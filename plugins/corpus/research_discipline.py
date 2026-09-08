@@ -31,6 +31,11 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
   包括 `computed_by` 字段。
 - 落卡前**必须**调用 `strategy_lint`。返回 `passed=false` 时：
   修正后重新校验，**不得绕过**；若无解，直接报告「该条件下不可建仓」。
+- `strategy_lint` 的返回必须**原样整体**写入策略卡的 `lint` 段，
+  至少包含 `passed`（布尔）+ `errors` + `warnings` 三个字段。
+  禁止只写 `checked_by` 再用自然语言转述结论——`checked_by` 的唯一作用
+  就是给 `passed` 做背书，丢了 `passed`，离线校验脚本无法确认这张卡
+  真的通过了校验，等于自己给自己发通行证。
 
 ## 二、缺失参数必须追问，不得假设
 
@@ -52,7 +57,20 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
   - `fact`：已发生的事实（营收、产能、招标量……）
   - `forecast`：对未来的预测（目标价、营收预测……）
   - `opinion`：观点/判断（「我们看好……」）
-- 检索返回的 **snippet 仅用于定位，禁止引用**——引用前必须取回逐字原文。
+- `page` 必须是**可定位的真实位置**：研报/PDF 填页码数字（如 `7`），
+  网页或接口来源填 URL / 锚点。**禁止填 `—`、`N/A`、空值**——
+  `strategy_lint` 会把占位符判为 ERROR 并拒绝落卡。
+- 至少包含**一条 `kind="fact"`**。只有预测/观点而没有事实支撑的策略，
+  不构成可证伪的投资逻辑，会被拦下。
+- 顶层 `sources` 段必须**声明所有被引用的来源**（每条含 `id`，以及
+  `url` / `title` 至少一项）。`evidence[].source_ref` 必须能在其中找到——
+  指向未声明来源的引用视为悬空，同样被拦下。
+- `corpus_search` 返回的 **snippet 是截断的，仅用于定位，禁止直接引用**。
+  写 `evidence.quote` 前必须先用 `corpus_fetch(doc_id, locator)` 取回逐字
+  原文；`locator` 要原样填进 `evidence.page`。
+- 分析研报内容时**优先用 `corpus_search` 查本地语料库**。网页检索只用于
+  语料库之外的最新信息，且同样必须给出可定位来源（URL 或锚点），
+  不能只写「据网络资料」。
 - 资料里没有的数字就写「资料未给出」。**宁可留白，不可编造。**
 
 ## 四、防确认偏误

@@ -1,0 +1,503 @@
+"""离线策略卡校验：三条硬闸的最终裁决。
+
+为什么在线之外还要再跑一遍：``strategy_lint`` 是 Agent **自己调用**的，
+我们只能从 trajectory 里相信它调过；而最终落盘的 json 也是 Agent **自己写**的。
+这两件事之间没有必然联系——Agent 完全可以绕过校验，直接写一张挑不出毛病的
+策略卡，再在 ``lint`` 段补一句 ``"passed": true``。
+
+所以本模块**不信任任何落盘字段**，一律重算；它认的是**磁盘上那个文件**，
+而不是 Agent 声称它做过什么。
+
+与 ``strategy_lint`` 的分工：
+
+- ``strategy_lint`` —— 在线、给 Agent 看：错误信息要指导它改哪个字段、
+  改成什么，warning 允许放过。
+- 本模块 —— 离线、给验收看：要么过要么不过，没有 WARN 的余地；
+  也不提供「怎么改」的提示，因为它的读者是人不是模型。
+
+三条硬闸对应 ``docs/plan/p0-research-kernel.md`` §2：
+
+1. **数字可溯源**：每条 evidence 的 quote 能在 source_ref 指向的原文里逐字找到
+2. **算术不出 LLM**：sizing 带 ``computed_by`` 且金额 / 权重可重算复核
+3. **schema 完备**：止损 / 失效条件 / 时间窗必填 + lint 契约成立
+
+用法::
+
+    python -m plugins.corpus.verify path/to/strategy.json
+
+溯源校验需要一个「source_ref -> 原文」的解析器（P0b 的 corpus 会提供）。
+没给解析器时该闸标记为 **skipped 而非 passed**——校验不了就是没验过，
+不能算通过。默认 ``strict=True``：有任一闸 skipped，整卡判不通过。
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import sqlite3
+import sys
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from plugins.corpus.fetch import open_resolver
+from plugins.corpus.strategy_schema import (
+    HORIZONS,
+    POSITION_SIZING_ID,
+    STRATEGY_LINT_ID,
+    position_of,
+    sizing_of,
+)
+from plugins.tools.strategy_lint import lint_strategy
+
+# source_ref -> 原文全文；返回 None 表示该来源无法解析。
+SourceResolver = Callable[[str], str | None]
+
+GATE_TRACEABILITY = "traceability"
+GATE_ARITHMETIC = "arithmetic"
+GATE_SCHEMA = "schema"
+# 展示顺序 = 硬闸编号顺序，便于人对着验收表逐条勾
+GATE_ORDER: tuple[str, ...] = (GATE_TRACEABILITY, GATE_ARITHMETIC, GATE_SCHEMA)
+
+# 金额到分、权重到 1bp：足够容忍 position_sizing 的取整与 JSON 序列化，
+# 又足够窄到「改一手股」必定被抓到。与 strategy_lint 内重算同一容差。
+RECOMPUTE_TOLERANCE = 0.01
+
+_PASSED = "passed"
+_FAILED = "failed"
+_SKIPPED = "skipped"
+
+_GATE_TITLES = {
+    GATE_TRACEABILITY: "硬闸① 数字可溯源",
+    GATE_ARITHMETIC: "硬闸② 算术不出 LLM",
+    GATE_SCHEMA: "硬闸③ schema 完备 + lint 契约",
+}
+
+
+def _number(value: object) -> float | None:
+    """转有限 float，失败返回 ``None``（``bool`` 同样拒绝）。"""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    number = float(value)
+    return number if math.isfinite(number) else None
+
+
+def _problem(gate: str, code: str, message: str) -> dict[str, str]:
+    return {"gate": gate, "code": code, "message": message}
+
+
+def _gate_traceability(
+    card: dict[str, Any],
+    resolver: SourceResolver | None,
+) -> tuple[str, list[dict[str, str]], int, int]:
+    """硬闸①：每条 evidence 的 quote 必须能在原文里**逐字**找到。
+
+    返回 ``(status, problems, total, traced)``：``total``/``traced`` 用于算
+    「溯源命中率」——plan §7.2 要求命中率 100%（未溯源数字数 = 0）。
+
+    这是 plan §9 记的「宽松版」：只要 quote 出现在被引用的那份原文中即算溯源。
+    它抓不出「张冠李戴」（引了 A 的话安在 B 头上），但能 100% 抓出「完全编造」。
+
+    resolver 为 ``None`` 时返回 ``skipped``——**不是** ``passed``。
+    """
+    evidence = position_of(card).get("evidence")
+    total = len(evidence) if isinstance(evidence, list) else 0
+    if resolver is None:
+        return _SKIPPED, [], total, 0
+
+    problems: list[dict[str, str]] = []
+    traced = 0
+    if not isinstance(evidence, list) or not evidence:
+        return _FAILED, [
+            _problem(
+                GATE_TRACEABILITY,
+                "no_evidence",
+                "没有 evidence 可溯源：无法验证任何数字的来源",
+            )
+        ], total, 0
+
+    for index, item in enumerate(evidence):
+        label = f"evidence[{index}]"
+        if not isinstance(item, dict):
+            problems.append(
+                _problem(
+                    GATE_TRACEABILITY,
+                    "not_object",
+                    label + " 不是对象，无法溯源",
+                )
+            )
+            continue
+        quote = str(item.get("quote") or "").strip()
+        ref = str(item.get("source_ref") or "").strip()
+        if not quote or not ref:
+            problems.append(
+                _problem(
+                    GATE_TRACEABILITY,
+                    "incomplete_evidence",
+                    label + " 缺少 source_ref 或 quote，溯源链断开",
+                )
+            )
+            continue
+        source_text = resolver(ref)
+        if source_text is None:
+            problems.append(
+                _problem(
+                    GATE_TRACEABILITY,
+                    "source_unresolvable",
+                    label + " 的 source_ref " + repr(ref) + " 无法解析到原文",
+                )
+            )
+            continue
+        if quote not in source_text:
+            problems.append(
+                _problem(
+                    GATE_TRACEABILITY,
+                    "quote_not_found",
+                    label + " 的 quote 未在 " + repr(ref) + " 中逐字出现：" + repr(quote[:60]),
+                )
+            )
+            continue
+        # 走到这里说明 quote 已在原文里逐字找到：成功溯源一条
+        traced += 1
+    return (_FAILED if problems else _PASSED), problems, total, traced
+
+
+def _gate_arithmetic(card: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
+    """硬闸②：sizing 必须来自 position_sizing，且金额 / 权重可重算复核。
+
+    不比对某个期望值，而是**重新推一遍**：``shares × entry.high`` 必须等于
+    ``amount``，``amount / capital_total`` 必须等于 ``weight_pct``。
+    LLM 自己算的数很难在三处同时自洽。
+    """
+    problems: list[dict[str, str]] = []
+    position = position_of(card)
+    sizing = sizing_of(card)
+
+    computed_by = str(sizing.get("computed_by") or "").strip()
+    if computed_by != POSITION_SIZING_ID:
+        problems.append(
+            _problem(
+                GATE_ARITHMETIC,
+                "computed_by_mismatch",
+                "sizing.computed_by 应为 "
+                + repr(POSITION_SIZING_ID)
+                + "，实际 "
+                + repr(computed_by)
+                + "——仓位不是 position_sizing 算出来的",
+            )
+        )
+
+    entry = position.get("entry")
+    entry = entry if isinstance(entry, dict) else {}
+    shares = _number(sizing.get("shares"))
+    amount = _number(sizing.get("amount"))
+    weight_pct = _number(sizing.get("weight_pct"))
+    entry_high = _number(entry.get("high"))
+    capital_total = _number(card.get("capital_total"))
+
+    # 显式 ``is not None`` 而不是 ``None not in (...)``：后者人读起来更短，
+    # 但不会让类型检查器收窄，下面的算术运算会全体报类型错误。
+    if shares is not None and entry_high is not None and amount is not None:
+        expected = shares * entry_high
+        if abs(expected - amount) > RECOMPUTE_TOLERANCE:
+            problems.append(
+                _problem(
+                    GATE_ARITHMETIC,
+                    "amount_mismatch",
+                    f"amount 应为 shares × entry.high = {shares:g} × {entry_high:g} = {expected:.2f}，实际 {amount:g}",
+                )
+            )
+    if (
+        amount is not None
+        and weight_pct is not None
+        and capital_total is not None
+        and capital_total > 0
+    ):
+        expected = amount / capital_total * 100
+        if abs(expected - weight_pct) > RECOMPUTE_TOLERANCE:
+            problems.append(
+                _problem(
+                    GATE_ARITHMETIC,
+                    "weight_mismatch",
+                    f"weight_pct 应为 amount / capital_total × 100 = {expected:.4f}，实际 {weight_pct:g}",
+                )
+            )
+    return (_FAILED if problems else _PASSED), problems
+
+
+def _gate_schema(card: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
+    """硬闸③：必填字段完备 + lint 契约成立。
+
+    lint 契约是三重的，缺一不可：
+
+    1. ``lint`` 段存在且被 ``strategy_lint`` 盖过章（``checked_by``）
+    2. 卡里记录的 ``passed`` 为真
+    3. **把这张卡重新喂给 ``strategy_lint``，结果仍为真，且错误条数与卡内
+       记录的一致**
+
+    第 3 条是关键：它挡住「先写一张漂亮的卡，再自己补一句 passed=true」。
+    只看前两条的话，Agent 完全可以自产自销。
+    """
+    problems: list[dict[str, str]] = []
+    position = position_of(card)
+
+    # 必填三项严格对齐 plan §2 硬闸③「止损 / 失效条件 / 时间窗」。
+    # 刻意**不**把 target 算进来：strategy_lint 也不强制它。若这里加码，
+    # 会出现「过得了在线校验、却过不了离线校验」的困惑，而这两处本该同源。
+    for key in ("stop_loss", "invalidation", "horizon"):
+        if key not in position or position.get(key) in (None, ""):
+            problems.append(
+                _problem(
+                    GATE_SCHEMA,
+                    "missing_required_field",
+                    "position." + key + " 必填，缺失或为空",
+                )
+            )
+    horizon = str(position.get("horizon") or "").strip()
+    if horizon and horizon not in HORIZONS:
+        problems.append(
+            _problem(
+                GATE_SCHEMA,
+                "horizon_not_in_enum",
+                "position.horizon 应取 " + repr(list(HORIZONS)) + " 之一，实际 " + repr(horizon),
+            )
+        )
+
+    # ── lint 契约 1 & 2 ────────────────────────────────────────────────
+    lint = card.get("lint")
+    if not isinstance(lint, dict):
+        problems.append(
+            _problem(
+                GATE_SCHEMA,
+                "lint_section_missing",
+                "策略卡缺少 lint 段：无法证明它被 strategy_lint 校验过",
+            )
+        )
+    else:
+        checked_by = str(lint.get("checked_by") or "").strip()
+        if checked_by != STRATEGY_LINT_ID:
+            problems.append(
+                _problem(
+                    GATE_SCHEMA,
+                    "lint_not_stamped",
+                    "lint.checked_by 应为 " + repr(STRATEGY_LINT_ID) + "，实际 " + repr(checked_by),
+                )
+            )
+        stored_passed = lint.get("passed")
+        if not isinstance(stored_passed, bool):
+            problems.append(
+                _problem(
+                    GATE_SCHEMA,
+                    "lint_passed_not_recorded",
+                    "lint.passed 缺失或不是布尔值——校验结果的**结论**没有被固化，"
+                    "离线无法确认这张卡真的通过了校验",
+                )
+            )
+        elif stored_passed is not True:
+            problems.append(
+                _problem(
+                    GATE_SCHEMA,
+                    "lint_recorded_failure",
+                    "卡内记录的 lint.passed 不是 true：未通过校验的卡不该落盘",
+                )
+            )
+
+    # ── lint 契约 3：重算，不信任落盘结论 ──────────────────────────────
+    fresh = lint_strategy(card)
+    if not fresh["passed"]:
+        codes = ", ".join(item["code"] for item in fresh["errors"])
+        problems.append(
+            _problem(
+                GATE_SCHEMA,
+                "lint_recheck_failed",
+                "重跑 strategy_lint 未通过（" + codes + "）——卡内容与「已通过校验」的结论不符",
+            )
+        )
+    if isinstance(lint, dict):
+        stored_errors = lint.get("errors")
+        stored_count = len(stored_errors) if isinstance(stored_errors, list) else -1
+        fresh_count = len(fresh["errors"])
+        if stored_count != fresh_count:
+            problems.append(
+                _problem(
+                    GATE_SCHEMA,
+                    "lint_result_diverged",
+                    f"卡内记录的 errors 条数（{stored_count}）与重算结果"
+                    f"（{fresh_count}）不一致——卡里的 lint 段不是本次校验的产物",
+                )
+            )
+    return (_FAILED if problems else _PASSED), problems
+
+
+def verify_card(
+    card: dict[str, Any],
+    *,
+    source_resolver: SourceResolver | None = None,
+    strict: bool = True,
+) -> dict[str, Any]:
+    """校验一张策略卡，返回裁决报告。
+
+    Args:
+        card: 已解析的策略卡 dict。
+        source_resolver: ``source_ref -> 原文`` 的解析器；为 ``None`` 时
+            溯源闸标记 skipped。P0b 的 corpus 接进来后由它提供。
+        strict: 为 ``True`` 时，任一闸 skipped 则整卡判不通过。
+            默认 True——**校验不了就是没验过**，不能默认放行。
+
+    Returns:
+        ``{"passed": bool, "gates": {...}, "traceability": {...},
+        "problems": [...], "skipped": [...]}``。
+        ``gates`` 每项形如 ``{"status": passed|failed|skipped, "problems": [...]}``。
+        ``traceability`` 形如 ``{"total": int, "traced": int, "rate": float,
+        "skipped": bool}``——plan §7.2 要求命中率 100%。
+    """
+    statuses: dict[str, str] = {}
+    problems: list[dict[str, str]] = []
+
+    traceability_status, traceability_problems, trace_total, trace_traced = _gate_traceability(
+        card,
+        source_resolver,
+    )
+    arithmetic_status, arithmetic_problems = _gate_arithmetic(card)
+    schema_status, schema_problems = _gate_schema(card)
+
+    statuses[GATE_TRACEABILITY] = traceability_status
+    statuses[GATE_ARITHMETIC] = arithmetic_status
+    statuses[GATE_SCHEMA] = schema_status
+    problems.extend(traceability_problems)
+    problems.extend(arithmetic_problems)
+    problems.extend(schema_problems)
+
+    skipped = [gate for gate in GATE_ORDER if statuses[gate] == _SKIPPED]
+    passed = not problems and not (strict and skipped)
+
+    return {
+        "passed": passed,
+        "gates": {
+            gate: {
+                "status": statuses[gate],
+                "problems": [item for item in problems if item["gate"] == gate],
+            }
+            for gate in GATE_ORDER
+        },
+        # 溯源命中率：未溯源数字数 = 0 即 rate == 1.0。skipped 时 rate 无意义，记 0。
+        "traceability": {
+            "total": trace_total,
+            "traced": trace_traced,
+            "rate": (trace_traced / trace_total) if trace_total else 0.0,
+            "skipped": traceability_status == _SKIPPED,
+        },
+        "problems": problems,
+        "skipped": skipped,
+    }
+
+
+def verify_file(
+    path: str | Path,
+    *,
+    source_resolver: SourceResolver | None = None,
+    strict: bool = True,
+) -> dict[str, Any]:
+    """读磁盘上的 strategy.json 并校验。
+
+    入口刻意走文件而不是走 dict：要验的就是**落盘的那份**，
+    用已经解析好的对象会掩盖「写文件时被改过」这类问题。
+    """
+    card = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(card, dict):
+        return {
+            "passed": False,
+            "gates": {gate: {"status": _FAILED, "problems": []} for gate in GATE_ORDER},
+            "problems": [
+                _problem(
+                    GATE_SCHEMA,
+                    "not_an_object",
+                    "strategy.json 顶层必须是对象，实际 " + type(card).__name__,
+                )
+            ],
+            "skipped": [],
+        }
+    return verify_card(card, source_resolver=source_resolver, strict=strict)
+
+
+def format_report(report: dict[str, Any]) -> str:
+    """把裁决报告渲染成人能逐条勾选的文本。"""
+    marks = {_PASSED: "[PASS]", _FAILED: "[FAIL]", _SKIPPED: "[SKIP]"}
+    verdict = "通过" if report["passed"] else "不通过"
+    lines = ["策略卡校验：" + verdict, ""]
+    for gate in GATE_ORDER:
+        info = report["gates"][gate]
+        lines.append("{} {}".format(marks.get(info["status"], "[????]"), _GATE_TITLES[gate]))
+        for item in info["problems"]:
+            lines.append("      - " + item["code"] + "：" + item["message"])
+    tr = report.get("traceability")
+    if tr and not tr.get("skipped"):
+        lines.append("")
+        lines.append(
+            f"数字溯源命中率：{tr['traced']}/{tr['total']} ({tr['rate'] * 100:.1f}%)"
+        )
+    if report["skipped"]:
+        lines.append("")
+        lines.append(
+            "注：以下闸未能校验（缺少 source_resolver），strict 模式计为不通过："
+            + "、".join(report["skipped"])
+        )
+    return "\n".join(lines)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """CLI 入口：``python -m plugins.corpus.verify <strategy.json> [--corpus <db>]``。
+
+    给 ``--corpus`` 才会真正跑硬闸①（否则溯源闸标记 skipped，strict 模式计为不通过）。
+    corpus 数据库由 ``open_resolver`` 打开并交给 ``verify``，本函数负责关连接。
+
+    退出码刻意区分「不通过」(1) 与「跑不起来」(2)：CI 里这两种要分开处理，
+    前者是策略的问题，后者是校验本身的问题，混在一起会掩盖后者。
+    """
+    args = list(sys.argv[1:] if argv is None else argv)
+    corpus_path: str | None = None
+    paths: list[str] = []
+    rest = list(args)
+    while rest:
+        token = rest.pop(0)
+        if token == "--corpus":
+            corpus_path = rest.pop(0) if rest else None
+        else:
+            paths.append(token)
+    if not paths:
+        print(__doc__)
+        return 2
+
+    conn: sqlite3.Connection | None = None
+    resolver: SourceResolver | None = None
+    if corpus_path:
+        try:
+            conn, resolver = open_resolver(corpus_path)
+        except sqlite3.Error as exc:
+            print("无法打开语料库：" + str(exc))
+            return 2
+    try:
+        report = verify_file(paths[0], source_resolver=resolver)
+    except (OSError, ValueError) as exc:
+        print("无法读取策略卡：" + str(exc))
+        return 2
+    finally:
+        if conn is not None:
+            conn.close()
+    print(format_report(report))
+    return 0 if report["passed"] else 1
+
+
+__all__ = [
+    "GATE_ARITHMETIC",
+    "GATE_ORDER",
+    "GATE_SCHEMA",
+    "GATE_TRACEABILITY",
+    "format_report",
+    "verify_card",
+    "verify_file",
+]
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

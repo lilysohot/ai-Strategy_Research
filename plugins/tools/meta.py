@@ -137,6 +137,13 @@ TOOL_META: dict[str, ToolMeta] = {
     # 截断只会把 computed_by 这类硬闸字段切掉，有害无益。
     "position_sizing": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
     "strategy_lint": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+    # 语料检索 / 取证（P0b）——只读本地 SQLite，无网络、无写入，故并发安全。
+    # timeout=10 而不是 5：首次调用要加载 jieba 词典（约 1s），
+    # 慢机器上 5s 会误超时。
+    # corpus_fetch 的 max_result_chars 必须是 0（不截断）：截断会把
+    # 「逐字原文」切掉，evidence.quote 就不再逐字，硬闸①的溯源比对当场失效。
+    "corpus_search": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance"),
+    "corpus_fetch": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
 
 }
 

@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.0 · P0a 未开始（11 项全部 ⬜） |
+| 版本 / 状态 | v1.1 · **P0a 已通过（11 项全部 ✅）** · P0b 进行中（B1 ✅ / B2 🔄 / B4 读侧 ✅） |
 | 上游文档 | [plan.md](./plan.md) · [trading-strategy-platform-feasibility.md](../tittel/trading-strategy-platform-feasibility.md) · [tech-stack.md](../tech-stack.md) |
 | 施工规格 | [p0-implementation-spec.md](../p0-implementation-spec.md)（算法、schema、改动点详见此文） |
 | 远期架构 | [corpus-ingestion-architecture.md](../corpus-ingestion-architecture.md)（Discord / IMA / 向量 / 信号层均推后） |
@@ -104,7 +104,7 @@ TUI 走 `apodex.local_tools`（宿主 cwd），资料库工具读本地库文件
 | 08 | 工具注册（TUI 需改 6 处） | 03, 05, 07 | ✅ | 6 处全改；**另需** workflow `tui.yaml` 的 `agent_tools`（详见 Answer） |
 | 09 | `TOOL_META` 条目 | 08 | ✅ | `category="finance"`，`timeout=5` |
 | 10 | 提示词：引用纪律 + 缺失参数追问 | 07, 08 | ✅ | 未建 TUI 通道，复用 workflow 既有的 `_sys_prompt_addendum` |
-| 11 | TUI 端到端 + P0a 验收 | 全部 | ⏸ | **代码侧已就绪，待真模型跑一次 TUI**（需配 `OPENAI_*`）。§7.1 的第 1/2/5 条只能由实跑判定；第 3/4/6 条已由 `tests/test_p0a_chain.py` 确定性覆盖 |
+| 11 | TUI 端到端 + P0a 验收 | 全部 | ✅ | 实跑 run828a：纪律全部达标（#5 最关键的「追问而非假设」通过）。实跑暴露两个缺陷并已修：`lint` 段未落盘 `passed`；`strategy_lint` 原**完全不校验 evidence**（13 条 `page="—"` 竟判 passed）。已补 evidence 校验 11 ERROR + 4 WARN、建 `verify.py` 离线三闸、建 `fetch.py`。验收改为机械可复现：`tests/test_p0a_acceptance.py`（6 例全过，含「伪造 `passed=true` 绕过被抓」）。真实茅台研报复核三闸全 PASS |
 
 **可并行**：01 / 03 / 05 三条线无依赖，可同时推进。
 
@@ -122,19 +122,31 @@ TUI 走 `apodex.local_tools`（宿主 cwd），资料库工具读本地库文件
 
 ---
 
-## 6. P0b 任务清单（20 份真实研报，P0a 通过后启动）
+## 6. P0b 任务清单（17 份真实研报，实测；P0a 通过后启动）
 
-> B 系列 issue 文件待 P0a 验收后在 `.scratch/p0b-minimal-corpus/` 建立。
+P0a 已通过，B 系列可启动。`.scratch/p0b-minimal-corpus/` 待建。
 
 | # | 任务 | 依赖 | 状态 | 要点 / 验收 |
 |---|---|---|---|---|
-| B1 | 挑选 20 份样本 | — | ⬜ | **刻意挑选**：跨机构 / 同系列连续 4 期 / docx / 含表格 / 含扫描页 / 故意重复各一 |
-| B2 | `ingest` 管道 | B1 | ⬜ | PyMuPDF + python-docx；去重 + boilerplate 剥离 + 数字单位绑定；`first_observed_at` |
-| B3 | FTS5 索引 | B2 | ⬜ | jieba 预分词；`30%` / `47.3亿` 绑成整体 token |
-| B4 | `corpus_search` / `corpus_fetch` | B3 | ⬜ | snippet 只定位，取证必须走 `corpus_fetch` |
-| B5 | 接入 P0a 对话 | B4 | ⬜ | — |
-| B6 | 20 道黄金题 | B1 | ⬜ | 数字型 8 / 观点型 6 / 对比型 3 / 时效型 3；同时是向量判据输入 |
-| B7 | 离线校验脚本 | B4, B6 | ⬜ | 三条硬闸；数字溯源命中率 100% |
+| B1 | 挑选 20 份样本 | — | ✅ | 样本已备（实测 **17 份**：PDF 14 / MD 2 / DOCX 1，228 页，**无扫描页**）。构成见下方「实际语料」 |
+| B2 | `ingest` 管道 | B1 | ✅ | `plugins/corpus/ingest.py` 已完成：三格式解析 + content_hash 去重 + boilerplate 剥离 + 扫描页标记。**17/17 入库，298 块，0 失败**。剩余（均 defer，不阻塞 P0b）：`first_observed_at`、`superseded_by`（改为靠 `doc_id` 日期前缀 + 提示词判断同系列最新） |
+| B3 | FTS5 索引 | B2 | ✅ | `plugins/corpus/index.py`。jieba 预分词 + 数字单位绑定（实测 jieba 会把 `47.3`/`亿元` 切开，已粘回）；FTS5 `tokenchars '.%'` 保住 `24.50`/`30%` 完整形态。298 块全部入索引 |
+| B4 | `corpus_search` / `corpus_fetch` | B3 | ✅ | `fetch.py`（读侧）+ `tools/corpus_search.py` + `tools/corpus_fetch.py`。snippet 截断到 160 字并带省略号，**取证必须走 `corpus_fetch`**。真实语料往返验证：search → fetch → evidence → 三闸全 PASS |
+
+> **⚠️ 实际语料与原配额的偏差（2026-09-08 实测）**
+> 17 份 ≠ 20 份；且**完全重复 0 组**，「故意重复只入库一次」这条验收暂无法用真实数据验证
+> （改为单测里用临时副本验 `content_hash` 去重）。
+> 语料主体是**宏观 / 策略类**（James-Bulltard 4 期、Capital-Wars 4 期、Simons-Substack 2 期、
+> Macro-Charts 1 期），个股研报仅贵州茅台 2 份（华创 08-16 / 国信 08-17）。
+> 两个天然利好：**James-Bulltard 4 期连续**（0831/0901/0902/0903）正好是同系列多期场景（取最新期靠 `doc_id` 前缀日期，`superseded_by` 按计划 defer）；茅台 2 份构成跨机构分歧场景。
+> 副作用：**B6 黄金题需按实际内容重新设计**，不能硬套原配额的题型配比。
+>
+> **定位符（locator）泛化**：MD / DOCX 没有页码，而 `strategy_lint` 要求
+> `evidence.page` 是真实定位符。约定：PDF 用页码（`1`），DOCX 用段落块/标题
+> （`para12` / `执行摘要`），MD 用章节标题（`二、关键事实`）。
+| B5 | 接入 P0a 对话 | B4 | ✅ | 两个工具已按 P0a 的 **7 处**注册点接入（`plugins/tools/__init__.py` 导入 + allowlist、`meta.py` TOOL_META、`apodex/profiles/react.yaml`、`apodex/agent_tools.py` 注册表 + `_READ_ONLY`、**`workflows/.../tui.yaml` 的 `agent_tools`**）。提示词已加「snippet 只定位，取证必须 `corpus_fetch`」+「优先查本地语料」。TUI 实跑已确认（run 20260908-124529+0800-react-cb47）：真实 agent 循环里先后调用 corpus_search→corpus_fetch，取到华创《贵州茅台 2026 年中报点评》逐字原文（26H1 总收入 922.8 亿、同增 1.3%）。接线闭环 |
+| B6 | 20 道黄金题 | B1 | ✅ | `plugins/corpus/golden.py`。按**实际语料**重排（原 A 股个股配额与宏观为主的实料不符）。Recall@5 = 100%（数字 8/8、观点 6/6、对比 3/3、时效 3/3）。诊断出「标题未入索引」已修（标题列加权 5×）+ 结果带 `published` 供时效判断 |
+| B7 | 离线校验脚本 | B4, B6 | ✅ | `verify.py` 接 `make_source_resolver`；新增「溯源命中率」指标（plan §7.2）。CLI 加 `--corpus` 开关。实测：逐字 evidence → 命中率 100% 且整卡通过；编造 quote → 命中率 <100% 且不通过。测试 `tests/test_corpus_verify_b7.py`、`tests/test_corpus_golden.py` |
 
 **20 份样本配额**（刻意设计，非随机——覆盖同行业跨机构、同系列多期、双格式、故意重复）：
 
@@ -177,11 +189,11 @@ uv run frontier-agent --mode react --cwd <工作目录>
 
 | # | 标准 |
 |---|---|
-| 1 | 20 份全部 ingest 成功（或明确标记 `needs_ocr` / 解析失败并有降级） |
+| 1 | 全部可用样本（实测 **17 份**：PDF 14 / MD 2 / DOCX 1）ingest 成功；未入库的 4 份已移入 `originals/`（不计入语料） |
 | 2 | 20 道黄金题 Agent 全部答对 |
 | 3 | 离线校验脚本：数字溯源命中率 100%（未溯源数字数 = 0） |
 | 4 | 故意重复的那份只入库一次 |
-| 5 | 同系列 4 期中，检索返回的是最新一期（`superseded_by` 生效） |
+| 5 | 同系列多期（James-Bulltard 0831/0901/0902/0903）检索按 `doc_id` 日期前缀排序返回最新一期。`superseded_by` 未实现，靠 `doc_id` 前缀日期 + 提示词判断最新（标题含期号的同系列由 Agent 取最新期号） |
 
 ---
 

@@ -112,6 +112,11 @@ def terminal_tool_registry() -> dict[str, Any]:
     from plugins.tools.strategy_lint import strategy_lint
     reg.setdefault("position_sizing", position_sizing)
     reg.setdefault("strategy_lint", strategy_lint)
+    # 语料检索 / 取证（P0b）。同样是只读、无副作用，两个入口共用一份实现。
+    from plugins.tools.corpus_fetch import corpus_fetch
+    from plugins.tools.corpus_search import corpus_search
+    reg.setdefault("corpus_fetch", corpus_fetch)
+    reg.setdefault("corpus_search", corpus_search)
     return reg
 
 
@@ -128,6 +133,9 @@ _READ_ONLY = frozenset({
     # 投研内核（P0a）：纯计算 + 纯校验，不碰文件系统、不碰网络、无副作用。
     # 不加进来的话，不带 -y 时每一次仓位计算都要人工点确认。
     "position_sizing", "strategy_lint",
+    # 语料检索 / 取证（P0b）：只读本地 SQLite。不加进来的话，
+    # 不带 -y 时每一次检索与取证都要人工点确认。
+    "corpus_search", "corpus_fetch",
 })
 # Tools that mutate the working tree — always confirmed (unless auto-approve)
 # AND journaled (snapshot-before, so the change is diffable + revertable).

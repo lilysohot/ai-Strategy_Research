@@ -8,6 +8,8 @@ from frontier_agent.core.tool import Tool
 from plugins.tools.assign_task import assign_task
 from plugins.tools.bash import bash
 from plugins.tools.collect_reports import collect_reports
+from plugins.tools.corpus_fetch import corpus_fetch
+from plugins.tools.corpus_search import corpus_search
 from plugins.tools.create_file import create_file
 from plugins.tools.create_subagent import create_subagent
 from plugins.tools.download_file import download_file
@@ -53,6 +55,10 @@ _BUILTIN_TOOLS: list[Tool] = [
     # 是否对某个 Agent 可见另由各 profile 的 tools 列表决定。
     position_sizing,
     strategy_lint,
+    # 语料检索 / 取证（P0b）。只读本地 SQLite，无网络、无写入。
+    # 加入本 allowlist 只让它们「可解析」，是否可见另由各 profile 决定。
+    corpus_search,
+    corpus_fetch,
     file_editor_view,
     file_editor_create,
     file_editor_str_replace,
