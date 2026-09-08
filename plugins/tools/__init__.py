@@ -18,10 +18,12 @@ from plugins.tools.file_editor import (
 )
 from plugins.tools.glob_search import glob_search
 from plugins.tools.grep_search import grep_search
+from plugins.tools.position_sizing import position_sizing
 from plugins.tools.read_file import read_file
 from plugins.tools.recover_result import recover_result
 from plugins.tools.run_python_code import run_python_code
 from plugins.tools.stop_subagent import stop_subagent
+from plugins.tools.strategy_lint import strategy_lint
 from plugins.tools.submit_report import submit_report
 from plugins.tools.task_board import add_task, finish_planning, update_task
 from plugins.tools.view_image import view_image
@@ -46,6 +48,11 @@ _BUILTIN_TOOLS: list[Tool] = [
     read_file,
     create_file,
     write_file,
+    # 投研内核（P0a）。两者都是纯函数：确定性计算 + 确定性校验，
+    # 无网络、无文件、无共享状态。加入本 allowlist 只让它们「可解析」，
+    # 是否对某个 Agent 可见另由各 profile 的 tools 列表决定。
+    position_sizing,
+    strategy_lint,
     file_editor_view,
     file_editor_create,
     file_editor_str_replace,

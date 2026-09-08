@@ -15,5 +15,13 @@ llm:
   context_window: ${OPENAI_CONTEXT_WINDOW:-262144}
 # Turn budgets live in the selected workflow profile. ``agent.max_turns`` here
 # would configure apodex's generic loop, which workflow dispatch does not run.
-tools: [web_search, web_fetch, bash, grep_search, glob_search, read_file, todo_write]
+# 投研内核（P0a）。两者都是纯函数，纯计算 / 纯校验，无副作用。
+tools: [web_search, web_fetch, bash, grep_search, glob_search, read_file, todo_write, position_sizing, strategy_lint]
 skills: []
+
+agent:
+  # 引用纪律 + 「缺失参数必须追问」。用 ref 而不是内联文本：
+  # 同一份常量还要被 web 侧（server 的 _sys_prompt_addendum）与 P1 的
+  # 在线审计 observer 复用，抄成两份迟早分叉。
+  # 经 task_runner 注入 metadata["_sys_prompt_addendum"]，workflow 原生支持。
+  system_prompt_addendum_ref: plugins.corpus.research_discipline:RESEARCH_DISCIPLINE_ADDENDUM

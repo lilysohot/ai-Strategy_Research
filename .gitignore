@@ -60,3 +60,22 @@ private/
 
 # User specific claude configurations
 .claude
+
+# ── 投研资料库（P0b 起）───────────────────────────────────────────────────
+# 研报原文 + SQLite 索引。全量 8000 份按 5–20GB 估，一旦误入库几乎不可逆。
+# 上面已有裸 `data/`，此处重复声明是刻意的：让
+# `git check-ignore -v data/corpus/corpus.db` 直接命中这一行，
+# 不依赖读者回溯到泛化的 `data/`。
+data/corpus/
+
+# ── Web platform (server/) ────────────────────────────────────────────────
+# Per-run artifacts: trajectory (run/agent/trajectories/*.jsonl|json), engine
+# logs, agent deliverables and uploaded inputs. Runtime data, never committed —
+# the trajectory also embeds per-run system prompts and file contents.
+server/runs/
+# Uploaded financial PDFs / research reports.
+uploads/
+# Local dev SQLite (the default when SERVER_DATABASE_URL is unset); production
+# uses Postgres and Alembic.
+server/dev.db
+server/*.db

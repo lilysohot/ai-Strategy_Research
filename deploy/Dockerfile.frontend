@@ -1,0 +1,34 @@
+# Frontend build image for the投研 Agent platform (T3.8).
+#
+# Produces the Vite bundle (``web/dist``) and nothing else. The API image
+# (deploy/Dockerfile.web) deliberately does NOT build the frontend: it is the
+# agent runtime image, and adding a node toolchain to it would roughly double its
+# size for no runtime benefit. Keeping the two separate also means a frontend
+# typo cannot invalidate the API layer cache.
+#
+# The built files are copied into a shared volume by the compose ``frontend``
+# service (see deploy/docker-compose.yml) and served by Caddy from /srv/web — so
+# this image is a build artifact producer, not a long-running container.
+
+# ── build stage ───────────────────────────────────────────────
+FROM node:20-alpine AS build
+WORKDIR /build
+
+# Install dependencies first so the (slow) layer is cached unless package.json
+# actually changes — the usual ordering win for node builds.
+COPY web/package.json web/package-lock.json ./
+RUN npm ci
+
+COPY web/ ./
+RUN npm run build
+
+# ── artifact stage ────────────────────────────────────────────
+# A minimal image holding only the bundle. The compose service copies /dist into
+# the shared volume and exits; Caddy then serves it read-only.
+FROM alpine:3.20 AS runtime
+COPY --from=build /build/dist /dist
+
+# Volume where compose asks this container to publish the bundle. Declaring it
+# documents the contract even though compose supplies the mount.
+VOLUME ["/srv/web"]
+CMD ["sh", "-c", "cp -a /dist/. /srv/web/ && echo frontend-bundle-ready"]

@@ -65,7 +65,7 @@ _COMPLETE_TOP_LEVEL_STOPS = frozenset({
 # ``no_tool`` means opposite things on the two paths that reach here, so it is
 # never in the shared set above. The generic coding loop runs with
 # ``no_tool_behavior="stop"``: a turn without tool calls IS how it answers.
-# Workflows run with ``no_tool_behavior="nudge"``, so the same reason means the
+# Workflows run with ``no_tool_behavior="nudge"``, so the same reason_clip means the
 # nudge budget ran out mid-task — which ``agent_bus.fan_in`` also classifies as
 # INCOMPLETE ("agent stopped without producing a final answer").
 _NO_TOOL_STOP = "no_tool"
@@ -295,6 +295,8 @@ class TaskRunnerMixin:
         # from turn 1's result.messages — do NOT strip it, or the model loses
         # its system prompt on every follow-up turn.
         system_prompt = profile.system_prompt(self.cwd) + "\n\n# Environment\n" + self._env_section
+        if profile.prompt_addendum:
+            system_prompt = f"{system_prompt}\n\n{profile.prompt_addendum}"
         if self.plan_state.active:
             from apodex.plan import PLAN_MODE_PROMPT
             system_prompt = system_prompt + "\n\n" + PLAN_MODE_PROMPT
@@ -462,6 +464,12 @@ class TaskRunnerMixin:
             "profile": workflow_profile,
             "coding_workspace_root": self.cwd,
             "sdk_extra_observers": [observer, usage_observer, self.tracer],
+            # Profile-authored domain rules (e.g. the research-citation
+            # discipline). Workflows already read this key — server/worker.py
+            # sets the same one for the web path — so no new channel is needed.
+            # getattr: ``profile`` is Any here and embedders pass duck-typed
+            # stand-ins that predate this field.
+            "_sys_prompt_addendum": getattr(profile, "prompt_addendum", ""),
             # Stable across workflow executions; ``turn_index`` advances
             # within it. Workflows use this for upstream LLM session affinity.
             "session_id": self.session_id,

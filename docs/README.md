@@ -97,6 +97,7 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Understand the frozen Textual + Rich decision | [TUI framework decision](python_terminal_tui_ai_agent_guide.md) **(design record, Chinese)** |
 | Compare context-offloading changes with an A/B run | [Tool-result truncation A/B](tool-result-truncation-ab.md) |
 | Pick up the deferred context-offloading work | [Context offloading follow-ups](context-offloading-followups.md) |
+| Replicate the CLI/TUI panes and workflows in the web app | [CLI → Web parity](plan/cli-web-parity.md) **(design record, Chinese)** |
 | Inspect release-facing changes | [Changelog](../CHANGELOG.md) |
 
 Subsystem READMEs live beside their code when they are primarily useful to

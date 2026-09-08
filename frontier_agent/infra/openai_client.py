@@ -7,6 +7,8 @@ vLLM, SGLang, OpenRouter, and similar endpoints.
 from __future__ import annotations
 
 import logging
+import os
+import time
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -20,6 +22,23 @@ from frontier_agent.infra.session_context import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Print the wall time of every model request (``1``/unset = on, ``0`` = off).
+# A print (not a logger call) on purpose: the terminal layer runs the root
+# logger at WARNING, so an INFO record would never reach the operator who is
+# waiting on a slow call.
+_TIMING_ENV = "FRONTIER_AGENT_LLM_TIMING"
+
+
+def _timing_enabled() -> bool:
+    return os.environ.get(_TIMING_ENV, "1").strip().lower() not in {
+        "0", "false", "no", "off",
+    }
+
+
+def _emit_timing(message: str) -> None:
+    if _timing_enabled():
+        print(message, flush=True)
 
 
 class OpenAIClient(LLMClient):
@@ -142,10 +161,17 @@ class OpenAIClient(LLMClient):
         if timeout is not None:
             kwargs["timeout"] = timeout
 
-        raw_response = await self._client.chat.completions.with_raw_response.create(
-            **kwargs,
-        )
-        raw = raw_response.parse()
+        started = time.perf_counter()
+        try:
+            raw_response = await self._client.chat.completions.with_raw_response.create(
+                **kwargs,
+            )
+            raw = raw_response.parse()
+        finally:
+            _emit_timing(
+                f"[LLM] chat model={self.model} "
+                f"elapsed={time.perf_counter() - started:.2f}s"
+            )
         return _to_llm_response(raw)
 
     # ── Streaming ────────────────────────────────────────────────────────
@@ -186,7 +212,7 @@ class OpenAIClient(LLMClient):
         elif self.default_timeout is not None:
             kwargs["timeout"] = self.default_timeout
 
-        async for chunk in await self._open_stream(kwargs):
+        async for chunk in self._timed_chunks(kwargs):
             chunk_usage = _usage_dict(getattr(chunk, "usage", None))
             chunk_model = getattr(chunk, "model", "") or ""
             if not chunk.choices:
@@ -205,6 +231,31 @@ class OpenAIClient(LLMClient):
                 finish_reason=getattr(choice, "finish_reason", None) or "",
                 model=chunk_model,
                 usage=chunk_usage,
+            )
+
+    async def _timed_chunks(self, kwargs: dict[str, Any]) -> AsyncIterator[Any]:
+        """Yield raw stream chunks, reporting how long the model took.
+
+        Two numbers because a streaming call is judged by both: ``ttft``
+        (time to first chunk — gateway queue plus the first token) and
+        ``total`` (until the stream closed). Reported from ``finally`` so a
+        stalled or aborted stream still prints what it cost before the
+        error surfaces; ``ttft`` reads ``-`` when the stream never opened.
+        """
+        started = time.perf_counter()
+        ttft: float | None = None
+        chunks = 0
+        try:
+            stream = await self._open_stream(kwargs)
+            ttft = time.perf_counter() - started
+            async for chunk in stream:
+                chunks += 1
+                yield chunk
+        finally:
+            _emit_timing(
+                f"[LLM] stream model={self.model} "
+                f"ttft={f'{ttft:.2f}s' if ttft is not None else '-'} "
+                f"total={time.perf_counter() - started:.2f}s chunks={chunks}"
             )
 
     async def _open_stream(self, kwargs: dict[str, Any]) -> Any:

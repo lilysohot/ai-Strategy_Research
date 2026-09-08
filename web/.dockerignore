@@ -1,0 +1,14 @@
+# Keep the frontend build context small (Dockerfile.frontend uses the repo root
+# as its context, so this file trims what gets sent to the daemon).
+node_modules
+dist
+dist-ssr
+coverage
+*.local
+.env
+.env.*
+!.env.example
+.git
+.vscode
+.idea
+npm-debug.log*

@@ -41,7 +41,14 @@ async def test_benchmark_session_bootstraps_team_runtime(monkeypatch: pytest.Mon
                 f"{dataset} references unregistered pipeline "
                 f"{config.default_pipeline!r}"
             )
-        assert len(registry.get(ResourceManager).all_tools) == 23
+        # Derive the expected count from the allowlist instead of pinning a
+        # literal: a hardcoded 23 silently rotted the moment a tool was added
+        # to _BUILTIN_TOOLS, and the number says nothing about *which* tools.
+        from plugins.tools import get_builtin_tools
+
+        builtins = get_builtin_tools()
+        assert len(registry.get(ResourceManager).all_tools) == len(builtins)
+        assert set(registry.get(ResourceManager).all_tools) == set(builtins)
         assert registry.get(AgentBus) is not None
         assert registry.get(SpawnGuard) is not None
         task = await registry.get(ProcessManager).create_task("runtime contract")

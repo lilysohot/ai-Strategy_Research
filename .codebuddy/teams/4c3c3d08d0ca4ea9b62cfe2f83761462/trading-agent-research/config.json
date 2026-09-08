@@ -1,0 +1,29 @@
+{
+  "name": "trading-agent-research",
+  "mainConversationId": "4c3c3d08d0ca4ea9b62cfe2f83761462",
+  "workspacePath": "/home/administrator/FrontierAgent",
+  "createdAt": "2026-09-05T16:32:27.662Z",
+  "options": {
+    "workspacePath": "/home/administrator/FrontierAgent"
+  },
+  "members": [
+    {
+      "memberId": "oss-researcher@trading-agent-research",
+      "name": "oss-researcher",
+      "role": "调研开源交易Agent框架架构",
+      "sessionId": "54e7f630de8c4a2f91ec7d989cdd92a3"
+    },
+    {
+      "memberId": "evidence-researcher@trading-agent-research",
+      "name": "evidence-researcher",
+      "role": "调研交易Agent评测与实盘表现",
+      "sessionId": "f00745e6bc1743408a7e4655369ed349"
+    },
+    {
+      "memberId": "risk-researcher@trading-agent-research",
+      "name": "risk-researcher",
+      "role": "调研交易Agent风控与结构化输出",
+      "sessionId": "009cd3e990284fae90601213ee998591"
+    }
+  ]
+}

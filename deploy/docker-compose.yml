@@ -1,0 +1,97 @@
+# Full-stack deployment for the投研 Agent platform (T1.10 baseline, T3.8 wiring).
+#
+# Start the stack (see deploy/README.md for the full runbook):
+#
+#   cd deploy && docker compose --env-file ../.env up -d --build
+#
+# Notes
+# - The public port is 8080 by default. Set web.port in config/config.yaml to
+#   change it; the API stays unexposed and is reachable only through Caddy.
+# - SSE requires the proxy hop to stay unbuffered. That is configured in
+#   deploy/Caddyfile (flush_interval -1), not in the app.
+# - Prefer running this over plain `python -m server.main`; the sandbox backend
+#   needs the privileges configured on the api service below.
+
+services:
+  # ── Frontend bundle ─────────────────────────────────────────────
+  # Builds the Vite bundle and publishes it into the shared `web_dist` volume,
+  # then exits. Caddy waits for it (service_completed_successfully) so the site
+  # never comes up serving an empty directory.
+  frontend:
+    profiles: ["full"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.frontend
+    volumes:
+      - web_dist:/srv/web
+    restart: "no"
+
+  # ── Edge: static bundle + streaming reverse proxy ───────────────
+  caddy:
+    profiles: ["full"]
+    image: caddy:2-alpine
+    container_name: ${CONTAINER_PREFIX}-caddy
+    restart: unless-stopped
+    depends_on:
+      frontend:
+        condition: service_completed_successfully
+    ports:
+      # Host:container. The container listens on 80 (plain) and 443 (TLS);
+      # publishing 80/443 would collide with anything already on the host, so
+      # map a high port here and terminate TLS in front of it if needed.
+      - "${CADDY_HTTP_PORT:-8080}:80"
+      - "${CADDY_HTTPS_PORT:-8443}:443"
+    environment:
+      # A real hostname gets an automatically renewed public certificate.
+      # Left unset it defaults to `localhost` (self-signed, fine for a laptop).
+      - SITE_ADDRESS=${SITE_ADDRESS:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - web_dist:/srv/web:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── API / agent engine ──────────────────────────────────────────
+  api:
+    profiles: ["full"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+      target: runtime
+    container_name: ${CONTAINER_PREFIX}-api
+    restart: unless-stopped
+    environment:
+      FRONTIER_AGENT_ALLOW_PRIVATE_HOSTS: "true"
+      FRONTIER_AGENT_CONFIG: /app/config/config.yaml
+      FRONTIER_AGENT_ENV: /app/.env
+    ports:
+      # API is published only to aid debugging; Caddy is the supported path.
+      - ${API_DEBUG_PORT:-8000}:8000
+    volumes:
+      - ../config:/app/config:ro
+      - ../.env:/app/.env:ro
+      - ../data:/app/data
+      - agent_data:/app/agent_data
+    working_dir: /app
+    # Bubblewrap user namespaces need these; see the Dockerfile notes.
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    cap_add:
+      - SYS_PTRACE
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  web_dist:
+  agent_data:
+  caddy_data:
+  caddy_config:

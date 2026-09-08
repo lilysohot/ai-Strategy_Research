@@ -49,6 +49,11 @@ class AgentProfile:
     tools: Callable[[], list[Any]]             # () -> [Tool]
     skills: list[str]                          # skill ids; [] none, ["*"] all
     extra_observers: Callable[[list[str]], list[Any]]  # (tool_names) -> [observer]
+    # Domain rules appended to whichever system prompt the active mode ends up
+    # using. Delivered through the workflow's existing ``_sys_prompt_addendum``
+    # metadata key, so a native workflow (react) and the generic loop get it
+    # by the same route.
+    prompt_addendum: str = ""
     max_turns: int | None = None               # profile default (CLI overrides)
     provider: str = "custom"
     api_key_env: str | None = None
@@ -126,6 +131,41 @@ def _tool_factory(names: list[str]) -> Callable[[], list[Any]]:
     return _factory
 
 
+def _resolve_addendum(agent: dict[str, Any]) -> str:
+    """Resolve the profile's system-prompt addendum ("" when none is set).
+
+    Two forms, because the two have different failure modes:
+
+    * ``system_prompt_addendum_ref: pkg.mod:CONST`` — a dotted import. This is
+      the one to prefer: the text then has a single source of truth that tests,
+      the web layer (``server`` sets the same ``_sys_prompt_addendum``) and a
+      future online auditor can all import.
+    * ``system_prompt_addendum: |`` — literal YAML text, for a one-off profile.
+
+    Resolution is fail-LOUD for a ref that is present but unresolvable (a typo
+    would otherwise silently drop the discipline block, which is exactly the
+    kind of quiet failure this project cannot afford), and silent when no key
+    is set at all.
+    """
+    ref = str(agent.get("system_prompt_addendum_ref") or "").strip()
+    if not ref:
+        return str(agent.get("system_prompt_addendum") or "").strip()
+    module_name, _, attr = ref.partition(":")
+    if not module_name or not attr:
+        raise ValueError(
+            f"agent.system_prompt_addendum_ref must look like 'pkg.mod:CONST', got {ref!r}"
+        )
+    from importlib import import_module
+
+    try:
+        value = getattr(import_module(module_name), attr)
+    except (ImportError, AttributeError) as exc:
+        raise ValueError(
+            f"agent.system_prompt_addendum_ref {ref!r} could not be resolved: {exc}"
+        ) from exc
+    return str(value)
+
+
 def _model_list(llm: dict[str, Any]) -> list[str]:
     """The selectable models: ``llm.models`` (list) or the single ``llm.model``.
     First entry is the default. Duplicates removed, order preserved."""
@@ -201,10 +241,22 @@ def _resolve_llm(
 
 
 def _profile_path(name: str) -> Path:
-    for d in (_USER_DIR, _PKG_DIR):  # user dir wins over built-in
+    """根据 profile 名称查找对应的 YAML 文件路径。
+
+    查找顺序：
+    1. 首先在用户目录 ~/.apodex/profiles/ 下查找（用户自定义配置优先）
+    2. 然后在包内置目录（apodex/profiles/）下查找
+    3. 两边都找不到则抛出 KeyError
+    """
+    # 按优先级遍历两个目录：用户目录优先，内置目录兜底
+    for d in (_USER_DIR, _PKG_DIR):
+        # 拼接出完整的文件路径，格式为 <目录>/<name>.yaml
         p = d / f"{name}.yaml"
+        # 检查文件是否真实存在于磁盘上
         if p.is_file():
+            # 找到文件，立即返回该路径（后续目录不再查找）
             return p
+    # 两个目录都找不到该 profile 文件，抛出异常并附带所有可用的 profile 名称
     raise KeyError(
         f"unknown mode {name!r}; available: {', '.join(profile_names())}"
     )
@@ -240,6 +292,7 @@ def _build(name: str) -> AgentProfile:
         tools=_tool_factory([str(t) for t in (raw.get("tools") or [])]),
         skills=[str(s) for s in (raw.get("skills") or [])],
         extra_observers=_robustness_observers,
+        prompt_addendum=_resolve_addendum(agent),
         max_turns=int(max_turns) if max_turns is not None else None,
         provider=provider,
         api_key_env=api_key_env,

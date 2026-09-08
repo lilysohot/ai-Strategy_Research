@@ -1,0 +1,73 @@
+# Edge front door for the投研 Agent platform (T3.8).
+#
+# One Caddy site serves both halves of the app:
+#
+#   /api/*  -> reverse proxy to the FastAPI container, with response buffering
+#              disabled so Server-Sent Events stream to the browser as they are
+#              produced instead of arriving in one lump when the proxy decides to
+#              flush. This is the single most important line in this file — the
+#              agent UI is driven entirely by SSE.
+#   /*      -> the built Vite bundle, with a single-page-app fallback so a
+#              client-side route (or a browser refresh on one) resolves instead
+#              of 404ing on a path that exists only in the router.
+#
+# HTTPS: set SITE_ADDRESS to a real hostname and Caddy obtains and renews a
+# certificate automatically (default behaviour). Leaving it at the ``localhost``
+# default makes Caddy serve HTTPS with a locally-trusted internal certificate,
+# which is the right shape for a first run on a laptop. Set SITE_ADDRESS to
+# ``:80`` only if you truly want plaintext — note that a platform which handles
+# API keys should not be on the public internet over HTTP.
+#
+# The static root is a read-only mount of the volume the ``frontend`` service
+# publishes its bundle into; nothing here writes to it.
+
+{
+	# Trust the RFC1918 ranges we are actually deployed behind, so X-Forwarded-*
+	# from docker's own proxying is honoured and client IPs stay correct in logs.
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+{$SITE_ADDRESS:localhost} {
+	encode gzip zstd
+
+	log {
+		output stdout
+		format console
+	}
+
+	# ── API: streaming reverse proxy ──────────────────────────
+	handle /api/* {
+		reverse_proxy api:8000 {
+			# Do not hold the response to buffer it. Without this, SSE turns into
+			# a loading spinner followed by the whole run at once.
+			flush_interval -1
+
+			# A long agent run legitimately idles between tokens; keep the
+			# upstream connection open rather than pruning it.
+			transport http {
+				read_timeout 7200s
+				write_timeout 7200s
+			}
+		}
+
+		# Belt and braces for any intermediary that still thinks in nginx terms.
+		header X-Accel-Buffering "no"
+		header Cache-Control "no-store"
+	}
+
+	# ── Static bundle + SPA fallback ──────────────────────────
+	handle {
+		root * /srv/web
+
+		# Hashed assets are immutable; everything else must revalidate so a new
+		# deploy is picked up instead of being served stale for a week.
+		@immutable path /assets/*
+		header @immutable Cache-Control "public, max-age=31536000, immutable"
+		header Cache-Control "no-cache"
+
+		try_files {path} /index.html
+		file_server
+	}
+}

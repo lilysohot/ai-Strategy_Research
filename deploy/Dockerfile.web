@@ -1,0 +1,60 @@
+# Web platform image for the投研 Agent platform.
+#
+# Single image: the API server (FastAPI) AND its worker subprocesses share this
+# image. Workers are spawned by the API process in the same container (CWD =
+# repo root, required for workflow discovery). The root Dockerfile is the apodex
+# agent image (SANDBOX_BACKEND=bwrap) and MUST NOT be overwritten (tech-stack.md
+# §2/§7.2/ADR-12).
+#
+# SANDBOX_BACKEND=native is baked into the ENV here, not injected per-run: the
+# react node reads it via get_config() which caches on first read. Native is also
+# the only backend that needs no CAP_SYS_ADMIN inside the container (ADR-6).
+
+# ── build stage ───────────────────────────────────────────────
+FROM python:3.12-slim AS build
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_PROJECT_ENVIRONMENT=/opt/venv \
+    PATH=/opt/venv/bin:$PATH
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl build-essential \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && ln -s /root/.local/bin/uv /usr/local/bin/uv
+
+WORKDIR /build
+COPY pyproject.toml uv.lock README.md LICENSE ./
+COPY frontier_agent ./frontier_agent
+COPY plugins ./plugins
+COPY workflows ./workflows
+COPY benchmarks ./benchmarks
+COPY apodex ./apodex
+COPY server ./server
+COPY config ./config
+# The web dependency group is what distinguishes this image from the agent one.
+RUN uv sync --frozen --extra sandbox --extra document-readers --extra eval --extra dev --group web
+
+# ── runtime stage ─────────────────────────────────────────────
+FROM python:3.12-slim AS runtime
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH=/opt/venv/bin:$PATH \
+    UV_PROJECT_ENVIRONMENT=/opt/venv \
+    SANDBOX_BACKEND=native \
+    SERVER_SANDBOX_BACKEND=native \
+    BASH_ALLOWLIST_MODE=enforce \
+    FRONTIER_AGENT_TOOL_USER=off
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /opt/venv /opt/venv
+COPY --from=build /build /app
+WORKDIR /app
+
+# Persistent run artifacts + user uploads (mounted as volumes in compose).
+VOLUME ["/app/server/runs", "/app/uploads"]
+
+EXPOSE 8000
+CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "8000"]

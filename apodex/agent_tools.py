@@ -104,6 +104,14 @@ def terminal_tool_registry() -> dict[str, Any]:
         reg.setdefault("recover_result", recover_result)
     except Exception:  # pragma: no cover - broken install
         pass
+    # 投研内核（P0a）。纯函数、无副作用，所以两个入口都能共用同一份实现，
+    # 不需要 apodex.local_tools 那样的「宿主 cwd」变体。
+    # 这里刻意不做 try/except：它们与 plugins/tools 同仓同包，
+    # 起不来说明安装坏了，静默降级只会让 Agent 退回心算——那正是硬闸②要挡的事。
+    from plugins.tools.position_sizing import position_sizing
+    from plugins.tools.strategy_lint import strategy_lint
+    reg.setdefault("position_sizing", position_sizing)
+    reg.setdefault("strategy_lint", strategy_lint)
     return reg
 
 
@@ -117,6 +125,9 @@ _READ_ONLY = frozenset({
     # Subagent & report workflow built-ins
     "create_subagent", "assign_task", "collect_reports", "stop_subagent",
     "submit_report", "finalize_answer",
+    # 投研内核（P0a）：纯计算 + 纯校验，不碰文件系统、不碰网络、无副作用。
+    # 不加进来的话，不带 -y 时每一次仓位计算都要人工点确认。
+    "position_sizing", "strategy_lint",
 })
 # Tools that mutate the working tree — always confirmed (unless auto-approve)
 # AND journaled (snapshot-before, so the change is diffable + revertable).

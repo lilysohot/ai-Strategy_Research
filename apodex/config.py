@@ -116,7 +116,11 @@ def inspect_runtime_config(
     if provider != "local" and (cfg.api_key or "").strip() == "EMPTY":
         key_configured = False
 
+    # 语法解析：使用 Python 3.9+ 内置泛型注解 `list[RuntimeConfigIssue]`，显式声明 issues 为【存储 RuntimeConfigIssue 实例的列表】，初始化为空列表
+    # 用法：该列表用于收集运行时配置预检查阶段发现的所有问题（含阻塞性错误、非阻塞警告），后续会被转为 tuple 传入 RuntimeConfigStatus 实例以保证不可变性
     issues: list[RuntimeConfigIssue] = []
+    # 语法解析：key_configured 是布尔值，`not` 是逻辑取反运算符，此处判断是否未配置有效 API Key
+    # 用法：若条件成立，后续代码块将追加对应的 RuntimeConfigIssue（缺失 API Key 的阻塞性错误）
     if not key_configured:
         source = f" ({api_key_env})" if api_key_env else ""
         issues.append(RuntimeConfigIssue(

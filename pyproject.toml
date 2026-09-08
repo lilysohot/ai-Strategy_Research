@@ -92,6 +92,29 @@ apodex = "apodex.cli:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.21",
+]
+# Web platform layer (the投研 Agent 平台 server/ + deploy/ web image). These are
+# NOT part of the framework core; they are pulled in only when building the web
+# image or running the server tests. Kept as a group so `uv sync --extra dev`
+# alone does not drag FastAPI/asyncpg into every contributor's environment.
+web = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy[asyncio]>=2.0",
+    "asyncpg>=0.29",
+    "alembic>=1.13",
+    "pyjwt>=2.13.0",
+    "cryptography>=50.0.0",
+    "aiosqlite>=0.20",
+    "python-multipart>=0.0.31",
+    # Password hashing. argon2id is the OWASP recommendation and won the PHC;
+    # passlib is deliberately avoided (unmaintained). See FR-1.1.
+    "argon2-cffi>=23.1",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["frontier_agent", "apodex", "plugins", "workflows", "benchmarks"]
 
@@ -179,6 +202,12 @@ ignore = [
 # retry iteration and rely on `nonlocal`, so binding the loop variables as
 # default arguments (B023's fix) would change their behaviour.
 "frontier_agent/core/runtime/loop/_call.py" = ["B023"]
+# FastAPI's dependency injection *is* `x = Depends(...)` in a parameter default:
+# the framework inspects the signature to build the dependency graph, so the
+# call must appear in the default rather than the body. B008 flags the pattern
+# generically; here it is the documented API, not a bug.
+"server/deps.py" = ["B008"]
+"server/routes/*.py" = ["B008"]
 
 [tool.ruff.lint.isort]
 known-first-party = [

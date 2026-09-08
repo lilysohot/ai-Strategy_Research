@@ -131,6 +131,13 @@ TOOL_META: dict[str, ToolMeta] = {
         max_result_chars=_EXEC_RESULT_MAX_CHARS,
     ),
 
+    # 投研内核（P0a）——纯函数，无共享状态、无 IO，故并发安全。
+    # timeout=5 是给极端机器的余量，正常是微秒级。
+    # max_result_chars 保持 0（不限）：两者输出都是小 JSON，
+    # 截断只会把 computed_by 这类硬闸字段切掉，有害无益。
+    "position_sizing": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+    "strategy_lint": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+
 }
 
 
