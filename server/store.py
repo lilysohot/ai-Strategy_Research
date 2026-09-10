@@ -25,6 +25,7 @@ from sqlalchemy import (
     event,
     func,
     select,
+    update,
 )
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -382,7 +383,7 @@ async def create_llm_config(
     async with get_sessionmaker()() as session:
         if is_default:
             await session.execute(
-                UserLLMConfig.__table__.update()
+                update(UserLLMConfig)
                 .where(UserLLMConfig.user_id == user_id)
                 .values(is_default=False)
             )
@@ -460,7 +461,7 @@ async def update_llm_config(
             cfg.api_key_cipher = encrypt_api_key(api_key)
         if is_default is True:
             await session.execute(
-                UserLLMConfig.__table__.update()
+                update(UserLLMConfig)
                 .where(UserLLMConfig.user_id == user_id)
                 .values(is_default=False)
             )
@@ -478,7 +479,7 @@ async def set_default_llm_config(*, user_id: uuid.UUID, config_id: uuid.UUID) ->
         if cfg is None or cfg.user_id != user_id:
             raise ConfigNotFoundError(str(config_id))
         await session.execute(
-            UserLLMConfig.__table__.update()
+            update(UserLLMConfig)
             .where(UserLLMConfig.user_id == user_id)
             .values(is_default=False)
         )

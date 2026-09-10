@@ -209,7 +209,10 @@ async def _migrate(src_url: str, dst_url: str, *, force: bool) -> int:
                 )
                 payload = [_row_values(row) for row in rows]
                 if payload:
-                    stmt = pg_insert(model.__table__).values(payload)
+                    # The mapped class, not ``__table__``: passing the Table
+                    # loses the ORM's type information and pyright sees a bare
+                    # ``FromClause``, which ``insert()`` does not accept.
+                    stmt = pg_insert(model).values(payload)
                     await conn.execute(stmt.on_conflict_do_nothing())
                 await conn.commit()
                 print(f"copied {model.__tablename__:<18} {len(payload)} rows")

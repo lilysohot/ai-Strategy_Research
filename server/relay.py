@@ -22,6 +22,7 @@ from __future__ import annotations
 import asyncio
 import json
 from collections.abc import AsyncIterator
+from typing import Any
 
 from server.bridge import _is_skipped_result, redact_deep
 from server.config import run_dir_for
@@ -149,7 +150,9 @@ async def _merge_async(
 async def sse_for_run(
     run_id: str,
     *,
-    queue: asyncio.Queue[dict] | None = None,
+    # The queue carries a ``None`` end-of-stream sentinel (see subscribe()), so
+    # its element type is ``dict | None`` — matching the orchestrator's fan-out.
+    queue: asyncio.Queue[dict[str, Any] | None] | None = None,
     after_line: int = 0,
 ) -> AsyncIterator[str]:
     """Produce the SSE byte stream for a run.

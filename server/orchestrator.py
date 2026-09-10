@@ -173,9 +173,14 @@ class Orchestrator:
         handle = self._handles.get(run_id)
         if handle is None or handle.proc.returncode is not None:
             return False
+        stdin = handle.proc.stdin
+        if stdin is None:
+            # The worker exited before its stdin pipe was wired up; there is
+            # nothing left to signal, so report the stop as a no-op.
+            return False
         try:
-            handle.proc.stdin.write((json.dumps({"action": "stop"}) + "\n").encode())
-            await handle.proc.stdin.drain()
+            stdin.write((json.dumps({"action": "stop"}) + "\n").encode())
+            await stdin.drain()
         except (BrokenPipeError, ValueError):
             return False
         handle.stopped = True
@@ -196,11 +201,14 @@ class Orchestrator:
         handle = self._handles.get(run_id)
         if handle is None or handle.proc.returncode is not None:
             return None
+        stdin = handle.proc.stdin
+        if stdin is None:
+            return None
         try:
-            handle.proc.stdin.write(
+            stdin.write(
                 (json.dumps({"action": "steer", "message": message}) + "\n").encode()
             )
-            await handle.proc.stdin.drain()
+            await stdin.drain()
         except (BrokenPipeError, ValueError):
             return None
         handle.steer_seq += 1
@@ -237,9 +245,12 @@ class Orchestrator:
         }
         if replacement_command:
             payload["replacement_command"] = replacement_command
+        stdin = handle.proc.stdin
+        if stdin is None:
+            return False
         try:
-            handle.proc.stdin.write((json.dumps(payload) + "\n").encode())
-            await handle.proc.stdin.drain()
+            stdin.write((json.dumps(payload) + "\n").encode())
+            await stdin.drain()
         except (BrokenPipeError, ValueError):
             return False
         return True

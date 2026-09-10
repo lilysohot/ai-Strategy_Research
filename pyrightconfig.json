@@ -6,6 +6,7 @@
   "include": [
     "frontier_agent",
     "apodex",
+    "server",
     "workflows",
     "plugins",
     "benchmarks",
