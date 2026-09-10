@@ -201,7 +201,7 @@ class FrontierAgentConfig(BaseSettings):
             return self.openai_model
         return self.vision_default_model
 
-    serper_api_key: str = "641b963f277e92d1a8444d4a3a9b0c0dea59b552"
+    serper_api_key: str = ""
     serper_base_url: str = "https://google.serper.dev"
     jina_api_key: str = ""
     jina_base_url: str = "https://r.jina.ai"
