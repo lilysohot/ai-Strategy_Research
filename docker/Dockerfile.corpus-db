@@ -1,0 +1,35 @@
+# 语料库专用 PostgreSQL 镜像：zhparser（中文全文）+ pgvector（向量留位）+ pg_trgm
+#
+# 为什么不用默认 postgres 镜像：默认镜像不含 zhparser / pgvector，
+# 而我们中文全文检索依赖 zhparser、向量留位依赖 pgvector。
+#
+# 用户指定保留 PG 18：pgvector 用官方 PG18 预编译镜像（pgvector/pgvector:pg18），
+# zhparser 在 PG18 上社区已验证可编译（2025-11 起），从源码编译。
+FROM pgvector/pgvector:pg18
+
+USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        postgresql-server-dev-18 \
+        wget \
+        git \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# SCWS：zhparser 的依赖（中文分词底层库）
+RUN wget -qO- https://github.com/hightman/scws/archive/refs/tags/1.2.3.tar.gz \
+      | tar xz -C /tmp \
+    && cd /tmp/scws-1.2.3 \
+    && ./configure \
+    && make install \
+    && ldconfig
+
+# zhparser（PG 中文全文检索扩展，随 postgresql-server-dev-18 的 pg_config 编入 PG18）
+ENV SCWS_HOME=/usr/local
+RUN git clone --depth 1 https://github.com/amutu/zhparser.git /tmp/zhparser \
+    && cd /tmp/zhparser \
+    && make \
+    && make install
+
+USER postgres

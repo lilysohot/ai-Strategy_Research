@@ -77,7 +77,8 @@ agent:
   # 只选了 workflow + workflow_profile，工具可见性由 agent.agent_tools 决定），
   # 所以只改 apodex 那份 profile 是不够的——两个纯函数工具也不会出现在
   # benchmark.yaml / simple.yaml 里，评测路径不受影响。
-  agent_tools: [web_search, web_fetch, bash, grep_search, glob_search, add_task, update_task, read_file, create_file, recover_result, position_sizing, strategy_lint, corpus_search, corpus_fetch]
+  # 市场数据（同花顺 fuyao）：只读取数工具，未配置凭据时返回 ok=false 而不拖垮流程。
+  agent_tools: [web_search, web_fetch, bash, grep_search, glob_search, add_task, update_task, read_file, create_file, recover_result, position_sizing, strategy_lint, corpus_search, corpus_fetch, data_coverage, market_resolve, market_quote, market_history, market_financials]
   web_search_impl: aligned
   web_fetch_impl: aligned
   # Warn/escalate when one host repeatedly fails within this many network turns.

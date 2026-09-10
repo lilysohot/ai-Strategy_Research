@@ -34,13 +34,12 @@ from __future__ import annotations
 
 import json
 import math
-import sqlite3
 import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from plugins.corpus.fetch import open_resolver
+from plugins.corpus.service import get_service
 from plugins.corpus.strategy_schema import (
     HORIZONS,
     POSITION_SIZING_ID,
@@ -446,44 +445,42 @@ def format_report(report: dict[str, Any]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """CLI 入口：``python -m plugins.corpus.verify <strategy.json> [--corpus <db>]``。
+    """CLI 入口：``python -m plugins.corpus.verify <strategy.json> [--corpus <dsn>]``。
 
-    给 ``--corpus`` 才会真正跑硬闸①（否则溯源闸标记 skipped，strict 模式计为不通过）。
-    corpus 数据库由 ``open_resolver`` 打开并交给 ``verify``，本函数负责关连接。
+    溯源闸（`source_resolver`）由 PG 的 ``CorpusService`` 提供：默认连 ``CORPUS_DSN``
+    环境变量（缺省本机 ``postgresql://postgres:postgres@localhost:5432/postgres``），
+    也可用 ``--corpus <dsn>`` 覆盖。不给 ``--corpus`` 也会连默认 PG，确保硬闸①始终
+    能真正比对原文（而不是标记 skipped）。
 
     退出码刻意区分「不通过」(1) 与「跑不起来」(2)：CI 里这两种要分开处理，
     前者是策略的问题，后者是校验本身的问题，混在一起会掩盖后者。
     """
     args = list(sys.argv[1:] if argv is None else argv)
-    corpus_path: str | None = None
+    corpus_dsn: str | None = None
     paths: list[str] = []
     rest = list(args)
     while rest:
         token = rest.pop(0)
         if token == "--corpus":
-            corpus_path = rest.pop(0) if rest else None
+            corpus_dsn = rest.pop(0) if rest else None
         else:
             paths.append(token)
     if not paths:
         print(__doc__)
         return 2
 
-    conn: sqlite3.Connection | None = None
     resolver: SourceResolver | None = None
-    if corpus_path:
-        try:
-            conn, resolver = open_resolver(corpus_path)
-        except sqlite3.Error as exc:
-            print("无法打开语料库：" + str(exc))
-            return 2
+    try:
+        svc = get_service(corpus_dsn)
+        resolver = svc.source_resolver()
+    except Exception as exc:
+        print("无法连接语料库（PG）：" + str(exc))
+        return 2
     try:
         report = verify_file(paths[0], source_resolver=resolver)
     except (OSError, ValueError) as exc:
         print("无法读取策略卡：" + str(exc))
         return 2
-    finally:
-        if conn is not None:
-            conn.close()
     print(format_report(report))
     return 0 if report["passed"] else 1
 

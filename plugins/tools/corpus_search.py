@@ -17,13 +17,28 @@ snippet 故意给不全，不是偷懒：如果这里就把整段原文吐出来
 from __future__ import annotations
 
 import json
-import sqlite3
 
 from frontier_agent.core.tool import tool
-from plugins.corpus.index import search
-from plugins.corpus.ingest import DEFAULT_DB_PATH, connect
+from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
+
+#: 无研报覆盖时的**流程级指令**（不是建议，是要求）。
+#:
+#: 关键点：语料里没有相关研报时，必须让模型**立刻停下「继续找研报」这条路**
+#: （否则它会反复检索，或去够一篇沾边但不相关的研报凑 evidence），
+#: 转而走市场数据 + 技术面。同时钉住纪律：禁止编造研报、指标数值不得由模型自算。
+NO_COVERAGE_HINT = (
+    "语料库中没有与该查询相关的研报（coverage=none）。"
+    "**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径："
+    "① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；"
+    "② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；"
+    "③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。"
+    "纪律：禁止编造或引用不存在的研报；"
+    "技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；"
+    "最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，"
+    "并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+)
 
 
 @tool
@@ -53,27 +68,32 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     limit = min(limit, MAX_LIMIT)
 
     try:
-        conn = connect(DEFAULT_DB_PATH)
-    except sqlite3.Error as exc:
-        return json.dumps(
-            {"ok": False, "error": f"语料库不可用：{exc}", "hits": []},
-            ensure_ascii=False,
-        )
-
-    try:
-        hits = search(conn, query, limit=limit)
-    except sqlite3.Error as exc:
-        # 索引未建是最常见的失败原因，单独说清楚，否则 Agent 会以为「资料里没有」
+        svc = get_service()
+        hits = svc.search(query, limit=limit)
+    except Exception as exc:  # 库不可用 / 连接失败 / 检索异常统一归到 ok=false
         return json.dumps(
             {
                 "ok": False,
-                "error": f"检索失败（语料索引可能尚未建立）：{exc}",
+                "error": f"检索失败（语料库可能未就绪）：{exc}",
                 "hits": [],
             },
             ensure_ascii=False,
         )
-    finally:
-        conn.close()
+
+    if not hits:
+        # 「没有相关研报」与「检索成功但为空」此前长得一样（ok=true + 空 hits），
+        # 模型无法区分，容易硬凑。这里给出**显式覆盖度信号 + 明确的下一步**。
+        return json.dumps(
+            {
+                "ok": True,
+                "query": query,
+                "count": 0,
+                "hits": [],
+                "coverage": "none",
+                "hint": NO_COVERAGE_HINT,
+            },
+            ensure_ascii=False,
+        )
 
     return json.dumps(
         {

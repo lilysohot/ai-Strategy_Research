@@ -15,11 +15,9 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 
 from frontier_agent.core.tool import tool
-from plugins.corpus.fetch import fetch_block
-from plugins.corpus.ingest import DEFAULT_DB_PATH, connect
+from plugins.corpus.service import get_service
 
 
 @tool
@@ -44,17 +42,13 @@ async def corpus_fetch(doc_id: str, locator: str) -> str:
         )
 
     try:
-        conn = connect(DEFAULT_DB_PATH)
-    except sqlite3.Error as exc:
+        svc = get_service()
+        block = svc.fetch(doc_id, locator)
+    except Exception as exc:
         return json.dumps(
             {"ok": False, "error": f"语料库不可用：{exc}"},
             ensure_ascii=False,
         )
-
-    try:
-        block = fetch_block(conn, doc_id, locator)
-    finally:
-        conn.close()
 
     if block is None:
         return json.dumps(

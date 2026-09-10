@@ -98,6 +98,9 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Compare context-offloading changes with an A/B run | [Tool-result truncation A/B](tool-result-truncation-ab.md) |
 | Pick up the deferred context-offloading work | [Context offloading follow-ups](context-offloading-followups.md) |
 | Replicate the CLI/TUI panes and workflows in the web app | [CLI → Web parity](plan/cli-web-parity.md) **(design record, Chinese)** |
+| Bring 同花顺 market data into the research chain | [同花顺数据接入](plan/ths-market-data.md) **(Chinese, 需求与设计)** |
+| Review the SQLite → PostgreSQL corpus migration results | [Corpus PG migration report](corpus-pg-migration-report.md) **(Chinese)** |
+| Understand why retrieval recall broke after that migration and how it was recalibrated | [Recall calibration guide](guide-recall-calibration.md) **(tutorial, Chinese, beginner-friendly)** |
 | Inspect release-facing changes | [Changelog](../CHANGELOG.md) |
 
 Subsystem READMEs live beside their code when they are primarily useful to

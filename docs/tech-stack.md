@@ -2,10 +2,10 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.2 · 已定稿（并入 **M0.5 spike 实测结论**，见 §4/§5；前序：EventStore no-op 修正、steer 降级 P2、monorepo、worker CWD=仓库根） |
+| 版本 / 状态 | **v1.3** · 已定稿（新增 **§3.1 语料数据层** 与 **ADR 13–15**；前序：v1.2 并入 M0.5 spike 实测结论，见 §4/§5） |
 | 上游文档 | [requirements-user-layer.md](./requirements-user-layer.md)（FR-1 登录 / FR-2 用户级大模型配置 / FR-3 会话 / FR-4 留痕 / FR-5 用量） |
 | 验证物 | `server/spike.py` + `server/verify_spike.py`——A1–A7 门禁，退出码即结论；见 [plan.md](./plan/plan.md#m05-链路验证spike) |
-| 既定决策 | 业务数据库 = PostgreSQL；部署 = Docker Compose；代码组织 = 仓库内延续（monorepo）；**沙箱后端 = `native`** |
+| 既定决策 | 业务数据库 = PostgreSQL 16；**语料库 = 独立 PostgreSQL 18.6 实例（zhparser，见 §3.1）**；部署 = Docker Compose；代码组织 = 仓库内延续（monorepo）；**沙箱后端 = `native`** |
 | 原则 | 复用 FrontierAgent 运行时既有挂载点，Web 层为纯新增，不修改 `frontier_agent/` 内核 |
 
 > **v1.2 相对 v1.1 的四处实质修正**（均由 spike 实测得出，非推测）：
@@ -13,6 +13,10 @@
 > 2. **默认 profile 没有文件工具**——`agent.agent_tools` 决定工具集，`simple`/`benchmark` 无 `read_file`/`create_file`，仅 `tui` 有（§5.4）。
 > 3. **native 模式忽略 `_sandbox_mounts`**——bind mount 只在 bwrap 分支，上传直接进 `FRONTIER_AGENT_INPUTS_DIR`（§5.1）。
 > 4. **`on_tool_call` 不是 OpenAI 线格式**——扁平 `{id, name, args}` 且此刻 `args` 为空，参数摘要须取 trajectory（§5.2）。
+>
+> **v1.3 变更**：新增 **§3.1 语料数据层** 与 **ADR 13–15**——语料库由 SQLite 迁至**独立
+> PostgreSQL 18.6 实例**（zhparser 中文全文 + pgvector 留位 + psycopg 3），并记录排序校准结论。
+> 需求与实施细节见 [plan/pg-migration.md](./plan/pg-migration.md) v2.0。
 
 ## 1. 总体架构
 
@@ -30,10 +34,11 @@ api 容器 (frontier-web 镜像, FastAPI 单实例)
    │             ├─ 用户级 LLM 注入: env OPENAI_API_KEY/BASE_URL/MODEL
    │             ├─ BridgeObserver → stdout JSONL  ← 仅流式 delta，**不落盘**
    │             ├─ TrajectoryFileObserver(运行时自带) → run_dir/agent/trajectories/*.jsonl ← **落盘**
+   │             ├─ corpus 工具 → CorpusService(plugins/corpus/service.py) → 语料库 PG 18.6(独立实例)
    │             └─ stdin JSONL 控制通道 (stop)
    ├─ EventRelay: stdout JSONL(实时) + trajectory tail(回放) → asyncio 队列 → SSE
    └─ Store: SQLAlchemy 2.0 async + asyncpg → PostgreSQL (业务主库)
-外部: PostgreSQL 16 容器 │ run_dir(trajectories/engine.log/outputs) │ 用户 LLM 端点 │ stub 行情数据源(预留 AKShare)
+外部: PostgreSQL 16 容器(业务库) │ **PostgreSQL 18.6 容器(语料库 corpus-db，独立实例)** │ run_dir(trajectories/engine.log/outputs) │ 用户 LLM 端点 │ stub 行情数据源(预留 AKShare)
 ```
 
 ## 2. 代码组织（monorepo 决策）
@@ -75,6 +80,30 @@ api 容器 (frontier-web 镜像, FastAPI 单实例)
 | 反向代理 | Caddy | 2.x | SSE 自动适配、自动 HTTPS；落选 Nginx(需手工关缓冲/调超时) |
 | 部署 | **Docker Compose** | v2 | 既定决策；见 §6 |
 | 测试 | pytest + `deploy/huggingface/mock_llm.py` 假端点 | — | 全链路回归零 API 成本 |
+
+### 3.1 语料数据层（corpus，独立于业务库）
+
+投研语料（研报 / 文章）的检索与取证是 Agent 的**数据底座**，与上面的业务库是**两个独立 PG 实例**——
+不共用连接、不共用 schema。完整需求与实施记录见 [plan/pg-migration.md](./plan/pg-migration.md) v2.0。
+
+| 层 | 选型 | 版本基线 | 理由 / 落选方案 |
+|---|---|---|---|
+| 语料数据库 | **PostgreSQL**（独立实例 `corpus-db`） | **18.6** | host:port 网络接入（Windows 客户端直连）+ 多写者并发 + `pg_dump` 备份；落选继续 SQLite（**单写入者且无 host:port，硬边界**）、MySQL（无增益） |
+| 中文全文检索 | **zhparser**（基于 SCWS）+ `zhcfg` 检索配置 | 源码编译（基础镜像 `pgvector/pgvector:pg18`） | **PG 内置 FTS 无中文分词器，必须装扩展**；落选 `pg_jieba`（维护活跃度）、`pgroonga`（体积/生态） |
+| 向量检索 | **pgvector** | 扩展已装，**未建列** | **判据驱动、留位不建列**：当前 FTS Recall@5 已 100%，无缺口；需要时同库启用，不引入新系统 |
+| DB 驱动 | **psycopg 3**（`psycopg[binary]`，`dict_row`） | `>=3.3.5` | 替代标准库 `sqlite3`；服务端游标 + 原生 COPY 入库；`dict_row` 按列名取值，避免驱动类型外泄 |
+| 文档解析 | PyMuPDF / `python-docx` / `python-pptx` | `>=1.28.2` / `>=1.1` / `>=0.6.23` | 沿用 P0 选型，本次未变 |
+| 排序 | **`ts_rank`**（标题 5× 加权）+ AND→OR 兜底 + 按文档去重 + 时效偏置 | — | 对照 SQLite 的 `bm25(fts, 0, 0, 5.0, 1.0)`；落选 `ts_rank_cd`（覆盖密度，不按词频/稀有度加权，实测 Recall 仅 85%）、`pg_textsearch`（新兴扩展，不压宝） |
+
+**三条硬约束（来自 `data-layer-architecture.md` §5，写代码时遵守）**：
+
+1. **服务层唯一收口**：所有 DB 访问经 `plugins/corpus/service.py` 的 `CorpusService`，调用方
+   （`corpus_search` / `corpus_fetch` / `verify` / `golden`）**一律不直连**。
+2. 服务层**不向外暴露驱动类型**（不返回 `sqlite3.Row` / psycopg 游标 / 连接对象），否则换库连坐。
+3. 检索能力（分词、权重、排序）**完全关进服务层**——zhparser / ts_rank / 将来 pgvector 都只影响这一层。
+
+> ⚠️ **版本分叉**：业务库 PG **16** vs 语料库 PG **18.6**。两者是**不同实例**，无需对齐版本；
+> 但部署、备份与升级文档必须分别标注，避免混淆（已列入 `pg-migration.md` §8 待办）。
 
 ## 4. 运行时链路（M0.5 spike 实测逐段验证）
 
@@ -363,6 +392,9 @@ volumes: { pgdata: {}, caddy_data: {} }
 | 10 | **profile 用 `tui` 或 `profile_overrides` 下发 `agent_tools`+`fs_mode`** | 沿用 `default`/`benchmark` | `simple`/`benchmark` 的 `agent_tools` 无 `read_file`/`create_file`，FR-3.4/3.5 不成立；override 从 server 下发，零上游改动 |
 | 11 | **`_trial_dir` 必设** | 依赖 CWD 默认 | 缺失则轨迹落 CWD 的 `logs/`，在持久卷之外，FR-4.2/4.4 失效 |
 | 12 | **镜像用 `deploy/Dockerfile.web`** | 根 `Dockerfile` | 根 Dockerfile 是 apodex agent 镜像，被 compose.yaml / docker/ / CI 引用，不可覆盖 |
+| 13 | **语料库用独立 PG 实例（18.6）+ zhparser**，与业务库 PG 16 分离 | 并入业务库 / 继续 SQLite | 语料是 Agent 的数据底座，写入模式（按需跑批）与业务库（在线事务）不同，分离后可独立备份与扩缩；SQLite 因**单写入者 + 无 host:port** 被排除（硬边界）。详见 §3.1 |
+| 14 | 语料排序用 **`ts_rank` + 标题 5× + 按文档去重 + 时效偏置** | `ts_rank_cd` / `pg_textsearch` / 服务层 rerank | 实测校准：切 PG 后 Recall@5 一度 **0%**，逐项补齐后才回到 **100%**（`pg-migration.md` §4.7）。`ts_rank_cd` 不按词频/稀有度加权，且多块文档会霸占 top-k，Recall 仅 85% |
+| 15 | pgvector **留位不建列** | 现在建 `embedding` 列 | 判据驱动：当前 FTS Recall@5 = 100%，无缺口；留位可在需要时同库启用，不引入新系统 |
 
 ## 9. 安全设计要点
 

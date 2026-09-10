@@ -1,0 +1,31 @@
+# 语料库 PostgreSQL 服务（Windows Docker Desktop / Linux 通用）
+#
+# 构建并启动：
+#   docker compose build
+#   docker compose up -d
+#
+# 连接串（WSL2 / Windows 本机均可用 localhost，因 WSL2 localhost 转发到 Windows 宿主）：
+#   postgresql://postgres:postgres@localhost:5432/postgres
+services:
+  corpus-db:
+    build:
+      context: .
+      dockerfile: Dockerfile.corpus-db
+    container_name: corpus-db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${CORPUS_DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

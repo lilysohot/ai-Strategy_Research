@@ -50,6 +50,13 @@ def _card(sizing: dict) -> dict:
             {
                 "source_ref": "stub:R01",
                 "page": 1,
+                # 逐字取自 R01「关键事实」段；没有 fact 会被 evidence_no_fact 挡下
+                "quote": "公司 2025 年全年营业收入为 47.3 亿元，同比增长 18.6%。",
+                "kind": "fact",
+            },
+            {
+                "source_ref": "stub:R01",
+                "page": 1,
                 "quote": "目标价 24.50 元",
                 "kind": "forecast",
             },
@@ -69,6 +76,18 @@ def _card(sizing: dict) -> dict:
         horizon="3-6M",
         capital_total=CAPITAL_TOTAL,
         sizing=sizing,
+        sources=[
+            {
+                "id": "stub:R01",
+                "title": "蓝海新材（LHXC.SH）首次覆盖（stub）",
+                "url": "file://tests/fixtures/stub_reports/R01_看多.md",
+            },
+            {
+                "id": "stub:R04",
+                "title": "蓝海新材（LHXC.SH）：多头逻辑的证伪条件（stub）",
+                "url": "file://tests/fixtures/stub_reports/R04_失效条件.md",
+            },
+        ],
     )
 
 
@@ -93,10 +112,7 @@ async def test_card_sizing_is_byte_identical_to_the_tool_result():
     assert card["position"]["sizing"] == sizing
     assert card["position"]["sizing"]["computed_by"] == POSITION_SIZING_ID
     # 重算一遍，不信任字段
-    assert (
-        card["position"]["sizing"]["shares"] * ENTRY_HIGH
-        == card["position"]["sizing"]["amount"]
-    )
+    assert card["position"]["sizing"]["shares"] * ENTRY_HIGH == card["position"]["sizing"]["amount"]
 
 
 async def test_hand_edited_shares_are_rejected_by_recomputation():

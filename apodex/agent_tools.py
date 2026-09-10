@@ -117,6 +117,18 @@ def terminal_tool_registry() -> dict[str, Any]:
     from plugins.tools.corpus_search import corpus_search
     reg.setdefault("corpus_fetch", corpus_fetch)
     reg.setdefault("corpus_search", corpus_search)
+    # 数据源覆盖度探测：开局一次看清有哪些源可用（只读，串起 corpus 与 market）。
+    from plugins.tools.data_coverage import data_coverage
+    reg.setdefault("data_coverage", data_coverage)
+    # 市场数据（同花顺 fuyao）：只读、无写入、按需拉取。
+    from plugins.tools.market_financials import market_financials
+    from plugins.tools.market_history import market_history
+    from plugins.tools.market_quote import market_quote
+    from plugins.tools.market_resolve import market_resolve
+    reg.setdefault("market_resolve", market_resolve)
+    reg.setdefault("market_quote", market_quote)
+    reg.setdefault("market_history", market_history)
+    reg.setdefault("market_financials", market_financials)
     return reg
 
 
@@ -136,6 +148,11 @@ _READ_ONLY = frozenset({
     # 语料检索 / 取证（P0b）：只读本地 SQLite。不加进来的话，
     # 不带 -y 时每一次检索与取证都要人工点确认。
     "corpus_search", "corpus_fetch",
+    # 数据源覆盖度探测：只读（研报检索 + 市场探测），无副作用。
+    "data_coverage",
+    # 市场数据（同花顺 fuyao）：只读网络读取，无副作用。
+    # 不加进来的话，不带 -y 时每次取数都要人工点确认。
+    "market_resolve", "market_quote", "market_history", "market_financials",
 })
 # Tools that mutate the working tree — always confirmed (unless auto-approve)
 # AND journaled (snapshot-before, so the change is diffable + revertable).

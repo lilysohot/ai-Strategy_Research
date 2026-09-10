@@ -16,7 +16,7 @@ llm:
 # Turn budgets live in the selected workflow profile. ``agent.max_turns`` here
 # would configure apodex's generic loop, which workflow dispatch does not run.
 # 投研内核（P0a）。两者都是纯函数，纯计算 / 纯校验，无副作用。
-tools: [web_search, web_fetch, bash, grep_search, glob_search, read_file, todo_write, position_sizing, strategy_lint, corpus_search, corpus_fetch]
+tools: [web_search, web_fetch, bash, grep_search, glob_search, read_file, todo_write, position_sizing, strategy_lint, corpus_search, corpus_fetch, data_coverage, market_resolve, market_quote, market_history, market_financials]
 skills: []
 
 agent:

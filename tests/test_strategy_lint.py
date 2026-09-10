@@ -10,6 +10,8 @@ from __future__ import annotations
 import copy
 import json
 
+import pytest
+
 from plugins.corpus.strategy_schema import (
     POSITION_SIZING_ID,
     STRATEGY_LINT_ID,
@@ -25,7 +27,15 @@ _VALID: dict = {
     "position": {
         "symbol": "LHXC.SH",
         "thesis": "产能爬坡打开第二成长曲线",
+        # 必须含至少一条 kind=fact（否则 evidence_no_fact）；quote 逐字取自
+        # tests/fixtures/stub_reports/R01_看多.md
         "evidence": [
+            {
+                "source_ref": "stub:R01",
+                "page": 1,
+                "quote": "公司 2025 年全年营业收入为 47.3 亿元，同比增长 18.6%。",
+                "kind": "fact",
+            },
             {
                 "source_ref": "stub:R01",
                 "page": 1,
@@ -51,6 +61,14 @@ _VALID: dict = {
     },
     "lint": {},
     "disclaimer": "本研究性推演不构成投资建议，不涉及任何交易执行。",
+    # evidence.source_ref 的解析表：strategy_lint 用它识别悬空引用
+    "sources": [
+        {
+            "id": "stub:R01",
+            "title": "蓝海新材（LHXC.SH）首次覆盖（stub）",
+            "url": "file://tests/fixtures/stub_reports/R01_看多.md",
+        },
+    ],
 }
 
 
@@ -219,6 +237,121 @@ async def test_hand_written_computed_by_is_error():
     assert "unknown_computed_by" in _codes(result)
 
 
+# ── ERROR：evidence 可溯源（硬闸①的在线形态）────────────────────────────
+# 这一组是「数字可溯源」从文档口号变成在线约束的地方：没有证据、证据没有
+# 页码、引用了不存在的来源、全是观点没有事实——都必须在落卡前被挡住。
+
+
+async def test_missing_evidence_is_error():
+    card = _card()
+    del card["position"]["evidence"]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "missing_evidence" in _codes(result)
+
+
+async def test_empty_evidence_is_error():
+    card = _card()
+    card["position"]["evidence"] = []
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_empty" in _codes(result)
+
+
+async def test_evidence_item_not_object_is_error():
+    card = _card()
+    card["position"]["evidence"] = ["目标价 24.50 元"]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_not_object" in _codes(result)
+
+
+@pytest.mark.parametrize("key", ["source_ref", "page", "quote", "kind"])
+async def test_evidence_missing_required_field_is_error(key: str):
+    """溯源四键缺任一，溯源链就断一环。"""
+    card = _card()
+    del card["position"]["evidence"][0][key]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_missing_field" in _codes(result)
+
+
+async def test_evidence_bad_kind_is_error():
+    card = _card()
+    card["position"]["evidence"][0]["kind"] = "guess"
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_bad_kind" in _codes(result)
+
+
+async def test_placeholder_page_is_error():
+    """网页抓取留下的 ``page="—"`` 让硬闸①的「页码」退化成半条腿。
+
+    这是 run 828a 产出物的真实缺陷：数据全是东方财富接口抓的，
+    13 条 evidence 的 page 无一例外是 ``—``，而当时的 lint 根本不看 evidence。
+    """
+    card = _card()
+    for item in card["position"]["evidence"]:
+        item["page"] = "—"
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_page_placeholder" in _codes(result)
+
+
+@pytest.mark.parametrize("page", ["N/A", "未知", "", "-", None])
+async def test_other_page_placeholders_are_error(page: object):
+    card = _card()
+    for item in card["position"]["evidence"]:
+        item["page"] = page
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_page_placeholder" in _codes(result)
+
+
+async def test_real_page_number_passes():
+    card = _card()
+    card["position"]["evidence"][0]["page"] = 7
+    result = await _lint(card)
+    assert result["passed"] is True, result["errors"]
+
+
+async def test_unknown_source_ref_is_error():
+    """悬空引用：evidence 指向 sources 里根本不存在的 id。"""
+    card = _card()
+    card["position"]["evidence"][0]["source_ref"] = "stub:R99"
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_unknown_source_ref" in _codes(result)
+
+
+async def test_missing_sources_section_is_error():
+    """没有 sources，source_ref 只是个无法解析的字符串。"""
+    card = _card()
+    del card["sources"]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "missing_sources" in _codes(result)
+
+
+async def test_source_without_id_is_error():
+    card = _card()
+    card["sources"] = [{"title": "没有 id 的来源"}]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "source_missing_id" in _codes(result)
+
+
+async def test_evidence_without_fact_is_error():
+    """只有预测/观点、没有一条事实 = 无事实基础的推测。"""
+    card = _card()
+    card["position"]["evidence"] = [
+        item for item in card["position"]["evidence"] if item["kind"] != "fact"
+    ]
+    result = await _lint(card)
+    assert result["passed"] is False
+    assert "evidence_no_fact" in _codes(result)
+
+
 # ── WARN（不阻断）───────────────────────────────────────────────────────
 
 
@@ -236,6 +369,43 @@ async def test_low_risk_reward_is_warning_only():
     result = await _lint(card)
     assert result["passed"] is True
     assert "low_risk_reward" in _warn_codes(result)
+
+
+async def test_short_quote_is_warning_only():
+    """过短的引用通常是「概括」而非逐字原文——提醒，不阻断。"""
+    card = _card()
+    card["position"]["evidence"][0]["quote"] = "47.3 亿"
+    result = await _lint(card)
+    assert result["passed"] is True, result["errors"]
+    assert "evidence_quote_too_short" in _warn_codes(result)
+
+
+async def test_duplicate_evidence_is_warning_only():
+    card = _card()
+    card["position"]["evidence"].append(dict(card["position"]["evidence"][0]))
+    result = await _lint(card)
+    assert result["passed"] is True, result["errors"]
+    assert "evidence_duplicate" in _warn_codes(result)
+
+
+async def test_target_without_forecast_is_warning_only():
+    """目标价是「关于未来的数」，正常应由预测/观点支撑；缺了只提醒。"""
+    card = _card()
+    card["position"]["evidence"] = [
+        item for item in card["position"]["evidence"] if item["kind"] not in ("forecast", "opinion")
+    ]
+    result = await _lint(card)
+    assert result["passed"] is True, result["errors"]
+    assert "target_without_forecast" in _warn_codes(result)
+
+
+async def test_source_without_locator_is_warning_only():
+    """来源既无 url 也无 title = 溯源在最后一环断掉。"""
+    card = _card()
+    card["sources"][0] = {"id": "stub:R01"}
+    result = await _lint(card)
+    assert result["passed"] is True, result["errors"]
+    assert "source_missing_locator" in _warn_codes(result)
 
 
 # ── 入参合法性 ──────────────────────────────────────────────────────────
@@ -271,6 +441,12 @@ async def test_card_built_from_schema_passes_lint():
             {
                 "source_ref": "stub:R01",
                 "page": 1,
+                "quote": "公司 2025 年全年营业收入为 47.3 亿元，同比增长 18.6%。",
+                "kind": "fact",
+            },
+            {
+                "source_ref": "stub:R01",
+                "page": 1,
                 "quote": "目标价 24.50 元",
                 "kind": "forecast",
             },
@@ -291,6 +467,13 @@ async def test_card_built_from_schema_passes_lint():
             "lot_size": 100,
             "computed_by": POSITION_SIZING_ID,
         },
+        sources=[
+            {
+                "id": "stub:R01",
+                "title": "蓝海新材（LHXC.SH）首次覆盖（stub）",
+                "url": "file://tests/fixtures/stub_reports/R01_看多.md",
+            },
+        ],
     )
     result = json.loads(await strategy_lint.func(json.dumps(card, ensure_ascii=False)))
     assert result["passed"] is True

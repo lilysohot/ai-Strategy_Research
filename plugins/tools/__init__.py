@@ -12,6 +12,7 @@ from plugins.tools.corpus_fetch import corpus_fetch
 from plugins.tools.corpus_search import corpus_search
 from plugins.tools.create_file import create_file
 from plugins.tools.create_subagent import create_subagent
+from plugins.tools.data_coverage import data_coverage
 from plugins.tools.download_file import download_file
 from plugins.tools.file_editor import (
     file_editor_create,
@@ -20,6 +21,10 @@ from plugins.tools.file_editor import (
 )
 from plugins.tools.glob_search import glob_search
 from plugins.tools.grep_search import grep_search
+from plugins.tools.market_financials import market_financials
+from plugins.tools.market_history import market_history
+from plugins.tools.market_quote import market_quote
+from plugins.tools.market_resolve import market_resolve
 from plugins.tools.position_sizing import position_sizing
 from plugins.tools.read_file import read_file
 from plugins.tools.recover_result import recover_result
@@ -59,6 +64,14 @@ _BUILTIN_TOOLS: list[Tool] = [
     # 加入本 allowlist 只让它们「可解析」，是否可见另由各 profile 决定。
     corpus_search,
     corpus_fetch,
+    # 数据源覆盖度探测（开局一次，串起 corpus 与 market，只读）。
+    data_coverage,
+    # 市场数据（同花顺 fuyao）。只读、无写入、按按需拉取（本模块不落库）。
+    # 未配置 THS_API_KEY 或 MARKET_ENABLED=false 时工具返回 ok=false，不影响其他工具。
+    market_resolve,
+    market_quote,
+    market_history,
+    market_financials,
     file_editor_view,
     file_editor_create,
     file_editor_str_replace,

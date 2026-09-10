@@ -144,6 +144,18 @@ TOOL_META: dict[str, ToolMeta] = {
     # 「逐字原文」切掉，evidence.quote 就不再逐字，硬闸①的溯源比对当场失效。
     "corpus_search": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance"),
     "corpus_fetch": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
+    # 市场数据（同花顺 fuyao）：只读网络调用。
+    # timeout=15 而不是 10：一次 quote 内部是「消歧 + 行情 + 估值」多次请求串联，
+    # 且要留时间给 transport 的退避重试（§5.2）。
+    # market_quote 的 max_result_chars 必须是 0：截断会切掉 quote_text 与 as_of，
+    # 硬闸①的来源时点比对当场失效（与 corpus_fetch 同源理由）。
+    # data_coverage 要连探「研报 + 行情 + 财报」多个源，单次耗时是普通取数的数倍，
+    # timeout 给到 30s，否则探测本身会先超时，反而让模型误判"没有数据"。
+    "data_coverage": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=30, category="finance"),
+    "market_resolve": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=15, category="finance"),
+    "market_quote": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=15, category="finance", max_result_chars=0),
+    "market_history": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=15, category="finance"),
+    "market_financials": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=15, category="finance"),
 
 }
 

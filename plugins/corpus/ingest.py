@@ -27,6 +27,7 @@
 from __future__ import annotations
 
 import hashlib
+import logging
 import re
 import sqlite3
 from collections.abc import Iterable
@@ -35,6 +36,8 @@ from pathlib import Path
 
 import pymupdf
 from docx import Document as DocxDocument
+
+logger = logging.getLogger(__name__)
 
 # 低于此值（字符/页）判定为扫描页：正常研报每页上千字符，扫描件接近 0。
 MIN_CHARS_PER_PAGE = 50
@@ -138,16 +141,73 @@ def _title_from_filename(source_path: str | Path) -> str:
     return stem.strip(" -_") or stem
 
 
-def parse_pdf(path: str | Path) -> list[Block]:
+def _render_table(table: list[list[str | None]]) -> str:
+    """表格二维结构 → 规整文本（**保留「指标 / 数值」的同行对应关系**）。
+
+    pymupdf 的 ``get_text`` 会把表格拆成散乱行，数字与表头错开，
+    于是「表格里的数字检索不到」（D1 要修的就是这个）。
+    这里按行列重建，单元格用 `` | `` 连接，检索与取证都可读。
+    """
+    lines: list[str] = []
+    for row in table:
+        cells = [(cell or "").strip().replace("\n", " ") for cell in row]
+        if not any(cells):
+            continue
+        lines.append(" | ".join(cells))
+    return "\n".join(lines)
+
+
+def extract_pdf_tables(path: str | Path) -> dict[int, list[str]]:
+    """抽 PDF 表格：``{1-based 页码: [表格文本, ...]}``。
+
+    ``pdfplumber`` 是**可选**能力：未安装或单页解析失败都返回空，
+    绝不拖垮 ingest 主流程（表格是增强，正文才是地基）。
+    """
+    try:
+        import pdfplumber  # 可选依赖，延迟导入
+    except ImportError:
+        logger.debug("pdfplumber 未安装，跳过表格抽取")
+        return {}
+
+    tables: dict[int, list[str]] = {}
+    try:
+        with pdfplumber.open(str(path)) as pdf:
+            for index, page in enumerate(pdf.pages, start=1):
+                rendered: list[str] = []
+                for table in page.extract_tables() or []:
+                    if len(table) < 2:  # 单行「表」基本是版式噪音
+                        continue
+                    text = _render_table(table)
+                    if len(text.strip()) < 8:
+                        continue
+                    rendered.append(text)
+                if rendered:
+                    tables[index] = rendered
+    except Exception as exc:  # 单份表格解析失败不得影响入库
+        logger.warning("表格抽取失败（已跳过）：%s -- %s", path, exc)
+        return {}
+    return tables
+
+
+def parse_pdf(path: str | Path, *, with_tables: bool = True) -> list[Block]:
     """PDF → 每页一个块，locator 是 1-based 页码字符串。
 
     用 ``pymupdf``（而非 ``fitz`` 旧入口，也非 pypdf）：只有它提供版面坐标，
     且实测这 14 份都能直接抽出文字层，无需 OCR。
+
+    ``with_tables=True``（默认，D1）时再把 pdfplumber 抽出的**结构化表格**
+    以 `[表格]` 段追加到该页文本末尾 —— 页码 locator 不变，取证仍按页，
+    但表格数字以「指标 | 数值」的规整形式进入 L3，可被检索到。
     """
+    tables = extract_pdf_tables(path) if with_tables else {}
     blocks: list[Block] = []
     with pymupdf.open(str(path)) as doc:
         for index, page in enumerate(doc, start=1):
             text = _strip_boilerplate(page.get_text("text"))
+            page_tables = tables.get(index, [])
+            if page_tables:
+                body = "\n[表格]\n" + "\n\n".join(page_tables)
+                text = f"{text}\n{body}" if text.strip() else body
             blocks.append(Block(seq=index, locator=str(index), text=text))
     return blocks
 

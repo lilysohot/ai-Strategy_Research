@@ -27,6 +27,8 @@ dependencies = [
     "python-pptx>=0.6.23",
     "pymupdf>=1.28.2",
     "jieba>=0.42.1",
+    "psycopg[binary]>=3.3.5",
+    "pdfplumber>=0.11.10",
 ]
 
 [project.optional-dependencies]
