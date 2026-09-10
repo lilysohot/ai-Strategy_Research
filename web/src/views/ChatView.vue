@@ -6,6 +6,7 @@ import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
 import { useRunStreamStore } from '@/stores/runs'
 import { useSessionsStore } from '@/stores/sessions'
+import { useAuthStore } from '@/stores/auth'
 import { artifacts as artifactsApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type { DiffFile } from '@/types'
@@ -33,6 +34,7 @@ import {
 
 const sessions = useSessionsStore()
 const runStream = useRunStreamStore()
+const authStore = useAuthStore()
 
 const input = ref('')
 const sending = ref(false)
@@ -228,6 +230,26 @@ watch(
   () => scrollToBottom(),
 )
 
+/**
+ * Re-read the server's copy of the active session's turns.
+ *
+ * A finished run's reply is persisted by the orchestrator but is never streamed
+ * again, and watching the *next* run clears the live buffers (``watch()`` resets
+ * ``answer``/``steps``). Without pulling the persisted copies back, sending a
+ * second message would take the previous answer off screen — the reply only ever
+ * existed in that stream state.
+ */
+async function reloadTurns(): Promise<void> {
+  const id = sessions.activeId
+  if (!id) return
+  try {
+    await sessions.loadTurns(id)
+  } catch {
+    // Keep whatever the live stream already rendered; a failed refresh must not
+    // blank a conversation the user can still read.
+  }
+}
+
 async function onSend() {
   const text = input.value.trim()
   if (!text || sending.value) return
@@ -235,9 +257,19 @@ async function onSend() {
     ElMessage.warning('请先新建或选择一个会话')
     return
   }
+  // Only one run is watched at a time: starting another would drop the live
+  // stream of the previous one mid-flight, and its answer would be gone.
+  if (runStream.isStreaming) {
+    ElMessage.warning('上一条还在运行，请等它结束或点击停止')
+    return
+  }
   sending.value = true
   input.value = ''
   try {
+    // Re-read first: the reply of any earlier run lives only in the server's
+    // copy at this point, and runStream.watch() below wipes the local stream
+    // state it used to be rendered from.
+    await reloadTurns()
     // 乐观插入用户消息
     sessions.appendLocalTurn({
       seq: (sessions.activeTurns.at(-1)?.seq ?? 0) + 1,
@@ -322,11 +354,19 @@ async function loadDiff() {
   }
 }
 
-// diff.json 由 worker 在终态时落盘；状态栏统计与 Diff Tab 都依赖它，到点即拉。
+/**
+ * Terminal state is when two things land: diff.json on disk, and the assistant
+ * turn in the DB — so re-read both. The delay is deliberate: the SSE terminal
+ * frame can beat the orchestrator's turn write by a few hundred ms, and pulling
+ * too early would cache a history still missing that reply.
+ */
 watch(
   () => runStream.status,
-  (s) => {
-    if (s === 'completed' || s === 'failed' || s === 'stopped') void loadDiff()
+  async (s) => {
+    if (s !== 'completed' && s !== 'failed' && s !== 'stopped') return
+    await new Promise((resolve) => setTimeout(resolve, 1200))
+    await reloadTurns()
+    void loadDiff()
   },
 )
 
@@ -353,6 +393,45 @@ function onSelectSession() {
   sidebarOpen.value = false
 }
 
+/**
+ * Remember which session the user was last in.
+ *
+ * The store is in-memory, so a reload otherwise lands on an empty chat area even
+ * though the server kept every session — it reads as "history was not saved"
+ * when in fact nothing was selected.
+ */
+const lastSessionKey = computed(
+  () => `frontier-agent.lastSession:${authStore.user?.id ?? 'anon'}`,
+)
+
+function rememberSession(id: string | null): void {
+  try {
+    if (id) localStorage.setItem(lastSessionKey.value, id)
+    else localStorage.removeItem(lastSessionKey.value)
+  } catch {
+    /* storage unavailable — fall back to opening the most recent session */
+  }
+}
+
+async function restoreSession(): Promise<void> {
+  if (sessions.activeId || !sessions.list.length) return
+  let remembered: string | null = null
+  try {
+    remembered = localStorage.getItem(lastSessionKey.value)
+  } catch {
+    remembered = null
+  }
+  // A remembered id can belong to another account or have been deleted since;
+  // in both cases fall back to the most recently updated session.
+  const target = sessions.list.find((s) => s.id === remembered) ?? sessions.list[0]
+  if (!target) return
+  try {
+    await sessions.select(target.id)
+  } catch {
+    ElMessage.error(sessions.error ?? '打开会话失败')
+  }
+}
+
 onMounted(async () => {
   if (!sessions.list.length) {
     try {
@@ -361,6 +440,7 @@ onMounted(async () => {
       ElMessage.error(sessions.error ?? '加载会话失败')
     }
   }
+  await restoreSession()
 })
 
 onBeforeUnmount(() => {
@@ -372,6 +452,7 @@ onBeforeUnmount(() => {
 watch(
   () => sessions.activeId,
   (id) => {
+    rememberSession(id)
     if (id) onSelectSession()
   },
 )
