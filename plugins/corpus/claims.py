@@ -112,6 +112,7 @@ class ExtractStats:
     candidates: int = 0
     claims: int = 0
     skipped_no_signal: int = 0
+    skipped_existing: int = 0  # 断点续跑：已抽取过的块，跳过以免重复花 LLM 调用
     failed: int = 0
     failures: list[dict[str, str]] = field(default_factory=list)
 
@@ -122,6 +123,7 @@ class ExtractStats:
             "candidates": self.candidates,
             "claims": self.claims,
             "skipped_no_signal": self.skipped_no_signal,
+            "skipped_existing": self.skipped_existing,
             "failed": self.failed,
         }
         if self.failures:
@@ -169,14 +171,24 @@ def triage_blocks(blocks: list[BlockLike]) -> tuple[list[BlockLike], int]:
 
 
 # ── LLM 交互 ─────────────────────────────────────────────────────
-PROMPT_TEMPLATE = """你是金融研报结构化抽取器。从下面这段研报原文中抽取**可验证的论断**。
+PROMPT_TEMPLATE = """你是金融研报结构化抽取器。从下面这段研报原文中抽取**含具体数字或评级的陈述**。
+
+什么算一条 claim（按此判断，不要过严）：
+- 「2026 年上半年实现营业收入 1741 亿元，同比增长 1.3%」→ fact
+- 「给予目标价 1888 元，维持"买入"评级」→ forecast
+- 「PE(TTM) 为 19.8 倍」「市占率 25%」→ fact
+不算：没有具体数字或评级的一般性描述（"公司竞争力突出"）、纯行业背景。
 
 要求：
 - 只输出 JSON 数组，不要任何解释文字、不要 Markdown 代码块。
 - 每条包含：claim（论断原文或最接近的原文表述）、kind（fact=已发生的事实；forecast=预测/目标价/评级）、
   tickers（涉及的代码，形如 600519.SH；没有则为 []）、metric（指标名，如 营业收入/净利润/PE）、
   value（数值原文，带单位）、period（报告期，如 2026H1）、confidence（0-1）。
-- 原文没有论断就输出 []。不要编造原文中不存在的数字。
+- 整段确实没有任何含数字/评级的陈述才输出 []。不要编造原文中不存在的数字。
+
+示例：
+输入：公司 2026 年上半年实现营业收入 1741.44 亿元，同比增长 1.3%；给予目标价 1888 元，维持买入评级。
+输出：[{"claim": "2026 年上半年实现营业收入 1741.44 亿元，同比增长 1.3%", "kind": "fact", "tickers": [], "metric": "营业收入", "value": "1741.44 亿元", "period": "2026H1", "confidence": 0.9}, {"claim": "给予目标价 1888 元，维持买入评级", "kind": "forecast", "tickers": [], "metric": "目标价", "value": "1888 元", "period": null, "confidence": 0.8}]
 
 原文：
 {text}
@@ -184,9 +196,13 @@ PROMPT_TEMPLATE = """你是金融研报结构化抽取器。从下面这段研�
 
 
 def build_prompt(text: str, *, max_chars: int = 2500) -> str:
-    """构造 prompt（截断超长块，避免单次调用过大）。"""
+    """构造 prompt（截断超长块，避免单次调用过大）。
+
+    用 ``replace`` 而不是 ``str.format``：模板里躺着 few-shot 的 JSON 示例，
+    ``format`` 会把 ``{"claim": ...}`` 当占位符解析，直接 KeyError（实测踩过）。
+    """
     body = text if len(text) <= max_chars else text[:max_chars] + "\n…（截断）"
-    return PROMPT_TEMPLATE.format(text=body)
+    return PROMPT_TEMPLATE.replace("{text}", body)
 
 
 def parse_claims_json(raw: str) -> list[dict[str, Any]]:

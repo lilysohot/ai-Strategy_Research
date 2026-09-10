@@ -555,16 +555,33 @@ class CorpusService:
         doc_ids: list[str] | None = None,
         limit: int | None = None,
         retry_attempts: int = 3,
+        sleep_between: float = 0.0,
+        skip_existing: bool = True,
+        dry_run: bool = False,
     ) -> ExtractStats:
         """D2：**分级 → LLM 抽取 → 落库**。
 
         ``llm`` 可注入（测试用假实现）；不给则用 :func:`build_default_llm`。
         ``retry_attempts`` 控制退避重试（实测供应商会 429 限流，重试即可成功）。
+        ``sleep_between`` 块间限速（秒）：610 块连打会触发限流风暴，全量跑批建议 1s。
+        ``skip_existing`` 断点续跑：跳过 claims 表已有 ``(doc_id, seq)`` 的块——
+        ``ON CONFLICT`` 只保证不重复**插入**，不挡重复的 **LLM 调用**；批跑中断后
+        重跑若不跳过，已成功的块会再花一遍钱。
         纪律与 ingest 一致：**单块失败只记 failure，不中断整批**。
         """
-        llm_fn = llm if llm is not None else build_default_llm()
-        if retry_attempts > 1:
-            llm_fn = with_retry(llm_fn, attempts=retry_attempts)
+        llm_fn = None
+        if not dry_run:
+            llm_fn = llm if llm is not None else build_default_llm()
+            if retry_attempts > 1:
+                llm_fn = with_retry(llm_fn, attempts=retry_attempts)
+
+        done: set[tuple[str, int]] = set()
+        if skip_existing:
+            with self._connect() as conn:
+                done = {
+                    (str(row["doc_id"]), int(row["seq"]))
+                    for row in conn.execute("SELECT DISTINCT doc_id, seq FROM claims").fetchall()
+                }
         stats = ExtractStats()
 
         targets = list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in self.list_documents()]
@@ -580,7 +597,12 @@ class CorpusService:
             for block in candidates:
                 if limit is not None and stats.candidates >= limit:
                     break
+                if (doc_id, block.seq) in done:
+                    stats.skipped_existing += 1
+                    continue
                 stats.candidates += 1
+                if dry_run:  # 错峰前只统计将抽取多少块，不调 LLM、不入库
+                    continue
                 try:
                     pending.extend(extract_from_block(block, doc_id=doc_id, llm=llm_fn))
                 except Exception as exc:  # 单块失败不得拖垮整批
@@ -592,7 +614,10 @@ class CorpusService:
                             "reason": f"{type(exc).__name__}: {exc}"[:200],
                         }
                     )
-            stats.claims += self._insert_claims(pending)
+                if sleep_between > 0:
+                    time.sleep(sleep_between)
+            if not dry_run:
+                stats.claims += self._insert_claims(pending)
 
         return stats
 
@@ -1136,7 +1161,15 @@ def _main() -> int:
 
     p_claims = sub.add_parser("extract-claims", help="D2：分级 + LLM 抽取 claim 并落库")
     p_claims.add_argument("--limit", type=int, default=None, help="最多处理多少个候选块（先跑小样本）")
+    p_claims.add_argument(
+        "--sleep", type=float, default=1.0,
+        help="块间限速秒数，防供应商 429 限流风暴（0=不限速；全量跑批建议 1s）",
+    )
     p_claims.add_argument("--doc", default=None, help="只处理指定 doc_id")
+    p_claims.add_argument(
+        "--dry-run", action="store_true",
+        help="只统计将抽取多少块 / 预计多少次 LLM 调用与耗时，不真正调模型（错峰前规划批次用）",
+    )
     p_claims.add_argument("--db", default=None)
 
     p_show_claims = sub.add_parser("claims", help="查询已抽取的 claim（D3/D4 的数据源）")
@@ -1156,12 +1189,27 @@ def _main() -> int:
     if args.cmd == "extract-claims":
         doc_ids = [args.doc] if args.doc else None
         try:
-            stats = svc.extract_claims(doc_ids=doc_ids, limit=args.limit)
+            stats = svc.extract_claims(
+                doc_ids=doc_ids, limit=args.limit, sleep_between=args.sleep,
+                dry_run=args.dry_run,
+            )
         except RuntimeError as exc:  # 缺 OPENAI_API_KEY 等
             print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False))
             return 2
-        print(json.dumps(stats.as_dict(), ensure_ascii=False, indent=2))
-        return 1 if stats.failed else 0
+        out = stats.as_dict()
+        if args.dry_run:
+            # 估算：每次 LLM 调用 ~2s 响应 + 限速间隔（实测均值，仅作排期参考）
+            calls = out["candidates"]
+            est_seconds = calls * (max(args.sleep, 0) + 2.0)
+            out = {
+                **out,
+                "dry_run": True,
+                "estimated_llm_calls": calls,
+                "estimated_seconds": round(est_seconds, 1),
+                "estimated_minutes": round(est_seconds / 60, 1),
+            }
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0 if args.dry_run else (1 if stats.failed else 0)
 
     if args.cmd == "claims":
         rows = svc.claims_of(

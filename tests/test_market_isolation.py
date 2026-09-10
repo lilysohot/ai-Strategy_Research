@@ -20,10 +20,16 @@ FORBIDDEN_MODULES = ("plugins.market",)
 
 
 def _market_imports(path: Path) -> list[str]:
-    """静态解析：收集该文件中对 plugins.market 的 import（不执行代码）。"""
+    """静态解析：收集该文件**模块级**对 plugins.market 的 import（不执行代码）。
+
+    只查顶层：import 该模块时若会连带 import market，隔离即告破；
+    而函数内的**延迟 import** 是「由调用方注入」的合法实现（§5.7）——
+    例如 verify 的 CLI 在给了 `--market-trace` 时才加载 market 的 resolver，
+    不装 market 也能正常跑 corpus verify。
+    """
     tree = ast.parse(path.read_text(encoding="utf-8"))
     found: list[str] = []
-    for node in ast.walk(tree):
+    for node in tree.body:  # 仅顶层，不下钻函数体
         if isinstance(node, ast.Import):
             found.extend(alias.name for alias in node.names)
         elif isinstance(node, ast.ImportFrom) and node.module:
@@ -52,7 +58,7 @@ def test_disabled_by_flag_returns_actionable_failure() -> None:
     assert denied is not None
     assert denied["ok"] is False
     assert denied["kind"] == "credentials"
-    assert "next" in denied and denied["next"]
+    assert denied.get("next")
 
 
 def test_missing_api_key_returns_actionable_failure() -> None:

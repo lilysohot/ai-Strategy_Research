@@ -206,7 +206,10 @@ def test_single_block_failure_does_not_stop_batch(scratch_dsn, tiny_corpus) -> N
         raise RuntimeError("LLM 超时")
 
     svc = CorpusService(scratch_dsn)
-    stats = svc.extract_claims(llm=flaky_llm, retry_attempts=1)
+    # skip_existing=False：本测试要验证「LLM 失败也记 failure 不中断」，
+    # 但同一 scratch 库里前面的测试已抽取过这些块 —— 不关掉断点续跑，
+    # 它们会被直接跳过，failed 恒为 0，验证就失效了。
+    stats = svc.extract_claims(llm=flaky_llm, retry_attempts=1, skip_existing=False)
 
     assert stats.failed >= 1, stats.as_dict()
     assert stats.failures, "失败必须带 locator 与原因，便于重试"

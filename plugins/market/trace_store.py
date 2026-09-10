@@ -86,10 +86,25 @@ def render_raw_record(record: dict) -> str:
     for row in rows:
         if not isinstance(row, dict):
             continue
-        parts = [f"{key}={row[key]}" for key in sorted(row) if isinstance(row[key], (int, float, str))]
+        parts = [
+            f"{key}={row[key]}"
+            for key in sorted(row)
+            if isinstance(row[key], (int, float, str)) and not isinstance(row[key], bool)
+        ]
         if isinstance(as_of, int):
             parts.append(f"as_of={as_of}")
         lines.append("; ".join(parts))
+    # `data` 层的标量也要渲染：historical 的 `adjust` / `interval` 在这里——
+    # 不渲染的话「复权口径」无法从留痕取证（§9 坑 1 要求口径可查）。
+    meta = [
+        f"{key}={data[key]}"
+        for key in sorted(data)
+        if key not in ("item", "timestamp")
+        and isinstance(data[key], (int, float, str))
+        and not isinstance(data[key], bool)
+    ]
+    if meta:
+        lines.append("; ".join(meta))
     return "\n".join(lines)
 
 

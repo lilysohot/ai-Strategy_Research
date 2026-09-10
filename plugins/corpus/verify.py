@@ -34,8 +34,10 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 from collections.abc import Callable
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -55,8 +57,19 @@ SourceResolver = Callable[[str], str | None]
 GATE_TRACEABILITY = "traceability"
 GATE_ARITHMETIC = "arithmetic"
 GATE_SCHEMA = "schema"
+# 市场数据溯源闸（M6）：`ths:` 引用走**响应留痕**比对，与语料库溯源分开计，
+# 避免"真的市场数字因 corpus 里没有该 doc 而被判无法解析"。
+GATE_MARKET = "market"
 # 展示顺序 = 硬闸编号顺序，便于人对着验收表逐条勾
-GATE_ORDER: tuple[str, ...] = (GATE_TRACEABILITY, GATE_ARITHMETIC, GATE_SCHEMA)
+GATE_ORDER: tuple[str, ...] = (GATE_TRACEABILITY, GATE_MARKET, GATE_ARITHMETIC, GATE_SCHEMA)
+
+# ── 市场数据常量（M6）────────────────────────────────────────────────────
+#: 市场数据来源前缀：`ths:<thscode>:<request_id>`
+MARKET_PREFIX = "ths:"
+#: 合法形态：必须带 thscode 与 request_id（缺 request_id 即悬空引用）
+MARKET_REF_RE = re.compile(r"^ths:(\d{6}\.(?:SH|SZ|BJ|OF|HK)):([A-Za-z0-9_-]+)$")
+#: 快照新鲜度阈值（自然日）：超过则 WARN（无日历表，按自然日粗判）
+DEFAULT_STALE_DAYS = 5
 
 # 金额到分、权重到 1bp：足够容忍 position_sizing 的取整与 JSON 序列化，
 # 又足够窄到「改一手股」必定被抓到。与 strategy_lint 内重算同一容差。
@@ -67,7 +80,8 @@ _FAILED = "failed"
 _SKIPPED = "skipped"
 
 _GATE_TITLES = {
-    GATE_TRACEABILITY: "硬闸① 数字可溯源",
+    GATE_TRACEABILITY: "硬闸① 数字可溯源（语料库）",
+    GATE_MARKET: "硬闸①扩 市场数据可溯源（留痕比对）",
     GATE_ARITHMETIC: "硬闸② 算术不出 LLM",
     GATE_SCHEMA: "硬闸③ schema 完备 + lint 契约",
 }
@@ -100,12 +114,6 @@ def _gate_traceability(
     resolver 为 ``None`` 时返回 ``skipped``——**不是** ``passed``。
     """
     evidence = position_of(card).get("evidence")
-    total = len(evidence) if isinstance(evidence, list) else 0
-    if resolver is None:
-        return _SKIPPED, [], total, 0
-
-    problems: list[dict[str, str]] = []
-    traced = 0
     if not isinstance(evidence, list) or not evidence:
         return _FAILED, [
             _problem(
@@ -113,19 +121,26 @@ def _gate_traceability(
                 "no_evidence",
                 "没有 evidence 可溯源：无法验证任何数字的来源",
             )
-        ], total, 0
+        ], 0, 0
 
-    for index, item in enumerate(evidence):
+    # 市场数据引用（`ths:` 前缀）交给**市场溯源闸**（M6）处理，本闸只管语料库来源——
+    # 否则 corpus 里根本没有该 doc，会被一律判成「无法解析到原文」，
+    # 结果是「真的市场数字也进不了卡」（M6 要修的正是这个）。
+    corpus_items = [
+        item
+        for item in evidence
+        if isinstance(item, dict)
+        and not str(item.get("source_ref") or "").strip().startswith(MARKET_PREFIX)
+    ]
+    total = len(corpus_items)
+    if resolver is None:
+        return _SKIPPED, [], total, 0
+
+    problems: list[dict[str, str]] = []
+    traced = 0
+
+    for index, item in enumerate(corpus_items):
         label = f"evidence[{index}]"
-        if not isinstance(item, dict):
-            problems.append(
-                _problem(
-                    GATE_TRACEABILITY,
-                    "not_object",
-                    label + " 不是对象，无法溯源",
-                )
-            )
-            continue
         quote = str(item.get("quote") or "").strip()
         ref = str(item.get("source_ref") or "").strip()
         if not quote or not ref:
@@ -159,6 +174,183 @@ def _gate_traceability(
         # 走到这里说明 quote 已在原文里逐字找到：成功溯源一条
         traced += 1
     return (_FAILED if problems else _PASSED), problems, total, traced
+
+
+def _market_evidence(card: dict[str, Any]) -> list[tuple[int, dict[str, Any]]]:
+    """取所有 `ths:` 市场引用（含原始下标，便于报错定位）。"""
+    evidence = position_of(card).get("evidence")
+    if not isinstance(evidence, list):
+        return []
+    return [
+        (index, item)
+        for index, item in enumerate(evidence)
+        if isinstance(item, dict)
+        and str(item.get("source_ref") or "").strip().startswith(MARKET_PREFIX)
+    ]
+
+
+def _market_as_of_ms(item: dict[str, Any]) -> int | None:
+    """解析引用时点：`quote` 里的 `as_of=<毫秒>` 优先，其次 `page`（ISO 时间）。"""
+    match = re.search(r"as_of=(\d{10,13})", str(item.get("quote") or ""))
+    if match:
+        return int(match.group(1))
+    page = str(item.get("page") or "").strip()
+    try:
+        return int(datetime.fromisoformat(page).timestamp() * 1000)
+    except ValueError:
+        return None
+
+
+def _gate_market_traceability(
+    card: dict[str, Any],
+    market_resolver: SourceResolver | None,
+) -> tuple[str, list[dict[str, str]], int, int]:
+    """市场溯源闸（M6）：`ths:` 引用必须在**响应留痕**里逐字命中。
+
+    与语料库溯源同一套 `quote in text` 判定，但文本来源是 run 目录的响应留痕
+    （§5.5 方案 A）。`market_resolver is None`（没给 `--market-trace`）⇒ `skipped`：
+    按 §5.5 方案 B 语义，**验不了就是没验过**，strict 下整卡不通过。
+    """
+    items = _market_evidence(card)
+    if not items:
+        return _PASSED, [], 0, 0
+    if market_resolver is None:
+        return _SKIPPED, [], len(items), 0
+
+    problems: list[dict[str, str]] = []
+    traced = 0
+    for index, item in items:
+        label = f"evidence[{index}]"
+        ref = str(item.get("source_ref") or "").strip()
+        quote = str(item.get("quote") or "").strip()
+
+        if not MARKET_REF_RE.match(ref):
+            problems.append(
+                _problem(
+                    GATE_MARKET,
+                    "market_ref_malformed",
+                    label + " 的 ths 引用不合法（应为 ths:<thscode>:<request_id>）：" + repr(ref),
+                )
+            )
+            continue
+        if not quote:
+            problems.append(_problem(GATE_MARKET, "incomplete_evidence", label + " 缺少 quote"))
+            continue
+
+        text = market_resolver(ref)
+        if text is None:
+            problems.append(
+                _problem(
+                    GATE_MARKET,
+                    "source_unresolvable",
+                    label + " 在留痕中找不到该次调用：" + repr(ref),
+                )
+            )
+            continue
+        if quote not in text:
+            problems.append(
+                _problem(
+                    GATE_MARKET,
+                    "quote_not_found",
+                    label + " 的 quote 未在那次真实响应中出现（疑似编造）：" + repr(quote[:60]),
+                )
+            )
+            continue
+        traced += 1
+    return (_FAILED if problems else _PASSED), problems, len(items), traced
+
+
+def check_market_consistency(
+    card: dict[str, Any],
+    *,
+    now_ms: int | None = None,
+    stale_days: int = DEFAULT_STALE_DAYS,
+    band_pct: float = 20.0,
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """市场一致性检查（M6）。返回 ``(errors, warnings)``。
+
+    - ERROR（阻断）：`adjust_mismatch`（口径混用必错）、`financial_lookahead`（前视偏差）；
+    - WARN（不阻断，提示复核）：`market_quote_stale`（快照太旧 / 缺时点）、
+      `price_out_of_band`（现价偏离建仓区间）。
+
+    边界：这些检查抓的是「**引用方式**不合适」，抓不了「数字本身错」——那是溯源闸的职责。
+    """
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    items = _market_evidence(card)
+    if not items:
+        return errors, warnings
+
+    now = now_ms or int(datetime.now().timestamp() * 1000)
+    max_age_ms = stale_days * 24 * 60 * 60 * 1000
+    adjusts: set[str] = set()
+    entry = position_of(card).get("entry") or {}
+    low = _number(entry.get("low"))
+    high = _number(entry.get("high"))
+
+    for index, item in items:
+        label = f"evidence[{index}]"
+        quote = str(item.get("quote") or "")
+
+        as_of = _market_as_of_ms(item)
+        if as_of is None:
+            warnings.append(
+                _problem(
+                    GATE_MARKET,
+                    "market_quote_stale",
+                    label + " 引用市场数字但没有可解析的 as_of 时点（实时价格必须带时点）",
+                )
+            )
+        elif now - as_of > max_age_ms:
+            days = (now - as_of) // (24 * 60 * 60 * 1000)
+            warnings.append(
+                _problem(
+                    GATE_MARKET,
+                    "market_quote_stale",
+                    f"{label} 的 as_of 距今约 {days} 天（阈值 {stale_days}）⇒ 价格可能已过时，请复核",
+                )
+            )
+
+        price = re.search(r"last_price=([\d.]+)", quote)
+        if price and low is not None and high is not None:
+            value = float(price.group(1))
+            if value < low * (1 - band_pct / 100) or value > high * (1 + band_pct / 100):
+                warnings.append(
+                    _problem(
+                        GATE_MARKET,
+                        "price_out_of_band",
+                        f"{label} 现价 {value} 明显偏离建仓区间 [{low}, {high}]（阈值 ±{band_pct}%）⇒ 请复核",
+                    )
+                )
+
+        adjust = re.search(r"adjust=([a-z]+)", quote)
+        if adjust:
+            adjusts.add(adjust.group(1))
+
+        # 前视偏差：evidence 显式带 report_date_ms 时才校验（可选字段，不带不误报）
+        report_ms = item.get("report_date_ms")
+        if (
+            isinstance(report_ms, (int, float))
+            and not isinstance(report_ms, bool)
+            and int(report_ms) > now
+        ):
+                errors.append(
+                    _problem(
+                        GATE_MARKET,
+                        "financial_lookahead",
+                        f"{label} 引用的财报 report_date_ms 晚于当前时点 ⇒ 用未来数据解释过去（§9 坑 2）",
+                    )
+                )
+
+    if len(adjusts) > 1:
+        errors.append(
+            _problem(
+                GATE_MARKET,
+                "adjust_mismatch",
+                "同一张卡混用了不同复权口径（" + "、".join(sorted(adjusts)) + "）⇒ 数值不可比",
+            )
+        )
+    return errors, warnings
 
 
 def _gate_arithmetic(card: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
@@ -332,6 +524,7 @@ def verify_card(
     card: dict[str, Any],
     *,
     source_resolver: SourceResolver | None = None,
+    market_resolver: SourceResolver | None = None,
     strict: bool = True,
 ) -> dict[str, Any]:
     """校验一张策略卡，返回裁决报告。
@@ -357,13 +550,20 @@ def verify_card(
         card,
         source_resolver,
     )
+    market_status, market_problems, market_total, market_traced = _gate_market_traceability(
+        card, market_resolver
+    )
+    market_errors, market_warnings = check_market_consistency(card)
     arithmetic_status, arithmetic_problems = _gate_arithmetic(card)
     schema_status, schema_problems = _gate_schema(card)
 
     statuses[GATE_TRACEABILITY] = traceability_status
+    statuses[GATE_MARKET] = market_status
     statuses[GATE_ARITHMETIC] = arithmetic_status
     statuses[GATE_SCHEMA] = schema_status
     problems.extend(traceability_problems)
+    problems.extend(market_problems)
+    problems.extend(market_errors)
     problems.extend(arithmetic_problems)
     problems.extend(schema_problems)
 
@@ -387,6 +587,13 @@ def verify_card(
             "skipped": traceability_status == _SKIPPED,
         },
         "problems": problems,
+        # 市场一致性 WARN（不阻断，提示复核）：价格太旧 / 缺时点 / 偏离建仓区间
+        "warnings": market_warnings,
+        "market_traceability": {
+            "total": market_total,
+            "traced": market_traced,
+            "skipped": market_status == _SKIPPED,
+        },
         "skipped": skipped,
     }
 
@@ -395,6 +602,7 @@ def verify_file(
     path: str | Path,
     *,
     source_resolver: SourceResolver | None = None,
+    market_resolver: SourceResolver | None = None,
     strict: bool = True,
 ) -> dict[str, Any]:
     """读磁盘上的 strategy.json 并校验。
@@ -457,12 +665,15 @@ def main(argv: list[str] | None = None) -> int:
     """
     args = list(sys.argv[1:] if argv is None else argv)
     corpus_dsn: str | None = None
+    market_trace_dir: str | None = None
     paths: list[str] = []
     rest = list(args)
     while rest:
         token = rest.pop(0)
         if token == "--corpus":
             corpus_dsn = rest.pop(0) if rest else None
+        elif token == "--market-trace":
+            market_trace_dir = rest.pop(0) if rest else None
         else:
             paths.append(token)
     if not paths:
@@ -476,8 +687,20 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:
         print("无法连接语料库（PG）：" + str(exc))
         return 2
+
+    # 市场溯源闸（M6）：`ths:` 引用走 run 目录留痕。延迟 import —— verify 核心
+    # 不依赖 market 实现（§5.7 纪律：resolver 由调用方注入），只有 CLI 用到才加载。
+    market_resolver: SourceResolver | None = None
+    if market_trace_dir:
+        from plugins.market.trace_store import resolve_market_source
+
+        def market_resolver(ref: str) -> str | None:
+            return resolve_market_source(ref, market_trace_dir)
+
     try:
-        report = verify_file(paths[0], source_resolver=resolver)
+        report = verify_file(
+            paths[0], source_resolver=resolver, market_resolver=market_resolver
+        )
     except (OSError, ValueError) as exc:
         print("无法读取策略卡：" + str(exc))
         return 2

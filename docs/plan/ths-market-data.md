@@ -721,13 +721,14 @@ Agent 可能一次要多家公司对比（`market_quote` 批量 或 连续多次
 | M2b | `failure.py` 失败策略 | M2a | ✅ | 六类失败分类 + **失败转译**（§6.3，返回 `reason`+`request_id`+`next`）+ 部分成功 `partial`。验收通过：`tests/test_market_failure.py` 14 项（六类均有可执行 `next`、`request_id` 随错误上抛、`call_or_fail` 兜住未预期异常） |
 | M2c | `fuyao_rest` adapter | M2b | ✅ | 端点 → 领域对象、口径归一、错误码映射（§2.2）。**已固化 §2.1.1 实测契约**。验收通过：`tests/test_market_adapter.py` 9 项契约测试，**不需要 API Key**（参数名 `thscodes`/`thscode`、`period` 字面量、毫秒窗口、无 `timestamp` 信封、**返回条数 > 请求条数 ⇒ 判定返回全市场并失败**、>100 分片） |
 | M3 | `MarketService`（**无存储**） | M1, M2c | ✅ | 注入式构造 `MarketService(adapter=..., sink=...)`；口径归一；`quote_text` 确定性渲染。验收通过：`tests/test_market_service.py` 14 项（注入 `mock` 时**不发网络请求、不连数据库**；估值失败不影响行情；`quote_text` 渲染确定性） |
-| M3b | 留痕接缝 + resolver | M3 | ⬜ | `NullSink` / `FileSink`（run 目录）+ `verify --market-trace`；默认开、可关。验收：留痕开时方案 A **来源时点命中 + 值域比对**通过；关时该闸标 `partial` 且 `strict` 下不通过 |
+| M3b | 留痕接缝 + resolver | M3 | ✅ | `NullSink` / `FileSink`（run 目录）+ `verify --market-trace` 已接齐：market 侧（`sink.py` / `trace_store.py` + service 聚合留痕）此前已备，本次补上 **verify 侧接线**——CLI `--market-trace <dir>` 构造 resolver 注入（延迟 import，verify 核心不依赖 market 实现，§5.7 纪律）。验收通过：留痕开时方案 A 命中（`tests/test_market_gate.py`）；未给 `--market-trace` 时该闸 `skipped`、`strict` 下整卡不通过（方案 B 语义） |
 | M5 | 四个 `@tool` + 6 处注册点接线 | M3 | ✅ | 严格按 §5.7 接齐 6 处（`__init__` allowlist / `meta.py` / `agent_tools.py` + `_READ_ONLY` / `react.yaml` / `tui.yaml`，`timeout=15`、`market_quote` 不截断）。验收通过：`tests/test_tool_registry.py` 8 项 + **真实凭据端到端 smoke**（`market_resolve`「茅台」与「600519」同结果、`market_quote` 拿到实时价 `1290.88` 且带 `as_of`、`market_history` 3 条日 K、`market_financials` 2025 FY 含披露日）。注：同步更新了 `EXPECTED_TOOLS`（新增工具必须改，否则该断言失败） |
-| M6 | 硬闸①扩展 + 回归 | M5, M3b | ⬜ | resolver 前缀分派 + 4 条新检查。**验收：现有 corpus 24 测试 + P0a 全部不退化**，黄金题 Recall@5 仍 100% |
-| M7 | 黄金题扩展（市场类） | M6 | ⬜ | 现价 / 区间 / 复权口径 / 财报对齐等 N 题。验收：留痕开启时市场类数字溯源命中率 100% |
+| M6 | 硬闸①扩展 + 回归 | M5, M3b | ✅ | **已实现（§5.5 表的 5 条全做）**：① corpus 溯源闸**跳过 `ths:` 引用**（此前真的市场数字也会被判「无法解析」⇒ 进不了卡）；② 新增**市场溯源闸**（`GATE_MARKET`）：`ths:` 引用须在留痕中逐字命中，未给 `--market-trace` ⇒ `skipped`（strict 下不通过）；③ 一致性检查：`market_ref_malformed`（ERROR）/ `market_quote_stale`（WARN）/ `price_out_of_band`（WARN）/ `adjust_mismatch`（ERROR）/ `financial_lookahead`（ERROR），WARN 不阻断、单独进 `report["warnings"]`。<br>**验收通过**：`tests/test_market_gate.py` 8 项（真留痕通过 / 编造 `quote_not_found` 精确指认 / 无留痕降级 / 口径混用 ERROR）；**回归红线达成**：corpus 全链路 + 黄金题 + strategy_lint 共 88 项全绿不退化 |
+| M7 | 黄金题扩展（市场类） | M6 | ✅ | **`tests/test_market_golden.py` 6 项，命中率 100% 达成**：现价（`quote_text`）/ 历史区间（`close_price`）/ 财报（`operating_income`）三类黄金题合一，`traced/total == 3/3`；反向验证编造数字立即跌破命中率并 `failed`；复权口径（`adjust=none`）可从留痕取证。<br>**过程中修复两个真实缺陷**：① 聚合留痕（service 的 sink）与 raw 留痕（transport 的 sink）是**两个接缝**，漏配任何一个，对应引用就溯源不了；② `render_raw_record` 此前不渲染 `data` 层标量 ⇒ 复权口径在留痕里查不到。<br>**已知局限**：`request_id` 暂未用于**精确锁定那次调用**（resolver 按 thscode 渲染该标的全部留痕）——合并 `quote_text` 跨行情+估值两次调用，单个 rid 本就无法覆盖；防编造不受影响（编造值不会出现在任何留痕），精确锁定留作加强项 |
 | M9 | （可选）Web 侧转发 | M3 | 🅿️ | `server/` 转发调用 `MarketService`，无直连 SQL、无缓存表 |
 | **M10** | **模块隔离架构测试** | M3 | ✅ | 断言 `plugins.corpus.*` / `workflows.*` 的 import 图**不含** `plugins.market`（AST 静态扫描，未发现反向依赖）；`MARKET_ENABLED=false` / 缺 Key 时 `unavailability()` 给出可执行失败、`build_service()` 返回 `None`。对应 §5.0「独立性可机械验证」 |
-| **M11** | **失败注入端到端** | M5, M2b | ⬜ | 断网 / 429 / 500 / 超时 / 字段漂移五类注入。断言：工具 `ok=false`、**无异常冒泡**、流程仍能产出策略卡（研报-only）、observability 有记录。对应 §6 |
+| **M11** | **失败注入端到端** | M5, M2b | ✅ | 断网 / 429 / 500 / 超时 / 字段漂移五类注入。断言通过：`tests/test_market_failure_injection.py` 6 项——工具 `ok=false` + 可执行 `next`、**无异常冒泡**、字段漂移得 `null` 而非 `0`、失败计入 observability。对应 §6 |
+| **M12** | `market_stats`（**可观察形态**） | M5 | 🅿️ **待办（已记录，暂不实现）** | **问题**：`market_history` 实测返回 **243 行 OHLC**，模型面对几百行数字**看不出趋势**——这是「有数据但观察不到」，不是「没有数据」。<br>**方案**：确定性工具输出**区间高低 / 均线（5·20·60）/ 波动率 / 最大回撤**，并带 `computed_by`（硬闸②）。<br>**价值定位**：主要不是合规，而是**让模型能看见**——面对 243 行它"看"不出均线，给 4 个数字就能判断（价格在 MA20 上方、回撤 12%）；`computed_by` 是顺带满足的。<br>**待拍板**：见 §10 第 6 条 |
 
 **可并行**：M1 与 M2a 无依赖；M 组整体与 P1 的 B1（语料全量）**可并行**，
 只有 D3 / D4 需要两边都就位。
@@ -768,18 +769,17 @@ Agent 可能一次要多家公司对比（`market_quote` 批量 或 连续多次
    仍需确认具体 capability 权限（无权限返回 `code=2003`）：
    prices / corporate-actions / financials / valuations / meta（**dump 不需要了**，本模块不落库）。
 2. 市场范围：A 股 only，还是要含指数 / ETF / 场外基金？
-4. **`market_stats` 的指标范围与计算路径**（M12 待办，暂不实现）：
-   ① 先做哪几个指标（建议最小集：区间高低 / 均线 5·20·60 / 波动率 / 最大回撤）；
-   ② 长尾指标（RSI / MACD / 布林带）是否允许走 `run_python_code_in_finance_sandbox`——
-   它算不算"确定性工具"（执行确定、输入来自留痕 ⇒ 可复现，但模型可能写错代码）；
-   ③ 是否同步扩展硬闸②到市场衍生量（M6）：`computed_by` 只防**编造**，
-   **重算复核**（verify 用留痕序列按同一公式重算）才防**算错**，两者要一起做。
-
 3. **留痕默认开启是否可接受**：默认走方案 A（`MARKET_TRACE=on`，写 run 目录，硬闸①可**证伪来源与时点、数值未被篡改**）。
    若要求关闭明文留痕，则降级为方案 B（闸标 `partial`，`strict` 下不通过）—— 可校验性下降，需你接受。
 4. V1 取舍：财务报表与财务指标（V1.1）是否并入本期？
 5. **降级容忍度**：行情不可用时，接受「研报-only 策略卡 + WARN」吗（§6.4）？
    若要求「无行情不出卡」，则需把该 WARN 升级为 ERROR —— 这会降低可用性，需你定。
+6. **`market_stats` 的指标范围与计算路径**（M12 待办，**暂不实现**）：
+   ① 先做哪几个指标（建议最小集：区间高低 / 均线 5·20·60 / 波动率 / 最大回撤）；
+   ② 长尾指标（RSI / MACD / 布林带）是否允许走 `run_python_code_in_finance_sandbox`——
+   它算不算"确定性工具"（执行确定、输入来自留痕 ⇒ 可复现，但模型可能写错代码）；
+   ③ 是否同步扩展硬闸②到市场衍生量（M6）：`computed_by` 只防**编造**，
+   **重算复核**（verify 用留痕序列按同一公式重算）才防**算错**，两者要一起做。
 
 ---
 
