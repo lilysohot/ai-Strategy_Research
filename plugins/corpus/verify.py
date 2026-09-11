@@ -115,13 +115,18 @@ def _gate_traceability(
     """
     evidence = position_of(card).get("evidence")
     if not isinstance(evidence, list) or not evidence:
-        return _FAILED, [
-            _problem(
-                GATE_TRACEABILITY,
-                "no_evidence",
-                "没有 evidence 可溯源：无法验证任何数字的来源",
-            )
-        ], 0, 0
+        return (
+            _FAILED,
+            [
+                _problem(
+                    GATE_TRACEABILITY,
+                    "no_evidence",
+                    "没有 evidence 可溯源：无法验证任何数字的来源",
+                )
+            ],
+            0,
+            0,
+        )
 
     # 市场数据引用（`ths:` 前缀）交给**市场溯源闸**（M6）处理，本闸只管语料库来源——
     # 否则 corpus 里根本没有该 doc，会被一律判成「无法解析到原文」，
@@ -334,13 +339,13 @@ def check_market_consistency(
             and not isinstance(report_ms, bool)
             and int(report_ms) > now
         ):
-                errors.append(
-                    _problem(
-                        GATE_MARKET,
-                        "financial_lookahead",
-                        f"{label} 引用的财报 report_date_ms 晚于当前时点 ⇒ 用未来数据解释过去（§9 坑 2）",
-                    )
+            errors.append(
+                _problem(
+                    GATE_MARKET,
+                    "financial_lookahead",
+                    f"{label} 引用的财报 report_date_ms 晚于当前时点 ⇒ 用未来数据解释过去（§9 坑 2）",
                 )
+            )
 
     if len(adjusts) > 1:
         errors.append(
@@ -640,9 +645,7 @@ def format_report(report: dict[str, Any]) -> str:
     tr = report.get("traceability")
     if tr and not tr.get("skipped"):
         lines.append("")
-        lines.append(
-            f"数字溯源命中率：{tr['traced']}/{tr['total']} ({tr['rate'] * 100:.1f}%)"
-        )
+        lines.append(f"数字溯源命中率：{tr['traced']}/{tr['total']} ({tr['rate'] * 100:.1f}%)")
     if report["skipped"]:
         lines.append("")
         lines.append(
@@ -702,9 +705,7 @@ def main(argv: list[str] | None = None) -> int:
         market_resolver = _market_resolver
 
     try:
-        report = verify_file(
-            paths[0], source_resolver=resolver, market_resolver=market_resolver
-        )
+        report = verify_file(paths[0], source_resolver=resolver, market_resolver=market_resolver)
     except (OSError, ValueError) as exc:
         print("无法读取策略卡：" + str(exc))
         return 2

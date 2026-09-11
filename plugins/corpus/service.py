@@ -26,11 +26,13 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import logging
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import threading
@@ -53,9 +55,12 @@ from psycopg.rows import DictRow, dict_row
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
     CLAIMS_SQL,
+    EXTRACTOR_VERSION,
+    INJECTED_MODEL,
     BlockView,
     ExtractStats,
     build_default_llm,
+    configured_model,
     extract_from_block,
     triage_blocks,
     with_retry,
@@ -95,7 +100,7 @@ class IngestStats:
     added: int = 0
     skipped_duplicate: int = 0
     skipped_unchanged: int = 0
-    skipped_fresh: int = 0      # 因"刚被修改（可能还在拷贝）"而跳过
+    skipped_fresh: int = 0  # 因"刚被修改（可能还在拷贝）"而跳过
     needs_ocr: int = 0
     empty: int = 0
     failed: int = 0
@@ -254,10 +259,7 @@ def dsn() -> str:
     host = os.environ.get("CORPUS_DB_HOST", DEFAULT_CORPUS_DB_HOST)
     port = os.environ.get("CORPUS_DB_PORT", DEFAULT_CORPUS_DB_PORT)
     name = os.environ.get("CORPUS_DB_NAME", DEFAULT_CORPUS_DB_NAME)
-    return (
-        f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}"
-        f"@{host}:{port}/{name}"
-    )
+    return f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}@{host}:{port}/{name}"
 
 
 class CorpusService:
@@ -307,16 +309,12 @@ class CorpusService:
                     # Kept as the original f-string: routing it through
                     # sql.Identifier() would quote the name and change the
                     # emitted DDL for no functional gain.
-                    conn.execute(
-                        cast(LiteralString, f"CREATE EXTENSION IF NOT EXISTS {ext}")
-                    )
+                    conn.execute(cast(LiteralString, f"CREATE EXTENSION IF NOT EXISTS {ext}"))
                 except psycopg.Error as exc:
                     raise RuntimeError(
                         f"无法创建扩展 {ext}（通常需要超级用户权限）：{exc}"
                     ) from exc
-            if not conn.execute(
-                "SELECT 1 FROM pg_ts_config WHERE cfgname = 'zhcfg'"
-            ).fetchone():
+            if not conn.execute("SELECT 1 FROM pg_ts_config WHERE cfgname = 'zhcfg'").fetchone():
                 conn.execute("CREATE TEXT SEARCH CONFIGURATION zhcfg (PARSER = zhparser)")
                 conn.execute(
                     "ALTER TEXT SEARCH CONFIGURATION zhcfg ADD MAPPING FOR "
@@ -520,9 +518,7 @@ class CorpusService:
         candidate_limit = max(50, limit * 10)
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
-                self._SEARCH_SELECT.format(
-                    tsquery="plainto_tsquery('zhcfg', %(q)s)"
-                ),
+                self._SEARCH_SELECT.format(tsquery="plainto_tsquery('zhcfg', %(q)s)"),
                 {"q": q, "limit": candidate_limit},
             )
             rows = cur.fetchall()
@@ -530,17 +526,13 @@ class CorpusService:
                 # AND 全空时退回 OR：宁可给几条带噪音的候选，
                 # 也不要让调用方误判「资料里没有」——
                 # 与 P0 的 FTS5 AND→OR 兜底一致。
-                cur.execute(
-                    "SELECT plainto_tsquery('zhcfg', %(q)s)::text AS tsv", {"q": q}
-                )
+                cur.execute("SELECT plainto_tsquery('zhcfg', %(q)s)::text AS tsv", {"q": q})
                 row = cur.fetchone()
                 and_text = row["tsv"] if row else ""
                 or_ts = and_text.replace(" & ", " | ")
                 if or_ts and or_ts.strip() not in ("''",):
                     cur.execute(
-                        self._SEARCH_SELECT.format(
-                            tsquery="to_tsquery('zhcfg', %(or_ts)s)"
-                        ),
+                        self._SEARCH_SELECT.format(tsquery="to_tsquery('zhcfg', %(or_ts)s)"),
                         {"or_ts": or_ts, "limit": candidate_limit},
                     )
                     rows = cur.fetchall()
@@ -567,9 +559,9 @@ class CorpusService:
             prev = best_per_doc.get(r["doc_id"])
             if prev is None or (r["score"] or 0.0) > (prev["score"] or 0.0):
                 best_per_doc[r["doc_id"]] = r
-        ranked = sorted(
-            best_per_doc.values(), key=lambda r: r["score"] or 0.0, reverse=True
-        )[:limit]
+        ranked = sorted(best_per_doc.values(), key=lambda r: r["score"] or 0.0, reverse=True)[
+            :limit
+        ]
 
         return [
             SearchHit(
@@ -588,8 +580,7 @@ class CorpusService:
 
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
-                "SELECT doc_id, seq, locator, text FROM blocks "
-                "WHERE doc_id = %s AND locator = %s",
+                "SELECT doc_id, seq, locator, text FROM blocks WHERE doc_id = %s AND locator = %s",
                 (str(doc_id), str(locator)),
             )
             r = cur.fetchone()
@@ -600,8 +591,7 @@ class CorpusService:
     def document_text(self, doc_id: str) -> str | None:
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
-                "SELECT string_agg(text, chr(10) ORDER BY seq) AS t "
-                "FROM blocks WHERE doc_id = %s",
+                "SELECT string_agg(text, chr(10) ORDER BY seq) AS t FROM blocks WHERE doc_id = %s",
                 (str(doc_id),),
             )
             row = cur.fetchone()
@@ -626,95 +616,360 @@ class CorpusService:
         sleep_between: float = 0.0,
         skip_existing: bool = True,
         dry_run: bool = False,
+        should_stop: Callable[[], bool] | None = None,
+        max_consecutive_failures: int = 5,
+        max_attempts: int = 3,
     ) -> ExtractStats:
-        """D2：**分级 → LLM 抽取 → 落库**。
+        """D2：**分级 → LLM 抽取 → 逐块落库**。
 
         ``llm`` 可注入（测试用假实现）；不给则用 :func:`build_default_llm`。
         ``retry_attempts`` 控制退避重试（实测供应商会 429 限流，重试即可成功）。
         ``sleep_between`` 块间限速（秒）：610 块连打会触发限流风暴，全量跑批建议 1s。
-        ``skip_existing`` 断点续跑：跳过 claims 表已有 ``(doc_id, seq)`` 的块——
-        ``ON CONFLICT`` 只保证不重复**插入**，不挡重复的 **LLM 调用**；批跑中断后
-        重跑若不跳过，已成功的块会再花一遍钱。
-        纪律与 ingest 一致：**单块失败只记 failure，不中断整批**。
+        ``should_stop`` 每次取块前问一次（Ctrl-C 的优雅退出钩子）。命中即停，
+        但**不影响已经落库的块**。
+
+        **落库粒度 = 块，而不是文档**（关键保证）：每块抽完立刻把「claims 行 +
+        块级标记」在**同一个事务**里提交。理由是不可逆的 LLM 开销：若攒到文档
+        末尾再写，一次限流 / Ctrl-C / kill 会让整份文档已花掉的钱全部蒸发（实测
+        发生过）。逐块提交后，任何时刻被打断，已完成块都已落库；配合
+        ``claim_block_runs`` 标记与 ``skip_existing``，重跑只补没做过的块。
+
+        ``skip_existing`` 断点续跑的跳过判据是**同模型 + 同抽取器指纹**下的
+        ``status='ok'`` 记录（含"抽出 0 条 claim"的块）。``failed`` 且未达
+        ``max_attempts`` 的块**不跳过**，下次会重试；达上限的视为死信，跳过并
+        计入 ``skipped_dead_letter``，避免某个必然失败的块反复白花钱。
+
+        ``max_consecutive_failures``：连续失败这么多块就**干净退出**。额度耗尽 /
+        被限流时，后续块注定全败 —— 继续跑只会把剩余额度全烧在重试上。熔断与
+        中断都只停"往后跑"，已落库的块不受影响。
+
+        纪律与 ingest 一致：**单块失败只记 failure，不中断整批**（直到熔断阈值）。
         """
+        usage: dict[str, int] = {}
+        model_name = configured_model()
         llm_fn = None
         if not dry_run:
-            llm_fn = llm if llm is not None else build_default_llm()
+            if llm is not None:
+                llm_fn = llm
+                # 注入实现没有"配置模型"的概念：用稳定标识，保证同一套假实现
+                # 的重跑互相跳过，且不受环境里 OPENAI_MODEL 变化影响。
+                model_name = INJECTED_MODEL
+            else:
+                llm_fn = build_default_llm(usage_sink=usage)
             if retry_attempts > 1:
                 llm_fn = with_retry(llm_fn, attempts=retry_attempts)
 
         done: set[tuple[str, int]] = set()
+        dead: set[tuple[str, int]] = set()
         if skip_existing:
-            with self._connect() as conn:
-                done = {
-                    (str(row["doc_id"]), int(row["seq"]))
-                    for row in conn.execute("SELECT DISTINCT doc_id, seq FROM claims").fetchall()
-                }
+            done, dead = self._done_blocks(model=model_name, max_attempts=max_attempts)
         stats = ExtractStats()
 
-        targets = list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in self.list_documents()]
+        targets = (
+            list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in self.list_documents()]
+        )
+        stop = False
+        consecutive_failures = 0
         for doc_id in targets:
             stats.documents += 1
             rows = self.blocks_of(doc_id)
             stats.blocks += len(rows)
-            views = [BlockView(int(r["seq"]), str(r["locator"]), str(r["text"] or "")) for r in rows]
+            views = [
+                BlockView(int(r["seq"]), str(r["locator"]), str(r["text"] or "")) for r in rows
+            ]
             candidates, skipped = triage_blocks(views)
             stats.skipped_no_signal += skipped
 
-            pending: list = []
             for block in candidates:
                 if limit is not None and stats.candidates >= limit:
+                    # 只是本批到量就收，不算「被中断」：保持原有语义
+                    # （继续扫后续文档，跟 limit 前一样不做任何事）。
+                    break
+                if should_stop is not None and should_stop():
+                    # 中断信号：干净退出。已落库的块不受影响，重跑自动跳过。
+                    stop = True
+                    stats.stopped_early = True
+                    stats.stopped_reason = "收到中断信号；已完成的块均已落库，重跑自动续上"
                     break
                 if (doc_id, block.seq) in done:
                     stats.skipped_existing += 1
                     continue
+                if (doc_id, block.seq) in dead:
+                    stats.skipped_dead_letter += 1
+                    continue
                 stats.candidates += 1
                 if dry_run:  # 错峰前只统计将抽取多少块，不调 LLM、不入库
                     continue
+                started = time.monotonic()
+                tokens_before = (
+                    usage.get("prompt_tokens", 0),
+                    usage.get("completion_tokens", 0),
+                )
                 try:
                     # dry_run already continued above, so an llm is always
                     # resolved by here; the assert narrows it for the checker.
                     assert llm_fn is not None
-                    pending.extend(extract_from_block(block, doc_id=doc_id, llm=llm_fn))
+                    extracted = extract_from_block(block, doc_id=doc_id, llm=llm_fn)
                 except Exception as exc:  # 单块失败不得拖垮整批
+                    reason = f"{type(exc).__name__}: {exc}"[:200]
                     stats.failed += 1
+                    consecutive_failures += 1
                     stats.failures.append(
-                        {
-                            "doc_id": doc_id,
-                            "locator": block.locator,
-                            "reason": f"{type(exc).__name__}: {exc}"[:200],
-                        }
+                        {"doc_id": doc_id, "locator": block.locator, "reason": reason}
+                    )
+                    prompt_t, completion_t = self._usage_delta(tokens_before, usage)
+                    stats.prompt_tokens += prompt_t
+                    stats.completion_tokens += completion_t
+                    # 失败也留痕（status=failed）：重跑时这些块会被重试，
+                    # 而不是像以前那样只在内存里记一笔、进程一死就查无此事。
+                    self._commit_block_result(
+                        doc_id=doc_id,
+                        seq=block.seq,
+                        claims=[],
+                        status="failed",
+                        model=model_name,
+                        error=reason,
+                        duration_ms=int((time.monotonic() - started) * 1000),
+                        prompt_tokens=prompt_t,
+                        completion_tokens=completion_t,
+                    )
+                    if 0 < max_consecutive_failures <= consecutive_failures:
+                        # 熔断：额度耗尽 / 被限流时后续块注定全败，
+                        # 继续跑只会把剩下的额度烧在重试上。
+                        stop = True
+                        stats.stopped_early = True
+                        stats.stopped_reason = (
+                            f"连续 {consecutive_failures} 块失败（多为额度耗尽或限流），"
+                            "已干净退出；已完成的块均已落库，重跑自动续上"
+                        )
+                        break
+                else:
+                    consecutive_failures = 0
+                    prompt_t, completion_t = self._usage_delta(tokens_before, usage)
+                    stats.prompt_tokens += prompt_t
+                    stats.completion_tokens += completion_t
+                    # ★ 一块一提交：此后即使限流 / 中断 / 被 kill，这块的钱也不白花。
+                    stats.claims += self._commit_block_result(
+                        doc_id=doc_id,
+                        seq=block.seq,
+                        claims=extracted,
+                        status="ok",
+                        model=model_name,
+                        duration_ms=int((time.monotonic() - started) * 1000),
+                        prompt_tokens=prompt_t,
+                        completion_tokens=completion_t,
                     )
                 if sleep_between > 0:
                     time.sleep(sleep_between)
-            if not dry_run:
-                stats.claims += self._insert_claims(pending)
+            if stop:
+                break
 
         return stats
 
-    def _insert_claims(self, claims: list) -> int:
-        """批量写入 claim；``(doc_id, seq, claim_text)`` 重复则跳过（幂等重跑）。"""
-        if not claims:
-            return 0
+    @staticmethod
+    def _usage_delta(before: tuple[int, int], sink: dict[str, int]) -> tuple[int, int]:
+        """取一块的 token 增量（含该块的全部重试尝试）。"""
+        return (
+            sink.get("prompt_tokens", 0) - before[0],
+            sink.get("completion_tokens", 0) - before[1],
+        )
+
+    def _done_blocks(
+        self, *, model: str, max_attempts: int
+    ) -> tuple[set[tuple[str, int]], set[tuple[str, int]]]:
+        """返回 ``(已完成的块, 死信块)`` —— 断点续跑的跳过判据。
+
+        **已完成** = 同一 ``model`` + 同一 ``extractor_version`` 下 ``status='ok'``
+        的块。指纹不能省：块一旦记为 ok 就永不重抽，而"抽得好不好"完全取决于模型
+        与 prompt；不认指纹的话，换模型（GLM-4.7 → AirX）或改 prompt 之后旧块会被
+        **静默永久跳过** —— 看起来在跑，实际一条都不抽，且不报错。
+
+        **死信** = 同一指纹下 ``status='failed'`` 且 ``attempts`` 已达
+        ``max_attempts`` 的块。这类块多因内容本身必然失败（超长 JSON、内容过滤），
+        没有上限的话每次重跑都会再失败一次、**每次都白花一次钱**。
+        换模型/换 prompt 后 ``attempts`` 归零（见 :meth:`_commit_block_result`），
+        所以换指纹后死信会被重新尝试。
+
+        **不再**拿 ``claims`` 表反推"做过没有"：那条路既漏掉"抽出 0 条 claim"的块
+        （每次重跑都要再烧一次钱），又没有模型信息，会让换模型静默失效。
+        """
+        with self._connect() as conn:
+            done = {
+                (str(row["doc_id"]), int(row["seq"]))
+                for row in conn.execute(
+                    "SELECT doc_id, seq FROM claim_block_runs "
+                    "WHERE status = 'ok' AND model = %s AND extractor_version = %s",
+                    (model, EXTRACTOR_VERSION),
+                ).fetchall()
+            }
+            dead = {
+                (str(row["doc_id"]), int(row["seq"]))
+                for row in conn.execute(
+                    "SELECT doc_id, seq FROM claim_block_runs "
+                    "WHERE status = 'failed' AND attempts >= %s "
+                    "AND model = %s AND extractor_version = %s",
+                    (int(max_attempts), model, EXTRACTOR_VERSION),
+                ).fetchall()
+            }
+        return done, dead
+
+    def _commit_block_result(
+        self,
+        *,
+        doc_id: str,
+        seq: int,
+        claims: list,
+        status: str,
+        model: str,
+        error: str | None = None,
+        duration_ms: int | None = None,
+        prompt_tokens: int = 0,
+        completion_tokens: int = 0,
+    ) -> int:
+        """**原子**写入一块的抽取结果：claims 行 + 块级标记，同一事务提交。
+
+        这是「钱花了必落库」的落点：只写 claims 不写标记，抽出 0 条的块下次仍被
+        重抽；只写标记不写 claims，中断时数据本身就丢了 —— 两者必须同生共死，
+        所以合进一个事务。
+
+        **换指纹即整块替换**：这块上次若是用别的模型 / 别的 prompt 版本抽的，先把
+        该块旧 claims 删掉再插新的。否则一张表里会混着两代模型的结果 ——
+        ``ON CONFLICT`` 只挡完全相同的文本，挡不住同一个数字被两种口径表述。
+        仅在 ``status='ok'`` 时替换；失败时不动既有数据。
+
+        ``attempts`` 只统计**当前指纹**下的次数：指纹变了就归 1，否则"换个模型
+        重试"会被上一个模型累计的失败次数直接判成死信。
+
+        返回本次实际插入的 claim 行数（``ON CONFLICT DO NOTHING`` 后的净增，
+        重跑同一块时为 0，不会重复计数）。
+        """
         rows = [
             (
-                str(c.doc_id), int(c.seq), str(c.locator), str(c.claim_text), str(c.kind),
-                list(c.tickers), c.metric, c.value_text, c.period, c.confidence,
+                str(c.doc_id),
+                int(c.seq),
+                str(c.locator),
+                str(c.claim_text),
+                str(c.kind),
+                list(c.tickers),
+                c.metric,
+                c.value_text,
+                c.period,
+                c.confidence,
             )
             for c in claims
         ]
         with self._lock, self._connect() as conn:
             with conn.cursor() as cur:
-                cur.executemany(
-                    "INSERT INTO claims (doc_id, seq, locator, claim_text, kind, tickers, "
-                    "metric, value_text, period, confidence) "
-                    "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
-                    "ON CONFLICT (doc_id, seq, claim_text) DO NOTHING",
-                    rows,
+                inserted = 0
+                if status == "ok":
+                    cur.execute(
+                        "SELECT model, extractor_version FROM claim_block_runs "
+                        "WHERE doc_id = %s AND seq = %s",
+                        (str(doc_id), int(seq)),
+                    )
+                    previous = cur.fetchone()
+                    if previous is not None and (
+                        str(previous["model"]) != model
+                        or str(previous["extractor_version"]) != EXTRACTOR_VERSION
+                    ):
+                        cur.execute(
+                            "DELETE FROM claims WHERE doc_id = %s AND seq = %s",
+                            (str(doc_id), int(seq)),
+                        )
+                if rows:
+                    cur.executemany(
+                        "INSERT INTO claims (doc_id, seq, locator, claim_text, kind, tickers, "
+                        "metric, value_text, period, confidence) "
+                        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
+                        "ON CONFLICT (doc_id, seq, claim_text) DO NOTHING",
+                        rows,
+                    )
+                    inserted = cur.rowcount
+                cur.execute(
+                    "INSERT INTO claim_block_runs "
+                    "(doc_id, seq, status, claims_n, attempts, model, extractor_version, "
+                    " duration_ms, prompt_tokens, completion_tokens, error, updated_at) "
+                    "VALUES (%s,%s,%s,%s,1,%s,%s,%s,%s,%s,%s,now()) "
+                    "ON CONFLICT (doc_id, seq) DO UPDATE SET "
+                    "status = EXCLUDED.status, "
+                    "claims_n = EXCLUDED.claims_n, "
+                    "attempts = CASE "
+                    "  WHEN claim_block_runs.model IS DISTINCT FROM EXCLUDED.model "
+                    "    OR claim_block_runs.extractor_version "
+                    "       IS DISTINCT FROM EXCLUDED.extractor_version "
+                    "  THEN 1 ELSE claim_block_runs.attempts + 1 END, "
+                    "model = EXCLUDED.model, "
+                    "extractor_version = EXCLUDED.extractor_version, "
+                    "duration_ms = EXCLUDED.duration_ms, "
+                    "prompt_tokens = EXCLUDED.prompt_tokens, "
+                    "completion_tokens = EXCLUDED.completion_tokens, "
+                    "error = EXCLUDED.error, "
+                    "updated_at = now()",
+                    (
+                        str(doc_id),
+                        int(seq),
+                        str(status),
+                        len(claims),
+                        model,
+                        EXTRACTOR_VERSION,
+                        duration_ms,
+                        prompt_tokens,
+                        completion_tokens,
+                        error,
+                    ),
                 )
-                inserted = cur.rowcount
             conn.commit()
         return max(inserted, 0)
+
+    def average_block_seconds(self, *, default: float = 45.0) -> float:
+        """历史平均单块耗时（秒）—— 排期估算用真实数据，而不是拍脑袋的常数。
+
+        旧版 ``--dry-run`` 用"每次调用 ~2s"估算，把 614 块算成 30.8 分钟；实测
+        中位数约 51s（20~177s），真实耗时约 9 小时 —— 低估 17 倍。台账里的
+        ``duration_ms`` 一上线就有真实样本，没有样本时才退化为 ``default``。
+        """
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT avg(duration_ms) AS avg_ms, count(*) AS n FROM claim_block_runs "
+                "WHERE status = 'ok' AND duration_ms IS NOT NULL"
+            ).fetchone()
+        if row and row["n"] and row["avg_ms"]:
+            return max(1.0, float(row["avg_ms"]) / 1000.0)
+        return default
+
+    def block_runs(
+        self,
+        *,
+        doc_id: str | None = None,
+        status: str | None = None,
+        limit: int = 200,
+    ) -> list[dict[str, object]]:
+        """查询块级台账 —— D2 进度、失败原因与花费的可见性入口。
+
+        跳过只认"同模型 + 同抽取器指纹"的 ``ok`` 记录，所以排查"为什么某块没被重抽"
+        或"还有多少没抽"时，看这张表而不是 ``claims``。
+        """
+        sql = (
+            "SELECT doc_id, seq, status, claims_n, attempts, model, extractor_version, "
+            "duration_ms, prompt_tokens, completion_tokens, error, updated_at "
+            "FROM claim_block_runs"
+        )
+        where: list[str] = []
+        params: list[object] = []
+        if doc_id:
+            where.append("doc_id = %s")
+            params.append(str(doc_id))
+        if status:
+            where.append("status = %s")
+            params.append(str(status))
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        sql += " ORDER BY doc_id, seq LIMIT %s"
+        params.append(int(limit))
+
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(cast(LiteralString, sql), params)
+            return list(cur.fetchall())
 
     def claims_of(
         self,
@@ -773,12 +1028,53 @@ class CorpusService:
     # 导出时显式指定列：**排除 GENERATED 列**（documents.title_tsv / blocks.tsv）。
     # 它们由 PG 在恢复写入时自动重算，写回去会直接报
     # "cannot insert a non-DEFAULT value into column ... generated always"。
+    #
+    # 抽取产物（claims）与块级台账（claim_block_runs）**必须一起备份**：
+    # 台账是断点续跑的跳过标记，丢了它的后果不是"少几行"，而是恢复后所有块
+    # 都被判定为"没做过" —— 已经花过的钱要再花一遍。
     _BACKUP_COLUMNS: ClassVar[dict[str, tuple[str, ...]]] = {
         "documents": (
-            "doc_id", "title", "source_path", "content_hash", "mime", "status",
-            "char_count", "block_count", "ingested_at", "published",
+            "doc_id",
+            "title",
+            "source_path",
+            "content_hash",
+            "mime",
+            "status",
+            "char_count",
+            "block_count",
+            "ingested_at",
+            "published",
         ),
         "blocks": ("doc_id", "seq", "locator", "text"),
+        "claims": (
+            "claim_id",
+            "doc_id",
+            "seq",
+            "locator",
+            "claim_text",
+            "kind",
+            "tickers",
+            "metric",
+            "value_text",
+            "period",
+            "confidence",
+            "entities",
+            "extracted_at",
+        ),
+        "claim_block_runs": (
+            "doc_id",
+            "seq",
+            "status",
+            "claims_n",
+            "attempts",
+            "model",
+            "extractor_version",
+            "duration_ms",
+            "prompt_tokens",
+            "completion_tokens",
+            "error",
+            "updated_at",
+        ),
     }
 
     @staticmethod
@@ -812,9 +1108,17 @@ class CorpusService:
         dest.mkdir(parents=True, exist_ok=True)
         path = dest / "corpus.dump"
         proc = subprocess.run(
-            ["pg_dump", "--format=custom", "--no-owner", "--no-acl",
-             "--file", str(path), self._dsn],
-            capture_output=True, text=True,
+            [
+                "pg_dump",
+                "--format=custom",
+                "--no-owner",
+                "--no-acl",
+                "--file",
+                str(path),
+                self._dsn,
+            ],
+            capture_output=True,
+            text=True,
         )
         if proc.returncode != 0:
             raise RuntimeError(f"pg_dump 失败：{(proc.stderr or '').strip()[:300]}")
@@ -890,9 +1194,18 @@ class CorpusService:
         if tool is None:
             raise RuntimeError("未找到 pg_restore，无法恢复 .dump 备份")
         proc = subprocess.run(
-            [tool, "--no-owner", "--no-acl", "--dbname", target_dsn,
-             "--clean", "--if-exists", str(dump)],
-            capture_output=True, text=True,
+            [
+                tool,
+                "--no-owner",
+                "--no-acl",
+                "--dbname",
+                target_dsn,
+                "--clean",
+                "--if-exists",
+                str(dump),
+            ],
+            capture_output=True,
+            text=True,
         )
         # pg_restore 遇到「对象不存在」等提示也会返回非 0，
         # 所以以「恢复后行数」为准，退出码只用来告警。
@@ -911,20 +1224,42 @@ class CorpusService:
         target = CorpusService(target_dsn)
         target.init_db()  # 建表 + 生成列（zhcfg 检索配置须已存在于目标库）
         with target._connect() as conn:
+            # 恢复 = **覆盖**，不是追加。CSV 路径原本直接 COPY，往非空表灌会撞
+            # 主键 / UNIQUE；先整体清空，与 pg_dump 路径的 --clean 语义对齐。
+            table_names = ", ".join(self._BACKUP_COLUMNS)
+            conn.execute(cast(LiteralString, f"TRUNCATE {table_names} CASCADE"))
             for table, columns in self._BACKUP_COLUMNS.items():
+                csv_path = src / f"{table}.csv"
+                if not csv_path.exists():
+                    # 旧备份可能缺表（claims 曾被漏掉过）：跳过并告警，而不是
+                    # 让整次恢复失败。
+                    logger.warning("备份里缺少 %s.csv，跳过该表", table)
+                    continue
                 columns_sql = ", ".join(columns)
-                data = (src / f"{table}.csv").read_bytes()
                 statement = cast(
                     LiteralString,
                     f"COPY {table} ({columns_sql}) FROM STDIN WITH (FORMAT CSV, HEADER)",
                 )
                 with conn.cursor() as cur, cur.copy(statement) as copy:
-                    copy.write(data)
+                    copy.write(csv_path.read_bytes())
+            # claims.claim_id 是显式写回的，序列不会自动跟进；不同步的话下次
+            # nextval 会直接撞主键。
+            conn.execute(
+                "SELECT setval('claims_claim_id_seq', "
+                "COALESCE((SELECT max(claim_id) FROM claims), 0) + 1, false)"
+            )
             conn.commit()
 
         counts = target._row_counts()
-        if expected and counts != expected:
-            raise RuntimeError(f"恢复后行数与备份不一致：{counts} != {expected}")
+        # 只比对备份 manifest 里声明过的表：旧 manifest 不含后加的表（claims /
+        # claim_block_runs），按全量比对会误报不一致。
+        mismatch = {
+            table: (counts.get(table), want)
+            for table, want in expected.items()
+            if counts.get(table) != want
+        }
+        if mismatch:
+            raise RuntimeError(f"恢复后行数与备份不一致：{mismatch}")
         logger.info("restore(csv) 完成：%s", counts)
         return counts
 
@@ -958,9 +1293,7 @@ class CorpusService:
             by_status = {r["status"]: r["n"] for r in cur.fetchall()}
             cur.execute("SELECT mime, COUNT(*) AS n FROM documents GROUP BY mime")
             by_mime = {r["mime"]: r["n"] for r in cur.fetchall()}
-            cur.execute(
-                "SELECT MIN(published) AS lo, MAX(published) AS hi FROM documents"
-            )
+            cur.execute("SELECT MIN(published) AS lo, MAX(published) AS hi FROM documents")
             span = cur.fetchone()
         return {
             "documents": total,
@@ -1016,9 +1349,14 @@ class CorpusService:
                 "run_id": None,
                 "status": "error",
                 "error": f"{type(exc).__name__}: {exc}",
-                "total": 0, "added": 0, "skipped_duplicate": 0,
-                "skipped_unchanged": 0, "skipped_fresh": 0,
-                "needs_ocr": 0, "empty": 0, "failed": 0,
+                "total": 0,
+                "added": 0,
+                "skipped_duplicate": 0,
+                "skipped_unchanged": 0,
+                "skipped_fresh": 0,
+                "needs_ocr": 0,
+                "empty": 0,
+                "failed": 0,
                 "failures": [],
                 "duration_ms": int((time.monotonic() - started) * 1000),
                 "exit_code": 2,
@@ -1027,9 +1365,7 @@ class CorpusService:
             self._ledger_json(record)
             return record
 
-    def _ingest_inner(
-        self, root: str | Path, *, trigger: str, min_age: float
-    ) -> dict[str, object]:
+    def _ingest_inner(self, root: str | Path, *, trigger: str, min_age: float) -> dict[str, object]:
         self.init_db()
         with self._connect() as lock_conn:
             got = lock_conn.execute(
@@ -1039,15 +1375,15 @@ class CorpusService:
                 msg = "已有跑批在运行（未取得 advisory lock），本次跳过"
                 logger.warning(msg)
                 return {
-                    "run_id": None, "status": "error", "error": msg,
+                    "run_id": None,
+                    "status": "error",
+                    "error": msg,
                     "exit_code": 2,
                 }
             try:
                 return self._ingest_locked(root, trigger=trigger, min_age=min_age)
             finally:
-                lock_conn.execute(
-                    "SELECT pg_advisory_unlock(%s)", (_INGEST_LOCK_KEY,)
-                )
+                lock_conn.execute("SELECT pg_advisory_unlock(%s)", (_INGEST_LOCK_KEY,))
                 lock_conn.commit()
 
     def _ingest_locked(
@@ -1060,7 +1396,10 @@ class CorpusService:
         except Exception as exc:  # 跑批整个挂了（如 PG 不可达）
             logger.exception("跑批失败")
             record = self._ledger_finish(
-                run_id, None, "error", error=str(exc),
+                run_id,
+                None,
+                "error",
+                error=str(exc),
                 duration_ms=int((time.monotonic() - started) * 1000),
             )
             return {**record, "exit_code": 2}
@@ -1069,13 +1408,19 @@ class CorpusService:
         problems = stats.failed + stats.empty + stats.needs_ocr
         status = "ok" if problems == 0 else "warn"
         record = self._ledger_finish(
-            run_id, stats, status,
+            run_id,
+            stats,
+            status,
             duration_ms=int((time.monotonic() - started) * 1000),
         )
         exit_code = 0 if status == "ok" else 1
         logger.info(
             "跑批结束：status=%s added=%s failed=%s empty=%s needs_ocr=%s",
-            status, stats.added, stats.failed, stats.empty, stats.needs_ocr,
+            status,
+            stats.added,
+            stats.failed,
+            stats.empty,
+            stats.needs_ocr,
         )
         return {**record, "exit_code": exit_code}
 
@@ -1218,12 +1563,15 @@ def _main() -> int:
     p_ingest.add_argument("--dir", default=CORPUS_ROOT)
     p_ingest.add_argument("--db", default=None)
     p_ingest.add_argument(
-        "--trigger", default="manual",
+        "--trigger",
+        default="manual",
         choices=["manual", "cron", "scheduler", "script"],
         help="记进台账的触发来源（默认 manual）",
     )
     p_ingest.add_argument(
-        "--min-age", type=float, default=60.0,
+        "--min-age",
+        type=float,
+        default=60.0,
         help="跳过最近 N 秒內被修改的文件，避免解析到拷贝一半的 PDF（0=不启用，默认 60）",
     )
 
@@ -1248,15 +1596,32 @@ def _main() -> int:
     p_restore.add_argument("--db", required=True, help="目标库 DSN，务必确认")
 
     p_claims = sub.add_parser("extract-claims", help="D2：分级 + LLM 抽取 claim 并落库")
-    p_claims.add_argument("--limit", type=int, default=None, help="最多处理多少个候选块（先跑小样本）")
     p_claims.add_argument(
-        "--sleep", type=float, default=1.0,
+        "--limit", type=int, default=None, help="最多处理多少个候选块（先跑小样本）"
+    )
+    p_claims.add_argument(
+        "--sleep",
+        type=float,
+        default=1.0,
         help="块间限速秒数，防供应商 429 限流风暴（0=不限速；全量跑批建议 1s）",
     )
     p_claims.add_argument("--doc", default=None, help="只处理指定 doc_id")
     p_claims.add_argument(
-        "--dry-run", action="store_true",
+        "--dry-run",
+        action="store_true",
         help="只统计将抽取多少块 / 预计多少次 LLM 调用与耗时，不真正调模型（错峰前规划批次用）",
+    )
+    p_claims.add_argument(
+        "--max-consecutive-failures",
+        type=int,
+        default=5,
+        help="连续失败多少块即熔断干净退出（额度耗尽 / 限流时别再烧额度；0=关闭熔断）",
+    )
+    p_claims.add_argument(
+        "--max-attempts",
+        type=int,
+        default=3,
+        help="同一块累计失败多少次后视为死信、不再重试（防必然失败的块反复花钱）",
     )
     p_claims.add_argument("--db", default=None)
 
@@ -1276,33 +1641,73 @@ def _main() -> int:
 
     if args.cmd == "extract-claims":
         doc_ids = [args.doc] if args.doc else None
+        # 幂等建表：块级台账（claim_block_runs）是后加的，老库必须先迁移，
+        # 否则第一次跑会因为"表不存在"直接失败。
+        svc.init_db()
+        stop_requested = {"flag": False}
+
+        def _request_stop(signum: int, _frame: object) -> None:
+            """Ctrl-C 不再立刻炸掉进程：先把当前块做完，再干净退出。
+
+            落库粒度是块，所以"当前块之后"没有任何未提交的数据会丢；这里做的是
+            让汇总（含失败清单）能打印出来。**第二次 Ctrl-C 恢复默认行为**立即中断，
+            否则一个卡在 300s 超时上的块会让用户等足 5 分钟。
+            """
+            if stop_requested["flag"]:
+                signal.signal(signum, signal.SIG_DFL)
+                return
+            stop_requested["flag"] = True
+            logger.warning(
+                "收到信号 %s：当前块完成后干净退出（已落库的块不受影响，"
+                "重跑会自动跳过）；再按一次 Ctrl-C 立即中断",
+                signum,
+            )
+
+        previous_handlers: dict[int, object] = {}
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            with contextlib.suppress(ValueError, OSError):  # 非主线程 / 平台不支持
+                previous_handlers[sig] = signal.signal(sig, _request_stop)
         try:
             stats = svc.extract_claims(
-                doc_ids=doc_ids, limit=args.limit, sleep_between=args.sleep,
+                doc_ids=doc_ids,
+                limit=args.limit,
+                sleep_between=args.sleep,
                 dry_run=args.dry_run,
+                should_stop=lambda: stop_requested["flag"],
+                max_consecutive_failures=args.max_consecutive_failures,
+                max_attempts=args.max_attempts,
             )
         except RuntimeError as exc:  # 缺 OPENAI_API_KEY 等
             print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False))
             return 2
+        finally:
+            for sig, handler in previous_handlers.items():
+                signal.signal(sig, handler)  # type: ignore[arg-type]
         out = stats.as_dict()
         if args.dry_run:
-            # 估算：每次 LLM 调用 ~2s 响应 + 限速间隔（实测均值，仅作排期参考）
+            # 用**真实历史均值**估算，而不是"每次 2 秒"这种拍脑袋常数：
+            # 那版常数把 614 块估成 30.8 分钟，实测约 9 小时（差 17 倍）。
+            per_call = svc.average_block_seconds()
             calls = out["candidates"]
-            est_seconds = calls * (max(args.sleep, 0) + 2.0)
+            est_seconds = calls * (max(args.sleep, 0) + per_call)
             out = {
                 **out,
                 "dry_run": True,
                 "estimated_llm_calls": calls,
+                "estimated_seconds_per_call": round(per_call, 1),
                 "estimated_seconds": round(est_seconds, 1),
                 "estimated_minutes": round(est_seconds / 60, 1),
+                "estimated_hours": round(est_seconds / 3600, 1),
             }
         print(json.dumps(out, ensure_ascii=False, indent=2))
-        return 0 if args.dry_run else (1 if stats.failed else 0)
+        if args.dry_run:
+            return 0
+        if stats.stopped_early:
+            return 130  # 中断 / 熔断提前退出（Unix 惯例：130 = 被 SIGINT 打断）
+        return 1 if stats.failed else 0
 
     if args.cmd == "claims":
-        rows = svc.claims_of(
-            doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit
-        )
+        rows = svc.claims_of(doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit)
         print(json.dumps(rows, ensure_ascii=False, indent=2, default=str))
         return 0
 
@@ -1313,14 +1718,10 @@ def _main() -> int:
         return code if isinstance(code, int) else 2
     elif args.cmd == "runs":
         svc.init_db()
-        print(json.dumps(
-            svc.recent_runs(args.limit), ensure_ascii=False, indent=2, default=str
-        ))
+        print(json.dumps(svc.recent_runs(args.limit), ensure_ascii=False, indent=2, default=str))
     elif args.cmd == "failures":
         svc.init_db()
-        print(json.dumps(
-            svc.run_failures(args.run), ensure_ascii=False, indent=2, default=str
-        ))
+        print(json.dumps(svc.run_failures(args.run), ensure_ascii=False, indent=2, default=str))
     elif args.cmd == "stats":
         svc.init_db()
         print(json.dumps(svc.stats(), ensure_ascii=False, indent=2))

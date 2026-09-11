@@ -11,6 +11,11 @@
    筛掉「无数字 / 无预测词 / 纯免责声明」的块，只对候选块调 LLM。
 3. **单块失败不中断**：LLM 返回乱码、超时、JSON 解析失败都只记一条 failure，
    绝不拖垮整批（与 ingest 同一条纪律）。
+4. **块级台账（``claim_block_runs``）**：一块一行，记录"做过没有、成没成、用哪个
+   模型/prompt 版本做的、花了多少 token"。跳过只认"同一模型 + 同一抽取器指纹"
+   的成功记录 —— 换模型或改 prompt 会自动失效重抽，不会静默跳过。
+   LLM 调用是**不可逆的花费**，所以落库粒度、跳过粒度都必须细到块（见
+   ``CorpusService.extract_claims``）。
 
 LLM 以**可调用对象注入**（``LlmFn``）：测试注入假实现，生产注入真实客户端，
 本模块不绑定任何具体 SDK。
@@ -18,8 +23,10 @@ LLM 以**可调用对象注入**（``LlmFn``）：测试注入假实现，生产
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
+import os
 import re
 import time
 from collections.abc import Callable, Sequence
@@ -59,6 +66,34 @@ CREATE TABLE IF NOT EXISTS claims (
 CREATE INDEX IF NOT EXISTS idx_claims_doc     ON claims (doc_id, seq);
 CREATE INDEX IF NOT EXISTS idx_claims_tickers ON claims USING gin (tickers);
 CREATE INDEX IF NOT EXISTS idx_claims_kind    ON claims (kind);
+
+-- 块级抽取台账：断点续跑的「跳过标记」，同时是每块的审计与花费记录。
+-- 为什么必须有这张表：若只拿 ``claims`` 反推「这块做过没有」，就会漏掉
+-- **抽出 0 条 claim 的块** —— 它们既没在 claims 里留痕，又每次重跑都被
+-- 再调一次 LLM（同一块钱反复花，且永远跑不到尽头）。
+CREATE TABLE IF NOT EXISTS claim_block_runs (
+    doc_id      text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,
+    seq         integer     NOT NULL,
+    -- ok=抽取成功（claims_n 允许为 0，也算「做过」）；failed=调用失败，重跑会重试
+    status      text        NOT NULL,
+    claims_n    integer     NOT NULL DEFAULT 0,
+    attempts    integer     NOT NULL DEFAULT 1,
+    -- ★ 抽取来源指纹：跳过只认「同一模型 + 同一 prompt/解析器版本」的 ok 记录。
+    -- 没有它，换模型（如 GLM-4.7 → GLM-4.5-AirX）或改 prompt 之后，旧块会被
+    -- 静默永久跳过 —— 看起来在跑，实际一条都不抽，且不报错。
+    model             text,
+    extractor_version text,
+    duration_ms       integer,
+    -- 花费台账：有它才能回答「已经花了多少、剩下还要多少」
+    prompt_tokens     integer,
+    completion_tokens integer,
+    error       text,
+    updated_at  timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (doc_id, seq)
+);
+CREATE INDEX IF NOT EXISTS idx_claim_block_runs_status ON claim_block_runs (status);
+CREATE INDEX IF NOT EXISTS idx_claim_block_runs_fingerprint
+    ON claim_block_runs (status, model, extractor_version);
 """
 
 CLAIMS_COMMENTS = (
@@ -66,6 +101,16 @@ CLAIMS_COMMENTS = (
     "COMMENT ON COLUMN claims.locator IS '取证句柄，与 blocks.locator 一致；claim 必须能回到原文'",
     "COMMENT ON COLUMN claims.kind IS 'fact=已发生；forecast=前瞻性（目标价/预测，属 FORWARD_LOOKING）'",
     "COMMENT ON COLUMN claims.tickers IS '涉及标的代码数组，D3 挖掘与 D4 共识度按此聚合'",
+    "COMMENT ON TABLE claim_block_runs IS "
+    "'D2 块级抽取台账：断点续跑的跳过标记 + 每块审计/花费（模型、耗时、tokens、错误）'",
+    "COMMENT ON COLUMN claim_block_runs.status IS "
+    "'ok=已成功抽取（claims_n 可能为 0，同样算「做过」）；failed=调用失败，重跑会重试'",
+    "COMMENT ON COLUMN claim_block_runs.attempts IS '该块累计被抽取次数（含历次重跑），达上限即视为死信'",
+    "COMMENT ON COLUMN claim_block_runs.model IS "
+    "'抽取时使用的模型名；跳过判断要带上它，换模型自动失效重抽'",
+    "COMMENT ON COLUMN claim_block_runs.extractor_version IS "
+    "'prompt + 解析器的内容指纹；改 prompt/解析器后自动失效重抽'",
+    "COMMENT ON COLUMN claim_block_runs.error IS 'status=failed 时的异常摘要，便于批量重试前先看原因'",
 )
 
 
@@ -123,7 +168,12 @@ class ExtractStats:
     claims: int = 0
     skipped_no_signal: int = 0
     skipped_existing: int = 0  # 断点续跑：已抽取过的块，跳过以免重复花 LLM 调用
+    skipped_dead_letter: int = 0  # 反复失败达上限的块：跳过，不再无限烧钱
     failed: int = 0
+    stopped_early: bool = False  # 命中 should_stop（中断信号）后干净退出
+    stopped_reason: str | None = None  # 提前退出的原因（中断 / 连续失败熔断）
+    prompt_tokens: int = 0  # 本次已消耗的 prompt tokens（花费台账）
+    completion_tokens: int = 0
     failures: list[dict[str, str]] = field(default_factory=list)
 
     def as_dict(self) -> dict[str, Any]:
@@ -136,8 +186,14 @@ class ExtractStats:
             "claims": self.claims,
             "skipped_no_signal": self.skipped_no_signal,
             "skipped_existing": self.skipped_existing,
+            "skipped_dead_letter": self.skipped_dead_letter,
             "failed": self.failed,
+            "stopped_early": self.stopped_early,
+            "prompt_tokens": self.prompt_tokens,
+            "completion_tokens": self.completion_tokens,
         }
+        if self.stopped_reason:
+            data["stopped_reason"] = self.stopped_reason
         if self.failures:
             data["failures"] = self.failures[:20]
         return data
@@ -147,12 +203,36 @@ class ExtractStats:
 # 有数字才可能有可验证的论断；有预测词才可能是 forecast。
 _NUMERIC_RE = re.compile(r"\d")
 _FORECAST_HINTS = (
-    "预计", "预测", "预期", "目标价", "评级", "买入", "增持", "中性", "减持",
-    "有望", "将达", "有望达", "同比", "环比", "增长", "增速", " forecast", "CAGR",
+    "预计",
+    "预测",
+    "预期",
+    "目标价",
+    "评级",
+    "买入",
+    "增持",
+    "中性",
+    "减持",
+    "有望",
+    "将达",
+    "有望达",
+    "同比",
+    "环比",
+    "增长",
+    "增速",
+    " forecast",
+    "CAGR",
 )
 _NOISE_HINTS = (
-    "免责声明", "未经", "书面许可", "分析师声明", "风险提示", "评级标准",
-    "投资评级标准", "本报告由", "在法律许可", "版权归",
+    "免责声明",
+    "未经",
+    "书面许可",
+    "分析师声明",
+    "风险提示",
+    "评级标准",
+    "投资评级标准",
+    "本报告由",
+    "在法律许可",
+    "版权归",
 )
 
 
@@ -183,6 +263,9 @@ def triage_blocks(blocks: Sequence[BlockLike]) -> tuple[list[BlockLike], int]:
 
 
 # ── LLM 交互 ─────────────────────────────────────────────────────
+#: 单块送入模型的最大字符数（超长表格块截断，避免单次调用过大）
+PROMPT_MAX_CHARS = 2500
+
 PROMPT_TEMPLATE = """你是金融研报结构化抽取器。从下面这段研报原文中抽取**含具体数字或评级的陈述**。
 
 什么算一条 claim（按此判断，不要过严）：
@@ -207,7 +290,7 @@ PROMPT_TEMPLATE = """你是金融研报结构化抽取器。从下面这段研�
 """
 
 
-def build_prompt(text: str, *, max_chars: int = 2500) -> str:
+def build_prompt(text: str, *, max_chars: int = PROMPT_MAX_CHARS) -> str:
     """构造 prompt（截断超长块，避免单次调用过大）。
 
     用 ``replace`` 而不是 ``str.format``：模板里躺着 few-shot 的 JSON 示例，
@@ -215,6 +298,30 @@ def build_prompt(text: str, *, max_chars: int = 2500) -> str:
     """
     body = text if len(text) <= max_chars else text[:max_chars] + "\n…（截断）"
     return PROMPT_TEMPLATE.replace("{text}", body)
+
+
+#: 抽取口径的人工版本号 —— 改动 :func:`parse_claims_json` / :func:`claims_from_payload`
+#: 这类"不进模板"的解析逻辑时加一。改 prompt 模板则指纹会自动变化，无需动它。
+_EXTRACTOR_REV = 1
+
+#: 抽取器指纹：``prompt 模板 + 解析口径版本 + 截断长度`` 的内容哈希。
+#:
+#: **为什么跳过判断必须带上它**：块一旦标记成 ``ok`` 就永不重抽，可"抽得好不好"
+#: 完全取决于模型与 prompt。没有指纹时，换模型（GLM-4.7 → AirX）或改 prompt 之后
+#: 旧块会被静默永久跳过 —— 看起来在跑，实际一条都不抽，而且不报错。
+EXTRACTOR_VERSION = hashlib.sha256(
+    f"{PROMPT_TEMPLATE}|{_EXTRACTOR_REV}|{PROMPT_MAX_CHARS}".encode()
+).hexdigest()[:12]
+
+
+#: 注入式实现（测试 / 自定义 ``llm``）没有"配置模型"的概念，用这个稳定标识做
+#: 指纹的一半：既让同一套假实现的重跑互相跳过，又不受环境里 ``OPENAI_MODEL`` 影响。
+INJECTED_MODEL = "injected"
+
+
+def configured_model() -> str:
+    """当前配置的模型名 —— 跳过指纹的一半（与 :func:`build_default_llm` 同源）。"""
+    return os.environ.get("OPENAI_MODEL") or "unknown"
 
 
 def parse_claims_json(raw: str) -> list[dict[str, Any]]:
@@ -343,14 +450,25 @@ def with_retry(
     return _wrapped
 
 
-def build_default_llm() -> LlmFn:
+def build_default_llm(usage_sink: dict[str, int] | None = None) -> LlmFn:
     """生产用 LLM：走 OpenAI 兼容接口（凭据来自 ``.env``）。
 
     这是**离线批处理**路径（不是 Agent 主链路），直接用 ``openai`` SDK；
     Agent 运行时的 LLM 仍走 ``frontier_agent.infra``。
-    """
-    import os
 
+    ``usage_sink`` 传入一个可变字典即累计 token 用量（键
+    ``prompt_tokens`` / ``completion_tokens``），调用方按块取差值即可得到单块
+    花费 —— 没有它就无法回答"已经花了多少、剩下还要多少"。
+
+    两个超时/重试参数是**故意显式**的（默认值会把一次偶发挂起放大成十几分钟）：
+
+    - ``timeout``（默认 300s，``CORPUS_LLM_TIMEOUT`` 可覆盖）：SDK 默认读超时
+      600s，实测供应商会"TCP 连上了、请求发出去了，但一个字节都不回"，一次
+      挂起就白等 10 分钟。观察到的最慢**合法**调用约 177s（长表格块吐几十条
+      claim），故留 300s 余量。
+    - ``max_retries=0``：重试策略只由 :func:`with_retry` 一处负责。若 SDK 自己
+      再重试 2 次，会叠成「3 次 x 3 次」的请求放大 —— 限流时反而越重试越糟。
+    """
     from openai import OpenAI
 
     base_url = os.environ.get("OPENAI_BASE_URL") or None
@@ -359,7 +477,8 @@ def build_default_llm() -> LlmFn:
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY 未配置，无法执行 claim 抽取（D2）")
 
-    client = OpenAI(api_key=api_key, base_url=base_url)
+    timeout = float(os.environ.get("CORPUS_LLM_TIMEOUT", "300"))
+    client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout, max_retries=0)
 
     def _llm(prompt: str) -> str:
         response = client.chat.completions.create(
@@ -370,6 +489,15 @@ def build_default_llm() -> LlmFn:
             ],
             temperature=0,
         )
+        if usage_sink is not None:
+            usage = getattr(response, "usage", None)
+            if usage is not None:
+                usage_sink["prompt_tokens"] = usage_sink.get("prompt_tokens", 0) + (
+                    usage.prompt_tokens or 0
+                )
+                usage_sink["completion_tokens"] = usage_sink.get("completion_tokens", 0) + (
+                    usage.completion_tokens or 0
+                )
         return response.choices[0].message.content or ""
 
     return _llm

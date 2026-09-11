@@ -72,108 +72,148 @@ def _m(title: str, prefix: str = "") -> Matcher:
 GOLDEN_SET: tuple[GoldenQuestion, ...] = (
     # ── 数字型（8）────────────────────────────────────────────────────
     GoldenQuestion(
-        "N1", "字节跳动获得的银团贷款规模是多少亿美元", KIND_NUMBER,
+        "N1",
+        "字节跳动获得的银团贷款规模是多少亿美元",
+        KIND_NUMBER,
         (_m("字节获296亿美元银团贷款"),),
         note="296 亿美元（国金证券通信行业研究）",
     ),
     GoldenQuestion(
-        "N2", "Figure 加码 Helix 算力投入了多少亿美元", KIND_NUMBER,
+        "N2",
+        "Figure 加码 Helix 算力投入了多少亿美元",
+        KIND_NUMBER,
         (_m("figure斥35亿美元加码helix算力"),),
         note="35 亿美元（国泰海通机器人行业周报）",
     ),
     GoldenQuestion(
-        "N3", "国盛证券提到增资银行保险的规模是多少亿", KIND_NUMBER,
+        "N3",
+        "国盛证券提到增资银行保险的规模是多少亿",
+        KIND_NUMBER,
         (_m("3600亿增资银行保险"),),
         note="3600 亿",
     ),
     GoldenQuestion(
-        "N4", "华福证券基础化工周报提到电子特气涨幅超过多少", KIND_NUMBER,
+        "N4",
+        "华福证券基础化工周报提到电子特气涨幅超过多少",
+        KIND_NUMBER,
         (_m("电子特气涨幅超24"),),
         note="涨幅超 24%",
     ),
     GoldenQuestion(
-        "N5", "光大证券金属周报提到焦煤期货收盘价周内下跌多少", KIND_NUMBER,
+        "N5",
+        "光大证券金属周报提到焦煤期货收盘价周内下跌多少",
+        KIND_NUMBER,
         (_m("焦煤期货收盘价周内下跌3-64"),),
         note="3.64%",
     ),
     GoldenQuestion(
-        "N6", "长江证券化工专题里小苏打出口占产量的比重是多少", KIND_NUMBER,
+        "N6",
+        "长江证券化工专题里小苏打出口占产量的比重是多少",
+        KIND_NUMBER,
         (_m("长江证券-化工专题"),),
         note="30% 左右",
     ),
     GoldenQuestion(
-        "N7", "贵州茅台 2026 上半年收入同比增长百分之多少", KIND_NUMBER,
+        "N7",
+        "贵州茅台 2026 上半年收入同比增长百分之多少",
+        KIND_NUMBER,
         (_m("国信证券", "2026-08-17"),),
         note="1.3%",
     ),
     GoldenQuestion(
-        "N8", "光力科技的主营业务和股票代码是什么", KIND_NUMBER,
+        "N8",
+        "光力科技的主营业务和股票代码是什么",
+        KIND_NUMBER,
         (_m("光力科技"),),
         note="300480，半导体划片机国内龙头",
     ),
     # ── 观点型（6）────────────────────────────────────────────────────
     GoldenQuestion(
-        "O1", "华创证券对贵州茅台给出什么投资评级", KIND_OPINION,
+        "O1",
+        "华创证券对贵州茅台给出什么投资评级",
+        KIND_OPINION,
         (_m("华创证券", "2026-08-16"),),
         note="强推（维持）",
     ),
     GoldenQuestion(
-        "O2", "摩根大通对中国人工智能板块的态度与评级", KIND_OPINION,
+        "O2",
+        "摩根大通对中国人工智能板块的态度与评级",
+        KIND_OPINION,
         (_m("jpmorgan"),),
         note="维持增持 / 中性，上调智谱 MiniMax 目标价",
     ),
     GoldenQuestion(
-        "O3", "国金证券怎么看 AI PCB 与半导体设备的布局时机", KIND_OPINION,
+        "O3",
+        "国金证券怎么看 AI PCB 与半导体设备的布局时机",
+        KIND_OPINION,
         (_m("ai-pcb及半导体设备迎来布局良机"),),
         note="迎来布局良机",
     ),
     GoldenQuestion(
-        "O4", "华福证券为什么看好供给约束型周期品", KIND_OPINION,
+        "O4",
+        "华福证券为什么看好供给约束型周期品",
+        KIND_OPINION,
         (_m("看好供给约束型周期品"),),
         note="美联储加息扩表可能性或已浮现",
     ),
     GoldenQuestion(
-        "O5", "国金证券对钽价和锑价的判断是什么", KIND_OPINION,
+        "O5",
+        "国金证券对钽价和锑价的判断是什么",
+        KIND_OPINION,
         (_m("钽价有望启动上行"),),
         note="钽价有望启动上行、关注锑价止跌回升",
     ),
     GoldenQuestion(
-        "O6", "华泰证券宏观海外周报如何看待联储加息", KIND_OPINION,
+        "O6",
+        "华泰证券宏观海外周报如何看待联储加息",
+        KIND_OPINION,
         (_m("联储加息悬念白热化"),),
         note="联储加息悬念白热化",
     ),
     # ── 对比型（3）：跨文档，少召回一份即算错 ─────────────────────────
     GoldenQuestion(
-        "C1", "华创证券和国信证券分别对贵州茅台给出什么评级", KIND_COMPARE,
+        "C1",
+        "华创证券和国信证券分别对贵州茅台给出什么评级",
+        KIND_COMPARE,
         (_m("华创证券", "2026-08-16"), _m("国信证券", "2026-08-17")),
         require_all=True,
         note="强推 vs 优于大市",
     ),
     GoldenQuestion(
-        "C2", "国金证券和东吴证券分别对 GPT-6 Astra 发布有什么看法", KIND_COMPARE,
+        "C2",
+        "国金证券和东吴证券分别对 GPT-6 Astra 发布有什么看法",
+        KIND_COMPARE,
         (_m("gpt-6-astra-fable-5-1正式发布"), _m("gpt-6-astra发布")),
         require_all=True,
         note="国金：互联网行业研究；东吴：策略周评",
     ),
     GoldenQuestion(
-        "C3", "光大证券和天风证券分别对 8 月美国非农数据给出了什么解读", KIND_COMPARE,
+        "C3",
+        "光大证券和天风证券分别对 8 月美国非农数据给出了什么解读",
+        KIND_COMPARE,
         (_m("2026年8月美国非农数据点评"), _m("非农大超预期")),
         require_all=True,
         note="光大：强非农降低加息门槛；天风：非农大超预期、加息预期升温",
     ),
     # ── 时效型（3）：考的是「最新一期」能否被召回 ──────────────────────
     GoldenQuestion(
-        "T1", "James Bulltard 最新一期的复盘是哪一期", KIND_TIMELINESS,
+        "T1",
+        "James Bulltard 最新一期的复盘是哪一期",
+        KIND_TIMELINESS,
         (_m("James-Bulltard_9826", "2026-09-08"),),
         note="5 期中最晚的 09-08（9826 复盘）",
     ),
     GoldenQuestion(
-        "T2", "全球流动性观察最新一期是哪天发布的", KIND_TIMELINESS,
+        "T2",
+        "全球流动性观察最新一期是哪天发布的",
+        KIND_TIMELINESS,
         (_m("全球流动性观察", "2026-09-08"),),
         note="3 期中最晚的 09-08（周度更新）",
     ),
     GoldenQuestion(
-        "T3", "Simons-Substack 最近一篇讲了什么", KIND_TIMELINESS,
+        "T3",
+        "Simons-Substack 最近一篇讲了什么",
+        KIND_TIMELINESS,
         (_m("白银矿股", "2026-09-07"),),
         note="2026-09-07 白银矿股关注图表四",
     ),
@@ -250,12 +290,14 @@ def run_golden(corpus: CorpusService, *, top_k: int = 5) -> GoldenReport:
                 missing.append(matcher)
         # require_all：跨文档题少一份即算错；否则命中任一份即算对
         ok = not missing if question.require_all else bool(matched)
-        report.results.append(GoldenResult(
-            question=question,
-            hit=ok,
-            matched=tuple(matched),
-            missing=tuple(missing),
-        ))
+        report.results.append(
+            GoldenResult(
+                question=question,
+                hit=ok,
+                matched=tuple(matched),
+                missing=tuple(missing),
+            )
+        )
     return report
 
 
@@ -273,8 +315,11 @@ def format_golden_report(report: GoldenReport) -> str:
         lines.append("未命中：")
         for item in failures:
             lines.append(f"  [{item.question.qid}] {item.question.question}")
-            lines.append("       期望：" + "；".join(
-                m.title_contains + ("/" + m.doc_prefix if m.doc_prefix else "")
-                for m in item.question.expects
-            ))
+            lines.append(
+                "       期望："
+                + "；".join(
+                    m.title_contains + ("/" + m.doc_prefix if m.doc_prefix else "")
+                    for m in item.question.expects
+                )
+            )
     return "\n".join(lines)

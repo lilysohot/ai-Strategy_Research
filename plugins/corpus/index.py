@@ -147,8 +147,7 @@ def build_index(conn: sqlite3.Connection) -> int:
     ).fetchall()
 
     conn.executemany(
-        "INSERT INTO blocks_fts (doc_id, locator, title_tokens, tokens)"
-        " VALUES (?, ?, ?, ?)",
+        "INSERT INTO blocks_fts (doc_id, locator, title_tokens, tokens) VALUES (?, ?, ?, ?)",
         [
             # 标题也进索引：它往往含正文里不出现的机构名/标的名，
             # 不索引的话「摩根大通」这类查询会一无所获。
