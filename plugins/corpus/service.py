@@ -30,18 +30,17 @@ import contextlib
 import json
 import logging
 import os
-import re
 import shutil
 import signal
 import subprocess
 import sys
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, ClassVar, LiteralString, cast
+from typing import TYPE_CHECKING, Any, ClassVar, LiteralString, cast
 from urllib.parse import quote
 
 if TYPE_CHECKING:
@@ -54,13 +53,20 @@ from psycopg.rows import DictRow, dict_row
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
+    CLAIMS_MIGRATIONS_SQL,
     CLAIMS_SQL,
+    DOC_KINDS,
     EXTRACTOR_VERSION,
     INJECTED_MODEL,
     BlockView,
+    Claim,
     ExtractStats,
+    apply_as_of_fallback,
+    apply_doc_ticker,
     build_default_llm,
+    classify_doc_kind,
     configured_model,
+    document_ticker,
     extract_from_block,
     triage_blocks,
     with_retry,
@@ -73,11 +79,13 @@ from plugins.corpus.ingest import (
     iter_corpus_files,
     parse_document,
 )
+from plugins.corpus.metadata import (
+    DOCUMENTS_MIGRATIONS_SQL,
+    derive_metadata,
+    derive_published,
+)
 
 logger = logging.getLogger(__name__)
-
-# doc_id 形如 ``2026-08-16_6f14cc14``：日期前缀即 published（documents 表无 published 列时派生）
-_DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})_")
 
 
 @dataclass
@@ -262,6 +270,28 @@ def dsn() -> str:
     return f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}@{host}:{port}/{name}"
 
 
+def _dedup_claims(claims: list[Claim]) -> list[Claim]:
+    """块内去重（§3.4）：同一 ``(metric, period, kind)`` 保留最后一条。
+
+    LLM 偶尔在同一次输出里对同一指标重复给值（两次表述、两个精度）。"最后一条"
+    与逐块提交的顺序一致 —— 后给的表述是对前者的修正。``metric`` 为空的行没有
+    可比的坐标，不参与去重。
+    """
+    seen: set[tuple[str, str | None, str]] = set()
+    kept: list[Claim] = []
+    for claim in reversed(claims):
+        if claim.metric is None:
+            kept.append(claim)
+            continue
+        key = (claim.metric, claim.period, claim.kind)
+        if key in seen:
+            continue
+        seen.add(key)
+        kept.append(claim)
+    kept.reverse()
+    return kept
+
+
 class CorpusService:
     """语料服务：所有 PG 访问经此。"""
 
@@ -327,24 +357,108 @@ class CorpusService:
         with self._connect() as conn:
             conn.execute(SCHEMA_SQL)
             conn.execute(LEDGER_SQL)
-            conn.execute(CLAIMS_SQL)  # D2：claim / entities（幂等，不影响既有表）
+            conn.execute(CLAIMS_SQL)  # D2：claim 抽取（幂等，不影响既有表）
+            # 老库幂等迁移：三列事实列 + doc_kind_override + 删除 entities 死字段
+            conn.execute(CLAIMS_MIGRATIONS_SQL)
+            # P6（§3.5）：文档级元数据四列（doc_kind/subject/org/analysts）
+            conn.execute(DOCUMENTS_MIGRATIONS_SQL)
             for stmt in (*_COLUMN_COMMENTS, *LEDGER_COMMENTS, *CLAIMS_COMMENTS):
                 # COMMENT statements are module-level constants; the cast only
                 # tells the type checker they are not caller-supplied SQL.
                 conn.execute(cast(LiteralString, stmt))
             conn.commit()
 
-    # ── 写入 ──────────────────────────────────────────────────
+    def set_doc_kind(self, doc_id: str, kind: str | None) -> None:
+        """人工纠正文档领域分类（§11 缺口#1 的纠正入口）。
 
-    @staticmethod
-    def _published_of(doc_id: str) -> str | None:
-        m = _DATE_RE.match(doc_id)
-        return m.group(1) if m else None
+        ``doc_kind`` 决定抽取插槽与是否给文档级标的兜底，自动分类误判时
+        （公司研报标题无代码且正文码为 0/多），坐标会整份文档全错 —— 这里是
+        事后的手动纠偏。``None`` 清除覆盖、恢复自动分类。
+        """
+        if kind is not None and kind not in DOC_KINDS:
+            raise ValueError(f"未知 doc_kind：{kind!r}（应为 {'/'.join(DOC_KINDS)} 或 None）")
+        with self._lock, self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "UPDATE documents SET doc_kind_override = %s WHERE doc_id = %s",
+                (kind, str(doc_id)),
+            )
+            conn.commit()
+
+    def refresh_metadata(self, doc_ids: Sequence[str] | None = None) -> dict[str, object]:
+        """派生并物化文档级元数据（P6，§3.5 可得子集），返回统计摘要。
+
+        ``doc_kind`` / ``subject`` / ``org`` / ``analysts`` 以派生为唯一权威，
+        **非空即覆盖**（幂等）；``published`` 只回填 NULL（ingest 写入的 doc_id
+        日期是事实，不覆盖）。纯规则派生，0 LLM 成本；抽取链路行为不变
+        （抽取仍按 override → 现算分类取插槽，这里只是把同一判定落到列，
+        供 D3/D4 直接 join，不再各自重算）。
+        """
+        with self._lock, self._connect() as conn, conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(
+                "SELECT doc_id, title, published, doc_kind_override FROM documents"
+                + (" WHERE doc_id = ANY(%s)" if doc_ids else "")
+                + " ORDER BY doc_id",
+                (list(doc_ids),) if doc_ids else None,
+            )
+            documents = cur.fetchall()
+            stats = {
+                "docs": len(documents),
+                "org_filled": 0,
+                "analysts_filled": 0,
+                "subject_filled": 0,
+                "published_backfilled": 0,
+                "kind_dist": {},
+            }
+            kinds: dict[str, int] = {}
+            for row in documents:
+                doc_id, title = str(row["doc_id"]), str(row["title"] or "")
+                texts = [str(b["text"] or "") for b in self._blocks_rows(conn, doc_id)]
+                meta = derive_metadata(doc_id, title, texts, row["doc_kind_override"])
+                kinds[str(meta["doc_kind"])] = kinds.get(str(meta["doc_kind"]), 0) + 1
+                cur.execute(
+                    "UPDATE documents SET doc_kind = %s, subject = %s, org = %s,"
+                    " analysts = %s WHERE doc_id = %s",
+                    (
+                        meta["doc_kind"],
+                        meta["subject"],
+                        meta["org"],
+                        list(meta["analysts"]) or None,
+                        doc_id,
+                    ),
+                )
+                # published：只回填 NULL（见 docstring），ingest 已填的不动
+                if row["published"] is None and meta["published"] is not None:
+                    cur.execute(
+                        "UPDATE documents SET published = %s WHERE doc_id = %s",
+                        (meta["published"], doc_id),
+                    )
+                    stats["published_backfilled"] += 1
+                if meta["org"]:
+                    stats["org_filled"] += 1
+                if meta["analysts"]:
+                    stats["analysts_filled"] += 1
+                if meta["subject"]:
+                    stats["subject_filled"] += 1
+            stats["kind_dist"] = dict(sorted(kinds.items()))
+            conn.commit()
+        return stats
+
+    def _blocks_rows(self, conn: psycopg.Connection[Any], doc_id: str) -> list[dict[str, Any]]:
+        """一份文档的块文本（元数据派生用；与 blocks_of 同源但走 dict 行）。"""
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(
+                "SELECT seq, text FROM blocks WHERE doc_id = %s ORDER BY seq",
+                (doc_id,),
+            )
+            return cur.fetchall()
+
+    # ── 写入 ──────────────────────────────────────────────────
 
     def ingest_path(self, path: str | Path) -> tuple[str, bool]:
         """解析并落库一份，返回 ``(status, added)``。"""
         parsed = parse_document(path)
-        published = self._published_of(parsed.doc_id)
+        first_text = parsed.blocks[0].text if parsed.blocks else None
+        published = derive_published(parsed.doc_id, parsed.title, first_text)
         with self._lock, self._connect() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -376,6 +490,10 @@ class CorpusService:
                         [(parsed.doc_id, b.seq, b.locator, b.text) for b in parsed.blocks],
                     )
             conn.commit()
+        if inserted:
+            # P6（§3.5）：元数据随 ingest 物化（org/analysts/doc_kind/subject +
+            # published 的首块日期回填），新文档入即可被 D3/D4 join
+            self.refresh_metadata([parsed.doc_id])
         return parsed.status, inserted
 
     def ingest_dir(
@@ -398,6 +516,7 @@ class CorpusService:
         """
         stats = IngestStats()
         known = self._known_hashes()
+        added_doc_ids: list[str] = []
 
         files = list(iter_corpus_files(root))
         if min_age > 0:
@@ -436,7 +555,8 @@ class CorpusService:
                     logger.exception("ingest 解析失败：%s", key)
                     continue
 
-                published = self._published_of(parsed.doc_id)
+                first_text = parsed.blocks[0].text if parsed.blocks else None
+                published = derive_published(parsed.doc_id, parsed.title, first_text)
                 with conn.cursor() as cur:
                     cur.execute(
                         """
@@ -468,6 +588,7 @@ class CorpusService:
                         )
                     stats.added += 1
                     stats.blocks += len(parsed.blocks)
+                    added_doc_ids.append(parsed.doc_id)
                 else:
                     stats.skipped_duplicate += 1
 
@@ -477,6 +598,17 @@ class CorpusService:
                     stats.empty += 1
 
             conn.commit()
+
+        if added_doc_ids:
+            # P6（§3.5）：本批新增文档的元数据随 ingest 物化（事务外批量补）
+            refresh = self.refresh_metadata(added_doc_ids)
+            logger.info(
+                "元数据物化：%s 份（org=%s analysts=%s published 补=%s）",
+                refresh["docs"],
+                refresh["org_filled"],
+                refresh["analysts_filled"],
+                refresh["published_backfilled"],
+            )
 
         logger.info(
             "ingest 完成：total=%s added=%s unchanged=%s dup=%s failed=%s",
@@ -665,9 +797,17 @@ class CorpusService:
             done, dead = self._done_blocks(model=model_name, max_attempts=max_attempts)
         stats = ExtractStats()
 
-        targets = (
-            list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in self.list_documents()]
-        )
+        documents = self.list_documents()
+        # 标题 / 发布日 / doc_kind 覆盖用于：文档级标的兜底、as_of 兜底、插槽选择
+        # （券商研报的代码常只出现在标题里；published 是 as_of 的兜底来源，§5.1）
+        titles = {str(row["doc_id"]): str(row["title"] or "") for row in documents}
+        published_by = {str(row["doc_id"]): row["published"] for row in documents}
+        kind_overrides = {
+            str(row["doc_id"]): row["doc_kind_override"]
+            for row in documents
+            if row.get("doc_kind_override")
+        }
+        targets = list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in documents]
         stop = False
         consecutive_failures = 0
         for doc_id in targets:
@@ -679,6 +819,22 @@ class CorpusService:
             ]
             candidates, skipped = triage_blocks(views)
             stats.skipped_no_signal += skipped
+            # 领域插槽选择（§3.1/§3.2）：人工覆盖优先（缺口#1），否则零成本规则分类
+            override = kind_overrides.get(doc_id)
+            if override in DOC_KINDS:
+                doc_kind = str(override)
+            else:
+                doc_kind = classify_doc_kind(titles.get(doc_id, ""), [v.text for v in views])
+            # 文档级标的：模型在表格块里常常抽不出代码（表格里没有代码列）。
+            # **只给 company**（§3.1 副产品）：industry/macro 给错误的标的坐标
+            # 比缺失更危险 —— 下游无法察觉。
+            ticker = (
+                document_ticker(titles.get(doc_id, ""), [view.text for view in views])
+                if doc_kind == "company"
+                else None
+            )
+            if ticker:
+                logger.info("文档 %s（%s）的文档级标的兜底：%s", doc_id, doc_kind, ticker)
 
             for block in candidates:
                 if limit is not None and stats.candidates >= limit:
@@ -709,7 +865,14 @@ class CorpusService:
                     # dry_run already continued above, so an llm is always
                     # resolved by here; the assert narrows it for the checker.
                     assert llm_fn is not None
-                    extracted = extract_from_block(block, doc_id=doc_id, llm=llm_fn)
+                    extracted = apply_as_of_fallback(
+                        apply_doc_ticker(
+                            extract_from_block(block, doc_id=doc_id, llm=llm_fn, doc_kind=doc_kind),
+                            ticker,
+                        ),
+                        # as_of 兜底（§5.1）：模型没给时用发布日（≈0 token 成本）
+                        str(published_by[doc_id]) if published_by.get(doc_id) else None,
+                    )
                 except Exception as exc:  # 单块失败不得拖垮整批
                     reason = f"{type(exc).__name__}: {exc}"[:200]
                     stats.failed += 1
@@ -840,9 +1003,17 @@ class CorpusService:
         ``attempts`` 只统计**当前指纹**下的次数：指纹变了就归 1，否则"换个模型
         重试"会被上一个模型累计的失败次数直接判成死信。
 
+        **跨块去重（§3.4 缺陷 4）**：同一 ``(doc_id, metric, period, kind)`` 在
+        多个块重复出现（如 毛利率 2026E 文字块 90.4% / 表格块 90.42%，文本不同
+        ``ON CONFLICT`` 挡不住），按标的聚合时会被**重复计数**。口径：序号更大
+        （更靠后）的块覆盖之前的 —— 与逐块提交顺序一致，只删 ``seq < 当前块`` 的
+        旧行，重抽靠前的块永远不会碰掉靠后块已落库的结果。``metric`` 为空的行
+        没有可比坐标，不参与。块内重复由 :func:`_dedup_claims` 先收一次。
+
         返回本次实际插入的 claim 行数（``ON CONFLICT DO NOTHING`` 后的净增，
         重跑同一块时为 0，不会重复计数）。
         """
+        claims = _dedup_claims(list(claims))
         rows = [
             (
                 str(c.doc_id),
@@ -853,7 +1024,10 @@ class CorpusService:
                 list(c.tickers),
                 c.metric,
                 c.value_text,
+                c.value_num,
+                c.unit,
                 c.period,
+                c.as_of,
                 c.confidence,
             )
             for c in claims
@@ -877,10 +1051,26 @@ class CorpusService:
                             (str(doc_id), int(seq)),
                         )
                 if rows:
+                    # 跨块去重（§3.4 缺陷 4）：删掉更靠前块里同坐标的旧行。
+                    # IS NOT DISTINCT FROM 让 NULL period 也参与比较（目标价这类
+                    # 不带期间的指标在多个块重复时同样只留一条）。
+                    # 排序键把 None 归到 ""：同块内 period 混有 NULL 与字符串时
+                    # （表格块常见），tuple 直接比较会 TypeError。
+                    triples = sorted(
+                        {(c.metric, c.period, c.kind) for c in claims if c.metric is not None},
+                        key=lambda t: (t[0], t[1] or "", t[2]),
+                    )
+                    for metric, period, kind in triples:
+                        cur.execute(
+                            "DELETE FROM claims WHERE doc_id = %s AND seq < %s "
+                            "AND metric IS NOT DISTINCT FROM %s "
+                            "AND period IS NOT DISTINCT FROM %s AND kind = %s",
+                            (str(doc_id), int(seq), metric, period, kind),
+                        )
                     cur.executemany(
                         "INSERT INTO claims (doc_id, seq, locator, claim_text, kind, tickers, "
-                        "metric, value_text, period, confidence) "
-                        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
+                        "metric, value_text, value_num, unit, period, as_of, confidence) "
+                        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
                         "ON CONFLICT (doc_id, seq, claim_text) DO NOTHING",
                         rows,
                     )
@@ -982,7 +1172,7 @@ class CorpusService:
         """查询 claim（按文档 / 标的 / 类型）—— D3 挖掘与 D4 聚合的入口。"""
         sql = (
             "SELECT claim_id, doc_id, seq, locator, claim_text, kind, tickers, "
-            "metric, value_text, period, confidence FROM claims"
+            "metric, value_text, value_num, unit, period, as_of, confidence FROM claims"
         )
         where: list[str] = []
         params: list[object] = []
@@ -1010,7 +1200,8 @@ class CorpusService:
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT doc_id, title, source_path, mime, status, "
-                "block_count, char_count, published FROM documents ORDER BY doc_id"
+                "block_count, char_count, published, doc_kind_override "
+                "FROM documents ORDER BY doc_id"
             )
             rows = cur.fetchall()
         return [dict(r) for r in rows]
@@ -1029,6 +1220,10 @@ class CorpusService:
     # 它们由 PG 在恢复写入时自动重算，写回去会直接报
     # "cannot insert a non-DEFAULT value into column ... generated always"。
     #
+    # ⚠️ 该列表是**逐列枚举**的：``claims`` 加了新列而忘了同步这里，不会被报错，
+    # 只会在备份里**静默丢字段**（上次整张 claims 表漏出备份就是这样踩的，
+    # 见 d2-claims-design §5.1 / 附录 A）。
+    #
     # 抽取产物（claims）与块级台账（claim_block_runs）**必须一起备份**：
     # 台账是断点续跑的跳过标记，丢了它的后果不是"少几行"，而是恢复后所有块
     # 都被判定为"没做过" —— 已经花过的钱要再花一遍。
@@ -1044,6 +1239,14 @@ class CorpusService:
             "block_count",
             "ingested_at",
             "published",
+            # P1 迁移加列（§5.1 ⚠️）：不同步这行，备份会静默丢 doc_kind_override，
+            # 恢复后人工纠正过的分类全部归零 —— 审计（P5）的备份覆盖率检查抓的正是它。
+            "doc_kind_override",
+            # P6 迁移加列（§3.5 可得子集）：同一教训，加列必须同步备份枚举
+            "doc_kind",
+            "subject",
+            "org",
+            "analysts",
         ),
         "blocks": ("doc_id", "seq", "locator", "text"),
         "claims": (
@@ -1056,9 +1259,11 @@ class CorpusService:
             "tickers",
             "metric",
             "value_text",
+            "value_num",
+            "unit",
             "period",
+            "as_of",
             "confidence",
-            "entities",
             "extracted_at",
         ),
         "claim_block_runs": (
@@ -1235,7 +1440,17 @@ class CorpusService:
                     # 让整次恢复失败。
                     logger.warning("备份里缺少 %s.csv，跳过该表", table)
                     continue
-                columns_sql = ", ".join(columns)
+                # 列取**当前 schema 与备份文件表头的交集**：旧备份没有后加的列
+                # （如 claims 的 value_num/unit/as_of），直接按当前列 COPY 会报
+                # "column does not exist in file"；旧备份里已删除的列（entities）
+                # 也不能再写。缺的列恢复后为 NULL / 默认值，可重跑补齐。
+                header_line = csv_path.open("r", encoding="utf-8").readline()
+                header = {name.strip() for name in header_line.strip().split(",")}
+                present = [c for c in columns if c in header]
+                dropped = [c for c in columns if c not in header]
+                if dropped:
+                    logger.warning("备份 %s.csv 缺少列 %s，恢复后该列为空", table, dropped)
+                columns_sql = ", ".join(present)
                 statement = cast(
                     LiteralString,
                     f"COPY {table} ({columns_sql}) FROM STDIN WITH (FORMAT CSV, HEADER)",
@@ -1632,6 +1847,36 @@ def _main() -> int:
     p_show_claims.add_argument("--limit", type=int, default=50)
     p_show_claims.add_argument("--db", default=None)
 
+    p_set_kind = sub.add_parser(
+        "set-doc-kind", help="人工纠正文档领域分类（§11 缺口#1：分类误判的纠正入口）"
+    )
+    p_set_kind.add_argument("--doc", required=True, help="doc_id")
+    p_set_kind.add_argument(
+        "--kind",
+        required=True,
+        choices=[*DOC_KINDS, "auto"],
+        help="company/industry/macro；auto=清除覆盖、恢复自动分类",
+    )
+    p_set_kind.add_argument("--db", default=None)
+
+    p_audit = sub.add_parser(
+        "audit", help="D2 P5：语料库三类审计报告（完整性/一致性/质量，只读，JSON 输出）"
+    )
+    p_audit.add_argument("--doc", default=None, help="只审计指定 doc_id")
+    p_audit.add_argument(
+        "--jsonl",
+        default=None,
+        help="审计留痕 JSONL 路径（默认 data/corpus/.audit/audit_runs.jsonl，传空串禁用）",
+    )
+    p_audit.add_argument("--db", default=None)
+
+    p_meta = sub.add_parser(
+        "refresh-metadata",
+        help="D2 P6：派生并物化文档级元数据（doc_kind/subject/org/analysts/published，纯规则 0 LLM）",
+    )
+    p_meta.add_argument("--doc", default=None, help="只处理指定 doc_id")
+    p_meta.add_argument("--db", default=None)
+
     p_snap = sub.add_parser("snapshot", help="[旧名] 等价于 backup")
     p_snap.add_argument("--out", required=True)
     p_snap.add_argument("--db", default=None)
@@ -1709,6 +1954,33 @@ def _main() -> int:
     if args.cmd == "claims":
         rows = svc.claims_of(doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit)
         print(json.dumps(rows, ensure_ascii=False, indent=2, default=str))
+        return 0
+
+    if args.cmd == "set-doc-kind":
+        # doc_kind 决定抽取插槽与文档级标的兜底；误判时整份文档坐标全错（§11 缺口#1）
+        svc.set_doc_kind(args.doc, None if args.kind == "auto" else args.kind)
+        print(json.dumps({"ok": True, "doc_id": args.doc, "doc_kind": args.kind}))
+        return 0
+
+    if args.cmd == "audit":
+        # 延迟导入：audit 反向依赖本模块的 _BACKUP_COLUMNS（备份覆盖率检查）
+        from plugins.corpus.audit import run_audit
+
+        report, code = run_audit(
+            args.db or dsn(),
+            doc_ids=[args.doc] if args.doc else None,
+            jsonl_path=args.jsonl,
+        )
+        print(json.dumps(report, ensure_ascii=False, indent=2, default=str))
+        return code
+
+    if args.cmd == "refresh-metadata":
+        svc.init_db()  # 幂等：老库补 P6 四列迁移
+        print(
+            json.dumps(
+                svc.refresh_metadata([args.doc] if args.doc else None), ensure_ascii=False, indent=2
+            )
+        )
         return 0
 
     if args.cmd == "ingest":
