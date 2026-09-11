@@ -19,12 +19,13 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from server.deps import get_current_user
 from server.store import (
     SessionNotFoundError,
     append_turn,
+    count_sessions,
     create_session,
     delete_session,
     derive_title,
@@ -35,6 +36,13 @@ from server.store import (
 from server.store import User as UserModel
 
 router = APIRouter(prefix="/api/sessions", tags=["sessions"])
+
+#: Page-size defaults and hard ceilings. The ceilings are what stop a caller
+#: from asking for a million rows and defeating the point of paginating.
+DEFAULT_SESSION_LIMIT = 50
+MAX_SESSION_LIMIT = 200
+DEFAULT_TURN_LIMIT = 100
+MAX_TURN_LIMIT = 500
 
 
 class CreateSessionRequest:
@@ -100,9 +108,16 @@ async def create_session_route(
 @router.get("")
 async def list_sessions_route(
     user: UserModel = Depends(get_current_user),
+    limit: int = Query(DEFAULT_SESSION_LIMIT, ge=1, le=MAX_SESSION_LIMIT),
+    offset: int = Query(0, ge=0),
 ) -> dict[str, Any]:
-    rows = await list_sessions(user_id=user.id)
-    return {"sessions": [_session_view(s) for s in rows]}
+    rows = await list_sessions(user_id=user.id, limit=limit, offset=offset)
+    total = await count_sessions(user_id=user.id)
+    return {
+        "sessions": [_session_view(s) for s in rows],
+        "total": total,
+        "has_more": offset + len(rows) < total,
+    }
 
 
 @router.get("/{session_id}")
@@ -126,7 +141,10 @@ async def get_session_route(
 
 @router.get("/{session_id}/turns")
 async def get_turns_route(
-    session_id: str, user: UserModel = Depends(get_current_user)
+    session_id: str,
+    user: UserModel = Depends(get_current_user),
+    limit: int = Query(DEFAULT_TURN_LIMIT, ge=1, le=MAX_TURN_LIMIT),
+    before_seq: int | None = Query(None, ge=1),
 ) -> dict[str, Any]:
     try:
         sid = uuid.UUID(session_id)
@@ -141,8 +159,15 @@ async def get_turns_route(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="会话不存在"
         ) from None
-    rows = await list_turns(session_id=sid)
-    return {"turns": [_turn_view(t) for t in rows]}
+    rows = await list_turns(session_id=sid, limit=limit, before_seq=before_seq)
+    return {
+        "turns": [_turn_view(t) for t in rows],
+        # A full page means older turns may exist; the client pages backwards by
+        # sending the oldest seq it holds as ``before_seq``. This over-reports by
+        # at most one page (when the oldest turn lands exactly on the boundary),
+        # which is harmless — the next call simply returns an empty list.
+        "has_more": len(rows) == limit,
+    }
 
 
 @router.delete("/{session_id}", status_code=204)

@@ -20,6 +20,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
+#: Placeholder the server refuses to run with outside of ``SERVER_DEBUG``. It is
+#: a constant (rather than an inline literal) so the startup check and the
+#: default value cannot drift apart.
+INSECURE_DEFAULT_MASTER_KEY = "dev-only-insecure-master-key-change-me"
+
 
 class ServerConfig(BaseSettings):
     """Runtime configuration, all overridable via environment variables.
@@ -68,7 +73,18 @@ class ServerConfig(BaseSettings):
 
     # — Secrets ————————————————————————————————————————————————
     # Master key for Fernet-encrypting user LLM api_keys. MUST be set in prod.
-    master_key: str = "dev-only-insecure-master-key-change-me"
+    # Rotating it makes every stored api_key_cipher undecryptable — users have
+    # to re-enter their keys. See deploy/README.md.
+    master_key: str = INSECURE_DEFAULT_MASTER_KEY
+
+    # Signing key for JWTs. Kept separate from master_key on purpose: sharing
+    # one value means a single leak gives away both the encrypted LLM
+    # credentials and every live session token.
+    jwt_secret: str = ""
+
+    # Local-development escape hatch: skips the startup secret checks
+    # (see security.check_startup_secrets). Never set this in a deployment.
+    debug: bool = False
 
     # — Model / sandbox ——————————————————————————————————————
     sandbox_backend: str = "native"

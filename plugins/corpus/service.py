@@ -39,9 +39,16 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING, ClassVar, LiteralString, cast
+from urllib.parse import quote
+
+if TYPE_CHECKING:
+    # Runtime import stays inside fetch() to avoid a circular import; this one
+    # exists so the annotation resolves for type checking.
+    from plugins.corpus.fetch import FetchedBlock
 
 import psycopg
-from psycopg.rows import dict_row
+from psycopg.rows import DictRow, dict_row
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -100,7 +107,9 @@ class IngestStats:
             self.failures = []
 
     def as_dict(self) -> dict[str, object]:
-        data = {
+        # Annotated: the literal below would otherwise narrow to dict[str, int]
+        # and the failures list would not fit.
+        data: dict[str, object] = {
             "total": self.total,
             "added": self.added,
             "skipped_duplicate": self.skipped_duplicate,
@@ -214,10 +223,40 @@ RUNS_DIR = Path("data/corpus_runs")
 _INGEST_LOCK_KEY = 0x636F7270
 
 
+#: 语料库本机开发默认值。生产 / 容器环境请用 ``CORPUS_DSN``（完整连接串）覆盖，
+#: 或用 ``CORPUS_DB_HOST/PORT/NAME/USER/PASSWORD`` 组件式覆盖。
+DEFAULT_CORPUS_DB_HOST = "localhost"
+DEFAULT_CORPUS_DB_PORT = "5432"
+DEFAULT_CORPUS_DB_NAME = "postgres"
+DEFAULT_CORPUS_DB_USER = "postgres"
+DEFAULT_CORPUS_DB_PASSWORD = "postgres"
+
+
 def dsn() -> str:
-    """连接串：默认本机（WSL2 localhost 经转发可达 Windows Docker 发布的端口）。"""
-    return os.environ.get(
-        "CORPUS_DSN", "postgresql://postgres:postgres@localhost:5432/postgres"
+    """语料库连接串 —— 全部连接参数均来自配置，无散落硬编码。
+
+    解析优先级（高 → 低）：
+
+    1. ``CORPUS_DSN``：完整连接串，部署 / 容器环境推荐。
+    2. ``CORPUS_DB_HOST`` / ``_PORT`` / ``_NAME`` / ``_USER`` / ``_PASSWORD``：
+       组件式拼装，便于 Docker Compose 与本机 CLI 共用同一组变量。
+    3. 本机开发默认值（WSL2 ``localhost`` 经转发可达 Windows Docker 发布的端口）。
+
+    注意：语料库与平台业务库（``SERVER_DATABASE_URL``）是**同一实例上的不同
+    database**（默认 ``postgres`` vs ``apodex``），host / port / 账号相同、仅库名
+    不同，配置时勿混（见根 ``.env`` 与 ``.env.example`` 的注释）。
+    """
+    configured = os.environ.get("CORPUS_DSN", "").strip()
+    if configured:
+        return configured
+    user = os.environ.get("CORPUS_DB_USER", DEFAULT_CORPUS_DB_USER)
+    password = os.environ.get("CORPUS_DB_PASSWORD", DEFAULT_CORPUS_DB_PASSWORD)
+    host = os.environ.get("CORPUS_DB_HOST", DEFAULT_CORPUS_DB_HOST)
+    port = os.environ.get("CORPUS_DB_PORT", DEFAULT_CORPUS_DB_PORT)
+    name = os.environ.get("CORPUS_DB_NAME", DEFAULT_CORPUS_DB_NAME)
+    return (
+        f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}"
+        f"@{host}:{port}/{name}"
     )
 
 
@@ -230,8 +269,29 @@ class CorpusService:
 
     # ── 连接 ──────────────────────────────────────────────────
 
-    def _connect(self) -> psycopg.Connection:
-        return psycopg.connect(self._dsn, row_factory=dict_row, connect_timeout=10)
+    def _connect(self) -> psycopg.Connection[DictRow]:
+        """Open a connection whose rows are dicts.
+
+        The ``[DictRow]`` is what makes typed access work everywhere else:
+        psycopg's ``connect`` infers its row type from the *return* context, so
+        annotating this as a bare ``psycopg.Connection`` pins it to ``TupleRow``
+        and every ``row["col"]`` downstream is then an error. One annotation
+        here is the difference between ~70 type errors and none.
+        """
+        # ``connect`` cannot infer Row from ``row_factory`` (its return type is
+        # effectively pinned to TupleRow), so the dict-row contract is asserted
+        # here once instead of at every ``row["col"]`` downstream.
+        return cast(
+            "psycopg.Connection[DictRow]",
+            psycopg.connect(
+                self._dsn,
+                # psycopg cannot infer Row from row_factory — its signature pins
+                # the parameter to RowFactory[TupleRow] — so the dict-row
+                # contract is asserted on the result instead of here.
+                row_factory=dict_row,  # type: ignore[arg-type]
+                connect_timeout=10,
+            ),
+        )
 
     def ensure_prerequisites(self) -> None:
         """确保扩展与中文检索配置存在 —— **恢复到全新库时必须先做这一步**。
@@ -243,7 +303,13 @@ class CorpusService:
         with self._connect() as conn:
             for ext in ("zhparser", "vector", "pg_trgm"):
                 try:
-                    conn.execute(f"CREATE EXTENSION IF NOT EXISTS {ext}")
+                    # Extension names are internal constants, not caller input.
+                    # Kept as the original f-string: routing it through
+                    # sql.Identifier() would quote the name and change the
+                    # emitted DDL for no functional gain.
+                    conn.execute(
+                        cast(LiteralString, f"CREATE EXTENSION IF NOT EXISTS {ext}")
+                    )
                 except psycopg.Error as exc:
                     raise RuntimeError(
                         f"无法创建扩展 {ext}（通常需要超级用户权限）：{exc}"
@@ -265,7 +331,9 @@ class CorpusService:
             conn.execute(LEDGER_SQL)
             conn.execute(CLAIMS_SQL)  # D2：claim / entities（幂等，不影响既有表）
             for stmt in (*_COLUMN_COMMENTS, *LEDGER_COMMENTS, *CLAIMS_COMMENTS):
-                conn.execute(stmt)
+                # COMMENT statements are module-level constants; the cast only
+                # tells the type checker they are not caller-supplied SQL.
+                conn.execute(cast(LiteralString, stmt))
             conn.commit()
 
     # ── 写入 ──────────────────────────────────────────────────
@@ -539,7 +607,7 @@ class CorpusService:
             row = cur.fetchone()
         return row["t"] if row and row["t"] else None
 
-    def blocks_of(self, doc_id: str) -> list[dict[str, object]]:
+    def blocks_of(self, doc_id: str) -> list[DictRow]:
         """取一份文档的全部块（``seq`` / ``locator`` / ``text``）—— D2 抽取的输入。"""
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
@@ -604,6 +672,9 @@ class CorpusService:
                 if dry_run:  # 错峰前只统计将抽取多少块，不调 LLM、不入库
                     continue
                 try:
+                    # dry_run already continued above, so an llm is always
+                    # resolved by here; the assert narrows it for the checker.
+                    assert llm_fn is not None
                     pending.extend(extract_from_block(block, doc_id=doc_id, llm=llm_fn))
                 except Exception as exc:  # 单块失败不得拖垮整批
                     stats.failed += 1
@@ -675,7 +746,9 @@ class CorpusService:
         params.append(int(limit))
 
         with self._connect() as conn, conn.cursor() as cur:
-            cur.execute(sql, params)
+            # Built from fixed fragments with %s placeholders and bound params —
+            # the cast documents that no caller text reaches the SQL itself.
+            cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
     def list_documents(self) -> list[dict[str, object]]:
@@ -700,7 +773,7 @@ class CorpusService:
     # 导出时显式指定列：**排除 GENERATED 列**（documents.title_tsv / blocks.tsv）。
     # 它们由 PG 在恢复写入时自动重算，写回去会直接报
     # "cannot insert a non-DEFAULT value into column ... generated always"。
-    _BACKUP_COLUMNS: dict[str, tuple[str, ...]] = {
+    _BACKUP_COLUMNS: ClassVar[dict[str, tuple[str, ...]]] = {
         "documents": (
             "doc_id", "title", "source_path", "content_hash", "mime", "status",
             "char_count", "block_count", "ingested_at", "published",
@@ -755,9 +828,12 @@ class CorpusService:
             for table, columns in self._BACKUP_COLUMNS.items():
                 columns_sql = ", ".join(columns)
                 with (dest / f"{table}.csv").open("wb") as fh, conn.cursor() as cur:
-                    with cur.copy(
-                        f"COPY {table} ({columns_sql}) TO STDOUT WITH (FORMAT CSV, HEADER)"
-                    ) as copy:
+                    # Table/column names come from _BACKUP_COLUMNS, not a caller.
+                    statement = cast(
+                        LiteralString,
+                        f"COPY {table} ({columns_sql}) TO STDOUT WITH (FORMAT CSV, HEADER)",
+                    )
+                    with cur.copy(statement) as copy:
                         while True:
                             chunk = copy.read()
                             if not chunk:
@@ -785,10 +861,13 @@ class CorpusService:
 
     def _row_counts(self) -> dict[str, int]:
         with self._connect() as conn:
-            return {
-                table: conn.execute(f"SELECT count(*) AS n FROM {table}").fetchone()["n"]
-                for table in self._BACKUP_COLUMNS
-            }
+            counts: dict[str, int] = {}
+            for table in self._BACKUP_COLUMNS:
+                # Table names come from _BACKUP_COLUMNS, never from a caller.
+                query = cast(LiteralString, f"SELECT count(*) AS n FROM {table}")
+                row = conn.execute(query).fetchone()
+                counts[table] = int(row["n"]) if row else 0
+            return counts
 
     def restore(self, src: str | Path, target_dsn: str) -> dict[str, int]:
         """把备份恢复到 ``target_dsn`` 指向的库，返回恢复后的行数。
@@ -835,9 +914,11 @@ class CorpusService:
             for table, columns in self._BACKUP_COLUMNS.items():
                 columns_sql = ", ".join(columns)
                 data = (src / f"{table}.csv").read_bytes()
-                with conn.cursor() as cur, cur.copy(
-                    f"COPY {table} ({columns_sql}) FROM STDIN WITH (FORMAT CSV, HEADER)"
-                ) as copy:
+                statement = cast(
+                    LiteralString,
+                    f"COPY {table} ({columns_sql}) FROM STDIN WITH (FORMAT CSV, HEADER)",
+                )
+                with conn.cursor() as cur, cur.copy(statement) as copy:
                     copy.write(data)
             conn.commit()
 
@@ -868,9 +949,11 @@ class CorpusService:
     def stats(self) -> dict[str, object]:
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) AS n FROM documents")
-            total = cur.fetchone()["n"]
+            row = cur.fetchone()
+            total = int(row["n"]) if row else 0
             cur.execute("SELECT COUNT(*) AS n FROM blocks")
-            blocks = cur.fetchone()["n"]
+            row = cur.fetchone()
+            blocks = int(row["n"]) if row else 0
             cur.execute("SELECT status, COUNT(*) AS n FROM documents GROUP BY status")
             by_status = {r["status"]: r["n"] for r in cur.fetchall()}
             cur.execute("SELECT mime, COUNT(*) AS n FROM documents GROUP BY mime")
@@ -1004,6 +1087,11 @@ class CorpusService:
                 (str(root), trigger),
             ).fetchone()
             conn.commit()
+            # RETURNING always yields a row; a missing one means the insert did
+            # not happen, and continuing with a fabricated id would mis-attribute
+            # the whole run.
+            if row is None:
+                raise RuntimeError("创建 ingest_run 台账失败")
             return int(row["run_id"])
 
     def _ledger_finish(

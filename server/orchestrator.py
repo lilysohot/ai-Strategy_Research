@@ -21,12 +21,14 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import json
+import logging
 import os
 import signal
 import sys
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from server.artifacts import scan_outputs
@@ -37,6 +39,7 @@ from server.history import extract_final_answer, render_session_history
 from server.store import (
     append_turn,
     ensure_session,
+    list_active_runs,
     list_turns,
     record_artifacts,
     resolve_user_llm_env,
@@ -45,7 +48,27 @@ from server.store import (
 )
 from server.usage import usage_for_run
 
+logger = logging.getLogger(__name__)
+
 WorkerCallback = Callable[[str, dict[str, Any]], None]
+
+
+def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
+    """Best-effort read of a worker's ``summary.json``.
+
+    The worker rewrites it as it makes progress, so it is the only record that
+    survives a worker which was killed outright (SIGKILL) or died together with
+    its parent process. A missing or unreadable file yields ``{}`` — callers
+    read that as "no partial result", never as an error to surface.
+    """
+    path = Path(run_dir) / "summary.json"
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    return data if isinstance(data, dict) else {}
 
 
 # Stable namespace so the same free-form session string (e.g. "default") always
@@ -286,6 +309,55 @@ class Orchestrator:
         """Signal every subscriber that no more live events will arrive."""
         for q in tuple(self._subscribers.get(run_id, ())):
             q.put_nowait(None)
+
+    async def reconcile_orphan_runs(self) -> int:
+        """Close out runs left active by a process that no longer exists.
+
+        ``runs`` rows outlive the server process, but the worker handles that
+        would have finished them live only in memory. After a start-up that
+        follows a crash, a deploy or a container reschedule, every row still
+        marked queued/running is one nobody will ever complete: its worker is
+        gone, so the SSE stream the UI is holding open will never produce a
+        terminal frame. Without this sweep the run spins in the UI forever, and
+        (once quotas land) keeps consuming a concurrency slot.
+
+        Runs whose handle exists in this process are skipped — they are live and
+        will report their own outcome.
+
+        Returns how many runs were closed. Never raises: a failed sweep must not
+        take the API down, it only means the next start-up will try again.
+        """
+        try:
+            stale = await list_active_runs()
+        except Exception:
+            logger.exception("orphan-run reconcile: query failed, skipping sweep")
+            return 0
+
+        closed = 0
+        for row in stale:
+            run_id = row.id.hex
+            if run_id in self._handles:
+                continue
+            partial = _read_run_summary(row.run_dir)
+            final_answer = str(partial.get("final_answer") or "").strip()
+            error = str(partial.get("error") or "").strip()
+            # A partial answer means the worker got far enough to be worth
+            # keeping — but the run was still cut short, so it is "stopped",
+            # never "completed".
+            status = "stopped" if final_answer else "failed"
+            await update_run_result(
+                run_id=row.id,
+                status=status,
+                final_answer=final_answer or None,
+                error=error or ("服务重启导致运行中断" if status == "failed" else None),
+                stopped_by="server_restart",
+            )
+            closed += 1
+            logger.warning("orphan run reconciled: run_id=%s status=%s", run_id, status)
+
+        if closed:
+            logger.warning("orphan-run reconcile: closed %d run(s)", closed)
+        return closed
 
     async def shutdown(self) -> None:
         """Drain queues, then SIGKILL any live workers."""
@@ -615,17 +687,9 @@ class Orchestrator:
         """
         if not _looks_like_uuid(handle.run_id):
             return
-        run_root = run_dir_for(handle.run_id)
-        summary_path = run_root / "summary.json"
-        final_answer = ""
-        error = ""
-        if summary_path.exists():
-            try:
-                summary = json.loads(summary_path.read_text(encoding="utf-8"))
-                final_answer = (summary.get("final_answer") or "").strip()
-                error = summary.get("error") or ""
-            except (json.JSONDecodeError, OSError):
-                pass
+        summary = _read_run_summary(run_dir_for(handle.run_id))
+        final_answer = (summary.get("final_answer") or "").strip()
+        error = summary.get("error") or ""
         # stopped_by precedence: explicit user stop > externally killed.
         stopped_by = getattr(handle, "_stopped_by", "") or "sigkill"
         frame = {

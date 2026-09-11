@@ -672,25 +672,33 @@ async def append_turn(
         return turn
 
 
-async def list_turns(*, session_id: uuid.UUID, limit: int | None = None) -> list[Turn]:
+async def list_turns(
+    *,
+    session_id: uuid.UUID,
+    limit: int | None = None,
+    before_seq: int | None = None,
+) -> list[Turn]:
     """Return a session's turns in chronological (seq) order.
 
-    ``limit`` (when given) returns only the most recent N turns — used by the
-    history renderer to bound prompt size on very long threads.
+    ``limit`` returns only the most recent N turns — used by the history
+    renderer to bound prompt size on very long threads, and by the web client so
+    a thousand-turn conversation does not arrive in one response.
+
+    ``before_seq`` pages backwards: only turns with a lower ``seq`` are
+    considered, so repeated calls walk towards the start of the conversation
+    without re-sending what the client already has.
     """
     async with get_sessionmaker()() as session:
-        stmt = select(Turn).where(Turn.session_id == session_id).order_by(Turn.seq.asc())
+        conditions = [Turn.session_id == session_id]
+        if before_seq is not None:
+            conditions.append(Turn.seq < before_seq)
+        stmt = select(Turn).where(*conditions)
         if limit is not None:
-            # Order by seq desc, take N, then re-sort asc for stable output.
-            stmt = (
-                select(Turn)
-                .where(Turn.session_id == session_id)
-                .order_by(Turn.seq.desc())
-                .limit(limit)
-            )
+            # Take the newest N, then re-sort ascending for stable output.
+            stmt = stmt.order_by(Turn.seq.desc()).limit(limit)
             rows = list(reversed((await session.execute(stmt)).scalars().all()))
             return rows
-        return list((await session.execute(stmt)).scalars().all())
+        return list((await session.execute(stmt.order_by(Turn.seq.asc()))).scalars().all())
 
 
 # ── Session CRUD (T2.7) ─────────────────────────────────────────────
@@ -741,15 +749,38 @@ async def get_session(*, session_id: uuid.UUID, user_id: uuid.UUID) -> Session |
         return row
 
 
-async def list_sessions(*, user_id: uuid.UUID) -> list[Session]:
-    """List a user's non-deleted sessions, most recent first."""
+async def list_sessions(
+    *, user_id: uuid.UUID, limit: int | None = None, offset: int = 0
+) -> list[Session]:
+    """List a user's non-deleted sessions, most recent first.
+
+    ``limit``/``offset`` page through the list; the conversation list grows
+    without bound otherwise.
+    """
     async with get_sessionmaker()() as session:
-        result = await session.execute(
+        stmt = (
             select(Session)
             .where(Session.user_id == user_id, Session.deleted_at.is_(None))
             .order_by(Session.updated_at.desc())
         )
-        return list(result.scalars().all())
+        if limit is not None:
+            stmt = stmt.limit(limit).offset(offset)
+        return list((await session.execute(stmt)).scalars().all())
+
+
+async def count_sessions(*, user_id: uuid.UUID) -> int:
+    """Total non-deleted sessions owned by ``user_id``.
+
+    Paired with :func:`list_sessions` so the API can report whether more pages
+    exist — a client that only sees the current page cannot tell.
+    """
+    async with get_sessionmaker()() as session:
+        result = await session.execute(
+            select(func.count())
+            .select_from(Session)
+            .where(Session.user_id == user_id, Session.deleted_at.is_(None))
+        )
+        return int(result.scalar_one())
 
 
 async def delete_session(*, session_id: uuid.UUID, user_id: uuid.UUID) -> None:
@@ -807,6 +838,26 @@ async def get_run(*, run_id: uuid.UUID, user_id: uuid.UUID) -> Run | None:
         if row is None or row.user_id != user_id:
             return None
         return row
+
+
+#: A run is only ever in one of these while the process that owns it is alive.
+#: Anything still in one of them after a start-up belongs to a worker that no
+#: longer exists — see :meth:`server.orchestrator.Orchestrator.reconcile_orphan_runs`.
+ACTIVE_RUN_STATUSES: tuple[str, ...] = ("queued", "running")
+
+
+async def list_active_runs() -> list[Run]:
+    """Return every run still marked ``queued``/``running``, across all users.
+
+    Deliberately not filtered by owner: reconciliation is a server-wide sweep
+    performed at start-up, where there is no request user to filter by, and a
+    run abandoned by a crash belongs to whoever submitted it.
+    """
+    async with get_sessionmaker()() as session:
+        result = await session.execute(
+            select(Run).where(Run.status.in_(ACTIVE_RUN_STATUSES))
+        )
+        return list(result.scalars().all())
 
 
 async def update_run_result(

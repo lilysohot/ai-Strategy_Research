@@ -48,6 +48,20 @@ export interface Turn {
   created_at: string | null
 }
 
+/** Page of the conversation list (sessions are paged forward). */
+export interface SessionListResponse {
+  sessions: Session[]
+  /** Total sessions owned by the caller — what ``has_more`` is derived from. */
+  total: number
+  has_more: boolean
+}
+
+/** Page of one session's turns (turns are paged backwards via ``before_seq``). */
+export interface TurnListResponse {
+  turns: Turn[]
+  has_more: boolean
+}
+
 /** A user LLM config as returned by the API — always masked. */
 export interface LlmConfig {
   id: string

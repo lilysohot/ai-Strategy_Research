@@ -13,11 +13,12 @@ services:
       dockerfile: Dockerfile.corpus-db
     container_name: corpus-db
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_DB: ${CORPUS_DB_NAME:-postgres}
+      POSTGRES_USER: ${CORPUS_DB_USER:-postgres}
       POSTGRES_PASSWORD: ${CORPUS_DB_PASSWORD:-postgres}
     ports:
-      - "5432:5432"
+      # 宿主端口可用 CORPUS_DB_PORT 覆盖；须与 .env 的 CORPUS_DSN 一致。
+      - "${CORPUS_DB_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d:ro

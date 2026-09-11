@@ -22,7 +22,7 @@ import json
 import logging
 import re
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
@@ -70,11 +70,21 @@ CLAIMS_COMMENTS = (
 
 
 class BlockLike(Protocol):
-    """只需 seq / locator / text 三个字段（``ingest.Block`` 天然满足）。"""
+    """只需 seq / locator / text 三个字段（``ingest.Block`` 天然满足）。
 
-    seq: int
-    locator: str
-    text: str
+    Read-only by design: consumers only ever read these, and read-only is what
+    lets a frozen dataclass (:class:`BlockView`) satisfy the protocol — a
+    protocol with writable attributes cannot be implemented by one.
+    """
+
+    @property
+    def seq(self) -> int: ...
+
+    @property
+    def locator(self) -> str: ...
+
+    @property
+    def text(self) -> str: ...
 
 
 @dataclass(frozen=True)
@@ -117,7 +127,9 @@ class ExtractStats:
     failures: list[dict[str, str]] = field(default_factory=list)
 
     def as_dict(self) -> dict[str, Any]:
-        data = {
+        # Annotated: the literal otherwise narrows to dict[str, int] and the
+        # failures list would not fit.
+        data: dict[str, object] = {
             "documents": self.documents,
             "blocks": self.blocks,
             "candidates": self.candidates,
@@ -158,7 +170,7 @@ def has_signal(text: str) -> bool:
     return bool(_NUMERIC_RE.search(text))
 
 
-def triage_blocks(blocks: list[BlockLike]) -> tuple[list[BlockLike], int]:
+def triage_blocks(blocks: Sequence[BlockLike]) -> tuple[list[BlockLike], int]:
     """分级：返回 ``(候选块, 被跳过的块数)``。"""
     candidates: list[BlockLike] = []
     skipped = 0

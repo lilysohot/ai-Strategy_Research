@@ -22,9 +22,10 @@ import type {
   RunSubmitResponse,
   RunTraceResponse,
   Session,
+  SessionListResponse,
   TestResult,
   TokenResponse,
-  Turn,
+  TurnListResponse,
   User,
 } from '../types'
 
@@ -102,12 +103,21 @@ export const sessions = {
       body: { title: title ?? null, first_message: firstMessage ?? null },
     }),
 
-  list: () => request<{ sessions: Session[] }>('/sessions'),
+  /** Most recent first. ``offset`` pages forward; ``has_more`` says if there is more. */
+  list: (params?: { limit?: number; offset?: number }) =>
+    request<SessionListResponse>('/sessions', { query: params }),
 
   get: (id: string) => request<Session>(`/sessions/${encodeURIComponent(id)}`),
 
-  turns: (id: string) =>
-    request<{ turns: Turn[] }>(`/sessions/${encodeURIComponent(id)}/turns`),
+  /**
+   * One page of turns, newest last. Pass ``before_seq`` (the oldest seq already
+   * held) to page backwards into older history — a long conversation is fetched
+   * a page at a time rather than in one growing response.
+   */
+  turns: (id: string, params?: { limit?: number; before_seq?: number }) =>
+    request<TurnListResponse>(`/sessions/${encodeURIComponent(id)}/turns`, {
+      query: params,
+    }),
 
   remove: (id: string) =>
     request<void>(`/sessions/${encodeURIComponent(id)}`, { method: 'DELETE' }),

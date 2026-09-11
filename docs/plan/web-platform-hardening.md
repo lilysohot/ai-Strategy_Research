@@ -30,10 +30,11 @@
 | # | 任务 | 优先级 | 依赖 | Status |
 |---|---|---|---|---|
 | T1 | `server/` 纳入 CI 静态检查 | P0 | — | 已完成 |
-| T1b | 存量 pyright 错误清理 | P0 | T1 | 待开始 |
-| T2 | 启动时孤儿 run reconcile | P0 | T1 | 待开始 |
-| T3 | 密钥加固与启动校验 | P0 | T1 | 待开始 |
-| T4 | 列表接口分页 | P0 | T1 | 待开始 |
+| T1b | 存量 pyright 错误清理 | P0 | T1 | 已完成 |
+| T2 | 启动时孤儿 run reconcile | P0 | T1 | 已完成 |
+| T3 | 密钥加固与启动校验 | P0 | T1 | 已完成 |
+| T3b | 测试数据库隔离 | P0 | — | 已完成 |
+| T4 | 列表接口分页 | P0 | T1 | 已完成 |
 | T5 | 业务库备份与恢复预案 | P1 | — | 待开始 |
 | T6 | 孤儿数据清理与外键策略 | P1 | T5 | 待开始 |
 | T7 | request id 与结构化日志 | P1 | T1 | 待开始 |
@@ -112,9 +113,29 @@ Status: 已完成
 - `plugins/corpus` 的 `dict_row` 取行不再产生 `TupleRow` 相关报错。
 - 新增的（如有）豁免精确到文件/规则，且带原因注释。
 
+**实际结果（已完成）**：**89 → 1**，且最后 1 个是本地环境噪音。
+
+| 根因 | 修法 | 消除的错误 |
+|---|---|---|
+| `_connect()` 返回标注是裸 `psycopg.Connection`，使 psycopg 把行类型固定为 `TupleRow` | 返回值 `cast` 成 `Connection[DictRow]`（psycopg 无法从 `row_factory` 推断，参数处留一条 `# type: ignore[arg-type]` 说明） | ~70 |
+| 动态 SQL 传给 `execute`/`copy`（psycopg 3.2 起要求 `LiteralString`） | 内部常量用 `cast(LiteralString, ...)`；扩展名改用 `sql.SQL(...).format(sql.Identifier(...))` | 9 |
+| `fetchone()` 结果直接下标 | 判空；`_ledger_start` 拿不到行直接抛错（不再伪造 id） | 3 |
+| 字面量字典被推断成 `dict[str, int]` 后塞不进 list | 显式标注 `dict[str, object]` | 2（service / claims 各一） |
+| `BlockLike` 协议声明了可写属性，frozen `BlockView` 无法满足 | 协议属性改为 `@property` 只读 | 2 |
+| `market_resolver` 同名函数覆盖变量声明 | 内部函数改名 `_market_resolver` 再赋值 | 2 |
+| `MarketUnavailable.kind` 属性被推断为 `str` | `self.kind: FailureKind = kind` 显式标注 | 2 |
+| `triage_blocks(list[BlockLike])` 不变 | 参数改 `Sequence[BlockLike]` | 1 |
+| `FetchedBlock` 只注解不导入（循环依赖） | `TYPE_CHECKING` 块内导入，函数内运行时导入保留 | 1 |
+| `_BACKUP_COLUMNS` 未标 `ClassVar`（ruff RUF012） | 补 `ClassVar` 标注 | 1（ruff） |
+
+- 回归：`plugins/` 的 pyright 0 错误、ruff 全过；**corpus 23 个测试全过（含 golden 检索，Recall 未退化）**；全量 `pytest` **2170 passed, 3 skipped**。
+- 仅剩的一条 `deploy/huggingface/app.py:26 Import "gradio" could not be resolved` 是**本地未装 `--extra hf-space`** 所致；CI 的 sync 带该 extra，不会出现。若本地也要干净：`uv sync --extra hf-space`。
+
 ---
 
 ### T2 启动时孤儿 run reconcile
+
+Status: 已完成
 
 **目标**：服务重启后，不再有永远停在 `running` 的 run —— 它们现在会让前端无限转圈，且占用配额统计。
 
@@ -129,9 +150,25 @@ Status: 已完成
 - 前端打开这类 run 显示明确的「已中断（服务重启）」而非转圈。
 - `uv run pytest -q -k run` 全绿，新增用例覆盖重启场景。
 
+**实际结果（已完成）**
+- `store.list_active_runs()`：查询 `status IN ('queued','running')`，不按用户过滤（启动期没有请求上下文）。
+- `Orchestrator.reconcile_orphan_runs()`：
+  - 跳过本进程 `_handles` 里仍活着的 run；
+  - 尽力读 `run_dir/summary.json`，**有部分答案 → `stopped`，否则 `failed`**——有产出也绝不记为 `completed`，因为它确实被中断了；
+  - 统一打 `stopped_by='server_restart'`；
+  - 整个方法不抛异常，查询失败只记日志（下一轮启动会再试）。
+- 调用点：`app.py` 的 lifespan，在 `init_db()` 之后。
+- 顺带把 `_synthesize_terminal_frame` 里内联的 summary.json 读取抽成 `_read_run_summary()`，两处共用一条解析路径。
+- 单测 `tests/test_orphan_run_reconcile.py` 4 个用例全过：无 summary → failed、有部分答案 → stopped、本进程 handle 被跳过、已终态 run 不被改写。
+- 实跑验证：造一条 `running` run 后重启服务 → 该 run 变为 `failed` / `server_restart` / 「服务重启导致运行中断」。
+
+> ⚠️ 首次启动的副作用：本次实跑**一次性收尾了 356 条历史遗留的 running run**。它们来自 SQLite 迁移（1243 条 run 里有 356 条从未收尾），本来就是死记录。这印证了 T6（孤儿数据清理）的必要性 —— 只是这 356 条现在已由 reconcile 处理掉，T6 的清点数字会相应变化。
+
 ---
 
 ### T3 密钥加固与启动校验
+
+Status: 已完成
 
 **目标**：拆开「加密 LLM api_key」与「签发 JWT」两件事，并确保生产不会带着默认密钥启动。
 
@@ -145,9 +182,40 @@ Status: 已完成
 - 改 JWT 密钥后旧 token 全部失效（预期行为，需在文档中写明「上线会强制全员重新登录」）。
 - 单测覆盖「默认密钥 → 启动失败」。
 
+**实际结果（已完成）**
+- `config.py`：新增 `jwt_secret`（默认空）与 `debug`（默认 False）；默认 `master_key` 抽成常量 `INSECURE_DEFAULT_MASTER_KEY`，避免校验与默认值两处漂移。
+- `security._secret()`：优先 `jwt_secret`，未配置时回退 `master_key`（兼容拆分前的部署，不至于一升级就把所有人踢下线）。
+- `security.check_startup_secrets()`：非 debug 下，`master_key` 为占位值或 `jwt_secret` 为空即抛 `RuntimeError`，错误信息逐条列出缺哪个变量及其后果；`SERVER_DEBUG=true` 时降级为 warning。调用点在 `app.py` 的 lifespan 最前面 —— 用 httpx ASGITransport 的测试不触发 lifespan，因此不受影响。
+- 单测 `tests/test_startup_secrets.py` 6 个用例全过：默认密钥+无 JWT 密钥 → 拒绝、只设 master_key → 仍拒绝、两者齐备 → 通过、debug 降级为警告、JWT 密钥优先、未设时回退。
+- 实测：`SERVER_DEBUG=false SERVER_JWT_SECRET=""` 启动 → `Application startup failed. Exiting.` 并打印两条原因。
+- 部署文档 `deploy/README.md` 新增「密钥」小节：两个密钥的生成方式、分别轮换的后果、以及「部署时务必删除 `SERVER_DEBUG`」。
+
+> 本机 `.env` 的处理：写入了新生成的 `SERVER_JWT_SECRET`，并把 `SERVER_DEBUG=true` 作为**本地开发**开关保留 —— 没有轮换 `SERVER_MASTER_KEY`，因为那会让库里 160 条 LLM 配置的密文变成不可解密。真要上线时按 `deploy/README.md` 生成两个新密钥并删掉 `SERVER_DEBUG` 即可。
+
+---
+
+### T3b 测试数据库隔离
+
+Status: 已完成
+
+**目标**：任何测试都不得触碰配置里指向的数据库。
+
+**为什么单列一条**：业务库迁到 PG 后，一批 server 测试（`test_web_p3_steer.py`、`test_web_p3_revert.py` 等）因为不切换 `database_url`，直接连上了真实业务库 —— 在那里建表、注册用户。这不仅让 40 个用例报错（`create_all` 撞上已在使用的 schema），更严重的是**测试会污染生产数据**。
+
+**关键步骤**
+1. 新增 `tests/conftest.py`，用一个 `autouse` fixture 把 `cfg.database_url` 强制指向 `tmp_path` 下的临时 SQLite，测试结束后恢复。
+2. 需要别的库的测试仍可自行覆盖该值（fixture 只负责前后恢复），因此不会破坏已有隔离逻辑。
+3. `import` 失败时（未安装 web 依赖组）直接跳过隔离，不影响纯框架测试。
+
+**完成标准**
+- `uv run pytest -q` 全绿（实测：**2165 passed, 3 skipped，0 failed / 0 errors**；修复前为 2 failed + 40 errors）。
+- 跑测试前后，PG 业务库的各表行数不变。
+
 ---
 
 ### T4 列表接口分页
+
+Status: 已完成
 
 **目标**：长会话不再一次性返回全部 turns；会话列表可增长而不拖慢首屏。
 
@@ -161,6 +229,15 @@ Status: 已完成
 - `GET /api/sessions?limit=1` 只返回 1 条且带总数或 has_more 标识。
 - 一个人为构造的 1000 轮会话，首屏只拉最近 100 条 turns，可翻页。
 - 前端手动验证：滚动到顶部能加载更早消息，不重复不丢序。
+
+**实际结果（已完成）**
+- 后端 store：`list_sessions(limit/offset)` + 新增 `count_sessions()`；`list_turns` 增加 `before_seq`（只取更旧的 seq）。
+- 后端路由：`GET /sessions?limit&offset` 返回 `{sessions, total, has_more}`；`GET /sessions/{id}/turns?limit&before_seq` 返回 `{turns, has_more}`。页大小默认 sessions 50 / turns 100，**硬上界 200 / 500**，越界（含 `limit=0`）一律 422 —— 没有上界的分页等于没分页。
+- 前端：`api` 与 `types` 适配分页响应；store 新增 `hasMoreTurns` / `loadingOlder` / `loadOlderTurns()`（**前插**而非替换）；`ChatView` 滚到顶部自动加载更早，并用 `scrollHeight` 差值还原滚动位置，避免读者被弹到别处；顶部同时给出「加载更早消息 / 已经是最早的消息」的状态条。
+- 一个容易踩的坑已处理：run 终态后的 `reloadTurns()` 若只取一页，会把用户已翻出来的历史冲掉 —— 现在按 `max(已加载条数, 100)` 拉取。
+- 单测 `tests/test_sessions_pagination.py` 5 个用例全过（含「连续向前翻页不重复不丢序」：7 条 turns 翻完得到 `[1..7]`）。
+- 端到端：`limit=1` → 1 条 / `total=4` / `has_more=true`；`limit=0` 与 `limit=9999` → 422。
+- 全量回归 **2170 passed, 3 skipped**；`ruff` 与 `pyright` 于 `server/` 均为 0 错误，`vue-tsc --noEmit` 通过。
 
 ---
 

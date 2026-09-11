@@ -105,6 +105,28 @@ handle /api/* {
 
 ## 安全说明
 
+### 密钥（`SERVER_MASTER_KEY` / `SERVER_JWT_SECRET`）
+
+两者**必须分别设置**，且都不能是仓库里的占位值。启动时会校验，不合规直接拒绝启动：
+
+- `SERVER_MASTER_KEY`：用于 Fernet 加密用户保存的 LLM `api_key`。
+- `SERVER_JWT_SECRET`：用于签发登录 JWT。
+
+分开的理由：共用一个值时，一次泄露会同时交出「加密的 LLM 凭证」和「伪造登录态的能力」。
+
+```bash
+# 生成（两条命令各生成一次，不要复用同一个值）
+python3 -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+| 操作 | 后果 |
+| --- | --- |
+| 轮换 `SERVER_JWT_SECRET` | 所有人被强制重新登录（旧 token 立即失效） |
+| 轮换 `SERVER_MASTER_KEY` | 已保存的 LLM `api_key` **全部无法解密**，用户必须重新录入 |
+
+本地开发可用 `SERVER_DEBUG=true` 把该校验降级为警告（允许使用默认 `SERVER_MASTER_KEY`）。
+**部署时务必删除 `SERVER_DEBUG`**，否则服务会以仓库里的公开占位密钥运行。
+
 - 平台会处理用户的 API Key，**不应以明文 HTTP 暴露在公网**。`SITE_ADDRESS`
   默认为 `localhost`（自签证书）；部署到公网请使用真实域名走自动 HTTPS。
 - API 容器启用了 `SYS_PTRACE` 与宽松的 seccomp/apparmor，这是 bubblewrap

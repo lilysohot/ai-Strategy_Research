@@ -202,7 +202,9 @@ def parse_pdf(path: str | Path, *, with_tables: bool = True) -> list[Block]:
     tables = extract_pdf_tables(path) if with_tables else {}
     blocks: list[Block] = []
     with pymupdf.open(str(path)) as doc:
-        for index, page in enumerate(doc, start=1):
+        # pymupdf.Document is iterable at runtime but ships no ``__iter__``
+        # annotation, so the protocol check cannot see it.
+        for index, page in enumerate(doc, start=1):  # type: ignore[arg-type]
             text = _strip_boilerplate(page.get_text("text"))
             page_tables = tables.get(index, [])
             if page_tables:

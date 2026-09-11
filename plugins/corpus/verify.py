@@ -694,8 +694,12 @@ def main(argv: list[str] | None = None) -> int:
     if market_trace_dir:
         from plugins.market.trace_store import resolve_market_source
 
-        def market_resolver(ref: str) -> str | None:
+        def _market_resolver(ref: str) -> str | None:
             return resolve_market_source(ref, market_trace_dir)
+
+        # Named apart from the variable: defining a function with the same name
+        # as the ``SourceResolver | None`` slot it fills redeclares that slot.
+        market_resolver = _market_resolver
 
     try:
         report = verify_file(

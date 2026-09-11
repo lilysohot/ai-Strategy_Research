@@ -172,6 +172,31 @@ async function scrollToBottom() {
   if (scrollEl.value) scrollEl.value.scrollTop = scrollEl.value.scrollHeight
 }
 
+/**
+ * Load the previous page of turns when the user scrolls to the top.
+ *
+ * The scroll position has to be restored manually: prepending messages grows the
+ * content above the viewport, which would otherwise jump the reader to a
+ * completely different part of the conversation. Anchoring on the height delta
+ * keeps the message they were looking at exactly where it was.
+ */
+async function onMessagesScroll() {
+  const el = scrollEl.value
+  if (!el || el.scrollTop > 40) return
+  if (!sessions.hasMoreTurns || sessions.loadingOlder) return
+
+  const heightBefore = el.scrollHeight
+  try {
+    await sessions.loadOlderTurns()
+  } catch {
+    return // the store already stashed the message; don't fight it with a jump
+  }
+  await nextTick()
+  if (scrollEl.value) {
+    scrollEl.value.scrollTop = scrollEl.value.scrollHeight - heightBefore
+  }
+}
+
 // ── P2.6 transcript 导航（§5.5：/filter · /find · Ctrl-G · Ctrl-Y）──
 const transcriptFilter = ref<TranscriptFilter>('all')
 const visibleSteps = computed(() => filterSteps(runStream.steps, transcriptFilter.value))
@@ -243,7 +268,9 @@ async function reloadTurns(): Promise<void> {
   const id = sessions.activeId
   if (!id) return
   try {
-    await sessions.loadTurns(id)
+    // Keep whatever the user already paged through: a plain one-page refresh
+    // would drop the older turns loaded by scrolling up.
+    await sessions.loadTurns(id, Math.max(sessions.activeTurns.length, 100))
   } catch {
     // Keep whatever the live stream already rendered; a failed refresh must not
     // blank a conversation the user can still read.
@@ -586,7 +613,19 @@ watch(
         </div>
       </div>
 
-      <div ref="scrollEl" class="messages" data-testid="messages">
+      <div ref="scrollEl" class="messages" data-testid="messages" @scroll.passive="onMessagesScroll">
+        <div v-if="messages.length" class="older-turns" data-testid="older-turns">
+          <el-button
+            v-if="sessions.hasMoreTurns"
+            text
+            size="small"
+            :loading="sessions.loadingOlder"
+            @click="onMessagesScroll"
+          >
+            加载更早消息
+          </el-button>
+          <span v-else class="older-turns-end">已经是最早的消息</span>
+        </div>
         <el-empty
           v-if="!messages.length"
           description="开始你的第一条消息"
@@ -798,6 +837,19 @@ watch(
 
 .messages-empty {
   margin: auto;
+}
+
+/* Pagination header: "load older" affordance at the top of the transcript. */
+.older-turns {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 6px;
+  flex-shrink: 0;
+}
+
+.older-turns-end {
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
 }
 
 .msg {

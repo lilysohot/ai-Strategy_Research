@@ -20,16 +20,25 @@ from server.routes import auth as auth_routes
 from server.routes import models as models_routes
 from server.routes import runs as runs_routes
 from server.routes import sessions as sessions_routes
+from server.security import check_startup_secrets
 from server.store import init_db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    # Fail before serving traffic: a server started with the shipped keys signs
+    # tokens with a secret anyone can read out of the repository.
+    check_startup_secrets()
     # Best-effort schema creation; prod uses Alembic before container start.
     # A DB that is briefly unavailable at boot must not take the API down: the
     # health endpoint reports the DB independently.
     with contextlib.suppress(Exception):
         await init_db()
+    # Runs still marked queued/running belong to a worker from a previous
+    # process; nothing in this one will ever finish them, so close them out now
+    # instead of leaving the UI waiting on a stream that can never end.
+    with contextlib.suppress(Exception):
+        await get_orchestrator().reconcile_orphan_runs()
     yield
     await get_orchestrator().shutdown()
 

@@ -20,6 +20,7 @@ Two design notes that matter under load:
 from __future__ import annotations
 
 import asyncio
+import logging
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -37,6 +38,8 @@ from argon2.exceptions import (
 # argon2id with the library's OWASP-recommended defaults (time_cost=3,
 # memory_cost=64MiB, parallelism=4) — resistant to both GPU cracking and
 # side-channel attacks. passlib is deliberately not used: it is unmaintained.
+logger = logging.getLogger(__name__)
+
 _hasher = PasswordHasher()
 
 
@@ -92,9 +95,61 @@ class TokenError(Exception):
 
 
 def _secret() -> str:
+    """Signing key for JWTs.
+
+    ``jwt_secret`` when configured, falling back to ``master_key`` for
+    deployments that predate the split. Sharing one key is exactly what the
+    split exists to prevent, so the fallback is a transition aid, not the
+    target state — :func:`check_startup_secrets` pushes operators to set it.
+    """
     from server.config import get_config
 
-    return get_config().master_key
+    cfg = get_config()
+    return cfg.jwt_secret or cfg.master_key
+
+
+def check_startup_secrets() -> None:
+    """Refuse to start with the shipped placeholder keys.
+
+    Two failure modes this closes:
+
+    * ``master_key`` still at its default — every encrypted LLM api_key would
+      be protected by a value anyone can read out of this repository.
+    * ``jwt_secret`` unset — tokens fall back to being signed with
+      ``master_key``, so leaking the encryption key also forges sessions.
+
+    An explicit ``SERVER_DEBUG=true`` downgrades both to a warning so local
+    development is not blocked; it must never be set in a deployment.
+    """
+    from server.config import INSECURE_DEFAULT_MASTER_KEY, get_config
+
+    cfg = get_config()
+
+    if cfg.debug:
+        if cfg.master_key == INSECURE_DEFAULT_MASTER_KEY:
+            logger.warning(
+                "SERVER_DEBUG is on: starting with the default SERVER_MASTER_KEY. "
+                "Stored LLM api_keys are NOT protected."
+            )
+        return
+
+    problems: list[str] = []
+    if cfg.master_key == INSECURE_DEFAULT_MASTER_KEY:
+        problems.append(
+            "SERVER_MASTER_KEY 仍是仓库默认值，必须设置为随机密钥"
+            "（轮换会使已保存的 LLM api_key 无法解密，需重新录入）"
+        )
+    if not cfg.jwt_secret:
+        problems.append(
+            "SERVER_JWT_SECRET 未设置；不设置会回退到用 SERVER_MASTER_KEY 签 JWT，"
+            "导致加密密钥泄露即可伪造登录态"
+        )
+    if problems:
+        raise RuntimeError(
+            "拒绝启动：不安全的密钥配置\n- "
+            + "\n- ".join(problems)
+            + "\n\n本地开发可设 SERVER_DEBUG=true 跳过此检查（切勿用于部署）。"
+        )
 
 
 def create_access_token(user_id: uuid.UUID | str, *, ttl_s: int = ACCESS_TOKEN_TTL_S) -> str:

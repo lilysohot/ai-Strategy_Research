@@ -48,7 +48,10 @@ class MarketUnavailable(Exception):
         retryable: bool | None = None,
     ) -> None:
         super().__init__(message)
-        self.kind = kind
+        # Annotated explicitly: without it the attribute widens to ``str`` and
+        # every use that must match the FailureKind literal (NEXT_ACTIONS lookup,
+        # re-raising) stops type-checking.
+        self.kind: FailureKind = kind
         self.message = message
         self.request_id = request_id
         self.retryable = retryable if retryable is not None else kind in RETRYABLE_KINDS

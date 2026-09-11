@@ -69,6 +69,10 @@ services:
       FRONTIER_AGENT_ALLOW_PRIVATE_HOSTS: "true"
       FRONTIER_AGENT_CONFIG: /app/config/config.yaml
       FRONTIER_AGENT_ENV: /app/.env
+      # Corpus DB：容器内 localhost 指向容器自身，必须显式指向宿主 / 服务地址。
+      # 用 CORPUS_DSN_DOCKER 覆盖；默认走 Docker Desktop 宿主网关。本机 CLI 读
+      # ../.env 的 CORPUS_DSN，不受此项影响。
+      CORPUS_DSN: ${CORPUS_DSN_DOCKER:-postgresql://postgres:postgres@host.docker.internal:5432/postgres}
     ports:
       # API is published only to aid debugging; Caddy is the supported path.
       - ${API_DEBUG_PORT:-8000}:8000

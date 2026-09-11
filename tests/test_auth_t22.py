@@ -32,9 +32,14 @@ async def client(tmp_path):
     cfg = get_config()
     original_url = cfg.database_url
     original_key = cfg.master_key
+    original_jwt = cfg.jwt_secret
     # Per-test DB and signing key, so tests cannot influence each other.
     cfg.database_url = f"sqlite+aiosqlite:///{db}"
     cfg.master_key = f"test-master-key-{uuid.uuid4().hex}"
+    # Empty so tokens are signed with the per-test master_key above; a real
+    # deployment sets this, and that path is covered by
+    # test_me_rejects_token_after_jwt_secret_rotation.
+    cfg.jwt_secret = ""
     await reset_engine()
     await init_db()
 
@@ -47,6 +52,7 @@ async def client(tmp_path):
     login_throttle._records.clear()
     cfg.database_url = original_url
     cfg.master_key = original_key
+    cfg.jwt_secret = original_jwt
     await reset_engine()
 
 
@@ -202,6 +208,31 @@ async def test_me_rejects_token_from_another_key(client):
         assert resp.status_code == 401
     finally:
         cfg.master_key = original
+
+
+@pytest.mark.asyncio
+async def test_me_rejects_token_after_jwt_secret_rotation(client):
+    """Rotating SERVER_JWT_SECRET must invalidate every outstanding token.
+
+    This is the deployment-realistic counterpart of the master_key case: once
+    ``jwt_secret`` is set it — not ``master_key`` — is what signs tokens, so it
+    is also what rotating has to invalidate.
+    """
+    from server.config import get_config
+
+    await _register(client)
+    token = await _login(client)
+    # Sanity: the token is valid before the rotation.
+    assert (await client.get("/api/auth/me", headers=_auth(token))).status_code == 200
+
+    cfg = get_config()
+    original = cfg.jwt_secret
+    try:
+        cfg.jwt_secret = "a-rotated-signing-key"
+        resp = await client.get("/api/auth/me", headers=_auth(token))
+        assert resp.status_code == 401
+    finally:
+        cfg.jwt_secret = original
 
 
 @pytest.mark.asyncio
