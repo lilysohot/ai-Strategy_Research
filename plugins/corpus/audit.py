@@ -6,8 +6,8 @@
 **只读现有表**（``documents`` / ``blocks`` / ``claims`` / ``claim_block_runs``），
 不产 claim、不调 LLM；所有"判定类"逻辑与抽取链路**同口径复用**：
 
-- 候选块判定 = ``claims.has_signal``（与 ``extract-claims`` 同一条规则，避免审计
-  自立标准导致"审计说没抽、抽取说抽过"的假缺口）；
+- 候选块判定 = ``claims_v2.triage_block_detail``，输出 numeric/rating/noise/no_signal
+  原因码，便于看见评级召回与噪声过滤；
 - 领域分类 = ``doc_kind_override`` 优先，否则 ``classify_doc_kind(title, texts)``
   （与 ``CorpusService.extract_claims`` 完全一致）；
 - 文档级标的 = ``document_ticker``，仅 company 文档（同上）；
@@ -47,9 +47,10 @@ from plugins.corpus.claims import (
     BlockView,
     classify_doc_kind,
     document_ticker,
-    has_signal,
+    is_flat_table,
     normalize_metric,
 )
+from plugins.corpus.claims_v2 import classify_doc_kind_detail, triage_block_detail
 
 #: 死信判定：同一块累计失败次数达到该值即不再重试（与 CLI 默认 --max-attempts 一致）
 DEAD_LETTER_ATTEMPTS = 3
@@ -111,6 +112,13 @@ def _load_runs(conn: psycopg.Connection) -> list[dict[str, Any]]:
         return [dict(r) for r in cur.fetchall()]
 
 
+def _table_exists(conn: psycopg.Connection, table: str) -> bool:
+    with conn.cursor(row_factory=dict_row) as cur:
+        cur.execute("SELECT to_regclass(%s) AS name", (table,))
+        row = cur.fetchone()
+    return bool(row and row["name"])
+
+
 def _doc_kind(row: dict[str, Any], texts: list[str]) -> str:
     """与 ``CorpusService.extract_claims`` 同口径：覆盖优先，否则零成本规则分类。"""
     override = row.get("doc_kind_override")
@@ -120,8 +128,15 @@ def _doc_kind(row: dict[str, Any], texts: list[str]) -> str:
 
 
 # ── 报告一：完整性 ───────────────────────────────────────────────
-#: 审计覆盖的四张表（§4：只读现有表）
-_AUDITED_TABLES = ("blocks", "claim_block_runs", "claims", "documents")
+#: 审计覆盖的表（§4：只读现有表；v2 影子表同样必须被备份/恢复覆盖）
+_AUDITED_TABLES = (
+    "blocks",
+    "claim_block_runs",
+    "claim_block_runs_v2",
+    "claims",
+    "claims_v2",
+    "documents",
+)
 
 
 def _backup_coverage(conn: psycopg.Connection) -> tuple[list[dict[str, Any]], list[str]]:
@@ -177,14 +192,45 @@ def audit_completeness(
     eligible = {str(row["doc_id"]) for row in documents if row.get("status") == "ok"}
     candidates: dict[str, set[int]] = {}
     no_candidate_docs: list[str] = []
+    triage_reasons: Counter[str] = Counter()
+    block_lengths: list[int] = []
+    flat_tables: list[tuple[str, int]] = []
     for row in documents:
         doc_id = str(row["doc_id"])
         if doc_id not in eligible:
             continue
-        cand = {b.seq for b in blocks_by_doc.get(doc_id, []) if has_signal(b.text)}
+        cand: set[int] = set()
+        for block in blocks_by_doc.get(doc_id, []):
+            block_lengths.append(len(block.text))
+            triage = triage_block_detail(block.text)
+            triage_reasons[triage.reason] += 1
+            if triage.candidate:
+                cand.add(block.seq)
+            if is_flat_table(block.text):
+                flat_tables.append((doc_id, block.seq))
         candidates[doc_id] = cand
         if not cand:
             no_candidate_docs.append(doc_id)
+
+    kind_details = {
+        str(row["doc_id"]): classify_doc_kind_detail(
+            str(row.get("title") or ""),
+            tuple(b.text for b in blocks_by_doc.get(str(row["doc_id"]), [])),
+            str(row["doc_kind_override"]) if row.get("doc_kind_override") else None,
+        )
+        for row in documents
+    }
+    kind_reason_counts = Counter(detail.reason for detail in kind_details.values())
+    low_confidence_docs = [
+        {
+            "doc_id": doc_id,
+            "kind": detail.kind,
+            "reason": detail.reason,
+            "confidence": detail.confidence,
+        }
+        for doc_id, detail in sorted(kind_details.items())
+        if detail.confidence < 0.8
+    ]
 
     ok_runs: dict[str, set[int]] = defaultdict(set)
     failed_runs: list[dict[str, Any]] = []
@@ -231,6 +277,26 @@ def audit_completeness(
             "examples": no_candidate_docs[:DETAIL_LIMIT],
         },
         "failed_runs": {"count": len(failed_runs), "examples": failed_runs[:DETAIL_LIMIT]},
+        "triage": {
+            "reason_counts": dict(sorted(triage_reasons.items())),
+            "flat_table_blocks": {
+                "count": len(flat_tables),
+                "examples": flat_tables[:DETAIL_LIMIT],
+            },
+            "block_length": {
+                "count": len(block_lengths),
+                "min": min(block_lengths) if block_lengths else 0,
+                "max": max(block_lengths) if block_lengths else 0,
+                "avg": round(sum(block_lengths) / len(block_lengths), 1) if block_lengths else 0,
+            },
+        },
+        "doc_kind_detail": {
+            "reason_counts": dict(sorted(kind_reason_counts.items())),
+            "low_confidence": {
+                "count": len(low_confidence_docs),
+                "examples": low_confidence_docs[:DETAIL_LIMIT],
+            },
+        },
         "field_missing": {
             "claims_total": total,
             **{
@@ -243,6 +309,30 @@ def audit_completeness(
             "drift": backup_missing,
             "tables_not_backed_up": backup_extra_tables,
         },
+    }
+
+
+def audit_v2_shadow(conn: psycopg.Connection) -> dict[str, Any]:
+    """v2 影子状态分布；只读，不要求生产切换。"""
+    if not _table_exists(conn, "claims_v2") or not _table_exists(conn, "claim_block_runs_v2"):
+        return {"available": False}
+    with conn.cursor(row_factory=dict_row) as cur:
+        cur.execute("SELECT quality_status, COUNT(*) AS n FROM claims_v2 GROUP BY quality_status")
+        quality = {str(r["quality_status"]): int(r["n"]) for r in cur.fetchall()}
+        cur.execute("SELECT status, COUNT(*) AS n FROM claim_block_runs_v2 GROUP BY status")
+        runs = {str(r["status"]): int(r["n"]) for r in cur.fetchall()}
+        cur.execute("SELECT COUNT(*) AS n FROM claims_v2 WHERE quality_status = 'ok'")
+        ok_row = cur.fetchone()
+    ok = int(ok_row["n"]) if ok_row else 0
+    total = sum(quality.values())
+    return {
+        "available": True,
+        "claims": {
+            "total": total,
+            "quality_status": dict(sorted(quality.items())),
+            "normal_query_visible": ok,
+        },
+        "runs": {"status": dict(sorted(runs.items()))},
     }
 
 
@@ -450,12 +540,14 @@ def run_audit(
             completeness = audit_completeness(conn, documents, blocks_by_doc, claims, runs)
             consistency = audit_consistency(documents, blocks_by_doc, claims)
             quality = audit_quality(blocks_by_doc, claims, runs)
+            v2_shadow = audit_v2_shadow(conn)
     except psycopg.OperationalError as exc:
         return {"ok": False, "error": f"PG 不可用：{exc}"}, 2
 
     report["completeness"] = completeness
     report["consistency"] = consistency
     report["quality"] = quality
+    report["v2_shadow"] = v2_shadow
 
     # 冲突清单（驱动退出码）；观察项/缺口只报告
     conflicts: list[str] = []

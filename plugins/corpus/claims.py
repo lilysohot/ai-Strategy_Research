@@ -122,24 +122,41 @@ ALTER TABLE documents ADD COLUMN IF NOT EXISTS doc_kind_override text;
 
 CLAIMS_COMMENTS = (
     "COMMENT ON TABLE claims IS 'D2：从研报块抽取的结构化论断（可溯源到 locator）'",
+    "COMMENT ON COLUMN claims.claim_id IS '旧版 claim 主键，自增，仅用于行级引用'",
+    "COMMENT ON COLUMN claims.doc_id IS '来源文档 ID，外键指向 documents(doc_id)，删除文档时级联删除'",
+    "COMMENT ON COLUMN claims.seq IS '来源 block 序号，与 blocks(doc_id, seq) 对应'",
     "COMMENT ON COLUMN claims.locator IS '取证句柄，与 blocks.locator 一致；claim 必须能回到原文'",
+    "COMMENT ON COLUMN claims.claim_text IS 'LLM 抽出的旧版论断文本；v1 中同时承担断言和证据语义'",
     "COMMENT ON COLUMN claims.kind IS 'fact=已发生；forecast=前瞻性（目标价/预测，属 FORWARD_LOOKING）'",
     "COMMENT ON COLUMN claims.tickers IS '涉及标的代码数组，D3 挖掘与 D4 共识度按此聚合'",
+    "COMMENT ON COLUMN claims.metric IS '旧版复合指标字段，可能同时编码主体、指标、口径和期间线索'",
+    "COMMENT ON COLUMN claims.value_text IS '原文或模型输出中的数值文本，保留原始表达'",
     "COMMENT ON COLUMN claims.value_num IS "
     "'value_text 的数值投影（Python 解析，零 LLM 成本）；解析失败为 NULL，不得猜'",
     "COMMENT ON COLUMN claims.unit IS 'value_text 的单位（万元/亿元/%/万人…）；与 value_num 配套'",
+    "COMMENT ON COLUMN claims.period IS '旧版期间原文/短文本；未拆分 period_end 和 period_grain'",
     "COMMENT ON COLUMN claims.as_of IS "
     "'发布/数据时点（D4 时效切片 as_of <= T 用）；模型给出，缺失时用 documents.published 兜底'",
+    "COMMENT ON COLUMN claims.confidence IS '模型输出置信度；旧版仅作参考，不参与确定性质量裁决'",
+    "COMMENT ON COLUMN claims.extracted_at IS 'claim 写入时间，默认 now()'",
     "COMMENT ON TABLE claim_block_runs IS "
     "'D2 块级抽取台账：断点续跑的跳过标记 + 每块审计/花费（模型、耗时、tokens、错误）'",
+    "COMMENT ON COLUMN claim_block_runs.doc_id IS '来源文档 ID，外键指向 documents(doc_id)'",
+    "COMMENT ON COLUMN claim_block_runs.seq IS '来源 block 序号；旧版台账按 doc_id + seq 唯一'",
     "COMMENT ON COLUMN claim_block_runs.status IS "
     "'ok=已成功抽取（claims_n 可能为 0，同样算「做过」）；failed=调用失败，重跑会重试'",
+    "COMMENT ON COLUMN claim_block_runs.claims_n IS '该块本次成功写入的旧版 claim 数量，可为 0'",
     "COMMENT ON COLUMN claim_block_runs.attempts IS '该块累计被抽取次数（含历次重跑），达上限即视为死信'",
     "COMMENT ON COLUMN claim_block_runs.model IS "
     "'抽取时使用的模型名；跳过判断要带上它，换模型自动失效重抽'",
     "COMMENT ON COLUMN claim_block_runs.extractor_version IS "
     "'prompt + 解析器的内容指纹；改 prompt/解析器后自动失效重抽'",
+    "COMMENT ON COLUMN claim_block_runs.duration_ms IS '该块抽取调用耗时，毫秒'",
+    "COMMENT ON COLUMN claim_block_runs.prompt_tokens IS '该块抽取消耗的 prompt tokens；没有 usage 时为 NULL'",
+    "COMMENT ON COLUMN claim_block_runs.completion_tokens IS "
+    "'该块抽取消耗的 completion tokens；没有 usage 时为 NULL'",
     "COMMENT ON COLUMN claim_block_runs.error IS 'status=failed 时的异常摘要，便于批量重试前先看原因'",
+    "COMMENT ON COLUMN claim_block_runs.updated_at IS '该块台账最后更新时间，upsert 时刷新'",
 )
 
 
@@ -206,6 +223,9 @@ class ExtractStats:
     skipped_existing: int = 0  # 断点续跑：已抽取过的块，跳过以免重复花 LLM 调用
     skipped_dead_letter: int = 0  # 反复失败达上限的块：跳过，不再无限烧钱
     failed: int = 0
+    review: int = 0
+    rejected: int = 0
+    truncated: int = 0
     stopped_early: bool = False  # 命中 should_stop（中断信号）后干净退出
     stopped_reason: str | None = None  # 提前退出的原因（中断 / 连续失败熔断）
     prompt_tokens: int = 0  # 本次已消耗的 prompt tokens（花费台账）
@@ -224,6 +244,9 @@ class ExtractStats:
             "skipped_existing": self.skipped_existing,
             "skipped_dead_letter": self.skipped_dead_letter,
             "failed": self.failed,
+            "review": self.review,
+            "rejected": self.rejected,
+            "truncated": self.truncated,
             "stopped_early": self.stopped_early,
             "prompt_tokens": self.prompt_tokens,
             "completion_tokens": self.completion_tokens,

@@ -2,16 +2,19 @@
 
 | 项 | 内容 |
 |---|---|
-| 状态 | **有效 · 待实施** |
+| 状态 | **有效 · 代码侧已实施 · 发布验收中** |
 | 日期 | 2026-09-12 |
 | 替代文档 | [D2 Claims 质量加固执行清单](./d2-claims-quality-hardening.md) · [D2 Claims v2 架构重塑设计](./d2-claims-v2-design.md) |
 | 上游设计 | [D2 Claims 设计](./d2-claims-design.md) |
 | 关联闭环 | [Claims × 同花顺闭环](./claims-market-closed-loop-plan.md) · [投研双数据链路优化报告](./research-data-closed-loop-optimization-report.md) |
-| 主要代码 | `plugins/corpus/claims.py`、`plugins/corpus/service.py`、`tests/test_corpus_claims.py`、`tests/test_corpus_metadata.py` |
+| 主要代码 | `plugins/corpus/claims.py`、`plugins/corpus/claims_v2.py`、`plugins/corpus/service.py`、`plugins/corpus/audit.py`、`tests/test_corpus_claims.py`、`tests/test_corpus_claims_v2.py`、`tests/test_corpus_metadata.py` |
 | 总目标 | 将 Claims 建成可靠的证据生产层：每条断言原子、可回链、语义坐标明确、确定性字段可重算、质量状态可审计，并能安全交给后续比较与判断层 |
 
 > 本文档是 Claims 优化的唯一有效执行计划。被替代的两份旧文档仅保留设计演进记录，
 > 不再作为实施、验收或排期依据。
+
+> 进度标记（2026-09-12）：`[√]` 表示已经在代码或自动化测试中落地；仍为 `[ ]`
+> 的条目需要金标样本、真实语料影子运行、人工评审、发布切换或备份恢复演练确认。
 
 ## 1. 范围与完成定义
 
@@ -167,16 +170,16 @@ ArgumentAudit            论证是否过度或遗漏反证
 
 ## 5. C0：Interface 与迁移决策冻结（P0）
 
-- [ ] 将 §3 字段整理成可实现的数据类型和数据库草案。
-- [ ] 为每个字段写明语义、可空条件、来源和派生规则。
-- [ ] 冻结 `fact / forecast / opinion` 三类含义；评级归入 `opinion`，不再伪装成预测数字。
-- [ ] 冻结 `ok / review / rejected` 状态及其进入查询和聚合的规则。
-- [ ] 冻结原始字段不可回写的不变量。
-- [ ] 冻结时间语义：`period_end`、`observed_at`、`known_at` 互不替代。
-- [ ] 采用 `claims_v2` 影子表；现有 `claims` 保留为对照和回退数据。
-- [ ] 暂时保留 `tickers[]` 读取兼容；新写入使用规范 `subject`，由 Adapter 转换。
-- [ ] 决定 `review/rejected` 是保存在影子表还是独立审计表；两者都必须可查询。
-- [ ] 确认不会在本轮顺带建设 narratives 或策略判断 Module。
+- [√] 将 §3 字段整理成可实现的数据类型和数据库草案。
+- [√] 为每个字段写明语义、可空条件、来源和派生规则。
+- [√] 冻结 `fact / forecast / opinion` 三类含义；评级归入 `opinion`，不再伪装成预测数字。
+- [√] 冻结 `ok / review / rejected` 状态及其进入查询和聚合的规则。
+- [√] 冻结原始字段不可回写的不变量。
+- [√] 冻结时间语义：`period_end`、`observed_at`、`known_at` 互不替代。
+- [√] 采用 `claims_v2` 影子表；现有 `claims` 保留为对照和回退数据。
+- [√] 暂时保留 `tickers[]` 读取兼容；新写入使用规范 `subject`，由 Adapter 转换。
+- [√] 决定 `review/rejected` 是保存在影子表还是独立审计表；两者都必须可查询。
+- [√] 确认不会在本轮顺带建设 narratives 或策略判断 Module。
 
 **验收**：字段语义、不变量、错误模式、版本策略和兼容方式均有测试草案；不改变生产结果。
 
@@ -197,8 +200,8 @@ ArgumentAudit            论证是否过度或遗漏反证
 
 ### 6.2 审计和指标
 
-- [ ] 新增只读审计入口，不调用 LLM、不修改数据库。
-- [ ] 输出块长度、triage 结果及原因、文档类型及原因、表格判断和已有运行状态。
+- [√] 新增只读审计入口，不调用 LLM、不修改数据库。
+- [√] 输出块长度、triage 结果及原因、文档类型及原因、表格判断和已有运行状态。
 - [ ] 输出候选召回率、噪声放行率、分类准确率、表格 precision/recall。
 - [ ] 输出原文可回链率、数字忠实率、字段有效率、坐标合法率和期间锚定率。
 - [ ] 输出空结果率、失败率、截断率、平均 token 和耗时。
@@ -209,34 +212,34 @@ ArgumentAudit            论证是否过度或遗漏反证
 
 ## 7. C2：候选召回与文档分类（P0）
 
-- [ ] 将 triage 内部结果改为“是否候选 + 原因码”。
-- [ ] 至少支持 `numeric / rating / noise / no_signal`。
-- [ ] 放行“维持买入”“上调至增持”“Buy”“Neutral”“Overweight”等无数字评级。
-- [ ] 继续过滤评级定义页、免责声明、联系人和分析师名单。
+- [√] 将 triage 内部结果改为“是否候选 + 原因码”。
+- [√] 至少支持 `numeric / rating / noise / no_signal`。
+- [√] 放行“维持买入”“上调至增持”“Buy”“Neutral”“Overweight”等无数字评级。
+- [√] 继续过滤评级定义页、免责声明、联系人和分析师名单。
 - [ ] 为中英文评级增加正例和至少三类误放行反例。
-- [ ] 新增 `classify_doc_kind_detail()`，返回 `kind / reason / confidence`。
-- [ ] 保持 `classify_doc_kind()` 现有 Interface。
-- [ ] 统一分类原因码：`manual_override`、`title_ticker`、`single_body_ticker`、
+- [√] 新增 `classify_doc_kind_detail()`，返回 `kind / reason / confidence`。
+- [√] 保持 `classify_doc_kind()` 现有 Interface。
+- [√] 统一分类原因码：`manual_override`、`title_ticker`、`single_body_ticker`、
   `multiple_tickers`、`industry_title`、`macro_title`、`fallback`。
-- [ ] 人工 `doc_kind_override` 始终优先于自动规则。
-- [ ] `fallback` 和低置信度文档只进入覆写候选清单，审计命令不得自动写入。
+- [√] 人工 `doc_kind_override` 始终优先于自动规则。
+- [√] `fallback` 和低置信度文档只进入覆写候选清单，审计命令不得自动写入。
 - [ ] 单列评级候选数量、有效输出数量和空输出数量，评估新增成本。
 
 **验收**：纯评级候选召回率 ≥95%；文档分类准确率 ≥95%；数字类召回不下降；噪声金标不新增误放行。
 
 ## 8. C3：原文忠实性与抽取安全（P0）
 
-- [ ] 将 `claim_text` 与 `evidence_quote` 分离：前者是原子化断言，后者是精确原文证据。
-- [ ] 散文 Claim 的 `evidence_quote` 必须能在对应 block 中逐字找到。
-- [ ] 表格 Claim 保存表名、行名、列头、单元格原文或等价定位信息。
-- [ ] 无法提供精确证据的 Claim 不得进入 `ok`。
-- [ ] 数字必须能在精确证据或对应表格单元格中找到。
-- [ ] 文档内容按不可信数据处理；system prompt 明确禁止执行文档中的指令。
-- [ ] 添加“忽略规则”“输出虚构目标价”“调用工具”等提示词注入 fixture。
-- [ ] 限制 LLM 只做结构化抽取，不做算术、市场查询、比较和投资判断。
-- [ ] 保留 JSON fence、外围文本、对象包裹和截断数组的宽容解析。
-- [ ] 截断恢复必须写入 `truncated` 诊断，不得伪装成完整抽取。
-- [ ] 解析失败不得静默当成“原文没有 Claim”；必须区分 empty 与 failed。
+- [√] 将 `claim_text` 与 `evidence_quote` 分离：前者是原子化断言，后者是精确原文证据。
+- [√] 散文 Claim 的 `evidence_quote` 必须能在对应 block 中逐字找到。
+- [√] 表格 Claim 保存表名、行名、列头、单元格原文或等价定位信息。
+- [√] 无法提供精确证据的 Claim 不得进入 `ok`。
+- [√] 数字必须能在精确证据或对应表格单元格中找到。
+- [√] 文档内容按不可信数据处理；system prompt 明确禁止执行文档中的指令。
+- [√] 添加“忽略规则”“输出虚构目标价”“调用工具”等提示词注入 fixture。
+- [√] 限制 LLM 只做结构化抽取，不做算术、市场查询、比较和投资判断。
+- [√] 保留 JSON fence、外围文本、对象包裹和截断数组的宽容解析。
+- [√] 截断恢复必须写入 `truncated` 诊断，不得伪装成完整抽取。
+- [√] 解析失败不得静默当成“原文没有 Claim”；必须区分 empty 与 failed。
 
 **验收**：所有 `ok` Claim 均可回链原文；金标数字幻觉为 0；注入内容不能改变抽取契约。
 
@@ -244,47 +247,47 @@ ArgumentAudit            论证是否过度或遗漏反证
 
 ### 9.1 主体和指标
 
-- [ ] 将复合 `metric` 拆为 `scope / subject / metric / qualifiers`。
-- [ ] 永久保留 `subject_raw` 和 `metric_raw`。
-- [ ] 公司主体规范为证券标识；无法唯一识别时留空，不按弱号段猜测。
+- [√] 将复合 `metric` 拆为 `scope / subject / metric / qualifiers`。
+- [√] 永久保留 `subject_raw` 和 `metric_raw`。
+- [√] 公司主体规范为证券标识；无法唯一识别时留空，不按弱号段猜测。
 - [ ] 非公司 Claim 不携带公司标的，跨主体 Claim 必须拆成多条原子 Claim。
 - [ ] 指标别名新增必须具备样本依据、fixture 和不误合并反例。
-- [ ] 不在 Claims 中映射同花顺字段或 `MetricMap` 的市场侧标识。
+- [√] 不在 Claims 中映射同花顺字段或 `MetricMap` 的市场侧标识。
 
 ### 9.2 数值和单位
 
-- [ ] 继续使用 `Decimal` 派生 `value_num`。
-- [ ] 支持千位分隔符、会计括号负数、百分比和常见中文量级。
-- [ ] 永久保留 `value_text` 和 `unit_raw`。
-- [ ] 未知单位保持原样；不得默认为 1、0 或某个基准币种。
-- [ ] 单位换算规则版本化，并可由原始值重复计算。
+- [√] 继续使用 `Decimal` 派生 `value_num`。
+- [√] 支持千位分隔符、会计括号负数、百分比和常见中文量级。
+- [√] 永久保留 `value_text` 和 `unit_raw`。
+- [√] 未知单位保持原样；不得默认为 1、0 或某个基准币种。
+- [√] 单位换算规则版本化，并可由原始值重复计算。
 - [ ] 同一句含多个数值时拆成原子 Claim，避免 `value_num` 指向不明。
 
 ### 9.3 期间和时间
 
-- [ ] 永久保留 `period_raw`。
-- [ ] 安全归一年度、半年度、季度、月度和时点型期间。
-- [ ] 支持 `2026H1` 与“2026 年上半年”等确定性等价关系。
-- [ ] 不根据附近文本猜测缺失年份。
-- [ ] 分离 `period_end`、`observed_at` 和 `known_at`。
-- [ ] 文档发布日期只可作为 `known_at` 候选，不得静默填成事实发生时间。
-- [ ] 有歧义的期间进入 `review`，并保留原因。
+- [√] 永久保留 `period_raw`。
+- [√] 安全归一年度、半年度、季度、月度和时点型期间。
+- [√] 支持 `2026H1` 与“2026 年上半年”等确定性等价关系。
+- [√] 不根据附近文本猜测缺失年份。
+- [√] 分离 `period_end`、`observed_at` 和 `known_at`。
+- [√] 文档发布日期只可作为 `known_at` 候选，不得静默填成事实发生时间。
+- [√] 有歧义的期间进入 `review`，并保留原因。
 
 **验收**：派生字段均能由原始字段和规则版本重算；任何规范化都不覆盖原文。
 
 ## 10. C5：lint 与质量门禁（P1）
 
-- [ ] 实现 `lint_claim()`，只接受 Claim 数据并返回状态和原因码。
-- [ ] LLM 不参与 lint 裁决。
-- [ ] 校验非公司 Claim 不得错误携带公司代码。
+- [√] 实现 `lint_claim()`，只接受 Claim 数据并返回状态和原因码。
+- [√] LLM 不参与 lint 裁决。
+- [√] 校验非公司 Claim 不得错误携带公司代码。
 - [ ] 校验 company、industry、macro 的限定口径是否合法。
 - [ ] 校验 `actual / consensus / previous` 不得静默混用。
-- [ ] 校验 `opinion` 不得携带伪造的数值投影。
-- [ ] 校验有 `period_raw` 但无法可靠解析时不得进入 `ok`。
-- [ ] 校验数值能否在证据中找到，单位是否与原文一致。
+- [√] 校验 `opinion` 不得携带伪造的数值投影。
+- [√] 校验有 `period_raw` 但无法可靠解析时不得进入 `ok`。
+- [√] 校验数值能否在证据中找到，单位是否与原文一致。
 - [ ] 同一坐标的单位冲突、数值冲突和修订关系进入可见诊断。
-- [ ] `review/rejected` 保留审计记录，但正常查询和聚合默认排除。
-- [ ] lint 规则建立独立版本号；历史结果能解释当时使用的规则。
+- [√] `review/rejected` 保留审计记录，但正常查询和聚合默认排除。
+- [√] lint 规则建立独立版本号；历史结果能解释当时使用的规则。
 
 建议原因码至少包括：
 
@@ -312,7 +315,7 @@ prompt_injection_detected
 - [ ] 建立真实预测表、普通正文、目录、脚注和压平长表 fixture。
 - [ ] 测量 `is_flat_table()` precision/recall，规则调整前后均输出基线变化。
 - [ ] 长表采用结构优先压缩，保留表名、单位、行名、列头、期间和数值单元格。
-- [ ] 为每条表格 Claim 保存可以重建“行名 × 列头 → 单元格”的证据定位。
+- [√] 为每条表格 Claim 保存可以重建“行名 × 列头 → 单元格”的证据定位。
 - [ ] 表头缺失、列错位或期间无法锚定时进入 `review`，不猜测、不静默丢弃。
 - [ ] 一行多期间、多单位、同比/环比混排分别建立正反例。
 - [ ] 记录压缩前后字符数、token 估算、截断状态和 Claim 损失数量。
@@ -322,16 +325,16 @@ prompt_injection_detected
 
 ## 12. C7：持久化、重入与运行治理（P1）
 
-- [ ] 新建 `claims_v2` 影子表，v1 表不做破坏性迁移。
-- [ ] 保持“单块结果 + 块级运行台账”原子提交。
-- [ ] 台账记录模型、提示词版本、解析版本、lint 版本和 token 使用。
-- [ ] 抽出 0 条、全部 review、全部 rejected 和调用失败必须是不同状态。
-- [ ] 引入 `source_rev`；文档清洗重入后不得复用旧块结果。
-- [ ] 指纹变化时按块替换，不混用两代结果。
-- [ ] 已成功处理的空结果仍然跳过，避免重复消耗。
-- [ ] 失败块支持有限重试、熔断、死信和人工复核。
-- [ ] 运行统计增加 accepted/review/rejected/truncated/failed 数量。
-- [ ] schema 增加字段时同步备份、恢复、导出列和序列校准测试。
+- [√] 新建 `claims_v2` 影子表，v1 表不做破坏性迁移。
+- [√] 保持“单块结果 + 块级运行台账”原子提交。
+- [√] 台账记录模型、提示词版本、解析版本、lint 版本和 token 使用。
+- [√] 抽出 0 条、全部 review、全部 rejected 和调用失败必须是不同状态。
+- [√] 引入 `source_rev`；文档清洗重入后不得复用旧块结果。
+- [√] 指纹变化时按块替换，不混用两代结果。
+- [√] 已成功处理的空结果仍然跳过，避免重复消耗。
+- [√] 失败块支持有限重试、熔断、死信和人工复核。
+- [√] 运行统计增加 accepted/review/rejected/truncated/failed 数量。
+- [√] schema 增加字段时同步备份、恢复、导出列和序列校准测试。
 - [ ] 提供重跑前 dry-run：影响文档、候选块、预计 token、版本差异和死信数量。
 - [ ] 提供指定 `doc_id / source_rev / extractor_version` 的小范围重抽入口。
 
@@ -340,10 +343,10 @@ prompt_injection_detected
 ## 13. C8：影子运行、验收与切换（P1）
 
 - [ ] 在金标文档和至少 10 份真实文档上执行 v1/v2 双跑。
-- [ ] 差异报告拆分为新增、删除、证据变化、坐标变化、数值变化、时间变化和状态变化。
+- [√] 差异报告拆分为新增、删除、证据变化、坐标变化、数值变化、时间变化和状态变化。
 - [ ] 人工检查全部数值变化、`ok → rejected` 和 `rejected → ok` 变化。
-- [ ] 建立只读兼容 Adapter；D3/D4 在切换前不直接依赖 v2 表结构。
-- [ ] 验证 Adapter 不会把 `review/rejected` 暴露给正常聚合。
+- [√] 建立只读兼容 Adapter；D3/D4 在切换前不直接依赖 v2 表结构。
+- [√] 验证 Adapter 不会把 `review/rejected` 暴露给正常聚合。
 - [ ] 达到发布门槛后再切换默认读取版本。
 - [ ] 保留明确的回退开关、v1 数据保留期和切换日志。
 - [ ] 切换成功后才批准全量重抽。
@@ -382,4 +385,3 @@ uv run pyright
 - 全量重抽属于发布动作，不是普通开发步骤；必须经过 dry-run、差异评审和备份确认。
 - `claims.py` 暂不因文件长度机械拆分。只有出现真实变化点或第二个 Adapter 时才增加内部 Seam，
   保持调用方 Leverage 和维护 Locality。
-

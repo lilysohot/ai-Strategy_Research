@@ -39,6 +39,7 @@ import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, LiteralString, cast
 from urllib.parse import quote
@@ -50,6 +51,7 @@ if TYPE_CHECKING:
 
 import psycopg
 from psycopg.rows import DictRow, dict_row
+from psycopg.types.json import Jsonb
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -70,6 +72,18 @@ from plugins.corpus.claims import (
     extract_from_block,
     triage_blocks,
     with_retry,
+)
+from plugins.corpus.claims_v2 import (
+    CLAIMS_V2_COMMENTS,
+    CLAIMS_V2_SQL,
+    EXTRACTOR_VERSION_V2,
+    LINT_VERSION,
+    ClaimRecord,
+    ExtractionResult,
+    claim_record_to_legacy,
+    classify_doc_kind_detail,
+    extract_from_block_v2,
+    triage_blocks_detail,
 )
 from plugins.corpus.ingest import (
     CORPUS_ROOT,
@@ -292,6 +306,51 @@ def _dedup_claims(claims: list[Claim]) -> list[Claim]:
     return kept
 
 
+def _claim_record_from_row(row: dict[str, object]) -> ClaimRecord:
+    """把 PG dict 行恢复成 ClaimRecord，供 v2 legacy adapter 使用。"""
+    table_ref = row.get("table_ref")
+    qualifiers = row.get("qualifiers")
+    reason_codes = row.get("reason_codes")
+    return ClaimRecord(
+        doc_id=str(row["doc_id"]),
+        source_rev=str(row["source_rev"]),
+        seq=int(str(row["seq"])),
+        locator=str(row["locator"]),
+        claim_text=str(row["claim_text"]),
+        evidence_quote=str(row["evidence_quote"]) if row.get("evidence_quote") else None,
+        evidence_kind=str(row.get("evidence_kind") or "prose"),
+        table_ref={str(k): str(v) for k, v in table_ref.items()}
+        if isinstance(table_ref, dict)
+        else {},
+        scope=str(row.get("scope") or "company"),
+        subject_raw=str(row["subject_raw"]) if row.get("subject_raw") else None,
+        subject=str(row["subject"]) if row.get("subject") else None,
+        metric_raw=str(row["metric_raw"]) if row.get("metric_raw") else None,
+        metric=str(row["metric"]) if row.get("metric") else None,
+        qualifiers={str(k): str(v) for k, v in qualifiers.items()}
+        if isinstance(qualifiers, dict)
+        else {},
+        kind=str(row.get("kind") or "fact"),
+        value_text=str(row["value_text"]) if row.get("value_text") else None,
+        value_num=cast(Decimal | None, row.get("value_num")),
+        unit_raw=str(row["unit_raw"]) if row.get("unit_raw") else None,
+        unit=str(row["unit"]) if row.get("unit") else None,
+        period_raw=str(row["period_raw"]) if row.get("period_raw") else None,
+        period_end=str(row["period_end"]) if row.get("period_end") else None,
+        period_grain=str(row["period_grain"]) if row.get("period_grain") else None,
+        observed_at=str(row["observed_at"]) if row.get("observed_at") else None,
+        known_at=str(row["known_at"]) if row.get("known_at") else None,
+        quality_status=str(row.get("quality_status") or "review"),
+        reason_codes=tuple(str(code) for code in reason_codes)
+        if isinstance(reason_codes, list)
+        else (),
+        model=str(row["model"]) if row.get("model") else None,
+        extractor_version=str(row.get("extractor_version") or EXTRACTOR_VERSION_V2),
+        lint_version=str(row.get("lint_version") or LINT_VERSION),
+        extracted_at=str(row["extracted_at"]) if row.get("extracted_at") else None,
+    )
+
+
 class CorpusService:
     """语料服务：所有 PG 访问经此。"""
 
@@ -358,11 +417,17 @@ class CorpusService:
             conn.execute(SCHEMA_SQL)
             conn.execute(LEDGER_SQL)
             conn.execute(CLAIMS_SQL)  # D2：claim 抽取（幂等，不影响既有表）
+            conn.execute(CLAIMS_V2_SQL)  # D2 v2：影子抽取表，不改变生产读取路径
             # 老库幂等迁移：三列事实列 + doc_kind_override + 删除 entities 死字段
             conn.execute(CLAIMS_MIGRATIONS_SQL)
             # P6（§3.5）：文档级元数据四列（doc_kind/subject/org/analysts）
             conn.execute(DOCUMENTS_MIGRATIONS_SQL)
-            for stmt in (*_COLUMN_COMMENTS, *LEDGER_COMMENTS, *CLAIMS_COMMENTS):
+            for stmt in (
+                *_COLUMN_COMMENTS,
+                *LEDGER_COMMENTS,
+                *CLAIMS_COMMENTS,
+                *CLAIMS_V2_COMMENTS,
+            ):
                 # COMMENT statements are module-level constants; the cast only
                 # tells the type checker they are not caller-supplied SQL.
                 conn.execute(cast(LiteralString, stmt))
@@ -929,6 +994,169 @@ class CorpusService:
 
         return stats
 
+    def extract_claims_v2(
+        self,
+        *,
+        llm: Callable[[str], str] | None = None,
+        doc_ids: list[str] | None = None,
+        limit: int | None = None,
+        retry_attempts: int = 3,
+        sleep_between: float = 0.0,
+        skip_existing: bool = True,
+        dry_run: bool = False,
+        should_stop: Callable[[], bool] | None = None,
+        max_consecutive_failures: int = 5,
+        max_attempts: int = 3,
+    ) -> ExtractStats:
+        """D2 Claims v2 影子抽取：不写 v1 ``claims``，不改变默认生产读取。
+
+        与 v1 一样按块原子提交，但 v2 的块级状态更细：``empty``、``all_review``、
+        ``all_rejected`` 与 ``failed`` 分开落账，review/rejected 记录也保存在影子表，
+        默认查询只投影 ``quality_status='ok'``。
+        """
+        usage: dict[str, int] = {}
+        model_name = configured_model()
+        llm_fn = None
+        if not dry_run:
+            if llm is not None:
+                llm_fn = llm
+                model_name = INJECTED_MODEL
+            else:
+                llm_fn = build_default_llm(usage_sink=usage)
+            if retry_attempts > 1:
+                llm_fn = with_retry(llm_fn, attempts=retry_attempts)
+
+        done: set[tuple[str, str, int]] = set()
+        dead: set[tuple[str, str, int]] = set()
+        if skip_existing:
+            done, dead = self._done_blocks_v2(model=model_name, max_attempts=max_attempts)
+
+        stats = ExtractStats()
+        documents = self.list_documents()
+        rows_by_doc = {str(row["doc_id"]): row for row in documents}
+        targets = list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in documents]
+        stop = False
+        consecutive_failures = 0
+        for doc_id in targets:
+            doc_row = rows_by_doc.get(doc_id, {})
+            stats.documents += 1
+            rows = self.blocks_of(doc_id)
+            stats.blocks += len(rows)
+            views = [
+                BlockView(int(r["seq"]), str(r["locator"]), str(r["text"] or "")) for r in rows
+            ]
+            candidates, reason_counts = triage_blocks_detail(views)
+            stats.skipped_no_signal += reason_counts.get("noise", 0) + reason_counts.get(
+                "no_signal", 0
+            )
+            title = str(doc_row.get("title") or "")
+            published = str(doc_row["published"]) if doc_row.get("published") else None
+            source_rev = str(doc_row.get("content_hash") or "unknown")
+            detail = classify_doc_kind_detail(
+                title,
+                tuple(v.text for v in views),
+                str(doc_row["doc_kind_override"]) if doc_row.get("doc_kind_override") else None,
+            )
+
+            for block in candidates:
+                if limit is not None and stats.candidates >= limit:
+                    break
+                if should_stop is not None and should_stop():
+                    stop = True
+                    stats.stopped_early = True
+                    stats.stopped_reason = "收到中断信号；v2 已完成的块均已落库，重跑自动续上"
+                    break
+                key = (doc_id, source_rev, block.seq)
+                if key in done:
+                    stats.skipped_existing += 1
+                    continue
+                if key in dead:
+                    stats.skipped_dead_letter += 1
+                    continue
+                stats.candidates += 1
+                if dry_run:
+                    continue
+
+                started = time.monotonic()
+                tokens_before = (
+                    usage.get("prompt_tokens", 0),
+                    usage.get("completion_tokens", 0),
+                )
+                try:
+                    assert llm_fn is not None
+                    result = extract_from_block_v2(
+                        block,
+                        doc_id=doc_id,
+                        source_rev=source_rev,
+                        llm=llm_fn,
+                        doc_kind=detail.kind,
+                        model=model_name,
+                        known_at_fallback=published,
+                    )
+                except Exception as exc:
+                    reason = f"{type(exc).__name__}: {exc}"[:200]
+                    result = ExtractionResult(
+                        diagnostics=[{"code": "llm_failed", "message": reason}],
+                        model=model_name,
+                        extractor_version=EXTRACTOR_VERSION_V2,
+                    )
+                    status = "failed"
+                    stats.failures.append(
+                        {"doc_id": doc_id, "locator": block.locator, "reason": reason}
+                    )
+                else:
+                    status = result.block_status()
+                    if status == "failed":
+                        stats.failures.append(
+                            {
+                                "doc_id": doc_id,
+                                "locator": block.locator,
+                                "reason": str(result.diagnostics[:1]),
+                            }
+                        )
+
+                prompt_t, completion_t = self._usage_delta(tokens_before, usage)
+                stats.prompt_tokens += prompt_t
+                stats.completion_tokens += completion_t
+                stats.claims += len(result.accepted)
+                stats.review += len(result.review)
+                stats.rejected += len(result.rejected)
+                stats.truncated += 1 if result.truncated else 0
+                self._commit_block_result_v2(
+                    doc_id=doc_id,
+                    source_rev=source_rev,
+                    seq=block.seq,
+                    result=result,
+                    status=status,
+                    model=model_name,
+                    error="; ".join(
+                        str(d.get("message") or d.get("code")) for d in result.diagnostics
+                    )
+                    or None,
+                    duration_ms=int((time.monotonic() - started) * 1000),
+                    prompt_tokens=prompt_t,
+                    completion_tokens=completion_t,
+                )
+                if status == "failed":
+                    stats.failed += 1
+                    consecutive_failures += 1
+                    if 0 < max_consecutive_failures <= consecutive_failures:
+                        stop = True
+                        stats.stopped_early = True
+                        stats.stopped_reason = (
+                            f"连续 {consecutive_failures} 块失败（v2），已干净退出；"
+                            "已完成的块均已落库，重跑自动续上"
+                        )
+                        break
+                else:
+                    consecutive_failures = 0
+                if sleep_between > 0:
+                    time.sleep(sleep_between)
+            if stop:
+                break
+
+        return stats
+
     @staticmethod
     def _usage_delta(before: tuple[int, int], sink: dict[str, int]) -> tuple[int, int]:
         """取一块的 token 增量（含该块的全部重试尝试）。"""
@@ -972,6 +1200,31 @@ class CorpusService:
                     "WHERE status = 'failed' AND attempts >= %s "
                     "AND model = %s AND extractor_version = %s",
                     (int(max_attempts), model, EXTRACTOR_VERSION),
+                ).fetchall()
+            }
+        return done, dead
+
+    def _done_blocks_v2(
+        self, *, model: str, max_attempts: int
+    ) -> tuple[set[tuple[str, str, int]], set[tuple[str, str, int]]]:
+        """v2 断点续跑集合，source_rev/extractor/lint 任一变化都会重抽。"""
+        with self._connect() as conn:
+            done = {
+                (str(row["doc_id"]), str(row["source_rev"]), int(row["seq"]))
+                for row in conn.execute(
+                    "SELECT doc_id, source_rev, seq FROM claim_block_runs_v2 "
+                    "WHERE status IN ('ok', 'empty', 'all_review', 'all_rejected') "
+                    "AND model = %s AND extractor_version = %s AND lint_version = %s",
+                    (model, EXTRACTOR_VERSION_V2, LINT_VERSION),
+                ).fetchall()
+            }
+            dead = {
+                (str(row["doc_id"]), str(row["source_rev"]), int(row["seq"]))
+                for row in conn.execute(
+                    "SELECT doc_id, source_rev, seq FROM claim_block_runs_v2 "
+                    "WHERE status = 'failed' AND attempts >= %s "
+                    "AND model = %s AND extractor_version = %s AND lint_version = %s",
+                    (int(max_attempts), model, EXTRACTOR_VERSION_V2, LINT_VERSION),
                 ).fetchall()
             }
         return done, dead
@@ -1111,6 +1364,138 @@ class CorpusService:
             conn.commit()
         return max(inserted, 0)
 
+    def _commit_block_result_v2(
+        self,
+        *,
+        doc_id: str,
+        source_rev: str,
+        seq: int,
+        result: ExtractionResult,
+        status: str,
+        model: str,
+        error: str | None = None,
+        duration_ms: int | None = None,
+        prompt_tokens: int = 0,
+        completion_tokens: int = 0,
+    ) -> None:
+        """原子写入 v2 单块结果：三类 claim + 块级台账同事务。"""
+        records = result.all_records()
+        rows = [
+            (
+                r.doc_id,
+                r.source_rev,
+                r.seq,
+                r.locator,
+                r.claim_text,
+                r.evidence_quote,
+                r.evidence_kind,
+                Jsonb(r.table_ref),
+                r.scope,
+                r.subject_raw,
+                r.subject,
+                r.metric_raw,
+                r.metric,
+                Jsonb(r.qualifiers),
+                r.kind,
+                r.value_text,
+                r.value_num,
+                r.unit_raw,
+                r.unit,
+                r.period_raw,
+                r.period_end,
+                r.period_grain,
+                r.observed_at,
+                r.known_at,
+                r.quality_status,
+                list(r.reason_codes),
+                r.model,
+                r.extractor_version,
+                r.lint_version,
+                r.extracted_at,
+            )
+            for r in records
+        ]
+        with self._lock, self._connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT model, extractor_version, lint_version FROM claim_block_runs_v2 "
+                    "WHERE doc_id = %s AND source_rev = %s AND seq = %s",
+                    (str(doc_id), str(source_rev), int(seq)),
+                )
+                previous = cur.fetchone()
+                previous_fingerprint_differs = previous is not None and (
+                    str(previous["model"]) != model
+                    or str(previous["extractor_version"]) != EXTRACTOR_VERSION_V2
+                    or str(previous["lint_version"]) != LINT_VERSION
+                )
+                if status != "failed" or previous_fingerprint_differs:
+                    cur.execute(
+                        "DELETE FROM claims_v2 WHERE doc_id = %s AND source_rev = %s AND seq = %s",
+                        (str(doc_id), str(source_rev), int(seq)),
+                    )
+                if rows:
+                    cur.executemany(
+                        "INSERT INTO claims_v2 ("
+                        "doc_id, source_rev, seq, locator, claim_text, evidence_quote, "
+                        "evidence_kind, table_ref, scope, subject_raw, subject, metric_raw, "
+                        "metric, qualifiers, kind, value_text, value_num, unit_raw, unit, "
+                        "period_raw, period_end, period_grain, observed_at, known_at, "
+                        "quality_status, reason_codes, model, extractor_version, "
+                        "lint_version, extracted_at) "
+                        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"
+                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
+                        "ON CONFLICT DO NOTHING",
+                        rows,
+                    )
+                cur.execute(
+                    "INSERT INTO claim_block_runs_v2 "
+                    "(doc_id, source_rev, seq, status, accepted_n, review_n, rejected_n, "
+                    " attempts, model, extractor_version, lint_version, duration_ms, "
+                    " prompt_tokens, completion_tokens, truncated, diagnostics, error, updated_at) "
+                    "VALUES (%s,%s,%s,%s,%s,%s,%s,1,%s,%s,%s,%s,%s,%s,%s,%s,%s,now()) "
+                    "ON CONFLICT (doc_id, source_rev, seq) DO UPDATE SET "
+                    "status = EXCLUDED.status, "
+                    "accepted_n = EXCLUDED.accepted_n, "
+                    "review_n = EXCLUDED.review_n, "
+                    "rejected_n = EXCLUDED.rejected_n, "
+                    "attempts = CASE "
+                    "  WHEN claim_block_runs_v2.model IS DISTINCT FROM EXCLUDED.model "
+                    "    OR claim_block_runs_v2.extractor_version "
+                    "       IS DISTINCT FROM EXCLUDED.extractor_version "
+                    "    OR claim_block_runs_v2.lint_version "
+                    "       IS DISTINCT FROM EXCLUDED.lint_version "
+                    "  THEN 1 ELSE claim_block_runs_v2.attempts + 1 END, "
+                    "model = EXCLUDED.model, "
+                    "extractor_version = EXCLUDED.extractor_version, "
+                    "lint_version = EXCLUDED.lint_version, "
+                    "duration_ms = EXCLUDED.duration_ms, "
+                    "prompt_tokens = EXCLUDED.prompt_tokens, "
+                    "completion_tokens = EXCLUDED.completion_tokens, "
+                    "truncated = EXCLUDED.truncated, "
+                    "diagnostics = EXCLUDED.diagnostics, "
+                    "error = EXCLUDED.error, "
+                    "updated_at = now()",
+                    (
+                        str(doc_id),
+                        str(source_rev),
+                        int(seq),
+                        str(status),
+                        len(result.accepted),
+                        len(result.review),
+                        len(result.rejected),
+                        model,
+                        EXTRACTOR_VERSION_V2,
+                        LINT_VERSION,
+                        duration_ms,
+                        prompt_tokens,
+                        completion_tokens,
+                        result.truncated,
+                        Jsonb(result.diagnostics),
+                        error,
+                    ),
+                )
+            conn.commit()
+
     def average_block_seconds(self, *, default: float = 45.0) -> float:
         """历史平均单块耗时（秒）—— 排期估算用真实数据，而不是拍脑袋的常数。
 
@@ -1161,6 +1546,37 @@ class CorpusService:
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
+    def block_runs_v2(
+        self,
+        *,
+        doc_id: str | None = None,
+        status: str | None = None,
+        limit: int = 200,
+    ) -> list[dict[str, object]]:
+        """查询 v2 块级台账。"""
+        sql = (
+            "SELECT doc_id, source_rev, seq, status, accepted_n, review_n, rejected_n, "
+            "attempts, model, extractor_version, lint_version, duration_ms, prompt_tokens, "
+            "completion_tokens, truncated, diagnostics, error, updated_at "
+            "FROM claim_block_runs_v2"
+        )
+        where: list[str] = []
+        params: list[object] = []
+        if doc_id:
+            where.append("doc_id = %s")
+            params.append(str(doc_id))
+        if status:
+            where.append("status = %s")
+            params.append(str(status))
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        sql += " ORDER BY doc_id, source_rev, seq LIMIT %s"
+        params.append(int(limit))
+
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(cast(LiteralString, sql), params)
+            return list(cur.fetchall())
+
     def claims_of(
         self,
         *,
@@ -1196,10 +1612,175 @@ class CorpusService:
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
+    def claims_v2_of(
+        self,
+        *,
+        doc_id: str | None = None,
+        subject: str | None = None,
+        kind: str | None = None,
+        quality_status: str | None = "ok",
+        limit: int = 50,
+    ) -> list[dict[str, object]]:
+        """查询 v2 claims；默认只暴露 ok，review/rejected 需显式传 ``None`` 或状态。"""
+        sql = (
+            "SELECT claim_id, doc_id, source_rev, seq, locator, claim_text, "
+            "evidence_quote, evidence_kind, table_ref, scope, subject_raw, subject, "
+            "metric_raw, metric, qualifiers, kind, value_text, value_num, unit_raw, unit, "
+            "period_raw, period_end, period_grain, observed_at, known_at, quality_status, "
+            "reason_codes, model, extractor_version, lint_version, extracted_at "
+            "FROM claims_v2"
+        )
+        where: list[str] = []
+        params: list[object] = []
+        if doc_id:
+            where.append("doc_id = %s")
+            params.append(str(doc_id))
+        if subject:
+            where.append("subject = %s")
+            params.append(str(subject))
+        if kind:
+            where.append("kind = %s")
+            params.append(str(kind))
+        if quality_status:
+            where.append("quality_status = %s")
+            params.append(str(quality_status))
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        sql += " ORDER BY doc_id, source_rev, seq, claim_id LIMIT %s"
+        params.append(int(limit))
+
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(cast(LiteralString, sql), params)
+            return list(cur.fetchall())
+
+    def claim_observation_projection(
+        self,
+        *,
+        doc_id: str | None = None,
+        subject: str | None = None,
+        limit: int = 50,
+    ) -> list[dict[str, object]]:
+        """Claims v2 给后续判断层的只读投影；默认排除 review/rejected。"""
+        rows = self.claims_v2_of(doc_id=doc_id, subject=subject, quality_status="ok", limit=limit)
+        return [
+            {
+                "doc_id": row["doc_id"],
+                "source_rev": row["source_rev"],
+                "seq": row["seq"],
+                "locator": row["locator"],
+                "evidence_quote": row["evidence_quote"],
+                "scope": row["scope"],
+                "subject": row["subject"],
+                "metric": row["metric"],
+                "qualifiers": row["qualifiers"],
+                "kind": row["kind"],
+                "value_text": row["value_text"],
+                "value_num": row["value_num"],
+                "unit": row["unit"],
+                "period_end": row["period_end"],
+                "known_at": row["known_at"],
+                "quality_status": row["quality_status"],
+            }
+            for row in rows
+        ]
+
+    def legacy_claims_from_v2(
+        self,
+        *,
+        doc_id: str | None = None,
+        subject: str | None = None,
+        limit: int = 50,
+    ) -> list[Claim]:
+        """v2 → v1 兼容 Adapter；仅转换 ok 记录。"""
+        records = [
+            _claim_record_from_row(row)
+            for row in self.claims_v2_of(
+                doc_id=doc_id,
+                subject=subject,
+                quality_status="ok",
+                limit=limit,
+            )
+        ]
+        return [claim_record_to_legacy(record) for record in records]
+
+    def claim_version_diff(
+        self,
+        *,
+        doc_id: str | None = None,
+        limit: int = 1000,
+    ) -> dict[str, object]:
+        """v1/v2 影子差异摘要：新增、删除、证据/坐标/数值/时间/状态变化。"""
+        v1 = self.claims_of(doc_id=doc_id, limit=limit)
+        v2 = self.claims_v2_of(doc_id=doc_id, quality_status=None, limit=limit)
+        v1_by_text = {str(row["claim_text"]): row for row in v1}
+        v2_by_text = {str(row["claim_text"]): row for row in v2}
+        added = sorted(set(v2_by_text) - set(v1_by_text))
+        removed = sorted(set(v1_by_text) - set(v2_by_text))
+        common = sorted(set(v1_by_text) & set(v2_by_text))
+
+        def examples(names: list[str]) -> list[str]:
+            return names[:20]
+
+        def tickers_of(value: object) -> tuple[object, ...]:
+            return tuple(value) if isinstance(value, (list, tuple)) else ()
+
+        coordinate_changes = [
+            text
+            for text in common
+            if (
+                v1_by_text[text].get("metric"),
+                tickers_of(v1_by_text[text].get("tickers")),
+            )
+            != (
+                v2_by_text[text].get("metric"),
+                (v2_by_text[text].get("subject"),)
+                if v2_by_text[text].get("scope") == "company" and v2_by_text[text].get("subject")
+                else (),
+            )
+        ]
+        value_changes = [
+            text
+            for text in common
+            if (
+                v1_by_text[text].get("value_text"),
+                str(v1_by_text[text].get("value_num")),
+            )
+            != (
+                v2_by_text[text].get("value_text"),
+                str(v2_by_text[text].get("value_num")),
+            )
+        ]
+        time_changes = [
+            text
+            for text in common
+            if str(v1_by_text[text].get("as_of")) != str(v2_by_text[text].get("known_at"))
+        ]
+        status_changes = [text for text in common if v2_by_text[text].get("quality_status") != "ok"]
+        evidence_changes = [
+            text for text in common if v2_by_text[text].get("evidence_quote") not in (None, text)
+        ]
+        return {
+            "v1_total": len(v1),
+            "v2_total": len(v2),
+            "added": {"count": len(added), "examples": examples(added)},
+            "removed": {"count": len(removed), "examples": examples(removed)},
+            "evidence_changes": {
+                "count": len(evidence_changes),
+                "examples": examples(evidence_changes),
+            },
+            "coordinate_changes": {
+                "count": len(coordinate_changes),
+                "examples": examples(coordinate_changes),
+            },
+            "value_changes": {"count": len(value_changes), "examples": examples(value_changes)},
+            "time_changes": {"count": len(time_changes), "examples": examples(time_changes)},
+            "status_changes": {"count": len(status_changes), "examples": examples(status_changes)},
+        }
+
     def list_documents(self) -> list[dict[str, object]]:
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
-                "SELECT doc_id, title, source_path, mime, status, "
+                "SELECT doc_id, title, source_path, content_hash, mime, status, "
                 "block_count, char_count, published, doc_kind_override "
                 "FROM documents ORDER BY doc_id"
             )
@@ -1277,6 +1858,59 @@ class CorpusService:
             "duration_ms",
             "prompt_tokens",
             "completion_tokens",
+            "error",
+            "updated_at",
+        ),
+        "claims_v2": (
+            "claim_id",
+            "doc_id",
+            "source_rev",
+            "seq",
+            "locator",
+            "claim_text",
+            "evidence_quote",
+            "evidence_kind",
+            "table_ref",
+            "scope",
+            "subject_raw",
+            "subject",
+            "metric_raw",
+            "metric",
+            "qualifiers",
+            "kind",
+            "value_text",
+            "value_num",
+            "unit_raw",
+            "unit",
+            "period_raw",
+            "period_end",
+            "period_grain",
+            "observed_at",
+            "known_at",
+            "quality_status",
+            "reason_codes",
+            "model",
+            "extractor_version",
+            "lint_version",
+            "extracted_at",
+        ),
+        "claim_block_runs_v2": (
+            "doc_id",
+            "source_rev",
+            "seq",
+            "status",
+            "accepted_n",
+            "review_n",
+            "rejected_n",
+            "attempts",
+            "model",
+            "extractor_version",
+            "lint_version",
+            "duration_ms",
+            "prompt_tokens",
+            "completion_tokens",
+            "truncated",
+            "diagnostics",
             "error",
             "updated_at",
         ),
@@ -1462,6 +2096,10 @@ class CorpusService:
             conn.execute(
                 "SELECT setval('claims_claim_id_seq', "
                 "COALESCE((SELECT max(claim_id) FROM claims), 0) + 1, false)"
+            )
+            conn.execute(
+                "SELECT setval('claims_v2_claim_id_seq', "
+                "COALESCE((SELECT max(claim_id) FROM claims_v2), 0) + 1, false)"
             )
             conn.commit()
 
@@ -1827,6 +2465,11 @@ def _main() -> int:
         help="只统计将抽取多少块 / 预计多少次 LLM 调用与耗时，不真正调模型（错峰前规划批次用）",
     )
     p_claims.add_argument(
+        "--v2",
+        action="store_true",
+        help="写入 claims_v2 影子表并保留 review/rejected 审计记录；默认仍写 v1 claims",
+    )
+    p_claims.add_argument(
         "--max-consecutive-failures",
         type=int,
         default=5,
@@ -1843,9 +2486,24 @@ def _main() -> int:
     p_show_claims = sub.add_parser("claims", help="查询已抽取的 claim（D3/D4 的数据源）")
     p_show_claims.add_argument("--doc", default=None)
     p_show_claims.add_argument("--ticker", default=None, help="按标的代码过滤，如 600519.SH")
-    p_show_claims.add_argument("--kind", default=None, choices=["fact", "forecast"])
+    p_show_claims.add_argument(
+        "--subject", default=None, help="v2 subject 过滤；company 下等价于 ticker"
+    )
+    p_show_claims.add_argument("--kind", default=None, choices=["fact", "forecast", "opinion"])
+    p_show_claims.add_argument("--v2", action="store_true", help="读取 claims_v2 影子表")
+    p_show_claims.add_argument(
+        "--quality",
+        default="ok",
+        choices=["ok", "review", "rejected", "all"],
+        help="v2 质量状态过滤；默认 ok，all=包含 review/rejected",
+    )
     p_show_claims.add_argument("--limit", type=int, default=50)
     p_show_claims.add_argument("--db", default=None)
+
+    p_diff = sub.add_parser("claim-diff", help="D2 v1/v2 影子差异报告")
+    p_diff.add_argument("--doc", default=None)
+    p_diff.add_argument("--limit", type=int, default=1000)
+    p_diff.add_argument("--db", default=None)
 
     p_set_kind = sub.add_parser(
         "set-doc-kind", help="人工纠正文档领域分类（§11 缺口#1：分类误判的纠正入口）"
@@ -1913,7 +2571,8 @@ def _main() -> int:
             with contextlib.suppress(ValueError, OSError):  # 非主线程 / 平台不支持
                 previous_handlers[sig] = signal.signal(sig, _request_stop)
         try:
-            stats = svc.extract_claims(
+            extract = svc.extract_claims_v2 if args.v2 else svc.extract_claims
+            stats = extract(
                 doc_ids=doc_ids,
                 limit=args.limit,
                 sleep_between=args.sleep,
@@ -1952,8 +2611,31 @@ def _main() -> int:
         return 1 if stats.failed else 0
 
     if args.cmd == "claims":
-        rows = svc.claims_of(doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit)
+        if args.v2:
+            subject = args.subject or args.ticker
+            rows = svc.claims_v2_of(
+                doc_id=args.doc,
+                subject=subject,
+                kind=args.kind,
+                quality_status=None if args.quality == "all" else args.quality,
+                limit=args.limit,
+            )
+        else:
+            rows = svc.claims_of(
+                doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit
+            )
         print(json.dumps(rows, ensure_ascii=False, indent=2, default=str))
+        return 0
+
+    if args.cmd == "claim-diff":
+        print(
+            json.dumps(
+                svc.claim_version_diff(doc_id=args.doc, limit=args.limit),
+                ensure_ascii=False,
+                indent=2,
+                default=str,
+            )
+        )
         return 0
 
     if args.cmd == "set-doc-kind":
@@ -1996,7 +2678,7 @@ def _main() -> int:
         print(json.dumps(svc.run_failures(args.run), ensure_ascii=False, indent=2, default=str))
     elif args.cmd == "stats":
         svc.init_db()
-        print(json.dumps(svc.stats(), ensure_ascii=False, indent=2))
+        print(json.dumps(svc.stats(), ensure_ascii=False, indent=2, default=str))
     elif args.cmd in ("backup", "snapshot"):
         mode = getattr(args, "mode", "auto")
         out = svc.backup(args.out, mode=mode)
