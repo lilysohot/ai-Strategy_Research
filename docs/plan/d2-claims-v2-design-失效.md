@@ -8,7 +8,7 @@
 | 状态 | **已失效 · 仅保留历史记录** |
 | 日期 | 2026-09-12 |
 | 前版 | [d2-claims-design.md](./d2-claims-design.md)（v1.1，P0–P7 已全部落地，作为遗产清单保留） |
-| 输入 | [d2-claims-quality-hardening.md](./d2-claims-quality-hardening.md)（缺口清单）· [research-data-closed-loop-optimization-report.md](./research-data-closed-loop-optimization-report.md)（闭环契约）· glm 全量跑批实测（290/628 块在库） |
+| 输入 | [d2-claims-quality-hardening-失效.md](./d2-claims-quality-hardening-失效.md)（缺口清单）· [research-data-closed-loop-optimization-report.md](./research-data-closed-loop-optimization-report.md)（闭环契约）· glm 全量跑批实测（290/628 块在库） |
 | 本文档要回答的问题 | v1 的哪些结构问题是修补解决不了的？v2 的表结构、管线、评估、重入语义长什么样？ |
 
 > **一句话**：v1 把「按公司研报设计的抽取器」改造成了三插槽体系，补齐了三态、单位、审计、元数据；

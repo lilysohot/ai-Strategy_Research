@@ -17,6 +17,25 @@ useful when changing that subsystem rather than when getting started.
 | Understand ReAct versus Agent Team | [Workflow implementations](#workflow-implementations) |
 | Run benchmark evaluation | [Evaluation guide](eval.md) |
 | Extend the framework | [Developer guides](#developer-guides) |
+| Understand the investment-research product requirements | [Product requirements](product-requirements.md) |
+| Understand the current and target research process | [Business process](business-process.md) |
+
+## Product and business design
+
+The investment-research Web product has two canonical product documents:
+
+| Question | Canonical document |
+|---|---|
+| What must the product do, what is available now, and what remains? | [Product requirements](product-requirements.md) |
+| How do user runs, evidence, decisions, and review connect? | [Business process](business-process.md) |
+| How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
+| How is it implemented? | [Technical architecture](tech-stack.md) |
+
+`requirements-user-layer.md` is retained only as a compatibility link to the
+integrated requirements. Files under `docs/plan/` are implementation plans and
+progress ledgers; they do not redefine product scope. Files under `docs/tittel/`
+are research or historical design inputs unless a canonical page explicitly says
+otherwise.
 
 ## Installation and deployment
 
@@ -92,6 +111,8 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Task | Document |
 |---|---|
 | Understand runtime flow, observers, teams, and package boundaries | [Framework architecture](framework.md) |
+| Understand product scope and delivery status | [Product requirements](product-requirements.md) |
+| Understand the evidence-to-decision business flow | [Business process](business-process.md) |
 | Author and register a workflow plugin | [Writing a workflow](workflows.md) |
 | Develop and submit changes | [Contributing](../CONTRIBUTING.md) |
 | Understand the frozen Textual + Rich decision | [TUI framework decision](python_terminal_tui_ai_agent_guide.md) **(design record, Chinese)** |
@@ -100,6 +121,9 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Replicate the CLI/TUI panes and workflows in the web app | [CLI → Web parity](plan/cli-web-parity.md) **(design record, Chinese)** |
 | Bring 同花顺 market data into the research chain | [同花顺数据接入](plan/ths-market-data.md) **(Chinese, 需求与设计)** |
 | Decompose research claims by document domain (company / industry / macro) and add a corpus audit layer | [D2 Claims 设计](plan/d2-claims-design.md) **(Chinese, 需求与设计)** |
+| Continue the active Claims release validation and hardening work | [D2 Claims 优化执行计划](plan/d2-claims-optimization-plan.md) **(active plan, Chinese)** |
+| Close the Claims × market evidence and comparison loop | [Claims × 同花顺闭环计划](plan/claims-market-closed-loop-plan.md) **(active plan, Chinese)** |
+| Find the active implementation plan or a historical design record | [Plan and design index](plan/README.md) |
 | Pick up the next web-platform hardening task | [Web platform hardening](plan/web-platform-hardening.md) **(task list, Chinese)** |
 | Review the SQLite → PostgreSQL corpus migration results | [Corpus PG migration report](corpus-pg-migration-report.md) **(Chinese)** |
 | Understand why retrieval recall broke after that migration and how it was recalibrated | [Recall calibration guide](guide-recall-calibration.md) **(tutorial, Chinese, beginner-friendly)** |
@@ -122,6 +146,12 @@ When updating documentation, change the canonical page instead of copying a
 second set of commands:
 
 - root `README.md`: product story, capabilities, short quick start, and results;
+- `docs/product-requirements.md`: the single source of truth for investment-research product scope, requirement status, priorities, and acceptance;
+- `docs/business-process.md`: the single source of truth for current/target business stages, decision branches, and completion criteria;
+- `CONTEXT.md`: domain glossary only; it must not contain implementation or planning details;
+- `docs/design/investment-research-workbench-prd.md`: Web interaction expression of approved requirements, not a second product backlog;
+- `docs/plan/`: implementation sequence and progress only; plans must link to requirement IDs rather than redefining them;
+- `docs/plan/README.md`: status index for active, implemented, historical, and invalidated plans;
 - `docs/install/`: environment-specific installation and deployment;
 - `docs/install/docker.md`: Compose, image pinning, `docker run`, and cloud
   deployment of the CPU agent container;

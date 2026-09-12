@@ -3,11 +3,13 @@
 | 项 | 内容 |
 |---|---|
 | 版本 / 状态 | v1.3 · 阶段一至阶段三全部实施；回溯审计补全 2 处遗漏（终端 run 事件 + 失败原因/运行目录） |
-| 上游文档 | [requirements-user-layer.md](../requirements-user-layer.md) · [tech-stack.md](../tech-stack.md) · [tui-user-guide.zh-CN.md](../tui-user-guide.zh-CN.md) · [plan.md](./plan.md) |
+| 上游文档 | [产品需求基线](../product-requirements.md) · [业务流程](../business-process.md) · [tech-stack.md](../tech-stack.md) · [tui-user-guide.zh-CN.md](../tui-user-guide.zh-CN.md) |
 | 复刻基准 | `apodex/tui/` + `apodex/observers.py`（TerminalObserver）+ `docs/tui-user-guide.zh-CN.md` |
 | 状态图例 | ✅ 已有 · ⚠️ 部分具备 · ⬜ 缺失 |
 
-> **本文只做方案设计，不含代码改动。** 实施排期见 §9，需评审通过后再动手。
+> **文档职责修正**：本文最初是方案，现作为阶段一至阶段三的实施与回溯审计记录保留。
+> 当前工作台交互以 [前端交互规格](../design/investment-research-workbench-prd.md) 为准，当前产品状态以
+> [产品需求基线](../product-requirements.md) 为准。
 
 ---
 

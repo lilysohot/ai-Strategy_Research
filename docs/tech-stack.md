@@ -2,11 +2,11 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | **v1.3** · 已定稿（新增 **§3.1 语料数据层** 与 **ADR 13–15**；前序：v1.2 并入 M0.5 spike 实测结论，见 §4/§5） |
-| 上游文档 | [requirements-user-layer.md](./requirements-user-layer.md)（FR-1 登录 / FR-2 用户级大模型配置 / FR-3 会话 / FR-4 留痕 / FR-5 用量） |
+| 版本 / 状态 | **v1.4 · 技术实现参考**（产品范围与状态已归并到产品需求基线） |
+| 上游文档 | [product-requirements.md](./product-requirements.md)（唯一产品需求真源）· [business-process.md](./business-process.md)（业务流程真源） |
 | 验证物 | `server/spike.py` + `server/verify_spike.py`——A1–A7 门禁，退出码即结论；见 [plan.md](./plan/plan.md#m05-链路验证spike) |
 | 既定决策 | 业务数据库 = PostgreSQL 16；**语料库 = 独立 PostgreSQL 18.6 实例（zhparser，见 §3.1）**；部署 = Docker Compose；代码组织 = 仓库内延续（monorepo）；**沙箱后端 = `native`** |
-| 原则 | 复用 FrontierAgent 运行时既有挂载点，Web 层为纯新增，不修改 `frontier_agent/` 内核 |
+| 原则 | 复用 FrontierAgent 运行时既有挂载点，Web 层为纯新增，不修改 `frontier_agent/` 内核；本文不重新定义产品优先级 |
 
 > **v1.2 相对 v1.1 的四处实质修正**（均由 spike 实测得出，非推测）：
 > 1. **事件持久化不需要自研**——运行时 `TrajectoryFileObserver` 已增量落盘完整轨迹（含参数、用量、system_prompt、SIGKILL 安全），原 ADR-4 基于不完整复审（§5.2、§6.2）。
@@ -14,6 +14,7 @@
 > 3. **native 模式忽略 `_sandbox_mounts`**——bind mount 只在 bwrap 分支，上传直接进 `FRONTIER_AGENT_INPUTS_DIR`（§5.1）。
 > 4. **`on_tool_call` 不是 OpenAI 线格式**——扁平 `{id, name, args}` 且此刻 `args` 为空，参数摘要须取 trajectory（§5.2）。
 >
+> **v1.4 文档归并**：需求、业务流程与技术实现分开维护；并按当前代码修正 Web 控制通道、市场数据源和工具暴露状态。
 > **v1.3 变更**：新增 **§3.1 语料数据层** 与 **ADR 13–15**——语料库由 SQLite 迁至**独立
 > PostgreSQL 18.6 实例**（zhparser 中文全文 + pgvector 留位 + psycopg 3），并记录排序校准结论。
 > 需求与实施细节见 [plan/pg-migration.md](./plan/pg-migration.md) v2.0。
@@ -30,15 +31,16 @@ api 容器 (frontier-web 镜像, FastAPI 单实例)
    ├─ Auth: JWT + argon2          ├─ LLM 配置: Fernet 加密存取
    ├─ Orchestrator: 任务队列 + 子进程池 (run-per-subprocess)
    │      └─ worker 子进程 (同镜像, CWD=仓库根)
-   │             ├─ BenchmarkSession(注册表快照) + 投研 profile(inline)
+   │             ├─ BenchmarkSession(注册表快照) + tui profile + server profile_overrides
    │             ├─ 用户级 LLM 注入: env OPENAI_API_KEY/BASE_URL/MODEL
    │             ├─ BridgeObserver → stdout JSONL  ← 仅流式 delta，**不落盘**
    │             ├─ TrajectoryFileObserver(运行时自带) → run_dir/agent/trajectories/*.jsonl ← **落盘**
-   │             ├─ corpus 工具 → CorpusService(plugins/corpus/service.py) → 语料库 PG 18.6(独立实例)
-   │             └─ stdin JSONL 控制通道 (stop)
+   │             ├─ 已注册 corpus / market / strategy 工具（Web 默认 override 尚未完整暴露，见 PR-DATA-04）
+   │             ├─ CorpusService(plugins/corpus/service.py) → 语料库 PG 18.6(独立实例)
+   │             └─ stdin JSONL 控制通道 (stop / steer / approve)
    ├─ EventRelay: stdout JSONL(实时) + trajectory tail(回放) → asyncio 队列 → SSE
    └─ Store: SQLAlchemy 2.0 async + asyncpg → PostgreSQL (业务主库)
-外部: PostgreSQL 16 容器(业务库) │ **PostgreSQL 18.6 容器(语料库 corpus-db，独立实例)** │ run_dir(trajectories/engine.log/outputs) │ 用户 LLM 端点 │ stub 行情数据源(预留 AKShare)
+外部: PostgreSQL 16 容器(业务库) │ **PostgreSQL 18.6 容器(语料库 corpus-db，独立实例)** │ run_dir(trajectories/engine.log/outputs) │ 用户 LLM 端点 │ fuyao 同花顺 REST 数据源
 ```
 
 ## 2. 代码组织（monorepo 决策）
@@ -172,9 +174,9 @@ so partial runs remain readable without retaining full payloads in memory.
 | 能力 | 归属 | 说明 |
 |---|---|---|
 | 工具调用**参数**、结果、耗时 | 运行时 trajectory | `tool_calls[].args` 完整；`result` 带 `error`/`ms` |
-| token 用量（FR-5.1） | 运行时 trajectory | 每轮 `usage` 字段，run 结束聚合进 runs 表 |
+| token 用量（PR-GOV-03） | 运行时 trajectory | 每轮 `usage` 字段，run 结束聚合进 runs 表 |
 | system_prompt 归档（L5） | 运行时 trajectory | `start` 记录 |
-| SIGKILL 后仍可回放（FR-4.2） | 运行时 trajectory | 增量 flush，非进程结束时才写 |
+| SIGKILL 后仍可回放（PR-GOV-02） | 运行时 trajectory | 增量 flush，非进程结束时才写 |
 | **流式 delta 实时推送** | **自研 BridgeObserver** | 轨迹只存每轮最终 content，无 delta |
 | 生命周期事件（run_started/finished） | 自研 BridgeObserver | 纯推送，不落盘 |
 
@@ -183,9 +185,10 @@ so partial runs remain readable without retaining full payloads in memory.
 - **stopped_by 取值**：它在 `AgentLoopResult` 上（`on_loop_end` 的 `result.stopped_by`），**不在** `BenchmarkSession.run()` 返回的 pipeline state 里。`run()` 返回的 state 只有 `final_answer`/`final_content`/`answer_status` 等；平台需从 observer 捕获 `stopped_by` 与 worker 自己的 deadline/SIGKILL 路径合并落库。
 - **observer 钩子形状（实测）**：`on_tool_call(ctx, tool_call)` 的 `tool_call` 是**扁平** `{"id","name","args"}`，**不是** OpenAI 的 `{"function":{"name","arguments"}}`；且此刻 `args` 为空（流式仍在组装）。按 `tool_call["function"]["name"]` 取值会得到空串。参数摘要一律从 trajectory 的 `llm` 记录取。
 - **停止**：`metadata['pause_check']` 协作停止（带走 partial answer 回填 turns，`stopped_by` 记录）+ 编排器 SIGKILL 兜底。
-- **steer（P2，范围外）**：steer 为 apodex 应用层机制（`apodex/steer.py`，内核零匹配），P2 需逆向其 Intervention 注入语义；P1 BridgeObserver 为纯事件转发器 + stop 控制通道。
+- **steer**：`server.steer.SteerInbox/SteerObserver` 从 worker stdin 接收内容，在安全的工具/轮次边界注入；Web 显示“下一工具边界生效”。
+- **审批**：`ApprovalObserver` 对 confirm 级工具调用发出 `approval_requested`，等待 stdin 的 approve/reject/replace；停止时拒绝尚未处理的审批，避免 worker 悬挂。
 
-### 5.3 用户级 LLM 注入（FR-2.4）
+### 5.3 用户级 LLM 注入（PR-LLM-02）
 
 **机制修正（v1.2）**：主智能体的 LLM **不是** `create_llm(config)` 造的。`create_llm(config)` 在 `BenchmarkSession._bootstrap` 里只喂给 `ResourceManager`（aux/摘要，以及 `profile` 缺失时的降级分支）。主链路是：
 
@@ -202,16 +205,16 @@ metadata["profile"] → load_react_profile() → 解析 ${OPENAI_*} 占位符 �
    | 注入情况 | 结果 |
    |---|---|
    | 三个变量全注入 | ✅ 正常 |
-   | 全未注入 | `api_key=None` 且 env 也无 → `AsyncOpenAI` 构造即抛 → **响亮失败** |
+   | 用户变量全未注入 | worker 随后从仓库 `.env` 读取系统默认三元组；系统默认也不完整时才响亮失败 |
    | **只注入 key，漏 `base_url`** | `base_url=""` → `None` → **静默打到 `https://api.openai.com/v1`，带着用户的 key** |
 
-   故 worker 启动前必须断言三者全非空，否则拒绝启动（FR-2.5 要求的"配置失效直接失败，不静默换用他人配置"）。
+   故 worker 启动前必须断言用户注入要么三个全有、要么三个全无（PR-LLM-02 要求的“配置失效直接失败，不静默换用他人配置”）。
 
 2. **`metadata["profile"]` 或 `profile_inline` 必须存在**，缺则静默走 `resource_mgr.get_llm("stateful_react")` 降级分支（`main_agent.py:376`），返回 `profile=None`，导致轮次上限、超时、压缩、工具策略全部回落到模块常量且**不报错**。
 
 **系统默认回落**：仓库 `.env` 的路径由 `__file__` 推算（`infra/config.py:22`、`profile.py:17`），**与 CWD 无关**，且 `load_dotenv(override=False)` 保证注入值不被覆盖。结论成立，但理由不是"worker CWD=仓库根"。runs 表记录快照（model/base_url，不含 key）。
 
-### 5.4 profile 与工具集契约（v1.2 新增，A2 红灯的根因）
+### 5.4 profile 与工具集契约（v1.4 按当前代码校正）
 
 **默认 profile 没有文件工具。** spike 第一跑撞出：
 
@@ -226,24 +229,32 @@ Available tools: bash, download_file, glob_search, grep_search, recover_result, 
 |---|---|---|
 | `default` → `simple` | web_search, web_fetch, bash, download_file, grep_search, glob_search, recover_result | ❌ **无 `read_file` / `create_file`** |
 | `benchmark`（别名 `keep5`） | 同上 | ❌ 同上 |
-| `tui` | web_search, web_fetch, bash, grep_search, glob_search, add_task, update_task, **read_file, create_file**, recover_result | ✅ |
+| `tui` | Web/文件工具 + `position_sizing` / `strategy_lint` + `corpus_*` + `data_coverage` + 四个 `market_*` 工具 | ✅ |
 
-**FR-3.4（产物下载）与 FR-3.5（上传后 agent 读取）在 `default`/`benchmark` 下不成立。** 二选一，均无需改上游文件：
+**PR-WB-03/04（附件与产物）在 `default`/`benchmark` 下不成立。** 二选一，均无需改上游文件：
 
 - **方案 A**：`metadata["profile"] = "tui"`（现成，spike 已验证 7/7 通过）；
 - **方案 B**：`metadata["profile"]` 用任一 profile，再用 `metadata["profile_overrides"]` 下发
   `{"agent": {"agent_tools": [...], "fs_mode": true}}`。override 是深合并且最后应用（`profile.py:73-77`），server 侧完全可控。
 
-**投研产品的推荐基线**（方案 B，写进 `server/` 的 profile 常量）：
+当前 Web worker 选择 `tui`，随后由 `server/profile.py::build_profile_overrides()` 精确覆盖
+`agent.agent_tools`。该覆盖目前只保留基础 Web/文件工具，反而移除了 `tui.yaml` 中已经注册的
+corpus、market、coverage、sizing 与 lint 工具；因此“注册成功”和“TUI 可用”不能写成“Web 投研链
+已可用”。这是 [PR-DATA-04](product-requirements.md#44-语料市场与证据) 的 P0 接线缺口。
+
+**投研产品目标基线**（方案 B，由 `server/` 的 profile 常量维护）：
 
 ```python
 PROFILE_OVERRIDES = {
     "agent": {
-        # 文件工具是投研交付的承重墙；市场工具（T4.2）从 server 侧追加，不改上游
+        # 与 workflows/stateful_react_agent/profiles/tui.yaml 的投研工具集合取并集，
+        # 再按服务端 allowlist 缩减；不得用基础列表意外遮蔽已批准的金融工具。
         "agent_tools": [
             "web_search", "web_fetch", "bash", "grep_search", "glob_search",
             "read_file", "create_file", "recover_result",
-            "market_kline", "market_financials", "market_announcements", "market_news",
+            "position_sizing", "strategy_lint", "corpus_search", "corpus_fetch",
+            "data_coverage", "market_resolve", "market_quote", "market_history",
+            "market_financials",
         ],
         "fs_mode": True,          # 否则模型不知道 /workspace /outputs /inputs 约定
         "thinking_format": "tag",  # 显式声明，不依赖 model_registry.yaml 对未知模型的推断
@@ -273,42 +284,45 @@ CREATE TABLE user_llm_configs (
   is_default BOOLEAN NOT NULL DEFAULT false,
   last_verified_at TIMESTAMPTZ, last_verify_ok BOOLEAN,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE (user_id, name));
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now());
 
 CREATE TABLE sessions (
   id UUID PRIMARY KEY, user_id UUID NOT NULL REFERENCES users(id),
-  title TEXT NOT NULL, deleted_at TIMESTAMPTZ,        -- 软删除(FR-4.4)
+  title TEXT NOT NULL, deleted_at TIMESTAMPTZ,        -- 软删除(PR-WB-01)
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now());
 CREATE INDEX idx_sessions_user ON sessions(user_id, updated_at DESC);
 
 CREATE TABLE runs (
   id UUID PRIMARY KEY, session_id UUID NOT NULL REFERENCES sessions(id),
-  user_id UUID NOT NULL, status TEXT NOT NULL,        -- queued|running|done|failed|stopped|cancelled
+  user_id UUID NOT NULL REFERENCES users(id),
+  status TEXT NOT NULL,                               -- queued|running|completed|failed|stopped
   pipeline_id TEXT NOT NULL, prompt TEXT NOT NULL,
   final_answer TEXT, stopped_by TEXT, error TEXT,
-  llm_config_id UUID, llm_snapshot_json JSONB,        -- model/base_url/params 快照, 不含 key
-  prompt_tokens INT, completion_tokens INT, total_tokens INT,   -- FR-5.1 (聚合自 trajectory 的 usage)
-  run_dir TEXT NOT NULL,                              -- agent/trajectories/ / engine.log / ws/outputs/
+  llm_config_id UUID REFERENCES user_llm_configs(id),
+  llm_snapshot_json JSONB,                            -- model/base_url/params 快照, 不含 key
+  prompt_tokens INT, completion_tokens INT, total_tokens INT,
+  cache_read_tokens INT, cache_write_tokens INT, reasoning_tokens INT,
+  llm_calls INT, usage_json JSONB,                    -- PR-GOV-03，聚合自 trajectory
+  run_dir TEXT NOT NULL,                              -- run/agent/trajectories/、run/engine.log、ws/outputs/
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ);
 CREATE INDEX idx_runs_session ON runs(session_id, created_at);
 
 CREATE TABLE turns (
-  id BIGSERIAL PRIMARY KEY, session_id UUID NOT NULL, seq INT NOT NULL,
+  id BIGSERIAL PRIMARY KEY, session_id UUID NOT NULL REFERENCES sessions(id), seq INT NOT NULL,
   role TEXT NOT NULL,                                 -- user|assistant
-  content TEXT NOT NULL, run_id UUID,
+  content TEXT NOT NULL, run_id UUID REFERENCES runs(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (session_id, seq));
 
 CREATE TABLE artifacts (
-  run_id UUID NOT NULL, rel_path TEXT NOT NULL,
+  run_id UUID NOT NULL REFERENCES runs(id), rel_path TEXT NOT NULL,
   size BIGINT, sha256 TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   PRIMARY KEY (run_id, rel_path));
 
 CREATE TABLE audit_log (
-  id BIGSERIAL PRIMARY KEY, user_id UUID, action TEXT NOT NULL,
+  id BIGSERIAL PRIMARY KEY, user_id UUID REFERENCES users(id), action TEXT NOT NULL,
   detail_json JSONB, ip TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now());     -- 登录/配置增删改/key 轮换
 ```
@@ -322,49 +336,57 @@ CREATE TABLE audit_log (
 | 文件 | 内容 | 用途 |
 |---|---|---|
 | `react_agent.jsonl` | 增量 flush 的事件流：`start` / `llm` / `result` / `compaction` | **回放与断线续传的唯一真源**，行号即游标 |
-| `react_agent.json` | 原子替换的完整信封（含 messages） | 整体导出、会话导出（FR-4.3 zip） |
+| `react_agent.json` | 原子替换的完整信封（含 messages） | 整体查看；未来会话导出的输入（PR-GOV-05） |
 
 记录类型与承载能力（spike 实测）：
 
 | `t` | 关键字段 | 覆盖需求 |
 |---|---|---|
-| `start` | `system_prompt`、`model_name`、`tool_names`、`max_turns` | FR-4 L5 诊断层 |
-| `llm` | `turn`、`content`、`tool_calls[{name,args}]`、`usage{prompt,completion,cache_*}_tokens` | FR-4 L3 参数摘要、FR-5.1 用量 |
-| `result` | `turn`、`name`、`tool_call_id`、`result`、`error`、`ms` | FR-4 L3 工具结果 |
+| `start` | `system_prompt`、`model_name`、`tool_names`、`max_turns` | PR-GOV-01/02 诊断与回放 |
+| `llm` | `turn`、`content`、`tool_calls[{name,args}]`、`usage{prompt,completion,cache_*}_tokens` | PR-GOV-02/03 参数摘要与用量 |
+| `result` | `turn`、`name`、`tool_call_id`、`result`、`error`、`ms` | PR-GOV-02 工具结果 |
 | `compaction` | 被丢弃与被保留的内容 | 长程运行的可解释性 |
 
-- **理由**：与自建方案相比，运行时版本额外提供参数、用量、system_prompt 与 SIGKILL 安全，且随 run 目录整体归档/导出/删除，满足 FR-4.1/4.2/4.4。自研只剩"delta 实时推送"一层，且该层**不落盘**——delta 丢了也不影响留痕。
+- **理由**：与自建方案相比，运行时版本额外提供参数、用量、system_prompt 与 SIGKILL 安全，且随 run 目录整体归档，满足 PR-GOV-01/02。自研只剩“delta 实时推送”一层，且该层**不落盘**——delta 丢了也不影响留痕；导出和保留期仍属 PR-GOV-05 待办。
 - **代价**：无跨 run SQL 查询（轨迹查询本就是单 run 粒度，可接受）；run 目录必须持久卷挂载；`.jsonl` 的字段契约属上游，升级时需比对（建议 T1.11 加一条 schema 断言：四个 `t` 值均出现且 `llm.usage` 可解析）。
 - **EventStore 仍是 no-op**，与本节不冲突：它和轨迹是两套东西，不要再用它论证"持久化需自建"。
+
+### 6.3 当前 HTTP 边界
+
+| 领域 | 当前接口 |
+|---|---|
+| 认证 | `POST /api/auth/register`、`login`、`logout`、`password`；`GET /api/auth/me` |
+| 模型连接 | `GET/POST /api/models`；`GET/PUT/DELETE /api/models/{id}`；`POST /api/models/{id}/test` |
+| 研究 | `GET/POST /api/sessions`；`GET/DELETE /api/sessions/{id}`；`GET /api/sessions/{id}/turns` |
+| Run | `POST /api/runs`；`GET /api/runs/{id}`、`events`、`trace` |
+| 运行控制 | `POST /api/runs/{id}/control`、`steer`、`approve`、`revert` |
+| 产物与变更 | `GET /api/runs/{id}/artifacts`、`artifacts/preview`、`artifacts/download`、`diff` |
+
+除注册、登录与 `/healthz` 外，接口必须从认证上下文取得用户并做 owner 过滤。当前没有 usage 聚合、Project/Tag、全局研究搜索或在线 Claim 比较接口；不得沿用旧需求中的 `/api/models/configs` 或 `/api/sessions/{id}/runs` 作为现行契约。
 
 ## 7. Docker 化部署
 
 ### 7.1 Compose 拓扑
 
-```yaml
-services:
-  postgres:
-    image: postgres:16-alpine
-    environment: [POSTGRES_DB=apodex, POSTGRES_USER=apodex, POSTGRES_PASSWORD=${PG_PASSWORD}]
-    volumes: [pgdata:/var/lib/postgresql/data]
-    healthcheck: { test: ["CMD-SHELL", "pg_isready -U apodex"], interval: 5s, retries: 10 }
-  api:
-    build:                        # 单镜像 frontier-web
-      context: .
-      dockerfile: deploy/Dockerfile.web   # 不可覆盖根 Dockerfile(apodex agent 镜像)
-    env_file: [.env]              # MASTER_KEY / WORKER_POOL_SIZE / 默认 LLM 端点
-    depends_on: { postgres: { condition: service_healthy } }
-    volumes:
-      - ./server/runs:/app/server/runs      # run 产物 + 事件轨迹, 必须持久化
-      - ./uploads:/app/uploads              # 用户上传(财报PDF等)
-    stop_grace_period: 30s                  # 留给编排器 drain + 回收 worker
-    deploy: { resources: { limits: { cpus: "4", memory: 4G } } }
-  caddy:
-    image: caddy:2-alpine
-    ports: ["80:80", "443:443"]
-    volumes: [./deploy/Caddyfile:/etc/caddy/Caddyfile, caddy_data:/data]
-volumes: { pgdata: {}, caddy_data: {} }
+当前 `deploy/docker-compose.yml` 的 `full` profile 由三项服务组成：
+
+```text
+frontend（一次性构建 Vite） ──> web_dist ──> caddy（静态站点 + SSE 反代）
+                                               │
+                                               ▼
+                                      api（FastAPI + worker 子进程）
+                                               ├─ SERVER_DATABASE_URL → 外部/宿主业务库
+                                               ├─ CORPUS_DSN → 外部/宿主 corpus PG
+                                               └─ .env → 系统 LLM、密钥与市场凭据
 ```
+
+- Compose 不创建 PostgreSQL 服务；业务库和 corpus 库必须由 `.env`/环境变量指向已部署实例。
+- `frontend` 写 `web_dist` 后退出，Caddy 等待构建成功再启动；Caddy 默认发布 8080/8443，API 的 8000 端口只用于调试。
+- API 只读挂载配置与 `.env`，并挂载 `data` 和 `agent_data`。
+- **当前持久化缺口**：`ServerConfig.runs_root` 是 `/app/server/runs`，但 Compose 的命名卷
+  `agent_data` 挂在 `/app/agent_data`；`Dockerfile.web` 对 `/app/server/runs` 和 `/app/uploads` 的
+  `VOLUME` 会形成匿名卷，不能满足可识别备份与恢复。生产发布前必须把命名卷直接挂到
+  `runs_root/uploads_root`，并完成 PR-GOV-05 的重启、备份和恢复验收。
 
 ### 7.2 镜像与沙箱
 
@@ -384,13 +406,13 @@ volumes: { pgdata: {}, caddy_data: {} }
 | 2 | **monorepo：仓库内延续** | 另起仓库 | import 图谱 + CWD 敏感发现 + Docker 上下文三重约束；边界靠目录规则维持 |
 | 3 | run-per-subprocess，worker **CWD=仓库根**，**永不池化** | 线程并发 / CWD=run目录 / worker 池 | 全局注册表隔离 + pipeline CWD 相对发现；`_llm_cache`/`ResourceManager`/`_sandbox` 单例/`get_config()` 皆为进程级 |
 | 4 | ~~事件自研 events.jsonl~~ **→ 运行时 trajectory + 自研仅 delta 推送** | 自研 events.jsonl / 事件入 Postgres / 运行时 EventStore | **v1.2 推翻**：EventStore 确为 no-op，但 `TrajectoryFileObserver` 已增量 flush 且含参数、用量、system_prompt、SIGKILL 安全。自研面从"整套事件持久化"缩小到"delta 实时推送，不落盘" |
-| 5 | **steer 降级 P2** | P1 实现 | steer 为 apodex 应用层机制（内核零匹配），Web 复刻需逆向验证；P1 以"停止+追问"替代 |
+| 5 | ~~steer 降级 P2~~ → **Web 安全边界 steer + 审批已实现** | 仅停止后追问 | worker stdin + Observer 已验证可在运行中补充方向并处理 confirm 级调用；UI 必须表达延迟生效和真实确认态 |
 | 6 | 沙箱后端 **强制 `native`**（功能前提，非仅安全） | `auto`/bwrap-in-docker | 只有 container/native 分支读 `FRONTIER_AGENT_*_DIR`；同时避免 CAP_SYS_ADMIN，P1 不跑不受信代码 |
 | 7 | fetch 封装 SSE | EventSource | 需 Authorization 头与游标重连 |
 | 8 | Caddy 边缘代理 | Nginx | SSE/HTTPS 零配置调优成本 |
-| 9 | JWT(HS256)+argon2id | session/OAuth | 单实例足够；SSO 留二期(FR-1.5) |
-| 10 | **profile 用 `tui` 或 `profile_overrides` 下发 `agent_tools`+`fs_mode`** | 沿用 `default`/`benchmark` | `simple`/`benchmark` 的 `agent_tools` 无 `read_file`/`create_file`，FR-3.4/3.5 不成立；override 从 server 下发，零上游改动 |
-| 11 | **`_trial_dir` 必设** | 依赖 CWD 默认 | 缺失则轨迹落 CWD 的 `logs/`，在持久卷之外，FR-4.2/4.4 失效 |
+| 9 | JWT(HS256)+argon2id | session/OAuth | 单实例足够；SSO 留二期（PR-AUTH-02） |
+| 10 | **profile 用 `tui` + `profile_overrides` 下发 `agent_tools`+`fs_mode`** | 沿用 `default`/`benchmark` | `simple`/`benchmark` 无文件工具；当前 Web override 还需修复金融工具遮蔽（PR-DATA-04） |
+| 11 | **`_trial_dir` 必设** | 依赖 CWD 默认 | 缺失则轨迹落 CWD 的 `logs/`，在持久卷之外，PR-GOV-02/05 失效 |
 | 12 | **镜像用 `deploy/Dockerfile.web`** | 根 `Dockerfile` | 根 Dockerfile 是 apodex agent 镜像，被 compose.yaml / docker/ / CI 引用，不可覆盖 |
 | 13 | **语料库用独立 PG 实例（18.6）+ zhparser**，与业务库 PG 16 分离 | 并入业务库 / 继续 SQLite | 语料是 Agent 的数据底座，写入模式（按需跑批）与业务库（在线事务）不同，分离后可独立备份与扩缩；SQLite 因**单写入者 + 无 host:port** 被排除（硬边界）。详见 §3.1 |
 | 14 | 语料排序用 **`ts_rank` + 标题 5× + 按文档去重 + 时效偏置** | `ts_rank_cd` / `pg_textsearch` / 服务层 rerank | 实测校准：切 PG 后 Recall@5 一度 **0%**，逐项补齐后才回到 **100%**（`pg-migration.md` §4.7）。`ts_rank_cd` 不按词频/稀有度加权，且多块文档会霸占 top-k，Recall 仅 85% |
@@ -403,17 +425,16 @@ volumes: { pgdata: {}, caddy_data: {} }
 ## 10. 目录结构（新增部分）
 
 ```text
-server/        app.py config.py orchestrator.py worker.py session.py
-               bridge.py(仅 delta，不落盘) relay.py(trajectory tail + SSE)
-               history.py store.py security.py profile.py(投研 PROFILE_OVERRIDES)
-               routes/{auth,models,sessions,runs,artifacts,usage}.py
-               alembic/
+server/        app.py config.py orchestrator.py worker.py
+               bridge.py relay.py history.py store.py security.py profile.py
+               approval.py steer.py diff.py artifacts.py usage.py
+               routes/{auth,models,sessions,runs,artifacts}.py  alembic/
                runs/<run_id>/{ws/{outputs/}, inputs/, spill/, run/{agent/trajectories/,engine.log}}
-               spike.py verify_spike.py      # M0.5 验证物，长期保留为回归门禁
-plugins/market/  base.py(MarketDataSource协议) stub.py tools.py   # akshare.py 预留
-web/           Vite+Vue3: views/{Chat,SessionList,ModelConfigs,Usage} stores/ sse.ts
-deploy/        Dockerfile.web  Caddyfile  docker-compose.yml
-docs/          requirements-user-layer.md  tech-stack.md(本文档)  plan/plan.md
+plugins/corpus/ PostgreSQL 语料、Claims、审计与服务层
+plugins/market/ ports.py service.py factory.py sink.py trace_store.py adapters/ transport/
+web/           Vite+Vue3: views/ components/ stores/ api/ sse.ts
+deploy/        Dockerfile.web Dockerfile.frontend Caddyfile docker-compose.yml
+docs/          product-requirements.md business-process.md tech-stack.md plan/
 ```
 
 - `deploy/` 已存在 `huggingface/`（HF Space，被 CI 的 `check_public_leaks.py` 与 registry 漂移检查覆盖）。平台部署文件与它并列，**不要放进 `deploy/huggingface/`**。
@@ -425,9 +446,9 @@ docs/          requirements-user-layer.md  tech-stack.md(本文档)  plan/plan.m
 |---|---|---|
 | **M0.5** | **链路 spike（已完成）** | `spike.py` + `verify_spike.py` A1–A7；`--profile tui` 7/7 通过，`--profile default` A2/A3 红（可复现，已定为 profile 契约约束） |
 | M1 | worker/orchestrator/bridge + compose 骨架 + Alembic 初始化 | ① `verify_spike.py` 在真端点上 7/7（**A2 是 Go/No-Go 门**）；② SSE 收到 delta 且 trajectory 可回放；③ 市场工具经 `profile_overrides` 出现在 agent 工具列表；④ worker 崩溃不影响主服务 |
-| M2 | 多轮/stop/产物 + FR-2 LLM 配置全套（注入+预检）+ 文件上传 | 同会话 3 轮追问上下文连贯；停止后 partial 回填 + `stopped_by` 落库；断线重连不丢事件；错误 key 预检报错；产物 size/sha256 入库 |
+| M2 | 多轮/stop/产物 + PR-LLM-01/02 模型连接全套（注入+预检）+ 文件上传 | 同会话 3 轮追问上下文连贯；停止后 partial 回填 + `stopped_by` 落库；断线重连不丢事件；错误 key 预检报错；产物 size/sha256 入库 |
 | M3 | Vue3 前端（登录+会话+模型配置页+运行详情回放）+ Caddy 上线 | 免责声明可见；移动端可读；运行详情能回放 trajectory 时间线 |
-| M4 | stub 行情工具 + 投研 prompt + 用量页(P1) | 替换真实数据源（akshare factory）无需改 Web/Agent 层 |
+| M4 | corpus/claims/同花顺工具基线已落地；Web 工具暴露、Run 级市场证据、比较层与用量页待闭合 | 以 `PR-DATA-04` 至 `PR-DATA-08`、`PR-GOV-04` 的验收为准 |
 
 **阶段 0 前置（不再与 M1 并行）**：GLM-5.3-Flash 的**工具调用**质量必须在动工前实测——`ModelProfile.tool_call_format` 默认 `native_fc` 且 ReAct 工作流**没有任何 profile 旋钮能改它**（已 grep 确认）。端点若不能稳定驱动 function calling，网页层救不回来。实测命令即 `spike.py --real`，模型名小写 `glm-5.3-flash`（官方 API enum）。
 
@@ -436,5 +457,5 @@ docs/          requirements-user-layer.md  tech-stack.md(本文档)  plan/plan.m
 - GLM-5.3-Flash 编排质量未实测（阶段 0 与 M1 并行暴露）；thinking 流经 BridgeObserver 以 delta 类型分事件转发，不全文透传防刷屏。
 - Postgres 故障面增大 → healthcheck + restart policy + 每日备份。
 - 单 api 实例 = SSE 队列在进程内；多实例需 Postgres LISTEN/NOTIFY 或 Redis 分发，二期决策。
-- `ToolRegistry.get_for_role` 角色工具 allowlist 与 profile 的匹配需 M1 实测（市场工具可见性）。
-- 开放问题沿用需求文档三条（注册策略 / 多设备登录 / 按会话切模型）。
+- Web `profile_overrides` 当前遮蔽已注册金融工具，需用真实 Run 验证工具可见性、用户隔离和产物门禁。
+- 产品开放问题与优先级统一见 [product-requirements.md](product-requirements.md)，不再在技术文档维护第二份清单。

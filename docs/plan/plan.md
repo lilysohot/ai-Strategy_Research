@@ -2,9 +2,14 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.1 · 构建基线（随进度更新；已并入 M0.5 spike 实测结论） |
-| 上游文档 | [requirements-user-layer.md](./requirements-user-layer.md) · [tech-stack.md](./tech-stack.md) |
+| 版本 / 状态 | v1.2 · **历史里程碑台账**（M0–M3 记录；不得作为当前产品状态） |
+| 上游文档 | [产品需求基线](../product-requirements.md) · [业务流程](../business-process.md) · [技术架构](../tech-stack.md) |
 | 状态图例 | ✅ 已完成 · 🔄 进行中 · ⬜ 未开始 · 🅿️ P2 暂缓 · ⛔ 阻塞 |
+
+> **文档职责修正（2026-09-12）**：本文保留 Web 平台早期 M0–M3 的实施记录；下方“当前焦点”、
+> M4 预测和测试数字是当时快照，不再代表仓库当前状态。当前需求与能力差距统一见
+> [product-requirements.md](../product-requirements.md)，投研闭环执行见
+> [claims-market-closed-loop-plan.md](./claims-market-closed-loop-plan.md)。
 
 ## 当前焦点
 
@@ -27,9 +32,9 @@
 | # | 任务 | 状态 | 产出 |
 |---|---|---|---|
 | M0.1 | 可行性评估 + apodex/FastAPI 链路复审（EventStore no-op、steer 降级、CWD 约束等修正） | ✅ | 复审报告（会话） |
-| M0.2 | 用户层需求文档定稿 | ✅ | docs/requirements-user-layer.md（v1.1） |
+| M0.2 | 产品需求基线整合 | ✅ | docs/product-requirements.md（v2.0；旧用户层文档保留兼容入口） |
 | M0.3 | 技术选型与架构文档定稿（PostgreSQL + Docker + monorepo 决策固化） | ✅ | docs/tech-stack.md（v1.2，含 §5.4 profile/工具集契约、§5.2 事件持久化修正） |
-| M0.4 | 项目计划清单建立 | ✅ | docs/plan.md（本文档） |
+| M0.4 | 项目计划清单建立 | ✅ | docs/plan/plan.md（本文档，现为历史台账） |
 
 ## M0.5 链路验证（spike，已完成）
 
@@ -134,26 +139,26 @@
 
 ---
 
-## M4 金融工具与投研闭环（第 4 周后）
+## M4 金融工具与投研闭环（历史预测；当前状态见产品需求）
 
 **目标**：stub 数据源跑通投研问答；换真实源零改 Web/Agent 层。
 
 | # | 任务 | 状态 | 要点 / 验收 |
 |---|---|---|---|
-| T4.1 | plugins/market/base.py + stub.py | ⬜ | MarketDataSource 协议（kline/financials/announcements/news）；确定性 mock CSV |
-| T4.2 | tools.py 工具注册 | ⬜ | @tool 四件套；plugins/tools/__init__.py 的 `_BUILTIN_TOOLS` 注册（+2 行，**同步改 `tests/test_tool_registry.py::EXPECTED_TOOLS`**）；**可见性经 `profile_overrides["agent"]["agent_tools"]` 从 server 下发，不落上游文件**（tech-stack §5.4） |
-| T4.3 | 投研 prompt/profile | ⬜ | **走 `metadata["profile_inline"]`**（不落文件到 `workflows/`，零上游改动、天然 bypass_cache）；`server/profile.py` 定义投研 PROFILE_OVERRIDES（agent_tools 含文件+市场工具、fs_mode=true、thinking_format=tag）；验收：agent 调用 mock 工具产出带引用的投研问答 |
+| T4.1 | 市场领域层 + mock/真实 adapter | ✅ | 已由 `plugins/market/` 的 ports/service、mock 与 fuyao REST adapter 实现；不再采用本行早期接口命名 |
+| T4.2 | 四个市场工具注册 | ✅ | `market_resolve/quote/history/financials` 已进入工具注册与 `tui` profile；真实调用和失败注入已有验证 |
+| T4.3 | 投研 Web profile | 🟡 | `server/profile.py` 已存在，但当前精确 override 遮蔽了 corpus/market/coverage/sizing/lint；按 `PR-DATA-04` 闭合后才算 Web 可用 |
 | T4.4 | 用量页（P1 项） | ⬜ | 按日/按配置聚合展示（只计量不计费） |
-| T4.5 | akshare.py 真实源 + DuckDB 缓存 | 🅿️ | factory 替换 stub；定时抓取（cron 级，日频定位）；不被 P1 阻塞 |
+| T4.5 | 真实市场源 | ✅ | 已改为 fuyao 同花顺 REST 按需取数；“AKShare + DuckDB”方案取消，market 模块不建数据仓库 |
 
 ---
 
-## P2 暂缓清单（记录在案，不进当前排期）
+## P2 暂缓及后续迁移记录
 
 | 项 | 依赖 / 触发条件 |
 |---|---|
-| steer 运行中插话 | 逆向 apodex/steer.py 的 Intervention 注入语义并验证；主链路稳定后 |
-| 审批仲裁器（挂起→卡片→放行） | 交易场景需求确认后 |
+| ~~steer 运行中插话~~ | ✅ 已在后续 Web 阶段通过 worker stdin + `SteerObserver` 实现 |
+| ~~审批仲裁器（挂起→卡片→放行）~~ | ✅ 已通过 `ApprovalObserver`、运行控制通道和 Web 审批卡实现 |
 | 多实例 SSE 分发（Postgres LISTEN/NOTIFY 或 Redis） | 单实例并发不足时 |
 | sidecar 沙箱强化（gVisor/kata） | 运行不受信第三方代码需求出现时 |
 | workflows/investment_research 多智能体投研工作流 | agent_team 编排质量实测达标后 |

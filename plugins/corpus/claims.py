@@ -1,5 +1,8 @@
 """D2：claim 抽取（LLM）——“市场一致预期”的地基。
 
+迁移状态：本文件保留 v1 兼容实现及新旧链路共用的模型/解析能力。
+正式入口为 CorpusService.extract_claims / claims_of；不再扩展旧 block 抽取规则。
+
 为什么需要它（``ths-market-data.md``）：供应商**没有**一致预期 / 机构预测接口，
 「市场一致预期」只能来自我们自己的 corpus 研报 ⇒ 必须把研报里的论断结构化出来。
 
@@ -45,6 +48,26 @@ CLAIM_KINDS = ("fact", "forecast")
 MAX_CLAIM_CHARS = 500
 
 LlmFn = Callable[[str], str]
+
+
+class LlmResponse(str):
+    """String-compatible result carrying allowlisted metadata, never reasoning/source text."""
+
+    diagnostics: dict[str, Any]
+
+    def __new__(cls, content: str, diagnostics: dict[str, Any]) -> LlmResponse:
+        result = super().__new__(cls, content)
+        result.diagnostics = diagnostics
+        return result
+
+
+class LlmCallError(RuntimeError):
+    """Safe provider failure with bounded diagnostic fields and no raw server message."""
+
+    def __init__(self, diagnostics: dict[str, Any]) -> None:
+        self.diagnostics = diagnostics
+        super().__init__(str(diagnostics.get("error_type", "LlmCallError")))
+
 
 CLAIMS_SQL = """
 CREATE TABLE IF NOT EXISTS claims (
@@ -1025,6 +1048,9 @@ def build_default_llm(usage_sink: dict[str, int] | None = None) -> LlmFn:
       推理模型会把它全部烧在 reasoning 上、``content`` 为空（实测复现过）。
       结构化抽取默认关思考；``CORPUS_LLM_THINKING=enabled`` 打开。端点不认识
       该参数（如 OpenAI 官方）时记一次告警并**自动去掉参数重试**，之后不再附带。
+    - GLM-5.3 / GLM-5.3-Flash 不能关闭思考：语料批处理默认省略 thinking，
+      使用 ``reasoning_effort=low``。这不修改 Agent/工作流配置。
+      ``CORPUS_LLM_REASONING_EFFORT`` 可显式覆盖；``provider_default`` 省略 effort。
     """
     from openai import BadRequestError, OpenAI
 
@@ -1038,6 +1064,7 @@ def build_default_llm(usage_sink: dict[str, int] | None = None) -> LlmFn:
     client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout, max_retries=0)
 
     thinking_supported = True  # 端点拒绝 thinking 参数后置 False，后续调用不再附带
+    forced_thinking = model.lower().rsplit("/", 1)[-1] in {"glm-5.3", "glm-5.3-flash"}
 
     def _create(prompt: str, extra_body: dict[str, Any] | None) -> Any:
         return client.chat.completions.create(
@@ -1053,17 +1080,59 @@ def build_default_llm(usage_sink: dict[str, int] | None = None) -> LlmFn:
 
     def _llm(prompt: str) -> str:
         nonlocal thinking_supported
-        extra = thinking_extra_body() if thinking_supported else None
+        extra = thinking_extra_body() if thinking_supported and not forced_thinking else {}
+        effort = os.environ.get("CORPUS_LLM_REASONING_EFFORT", "").strip().lower()
+        if not effort and forced_thinking:
+            effort = "low"
+        if effort == "provider_default":
+            effort = ""
+        if effort:
+            allowed = (
+                {"low", "high", "max"}
+                if forced_thinking
+                else {"low", "medium", "high", "max", "none", "minimal"}
+            )
+            if effort not in allowed:
+                raise ValueError("invalid CORPUS_LLM_REASONING_EFFORT")
+            extra = {**(extra or {}), "reasoning_effort": effort}
+        started = time.monotonic()
+        diagnostics: dict[str, Any] = {
+            "adapter_version": "corpus-chat-3",
+            "model": model,
+            "max_output_tokens": max_output_tokens(),
+            "timeout_seconds": timeout,
+            "reasoning_effort": effort or None,
+            "thinking": (extra or {}).get("thinking"),
+            "attempts": 1,
+        }
         try:
-            response = _create(prompt, extra)
-        except BadRequestError as exc:
-            if extra and "thinking" in str(exc).lower():
-                # 端点不认识 thinking（如 OpenAI 官方会 400）：降级为不带参数重试
-                thinking_supported = False
-                logger.warning("端点不认识 thinking 参数，本次起不再附带：%s", str(exc)[:120])
-                response = _create(prompt, None)
-            else:
-                raise
+            try:
+                response = _create(prompt, extra)
+            except BadRequestError as exc:
+                if extra and "thinking" in extra and "thinking" in str(exc).lower():
+                    thinking_supported = False
+                    logger.warning("端点拒绝 thinking 参数，移除该字段重试；错误原文不记录")
+                    diagnostics["attempts"] = 2
+                    diagnostics["thinking_fallback"] = True
+                    diagnostics["thinking"] = None
+                    response = _create(prompt, {k: v for k, v in extra.items() if k != "thinking"})
+                else:
+                    raise
+        except Exception as exc:
+            diagnostics.update(
+                error_type=type(exc).__name__,
+                http_status=getattr(exc, "status_code", None),
+                duration_ms=round((time.monotonic() - started) * 1000),
+            )
+            raise LlmCallError(diagnostics) from None
+        diagnostics["duration_ms"] = round((time.monotonic() - started) * 1000)
+        usage = getattr(response, "usage", None)
+        details = getattr(usage, "completion_tokens_details", None)
+        diagnostics.update(
+            prompt_tokens=getattr(usage, "prompt_tokens", None),
+            completion_tokens=getattr(usage, "completion_tokens", None),
+            reasoning_tokens=getattr(details, "reasoning_tokens", None),
+        )
         if usage_sink is not None:
             usage = getattr(response, "usage", None)
             if usage is not None:
@@ -1073,11 +1142,20 @@ def build_default_llm(usage_sink: dict[str, int] | None = None) -> LlmFn:
                 usage_sink["completion_tokens"] = usage_sink.get("completion_tokens", 0) + (
                     usage.completion_tokens or 0
                 )
+        if not response.choices:
+            diagnostics["error_type"] = "MissingResponseChoice"
+            raise LlmCallError(diagnostics)
         choice = response.choices[0]
+        content = choice.message.content or ""
+        diagnostics.update(
+            finish_reason=getattr(choice, "finish_reason", None),
+            content_chars=len(content),
+            reasoning_chars=len(getattr(choice.message, "reasoning_content", "") or ""),
+        )
         if getattr(choice, "finish_reason", None) == "length":
             logger.info(
                 "单块输出达到 max_tokens=%d 被截断，JSON 前缀将按完整对象抢救", max_output_tokens()
             )
-        return choice.message.content or ""
+        return LlmResponse(content, diagnostics)
 
     return _llm

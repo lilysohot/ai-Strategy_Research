@@ -1,0 +1,273 @@
+{
+  "manifest": {
+    "version": "corpus-expanded-holdout-1",
+    "frozen_before_execution": true,
+    "selection": "Three previously unused documents, selected by institution and layout; visually checked target pages before extraction. Convenience sample, not population accuracy.",
+    "limits": {
+      "prose_calls_per_macro_document": 2,
+      "packet_chars": 2000,
+      "timeout_seconds": 60
+    },
+    "scoring": "Exact row/column/value/unit for 12 table cells. Prose numeric retrieval and complete semantic coordinates scored separately. Whitespace-only quote alignment. No publication-year inference. No retries to improve scores. Unmatched outputs outside frozen targets are not an annotated precision denominator.",
+    "samples": [
+      {
+        "name": "beiteli_customer_table",
+        "role": "new_layout_holdout",
+        "pattern": "*2594e01d.pdf",
+        "source_rev": "f0e67b732b3f6d7b",
+        "pages": [
+          4
+        ],
+        "gold": [
+          {
+            "row": "上海银浆",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "171,188.68"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "上海银浆",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "46.95%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "帝科股份",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "59,243.00"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "帝科股份",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "16.25%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "贺利氏光伏",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "7,541.37"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "贺利氏光伏",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "2.07%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "苏州科德",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "6,817.11"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "苏州科德",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "1.87%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "日御光伏",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "6,286.82"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "日御光伏",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "1.72%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "合计",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "251076.98"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "合计",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "68.86%"
+            ],
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "name": "huatai_nfp_holdout",
+        "role": "new_institution_prose",
+        "pattern": "*d571f138.pdf",
+        "source_rev": "5e30537691c88e4e",
+        "pages": [
+          1
+        ],
+        "model_extract": true,
+        "targets": [
+          {
+            "name": "nfp_actual",
+            "number": "16.2",
+            "quote_terms": [
+              "非农",
+              "16.2"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "actual",
+            "basis": null,
+            "period_end": null
+          },
+          {
+            "name": "nfp_consensus",
+            "number": "5.6",
+            "quote_terms": [
+              "预期",
+              "5.6"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "consensus",
+            "basis": null,
+            "period_end": null
+          }
+        ],
+        "negative_rules": [
+          "no_calculate",
+          "no_inferred_year",
+          "revision_not_previous"
+        ]
+      },
+      {
+        "name": "zhongyin_nfp_yoy_holdout",
+        "role": "new_institution_semantic_negative",
+        "pattern": "*65b4b040.pdf",
+        "source_rev": "bd0a65b7c6fe481d",
+        "pages": [
+          1
+        ],
+        "model_extract": true,
+        "targets": [
+          {
+            "name": "nfp_yoy_rate",
+            "number": "0.38",
+            "quote_terms": [
+              "非农",
+              "同比",
+              "0.38"
+            ],
+            "metrics": [
+              "NFP",
+              "非农就业人数",
+              "非农就业人数同比",
+              "非农就业"
+            ],
+            "subject": "US",
+            "units": [
+              "%"
+            ],
+            "state": "actual",
+            "basis": "YoY",
+            "period_end": null
+          }
+        ],
+        "negative_rules": [
+          "no_calculate",
+          "no_inferred_year",
+          "no_borrowed_actual_consensus"
+        ]
+      }
+    ],
+    "synthetic_negative_rules": [
+      "wrong_period",
+      "wrong_metric_value",
+      "fabricated_known_at",
+      "forecast_as_fact",
+      "duplicate_identity"
+    ]
+  },
+  "manifest_hash": "008474d37099b5d2716ca2b73366f4b3a9e14f5eb9be73ebc3cea66676b0bfd3",
+  "code_hashes": {
+    "/home/administrator/FrontierAgent/scripts/corpus_holdout_eval.py": "4320907bed6f0482c16c0bfa6ec935b6c01f57af11209d9e82f93dc7929096af",
+    "plugins/corpus/__init__.py": "c9d1262d32868e347b4a612842c9575bea39090ed0ea5a82ce8337b4077778d3",
+    "plugins/corpus/audit.py": "5c64904cbc61f18153b0a384f8ecebf2a4b005f3391a6ff209f887c4c9777c44",
+    "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+    "plugins/corpus/claims_v2.py": "da867755f2fb0fd953441ca7e6b5324babefaedcd22ce9dad2279e0398d6de70",
+    "plugins/corpus/derivation.py": "2a89b9c1e3106099bc916afeac1900f84c0d354cf81376d3f223e0d66ccc0c2d",
+    "plugins/corpus/evidence.py": "b84dbdf0f8a96e089aa57e8d737b8d4d2a71b9fafb2e5edda42d35a2822729ae",
+    "plugins/corpus/evidence_pipeline.py": "96a2064ab3262ad5e8203b3dbbeead871e165ee6a923959b7db06fbc4f7d69fc",
+    "plugins/corpus/fetch.py": "c8b60024d404a7e603984253585319725f493100bcb226f83936c12aca1ab084",
+    "plugins/corpus/golden.py": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+    "plugins/corpus/index.py": "104f5202a166f38cb0a621d7b02c6218e6f2aa606271394c086c292c309e4069",
+    "plugins/corpus/ingest.py": "90d4dc2a01d160d374fdc7882820cdd378f90cfc4433fa84d5d2931ae6410e34",
+    "plugins/corpus/metadata.py": "8d623f7bdeb45d1864741c6e19f7aff43c4dfd7667374d7616c4b95f1578ef3d",
+    "plugins/corpus/research_discipline.py": "a34b6be1923d9ee4c9985d61e8ec0d5da344dc7cfb4296c81bf4881389b4d4f6",
+    "plugins/corpus/service.py": "7ab11003aabee56bd4ea365abf38ef39d53e272bc2d40fdb139cfd1602f1b563",
+    "plugins/corpus/strategy_schema.py": "bcf4fbcb0f9c267b6ab6ae381d64f52ac3559325b7a9ddfa07675a5bcc8965bf",
+    "plugins/corpus/verify.py": "350523ffaea83a92196217bfb415ae1366fda5fbcacc9b254d76512152d32ba1",
+    "scripts/corpus_evidence_pilot.py": "7010b7ef26f4076afef8b3fbebe68f5a44bd01cd88d3cb90776c8a783e2f0b77"
+  },
+  "started_at": "2026-09-12T15:53:07.242739+00:00"
+}

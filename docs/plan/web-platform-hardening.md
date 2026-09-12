@@ -2,8 +2,8 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | **v1.0 · 待开始** |
-| 上游文档 | [tech-stack.md](../tech-stack.md)（选型与 §6 数据模型） · [plan/pg-migration.md](./pg-migration.md)（语料库 PG，不在本计划范围） |
+| 版本 / 状态 | **v1.1 · 进行中**（P0 正确性已完成；P1/P2/P3 按总览推进） |
+| 上游文档 | [产品需求基线](../product-requirements.md) · [tech-stack.md](../tech-stack.md)（选型与 §6 数据模型） · [pg-migration.md](./pg-migration.md)（语料库 PG，不在本计划范围） |
 | 范围 | `server/`（FastAPI 业务层） · `web/`（Vue3 前端） · `deploy/`（Caddy/compose） · `.github/`（CI） |
 | 不在范围 | `frontier_agent/` 内核 · `workflows/` · `apodex/` · 语料库（`plugins/corpus`） · **多实例横向扩容**（见 T17，需独立架构决策） |
 | 追踪方式 | 每个任务带 `Status:` 行，取值为 `待开始` / `进行中` / `已完成` / `已搁置`；推进时只改这一行 |

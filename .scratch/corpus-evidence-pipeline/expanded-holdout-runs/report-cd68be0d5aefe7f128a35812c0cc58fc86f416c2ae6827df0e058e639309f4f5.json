@@ -1,0 +1,1116 @@
+{
+  "manifest": {
+    "version": "corpus-expanded-holdout-1",
+    "frozen_before_execution": true,
+    "selection": "Three previously unused documents, selected by institution and layout; visually checked target pages before extraction. Convenience sample, not population accuracy.",
+    "limits": {
+      "prose_calls_per_macro_document": 2,
+      "packet_chars": 2000,
+      "timeout_seconds": 60
+    },
+    "scoring": "Exact row/column/value/unit for 12 table cells. Prose numeric retrieval and complete semantic coordinates scored separately. Whitespace-only quote alignment. No publication-year inference. No retries to improve scores. Unmatched outputs outside frozen targets are not an annotated precision denominator.",
+    "samples": [
+      {
+        "name": "beiteli_customer_table",
+        "role": "new_layout_holdout",
+        "pattern": "*2594e01d.pdf",
+        "source_rev": "f0e67b732b3f6d7b",
+        "pages": [
+          4
+        ],
+        "gold": [
+          {
+            "row": "上海银浆",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "171,188.68"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "上海银浆",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "46.95%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "帝科股份",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "59,243.00"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "帝科股份",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "16.25%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "贺利氏光伏",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "7,541.37"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "贺利氏光伏",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "2.07%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "苏州科德",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "6,817.11"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "苏州科德",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "1.87%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "日御光伏",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "6,286.82"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "日御光伏",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "1.72%"
+            ],
+            "unit": "%"
+          },
+          {
+            "row": "合计",
+            "columns": [
+              "销售额（万元）"
+            ],
+            "values": [
+              "251076.98"
+            ],
+            "unit": "万元"
+          },
+          {
+            "row": "合计",
+            "columns": [
+              "占收入比例"
+            ],
+            "values": [
+              "68.86%"
+            ],
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "name": "huatai_nfp_holdout",
+        "role": "new_institution_prose",
+        "pattern": "*d571f138.pdf",
+        "source_rev": "5e30537691c88e4e",
+        "pages": [
+          1
+        ],
+        "model_extract": true,
+        "targets": [
+          {
+            "name": "nfp_actual",
+            "number": "16.2",
+            "quote_terms": [
+              "非农",
+              "16.2"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "actual",
+            "basis": null,
+            "period_end": null
+          },
+          {
+            "name": "nfp_consensus",
+            "number": "5.6",
+            "quote_terms": [
+              "预期",
+              "5.6"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "consensus",
+            "basis": null,
+            "period_end": null
+          }
+        ],
+        "negative_rules": [
+          "no_calculate",
+          "no_inferred_year",
+          "revision_not_previous"
+        ]
+      },
+      {
+        "name": "zhongyin_nfp_yoy_holdout",
+        "role": "new_institution_semantic_negative",
+        "pattern": "*65b4b040.pdf",
+        "source_rev": "bd0a65b7c6fe481d",
+        "pages": [
+          1
+        ],
+        "model_extract": true,
+        "targets": [
+          {
+            "name": "nfp_yoy_rate",
+            "number": "0.38",
+            "quote_terms": [
+              "非农",
+              "同比",
+              "0.38"
+            ],
+            "metrics": [
+              "NFP",
+              "非农就业人数",
+              "非农就业人数同比",
+              "非农就业"
+            ],
+            "subject": "US",
+            "units": [
+              "%"
+            ],
+            "state": "actual",
+            "basis": "YoY",
+            "period_end": null
+          }
+        ],
+        "negative_rules": [
+          "no_calculate",
+          "no_inferred_year",
+          "no_borrowed_actual_consensus"
+        ]
+      }
+    ],
+    "synthetic_negative_rules": [
+      "wrong_period",
+      "wrong_metric_value",
+      "fabricated_known_at",
+      "forecast_as_fact",
+      "duplicate_identity"
+    ]
+  },
+  "manifest_hash": "008474d37099b5d2716ca2b73366f4b3a9e14f5eb9be73ebc3cea66676b0bfd3",
+  "code_hashes": {
+    "/home/administrator/FrontierAgent/scripts/corpus_holdout_eval.py": "4320907bed6f0482c16c0bfa6ec935b6c01f57af11209d9e82f93dc7929096af",
+    "plugins/corpus/__init__.py": "c9d1262d32868e347b4a612842c9575bea39090ed0ea5a82ce8337b4077778d3",
+    "plugins/corpus/audit.py": "5c64904cbc61f18153b0a384f8ecebf2a4b005f3391a6ff209f887c4c9777c44",
+    "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+    "plugins/corpus/claims_v2.py": "da867755f2fb0fd953441ca7e6b5324babefaedcd22ce9dad2279e0398d6de70",
+    "plugins/corpus/derivation.py": "2a89b9c1e3106099bc916afeac1900f84c0d354cf81376d3f223e0d66ccc0c2d",
+    "plugins/corpus/evidence.py": "b84dbdf0f8a96e089aa57e8d737b8d4d2a71b9fafb2e5edda42d35a2822729ae",
+    "plugins/corpus/evidence_pipeline.py": "96a2064ab3262ad5e8203b3dbbeead871e165ee6a923959b7db06fbc4f7d69fc",
+    "plugins/corpus/fetch.py": "c8b60024d404a7e603984253585319725f493100bcb226f83936c12aca1ab084",
+    "plugins/corpus/golden.py": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+    "plugins/corpus/index.py": "104f5202a166f38cb0a621d7b02c6218e6f2aa606271394c086c292c309e4069",
+    "plugins/corpus/ingest.py": "90d4dc2a01d160d374fdc7882820cdd378f90cfc4433fa84d5d2931ae6410e34",
+    "plugins/corpus/metadata.py": "8d623f7bdeb45d1864741c6e19f7aff43c4dfd7667374d7616c4b95f1578ef3d",
+    "plugins/corpus/research_discipline.py": "a34b6be1923d9ee4c9985d61e8ec0d5da344dc7cfb4296c81bf4881389b4d4f6",
+    "plugins/corpus/service.py": "7ab11003aabee56bd4ea365abf38ef39d53e272bc2d40fdb139cfd1602f1b563",
+    "plugins/corpus/strategy_schema.py": "bcf4fbcb0f9c267b6ab6ae381d64f52ac3559325b7a9ddfa07675a5bcc8965bf",
+    "plugins/corpus/verify.py": "350523ffaea83a92196217bfb415ae1366fda5fbcacc9b254d76512152d32ba1",
+    "scripts/corpus_evidence_pilot.py": "7010b7ef26f4076afef8b3fbebe68f5a44bd01cd88d3cb90776c8a783e2f0b77"
+  },
+  "started_at": "2026-09-12T15:53:07.242739+00:00",
+  "finished_at": "2026-09-12T15:53:38.270159+00:00",
+  "samples": [
+    {
+      "name": "beiteli_customer_table",
+      "source_path": "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "source_rev": "f0e67b732b3f6d7b",
+      "doc_id": "2026-08-12_f0e67b73",
+      "run_id": "3d0bae2889957f57f189c42c9f942f1e6441c64dc0cdc7830e276a8d70f294fc",
+      "packets": 1,
+      "facts": 0,
+      "quality": {},
+      "calculation_ready": 0,
+      "packet_status": {
+        "deferred": 1
+      },
+      "complete": false,
+      "persisted_reloaded_audited": true,
+      "table_checks": [
+        {
+          "row": "上海银浆",
+          "column": "销售额（万元）",
+          "expected": "171,188.68",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "上海银浆",
+          "column": "占收入比例",
+          "expected": "46.95%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "帝科股份",
+          "column": "销售额（万元）",
+          "expected": "59,243.00",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "帝科股份",
+          "column": "占收入比例",
+          "expected": "16.25%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "贺利氏光伏",
+          "column": "销售额（万元）",
+          "expected": "7,541.37",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "贺利氏光伏",
+          "column": "占收入比例",
+          "expected": "2.07%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "苏州科德",
+          "column": "销售额（万元）",
+          "expected": "6,817.11",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "苏州科德",
+          "column": "占收入比例",
+          "expected": "1.87%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "日御光伏",
+          "column": "销售额（万元）",
+          "expected": "6,286.82",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "日御光伏",
+          "column": "占收入比例",
+          "expected": "1.72%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "合计",
+          "column": "销售额（万元）",
+          "expected": "251076.98",
+          "unit": "万元",
+          "passed": false,
+          "actual": []
+        },
+        {
+          "row": "合计",
+          "column": "占收入比例",
+          "expected": "68.86%",
+          "unit": "%",
+          "passed": false,
+          "actual": []
+        }
+      ],
+      "prose_checks": [],
+      "negative_checks": []
+    },
+    {
+      "name": "huatai_nfp_holdout",
+      "source_path": "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "source_rev": "5e30537691c88e4e",
+      "doc_id": "2026-09-06_5e305376",
+      "run_id": "162756f7c346c2c59b07255a3d6156c684718895e75a34dffa3c30bf3b983711",
+      "packets": 2,
+      "facts": 29,
+      "quality": {
+        "review": 26,
+        "ok": 3
+      },
+      "calculation_ready": 0,
+      "packet_status": {
+        "completed": 2
+      },
+      "complete": true,
+      "persisted_reloaded_audited": true,
+      "table_checks": [],
+      "prose_checks": [
+        {
+          "target": {
+            "name": "nfp_actual",
+            "number": "16.2",
+            "quote_terms": [
+              "非农",
+              "16.2"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "actual",
+            "basis": null,
+            "period_end": null
+          },
+          "retrieved": true,
+          "coordinate_pass": false,
+          "matches": [
+            {
+              "fact_id": "437896920d93f2c05e701bce81021f7ae524cd0701156ebd2fdf2ed25664b7d5",
+              "packet_id": "900a4bfa421ffaad72b4095ae9ad2f443c7151d6b9a22495264d0aff78bc6889",
+              "claim": {
+                "doc_id": "2026-09-06_5e305376",
+                "source_rev": "b6ef7178629e24477e4e0e36a2b02770c715fbe9cd9370d8fbe5ed7f18588cd6",
+                "seq": 0,
+                "locator": "1",
+                "claim_text": "美国8月新增非农就业为16.2万，大幅高于预期的5.6万",
+                "evidence_quote": "美国8 月新增非农就业为16.2 万，大幅高于预期的5.6\n万",
+                "evidence_kind": "prose",
+                "table_ref": {},
+                "scope": "macro",
+                "subject_raw": "美国",
+                "subject": "US",
+                "metric_raw": "新增非农就业",
+                "metric": "NFP",
+                "qualifiers": {
+                  "state": "actual"
+                },
+                "kind": "fact",
+                "value_text": "16.2",
+                "value_num": "16.2",
+                "unit_raw": "万",
+                "unit": "万",
+                "period_raw": "8月",
+                "period_end": null,
+                "period_grain": null,
+                "observed_at": null,
+                "known_at": "2026-09-06",
+                "quality_status": "review",
+                "reason_codes": [
+                  "period_unanchored",
+                  "period_missing"
+                ],
+                "model": "glm-5.3-flash",
+                "extractor_version": "3a1f06510fd3",
+                "lint_version": "claims-v2-lint-4",
+                "extracted_at": null
+              },
+              "metric_id": null,
+              "usable_for": [
+                "cite"
+              ],
+              "reasons": [
+                "period_unanchored",
+                "period_missing",
+                "metric_not_registered"
+              ],
+              "evidence_alignment": {
+                "end": 1178,
+                "start": 1147,
+                "method": "whitespace_only",
+                "model_quote": "美国8 月新增非农就业为16.2 万，大幅高于预期的5.6 万",
+                "source_quote": "美国8 月新增非农就业为16.2 万，大幅高于预期的5.6\n万"
+              }
+            }
+          ]
+        },
+        {
+          "target": {
+            "name": "nfp_consensus",
+            "number": "5.6",
+            "quote_terms": [
+              "预期",
+              "5.6"
+            ],
+            "metrics": [
+              "NFP",
+              "新增非农就业",
+              "非农就业",
+              "非农就业人数"
+            ],
+            "subject": "US",
+            "units": [
+              "万人"
+            ],
+            "state": "consensus",
+            "basis": null,
+            "period_end": null
+          },
+          "retrieved": true,
+          "coordinate_pass": false,
+          "matches": [
+            {
+              "fact_id": "5e896690b7fd32afdf44f76f2fa8383e8b7976ce64c47309d8f8854adc1e0b18",
+              "packet_id": "900a4bfa421ffaad72b4095ae9ad2f443c7151d6b9a22495264d0aff78bc6889",
+              "claim": {
+                "doc_id": "2026-09-06_5e305376",
+                "source_rev": "b6ef7178629e24477e4e0e36a2b02770c715fbe9cd9370d8fbe5ed7f18588cd6",
+                "seq": 0,
+                "locator": "1",
+                "claim_text": "美国8月新增非农就业市场预期为5.6万",
+                "evidence_quote": "大幅高于预期的5.6\n万",
+                "evidence_kind": "prose",
+                "table_ref": {},
+                "scope": "macro",
+                "subject_raw": "美国",
+                "subject": "US",
+                "metric_raw": "新增非农就业预期",
+                "metric": "新增非农就业预期",
+                "qualifiers": {
+                  "state": "consensus"
+                },
+                "kind": "fact",
+                "value_text": "5.6",
+                "value_num": "5.6",
+                "unit_raw": "万",
+                "unit": "万",
+                "period_raw": "8月",
+                "period_end": null,
+                "period_grain": null,
+                "observed_at": null,
+                "known_at": "2026-09-06",
+                "quality_status": "review",
+                "reason_codes": [
+                  "period_unanchored",
+                  "period_missing"
+                ],
+                "model": "glm-5.3-flash",
+                "extractor_version": "3a1f06510fd3",
+                "lint_version": "claims-v2-lint-4",
+                "extracted_at": null
+              },
+              "metric_id": null,
+              "usable_for": [
+                "cite"
+              ],
+              "reasons": [
+                "period_unanchored",
+                "period_missing",
+                "metric_not_registered"
+              ],
+              "evidence_alignment": {
+                "end": 1178,
+                "start": 1166,
+                "method": "whitespace_only",
+                "model_quote": "大幅高于预期的5.6 万",
+                "source_quote": "大幅高于预期的5.6\n万"
+              }
+            }
+          ]
+        }
+      ],
+      "negative_checks": [
+        {
+          "rule": "no_calculate",
+          "passed": true,
+          "observed_nfp_facts": 3,
+          "vacuous": false,
+          "wrong_fact_ids": []
+        },
+        {
+          "rule": "no_inferred_year",
+          "passed": true,
+          "observed_nfp_facts": 3,
+          "vacuous": false,
+          "wrong_fact_ids": []
+        },
+        {
+          "rule": "revision_not_previous",
+          "passed": true,
+          "observed_nfp_facts": 3,
+          "vacuous": false,
+          "wrong_fact_ids": []
+        }
+      ]
+    },
+    {
+      "name": "zhongyin_nfp_yoy_holdout",
+      "source_path": "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "source_rev": "bd0a65b7c6fe481d",
+      "doc_id": "2026-09-06_bd0a65b7",
+      "run_id": "ab013676b49cd5d210349a487574563ba1c222e598ab88c889cd7aaa5061dd14",
+      "packets": 2,
+      "facts": 0,
+      "quality": {},
+      "calculation_ready": 0,
+      "packet_status": {
+        "not_candidate": 2
+      },
+      "complete": true,
+      "persisted_reloaded_audited": true,
+      "table_checks": [],
+      "prose_checks": [
+        {
+          "target": {
+            "name": "nfp_yoy_rate",
+            "number": "0.38",
+            "quote_terms": [
+              "非农",
+              "同比",
+              "0.38"
+            ],
+            "metrics": [
+              "NFP",
+              "非农就业人数",
+              "非农就业人数同比",
+              "非农就业"
+            ],
+            "subject": "US",
+            "units": [
+              "%"
+            ],
+            "state": "actual",
+            "basis": "YoY",
+            "period_end": null
+          },
+          "retrieved": false,
+          "coordinate_pass": false,
+          "matches": []
+        }
+      ],
+      "negative_checks": [
+        {
+          "rule": "no_calculate",
+          "passed": true,
+          "observed_nfp_facts": 0,
+          "vacuous": true,
+          "wrong_fact_ids": []
+        },
+        {
+          "rule": "no_inferred_year",
+          "passed": true,
+          "observed_nfp_facts": 0,
+          "vacuous": true,
+          "wrong_fact_ids": []
+        },
+        {
+          "rule": "no_borrowed_actual_consensus",
+          "passed": true,
+          "observed_nfp_facts": 0,
+          "vacuous": true,
+          "wrong_fact_ids": []
+        }
+      ]
+    }
+  ],
+  "synthetic_probes": [
+    {
+      "name": "valid_control",
+      "expected_calculate": true,
+      "passed": true,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wrong_period",
+      "expected_calculate": false,
+      "passed": false,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "48eb589e3c0d9a635f653e0d42d747cedc86da17245cb8b4d3306ad777195af0",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2025A营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2025A营业收入100元",
+            "source_quote": "2025A营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wrong_metric_value",
+      "expected_calculate": false,
+      "passed": false,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c41551475735094374422b385d173e33bde954f9e059a0f8ddf0640268742c14",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "e7480769c66dda952bf532c676f29a49e2379237c3611a3b23633e0b2708e927",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入20元",
+            "evidence_quote": "2026E营业收入100元，净利润20元。",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "20元",
+            "value_num": "20",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元，净利润20元。",
+            "source_quote": "2026E营业收入100元，净利润20元。",
+            "start": 0,
+            "end": 21,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "fabricated_known_at",
+      "expected_calculate": false,
+      "passed": false,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "1990-01-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "forecast_as_fact",
+      "expected_calculate": false,
+      "passed": false,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "fact",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "duplicate_identity",
+      "expected_calculate": false,
+      "passed": false,
+      "actual_calculate": true,
+      "unique_identity": false,
+      "facts": [
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        },
+        {
+          "fact_id": "c12c111062643b06a6a9bb5c3a94177e2d8e70c0f98695e6c1b1d40ea8eb0f7f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "fact",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2537,
+    "completion_tokens": 4672
+  },
+  "business_acceptance": false,
+  "limitations": [
+    "Not population accuracy; only frozen targets are annotated",
+    "Synthetic probes are known regressions, not new holdout data",
+    "No production macro calculator is enabled",
+    "Source publication authenticity not independently verified"
+  ],
+  "rescore": {
+    "parent_report": "report-fb6c53e757d586ec1bf61876fef14417a438beeaf4288779c70bc4cf760e01e5.json",
+    "code_hashes": {
+      "/home/administrator/FrontierAgent/scripts/corpus_holdout_eval.py": "87e0cbef55bb6ce27a307e16bd0135691712c12eca89e23a6d5cb4ffdd1bfee9",
+      "plugins/corpus/__init__.py": "c9d1262d32868e347b4a612842c9575bea39090ed0ea5a82ce8337b4077778d3",
+      "plugins/corpus/audit.py": "5c64904cbc61f18153b0a384f8ecebf2a4b005f3391a6ff209f887c4c9777c44",
+      "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+      "plugins/corpus/claims_v2.py": "da867755f2fb0fd953441ca7e6b5324babefaedcd22ce9dad2279e0398d6de70",
+      "plugins/corpus/derivation.py": "2a89b9c1e3106099bc916afeac1900f84c0d354cf81376d3f223e0d66ccc0c2d",
+      "plugins/corpus/evidence.py": "b84dbdf0f8a96e089aa57e8d737b8d4d2a71b9fafb2e5edda42d35a2822729ae",
+      "plugins/corpus/evidence_pipeline.py": "96a2064ab3262ad5e8203b3dbbeead871e165ee6a923959b7db06fbc4f7d69fc",
+      "plugins/corpus/fetch.py": "c8b60024d404a7e603984253585319725f493100bcb226f83936c12aca1ab084",
+      "plugins/corpus/golden.py": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+      "plugins/corpus/index.py": "104f5202a166f38cb0a621d7b02c6218e6f2aa606271394c086c292c309e4069",
+      "plugins/corpus/ingest.py": "90d4dc2a01d160d374fdc7882820cdd378f90cfc4433fa84d5d2931ae6410e34",
+      "plugins/corpus/metadata.py": "8d623f7bdeb45d1864741c6e19f7aff43c4dfd7667374d7616c4b95f1578ef3d",
+      "plugins/corpus/research_discipline.py": "a34b6be1923d9ee4c9985d61e8ec0d5da344dc7cfb4296c81bf4881389b4d4f6",
+      "plugins/corpus/service.py": "7ab11003aabee56bd4ea365abf38ef39d53e272bc2d40fdb139cfd1602f1b563",
+      "plugins/corpus/strategy_schema.py": "bcf4fbcb0f9c267b6ab6ae381d64f52ac3559325b7a9ddfa07675a5bcc8965bf",
+      "plugins/corpus/verify.py": "350523ffaea83a92196217bfb415ae1366fda5fbcacc9b254d76512152d32ba1",
+      "scripts/corpus_evidence_pilot.py": "7010b7ef26f4076afef8b3fbebe68f5a44bd01cd88d3cb90776c8a783e2f0b77"
+    },
+    "model_calls": 0,
+    "reason": "Include claim text and metric in NFP negative scope; gold unchanged"
+  }
+}

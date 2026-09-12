@@ -1,0 +1,128 @@
+{
+  "counts": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  },
+  "document_status": {
+    "ok": 69,
+    "empty": 18
+  },
+  "document_mime": {
+    "application/pdf": 79,
+    "text/markdown": 7,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": 1
+  },
+  "block_runs": [
+    {
+      "status": "ok",
+      "n": 290
+    }
+  ],
+  "block_quality": {
+    "empty": 42,
+    "nonempty_under_100_chars": 74,
+    "over_prompt_limit": 51,
+    "prompt_limit": 2500,
+    "omitted_characters_if_each_block_prompted": 49600,
+    "all_characters": 956586,
+    "flat_tables": 63,
+    "table_appended_blocks": 9,
+    "appended_tables_beyond_prompt": 0,
+    "duplicate_locators": []
+  },
+  "claim_fields": {
+    "metric": 0,
+    "value_num": 278,
+    "unit": 424,
+    "period": 671,
+    "as_of": 0,
+    "tickers": 1205
+  },
+  "claims_by_kind": {
+    "fact": 1003,
+    "forecast": 315
+  },
+  "numeric_claims": {
+    "n": 1040,
+    "missing_unit": 146,
+    "missing_period": 506
+  },
+  "long_examples": [
+    {
+      "doc_id": "2026-09-06_5e305376",
+      "locator": "10",
+      "chars": 9268,
+      "title": "2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化"
+    },
+    {
+      "doc_id": "2026-08-16_7d3ca3b9",
+      "locator": "21",
+      "chars": 7592,
+      "title": "2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性"
+    },
+    {
+      "doc_id": "2026-08-16_7d3ca3b9",
+      "locator": "20",
+      "chars": 6963,
+      "title": "2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性"
+    },
+    {
+      "doc_id": "2026-08-16_7d3ca3b9",
+      "locator": "19",
+      "chars": 6891,
+      "title": "2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性"
+    },
+    {
+      "doc_id": "2026-08-16_7d3ca3b9",
+      "locator": "18",
+      "chars": 4886,
+      "title": "2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性"
+    }
+  ],
+  "counterexamples": {
+    "integer_cleaning": {
+      "input": "Revenue\n100\n120\nGrowth\n20%",
+      "output": "Revenue\nGrowth\n20%"
+    },
+    "missing_unit_and_period": {
+      "quality_status": "ok",
+      "reason_codes": []
+    },
+    "invented_table": {
+      "quality_status": "ok",
+      "reason_codes": []
+    },
+    "numeric_substring": {
+      "quality_status": "ok",
+      "reason_codes": []
+    },
+    "wrong_subject": {
+      "quality_status": "ok",
+      "reason_codes": []
+    },
+    "unit_projection": {
+      "value_num": "2",
+      "unit_raw": "亿元",
+      "unit": "元",
+      "quality_status": "ok"
+    }
+  },
+  "local_pdf_count": 58,
+  "maotai_page3": {
+    "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "raw_chars": 3386,
+    "clean_chars": 2830,
+    "removed_integer_line_count": 131
+  },
+  "raw_pdf_scan": {
+    "pages": 889,
+    "pages_with_integer_lines_cleaner_removes": 444,
+    "integer_lines_cleaner_removes": 7027,
+    "low_text_with_images": 47,
+    "low_text_pages_in_ok_docs": 42,
+    "note": "Counts include real page numbers and chart ticks; not all removed lines are financial facts."
+  },
+  "observed_at": "2026-09-12 13:07:32 UTC"
+}

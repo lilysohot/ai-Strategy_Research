@@ -47,6 +47,8 @@ from urllib.parse import quote
 if TYPE_CHECKING:
     # Runtime import stays inside fetch() to avoid a circular import; this one
     # exists so the annotation resolves for type checking.
+    from plugins.corpus.derivation import Calculation
+    from plugins.corpus.evidence_pipeline import EvidenceRun
     from plugins.corpus.fetch import FetchedBlock
 
 import psycopg
@@ -100,6 +102,15 @@ from plugins.corpus.metadata import (
 )
 
 logger = logging.getLogger(__name__)
+
+EVIDENCE_RUNS_SQL = """
+CREATE TABLE IF NOT EXISTS corpus_evidence_runs (
+    run_id text PRIMARY KEY, doc_id text NOT NULL, source_rev text NOT NULL,
+    parse_rev text NOT NULL, payload jsonb NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS corpus_evidence_runs_doc ON corpus_evidence_runs(doc_id, parse_rev);
+"""
 
 
 @dataclass
@@ -285,19 +296,22 @@ def dsn() -> str:
 
 
 def _dedup_claims(claims: list[Claim]) -> list[Claim]:
-    """块内去重（§3.4）：同一 ``(metric, period, kind)`` 保留最后一条。
-
-    LLM 偶尔在同一次输出里对同一指标重复给值（两次表述、两个精度）。"最后一条"
-    与逐块提交的顺序一致 —— 后给的表述是对前者的修正。``metric`` 为空的行没有
-    可比的坐标，不参与去重。
-    """
-    seen: set[tuple[str, str | None, str]] = set()
+    """Collapse identical observations, preserving different subjects and conflicting values."""
+    seen: set[tuple[object, ...]] = set()
     kept: list[Claim] = []
     for claim in reversed(claims):
         if claim.metric is None:
             kept.append(claim)
             continue
-        key = (claim.metric, claim.period, claim.kind)
+        key = (
+            tuple(sorted(claim.tickers)),
+            claim.metric,
+            claim.period,
+            claim.kind,
+            claim.value_text or claim.claim_text,
+            claim.unit,
+            claim.as_of,
+        )
         if key in seen:
             continue
         seen.add(key)
@@ -418,6 +432,7 @@ class CorpusService:
             conn.execute(LEDGER_SQL)
             conn.execute(CLAIMS_SQL)  # D2：claim 抽取（幂等，不影响既有表）
             conn.execute(CLAIMS_V2_SQL)  # D2 v2：影子抽取表，不改变生产读取路径
+            conn.execute(EVIDENCE_RUNS_SQL)
             # 老库幂等迁移：三列事实列 + doc_kind_override + 删除 entities 死字段
             conn.execute(CLAIMS_MIGRATIONS_SQL)
             # P6（§3.5）：文档级元数据四列（doc_kind/subject/org/analysts）
@@ -803,7 +818,184 @@ class CorpusService:
             )
             return list(cur.fetchall())
 
+    def save_evidence_run(self, run: EvidenceRun) -> str:
+        """Persist a content-addressed shadow revision, without replacing legacy corpus rows."""
+        from plugins.corpus.evidence_pipeline import EvidenceRun
+
+        if not isinstance(run, EvidenceRun):
+            raise TypeError("expected EvidenceRun")
+        run.verify_identity()
+        with self._lock, self._connect() as conn, conn.cursor() as cur:
+            cur.execute(EVIDENCE_RUNS_SQL)
+            cur.execute(
+                "INSERT INTO corpus_evidence_runs (run_id,doc_id,source_rev,parse_rev,payload) "
+                "VALUES (%s,%s,%s,%s,%s::jsonb) ON CONFLICT (run_id) DO NOTHING",
+                (
+                    run.run_id,
+                    run.document.doc_id,
+                    run.document.source_rev,
+                    run.document.parse_rev,
+                    run.model_dump_json(),
+                ),
+            )
+        return run.run_id
+
+    def load_evidence_run(self, run_id: str) -> EvidenceRun:
+        """Fetch and validate the exact revision named by a calculation or evidence link."""
+        from plugins.corpus.evidence_pipeline import EvidenceRun
+
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute("SELECT to_regclass('corpus_evidence_runs') AS relation")
+            relation = cur.fetchone()
+            if relation is None or relation["relation"] is None:
+                raise KeyError(run_id)
+            cur.execute("SELECT payload FROM corpus_evidence_runs WHERE run_id=%s", (run_id,))
+            row = cur.fetchone()
+        if row is None:
+            raise KeyError(run_id)
+        run = EvidenceRun.model_validate(row["payload"])
+        run.verify_identity()
+        if run.run_id != run_id:
+            raise ValueError("stored evidence run ID mismatch")
+        return run
+
+    def fetch_evidence(self, run_id: str, packet_id: str) -> dict[str, object]:
+        """Return exact source coordinates and content, rather than a search snippet."""
+        run = self.load_evidence_run(run_id)
+        return run.document.fetch(packet_id).model_dump(mode="json")
+
     def extract_claims(
+        self,
+        path: str | Path,
+        *,
+        pages: tuple[int, ...] | None = None,
+        llm: Callable[[str], str] | None = None,
+        model: str | None = None,
+        max_prose_calls: int = 0,
+        packet_chars: int = 2000,
+        persist: bool = True,
+    ) -> EvidenceRun:
+        """Canonical extraction: source → verified evidence revision, never legacy tables.
+
+        A positive prose budget explicitly enables model calls. Zero leaves prose deferred.
+        No full-corpus selection or legacy fallback is implicit in this interface.
+        """
+        from plugins.corpus.evidence_pipeline import build_evidence_run
+
+        if max_prose_calls < 0 or not 100 <= packet_chars <= 2500 or pages == ():
+            raise ValueError("invalid extraction budget, packet size or empty page selection")
+        if max_prose_calls and llm is None:
+            llm = build_default_llm()
+            model = model or configured_model()
+        run = build_evidence_run(
+            path,
+            pages=pages,
+            llm=llm,
+            model=model,
+            max_prose_calls=max_prose_calls,
+            packet_chars=packet_chars,
+        )
+        if persist:
+            self.save_evidence_run(run)
+        return run
+
+    def claims_of(
+        self,
+        *,
+        run_id: str,
+        subject: str | None = None,
+        kind: str | None = None,
+        quality_status: str | None = "ok",
+        purpose: str = "cite",
+        limit: int = 50,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        """Read one exact evidence revision with usage gates and explicit coverage.
+
+        ``audit`` may expose rejected rows; cite/compare/calculate enforce usable_for.
+        Historical validation versions remain auditable, not computation-ready.
+        Missing revisions raise KeyError; they never fall back to claims/claims_v2.
+        """
+        from plugins.corpus.evidence_pipeline import project_claims
+
+        return project_claims(
+            self.load_evidence_run(run_id),
+            subject=subject,
+            kind=kind,
+            quality_status=quality_status,
+            purpose=purpose,
+            limit=limit,
+            offset=offset,
+        )
+
+    def claim_observation_projection(
+        self,
+        *,
+        run_id: str,
+        subject: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> dict[str, object]:
+        """Comparison-ready evidence only; quality=ok alone is insufficient."""
+        return self.claims_of(
+            run_id=run_id,
+            subject=subject,
+            purpose="compare",
+            limit=limit,
+            offset=offset,
+        )
+
+    def derive_claims(
+        self,
+        *,
+        run_id: str,
+        formula: str,
+        input_ids: tuple[str, ...],
+    ) -> Calculation:
+        """Calculate against the same stored revision exposed by claims_of."""
+        from plugins.corpus.derivation import derive
+        from plugins.corpus.evidence_pipeline import validation_is_current
+
+        run = self.load_evidence_run(run_id)
+        if not validation_is_current(run):
+            raise ValueError("validation_version_stale")
+        return derive(run, formula, input_ids)
+
+    def reconcile_claims(self, *, run_id: str) -> list[dict[str, Any]]:
+        """Read-only financial basis review; historical evidence is not promoted."""
+        from plugins.corpus.derivation import reconcile_net_margin
+
+        return reconcile_net_margin(self.load_evidence_run(run_id))
+
+    def claim_runs(
+        self,
+        *,
+        doc_id: str | None = None,
+        limit: int = 20,
+    ) -> list[dict[str, object]]:
+        """Discover revisions, without selecting a supposedly complete/latest winner."""
+        if not 1 <= limit <= 1000:
+            raise ValueError("limit must be between 1 and 1000")
+        sql = "SELECT payload FROM corpus_evidence_runs"
+        params: list[object] = []
+        if doc_id:
+            sql += " WHERE doc_id=%s"
+            params.append(doc_id)
+        sql += " ORDER BY created_at DESC, run_id LIMIT %s"
+        params.append(limit)
+        from plugins.corpus.evidence_pipeline import EvidenceRun, claim_run_context
+
+        with self._connect() as conn, conn.cursor() as cur:
+            # Older databases with only legacy data have no evidence revisions yet.
+            cur.execute("SELECT to_regclass('corpus_evidence_runs') AS relation")
+            relation = cur.fetchone()
+            if relation is None or relation["relation"] is None:
+                return []
+            cur.execute(cast(LiteralString, sql), params)
+            runs = [EvidenceRun.model_validate(row["payload"]) for row in cur.fetchall()]
+        return [claim_run_context(run) for run in runs]
+
+    def extract_legacy_claims(
         self,
         *,
         llm: Callable[[str], str] | None = None,
@@ -1256,12 +1448,10 @@ class CorpusService:
         ``attempts`` 只统计**当前指纹**下的次数：指纹变了就归 1，否则"换个模型
         重试"会被上一个模型累计的失败次数直接判成死信。
 
-        **跨块去重（§3.4 缺陷 4）**：同一 ``(doc_id, metric, period, kind)`` 在
-        多个块重复出现（如 毛利率 2026E 文字块 90.4% / 表格块 90.42%，文本不同
-        ``ON CONFLICT`` 挡不住），按标的聚合时会被**重复计数**。口径：序号更大
-        （更靠后）的块覆盖之前的 —— 与逐块提交顺序一致，只删 ``seq < 当前块`` 的
-        旧行，重抽靠前的块永远不会碰掉靠后块已落库的结果。``metric`` 为空的行
-        没有可比坐标，不参与。块内重复由 :func:`_dedup_claims` 先收一次。
+        **跨块去重**：仅合并主体、指标、期间、类型、原数值、单位与观察日均相同
+        的重复观测。90.4% / 90.42% 等不同值保留为未决冲突，不能按页码裁决真伪；
+        不同主体不互相覆盖。仅删除更早块的完全相同观测，缺指标或原数值不参与。
+        下游不得直接把候选行相加；块内重复由 :func:`_dedup_claims` 先收一次。
 
         返回本次实际插入的 claim 行数（``ON CONFLICT DO NOTHING`` 后的净增，
         重跑同一块时为 0，不会重复计数）。
@@ -1304,21 +1494,29 @@ class CorpusService:
                             (str(doc_id), int(seq)),
                         )
                 if rows:
-                    # 跨块去重（§3.4 缺陷 4）：删掉更靠前块里同坐标的旧行。
-                    # IS NOT DISTINCT FROM 让 NULL period 也参与比较（目标价这类
-                    # 不带期间的指标在多个块重复时同样只留一条）。
-                    # 排序键把 None 归到 ""：同块内 period 混有 NULL 与字符串时
-                    # （表格块常见），tuple 直接比较会 TypeError。
-                    triples = sorted(
-                        {(c.metric, c.period, c.kind) for c in claims if c.metric is not None},
-                        key=lambda t: (t[0], t[1] or "", t[2]),
-                    )
-                    for metric, period, kind in triples:
+                    # 只合并同主体、同坐标且原值相同的旧观测；保留不同值供冲突审计。
+                    for claim in claims:
+                        if claim.metric is None or claim.value_text is None:
+                            continue
                         cur.execute(
                             "DELETE FROM claims WHERE doc_id = %s AND seq < %s "
                             "AND metric IS NOT DISTINCT FROM %s "
-                            "AND period IS NOT DISTINCT FROM %s AND kind = %s",
-                            (str(doc_id), int(seq), metric, period, kind),
+                            "AND period IS NOT DISTINCT FROM %s AND kind = %s "
+                            "AND tickers @> %s::text[] AND tickers <@ %s::text[] "
+                            "AND value_text IS NOT DISTINCT FROM %s "
+                            "AND unit IS NOT DISTINCT FROM %s AND as_of IS NOT DISTINCT FROM %s",
+                            (
+                                str(doc_id),
+                                int(seq),
+                                claim.metric,
+                                claim.period,
+                                claim.kind,
+                                list(claim.tickers),
+                                list(claim.tickers),
+                                claim.value_text,
+                                claim.unit,
+                                claim.as_of,
+                            ),
                         )
                     cur.executemany(
                         "INSERT INTO claims (doc_id, seq, locator, claim_text, kind, tickers, "
@@ -1577,7 +1775,7 @@ class CorpusService:
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
-    def claims_of(
+    def legacy_claims_of(
         self,
         *,
         doc_id: str | None = None,
@@ -1653,7 +1851,7 @@ class CorpusService:
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
-    def claim_observation_projection(
+    def legacy_v2_observation_projection(
         self,
         *,
         doc_id: str | None = None,
@@ -1677,6 +1875,8 @@ class CorpusService:
                 "value_text": row["value_text"],
                 "value_num": row["value_num"],
                 "unit": row["unit"],
+                "unit_raw": row["unit_raw"],
+                "period_grain": row["period_grain"],
                 "period_end": row["period_end"],
                 "known_at": row["known_at"],
                 "quality_status": row["quality_status"],
@@ -1710,7 +1910,7 @@ class CorpusService:
         limit: int = 1000,
     ) -> dict[str, object]:
         """v1/v2 影子差异摘要：新增、删除、证据/坐标/数值/时间/状态变化。"""
-        v1 = self.claims_of(doc_id=doc_id, limit=limit)
+        v1 = self.legacy_claims_of(doc_id=doc_id, limit=limit)
         v2 = self.claims_v2_of(doc_id=doc_id, quality_status=None, limit=limit)
         v1_by_text = {str(row["claim_text"]): row for row in v1}
         v2_by_text = {str(row["claim_text"]): row for row in v2}
@@ -1809,6 +2009,14 @@ class CorpusService:
     # 台账是断点续跑的跳过标记，丢了它的后果不是"少几行"，而是恢复后所有块
     # 都被判定为"没做过" —— 已经花过的钱要再花一遍。
     _BACKUP_COLUMNS: ClassVar[dict[str, tuple[str, ...]]] = {
+        "corpus_evidence_runs": (
+            "run_id",
+            "doc_id",
+            "source_rev",
+            "parse_rev",
+            "payload",
+            "created_at",
+        ),
         "documents": (
             "doc_id",
             "title",
@@ -2448,7 +2656,13 @@ def _main() -> int:
     p_restore.add_argument("--src", required=True, help="备份目录或 corpus.dump 文件")
     p_restore.add_argument("--db", required=True, help="目标库 DSN，务必确认")
 
-    p_claims = sub.add_parser("extract-claims", help="D2：分级 + LLM 抽取 claim 并落库")
+    p_claims = sub.add_parser("extract-claims", help="源文件 → 新证据链；旧抽取须显式选择")
+    p_claims.add_argument("--source", type=Path, help="新版：一个源文件，不隐式跑全库")
+    p_claims.add_argument("--pages", type=int, nargs="+", help="新版：PDF 页码（从 1 开始）")
+    p_claims.add_argument("--prose-calls", type=int, default=0, help="新版：正文调用上限，默认 0")
+    p_claims.add_argument("--packet-chars", type=int, default=2000)
+    extract_mode = p_claims.add_mutually_exclusive_group()
+    extract_mode.add_argument("--legacy", action="store_true", help="兼容：显式写旧 claims 表")
     p_claims.add_argument(
         "--limit", type=int, default=None, help="最多处理多少个候选块（先跑小样本）"
     )
@@ -2464,10 +2678,10 @@ def _main() -> int:
         action="store_true",
         help="只统计将抽取多少块 / 预计多少次 LLM 调用与耗时，不真正调模型（错峰前规划批次用）",
     )
-    p_claims.add_argument(
+    extract_mode.add_argument(
         "--v2",
         action="store_true",
-        help="写入 claims_v2 影子表并保留 review/rejected 审计记录；默认仍写 v1 claims",
+        help="兼容：旧 block 抽取写 claims_v2 影子表，不是新证据链",
     )
     p_claims.add_argument(
         "--max-consecutive-failures",
@@ -2484,13 +2698,20 @@ def _main() -> int:
     p_claims.add_argument("--db", default=None)
 
     p_show_claims = sub.add_parser("claims", help="查询已抽取的 claim（D3/D4 的数据源）")
+    p_show_claims.add_argument("--run-id", help="新版：必须指定精确证据版本")
+    p_show_claims.add_argument(
+        "--purpose", choices=["cite", "compare", "calculate", "audit"], default="cite"
+    )
+    p_show_claims.add_argument("--offset", type=int, default=0)
     p_show_claims.add_argument("--doc", default=None)
     p_show_claims.add_argument("--ticker", default=None, help="按标的代码过滤，如 600519.SH")
     p_show_claims.add_argument(
         "--subject", default=None, help="v2 subject 过滤；company 下等价于 ticker"
     )
     p_show_claims.add_argument("--kind", default=None, choices=["fact", "forecast", "opinion"])
-    p_show_claims.add_argument("--v2", action="store_true", help="读取 claims_v2 影子表")
+    read_mode = p_show_claims.add_mutually_exclusive_group()
+    read_mode.add_argument("--v2", action="store_true", help="兼容：读取 claims_v2 影子表")
+    read_mode.add_argument("--legacy", action="store_true", help="兼容：只读旧 claims 表")
     p_show_claims.add_argument(
         "--quality",
         default="ok",
@@ -2499,6 +2720,26 @@ def _main() -> int:
     )
     p_show_claims.add_argument("--limit", type=int, default=50)
     p_show_claims.add_argument("--db", default=None)
+
+    p_claim_runs = sub.add_parser("claim-runs", help="发现新证据版本及实际处理范围")
+    p_claim_runs.add_argument("--doc", default=None)
+    p_claim_runs.add_argument("--limit", type=int, default=20)
+    p_claim_runs.add_argument("--db", default=None)
+
+    p_derive = sub.add_parser("derive-claims", help="按同一证据版本和事实 IDs 复算")
+    p_derive.add_argument("--run-id", required=True)
+    p_derive.add_argument("--formula", required=True)
+    p_derive.add_argument("--inputs", required=True, nargs="+")
+    p_derive.add_argument("--db", default=None)
+
+    p_reconcile = sub.add_parser("reconcile-claims", help="只读复核源净利率与明确公式的差异")
+    p_reconcile.add_argument("--run-id", required=True)
+    p_reconcile.add_argument("--db", default=None)
+
+    p_evidence = sub.add_parser("claim-evidence", help="读取指定证据版本中的原文及坐标")
+    p_evidence.add_argument("--run-id", required=True)
+    p_evidence.add_argument("--packet-id", required=True)
+    p_evidence.add_argument("--db", default=None)
 
     p_diff = sub.add_parser("claim-diff", help="D2 v1/v2 影子差异报告")
     p_diff.add_argument("--doc", default=None)
@@ -2540,9 +2781,35 @@ def _main() -> int:
     p_snap.add_argument("--db", default=None)
 
     args = parser.parse_args()
+    if args.cmd == "extract-claims":
+        if args.legacy or args.v2:
+            if args.source or args.pages or args.prose_calls or args.packet_chars != 2000:
+                parser.error("旧抽取不能混用 --source/--pages/--prose-calls/--packet-chars")
+        else:
+            if not args.source or args.doc or vars(args).get("limit") is not None or args.dry_run:
+                parser.error("新抽取需要 --source；旧批处理参数须显式指定 --legacy 或 --v2")
+            if args.prose_calls < 0 or not 100 <= args.packet_chars <= 2500:
+                parser.error("--prose-calls 必须非负；--packet-chars 必须在 100—2500")
+    if args.cmd == "claims":
+        if args.legacy or args.v2:
+            if args.run_id or args.purpose != "cite" or args.offset:
+                parser.error("旧查询不能混用新版 run-id/purpose/offset；旧表不提供计算许可")
+        elif not args.run_id or args.doc:
+            parser.error("新查询需要 --run-id；用 claim-runs --doc 查找版本，旧表须显式选择")
     svc = get_service(args.db)
 
     if args.cmd == "extract-claims":
+        if not (args.legacy or args.v2):
+            from plugins.corpus.evidence_pipeline import claim_run_context
+
+            run = svc.extract_claims(
+                args.source,
+                pages=tuple(args.pages) if args.pages else None,
+                max_prose_calls=args.prose_calls,
+                packet_chars=args.packet_chars,
+            )
+            print(json.dumps(claim_run_context(run), ensure_ascii=False, indent=2))
+            return 0 if run.summary()["complete"] else 1
         doc_ids = [args.doc] if args.doc else None
         # 幂等建表：块级台账（claim_block_runs）是后加的，老库必须先迁移，
         # 否则第一次跑会因为"表不存在"直接失败。
@@ -2571,7 +2838,7 @@ def _main() -> int:
             with contextlib.suppress(ValueError, OSError):  # 非主线程 / 平台不支持
                 previous_handlers[sig] = signal.signal(sig, _request_stop)
         try:
-            extract = svc.extract_claims_v2 if args.v2 else svc.extract_claims
+            extract = svc.extract_claims_v2 if args.v2 else svc.extract_legacy_claims
             stats = extract(
                 doc_ids=doc_ids,
                 limit=args.limit,
@@ -2620,11 +2887,54 @@ def _main() -> int:
                 quality_status=None if args.quality == "all" else args.quality,
                 limit=args.limit,
             )
-        else:
-            rows = svc.claims_of(
+        elif args.legacy:
+            rows = svc.legacy_claims_of(
                 doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit
             )
+        else:
+            result = svc.claims_of(
+                run_id=args.run_id,
+                subject=args.subject or args.ticker,
+                kind=args.kind,
+                quality_status=None if args.quality == "all" else args.quality,
+                purpose=args.purpose,
+                limit=args.limit,
+                offset=args.offset,
+            )
+            print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+            return 0
         print(json.dumps(rows, ensure_ascii=False, indent=2, default=str))
+        return 0
+
+    if args.cmd == "claim-runs":
+        print(
+            json.dumps(
+                svc.claim_runs(doc_id=args.doc, limit=args.limit), ensure_ascii=False, indent=2
+            )
+        )
+        return 0
+
+    if args.cmd == "derive-claims":
+        calculation = svc.derive_claims(
+            run_id=args.run_id,
+            formula=args.formula,
+            input_ids=tuple(args.inputs),
+        )
+        print(calculation.model_dump_json(indent=2))
+        return 0
+
+    if args.cmd == "reconcile-claims":
+        print(json.dumps(svc.reconcile_claims(run_id=args.run_id), ensure_ascii=False, indent=2))
+        return 0
+
+    if args.cmd == "claim-evidence":
+        print(
+            json.dumps(
+                svc.fetch_evidence(args.run_id, args.packet_id),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return 0
 
     if args.cmd == "claim-diff":

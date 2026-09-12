@@ -4,10 +4,11 @@
 |---|---|
 | 状态 | **有效 · 代码侧已实施 · 发布验收中** |
 | 日期 | 2026-09-12 |
-| 替代文档 | [D2 Claims 质量加固执行清单](./d2-claims-quality-hardening.md) · [D2 Claims v2 架构重塑设计](./d2-claims-v2-design.md) |
+| 替代文档 | [D2 Claims 质量加固执行清单](./d2-claims-quality-hardening-失效.md) · [D2 Claims v2 架构重塑设计](./d2-claims-v2-design-失效.md) |
 | 上游设计 | [D2 Claims 设计](./d2-claims-design.md) |
 | 关联闭环 | [Claims × 同花顺闭环](./claims-market-closed-loop-plan.md) · [投研双数据链路优化报告](./research-data-closed-loop-optimization-report.md) |
 | 主要代码 | `plugins/corpus/claims.py`、`plugins/corpus/claims_v2.py`、`plugins/corpus/service.py`、`plugins/corpus/audit.py`、`tests/test_corpus_claims.py`、`tests/test_corpus_claims_v2.py`、`tests/test_corpus_metadata.py` |
+| 当前验收范围 | **PG 现有 87 份全量数据**（2026-09-12 用户确认 84 份全量验收；随后新增 3 份个股研报并纳入验收） |
 | 总目标 | 将 Claims 建成可靠的证据生产层：每条断言原子、可回链、语义坐标明确、确定性字段可重算、质量状态可审计，并能安全交给后续比较与判断层 |
 
 > 本文档是 Claims 优化的唯一有效执行计划。被替代的两份旧文档仅保留设计演进记录，
@@ -15,6 +16,28 @@
 
 > 进度标记（2026-09-12）：`[√]` 表示已经在代码或自动化测试中落地；仍为 `[ ]`
 > 的条目需要金标样本、真实语料影子运行、人工评审、发布切换或备份恢复演练确认。
+
+> C1 标注进展（2026-09-12）：用户已完成 180 条 full 样本块级标注，文件为
+> `data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.csv`；
+> `label_notes` 暴露出的个人交易记录误放行、免责声明/销售通讯录噪声、债券/QE 宏观
+> 分类和中英文混杂样本已进入 C2 规则与测试。金标表已新增 `label_content_genre`
+> 人工标签和 `suggested_content_genre` 系统建议，用于区分 research_report、
+> market_commentary、personal_trade_log、disclaimer、sales_contact 等内容类型；个人
+> 交易记录有参考价值时可进入抽取，不再天然视为噪声。
+> 字段级 Claim 金标仍需继续补齐；当前 `label_claims_json=claim` 可作为块级正例占位。
+
+> C2 full180 块级复核（2026-09-12）：已更新
+> `data/corpus/.audit/c2_full180_block_validation_20260912.md` 与
+> `data/corpus/.audit/c2_full180_review_queue_20260912.csv`。当前结论是“C2 full180
+> 块级门槛通过”：`label_candidate` 无空值，个人交易口径无冲突；triage precision
+> 100.0%、recall 100.0%，doc-kind accuracy 100.0%，review queue 为空。
+
+> C3/C4 字段级金标准备（2026-09-12）：已生成优先 50 条字段级模板
+> `data/corpus/.audit/c3c4_field_gold_priority50_20260912.csv`、全量 133 条正例骨架
+> `data/corpus/.audit/c3c4_field_gold_all133_skeleton_20260912.csv`、字段字典
+> `data/corpus/.audit/c3c4_field_dictionary_20260912.csv` 和标注说明
+> `data/corpus/.audit/c3c4_field_gold_instructions_20260912.md`。当前状态是模板就绪，
+> 仍需人工补齐字段级 Claim 后，再计算原文可回链率、字段有效率、数字忠实率和期间锚定率。
 
 ## 1. 范围与完成定义
 
@@ -187,7 +210,8 @@ ArgumentAudit            论证是否过度或遗漏反证
 
 ### 6.1 金标样本
 
-- [ ] 分层选择至少 180 个块：company、industry、macro 各至少 60 个。
+- [√] 分层选择至少 180 个块：company、industry、macro 各至少 60 个。
+- [√] 生成 C3/C4 字段级 Claim 优先模板、全量正例骨架和字段字典。
 - [ ] 覆盖数字事实、预测、无数字评级、宏观实际/预期/前值。
 - [ ] 覆盖普通表格、压平长表、一行多期间、多单位、表头缺失和会计括号负数。
 - [ ] 覆盖公司报告中的同业比较、行业报告中的多公司代码和无代码文档。
@@ -206,17 +230,17 @@ ArgumentAudit            论证是否过度或遗漏反证
 - [ ] 输出原文可回链率、数字忠实率、字段有效率、坐标合法率和期间锚定率。
 - [ ] 输出空结果率、失败率、截断率、平均 token 和耗时。
 - [ ] 区分候选漏失、LLM 错误、确定性解析错误和持久化错误。
-- [ ] 保存当前 v1 结果快照，作为 v2 差异对照。
+- [√] 保存当前 v1 结果快照，作为 v2 差异对照。
 
 **验收**：相同语料、配置和版本可重复生成相同报告；指标定义和标注规则进入版本控制。
 
 ## 7. C2：候选召回与文档分类（P0）
 
 - [√] 将 triage 内部结果改为“是否候选 + 原因码”。
-- [√] 至少支持 `numeric / rating / noise / no_signal`。
+- [√] 至少支持 `numeric / rating / personal_trade / qualitative / noise / no_signal`。
 - [√] 放行“维持买入”“上调至增持”“Buy”“Neutral”“Overweight”等无数字评级。
 - [√] 继续过滤评级定义页、免责声明、联系人和分析师名单。
-- [ ] 为中英文评级增加正例和至少三类误放行反例。
+- [√] 为中英文评级增加正例和至少三类误放行反例。
 - [√] 新增 `classify_doc_kind_detail()`，返回 `kind / reason / confidence`。
 - [√] 保持 `classify_doc_kind()` 现有 Interface。
 - [√] 统一分类原因码：`manual_override`、`title_ticker`、`single_body_ticker`、
@@ -226,6 +250,8 @@ ArgumentAudit            论证是否过度或遗漏反证
 - [ ] 单列评级候选数量、有效输出数量和空输出数量，评估新增成本。
 
 **验收**：纯评级候选召回率 ≥95%；文档分类准确率 ≥95%；数字类召回不下降；噪声金标不新增误放行。
+
+**实测（2026-09-12 full180）**：候选 precision 100.0%、recall 100.0%；文档分类准确率 100.0%；review queue 为空。
 
 ## 8. C3：原文忠实性与抽取安全（P0）
 

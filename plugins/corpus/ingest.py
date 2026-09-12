@@ -36,6 +36,7 @@ from pathlib import Path
 
 import pymupdf
 from docx import Document as DocxDocument
+from docx.table import Table
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ BOILERPLATE_PATTERNS: tuple[str, ...] = (
     r"^\s*本报告由.*仅供.*使用\s*$",
     r"^\s*本报告不构成.*投资建议\s*$",
     r"^\s*(第\s*)?\d+\s*/\s*\d+\s*(页)?\s*$",  # "3 / 22" 页码行
-    r"^\s*-?\s*\d+\s*-?\s*$",  # 孤立的页码
+    # Standalone integers may be financial cells. Removing page numbers needs coordinates.
     r"^\s*请务必阅读.*免责声明.*$",
     r"^\s*未经.*书面许可.*不得.*$",
 )
@@ -237,13 +238,17 @@ def parse_docx(path: str | Path) -> list[Block]:
             seq += 1
         buffer = []
 
-    for index, paragraph in enumerate(document.paragraphs):
+    for index, paragraph in enumerate(document.iter_inner_content()):
+        if isinstance(paragraph, Table):
+            buffer.append(_render_table([[cell.text for cell in row.cells] for row in paragraph.rows]))
+            continue
         text = paragraph.text.strip()
         style = (paragraph.style.name or "") if paragraph.style is not None else ""
         if style.lower().startswith("heading") and text:
             flush()
             current_locator = text
             fallback_index = index
+            buffer.append(text)
             continue
         if text:
             buffer.append(text)
@@ -278,6 +283,7 @@ def parse_markdown(path: str | Path) -> list[Block]:
         if re.match(r"^#{1,6}\s+", line):
             flush()
             current_locator = line.lstrip("#").strip() or current_locator
+            buffer.append(line)
             continue
         buffer.append(line)
     flush()

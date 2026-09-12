@@ -200,20 +200,20 @@ def test_end_to_end_extract_and_query(scratch_dsn, tiny_corpus) -> None:
     ingest = svc.ingest_dir(tiny_corpus)
     assert ingest.added >= 1, ingest.as_dict()
 
-    stats = svc.extract_claims(llm=lambda prompt: FAKE_RESPONSE)
+    stats = svc.extract_legacy_claims(llm=lambda prompt: FAKE_RESPONSE)
 
     assert stats.failed == 0, stats.as_dict()
     assert stats.claims == 2, stats.as_dict()
     assert stats.skipped_no_signal >= 0
 
     # ① 可按标的查（D3 挖掘 / D4 共识度的入口）
-    by_ticker = svc.claims_of(ticker="600519.SH")
+    by_ticker = svc.legacy_claims_of(ticker="600519.SH")
     assert len(by_ticker) == 2
     assert all("600519.SH" in row["tickers"] for row in by_ticker)
 
     # ② 可按类型查（fact / forecast）
-    assert len(svc.claims_of(kind="forecast")) == 1
-    assert len(svc.claims_of(kind="fact")) == 1
+    assert len(svc.legacy_claims_of(kind="forecast")) == 1
+    assert len(svc.legacy_claims_of(kind="fact")) == 1
 
     # ③ locator 与 blocks 对齐 ⇒ claim 可溯源回原文
     for row in by_ticker:
@@ -224,9 +224,9 @@ def test_end_to_end_extract_and_query(scratch_dsn, tiny_corpus) -> None:
 def test_extract_is_idempotent(scratch_dsn, tiny_corpus) -> None:
     """重跑不得重复入库（UNIQUE + ON CONFLICT DO NOTHING）。"""
     svc = CorpusService(scratch_dsn)
-    before = len(svc.claims_of(limit=100))
-    svc.extract_claims(llm=lambda prompt: FAKE_RESPONSE)
-    after = len(svc.claims_of(limit=100))
+    before = len(svc.legacy_claims_of(limit=100))
+    svc.extract_legacy_claims(llm=lambda prompt: FAKE_RESPONSE)
+    after = len(svc.legacy_claims_of(limit=100))
     assert after == before, "重跑抽取产生了重复 claim"
 
 
@@ -240,7 +240,7 @@ def test_single_block_failure_does_not_stop_batch(scratch_dsn, tiny_corpus) -> N
     # skip_existing=False：本测试要验证「LLM 失败也记 failure 不中断」，
     # 但同一 scratch 库里前面的测试已抽取过这些块 —— 不关掉断点续跑，
     # 它们会被直接跳过，failed 恒为 0，验证就失效了。
-    stats = svc.extract_claims(llm=flaky_llm, retry_attempts=1, skip_existing=False)
+    stats = svc.extract_legacy_claims(llm=flaky_llm, retry_attempts=1, skip_existing=False)
 
     assert stats.failed >= 1, stats.as_dict()
     assert stats.failures, "失败必须带 locator 与原因，便于重试"
@@ -357,7 +357,7 @@ def test_block_claims_survive_a_later_failure(fresh_svc) -> None:
             return _claim_json("第一块已落库 1741 亿元")
         raise RuntimeError("429 Too Many Requests")
 
-    stats = fresh_svc.extract_claims(
+    stats = fresh_svc.extract_legacy_claims(
         llm=llm,
         retry_attempts=1,
         sleep_between=0,
@@ -365,7 +365,7 @@ def test_block_claims_survive_a_later_failure(fresh_svc) -> None:
     )
 
     assert stats.failed >= 1, stats.as_dict()
-    texts = [str(row["claim_text"]) for row in fresh_svc.claims_of(limit=100)]
+    texts = [str(row["claim_text"]) for row in fresh_svc.legacy_claims_of(limit=100)]
     assert any("第一块已落库" in text for text in texts), (
         "失败 / 中断后已完成块的 claim 丢了 —— 这正是要修的失败模式"
     )
@@ -381,7 +381,7 @@ def test_stop_request_keeps_committed_blocks(fresh_svc) -> None:
         seen["n"] += 1
         return _claim_json(f"第 {seen['n']} 块已落库")
 
-    stats = fresh_svc.extract_claims(
+    stats = fresh_svc.extract_legacy_claims(
         llm=llm,
         retry_attempts=1,
         sleep_between=0,
@@ -391,7 +391,7 @@ def test_stop_request_keeps_committed_blocks(fresh_svc) -> None:
     assert stats.stopped_early is True
     assert stats.stopped_reason, "提前退出必须说明原因"
     assert seen["n"] == 1, "中断后不该再调模型"
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert len(rows) == 1 and "第 1 块已落库" in str(rows[0]["claim_text"])
 
 
@@ -403,12 +403,12 @@ def test_rerun_skips_blocks_that_yielded_zero_claims(fresh_svc) -> None:
         calls["n"] += 1
         return "[]"
 
-    first = fresh_svc.extract_claims(llm=empty_llm, retry_attempts=1, sleep_between=0)
+    first = fresh_svc.extract_legacy_claims(llm=empty_llm, retry_attempts=1, sleep_between=0)
     assert first.candidates == len(COMMIT_BLOCKS) and first.claims == 0
     assert calls["n"] == len(COMMIT_BLOCKS)
 
     calls["n"] = 0
-    second = fresh_svc.extract_claims(llm=empty_llm, retry_attempts=1, sleep_between=0)
+    second = fresh_svc.extract_legacy_claims(llm=empty_llm, retry_attempts=1, sleep_between=0)
 
     assert calls["n"] == 0, "抽出 0 条的块被重复调用了 LLM（重复花钱）"
     assert second.skipped_existing == len(COMMIT_BLOCKS)
@@ -427,7 +427,7 @@ def test_failed_blocks_are_retried_on_rerun(fresh_svc) -> None:
             raise RuntimeError("429 Too Many Requests")
         return _claim_json("第二轮补上了 1741 亿元")
 
-    first = fresh_svc.extract_claims(
+    first = fresh_svc.extract_legacy_claims(
         llm=flaky,
         retry_attempts=1,
         sleep_between=0,
@@ -435,7 +435,7 @@ def test_failed_blocks_are_retried_on_rerun(fresh_svc) -> None:
     )
     assert first.failed == len(COMMIT_BLOCKS)
 
-    second = fresh_svc.extract_claims(
+    second = fresh_svc.extract_legacy_claims(
         llm=flaky,
         retry_attempts=1,
         sleep_between=0,
@@ -464,7 +464,7 @@ def test_fingerprint_change_reextracts_and_replaces(fresh_svc, monkeypatch) -> N
         return llm
 
     seqs["n"] = 0
-    old_claims = fresh_svc.extract_claims(
+    old_claims = fresh_svc.extract_legacy_claims(
         llm=llm_factory("GLM-4.7"),
         retry_attempts=1,
         sleep_between=0,
@@ -473,14 +473,14 @@ def test_fingerprint_change_reextracts_and_replaces(fresh_svc, monkeypatch) -> N
 
     monkeypatch.setattr("plugins.corpus.service.EXTRACTOR_VERSION", "v2-test")
     seqs["n"] = 0
-    new_claims = fresh_svc.extract_claims(
+    new_claims = fresh_svc.extract_legacy_claims(
         llm=llm_factory("AirX"),
         retry_attempts=1,
         sleep_between=0,
     )
 
     assert new_claims.claims == len(COMMIT_BLOCKS), "指纹变了却没重抽 —— 换模型会静默失效"
-    texts = [str(row["claim_text"]) for row in fresh_svc.claims_of(limit=100)]
+    texts = [str(row["claim_text"]) for row in fresh_svc.legacy_claims_of(limit=100)]
     assert sum("AirX 口径" in text for text in texts) == len(COMMIT_BLOCKS)
     assert not any("GLM-4.7 口径" in text for text in texts), "两代模型的结果混在一张表里"
 
@@ -493,7 +493,7 @@ def test_circuit_breaker_stops_after_consecutive_failures(fresh_svc) -> None:
         calls["n"] += 1
         raise RuntimeError("429 Too Many Requests")
 
-    stats = fresh_svc.extract_claims(
+    stats = fresh_svc.extract_legacy_claims(
         llm=always_429,
         retry_attempts=1,
         sleep_between=0,
@@ -515,7 +515,7 @@ def test_dead_letter_is_not_retried_forever(fresh_svc) -> None:
         raise RuntimeError("429 Too Many Requests")
 
     def run():
-        return fresh_svc.extract_claims(
+        return fresh_svc.extract_legacy_claims(
             llm=always_429,
             retry_attempts=1,
             sleep_between=0,
@@ -595,14 +595,14 @@ def test_apply_doc_ticker_respects_model_value() -> None:
 
 def test_document_ticker_fallback_fills_table_blocks(fresh_svc) -> None:
     """端到端：模型没给 ticker 时，落库的 claim 必须带上文档级标的。"""
-    stats = fresh_svc.extract_claims(
+    stats = fresh_svc.extract_legacy_claims(
         llm=lambda prompt: _claim_json("营业收入 1741 亿元"),
         retry_attempts=1,
         sleep_between=0,
     )
     assert stats.claims == len(COMMIT_BLOCKS)
 
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert rows and all(list(row["tickers"]) == ["600519.SH"] for row in rows), (
         "文档级标的兜底没生效 —— 这些 claim 在按 ticker 聚合时会全部落空"
     )
@@ -724,11 +724,11 @@ def test_industry_doc_end_to_end_slot_and_tickers(fresh_svc) -> None:
         )
 
     fresh_svc.set_doc_kind(COMMIT_DOC, "industry")
-    stats = fresh_svc.extract_claims(llm=llm, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(llm=llm, retry_attempts=1, sleep_between=0)
     assert stats.claims == len(COMMIT_BLOCKS), stats.as_dict()
     assert all("<主体>.<指标>" in p for p in prompts), "industry 文档没用 industry 插槽"
 
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert rows and all(list(row["tickers"]) == [] for row in rows), (
         "industry 文档的 tickers 必须全空 —— 服务层不给文档级标的，解析层清掉模型越界值"
     )
@@ -842,11 +842,11 @@ def test_macro_doc_uses_macro_slot_and_fact_columns(fresh_svc) -> None:
         )
 
     fresh_svc.set_doc_kind(COMMIT_DOC, "macro")
-    stats = fresh_svc.extract_claims(llm=llm, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(llm=llm, retry_attempts=1, sleep_between=0)
     assert stats.claims == len(COMMIT_BLOCKS), stats.as_dict()
     assert any("US.NFP" in p for p in prompts), "macro 文档没用 macro 插槽"
 
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert rows and all(list(row["tickers"]) == [] for row in rows), (
         "macro 文档不得给文档级标的兜底（§3.1 副产品），即使正文里有代码"
     )
@@ -885,14 +885,14 @@ def test_company_doc_uses_company_slot_and_keeps_tickers(fresh_svc) -> None:
         )
 
     fresh_svc.set_doc_kind(COMMIT_DOC, "company")
-    stats = fresh_svc.extract_claims(llm=llm, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(llm=llm, retry_attempts=1, sleep_between=0)
     assert stats.claims == len(COMMIT_BLOCKS), stats.as_dict()
     assert all("公司研报" in p for p in prompts), "company 文档没用 company 插槽"
     assert all("<主体>.<指标>" not in p for p in prompts), (
         "company 插槽不得混入 industry 的编码规则"
     )
 
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert rows and all(list(row["tickers"]) == ["600519.SH"] for row in rows), (
         "company 文档的模型 tickers 是坐标本体，必须原样保留（§3.3）"
     )
@@ -973,8 +973,8 @@ def test_unit_scale_maps_money_units_to_base() -> None:
     assert unit_scale("") == (Decimal(1), "")
 
 
-def test_dedup_claims_keeps_last_per_coordinate() -> None:
-    """块内去重：同一 (metric, period, kind) 保留最后一条（后说是对前说的修正）。"""
+def test_dedup_claims_preserves_unresolved_coordinate_conflicts() -> None:
+    """Different observations cannot be silently interpreted as later corrections."""
 
     def claim(seq: int, metric: str | None, period: str | None, kind: str, text: str) -> Claim:
         return Claim(
@@ -996,12 +996,12 @@ def test_dedup_claims_keeps_last_per_coordinate() -> None:
         claim(1, None, None, "fact", "无指标坐标也保留"),
     ]
     kept = _dedup_claims(claims)
-    assert len(kept) == 5
+    assert len(kept) == 6
     assert [
         c.claim_text
         for c in kept
         if c.metric == "毛利率" and c.kind == "fact" and c.period == "2026E"
-    ] == ["毛利率 90.42%"]
+    ] == ["毛利率 90.4%", "毛利率 90.42%"]
     assert [c.claim_text for c in kept if c.metric is None] == [
         "无指标坐标",
         "无指标坐标也保留",
@@ -1009,7 +1009,7 @@ def test_dedup_claims_keeps_last_per_coordinate() -> None:
     assert _dedup_claims([]) == []
 
 
-def test_cross_block_dedup_keeps_latest_block(fresh_svc) -> None:
+def test_cross_block_dedup_preserves_conflicting_values(fresh_svc) -> None:
     """★ 缺陷 4 端到端：毛利率 2026E 跨块重复 2 条 → 1 条，幸存行 value_num 可取。
 
     seq=1 与 seq=2 给同坐标不同精度的表述（90.4% / 90.42%，文本不同，
@@ -1068,19 +1068,17 @@ def test_cross_block_dedup_keeps_latest_block(fresh_svc) -> None:
     def llm(prompt: str) -> str:
         return responses.pop(0)
 
-    stats = fresh_svc.extract_claims(llm=llm, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(llm=llm, retry_attempts=1, sleep_between=0)
     # stats.claims 累计每次提交的净插入数（2+1+1=4，跨块删除不计入）；
     # 库里净存 3 条 —— seq=1 的毛利率行被 seq=2 同坐标覆盖。
     assert stats.claims == 4, stats.as_dict()
 
-    rows = fresh_svc.claims_of(limit=100)
-    assert len(rows) == 3, f"库内应有 3 条：{[str(r['claim_text']) for r in rows]}"
+    rows = fresh_svc.legacy_claims_of(limit=100)
+    assert len(rows) == 4, f"Conflicting observations must survive: {rows}"
     gross_rate_fact = [r for r in rows if r["metric"] == "毛利率" and r["kind"] == "fact"]
-    assert len(gross_rate_fact) == 1, "跨块重复没有合并 —— D4 共识度会重复计数"
-    survivor = gross_rate_fact[0]
-    assert survivor["value_num"] == Decimal("90.42"), "必须保留靠后块的值"
-    assert int(survivor["seq"]) == 2
-    assert survivor["value_num"] is not None, "§9.2 P3：该行 value_num 可取（非 NULL）"
+    assert len(gross_rate_fact) == 2
+    assert {r["value_num"] for r in gross_rate_fact} == {Decimal("90.4"), Decimal("90.42")}
+    assert {int(r["seq"]) for r in gross_rate_fact} == {1, 2}
 
     forecast = [r for r in rows if r["metric"] == "毛利率" and r["kind"] == "forecast"]
     assert len(forecast) == 1, "kind 不同不算重复，不得误删"
@@ -1315,9 +1313,9 @@ def test_commit_block_with_mixed_null_and_str_periods(fresh_svc) -> None:
         ensure_ascii=False,
     )
 
-    stats = fresh_svc.extract_claims(llm=lambda prompt: payload, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(llm=lambda prompt: payload, retry_attempts=1, sleep_between=0)
     assert stats.failed == 0, stats.as_dict()
-    rows = fresh_svc.claims_of(limit=100)
+    rows = fresh_svc.legacy_claims_of(limit=100)
     assert {(r["metric"], r["period"]) for r in rows} == {
         ("利润表.其他收入", "2026E"),
         ("利润表.其他收入", None),

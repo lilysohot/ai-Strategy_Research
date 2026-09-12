@@ -1,0 +1,197 @@
+{
+  "status": "passed",
+  "model_calls": 0,
+  "samples": [
+    {
+      "name": "maotai_financial_tables",
+      "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+      "fields_passed": 32,
+      "facts_read": 368,
+      "selected_scope_complete": false,
+      "formulas": [
+        {
+          "passed": true,
+          "expected": "3.837749",
+          "tolerance": "0.000001",
+          "calculation_id": "7b3872f8e753f373734e75ebba4925ef3568da1e2fa4ba696a46726cb5c6a16b",
+          "formula": "revenue_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44",
+            "c9099a2d3f140ead7eff9c1d4d807b27416434804402c6bf1ea3485e6a374ce7"
+          ],
+          "input_values": [
+            "1.78657E+11",
+            "1.72054E+11"
+          ],
+          "value": "3.837748613807293059155846400",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "2.865646",
+          "tolerance": "0.000001",
+          "calculation_id": "ffb14c2e442ea9d5c5dc5a6ce59e95addd5e90cfa55a7975be6974cbda97c5a6",
+          "formula": "parent_profit_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e",
+            "98443e14f88ac9e5d9b7ca8c2ca70d3fec3de24f73a1a21763313a74500901a0"
+          ],
+          "input_values": [
+            "8.4679E+10",
+            "8.2320E+10"
+          ],
+          "value": "2.865646258503401360544217700",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "-58.135301",
+          "tolerance": "0.000001",
+          "calculation_id": "7bdfa3569a1c91ef9a0d6cab7e9b98e4c286bce575229617a8f3e1979b446bbb",
+          "formula": "operating_cash_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "51bf0a92685c9aa05d0f5d18730a96cd7e40ab1fd228da9d2cafa09882598c24",
+            "5e45e67d11fe5a5ca2b54f909eb9b343e9c057eeadce7162c8459e47562670eb"
+          ],
+          "input_values": [
+            "2.5756E+10",
+            "6.1522E+10"
+          ],
+          "value": "-58.13530119306914599655407822",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "30.416042",
+          "tolerance": "0.000001",
+          "calculation_id": "32547c5da4af77aeace7fa2dd6fae1b5d6637405b89fd51f662e67a6c8ca68b6",
+          "formula": "cash_profit_ratio",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "51bf0a92685c9aa05d0f5d18730a96cd7e40ab1fd228da9d2cafa09882598c24",
+            "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e"
+          ],
+          "input_values": [
+            "2.5756E+10",
+            "8.4679E+10"
+          ],
+          "value": "30.41604175769671347087235324",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "49.167399",
+          "tolerance": "0.000001",
+          "calculation_id": "b2373b7a6b8d010e4d00a81ffcc131e2a57febbe543f936c9d97d6d6acd3c829",
+          "formula": "net_margin",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+            "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44"
+          ],
+          "input_values": [
+            "8.7841E+10",
+            "1.78657E+11"
+          ],
+          "value": "49.16739898240763026357769357",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "0",
+          "tolerance": "0",
+          "calculation_id": "51422c5887d87e716b81deb1b03f6424ec1c91a3bac981d151725ac103a15226",
+          "formula": "balance_residual",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "859c267a3da378a05cbe6ff46d5e819b27a86d1fe2036c45e93f3e7e2689081f",
+            "1fd86a53b17cc8c4890500fcdc213923d4203fd678f919d860b329f65d0f12cf",
+            "8f06c656ad3e4f1d43f3ac4287caa93a878a0fdfd32a07b7320e283dff64a404"
+          ],
+          "input_values": [
+            "3.40489E+11",
+            "5.5048E+10",
+            "2.85441E+11"
+          ],
+          "value": "0",
+          "unit": "元",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "0",
+          "tolerance": "0",
+          "calculation_id": "376663186d3e6e14654f910cace45327591d87e55b82e26d18e61102625c09b5",
+          "formula": "profit_residual",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "inputs": [
+            "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+            "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e",
+            "c264a12f2686ec6f5440931b9c239dad03cb54702583d8bd4c45b57012b443b1"
+          ],
+          "input_values": [
+            "8.7841E+10",
+            "8.4679E+10",
+            "3.162E+9"
+          ],
+          "value": "0",
+          "unit": "元",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        }
+      ]
+    },
+    {
+      "name": "guangli_financial_table",
+      "run_id": "ba3ddd4f46ffe3d638bc82756efd13204ae687eac0585d5e2a926350083747b3",
+      "fields_passed": 15,
+      "facts_read": 50,
+      "selected_scope_complete": false,
+      "formulas": []
+    },
+    {
+      "name": "guosen_maotai_holdout",
+      "run_id": "530ca22514b35c75eb3e2cc69f61e7670afc79906baf614c5b5fe9cb45a666bb",
+      "fields_passed": 10,
+      "facts_read": 50,
+      "selected_scope_complete": false,
+      "formulas": []
+    }
+  ],
+  "macro_reused_run": "552942996489beb4f1f44b66d2ab944a48b1d5b9ff2e81ef59b6c61c71c65fbf",
+  "macro_targets": 2,
+  "macro_comparison_rows": 0,
+  "legacy_counts_before": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  },
+  "legacy_counts_after": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  }
+}

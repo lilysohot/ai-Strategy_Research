@@ -11,6 +11,7 @@ This makes a single 1-token call through the same code path first.
 Exits non-zero with the fix, not just the error. Secrets are never printed —
 only whether each key is set.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -30,6 +31,7 @@ def report_env() -> None:
     what the run will actually use.
     """
     from frontier_agent.infra.config import get_config
+
     c = get_config()
     print(f"  {'llm_provider':22} = {c.llm_provider or '<unset>'}")
     print(f"  {'openai_model':22} = {c.openai_model or '<unset>'}")
@@ -51,6 +53,7 @@ async def check_kernel_llm() -> str | None:
     """The LLM BenchmarkSession._bootstrap() builds from LLM_PROVIDER."""
     from frontier_agent.infra.config import get_config
     from frontier_agent.infra.llm_adapter import create_llm
+
     try:
         create_llm(get_config())
     except ValueError as e:
@@ -69,34 +72,39 @@ async def check_kernel_llm() -> str | None:
 
 async def check_workflow_llm(pipeline: str, profile: str) -> str | None:
     """The LLM the workflow actually runs on, with the profile's sampling args."""
-    mod = f"workflows.{pipeline}.profile"
     try:
-        p = __import__(mod, fromlist=["load_profile", "create_llm"])
-    except ImportError as e:
-        return f"cannot import {mod}: {e}"
-    try:
-        # create_llm takes the whole profile dict and reads profile["llm"] itself
-        llm = p.create_llm(p.load_profile(profile))
+        if pipeline in {"stateful-react-agent", "stateful_react_agent"}:
+            from workflows.stateful_react_agent.profile import (
+                create_react_llm,
+                load_react_profile,
+            )
+
+            llm = create_react_llm(load_react_profile(profile))
+        elif pipeline in {"agent_team", "agent_team_report"}:
+            from workflows.agent_team.profile import create_swarm_llm, load_swarm_profile
+
+            llm = create_swarm_llm(load_swarm_profile(profile))
+        else:
+            return "unsupported pipeline; use stateful-react-agent, agent_team or agent_team_report"
     except Exception as e:
-        return f"building the profile LLM failed: {type(e).__name__}: {e}"
+        return f"building the profile LLM failed: {type(e).__name__}"
 
     try:
         # LLMClient.chat is the kernel's non-streaming entry point; max_tokens=1
         # keeps this to one token so the check is nearly free.
-        await llm.chat([{"role": "user", "content": "hi"}], max_tokens=1)
+        await asyncio.wait_for(
+            llm.chat([{"role": "user", "content": "hi"}], max_tokens=1, timeout=30),
+            timeout=35,
+        )
     except Exception as e:
         msg = str(e)
         hint = ""
         if "top_p" in msg or "repetition_penalty" in msg:
             hint = (
-                "\n      The profile sends top_p / repetition_penalty, which "
-                "profile.py\n      injects into extra_body unconditionally — "
-                "removing them from the\n      YAML does not help. GPT-5-family "
-                "endpoints reject them. Use a\n      vLLM/SGLang-style endpoint, "
-                "or change profile.py first (which\n      means the golden "
-                "baseline has to be frozen after that change)."
+                "\n      Check the selected profile's sampling parameters against "
+                "the configured endpoint; a parameter was rejected."
             )
-        return f"{type(e).__name__}: {msg[:300]}{hint}"
+        return f"{type(e).__name__} (provider message omitted for credential safety){hint}"
     return None
 
 

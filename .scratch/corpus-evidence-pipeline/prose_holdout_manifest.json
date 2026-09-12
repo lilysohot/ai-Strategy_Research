@@ -1,0 +1,17 @@
+{
+  "version": "corpus-prose-holdout-1",
+  "description": "Frozen before model execution. Unseen Tianfeng source: quote-level extraction plus explicit missing-year negative control. Not a fully dated macro observation acceptance test.",
+  "samples": [
+    {
+      "name": "tianfeng_nfp_unanchored_month",
+      "role": "held_out_prose_and_temporal_negative_control",
+      "pattern": "*5520fab6.pdf",
+      "pages": [1],
+      "model_extract": true,
+      "prose_gold": [
+        {"subject": "US", "metric": "NFP", "period_end": null, "value_num": "16.2", "unit": "万人", "state": "actual", "quality_status": "review", "required_reasons": ["period_unanchored"], "must_not_calculate": true},
+        {"subject": "US", "metric": "NFP", "period_end": null, "value_num": "5.5", "unit": "万人", "state": "consensus", "quality_status": "review", "required_reasons": ["period_unanchored"], "must_not_calculate": true}
+      ]
+    }
+  ]
+}

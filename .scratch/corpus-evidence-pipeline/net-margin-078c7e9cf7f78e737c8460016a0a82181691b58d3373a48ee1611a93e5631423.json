@@ -1,0 +1,617 @@
+{
+  "status": "review_completed_definition_unresolved",
+  "model_calls": 0,
+  "source_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+  "source_rev": "6f14cc145b798b37",
+  "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+  "pipeline_version": "evidence-pipeline-6",
+  "visually_checked_pages": [
+    1,
+    2,
+    3
+  ],
+  "gold_fields_passed": 20,
+  "reviews": [
+    {
+      "review_version": "net-margin-review-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "metric": "net_margin",
+      "period": "2025A",
+      "source_fact_id": "a7df3a0e668710b324d924cc4ad0565baa215d649364c2a270e789ad3e738a9f",
+      "source_value": "50.5",
+      "source": {
+        "fact_id": "a7df3a0e668710b324d924cc4ad0565baa215d649364c2a270e789ad3e738a9f",
+        "packet_id": "700104b2106d500de83bef2f40ad5a11590d4649287bcf4ecb3d39596ebdb97d",
+        "locator": "3",
+        "metric_raw": "净利率",
+        "value_text": "50.5%",
+        "unit_raw": "%",
+        "table_ref": {
+          "row": "净利率",
+          "cell": "50.5%",
+          "table": "b2979a0689190d4ccda0001a101287ebc8da493dd28affa72a92b709b5bd5ac6",
+          "column": "2025A"
+        },
+        "evidence_quote": "净利率 | 2025A: 50.5% | 2026E: 50.2% | 2027E: 50.2% | 2028E: 50.3%"
+      },
+      "definition_verified": false,
+      "source_usable_for": [
+        "cite"
+      ],
+      "status": "review_definition_or_source",
+      "candidate_definition": "净利润/营业总收入*100",
+      "input_fact_ids": [
+        "e0be90e7d600753870caffd868b107148cebf104dcac92d878c987693929fea1",
+        "c9099a2d3f140ead7eff9c1d4d807b27416434804402c6bf1ea3485e6a374ce7"
+      ],
+      "input_evidence": [
+        {
+          "fact_id": "e0be90e7d600753870caffd868b107148cebf104dcac92d878c987693929fea1",
+          "packet_id": "44860e07a3ac049018de4d1f796e06d3094bed4349ba475d6d806e2ab46dfe05",
+          "locator": "3",
+          "metric_raw": "净利润",
+          "value_text": "85,310",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "净利润",
+            "cell": "85,310",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2025A"
+          },
+          "evidence_quote": "净利润 | 2025A: 85,310 | 2026E: 87,841 | 2027E: 91,774 | 2028E: 95,749"
+        },
+        {
+          "fact_id": "c9099a2d3f140ead7eff9c1d4d807b27416434804402c6bf1ea3485e6a374ce7",
+          "packet_id": "ebfea8ade027789a07f8bcd5e67fdac1ca993a18ff6b3fb98119703c03f1e0dd",
+          "locator": "3",
+          "metric_raw": "营业总收入",
+          "value_text": "172,054",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "营业总收入",
+            "cell": "172,054",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2025A"
+          },
+          "evidence_quote": "营业总收入 | 2025A: 172,054 | 2026E: 178,657 | 2027E: 186,196 | 2028E: 194,063"
+        }
+      ],
+      "calculation": {
+        "calculation_id": "e0a1e3f9dc8ffa714d4dacadb949d3369b0298c4cd94eebeb122bb6aac884080",
+        "formula": "net_margin",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "e0be90e7d600753870caffd868b107148cebf104dcac92d878c987693929fea1",
+          "c9099a2d3f140ead7eff9c1d4d807b27416434804402c6bf1ea3485e6a374ce7"
+        ],
+        "input_values": [
+          "8.5310E+10",
+          "1.72054E+11"
+        ],
+        "value": "49.58327036860520534250874725",
+        "unit": "%",
+        "basis": "source_reported",
+        "period": "2025-12-31"
+      },
+      "derived_value": "49.58327036860520534250874725",
+      "difference_percentage_points": "-0.91672963139479465749125275",
+      "tolerance_percentage_points": "0.05",
+      "implied_denominator_not_source_data": "168930693069.3069306930693069",
+      "profit_residual": "0",
+      "profit_residual_calculation": {
+        "calculation_id": "e9c8be2f9d4608fbc86f045a9b70250c962f18b1b7e84fa880eb6b53748fa255",
+        "formula": "profit_residual",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "e0be90e7d600753870caffd868b107148cebf104dcac92d878c987693929fea1",
+          "98443e14f88ac9e5d9b7ca8c2ca70d3fec3de24f73a1a21763313a74500901a0",
+          "52b3aa4f2e221d730a89a84813122f00b9349cd53492d2833729646f52af2130"
+        ],
+        "input_values": [
+          "8.5310E+10",
+          "8.2320E+10",
+          "2.990E+9"
+        ],
+        "value": "0",
+        "unit": "元",
+        "basis": "source_reported",
+        "period": "2025-12-31"
+      },
+      "parent_profit_ratio_candidate": "47.84544387227265858393295128"
+    },
+    {
+      "review_version": "net-margin-review-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "metric": "net_margin",
+      "period": "2026E",
+      "source_fact_id": "4751d03dd08921973de4d9efc82af8910c8f6ba3b41cf6aac199f273be8ca7ef",
+      "source_value": "50.2",
+      "source": {
+        "fact_id": "4751d03dd08921973de4d9efc82af8910c8f6ba3b41cf6aac199f273be8ca7ef",
+        "packet_id": "700104b2106d500de83bef2f40ad5a11590d4649287bcf4ecb3d39596ebdb97d",
+        "locator": "3",
+        "metric_raw": "净利率",
+        "value_text": "50.2%",
+        "unit_raw": "%",
+        "table_ref": {
+          "row": "净利率",
+          "cell": "50.2%",
+          "table": "b2979a0689190d4ccda0001a101287ebc8da493dd28affa72a92b709b5bd5ac6",
+          "column": "2026E"
+        },
+        "evidence_quote": "净利率 | 2025A: 50.5% | 2026E: 50.2% | 2027E: 50.2% | 2028E: 50.3%"
+      },
+      "definition_verified": false,
+      "source_usable_for": [
+        "cite"
+      ],
+      "status": "review_definition_or_source",
+      "candidate_definition": "净利润/营业总收入*100",
+      "input_fact_ids": [
+        "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+        "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44"
+      ],
+      "input_evidence": [
+        {
+          "fact_id": "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+          "packet_id": "44860e07a3ac049018de4d1f796e06d3094bed4349ba475d6d806e2ab46dfe05",
+          "locator": "3",
+          "metric_raw": "净利润",
+          "value_text": "87,841",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "净利润",
+            "cell": "87,841",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2026E"
+          },
+          "evidence_quote": "净利润 | 2025A: 85,310 | 2026E: 87,841 | 2027E: 91,774 | 2028E: 95,749"
+        },
+        {
+          "fact_id": "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44",
+          "packet_id": "ebfea8ade027789a07f8bcd5e67fdac1ca993a18ff6b3fb98119703c03f1e0dd",
+          "locator": "3",
+          "metric_raw": "营业总收入",
+          "value_text": "178,657",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "营业总收入",
+            "cell": "178,657",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2026E"
+          },
+          "evidence_quote": "营业总收入 | 2025A: 172,054 | 2026E: 178,657 | 2027E: 186,196 | 2028E: 194,063"
+        }
+      ],
+      "calculation": {
+        "calculation_id": "8d2ede05bf8a646687b0ad063e173c59977b4dbcd9f986e39a04775deb3b2954",
+        "formula": "net_margin",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+          "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44"
+        ],
+        "input_values": [
+          "8.7841E+10",
+          "1.78657E+11"
+        ],
+        "value": "49.16739898240763026357769357",
+        "unit": "%",
+        "basis": "source_forecast",
+        "period": "2026-12-31"
+      },
+      "derived_value": "49.16739898240763026357769357",
+      "difference_percentage_points": "-1.03260101759236973642230643",
+      "tolerance_percentage_points": "0.05",
+      "implied_denominator_not_source_data": "174982071713.1474103585657371",
+      "profit_residual": "0",
+      "profit_residual_calculation": {
+        "calculation_id": "f8ed96acb56a888799861072bdbe415c616501f95552484eda2ef32a3be58798",
+        "formula": "profit_residual",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+          "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e",
+          "c264a12f2686ec6f5440931b9c239dad03cb54702583d8bd4c45b57012b443b1"
+        ],
+        "input_values": [
+          "8.7841E+10",
+          "8.4679E+10",
+          "3.162E+9"
+        ],
+        "value": "0",
+        "unit": "元",
+        "basis": "source_forecast",
+        "period": "2026-12-31"
+      },
+      "parent_profit_ratio_candidate": "47.39752710501127859529713361"
+    },
+    {
+      "review_version": "net-margin-review-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "metric": "net_margin",
+      "period": "2027E",
+      "source_fact_id": "965c2277883eecc92ea974b803e5d6665b1bf04c995372864b76b0809a0aba1a",
+      "source_value": "50.2",
+      "source": {
+        "fact_id": "965c2277883eecc92ea974b803e5d6665b1bf04c995372864b76b0809a0aba1a",
+        "packet_id": "700104b2106d500de83bef2f40ad5a11590d4649287bcf4ecb3d39596ebdb97d",
+        "locator": "3",
+        "metric_raw": "净利率",
+        "value_text": "50.2%",
+        "unit_raw": "%",
+        "table_ref": {
+          "row": "净利率",
+          "cell": "50.2%",
+          "table": "b2979a0689190d4ccda0001a101287ebc8da493dd28affa72a92b709b5bd5ac6",
+          "column": "2027E"
+        },
+        "evidence_quote": "净利率 | 2025A: 50.5% | 2026E: 50.2% | 2027E: 50.2% | 2028E: 50.3%"
+      },
+      "definition_verified": false,
+      "source_usable_for": [
+        "cite"
+      ],
+      "status": "review_definition_or_source",
+      "candidate_definition": "净利润/营业总收入*100",
+      "input_fact_ids": [
+        "493088ac1c9b1145658da04c82702b88c8e851a6d4d6a156c46f25bc57a51af3",
+        "3343a477c957edf9aded0d78ea85a9de72766eb636a3e5c714f24d6f6b5c13e4"
+      ],
+      "input_evidence": [
+        {
+          "fact_id": "493088ac1c9b1145658da04c82702b88c8e851a6d4d6a156c46f25bc57a51af3",
+          "packet_id": "44860e07a3ac049018de4d1f796e06d3094bed4349ba475d6d806e2ab46dfe05",
+          "locator": "3",
+          "metric_raw": "净利润",
+          "value_text": "91,774",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "净利润",
+            "cell": "91,774",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2027E"
+          },
+          "evidence_quote": "净利润 | 2025A: 85,310 | 2026E: 87,841 | 2027E: 91,774 | 2028E: 95,749"
+        },
+        {
+          "fact_id": "3343a477c957edf9aded0d78ea85a9de72766eb636a3e5c714f24d6f6b5c13e4",
+          "packet_id": "ebfea8ade027789a07f8bcd5e67fdac1ca993a18ff6b3fb98119703c03f1e0dd",
+          "locator": "3",
+          "metric_raw": "营业总收入",
+          "value_text": "186,196",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "营业总收入",
+            "cell": "186,196",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2027E"
+          },
+          "evidence_quote": "营业总收入 | 2025A: 172,054 | 2026E: 178,657 | 2027E: 186,196 | 2028E: 194,063"
+        }
+      ],
+      "calculation": {
+        "calculation_id": "50b2479740f21e3b387d007b2effc3083691bed23fd7ce390d96349c70e79ac6",
+        "formula": "net_margin",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "493088ac1c9b1145658da04c82702b88c8e851a6d4d6a156c46f25bc57a51af3",
+          "3343a477c957edf9aded0d78ea85a9de72766eb636a3e5c714f24d6f6b5c13e4"
+        ],
+        "input_values": [
+          "9.1774E+10",
+          "1.86196E+11"
+        ],
+        "value": "49.28892135169391394014909021",
+        "unit": "%",
+        "basis": "source_forecast",
+        "period": "2027-12-31"
+      },
+      "derived_value": "49.28892135169391394014909021",
+      "difference_percentage_points": "-0.91107864830608605985090979",
+      "tolerance_percentage_points": "0.05",
+      "implied_denominator_not_source_data": "182816733067.7290836653386454",
+      "profit_residual": "0",
+      "profit_residual_calculation": {
+        "calculation_id": "be26ad9f68b9da6f658ab225e345bb66daedc87a321b10b288cb2a5b95ee6eeb",
+        "formula": "profit_residual",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "493088ac1c9b1145658da04c82702b88c8e851a6d4d6a156c46f25bc57a51af3",
+          "95656e6a3b0fb6f828aa0ff8a30d104d39fa7b18f1c51ea7f00b1a5b797b39d0",
+          "7d490c99a6f9b47b2c9cf4ae1e19573db59538e455de1d7fdfece3ef3609e1bd"
+        ],
+        "input_values": [
+          "9.1774E+10",
+          "8.8470E+10",
+          "3.304E+9"
+        ],
+        "value": "0",
+        "unit": "元",
+        "basis": "source_forecast",
+        "period": "2027-12-31"
+      },
+      "parent_profit_ratio_candidate": "47.51444714172162667296827000"
+    },
+    {
+      "review_version": "net-margin-review-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "metric": "net_margin",
+      "period": "2028E",
+      "source_fact_id": "b4f92394076f16dab5a8c2df407404a03636b399462b6319ed013c60201f4c3f",
+      "source_value": "50.3",
+      "source": {
+        "fact_id": "b4f92394076f16dab5a8c2df407404a03636b399462b6319ed013c60201f4c3f",
+        "packet_id": "700104b2106d500de83bef2f40ad5a11590d4649287bcf4ecb3d39596ebdb97d",
+        "locator": "3",
+        "metric_raw": "净利率",
+        "value_text": "50.3%",
+        "unit_raw": "%",
+        "table_ref": {
+          "row": "净利率",
+          "cell": "50.3%",
+          "table": "b2979a0689190d4ccda0001a101287ebc8da493dd28affa72a92b709b5bd5ac6",
+          "column": "2028E"
+        },
+        "evidence_quote": "净利率 | 2025A: 50.5% | 2026E: 50.2% | 2027E: 50.2% | 2028E: 50.3%"
+      },
+      "definition_verified": false,
+      "source_usable_for": [
+        "cite"
+      ],
+      "status": "review_definition_or_source",
+      "candidate_definition": "净利润/营业总收入*100",
+      "input_fact_ids": [
+        "55926d365d0e6503e0c7c37977940b186cd38b3071f00e1fea2b7f1c8e340089",
+        "9c0834c637fea0895f45b453d4bc198796923a67330b261a64295d39d1647bde"
+      ],
+      "input_evidence": [
+        {
+          "fact_id": "55926d365d0e6503e0c7c37977940b186cd38b3071f00e1fea2b7f1c8e340089",
+          "packet_id": "44860e07a3ac049018de4d1f796e06d3094bed4349ba475d6d806e2ab46dfe05",
+          "locator": "3",
+          "metric_raw": "净利润",
+          "value_text": "95,749",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "净利润",
+            "cell": "95,749",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2028E"
+          },
+          "evidence_quote": "净利润 | 2025A: 85,310 | 2026E: 87,841 | 2027E: 91,774 | 2028E: 95,749"
+        },
+        {
+          "fact_id": "9c0834c637fea0895f45b453d4bc198796923a67330b261a64295d39d1647bde",
+          "packet_id": "ebfea8ade027789a07f8bcd5e67fdac1ca993a18ff6b3fb98119703c03f1e0dd",
+          "locator": "3",
+          "metric_raw": "营业总收入",
+          "value_text": "194,063",
+          "unit_raw": "百万元",
+          "table_ref": {
+            "row": "营业总收入",
+            "cell": "194,063",
+            "table": "c8032970c3a77b7df8877f7c60e7b21a0afa0932b372848f38a37d43da2ef7ff",
+            "column": "2028E"
+          },
+          "evidence_quote": "营业总收入 | 2025A: 172,054 | 2026E: 178,657 | 2027E: 186,196 | 2028E: 194,063"
+        }
+      ],
+      "calculation": {
+        "calculation_id": "db99fb4412f7694216fc6057aa34feffd2cb6e18ce46c7ae0d75edbf0182a385",
+        "formula": "net_margin",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "55926d365d0e6503e0c7c37977940b186cd38b3071f00e1fea2b7f1c8e340089",
+          "9c0834c637fea0895f45b453d4bc198796923a67330b261a64295d39d1647bde"
+        ],
+        "input_values": [
+          "9.5749E+10",
+          "1.94063E+11"
+        ],
+        "value": "49.33913213750173912595394279",
+        "unit": "%",
+        "basis": "source_forecast",
+        "period": "2028-12-31"
+      },
+      "derived_value": "49.33913213750173912595394279",
+      "difference_percentage_points": "-0.96086786249826087404605721",
+      "tolerance_percentage_points": "0.05",
+      "implied_denominator_not_source_data": "190355864811.1332007952286282",
+      "profit_residual": "0",
+      "profit_residual_calculation": {
+        "calculation_id": "ebfef82c7d7d1274578c8bbfd6d58140f90255afc0fefdd25dfd59516f9e4fe5",
+        "formula": "profit_residual",
+        "computed_by": "corpus-financial-formulas-1",
+        "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+        "inputs": [
+          "55926d365d0e6503e0c7c37977940b186cd38b3071f00e1fea2b7f1c8e340089",
+          "485fcf3c7df5b04894a015c652ffa58fde2213db7f7c508436039c13c96217a1",
+          "c5ef1e9df38edb316df5e43a72c19c57e662e0df0de5614b6b0ce01ffdaeabcc"
+        ],
+        "input_values": [
+          "9.5749E+10",
+          "9.2302E+10",
+          "3.447E+9"
+        ],
+        "value": "0",
+        "unit": "元",
+        "basis": "source_forecast",
+        "period": "2028-12-31"
+      },
+      "parent_profit_ratio_candidate": "47.56290482987483446097401359"
+    }
+  ],
+  "existing_formula_checks": [
+    {
+      "passed": true,
+      "expected": "3.837749",
+      "tolerance": "0.000001",
+      "calculation_id": "2d3706f53b23c2c831f1ad254bbe5108f080a189574cc0b524c5a39149b4b195",
+      "formula": "revenue_growth",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44",
+        "c9099a2d3f140ead7eff9c1d4d807b27416434804402c6bf1ea3485e6a374ce7"
+      ],
+      "input_values": [
+        "1.78657E+11",
+        "1.72054E+11"
+      ],
+      "value": "3.837748613807293059155846400",
+      "unit": "%",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "2.865646",
+      "tolerance": "0.000001",
+      "calculation_id": "9fdae77c9aa4cd760b7a42800b250ebdbbd09f2fdc3b6f23a1df215ab3fa162e",
+      "formula": "parent_profit_growth",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e",
+        "98443e14f88ac9e5d9b7ca8c2ca70d3fec3de24f73a1a21763313a74500901a0"
+      ],
+      "input_values": [
+        "8.4679E+10",
+        "8.2320E+10"
+      ],
+      "value": "2.865646258503401360544217700",
+      "unit": "%",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "-58.135301",
+      "tolerance": "0.000001",
+      "calculation_id": "9cf0942feedd0927a7864d45c70773abee59257af276725d0561f01d3afa0d80",
+      "formula": "operating_cash_growth",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "51bf0a92685c9aa05d0f5d18730a96cd7e40ab1fd228da9d2cafa09882598c24",
+        "5e45e67d11fe5a5ca2b54f909eb9b343e9c057eeadce7162c8459e47562670eb"
+      ],
+      "input_values": [
+        "2.5756E+10",
+        "6.1522E+10"
+      ],
+      "value": "-58.13530119306914599655407822",
+      "unit": "%",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "30.416042",
+      "tolerance": "0.000001",
+      "calculation_id": "f98651679f4462c28b580a630e1348329f54b89d906a7fe21324092bd0460126",
+      "formula": "cash_profit_ratio",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "51bf0a92685c9aa05d0f5d18730a96cd7e40ab1fd228da9d2cafa09882598c24",
+        "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e"
+      ],
+      "input_values": [
+        "2.5756E+10",
+        "8.4679E+10"
+      ],
+      "value": "30.41604175769671347087235324",
+      "unit": "%",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "49.167399",
+      "tolerance": "0.000001",
+      "calculation_id": "8d2ede05bf8a646687b0ad063e173c59977b4dbcd9f986e39a04775deb3b2954",
+      "formula": "net_margin",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+        "d7244f494b043a058a9d2547789e36c53764b4dcccf70c93279b2c0aa5eb0e44"
+      ],
+      "input_values": [
+        "8.7841E+10",
+        "1.78657E+11"
+      ],
+      "value": "49.16739898240763026357769357",
+      "unit": "%",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "0",
+      "tolerance": "0",
+      "calculation_id": "15238da6effd45f0e1b0c9486ddd59fcc1fcdd48af148fc4a8311bfa95a227ee",
+      "formula": "balance_residual",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "859c267a3da378a05cbe6ff46d5e819b27a86d1fe2036c45e93f3e7e2689081f",
+        "1fd86a53b17cc8c4890500fcdc213923d4203fd678f919d860b329f65d0f12cf",
+        "8f06c656ad3e4f1d43f3ac4287caa93a878a0fdfd32a07b7320e283dff64a404"
+      ],
+      "input_values": [
+        "3.40489E+11",
+        "5.5048E+10",
+        "2.85441E+11"
+      ],
+      "value": "0",
+      "unit": "元",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    },
+    {
+      "passed": true,
+      "expected": "0",
+      "tolerance": "0",
+      "calculation_id": "f8ed96acb56a888799861072bdbe415c616501f95552484eda2ef32a3be58798",
+      "formula": "profit_residual",
+      "computed_by": "corpus-financial-formulas-1",
+      "run_id": "304edf3adb93ae931fbfd1dedbc39a17b249f8dee10f96d1b34943de2a906e52",
+      "inputs": [
+        "81d8156c4f1a6cb4ff870b3a07a7fcb02c85481314239c73f465fef952e4659c",
+        "d5dc718457bc5a991842d29ffac8d6008ceb9bda6354d6a41670ee6d6ab7d30e",
+        "c264a12f2686ec6f5440931b9c239dad03cb54702583d8bd4c45b57012b443b1"
+      ],
+      "input_values": [
+        "8.7841E+10",
+        "8.4679E+10",
+        "3.162E+9"
+      ],
+      "value": "0",
+      "unit": "元",
+      "basis": "source_forecast",
+      "period": "2026-12-31"
+    }
+  ],
+  "legacy_counts_before": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  },
+  "legacy_counts_after": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  }
+}

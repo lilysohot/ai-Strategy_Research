@@ -2,10 +2,13 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | **v1.1 · 待评审**（评审通过前不进入实现） |
+| 版本 / 状态 | **v1.2 · 设计基线已实施**（P0–P7 已完成；后续优化进入独立有效计划） |
 | 上游文档 | [p0-research-kernel.md](./p0-research-kernel.md)（三条硬闸）· [p1-corpus-scaleup.md](./p1-corpus-scaleup.md)（D2 任务）· [data-layer-architecture.md](./data-layer-architecture.md)（服务层收口） |
 | 影响范围 | `plugins/corpus/claims.py` · `plugins/corpus/service.py` · `tests/test_corpus_claims.py`；新增一个审计 CLI。**不改 D3/D4 的现有查询**（先保证向后兼容） |
 | 状态图例 | ✅ 已完成 · 🔄 进行中 · ⬜ 未开始 · 🅿️ 暂缓 · ⛔ 阻塞 |
+
+> **文档职责**：本文记录 D2 领域化抽取的已实施设计与验收。当前发布验收和后续优化只在
+> [d2-claims-optimization-plan.md](./d2-claims-optimization-plan.md) 维护；本文 §11 的历史待办若与有效计划冲突，以有效计划为准。
 
 > **本文要解决的问题**：D2 的 claim 抽取自诞生起就**只按「公司研报」一种文档设计**（坐标轴是
 > `tickers` + `metric` + `period`）。而当前语料里 **96% 的文档不是公司研报**，它们抽出来的

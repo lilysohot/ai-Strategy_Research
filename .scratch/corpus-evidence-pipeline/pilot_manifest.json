@@ -1,0 +1,52 @@
+{
+  "version": "corpus-usability-pilot-1",
+  "description": "Frozen targeted field checks; small convenience sample, not a population accuracy estimate.",
+  "samples": [
+    {
+      "name": "maotai_financial_tables",
+      "role": "development_regression",
+      "pattern": "*e034bdac.pdf",
+      "pages": [3],
+      "gold": [
+        {"row": "研发费用", "columns": ["2025A", "2026E", "2027E", "2028E"], "values": ["190", "197", "206", "215"], "unit": "百万元"},
+        {"row": "财务费用", "columns": ["2025A", "2026E", "2027E", "2028E"], "values": ["-815", "-875", "-781", "-680"], "unit": "百万元"},
+        {"row": "P/E", "columns": ["2025A", "2026E", "2027E", "2028E"], "values": ["20", "20", "19", "18"], "unit": "倍"},
+        {"row": "应收票据", "columns": ["2025A", "2026E", "2027E", "2028E"], "values": ["0", "0", "0", "0"], "unit": "百万元"},
+        {"row": "营业总收入", "columns": ["2025A", "2026E"], "values": ["172,054", "178,657"], "unit": "百万元"},
+        {"row": "归属母公司净利润", "columns": ["2025A", "2026E"], "values": ["82,320", "84,679"], "unit": "百万元"},
+        {"row": "经营活动现金流", "columns": ["2025A", "2026E"], "values": ["61,522", "25,756"], "unit": "百万元"},
+        {"row": "净利润", "columns": ["2025A", "2026E"], "values": ["85,310", "87,841"], "unit": "百万元"},
+        {"row": "资产合计", "columns": ["2025A", "2026E"], "values": ["303,835", "340,489"], "unit": "百万元"},
+        {"row": "负债合计", "columns": ["2025A", "2026E"], "values": ["49,876", "55,048"], "unit": "百万元"},
+        {"row": "所有者权益合计", "columns": ["2025A", "2026E"], "values": ["253,959", "285,441"], "unit": "百万元"},
+        {"row": "少数股东损益", "columns": ["2025A", "2026E"], "values": ["2,990", "3,162"], "unit": "百万元"}
+      ],
+      "derive": true
+    },
+    {
+      "name": "guangli_financial_table",
+      "role": "comparison_sample",
+      "pattern": "*b6beb6ee.pdf",
+      "pages": [1],
+      "gold": [
+        {"row": "营业收入(百万元)", "columns": ["2024", "2025", "2026E", "2027E", "2028E"], "values": ["573", "670", "997", "1,434", "1,832"], "unit": "百万元"},
+        {"row": "归母净利润(百万元)", "columns": ["2024", "2025", "2026E", "2027E", "2028E"], "values": ["-113", "40", "132", "219", "343"], "unit": "百万元"},
+        {"row": "市盈率（PE）", "columns": ["2024", "2025", "2026E", "2027E", "2028E"], "values": ["-87.6", "245.9", "78.6", "47.5", "30.3"], "unit": "倍"}
+      ]
+    },
+    {
+      "name": "guosen_maotai_holdout",
+      "role": "held_out_parser_check",
+      "pattern": "*bbba671e.pdf",
+      "pages": [1],
+      "gold": [
+        {"row": "营业收入(百万元)", "columns": ["2024", "2025", "2026E", "2027E", "2028E"], "values": ["174,144", "172,054", "173,340", "183,763", "199,348"], "unit": "百万元"},
+        {"row": "净利润(百万元)", "columns": ["2024", "2025", "2026E", "2027E", "2028E"], "values": ["86228", "82320", "82367", "88628", "97249"], "unit": "百万元"}
+      ]
+    },
+    {"name": "macro_prose", "role": "prose_exploration", "pattern": "*6fc25e24.pdf", "pages": [1], "model_extract": true,
+     "prose_gold": [{"subject": "US", "metric": "NFP", "period_end": "2026-08-31", "value_num": "16.2", "unit": "万人", "state": "actual"},
+                     {"subject": "US", "metric": "NFP", "period_end": "2026-08-31", "value_num": "5.6", "unit": "万人", "state": "consensus"}]},
+    {"name": "image_only_source", "role": "negative_control", "pattern": "高盛*.pdf", "pages": [1], "expect_unknown": true}
+  ]
+}

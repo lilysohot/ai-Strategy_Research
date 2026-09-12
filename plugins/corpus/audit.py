@@ -6,8 +6,8 @@
 **只读现有表**（``documents`` / ``blocks`` / ``claims`` / ``claim_block_runs``），
 不产 claim、不调 LLM；所有"判定类"逻辑与抽取链路**同口径复用**：
 
-- 候选块判定 = ``claims_v2.triage_block_detail``，输出 numeric/rating/noise/no_signal
-  原因码，便于看见评级召回与噪声过滤；
+- 候选块判定 = ``claims_v2.triage_block_detail``，输出 numeric/rating/personal_trade/
+  qualitative/noise/no_signal 原因码，便于看见评级、个人交易、定性观点召回与噪声过滤；
 - 领域分类 = ``doc_kind_override`` 优先，否则 ``classify_doc_kind(title, texts)``
   （与 ``CorpusService.extract_claims`` 完全一致）；
 - 文档级标的 = ``document_ticker``，仅 company 文档（同上）；
@@ -50,7 +50,11 @@ from plugins.corpus.claims import (
     is_flat_table,
     normalize_metric,
 )
-from plugins.corpus.claims_v2 import classify_doc_kind_detail, triage_block_detail
+from plugins.corpus.claims_v2 import (
+    _value_in_evidence,
+    classify_doc_kind_detail,
+    triage_block_detail,
+)
 
 #: 死信判定：同一块累计失败次数达到该值即不再重试（与 CLI 默认 --max-attempts 一致）
 DEAD_LETTER_ATTEMPTS = 3
@@ -450,9 +454,8 @@ def _trace_values(
         if raw in (None, ""):
             continue  # 无值的 claim 归完整性报告管，这里不判
         block_text = text_by_key.get((str(c["doc_id"]), int(c["seq"])), "")
-        haystack = block_text.replace(",", "").replace(" ", "")
         tokens = _NUM_TOKEN_RE.findall(str(raw))
-        if tokens and all(t not in haystack for t in tokens):
+        if tokens and not _value_in_evidence(str(raw), block_text):
             failures.append(
                 {
                     "doc_id": c["doc_id"],

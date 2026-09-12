@@ -120,7 +120,57 @@ def test_v2_triage_keeps_rating_without_numbers_and_filters_noise() -> None:
     assert triage_block_detail("维持买入评级").candidate is True
     assert triage_block_detail("Buy / Neutral / Overweight").reason == "rating"
     assert triage_block_detail("投资评级标准：买入=预期收益率超过 20%").reason == "noise"
+    assert triage_block_detail("个人交易记录：今天买入一些煤炭，卖出消费。").candidate is True
+    assert triage_block_detail("持仓复盘：减仓 AI，做多黄金。").reason == "personal_trade"
+    assert triage_block_detail("Trade log: I sold puts and added semis.").candidate is True
+    assert (
+        triage_block_detail("My Open Book: I am more active in my trading.").reason
+        == "personal_trade"
+    )
+    assert triage_block_detail("今天不再另写复盘，直接附上 database link。").candidate is False
+    assert (
+        triage_block_detail("华创证券机构销售通讯录 企业邮箱 销售经理 010-63214682").reason
+        == "noise"
+    )
+    assert (
+        triage_block_detail("本报告不构成买入、卖出或持有任何证券的要约或招揽。").reason == "noise"
+    )
+    assert (
+        triage_block_detail("The information does not constitute accounting advice.").reason
+        == "noise"
+    )
     assert triage_block_detail("公司竞争力突出").reason == "no_signal"
+
+
+def test_v2_triage_filters_structural_pages_without_blocking_real_views() -> None:
+    rating_standard = (
+        "证券研究报告 作者保证报告所采用的数据均来自合规渠道。"
+        "国信证券投资评级 投资评级标准 报告发布日后6 到12 个月相对市场表现。"
+    )
+    assert triage_block_detail(rating_standard).reason == "noise"
+
+    figure_catalog = (
+        "宏观研究 图表27：最新一周美国汽油可供应天数较上一周小幅下降"
+        " ........................................ 8 图表28：美国EIA商业原油库存减少"
+        " ........................................ 8 图表29：美国原油产量上行"
+        " ........................................ 8"
+    )
+    assert triage_block_detail(figure_catalog).reason == "noise"
+
+    no_recap_link = (
+        "今天我不再另写复盘了，所以这里直接附上今天数据库的链接。"
+        "I won’t be writing a recap today, so here is today’s link to the database."
+    )
+    assert triage_block_detail(no_recap_link).reason == "noise"
+
+    market_view = (
+        "核心信息是，债券市场并非在反抗政策制定者。"
+        "市场是在要求政策制定者区分健康的价格发现与真正的市场失灵。"
+    )
+    assert triage_block_detail(market_view).reason == "qualitative"
+
+    internal_numeric_table = "18.4% 43.7% 0.76% 0.95% TTM 1.11% 风险提示：仅供内部参考"
+    assert triage_block_detail(internal_numeric_table).reason == "numeric"
 
 
 def test_doc_kind_detail_reports_reason_and_confidence() -> None:
@@ -130,9 +180,58 @@ def test_doc_kind_detail_reports_reason_and_confidence() -> None:
         == "multiple_tickers"
     )
     assert classify_doc_kind_detail("宏观流动性周报").kind == "macro"
+    assert classify_doc_kind_detail("Capital-Wars_债券国债QE与3-3-3-30政策框架").kind == "macro"
+    assert classify_doc_kind_detail("2026 年 8 月美国非农数据点评").kind == "macro"
     detail = classify_doc_kind_detail("无明显线索", ())
     assert detail.kind == "industry" and detail.reason == "fallback" and detail.confidence < 0.6
     assert classify_doc_kind_detail("任何标题", (), "macro").reason == "manual_override"
+
+
+def test_doc_kind_detail_handles_gold_source_patterns() -> None:
+    assert classify_doc_kind_detail("天孚通信_投委会决策报告").kind == "company"
+    assert (
+        classify_doc_kind_detail(
+            "Macro-Charts_系好安全带", ("Russell positioning remains low",)
+        ).kind
+        == "industry"
+    )
+    assert (
+        classify_doc_kind_detail(
+            "Macro-Charts_系好安全带",
+            ("Cover story: How to Fix Your Bond Strategy as Yields Rise",),
+        ).kind
+        == "macro"
+    )
+    assert classify_doc_kind_detail("Simons-Substack_黄金的多头与空头逻辑").kind == "macro"
+    assert classify_doc_kind_detail("Simons-Substack_白银矿股关注图表四").kind == "industry"
+    assert (
+        classify_doc_kind_detail(
+            "2026.09.05-中信建投-行业数据周报9月第1期-市场普遍下跌",
+            ("盈利预测—一级行业 本周盈利增速预测调整居前的五个行业为电子、环保。",),
+        ).kind
+        == "industry"
+    )
+    assert (
+        classify_doc_kind_detail(
+            "2026.09.05-中信建投-行业数据周报9月第1期-市场普遍下跌",
+            ("内容摘要 核心观点：本周A股主要宽基指数普遍下跌，市场结构延续再平衡。",),
+        ).kind
+        == "macro"
+    )
+    assert (
+        classify_doc_kind_detail(
+            "2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高",
+            ("本周房地产市场延续分化。二手房成交面积同比涨幅走阔。",),
+        ).kind
+        == "industry"
+    )
+    assert (
+        classify_doc_kind_detail(
+            "2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高",
+            ("宏观经济点评 风险提示 宏观经济超预期下行，拖累房地产市场止跌节奏。",),
+        ).kind
+        == "macro"
+    )
 
 
 def test_v2_prompt_marks_document_text_as_untrusted() -> None:
@@ -214,7 +313,7 @@ def test_lint_claim_applies_quality_gate_without_llm() -> None:
         subject="600519.SH",
         metric="营业收入",
         value_text="1741 亿元",
-        value_num=Decimal("1741"),
+        value_num=Decimal("174100000000"),
         unit_raw="亿元",
         unit="元",
         period_raw="2026H1",
@@ -338,7 +437,7 @@ def test_extract_claims_v2_persists_shadow_rows_and_default_projection(
     runs = v2_svc.block_runs_v2(limit=10)
     assert {row["status"] for row in runs} == {"ok", "all_review", "all_rejected"}
 
-    projection = v2_svc.claim_observation_projection(limit=10)
+    projection = v2_svc.legacy_v2_observation_projection(limit=10)
     assert len(projection) == 1
     assert projection[0]["known_at"].isoformat() == "2026-09-06"
 

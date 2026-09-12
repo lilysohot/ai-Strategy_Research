@@ -1,0 +1,45 @@
+{
+  "version": "corpus-expanded-holdout-1",
+  "frozen_before_execution": true,
+  "selection": "Three previously unused documents, selected by institution and layout; visually checked target pages before extraction. Convenience sample, not population accuracy.",
+  "limits": {"prose_calls_per_macro_document": 2, "packet_chars": 2000, "timeout_seconds": 60},
+  "scoring": "Exact row/column/value/unit for 12 table cells. Prose numeric retrieval and complete semantic coordinates scored separately. Whitespace-only quote alignment. No publication-year inference. No retries to improve scores. Unmatched outputs outside frozen targets are not an annotated precision denominator.",
+  "samples": [
+    {
+      "name": "beiteli_customer_table", "role": "new_layout_holdout",
+      "pattern": "*2594e01d.pdf", "source_rev": "f0e67b732b3f6d7b", "pages": [4],
+      "gold": [
+        {"row": "上海银浆", "columns": ["销售额（万元）"], "values": ["171,188.68"], "unit": "万元"},
+        {"row": "上海银浆", "columns": ["占收入比例"], "values": ["46.95%"], "unit": "%"},
+        {"row": "帝科股份", "columns": ["销售额（万元）"], "values": ["59,243.00"], "unit": "万元"},
+        {"row": "帝科股份", "columns": ["占收入比例"], "values": ["16.25%"], "unit": "%"},
+        {"row": "贺利氏光伏", "columns": ["销售额（万元）"], "values": ["7,541.37"], "unit": "万元"},
+        {"row": "贺利氏光伏", "columns": ["占收入比例"], "values": ["2.07%"], "unit": "%"},
+        {"row": "苏州科德", "columns": ["销售额（万元）"], "values": ["6,817.11"], "unit": "万元"},
+        {"row": "苏州科德", "columns": ["占收入比例"], "values": ["1.87%"], "unit": "%"},
+        {"row": "日御光伏", "columns": ["销售额（万元）"], "values": ["6,286.82"], "unit": "万元"},
+        {"row": "日御光伏", "columns": ["占收入比例"], "values": ["1.72%"], "unit": "%"},
+        {"row": "合计", "columns": ["销售额（万元）"], "values": ["251076.98"], "unit": "万元"},
+        {"row": "合计", "columns": ["占收入比例"], "values": ["68.86%"], "unit": "%"}
+      ]
+    },
+    {
+      "name": "huatai_nfp_holdout", "role": "new_institution_prose",
+      "pattern": "*d571f138.pdf", "source_rev": "5e30537691c88e4e", "pages": [1], "model_extract": true,
+      "targets": [
+        {"name": "nfp_actual", "number": "16.2", "quote_terms": ["非农", "16.2"], "metrics": ["NFP", "新增非农就业", "非农就业", "非农就业人数"], "subject": "US", "units": ["万人"], "state": "actual", "basis": null, "period_end": null},
+        {"name": "nfp_consensus", "number": "5.6", "quote_terms": ["预期", "5.6"], "metrics": ["NFP", "新增非农就业", "非农就业", "非农就业人数"], "subject": "US", "units": ["万人"], "state": "consensus", "basis": null, "period_end": null}
+      ],
+      "negative_rules": ["no_calculate", "no_inferred_year", "revision_not_previous"]
+    },
+    {
+      "name": "zhongyin_nfp_yoy_holdout", "role": "new_institution_semantic_negative",
+      "pattern": "*65b4b040.pdf", "source_rev": "bd0a65b7c6fe481d", "pages": [1], "model_extract": true,
+      "targets": [
+        {"name": "nfp_yoy_rate", "number": "0.38", "quote_terms": ["非农", "同比", "0.38"], "metrics": ["NFP", "非农就业人数", "非农就业人数同比", "非农就业"], "subject": "US", "units": ["%"], "state": "actual", "basis": "YoY", "period_end": null}
+      ],
+      "negative_rules": ["no_calculate", "no_inferred_year", "no_borrowed_actual_consensus"]
+    }
+  ],
+  "synthetic_negative_rules": ["wrong_period", "wrong_metric_value", "fabricated_known_at", "forecast_as_fact", "duplicate_identity"]
+}
