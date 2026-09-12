@@ -230,24 +230,35 @@ function toggleMode() {
   padding-bottom: 48px;
   min-height: 100vh;
   padding: 16px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(201, 182, 75, 0.11), transparent 30%),
+    linear-gradient(135deg, #0b0e0b 0%, var(--bg-app) 52%, #141810 100%);
 }
 
 .login-card {
   width: 100%;
-  max-width: 400px;
-  border-radius: 12px;
+  max-width: 420px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-raised) 96%, black);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.login-card :deep(.el-card__body) {
+  padding: 28px 28px 26px;
 }
 
 .title {
   margin: 0 0 4px;
-  font-size: 24px;
-  font-weight: 600;
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .subtitle {
   margin: 0 0 20px;
-  color: var(--el-text-color-secondary);
+  color: var(--muted);
   font-size: 14px;
 }
 
@@ -258,6 +269,7 @@ function toggleMode() {
 .submit-btn {
   width: 100%;
   margin-top: 8px;
+  color: var(--accent-text);
 }
 
 .switch-row {
@@ -268,7 +280,19 @@ function toggleMode() {
 .hint {
   margin-top: 16px;
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: var(--muted);
   line-height: 1.6;
+}
+
+.login-card :deep(.el-form-item__error) {
+  color: var(--danger);
+}
+
+.login-card :deep(.el-input__inner) {
+  color: var(--text);
+}
+
+.login-card :deep(.el-input__inner::placeholder) {
+  color: var(--quiet);
 }
 </style>

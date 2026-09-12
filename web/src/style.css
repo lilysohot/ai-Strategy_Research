@@ -3,36 +3,53 @@
 
 :root {
   color-scheme: dark;
-  --bg-app: #10110e;
-  --bg-rail: #0c0d0b;
-  --bg-raised: #181a15;
-  --line: #303228;
-  --text: #f0ecdd;
-  --muted: #a5a59b;
-  --quiet: #6f7068;
-  --accent: #d5c93a;
-  --ok: #9bbe87;
-  --warning: #e5b466;
-  --danger: #d78778;
-  --el-color-primary: #d5c93a;
-  --el-color-primary-light-3: #bfb644;
-  --el-color-primary-light-5: #8f8939;
-  --el-color-primary-light-7: #4b4928;
-  --el-color-primary-light-9: #252619;
-  --el-color-primary-dark-2: #f0e76a;
-  --el-bg-color: #181a15;
-  --el-bg-color-page: #10110e;
-  --el-bg-color-overlay: #181a15;
-  --el-fill-color: #1f211b;
-  --el-fill-color-light: #25271f;
-  --el-fill-color-lighter: #181a15;
-  --el-border-color: #303228;
-  --el-border-color-light: #303228;
-  --el-border-color-lighter: #303228;
-  --el-text-color-primary: #f0ecdd;
-  --el-text-color-regular: #d8d4c4;
-  --el-text-color-secondary: #a5a59b;
-  --el-text-color-placeholder: #6f7068;
+  --bg-app: #0f120f;
+  --bg-rail: #11150f;
+  --bg-raised: #1a2018;
+  --bg-elevated: #22291f;
+  --bg-input: #151a13;
+  --line: #384032;
+  --line-strong: #566044;
+  --text: #f4f0e3;
+  --text-soft: #ddd7c7;
+  --muted: #b4ad9a;
+  --quiet: #9a927f;
+  --accent: #c9b64b;
+  --accent-hover: #dccb63;
+  --accent-soft: #343116;
+  --accent-text: #15170f;
+  --ok: #95b884;
+  --warning: #d7a95d;
+  --danger: #d78374;
+  --el-color-primary: var(--accent);
+  --el-color-primary-light-3: #d8c866;
+  --el-color-primary-light-5: #9f903a;
+  --el-color-primary-light-7: #5e5529;
+  --el-color-primary-light-9: var(--accent-soft);
+  --el-color-primary-dark-2: var(--accent-hover);
+  --el-color-success: var(--ok);
+  --el-color-warning: var(--warning);
+  --el-color-danger: var(--danger);
+  --el-bg-color: var(--bg-raised);
+  --el-bg-color-page: var(--bg-app);
+  --el-bg-color-overlay: var(--bg-elevated);
+  --el-fill-color: var(--bg-elevated);
+  --el-fill-color-light: #262d22;
+  --el-fill-color-lighter: var(--bg-raised);
+  --el-fill-color-blank: var(--bg-input);
+  --el-border-color: var(--line);
+  --el-border-color-light: var(--line);
+  --el-border-color-lighter: #2d3429;
+  --el-border-color-extra-light: #252c22;
+  --el-text-color-primary: var(--text);
+  --el-text-color-regular: var(--text-soft);
+  --el-text-color-secondary: var(--muted);
+  --el-text-color-placeholder: var(--quiet);
+  --el-card-bg-color: var(--bg-raised);
+  --el-mask-color: rgba(0, 0, 0, 0.68);
+  --el-disabled-bg-color: #2a3026;
+  --el-disabled-text-color: #a69d8b;
+  --el-disabled-border-color: #454c3b;
 }
 
 * {
@@ -67,6 +84,107 @@ textarea {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.el-card {
+  --el-card-bg-color: var(--bg-raised);
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.el-input,
+.el-textarea {
+  --el-input-bg-color: var(--bg-input);
+  --el-input-border-color: var(--line);
+  --el-input-hover-border-color: var(--line-strong);
+  --el-input-focus-border-color: var(--accent);
+  --el-input-text-color: var(--text);
+  --el-input-placeholder-color: var(--quiet);
+  --el-input-icon-color: var(--muted);
+}
+
+.el-input__wrapper,
+.el-textarea__inner {
+  background-color: var(--bg-input);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.el-input__wrapper:hover,
+.el-textarea__inner:hover {
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
+.el-input__wrapper.is-focus,
+.el-textarea__inner:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.el-button {
+  --el-button-bg-color: var(--bg-elevated);
+  --el-button-border-color: var(--line);
+  --el-button-text-color: var(--text-soft);
+  --el-button-hover-bg-color: #2a3125;
+  --el-button-hover-border-color: var(--line-strong);
+  --el-button-hover-text-color: var(--text);
+  --el-button-active-bg-color: #303727;
+  --el-button-active-border-color: var(--accent);
+  --el-button-active-text-color: var(--text);
+}
+
+.el-button--primary {
+  --el-button-bg-color: var(--accent);
+  --el-button-border-color: var(--accent);
+  --el-button-text-color: var(--accent-text);
+  --el-button-hover-bg-color: var(--accent-hover);
+  --el-button-hover-border-color: var(--accent-hover);
+  --el-button-hover-text-color: var(--accent-text);
+  --el-button-active-bg-color: #aa9938;
+  --el-button-active-border-color: #aa9938;
+  font-weight: 700;
+}
+
+.el-button--primary:not(.is-disabled) {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-text) !important;
+}
+
+.el-button--primary:not(.is-disabled):hover,
+.el-button--primary:not(.is-disabled):focus {
+  background-color: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
+  color: var(--accent-text) !important;
+}
+
+.el-button--primary:not(.is-disabled):active {
+  background-color: #aa9938 !important;
+  border-color: #aa9938 !important;
+  color: var(--accent-text) !important;
+}
+
+.el-button.is-disabled,
+.el-button.is-disabled:hover {
+  background-color: var(--el-disabled-bg-color);
+  border-color: var(--el-disabled-border-color);
+  color: var(--el-disabled-text-color);
+}
+
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:hover {
+  --el-button-disabled-bg-color: #333928;
+  --el-button-disabled-border-color: #4b523d;
+  --el-button-disabled-text-color: #aaa18d;
+  background-color: #333928 !important;
+  border-color: #4b523d !important;
+  color: #aaa18d !important;
+}
+
+.el-link.el-link--primary {
+  --el-link-text-color: var(--accent);
+  --el-link-hover-text-color: var(--accent-hover);
 }
 
 /* Long unbroken strings (a base_url, a sha256) would otherwise stretch the
