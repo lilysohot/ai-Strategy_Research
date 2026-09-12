@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>FrontierAgent · 投资研究工作台</title>
+  <!--
+    设计假设（验证前样稿）：
+    - 用户需要一边与 Agent 协作、一边阅读正在沉淀的投资研究报告。
+    - 一次 Run 是中心对象；会话、流式过程、产物和控制动作都挂在它下面。
+    - 示例报告、工具活动和会话均为演示占位，正式实现必须改接 Session / Run / SSE / Artifact API。
+    - 品牌文字暂用 FrontierAgent；上线前应将 apodex/tui/logo.py 的既有标识转为正式 Web 资产，不能自行替换品牌图形。
+  -->
+  <style>
+    :root {
+      --bg-app: #10110e;
+      --bg-rail: #0c0d0b;
+      --bg-raised: #181a15;
+      --bg-hover: #20221c;
+      --line: #303228;
+      --line-soft: #24261f;
+      --text: #f0ecdd;
+      --muted: #a5a59b;
+      --quiet: #6f7068;
+      --accent: #d5c93a;
+      --accent-wash: #2a2912;
+      --ok: #9bbe87;
+      --warning: #e5b466;
+      --danger: #d78778;
+      --report: #e9e3d5;
+      --sans: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
+      --serif: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", Georgia, serif;
+      --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+      --left: 250px;
+      --canvas: clamp(430px, 37vw, 610px);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-width: 320px; min-height: 100%; margin: 0; }
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      background: var(--bg-app);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, textarea:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: var(--left) minmax(530px, 1fr) var(--canvas);
+      height: calc(100vh - 30px);
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    /* A. Research rail */
+    .rail {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-rail);
+      border-right: 1px solid var(--line);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      min-height: 64px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .brand__wordmark {
+      letter-spacing: -.03em;
+      font-size: 17px;
+      font-weight: 650;
+      line-height: 1;
+    }
+    .brand__wordmark em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    .brand__meta {
+      display: block;
+      margin-top: 5px;
+      color: var(--quiet);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .rail__content { padding: 14px 10px; overflow-y: auto; }
+    .new-research, .nav-button, .session, .text-button, .chip, .canvas-tab, .run-action {
+      border: 0;
+      cursor: pointer;
+      background: transparent;
+    }
+    .new-research {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 14px;
+      padding: 10px 11px;
+      border: 1px solid #565321;
+      border-radius: 8px;
+      background: #211f08;
+      color: #f4ed9b;
+      font-weight: 650;
+      text-align: left;
+    }
+    .new-research:hover { background: #2e2b09; }
+    .keycap {
+      padding: 1px 5px;
+      border: 1px solid #706b30;
+      border-radius: 4px;
+      color: #c9c582;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .filter {
+      position: relative;
+      margin: 0 2px 13px;
+    }
+    .filter input {
+      width: 100%;
+      padding: 8px 9px 8px 28px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #151612;
+      color: var(--text);
+      font-size: 12px;
+    }
+    .filter::before {
+      position: absolute; top: 8px; left: 10px; content: "⌕"; color: var(--quiet);
+      pointer-events: none;
+    }
+    .nav { display: grid; gap: 2px; margin: 0 2px 17px; }
+    .nav-button {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 8px; border-radius: 6px; color: var(--muted); text-align: left;
+    }
+    .nav-button:hover { background: var(--bg-hover); color: var(--text); }
+    .nav-button[aria-current="page"] { color: var(--text); }
+    .nav-button span:last-child { color: var(--quiet); font: 11px var(--mono); }
+    .section-label {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 0 8px 6px; color: var(--quiet); font-size: 11px; font-weight: 650;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .session-list { display: grid; gap: 2px; }
+    .session {
+      position: relative; display: block; width: 100%; padding: 8px 9px 8px 12px;
+      border-radius: 6px; color: var(--muted); text-align: left;
+    }
+    .session::before {
+      position: absolute; left: 0; top: 9px; bottom: 9px; width: 2px;
+      content: ""; border-radius: 2px; background: transparent;
+    }
+    .session:hover { background: var(--bg-hover); color: var(--text); }
+    .session.is-active { background: #292707; color: #f3efa5; }
+    .session.is-active::before { background: var(--accent); }
+    .session__title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+    .session__meta { display: block; margin-top: 2px; color: var(--quiet); font-size: 11px; }
+    .session.is-active .session__meta { color: #aaa76f; }
+    .rail__footer {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 12px 14px; border-top: 1px solid var(--line-soft); color: var(--muted);
+    }
+    .account { min-width: 0; }
+    .account strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 600; }
+    .account span { display: block; color: var(--quiet); font-size: 10px; }
+    .account-menu { padding: 4px; border: 1px solid var(--line); border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; }
+    .account-menu:hover { background: var(--bg-hover); color: var(--text); }
+
+    /* B. Conversation */
+    .thread {
+      display: flex; flex-direction: column; min-width: 0; background: var(--bg-app);
+      border-right: 1px solid var(--line);
+    }
+    .thread__header, .canvas__header {
+      display: flex; align-items: center; min-height: 64px; padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .thread__heading { min-width: 0; }
+    .thread__crumb { color: var(--quiet); font: 10px var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+    .thread__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-size: 15px; font-weight: 650; }
+    .header-spacer { flex: 1; }
+    .run-pill {
+      display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; padding: 5px 8px;
+      border: 1px solid #605a23; border-radius: 999px; background: #1d1b09; color: #e6da71;
+      font: 11px var(--mono); white-space: nowrap;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgb(213 201 58 / 12%); }
+    .run-pill.is-complete { border-color: #3d5435; background: #142015; color: var(--ok); }
+    .run-pill.is-complete .status-dot { background: var(--ok); box-shadow: none; }
+    .header-button, .icon-button {
+      display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line);
+      border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer;
+    }
+    .header-button { margin-left: 8px; padding: 6px 9px; font-size: 12px; }
+    .header-button:hover, .icon-button:hover { background: var(--bg-hover); color: var(--text); }
+    .icon-button { width: 30px; height: 30px; }
+    .thread__scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 28px clamp(20px, 4vw, 52px) 22px; }
+    .conversation { max-width: 740px; margin: 0 auto; }
+    .turn { margin: 0 0 28px; }
+    .turn__meta { display: flex; align-items: center; gap: 7px; margin-bottom: 9px; color: var(--quiet); font-size: 11px; }
+    .role-mark { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); font: 10px var(--mono); }
+    .turn--user .turn__content {
+      max-width: 92%; padding: 13px 15px; border: 1px solid var(--line); border-radius: 2px 10px 10px 10px;
+      background: var(--bg-raised); color: #e8e5d8;
+    }
+    .turn__content { font-size: 14px; line-height: 1.76; }
+    .turn__content p { margin: 0 0 12px; }
+    .turn__content p:last-child { margin-bottom: 0; }
+    .turn__content h3 { margin: 20px 0 8px; color: var(--report); font-family: var(--serif); font-size: 20px; line-height: 1.25; }
+    .turn__content strong { color: #f7f1c4; font-weight: 680; }
+    .inline-cite { color: #e4d55f; font-family: var(--mono); font-size: 11px; text-decoration: none; border-bottom: 1px solid #766f2d; }
+    .turn__content ul { padding-left: 19px; margin: 8px 0; }
+    .turn__content li { margin: 4px 0; }
+
+    .run-stage { margin: 16px 0 18px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .run-stage__summary {
+      display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 2px;
+    }
+    .stage-label { color: #e6dc88; font-size: 12px; font-weight: 650; }
+    .stage-detail { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+    .stage-time { margin-left: auto; color: var(--quiet); font: 11px var(--mono); white-space: nowrap; }
+    .run-action { padding: 4px 7px; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); font-size: 11px; }
+    .run-action:hover { border-color: #5a5739; color: var(--text); }
+    .run-action--stop { color: var(--danger); }
+    .run-stage__body { display: none; padding: 0 2px 14px; }
+    .run-stage.is-open .run-stage__body { display: block; }
+    .stage-list { display: grid; gap: 1px; padding: 0; margin: 0; list-style: none; }
+    .stage-list li { display: grid; grid-template-columns: 16px 1fr auto; gap: 8px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--line-soft); }
+    .stage-list li:first-child { border-top: 0; }
+    .stage-status { color: var(--ok); font-family: var(--mono); font-size: 11px; }
+    .stage-status.running { color: var(--accent); }
+    .stage-status.waiting { color: var(--warning); }
+    .stage-name { color: var(--text); font: 12px var(--mono); }
+    .stage-result { overflow: hidden; max-width: 240px; color: var(--quiet); text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+    .steer-row { display: none; gap: 7px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
+    .steer-row.is-visible { display: flex; }
+    .steer-row input { flex: 1; min-width: 0; padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: #141510; color: var(--text); font-size: 12px; }
+    .steer-row button { padding: 7px 9px; border: 1px solid #5a5739; border-radius: 6px; background: transparent; color: #dfd582; cursor: pointer; font-size: 12px; }
+    .steer-note { display: none; margin: 8px 0 0; color: var(--ok); font-size: 11px; }
+    .steer-note.is-visible { display: block; }
+    .approval-card { margin: 12px 0 14px; padding: 13px; border: 1px solid #735c32; border-radius: var(--radius); background: #201b11; }
+    .approval-card[hidden] { display: none; }
+    .approval-card__eyebrow { color: var(--warning); font: 10px var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+    .approval-card h4 { margin: 4px 0 3px; color: var(--text); font-size: 13px; }
+    .approval-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .approval-card__actions { display: flex; align-items: center; gap: 7px; margin-top: 11px; }
+    .approval-card__actions button { padding: 6px 8px; border: 1px solid #6a603a; border-radius: 5px; background: transparent; color: #e8dd9a; cursor: pointer; font-size: 11px; }
+    .approval-card__actions button:first-child { border-color: #4c7646; color: #c4e1b7; }
+    .approval-card__actions button:hover { background: #2a2716; }
+    .approval-result { display: none; margin-top: 9px; color: var(--ok); font-size: 12px; }
+    .approval-result.is-visible { display: block; }
+
+    .composer-wrap { padding: 14px clamp(16px, 3vw, 36px) 17px; border-top: 1px solid var(--line); background: #12130f; }
+    .composer { max-width: 760px; margin: 0 auto; padding: 10px; border: 1px solid #414238; border-radius: 12px; background: var(--bg-raised); }
+    .composer:focus-within { border-color: #77712d; box-shadow: 0 0 0 3px rgb(213 201 58 / 7%); }
+    .composer textarea { display: block; width: 100%; min-height: 50px; max-height: 140px; resize: vertical; border: 0; outline: 0; background: transparent; color: var(--text); line-height: 1.55; }
+    .composer textarea::placeholder { color: var(--quiet); }
+    .attachment-list { display: none; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+    .attachment-list.has-items { display: flex; }
+    .attachment { display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px; border: 1px solid #525349; border-radius: 999px; color: var(--muted); font-size: 11px; }
+    .attachment button { padding: 0; border: 0; background: transparent; color: var(--quiet); cursor: pointer; }
+    .composer__bottom { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--line-soft); padding-top: 8px; }
+    .composer-tools { display: flex; gap: 5px; }
+    .tool-button { padding: 4px 7px; border: 1px solid transparent; border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
+    .tool-button:hover, .tool-button.is-active { border-color: #55533a; background: #24251c; color: #e6dd94; }
+    .send { display: inline-flex; align-items: center; gap: 7px; margin-left: auto; padding: 7px 10px; border: 0; border-radius: 7px; background: var(--accent); color: #171609; cursor: pointer; font-size: 12px; font-weight: 750; }
+    .send:hover { background: #e3d844; }
+    .send kbd { padding: 1px 3px; border: 1px solid #979031; border-radius: 3px; color: #4b480f; background: #e8df6d; font: 9px var(--mono); }
+
+    /* C. Research canvas */
+    .canvas { display: flex; flex-direction: column; min-width: 0; background: #151611; }
+    .canvas__header { gap: 10px; }
+    .document-icon { display: grid; place-items: center; width: 27px; height: 31px; border: 1px solid #6b693a; border-radius: 3px; color: #e6db75; font: 10px var(--mono); }
+    .canvas__name { min-width: 0; }
+    .canvas__name strong { display: block; overflow: hidden; color: var(--text); font: 13px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+    .canvas__name span { display: block; color: var(--quiet); font-size: 10px; }
+    .canvas__actions { display: flex; gap: 5px; margin-left: auto; }
+    .canvas__toolbar { display: flex; align-items: center; gap: 4px; min-height: 40px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+    .canvas-tab { padding: 8px 7px; border-bottom: 2px solid transparent; color: var(--quiet); font-size: 12px; }
+    .canvas-tab:hover { color: var(--muted); }
+    .canvas-tab.is-active { border-bottom-color: var(--accent); color: #eee59a; }
+    .canvas-source { margin-left: auto; color: var(--quiet); font: 10px var(--mono); }
+    .canvas__scroll { flex: 1; min-height: 0; overflow-y: auto; }
+    .report { max-width: 760px; margin: 0 auto; padding: 30px clamp(23px, 3vw, 44px) 64px; color: var(--report); font-family: var(--serif); font-size: 15px; line-height: 1.88; }
+    .report__kicker { color: #bcb77c; font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .report h1 { max-width: 620px; margin: 9px 0 18px; color: #f3eee2; font-family: var(--serif); font-size: clamp(27px, 2.5vw, 37px); font-weight: 620; letter-spacing: -.045em; line-height: 1.12; }
+    .report h2 { margin: 34px 0 10px; padding-top: 2px; border-top: 1px solid #3a3b31; color: #f0eadc; font-size: 21px; line-height: 1.25; }
+    .report p { margin: 0 0 15px; }
+    .report__summary { margin: 0 0 23px; padding: 14px 0; border-top: 1px solid #656333; border-bottom: 1px solid #656333; color: #f0e9bd; font-size: 17px; font-weight: 620; line-height: 1.55; }
+    .report__facts { display: grid; grid-template-columns: 105px 1fr; margin: 18px 0; border-top: 1px solid #3a3b31; font-family: var(--sans); font-size: 12px; }
+    .report__facts div { display: contents; }
+    .report__facts dt, .report__facts dd { margin: 0; padding: 7px 0; border-bottom: 1px solid #303128; }
+    .report__facts dt { color: var(--muted); }
+    .report__facts dd { color: #e9e6d5; }
+    .report__facts b { color: #e8dc75; font-weight: 650; }
+    .source-link { color: #ddd162; text-decoration: none; border-bottom: 1px solid #7c7532; font-family: var(--sans); font-size: 12px; }
+    .report__footnote { color: var(--quiet); font-family: var(--sans); font-size: 12px; }
+    .canvas-panel { display: none; padding: 20px 18px; }
+    .canvas-panel.is-active { display: block; }
+    .artifact-row { display: flex; gap: 10px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line-soft); }
+    .artifact-row__type { width: 30px; color: #e3d469; font: 10px var(--mono); }
+    .artifact-row__name { min-width: 0; flex: 1; color: var(--text); font-size: 13px; }
+    .artifact-row__meta { color: var(--quiet); font: 10px var(--mono); }
+    .artifact-row button { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
+    .artifact-row button:hover { color: var(--text); }
+    .change-summary { display: flex; gap: 8px; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
+    .change-summary b { color: var(--ok); font-family: var(--mono); }
+    .change-row { padding: 10px 0; border-top: 1px solid var(--line-soft); }
+    .change-row code { color: #dedbd0; font: 11px var(--mono); }
+    .change-row span { display: block; margin-top: 3px; color: var(--quiet); font-size: 11px; }
+    .canvas__empty { display: none; height: 100%; padding: 70px 32px; color: var(--muted); }
+
+    .disclaimer { height: 30px; padding: 7px 16px; overflow: hidden; border-top: 1px solid var(--line); background: #0d0e0c; color: var(--quiet); text-align: center; font-size: 10px; white-space: nowrap; text-overflow: ellipsis; }
+    .disclaimer strong { color: #c7a762; font-weight: 600; }
+    .toast { position: fixed; z-index: 20; right: 22px; bottom: 47px; max-width: 330px; padding: 9px 12px; border: 1px solid #596c4b; border-radius: 7px; background: #192018; color: #d8ead1; font-size: 12px; box-shadow: 0 12px 30px rgb(0 0 0 / 28%); opacity: 0; pointer-events: none; transform: translateY(5px); transition: opacity .18s, transform .18s; }
+    .toast.is-visible { opacity: 1; transform: translateY(0); }
+
+    .workbench.is-reading { grid-template-columns: 0 minmax(0, 1fr) minmax(560px, 55vw); }
+    .workbench.is-reading .rail { visibility: hidden; }
+    .workbench.is-reading .thread__scroll { padding-left: 28px; padding-right: 28px; }
+
+    @media (max-width: 1279px) {
+      :root { --left: 64px; --canvas: minmax(390px, 43vw); }
+      .brand, .rail__footer { justify-content: center; padding-left: 5px; padding-right: 5px; }
+      .brand__meta, .account, .account-menu { display: none; }
+      .brand__wordmark { font-size: 0; }
+      .brand__wordmark::before { content: "FA"; color: var(--accent); font: 700 15px var(--mono); letter-spacing: -.1em; }
+      .rail__content { padding: 14px 6px; }
+      .new-research { justify-content: center; padding: 10px 4px; font-size: 0; }
+      .new-research::before { content: "+"; font-size: 18px; }
+      .new-research .keycap, .filter, .section-label { display: none; }
+      .nav-button { justify-content: center; padding: 8px 2px; font-size: 0; }
+      .nav-button span:first-child::first-letter { font-size: 15px; }
+      .nav-button span:last-child { display: none; }
+      .session { padding: 9px 2px; text-align: center; }
+      .session__title { font-size: 0; }
+      .session__title::first-letter { font-size: 13px; }
+      .session__meta { display: none; }
+      .session::before { left: 1px; }
+      .stage-result { display: none; }
+    }
+
+    @media (max-width: 1023px) {
+      body { overflow: auto; }
+      .workbench { grid-template-columns: 1fr; height: calc(100vh - 30px); min-height: 540px; }
+      .rail { display: none; }
+      .canvas { display: none; position: fixed; z-index: 10; inset: 0 0 30px; }
+      .workbench.show-canvas .canvas { display: flex; }
+      .workbench.is-reading { grid-template-columns: 1fr; }
+      .workbench.is-reading .thread { display: none; }
+      .workbench.is-reading .canvas { display: flex; }
+      .thread { border-right: 0; }
+      .canvas__header::before { content: "‹"; color: var(--muted); font-size: 22px; }
+      .canvas__header { cursor: pointer; }
+    }
+
+    @media (max-width: 620px) {
+      .thread__header, .canvas__header { min-height: 56px; padding: 0 12px; }
+      .thread__title { max-width: 180px; }
+      .run-pill { margin-left: 6px; padding: 4px 6px; }
+      .run-pill span:last-child { display: none; }
+      .header-button { padding: 6px; font-size: 0; }
+      .header-button::before { content: "报告"; font-size: 11px; }
+      .thread__scroll { padding: 20px 16px; }
+      .turn { margin-bottom: 22px; }
+      .turn--user .turn__content { max-width: 100%; }
+      .stage-detail { display: none; }
+      .run-stage__summary { gap: 7px; }
+      .stage-time { font-size: 10px; }
+      .composer-wrap { padding: 9px 10px; }
+      .composer { border-radius: 9px; }
+      .tool-button:not(:first-child) { display: none; }
+      .send kbd { display: none; }
+      .report { padding: 24px 19px 44px; font-size: 15px; }
+      .report h1 { font-size: 29px; }
+      .canvas-source { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+      .status-dot { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="workbench" id="workbench">
+    <aside class="rail" aria-label="研究导航">
+      <div class="brand">
+        <div>
+          <div class="brand__wordmark">Frontier<em>Agent</em></div>
+          <span class="brand__meta">research workspace · by Apodex</span>
+        </div>
+      </div>
+      <div class="rail__content">
+        <button class="new-research" id="newResearch" type="button">
+          <span>＋ 新建研究</span><span class="keycap">Ctrl N</span>
+        </button>
+        <label class="filter">
+          <span class="sr-only">筛选已加载研究</span>
+          <input id="sessionFilter" type="search" placeholder="筛选已加载研究">
+        </label>
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-button" aria-current="page" type="button"><span>研究</span><span>12</span></button>
+          <button class="nav-button" type="button" title="需要后端接口后开放"><span>资料库</span><span>规划中</span></button>
+          <button class="nav-button" type="button" title="需要后端接口后开放"><span>环境</span><span>规划中</span></button>
+        </nav>
+        <div class="section-label"><span>最近研究</span><span>⌄</span></div>
+        <div class="session-list" id="sessionList">
+          <button class="session is-active" type="button" data-title="美联储降息前景与信号">
+            <span class="session__title">美联储降息前景与信号</span><span class="session__meta">进行中 · 4 轮</span>
+          </button>
+          <button class="session" type="button" data-title="中国出口与汇率传导">
+            <span class="session__title">中国出口与汇率传导</span><span class="session__meta">昨天 · 8 轮</span>
+          </button>
+          <button class="session" type="button" data-title="黄金与实际利率的情景分析">
+            <span class="session__title">黄金与实际利率的情景分析</span><span class="session__meta">9 月 09 日 · 5 轮</span>
+          </button>
+          <button class="session" type="button" data-title="AI 基建 CAPEX 跟踪">
+            <span class="session__title">AI 基建 CAPEX 跟踪</span><span class="session__meta">9 月 07 日 · 9 轮</span>
+          </button>
+        </div>
+      </div>
+      <div class="rail__footer">
+        <div class="account"><strong>研究者</strong><span>模型与连接</span></div>
+        <button class="account-menu" type="button" title="模型与连接">···</button>
+      </div>
+    </aside>
+
+    <section class="thread" aria-label="研究对话">
+      <header class="thread__header">
+        <div class="thread__heading">
+          <div class="thread__crumb">研究 / 宏观 / 当前会话</div>
+          <div class="thread__title" id="threadTitle">美联储降息前景与信号</div>
+        </div>
+        <span class="header-spacer"></span>
+        <div class="run-pill" id="runPill"><i class="status-dot"></i><span id="runStatus">正在研究</span></div>
+        <button class="header-button" id="openCanvas" type="button">打开报告</button>
+      </header>
+
+      <div class="thread__scroll" id="threadScroll">
+        <div class="conversation" id="conversation">
+          <section class="turn turn--user">
+            <div class="turn__meta"><span class="role-mark">你</span><span>今天 09:42</span></div>
+            <div class="turn__content">综合今天公布的数据和两份附件研报，判断 9 月会议后美债、美元和黄金的主要风险路径。请区分基准、上行与下行情景，并给出未来两周的观察清单。</div>
+          </section>
+
+          <section class="turn turn--assistant" id="agentTurn">
+            <div class="turn__meta"><span class="role-mark">FA</span><span>FrontierAgent</span><span>·</span><span id="agentMeta">正在构建研究框架</span></div>
+            <div class="run-stage" id="runStage">
+              <div class="run-stage__summary">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span class="stage-label" id="stageLabel">正在检索宏观数据</span>
+                <span class="stage-detail" id="stageDetail">已完成 3 个工具调用，正在交叉核验</span>
+                <span class="stage-time" id="stageTime">01:48</span>
+                <button class="run-action" id="toggleProcess" type="button">过程</button>
+                <button class="run-action" id="steerToggle" type="button">补充方向</button>
+                <button class="run-action run-action--stop" id="stopRun" type="button">停止</button>
+              </div>
+              <div class="run-stage__body">
+                <ol class="stage-list" aria-label="运行过程">
+                  <li><span class="stage-status">✓</span><span class="stage-name">market_history</span><span class="stage-result">利率与美元走势</span></li>
+                  <li><span class="stage-status">✓</span><span class="stage-name">corpus_search</span><span class="stage-result">命中 2 份研报</span></li>
+                  <li><span class="stage-status running">◌</span><span class="stage-name">web_search_aligned</span><span class="stage-result">核验会议定价</span></li>
+                  <li><span class="stage-status">·</span><span class="stage-name">cited_report_finalizer</span><span class="stage-result">等待证据齐备</span></li>
+                </ol>
+                <div class="steer-row" id="steerRow">
+                  <input id="steerInput" aria-label="补充研究方向" placeholder="例如：优先检验美元走弱情景">
+                  <button id="sendSteer" type="button">排队发送</button>
+                </div>
+                <p class="steer-note" id="steerNote">已排队：将在下一工具边界告知 Agent。</p>
+              </div>
+            </div>
+
+            <div class="approval-card" id="approvalCard" hidden>
+              <div class="approval-card__eyebrow">需要你的决定 · 高风险操作</div>
+              <h4>允许使用外部数据源抓取本周公告吗？</h4>
+              <p>当前运行时不是操作系统级沙箱。获批操作会按你的用户权限执行。</p>
+              <div class="approval-card__actions">
+                <button data-approval="allow" type="button">允许一次</button>
+                <button data-approval="reject" type="button">拒绝并继续</button>
+              </div>
+              <div class="approval-result" id="approvalResult"></div>
+            </div>
+
+            <div class="turn__content" id="agentContent" aria-live="polite">
+              <p>我先把利率路径与风险资产之间的传导拆开：本次判断不能只看“是否降息”，还需要同时核对<strong>路径定价、实际利率与美元流动性</strong>。报告画布会持续汇总已验证的结论。</p>
+              <h3>初步观察</h3>
+              <ul>
+                <li>基准情景下，若降息被充分定价，长端利率的反应将更依赖通胀与期限溢价，而非政策动作本身。</li>
+                <li>黄金的有效驱动应拆为实际利率、美元和避险需求，避免以单一利率叙事替代因果判断。<a class="inline-cite" href="#source-1">[1]</a></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="composer-wrap">
+        <form class="composer" id="composer">
+          <div class="attachment-list" id="attachmentList" aria-live="polite"></div>
+          <label class="sr-only" for="promptInput">继续提问</label>
+          <textarea id="promptInput" rows="2" placeholder="继续追问、补充约束，或粘贴研究问题…"></textarea>
+          <div class="composer__bottom">
+            <div class="composer-tools">
+              <label class="tool-button" for="fileInput">＋ 附件</label>
+              <input id="fileInput" type="file" multiple hidden>
+              <button class="tool-button" type="button" data-template="请按基准、上行、下行情景重写结论，并列出触发条件。">情景</button>
+              <button class="tool-button" type="button" data-template="请从估值、流动性、政策与技术面四个维度补充风险清单。">风险</button>
+            </div>
+            <button class="send" type="submit">发送 <kbd>⌘↵</kbd></button>
+          </div>
+        </form>
+      </footer>
+    </section>
+
+    <aside class="canvas" aria-label="研究画布">
+      <header class="canvas__header" id="canvasHeader">
+        <div class="document-icon">MD</div>
+        <div class="canvas__name">
+          <strong>美联储降息前景与信号.md</strong>
+          <span>本次回答 · 运行中自动汇总</span>
+        </div>
+        <div class="canvas__actions">
+          <button class="icon-button" id="focusReading" type="button" title="专注阅读">↗</button>
+          <button class="icon-button" type="button" title="下载报告">↓</button>
+        </div>
+      </header>
+      <nav class="canvas__toolbar" aria-label="报告内容">
+        <button class="canvas-tab is-active" type="button" data-panel="report">结论</button>
+        <button class="canvas-tab" type="button" data-panel="artifacts">产物 <span class="sr-only">2 个</span></button>
+        <button class="canvas-tab" type="button" data-panel="changes">变更</button>
+        <span class="canvas-source">来源：当前 Run · 演示数据</span>
+      </nav>
+      <div class="canvas__scroll">
+        <article class="report canvas-panel is-active" id="panel-report">
+          <div class="report__kicker">宏观研究 · 2026.09.12 · 草稿</div>
+          <h1>美联储进入“路径博弈”：价格已先于政策行动</h1>
+          <p class="report__summary">基准判断：市场的核心风险不在单次降息，而在于“宽松已被定价”后，长端实际利率与美元是否同步回落。</p>
+          <p>短端定价已将政策转向纳入预期，但长端收益率仍受期限溢价、通胀再加速与财政供给共同约束。因此，会议后的首要验证点是实际利率和美元的同向变化，而不是标题数字本身。</p>
+          <dl class="report__facts">
+            <div><dt>基准</dt><dd><b>缓慢宽松</b>：短端回落，长端保持韧性，风险资产分化。</dd></div>
+            <div><dt>上行风险</dt><dd><b>美元反弹</b>：宽松预期兑现后，期限溢价抬升压制估值。</dd></div>
+            <div><dt>下行风险</dt><dd><b>增长失速</b>：实际利率下行，黄金与长久期资产相对受益。</dd></div>
+          </dl>
+          <h2>一、未来两周观察清单</h2>
+          <p>优先按“数据 → 利率 → 美元 → 风险资产”的顺序追踪。若通胀指标未能继续降温，同时长端收益率突破近期区间，则不应将政策宽松机械外推为全面风险偏好回升。</p>
+          <p>黄金的验证阈值是实际利率走低和美元走弱是否同时出现；若两者背离，需把上涨归因拆开，避免在情绪驱动阶段把相关性误判为稳态关系。</p>
+          <h2>二、执行纪律</h2>
+          <p>本报告只给出观察框架，不形成自动交易指令。所有方向判断须在关键数据、波动率与仓位信号一致后才升级为策略动作。</p>
+          <p class="report__footnote" id="source-1">[1] 演示引用：正式实现保留 Agent 输出中的 Markdown 链接；结构化来源档案需要单独的后端 source API。</p>
+        </article>
+
+        <section class="canvas-panel" id="panel-artifacts" aria-label="产物列表">
+          <div class="artifact-row"><span class="artifact-row__type">MD</span><span class="artifact-row__name">美联储降息前景与信号.md</span><span class="artifact-row__meta">12.4 KB</span><button type="button">预览</button><button type="button">下载</button></div>
+          <div class="artifact-row"><span class="artifact-row__type">CSV</span><span class="artifact-row__name">宏观指标观察清单.csv</span><span class="artifact-row__meta">2.1 KB</span><button type="button">预览</button><button type="button">下载</button></div>
+          <p class="report__footnote">正式实现：文件元数据与预览类型严格来自 `/api/runs/{id}/artifacts` 和 preview 接口；二进制文件只提供下载。</p>
+        </section>
+
+        <section class="canvas-panel" id="panel-changes" aria-label="文件变更">
+          <div class="change-summary"><span>本次运行</span><b>+18</b><span>−2</span><span>文件变更</span></div>
+          <div class="change-row"><code>outputs/美联储降息前景与信号.md</code><span>新增 1 个产物；终态后可下载。</span></div>
+          <div class="change-row"><code>outputs/宏观指标观察清单.csv</code><span>新增 1 个产物；回滚只在服务端确认可回滚时出现。</span></div>
+        </section>
+      </div>
+    </aside>
+  </main>
+  <footer class="disclaimer">本平台输出由 AI 生成，仅供参考，<strong>不构成投资建议</strong>。据此操作，风险自担。</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const workbench = document.getElementById('workbench');
+      const thread = document.getElementById('threadScroll');
+      const toast = document.getElementById('toast');
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.classList.remove('is-visible'), 2600);
+      };
+
+      document.getElementById('toggleProcess').addEventListener('click', () => {
+        document.getElementById('runStage').classList.toggle('is-open');
+      });
+      document.getElementById('steerToggle').addEventListener('click', () => {
+        const stage = document.getElementById('runStage');
+        stage.classList.add('is-open');
+        document.getElementById('steerRow').classList.toggle('is-visible');
+        document.getElementById('steerInput').focus();
+      });
+      document.getElementById('sendSteer').addEventListener('click', () => {
+        const input = document.getElementById('steerInput');
+        if (!input.value.trim()) return;
+        document.getElementById('steerNote').classList.add('is-visible');
+        input.value = '';
+        showToast('演示：插话已排队；正式实现应等待 /steer 确认。');
+      });
+      document.getElementById('stopRun').addEventListener('click', (event) => {
+        event.currentTarget.disabled = true;
+        document.getElementById('stageLabel').textContent = '正在请求停止';
+        document.getElementById('stageDetail').textContent = '等待 Agent 在安全边界完成当前操作';
+        window.setTimeout(() => {
+          document.getElementById('stageLabel').textContent = '已停止，部分结果已保留';
+          document.getElementById('stageDetail').textContent = 'stopped_by: user_stop · 可以继续追问';
+          document.getElementById('runPill').classList.add('is-complete');
+          document.getElementById('runStatus').textContent = '部分完成';
+          event.currentTarget.style.display = 'none';
+          showToast('演示：真实实现调用 POST /control，并以 Run 终态为准。');
+        }, 760);
+      });
+      document.querySelectorAll('[data-approval]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const result = document.getElementById('approvalResult');
+          result.textContent = button.dataset.approval === 'allow' ? '已提交允许一次，等待运行确认。' : '已拒绝，替代路径将被回传给 Agent。';
+          result.classList.add('is-visible');
+          showToast('演示：正式实现必须等待 approval_resolved 事件后关闭卡片。');
+        });
+      });
+
+      document.querySelectorAll('.canvas-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.canvas-tab').forEach((item) => item.classList.remove('is-active'));
+          document.querySelectorAll('.canvas-panel').forEach((item) => item.classList.remove('is-active'));
+          tab.classList.add('is-active');
+          document.getElementById(`panel-${tab.dataset.panel}`).classList.add('is-active');
+        });
+      });
+      document.getElementById('focusReading').addEventListener('click', () => {
+        workbench.classList.toggle('is-reading');
+        showToast(workbench.classList.contains('is-reading') ? '已进入专注阅读，按 Esc 返回工作台。' : '已回到工作台。');
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && workbench.classList.contains('is-reading')) workbench.classList.remove('is-reading');
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault(); document.getElementById('sessionFilter').focus();
+        }
+      });
+      const openCanvas = () => workbench.classList.add('show-canvas');
+      document.getElementById('openCanvas').addEventListener('click', openCanvas);
+      document.getElementById('canvasHeader').addEventListener('click', (event) => {
+        if (window.innerWidth < 1024 && !event.target.closest('button')) workbench.classList.remove('show-canvas');
+      });
+
+      document.querySelectorAll('.session').forEach((session) => {
+        session.addEventListener('click', () => {
+          document.querySelectorAll('.session').forEach((item) => item.classList.remove('is-active'));
+          session.classList.add('is-active');
+          document.getElementById('threadTitle').textContent = session.dataset.title;
+          showToast('演示：正式实现将加载所选 Session 的 turns。');
+        });
+      });
+      document.getElementById('sessionFilter').addEventListener('input', (event) => {
+        const term = event.target.value.trim().toLowerCase();
+        document.querySelectorAll('.session').forEach((session) => {
+          session.hidden = !!term && !session.dataset.title.toLowerCase().includes(term);
+        });
+      });
+      document.getElementById('newResearch').addEventListener('click', () => {
+        document.getElementById('promptInput').focus();
+        showToast('演示：正式实现先 POST /sessions，再选中并聚焦研究编辑器。');
+      });
+
+      const attachmentList = document.getElementById('attachmentList');
+      document.getElementById('fileInput').addEventListener('change', (event) => {
+        attachmentList.innerHTML = '';
+        Array.from(event.target.files).forEach((file) => {
+          const chip = document.createElement('span');
+          chip.className = 'attachment';
+          chip.textContent = `${file.name} · ${(file.size / 1024).toFixed(1)} KB`;
+          const remove = document.createElement('button');
+          remove.type = 'button'; remove.setAttribute('aria-label', `移除 ${file.name}`); remove.textContent = '×';
+          remove.addEventListener('click', () => { chip.remove(); if (!attachmentList.children.length) attachmentList.classList.remove('has-items'); });
+          chip.append(' ', remove); attachmentList.append(chip);
+        });
+        attachmentList.classList.toggle('has-items', attachmentList.children.length > 0);
+        if (attachmentList.children.length) showToast('演示：正式实现以 FormData 提交附件，并接受服务端限额校验。');
+      });
+      document.querySelectorAll('[data-template]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const input = document.getElementById('promptInput');
+          input.value = button.dataset.template; input.focus();
+        });
+      });
+      const sendPrompt = () => {
+        const input = document.getElementById('promptInput');
+        const question = input.value.trim();
+        if (!question) return;
+        const turn = document.createElement('section');
+        turn.className = 'turn turn--user';
+        turn.innerHTML = `<div class="turn__meta"><span class="role-mark">你</span><span>刚刚</span></div><div class="turn__content"></div>`;
+        turn.querySelector('.turn__content').textContent = question;
+        document.getElementById('conversation').append(turn);
+        input.value = '';
+        thread.scrollTop = thread.scrollHeight;
+        document.getElementById('agentMeta').textContent = '正在分析你的补充问题';
+        document.getElementById('stageLabel').textContent = '正在生成新的研究回合';
+        showToast('演示：真实实现会 POST /runs，然后订阅 SSE。');
+        window.setTimeout(() => {
+          document.getElementById('agentMeta').textContent = '已完成新一轮整理';
+          document.getElementById('stageLabel').textContent = '本轮研究已完成';
+          document.getElementById('stageDetail').textContent = '报告画布已可根据真实产物刷新';
+          document.getElementById('runPill').classList.add('is-complete');
+          document.getElementById('runStatus').textContent = '已完成';
+          document.getElementById('agentContent').insertAdjacentHTML('beforeend', '<p><strong>补充结论：</strong>新的问题已作为后续回合的研究约束。生产版本应在终态后重新读取 turns、Run summary 与 artifacts，而非依赖此演示文本。</p>');
+        }, 850);
+      };
+      document.getElementById('composer').addEventListener('submit', (event) => { event.preventDefault(); sendPrompt(); });
+      document.getElementById('promptInput').addEventListener('keydown', (event) => {
+        if (event.isComposing) return;
+        if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); sendPrompt(); }
+      });
+    })();
+  </script>
+</body>
+</html>
