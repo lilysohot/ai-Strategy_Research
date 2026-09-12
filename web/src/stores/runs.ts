@@ -84,6 +84,8 @@ export const useRunStreamStore = defineStore('runStream', () => {
   const lastError = ref<string | null>(null)
   /** Answer text assembled from streamed deltas for the active run. */
   const answer = ref('')
+  /** Authoritative final answer from GET /api/runs/{id}; live deltas stay in answer. */
+  const finalAnswer = ref<string | null>(null)
   /** Ordered reasoning/tool steps for the active run. */
   const steps = ref<RunStep[]>([])
   // — status bar (§5.6): run facts + wall clock + token totals —
@@ -304,6 +306,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
       steerQueued.value = 0
       pendingApproval.value = null
       errorMessage.value = null
+      finalAnswer.value = null
       runDir.value = null
       startedAtMs.value = null
       endedAtMs.value = null
@@ -371,6 +374,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
       const summary = await runsApi.get(runId.value)
       if (runDir.value === null) runDir.value = summary.run_dir ?? null
       if (summary.status) status.value = summary.status as RunStatus
+      finalAnswer.value = summary.final_answer ?? finalAnswer.value
       const reason = summary.error || (summary.stopped_by ? `已停止（${summary.stopped_by}）` : null)
       if (reason) errorMessage.value = reason
       if (summary.usage) {
@@ -427,6 +431,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     endedAtMs.value = null
     cursor.value = 0
     answer.value = ''
+    finalAnswer.value = null
     lastError.value = null
     connection.value = 'idle'
   }
@@ -440,6 +445,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     connection,
     lastError,
     answer,
+    finalAnswer,
     meta,
     usage,
     steerQueued,
