@@ -41,8 +41,9 @@
 | T8 | `/healthz` 真实探活 | P1 | T7 | 待开始 |
 | T9 | `/api/runs` 限流与配额 | P1 | T7 | 待开始 |
 | T10 | run 指标与成本观测 | P1 | T7 | 待开始 |
-| T11 | 前端测试与 SSE store 覆盖 | P2 | — | 待开始 |
-| T12 | 全局错误边界与 404 | P2 | T11 | 待开始 |
+| T11 | 前端测试接入与 CI 覆盖 | P2 | — | 已完成 |
+| T11b | SSE store 层测试覆盖 | P2 | T11 | 已搁置（需先决策） |
+| T12 | 全局错误边界与 404 | P2 | T11 | 已完成 |
 | T13 | 长会话虚拟滚动 | P2 | T11 | 待开始 |
 | T14 | Caddy 安全响应头 | P2 | — | 待开始 |
 | T15 | refresh token 与登出吊销 | P3 | — | 待开始 |
@@ -343,24 +344,67 @@ Status: 已完成
 
 ## 4. P2 · 前端体验
 
-### T11 前端测试与 SSE store 覆盖
+### T11 前端测试接入与 CI 覆盖
 
-**目标**：`stores/runs.ts` 的 SSE 归约（重放去重、游标重连、`streamedTurns` 集合）是全应用最复杂逻辑，目前零测试。
+Status: 已完成（接入与 CI 部分；store 覆盖移交 T11b）
+
+**目标**：让已有的 63 个前端用例真正跑起来，并补上最复杂逻辑（SSE 归约）的覆盖。
+
+**现状（2026-09-12 核对，接入前）**：`web/src/utils/` 下已有 8 个 `*.test.ts`、共 **63 个用例**（activity / approval / diff / plan / preview / revert / statusbar / transcript），用的是 **Node 内置 test runner**（`node:test`，文件头写明「项目没有 vitest，离线装不了」）。它们能跑，但**运行方式从未固化**：`package.json` 无 `test` script、CI 无任何前端步骤（前端连类型检查都没有）。`stores/runs.ts`（SSE 归约、去重、重连）与 `stores/sessions.ts` 仍**完全没有覆盖**。
 
 **关键步骤**
-1. 引入 vitest（与 Vite 同源，配置成本最低），配置 `web/package.json` 的 `test` script。
-2. 优先覆盖：事件归约、重连不重复渲染、终态 reconcile、审批门生命周期。
-3. 再覆盖 `stores/sessions.ts` 的 turns 回填（对应本计划前的多轮覆盖修复）。
-4. CI 增加一步 `npm ci && npm run test`。
+1. 把 vitest 加进 `web/package.json` 的 devDependencies 与 `test` script（与 Vite 同源，配置成本最低），先让既有 63 个用例可跑。
+2. 覆盖 store 层：事件归约、重连不重复渲染、终态 reconcile、审批门生命周期、turns 回填。
+3. CI 增加一步 `npm ci && npm run test`（放在 `vue-tsc` 之后）。
 
 **完成标准**
-- `npm run test` 覆盖上述四个场景，全部通过。
+- `npm run test` 让既有 63 个用例全绿，并新增 store 层用例。
 - 人为破坏重放去重逻辑时测试会失败（证明测试有效）。
 - CI 有前端测试步骤。
+
+> 覆盖 63 个已存在的用例是低垂果实：它们是现成的，只是缺一个 runner。
+
+**实际结果（已完成 · 接入部分）**
+
+- 澄清了一个此前的误判：**测试文件不是 vitest 风格，而是 Node 内置 test runner**（`node:test` + `node:assert/strict`）。文件头写明「项目没有 vitest，离线装不了」—— 所以**不引入 vitest 才是遵循项目既定约束**，我最初写的"引入 vitest"是错的。
+- `web/package.json` 新增 `test` script（`node --experimental-strip-types --test "src/**/*.test.ts"`）与 `engines.node >= 22.6`（`--experimental-strip-types` 的最低版本）。
+- `.github/workflows/ci.yml` 新增独立 `frontend` job：`setup-node@v4`（Node 22）→ `npm ci` → `npm run typecheck`（vue-tsc）→ `npm run test`。**这是 CI 第一次覆盖 `web/`** —— 此前前端既无类型检查也无测试。
+- 验证：`npm run test` → **63 passed / 0 failed**；`vue-tsc --noEmit` 零错误（Node 22.12.0）。
+
+---
+
+### T11b SSE store 层测试覆盖
+
+Status: 已搁置（需先决策）
+
+**目标**：`stores/runs.ts` 的 SSE 归约（重放去重、游标重连、`streamedTurns` 集合、终态 reconcile）是全应用最复杂的逻辑，目前零覆盖。
+
+**障碍（已实测确认，非推测）**：裸 Node ESM 不支持**目录导入**。探针测试在 `import { useRunStreamStore } from '../stores/runs.ts'` 处失败：
+
+```
+Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import
+'/home/.../web/src/api' is not supported resolving ES modules
+imported from '/home/.../web/src/stores/runs.ts'
+```
+
+`runs.ts` 内部是 `from '../api'`（无扩展名的目录导入），Node 不做路径推断 —— 这是「既有 63 个测试全部集中在 `utils/`」的根本原因：只有 `utils/` 模块之间的导入带了 `.ts` 扩展名。
+
+**两条可行路径（需选一，均要动生产源码，故先不做）**
+
+| 路径 | 做法 | 代价 |
+|---|---|---|
+| A | 给 `stores/` + `api/` + `sse.ts` 依赖链的导入补显式扩展名（`'../api/index.ts'`） | 改动面覆盖多个生产文件；Vite 兼容带扩展名的导入，但需要回归一遍构建 |
+| B | 把 `applyEvent` 的纯归约逻辑抽到 `utils/` 下的无依赖模块，store 只做状态容器 | 更符合既有测试架构（utils 纯函数 + 测试），但需要一次小重构 |
+
+**建议**：选 B。它与现有 8 个 `utils/` 模块 + 测试的组织方式一致，且抽出的纯函数正是"重放去重"这类最该被测的逻辑；A 则是为测试便利去改生产代码的导入形态。
+
+**完成标准**：`npm run test` 覆盖事件归约、重连不重复渲染、终态 reconcile、turns 回填；人为破坏去重逻辑时测试会失败。
 
 ---
 
 ### T12 全局错误边界与 404
+
+Status: 已完成
 
 **目标**：单组件抛错不应白屏；未知路由不应静默跳首页。
 
@@ -372,6 +416,19 @@ Status: 已完成
 **完成标准**
 - 让某个子组件故意抛错，界面显示错误页而不是白屏。
 - 访问 `/no-such-page` 显示 404 页。
+
+**实际结果（已完成）**
+- `App.vue` 从空壳升级为顶层错误边界：`onErrorCaptured` 捕获全部后代组件错误（渲染 / 生命周期 / 异步事件），落一个兜底页（错误摘要 + 「重试 / 返回首页」），并 `return false` 阻断传播；「重试」通过递增 `RouterView` 的 key 强制重挂载子树，路由变化时自动清除错误态（浏览器后退也是合法恢复路径）。
+- 新增 `views/NotFoundView.vue`；`router/index.ts` 的 catch-all 从 `redirect: '/'` 改为 shell 内的真实 404 路由（`name: 'not-found'`）——保留 shell 导航作为返回入口，未登录访问未知深链仍会先经登录守卫。
+- 关键异步操作的可操作提示（ChatView）：
+  - 提交 run 失败：不再用一闪而过的 toast，改为 composer 上方的常驻错误横幅（保留失败原因），附「重试发送」——原文被保存在 `sendFailure` 里，一键原样重发，成功后横幅自动消失；
+  - 加载会话失败：`onMounted` 的 loadList / restore 失败统一收敛为消息区顶部的「加载会话失败：…」横幅 + 「重试」按钮（`bootSessions()` 同时服务首载与重试），替换掉原先两处各自为政的 toast。
+- 验证（浏览器实测，vite dev + FastAPI 后端，临时注入抛错后回滚）：
+  - `/no-such-page` 显示 404 页（标题、文案、返回按钮、shell 导航齐全）；
+  - `/models` 注入 `throw` 后显示兜底错误页而非白屏，「重试」后仍稳定显示错误页，「返回首页」正常回到对话；
+  - 停掉后端后发送消息 → 「发送失败：请求失败（HTTP 500）」横幅 + 「重试发送」，用户气泡保留，重试再失败横幅仍在、页面不白屏（500 来自 vite proxy 对不可达上游的转发行为，生产 Caddy 下为 502，前端处理路径相同）。
+- 回归：`vue-tsc --noEmit` 0 错误；`npm run test` 63 passed；`npm run build` 通过。
+- 遗留：测试账号 `smoke_t12` 留在业务库（无删除接口），冒烟会话已通过 API 删除。
 
 ---
 

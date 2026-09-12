@@ -31,11 +31,15 @@ const routes: RouteRecordRaw[] = [
         name: 'models',
         component: () => import('../views/ModelConfigsView.vue'),
       },
+      // Real 404 instead of a silent redirect (T12): an unknown deep link gets a
+      // page that says so, with the shell nav still there as the way out.
+      {
+        path: ':pathMatch(.*)*',
+        name: 'not-found',
+        component: () => import('../views/NotFoundView.vue'),
+      },
     ],
   },
-  // Anything unknown falls back into the app rather than a 404 page: the shell
-  // owns the navigation, and an unknown deep link is a stale bookmark.
-  { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
 export const router = createRouter({

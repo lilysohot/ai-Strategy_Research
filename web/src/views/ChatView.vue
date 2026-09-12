@@ -41,6 +41,12 @@ const sending = ref(false)
 const stopping = ref(false)
 const scrollEl = ref<HTMLElement | null>(null)
 
+// T12: a failed submit stays on screen as an actionable banner (with the exact
+// text preserved for one-click retry) instead of a toast that vanishes.
+const sendFailure = ref<{ text: string; message: string } | null>(null)
+// T12: same treatment for session bootstrap failures (list/restore).
+const bootFailure = ref<string | null>(null)
+
 // 移动端：默认隐藏会话列表
 const sidebarOpen = ref(false)
 
@@ -292,6 +298,7 @@ async function onSend() {
   }
   sending.value = true
   input.value = ''
+  sendFailure.value = null
   try {
     // Re-read first: the reply of any earlier run lives only in the server's
     // copy at this point, and runStream.watch() below wipes the local stream
@@ -308,11 +315,23 @@ async function onSend() {
     const res = await runsApi.submit({ session_id: sessions.activeId, message: text })
     runStream.watch(res.run_id)
   } catch (err) {
-    const msg = err instanceof Error ? err.message : '发送失败'
-    ElMessage.error(msg)
+    // Keep the optimistic turn (it reads as "sent") and pair it with a banner
+    // the user can retry; a self-dismissing toast made failures look lost.
+    sendFailure.value = {
+      text,
+      message: err instanceof Error ? err.message : '发送失败',
+    }
   } finally {
     sending.value = false
   }
+}
+
+/** Re-send the exact text that failed; onSend clears the banner on success. */
+function retrySend(): void {
+  if (!sendFailure.value || sending.value) return
+  input.value = sendFailure.value.text
+  sendFailure.value = null
+  void onSend()
 }
 
 /**
@@ -452,22 +471,27 @@ async function restoreSession(): Promise<void> {
   // in both cases fall back to the most recently updated session.
   const target = sessions.list.find((s) => s.id === remembered) ?? sessions.list[0]
   if (!target) return
+  // Let the failure propagate: the caller (boot) turns it into the retryable
+  // banner instead of a toast here.
+  await sessions.select(target.id)
+}
+
+/**
+ * Load the session list and restore the last-open one. Shared by the initial
+ * mount and the retry button on the boot failure banner (T12).
+ */
+async function bootSessions(): Promise<void> {
+  bootFailure.value = null
   try {
-    await sessions.select(target.id)
+    if (!sessions.list.length) await sessions.loadList()
+    await restoreSession()
   } catch {
-    ElMessage.error(sessions.error ?? '打开会话失败')
+    bootFailure.value = sessions.error ?? '加载会话失败'
   }
 }
 
-onMounted(async () => {
-  if (!sessions.list.length) {
-    try {
-      await sessions.loadList()
-    } catch {
-      ElMessage.error(sessions.error ?? '加载会话失败')
-    }
-  }
-  await restoreSession()
+onMounted(() => {
+  void bootSessions()
 })
 
 onBeforeUnmount(() => {
@@ -548,6 +572,19 @@ watch(
           详情
         </el-button>
       </header>
+
+      <!-- T12：会话加载失败时给可重试的内联提示，而不是一闪而过的 toast -->
+      <el-alert
+        v-if="bootFailure"
+        class="boot-error-banner"
+        type="error"
+        :closable="false"
+        show-icon
+        :title="`加载会话失败：${bootFailure}`"
+        data-testid="boot-error-banner"
+      >
+        <el-button size="small" type="primary" plain @click="bootSessions">重试</el-button>
+      </el-alert>
 
       <!-- §5.7：失败原因可追溯 —— 仅状态栏的"失败"标签不够，必须给出 why -->
       <el-alert
@@ -664,6 +701,19 @@ watch(
           </div>
         </div>
       </div>
+
+      <!-- T12：发送失败保留原文并提供一键重试，而不是自消失的 toast -->
+      <el-alert
+        v-if="sendFailure"
+        class="send-error-banner"
+        type="error"
+        :closable="false"
+        show-icon
+        :title="`发送失败：${sendFailure.message}`"
+        data-testid="send-error-banner"
+      >
+        <el-button size="small" type="primary" plain @click="retrySend">重试发送</el-button>
+      </el-alert>
 
       <footer class="composer">
         <el-input

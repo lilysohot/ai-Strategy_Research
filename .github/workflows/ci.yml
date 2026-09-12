@@ -94,3 +94,27 @@ jobs:
         env:
           SANDBOX_BACKEND: bwrap
         run: uv run pytest -q
+
+  # The web layer had no CI at all: no type check, no lint, no tests. The suite
+  # uses Node's built-in test runner rather than a framework, because the
+  # project deliberately ships without vitest (it must run offline) — that is
+  # why this job pins Node 22.6+, the first version with --experimental-strip-types.
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Type check (vue-tsc)
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test
