@@ -33,13 +33,13 @@ withDefaults(defineProps<{ variant?: 'banner' | 'inline' }>(), { variant: 'banne
   font-size: 12px;
   line-height: 1.6;
   color: var(--el-text-color-secondary);
-  background: var(--el-fill-color-lighter);
-  border-top: 1px solid var(--el-border-color-lighter);
+  background: var(--bg-rail);
+  border-top: 1px solid var(--line);
   text-align: center;
 }
 
 .disclaimer strong {
-  color: var(--el-color-warning);
+  color: var(--warning);
 }
 
 /* Login / standalone pages: no shell chrome to sit under, so it floats at the

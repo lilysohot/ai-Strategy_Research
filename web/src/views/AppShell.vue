@@ -1,14 +1,4 @@
 <script setup lang="ts">
-/**
- * App shell: navigation + routed content + the always-visible disclaimer.
- *
- * Mobile-readable is a milestone acceptance item, so the layout is a single
- * column that collapses to a stacked drawer trigger under 768px rather than a
- * fixed sidebar that would squeeze the message column.
- *
- * Element Plus is registered globally in main.ts, so ``el-*`` tags resolve
- * without per-component imports.
- */
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -19,10 +9,7 @@ const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-const activeMenu = computed(() => {
-  const name = route.name
-  return name === 'models' ? 'models' : 'chat'
-})
+const isWorkbench = computed(() => route.name === 'chat')
 
 async function onLogout(): Promise<void> {
   await auth.logout()
@@ -31,31 +18,18 @@ async function onLogout(): Promise<void> {
 </script>
 
 <template>
-  <ElContainer class="shell">
-    <ElHeader class="shell__header" height="56px">
-      <span class="shell__brand">投研 Agent</span>
-      <nav class="shell__nav">
-        <ElMenu
-          :default-active="activeMenu"
-          mode="horizontal"
-          :ellipsis="false"
-          class="shell__menu"
-        >
-          <ElMenuItem index="chat" @click="router.push({ name: 'chat' })">
-            对话
-          </ElMenuItem>
-          <ElMenuItem index="models" @click="router.push({ name: 'models' })">
-            模型配置
-          </ElMenuItem>
-        </ElMenu>
-      </nav>
+  <ElContainer class="shell" :class="{ 'shell--workbench': isWorkbench }">
+    <ElHeader v-if="!isWorkbench" class="shell__header" height="56px">
+      <el-button text type="primary" @click="router.push({ name: 'chat' })">
+        返回工作台
+      </el-button>
       <span class="shell__spacer" />
       <span v-if="auth.user" class="shell__user">{{ auth.user.username }}</span>
       <el-button link type="primary" @click="onLogout">退出</el-button>
     </ElHeader>
 
     <ElContainer class="shell__body">
-      <ElMain class="shell__main">
+      <ElMain class="shell__main" :class="{ 'shell__main--workbench': isWorkbench }">
         <RouterView />
       </ElMain>
     </ElContainer>
@@ -69,6 +43,8 @@ async function onLogout(): Promise<void> {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--bg-app);
+  color: var(--text);
 }
 
 .shell__header {
@@ -77,21 +53,6 @@ async function onLogout(): Promise<void> {
   gap: 12px;
   border-bottom: 1px solid var(--el-border-color-lighter);
   padding: 0 16px;
-}
-
-.shell__brand {
-  font-weight: 600;
-  font-size: 16px;
-  white-space: nowrap;
-}
-
-.shell__nav {
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
-.shell__menu {
-  border-bottom: none;
 }
 
 .shell__spacer {
@@ -114,6 +75,11 @@ async function onLogout(): Promise<void> {
   overflow: auto;
 }
 
+.shell__main--workbench {
+  padding: 0;
+  overflow: hidden;
+}
+
 /* Under 768px the horizontal menu collapses and the brand loses its padding
    rather than pushing the nav off-screen. */
 @media (max-width: 768px) {
@@ -122,12 +88,12 @@ async function onLogout(): Promise<void> {
     gap: 8px;
   }
 
-  .shell__brand {
-    font-size: 14px;
-  }
-
   .shell__main {
     padding: 8px;
+  }
+
+  .shell__main--workbench {
+    padding: 0;
   }
 }
 </style>
