@@ -1,0 +1,369 @@
+{
+  "run_id": "ce740fb7e81a85e5f642375af069fb70a88e90d91e0e473182c7fef70cd0352f",
+  "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+  "extractor_version": "material-semantics-8",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_1708d3b9e8de",
+        "display_name": "文档声音",
+        "role": "document_voice",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_fcf5af4c357e",
+        "display_name": "文档声音",
+        "role": "document_voice",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_cdc39adb9c7b5bf2",
+        "text": "作者今日增持TTD 10,000股，成交价14.76，并卖出100张周五到期15美元看涨期权，权利金0.16",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16",
+            "start": 36,
+            "end": 112
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_cdeeaa02049cfd37",
+        "text": "TTD CEO曾以25美元水平买入1.5亿美元（作者引述的他人行为）",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": "$150m",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "the $25 level the CEO bought $150m worth",
+            "start": 161,
+            "end": 201
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ea4fc85cd3b77ad8",
+        "text": "作者今日增持FRVO 3,000股，成交价17.30，并卖出30张9月到期20美元看涨期权，权利金0.50",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50",
+            "start": 205,
+            "end": 279
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b16121fef4746de7",
+        "text": "FRVO本周与Google达成交易（作者增持的依据）",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "after their deal with Google this week",
+            "start": 302,
+            "end": 340
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_037185df84fac49a",
+        "text": "作者卖出50张MDT 90美元下周到期看跌期权，权利金0.47",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "MDT - I sold 50 puts at $90 for next week for .47",
+            "start": 344,
+            "end": 393
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_4e7983b7d652bc26",
+        "text": "作者昨日盘后卖出AGX仓位，并在discord同步发布",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "AGX - I sold this position yesterday afterhours and posted it in the discord",
+            "start": 397,
+            "end": 473
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_0253c3f4cc57e9fb",
+        "text": "作者对AGX不了解，仅跟随前一日资金流买入",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I knew nothing about this name and just followed the flows from the day\nbefore",
+            "start": 486,
+            "end": 564
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_893bcde5ffcdb9bd",
+        "text": "AGX财报后大涨超50美元，随后回落，作者以447清仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_fcf5af4c357e",
+        "polarity": "affirmed",
+        "value": "447",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447",
+            "start": 566,
+            "end": 659
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_2d6c711891cb877b",
+        "type": "supports",
+        "from_item": "itm_cdeeaa02049cfd37",
+        "to_item": "itm_cdc39adb9c7b5bf2",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "this is still well below the $25 level the CEO bought $150m worth",
+            "start": 136,
+            "end": 201
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_d5f2944ee244e7a3",
+        "type": "supports",
+        "from_item": "itm_b16121fef4746de7",
+        "to_item": "itm_ea4fc85cd3b77ad8",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "adding\nto my position after their deal with Google this week",
+            "start": 280,
+            "end": 340
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_f505a451f16c2898",
+          "status": "extracted",
+          "item_refs": [
+            "itm_cdc39adb9c7b5bf2",
+            "itm_cdeeaa02049cfd37",
+            "itm_ea4fc85cd3b77ad8",
+            "itm_b16121fef4746de7",
+            "itm_037185df84fac49a",
+            "itm_4e7983b7d652bc26",
+            "itm_0253c3f4cc57e9fb",
+            "itm_893bcde5ffcdb9bd"
+          ],
+          "reason_codes": []
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "status": "completed",
+      "records": 10,
+      "model_calls": 2,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 8926,
+            "prompt_tokens": 1270,
+            "completion_tokens": 1217,
+            "reasoning_tokens": 0,
+            "finish_reason": "stop",
+            "content_chars": 3992,
+            "reasoning_chars": 0
+          },
+          "relations": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 1624,
+            "prompt_tokens": 1071,
+            "completion_tokens": 149,
+            "reasoning_tokens": 0,
+            "finish_reason": "stop",
+            "content_chars": 496,
+            "reasoning_chars": 0
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_1016932864bc4e42",
+        "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+        "locator": "5",
+        "start": 0,
+        "end": 674,
+        "text": "My Open Book\nTrades I Made Today\n1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n2. FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n3. MDT - I sold 50 puts at $90 for next week for .47\n4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_f505a451f16c2898",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 0,
+      "end": 674,
+      "signal_types": [
+        "behavior",
+        "personal_trade"
+      ],
+      "attribution_capability": "document_only",
+      "text": "My Open Book\nTrades I Made Today\n1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n2. FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n3. MDT - I sold 50 puts at $90 for next week for .47\n4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n"
+    }
+  ]
+}

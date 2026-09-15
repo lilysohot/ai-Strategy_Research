@@ -1,0 +1,153 @@
+{
+  "version": "cleaning-ingestion-diagnosis-v1",
+  "purpose": "diagnosis_not_fix_or_business_acceptance",
+  "checks": [
+    {
+      "id": "same_source_new_cleaner_refresh",
+      "expected": "The requested cleaning pass reaches the current parser",
+      "passed": false,
+      "observed": {
+        "parser_calls": 0,
+        "skipped_unchanged": 1
+      }
+    },
+    {
+      "id": "changed_source_reaches_parser",
+      "expected": "The requested cleaning pass reaches the current parser",
+      "passed": true,
+      "observed": {
+        "parser_calls": 1,
+        "skipped_unchanged": 0
+      }
+    },
+    {
+      "id": "single_file_reclean_updates_blocks",
+      "expected": "Second parsed version can be published",
+      "passed": false,
+      "observed": {
+        "first_added": true,
+        "second_added": false,
+        "block_write_calls": 1,
+        "persisted_text": "OLD_TEXT",
+        "io": "fake PG cursor; not a live SQL test"
+      }
+    },
+    {
+      "id": "retry_repairs_failed_metadata",
+      "expected": "Retry completes interrupted metadata stage",
+      "passed": false,
+      "observed": {
+        "failed_after_data_commit": true,
+        "metadata_calls_after_retry": 1
+      }
+    },
+    {
+      "id": "readable_short_text_not_ocr",
+      "expected": "Readable Markdown must not be classified as needing OCR",
+      "passed": false,
+      "observed": {
+        "legacy_status": "needs_ocr",
+        "evidence_status": [
+          "available"
+        ]
+      }
+    },
+    {
+      "id": "unique_fetch_locator",
+      "expected": "Each exposed doc_id + locator identifies one block",
+      "passed": false,
+      "observed": {
+        "blocks": 2,
+        "locator_counts": {
+          "风险": 2
+        },
+        "evidence_has_offsets": true
+      }
+    },
+    {
+      "id": "cleaning_preserves_substantive_qualifier",
+      "expected": "Filtering a boilerplate prefix does not erase a substantive condition",
+      "passed": false,
+      "observed": {
+        "index_keeps_qualifier": false,
+        "evidence_keeps_qualifier": true,
+        "scope": "synthetic prefix counterexample; no corpus frequency inferred"
+      }
+    },
+    {
+      "id": "mixed_pdf_exposes_unreadable_page",
+      "expected": "A text page cannot hide an empty/image page behind whole-document ok",
+      "passed": false,
+      "observed": {
+        "status": "ok",
+        "page_chars": [
+          360,
+          0
+        ],
+        "scope": "synthetic page API; actual PDF rendering not tested"
+      }
+    },
+    {
+      "id": "default_minutes_exclusion",
+      "expected": "Confirmed minutes are excluded by the new default policy",
+      "passed": false,
+      "observed": {
+        "discovered_files": [
+          "company.md",
+          "会议纪要.md"
+        ],
+        "note": "new requirement not implemented; filename alone is not a final classifier"
+      }
+    },
+    {
+      "id": "r2_direct_path_database_independent",
+      "expected": "Path-based R2 can prepare a result without database I/O",
+      "passed": true,
+      "observed": {
+        "postgres_calls": 0,
+        "result_type": "MaterialRun",
+        "model_calls": 0,
+        "note": "no semantic quality claim at zero model budget"
+      }
+    },
+    {
+      "id": "p4_protocol_valid_without_database",
+      "expected": "Archived response passes its frozen protocol even without any database",
+      "passed": false,
+      "observed": {
+        "attempted": 8,
+        "valid": 4,
+        "invalid_enums": {
+          "risk": 3,
+          "question": 1
+        },
+        "postgres_calls": 0,
+        "new_model_calls": 0
+      }
+    }
+  ],
+  "unmet_contract_count": 9,
+  "network": {
+    "blocked_socket_connects": 0
+  },
+  "real_postgres_connections": 0,
+  "new_model_calls": 0,
+  "corpus_source_reads": 0,
+  "production_code_changes": 0,
+  "code_sha256": {
+    "plugins/corpus/ingest.py": "90d4dc2a01d160d374fdc7882820cdd378f90cfc4433fa84d5d2931ae6410e34",
+    "plugins/corpus/service.py": "eb679e5323e0a6a8fda94ce98daa26439370938608101c7ffcecf84302c6d6c3",
+    "plugins/corpus/evidence.py": "8b56364bf517a8a89c556b1f1628f7af8b9f9e399dce1957e2e8b2773958c27d",
+    "plugins/corpus/metadata.py": "8d623f7bdeb45d1864741c6e19f7aff43c4dfd7667374d7616c4b95f1578ef3d",
+    "plugins/corpus/evidence_pipeline.py": "60c41cab226158b551b80db7f9460b1d4f36b4403db4770143a9d4b61e5d83d8"
+  },
+  "archived_input_sha256": {
+    "r2-p4-item-plan.json": "96ca9d113dab13a18e22a2f726ec2df04bdb9b747636d0183e6852cc25a1bc7e",
+    "p4-runs/p4-items-1/audit-export.json": "0bcd1497e74195b6c44ec487794266fdd0749ebeb1547ee59ad093d63c883966",
+    "p4_item_trial.py": "035af033498e59151509e4b771debdcd5214b046407f2689e67fb59a800911cc"
+  },
+  "limitations": [
+    "synthetic fixtures, fake PG I/O; not live SQL durability or corpus-wide audit",
+    "P4 replay checks archived wire only, not whole R2 capability"
+  ]
+}

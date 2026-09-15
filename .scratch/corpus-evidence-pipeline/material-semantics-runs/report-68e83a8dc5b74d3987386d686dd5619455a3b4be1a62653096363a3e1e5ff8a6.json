@@ -1,0 +1,414 @@
+{
+  "contract_version": "material-understanding-v1",
+  "gold_sha256": "90ca4126bb589c76c71eac6c25b2ed53a840bd0eb8dbaa6956665b28b02c029c",
+  "model": "glm-5.3-flash",
+  "model_calls": 5,
+  "usage": {
+    "prompt_tokens": 13374,
+    "completion_tokens": 12567
+  },
+  "samples": [
+    {
+      "sample_id": "dev-company-report",
+      "source_rev": "6f14cc145b798b37",
+      "material_run_id": "400c13ce7a0c4a3c2eef35194d51f1203d872918ec3d505fd496694994638ff9",
+      "summary": {
+        "run_id": "400c13ce7a0c4a3c2eef35194d51f1203d872918ec3d505fd496694994638ff9",
+        "evidence_run_id": "9149f96ae44b3f89c305848d47eb55c38c65c0a3710d06c1cb0e53cc883ccd0f",
+        "items": 14,
+        "relations": 4,
+        "speakers": 4,
+        "semantic_types": {
+          "fact": 8,
+          "forecast": 3,
+          "opinion": 3
+        },
+        "packet_status": {
+          "not_candidate": 7,
+          "completed": 1
+        },
+        "complete": true
+      },
+      "item_recall": 0.8,
+      "critical_item_recall": 0.75,
+      "semantic_target_accuracy": 0.6,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 0.0,
+      "detail": [
+        {
+          "gold_item": "dcr-fact-results",
+          "matched": true,
+          "predicted_item": "itm_9ad9445a61bd13cf",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": true,
+            "perspective": false,
+            "speaker": false,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "26H1 实现总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%"
+        },
+        {
+          "gold_item": "dcr-opinion-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "dcr-forecast-qualitative",
+          "matched": true,
+          "predicted_item": "itm_c10786a94f0adfb4",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "公司已于改革中完成底层逻辑的重构，经营最困难阶段已过，Q3预计将抓住中秋旺季窗口放量，下半年飞天供应偏紧、供需改善"
+        },
+        {
+          "gold_item": "dcr-forecast-target",
+          "matched": true,
+          "predicted_item": "itm_bc6ae4a3314d1dbd",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "维持26-28年EPS预测值67.74/70.77/73.84元，维持一年目标价2030元和“强推”评级"
+        },
+        {
+          "gold_item": "dcr-risk-demand",
+          "matched": true,
+          "predicted_item": "itm_7344f75659cb763b",
+          "quote_similarity": 0.8889,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_rev": "174b64628f35aca6",
+      "material_run_id": "c4f28f0f14ce4d3101ec6f5e6c930b5d55f03bd5808968ff845bc0dd6cc2513e",
+      "summary": {
+        "run_id": "c4f28f0f14ce4d3101ec6f5e6c930b5d55f03bd5808968ff845bc0dd6cc2513e",
+        "evidence_run_id": "d6dace3e782315e921f34ab7aef013995588745b8a8a927081b616d019682593",
+        "items": 12,
+        "relations": 0,
+        "speakers": 1,
+        "semantic_types": {
+          "opinion": 11,
+          "fact": 1
+        },
+        "packet_status": {
+          "completed": 1
+        },
+        "complete": true
+      },
+      "item_recall": 0.75,
+      "critical_item_recall": 0.75,
+      "semantic_target_accuracy": 0.25,
+      "attribution_target_accuracy": 0.75,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "detail": [
+        {
+          "gold_item": "diq-question-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-answer-bottom",
+          "matched": true,
+          "predicted_item": "itm_cddaf2d148965227",
+          "quote_similarity": 0.6286,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": false,
+            "perspective": true,
+            "speaker": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": false
+          },
+          "predicted_text": "价格底部主要改善长期赔率，并不一定等同于中期拐点；价格处于高位也不必然构成卖点。"
+        },
+        {
+          "gold_item": "diq-forecast-supply-demand",
+          "matched": true,
+          "predicted_item": "itm_90383f69bb59adda",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": false,
+            "speech_role": false,
+            "perspective": true,
+            "speaker": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": false
+          },
+          "predicted_text": "未来的新增产能不应否定当前明确的景气阶段，只要未来一至两年供需持续改善，行业仍具备周期投资价值。"
+        },
+        {
+          "gold_item": "diq-risk-policy",
+          "matched": true,
+          "predicted_item": "itm_46663b2daf8730ca",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": false
+          },
+          "predicted_text": "风险提示：供给端政策执行力度不及预期；海外需求不及预期；全球地缘政治动荡；技术风险。"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_rev": "810ef870625e7856",
+      "material_run_id": "b5486d57222c24c656da6ac1d0b9aa13f90b7bb421d992428dd5a5a56ba7cbfe",
+      "summary": {
+        "run_id": "b5486d57222c24c656da6ac1d0b9aa13f90b7bb421d992428dd5a5a56ba7cbfe",
+        "evidence_run_id": "68bc6ae3ffb20b9c6802bad7ee3f8fd33b67e01cdb983c2695987f85cfe90feb",
+        "items": 5,
+        "relations": 1,
+        "speakers": 1,
+        "semantic_types": {
+          "behavior": 4,
+          "fact": 1
+        },
+        "packet_status": {
+          "completed": 1
+        },
+        "complete": true
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 0.0,
+      "detail": [
+        {
+          "gold_item": "dpt-ttd-executed",
+          "matched": true,
+          "predicted_item": "itm_85c5031a827588da",
+          "quote_similarity": 0.9655,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "TTD：加仓10,000股，成交价14.76，并以0.16卖出100张周五到期$15看涨期权；该价格仍远低于CEO买入1.5亿美元的$25水平"
+        },
+        {
+          "gold_item": "dpt-frvo-executed",
+          "matched": true,
+          "predicted_item": "itm_ff8e424c26be126a",
+          "quote_similarity": 0.9558,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "FRVO：加仓3,000股，成交价17.30，并以0.50卖出30张9月到期$20看涨期权；加仓背景是本周与Google的交易"
+        },
+        {
+          "gold_item": "dpt-mdt-executed",
+          "matched": true,
+          "predicted_item": "itm_6fddcf7dbe6ff0f9",
+          "quote_similarity": 0.9429,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "MDT：以0.47卖出50张下周到期、行权价$90的看跌期权"
+        },
+        {
+          "gold_item": "dpt-agx-retrospective",
+          "matched": true,
+          "predicted_item": "itm_5d85889146131596",
+          "quote_similarity": 0.971,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "AGX：昨日盘后清仓并在discord发布；对该标的并不了解，仅跟随前一日资金流；财报后大涨$50+后回吐部分，遂以447清仓"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_rev": "80b5a290df3d2ade",
+      "material_run_id": "8291256d569bd033de317ae475fa3376d5e82b5f031904a77d39c7abc25540eb",
+      "summary": {
+        "run_id": "8291256d569bd033de317ae475fa3376d5e82b5f031904a77d39c7abc25540eb",
+        "evidence_run_id": "09ccf64fa5f8c7c69ace657b75c32caa62dd1233bf925ea15add64847134c878",
+        "items": 21,
+        "relations": 4,
+        "speakers": 2,
+        "semantic_types": {
+          "fact": 13,
+          "behavior": 2,
+          "opinion": 3,
+          "forecast": 1,
+          "unknown": 2
+        },
+        "packet_status": {
+          "completed": 1,
+          "failed": 1
+        },
+        "complete": false
+      },
+      "item_recall": 0.18181818181818182,
+      "critical_item_recall": 0.18181818181818182,
+      "semantic_target_accuracy": 0.18181818181818182,
+      "attribution_target_accuracy": 0.18181818181818182,
+      "critical_all_fields_accuracy": 0.09090909090909091,
+      "source_relation_recall": 0.25,
+      "source_relation_precision": 0.25,
+      "detail": [
+        {
+          "gold_item": "dec-summary-outlook",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-capex",
+          "matched": true,
+          "predicted_item": "itm_9cdb249055795856",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "每万吨锂电铜箔整个设备资本开支大概如何、阴极辊表处理等大件价值量分配如何？"
+        },
+        {
+          "gold_item": "dec-answer-capex",
+          "matched": true,
+          "predicted_item": "itm_2b98aa855bdbf017",
+          "quote_similarity": 0.9677,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": false,
+            "perspective": true,
+            "speaker": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true
+          },
+          "predicted_text": "每1万吨锂电铜箔的主设备投资约2.5到3亿元"
+        },
+        {
+          "gold_item": "dec-host-clarification",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-forecast-validation",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-ambiguous-audio-check",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-yield",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-yield",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-quoted-yield-split",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-mitsui",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-mitsui",
+          "matched": false
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "item_recall": 0.6829545454545455,
+    "critical_item_recall": 0.6704545454545454,
+    "semantic_target_accuracy": 0.5079545454545454,
+    "attribution_target_accuracy": 0.23295454545454547,
+    "critical_all_fields_accuracy": 0.022727272727272728,
+    "source_relation_recall": 0.5625,
+    "source_relation_precision": 0.0625
+  },
+  "business_acceptance": false,
+  "limitations": [
+    "Development targets are a selected joint gold, not exhaustive whole-document claims.",
+    "Extra extracted items are retained for audit but are not scored as false positives.",
+    "No corpus ingestion or database write is performed."
+  ]
+}

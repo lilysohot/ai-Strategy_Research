@@ -1,0 +1,44 @@
+{
+  "version": "r2-p3s-scope-provider-scope-1",
+  "date": "2026-09-14",
+  "authorization": "user_continue_and_request_specific_human_participation",
+  "parent_p3r_manifest_sha256": "a79ad421df11933f4360d264a60b4856aeded9273c4277af0c4f03d03b0d18b3",
+  "modify_existing_protected_files": [],
+  "new_protected_files": [],
+  "new_scratch_files": [
+    ".scratch/corpus-evidence-pipeline/p3s_scope_provider.py",
+    ".scratch/corpus-evidence-pipeline/test_p3s_scope_provider.py",
+    ".scratch/corpus-evidence-pipeline/p3s_review.py"
+  ],
+  "generated_files": [
+    ".scratch/corpus-evidence-pipeline/r2-p3s-inventory.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3s-denominator-review-template.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3s-human-review-guide.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3s-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3s-manifest.json"
+  ],
+  "allowed_sources": "four frozen development sample IDs and six frozen development micro scopes only",
+  "acceptance": {
+    "full_development_packets_accounted": 14,
+    "source_non_whitespace_coverage": "complete_or_explicit_packet_failure",
+    "table_packets_preserved_as_table_row": true,
+    "table_packets_sent_to_clause_lattice": 0,
+    "prose_scope_lattice_capacity_failures": 0,
+    "gold_items_contained_in_generated_scopes": 35,
+    "positive_relation_endpoints_referencable": 17,
+    "negative_relation_endpoints_referencable": 8,
+    "automatic_human_approvals": 0,
+    "silent_truncation": 0
+  },
+  "external_activity": {
+    "model_calls": 0,
+    "judge_calls": 0,
+    "postgres_access": 0,
+    "market_calls": 0,
+    "ingestion_runs": 0
+  },
+  "production_wiring": false,
+  "default_entry_changes": false,
+  "gold_mutation": false,
+  "p4_budget_authorized": false
+}

@@ -1,0 +1,300 @@
+{
+  "version": "r2-p3r-development-review-1",
+  "split": "development",
+  "development_sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "micro_scope_ids": [
+    "micro-company-recommendation",
+    "micro-industry-q7-q8",
+    "micro-trade-ttd",
+    "micro-copper-summary",
+    "micro-copper-audio",
+    "micro-copper-yield"
+  ],
+  "planner_generation_fields": [
+    "scope_id",
+    "sample_id",
+    "source_path",
+    "source_sha256",
+    "locator"
+  ],
+  "gold_fields_available_to_planner": 0,
+  "source_paths_opened": [
+    "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+    "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+    "data/corpus/5月：锂电铜箔和电子铜箔.md"
+  ],
+  "holdout_source_paths_opened": 0,
+  "model_calls": 0,
+  "judge_calls": 0,
+  "postgres_access": 0,
+  "market_calls": 0,
+  "ingestion_runs": 0,
+  "micro": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "selected_chars": 122,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 53,
+      "edges": 19,
+      "node_roles": {
+        "clause": 11,
+        "alternative": 41,
+        "whole": 1
+      },
+      "edge_types": {
+        "part_of": 10,
+        "next": 9
+      },
+      "gold_items": 7,
+      "mapping_statuses": {
+        "unique_minimum": 7
+      },
+      "distinct_mapped_nodes": 7,
+      "positive_relations": 0,
+      "positive_relation_endpoints_referencable": 0,
+      "negative_relations": 0,
+      "negative_relation_endpoints_referencable": 0,
+      "human_approved": 0
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "selected_chars": 239,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 157,
+      "edges": 46,
+      "node_roles": {
+        "clause": 22,
+        "alternative": 131,
+        "whole": 1,
+        "condition": 3
+      },
+      "edge_types": {
+        "part_of": 23,
+        "next": 22,
+        "qualifies": 1
+      },
+      "gold_items": 14,
+      "mapping_statuses": {
+        "unique_minimum": 14
+      },
+      "distinct_mapped_nodes": 14,
+      "positive_relations": 11,
+      "positive_relation_endpoints_referencable": 11,
+      "negative_relations": 3,
+      "negative_relation_endpoints_referencable": 3,
+      "human_approved": 0
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "selected_chars": 168,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 21,
+      "edges": 11,
+      "node_roles": {
+        "alternative": 13,
+        "whole": 1,
+        "clause": 7
+      },
+      "edge_types": {
+        "part_of": 6,
+        "next": 5
+      },
+      "gold_items": 4,
+      "mapping_statuses": {
+        "unique_minimum": 4
+      },
+      "distinct_mapped_nodes": 4,
+      "positive_relations": 0,
+      "positive_relation_endpoints_referencable": 0,
+      "negative_relations": 2,
+      "negative_relation_endpoints_referencable": 2,
+      "human_approved": 0
+    },
+    {
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 70,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 21,
+      "edges": 11,
+      "node_roles": {
+        "clause": 6,
+        "alternative": 14,
+        "whole": 1
+      },
+      "edge_types": {
+        "part_of": 6,
+        "next": 5
+      },
+      "gold_items": 1,
+      "mapping_statuses": {
+        "unique_minimum": 1
+      },
+      "distinct_mapped_nodes": 1,
+      "positive_relations": 0,
+      "positive_relation_endpoints_referencable": 0,
+      "negative_relations": 0,
+      "negative_relation_endpoints_referencable": 0,
+      "human_approved": 0
+    },
+    {
+      "scope_id": "micro-copper-audio",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 21,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 15,
+      "edges": 10,
+      "node_roles": {
+        "attribution": 1,
+        "clause": 5,
+        "alternative": 8,
+        "whole": 1
+      },
+      "edge_types": {
+        "part_of": 5,
+        "next": 4,
+        "attributes": 1
+      },
+      "gold_items": 1,
+      "mapping_statuses": {
+        "unique_minimum": 1
+      },
+      "distinct_mapped_nodes": 1,
+      "positive_relations": 0,
+      "positive_relation_endpoints_referencable": 0,
+      "negative_relations": 0,
+      "negative_relation_endpoints_referencable": 0,
+      "human_approved": 0
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 121,
+      "root_statuses": [
+        "planned"
+      ],
+      "nodes": 93,
+      "edges": 33,
+      "node_roles": {
+        "attribution": 4,
+        "clause": 17,
+        "alternative": 71,
+        "whole": 1
+      },
+      "edge_types": {
+        "part_of": 15,
+        "next": 14,
+        "attributes": 4
+      },
+      "gold_items": 8,
+      "mapping_statuses": {
+        "unique_minimum": 8
+      },
+      "distinct_mapped_nodes": 8,
+      "positive_relations": 6,
+      "positive_relation_endpoints_referencable": 6,
+      "negative_relations": 3,
+      "negative_relation_endpoints_referencable": 3,
+      "human_approved": 0
+    }
+  ],
+  "totals": {
+    "items": 35,
+    "unique_minimum_mappings": 35,
+    "distinct_mapped_nodes": 35,
+    "positive_relations": 17,
+    "positive_relation_endpoints_referencable": 17,
+    "negative_relations": 8,
+    "negative_relation_endpoints_referencable": 8,
+    "human_approved": 0
+  },
+  "full_capacity": [
+    {
+      "sample_id": "dev-company-report",
+      "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "packets": 8,
+      "selected_chars": 3047,
+      "planned_roots": 0,
+      "unresolved_roots": 8,
+      "root_statuses": {
+        "unsupported_packet": 7,
+        "unresolved_capacity": 1
+      },
+      "nodes": 8,
+      "edges": 0,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "packets": 1,
+      "selected_chars": 1508,
+      "planned_roots": 0,
+      "unresolved_roots": 1,
+      "root_statuses": {
+        "unresolved_capacity": 1
+      },
+      "nodes": 1,
+      "edges": 0,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_sha256": "810ef870625e7856c39812818f1b6226caa6d786ba8ff1d5e26bb2b0947c2139",
+      "packets": 1,
+      "selected_chars": 674,
+      "planned_roots": 1,
+      "unresolved_roots": 0,
+      "root_statuses": {
+        "planned": 1
+      },
+      "nodes": 173,
+      "edges": 49,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_sha256": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+      "packets": 4,
+      "selected_chars": 11815,
+      "planned_roots": 0,
+      "unresolved_roots": 4,
+      "root_statuses": {
+        "unresolved_capacity": 4
+      },
+      "nodes": 4,
+      "edges": 0,
+      "calls_authorized": 0
+    }
+  ],
+  "gates": {
+    "R0_gold_independent_generation": "passed",
+    "R1_fixed_development_item_locatability": "passed",
+    "R2_relation_endpoint_referencability": "passed",
+    "R3_finite_capacity_and_no_silent_truncation": "passed",
+    "R4_condition_and_attribution_support": "passed",
+    "R5_human_atomic_denominator_approval": "not_evaluated",
+    "R6_production_and_old_flow_isolation": "passed"
+  },
+  "status": "structural_prototype_passed_human_denominator_review_required",
+  "p4_budget_authorized": false
+}

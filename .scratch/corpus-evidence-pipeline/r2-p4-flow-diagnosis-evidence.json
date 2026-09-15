@@ -1,0 +1,109 @@
+{
+  "version": "p4-flow-diagnosis-1",
+  "purpose": "diagnosis_only_not_acceptance_or_repair",
+  "new_model_calls": 0,
+  "database_connections": 0,
+  "network": {
+    "blocked_socket_connects": 0
+  },
+  "original": {
+    "attempted_obligations": 8,
+    "returned_unique_ids": 8,
+    "json_valid_rows": 8,
+    "strict_valid_rows": 4,
+    "first_batch_error_count": 8,
+    "not_attempted_obligations": 27,
+    "invalid_semantic_values": {
+      "risk": 3,
+      "question": 1
+    }
+  },
+  "enum_only_counterfactual": {
+    "batch_protocol_valid": true,
+    "remaining_axis_mismatches": {
+      "speaker_ref": 7,
+      "behavior_status": 8,
+      "unknown_constraints": 7,
+      "value": 2,
+      "polarity": 3,
+      "temporal_frame": 1
+    }
+  },
+  "synthetic_counterexamples": {
+    "tampered_text_score_passed": true,
+    "execute_precheck_rejects_tampered_plan": true,
+    "one_semantic_error_G3": "passed",
+    "one_semantic_error_G6": "failed",
+    "one_semantic_error_accuracy": 0.9714285714285714
+  },
+  "runtime_contract": {
+    "prepare_without_gold": "cannot_prepare_without_evaluation_projection",
+    "request_keys": [
+      "field_enums",
+      "obligations",
+      "plan_id",
+      "protocol_version",
+      "unknown_field_vocabulary"
+    ],
+    "obligation_keys": [
+      "context_span_id",
+      "context_text",
+      "focus_span_id",
+      "obligation_id",
+      "source_text"
+    ],
+    "fill_field_keys": [
+      "behavior_status",
+      "identity_status",
+      "perspective",
+      "polarity",
+      "semantic_type",
+      "speaker_role",
+      "speech_role",
+      "statement_role",
+      "temporal_frame",
+      "unit",
+      "unknown_fields",
+      "value"
+    ],
+    "executed_repo_files_during_prepare_and_parse": [
+      ".scratch/corpus-evidence-pipeline/p3_replay_review.py",
+      ".scratch/corpus-evidence-pipeline/p3h_review.py",
+      ".scratch/corpus-evidence-pipeline/p3i_contract_bridge.py",
+      ".scratch/corpus-evidence-pipeline/p4_flow_diagnosis.py",
+      ".scratch/corpus-evidence-pipeline/p4_item_trial.py",
+      "plugins/corpus/_r2_plan.py"
+    ],
+    "legacy_extractor_called": false,
+    "p2_runtime_called": false,
+    "corpus_service_called": false
+  },
+  "protection": {
+    "files": 2336,
+    "by_root": {
+      "AGENTS.md": 1,
+      "apodex": 73,
+      "config": 3,
+      "deploy": 18,
+      "docker": 11,
+      "frontier_agent": 136,
+      "plugins": 104,
+      "pyproject.toml": 1,
+      "pyrightconfig.json": 1,
+      "scripts": 24,
+      "server": 1735,
+      "tests": 125,
+      "tools": 9,
+      "uv.lock": 1,
+      "web": 35,
+      "workflows": 59
+    },
+    "server_runs_artifacts": 1706
+  },
+  "frozen_input_sha256": {
+    ".scratch/corpus-evidence-pipeline/p4-runs/p4-items-1/audit-export.json": "0bcd1497e74195b6c44ec487794266fdd0749ebeb1547ee59ad093d63c883966",
+    ".scratch/corpus-evidence-pipeline/p4_item_trial.py": "035af033498e59151509e4b771debdcd5214b046407f2689e67fb59a800911cc",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-inventory.json": "b2632e12ad5421721538587a159fdac2f5b8f08007e21c6c196e9ac1c33e483d",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-field-review-completed.json": "867124cbc515b9b529eeded959329c31e50e69c18d0ad51b95ab50cb83b1a587"
+  }
+}

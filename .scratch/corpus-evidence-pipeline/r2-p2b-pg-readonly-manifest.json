@@ -1,0 +1,56 @@
+{
+  "version": "p2b-pg-readonly-review-freeze-1",
+  "date": "2026-09-14",
+  "authorization": "user_explicit_readonly_impact_audit",
+  "status": "readonly_review_completed_historical_zero_impact_not_proven",
+  "p2b_manifest_sha256": "85d587047b680b5c76ca985f63945ec243d69e7d16e8ddf35a5596144b72ab3f",
+  "database": "postgres",
+  "cluster_system_identifier": "7683087224215924779",
+  "read_only_transactions": 3,
+  "ddl_dml_commands": 0,
+  "cleanup_restore_migration": false,
+  "model_calls": 0,
+  "source_body_output": false,
+  "p3_started": false,
+  "budget_authorized": false,
+  "results": {
+    "test_schema_residue": 0,
+    "documents": 89,
+    "blocks": 1101,
+    "claims": 1318,
+    "evidence_runs": 57,
+    "orphan_blocks": 0,
+    "orphan_claims": 0,
+    "invalid_indexes": 0,
+    "backup_document_ids": 78,
+    "backup_missing_ids": 0,
+    "backup_stored_hash_changes": 0,
+    "event_window_new_documents": 0,
+    "event_window_new_evidence_runs": 0,
+    "event_window_new_ingest_runs": 0
+  },
+  "limitations": [
+    "no_immediate_preincident_database_snapshot",
+    "no_full_statement_or_connection_audit",
+    "no_WAL_archiving",
+    "fixed_schema_preexisting_contents_unknown",
+    "prior_B6_B7_sample_identity_unknown",
+    "backup_comparison_is_stored_metadata_not_source_body_rehash",
+    "current_target_matches_configuration_but_incident_connection_fingerprint_missing"
+  ],
+  "authoritative_database_artifact": "p2b-pg-readonly-evidence.json",
+  "process_artifacts": [
+    "p2b-pg-readonly-catalog.json",
+    "p2b-pg-readonly-catalog-final.json"
+  ],
+  "files": {
+    ".scratch/corpus-evidence-pipeline/p2b-pg-readonly-catalog-final.json": "ea86ba3038c4d48f0371620bface6a681d97a861e7ad3a5b07ae4354a8f9ad20",
+    "data/corpus_full_backup_v2/documents.csv": "b7c48a2dbcc5e8b390e28966f0a6c92840bd00ce9bd6c42f375ad95bd970cf98",
+    ".scratch/corpus-evidence-pipeline/p2b-pg-readonly-catalog.json": "55e3e03830752f22b7bf86984b6f3dcab522e7d66b6bd431babe84cde15daf53",
+    ".scratch/corpus-evidence-pipeline/r2-p2b-pg-readonly-report.md": "3487f067b63410a4468a7df23bd9124323827c5252055b7ac365738853ea4a96",
+    "data/corpus_full_backup_v2/manifest.json": "4fedb1600a07de64abf0c3e40b5e5da1515857b6ab6efb797d55152b19c7c1b2",
+    ".scratch/corpus-evidence-pipeline/p2b-pg-readonly-evidence.json": "3589e41956131f50c78ae87ab2d146a7445160d5e95a6626c39419594787d2ff",
+    ".scratch/corpus-evidence-pipeline/p2b-pg-log-summary.json": "34dd42226d2c0cd3fe09c88df5503fd3398e393d5590d488ddf0b02d9731d040",
+    ".scratch/corpus-evidence-pipeline/p2b_pg_readonly_audit.py": "a5bb8ab58036ef1f36eb3aed09eb94badc6b6899aec898bdb28c3fbdbf699307"
+  }
+}

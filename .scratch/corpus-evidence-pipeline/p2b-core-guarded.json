@@ -1,0 +1,2735 @@
+{
+  "db": "disabled before native driver",
+  "exit_code": 0,
+  "files": [
+    "tests/test_corpus_a1_ingest_search.py",
+    "tests/test_corpus_audit.py",
+    "tests/test_corpus_claims.py",
+    "tests/test_corpus_claims_interface.py",
+    "tests/test_corpus_claims_v2.py",
+    "tests/test_corpus_coverage.py",
+    "tests/test_corpus_evidence_pipeline.py",
+    "tests/test_corpus_financial_review.py",
+    "tests/test_corpus_golden.py",
+    "tests/test_corpus_holdout_eval.py",
+    "tests/test_corpus_ingest.py",
+    "tests/test_corpus_layout_recovery.py",
+    "tests/test_corpus_llm_diagnostics.py",
+    "tests/test_corpus_macro_models.py",
+    "tests/test_corpus_macro_official.py",
+    "tests/test_corpus_material_semantics.py",
+    "tests/test_corpus_metadata.py",
+    "tests/test_corpus_preflight.py",
+    "tests/test_corpus_quality_contracts.py",
+    "tests/test_corpus_search.py",
+    "tests/test_corpus_semantic_gates.py",
+    "tests/test_corpus_verify_b7.py",
+    "tests/test_data_coverage.py",
+    "tests/test_market_adapter.py",
+    "tests/test_market_failure.py",
+    "tests/test_market_failure_injection.py",
+    "tests/test_market_gate.py",
+    "tests/test_market_golden.py",
+    "tests/test_market_isolation.py",
+    "tests/test_market_service.py",
+    "tests/test_market_transport.py",
+    "tests/test_market_verify.py",
+    "tests/test_position_sizing.py",
+    "tests/test_strategy_lint.py"
+  ],
+  "real_corpus_tests": "excluded",
+  "records": [
+    {
+      "nodeid": "tests/test_corpus_a1_ingest_search.py::test_ingest_then_search_without_any_index_build",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 A1 门禁：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_a1_ingest_search.py::test_rerun_is_idempotent_and_skips_unchanged",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 A1 门禁：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_completeness_gap_stale_and_zero_candidates",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_backup_coverage_detects_unlisted_column",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_consistency_all_four_checks",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_quality_traceability_and_runs",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_exit_code_reflects_conflicts_and_jsonl_trace",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_doc_scope_filters_documents",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D5 审计测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_audit.py::test_pg_down_returns_exit_2",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_triage_keeps_blocks_with_numbers",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_triage_skips_noise_and_numberless_blocks",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_claims_json_tolerates_fences_and_prose",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_claims_json_returns_empty_on_garbage",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_claims_json_unwraps_object",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_claims_from_payload_cleans_fields",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_from_block_keeps_locator_for_traceability",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_end_to_end_extract_and_query",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_is_idempotent",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_single_block_failure_does_not_stop_batch",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_retry_recovers_from_transient_failure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_block_claims_survive_a_later_failure",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_stop_request_keeps_committed_blocks",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_rerun_skips_blocks_that_yielded_zero_claims",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_failed_blocks_are_retried_on_rerun",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_fingerprint_change_reextracts_and_replaces",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_circuit_breaker_stops_after_consecutive_failures",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_dead_letter_is_not_retried_forever",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_reads_strict_form",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_maps_bare_code_in_title",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_ignores_bare_code_in_body",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_abstains_on_industry_reports",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_skips_invalid_bare_candidates",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_returns_none_when_unknown",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_apply_doc_ticker_respects_model_value",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_document_ticker_fallback_fills_table_blocks",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_classify_doc_kind_company",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_classify_doc_kind_industry",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_classify_doc_kind_macro",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_build_prompt_selects_slot_by_doc_kind",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_from_block_passes_doc_kind_to_prompt",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_from_block_enforces_coordinate_model",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_industry_doc_end_to_end_slot_and_tickers",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_value_splits_number_and_unit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_value_handles_accounting_parens",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_value_never_guesses",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_as_of_accepts_iso_and_chinese_dates",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_as_of_rejects_non_dates",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_claims_from_payload_derives_fact_columns",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_apply_as_of_fallback_fills_from_published",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_macro_doc_uses_macro_slot_and_fact_columns",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_company_doc_uses_company_slot_and_keeps_tickers",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_set_doc_kind_validates_and_clears",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_backup_columns_track_claims_schema",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_doc_kind_constants_are_closed_world",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_normalize_metric_merges_known_aliases",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_normalize_metric_never_touches_coordinates",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_claims_from_payload_applies_metric_alias",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_unit_scale_maps_money_units_to_base",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_dedup_claims_preserves_unresolved_coordinate_conflicts",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_cross_block_dedup_preserves_conflicting_values",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_is_flat_table_detects_flattened_financial_table",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_is_flat_table_rejects_prose_even_when_number_dense",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_is_flat_table_rejects_toc_dot_leaders_and_short_fragments",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_build_prompt_appends_table_section_for_flat_tables_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extractor_version_input_includes_table_appendix",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_from_block_sends_table_appendix_for_table_blocks",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_extract_from_block_drops_unanchored_periods_in_table_blocks",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_parse_claims_json_salvages_truncated_array",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_max_output_tokens_default_and_override",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_thinking_disabled_by_default_and_opt_in",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims.py::test_commit_block_with_mixed_null_and_str_periods",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 落库测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_canonical_extract_read_fetch_and_calculate",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_default_budget_is_deferred_and_no_legacy_fallback",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_quality_ok_is_not_comparison_permission",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[pipeline_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[extractor_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[lint_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_rejected_is_audit_only_and_tamper_is_refused",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args6]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args7]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_default_and_explicit_legacy_routing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_revision_selection_does_not_merge_a_later_failed_run",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_evidence_and_calculation_share_revision",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_explicit_budget_selects_adapter_but_preview_does_not_write",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_v2_triage_keeps_rating_without_numbers_and_filters_noise",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_v2_triage_filters_structural_pages_without_blocking_real_views",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_doc_kind_detail_reports_reason_and_confidence",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_doc_kind_detail_handles_gold_source_patterns",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_v2_prompt_marks_document_text_as_untrusted",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_parse_claims_json_detail_distinguishes_empty_failed_and_truncated",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_period_normalization_covers_core_grains_and_refuses_unanchored_month",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_records_from_payload_splits_coordinates_and_preserves_raw_fields",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_lint_claim_applies_quality_gate_without_llm",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_extract_from_block_v2_partitions_quality_statuses",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_extract_claims_v2_persists_shadow_rows_and_default_projection",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D2 v2 测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_v2_backup_columns_are_registered",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_claim_tables_comment_every_data_column[\\nCREATE TABLE IF NOT EXISTS claims (\\n    claim_id      BIGSERIAL PRIMARY KEY,\\n    doc_id        text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    seq           integer     NOT NULL,\\n    -- \\u53d6\\u8bc1\\u53e5\\u67c4\\uff0c\\u4e0e blocks.locator \\u540c\\u4e00\\u5957\\uff1aclaim \\u5fc5\\u987b\\u80fd\\u56de\\u5230\\u539f\\u6587\\uff08\\u786c\\u95f8\\u2460\\uff09\\n    locator       text        NOT NULL,\\n    claim_text    text        NOT NULL,\\n    kind          text        NOT NULL DEFAULT 'fact',\\n    -- \\u6d89\\u53ca\\u6807\\u7684\\u4ee3\\u7801\\uff08\\u5982 600519.SH\\uff09\\uff0cD3 \\u6316\\u6398 / D4 \\u5171\\u8bc6\\u5ea6\\u6309\\u5b83\\u805a\\u5408\\n    tickers       text[]      NOT NULL DEFAULT '{}',\\n    metric        text,\\n    value_text    text,\\n    -- \\u4e8b\\u5b9e\\u5217 / \\u6570\\u503c\\u6295\\u5f71\\uff08d2-claims-design \\xa75.1\\uff09\\uff1a\\u53ef\\u679a\\u4e3e\\u547d\\u540d\\u7ef4\\u5ea6\\uff08\\u5730\\u57df/\\u53e3\\u5f84/\\u4e09\\u6001\\uff09\\n    -- \\u7f16\\u7801\\u8fdb metric\\uff0c\\u4f46\\u8fd9\\u4e09\\u5217**\\u5fc5\\u987b\\u843d\\u5217**\\u2014\\u2014 as_of \\u8981\\u505a\\u8303\\u56f4\\u5207\\u7247\\uff08as_of <= T\\uff09\\uff0c\\n    -- \\u7f16\\u7801\\u8fdb\\u540d\\u5b57\\u65e0\\u6cd5\\u7d22\\u5f15\\uff1bvalue_num/unit \\u8981\\u505a\\u7b97\\u672f\\uff08\\u5747\\u503c/\\u4e2d\\u4f4d\\u6570/\\u79bb\\u6563\\u5ea6\\uff09\\uff0c\\n    -- \\u540d\\u5b57\\u91cc\\u653e\\u4e0d\\u4e0b\\u3002value_num/unit \\u7531 Python \\u4ece value_text \\u89e3\\u6790\\uff08\\u96f6 LLM \\u6210\\u672c\\uff09\\uff0c\\n    -- \\u89e3\\u6790\\u5931\\u8d25\\u65f6 value_num \\u7559 NULL \\u5e76\\u4fdd\\u7559 value_text \\u539f\\u6587\\uff0c\\u4e0d\\u5f97\\u731c\\u3002\\n    value_num     numeric,\\n    unit          text,\\n    period        text,\\n    as_of         date,\\n    confidence    real,\\n    extracted_at  timestamptz NOT NULL DEFAULT now(),\\n    UNIQUE (doc_id, seq, claim_text)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claims_doc     ON claims (doc_id, seq);\\nCREATE INDEX IF NOT EXISTS idx_claims_tickers ON claims USING gin (tickers);\\nCREATE INDEX IF NOT EXISTS idx_claims_kind    ON claims (kind);\\n-- \\u6ce8\\u610f\\uff1aas_of \\u7684\\u7d22\\u5f15\\u5728 CLAIMS_MIGRATIONS_SQL \\u91cc\\u5efa \\u2014\\u2014 \\u8001\\u5e93\\u52a0\\u5217\\u53d1\\u751f\\u5728\\u8fc1\\u79fb\\u5757\\uff0c\\n-- \\u8fd9\\u91cc\\u5efa\\u4e86\\u4f1a\\u8ba9 CREATE INDEX \\u5728\\u8001\\u5e93\\u4e0a\\u5148\\u4e8e ADD COLUMN \\u6267\\u884c\\u800c\\u76f4\\u63a5\\u5931\\u8d25\\u3002\\n\\n-- \\u5757\\u7ea7\\u62bd\\u53d6\\u53f0\\u8d26\\uff1a\\u65ad\\u70b9\\u7eed\\u8dd1\\u7684\\u300c\\u8df3\\u8fc7\\u6807\\u8bb0\\u300d\\uff0c\\u540c\\u65f6\\u662f\\u6bcf\\u5757\\u7684\\u5ba1\\u8ba1\\u4e0e\\u82b1\\u8d39\\u8bb0\\u5f55\\u3002\\n-- \\u4e3a\\u4ec0\\u4e48\\u5fc5\\u987b\\u6709\\u8fd9\\u5f20\\u8868\\uff1a\\u82e5\\u53ea\\u62ff ``claims`` \\u53cd\\u63a8\\u300c\\u8fd9\\u5757\\u505a\\u8fc7\\u6ca1\\u6709\\u300d\\uff0c\\u5c31\\u4f1a\\u6f0f\\u6389\\n-- **\\u62bd\\u51fa 0 \\u6761 claim \\u7684\\u5757** \\u2014\\u2014 \\u5b83\\u4eec\\u65e2\\u6ca1\\u5728 claims \\u91cc\\u7559\\u75d5\\uff0c\\u53c8\\u6bcf\\u6b21\\u91cd\\u8dd1\\u90fd\\u88ab\\n-- \\u518d\\u8c03\\u4e00\\u6b21 LLM\\uff08\\u540c\\u4e00\\u5757\\u94b1\\u53cd\\u590d\\u82b1\\uff0c\\u4e14\\u6c38\\u8fdc\\u8dd1\\u4e0d\\u5230\\u5c3d\\u5934\\uff09\\u3002\\nCREATE TABLE IF NOT EXISTS claim_block_runs (\\n    doc_id      text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    seq         integer     NOT NULL,\\n    -- ok=\\u62bd\\u53d6\\u6210\\u529f\\uff08claims_n \\u5141\\u8bb8\\u4e3a 0\\uff0c\\u4e5f\\u7b97\\u300c\\u505a\\u8fc7\\u300d\\uff09\\uff1bfailed=\\u8c03\\u7528\\u5931\\u8d25\\uff0c\\u91cd\\u8dd1\\u4f1a\\u91cd\\u8bd5\\n    status      text        NOT NULL,\\n    claims_n    integer     NOT NULL DEFAULT 0,\\n    attempts    integer     NOT NULL DEFAULT 1,\\n    -- \\u2605 \\u62bd\\u53d6\\u6765\\u6e90\\u6307\\u7eb9\\uff1a\\u8df3\\u8fc7\\u53ea\\u8ba4\\u300c\\u540c\\u4e00\\u6a21\\u578b + \\u540c\\u4e00 prompt/\\u89e3\\u6790\\u5668\\u7248\\u672c\\u300d\\u7684 ok \\u8bb0\\u5f55\\u3002\\n    -- \\u6ca1\\u6709\\u5b83\\uff0c\\u6362\\u6a21\\u578b\\uff08\\u5982 GLM-4.7 \\u2192 GLM-4.5-AirX\\uff09\\u6216\\u6539 prompt \\u4e4b\\u540e\\uff0c\\u65e7\\u5757\\u4f1a\\u88ab\\n    -- \\u9759\\u9ed8\\u6c38\\u4e45\\u8df3\\u8fc7 \\u2014\\u2014 \\u770b\\u8d77\\u6765\\u5728\\u8dd1\\uff0c\\u5b9e\\u9645\\u4e00\\u6761\\u90fd\\u4e0d\\u62bd\\uff0c\\u4e14\\u4e0d\\u62a5\\u9519\\u3002\\n    model             text,\\n    extractor_version text,\\n    duration_ms       integer,\\n    -- \\u82b1\\u8d39\\u53f0\\u8d26\\uff1a\\u6709\\u5b83\\u624d\\u80fd\\u56de\\u7b54\\u300c\\u5df2\\u7ecf\\u82b1\\u4e86\\u591a\\u5c11\\u3001\\u5269\\u4e0b\\u8fd8\\u8981\\u591a\\u5c11\\u300d\\n    prompt_tokens     integer,\\n    completion_tokens integer,\\n    error       text,\\n    updated_at  timestamptz NOT NULL DEFAULT now(),\\n    PRIMARY KEY (doc_id, seq)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_status ON claim_block_runs (status);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_fingerprint\\n    ON claim_block_runs (status, model, extractor_version);\\n-comments0-claims]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_claim_tables_comment_every_data_column[\\nCREATE TABLE IF NOT EXISTS claims (\\n    claim_id      BIGSERIAL PRIMARY KEY,\\n    doc_id        text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    seq           integer     NOT NULL,\\n    -- \\u53d6\\u8bc1\\u53e5\\u67c4\\uff0c\\u4e0e blocks.locator \\u540c\\u4e00\\u5957\\uff1aclaim \\u5fc5\\u987b\\u80fd\\u56de\\u5230\\u539f\\u6587\\uff08\\u786c\\u95f8\\u2460\\uff09\\n    locator       text        NOT NULL,\\n    claim_text    text        NOT NULL,\\n    kind          text        NOT NULL DEFAULT 'fact',\\n    -- \\u6d89\\u53ca\\u6807\\u7684\\u4ee3\\u7801\\uff08\\u5982 600519.SH\\uff09\\uff0cD3 \\u6316\\u6398 / D4 \\u5171\\u8bc6\\u5ea6\\u6309\\u5b83\\u805a\\u5408\\n    tickers       text[]      NOT NULL DEFAULT '{}',\\n    metric        text,\\n    value_text    text,\\n    -- \\u4e8b\\u5b9e\\u5217 / \\u6570\\u503c\\u6295\\u5f71\\uff08d2-claims-design \\xa75.1\\uff09\\uff1a\\u53ef\\u679a\\u4e3e\\u547d\\u540d\\u7ef4\\u5ea6\\uff08\\u5730\\u57df/\\u53e3\\u5f84/\\u4e09\\u6001\\uff09\\n    -- \\u7f16\\u7801\\u8fdb metric\\uff0c\\u4f46\\u8fd9\\u4e09\\u5217**\\u5fc5\\u987b\\u843d\\u5217**\\u2014\\u2014 as_of \\u8981\\u505a\\u8303\\u56f4\\u5207\\u7247\\uff08as_of <= T\\uff09\\uff0c\\n    -- \\u7f16\\u7801\\u8fdb\\u540d\\u5b57\\u65e0\\u6cd5\\u7d22\\u5f15\\uff1bvalue_num/unit \\u8981\\u505a\\u7b97\\u672f\\uff08\\u5747\\u503c/\\u4e2d\\u4f4d\\u6570/\\u79bb\\u6563\\u5ea6\\uff09\\uff0c\\n    -- \\u540d\\u5b57\\u91cc\\u653e\\u4e0d\\u4e0b\\u3002value_num/unit \\u7531 Python \\u4ece value_text \\u89e3\\u6790\\uff08\\u96f6 LLM \\u6210\\u672c\\uff09\\uff0c\\n    -- \\u89e3\\u6790\\u5931\\u8d25\\u65f6 value_num \\u7559 NULL \\u5e76\\u4fdd\\u7559 value_text \\u539f\\u6587\\uff0c\\u4e0d\\u5f97\\u731c\\u3002\\n    value_num     numeric,\\n    unit          text,\\n    period        text,\\n    as_of         date,\\n    confidence    real,\\n    extracted_at  timestamptz NOT NULL DEFAULT now(),\\n    UNIQUE (doc_id, seq, claim_text)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claims_doc     ON claims (doc_id, seq);\\nCREATE INDEX IF NOT EXISTS idx_claims_tickers ON claims USING gin (tickers);\\nCREATE INDEX IF NOT EXISTS idx_claims_kind    ON claims (kind);\\n-- \\u6ce8\\u610f\\uff1aas_of \\u7684\\u7d22\\u5f15\\u5728 CLAIMS_MIGRATIONS_SQL \\u91cc\\u5efa \\u2014\\u2014 \\u8001\\u5e93\\u52a0\\u5217\\u53d1\\u751f\\u5728\\u8fc1\\u79fb\\u5757\\uff0c\\n-- \\u8fd9\\u91cc\\u5efa\\u4e86\\u4f1a\\u8ba9 CREATE INDEX \\u5728\\u8001\\u5e93\\u4e0a\\u5148\\u4e8e ADD COLUMN \\u6267\\u884c\\u800c\\u76f4\\u63a5\\u5931\\u8d25\\u3002\\n\\n-- \\u5757\\u7ea7\\u62bd\\u53d6\\u53f0\\u8d26\\uff1a\\u65ad\\u70b9\\u7eed\\u8dd1\\u7684\\u300c\\u8df3\\u8fc7\\u6807\\u8bb0\\u300d\\uff0c\\u540c\\u65f6\\u662f\\u6bcf\\u5757\\u7684\\u5ba1\\u8ba1\\u4e0e\\u82b1\\u8d39\\u8bb0\\u5f55\\u3002\\n-- \\u4e3a\\u4ec0\\u4e48\\u5fc5\\u987b\\u6709\\u8fd9\\u5f20\\u8868\\uff1a\\u82e5\\u53ea\\u62ff ``claims`` \\u53cd\\u63a8\\u300c\\u8fd9\\u5757\\u505a\\u8fc7\\u6ca1\\u6709\\u300d\\uff0c\\u5c31\\u4f1a\\u6f0f\\u6389\\n-- **\\u62bd\\u51fa 0 \\u6761 claim \\u7684\\u5757** \\u2014\\u2014 \\u5b83\\u4eec\\u65e2\\u6ca1\\u5728 claims \\u91cc\\u7559\\u75d5\\uff0c\\u53c8\\u6bcf\\u6b21\\u91cd\\u8dd1\\u90fd\\u88ab\\n-- \\u518d\\u8c03\\u4e00\\u6b21 LLM\\uff08\\u540c\\u4e00\\u5757\\u94b1\\u53cd\\u590d\\u82b1\\uff0c\\u4e14\\u6c38\\u8fdc\\u8dd1\\u4e0d\\u5230\\u5c3d\\u5934\\uff09\\u3002\\nCREATE TABLE IF NOT EXISTS claim_block_runs (\\n    doc_id      text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    seq         integer     NOT NULL,\\n    -- ok=\\u62bd\\u53d6\\u6210\\u529f\\uff08claims_n \\u5141\\u8bb8\\u4e3a 0\\uff0c\\u4e5f\\u7b97\\u300c\\u505a\\u8fc7\\u300d\\uff09\\uff1bfailed=\\u8c03\\u7528\\u5931\\u8d25\\uff0c\\u91cd\\u8dd1\\u4f1a\\u91cd\\u8bd5\\n    status      text        NOT NULL,\\n    claims_n    integer     NOT NULL DEFAULT 0,\\n    attempts    integer     NOT NULL DEFAULT 1,\\n    -- \\u2605 \\u62bd\\u53d6\\u6765\\u6e90\\u6307\\u7eb9\\uff1a\\u8df3\\u8fc7\\u53ea\\u8ba4\\u300c\\u540c\\u4e00\\u6a21\\u578b + \\u540c\\u4e00 prompt/\\u89e3\\u6790\\u5668\\u7248\\u672c\\u300d\\u7684 ok \\u8bb0\\u5f55\\u3002\\n    -- \\u6ca1\\u6709\\u5b83\\uff0c\\u6362\\u6a21\\u578b\\uff08\\u5982 GLM-4.7 \\u2192 GLM-4.5-AirX\\uff09\\u6216\\u6539 prompt \\u4e4b\\u540e\\uff0c\\u65e7\\u5757\\u4f1a\\u88ab\\n    -- \\u9759\\u9ed8\\u6c38\\u4e45\\u8df3\\u8fc7 \\u2014\\u2014 \\u770b\\u8d77\\u6765\\u5728\\u8dd1\\uff0c\\u5b9e\\u9645\\u4e00\\u6761\\u90fd\\u4e0d\\u62bd\\uff0c\\u4e14\\u4e0d\\u62a5\\u9519\\u3002\\n    model             text,\\n    extractor_version text,\\n    duration_ms       integer,\\n    -- \\u82b1\\u8d39\\u53f0\\u8d26\\uff1a\\u6709\\u5b83\\u624d\\u80fd\\u56de\\u7b54\\u300c\\u5df2\\u7ecf\\u82b1\\u4e86\\u591a\\u5c11\\u3001\\u5269\\u4e0b\\u8fd8\\u8981\\u591a\\u5c11\\u300d\\n    prompt_tokens     integer,\\n    completion_tokens integer,\\n    error       text,\\n    updated_at  timestamptz NOT NULL DEFAULT now(),\\n    PRIMARY KEY (doc_id, seq)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_status ON claim_block_runs (status);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_fingerprint\\n    ON claim_block_runs (status, model, extractor_version);\\n-comments1-claim_block_runs]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_claim_tables_comment_every_data_column[\\nCREATE TABLE IF NOT EXISTS claims_v2 (\\n    claim_id          BIGSERIAL PRIMARY KEY,\\n    doc_id            text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    source_rev        text        NOT NULL,\\n    seq               integer     NOT NULL,\\n    locator           text        NOT NULL,\\n    claim_text        text        NOT NULL,\\n    evidence_quote    text,\\n    evidence_kind     text        NOT NULL DEFAULT 'prose',\\n    table_ref         jsonb       NOT NULL DEFAULT '{}'::jsonb,\\n    scope             text        NOT NULL,\\n    subject_raw       text,\\n    subject           text,\\n    metric_raw        text,\\n    metric            text,\\n    qualifiers        jsonb       NOT NULL DEFAULT '{}'::jsonb,\\n    kind              text        NOT NULL,\\n    value_text        text,\\n    value_num         numeric,\\n    unit_raw          text,\\n    unit              text,\\n    period_raw        text,\\n    period_end        date,\\n    period_grain      text,\\n    observed_at       date,\\n    known_at          date,\\n    quality_status    text        NOT NULL,\\n    reason_codes      text[]      NOT NULL DEFAULT '{}',\\n    model             text,\\n    extractor_version text        NOT NULL,\\n    lint_version      text        NOT NULL,\\n    extracted_at      timestamptz NOT NULL DEFAULT now(),\\n    UNIQUE (doc_id, source_rev, seq, claim_text, evidence_quote, metric, period_end, value_text)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_doc\\n    ON claims_v2 (doc_id, source_rev, seq);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_quality\\n    ON claims_v2 (quality_status);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_subject_metric\\n    ON claims_v2 (scope, subject, metric, period_end);\\n\\nCREATE TABLE IF NOT EXISTS claim_block_runs_v2 (\\n    doc_id            text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    source_rev        text        NOT NULL,\\n    seq               integer     NOT NULL,\\n    status            text        NOT NULL,\\n    accepted_n        integer     NOT NULL DEFAULT 0,\\n    review_n          integer     NOT NULL DEFAULT 0,\\n    rejected_n        integer     NOT NULL DEFAULT 0,\\n    attempts          integer     NOT NULL DEFAULT 1,\\n    model             text,\\n    extractor_version text,\\n    lint_version      text,\\n    duration_ms       integer,\\n    prompt_tokens     integer,\\n    completion_tokens integer,\\n    truncated         boolean     NOT NULL DEFAULT false,\\n    diagnostics       jsonb       NOT NULL DEFAULT '[]'::jsonb,\\n    error             text,\\n    updated_at        timestamptz NOT NULL DEFAULT now(),\\n    PRIMARY KEY (doc_id, source_rev, seq)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_v2_status\\n    ON claim_block_runs_v2 (status);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_v2_fingerprint\\n    ON claim_block_runs_v2 (status, model, extractor_version, lint_version);\\n-comments2-claims_v2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_v2.py::test_claim_tables_comment_every_data_column[\\nCREATE TABLE IF NOT EXISTS claims_v2 (\\n    claim_id          BIGSERIAL PRIMARY KEY,\\n    doc_id            text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    source_rev        text        NOT NULL,\\n    seq               integer     NOT NULL,\\n    locator           text        NOT NULL,\\n    claim_text        text        NOT NULL,\\n    evidence_quote    text,\\n    evidence_kind     text        NOT NULL DEFAULT 'prose',\\n    table_ref         jsonb       NOT NULL DEFAULT '{}'::jsonb,\\n    scope             text        NOT NULL,\\n    subject_raw       text,\\n    subject           text,\\n    metric_raw        text,\\n    metric            text,\\n    qualifiers        jsonb       NOT NULL DEFAULT '{}'::jsonb,\\n    kind              text        NOT NULL,\\n    value_text        text,\\n    value_num         numeric,\\n    unit_raw          text,\\n    unit              text,\\n    period_raw        text,\\n    period_end        date,\\n    period_grain      text,\\n    observed_at       date,\\n    known_at          date,\\n    quality_status    text        NOT NULL,\\n    reason_codes      text[]      NOT NULL DEFAULT '{}',\\n    model             text,\\n    extractor_version text        NOT NULL,\\n    lint_version      text        NOT NULL,\\n    extracted_at      timestamptz NOT NULL DEFAULT now(),\\n    UNIQUE (doc_id, source_rev, seq, claim_text, evidence_quote, metric, period_end, value_text)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_doc\\n    ON claims_v2 (doc_id, source_rev, seq);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_quality\\n    ON claims_v2 (quality_status);\\nCREATE INDEX IF NOT EXISTS idx_claims_v2_subject_metric\\n    ON claims_v2 (scope, subject, metric, period_end);\\n\\nCREATE TABLE IF NOT EXISTS claim_block_runs_v2 (\\n    doc_id            text        NOT NULL REFERENCES documents(doc_id) ON DELETE CASCADE,\\n    source_rev        text        NOT NULL,\\n    seq               integer     NOT NULL,\\n    status            text        NOT NULL,\\n    accepted_n        integer     NOT NULL DEFAULT 0,\\n    review_n          integer     NOT NULL DEFAULT 0,\\n    rejected_n        integer     NOT NULL DEFAULT 0,\\n    attempts          integer     NOT NULL DEFAULT 1,\\n    model             text,\\n    extractor_version text,\\n    lint_version      text,\\n    duration_ms       integer,\\n    prompt_tokens     integer,\\n    completion_tokens integer,\\n    truncated         boolean     NOT NULL DEFAULT false,\\n    diagnostics       jsonb       NOT NULL DEFAULT '[]'::jsonb,\\n    error             text,\\n    updated_at        timestamptz NOT NULL DEFAULT now(),\\n    PRIMARY KEY (doc_id, source_rev, seq)\\n);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_v2_status\\n    ON claim_block_runs_v2 (status);\\nCREATE INDEX IF NOT EXISTS idx_claim_block_runs_v2_fingerprint\\n    ON claim_block_runs_v2 (status, model, extractor_version, lint_version);\\n-comments3-claim_block_runs_v2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_coverage.py::test_no_coverage_returns_explicit_signal",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_coverage.py::test_no_coverage_tells_model_to_stop_and_switch_path",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_coverage.py::test_no_coverage_hint_pins_the_no_fabrication_rule",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_coverage.py::test_coverage_signal_is_present_in_the_discipline_prompt",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_pdf_cells_have_verifiable_coordinates_and_raw_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_long_text_coverage_and_parser_configuration_identity",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_image_only_page_is_unknown_not_empty_success",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_markdown_headings_and_word_tables_are_preserved",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_run_roundtrip_and_no_unit_means_not_calculable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_growth_has_exact_input_ids_and_refuses_reversed_periods",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_llm_failure_does_not_report_complete",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_changed_subject_is_refused_even_with_valid_amount",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[   ]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[[{broken]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_source_view_does_not_apply_legacy_boilerplate_cleaning",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_database_versions_idempotence_and_backup_roundtrip",
+      "outcome": "skipped",
+      "reason": "Skipped: PostgreSQL unavailable",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change0-unit_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change1-basis_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change2-source_revision_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_wrong_unit_or_metric_cannot_borrow_a_real_number",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_preserves_source_and_marks_unresolved_definition",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_matching_number_does_not_prove_the_author_formula",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_source_display_precision_controls_rounding_tolerance",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_does_not_guess_invalid_inputs[kwargs0-zero_denominator]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_does_not_guess_invalid_inputs[kwargs1-duplicate_fact_ids]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes0-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes1-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes2-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes3-unit_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_financial_review_service_and_cli_do_not_write",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_holdout_eval.py::test_missed_target_is_not_a_pass_even_when_negative_checks_are_vacuous",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_holdout_eval.py::test_negative_rule_names_fail_closed",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_holdout_eval.py::test_adversarial_probe_inventory_and_positive_control",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_holdout_eval.py::test_wrong_state_does_not_count_as_complete_coordinate",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_holdout_eval.py::test_negative_scope_includes_short_quotes_with_nfp_in_claim_text",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_ingest.py::test_reingest_same_file_keeps_single_document",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_sidebar_list_does_not_hide_numeric_body",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_footer_does_not_hide_numeric_body",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_contact_only_and_related_titles_remain_noise",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_customer_table_restores_cells_title_footnote_and_period",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_customer_ratio_without_explicit_percent_is_not_guessed",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_layout_recovery.py::test_skipped_page_does_not_prove_source_absence",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_empty_length_response_preserves_safe_diagnostics",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_failed_output_is_not_a_successful_empty_packet[[]-length-output_truncated]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_failed_output_is_not_a_successful_empty_packet[-stop-empty_response]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_failed_output_is_not_a_successful_empty_packet[not json-stop-invalid_json]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_timeout_records_type_not_provider_message",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_macro_raw_aliases_and_layout_whitespace_resolve_to_exact_source",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_whitespace_alignment_must_not_invent_a_numeric_token",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_glm53_corpus_default_is_low_effort_without_disabled_thinking",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_model_supplied_year_without_source_anchor_is_not_a_normalized_period",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_old_evidence_identity_contracts_remain_readable[1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_old_evidence_identity_contracts_remain_readable[2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_old_evidence_identity_contracts_remain_readable[3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_old_evidence_identity_contracts_remain_readable[4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_nonempty_invalid_schema_cannot_become_empty_success[[null]]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_nonempty_invalid_schema_cannot_become_empty_success[[1]]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_nonempty_invalid_schema_cannot_become_empty_success[[{}]]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_llm_diagnostics.py::test_explicit_empty_array_with_stop_is_legitimate_empty_success",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_all_record_types_roundtrip_and_content_identity",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[2026-09-04]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[2026-09-04T08:30:00]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[2026-02-30T08:30:00Z]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[2026-09-04T08:30:00+24:00]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_rejects_date_only_naive_invalid_or_numeric[1788539400]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_time_preserves_offset_but_compares_in_utc",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_unknown_dates_not_filled_from_ingestion",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_unknown_fields_and_self_approval_rejected_everywhere",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_immutable_nested_values_and_validated_copy",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_identity_includes_roles_qualifiers_vintages_and_snapshots",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_content_tampering_and_envelope_extras_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_roles_cannot_be_relabelled[changes0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_roles_cannot_be_relabelled[changes1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_roles_cannot_be_relabelled[changes2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_exact_signed_zero_and_raw_preserved[162-thousand_jobs-162000]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_exact_signed_zero_and_raw_preserved[-20-thousand_jobs--20000]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_exact_signed_zero_and_raw_preserved[0-jobs-0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_exact_signed_zero_and_raw_preserved[162,000-jobs-162000]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_exact_signed_zero_and_raw_preserved[123456789012345678901234567890.1234-thousand_jobs-123456789012345678901234567890123.4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[\\u2014]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[NaN]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[Infinity]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[1e10]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[12,34]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_missing_or_malformed_numbers_do_not_become_zero[16.2\\u4e07]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_chinese_units_require_real_application_receipt",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_serialized_valid_receipt_is_not_a_trust_source",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_rejected_insufficient_and_duplicate_reviews_do_not_grant_mapping",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_receipts_require_resolvable_evidence",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_other_series_or_unknown_dimensions_never_normalize_as_nfp_jobs[change0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_other_series_or_unknown_dimensions_never_normalize_as_nfp_jobs[change1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_other_series_or_unknown_dimensions_never_normalize_as_nfp_jobs[change2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_other_series_or_unknown_dimensions_never_normalize_as_nfp_jobs[change3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_other_series_or_unknown_dimensions_never_normalize_as_nfp_jobs[change4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_percent_not_a_jobs_unit_even_with_a_receipt",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_blocked_result_cannot_hide_a_value_or_missing_reason",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_old_run_reference_roundtrip_without_migration",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_duplicate_json_keys_are_not_last_writer_wins",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalized_values_must_be_finite[value0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalized_values_must_be_finite[value1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalized_values_must_be_finite[value2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_normalization_status_cannot_contradict_value_or_reasons",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_models.py::test_reviewer_cannot_claim_approved_with_a_blocking_reason",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_monthly_versions_raw_evidence_trust_and_replay[2025-05-first-139]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_monthly_versions_raw_evidence_trust_and_replay[2025-04-second-147]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_monthly_versions_raw_evidence_trust_and_replay[2025-03-third-120]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_one_release_keeps_all_vintages_without_changing_event_or_prior_result",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_winter_and_year_rollover",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_annual_benchmark_is_revised_change_not_level_or_revision_delta[2024-11-261]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_annual_benchmark_is_revised_change_not_level_or_revision_delta[2024-12-307]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_benchmark_release_current_month_still_first",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[(ET)--time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[(ET)-(EST)-time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[8:30 a.m.-June 6-time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[Friday, June 6-Thursday, June 6-time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[June 6, 2025-June 5, 2025-time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[MAY 2025-MAY-period_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[MAY 2025-APRIL 2025-vintage_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[seasonally adjusted-not seasonally adjusted-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[May 2025(p)-May 2025-vintage_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[May 2025(p)-May (p)-period_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[Apr. 2025(p)-Mar. 2025(p)-period_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[Over-the-month change-Over-the-year change-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[<td>139</td>-<td></td>-value_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[<td>139</td>-<td>13,9</td>-value_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[<td>139</td>-<td>139%</td>-value_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[The establishment survey revises its initial monthly estimates twice, in the immediately succeeding 2 months.-Revisions may occur.-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[</table>--atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[<td>139</td>-<td colspan=\"2\">139</td>-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[<th>May 2025(p)</th>-<th rowspan=\"2\">May 2025(p)</th>-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_missing_conflicting_or_ambiguous_source_is_blocked[(p) Preliminary-p = revised-vintage_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_signed_zero_and_comma_values[-20]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_signed_zero_and_comma_values[0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_signed_zero_and_comma_values[+139]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_signed_zero_and_comma_values[1,234]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_never_relabel_a_requested_vintage[2025-05-second]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_never_relabel_a_requested_vintage[2025-04-first]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_never_relabel_a_requested_vintage[2024-05-third]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_never_relabel_a_requested_vintage[2025-06-first]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_never_relabel_a_requested_vintage[2025-05-benchmark]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://www.bls.gov/news.release/empsit.htm]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://www.bls.gov/news.release/archives/empsit_06062025.htm?latest=1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://www.bls.gov/news.release/archives/empsit_06062025.htm#x]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[http://www.bls.gov/news.release/archives/empsit_06062025.htm]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://evil.test/news.release/archives/empsit_06062025.htm]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://www.bls.gov.evil.test/news.release/archives/empsit_06062025.htm]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_noncanonical_or_wrong_event_url_rejected_before_transport[https://www.bls.gov/news.release/archives/empsit_07032025.htm]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_capture_changes_fail_closed[changes0-source_hash_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_capture_changes_fail_closed[changes1-source_conflict]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_capture_changes_fail_closed[changes2-source_conflict]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_capture_changes_fail_closed[changes3-source_conflict]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_capture_changes_fail_closed[changes4-time_provenance_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_explicit_archive_save_is_content_addressed_and_never_overwrites",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_no_repinning_changed_source_into_same_historical_event",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_benchmark_headers_cannot_be_swapped_or_year_guessed[|  revised  |published  |           |  revised  |published |-|  published  |revised  |           |  published  |revised |-atomic_evidence_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_benchmark_headers_cannot_be_swapped_or_year_guessed[           2024      |-           2023      |-period_unverified]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_benchmark_headers_cannot_be_swapped_or_year_guessed[Over-the-month change\\n-Over-the-year change\\n-indicator_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_duplicate_rows_tables_and_deep_html_are_not_accepted",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_bounded_transport_no_redirect_no_retry_and_raw_response_retained[200]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_bounded_transport_no_redirect_no_retry_and_raw_response_retained[302]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_bounded_transport_no_redirect_no_retry_and_raw_response_retained[403]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_bounded_transport_no_redirect_no_retry_and_raw_response_retained[500]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_macro_official.py::test_transport_size_limit_and_timeout",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_dialogue_without_digits_is_a_candidate",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_material_semantics_preserve_attribution_conditions_and_quotes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_bad_speaker_reference_discards_only_dependent_records",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_nonbehavior_status_is_normalized_to_not_applicable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_ambiguous_extra_quote_does_not_discard_valid_packet_items",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_invalid_extra_enum_does_not_discard_valid_packet_items",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_model_enum_aliases_are_normalized_at_the_contract_boundary",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_truncated_response_salvages_complete_records_and_marks_partial",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_structured_split_keeps_question_with_following_answer",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_company_announcement_and_target_price_are_normalized",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_staged_jsonl_extracts_items_then_relations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_staged_jsonl_salvages_complete_lines_and_marks_partial",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_zero_budget_is_explicitly_deferred",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_requires_staged_jsonl",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_service_accepts_uningested_path_without_persistence",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_unlabelled_document_voice_is_degraded_not_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_recovers_null_speaker_without_cascade",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_binds_omitted_slot_id_by_unique_exact_quote",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_marks_missing_terminal_record_partial",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_exact_item_limit_is_capacity_saturation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_falls_back_to_explicit_source_metadata",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_coverage_system_corrects_detected_question_structure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_owns_numbered_answers_and_quoted_continuation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_owns_trade_time_and_explicit_value",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_owns_risk_polarity_and_report_values",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_preserves_claim_polarity_when_text_contains_lexical_negation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_adds_controlled_unknown_axes_for_unattributed_summary",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_splits_known_compound_statements_into_atomic_obligations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_preserves_connector_commas_inside_one_question",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_system_does_not_create_obligations_for_bare_acknowledgements",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_lexical_signals_allow_supported_semantic_disambiguation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_mixed_audio_turn_is_one_unknown_attribution_obligation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_atomic_obligation_batches_never_exceed_item_capacity",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_slot_protocol_calls_model_once_per_finite_atomic_batch",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_detected_question_cannot_be_rejected_as_no_supported_item",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_relation_candidates_exclude_adjacent_quote_without_explicit_connector",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_relation_obligations_require_one_explicit_decision_per_pair",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_material_semantics.py::test_candidate_slot_scope_runs_only_frozen_obligations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_derive_org_from_title_segment",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_derive_analysts_strips_sac_number",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_derive_published_falls_back_in_order",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_derive_metadata_subject_only_for_company",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_refresh_metadata_fills_all_fields",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D6 元数据测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_refresh_metadata_is_idempotent",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D6 元数据测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_refresh_metadata_doc_scope",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D6 元数据测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_init_db_restores_dropped_columns",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D6 元数据测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_backup_columns_cover_new_fields",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_metadata.py::test_ingest_hook_materializes_metadata",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 不可用，跳过 D6 元数据测试：P0 offline guard: PostgreSQL disabled",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_preflight.py::test_react_preflight_uses_current_profile_facade[stateful-react-agent]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_preflight.py::test_react_preflight_uses_current_profile_facade[stateful_react_agent]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_integer_zero_and_negative_values_survive_cleaning",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_table_requires_verified_source_not_a_model_supplied_label",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_number_must_match_whole_token_and_sign",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_numeric_fact_without_unit_and_period_is_review",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_money_value_and_unit_are_normalized_together",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_dedup_does_not_merge_companies_or_conflicting_values",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_quality_contracts.py::test_stored_numeric_projection_cannot_disagree_with_raw_unit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_number_and_unit_are_bound_into_one_token",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_thousand_separators_are_normalized",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_punctuation_only_tokens_are_dropped",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_returns_handle_and_snippet",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_number_query_finds_the_report_that_contains_it",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_respects_limit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_empty_query_returns_nothing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_or_fallback_when_and_query_finds_nothing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_snippet_is_truncated_and_marked",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_snippet_is_not_usable_as_a_quote",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_then_fetch_returns_verbatim_text",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_locator_accepts_integer_page",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_unknown_locator_returns_none_instead_of_raising",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[wrong_period]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[wrong_metric_value]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[fabricated_known_at]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[forecast_as_fact]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[duplicate_identity]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_valid_control_remains_calculable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165120\\u5143\\uff1b\\u51c0\\u5229\\u6da6100\\u5143\\u3002-changes0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u5f52\\u6bcd\\u51c0\\u5229\\u6da6100\\u5143\\u3002-changes1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2025A\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\uff1b2026E\\u8425\\u4e1a\\u6536\\u5165120\\u5143\\u3002-changes2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165-100\\u5143\\u3002-changes3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u4e07\\u5143\\u3002-changes4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\uff1b2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\u3002-changes5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\u3002-changes6]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_duplicate_identity_rejected_at_read_and_compute_interfaces",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_identity_distinguishes_qualifiers_and_kind",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_model_time_override_is_retained_only_as_audit_data",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_historical_calculation_rejected_without_rewriting_citations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_verify_b7.py::test_verbatim_quote_gives_full_traceability",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_verify_b7.py::test_fabricated_quote_lowers_traceability_rate",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_corpus_verify_b7.py::test_no_resolver_marks_traceability_skipped_strict_fails",
+      "outcome": "skipped",
+      "reason": "Skipped: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）",
+      "when": "setup"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_full_when_research_and_market_both_available",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_partial_without_research_requires_switching_to_market",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_none_gives_the_correct_exit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_research_only_forbids_inventing_prices",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_market_unavailable_is_reported_not_crashed",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_corpus_outage_is_distinguished_from_no_research",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_empty_query_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_search_tickers_maps_all_fields",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_snapshot_uses_plural_thscodes_and_maps_quote",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_batch_guard_rejects_market_wide_response",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_history_uses_singular_thscode_and_ms_window",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_financials_uses_period_literal_and_collects_extra_values",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_corporate_actions_parses_envelope_without_timestamp",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_null_is_not_coerced_to_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_batch_is_chunked_over_limit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_adapter.py::test_chunked_partitions_codes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_translate_includes_reason_request_id_and_next",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[bad_request]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[credentials]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[network]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[not_found]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[rate_limited]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_every_failure_kind_has_actionable_next[unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_not_found_next_points_to_resolve",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_bad_request_next_mentions_param_contract",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_partial_success_keeps_ok_and_marks_partial",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_all_failed_is_not_ok",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_call_or_fail_converts_market_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_call_or_fail_catches_unexpected_exception",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure.py::test_call_or_fail_returns_value_on_success",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_failure_injection_returns_actionable_failure[\\u65ad\\u7f51-_network_down-network]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_failure_injection_returns_actionable_failure[\\u8d85\\u65f6-_timeout-network]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_failure_injection_returns_actionable_failure[429 \\u9650\\u6d41-<lambda>-rate_limited]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_failure_injection_returns_actionable_failure[500 \\u4e0a\\u6e38\\u5f02\\u5e38-<lambda>-unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_field_drift_yields_null_not_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_failure_injection.py::test_failures_are_counted_for_observability",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_real_trace_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_fabricated_quote_is_caught",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_missing_trace_degrades_to_skipped",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_malformed_ref_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_stale_quote_warns_but_does_not_block",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_adjust_mismatch_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_financial_lookahead_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_corpus_only_card_is_untouched",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_quote_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_history_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_financials_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_fabricated_number_is_caught",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_market_hit_rate_is_100_percent",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_fabricated_breaks_the_100_percent",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_no_reverse_dependency_on_market[plugins/corpus]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_no_reverse_dependency_on_market[workflows]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_disabled_by_flag_returns_actionable_failure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_missing_api_key_returns_actionable_failure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_build_service_is_none_when_unavailable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_isolation.py::test_enabled_by_default_with_key",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_name_code_and_thscode_all_agree",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_ambiguous_lists_candidates",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_exposes_dropped_candidates_when_preferring",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_prefers_a_share_over_other_asset_types",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_not_found_has_actionable_reason",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_cache_hits_within_ttl",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_resolve_cache_expires_after_ttl",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_quote_merges_valuation_name_and_pe",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_quote_survives_valuation_failure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_quote_text_is_deterministic",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_quote_without_codes_fails_cleanly[codes0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_quote_without_codes_fails_cleanly[codes1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_health_does_not_touch_network",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_service.py::test_service_has_no_storage_dependency",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_success_returns_payload_and_counts",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_retryable_failures_map_to_domain_errors[429-body0-rate_limited]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_retryable_failures_map_to_domain_errors[500-body1-unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_retryable_failures_map_to_domain_errors[503-body2-unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_timeout_maps_to_network_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_bad_request_is_not_retried",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_singleflight_dedupes_concurrent_identical_requests",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_circuit_breaker_opens_and_fails_fast",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_circuit_breaker_recovers_after_cooldown",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[2001-credentials]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[2003-credentials]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[1002-bad_request]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[3001-not_found]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[4001-rate_limited]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[5001-unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_map_response_code_covers_all_families[9999-unavailable]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_transport.py::test_non_json_response_is_network_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_quote_text_is_found_in_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_tampered_number_does_not_match",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_trace_disabled_degrades_to_none",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_resolve_market_source_returns_rendered_text",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_resolve_market_source_ignores_non_market_ref",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_parse_source_ref",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_render_raw_record_includes_sorted_fields_and_as_of",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_verify.py::test_missing_trace_file_is_tolerated",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_baseline_matches_hand_calculation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_is_the_binding_constraint",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_capital_is_the_binding_constraint",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_shares_are_rounded_down_to_whole_lots",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_custom_lot_size_is_honoured",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_shares_below_one_lot_returns_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_stop_loss_at_or_above_entry_low_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_budget_below_floor_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_budget_above_ceiling_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_inverted_entry_range_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_non_positive_inputs_are_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_non_numeric_input_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_nan_input_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_invalid_lot_size_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_result_always_carries_computed_by",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_same_input_gives_identical_output",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_max_weight_pct_cap_is_applied",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_valid_card_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_lint_result_is_stamped_with_checked_by",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_stop_loss_not_below_entry_low_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_entry_low_not_below_entry_high_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_target_not_above_entry_high_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_stop_loss_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_risk_budget_below_floor_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_risk_budget_above_ceiling_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_weight_over_max_weight_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_invalidation_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_horizon_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_horizon_outside_enum_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_shares_below_one_lot_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_shares_not_multiple_of_lot_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_computed_by_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_hand_written_computed_by_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_evidence_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_evidence_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_item_not_object_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[source_ref]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[page]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[quote]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[kind]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_bad_kind_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_placeholder_page_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[N/A]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[\\u672a\\u77e5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[-]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_real_page_number_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_unknown_source_ref_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_sources_section_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_source_without_id_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_without_fact_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_too_many_tunable_params_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_low_risk_reward_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_short_quote_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_duplicate_evidence_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_target_without_forecast_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_source_without_locator_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_invalid_json_returns_error_without_raising",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_position_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_non_object_json_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_card_built_from_schema_passes_lint",
+      "outcome": "passed",
+      "when": "call"
+    }
+  ],
+  "suite": "core"
+}

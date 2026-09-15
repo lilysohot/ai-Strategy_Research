@@ -1,0 +1,629 @@
+{
+  "model_calls": 0,
+  "financial_samples": [
+    {
+      "name": "maotai_financial_tables",
+      "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+      "fields_passed": 32,
+      "formulas": [
+        {
+          "passed": true,
+          "expected": "3.837749",
+          "tolerance": "0.000001",
+          "calculation_id": "b70a43f7f0897ce25ec56d45224792bb7492a289dbd7aba84ed4829b05f1959f",
+          "formula": "revenue_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "3cdda629c853ec228623d7f6c4fff3e6634c1ec74436d4a617860a5ba512187c",
+            "76ac4ac04a372583a31babb3b580dfa5faa92babc1da19337e2171fd2b01af21"
+          ],
+          "input_values": [
+            "1.78657E+11",
+            "1.72054E+11"
+          ],
+          "value": "3.837748613807293059155846400",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "2.865646",
+          "tolerance": "0.000001",
+          "calculation_id": "61c29b1bd9012365391a1a724d799681cc010820e9cc5b18cdff22acc0efae49",
+          "formula": "parent_profit_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "aa338d18a93b659d28bf01b135f4dafe03165d427aee279e27f487e05f2cbf92",
+            "6e2b2450f25f1d0ee5041f566a0034be449d9c1d93638d5065ece22430de5ff8"
+          ],
+          "input_values": [
+            "8.4679E+10",
+            "8.2320E+10"
+          ],
+          "value": "2.865646258503401360544217700",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "-58.135301",
+          "tolerance": "0.000001",
+          "calculation_id": "1ec259b6c933494449d1b7914c7f7fbac1464cfbc793b83c50ef597ba85f1166",
+          "formula": "operating_cash_growth",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "e1280ae2385565bb4a6bb2455dedc5740898b01e9b2e734465dcb3d56bb81e72",
+            "f51a5504ad4c1116d74fda7d9c6ec71709f596e536473c8afa20df43256d3c6e"
+          ],
+          "input_values": [
+            "2.5756E+10",
+            "6.1522E+10"
+          ],
+          "value": "-58.13530119306914599655407822",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "30.416042",
+          "tolerance": "0.000001",
+          "calculation_id": "03d6b85c244818b06a051dc63e146eb3a648c7f475c232aa2571cda6c266af02",
+          "formula": "cash_profit_ratio",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "e1280ae2385565bb4a6bb2455dedc5740898b01e9b2e734465dcb3d56bb81e72",
+            "aa338d18a93b659d28bf01b135f4dafe03165d427aee279e27f487e05f2cbf92"
+          ],
+          "input_values": [
+            "2.5756E+10",
+            "8.4679E+10"
+          ],
+          "value": "30.41604175769671347087235324",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "49.167399",
+          "tolerance": "0.000001",
+          "calculation_id": "113d957f1accfccbe319250e8f5ed4e48f38be909d9a014a8f5f3d7be6936d94",
+          "formula": "net_margin",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "93203c17fdb7d2404c077fa54b2789ade5f9bee6f0dcbf25f3097a6b6745ed96",
+            "3cdda629c853ec228623d7f6c4fff3e6634c1ec74436d4a617860a5ba512187c"
+          ],
+          "input_values": [
+            "8.7841E+10",
+            "1.78657E+11"
+          ],
+          "value": "49.16739898240763026357769357",
+          "unit": "%",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "0",
+          "tolerance": "0",
+          "calculation_id": "085e918c1774b1e0741c5ad14ddc2a3afad49e2c5db732ab9d388995b35100cc",
+          "formula": "balance_residual",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "219873c8818dd4b831ce88d214b07e38c74892e19c84721616834374417798b1",
+            "a04d10ed1d8660c086dd44a4e561e8a6b9bc81dbb2c3f476899774bb66ae7304",
+            "6065c29f0afc9d5d0bfef3abaf416c723001e515c2a48dcc6311c4d1ea878048"
+          ],
+          "input_values": [
+            "3.40489E+11",
+            "5.5048E+10",
+            "2.85441E+11"
+          ],
+          "value": "0",
+          "unit": "元",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        },
+        {
+          "passed": true,
+          "expected": "0",
+          "tolerance": "0",
+          "calculation_id": "30bd26f18a1553569d1c091e30a5e7c2451fee82f815e05b08bd527fb59d7b8f",
+          "formula": "profit_residual",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "b437256a865111ccca96c80047eb285ee383742504a321be86063f3259e0e776",
+          "inputs": [
+            "93203c17fdb7d2404c077fa54b2789ade5f9bee6f0dcbf25f3097a6b6745ed96",
+            "aa338d18a93b659d28bf01b135f4dafe03165d427aee279e27f487e05f2cbf92",
+            "84dce981755955f6463c28b12915fa9c905183492a6f79d6c592f39afb31676e"
+          ],
+          "input_values": [
+            "8.7841E+10",
+            "8.4679E+10",
+            "3.162E+9"
+          ],
+          "value": "0",
+          "unit": "元",
+          "basis": "source_forecast",
+          "period": "2026-12-31"
+        }
+      ],
+      "pipeline_version": "evidence-pipeline-7"
+    },
+    {
+      "name": "guangli_financial_table",
+      "run_id": "c54d18662625bdbdaf2909a0a6f6e6ba5636721ede37d289e5a4aaff2614a7e6",
+      "fields_passed": 15,
+      "formulas": [],
+      "pipeline_version": "evidence-pipeline-7"
+    },
+    {
+      "name": "guosen_maotai_holdout",
+      "run_id": "67fed670b26423a32281520f0c16cd06103c097109ea183c8b9d7a859144cf46",
+      "fields_passed": 10,
+      "formulas": [],
+      "pipeline_version": "evidence-pipeline-7"
+    }
+  ],
+  "synthetic_probes": [
+    {
+      "name": "valid_control",
+      "expected_calculate": true,
+      "passed": true,
+      "actual_calculate": true,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "0cd52b337610809abe1dc3a18edec2060a19e3b7f014e57fe6b3497db4972f39",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "ok",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "reasons": [],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wrong_period",
+      "expected_calculate": false,
+      "passed": true,
+      "actual_calculate": false,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "46b7eceaa8f4d22db73916200a56e716674f0d52a3b3f0393c74f5a421bf539e",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "48eb589e3c0d9a635f653e0d42d747cedc86da17245cb8b4d3306ad777195af0",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2025A营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [
+              "atomic_evidence_mismatch"
+            ],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "atomic_evidence_mismatch"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2025A营业收入100元",
+            "source_quote": "2025A营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wrong_metric_value",
+      "expected_calculate": false,
+      "passed": true,
+      "actual_calculate": false,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "3032ac26ab8fca763b847bd2a7188aa74b3f99cf6a93a40831c662d7d38a463f",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "e7480769c66dda952bf532c676f29a49e2379237c3611a3b23633e0b2708e927",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入20元",
+            "evidence_quote": "2026E营业收入100元，净利润20元。",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "20元",
+            "value_num": "20",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [
+              "atomic_evidence_mismatch"
+            ],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "atomic_evidence_mismatch"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元，净利润20元。",
+            "source_quote": "2026E营业收入100元，净利润20元。",
+            "start": 0,
+            "end": 21,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "fabricated_known_at",
+      "expected_calculate": false,
+      "passed": true,
+      "actual_calculate": false,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "0cd52b337610809abe1dc3a18edec2060a19e3b7f014e57fe6b3497db4972f39",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [
+              "known_at_unverified_override"
+            ],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "known_at_unverified_override"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact",
+            "model_known_at": "1990-01-01"
+          }
+        }
+      ]
+    },
+    {
+      "name": "forecast_as_fact",
+      "expected_calculate": false,
+      "passed": true,
+      "actual_calculate": false,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "c05d6e8477c02486a6e688661f0b86fc899903fdf6f7603c5454dd5e74891f4a",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "fact",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [
+              "kind_source_mismatch"
+            ],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "kind_source_mismatch"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "name": "duplicate_identity",
+      "expected_calculate": false,
+      "passed": true,
+      "actual_calculate": false,
+      "unique_identity": true,
+      "facts": [
+        {
+          "fact_id": "0cd52b337610809abe1dc3a18edec2060a19e3b7f014e57fe6b3497db4972f39",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "forecast",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "conflicting_fact_kinds"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        },
+        {
+          "fact_id": "c05d6e8477c02486a6e688661f0b86fc899903fdf6f7603c5454dd5e74891f4a",
+          "packet_id": "p",
+          "claim": {
+            "doc_id": "synthetic",
+            "source_rev": "f88152f90af491a763f96dd982d3368b8208e5ef7f5c5cbd1c3e9a27e07e5c5f",
+            "seq": 0,
+            "locator": "1",
+            "claim_text": "2026E营业收入100元",
+            "evidence_quote": "2026E营业收入100元",
+            "evidence_kind": "prose",
+            "table_ref": {},
+            "scope": "company",
+            "subject_raw": "600519.SH",
+            "subject": "600519.SH",
+            "metric_raw": "营业收入",
+            "metric": "营业收入",
+            "qualifiers": {},
+            "kind": "fact",
+            "value_text": "100元",
+            "value_num": "100",
+            "unit_raw": "元",
+            "unit": "元",
+            "period_raw": "2026E",
+            "period_end": "2026-12-31",
+            "period_grain": "annual",
+            "observed_at": null,
+            "known_at": "2026-09-01",
+            "quality_status": "review",
+            "reason_codes": [
+              "kind_source_mismatch"
+            ],
+            "model": "frozen-synthetic",
+            "extractor_version": "3a1f06510fd3",
+            "lint_version": "claims-v2-lint-4",
+            "extracted_at": null
+          },
+          "metric_id": "revenue",
+          "usable_for": [
+            "cite"
+          ],
+          "reasons": [
+            "kind_source_mismatch",
+            "conflicting_fact_kinds"
+          ],
+          "evidence_alignment": {
+            "model_quote": "2026E营业收入100元",
+            "source_quote": "2026E营业收入100元",
+            "start": 0,
+            "end": 13,
+            "method": "exact"
+          }
+        }
+      ]
+    }
+  ],
+  "legacy_counts_before": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  },
+  "legacy_counts_after": {
+    "documents": 87,
+    "blocks": 1096,
+    "claims": 1318,
+    "claims_v2": 0
+  },
+  "code_hashes": {
+    "/home/administrator/FrontierAgent/scripts/corpus_holdout_eval.py": "87e0cbef55bb6ce27a307e16bd0135691712c12eca89e23a6d5cb4ffdd1bfee9",
+    "plugins/corpus/__init__.py": "c9d1262d32868e347b4a612842c9575bea39090ed0ea5a82ce8337b4077778d3",
+    "plugins/corpus/_semantic_validation.py": "0cc316aec70b6e09e09a0e018a6da7f22df246657aa21155a6ad7d9558d6196d",
+    "plugins/corpus/audit.py": "5c64904cbc61f18153b0a384f8ecebf2a4b005f3391a6ff209f887c4c9777c44",
+    "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+    "plugins/corpus/claims_v2.py": "cc956a1bbcc9dd97240ae7e86d01d477f2bb1acf770f475743e3d9f1743f12fb",
+    "plugins/corpus/derivation.py": "c190fb4075685cbcd490a2bc4a59499e6c3263be74015049f339b09b84d1978b",
+    "plugins/corpus/evidence.py": "2d264ab0821d2fc7d35c8369c840a6744d77adaa0f5cb4473e8c2278965eefe8",
+    "plugins/corpus/evidence_pipeline.py": "290480c03a3215e16a673f2cedf37bc26f26924955cae71366766d205fb1b393",
+    "plugins/corpus/fetch.py": "c8b60024d404a7e603984253585319725f493100bcb226f83936c12aca1ab084",
+    "plugins/corpus/golden.py": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+    "plugins/corpus/index.py": "104f5202a166f38cb0a621d7b02c6218e6f2aa606271394c086c292c309e4069",
+    "plugins/corpus/ingest.py": "90d4dc2a01d160d374fdc7882820cdd378f90cfc4433fa84d5d2931ae6410e34",
+    "plugins/corpus/metadata.py": "8d623f7bdeb45d1864741c6e19f7aff43c4dfd7667374d7616c4b95f1578ef3d",
+    "plugins/corpus/research_discipline.py": "a34b6be1923d9ee4c9985d61e8ec0d5da344dc7cfb4296c81bf4881389b4d4f6",
+    "plugins/corpus/service.py": "7ab11003aabee56bd4ea365abf38ef39d53e272bc2d40fdb139cfd1602f1b563",
+    "plugins/corpus/strategy_schema.py": "bcf4fbcb0f9c267b6ab6ae381d64f52ac3559325b7a9ddfa07675a5bcc8965bf",
+    "plugins/corpus/verify.py": "350523ffaea83a92196217bfb415ae1366fda5fbcacc9b254d76512152d32ba1",
+    "scripts/corpus_evidence_pilot.py": "7010b7ef26f4076afef8b3fbebe68f5a44bd01cd88d3cb90776c8a783e2f0b77"
+  }
+}

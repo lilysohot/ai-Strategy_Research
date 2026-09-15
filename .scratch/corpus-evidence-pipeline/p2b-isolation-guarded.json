@@ -1,0 +1,872 @@
+{
+  "db": "disabled before native driver",
+  "exit_code": 0,
+  "files": [
+    "tests/test_corpus_claims_interface.py",
+    "tests/test_corpus_ingest.py",
+    "tests/test_corpus_search.py",
+    "tests/test_corpus_evidence_pipeline.py",
+    "tests/test_corpus_financial_review.py",
+    "tests/test_corpus_semantic_gates.py",
+    "tests/test_data_coverage.py",
+    "tests/test_market_golden.py",
+    "tests/test_market_gate.py",
+    "tests/test_position_sizing.py",
+    "tests/test_strategy_lint.py"
+  ],
+  "real_corpus_tests": "excluded",
+  "records": [
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_canonical_extract_read_fetch_and_calculate",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_default_budget_is_deferred_and_no_legacy_fallback",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_quality_ok_is_not_comparison_permission",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[pipeline_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[extractor_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_old_validation_is_readable_but_not_calculable[lint_version]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_rejected_is_audit_only_and_tamper_is_refused",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_filters_fail_closed[kwargs5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args6]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_requires_explicit_source_revision_or_legacy[args7]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_default_and_explicit_legacy_routing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_revision_selection_does_not_merge_a_later_failed_run",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_cli_evidence_and_calculation_share_revision",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_explicit_budget_selects_adapter_but_preview_does_not_write",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_claims_interface.py::test_invalid_extraction_scope_fails_before_provider[kwargs3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_ingest.py::test_reingest_same_file_keeps_single_document",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_number_and_unit_are_bound_into_one_token",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_thousand_separators_are_normalized",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_punctuation_only_tokens_are_dropped",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_returns_handle_and_snippet",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_number_query_finds_the_report_that_contains_it",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_respects_limit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_empty_query_returns_nothing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_or_fallback_when_and_query_finds_nothing",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_snippet_is_truncated_and_marked",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_snippet_is_not_usable_as_a_quote",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_search_then_fetch_returns_verbatim_text",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_locator_accepts_integer_page",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_search.py::test_unknown_locator_returns_none_instead_of_raising",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_pdf_cells_have_verifiable_coordinates_and_raw_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_long_text_coverage_and_parser_configuration_identity",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_image_only_page_is_unknown_not_empty_success",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_markdown_headings_and_word_tables_are_preserved",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_run_roundtrip_and_no_unit_means_not_calculable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_growth_has_exact_input_ids_and_refuses_reversed_periods",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_llm_failure_does_not_report_complete",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_changed_subject_is_refused_even_with_valid_amount",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[   ]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_empty_or_broken_response_is_failure_not_empty_success[[{broken]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_source_view_does_not_apply_legacy_boilerplate_cleaning",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_database_versions_idempotence_and_backup_roundtrip",
+      "outcome": "skipped",
+      "reason": "Skipped: PostgreSQL unavailable",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change0-unit_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change1-basis_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_calculation_rejects_incompatible_inputs[change2-source_revision_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_evidence_pipeline.py::test_wrong_unit_or_metric_cannot_borrow_a_real_number",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_preserves_source_and_marks_unresolved_definition",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_matching_number_does_not_prove_the_author_formula",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_source_display_precision_controls_rounding_tolerance",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_does_not_guess_invalid_inputs[kwargs0-zero_denominator]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_does_not_guess_invalid_inputs[kwargs1-duplicate_fact_ids]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes0-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes1-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes2-missing_or_ambiguous:net_profit]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_review_rejects_mismatched_financial_coordinates[changes3-unit_mismatch]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_financial_review.py::test_financial_review_service_and_cli_do_not_write",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[wrong_period]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[wrong_metric_value]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[fabricated_known_at]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[forecast_as_fact]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_invalid_candidates_never_enter_calculation[duplicate_identity]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_valid_control_remains_calculable",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165120\\u5143\\uff1b\\u51c0\\u5229\\u6da6100\\u5143\\u3002-changes0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u5f52\\u6bcd\\u51c0\\u5229\\u6da6100\\u5143\\u3002-changes1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2025A\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\uff1b2026E\\u8425\\u4e1a\\u6536\\u5165120\\u5143\\u3002-changes2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165-100\\u5143\\u3002-changes3]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u4e07\\u5143\\u3002-changes4]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\uff1b2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\u3002-changes5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_independent_atomic_variants_fail_closed[2026E\\u8425\\u4e1a\\u6536\\u5165100\\u5143\\u3002-changes6]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_duplicate_identity_rejected_at_read_and_compute_interfaces",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_identity_distinguishes_qualifiers_and_kind",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_model_time_override_is_retained_only_as_audit_data",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_corpus_semantic_gates.py::test_historical_calculation_rejected_without_rewriting_citations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_full_when_research_and_market_both_available",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_partial_without_research_requires_switching_to_market",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_none_gives_the_correct_exit",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_research_only_forbids_inventing_prices",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_market_unavailable_is_reported_not_crashed",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_corpus_outage_is_distinguished_from_no_research",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_data_coverage.py::test_empty_query_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_quote_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_history_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_financials_golden_hits_trace",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_fabricated_number_is_caught",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_market_hit_rate_is_100_percent",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_golden.py::test_fabricated_breaks_the_100_percent",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_real_trace_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_fabricated_quote_is_caught",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_missing_trace_degrades_to_skipped",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_malformed_ref_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_stale_quote_warns_but_does_not_block",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_adjust_mismatch_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_financial_lookahead_is_an_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_market_gate.py::test_corpus_only_card_is_untouched",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_baseline_matches_hand_calculation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_is_the_binding_constraint",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_capital_is_the_binding_constraint",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_shares_are_rounded_down_to_whole_lots",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_custom_lot_size_is_honoured",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_shares_below_one_lot_returns_zero",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_stop_loss_at_or_above_entry_low_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_budget_below_floor_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_risk_budget_above_ceiling_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_inverted_entry_range_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_non_positive_inputs_are_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_non_numeric_input_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_nan_input_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_invalid_lot_size_is_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_result_always_carries_computed_by",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_same_input_gives_identical_output",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_position_sizing.py::test_max_weight_pct_cap_is_applied",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_valid_card_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_lint_result_is_stamped_with_checked_by",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_stop_loss_not_below_entry_low_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_entry_low_not_below_entry_high_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_target_not_above_entry_high_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_stop_loss_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_risk_budget_below_floor_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_risk_budget_above_ceiling_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_weight_over_max_weight_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_invalidation_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_horizon_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_horizon_outside_enum_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_shares_below_one_lot_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_shares_not_multiple_of_lot_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_computed_by_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_hand_written_computed_by_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_evidence_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_empty_evidence_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_item_not_object_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[source_ref]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[page]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[quote]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_missing_required_field_is_error[kind]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_bad_kind_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_placeholder_page_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[N/A]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[\\u672a\\u77e5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[-]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_other_page_placeholders_are_error[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_real_page_number_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_unknown_source_ref_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_sources_section_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_source_without_id_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_evidence_without_fact_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_too_many_tunable_params_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_low_risk_reward_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_short_quote_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_duplicate_evidence_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_target_without_forecast_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_source_without_locator_is_warning_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_invalid_json_returns_error_without_raising",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_missing_position_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_non_object_json_is_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_strategy_lint.py::test_card_built_from_schema_passes_lint",
+      "outcome": "passed",
+      "when": "call"
+    }
+  ],
+  "suite": "isolation"
+}

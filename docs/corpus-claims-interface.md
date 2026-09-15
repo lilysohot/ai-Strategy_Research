@@ -3,6 +3,12 @@
 当前状态：默认 service / CLI 已接通 EvidenceRun。旧表不迁移、不删除；旧抽取仅保留显式兼容。
 新业务只走以下接口，不再自行选择 claims 或 claims_v2。
 
+2026-09-13 职责澄清：此入口属于研究材料证据链。目标覆盖研报、电话会议、个人交易及复盘中的
+观点、论据、视角、条件风险和归属，完整非数值链路仍待 R1—R3 验收。
+材料数字及下述财务复算是来源限定的论据/内部核对，不是同花顺数据层的实际观测；
+未来跨层比较只读关联，不覆盖原文或自动把 Claim 晋升为行情、政府统计。
+实现状态和下一步见 [统一总计划](plan/claims-market-closed-loop-plan.md)，本次说明不改变现有运行时能力。
+
 ## 正式接口
 
 ```python
@@ -78,5 +84,23 @@ extract-claims 已保存但范围未完成时返回退出码 1，并输出 run_i
 财务口径复核更新：reconcile_claims / reconcile-claims 只读对照源净利率与明确选定的利润/收入公式。
 数值吻合不证明作者定义；缺输入或口径歧义返回 unverifiable。evidence-pipeline-6 对未经定义验证的
 源净利率仅保留 cite，历史版本不覆盖，明确金额输入的公式仍可复算。
+
+## 语义门禁与覆盖状态（pipeline 7 / layout 3）
+
+- 受控财务正文必须有同一原文事实中的指标、数值、单位、期间及实际/预测绑定。
+  暂不支持的复杂语法、任意模型口径限定保持仅引用，不因各字段分别出现在同页就允许计算。
+- 模型 known_at 不覆盖文档发布日期候选；不同值保留在 evidence_alignment.model_known_at 作审计，
+  当前记录带 known_at_unverified_override，不允许计算。
+- 文档发布日期仍是候选，不是已核验的历史公开时点；输出 point_in_time_verified=false。
+  财务 source_reported/source_forecast 复算不等于允许事件回测。
+- 身份涵盖 kind、qualifiers、单位、日期和引文；重复 ID 在读取与计算入口均拒绝。
+  对同一个来源数值的冲突实际/预测分类，两条记录均隔离计算。
+- derive 也直接检查当前校验版本，不能绕过 service 用历史许可计算。旧 run 可继续引用和审计。
+- complete 仍是兼容的包执行状态；coverage_verified=false 明确不证明目标召回。
+  没有结果且有预筛跳过时返回 unknown，不将跳过推断成源文件无数据。
+- 客户表采用客户名称/销售额/占收入比例的显式列头恢复，保留年份标题、脚注及单元格坐标。
+  行名进入 customer 限定，指标为客户销售额/客户收入占比；不冒充公司总收入，也不自动计算集中度。
+
+材料下一阶段见 [统一总计划](plan/claims-market-closed-loop-plan.md) R1—R3；宏观数据接口和计算归 D1/D2，当前未注册宏观计算公式。
 首份复核见 [.scratch 报告](../.scratch/corpus-evidence-pipeline/net-margin-review.md)：
 目标字段抽取无误，作者口径未证实，未擅自更正源比率。

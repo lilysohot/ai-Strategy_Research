@@ -1,0 +1,1031 @@
+{
+  "version": "r2-p3s-denominator-human-review-1",
+  "split": "development",
+  "reviewer_name": "Xyl",
+  "reviewed_at": "2026-09-14 16:40:00",
+  "allowed_decisions": [
+    "approve",
+    "reject",
+    "needs_split",
+    "needs_merge"
+  ],
+  "approved_records": 31,
+  "instructions": "A human fills every decision, reason, and check. Agent proposals are not approvals.",
+  "records": [
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-company-outlook",
+      "source_quote": "茅台经营向上明确，底层逻辑未变",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "db31986daad28d88eb28cedda6a60ee6641df325e520872c1f680e2517008516",
+          "role": "alternative",
+          "span_id": "ee2286d9ea268bb9a14aecd687f0184fe747b8b413c1dfb600c76e872661271f",
+          "start": 3,
+          "end": 19,
+          "text": "茅台经营向上明确，底层逻辑未变，",
+          "text_sha256": "b7ccad1f4eb8e201f2b38d596fe3aa403a24f0cef898224776615f509f3cb79a"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一命题，归属（茅台经营向上明确）保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-eps-forecast",
+      "source_quote": "维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "17411295a9fa818640dac71377773746fd087df2e19545cf377cec0795ee1d0d",
+          "role": "alternative",
+          "span_id": "40f850cbbca6be9ff631d270dce7f123f1613df864ef4be777c91382cb7924d6",
+          "start": 20,
+          "end": 61,
+          "text": "我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，",
+          "text_sha256": "33b97ffdbbd5b6c64cefb44328f167f61897700b36d174d4712d25071be0e053"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一EPS预测命题，数值与年限完整，归属保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-target-price",
+      "source_quote": "维持一年目标价 2030 元",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "48207bdad8c082470b4fdf860e2ec2294b547fff5445aa9fb107ca5535a36e62",
+          "role": "clause",
+          "span_id": "270932b3527ac5d6e25c68672299b804449b355539ad47dc0c6448bcca074fd6",
+          "start": 61,
+          "end": 75,
+          "text": "维持一年目标价 2030 元",
+          "text_sha256": "f09513a87cf045ece533b3e27e8206454163112e66cdbf1cef479de74095595b"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一目标价命题，数值完整，无合并。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-rating",
+      "source_quote": "维持一年目标价 2030 元和“强推”评级",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "533b054a731beace3eca67d0d8b94ac43733b8f15bf2aab8ad90bd3a48b6f450",
+          "role": "clause",
+          "span_id": "c8dce0e967aedf3800d660bdc84b399cd724a25b4d32c18da1e32687a695000d",
+          "start": 61,
+          "end": 83,
+          "text": "维持一年目标价 2030 元和“强推”评级。",
+          "text_sha256": "d75a7240766dd4bccd4184a40099cfb0c965bed4f213b473d6cefa8e38ea00e7"
+        }
+      ],
+      "human_decision": "needs_split",
+      "human_reason": "节点同时包含维持目标价2030元与维持强推评级两条独立命题，且与mc-target-price节点重叠，需拆分。",
+      "checks": {
+        "one_research_statement": false,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": false,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-macro",
+      "source_quote": "宏观需求持续疲软",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "8d0ada12fc2885a14b959c6ede86ceb93ddd85816c33e047f99559802404238b",
+          "role": "clause",
+          "span_id": "27385f27ad158b954e2769114a5841b3bf3d034eb4f9357c9d9f37755a7e5c4c",
+          "start": 85,
+          "end": 101,
+          "text": " 风险提示：宏观需求持续疲软、",
+          "text_sha256": "71dd451571c103123cf47eb5721153dbd6eb2defcb44337409b5b0dd3b77c5ae"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一风险命题，归属（风险提示）保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-consumption",
+      "source_quote": "消费复苏不及预期",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "ee748f048721873e7a249b4f7bf13fdc348f9abf4c085f451217495a00a3574d",
+          "role": "clause",
+          "span_id": "9038a03975ce27b2873d873eed944683e05d5d5a353500c3b03da84933063dcb",
+          "start": 101,
+          "end": 110,
+          "text": "消费复苏不及预期、",
+          "text_sha256": "2e616ce764b6a8d7447435d163ef2409f7c7a5e628d7561c22e2bb7c9c815ef3"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一风险命题，无合并。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-competition",
+      "source_quote": "行业竞争加剧",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "2a6c9a8a41db74fe73ca894dbb8891312fd40b81f045e6d93c61096ed9390792",
+          "role": "clause",
+          "span_id": "b2583ab4c5bc1087730156cec1127b5ae9b1c73b8869d5b3952b4f65fb5378e0",
+          "start": 110,
+          "end": 119,
+          "text": "行业竞争加剧等 。",
+          "text_sha256": "11e7c299e8ef58d3482b8f9ceba0009cde4c4e2aaf9c6b82ba2e66807f7e4664"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一风险命题，无合并。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-bottom",
+      "source_quote": "产品价格跌至底部，是否意味着买点出现？",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "aa3493a08a6dfec98266b9dc289f2060c7abf6402f3b3bbf9191b8855a2c0aad",
+          "role": "alternative",
+          "span_id": "216773730b36352de8294067cc46985f07631becd06a5a4f255568b6ca1f62a6",
+          "start": 2,
+          "end": 21,
+          "text": "产品价格跌至底部，是否意味着买点出现？",
+          "text_sha256": "f3fe1ad1614294a27d57edd00bbdb67fac0ae049fa801f2bd7b145eb0afff41d"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一问题命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-high",
+      "source_quote": "到了高位，是否意味着卖点？",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "41c74c1e545e4b3007c985db2a9760300ef00ef8dd8a807fcdf2fed599716260",
+          "role": "alternative",
+          "span_id": "750f3e944818e1edf274103ca853346b724e88039e338048a6a0b33db1550eed",
+          "start": 21,
+          "end": 34,
+          "text": "到了高位，是否意味着卖点？",
+          "text_sha256": "32c0ba25f13f57ba6e3b5361c67097ae888c680401804abf4ceaa1f04aa5d139"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一问题命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-long-odds",
+      "source_quote": "价格底部主要改善长期赔率",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "ec7c66023fb21494fadce2719a5e18d8508c1d397af0701e70908f860626d530",
+          "role": "clause",
+          "span_id": "01eec8dd5d63ee79fd54b6740512f0e9d37a8c25b9827b07929a362a5e189b5a",
+          "start": 36,
+          "end": 49,
+          "text": "价格底部主要改善长期赔率，",
+          "text_sha256": "7f491e235c28d669af4948629b0efc043ca2ba29e36a35c77ef0870fc36f4b7f"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，结论与对象完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-not-inflection",
+      "source_quote": "并不一定等同于中期拐点",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "e1731f3386247b155d2f0765ee86a017d2a53d651314fccbb76b39035a22f161",
+          "role": "clause",
+          "span_id": "3c6745a4738bd5dfbc71f01f8a11eb48407c402f4ef15424792be8fccab40036",
+          "start": 50,
+          "end": 62,
+          "text": "并不一定等同于中期拐点；",
+          "text_sha256": "87ca791084a967e846168fd6dfe7e23a7371da9cbea71cc1dc3338014e8cfd39"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，否定语义完整保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-focus-balance",
+      "source_quote": "中期投资更应关注供需改善的情况",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "bac7c84d75743c9cfafe426904d74fe14ba364c59e05b02cd22818b4f43ff92f",
+          "role": "clause",
+          "span_id": "3b4d190b8267f7341569a5f6dd022eab3bece8b0656d1654195e94e8fb443119",
+          "start": 63,
+          "end": 79,
+          "text": "中期投资更应关注供需改善的情况和",
+          "text_sha256": "6c71c6ea98d85ceb5154eeabffef84add6bb9c3bddfecca921e421b577146c7e"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题完整；节点尾部“和”为切分伪影，坐标可回取。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-focus-spread",
+      "source_quote": "价差扩张",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "1fd35c4d1450f63987cbb4c6d4455145f6774f0a55dbdf2308efbd62a1d645f8",
+          "role": "clause",
+          "span_id": "3a6db73127d15dec1d9b2db11600ff284d9de2aaf49d85ebe2e8084612372917",
+          "start": 80,
+          "end": 85,
+          "text": "价差扩张。",
+          "text_sha256": "49ef336f55b455f498c13e780ea085730295ce44ef666a5aeee1fa06781004d0"
+        }
+      ],
+      "human_decision": "needs_merge",
+      "human_reason": "“价差扩张”为不完整片段，缺谓语对象，单独记录改变原意，需与相邻命题合并。",
+      "checks": {
+        "one_research_statement": false,
+        "necessary_condition_or_attribution_retained": false,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-high-not-sell",
+      "source_quote": "价格处于高位也不必然构成卖点",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "0a3e1fa693e7a61cf699d73e6d4e67403ae7ec035cd4a4667c177d5755178fae",
+          "role": "clause",
+          "span_id": "304499044c011f7cbf09ab6c893bab3da111c23e510721444513de624f38da37",
+          "start": 88,
+          "end": 103,
+          "text": "价格处于高位也不必然构成卖点，",
+          "text_sha256": "b2bf1195b57ee3445e85947536ecbb848fa7f98b4292ea6528d73637c88aff86"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，否定语义完整保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-future-trend",
+      "source_quote": "关键仍是对未来景气趋势的判断",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "e3a7ec7b3f6a088e6658b6b134343f569df7eacb1358b04023bab41ecfa78846",
+          "role": "clause",
+          "span_id": "8ad0f0bcf4be9ffe3bca443decf32608348d863b327f58d95c52f101d23aace1",
+          "start": 103,
+          "end": 118,
+          "text": "关键仍是对未来景气趋势的判断。",
+          "text_sha256": "646efab257363e277c0bf5e626f76f443443f5649a8ebd66ffb9d2881205b755"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-expansion",
+      "source_quote": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "9e9ea0831a9a5b61b391fc6168e1cc15692713098b83cbf03c8391ea2b50f2f9",
+          "role": "alternative",
+          "span_id": "e85f37103bdaf1e2528816cc4f01f687e499b6723e7c17f411e968e1eee23fec",
+          "start": 122,
+          "end": 149,
+          "text": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+          "text_sha256": "d5e4e1b3a1f9d6cf541f57ebeebcb2e0670b391a904be954d303bd4797e95f27"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一问题命题，前置背景为问题前提而非独立命题。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-cycle",
+      "source_quote": "万物皆周期",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "01f56899f81c45e9a2c41904e9bdb90f486eb82e70698af13b68d0ebad10f407",
+          "role": "clause",
+          "span_id": "c3b45ccd46b926f2e17a0c7dcaa790c3bc3af9f617eef7e46f8a57129e12730d",
+          "start": 151,
+          "end": 158,
+          "text": "“万物皆周期。",
+          "text_sha256": "520008d4179c152081a609693561dc468a85b26226220a334b53cf2d2cf24336"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题（引语），完整可核验。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-capacity-not-invalidate",
+      "source_quote": "未来的新增产能不应否定当前明确的景气阶段",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "d10a71d46be4639390ddeea8235c73b8235131b306a81f8ced47ca6192e142f1",
+          "role": "clause",
+          "span_id": "e93befaefebd525bd3bf27f9d817fbd424ebd8d0424fd144e4cc156257af2c4a",
+          "start": 158,
+          "end": 180,
+          "text": "”未来的新增产能不应否定当前明确的景气阶段。",
+          "text_sha256": "22227c36bd74e12add4eeeee2cf5c1511d5a968c0f1183567937b0b2beec1878"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，否定语义完整保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-price-cycles",
+      "source_quote": "不同行业均存在价格的变动",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "79537c4903d24f7e95e1e6d4b369a5d2b68185ab4d98d6f70e30d168dc3b872e",
+          "role": "clause",
+          "span_id": "faa6d911428af3c3f0ec7c953a7fd055ec074e23e19503b99ccc22d853666137",
+          "start": 180,
+          "end": 193,
+          "text": "不同行业均存在价格的变动，",
+          "text_sha256": "7ac40ccf18291a2ebe52550f71d00b0dc9b98365115a92729e71f177277bdd9a"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-cycle-length",
+      "source_quote": "每个行业景气长短不同",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "be44945ec07e3b074f86f8ade7c9630ab74ba8803f0e38e0783941607de57f42",
+          "role": "clause",
+          "span_id": "13a1200d20c6bcd8804775772a6b833eaed9df6c013a20671eb19c22bfde0d1f",
+          "start": 194,
+          "end": 209,
+          "text": "只是每个行业景气长短不同而已，",
+          "text_sha256": "1cd5807d8c02055a9c4e9de8f61e95e399ed385a823928fa4e9b6405cd702ecf"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-investment-value",
+      "source_quote": "只要未来一至两年供需持续改善， 行业仍具备周期投资价值",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "f8cc9310618af7fa69f5f5991a6e7ce58312a08a7757e0ea304f8f0e856db20f",
+          "role": "condition",
+          "span_id": "c59aa7f142669b87cf28cede5a0f907cddf4a1fdc0202f8fd0d25a981b4d94ff",
+          "start": 210,
+          "end": 238,
+          "text": "只要未来一至两年供需持续改善， 行业仍具备周期投资价值。",
+          "text_sha256": "46f6fdb22ba2d1a35a0cccf997a9b34bb5b2400967d5825ef5aacf483fd4ce74"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一条件命题，条件与结论完整保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-added-shares",
+      "source_quote": "TTD - I added 10,000 more at 14.76",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "1824d1d76eb99a1c72c1a20676cfef11f26a15c1e5b7cb80e9d12e48c2892476",
+          "role": "alternative",
+          "span_id": "c75f3513f129c6df3adfd07291cadeda2f40bfabaa8ab4500a05160f241950e8",
+          "start": 0,
+          "end": 37,
+          "text": "1. TTD - I added 10,000 more at 14.76",
+          "text_sha256": "1cb4901dbbd575e2d05e4d3f749475571c0a1a9187a23607e3a49df2a214463d"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一交易行为，标的、数量与价格完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-sold-calls",
+      "source_quote": "sold 100 $15 calls for friday for .16",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "c7db41d829684a2fdeb2c08e91c73b85ff7370f16300c993af8151c2733ccc87",
+          "role": "clause",
+          "span_id": "e9e9fdc5f50846e373a196d314d9b7e06cc8b1d49c20e7af5bf321c426f7a6ec",
+          "start": 38,
+          "end": 79,
+          "text": "and sold 100 $15 calls for friday for .16",
+          "text_sha256": "76e38e278479b2c755aa284447e3dea88bd4e229e6f16d1d2d381f8f4d6002ce"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一期权卖出行为，要素完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-below-ceo-level",
+      "source_quote": "this is still well below the $25 level",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "eb2c41950c5a053ec2cc80a24558d592defc9e91b64987774f6d4cbe1c921f86",
+          "role": "clause",
+          "span_id": "710eb8ab84aad0301ec719001ee794728247515bcb8c853834f689bdd3b52e27",
+          "start": 103,
+          "end": 141,
+          "text": "this is still well below the $25 level",
+          "text_sha256": "44c037e25ade70064d9de98ab6253065bf4b994336e48aa851615bef8cf3de9c"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一价格观察，参照水平可经坐标回取。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-ceo-bought",
+      "source_quote": "the CEO bought $150m worth",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "b92fc05b80d4d13acd21fdd6494423106d2f9557a6f9bb9c14878bb618e6276b",
+          "role": "clause",
+          "span_id": "125f1f84914cec7d8466fccb4763a51e651cbf91929e0904a094678d847ec522",
+          "start": 142,
+          "end": 168,
+          "text": "the CEO bought $150m worth",
+          "text_sha256": "55422cbca470282f8273821eba389080a6529bd6468ed5a5737baf8a97bdfc05"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一行为命题，归属（CEO）与金额完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-summary",
+      "target_id": "mcs-outlook",
+      "source_quote": "总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "12dc548971de4c27af324cb6b946761da480be5982ea2a97a4d630811632f1bd"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "d0a3ae3a25512da0b7433767d81f0defc3b602f8084195debca60ed1e1b60d61",
+          "role": "whole",
+          "span_id": "07811719c65bf26c572272e55333af205df75b2dcccb9bdacba4a878ae9064f6",
+          "start": 0,
+          "end": 70,
+          "text": "总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量。",
+          "text_sha256": "0ef6831a6f96dfa85d203aec60f0ab7ec675d740c51cb78af0828adc576b190d"
+        }
+      ],
+      "human_decision": "needs_split",
+      "human_reason": "节点含行业阶段、泰金公司增长潜力、细分设备增量三条可独立核验命题，需拆分。",
+      "checks": {
+        "one_research_statement": false,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": false,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-audio",
+      "target_id": "mca-hearing-check",
+      "source_quote": "投资者：大家好，请问能听到吗？可以，您讲",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "bbcd0f2cffa0ee76b615356f55beae1c51e3493a3eac6046f3547fce8a904b43"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "ee8827e28a59e94b3ec6c94136c67310e63809f68c3a5a2c2f171fad6f4d67fe",
+          "role": "whole",
+          "span_id": "d80c86f7921ab7714fb6b7890eeda4bdc3c21a7bafe12e3c5deb1541ab353739",
+          "start": 0,
+          "end": 21,
+          "text": "投资者：大家好，请问能听到吗？可以，您讲。",
+          "text_sha256": "2c29046640d1924b36fec23b5c9a8895f5e9be9997741e2cbdfecc6fa2579266"
+        }
+      ],
+      "human_decision": "reject",
+      "human_reason": "通话开头音量测试寒暄，非研究命题，不应计入分母。",
+      "checks": {
+        "one_research_statement": false,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-q-cause",
+      "source_quote": "您觉得良品率低是设备问题还是工艺问题？",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "9f0cc5c75decd2819e89690baad1f8861c384f5b2a5a3dfa6272fbcc4c34fe86",
+          "role": "clause",
+          "span_id": "8693d1d3b6d04f47bf0e475c085b8936b63c88db1851e4da117a5ab2a558d7ba",
+          "start": 7,
+          "end": 26,
+          "text": "您觉得良品率低是设备问题还是工艺问题？",
+          "text_sha256": "e5306d0d1c9a2ee25ad3f46e9a213a4426b0acd4923edf6f9790c8849397d313"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一问题命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-q-improve",
+      "source_quote": "设备端能配套改进吗？",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "c1b82abaeb1acb15afdd0457b7b778b8ca0538ac15822ace65d3820e4bb568ef",
+          "role": "clause",
+          "span_id": "50a3276df6fec0b6ad0d8728f3458f7e69372a952a26befd3d32b885a4111506",
+          "start": 26,
+          "end": 36,
+          "text": "设备端能配套改进吗？",
+          "text_sha256": "34b7fe6508b29e1d7a4caae4d69b928d20d858b387480f5fb78bbb3e202de9ad"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一问题命题，完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-a-leading",
+      "source_quote": "我认为设备目前加工精度和控制精度已经做到行业领先",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "7bb58ba8cab3f446bd9feb6a49c54506185c937e5987129cd987320d6c2965a1",
+          "role": "clause",
+          "span_id": "86ba2d9dca600162dc32f922d8faecb32c76b85a902f5c1fbd6086b8d0967690",
+          "start": 41,
+          "end": 66,
+          "text": "我认为设备目前加工精度和控制精度已经做到行业领先，",
+          "text_sha256": "5146ffe2e8a204d65892d2cea9b90a98c1c112b167c1a8a2c099a1d248d779e9"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一回答命题，归属（我认为）与对象保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-a-process",
+      "source_quote": "大概率跟工艺挂钩",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "8a038a2c07acf5e499ff13af4acf268e7d9f0e9ef3d900a79c4dae076e7ea513",
+          "role": "clause",
+          "span_id": "8ea865e917c048a5e31f6a52b70c4a4efcb4daf050c6d2fe8f2b2e098645d75c",
+          "start": 66,
+          "end": 77,
+          "text": "那么大概率跟工艺挂钩。",
+          "text_sha256": "4b7772e1e230b0de01be03f46103163dbff7a058307af2ef8d85b40eebfdfb78"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一回答命题，结论完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-ratio",
+      "source_quote": "他说工艺和设备是64开",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "ca6f1ae1249ebf980ed8e43321ccf385be271b967acb9f9ddb50870d62b56ec0",
+          "role": "clause",
+          "span_id": "c2876c24753c894b415b8726d60bb5016b7a873ce567d6fe7a16f9cb02d5ef43",
+          "start": 88,
+          "end": 100,
+          "text": "他说工艺和设备是64开，",
+          "text_sha256": "78b179d814794a67b4295c43fe8033c36ab8f6075a72865397ddf1fe9581c0b1"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一陈述命题，归属（他说）保留，数值完整。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-process-major",
+      "source_quote": "工艺占大头",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "defd0fbc29463a77b7cb05087e643147383d2a8cae2b82833175e05ae5e07baf",
+          "role": "clause",
+          "span_id": "653bba0bb9633a411b4eb6b4815735d3deb47eca13a3255f449b8b29a4a5b932",
+          "start": 100,
+          "end": 106,
+          "text": "工艺占大头，",
+          "text_sha256": "d576bd7ccfb378b8ffc2b03a457fcf6aec811d63abfa6eaef80fdc6419e12dba"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一陈述命题，语义完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-device-support",
+      "source_quote": "设备只是配套",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "42df5bf57cc7e76e9c8cc8b8be1a5143812b2021c806f58a3197238931c67546",
+          "role": "clause",
+          "span_id": "6bcfda24f46dc20f6c3942ec23e2f9296873b5029e9e1c1489c77530aab9d825",
+          "start": 106,
+          "end": 113,
+          "text": "设备只是配套，",
+          "text_sha256": "c53d1d5f649fc35462cd2297587cb6426704b31a5e0185b35c721a3426ddb7eb"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一陈述命题，语义完整可独立记录。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-device-needed",
+      "source_quote": "但没设备也不行",
+      "scope_status": "unique_scope",
+      "generated_scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "5b163e53546f8ee0cdc75702791383fccb0e8378bd56e162ae0349bd357e4ef9",
+          "role": "clause",
+          "span_id": "252e3e69cdb2d6ebba9aebebdf4cacb2ea8f40d304793654a1e45585f4e0f7a0",
+          "start": 113,
+          "end": 121,
+          "text": "但没设备也不行。",
+          "text_sha256": "f7f01bcbae49d51d8ee62fc0a6f7f418b09977bf59ae4e9e1f7c49df9c500fc0"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一陈述命题，转折语义完整保留。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    }
+  ]
+}

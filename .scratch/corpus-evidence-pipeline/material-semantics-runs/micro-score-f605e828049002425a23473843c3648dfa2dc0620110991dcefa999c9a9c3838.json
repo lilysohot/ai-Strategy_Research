@@ -1,0 +1,219 @@
+{
+  "schema_version": "material-micro-score-v1",
+  "scorer_version": "material-micro-scorer-1",
+  "micro_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "replay_report": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/report-31bb378d85c95a33ccfe2605dd6ea952599faa33a20090a9175551119e9e8881.json",
+  "replay_report_sha256": "1d583061f93c4a53e44b56a0bf54e0d2aed4630589b7da83b5344dc07aa68302",
+  "split": "development",
+  "model_calls": 0,
+  "source_model_calls_reused": 0,
+  "precision_scope": "six_exhaustively_annotated_micro_scopes_only",
+  "samples": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "material_run_id": "151ac1057d4efd72807c1879c7d739d480eb33d7059ed64d928cc13511ec8bce",
+      "item_recall": 0.42857142857142855,
+      "item_precision": 1.0,
+      "relation_recall": 1.0,
+      "relation_precision": 1.0,
+      "counts": {
+        "gold_items": 7,
+        "predicted_items": 3,
+        "matched_items": 3,
+        "positive_relations": 0,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "negative_relations": 0,
+        "assessable_negative_relations": 0,
+        "negative_relation_hits": 0
+      },
+      "missed_items": [
+        "mc-company-outlook",
+        "mc-target-price",
+        "mc-risk-macro",
+        "mc-risk-consumption"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": []
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "material_run_id": "f2ab56fd7658e5d2c403547c775314ba07e23911ed7a720d863fae2edb2b1950",
+      "item_recall": 0.14285714285714285,
+      "item_precision": 1.0,
+      "relation_recall": 0.0,
+      "relation_precision": 1.0,
+      "counts": {
+        "gold_items": 14,
+        "predicted_items": 2,
+        "matched_items": 2,
+        "positive_relations": 11,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "negative_relations": 3,
+        "assessable_negative_relations": 0,
+        "negative_relation_hits": 0
+      },
+      "missed_items": [
+        "mi-q-bottom",
+        "mi-q-high",
+        "mi-a-long-odds",
+        "mi-a-focus-balance",
+        "mi-a-focus-spread",
+        "mi-a-high-not-sell",
+        "mi-a-future-trend",
+        "mi-q-expansion",
+        "mi-a-cycle",
+        "mi-a-capacity-not-invalidate",
+        "mi-a-price-cycles",
+        "mi-a-cycle-length"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": []
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "material_run_id": "ce740fb7e81a85e5f642375af069fb70a88e90d91e0e473182c7fef70cd0352f",
+      "item_recall": 0.5,
+      "item_precision": 1.0,
+      "relation_recall": 1.0,
+      "relation_precision": 0.0,
+      "counts": {
+        "gold_items": 4,
+        "predicted_items": 2,
+        "matched_items": 2,
+        "positive_relations": 0,
+        "predicted_relations": 1,
+        "matched_relations": 0,
+        "false_positive_relations": 1,
+        "negative_relations": 2,
+        "assessable_negative_relations": 2,
+        "negative_relation_hits": 1
+      },
+      "missed_items": [
+        "mt-added-shares",
+        "mt-below-ceo-level"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": [
+        [
+          "supports",
+          "itm_cdeeaa02049cfd37",
+          "itm_cdc39adb9c7b5bf2"
+        ]
+      ]
+    },
+    {
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "material_run_id": "68840f811f70743a711d89b9cea4892e6fa1685be28cb2c09009a8fdae654900",
+      "item_recall": 0.0,
+      "item_precision": 1.0,
+      "relation_recall": 1.0,
+      "relation_precision": 1.0,
+      "counts": {
+        "gold_items": 1,
+        "predicted_items": 0,
+        "matched_items": 0,
+        "positive_relations": 0,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "negative_relations": 0,
+        "assessable_negative_relations": 0,
+        "negative_relation_hits": 0
+      },
+      "missed_items": [
+        "mcs-outlook"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": []
+    },
+    {
+      "scope_id": "micro-copper-audio",
+      "sample_id": "dev-expert-call-copper-foil",
+      "material_run_id": "68840f811f70743a711d89b9cea4892e6fa1685be28cb2c09009a8fdae654900",
+      "item_recall": 0.0,
+      "item_precision": 1.0,
+      "relation_recall": 1.0,
+      "relation_precision": 1.0,
+      "counts": {
+        "gold_items": 1,
+        "predicted_items": 0,
+        "matched_items": 0,
+        "positive_relations": 0,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "negative_relations": 0,
+        "assessable_negative_relations": 0,
+        "negative_relation_hits": 0
+      },
+      "missed_items": [
+        "mca-hearing-check"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": []
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "material_run_id": "68840f811f70743a711d89b9cea4892e6fa1685be28cb2c09009a8fdae654900",
+      "item_recall": 0.25,
+      "item_precision": 1.0,
+      "relation_recall": 0.16666666666666666,
+      "relation_precision": 1.0,
+      "counts": {
+        "gold_items": 8,
+        "predicted_items": 2,
+        "matched_items": 2,
+        "positive_relations": 6,
+        "predicted_relations": 1,
+        "matched_relations": 1,
+        "false_positive_relations": 0,
+        "negative_relations": 3,
+        "assessable_negative_relations": 1,
+        "negative_relation_hits": 0
+      },
+      "missed_items": [
+        "mcy-q-cause",
+        "mcy-q-improve",
+        "mcy-a-leading",
+        "mcy-e-ratio",
+        "mcy-e-process-major",
+        "mcy-e-device-support"
+      ],
+      "extra_predicted_items": [],
+      "negative_relation_hits": []
+    }
+  ],
+  "aggregate": {
+    "item_recall": 0.2571428571428571,
+    "item_precision": 1.0,
+    "relation_recall": 0.058823529411764705,
+    "relation_precision": 0.5,
+    "negative_relation_avoidance": 0.6666666666666667
+  },
+  "counts": {
+    "gold_items": 35,
+    "predicted_items": 9,
+    "matched_items": 9,
+    "positive_relations": 17,
+    "predicted_relations": 2,
+    "matched_relations": 1,
+    "false_positive_relations": 1,
+    "negative_relations": 8,
+    "assessable_negative_relations": 3,
+    "negative_relation_hits": 1
+  },
+  "limitations": [
+    "This is exhaustive only inside the six frozen micro-scopes.",
+    "Offline replay reuses existing predictions and makes no model calls.",
+    "No holdout source or corpus database is accessed."
+  ]
+}

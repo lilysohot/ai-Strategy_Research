@@ -1,0 +1,145 @@
+{
+  "version": "r2-p3h-denominator-amendment-1",
+  "date": "2026-09-14",
+  "split": "development",
+  "base_gold_path": "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json",
+  "base_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "human_review_path": ".scratch/corpus-evidence-pipeline/r2-p3s-denominator-review-completed.json",
+  "human_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609",
+  "carry_forward_approved_items": 30,
+  "replacement_items_pending_review": 5,
+  "operations": [
+    {
+      "operation": "replace_item",
+      "scope_id": "micro-company-recommendation",
+      "remove_item_ids": ["mc-rating"],
+      "add_items": [
+        {
+          "item_id": "mc-rating-v2",
+          "quote": "“强推”评级",
+          "semantic_type": "opinion",
+          "statement_role": "claim",
+          "speech_role": "statement",
+          "speaker_role": "analyst_author",
+          "identity_status": "explicit",
+          "perspective": "source_explicit",
+          "polarity": "affirmed",
+          "behavior_status": null,
+          "temporal_frame": "contemporaneous",
+          "value": "强推",
+          "unknown_fields": []
+        }
+      ],
+      "reason": "human_needs_split_target_price_and_rating"
+    },
+    {
+      "operation": "merge_items",
+      "scope_id": "micro-industry-q7-q8",
+      "remove_item_ids": ["mi-a-focus-balance", "mi-a-focus-spread"],
+      "add_items": [
+        {
+          "item_id": "mi-a-focus-balance-spread-v2",
+          "quote": "中期投资更应关注供需改善的情况和\n价差扩张",
+          "semantic_type": "opinion",
+          "statement_role": "answer",
+          "speech_role": "answer",
+          "speaker_role": "analyst_author",
+          "identity_status": "unknown",
+          "perspective": "source_explicit",
+          "polarity": "affirmed",
+          "behavior_status": null,
+          "temporal_frame": "contemporaneous",
+          "value": null,
+          "unknown_fields": ["author_identity"]
+        }
+      ],
+      "remove_relation_ids": ["mir-03", "mir-04"],
+      "add_relations": [
+        {
+          "relation_id": "mir-03-v2",
+          "type": "answers",
+          "from_item": "mi-a-focus-balance-spread-v2",
+          "to_item": "mi-q-bottom"
+        }
+      ],
+      "reason": "human_needs_merge_incomplete_spread_fragment"
+    },
+    {
+      "operation": "split_item",
+      "scope_id": "micro-copper-summary",
+      "remove_item_ids": ["mcs-outlook"],
+      "add_items": [
+        {
+          "item_id": "mcs-industry-substitution-v2",
+          "quote": "铜箔设备行业正处于国产替代加速期",
+          "semantic_type": "opinion",
+          "statement_role": "claim",
+          "speech_role": "statement",
+          "speaker_role": "summary_author",
+          "identity_status": "unknown",
+          "perspective": "unknown",
+          "polarity": "affirmed",
+          "behavior_status": null,
+          "temporal_frame": "unknown",
+          "value": null,
+          "unknown_fields": ["summary_authorship", "summary_generation_method"]
+        },
+        {
+          "item_id": "mcs-taijin-growth-v2",
+          "quote": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力",
+          "semantic_type": "opinion",
+          "statement_role": "claim",
+          "speech_role": "statement",
+          "speaker_role": "summary_author",
+          "identity_status": "unknown",
+          "perspective": "unknown",
+          "polarity": "affirmed",
+          "behavior_status": null,
+          "temporal_frame": "unknown",
+          "value": null,
+          "unknown_fields": ["summary_authorship", "summary_generation_method"]
+        },
+        {
+          "item_id": "mcs-surface-treatment-v2",
+          "quote": "表处理设备将成为重要增量",
+          "semantic_type": "opinion",
+          "statement_role": "claim",
+          "speech_role": "statement",
+          "speaker_role": "summary_author",
+          "identity_status": "unknown",
+          "perspective": "unknown",
+          "polarity": "affirmed",
+          "behavior_status": null,
+          "temporal_frame": "unknown",
+          "value": null,
+          "unknown_fields": ["summary_authorship", "summary_generation_method"]
+        }
+      ],
+      "reason": "human_needs_split_industry_company_and_equipment_claims"
+    },
+    {
+      "operation": "reject_item",
+      "scope_id": "micro-copper-audio",
+      "remove_item_ids": ["mca-hearing-check"],
+      "add_items": [],
+      "add_excluded": [
+        {
+          "quote": "投资者：大家好，请问能听到吗？可以，您讲",
+          "reason": "human_rejected_call_setup_not_research_item"
+        }
+      ],
+      "reason": "human_reject_call_setup_greeting"
+    }
+  ],
+  "expected_after_application": {
+    "scopes": 6,
+    "items": 35,
+    "positive_relations": 16,
+    "negative_relations": 8,
+    "excluded_fragments": 6,
+    "carry_forward_approved_items": 30,
+    "pending_replacement_items": 5
+  },
+  "automatic_approval": false,
+  "p4_budget_authorized": false
+}

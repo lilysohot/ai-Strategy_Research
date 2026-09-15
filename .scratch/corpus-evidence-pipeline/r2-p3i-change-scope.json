@@ -1,0 +1,41 @@
+{
+  "version": "r2-p3i-change-scope-1",
+  "date": "2026-09-14",
+  "stage": "P3-I",
+  "purpose": "Build and falsify a development-only field-contract projection before any P4 model budget is frozen.",
+  "allowed_new_files": [
+    ".scratch/corpus-evidence-pipeline/p3i_contract_bridge.py",
+    ".scratch/corpus-evidence-pipeline/test_p3i_contract_bridge.py",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-inventory.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-field-review-template.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-manifest.json"
+  ],
+  "allowed_existing_files": [
+    "docs/plan/r2-local-redesign-cli-closure-plan.md",
+    "docs/plan/claims-market-closed-loop-plan.md",
+    "docs/plan/README.md",
+    ".scratch/corpus-evidence-pipeline/spec.md",
+    ".scratch/corpus-evidence-pipeline/issues/20-material-semantics.md"
+  ],
+  "forbidden": [
+    "plugins/corpus/_r2_plan.py",
+    "plugins/corpus/_r2_audit.py",
+    "plugins/corpus/_r2_runtime.py",
+    "public parsers and EvidenceRun",
+    "legacy material extraction and ingestion",
+    "PostgreSQL",
+    "holdout sources",
+    "relation execution",
+    "P4 model execution"
+  ],
+  "authorization": {
+    "development_model_calls_permitted_by_user": true,
+    "p3i_model_calls_planned": 0,
+    "judge_calls": 0,
+    "postgres_access": 0,
+    "ingestion_runs": 0,
+    "holdout_reads": 0
+  },
+  "exit": "All 35 projected targets are lossless, negative mutations fail closed, protected files remain unchanged, and the bridge-specific human review template is generated. P4 remains blocked until that template is approved."
+}

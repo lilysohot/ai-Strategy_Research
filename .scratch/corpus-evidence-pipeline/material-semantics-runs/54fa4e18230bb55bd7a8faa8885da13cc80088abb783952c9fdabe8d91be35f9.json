@@ -1,0 +1,533 @@
+{
+  "run_id": "54fa4e18230bb55bd7a8faa8885da13cc80088abb783952c9fdabe8d91be35f9",
+  "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+  "extractor_version": "material-semantics-10",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_1c54a975d0b5",
+        "display_name": "James-Bulltard",
+        "role": "source_author",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_6c0e0ffe1a8f",
+        "display_name": null,
+        "role": "quoted_source",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_c562c27b45187396",
+        "text": "作者以14.76的价格增持了10,000股TTD",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I added 10,000 more at 14.76",
+            "start": 42,
+            "end": 70
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7d0d07cfdde246cc",
+        "text": "作者卖出100份周五到期、行权价$15的TTD看涨期权，价格0.16，继续加仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "sold 100 $15 calls for friday for .16",
+            "start": 75,
+            "end": 112
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_527a18fa65a2fa03",
+        "text": "作者认为TTD价格仍远低于$25水平",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "this is still well below the $25 level",
+            "start": 136,
+            "end": 174
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_42c1df62b260ed33",
+        "text": "TTD CEO买入了价值1.5亿美元的股票",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "the CEO bought $150m worth",
+            "start": 175,
+            "end": 201
+          }
+        ],
+        "unknown_fields": [
+          "quoted_source_identity"
+        ]
+      },
+      {
+        "item_id": "itm_a0d2f4fcf2d94ce3",
+        "text": "作者以17.30的价格增持3,000股FRVO",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I bought 3000 more at 17.30",
+            "start": 212,
+            "end": 239
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a2514c1b1555f3b2",
+        "text": "作者卖出30份$20九月到期FRVO看涨期权，价格0.50，在本周其与Google达成交易后加仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "sold 30 $20 September calls for .50",
+            "start": 244,
+            "end": 279
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_01b92f8efff76382",
+        "text": "作者卖出50份下周到期、行权价$90的MDT看跌期权，价格0.47",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I sold 50 puts at $90 for next week for .47",
+            "start": 350,
+            "end": 393
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b394f6b37dc15f51",
+        "text": "作者昨日盘后卖出AGX仓位并在discord发布，以447清仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I sold this position yesterday afterhours",
+            "start": 403,
+            "end": 444
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d2bde4bb201f5f1b",
+        "text": "作者对该股票一无所知，仅跟随前一日资金流",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I knew nothing about this name and just followed the flows",
+            "start": 486,
+            "end": 544
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [
+        "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8:relations_not_processed",
+        "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8:atomic_obligations_incomplete"
+      ],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_e244e1ab6d593af7",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "title_only_no_atomic_claim",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_5fcadca35cac4bd1",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c562c27b45187396"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_7cae723d1a768d7f",
+          "status": "extracted",
+          "item_refs": [
+            "itm_7d0d07cfdde246cc"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ce57c8df1b5c7f99",
+          "status": "extracted",
+          "item_refs": [
+            "itm_527a18fa65a2fa03"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_388a06119462c213",
+          "status": "partial",
+          "item_refs": [
+            "itm_42c1df62b260ed33"
+          ],
+          "reason_codes": [
+            "missing_signal:behavior"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_eac6fa614ef001d6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a0d2f4fcf2d94ce3"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_af46e0d45cbfc436",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a2514c1b1555f3b2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c21989c339c4af4e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_01b92f8efff76382"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f4916725c5363ce8",
+          "status": "partial",
+          "item_refs": [
+            "itm_b394f6b37dc15f51",
+            "itm_d2bde4bb201f5f1b"
+          ],
+          "reason_codes": [
+            "multiple_items_for_atomic_obligation"
+          ]
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "status": "partial",
+      "records": 9,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v3",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 9765,
+              "prompt_tokens": 1618,
+              "completion_tokens": 1596,
+              "reasoning_tokens": 10,
+              "finish_reason": "stop",
+              "content_chars": 5106,
+              "reasoning_chars": 51,
+              "coverage_protocol_incomplete": true
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_1016932864bc4e42",
+        "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+        "locator": "5",
+        "start": 0,
+        "end": 674,
+        "text": "My Open Book\nTrades I Made Today\n1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n2. FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n3. MDT - I sold 50 puts at $90 for next week for .47\n4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_e244e1ab6d593af7",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 0,
+      "end": 33,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "My Open Book\nTrades I Made Today\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_5fcadca35cac4bd1",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 33,
+      "end": 70,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "1. TTD - I added 10,000 more at 14.76",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_7cae723d1a768d7f",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 70,
+      "end": 136,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": " and sold 100 $15 calls for friday for .16 adding\nto my position, ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_ce57c8df1b5c7f99",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 136,
+      "end": 175,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "this is still well below the $25 level ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_388a06119462c213",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 175,
+      "end": 202,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "the CEO bought $150m worth\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_eac6fa614ef001d6",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 202,
+      "end": 239,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2. FRVO - I bought 3000 more at 17.30",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_af46e0d45cbfc436",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 239,
+      "end": 341,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": " and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_c21989c339c4af4e",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 341,
+      "end": 394,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "3. MDT - I sold 50 puts at $90 for next week for .47\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_f4916725c5363ce8",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 394,
+      "end": 674,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    }
+  ]
+}

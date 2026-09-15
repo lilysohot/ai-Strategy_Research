@@ -1,0 +1,99 @@
+{
+  "budget_version": "r2-v12-atomic-items-v6",
+  "frozen_at": "2026-09-14",
+  "reason": "在 v11 item 门失败并完成离线根因修正后，只用同一四类 development、同一六个穷举微范围复验 v12 的 37 个有限原子义务；item 门通过前关系继续冻结。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "micro_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "micro_scope_ids": [
+    "micro-company-recommendation",
+    "micro-industry-q7-q8",
+    "micro-trade-ttd",
+    "micro-copper-summary",
+    "micro-copper-audio",
+    "micro-copper-yield"
+  ],
+  "candidate_slot_ids_by_sample": {
+    "dev-company-report": [
+      "slot_a28df1553ef81190",
+      "slot_03fd88dc9afca766",
+      "slot_ef7e8464348d233f",
+      "slot_91de9db963452478",
+      "slot_3589bd5c6d64774b",
+      "slot_934838521df47086",
+      "slot_fc42861a679cdd56"
+    ],
+    "dev-industry-qa-report": [
+      "slot_3acc6b88287c0b44",
+      "slot_8b16efec699036bf",
+      "slot_9c97bf2656f9b308",
+      "slot_8b2ef3632af2af39",
+      "slot_2c0a86b38ec61a00",
+      "slot_ff2aa0ad5c6e4ff9",
+      "slot_526a3b36e0ee7689",
+      "slot_62748509a5baf787",
+      "slot_1a0634276a274fb2",
+      "slot_e3992d2856fd270e",
+      "slot_534f78e28a72f3e6",
+      "slot_84c3323c2e3e18d8",
+      "slot_0f3a30fe67a44421",
+      "slot_cb4205b56ce405f5"
+    ],
+    "dev-personal-trade-review": [
+      "slot_fae5dbe0cc15f74d",
+      "slot_a98ab89e6395c608",
+      "slot_7cae723d1a768d7f",
+      "slot_ce57c8df1b5c7f99",
+      "slot_388a06119462c213",
+      "slot_22b692bbd549ea4a"
+    ],
+    "dev-expert-call-copper-foil": [
+      "slot_29ddd1535ef90df3",
+      "slot_b91d39ef8582bd08",
+      "slot_0c53bb2c8945d068",
+      "slot_6491fa61b5a495a7",
+      "slot_c224f6bce63d1560",
+      "slot_9e027185152ecb55",
+      "slot_712e6f0ef8a7412d",
+      "slot_c59de169ecee5ce6",
+      "slot_12856eb2eee59813",
+      "slot_3c286ee01e4793ed"
+    ]
+  },
+  "model": "glm-5.3-flash",
+  "round_ids": [
+    "v12-terminal-items"
+  ],
+  "development_rounds_max": 1,
+  "calls_per_round_max": 9,
+  "calls_total_max": 9,
+  "calls_per_document_per_round_max": 3,
+  "planned_calls_upper_bound": 9,
+  "seconds_per_call": 60,
+  "packet_chars": 3000,
+  "max_slots_per_batch": 6,
+  "max_items_per_packet": 6,
+  "max_output_tokens": 8192,
+  "response_format": "material-atomic-jsonl-v4",
+  "stages": [
+    "atomic_item_terminal"
+  ],
+  "relation_mode": "deferred",
+  "raw_audit_policy": "failed_or_partial_only_local_0600",
+  "holdout_calls_allowed": 0,
+  "stop_conditions": [
+    "source_or_candidate_slot_identity_drift",
+    "holdout_access_or_leakage",
+    "missing_duplicate_or_invalid_slot_terminal",
+    "multiple_items_for_one_obligation",
+    "micro_item_recall_or_precision_below_one",
+    "any_protected_scope_regression",
+    "round_or_call_budget_exhausted"
+  ]
+}

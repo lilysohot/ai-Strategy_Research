@@ -1,0 +1,19 @@
+{
+  "version": "r2-p2b-additions-only-1",
+  "p0_manifest_sha256": "4e2c45ce216a942137f60b863e236ae46f3a8870317ebdbe9ead6342b4698076",
+  "modify_existing_protected_files": [],
+  "new_protected_files": [
+    "plugins/corpus/_r2_plan.py",
+    "plugins/corpus/_r2_audit.py",
+    "plugins/corpus/_r2_runtime.py"
+  ],
+  "new_offline_files": [
+    ".scratch/corpus-evidence-pipeline/p2b_guard.py",
+    ".scratch/corpus-evidence-pipeline/p2b_projection.py",
+    ".scratch/corpus-evidence-pipeline/test_r2_runtime_v1.py"
+  ],
+  "scope": "P2 private offline execution, fake/replay relations and audit fault tests only",
+  "real_model_calls": 0,
+  "database": "explicit temporary local SQLite audit journals in tests; never corpus PostgreSQL",
+  "default_entry_changes": false
+}

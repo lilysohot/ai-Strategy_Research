@@ -1,0 +1,121 @@
+{
+  "run_id": "b93999850ee5b08e39c1f75fbee885dbc56fe7cc39ada985900de8cf91df656f",
+  "evidence_run_id": "97b40b7f57fbd96806e6f96dc0aa87e108d92ae99c81ff7dd487741ebdd36bc6",
+  "extractor_version": "material-semantics-6",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-16_6f14cc14",
+      "source_rev": "6f14cc145b798b37",
+      "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "material_date": "2026-08-16",
+      "published_at": "2026-08-16",
+      "language": "zh-CN"
+    },
+    "speakers": [],
+    "items": [],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "1"
+      ],
+      "omitted_areas": [
+        "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b:items_error:ValueError"
+      ],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "1a16c3e732c9b7094ddb1547d18fb81ced0b77af61082cd4e21b8eadf6748a82",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "bb7ec711a15fbccbef46f8eac0f5ffd492202d88d055893326ff99157f4782e5",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "4927b5abf9726f1d6cf19aa4c0557a5ad75e7a089a3da3c9ec7707859476db4e",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "5edb1f753a47b0067d2be018279aa1a9072300e878c524ccbc6499be010a90ec",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "ec6cbe1e11416f368327e0aecc40f567be56f1023269bc4601124f710ee6cb27",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "f5d1965adc9a3155d59b18674fc28e5d05f949c3cc885f52cd944d59ca121056",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "66c35bb27b62ad7b930553086cbd13f2e4a9731a3b3bb3c831d20f72373d1372",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 16020,
+            "prompt_tokens": 2392,
+            "completion_tokens": 2485,
+            "reasoning_tokens": 11,
+            "finish_reason": "stop",
+            "content_chars": 7885,
+            "reasoning_chars": 50,
+            "discarded_records": 21,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    }
+  ]
+}

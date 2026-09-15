@@ -22,9 +22,18 @@ from plugins.corpus.claims import document_ticker
 from plugins.corpus.ingest import _doc_id, _title_from_filename, content_hash
 from plugins.corpus.metadata import derive_published
 
-PARSER_VERSION = "evidence-layout-2"
+PARSER_VERSION = "evidence-layout-4"
 PERIOD = re.compile(r"20\d{2}(?:[AEF]|H[12]|Q[1-4])?", re.IGNORECASE)
 NUMBER = re.compile(r"[+\-−]?(?:\d[\d,]*(?:\.\d+)?|\(\d[\d,]*(?:\.\d+)?\))%?")
+_QUESTION_TURN_BOUNDARY = re.compile(
+    r"(?m)^(?=\s*(?:主持人|投资者|提问者|分析师|问)\s*[：:])"
+)
+_SPEAKER_TURN_BOUNDARY = re.compile(
+    r"(?m)^(?=\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)\s*[：:])"
+)
+_NUMBERED_QUESTION_BOUNDARY = re.compile(
+    r"(?m)^(?=\s*(?:[一二三四五六七八九十百]+|\d+)[、.．]\s*[^\n]{0,100}[？?])"
+)
 BBox = tuple[float, float, float, float]
 
 
@@ -106,7 +115,7 @@ def _packet(parse_rev: str, **fields: object) -> EvidencePacket:
 
 
 def split_spans(text: str, locator: str, max_chars: int) -> list[Span]:
-    """Cover every character exactly once, preferring paragraph/line/sentence ends."""
+    """Cover every character once without separating ordinary question/answer turns."""
     if max_chars < 100:
         raise ValueError("packet_chars must be at least 100")
     spans: list[Span] = []
@@ -114,10 +123,26 @@ def split_spans(text: str, locator: str, max_chars: int) -> list[Span]:
     while start < len(text):
         end = min(start + max_chars, len(text))
         if end < len(text):
-            choices = [text.rfind(sep, start + max_chars // 2, end) for sep in ("\n", "。", ". ")]
-            boundary = max(choices)
+            lower = start + max_chars // 2
+            structured: list[int] = []
+            for pattern in (
+                _QUESTION_TURN_BOUNDARY,
+                _NUMBERED_QUESTION_BOUNDARY,
+                _SPEAKER_TURN_BOUNDARY,
+            ):
+                structured = [match.start() for match in pattern.finditer(text, lower, end)]
+                if structured:
+                    break
+            # Prefer the latest question-start boundary so its answer stays in the next packet.
+            # If no structural marker exists, retain the established lossless text fallback.
+            boundary = max(structured, default=-1)
+            if boundary < 0:
+                choices = [
+                    text.rfind(sep, lower, end) for sep in ("\n\n", "\n", "。", ". ")
+                ]
+                boundary = max(choices)
             if boundary >= 0:
-                end = boundary + 1
+                end = boundary if structured else boundary + 1
         spans.append(Span(locator=locator, text=text[start:end], start=start, end=end))
         start = end
     return spans
@@ -281,6 +306,114 @@ def _table_packets(page: pymupdf.Page, parse_rev: str) -> list[EvidencePacket]:
     return packets
 
 
+def _customer_packets(page: pymupdf.Page, parse_rev: str) -> list[EvidencePacket]:
+    """Recover customer sales/share columns, with title and footer evidence.
+
+    Explicit header and per-row unit checks are required. No OCR, interpolation,
+    missing-cell filling, or inference that a customer amount is company revenue.
+    """
+    lines = _lines(page)
+    packets: list[EvidencePacket] = []
+    for index, line in enumerate(lines):
+        label_header = next((s for s in line if s.text == "客户名称"), None)
+        sales = next(
+            (s for s in line if re.fullmatch(r"销售额[（(](百万元|亿元|万元|元)[）)]", s.text)),
+            None,
+        )
+        share = next((s for s in line if s.text == "占收入比例"), None)
+        if not label_header or not sales or not share:
+            continue
+        headers = (label_header, sales, share)
+        if any(h.bbox is None for h in headers):
+            continue
+        assert sales.bbox is not None
+        centers = [(h.bbox[0] + h.bbox[2]) / 2 for h in headers]  # type: ignore[index]
+        if not centers[0] < centers[1] < centers[2]:
+            continue
+        title_parts = [
+            s
+            for prev in lines[:index]
+            for s in prev
+            if s.bbox and 0 < sales.bbox[1] - s.bbox[1] < 32
+        ]  # type: ignore[index]
+        title = _join(title_parts) if title_parts else None
+        if title is None or "客户" not in title.text:
+            continue
+        unit_match = re.search(r"[（(](百万元|亿元|万元|元)[）)]", sales.text)
+        assert unit_match is not None
+        boundaries = ((centers[0] + centers[1]) / 2, (centers[1] + centers[2]) / 2)
+        rows: list[tuple[Span, Span, Span]] = []
+        footer = None
+        previous_y = sales.bbox[1]  # type: ignore[index]
+        for row in lines[index + 1 :]:
+            joined = " ".join(s.text for s in row)
+            if re.search(r"(?:数据|资料)来源", joined):
+                footer = _join(row)
+                break
+            if not row[0].bbox or row[0].bbox[1] - previous_y > 45:
+                break
+            labels = [
+                s
+                for s in row
+                if s.bbox and s.bbox[0] < boundaries[0] and not NUMBER.fullmatch(s.text)
+            ]
+            amounts = [
+                s
+                for s in row
+                if s.bbox
+                and boundaries[0] <= (s.bbox[0] + s.bbox[2]) / 2 < boundaries[1]
+                and NUMBER.fullmatch(s.text)
+                and not s.text.endswith("%")
+            ]
+            shares = [
+                s
+                for s in row
+                if s.bbox
+                and boundaries[1]
+                <= (s.bbox[0] + s.bbox[2]) / 2
+                < centers[2] + (centers[2] - centers[1]) / 2
+                and NUMBER.fullmatch(s.text)
+                and s.text.endswith("%")
+            ]
+            if not labels or len(amounts) != 1 or len(shares) != 1:
+                break
+            rows.append((_join(labels), amounts[0], shares[0]))
+            previous_y = row[0].bbox[1]
+        table_id = fingerprint(
+            [parse_rev, "customer-sales", title.model_dump(), [h.model_dump() for h in headers]]
+        )
+        for label, amount, percent in rows:
+            cells = tuple(
+                Cell(
+                    table_id=table_id,
+                    row=label.text,
+                    column=header.text,
+                    value=value.text,
+                    unit=unit,
+                    span=value,
+                    row_span=label,
+                    column_span=header,
+                    unit_span=value if unit == "%" else header,
+                )
+                for header, value, unit in ((sales, amount, unit_match[1]), (share, percent, "%"))
+            )
+            context = (title.text, *((footer.text,) if footer else ()))
+            packets.append(
+                _packet(
+                    parse_rev,
+                    locator=label.locator,
+                    kind="table",
+                    text=" | ".join(
+                        [title.text, label.text, *[f"{c.column}: {c.value}" for c in cells]]
+                    ),
+                    cells=cells,
+                    spans=(*headers, title, label, amount, percent, *((footer,) if footer else ())),
+                    context=context,
+                )
+            )
+    return packets
+
+
 def parse_evidence(
     path: str | Path,
     *,
@@ -318,6 +451,7 @@ def parse_evidence(
                     )
                     continue
                 packets.extend(_table_packets(page, parse_rev))
+                packets.extend(_customer_packets(page, parse_rev))
                 for span in split_spans(text, str(number), packet_chars):
                     packets.append(
                         _packet(

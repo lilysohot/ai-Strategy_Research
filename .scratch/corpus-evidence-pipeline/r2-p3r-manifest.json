@@ -1,0 +1,109 @@
+{
+  "version": "r2-p3r-bounded-clause-lattice-freeze-1",
+  "date": "2026-09-14",
+  "stage": "P3-R",
+  "status": "micro_structural_gate_passed_full_scope_provider_and_human_review_blocked",
+  "parent_p3_manifest_sha256": "edbc14e557309adb586bc7046f4e87ac8ad5449c39449b00be2dc747204a4bef",
+  "p4_budget_authorized": false,
+  "scope": {
+    "development_sample_count": 4,
+    "micro_scope_count": 6,
+    "micro_selected_chars": 741,
+    "production_code_changed": false,
+    "protected_existing_files_changed": 0,
+    "holdout_source_paths_opened": 0
+  },
+  "external_activity": {
+    "model_calls": 0,
+    "judge_calls": 0,
+    "postgres_access": 0,
+    "market_calls": 0,
+    "ingestion_runs": 0
+  },
+  "interface": {
+    "module": "p3r_clause_lattice",
+    "entry": "prepare_lattice(source, expected_binding, scopes, limits)",
+    "verification": "verify_lattice(source, expected_binding, plan, expected_plan_id)",
+    "dependency_category": "in_process_pure_computation",
+    "planner_generation_fields": [
+      "scope_id",
+      "sample_id",
+      "source_path",
+      "source_sha256",
+      "locator"
+    ],
+    "gold_fields_available_to_planner": 0
+  },
+  "micro_results": {
+    "nodes": 360,
+    "edges": 130,
+    "items": 35,
+    "unique_minimum_mappings": 35,
+    "distinct_mapped_nodes": 35,
+    "positive_relations": 17,
+    "positive_relation_endpoints_referencable": 17,
+    "negative_relations": 8,
+    "negative_relation_endpoints_referencable": 8,
+    "human_approved": 0
+  },
+  "full_capacity_results": {
+    "packet_roots": 14,
+    "planned": 1,
+    "unsupported_packet": 7,
+    "unresolved_capacity": 6,
+    "interpretation": "scope_provider_not_ready_for_whole_packet_planning"
+  },
+  "limits": {
+    "max_segments_per_root": 64,
+    "max_window_segments": 8,
+    "max_nodes_per_root": 384,
+    "max_edges_per_root": 768,
+    "capacity_behavior": "retain_bound_whole_span_and_emit_explicit_unresolved_status"
+  },
+  "gates": {
+    "R0_gold_independent_generation": "passed",
+    "R1_fixed_development_item_locatability": "passed",
+    "R2_relation_endpoint_referencability": "passed",
+    "R3_finite_capacity_and_no_silent_truncation": "passed",
+    "R4_condition_and_attribution_support": "passed",
+    "R5_human_atomic_denominator_approval": "not_evaluated",
+    "R6_production_and_old_flow_isolation": "passed"
+  },
+  "verification": {
+    "p3r_tests": 24,
+    "prior_p1_p2_p3_tests": 224,
+    "combined_tests_passed": 248,
+    "ruff": "passed",
+    "target_pyright": "0_errors_0_warnings",
+    "import_smoke_stage_1": "339/339",
+    "import_smoke_stage_2": "388/388",
+    "symbol_closure": "438/438",
+    "p2b_protected_guard": "passed_2336_old_unchanged_3_registered_additions_match",
+    "non_gate_command_error": "two initial import-smoke attempts used missing scripts path; corrected tools path passed"
+  },
+  "next_requirements": {
+    "human_review_of_35_proposed_mappings": true,
+    "separate_zero_model_p3s_scope_provider_review": true,
+    "production_promotion": false,
+    "new_model_budget": false
+  },
+  "input_sha256": {
+    ".scratch/corpus-evidence-pipeline/r2-p3r-change-scope.json": "7ae0b3e930222600d1affaff1ccef5434fa3c93137227e2dcfb177cab2a60944",
+    ".scratch/corpus-evidence-pipeline/r2-p3-manifest.json": "edbc14e557309adb586bc7046f4e87ac8ad5449c39449b00be2dc747204a4bef",
+    "plugins/corpus/_r2_plan.py": "644fab580b972acd744bb077a17b568d4a0430681b375e590168bcb164519070",
+    "data/corpus/.audit/r1_material_gold_v1_20260913.json": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+    "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5"
+  },
+  "deliverable_sha256": {
+    ".scratch/corpus-evidence-pipeline/p3r_clause_lattice.py": "c49c4d867ba5702c29b3d11bb2e695e0b4e2336ec567c46d9f1fe1f9cf36c7ce",
+    ".scratch/corpus-evidence-pipeline/test_p3r_clause_lattice.py": "547897d3eff2efac5a70af91ffa912c32cbaabad255371588804cf1a0c294c3a",
+    ".scratch/corpus-evidence-pipeline/p3r_review.py": "03b0891d6c1b231fa7a472a664531b7d8d1b16e322e595c6849317c310860ad8",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-inventory.json": "da5659014e82c77882378a0eeb5888cd5ce4853f97d2d2bf47ccd590e3d308df",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-review-queue.json": "48fdc362a9e017746ed58eaeb8c43f2d7fd16d1f90d55c36ecfee03d785435b6",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-report.md": "8c822f3077cd5425aec2f8d374e8b96140e59d01ab41d676c6ff6c5d90c039c8",
+    "docs/plan/r2-local-redesign-cli-closure-plan.md": "83e99935adc17cb2db15419d59cab96ede1e05702beb2364739153d6042a361e",
+    "docs/plan/README.md": "73d414cca3171e3fc1fb5555ee890f9778c09f048a0bb8e41d036d4a260401c8",
+    "docs/plan/claims-market-closed-loop-plan.md": "87f43fd9fc242f9fa4896bd5882cb164ab605a9eec4eba745ee32b74a8f43002",
+    ".scratch/corpus-evidence-pipeline/spec.md": "ebfd83751d39b3b2a71ee9922eb4dde3665dec5e267045115af79a130be8c0de"
+  }
+}

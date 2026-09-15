@@ -5,6 +5,10 @@ Execution: partial — financial review, expanded holdout and macro specificatio
 Priority: P1
 Blocked by: none
 
+2026-09-13 范围迁移：以下为历史专项验收，不再作为独立总清单。已完成修复与未通过项保留；
+剩余材料语义/独立样本归 [总计划](../../../docs/plan/claims-market-closed-loop-plan.md) R1—R3/V1，
+数据与跨层比较归 D/A。政府官网核验不再阻断材料处理；通用 OCR/大规模覆盖仍后置。
+
 ## Acceptance
 
 - 复核茅台样本净利率 50.2% 与 净利润/营业总收入=49.1674% 的口径差异。不能自动改原值，也不能用任意近似匹配隐藏差异。
@@ -24,3 +28,7 @@ Blocked by: none
 [13 待确认口径](13-source-questions.md) 已交付。扩大留出实测未通过：12 表格字段未恢复，
 3 正文目标仅取到 2 个数值，5 个语义反例仍错误放行。宏观契约仅定义，尚未实现启用；
 询问草稿未发送、未获确认。[14](14-semantic-gates.md) 登记后续修复，整个 08 仍 partial。
+
+2026-09-13：[14 定点修复](14-semantic-gates.md) 已执行：错误放行 0/5、客户表 12/12、正文数值 3/3；
+原 57 字段/7 公式回归通过。宏观完整规范字段与独立真实留出仍待补足，整个 08/14 保持 partial。
+[15 宏观实施拆分](15-macro-implementation-plan.md) 完成，M1—M6 尚未执行。

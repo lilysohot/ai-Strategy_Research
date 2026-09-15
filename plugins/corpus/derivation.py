@@ -10,7 +10,12 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus.evidence import fingerprint
-from plugins.corpus.evidence_pipeline import EvidenceFact, EvidenceRun
+from plugins.corpus.evidence_pipeline import (
+    EvidenceFact,
+    EvidenceRun,
+    duplicate_fact_ids,
+    validation_is_current,
+)
 
 FORMULA_VERSION = "corpus-financial-formulas-1"
 RECIPES = {
@@ -45,6 +50,10 @@ def derive(run: EvidenceRun, formula: str, input_ids: tuple[str, ...]) -> Calcul
     total/part1/part2. Cross-source model mixing is not implicitly permitted.
     """
     run.verify_identity()
+    if not validation_is_current(run):
+        raise ValueError("validation_version_stale")
+    if duplicate_fact_ids(run):
+        raise ValueError("duplicate_fact_ids")
     if formula not in RECIPES:
         raise ValueError("unsupported_formula")
     by_id = {f.fact_id: f for f in run.facts}

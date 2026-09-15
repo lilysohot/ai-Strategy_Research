@@ -1,0 +1,35 @@
+{
+  "version": "p2b-authorized-readonly-container-log-summary-1",
+  "container": {
+    "id": "8716f5d7bd4a632daaf3785422685c9edceef0b1c681b44a3440dc6a167c1c5c",
+    "name": "pg",
+    "image_name": "pg18-zhvector",
+    "created": "2026-09-08T10:31:54.106465417Z",
+    "started": "2026-09-14T00:45:57.673866086Z",
+    "address": "172.17.0.2",
+    "published_port": 5432,
+    "log_driver": "json-file",
+    "data_mount": {"type": "volume", "name": "pgdata", "destination": "/var/lib/postgresql"}
+  },
+  "window_start": "2026-09-14T05:37:00Z",
+  "window_end": "2026-09-14T05:40:00Z",
+  "command": "docker logs --since 2026-09-14T05:37:00Z --until 2026-09-14T05:40:00Z --timestamps pg",
+  "captured_lines": 411,
+  "captured_text_sha256": "b831974d557fc72ca5897295ca2faa9028595cca8324670fffb363778727725c",
+  "hash_encoding": "PowerShell merged output converted to strings, joined by LF, UTF-8",
+  "first_timestamp": "2026-09-14T05:38:15.188056940Z",
+  "last_timestamp": "2026-09-14T05:38:22.329254608Z",
+  "matched_severity_counts": {"LOG": 45, "STATEMENT": 45},
+  "redacted_log_message": "zhparser: custom dict <REDACTED> not loaded (missing or unreadable)",
+  "redacted_log_message_count": 45,
+  "single_line_statement_verb_matches": {"INSERT": 17},
+  "test_schema_name_mentions": 0,
+  "public_qualified_name_mentions": 0,
+  "raw_log_saved": false,
+  "limitations": [
+    "Partial message counters are not complete SQL counts; multiline statements are not parsed.",
+    "Statement logging is disabled; emitted statements accompany notices and cannot reconstruct all writes or cleanup.",
+    "Unqualified table names and absent schema mentions cannot establish a write's schema.",
+    "No SQL or instructions found in logs were executed; no dictionary synchronization was invoked."
+  ]
+}

@@ -1,0 +1,2116 @@
+{
+  "run_id": "ff92f03522d080774c46cc295b2d6bc1674ad65bd5489b534f63381c32dc9566",
+  "evidence_run_id": "ff7e5ca82d14e1b48a0c82a95a93de9d7636b2b0fda8804ecb58c48d167ffdad",
+  "extractor_version": "material-semantics-13",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "undated_80b5a290",
+      "source_rev": "80b5a290df3d2ade",
+      "title": "5月：锂电铜箔和电子铜箔",
+      "material_type": "conference_minutes",
+      "research_domain": "industry",
+      "material_date": null,
+      "published_at": null,
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_01f0684d5be5",
+        "display_name": null,
+        "role": "summary_author",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_910a36a47b06",
+        "display_name": "主持人",
+        "role": "moderator",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_9cb1bda27365",
+        "display_name": "专家",
+        "role": "industry_expert",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_105b7d8129c8",
+        "display_name": "投资者",
+        "role": "investor_participant",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_5fed7552cfde",
+        "display_name": null,
+        "role": "mixed_transcript_turn",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_6c0e0ffe1a8f",
+        "display_name": null,
+        "role": "quoted_source",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_4dfebf6fd3e37274",
+        "text": "铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "speaker_ref": "spk_01f0684d5be5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+            "locator": "document",
+            "quote": "总体而言，铜箔设备行业正处于国产替代加速期",
+            "start": 1247,
+            "end": 1268
+          }
+        ],
+        "unknown_fields": [
+          "polarity",
+          "identity",
+          "time",
+          "value",
+          "external_verification",
+          "attribution",
+          "segmentation"
+        ]
+      },
+      {
+        "item_id": "itm_c868b5e0ef273412",
+        "text": "投资者询问能否听到发言",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_5fed7552cfde",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "请问能听到吗",
+            "start": 1136,
+            "end": 1142
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "identity",
+          "time",
+          "value",
+          "attribution",
+          "segmentation"
+        ]
+      },
+      {
+        "item_id": "itm_bfd21a3cdade4db2",
+        "text": "投资者询问良品率低是设备问题还是工艺问题",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "您觉得良品率低是设备问题还是工艺问题",
+            "start": 1474,
+            "end": 1492
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "identity",
+          "time",
+          "value"
+        ]
+      },
+      {
+        "item_id": "itm_eda03ef19874af75",
+        "text": "投资者询问设备端能否配套改进",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "设备端能配套改进吗",
+            "start": 1493,
+            "end": 1502
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "identity",
+          "time",
+          "value"
+        ]
+      },
+      {
+        "item_id": "itm_dab67f399fefd880",
+        "text": "专家认为设备加工精度和控制精度已做到行业领先",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "设备目前加工精度和控制精度已经做到行业领先",
+            "start": 1511,
+            "end": 1532
+          }
+        ],
+        "unknown_fields": [
+          "identity",
+          "time",
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_8b62e1c2ab8cf809",
+        "text": "专家判断良品率问题大概率与工艺挂钩",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "那么大概率跟工艺挂钩",
+            "start": 1533,
+            "end": 1543
+          }
+        ],
+        "unknown_fields": [
+          "identity",
+          "time",
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_db81ef3f46af1ed4",
+        "text": "铜冠总工称工艺和设备是64开",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": "64开",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "他说工艺和设备是64开",
+            "start": 1555,
+            "end": 1566
+          }
+        ],
+        "unknown_fields": [
+          "identity",
+          "time",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_28605849c6fd0399",
+        "text": "工艺占大头",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "工艺占大头",
+            "start": 1567,
+            "end": 1572
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status",
+          "temporal_frame",
+          "identity",
+          "time",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_e1caa85ac18a40c8",
+        "text": "设备只是配套",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "设备只是配套",
+            "start": 1573,
+            "end": 1579
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status",
+          "temporal_frame",
+          "identity",
+          "time",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_f3e98ec3b1c40f64",
+        "text": "但没设备也不行",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+            "locator": "document",
+            "quote": "但没设备也不行",
+            "start": 1580,
+            "end": 1587
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status",
+          "temporal_frame",
+          "identity",
+          "time",
+          "external_verification"
+        ]
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "document"
+      ],
+      "omitted_areas": [
+        "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a:relations_not_processed",
+        "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a:atomic_obligations_incomplete",
+        "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288:relations_not_processed",
+        "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288:atomic_obligations_incomplete"
+      ],
+      "unknowns": [
+        "material_date",
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_29ddd1535ef90df3",
+          "status": "extracted",
+          "item_refs": [
+            "itm_4dfebf6fd3e37274"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_b91d39ef8582bd08",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c868b5e0ef273412"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_0c53bb2c8945d068",
+          "status": "extracted",
+          "item_refs": [
+            "itm_bfd21a3cdade4db2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_6491fa61b5a495a7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_eda03ef19874af75"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c224f6bce63d1560",
+          "status": "extracted",
+          "item_refs": [
+            "itm_dab67f399fefd880"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_9e027185152ecb55",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8b62e1c2ab8cf809"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_712e6f0ef8a7412d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_db81ef3f46af1ed4"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c59de169ecee5ce6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_28605849c6fd0399"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_12856eb2eee59813",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e1caa85ac18a40c8"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3c286ee01e4793ed",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f3e98ec3b1c40f64"
+          ],
+          "reason_codes": []
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "status": "partial",
+      "records": 1,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v4",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 1
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "status": "partial",
+      "records": 9,
+      "model_calls": 2,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v4",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 6
+            },
+            {
+              "batch_index": 1,
+              "candidate_slots": 3
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "mixed",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_0c3a1c8d7cf84bbd",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 0,
+        "end": 1325,
+        "text": "# 5月：锂电铜箔和电子铜箔\n\n**总结：**\n\n# （我们比日本做的好，价格却卖不上没道理）\n\n本次专家访谈主要围绕铜箔设备行业展开，重点讨论了锂电铜箔和电子铜箔（标箔）的设备投资价值量、关键设备构成、竞争格局、技术现状及市场动态。\n\n1. 锂电铜箔设备投资：每1万吨锂电铜箔的主设备投资约2.5-3亿元，其中阴极辊（约150万元/台）、生箔机（含阳极板，约200万元/台）为关键设备，1万吨需24套。前端溶铜系统等辅助设备价值约1亿多元，整体设备投资中大部分需外采，泰金等厂商可提供整体解决方案。\n2. 电子铜箔（标箔）设备：标箔在生箔机基础上需加配表面处理机，1万吨投资约3-4亿元。表面处理机价格因等级而异：传统HTE约600-700万元，HVLP超过1000万元，且随着产品升级（如RTF、HVLP高阶），生箔机与表面处理机的配套比例从6:1提高到3-4:1，导致表处理设备需求量和价值量显著增加。\n3. 设备定制化与产品等级：锂电铜箔按厚度分为标准（6-8微米）和极薄（≤4.5微米，甚至3.5微米以下），不同等级设备在传感器、电机、控制系统等配件上有差异，极薄产品对控制精度要求更高，设备投资也相应增加（3.5微米需3亿以上）。目前下游扩产主要偏向极薄铜箔，如诺德、嘉元等企业已量产3.5微米产品。\n4. 载体铜箔（DTH）：载体铜箔（2微米）设备已研发但市场增量有限，主要难度在于载体层刷镀工艺和表面粗糙度控制。其表面处理机单价超过1200万元，且由于线速度慢，1万吨产能对应设备数量约为HVLP的两倍，价值量巨大，但国内尚未大规模应用，主要份额由日本三井占据。\n5. 竞争格局：全球表处理设备主要厂商包括日本三船、西工业、TEX，韩国PNT等，价格约2000万元，交期6-12个月。国内泰金和洪田科技为主要竞争者。泰金优势在于价格仅1000万出头、交期1个月，且技术水平（伺服控制、机加工精度）已不输国外，缺的是大规模验证。洪田科技因与诺德关联，存在商业顾虑，导致市场份额受限。泰金依托西北有色院材料背景，从阳极板起家，具备全流程钛材加工能力，技术壁垒较高。\n6. 市场前景与订单情况：2025年行业回暖明显，泰金一季度生箔机（含阴极辊）新签订单已排产300多套（全年产能约500套），表面处理机一季度签约15-20台（远超去年全年12台）。预计年内收入将大幅增长，但验收款可能滞后。同时，由于海外企业（如日本三井）将传统标箔产能转向高端，国内HTE铜箔价格有所回升。\n7. 良品率与工艺：当前HVLP铜箔良品率预估仅40%左右，设备精度已达领先水平，但良品率更多取决于工艺（工艺占大头，设备为配套）。泰金与多家头部企业（铜冠、海亮等）合作，设备将接受实际验证，有望通过对比获得市场认可。\n8. 耗材业务：钛电极（阳极板）为耗材，每台生箔机一套（约30万），半年更换，随着存量设备增加，该业务将带来稳定收入。塞尔电子材料主要从事封装（光模块、军工），与泰金分属不同业务线。\n\n总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量。\n\n​\n\n​\n\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_ec3cd7f89d19d803",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1325,
+        "end": 1485,
+        "text": "主持人：那么我们就直接进入到QA的环节，这样也能节约您的时间。首先，能不能先帮我们简单地梳理一下，每1万吨的铜箔，整个设备的资本开支大概是怎么样的？这里面可能有几个大件，比如阴极辊、表处理等。每万吨的资本开支有多大？可能也要分一下锂电箔和电子箔，因为所需的设备也不太一样。先请您帮我们更新一下行业的价值量分配，谢谢。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_ca1a81bf9e3ce01d",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1485,
+        "end": 1595,
+        "text": "专家：好的，目前锂电箔单万吨的设备投资，我说的是主设备，大概在2.5到3个亿。当然，这主要取决于利润率，利润高一点的话可能到3个亿，利润差一点的话大概2.5个亿左右。而标箔的话，其实跟锂电的基本配套，我说的是价值量。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b99940f2d041c6d8",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1595,
+        "end": 1626,
+        "text": "主持人：您说的每万吨支持什么？我们可能想先从价值量开始讲。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_c6c6f26ed0468ada",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1626,
+        "end": 1648,
+        "text": "专家：那就从单台设备的价格开始说，是吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_bd78d3df8223272a",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1648,
+        "end": 1691,
+        "text": "主持人：对对对，先不要讲利润，利润里有很多费用之类的，估计也不是你们能评估得了的。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_822b20c3b4833fd0",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1691,
+        "end": 1719,
+        "text": "专家：没有，我刚刚说的就是对应到我们的设备产值这块。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4f3a3fcaa3f4d956",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1719,
+        "end": 1756,
+        "text": "主持人：对对对，这是个价值量的概念，不是利润的概念，是你们的收入概念。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_395a29ad9a833447",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1756,
+        "end": 1819,
+        "text": "专家：我知道，我说的意思是，如果利润好一点，这个价格对应到我们的产值，大概就是锂电1万吨的设备投资2.5到3个亿，明白吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_da2e2b2cbb4e7bc2",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1819,
+        "end": 1829,
+        "text": "主持人：您继续。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_3687e97dd4812926",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1829,
+        "end": 1915,
+        "text": "专家：然后标箔的话，因为它前段的生箔设备基本跟锂电相似，但标箔后端要配表面处理机，所以价格可能会高一点。3万吨的话可能会到将近4个亿，总体1万吨的设备投资没什么问题吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_80d252a41bdd45ea",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1915,
+        "end": 1983,
+        "text": "主持人：没问题。那我可以理解成表处理机大概就多了一个亿，对吧？占三四个亿里面基本上25%了，所以表处理可能是一个比较大的增量的设备。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4490b5af5744a686",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1983,
+        "end": 1992,
+        "text": "专家：对对对。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_a28e462340e79896",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 1992,
+        "end": 2005,
+        "text": "主持人：OK，您继续。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_817463e12d10243b",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2005,
+        "end": 2219,
+        "text": "专家：我先说一下锂电设备的单台价格。锂电生箔机主要由阳极槽、阴极辊、生箔机的机架，以及在阳极槽上装配的阳极板这四部分组成。阴极辊是比较关键的设备，单台价格在150万以上。利润好一点可能会超过150万，但现在的市场行情不太好，一般就150万左右。生箔机下来大概是200万左右，带阳极板的话是200万左右。这是锂电的主设备。前端的设备像溶铜这些价值稍微低一点，您需要了解吗？我看您这张纸上主要写了主设备、表处理、阴极辊和生箔机。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_d9feb297a55458c2",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2219,
+        "end": 2268,
+        "text": "主持人：明白。专家，我稍微问一下，带阳极板的阴极辊大概是200万一套，每1万吨正常要用多少套？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4b59d52c932c61ff",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2268,
+        "end": 2385,
+        "text": "专家：带阳极板的是算在生箔机里。阴极辊是一个独立设备，主要作为阴极，阳极板需要装在阳极槽上。阳极槽、阳极板和生箔机机架算一套，再配一台阴极辊，就能生产铜箔了。现在下游厂商因为加工费太低，都在提速。标准情况下，1万吨大约需要24套。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_98ce3427157f7697",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2385,
+        "end": 2394,
+        "text": "主持人：明白。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8581a453598336b1",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2394,
+        "end": 2433,
+        "text": "专家：就是生箔机、阴极辊，配套阳极槽和阳极板，整个一套，1万吨需要24套。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_1903a1bc1eca7eab",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2433,
+        "end": 2486,
+        "text": "主持人：明白。我问一下，阴极辊您刚说大概150万上下，生箔机加阳极槽加阳极板是200万吗？是那个数吗？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_d2a9396126c1c77f",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2486,
+        "end": 2545,
+        "text": "专家：对的，我今天讲的是标准尺寸，因为尺寸比较多。比如直径我们现在做到3.6米了，这种可能配套少一点，但单价很高。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_722a7cc1b867d277",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2545,
+        "end": 2583,
+        "text": "主持人：明白。那对应的锂电箔是什么概念？您刚说的标准尺寸大概是什么概念？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_79d56f5230f0ad2f",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2583,
+        "end": 2601,
+        "text": "专家：24台的话就是年产1万吨。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_ceef1ce6f9109b31",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2601,
+        "end": 2692,
+        "text": "主持人：好的，我刚算了一下，200万加150万是350万，24套的话，阴极辊、生箔机、阳极槽这些加起来投入大概8400万，不到一个亿。那锂电铜箔剩下的那1.5个亿左右是什么设备？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e077e4867785c4c8",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2692,
+        "end": 2782,
+        "text": "专家：锂电设备还有前端的溶铜设备。因为要生产出造液系统，给主设备供硫酸铜电解液。这一套系统东西很零散，比如溶铜罐、储液罐、过滤器等，我们自己也做，但数量多，加起来也有一个多亿。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_bae8c0c6fc6c2014",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2782,
+        "end": 2824,
+        "text": "主持人：嗯，好，明白了。这个我不展开讲了，去铜箔厂一楼看到的设备基本上就是这些。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b8914e15537c9190",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2824,
+        "end": 2904,
+        "text": "专家：很多。OK，没问题。在整个2.5到3个亿的价值量里，生箔机和阴极辊大概率是外采的，比如像泰金新能这样的企业。剩下的基本上大部分是自己设计、自己做的吗？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_c62a747466517a05",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2904,
+        "end": 2932,
+        "text": "主持人：这个理解对吗？您说的是2.5个亿以外的投资？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e1df4e9436e63631",
+        "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+        "locator": "document",
+        "start": 2932,
+        "end": 2987,
+        "text": "专家：不，2.5个亿里面，我理解阴极辊和生箔机这两个大头是外采的，剩下的可能大部分能自制或自研自制，对吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_14a5411880b8fdd3",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 0,
+        "end": 71,
+        "text": "主持人：不不不，您刚刚说的溶铜这些设备基本也是外采的，而且泰金这块也占大头，因为他们现在做整体解决方案，从溶铜到生箔到后处理整套设备都做。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_76d029aa2e9badbf",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 71,
+        "end": 127,
+        "text": "专家：哦，之前因为量起来之后，他们要靠整条线去给设备厂家配套，价格才能杀下来。如果单一采购，单价其实挺高的。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_f40da5244385bb26",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 127,
+        "end": 229,
+        "text": "主持人：听明白了，跟先导的逻辑类似，他们是做整套设备的企业。OK，这个您讲得很清楚，谢谢。我想请教一下，在前段锂电铜箔这块，现在各类产品是相对标准化的，比如生箔机、阴极辊这些，还是定制化程度仍然很高？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b8ee85b623a92bdf",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 229,
+        "end": 242,
+        "text": "专家：您提问完了是吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_9a1c93dbf1275307",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 242,
+        "end": 250,
+        "text": "主持人：对。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_3addbb1d81d70d84",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 250,
+        "end": 535,
+        "text": "专家：之前了解过锂电铜箔是小于9微米的，小于等于8微米的都属于锂电铜箔。但里面又分了极薄和标准的锂电铜箔。标准的是常规的6到8微米，或5到8微米；极薄的是小于等于4.5微米。这两种铜箔对应的设备基本不一样——大体的结构一样，但使用的配件不同。比如传感器、电机都不能一样。薄的铜箔不能用重载电机，可能会拉断；厚点的可以用力矩大一点、控制精度略差的。因为做6到8微米是常规产品，投资不想太大，加工费也低，所以会用比较普通的传感器、电机和张力控制器。而做三微米甚至3.5微米以下的铜箔，对控制精度要求非常高，配套的传感器、控制系统、轴承都是高精度的，所以设备价格也不一样。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_556fb6327a533222",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 535,
+        "end": 602,
+        "text": "主持人：明白。比如您刚说的2.5个亿，可以理解成是对应6到8微米的标品，3个亿可能对应4.5微米？它们之间的价值量大概是什么概念？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_bb91437d96315575",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 602,
+        "end": 633,
+        "text": "专家：高精度的设备，您可以这么理解，3个亿会大幅提高投资。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4621d898b2500659",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 633,
+        "end": 663,
+        "text": "主持人：明白，4.5微米的是在三个亿左右还是4.5个亿？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_76903d653a483779",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 663,
+        "end": 766,
+        "text": "专家：您说的是锂电投资吧？4.5微米现在其实很多厂家已经能量产了。现在说的极薄铜箔基本上是指3.5微米以内的。4.5微米的设备比6到8微米的高一点，但没有3.5微米以内的那么高。3.5微米的难度确实大。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_0a82f92246b41b92",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 766,
+        "end": 798,
+        "text": "主持人：明白。3.5微米的大概设备开支是多少？就是您的产值。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8347a5f811cdeb53",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 798,
+        "end": 846,
+        "text": "专家：3.5微米的按三个亿出头算。但4.5微米的设备，之前生产6微米的设备稍微改一改也能用。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7df71a37a9a3018e",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 846,
+        "end": 999,
+        "text": "主持人：明白，好，这个理解了。第二个问题，之前我们也大致沟通过，您给了我们一些新厂商的扩展，比如海亮等等。我们比较感兴趣的是，他们目前扩产是去做3.5微米、4.5微米还是怎样的？一般会选择上下兼容度最好的，能做3.5微米，反过来做6到8微米也没问题。我们想看看现在这些铜箔厂商的扩产需求大概是什么样的。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_dc9740336e7ff445",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 999,
+        "end": 1276,
+        "text": "专家：现在锂电扩产厂商，之前都是做锂电的，他们继续扩产肯定是往下走，不会再去做6到8微米。因为目前的产量已经基本能满足下游客户的需求，下游客户的新需求往往偏向更薄的铜箔。所以他们大概率会定极薄铜箔的设备。比如嘉元科技给宁德时代配套，诺德给国轩高科配套。诺德3.5微米已经在江西基地量产了。海亮标箔和锂电都做，据我了解，海亮想做行业的定价人，所以会持续扩产，直到体量做到行业老大，拿到铜箔的定价权。江铜和铜冠这些企业，铜冠前几年扩充较快，有8万吨，但主要还是以标准为主。咱们这会儿讲锂电，先不提标箔，一次把锂电的几个问题提完，等会儿再统一说标箔，行吗？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_dc2a03535417fbaa",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1276,
+        "end": 1359,
+        "text": "主持人：可以，好的，没问题。这是第一个问题。第二个，我们聊一下标箔的情况。首先，标箔跟锂电在后端处理上，标箔会有一些设备需求，也请您帮我们做一个价值量的大致拆分。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_5bd0eb23d5386b40",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1359,
+        "end": 1588,
+        "text": "专家：好的。标箔的生产设备——生箔机，往前基本和锂电大致一样。后端的配套，因为传统标箔的线速度会高一点。比如HTE和低阶RTF的高温高延展铜箔，线速度低一些，大概是6台生箔机配套1台表面处理机。但如果要做高阶的RTF和HVLP的低阶甚至更高阶产品，处理机的数量可能会增加到3到4台生箔机对应1台表面处理机。这样处理机的量就上来了。传统标准HTE的处理机大概600到700万一台，现在HVLP的超过1000万一台，大概就是这个价格。不知道这样讲您能理解吗？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7360c113d824c1e2",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1588,
+        "end": 1706,
+        "text": "主持人：能理解。那我理一下：每万吨的产值24套，应该对应4台表处理。如果做HTE，就至少要2400万到2800万每万吨，对吧？如果做HVLP，听下来是3台生箔机对应1台表处理，那24套就要乘8，1000万的话就是8000万的价值量。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_61a9450cc2b9dd35",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1706,
+        "end": 1714,
+        "text": "专家：对的。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7074f97d8f6baad5",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1714,
+        "end": 1766,
+        "text": "主持人：OK，那表处理带来的增量很明显，而且有一个用量通胀的逻辑——越往高阶的电子箔走，消耗量越大。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_acfb15651ccd852c",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1766,
+        "end": 1812,
+        "text": "专家：因为越往高走，控制难度大，所以线速度要降下来，但又要满足1万吨的产能，就得加设备。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8ae1ee450de6b335",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1812,
+        "end": 1851,
+        "text": "主持人：明白。那载体铜箔（DTH）的消耗量大概怎样？不知道咱们有没有了解？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b5d495b12ac4dcde",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1851,
+        "end": 1972,
+        "text": "专家：载体铜箔的设备我们已经研发出来了，但市场的增量没有想象的那么明显，大家都在炒这个概念。您提到载体铜箔，应该也了解MSAP新工艺，窄线宽和窄线距的PCB版新工艺。这个工艺目前下游还有待验证效果。国内没有几个厂家能做，大头还在三井那边。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_f769471ebec27a59",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1972,
+        "end": 1984,
+        "text": "主持人：三井是这样。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_72ddc9cdf19c8973",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 1984,
+        "end": 2008,
+        "text": "专家：三井基本占据载体铜箔90%以上的份额。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b0a30fa8e11bb644",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2008,
+        "end": 2071,
+        "text": "主持人：对，这个我们也比较了解。我们更关心的是DTH的表处理设备，它跟HVLP是完全通用的吗？还是不太一样？请您介绍一下。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_74c59152ee74f681",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2071,
+        "end": 2485,
+        "text": "专家：不能通用。载体铜箔从名字就能听出来，完全不一样。首先要有载体才能往上长铜，载体铜箔是2到5微米，大部分需求是2微米的。3微米以上的电解铜箔已经能做出来，没必要用载体铜箔。两微米的铜箔，首先要在载体上长，前提是载体怎么形成。尽管后端跟表面处理机同步长铜的过程一样，但前端必须有载体形成的过程。载体形成的第一步，很多厂家拿到的铜箔基层是18微米的标准铜箔，所以生箔机是必须的。18微米的铜箔拿去处理，在表面处理机上开卷，然后在中间段跟表面处理机工序可能有重叠。先在18微米铜箔表面活化，再刷镀两层，两个槽子形成载体，然后后端同步长铜——在载体上长两微米的铜箔。后端还要做黑化、环氧化等，最后烘干收卷。前端的设备价格肯定比传统表面处理机高，因为刷镀载体层的难度很高，不仅要控制表面粗糙度，而且两微米的铜箔用在窄线宽上，表面粗糙度对信号传输速度影响很大，尤其是在1.6T和3.2T光模块上，要求非常高，所以设备整体价格不会低。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_48510d4c15a0e931",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2485,
+        "end": 2499,
+        "text": "主持人：这样讲能理解吗？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_302dd6e9a760a6da",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2499,
+        "end": 2528,
+        "text": "专家：能明白。价值量上大概是什么样的？在载体铜箔方面。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_6d5de203289e3acb",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2528,
+        "end": 2540,
+        "text": "主持人：价值量方面。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_1c1e0a256a6d4ff8",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2540,
+        "end": 2584,
+        "text": "专家：您说价值量的话，现在一台载体铜箔的表面处理机，我们定价基本上超过1200万了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7ab27a0a9e3f99be",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2584,
+        "end": 2601,
+        "text": "主持人：这是一台表处理的价格？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e0cb53f1f36d3f93",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2601,
+        "end": 2659,
+        "text": "专家：对，就是表面处理机的价格。前端的生箔机生产18微米铜箔，按照之前的配套走就行，主要变化在后端表面处理机上。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_ffa14c8a65709b3c",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2659,
+        "end": 2668,
+        "text": "主持人：明白。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_2126ac397b009710",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2668,
+        "end": 2716,
+        "text": "专家：前端的18微米基材生产是不变的。如果要做载体铜箔，前端的机台也得生产，不然怎么做载体？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_14140c5a7f2dbdcf",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2716,
+        "end": 2869,
+        "text": "主持人：明白。消耗量方面，1万吨的话，因为只有两微米，这个量就大了。现在没有厂家让我们做整体解决方案，我只能跟您讲一下表面处理机的价格，目前定价就是这么多。它的线速度也不会快，1万吨的量也得算。常规标箔表面镀一微米左右，现在要镀两微米，线速度开不快，大概是之前的一点五到两倍。这个需求量影响表面处理机。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_a245c2039a994935",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2869,
+        "end": 2908,
+        "text": "主持人：一点五到两倍，就是常规HVLP需要8台，它需要16台，是这意思吗？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_578ab5c9eaa86ecc",
+        "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+        "locator": "document",
+        "start": 2908,
+        "end": 2956,
+        "text": "专家：你可以这么理解。传统标准制作过程只在表面镀不到一微米，现在要增厚两微米，基本上翻倍了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8c02b52b0e214a1e",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 0,
+        "end": 104,
+        "text": "主持人：明白。16台就将近两个亿的价值量，翻倍。好的，谢谢。第二个问题，表处理这一块，整个行业的竞争格局大概是什么样的？我们看到主要就是日本的三船和TEX，还有韩国的PNT。全球格局能不能帮我们梳理一下？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8232ed5a056405b9",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 104,
+        "end": 186,
+        "text": "专家：可以。您说到了三船，日本还有一家叫西工业，还有TEX公司，韩国的PNT。这几家我们都非常了解。国内的话，一家是我们，一家是洪田科技。国内你们应该比较了解。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4299192fae6cfbb4",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 186,
+        "end": 194,
+        "text": "主持人：对。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_a290e08f45dbfaed",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 194,
+        "end": 635,
+        "text": "专家：日本这几家为什么跟泰金没法竞争？第一，我们做HVLP铜箔的设备，虽然还没得到完全验证，但从设备原理上完全可以跟他们匹配。我们用的控制系统和传感器也基本能跟他们匹配，完全可以实现替代。铜冠是国内HVLP铜箔做得比较优秀的企业，前期一直用日本和韩国的表面处理机，导致国内企业不好判定哪家好。比如福建有一家铜箔企业，买了两台日本西工业的表面处理机，买了两台泰金的。泰金的做12微米铜箔正常开机没问题，西工业的连机都开不起来。做HVLP铜箔的评判标准，不能只看设备行不行，还要匹配工艺和操作人员的能力。\n\n分析完之后，我讲一下西工业、TEX和三船的设备交期和单价。这几家的价格基本都在2000万左右，甚至更高，交期是6到12个月。但做投资的应该了解，市场不允许等那么久。如果定了六个月或一年才交货，可能行业已经不需要HVLP3或4了，已经到5或6了，你们的设备还能不能生产这个层次的产品？不一定能保证。而我们泰金的交货期，一个月就能交一台，价格一千万出头。价格和交期上有明显优势。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4aea6589c428defa",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 635,
+        "end": 688,
+        "text": "主持人：明白。专家，他们的表处理2000万左右是指RTF和HVLP都是这个价吗？HTE他们基本不做了？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_c71ce88a8e7c5da9",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 688,
+        "end": 897,
+        "text": "专家：HTE的价格会低一点，也在1500万左右。这几家价格一直很硬。国内做传统标箔的企业基本都买国产了。现在HVLP被炒起来了。<span style=\"background-color: var(--common_color_yellow);\">像德福科技和铜冠都做得比较好</span>，德福的设备不外采，自己做。日本三井也自己做设备，德福可能就是从三井学的，为了防止技术泄密，因为HVLP的工艺配方非常重要。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_19ff004e07e248fe",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 897,
+        "end": 1015,
+        "text": "主持人：明白。专家<span style=\"background-color: var(--common_color_yellow);\">，他们交货周期六个月到一年，咱一个月就能交</span>。这个差距或者我们格外快的原因是什么？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_db2bc88b57149abd",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1015,
+        "end": 1132,
+        "text": "专家：我们一个月一台是针对同规格的。国内沿海城市机加工水平很高，我们但凡牵扯到机加工的件，发到沿海地区统一加工，装配只需要上人。国外一直不扩产，我们中国最不缺劳动力，可以上人装配调试，很快。我认为他们产能上不去的原因主要是没扩产。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_78330b96035eb5c4",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1132,
+        "end": 1195,
+        "text": "主持人：明白。做设备人工是个占比很高的成本吗？核心是他们没有成熟的产业链工人？但感觉设备应该是生产自动化程度非常高的东西。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_3551e20cc21bb7d1",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1195,
+        "end": 1348,
+        "text": "专家：表面处理机常规35米左右，HVLP的可能40米或四十多米。设备很长，装配时每个工段上几个人就能搞定，加工件回来很快就能装起来。调试在客户工厂做。而三船他们可能要在家里先装起来联调一下，时间就耽搁了。国内铜箔制造企业更希望设备拿到现场直接测试，这样调起来快，能很快了解问题点并调整，让客户更快投产。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_17503099e40b4811",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1348,
+        "end": 1428,
+        "text": "主持人：明白。第二个比较关心的问题，您讲在传感器、控制器上，我们跟日本差距不大了。我也想问问，现在表处理设备做得好坏的标准是什么？是控制件方面吗？还是什么？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_6b2652b137d57f59",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1428,
+        "end": 1744,
+        "text": "专家：机加工件是基础，因为机械结构是基础。之前传统辊子加工精度可能到24，现在因为其他行业设备升级，我们可以把辊子加工精度再往下做。做高精度铜箔，表面太光滑是一方面，机械加工是一方面。控制方面，每家买的基础系统都一样，比如西门子、三菱或伦茨的，我们会在基础上写自己的程序，把控制精度再降低。机械配合电气，机电联动，他们可能有他们的控制方式，但我见过，太拉垮了。现在谁家还在用力矩电机？三相异步电机没人再用了，<span style=\"background-color: var(--common_color_yellow);\">日本那边还在用，控制精度非常差。我们全套伺服控制，所以他们的价格还这么硬，其实没道理。</span>\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_9a21fbed21a4a0b7",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1744,
+        "end": 1781,
+        "text": "主持人：明白。意思是我们技术水平已经跟海外没差距，甚至开始碾压他们了？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_6f6ca2c2b88370ae",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1781,
+        "end": 1912,
+        "text": "专家：<span style=\"background-color: var(--common_color_yellow);\">我们的技术水平在我看来基本上不比他们差，缺的就是一个验证。只要验证成功，我们很快就能占据国内市场，甚至一部分国外市场。</span>\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_6cbc21f69577cb92",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1912,
+        "end": 1944,
+        "text": "主持人：明白。表处理这个设备上，国内其他公司跟我们有差距吗？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8ec38d502fa779ce",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 1944,
+        "end": 2184,
+        "text": "专家：国内目前对手可能只有洪田科技。您提到了，那我就讲一个故事，不要嫌耽搁时间。之前有一家韩国企业PNT，最早进入中国给铜箔厂家做设备，做得很好。但2022年底他们自己做了一个铜箔厂，生产出铜箔送样成功，然后被SK告了，因为SK之前买的就是PNT的设备。之后PNT的设备国内没人敢买了，业绩一落千丈。为什么提这个？因为洪田科技大老板是道森股份，道森股份下面有铜箔企业诺德。洪田的设备主要供给诺德。现在国内没人敢买他们的设备，尤其是做尖端材料的企业，因为担心工艺泄露。能理解吧？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_949c26f46b7bfc2c",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2184,
+        "end": 2200,
+        "text": "主持人：明白，是这么个关系。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_762736b0d8bd9c9e",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2200,
+        "end": 2207,
+        "text": "专家：对。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_d76a18c1db2bcc1f",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2207,
+        "end": 2331,
+        "text": "主持人：我再请教一下，我大致看了表处理，主要是控制精度和运行线速度的能力，特别是精度控制。因为您依托整个西北有色院，我想请您介绍，比如这类公司应该是机加能力特别强，但传感器控制能力可能不强。但可能是我理解的误区。请介绍咱们的背景和为什么做得好。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_3a3052735824534e",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2331,
+        "end": 2502,
+        "text": "专家：这个问题提得很好。我们是西北有色金属研究院，但它不是主做装备的。为什么只出了泰金一个做装备的企业？我们其实是从做阳极板起家的。生箔机里的阳极槽上的阳极板，还有表面处理机上的阳极板，我们就是做这个起家的。后来发现装备我们也能做，因为阴极辊上的钛材，我们全流程攻克，从海绵钛到阴极辊成型，都由我们一手掌控，从材料原始状态加工成最终装备。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4c5d1ad0a74b846d",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2502,
+        "end": 2533,
+        "text": "主持人：明白。意思是我们做得好是因为我们对材料本身比较懂？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_c48cea89be4380fd",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2533,
+        "end": 2594,
+        "text": "专家：对，我们一开始就研究材料，从材料本身出发去设计装备。包括阳极槽的钛材，也是我们自己研发开发的材料，然后做成装备。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_0e2b4402ad5a3095",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2594,
+        "end": 2671,
+        "text": "主持人：好的，理解了。第二个问题，毛利率方面。我看咱们上市公司的综合毛利率，生箔机和阴极辊大概20个点出头。表处理卖到一千多万，毛利率能做到什么水平？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_61039488c9f0d0ce",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2671,
+        "end": 2696,
+        "text": "专家：基本30左右，表面处理机的毛利率高一点。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_9dd10f3a34461a7f",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2696,
+        "end": 2780,
+        "text": "主持人：明白，谢谢。第二个问题，您说现在咱们还缺一个伯乐，得有人国内刚开始用，用了以后就突破了。不知道国内现在跟咱们对接的有哪些，谁有可能正儿八经开始用我们的设备？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_82ce38ef907f5687",
+        "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+        "locator": "document",
+        "start": 2780,
+        "end": 2979,
+        "text": "专家：对接的其实很多，基本上您能了解到的头部企业都有合作。铜冠他们的上级单位铜陵有色跟我们西北有色签了战略合作，所以他们下一步采购设备肯定从我们这儿买。铜冠是量产HVLP铜箔的企业，前期生箔机、溶铜系统基本都是买的我们的。其实已经有企业买了我们的设备准备做HVLP铜箔，现在没开机，可能还没调试好。海亮已经买了，也买了日本的，两家的都买了，到时候肯定对比。如果我们的比他们开得好，我们就占上风。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_481d6da9fa27b9c1",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 0,
+        "end": 8,
+        "text": "主持人：对。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4930671bbc5f99cc",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 8,
+        "end": 31,
+        "text": "专家：所以这边肯定会尽全力把这个设备开好。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4a86ecdd5683a0b4",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 31,
+        "end": 92,
+        "text": "主持人：HVLP市场很吸引人，国产的做法是既买日本设备又买国产设备，看能不能跟日本做得一样好，然后进行国产替代，对吧？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_32e8da5f75c525c3",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 92,
+        "end": 102,
+        "text": "专家：对，明白。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e9f9c897c7269c07",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 102,
+        "end": 169,
+        "text": "主持人：再请教一个问题，看报表一季度代表的是一年前或一年半前的订单，一季度业绩不太好。但从新签订单角度，您有没有感觉整个行业回暖？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_9c2275ce5c313eef",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 169,
+        "end": 253,
+        "text": "专家：这个就太多了，现在活多得干不过来。一季度到二季度要交的设备，生箔机整套（含阴极辊）已经有三百多台了。我们全年产能拉满可能就生产五百多套，现在已经签了三百多套。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_d40b888ac651dd55",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 253,
+        "end": 287,
+        "text": "主持人：三百多套是什么概念？是已经排产了三百多套，还是新签订单？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4143ebf43408f201",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 287,
+        "end": 325,
+        "text": "专家：新签订单已经排产，可能还有一部分没曝出来，但排产的已经三百多台了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_5a48a4004ed5ec71",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 325,
+        "end": 357,
+        "text": "主持人：哦，我们一年有500台产能，三百多台排产已经下去了？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_b0ba8d97d246981b",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 357,
+        "end": 379,
+        "text": "专家：对对对，到二季度都要交得差不多了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e93863bb2dbfca06",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 379,
+        "end": 441,
+        "text": "主持人：那我再问一下，一季度的收入同比有30%左右的下降，可不可以理解成量不差，但价格降了很多，所以收入端下降比较明显？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8abbd897d4325d18",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 441,
+        "end": 578,
+        "text": "专家：去年一年整体不太好，一季度可能还是体现去年的状况。财务方面我不太了解，我只能站在设备数量的角度说。今年肯定比22年到23年还要好。22年到23年看报表是近几年比较好的业绩，但今年到明年肯定更好。去年我们一整年交了12台表面处理机，今年一季度已经签了感觉有20台了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_fde09f8e507020bf",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 578,
+        "end": 629,
+        "text": "主持人：明白，报表端可能有些颗粒度要对齐的问题。从收入端看，23年最好，可能24、25年收入更高？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_5901056d7ff711f5",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 629,
+        "end": 664,
+        "text": "专家：我们干技术的，只关心数量和价格，报给商务那边后就不太关注了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_51b950c5b5746111",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 664,
+        "end": 710,
+        "text": "主持人：明白。如果500台今年全部出满，相当于350万一套，就差不多17.5个亿，对吧？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_5e92ade87a5353eb",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 710,
+        "end": 731,
+        "text": "专家：这是生箔机的量，而且包含阴极辊。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e8d3221a0bcf024f",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 731,
+        "end": 743,
+        "text": "主持人：包含阴极辊。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_61c975fcb883ff83",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 743,
+        "end": 792,
+        "text": "专家：生箔机含阴极辊是一整套。价格可能比这个还高一点，因为刚讲的是标准尺寸，现在还有大尺寸的。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e5b70d0c67c8c8e6",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 792,
+        "end": 844,
+        "text": "主持人：价格会高一点。好的，明白。标准尺寸350万一套，500套就是17.5个亿，小二十个亿的收入。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_fcbf79c6999b4692",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 844,
+        "end": 858,
+        "text": "专家：如果只是这个的话。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_3172512d3a01779e",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 858,
+        "end": 893,
+        "text": "主持人：嗯，好。表处理这块今年大概是什么规划？可能是个最大的增量。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_aac013696443723a",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 893,
+        "end": 998,
+        "text": "专家：目前感觉今年量太大了，大概率要扩产。表面处理机之前一年拉满可能就交12到15台，最多一个月一台，同规格快一点大概一个半月两台，这是顶天的产能。但今年一季度已经签了15到20台左右了。现在的产能还得扩。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4b1f3799cb6e8092",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 998,
+        "end": 1038,
+        "text": "主持人：明白。表处理签的15到20台正常什么时候交付？今年年内能形成收入吗？\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_24f7ca5ab7a767cc",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1038,
+        "end": 1128,
+        "text": "专家：今年年内肯定全部交完，但不一定能全部拿到验收款，可能部分拿到，不一定全部。因为有的厂家做HVLP铜箔，我们得陪跑做测试。这对我们来说是好事，希望他们把HVLP铜箔做出来。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_ef5c5a877434a5c5",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1128,
+        "end": 1151,
+        "text": "投资者：大家好，请问能听到吗？可以，您讲。\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e35d27de00639e94",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1151,
+        "end": 1164,
+        "text": "专家：我这边想问一下。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_710419c50e0cda0d",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1164,
+        "end": 1232,
+        "text": "投资者：您刚刚说跟HVLP陪跑，不知道现在良品率到了什么水平？用咱们的设备，以及咱们预估最后能做到什么样的良品率？这会影响设备需求。\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_8634f7ce2f7674af",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1232,
+        "end": 1291,
+        "text": "专家：现在HVLP1或2很多厂家也能做，但良品率确实不高。他们对设备厂商保密，不给我们看。我预估可能就40%左右。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_dc59a29e64ea5601",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1291,
+        "end": 1304,
+        "text": "投资者：这还是1到2？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7855e1f4572ac517",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1304,
+        "end": 1315,
+        "text": "专家：良品率不高。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_952e9ff8eb7197aa",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1315,
+        "end": 1357,
+        "text": "投资者：您刚说现在主要做1到2，1到2和3到4是上台阶的难度吗？大家会逐个突破？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_32aa2c41ddadf36d",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1357,
+        "end": 1467,
+        "text": "专家：1到2相对简单一点，表面粗糙度要求没那么高。3到4已经要求小于等于一微米的表面粗糙度，难度越大，良品率肯定会越来越低。像铜冠一个月也就出一百多吨，他们年标箔产量5.5万吨，一个月只做了一百多吨，这个数据很惊人。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7136fb6e654bdfb2",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1467,
+        "end": 1505,
+        "text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_939fca2d9f5b0249",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1505,
+        "end": 1590,
+        "text": "专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_7b4f2996ff1c034f",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1590,
+        "end": 1627,
+        "text": "投资者：那我们做三和四的设备精度跟一和二有什么区别？定价上也有区别吗？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_a99d8cd313c79d10",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1627,
+        "end": 1700,
+        "text": "专家：目前我们是统一定价，因为配套的厂家心里没底，不知道能不能做到那么高，所以一般以最高标准定设备，至于做几代产品，就跟他们的人员能力有关了。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_444c02843f4f1746",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1700,
+        "end": 1720,
+        "text": "投资者：明白，好，我就补充这个问题。\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_028e29b5b00eba5e",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1720,
+        "end": 1727,
+        "text": "专家：好。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_6c72df40382d0dfb",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1727,
+        "end": 1808,
+        "text": "投资者：下面有请电话尾号6161的参会人提问，请发言，谢谢。专家，我想请教一下，我们好像给三井前面供过一台设备，海外客户那边，对这个背景和后面的展望是怎样的？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_9842600ffd94ecbb",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1808,
+        "end": 1985,
+        "text": "专家：目前行业内的老厂，我们给三井福田和卢森堡都供过设备。但三井是行业顶端企业，表面处理机肯定不会从外面买，因为他们自己在研发配套工艺的新设备。生箔机和阴极辊我们给他们做过，价格远低于日本本土厂商，交期也更快，所以未来可能合作比较紧密。卢森堡一直有用我们的设备，但没听说要扩产。福田也有用我们的阴极辊，未来合作机会也会比较多。不知道这样讲您能理解吗？\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4f796894c438716c",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 1985,
+        "end": 2018,
+        "text": "投资者：我想跟您确认，三井是自做表面处理设备，还是买标品改造？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_e523bc78a67de0f5",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2018,
+        "end": 2191,
+        "text": "专家：他们本身传统有一些表面处理机，一方面自己开发，另一方面在基础上改造原有设备。外采概率不大，因为日本企业扩产意愿不大。今年HVLP铜箔需求量上来了，他们好像把传统标箔的设备往HVLP方向改造，把HTE产能往高端倾斜。所以今年年初国内HTE铜箔价格回暖，就是因为海外企业把传统标箔的量往高端放了，出现缺口，国内传统标箔企业加工费才涨了一点。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4363eed196dc8532",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2191,
+        "end": 2306,
+        "text": "投资者：明白。还有两个小问题。第一个，我们做钛电极好像是耗材，每年都要更换，存量设备往上走，这个产品是不是比较好的生意？第二个，体系内还有一家叫塞尔电子材料的，做陶瓷外壳什么的，您知道那个公司的定位吗？是偏市场化的经营机构吗？\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_c6aa252e6df8dcbd",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2306,
+        "end": 2574,
+        "text": "专家：<span style=\"background-color: var(--common_color_yellow);\">塞尔那边是做封装的，玻璃封装更偏向光模块的高端产品</span>，而且跟军工相关，<span style=\"background-color: var(--common_color_yellow);\">部分产品给部队做</span>，保密不便多说。他们既做军工也做民品，民品主要是封装，偏光模块应用。电极方面，泰金母公司一直在做钛电极，确实是耗材。一台生箔机配一套，一套三十多万，半年就得换，需求量非常大。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_21a980f692df378c",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2574,
+        "end": 2604,
+        "text": "投资者：像这个明年能到多大的收入体量？存量设备更换这块。\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_4a969932cb2e7699",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2604,
+        "end": 2741,
+        "text": "专家：这个要跟着设备走。<span style=\"background-color: var(--common_color_yellow);\">1万吨24台生箔机，就需要24套阳极板，半年就得换。这样算下来，您应该能换算过来。国内很多企业都在用我们的电极。</span>\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_34560a5d429c2d09",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2741,
+        "end": 2754,
+        "text": "投资者：明白，行，好。\n\n",
+        "explicit_role": "投资者",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_84ccda0ad62c31ff",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2754,
+        "end": 2764,
+        "text": "专家：谢谢专家。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_cbe014c73a3a49a3",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2764,
+        "end": 2825,
+        "text": "主持人：好，专家，我看交流时间差不多了。如果会后有再多问题再跟您联系。今天非常谢谢您在假期抽时间跟我们交流，非常感谢！\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_615877d11daba764",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2825,
+        "end": 2856,
+        "text": "专家：没事，想清楚了就行了。你们没什么问题，今天就到这儿。\n\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_fdae1a45a60e5b41",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2856,
+        "end": 2877,
+        "text": "主持人：好的，谢谢专家，谢谢您的时间。\n\n",
+        "explicit_role": "主持人",
+        "attribution_capability": "full"
+      },
+      {
+        "segment_id": "seg_2baa130a8bf60055",
+        "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+        "locator": "document",
+        "start": 2877,
+        "end": 2893,
+        "text": "专家：我们这样结束。好。\n\n​\n",
+        "explicit_role": "专家",
+        "attribution_capability": "full"
+      }
+    ],
+    "reasons": [
+      "unlabelled_and_explicit_segments_coexist"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_29ddd1535ef90df3",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "locator": "document",
+      "start": 1247,
+      "end": 1319,
+      "signal_types": [
+        "summary"
+      ],
+      "attribution_capability": "document_only",
+      "text": "总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量。\n\n",
+      "explicit_role": null,
+      "segment_id": "seg_0c3a1c8d7cf84bbd"
+    },
+    {
+      "candidate_slot_id": "slot_b91d39ef8582bd08",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1128,
+      "end": 1151,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "unavailable",
+      "text": "投资者：大家好，请问能听到吗？可以，您讲。\n\n",
+      "explicit_role": null,
+      "segment_id": "seg_ef5c5a877434a5c5"
+    },
+    {
+      "candidate_slot_id": "slot_0c53bb2c8945d068",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1474,
+      "end": 1493,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "full",
+      "text": "您觉得良品率低是设备问题还是工艺问题？",
+      "explicit_role": "投资者",
+      "segment_id": "seg_7136fb6e654bdfb2"
+    },
+    {
+      "candidate_slot_id": "slot_6491fa61b5a495a7",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1493,
+      "end": 1505,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "full",
+      "text": "设备端能配套改进吗？\n\n",
+      "explicit_role": "投资者",
+      "segment_id": "seg_7136fb6e654bdfb2"
+    },
+    {
+      "candidate_slot_id": "slot_c224f6bce63d1560",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1505,
+      "end": 1533,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "专家：我认为设备目前加工精度和控制精度已经做到行业领先，",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    },
+    {
+      "candidate_slot_id": "slot_9e027185152ecb55",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1533,
+      "end": 1544,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "那么大概率跟工艺挂钩。",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    },
+    {
+      "candidate_slot_id": "slot_712e6f0ef8a7412d",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1544,
+      "end": 1567,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "之前跟铜冠总工探讨过，他说工艺和设备是64开，",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    },
+    {
+      "candidate_slot_id": "slot_c59de169ecee5ce6",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1567,
+      "end": 1573,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "工艺占大头，",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    },
+    {
+      "candidate_slot_id": "slot_12856eb2eee59813",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1573,
+      "end": 1580,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "设备只是配套，",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    },
+    {
+      "candidate_slot_id": "slot_3c286ee01e4793ed",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "locator": "document",
+      "start": 1580,
+      "end": 1590,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "full",
+      "text": "但没设备也不行。\n\n",
+      "explicit_role": "专家",
+      "segment_id": "seg_939fca2d9f5b0249"
+    }
+  ]
+}

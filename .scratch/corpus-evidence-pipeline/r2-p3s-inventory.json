@@ -1,0 +1,484 @@
+{
+  "version": "r2-p3s-development-scope-review-1",
+  "split": "development",
+  "development_sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "source_paths_opened": [
+    "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+    "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+    "data/corpus/5月：锂电铜箔和电子铜箔.md"
+  ],
+  "holdout_source_paths_opened": 0,
+  "model_calls": 0,
+  "judge_calls": 0,
+  "postgres_access": 0,
+  "market_calls": 0,
+  "ingestion_runs": 0,
+  "sources": [
+    {
+      "sample_id": "dev-company-report",
+      "packets": 8,
+      "packet_kinds": {
+        "table": 7,
+        "prose": 1
+      },
+      "planned_packets": 8,
+      "unresolved_packets": 0,
+      "candidate_scopes": 17,
+      "unresolved_scopes": 0,
+      "scope_kinds": {
+        "table_row": 7,
+        "prose": 6,
+        "turn": 4
+      },
+      "source_chars": 3047,
+      "covered_chars": 3047,
+      "source_non_whitespace_chars": 2604,
+      "covered_non_whitespace_chars": 2604,
+      "context_edges": 9,
+      "clause_lattice_scopes": 10,
+      "table_scopes": 7,
+      "table_scopes_sent_to_clause_lattice": 0,
+      "clause_lattice_root_statuses": {
+        "planned": 10
+      },
+      "clause_lattice_nodes": 1778,
+      "clause_lattice_edges": 521,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packets": 1,
+      "packet_kinds": {
+        "prose": 1
+      },
+      "planned_packets": 1,
+      "unresolved_packets": 0,
+      "candidate_scopes": 5,
+      "unresolved_scopes": 0,
+      "scope_kinds": {
+        "prose": 4,
+        "heading_context": 1
+      },
+      "source_chars": 1508,
+      "covered_chars": 1508,
+      "source_non_whitespace_chars": 1394,
+      "covered_non_whitespace_chars": 1394,
+      "context_edges": 4,
+      "clause_lattice_scopes": 5,
+      "table_scopes": 0,
+      "table_scopes_sent_to_clause_lattice": 0,
+      "clause_lattice_root_statuses": {
+        "planned": 5
+      },
+      "clause_lattice_nodes": 1097,
+      "clause_lattice_edges": 309,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "packets": 1,
+      "packet_kinds": {
+        "prose": 1
+      },
+      "planned_packets": 1,
+      "unresolved_packets": 0,
+      "candidate_scopes": 3,
+      "unresolved_scopes": 0,
+      "scope_kinds": {
+        "prose": 3
+      },
+      "source_chars": 674,
+      "covered_chars": 674,
+      "source_non_whitespace_chars": 536,
+      "covered_non_whitespace_chars": 536,
+      "context_edges": 2,
+      "clause_lattice_scopes": 3,
+      "table_scopes": 0,
+      "table_scopes_sent_to_clause_lattice": 0,
+      "clause_lattice_root_statuses": {
+        "planned": 3
+      },
+      "clause_lattice_nodes": 122,
+      "clause_lattice_edges": 47,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packets": 4,
+      "packet_kinds": {
+        "prose": 4
+      },
+      "planned_packets": 4,
+      "unresolved_packets": 0,
+      "candidate_scopes": 40,
+      "unresolved_scopes": 0,
+      "scope_kinds": {
+        "prose": 28,
+        "turn": 12
+      },
+      "source_chars": 11815,
+      "covered_chars": 11815,
+      "source_non_whitespace_chars": 11479,
+      "covered_non_whitespace_chars": 11479,
+      "context_edges": 36,
+      "clause_lattice_scopes": 40,
+      "table_scopes": 0,
+      "table_scopes_sent_to_clause_lattice": 0,
+      "clause_lattice_root_statuses": {
+        "planned": 40
+      },
+      "clause_lattice_nodes": 8233,
+      "clause_lattice_edges": 2450,
+      "calls_authorized": 0
+    }
+  ],
+  "target_scope_review": [
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-company-outlook",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-eps-forecast",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-target-price",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-rating",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-macro",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-consumption",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-company-report",
+      "micro_scope_id": "micro-company-recommendation",
+      "target_id": "mc-risk-competition",
+      "status": "unique_scope",
+      "scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-bottom",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-high",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-long-odds",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-not-inflection",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-focus-balance",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-focus-spread",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-high-not-sell",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-future-trend",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-q-expansion",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-cycle",
+      "status": "unique_scope",
+      "scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-capacity-not-invalidate",
+      "status": "unique_scope",
+      "scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-price-cycles",
+      "status": "unique_scope",
+      "scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-cycle-length",
+      "status": "unique_scope",
+      "scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "micro_scope_id": "micro-industry-q7-q8",
+      "target_id": "mi-a-investment-value",
+      "status": "unique_scope",
+      "scope_ids": [
+        "21ca89640115817628f297be018861a6184f6c1dbfdb9c4b6f0cf594ba76690a"
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-added-shares",
+      "status": "unique_scope",
+      "scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-sold-calls",
+      "status": "unique_scope",
+      "scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-below-ceo-level",
+      "status": "unique_scope",
+      "scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "micro_scope_id": "micro-trade-ttd",
+      "target_id": "mt-ceo-bought",
+      "status": "unique_scope",
+      "scope_ids": [
+        "40bd6975109f2bd7c40fec821dc160e6741d6f04d06d57432db3a82c9fb954da"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-summary",
+      "target_id": "mcs-outlook",
+      "status": "unique_scope",
+      "scope_ids": [
+        "12dc548971de4c27af324cb6b946761da480be5982ea2a97a4d630811632f1bd"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-audio",
+      "target_id": "mca-hearing-check",
+      "status": "unique_scope",
+      "scope_ids": [
+        "bbcd0f2cffa0ee76b615356f55beae1c51e3493a3eac6046f3547fce8a904b43"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-q-cause",
+      "status": "unique_scope",
+      "scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-q-improve",
+      "status": "unique_scope",
+      "scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-a-leading",
+      "status": "unique_scope",
+      "scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-a-process",
+      "status": "unique_scope",
+      "scope_ids": [
+        "1fe0d2a55b949deefa12e7d5326cbbf715840b41e2df475b274be87811ef96de"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-ratio",
+      "status": "unique_scope",
+      "scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-process-major",
+      "status": "unique_scope",
+      "scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-device-support",
+      "status": "unique_scope",
+      "scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "micro_scope_id": "micro-copper-yield",
+      "target_id": "mcy-e-device-needed",
+      "status": "unique_scope",
+      "scope_ids": [
+        "db138d5af605e90e5e77ddab6bffa72a1613d0eb65a457a946f42357a089572a"
+      ]
+    }
+  ],
+  "totals": {
+    "packets": 14,
+    "unresolved_packets": 0,
+    "candidate_scopes": 65,
+    "unresolved_scopes": 0,
+    "table_scopes": 7,
+    "table_scopes_sent_to_clause_lattice": 0,
+    "clause_lattice_capacity_or_kind_failures": 0,
+    "items": 35,
+    "items_in_unique_generated_scope": 35,
+    "positive_relation_endpoints_referencable": 17,
+    "negative_relation_endpoints_referencable": 8,
+    "human_approved": 0
+  },
+  "gates": {
+    "S0_source_identity_and_gold_independence": "passed",
+    "S1_all_packets_accounted_and_covered": "passed",
+    "S2_table_type_preserved": "passed",
+    "S3_all_prose_scopes_within_clause_lattice_capacity": "passed",
+    "S4_fixed_development_target_scope_coverage": "passed",
+    "S5_relation_endpoint_scope_references": "passed",
+    "S6_human_atomic_denominator_approval": "not_evaluated",
+    "S7_production_and_old_flow_isolation": "passed"
+  },
+  "status": "scope_provider_structural_gate_passed_human_denominator_review_required",
+  "p4_budget_authorized": false
+}

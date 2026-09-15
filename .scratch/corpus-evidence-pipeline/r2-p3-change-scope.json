@@ -1,0 +1,30 @@
+{
+  "version": "r2-p3-offline-review-scope-1",
+  "date": "2026-09-14",
+  "parent_p2b_manifest_sha256": "85d587047b680b5c76ca985f63945ec243d69e7d16e8ddf35a5596144b72ab3f",
+  "pg_review_manifest_sha256": "ec6738e40037067e1153b042054383484557c66b32332fce06f20e08da6ec1b8",
+  "modify_existing_protected_files": [],
+  "new_protected_files": [],
+  "new_offline_files": [
+    ".scratch/corpus-evidence-pipeline/p3_replay_review.py",
+    ".scratch/corpus-evidence-pipeline/test_p3_replay_review.py"
+  ],
+  "generated_files": [
+    ".scratch/corpus-evidence-pipeline/r2-p3-replay-inventory.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3-review-queue.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3-manifest.json"
+  ],
+  "scope": "P3 fixed development v12/v13 raw and product replay inventory, six micro-scope planner capacity, deterministic difference classification, and human review queue only",
+  "allowed_sources": "four development sample IDs and six frozen development micro scopes only",
+  "holdout_source_access": 0,
+  "postgres_access": 0,
+  "real_model_calls": 0,
+  "judge_calls": 0,
+  "real_market_calls": 0,
+  "production_wiring": false,
+  "default_entry_changes": false,
+  "gold_mutation": false,
+  "automatic_human_approval": false,
+  "p4_budget_authorized": false
+}

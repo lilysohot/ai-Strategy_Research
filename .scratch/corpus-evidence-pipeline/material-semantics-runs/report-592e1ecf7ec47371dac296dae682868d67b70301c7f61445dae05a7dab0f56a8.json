@@ -1,0 +1,333 @@
+{
+  "contract_version": "material-understanding-v1",
+  "gold_sha256": "6fbbcdeeac51b3553b2b3d6793325f06f519f70e406d31c3c2004380035fb64c",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "budget_version": "r2-jsonl-development-v2",
+  "budget_sha256": "550de1c02d3d40758a31a1c370a8606e71c0e0dc60e21c7aded1a2b2806b57cc",
+  "round_id": "jsonl-baseline",
+  "split": "development",
+  "model": "glm-5.3-flash",
+  "model_calls": 7,
+  "usage": {
+    "prompt_tokens": 15598,
+    "completion_tokens": 17378
+  },
+  "raw_audits": [
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "items",
+      "response_sha256": "f5e79aa7db0cf4d3a1edd5429bf81940a2babf5a65841ff0cc5813f1a0ee4de2",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-items-f5e79aa7db0c.txt"
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "stage": "items",
+      "response_sha256": "18e9d730dd4b1d1eb0b13285feb949d01842a453ab427f980bbf930a599916a0",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-items-18e9d730dd4b.txt"
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "stage": "items",
+      "response_sha256": "14c1737ca3e1dffd675bfa644c759ece75be7c6b4fdd8e5e8df9ff3e5592bf45",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-personal-trade-review/65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8-items-14c1737ca3e1.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "items",
+      "response_sha256": "91489546cb05837e56f6e2ab982beb78c4dc7afba93370b62845967999653e64",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-items-91489546cb05.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "items",
+      "response_sha256": "cff14e9cdee37aa5a8496c2ddb6218c612a8a98fe93b228fe7d54398f765b4c3",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-items-cff14e9cdee3.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "items",
+      "response_sha256": "c0c7a62e9e27d301854b9382d191330a6aabed8cb50dab337d32cce01265108a",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-items-c0c7a62e9e27.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "items",
+      "response_sha256": "a4802ff559416e1869ebfe1cdd42bd8f0935b755f25b48b2cef85b23c3a3e14e",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-jsonl-development-v2/jsonl-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-items-a4802ff55941.txt"
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": "dev-company-report",
+      "source_rev": "6f14cc145b798b37",
+      "material_run_id": "b93999850ee5b08e39c1f75fbee885dbc56fe7cc39ada985900de8cf91df656f",
+      "summary": {
+        "run_id": "b93999850ee5b08e39c1f75fbee885dbc56fe7cc39ada985900de8cf91df656f",
+        "evidence_run_id": "97b40b7f57fbd96806e6f96dc0aa87e108d92ae99c81ff7dd487741ebdd36bc6",
+        "items": 0,
+        "relations": 0,
+        "speakers": 0,
+        "semantic_types": {},
+        "packet_status": {
+          "not_candidate": 7,
+          "failed": 1
+        },
+        "complete": false
+      },
+      "item_recall": 0.0,
+      "critical_item_recall": 0.0,
+      "semantic_target_accuracy": 0.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "counts": {
+        "gold_items": 5,
+        "matched_items": 0,
+        "critical_items": 4,
+        "matched_critical_items": 0,
+        "semantic_correct": 0,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dcr-fact-results",
+          "matched": false
+        },
+        {
+          "gold_item": "dcr-opinion-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "dcr-forecast-qualitative",
+          "matched": false
+        },
+        {
+          "gold_item": "dcr-forecast-target",
+          "matched": false
+        },
+        {
+          "gold_item": "dcr-risk-demand",
+          "matched": false
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_rev": "174b64628f35aca6",
+      "material_run_id": "cd5c8aa66f157a2904e65ed9e01d92f0f02773ae4783c50b92712d8d4ca0541e",
+      "summary": {
+        "run_id": "cd5c8aa66f157a2904e65ed9e01d92f0f02773ae4783c50b92712d8d4ca0541e",
+        "evidence_run_id": "c07e19895f6276b36bc4d56c5e2f596097197df04e165984fb894e72fae3dbb9",
+        "items": 0,
+        "relations": 0,
+        "speakers": 0,
+        "semantic_types": {},
+        "packet_status": {
+          "failed": 1
+        },
+        "complete": false
+      },
+      "item_recall": 0.0,
+      "critical_item_recall": 0.0,
+      "semantic_target_accuracy": 0.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 0,
+        "critical_items": 4,
+        "matched_critical_items": 0,
+        "semantic_correct": 0,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 1,
+        "matched_relations": 0,
+        "false_positive_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "diq-question-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-answer-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-forecast-supply-demand",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-risk-policy",
+          "matched": false
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_rev": "810ef870625e7856",
+      "material_run_id": "7d341adc8160abce3605924769f8fc362b2b54cdbf9c24184482032894dd77ec",
+      "summary": {
+        "run_id": "7d341adc8160abce3605924769f8fc362b2b54cdbf9c24184482032894dd77ec",
+        "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+        "items": 0,
+        "relations": 0,
+        "speakers": 0,
+        "semantic_types": {},
+        "packet_status": {
+          "failed": 1
+        },
+        "complete": false
+      },
+      "item_recall": 0.0,
+      "critical_item_recall": 0.0,
+      "semantic_target_accuracy": 0.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 0,
+        "critical_items": 4,
+        "matched_critical_items": 0,
+        "semantic_correct": 0,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dpt-ttd-executed",
+          "matched": false
+        },
+        {
+          "gold_item": "dpt-frvo-executed",
+          "matched": false
+        },
+        {
+          "gold_item": "dpt-mdt-executed",
+          "matched": false
+        },
+        {
+          "gold_item": "dpt-agx-retrospective",
+          "matched": false
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_rev": "80b5a290df3d2ade",
+      "material_run_id": "2c242efa96d4a4baf849a393ac5a0da0754d48fd81348d971e39697f4f490fa6",
+      "summary": {
+        "run_id": "2c242efa96d4a4baf849a393ac5a0da0754d48fd81348d971e39697f4f490fa6",
+        "evidence_run_id": "ff7e5ca82d14e1b48a0c82a95a93de9d7636b2b0fda8804ecb58c48d167ffdad",
+        "items": 0,
+        "relations": 0,
+        "speakers": 0,
+        "semantic_types": {},
+        "packet_status": {
+          "failed": 4
+        },
+        "complete": false
+      },
+      "item_recall": 0.0,
+      "critical_item_recall": 0.0,
+      "semantic_target_accuracy": 0.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "counts": {
+        "gold_items": 11,
+        "matched_items": 0,
+        "critical_items": 11,
+        "matched_critical_items": 0,
+        "semantic_correct": 0,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 4,
+        "matched_relations": 0,
+        "false_positive_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dec-summary-outlook",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-capex",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-capex",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-host-clarification",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-forecast-validation",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-ambiguous-audio-check",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-yield",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-yield",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-quoted-yield-split",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-mitsui",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-mitsui",
+          "matched": false
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "item_recall": 0.0,
+    "critical_item_recall": 0.0,
+    "semantic_target_accuracy": 0.0,
+    "attribution_target_accuracy": 0.0,
+    "critical_all_fields_accuracy": 0.0,
+    "source_relation_recall": 0.0,
+    "source_relation_precision": 1.0
+  },
+  "business_acceptance": false,
+  "replay_of": null,
+  "limitations": [
+    "Development targets are a selected joint gold, not exhaustive whole-document claims.",
+    "Extra extracted items are retained for audit but are not scored as false positives.",
+    "No corpus ingestion or database write is performed."
+  ]
+}

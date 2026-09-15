@@ -1,0 +1,228 @@
+{
+  "version": "r2-p3h-remediation-human-review-1",
+  "split": "development",
+  "reviewer_name": "Xyl",
+  "reviewed_at": "2026-09-14 17:40:00",
+  "allowed_decisions": [
+    "approve",
+    "reject",
+    "needs_split",
+    "needs_merge"
+  ],
+  "approved_records": 0,
+  "carried_forward_approved_records": 30,
+  "instructions": "A human reviews only these five replacement items. Agent proposals are not approvals.",
+  "records": [
+    {
+      "target_id": "mc-rating-v2",
+      "source_quote": "“强推”评级",
+      "proposed_fields": {
+        "quote": "“强推”评级",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "强推",
+        "unknown_fields": []
+      },
+      "generated_scope_ids": [
+        "d0958db104ffcfb78d58fadd3288bfd728bf60d7fdda57e7b804b6763bcd4764"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "e830610ea7c14ff9fe1cd4693723c5d8aca210d29f8f20c3294b17f7d094da39",
+          "role": "clause",
+          "span_id": "e830ce2748e8b8697ad8324cf00a15f2580960b31cd264e0a4a1eb6d046c25d6",
+          "start": 75,
+          "end": 83,
+          "text": "和“强推”评级。",
+          "text_sha256": "f1ad50c926949721f6cfbd852a3d880875d18244d692e219f7fb4f024ea127b8"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，积极信号评级类型。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "target_id": "mcs-industry-substitution-v2",
+      "source_quote": "铜箔设备行业正处于国产替代加速期",
+      "proposed_fields": {
+        "quote": "铜箔设备行业正处于国产替代加速期",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "summary_authorship",
+          "summary_generation_method"
+        ]
+      },
+      "generated_scope_ids": [
+        "12dc548971de4c27af324cb6b946761da480be5982ea2a97a4d630811632f1bd"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "c9ca6f630534da90799ac439bc54c755c621498f6d7291df8a56a6a2648d23d9",
+          "role": "clause",
+          "span_id": "059397aea3d8ed442fafd5d0e95c4525fe66d47527e3d124bfbee171955ca66a",
+          "start": 5,
+          "end": 22,
+          "text": "铜箔设备行业正处于国产替代加速期，",
+          "text_sha256": "8f879ec93b96947ace78b74a4c03c0513e37ccf63c127ef64ee480b57f3eea08"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一陈述命题，行业变革叙事。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "target_id": "mcs-surface-treatment-v2",
+      "source_quote": "表处理设备将成为重要增量",
+      "proposed_fields": {
+        "quote": "表处理设备将成为重要增量",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "summary_authorship",
+          "summary_generation_method"
+        ]
+      },
+      "generated_scope_ids": [
+        "12dc548971de4c27af324cb6b946761da480be5982ea2a97a4d630811632f1bd"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "8a0d032185c4cf749b3db33342465709167000ecd4e3e4680d4a22e59ecd9626",
+          "role": "clause",
+          "span_id": "f3fa2ca3beb8acef023ffab672afc533c393ca45b580aec75c0ece57d77c3930",
+          "start": 55,
+          "end": 70,
+          "text": "尤其表处理设备将成为重要增量。",
+          "text_sha256": "0b5e3b872558ad91511afc3814876982a3b92769c2ed5ea1b4046560e77bfd39"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一命题，产品在该领域有突出的增涨信号。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "target_id": "mcs-taijin-growth-v2",
+      "source_quote": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力",
+      "proposed_fields": {
+        "quote": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "summary_authorship",
+          "summary_generation_method"
+        ]
+      },
+      "generated_scope_ids": [
+        "12dc548971de4c27af324cb6b946761da480be5982ea2a97a4d630811632f1bd"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "6d519b10709032e954b1d85ac5909eb1cfdd38f3b55a7f39ca6410783bd927d6",
+          "role": "alternative",
+          "span_id": "c8b8329aea9ed6e0776e0177bc13493838680dc9921d395ce1a3b915fc409621",
+          "start": 22,
+          "end": 55,
+          "text": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，",
+          "text_sha256": "fd236fca096b6c934ca9ae97750c7bd73bc121dc2267d8a39b368db7342fee0c"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一观点命题，主体明确，在行业有着关键的位置和突出的优势。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    },
+    {
+      "target_id": "mi-a-focus-balance-spread-v2",
+      "source_quote": "中期投资更应关注供需改善的情况和\n价差扩张",
+      "proposed_fields": {
+        "quote": "中期投资更应关注供需改善的情况和\n价差扩张",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "generated_scope_ids": [
+        "b2bdc83d6a8de7f2dea14ba34ff8efb74e1931f7fce856e30f2e1a40606fa1f3"
+      ],
+      "proposed_clause_nodes": [
+        {
+          "node_id": "b8b14401592a9cce78abe624a1af9ffebe05afe4658a37da6c274c762a587975",
+          "role": "alternative",
+          "span_id": "80a5327efb7b14ec93f63ac22568eadb39af490ee471e85c3bb4eb2b1be1ba2e",
+          "start": 63,
+          "end": 85,
+          "text": "中期投资更应关注供需改善的情况和\n价差扩张。",
+          "text_sha256": "b6e2b0bc421c4586e63a97eb8bd7d431df319402a57f4998bf464e7f63bf8e87"
+        }
+      ],
+      "human_decision": "approve",
+      "human_reason": "单一命题（关注供需关系），建议性指导。",
+      "checks": {
+        "one_research_statement": true,
+        "necessary_condition_or_attribution_retained": true,
+        "no_unrelated_claim_merged": true,
+        "source_quote_and_locator_sufficient": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,679 @@
+{
+  "contract_version": "material-understanding-v1",
+  "gold_sha256": "6fbbcdeeac51b3553b2b3d6793325f06f519f70e406d31c3c2004380035fb64c",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "budget_version": null,
+  "budget_sha256": null,
+  "round_id": null,
+  "split": "development",
+  "model": "glm-5.3-flash",
+  "model_calls": 0,
+  "usage": {},
+  "raw_audits": [],
+  "deterministic_stress": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_rev": "48c05895798ba009",
+      "packets": 44,
+      "segments": 44,
+      "candidate_slots": 44,
+      "dialogue_structure": "document_voice",
+      "attribution_capability": "document_only",
+      "processing_mode": "degraded",
+      "signal_types": [
+        "condition",
+        "evidence",
+        "forecast",
+        "negation",
+        "numeric",
+        "qualitative",
+        "question",
+        "risk"
+      ],
+      "model_calls": 0
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": "dev-company-report",
+      "source_rev": "6f14cc145b798b37",
+      "material_run_id": "151ac1057d4efd72807c1879c7d739d480eb33d7059ed64d928cc13511ec8bce",
+      "summary": {
+        "run_id": "151ac1057d4efd72807c1879c7d739d480eb33d7059ed64d928cc13511ec8bce",
+        "evidence_run_id": "97b40b7f57fbd96806e6f96dc0aa87e108d92ae99c81ff7dd487741ebdd36bc6",
+        "items": 20,
+        "relations": 2,
+        "speakers": 3,
+        "semantic_types": {
+          "fact": 13,
+          "forecast": 4,
+          "opinion": 2,
+          "unknown": 1
+        },
+        "packet_status": {
+          "not_candidate": 7,
+          "completed": 1
+        },
+        "slot_status": {
+          "extracted": 1
+        },
+        "complete": true
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 0.8,
+      "attribution_target_accuracy": 0.2,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 5,
+        "matched_items": 5,
+        "predicted_items": 20,
+        "unmatched_predicted_items": 15,
+        "critical_items": 4,
+        "matched_critical_items": 4,
+        "semantic_correct": 4,
+        "attribution_correct": 1,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "predicted_relations": 2,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 2
+      },
+      "detail": [
+        {
+          "gold_item": "dcr-fact-results",
+          "matched": true,
+          "predicted_item": "itm_79c32eca350ca195",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "公司公布2026年中报，26H1实现总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%。"
+        },
+        {
+          "gold_item": "dcr-opinion-bottom",
+          "matched": true,
+          "predicted_item": "itm_41ae0fbc5b5e50c3",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": true
+          },
+          "predicted_text": "我们认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过。"
+        },
+        {
+          "gold_item": "dcr-forecast-qualitative",
+          "matched": true,
+          "predicted_item": "itm_86237c54b97642a2",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": true
+          },
+          "predicted_text": "Q3预计将抓住中秋旺季窗口放量，下半年飞天供应偏紧、供需改善，利好结构升级。"
+        },
+        {
+          "gold_item": "dcr-forecast-target",
+          "matched": true,
+          "predicted_item": "itm_d70b56a39a4857ea",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": true
+          },
+          "predicted_text": "维持一年目标价2030元和“强推”评级。"
+        },
+        {
+          "gold_item": "dcr-risk-demand",
+          "matched": true,
+          "predicted_item": "itm_2227b9880c89f16f",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等。"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_rev": "174b64628f35aca6",
+      "material_run_id": "f2ab56fd7658e5d2c403547c775314ba07e23911ed7a720d863fae2edb2b1950",
+      "summary": {
+        "run_id": "f2ab56fd7658e5d2c403547c775314ba07e23911ed7a720d863fae2edb2b1950",
+        "evidence_run_id": "c07e19895f6276b36bc4d56c5e2f596097197df04e165984fb894e72fae3dbb9",
+        "items": 10,
+        "relations": 1,
+        "speakers": 2,
+        "semantic_types": {
+          "opinion": 6,
+          "fact": 1,
+          "forecast": 3
+        },
+        "packet_status": {
+          "completed": 1
+        },
+        "slot_status": {
+          "extracted": 1
+        },
+        "complete": true
+      },
+      "item_recall": 0.75,
+      "critical_item_recall": 0.75,
+      "semantic_target_accuracy": 0.75,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 3,
+        "predicted_items": 10,
+        "unmatched_predicted_items": 7,
+        "critical_items": 4,
+        "matched_critical_items": 3,
+        "semantic_correct": 3,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 1,
+        "predicted_relations": 1,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 1
+      },
+      "detail": [
+        {
+          "gold_item": "diq-question-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-answer-bottom",
+          "matched": true,
+          "predicted_item": "itm_d57370426642240d",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": true
+          },
+          "predicted_text": "价格底部主要改善长期赔率，并不一定等同于中期拐点；价格处于高位也不必然构成卖点。"
+        },
+        {
+          "gold_item": "diq-forecast-supply-demand",
+          "matched": true,
+          "predicted_item": "itm_873c5c03a4b8c44a",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": true
+          },
+          "predicted_text": "只要未来一至两年供需持续改善，行业仍具备周期投资价值，未来的新增产能不应否定当前明确的景气阶段。"
+        },
+        {
+          "gold_item": "diq-risk-policy",
+          "matched": true,
+          "predicted_item": "itm_969fb66f36e564e4",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "风险提示：1、供给端政策执行力度不及预期；2、海外需求不及预期；3、全球地缘政治动荡；4、技术风险。"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_rev": "810ef870625e7856",
+      "material_run_id": "ce740fb7e81a85e5f642375af069fb70a88e90d91e0e473182c7fef70cd0352f",
+      "summary": {
+        "run_id": "ce740fb7e81a85e5f642375af069fb70a88e90d91e0e473182c7fef70cd0352f",
+        "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+        "items": 8,
+        "relations": 2,
+        "speakers": 2,
+        "semantic_types": {
+          "behavior": 6,
+          "fact": 2
+        },
+        "packet_status": {
+          "completed": 1
+        },
+        "slot_status": {
+          "extracted": 1
+        },
+        "complete": true
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy": 0.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 4,
+        "predicted_items": 8,
+        "unmatched_predicted_items": 4,
+        "critical_items": 4,
+        "matched_critical_items": 4,
+        "semantic_correct": 4,
+        "attribution_correct": 0,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "predicted_relations": 2,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 2
+      },
+      "detail": [
+        {
+          "gold_item": "dpt-ttd-executed",
+          "matched": true,
+          "predicted_item": "itm_cdc39adb9c7b5bf2",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "作者今日增持TTD 10,000股，成交价14.76，并卖出100张周五到期15美元看涨期权，权利金0.16"
+        },
+        {
+          "gold_item": "dpt-frvo-executed",
+          "matched": true,
+          "predicted_item": "itm_ea4fc85cd3b77ad8",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "作者今日增持FRVO 3,000股，成交价17.30，并卖出30张9月到期20美元看涨期权，权利金0.50"
+        },
+        {
+          "gold_item": "dpt-mdt-executed",
+          "matched": true,
+          "predicted_item": "itm_037185df84fac49a",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "作者卖出50张MDT 90美元下周到期看跌期权，权利金0.47"
+        },
+        {
+          "gold_item": "dpt-agx-retrospective",
+          "matched": true,
+          "predicted_item": "itm_4e7983b7d652bc26",
+          "quote_similarity": 0.9403,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "作者昨日盘后卖出AGX仓位，并在discord同步发布"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_rev": "80b5a290df3d2ade",
+      "material_run_id": "68840f811f70743a711d89b9cea4892e6fa1685be28cb2c09009a8fdae654900",
+      "summary": {
+        "run_id": "68840f811f70743a711d89b9cea4892e6fa1685be28cb2c09009a8fdae654900",
+        "evidence_run_id": "ff7e5ca82d14e1b48a0c82a95a93de9d7636b2b0fda8804ecb58c48d167ffdad",
+        "items": 64,
+        "relations": 31,
+        "speakers": 7,
+        "semantic_types": {
+          "fact": 39,
+          "opinion": 9,
+          "behavior": 1,
+          "unknown": 7,
+          "forecast": 8
+        },
+        "packet_status": {
+          "completed": 3,
+          "failed": 1
+        },
+        "slot_status": {
+          "extracted": 3,
+          "failed": 1
+        },
+        "complete": false
+      },
+      "item_recall": 0.7272727272727273,
+      "critical_item_recall": 0.7272727272727273,
+      "semantic_target_accuracy": 0.6363636363636364,
+      "attribution_target_accuracy": 0.6363636363636364,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.25,
+      "source_relation_precision": 1.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 11,
+        "matched_items": 8,
+        "predicted_items": 64,
+        "unmatched_predicted_items": 56,
+        "critical_items": 11,
+        "matched_critical_items": 8,
+        "semantic_correct": 7,
+        "attribution_correct": 7,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 4,
+        "predicted_relations": 31,
+        "matched_relations": 1,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 30
+      },
+      "detail": [
+        {
+          "gold_item": "dec-summary-outlook",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-capex",
+          "matched": true,
+          "predicted_item": "itm_6db1425b168bb2bd",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "主持人提问：每1万吨铜箔整个设备的资本开支如何，需分锂电箔和电子箔"
+        },
+        {
+          "gold_item": "dec-answer-capex",
+          "matched": true,
+          "predicted_item": "itm_fc42deb1c02f558e",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "每1万吨锂电铜箔的主设备投资约2.5-3亿元"
+        },
+        {
+          "gold_item": "dec-host-clarification",
+          "matched": true,
+          "predicted_item": "itm_15a0f58d0f91dcc5",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": false,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "主持人澄清：讨论的是价值量/收入概念，不是利润概念"
+        },
+        {
+          "gold_item": "dec-forecast-validation",
+          "matched": true,
+          "predicted_item": "itm_5b7b9c0976774c32",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "泰金技术水平基本不比日本厂商差，缺的是验证；只要验证成功，很快能占据国内市场甚至一部分国外市场。"
+        },
+        {
+          "gold_item": "dec-ambiguous-audio-check",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-question-yield",
+          "matched": false
+        },
+        {
+          "gold_item": "dec-answer-yield",
+          "matched": true,
+          "predicted_item": "itm_6f668d273679ac62",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "设备加工和控制精度已行业领先，良品率低大概率跟工艺挂钩"
+        },
+        {
+          "gold_item": "dec-quoted-yield-split",
+          "matched": true,
+          "predicted_item": "itm_f74677365f71834c",
+          "quote_similarity": 0.7164,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": false,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "铜冠总工称工艺和设备是64开，工艺占大头，设备只是配套但没设备也不行"
+        },
+        {
+          "gold_item": "dec-question-mitsui",
+          "matched": true,
+          "predicted_item": "itm_3c1fdae81dd57c6f",
+          "quote_similarity": 0.4762,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": false,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "电话尾号6161参会人提问：给三井供过设备的背景和后面展望"
+        },
+        {
+          "gold_item": "dec-answer-mitsui",
+          "matched": true,
+          "predicted_item": "itm_062fc96a60f2a19e",
+          "quote_similarity": 0.8,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "三井生箔机和阴极辊价格远低于日本本土厂商、交期更快，未来可能合作比较紧密"
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "item_recall": 0.8333333333333334,
+    "critical_item_recall": 0.8260869565217391,
+    "semantic_target_accuracy": 0.75,
+    "attribution_target_accuracy": 0.3333333333333333,
+    "critical_all_fields_accuracy": 0.0,
+    "source_relation_recall": 0.2,
+    "source_relation_precision": 1.0,
+    "source_relation_precision_scope": "selected_target_endpoints_only",
+    "unmatched_predicted_items": 82,
+    "unscored_source_relations": 35
+  },
+  "business_acceptance": false,
+  "replay_of": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-d68f8aaa2bc7b958fe60ee49c674ea290dda536b3c602c720eeb93ade5682dac.json",
+  "limitations": [
+    "Development targets are a selected joint gold, not exhaustive whole-document claims.",
+    "Extra items and relations are counted but cannot be scored as false positives without exhaustive negative gold.",
+    "Source relation precision covers only predictions whose endpoints map to selected gold items.",
+    "No corpus ingestion or database write is performed."
+  ]
+}

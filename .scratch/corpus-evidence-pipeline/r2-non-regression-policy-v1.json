@@ -1,0 +1,70 @@
+{
+  "schema_version": "r2-non-regression-policy-v1",
+  "created_at": "2026-09-13",
+  "split": "development",
+  "scorer_versions": {
+    "material": "material-development-scorer-2",
+    "micro": "material-micro-scorer-1"
+  },
+  "rule": "Every protected metric is a floor, not an R2 acceptance target. A candidate fails on any per-category decrease even if its aggregate improves.",
+  "source_gold": {
+    "path": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+    "sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b"
+  },
+  "micro_gold": {
+    "path": "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json",
+    "sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5"
+  },
+  "baseline_material_report": {
+    "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-31bb378d85c95a33ccfe2605dd6ea952599faa33a20090a9175551119e9e8881.json",
+    "sha256": "1d583061f93c4a53e44b56a0bf54e0d2aed4630589b7da83b5344dc07aa68302"
+  },
+  "baseline_micro_score": {
+    "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/micro-score-f605e828049002425a23473843c3648dfa2dc0620110991dcefa999c9a9c3838.json",
+    "sha256": "fb7b32b9e8f646d2506eeed9c5992252450340d6a44c8cee7404d7534b427711"
+  },
+  "protected_samples": {
+    "dev-company-report": {
+      "metric_floors": {"item_recall": 1.0, "critical_item_recall": 1.0, "semantic_target_accuracy": 0.8, "attribution_target_accuracy": 0.2, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 1.0, "source_relation_precision": 1.0},
+      "require_complete": true,
+      "max_failed_or_partial_packets": 0
+    },
+    "dev-industry-qa-report": {
+      "metric_floors": {"item_recall": 0.75, "critical_item_recall": 0.75, "semantic_target_accuracy": 0.75, "attribution_target_accuracy": 0.0, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 0.0, "source_relation_precision": 0.0},
+      "require_complete": true,
+      "max_failed_or_partial_packets": 0
+    },
+    "dev-personal-trade-review": {
+      "metric_floors": {"item_recall": 1.0, "critical_item_recall": 1.0, "semantic_target_accuracy": 1.0, "attribution_target_accuracy": 0.0, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 1.0, "source_relation_precision": 1.0},
+      "require_complete": true,
+      "max_failed_or_partial_packets": 0
+    },
+    "dev-expert-call-copper-foil": {
+      "metric_floors": {"item_recall": 0.7272727272727273, "critical_item_recall": 0.7272727272727273, "semantic_target_accuracy": 0.6363636363636364, "attribution_target_accuracy": 0.6363636363636364, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 0.25, "source_relation_precision": 1.0},
+      "require_complete": false,
+      "max_failed_or_partial_packets": 1
+    }
+  },
+  "protected_micro_scopes": {
+    "micro-company-recommendation": {"metric_floors": {"item_recall": 0.42857142857142855, "item_precision": 1.0, "relation_recall": 1.0, "relation_precision": 1.0}, "max_negative_relation_hits": 0, "max_false_positive_relations": 0},
+    "micro-industry-q7-q8": {"metric_floors": {"item_recall": 0.14285714285714285, "item_precision": 1.0, "relation_recall": 0.0, "relation_precision": 1.0}, "max_negative_relation_hits": 0, "max_false_positive_relations": 0},
+    "micro-trade-ttd": {"metric_floors": {"item_recall": 0.5, "item_precision": 1.0, "relation_recall": 1.0, "relation_precision": 0.0}, "max_negative_relation_hits": 1, "max_false_positive_relations": 1},
+    "micro-copper-summary": {"metric_floors": {"item_recall": 0.0, "item_precision": 1.0, "relation_recall": 1.0, "relation_precision": 1.0}, "max_negative_relation_hits": 0, "max_false_positive_relations": 0},
+    "micro-copper-audio": {"metric_floors": {"item_recall": 0.0, "item_precision": 1.0, "relation_recall": 1.0, "relation_precision": 1.0}, "max_negative_relation_hits": 0, "max_false_positive_relations": 0},
+    "micro-copper-yield": {"metric_floors": {"item_recall": 0.25, "item_precision": 1.0, "relation_recall": 0.16666666666666666, "relation_precision": 1.0}, "max_negative_relation_hits": 0, "max_false_positive_relations": 0}
+  },
+  "required_engineering_gates": [
+    "full corpus pytest suite",
+    "R1 gold verifier",
+    "micro-gold verifier",
+    "R2 targeted pyright",
+    "Ruff",
+    "import smoke stages 1 and 2",
+    "symbol closure"
+  ],
+  "future_budget_requirements": {
+    "sample_ids_must_equal_protected_samples": true,
+    "holdout_calls_allowed": 0,
+    "single_frozen_development_round_before_review": true
+  }
+}

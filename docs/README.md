@@ -28,6 +28,8 @@ The investment-research Web product has two canonical product documents:
 |---|---|
 | What must the product do, what is available now, and what remains? | [Product requirements](product-requirements.md) |
 | How do user runs, evidence, decisions, and review connect? | [Business process](business-process.md) |
+| What comes next for research materials, structured data, and analysis? | [Unified execution plan](plan/claims-market-closed-loop-plan.md) |
+| What is the proposed source-to-index rebuild, and what must be verified before freezing it? | [Corpus preparation rebuild draft](plan/corpus-ingestion-rebuild-architecture.md) — candidate design, not implemented; authority and historical documents in §0 |
 | How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
 | How is it implemented? | [Technical architecture](tech-stack.md) |
 

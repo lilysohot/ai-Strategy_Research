@@ -1,0 +1,169 @@
+{
+  "asset_sha256": {
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/03625a79cb35885ec6b50a763430d688a8ca93379ac851a08dc2dd63d384e5b2.json": "93414bacd1d09b1fca97c87fb0d6ddb1c95e2dc562f28d3d007722d557a8ffac",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/0bff08dad85261427bf1a928e86fd12ba6e11a67077322f8c2ce48988616305b.json": "24a12c7ddcf75690a0ffc5764d97668e616617607d0cbdeeeb106e2aa1155b5c",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/1aa0ac1df8e43222a77c6a02b6c7f247fc5f39041e774c95999416847361f9b3.json": "cffc04f9404a834c651f01bc5b2a68589a7595254f0e9ec7e40670e0a9c22e49",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/28f0108e54fd05e73747c795b5df16ff32a2ed9f79f346fc3088cc5577681070.json": "ee61c6d24dfefd401948d0c0577f477d1c72deafa446610dec4007413bc4626e",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/2a03db2282cc35ef055c6fa95c4860cc48b39e93ddca3ff459c07e7ff4b0beba.json": "7e4d079f39db269c22869c652a2e242b663b88a9f08ba8e715f59cecf77647c8",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/7abcae1ed38abc48eb29e8895da2326078e2e8c6624c95b1c7d62cfc522abdaa.json": "1e2cef6a09e1ec2e4deea88c02c878ca45d79095992190b0cd943fee9fe7d840",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/9478adf78689e83a0d2a815552a338b8762453e17a8ea136779304987e27e633.json": "a6d0f741ee901e573f5787fa0115a9bb3c27f1931daddb5390ff86d6da668943",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/cb4f63ddb430ab5600730c8e5788dc6f258cebc8a3f69c796ee3e8b3c7620fcf.json": "82dcfa44822d194fd0322da28608eb33f4cb58da04eed31886c0346b63e251df",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-7a417d88c533.txt": "7a417d88c533eae5940c6a9394fd8bc08317ca0312b1861efae347917f41ee56",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-fa0a03c439c8.txt": "fa0a03c439c848b1bcde6fdbc19785142271215bd2049de63b60796ad7de1e4e",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-176d2f3f7443.txt": "176d2f3f7443f5df7ede8041ba76483284a2a6410c127eaaf44890f8226770d3",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-3d88ef676abe.txt": "3d88ef676abe2ce0f6958395a985bbbbc89b67d403e552cd1c64922f33c28ccc",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-0a3afa4deedc.txt": "0a3afa4deedcc47ed5b642e417e6ee7a2262a2544997f417970fe9eb32344441",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-05d18566db88.txt": "05d18566db88b202951c026b096ff712e7e12858a2c47b78d4202a82e8686ff1",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-8afa5d994287.txt": "8afa5d994287e5280216df283fe6e36d2ebd61993352392417fc1456f7cc5cff",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-fc06d097fc28.txt": "fc06d097fc2879d98c5429c42e7cdadae420f730e432e9020c09ea28ada7c3e8",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v12-atomic-items-v6/v12-terminal-items/dev-personal-trade-review/65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8-atomic_item_terminal-47d419bb5028.txt": "47d419bb5028755f9d30753b308d4a054db6ce1bf550def67123306da967374b",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-45cb3dbf6b34.txt": "45cb3dbf6b342d5ca5994ce2fe9162e4a320cc0480ef6699a1d4e464f14c2c3f",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-6d16bf15c08f.txt": "6d16bf15c08ffb73b9cf5c8b4f9d00647c89fb72ed6f9a3162d062a31280b245",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-41403c9616a2.txt": "41403c9616a28afe6137ba5f5f22e476c0e9ab3700c1cc51930171c457c6dac7",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-757980d78721.txt": "757980d7872115ec44578b406a443d593a9e54b83aad5fd31e3ba2ebd294283e",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-78ba2e7214f2.txt": "78ba2e7214f2a48795c62b45ecbcb59c16b26e8a19d6c8f811c0d0c9973ae668",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-76a716d2b006.txt": "76a716d2b00677e1d81ecaa96655b1b04e74e4479ebbfb0991003f13e1c0eaf6",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-7c9365f675ee.txt": "7c9365f675ee7d49d6e5a3d24681ec26a88c9faa4cc444a018e584df0bdc89bd",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-9649cb8dab0d.txt": "9649cb8dab0d24e871cc65aa70884d1d60f2127643facf212615eb20d22e3639",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-v13-final-items-v7/v13-final-items/dev-personal-trade-review/65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8-atomic_item_terminal-3a4fb763e52a.txt": "3a4fb763e52ac4bed6f0f596770ace3cea031e2c0ba19a18dc108004a678e359",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-09b119120285666aac93fcb41ce1f8c0ebe3c4bb563f50a964bdc30b0b301b40.json": "ac6acd4aee29aa13e4e2903c3b217692093521135def82b9a6c05489d06b151a",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-46caccfc1c7d23ef3858a8a501560c07b250888b0b3f189fdff75d8ba6bc6b4b.json": "34cc841e98257580889681907f86cce54003f4a46e5df8f14df451fbd502f8ab",
+    ".scratch/corpus-evidence-pipeline/p0-fixtures/2026-08-16_600519.SH.md": "3e473fa5b58e5cd398f1711e61a3c272a2f1271c4ad173d10f0821621f80fb88",
+    ".scratch/corpus-evidence-pipeline/p0_baseline.py": "903112b3d3f78278c91cfd66265251897273c89c7cf32f07f53e297580d5a864",
+    ".scratch/corpus-evidence-pipeline/r2-atomic-development-budget-v4.json": "5e4a47e56fc6969bcf7b829da06523cdedeb3ed377da92c9933c2dd219c9ce8c",
+    ".scratch/corpus-evidence-pipeline/r2-capability-development-budget-v3.json": "1dce27ecfa0da937263dae1c725ef6c037402d2e01dcf5f18f523ed8077b3c2e",
+    ".scratch/corpus-evidence-pipeline/r2-item-acceptance-policy-v2.json": "c0fed47f53ddc6b7966a32a30054e4a87c28914234077a0dc2b5122775473852",
+    ".scratch/corpus-evidence-pipeline/r2-jsonl-development-budget-v2.json": "550de1c02d3d40758a31a1c370a8606e71c0e0dc60e21c7aded1a2b2806b57cc",
+    ".scratch/corpus-evidence-pipeline/r2-non-regression-policy-v1.json": "c81773044710b16fab93b6a061d2bd9d8581f6614541e49271559240b724aaa4",
+    ".scratch/corpus-evidence-pipeline/r2-redesign-development-budget-v1.json": "2c05f12217a1f527a2912c12b5cedb900a9bfa21de8985c7259e22409a8903d8",
+    ".scratch/corpus-evidence-pipeline/r2-v11-atomic-items-budget-v5.json": "20333bad6bde5b8ab18858119d5113ac930588b39b572be25889ec453b1a9137",
+    ".scratch/corpus-evidence-pipeline/r2-v12-atomic-items-budget-v6.json": "d6a3e15300255f4a73e9ed6e8a7bc712fdc9b996f1e92b02c3aea545b49d47ca",
+    ".scratch/corpus-evidence-pipeline/r2-v13-final-items-budget-v7.json": "300437b718abb8d9f890327be375c23c083bae1f8ba2a91108dc5b4d6a960e7f",
+    ".scratch/corpus-evidence-pipeline/replay_material_raw_audit.py": "38b1659330bcc2b0d8582c08da4f8ff39ceeb7cf03fda377a8b92b978a8bc087",
+    ".scratch/corpus-evidence-pipeline/run_material_development.py": "934ba78e4fb7a52be9edd74e6b8d727718d2236f029956e855bd682ac1a04077",
+    ".scratch/corpus-evidence-pipeline/test_p0_baseline.py": "4dad7f291223e6615fb546a51b5010fde91459c2c54aba0360418221f1ff9341",
+    ".scratch/corpus-evidence-pipeline/verify_claims_entry.py": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+    ".scratch/corpus-evidence-pipeline/verify_material_gold.py": "4a7a03377ac31071d27a4b07784707598e32df6d40b2b5d8b163903c1c2018b5",
+    ".scratch/corpus-evidence-pipeline/verify_material_item_contract_v2.py": "442ff9c69d3266ba137cc662befe13d7041e1e7ceb5fdf55277107939fe361a6",
+    ".scratch/corpus-evidence-pipeline/verify_material_micro_gold.py": "b3f999eeb0ecafefd25b75b285a465d9b2f6533773af8364d6e788dd021e5ef1",
+    ".scratch/corpus-evidence-pipeline/verify_net_margin.py": "7713aaa2ceeb82ac12572b70cf79d9e96cbfe56cb72ec7e1bcd78b013afba91e",
+    ".scratch/corpus-evidence-pipeline/verify_semantic_repair.py": "3227769edd7b56fdc4d308b8080aab0b1b3cfcf282be8f2596b35a2a23632c92",
+    "data/corpus/.audit/r1_material_gold_v1_20260913.json": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+    "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+    "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+    "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf": "810ef870625e7856c39812818f1b6226caa6d786ba8ff1d5e26bb2b0947c2139",
+    "data/corpus/5月：锂电铜箔和电子铜箔.md": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d"
+  },
+  "development_assets": [
+    {
+      "raw_responses": 9,
+      "report": "report-09b119120285666aac93fcb41ce1f8c0ebe3c4bb563f50a964bdc30b0b301b40.json",
+      "samples": [
+        {
+          "material_run_id": "1aa0ac1df8e43222a77c6a02b6c7f247fc5f39041e774c95999416847361f9b3",
+          "sample_id": "dev-company-report",
+          "source_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+          "source_rev": "6f14cc145b798b37"
+        },
+        {
+          "material_run_id": "9478adf78689e83a0d2a815552a338b8762453e17a8ea136779304987e27e633",
+          "sample_id": "dev-industry-qa-report",
+          "source_path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+          "source_rev": "174b64628f35aca6"
+        },
+        {
+          "material_run_id": "0bff08dad85261427bf1a928e86fd12ba6e11a67077322f8c2ce48988616305b",
+          "sample_id": "dev-personal-trade-review",
+          "source_path": "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+          "source_rev": "810ef870625e7856"
+        },
+        {
+          "material_run_id": "28f0108e54fd05e73747c795b5df16ff32a2ed9f79f346fc3088cc5577681070",
+          "sample_id": "dev-expert-call-copper-foil",
+          "source_path": "data/corpus/5月：锂电铜箔和电子铜箔.md",
+          "source_rev": "80b5a290df3d2ade"
+        }
+      ]
+    },
+    {
+      "raw_responses": 9,
+      "report": "report-46caccfc1c7d23ef3858a8a501560c07b250888b0b3f189fdff75d8ba6bc6b4b.json",
+      "samples": [
+        {
+          "material_run_id": "cb4f63ddb430ab5600730c8e5788dc6f258cebc8a3f69c796ee3e8b3c7620fcf",
+          "sample_id": "dev-company-report",
+          "source_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+          "source_rev": "6f14cc145b798b37"
+        },
+        {
+          "material_run_id": "03625a79cb35885ec6b50a763430d688a8ca93379ac851a08dc2dd63d384e5b2",
+          "sample_id": "dev-industry-qa-report",
+          "source_path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+          "source_rev": "174b64628f35aca6"
+        },
+        {
+          "material_run_id": "7abcae1ed38abc48eb29e8895da2326078e2e8c6624c95b1c7d62cfc522abdaa",
+          "sample_id": "dev-personal-trade-review",
+          "source_path": "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+          "source_rev": "810ef870625e7856"
+        },
+        {
+          "material_run_id": "2a03db2282cc35ef055c6fa95c4860cc48b39e93ddca3ff459c07e7ff4b0beba",
+          "sample_id": "dev-expert-call-copper-foil",
+          "source_path": "data/corpus/5月：锂电铜箔和电子铜箔.md",
+          "source_rev": "80b5a290df3d2ade"
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "packages": {
+      "PyMuPDF": "1.28.2",
+      "httpx": "0.28.1",
+      "jieba": "0.42.1",
+      "psycopg": "3.3.5",
+      "pydantic": "2.13.4",
+      "pytest": "9.1.1",
+      "python-docx": "1.2.0"
+    },
+    "platform": "Linux-6.6.114.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "python": "3.12.14"
+  },
+  "head": "2c0c76582ae611e5b518b331673bd917212bc342",
+  "pg_preflight": {
+    "docker_executable": true,
+    "isolated_instance_verified": false,
+    "local_initdb": false,
+    "required": [
+      "zhparser",
+      "vector",
+      "pg_trgm",
+      "zhcfg"
+    ],
+    "status": "not_verified_no_database_contact"
+  },
+  "protected_paths_sha256": "6f922af2ec0b681f89c9befe7706a7923fc4ba497e9417856604b2eb67216b5a",
+  "schema": "r2-p0-baseline-1",
+  "scope": {
+    "gold_access": "opaque file hashes only",
+    "holdout_source_access": false,
+    "production_db_access": false,
+    "real_market_calls": 0,
+    "real_model_calls": 0
+  },
+  "untracked_protected_paths": [
+    "plugins/corpus/_bls_archive.py",
+    "plugins/corpus/_semantic_validation.py",
+    "plugins/corpus/macro_models.py",
+    "plugins/corpus/macro_official.py",
+    "plugins/corpus/macro_verification.py",
+    "plugins/corpus/material_semantics.py",
+    "tests/test_corpus_layout_recovery.py",
+    "tests/test_corpus_macro_models.py",
+    "tests/test_corpus_macro_official.py",
+    "tests/test_corpus_material_semantics.py",
+    "tests/test_corpus_semantic_gates.py"
+  ],
+  "workspace_code_diff_sha256": "5e044251053ddd4afe9475f31b111e88c78a8d3eb8a485843b425a4392a389f7"
+}

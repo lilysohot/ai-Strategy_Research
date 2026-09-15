@@ -1,0 +1,103 @@
+{
+  "version": "r2-p3-fixed-development-review-freeze-1",
+  "date": "2026-09-14",
+  "stage": "P3",
+  "status": "stop_condition_reached_planner_zero_candidates",
+  "p2_status": "technical_gate_completed_with_pg_historical_uncertainty_retained",
+  "p4_budget_authorized": false,
+  "scope": {
+    "development_sample_count": 4,
+    "micro_scope_count": 6,
+    "gold_item_count": 35,
+    "positive_relation_count": 17,
+    "negative_relation_count": 8,
+    "production_code_changed": false,
+    "protected_existing_files_changed": 0,
+    "holdout_source_paths_opened": 0
+  },
+  "external_activity": {
+    "model_calls": 0,
+    "judge_calls": 0,
+    "postgres_access": 0,
+    "market_calls": 0,
+    "ingestion_runs": 0
+  },
+  "legacy_replay": {
+    "v12": {
+      "raw_response_files": 9,
+      "terminal_records_accounted": 37,
+      "invalid_json_lines": 0,
+      "new_wire_records_accepted": 0
+    },
+    "v13": {
+      "raw_response_files": 9,
+      "terminal_records_accounted": 37,
+      "invalid_json_lines": 0,
+      "new_wire_records_accepted": 0
+    },
+    "raw_response_hashes_bound_by_inventory": 18,
+    "new_runtime_replay": "not_replayable_without_fabricating_protocol_fields"
+  },
+  "planner_review": {
+    "micro_selected_chars": 741,
+    "micro_candidate_obligations": 0,
+    "micro_unresolved_obligations": 6,
+    "full_selected_chars": 17044,
+    "full_candidate_obligations": 0,
+    "full_unresolved_obligations": 14,
+    "human_review_records": 35,
+    "human_approved_records": 0,
+    "dominant_failure": "compound_or_condition",
+    "diagnosis": "planner_grain_and_scope_generation_failure_not_batch_capacity"
+  },
+  "gates": {
+    "G0_identity_scope": "passed",
+    "G1_terminal_capacity": "not_evaluated_for_new_model_output",
+    "G2_content_fidelity": "not_evaluated_review_required",
+    "G3_field_semantics": "not_evaluated_review_required",
+    "G4_relations": "not_evaluated",
+    "G5_old_flow_isolation": "passed_by_p2b_frozen_evidence",
+    "G6_class_non_regression": "not_evaluated_no_new_protocol_outputs"
+  },
+  "verification": {
+    "p3_tests": 11,
+    "p1_tests": 65,
+    "p2a_tests": 73,
+    "p2b_tests": 75,
+    "combined_tests_passed": 224,
+    "ruff": "passed",
+    "import_smoke_stage_1": "339/339",
+    "import_smoke_stage_2": "388/388",
+    "symbol_closure": "438/438",
+    "p2b_protected_guard": "passed"
+  },
+  "out_of_scope_artifacts_removed": [
+    ".scratch/corpus-evidence-pipeline/p3-validation.xml",
+    ".scratch/corpus-evidence-pipeline/p3-validation-final.xml"
+  ],
+  "recommended_next_decision": {
+    "preferred": "scratch_only_bounded_clause_lattice_planner_prototype",
+    "fallback": "downgrade_R2_to_evidence_assisted_reading_with_human_confirmation",
+    "new_model_budget": false
+  },
+  "input_sha256": {
+    ".scratch/corpus-evidence-pipeline/r2-p3-change-scope.json": "1f4a25b1919460a2b941e1da4cd30d20d5775d79e08753c27d3a8979b27996d0",
+    ".scratch/corpus-evidence-pipeline/r2-p2b-manifest.json": "85d587047b680b5c76ca985f63945ec243d69e7d16e8ddf35a5596144b72ab3f",
+    ".scratch/corpus-evidence-pipeline/r2-p2b-pg-readonly-manifest.json": "ec6738e40037067e1153b042054383484557c66b32332fce06f20e08da6ec1b8",
+    "data/corpus/.audit/r1_material_gold_v1_20260913.json": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+    "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-09b119120285666aac93fcb41ce1f8c0ebe3c4bb563f50a964bdc30b0b301b40.json": "ac6acd4aee29aa13e4e2903c3b217692093521135def82b9a6c05489d06b151a",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-46caccfc1c7d23ef3858a8a501560c07b250888b0b3f189fdff75d8ba6bc6b4b.json": "34cc841e98257580889681907f86cce54003f4a46e5df8f14df451fbd502f8ab",
+    ".scratch/corpus-evidence-pipeline/r2-v12-atomic-items-budget-v6.json": "d6a3e15300255f4a73e9ed6e8a7bc712fdc9b996f1e92b02c3aea545b49d47ca",
+    ".scratch/corpus-evidence-pipeline/r2-v13-final-items-budget-v7.json": "300437b718abb8d9f890327be375c23c083bae1f8ba2a91108dc5b4d6a960e7f",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/item-contract-score-v2-76525bcdee094fbb621db58a802afad78faeabc0f4573b4c61e8f45520c41e51.json": "ea50201370d6fa318efbfe7bd90496bb465d4b5089850f006fc57a3f93dcacc3",
+    ".scratch/corpus-evidence-pipeline/material-semantics-runs/item-contract-score-v2-203a306ebfc2dc881fbbffc78a76b08d771a5b5c596c4cde87c3adadd40a04f0.json": "ffcedfe0c35bfbcd1c2035f87ed26a820425aac5865e892e7ef70637a1ccfd76"
+  },
+  "deliverable_sha256": {
+    ".scratch/corpus-evidence-pipeline/p3_replay_review.py": "dbbd2dd98038508a2db43730f22af9ac4073b1a83e5e93a0b6e62cf52e81cfe6",
+    ".scratch/corpus-evidence-pipeline/test_p3_replay_review.py": "62d8f11e5c5069ad56b6dce3a4491967ac8ae1995fbfe9ebfdc33d5d6fed384a",
+    ".scratch/corpus-evidence-pipeline/r2-p3-replay-inventory.json": "3302f44ff9e0746c387b33054479d6ed55650fb329d2b1337768b2e1487a44bd",
+    ".scratch/corpus-evidence-pipeline/r2-p3-review-queue.json": "0a835c295146c81a6787878ebb86c83e8e5722e953dcea2381de2a8e69a8634c",
+    ".scratch/corpus-evidence-pipeline/r2-p3-report.md": "252caf91ccdc79d4386c7162bc1ade05a3745756dfce97affaa76c7cfe8b86bc"
+  }
+}

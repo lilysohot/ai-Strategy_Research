@@ -1,0 +1,51 @@
+{
+  "version": "r2-p3i-manifest-1",
+  "date": "2026-09-14",
+  "status": "projection_and_zero_model_gates_passed_human_bridge_review_required",
+  "authorization": {
+    "development_model_use_permitted": true,
+    "actual_model_calls": 0,
+    "reason_model_not_used": "Evaluation criteria must be frozen independently before P4 model output is observed.",
+    "postgres_access": 0,
+    "holdout_reads": 0,
+    "relation_calls": 0,
+    "ingestion_runs": 0
+  },
+  "bindings": {
+    "p0_external_manifest_sha256": "4e2c45ce216a942137f60b863e236ae46f3a8870317ebdbe9ead6342b4698076",
+    "p1_contract_sha256": "feebd1fd816ff824345185f7e3d690ea25621080d9d348f7d53bb82650763776",
+    "p2b_manifest_sha256": "85d587047b680b5c76ca985f63945ec243d69e7d16e8ddf35a5596144b72ab3f",
+    "p3h_manifest_sha256": "d2282d831c6bc069a1819f2fae64b2d68336c9dbbf97eb02fcc47f79747533c3",
+    "p3h_completed_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275",
+    "effective_denominator_sha256": "3f5e972425074dc3640be8f7b9d80617e7cd78d89034b75b089b03d3dea1577d",
+    "protected_runtime_sha256": "2f8f025177721b74038ea469ee34b55120ce7ac9bf7b35419b9d801f8bd0546b"
+  },
+  "results": {
+    "projected_items": 35,
+    "speaker_registry_entries": 8,
+    "value_records_for_review": 8,
+    "unknown_constraints": 49,
+    "tests_passed": 21,
+    "combined_p1_through_p3i_tests_passed": 241,
+    "ruff": "passed",
+    "pyright_errors": 0,
+    "old_protected_files_unchanged": 2336,
+    "registered_protected_additions_matched": 3,
+    "human_gate": "not_evaluated",
+    "p4_budget_frozen": false
+  },
+  "files": {
+    ".scratch/corpus-evidence-pipeline/r2-p3i-change-scope.json": "a419d459d7da44c367c4b85337f9c4b24d885ad68c7a7f0c3857442f9083218c",
+    ".scratch/corpus-evidence-pipeline/p3i_contract_bridge.py": "27f189d937017b8e279bd64b99af85796137836b60f0af656d2ea8ffef6232fe",
+    ".scratch/corpus-evidence-pipeline/test_p3i_contract_bridge.py": "1e525e68f67eb7b8811669c1e487a9a69201a56d044f5b3c83879758b1b2dcea",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-inventory.json": "b2632e12ad5421721538587a159fdac2f5b8f08007e21c6c196e9ac1c33e483d",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-field-review-template.json": "0111c5bc62fd695f8105db5b38282a80cfa0d48a4c50e44cbd9efa44fe566230",
+    ".scratch/corpus-evidence-pipeline/r2-p3i-report.md": "192641647cd3d7bd1af47ed8edac728735babbfe90ba69cd769009c2b936bdd6",
+    ".scratch/corpus-evidence-pipeline/r2-p4-readiness-contract-gap-report.md": "31bcc5d7d909f3e1c42620611d54be8f56a6a82789ae6de58ab289d0359d5ed0",
+    "docs/plan/r2-local-redesign-cli-closure-plan.md": "dd850be1d7e419a9c51f3569ebeb1adc132154fce6ac89eb26490028d53b4712",
+    "docs/plan/claims-market-closed-loop-plan.md": "277d4d6df81226b2e83b06d261ffca15d797cde9fa56d0bd965b1e1f60e0d227",
+    "docs/plan/README.md": "62b7ed422de4962bc55416594852505c08c91f4d006bac8bc7550236ccb65385",
+    ".scratch/corpus-evidence-pipeline/spec.md": "36bb9c6fcd7d4540a5c947f97a9bbbac2cc41e8bd69f95d2f8570b4ac15470a6",
+    ".scratch/corpus-evidence-pipeline/issues/20-material-semantics.md": "0090baeea368421149bcee114cca28bf59a368c5032043fdf28c0471f1504920"
+  }
+}

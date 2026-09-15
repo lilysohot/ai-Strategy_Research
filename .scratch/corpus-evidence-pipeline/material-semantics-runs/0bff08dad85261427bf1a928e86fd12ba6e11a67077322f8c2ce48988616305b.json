@@ -1,0 +1,340 @@
+{
+  "run_id": "0bff08dad85261427bf1a928e86fd12ba6e11a67077322f8c2ce48988616305b",
+  "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+  "extractor_version": "material-semantics-12",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_1c54a975d0b5",
+        "display_name": "James-Bulltard",
+        "role": "source_author",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_6c0e0ffe1a8f",
+        "display_name": null,
+        "role": "quoted_source",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_11162f4a9ec0e26e",
+        "text": "作者以14.76的价格又买入了10,000股TTD",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I added 10,000 more at 14.76",
+            "start": 42,
+            "end": 70
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a401d06970eeda8a",
+        "text": "作者卖出了100份周五到期的$15看涨期权，价格为0.16，以增加仓位",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "sold 100 $15 calls for friday for .16",
+            "start": 75,
+            "end": 112
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_18b8a33f24845dd9",
+        "text": "TTD价格仍远低于$25水平",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "this is still well below the $25 level",
+            "start": 136,
+            "end": 174
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_8056b4c8446f4fe2",
+        "text": "TTD CEO买入了价值1.5亿美元的股票",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "the CEO bought $150m worth",
+            "start": 175,
+            "end": 201
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [
+        "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8:relations_not_processed",
+        "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8:atomic_obligations_incomplete"
+      ],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_fae5dbe0cc15f74d",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "slot_text_only_numbering",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_a98ab89e6395c608",
+          "status": "extracted",
+          "item_refs": [
+            "itm_11162f4a9ec0e26e"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_7cae723d1a768d7f",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a401d06970eeda8a"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ce57c8df1b5c7f99",
+          "status": "extracted",
+          "item_refs": [
+            "itm_18b8a33f24845dd9"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_388a06119462c213",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8056b4c8446f4fe2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_22b692bbd549ea4a",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "slot_text_only_numbering",
+            "missing_signal:claim"
+          ]
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "status": "partial",
+      "records": 4,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v4",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 6,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 6903,
+              "prompt_tokens": 1260,
+              "completion_tokens": 633,
+              "reasoning_tokens": 0,
+              "finish_reason": "stop",
+              "content_chars": 2111,
+              "reasoning_chars": 0
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_1016932864bc4e42",
+        "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+        "locator": "5",
+        "start": 0,
+        "end": 674,
+        "text": "My Open Book\nTrades I Made Today\n1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n2. FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n3. MDT - I sold 50 puts at $90 for next week for .47\n4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_fae5dbe0cc15f74d",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 33,
+      "end": 36,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "1. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_a98ab89e6395c608",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 36,
+      "end": 70,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "TTD - I added 10,000 more at 14.76",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_7cae723d1a768d7f",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 70,
+      "end": 136,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": " and sold 100 $15 calls for friday for .16 adding\nto my position, ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_ce57c8df1b5c7f99",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 136,
+      "end": 175,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "this is still well below the $25 level ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_388a06119462c213",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 175,
+      "end": 202,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "the CEO bought $150m worth\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_22b692bbd549ea4a",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 394,
+      "end": 397,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "4. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    }
+  ]
+}

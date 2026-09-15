@@ -345,6 +345,9 @@ _PERSONAL_TRADE_HINT_RE = re.compile(
     r"\bnew positions\b|\bstop(?:ped)? out\b",
     flags=re.IGNORECASE,
 )
+_DIALOGUE_TURN_RE = re.compile(
+    r"(?:^|\n)\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)\s*[：:]"
+)
 _EMAIL_RE = re.compile(r"[\w.%-]+@[\w.-]+\.[A-Za-z]{2,}")
 _TICKER_RE = re.compile(r"^\d{6}\.(?:SH|SZ)$", re.IGNORECASE)
 _NUM_TOKEN_RE = re.compile(r"\d+(?:\.\d+)?")
@@ -496,7 +499,7 @@ class ExtractionResult:
 
 
 def triage_block_detail(text: str) -> TriageDecision:
-    """候选召回：numeric / rating / personal_trade / qualitative / noise / no_signal。"""
+    """候选召回：数字、评级、交易、问答与定性材料；纯噪声仍拒绝。"""
     body = text or ""
     if not body.strip():
         return TriageDecision(False, "no_signal")
@@ -504,6 +507,8 @@ def triage_block_detail(text: str) -> TriageDecision:
         return TriageDecision(False, "noise")
     if _contains_personal_trade(body):
         return TriageDecision(True, "personal_trade")
+    if len(_DIALOGUE_TURN_RE.findall(body)) >= 2:
+        return TriageDecision(True, "dialogue")
     if any(ch.isdigit() for ch in body):
         return TriageDecision(True, "numeric")
     if _contains_rating(body):
@@ -520,6 +525,7 @@ def triage_blocks_detail(blocks: Sequence[BlockLike]) -> tuple[list[BlockLike], 
         "numeric": 0,
         "rating": 0,
         "personal_trade": 0,
+        "dialogue": 0,
         "qualitative": 0,
         "noise": 0,
         "no_signal": 0,
@@ -1063,12 +1069,14 @@ def _is_noise(text: str) -> bool:
         and len(body.strip()) < 220
         and _num_token_count(body) < 5
         and not _has_content_signal(body)
+        and not _has_numeric_assertion(body)
     ):
         return True
     if (
         "相关研究报告" in body
         and body.count("《") >= 8
         and not any(hint in body for hint in ("核心观点", "投资要点", "报告要点"))
+        and not _has_numeric_assertion(body)
     ):
         return True
     if (
@@ -1114,6 +1122,20 @@ def _has_content_signal(text: str) -> bool:
     return _contains_hint(text, _CONTENT_HEADING_HINTS) or _contains_hint(
         text, _CONTENT_ASSERTION_HINTS
     )
+
+
+def _has_numeric_assertion(text: str) -> bool:
+    """A sidebar/footer must not veto a substantive statistical sentence.
+
+    Titles in related-reading lists and ratings boilerplate are not assertions.
+    This only protects recall; evidence and calculation gates still run later.
+    """
+    body = re.sub(r"《[^》]*》", "", text)
+    body = re.sub(r"\s+", "", body)
+    return bool(re.search(
+        r"(?:同比|环比)(?:增长|下降|上升|增加|减少|上涨|下跌|升|降)?"
+        r"[+\-−]?\d+(?:\.\d+)?%", body
+    ))
 
 
 def _email_count(text: str) -> int:

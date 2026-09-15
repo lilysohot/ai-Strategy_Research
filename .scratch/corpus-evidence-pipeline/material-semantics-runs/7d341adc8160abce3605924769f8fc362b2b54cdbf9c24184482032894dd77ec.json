@@ -1,0 +1,65 @@
+{
+  "run_id": "7d341adc8160abce3605924769f8fc362b2b54cdbf9c24184482032894dd77ec",
+  "evidence_run_id": "082192a0758020ff26e5514e80bf897c644368ac65c65b5731f8048ce7c8de2f",
+  "extractor_version": "material-semantics-6",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [],
+    "items": [],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [
+        "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8:items_error:ValueError"
+      ],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 8829,
+            "prompt_tokens": 791,
+            "completion_tokens": 1018,
+            "reasoning_tokens": 33,
+            "finish_reason": "stop",
+            "content_chars": 3480,
+            "reasoning_chars": 143,
+            "discarded_records": 8,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    }
+  ]
+}

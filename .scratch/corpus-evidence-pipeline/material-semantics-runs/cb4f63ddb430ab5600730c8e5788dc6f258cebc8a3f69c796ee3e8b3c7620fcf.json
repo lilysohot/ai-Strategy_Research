@@ -1,0 +1,572 @@
+{
+  "run_id": "cb4f63ddb430ab5600730c8e5788dc6f258cebc8a3f69c796ee3e8b3c7620fcf",
+  "evidence_run_id": "97b40b7f57fbd96806e6f96dc0aa87e108d92ae99c81ff7dd487741ebdd36bc6",
+  "extractor_version": "material-semantics-13",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-16_6f14cc14",
+      "source_rev": "6f14cc145b798b37",
+      "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "material_date": "2026-08-16",
+      "published_at": "2026-08-16",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_c82b0ee614fd",
+        "display_name": "欧阳予、田晨曦、张慧",
+        "role": "analyst_author",
+        "identity_status": "explicit"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_c1c9864e50c77826",
+        "text": "茅台经营向上明确，底层逻辑未变",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "茅台经营向上明确，底层逻辑未变",
+            "start": 1475,
+            "end": 1490
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_2c4b3faca2234b73",
+        "text": "维持26-28年EPS预测值67.74/70.77/73.84元",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": "26-28年 67.74/70.77/73.84元",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "维持26-28 年EPS 预测值\n67.74/70.77/73.84 元",
+            "start": 1493,
+            "end": 1529
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_0bbc487429fd6476",
+        "text": "维持一年目标价2030元",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": "2030元",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "维持一年目标价2030 元",
+            "start": 1530,
+            "end": 1543
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_cba2630b0d710820",
+        "text": "风险提示：宏观需求持续疲软",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "宏观需求持续疲软",
+            "start": 1561,
+            "end": 1569
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_8a232a090479c730",
+        "text": "风险提示：消费复苏不及预期",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "消费复苏不及预期",
+            "start": 1570,
+            "end": 1578
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_6c4827582bd53003",
+        "text": "行业竞争加剧等风险",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_c82b0ee614fd",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "行业竞争加剧等。",
+            "start": 1579,
+            "end": 1587
+          }
+        ],
+        "unknown_fields": [
+          "time",
+          "value",
+          "external_verification"
+        ]
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "1"
+      ],
+      "omitted_areas": [
+        "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b:relations_not_processed",
+        "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b:atomic_obligations_incomplete"
+      ],
+      "unknowns": [],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_a28df1553ef81190",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c1c9864e50c77826"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_03fd88dc9afca766",
+          "status": "extracted",
+          "item_refs": [
+            "itm_2c4b3faca2234b73"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ef7e8464348d233f",
+          "status": "extracted",
+          "item_refs": [
+            "itm_0bbc487429fd6476"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_91de9db963452478",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "item_failed_validation",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_3589bd5c6d64774b",
+          "status": "extracted",
+          "item_refs": [
+            "itm_cba2630b0d710820"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_934838521df47086",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8a232a090479c730"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_fc42861a679cdd56",
+          "status": "extracted",
+          "item_refs": [
+            "itm_6c4827582bd53003"
+          ],
+          "reason_codes": []
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "1a16c3e732c9b7094ddb1547d18fb81ced0b77af61082cd4e21b8eadf6748a82",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "bb7ec711a15fbccbef46f8eac0f5ffd492202d88d055893326ff99157f4782e5",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "4927b5abf9726f1d6cf19aa4c0557a5ad75e7a089a3da3c9ec7707859476db4e",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "5edb1f753a47b0067d2be018279aa1a9072300e878c524ccbc6499be010a90ec",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "ec6cbe1e11416f368327e0aecc40f567be56f1023269bc4601124f710ee6cb27",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "f5d1965adc9a3155d59b18674fc28e5d05f949c3cc885f52cd944d59ca121056",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "66c35bb27b62ad7b930553086cbd13f2e4a9731a3b3bb3c831d20f72373d1372",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "status": "partial",
+      "records": 6,
+      "model_calls": 2,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v4",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 6,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 5869,
+              "prompt_tokens": 1372,
+              "completion_tokens": 786,
+              "reasoning_tokens": 0,
+              "finish_reason": "stop",
+              "content_chars": 2534,
+              "reasoning_chars": 0,
+              "discarded_records": 1,
+              "coverage_protocol_incomplete": true
+            },
+            {
+              "batch_index": 1,
+              "candidate_slots": 1,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 2227,
+              "prompt_tokens": 1010,
+              "completion_tokens": 164,
+              "reasoning_tokens": 0,
+              "finish_reason": "stop",
+              "content_chars": 523,
+              "reasoning_chars": 0
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_876022efdc7b0a3c",
+        "packet_id": "1a16c3e732c9b7094ddb1547d18fb81ced0b77af61082cd4e21b8eadf6748a82",
+        "locator": "1",
+        "start": 0,
+        "end": 77,
+        "text": "营业总收入(百万) | 2025A: 172,054 | 2026E: 178,657 | 2027E: 186,196 | 2028E: 194,063",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_ff6e569580181367",
+        "packet_id": "bb7ec711a15fbccbef46f8eac0f5ffd492202d88d055893326ff99157f4782e5",
+        "locator": "1",
+        "start": 0,
+        "end": 64,
+        "text": "同比增速(%) | 2025A: -1.2% | 2026E: 3.8% | 2027E: 4.2% | 2028E: 4.2%",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_a189f80984506063",
+        "packet_id": "4927b5abf9726f1d6cf19aa4c0557a5ad75e7a089a3da3c9ec7707859476db4e",
+        "locator": "1",
+        "start": 0,
+        "end": 73,
+        "text": "归母净利润(百万) | 2025A: 82,320 | 2026E: 84,679 | 2027E: 88,470 | 2028E: 92,302",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_a089d8deab8a5ae1",
+        "packet_id": "5edb1f753a47b0067d2be018279aa1a9072300e878c524ccbc6499be010a90ec",
+        "locator": "1",
+        "start": 0,
+        "end": 64,
+        "text": "同比增速(%) | 2025A: -4.5% | 2026E: 2.9% | 2027E: 4.5% | 2028E: 4.3%",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_eb4a8ee0da66d286",
+        "packet_id": "ec6cbe1e11416f368327e0aecc40f567be56f1023269bc4601124f710ee6cb27",
+        "locator": "1",
+        "start": 0,
+        "end": 67,
+        "text": "每股盈利(元) | 2025A: 65.85 | 2026E: 67.74 | 2027E: 70.77 | 2028E: 73.84",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_7eed2b3df8a8b5b1",
+        "packet_id": "f5d1965adc9a3155d59b18674fc28e5d05f949c3cc885f52cd944d59ca121056",
+        "locator": "1",
+        "start": 0,
+        "end": 54,
+        "text": "市盈率(倍) | 2025A: 20 | 2026E: 20 | 2027E: 19 | 2028E: 18",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_992b7103de1f55d8",
+        "packet_id": "66c35bb27b62ad7b930553086cbd13f2e4a9731a3b3bb3c831d20f72373d1372",
+        "locator": "1",
+        "start": 0,
+        "end": 58,
+        "text": "市净率(倍) | 2025A: 6.9 | 2026E: 6.1 | 2027E: 5.6 | 2028E: 5.2",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_9c011501a8a7a1a9",
+        "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+        "locator": "1",
+        "start": 0,
+        "end": 2590,
+        "text": " \n证券研究报告 \n证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号    \n \n \n公司研究 \n \n \n白酒  2026 年08 月16 日 \n \n \n \n贵州茅台（600519）2026 年中报点评 \n \n 强推 （维持） \n \n \n报表实质扎实，经营底部已过 \n \n \n目标价：2030 元 \n当前价：1341.99 元 \n \n \n事项： \n \n公司公布2026 年中报，26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%。单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。 \n评论： \n \n不唯指标论，Q2 茅台酒平稳，i 茅台增长亮眼，系列酒大幅调整拖累。公司上\n半年收入同增1.3%相对稳健，单Q2 收入同降5.2%略低于市场预期。分产品\n看，Q2 茅台酒收入略降1%表现平稳，i 茅台飞天持续大幅放量引流，线下经\n销商进度正常；系列酒营收同降25%，受茅台1935 及王子酒等单品调整出厂\n价及主动控制发货节奏影响，实际渠道反馈核心单品茅台1935 等动销表现较\n好。分渠道看，单Q2 直销占比同比大幅提升17.8pcts 至61.1%，i 茅台收入同\n增282.6%至187.1 亿，i 茅台市场“平衡器与稳定器”的成效得到初步验证。\n批发渠道同降34.9%，主要系生肖、精品等调整投放模式，叠加系列酒及海外\n市场调整减少所致，Q2 国外收入同降50.2%。 \n \n产品结构重回金字塔影响盈利，回款指标增长8%好于收入，经营质量仍高。\n单Q2 毛利率同降1.2pcts，主要是产品结构市场化改革过程中的正常表现，生\n肖、精品等高端产品定价遵循市场化同比调低出厂价，飞天占比提高后结构略\n有下降、以及Q2 系列酒调整较多导致产品结构下降。税费端相对平稳，税金\n率同比微增0.1pct，管理费用率同增0.3pct，销售费用率同降0.2pct，综上归\n母净利率同降0.9pct 至46.9%。单Q2 销售回款同增7.9%好于收入，表明公司\n实际产品周转较好、渠道回款配合度较高，实际经营质量仍高。经营性现金流\n净额同增915.8%，主要系财务公司吸收集团公司成员单位存款增加及不可随\n时支取的同业存款减少所致。 \n \n市场化改革有序推进，旺季放量、淡季挺价节奏清晰，且H2 供需关系进一步\n改善。今年公司坚持以市场需求为导向，不唯指标论，且改革节奏清晰：一季\n度抓住春节旺季放量窗口，销量大幅增长；进入淡季后挺价动作频出，二季度\n飞天连续两次提价（3 月底和7 月），且8 月线下自营店再次上调指导价，当\n前批价已站稳1700 元以上，投放量可由税金及附加科目推算（由于生产端缴\n税），Q1 此科目增长14.8%，Q2 下降4.8%，预计Q2 整体投放量偏紧。我们\n认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过，Q3 预计将\n抓住中秋旺季窗口放量，且下半年飞天供应偏紧、供需改善，生肖精品等高附\n加值产品性价比逐步凸显，利好结构升级。 \n \n投资建议：报表实质扎实，经营向上明确，重申“强推”评级。尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道，上半年初步验\n证公司市场化改革成效，尽管Q2 报表有所下滑，年内看兼顾报表和稳价稳中\n向好，下半年基数降低后增长确定性提高，且明年通过提价效应和产品结构增\n长路径清晰，中长期正构建“以需求为导向、消费者为中心”To C 营销体系。\n综上，茅台经营向上明确，底层逻辑未变，我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。 \n \n风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等。 \n \n主要财务指标 \n \n2025A \n2026E \n2027E \n2028E \n营业总收入(百万) \n172,054 \n178,657 \n186,196 \n194,063 \n同比增速(%) \n-1.2% \n3.8% \n4.2% \n4.2% \n归母净利润(百万) \n82,320 \n84,679 \n88,470 \n92,302 \n同比增速(%) \n-4.5% \n2.9% \n4.5% \n4.3% \n每股盈利(元) \n65.85 \n67.74 \n70.77 \n73.84 \n市盈率(倍)  \n20 \n20 \n19 \n18 \n市净率(倍) \n6.9 \n6.1 \n5.6 \n5.2 \n  \n资料来源：公司公告，华创证券预测      注：股价为2026 年8 月14 日收盘价 \n \n证券分析师：欧阳予 \n邮箱：ouyangyu@hcyjs.com \n执业编号：S0360520070001 \n证券分析师：田晨曦 \n邮箱：tianchenxi@hcyjs.com \n执业编号：S0360522090005 \n证券分析师：张慧 \n电话：021-20572556 \n邮箱：zhanghui1@hcyjs.com \n执业编号：S0360525070001 \n联系人：王培培 \n邮箱：wangpeipei@hcyjs.com \n \n公司基本数据 \n总股本(万股) \n125,008.16 \n已上市流通股(万股) \n125,008.16 \n总市值(亿元) \n16,775.97 \n流通市值(亿元) \n16,775.97 \n资产负债率(%) \n15.19 \n每股净资产(元) \n200.99 \n12 个月内最高/最低价 \n1,555.00/1,168.63 \n市场表现对比图(近12 个月) \n \n相关研究报告 \n《贵州茅台（600519）重大事项点评：再提价注入\n信心，市场化坚定推进》 \n2026-07-19\n《贵州茅台（600519）2025 年度股东大会点评：\n股东会传递信心，凝聚价值共识》 \n2026-06-14\n《贵州茅台（600519）深度研究报告：雄关漫道真\n如铁，而今迈步从头越》 \n2026-06-09\n \n \n-15%\n-3%\n8%\n19%\n25/08\n25/10\n26/01\n26/03\n26/06\n26/08\n2025-08-18~2026-08-14\n贵州茅台\n沪深300\n华创证券研究所 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_a28df1553ef81190",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1472,
+      "end": 1491,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "综上，茅台经营向上明确，底层逻辑未变，",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_03fd88dc9afca766",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1491,
+      "end": 1530,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_ef7e8464348d233f",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1530,
+      "end": 1543,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "维持一年目标价2030 元",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_91de9db963452478",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1543,
+      "end": 1553,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "和“强推”评级。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_3589bd5c6d64774b",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1556,
+      "end": 1570,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "风险提示：宏观需求持续疲软、",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_934838521df47086",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1570,
+      "end": 1579,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "消费复苏不及预期、",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    },
+    {
+      "candidate_slot_id": "slot_fc42861a679cdd56",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "locator": "1",
+      "start": 1579,
+      "end": 1591,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "行业竞争加剧等。 \n \n",
+      "explicit_role": null,
+      "segment_id": "seg_9c011501a8a7a1a9"
+    }
+  ]
+}

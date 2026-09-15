@@ -1,14 +1,16 @@
 # 多源资料库接入 Harness 架构设计（Discord + IMA）
 
 > ⚠️ **施工状态：本文档是历史远期探索，不是当前需求、流程或施工依据。**
-> 经架构评审收敛，当前施工范围是 **P0（投研内核 + 最小资料库）**，
-> 施工规格见 **[p0-implementation-spec.md](p0-implementation-spec.md)**。
+> 当时架构评审收敛范围是 **P0（投研内核 + 最小资料库）**，
+> 历史规格见 **[p0-implementation-spec.md](p0-implementation-spec.md)**。
 > 本文档中以下部分**已推后至 P1 及以后**：Discord / IMA 接入、向量检索、信号层与
 > `screen_tickers`、论证单元 LLM 抽取、全量 8000 份 ingest。
 > 本文档保留作为远期设计依据，其中的精度红线、近重复与数字处理原则对 P0 同样适用。
 > 当前产品状态与目标流程分别见 [product-requirements.md](product-requirements.md) 和
 > [business-process.md](business-process.md)；当前语料存储见
 > [plan/data-layer-architecture.md](plan/data-layer-architecture.md)。
+> 2026-09-15：本轮新目标唯一候选见[重构草案 v1.1](plan/corpus-ingestion-rebuild-architecture.md)，
+> I0 复核后才冻结；本文不恢复向量、模型调用或全量入库授权，也不作为平行施工方案。
 
 > 适用项目：FrontierAgent（本仓库）
 > 目标：将 Discord（实时社媒/信号流）与 IMA（知识库/研报/策略文档）两个数据源接入

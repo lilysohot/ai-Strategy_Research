@@ -1,0 +1,16 @@
+{
+  "version": "r2-p1-contract-manifest-1",
+  "date": "2026-09-14",
+  "status": "design_frozen_synthetic_planning_checks_passed",
+  "p0_manifest_sha256": "4e2c45ce216a942137f60b863e236ae46f3a8870317ebdbe9ead6342b4698076",
+  "authorization": {"stage": "P1", "real_model_calls": 0, "judge_calls": 0, "market_calls": 0, "ingestion": 0, "holdout_reads": 0},
+  "results": {"passed": 65, "failed": 0, "skipped": 0, "case_groups": 6, "synthetic_scenarios": 12, "production_changes": false},
+  "not_verified": ["semantic_fidelity", "real_development_atomic_coverage", "new_atomic_gold_denominators", "output_mutation_scorer", "relation_generation", "model_batch_cost", "postgres_integration", "cli_integration"],
+  "files": {
+    "docs/plan/r2-p1-interface-contract.md": "feebd1fd816ff824345185f7e3d690ea25621080d9d348f7d53bb82650763776",
+    ".scratch/corpus-evidence-pipeline/p1_planner_spec.py": "25f7e150dc79a8da33b73a2ef7ca65489b0abdadb94f2cc4785576e1d1b432d8",
+    ".scratch/corpus-evidence-pipeline/test_p1_planner_spec.py": "ca8d37f424a677639b6d8e1930c35fd3878f58f881ab292da608e790dc067dd8",
+    ".scratch/corpus-evidence-pipeline/p1-validation-results.xml": "55ba901b5a1c3911a396d2b389dd9c58cf26b6f76f271dd7312a62eeacadb079",
+    ".scratch/corpus-evidence-pipeline/p0-baselines/baseline-4e2c45ce216a9421/snapshot-p1-r2-disabled.json": "847f3381a5c2f86a86b0efcde6ae79efceba7e9662e964962e69071a06b0133b"
+  }
+}

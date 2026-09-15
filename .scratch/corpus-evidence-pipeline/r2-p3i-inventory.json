@@ -1,0 +1,1806 @@
+{
+  "version": "r2-p3i-field-contract-projection-1",
+  "split": "development",
+  "purpose": "evaluation_target_projection_only_never_model_input",
+  "bindings": {
+    "effective_denominator_sha256": "3f5e972425074dc3640be8f7b9d80617e7cd78d89034b75b089b03d3dea1577d",
+    "p3s_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609",
+    "p3h_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275",
+    "p2_evaluator_sha256": "2a6b138a7d3720335b585f4c0760c51f4768a571eca3652c538be759562c0aeb",
+    "p2_runtime_sha256": "2f8f025177721b74038ea469ee34b55120ce7ac9bf7b35419b9d801f8bd0546b"
+  },
+  "contract": {
+    "base_protocol": "r2-obligation-item-1",
+    "projection_version": "p3i-field-projection-1",
+    "axes": [
+      "semantic_type",
+      "speaker_ref",
+      "perspective",
+      "speech_role",
+      "polarity",
+      "behavior_status",
+      "temporal_frame",
+      "value",
+      "unit",
+      "statement_role"
+    ],
+    "speaker_rule": "scope_role_identity_registry_v1",
+    "value_rule": "literal_expression_or_three_allowlisted_transforms_v1",
+    "unit_rule": "explicit_source_symbol_else_unknown_v1",
+    "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+    "runtime_change_required_after_human_approval": true
+  },
+  "counts": {
+    "records": 35,
+    "speaker_registry_entries": 8,
+    "non_null_values": 8,
+    "value_origins": {
+      "unknown": 27,
+      "validated_transform": 3,
+      "source_observed": 5
+    },
+    "unit_treatments": {
+      "no_scalar_value": 27,
+      "explicit_unit_with_composite_value": 2,
+      "explicit_unit_single_value": 3,
+      "no_single_explicit_scalar_unit": 3
+    },
+    "unknown_constraints": 49
+  },
+  "speaker_registry": [
+    {
+      "speaker_ref": "spk-0b5d26c077a815418308",
+      "scope_id": "micro-copper-yield",
+      "speaker_role": "industry_expert",
+      "identity_status": "unknown"
+    },
+    {
+      "speaker_ref": "spk-38cb9bd55d64215d88a1",
+      "scope_id": "micro-copper-yield",
+      "speaker_role": "quoted_source",
+      "identity_status": "unknown"
+    },
+    {
+      "speaker_ref": "spk-42005d87d770636e8611",
+      "scope_id": "micro-copper-summary",
+      "speaker_role": "summary_author",
+      "identity_status": "unknown"
+    },
+    {
+      "speaker_ref": "spk-ada01339ef292649d034",
+      "scope_id": "micro-trade-ttd",
+      "speaker_role": "source_author",
+      "identity_status": "explicit"
+    },
+    {
+      "speaker_ref": "spk-bb3dfce46462d0a9bac3",
+      "scope_id": "micro-copper-yield",
+      "speaker_role": "investor_participant",
+      "identity_status": "unknown"
+    },
+    {
+      "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+      "scope_id": "micro-company-recommendation",
+      "speaker_role": "analyst_author",
+      "identity_status": "explicit"
+    },
+    {
+      "speaker_ref": "spk-d9dca5456c88c5cc479f",
+      "scope_id": "micro-trade-ttd",
+      "speaker_role": "quoted_source",
+      "identity_status": "unknown"
+    },
+    {
+      "speaker_ref": "spk-e6f8268869b5596596fa",
+      "scope_id": "micro-industry-q7-q8",
+      "speaker_role": "analyst_author",
+      "identity_status": "unknown"
+    }
+  ],
+  "records": [
+    {
+      "target_id": "mc-company-outlook",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "茅台经营向上明确，底层逻辑未变",
+      "approved_node": {
+        "node_id": "db31986daad28d88eb28cedda6a60ee6641df325e520872c1f680e2517008516",
+        "role": "alternative",
+        "span_id": "ee2286d9ea268bb9a14aecd687f0184fe747b8b413c1dfb600c76e872661271f",
+        "start": 3,
+        "end": 19,
+        "text": "茅台经营向上明确，底层逻辑未变，",
+        "text_sha256": "b7ccad1f4eb8e201f2b38d596fe3aa403a24f0cef898224776615f509f3cb79a"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-eps-forecast",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元",
+      "approved_node": {
+        "node_id": "17411295a9fa818640dac71377773746fd087df2e19545cf377cec0795ee1d0d",
+        "role": "alternative",
+        "span_id": "40f850cbbca6be9ff631d270dce7f123f1613df864ef4be777c91382cb7924d6",
+        "start": 20,
+        "end": 61,
+        "text": "我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，",
+        "text_sha256": "33b97ffdbbd5b6c64cefb44328f167f61897700b36d174d4712d25071be0e053"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "26-28年 67.74/70.77/73.84元",
+        "unit": "元",
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "26-28年 67.74/70.77/73.84元",
+        "value_origin": "validated_transform",
+        "transform_rule_id": "compose_explicit_year_range_and_eps_values_v1",
+        "value_binding": "all_numeric_tokens_source_bound_transform_pending_human_review",
+        "unit": "元",
+        "unit_origin": "source_observed",
+        "unit_treatment": "explicit_unit_with_composite_value"
+      },
+      "constraints": [],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-target-price",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "维持一年目标价 2030 元",
+      "approved_node": {
+        "node_id": "48207bdad8c082470b4fdf860e2ec2294b547fff5445aa9fb107ca5535a36e62",
+        "role": "clause",
+        "span_id": "270932b3527ac5d6e25c68672299b804449b355539ad47dc0c6448bcca074fd6",
+        "start": 61,
+        "end": 75,
+        "text": "维持一年目标价 2030 元",
+        "text_sha256": "f09513a87cf045ece533b3e27e8206454163112e66cdbf1cef479de74095595b"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "2030元",
+        "unit": "元",
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "2030元",
+        "value_origin": "source_observed",
+        "transform_rule_id": null,
+        "value_binding": "normalized_literal_substring",
+        "unit": "元",
+        "unit_origin": "source_observed",
+        "unit_treatment": "explicit_unit_single_value"
+      },
+      "constraints": [],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-risk-macro",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "宏观需求持续疲软",
+      "approved_node": {
+        "node_id": "8d0ada12fc2885a14b959c6ede86ceb93ddd85816c33e047f99559802404238b",
+        "role": "clause",
+        "span_id": "27385f27ad158b954e2769114a5841b3bf3d034eb4f9357c9d9f37755a7e5c4c",
+        "start": 85,
+        "end": 101,
+        "text": " 风险提示：宏观需求持续疲软、",
+        "text_sha256": "71dd451571c103123cf47eb5721153dbd6eb2defcb44337409b5b0dd3b77c5ae"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "risk"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:probability",
+        "unknown_field:time_horizon"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-risk-consumption",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "消费复苏不及预期",
+      "approved_node": {
+        "node_id": "ee748f048721873e7a249b4f7bf13fdc348f9abf4c085f451217495a00a3574d",
+        "role": "clause",
+        "span_id": "9038a03975ce27b2873d873eed944683e05d5d5a353500c3b03da84933063dcb",
+        "start": 101,
+        "end": 110,
+        "text": "消费复苏不及预期、",
+        "text_sha256": "2e616ce764b6a8d7447435d163ef2409f7c7a5e628d7561c22e2bb7c9c815ef3"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "risk"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:probability",
+        "unknown_field:time_horizon"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-risk-competition",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "行业竞争加剧",
+      "approved_node": {
+        "node_id": "2a6c9a8a41db74fe73ca894dbb8891312fd40b81f045e6d93c61096ed9390792",
+        "role": "clause",
+        "span_id": "b2583ab4c5bc1087730156cec1127b5ae9b1c73b8869d5b3952b4f65fb5378e0",
+        "start": 110,
+        "end": 119,
+        "text": "行业竞争加剧等 。",
+        "text_sha256": "11e7c299e8ef58d3482b8f9ceba0009cde4c4e2aaf9c6b82ba2e66807f7e4664"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "risk"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:probability",
+        "unknown_field:time_horizon"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mc-rating-v2",
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "source_quote": "“强推”评级",
+      "approved_node": {
+        "node_id": "e830610ea7c14ff9fe1cd4693723c5d8aca210d29f8f20c3294b17f7d094da39",
+        "role": "clause",
+        "span_id": "e830ce2748e8b8697ad8324cf00a15f2580960b31cd264e0a4a1eb6d046c25d6",
+        "start": 75,
+        "end": 83,
+        "text": "和“强推”评级。",
+        "text_sha256": "f1ad50c926949721f6cfbd852a3d880875d18244d692e219f7fb4f024ea127b8"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "强推",
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d435109a4d6d16c6a3f3",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "强推",
+        "value_origin": "source_observed",
+        "transform_rule_id": null,
+        "value_binding": "normalized_literal_substring",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_single_explicit_scalar_unit"
+      },
+      "constraints": [],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275"
+    },
+    {
+      "target_id": "mi-q-bottom",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "产品价格跌至底部，是否意味着买点出现？",
+      "approved_node": {
+        "node_id": "aa3493a08a6dfec98266b9dc289f2060c7abf6402f3b3bbf9191b8855a2c0aad",
+        "role": "alternative",
+        "span_id": "216773730b36352de8294067cc46985f07631becd06a5a4f255568b6ca1f62a6",
+        "start": 2,
+        "end": 21,
+        "text": "产品价格跌至底部，是否意味着买点出现？",
+        "text_sha256": "f3fe1ad1614294a27d57edd00bbdb67fac0ae049fa801f2bd7b145eb0afff41d"
+      },
+      "projected_fields": {
+        "semantic_type": "unknown",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "question"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-q-high",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "到了高位，是否意味着卖点？",
+      "approved_node": {
+        "node_id": "41c74c1e545e4b3007c985db2a9760300ef00ef8dd8a807fcdf2fed599716260",
+        "role": "alternative",
+        "span_id": "750f3e944818e1edf274103ca853346b724e88039e338048a6a0b33db1550eed",
+        "start": 21,
+        "end": 34,
+        "text": "到了高位，是否意味着卖点？",
+        "text_sha256": "32c0ba25f13f57ba6e3b5361c67097ae888c680401804abf4ceaa1f04aa5d139"
+      },
+      "projected_fields": {
+        "semantic_type": "unknown",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "question"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-long-odds",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "价格底部主要改善长期赔率",
+      "approved_node": {
+        "node_id": "ec7c66023fb21494fadce2719a5e18d8508c1d397af0701e70908f860626d530",
+        "role": "clause",
+        "span_id": "01eec8dd5d63ee79fd54b6740512f0e9d37a8c25b9827b07929a362a5e189b5a",
+        "start": 36,
+        "end": 49,
+        "text": "价格底部主要改善长期赔率，",
+        "text_sha256": "7f491e235c28d669af4948629b0efc043ca2ba29e36a35c77ef0870fc36f4b7f"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-not-inflection",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "并不一定等同于中期拐点",
+      "approved_node": {
+        "node_id": "e1731f3386247b155d2f0765ee86a017d2a53d651314fccbb76b39035a22f161",
+        "role": "clause",
+        "span_id": "3c6745a4738bd5dfbc71f01f8a11eb48407c402f4ef15424792be8fccab40036",
+        "start": 50,
+        "end": 62,
+        "text": "并不一定等同于中期拐点；",
+        "text_sha256": "87ca791084a967e846168fd6dfe7e23a7371da9cbea71cc1dc3338014e8cfd39"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-high-not-sell",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "价格处于高位也不必然构成卖点",
+      "approved_node": {
+        "node_id": "0a3e1fa693e7a61cf699d73e6d4e67403ae7ec035cd4a4667c177d5755178fae",
+        "role": "clause",
+        "span_id": "304499044c011f7cbf09ab6c893bab3da111c23e510721444513de624f38da37",
+        "start": 88,
+        "end": 103,
+        "text": "价格处于高位也不必然构成卖点，",
+        "text_sha256": "b2bf1195b57ee3445e85947536ecbb848fa7f98b4292ea6528d73637c88aff86"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-future-trend",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "关键仍是对未来景气趋势的判断",
+      "approved_node": {
+        "node_id": "e3a7ec7b3f6a088e6658b6b134343f569df7eacb1358b04023bab41ecfa78846",
+        "role": "clause",
+        "span_id": "8ad0f0bcf4be9ffe3bca443decf32608348d863b327f58d95c52f101d23aace1",
+        "start": 103,
+        "end": 118,
+        "text": "关键仍是对未来景气趋势的判断。",
+        "text_sha256": "646efab257363e277c0bf5e626f76f443443f5649a8ebd66ffb9d2881205b755"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-q-expansion",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+      "approved_node": {
+        "node_id": "9e9ea0831a9a5b61b391fc6168e1cc15692713098b83cbf03c8391ea2b50f2f9",
+        "role": "alternative",
+        "span_id": "e85f37103bdaf1e2528816cc4f01f687e499b6723e7c17f411e968e1eee23fec",
+        "start": 122,
+        "end": 149,
+        "text": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+        "text_sha256": "d5e4e1b3a1f9d6cf541f57ebeebcb2e0670b391a904be954d303bd4797e95f27"
+      },
+      "projected_fields": {
+        "semantic_type": "unknown",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "question"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-cycle",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "万物皆周期",
+      "approved_node": {
+        "node_id": "01f56899f81c45e9a2c41904e9bdb90f486eb82e70698af13b68d0ebad10f407",
+        "role": "clause",
+        "span_id": "c3b45ccd46b926f2e17a0c7dcaa790c3bc3af9f617eef7e46f8a57129e12730d",
+        "start": 151,
+        "end": 158,
+        "text": "“万物皆周期。",
+        "text_sha256": "520008d4179c152081a609693561dc468a85b26226220a334b53cf2d2cf24336"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-capacity-not-invalidate",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "未来的新增产能不应否定当前明确的景气阶段",
+      "approved_node": {
+        "node_id": "d10a71d46be4639390ddeea8235c73b8235131b306a81f8ced47ca6192e142f1",
+        "role": "clause",
+        "span_id": "e93befaefebd525bd3bf27f9d817fbd424ebd8d0424fd144e4cc156257af2c4a",
+        "start": 158,
+        "end": 180,
+        "text": "”未来的新增产能不应否定当前明确的景气阶段。",
+        "text_sha256": "22227c36bd74e12add4eeeee2cf5c1511d5a968c0f1183567937b0b2beec1878"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-price-cycles",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "不同行业均存在价格的变动",
+      "approved_node": {
+        "node_id": "79537c4903d24f7e95e1e6d4b369a5d2b68185ab4d98d6f70e30d168dc3b872e",
+        "role": "clause",
+        "span_id": "faa6d911428af3c3f0ec7c953a7fd055ec074e23e19503b99ccc22d853666137",
+        "start": 180,
+        "end": 193,
+        "text": "不同行业均存在价格的变动，",
+        "text_sha256": "7ac40ccf18291a2ebe52550f71d00b0dc9b98365115a92729e71f177277bdd9a"
+      },
+      "projected_fields": {
+        "semantic_type": "fact",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-cycle-length",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "每个行业景气长短不同",
+      "approved_node": {
+        "node_id": "be44945ec07e3b074f86f8ade7c9630ab74ba8803f0e38e0783941607de57f42",
+        "role": "clause",
+        "span_id": "13a1200d20c6bcd8804775772a6b833eaed9df6c013a20671eb19c22bfde0d1f",
+        "start": 194,
+        "end": 209,
+        "text": "只是每个行业景气长短不同而已，",
+        "text_sha256": "1cd5807d8c02055a9c4e9de8f61e95e399ed385a823928fa4e9b6405cd702ecf"
+      },
+      "projected_fields": {
+        "semantic_type": "fact",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-investment-value",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "只要未来一至两年供需持续改善， 行业仍具备周期投资价值",
+      "approved_node": {
+        "node_id": "f8cc9310618af7fa69f5f5991a6e7ce58312a08a7757e0ea304f8f0e856db20f",
+        "role": "condition",
+        "span_id": "c59aa7f142669b87cf28cede5a0f907cddf4a1fdc0202f8fd0d25a981b4d94ff",
+        "start": 210,
+        "end": 238,
+        "text": "只要未来一至两年供需持续改善， 行业仍具备周期投资价值。",
+        "text_sha256": "46f6fdb22ba2d1a35a0cccf997a9b34bb5b2400967d5825ef5aacf483fd4ce74"
+      },
+      "projected_fields": {
+        "semantic_type": "forecast",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "condition"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity",
+        "unknown_field:numeric_value"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mi-a-focus-balance-spread-v2",
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "source_quote": "中期投资更应关注供需改善的情况和\n价差扩张",
+      "approved_node": {
+        "node_id": "b8b14401592a9cce78abe624a1af9ffebe05afe4658a37da6c274c762a587975",
+        "role": "alternative",
+        "span_id": "80a5327efb7b14ec93f63ac22568eadb39af490ee471e85c3bb4eb2b1be1ba2e",
+        "start": 63,
+        "end": 85,
+        "text": "中期投资更应关注供需改善的情况和\n价差扩张。",
+        "text_sha256": "b6e2b0bc421c4586e63a97eb8bd7d431df319402a57f4998bf464e7f63bf8e87"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-e6f8268869b5596596fa",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:author_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275"
+    },
+    {
+      "target_id": "mt-added-shares",
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "source_quote": "TTD - I added 10,000 more at 14.76",
+      "approved_node": {
+        "node_id": "1824d1d76eb99a1c72c1a20676cfef11f26a15c1e5b7cb80e9d12e48c2892476",
+        "role": "alternative",
+        "span_id": "c75f3513f129c6df3adfd07291cadeda2f40bfabaa8ab4500a05160f241950e8",
+        "start": 0,
+        "end": 37,
+        "text": "1. TTD - I added 10,000 more at 14.76",
+        "text_sha256": "1cb4901dbbd575e2d05e4d3f749475571c0a1a9187a23607e3a49df2a214463d"
+      },
+      "projected_fields": {
+        "semantic_type": "behavior",
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "value": "10,000 at 14.76",
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "10,000 at 14.76",
+        "value_origin": "validated_transform",
+        "transform_rule_id": "drop_nonsemantic_more_token_v1",
+        "value_binding": "all_numeric_tokens_source_bound_transform_pending_human_review",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_single_explicit_scalar_unit"
+      },
+      "constraints": [
+        "unknown_field:external_execution_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mt-sold-calls",
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "source_quote": "sold 100 $15 calls for friday for .16",
+      "approved_node": {
+        "node_id": "c7db41d829684a2fdeb2c08e91c73b85ff7370f16300c993af8151c2733ccc87",
+        "role": "clause",
+        "span_id": "e9e9fdc5f50846e373a196d314d9b7e06cc8b1d49c20e7af5bf321c426f7a6ec",
+        "start": 38,
+        "end": 79,
+        "text": "and sold 100 $15 calls for friday for .16",
+        "text_sha256": "76e38e278479b2c755aa284447e3dea88bd4e229e6f16d1d2d381f8f4d6002ce"
+      },
+      "projected_fields": {
+        "semantic_type": "behavior",
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "value": "100 $15 calls at .16",
+        "unit": "$",
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "100 $15 calls at .16",
+        "value_origin": "validated_transform",
+        "transform_rule_id": "normalize_trade_price_preposition_and_omit_unresolved_date_v1",
+        "value_binding": "all_numeric_tokens_source_bound_transform_pending_human_review",
+        "unit": "$",
+        "unit_origin": "source_observed",
+        "unit_treatment": "explicit_unit_with_composite_value"
+      },
+      "constraints": [
+        "unknown_field:calendar_date",
+        "unknown_field:external_execution_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mt-below-ceo-level",
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "source_quote": "this is still well below the $25 level",
+      "approved_node": {
+        "node_id": "eb2c41950c5a053ec2cc80a24558d592defc9e91b64987774f6d4cbe1c921f86",
+        "role": "clause",
+        "span_id": "710eb8ab84aad0301ec719001ee794728247515bcb8c853834f689bdd3b52e27",
+        "start": 103,
+        "end": 141,
+        "text": "this is still well below the $25 level",
+        "text_sha256": "44c037e25ade70064d9de98ab6253065bf4b994336e48aa851615bef8cf3de9c"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "$25 level",
+        "unit": "$",
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-ada01339ef292649d034",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "$25 level",
+        "value_origin": "source_observed",
+        "transform_rule_id": null,
+        "value_binding": "normalized_literal_substring",
+        "unit": "$",
+        "unit_origin": "source_observed",
+        "unit_treatment": "explicit_unit_single_value"
+      },
+      "constraints": [
+        "unknown_field:comparison_price_timestamp"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mt-ceo-bought",
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "source_quote": "the CEO bought $150m worth",
+      "approved_node": {
+        "node_id": "b92fc05b80d4d13acd21fdd6494423106d2f9557a6f9bb9c14878bb618e6276b",
+        "role": "clause",
+        "span_id": "125f1f84914cec7d8466fccb4763a51e651cbf91929e0904a094678d847ec522",
+        "start": 142,
+        "end": 168,
+        "text": "the CEO bought $150m worth",
+        "text_sha256": "55422cbca470282f8273821eba389080a6529bd6468ed5a5737baf8a97bdfc05"
+      },
+      "projected_fields": {
+        "semantic_type": "fact",
+        "speaker_ref": "spk-d9dca5456c88c5cc479f",
+        "perspective": "quoted_other",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": "$150m",
+        "unit": "$",
+        "statement_role": "evidence"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-d9dca5456c88c5cc479f",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "$150m",
+        "value_origin": "source_observed",
+        "transform_rule_id": null,
+        "value_binding": "normalized_literal_substring",
+        "unit": "$",
+        "unit_origin": "source_observed",
+        "unit_treatment": "explicit_unit_single_value"
+      },
+      "constraints": [
+        "unknown_field:ceo_identity",
+        "unknown_field:transaction_date",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcs-industry-substitution-v2",
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "铜箔设备行业正处于国产替代加速期",
+      "approved_node": {
+        "node_id": "c9ca6f630534da90799ac439bc54c755c621498f6d7291df8a56a6a2648d23d9",
+        "role": "clause",
+        "span_id": "059397aea3d8ed442fafd5d0e95c4525fe66d47527e3d124bfbee171955ca66a",
+        "start": 5,
+        "end": 22,
+        "text": "铜箔设备行业正处于国产替代加速期，",
+        "text_sha256": "8f879ec93b96947ace78b74a4c03c0513e37ccf63c127ef64ee480b57f3eea08"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "perspective": "unknown",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:summary_authorship",
+        "unknown_field:summary_generation_method"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275"
+    },
+    {
+      "target_id": "mcs-taijin-growth-v2",
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力",
+      "approved_node": {
+        "node_id": "6d519b10709032e954b1d85ac5909eb1cfdd38f3b55a7f39ca6410783bd927d6",
+        "role": "alternative",
+        "span_id": "c8b8329aea9ed6e0776e0177bc13493838680dc9921d395ce1a3b915fc409621",
+        "start": 22,
+        "end": 55,
+        "text": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，",
+        "text_sha256": "fd236fca096b6c934ca9ae97750c7bd73bc121dc2267d8a39b368db7342fee0c"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "perspective": "unknown",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:summary_authorship",
+        "unknown_field:summary_generation_method"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275"
+    },
+    {
+      "target_id": "mcs-surface-treatment-v2",
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "表处理设备将成为重要增量",
+      "approved_node": {
+        "node_id": "8a0d032185c4cf749b3db33342465709167000ecd4e3e4680d4a22e59ecd9626",
+        "role": "clause",
+        "span_id": "f3fa2ca3beb8acef023ffab672afc533c393ca45b580aec75c0ece57d77c3930",
+        "start": 55,
+        "end": 70,
+        "text": "尤其表处理设备将成为重要增量。",
+        "text_sha256": "0b5e3b872558ad91511afc3814876982a3b92769c2ed5ea1b4046560e77bfd39"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "perspective": "unknown",
+        "speech_role": "statement",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unit": null,
+        "statement_role": "claim"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-42005d87d770636e8611",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:summary_authorship",
+        "unknown_field:summary_generation_method"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "5fe77427e1fc0727ccd16bc8542f26a0f9619161cfad40f1c22e3270a9f46275"
+    },
+    {
+      "target_id": "mcy-q-cause",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "您觉得良品率低是设备问题还是工艺问题？",
+      "approved_node": {
+        "node_id": "9f0cc5c75decd2819e89690baad1f8861c384f5b2a5a3dfa6272fbcc4c34fe86",
+        "role": "clause",
+        "span_id": "8693d1d3b6d04f47bf0e475c085b8936b63c88db1851e4da117a5ab2a558d7ba",
+        "start": 7,
+        "end": 26,
+        "text": "您觉得良品率低是设备问题还是工艺问题？",
+        "text_sha256": "e5306d0d1c9a2ee25ad3f46e9a213a4426b0acd4923edf6f9790c8849397d313"
+      },
+      "projected_fields": {
+        "semantic_type": "unknown",
+        "speaker_ref": "spk-bb3dfce46462d0a9bac3",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "question"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-bb3dfce46462d0a9bac3",
+        "speaker_role": "investor_participant",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:investor_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-q-improve",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "设备端能配套改进吗？",
+      "approved_node": {
+        "node_id": "c1b82abaeb1acb15afdd0457b7b778b8ca0538ac15822ace65d3820e4bb568ef",
+        "role": "clause",
+        "span_id": "50a3276df6fec0b6ad0d8728f3458f7e69372a952a26befd3d32b885a4111506",
+        "start": 26,
+        "end": 36,
+        "text": "设备端能配套改进吗？",
+        "text_sha256": "34b7fe6508b29e1d7a4caae4d69b928d20d858b387480f5fb78bbb3e202de9ad"
+      },
+      "projected_fields": {
+        "semantic_type": "unknown",
+        "speaker_ref": "spk-bb3dfce46462d0a9bac3",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "question"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-bb3dfce46462d0a9bac3",
+        "speaker_role": "investor_participant",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:investor_identity"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-a-leading",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "我认为设备目前加工精度和控制精度已经做到行业领先",
+      "approved_node": {
+        "node_id": "7bb58ba8cab3f446bd9feb6a49c54506185c937e5987129cd987320d6c2965a1",
+        "role": "clause",
+        "span_id": "86ba2d9dca600162dc32f922d8faecb32c76b85a902f5c1fbd6086b8d0967690",
+        "start": 41,
+        "end": 66,
+        "text": "我认为设备目前加工精度和控制精度已经做到行业领先，",
+        "text_sha256": "5146ffe2e8a204d65892d2cea9b90a98c1c112b167c1a8a2c099a1d248d779e9"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-0b5d26c077a815418308",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-0b5d26c077a815418308",
+        "speaker_role": "industry_expert",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:expert_identity",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-a-process",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "大概率跟工艺挂钩",
+      "approved_node": {
+        "node_id": "8a038a2c07acf5e499ff13af4acf268e7d9f0e9ef3d900a79c4dae076e7ea513",
+        "role": "clause",
+        "span_id": "8ea865e917c048a5e31f6a52b70c4a4efcb4daf050c6d2fe8f2b2e098645d75c",
+        "start": 66,
+        "end": 77,
+        "text": "那么大概率跟工艺挂钩。",
+        "text_sha256": "4b7772e1e230b0de01be03f46103163dbff7a058307af2ef8d85b40eebfdfb78"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-0b5d26c077a815418308",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unit": null,
+        "statement_role": "answer"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-0b5d26c077a815418308",
+        "speaker_role": "industry_expert",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:expert_identity",
+        "unknown_field:probability",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-e-ratio",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "他说工艺和设备是64开",
+      "approved_node": {
+        "node_id": "ca6f1ae1249ebf980ed8e43321ccf385be271b967acb9f9ddb50870d62b56ec0",
+        "role": "clause",
+        "span_id": "c2876c24753c894b415b8726d60bb5016b7a873ce567d6fe7a16f9cb02d5ef43",
+        "start": 88,
+        "end": 100,
+        "text": "他说工艺和设备是64开，",
+        "text_sha256": "78b179d814794a67b4295c43fe8033c36ab8f6075a72865397ddf1fe9581c0b1"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": "64开",
+        "unit": null,
+        "statement_role": "evidence"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": "64开",
+        "value_origin": "source_observed",
+        "transform_rule_id": null,
+        "value_binding": "normalized_literal_substring",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_single_explicit_scalar_unit"
+      },
+      "constraints": [
+        "unknown_field:quoted_speaker_identity",
+        "unknown_field:ratio_definition",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-e-process-major",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "工艺占大头",
+      "approved_node": {
+        "node_id": "defd0fbc29463a77b7cb05087e643147383d2a8cae2b82833175e05ae5e07baf",
+        "role": "clause",
+        "span_id": "653bba0bb9633a411b4eb6b4815735d3deb47eca13a3255f449b8b29a4a5b932",
+        "start": 100,
+        "end": 106,
+        "text": "工艺占大头，",
+        "text_sha256": "d576bd7ccfb378b8ffc2b03a457fcf6aec811d63abfa6eaef80fdc6419e12dba"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unit": null,
+        "statement_role": "evidence"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:quoted_speaker_identity",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-e-device-support",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "设备只是配套",
+      "approved_node": {
+        "node_id": "42df5bf57cc7e76e9c8cc8b8be1a5143812b2021c806f58a3197238931c67546",
+        "role": "clause",
+        "span_id": "6bcfda24f46dc20f6c3942ec23e2f9296873b5029e9e1c1489c77530aab9d825",
+        "start": 106,
+        "end": 113,
+        "text": "设备只是配套，",
+        "text_sha256": "c53d1d5f649fc35462cd2297587cb6426704b31a5e0185b35c721a3426ddb7eb"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unit": null,
+        "statement_role": "evidence"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:quoted_speaker_identity",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    },
+    {
+      "target_id": "mcy-e-device-needed",
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_quote": "但没设备也不行",
+      "approved_node": {
+        "node_id": "5b163e53546f8ee0cdc75702791383fccb0e8378bd56e162ae0349bd357e4ef9",
+        "role": "clause",
+        "span_id": "252e3e69cdb2d6ebba9aebebdf4cacb2ea8f40d304793654a1e45585f4e0f7a0",
+        "start": 113,
+        "end": 121,
+        "text": "但没设备也不行。",
+        "text_sha256": "f7f01bcbae49d51d8ee62fc0a6f7f418b09977bf59ae4e9e1f7c49df9c500fc0"
+      },
+      "projected_fields": {
+        "semantic_type": "opinion",
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unit": null,
+        "statement_role": "evidence"
+      },
+      "speaker_projection": {
+        "speaker_ref": "spk-38cb9bd55d64215d88a1",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "rule": "scope_role_identity_registry_v1"
+      },
+      "value_projection": {
+        "value": null,
+        "value_origin": "unknown",
+        "transform_rule_id": null,
+        "value_binding": "not_applicable_qualitative_item",
+        "unit": null,
+        "unit_origin": "unknown",
+        "unit_treatment": "no_scalar_value"
+      },
+      "constraints": [
+        "unknown_field:quoted_speaker_identity",
+        "unknown_field:external_truth_verification"
+      ],
+      "constraint_rule": "unknown_fields_to_prefixed_constraints_v1",
+      "evaluation_only": true,
+      "human_atomic_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609"
+    }
+  ],
+  "gates": {
+    "I0_frozen_inputs": "passed",
+    "I1_approved_35_target_identity": "passed",
+    "I2_speaker_projection_reversible": "passed",
+    "I3_value_and_unit_source_binding": "passed",
+    "I4_unknown_constraints_lossless": "passed",
+    "I5_production_and_old_flow_isolation": "passed",
+    "I6_bridge_human_approval": "not_evaluated"
+  },
+  "model_calls": 0,
+  "postgres_access": 0,
+  "holdout_reads": 0,
+  "ingestion_runs": 0,
+  "p4_budget_authorized": false
+}

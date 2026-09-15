@@ -1,0 +1,551 @@
+{
+  "run_id": "1b0c6ff855762546781237a68db00120b96196ed1660baba0267d7a91d0efdbb",
+  "evidence_run_id": "dd09085df184d2fd41a9bad3f51431c7051bcc4a223a604b6f35cc7742ef35db",
+  "extractor_version": "material-semantics-5",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-16_6f14cc14",
+      "source_rev": "6f14cc145b798b37",
+      "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "material_date": "2026-08-16",
+      "published_at": "2026-08-16",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_84613156b046",
+        "display_name": "欧阳予",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_dc52335c482f",
+        "display_name": "田晨曦",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_3dedc7b847c6",
+        "display_name": "张慧",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_3cda9f257220",
+        "display_name": "王培培",
+        "role": "contact",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_0543cdc58aec",
+        "display_name": "公司公告",
+        "role": "quoted_source",
+        "identity_status": "explicit"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_a72e105ee3eb69d5",
+        "text": "26H1总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_0543cdc58aec",
+        "polarity": "affirmed",
+        "value": "26H1总收入922.8亿元(+1.3%)，归母净利润445.2亿元(-2.0%)",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%",
+            "start": 203,
+            "end": 250
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_92e1402b23f634cb",
+        "text": "单Q2总收入375.8亿元，同降5.2%，归母净利润172.7亿元，同降6.9%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "Q2总收入375.8亿元(-5.2%)，归母净利润172.7亿元(-6.9%)",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%",
+            "start": 251,
+            "end": 295
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d9d54422736c8cd5",
+        "text": "Q2茅台酒收入略降1%表现平稳",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "-1%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "Q2 茅台酒收入略降1%表现平稳",
+            "start": 385,
+            "end": 401
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7d93e5f3a46554db",
+        "text": "Q2 i茅台收入同增282.6%至187.1亿",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "+282.6%至187.1亿",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "i 茅台收入同\n增282.6%至187.1 亿",
+            "start": 533,
+            "end": 556
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c4a9b121c46a1299",
+        "text": "Q2系列酒营收同降25%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "-25%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "系列酒营收同降25%",
+            "start": 428,
+            "end": 438
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3726565eaa1ecfe7",
+        "text": "单Q2直销占比同比提升17.8pcts至61.1%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "+17.8pcts至61.1%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "直销占比同比大幅提升17.8pcts 至61.1%",
+            "start": 507,
+            "end": 532
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_2c803d87a00f3fb0",
+        "text": "单Q2销售回款同增7.9%好于收入，经营质量仍高",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "+7.9%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "单Q2 销售回款同增7.9%好于收入",
+            "start": 859,
+            "end": 877
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f50f6dff427c63b5",
+        "text": "当前批价已站稳1700元以上",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "1700元以上",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "当\n前批价已站稳1700 元以上",
+            "start": 1115,
+            "end": 1131
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_31b1ba998c8763c6",
+        "text": "公司已完成底层逻辑重构，经营最困难阶段已过",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "经营最困难阶段已过",
+            "start": 1216,
+            "end": 1225
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_51935503ca52ab5e",
+        "text": "Q3预计将抓住中秋旺季窗口放量，下半年飞天供应偏紧、供需改善",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "Q3 预计将\n抓住中秋旺季窗口放量",
+            "start": 1226,
+            "end": 1243
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_cb25dd872bb44d17",
+        "text": "维持26-28年EPS预测67.74/70.77/73.84元",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "67.74/70.77/73.84元",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "维持26-28 年EPS 预测值\n67.74/70.77/73.84 元",
+            "start": 1493,
+            "end": 1529
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_cf41e3c1739ef501",
+        "text": "维持一年目标价2030元和强推评级",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": "目标价2030元",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "维持一年目标价2030 元和“强推”评级",
+            "start": 1530,
+            "end": 1550
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5093e6eae960e5df",
+        "text": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "宏观需求持续疲软、消费复苏不及预期、行业竞争加剧",
+            "start": 1561,
+            "end": 1585
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_60d85edb3ad2ff7f",
+        "text": "宏观消费环境未见明显好转",
+        "semantic_type": "fact",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "宏观消费环\n境未见明显好转",
+            "start": 1322,
+            "end": 1335
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6cdc529ba7ccfd58",
+        "text": "下半年基数降低后增长确定性提高，明年提价效应和产品结构增长路径清晰",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "下半年基数降低后增长确定性提高",
+            "start": 1402,
+            "end": 1417
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_8396e67b8b94c0f9",
+        "type": "supports",
+        "from_item": "itm_2c803d87a00f3fb0",
+        "to_item": "itm_31b1ba998c8763c6",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "表明公司\n实际产品周转较好、渠道回款配合度较高，实际经营质量仍高",
+            "start": 878,
+            "end": 910
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_7dbcff47e2df4242",
+        "type": "supports",
+        "from_item": "itm_7d93e5f3a46554db",
+        "to_item": "itm_31b1ba998c8763c6",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "i 茅台市场“平衡器与稳定器”的成效得到初步验证",
+            "start": 557,
+            "end": 581
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_d63221671f16c3ac",
+        "type": "conditions",
+        "from_item": "itm_60d85edb3ad2ff7f",
+        "to_item": "itm_5093e6eae960e5df",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+            "locator": "1",
+            "quote": "尽管宏观消费环\n境未见明显好转",
+            "start": 1320,
+            "end": 1335
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "1"
+      ],
+      "omitted_areas": [],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "43309d482734ebc0d746793403c6884ee22ddd57b45f42dd90bf33b3d14daa8d",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "f5b0f52460738ce3b4534b5a99b40789653bedf7b3916f9be2d8e67d41d38d90",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "70fe02a34bc44f414116c9a065523c522a67daa8acacce2c8fd4556a73095a1e",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "3d3f54b2986c28385e2f5f76cebfaa50ac96fd7e72eb30db521063a6d6b1b303",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "a52a301800b07445f71b33b23d08542008eb84e2a68a48ae85e2b529a630f181",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "f2fa32c7bd2da535a099b88011c4c1571903782fad87426b943aea0d6a93df3e",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "c6d6ac65dce1adcc9cba08eb65ac44857593a65a5fb950023103a854821bcecb",
+      "status": "not_candidate",
+      "records": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "1da63ca2d6980f860a8d64f3477cce019528b104e6ffd2628ec5e923dcefa2d7",
+      "status": "completed",
+      "records": 15,
+      "reasons": [],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 13289,
+        "prompt_tokens": 3103,
+        "completion_tokens": 1968,
+        "reasoning_tokens": 26,
+        "finish_reason": "stop",
+        "content_chars": 6164,
+        "reasoning_chars": 118
+      }
+    }
+  ]
+}

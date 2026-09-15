@@ -1,0 +1,1175 @@
+{
+  "version": "r2-p3-human-review-queue-1",
+  "split": "development",
+  "contract_sha256": "feebd1fd816ff824345185f7e3d690ea25621080d9d348f7d53bb82650763776",
+  "reviewer": null,
+  "approved_records": 0,
+  "instructions": "Human reviewer decides atomic denominator and exact obligation mapping. Agent proposals are not approvals.",
+  "records": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-company-outlook",
+      "target_quote": "茅台经营向上明确，底层逻辑未变",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": []
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-eps-forecast",
+      "target_quote": "维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "26-28年 67.74/70.77/73.84元",
+        "unknown_fields": []
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-target-price",
+      "target_quote": "维持一年目标价 2030 元",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "2030元",
+        "unknown_fields": []
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-rating",
+      "target_quote": "维持一年目标价 2030 元和“强推”评级",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "强推",
+        "unknown_fields": []
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-risk-macro",
+      "target_quote": "宏观需求持续疲软",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "probability",
+          "time_horizon"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-risk-consumption",
+      "target_quote": "消费复苏不及预期",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "probability",
+          "time_horizon"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "target_id": "mc-risk-competition",
+      "target_quote": "行业竞争加剧",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "probability",
+          "time_horizon"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "bd38bda6c70822282367b344d74bbdd9545e5f53d1256fcb7c62fb6301f9c14b",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "综上，茅台经营向上明确，底层逻辑未变， 我们维持 26-28 年 EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价 2030 元和“强推”评级。 \n 风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等 。   ",
+          "focus_sha256": "87feec482967af07720d58cbabaa6761c8ac2df80fb34ef3aa9262a4164e37fe",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-q-bottom",
+      "target_quote": "产品价格跌至底部，是否意味着买点出现？",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-q-high",
+      "target_quote": "到了高位，是否意味着卖点？",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-long-odds",
+      "target_quote": "价格底部主要改善长期赔率",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-not-inflection",
+      "target_quote": "并不一定等同于中期拐点",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-focus-balance",
+      "target_quote": "中期投资更应关注供需改善的情况",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-focus-spread",
+      "target_quote": "价差扩张",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-high-not-sell",
+      "target_quote": "价格处于高位也不必然构成卖点",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-future-trend",
+      "target_quote": "关键仍是对未来景气趋势的判断",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-q-expansion",
+      "target_quote": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-cycle",
+      "target_quote": "万物皆周期",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-capacity-not-invalidate",
+      "target_quote": "未来的新增产能不应否定当前明确的景气阶段",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-price-cycles",
+      "target_quote": "不同行业均存在价格的变动",
+      "target_fields": {
+        "semantic_type": "fact",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-cycle-length",
+      "target_quote": "每个行业景气长短不同",
+      "target_fields": {
+        "semantic_type": "fact",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "author_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "target_id": "mi-a-investment-value",
+      "target_quote": "只要未来一至两年供需持续改善， 行业仍具备周期投资价值",
+      "target_fields": {
+        "semantic_type": "forecast",
+        "speaker_role": "analyst_author",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "condition",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "author_identity",
+          "numeric_value"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "855b7d1db104a32b408bcb71f28d9ccfdc5cdb323a18e8dfcd1e73f7ccc2c9c6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率， 并不一定等同于中期拐点； 中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已， 只要未来一至两年供需持续改善， 行业仍具备周期投资价值。 ",
+          "focus_sha256": "66defbbd07f5ab901cff386437a7896a3deb7b9018cf8fe34bc7a82308123d33",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "target_id": "mt-added-shares",
+      "target_quote": "TTD - I added 10,000 more at 14.76",
+      "target_fields": {
+        "semantic_type": "behavior",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "value": "10,000 at 14.76",
+        "unknown_fields": [
+          "external_execution_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "8cc340901af18f4a0d9cd943c2261ab2d07204dd7db4f5e9f6fae1f1a3abc2f6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth",
+          "focus_sha256": "493336b7c6ad56c148a572c386fc63e86e60b5be9551dd47613a38297546108c",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "target_id": "mt-sold-calls",
+      "target_quote": "sold 100 $15 calls for friday for .16",
+      "target_fields": {
+        "semantic_type": "behavior",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "value": "100 $15 calls at .16",
+        "unknown_fields": [
+          "calendar_date",
+          "external_execution_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "8cc340901af18f4a0d9cd943c2261ab2d07204dd7db4f5e9f6fae1f1a3abc2f6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth",
+          "focus_sha256": "493336b7c6ad56c148a572c386fc63e86e60b5be9551dd47613a38297546108c",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "target_id": "mt-below-ceo-level",
+      "target_quote": "this is still well below the $25 level",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "source_author",
+        "identity_status": "explicit",
+        "perspective": "source_explicit",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": "$25 level",
+        "unknown_fields": [
+          "comparison_price_timestamp"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "8cc340901af18f4a0d9cd943c2261ab2d07204dd7db4f5e9f6fae1f1a3abc2f6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth",
+          "focus_sha256": "493336b7c6ad56c148a572c386fc63e86e60b5be9551dd47613a38297546108c",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "target_id": "mt-ceo-bought",
+      "target_quote": "the CEO bought $150m worth",
+      "target_fields": {
+        "semantic_type": "fact",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "perspective": "quoted_other",
+        "speech_role": "statement",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": "$150m",
+        "unknown_fields": [
+          "ceo_identity",
+          "transaction_date",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "8cc340901af18f4a0d9cd943c2261ab2d07204dd7db4f5e9f6fae1f1a3abc2f6",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth",
+          "focus_sha256": "493336b7c6ad56c148a572c386fc63e86e60b5be9551dd47613a38297546108c",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcs-outlook",
+      "target_quote": "总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "summary_author",
+        "identity_status": "unknown",
+        "perspective": "unknown",
+        "speech_role": "statement",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "value": null,
+        "unknown_fields": [
+          "summary_authorship",
+          "summary_generation_method"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "0753274b74cf65e1aaa6a8f064b0680041fe14f0343dacd80e7293a387bd77dd",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "总体而言，铜箔设备行业正处于国产替代加速期，泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量。",
+          "focus_sha256": "0ef6831a6f96dfa85d203aec60f0ab7ec675d740c51cb78af0828adc576b190d",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-audio",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mca-hearing-check",
+      "target_quote": "投资者：大家好，请问能听到吗？可以，您讲",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "mixed_transcript_turn",
+        "identity_status": "unknown",
+        "perspective": "unknown",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "speaker_identity",
+          "turn_segmentation",
+          "response_speaker"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "0b7ce28a253f6baf6ac1b98d4d6a1afb900c9a81b9f68b9c620bc95cbdae5987",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：大家好，请问能听到吗？可以，您讲。",
+          "focus_sha256": "2c29046640d1924b36fec23b5c9a8895f5e9be9997741e2cbdfecc6fa2579266",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-q-cause",
+      "target_quote": "您觉得良品率低是设备问题还是工艺问题？",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "investor_participant",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "investor_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-q-improve",
+      "target_quote": "设备端能配套改进吗？",
+      "target_fields": {
+        "semantic_type": "unknown",
+        "speaker_role": "investor_participant",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "question",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "investor_identity"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-a-leading",
+      "target_quote": "我认为设备目前加工精度和控制精度已经做到行业领先",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "industry_expert",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "expert_identity",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-a-process",
+      "target_quote": "大概率跟工艺挂钩",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "industry_expert",
+        "identity_status": "unknown",
+        "perspective": "source_explicit",
+        "speech_role": "answer",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "value": null,
+        "unknown_fields": [
+          "expert_identity",
+          "probability",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-e-ratio",
+      "target_quote": "他说工艺和设备是64开",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": "64开",
+        "unknown_fields": [
+          "quoted_speaker_identity",
+          "ratio_definition",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-e-process-major",
+      "target_quote": "工艺占大头",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unknown_fields": [
+          "quoted_speaker_identity",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-e-device-support",
+      "target_quote": "设备只是配套",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unknown_fields": [
+          "quoted_speaker_identity",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "target_id": "mcy-e-device-needed",
+      "target_quote": "但没设备也不行",
+      "target_fields": {
+        "semantic_type": "opinion",
+        "speaker_role": "quoted_source",
+        "identity_status": "unknown",
+        "perspective": "quoted_other",
+        "speech_role": "answer",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "value": null,
+        "unknown_fields": [
+          "quoted_speaker_identity",
+          "external_truth_verification"
+        ]
+      },
+      "mapping_status": "structurally_unresolved",
+      "review_status": "proposed_not_approved",
+      "matching_obligations": [
+        {
+          "obligation_id": "c1ddc87550e147e3b88e6d98c47bbc07a7ad99c2cf7ab6d3365a30a3b836a4bc",
+          "state": "unresolved",
+          "reason": "compound_or_condition",
+          "focus_text": "投资者：明白。您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，工艺占大头，设备只是配套，但没设备也不行。",
+          "focus_sha256": "03d7267a7e985e2d317e0735132f2b537d85be0306a72ca5afc830da6a72ad26",
+          "atomicity": "not_verified"
+        }
+      ]
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 # 14 完整事实绑定与覆盖修复
 
 Status: ready-for-agent
-Execution: not-started
+Execution: partial — known error gates and targeted layout/prose recall repaired; macro normalization and independent holdout pending
 Priority: P0
 
-依据：[扩大留出失败报告](../expanded-holdout-report.md)。本轮只登记，不自动扩大修复范围。
+依据：[扩大留出失败报告](../expanded-holdout-report.md)。2026-09-13 用户授权执行修复。
 
 ## 第一阶段：阻止错误计算
 
@@ -21,4 +21,14 @@ Priority: P0
 - 受控指标与单位规范化不靠放宽任意别名；NFP 岗位、同比百分比、修订合计必须区分。
 - 本轮 12 单元格和 3 正文目标转为回归集；另外冻结新的留出资料检验泛化。
 
-两个阶段通过仍不自动开放宏观公式，继续满足宏观契约的官方版本、预期快照和时间证明。
+两个阶段通过仍不自动开放宏观公式。2026-09-13 最新范围：严格事件的版本/快照/时间证明仅约束对应数据用途，
+不作为材料理解前置；后续任务归 [总计划](../../../docs/plan/claims-market-closed-loop-plan.md) R/D/A/V。
+
+## 执行结果
+
+见 [修复验收](../semantic-repair-report.md)。五类已知反例错误放行 5/5 → 0/5，合法正控通过；
+既有财务 57 字段与 7 公式保持通过。正文数值 2/3 → 3/3，客户表 0/12 → 12/12，
+原始单位、坐标与脚注保留，不允许客户销售额冒充总营收。
+pipeline 7 / layout 3 已实现版本门禁、重复身份读/算拒绝和执行/覆盖状态区分。
+宏观冻结规范字段仍 0/3，独立真实新样本尚未补足，故整个任务不标记全部完成。
+宏观实施依赖已在 [15](15-macro-implementation-plan.md) 拆分，本轮不启用生产宏观公式。

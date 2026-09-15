@@ -1,0 +1,48 @@
+{
+  "version": "r2-p3r-bounded-clause-lattice-scope-1",
+  "date": "2026-09-14",
+  "authorization": "user_continue_after_p3_preferred_recommendation",
+  "parent_p3_manifest_sha256": "edbc14e557309adb586bc7046f4e87ac8ad5449c39449b00be2dc747204a4bef",
+  "production_planner_sha256": "644fab580b972acd744bb077a17b568d4a0430681b375e590168bcb164519070",
+  "modify_existing_protected_files": [],
+  "new_protected_files": [],
+  "new_scratch_files": [
+    ".scratch/corpus-evidence-pipeline/p3r_clause_lattice.py",
+    ".scratch/corpus-evidence-pipeline/test_p3r_clause_lattice.py",
+    ".scratch/corpus-evidence-pipeline/p3r_review.py"
+  ],
+  "generated_files": [
+    ".scratch/corpus-evidence-pipeline/r2-p3r-inventory.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-review-queue.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3r-manifest.json"
+  ],
+  "allowed_sources": "four frozen development sample IDs and six frozen development micro scopes only",
+  "planner_generation_must_not_read": [
+    "gold items",
+    "gold relations",
+    "gold negative relations",
+    "holdout source paths"
+  ],
+  "acceptance": {
+    "gold_items_locatable_in_generated_nodes": 35,
+    "positive_relation_endpoints_referencable": 17,
+    "negative_relation_endpoints_referencable": 8,
+    "silent_truncation": 0,
+    "automatic_human_approvals": 0,
+    "per_root_node_and_edge_caps_required": true,
+    "whole_span_preserved": true,
+    "shared_condition_and_attribution_spans_supported": true
+  },
+  "external_activity": {
+    "model_calls": 0,
+    "judge_calls": 0,
+    "postgres_access": 0,
+    "market_calls": 0,
+    "ingestion_runs": 0
+  },
+  "production_wiring": false,
+  "default_entry_changes": false,
+  "gold_mutation": false,
+  "p4_budget_authorized": false
+}

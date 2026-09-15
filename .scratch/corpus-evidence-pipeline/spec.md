@@ -1,13 +1,43 @@
 # Corpus 可推导证据链与小样本验收
 
-Status: pilot-completed
-Acceptance: targeted-pilot-passed — 表格及最小正文取证通过，宏观计算/全库覆盖仍未放行
+Status: partial — historical-pilot-retained; research-material-scope-expanded
+Acceptance: targeted-pilot-passed — 部分财务/正文取证通过；材料理解、数据与综合分析完整闭环未验收
+
+当前唯一执行清单：[研究材料 × 同花顺数据 × 分析](../../docs/plan/claims-market-closed-loop-plan.md)。
+下方 01—17 为历史实施与验收台账，旧“下一步”及单项已完成不代表全项目完成。
+18 完成本次职责与文档重整，19 / R1 已冻结最小契约与联合金标；20 / R2 已执行但开发门禁失败，
+当前停留 R2，21 / R3 未开始。
+
+2026-09-14 当前状态补充：R2 已执行至 v13 最终轮，9/9 调用、34/35 item，失败后按停止条件关闭。
+已完成流程诊断与 [局部重设计/CLI 计划](../../docs/plan/r2-local-redesign-cli-closure-plan.md) 编制；
+plan-v13：P2技术门完成，PG事故历史不确定性保留，P0-PG未验证。P3-R/P3-S的节点与全文范围
+结构门通过。用户提交35条人工复核：31 approve、2 split、1 merge、1 reject。P3-H用overlay应用
+意见，不改base gold；30条旧批准可继承，5条替代item在35-item、16正/8负有效分母中零模型重放
+节点和范围均通过，替代项随后人工5/5 approve，35条原子分母已全部通过。P4预算前发现新wire与
+微金标字段轴缺口已由P3-I在scratch生成35条evaluation-only投影：8个去重speaker registry、8条
+value/unit、49个unknown constraint，21项零模型测试及静态门通过，随后人工全approve。P4冻结
+35 item/最多5调用/0重试预算；首批真实调用返回8行，其中4行违反semantic枚举，批级fail-stop后
+余下4批未发送。进一步回溯确认speaker事实不可观测、null/unknown applicability、复合value保真与
+跨轴规则仍是接口缺口，不能靠提示词或降门槛解决。P4未通过，先进入零模型P4-A，P5保持冻结。
+Web 暂缓，CLI 优先。见 [P0 报告](r2-p0-baseline-report.md)、[P1 报告](r2-p1-report.md)
+与 [P2-B 报告](r2-p2b-report.md)、[执行偏差报告](r2-p2b-guard-incident.md)。
+最新：[PG只读影响核查](r2-p2b-pg-readonly-report.md)；核查未修改或清理数据库。
+P3：[固定开发回放与planner诊断](r2-p3-report.md)；P3-R：[有限子句格局部验证](r2-p3r-report.md)；
+P3-S：[全文范围提供器验证](r2-p3s-report.md)；P3-H：[人工裁决应用与修订](r2-p3h-report.md)；
+P4前置：[字段契约缺口报告](r2-p4-readiness-contract-gap-report.md)；P3-I：[字段契约桥接报告](r2-p3i-report.md)；
+P4：[有限item字段填写试验](r2-p4-item-report.md)。下一步仅在scratch零模型修订系统字段所有权、
+字段级有限义务、value span/transform和跨轴不变量；通过反例、回放与保护门前不得再冻结模型预算。
+下方历史执行记录不作为最新状态；生产实现、旧预算与历史报告未因本次计划同步而修改。
 
 ## 目标
 
 落实 `.scratch/corpus-quality-analysis/analysis.md`：建立源文件→保真解析→有来源坐标的证据包→事实抽取→确定性校验→可计算投影→公式复算→版本化保存/取回的完整链路，再开展少量真实资料试验。
 
 ## 范围与边界
+
+2026-09-13 最新范围：材料用于观点、论据、视角及事实/行为归属，政府统计和行情由同花顺接口承担。
+下列旧数据推导要求保留为来源内部核对的历史范围，不将研报数字自动变成数据层事实。
+已有代码与失败报告保留；完整材料理解需独立验收，数据与分析分别按 D/A 任务推进。
 
 - 修复当前代码的数字误删、数值/单位不一致、引用校验和去重问题，保留已有用户修改。
 - PDF、Markdown、DOCX 均保留原始文本与定位；表格优先用真实坐标恢复，无法确定时进入 review；图片缺文字时明确 unknown/needs_ocr，不制造数字。
@@ -53,3 +83,28 @@ Acceptance: targeted-pilot-passed — 表格及最小正文取证通过，宏观
   [13 待确认口径](issues/13-source-questions.md) 已完成本轮交付。见 [扩大留出报告](expanded-holdout-report.md)。
   本轮业务验收失败，既有定点通过不代表泛化：表格 0/12、正文数值 2/3、语义反例错误放行 5/5。
   契约定义不等于宏观公式上线；待确认清单未发送。08 保持 partial，修复登记在 [14](issues/14-semantic-gates.md)。
+- 2026-09-13：[14 已执行定点修复](semantic-repair-report.md)，五类语义错误放行降为 0/5，
+  客户表 12/12、正文数值 3/3；原财务 57 字段/7 公式回归通过。宏观规范字段仍 0/3，
+  独立真实留出与更广覆盖仍待补足，08/14 保持 partial。
+  [15 宏观实施清单](issues/15-macro-implementation-plan.md) 已细化，M1—M6 未执行，不开放生产宏观计算。
+- 2026-09-13 后续：[16 宏观 M1](issues/16-macro-m1-models.md) 已完成不可变模型、
+  应用侧审核记录、受控单位换算与旧 run 引用兼容；47 项新增测试、282 项 Corpus 回归通过。
+  此更新替代上一条的 M1 待办状态，不改变已有真实留出失败记录或 08/14 的 partial 状态。
+  审核登记仅在可信宿主内存中；M2—M6、持久信任接入及真实宏观可计算验收仍未完成。
+- 2026-09-13 后续：[17 宏观 M2](issues/17-macro-m2-official.md) 完成官方适配器实现和离线回归。
+  60 项新增测试、342 项 Corpus 回归通过；指定 BLS 原始归档下载返回 403，真实接入验收未完成。
+  M2 保持 partial，未推进 M3—M6；没有把合成夹具通过替代真实留出，也未改变此前失败记录。
+- 2026-09-13 后续用户决策：M2 官网真实验收暂跳过，17 调整为 deferred，非验收通过。
+  研报宏观处理不再以逐条官网证实为前置；当前优先来源忠实性、口径一致性与来源限定的推导。
+  如需官方宏观数据，后续考虑用户选定的第三方接口。BLS 403 不阻断本地研报主线，其他接口可达性未验证。
+  此次仅更新文档；未实施 M3—M6、未改变现有门禁、未宣称研报数据已获独立官方核验。
+- 2026-09-13 最新：[18 职责与文档重整](issues/18-research-scope-reset.md) 已交付。
+  用户明确材料侧提供观点/论据/视角，涵盖研报、电话会议和个人交易；政府统计/行情由同花顺提供。
+  先前“研报数字接成宏观推导主线”已被替代，材料 R1—R3、数据 D1—D2、分析 A1、验收 V1 分开安排。
+  当时 19—25 仅登记未执行，旧财务复算仍来源限定；未修改代码、数据库或接入新接口。
+- 2026-09-13 后续：[19 / R1](issues/19-material-contract-gold.md) 已完成并按用户新增纪要修订。
+  当前冻结 4 份开发、2 份独立留出、37 个 item、7 条关系；电话交流纪要已有开发正样本但无独立
+  留出。新增文件未入库，直接按文件 hash 与 Markdown 行号绑定；当时下一任务为 20 / R2。
+- 2026-09-13 后续：[20 / R2](issues/20-material-semantics.md) 已实现材料语义产物与未入库路径，
+  但冻结开发验收仅 item 12/24、critical 11/23、关系 1/5；基线加两次修订后按停止条件结束，
+  留出未运行，R2 保持 partial，R3 不启动。见 [R2 报告](material-semantics-report.md)。

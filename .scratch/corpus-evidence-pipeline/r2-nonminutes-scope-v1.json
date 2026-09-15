@@ -1,0 +1,33 @@
+{
+  "version": "r2-nonminutes-scope-1",
+  "date": "2026-09-14",
+  "purpose": "Diagnostic subset rescore after excluding telephone and meeting minutes; no new model acceptance run.",
+  "split": "development",
+  "included_sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review"
+  ],
+  "excluded_sample_ids": ["dev-expert-call-copper-foil"],
+  "excluded_material_types": ["conference_minutes", "earnings_call"],
+  "included_scope_ids": [
+    "micro-company-recommendation",
+    "micro-industry-q7-q8",
+    "micro-trade-ttd"
+  ],
+  "historical_v13_item_count": 25,
+  "current_p3i_p4_item_count": 24,
+  "new_model_calls": 0,
+  "holdout_calls": 0,
+  "postgres_access": 0,
+  "ingestion_runs": 0,
+  "physical_source_deletion": false,
+  "historical_contracts_and_results_unchanged": true,
+  "threshold_policy": "Use frozen v13 thresholds for historical replay; show per-scope metrics and critical-error veto separately. P4 protocol completeness is audited independently of its known-broken semantic scorer.",
+  "limitations": [
+    "This is exclusion from diagnostic and current testing scope, not removal of minute-specific code from the extractor.",
+    "Removing samples from a denominator does not undo past prompts, tuning, or model calls.",
+    "Historical v13 gold and current P3-I gold have different item boundaries and must not be merged.",
+    "A passing historical subset metric would not certify current R2, relations, full documents, or CLI integration."
+  ]
+}

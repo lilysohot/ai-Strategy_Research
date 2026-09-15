@@ -50,6 +50,7 @@ if TYPE_CHECKING:
     from plugins.corpus.derivation import Calculation
     from plugins.corpus.evidence_pipeline import EvidenceRun
     from plugins.corpus.fetch import FetchedBlock
+    from plugins.corpus.material_semantics import MaterialRun, MaterialType
 
 import psycopg
 from psycopg.rows import DictRow, dict_row
@@ -898,6 +899,66 @@ class CorpusService:
         if persist:
             self.save_evidence_run(run)
         return run
+
+    def understand_material(
+        self,
+        *,
+        path: str | Path | None = None,
+        evidence_run_id: str | None = None,
+        pages: tuple[int, ...] | None = None,
+        llm: Callable[[str], str] | None = None,
+        model: str | None = None,
+        max_calls: int = 0,
+        packet_chars: int = 2000,
+        material_type: MaterialType | None = None,
+        persist_evidence: bool = False,
+        staged_jsonl: bool = False,
+        max_items_per_packet: int = 30,
+        slot_protocol: bool = False,
+        max_slots_per_batch: int = 8,
+        extract_relations: bool = True,
+        candidate_slot_ids: tuple[str, ...] | None = None,
+    ) -> MaterialRun:
+        """Build an R2 material view from a path or an exact saved evidence revision.
+
+        A direct path does not ingest the source or persist its shadow EvidenceRun unless
+        explicitly requested.  This keeps material semantics on the canonical evidence
+        parser while allowing pre-ingestion acceptance samples.
+        """
+        from plugins.corpus.evidence_pipeline import build_evidence_run
+        from plugins.corpus.material_semantics import extract_material_understanding
+
+        if (path is None) == (evidence_run_id is None):
+            raise ValueError("provide exactly one of path or evidence_run_id")
+        if max_calls < 0 or max_items_per_packet < 1 or max_slots_per_batch < 1:
+            raise ValueError("max_calls must be non-negative")
+        if max_calls and llm is None:
+            llm = build_default_llm()
+            model = model or configured_model()
+        if evidence_run_id is not None:
+            evidence_run = self.load_evidence_run(evidence_run_id)
+        else:
+            if not 100 <= packet_chars <= 12000 or pages == ():
+                raise ValueError("invalid material packet size or empty page selection")
+            evidence_run = build_evidence_run(
+                cast("Path", path),
+                pages=pages,
+                packet_chars=packet_chars,
+            )
+            if persist_evidence:
+                self.save_evidence_run(evidence_run)
+        return extract_material_understanding(
+            evidence_run,
+            llm=llm,
+            max_calls=max_calls,
+            material_type=material_type,
+            staged_jsonl=staged_jsonl,
+            max_items_per_packet=max_items_per_packet,
+            slot_protocol=slot_protocol,
+            max_slots_per_batch=max_slots_per_batch,
+            extract_relations=extract_relations,
+            candidate_slot_ids=candidate_slot_ids,
+        )
 
     def claims_of(
         self,

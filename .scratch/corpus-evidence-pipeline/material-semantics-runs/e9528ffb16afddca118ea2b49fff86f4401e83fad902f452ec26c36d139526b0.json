@@ -1,0 +1,906 @@
+{
+  "run_id": "e9528ffb16afddca118ea2b49fff86f4401e83fad902f452ec26c36d139526b0",
+  "evidence_run_id": "97b40b7f57fbd96806e6f96dc0aa87e108d92ae99c81ff7dd487741ebdd36bc6",
+  "extractor_version": "material-semantics-7",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-16_6f14cc14",
+      "source_rev": "6f14cc145b798b37",
+      "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "material_date": "2026-08-16",
+      "published_at": "2026-08-16",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_84613156b046",
+        "display_name": "欧阳予",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_dc52335c482f",
+        "display_name": "田晨曦",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_3dedc7b847c6",
+        "display_name": "张慧",
+        "role": "analyst",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_3cda9f257220",
+        "display_name": "王培培",
+        "role": "contact",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_0543cdc58aec",
+        "display_name": "公司公告",
+        "role": "quoted_source",
+        "identity_status": "explicit"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_596c474b53c28862",
+        "text": "公司公布2026年中报，26H1实现总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_0543cdc58aec",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%",
+            "start": 203,
+            "end": 250
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_08a4636a1af37f68",
+        "text": "单Q2总收入375.8亿元，同降5.2%，归母净利润172.7亿元，同降6.9%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%",
+            "start": 251,
+            "end": 295
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_98c0c4725fb87e22",
+        "text": "Q2茅台酒收入略降1%表现平稳",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "Q2 茅台酒收入略降1%表现平稳",
+            "start": 385,
+            "end": 401
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_68413bd2ebb32745",
+        "text": "系列酒营收同降25%，受茅台1935及王子酒等单品调整出厂价及主动控制发货节奏影响",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "系列酒营收同降25%，受茅台1935 及王子酒等单品调整出厂\n价及主动控制发货节奏影响",
+            "start": 428,
+            "end": 471
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_dd17014edd08f5b6",
+        "text": "单Q2直销占比同比大幅提升17.8pcts至61.1%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 直销占比同比大幅提升17.8pcts 至61.1%",
+            "start": 503,
+            "end": 532
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_663ba8d54c58a032",
+        "text": "i茅台收入同增282.6%至187.1亿",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "i 茅台收入同\n增282.6%至187.1 亿",
+            "start": 533,
+            "end": 556
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d66bc31c748352d9",
+        "text": "批发渠道同降34.9%，Q2国外收入同降50.2%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "批发渠道同降34.9%",
+            "start": 583,
+            "end": 594
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b2bff7338cbc6e8d",
+        "text": "单Q2毛利率同降1.2pcts，归母净利率同降0.9pct至46.9%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 毛利率同降1.2pcts",
+            "start": 684,
+            "end": 700
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e2b978b58010b7a4",
+        "text": "单Q2销售回款同增7.9%好于收入，实际经营质量仍高",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 销售回款同增7.9%好于收入",
+            "start": 859,
+            "end": 877
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a1a2a4cf14122503",
+        "text": "经营性现金流净额同增915.8%，主要系财务公司吸收集团公司成员单位存款增加及不可随时支取的同业存款减少所致",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "经营性现金流\n净额同增915.8%",
+            "start": 911,
+            "end": 928
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_320f46aac4779313",
+        "text": "二季度飞天连续两次提价（3月底和7月），8月线下自营店再次上调指导价",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "二季度\n飞天连续两次提价（3 月底和7 月），且8 月线下自营店再次上调指导价",
+            "start": 1075,
+            "end": 1114
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_1db74017503682b7",
+        "text": "当前批价已站稳1700元以上",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "当\n前批价已站稳1700 元以上",
+            "start": 1115,
+            "end": 1131
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_25344f55e14d0119",
+        "text": "预计Q2整体投放量偏紧",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "预计Q2 整体投放量偏紧",
+            "start": 1181,
+            "end": 1193
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_e490eb591c88063a",
+        "text": "公司已于改革中完成底层逻辑的重构，经营最困难阶段已过",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "我们\n认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过",
+            "start": 1194,
+            "end": 1225
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f41abf690fd403c4",
+        "text": "Q3预计将抓住中秋旺季窗口放量，下半年飞天供应偏紧、供需改善",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "Q3 预计将\n抓住中秋旺季窗口放量，且下半年飞天供应偏紧、供需改善",
+            "start": 1226,
+            "end": 1259
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_065376dc140279c2",
+        "text": "维持26-28年EPS预测值67.74/70.77/73.84元",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元",
+            "start": 1491,
+            "end": 1529
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_97fb23d1863adbc5",
+        "text": "维持一年目标价2030元和强推评级",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "维持一年目标价2030 元和“强推”评级",
+            "start": 1530,
+            "end": 1550
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_3a6c8a3c4d8fa362",
+        "text": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等",
+        "semantic_type": "unknown",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等",
+            "start": 1556,
+            "end": 1586
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a43191b82e2bdf1d",
+        "text": "尽管宏观消费环境未见明显好转，但茅台通过市场化改革已明确找到破局之道",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道",
+            "start": 1320,
+            "end": 1355
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fb13dd90e927d33f",
+        "text": "实际渠道反馈核心单品茅台1935等动销表现较好",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_84613156b046",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "实际渠道反馈核心单品茅台1935 等动销表现较\n好",
+            "start": 472,
+            "end": 497
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_be5e7287fb365e06",
+        "type": "supports",
+        "from_item": "itm_98c0c4725fb87e22",
+        "to_item": "itm_596c474b53c28862",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "Q2 茅台酒收入略降1%表现平稳",
+            "start": 385,
+            "end": 401
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_a2d6483dee7836f4",
+        "type": "supports",
+        "from_item": "itm_68413bd2ebb32745",
+        "to_item": "itm_596c474b53c28862",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "系列酒营收同降25%，受茅台1935 及王子酒等单品调整出厂\n价及主动控制发货节奏影响",
+            "start": 428,
+            "end": 471
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_d4806d2341c42aa9",
+        "type": "supports",
+        "from_item": "itm_fb13dd90e927d33f",
+        "to_item": "itm_68413bd2ebb32745",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "实际渠道反馈核心单品茅台1935 等动销表现较\n好",
+            "start": 472,
+            "end": 497
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_84139b367f5e1d82",
+        "type": "supports",
+        "from_item": "itm_663ba8d54c58a032",
+        "to_item": "itm_dd17014edd08f5b6",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "i 茅台收入同\n增282.6%至187.1 亿",
+            "start": 533,
+            "end": 556
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_eb377883f3b313f3",
+        "type": "supports",
+        "from_item": "itm_b2bff7338cbc6e8d",
+        "to_item": "itm_08a4636a1af37f68",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 毛利率同降1.2pcts",
+            "start": 684,
+            "end": 700
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_b646d9913cc79e5d",
+        "type": "supports",
+        "from_item": "itm_e2b978b58010b7a4",
+        "to_item": "itm_e490eb591c88063a",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "单Q2 销售回款同增7.9%好于收入",
+            "start": 859,
+            "end": 877
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_15c8a98718dcae8e",
+        "type": "supports",
+        "from_item": "itm_320f46aac4779313",
+        "to_item": "itm_1db74017503682b7",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "二季度\n飞天连续两次提价（3 月底和7 月），且8 月线下自营店再次上调指导价，当\n前批价已站稳1700 元以上",
+            "start": 1075,
+            "end": 1131
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_b640446aad6419c9",
+        "type": "supports",
+        "from_item": "itm_25344f55e14d0119",
+        "to_item": "itm_08a4636a1af37f68",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "预计Q2 整体投放量偏紧",
+            "start": 1181,
+            "end": 1193
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_49fdc1d8d203e05c",
+        "type": "supports",
+        "from_item": "itm_e490eb591c88063a",
+        "to_item": "itm_f41abf690fd403c4",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "我们\n认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过，Q3 预计将\n抓住中秋旺季窗口放量",
+            "start": 1194,
+            "end": 1243
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_786aab2f54960e73",
+        "type": "supports",
+        "from_item": "itm_a43191b82e2bdf1d",
+        "to_item": "itm_97fb23d1863adbc5",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道",
+            "start": 1320,
+            "end": 1355
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_fccfe1f178c5b4fb",
+        "type": "supports",
+        "from_item": "itm_065376dc140279c2",
+        "to_item": "itm_97fb23d1863adbc5",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级",
+            "start": 1491,
+            "end": 1550
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_8bd64deec6722638",
+        "type": "supports",
+        "from_item": "itm_e490eb591c88063a",
+        "to_item": "itm_97fb23d1863adbc5",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "我们\n认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过",
+            "start": 1194,
+            "end": 1225
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_07489e808e7ee418",
+        "type": "supports",
+        "from_item": "itm_320f46aac4779313",
+        "to_item": "itm_a43191b82e2bdf1d",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "二季度\n飞天连续两次提价（3 月底和7 月），且8 月线下自营店再次上调指导价",
+            "start": 1075,
+            "end": 1114
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_1d2a60e6d0010814",
+        "type": "supports",
+        "from_item": "itm_663ba8d54c58a032",
+        "to_item": "itm_a43191b82e2bdf1d",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "i 茅台收入同\n增282.6%至187.1 亿",
+            "start": 533,
+            "end": 556
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_4832d864bc2beaba",
+        "type": "supports",
+        "from_item": "itm_a1a2a4cf14122503",
+        "to_item": "itm_e2b978b58010b7a4",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "6f14cc145b798b37",
+            "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+            "locator": "1",
+            "quote": "经营性现金流\n净额同增915.8%",
+            "start": 911,
+            "end": 928
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "1"
+      ],
+      "omitted_areas": [],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "1a16c3e732c9b7094ddb1547d18fb81ced0b77af61082cd4e21b8eadf6748a82",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "bb7ec711a15fbccbef46f8eac0f5ffd492202d88d055893326ff99157f4782e5",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "4927b5abf9726f1d6cf19aa4c0557a5ad75e7a089a3da3c9ec7707859476db4e",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "5edb1f753a47b0067d2be018279aa1a9072300e878c524ccbc6499be010a90ec",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "ec6cbe1e11416f368327e0aecc40f567be56f1023269bc4601124f710ee6cb27",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "f5d1965adc9a3155d59b18674fc28e5d05f949c3cc885f52cd944d59ca121056",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "66c35bb27b62ad7b930553086cbd13f2e4a9731a3b3bb3c831d20f72373d1372",
+      "status": "not_candidate",
+      "records": 0,
+      "model_calls": 0,
+      "reasons": [],
+      "diagnostics": null
+    },
+    {
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "status": "completed",
+      "records": 35,
+      "model_calls": 2,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 15888,
+            "prompt_tokens": 2392,
+            "completion_tokens": 2418,
+            "reasoning_tokens": 11,
+            "finish_reason": "stop",
+            "content_chars": 7598,
+            "reasoning_chars": 50
+          },
+          "relations": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 8068,
+            "prompt_tokens": 3337,
+            "completion_tokens": 1257,
+            "reasoning_tokens": 3,
+            "finish_reason": "stop",
+            "content_chars": 3268,
+            "reasoning_chars": 18
+          }
+        }
+      }
+    }
+  ]
+}

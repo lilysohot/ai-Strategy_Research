@@ -1,0 +1,44 @@
+{
+  "version": "r2-p4-change-scope-1",
+  "date": "2026-09-14",
+  "stage": "P4",
+  "purpose": "Run one bounded development-only item field-fill trial after P3-I human approval.",
+  "allowed_new_files": [
+    ".scratch/corpus-evidence-pipeline/p4_item_trial.py",
+    ".scratch/corpus-evidence-pipeline/test_p4_item_trial.py",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-plan.json",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-budget-v1.json",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p4-manifest.json",
+    ".scratch/corpus-evidence-pipeline/p4-runs/*"
+  ],
+  "allowed_existing_files": [
+    "docs/plan/r2-local-redesign-cli-closure-plan.md",
+    "docs/plan/claims-market-closed-loop-plan.md",
+    "docs/plan/README.md",
+    ".scratch/corpus-evidence-pipeline/spec.md",
+    ".scratch/corpus-evidence-pipeline/issues/20-material-semantics.md"
+  ],
+  "forbidden": [
+    "plugins/corpus/_r2_plan.py",
+    "plugins/corpus/_r2_audit.py",
+    "plugins/corpus/_r2_runtime.py",
+    "public parsers and EvidenceRun",
+    "legacy material extraction and ingestion",
+    "PostgreSQL",
+    "holdout sources",
+    "relation execution"
+  ],
+  "model_budget_ceiling": {
+    "split": "development",
+    "items": 35,
+    "max_batch_size": 8,
+    "max_calls": 5,
+    "retries": 0,
+    "rounds": 1,
+    "concurrency": 1,
+    "preflight_calls": 0,
+    "first_batch_is_provider_check": true
+  },
+  "fail_stop": "Any identity drift, malformed or missing terminal, adapter error, audit persistence error, semantic gate failure, protected-file drift, or budget exhaustion closes the round without retry."
+}

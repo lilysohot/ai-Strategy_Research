@@ -1,0 +1,50 @@
+{
+  "budget_version": "r2-capability-development-v3",
+  "frozen_at": "2026-09-13",
+  "reason": "验证结构能力路由、确定性表达者兜底、候选槽位覆盖台账和受限关系候选对；只授权一次开发集读出，不授权自动追加纠偏轮。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "deterministic_stress_samples": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "model_calls_allowed": 0
+    }
+  ],
+  "model": "glm-5.3-flash",
+  "round_ids": [
+    "capability-baseline"
+  ],
+  "development_rounds_max": 1,
+  "calls_per_round_max": 16,
+  "calls_total_max": 16,
+  "calls_per_document_per_round_max": 8,
+  "planned_calls_upper_bound": 14,
+  "seconds_per_call": 60,
+  "packet_chars": 3000,
+  "max_items_per_packet": 30,
+  "max_output_tokens": 8192,
+  "response_format": "material-slot-jsonl-v2",
+  "stages": [
+    "items_with_coverage",
+    "restricted_relations"
+  ],
+  "raw_audit_policy": "failed_or_partial_only_local_0600",
+  "holdout_calls_allowed": 0,
+  "stop_conditions": [
+    "source_identity_or_quote_binding_failure",
+    "holdout_access_or_leakage",
+    "critical_attribution_polarity_behavior_or_relation_false_positive",
+    "coverage_ledger_incomplete",
+    "item_capacity_saturation",
+    "round_or_call_budget_exhausted",
+    "development_acceptance_gate_failure_after_single_round"
+  ]
+}

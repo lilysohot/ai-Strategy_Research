@@ -14,6 +14,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from plugins.corpus._semantic_validation import prose_binding_reasons
 from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse, parse_value
 from plugins.corpus.claims_v2 import (
     EXTRACTOR_VERSION_V2,
@@ -28,7 +29,7 @@ from plugins.corpus.claims_v2 import (
 )
 from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprint, parse_evidence
 
-PIPELINE_VERSION = "evidence-pipeline-6"
+PIPELINE_VERSION = "evidence-pipeline-7"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
 METRICS: dict[str, tuple[str, str]] = {
     "营业收入": ("revenue", "元"),
@@ -105,6 +106,8 @@ class EvidenceRun(BaseModel):
             "complete": all(
                 r.status not in {"failed", "unknown", "deferred"} for r in self.packet_runs
             ),
+            "coverage_verified": False,
+            "completeness_meaning": "packet_execution_only_not_target_recall",
         }
 
     def verify_identity(self) -> None:
@@ -160,9 +163,15 @@ def validation_is_current(run: EvidenceRun) -> bool:
     )
 
 
+def duplicate_fact_ids(run: EvidenceRun) -> set[str]:
+    """Never let a keyed projection silently choose one of several facts."""
+    return {key for key, count in Counter(f.fact_id for f in run.facts).items() if count > 1}
+
+
 def claim_run_context(run: EvidenceRun) -> dict[str, object]:
     """Always qualify completeness by the actual parsed scope, never the whole corpus."""
     run.verify_identity()
+    duplicates = duplicate_fact_ids(run)
     return {
         **run.summary(),
         "origin": "evidence",
@@ -172,8 +181,15 @@ def claim_run_context(run: EvidenceRun) -> dict[str, object]:
         "extractor_version": run.extractor_version,
         "lint_version": run.lint_version,
         "validation_current": validation_is_current(run),
+        "known_at_basis": "document_publication_candidate",
+        "point_in_time_verified": False,
         "calculation_ready": (
-            sum("calculate" in f.usable_for for f in run.facts) if validation_is_current(run) else 0
+            sum(
+                "calculate" in f.usable_for and f.fact_id not in duplicates
+                for f in run.facts
+            )
+            if validation_is_current(run)
+            else 0
         ),
         "scope": {
             "locators": [page.locator for page in run.document.pages],
@@ -204,6 +220,7 @@ def project_claims(
         raise ValueError("invalid pagination")
     context = claim_run_context(run)
     current = validation_is_current(run)
+    duplicates = duplicate_fact_ids(run)
     rows = []
     for fact in run.facts:
         claim = fact.claim
@@ -213,7 +230,11 @@ def project_claims(
             continue
         if quality_status is not None and claim.quality_status != quality_status:
             continue
-        allowed = [p for p in fact.usable_for if current or p == "cite"]
+        allowed = [
+            p
+            for p in fact.usable_for
+            if (current and fact.fact_id not in duplicates) or p == "cite"
+        ]
         if purpose != "audit" and purpose not in allowed:
             continue
         data = fact.model_dump(mode="json")
@@ -226,10 +247,16 @@ def project_claims(
                 "source_rev": run.document.source_rev,
                 "parse_rev": run.document.parse_rev,
                 "usable_for": allowed,
-                "reasons": list(fact.reasons) + ([] if current else ["validation_version_stale"]),
+                "reasons": list(fact.reasons)
+                + ([] if current else ["validation_version_stale"])
+                + (["duplicate_fact_ids"] if fact.fact_id in duplicates else []),
             }
         )
-    unknown = not context["complete"] or (purpose in {"compare", "calculate"} and not current)
+    unknown = (
+        not context["complete"]
+        or any(p.status == "not_candidate" for p in run.packet_runs)
+        or (purpose in {"compare", "calculate"} and (not current or bool(duplicates)))
+    )
     return {
         **context,
         "purpose": purpose,
@@ -249,11 +276,18 @@ def _fact(
     document: EvidenceDocument,
 ) -> EvidenceFact:
     record = replace(record, extracted_at=None)
+    time_reasons = []
+    model_known_at = record.known_at
+    if record.known_at != document.published:
+        time_reasons.append("known_at_unverified_override")
+        record = replace(record, known_at=document.published)
     alignment = None
     if packet.kind == "prose" and record.evidence_quote:
         alignment = align_quote(record.evidence_quote, packet.text)
         if alignment is not None:
             record = replace(record, evidence_quote=str(alignment["source_quote"]))
+            if time_reasons:
+                alignment["model_known_at"] = model_known_at
     if record.period_raw and re.sub(r"\s+", "", record.period_raw) not in re.sub(
         r"\s+", "", packet.text
     ):
@@ -266,7 +300,7 @@ def _fact(
     record = apply_lint(record, block_text=packet.text, table_lookup=packet.lookup)
     metric_name = re.sub(r"[（(](?:百万元|亿元|万元|元)[）)]$", "", record.metric or "")
     spec = METRICS.get(metric_name)
-    reasons = list(record.reason_codes)
+    reasons = [*record.reason_codes, *time_reasons]
     usable: list[str] = []
     if record.quality_status != "rejected":
         usable.append("cite")
@@ -290,6 +324,7 @@ def _fact(
     if not record.subject:
         reasons.append("subject_missing")
     if packet.kind == "prose" and spec and record.kind != "opinion":
+        reasons.extend(prose_binding_reasons(record, METRICS))
         quote = record.evidence_quote or ""
         aliases = [name for name, mapping in METRICS.items() if mapping[0] == spec[0]]
         if not any(name in quote for name in aliases):
@@ -308,6 +343,24 @@ def _fact(
             reasons.append("value_unit_pair_not_in_quote")
     if record.kind != "opinion" and record.value_num is not None and not reasons:
         usable.extend(["compare", "calculate"])
+    semantic_reasons = [
+        reason
+        for reason in reasons
+        if reason.startswith(
+            (
+                "atomic_evidence_",
+                "kind_source_",
+                "known_at_unverified_",
+                "qualifier_definition_",
+            )
+        )
+    ]
+    if semantic_reasons and record.quality_status == "ok":
+        record = replace(
+            record,
+            quality_status="review",
+            reason_codes=tuple(dict.fromkeys((*record.reason_codes, *semantic_reasons))),
+        )
     return EvidenceFact(
         fact_id=fingerprint(
             [
@@ -318,6 +371,11 @@ def _fact(
                 record.metric,
                 record.period_raw,
                 record.value_text,
+                record.kind,
+                record.qualifiers,
+                record.unit,
+                record.known_at,
+                record.evidence_quote,
             ]
         ),
         packet_id=packet.packet_id,
@@ -332,6 +390,13 @@ def _fact(
 def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[ClaimRecord]:
     payload = []
     for cell in packet.cells:
+        customer_column = cell.column.startswith("销售额") or cell.column == "占收入比例"
+        years = set(re.findall(r"(?<!\d)20\d{2}(?!\d)", " ".join(packet.context)))
+        period = (
+            next(iter(years))
+            if customer_column and len(years) == 1
+            else (None if customer_column else cell.column)
+        )
         payload.append(
             {
                 "claim_text": f"{cell.row} {cell.column} {cell.value} {cell.unit}",
@@ -340,10 +405,15 @@ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[C
                 "table_ref": cell.reference(),
                 "scope": "company",
                 "subject": document.subject,
-                "metric": cell.row,
+                "metric": ("客户销售额" if cell.column.startswith("销售额") else "客户收入占比")
+                if customer_column
+                else cell.row,
+                "qualifiers": {"customer": cell.row, "table_basis": "source_customer_sales"}
+                if customer_column
+                else {},
                 "value_text": cell.value,
                 "unit_raw": cell.unit,
-                "period_raw": cell.column,
+                "period_raw": period,
                 "kind": "forecast" if cell.column.upper().endswith(("E", "F")) else "fact",
             }
         )
@@ -360,6 +430,38 @@ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[C
 
 
 def _mark_conflicts(facts: list[EvidenceFact]) -> list[EvidenceFact]:
+    # Detect contradictory classifications even when one member already failed validation.
+    semantic: dict[tuple[object, ...], list[int]] = defaultdict(list)
+    ids = Counter(f.fact_id for f in facts)
+    for index, fact in enumerate(facts):
+        c = fact.claim
+        semantic[
+            (fact.packet_id, c.subject, fact.metric_id, c.metric, c.period_raw, c.value_num, c.unit)
+        ].append(index)
+    for indices in semantic.values():
+        if len({facts[i].claim.kind for i in indices}) > 1:
+            for index in indices:
+                f = facts[index]
+                facts[index] = f.model_copy(
+                    update={
+                        "usable_for": tuple(p for p in f.usable_for if p == "cite"),
+                        "reasons": (*f.reasons, "conflicting_fact_kinds"),
+                        "claim": replace(f.claim, quality_status="review")
+                        if f.claim.quality_status == "ok"
+                        else f.claim,
+                    }
+                )
+    for index, fact in enumerate(facts):
+        if ids[fact.fact_id] > 1:
+            facts[index] = fact.model_copy(
+                update={
+                    "usable_for": tuple(p for p in fact.usable_for if p == "cite"),
+                    "reasons": (*fact.reasons, "duplicate_fact_ids"),
+                    "claim": replace(fact.claim, quality_status="review")
+                    if fact.claim.quality_status == "ok"
+                    else fact.claim,
+                }
+            )
     groups: dict[tuple[object, ...], list[int]] = defaultdict(list)
     for index, fact in enumerate(facts):
         c = fact.claim

@@ -1,0 +1,169 @@
+{
+  "run_id": "2c242efa96d4a4baf849a393ac5a0da0754d48fd81348d971e39697f4f490fa6",
+  "evidence_run_id": "ff7e5ca82d14e1b48a0c82a95a93de9d7636b2b0fda8804ecb58c48d167ffdad",
+  "extractor_version": "material-semantics-6",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "undated_80b5a290",
+      "source_rev": "80b5a290df3d2ade",
+      "title": "5月：锂电铜箔和电子铜箔",
+      "material_type": "conference_minutes",
+      "research_domain": "industry",
+      "material_date": null,
+      "published_at": null,
+      "language": "zh-CN"
+    },
+    "speakers": [],
+    "items": [],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "document"
+      ],
+      "omitted_areas": [
+        "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a:items_error:ValueError",
+        "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c:items_error:ValueError",
+        "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de:items_error:ValueError",
+        "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288:items_error:ValueError"
+      ],
+      "unknowns": [
+        "material_date"
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 10249,
+            "prompt_tokens": 2785,
+            "completion_tokens": 1476,
+            "reasoning_tokens": 18,
+            "finish_reason": "stop",
+            "content_chars": 4626,
+            "reasoning_chars": 62,
+            "discarded_records": 12,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 22913,
+            "prompt_tokens": 2929,
+            "completion_tokens": 3504,
+            "reasoning_tokens": 16,
+            "finish_reason": "stop",
+            "content_chars": 10850,
+            "reasoning_chars": 63,
+            "discarded_records": 29,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 24363,
+            "prompt_tokens": 2704,
+            "completion_tokens": 3550,
+            "reasoning_tokens": 32,
+            "finish_reason": "stop",
+            "content_chars": 11067,
+            "reasoning_chars": 131,
+            "discarded_records": 30,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "status": "failed",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "items_error:ValueError"
+      ],
+      "diagnostics": {
+        "response_format": "material-jsonl-v1",
+        "stages": {
+          "items": {
+            "adapter_version": "corpus-chat-3",
+            "model": "glm-5.3-flash",
+            "max_output_tokens": 8192,
+            "timeout_seconds": 60.0,
+            "reasoning_effort": "low",
+            "thinking": null,
+            "attempts": 1,
+            "duration_ms": 22976,
+            "prompt_tokens": 2478,
+            "completion_tokens": 3554,
+            "reasoning_tokens": 56,
+            "finish_reason": "stop",
+            "content_chars": 11585,
+            "reasoning_chars": 251,
+            "discarded_records": 30,
+            "error_type": "ValueError",
+            "validation_error": "all material items failed evidence validation"
+          }
+        }
+      }
+    }
+  ]
+}

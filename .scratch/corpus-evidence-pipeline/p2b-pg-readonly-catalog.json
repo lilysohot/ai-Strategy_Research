@@ -1,0 +1,928 @@
+{
+  "version": "p2b-pg-readonly-1",
+  "scope": "metadata only; no corpus text or DDL/DML; explicit rollback",
+  "target_resolution": "current same-environment service.dsn(); prior connection identity was not recorded",
+  "configured_target": {
+    "host": "localhost",
+    "port": "5432",
+    "dbname": "postgres",
+    "user": "postgres"
+  },
+  "queries": {
+    "identity": [
+      {
+        "database": "postgres",
+        "role": "postgres",
+        "server_address": "172.17.0.2/32",
+        "server_port": 5432,
+        "version": "18.6 (Debian 18.6-1.pgdg12+2)",
+        "server_started": "2026-09-14 00:45:58.063575+00:00",
+        "observed_at": "2026-09-14 05:50:15.567468+00:00",
+        "read_only": "on"
+      }
+    ],
+    "cluster": [
+      {
+        "system_identifier": "7683087224215924779",
+        "pg_control_version": 1800,
+        "catalog_version_no": 202506291
+      }
+    ],
+    "settings": [
+      {
+        "name": "archive_mode",
+        "setting": "off"
+      },
+      {
+        "name": "log_connections",
+        "setting": ""
+      },
+      {
+        "name": "log_destination",
+        "setting": "stderr"
+      },
+      {
+        "name": "log_directory",
+        "setting": "log"
+      },
+      {
+        "name": "log_disconnections",
+        "setting": "off"
+      },
+      {
+        "name": "log_filename",
+        "setting": "postgresql-%Y-%m-%d_%H%M%S.log"
+      },
+      {
+        "name": "logging_collector",
+        "setting": "off"
+      },
+      {
+        "name": "log_min_duration_statement",
+        "setting": "-1"
+      },
+      {
+        "name": "log_statement",
+        "setting": "none"
+      },
+      {
+        "name": "shared_preload_libraries",
+        "setting": ""
+      },
+      {
+        "name": "track_commit_timestamp",
+        "setting": "off"
+      }
+    ],
+    "schemas": {
+      "unavailable_sqlstate": null
+    },
+    "extensions": [
+      {
+        "extname": "pg_trgm",
+        "extversion": "1.6",
+        "nspname": "public"
+      },
+      {
+        "extname": "plpgsql",
+        "extversion": "1.0",
+        "nspname": "pg_catalog"
+      },
+      {
+        "extname": "vector",
+        "extversion": "0.8.6",
+        "nspname": "public"
+      },
+      {
+        "extname": "zhparser",
+        "extversion": "2.4",
+        "nspname": "public"
+      }
+    ],
+    "text_search_config": [
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "prsname": "zhparser"
+      }
+    ],
+    "text_search_mapping": [
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 97,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 98,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 99,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 101,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 102,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 104,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 105,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 106,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 107,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 108,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 109,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 110,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 111,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 112,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 113,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 114,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 115,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 116,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 117,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 118,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 119,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 120,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 121,
+        "mapseqno": 1,
+        "dictname": "simple"
+      },
+      {
+        "nspname": "public",
+        "cfgname": "zhcfg",
+        "maptokentype": 122,
+        "mapseqno": 1,
+        "dictname": "simple"
+      }
+    ],
+    "table_statistics": [
+      {
+        "schemaname": "public",
+        "relname": "blocks",
+        "n_live_tup": 5,
+        "n_dead_tup": 0,
+        "n_tup_ins": 5,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "chinese_docs",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "claim_block_runs",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "claim_block_runs_v2",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "claims",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "claims_v2",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "corpus_evidence_runs",
+        "n_live_tup": 7,
+        "n_dead_tup": 0,
+        "n_tup_ins": 7,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "docs",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "documents",
+        "n_live_tup": 2,
+        "n_dead_tup": 2,
+        "n_tup_ins": 2,
+        "n_tup_upd": 2,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "ingest_failures",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "public",
+        "relname": "ingest_runs",
+        "n_live_tup": 4,
+        "n_dead_tup": 4,
+        "n_tup_ins": 4,
+        "n_tup_upd": 4,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      },
+      {
+        "schemaname": "zhparser",
+        "relname": "zhprs_custom_word",
+        "n_live_tup": 0,
+        "n_dead_tup": 0,
+        "n_tup_ins": 0,
+        "n_tup_upd": 0,
+        "n_tup_del": 0,
+        "last_analyze": null,
+        "last_autoanalyze": null
+      }
+    ],
+    "database_statistics": [
+      {
+        "stats_reset": null,
+        "xact_commit": 17176,
+        "xact_rollback": 0,
+        "tup_inserted": 384719,
+        "tup_updated": 45542,
+        "tup_deleted": 381542
+      }
+    ],
+    "columns": [
+      {
+        "table_schema": "public",
+        "table_name": "blocks",
+        "column_name": "doc_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "blocks",
+        "column_name": "seq",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "blocks",
+        "column_name": "locator",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "blocks",
+        "column_name": "text",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "blocks",
+        "column_name": "tsv",
+        "data_type": "tsvector"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "doc_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "seq",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "status",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "claims_n",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "attempts",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "model",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "extractor_version",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "duration_ms",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "prompt_tokens",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "completion_tokens",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "error",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claim_block_runs",
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "claim_id",
+        "data_type": "bigint"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "doc_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "seq",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "locator",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "claim_text",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "kind",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "tickers",
+        "data_type": "ARRAY"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "metric",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "value_text",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "period",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "confidence",
+        "data_type": "real"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "extracted_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "value_num",
+        "data_type": "numeric"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "unit",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "claims",
+        "column_name": "as_of",
+        "data_type": "date"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "run_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "doc_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "source_rev",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "parse_rev",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "payload",
+        "data_type": "jsonb"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "corpus_evidence_runs",
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "doc_id",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "title",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "source_path",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "content_hash",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "mime",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "status",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "char_count",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "block_count",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "ingested_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "published",
+        "data_type": "date"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "title_tsv",
+        "data_type": "tsvector"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "doc_kind_override",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "doc_kind",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "subject",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "org",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "documents",
+        "column_name": "analysts",
+        "data_type": "ARRAY"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_failures",
+        "column_name": "run_id",
+        "data_type": "bigint"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_failures",
+        "column_name": "path",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_failures",
+        "column_name": "reason",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "run_id",
+        "data_type": "bigint"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "started_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "finished_at",
+        "data_type": "timestamp with time zone"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "duration_ms",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "root",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "total",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "added",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "skipped_duplicate",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "skipped_unchanged",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "needs_ocr",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "empty",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "failed",
+        "data_type": "integer"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "status",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "error",
+        "data_type": "text"
+      },
+      {
+        "table_schema": "public",
+        "table_name": "ingest_runs",
+        "column_name": "trigger",
+        "data_type": "text"
+      }
+    ],
+    "count_documents": [
+      {
+        "rows": 89
+      }
+    ],
+    "count_blocks": [
+      {
+        "rows": 1101
+      }
+    ],
+    "count_claims": [
+      {
+        "rows": 1318
+      }
+    ],
+    "count_claim_block_runs": [
+      {
+        "rows": 290
+      }
+    ],
+    "count_corpus_evidence_runs": [
+      {
+        "rows": 57
+      }
+    ],
+    "count_ingest_runs": [
+      {
+        "rows": 11
+      }
+    ],
+    "count_ingest_failures": [
+      {
+        "rows": 1
+      }
+    ],
+    "document_times": [
+      {
+        "first_ingested": "2026-09-08 10:37:47.914492+00:00",
+        "last_ingested": "2026-09-14 01:34:33.044155+00:00"
+      }
+    ],
+    "orphan_blocks": [
+      {
+        "rows": 0
+      }
+    ],
+    "orphan_claims": [
+      {
+        "rows": 0
+      }
+    ],
+    "invalid_indexes": [],
+    "current_logfile": [
+      {
+        "path": null
+      }
+    ],
+    "log_directory": {
+      "unavailable_sqlstate": "58P01"
+    },
+    "archiver": [
+      {
+        "archived_count": 0,
+        "last_archived_wal": null,
+        "last_archived_time": null,
+        "failed_count": 0,
+        "stats_reset": "2026-09-13 02:54:45.433310+00:00"
+      }
+    ]
+  },
+  "transaction_ended": "rollback"
+}

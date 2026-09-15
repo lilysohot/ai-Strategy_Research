@@ -1,0 +1,617 @@
+diff --git a/plugins/corpus/claims_v2.py b/plugins/corpus/claims_v2.py
+index c4c3f7d..e798e80 100644
+--- a/plugins/corpus/claims_v2.py
++++ b/plugins/corpus/claims_v2.py
+@@ -345,6 +345,9 @@ _PERSONAL_TRADE_HINT_RE = re.compile(
+     r"\bnew positions\b|\bstop(?:ped)? out\b",
+     flags=re.IGNORECASE,
+ )
++_DIALOGUE_TURN_RE = re.compile(
++    r"(?:^|\n)\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)\s*[：:]"
++)
+ _EMAIL_RE = re.compile(r"[\w.%-]+@[\w.-]+\.[A-Za-z]{2,}")
+ _TICKER_RE = re.compile(r"^\d{6}\.(?:SH|SZ)$", re.IGNORECASE)
+ _NUM_TOKEN_RE = re.compile(r"\d+(?:\.\d+)?")
+@@ -496,7 +499,7 @@ class ExtractionResult:
+ 
+ 
+ def triage_block_detail(text: str) -> TriageDecision:
+-    """候选召回：numeric / rating / personal_trade / qualitative / noise / no_signal。"""
++    """候选召回：数字、评级、交易、问答与定性材料；纯噪声仍拒绝。"""
+     body = text or ""
+     if not body.strip():
+         return TriageDecision(False, "no_signal")
+@@ -504,6 +507,8 @@ def triage_block_detail(text: str) -> TriageDecision:
+         return TriageDecision(False, "noise")
+     if _contains_personal_trade(body):
+         return TriageDecision(True, "personal_trade")
++    if len(_DIALOGUE_TURN_RE.findall(body)) >= 2:
++        return TriageDecision(True, "dialogue")
+     if any(ch.isdigit() for ch in body):
+         return TriageDecision(True, "numeric")
+     if _contains_rating(body):
+@@ -520,6 +525,7 @@ def triage_blocks_detail(blocks: Sequence[BlockLike]) -> tuple[list[BlockLike],
+         "numeric": 0,
+         "rating": 0,
+         "personal_trade": 0,
++        "dialogue": 0,
+         "qualitative": 0,
+         "noise": 0,
+         "no_signal": 0,
+@@ -1063,12 +1069,14 @@ def _is_noise(text: str) -> bool:
+         and len(body.strip()) < 220
+         and _num_token_count(body) < 5
+         and not _has_content_signal(body)
++        and not _has_numeric_assertion(body)
+     ):
+         return True
+     if (
+         "相关研究报告" in body
+         and body.count("《") >= 8
+         and not any(hint in body for hint in ("核心观点", "投资要点", "报告要点"))
++        and not _has_numeric_assertion(body)
+     ):
+         return True
+     if (
+@@ -1116,6 +1124,20 @@ def _has_content_signal(text: str) -> bool:
+     )
+ 
+ 
++def _has_numeric_assertion(text: str) -> bool:
++    """A sidebar/footer must not veto a substantive statistical sentence.
++
++    Titles in related-reading lists and ratings boilerplate are not assertions.
++    This only protects recall; evidence and calculation gates still run later.
++    """
++    body = re.sub(r"《[^》]*》", "", text)
++    body = re.sub(r"\s+", "", body)
++    return bool(re.search(
++        r"(?:同比|环比)(?:增长|下降|上升|增加|减少|上涨|下跌|升|降)?"
++        r"[+\-−]?\d+(?:\.\d+)?%", body
++    ))
++
++
+ def _email_count(text: str) -> int:
+     return len(_EMAIL_RE.findall(text or ""))
+ 
+diff --git a/plugins/corpus/derivation.py b/plugins/corpus/derivation.py
+index 2e0b200..cd87fcf 100644
+--- a/plugins/corpus/derivation.py
++++ b/plugins/corpus/derivation.py
+@@ -10,7 +10,12 @@ from typing import Any
+ from pydantic import BaseModel, ConfigDict
+ 
+ from plugins.corpus.evidence import fingerprint
+-from plugins.corpus.evidence_pipeline import EvidenceFact, EvidenceRun
++from plugins.corpus.evidence_pipeline import (
++    EvidenceFact,
++    EvidenceRun,
++    duplicate_fact_ids,
++    validation_is_current,
++)
+ 
+ FORMULA_VERSION = "corpus-financial-formulas-1"
+ RECIPES = {
+@@ -45,6 +50,10 @@ def derive(run: EvidenceRun, formula: str, input_ids: tuple[str, ...]) -> Calcul
+     total/part1/part2. Cross-source model mixing is not implicitly permitted.
+     """
+     run.verify_identity()
++    if not validation_is_current(run):
++        raise ValueError("validation_version_stale")
++    if duplicate_fact_ids(run):
++        raise ValueError("duplicate_fact_ids")
+     if formula not in RECIPES:
+         raise ValueError("unsupported_formula")
+     by_id = {f.fact_id: f for f in run.facts}
+diff --git a/plugins/corpus/evidence.py b/plugins/corpus/evidence.py
+index 81c5bac..cd78912 100644
+--- a/plugins/corpus/evidence.py
++++ b/plugins/corpus/evidence.py
+@@ -22,9 +22,18 @@ from plugins.corpus.claims import document_ticker
+ from plugins.corpus.ingest import _doc_id, _title_from_filename, content_hash
+ from plugins.corpus.metadata import derive_published
+ 
+-PARSER_VERSION = "evidence-layout-2"
++PARSER_VERSION = "evidence-layout-4"
+ PERIOD = re.compile(r"20\d{2}(?:[AEF]|H[12]|Q[1-4])?", re.IGNORECASE)
+ NUMBER = re.compile(r"[+\-−]?(?:\d[\d,]*(?:\.\d+)?|\(\d[\d,]*(?:\.\d+)?\))%?")
++_QUESTION_TURN_BOUNDARY = re.compile(
++    r"(?m)^(?=\s*(?:主持人|投资者|提问者|分析师|问)\s*[：:])"
++)
++_SPEAKER_TURN_BOUNDARY = re.compile(
++    r"(?m)^(?=\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)\s*[：:])"
++)
++_NUMBERED_QUESTION_BOUNDARY = re.compile(
++    r"(?m)^(?=\s*(?:[一二三四五六七八九十百]+|\d+)[、.．]\s*[^\n]{0,100}[？?])"
++)
+ BBox = tuple[float, float, float, float]
+ 
+ 
+@@ -106,7 +115,7 @@ def _packet(parse_rev: str, **fields: object) -> EvidencePacket:
+ 
+ 
+ def split_spans(text: str, locator: str, max_chars: int) -> list[Span]:
+-    """Cover every character exactly once, preferring paragraph/line/sentence ends."""
++    """Cover every character once without separating ordinary question/answer turns."""
+     if max_chars < 100:
+         raise ValueError("packet_chars must be at least 100")
+     spans: list[Span] = []
+@@ -114,10 +123,26 @@ def split_spans(text: str, locator: str, max_chars: int) -> list[Span]:
+     while start < len(text):
+         end = min(start + max_chars, len(text))
+         if end < len(text):
+-            choices = [text.rfind(sep, start + max_chars // 2, end) for sep in ("\n", "。", ". ")]
+-            boundary = max(choices)
++            lower = start + max_chars // 2
++            structured: list[int] = []
++            for pattern in (
++                _QUESTION_TURN_BOUNDARY,
++                _NUMBERED_QUESTION_BOUNDARY,
++                _SPEAKER_TURN_BOUNDARY,
++            ):
++                structured = [match.start() for match in pattern.finditer(text, lower, end)]
++                if structured:
++                    break
++            # Prefer the latest question-start boundary so its answer stays in the next packet.
++            # If no structural marker exists, retain the established lossless text fallback.
++            boundary = max(structured, default=-1)
++            if boundary < 0:
++                choices = [
++                    text.rfind(sep, lower, end) for sep in ("\n\n", "\n", "。", ". ")
++                ]
++                boundary = max(choices)
+             if boundary >= 0:
+-                end = boundary + 1
++                end = boundary if structured else boundary + 1
+         spans.append(Span(locator=locator, text=text[start:end], start=start, end=end))
+         start = end
+     return spans
+@@ -281,6 +306,114 @@ def _table_packets(page: pymupdf.Page, parse_rev: str) -> list[EvidencePacket]:
+     return packets
+ 
+ 
++def _customer_packets(page: pymupdf.Page, parse_rev: str) -> list[EvidencePacket]:
++    """Recover customer sales/share columns, with title and footer evidence.
++
++    Explicit header and per-row unit checks are required. No OCR, interpolation,
++    missing-cell filling, or inference that a customer amount is company revenue.
++    """
++    lines = _lines(page)
++    packets: list[EvidencePacket] = []
++    for index, line in enumerate(lines):
++        label_header = next((s for s in line if s.text == "客户名称"), None)
++        sales = next(
++            (s for s in line if re.fullmatch(r"销售额[（(](百万元|亿元|万元|元)[）)]", s.text)),
++            None,
++        )
++        share = next((s for s in line if s.text == "占收入比例"), None)
++        if not label_header or not sales or not share:
++            continue
++        headers = (label_header, sales, share)
++        if any(h.bbox is None for h in headers):
++            continue
++        assert sales.bbox is not None
++        centers = [(h.bbox[0] + h.bbox[2]) / 2 for h in headers]  # type: ignore[index]
++        if not centers[0] < centers[1] < centers[2]:
++            continue
++        title_parts = [
++            s
++            for prev in lines[:index]
++            for s in prev
++            if s.bbox and 0 < sales.bbox[1] - s.bbox[1] < 32
++        ]  # type: ignore[index]
++        title = _join(title_parts) if title_parts else None
++        if title is None or "客户" not in title.text:
++            continue
++        unit_match = re.search(r"[（(](百万元|亿元|万元|元)[）)]", sales.text)
++        assert unit_match is not None
++        boundaries = ((centers[0] + centers[1]) / 2, (centers[1] + centers[2]) / 2)
++        rows: list[tuple[Span, Span, Span]] = []
++        footer = None
++        previous_y = sales.bbox[1]  # type: ignore[index]
++        for row in lines[index + 1 :]:
++            joined = " ".join(s.text for s in row)
++            if re.search(r"(?:数据|资料)来源", joined):
++                footer = _join(row)
++                break
++            if not row[0].bbox or row[0].bbox[1] - previous_y > 45:
++                break
++            labels = [
++                s
++                for s in row
++                if s.bbox and s.bbox[0] < boundaries[0] and not NUMBER.fullmatch(s.text)
++            ]
++            amounts = [
++                s
++                for s in row
++                if s.bbox
++                and boundaries[0] <= (s.bbox[0] + s.bbox[2]) / 2 < boundaries[1]
++                and NUMBER.fullmatch(s.text)
++                and not s.text.endswith("%")
++            ]
++            shares = [
++                s
++                for s in row
++                if s.bbox
++                and boundaries[1]
++                <= (s.bbox[0] + s.bbox[2]) / 2
++                < centers[2] + (centers[2] - centers[1]) / 2
++                and NUMBER.fullmatch(s.text)
++                and s.text.endswith("%")
++            ]
++            if not labels or len(amounts) != 1 or len(shares) != 1:
++                break
++            rows.append((_join(labels), amounts[0], shares[0]))
++            previous_y = row[0].bbox[1]
++        table_id = fingerprint(
++            [parse_rev, "customer-sales", title.model_dump(), [h.model_dump() for h in headers]]
++        )
++        for label, amount, percent in rows:
++            cells = tuple(
++                Cell(
++                    table_id=table_id,
++                    row=label.text,
++                    column=header.text,
++                    value=value.text,
++                    unit=unit,
++                    span=value,
++                    row_span=label,
++                    column_span=header,
++                    unit_span=value if unit == "%" else header,
++                )
++                for header, value, unit in ((sales, amount, unit_match[1]), (share, percent, "%"))
++            )
++            context = (title.text, *((footer.text,) if footer else ()))
++            packets.append(
++                _packet(
++                    parse_rev,
++                    locator=label.locator,
++                    kind="table",
++                    text=" | ".join(
++                        [title.text, label.text, *[f"{c.column}: {c.value}" for c in cells]]
++                    ),
++                    cells=cells,
++                    spans=(*headers, title, label, amount, percent, *((footer,) if footer else ())),
++                    context=context,
++                )
++            )
++    return packets
++
++
+ def parse_evidence(
+     path: str | Path,
+     *,
+@@ -318,6 +451,7 @@ def parse_evidence(
+                     )
+                     continue
+                 packets.extend(_table_packets(page, parse_rev))
++                packets.extend(_customer_packets(page, parse_rev))
+                 for span in split_spans(text, str(number), packet_chars):
+                     packets.append(
+                         _packet(
+diff --git a/plugins/corpus/evidence_pipeline.py b/plugins/corpus/evidence_pipeline.py
+index 9eb3f97..1d0ed31 100644
+--- a/plugins/corpus/evidence_pipeline.py
++++ b/plugins/corpus/evidence_pipeline.py
+@@ -14,6 +14,7 @@ from pathlib import Path
+ 
+ from pydantic import BaseModel, ConfigDict
+ 
++from plugins.corpus._semantic_validation import prose_binding_reasons
+ from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse, parse_value
+ from plugins.corpus.claims_v2 import (
+     EXTRACTOR_VERSION_V2,
+@@ -28,7 +29,7 @@ from plugins.corpus.claims_v2 import (
+ )
+ from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprint, parse_evidence
+ 
+-PIPELINE_VERSION = "evidence-pipeline-6"
++PIPELINE_VERSION = "evidence-pipeline-7"
+ # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
+ METRICS: dict[str, tuple[str, str]] = {
+     "营业收入": ("revenue", "元"),
+@@ -105,6 +106,8 @@ class EvidenceRun(BaseModel):
+             "complete": all(
+                 r.status not in {"failed", "unknown", "deferred"} for r in self.packet_runs
+             ),
++            "coverage_verified": False,
++            "completeness_meaning": "packet_execution_only_not_target_recall",
+         }
+ 
+     def verify_identity(self) -> None:
+@@ -160,9 +163,15 @@ def validation_is_current(run: EvidenceRun) -> bool:
+     )
+ 
+ 
++def duplicate_fact_ids(run: EvidenceRun) -> set[str]:
++    """Never let a keyed projection silently choose one of several facts."""
++    return {key for key, count in Counter(f.fact_id for f in run.facts).items() if count > 1}
++
++
+ def claim_run_context(run: EvidenceRun) -> dict[str, object]:
+     """Always qualify completeness by the actual parsed scope, never the whole corpus."""
+     run.verify_identity()
++    duplicates = duplicate_fact_ids(run)
+     return {
+         **run.summary(),
+         "origin": "evidence",
+@@ -172,8 +181,15 @@ def claim_run_context(run: EvidenceRun) -> dict[str, object]:
+         "extractor_version": run.extractor_version,
+         "lint_version": run.lint_version,
+         "validation_current": validation_is_current(run),
++        "known_at_basis": "document_publication_candidate",
++        "point_in_time_verified": False,
+         "calculation_ready": (
+-            sum("calculate" in f.usable_for for f in run.facts) if validation_is_current(run) else 0
++            sum(
++                "calculate" in f.usable_for and f.fact_id not in duplicates
++                for f in run.facts
++            )
++            if validation_is_current(run)
++            else 0
+         ),
+         "scope": {
+             "locators": [page.locator for page in run.document.pages],
+@@ -204,6 +220,7 @@ def project_claims(
+         raise ValueError("invalid pagination")
+     context = claim_run_context(run)
+     current = validation_is_current(run)
++    duplicates = duplicate_fact_ids(run)
+     rows = []
+     for fact in run.facts:
+         claim = fact.claim
+@@ -213,7 +230,11 @@ def project_claims(
+             continue
+         if quality_status is not None and claim.quality_status != quality_status:
+             continue
+-        allowed = [p for p in fact.usable_for if current or p == "cite"]
++        allowed = [
++            p
++            for p in fact.usable_for
++            if (current and fact.fact_id not in duplicates) or p == "cite"
++        ]
+         if purpose != "audit" and purpose not in allowed:
+             continue
+         data = fact.model_dump(mode="json")
+@@ -226,10 +247,16 @@ def project_claims(
+                 "source_rev": run.document.source_rev,
+                 "parse_rev": run.document.parse_rev,
+                 "usable_for": allowed,
+-                "reasons": list(fact.reasons) + ([] if current else ["validation_version_stale"]),
++                "reasons": list(fact.reasons)
++                + ([] if current else ["validation_version_stale"])
++                + (["duplicate_fact_ids"] if fact.fact_id in duplicates else []),
+             }
+         )
+-    unknown = not context["complete"] or (purpose in {"compare", "calculate"} and not current)
++    unknown = (
++        not context["complete"]
++        or any(p.status == "not_candidate" for p in run.packet_runs)
++        or (purpose in {"compare", "calculate"} and (not current or bool(duplicates)))
++    )
+     return {
+         **context,
+         "purpose": purpose,
+@@ -249,11 +276,18 @@ def _fact(
+     document: EvidenceDocument,
+ ) -> EvidenceFact:
+     record = replace(record, extracted_at=None)
++    time_reasons = []
++    model_known_at = record.known_at
++    if record.known_at != document.published:
++        time_reasons.append("known_at_unverified_override")
++        record = replace(record, known_at=document.published)
+     alignment = None
+     if packet.kind == "prose" and record.evidence_quote:
+         alignment = align_quote(record.evidence_quote, packet.text)
+         if alignment is not None:
+             record = replace(record, evidence_quote=str(alignment["source_quote"]))
++            if time_reasons:
++                alignment["model_known_at"] = model_known_at
+     if record.period_raw and re.sub(r"\s+", "", record.period_raw) not in re.sub(
+         r"\s+", "", packet.text
+     ):
+@@ -266,7 +300,7 @@ def _fact(
+     record = apply_lint(record, block_text=packet.text, table_lookup=packet.lookup)
+     metric_name = re.sub(r"[（(](?:百万元|亿元|万元|元)[）)]$", "", record.metric or "")
+     spec = METRICS.get(metric_name)
+-    reasons = list(record.reason_codes)
++    reasons = [*record.reason_codes, *time_reasons]
+     usable: list[str] = []
+     if record.quality_status != "rejected":
+         usable.append("cite")
+@@ -290,6 +324,7 @@ def _fact(
+     if not record.subject:
+         reasons.append("subject_missing")
+     if packet.kind == "prose" and spec and record.kind != "opinion":
++        reasons.extend(prose_binding_reasons(record, METRICS))
+         quote = record.evidence_quote or ""
+         aliases = [name for name, mapping in METRICS.items() if mapping[0] == spec[0]]
+         if not any(name in quote for name in aliases):
+@@ -308,6 +343,24 @@ def _fact(
+             reasons.append("value_unit_pair_not_in_quote")
+     if record.kind != "opinion" and record.value_num is not None and not reasons:
+         usable.extend(["compare", "calculate"])
++    semantic_reasons = [
++        reason
++        for reason in reasons
++        if reason.startswith(
++            (
++                "atomic_evidence_",
++                "kind_source_",
++                "known_at_unverified_",
++                "qualifier_definition_",
++            )
++        )
++    ]
++    if semantic_reasons and record.quality_status == "ok":
++        record = replace(
++            record,
++            quality_status="review",
++            reason_codes=tuple(dict.fromkeys((*record.reason_codes, *semantic_reasons))),
++        )
+     return EvidenceFact(
+         fact_id=fingerprint(
+             [
+@@ -318,6 +371,11 @@ def _fact(
+                 record.metric,
+                 record.period_raw,
+                 record.value_text,
++                record.kind,
++                record.qualifiers,
++                record.unit,
++                record.known_at,
++                record.evidence_quote,
+             ]
+         ),
+         packet_id=packet.packet_id,
+@@ -332,6 +390,13 @@ def _fact(
+ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[ClaimRecord]:
+     payload = []
+     for cell in packet.cells:
++        customer_column = cell.column.startswith("销售额") or cell.column == "占收入比例"
++        years = set(re.findall(r"(?<!\d)20\d{2}(?!\d)", " ".join(packet.context)))
++        period = (
++            next(iter(years))
++            if customer_column and len(years) == 1
++            else (None if customer_column else cell.column)
++        )
+         payload.append(
+             {
+                 "claim_text": f"{cell.row} {cell.column} {cell.value} {cell.unit}",
+@@ -340,10 +405,15 @@ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[C
+                 "table_ref": cell.reference(),
+                 "scope": "company",
+                 "subject": document.subject,
+-                "metric": cell.row,
++                "metric": ("客户销售额" if cell.column.startswith("销售额") else "客户收入占比")
++                if customer_column
++                else cell.row,
++                "qualifiers": {"customer": cell.row, "table_basis": "source_customer_sales"}
++                if customer_column
++                else {},
+                 "value_text": cell.value,
+                 "unit_raw": cell.unit,
+-                "period_raw": cell.column,
++                "period_raw": period,
+                 "kind": "forecast" if cell.column.upper().endswith(("E", "F")) else "fact",
+             }
+         )
+@@ -360,6 +430,38 @@ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[C
+ 
+ 
+ def _mark_conflicts(facts: list[EvidenceFact]) -> list[EvidenceFact]:
++    # Detect contradictory classifications even when one member already failed validation.
++    semantic: dict[tuple[object, ...], list[int]] = defaultdict(list)
++    ids = Counter(f.fact_id for f in facts)
++    for index, fact in enumerate(facts):
++        c = fact.claim
++        semantic[
++            (fact.packet_id, c.subject, fact.metric_id, c.metric, c.period_raw, c.value_num, c.unit)
++        ].append(index)
++    for indices in semantic.values():
++        if len({facts[i].claim.kind for i in indices}) > 1:
++            for index in indices:
++                f = facts[index]
++                facts[index] = f.model_copy(
++                    update={
++                        "usable_for": tuple(p for p in f.usable_for if p == "cite"),
++                        "reasons": (*f.reasons, "conflicting_fact_kinds"),
++                        "claim": replace(f.claim, quality_status="review")
++                        if f.claim.quality_status == "ok"
++                        else f.claim,
++                    }
++                )
++    for index, fact in enumerate(facts):
++        if ids[fact.fact_id] > 1:
++            facts[index] = fact.model_copy(
++                update={
++                    "usable_for": tuple(p for p in fact.usable_for if p == "cite"),
++                    "reasons": (*fact.reasons, "duplicate_fact_ids"),
++                    "claim": replace(fact.claim, quality_status="review")
++                    if fact.claim.quality_status == "ok"
++                    else fact.claim,
++                }
++            )
+     groups: dict[tuple[object, ...], list[int]] = defaultdict(list)
+     for index, fact in enumerate(facts):
+         c = fact.claim
+diff --git a/plugins/corpus/service.py b/plugins/corpus/service.py
+index 336bbba..c6dd3d2 100644
+--- a/plugins/corpus/service.py
++++ b/plugins/corpus/service.py
+@@ -50,6 +50,7 @@ if TYPE_CHECKING:
+     from plugins.corpus.derivation import Calculation
+     from plugins.corpus.evidence_pipeline import EvidenceRun
+     from plugins.corpus.fetch import FetchedBlock
++    from plugins.corpus.material_semantics import MaterialRun, MaterialType
+ 
+ import psycopg
+ from psycopg.rows import DictRow, dict_row
+@@ -899,6 +900,66 @@ class CorpusService:
+             self.save_evidence_run(run)
+         return run
+ 
++    def understand_material(
++        self,
++        *,
++        path: str | Path | None = None,
++        evidence_run_id: str | None = None,
++        pages: tuple[int, ...] | None = None,
++        llm: Callable[[str], str] | None = None,
++        model: str | None = None,
++        max_calls: int = 0,
++        packet_chars: int = 2000,
++        material_type: MaterialType | None = None,
++        persist_evidence: bool = False,
++        staged_jsonl: bool = False,
++        max_items_per_packet: int = 30,
++        slot_protocol: bool = False,
++        max_slots_per_batch: int = 8,
++        extract_relations: bool = True,
++        candidate_slot_ids: tuple[str, ...] | None = None,
++    ) -> MaterialRun:
++        """Build an R2 material view from a path or an exact saved evidence revision.
++
++        A direct path does not ingest the source or persist its shadow EvidenceRun unless
++        explicitly requested.  This keeps material semantics on the canonical evidence
++        parser while allowing pre-ingestion acceptance samples.
++        """
++        from plugins.corpus.evidence_pipeline import build_evidence_run
++        from plugins.corpus.material_semantics import extract_material_understanding
++
++        if (path is None) == (evidence_run_id is None):
++            raise ValueError("provide exactly one of path or evidence_run_id")
++        if max_calls < 0 or max_items_per_packet < 1 or max_slots_per_batch < 1:
++            raise ValueError("max_calls must be non-negative")
++        if max_calls and llm is None:
++            llm = build_default_llm()
++            model = model or configured_model()
++        if evidence_run_id is not None:
++            evidence_run = self.load_evidence_run(evidence_run_id)
++        else:
++            if not 100 <= packet_chars <= 12000 or pages == ():
++                raise ValueError("invalid material packet size or empty page selection")
++            evidence_run = build_evidence_run(
++                cast("Path", path),
++                pages=pages,
++                packet_chars=packet_chars,
++            )
++            if persist_evidence:
++                self.save_evidence_run(evidence_run)
++        return extract_material_understanding(
++            evidence_run,
++            llm=llm,
++            max_calls=max_calls,
++            material_type=material_type,
++            staged_jsonl=staged_jsonl,
++            max_items_per_packet=max_items_per_packet,
++            slot_protocol=slot_protocol,
++            max_slots_per_batch=max_slots_per_batch,
++            extract_relations=extract_relations,
++            candidate_slot_ids=candidate_slot_ids,
++        )
++
+     def claims_of(
+         self,
+         *,

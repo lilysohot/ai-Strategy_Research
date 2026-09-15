@@ -1,7 +1,9 @@
 # P0 实施规格：投研内核 + 最小资料库
 
-> **本文档是施工依据**，对应 `docs/tittel/trading-strategy-platform-feasibility.md` 的 P0 阶段，
-> 并经架构评审收敛后的最终范围。
+> **本文档是 P0 历史施工规格，不是本轮语料重构施工依据**，对应
+> `docs/tittel/trading-strategy-platform-feasibility.md` 的 P0 阶段。
+> 2026-09-15：语料部分的新目标见[重构草案 v1.1](plan/corpus-ingestion-rebuild-architecture.md)，
+> I0 后才冻结实施；数字溯源、受控计算、策略校验和安全要求继续有效，未因语料重构退休。
 > 完整远期架构见 [corpus-ingestion-architecture.md](corpus-ingestion-architecture.md)——
 > **该文档中 Discord / IMA 接入、向量检索、信号层、跨源共振均不在 P0 范围，已推后**。
 > 原则：**P0 验证机制，不验证质量；但绝不产出无法溯源的数字。**

@@ -1,0 +1,532 @@
+{
+  "version": "r2-p3-replay-review-1",
+  "split": "development",
+  "development_sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "micro_scope_ids": [
+    "micro-company-recommendation",
+    "micro-industry-q7-q8",
+    "micro-trade-ttd",
+    "micro-copper-summary",
+    "micro-copper-audio",
+    "micro-copper-yield"
+  ],
+  "source_paths_opened": [
+    "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+    "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+    "data/corpus/5月：锂电铜箔和电子铜箔.md"
+  ],
+  "holdout_source_paths_opened": 0,
+  "model_calls": 0,
+  "judge_calls": 0,
+  "postgres_access": 0,
+  "legacy": {
+    "v12": {
+      "version": "v12",
+      "report_path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-09b119120285666aac93fcb41ce1f8c0ebe3c4bb563f50a964bdc30b0b301b40.json",
+      "report_sha256": "ac6acd4aee29aa13e4e2903c3b217692093521135def82b9a6c05489d06b151a",
+      "budget_path": ".scratch/corpus-evidence-pipeline/r2-v12-atomic-items-budget-v6.json",
+      "budget_sha256": "d6a3e15300255f4a73e9ed6e8a7bc712fdc9b996f1e92b02c3aea545b49d47ca",
+      "raw_response_count": 9,
+      "raw": [
+        {
+          "sample_id": "dev-company-report",
+          "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+          "response_sha256": "fa0a03c439c848b1bcde6fdbc19785142271215bd2049de63b60796ad7de1e4e",
+          "bytes": 2786,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-company-report",
+          "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+          "response_sha256": "7a417d88c533eae5940c6a9394fd8bc08317ca0312b1861efae347917f41ee56",
+          "bytes": 619,
+          "json_rows": 2,
+          "record_types": {
+            "speaker": 1,
+            "item": 1
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "05d18566db88b202951c026b096ff712e7e12858a2c47b78d4202a82e8686ff1",
+          "bytes": 2774,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "8afa5d994287e5280216df283fe6e36d2ebd61993352392417fc1456f7cc5cff",
+          "bytes": 2901,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "fc06d097fc2879d98c5429c42e7cdadae420f730e432e9020c09ea28ada7c3e8",
+          "bytes": 1194,
+          "json_rows": 3,
+          "record_types": {
+            "speaker": 1,
+            "item": 2
+          }
+        },
+        {
+          "sample_id": "dev-personal-trade-review",
+          "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+          "response_sha256": "47d419bb5028755f9d30753b308d4a054db6ce1bf550def67123306da967374b",
+          "bytes": 2221,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "coverage": 2,
+            "item": 4
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+          "response_sha256": "0a3afa4deedcc47ed5b642e417e6ee7a2262a2544997f417970fe9eb32344441",
+          "bytes": 769,
+          "json_rows": 2,
+          "record_types": {
+            "speaker": 1,
+            "item": 1
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+          "response_sha256": "176d2f3f7443f5df7ede8041ba76483284a2a6410c127eaaf44890f8226770d3",
+          "bytes": 3098,
+          "json_rows": 8,
+          "record_types": {
+            "speaker": 2,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+          "response_sha256": "3d88ef676abe2ce0f6958395a985bbbbc89b67d403e552cd1c64922f33c28ccc",
+          "bytes": 1503,
+          "json_rows": 4,
+          "record_types": {
+            "speaker": 1,
+            "item": 3
+          }
+        }
+      ],
+      "record_types": {
+        "speaker": 10,
+        "item": 35,
+        "coverage": 2
+      },
+      "invalid_json_lines": 0,
+      "terminal_coverage": {
+        "dev-company-report": {
+          "expected": 7,
+          "observed_unique_terminal_ids": 7,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-industry-qa-report": {
+          "expected": 14,
+          "observed_unique_terminal_ids": 14,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-personal-trade-review": {
+          "expected": 6,
+          "observed_unique_terminal_ids": 6,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-expert-call-copper-foil": {
+          "expected": 10,
+          "observed_unique_terminal_ids": 10,
+          "missing": 0,
+          "unknown": 0
+        }
+      },
+      "legacy_score": {
+        "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/item-contract-score-v2-76525bcdee094fbb621db58a802afad78faeabc0f4573b4c61e8f45520c41e51.json",
+        "sha256": "ea50201370d6fa318efbfe7bd90496bb465d4b5089850f006fc57a3f93dcacc3",
+        "passed": false,
+        "item_recall": 1.0,
+        "item_precision": 1.0,
+        "semantic_accuracy": 0.9142857142857143,
+        "critical_errors": 9,
+        "historical_only": true
+      },
+      "new_wire_records_accepted": 0,
+      "new_runtime_replay": "not_replayable",
+      "not_replayable_reasons": [
+        "legacy rows bind candidate_slot_id, not new plan_id/obligation_id",
+        "legacy rows do not carry the new terminal/item envelope or evidence_span_ids",
+        "legacy response_received/audit proof cannot be reconstructed from an OfflineGrant journal",
+        "missing fields must not be copied from gold or synthesized by an adapter"
+      ]
+    },
+    "v13": {
+      "version": "v13",
+      "report_path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-46caccfc1c7d23ef3858a8a501560c07b250888b0b3f189fdff75d8ba6bc6b4b.json",
+      "report_sha256": "34cc841e98257580889681907f86cce54003f4a46e5df8f14df451fbd502f8ab",
+      "budget_path": ".scratch/corpus-evidence-pipeline/r2-v13-final-items-budget-v7.json",
+      "budget_sha256": "300437b718abb8d9f890327be375c23c083bae1f8ba2a91108dc5b4d6a960e7f",
+      "raw_response_count": 9,
+      "raw": [
+        {
+          "sample_id": "dev-company-report",
+          "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+          "response_sha256": "45cb3dbf6b342d5ca5994ce2fe9162e4a320cc0480ef6699a1d4e464f14c2c3f",
+          "bytes": 2800,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-company-report",
+          "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+          "response_sha256": "6d16bf15c08ffb73b9cf5c8b4f9d00647c89fb72ed6f9a3162d062a31280b245",
+          "bytes": 577,
+          "json_rows": 2,
+          "record_types": {
+            "speaker": 1,
+            "item": 1
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "9649cb8dab0d24e871cc65aa70884d1d60f2127643facf212615eb20d22e3639",
+          "bytes": 2967,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "76a716d2b00677e1d81ecaa96655b1b04e74e4479ebbfb0991003f13e1c0eaf6",
+          "bytes": 3042,
+          "json_rows": 8,
+          "record_types": {
+            "speaker": 2,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-industry-qa-report",
+          "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+          "response_sha256": "7c9365f675ee7d49d6e5a3d24681ec26a88c9faa4cc444a018e584df0bdc89bd",
+          "bytes": 1122,
+          "json_rows": 3,
+          "record_types": {
+            "speaker": 1,
+            "item": 2
+          }
+        },
+        {
+          "sample_id": "dev-personal-trade-review",
+          "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+          "response_sha256": "3a4fb763e52ac4bed6f0f596770ace3cea031e2c0ba19a18dc108004a678e359",
+          "bytes": 2247,
+          "json_rows": 7,
+          "record_types": {
+            "speaker": 1,
+            "item": 4,
+            "coverage": 2
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+          "response_sha256": "78ba2e7214f2a48795c62b45ecbcb59c16b26e8a19d6c8f811c0d0c9973ae668",
+          "bytes": 742,
+          "json_rows": 2,
+          "record_types": {
+            "speaker": 1,
+            "item": 1
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+          "response_sha256": "41403c9616a28afe6137ba5f5f22e476c0e9ab3700c1cc51930171c457c6dac7",
+          "bytes": 3068,
+          "json_rows": 8,
+          "record_types": {
+            "speaker": 2,
+            "item": 6
+          }
+        },
+        {
+          "sample_id": "dev-expert-call-copper-foil",
+          "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+          "response_sha256": "757980d7872115ec44578b406a443d593a9e54b83aad5fd31e3ba2ebd294283e",
+          "bytes": 1445,
+          "json_rows": 4,
+          "record_types": {
+            "speaker": 1,
+            "item": 3
+          }
+        }
+      ],
+      "record_types": {
+        "speaker": 11,
+        "item": 35,
+        "coverage": 2
+      },
+      "invalid_json_lines": 0,
+      "terminal_coverage": {
+        "dev-company-report": {
+          "expected": 7,
+          "observed_unique_terminal_ids": 7,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-industry-qa-report": {
+          "expected": 14,
+          "observed_unique_terminal_ids": 14,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-personal-trade-review": {
+          "expected": 6,
+          "observed_unique_terminal_ids": 6,
+          "missing": 0,
+          "unknown": 0
+        },
+        "dev-expert-call-copper-foil": {
+          "expected": 10,
+          "observed_unique_terminal_ids": 10,
+          "missing": 0,
+          "unknown": 0
+        }
+      },
+      "legacy_score": {
+        "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/item-contract-score-v2-203a306ebfc2dc881fbbffc78a76b08d771a5b5c596c4cde87c3adadd40a04f0.json",
+        "sha256": "ffcedfe0c35bfbcd1c2035f87ed26a820425aac5865e892e7ef70637a1ccfd76",
+        "passed": false,
+        "item_recall": 0.9714285714285714,
+        "item_precision": 1.0,
+        "semantic_accuracy": 0.9117647058823529,
+        "critical_errors": 1,
+        "historical_only": true
+      },
+      "new_wire_records_accepted": 0,
+      "new_runtime_replay": "not_replayable",
+      "not_replayable_reasons": [
+        "legacy rows bind candidate_slot_id, not new plan_id/obligation_id",
+        "legacy rows do not carry the new terminal/item envelope or evidence_span_ids",
+        "legacy response_received/audit proof cannot be reconstructed from an OfflineGrant journal",
+        "missing fields must not be copied from gold or synthesized by an adapter"
+      ]
+    }
+  },
+  "micro_planner": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "sample_id": "dev-company-report",
+      "selected_chars": 122,
+      "gold_items": 7,
+      "gold_relations": 0,
+      "gold_negative_relations": 0,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 7
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "sample_id": "dev-industry-qa-report",
+      "selected_chars": 239,
+      "gold_items": 14,
+      "gold_relations": 11,
+      "gold_negative_relations": 3,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 14
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "sample_id": "dev-personal-trade-review",
+      "selected_chars": 168,
+      "gold_items": 4,
+      "gold_relations": 0,
+      "gold_negative_relations": 2,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 4
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    },
+    {
+      "scope_id": "micro-copper-summary",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 70,
+      "gold_items": 1,
+      "gold_relations": 0,
+      "gold_negative_relations": 0,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 1
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    },
+    {
+      "scope_id": "micro-copper-audio",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 21,
+      "gold_items": 1,
+      "gold_relations": 0,
+      "gold_negative_relations": 0,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 1
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "sample_id": "dev-expert-call-copper-foil",
+      "selected_chars": 121,
+      "gold_items": 8,
+      "gold_relations": 6,
+      "gold_negative_relations": 3,
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "estimated_item_batches": 0,
+      "mapping_statuses": {
+        "structurally_unresolved": 8
+      },
+      "semantic_coverage": "not_evaluated",
+      "relation_status": "deferred",
+      "calls_authorized": 0
+    }
+  ],
+  "full_capacity": [
+    {
+      "sample_id": "dev-company-report",
+      "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "packets": 8,
+      "selected_roots": 8,
+      "selected_chars": 3047,
+      "status": "planned_not_semantically_verified",
+      "obligations": 8,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 8,
+      "item_batches": 0,
+      "max_request_bytes": 0,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "packets": 1,
+      "selected_roots": 1,
+      "selected_chars": 1508,
+      "status": "planned_not_semantically_verified",
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "item_batches": 0,
+      "max_request_bytes": 0,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_sha256": "810ef870625e7856c39812818f1b6226caa6d786ba8ff1d5e26bb2b0947c2139",
+      "packets": 1,
+      "selected_roots": 1,
+      "selected_chars": 674,
+      "status": "planned_not_semantically_verified",
+      "obligations": 1,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 1,
+      "item_batches": 0,
+      "max_request_bytes": 0,
+      "calls_authorized": 0
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_sha256": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+      "packets": 4,
+      "selected_roots": 4,
+      "selected_chars": 11815,
+      "status": "planned_not_semantically_verified",
+      "obligations": 4,
+      "candidate_obligations": 0,
+      "unresolved_obligations": 4,
+      "item_batches": 0,
+      "max_request_bytes": 0,
+      "calls_authorized": 0
+    }
+  ],
+  "review_queue_counts": {
+    "structurally_unresolved": 35
+  },
+  "gates": {
+    "G0_identity_scope": "passed",
+    "G1_terminal_capacity": "not_evaluated_for_new_model_output",
+    "G2_content_fidelity": "not_evaluated_review_required",
+    "G3_field_semantics": "not_evaluated_review_required",
+    "G4_relations": "not_evaluated",
+    "G5_old_flow_isolation": "passed_by_p2b_frozen_evidence",
+    "G6_class_non_regression": "not_evaluated_no_new_protocol_outputs"
+  },
+  "p3_status": "blocked_by_non_replayable_legacy_wire_and_unapproved_atomic_mapping",
+  "p4_budget_authorized": false
+}

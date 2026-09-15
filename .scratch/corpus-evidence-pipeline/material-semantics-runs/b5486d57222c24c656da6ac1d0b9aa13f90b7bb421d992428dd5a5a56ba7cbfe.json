@@ -1,0 +1,200 @@
+{
+  "run_id": "b5486d57222c24c656da6ac1d0b9aa13f90b7bb421d992428dd5a5a56ba7cbfe",
+  "evidence_run_id": "68bc6ae3ffb20b9c6802bad7ee3f8fd33b67e01cdb983c2695987f85cfe90feb",
+  "extractor_version": "material-semantics-1",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_682e19e0bd77",
+        "display_name": "James-Bulltard_9326",
+        "role": "unknown",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_85c5031a827588da",
+        "text": "TTD：加仓10,000股，成交价14.76，并以0.16卖出100张周五到期$15看涨期权；该价格仍远低于CEO买入1.5亿美元的$25水平",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_682e19e0bd77",
+        "polarity": "affirmed",
+        "value": "added 10,000 @14.76; sold 100 $15 calls @0.16; CEO bought $150m at $25 level",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16",
+            "start": 42,
+            "end": 112
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ff8e424c26be126a",
+        "text": "FRVO：加仓3,000股，成交价17.30，并以0.50卖出30张9月到期$20看涨期权；加仓背景是本周与Google的交易",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_682e19e0bd77",
+        "polarity": "affirmed",
+        "value": "added 3,000 @17.30; sold 30 $20 September calls @0.50",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "I bought 3000 more at 17.30 and sold 30 $20 September calls for .50",
+            "start": 212,
+            "end": 279
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6fddcf7dbe6ff0f9",
+        "text": "MDT：以0.47卖出50张下周到期、行权价$90的看跌期权",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_682e19e0bd77",
+        "polarity": "affirmed",
+        "value": "sold 50 puts @90 strike @0.47",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "I sold 50 puts at $90 for next week for .47",
+            "start": 350,
+            "end": 393
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5d85889146131596",
+        "text": "AGX：昨日盘后清仓并在discord发布；对该标的并不了解，仅跟随前一日资金流；财报后大涨$50+后回吐部分，遂以447清仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_682e19e0bd77",
+        "polarity": "affirmed",
+        "value": "liquidated at 447",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "I sold this position yesterday afterhours and posted it in the discord when I\ndid",
+            "start": 403,
+            "end": 484
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d44a9ce047df930a",
+        "text": "AGX财报后大涨$50+，随后部分回吐",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_682e19e0bd77",
+        "polarity": "affirmed",
+        "value": "$50+ pop",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "It caught a $50+ pop on earnings and gave some back initially",
+            "start": 566,
+            "end": 627
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_a06b952f295bac85",
+        "type": "motivates",
+        "from_item": "itm_d44a9ce047df930a",
+        "to_item": "itm_5d85889146131596",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+            "locator": "5",
+            "quote": "It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447",
+            "start": 566,
+            "end": 659
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [],
+      "unknowns": [
+        "speaker_identity"
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "29325d13b7b0a744ed11eb775e26227a18859a7e30cb81f5e803105a0a2685cc",
+      "status": "completed",
+      "records": 5,
+      "reasons": [],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 7621,
+        "prompt_tokens": 746,
+        "completion_tokens": 1020,
+        "reasoning_tokens": 3,
+        "finish_reason": "stop",
+        "content_chars": 3213,
+        "reasoning_chars": 14
+      }
+    }
+  ]
+}

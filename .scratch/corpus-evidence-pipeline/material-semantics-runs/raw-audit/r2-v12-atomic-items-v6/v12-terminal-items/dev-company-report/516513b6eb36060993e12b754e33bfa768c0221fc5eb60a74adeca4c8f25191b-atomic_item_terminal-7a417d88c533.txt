@@ -1,0 +1,2 @@
+{"record_type":"speaker","speaker_id":"spk_c82b0ee614fd","display_name":"欧阳予、田晨曦、张慧","role":"analyst_author","identity_status":"explicit"}
+{"record_type":"item","item_id":"it_9a1f2c3d4e5b","text":"行业竞争加剧等风险","semantic_type":"risk","statement_role":"risk","speech_role":"statement","perspective":"source_explicit","speaker_ref":"spk_c82b0ee614fd","polarity":"negative","value":null,"behavior_status":null,"temporal_frame":"unknown","evidence_quote":"行业竞争加剧等。","unknown_fields":["value","behavior_status","temporal_frame"],"candidate_slot_id":"slot_fc42861a679cdd56"}

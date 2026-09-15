@@ -1,0 +1,1082 @@
+{
+  "schema_version": "material-item-contract-score-v2",
+  "scorer_version": "material-item-contract-scorer-2",
+  "policy_sha256": "c0fed47f53ddc6b7966a32a30054e4a87c28914234077a0dc2b5122775473852",
+  "diagnostic_replay_report": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/report-46caccfc1c7d23ef3858a8a501560c07b250888b0b3f189fdff75d8ba6bc6b4b.json",
+  "diagnostic_replay_report_sha256": "34cc841e98257580889681907f86cce54003f4a46e5df8f14df451fbd502f8ab",
+  "split": "development",
+  "model_calls": 0,
+  "metrics": {
+    "item_recall": 0.9714285714285714,
+    "item_precision": 1.0,
+    "semantic_accuracy": 0.9117647058823529,
+    "speech_structure_accuracy": 1.0,
+    "attribution_accuracy": 1.0,
+    "polarity_accuracy": 1.0,
+    "condition_risk_retention": 1.0,
+    "behavior_state_temporal_accuracy": 1.0,
+    "value_accuracy": 1.0,
+    "evidence_unique_alignment": 1.0,
+    "unknown_axis_recall": 1.0,
+    "unsupported_statement_precision": 1.0,
+    "critical_errors": 1
+  },
+  "thresholds": {
+    "item_recall": 1.0,
+    "item_precision": 1.0,
+    "semantic_accuracy": 0.9,
+    "speech_structure_accuracy": 1.0,
+    "attribution_accuracy": 1.0,
+    "polarity_accuracy": 1.0,
+    "condition_risk_retention": 1.0,
+    "behavior_state_temporal_accuracy": 1.0,
+    "value_accuracy": 1.0,
+    "evidence_unique_alignment": 1.0,
+    "unknown_axis_recall": 1.0,
+    "unsupported_statement_precision": 0.95,
+    "critical_errors": 0
+  },
+  "counts": {
+    "gold_items": 35,
+    "predicted_items": 34,
+    "matched_items": 34,
+    "compared_items": 34,
+    "semantic_correct": 31,
+    "speech_structure_correct": 34,
+    "attribution_correct": 34,
+    "polarity_correct": 34,
+    "condition_risk_items": 4,
+    "condition_risk_correct": 4,
+    "behavior_items": 2,
+    "behavior_correct": 2,
+    "value_correct": 34,
+    "evidence_correct": 34,
+    "unknown_axes": 50,
+    "unknown_axis_hits": 50
+  },
+  "passed": false,
+  "violations": [
+    "item_recall: 0.9714285714285714 < 1.0"
+  ],
+  "critical_error_detail": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "item_id": "mc-rating",
+      "error": "item_missing"
+    }
+  ],
+  "scopes": [
+    {
+      "scope_id": "micro-company-recommendation",
+      "gold_items": 7,
+      "predicted_items": 6,
+      "matched_items": 6,
+      "unmatched_gold": [
+        "mc-rating"
+      ],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mc-company-outlook",
+          "predicted_item": "itm_c1c9864e50c77826",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mc-eps-forecast",
+          "predicted_item": "itm_2c4b3faca2234b73",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time"
+          ]
+        },
+        {
+          "gold_item": "mc-target-price",
+          "predicted_item": "itm_0bbc487429fd6476",
+          "identity_score": 1.0,
+          "identity_method": "normalized_similarity",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time"
+          ]
+        },
+        {
+          "gold_item": "mc-risk-macro",
+          "predicted_item": "itm_cba2630b0d710820",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "time",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mc-risk-consumption",
+          "predicted_item": "itm_8a232a090479c730",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "time",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mc-risk-competition",
+          "predicted_item": "itm_6c4827582bd53003",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "time",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-industry-q7-q8",
+      "gold_items": 14,
+      "predicted_items": 14,
+      "matched_items": 14,
+      "unmatched_gold": [],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mi-q-bottom",
+          "predicted_item": "itm_60368d8c17fb85e0",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-q-high",
+          "predicted_item": "itm_7e31e7b58be528bd",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-long-odds",
+          "predicted_item": "itm_ab0cac8f75355f5b",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-not-inflection",
+          "predicted_item": "itm_1d1704d4e6019937",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-focus-balance",
+          "predicted_item": "itm_697807e0e698a860",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-focus-spread",
+          "predicted_item": "itm_031c1974637f0c10",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-high-not-sell",
+          "predicted_item": "itm_16f3d4edc9ed2b3b",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-future-trend",
+          "predicted_item": "itm_86d733969ab00b97",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-q-expansion",
+          "predicted_item": "itm_839e7c27bd45032b",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-cycle",
+          "predicted_item": "itm_42acdaeeb9390cdf",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-capacity-not-invalidate",
+          "predicted_item": "itm_9d74a9aaade14810",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-price-cycles",
+          "predicted_item": "itm_a40ff93c0d925518",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-cycle-length",
+          "predicted_item": "itm_0bc26ef75e618bf0",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mi-a-investment-value",
+          "predicted_item": "itm_b04f8c385b7a77f5",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-trade-ttd",
+      "gold_items": 4,
+      "predicted_items": 4,
+      "matched_items": 4,
+      "unmatched_gold": [],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mt-added-shares",
+          "predicted_item": "itm_a213f796be68ee14",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification"
+          ]
+        },
+        {
+          "gold_item": "mt-sold-calls",
+          "predicted_item": "itm_6b3999cfeb76f094",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "time"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time"
+          ]
+        },
+        {
+          "gold_item": "mt-below-ceo-level",
+          "predicted_item": "itm_5181e58240f6435d",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "time"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "time"
+          ]
+        },
+        {
+          "gold_item": "mt-ceo-bought",
+          "predicted_item": "itm_4ef5796c3413470b",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity",
+            "time"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time"
+          ]
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-summary",
+      "gold_items": 1,
+      "predicted_items": 1,
+      "matched_items": 1,
+      "unmatched_gold": [],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mcs-outlook",
+          "predicted_item": "itm_3f24290f71995bb5",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "attribution",
+            "segmentation",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "attribution",
+            "external_verification",
+            "identity",
+            "segmentation",
+            "time",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-audio",
+      "gold_items": 1,
+      "predicted_items": 1,
+      "matched_items": 1,
+      "unmatched_gold": [],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mca-hearing-check",
+          "predicted_item": "itm_6d2a41ea83c82541",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "attribution",
+            "identity",
+            "segmentation"
+          ],
+          "unknown_axes_predicted": [
+            "attribution",
+            "identity",
+            "segmentation",
+            "time",
+            "value"
+          ]
+        }
+      ]
+    },
+    {
+      "scope_id": "micro-copper-yield",
+      "gold_items": 8,
+      "predicted_items": 8,
+      "matched_items": 8,
+      "unmatched_gold": [],
+      "unmatched_predicted": [],
+      "detail": [
+        {
+          "gold_item": "mcy-q-cause",
+          "predicted_item": "itm_4fdba0bc60dda629",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-q-improve",
+          "predicted_item": "itm_df7b5d2f0bd98c22",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-a-leading",
+          "predicted_item": "itm_cba8a8f6621c4cd8",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-a-process",
+          "predicted_item": "itm_573cb18550117b0f",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-e-ratio",
+          "predicted_item": "itm_4a68d9669c9e5e07",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity",
+            "value"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-e-process-major",
+          "predicted_item": "itm_48c9e944a078f571",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-e-device-support",
+          "predicted_item": "itm_6a11323b6df71aae",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        },
+        {
+          "gold_item": "mcy-e-device-needed",
+          "predicted_item": "itm_2a33c21984cd6e88",
+          "identity_score": 1.0,
+          "identity_method": "unique_containment",
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker_role": true,
+            "identity_status": true,
+            "polarity": true,
+            "value": true
+          },
+          "behavior_state_temporal": true,
+          "condition_risk_retained": true,
+          "evidence_unique": true,
+          "unknown_axes_expected": [
+            "external_verification",
+            "identity"
+          ],
+          "unknown_axes_predicted": [
+            "external_verification",
+            "identity",
+            "time",
+            "value"
+          ]
+        }
+      ]
+    }
+  ],
+  "note": "This v2 result does not replace or amend the frozen v12 scorer result."
+}

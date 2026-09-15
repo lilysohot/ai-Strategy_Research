@@ -1,0 +1,565 @@
+{
+  "db": "disabled before native driver",
+  "exit_code": 0,
+  "files": [
+    "tests/test_stateful_workflow.py",
+    "tests/test_agent_team_workflow.py",
+    "tests/test_tool_registry.py",
+    "tests/test_profile_literal_validation.py",
+    "apodex/tests/test_profiles.py"
+  ],
+  "real_corpus_tests": "excluded",
+  "records": [
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_stateful_workflow_registers_public_pipeline",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_stateful_profile_overrides_merge_recursively",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_retired_stateful_profile_names_remain_aliases",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_retired_default_profile_keeps_its_retention",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_explicit_override_still_beats_alias_retention",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_shared_citation_helpers_are_deterministic",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_stateful_workflow.py::test_sdk_reporter_shim_is_safe_without_emitter",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_agent_team_registers_canonical_and_legacy_pipelines",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_reporter_defaults_are_fast_and_reporter_off_is_supported",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_heavy_reporter_fails_with_actionable_error",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_fast_reporter_review_cannot_invent_a_url",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_agent_team_ships_consistent_profiles",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_main_prompt_requires_read_file_delegation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_default_profile_aliases_benchmark",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_profile_selects_web_fetch_implementation",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_native_publish_contract_maps_virtual_manifest_to_physical_root",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_native_physical_output_paths_still_obey_virtual_manifest_policy",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_spill_store_is_read_only_for_structured_and_symlinked_paths",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_bash_allows_spill_reads_but_rejects_mutations",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_write_tools_reject_spill_before_acquiring_a_sandbox",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_native_main_prompt_distinguishes_manifest_and_filesystem_paths",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_assignment_validation_reports_stale_agent_in_same_failure",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_bash_allows_spill_reads_that_publish_elsewhere",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_spill_gate_still_refuses_mutations_that_also_redirect_to_outputs",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_spill_cd_refusal_explains_the_real_reason",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_bwrap_mounts_the_spill_store_read_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_the_shipped_writer_agrees_with_the_authoritative_spill_rule",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_agent_team_workflow.py::test_spill_gate_refuses_verbs_that_can_name_their_own_write_target",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_builtin_registry_is_an_explicit_allowlist",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_registry_round_trip",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_finance_tools_are_in_the_terminal_registry",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_finance_tools_are_auto_approved_as_read_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_finance_tools_have_finance_metadata",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_market_tools_are_in_the_terminal_registry",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_market_tools_are_auto_approved_as_read_only",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_tool_registry.py::test_market_tools_have_network_aware_metadata",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[value0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[value1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[value2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[3.5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[True]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_rejects_without_raising[not-a-real-format]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[value0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[value1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[value2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[3.5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[True]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_rejects_without_raising[not-a-real-format]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_accepts_every_declared_member[tag]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_accepts_every_declared_member[content_block]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_accepts_every_declared_member[reasoning_content]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_thinking_format_guard_accepts_every_declared_member[none]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_accepts_every_declared_member[chat_completions]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_accepts_every_declared_member[anthropic]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_accepts_every_declared_member[responses]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_wire_protocol_guard_accepts_every_declared_member[bedrock]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[value0]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[value1]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[value2]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[3.5]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[True]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[None]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_falls_back_for_unusable_config[not-a-real-format]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_protocol_of_normalises_case_and_honours_valid_values",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value0-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value0-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value1-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value1-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value2-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[value2-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[5-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[5-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[3.5-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[3.5-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[True-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[True-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[None-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[None-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[not-a-real-format-workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_thinking_format[not-a-real-format-workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_honour_a_valid_explicit_format[workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_honour_a_valid_explicit_format[workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_protocol[workflows.agent_team.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_profile_loaders_survive_unusable_protocol[workflows.stateful_react_agent.profile]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "tests/test_profile_literal_validation.py::test_guards_stay_in_sync_with_their_literal_aliases",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_builtin_coding_profile_resolves_from_env",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_models_list_default_is_first",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_single_model_key_still_works",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_context_window_default_when_unset",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_native_workflow_modes_are_explicit_and_use_shipped_profiles",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_workflow_modes_expose_the_tools_their_workflow_profile_binds",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_reading_workflow_tool_names_stays_quiet",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_workflow_tool_names_never_break_startup",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_native_workflow_modes_accept_local_openai_compatible_provider",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_user_dir_overrides_builtin",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_unknown_tool_name_raises",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_explicit_var_creds_without_provider",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_unknown_profile_raises",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_system_prompt_override",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": "apodex/tests/test_profiles.py::test_wrap_skills_llm_noop_and_wrap",
+      "outcome": "passed",
+      "when": "call"
+    }
+  ],
+  "suite": "platform"
+}

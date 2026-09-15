@@ -1,0 +1,59 @@
+{
+  "version": "r2-p4-manifest-1",
+  "date": "2026-09-14",
+  "stage": "P4",
+  "status": "failed_fail_stop",
+  "human_bridge_review": {
+    "path": ".scratch/corpus-evidence-pipeline/r2-p3i-field-review-completed.json",
+    "sha256": "867124cbc515b9b529eeded959329c31e50e69c18d0ad51b95ab50cb83b1a587",
+    "all_approved": true
+  },
+  "bindings": {
+    ".scratch/corpus-evidence-pipeline/r2-p4-change-scope.json": "3c30da30395325eb507c09c3d845b0f8af6bf551b052b4de39ef71786e27471b",
+    ".scratch/corpus-evidence-pipeline/p4_item_trial.py": "035af033498e59151509e4b771debdcd5214b046407f2689e67fb59a800911cc",
+    ".scratch/corpus-evidence-pipeline/test_p4_item_trial.py": "d8a49380468d769d685242024d4b207c951730c6118202a350c9faa6eafe2a06",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-plan.json": "96ca9d113dab13a18e22a2f726ec2df04bdb9b747636d0183e6852cc25a1bc7e",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-budget-v1.json": "10f62bd209be9d16bba364370bb304deec01d10f8942b5ef98ddad81615550cb",
+    ".scratch/corpus-evidence-pipeline/r2-p4-item-report.md": "28e712997fe9e1719ceb4cca90b6944956bbdadd842ebb7e9784176de7722bd5",
+    ".scratch/corpus-evidence-pipeline/p4-runs/p4-items-1/result.json": "f6c3b70b3cf4742bfda60bc546cab728bfdfb0cbe34b21743ff835093ff4db30",
+    ".scratch/corpus-evidence-pipeline/p4-runs/p4-items-1/audit-export.json": "0bcd1497e74195b6c44ec487794266fdd0749ebeb1547ee59ad093d63c883966",
+    ".scratch/corpus-evidence-pipeline/p4-runs/p4-items-1/audit.sqlite3": "6f84912a402e1fc3f7927e7197b2ec2bb4b2e5741966661a9f5e403444a97607",
+    "docs/plan/r2-local-redesign-cli-closure-plan.md": "bb92349f08c8b7dfc6aa1d4dd0f2c13245b818bfb8c8e0760267fcdf879549bc",
+    ".scratch/corpus-evidence-pipeline/spec.md": "0415b5c52c1159264847d216692b68882a0d7029e5101c9e767fe1cc16d7ef1c",
+    ".scratch/corpus-evidence-pipeline/issues/20-material-semantics.md": "f856c070c2dfe913c1c17437cef20db865656d00cbfd0870950445fe43aefa06"
+  },
+  "budget": {
+    "planned_calls": 5,
+    "actual_calls": 1,
+    "retries": 0,
+    "unspent_calls_not_reusable": 4,
+    "prompt_tokens": 2550,
+    "completion_tokens": 1564,
+    "holdout_calls": 0,
+    "relation_calls": 0,
+    "postgres_access": 0,
+    "ingestion_runs": 0
+  },
+  "result": {
+    "returned_records": 8,
+    "strictly_valid_records": 4,
+    "halt_reason": "invalid_batch_response",
+    "G0_identity": "failed",
+    "G1_terminal_capacity": "failed",
+    "G2_system_text_and_constraints": "failed",
+    "G3_field_semantics": "failed",
+    "G4_relations": "not_evaluated",
+    "G5_old_flow_isolation": "passed_external_guard",
+    "G6_per_scope_non_regression": "failed",
+    "G7_cli": "not_evaluated"
+  },
+  "verification": {
+    "p4_tests": "27 passed",
+    "combined_p3h_p3i_p4_tests": "66 passed",
+    "ruff": "passed",
+    "pyright": "0 errors",
+    "old_protected_unchanged": 2336,
+    "registered_protected_additions_unchanged": 3
+  },
+  "next": "P4-A zero-model local interface revision; P5, production, CLI integration, PostgreSQL, ingestion, and holdout remain frozen."
+}

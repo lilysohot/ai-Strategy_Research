@@ -1,0 +1,39 @@
+{
+  "version": "r2-p3h-human-denominator-remediation-scope-1",
+  "date": "2026-09-14",
+  "parent_p3s_manifest_sha256": "c4aa7c87e6abb706ef3d8e53acfcaed54500c82e17e44ac56091647066590512",
+  "submitted_human_review_sha256": "e171ce7b02bb11b77a86d08a0880d9d42da7990fedf94b3976fe931b5c79a609",
+  "submitted_decisions": {
+    "approve": 31,
+    "needs_split": 2,
+    "needs_merge": 1,
+    "reject": 1
+  },
+  "file_normalization": {
+    "move_submitted_file_to": ".scratch/corpus-evidence-pipeline/r2-p3s-denominator-review-completed.json",
+    "restore_frozen_template_sha256": "443d6136e35924ff0bf2bd8c9291c3a4d5c60eed04c34a3e427344026b2f6d59"
+  },
+  "new_scratch_files": [
+    ".scratch/corpus-evidence-pipeline/p3h_review.py",
+    ".scratch/corpus-evidence-pipeline/test_p3h_review.py"
+  ],
+  "generated_files": [
+    ".scratch/corpus-evidence-pipeline/r2-p3h-denominator-amendment-v1.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3h-inventory.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3h-remediation-review-template.json",
+    ".scratch/corpus-evidence-pipeline/r2-p3h-report.md",
+    ".scratch/corpus-evidence-pipeline/r2-p3h-manifest.json"
+  ],
+  "constraints": {
+    "base_gold_mutation": false,
+    "submitted_human_decisions_mutation": false,
+    "automatic_approval_of_replacement_nodes": false,
+    "development_only": true,
+    "holdout_source_paths_opened": 0,
+    "production_code_changed": false,
+    "model_calls": 0,
+    "postgres_access": 0,
+    "ingestion_runs": 0,
+    "p4_budget_authorized": false
+  }
+}

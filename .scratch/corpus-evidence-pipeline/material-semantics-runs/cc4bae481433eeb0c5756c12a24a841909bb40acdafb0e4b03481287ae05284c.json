@@ -1,0 +1,2468 @@
+{
+  "run_id": "cc4bae481433eeb0c5756c12a24a841909bb40acdafb0e4b03481287ae05284c",
+  "evidence_run_id": "c07e19895f6276b36bc4d56c5e2f596097197df04e165984fb894e72fae3dbb9",
+  "extractor_version": "material-semantics-10",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-13_174b6462",
+      "source_rev": "174b64628f35aca6",
+      "title": "2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "material_date": "2026-08-13",
+      "published_at": "2026-08-13",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_71f8be010143",
+        "display_name": null,
+        "role": "analyst_author",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_da24bfc3f30d",
+        "display_name": "未知表达者",
+        "role": "analyst_author",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_8e9f0aa76e1e63ce",
+        "text": "化工行业兼具周期与成长属性。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "化工行业兼具周期与成长属性",
+            "start": 116,
+            "end": 129
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_514aaeaa81c4ffd2",
+        "text": "周期类产品因供需错配持续产生价格与盈利弹性，新材料则受益于需求增长和国产替代。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "周期类产品因供需错配持续产生价格与盈利弹性",
+            "start": 130,
+            "end": 151
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5fe2f928a2dd3dd1",
+        "text": "子行业景气周期相互错位，使板块长期具备结构性投资机会。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "子行业景气周期相互错位，使板块长期具备结构性投资机会",
+            "start": 170,
+            "end": 196
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f8ef477acc63b6c2",
+        "text": "化工品景气的本质是盈利改善，主要观察价差变化。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "化工品景气的本质是盈利改善，主要观察价差变化",
+            "start": 221,
+            "end": 243
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6259b54387d29673",
+        "text": "原料价格波动较大时，应重点观察产品价差。",
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "原料价格波动较大时，应重点观察产品价\n差",
+            "start": 244,
+            "end": 264
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3469fcdcaac4d1a0",
+        "text": "仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化。",
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化",
+            "start": 265,
+            "end": 300
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_8bda3c0e8762939b",
+        "text": "研究某一子行业应明确其下游用途，梳理供需的变化。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "研究某一子行业应明确其下游用途，梳理供需的变化",
+            "start": 343,
+            "end": 366
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b174266d4a6f36a4",
+        "text": "行业的筛选应由单纯“从高增长需求找产品”，逐步转向基于供需平衡表的自下而上比较。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "逐步转向基于供需平衡表的自下而上比较",
+            "start": 390,
+            "end": 408
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_44a8cbb2af44e5ea",
+        "text": "随着中国经济增长回归新常态，全球GDP增速放缓，需求对景气的拉动弱于以往。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "需求对景气的拉动弱于以往",
+            "start": 459,
+            "end": 471
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_18ade92e745a5f16",
+        "text": "未来的着眼点更应该放在供给的增速，如近年来有色行业的铜、铝，化工行业的钾肥、制冷剂等。",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "未来的着\n眼点更应该放在供给的增速",
+            "start": 472,
+            "end": 489
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_4bca2d74c5045594",
+        "text": "供给又应看哪里？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "供给又应看哪里？",
+            "start": 533,
+            "end": 541
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "polarity",
+          "value",
+          "behavior_status",
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_72260e58c2e9f2d5",
+        "text": "化工品是全球贸易品，出口使国内外市场相互连通，具有贸易属性的化工品需求应立足全球。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "化工品是全球贸易品，出口使国内外市场相互连通",
+            "start": 543,
+            "end": 565
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_4096dbfff4176d31",
+        "text": "中国制造业持续崛起，进口占比减少，海外产能存在收缩趋势，供给应重点关注国内新增产能。",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "供给应重点关注国内新增产能",
+            "start": 613,
+            "end": 626
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_e46dc24e1825ea6f",
+        "text": "为什么部分行业开工率较高，景气仍未明显上升？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "为什么部分行业开工率较高，景气仍未明显上升？",
+            "start": 630,
+            "end": 652
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "polarity",
+          "value",
+          "behavior_status",
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_560f8727c36b2da2",
+        "text": "近年来诸多行业集中度提升，扩产主体主要为大型生产或先进装置，推高了开工率中枢。",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "扩产主体主要为大型生产或先进装置，推高了开工率中枢",
+            "start": 668,
+            "end": 693
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_e76c493e4d1841d3",
+        "text": "有的行业80-90%的开工率即便接近历史较高水平，也不一定代表供给紧张，行业景气未必上升。",
+        "semantic_type": "opinion",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": "80-90%",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "也不一定代表供给紧张，行业景气未必上升",
+            "start": 720,
+            "end": 739
+          }
+        ],
+        "unknown_fields": [
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_1e2fae8b2ac59b16",
+        "text": "产品价格跌至底部，是否意味着买点出现？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "产品价格跌至底部，是否意味着买点出现？",
+            "start": 743,
+            "end": 762
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "polarity",
+          "value",
+          "behavior_status",
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_a746210ebc8355ef",
+        "text": "到了高位，是否意味着卖点？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "到了高位，是否意味着卖点？",
+            "start": 762,
+            "end": 775
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "polarity",
+          "value",
+          "behavior_status",
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_a9aa2cb04c40e4a4",
+        "text": "价格底部主要改善长期赔率。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "价格底部主要改善长期赔率",
+            "start": 777,
+            "end": 789
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_9917401b7cb53404",
+        "text": "价格底部并不一定等同于中期拐点。",
+        "semantic_type": "opinion",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "并不一定等同于中期拐点",
+            "start": 790,
+            "end": 801
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_8a109ab813910696",
+        "text": "中期投资更应关注供需改善的情况。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "中期投资更应关注供需改善的情况",
+            "start": 802,
+            "end": 817
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_21d9a498c63305cc",
+        "text": "中期投资更应关注价差扩张。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "价差扩张",
+            "start": 819,
+            "end": 823
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_318d5193a41fd4c3",
+        "text": "价格处于高位也不必然构成卖点。",
+        "semantic_type": "opinion",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "价格处于高位也不必然构成卖点",
+            "start": 827,
+            "end": 841
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_41c18aa523948f66",
+        "text": "关键仍是对未来景气趋势的判断。",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "关键仍是对未来景气趋势的判断",
+            "start": 842,
+            "end": 856
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_761c4fe953d32b41",
+        "text": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "未来行业两年供需很好，但更长期可能扩产，是否值得投资？",
+            "start": 861,
+            "end": 888
+          }
+        ],
+        "unknown_fields": [
+          "semantic_type",
+          "polarity",
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_4c15bfc75b2eaa03",
+        "text": "万物皆周期。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "万物皆周期。",
+            "start": 891,
+            "end": 897
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "behavior_status"
+        ]
+      },
+      {
+        "item_id": "itm_d23eb0da2c71eb09",
+        "text": "未来的新增产能不应否定当前明确的景气阶段。",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "未来的新增产能不应否定当前明确的景气阶段",
+            "start": 898,
+            "end": 918
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_bfd5d873f99fab98",
+        "text": "不同行业均存在价格的变动。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "不同行业均存在价格的变动",
+            "start": 919,
+            "end": 931
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9cdbc8c9b622b249",
+        "text": "每个行业景气长短不同。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "只是每个行业景气长短不同而已",
+            "start": 933,
+            "end": 947
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b906bbec6ba89729",
+        "text": "只要未来一至两年供需持续改善，行业仍具备周期投资价值。",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "只要未来一至两年供需持续改善，行业仍具备周期投资价值",
+            "start": 948,
+            "end": 974
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_8f762c268ef0f9df",
+        "text": "看好某一行业景气向上，但相关标的较多，应当如何选择？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "看好某一行业景气向上，但相关标的较多，应当如何选择？",
+            "start": 978,
+            "end": 1004
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f5a7147ffdfce2b6",
+        "text": "景气上行期行业应优先比较相关公司产品产能与市值的弹性，并综合考察盈利情况、成本优势。",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "应优先比较相关公司产品产能与市值的弹性",
+            "start": 1019,
+            "end": 1038
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fdfacf22c19a4bae",
+        "text": "若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性。",
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性",
+            "start": 1055,
+            "end": 1086
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_be0ba58a1339979a",
+        "text": "公司市值已经反映较高的产品涨价预期，是否还能继续持有？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "公司市值已经反映较高的产品涨价预期，是否还能继续持有？",
+            "start": 1091,
+            "end": 1118
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_36b3e36a72d75ce5",
+        "text": "思路一：跟踪研究后续供需关系的变化，预测价格的趋势，继而做出决策，而不因当前市值位置做出决断。",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "跟踪研究后续供需关系的变化，预测价格的趋势",
+            "start": 1132,
+            "end": 1153
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_443626e8cb1c8bc8",
+        "text": "思路二：参考产品高位的历史价格，分析未来触及的可能性和空间。",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "参考产品高位的历史价格，分析未来触及的可能性和空间",
+            "start": 1178,
+            "end": 1203
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_aff7d9e6c0b33ea6",
+        "text": "供给端政策执行力度不及预期（风险）。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "供给端政策执行力度不及预期",
+            "start": 1213,
+            "end": 1226
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7406094e347fa3e3",
+        "text": "海外需求不及预期（风险）。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "海外需求不及预期",
+            "start": 1229,
+            "end": 1237
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b4339adb3d3d1b63",
+        "text": "全球地缘政治动荡（风险）。",
+        "semantic_type": "fact",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "全球地缘政治动荡",
+            "start": 1242,
+            "end": 1250
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fc24590449287dd6",
+        "text": "存在技术风险。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_71f8be010143",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+            "locator": "3",
+            "quote": "技术风险。",
+            "start": 1253,
+            "end": 1258
+          }
+        ],
+        "unknown_fields": [
+          "polarity",
+          "value",
+          "behavior_status",
+          "temporal_frame"
+        ]
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "3"
+      ],
+      "omitted_areas": [
+        "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7:relations_not_processed",
+        "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7:atomic_obligations_incomplete"
+      ],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_f3eacebe841e0729",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "no_substantive_claim",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_c7d7036e280a124d",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "question_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_a5b096a5d7ea5292",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8e9f0aa76e1e63ce"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c6881d5b50fcf1d7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_514aaeaa81c4ffd2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_2a9e2893bee38067",
+          "status": "extracted",
+          "item_refs": [
+            "itm_5fe2f928a2dd3dd1"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f8407b25db98e158",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "question_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_d09c43ce67751c3b",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f8ef477acc63b6c2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f3936f2d34088bc4",
+          "status": "extracted",
+          "item_refs": [
+            "itm_6259b54387d29673"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_33bcb185464339f8",
+          "status": "extracted",
+          "item_refs": [
+            "itm_3469fcdcaac4d1a0"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_4fc255688977e187",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "question_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_76534f9f5c33ee49",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8bda3c0e8762939b"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3a9cac87fd5af09c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b174266d4a6f36a4"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_710701dc8bac0bde",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "question_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_38b746e51c087b4d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_44a8cbb2af44e5ea"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_20907b358c8f6d5d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_18ade92e745a5f16"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_a29d5bdb1605195a",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "question_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_f133ad3a271b9960",
+          "status": "extracted",
+          "item_refs": [
+            "itm_4bca2d74c5045594"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_49b4d843dfe3db93",
+          "status": "extracted",
+          "item_refs": [
+            "itm_72260e58c2e9f2d5"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3bfb203b90a718ee",
+          "status": "extracted",
+          "item_refs": [
+            "itm_4096dbfff4176d31"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c19190c2b1031b2c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e46dc24e1825ea6f"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ce604983b93b9fce",
+          "status": "extracted",
+          "item_refs": [
+            "itm_560f8727c36b2da2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ee35dee60dc1701e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e76c493e4d1841d3"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3acc6b88287c0b44",
+          "status": "extracted",
+          "item_refs": [
+            "itm_1e2fae8b2ac59b16"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_8b16efec699036bf",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a746210ebc8355ef"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_9c97bf2656f9b308",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a9aa2cb04c40e4a4"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_8b2ef3632af2af39",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9917401b7cb53404"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_2c0a86b38ec61a00",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8a109ab813910696"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ff2aa0ad5c6e4ff9",
+          "status": "extracted",
+          "item_refs": [
+            "itm_21d9a498c63305cc"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_526a3b36e0ee7689",
+          "status": "extracted",
+          "item_refs": [
+            "itm_318d5193a41fd4c3"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_62748509a5baf787",
+          "status": "extracted",
+          "item_refs": [
+            "itm_41c18aa523948f66"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_efe1883fa4d43f0a",
+          "status": "partial",
+          "item_refs": [
+            "itm_761c4fe953d32b41"
+          ],
+          "reason_codes": [
+            "missing_signal:forecast"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_e3992d2856fd270e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_4c15bfc75b2eaa03"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_534f78e28a72f3e6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_d23eb0da2c71eb09"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_84c3323c2e3e18d8",
+          "status": "extracted",
+          "item_refs": [
+            "itm_bfd5d873f99fab98"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_0f3a30fe67a44421",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9cdbc8c9b622b249"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_cb4205b56ce405f5",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b906bbec6ba89729"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_88555f4fd2088a01",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8f762c268ef0f9df"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c5d3afce9dabc829",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f5a7147ffdfce2b6"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1730543807ed7933",
+          "status": "extracted",
+          "item_refs": [
+            "itm_fdfacf22c19a4bae"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_c5b90c3dcb19aa1b",
+          "status": "partial",
+          "item_refs": [
+            "itm_be0ba58a1339979a"
+          ],
+          "reason_codes": [
+            "missing_signal:forecast"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_a9cd51fc0a4cd6ca",
+          "status": "extracted",
+          "item_refs": [
+            "itm_36b3e36a72d75ce5"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_5b550c84778bc437",
+          "status": "extracted",
+          "item_refs": [
+            "itm_443626e8cb1c8bc8"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_83ce1fabd365245b",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "section_header_only",
+            "detected_signal_rejected:risk",
+            "missing_signal:risk"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_d7623f0b25c2dc90",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "enumeration_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_0b7a81f7200691ae",
+          "status": "extracted",
+          "item_refs": [
+            "itm_aff7d9e6c0b33ea6"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ecdfff13e56b9f40",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "enumeration_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_3e859271ac7f9242",
+          "status": "extracted",
+          "item_refs": [
+            "itm_7406094e347fa3e3"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f2333f9956d33be2",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b4339adb3d3d1b63"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_a60cdb5fa04a6f8b",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "heading_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_51a2eb0825cde321",
+          "status": "extracted",
+          "item_refs": [
+            "itm_fc24590449287dd6"
+          ],
+          "reason_codes": [
+            "risk_item_extracted"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_7431d4e934a32987",
+          "status": "partial",
+          "item_refs": [],
+          "reason_codes": [
+            "chart_and_metadata_only",
+            "detected_signal_rejected:question",
+            "missing_signal:question"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_636ed327c790c982",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "chart_data_and_related_research_metadata_only",
+            "missing_signal:claim"
+          ]
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "status": "partial",
+      "records": 40,
+      "model_calls": 4,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v3",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 16,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 11516,
+              "prompt_tokens": 2246,
+              "completion_tokens": 1888,
+              "reasoning_tokens": 0,
+              "finish_reason": "stop",
+              "content_chars": 6116,
+              "reasoning_chars": 0,
+              "coverage_protocol_incomplete": true
+            },
+            {
+              "batch_index": 1,
+              "candidate_slots": 16,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 14542,
+              "prompt_tokens": 2028,
+              "completion_tokens": 2606,
+              "reasoning_tokens": 0,
+              "finish_reason": "stop",
+              "content_chars": 8872,
+              "reasoning_chars": 0,
+              "coverage_protocol_incomplete": true
+            },
+            {
+              "batch_index": 2,
+              "candidate_slots": 16,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 12113,
+              "prompt_tokens": 2005,
+              "completion_tokens": 2203,
+              "reasoning_tokens": 12,
+              "finish_reason": "stop",
+              "content_chars": 7276,
+              "reasoning_chars": 57,
+              "coverage_protocol_incomplete": true
+            },
+            {
+              "batch_index": 3,
+              "candidate_slots": 4,
+              "adapter_version": "corpus-chat-3",
+              "model": "glm-5.3-flash",
+              "max_output_tokens": 8192,
+              "timeout_seconds": 60.0,
+              "reasoning_effort": "low",
+              "thinking": null,
+              "attempts": 1,
+              "duration_ms": 2714,
+              "prompt_tokens": 1349,
+              "completion_tokens": 332,
+              "reasoning_tokens": 25,
+              "finish_reason": "stop",
+              "content_chars": 1108,
+              "reasoning_chars": 58,
+              "coverage_protocol_incomplete": true
+            }
+          ],
+          "relations": {
+            "status": "deferred_by_configuration"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_84af31f3ecfe8a82",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 0,
+        "end": 98,
+        "text": " \n请阅读最后评级说明和重要声明 \n \n \n更多研报请访问 \n长江研究小程序 \n \n丨证券研究报告丨 \n基础化工 \n化工专题：景气投资“十问十答” \n行业研究丨深度报告 \n投资评级 \n看好丨维持\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_60c0eadf391e21ba",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 98,
+        "end": 199,
+        "text": "一、为什么化工行业是一个好赛道？ \n化工行业兼具周期与成长属性。周期类产品因供需错配持续产生价格与盈利弹性，新材料则受\n益于需求增长和国产替代。子行业景气周期相互错位，使板块长期具备结构性投资机会。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_b0d1c9fae1b15403",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 199,
+        "end": 303,
+        "text": "二、判断化工景气，应看产品价格还是价差？ \n化工品景气的本质是盈利改善，主要观察价差变化。原料价格波动较大时，应重点观察产品价\n差；仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_6eecfedee3daf2c7",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 303,
+        "end": 411,
+        "text": "三、化工子行业众多且复杂，应如何建立研究框架？ \n化工的复杂性就在于子行业众多，研究某一子行业应明确其下游用途，梳理供需的变化。行业\n的筛选则应由单纯“从高增长需求找产品”，逐步转向基于供需平衡表的自下而上比较。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_fb34ed733fedd56e",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 411,
+        "end": 518,
+        "text": "四、需求增速放缓后，周期行业是否更难选择？ \n随着中国经济增长回归新常态，全球GDP 增速放缓，需求对景气的拉动弱于以往。未来的着\n眼点更应该放在供给的增速，如近年来有色行业的铜、铝，化工行业的钾肥、制冷剂等。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_d2b7472b333b1e0b",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 518,
+        "end": 628,
+        "text": "五、化工品需求看国内还是全球？供给又应看哪里？ \n化工品是全球贸易品，出口使国内外市场相互连通，具有贸易属性的化工品需求应立足全球；\n中国制造业持续崛起，进口占比减少，海外产能存在收缩趋势，供给应重点关注国内新增产能。\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_46c79e0efc3234c1",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 628,
+        "end": 741,
+        "text": "六、为什么部分行业开工率较高，景气仍未明显上升？ \n近年来，诸多行业集中度提升，扩产主体主要为大型生产或先进装置，推高了开工率中枢。有\n的行业80-90%的开工率即便接近历史较高水平，也不一定代表供给紧张，行业景气未必上升。\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_7dbd1d51be4c7710",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 741,
+        "end": 859,
+        "text": "七、产品价格跌至底部，是否意味着买点出现？到了高位，是否意味着卖点？ \n价格底部主要改善长期赔率，并不一定等同于中期拐点；中期投资更应关注供需改善的情况和\n价差扩张。同样，价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_e0395b14f79326ec",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 859,
+        "end": 976,
+        "text": "八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n“万物皆周期。”未来的新增产能不应否定当前明确的景气阶段。不同行业均存在价格的变动，\n只是每个行业景气长短不同而已，只要未来一至两年供需持续改善，行业仍具备周期投资价值。\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_4a749c97f85323b0",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 976,
+        "end": 1089,
+        "text": "九、看好某一行业景气向上，但相关标的较多，应当如何选择？ \n对于处于景气上行期的行业，应优先比较相关公司产品产能与市值的弹性，并综合考察盈利情\n况、成本优势。若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性。 \n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_4b7edf1c837d3a85",
+        "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+        "locator": "3",
+        "start": 1089,
+        "end": 1508,
+        "text": "十、公司市值已经反映较高的产品涨价预期，是否还能继续持有？ \n有两种思路可供参考：1）跟踪研究后续供需关系的变化，预测价格的趋势，继而做出决策，\n而不因当前市值位置做出决断；2）参考产品高位的历史价格，分析未来触及的可能性和空间。\n风险提示 \n1、供给端政策执行力度不及预期；2、海外需求不及预期； \n3、全球地缘政治动荡；4、技术风险。 \n市场表现对比图(近12 个月) \n \n资料来源：Wind \n \n相关研究 \n•《化工Q3 复盘：历史表现几何？》2026-07-28\n•《价值凸显，拥抱景气，布局新材料——基础化\n工2026 年度中期投资策略》2026-07-16 \n•《化工反内卷专题：全球产能占比高，让规模变\n成效益》2026-05-31 \n \n-10%\n7%\n23%\n40%\n2025/8\n2025/12\n2026/4\n2026/8\n基础化工\n上证综指\n2026-08-10\n%%\nresearch.95579.com\n3\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_f3eacebe841e0729",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 0,
+      "end": 98,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": " \n请阅读最后评级说明和重要声明 \n \n \n更多研报请访问 \n长江研究小程序 \n \n丨证券研究报告丨 \n基础化工 \n化工专题：景气投资“十问十答” \n行业研究丨深度报告 \n投资评级 \n看好丨维持\n",
+      "explicit_role": null,
+      "segment_id": "seg_84af31f3ecfe8a82"
+    },
+    {
+      "candidate_slot_id": "slot_c7d7036e280a124d",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 98,
+      "end": 116,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "一、为什么化工行业是一个好赛道？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_60c0eadf391e21ba"
+    },
+    {
+      "candidate_slot_id": "slot_a5b096a5d7ea5292",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 116,
+      "end": 130,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "化工行业兼具周期与成长属性。",
+      "explicit_role": null,
+      "segment_id": "seg_60c0eadf391e21ba"
+    },
+    {
+      "candidate_slot_id": "slot_c6881d5b50fcf1d7",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 130,
+      "end": 170,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "周期类产品因供需错配持续产生价格与盈利弹性，新材料则受\n益于需求增长和国产替代。",
+      "explicit_role": null,
+      "segment_id": "seg_60c0eadf391e21ba"
+    },
+    {
+      "candidate_slot_id": "slot_2a9e2893bee38067",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 170,
+      "end": 199,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "子行业景气周期相互错位，使板块长期具备结构性投资机会。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_60c0eadf391e21ba"
+    },
+    {
+      "candidate_slot_id": "slot_f8407b25db98e158",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 199,
+      "end": 221,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "二、判断化工景气，应看产品价格还是价差？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_b0d1c9fae1b15403"
+    },
+    {
+      "candidate_slot_id": "slot_d09c43ce67751c3b",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 221,
+      "end": 244,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "化工品景气的本质是盈利改善，主要观察价差变化。",
+      "explicit_role": null,
+      "segment_id": "seg_b0d1c9fae1b15403"
+    },
+    {
+      "candidate_slot_id": "slot_f3936f2d34088bc4",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 244,
+      "end": 265,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "原料价格波动较大时，应重点观察产品价\n差；",
+      "explicit_role": null,
+      "segment_id": "seg_b0d1c9fae1b15403"
+    },
+    {
+      "candidate_slot_id": "slot_33bcb185464339f8",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 265,
+      "end": 303,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_b0d1c9fae1b15403"
+    },
+    {
+      "candidate_slot_id": "slot_4fc255688977e187",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 303,
+      "end": 328,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "三、化工子行业众多且复杂，应如何建立研究框架？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_6eecfedee3daf2c7"
+    },
+    {
+      "candidate_slot_id": "slot_76534f9f5c33ee49",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 328,
+      "end": 367,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "化工的复杂性就在于子行业众多，研究某一子行业应明确其下游用途，梳理供需的变化。",
+      "explicit_role": null,
+      "segment_id": "seg_6eecfedee3daf2c7"
+    },
+    {
+      "candidate_slot_id": "slot_3a9cac87fd5af09c",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 367,
+      "end": 411,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "行业\n的筛选则应由单纯“从高增长需求找产品”，逐步转向基于供需平衡表的自下而上比较。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_6eecfedee3daf2c7"
+    },
+    {
+      "candidate_slot_id": "slot_710701dc8bac0bde",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 411,
+      "end": 434,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "四、需求增速放缓后，周期行业是否更难选择？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_fb34ed733fedd56e"
+    },
+    {
+      "candidate_slot_id": "slot_38b746e51c087b4d",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 434,
+      "end": 472,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "随着中国经济增长回归新常态，全球GDP 增速放缓，需求对景气的拉动弱于以往。",
+      "explicit_role": null,
+      "segment_id": "seg_fb34ed733fedd56e"
+    },
+    {
+      "candidate_slot_id": "slot_20907b358c8f6d5d",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 472,
+      "end": 518,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "未来的着\n眼点更应该放在供给的增速，如近年来有色行业的铜、铝，化工行业的钾肥、制冷剂等。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_fb34ed733fedd56e"
+    },
+    {
+      "candidate_slot_id": "slot_a29d5bdb1605195a",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 518,
+      "end": 533,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "五、化工品需求看国内还是全球？",
+      "explicit_role": null,
+      "segment_id": "seg_d2b7472b333b1e0b"
+    },
+    {
+      "candidate_slot_id": "slot_f133ad3a271b9960",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 533,
+      "end": 543,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "供给又应看哪里？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_d2b7472b333b1e0b"
+    },
+    {
+      "candidate_slot_id": "slot_49b4d843dfe3db93",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 543,
+      "end": 585,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "化工品是全球贸易品，出口使国内外市场相互连通，具有贸易属性的化工品需求应立足全球；\n",
+      "explicit_role": null,
+      "segment_id": "seg_d2b7472b333b1e0b"
+    },
+    {
+      "candidate_slot_id": "slot_3bfb203b90a718ee",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 585,
+      "end": 628,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中国制造业持续崛起，进口占比减少，海外产能存在收缩趋势，供给应重点关注国内新增产能。\n",
+      "explicit_role": null,
+      "segment_id": "seg_d2b7472b333b1e0b"
+    },
+    {
+      "candidate_slot_id": "slot_c19190c2b1031b2c",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 628,
+      "end": 654,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "六、为什么部分行业开工率较高，景气仍未明显上升？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_46c79e0efc3234c1"
+    },
+    {
+      "candidate_slot_id": "slot_ce604983b93b9fce",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 654,
+      "end": 694,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "近年来，诸多行业集中度提升，扩产主体主要为大型生产或先进装置，推高了开工率中枢。",
+      "explicit_role": null,
+      "segment_id": "seg_46c79e0efc3234c1"
+    },
+    {
+      "candidate_slot_id": "slot_ee35dee60dc1701e",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 694,
+      "end": 741,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "有\n的行业80-90%的开工率即便接近历史较高水平，也不一定代表供给紧张，行业景气未必上升。\n",
+      "explicit_role": null,
+      "segment_id": "seg_46c79e0efc3234c1"
+    },
+    {
+      "candidate_slot_id": "slot_3acc6b88287c0b44",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 741,
+      "end": 762,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "七、产品价格跌至底部，是否意味着买点出现？",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_8b16efec699036bf",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 762,
+      "end": 777,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "到了高位，是否意味着卖点？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_9c97bf2656f9b308",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 777,
+      "end": 790,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "价格底部主要改善长期赔率，",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_8b2ef3632af2af39",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 790,
+      "end": 802,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "并不一定等同于中期拐点；",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_2c0a86b38ec61a00",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 802,
+      "end": 817,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中期投资更应关注供需改善的情况",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_ff2aa0ad5c6e4ff9",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 817,
+      "end": 824,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "和\n价差扩张。",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_526a3b36e0ee7689",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 824,
+      "end": 842,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "同样，价格处于高位也不必然构成卖点，",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_62748509a5baf787",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 842,
+      "end": 859,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "关键仍是对未来景气趋势的判断。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_7dbd1d51be4c7710"
+    },
+    {
+      "candidate_slot_id": "slot_efe1883fa4d43f0a",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 859,
+      "end": 890,
+      "signal_types": [
+        "question",
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "八、未来行业两年供需很好，但更长期可能扩产，是否值得投资？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_e3992d2856fd270e",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 890,
+      "end": 897,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "“万物皆周期。",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_534f78e28a72f3e6",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 897,
+      "end": 919,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "”未来的新增产能不应否定当前明确的景气阶段。",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_84c3323c2e3e18d8",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 919,
+      "end": 932,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不同行业均存在价格的变动，",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_0f3a30fe67a44421",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 932,
+      "end": 948,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "\n只是每个行业景气长短不同而已，",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_cb4205b56ce405f5",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 948,
+      "end": 976,
+      "signal_types": [
+        "forecast",
+        "condition"
+      ],
+      "attribution_capability": "document_only",
+      "text": "只要未来一至两年供需持续改善，行业仍具备周期投资价值。\n",
+      "explicit_role": null,
+      "segment_id": "seg_e0395b14f79326ec"
+    },
+    {
+      "candidate_slot_id": "slot_88555f4fd2088a01",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 976,
+      "end": 1006,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "九、看好某一行业景气向上，但相关标的较多，应当如何选择？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_4a749c97f85323b0"
+    },
+    {
+      "candidate_slot_id": "slot_c5d3afce9dabc829",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1006,
+      "end": 1055,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "对于处于景气上行期的行业，应优先比较相关公司产品产能与市值的弹性，并综合考察盈利情\n况、成本优势。",
+      "explicit_role": null,
+      "segment_id": "seg_4a749c97f85323b0"
+    },
+    {
+      "candidate_slot_id": "slot_1730543807ed7933",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1055,
+      "end": 1089,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_4a749c97f85323b0"
+    },
+    {
+      "candidate_slot_id": "slot_c5b90c3dcb19aa1b",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1089,
+      "end": 1120,
+      "signal_types": [
+        "question",
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "十、公司市值已经反映较高的产品涨价预期，是否还能继续持有？ \n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_a9cd51fc0a4cd6ca",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1120,
+      "end": 1176,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "有两种思路可供参考：1）跟踪研究后续供需关系的变化，预测价格的趋势，继而做出决策，\n而不因当前市值位置做出决断；",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_5b550c84778bc437",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1176,
+      "end": 1205,
+      "signal_types": [
+        "forecast"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2）参考产品高位的历史价格，分析未来触及的可能性和空间。\n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_83ce1fabd365245b",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1205,
+      "end": 1211,
+      "signal_types": [
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "风险提示 \n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_d7623f0b25c2dc90",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1211,
+      "end": 1213,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "1、",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_0b7a81f7200691ae",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1213,
+      "end": 1227,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "供给端政策执行力度不及预期；",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_ecdfff13e56b9f40",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1227,
+      "end": 1229,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2、",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_3e859271ac7f9242",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1229,
+      "end": 1240,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "海外需求不及预期； \n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_f2333f9956d33be2",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1240,
+      "end": 1251,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "3、全球地缘政治动荡；",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_a60cdb5fa04a6f8b",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1251,
+      "end": 1253,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "4、",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_51a2eb0825cde321",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1253,
+      "end": 1260,
+      "signal_types": [
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "技术风险。 \n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_7431d4e934a32987",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1260,
+      "end": 1315,
+      "signal_types": [
+        "question"
+      ],
+      "attribution_capability": "document_only",
+      "text": "市场表现对比图(近12 个月) \n \n资料来源：Wind \n \n相关研究 \n•《化工Q3 复盘：历史表现几何？",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    },
+    {
+      "candidate_slot_id": "slot_636ed327c790c982",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "locator": "3",
+      "start": 1315,
+      "end": 1508,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "》2026-07-28\n•《价值凸显，拥抱景气，布局新材料——基础化\n工2026 年度中期投资策略》2026-07-16 \n•《化工反内卷专题：全球产能占比高，让规模变\n成效益》2026-05-31 \n \n-10%\n7%\n23%\n40%\n2025/8\n2025/12\n2026/4\n2026/8\n基础化工\n上证综指\n2026-08-10\n%%\nresearch.95579.com\n3\n",
+      "explicit_role": null,
+      "segment_id": "seg_4b7edf1c837d3a85"
+    }
+  ]
+}

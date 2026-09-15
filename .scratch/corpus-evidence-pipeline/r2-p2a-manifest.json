@@ -1,0 +1,41 @@
+{
+  "version": "r2-p2a-evaluator-freeze-1",
+  "date": "2026-09-14",
+  "stage": "P2-A",
+  "status": "offline_item_evaluator_and_synthetic_mutations_passed",
+  "parent_stage_status": "P2_partial",
+  "p0_manifest_sha256": "4e2c45ce216a942137f60b863e236ae46f3a8870317ebdbe9ead6342b4698076",
+  "p1_manifest_sha256": "a9477f7281287b0ce78b3fcc978b88fa5d48f5312094851e4e00d67cf2370603",
+  "contract_sha256": "feebd1fd816ff824345185f7e3d690ea25621080d9d348f7d53bb82650763776",
+  "policy_content_sha256": "be7ee183d71094b78b646b16b6e661722649725979a4bb52d177cd3c6b9a3062",
+  "real_model_calls": 0,
+  "judge_calls": 0,
+  "real_market_calls": 0,
+  "ingestion": 0,
+  "production_code_changes": false,
+  "new_atomic_gold_approvals": 0,
+  "tests": {"p0_existing": 18, "p1_existing": 65, "p2a_new": 73, "total_passed": 156, "failed": 0, "skipped": 0},
+  "synthetic_positive_control": {
+    "case_id": "synthetic-case",
+    "result_sha256": "12808fde437fc201eba180a6fcc11efcb4f1aa992b431ebe23aec722f4aca07c",
+    "item_recall": [2, 2], "item_precision": [2, 2], "content_fidelity": [2, 2],
+    "critical_errors": 0,
+    "G0_G3": "passed_on_normalized_synthetic_input",
+    "G4_G7": "not_evaluated",
+    "budget_authorized": false
+  },
+  "remaining_p2": [
+    "production_private_module_and_EvidenceRun_bridge",
+    "same_interface_fake_replay_execution_and_independent_runtime_validation",
+    "fake_relation_protocol",
+    "raw_response_and_attempt_ledger_verification",
+    "durable_budget_reservation_crash_fault_injection",
+    "response_retention_and_persistence_failure_stop"
+  ],
+  "files": {
+    ".scratch/corpus-evidence-pipeline/r2_evaluation_v1.py": "2a6b138a7d3720335b585f4c0760c51f4768a571eca3652c538be759562c0aeb",
+    ".scratch/corpus-evidence-pipeline/test_r2_evaluation_v1.py": "5226ded47f8cc806530efac096c270d251b038a32a46f5af7a72bcca5ab6cbce",
+    ".scratch/corpus-evidence-pipeline/p2a-validation-final.xml": "bb9cfdc1fdd038b901ca2087940854fe4fb72d655ca03e8f47ab0ee9d86a00ce",
+    ".scratch/corpus-evidence-pipeline/p0-baselines/baseline-4e2c45ce216a9421/snapshot-p2a-r2-disabled.json": "847f3381a5c2f86a86b0efcde6ae79efceba7e9662e964962e69071a06b0133b"
+  }
+}

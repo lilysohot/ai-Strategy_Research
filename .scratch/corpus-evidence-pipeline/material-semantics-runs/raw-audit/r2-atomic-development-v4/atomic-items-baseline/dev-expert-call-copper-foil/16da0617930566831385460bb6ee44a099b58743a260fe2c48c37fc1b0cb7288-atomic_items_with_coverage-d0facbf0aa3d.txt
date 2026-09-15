@@ -1,0 +1,8 @@
+{"record_type":"speaker","speaker_id":"spk_9cb1bda27365","display_name":"专家","role":"industry_expert","identity_status":"unknown"}
+{"record_type":"speaker","speaker_id":"spk_910a36a47b06","display_name":"主持人","role":"moderator","identity_status":"unknown"}
+{"record_type":"item","item_id":"itm_001","candidate_slot_id":"slot_61453075ef6d40f7","text":"专家宣布会议结束","semantic_type":"behavior","statement_role":"claim","speech_role":"statement","perspective":"source_explicit","speaker_ref":"spk_9cb1bda27365","polarity":"positive","value":null,"behavior_status":"completed","temporal_frame":"current","evidence_quote":"你们没什么问题，今天就到这儿。","unknown_fields":[]}
+{"record_type":"coverage","candidate_slot_id":"slot_61453075ef6d40f7","status":"extracted","reason_code":null}
+{"record_type":"item","item_id":"itm_002","candidate_slot_id":"slot_be37935ee09d1251","text":"主持人感谢专家的时间","semantic_type":"behavior","statement_role":"claim","speech_role":"statement","perspective":"source_explicit","speaker_ref":"spk_910a36a47b06","polarity":"positive","value":null,"behavior_status":"completed","temporal_frame":"current","evidence_quote":"好的，谢谢专家，谢谢您的时间。","unknown_fields":[]}
+{"record_type":"coverage","candidate_slot_id":"slot_be37935ee09d1251","status":"extracted","reason_code":null}
+{"record_type":"item","item_id":"itm_003","candidate_slot_id":"slot_fbfac085b984dafd","text":"专家确认以此结束","semantic_type":"behavior","statement_role":"claim","speech_role":"statement","perspective":"source_explicit","speaker_ref":"spk_9cb1bda27365","polarity":"positive","value":null,"behavior_status":"completed","temporal_frame":"current","evidence_quote":"我们这样结束。","unknown_fields":[]}
+{"record_type":"coverage","candidate_slot_id":"slot_fbfac085b984dafd","status":"extracted","reason_code":null}

@@ -1,0 +1,34 @@
+{
+  "budget_version": "r2-redesign-development-v1",
+  "frozen_at": "2026-09-13",
+  "reason": "R2 的首次开发预算已按停止条件耗尽；本预算只授权结构重设计验证，不授权继续提示词试错或访问留出集。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "model": "glm-5.3-flash",
+  "round_ids": [
+    "redesign-baseline",
+    "redesign-correction-1"
+  ],
+  "development_rounds_max": 2,
+  "calls_per_round_max": 8,
+  "calls_total_max": 16,
+  "calls_per_document_per_round_max": 4,
+  "seconds_per_call": 60,
+  "packet_chars": 4100,
+  "max_output_tokens": 8192,
+  "holdout_calls_allowed": 0,
+  "stop_conditions": [
+    "source_identity_or_quote_binding_failure",
+    "holdout_access_or_leakage",
+    "critical_attribution_polarity_behavior_or_relation_false_positive",
+    "round_or_call_budget_exhausted",
+    "unrecoverable_output_truncation",
+    "development_acceptance_gate_failure_after_final_round"
+  ]
+}

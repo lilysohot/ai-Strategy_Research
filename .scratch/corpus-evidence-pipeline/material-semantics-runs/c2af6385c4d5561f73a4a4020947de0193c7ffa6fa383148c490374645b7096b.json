@@ -1,0 +1,2863 @@
+{
+  "run_id": "c2af6385c4d5561f73a4a4020947de0193c7ffa6fa383148c490374645b7096b",
+  "evidence_run_id": "35bdde143a49c4f033f936af954c27079a01e201b46fb1fefadcbdf6047af13c",
+  "extractor_version": "material-semantics-5",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "undated_80b5a290",
+      "source_rev": "80b5a290df3d2ade",
+      "title": "5月：锂电铜箔和电子铜箔",
+      "material_type": "conference_minutes",
+      "research_domain": "industry",
+      "material_date": null,
+      "published_at": null,
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_910a36a47b06",
+        "display_name": "主持人",
+        "role": "moderator",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_9cb1bda27365",
+        "display_name": "专家",
+        "role": "industry_expert",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_105b7d8129c8",
+        "display_name": "投资者",
+        "role": "investor_participant",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_8dcf61762325",
+        "display_name": "电话尾号6161参会人",
+        "role": "investor_participant",
+        "identity_status": "unknown"
+      },
+      {
+        "speaker_id": "spk_d8b713d0fe08",
+        "display_name": "铜冠总工（被转述）",
+        "role": "industry_expert",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_9154430da505881e",
+        "text": "每1万吨锂电箔主设备投资约2.5到3亿元",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "2.5-3亿元/万吨",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "锂电箔单万吨的设备投资，我说的是主设备，大概在2.5到3个亿",
+            "start": 1493,
+            "end": 1523
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_05998910f6963019",
+        "text": "标箔1万吨设备投资约3-4亿元（3万吨近4亿）",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "3-4亿元/万吨",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "标箔后端要配表面处理机，所以价格可能会高一点。3万吨的话可能会到将近4个亿",
+            "start": 1858,
+            "end": 1895
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a3b891ffea716592",
+        "text": "表处理机是较大的增量设备",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "表处理可能是一个比较大的增量的设备",
+            "start": 1963,
+            "end": 1980
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c2748cd2ce652ce3",
+        "text": "阴极辊单台价格约150万元",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约150万元/台",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "阴极辊是比较关键的设备，单台价格在150万以上",
+            "start": 2066,
+            "end": 2089
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9cab2347ff14de96",
+        "text": "生箔机带阳极板约200万元/台",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约200万元/台",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "生箔机下来大概是200万左右，带阳极板的话是200万左右",
+            "start": 2127,
+            "end": 2155
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_374321492d2922bf",
+        "text": "标准情况下1万吨约需24套设备",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "24套/万吨",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "标准情况下，1万吨大约需要24套",
+            "start": 2366,
+            "end": 2382
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3e1ed5db0f5792ac",
+        "text": "阴极辊和生箔机两个大头是外采的",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "我理解阴极辊和生箔机这两个大头是外采的",
+            "start": 2945,
+            "end": 2964
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_29baab5a23c40466",
+        "text": "溶铜设备基本外采，泰金占大头并做整体解决方案",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "溶铜这些设备基本也是外采的，而且泰金这块也占大头，因为他们现在做整体解决方案",
+            "start": 3000,
+            "end": 3038
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_53ed8c112eb22c2a",
+        "text": "锂电铜箔分标准（6-8微米）和极薄（≤4.5微米）两类",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "标准的是常规的6到8微米，或5到8微米；极薄的是小于等于4.5微米",
+            "start": 3290,
+            "end": 3323
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_38cc207fcf8324a0",
+        "text": "极薄铜箔对控制精度要求高，需高精度配件，设备价格更高",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "做三微米甚至3.5微米以下的铜箔，对控制精度要求非常高，配套的传感器、控制系统、轴承都是高精度的，所以设备价格也不一样",
+            "start": 3460,
+            "end": 3519
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_2cae3219d707b1cf",
+        "text": "3.5微米铜箔设备投资按3亿出头算",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "3亿出头",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "3.5微米的按三个亿出头算",
+            "start": 3788,
+            "end": 3801
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a33fa9eaa8dc1fb2",
+        "text": "4.5微米设备投资比6-8微米高一点，但低于3.5微米",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "4.5微米的设备比6到8微米的高一点，但没有3.5微米以内的那么高",
+            "start": 3705,
+            "end": 3738
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d4caad90814bb9a1",
+        "text": "很多厂家已能量产4.5微米铜箔",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "4.5微米现在其实很多厂家已经能量产了",
+            "start": 3663,
+            "end": 3682
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6555491269e87463",
+        "text": "下游厂商因加工费太低都在提速",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "现在下游厂商因为加工费太低，都在提速",
+            "start": 2347,
+            "end": 2365
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_00919ced14cbd283",
+        "text": "阴极辊直径现在做到3.6米，配套少但单价很高",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "直径3.6米",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "直径我们现在做到3.6米了，这种可能配套少一点，但单价很高",
+            "start": 2513,
+            "end": 2542
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9e6753da299dd31b",
+        "text": "每1万吨铜箔整个设备资本开支大概如何、阴极辊表处理等大件价值量分配怎样？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "每1万吨的铜箔，整个设备的资本开支大概是怎么样的",
+            "start": 1374,
+            "end": 1398
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9feebd30dd2c9905",
+        "text": "锂电铜箔产品是相对标准化还是定制化程度仍很高？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "现在各类产品是相对标准化的，比如生箔机、阴极辊这些，还是定制化程度仍然很高",
+            "start": 3176,
+            "end": 3213
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_52e4ea1fec8a7ca4",
+        "text": "锂电铜箔剩余约1.5亿投资对应什么设备？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "锂电铜箔剩下的那1.5个亿左右是什么设备",
+            "start": 2669,
+            "end": 2689
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e86a0bfb24304bba",
+        "text": "新扩产厂商（如海亮）扩产是做3.5微米、4.5微米还是其他？",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "他们目前扩产是去做3.5微米、4.5微米还是怎样的？",
+            "start": 63,
+            "end": 89
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5e78bb897af4d43a",
+        "text": "锂电扩产厂商继续扩产会往更薄方向走，不会再做6到8微米，大概率定极薄铜箔设备",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "他们继续扩产肯定是往下走，不会再去做6到8微米",
+            "start": 174,
+            "end": 197
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_578e389254fecb69",
+        "text": "诺德3.5微米已在江西基地量产",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "诺德3.5微米已经在江西基地量产了",
+            "start": 279,
+            "end": 296
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ca15bd09b0210e47",
+        "text": "海亮想做行业定价人，会持续扩产直到拿到铜箔定价权",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "海亮想做行业的定价人，所以会持续扩产",
+            "start": 312,
+            "end": 330
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_b1cb58e0c4952e0a",
+        "text": "铜冠前几年扩充较快，有8万吨，但主要以标准箔为主",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "8万吨",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "铜冠前几年扩充较快，有8万吨",
+            "start": 361,
+            "end": 375
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_4661f776f9300676",
+        "text": "HTE和低阶RTF约6台生箔机配1台表面处理机；高阶RTF和HVLP为3到4台配1台",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "大概是6台生箔机配套1台表面处理机",
+            "start": 592,
+            "end": 609
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e35677d5ebf03659",
+        "text": "传统标准HTE处理机约600到700万一台，HVLP超过1000万一台",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "600-700万/台；>1000万/台",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "传统标准HTE的处理机大概600到700万一台，现在HVLP的超过1000万一台",
+            "start": 678,
+            "end": 718
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_df11d02a96ebee64",
+        "text": "每万吨HTE表处理价值约2400万到2800万；HVLP约8000万",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "affirmed",
+        "value": "2400-2800万/万吨；8000万",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "就至少要2400万到2800万每万吨，对吧？",
+            "start": 783,
+            "end": 805
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_61d2cc60f1685d87",
+        "text": "越往高阶电子箔走，表处理设备消耗量越大（用量通胀逻辑）",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "越往高阶的电子箔走，消耗量越大",
+            "start": 902,
+            "end": 917
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5d0b2a250f6b876a",
+        "text": "载体铜箔设备已研发出来，但市场增量没有想象的明显，大家都在炒概念",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "载体铜箔的设备我们已经研发出来了，但市场的增量没有想象的那么明显",
+            "start": 1008,
+            "end": 1040
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7a072d8b81febb86",
+        "text": "MSAP新工艺下游还有待验证效果，国内没几个厂家能做，大头在三井",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "这个工艺目前下游还有待验证效果。国内没有几个厂家能做，大头还在三井那边",
+            "start": 1088,
+            "end": 1123
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c1685e98653230c2",
+        "text": "三井基本占据载体铜箔90%以上份额",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "90%以上",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "三井基本占据载体铜箔90%以上的份额",
+            "start": 1141,
+            "end": 1159
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b768b28d7e9cf491",
+        "text": "DTH表处理设备与HVLP不能通用，前端必须有载体形成过程",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "不能通用。载体铜箔从名字就能听出来，完全不一样",
+            "start": 1228,
+            "end": 1251
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_2290a047892385c2",
+        "text": "载体铜箔表面处理机定价超过1200万一台",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": ">1200万/台",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我们定价基本上超过1200万了",
+            "start": 1720,
+            "end": 1735
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a0b456b92424b34c",
+        "text": "载体铜箔线速度开不快，需求量约为之前的一点五到两倍",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "1.5-2倍",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "大概是之前的一点五到两倍",
+            "start": 1995,
+            "end": 2007
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6dbebb98cea2a8d8",
+        "text": "载体铜箔16台表处理将近两个亿价值量",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "affirmed",
+        "value": "近2亿",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "16台就将近两个亿的价值量",
+            "start": 2117,
+            "end": 2130
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5cee046212fdb702",
+        "text": "表处理竞争格局：日本三船、西工业、TEX，韩国PNT；国内泰金和洪田科技",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "日本还有一家叫西工业，还有TEX公司，韩国的PNT",
+            "start": 2227,
+            "end": 2252
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_4d5bcef72026dc11",
+        "text": "泰金HVLP设备从原理、控制系统和传感器上完全可以替代日本设备",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "从设备原理上完全可以跟他们匹配",
+            "start": 2351,
+            "end": 2366
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_0a8028baed83253b",
+        "text": "福建某铜箔企业购入的西工业设备连机都开不起来，泰金设备正常开机",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "西工业的连机都开不起来",
+            "start": 2504,
+            "end": 2515
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d5911d35fe12389c",
+        "text": "西工业、TEX、三船价格基本2000万左右甚至更高，交期6到12个月",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约2000万；6-12个月",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "这几家的价格基本都在2000万左右，甚至更高，交期是6到12个月",
+            "start": 2585,
+            "end": 2617
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d1fccee0efd60ea9",
+        "text": "若等6个月到一年交货，行业可能已到HVLP5或6，设备不一定能生产该层次产品",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "可能行业已经不需要HVLP3或4了，已经到5或6了",
+            "start": 2652,
+            "end": 2677
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_d7aaa49bb9e1c059",
+        "text": "泰金一个月能交一台，价格一千万出头，价格和交期有明显优势",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "1个月/台；约1000万+",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我们泰金的交货期，一个月就能交一台，价格一千万出头",
+            "start": 2705,
+            "end": 2730
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ab96880bf7276fb6",
+        "text": "日韩几家HTE价格约1500万左右，价格一直很硬",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约1500万",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "HTE的价格会低一点，也在1500万左右",
+            "start": 2801,
+            "end": 2821
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_487a80124ca5fc02",
+        "text": "德福科技设备不外采自己做，可能是从三井学的，为防止HVLP工艺配方泄密",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "德福的设备不外采，自己做",
+            "start": 2944,
+            "end": 2956
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6310fea411127d90",
+        "text": "泰金交期快的原因：机加工件发沿海地区加工，国内可上人装配调试",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "发到沿海地区统一加工，装配只需要上人",
+            "start": 3170,
+            "end": 3188
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_907b46fd3a622ff1",
+        "text": "国外厂商产能上不去的主要原因是没扩产",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我认为他们产能上不去的原因主要是没扩产",
+            "start": 3220,
+            "end": 3239
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_795ce670204005b4",
+        "text": "国内客户希望设备到现场直接测试调试，比国外先联调更快投产",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "国内铜箔制造企业更希望设备拿到现场直接测试",
+            "start": 3407,
+            "end": 3428
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_345c95b3b9b7fe3a",
+        "text": "日本设备仍用三相异步电机控制精度差，泰金全套伺服控制，其价格还这么硬没道理",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "日本那边还在用，控制精度非常差。我们全套伺服控制",
+            "start": 3802,
+            "end": 3826
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d193b29344e494f2",
+        "text": "泰金技术水平基本不比日本差，缺的只是一个验证",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我们的技术水平在我看来基本上不比他们差，缺的就是一个验证",
+            "start": 3954,
+            "end": 3982
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_31002741f0c6a42a",
+        "text": "只要验证成功，泰金很快能占据国内市场甚至一部分国外市场",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "只要验证成功，我们很快就能占据国内市场，甚至一部分国外市场",
+            "start": 3983,
+            "end": 4012
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_c59310242e60cc4b",
+        "text": "表处理设备上国内其他公司跟我们有差距吗",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "国内其他公司跟我们有差距吗？",
+            "start": 16,
+            "end": 30
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_45d42d8b7ac998b3",
+        "text": "国内表处理设备对手可能只有洪田科技",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "国内目前对手可能只有洪田科技",
+            "start": 35,
+            "end": 49
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_da7e0116f32d3128",
+        "text": "韩国PNT自建铜箔厂被SK起诉后设备国内无人敢买、业绩一落千丈",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "之后PNT的设备国内没人敢买了，业绩一落千丈",
+            "start": 159,
+            "end": 181
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fd65eae0f273ab30",
+        "text": "洪田科技属道森股份，道森旗下有铜箔企业诺德，洪田设备主要供给诺德",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "洪田的设备主要供给诺德",
+            "start": 218,
+            "end": 229
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3df7d52adad58dcb",
+        "text": "现在国内没人敢买洪田的设备，尤其尖端材料企业担心工艺泄露",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "现在国内没人敢买他们的设备",
+            "start": 230,
+            "end": 243
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_4ae98c3661625ee1",
+        "text": "请介绍公司背景和表处理设备做得好的原因",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "请介绍咱们的背景和为什么做得好",
+            "start": 401,
+            "end": 416
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d9e319a2390903cb",
+        "text": "公司从做阳极板起家",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "我们其实是从做阳极板起家的",
+            "start": 471,
+            "end": 484
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_56085de7662cefa7",
+        "text": "阴极辊钛材全流程攻克，从海绵钛到成型一手掌控",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "从海绵钛到阴极辊成型，都由我们一手掌控",
+            "start": 553,
+            "end": 572
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_14eddc97d39c2574",
+        "text": "从材料本身出发设计装备是做得好的原因",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "从材料本身出发去设计装备",
+            "start": 637,
+            "end": 649
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_dc9452e8513b7ed4",
+        "text": "表处理机毛利率能做到什么水平",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "毛利率能做到什么水平？",
+            "start": 746,
+            "end": 757
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b2fcd52117fb1234",
+        "text": "表面处理机毛利率基本30左右，比生箔机高一点",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约30%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "基本30左右，表面处理机的毛利率高一点",
+            "start": 762,
+            "end": 781
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_853a6bd0900bf4f9",
+        "text": "国内哪些企业可能正儿八经开始用我们的设备",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "谁有可能正儿八经开始用我们的设备？",
+            "start": 849,
+            "end": 866
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_42ba51f1ed4383d9",
+        "text": "铜陵有色与西北有色签战略合作，下一步采购设备肯定从我们这儿买",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "他们下一步采购设备肯定从我们这儿买",
+            "start": 926,
+            "end": 943
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_4ad2871a01ffcc50",
+        "text": "已有企业买了我们的设备准备做HVLP铜箔，现在没开机",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "其实已经有企业买了我们的设备准备做HVLP铜箔，现在没开机",
+            "start": 979,
+            "end": 1008
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_037ac15f25df8d0b",
+        "text": "海亮已同时购买我们和日本的设备，届时会对比",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "海亮已经买了，也买了日本的，两家的都买了，到时候肯定对比",
+            "start": 1017,
+            "end": 1045
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_57a1085444b67187",
+        "text": "如果我们的设备比日本的开得好，我们就占上风",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "如果我们的比他们开得好，我们就占上风",
+            "start": 1046,
+            "end": 1064
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_ecfbb65c23ba7324",
+        "text": "从新签订单角度整个行业是否回暖",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "您有没有感觉整个行业回暖？",
+            "start": 1221,
+            "end": 1234
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_81145fa4cd9c3689",
+        "text": "生箔机整套（含阴极辊）已签三百多台，全年产能约五百多套",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "已签300多台/年产能500多套",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "已经有三百多台了。我们全年产能拉满可能就生产五百多套",
+            "start": 1280,
+            "end": 1306
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c8eecc108aa1fbf0",
+        "text": "新签订单已排产三百多台，到二季度都要交得差不多",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "300多台",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "新签订单已经排产",
+            "start": 1357,
+            "end": 1365
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_94d0e3c42c52a792",
+        "text": "一季度收入下降30%是否因价格降很多而量不差",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": "收入同比降约30%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "一季度的收入同比有30%左右的下降",
+            "start": 1457,
+            "end": 1474
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_a6d9fce52e824420",
+        "text": "今年肯定比22年到23年还要好，今年到明年肯定更好",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "今年肯定比22年到23年还要好",
+            "start": 1560,
+            "end": 1575
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_04a348b59afc3223",
+        "text": "去年全年交了12台表面处理机，今年一季度已签约20台",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "去年12台/今年一季度约20台",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "去年我们一整年交了12台表面处理机，今年一季度已经签了感觉有20台了",
+            "start": 1608,
+            "end": 1642
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b96ba3b2d98d00c9",
+        "text": "500台×350万一套是否约17.5亿收入",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": "17.5亿",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "就差不多17.5个亿，对吧？",
+            "start": 1761,
+            "end": 1775
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_276902c1b0889001",
+        "text": "生箔机含阴极辊是一整套，价格可能比350万还高一点",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "价格可能比这个还高一点",
+            "start": 1825,
+            "end": 1836
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_1ad9e36a2af94eb6",
+        "text": "表处理设备今年大概是什么规划",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_910a36a47b06",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "表处理这块今年大概是什么规划？",
+            "start": 1933,
+            "end": 1948
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_94296d357871b7f7",
+        "text": "今年量太大，大概率要扩产",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "大概率要扩产",
+            "start": 1974,
+            "end": 1980
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_c3dbdd9eaebe7246",
+        "text": "表面处理机年产能12到15台，今年一季度已签15到20台",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "年产能12-15台/已签15-20台",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "今年一季度已经签了15到20台左右了",
+            "start": 2035,
+            "end": 2053
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_648c9fdc971a01f2",
+        "text": "表处理设备今年年内肯定全部交完，但不一定全部拿到验收款",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "今年年内肯定全部交完，但不一定能全部拿到验收款",
+            "start": 2108,
+            "end": 2131
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_51ed1d82bd9cb9a7",
+        "text": "HVLP陪跑现在良品率到什么水平，最终能预估做到什么水平",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "不知道现在良品率到了什么水平？",
+            "start": 2247,
+            "end": 2262
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_395e1ad7284ed81b",
+        "text": "HVLP厂家良品率不高且对设备厂商保密，预估可能40%左右",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "约40%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "我预估可能就40%左右",
+            "start": 2344,
+            "end": 2355
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_13e67344ff1619e4",
+        "text": "HVLP 1到2和3到4是否难度上台阶、会逐个突破",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "1到2和3到4是上台阶的难度吗？",
+            "start": 2398,
+            "end": 2414
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_457bc255cd7b7156",
+        "text": "3到4要求表面粗糙度小于等于一微米，难度越大良品率会越来越低",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "≤1微米",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "难度越大，良品率肯定会越来越低",
+            "start": 2470,
+            "end": 2485
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7771050eb0d93c1a",
+        "text": "铜冠月产HVLP一百多吨，而年标箔产量5.5万吨",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "月100多吨/年5.5万吨",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "他们年标箔产量5.5万吨，一个月只做了一百多吨",
+            "start": 2500,
+            "end": 2523
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_abb066b0a35479f9",
+        "text": "良品率低是设备问题还是工艺问题，设备端能否配套改进",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "您觉得良品率低是设备问题还是工艺问题？",
+            "start": 2541,
+            "end": 2560
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3bcf6c522222ed97",
+        "text": "设备加工和控制精度已行业领先，良品率大概率跟工艺挂钩",
+        "semantic_type": "opinion",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "大概率跟工艺挂钩",
+            "start": 2602,
+            "end": 2610
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d28606cb779ba997",
+        "text": "铜冠总工称工艺和设备是64开，工艺占大头，设备只是配套但没设备也不行",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "speech_role": "answer",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_d8b713d0fe08",
+        "polarity": "affirmed",
+        "value": "64开",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "他说工艺和设备是64开，工艺占大头",
+            "start": 2622,
+            "end": 2639
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7f2941e599ff999f",
+        "text": "做三、四代产品的设备精度与一、二代有什么区别，定价是否有区别",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "定价上也有区别吗？",
+            "start": 2683,
+            "end": 2692
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9606b49f4e8154d9",
+        "text": "目前统一定价，一般以最高标准定设备",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "目前我们是统一定价",
+            "start": 2697,
+            "end": 2706
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_2e42a1e2cb28a8ad",
+        "text": "给三井供过设备的背景及后面展望如何",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_8dcf61762325",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "对这个背景和后面的展望是怎样的？",
+            "start": 2857,
+            "end": 2873
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_57f56b5eb56bf30b",
+        "text": "给三井、福田和卢森堡都供过设备",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "我们给三井福田和卢森堡都供过设备",
+            "start": 2887,
+            "end": 2903
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_dcf23991207b34e6",
+        "text": "三井是行业顶端企业，表面处理机不会外采，自己在研发配套工艺新设备",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "表面处理机肯定不会从外面买",
+            "start": 2915,
+            "end": 2928
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3dc5e9f5646d2921",
+        "text": "给三井做过生箔机和阴极辊，价格远低于日本本土厂商、交期更快",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "价格远低于日本本土厂商，交期也更快",
+            "start": 2962,
+            "end": 2979
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3e8b4308b6adbdf1",
+        "text": "未来与三井可能合作比较紧密",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "所以未来可能合作比较紧密",
+            "start": 2980,
+            "end": 2992
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_bdafeccacc578721",
+        "text": "卢森堡一直用我们的设备，但没听说要扩产",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "卢森堡一直有用我们的设备，但没听说要扩产",
+            "start": 2993,
+            "end": 3013
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_565c9875e61aa702",
+        "text": "福田有用我们的阴极辊，未来合作机会也会比较多",
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "未来合作机会也会比较多",
+            "start": 3026,
+            "end": 3037
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_7fb4dc6bf90779bb",
+        "text": "三井是自做表面处理设备还是买标品改造",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_8dcf61762325",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "三井是自做表面处理设备，还是买标品改造？",
+            "start": 3063,
+            "end": 3083
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d41416d0444138dd",
+        "text": "三井一方面自己开发，另一方面改造原有设备，外采概率不大",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "外采概率不大，因为日本企业扩产意愿不大",
+            "start": 3126,
+            "end": 3145
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_1d2c927ba16f8d35",
+        "text": "三井把传统标箔设备往HVLP方向改造，把HTE产能往高端倾斜",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "把HTE产能往高端倾斜",
+            "start": 3183,
+            "end": 3194
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_799ca32cc0b9011b",
+        "text": "今年年初国内HTE铜箔价格回暖，因海外把传统标箔量往高端放出现缺口，国内标箔加工费涨了一点",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "国内传统标箔企业加工费才涨了一点",
+            "start": 3239,
+            "end": 3255
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b99b49bb513f1171",
+        "text": "钛电极耗材是否好生意；塞尔电子材料的定位是否偏市场化",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "这个产品是不是比较好的生意？",
+            "start": 3304,
+            "end": 3318
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_86f33e9795c29549",
+        "text": "塞尔做封装，玻璃封装偏光模块高端产品，跟军工相关，既做军工也做民品",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "塞尔那边是做封装的，玻璃封装更偏向光模块的高端产品",
+            "start": 3436,
+            "end": 3461
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_66b1a2e4af287254",
+        "text": "泰金母公司一直做钛电极，是耗材，一套三十多万，半年就得换，需求量非常大",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "一套30多万/半年一换",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "一套三十多万，半年就得换，需求量非常大",
+            "start": 3619,
+            "end": 3638
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e555b88b08d49686",
+        "text": "存量设备更换的钛电极明年能到多大收入体量",
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "speech_role": "question",
+        "perspective": "unknown",
+        "speaker_ref": "spk_105b7d8129c8",
+        "polarity": "unknown",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "像这个明年能到多大的收入体量？",
+            "start": 3645,
+            "end": 3660
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9da3d0ed6a8ba7bf",
+        "text": "1万吨需24台生箔机即24套阳极板，半年就得换，国内很多企业在用我们的电极",
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "speech_role": "answer",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_9cb1bda27365",
+        "polarity": "affirmed",
+        "value": "1万吨=24套/半年一换",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "1万吨24台生箔机，就需要24套阳极板，半年就得换",
+            "start": 3743,
+            "end": 3768
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_7bfd6ffcf9645500",
+        "type": "answers",
+        "from_item": "itm_9154430da505881e",
+        "to_item": "itm_9e6753da299dd31b",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "首先，能不能先帮我们简单地梳理一下，每1万吨的铜箔，整个设备的资本开支大概是怎么样的",
+            "start": 1356,
+            "end": 1398
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_e738d092f4a9f153",
+        "type": "answers",
+        "from_item": "itm_53ed8c112eb22c2a",
+        "to_item": "itm_9feebd30dd2c9905",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "还是定制化程度仍然很高",
+            "start": 3202,
+            "end": 3213
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_fe160a1addf949e9",
+        "type": "elaborates",
+        "from_item": "itm_38cc207fcf8324a0",
+        "to_item": "itm_53ed8c112eb22c2a",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "这两种铜箔对应的设备基本不一样——大体的结构一样，但使用的配件不同",
+            "start": 3324,
+            "end": 3357
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_30ce40a998630bc8",
+        "type": "elaborates",
+        "from_item": "itm_2cae3219d707b1cf",
+        "to_item": "itm_38cc207fcf8324a0",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+            "locator": "document",
+            "quote": "3.5微米的按三个亿出头算",
+            "start": 3788,
+            "end": 3801
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_928197348dbb0333",
+        "type": "answers",
+        "from_item": "itm_5e78bb897af4d43a",
+        "to_item": "itm_e86a0bfb24304bba",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "现在锂电扩产厂商，之前都是做锂电的，他们继续扩产肯定是往下走",
+            "start": 156,
+            "end": 186
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_ce59f4dbb192d619",
+        "type": "supports",
+        "from_item": "itm_0a8028baed83253b",
+        "to_item": "itm_4d5bcef72026dc11",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "泰金的做12微米铜箔正常开机没问题，西工业的连机都开不起来",
+            "start": 2486,
+            "end": 2515
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_9e15b3ab107e4169",
+        "type": "supports",
+        "from_item": "itm_d5911d35fe12389c",
+        "to_item": "itm_d7aaa49bb9e1c059",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "价格和交期上有明显优势",
+            "start": 2731,
+            "end": 2742
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_3b2020ff152f8f41",
+        "type": "conditions",
+        "from_item": "itm_31002741f0c6a42a",
+        "to_item": "itm_d193b29344e494f2",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "缺的就是一个验证。只要验证成功",
+            "start": 3974,
+            "end": 3989
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_18c7018669a32dbc",
+        "type": "elaborates",
+        "from_item": "itm_6310fea411127d90",
+        "to_item": "itm_d7aaa49bb9e1c059",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我们一个月一台是针对同规格的",
+            "start": 3128,
+            "end": 3142
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_0fa9deb4b9de37d6",
+        "type": "supports",
+        "from_item": "itm_345c95b3b9b7fe3a",
+        "to_item": "itm_d193b29344e494f2",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+            "locator": "document",
+            "quote": "我们的技术水平在我看来基本上不比他们差",
+            "start": 3954,
+            "end": 3973
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_298744201c36cbb6",
+        "type": "answers",
+        "from_item": "itm_45d42d8b7ac998b3",
+        "to_item": "itm_c59310242e60cc4b",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "国内目前对手可能只有洪田科技",
+            "start": 35,
+            "end": 49
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_f0f0b4030d85107d",
+        "type": "supports",
+        "from_item": "itm_da7e0116f32d3128",
+        "to_item": "itm_45d42d8b7ac998b3",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "为什么提这个？",
+            "start": 182,
+            "end": 189
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_e79ecf0e7184c34b",
+        "type": "supports",
+        "from_item": "itm_fd65eae0f273ab30",
+        "to_item": "itm_45d42d8b7ac998b3",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "因为洪田科技大老板是道森股份",
+            "start": 189,
+            "end": 203
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_9ba66fcb0db52f0b",
+        "type": "supports",
+        "from_item": "itm_3df7d52adad58dcb",
+        "to_item": "itm_45d42d8b7ac998b3",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "因为担心工艺泄露",
+            "start": 256,
+            "end": 264
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_19d483739390740e",
+        "type": "answers",
+        "from_item": "itm_d9e319a2390903cb",
+        "to_item": "itm_4ae98c3661625ee1",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "80b5a290df3d2ade",
+            "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+            "locator": "document",
+            "quote": "我们其实是从做阳极板起家的",
+            "start": 471,
+            "end": 484
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "document"
+      ],
+      "omitted_areas": [
+        "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97:truncated_response_salvaged"
+      ],
+      "unknowns": [
+        "material_date",
+        "speaker_identity"
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "852a78d69b1cdef8b71a11783e03eb323200fe754eaef480d3ff948d12add0d0",
+      "status": "completed",
+      "records": 18,
+      "reasons": [],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 21667,
+        "prompt_tokens": 4006,
+        "completion_tokens": 3222,
+        "reasoning_tokens": 417,
+        "finish_reason": "stop",
+        "content_chars": 7957,
+        "reasoning_chars": 1085,
+        "discarded_records": 2
+      }
+    },
+    {
+      "packet_id": "536288edc4303ddd93a7d73d9f6071a2363a37c826b9f43de1c4e0d41224059d",
+      "status": "completed",
+      "records": 30,
+      "reasons": [],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 34260,
+        "prompt_tokens": 4154,
+        "completion_tokens": 4964,
+        "reasoning_tokens": 699,
+        "finish_reason": "stop",
+        "content_chars": 12334,
+        "reasoning_chars": 1651
+      }
+    },
+    {
+      "packet_id": "e8c34e0f5457c800989b7d3750088c02836e292558a15ef81e7225f259239a97",
+      "status": "partial",
+      "records": 54,
+      "reasons": [
+        "truncated_response_salvaged"
+      ],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 52938,
+        "prompt_tokens": 3809,
+        "completion_tokens": 8192,
+        "reasoning_tokens": 1207,
+        "finish_reason": "length",
+        "content_chars": 20873,
+        "reasoning_chars": 2827,
+        "partial_json_salvaged": true
+      }
+    }
+  ]
+}

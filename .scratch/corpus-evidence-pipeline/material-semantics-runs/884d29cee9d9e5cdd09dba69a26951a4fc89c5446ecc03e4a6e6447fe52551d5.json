@@ -1,0 +1,57 @@
+{
+  "run_id": "884d29cee9d9e5cdd09dba69a26951a4fc89c5446ecc03e4a6e6447fe52551d5",
+  "evidence_run_id": "d6dace3e782315e921f34ab7aef013995588745b8a8a927081b616d019682593",
+  "extractor_version": "material-semantics-3",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-13_174b6462",
+      "source_rev": "174b64628f35aca6",
+      "title": "2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "material_date": "2026-08-13",
+      "published_at": "2026-08-13",
+      "language": "zh-CN"
+    },
+    "speakers": [],
+    "items": [],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "3"
+      ],
+      "omitted_areas": [
+        "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9:extraction_error:ValidationError"
+      ],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+      "status": "failed",
+      "records": 0,
+      "reasons": [
+        "extraction_error:ValidationError"
+      ],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 18787,
+        "prompt_tokens": 1829,
+        "completion_tokens": 3289,
+        "reasoning_tokens": 19,
+        "finish_reason": "stop",
+        "content_chars": 10862,
+        "reasoning_chars": 93,
+        "validation_error": "1 validation error for MaterialItem\nsemantic_type\n  Input should be 'fact', 'forecast', 'opinion', 'behavior' or 'unknown' [type=literal_error, input_value='con"
+      }
+    }
+  ]
+}

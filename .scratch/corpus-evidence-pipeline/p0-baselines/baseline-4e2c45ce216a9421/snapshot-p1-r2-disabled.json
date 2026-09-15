@@ -1,0 +1,646 @@
+{
+  "calculation": {
+    "basis": "source_forecast",
+    "calculation_id": "91dedf49ca22da3537103ba0b5a55b211b47f0cff6708461d36468fb6af3be04",
+    "computed_by": "corpus-financial-formulas-1",
+    "formula": "revenue_growth",
+    "input_values": [
+      "120",
+      "100"
+    ],
+    "inputs": [
+      "73b6917e20d329fb55f866868e6215f22ba6f2eda82992bc884258f292725e11",
+      "fcde500694e0893f58285b8d1322eccad5218c2f9e38c25a1400f3909554abe2"
+    ],
+    "period": "2026-12-31",
+    "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+    "unit": "%",
+    "value": "20.0"
+  },
+  "cli": {
+    "exit_code": 0,
+    "json": {
+      "calculation_ready": 2,
+      "complete": true,
+      "completeness_meaning": "packet_execution_only_not_target_recall",
+      "coverage_applies_to": "matching_claims_in_selected_source_scope_only",
+      "coverage_status": "available",
+      "coverage_verified": false,
+      "doc_id": "2026-08-16_3e473fa5",
+      "extractor_version": "3a1f06510fd3",
+      "facts": 2,
+      "has_more": false,
+      "items": [
+        {
+          "claim_text": "2025A 营业收入100元",
+          "doc_id": "2026-08-16_3e473fa5",
+          "evidence_alignment": {
+            "end": 26,
+            "method": "exact",
+            "model_quote": "2025A 营业收入100元",
+            "source_quote": "2025A 营业收入100元",
+            "start": 12
+          },
+          "evidence_kind": "prose",
+          "evidence_quote": "2025A 营业收入100元",
+          "extracted_at": null,
+          "extractor_version": "3a1f06510fd3",
+          "fact_id": "fcde500694e0893f58285b8d1322eccad5218c2f9e38c25a1400f3909554abe2",
+          "kind": "fact",
+          "known_at": "2026-08-16",
+          "lint_version": "claims-v2-lint-4",
+          "locator": "document",
+          "metric": "营业收入",
+          "metric_id": "revenue",
+          "metric_raw": "营业收入",
+          "model": "p0-fake",
+          "observed_at": null,
+          "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+          "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+          "period_end": "2025-12-31",
+          "period_grain": "annual",
+          "period_raw": "2025A",
+          "qualifiers": {},
+          "quality_status": "ok",
+          "reason_codes": [],
+          "reasons": [],
+          "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+          "scope": "company",
+          "seq": 0,
+          "source_rev": "3e473fa5b58e5cd3",
+          "subject": "600519.SH",
+          "subject_raw": "600519.SH",
+          "table_ref": {},
+          "unit": "元",
+          "unit_raw": "元",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "value_num": "100",
+          "value_text": "100元"
+        },
+        {
+          "claim_text": "2026E 营业收入120元",
+          "doc_id": "2026-08-16_3e473fa5",
+          "evidence_alignment": {
+            "end": 41,
+            "method": "exact",
+            "model_quote": "2026E 营业收入120元",
+            "source_quote": "2026E 营业收入120元",
+            "start": 27
+          },
+          "evidence_kind": "prose",
+          "evidence_quote": "2026E 营业收入120元",
+          "extracted_at": null,
+          "extractor_version": "3a1f06510fd3",
+          "fact_id": "73b6917e20d329fb55f866868e6215f22ba6f2eda82992bc884258f292725e11",
+          "kind": "forecast",
+          "known_at": "2026-08-16",
+          "lint_version": "claims-v2-lint-4",
+          "locator": "document",
+          "metric": "营业收入",
+          "metric_id": "revenue",
+          "metric_raw": "营业收入",
+          "model": "p0-fake",
+          "observed_at": null,
+          "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+          "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+          "period_end": "2026-12-31",
+          "period_grain": "annual",
+          "period_raw": "2026E",
+          "qualifiers": {},
+          "quality_status": "ok",
+          "reason_codes": [],
+          "reasons": [],
+          "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+          "scope": "company",
+          "seq": 0,
+          "source_rev": "3e473fa5b58e5cd3",
+          "subject": "600519.SH",
+          "subject_raw": "600519.SH",
+          "table_ref": {},
+          "unit": "元",
+          "unit_raw": "元",
+          "usable_for": [
+            "cite",
+            "compare",
+            "calculate"
+          ],
+          "value_num": "120",
+          "value_text": "120元"
+        }
+      ],
+      "known_at_basis": "document_publication_candidate",
+      "limit": 50,
+      "lint_version": "claims-v2-lint-4",
+      "offset": 0,
+      "origin": "evidence",
+      "packet_runs": [
+        {
+          "diagnostics": {
+            "parse_error": null,
+            "parse_failed": false,
+            "parse_truncated": false,
+            "parsed_items": 2
+          },
+          "method": "llm",
+          "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+          "reasons": [],
+          "records": 2,
+          "status": "completed"
+        }
+      ],
+      "packet_status": {
+        "completed": 1
+      },
+      "packets": 1,
+      "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+      "pipeline_version": "evidence-pipeline-7",
+      "point_in_time_verified": false,
+      "purpose": "calculate",
+      "quality": {
+        "ok": 2
+      },
+      "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+      "scope": {
+        "completeness_applies_to": "selected_source_scope_only",
+        "locators": [
+          "document"
+        ]
+      },
+      "source_rev": "3e473fa5b58e5cd3",
+      "total": 2,
+      "validation_current": true
+    }
+  },
+  "deferred": {
+    "calculation_ready": 0,
+    "complete": false,
+    "completeness_meaning": "packet_execution_only_not_target_recall",
+    "coverage_verified": false,
+    "doc_id": "2026-08-16_3e473fa5",
+    "facts": 0,
+    "packet_status": {
+      "deferred": 1
+    },
+    "packets": 1,
+    "quality": {},
+    "run_id": "dedbfc84e77f0d206e2f6fc1446fb88530e567e7ccb3dd062cce4ac73f1c1a90"
+  },
+  "evidence_run": {
+    "document": {
+      "doc_id": "2026-08-16_3e473fa5",
+      "packets": [
+        {
+          "cells": [],
+          "context": [
+            "600519.SH",
+            "600519.SH"
+          ],
+          "kind": "prose",
+          "locator": "document",
+          "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+          "reasons": [],
+          "spans": [
+            {
+              "bbox": null,
+              "end": 43,
+              "locator": "document",
+              "start": 0,
+              "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。\n"
+            }
+          ],
+          "status": "available",
+          "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。\n"
+        }
+      ],
+      "pages": [
+        {
+          "bbox": null,
+          "end": null,
+          "locator": "document",
+          "start": null,
+          "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。\n"
+        }
+      ],
+      "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+      "parser_version": "evidence-layout-4",
+      "published": "2026-08-16",
+      "source_path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/p0-fixtures/2026-08-16_600519.SH.md",
+      "source_rev": "3e473fa5b58e5cd3",
+      "subject": "600519.SH",
+      "title": "600519.SH"
+    },
+    "extractor_version": "3a1f06510fd3",
+    "facts": [
+      {
+        "claim": {
+          "claim_text": "2025A 营业收入100元",
+          "doc_id": "2026-08-16_3e473fa5",
+          "evidence_kind": "prose",
+          "evidence_quote": "2025A 营业收入100元",
+          "extracted_at": null,
+          "extractor_version": "3a1f06510fd3",
+          "kind": "fact",
+          "known_at": "2026-08-16",
+          "lint_version": "claims-v2-lint-4",
+          "locator": "document",
+          "metric": "营业收入",
+          "metric_raw": "营业收入",
+          "model": "p0-fake",
+          "observed_at": null,
+          "period_end": "2025-12-31",
+          "period_grain": "annual",
+          "period_raw": "2025A",
+          "qualifiers": {},
+          "quality_status": "ok",
+          "reason_codes": [],
+          "scope": "company",
+          "seq": 0,
+          "source_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+          "subject": "600519.SH",
+          "subject_raw": "600519.SH",
+          "table_ref": {},
+          "unit": "元",
+          "unit_raw": "元",
+          "value_num": "100",
+          "value_text": "100元"
+        },
+        "evidence_alignment": {
+          "end": 26,
+          "method": "exact",
+          "model_quote": "2025A 营业收入100元",
+          "source_quote": "2025A 营业收入100元",
+          "start": 12
+        },
+        "fact_id": "fcde500694e0893f58285b8d1322eccad5218c2f9e38c25a1400f3909554abe2",
+        "metric_id": "revenue",
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "reasons": [],
+        "usable_for": [
+          "cite",
+          "compare",
+          "calculate"
+        ]
+      },
+      {
+        "claim": {
+          "claim_text": "2026E 营业收入120元",
+          "doc_id": "2026-08-16_3e473fa5",
+          "evidence_kind": "prose",
+          "evidence_quote": "2026E 营业收入120元",
+          "extracted_at": null,
+          "extractor_version": "3a1f06510fd3",
+          "kind": "forecast",
+          "known_at": "2026-08-16",
+          "lint_version": "claims-v2-lint-4",
+          "locator": "document",
+          "metric": "营业收入",
+          "metric_raw": "营业收入",
+          "model": "p0-fake",
+          "observed_at": null,
+          "period_end": "2026-12-31",
+          "period_grain": "annual",
+          "period_raw": "2026E",
+          "qualifiers": {},
+          "quality_status": "ok",
+          "reason_codes": [],
+          "scope": "company",
+          "seq": 0,
+          "source_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+          "subject": "600519.SH",
+          "subject_raw": "600519.SH",
+          "table_ref": {},
+          "unit": "元",
+          "unit_raw": "元",
+          "value_num": "120",
+          "value_text": "120元"
+        },
+        "evidence_alignment": {
+          "end": 41,
+          "method": "exact",
+          "model_quote": "2026E 营业收入120元",
+          "source_quote": "2026E 营业收入120元",
+          "start": 27
+        },
+        "fact_id": "73b6917e20d329fb55f866868e6215f22ba6f2eda82992bc884258f292725e11",
+        "metric_id": "revenue",
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "reasons": [],
+        "usable_for": [
+          "cite",
+          "compare",
+          "calculate"
+        ]
+      }
+    ],
+    "lint_version": "claims-v2-lint-4",
+    "model": "p0-fake",
+    "packet_runs": [
+      {
+        "diagnostics": {
+          "parse_error": null,
+          "parse_failed": false,
+          "parse_truncated": false,
+          "parsed_items": 2
+        },
+        "method": "llm",
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "reasons": [],
+        "records": 2,
+        "status": "completed"
+      }
+    ],
+    "pipeline_version": "evidence-pipeline-7",
+    "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1"
+  },
+  "fixture_sha256": "3e473fa5b58e5cd398f1711e61a3c272a2f1271c4ad173d10f0821621f80fb88",
+  "legacy_sqlite": {
+    "fetch": [
+      {
+        "doc_id": "2026-08-16_3e473fa5",
+        "locator": "600519.SH",
+        "seq": 0,
+        "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。"
+      }
+    ],
+    "hits": [
+      {
+        "doc_id": "2026-08-16_3e473fa5",
+        "locator": "600519.SH",
+        "published": "2026-08-16",
+        "score": -2.75e-06,
+        "snippet": "# 600519.SH 2025A 营业收入100元。2026E 营业收入120元。",
+        "title": "600519.SH"
+      }
+    ],
+    "inserted": [
+      true,
+      false
+    ],
+    "tokens": "营业 收入 100元 增长 20%"
+  },
+  "limitations": [
+    "PG persistence replaced by in-memory store",
+    "provider is fake",
+    "SQLite search is not PostgreSQL/zhparser acceptance"
+  ],
+  "market": {
+    "excluded_fields": [
+      "quote.items[].age (relative display age, not source as_of)"
+    ],
+    "financials": {
+      "items": [
+        {
+          "currency": "CNY",
+          "fiscal_period": "FY",
+          "fiscal_year": 2025,
+          "period_end_ms": 1767110400000,
+          "report_date_ms": 1776355200000,
+          "values": {
+            "operating_income": 168838102514.79
+          }
+        }
+      ],
+      "ok": true,
+      "period": "annual",
+      "statement": "income",
+      "thscode": "600519.SH"
+    },
+    "history": {
+      "adjust": "none",
+      "count": 1,
+      "interval": "1d",
+      "items": [
+        {
+          "close_price": 1408.34577,
+          "date_ms": 1735747200000,
+          "high_price": 1444.83577,
+          "low_price": 1400.34577,
+          "open_price": 1444.34577,
+          "turnover": 7490883773.19,
+          "volume": 5002870.0
+        }
+      ],
+      "ok": true,
+      "thscode": "600519.SH"
+    },
+    "limitations": [
+      "fixed HTTP fixture, not a live THS call",
+      "legacy resolver is not request-ID strict"
+    ],
+    "quote": {
+      "caveats": [],
+      "items": [
+        {
+          "as_of": "2026-09-09T15:23:52+08:00",
+          "as_of_ms": 1788938632000,
+          "high_price": 1309.3,
+          "last_price": 1290.88,
+          "low_price": 1286.68,
+          "name": "贵州茅台",
+          "open_price": 1305.01,
+          "pb_mrq": 6.422616,
+          "pcf_ttm": null,
+          "pe_mrq": null,
+          "pe_ttm": 19.816116,
+          "prev_price": 1309.3,
+          "price_change": -18.42,
+          "price_change_ratio_pct": -1.406859,
+          "ps_ttm": null,
+          "quote_text": "last_price=1290.88; pe_ttm=19.816116; as_of=1788938632000",
+          "thscode": "600519.SH",
+          "turnover": 4168500500.0,
+          "volume": 3222611.0
+        }
+      ],
+      "ok": true
+    },
+    "resolved_text": "last_price=1290.88; pe_ttm=19.816116; as_of=1788938632000\nhigh_price=1309.3; last_price=1290.88; low_price=1286.68; open_price=1305.01; prev_price=1309.3; price_change=-18.42; price_change_ratio_pct=-1.406859; thscode=600519.SH; ticker=600519; turnover=4168500500; volume=3222611; as_of=1788938632000\nname=贵州茅台; pb_mrq=6.422616; pe_ttm=19.816116; thscode=600519.SH; ticker=600519; as_of=1788938632000\nclose_price=1408.34577; date_ms=1735747200000; high_price=1444.83577; low_price=1400.34577; open_price=1444.34577; turnover=7490883773.19; volume=5002870.0; as_of=1788938632000\nadjust=none; interval=1d; thscode=600519.SH\ncurrency=CNY; fiscal_period=FY; fiscal_year=2025; operating_income=168838102514.79; period=annual; period_end_ms=1767110400000; report_date_ms=1776355200000; thscode=600519.SH; as_of=1788938632000"
+  },
+  "packets": [
+    {
+      "cells": [],
+      "context": [
+        "600519.SH",
+        "600519.SH"
+      ],
+      "kind": "prose",
+      "locator": "document",
+      "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+      "reasons": [],
+      "spans": [
+        {
+          "bbox": null,
+          "end": 43,
+          "locator": "document",
+          "start": 0,
+          "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。\n"
+        }
+      ],
+      "status": "available",
+      "text": "# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。\n"
+    }
+  ],
+  "projection": {
+    "calculation_ready": 2,
+    "complete": true,
+    "completeness_meaning": "packet_execution_only_not_target_recall",
+    "coverage_applies_to": "matching_claims_in_selected_source_scope_only",
+    "coverage_status": "available",
+    "coverage_verified": false,
+    "doc_id": "2026-08-16_3e473fa5",
+    "extractor_version": "3a1f06510fd3",
+    "facts": 2,
+    "has_more": false,
+    "items": [
+      {
+        "claim_text": "2025A 营业收入100元",
+        "doc_id": "2026-08-16_3e473fa5",
+        "evidence_alignment": {
+          "end": 26,
+          "method": "exact",
+          "model_quote": "2025A 营业收入100元",
+          "source_quote": "2025A 营业收入100元",
+          "start": 12
+        },
+        "evidence_kind": "prose",
+        "evidence_quote": "2025A 营业收入100元",
+        "extracted_at": null,
+        "extractor_version": "3a1f06510fd3",
+        "fact_id": "fcde500694e0893f58285b8d1322eccad5218c2f9e38c25a1400f3909554abe2",
+        "kind": "fact",
+        "known_at": "2026-08-16",
+        "lint_version": "claims-v2-lint-4",
+        "locator": "document",
+        "metric": "营业收入",
+        "metric_id": "revenue",
+        "metric_raw": "营业收入",
+        "model": "p0-fake",
+        "observed_at": null,
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+        "period_end": "2025-12-31",
+        "period_grain": "annual",
+        "period_raw": "2025A",
+        "qualifiers": {},
+        "quality_status": "ok",
+        "reason_codes": [],
+        "reasons": [],
+        "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+        "scope": "company",
+        "seq": 0,
+        "source_rev": "3e473fa5b58e5cd3",
+        "subject": "600519.SH",
+        "subject_raw": "600519.SH",
+        "table_ref": {},
+        "unit": "元",
+        "unit_raw": "元",
+        "usable_for": [
+          "cite",
+          "compare",
+          "calculate"
+        ],
+        "value_num": "100",
+        "value_text": "100元"
+      },
+      {
+        "claim_text": "2026E 营业收入120元",
+        "doc_id": "2026-08-16_3e473fa5",
+        "evidence_alignment": {
+          "end": 41,
+          "method": "exact",
+          "model_quote": "2026E 营业收入120元",
+          "source_quote": "2026E 营业收入120元",
+          "start": 27
+        },
+        "evidence_kind": "prose",
+        "evidence_quote": "2026E 营业收入120元",
+        "extracted_at": null,
+        "extractor_version": "3a1f06510fd3",
+        "fact_id": "73b6917e20d329fb55f866868e6215f22ba6f2eda82992bc884258f292725e11",
+        "kind": "forecast",
+        "known_at": "2026-08-16",
+        "lint_version": "claims-v2-lint-4",
+        "locator": "document",
+        "metric": "营业收入",
+        "metric_id": "revenue",
+        "metric_raw": "营业收入",
+        "model": "p0-fake",
+        "observed_at": null,
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+        "period_end": "2026-12-31",
+        "period_grain": "annual",
+        "period_raw": "2026E",
+        "qualifiers": {},
+        "quality_status": "ok",
+        "reason_codes": [],
+        "reasons": [],
+        "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+        "scope": "company",
+        "seq": 0,
+        "source_rev": "3e473fa5b58e5cd3",
+        "subject": "600519.SH",
+        "subject_raw": "600519.SH",
+        "table_ref": {},
+        "unit": "元",
+        "unit_raw": "元",
+        "usable_for": [
+          "cite",
+          "compare",
+          "calculate"
+        ],
+        "value_num": "120",
+        "value_text": "120元"
+      }
+    ],
+    "known_at_basis": "document_publication_candidate",
+    "limit": 50,
+    "lint_version": "claims-v2-lint-4",
+    "offset": 0,
+    "origin": "evidence",
+    "packet_runs": [
+      {
+        "diagnostics": {
+          "parse_error": null,
+          "parse_failed": false,
+          "parse_truncated": false,
+          "parsed_items": 2
+        },
+        "method": "llm",
+        "packet_id": "7afe25cefb7fa18b4574eeda7ced10b2415fc2fa3a1b3eb450d34bd219e4ba68",
+        "reasons": [],
+        "records": 2,
+        "status": "completed"
+      }
+    ],
+    "packet_status": {
+      "completed": 1
+    },
+    "packets": 1,
+    "parse_rev": "dc1b781c98e632b54ade1802ac6249cf9a372a1baedb1806df3b415d476c575f",
+    "pipeline_version": "evidence-pipeline-7",
+    "point_in_time_verified": false,
+    "purpose": "calculate",
+    "quality": {
+      "ok": 2
+    },
+    "run_id": "9f169203ed0a9277e48c69251ec49204993245daa6040e77938bc84ada213ab1",
+    "scope": {
+      "completeness_applies_to": "selected_source_scope_only",
+      "locators": [
+        "document"
+      ]
+    },
+    "source_rev": "3e473fa5b58e5cd3",
+    "total": 2,
+    "validation_current": true
+  },
+  "rejected": {
+    "reversed_period": "ValueError",
+    "wrong_revision": "KeyError"
+  }
+}

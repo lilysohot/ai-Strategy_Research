@@ -1,0 +1,85 @@
+{
+  "run_id": "7588deea29f7db3864f4ae3d42eb5156ad36983c86a61b3349ca094df2dd40e7",
+  "evidence_run_id": "09ccf64fa5f8c7c69ace657b75c32caa62dd1233bf925ea15add64847134c878",
+  "extractor_version": "material-semantics-2",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "undated_80b5a290",
+      "source_rev": "80b5a290df3d2ade",
+      "title": "5月：锂电铜箔和电子铜箔",
+      "material_type": "conference_minutes",
+      "research_domain": "industry",
+      "material_date": null,
+      "published_at": null,
+      "language": "zh-CN"
+    },
+    "speakers": [],
+    "items": [],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "document"
+      ],
+      "omitted_areas": [
+        "93716e1f2fc0235ffb4cba3396cf5408d227a275cddf163ed1e8b643696c5278:extraction_error:ValueError",
+        "da316cd50acc16b4ca5e454310cde65fdf0164fb228d24d058dc4a26b2fc5ff2:extraction_error:ValueError"
+      ],
+      "unknowns": [
+        "material_date"
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "93716e1f2fc0235ffb4cba3396cf5408d227a275cddf163ed1e8b643696c5278",
+      "status": "failed",
+      "records": 0,
+      "reasons": [
+        "extraction_error:ValueError"
+      ],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 32124,
+        "prompt_tokens": 5996,
+        "completion_tokens": 5216,
+        "reasoning_tokens": 61,
+        "finish_reason": "stop",
+        "content_chars": 14760,
+        "reasoning_chars": 265,
+        "validation_error": "evidence quote is not uniquely aligned"
+      }
+    },
+    {
+      "packet_id": "da316cd50acc16b4ca5e454310cde65fdf0164fb228d24d058dc4a26b2fc5ff2",
+      "status": "failed",
+      "records": 0,
+      "reasons": [
+        "extraction_error:ValueError"
+      ],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 42139,
+        "prompt_tokens": 3253,
+        "completion_tokens": 7298,
+        "reasoning_tokens": 42,
+        "finish_reason": "stop",
+        "content_chars": 20572,
+        "reasoning_chars": 174,
+        "validation_error": "evidence quote is not uniquely aligned"
+      }
+    }
+  ]
+}

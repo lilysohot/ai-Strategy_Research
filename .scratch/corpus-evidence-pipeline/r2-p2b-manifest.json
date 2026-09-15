@@ -1,0 +1,70 @@
+{
+  "version": "r2-p2b-private-offline-freeze-1",
+  "date": "2026-09-14",
+  "stage": "P2-B",
+  "status": "offline_technical_checks_passed_impact_review_pending",
+  "parent_stage_status": "P2_partial",
+  "p3_authorized": false,
+  "p0_manifest_sha256": "4e2c45ce216a942137f60b863e236ae46f3a8870317ebdbe9ead6342b4698076",
+  "p1_manifest_sha256": "a9477f7281287b0ce78b3fcc978b88fa5d48f5312094851e4e00d67cf2370603",
+  "p2a_manifest_sha256": "72d5eb692bf44ad7f5dd61fa82e1db3e8e8cce72ee2fa461014c991e9e990cbf",
+  "scope_sha256": "296db21dfd5ff9e890b5793767353060161e3a757453bf6718ad364c3583fc12",
+  "real_model_calls": 0,
+  "judge_calls": 0,
+  "real_market_calls": 0,
+  "new_real_model_budget": 0,
+  "postgres_access": "occurred_in_initial_unguarded_regression; impact_not_verified",
+  "test_schema_writes_and_deletions": true,
+  "supplied_document_reingestion": false,
+  "holdout_exposure": "not_verified_database_samples_not_logged; no_explicit_holdout_source_opening",
+  "protected_files_unchanged": 2336,
+  "protected_additions": 3,
+  "tests": {
+    "p1": 65,
+    "p2a": 73,
+    "p2b": 75,
+    "total_passed": 213,
+    "core_passed": 495,
+    "core_pg_skipped": 36,
+    "core_deselected": 1,
+    "platform_passed": 110,
+    "isolation_overlap_passed": 169,
+    "isolation_pg_skipped": 1
+  },
+  "snapshot_sha256": "847f3381a5c2f86a86b0efcde6ae79efceba7e9662e964962e69071a06b0133b",
+  "invalid_for_acceptance": [
+    "p2b-core-tests.json",
+    "p2b-platform-tests.json",
+    "p2b-isolation-tests.json"
+  ],
+  "superseded": [
+    "p2b-validation-final.xml"
+  ],
+  "limits": [
+    "synthetic_fake_replay_only",
+    "semantic_correctness_not_evaluated",
+    "no_real_model_budget_registry_or_token_time_caps",
+    "no_default_service_or_cli_wiring",
+    "P0-PG_formal_isolation_unverified",
+    "database_incident_requires_user_scoped_readonly_review_before_P3"
+  ],
+  "files": {
+    ".scratch/corpus-evidence-pipeline/test_r2_runtime_v1.py": "35838d2dc4ffa6a557e50a056f7030ac1ae1f7213e70594dfca7675e39f8b9f2",
+    ".scratch/corpus-evidence-pipeline/p2b_projection.py": "5cdc1fdda0e70540a847d47d374714c68fd5814ff6c890adcd0b9797836f1e61",
+    "plugins/corpus/_r2_runtime.py": "2f8f025177721b74038ea469ee34b55120ce7ac9bf7b35419b9d801f8bd0546b",
+    ".scratch/corpus-evidence-pipeline/p2b-isolation-guarded.json": "b833e5a927724d8c144e88d76c6840645bbd3387cb9e94110b4e339b4d77a853",
+    ".scratch/corpus-evidence-pipeline/p2b-core-tests.json": "32a69e58dfba18d954694f5b913629d37eecbb36a9fd57ea234c2cb527498049",
+    ".scratch/corpus-evidence-pipeline/p2b-validation-final.xml": "995c4830317da446ac90776399ec61881725dfc80b360493fff33e18c5394c36",
+    ".scratch/corpus-evidence-pipeline/p2b_guard.py": "e853eea7e6d013eb763e127e293344162e5b17baf9542343f275f7d03496fe27",
+    ".scratch/corpus-evidence-pipeline/r2-p2b-guard-incident.md": "30392f5c19ab9d1bc1ae52165edc56914fe4d335c98f91ed82b760686b19d52b",
+    ".scratch/corpus-evidence-pipeline/p2b-old-path-snapshot.json": "847f3381a5c2f86a86b0efcde6ae79efceba7e9662e964962e69071a06b0133b",
+    "plugins/corpus/_r2_plan.py": "644fab580b972acd744bb077a17b568d4a0430681b375e590168bcb164519070",
+    ".scratch/corpus-evidence-pipeline/p2b-platform-tests.json": "6d81c2fc3c2af490625c6a7464155903ca7a7f701d8d98abe0c659d495288f3a",
+    "plugins/corpus/_r2_audit.py": "44f7277589ef227077d3d189b5422a1adf027be2f2047471ae7d1cb39c2c18a2",
+    ".scratch/corpus-evidence-pipeline/r2-p2b-change-scope.json": "296db21dfd5ff9e890b5793767353060161e3a757453bf6718ad364c3583fc12",
+    ".scratch/corpus-evidence-pipeline/p2b-core-guarded.json": "0e762e2553d08f6ac94457e846e2b8623a7045e739a17a9ed1459561e087172b",
+    ".scratch/corpus-evidence-pipeline/p2b-platform-guarded.json": "6d81c2fc3c2af490625c6a7464155903ca7a7f701d8d98abe0c659d495288f3a",
+    ".scratch/corpus-evidence-pipeline/p2b-isolation-tests.json": "f27bed9ee9d3aee55f3133a8ff98380dcd4afb3f60cba84a134ac16ff445bbfb",
+    ".scratch/corpus-evidence-pipeline/p2b-validation-guarded-final.xml": "247aedcf6795eb19db8af4c6c60fd081f8e3309a3956b97f004b154ceffae67a"
+  }
+}

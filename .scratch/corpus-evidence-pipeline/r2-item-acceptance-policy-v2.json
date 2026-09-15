@@ -1,0 +1,62 @@
+{
+  "schema_version": "r2-item-acceptance-policy-v2",
+  "scorer_version": "material-item-contract-scorer-2",
+  "frozen_at": "2026-09-14",
+  "purpose": "为最后一次 R2 item 优化冻结前瞻验收口径；不得用于追溯改写 v12 的原始 scorer 结论。",
+  "split": "development",
+  "bindings": {
+    "source_gold": {
+      "path": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+      "sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b"
+    },
+    "micro_gold": {
+      "path": "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json",
+      "sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5"
+    },
+    "diagnostic_baseline_report": {
+      "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-09b119120285666aac93fcb41ce1f8c0ebe3c4bb563f50a964bdc30b0b301b40.json",
+      "sha256": "ac6acd4aee29aa13e4e2903c3b217692093521135def82b9a6c05489d06b151a"
+    },
+    "v12_budget": {
+      "path": ".scratch/corpus-evidence-pipeline/r2-v12-atomic-items-budget-v6.json",
+      "sha256": "d6a3e15300255f4a73e9ed6e8a7bc712fdc9b996f1e92b02c3aea545b49d47ca"
+    }
+  },
+  "item_identity": {
+    "method": "one_to_one_unique_containment_then_normalized_similarity",
+    "normalized_similarity_min": 0.5,
+    "unique_containment": "A shorter exact quote may identify a longer gold quote only when it maps to exactly one gold item in the exhaustive scope.",
+    "predicted_evidence_must_be_unique_in_packet": true
+  },
+  "field_contract": {
+    "exact": [
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "polarity",
+      "identity_status"
+    ],
+    "speaker_role": "canonical_category",
+    "behavior_status": "exact_for_behavior_only",
+    "temporal_frame": "exact_for_behavior_only",
+    "value": "exact_when_gold_is_explicit_and_null_when_gold_is_null",
+    "unknown_fields": "score_normalized_uncertainty_axes; do_not_require_free_text_set_equality"
+  },
+  "thresholds": {
+    "item_recall": 1.0,
+    "item_precision": 1.0,
+    "semantic_accuracy": 0.9,
+    "speech_structure_accuracy": 1.0,
+    "attribution_accuracy": 1.0,
+    "polarity_accuracy": 1.0,
+    "condition_risk_retention": 1.0,
+    "behavior_state_temporal_accuracy": 1.0,
+    "value_accuracy": 1.0,
+    "evidence_unique_alignment": 1.0,
+    "unknown_axis_recall": 1.0,
+    "unsupported_statement_precision": 0.95,
+    "critical_errors": 0
+  },
+  "stop_rule": "If the final bounded item optimization misses any threshold, stop the current R2 design and do not run relation extraction."
+}

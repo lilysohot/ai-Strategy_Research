@@ -1,0 +1,617 @@
+{
+  "run_id": "44e1f77ed5e3848ba29c77f6965cbf62bc1ba706b393c84472b7a93e0f13f9e9",
+  "evidence_run_id": "d6dace3e782315e921f34ab7aef013995588745b8a8a927081b616d019682593",
+  "extractor_version": "material-semantics-2",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-08-13_174b6462",
+      "source_rev": "174b64628f35aca6",
+      "title": "2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "material_date": "2026-08-13",
+      "published_at": "2026-08-13",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_eb8c8684713c",
+        "display_name": "长江证券",
+        "role": "研报作者",
+        "identity_status": "explicit"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_578222f80c40fe5d",
+        "text": "化工行业兼具周期与成长属性，子行业景气周期相互错位，使板块长期具备结构性投资机会。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "化工行业兼具周期与成长属性",
+            "start": 116,
+            "end": 129
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_31b6d79c259707fd",
+        "text": "化工品景气的本质是盈利改善，主要观察价差变化；原料价格波动较大时应重点观察产品价差。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "化工品景气的本质是盈利改善，主要观察价差变化",
+            "start": 221,
+            "end": 243
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_cdb1436bcf8b3baf",
+        "text": "仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化。",
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "仅当成本相对稳定、价格与价差走势趋于一致时",
+            "start": 265,
+            "end": 286
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e301be7d6060794b",
+        "text": "研究某一子行业应明确其下游用途，梳理供需的变化；行业筛选应转向基于供需平衡表的自下而上比较。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "逐步转向基于供需平衡表的自下而上比较",
+            "start": 390,
+            "end": 408
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d39c8a9815eeca93",
+        "text": "随着中国经济增长回归新常态，全球GDP增速放缓，需求对景气的拉动弱于以往。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "需求对景气的拉动弱于以往",
+            "start": 459,
+            "end": 471
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7c3a505320b50f27",
+        "text": "未来的着眼点更应该放在供给的增速，如有色行业的铜、铝，化工行业的钾肥、制冷剂等。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "未来的着\n眼点更应该放在供给的增速",
+            "start": 472,
+            "end": 489
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_8e77eae2e28e1dcc",
+        "text": "具有贸易属性的化工品需求应立足全球；供给应重点关注国内新增产能。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "供给应重点关注国内新增产能",
+            "start": 613,
+            "end": 626
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_73799bc0ba6f029c",
+        "text": "部分行业开工率较高但景气未明显上升，因扩产主体为大型生产或先进装置，推高了开工率中枢。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "推高了开工率中枢",
+            "start": 685,
+            "end": 693
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fb6060180b142785",
+        "text": "有的行业80-90%的开工率即便接近历史较高水平，也不一定代表供给紧张，行业景气未必上升。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "negated",
+        "value": "80-90%",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "也不一定代表供给紧张，行业景气未必上升",
+            "start": 720,
+            "end": 739
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ebaadc761994da35",
+        "text": "价格底部主要改善长期赔率，并不一定等同于中期拐点；中期投资更应关注供需改善的情况和价差扩张。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "mixed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "并不一定等同于中期拐点",
+            "start": 790,
+            "end": 801
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_647378d63032a359",
+        "text": "价格处于高位也不必然构成卖点，关键仍是对未来景气趋势的判断。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "negated",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "价格处于高位也不必然构成卖点",
+            "start": 827,
+            "end": 841
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c0f4a6387988ba61",
+        "text": "未来的新增产能不应否定当前明确的景气阶段；只要未来一至两年供需持续改善，行业仍具备周期投资价值。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "只要未来一至两年供需持续改善，行业仍具备周期投资价值",
+            "start": 948,
+            "end": 974
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e8682d23e5939084",
+        "text": "对于处于景气上行期的行业，应优先比较相关公司产品产能与市值的弹性，并综合考察盈利情况、成本优势。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "应优先比较相关公司产品产能与市值的弹性",
+            "start": 1019,
+            "end": 1038
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_eddf5cceb05c545a",
+        "text": "若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性。",
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "若公司多个产品同时具有涨价弹性",
+            "start": 1055,
+            "end": 1070
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ea44a957993e6733",
+        "text": "思路一：跟踪研究后续供需关系的变化，预测价格的趋势，继而做出决策，而不因当前市值位置做出决断。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "而不因当前市值位置做出决断",
+            "start": 1162,
+            "end": 1175
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_de8af024f6493d05",
+        "text": "思路二：参考产品高位的历史价格，分析未来触及的可能性和空间。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "参考产品高位的历史价格，分析未来触及的可能性和空间",
+            "start": 1178,
+            "end": 1203
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b199b35437ac039b",
+        "text": "风险提示：供给端政策执行力度不及预期。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "供给端政策执行力度不及预期",
+            "start": 1213,
+            "end": 1226
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_a147de4daeb912c8",
+        "text": "风险提示：海外需求不及预期。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "海外需求不及预期",
+            "start": 1229,
+            "end": 1237
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_cd21591ea24af813",
+        "text": "风险提示：全球地缘政治动荡。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "全球地缘政治动荡",
+            "start": 1242,
+            "end": 1250
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      },
+      {
+        "item_id": "itm_664f671aa9421e81",
+        "text": "风险提示：技术风险。",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_eb8c8684713c",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "技术风险",
+            "start": 1253,
+            "end": 1257
+          }
+        ],
+        "unknown_fields": [
+          "numeric_value"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "relation_id": "rel_5bccf383f5902a70",
+        "type": "conditions",
+        "from_item": "itm_cdb1436bcf8b3baf",
+        "to_item": "itm_31b6d79c259707fd",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "仅当成本相对稳定、价格与价差走势趋于一致时，产品价格才可代表景气的变化",
+            "start": 265,
+            "end": 300
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_6ef74a89d7d0dcf5",
+        "type": "elaborates",
+        "from_item": "itm_fb6060180b142785",
+        "to_item": "itm_73799bc0ba6f029c",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "有\n的行业80-90%的开工率即便接近历史较高水平，也不一定代表供给紧张",
+            "start": 694,
+            "end": 730
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_817ee6a2dcc1182b",
+        "type": "elaborates",
+        "from_item": "itm_eddf5cceb05c545a",
+        "to_item": "itm_e8682d23e5939084",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "若公司多个产品同时具有涨价弹性，还需评估多个产品的综合业绩弹性",
+            "start": 1055,
+            "end": 1086
+          }
+        ]
+      },
+      {
+        "relation_id": "rel_c4390a348a39a2e0",
+        "type": "elaborates",
+        "from_item": "itm_de8af024f6493d05",
+        "to_item": "itm_ea44a957993e6733",
+        "provenance": "source_explicit",
+        "evidence": [
+          {
+            "source_rev": "174b64628f35aca6",
+            "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+            "locator": "3",
+            "quote": "有两种思路可供参考",
+            "start": 1120,
+            "end": 1129
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "scoped_locators": [
+        "3"
+      ],
+      "omitted_areas": [],
+      "unknowns": []
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "25e44cc9136ec5bd186871eb5774c80c45460b93cbe3e786c55867dc9264e1f9",
+      "status": "completed",
+      "records": 20,
+      "reasons": [],
+      "diagnostics": {
+        "adapter_version": "corpus-chat-3",
+        "model": "glm-5.3-flash",
+        "max_output_tokens": 8192,
+        "timeout_seconds": 60.0,
+        "reasoning_effort": "low",
+        "thinking": null,
+        "attempts": 1,
+        "duration_ms": 19317,
+        "prompt_tokens": 1695,
+        "completion_tokens": 2845,
+        "reasoning_tokens": 32,
+        "finish_reason": "stop",
+        "content_chars": 8336,
+        "reasoning_chars": 136
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "db": "disabled before native driver",
+  "exit_code": 0,
+  "files": [
+    ".scratch/corpus-evidence-pipeline/test_p0_baseline.py"
+  ],
+  "real_corpus_tests": "excluded",
+  "records": [
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_valid_baseline_passes",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[plugins/example.py-modify]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[plugins/example.py-delete]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[plugins/new.py-add]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[response.json-modify]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[response.json-delete]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[protected-paths.json-modify]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[workspace-code.patch-modify]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_drift_fails_closed[baseline-manifest.json-modify]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_rehashed_manifest_still_requires_external_pin",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_runtime_drift_fails[head]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_runtime_drift_fails[environment]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_manifest_paths_cannot_escape[../escape]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_manifest_paths_cannot_escape[/etc/passwd]",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_symlink_escape_rejected",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_write_once_preserves_previous_result",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_service_audit_ignores_only_private_method_body",
+      "outcome": "passed",
+      "when": "call"
+    },
+    {
+      "nodeid": ".scratch/corpus-evidence-pipeline/test_p0_baseline.py::test_public_snapshot_control",
+      "outcome": "passed",
+      "when": "call"
+    }
+  ],
+  "suite": "guard"
+}
