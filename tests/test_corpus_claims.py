@@ -18,7 +18,6 @@ LLM 全程**注入假实现**，不发真实请求。
 from __future__ import annotations
 
 import json
-import textwrap
 import uuid
 from collections.abc import Callable
 from decimal import Decimal
@@ -53,8 +52,6 @@ from plugins.corpus.claims import (
 )
 from plugins.corpus.service import CorpusService, _dedup_claims, dsn
 
-SCRATCH_SCHEMA = "corpus_d2check"
-
 FAKE_RESPONSE = json.dumps(
     [
         {
@@ -80,47 +77,10 @@ FAKE_RESPONSE = json.dumps(
 )
 
 
-def _scratch_url(admin: str, schema: str = SCRATCH_SCHEMA) -> str:
+def _scratch_url(admin: str, schema: str) -> str:
     options = quote(f"-c search_path={schema},public")
     sep = "&" if "?" in admin else "?"
     return f"{admin}{sep}options={options}"
-
-
-@pytest.fixture(scope="module")
-def scratch_dsn():
-    admin = dsn()
-    try:
-        psycopg.connect(admin, connect_timeout=5).close()
-    except psycopg.OperationalError as exc:  # pragma: no cover - 环境相关
-        pytest.skip(f"PG 不可用，跳过 D2 测试：{exc}")
-
-    with psycopg.connect(admin, autocommit=True) as conn:
-        conn.execute(f'DROP SCHEMA IF EXISTS "{SCRATCH_SCHEMA}" CASCADE')
-        conn.execute(f'CREATE SCHEMA "{SCRATCH_SCHEMA}"')
-    try:
-        yield _scratch_url(admin, SCRATCH_SCHEMA)
-    finally:
-        with psycopg.connect(admin, autocommit=True) as conn:
-            conn.execute(f'DROP SCHEMA IF EXISTS "{SCRATCH_SCHEMA}" CASCADE')
-
-
-@pytest.fixture(scope="module")
-def tiny_corpus(tmp_path_factory):
-    directory = tmp_path_factory.mktemp("d2_corpus")
-    (directory / "2026-09-09_D2抽取验证.md").write_text(
-        textwrap.dedent(
-            """
-            # D2 抽取验证
-
-            贵州茅台（600519.SH）2026H1 营业收入约 1741 亿元，同比增长 1.3%。
-            目标价 1888 元，维持增持评级。
-
-            免责声明：本报告未经书面许可不得转载。
-            """
-        ).strip(),
-        encoding="utf-8",
-    )
-    return directory
 
 
 # ── 分级 ─────────────────────────────────────────────────────────
@@ -193,12 +153,10 @@ def test_extract_from_block_keeps_locator_for_traceability() -> None:
     assert all(c.doc_id == "2026-09-09_abcdef12" for c in claims)
 
 
-# ── 端到端（临时 schema） ──────────────────────────────────────
-def test_end_to_end_extract_and_query(scratch_dsn, tiny_corpus) -> None:
-    svc = CorpusService(scratch_dsn)
-    svc.init_db()
-    ingest = svc.ingest_dir(tiny_corpus)
-    assert ingest.added >= 1, ingest.as_dict()
+# ── 端到端（独立 schema） ──────────────────────────────────────
+def test_end_to_end_extract_and_query(e2e_svc) -> None:
+    """直插 documents/blocks：I2-7 写路径已代理引擎链路，ingest_dir 走守卫。"""
+    svc = e2e_svc
 
     stats = svc.extract_legacy_claims(llm=lambda prompt: FAKE_RESPONSE)
 
@@ -221,30 +179,39 @@ def test_end_to_end_extract_and_query(scratch_dsn, tiny_corpus) -> None:
         assert fetched is not None, "claim 的 locator 必须能取回原文块"
 
 
-def test_extract_is_idempotent(scratch_dsn, tiny_corpus) -> None:
+def test_extract_is_idempotent(fresh_svc) -> None:
     """重跑不得重复入库（UNIQUE + ON CONFLICT DO NOTHING）。"""
-    svc = CorpusService(scratch_dsn)
+    svc = fresh_svc
+    first = svc.extract_legacy_claims(llm=lambda prompt: FAKE_RESPONSE)
+    assert first.claims >= 1, first.as_dict()
     before = len(svc.legacy_claims_of(limit=100))
     svc.extract_legacy_claims(llm=lambda prompt: FAKE_RESPONSE)
     after = len(svc.legacy_claims_of(limit=100))
     assert after == before, "重跑抽取产生了重复 claim"
 
 
-def test_single_block_failure_does_not_stop_batch(scratch_dsn, tiny_corpus) -> None:
+def test_single_block_failure_does_not_stop_batch(fresh_svc) -> None:
     """LLM 单块失败只记 failure，不得中断整批（与 ingest 同一条纪律）。"""
 
     def flaky_llm(prompt: str) -> str:
         raise RuntimeError("LLM 超时")
 
-    svc = CorpusService(scratch_dsn)
-    # skip_existing=False：本测试要验证「LLM 失败也记 failure 不中断」，
-    # 但同一 scratch 库里前面的测试已抽取过这些块 —— 不关掉断点续跑，
-    # 它们会被直接跳过，failed 恒为 0，验证就失效了。
-    stats = svc.extract_legacy_claims(llm=flaky_llm, retry_attempts=1, skip_existing=False)
+    svc = fresh_svc
+    stats = svc.extract_legacy_claims(llm=flaky_llm, retry_attempts=1)
 
     assert stats.failed >= 1, stats.as_dict()
     assert stats.failures, "失败必须带 locator 与原因，便于重试"
     assert "locator" in stats.failures[0]
+
+
+# ── I2-7 写路径守卫：CORPUS_I2_DSN 未配置则拒绝一切 ingest（fail-closed） ──
+def test_ingest_dir_requires_i2_sandbox_dsn(tmp_path, monkeypatch) -> None:
+    """旧直写兜底已删除：ingest_dir 只能经 CORPUS_I2_DSN 走 preparation 引擎。"""
+    monkeypatch.delenv("CORPUS_I2_DSN", raising=False)
+    (tmp_path / "note.md").write_text("占位来源", encoding="utf-8")
+    svc = CorpusService("postgresql://unused")
+    with pytest.raises(RuntimeError, match="CORPUS_I2_DSN"):
+        svc.ingest_dir(tmp_path)
 
 
 def test_retry_recovers_from_transient_failure() -> None:
@@ -295,12 +262,23 @@ def _claim_json(text: str, period: str = "2026H1") -> str:
     )
 
 
-@pytest.fixture
-def fresh_svc(tmp_path):
-    """独立 schema + 独立文档的 ``CorpusService``：用例之间零共享状态。
+E2E_DOC = "2026-09-09_d2e2e"
+E2E_BLOCKS = (
+    (
+        1,
+        "1",
+        "贵州茅台（600519.SH）2026H1 营业收入约 1741 亿元，同比增长 1.3%。"
+        "目标价 1888 元，维持增持评级。",
+    ),
+)
 
-    不走 ``ingest_dir``（切块规则会变，拿不稳"到底几个候选块"），直接写
-    ``documents`` / ``blocks``，保证恰好 :data:`COMMIT_BLOCKS` 个候选块。
+
+def _fresh_corpus_svc(doc_id: str, title: str, blocks: tuple):
+    """独立 schema + 直插 documents/blocks 的 ``CorpusService``：用例间零共享状态。
+
+    不走 ``ingest_dir``：I2-7 写路径已代理引擎链路（测试侧无 ``CORPUS_I2_DSN``），
+    且切块规则会变，拿不稳「到底几个候选块」——直接写 ``documents`` /
+    ``blocks``，保证恰好 ``len(blocks)`` 个候选块。
     """
     admin = dsn()
     try:
@@ -322,26 +300,38 @@ def fresh_svc(tmp_path):
                     " status, char_count, block_count, published)"
                     " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (
-                        COMMIT_DOC,
-                        "D2 落库验证",
-                        "data/corpus/d2commit.md",
+                        doc_id,
+                        title,
+                        f"data/corpus/{doc_id}.md",
                         uuid.uuid4().hex,
                         "text/markdown",
                         "ok",
                         90,
-                        len(COMMIT_BLOCKS),
+                        len(blocks),
                         "2026-09-06",  # as_of 兜底的来源（§5.1）
                     ),
                 )
                 cur.executemany(
                     "INSERT INTO blocks (doc_id, seq, locator, text) VALUES (%s,%s,%s,%s)",
-                    [(COMMIT_DOC, seq, locator, text) for seq, locator, text in COMMIT_BLOCKS],
+                    [(doc_id, seq, locator, text) for seq, locator, text in blocks],
                 )
             conn.commit()
         yield svc
     finally:
         with psycopg.connect(admin, autocommit=True) as conn:
             conn.execute(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE')
+
+
+@pytest.fixture
+def fresh_svc():
+    """三候选块文档：覆盖「钱不能白花」逐块落库/熔断语义。"""
+    yield from _fresh_corpus_svc(COMMIT_DOC, "D2 落库验证", COMMIT_BLOCKS)
+
+
+@pytest.fixture
+def e2e_svc():
+    """单候选块文档：端到端「一块抽出 2 条 claim」的原始查询语义。"""
+    yield from _fresh_corpus_svc(E2E_DOC, "D2 端到端验证", E2E_BLOCKS)
 
 
 def test_block_claims_survive_a_later_failure(fresh_svc) -> None:
@@ -1313,7 +1303,9 @@ def test_commit_block_with_mixed_null_and_str_periods(fresh_svc) -> None:
         ensure_ascii=False,
     )
 
-    stats = fresh_svc.extract_legacy_claims(llm=lambda prompt: payload, retry_attempts=1, sleep_between=0)
+    stats = fresh_svc.extract_legacy_claims(
+        llm=lambda prompt: payload, retry_attempts=1, sleep_between=0
+    )
     assert stats.failed == 0, stats.as_dict()
     rows = fresh_svc.legacy_claims_of(limit=100)
     assert {(r["metric"], r["period"]) for r in rows} == {

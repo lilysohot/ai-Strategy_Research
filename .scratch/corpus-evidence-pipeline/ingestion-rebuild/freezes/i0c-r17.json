@@ -1,0 +1,55 @@
+{
+  "snapshot_id": "i0c-r17",
+  "revision": "r17",
+  "phase": "i0c",
+  "task": "M5 independent review executed (matrix 20/20 MATRIX OK, X1-X15) + U sign-off + F1 test-hygiene fix rebind",
+  "binding": {
+    "review_report": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/review.md": "4f97b5040a54e3330c4f95b4e1257336c37215adc3b01789b5d66cde6b510689",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/cross-check-evidence.txt": "5cd0d5b5a0e177c90383b47088b2385c93892133d47e160f1ed6ae09bcb058fe",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence-postfix/recheck.txt": "54cde9a3a3199486d4a2ff2e35bc61ba8c5cb7301c54e660f8008027512c6250",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence/index.txt": "569c9757dee824976dfd3804ffd01d968806720970150eefcbfbfacce5be9318",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence/matrix-summary.json": "1cc7962fb191d3b77b5867d49ef2719dacfa8ec4d0f56fbd4449537086f9d17a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence/environment.txt": "c508af569646f006ad575d456dcfbdd674bfcc084dc421a66b140278236401e0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence/postflight-hashes.txt": "072827f46fa2f363f1184108ed63c619511292537c20b6736a592981328a5da5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence-aborted-r15-pregate/README-ABORTED.txt": "a49bed2a0646d455576e3fd198dee2c8ae35c49a8768230e1c3040b727722780",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence-aborted-r15-pregate/index.txt": "c791404772308978a6403ac69882315ecfbacc5da2d7389e62fcfaaa46017a18",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence-aborted-r15-pregate/freeze-validator.log": "e53fbee48ea3d97298e0d39a1743dfff12cc582bacf3ad2504962ada5e124fa6",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence-aborted-r15-pregate/environment.txt": "c508af569646f006ad575d456dcfbdd674bfcc084dc421a66b140278236401e0"
+    },
+    "tests": {
+      "tests/test_corpus_gap_dispositions.py": "43a6cd6cd4dfec83490d6bae0a797981eaa933655c0d3693459fa6aa47a40ec9"
+    },
+    "docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "5b0cad4435e03fca63aa243a16e082982badf768e7d644a264af047e59c160fd",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "5c13d78dcf3a361ce2c9696a4c3660a72db64755952bd2d9bb7a2c80744f31e8"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "9c77001d88f98e1f03da2f6a03069528637b52480af8541277ed8e4b2ea03ea9"
+    },
+    "freeze_generator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/m5_review_signoff_freeze.py": "bdbd1a47e5f110b0ea68a8f6af9c9f6c6800b4253f5ea5aafad0332b49054426"
+    }
+  },
+  "corrections": {
+    "M5_release": "M5 放行：复核包 v2（锚点 r15）矩阵 20 块全绿零 skip（publication 17 / repository 18 / authority 8 / cli_isolation 5 / consumers 19 / cli 4 / i28-i24 6 / fullchain 12 / gap_dispositions 13 / i1 业务 188 / guard 19），前置门 4/4、运行后零漂移门过、装置自证 SELFTEST_OK，交叉核验 X1—X15 全部符合预期。",
+    "U_signoff": "U 于 2026-09-18 签认 M5 放行（依据 U 明确指令「独立复核 + U 签认」）。",
+    "independence_deviation": "复核执行者 = I0—I2 制备方会话，不满足复核包 §9「全新会话」要求；已在 review.md §0 显著登记，并由 U 在签认时明确接受；若 U 不再认可，M5 立即回到 not_declared 并另派复核人。",
+    "F1": "复核发现（P2 测试卫生）：test_corpus_gap_dispositions.py 直接 json.loads(stdout) 被 pymupdf 一次性提示行污染 → 单独运行/被 -k 选中时假红；修复为 _cli_json() 从首个 { 解析，修复后逐用例单独运行 + 整文件 13 + 组合面 96 全绿，证据 evidence-postfix/recheck.txt。",
+    "F2": "复核发现（P3 备料缺陷）：复核包 v1 锚点 i0c-r13 与 import-smoke 固定计数在 r15 后过时；首次矩阵调用被前置门（绑定零漂移门）正确拦下（证据 evidence-aborted-r15-pregate/）。处置：包 v2 + i0c-r16 重绑，未放宽任何既有块计数。",
+    "F3": "既有状态（非本轮引入）：validate_i1_freeze.py 对 i1-r3 的工作区绑定自 I0-C/I2 起失配；M5 矩阵只以 validate_i0c_freeze.py 为冻结门，建议 I3 前置修订理顺。"
+  },
+  "notes": [
+    "本轮无实现（plugins/）改动：F1 只改测试的 stdout 解析，断言与用例数不变。",
+    "证据面冻结：矩阵 evidence 关键件 + 交叉核验原始输出 + F1 复验输出一并绑定；重跑 verify_matrix.py 必须产出逐字节相同的 matrix-summary.json，否则视为漂移。",
+    "生产库 I4 前零写入；本轮真库动作仅限 i2_sandbox_corpus 的 corpus schema。",
+    "I3 前置：M5 已放行，但 I3 仍须先做 I3-0/I3-2（评分器与预期冻结）；I3-1 另需其 F1 前置（已闭环）。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18；独立性偏差已登记并由 U 接受）",
+  "created_at": "2026-09-18T13:19:58+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r16",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r16.json",
+    "sha256": "76483697de59cda4f8589cf8d2d5e12de5d204a4691ee77db1748927473fba1f"
+  }
+}

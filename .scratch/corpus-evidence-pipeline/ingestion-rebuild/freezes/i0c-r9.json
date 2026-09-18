@@ -1,0 +1,51 @@
+{
+  "snapshot_id": "i0c-r9",
+  "revision": "r9",
+  "phase": "i0c",
+  "task": "I2-8 consumer wiring (2) + I2-4 CLI six duties: version handles cv2:<build_id>/chunk:<chunk_id>, archive_required for legacy handles, coverage three axes, new-chain audit, CLI plan/build/check/publish/status/rebuild-plan with exit codes and operator record",
+  "binding": {
+    "implementation": {
+      "plugins/corpus/cli.py": "a2af229b15d905767044f6a28e88af96bcbabee581c68bacc502483348fcc891",
+      "plugins/corpus/audit.py": "1641285b3d7352fd7fa71de5103063c01c230c79db28823d64ce8e2cd0a014d0",
+      "plugins/corpus/service.py": "6e6442c630ca90fde5283af2bee2dd09e3fbbffca6ce66a59f0292c8332afa59",
+      "plugins/corpus/preparation/read_pg.py": "4e02799994069f7ddd22a6921deab26cccaf13eb7f639038e02a8f0e5cd5bca1",
+      "plugins/corpus/preparation/search_pg.py": "a88711ab5cb430171c95671ed656e7972e59159beb831c05024f274bf6d36a5d",
+      "plugins/corpus/preparation/engine.py": "f7e117c9b93e8f48c8ea34c14d84b4536e03a36f15e0c146922fb0c8eb9ad046",
+      "plugins/corpus/preparation/repository_pg.py": "e7d0121cb266d47f126e046be2f7f2b68db940a71dc15b53cb32335de369eb17",
+      "plugins/tools/corpus_search.py": "1761ef32baf74f3789ba4bb40d3d10ba250462534056d208618b7e8997a7c378",
+      "plugins/tools/corpus_fetch.py": "369a6291fa7f5d680fbebe33130490ded88be07b79ad16909dd5dc9c76c6e162"
+    },
+    "tests": {
+      "tests/test_corpus_consumers_pg.py": "98b77b755598aee53fc0d82d843f65d172f6120daf4ddd38ac5fe2f1955a1331",
+      "tests/test_corpus_cli.py": "e4c0d8ec249783d6eb1e8bd349b7882fc3f0d957e365865e4f5500fdeb27a7fb",
+      "tests/test_corpus_cli_pg.py": "882de1b7579f226a5ac1e81ac274d973f04c2890396ce81d5302b760298b129e",
+      "tests/test_corpus_coverage.py": "b9b091e9af87f79a5acb4cfc2cb2d757ea251304ec60e9dbb489da4ee4c89243"
+    },
+    "docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "abcf3c5808e97c65f1c00f235c7ecc982738b0936bd124a29c134f6a6e9d8100",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "6dfe76127be7644efb091e75af63ed5608d9e141380bf0901f8a87e1db37690a"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "cc1c68ba1c314fd855a21f4a5f42e06ad122ca15429a0ab722efee9357918579"
+    }
+  },
+  "corrections": {
+    "I2-8": "消费者接线（二）：新增 preparation/read_pg.py 作为读侧唯一权威入口——句柄 cv2:<build_id> + chunk:<chunk_id>、跨发布取回原 build、旧句柄 LegacyHandleError(archive_required)、跨 build/坏哈希 UnknownHandleError、来源撤销 WithdrawnError、§7.3 coverage_snapshot 三轴；service.py 增加读链判定（CORPUS_READ_CHAIN=new|legacy|auto）并把 search/fetch/文档级读取/source_resolver/coverage 迁到新链（旧句柄不静默换正文）；search_pg 命中增加 snippet/published；tools corpus_search/corpus_fetch 返回版本句柄与coverage 对象，空命中改述『当前已发布范围无匹配』；audit.py 新增 audit_corpus_chain（活动版本决定/执行台账/引用闭合）并纳入 run_audit 冲突。",
+    "I2-4": "CLI 六职责：新增 plugins/corpus/cli.py（plan/build/check/publish/status/rebuild-plan），一律复用正式编排——check 调新增公开门 engine.check_build_publishable（与 publish 第 3 步同一实现），rebuild-plan 用新增 engine.current_revs() 与引擎同公式重算 parse_rev；publish 必填 --operator 且操作者/generation 落 PUBLISHED job 检查点（publish-record-1）；退出码 0/2/3/4/5 显式区分（目标拒绝以『拒绝』前缀路由到 3）。",
+    "coverage": "§7.3 三轴：search 空命中返回 query_status=no_match 且 availability=unknown，不自动转 absent；test_corpus_coverage 的旧『coverage==none』断言按新契约更新为 coverage 对象断言（契约升级而非放宽）。",
+    "golden_deferred": "golden.py 按 design-review 消费者矩阵路由 I3-5（retire_after_i3），本轮未迁移、未以新链验收替代，如实登记。"
+  },
+  "notes": [
+    "i0c-r8 保留历史字节，不追改；本修订登记 I2-8/I2-4 交付与读侧/CLI 新接口。",
+    "supersession 沿用：本修订绑定的路径由合并后的 i0c-current 按新哈希核验。",
+    "I2-8 后待执行：I2-6（authority + cli_isolation；前置 I2-4/8/5 已齐）；M5 仍 not_declared；生产库 I4 前零写入。",
+    "真库门 run 环境为 i2-verify 守卫 env + env -u PYTHONPATH（去宿主 IDE sitecustomize），写入仅限 i2_sandbox_corpus 的 corpus schema。"
+  ],
+  "m5_declaration": "not_declared（I2-1/2/3/4/5/7/8 完成；仍需 I2-6 与独立复核后方可声明 M5）",
+  "created_at": "2026-09-18T10:33:07+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r8",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r8.json",
+    "sha256": "b3e69d37e3da54ec757c22a6d5dce04c73aab2e2ceadeb01cedaaae2d23a2915"
+  }
+}

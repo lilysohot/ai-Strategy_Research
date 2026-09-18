@@ -1,0 +1,22 @@
+{
+  "artifact": "source-gold.jsonl",
+  "status": "awaiting_human_labeling",
+  "note": "架构 §12.1：人工确认原值/条件/评级/页段/cell、应保留或噪声、合法映射；不可用被测解析器输出自证正确。本文件只含 schema 与空记录；任何由模型生成的条目均视为无效金标（任务清单 §1 A 角色纪律）。",
+  "record_schema": {
+    "gold_id": null,
+    "source_id": null,
+    "kind": "value|condition|rating|noise|table_cell|mapping",
+    "locator": {
+      "page": null,
+      "element": null,
+      "char_range": null,
+      "cell": null
+    },
+    "expected": null,
+    "must_preserve": null,
+    "human_basis": null,
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "records": []
+}

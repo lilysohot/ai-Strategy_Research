@@ -1,0 +1,44 @@
+# I2-8 消费者接线（二）+ I2-4 CLI 六职责 验证矩阵（2026-09-18）
+
+环境：corpus-db 容器 host 543 → i2_sandbox_corpus（隔离演练库）；pg（生产）零触碰。
+说明：宿主 shell 注入 PYTHONPATH=<IDE>/shim（补丁 shutil.rmtree → 派生 node 子进程，守卫拒绝），
+      故统一 env -u PYTHONPATH（去污染，非放宽守卫）。
+
+## A 真库门（i2-verify 守卫 env，零 skip）
+$ env -u PYTHONPATH CORPUS_GUARD_PHASE=i2-verify CORPUS_GUARD_CONFIG=.../guards/i2-verify.json CORPUS_I2_DSN=postgresql://postgres:***@127.0.0.1:543/i2_sandbox_corpus PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest tests/test_corpus_consumers_pg.py tests/test_corpus_cli_pg.py tests/test_corpus_preparation_publication_pg.py tests/test_corpus_preparation_repository_pg.py -q -p plugins.corpus.preparation.guard_pytest -p no:cacheprovider --noconftest -c /dev/null
+..................................................                       [100%]
+50 passed in 14.41s
+exit=0
+
+## B 普通环境（语料全量 27 文件，含 CLI 参数/退出码与 coverage 契约）
+$ env -u PYTHONPATH uv run pytest <27 corpus 文件> -q -p no:cacheprovider
+........................................................................ [ 84%]
+.................................................................        [100%]
+424 passed, 1 skipped in 39.85s
+exit=0
+
+## C i1 守卫 env（preparation 11 文件，零网络/零 PG）
+........................................................................ [ 76%]
+............................................                             [100%]
+188 passed in 31.28s
+exit=0
+
+## D 静态门
+$ env -u PYTHONPATH uv run ruff check plugins apodex benchmarks workflows deploy tools scripts
+All checks passed!
+$ env -u PYTHONPATH uv run pyright plugins/corpus plugins/tools/corpus_search.py plugins/tools/corpus_fetch.py
+0 errors, 0 warnings, 0 informations
+$ env -u PYTHONPATH uv run python tools/import_smoke.py --stage 1
+
+[framework] 358/358 modules imported
+
+## E 冻结链
+$ env -u PYTHONPATH uv run python .scratch/.../freezes/validate_i0c_freeze.py
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+$ 重发 i0c-r9（write-once 反例）
+I2-8/I2-4 FREEZE FAILED: i0c-r9 已存在（write-once：不得重发或覆盖）
+
+## F 收尾：演练库零残留
+TRUNCATE TABLE
+0|0|0
+- 生产库 127.0.0.1:5432 / apodex / i0b2_verify_* 全程只读未触碰；零模型调用。

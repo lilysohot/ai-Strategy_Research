@@ -1,0 +1,51 @@
+{
+  "binding": {
+    "ddl": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql": "c4bc8aff02ccbc62f383356c7456200935e7dfe3a6a8158e6357dc800fb32eb9"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "be38ad12d975101681d42f5e478564f7eef51d640e8f0963e796819dcbeb50fd"
+    },
+    "implementation": {
+      "plugins/corpus/preparation/chunk.py": "3fd4e3c359e01ef1c7d76eda31e343091f266f02c9275e13dd8df0ed06cbac96",
+      "plugins/corpus/preparation/engine.py": "fd98e85a17a911973a6e68381428f3784e8968ead3e2327129dc6e179d295189",
+      "plugins/corpus/preparation/search_pg.py": "c0f8bd14c60e370500fec86de7dd501ba168e2587520c0c8273f9b8421d64efe"
+    },
+    "pg_tests": {
+      "tests/test_corpus_preparation_repository_pg.py": "afae0fecdca89bd3d737d035339fb7acc9825f0abcb16cc44631956ba7c12f53"
+    },
+    "plan_updates": {
+      "docs/plan/claims-market-closed-loop-plan.md": "1d22604ad868725009ead9cb6d0582cf96a15caeaf9ce4708f342284f12945aa"
+    },
+    "report_r3": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1-report-r3.json": "4e073da4663f4d6fdafb9b5ece89d2d210f0285a79cfa53fbe040d33cf3b2483"
+    },
+    "tests": {
+      "tests/test_corpus_preparation_contract.py": "5d3c1c86bfadd4639c18d8c15037c7b6b5a6b6dbe27683965bdab89e91850fb9"
+    },
+    "verify": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_verify.py": "98c523af881596cf6260bd6a2e9765ef375be53d1924db6ee971141519a14e42"
+    }
+  },
+  "corrections": {
+    "I2-3": "FTS 落地：engine.INDEX_REV_V2=\"index-2-zhcfg-2\"（分词配置 zhcfg 全词性→simple 映射含 m 数词 + chunk-2 索引文本规则含 % 归一化的组合版本；文本规则变更必须换新 index_rev，禁止同名配置沿用旧版本，index_rev 进入 build_id，升级即全量重建）；chunk.search_text 生成时 % →空格归一化（SCWS 将 \"23.5%\" 整体成词致裸数字查询不命中）；新增 search_pg.py（websearch_to_tsquery + 身份/领域/日期过滤，SQL 先按 admission 活动范围筛再 ts_rank 排名）；DDL r3 落 search_text/tsv/GIN 与 idx_admissions_domain 及日期 partial 索引（i2s1-report-r3.json 19 索引全集比对全 ok）；contract 测试补 index_rev 参与 build_id 断言；PG 真库 18 passed，分词召回边界按 SCWS 词典实证断言。"
+  },
+  "created_at": "2026-09-17T14:35:58+08:00",
+  "m5_declaration": "not_declared（I2-1/I2-2/I2-3 完成；仍需 I2-4/5/6/7/8 与真实 PG 并发/CLI/消费者验收后方可声明 M5）",
+  "notes": [
+    "i0c-r3 保留历史字节，不追改；本修订登记 I2-3（FTS）交付，并首次引入 validator supersession 规则：i1-r4 绑定中被 i0c-r2/r3/r4 显式重绑的文件（本轮 engine.py/chunk.py/test_corpus_preparation_contract.py）不再核 i1-r4 旧哈希，改由合并后 i0c-current 绑定核新哈希。",
+    "index_rev 由 index-2-zhcfg-1 升级为 index-2-zhcfg-2：索引文本生成规则变更（% 归一化）必须换新版本号；升级即全量重建（新 build 重算 search_tsv/GIN），旧 build 不受影响、不从旧库混查候选。",
+    "分词召回边界（SCWS 词典实证）：\"石英砂\" 为词典整词，\"石英股份\" 切为 石英+股份；查询 token 与文档 token 精确匹配，PG 测试按各自可命中词断言（石英→公司例，景气→行业例）。",
+    "test_corpus_preparation_contract.py 于本轮新增 index_rev 参与 build_id 断言（i1-r4 后演进），由本修订显式重绑。",
+    "I2-5（publication 双 worker）与 I2-7（消费者接线）前置齐备可启动；M5 仍 not_declared。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r3.json",
+    "sha256": "cbf9e5f9e1c2a42e67af472bff38755b4979a320ad90cf6d81965ba386275745",
+    "snapshot_id": "i0c-r3"
+  },
+  "phase": "i0c",
+  "revision": "r4",
+  "snapshot_id": "i0c-r4",
+  "task": "I2-3 FTS implementation: tokenizer config versioning (index_rev), search_text/GIN, identity/domain/date partial indexes, latest-revision-wins supersession in freeze validator"
+}

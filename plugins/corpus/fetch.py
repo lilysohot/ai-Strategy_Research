@@ -17,7 +17,17 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from plugins.corpus.ingest import DEFAULT_DB_PATH, connect
+#: 落盘路径。旧 sqlite 链只读保留（读侧迁移归 I2-8）。
+DEFAULT_DB_PATH = "data/corpus/index.db"
+
+
+def connect(db_path: str | Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
+    """打开语料库（外键约束显式打开）。从 ingest 退休内联，行为不变。"""
+    path = Path(db_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(str(path))
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
 
 
 @dataclass(frozen=True)

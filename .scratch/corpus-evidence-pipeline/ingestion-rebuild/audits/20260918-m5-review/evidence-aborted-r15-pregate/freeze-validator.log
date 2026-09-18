@@ -1,0 +1,5 @@
+I0C FREEZE CHECK FAILED: i0c-current.binding[review_package]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/README.md 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[review_package]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/cross-check.md 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[review_package]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/run_matrix.sh 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[review_package]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/verify_matrix.py 哈希失配或缺失
+i0c freeze verification FAILED: 4 error(s)

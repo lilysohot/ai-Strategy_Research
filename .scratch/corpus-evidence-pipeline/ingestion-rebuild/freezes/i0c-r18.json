@@ -1,0 +1,37 @@
+{
+  "snapshot_id": "i0c-r18",
+  "revision": "r18",
+  "phase": "i0c",
+  "task": "record report freeze revision (i0c-r17) in review.md and the master ledger",
+  "binding": {
+    "review_report": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/review.md": "86229e4399fd180f60d245af5eb82b1f2107cb9a1de0870b847c3893e0854001"
+    },
+    "docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "8651846d4f0ba4f94665ec29be65bbf4ebc1befcb976fc1ad580994657bef2e0",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "5c13d78dcf3a361ce2c9696a4c3660a72db64755952bd2d9bb7a2c80744f31e8"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "ccb901d1a792bfe6f97c7f96c1aff8df52fec35a4ba9c17d0074d5fd166e67ae"
+    },
+    "freeze_generator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/m5_review_signoff_r18_freeze.py": "aacd945770c05020f471322b2477b6b34ae3f837e53c6d61098ee079bb3611f8"
+    }
+  },
+  "corrections": {
+    "M5_release": "M5 放行与 U 签认（同 i0c-r17）——本修订仅补记冻结修订标识。",
+    "U_signoff": "U 于 2026-09-18 签认 M5 放行。",
+    "report_revision": "review.md 头部与总台账签认段补记「报告冻结修订 = i0c-r17」；无实现/测试/行为改动，只重绑报告与台账，保持「读到的结论 ↔ 验证的字节」可对应。"
+  },
+  "notes": [
+    "无 plugins/ 或 tests/ 改动；r17 的证据面绑定不变（未重绑即未改字节）。",
+    "冻结链：r18->r17->r16->r15->…->i0a5(M1)；validate_i0c_freeze.py 须 exit 0。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18；独立性偏差已登记并由 U 接受）",
+  "created_at": "2026-09-18T13:20:33+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r17",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r17.json",
+    "sha256": "258ded6f17f3abda6d201c697de05fcc534fd28c2e3b8eb31011dbc9267f484f"
+  }
+}

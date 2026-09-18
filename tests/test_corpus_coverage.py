@@ -2,7 +2,12 @@
 
 背景（此前的行为）：`corpus_search` 查不到时返回 `ok=true / count=0 / hits=[]`，
 与「检索成功但为空」长得一样，模型无法区分 ⇒ 反复重试，或去够一篇沾边的
-研报凑 evidence。现在空结果返回 `coverage="none"` + 明确的流程指令。
+研报凑 evidence。现在空结果返回 §7.3 三轴 ``coverage`` 对象 + 明确的流程指令。
+
+I2-8：``coverage`` 由未定义的 ``"none"`` 字符串升级为结构对象
+（``processing`` / ``query_status`` / ``availability`` / ``reason_codes``）——
+空命中只表述"该已查询范围无匹配"（``query_status=no_match``），
+**不自动转 absent**（``availability`` 仍为 unknown），见架构 §7.3。
 
 注：这里用 **monkeypatch 注入空结果**而不是构造一个"查不到的词"——
 中文分词会让看似不可能的查询命中语料（实测「…影子股份XYZ…」因"股份"二字命中），
@@ -43,7 +48,12 @@ def test_no_coverage_returns_explicit_signal(empty_corpus) -> None:
 
     assert payload["count"] == 0
     assert payload["hits"] == []
-    assert payload["coverage"] == "none", "无覆盖必须显式告知，不能与「检索成功」混同"
+    coverage = payload["coverage"]
+    assert isinstance(coverage, dict), "无覆盖必须显式告知，不能与「检索成功」混同"
+    assert coverage["query_status"] == "no_match"
+    # §7.3：自由文本 FTS 无命中不足以推断材料不存在 ⇒ 不自动转 absent
+    assert coverage["availability"] == "unknown"
+    assert coverage["reason_codes"]
 
 
 def test_no_coverage_tells_model_to_stop_and_switch_path(empty_corpus) -> None:

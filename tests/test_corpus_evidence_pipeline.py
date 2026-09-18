@@ -10,7 +10,6 @@ from docx import Document
 from plugins.corpus.derivation import derive
 from plugins.corpus.evidence import fingerprint, parse_evidence, split_spans
 from plugins.corpus.evidence_pipeline import EvidenceRun, build_evidence_run
-from plugins.corpus.ingest import parse_docx, parse_markdown
 
 
 def make_report(tmp_path):
@@ -75,9 +74,13 @@ def test_image_only_page_is_unknown_not_empty_success(tmp_path):
 
 
 def test_markdown_headings_and_word_tables_are_preserved(tmp_path):
+    # I2-7：旧 ingest.parse_markdown/parse_docx 已随写链退休；同样的
+    # 「结构保真」契约改由 parse_evidence 的 md/docx 路径兑现。
     path = tmp_path / "source.md"
     path.write_text("# Forecast\n## Revenue\n100\n", encoding="utf-8")
-    assert "## Revenue" in parse_markdown(path)[-1].text
+    md = parse_evidence(path)
+    assert "## Revenue" in md.pages[0].text
+    assert "Revenue" in md.packets[-1].context
     doc = Document()
     doc.add_heading("Forecast", level=1)
     table = doc.add_table(rows=2, cols=2)
@@ -85,7 +88,8 @@ def test_markdown_headings_and_word_tables_are_preserved(tmp_path):
     table.cell(1, 0).text, table.cell(1, 1).text = "Amount", "100"
     target = tmp_path / "source.docx"
     doc.save(target)
-    text = "\n".join(b.text for b in parse_docx(target))
+    docx = parse_evidence(target)
+    text = "\n".join(p.text for p in docx.packets)
     assert "Forecast" in text and "Amount | 100" in text
 
 
@@ -105,7 +109,12 @@ def test_run_roundtrip_and_no_unit_means_not_calculable(tmp_path):
 def _calculation_run(tmp_path):
     # Change only units via a real evidence source, not by trusting model-provided table_ref.
     path = tmp_path / "2026-08-16_600519.SH.md"
-    path.write_text("# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。", encoding="utf-8")
+    # I2-7：文件名日期前缀会被 _title_from_filename 剥掉、不再派生 published，
+    # 来源日期必须由正文显式给出（source_explicit 语义）。
+    path.write_text(
+        "# 600519.SH\n发布日期：2026-08-16。\n2025A 营业收入100元。2026E 营业收入120元。",
+        encoding="utf-8",
+    )
     import json
 
     payload = [
@@ -185,7 +194,7 @@ def test_database_versions_idempotence_and_backup_roundtrip(tmp_path):
 
     import psycopg
 
-    from plugins.corpus.evidence_pipeline import extract_evidence
+    from plugins.corpus.evidence_pipeline import build_evidence_run, extract_evidence
     from plugins.corpus.service import CorpusService, dsn
 
     admin = dsn()
@@ -208,7 +217,10 @@ def test_database_versions_idempotence_and_backup_roundtrip(tmp_path):
         service = CorpusService(urls[0])
         service.init_db()
         path = make_report(tmp_path)
-        first = service.extract_claims(path)
+        # R1：extract_claims 现由同源 units 投影（本测试的 scratch schema 无 corpus
+        # schema），改为直接走 parse_evidence 的 build_evidence_run 以继续覆盖
+        # save/load/backup 的版本幂等与往返。
+        first = build_evidence_run(path)
         second = extract_evidence(parse_evidence(path, packet_chars=300))
         for run in (first, first, second):
             service.save_evidence_run(run)

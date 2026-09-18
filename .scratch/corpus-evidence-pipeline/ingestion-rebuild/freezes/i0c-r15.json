@@ -1,0 +1,63 @@
+{
+  "snapshot_id": "i0c-r15",
+  "revision": "r15",
+  "phase": "i0c",
+  "task": "I2 full-chain independent review remediation (F1-F4 / RM-FC-0..8): gap disposition + coordinates, machine-readable gaps in check/status, coverage scoped",
+  "binding": {
+    "implementation": {
+      "plugins/corpus/preparation/gaps.py": "ea4714ae3438c4f006447096e126e544259b7a04a883af5e91c7eebecd705d1a",
+      "plugins/corpus/preparation/clean.py": "e81c303646db41553b0fa65db2b17fa9c6400614a23c18def3901f93d303f497",
+      "plugins/corpus/preparation/engine.py": "23a121ffcd46d179c07a2c04d07ab72b1c0022dc9e9cefbb37f5f1aaf1a6d4df",
+      "plugins/corpus/preparation/read_pg.py": "fb87a771974b0393075da7f2e3b602a3e120ff1a0916a6fcf8c7e296c98ef8e1",
+      "plugins/corpus/cli.py": "d02ea4044baa5a81f1320bffd6221c437a3e8b1d0b640bbc2cdc89d6a15320ed"
+    },
+    "tests": {
+      "tests/test_corpus_gap_dispositions.py": "c5997eac71880196f84bebc73256b5d02d4a06e39115e08810a6ddf2ab58b043"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-architecture.md": "f786277d88a9cd5c05d0d90f1bca8d7e2738a758e125bce1f5b9305e3d50151d",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "53490c39a828ca3fd81a9e5bd7f41aa3fdd96fd5316eb005aa9c791a34a1c57b",
+      "docs/plan/claims-market-closed-loop-plan.md": "2dec419d0042ff7b710326450142aae542379980f6cbf4ac073cdd8e8f8dce2c"
+    },
+    "review_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/review.md": "ea88c55b0fd46f0b85110a7866611e61092fb32024bb80dff91e2105234bb107",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/remediation-checklist.md": "717a18c1243e111c9f6e1177e73d693571174ec85eeee4a52e37b04d7e4ecc41",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py": "1ed78033176642d90fb0b1cfc2ea76014e7e2a0dc937ce138ec25b13b23118b8"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "b4ceff292d13aa9fa9c9274cd152afd26aab27e48cd9e782ff08504734243c30"
+    },
+    "freeze_generator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2_fullchain_remediation_freeze.py": "f3d583d6d4b55a2e05f52b9f883693f34406243750e8a102e4175ad42c165467"
+    }
+  },
+  "corrections": {
+    "RM-FC-0": "裁定（写入架构 §7.3/§9）：缺口分级 = A（disposition 默认分级表）+ C（缺口坐标化）组合；F4 命名以实现为准（corpus-status --build）。缺口台账形状不变（gap_regions/oversized_chunks 两键），缺口身份仍为 issue:<code>:<location>。",
+    "RM-FC-1": "F1：engine._verify_publication_ready 由「缺口非空恒拒」改为按 gaps 裁决——blocking 拒（文案保留 gap_regions）、acknowledged/可证范围外放行；acknowledged 缺口的依据（gap_policy_rev）与记录人（operator）写入 PUBLISHED job 检查点。",
+    "RM-FC-2": "F1-C：preparation/gaps.py 新增——码表/默认分级/恢复路径唯一来源；clean.CleanRegion 承载结构化坐标（page/element/char/unlocatable）。",
+    "RM-FC-3": "F2：corpus-check 被拒时输出结构化 gaps/gap_summary/recovery（原实测红转绿）。",
+    "RM-FC-4": "F2：corpus-status 输出 gaps/gap_summary/recovery 与缺口感知的 next（原实测红转绿）。",
+    "RM-FC-5": "F3：read_pg.DocumentEvidence/fetch_document 写明 \"\\n\" 拼接语义（非源文件字节还原），架构 §7.2 同步登记。",
+    "RM-FC-6": "F4：架构 §9 CLI 表 --job 用词作废，改为 --build（与实现一致）。",
+    "RM-FC-7": "提升项：corpus-plan 增加只读可发布性预检（同一分级实现；无 scope ⇒ 只可能更严）；coverage 补 published_with_gaps 计数与 gap_regions_present 理由码，processing 如实降为 scoped。",
+    "F1": "见 RM-FC-1/RM-FC-2（§7.3 scoped 不可达已解除）。",
+    "F2": "见 RM-FC-3/RM-FC-4。",
+    "F3": "见 RM-FC-5。",
+    "F4": "见 RM-FC-6。"
+  },
+  "notes": [
+    "回路基线：audits/20260918-i2-fullchain-review 12 项探针 10 passed/2 failed → 12 passed（2 红即 F2 的两条契约断言）。",
+    "官方 I2 六族真库门仍 71 passed 零 skip（未因新增缺口路径放宽；未修改六族测试文件）。",
+    "新增常驻回归 tests/test_corpus_gap_dispositions.py（真库 13 passed 零 skip）；普通环境非 PG 语料全量 595 passed / 5 skipped。",
+    "生产库 I4 前零写入；真库动作仅限 i2_sandbox_corpus 的 corpus schema。",
+    "M5 复核包（r14）的对象锚点应改绑 i0c-r15：本修订变更了 engine/cli/read_pg/clean 的实现字节。",
+    "既有状态（非本修订引入）：freezes/validate_i1_freeze.py 对 i1-r3 的工作区绑定自 I0-C/I2 起已失配，本修订未扩大该面；M5 复核矩阵只要求 validate_i0c_freeze.py。"
+  ],
+  "m5_declaration": "not_declared（本轮整改不改 M5 结论；待独立复核 + U 签认）",
+  "created_at": "2026-09-18T13:06:13+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r14",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r14.json",
+    "sha256": "4e1180a6bd25c3c3aa92eb71f88c1fb846e56a46000615c535f132f1da263e00"
+  }
+}

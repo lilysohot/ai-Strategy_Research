@@ -1,0 +1,32 @@
+{
+  "config_version": 1,
+  "phase": "i0-inventory",
+  "note": "I0G-1/I0A-1..2 阶段：只读盘点。网络仅放行用户核定并已启动的原库 pg 容器（pg18-zhvector，127.0.0.1:5432，2026-09-15 用户确认其为迁移数据所在）；仅允许 SELECT 类盘点，零 DDL/DML。模型客户端与智能解析模块禁用；CORPUS_DSN 保持投毒，盘点连接串仅经显式环境变量传入且须命中 allowed_targets。来源读取规则（fail-closed）：read_roots 内读取必须命中 allowed_source_paths（空清单即全部拒绝），受保护路径禁止写入/删除/重命名，且其读取仅在同时被 read_roots 绑定时放行；本阶段将两个盘点根同时绑定为允许清单，仅允许哈希与元数据列举，禁止一切写入。Python 子进程经命令行重写注入守卫；非 Python 子进程与 exec/system 派生一律拒绝。I0B 恢复目标批准后另出阶段配置，不自动获得数据库或备份授权。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "reason": "I0A-1 只读盘点：原库 pg 容器（pg18-zhvector，具名卷 pgdata，迁移记录 17 份/298 块）；用户 2026-09-15 核定启动"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": ["plugins.corpus._r2_"],
+    "poisoned_env": ["OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL"],
+    "poisoned_dsn": ["CORPUS_DSN"]
+  },
+  "sources": {
+    "read_roots": ["data/corpus", "data/corpus_full_backup_v2"],
+    "allowed_source_paths": ["data/corpus", "data/corpus_full_backup_v2"],
+    "forbidden_roots": [],
+    "protected_roots": ["data"]
+  }
+}

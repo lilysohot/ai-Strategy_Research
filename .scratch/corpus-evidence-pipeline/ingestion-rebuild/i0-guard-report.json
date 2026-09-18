@@ -1,0 +1,48 @@
+{
+  "artifact": "i0-guard-report.json",
+  "task": "I0G-1 执行守卫：建立/核查阶段化执行守卫（任务清单 §3.0）",
+  "date": "2026-09-15",
+  "actor": "A",
+  "status": "guard_installed_and_selfcheck_passed",
+  "scope_note": "本报告仅证明 I0G-1 守卫已建立并通过合成反例自检；不表示 I0-A/I0-B/I0-C 任何盘点、备份或冻结完成，不代表获得数据库或备份授权。",
+  "code_fingerprints": {
+    "plugins/corpus/preparation/guard.py": "75835f0ab494fdacb2b5feb4deca5ba76bb11c29b3590e523b63d1d8d0f11bf6",
+    "plugins/corpus/preparation/guard_pytest.py": "2f52d46820b2d0f4442cd572de61fe7d462ebd9d883e0960c33904d4254b88a8",
+    "plugins/corpus/preparation/__init__.py": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2",
+    "tests/test_corpus_preparation_guard.py": "3904a3d012c3b7f236fc6da1aae3c046526f8cbf69614758978ff39c4cce8d12"
+  },
+  "phase_configs": {
+    "guards/i0-inventory.json": {
+      "sha256": "51b28f22fc81e3e21683e9901b9d91c84720003743648f95225cae1bb34d099a",
+      "phase": "i0-inventory",
+      "network": "allowlist：仅 127.0.0.1:5432（用户 2026-09-15 核定的原库 pg 容器 pg18-zhvector，只读盘点）；其余目标全禁",
+      "model": "openai/anthropic/_r2_* 导入陷阱 + OPENAI_*/CORPUS_DSN 投毒（盘点连接串仅经 CORPUS_INVENTORY_DSN 显式传入并须命中 allowed_targets）",
+      "sources": "data/corpus 与 data/corpus_full_backup_v2 仅只读哈希/列举；data/ 全部禁写",
+      "revised_at": "2026-09-15：原库目标经用户核定后由 deny_all 升级为单目标 allowlist；重跑自检 12/12 与测试 10/10 通过"
+    },
+    "guards/i1.json": {
+      "sha256": "80458f0d3f066ed40d17e519c49494efd08bcdb494c4b8c9320604543f3aa516",
+      "phase": "i1",
+      "network": "deny_all（I1 无网络/PG）",
+      "sources": "read_roots 为空即全部拒绝；待 I0A-2 终态 + I1-8 绑定 allowed_source_paths"
+    }
+  },
+  "git_head": "8d4772ca8fb2e368d4a256554784c7384c8f24ea",
+  "selfcheck": {
+    "phase": "i0-inventory",
+    "passed": true,
+    "case_count": 12,
+    "cases_passed": 12,
+    "config_sha256": "51b28f22fc81e3e21683e9901b9d91c84720003743648f95225cae1bb34d099a",
+    "method": "全部用例在全新子进程中执行；拒绝行为逐例断言（架构 §2.1：仅日志 0 次不足以过门）；不触真实 PG、不读来源正文"
+  },
+  "test_evidence": {
+    "suite": "tests/test_corpus_preparation_guard.py",
+    "result": "10 passed（含 pytest 收集前安装、CLI 子进程继承、允许清单文件级拒绝、幂等/换配置拒绝）"
+  },
+  "open_gaps_for_user": [
+    "D0 与责任交接待确认（任务清单 §4.1）",
+    "原库已核定并在线核实（2026-09-15，pg 容器/pg18-zhvector，盘点见 i0a1-inventory-findings.json）；I0B/I2 隔离目标仍待用户核定——候选 docker/corpus-db（空库，修复挂载后可用）",
+    "I1 阶段 allowed_source_paths 待 I0A-2 人工终态后回填"
+  ]
+}

@@ -2,12 +2,16 @@
 
 | 项 | 内容 |
 |---|---|
-| 状态 | **有效 · 评审修订草案；I0 未完成，物理架构未冻结，功能未实施；不是清库执行授权** |
+| 状态 | **有效 · 评审修订草案；I0 未完成，物理架构未冻结，业务新链未落地；不是清库执行授权** |
 | 日期 | 2026-09-15（初稿 2026-09-14） |
 | 需求 | PR-DATA-01/02/09/12、PR-OUT-04/06/07 |
 | 上游 | [产品范围 §2.2](../product-requirements.md#22-当前阶段范围收缩2026-09-14-用户确认)、[清洗入库诊断](../../.scratch/corpus-evidence-pipeline/cleaning-ingestion-diagnosis-report.md) |
 | 关系 | 本轮重构的唯一设计草案，权威关系见 §0；替代旧方案的目标设计顺序，不替代当前实现事实、历史预算或 R2 语义阈值 |
 | 进度真源 | [统一执行计划](claims-market-closed-loop-plan.md)，I0—I5 为基础链路，R2-S* 为后续语义链路 |
+
+2026-09-15 状态说明：守卫、盘点记录和候选资产已出现，交付与验收分别见
+[I0 细任务台账](claims-market-closed-loop-plan.md#i0-execution-ledger)；本文后续“本轮未执行/未生成”
+指 v1.1 设计修订时点，不覆盖此后执行事实。本次仅同步状态引用，不修改下列架构或放行门。
 
 ## 0. 文档权威与本轮修订
 
@@ -18,11 +22,15 @@
 |---|---|
 | [产品需求](../product-requirements.md)、[业务流程](../business-process.md)、[领域词汇](../../CONTEXT.md) | 范围、业务语义和用语上游；本文不扩大产品承诺 |
 | [统一执行计划](claims-market-closed-loop-plan.md) | 唯一进度台账；本文只定义交付与门，不另标执行完成 |
+| [任务分解 v1.1](corpus-ingestion-rebuild-tasks.md) | 本文阶段的唯一执行分解；落实依赖、消费者接线、最终重验和切换分支，不新增产品范围或自行批准操作 |
 | 本文 | 本轮来源到索引的唯一候选设计；I0 复核后才形成实施冻结版本 |
 | [三类研报方案](research-report-cleaning-scope-plan.md) | 保留范围及 R2 语义要求；基础存储/索引细节与阶段顺序由本文替代 |
 | [数据层架构](data-layer-architecture.md)、[PG 迁移记录](pg-migration.md) | 现有选型及历史实施证据；旧 schema、零调用方改动及旧评分不约束新设计；实际能力仍须看代码与对应实测 |
 | [P0 实施规格](../p0-implementation-spec.md) | P0 历史施工规格；语料实现部分不再指导本轮，数字溯源/受控计算/安全要求继续有效 |
 | [旧资料库架构](../corpus-ingestion-architecture.md) | 历史远期探索，不是并行施工方案；不恢复其中向量/LLM 接入授权 |
+
+2026-09-15 任务评审补充：以下 §11/§12 同步澄清“精确切换清单”和“每阶段不可变快照”，不改变
+前述三类范围或开启执行；任务分解本身也不是新的进度台账。
 
 旧文档中的“当前”“施工依据”仅适用于其历史阶段。本文仍为草案，不能据此声称当前库已经采用
 新 schema；I0 若推翻候选设计，修订本文与总计划，不另起一份平行的有效架构。
@@ -296,6 +304,29 @@ context 不属于新的来源正文，也不制造额外 item。fetch 可展示�
 若存在准入未决、构建失败、库未发布或故障，覆盖为 unknown；只有明确检索范围完成且查询成功，
 才可报告该范围无匹配，不能外推整个来源集合不存在相关资料。
 
+**I2-8 独立复核裁定（RM-I28-0，2026-09-18）——以下四条为本节的规格补充，实现与规格一致：**
+
+- **文档级读取遵循句柄版本**：`document_text` / `source_resolver`（经同一权威读取 Interface）
+  与块级 `fetch` 同语义——按 `cv2:<build_id>` 绑定的 build 返回原文，跨发布**不换正文**；
+  返回对象的 `build_id` 必须等于**实际读取的 build**，不得回填句柄值。
+- **撤销的文档级信号**：来源撤销/排除时文档级返回 `None`（显式不可服务），不得用空串
+  冒充“合法空文档”（零单元 build 才是 `""`）；块级仍抛 `WithdrawnError`，两者语义对齐。
+- **迁移目标无 legacy fallback**：目标库已承载 corpus schema 时，任何配置不得回退旧
+  `blocks`（显式请求 `legacy` 直接拒绝）；`new` 在无 corpus schema 的库上同样 fail-closed；
+  `auto` 仅作未迁移旧库的过渡兜底，不得用于迁移目标。
+- **旧引用归档策略**：`doc_id→source_id` 映射 manifest 属 I4 停写窗口交付件
+  （design-review `reset_scope_candidates` 前置为「新链重建并核对后」）；在此之前只提供
+  `archive_required` 拒绝路径，不提前生成该件、不以新正文冒称旧引用。
+
+**I2 全链路复核裁定（RM-FC-5，2026-09-18）——拼接语义落规格：**
+
+- **块级与文档级文本的拼接语义**：`ChunkEvidence.text` 与 `DocumentEvidence.text` 都是所引
+  单元 `raw_text` 的确定性 `"\n"` 拼接，**不是源文件的字节还原**——源文件中的空行分隔在拼接
+  中不保留（源 `A\n\nB` → 文本 `A\nB`）。逐字性按**单元**成立（每个单元的 `raw_text` 逐字出自
+  源文件）；跨单元引文必须按单元取证，不得把拼接结果当原文切片。文档级 `DocumentEvidence`
+  的 `text` 与 `build_id` 同源（同一 build 的全量单元，按 `ordinal` 排序）。
+- 空文档与撤销必须可区分：零单元 build 才是 `""`，撤销/排除抛/返回不可服务信号（见上）。
+
 ### 7.3 准入、处理覆盖、查询结果三轴契约
 
 `coverage` 不再是未定义字符串，而是包含以下字段的返回对象；类型/枚举/非法组合由同一
@@ -312,6 +343,12 @@ coverage 必带 `requested_scope_ref/effective_scope_ref/publication_snapshot_re
 来源数、已发布数、排除数、待复核/失败数；计数定义与分母绑定同一 scope 清单及查询快照，不能
 从另一时刻的全库 stats 拼接。检索并发发布时的结果和覆盖元数据读取同一数据库快照。
 
+`publication_snapshot_ref`（I2-8 落地定义）：当前发布集合的稳定指纹——
+对 `(source_id, active_build_id, generation)` 全集做确定性 md5 聚合，与各项计数在**同一条 SQL**
+内求值（因此二者同快照）；发布、撤销或 generation 变化都会改变它，可用于把 coverage 绑定到
+具体发布时点。检索侧的「同快照」由 `read_pg.search_with_coverage` 实现：命中与覆盖在同一个
+REPEATABLE READ 事务内读取，并发发布下不会出现「覆盖报零已发布来源、却返回了命中」。
+
 - full：请求范围内必需区域均已完成、可定位且发布；不证明全部视觉内容或模型语义完整。
 - scoped：只覆盖请求范围的一个明确且已获准的真子集，子集内无未决必需区域；须返回剩余范围。
   用户若明确请求该子集且全部完成，可相对这个新请求报告 full，不能仍称整篇 full。
@@ -326,6 +363,51 @@ coverage 必带 `requested_scope_ref/effective_scope_ref/publication_snapshot_re
 
 必测组合：空库且 scope 未登记、已完成范围的无匹配、排除材料、部分范围、未决准入、PG 故障、
 旧版可用但更新失败、查询期间发布及跨域聚合。该映射不修改市场数据的业务含义。
+
+**I2 全链路复核裁定（RM-FC-0，2026-09-18）：缺口分级与 `scoped` 可达**
+
+§7.3 的 `scoped` 允许发布「已获准的真子集」，但读取缺口（`quality_report.gap_regions`）
+此前恒阻断发布且无坐标，使 `scoped` 在实现上不可达（缺口区域 `ordinal=None`，既不能参与
+scope 判定，也不可能被证明「在请求范围之外」）。本裁定选定 **A + C 组合**：给缺口一个
+**裁决 seam**（默认分级即 `disposition`，并可被 scope 判定降为 `out_of_scope`），同时
+**补齐缺口坐标**。任何路径下缺口都**必须保持可见**，不得回退为静默丢弃。
+
+缺口身份沿用既有台账编码 `issue:<code>:<location>`（`quality_report` 形状不变，仍为
+`gap_regions`/`oversized_chunks` 两键）。坐标取自 reader 的 `location`：`page:N` → 页坐标；
+`body[i]` / `…:tbl[n]/row[r]/cell[c]` → 元素坐标；`char:a-b` / `char:a-` → 字符区间；
+其余显式标 `unlocatable`（无法证明在获批范围之外）。
+
+| 缺口码 | 合成区域状态 | 默认分级 |
+|---|---|---|
+| `empty_page` | review_required | **acknowledged**（无文字层且无图片，未丢失任何正文） |
+| `image_region_small` | noise | **acknowledged**（阈值内装饰图，已按噪声记账） |
+| `unterminated_code_fence` | review_required | **acknowledged**（文本已消费到文件尾，仅围栏结构未闭合） |
+| `image_only_page` | needs_ocr | **blocking** |
+| `image_region_unreadable` | needs_ocr | **blocking** |
+| `table_extraction_failed` | review_required | **blocking** |
+| `table_lines_without_extraction` | review_required | **blocking** |
+| `unreadable_element` | review_required | **blocking** |
+| `unknown_body_element` | review_required | **blocking** |
+| 词表外/键不可解析 | — | **blocking**（fail-closed：看不见的缺口比误阻断更危险） |
+
+判定顺序与发布口径：
+
+1. **scope 优先**：缺口坐标可证落在获批 `char:` 区间之外（与任一区间无重叠）→ 生命周期
+   判为 `out_of_scope`：不阻断发布、不计入剩余范围（该区域本就不在请求范围内）。
+   部分重叠/无 `char` 坐标 → **不可证范围外**，回落默认分级。
+2. **默认分级**：`blocking` → 拒绝发布（错误文案仍含 `gap_regions`，原因机读）；
+   `acknowledged` → 允许发布，但必须进 `quality_report`、`check`/`status` 的 `gaps` 输出与
+   `coverage.reason_codes`。
+3. **coverage 如实反映**：活动 build 的缺口台账非空（含 `acknowledged`/`out_of_scope`）时，
+   该来源的已发布集合只是**真子集** → `coverage.processing=scoped` 且 `reason_codes` 含
+   `gap_regions_present`；缺口清单（含坐标与恢复路径）即「剩余范围」的机读形式。无缺口仍为
+   `full`；未决/失败/零发布仍优先 `unknown`。
+4. **依据与记录人**：默认分级表即依据（`gap-policy-1`），记录人为 `publish --operator`
+   （写入 PUBLISHED job 检查点 `publish-record-1` 的 `acknowledged_gaps`/`gap_policy_rev`）。
+   按码的个别豁免（政策 override）留待 I3 校准后外置为策略配置（policy v2），不在本裁定内。
+5. **CLI 可见性**：`corpus-check`（含被拒时）与 `corpus-status` 都必须输出结构化 `gaps`
+   （码/坐标/状态/分级/恢复路径）与 `recovery`（可执行恢复路径），不得只给自然语言 `error`；
+   `corpus-plan` 的预检与 `check` 共用同一分级与判定实现（不得各算一套）。
 
 ## 8. 构建、入库与发布状态
 
@@ -408,8 +490,14 @@ I2 必须实际验证双 worker 竞争、续租/过期恰好临界、旧 worker 
 | `corpus-build --plan ...` | 执行来源归档与候选构建/恢复；写显式目标，不自动发布 |
 | `corpus-check --build ...` | 核验产物/索引/取证/状态；只读 PG 与来源归档 |
 | `corpus-publish --build ...` | 检查门通过后切活动版本，记录操作者和 generation |
-| `corpus-status --job ...` | 显示阶段、失败、缺口与可执行恢复路径 |
+| `corpus-status --build ...` | 显示该 build 的逐阶段状态、失败、缺口与可执行恢复路径 |
 | `corpus-rebuild-plan --manifest ...` | 比较 parse/clean/chunk/index 版本，决定可复用阶段；不直接全库重跑 |
+
+**I2 全链路复核裁定（RM-FC-6，2026-09-18）：** `corpus-status` 的参数以**实现为准**统一为
+`--build <build_id>`（该命令逐阶段展示一个 build 的 9 个阶段台账，「阶段+attempt」是展示
+粒度而非查询键）；本节原 `--job` 用词作废，其余命令的 `--build`/`--manifest` 不变。另：
+`corpus-plan` 增加**只读可发布性预检**（同一缺口分级与判定实现，无 PG 写入、无模型），
+输出每份材料的预计缺口与「按当前口径是否可发布」的预判；预检是预判，发布门仍是唯一权威。
 
 旧 ingest 停止自动写旧表；切换期间可以显式提示迁移，不保留静默 legacy fallback。清库/退役是
 独立维护操作，必须读精确 reset manifest，不能由日常 ingest 的一个隐含参数触发。
@@ -452,7 +540,7 @@ I0 恢复报告必须记录实际覆盖截止点、可接受的数据损失与�
 | I1 | 统一解析、清洗、切块及内存执行链 | I0-A 的逻辑契约/开发基线冻结后可做纯内存工作；反例/映射通过，不冒充 I0-B/C 完成 |
 | I2 | 经 I0-C 冻结的 PG 布局、索引、候选写入、发布与恢复 | I0 全部通过 + I1；在显式隔离 PG 实测含租约接管，核心 PG 门不允许 skip |
 | I3 | 公司/行业/宏观至少各两份已使用开发材料的 CLI/工具 E2E | 样本格式/查询/证据 gold 按 §12 锁定；逐类清洗/检索/取证及财务非回归通过，强制零模型 |
-| I4 | 经复核批准的迁移/清理、活动数据重建及切换 | I3 + 最新一致性备份恢复证据 + 精确 reset manifest；活动索引无纪要/旧版本污染，失败可恢复 |
+| I4 | 经复核批准的迁移/清理、活动数据重建及切换 | I3 + 停写截止点后最终一致性备份恢复 + 精确切换清单/批准；reset 分支另需删除清单，migrate 不强制清理；defer 阻断切换，活动索引无污染且可恢复 |
 | I5 | 增量、重新解析、重新切块/建索引和维护说明 | 四种重复/变更情况均可重复，旧入口退出，无隐藏双写 |
 
 I0—I5 是“可用证据库”的交付，不等待 R2 item/关系模型验收。R2-S* 可在新 Interface 稳定后做
@@ -481,8 +569,9 @@ I0-A 必须交实际对象/消费方清单、每来源准入终态、测试资�
 | `.scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json` | 原 golden 及已通过财务资产的哈希、适用/排除清单、旧锚点到新 source/证据的审核映射；新旧口径分别报告 |
 | `.scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-restore-report.json` | I0-B 的备份清单、恢复目标/过程、哈希/数量/取证、权限/扩展、耗时和失败，不得仅写 passed |
 | `.scratch/corpus-evidence-pipeline/ingestion-rebuild/design-review.json` | I0-C：实际证据引用、候选决策/DDL 映射、资源/租约参数、变更原因、批准人与冻结版本 |
-| `.scratch/corpus-evidence-pipeline/ingestion-rebuild/freeze-manifest.json` | 每阶段源资产/规则/预期/测试/评分器/配置的哈希及阶段父版本；报告须绑定同一 manifest |
-| `.scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json` | 仅 I4 前冻结：精确待清理对象、保留对象、依赖顺序、批准、最新备份及恢复报告引用 |
+| `.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/<phase>-<revision>.json`、`freeze-manifest.json` | 每阶段/修订追加不可变快照，绑定源/规则/预期/测试/评分器/代码差异/配置哈希及父快照；报告引用其实际运行快照 ID/哈希，后者仅可作当前版本索引，不能追改历史 |
+| `.scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-cutover-manifest.json` | I4 停写与最终备份恢复后冻结：reset/migrate/defer 决定、精确对象/顺序/保留项、截止点/版本/恢复证据及批准；defer 不执行 |
+| `.scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json` | 仅批准 reset 分支在清理前冻结：精确待清理/保留对象、依赖顺序、批准、截止点后的最终备份及恢复引用；不是迁移分支必选动作 |
 | `tests/fixtures/corpus_preparation/`、`tests/test_corpus_preparation_*.py` | 拟新增合成 MD/DOCX/PDF 小夹具及确定性/PG/CLI 契约测试；真实版权资料不复制到公开夹具 |
 
 query-gold 从已准入开发材料的实际原文出题，公司/行业/宏观每类至少 10 条，覆盖原值、条件/

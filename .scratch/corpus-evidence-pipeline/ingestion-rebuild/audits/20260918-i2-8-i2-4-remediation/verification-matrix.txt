@@ -1,0 +1,48 @@
+# I2-8 / I2-4 独立复核整改 验证矩阵（2026-09-18）
+
+依据：audits/20260918-i2-8-i2-4-review/{review.md,remediation-checklist.md}（RM-I28-0～13）
+环境：i2-verify 守卫 env + env -u PYTHONPATH（去宿主 IDE 注入）；仅写 i2_sandbox_corpus。
+
+## A 复核探针（整改前 5 failed / 1 passed → 目标全绿）
+$ env -u PYTHONPATH CORPUS_GUARD_PHASE=i2-verify CORPUS_GUARD_CONFIG=.../i2-verify.json CORPUS_I2_DSN=... uv run pytest audits/20260918-i2-8-i2-4-review/test_review_probes.py -q -p plugins.corpus.preparation.guard_pytest --noconftest -c /dev/null
+......                                                                   [100%]
+6 passed in 1.17s
+
+## B 真库门（整改后，零 skip）
+$ pytest tests/test_corpus_consumers_pg.py tests/test_corpus_cli_pg.py tests/test_corpus_preparation_publication_pg.py tests/test_corpus_preparation_repository_pg.py
+..........................................................               [100%]
+58 passed in 15.67s
+
+## C 普通环境（语料全量 27 文件 + data_coverage）
+...                                                                      [100%]
+434 passed, 1 skipped in 39.92s
+
+## D i1 守卫 env（preparation 11 文件）
+............................................                             [100%]
+188 passed in 30.87s
+
+## E 静态门
+All checks passed!
+1 error, 0 warnings, 0 informations
+[framework] 358/358 modules imported
+
+## F 冻结链（r11）
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+
+## G 收尾
+TRUNCATE TABLE
+0|0
+- 生产库/apodex/i0b2_verify_* 只读未触碰；零模型调用。
+
+## H 最终复跑（i0c-r12 类型收窄后）
+$ 真库门 + 复核探针（i2-verify 守卫 env，env -u PYTHONPATH）
+................................................................         [100%]
+64 passed in 16.35s
+$ 普通环境（语料全量 + data_coverage）
+...........................................                              [100%]
+43 passed in 1.29s
+$ pyright plugins/corpus plugins/tools
+0 errors, 0 warnings, 0 informations
+$ 冻结链 r12
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+- 演练库已收尾清零。

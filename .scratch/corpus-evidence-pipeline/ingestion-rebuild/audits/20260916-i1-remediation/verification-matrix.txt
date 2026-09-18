@@ -1,0 +1,35 @@
+=== I1 remediation verification matrix (2026-09-16) ===
+
+--- [1/7] chain contracts + i1-9 acceptance (guard env) ---
+env -i PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONPATH=/home/administrator/FrontierAgent PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 CORPUS_GUARD_PHASE=i1 CORPUS_GUARD_CONFIG=.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json .venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9-retest/test_i1_9_acceptance.py -q --tb=short
+..............                                                           [100%]
+14 passed in 0.27s
+exit=0
+
+--- [2/7] business suite 11 files (normal env) ---
+.venv/bin/python -B -m pytest tests/test_corpus_preparation_{release_gate,counterexamples,remediation,contract,engine,fixtures,readers,source,admission,chunk,clean}.py -q --tb=short
+180 passed in 30.14s
+exit=0
+
+--- [3/7] legacy probes 20+11 (guard env) ---
+env -i PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONPATH=/home/administrator/FrontierAgent PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 CORPUS_GUARD_PHASE=i1 CORPUS_GUARD_CONFIG=.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json .venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py -q --tb=short
+31 passed in 0.35s
+exit=0
+
+--- [4/7] guard pytest 19 (normal env, no CORPUS_GUARD_*) ---
+.venv/bin/python -B -m pytest tests/test_corpus_preparation_guard.py -q --tb=short
+19 passed in 3.01s
+exit=0
+
+--- [5/7] pyright I1 scope (preparation pkg + changed tests) ---
+.venv/bin/python -m pyright plugins/corpus/preparation tests/test_corpus_preparation_engine.py tests/test_corpus_preparation_contract.py tests/test_corpus_preparation_remediation.py tests/test_corpus_preparation_counterexamples.py tests/test_corpus_preparation_release_gate.py
+0 errors, 0 warnings, 0 informations
+
+--- [6/7] ruff check + format (preparation pkg + changed tests) ---
+.venv/bin/python -m ruff check plugins/corpus/preparation tests/test_corpus_preparation_*.py && .venv/bin/python -m ruff format --check plugins/corpus/preparation
+All checks passed!
+15 files already formatted
+
+--- [7/7] import smoke stage 1 ---
+.venv/bin/python -B tools/import_smoke.py --stage 1
+[framework] 354/354 modules imported

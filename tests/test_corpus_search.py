@@ -7,31 +7,80 @@
 
 from __future__ import annotations
 
-import shutil
 import sqlite3
 from pathlib import Path
 
 import pytest
 
-from plugins.corpus.fetch import fetch_block
+from plugins.corpus.evidence import parse_evidence
+from plugins.corpus.fetch import connect, fetch_block
 from plugins.corpus.index import SNIPPET_WIDTH, _make_snippet, build_index, search, tokenize
-from plugins.corpus.ingest import connect, init_db, parse_document, upsert_document
 
 STUB_DIR = Path(__file__).parent / "fixtures" / "stub_reports"
+
+# 读侧最小 schema：列集按 index/fetch 的实际 SELECT 反推（I2-7 后写链已退休，
+# 测试只负责把解析结果放进读侧认识的形状）。
+_STUB_DDL = """
+CREATE TABLE documents (
+    doc_id      TEXT PRIMARY KEY,
+    title       TEXT NOT NULL,
+    source_path TEXT NOT NULL,
+    mime        TEXT NOT NULL,
+    status      TEXT NOT NULL,
+    block_count INTEGER NOT NULL,
+    char_count  INTEGER NOT NULL
+);
+CREATE TABLE blocks (
+    doc_id  TEXT NOT NULL,
+    seq     INTEGER NOT NULL,
+    locator TEXT NOT NULL,
+    text    TEXT NOT NULL,
+    PRIMARY KEY (doc_id, seq)
+);
+"""
+
+
+def _stub_body(path: Path) -> str:
+    """stub md 的正文：剥掉头部 key: value 元数据区（fixture 的组织方式）。
+
+    parse_evidence 的 md 路径原文透传、不认识元数据区；而块文本应当只含
+    正文——元数据混进块里会稀释 FTS 排名并挤占 snippet 窗口。
+    """
+    lines = path.read_text(encoding="utf-8").splitlines()
+    for i, line in enumerate(lines):
+        if line.startswith("# "):
+            return "\n".join(lines[i:])
+    return "\n".join(lines)
+
+
+def _load_stub_corpus(conn: sqlite3.Connection) -> None:
+    """stub 研报 → 真实解析 → 手搓最小 sqlite 写入。
+
+    I2-7：旧 ingest.parse_document/upsert_document 已随写链整体退休。
+    解析仍走生产同源（parse_evidence）：doc_id/title 不是手搓的；md 恒为
+    单页（locator="document"），整篇正文自然成为一块。
+    """
+    conn.executescript(_STUB_DDL)
+    for path in sorted(STUB_DIR.glob("*.md")):
+        doc = parse_evidence(path)
+        page = doc.pages[0]
+        conn.execute(
+            "INSERT INTO documents (doc_id, title, source_path, mime, status, block_count,"
+            " char_count) VALUES (?, ?, ?, 'text/markdown', 'active', 1, ?)",
+            (doc.doc_id, doc.title, doc.source_path, len(page.text)),
+        )
+        conn.execute(
+            "INSERT INTO blocks (doc_id, seq, locator, text) VALUES (?, 1, ?, ?)",
+            (doc.doc_id, page.locator, _stub_body(path)),
+        )
+    conn.commit()
 
 
 @pytest.fixture
 def indexed_corpus(tmp_path: Path):
-    """stub 研报 → ingest → 建索引。全链路真实，只是数据换成 stub。"""
-    root = tmp_path / "corpus"
-    root.mkdir()
-    for source in sorted(STUB_DIR.glob("*.md")):
-        shutil.copy(source, root / source.name)
-
+    """stub 研报入库 → 建索引。全链路真实，只是数据换成 stub。"""
     conn = connect(tmp_path / "index.db")
-    init_db(conn)
-    for path in sorted(root.glob("*.md")):
-        upsert_document(conn, parse_document(path))
+    _load_stub_corpus(conn)
     build_index(conn)
     yield conn
     conn.close()

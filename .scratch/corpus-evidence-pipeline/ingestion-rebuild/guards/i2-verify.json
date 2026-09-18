@@ -1,0 +1,36 @@
+{
+  "config_version": 1,
+  "phase": "i2-verify",
+  "note": "I2-7 verify-pg 守卫阶段（区别于 i2-sandbox：本阶段引擎链路真实执行，ingest 须经 data/corpus-archive 内容寻址归档，故 protected_roots 精确到 corpus/corpus_full_backup_v2/corpus_runs 三个子目录；corpus-archive 放开为演练归档位——写入幂等（同哈希先核验后复用），残留即可复用的内容寻址对象。原始语料 data/corpus 全目录禁写；read_roots 空（fail-closed）：测试来源全部位于仓库内临时目录（runtime_roots 放行），不授权任何 data/ 读取，3 份生产 PDF 保留 forbidden 强调。网络仍仅允许 127.0.0.1:543（corpus-db 隔离容器，目标库 i2_sandbox_corpus 由测试用例 fail-closed 自校验 current_database+非生产实例）；CORPUS_DSN 保持投毒，演练连接串经 CORPUS_I2_DSN 显式传入且端口须命中 allowed_targets。零模型；Python 子进程经命令行重写注入守卫。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {"host": "127.0.0.1", "port": 543, "reason": "I2 演练库 corpus-db（宿主 543→容器 5432）；仅 i2_sandbox_corpus 可写，其余库只读校验"}
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": ["plugins.corpus._r2_"],
+    "poisoned_env": ["OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL"],
+    "poisoned_dsn": ["CORPUS_DSN"]
+  },
+  "sources": {
+    "read_roots": [],
+    "allowed_source_paths": [],
+    "forbidden_roots": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf"
+    ],
+    "protected_roots": [
+      "data/corpus",
+      "data/corpus_full_backup_v2",
+      "data/corpus_runs"
+    ]
+  }
+}

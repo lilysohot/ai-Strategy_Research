@@ -1,0 +1,194 @@
+{
+ "artifact": "i0a5-freeze-report-20260915.json",
+ "task": "I0A-5 联合冻结门通过记录（M1 阶段快照）",
+ "generated_at": "2026-09-15T12:41:47+00:00",
+ "confirmed_by": "U（2026-09-15 会话确认：批准 I0A-5 联合冻结，生成不可变 M1 阶段快照）",
+ "guard": {
+  "phase": "i0a5-freeze",
+  "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a5-freeze.json",
+  "config_sha256": "d5d180a355d2a65f4e9b47fc8b9b348ec428f75c68e0ecc82c12b59df8d9e26c",
+  "network_mode": "deny_all（零连接；冻结时点重测由 i0-inventory 守卫下只读步骤先行完成）",
+  "model_calls": 0,
+  "child_processes": 0
+ },
+ "script_sha256": "d06db892fcd3bafa420b9765c9f0f7ffc83a345c66682b63393fa15be17290e2",
+ "inputs": {
+  "i0a1_inventory": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-inventory.json",
+   "sha256": "1f1cf6a4a58860c153b76b22e071daeacd1557b6656fd50b20e4a8aa7677285b"
+  },
+  "i0a1_findings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json",
+   "sha256": "97f057c80e3bcb934428f153226a4ed6492b65af836d6c2a861e1fb475a54758"
+  },
+  "i0a1_review": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-review.json",
+   "sha256": "57618970ab25d49bd0d389809ec235559e8b3eeb68ac7096db0b9849a9b7fde1"
+  },
+  "i0a2_dev_manifest": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+   "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961"
+  },
+  "i0a2_review_queue": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/review-queue.json",
+   "sha256": "6a8111766358b6861adaa338e99c1e3544e15bc4581be94b9088fa17cbfa5476"
+  },
+  "i0a2_review_brief": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-review-brief.json",
+   "sha256": "01cb85655f462acca35b13de17157cf8a8af51a2b1acf6472647a2dd7d834dd7"
+  },
+  "i0a2_doclist_findings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-doclist-findings.json",
+   "sha256": "f6f118f527b1d4c3dcbb4be5fc8d3a13490ce5ea7ba0ca29ad1f014491895376"
+  },
+  "i0a2_adjudicated": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-adjudicated-20260915.json",
+   "sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea"
+  },
+  "i0a2_doclist_recount": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-doclist-recount-20260915.json",
+   "sha256": "d98b0517ccbf62bf6f9201ae224744d2bcce05e8f84445a19ff6da51888bd0c9"
+  },
+  "i0a3_admission_policy": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json",
+   "sha256": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661"
+  },
+  "i0a3_policy_verification": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a3-policy-verification.json",
+   "sha256": "f80182a9d4f058ae19ae70041fccc7945fe7aac899ae7962aa8d9ea990dad378"
+  },
+  "i0a4_candidates_v3": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-candidates-v3-20260915.json",
+   "sha256": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943"
+  },
+  "i0a4_labeling_working": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-labeling-working.json",
+   "sha256": "00968eca31734dbc9e56d82e573d54059726ab750675b99a5e5ed1a006d402c9"
+  },
+  "i0a4_freeze_report": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-freeze-report-20260915.json",
+   "sha256": "d67601c0bf1f26346bfd222b782ee166d128799ef8925c2c748f0fbd562e21e0"
+  },
+  "i0a4_source_gold_frozen": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+   "sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+  },
+  "i0a4_query_gold_frozen": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl",
+   "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+  },
+  "i0a4_baseline_bindings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json",
+   "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b"
+  },
+  "i1_guard_config": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+   "sha256": "e26a10ac8e8fafc7c0e87111eeffa1ddd9dc2b6203c4adeab24ad75b58414a0e"
+  },
+  "i0_guard_config_inventory": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json",
+   "sha256": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05"
+  },
+  "i1_guard_impl": {
+   "path": "plugins/corpus/preparation/guard.py",
+   "sha256": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794"
+  },
+  "i1_guard_pytest": {
+   "path": "plugins/corpus/preparation/guard_pytest.py",
+   "sha256": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5"
+  },
+  "i1_guard_init": {
+   "path": "plugins/corpus/preparation/__init__.py",
+   "sha256": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2"
+  },
+  "i1_guard_tests": {
+   "path": "tests/test_corpus_preparation_guard.py",
+   "sha256": "a340549add3d047c71cd2fe6216486cea9e2fc39a7bcccdc8c776d5e986fd0ee"
+  },
+  "i0_guard_report_v2": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-guard-report-v2.json",
+   "sha256": "68c8def23d010216e3be3abaf1cc5856c8bba4320e0aaf7ad3818f341e5df615"
+  },
+  "i0_guard_counterexamples_run3": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/2026-09-15-status/guard-counterexamples-run3.json",
+   "sha256": "760a7709aa474e9b78c336e17f21645042d707c86312c97d498608ed22017997"
+  }
+ },
+ "checks": {
+  "i0a2": {
+   "adjudicated": 73,
+   "admitted": 40,
+   "excluded": 6,
+   "excluded_from_active": 27,
+   "dev": 6,
+   "dev_scopes": {
+    "industry": 2,
+    "company": 2,
+    "macro": 2
+   },
+   "holdout": 3,
+   "recount": {
+    "observed_at": "2026-09-15T12:01:45+00:00",
+    "documents": 89,
+    "by_status": {
+     "empty": 18,
+     "ok": 71
+    },
+    "delta": {
+     "added": 0,
+     "removed": 0,
+     "changed": 0
+    }
+   }
+  },
+  "i0a3": {
+   "policy_rev": "v1-20260915",
+   "features": 6,
+   "contradictions": 0,
+   "by_decision_totals": {
+    "admitted": 40,
+    "excluded": 6,
+    "excluded_from_active": 27
+   }
+  },
+  "i0a4": {
+   "source_records": 23,
+   "source_roles": {
+    "body_evidence": 20,
+    "generic_statement": 3
+   },
+   "query_records": 30,
+   "query_per_domain": {
+    "company": 10,
+    "industry": 10,
+    "macro": 10
+   },
+   "critical": {
+    "company": 10,
+    "industry": 9,
+    "macro": 9
+   },
+   "satisfy_rule": {
+    "any": 22,
+    "all": 2
+   },
+   "pdf_hash_recheck": "23/23 通过"
+  },
+  "guard": {
+   "run3": "12/12 拒绝",
+   "fingerprints": "7 文件与当前一致"
+  },
+  "errors": []
+ },
+ "documented_limitations": [
+  "I0A-1 守卫配置版本漂移（51b28f22→d3025d52，allowed_targets 未变）为复核已说明项，沿用 i0a1-review.json",
+  "I0A-3 验证任务标签为 draft-1，但其输入哈希与冻结 v1（policy_rev=v1-20260915）当前字节一致：验证证据即绑定冻结版字节，无版本漂移"
+ ],
+ "outputs": {
+  "i0a5-logic-contract-frozen-v1-20260915.json": {
+   "sha256": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30",
+   "frozen": true
+  }
+ },
+ "discipline": "冻结件不可变；发现错误升版本重冻结（frozen-v2…），不得覆盖；金标仅用于评估，不反哺运行链路；下一步 I1（I1-8 先执行）。"
+}

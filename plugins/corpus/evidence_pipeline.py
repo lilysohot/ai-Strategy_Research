@@ -16,7 +16,7 @@ from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus._semantic_validation import prose_binding_reasons
 from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse, parse_value
-from plugins.corpus.claims_v2 import (
+from plugins.corpus.claims_detail import (
     EXTRACTOR_VERSION_V2,
     LINT_VERSION,
     ClaimRecord,
@@ -27,7 +27,13 @@ from plugins.corpus.claims_v2 import (
     records_from_payload,
     triage_block_detail,
 )
-from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprint, parse_evidence
+from plugins.corpus.evidence import (
+    EvidenceDocument,
+    EvidencePacket,
+    Span,
+    fingerprint,
+    parse_evidence,
+)
 
 PIPELINE_VERSION = "evidence-pipeline-7"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
@@ -184,10 +190,7 @@ def claim_run_context(run: EvidenceRun) -> dict[str, object]:
         "known_at_basis": "document_publication_candidate",
         "point_in_time_verified": False,
         "calculation_ready": (
-            sum(
-                "calculate" in f.usable_for and f.fact_id not in duplicates
-                for f in run.facts
-            )
+            sum("calculate" in f.usable_for and f.fact_id not in duplicates for f in run.facts)
             if validation_is_current(run)
             else 0
         ),
@@ -600,6 +603,70 @@ def build_evidence_run(
     """Small caller interface covering parsing, extraction, verification and projection."""
     return extract_evidence(
         parse_evidence(path, pages=pages, packet_chars=packet_chars),
+        llm=llm,
+        model=model,
+        max_prose_calls=max_prose_calls,
+    )
+
+
+#: units 投影的解析器版本（R1：不再走 evidence.py 的 PDF/DOCX/MD 二次解析）。
+UNITS_PROJECTION_VERSION = "evidence-units-projection-1"
+
+
+def _packet_from_unit(parse_rev: str, locator: str, text: str) -> EvidencePacket:
+    """把单个同源 unit 投影为 prose packet（packet_id 由内容寻址决定）。"""
+    preliminary = EvidencePacket(
+        packet_id="",
+        locator=locator,
+        kind="prose",
+        text=text,
+        context=(),
+    )
+    key = fingerprint([parse_rev, preliminary.model_dump(mode="json")])
+    return preliminary.model_copy(update={"packet_id": key})
+
+
+def build_evidence_run_from_units(
+    source_id: str,
+    units: list[dict[str, object]],
+    *,
+    title: str = "",
+    subject: str | None = None,
+    published: str | None = None,
+    llm: LlmFn | None = None,
+    model: str | None = None,
+    max_prose_calls: int = 0,
+) -> EvidenceRun:
+    """从同源 units 投影 Evidence（I2-7 canonical units 投影，R1）。
+
+    不二次解析原文件：权威正文来自已入链的 ``corpus_units.raw_text``，按 ordinal
+    顺序投影为 prose packets（``parse_evidence`` 的 PDF/DOCX/MD 独立解析不再是
+    canonical 入口）。``title``/``subject``/``published`` 由调用方从 source/
+    admission 元数据给出（发布日期唯一落点=admission.report_publication，R4），
+    不再由解析器从文件名/正文重推。``run_id`` 与 ``parse_rev`` 由投影内容寻址
+    决定，绑定 source/build 身份；无 units（来源未入链）返回空 packets 的确定性
+    空 run。
+    """
+    texts = [str(unit["text"]) for unit in units]
+    parse_rev = fingerprint([source_id, UNITS_PROJECTION_VERSION, texts])
+    packets = tuple(
+        _packet_from_unit(parse_rev, str(unit["locator"]), str(unit["text"]))
+        for unit in units
+    )
+    document = EvidenceDocument(
+        doc_id=f"cv2:{source_id}",
+        title=title,
+        source_path=f"cv2:{source_id}",
+        source_rev=source_id,
+        parse_rev=parse_rev,
+        parser_version=UNITS_PROJECTION_VERSION,
+        subject=subject,
+        published=published,
+        pages=(Span(locator="document", text="\n".join(texts)),) if texts else (),
+        packets=packets,
+    )
+    return extract_evidence(
+        document,
         llm=llm,
         model=model,
         max_prose_calls=max_prose_calls,

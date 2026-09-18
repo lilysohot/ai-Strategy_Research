@@ -7,8 +7,9 @@
 
 | 文档 | 当前职责 |
 |---|---|
-| [研究材料 × 同花顺数据 × 分析总计划](claims-market-closed-loop-plan.md) | 当前唯一跨层进度真源：I0—I5、R1—R3、D1—D2、A1、V1；下一步 I0 基础链路范围与契约盘点；R2 历史失败保留，R3 未开始 |
-| [语料清洗、切块、入库与索引重构草案](corpus-ingestion-rebuild-architecture.md) | 唯一当前基础链路候选设计 v1.1；I0-A 盘点/基线、B 首次恢复、C 设计复核后才冻结物理架构，I4 另核最新备份；强制零模型，未实施、未清库 |
+| [研究材料 × 同花顺数据 × 分析总计划](claims-market-closed-loop-plan.md) | 当前唯一跨层进度真源；I0 细任务台账已回填：守卫已放行、I0A-1～5 与 I0-B 完成（M1/M2 达成），I1-1～I1-9 完成、F1—F7/R1—R6 整改收口后当前候选 i1-r3，**M4 已独立复核放行并由 U 签认（2026-09-16）**；I0-C（M3）待执行、I2 not_ready。R2 历史失败保留，R3 未开始 |
+| [语料清洗、切块、入库与索引重构草案](corpus-ingestion-rebuild-architecture.md) | 唯一当前基础链路候选设计 v1.1；I0-A/B/C 门后才冻结物理架构，I4 另核最新备份；强制零模型，I0-A/B 已完成、I0-C 待执行，业务新链未落地、未清库 |
+| [语料重构任务分解](corpus-ingestion-rebuild-tasks.md) | 执行分解 v1.1，含守卫、消费者接线、最终重验和条件切换；页首新增状态导航与每轮回填规则，状态裁决仍归总计划，不凭文件存在勾选完成 |
 | [三类研报清洗与 R2 收口方案](research-report-cleaning-scope-plan.md) | 公司/行业/宏观范围及 R2 语义交付设计，纪要退出默认处理及验收；来源到索引的细节与执行顺序以重构设计为准，不再将基础 PG 验证放在模型试验之后；功能未实施、模型预算未授权 |
 | [清洗与入库回溯诊断](../../.scratch/corpus-evidence-pipeline/cleaning-ingestion-diagnosis-report.md) | 只读诊断：内容去重阻止重清洗发布、解析双路径、状态/定位及恢复缺口；建议局部重设计版本/准入/发布，不更换 PG，不以重入库代替 R2 修复；未实施 |
 | [R2 局部重设计与 CLI 闭环计划](r2-local-redesign-cli-closure-plan.md) | plan-v13阶段记录：P3-I人工通过，P4调用1/5后协议失败；最新边界与主链归并方向见总计划及下列归因评估，旧实验表/入口不要求永久兼容 |

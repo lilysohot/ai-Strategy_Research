@@ -79,13 +79,31 @@ async def data_coverage(query: str, with_financials: bool = True) -> str:
             ensure_ascii=False,
         )
 
-    # ① 研报：只要判断有没有，取少量即可
+    # ① 研报：只要判断有没有，取少量即可；并透出 §7.3 三轴覆盖对象（RM-I28-4）
     research_count = 0
     research_error: str | None = None
+    research_coverage: dict | None = None
     try:
         from plugins.corpus.service import get_service as corpus_service
 
-        research_count = len(corpus_service().search(query, limit=RESEARCH_PROBE_LIMIT))
+        svc = corpus_service()
+        # 命中与覆盖同快照取回（§7.3）；旧实现（无组合读取）退回两步并标注 query_status
+        if hasattr(svc, "search_with_coverage"):
+            hits, research_coverage = svc.search_with_coverage(query, limit=RESEARCH_PROBE_LIMIT)
+            research_count = len(hits)
+        else:
+            research_count = len(svc.search(query, limit=RESEARCH_PROBE_LIMIT))
+            # 覆盖对象可选：无该能力的旧替身（测试桩/旧 Service）只影响三轴透出，
+            # 不影响「有没有研报」的计数语义。
+            coverage_getter = getattr(svc, "coverage", None)
+            if callable(coverage_getter):
+                try:
+                    candidate = coverage_getter(
+                        query_status="matched" if research_count else "no_match"
+                    )
+                    research_coverage = dict(candidate) if isinstance(candidate, dict) else None
+                except Exception:
+                    research_coverage = None
     except Exception as exc:  # 语料库不可用 ≠ 没有研报，两者要分开记
         research_error = f"{type(exc).__name__}: {exc}"[:120]
 
@@ -166,6 +184,10 @@ async def data_coverage(query: str, with_financials: bool = True) -> str:
                     "note": "公网检索兜底（web_search / web_fetch），须给可定位来源；不属于标的结构化数据",
                 },
             },
+            # 研报侧 §7.3 三轴（requested/effective/publication_snapshot/counts）：
+            # 与市场侧字段**分层**——上面 coverage.* 是各数据源的可用性/计数，
+            # 本键是语料新链的处理完整度与查询状态，两者不互相替代。
+            "research_coverage": research_coverage,
             "verdict": verdict,
             "guidance": guidance,
         },

@@ -1,0 +1,26 @@
+{
+  "config_version": 1,
+  "phase": "i0a4-freeze-gate",
+  "note": "I0A-4 人工金标冻结门（独立确定性脚本，人工填写完成、写入冻结 jsonl 前运行）。零网络（deny_all：冻结门只读本地 v3 候选包/工作文件/原 PDF/终态登记，不需要任何数据库；隔离语义从『仅 543』收紧为『零连接』）、零模型、零子进程派生。只读 data/corpus（原 PDF 哈希复核）+ .scratch/corpus-evidence-pipeline（候选包/工作文件/裁决登记）；data/ 受保护禁止写入删除重命名。输出仅限冻结三件套（source-gold-frozen.jsonl / query-gold-frozen.jsonl / 冻结报告），一律 open('x') 独占创建单次写入，任何输出已存在即拒绝并要求升版本。工作文件须绑定 v3 候选包 sha256，哈希不符即拒。",
+  "network": {
+    "mode": "deny_all",
+    "allowed_targets": []
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": ["plugins.corpus._r2_"],
+    "poisoned_env": ["OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL"],
+    "poisoned_dsn": ["CORPUS_DSN", "CORPUS_GOLD_DSN", "CORPUS_INVENTORY_DSN"]
+  },
+  "sources": {
+    "read_roots": ["data/corpus", ".scratch/corpus-evidence-pipeline"],
+    "allowed_source_paths": ["data/corpus", ".scratch/corpus-evidence-pipeline"],
+    "forbidden_roots": [],
+    "protected_roots": ["data"]
+  }
+}

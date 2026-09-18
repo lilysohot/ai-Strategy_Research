@@ -1,0 +1,20 @@
+{
+  "artifact": "query-gold.jsonl",
+  "status": "awaiting_human_authoring",
+  "note": "架构 §12.1：从已准入开发材料实际原文出题，每类≥10（含关键题/any-all/无答案负例）；不由模型出题、不从候选结果倒推答案。当前为 schema 占位。",
+  "record_schema": {
+    "query_id": null,
+    "domain": "company|industry|macro",
+    "requested_scope": null,
+    "question": null,
+    "relevant_sources": [],
+    "evidence_ranges": [],
+    "critical": null,
+    "any_all": null,
+    "negative": null,
+    "human_basis": null,
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "records": []
+}

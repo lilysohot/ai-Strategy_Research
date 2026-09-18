@@ -1,0 +1,127 @@
+{
+  "artifact": "i0-status-guard-counterexamples",
+  "date": "2026-09-15",
+  "scope": "synthetic temporary files and audit-event replay only; no real corpus, PG, models or network requests",
+  "python": "3.12.14",
+  "cases": [
+    {
+      "id": "C01",
+      "case": "absolute forbidden read (positive control)",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C02",
+      "case": "relative forbidden read",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C03",
+      "case": "relative protected write",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C04",
+      "case": "absolute protected unlink",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C05",
+      "case": "empty allowed_source_paths denies source read",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C06",
+      "case": "I1 empty read_roots denies source read (synthetic root)",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C07",
+      "case": "CLI wrapper preserves guard in exec target",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C08",
+      "case": "ordinary child inherits file guard",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C09",
+      "case": "pytest phase without config fails closed",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C10",
+      "case": "blocked stdlib module import (positive control)",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C11",
+      "case": "deny_all rejects Unix socket connect audit event",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    },
+    {
+      "id": "C12",
+      "case": "deny_all rejects IPv4 connect audit event (positive control)",
+      "expected": "guard_refusal",
+      "passed": true,
+      "exit_code": 0,
+      "observed": "GUARD_REFUSED",
+      "stderr": ""
+    }
+  ],
+  "passed": 12,
+  "failed": 0,
+  "fingerprints": {
+    "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+    "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+    "plugins/corpus/preparation/__init__.py": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2",
+    "tests/test_corpus_preparation_guard.py": "a340549add3d047c71cd2fe6216486cea9e2fc39a7bcccdc8c776d5e986fd0ee",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "e26a10ac8e8fafc7c0e87111eeffa1ddd9dc2b6203c4adeab24ad75b58414a0e",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/2026-09-15-status/guard_counterexamples.py": "6a02c133f69ff318220bb5e366b3c78dc38cf02d02ba623cfdf489bba881eb3c"
+  }
+}

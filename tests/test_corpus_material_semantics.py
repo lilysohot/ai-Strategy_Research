@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from unittest.mock import Mock
 
-from plugins.corpus.claims_v2 import triage_block_detail
+from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (

@@ -1,0 +1,412 @@
+{
+  "cases": [
+    {
+      "case": "import openai",
+      "detail": "ImportError: corpus preparation guard: 模块 'openai' 在阶段 'i1' 被零模型守卫禁止导入",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "from openai import OpenAI; OpenAI()",
+      "detail": "ImportError: corpus preparation guard: 模块 'openai' 在阶段 'i1' 被零模型守卫禁止导入",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "import anthropic",
+      "detail": "ImportError: corpus preparation guard: 模块 'anthropic' 在阶段 'i1' 被零模型守卫禁止导入",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "import plugins.corpus.material_semantics",
+      "detail": "ImportError: corpus preparation guard: 模块 'plugins.corpus.material_semantics' 在阶段 'i1' 被零模型守卫禁止导入",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "import plugins.corpus._r2_runtime",
+      "detail": "ImportError: corpus preparation guard: 模块 'plugins.corpus._r2_runtime' 在阶段 'i1' 被零模型守卫禁止导入",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "open('/home/administrator/FrontierAgent/data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf', 'rb').read()",
+      "detail": "OSError: corpus preparation guard: 阶段 'i1' 禁止访问隔离路径 /home/administrator/FrontierAgent/data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf', 'rb').read()",
+      "detail": "OSError: corpus preparation guard: 阶段 'i1' 禁止访问隔离路径 /home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf', 'rb').read()",
+      "detail": "OSError: corpus preparation guard: 阶段 'i1' 禁止访问隔离路径 /home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "open('/home/administrator/FrontierAgent/data/corpus/2026-08-16_2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性-b4d3b59b.pdf', 'rb').read()",
+      "detail": "OSError: corpus preparation guard: 路径 /home/administrator/FrontierAgent/data/corpus/2026-08-16_2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性-b4d3b59b.pdf 不在阶段 'i1' 的开发来源允许清单内",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "import socket; class _S:;     family = socket.AF_INET; sys.audit('socket.connect', _S(), ('127.0.0.1', 5432))",
+      "detail": "OSError: corpus preparation guard: 阶段 'i1' 禁止 socket 连接 ('127.0.0.1', 5432)",
+      "kind": "refusal",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf', 'rb').read()).hexdigest(); assert len(h) == 64; print('DEV_HASH_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import os; assert os.environ['OPENAI_API_KEY'] == 'CORPUS_GUARD_DISABLED'; assert 'corpus_guard_forbidden' in os.environ['CORPUS_DSN']; print('POISON_OK')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "import subprocess; child = subprocess.run([sys.executable, '-I', '-B', '-c', \"open('/home/administrator/FrontierAgent/data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf', 'rb').read()\"], capture_output=True, text=True); assert child.returncode != 0 and 'corpus preparation guard' in child.stderr, child.stderr; print('CHILD_INHERITED')",
+      "detail": "",
+      "kind": "positive",
+      "passed": true
+    },
+    {
+      "case": "pytest guard installs before collection (openai refused)",
+      "detail": "",
+      "kind": "refusal",
+      "passed": true
+    }
+  ],
+  "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+  "config_consistency": {
+    "checks": [
+      {
+        "check": "phase == i1",
+        "detail": "i1",
+        "passed": true
+      },
+      {
+        "check": "network deny_all",
+        "detail": "deny_all",
+        "passed": true
+      },
+      {
+        "check": "no allowed_targets",
+        "detail": "()",
+        "passed": true
+      },
+      {
+        "check": "read_roots == data/corpus",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "allowed == 6 dev files",
+        "detail": "6 allowed",
+        "passed": true
+      },
+      {
+        "check": "forbidden == 3 holdout files",
+        "detail": "3 forbidden",
+        "passed": true
+      },
+      {
+        "check": "protected == data",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "openai blocked",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "anthropic blocked",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "semantic parser blocked",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "_r2_runtime blocked",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "CORPUS_DSN poisoned",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "dev exists: data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "holdout exists: data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "holdout exists: data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "holdout exists: data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+        "detail": "",
+        "passed": true
+      },
+      {
+        "check": "non-dev probe exists",
+        "detail": "",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "config_sha256": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+  "dev_materials": 6,
+  "fingerprints": {
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i1_8_guard_bind_verify.py": "d22bd2e8f5d54ed4c5b7ac618f9446864a200bf31aebaae003e34751c842e17c",
+    "plugins/corpus/preparation/__init__.py": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2",
+    "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+    "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+    "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616"
+  },
+  "holdout_isolation": 3,
+  "model_calls": 0,
+  "network_attempts": 0,
+  "passed": true,
+  "phase": "i1",
+  "report_version": 1,
+  "selfcheck": {
+    "cases": [
+      {
+        "case": "import openai",
+        "detail": "REFUSED ImportError corpus preparation guard: 模块 'openai' 在阶段 'i1' 被零模型守卫禁止导入",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "from openai import OpenAI;     OpenAI()",
+        "detail": "REFUSED ImportError corpus preparation guard: 模块 'openai' 在阶段 'i1' 被零模型守卫禁止导入",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "import anthropic",
+        "detail": "REFUSED ImportError corpus preparation guard: 模块 'anthropic' 在阶段 'i1' 被零模型守卫禁止导入",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "import plugins.corpus.material_semantics",
+        "detail": "REFUSED ImportError corpus preparation guard: 模块 'plugins.corpus.material_semantics' 在阶段 'i1' 被零模型守卫禁止导入",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "import plugins.corpus._r2_runtime",
+        "detail": "REFUSED ImportError corpus preparation guard: 模块 'plugins.corpus._r2_runtime' 在阶段 'i1' 被零模型守卫禁止导入",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "class _S:;         family = socket.AF_INET;     sys.audit('socket.connect', _S(), ('203.0.113.1', 443))",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'i1' 禁止 socket 连接 ('203.0.113.1', 443)",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "class _U:;         family = socket.AF_UNIX;     sys.audit('socket.connect', _U(), '/synthetic-guard.sock')",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'i1' 禁止 socket 连接 '/synthetic-guard.sock'",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "open('/tmp/tmpml2q47b_/holdout/secret.md').read()",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止访问隔离路径 /tmp/tmpml2q47b_/holdout/secret.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.chdir('/tmp/tmpml2q47b_');     open('holdout/secret.md').read()",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止访问隔离路径 /tmp/tmpml2q47b_/holdout/secret.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.chdir('/tmp/tmpml2q47b_');     open('data/keep.md', 'w').write('x')",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止写入受保护路径 /tmp/tmpml2q47b_/data/keep.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.unlink('/tmp/tmpml2q47b_/data/keep.md')",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止删除受保护或隔离路径 /tmp/tmpml2q47b_/data/keep.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.rename('/tmp/tmpml2q47b_/data/keep.md', '/tmp/tmpml2q47b_/moved.md')",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止重命名受保护或隔离路径 /tmp/tmpml2q47b_/data/keep.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "open('/tmp/tmpml2q47b_/sources/other.md').read()",
+        "detail": "REFUSED OSError corpus preparation guard: 路径 /tmp/tmpml2q47b_/sources/other.md 不在阶段 'synthetic-selfcheck' 的开发来源允许清单内",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "open('/tmp/tmpml2q47b_/sources/sample.md').read()",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 未绑定 read_roots，拒绝读取 /tmp/tmpml2q47b_/sources/sample.md",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "import hashlib; h = hashlib.sha256(open('/tmp/tmpml2q47b_/sources/sample.md', 'rb').read()).hexdigest(); assert len(h) == 64; print('HASH_OK')",
+        "detail": "",
+        "expected": "HASH_OK",
+        "passed": true
+      },
+      {
+        "case": "raise SystemExit(guard.main(sys.argv[1:]))",
+        "detail": "",
+        "expected": "GUARD_REFUSED",
+        "passed": true
+      },
+      {
+        "case": "import subprocess;     subprocess.run(['/bin/true'])",
+        "detail": "REFUSED GuardError corpus preparation guard: 拒绝派生非 Python 子进程（纯 Python 守卫无法保护其行为）: ['/bin/true']",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "import subprocess; child = subprocess.run([sys.executable, '-I', '-B', '-c', \"try:\\n    open('/tmp/tmpml2q47b_/holdout/secret.md').read()\\nexcept OSError as exc:\\n    if 'corpus preparation guard' not in str(exc):\\n        raise\\n    print('GUARD_REFUSED')\\n    raise SystemExit(0)\\nprint('POLICY_BYPASS')\\nraise SystemExit(1)\\n\"], capture_output=True, text=True); assert child.returncode == 0 and 'GUARD_REFUSED' in child.stdout, child.stderr; print('CHILD_INHERITED')",
+        "detail": "",
+        "expected": "CHILD_INHERITED",
+        "passed": true
+      },
+      {
+        "case": "os.environ['CORPUS_GUARD_PHASE'] = 'synthetic-selfcheck';     os.environ.pop('CORPUS_GUARD_CONFIG', None);     from plugins.corpus.preparation import guard_pytest;     guard_pytest.pytest_load_initial_conftests([], None, None)",
+        "detail": "REFUSED GuardError corpus preparation guard: 检测到部分声明（CORPUS_GUARD_CONFIG 缺失）；CORPUS_GUARD_PHASE 与 CORPUS_GUARD_CONFIG 必须同时提供，否则拒绝运行",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.execvp('/home/administrator/FrontierAgent/.venv/bin/python3', ['/home/administrator/FrontierAgent/.venv/bin/python3', '-c', 'pass'])",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止 exec/system 派生不受守卫约束的进程",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.system('true')",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止 exec/system 派生不受守卫约束的进程",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "os.posix_spawn('/home/administrator/FrontierAgent/.venv/bin/python3', ['/home/administrator/FrontierAgent/.venv/bin/python3', '-c', 'pass'], {})",
+        "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 拒绝未受控子进程派生 '/home/administrator/FrontierAgent/.venv/bin/python3 /home/administrator/FrontierAgent/.venv/bin/python3 -c pass'",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "install fails when blocked module already loaded",
+        "detail": "REFUSED GuardError corpus preparation guard: 被禁模块已先于守卫加载: ['json']",
+        "expected": "refused",
+        "passed": true
+      },
+      {
+        "case": "unknown config field rejected",
+        "detail": "REFUSED GuardError guard config 存在未知字段: ['unexpected_field']",
+        "expected": "refused",
+        "passed": true
+      }
+    ],
+    "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+    "config_sha256": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+    "fingerprints": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+      "plugins/corpus/preparation/__init__.py": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2",
+      "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616"
+    },
+    "passed": true,
+    "phase": "i1",
+    "report_version": 2
+  },
+  "task": "I1-8"
+}

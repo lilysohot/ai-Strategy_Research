@@ -1,0 +1,378 @@
+{
+ "artifact": "i0a5-logic-contract-frozen-v1-20260915.json",
+ "task": "I0A-5 逻辑契约与开发基线联合冻结（frozen v1；M1 阶段快照）",
+ "date": "2026-09-15",
+ "frozen": true,
+ "freeze_basis": {
+  "confirmed_by": "U（2026-09-15 会话确认：批准 I0A-5 联合冻结，生成不可变 M1 阶段快照）",
+  "gate": "i0a5_freeze.py check 全过；本件与冻结报告 write-once 独占创建",
+  "preconditions_verified": [
+   "I0A-1 复核通过（i0a1-review.json）+ findings 绑定哈希一致",
+   "I0A-2 73 条终态（U 裁决 2026-09-15）：admitted 40 / excluded 6 / excluded_from_active 27；开发材料 6（company/industry/macro 各 2）；留出保护 3；冻结时点重测 89=71+18 零增删改、核心记录在库未变",
+   "I0A-3 admission-policy frozen v1-20260915：6 项表达式、验证 0 矛盾、三类计数与终态一致，自动准入保持禁用",
+   "I0A-4 冻结门通过：source-gold 23 条 / query-gold 30 条（每域 8+2、含关键题与 any/all、无答案负例 6）；23 槽原 PDF 冻结时点哈希复核通过",
+   "I1-8 守卫绑定：run3 反例 12/12 拒绝、7 文件指纹与当前一致；i1.json 保持 deny_all/read_roots 空 fail-closed 预置",
+   "baseline-bindings 7 类全部绑定（无 pending_locate_and_hash）"
+  ]
+ },
+ "supersedes": {
+  "draft": "i0a5-logic-contract-draft.json（frozen=false，保留不改；草案只汇集与绑定，不新增语义）"
+ },
+ "authority": {
+  "design": "docs/plan/corpus-ingestion-rebuild-architecture.md（v1.1 §4.1/4.2/4.3、§5.2、§7.3、§8/8.1）",
+  "tasks": "docs/plan/corpus-ingestion-rebuild-tasks.md（I0A-5 行）",
+  "note": "本文件只汇集与绑定，不新增语义、不改变物理候选；I0-C 若调整物理布局，仅权威映射整体迁移，逻辑契约枚举与判定次序不变"
+ },
+ "freeze_gate": {
+  "script": "i0a5_freeze.py",
+  "script_sha256": "d06db892fcd3bafa420b9765c9f0f7ffc83a345c66682b63393fa15be17290e2",
+  "guard_config": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a5-freeze.json",
+  "config_sha256": "d5d180a355d2a65f4e9b47fc8b9b348ec428f75c68e0ecc82c12b59df8d9e26c",
+  "network_mode": "deny_all（零连接）",
+  "model_calls": 0,
+  "child_processes": 0
+ },
+ "bindings": {
+  "i0a1_inventory": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-inventory.json",
+   "sha256": "1f1cf6a4a58860c153b76b22e071daeacd1557b6656fd50b20e4a8aa7677285b"
+  },
+  "i0a1_findings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json",
+   "sha256": "97f057c80e3bcb934428f153226a4ed6492b65af836d6c2a861e1fb475a54758"
+  },
+  "i0a1_review": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-review.json",
+   "sha256": "57618970ab25d49bd0d389809ec235559e8b3eeb68ac7096db0b9849a9b7fde1"
+  },
+  "i0a2_dev_manifest": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+   "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961"
+  },
+  "i0a2_review_queue": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/review-queue.json",
+   "sha256": "6a8111766358b6861adaa338e99c1e3544e15bc4581be94b9088fa17cbfa5476"
+  },
+  "i0a2_review_brief": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-review-brief.json",
+   "sha256": "01cb85655f462acca35b13de17157cf8a8af51a2b1acf6472647a2dd7d834dd7"
+  },
+  "i0a2_doclist_findings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-doclist-findings.json",
+   "sha256": "f6f118f527b1d4c3dcbb4be5fc8d3a13490ce5ea7ba0ca29ad1f014491895376"
+  },
+  "i0a2_adjudicated": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-adjudicated-20260915.json",
+   "sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea"
+  },
+  "i0a2_doclist_recount": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-doclist-recount-20260915.json",
+   "sha256": "d98b0517ccbf62bf6f9201ae224744d2bcce05e8f84445a19ff6da51888bd0c9"
+  },
+  "i0a3_admission_policy": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json",
+   "sha256": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661"
+  },
+  "i0a3_policy_verification": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a3-policy-verification.json",
+   "sha256": "f80182a9d4f058ae19ae70041fccc7945fe7aac899ae7962aa8d9ea990dad378"
+  },
+  "i0a4_candidates_v3": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-candidates-v3-20260915.json",
+   "sha256": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943"
+  },
+  "i0a4_labeling_working": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-labeling-working.json",
+   "sha256": "00968eca31734dbc9e56d82e573d54059726ab750675b99a5e5ed1a006d402c9"
+  },
+  "i0a4_freeze_report": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-freeze-report-20260915.json",
+   "sha256": "d67601c0bf1f26346bfd222b782ee166d128799ef8925c2c748f0fbd562e21e0"
+  },
+  "i0a4_source_gold_frozen": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+   "sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+  },
+  "i0a4_query_gold_frozen": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl",
+   "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+  },
+  "i0a4_baseline_bindings": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json",
+   "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b"
+  },
+  "i1_guard_config": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+   "sha256": "e26a10ac8e8fafc7c0e87111eeffa1ddd9dc2b6203c4adeab24ad75b58414a0e"
+  },
+  "i0_guard_config_inventory": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json",
+   "sha256": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05"
+  },
+  "i1_guard_impl": {
+   "path": "plugins/corpus/preparation/guard.py",
+   "sha256": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794"
+  },
+  "i1_guard_pytest": {
+   "path": "plugins/corpus/preparation/guard_pytest.py",
+   "sha256": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5"
+  },
+  "i1_guard_init": {
+   "path": "plugins/corpus/preparation/__init__.py",
+   "sha256": "9097d2fe6de33d81147cdf1b8a46409d2cb32105c4c6dbd8f3a7a330348319f2"
+  },
+  "i1_guard_tests": {
+   "path": "tests/test_corpus_preparation_guard.py",
+   "sha256": "a340549add3d047c71cd2fe6216486cea9e2fc39a7bcccdc8c776d5e986fd0ee"
+  },
+  "i0_guard_report_v2": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-guard-report-v2.json",
+   "sha256": "68c8def23d010216e3be3abaf1cc5856c8bba4320e0aaf7ad3818f341e5df615"
+  },
+  "i0_guard_counterexamples_run3": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/2026-09-15-status/guard-counterexamples-run3.json",
+   "sha256": "760a7709aa474e9b78c336e17f21645042d707c86312c97d498608ed22017997"
+  }
+ },
+ "contract": {
+  "decide_admission": {
+   "ref": "architecture §5.2",
+   "signature": "decide_admission(source, reviewed_decisions, probe, policy) -> AdmissionDecision",
+   "purity": "纯函数；同输入同 policy_rev 同结果；policy 未冻结或版本未知则拒绝执行",
+   "inputs": {
+    "source": "完整来源哈希、格式、登记位置；路径/标题不是批准凭证",
+    "reviewed_decisions": "绑定来源哈希的审核记录、审阅人、时间、范围坐标、决定、依据、显式取代链",
+    "probe": "feature_id/value/source_locator/extractor_rev；value ∈ matched|absent|unreadable，未读到不能算 absent",
+    "policy": "policy_rev、允许材料/领域、特征定义与探查资源上限"
+   },
+   "output_enums": {
+    "decision": [
+     "in_scope",
+     "excluded_by_policy",
+     "review_required"
+    ],
+    "reason_codes_at_least": [
+     "missing_review",
+     "conflicting_review",
+     "source_changed",
+     "mixed_material",
+     "unsupported_domain",
+     "unreadable_probe",
+     "policy_conflict"
+    ]
+   },
+   "decision_order": [
+    "1. 审核绑定不同源哈希/坐标无效/多个未解决人工决定 → review_required；不凭时间猜取代关系",
+    "2. 唯一有效人工决定 + 分析师研报 + company/industry/macro + 范围明确 → in_scope；已确认纪要或主线外 → excluded_by_policy；部分章节批准仅按显式坐标 scope",
+    "3. 其余一律 review_required，原因取适用项",
+    "4. 单一类型词不决定类型；新哈希不继承旧哈希批准"
+   ],
+   "constraints": [
+    "机器特征仅生成复核建议，禁止自动纳入/排除",
+    "进入构建的清单只能含 in_scope",
+    "冲突仅列复核，不静默覆盖"
+   ]
+  },
+  "citation_authority": {
+   "ref": "architecture §4.2",
+   "rule": "原始文件字节为最终来源；确定构建版本内权威记录 = 原文文字 + 原始坐标（候选 corpus_units.raw_text + 坐标，不是 clean_view/search_text）",
+   "citation_binding": "source_id/build_id/unit_id + 原文 Unicode code point [start,end) 或 cell 坐标 + 内容哈希；多片段分别引用，不用清洗文本偏移",
+   "verification": "fetch/verify 经同一证据读取 Interface；副本冲突返回完整性错误，禁止回退可用副本；离线副本须由权威集合导出并绑定可信清单"
+  },
+  "report_publication_date": {
+   "ref": "architecture §4.3",
+   "location": "corpus_admissions.metadata_snapshot.report_publication（唯一落点，不双权威）",
+   "fields": [
+    "value(ISO 日期或有时点)",
+    "precision=date|instant|unknown",
+    "status=known|unknown|conflict",
+    "evidence_refs",
+    "origin=source_explicit|human_review",
+    "review_ref"
+   ],
+   "rules": [
+    "known 须有原文依据或绑定来源哈希的人工依据；仅日期不补午夜/时区",
+    "unknown/conflict 的 value=null，冲突候选单列",
+    "不得从 mtime/doc_id/上线时间补值",
+    "更正创建新 metadata/decision 版本，不改已引用 build 的时间解释"
+   ]
+  },
+  "coverage_axes": {
+   "ref": "architecture §7.3",
+   "axes": {
+    "admission.decision": "in_scope | excluded_by_policy | review_required（§5.2 决定，非查询结果）",
+    "coverage.processing": "full | scoped | unknown（相对 requested_scope 的完成度，非语义正确率）",
+    "query_status": "matched | no_match | failed（effective_scope 内执行结果）",
+    "availability": "available | absent | unknown（针对明确用途与范围）"
+   },
+   "required_fields": [
+    "requested_scope_ref",
+    "effective_scope_ref",
+    "publication_snapshot_ref",
+    "reason_codes",
+    "来源数/已发布数/排除数/待复核失败数"
+   ],
+   "rules": [
+    "未知枚举拒绝，不 fallback 成功",
+    "unknown 优先于 scoped",
+    "excluded 不进处理完整度或冒充 no_match",
+    "failed 恒 unknown",
+    "no_match 仅指已查询范围；FTS 无命中通常 availability=unknown",
+    "旧版合法活动版本不因新构建失败自动失效；禁止静默用旧版满足最新要求"
+   ],
+   "counting": "计数分母绑定同一 scope 清单与查询快照，不跨时刻拼接"
+  },
+  "revision_model": {
+   "ref": "architecture §4.1",
+   "ids": {
+    "source_id": "完整 SHA-256，仅由原始字节决定；路径改名不变；更新产生新 source_id",
+    "parse_rev": "源哈希 + 解析器/依赖版本 + 解析参数",
+    "clean_rev": "清洗规则 + 必要元数据",
+    "chunk_rev": "切块规则",
+    "index_rev": "分词配置 + 索引文本生成规则",
+    "build_id": "绑定全部 rev + 准入决定 + 实际 scope；重复执行幂等"
+   },
+   "rules": [
+    "发布后 units/chunks 不可覆盖",
+    "新 build 核验通过才切 active_build_id",
+    "缓存命中核验输入/产物哈希，不沿用文件未变即跳过",
+    "必要元数据更正影响检索展示时生成新 build"
+   ]
+  },
+  "job_state_machine": {
+   "ref": "architecture §8 / §8.1",
+   "stage_order": [
+    "registered",
+    "admission_decided",
+    "parsed",
+    "cleaned",
+    "chunked",
+    "staged",
+    "indexed",
+    "verified",
+    "published"
+   ],
+   "job_states": [
+    "queued",
+    "running",
+    "succeeded",
+    "failed",
+    "cancelled"
+   ],
+   "job_key": "(build_id, stage) 唯一；重试/接管递增 attempt，不新造 build",
+   "lease": {
+    "ownership": "短事务原子判定 queued/可重试 failed/已过期 running；running 未过期不得抢占",
+    "fence": "每次取得所有权递增 attempt 与 fence_token；权威写入与检查点提交须校验 running/未过期/当前 token，更新零行即 lease_lost",
+    "heartbeat": "heartbeat < TTL 且 ≤ TTL/3；开发候选 TTL=120s、heartbeat=30s（I0 冻结，非已测保证）",
+    "config_required": [
+     "lease_ttl_seconds",
+     "heartbeat_interval_seconds",
+     "stage_timeout_seconds",
+     "max_attempts"
+    ],
+    "missing_config": "缺配置不启动；不能无限续租重试"
+   },
+   "publish": "短事务锁定 publication、核对 admission/generation、确认 build 完整通过检查后切活动指针；旧任务不得覆盖新决定",
+   "memory_chain_note": "I1 内存实现须保留同一次序与幂等语义；租约的 PG 条件写入实测在 I2，不以内存锁代替"
+  }
+ },
+ "development_baseline": {
+  "note": "M1 开发基线（冻结）：本契约 + I0A-2 来源终态与开发分母 + I0A-4 金标/负例 + I1-8 守卫绑定；物理候选仍待 I0-C，不以本快照冻结物理布局",
+  "sources": {
+   "adjudicated_total": 73,
+   "admitted_research_report": 40,
+   "excluded": 6,
+   "excluded_from_active": 27,
+   "holdout_protected": 3,
+   "dev_approved": 6,
+   "dev_scopes": {
+    "industry": 2,
+    "company": 2,
+    "macro": 2
+   }
+  },
+  "denominator_freeze": {
+   "recount": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-doclist-recount-20260915.json",
+   "observed_at": "2026-09-15T12:01:45+00:00",
+   "documents": 89,
+   "by_status": {
+    "empty": 18,
+    "ok": 71
+   },
+   "delta": {
+    "added": 0,
+    "removed": 0,
+    "changed": 0
+   }
+  },
+  "gold": {
+   "source": {
+    "records": 23,
+    "roles": {
+     "body_evidence": 20,
+     "generic_statement": 3
+    }
+   },
+   "query": {
+    "records": 30,
+    "per_domain": {
+     "company": 10,
+     "industry": 10,
+     "macro": 10
+    },
+    "critical": {
+     "company": 10,
+     "industry": 9,
+     "macro": 9
+    },
+    "satisfy_rule": {
+     "any": 22,
+     "all": 2
+    }
+   }
+  },
+  "guard_binding": {
+   "run3": "12/12 拒绝",
+   "fingerprints": "7 文件与当前一致",
+   "i1_config": "deny_all；read_roots 空（待 I1 启动时回填实际来源清单并重验）"
+  },
+  "i1_implications": [
+   "I1-1 contract 内存数据模型须逐一实现本契约枚举/判定次序/必填字段，非法组合在 Interface 校验拒绝",
+   "I1-5 admission 表驱动用例由冻结后的 admission-policy 与 I0A-2 终态生成；speaker_turns/qa_markers/transcript_declaration 正例由 I1 合成夹具提供（登记待办）",
+   "I1 全部测试不构造真实 PG/模型客户端；I1-8 守卫绑定与来源清单回填先于任何测试收集"
+  ]
+ },
+ "carried_items": [
+  {
+   "item": "旧检索题（legacy_retrieval_golden）适用范围与同口径重评",
+   "route": "I3-5（U 圈定范围后）",
+   "blocking_m1": false
+  },
+  {
+   "item": "旧人工审核导出权威版本（.audit 88 工件）与 docs/chinese_docs 遗留表归属",
+   "route": "I0-C",
+   "blocking_m1": false
+  },
+  {
+   "item": "I0-C 清理清单（DB 21 条删除 + 磁盘 1 文件 + 37 ADS 残留）",
+   "route": "前置 M2+I0-C 冻结+I4 停写窗口+U 执行签认；本阶段零执行",
+   "blocking_m1": false
+  },
+  {
+   "item": "宿主侧外部写入者手段（单 superuser 角色）",
+   "route": "I4 停写窗口需 U 提供",
+   "blocking_m1": false
+  },
+  {
+   "item": "I1-8 实际 I1 来源清单回填与拒绝路径验证（模型客户端陷阱、子进程继承）",
+   "route": "I1 启动首项",
+   "blocking_m1": false
+  },
+  {
+   "item": "物理布局候选（复用/新建/迁移字段）",
+   "route": "I0-C-1 裁决；契约枚举与判定次序不变",
+   "blocking_m1": false
+  }
+ ],
+ "discipline": "冻结件不可变；发现错误升版本重冻结（frozen-v2…），不得覆盖；草案保留；金标仅用于评估，不反哺运行链路；I0-C 若调整物理布局，仅权威映射整体迁移，逻辑契约枚举与判定次序不变；本批次零模型、零数据库写入。"
+}

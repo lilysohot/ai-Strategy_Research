@@ -1,0 +1,45 @@
+{
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "6c2fb769b479e7bb69f5e587ac31b1e2e711db4eac48e873466a8adfb1615239"
+    },
+    "independent_review": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260917-i2-independent-review/review.md": "7ff37290e70ffe656e2d35e9e383b8537764752a18b1d43b6d3e10354b98b5aa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260917-i2-independent-review/test_review_probes.py": "1dd4aa249eab2ee0fdeb6750f161cd6c41fc7e6c9a59d5dcc1cf2622f786d24a"
+    },
+    "plan_updates": {
+      "docs/plan/claims-market-closed-loop-plan.md": "82137a622d0f1f2efdfaf9d90d4f024293c5a5640ca5fd989268d65df1a8edc3",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "a03bced14a499db6b4d116a113058710df240f4ca4360c0000272be72bbcfa0f"
+    },
+    "pg_tests": {
+      "tests/test_corpus_preparation_repository_pg.py": "5ea9ec893d6dad07c34976be4500eb21542f052143a42a66b75ea4b569d7ae8f"
+    },
+    "repository_pg": {
+      "plugins/corpus/preparation/repository_pg.py": "011876662c826cc100953fae87ec0f8ce75035687f7e265f7fec6bf9eccdab56"
+    }
+  },
+  "corrections": {
+    "F1": "PG 真库测试清理 fixture 在 TRUNCATE 前校验 current_database 与同实例生产库哨兵，错误库/生产实例先拒绝；PgStore 目标校验失败显式关闭连接。",
+    "F2": "publish 读取 corpus_builds.scope_ref 并与 admission.scope_ref 校验，合法部分 scope 不再因 SELECT 列不足抛 IndexError。",
+    "F3": "租约所有权校验在 SELECT ... FOR UPDATE 返回后取数据库 clock_timestamp()，避免等待行锁跨过 lease_until 后仍按旧时间放行。",
+    "F4": "validate_i0c_freeze.py 核验当前 i0c-r2 绑定，并补核仍被继承使用的 i1-r4 绑定；新增 i0c-r3 绑定本次修复与独立 review 反例。",
+    "F5": "Build.quality_report 按解析后的 JSON 规范化比较，JSONB 往返不再因键序/空格变化破坏幂等。",
+    "F6": "Job.checkpoint 与 source checkpoint 从 JSONB 读回时统一编码为 JSON 字符串，保持 Store 契约。"
+  },
+  "created_at": "2026-09-17T12:00:00+08:00",
+  "m5_declaration": "not_declared（I2 独立复核整改完成；仍需 I2-3/4/5/6/7/8 与真实 PG 并发/CLI/消费者验收后方可声明 M5）",
+  "notes": [
+    "i0c-r2 保留历史字节，不追改；本修订仅登记 20260917-i2-independent-review 的 F1-F6 整改与对应反例 probe。",
+    "本轮无真实 PostgreSQL 连接：独立 review probe 使用 fake connection/cursor；tests/test_corpus_preparation_repository_pg.py 在未设置 CORPUS_I2_DSN 时模块级跳过。",
+    "当前 validator 会核 i0c-r2 显式绑定、本 r3 修复绑定，以及继承仍生效的 i1-r4 绑定；旧 i0c-r1 活文件不重新要求匹配旧哈希。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r2.json",
+    "sha256": "805372cb6cd83adfe81fe6ba41ca65fbae793db13b67bae7068fe2271d2a1563",
+    "snapshot_id": "i0c-r2"
+  },
+  "phase": "i0c",
+  "revision": "r3",
+  "snapshot_id": "i0c-r3",
+  "task": "I2 independent review remediation for PG adapter safety, store contract, lease fencing, and freeze validation"
+}

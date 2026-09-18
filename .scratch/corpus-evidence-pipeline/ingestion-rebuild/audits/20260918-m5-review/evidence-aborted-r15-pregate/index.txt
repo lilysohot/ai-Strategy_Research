@@ -1,0 +1,1 @@
+freeze-validator exit=1

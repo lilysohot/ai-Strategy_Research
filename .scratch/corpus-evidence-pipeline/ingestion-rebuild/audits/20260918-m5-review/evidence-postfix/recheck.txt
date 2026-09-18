@@ -1,0 +1,27 @@
+=== F1 修复后复验（r17 前置）：逐用例单独运行 + 整文件（守卫 env，i2-verify） ===
+日期: 2026-09-18
+
+--- 单独运行 test_check_and_status_expose_structured_gaps ---
+.                                                                        [100%]
+1 passed in 0.52s
+--- 单独运行 test_acknowledged_gap_publishes_and_coverage_is_scoped ---
+.                                                                        [100%]
+1 passed in 0.42s
+--- 单独运行 test_plan_precheck_shares_the_same_verdict ---
+.                                                                        [100%]
+1 passed in 0.49s
+--- 单独运行 test_document_text_is_unit_join_not_byte_restore ---
+.                                                                        [100%]
+1 passed in 0.40s
+
+--- 整文件（13 用例）---
+.............                                                            [100%]
+13 passed in 1.05s
+
+--- 纯 Python 部分（普通环境）---
+.........                                                                [100%]
+9 passed, 4 deselected in 0.24s
+
+=== 修复后受影响面整体复跑（回路 + 缺口 + 官方六族，守卫 env） ===
+........................                                                 [100%]
+96 passed in 23.28s

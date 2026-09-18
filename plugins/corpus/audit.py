@@ -6,7 +6,7 @@
 **只读现有表**（``documents`` / ``blocks`` / ``claims`` / ``claim_block_runs``），
 不产 claim、不调 LLM；所有"判定类"逻辑与抽取链路**同口径复用**：
 
-- 候选块判定 = ``claims_v2.triage_block_detail``，输出 numeric/rating/personal_trade/
+- 候选块判定 = ``claims_detail.triage_block_detail``，输出 numeric/rating/personal_trade/
   qualitative/noise/no_signal 原因码，便于看见评级、个人交易、定性观点召回与噪声过滤；
 - 领域分类 = ``doc_kind_override`` 优先，否则 ``classify_doc_kind(title, texts)``
   （与 ``CorpusService.extract_claims`` 完全一致）；
@@ -37,10 +37,13 @@ from collections import Counter, defaultdict
 from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any, LiteralString, cast
 
-import psycopg
-from psycopg.rows import dict_row
+if TYPE_CHECKING:
+    # psycopg 是可选依赖（PG 审计链路专属）：类型仅用于标注（本模块有
+    # ``from __future__ import annotations``）；实际连接在函数内惰性 import，
+    # 普通 sqlite 环境零 psycopg。
+    import psycopg
 
 from plugins.corpus.claims import (
     DOC_KINDS,
@@ -50,7 +53,7 @@ from plugins.corpus.claims import (
     is_flat_table,
     normalize_metric,
 )
-from plugins.corpus.claims_v2 import (
+from plugins.corpus.claims_detail import (
     _value_in_evidence,
     classify_doc_kind_detail,
     triage_block_detail,
@@ -76,6 +79,8 @@ _FORECAST_PERIOD_RE = re.compile(r"\d{4}E$")
 def _load_documents(
     conn: psycopg.Connection, doc_ids: Sequence[str] | None
 ) -> list[dict[str, Any]]:
+    from psycopg.rows import dict_row
+
     sql = (
         "SELECT doc_id, title, published, doc_kind_override, status FROM documents"
         + (" WHERE doc_id = ANY(%s)" if doc_ids else "")
@@ -87,6 +92,8 @@ def _load_documents(
 
 
 def _load_blocks(conn: psycopg.Connection) -> dict[str, list[BlockView]]:
+    from psycopg.rows import dict_row
+
     by_doc: dict[str, list[BlockView]] = defaultdict(list)
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute("SELECT doc_id, seq, locator, text FROM blocks ORDER BY doc_id, seq")
@@ -98,6 +105,8 @@ def _load_blocks(conn: psycopg.Connection) -> dict[str, list[BlockView]]:
 
 
 def _load_claims(conn: psycopg.Connection) -> list[dict[str, Any]]:
+    from psycopg.rows import dict_row
+
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute(
             "SELECT claim_id, doc_id, seq, kind, tickers, metric, value_text, value_num,"
@@ -107,6 +116,8 @@ def _load_claims(conn: psycopg.Connection) -> list[dict[str, Any]]:
 
 
 def _load_runs(conn: psycopg.Connection) -> list[dict[str, Any]]:
+    from psycopg.rows import dict_row
+
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute(
             "SELECT doc_id, seq, status, claims_n, attempts, duration_ms, prompt_tokens,"
@@ -117,6 +128,8 @@ def _load_runs(conn: psycopg.Connection) -> list[dict[str, Any]]:
 
 
 def _table_exists(conn: psycopg.Connection, table: str) -> bool:
+    from psycopg.rows import dict_row
+
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute("SELECT to_regclass(%s) AS name", (table,))
         row = cur.fetchone()
@@ -132,13 +145,11 @@ def _doc_kind(row: dict[str, Any], texts: list[str]) -> str:
 
 
 # ── 报告一：完整性 ───────────────────────────────────────────────
-#: 审计覆盖的表（§4：只读现有表；v2 影子表同样必须被备份/恢复覆盖）
+#: 审计覆盖的表（§4：只读现有表；同样必须被备份/恢复覆盖）
 _AUDITED_TABLES = (
     "blocks",
     "claim_block_runs",
-    "claim_block_runs_v2",
     "claims",
-    "claims_v2",
     "documents",
 )
 
@@ -151,6 +162,8 @@ def _backup_coverage(conn: psycopg.Connection) -> tuple[list[dict[str, Any]], li
     没有的列；生成列（``tsv`` / ``title_tsv``）可随时重算，不算偏差。
     后者防"新表压根没进备份"。
     """
+    from psycopg.rows import dict_row
+
     from plugins.corpus.service import CorpusService  # 延迟导入避免环形依赖
 
     with conn.cursor(row_factory=dict_row) as cur:
@@ -313,30 +326,6 @@ def audit_completeness(
             "drift": backup_missing,
             "tables_not_backed_up": backup_extra_tables,
         },
-    }
-
-
-def audit_v2_shadow(conn: psycopg.Connection) -> dict[str, Any]:
-    """v2 影子状态分布；只读，不要求生产切换。"""
-    if not _table_exists(conn, "claims_v2") or not _table_exists(conn, "claim_block_runs_v2"):
-        return {"available": False}
-    with conn.cursor(row_factory=dict_row) as cur:
-        cur.execute("SELECT quality_status, COUNT(*) AS n FROM claims_v2 GROUP BY quality_status")
-        quality = {str(r["quality_status"]): int(r["n"]) for r in cur.fetchall()}
-        cur.execute("SELECT status, COUNT(*) AS n FROM claim_block_runs_v2 GROUP BY status")
-        runs = {str(r["status"]): int(r["n"]) for r in cur.fetchall()}
-        cur.execute("SELECT COUNT(*) AS n FROM claims_v2 WHERE quality_status = 'ok'")
-        ok_row = cur.fetchone()
-    ok = int(ok_row["n"]) if ok_row else 0
-    total = sum(quality.values())
-    return {
-        "available": True,
-        "claims": {
-            "total": total,
-            "quality_status": dict(sorted(quality.items())),
-            "normal_query_visible": ok,
-        },
-        "runs": {"status": dict(sorted(runs.items()))},
     }
 
 
@@ -522,12 +511,83 @@ def audit_quality(
 
 
 # ── 汇总入口 ─────────────────────────────────────────────────────
+_CHAIN_AUDIT_SQL = """
+SELECT
+  (SELECT count(*) FROM corpus.corpus_sources) AS sources,
+  (SELECT count(*) FROM corpus.corpus_admissions) AS admissions,
+  (SELECT count(*) FROM corpus.corpus_builds) AS builds,
+  (SELECT count(*) FROM corpus.corpus_units) AS units,
+  (SELECT count(*) FROM corpus.corpus_chunks) AS chunks,
+  (SELECT count(*) FROM corpus.corpus_publications WHERE active_build_id IS NOT NULL) AS active
+"""
+
+_CHAIN_CONFLICT_SQL: dict[str, str] = {
+    # 活动版本必须仍对应当前决定且当前决定为 in_scope（撤销未落地即为数据错误）
+    "published_decision_not_in_scope": """
+        SELECT count(*) FROM corpus.corpus_publications p
+        JOIN corpus.corpus_sources s ON s.source_id = p.source_id
+        LEFT JOIN corpus.corpus_admissions a ON a.decision_id = s.current_decision_id
+        WHERE p.active_build_id IS NOT NULL
+          AND (p.current_decision_id IS DISTINCT FROM s.current_decision_id
+               OR a.decision IS DISTINCT FROM 'in_scope')
+    """,
+    # 活动 build 的 PUBLISHED 逻辑 job 当前 attempt 必须 succeeded
+    "active_build_without_succeeded_publish_job": """
+        SELECT count(*) FROM corpus.corpus_publications p
+        WHERE p.active_build_id IS NOT NULL
+          AND NOT EXISTS (
+            SELECT 1 FROM corpus.corpus_jobs j
+            WHERE j.build_id = p.active_build_id AND j.stage = 'published'
+              AND j.attempt = (SELECT max(attempt) FROM corpus.corpus_jobs
+                               WHERE build_id = p.active_build_id AND stage = 'published')
+              AND j.state = 'succeeded')
+    """,
+    # 已发布 chunk 引用的单元必须存在（跨表手工写入/半提交的可审计证据）
+    "published_chunk_references_missing_unit": """
+        SELECT count(*) FROM corpus.corpus_chunks c
+        JOIN corpus.corpus_publications p ON p.active_build_id = c.build_id
+        WHERE EXISTS (
+            SELECT 1 FROM unnest(c.unit_refs) AS ref
+            WHERE NOT EXISTS (SELECT 1 FROM corpus.corpus_units u
+                              WHERE u.build_id = c.build_id AND u.unit_id = ref))
+    """,
+}
+
+
+def audit_corpus_chain(conn: psycopg.Connection) -> dict[str, Any]:
+    """新链审计（I2-8 读侧迁移）：活动版本/执行台账/引用闭合的确定性检查。
+
+    只读 ``corpus`` schema；旧表审计（documents/blocks/claims）保持不变，本段是
+    **新增入口而非替换**——新链不存在时返回 ``available=False``，不猜、不静默跳过。
+    """
+    from psycopg.rows import dict_row
+
+    with conn.cursor(row_factory=dict_row) as cur:
+        cur.execute("SELECT to_regclass('corpus.corpus_publications') IS NOT NULL AS ok")
+        row = cur.fetchone()
+        available = bool(row and row["ok"])
+        if not available:
+            return {"available": False, "conflicts": [], "counts": {}, "codes": []}
+        cur.execute(cast(LiteralString, _CHAIN_AUDIT_SQL))
+        counts_row = cur.fetchone()
+        counts = {key: int(value) for key, value in dict(counts_row or {}).items()}
+        codes: list[str] = []
+        for code, sql in _CHAIN_CONFLICT_SQL.items():
+            cur.execute(cast(LiteralString, sql))
+            hit = cur.fetchone()
+            if hit is not None and int(hit["count"]) > 0:
+                codes.append(code)
+    return {"available": True, "conflicts": codes, "counts": counts, "codes": codes}
+
+
 def run_audit(
     db: str,
     doc_ids: Sequence[str] | None = None,
     jsonl_path: str | Path | None = None,
 ) -> tuple[dict[str, Any], int]:
     """跑三类报告并落留痕，返回 ``(报告 JSON, 退出码)``。退出码：0 干净 / 1 有冲突 / 2 没跑起来。"""
+    import psycopg
+
     report: dict[str, Any] = {
         "disclaimer": DISCLAIMER,
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
@@ -543,14 +603,15 @@ def run_audit(
             completeness = audit_completeness(conn, documents, blocks_by_doc, claims, runs)
             consistency = audit_consistency(documents, blocks_by_doc, claims)
             quality = audit_quality(blocks_by_doc, claims, runs)
-            v2_shadow = audit_v2_shadow(conn)
+            # I2-8：新链审计（corpus schema 存在时）与旧表审计并列；不存在则 available=False
+            chain = audit_corpus_chain(conn)
     except psycopg.OperationalError as exc:
         return {"ok": False, "error": f"PG 不可用：{exc}"}, 2
 
     report["completeness"] = completeness
     report["consistency"] = consistency
     report["quality"] = quality
-    report["v2_shadow"] = v2_shadow
+    report["chain"] = chain
 
     # 冲突清单（驱动退出码）；观察项/缺口只报告
     conflicts: list[str] = []
@@ -563,6 +624,8 @@ def run_audit(
         conflicts.append("quality.traceability.untraced")
     if quality["runs"]["dead_letters"]:  # type: ignore[index]
         conflicts.append("quality.runs.dead_letters")
+    if chain.get("available") and chain.get("conflicts"):
+        conflicts.extend(f"chain.{code}" for code in chain["conflicts"])
     report["conflicts"] = conflicts
 
     _append_jsonl(jsonl_path, report, len(conflicts))

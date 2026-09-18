@@ -1,0 +1,634 @@
+{
+  "artifact": "i0a1-inventory-findings.json",
+  "task": "I0A-1 在线只读盘点",
+  "observed_at": "2026-09-15T05:53:58+00:00",
+  "guard": {
+    "phase": "i0-inventory",
+    "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json",
+    "config_sha256": "51b28f22fc81e3e21683e9901b9d91c84720003743648f95225cae1bb34d099a"
+  },
+  "target": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "database": "postgres",
+    "user": "postgres",
+    "note": "凭据不出现在本文件"
+  },
+  "errors": [],
+  "identity": [
+    {
+      "version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+      "db": "postgres",
+      "usr": "postgres",
+      "server_addr": "172.17.0.2/32",
+      "server_port": 5432,
+      "start_time": "2026-09-15 05:48:37.832891+00:00"
+    }
+  ],
+  "settings": [
+    {
+      "name": "config_file",
+      "setting": "/var/lib/postgresql/18/docker/postgresql.conf"
+    },
+    {
+      "name": "data_directory",
+      "setting": "/var/lib/postgresql/18/docker"
+    },
+    {
+      "name": "fsync",
+      "setting": "on"
+    },
+    {
+      "name": "hba_file",
+      "setting": "/var/lib/postgresql/18/docker/pg_hba.conf"
+    },
+    {
+      "name": "max_connections",
+      "setting": "100"
+    },
+    {
+      "name": "port",
+      "setting": "5432"
+    },
+    {
+      "name": "server_version",
+      "setting": "18.6 (Debian 18.6-1.pgdg12+2)"
+    },
+    {
+      "name": "shared_preload_libraries",
+      "setting": ""
+    },
+    {
+      "name": "wal_level",
+      "setting": "replica"
+    }
+  ],
+  "databases": [
+    {
+      "datname": "apodex",
+      "owner": "postgres",
+      "datallowconn": true,
+      "encoding": "UTF8",
+      "size": "9529 kB"
+    },
+    {
+      "datname": "postgres",
+      "owner": "postgres",
+      "datallowconn": true,
+      "encoding": "UTF8",
+      "size": "26 MB"
+    },
+    {
+      "datname": "template0",
+      "owner": "postgres",
+      "datallowconn": false,
+      "encoding": "UTF8",
+      "size": "7521 kB"
+    },
+    {
+      "datname": "template1",
+      "owner": "postgres",
+      "datallowconn": true,
+      "encoding": "UTF8",
+      "size": "7593 kB"
+    }
+  ],
+  "extensions_installed": [
+    {
+      "extname": "pg_trgm",
+      "extversion": "1.6",
+      "schema": "public"
+    },
+    {
+      "extname": "plpgsql",
+      "extversion": "1.0",
+      "schema": "pg_catalog"
+    },
+    {
+      "extname": "vector",
+      "extversion": "0.8.6",
+      "schema": "public"
+    },
+    {
+      "extname": "zhparser",
+      "extversion": "2.4",
+      "schema": "public"
+    }
+  ],
+  "extensions_available_relevant": [
+    {
+      "name": "pg_trgm",
+      "default_version": "1.6"
+    },
+    {
+      "name": "vector",
+      "default_version": "0.8.6"
+    },
+    {
+      "name": "zhparser",
+      "default_version": "2.4"
+    }
+  ],
+  "schemas": [
+    {
+      "nspname": "public",
+      "owner": "pg_database_owner"
+    },
+    {
+      "nspname": "zhparser",
+      "owner": "postgres"
+    }
+  ],
+  "tables": [
+    {
+      "schemaname": "public",
+      "tablename": "blocks",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "chinese_docs",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs_v2",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "corpus_evidence_runs",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "docs",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documents",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ingest_failures",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ingest_runs",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    },
+    {
+      "schemaname": "zhparser",
+      "tablename": "zhprs_custom_word",
+      "tableowner": "postgres",
+      "rowsecurity": false
+    }
+  ],
+  "views": [],
+  "matviews": [],
+  "sequences": [
+    {
+      "schemaname": "public",
+      "sequencename": "chinese_docs_id_seq",
+      "sequenceowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "sequencename": "claims_claim_id_seq",
+      "sequenceowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "sequencename": "claims_v2_claim_id_seq",
+      "sequenceowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "sequencename": "docs_id_seq",
+      "sequenceowner": "postgres"
+    },
+    {
+      "schemaname": "public",
+      "sequencename": "ingest_runs_run_id_seq",
+      "sequenceowner": "postgres"
+    }
+  ],
+  "indexes": [
+    {
+      "schemaname": "public",
+      "tablename": "blocks",
+      "indexname": "blocks_pkey",
+      "indexdef": "CREATE UNIQUE INDEX blocks_pkey ON public.blocks USING btree (doc_id, seq)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "blocks",
+      "indexname": "idx_blocks_locator",
+      "indexdef": "CREATE INDEX idx_blocks_locator ON public.blocks USING btree (doc_id, locator)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "blocks",
+      "indexname": "idx_blocks_tsv",
+      "indexdef": "CREATE INDEX idx_blocks_tsv ON public.blocks USING gin (tsv)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "chinese_docs",
+      "indexname": "chinese_docs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX chinese_docs_pkey ON public.chinese_docs USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "chinese_docs",
+      "indexname": "idx_docs_tsv",
+      "indexdef": "CREATE INDEX idx_docs_tsv ON public.chinese_docs USING gin (tsv)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs",
+      "indexname": "claim_block_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claim_block_runs_pkey ON public.claim_block_runs USING btree (doc_id, seq)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs",
+      "indexname": "idx_claim_block_runs_fingerprint",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_fingerprint ON public.claim_block_runs USING btree (status, model, extractor_version)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs",
+      "indexname": "idx_claim_block_runs_status",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_status ON public.claim_block_runs USING btree (status)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs_v2",
+      "indexname": "claim_block_runs_v2_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claim_block_runs_v2_pkey ON public.claim_block_runs_v2 USING btree (doc_id, source_rev, seq)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs_v2",
+      "indexname": "idx_claim_block_runs_v2_fingerprint",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_v2_fingerprint ON public.claim_block_runs_v2 USING btree (status, model, extractor_version, lint_version)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claim_block_runs_v2",
+      "indexname": "idx_claim_block_runs_v2_status",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_v2_status ON public.claim_block_runs_v2 USING btree (status)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "claims_doc_id_seq_claim_text_key",
+      "indexdef": "CREATE UNIQUE INDEX claims_doc_id_seq_claim_text_key ON public.claims USING btree (doc_id, seq, claim_text)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "claims_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claims_pkey ON public.claims USING btree (claim_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "idx_claims_as_of",
+      "indexdef": "CREATE INDEX idx_claims_as_of ON public.claims USING btree (as_of)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "idx_claims_doc",
+      "indexdef": "CREATE INDEX idx_claims_doc ON public.claims USING btree (doc_id, seq)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "idx_claims_kind",
+      "indexdef": "CREATE INDEX idx_claims_kind ON public.claims USING btree (kind)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims",
+      "indexname": "idx_claims_tickers",
+      "indexdef": "CREATE INDEX idx_claims_tickers ON public.claims USING gin (tickers)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "indexname": "claims_v2_doc_id_source_rev_seq_claim_text_evidence_quote_m_key",
+      "indexdef": "CREATE UNIQUE INDEX claims_v2_doc_id_source_rev_seq_claim_text_evidence_quote_m_key ON public.claims_v2 USING btree (doc_id, source_rev, seq, claim_text, evidence_quote, metric, period_end, value_text)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "indexname": "claims_v2_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claims_v2_pkey ON public.claims_v2 USING btree (claim_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_doc",
+      "indexdef": "CREATE INDEX idx_claims_v2_doc ON public.claims_v2 USING btree (doc_id, source_rev, seq)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_quality",
+      "indexdef": "CREATE INDEX idx_claims_v2_quality ON public.claims_v2 USING btree (quality_status)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_subject_metric",
+      "indexdef": "CREATE INDEX idx_claims_v2_subject_metric ON public.claims_v2 USING btree (scope, subject, metric, period_end)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "corpus_evidence_runs",
+      "indexname": "corpus_evidence_runs_doc",
+      "indexdef": "CREATE INDEX corpus_evidence_runs_doc ON public.corpus_evidence_runs USING btree (doc_id, parse_rev)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "corpus_evidence_runs",
+      "indexname": "corpus_evidence_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_evidence_runs_pkey ON public.corpus_evidence_runs USING btree (run_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "docs",
+      "indexname": "docs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX docs_pkey ON public.docs USING btree (id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "docs",
+      "indexname": "docs_tsv_idx",
+      "indexdef": "CREATE INDEX docs_tsv_idx ON public.docs USING gin (tsv)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documents",
+      "indexname": "documents_content_hash_key",
+      "indexdef": "CREATE UNIQUE INDEX documents_content_hash_key ON public.documents USING btree (content_hash)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documents",
+      "indexname": "documents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX documents_pkey ON public.documents USING btree (doc_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documents",
+      "indexname": "idx_documents_published",
+      "indexdef": "CREATE INDEX idx_documents_published ON public.documents USING btree (published DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ingest_failures",
+      "indexname": "idx_ingest_failures_run",
+      "indexdef": "CREATE INDEX idx_ingest_failures_run ON public.ingest_failures USING btree (run_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ingest_runs",
+      "indexname": "idx_ingest_runs_started",
+      "indexdef": "CREATE INDEX idx_ingest_runs_started ON public.ingest_runs USING btree (started_at DESC)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ingest_runs",
+      "indexname": "ingest_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ingest_runs_pkey ON public.ingest_runs USING btree (run_id)"
+    },
+    {
+      "schemaname": "zhparser",
+      "tablename": "zhprs_custom_word",
+      "indexname": "zhprs_custom_word_pkey",
+      "indexdef": "CREATE UNIQUE INDEX zhprs_custom_word_pkey ON zhparser.zhprs_custom_word USING btree (word)"
+    }
+  ],
+  "triggers": [],
+  "event_triggers": [],
+  "replication_slots": [],
+  "publications": [],
+  "subscriptions": [],
+  "stat_replication": [],
+  "activity": [
+    {
+      "pid": 14,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.837493+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_snippet": ""
+    },
+    {
+      "pid": 15,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.837706+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_snippet": ""
+    },
+    {
+      "pid": 16,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.837927+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_snippet": ""
+    },
+    {
+      "pid": 17,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.838143+00:00",
+      "state": null,
+      "backend_type": "checkpointer",
+      "query_snippet": ""
+    },
+    {
+      "pid": 18,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.838378+00:00",
+      "state": null,
+      "backend_type": "background writer",
+      "query_snippet": ""
+    },
+    {
+      "pid": 20,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.860874+00:00",
+      "state": null,
+      "backend_type": "walwriter",
+      "query_snippet": ""
+    },
+    {
+      "pid": 21,
+      "usename": null,
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.861313+00:00",
+      "state": null,
+      "backend_type": "autovacuum launcher",
+      "query_snippet": ""
+    },
+    {
+      "pid": 22,
+      "usename": "postgres",
+      "datname": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-15 05:48:37.861547+00:00",
+      "state": null,
+      "backend_type": "logical replication launcher",
+      "query_snippet": ""
+    },
+    {
+      "pid": 37,
+      "usename": "postgres",
+      "datname": "postgres",
+      "application_name": "",
+      "client_addr": "172.17.0.1/32",
+      "backend_start": "2026-09-15 05:53:58.902706+00:00",
+      "state": "active",
+      "backend_type": "client backend",
+      "query_snippet": "SELECT pid, usename, datname, application_name, client_addr::text AS client_addr, backend_start, state, backend_type, left(query, 160) AS query_snippet FROM pg_"
+    }
+  ],
+  "roles": [
+    {
+      "rolname": "postgres",
+      "rolsuper": true,
+      "rolcreatedb": true,
+      "rolcreaterole": true,
+      "rolcanlogin": true,
+      "rolreplication": true
+    }
+  ],
+  "table_counts": {
+    "public.blocks": 1101,
+    "public.chinese_docs": 3,
+    "public.claim_block_runs": 290,
+    "public.claim_block_runs_v2": 0,
+    "public.claims": 1318,
+    "public.claims_v2": 0,
+    "public.corpus_evidence_runs": 57,
+    "public.docs": 3,
+    "public.documents": 89,
+    "public.ingest_failures": 1,
+    "public.ingest_runs": 11,
+    "zhparser.zhprs_custom_word": 0
+  },
+  "documents_summary": [
+    {
+      "docs": 89,
+      "min_published": "2026-07-19",
+      "max_published": "2026-09-11",
+      "distinct_status": 2
+    }
+  ],
+  "documents_by_status": [
+    {
+      "status": "empty",
+      "n": 18
+    },
+    {
+      "status": "ok",
+      "n": 71
+    }
+  ],
+  "blocks_count": [
+    {
+      "blocks": 1101
+    }
+  ],
+  "comments_app_tables": [
+    {
+      "table_name": "blocks",
+      "description": "可定位的原文块：一份文档切成多条"
+    },
+    {
+      "table_name": "claim_block_runs",
+      "description": "D2 块级抽取台账：断点续跑的跳过标记 + 每块审计/花费（模型、耗时、tokens、错误）"
+    },
+    {
+      "table_name": "claim_block_runs_v2",
+      "description": "Claims v2 块级运行台账：empty/review/rejected/failed 分状态治理"
+    },
+    {
+      "table_name": "claims",
+      "description": "D2：从研报块抽取的结构化论断（可溯源到 locator）"
+    },
+    {
+      "table_name": "claims_v2",
+      "description": "D2 Claims v2 影子表：原文证据、语义坐标、确定性派生与质量状态"
+    },
+    {
+      "table_name": "documents",
+      "description": "语料文档元数据：一份研报/文章一条记录"
+    },
+    {
+      "table_name": "ingest_failures",
+      "description": "单次跑批里失败的文件清单，带文件名与原因"
+    },
+    {
+      "table_name": "ingest_runs",
+      "description": "每次跑批一条：什么时候跑的、成了多少、是否失败"
+    }
+  ],
+  "read_only_note": "连接层 default_transaction_read_only=on；全部语句为 SELECT（含系统目录）；零 DDL/DML"
+}

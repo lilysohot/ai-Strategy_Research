@@ -1,0 +1,62 @@
+{
+  "artifact": "i0a1-review.json",
+  "task": "I0A-1 盘点证据复核（review.md §4.3；I0G-1 放行后执行）",
+  "date": "2026-09-15",
+  "status": "review_complete_observations_reusable_with_recorded_limits",
+  "method": "静态复核 + 仓库内只读 grep 交叉验证；未重连 PG（避免扩大连接授权）；不修改既有盘点记录",
+  "verified_execution_evidence": [
+    {"item": "findings 绑定哈希", "result": "inventory.evidence.findings_sha256=97f057c8… 与当前 i0a1-inventory-findings.json 一致，绑定有效"},
+    {"item": "errors", "result": "findings.errors=[]，12 组采集全部成功"},
+    {"item": "精确目标与守卫一致性", "result": "findings.target=127.0.0.1:5432/postgres，与守卫配置 network.allowed_targets 单条目一致；连接串经 CORPUS_INVENTORY_DSN 显式传入，未读投毒的 CORPUS_DSN"},
+    {"item": "零 DDL/DML", "result": "脚本全部语句 SELECT（identity/settings/databases/extensions/schemas/tables/views/matviews/sequences/indexes/triggers/event_triggers/replication/publications/subscriptions/roles/activity/table_counts/documents 聚合）；连接层 default_transaction_read_only=on；autocommit 隔离单查询"},
+    {"item": "未读取正文", "result": "findings 仅系统目录与计数聚合（table_counts/documents_by_status），无任何块/正文内容"},
+    {"item": "不含凭据", "result": "inventory/findings 均无密码字段，target.note 显式声明"},
+    {"item": "后台写入者结论", "result": "与 findings 一致：shared_preload_libraries 空（settings）、无 cron.database_name 设置、triggers/event_triggers/replication_slots/publications/subscriptions 全空、wal_level=replica 默认"},
+    {"item": "pg_cron 可用性", "result": "脚本查询 pg_available_extensions 含 pg_cron/pg_jieba；findings extensions_available_relevant 仅返回 pg_trgm/vector/zhparser，pg_cron 不可用"}
+  ],
+  "config_version_drift": {
+    "finding": "inventory 记录 config_sha256=51b28f22…（执行时守卫配置）；当前配置哈希为 run3 指纹 d3025d52…（守卫修复轮回填 allowed_source_paths 并扩写 note）",
+    "assessment": "差异仅来源文件读取语义；network.allowed_targets（127.0.0.1:5432 单条目）未变，DB 网络约束等价。执行时点字节不可复现，记录为已说明的版本漂移",
+    "conclusion": "不构成观察失效；DB 相关观察可复用"
+  },
+  "consumer_list_correction": {
+    "original_scope": "盘点 consumers 表 10 项基于 grep CorpusService，另对 audit.py 标注直连 psycopg",
+    "gaps_found": [
+      {"path": "scripts/corpus_evidence_pilot.py", "role": "读写（service.extract_claims → claims/claim_block_runs/corpus_evidence_runs 写入路径）", "why_missed": "盘点未覆盖 scripts/ 目录"},
+      {"path": "scripts/corpus_holdout_eval.py", "role": "读写（service.extract_claims + fetch_evidence/load_evidence_run）", "why_missed": "同上"}
+    ],
+    "direct_psycopg_paths_rechecked": [
+      "plugins/corpus/service.py（唯一收口，findings 迁移记录一致）",
+      "plugins/corpus/audit.py:537 直连（盘点已标注）",
+      ".scratch/corpus-evidence-pipeline/p2b_pg_readonly_audit.py（历史只读审计脚本，用户授权轮次产物）",
+      ".scratch/corpus-evidence-pipeline/p0_baseline.py（psycopg.connect=reject_pg 硬拒绝，非消费者）",
+      "tests/test_corpus_*（直连 psycopg 做 fixture setup/teardown，测试隔离 schema）"
+    ],
+    "apodex_boundary": "apodex/ 全目录无 CorpusService/psycopg 语料库访问证据——共库 apodex 与语料库代码侧隔离成立",
+    "impact": "消费者清单补 2 项后可作为 I2-7/8 迁移矩阵输入；不改写历史 inventory，本报告为准"
+  },
+  "reusable_vs_retest": {
+    "reusable": [
+      "server_facts/objects/extensions/roles/sequences/indexes 结构观察（冻结时点前无 DDL 授权，无变化来源）",
+      "后台写入者=无的库内机制结论（仅库内机制；见 unknown）",
+      "documents_by_status（89=71 ok+18 empty）作为 2026-09-15T05:53Z 时点观察",
+      "共库结论（postgres+apodex 同实例，禁止实例级操作）"
+    ],
+    "retest_required": [
+      "表计数在 I0A-2 来源登记冻结时点重测（库在迁移后持续增长，时点观察不等于当前分母）",
+      "live_consumer_check 单点快照不重测即用：仅作时点记录，消费者完整性以代码侧清单（已补全）+ I2-7/8 实测为准"
+    ]
+  },
+  "unknowns_kept_blocking": [
+    {"item": "documents=89 vs 来源文件 73 vs 旧快照 78 差异、18 份 empty 处置", "routes_to": "I0A-2", "note": "不猜测消解"},
+    {"item": "docs/chinese_docs 两张遗留表归属", "routes_to": "I0-C 清理清单"},
+    {"item": "宿主定时任务/进程级外部写入者不存在性", "note": "单点快照+库内机制检查不证明宿主侧无写入者；I4 停写窗口需 U 提供按进程/客户端区分写入者的手段（单 superuser 角色）"},
+    {"item": "旧人工审核导出权威版本（data/corpus/.audit/ 88 个文件）", "routes_to": "I0A-2 终态登记"}
+  ],
+  "acceptance_gate_check": {
+    "no_credentials": true,
+    "every_object_has_consumer_evidence_or_unknown": "补 2 项 scripts 消费者后成立（本报告 consumer_list_correction）",
+    "unknowns_block_corresponding_decisions": true
+  },
+  "decision": "I0A-1 复核通过：历史盘点观察按上表范围复用；消费者清单以本报告补全版为准；计数重测与 4 项 unknown 按路由推进，不阻断 I0A-2 启动（其自身验收另计）"
+}

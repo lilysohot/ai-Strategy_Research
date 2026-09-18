@@ -1,0 +1,161 @@
+{
+  "created_at": "2026-09-16T12:00:00+00:00",
+  "manifest_version": 1,
+  "note": "freezes/ 索引：仅作当前版本索引，不可追改历史（架构 §12.1 L492）；追加式，新快照仅新增条目。各条目 sha256 指该快照创建时的原始字节；i1-r1 已于 2026-09-16 按经校验的 audits/20260916-i1-remediation/i1-r1-original.json 副本恢复。i1-r2 保留其当时字节及错误父锚点，仅作历史审计记录，不作为当前候选父快照。",
+  "snapshots": [
+    {
+      "created_at": "2026-09-16T12:00:00+00:00",
+      "file": "i1-r1.json",
+      "parent_snapshot_id": "i0a5",
+      "sha256": "d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957",
+      "snapshot_id": "i1-r1"
+    },
+    {
+      "created_at": "2026-09-16T16:30:00+00:00",
+      "file": "i1-r2.json",
+      "parent_snapshot_id": "i1-r1",
+      "sha256": "3d27a690519cb006b319da6fbc59dac2e81199b77b2b650983f700ea2f1f71e2",
+      "snapshot_id": "i1-r2"
+    },
+    {
+      "created_at": "2026-09-16T17:30:00+00:00",
+      "file": "i1-r3.json",
+      "parent_snapshot_id": "i1-r1",
+      "sha256": "f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59",
+      "snapshot_id": "i1-r3"
+    },
+    {
+      "created_at": "2026-09-17T03:06:44+00:00",
+      "file": "i1-r4.json",
+      "parent_snapshot_id": "i1-r3",
+      "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382",
+      "snapshot_id": "i1-r4"
+    },
+    {
+      "created_at": "2026-09-17T03:08:57+00:00",
+      "file": "i0c-r1.json",
+      "parent_snapshot_id": "i1-r4",
+      "sha256": "f775b9f8834ab657ad09233aa48c3f508ada9c4692bb5cc716126aa44cbaee70",
+      "snapshot_id": "i0c-r1"
+    },
+    {
+      "created_at": "2026-09-17T04:07:42+00:00",
+      "file": "i0c-r2.json",
+      "parent_snapshot_id": "i0c-r1",
+      "sha256": "805372cb6cd83adfe81fe6ba41ca65fbae793db13b67bae7068fe2271d2a1563",
+      "snapshot_id": "i0c-r2"
+    },
+    {
+      "created_at": "2026-09-17T12:00:00+08:00",
+      "file": "i0c-r3.json",
+      "parent_snapshot_id": "i0c-r2",
+      "sha256": "cbf9e5f9e1c2a42e67af472bff38755b4979a320ad90cf6d81965ba386275745",
+      "snapshot_id": "i0c-r3"
+    },
+    {
+      "created_at": "2026-09-17T14:35:58+08:00",
+      "file": "i0c-r4.json",
+      "parent_snapshot_id": "i0c-r3",
+      "sha256": "f667a7f86dd531c5a1492ce65085c884e7a3217fd4adc83f01355adf4f7eaf0e",
+      "snapshot_id": "i0c-r4"
+    },
+    {
+      "created_at": "2026-09-17T19:37:25+08:00",
+      "file": "i0c-r5.json",
+      "parent_snapshot_id": "i0c-r4",
+      "sha256": "7e1ca82601a4354306f37ee19d246c3c77d8c8f770714b2865df3140078adc8b",
+      "snapshot_id": "i0c-r5"
+    },
+    {
+      "snapshot_id": "i0c-r6",
+      "file": "i0c-r6.json",
+      "sha256": "70961ca73dc183cd2f6bda8d8de54d0efb07f87821d485e72d477ebca6c90a16",
+      "parent_snapshot_id": "i0c-r5",
+      "created_at": "2026-09-17T21:14:38+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r7",
+      "file": "i0c-r7.json",
+      "sha256": "5d0f0e12d1f54be8ea2b8e19df8b2fe37a36054779498f58d00e7558a5fa7792",
+      "parent_snapshot_id": "i0c-r6",
+      "created_at": "2026-09-18T00:24:39+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r8",
+      "file": "i0c-r8.json",
+      "sha256": "b3e69d37e3da54ec757c22a6d5dce04c73aab2e2ceadeb01cedaaae2d23a2915",
+      "parent_snapshot_id": "i0c-r7",
+      "created_at": "2026-09-18T09:48:30+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r9",
+      "file": "i0c-r9.json",
+      "sha256": "b0af2969d773ac07a2ca7fbc6d25cac4d9fe92b3d385eae4fee91b1f4b1602d1",
+      "parent_snapshot_id": "i0c-r8",
+      "created_at": "2026-09-18T10:33:07+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r10",
+      "file": "i0c-r10.json",
+      "sha256": "f72be661499c0e4867cbe4204370d51a1eff6ef625bc71f1171a7fe8eb2d0e8a",
+      "parent_snapshot_id": "i0c-r9",
+      "created_at": "2026-09-18T10:35:37+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r11",
+      "file": "i0c-r11.json",
+      "sha256": "79ad48a12dd1c2faf303319cf0e4d4b785bb225f89062dc2fb2b439e7282c48e",
+      "parent_snapshot_id": "i0c-r10",
+      "created_at": "2026-09-18T11:19:42+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r12",
+      "file": "i0c-r12.json",
+      "sha256": "66c8080ccccc104e68ab5592b1bd4a2286318080b6e5f010c069cf17ec5a088e",
+      "parent_snapshot_id": "i0c-r11",
+      "created_at": "2026-09-18T11:23:25+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r13",
+      "file": "i0c-r13.json",
+      "sha256": "10af5ce6f1a35a094b70a5aa922e33836f02a68f5e6a668e228be78dc00830ab",
+      "parent_snapshot_id": "i0c-r12",
+      "created_at": "2026-09-18T11:36:20+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r14",
+      "file": "i0c-r14.json",
+      "sha256": "4e1180a6bd25c3c3aa92eb71f88c1fb846e56a46000615c535f132f1da263e00",
+      "parent_snapshot_id": "i0c-r13",
+      "created_at": "2026-09-18T12:26:16+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r15",
+      "file": "i0c-r15.json",
+      "sha256": "c88cfa888bd2807293b95af0794dc46651121de7a2c83b31433f739a2de76dc8",
+      "parent_snapshot_id": "i0c-r14",
+      "created_at": "2026-09-18T13:06:13+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r16",
+      "file": "i0c-r16.json",
+      "sha256": "76483697de59cda4f8589cf8d2d5e12de5d204a4691ee77db1748927473fba1f",
+      "parent_snapshot_id": "i0c-r15",
+      "created_at": "2026-09-18T13:13:41+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r17",
+      "file": "i0c-r17.json",
+      "sha256": "258ded6f17f3abda6d201c697de05fcc534fd28c2e3b8eb31011dbc9267f484f",
+      "parent_snapshot_id": "i0c-r16",
+      "created_at": "2026-09-18T13:19:58+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r18",
+      "file": "i0c-r18.json",
+      "sha256": "ee3fae42f4be48a646fe58216379ae5eabb6270e9e05ec0976d191fe33a9f216",
+      "parent_snapshot_id": "i0c-r17",
+      "created_at": "2026-09-18T13:20:33+08:00"
+    }
+  ]
+}

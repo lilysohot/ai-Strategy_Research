@@ -5,31 +5,87 @@
 #
 # 用户指定保留 PG 18：pgvector 用官方 PG18 预编译镜像（pgvector/pgvector:pg18），
 # zhparser 在 PG18 上社区已验证可编译（2025-11 起），从源码编译。
+#
+# SCWS / zhparser 源码已本地化到 vendor/（构建期不访问 GitHub——受限网络下
+# codeload 流会被截断，2026-09-15 实测）；哈希钉在 vendor/SHA256SUMS，COPY 后先校验。
 FROM pgvector/pgvector:pg18
 
 USER root
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# autoconf / automake / libtool：下面 SCWS 那步要现生成 configure（见该处注释）。
+# automake 依赖 perl，显式装上，避免基础镜像里只有 perl-base 时踩缺模块。
+#
+# 构建期 apt 换源开关（不传 = 保持基础镜像自带的官方源，行为不变）。
+#
+# 基础镜像（postgres:18-bookworm，pgvector 镜像的基底）自带**两个 http 源**：
+#   /etc/apt/sources.list              -> http://deb.debian.org/debian
+#   /etc/apt/sources.list.d/pgdg.list  -> http://apt.postgresql.org/pub/repos/apt（PGDG）
+# 受限网络里这两处可能取不到，用下面的 build-arg 换成国内镜像。**优先给 http 地址**：
+# 基础镜像的源本来就是 http，apt 靠 InRelease 的 GPG 签名保证完整性，不需要 TLS。
+#   docker compose build --build-arg APT_DEBIAN_MIRROR=http://mirrors.tuna.tsinghua.edu.cn
+#   docker compose build --build-arg APT_PGDG_MIRROR=https://mirrors.aliyun.com/postgresql/repos/apt
+#
+# ⚠️ 要用 https 镜像站，必须先补 CA：官方 postgres 镜像把 ca-certificates 当临时依赖
+#    purge 掉了，镜像里没有任何系统根证书，apt 会报
+#      Certificate verification failed: ... No system certificates available
+#    （2026-09-15 实测：换 https://mirrors.tuna.tsinghua.edu.cn 时正是死在这里，
+#     表现为 `E: Unable to locate package autoconf` 之类"索引全空"的连锁失败）。
+#    所以下面第一步先在**原有源**上尽力把 CA 补回来，第二步才换源。
+ARG APT_DEBIAN_MIRROR=
+ARG APT_PGDG_MIRROR=
+RUN set -eux; \
+    printf 'Acquire::Retries "10";\n' > /etc/apt/apt.conf.d/99-retries; \
+    apt-get update || true; \
+    apt-get install -y --no-install-recommends ca-certificates || true; \
+    for f in /etc/apt/sources.list /etc/apt/sources.list.d/*; do \
+        [ -f "$f" ] || continue; \
+        if [ -n "$APT_DEBIAN_MIRROR" ]; then \
+            sed -i "s|http://deb\.debian\.org|$APT_DEBIAN_MIRROR|g; \
+                    s|http://security\.debian\.org|$APT_DEBIAN_MIRROR/debian-security|g" "$f"; \
+        fi; \
+        if [ -n "$APT_PGDG_MIRROR" ]; then \
+            sed -i "s|http://apt\.postgresql\.org/pub/repos/apt|$APT_PGDG_MIRROR|g" "$f"; \
+        fi; \
+    done; \
+    apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         postgresql-server-dev-18 \
-        wget \
-        git \
+        autoconf \
+        automake \
+        libtool \
+        perl \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # SCWS：zhparser 的依赖（中文分词底层库）
-RUN wget -qO- https://github.com/hightman/scws/archive/refs/tags/1.2.3.tar.gz \
-      | tar xz -C /tmp \
-    && cd /tmp/scws-1.2.3 \
-    && ./configure \
-    && make install \
-    && ldconfig
+#
+# ⚠️ 上游 README 的「./configure ; make install」针对的是**发行包**
+#    scws-1.2.3.tar.bz2（里面带了预生成的 configure）。而 GitHub 的
+#    archive/refs/tags/1.2.3.tar.gz 是直接从 git 树打的，只有 configure.ac 和
+#    Makefile.am，没有 configure —— 直接 ./configure 会得到
+#    `/bin/sh: 1: ./configure: not found`（exit 127）。
+#    上游为此提供了 acprep（脚本自述：intended for developers only, not included
+#    into dist, run this AFTER cvs checkout/update），它依次跑
+#    aclocal / autoheader / libtoolize / automake --add-missing / autoconf。
+#    用 `sh ./acprep` 调用，不依赖归档里的可执行位。
+COPY vendor/ /tmp/vendor-src/
+RUN set -eux; \
+    cd /tmp/vendor-src; \
+    sha256sum -c SHA256SUMS; \
+    tar xzf scws-1.2.3.tar.gz -C /tmp; \
+    cd /tmp/scws-1.2.3; \
+    sh ./acprep; \
+    ./configure; \
+    make install; \
+    ldconfig
 
 # zhparser（PG 中文全文检索扩展，随 postgresql-server-dev-18 的 pg_config 编入 PG18）
 ENV SCWS_HOME=/usr/local
-RUN git clone --depth 1 https://github.com/amutu/zhparser.git /tmp/zhparser \
-    && cd /tmp/zhparser \
-    && make \
-    && make install
+RUN set -eux; \
+    tar xzf /tmp/vendor-src/zhparser-master.tar.gz -C /tmp; \
+    cd /tmp/zhparser-master; \
+    make; \
+    make install; \
+    rm -rf /tmp/vendor-src /tmp/scws-1.2.3 /tmp/zhparser-master
 
 USER postgres

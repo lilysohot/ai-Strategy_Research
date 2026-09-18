@@ -1,0 +1,16 @@
+freeze-validator exit=0
+freeze-hashes exit=0
+freeze-r1-trusted-cmp exit=0
+guard-selfcheck exit=0
+chain-contracts-full-review exit=0
+i19-acceptance-historical exit=1
+legacy-probes exit=0
+boundary-contracts-r1-r5 exit=0
+business-11-files-guard-env exit=0
+guard-tests-normal-env exit=0
+pyright-i1-scope exit=0
+ruff-check exit=0
+ruff-format-check exit=0
+import-smoke-stage1 exit=0
+postflight-freeze-revalidate exit=0
+postflight-lib-versions exit=0

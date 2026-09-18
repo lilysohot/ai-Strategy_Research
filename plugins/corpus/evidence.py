@@ -19,15 +19,12 @@ from docx.table import Table
 from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus.claims import document_ticker
-from plugins.corpus.ingest import _doc_id, _title_from_filename, content_hash
 from plugins.corpus.metadata import derive_published
 
 PARSER_VERSION = "evidence-layout-4"
 PERIOD = re.compile(r"20\d{2}(?:[AEF]|H[12]|Q[1-4])?", re.IGNORECASE)
 NUMBER = re.compile(r"[+\-−]?(?:\d[\d,]*(?:\.\d+)?|\(\d[\d,]*(?:\.\d+)?\))%?")
-_QUESTION_TURN_BOUNDARY = re.compile(
-    r"(?m)^(?=\s*(?:主持人|投资者|提问者|分析师|问)\s*[：:])"
-)
+_QUESTION_TURN_BOUNDARY = re.compile(r"(?m)^(?=\s*(?:主持人|投资者|提问者|分析师|问)\s*[：:])")
 _SPEAKER_TURN_BOUNDARY = re.compile(
     r"(?m)^(?=\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)\s*[：:])"
 )
@@ -35,6 +32,41 @@ _NUMBERED_QUESTION_BOUNDARY = re.compile(
     r"(?m)^(?=\s*(?:[一二三四五六七八九十百]+|\d+)[、.．]\s*[^\n]{0,100}[？?])"
 )
 BBox = tuple[float, float, float, float]
+
+
+def content_hash(path: str | Path) -> str:
+    """文件字节的 SHA-256（取前 16 位）。
+
+    用字节而不是解析后的文本：同一份 PDF 换个解析器文本可能不同，
+    但字节不会说谎，去重要的就是这个稳定性。
+    """
+    digest = hashlib.sha256()
+    digest.update(Path(path).read_bytes())
+    return digest.hexdigest()[:16]
+
+
+def _doc_id(source_path: str | Path, file_hash: str) -> str:
+    """``<日期>_<hash8>``——短、无空格、无中文，模型抄写时不容易抄错。
+
+    为什么不用完整文件名做 id：那些名字有 60+ 个中文字符，让模型逐字复制
+    到 ``evidence.source_ref`` 里，抄错一个字就成了悬空引用（ERROR）。
+    source_path 里仍保留原始文件名，可回溯性没丢。
+
+    I2-7：这只生成标识符；日期前缀**不再派生 published**——来源日期唯一
+    落点是 metadata 模块（正文显式日期优先，禁止从 doc_id 前缀推断）。
+    """
+    path = Path(source_path)
+    match = re.match(r"(\d{4}-\d{2}-\d{2})", path.name)
+    date_part = match.group(1) if match else "undated"
+    return f"{date_part}_{file_hash[:8]}"
+
+
+def _title_from_filename(source_path: str | Path) -> str:
+    """从文件名剥出标题：去掉日期前缀、hash 后缀与扩展名。"""
+    stem = Path(source_path).stem
+    stem = re.sub(r"^\d{4}-\d{2}-\d{2}[_\s]*", "", stem)
+    stem = re.sub(r"[-_][0-9a-f]{8}$", "", stem)
+    return stem.strip(" -_") or stem
 
 
 def fingerprint(value: object) -> str:
@@ -137,9 +169,7 @@ def split_spans(text: str, locator: str, max_chars: int) -> list[Span]:
             # If no structural marker exists, retain the established lossless text fallback.
             boundary = max(structured, default=-1)
             if boundary < 0:
-                choices = [
-                    text.rfind(sep, lower, end) for sep in ("\n\n", "\n", "。", ". ")
-                ]
+                choices = [text.rfind(sep, lower, end) for sep in ("\n\n", "\n", "。", ". ")]
                 boundary = max(choices)
             if boundary >= 0:
                 end = boundary if structured else boundary + 1
@@ -529,7 +559,7 @@ def parse_evidence(
                     reasons=("no_extractable_text",),
                 )
             )
-    published = derive_published(doc_id, title, first_text)
+    published = derive_published(title, first_text)
     return EvidenceDocument(
         doc_id=doc_id,
         title=title,

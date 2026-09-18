@@ -1,0 +1,31 @@
+# I2-6 authority + cli_isolation 验证矩阵（2026-09-18）
+
+环境：i2-verify 守卫 env + env -u PYTHONPATH（去宿主 IDE 注入）；仅写 i2_sandbox_corpus 的 corpus schema。
+
+## A 真库门（authority + cli_isolation + 既有族 + I2-8/I2-4 复核探针，零 skip）
+$ env -u PYTHONPATH CORPUS_GUARD_PHASE=i2-verify CORPUS_GUARD_CONFIG=.../i2-verify.json CORPUS_I2_DSN=... uv run pytest tests/test_corpus_authority_pg.py tests/test_corpus_cli_isolation.py tests/test_corpus_consumers_pg.py tests/test_corpus_cli_pg.py tests/test_corpus_preparation_publication_pg.py tests/test_corpus_preparation_repository_pg.py audits/20260918-i2-8-i2-4-review/test_review_probes.py -q -p plugins.corpus.preparation.guard_pytest --noconftest -c /dev/null
+........................................................................ [ 93%]
+.....                                                                    [100%]
+77 passed in 20.17s
+
+## B 普通环境 / i1 守卫 / 静态门
+....................                                                     [100%]
+595 passed, 3 skipped in 41.42s
+............................................                             [100%]
+188 passed in 30.36s
+All checks passed!
+0 errors, 0 warnings, 0 informations
+[framework] 358/358 modules imported
+
+## C 冻结链 r13
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+I2-6 FREEZE FAILED: i0c-r13 已存在（write-once）
+
+## D 收尾
+TRUNCATE TABLE
+- 生产库/apodex/i0b2_verify_* 只读未触碰；零模型调用（子进程模型陷阱实测拒绝）。
+
+口径说明：B 段先后用了两种选择——较宽 glob（tests/test_corpus_*.py 去掉 *_pg.py + test_data_coverage.py）得 595 passed / 3 skipped；
+台账引用的规范 28 文件清单（I2-8 整改轮同口径）结果如下：
+...                                                                      [100%]
+434 passed, 1 skipped in 38.89s

@@ -17,10 +17,14 @@ services:
       POSTGRES_USER: ${CORPUS_DB_USER:-postgres}
       POSTGRES_PASSWORD: ${CORPUS_DB_PASSWORD:-postgres}
     ports:
-      # 宿主端口可用 CORPUS_DB_PORT 覆盖；须与 .env 的 CORPUS_DSN 一致。
-      - "${CORPUS_DB_PORT:-5432}:5432"
+      # 本容器是「隔离目标」（I0B 恢复演练 / I2 实验用），与原库 pg 容器（5432）并存。
+      # .env 的 CORPUS_DB_PORT=5432 属应用侧 DSN 拼装（指向原库），不能复用；
+      # 故这里用独立变量 CORPUS_DB_ISOLATED_PORT，默认 543。
+      - "${CORPUS_DB_ISOLATED_PORT:-543}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # PG18+ 镜像要求单挂载在 /var/lib/postgresql（数据落 18/docker 子目录）；
+      # 挂到 /data 子路径会触发 entrypoint 的 legacy-layout 保护性退出（2026-09-15 实测）。
+      - pgdata:/var/lib/postgresql
       - ./initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]

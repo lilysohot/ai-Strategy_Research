@@ -73,13 +73,13 @@ def corpus() -> list[Case]:
     docker_body = (
         "#1 [internal] load build definition\n"
         + _lines("#7 12.34 Collecting package", 600)
-        + "#9 ERROR: process \"/bin/sh -c pip install -r requirements.txt\" "
+        + '#9 ERROR: process "/bin/sh -c pip install -r requirements.txt" '
         "did not complete successfully: exit code: 1\n"
     )
     traceback_body = (
         "starting ingest run 2f19\n"
         + _lines("[info] ingested record", 800)
-        + 'Traceback (most recent call last):\n'
+        + "Traceback (most recent call last):\n"
         '  File "/app/ingest.py", line 210, in flush\n'
         "    self._conn.commit()\n"
         "psycopg2.errors.UniqueViolation: duplicate key value violates "
@@ -108,15 +108,21 @@ def corpus() -> list[Case]:
     # reaches them, a head-plus-tail split stops around rank 6 and spends the
     # rest of its budget on rank 590+.
     _GOOD = {
-        1: ("Stripe docs: proration behaviour",
+        1: (
+            "Stripe docs: proration behaviour",
             "https://stripe.com/docs/billing/subscriptions/prorations",
-            "Proration is computed in the smallest currency unit, rounded half-up."),
-        9: ("Invoice total off by one cent",
+            "Proration is computed in the smallest currency unit, rounded half-up.",
+        ),
+        9: (
+            "Invoice total off by one cent",
             "https://github.com/stripe/stripe-node/issues/1204",
-            "We saw 1199 where 1200 was expected; fix was to round the sum, not each line."),
-        12: ("Billing rounding RFC",
-             "https://internal.example/rfc/billing-rounding",
-             "Decision: round once at invoice level, not per line item."),
+            "We saw 1199 where 1200 was expected; fix was to round the sum, not each line.",
+        ),
+        12: (
+            "Billing rounding RFC",
+            "https://internal.example/rfc/billing-rounding",
+            "Decision: round once at invoice level, not per line item.",
+        ),
     }
 
     def _hit(rank: int) -> tuple[str, str, str]:
@@ -126,13 +132,8 @@ def corpus() -> list[Case]:
             "Has anyone else seen weird invoice numbers? bump. bump. still bumping.",
         )
 
-    ranked_body = (
-        "Search results for: proration rounding bug stripe invoice\n\n"
-        + "".join(
-            f"{rank}. {t}\n   {u}\n   {sn}\n\n"
-            for rank in range(1, 601)
-            for t, u, sn in [_hit(rank)]
-        )
+    ranked_body = "Search results for: proration rounding bug stripe invoice\n\n" + "".join(
+        f"{rank}. {t}\n   {u}\n   {sn}\n\n" for rank in range(1, 601) for t, u, sn in [_hit(rank)]
     )
     find_body = (
         "./src\n./src/auth\n"
@@ -140,51 +141,88 @@ def corpus() -> list[Case]:
         + "./migrations/0042_add_orders_pkey.sql\n"
     )
     return [
-        Case("pytest", pytest_body, {
-            "collected 1893 items": "head",
-            "test_rounding SKIPPED": "middle",
-            "FAILED tests/test_billing.py::test_proration": "tail",
-            "1 failed, 1892 passed": "tail",
-        }),
-        Case("webpack", build_body, {
-            "webpack --mode production": "head",
-            "TS2345: Argument of type": "tail",
-            "webpack compiled with 1 error": "tail",
-        }),
-        Case("docker-build", docker_body, {
-            "load build definition": "head",
-            "did not complete successfully: exit code: 1": "tail",
-        }),
-        Case("python-traceback", traceback_body, {
-            "starting ingest run 2f19": "head",
-            "psycopg2.errors.UniqueViolation": "tail",
-        }),
-        Case("grep", grep_body, {
-            "src/auth/session.py:12:def issue_token": "head",
-            "src/auth/refresh.py:77": "middle",
-            "tests/test_session.py:410": "tail",
-        }),
-        Case("json-api", json_body, {
-            '"status":"ok"': "head",
-            '"next_cursor":"eyJvZmZzZXQiOjMwMDB9"': "tail",
-            '"total":58211': "tail",
-        }),
-        Case("web-page", page_body, {
-            "## Abstract": "head",
-            "[41] Vaswani et al.": "tail",
-        }),
-        Case("web_search", ranked_body, ranked=True, needles={
-            # A ranked list inverts the usual rule: what decides the next action
-            # is the TOP of the list, and its tail is the dross — so only the
-            # good hits are scored, on their own axis.
-            "stripe.com/docs/billing/subscriptions/prorations": "head",
-            "stripe-node/issues/1204": "head",
-            "internal.example/rfc/billing-rounding": "head",
-        }),
-        Case("find", find_body, {
-            "./src/auth": "head",
-            "0042_add_orders_pkey.sql": "tail",
-        }),
+        Case(
+            "pytest",
+            pytest_body,
+            {
+                "collected 1893 items": "head",
+                "test_rounding SKIPPED": "middle",
+                "FAILED tests/test_billing.py::test_proration": "tail",
+                "1 failed, 1892 passed": "tail",
+            },
+        ),
+        Case(
+            "webpack",
+            build_body,
+            {
+                "webpack --mode production": "head",
+                "TS2345: Argument of type": "tail",
+                "webpack compiled with 1 error": "tail",
+            },
+        ),
+        Case(
+            "docker-build",
+            docker_body,
+            {
+                "load build definition": "head",
+                "did not complete successfully: exit code: 1": "tail",
+            },
+        ),
+        Case(
+            "python-traceback",
+            traceback_body,
+            {
+                "starting ingest run 2f19": "head",
+                "psycopg2.errors.UniqueViolation": "tail",
+            },
+        ),
+        Case(
+            "grep",
+            grep_body,
+            {
+                "src/auth/session.py:12:def issue_token": "head",
+                "src/auth/refresh.py:77": "middle",
+                "tests/test_session.py:410": "tail",
+            },
+        ),
+        Case(
+            "json-api",
+            json_body,
+            {
+                '"status":"ok"': "head",
+                '"next_cursor":"eyJvZmZzZXQiOjMwMDB9"': "tail",
+                '"total":58211': "tail",
+            },
+        ),
+        Case(
+            "web-page",
+            page_body,
+            {
+                "## Abstract": "head",
+                "[41] Vaswani et al.": "tail",
+            },
+        ),
+        Case(
+            "web_search",
+            ranked_body,
+            ranked=True,
+            needles={
+                # A ranked list inverts the usual rule: what decides the next action
+                # is the TOP of the list, and its tail is the dross — so only the
+                # good hits are scored, on their own axis.
+                "stripe.com/docs/billing/subscriptions/prorations": "head",
+                "stripe-node/issues/1204": "head",
+                "internal.example/rfc/billing-rounding": "head",
+            },
+        ),
+        Case(
+            "find",
+            find_body,
+            {
+                "./src/auth": "head",
+                "0042_add_orders_pkey.sql": "tail",
+            },
+        ),
     ]
 
 
@@ -199,10 +237,13 @@ def _run_arm(mode: str, cases: list[Case], caps: list[int]) -> dict:
         # Drive the real entry point: cap the fake tools the way ToolMeta would.
         # Two probes, because ``auto`` dispatches on ToolMeta.result_is_ranked.
         meta.TOOL_META["ab_probe"] = meta.ToolMeta(
-            category="compute", max_result_chars=cap,
+            category="compute",
+            max_result_chars=cap,
         )
         meta.TOOL_META["ab_probe_ranked"] = meta.ToolMeta(
-            category="web", max_result_chars=cap, result_is_ranked=True,
+            category="web",
+            max_result_chars=cap,
+            result_is_ranked=True,
         )
         hits = {"head": [0, 0], "middle": [0, 0], "tail": [0, 0]}
         ranked_top = [0, 0]
@@ -224,17 +265,17 @@ def _run_arm(mode: str, cases: list[Case], caps: list[int]) -> dict:
                 if needle in out:
                     bucket[0] += 1
                     found.append(needle)
-            rows.append({
-                "case": case.name,
-                "body_chars": len(case.body),
-                "inline_chars": len(out),
-                "needles_found": len(found),
-                "needles_total": len(case.needles),
-            })
+            rows.append(
+                {
+                    "case": case.name,
+                    "body_chars": len(case.body),
+                    "inline_chars": len(out),
+                    "needles_found": len(found),
+                    "needles_total": len(case.needles),
+                }
+            )
         per_cap[str(cap)] = {
-            "recall": {
-                where: (n / d if d else 1.0) for where, (n, d) in hits.items()
-            },
+            "recall": {where: (n / d if d else 1.0) for where, (n, d) in hits.items()},
             "ranked_top_recall": ranked_top[0] / ranked_top[1] if ranked_top[1] else 1.0,
             "results_over_cap": over_cap,
             "results_with_pointer": pointer,
@@ -246,7 +287,8 @@ def _run_arm(mode: str, cases: list[Case], caps: list[int]) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
-        "--caps", default="2000,8000,32000",
+        "--caps",
+        default="2000,8000,32000",
         help="Comma-separated inline caps to test (default: 2000,8000,32000)",
     )
     ap.add_argument("--json", default="", help="Also write the full report here")
@@ -259,8 +301,7 @@ def main() -> int:
         workspace = Path(tmp) / "ws"
         workspace.mkdir()
         saved_env = {
-            key: os.environ.get(key)
-            for key in ("SANDBOX_BACKEND", "FRONTIER_AGENT_WORKSPACE_DIR")
+            key: os.environ.get(key) for key in ("SANDBOX_BACKEND", "FRONTIER_AGENT_WORKSPACE_DIR")
         }
         os.environ["SANDBOX_BACKEND"] = "container"
         os.environ["FRONTIER_AGENT_WORKSPACE_DIR"] = str(workspace)
@@ -275,6 +316,7 @@ def main() -> int:
         # leaked workspace resolver or truncation mode would silently reshape
         # whatever runs next in the same process.
         from frontier_agent.infra.config import get_config
+
         # No resolver patch is needed: with no task sandbox bound,
         # ``current_local_workspace()`` is empty and ``_overflow_dir`` falls
         # through to the mount dir named by FRONTIER_AGENT_WORKSPACE_DIR above.
@@ -284,10 +326,7 @@ def main() -> int:
         )
         cases = corpus()
         try:
-            report = {
-                mode: _run_arm(mode, cases, caps)
-                for mode in ("head", "middle", "auto")
-            }
+            report = {mode: _run_arm(mode, cases, caps) for mode in ("head", "middle", "auto")}
             spilled = len(list((workspace / ".spill").rglob("*.md")))
         finally:
             reset_current_execution_scope(token)
@@ -305,7 +344,8 @@ def main() -> int:
     _print(report, caps, cases, spilled)
     if args.json:
         Path(args.json).write_text(
-            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8",
+            json.dumps(report, indent=2, ensure_ascii=False),
+            encoding="utf-8",
         )
         print(f"\nfull report -> {args.json}")
 
@@ -334,8 +374,10 @@ def _print(report: dict, caps: list[int], cases: list[Case], spilled: int) -> No
         f"corpus: {len(cases)} tool outputs, {needles} load-bearing lines "
         f"(head/middle/tail labelled)",
     )
-    print(f"spill files written across both arms: {spilled} "
-          f"(content-hash naming makes the arms share identical bodies)\n")
+    print(
+        f"spill files written across both arms: {spilled} "
+        f"(content-hash naming makes the arms share identical bodies)\n"
+    )
     header = (
         f"{'cap':>7}  {'arm':<7}  {'head':>6}  {'middle':>6}  {'tail':>6}  "
         f"{'ranked':>7}  {'over cap':>8}  {'pointer':>7}"

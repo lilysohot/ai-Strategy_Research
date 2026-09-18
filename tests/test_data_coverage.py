@@ -19,11 +19,19 @@ data_coverage_module = importlib.import_module("plugins.tools.data_coverage")
 
 
 class _FakeCorpus:
-    def __init__(self, hits: list) -> None:
+    def __init__(self, hits: list, chain: dict | None = None) -> None:
         self._hits = hits
+        self._chain = chain
 
     def search(self, query: str, limit: int = 10) -> list:
         return self._hits[:limit]
+
+    def search_with_coverage(self, query: str, *, limit: int = 10) -> tuple[list, dict]:
+        """§7.3 组合读取替身：命中与覆盖同快照返回（RM-I28-4）。"""
+        hits = self._hits[:limit]
+        chain = dict(self._chain or {})
+        chain.setdefault("query_status", "matched" if hits else "no_match")
+        return hits, chain
 
 
 class _FakeMarket:
@@ -47,11 +55,14 @@ def _install(
     research_hits: list | None = None,
     market: _FakeMarket | None = None,
     denied: dict | None = None,
+    research_chain: dict | None = None,
 ) -> None:
     from plugins.corpus import service as corpus_service_module
 
     monkeypatch.setattr(
-        corpus_service_module, "get_service", lambda: _FakeCorpus(research_hits or [])
+        corpus_service_module,
+        "get_service",
+        lambda: _FakeCorpus(research_hits or [], research_chain),
     )
     if denied is not None:
         monkeypatch.setattr(data_coverage_module, "unavailability", lambda *a, **k: denied)
@@ -158,3 +169,49 @@ def test_corpus_outage_is_distinguished_from_no_research(monkeypatch) -> None:
 def test_empty_query_is_rejected() -> None:
     payload = asyncio.run(data_coverage_module.data_coverage.func("   "))
     assert json.loads(payload)["ok"] is False
+
+
+# ── RM-I28-4：研报侧 §7.3 三轴透出（与市场侧字段分层）───────────
+
+
+def test_research_coverage_three_axes_passthrough(monkeypatch) -> None:
+    chain = {
+        "requested_scope_ref": "corpus_schema",
+        "effective_scope_ref": "corpus_publications.active_build_id",
+        "publication_snapshot_ref": "corpus_publications@deadbeef",
+        "processing": "full",
+        "availability": "available",
+        "reason_codes": (),
+        "counts": {"sources": 1, "published": 1, "withdrawn": 0, "pending": 0},
+    }
+    _install(
+        monkeypatch,
+        research_hits=[{"doc_id": "cv2:x", "locator": "chunk:y", "title": "研报"}],
+        market=None,
+        research_chain=chain,
+    )
+    payload = _probe()
+    research = payload["research_coverage"]
+    for key in ("requested_scope_ref", "effective_scope_ref", "publication_snapshot_ref"):
+        assert research[key]
+    assert research["query_status"] == "matched"
+    # 市场侧结构未被覆盖（分层，不混用同一键）
+    assert set(payload["coverage"]) >= {"research", "quote", "financials", "web"}
+    assert payload["coverage"]["research"]["count"] == 1
+
+
+def test_research_coverage_no_match_is_not_absent(monkeypatch) -> None:
+    _install(
+        monkeypatch,
+        research_hits=[],
+        market=None,
+        research_chain={
+            "processing": "full",
+            "availability": "unknown",
+            "reason_codes": (),
+            "counts": {"sources": 1, "published": 1},
+        },
+    )
+    research = _probe()["research_coverage"]
+    assert research["query_status"] == "no_match"  # 空命中不等于资料不存在
+    assert research["availability"] == "unknown"

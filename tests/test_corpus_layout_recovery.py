@@ -2,7 +2,7 @@
 
 import pymupdf
 
-from plugins.corpus.claims_v2 import triage_block_detail
+from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import parse_evidence
 from plugins.corpus.evidence_pipeline import build_evidence_run, project_claims
 

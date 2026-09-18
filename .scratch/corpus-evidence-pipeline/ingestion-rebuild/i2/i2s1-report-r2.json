@@ -1,0 +1,151 @@
+{
+  "artifact": "i2s1-report.json",
+  "task": "I2-1 隔离库 DDL 演练（i0c-r1 冻结布局；验收门：字段映射一致）",
+  "all_ok": true,
+  "checks": [
+    {
+      "check": "target_database",
+      "ok": true,
+      "detail": "i2_sandbox_corpus"
+    },
+    {
+      "check": "not_production_instance",
+      "ok": true,
+      "detail": "databases=['i0b2_verify_apodex', 'i0b2_verify_postgres', 'i2_sandbox_corpus', 'postgres', 'template1']"
+    },
+    {
+      "check": "table_set",
+      "ok": true,
+      "detail": "expected 9 tables, actual ['corpus_admissions', 'corpus_builds', 'corpus_chunks', 'corpus_jobs', 'corpus_publications', 'corpus_review_decisions', 'corpus_source_checkpoints', 'corpus_sources', 'corpus_units']"
+    },
+    {
+      "check": "columns:corpus_sources",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_review_decisions",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_admissions",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_builds",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_units",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_chunks",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_publications",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_jobs",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "columns:corpus_source_checkpoints",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "foreign_keys",
+      "ok": true,
+      "detail": "match"
+    },
+    {
+      "check": "pk:corpus_sources",
+      "ok": true,
+      "detail": "expected=['source_id'] actual=['source_id']"
+    },
+    {
+      "check": "pk:corpus_review_decisions",
+      "ok": true,
+      "detail": "expected=['decision_id'] actual=['decision_id']"
+    },
+    {
+      "check": "pk:corpus_admissions",
+      "ok": true,
+      "detail": "expected=['decision_id'] actual=['decision_id']"
+    },
+    {
+      "check": "pk:corpus_builds",
+      "ok": true,
+      "detail": "expected=['build_id'] actual=['build_id']"
+    },
+    {
+      "check": "pk:corpus_units",
+      "ok": true,
+      "detail": "expected=['build_id', 'unit_id'] actual=['build_id', 'unit_id']"
+    },
+    {
+      "check": "pk:corpus_chunks",
+      "ok": true,
+      "detail": "expected=['build_id', 'chunk_id'] actual=['build_id', 'chunk_id']"
+    },
+    {
+      "check": "pk:corpus_publications",
+      "ok": true,
+      "detail": "expected=['source_id'] actual=['source_id']"
+    },
+    {
+      "check": "pk:corpus_jobs",
+      "ok": true,
+      "detail": "expected=['build_id', 'stage', 'attempt'] actual=['build_id', 'stage', 'attempt']"
+    },
+    {
+      "check": "pk:corpus_source_checkpoints",
+      "ok": true,
+      "detail": "expected=['source_id', 'stage'] actual=['source_id', 'stage']"
+    },
+    {
+      "check": "jobs_single_running_partial_unique",
+      "ok": true,
+      "detail": "CREATE UNIQUE INDEX uq_jobs_single_running ON corpus.corpus_jobs USING btree (build_id, stage) WHERE (state = 'running'::text)"
+    },
+    {
+      "check": "chunks_search_tsv_generated_zhcfg",
+      "ok": true,
+      "detail": "to_tsvector('zhcfg'::regconfig, search_text)"
+    },
+    {
+      "check": "extensions",
+      "ok": true,
+      "detail": "{\"pg_trgm\": \"1.6\", \"vector\": \"0.8.6\", \"zhparser\": \"2.4\"}"
+    },
+    {
+      "check": "zhcfg_exists",
+      "ok": true,
+      "detail": "text search configuration zhcfg"
+    },
+    {
+      "check": "no_data_yet",
+      "ok": true,
+      "detail": "DDL 演练零数据行（I2-2 起写入）"
+    }
+  ],
+  "evidence": {
+    "design_review_sha256": "05e303d3efc8e745124469b8aa6af488923d4ef572639f345af2a3457de1bdd1",
+    "sandbox_schema_sql_sha256": "4d587859b37da399b9c4e35515b22b5d6c4dbccb28cda50ea45d97cc79b0fb0f",
+    "guard_i2_sandbox_sha256": "12d472a7d2cabcf347d3909ef8622d557541bbf59115330226843ee4166e1084",
+    "apply_script": "i2/i2s1_apply.py",
+    "verify_script": "i2/i2s1_verify.py",
+    "teardown_script": "i2/i2s1_teardown.py（临时对象清理精确范围：仅 corpus schema）"
+  },
+  "next": "I2-2 repository（候选写入/活动指针/job 租约接管）以 i2_sandbox_corpus 为演练目标"
+}

@@ -1,0 +1,123 @@
+{
+  "binding": {
+    "configs": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4"
+    },
+    "evidence_and_probes": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9/guard-selfcheck.json": "afdca89542b7fd5d6e0ce54d62741185a315eab3d843417b96d4b08552e33aad",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9-retest/test_i1_9_acceptance.py": "06325401826611f34affa6d013fed6a22bb846aec4a99fcf50513123228b18d8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py": "e883133e24d68164c6c3f35214694af35703b1d558bfeac4e276845e87c1ad3e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py": "bbfde1bd2b3644703729eccdf1430cd03a0da1eb59a08674c3ae3fb9171a1f21",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-remediation/verification-matrix.txt": "07bfdcd23a545380a6d7913f851d9adee6bc1eb92c174fef95988e993678aeee",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py": "4a7bc08df866d78f99235a6473599cc073094bfc7e0cdb53d49c622cfe990d82",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i1_9_make_fixtures.py": "e01bf33582c016a916be73039b7b4348c92e289ec2ade1b838c6053fe9c8827c"
+    },
+    "fixtures": {
+      "tests/fixtures/corpus_preparation/synthetic-company-report.docx": "6f1b9b572b2c2d73843d06c920b8bdca8bdb460dadfffce7cb4c715cf4411a2d",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.md": "2e851f2a15987891b9b3d88f90b5c8cf0fb775405ff2bb3625bbacf5f3eae3be",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.pdf": "1732fe9f23d0c0fee6ddb270f85a1084d4c8801bf8bd4c85b9177365dd6d7483"
+    },
+    "implementation": {
+      "plugins/corpus/preparation/__init__.py": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+      "plugins/corpus/preparation/admission.py": "3521f495ab3533f8dcb63177d83b0dfc68a724b728ac6107dabac4beffb372b4",
+      "plugins/corpus/preparation/chunk.py": "448b961b82b6b6c0e09bd2d664a4f4efe6a96fb641aca4f2ad564daa15634f25",
+      "plugins/corpus/preparation/clean.py": "32c94236257bb676cb5adfd15d2440f9e880abce1615c90494f3d2c34985ed74",
+      "plugins/corpus/preparation/contract.py": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      "plugins/corpus/preparation/engine.py": "40b03f906da42eae1714aa97725a11f5451e130e666e91bcbfeaf7db1b83688e",
+      "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "plugins/corpus/preparation/readers/__init__.py": "9576b25705a1ad0bfbbf61261f088b9d13655b6ff534a9d4354008220484d5f4",
+      "plugins/corpus/preparation/readers/base.py": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87",
+      "plugins/corpus/preparation/readers/docx_reader.py": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+      "plugins/corpus/preparation/readers/md_reader.py": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d",
+      "plugins/corpus/preparation/repository.py": "04a3cf9ea7a04d04939f35794e9614f6496de52f2ace3bf122ce74f81189b3a2",
+      "plugins/corpus/preparation/source.py": "fa0aa2d2f2f59437830c0a5047d3ffcac9629380bf682ea5844e2abc7956e3b8"
+    },
+    "tests": {
+      "tests/test_corpus_preparation_admission.py": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157",
+      "tests/test_corpus_preparation_chunk.py": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5",
+      "tests/test_corpus_preparation_clean.py": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a",
+      "tests/test_corpus_preparation_contract.py": "8fa028a66f96dd91744ba7f812ed953bf29fc2e0a989c79be6ee4573eccadeaa",
+      "tests/test_corpus_preparation_counterexamples.py": "2354e9c7ba1712a3567a346c4d14de538271eed89057bcadb8c71341b4cf1b9b",
+      "tests/test_corpus_preparation_engine.py": "cab31be55dd40bbd2aadb3282be517dbe941678d6d827dd9860d2cbf7a3d53df",
+      "tests/test_corpus_preparation_fixtures.py": "3e43a5a5c984c7879e17017e2ca73c85a298d3365c7c6c3d93161dbdf17228cb",
+      "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616",
+      "tests/test_corpus_preparation_readers.py": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4",
+      "tests/test_corpus_preparation_release_gate.py": "63e42f5450cfa50efd9e2cb7ee1c9e7f8e6a31f111349fa29540ded841a45dc8",
+      "tests/test_corpus_preparation_remediation.py": "4e347bbfaee6137fc5a9f01acaefaaf986047af94ddef770519262f9c233fee2",
+      "tests/test_corpus_preparation_source.py": "82d5e0631416bd207bfd0b78015d0d8b6baf7b216331c2a26af5b2d6612f945a"
+    }
+  },
+  "created_at": "2026-09-16T16:30:00+00:00",
+  "m4_declaration": "not_declared_pending_review（修复后全量复验绿：chain 14 + 业务 180 + 旧探针 31 + guard 19 + pyright 0 + ruff 0 + import_smoke 354/354，未触 PG/留出、夹具 synthetic-only；M4 放行仍留待下一轮独立复核确认，不以本快照自证）",
+  "notes": [
+    "r1 保留为历史候选（20260916-i1-9-retest review §5.4）；本快照为其后继候选，parent_snapshot 指向补丁后 r1。",
+    "r1 追加补丁说明：新增 full_review_chain_tests 绑定组纳入完整 review 11 项链路测试（N2 补救，追加非重写，原 35 项绑定逐字保留）。",
+    "旧探针协议升级（断言不变）：test_acceptance_probes.py 与 test_remaining_boundaries.py 的 publish 直调改为 register_job(PUBLISHED)+acquire_job+publish(owner/token)，因 C1 fail-closed 所有权门为有意的协议变更；两个发布正例语义不变。",
+    "N4 覆盖声明拆分见 required_case_coverage_map.fidelity：合成不变量/人工 source-gold 比对/格式真实样本三维，独立人工比对未执行部分标 unverified。",
+    "契约→测试映射（N2 要求的必需契约域）：登记失败 C3→test_chain_contracts; scope 限定 C2→chain+release_gate::test_scoped_approval_bounds_units_and_chunks; 质量/阶段发布门 C1→chain::quality/stage+release_gate::test_quality_*; 撤销不依赖解析 C4→chain::exclusion; 归档越界 C5→chain::archive_symlink; 检查点恢复 C6→chain::checkpoint+release_gate::test_parse_checkpoint_*; 取消/超时生命周期→chain::cancel+release_gate::test_cancel_*; 标题+超长 C7→chain::heading_oversized+counterexamples 反例三件套（PDF 有线表格/实录标题/条件句跨行）。",
+    "guard 合成自检 24/24 证据沿用 i1-9（guards/i1.json 哈希未变，绑定一致）。",
+    "r1 字节血缘：原始 r1 快照字节（sha256 d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957，锚定 freeze-manifest.json）不在 Git——.scratch/corpus-evidence-pipeline 树从未入库。已按 freeze-manifest 哈希逐字节校验恢复为 audits/20260916-i1-remediation/i1-r1-original.json；本快照 parent_snapshot.sha256 指向补丁后 r1（72e5fba4…），两者均为审计锚点。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r1.json",
+    "sha256": "72e5fba4b7c508b7bda3f1e863be6e8211e77408067bc5d2ab623f7db58f84a9",
+    "snapshot_id": "i1-r1"
+  },
+  "phase": "i1",
+  "required_case_coverage_map": {
+    "admission": "covered（表驱动 52 用例 + 夹具 engine 全链：in_scope/excluded/未决不发布/policy_conflict；反例：实录标题→REVIEW_REQUIRED/POLICY_CONFLICT）",
+    "authority": "I2+（当前 MemoryStore；真 PG 权威 fetch/verify 未实施）",
+    "cli_isolation": "partial（guard 19 项子进程守卫语义；CLI 全链真 Interface 属 I2）",
+    "coverage": "I3（检索覆盖三轴未实施）",
+    "fidelity": "合成不变量 covered（readers 全套 + remediation 15 + 反例三件套：PDF 有线表格零丢失/实录标题冲突/条件句跨行全字符 + 空页/纯图页/大图缺口/嵌套表/cell 图/char_span 保真）；人工 source-gold 独立比对 unverified（未执行）；格式真实样本 unverified（六份开发 smoke 不替代，属 I3 格式门）",
+    "legacy_regression": "I2+（既有回归入口待 I2 核定接入）",
+    "mapping": "covered（clean 映射 roundtrip 三格式参数化 + context_refs 引用式关联 + verify_clean_region）",
+    "publication_pg": "I2+（PG 未授权；engine publish 幂等/新激活递增/所有权四查门已在内存语义收口）",
+    "retrieval_pg": "I3+（检索指标未实施）"
+  },
+  "remediation_scope": "20260916-i1-full-review C1—C7 + 20260916-i1-9-retest N1—N4 全部关闭：C1 发布所有权/质量/阶段门 fail-closed；C2 scope 作用于 clean 层（units/chunks/质量门一致）；C3 登记失败终止；C4 排除快路径先于解析；C5 归档 symlink 边界核验；C6 检查点保真与恢复跳过已完成计算；C7 标题独立成块+超长复核块；N1 PDF 缺口负例/MD generation 正例；N2 本快照；N3 台账状态纠正；N4 反例三件套+覆盖声明拆分",
+  "revision": "r2",
+  "snapshot_id": "i1-r2",
+  "task": "I1 完整 review 修复后候选快照（corpus-ingestion-rebuild-tasks.md；r1 保留为历史候选）",
+  "verification_matrix": {
+    "acceptance_probes_20260916_i1": {
+      "command": "env -i PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONPATH=/home/administrator/FrontierAgent PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 CORPUS_GUARD_PHASE=i1 CORPUS_GUARD_CONFIG=.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json .venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py -q --tb=short",
+      "result": "31 passed"
+    },
+    "business_11_files_post_remediation": {
+      "command": ".venv/bin/python -B -m pytest tests/test_corpus_preparation_{release_gate,counterexamples,remediation,contract,engine,fixtures,readers,source,admission,chunk,clean}.py -q --tb=short",
+      "result": "180 passed"
+    },
+    "chain_contracts_full_review": {
+      "command": "env -i PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONPATH=/home/administrator/FrontierAgent PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 CORPUS_GUARD_PHASE=i1 CORPUS_GUARD_CONFIG=.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json .venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9-retest/test_i1_9_acceptance.py -q --tb=short",
+      "result": "14 passed"
+    },
+    "guard_pytest_normal_env": {
+      "command": ".venv/bin/python -B -m pytest tests/test_corpus_preparation_guard.py -q --tb=short",
+      "result": "19 passed"
+    },
+    "guard_selfcheck": {
+      "cases": 24,
+      "carried_from": "i1-r1（guards/i1.json 哈希未变）",
+      "passed": 24,
+      "report": "audits/20260916-i1-9/guard-selfcheck.json",
+      "report_version": 2
+    },
+    "import_smoke_stage1": {
+      "command": ".venv/bin/python -B tools/import_smoke.py --stage 1",
+      "result": "354/354"
+    },
+    "pyright_i1_scope": {
+      "command": ".venv/bin/python -m pyright plugins/corpus/preparation tests/test_corpus_preparation_{engine,contract,remediation,counterexamples,release_gate}.py",
+      "result": "0 errors"
+    },
+    "ruff": {
+      "command": ".venv/bin/python -m ruff check plugins/corpus/preparation tests/test_corpus_preparation_{engine,contract,remediation,counterexamples,release_gate}.py && .venv/bin/python -m ruff format --check plugins/corpus/preparation",
+      "result": "All checks passed / 15 files already formatted"
+    }
+  }
+}

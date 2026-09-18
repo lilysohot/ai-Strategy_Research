@@ -1,0 +1,33 @@
+{
+  "snapshot_id": "i0c-r12",
+  "revision": "r12",
+  "phase": "i0c",
+  "task": "i0c-r11 follow-up: data_coverage coverage_getter result narrowed to dict (pyright reportArgumentType fix); no behaviour change",
+  "binding": {
+    "implementation": {
+      "plugins/tools/data_coverage.py": "9791f21a96fc77aacc867660c49f2b03341ade800cb1b703c4314c0d3eddfddf"
+    },
+    "tests": {
+      "tests/test_data_coverage.py": "6c4b0e13a70986c93358e8747a18e1f2cb7918edf286df99fea6652b8e52188d"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "0ab5e57d9e938277ab5bbc206ee3a07f6b7056939760b876e10f2bdea2bd5d3b"
+    }
+  },
+  "corrections": {
+    "type_fix": "i0c-r11 后仅一处类型收窄：data_coverage 把 coverage_getter 返回值（object）显式收窄为 dict 再赋给 research_coverage（pyright reportArgumentType 1 项），行为不变；随本修订重绑该文件。"
+  },
+  "notes": [
+    "i0c-r9/r10 保留历史字节，不追改；本修订登记复核整改后的实现/测试/文档。",
+    "证据：复核探针 5 failed/1 passed → 6 passed；真库 consumers_pg(19)+cli_pg(4) 全 passed 零 skip；普通环境语料全量 425 passed/1 skipped；i1 守卫 env 188 passed。",
+    "I2-8 由 partial 转 complete（整改 DoD 1—6 满足）；M5 仍 not_declared（待 I2-6 与独立复核）。",
+    "生产库 I4 前零写入；真库动作仅限 i2_sandbox_corpus 的 corpus schema。"
+  ],
+  "m5_declaration": "not_declared（I2-1/2/3/4/5/7/8 完成；仍需 I2-6 与独立复核）",
+  "created_at": "2026-09-18T11:23:25+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r11",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r11.json",
+    "sha256": "79ad48a12dd1c2faf303319cf0e4d4b785bb225f89062dc2fb2b439e7282c48e"
+  }
+}

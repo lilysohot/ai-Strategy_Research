@@ -1,0 +1,15 @@
+7f910ad6673e0fd8ed31064f1661b4e90ac4d2d13169a183cea4473114ec718e  ./docs-contract/plan-docs.sha256
+eb63cdd5d6185ff02291082a30ddff9534e919fd526a1a89dbe316313e6f910f  ./docs-contract/plan-docs.tar.gz
+d1aa88f9790b6f54f863500bc162dc2c4ce74e93527b8f80f453a5c8ce769ec5  ./evidence/pipeline-scratch.tar.gz
+acd57914f4cf7d4337903bcd7aba63818bb22debd30ab4246e4cdb8303b92e3b  ./originals/data-corpus_full_backup_v2.tar.gz
+0c87e7114bf206dc16c6947c24f119be66005ece5c83869fca6a4d8dcdf5261d  ./originals/data-corpus_runs.tar.gz
+c4114533b67d9355745372eb3de42c1f43b10975b9234a972a90f5795a8e466c  ./originals/data-corpus.tar.gz
+e97ff0f6a42258bc3e9b7c27e984574169c9a0ac869f6ddfaeee4575bc8fe118  ./originals/originals-files.sha256
+822f07192eb10a46d56adc9c148fec57a9242870166e1e0cb26394e776300bc8  ./pg/apodex-toc.list
+a551dc3564e896d9f73c2d97d4b2d22953142c66d1177a52317ba3724f281acf  ./pg/archive-verification.txt
+e72389357af7ee07c005f393aca86ccfc774ddb4fcdfb73fc30fc00d6bbb485b  ./pg/i0b1-apodex.dump
+ea6221c9eaf2cdef0cb6ee9c50f163cb200ef4bfd0cf47ad3a176f7f4a13e8ec  ./pg/i0b1-globals.sql
+38c9b7bcbe6790852919eb23390d127de77fac183b4750c2617d0bcd37cb011f  ./pg/i0b1-postgres.dump
+5145aaab058a9a10289310aad56fc73c83bfa886ae50e13b93279c0259c4b912  ./pg/postgres-toc.list
+ffd7d631daa6744fd0025839d48d6b7455ffed5a4ac901103883ee48aaca1499  ./pg/post-snapshot-facts.txt
+67de8a587ab4595d8be3bee3e84416600a5b45ecc05322c0cc2291580a3e6b2c  ./pg/pre-snapshot-facts.txt

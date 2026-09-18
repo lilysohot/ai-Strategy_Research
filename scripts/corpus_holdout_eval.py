@@ -19,9 +19,8 @@ from typing import Any
 from dotenv import load_dotenv
 
 from plugins.corpus.claims import build_default_llm, configured_model
-from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprint
+from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, content_hash, fingerprint
 from plugins.corpus.evidence_pipeline import EvidenceRun, align_quote, extract_evidence
-from plugins.corpus.ingest import content_hash
 from plugins.corpus.service import CorpusService
 from scripts.corpus_evidence_pilot import field_checks, save_artifact
 

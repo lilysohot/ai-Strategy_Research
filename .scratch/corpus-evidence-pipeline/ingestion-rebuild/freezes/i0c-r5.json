@@ -1,0 +1,79 @@
+{
+  "binding": {
+    "docker_pg": {
+      "docker/Dockerfile.corpus-db": "a07fd04fb11254f8299c7be138d4323c009365fb980078acafd3cb3e821df518",
+      "docker/docker-compose.yml": "d70d431467f8ee0a208bd5339bbc384286e5b750c2cc74af63261c482b9f50ed",
+      "docker/initdb/00-extensions.sql": "9e73ac6db308ef03419c234d630293dec5523da1e4efb7f54770cc9bdefcfd4e"
+    },
+    "docs": {
+      "docs/plan/README.md": "355e50bb94150683f511e4738b0826d115201b1aaf515c99dfbee2902c9093ff",
+      "docs/plan/claims-market-closed-loop-plan.md": "e3ceb1f3d1829adcb27505e6b3f9c00fd319d1df49f02796615e37fde5140140",
+      "docs/plan/corpus-ingestion-rebuild-architecture.md": "365d0f39e43f34e5d65afc222e7ac520dfe547707c15574312ccd574ea55f159",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "5ac8494fd766bedcb98dc370088874a5ba17afd808853d8b4bd62a9b7a188819"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "b3a13cdf09a956864f0d600a33258eec0c3bc211d813958be388026928c9163d"
+    },
+    "guards": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i2-verify.json": "f47ce4569e81088db0b5886097518595351ba6a9391259c6ec20ba3975f1622c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2-verify-guard-report.json": "26212d2f698a80a6e59f824001661b20090bad0a5b4a17b36baf57a657a8634e"
+    },
+    "implementation": {
+      "plugins/corpus/_semantic_validation.py": "5cb3b5c903b39ba330c358ee210c894ab544e62ef25160414cd40ef4dd8702cb",
+      "plugins/corpus/audit.py": "18d9ec32579b17e8479c8109ff0b1866318f43e6af28949cd6ca765b02210bc3",
+      "plugins/corpus/claims_detail.py": "7ebf1d95e61f83cd68be42d7cc54ced4b592d4e38a0a2a8b57e414a060ae6dc6",
+      "plugins/corpus/evidence.py": "07a733edafe7d2f105d59e439bf7b5755bf9d5da85c9db312b8fabfcd3db057e",
+      "plugins/corpus/evidence_pipeline.py": "2403eb7143ce314132ca97242b3054309196b265b1c9b6bc6aa8cf03626d4f84",
+      "plugins/corpus/fetch.py": "3ab22110182fd727d52428a0ac621b8ad10d1cfd4f9da09567bcf961b7ce2cab",
+      "plugins/corpus/material_semantics.py": "72c95ff8022a6ec993f5e525b3b38ab747107f98172f19ac60e8d415b7c7a104",
+      "plugins/corpus/metadata.py": "4f1f9be73793c8051143dae71f690ad20e28b3ee99f00c6f87151a99ece38adb",
+      "plugins/corpus/preparation/engine.py": "e41f5b5e17164796d3974634b1ca079325237ebfe76e164dfed3a945cec76f66",
+      "plugins/corpus/preparation/repository_pg.py": "dcb0c6fcf0a858d917c8e79a0ed6ef3530c68fa58d8ee7ebd57860fe42e08d17",
+      "plugins/corpus/preparation/search_pg.py": "d34ce9e7661132c97beef949aa33e2e8193c570f9f9fd6fb963e4e119d69f2de",
+      "plugins/corpus/service.py": "da712d6dca2edc626a2a49e9331d89d8aadf856f8a5154b211a0718bc60ca8ea",
+      "scripts/corpus_holdout_eval.py": "d8a236b758d2fcf258505716322ae1a9925246887ca80116d6eed83e9b2f99b2",
+      "scripts/truncation_ab.py": "58b5105a99202f5c338e391654a5d84039c05b6ab728bbe5877ac9df6d52deeb",
+      "scripts/truncation_metrics.py": "121822c3e100493bb24d413ed6da881e118b1d74b7755db3249c5ecfed346eaa"
+    },
+    "tests": {
+      "tests/test_corpus_a1_ingest_search.py": "614d169ec7ffd59499ae8cd3b12093a882756c701708ff07809a5a7646789f1b",
+      "tests/test_corpus_claims.py": "7229adea36510c481d821af42630601fd3e30d251aa301b5da4871a6fbecdb83",
+      "tests/test_corpus_claims_detail.py": "55dc3411ad129a19ca4f02fbc87a27818c2261e6d924d6e9315aa170a8cebd80",
+      "tests/test_corpus_claims_interface.py": "9901eabcb5dced22523bd380751942fa21dd3f60fcb9943bd7a8349e89042d9a",
+      "tests/test_corpus_evidence_pipeline.py": "b47eb9a78e25b2fb57819f02b13fb7b526cf3d8b243abb2687c59f16b8c3bad2",
+      "tests/test_corpus_layout_recovery.py": "381963f9324b147bcbf6ada76f8c229da70d5ae5f261083f5e30461caef4855d",
+      "tests/test_corpus_material_semantics.py": "159d1e19aa5da52b93311417cec60f9cd781a9db5c40001f3a51a4d68ecae3ed",
+      "tests/test_corpus_metadata.py": "072b4cbf6e3f046ebebc95b3f5a92ec31fdc3c520d2bc3862df6e5e3d2bfe238",
+      "tests/test_corpus_preparation_admission.py": "062953f2ae964771de4c6cbec65c36131ee0b284d7703093f3fbba787710f041",
+      "tests/test_corpus_preparation_chunk.py": "d0e3c023d9210871d9428946bee18c479af77b3c81625ce3f8b451a7ac8d4b8b",
+      "tests/test_corpus_preparation_clean.py": "1113cca3b841a321d98c41d72d56891f015d58b6cd253d644da812bd230b62ee",
+      "tests/test_corpus_preparation_contract.py": "af621e470bcfcece9a7a93f71803eaeaf2a34a503b83839309fe35addfe4ad03",
+      "tests/test_corpus_preparation_engine.py": "09317f44a3f5a42df66ff7225f6419393b8d8cb3ddc32f695833445c589ee99b",
+      "tests/test_corpus_preparation_readers.py": "7d2c142b8e0758100fdd8415ddd4c9e710f7feebfc346dcf33327c1aab6577ff",
+      "tests/test_corpus_preparation_repository_pg.py": "afae0fecdca89bd3d737d035339fb7acc9825f0abcb16cc44631956ba7c12f53",
+      "tests/test_corpus_preparation_source.py": "4512d82ae2070dd4ad79168b56ffd6cfaef620bfbd75673d3f909fa7b945db9b",
+      "tests/test_corpus_search.py": "38df227a12b28c74041066934437157284d1809acf39dfabe8ad528816b0b424",
+      "tests/test_p0a_acceptance.py": "dc01b50fe5c814f33b72a654290d5b303e8356911dd2ae88f33980f6f96349b0"
+    }
+  },
+  "corrections": {
+    "I2-7": "I2-7 消费者接线（一）：CorpusService 写路径代理统一 preparation Module（ingest_path/ingest_dir 唯一走 plan→execute→publish，PgStore fail-closed 拒绝非 i2_sandbox_corpus 目标，旧 documents/blocks 直写分支退役）；ingest.py（464 行）全模块退休，connect/content_hash/_doc_id/_title_from_filename 内联至 fetch.py/evidence.py；claims_v2.py（1330 行）影子抽取路线退役，仍被证据链/审计/语义消费的共享规则拆至新增 claims_detail.py（ClaimRecord/records_from_payload/apply_lint/classify_doc_kind_detail/triage_block_detail），四件旧测试随影子路线删除；metadata.derive_published 禁 doc_id 前缀派生（只认原文显式日期，新链日期唯一落点=metadata_snapshot.report_publication，preparation.publication.probe_report_publication）；audit.py psycopg 惰性 import（普通环境零 psycopg）+ audit_v2_shadow 删除；_semantic_validation/evidence_pipeline/material_semantics 与 scripts 三件改引 claims_detail；新建 i2-verify 守卫阶段（protected_roots 收窄 data/corpus、corpus_full_backup_v2、corpus_runs 三子目录，corpus-archive 放行内容寻址归档）+ selfcheck 24/24；三门禁真库 26 passed / 4 skipped，定向回归 144 passed / 1 skipped。preparation engine/search_pg/repository_pg 与八件 preparation 测试系 impl-evidence 同源 units 投影配套演进（其中 test_corpus_preparation_repository_pg.py 字节未变），由本修订显式重绑。"
+  },
+  "created_at": "2026-09-17T19:37:25+08:00",
+  "m5_declaration": "not_declared（I2-1/I2-2/I2-3/I2-7 完成；仍需 I2-4/5/6/8 与真实 PG 并发/CLI/消费者验收后方可声明 M5）",
+  "notes": [
+    "i0c-r4 保留历史字节，不追改；本修订登记 I2-7（消费者接线一）交付。删除文件（plugins/corpus/claims_v2.py、plugins/corpus/ingest.py、tests/test_corpus_claims_v2.py、tests/test_corpus_ingest.py、tests/test_corpus_quality_contracts.py、tests/test_corpus_tables.py）不绑哈希，由 corrections 登记。",
+    "supersession 沿用：i1-r4 与 i0c-r2/r3/r4 绑定中被本修订重绑的路径改由合并后 i0c-current 按新哈希核验；validator 亦随本修订重绑（扩展 i0c-r5 检查块与合并逻辑）。",
+    "I2-7 后待执行：I2-4（CLI 六职责）、I2-5（publication 双 worker）、I2-8（消费者接线二）、I2-6（authority/cli_isolation）；M5 仍 not_declared；生产库 I4 前零写入。",
+    "preparation 重绑依据：十一件（engine/search_pg/repository_pg 及 contract/admission/chunk/clean/engine/readers/source/repository_pg 测试）mtime 同批（2026-09-17 19:00:36，I2-7 impl-evidence 同源 units 投影配套），其中十件相对既有冻结声明有实际字节演进，经普通环境七文件 141 passed 与真库三门禁 26 passed 验证后重绑；chunk.py、sandbox_schema.sql、i2s1_verify.py 字节未变，循 r4 声明核验。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4.json",
+    "sha256": "f667a7f86dd531c5a1492ce65085c884e7a3217fd4adc83f01355adf4f7eaf0e",
+    "snapshot_id": "i0c-r4"
+  },
+  "phase": "i0c",
+  "revision": "r5",
+  "snapshot_id": "i0c-r5",
+  "task": "I2-7 consumer wiring (1): CorpusService write-path proxy to preparation engine (plan->execute->publish), ingest.py retired, claims_v2 shadow route retired with shared rules kept via claims_detail.py, unique publication-date landing (report_publication), i2-verify guard stage"
+}

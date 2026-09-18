@@ -1,0 +1,58 @@
+# I2-5 publication_pg 验证矩阵（2026-09-17）
+
+环境：corpus-db 容器 host 543 → i2_sandbox_corpus（隔离演练库）；pg（生产）零触碰。
+说明：宿主 shell 注入 PYTHONPATH=<IDE>/shim（补丁 shutil.rmtree → 派生 node 子进程，
+      被 i2-sandbox 守卫拒绝)，故统一用 env -u PYTHONPATH 运行（非放宽守卫，仅去污染）。
+
+## A 真库门（i2-sandbox 守卫 env，不 skip）
+$ env -u PYTHONPATH CORPUS_GUARD_PHASE=i2-sandbox CORPUS_GUARD_CONFIG=... i2-sandbox.json CORPUS_I2_DSN=postgresql://postgres:***@127.0.0.1:543/i2_sandbox_corpus PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest tests/test_corpus_preparation_publication_pg.py tests/test_corpus_preparation_repository_pg.py -q -p plugins.corpus.preparation.guard_pytest -p no:cacheprovider --noconftest -c /dev/null
+...............................                                          [100%]
+31 passed in 6.80s
+exit=0
+
+## B 普通环境定向回归（17 文件：preparation + 消费链路）
+$ env -u PYTHONPATH uv run pytest <17 files> -q -p no:cacheprovider
+........................................................................ [ 92%]
+.......s.................                                                [100%]
+312 passed, 1 skipped in 36.19s
+exit=0
+
+## C i1 守卫 env（preparation 11 文件，零网络/零 PG）
+$ env -u PYTHONPATH CORPUS_GUARD_PHASE=i1 CORPUS_GUARD_CONFIG=.../guards/i1.json uv run pytest -p plugins.corpus.preparation.guard_pytest <11 files> -q -p no:cacheprovider
+........................................................................ [ 77%]
+..........................................                               [100%]
+186 passed in 29.96s
+exit=0
+
+## D 静态门
+$ env -u PYTHONPATH uv run ruff check plugins scripts tools apodex workflows deploy
+All checks passed!
+exit=0
+$ env -u PYTHONPATH uv run ruff format --check plugins tests
+
+138 files would be reformatted, 124 files already formatted
+exit=1
+$ env -u PYTHONPATH uv run pyright plugins/corpus/preparation/repository_pg.py plugins/corpus/preparation/repository.py
+0 errors, 0 warnings, 0 informations
+$ env -u PYTHONPATH uv run python tools/import_smoke.py --stage 1
+
+[framework] 356/356 modules imported
+
+## E 冻结链核验
+$ env -u PYTHONPATH uv run python .scratch/.../freezes/validate_i0c_freeze.py
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+exit=0
+$ 重发 i0c-r6（write-once 反例）
+I2-5 FREEZE FAILED: i0c-r6 已存在（write-once：不得重发或覆盖）
+
+## F 收尾：演练库零残留 + 口径补充
+$ docker exec corpus-db psql -U postgres -d i2_sandbox_corpus -c 'TRUNCATE corpus.corpus_source_checkpoints, corpus.corpus_jobs, corpus.corpus_publications, corpus.corpus_chunks, corpus.corpus_units, corpus.corpus_builds, corpus.corpus_admissions, corpus.corpus_review_decisions, corpus.corpus_sources;'
+TRUNCATE TABLE
+$ docker exec corpus-db psql -U postgres -d i2_sandbox_corpus -c 'SELECT count(*) FROM corpus.corpus_jobs;'
+0|0|0
+
+口径补充：
+- ruff format --check plugins tests 全仓库 139 文件待格式化为既有状态（非本轮引入）；
+  本轮改动文件（repository_pg.py / repository.py / publication_pg.py / audit.py / service.py）均通过 ruff format --check。
+- 生产库 127.0.0.1:5432 与 apodex、i0b2_verify_* 全程只读未触碰；写入仅限 i2_sandbox_corpus 的 corpus schema。
+- 始终零模型调用（i2-sandbox 守卫 poisoned_env OPENAI_* 未被使用；测试不构造 LLM 客户端）。

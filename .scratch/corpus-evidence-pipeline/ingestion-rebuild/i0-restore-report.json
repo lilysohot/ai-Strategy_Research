@@ -1,0 +1,35 @@
+{
+  "artifact": "i0-restore-report.json",
+  "task": "I0B-2 隔离恢复验证（M2 放行条件）",
+  "date": "2026-09-15",
+  "status": "restore_verified_data_identical_m2_evidence_ready",
+  "authorization": "U 核定（2026-09-15 会话：恢复验证用 corpus-db 隔离容器）",
+  "restore_targets": {
+    "container": "corpus-db（docker-corpus-db，宿主端口 543，卷 docker_pgdata）——与原库 pg:5432/卷 pgdata 完全隔离",
+    "databases_created": ["i0b2_verify_postgres", "i0b2_verify_apodex"],
+    "not_touched": ["原库 pg 全部数据库", "corpus-db 自身 postgres 初始库", "任何生产数据"],
+    "preconditions_checked": "corpus-db healthy，pg_trgm/vector/zhparser/plpgsql 扩展齐备，容量充足"
+  },
+  "restore_execution": [
+    {"step": "globals", "input": "i0b1-globals.sql", "result": "role postgres 已存在（预期，corpus-db 初始化同名 superuser），ALTER ROLE 成功；无其他对象"},
+    {"step": "pg_restore i0b1-postgres.dump → i0b2_verify_postgres", "result": "exit=0，错误 0 行"},
+    {"step": "pg_restore i0b1-apodex.dump → i0b2_verify_apodex", "result": "exit=1，31 行错误全部为 4 张表 FK 约束创建失败（audit_log/runs/sessions/turns），逐项对账证实为源库自身孤立引用（见 source_integrity_findings），数据行全部恢复"}
+  ],
+  "verification": {
+    "postgres_full_table_counts": "11 表精确 COUNT 与原库逐表一致（blocks 1101 / documents 89 / claims 1318 / claim_block_runs 290 / corpus_evidence_runs 57 / chinese_docs 3 / docs 3 / ingest_runs 11 / ingest_failures 1 / claims_v2 0 / claim_block_runs_v2 0）",
+    "documents_keyset_hash": "89 行 doc_id|content_hash|status|published 有序聚合 md5 = 85cc9f548341e61d0f5b52c04c23b012，与原库一致",
+    "blocks_content_checksum": "1101 行 doc_id|seq|locator|md5(text) 有序聚合 md5 = 73610cdd3f84e3dadaa45ba27eb8610d，与原库一致（全量正文级）",
+    "apodex_key_table_counts": "users 25 / sessions 133 / turns 1065 / runs 1256 / audit_log 1933，与原库一致",
+    "apodex_orphan_reference_parity": "孤立 audit_log 31 / 孤立 runs 517，与原库完全一致——恢复忠实"
+  },
+  "source_integrity_findings": [
+    {"finding": "原库 apodex 存在外键孤立引用：audit_log.user_id→users 31 条、runs.session_id→sessions 517 条（sessions/turns 约束同类）", "impact": "恢复时 FK 约束创建失败属忠实再现，非备份缺陷", "routing": "apodex 线完整性问题，登记待 I0-C 复核评估；不阻塞 M2"},
+    {"finding": "pg 库 n_live_tup 统计过期（documents 估计 2，实际 89）", "impact": "无；本次改用精确 COUNT", "routing": "提示 I2 迁移不得依赖统计估计"}
+  ],
+  "m2_gate": {
+    "condition": "I0B-2 恢复报告（本文件）+ 备份可用性证实",
+    "verdict": "M2 证据齐备：备份可恢复、数据与快照时点一致（表计数 + 键集哈希 + 全量正文校验和三级验证）",
+    "limitations": "恢复的是 2026-09-15T07:14Z 快照时点数据，在线变更窗口声明见 i0b1 备份报告；验证库保留于 corpus-db 供 I1 使用，不再另行清理授权"
+  },
+  "next": "M1（I0A-3/4/5 达门）后 I1 开发链启动；删除类清理仍按 i0c-cleanup-list.json 前置执行"
+}

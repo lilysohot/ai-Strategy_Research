@@ -1,0 +1,54 @@
+{
+  "probe": "adversarial-guard-probe",
+  "timestamp": "2026-09-17T01:46:27+00:00",
+  "guard_phase": "i1",
+  "config_sha256": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+  "results": {
+    "read_holdout": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "read_unlisted": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "read_allowed_hash": {
+      "expected": "ALLOWED",
+      "actual": "ALLOWED",
+      "ok": true
+    },
+    "write_data": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "import_openai": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "socket_connect": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "spawn_nonpython": {
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "ok": true
+    },
+    "child_python": {
+      "expected": "CHILD_REFUSED/rc=0",
+      "actual": "CHILD_REFUSED/rc=0",
+      "ok": true
+    },
+    "poisoned": {
+      "expected": "CORPUS_GUARD_DISABLED / postgresql://corpus-guard:",
+      "actual": "CORPUS_GUARD_DISABLED / postgresql://corpus-guard:corp",
+      "ok": true
+    }
+  },
+  "all_expected": true
+}

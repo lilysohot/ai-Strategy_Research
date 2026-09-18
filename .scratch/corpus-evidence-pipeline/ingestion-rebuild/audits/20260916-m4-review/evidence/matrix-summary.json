@@ -1,0 +1,70 @@
+{
+  "all_ok": true,
+  "blocks": {
+    "boundary-contracts-r1-r5": {
+      "detail": "tests=9 failures=0 errors=0 skipped=0",
+      "ok": true
+    },
+    "business-11-files-guard-env": {
+      "detail": "tests=186 failures=0 errors=0 skipped=0",
+      "ok": true
+    },
+    "chain-contracts-full-review": {
+      "detail": "tests=11 failures=0 errors=0 skipped=0",
+      "ok": true
+    },
+    "freeze-hashes": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "freeze-r1-trusted-cmp": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "freeze-validator": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "guard-selfcheck": {
+      "detail": "passed=True cases=24 case_passed=24",
+      "ok": true
+    },
+    "guard-tests-normal-env": {
+      "detail": "tests=19 failures=0 errors=0 skipped=0",
+      "ok": true
+    },
+    "i19-acceptance-historical": {
+      "detail": "tests=3 failures=1 errors=0 skipped=0 failing=['test_acceptance_freeze_does_not_omit_latest_known_chain_tests']",
+      "ok": true
+    },
+    "import-smoke-stage1": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "legacy-probes": {
+      "detail": "tests=31 failures=0 errors=0 skipped=0",
+      "ok": true
+    },
+    "postflight-freeze-revalidate": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "postflight-lib-versions": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "pyright-i1-scope": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "ruff-check": {
+      "detail": "内容全部命中",
+      "ok": true
+    },
+    "ruff-format-check": {
+      "detail": "内容全部命中",
+      "ok": true
+    }
+  },
+  "expectation": "matrix matches expected results; NOT an M4 verdict"
+}

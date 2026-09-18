@@ -72,6 +72,8 @@ def _names_recovery(tool_name: str, args: dict) -> bool:
         return True
     blob = json.dumps(args, ensure_ascii=False)
     return any(marker in blob for marker in _SPILL_MARKERS)
+
+
 # A ``tier2`` selection does NOT prove a summary was produced: a failed
 # summariser rolls back to a deterministic slice that can still win under that
 # label. Counting rollbacks separates "summarised" from "tried and broke",
@@ -127,7 +129,9 @@ def _trial_metrics(trial: Path) -> dict | None:
                 if _names_recovery(name, args):
                     recovery += 1
                 signature = json.dumps(
-                    [call.get("name"), args], sort_keys=True, ensure_ascii=False,
+                    [call.get("name"), args],
+                    sort_keys=True,
+                    ensure_ascii=False,
                 )
                 if signature in seen_calls and compactions:
                     redone += 1
@@ -143,9 +147,7 @@ def _trial_metrics(trial: Path) -> dict | None:
                 previous = prompt
         elif event.get("t") == "result":
             body = event.get("result")
-            if isinstance(body, str) and (
-                "chars elided" in body or "only part of this" in body
-            ):
+            if isinstance(body, str) and ("chars elided" in body or "only part of this" in body):
                 truncations += 1
     # The log is authoritative when present: it names the tier that won, which a
     # token drop cannot distinguish.
@@ -277,16 +279,18 @@ def main() -> int:
         ]
         for label in labels
     }
-    width = max(
-        max((len(c) for cells in cells_by_label.values() for c in cells), default=0),
-        max(len(label) for label in labels),
-    ) + 2
+    width = (
+        max(
+            max((len(c) for cells in cells_by_label.values() for c in cells), default=0),
+            max(len(label) for label in labels),
+        )
+        + 2
+    )
     print(f"{'metric':<24}" + "".join(f"{label:>{width}}" for label in labels))
     print("-" * (24 + width * len(labels)))
     for idx, (title, _key, _fmt) in enumerate(_ROWS):
         print(
-            f"{title:<24}"
-            + "".join(f"{cells_by_label[label][idx]:>{width}}" for label in labels),
+            f"{title:<24}" + "".join(f"{cells_by_label[label][idx]:>{width}}" for label in labels),
         )
 
     if len(labels) > 1 and any(dropped.values()):
@@ -315,7 +319,8 @@ def main() -> int:
 
     if args.json:
         Path(args.json).write_text(
-            json.dumps(arms, indent=2, ensure_ascii=False), encoding="utf-8",
+            json.dumps(arms, indent=2, ensure_ascii=False),
+            encoding="utf-8",
         )
         print(f"\nfull report -> {args.json}")
     if any(arm["trials"] == 0 for arm in arms.values()):

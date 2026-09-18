@@ -1,0 +1,89 @@
+=== X1 快照哈希与血缘 ===
+79ad48a12dd1c2faf303319cf0e4d4b785bb225f89062dc2fb2b439e7282c48e  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r11.json
+66c8080ccccc104e68ab5592b1bd4a2286318080b6e5f010c069cf17ec5a088e  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r12.json
+10af5ce6f1a35a094b70a5aa922e33836f02a68f5e6a668e228be78dc00830ab  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r13.json
+4e1180a6bd25c3c3aa92eb71f88c1fb846e56a46000615c535f132f1da263e00  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r14.json
+c88cfa888bd2807293b95af0794dc46651121de7a2c83b31433f739a2de76dc8  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r15.json
+76483697de59cda4f8589cf8d2d5e12de5d204a4691ee77db1748927473fba1f  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r16.json
+91e3f14b4a22a5425b36794e8c3d22efe3b192ef19a5253492b3cfea98d519d7  .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json
+--- validator ---
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed
+exit=0
+
+=== X3 用例数（collect-only） ===
+::TestI2GapCli::test_document_text_is_unit_join_not_byte_restore
+
+102 tests collected in 0.49s
+
+=== X2 绑定面逐文件复算（r15 + r16） ===
+i0c-r15 bindings: {'implementation': 5, 'tests': 1, 'docs': 3, 'review_evidence': 3, 'freeze_validator': 1, 'freeze_generator': 1} MISMATCH: [('freeze_validator', '.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py', 'b4ceff292d13', '0cac0f10dc50')]
+i0c-r16 bindings: {'review_package': 4, 'freeze_validator': 1, 'freeze_generator': 1} MISMATCH: none
+说明（X2）：r15 自身绑定里的 freeze_validator 一项在 r16 被重绑，按 latest-revision-wins 由 i0c-current 新哈希核验（X1 验证器 exit 0 即该合并绑定通过）；r16 自绑定 zero mismatch。
+
+=== X4 守卫对抗：留出读取必须被拒 ===
+REFUSED OSError corpus preparation guard: 阶段 'i2-verify' 禁止访问隔离路径 /home/administrator/
+REFUSED OSError corpus preparation guard: 阶段 'i2-verify' 禁止访问隔离路径 /home/administrator/
+--- selfcheck cases 抽查 ---
+passed= True cases= 24
+  None True
+  None True
+  None True
+  None True
+  None True
+  None True
+--- selfcheck 抽查（字段名 case/expected/passed）---
+passed= True cases= 24 phase= i2-verify
+  import openai | expected= refused | passed= True
+all cases passed: True
+cases 清单: ['import openai', 'from openai import OpenAI;     OpenAI()', 'import anthropic', 'import plugins.corpus.material_semantics', 'import plugins.corpus._r2_runtime', "class _S:;         family = socket.AF_INET;     sys.audit('socket.connect', _S(), ('203.0.113.1', 443))", "class _U:;         family = socket.AF_UNIX;     sys.audit('socket.connect', _U(), '/synthetic-guard.sock')", "open('/tmp/tmp6_uef2sq/holdout/secret.md').read()", "os.chdir('/tmp/tmp6_uef2sq');     open('holdout/secret.md').read()", "os.chdir('/tmp/tmp6_uef2sq');     open('data/keep.md', 'w').write('x')", "os.unlink('/tmp/tmp6_uef2sq/data/keep.md')", "os.rename('/tmp/tmp6_uef2sq/data/keep.md', '/tmp/tmp6_uef2sq/moved.md')", "open('/tmp/tmp6_uef2sq/sources/other.md').read()", "open('/tmp/tmp6_uef2sq/sources/sample.md').read()", "import hashlib; h = hashlib.sha256(open('/tmp/tmp6_uef2sq/sources/sample.md', 'rb').read()).hexdigest(); assert len(h) == 64; print('HASH_OK')", 'raise SystemExit(guard.main(sys.argv[1:]))', "import subprocess;     subprocess.run(['/bin/true'])", 'import subprocess; child = subprocess.run([sys.executable, \'-I\', \'-B\', \'-c\', "try:\\n    open(\'/tmp/tmp6_uef2sq/holdout/secret.md\').read()\\nexcept OSError as exc:\\n    if \'corpus preparation guard\' not in str(exc):\\n        raise\\n    print(\'GUARD_REFUSED\')\\n    raise SystemExit(0)\\nprint(\'POLICY_BYPASS\')\\nraise SystemExit(1)\\n"], capture_output=True, text=True); assert child.returncode == 0 and \'GUARD_REFUSED\' in child.stdout, child.stderr; print(\'CHILD_INHERITED\')', "os.environ['CORPUS_GUARD_PHASE'] = 'synthetic-selfcheck';     os.environ.pop('CORPUS_GUARD_CONFIG', None);     from plugins.corpus.preparation import guard_pytest;     guard_pytest.pytest_load_initial_conftests([], None, None)", "os.execvp('/home/administrator/FrontierAgent/.venv/bin/python', ['/home/administrator/FrontierAgent/.venv/bin/python', '-c', 'pass'])", "os.system('true')", "os.posix_spawn('/home/administrator/FrontierAgent/.venv/bin/python', ['/home/administrator/FrontierAgent/.venv/bin/python', '-c', 'pass'], {})", 'install fails when blocked module already loaded', 'unknown config field rejected']
+
+=== X5 write-once 拒绝路径 ===
+--- (1) 重跑冻结生成器 ---
+I0C-R15 FREEZE FAILED: i0c-r15 已存在（write-once）
+exit=1
+--- (2) evidence 已存在时重跑矩阵 ---
+拒绝：evidence 目录已存在（write-once）: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/evidence
+exit=2
+
+=== X6 legacy / 无 schema 双向 fail-closed ===
+REFUSED StoreError 拒绝：目标库已承载新链（corpus schema），legacy 读路径不可达（禁止在新库上静默降级读旧 blocks）
+--- 反向：无 schema 库请求 new ---
+REFUSED StoreError 拒绝：CORPUS_READ_CHAIN=new 但目标库无 corpus schema（不得回退旧 blocks 冒充新链）
+
+=== X7 同快照不变量（并发发布） ===
+.                                                                        [100%]
+1 passed in 1.25s
+
+=== X8 零模型（子进程真实被拒） ===
+child rc= 1
+contains openai: True
+
+=== X9 目标 fail-closed（非演练库） ===
+{
+  "ok": false,
+  "command": "status",
+  "error": "拒绝：current_database='postgres' ≠ 'i2_sandbox_corpus'"
+}
+exit= 3
+
+=== X10 装置自证 ===
+SELFTEST_OK: 篡改副本被判 2 项 MISS
+  - authority-pg: exit=1 期望 0
+  - cli-isolation: junit=(4, 0, 0, 0) 期望 (5, 0, 0, 0)
+
+=== X11 缺口裁决不可绕过 ===
+'issue:empty_page' -> unparsable_key blocking blocking= True
+'issue:empty_page:page:4:extra' -> empty_page acknowledged blocking= False
+'issue:not_in_vocabulary:page:1' -> not_in_vocabulary blocking blocking= True
+'issue::page:1' -> unparsable_key blocking blocking= True
+parse issue:empty_page -> None
+
+=== X12 无 scope 时缺口不得判 out_of_scope ===
+no-scope: ['blocking', 'blocking']
+scoped-pdf: ['blocking', 'blocking']
+char-outside: ['out_of_scope']
+
+=== X13—X15 缺口可见性 / 同口径 / 拼接语义 ===
+=========================== short test summary info ============================
+FAILED ../../../dev::TestI2GapCli::test_acknowledged_gap_publishes_and_coverage_is_scoped
+1 failed, 3 passed in 0.95s

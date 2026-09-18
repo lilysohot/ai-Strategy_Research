@@ -1,0 +1,43 @@
+{
+ "artifact": "i0a4-freeze-report-20260915.json",
+ "task": "I0A-4 人工金标冻结门通过记录",
+ "generated_at": "2026-09-15T11:41:21+00:00",
+ "guard": {
+  "phase": "i0a4-freeze-gate",
+  "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a4-freeze.json",
+  "config_sha256": "2a72ee67ffa4756b5e48ecf1cf5c69a5dfa4ad416e14055787528b425d25b179",
+  "network_mode": "deny_all（零连接）",
+  "model_calls": 0,
+  "child_processes": 0
+ },
+ "script_sha256": "f0b16651d05e018bae034655dd916956dc543848c95e9d10acc3bafb67d28a02",
+ "inputs": {
+  "working": {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-labeling-working.json",
+   "sha256": "00968eca31734dbc9e56d82e573d54059726ab750675b99a5e5ed1a006d402c9"
+  },
+  "package_ref": {
+   "artifact": "i0a4-candidates-v3-20260915.json",
+   "sha256": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943"
+  },
+  "adjudicated_sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea"
+ },
+ "checks": {
+  "label_slots": 23,
+  "query_slots": 30,
+  "pdf_hash_recheck": "全部通过",
+  "quote_substring": "空白归一后强校验通过",
+  "errors": []
+ },
+ "outputs": {
+  "source-gold-frozen.jsonl": {
+   "lines": 23,
+   "sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+  },
+  "query-gold-frozen.jsonl": {
+   "lines": 30,
+   "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+  }
+ },
+ "discipline": "冻结件不可变；发现错误升版本重冻结（frozen-v2…），不得覆盖；金标仅用于评估，不反哺运行链路"
+}

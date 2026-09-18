@@ -1,0 +1,50 @@
+{
+ "artifact": "i0a3-policy-verification.json",
+ "task": "I0A-3 特征表达式对 73 条锁定终态的验证（draft-1-20260915）",
+ "ran_at": "2026-09-15T08:44:18+00:00",
+ "inputs": {
+  "i0a2-adjudicated-20260915.json": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea",
+  "admission-policy.json (draft-1)": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661"
+ },
+ "expressions_under_test": {
+  "title_type_marker": "minutes|committee|pipeline|personal|broker 标记有序首中（表达式见政策 features[0]）",
+  "byline_institution": "首页头区 ≤400 字符券商署名 / 个人订阅署名 / 未署名 absent（PDF 内容级绑定留 I1）",
+  "heading_hierarchy": "≥2 个编号/井号标题（max_headings 50；内容级绑定留 I1）",
+  "speaker_turns": "≥3 个不同说话人前缀（max_scans 200；无正例样本，I1 合成夹具）",
+  "qa_markers": "≥2 组 Q:/提问:/投资者问: 配对；『十问十答』自设问答为反例",
+  "transcript_declaration": "前 2000 字符命中纪要/实录/电话会声明词（无正例样本，I1 合成夹具）"
+ },
+ "verification_results": {
+  "by_decision": {
+   "excluded": {
+    "pipeline": 5,
+    "broker": 1
+   },
+   "admitted": {
+    "broker": 38,
+    "absent": 2
+   },
+   "excluded_from_active": {
+    "personal": 17,
+    "absent": 4,
+    "committee": 6
+   }
+  },
+  "contradictions": [],
+  "snapshot_minutes_positives": 0,
+  "qa_tens_negative": {
+   "title_marker": "broker",
+   "qa_pair_scan": "title_level_not_interview_qa"
+  }
+ },
+ "verdict": {
+  "admitted_contradictions": 0,
+  "excluded_markers_as_expected": {
+   "A_pipeline->pipeline": 5,
+   "B_personal->personal_or_absent": 21,
+   "C_committee->committee": 6
+  },
+  "minutes_positive_samples_in_registered_corpus": 0,
+  "note": "speaker_turns/qa_markers/transcript_declaration 无库内正例——正例由 I1 表驱动合成夹具提供（登记为待办，不虚构样本）"
+ }
+}

@@ -1,0 +1,491 @@
+{
+  "artifact": "design-review.json",
+  "task": "I0-C 字段级设计复核（I0C-1/2/4 修订草案 r2；A 备料）",
+  "date": "2026-09-17",
+  "revision": "r2",
+  "revision_history": [
+    {"rev": "r1", "sha256": "3c69f0d141c0aadaa0b6771d09095e6ed93086235a78145f8f9550810889e9dc", "note": "初稿（13 候选 + 字段映射 + 参数 + 消费者矩阵）"},
+    {"rev": "r2", "note": "按 U 反馈六条修订：①新增 Store→持久化映射表与 corpus_review_decisions/corpus_source_checkpoints 两表（补 scope_ref/人工审核/取代链/pre-build 检查点）；②job 唯一性裁决为每 attempt 一行方案并列验收用例；③发布幂等改为状态比对协议并登记 I1 收口项；④I0C-4 对象裁决定稿（不再推 I2）；⑤清理授权与既有清单分离、逐表保留语义、docs/chinese_docs 表述修正；⑥删除无测量支撑的耗时余量说法，新增 I2 目标/角色/写入对象/归档根核定项"}
+  ],
+  "status": "adjudicated_signed_2026_09_17",
+  "prepared_by": "A",
+  "adjudication": {
+    "i0c_1_candidates": "signed_U_2026-09-17（15 候选 + 字段映射 + Store 持久化映射 + 协议裁决逐条批准）",
+    "i0c_2_parameters": "signed_U_2026-09-17（参数基线 + i2_targets 处理方式批准）",
+    "i0c_4_matrix": "signed_U_2026-09-17（对象裁决定稿批准）",
+    "i0c_3_freeze": "executed_after_this_file_finalized（freezes/i0c-r1.json + freeze-manifest 追加，validate_i0c_freeze.py 全过）",
+    "approved_by": "U（2026-09-17 会话：『好的，执行吧』——批准 r2 裁决清单（15 候选/分支/参数/i2_targets 处理方式/消费者矩阵），授权执行 I1 幂等协议修订（G2）与 I0C-3 冻结）",
+    "m3_preconditions": [
+      "I1 发布幂等协议修订落地（G2）——已完成（见 execution_status.i1_r4）",
+      "本文件 I0C-1/2/4 全部签认——已完成",
+      "i2_targets 待核定项——已按本文件建议值批准：演练库=corpus-db 新建 i2_sandbox_corpus（排除 i0b2_verify_* 可写）；生产=原库 postgres 库 corpus schema（I4 窗口）；角色=演练单角色+生产 corpus_app（最小权限）；归档根=独立于源目录的显式路径，默认 <repo>/data/corpus-archive（U 可在 I2-1 前改判绝对路径，不阻断 M3）"
+    ],
+    "u_feedback_2026_09_17": "六条反馈全部采纳并逐条落实（见 revision_history r2）"
+  },
+  "authority": {
+    "design": "docs/plan/corpus-ingestion-rebuild-architecture.md v1.1（§4 七类职责候选/§4.1-4.3/§5-§9/§10/§12.1/12.4）",
+    "tasks": "docs/plan/corpus-ingestion-rebuild-tasks.md v1.1 §3.2（I0C-1/2/4/3）",
+    "m3_gate": "M1、M2 与 I0C 全部完成；必需项无未决，否决候选已有获准替代；design-review/冻结版本/代码与配置引用一致，不以填写『待证据』放行 DDL"
+  },
+  "evidence_bindings": {
+    "i0_inventory": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-inventory.json", "sha256": "1f1cf6a4a58860c153b76b22e071daeacd1557b6656fd50b20e4a8aa7677285b"},
+    "i0a1_findings": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json", "sha256": "97f057c80e3bcb934428f153226a4ed6492b65af836d6c2a861e1fb475a54758"},
+    "i0b2_restore_report": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-restore-report.json", "sha256": "6ead6fd30617e2787cf35763adf005fe1810ef97f1b8c93d8e6c939e6518e652"},
+    "m1_logic_contract": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-logic-contract-frozen-v1-20260915.json", "sha256": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30"},
+    "i0c_cleanup_list": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0c-cleanup-list.json", "sha256": "434bef9dc4bc2cb3a8373f5afa793ad06391f5ba7d0a61ba5fac56b4981c367c"},
+    "dev_manifest": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json", "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961"},
+    "admission_policy": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json", "sha256": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661"},
+    "guard_i1": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json", "sha256": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4"},
+    "i1_freeze_r3": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r3.json", "sha256": "f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59"},
+    "baseline_bindings": {"path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json", "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b"},
+    "i1_contract_impl": {"path": "plugins/corpus/preparation/contract.py", "sha256": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2"},
+    "i1_store_impl": {"path": "plugins/corpus/preparation/repository.py", "sha256": "04a3cf9ea7a04d04939f35794e9614f6496de52f2ace3bf122ce74f81189b3a2"},
+    "i1_engine_impl": {"path": "plugins/corpus/preparation/engine.py", "sha256": "d07d7dfb381c9c4f763ed528d00aaea0571f3c1008d067f9e446c13ec6b27fb2"},
+    "old_service_schema": {"path": "plugins/corpus/service.py", "sha256": "eb679e5323e0a6a8fda94ce98daa26439370938608101c7ffcecf84302c6d6c3"},
+    "corpus_db_initdb": {"path": "docker/initdb/01-schema.sql", "sha256": "5fb6cfa59dbac87ef4c80e4e5d78f4a8da2bcd532ea5dfc149d349825d53336d"},
+    "d2_claims_schema": {"path": "plugins/corpus/claims.py", "sha256": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba"},
+    "d2_claims_v2_schema": {"path": "plugins/corpus/claims_v2.py", "sha256": "b645d3e7ed90d86d32d616c65166a93df071442fa88dfae4b370de6c2f5b498e"},
+    "architecture_doc": {"path": "docs/plan/corpus-ingestion-rebuild-architecture.md", "sha256": "365d0f39e43f34e5d65afc222e7ac520dfe547707c15574312ccd574ea55f159"},
+    "tasks_doc": {"path": "docs/plan/corpus-ingestion-rebuild-tasks.md", "sha256": "dee12ce867a5a211a8e8cd93414146811281801309c19e7d285d96e1c8b098f3"}
+  },
+  "observed_facts": {
+    "pg": "PostgreSQL 18.6；同实例共库 apodex（9529 kB）+ postgres（26 MB）；仅 postgres 超级用户单角色；无 pg_cron/触发器/复制（i0-inventory.server_facts/shared_database/background_writers）",
+    "extensions": "zhparser 2.4（FTS 在用，zhprs_custom_word 空表）、vector 0.8.6（留位未建列）、pg_trgm 1.6（已启用未接入）、plpgsql（i0a1-findings.extensions_installed）",
+    "old_tables": "documents 89（71 ok/18 empty）、blocks 1101、claims 1318、claims_v2 0、claim_block_runs 290、claim_block_runs_v2 0、corpus_evidence_runs 57、ingest_runs 11、ingest_failures 1、docs 3、chinese_docs 3（i0a1-findings.table_counts）",
+    "old_documents_columns": "doc_id PK / title / source_path / content_hash(16位前缀 UNIQUE) / mime / status(ok|needs_ocr|empty) / char_count / block_count / ingested_at / published(date，自 doc_id 日期前缀派生) / title_tsv(zhcfg GENERATED)（service.py:167-181 + initdb:01 注释）",
+    "old_blocks_columns": "doc_id FK / seq / locator / text / tsv(zhcfg GENERATED)，PK(doc_id,seq)（service.py:181-191）",
+    "restore": "M2 证据：隔离 corpus-db 恢复与原库三级一致（表计数/键集哈希/全量正文校验和）；apodex FK 孤立引用 31+517 为源库自身问题（i0-restore-report.verification/source_integrity_findings）",
+    "corpus_disk": "data/corpus 实测 130 MB、108 项、73 个来源文件（pdf/docx/md），最大单文件 5,303,547 字节 ≈5.3 MB（2026-09-17 实测）",
+    "scale": "裁决分母 73 来源（admitted 40 / excluded 6 / excluded_from_active 27；开发 6、留出保护 3）（m1_logic_contract.development_baseline）",
+    "docs_chinese_docs_writers": "代码侧零写入者（plugins/ tests/ scripts/ tools/ 无建表与 INSERT 命中）；该证据**仅排除仓库内写入者，不排除仓库外消费者**——归属结论以此为限（C12 修正表述）",
+    "store_interface_surface": "Store 抽象共 20 方法（repository.py:47-205）：来源/人工审核/准入（含 latest_admission 指针）/build/units/chunks/来源级检查点（(source_id,stage)，pre-build）/发布与撤销/job 生命周期五方法；内存实现 job 为单行当前状态（attempt 历史未追加，见 gap_register）"
+  },
+  "gap_register": {
+    "note": "设计复核识别的『逻辑契约 vs 现实现』差异；每条附收口动作与归属，不以沉默带过",
+    "items": [
+      {"id": "G1", "gap": "契约 §8.1 要求 attempt 历史追加保存；MemoryStore job 为单行当前状态（acquire/finish 直接 replace，历史被覆盖）", "disposition": "PG 按每 attempt 一行实现（C7 裁决），持久化增强不改 Store 接口与判定次序；内存 Seam 不补历史（临时适配器，语义等价性由 I2-5 用例覆盖）", "owner": "I2-2"},
+      {"id": "G2", "gap": "发布幂等现实现比较 (decision_id, active_build_id, activated_at) 三元组；DB 生成时间下『响应丢失+时钟前进重试』会被误判新激活（协议缺口，U 反馈③）", "disposition": "协议修订为状态比对（i0c_1_protocol.publish_idempotency_v2）；I1 代码与测试口径修订列为 **M3 前置收口项**（小改动：_set_publication 幂等键去 activated_at 分量；同步更新 i1-9 probe 的 (1,2) 断言口径与相关用例），在 I0C-3 冻结前完成并回填新修订快照", "owner": "A（I0C-3 冻结前）"},
+      {"id": "G3", "gap": "解析检查点按 (source_id, stage) 保存且发生在 build 创建之前，不能由依赖 build_id 的 corpus_jobs 表达", "disposition": "新增 corpus_source_checkpoints 表（C15）；last-write-wins 语义与 job 级 checkpoint（append 于 attempt 行）明确分离", "owner": "I2-1 DDL / I2-2"},
+      {"id": "G4", "gap": "ReviewedDecision（人工审核）与取代链在 r1 草案中无持久化落点", "disposition": "新增 corpus_review_decisions 表（C14）；取代链 supersedes 自引用显式化", "owner": "I2-1 DDL"},
+      {"id": "G5", "gap": "latest_admission『当前决定』指针在 PG 侧需要唯一性/恢复规则", "disposition": "corpus_sources.current_decision_id 显式指针列（见 store_persistence_mapping.latest_admission 行）", "owner": "I2-1 DDL / I2-2"},
+      {"id": "G6", "gap": "C14 冻结 DDL 为 review_decisions.source_id 设 FK，但审核终态（I0A-2）先于新链接收存在——FK 令先审后收流程不可行（I2-2 真库测试揭出）", "disposition": "i0c-r2 修正：去该 FK，改普通索引 idx_review_decisions_source；绑定按哈希值（§5.2）", "owner": "I2-1 DDL 修订 / I2-2"}
+    ]
+  },
+  "i0c_1_candidates": [
+    {
+      "id": "C1-corpus_sources",
+      "candidate": "corpus_sources（架构 §4）",
+      "decision": "retain",
+      "adjustments": [
+        "source_id 用完整 64 位 SHA-256（I1 Source 模型已强制；旧 documents.content_hash 仅 16 位前缀，不可复用作主键）",
+        "original_names 为 text[] 保留多别名（旧 source_path 单值；I1 source_id_from_bytes 语义：改名不改身份）",
+        "archive_path 为相对内容寻址路径 <sha256[:2]>/<sha256><ext>（I1 source.py 已实现并经 R5 symlink 边界加固）",
+        "新增 current_decision_id 显式指针列（G5：latest_admission 的 PG 落点，put_admission 同事务更新）",
+        "不设 registered_at 必填字段：接收时间可由 jobs/审计追溯，来源身份不含时间（避免 mtime 语义混入）"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[source.py]", "old_documents_columns", "architecture §4.1", "gap_register.G5"],
+      "ddl_mapping": "source_id char(64) PK；format/mime_type text；size_bytes bigint；archive_path text；original_names text[]；current_decision_id text FK→corpus_admissions"
+    },
+    {
+      "id": "C2-corpus_admissions",
+      "candidate": "corpus_admissions（架构 §4）",
+      "decision": "retain",
+      "adjustments": [
+        "decision_id=canonical_fingerprint（I1 admission.py 已实现，同输入同 policy_rev 同 id）",
+        "policy_rev 绑定 _SUPPORTED_POLICY_REVS=(v1-20260915,)，未支持版本拒绝（R5）",
+        "**scope_ref 列补齐（U 反馈①：Admission.scope_ref 为准入输出与 publish scope 核对字段，r1 遗漏）**",
+        "metadata_snapshot.report_publication 为研报发布日期唯一落点（§4.3 六字段结构，I1 ReportPublication 已实现跨字段校验）",
+        "旧 documents.published（doc_id 前缀派生）不迁移：违反 §4.3『不得从 doc_id 补值』；历史值仅留旧库审计与导出，新链由 source_explicit/human_review 依据重建"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[admission.py]", "i1_store_impl.publish scope 核对（repository.py:364-368）", "admission_policy", "architecture §4.3"],
+      "ddl_mapping": "decision_id text PK；source_id char(64) FK；material_type/research_domain text NULLable；decision text CHECK(in_scope|excluded_by_policy|review_required)；policy_rev/rule_rev text；reason_codes text[]；**scope_ref text NULLable**；evidence_refs text[]；review_ref text；metadata_snapshot jsonb"
+    },
+    {
+      "id": "C3-corpus_builds",
+      "candidate": "corpus_builds（架构 §4）",
+      "decision": "retain",
+      "adjustments": [
+        "build_id=compute_build_id(source_id,decision_id,parse_rev,clean_rev,chunk_rev,index_rev,scope_ref)（I1 已实现，char(64)）",
+        "quality_report jsonb（gap_regions/oversized_chunks，I1 engine._quality_report）；发布门按此阻止缺口常规发布（full-review R1/R2 已实现）",
+        "artifact_manifest 绑定产物清单哈希；config_fingerprint 记录解析资源参数版本（I0C-2 冻结值的指纹）"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[engine.py]", "m1_logic_contract.contract.revision_model"],
+      "ddl_mapping": "build_id char(64) PK；source_id/decision_id FK；parse_rev/clean_rev/chunk_rev/index_rev text；scope_ref text；config_fingerprint text；artifact_manifest text[]；quality_report jsonb"
+    },
+    {
+      "id": "C4-corpus_units",
+      "candidate": "corpus_units（架构 §4；§4.2 引用唯一权威）",
+      "decision": "retain",
+      "adjustments": [
+        "权威映射 = raw_text + UnitLocation(page/element/char_span Unicode code point [start,end)/bbox/cells) + content_hash=sha256(raw_text)（I1 Unit 构造即校验）",
+        "clean_view/mapping/status(kept|noise|review_required|needs_ocr|out_of_scope|oversized)/reasons 为投影与台账，不作引用权威（R1/R2：scope 过滤在 clean 层，未泄露范围外文本不等于未静默丢文本）",
+        "kind 词表 paragraph/heading/title/list_item/table/table_row/table_cell/qa_question/qa_answer/footer/header/quote/unknown（I1 UNIT_KINDS，开放集合不闭包）",
+        "旧 blocks 不迁移：无坐标/版本/状态表达（架构 §0 问题清单第 1 行），新链自源文件按 parse_rev 重建"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[readers/*,clean.py]", "old_blocks_columns", "m1_logic_contract.contract.citation_authority"],
+      "ddl_mapping": "(build_id,unit_id) PK；parent_id/ordinal；kind text；raw_text text；content_hash char(64)；location jsonb(page,element,char_span,bbox,cells)；clean_view text；mapping jsonb；status text；reasons text[]"
+    },
+    {
+      "id": "C5-corpus_chunks",
+      "candidate": "corpus_chunks（架构 §4；§6.2 结构优先切块）",
+      "decision": "retain",
+      "adjustments": [
+        "unit_refs 全量引用闭合 + context_refs 关联角色子集（full-review R4 引用式关联：context 文本退场、ordinal 引用保留，refs ⊆ unit_refs 由契约校验）",
+        "source_ranges 为成员单元原文区间装配（可验坐标存在时）",
+        "FTS 投影：search_text 上建 zhparser zhcfg GIN（对齐旧 blocks.tsv GENERATED 能力）；title_text/section_path 为有来源标记的检索字段；FTS 为可重建投影，不进引用权威",
+        "旧 blocks.tsv 不迁移：检索块自 chunk_rev 重建"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[chunk.py]", "old_blocks_columns.tsv", "architecture §6.2/§7.1"],
+      "ddl_mapping": "(build_id,chunk_id) PK；chunk_id 全局唯一（build 前缀命名）；kind text；unit_refs text[]；context_refs text[]；search_text text；title_text text；section_path text[]；source_ranges jsonb；search_tsv tsvector GENERATED ALWAYS AS (to_tsvector('zhcfg', search_text)) STORED + GIN"
+    },
+    {
+      "id": "C6-corpus_publications",
+      "candidate": "corpus_publications（架构 §4；§8 发布）",
+      "decision": "retain",
+      "adjustments": [
+        "source_id 唯一；current_decision_id/active_build_id/generation/activated_at（I1 Publication 模型 generation≥1）",
+        "publish 核对 build.decision_id + 所有权门（R1/R2 已实现于 MemoryStore，PG 侧同协议 I2-2 实测）；幂等语义按 publish_idempotency_v2 协议裁决（状态比对，见 i0c_1_protocol）",
+        "activated_at 仅由数据库在指针翻转事务内生成（generate 恒 DB now()）；调用方不提供时间",
+        "排除/撤销（retire）时 active_build_id 为空，旧 build 仅供审计"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[repository.py]", "m1_logic_contract.contract.job_state_machine.publish", "gap_register.G2"],
+      "ddl_mapping": "source_id char(64) PK；current_decision_id text FK；active_build_id char(64) NULLable FK；generation int；activated_at timestamptz（DB 生成）"
+    },
+    {
+      "id": "C7-corpus_jobs",
+      "candidate": "corpus_jobs（架构 §4；§8.1 租约/接管）",
+      "decision": "retain",
+      "adjustments": [
+        "**job 唯一性裁决（U 反馈②，定稿）**：corpus_jobs 每 attempt 一行——PK (build_id, stage, attempt)；『当前状态』= 该 (build_id, stage) 下 max(attempt) 行；部分唯一索引 UNIQUE(build_id, stage) WHERE state='running' 保证同逻辑 job 单活租约；attempt 历史按行天然追加（满足契约 §8.1『attempt 历史追加保存』，闭合 G1）",
+        "fencing 写入：UPDATE … WHERE build_id=? AND stage=? AND attempt=? AND state='running' AND lease_until>now() AND fence_token=?；更新零行即 lease_lost（停写不发布）",
+        "get_job 语义 = 返回 max(attempt) 当前行；finish 幂等重试 = 同 (build_id,stage,attempt) 已 succeeded 返回原行",
+        "PUBLISHED 阶段特殊语义保持 I1 已测行为：终态 PUBLISHED job 允许重新 acquire（消耗 attempt 预算）以支持撤销后重发布；内容阶段 succeeded 幂等短路",
+        "checkpoint（job 级）随 attempt 行保存：完整规范化载荷 + payload_hash（parse-checkpoint-2；仅改 issues/坐标/状态即拒绝复用，R3/R4）",
+        "旧 ingest_runs/ingest_failures 语义由 corpus_jobs 覆盖，不平行保留",
+        "**不采用**：单行覆盖式（丢失 attempt 历史，违反 §8.1）；逻辑表+历史表拆分（两表事务一致性与单活约束复杂化，单表部分唯一索引已足够）"
+      ],
+      "evidence": ["i1_store_impl.register_job/acquire_job/finish_job（repository.py:409-519）", "m1_logic_contract.contract.job_state_machine", "gap_register.G1"],
+      "ddl_mapping": "PK (build_id, stage, attempt)；state text；owner_id/fence_token text；lease_until/heartbeat_at timestamptz；error text；checkpoint jsonb；partial UNIQUE INDEX (build_id, stage) WHERE state='running'；attempt 历史=同逻辑键多行追加",
+      "acceptance_cases_i2_5": [
+        "双 worker 并发 acquire 同一 queued job：恰一成功，另一行锁等待后按新状态重判（partial unique running 兜底）",
+        "running 未过期抢占：拒绝（零行更新）",
+        "running 过期接管：attempt+1 新 fence_token；旧 token 的权威写入/心跳/finish 更新零行 → lease_lost，不覆盖接管者结果",
+        "旧 worker 迟到提交（finish/put_units/put_chunks/publish）：fencing 条件 UPDATE 零行拒绝，已接管者结果完整",
+        "提交成功但响应丢失：同 (build_id,stage,attempt) 重复 finish 幂等返回原检查点，不重复增行",
+        "cancelled 不自动复活（PUBLISHED 例外：重新 acquire 消耗 attempt）",
+        "max_attempts 边界：failed 重试、running 过期接管、PUBLISHED 重新激活均消耗预算，越界拒绝（F2）"
+      ]
+    },
+    {
+      "id": "C8-content_archive",
+      "candidate": "大型原文内容寻址归档（本地文件系统，不新增对象存储）",
+      "decision": "retain",
+      "adjustments": [
+        "布局 <archive_root>/<sha256[:2]>/<sha256><ext>；暂存 _staging 与最终落点同一信任边界（mkdir/mkstemp 前后核验真实落点，R5）",
+        "与 PG 备份同一备份清单：pg_dump 不等于已备份原文件（§4 注）——I0C-3 冻结与 I4 前归档目录纳入备份清单绑定",
+        "归档根目录为独立于源目录的显式配置（源 data/corpus 只读）；具体路径待 U 核定（见 i0c_2_parameters.i2_targets）"
+      ],
+      "evidence": ["i1_freeze_r3.binding.implementation[source.py]", "corpus_disk"],
+      "ddl_mapping": "无 DDL；文件系统布局进 I2-1 迁移/恢复脚本与备份清单"
+    },
+    {
+      "id": "C9-schema_layout",
+      "candidate": "语料物理命名空间（架构 §4：『现有 PostgreSQL 中使用独立语料 schema』）",
+      "decision": "adjust",
+      "adjustments": [
+        "新建独立 schema corpus（于现有 postgres 库），不与旧 public 应用表混放；九表（七表 + corpus_review_decisions + corpus_source_checkpoints）全部入 corpus schema",
+        "否决独立 database 方案：zhparser/FTS 与消费者查询需同库，跨库无 JOIN；CorpusService 同实例即可（§9 落点不变）",
+        "apodex 库不触碰；一切清理/演练按 schema+database 双重限定（i0-inventory.shared_database.risk）",
+        "I2-1 演练在隔离 corpus-db 容器按同布局建 DDL，不操作旧默认库"
+      ],
+      "evidence": ["i0_inventory.shared_database", "architecture §4"],
+      "ddl_mapping": "CREATE SCHEMA corpus；扩展保持库级安装（zhparser/vector/pg_trgm 已在 postgres 库）"
+    },
+    {
+      "id": "C10-old_documents_blocks",
+      "candidate": "复用现表 documents/blocks 作为新链主表",
+      "decision": "reject",
+      "adjustments": [
+        "否决理由（架构 §0 问题清单第 1 行原文）：documents/blocks 作为唯一清洗结果且无解析版本——必须补版本/质量表达；旧表无 source/build 版本维度、无坐标/映射/状态台账、content_hash 仅 16 位、published 为 doc_id 前缀派生",
+        "获准替代：新建 corpus schema 九表（C1-C7、C14、C15）；旧表数据由新链自源文件按版本化解析重建；旧表处置见 i0c_reset_scope_candidates（独立授权，不借用 i0c-cleanup-list）",
+        "旧 doc_id 句柄在新库清除后不映射新结果，历史引用由离线归档解释或返回 archive_required（§7.2）"
+      ],
+      "evidence": ["architecture §0/§7.2", "old_documents_columns", "old_blocks_columns", "i0c_cleanup_list.execution_preconditions"],
+      "ddl_mapping": "无迁移 DDL；I4 reset 候选对象（独立清单逐表签认）"
+    },
+    {
+      "id": "C11-d2_claims_tables",
+      "candidate": "claims/claims_v2/claim_block_runs/claim_block_runs_v2/corpus_evidence_runs",
+      "decision": "retain_external",
+      "adjustments": [
+        "D2 所有，不属基础入库成功条件（§4 注：额外语义产物表不属于基础入库的成功条件）",
+        "corpus schema 不建对应表；EvidenceRun/MaterialRun 作为后续产物引用 corpus.build_id/parse_rev；既有必要证据包由同源 units 投影，不二次解析（I2-7）",
+        "『外部保留』语义逐层拆分（U 反馈⑤）：保留的是**能力**（D2 抽取代码/共享模型/校验，接相同来源证据）与**导出记录**（I4 前 claims/台账导出件入归档）；**表本身**在导出完成后进入独立 reset 候选（逐表签认）——保留能力 ≠ 表永久保留",
+        "corpus_evidence_runs(57)/claim_block_runs(290) 历史台账：导出后 reset 候选；claims(1318)：模型预算产物，导出后 reset 候选；claims_v2/claim_block_runs_v2（0 行）：无数据，直接 reset 候选（无导出需求）"
+      ],
+      "evidence": ["d2_claims_schema", "d2_claims_v2_schema", "architecture §4 注"],
+      "ddl_mapping": "无新 DDL；消费侧由 build_id/parse_rev 关联"
+    },
+    {
+      "id": "C12-legacy_docs_chinese_docs",
+      "candidate": "docs / chinese_docs 遗留表归属（M1 carried_items 路由至 I0-C）",
+      "decision": "adjust",
+      "adjustments": [
+        "判定：疑似遗留产物——代码侧零仓库内写入者（observed_facts.docs_chinese_docs_writers）；**该证据不能证明无仓库外消费者**（U 反馈⑤修正：r1 曾过度推断），故归属结论为『疑似』而非定案",
+        "处置：默认保留原样（不进 reset 候选）；I4 停写窗口内只读导出内容 + 停写期连接观察（pg_stat_activity/日志，按 i0-inventory.live_consumer_check 方法扩展）后再由 U 裁决清理或转正；导出件入归档为获准替代",
+        "本项非必需布局组成，不进 corpus schema DDL，不阻断 M3"
+      ],
+      "evidence": ["observed_facts.docs_chinese_docs_writers", "i0a1_findings.tables[docs,chinese_docs]", "m1_logic_contract.carried_items[1]"],
+      "ddl_mapping": "无新 DDL；I4 观察后裁决对象"
+    },
+    {
+      "id": "C13-extensions_index",
+      "candidate": "扩展与第一版索引基线（架构 §7.1）",
+      "decision": "retain",
+      "adjustments": [
+        "zhparser 2.4（zhcfg）为 FTS 分词基线：旧 documents.title_tsv/blocks.tsv 均为 to_tsvector('zhcfg',…)（service.py/initdb 证据），新链 chunk.search_tsv 同配置；配置版本纳入 index_rev，升级不可原地沿用旧 rev",
+        "pg_trgm 1.6：保留已安装可用性，不建列不接入；FTS 召回不足时先记录具体失败再评估 trigram/精确匹配补充（§7.1），不默认引入新搜索系统",
+        "vector 0.8.6：留位不建列，基础链无向量检索需求",
+        "zhparser.zhprs_custom_word（0 行）保留：自定义词典挂点；词条变更属 index_rev 升级",
+        "index_rev 真实值 I2-3 定稿（I1 占位 index-1 维持至真实索引落地）"
+      ],
+      "evidence": ["i0a1_findings.extensions_installed", "old_documents_columns.title_tsv", "architecture §7.1"],
+      "ddl_mapping": "corpus.search_tsv GIN；build_id/source_id/领域/发布日期关联筛选索引（I2-3 定稿）"
+    },
+    {
+      "id": "C14-corpus_review_decisions",
+      "candidate": "人工审核记录持久化（U 反馈①新增；r1 遗漏）",
+      "decision": "retain_new",
+      "adjustments": [
+        "ReviewedDecision（I1 contract.py:366-392）为 decide_admission 输入与 §5.2 判定次序第 1 步的对象，必须有持久化落点",
+        "追加式：decision_id PK；同 id 同内容幂等、不同内容拒绝（对齐 MemoryStore._put_idempotent）",
+        "取代链 supersedes 自引用 FK→decision_id；显式且无环；多个未解决人工决定 → review_required（判定次序第 1 步），不凭时间猜取代",
+        "审核依据不可空：rationale NOT NULL；locators text[]（争议原文定位）；material_type/research_domain 为人工给出时优先于登记提示（full-review 静态收口）",
+        "**i0c-r2 修正（I2-2 测试揭出）**：source_id 不设 FK——审核终态（I0A-2）先于新链接收存在，FK 令先审后收流程不可行；改为普通索引 idx_review_decisions_source，绑定按哈希值（§5.2）"
+      ],
+      "evidence": ["i1_contract_impl ReviewedDecision", "i1_store_impl.put_reviewed_decision", "m1_logic_contract.contract.decide_admission.inputs", "gap_register.G6"],
+      "ddl_mapping": "decision_id text PK；source_id char(64) NOT NULL（无 FK，索引替代）；reviewer text；reviewed_at timestamptz；decision text CHECK(admitted|excluded|excluded_from_active)；rationale text NOT NULL；scope_ref text；supersedes text FK→自身；locators text[]；material_type/research_domain text NULLable"
+    },
+    {
+      "id": "C15-corpus_source_checkpoints",
+      "candidate": "来源级（pre-build）解析检查点持久化（U 反馈①新增；r1 遗漏）",
+      "decision": "retain_new",
+      "adjustments": [
+        "解析计算先于准入/建 build（内容级探查来自真实解析），检查点按 (source_id, stage) 键控（repository.py:125-135 已声明）；不能由依赖 build_id 的 corpus_jobs 表达（G3）",
+        "last-write-wins：同 (source_id, stage) 重复写入以最后一次为准（检查点可被无效化重算覆盖）——与 job 级 checkpoint（随 attempt 行 append、不可覆盖）语义相反，两表不得合并",
+        "checkpoint 字符串承载完整规范化载荷 + payload_hash（parse-checkpoint-2）；引擎校验输入/产物哈希后决定复用或重算（C6），仅改 issues/坐标/状态即拒绝复用"
+      ],
+      "evidence": ["i1_store_impl.put_source_checkpoint（repository.py:125-135, 321-329）", "i1_engine_impl checkpoint 流（engine.py:471/529/934）", "gap_register.G3"],
+      "ddl_mapping": "(source_id, stage) PK；checkpoint jsonb（schema_rev + payload + payload_hash）；updated_at timestamptz（覆盖时间，仅观测用）"
+    }
+  ],
+  "store_persistence_mapping": {
+    "note": "U 反馈①要求：Store 方法 → 持久化位置 → 唯一性/恢复规则 对应表。物理表数为 9（七表 + C14/C15），不拘泥七表；全部位于 corpus schema",
+    "rows": [
+      {"store_method": "put_source / get_source", "key": "source_id", "location": "corpus_sources", "uniqueness_recovery": "PK source_id；同 id 同内容幂等、不同内容拒绝（内容寻址名+哈希核验双保险）；崩溃恢复：行即真值"},
+      {"store_method": "put_reviewed_decision / get_reviewed_decision", "key": "decision_id", "location": "corpus_review_decisions", "uniqueness_recovery": "PK decision_id；追加不可变；supersedes 链显式无环；恢复：追加历史即全量，取代链按 §5.2 次序解析"},
+      {"store_method": "put_admission / get_admission", "key": "decision_id", "location": "corpus_admissions", "uniqueness_recovery": "PK decision_id；追加不可变（同 id 同内容幂等且**不回退**当前指针；不同内容拒绝）；scope_ref 落列；恢复：历史行全量保留"},
+      {"store_method": "latest_admission", "key": "source_id", "location": "corpus_sources.current_decision_id", "uniqueness_recovery": "显式指针列（裁决：不用 max(decided_at) 派生——人工决定可后补旧时间，指针单调性由 put_admission 同事务更新保证）；恢复：读列即得，无需重放"},
+      {"store_method": "put_build / get_build", "key": "build_id", "location": "corpus_builds", "uniqueness_recovery": "PK build_id；同 id 同内容幂等/不同拒绝；build_id 本身绑定全部 rev+决定+scope"},
+      {"store_method": "put_units / get_unit / get_units", "key": "(build_id, unit_id)", "location": "corpus_units", "uniqueness_recovery": "复合 PK；同键同内容幂等、不同内容拒绝；所有权门=PARSED job fencing（条件 UPDATE 零行=lease_lost）；恢复：按 build 全量读取校验"},
+      {"store_method": "put_chunks / get_chunk / get_chunks", "key": "chunk_id（全局唯一，build 前缀）", "location": "corpus_chunks", "uniqueness_recovery": "PK chunk_id；所有权门=CHUNKED job fencing；恢复：按 build 全量读取校验"},
+      {"store_method": "put_source_checkpoint / get_source_checkpoint", "key": "(source_id, stage)", "location": "corpus_source_checkpoints", "uniqueness_recovery": "PK (source_id,stage)；**last-write-wins**（无效化重算覆盖，与 job 级 checkpoint 语义相反）；pre-build 阶段即可存在；恢复：引擎按 payload_hash 校验决定复用/重算"},
+      {"store_method": "get_publication / publish / retire", "key": "source_id", "location": "corpus_publications", "uniqueness_recovery": "PK source_id；幂等=状态比对（publish_idempotency_v2：目标状态相同→返回现状，不递增 generation、不刷新时间）；所有权门=PUBLISHED job fencing；恢复：单行真值 + generation 单调"},
+      {"store_method": "register_job / get_job / acquire_job / heartbeat_job / finish_job", "key": "(build_id, stage)（逻辑）", "location": "corpus_jobs（每 attempt 一行）", "uniqueness_recovery": "PK (build_id,stage,attempt)；当前=max(attempt)；partial UNIQUE (build_id,stage) WHERE running；fencing 条件 UPDATE；attempt 历史追加（G1 闭合）；恢复：读当前行；重试读已提交检查点不重复增行"},
+      {"store_method": "（job 级 checkpoint，finish_job 参数）", "key": "(build_id, stage, attempt)", "location": "corpus_jobs.checkpoint jsonb", "uniqueness_recovery": "随 attempt 行不可变；payload_hash 完整校验；与 source 级检查点分工见 C15"}
+    ]
+  },
+  "i0c_1_protocol": {
+    "publish_idempotency_v2": {
+      "decision": "状态比对（U 反馈③闭合）",
+      "rule": [
+        "publish(source_id, decision_id, build_id)：若当前 publication 已为 (current_decision_id=decision_id, active_build_id=build_id) → 幂等返回现有 (generation, activated_at)，**不递增、不刷新时间**——无论请求路径/租约/token 如何",
+        "否则指针翻转：generation+1；activated_at=数据库 now()（仅翻转事务内生成，调用方永不提供）",
+        "retire 同理：目标状态 (decision_id, active_build_id=NULL) 相同即幂等返回",
+        "『提交成功但响应丢失』的重试无论是否重新 acquire，目标状态不变 → 恒幂等，缺口闭合",
+        "generation 语义收敛为『活动指针变更次数』：同 build 同决定重复发布无可观测状态变化，不递增"
+      ],
+      "delta_to_i1": "I1 现实现比较 (decision_id, active_build_id, activated_at) 三元组（repository.py:388-397）；注入固定时钟下与状态比对在单请求内等价，但『响应丢失+时钟前进』场景不等价（即缺口）。I1 修订（_set_publication 去 activated_at 分量 + i1-9 probe (1,2) 断言与相关用例口径更新）列为 **M3 前置收口项**，I0C-3 冻结前落地并回填修订快照",
+      "acceptance_cases_i2_5": ["同 (build,decision) 重复 publish → generation/activated_at 不变", "retire→publish 往返 → generation 递增、时间为新事务时间", "响应丢失重试（含重新 acquire）→ 恒幂等"]
+    },
+    "job_ownership_v1": {
+      "decision": "见 C7（每 attempt 一行 + partial unique running + fencing 条件 UPDATE）；验收用例 7 项见 C7.acceptance_cases_i2_5"
+    }
+  },
+  "i0c_1_field_mapping": {
+    "note": "旧 schema（public）→ 新 schema（corpus）字段级映射；『不迁移』= 新链自源文件重建或语义废弃，非数据丢失（旧库保留至 I4，dump 永久可考）",
+    "documents": {
+      "doc_id": "废弃 → source_id（字节身份）+ 检索句柄 cv2:<build_id>（§7.2）；doc_id 前缀含日期的派生语义一并废弃",
+      "title": "不迁移为元数据列 → units(heading/title) 原文单元 + corpus_chunks.title_text 投影",
+      "source_path": "corpus_sources.original_names[]（多别名）",
+      "content_hash": "升级 → corpus_sources.source_id（16 位前缀 → 完整 SHA-256）",
+      "mime": "corpus_sources.mime_type",
+      "status(ok|needs_ocr|empty)": "拆分 → units.status（区域级）+ admission 决定（来源级）；来源级 ok/empty 语义由构建与准入状态覆盖",
+      "char_count/block_count": "不迁移 → build.quality_report 与 units 计数派生",
+      "ingested_at": "不迁移为来源字段 → corpus_jobs 时间线/审计",
+      "published(date 派生)": "不迁移（§4.3 禁止 doc_id 补值）→ corpus_admissions.metadata_snapshot.report_publication 按原文依据/人工审核重建；旧值留旧库",
+      "title_tsv": "不迁移 → corpus_chunks 检索投影按 index_rev 重建"
+    },
+    "blocks": {
+      "doc_id": "corpus_units.build_id（版本维度新增）",
+      "seq": "corpus_units.ordinal + unit_id",
+      "locator": "corpus_units.location.page/element（保留显示语义）",
+      "text": "corpus_units.raw_text + content_hash（权威）",
+      "tsv": "corpus_chunks.search_tsv（重建投影）",
+      "（缺失维度）": "char_span/bbox/cells/parent_id/kind/clean_view/mapping/status/reasons 全部为新增列（老表无对应）"
+    },
+    "ingest_runs": "corpus_jobs（每 attempt 一行时间线 + error）",
+    "ingest_failures": "corpus_jobs.error/checkpoint（失败原因单列，§8.1）",
+    "claims/claims_v2/claim_block_runs*/corpus_evidence_runs": "D2 保留外部（C11：能力+导出件保留，表在导出后进独立 reset 候选）；后续经 build_id/parse_rev 关联，Evidence/EvidenceRun 由同源 units 投影（I2-7）",
+    "docs/chinese_docs": "疑似遗留表（仓库外消费者未排除），无映射（C12；I4 观察后裁决）",
+    "job_唯一键": "逻辑 job = (build_id, stage)；物理行 = (build_id, stage, attempt)；单活租约 = partial UNIQUE WHERE running（C7 裁决，消除 r1 的『或』二义）"
+  },
+  "i0c_1_branch": {
+    "chosen": "migrate_then_reset_limited",
+    "proposal": "migrate（corpus schema 并行新建，I2 隔离演练 → 消费者切换）+ I4 阶段对旧 public 派生表执行 reset-limited（仅精确对象清单，非整库）",
+    "rejected_alternatives": [
+      {"alt": "reset 整库清空重建", "reason": "同实例共库 apodex；架构 §10.1 禁止实例级/模糊匹配 DROP CASCADE；旧 claims 审计历史须先导出保留（§4 注）"},
+      {"alt": "defer（不迁移不清算）", "reason": "新旧双主结果并存违反 §9 无静默 legacy fallback；两条解析路径已定性为必须归并"}
+    ],
+    "authorization_separation": "既有 i0c-cleanup-list.json（U 已裁决：21 条 DB 记录 + 1 磁盘文件 + 37 ADS）授权范围**仅限其列名对象**，本草案的表级 reset 候选不借用该授权；表级清理走独立清单（下），逐表在 I4 停写窗口内由 U 签认后才执行",
+    "reset_scope_candidates": [
+      {"object": "public.documents", "precondition": "新链重建并核对后", "retained_semantics": "能力：无（新链替代）；数据：可由源文件重建；保留=导出件（doc_id→source_id 映射 manifest 供旧引用解释）"},
+      {"object": "public.blocks", "precondition": "同上", "retained_semantics": "数据由源重建；保留=导出件（旧证据引用定位对照）"},
+      {"object": "public.claims (1318)", "precondition": "I4 前导出 CSV/JSONL 入归档", "retained_semantics": "能力：D2 抽取代码保留（共享依赖拆出）；数据：模型预算产物，以导出件形式保留；表本身导出后 reset"},
+      {"object": "public.claims_v2 / public.claim_block_runs_v2 (0 行)", "precondition": "无导出需求", "retained_semantics": "空影子表，直接 reset 候选"},
+      {"object": "public.claim_block_runs (290) / public.corpus_evidence_runs (57)", "precondition": "导出台账入归档", "retained_semantics": "运行审计历史以导出件保留；表导出后 reset"},
+      {"object": "public.ingest_runs (11) / public.ingest_failures (1)", "precondition": "导出入归档", "retained_semantics": "旧跑批台账以导出件保留；语义已由 corpus_jobs 覆盖；表导出后 reset"},
+      {"object": "对应 sequences / indexes", "precondition": "随表", "retained_semantics": "无独立保留价值"}
+    ],
+    "not_in_reset_scope": [
+      {"object": "public.docs / public.chinese_docs", "reason": "归属疑似未定（仓库外消费者未排除）；默认保留，I4 窗口内导出+连接观察后由 U 单独裁决（C12）"},
+      {"object": "apodex 库全部对象", "reason": "不属语料链；其 FK 孤立引用为 apodex 线问题"},
+      {"object": "扩展（zhparser/vector/pg_trgm/plpgsql）与 zhparser.zhprs_custom_word", "reason": "库级基础设施与新链 FTS 基线（C13）"},
+      {"object": "旧人工审核导出（.audit 88 工件）与 I0B 备份（i0b1-20260915T0714Z）", "reason": "永久保留（人工审核历史与恢复证据）"}
+    ],
+    "execution_preconditions": "M2 已过（成立）+ I0-C 冻结（本文件签认后）+ I4 停写窗口 + U 逐表执行签认（共库 apodex 同实例，删除为 DML）"
+  },
+  "i0c_2_parameters": {
+    "lease": {
+      "lease_ttl_seconds": 300,
+      "heartbeat_interval_seconds": 60,
+      "stage_timeout_seconds": 600,
+      "max_attempts": 3,
+      "derivation": [
+        "heartbeat(60) < TTL(300) 且 ≤ TTL/3(100)，满足契约 §8.1.2 硬约束",
+        "与 I1 内存链测试夹具 LeaseConfig(300,60,600,3) 一致（i1-r3 绑定的 engine 测试），生命周期/接管语义已过 13+12 项用例",
+        "max_attempts=3 有限重试，不无限续租（§8.1.2）",
+        "**无耗时测量支撑的余量推断已按 U 反馈⑥删除**：600s 为待实测上限基线，不是解析容量保证；I2-5/I3 实测前不据此宣称任何余量"
+      ],
+      "i2_pending_verification": ["停顿/延迟实测 TTL 过期与接管恰好临界（I2-5）", "续租/过期竞态、提交丢响应、取消后接管实测", "各阶段真实耗时分布实测后按阶段收紧或放宽（须新参数版本并进 config_fingerprint）"]
+    },
+    "parse_resources": {
+      "parsers": "pymupdf 1.28.2 / python-docx 1.2.0（i1-r3 绑定 + M4 postflight-lib-versions 留痕）",
+      "execution_model": "单 worker 顺序解析（确定性优先）；双 worker 竞争仅作用于 job 租约层（I2-5 实测）",
+      "ocr": "不在允许列表；可视核验与 OCR 为明确后续任务（§3）",
+      "i2_pending_verification": ["真实三类开发样本（6 份）解析耗时分布", "64MB 上限文件的最坏情况解析内存占用"]
+    },
+    "archive": {
+      "observed": "data/corpus 130 MB / 108 项 / 73 来源文件 / 最大 5.3 MB（2026-09-17 实测）",
+      "capacity_rule": "内容寻址副本 ≤ 现有语料总量（去重后更小）；启动全量构建前 fail-closed 检查 archive 卷可用空间，阈值基线 ≥ 1 GB（≈8× 现有语料，无增长率实测支撑，I2 复评）；不足则 plan 阶段拒绝",
+      "permissions": "源目录（data/corpus）只读绑定；archive_root 仅 preparation 写入；_staging 与最终落点同边界（R5）",
+      "i2_pending_verification": ["容量门阈值按实测归档增长率复评", "恢复覆盖：archive 目录纳入备份清单后的恢复演练（I2-1）"]
+    },
+    "index": {
+      "fts_config": "zhparser 2.4 / zhcfg（延续旧链在用配置，§7.1 复用当前配置实测）",
+      "index_rev": "I1 占位 index-1；真实值 I2-3 定稿（分词配置 + 索引文本生成规则进 build 身份）",
+      "i2_pending_verification": ["GIN 构建耗时与 index 阶段 timeout 匹配", "数字/小数/负号/单位/中英混合查询固定测试通过率（§7.1）"]
+    },
+    "i2_targets": {
+      "note": "U 反馈⑥：明确 I2 的数据库/schema/角色/允许写入对象/归档根，避免把 M2 验证库默认当可改写目标；标注『待 U 核定』项不预设已授权",
+      "isolation_target": "corpus-db 容器（隔离）**新建**演练库（建议名 i2_sandbox_corpus）；**明确排除**：i0b2_verify_postgres / i0b2_verify_apodex（M2 验证库只读保留，不得作为 I2 可改写目标）；原库 pg 全部数据库不可写（待 U 核定演练库名与端口）",
+      "production_target": "原库 postgres 库内新建 corpus schema（C9）；建 schema/DDL 仅在 I4 批准窗口执行，I2 阶段零生产写入",
+      "roles": "现状仅 postgres 超级用户（盘点事实）；I2 演练沿用单角色并登记风险；生产建议新建 corpus_app 最小权限角色（仅 corpus schema 读写）——**待 U 核定**，不预设已授权",
+      "allowed_write_objects": "仅 corpus schema 九表 + 显式 archive_root；旧 public 表零写入（I4 批准清理除外）；guard 配置按 allowlist 绑定（I2 阶段守卫配置另发并重验）",
+      "archive_root": "独立于 data/corpus 的显式路径（源目录只读）；候选 <repo>/data/corpus-archive 或独立容器卷——**待 U 核定**",
+      "i0c_2_outputs_frozen_after_u": "上表核定项随 I0C-1 签认或单独核定后进入 I0C-3 冻结 manifest"
+    },
+    "discipline": "以上为待真实负载验证的开发基线（架构 §8.1.2/§12.4：不把备份耗时当解析耗时；参数变更须新版本并进入 build 身份/config_fingerprint）"
+  },
+  "i0c_4": {
+    "consumer_migration_matrix": [
+      {"consumer": "plugins/corpus/service.py（CorpusService/get_service/ingest_path/ingest_dir）", "access": "编排+读写", "disposition": "migrate_keep_entry", "action": "保留业务入口并代理新 preparation Module（plan→execute→publish）；ingest_path/ingest_dir 旧直写分支退役；init_db 幂等补齐仅服务旧库直至切换", "stage": "I2-7"},
+      {"consumer": "plugins/corpus/ingest.py（Block/ParsedDocument/content_hash/_strip_boilerplate/_doc_id/_title_from_filename/_render_table/extract_pdf_tables/parse_pdf/parse_docx/parse_markdown/parse_document/iter_corpus_files/connect/init_db/upsert_document/ingest_corpus）", "access": "旧解析路径", "disposition": "retire", "action": "全模块退休：解析归并至 preparation/readers/*（PDF 表格能力评估并入受控 Adapter）；_doc_id/_title_from_filename 派生语义废弃；sqlite connect/init_db/upsert_document 随旧链退役；无 legacy fallback", "stage": "I2-7（符号清单为本文件定稿）"},
+      {"consumer": "plugins/corpus/evidence.py（fingerprint/Span/Cell/reference）", "access": "证据构造", "disposition": "merge", "action": "Evidence/EvidenceRun 由同源 units 投影；fingerprint 语义保留（contract.canonical_fingerprint 已对齐）；Span/Cell 构造证据的旧路径退役，不再生成第二套独立正文", "stage": "I2-7"},
+      {"consumer": "plugins/tools/corpus_search.py", "access": "读", "disposition": "migrate", "action": "新句柄 doc_id=cv2:<build_id>/locator=chunk:<chunk_id> + coverage 对象；空命中提示改为『当前已发布范围内无匹配』", "stage": "I2-8"},
+      {"consumer": "plugins/tools/corpus_fetch.py", "access": "读", "disposition": "migrate", "action": "fetch 校验 chunk∈build，返回原文片段+span/cell；未知/旧句柄不静默换正文", "stage": "I2-8"},
+      {"consumer": "plugins/corpus/verify.py", "access": "读", "disposition": "migrate", "action": "与 fetch 同一权威证据读取 Interface；坏副本/跨 build/坏哈希拒绝", "stage": "I2-8"},
+      {"consumer": "plugins/corpus/golden.py", "access": "读", "disposition": "retire_after_i3", "action": "旧 golden 评测：I3-5 由 U 圈定范围后同口径重评或退役；迁移前不作为新链验收依据", "stage": "I2-8/I3-5"},
+      {"consumer": "plugins/corpus/audit.py", "access": "读写", "disposition": "keep_and_extend", "action": "审计保留：读侧迁新 build 句柄；审计功能自现有 audit.py 扩展，不另立入口", "stage": "I2-8"},
+      {"consumer": "plugins/corpus/metadata.py", "access": "读写", "disposition": "migrate", "action": "日期唯一落点 metadata_snapshot.report_publication；禁止 doc_id 前缀推日期", "stage": "I2-7"},
+      {"consumer": "plugins/corpus/claims.py（claims/claim_block_runs 建表与抽取入口）", "access": "读写", "disposition": "split_dependencies_keep", "action": "共享模型/LLM/校验拆依赖保留（财务公式与用途验证继续接相同来源证据）；claims 旧抽取入口在 D2 路线接新来源句柄后退休；表数据导出后按 reset 候选处置", "stage": "I2-7 拆依赖；退休随 D2 路线"},
+      {"consumer": "plugins/corpus/claims_v2.py（claims_v2/claim_block_runs_v2 影子表）", "access": "读写", "disposition": "retire", "action": "两表 0 行且 D2 v2 路线未启动：代码随共享依赖拆分处置；表为空直接进 reset 候选", "stage": "I2-7"},
+      {"consumer": "plugins/tools/data_coverage.py", "access": "读", "disposition": "migrate", "action": "§7.3 coverage 三轴对象（requested/effective/publication_snapshot/counts）", "stage": "I2-8"},
+      {"consumer": "tests/test_corpus_*（13 文件）", "access": "测试读写", "disposition": "audit_then_bind", "action": "逐文件核定来源/副作用/依赖并登记（§12.2）；legacy_regression 经清单绑定重验；不整组直跑探测真实 PG/留出", "stage": "I2-8/I3-7"}
+    ],
+    "retirement_scope": {
+      "note": "对象裁决在本文件定稿（U 反馈④）：迁移或退休哪些对象不再留待实施；I2 仅做 DDL/符号级实施与验收",
+      "symbols": {
+        "retire": ["ingest.py 全模块（Block/ParsedDocument/content_hash/_strip_boilerplate/_doc_id/_title_from_filename/_render_table/extract_pdf_tables/parse_pdf/parse_docx/parse_markdown/parse_document/iter_corpus_files/connect/init_db/upsert_document/ingest_corpus）", "evidence.py 旧证据构造路径（Span/Cell 自建证据；fingerprint 函数保留并对齐 canonical_fingerprint）", "service.py ingest_path/ingest_dir 旧直写分支", "claims_v2.py 影子表入口"],
+        "migrate": ["corpus_search/corpus_fetch/verify/data_coverage/metadata（读路径全部迁新句柄与 coverage 对象）", "audit.py 读侧", "service.py 编排入口（代理新 Module）"],
+        "keep": ["claims.py 抽取能力（共享依赖拆出后接新句柄，退休随 D2 路线）", "audit.py 审计能力（扩展不另立）", "golden.py（I3-5 圈定范围内保留）", "财务公式与用途验证（57 预期资产绑定）"],
+        "tables": {"reset_candidates": "见 i0c_1_branch.reset_scope_candidates（逐表导出前置）", "keep": ["corpus schema 九表", "docs/chinese_docs（观察后裁决）", "apodex 全部", "扩展与词典表"]}
+      },
+      "kept_dependencies": ["财务公式与用途验证（57 预期资产绑定）继续消费来源证据", "R2 共享能力与 baseline-bindings 旧锚点映射", ".audit 人工审核导出与旧 golden 报告", "apodex 库与其消费者（不属语料链）"]
+    },
+    "risks": [
+      {"risk": "仅 postgres 超级用户单角色", "severity": "必需（有明确责任人与时点）", "routing": "I4 停写窗口需 U 提供按进程/客户端区分写入者手段（M1 carried；责任=U，时点=I4 窗口批准前）——I2 演练不受阻，生产切换前必须闭合"},
+      {"risk": "共库 apodex FK 孤立引用（audit_log 31 / runs 517）", "severity": "非阻断", "routing": "apodex 线问题，不属语料链；登记不在本轮修复，I4 操作按 database 限定"},
+      {"risk": "zhparser 配置升级路径", "severity": "非阻断", "routing": "配置版本进 index_rev；升级联动重建与重校准（I2-3）"},
+      {"risk": "PG 统计过期（n_live_tup 失真）", "severity": "非阻断", "routing": "I2 迁移校验用精确 COUNT（I0B-2 教训）"},
+      {"risk": "旧 published 派生日期不可靠", "severity": "非阻断", "routing": "不迁移；新链按 §4.3 重建；历史值留旧库导出"},
+      {"risk": "18 empty 文档与 21 条删除仅限 I4 窗口", "severity": "非阻断", "routing": "i0c-cleanup-list 前置条件链 + U 执行签认（授权范围不扩展，见 authorization_separation）"}
+    ]
+  },
+  "unresolved_and_routing": {
+    "note": "I0C-4 对象裁决已定稿于本文件；以下为不阻断 M3 的后续工作（均有获准替代与明确归属），非『必需布局未决』",
+    "items": [
+      {"item": "docs/chinese_docs 内容级归属与仓库外消费者核实", "blocking_m3": false, "routing": "I4 停写窗口内只读导出+连接观察后由 U 裁决；替代=I0B dump 永久可考（C12）"},
+      {"item": "stage_timeout/容量门按真实负载收紧", "blocking_m3": false, "routing": "I2-5/I3 校准实测；当前值为显式声明的开发基线（I0C-2，无测量支撑的余量说法已删除）"},
+      {"item": "旧检索 golden 适用范围", "blocking_m3": false, "routing": "I3-5（M1 carried）"},
+      {"item": "旧人工审核导出权威版本（.audit 88 工件）确认", "blocking_m3": false, "routing": "I0C-3 manifest 绑定 .audit 清单 + I4 导出核验（M1 carried）"},
+      {"item": "i2_targets 待核定项（演练库名/生产 corpus_app 角色/归档根路径）", "blocking_m3": false, "routing": "随 I0C-1 签认由 U 核定，进入 I0C-3 冻结（i0c_2_parameters.i2_targets）"}
+    ],
+    "m3_precondition_actions": [
+      {"action": "I1 发布幂等协议修订（G2/publish_idempotency_v2）落地并重跑回归", "owner": "A", "deadline": "I0C-3 冻结前"}
+    ]
+  },
+  "i0c_3_freeze_plan": {
+    "trigger": "U 对本文件 I0C-1/2/4 逐条签认 + M3 前置收口项完成后",
+    "content": "新建 freezes/i0c-r1.json：绑定 design-review.json（签认版）+ 全部 evidence_bindings + corpus schema 九表 DDL 定稿引用 + i2_targets 核定值 + i1-r4 现行链；parent_snapshot 关联 M1（i0a5 71aa61af…）与 M2（i0-restore-report 6ead6fd3…）；freeze-manifest 追加条目",
+    "validator": "freezes/validate_i0c_freeze.py：索引 ID 唯一、父哈希、i0c-r1/i1-r4/i1-r3/i1-r1/i0a5 血缘、绑定全量核验"
+  },
+  "execution_status": {
+    "g2_protocol_landed": true,
+    "i1_r4": {
+      "snapshot_id": "i1-r4",
+      "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382",
+      "parent": "i1-r3 @ f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59",
+      "drift_vs_r3": "恰 6 文件（engine.py/repository.py + engine/contract/release_gate/fixtures 四测试）；其余 31 项绑定字节未变"
+    },
+    "verification_2026_09_17": {
+      "guard_env": "244 collected → 242 passed + 2 historical-expected failures（i1-9 验收文件：r1 链断言节点 + 历史 R1 语义节点 test_control_clean_md_can_exercise_generation_independently）",
+      "i0c_protocol_probes": "4 passed",
+      "guard_tests_normal_env": "19 passed",
+      "pyright": "0 errors",
+      "ruff": "All checks passed"
+    },
+    "i0c_r2_freeze": {
+      "reason": "I2-2 真库测试揭出 G6：C14 冻结 DDL 的 review_decisions.source_id FK 令先审后收流程不可行；DDL 修正（去 FK→索引）+ I2-2 repository_pg 实现一并入冻结修订",
+      "snapshot_id": "i0c-r2",
+      "ddl_r2": "sandbox_schema.sql sha=4d587859…（9 表 + 14 索引：review_decisions FK→idx_review_decisions_source）",
+      "i2s1_evidence": "teardown（精确范围）→ re-apply → i2s1-report-r2.json 26 项全 ok",
+      "i2s2_implementation": {
+        "repository_pg": "plugins/corpus/preparation/repository_pg.py（Store 全接口 PG 实现：每 attempt 行/fencing FOR UPDATE/DB 时间/发布幂等 v2/latest_admission 指针/G1 历史追加）",
+        "pg_tests": "tests/test_corpus_preparation_repository_pg.py 15 passed（i2-sandbox 守卫 env；普通/i1 env 模块级跳过不污染 sys.modules；含 engine+PgStore 端到端发布冒烟）",
+        "negative_probes": "生产端口拒绝/teardown 无确认拒绝/apply 重入拒绝"
+      }
+    }
+  },
+  "change_reasons_summary": "r2 六条修订：①补 Store→持久化映射表（11 行）与 corpus_review_decisions/corpus_source_checkpoints 两新表（表数 7→9），admissions 补 scope_ref，latest_admission 显式指针列；②job 唯一性定稿每 attempt 一行 + partial unique running，7 项验收用例入册；③发布幂等改状态比对协议，I1 修订列 M3 前置收口；④I0C-4 对象裁决定稿（12 消费者逐个 disposition），不再推 I2；⑤清理授权与既有清单分离，逐表保留语义（能力/数据/导出件），docs/chinese_docs 改『疑似遗留+观察后裁决』；⑥删除 ≥100× 余量说法，新增 i2_targets（隔离库/角色/写入对象/归档根，待核定项显式标注）"
+}

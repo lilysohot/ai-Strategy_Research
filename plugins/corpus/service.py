@@ -36,10 +36,9 @@ import subprocess
 import sys
 import threading
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, LiteralString, cast
 from urllib.parse import quote
@@ -47,14 +46,17 @@ from urllib.parse import quote
 if TYPE_CHECKING:
     # Runtime import stays inside fetch() to avoid a circular import; this one
     # exists so the annotation resolves for type checking.
+    # psycopg 是可选依赖（PG 演练链路专属）：类型仅用于标注（本模块有
+    # ``from __future__ import annotations``，运行时不求值）；实际连接在
+    # 函数内惰性 import，普通 sqlite 环境零 psycopg。
+    import psycopg
+    from psycopg.rows import DictRow
+
     from plugins.corpus.derivation import Calculation
     from plugins.corpus.evidence_pipeline import EvidenceRun
     from plugins.corpus.fetch import FetchedBlock
     from plugins.corpus.material_semantics import MaterialRun, MaterialType
-
-import psycopg
-from psycopg.rows import DictRow, dict_row
-from psycopg.types.json import Jsonb
+    from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -76,33 +78,75 @@ from plugins.corpus.claims import (
     triage_blocks,
     with_retry,
 )
-from plugins.corpus.claims_v2 import (
-    CLAIMS_V2_COMMENTS,
-    CLAIMS_V2_SQL,
-    EXTRACTOR_VERSION_V2,
-    LINT_VERSION,
-    ClaimRecord,
-    ExtractionResult,
-    claim_record_to_legacy,
-    classify_doc_kind_detail,
-    extract_from_block_v2,
-    triage_blocks_detail,
-)
-from plugins.corpus.ingest import (
-    CORPUS_ROOT,
-    STATUS_EMPTY,
-    STATUS_NEEDS_OCR,
-    content_hash,
-    iter_corpus_files,
-    parse_document,
-)
 from plugins.corpus.metadata import (
     DOCUMENTS_MIGRATIONS_SQL,
     derive_metadata,
-    derive_published,
 )
+from plugins.corpus.preparation.admission import AdmissionPolicy, load_admission_policy
+from plugins.corpus.preparation.contract import AdmissionDecision, sha256_of_bytes
+from plugins.corpus.preparation.engine import (
+    DEFAULT_LEASE,
+    EngineError,
+    PlanEntry,
+    execute_builds,
+    plan_builds,
+    publish_build,
+)
+from plugins.corpus.preparation.repository import StoreError
+from plugins.corpus.preparation.repository_pg import PgStore
+from plugins.corpus.preparation.source import SourceIngestError
 
 logger = logging.getLogger(__name__)
+
+# ── I2-7：写路径代理新 preparation Module（design-review 消费者矩阵裁决）──────
+# CorpusService 写路径唯一化：ingest_path/ingest_dir 一律走 preparation.engine
+# 的 plan→execute→publish；新链落隔离演练库（PgStore/_check_target fail-closed
+# 拒绝非 i2_sandbox_corpus 实例）。旧 documents/blocks 直写分支在本文件退役。
+_I2_SANDBOX_DB = "i2_sandbox_corpus"
+_I2_ARCHIVE_ROOT = Path(__file__).resolve().parents[2] / "data" / "corpus-archive"
+_I2_POLICY_PATH = (
+    Path(__file__).resolve().parents[2]
+    / ".scratch"
+    / "corpus-evidence-pipeline"
+    / "ingestion-rebuild"
+    / "admission-policy.json"
+)
+_I2_OWNER = "corpus-service"
+_I2_DECISION_FAILED = "failed"
+
+# ── 语料目录枚举（I2-7：自 ingest 退休内联；解析能力归 preparation/readers/*）──
+CORPUS_ROOT = "data/corpus"
+_INGEST_SUFFIXES = frozenset({".pdf", ".docx", ".md"})
+
+# ── I2-7 新式版本化句柄（R2：基础读取迁移，读侧不再查旧 blocks）──────────────
+# ``cv2:<source_id>``（source_id = 64 位 SHA-256）指向新链 corpus schema 的
+# ``corpus_units``/``corpus_publications``；旧句柄（无前缀）显式走旧 blocks 归档
+# 路径。二者显式区分，不静默互换正文（旧句柄精确版本/归档策略归 I2-8）。
+_CV2_HANDLE_PREFIX = "cv2:"
+
+
+def _source_id_from_cv2_handle(doc_id: str) -> str | None:
+    """解析 ``cv2:<source_id>`` 新式句柄；非 cv2 句柄返回 None（旧句柄路径）。"""
+    if not isinstance(doc_id, str) or not doc_id.startswith(_CV2_HANDLE_PREFIX):
+        return None
+    source_id = doc_id[len(_CV2_HANDLE_PREFIX) :]
+    if len(source_id) != 64 or any(c not in "0123456789abcdef" for c in source_id):
+        raise ValueError(f"新式句柄 source_id 非法（须为 64 位十六进制）: {doc_id!r}")
+    return source_id
+
+
+def _iter_corpus_files(root: str | Path = CORPUS_ROOT) -> Iterable[Path]:
+    """遍历语料目录里的可解析文件（跳过 README 与隐藏文件）。"""
+    directory = Path(root)
+    for path in sorted(directory.iterdir()):
+        if (
+            path.is_file()
+            and not path.name.startswith(".")
+            and path.name != "README.md"
+            and path.suffix.lower() in _INGEST_SUFFIXES
+        ):
+            yield path
+
 
 EVIDENCE_RUNS_SQL = """
 CREATE TABLE IF NOT EXISTS corpus_evidence_runs (
@@ -116,7 +160,12 @@ CREATE INDEX IF NOT EXISTS corpus_evidence_runs_doc ON corpus_evidence_runs(doc_
 
 @dataclass
 class SearchHit:
-    """一次检索命中（与 index.SearchHit 字段对齐，供工具层复用）。"""
+    """一次检索命中（与 index.SearchHit 字段对齐，供工具层复用）。
+
+    I2-8：新链命中额外携带 ``source_id``/``build_id``/``chunk_id``——
+    ``doc_id``/``locator`` 是§7.2 的取证句柄（``cv2:<build_id>`` + ``chunk:<chunk_id>``），
+    稳定来源身份与块身份另列，便于调用方断言"读的是哪个 build"。
+    """
 
     doc_id: str
     locator: str
@@ -124,6 +173,9 @@ class SearchHit:
     snippet: str
     score: float
     published: str
+    source_id: str = ""
+    build_id: str = ""
+    chunk_id: str = ""
 
 
 @dataclass
@@ -321,57 +373,17 @@ def _dedup_claims(claims: list[Claim]) -> list[Claim]:
     return kept
 
 
-def _claim_record_from_row(row: dict[str, object]) -> ClaimRecord:
-    """把 PG dict 行恢复成 ClaimRecord，供 v2 legacy adapter 使用。"""
-    table_ref = row.get("table_ref")
-    qualifiers = row.get("qualifiers")
-    reason_codes = row.get("reason_codes")
-    return ClaimRecord(
-        doc_id=str(row["doc_id"]),
-        source_rev=str(row["source_rev"]),
-        seq=int(str(row["seq"])),
-        locator=str(row["locator"]),
-        claim_text=str(row["claim_text"]),
-        evidence_quote=str(row["evidence_quote"]) if row.get("evidence_quote") else None,
-        evidence_kind=str(row.get("evidence_kind") or "prose"),
-        table_ref={str(k): str(v) for k, v in table_ref.items()}
-        if isinstance(table_ref, dict)
-        else {},
-        scope=str(row.get("scope") or "company"),
-        subject_raw=str(row["subject_raw"]) if row.get("subject_raw") else None,
-        subject=str(row["subject"]) if row.get("subject") else None,
-        metric_raw=str(row["metric_raw"]) if row.get("metric_raw") else None,
-        metric=str(row["metric"]) if row.get("metric") else None,
-        qualifiers={str(k): str(v) for k, v in qualifiers.items()}
-        if isinstance(qualifiers, dict)
-        else {},
-        kind=str(row.get("kind") or "fact"),
-        value_text=str(row["value_text"]) if row.get("value_text") else None,
-        value_num=cast(Decimal | None, row.get("value_num")),
-        unit_raw=str(row["unit_raw"]) if row.get("unit_raw") else None,
-        unit=str(row["unit"]) if row.get("unit") else None,
-        period_raw=str(row["period_raw"]) if row.get("period_raw") else None,
-        period_end=str(row["period_end"]) if row.get("period_end") else None,
-        period_grain=str(row["period_grain"]) if row.get("period_grain") else None,
-        observed_at=str(row["observed_at"]) if row.get("observed_at") else None,
-        known_at=str(row["known_at"]) if row.get("known_at") else None,
-        quality_status=str(row.get("quality_status") or "review"),
-        reason_codes=tuple(str(code) for code in reason_codes)
-        if isinstance(reason_codes, list)
-        else (),
-        model=str(row["model"]) if row.get("model") else None,
-        extractor_version=str(row.get("extractor_version") or EXTRACTOR_VERSION_V2),
-        lint_version=str(row.get("lint_version") or LINT_VERSION),
-        extracted_at=str(row["extracted_at"]) if row.get("extracted_at") else None,
-    )
-
-
 class CorpusService:
     """语料服务：所有 PG 访问经此。"""
 
     def __init__(self, dsn_url: str | None = None) -> None:
         self._dsn = dsn_url or dsn()
         self._lock = threading.Lock()
+        # I2-7：新链写路径上下文（隔离演练库 Store + 冻结准入政策）惰性缓存。
+        self._engine_store: PgStore | None = None
+        self._engine_policy: AdmissionPolicy | None = None
+        # I2-8：读链判定缓存（new=corpus schema 可用；legacy=旧 documents/blocks）。
+        self._read_chain_cache: str | None = None
 
     # ── 连接 ──────────────────────────────────────────────────
 
@@ -384,6 +396,9 @@ class CorpusService:
         and every ``row["col"]`` downstream is then an error. One annotation
         here is the difference between ~70 type errors and none.
         """
+        import psycopg
+        from psycopg.rows import dict_row
+
         # ``connect`` cannot infer Row from ``row_factory`` (its return type is
         # effectively pinned to TupleRow), so the dict-row contract is asserted
         # here once instead of at every ``row["col"]`` downstream.
@@ -406,6 +421,8 @@ class CorpusService:
         不会随 ``CREATE DATABASE`` 继承（除非来自 template）。灾备恢复到一个新库时，
         若不做这一步，``init_db`` 建生成列会因 ``zhcfg`` 不存在而失败。
         """
+        import psycopg
+
         with self._connect() as conn:
             for ext in ("zhparser", "vector", "pg_trgm"):
                 try:
@@ -432,7 +449,6 @@ class CorpusService:
             conn.execute(SCHEMA_SQL)
             conn.execute(LEDGER_SQL)
             conn.execute(CLAIMS_SQL)  # D2：claim 抽取（幂等，不影响既有表）
-            conn.execute(CLAIMS_V2_SQL)  # D2 v2：影子抽取表，不改变生产读取路径
             conn.execute(EVIDENCE_RUNS_SQL)
             # 老库幂等迁移：三列事实列 + doc_kind_override + 删除 entities 死字段
             conn.execute(CLAIMS_MIGRATIONS_SQL)
@@ -442,7 +458,6 @@ class CorpusService:
                 *_COLUMN_COMMENTS,
                 *LEDGER_COMMENTS,
                 *CLAIMS_COMMENTS,
-                *CLAIMS_V2_COMMENTS,
             ):
                 # COMMENT statements are module-level constants; the cast only
                 # tells the type checker they are not caller-supplied SQL.
@@ -469,11 +484,14 @@ class CorpusService:
         """派生并物化文档级元数据（P6，§3.5 可得子集），返回统计摘要。
 
         ``doc_kind`` / ``subject`` / ``org`` / ``analysts`` 以派生为唯一权威，
-        **非空即覆盖**（幂等）；``published`` 只回填 NULL（ingest 写入的 doc_id
-        日期是事实，不覆盖）。纯规则派生，0 LLM 成本；抽取链路行为不变
+        **非空即覆盖**（幂等）；``published`` 只回填 NULL（I2-7 后 ingest 与本
+        方法共用 metadata 模块这一唯一日期落点：来源显式日期，禁止从 doc_id
+        前缀推断，已填的不覆盖）。纯规则派生，0 LLM 成本；抽取链路行为不变
         （抽取仍按 override → 现算分类取插槽，这里只是把同一判定落到列，
         供 D3/D4 直接 join，不再各自重算）。
         """
+        from psycopg.rows import dict_row
+
         with self._lock, self._connect() as conn, conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 "SELECT doc_id, title, published, doc_kind_override FROM documents"
@@ -494,7 +512,7 @@ class CorpusService:
             for row in documents:
                 doc_id, title = str(row["doc_id"]), str(row["title"] or "")
                 texts = [str(b["text"] or "") for b in self._blocks_rows(conn, doc_id)]
-                meta = derive_metadata(doc_id, title, texts, row["doc_kind_override"])
+                meta = derive_metadata(title, texts, row["doc_kind_override"])
                 kinds[str(meta["doc_kind"])] = kinds.get(str(meta["doc_kind"]), 0) + 1
                 cur.execute(
                     "UPDATE documents SET doc_kind = %s, subject = %s, org = %s,"
@@ -526,6 +544,8 @@ class CorpusService:
 
     def _blocks_rows(self, conn: psycopg.Connection[Any], doc_id: str) -> list[dict[str, Any]]:
         """一份文档的块文本（元数据派生用；与 blocks_of 同源但走 dict 行）。"""
+        from psycopg.rows import dict_row
+
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 "SELECT seq, text FROM blocks WHERE doc_id = %s ORDER BY seq",
@@ -535,47 +555,181 @@ class CorpusService:
 
     # ── 写入 ──────────────────────────────────────────────────
 
-    def ingest_path(self, path: str | Path) -> tuple[str, bool]:
-        """解析并落库一份，返回 ``(status, added)``。"""
-        parsed = parse_document(path)
-        first_text = parsed.blocks[0].text if parsed.blocks else None
-        published = derive_published(parsed.doc_id, parsed.title, first_text)
-        with self._lock, self._connect() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO documents
-                        (doc_id, title, source_path, content_hash, mime, status,
-                         char_count, block_count, published)
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (content_hash) DO NOTHING
-                    RETURNING true
-                    """,
-                    (
-                        parsed.doc_id,
-                        parsed.title,
-                        str(parsed.source_path),
-                        parsed.content_hash,
-                        parsed.mime,
-                        parsed.status,
-                        parsed.char_count,
-                        len(parsed.blocks),
-                        published,
-                    ),
+    def _preparation_context(self) -> tuple[PgStore, AdmissionPolicy]:
+        """新链写路径上下文（惰性缓存）：隔离演练库 Store + 冻结准入政策。
+
+        fail-closed（I2-7 消费者矩阵）：``CORPUS_I2_DSN`` 未配置即拒绝一切写入——
+        写路径已唯一化为 preparation.engine 链路（plan→execute→publish），不再有
+        旧 documents/blocks 直写兜底；PgStore._check_target 会拒绝一切非
+        ``i2_sandbox_corpus`` 实例。
+        """
+        if self._engine_store is None or self._engine_policy is None:
+            sandbox_dsn = os.environ.get("CORPUS_I2_DSN", "")
+            if not sandbox_dsn:
+                raise RuntimeError(
+                    "写路径已代理新 preparation Module（I2-7）：需要 CORPUS_I2_DSN 指向"
+                    f"隔离演练库 {_I2_SANDBOX_DB}；未配置则拒绝写入（无旧直写兜底）"
                 )
-                inserted = cur.fetchone() is not None
-            if inserted:
-                with conn.cursor() as cur:
-                    cur.executemany(
-                        "INSERT INTO blocks (doc_id, seq, locator, text) VALUES (%s,%s,%s,%s)",
-                        [(parsed.doc_id, b.seq, b.locator, b.text) for b in parsed.blocks],
-                    )
-            conn.commit()
-        if inserted:
-            # P6（§3.5）：元数据随 ingest 物化（org/analysts/doc_kind/subject +
-            # published 的首块日期回填），新文档入即可被 D3/D4 join
-            self.refresh_metadata([parsed.doc_id])
-        return parsed.status, inserted
+            self._engine_store = PgStore(sandbox_dsn, sandbox_db=_I2_SANDBOX_DB)
+            self._engine_policy = load_admission_policy(_I2_POLICY_PATH)
+        return self._engine_store, self._engine_policy
+
+    def _ingest_via_engine(
+        self,
+        files: Sequence[Path],
+        *,
+        min_age: float = 0.0,
+        review_decision_ids: Sequence[str] = (),
+    ) -> tuple[IngestStats, list[tuple[str, str, bool]]]:
+        """统一准备代理（I2-7）：逐来源 plan→execute→publish，返回（统计, 逐路径结果）。
+
+        - ``min_age``（秒）：跳过刚被修改的文件（防半拷贝假失败，语义沿袭旧直写分支）。
+        - ``review_decision_ids``：清单条目携带的人工审核决定（决定绑定单源哈希；
+          政策 ``auto_decision.enabled=false``——无决定一律 review_required 不发布，
+          这是设计内状态，无 legacy fallback）。批量目录共用一组决定仅对单文件
+          清单有意义。
+        - 内容寻址预检（契约 §4.1 source_id 仅由字节决定）：来源已登记且活动发布
+          存在 ⇒ ``skipped_unchanged``（同目录重跑）/ ``skipped_duplicate``（改名
+          重收），不重复解析、不重复发布（不二次解析生成主正文）。
+        - 已登记但未发布的来源照常重新走链（补发布/重裁决，全程幂等）。
+        - 单份失败记 ``failed`` 并继续（引擎保证该来源归档/登记一致、可恢复）；
+          publish 走引擎 C1 四步协议（幂等重放短路 + VERIFIED 校验 + job 租约）。
+
+        逐路径结果为 ``(路径, 准入决定取值, 是否本次新发布)``，与输入同序同长；
+        排除/待复核不发布（无 legacy fallback），执行失败决定记 "failed"。
+        """
+        stats = IngestStats()
+        results: list[tuple[str, str, bool]] = []
+        decision_ids = tuple(review_decision_ids)
+
+        pending: list[Path] = []
+        if min_age > 0:
+            cutoff = time.time() - min_age
+            fresh = [p for p in files if p.stat().st_mtime > cutoff]
+            pending = [p for p in files if p.stat().st_mtime <= cutoff]
+            if fresh:
+                stats.skipped_fresh = len(fresh)
+                logger.warning(
+                    "跳过 %s 份刚被修改的文件（可能仍在拷贝中）：稍后再跑一次即可，"
+                    "或由下次跑批自动补上",
+                    len(fresh),
+                )
+        else:
+            pending = list(files)
+        if not pending:
+            return stats, results
+
+        store, policy = self._preparation_context()
+        for path in pending:
+            key = str(path)
+            stats.total += 1
+            try:
+                data = path.read_bytes()
+            except OSError as exc:
+                stats.failed += 1
+                stats.failures.append((key, f"读取失败：{exc}"))
+                logger.warning("ingest 读取失败：%s", key, exc_info=True)
+                results.append((key, _I2_DECISION_FAILED, False))
+                continue
+            if not data:
+                stats.failed += 1
+                stats.failures.append((key, "来源文件为空，不接收"))
+                results.append((key, _I2_DECISION_FAILED, False))
+                continue
+
+            # 内容寻址幂等预检：仅当调用方**未显式传入新审核决定**时，已登记且
+            # 活动发布存在才短路（同目录重跑/改名重收不重复解析、不重复发布）。
+            # 显式 review_decision_ids 表示要求重新裁决（R3），必须走 plan/engine
+            # 求值新决定（新排除/缩小范围/新 index_rev 重评），不得被旧活动发布
+            # 静默跳过——同源身份稳定不等于处理状态、授权范围与构建版本永远不变。
+            source_id = sha256_of_bytes(data)
+            publication = store.get_publication(source_id)
+            if (
+                not decision_ids
+                and publication is not None
+                and publication.active_build_id is not None
+            ):
+                source = store.get_source(source_id)
+                if source is not None and path.name not in source.original_names:
+                    stats.skipped_duplicate += 1  # 改名重收：同源不同路径名
+                else:
+                    stats.skipped_unchanged += 1
+                results.append((key, AdmissionDecision.IN_SCOPE.value, False))
+                continue
+
+            try:
+                plan = plan_builds(
+                    [PlanEntry(path=key, review_decision_ids=decision_ids)], policy=policy
+                )
+                report = execute_builds(
+                    store,
+                    plan,
+                    policy=policy,
+                    archive_root=_I2_ARCHIVE_ROOT,
+                    owner_id=_I2_OWNER,
+                    now=datetime.now(UTC),
+                    lease=DEFAULT_LEASE,
+                )
+            except (EngineError, SourceIngestError, StoreError) as exc:
+                # 单份失败不中断整批；引擎保证失败来源状态一致（可恢复）。
+                stats.failed += 1
+                stats.failures.append((key, str(exc)))
+                logger.exception("ingest 执行失败：%s", key)
+                results.append((key, _I2_DECISION_FAILED, False))
+                continue
+
+            outcome = report.outcomes[0]
+            decision = outcome.admission.decision
+            if decision is not AdmissionDecision.IN_SCOPE or outcome.build is None:
+                # 排除/待复核：不发布（无 legacy fallback）。
+                results.append((key, decision.value, False))
+                continue
+            try:
+                publish_build(
+                    store,
+                    outcome.build.build_id,
+                    activated_at=datetime.now(UTC),
+                    owner_id=_I2_OWNER,
+                )
+            except (EngineError, StoreError) as exc:
+                # 发布失败不中断整批；来源已登记，下次重跑走补发布路径（幂等）。
+                stats.failed += 1
+                stats.failures.append((key, f"发布失败：{exc}"))
+                logger.exception("ingest 发布失败：%s", key)
+                results.append((key, decision.value, False))
+                continue
+            stats.added += 1
+            stats.blocks += outcome.chunk_count
+            results.append((key, decision.value, True))
+
+        logger.info(
+            "ingest 完成（新链代理）：total=%s added=%s unchanged=%s dup=%s failed=%s",
+            stats.total,
+            stats.added,
+            stats.skipped_unchanged,
+            stats.skipped_duplicate,
+            stats.failed,
+        )
+        return stats, results
+
+    def ingest_path(
+        self, path: str | Path, *, review_decision_ids: Sequence[str] = ()
+    ) -> tuple[str, bool]:
+        """代理新链接收一份来源（plan→execute→publish），返回 ``(决定, published)``。
+
+        I2-7：``status`` 语义由旧 ok/needs_ocr/empty 换为准入决定取值
+        （in_scope/excluded_by_policy/review_required；执行失败记 "failed"）；
+        ``published`` 表示本次调用后该来源是否新置于活动发布（已发布的重复来源
+        幂等重放返回 False）。
+
+        ``review_decision_ids``：绑定该来源哈希的人工审核决定（政策
+        ``auto_decision.enabled=false``——无决定不自动纳入，落 review_required）。
+        """
+        _stats, results = self._ingest_via_engine(
+            [Path(path)], review_decision_ids=review_decision_ids
+        )
+        decision, published = results[0][1], results[0][2]
+        return decision, published
 
     def ingest_dir(
         self,
@@ -584,127 +738,18 @@ class CorpusService:
         rebuild_index: bool = True,
         min_age: float = 0.0,
     ) -> IngestStats:
-        """跑批入库一个目录，返回统计。
+        """跑批入库一个目录，返回统计（代理新链 plan→execute→publish）。
 
-        三件 P0 缺口在此补齐：跳过已入库未变（content_hash 比对）、失败带文件名与原因、
-        末尾索引可用（PG 用生成列自动维护 ``tsv``，无需手动重建 —— 消除 SQLite 的
-        "全表重建长事务"问题）。
+        ``rebuild_index`` 参数保留兼容签名但不再生效：新链发布时由引擎自动维护
+        检索索引（PG 生成列 ``tsv``），无手动重建需求。
 
-        ``min_age``（秒）：**跳过最近刚被修改过的文件**。
-        大文件拷贝/同步过程中跑批，会解析到只写了一半的 PDF ⇒ 产生一条**假失败**
-        （文件其实没问题，只是还没拷完）。跳过它们即可，下次跑批会自然补上。
-        0 表示不启用。
+        ``min_age``（秒）：跳过最近刚被修改过的文件（防半拷贝假失败），0 表示
+        不启用；幂等语义见 :meth:`_ingest_via_engine`（同目录重跑 skip_unchanged、
+        改名重收 skip_duplicate、排除/待复核不发布）。
         """
-        stats = IngestStats()
-        known = self._known_hashes()
-        added_doc_ids: list[str] = []
-
-        files = list(iter_corpus_files(root))
-        if min_age > 0:
-            cutoff = time.time() - min_age
-            fresh = [p for p in files if p.stat().st_mtime > cutoff]
-            files = [p for p in files if p.stat().st_mtime <= cutoff]
-            if fresh:
-                stats.skipped_fresh = len(fresh)
-                logger.warning(
-                    "跳过 %s 份刚被修改的文件（可能仍在拷贝中）：稍后再跑一次即可，"
-                    "或由下次跑批自动补上",
-                    len(fresh),
-                )
-
-        with self._lock, self._connect() as conn:
-            for path in files:
-                stats.total += 1
-                key = str(path)
-                try:
-                    digest = content_hash(path)
-                except OSError as exc:
-                    stats.failed += 1
-                    stats.failures.append((key, f"读取失败：{exc}"))
-                    logger.warning("ingest 读取失败：%s", key, exc_info=True)
-                    continue
-
-                if known.get(key) == digest:
-                    stats.skipped_unchanged += 1
-                    continue
-
-                try:
-                    parsed = parse_document(path)
-                except Exception as exc:  # 单份失败不中断整批
-                    stats.failed += 1
-                    stats.failures.append((key, f"解析失败：{exc}"))
-                    logger.exception("ingest 解析失败：%s", key)
-                    continue
-
-                first_text = parsed.blocks[0].text if parsed.blocks else None
-                published = derive_published(parsed.doc_id, parsed.title, first_text)
-                with conn.cursor() as cur:
-                    cur.execute(
-                        """
-                        INSERT INTO documents
-                            (doc_id, title, source_path, content_hash, mime, status,
-                             char_count, block_count, published)
-                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                        ON CONFLICT (content_hash) DO NOTHING
-                        RETURNING true
-                        """,
-                        (
-                            parsed.doc_id,
-                            parsed.title,
-                            str(parsed.source_path),
-                            parsed.content_hash,
-                            parsed.mime,
-                            parsed.status,
-                            parsed.char_count,
-                            len(parsed.blocks),
-                            published,
-                        ),
-                    )
-                    inserted = cur.fetchone() is not None
-                if inserted:
-                    with conn.cursor() as cur:
-                        cur.executemany(
-                            "INSERT INTO blocks (doc_id, seq, locator, text) VALUES (%s,%s,%s,%s)",
-                            [(parsed.doc_id, b.seq, b.locator, b.text) for b in parsed.blocks],
-                        )
-                    stats.added += 1
-                    stats.blocks += len(parsed.blocks)
-                    added_doc_ids.append(parsed.doc_id)
-                else:
-                    stats.skipped_duplicate += 1
-
-                if parsed.status == STATUS_NEEDS_OCR:
-                    stats.needs_ocr += 1
-                elif parsed.status == STATUS_EMPTY:
-                    stats.empty += 1
-
-            conn.commit()
-
-        if added_doc_ids:
-            # P6（§3.5）：本批新增文档的元数据随 ingest 物化（事务外批量补）
-            refresh = self.refresh_metadata(added_doc_ids)
-            logger.info(
-                "元数据物化：%s 份（org=%s analysts=%s published 补=%s）",
-                refresh["docs"],
-                refresh["org_filled"],
-                refresh["analysts_filled"],
-                refresh["published_backfilled"],
-            )
-
-        logger.info(
-            "ingest 完成：total=%s added=%s unchanged=%s dup=%s failed=%s",
-            stats.total,
-            stats.added,
-            stats.skipped_unchanged,
-            stats.skipped_duplicate,
-            stats.failed,
-        )
+        files = list(_iter_corpus_files(root))
+        stats, _results = self._ingest_via_engine(files, min_age=min_age)
         return stats
-
-    def _known_hashes(self) -> dict[str, str]:
-        with self._connect() as conn, conn.cursor() as cur:
-            cur.execute("SELECT source_path, content_hash FROM documents")
-            return {r["source_path"]: r["content_hash"] for r in cur.fetchall()}
 
     # ── 读取 ──────────────────────────────────────────────────
 
@@ -724,10 +769,148 @@ class CorpusService:
         LIMIT %(limit)s
     """
 
+    def read_chain(self) -> str:
+        """读侧链路：``new``（corpus schema 活动版本）或 ``legacy``（旧 blocks）。
+
+        RM-I28-8 裁定 A（演练目标无 legacy fallback，且降级不可达）：
+
+        - ``new``：要求目标库承载 ``corpus.corpus_publications``，否则 fail-closed
+          拒绝（不得默默回退旧 ``blocks``）；
+        - ``legacy``：仅在**不含 corpus schema** 的真旧库上允许（切换期兜底）；
+          目标库已有 corpus schema 时请求 ``legacy`` 直接拒绝——「新库上静默降级读旧表」
+          这条路径不可达，M5 可据此自证；
+        - ``auto``（默认）：按目标库结构探测（有 corpus schema 即 ``new``）；
+          仅适用于尚未迁移的旧库，文档写明适用范围。
+        """
+        cached = self._read_chain_cache
+        if cached is not None:
+            return cached
+        configured = os.environ.get("CORPUS_READ_CHAIN", "auto").strip().lower()
+        if configured not in ("new", "legacy", "auto"):
+            raise StoreError(
+                f"拒绝：CORPUS_READ_CHAIN 取值非法: {configured!r}（须 new|legacy|auto）"
+            )
+        has_chain = self._corpus_schema_present()
+        if configured == "new":
+            if not has_chain:
+                raise StoreError(
+                    "拒绝：CORPUS_READ_CHAIN=new 但目标库无 corpus schema"
+                    "（不得回退旧 blocks 冒充新链）"
+                )
+            chain = "new"
+        elif configured == "legacy":
+            if has_chain:
+                raise StoreError(
+                    "拒绝：目标库已承载新链（corpus schema），legacy 读路径不可达"
+                    "（禁止在新库上静默降级读旧 blocks）"
+                )
+            chain = "legacy"
+        else:
+            chain = "new" if has_chain else "legacy"
+        self._read_chain_cache = chain
+        return chain
+
+    def _corpus_schema_present(self) -> bool:
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute("SELECT to_regclass('corpus.corpus_publications') IS NOT NULL AS ok")
+            row = cur.fetchone()
+        return bool(row and row["ok"])
+
+    def coverage(self, query_status: str = "unknown") -> dict[str, object]:
+        """§7.3 三轴覆盖快照（新链）；新链不可用时返回 ``processing=unknown``。
+
+        ``no_match`` 不自动转 ``absent``：自由文本 FTS 无命中时 availability 仍为
+        unknown——只说明"该已查询范围无匹配"，不能外推整个来源集合没有相关资料。
+        """
+        if self.read_chain() != "new":
+            return {
+                "requested_scope_ref": None,
+                "effective_scope_ref": None,
+                "publication_snapshot_ref": None,
+                "processing": "unknown",
+                "query_status": query_status,
+                "availability": "unknown",
+                "reason_codes": ("legacy_chain",),
+            }
+        from plugins.corpus.preparation import read_pg
+
+        return read_pg.coverage_snapshot(
+            self._dsn, sandbox_db=_I2_SANDBOX_DB, query_status=query_status
+        )
+
+    def search_with_coverage(
+        self, query: str, *, limit: int = 10
+    ) -> tuple[list[SearchHit], dict[str, object]]:
+        """检索 + 覆盖元数据取自**同一数据库快照**（§7.3 并发发布一致性）。
+
+        工具层用本方法一次取回两者，避免「先取 hits 再取 coverage」拼接自两个时刻。
+        """
+        if self.read_chain() != "new":
+            hits = self.search(query, limit=limit)
+            return hits, self.coverage(query_status="matched" if hits else "no_match")
+        from plugins.corpus.preparation import read_pg
+
+        raw_hits, coverage = read_pg.search_with_coverage(
+            self._dsn, query, limit=limit, sandbox_db=_I2_SANDBOX_DB
+        )
+        return (
+            [
+                SearchHit(
+                    doc_id=read_pg.build_handle(hit.build_id),
+                    locator=read_pg.chunk_locator(hit.chunk_id),
+                    title=hit.title_text
+                    or (hit.section_path[-1] if hit.section_path else hit.chunk_id),
+                    snippet=hit.snippet,
+                    score=float(hit.score),
+                    published=hit.published or "undated",
+                    source_id=hit.source_id,
+                    build_id=hit.build_id,
+                    chunk_id=hit.chunk_id,
+                )
+                for hit in raw_hits
+            ],
+            coverage,
+        )
+
+    def fetch_verbatim(self, doc_id: str, locator: str) -> ChunkEvidence:
+        """按§7.2 句柄取回权威原文块（新链），失败即抛 :mod:`read_pg` 的拒绝类型。
+
+        与 :meth:`fetch` 的差别：不吞异常——调用方（工具/verify/CLI）需要区分
+        ``archive_required``（旧句柄）与"不存在"，而不是一律得到 None。
+        """
+        from plugins.corpus.preparation import read_pg
+
+        if self.read_chain() != "new":
+            raise read_pg.LegacyHandleError(
+                f"目标库未承载新链（read_chain={self.read_chain()}），句柄 {doc_id!r} 不可取证"
+            )
+        return read_pg.fetch_verbatim(self._dsn, doc_id, locator, sandbox_db=_I2_SANDBOX_DB)
+
     def search(self, query: str, *, limit: int = 10) -> list[SearchHit]:
         q = (query or "").strip()
         if not q:
             return []
+        if self.read_chain() == "new":
+            # I2-8：检索只服务活动 build（PUBLISHED 指针），命中即§7.2 取证句柄。
+            from plugins.corpus.preparation import read_pg
+            from plugins.corpus.preparation.search_pg import search_chunks
+
+            hits = search_chunks(self._dsn, q, limit=limit, sandbox_db=_I2_SANDBOX_DB)
+            return [
+                SearchHit(
+                    doc_id=read_pg.build_handle(hit.build_id),
+                    locator=read_pg.chunk_locator(hit.chunk_id),
+                    title=hit.title_text
+                    or (hit.section_path[-1] if hit.section_path else hit.chunk_id),
+                    snippet=hit.snippet,
+                    score=float(hit.score),
+                    published=hit.published or "undated",
+                    source_id=hit.source_id,
+                    build_id=hit.build_id,
+                    chunk_id=hit.chunk_id,
+                )
+                for hit in hits
+            ]
         candidate_limit = max(50, limit * 10)
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
@@ -783,14 +966,88 @@ class CorpusService:
                 title=r["title"],
                 snippet=r["snippet"],
                 score=float(r["score"]) if r["score"] is not None else 0.0,
-                published=(r["doc_id"][:10] if len(r["doc_id"]) >= 10 else "undated"),
+                # I2-7：日期只来自 documents.published（metadata 唯一日期落点），
+                # 禁止从 doc_id 前缀推断——doc_id 只是文件名派生的标识符。
+                published=(r["published"].isoformat() if r.get("published") else "undated"),
             )
             for r in ranked
         ]
 
+    def _active_build_units(self, source_id: str) -> list[dict[str, Any]]:
+        """活动 build 的 ``corpus_units`` 投影（I2-7 基础读取迁移，R2）。
+
+        读侧不再查旧 ``blocks``：经同一 ``self._connect()`` 连接访问新 corpus
+        schema，取 ``corpus_publications.active_build_id`` 指向的 build 的全部单元
+        （``raw_text`` 为权威原文，按 ``ordinal`` 排序）。返回
+        ``[{seq, locator, text}]``，``locator`` 由 ``location.page/element`` 派生，
+        供 ``document_text``/``fetch``/``blocks_of`` 复用。
+        """
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT u.ordinal, u.location, u.raw_text "
+                "FROM corpus.corpus_units u "
+                "WHERE u.build_id = (SELECT p.active_build_id "
+                "                    FROM corpus.corpus_publications p "
+                "                    WHERE p.source_id = %s) "
+                "ORDER BY u.ordinal",
+                (source_id,),
+            )
+            rows = cur.fetchall()
+        units: list[dict[str, object]] = []
+        for row in rows:
+            location = row["location"] if isinstance(row["location"], dict) else {}
+            page = location.get("page")
+            element = location.get("element")
+            locator = element or (f"p{page}" if page is not None else None) or str(row["ordinal"])
+            units.append(
+                {
+                    "seq": int(row["ordinal"]) if row["ordinal"] is not None else 0,
+                    "locator": str(locator),
+                    "text": str(row["raw_text"] or ""),
+                }
+            )
+        return units
+
+    def _active_report_publication(self, source_id: str) -> str | None:
+        """活动 build 的研报发布日期（R4 唯一落点 = admission.report_publication）。
+
+        读侧经 ``self._connect()`` 从 ``corpus_admissions.metadata_snapshot`` 取
+        ``report_publication.value``，供 Evidence 投影的 ``published``（known_at
+        兜底）；无活动 build 或日期 unknown 返回 None。
+        """
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT a.metadata_snapshot->'report_publication'->>'value' AS published "
+                "FROM corpus.corpus_publications p "
+                "JOIN corpus.corpus_admissions a ON a.decision_id = p.current_decision_id "
+                "WHERE p.source_id = %s",
+                (source_id,),
+            )
+            row = cur.fetchone()
+        if row is None or row["published"] is None:
+            return None
+        return str(row["published"])
+
     def fetch(self, doc_id: str, locator: str) -> FetchedBlock | None:
         from plugins.corpus.fetch import FetchedBlock  # 延迟导入，避免循环依赖
 
+        if self.read_chain() == "new":
+            # I2-8：句柄 = cv2:<build_id> + chunk:<chunk_id>；旧句柄抛 archive_required。
+            evidence = self.fetch_verbatim(doc_id, locator)
+            return FetchedBlock(doc_id=doc_id, seq=0, locator=locator, text=evidence.text)
+        source_id = _source_id_from_cv2_handle(doc_id)
+        if source_id is not None:
+            # 新式版本化句柄：从活动 build 的 corpus_units 取回权威原文单元。
+            for unit in self._active_build_units(source_id):
+                if unit["locator"] == str(locator):
+                    return FetchedBlock(
+                        doc_id=doc_id,
+                        seq=int(unit["seq"]),
+                        locator=str(unit["locator"]),
+                        text=str(unit["text"]),
+                    )
+            return None
+        # 旧句柄：显式走旧 blocks 归档路径（I2-8 精确版本句柄/归档策略前保留）。
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT doc_id, seq, locator, text FROM blocks WHERE doc_id = %s AND locator = %s",
@@ -802,6 +1059,20 @@ class CorpusService:
         return FetchedBlock(doc_id=r["doc_id"], seq=r["seq"], locator=r["locator"], text=r["text"])
 
     def document_text(self, doc_id: str) -> str | None:
+        if self.read_chain() == "new":
+            # I2-8/RM-I28-1：文档级读取遵循**句柄绑定 build**（与块级同语义）；
+            # 旧句柄 archive_required、撤销 = None（均非"合法空文档"），不静默换正文。
+            from plugins.corpus.preparation import read_pg
+
+            try:
+                return read_pg.fetch_document(self._dsn, doc_id, sandbox_db=_I2_SANDBOX_DB).text
+            except read_pg.ReadError:
+                return None
+        source_id = _source_id_from_cv2_handle(doc_id)
+        if source_id is not None:
+            units = self._active_build_units(source_id)
+            return "\n".join(str(unit["text"]) for unit in units) if units else None
+        # 旧句柄：显式走旧 blocks 归档路径（I2-8 归档策略前保留）。
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT string_agg(text, chr(10) ORDER BY seq) AS t FROM blocks WHERE doc_id = %s",
@@ -811,13 +1082,59 @@ class CorpusService:
         return row["t"] if row and row["t"] else None
 
     def blocks_of(self, doc_id: str) -> list[DictRow]:
-        """取一份文档的全部块（``seq`` / ``locator`` / ``text``）—— D2 抽取的输入。"""
+        """取一份文档的全部块（``seq`` / ``locator`` / ``text``）—— D2 抽取的输入。
+
+        I2-7 基础读取迁移（R2）：新式 ``cv2:`` 句柄走 ``corpus_units``；旧句柄
+        显式走旧 blocks 归档路径。
+        """
+        source_id = _source_id_from_cv2_handle(doc_id)
+        if source_id is not None:
+            return [  # type: ignore[return-value]
+                cast("DictRow", unit) for unit in self._active_build_units(source_id)
+            ]
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT seq, locator, text FROM blocks WHERE doc_id = %s ORDER BY seq",
                 (str(doc_id),),
             )
             return list(cur.fetchall())
+
+    def fetch_cell(
+        self, doc_id: str, *, row: int, col: int, page: int | None = None
+    ) -> CellEvidence:
+        """按 (页, 行, 列) 取权威单元格原文（I2-6 authority：错 cell 必须拒绝）。"""
+        from plugins.corpus.preparation import read_pg
+
+        if self.read_chain() != "new":
+            raise read_pg.IntegrityError(
+                "目标库未承载新链，无法按 cell 坐标取权威原文（不回退旧 blocks表）"
+            )
+        return read_pg.fetch_cell(
+            self._dsn, doc_id, row=row, col=col, page=page, sandbox_db=_I2_SANDBOX_DB
+        )
+
+    def verify_evidence_against_authority(self, run: EvidenceRun) -> None:
+        """把证据副本与**权威集合**比对（I2-6 authority）。
+
+        副本自带的 ``verify_identity`` 只能证明"自身未被改坏"；此处另行核验它对
+        权威正文的投影指纹（``parse_rev`` = f(source_id, 投影版本, units 文本序列)）
+        与当前 ``corpus_units`` 是否一致——篡改 JSONB 副本、或拿旧/别的内容冒称
+        权威正文，都在此拒绝，而不是回退到"看起来可用"的副本。
+        """
+        from plugins.corpus.evidence_pipeline import UNITS_PROJECTION_VERSION, fingerprint
+
+        if self.read_chain() != "new":
+            return
+        source_id = str(run.document.source_rev)
+        units = self._active_build_units(source_id)
+        texts = [str(unit["text"]) for unit in units]
+        expected = fingerprint([source_id, UNITS_PROJECTION_VERSION, texts])
+        if not units or expected != run.document.parse_rev:
+            from plugins.corpus.preparation import read_pg
+
+            raise read_pg.IntegrityError(
+                "证据副本与权威集合不一致（units 指纹不符）：拒绝采用该副本，不以近似内容替代"
+            )
 
     def save_evidence_run(self, run: EvidenceRun) -> str:
         """Persist a content-addressed shadow revision, without replacing legacy corpus rows."""
@@ -858,6 +1175,7 @@ class CorpusService:
         run.verify_identity()
         if run.run_id != run_id:
             raise ValueError("stored evidence run ID mismatch")
+        self.verify_evidence_against_authority(run)  # I2-6：副本必须与权威集合一致
         return run
 
     def fetch_evidence(self, run_id: str, packet_id: str) -> dict[str, object]:
@@ -880,21 +1198,38 @@ class CorpusService:
 
         A positive prose budget explicitly enables model calls. Zero leaves prose deferred.
         No full-corpus selection or legacy fallback is implicit in this interface.
+
+        I2-7（R1）：Evidence 由同源 ``corpus_units`` 投影（按 source_id 从活动 build
+        取 raw_text），不再二次解析原文件生成独立权威正文——``parse_evidence`` 的
+        PDF/DOCX/MD 解析退出 canonical 入口。标题由文件名派生（与 parse_evidence
+        同口径）、主体由标题+正文确定、发布日期读 admission.report_publication（R4
+        唯一落点）。
         """
-        from plugins.corpus.evidence_pipeline import build_evidence_run
+        from plugins.corpus.claims import document_ticker
+        from plugins.corpus.evidence import _title_from_filename
+        from plugins.corpus.evidence_pipeline import build_evidence_run_from_units
 
         if max_prose_calls < 0 or not 100 <= packet_chars <= 2500 or pages == ():
             raise ValueError("invalid extraction budget, packet size or empty page selection")
         if max_prose_calls and llm is None:
             llm = build_default_llm()
             model = model or configured_model()
-        run = build_evidence_run(
-            path,
-            pages=pages,
+        source_path = Path(path)
+        source_id = sha256_of_bytes(source_path.read_bytes())
+        units = self._active_build_units(source_id)
+        title = _title_from_filename(source_path)
+        joined = "\n".join(str(unit["text"]) for unit in units)
+        subject = document_ticker(title, [joined[:4000]])
+        published = self._active_report_publication(source_id)
+        run = build_evidence_run_from_units(
+            source_id,
+            units,
+            title=title,
+            subject=subject,
+            published=published,
             llm=llm,
             model=model,
             max_prose_calls=max_prose_calls,
-            packet_chars=packet_chars,
         )
         if persist:
             self.save_evidence_run(run)
@@ -975,7 +1310,7 @@ class CorpusService:
 
         ``audit`` may expose rejected rows; cite/compare/calculate enforce usable_for.
         Historical validation versions remain auditable, not computation-ready.
-        Missing revisions raise KeyError; they never fall back to claims/claims_v2.
+        Missing revisions raise KeyError; they never fall back to legacy claim tables.
         """
         from plugins.corpus.evidence_pipeline import project_claims
 
@@ -1247,177 +1582,6 @@ class CorpusService:
 
         return stats
 
-    def extract_claims_v2(
-        self,
-        *,
-        llm: Callable[[str], str] | None = None,
-        doc_ids: list[str] | None = None,
-        limit: int | None = None,
-        retry_attempts: int = 3,
-        sleep_between: float = 0.0,
-        skip_existing: bool = True,
-        dry_run: bool = False,
-        should_stop: Callable[[], bool] | None = None,
-        max_consecutive_failures: int = 5,
-        max_attempts: int = 3,
-    ) -> ExtractStats:
-        """D2 Claims v2 影子抽取：不写 v1 ``claims``，不改变默认生产读取。
-
-        与 v1 一样按块原子提交，但 v2 的块级状态更细：``empty``、``all_review``、
-        ``all_rejected`` 与 ``failed`` 分开落账，review/rejected 记录也保存在影子表，
-        默认查询只投影 ``quality_status='ok'``。
-        """
-        usage: dict[str, int] = {}
-        model_name = configured_model()
-        llm_fn = None
-        if not dry_run:
-            if llm is not None:
-                llm_fn = llm
-                model_name = INJECTED_MODEL
-            else:
-                llm_fn = build_default_llm(usage_sink=usage)
-            if retry_attempts > 1:
-                llm_fn = with_retry(llm_fn, attempts=retry_attempts)
-
-        done: set[tuple[str, str, int]] = set()
-        dead: set[tuple[str, str, int]] = set()
-        if skip_existing:
-            done, dead = self._done_blocks_v2(model=model_name, max_attempts=max_attempts)
-
-        stats = ExtractStats()
-        documents = self.list_documents()
-        rows_by_doc = {str(row["doc_id"]): row for row in documents}
-        targets = list(doc_ids) if doc_ids else [str(row["doc_id"]) for row in documents]
-        stop = False
-        consecutive_failures = 0
-        for doc_id in targets:
-            doc_row = rows_by_doc.get(doc_id, {})
-            stats.documents += 1
-            rows = self.blocks_of(doc_id)
-            stats.blocks += len(rows)
-            views = [
-                BlockView(int(r["seq"]), str(r["locator"]), str(r["text"] or "")) for r in rows
-            ]
-            candidates, reason_counts = triage_blocks_detail(views)
-            stats.skipped_no_signal += reason_counts.get("noise", 0) + reason_counts.get(
-                "no_signal", 0
-            )
-            title = str(doc_row.get("title") or "")
-            published = str(doc_row["published"]) if doc_row.get("published") else None
-            source_rev = str(doc_row.get("content_hash") or "unknown")
-            detail = classify_doc_kind_detail(
-                title,
-                tuple(v.text for v in views),
-                str(doc_row["doc_kind_override"]) if doc_row.get("doc_kind_override") else None,
-            )
-
-            for block in candidates:
-                if limit is not None and stats.candidates >= limit:
-                    break
-                if should_stop is not None and should_stop():
-                    stop = True
-                    stats.stopped_early = True
-                    stats.stopped_reason = "收到中断信号；v2 已完成的块均已落库，重跑自动续上"
-                    break
-                key = (doc_id, source_rev, block.seq)
-                if key in done:
-                    stats.skipped_existing += 1
-                    continue
-                if key in dead:
-                    stats.skipped_dead_letter += 1
-                    continue
-                stats.candidates += 1
-                if dry_run:
-                    continue
-
-                started = time.monotonic()
-                tokens_before = (
-                    usage.get("prompt_tokens", 0),
-                    usage.get("completion_tokens", 0),
-                )
-                try:
-                    assert llm_fn is not None
-                    result = extract_from_block_v2(
-                        block,
-                        doc_id=doc_id,
-                        source_rev=source_rev,
-                        llm=llm_fn,
-                        doc_kind=detail.kind,
-                        model=model_name,
-                        known_at_fallback=published,
-                    )
-                except Exception as exc:
-                    reason = f"{type(exc).__name__}: {exc}"[:200]
-                    result = ExtractionResult(
-                        diagnostics=[{"code": "llm_failed", "message": reason}],
-                        model=model_name,
-                        extractor_version=EXTRACTOR_VERSION_V2,
-                    )
-                    status = "failed"
-                    stats.failures.append(
-                        {"doc_id": doc_id, "locator": block.locator, "reason": reason}
-                    )
-                else:
-                    status = result.block_status()
-                    if status == "failed":
-                        stats.failures.append(
-                            {
-                                "doc_id": doc_id,
-                                "locator": block.locator,
-                                "reason": str(result.diagnostics[:1]),
-                            }
-                        )
-
-                prompt_t, completion_t = self._usage_delta(tokens_before, usage)
-                stats.prompt_tokens += prompt_t
-                stats.completion_tokens += completion_t
-                stats.claims += len(result.accepted)
-                stats.review += len(result.review)
-                stats.rejected += len(result.rejected)
-                stats.truncated += 1 if result.truncated else 0
-                self._commit_block_result_v2(
-                    doc_id=doc_id,
-                    source_rev=source_rev,
-                    seq=block.seq,
-                    result=result,
-                    status=status,
-                    model=model_name,
-                    error="; ".join(
-                        str(d.get("message") or d.get("code")) for d in result.diagnostics
-                    )
-                    or None,
-                    duration_ms=int((time.monotonic() - started) * 1000),
-                    prompt_tokens=prompt_t,
-                    completion_tokens=completion_t,
-                )
-                if status == "failed":
-                    stats.failed += 1
-                    consecutive_failures += 1
-                    if 0 < max_consecutive_failures <= consecutive_failures:
-                        stop = True
-                        stats.stopped_early = True
-                        stats.stopped_reason = (
-                            f"连续 {consecutive_failures} 块失败（v2），已干净退出；"
-                            "已完成的块均已落库，重跑自动续上"
-                        )
-                        break
-                else:
-                    consecutive_failures = 0
-                if sleep_between > 0:
-                    time.sleep(sleep_between)
-            if stop:
-                break
-
-        return stats
-
-    @staticmethod
-    def _usage_delta(before: tuple[int, int], sink: dict[str, int]) -> tuple[int, int]:
-        """取一块的 token 增量（含该块的全部重试尝试）。"""
-        return (
-            sink.get("prompt_tokens", 0) - before[0],
-            sink.get("completion_tokens", 0) - before[1],
-        )
-
     def _done_blocks(
         self, *, model: str, max_attempts: int
     ) -> tuple[set[tuple[str, int]], set[tuple[str, int]]]:
@@ -1453,31 +1617,6 @@ class CorpusService:
                     "WHERE status = 'failed' AND attempts >= %s "
                     "AND model = %s AND extractor_version = %s",
                     (int(max_attempts), model, EXTRACTOR_VERSION),
-                ).fetchall()
-            }
-        return done, dead
-
-    def _done_blocks_v2(
-        self, *, model: str, max_attempts: int
-    ) -> tuple[set[tuple[str, str, int]], set[tuple[str, str, int]]]:
-        """v2 断点续跑集合，source_rev/extractor/lint 任一变化都会重抽。"""
-        with self._connect() as conn:
-            done = {
-                (str(row["doc_id"]), str(row["source_rev"]), int(row["seq"]))
-                for row in conn.execute(
-                    "SELECT doc_id, source_rev, seq FROM claim_block_runs_v2 "
-                    "WHERE status IN ('ok', 'empty', 'all_review', 'all_rejected') "
-                    "AND model = %s AND extractor_version = %s AND lint_version = %s",
-                    (model, EXTRACTOR_VERSION_V2, LINT_VERSION),
-                ).fetchall()
-            }
-            dead = {
-                (str(row["doc_id"]), str(row["source_rev"]), int(row["seq"]))
-                for row in conn.execute(
-                    "SELECT doc_id, source_rev, seq FROM claim_block_runs_v2 "
-                    "WHERE status = 'failed' AND attempts >= %s "
-                    "AND model = %s AND extractor_version = %s AND lint_version = %s",
-                    (int(max_attempts), model, EXTRACTOR_VERSION_V2, LINT_VERSION),
                 ).fetchall()
             }
         return done, dead
@@ -1623,154 +1762,6 @@ class CorpusService:
             conn.commit()
         return max(inserted, 0)
 
-    def _commit_block_result_v2(
-        self,
-        *,
-        doc_id: str,
-        source_rev: str,
-        seq: int,
-        result: ExtractionResult,
-        status: str,
-        model: str,
-        error: str | None = None,
-        duration_ms: int | None = None,
-        prompt_tokens: int = 0,
-        completion_tokens: int = 0,
-    ) -> None:
-        """原子写入 v2 单块结果：三类 claim + 块级台账同事务。"""
-        records = result.all_records()
-        rows = [
-            (
-                r.doc_id,
-                r.source_rev,
-                r.seq,
-                r.locator,
-                r.claim_text,
-                r.evidence_quote,
-                r.evidence_kind,
-                Jsonb(r.table_ref),
-                r.scope,
-                r.subject_raw,
-                r.subject,
-                r.metric_raw,
-                r.metric,
-                Jsonb(r.qualifiers),
-                r.kind,
-                r.value_text,
-                r.value_num,
-                r.unit_raw,
-                r.unit,
-                r.period_raw,
-                r.period_end,
-                r.period_grain,
-                r.observed_at,
-                r.known_at,
-                r.quality_status,
-                list(r.reason_codes),
-                r.model,
-                r.extractor_version,
-                r.lint_version,
-                r.extracted_at,
-            )
-            for r in records
-        ]
-        with self._lock, self._connect() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "SELECT model, extractor_version, lint_version FROM claim_block_runs_v2 "
-                    "WHERE doc_id = %s AND source_rev = %s AND seq = %s",
-                    (str(doc_id), str(source_rev), int(seq)),
-                )
-                previous = cur.fetchone()
-                previous_fingerprint_differs = previous is not None and (
-                    str(previous["model"]) != model
-                    or str(previous["extractor_version"]) != EXTRACTOR_VERSION_V2
-                    or str(previous["lint_version"]) != LINT_VERSION
-                )
-                if status != "failed" or previous_fingerprint_differs:
-                    cur.execute(
-                        "DELETE FROM claims_v2 WHERE doc_id = %s AND source_rev = %s AND seq = %s",
-                        (str(doc_id), str(source_rev), int(seq)),
-                    )
-                if rows:
-                    cur.executemany(
-                        "INSERT INTO claims_v2 ("
-                        "doc_id, source_rev, seq, locator, claim_text, evidence_quote, "
-                        "evidence_kind, table_ref, scope, subject_raw, subject, metric_raw, "
-                        "metric, qualifiers, kind, value_text, value_num, unit_raw, unit, "
-                        "period_raw, period_end, period_grain, observed_at, known_at, "
-                        "quality_status, reason_codes, model, extractor_version, "
-                        "lint_version, extracted_at) "
-                        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"
-                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
-                        "ON CONFLICT DO NOTHING",
-                        rows,
-                    )
-                cur.execute(
-                    "INSERT INTO claim_block_runs_v2 "
-                    "(doc_id, source_rev, seq, status, accepted_n, review_n, rejected_n, "
-                    " attempts, model, extractor_version, lint_version, duration_ms, "
-                    " prompt_tokens, completion_tokens, truncated, diagnostics, error, updated_at) "
-                    "VALUES (%s,%s,%s,%s,%s,%s,%s,1,%s,%s,%s,%s,%s,%s,%s,%s,%s,now()) "
-                    "ON CONFLICT (doc_id, source_rev, seq) DO UPDATE SET "
-                    "status = EXCLUDED.status, "
-                    "accepted_n = EXCLUDED.accepted_n, "
-                    "review_n = EXCLUDED.review_n, "
-                    "rejected_n = EXCLUDED.rejected_n, "
-                    "attempts = CASE "
-                    "  WHEN claim_block_runs_v2.model IS DISTINCT FROM EXCLUDED.model "
-                    "    OR claim_block_runs_v2.extractor_version "
-                    "       IS DISTINCT FROM EXCLUDED.extractor_version "
-                    "    OR claim_block_runs_v2.lint_version "
-                    "       IS DISTINCT FROM EXCLUDED.lint_version "
-                    "  THEN 1 ELSE claim_block_runs_v2.attempts + 1 END, "
-                    "model = EXCLUDED.model, "
-                    "extractor_version = EXCLUDED.extractor_version, "
-                    "lint_version = EXCLUDED.lint_version, "
-                    "duration_ms = EXCLUDED.duration_ms, "
-                    "prompt_tokens = EXCLUDED.prompt_tokens, "
-                    "completion_tokens = EXCLUDED.completion_tokens, "
-                    "truncated = EXCLUDED.truncated, "
-                    "diagnostics = EXCLUDED.diagnostics, "
-                    "error = EXCLUDED.error, "
-                    "updated_at = now()",
-                    (
-                        str(doc_id),
-                        str(source_rev),
-                        int(seq),
-                        str(status),
-                        len(result.accepted),
-                        len(result.review),
-                        len(result.rejected),
-                        model,
-                        EXTRACTOR_VERSION_V2,
-                        LINT_VERSION,
-                        duration_ms,
-                        prompt_tokens,
-                        completion_tokens,
-                        result.truncated,
-                        Jsonb(result.diagnostics),
-                        error,
-                    ),
-                )
-            conn.commit()
-
-    def average_block_seconds(self, *, default: float = 45.0) -> float:
-        """历史平均单块耗时（秒）—— 排期估算用真实数据，而不是拍脑袋的常数。
-
-        旧版 ``--dry-run`` 用"每次调用 ~2s"估算，把 614 块算成 30.8 分钟；实测
-        中位数约 51s（20~177s），真实耗时约 9 小时 —— 低估 17 倍。台账里的
-        ``duration_ms`` 一上线就有真实样本，没有样本时才退化为 ``default``。
-        """
-        with self._connect() as conn:
-            row = conn.execute(
-                "SELECT avg(duration_ms) AS avg_ms, count(*) AS n FROM claim_block_runs "
-                "WHERE status = 'ok' AND duration_ms IS NOT NULL"
-            ).fetchone()
-        if row and row["n"] and row["avg_ms"]:
-            return max(1.0, float(row["avg_ms"]) / 1000.0)
-        return default
-
     def block_runs(
         self,
         *,
@@ -1805,36 +1796,25 @@ class CorpusService:
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
 
-    def block_runs_v2(
-        self,
-        *,
-        doc_id: str | None = None,
-        status: str | None = None,
-        limit: int = 200,
-    ) -> list[dict[str, object]]:
-        """查询 v2 块级台账。"""
-        sql = (
-            "SELECT doc_id, source_rev, seq, status, accepted_n, review_n, rejected_n, "
-            "attempts, model, extractor_version, lint_version, duration_ms, prompt_tokens, "
-            "completion_tokens, truncated, diagnostics, error, updated_at "
-            "FROM claim_block_runs_v2"
+    @staticmethod
+    def _usage_delta(before: tuple[int, int], usage: dict[str, int]) -> tuple[int, int]:
+        """单次 LLM 调用的 token 增量（``usage_sink`` 是跨调用累计值，相减即本次用量）。"""
+        return (
+            usage.get("prompt_tokens", 0) - before[0],
+            usage.get("completion_tokens", 0) - before[1],
         )
-        where: list[str] = []
-        params: list[object] = []
-        if doc_id:
-            where.append("doc_id = %s")
-            params.append(str(doc_id))
-        if status:
-            where.append("status = %s")
-            params.append(str(status))
-        if where:
-            sql += " WHERE " + " AND ".join(where)
-        sql += " ORDER BY doc_id, source_rev, seq LIMIT %s"
-        params.append(int(limit))
 
+    def average_block_seconds(self) -> float:
+        """历史单块平均耗时（秒）——dry-run 预估用真实台账均值，无历史时回退 2.0。"""
         with self._connect() as conn, conn.cursor() as cur:
-            cur.execute(cast(LiteralString, sql), params)
-            return list(cur.fetchall())
+            cur.execute(
+                "SELECT AVG(duration_ms) AS avg_ms FROM claim_block_runs "
+                "WHERE status = 'ok' AND duration_ms IS NOT NULL"
+            )
+            row = cur.fetchone()
+        if row is None or row["avg_ms"] is None:
+            return 2.0
+        return float(row["avg_ms"]) / 1000.0
 
     def legacy_claims_of(
         self,
@@ -1870,173 +1850,6 @@ class CorpusService:
             # the cast documents that no caller text reaches the SQL itself.
             cur.execute(cast(LiteralString, sql), params)
             return list(cur.fetchall())
-
-    def claims_v2_of(
-        self,
-        *,
-        doc_id: str | None = None,
-        subject: str | None = None,
-        kind: str | None = None,
-        quality_status: str | None = "ok",
-        limit: int = 50,
-    ) -> list[dict[str, object]]:
-        """查询 v2 claims；默认只暴露 ok，review/rejected 需显式传 ``None`` 或状态。"""
-        sql = (
-            "SELECT claim_id, doc_id, source_rev, seq, locator, claim_text, "
-            "evidence_quote, evidence_kind, table_ref, scope, subject_raw, subject, "
-            "metric_raw, metric, qualifiers, kind, value_text, value_num, unit_raw, unit, "
-            "period_raw, period_end, period_grain, observed_at, known_at, quality_status, "
-            "reason_codes, model, extractor_version, lint_version, extracted_at "
-            "FROM claims_v2"
-        )
-        where: list[str] = []
-        params: list[object] = []
-        if doc_id:
-            where.append("doc_id = %s")
-            params.append(str(doc_id))
-        if subject:
-            where.append("subject = %s")
-            params.append(str(subject))
-        if kind:
-            where.append("kind = %s")
-            params.append(str(kind))
-        if quality_status:
-            where.append("quality_status = %s")
-            params.append(str(quality_status))
-        if where:
-            sql += " WHERE " + " AND ".join(where)
-        sql += " ORDER BY doc_id, source_rev, seq, claim_id LIMIT %s"
-        params.append(int(limit))
-
-        with self._connect() as conn, conn.cursor() as cur:
-            cur.execute(cast(LiteralString, sql), params)
-            return list(cur.fetchall())
-
-    def legacy_v2_observation_projection(
-        self,
-        *,
-        doc_id: str | None = None,
-        subject: str | None = None,
-        limit: int = 50,
-    ) -> list[dict[str, object]]:
-        """Claims v2 给后续判断层的只读投影；默认排除 review/rejected。"""
-        rows = self.claims_v2_of(doc_id=doc_id, subject=subject, quality_status="ok", limit=limit)
-        return [
-            {
-                "doc_id": row["doc_id"],
-                "source_rev": row["source_rev"],
-                "seq": row["seq"],
-                "locator": row["locator"],
-                "evidence_quote": row["evidence_quote"],
-                "scope": row["scope"],
-                "subject": row["subject"],
-                "metric": row["metric"],
-                "qualifiers": row["qualifiers"],
-                "kind": row["kind"],
-                "value_text": row["value_text"],
-                "value_num": row["value_num"],
-                "unit": row["unit"],
-                "unit_raw": row["unit_raw"],
-                "period_grain": row["period_grain"],
-                "period_end": row["period_end"],
-                "known_at": row["known_at"],
-                "quality_status": row["quality_status"],
-            }
-            for row in rows
-        ]
-
-    def legacy_claims_from_v2(
-        self,
-        *,
-        doc_id: str | None = None,
-        subject: str | None = None,
-        limit: int = 50,
-    ) -> list[Claim]:
-        """v2 → v1 兼容 Adapter；仅转换 ok 记录。"""
-        records = [
-            _claim_record_from_row(row)
-            for row in self.claims_v2_of(
-                doc_id=doc_id,
-                subject=subject,
-                quality_status="ok",
-                limit=limit,
-            )
-        ]
-        return [claim_record_to_legacy(record) for record in records]
-
-    def claim_version_diff(
-        self,
-        *,
-        doc_id: str | None = None,
-        limit: int = 1000,
-    ) -> dict[str, object]:
-        """v1/v2 影子差异摘要：新增、删除、证据/坐标/数值/时间/状态变化。"""
-        v1 = self.legacy_claims_of(doc_id=doc_id, limit=limit)
-        v2 = self.claims_v2_of(doc_id=doc_id, quality_status=None, limit=limit)
-        v1_by_text = {str(row["claim_text"]): row for row in v1}
-        v2_by_text = {str(row["claim_text"]): row for row in v2}
-        added = sorted(set(v2_by_text) - set(v1_by_text))
-        removed = sorted(set(v1_by_text) - set(v2_by_text))
-        common = sorted(set(v1_by_text) & set(v2_by_text))
-
-        def examples(names: list[str]) -> list[str]:
-            return names[:20]
-
-        def tickers_of(value: object) -> tuple[object, ...]:
-            return tuple(value) if isinstance(value, (list, tuple)) else ()
-
-        coordinate_changes = [
-            text
-            for text in common
-            if (
-                v1_by_text[text].get("metric"),
-                tickers_of(v1_by_text[text].get("tickers")),
-            )
-            != (
-                v2_by_text[text].get("metric"),
-                (v2_by_text[text].get("subject"),)
-                if v2_by_text[text].get("scope") == "company" and v2_by_text[text].get("subject")
-                else (),
-            )
-        ]
-        value_changes = [
-            text
-            for text in common
-            if (
-                v1_by_text[text].get("value_text"),
-                str(v1_by_text[text].get("value_num")),
-            )
-            != (
-                v2_by_text[text].get("value_text"),
-                str(v2_by_text[text].get("value_num")),
-            )
-        ]
-        time_changes = [
-            text
-            for text in common
-            if str(v1_by_text[text].get("as_of")) != str(v2_by_text[text].get("known_at"))
-        ]
-        status_changes = [text for text in common if v2_by_text[text].get("quality_status") != "ok"]
-        evidence_changes = [
-            text for text in common if v2_by_text[text].get("evidence_quote") not in (None, text)
-        ]
-        return {
-            "v1_total": len(v1),
-            "v2_total": len(v2),
-            "added": {"count": len(added), "examples": examples(added)},
-            "removed": {"count": len(removed), "examples": examples(removed)},
-            "evidence_changes": {
-                "count": len(evidence_changes),
-                "examples": examples(evidence_changes),
-            },
-            "coordinate_changes": {
-                "count": len(coordinate_changes),
-                "examples": examples(coordinate_changes),
-            },
-            "value_changes": {"count": len(value_changes), "examples": examples(value_changes)},
-            "time_changes": {"count": len(time_changes), "examples": examples(time_changes)},
-            "status_changes": {"count": len(status_changes), "examples": examples(status_changes)},
-        }
 
     def list_documents(self) -> list[dict[str, object]]:
         with self._connect() as conn, conn.cursor() as cur:
@@ -2130,59 +1943,9 @@ class CorpusService:
             "error",
             "updated_at",
         ),
-        "claims_v2": (
-            "claim_id",
-            "doc_id",
-            "source_rev",
-            "seq",
-            "locator",
-            "claim_text",
-            "evidence_quote",
-            "evidence_kind",
-            "table_ref",
-            "scope",
-            "subject_raw",
-            "subject",
-            "metric_raw",
-            "metric",
-            "qualifiers",
-            "kind",
-            "value_text",
-            "value_num",
-            "unit_raw",
-            "unit",
-            "period_raw",
-            "period_end",
-            "period_grain",
-            "observed_at",
-            "known_at",
-            "quality_status",
-            "reason_codes",
-            "model",
-            "extractor_version",
-            "lint_version",
-            "extracted_at",
-        ),
-        "claim_block_runs_v2": (
-            "doc_id",
-            "source_rev",
-            "seq",
-            "status",
-            "accepted_n",
-            "review_n",
-            "rejected_n",
-            "attempts",
-            "model",
-            "extractor_version",
-            "lint_version",
-            "duration_ms",
-            "prompt_tokens",
-            "completion_tokens",
-            "truncated",
-            "diagnostics",
-            "error",
-            "updated_at",
-        ),
+        # claims_v2 / claim_block_runs_v2 影子表已随 I2-7 消费者矩阵退役
+        # （DDL 不再创建）；备份枚举必须与 init_db 同步，否则审计的
+        # backup_coverage 会把「枚举了但库里没有」当漂移报出来。
     }
 
     @staticmethod
@@ -2366,10 +2129,6 @@ class CorpusService:
                 "SELECT setval('claims_claim_id_seq', "
                 "COALESCE((SELECT max(claim_id) FROM claims), 0) + 1, false)"
             )
-            conn.execute(
-                "SELECT setval('claims_v2_claim_id_seq', "
-                "COALESCE((SELECT max(claim_id) FROM claims_v2), 0) + 1, false)"
-            )
             conn.commit()
 
         counts = target._row_counts()
@@ -2399,7 +2158,7 @@ class CorpusService:
         目录不存在时返回 0。
         """
         try:
-            return sum(1 for _ in iter_corpus_files(root))
+            return sum(1 for _ in _iter_corpus_files(root))
         except OSError:  # 目录不存在 / 不可读
             return 0
 
@@ -2739,11 +2498,6 @@ def _main() -> int:
         action="store_true",
         help="只统计将抽取多少块 / 预计多少次 LLM 调用与耗时，不真正调模型（错峰前规划批次用）",
     )
-    extract_mode.add_argument(
-        "--v2",
-        action="store_true",
-        help="兼容：旧 block 抽取写 claims_v2 影子表，不是新证据链",
-    )
     p_claims.add_argument(
         "--max-consecutive-failures",
         type=int,
@@ -2767,17 +2521,16 @@ def _main() -> int:
     p_show_claims.add_argument("--doc", default=None)
     p_show_claims.add_argument("--ticker", default=None, help="按标的代码过滤，如 600519.SH")
     p_show_claims.add_argument(
-        "--subject", default=None, help="v2 subject 过滤；company 下等价于 ticker"
+        "--subject", default=None, help="subject 过滤；company 下等价于 ticker"
     )
     p_show_claims.add_argument("--kind", default=None, choices=["fact", "forecast", "opinion"])
     read_mode = p_show_claims.add_mutually_exclusive_group()
-    read_mode.add_argument("--v2", action="store_true", help="兼容：读取 claims_v2 影子表")
     read_mode.add_argument("--legacy", action="store_true", help="兼容：只读旧 claims 表")
     p_show_claims.add_argument(
         "--quality",
         default="ok",
         choices=["ok", "review", "rejected", "all"],
-        help="v2 质量状态过滤；默认 ok，all=包含 review/rejected",
+        help="质量状态过滤；默认 ok，all=包含 review/rejected",
     )
     p_show_claims.add_argument("--limit", type=int, default=50)
     p_show_claims.add_argument("--db", default=None)
@@ -2801,11 +2554,6 @@ def _main() -> int:
     p_evidence.add_argument("--run-id", required=True)
     p_evidence.add_argument("--packet-id", required=True)
     p_evidence.add_argument("--db", default=None)
-
-    p_diff = sub.add_parser("claim-diff", help="D2 v1/v2 影子差异报告")
-    p_diff.add_argument("--doc", default=None)
-    p_diff.add_argument("--limit", type=int, default=1000)
-    p_diff.add_argument("--db", default=None)
 
     p_set_kind = sub.add_parser(
         "set-doc-kind", help="人工纠正文档领域分类（§11 缺口#1：分类误判的纠正入口）"
@@ -2843,16 +2591,16 @@ def _main() -> int:
 
     args = parser.parse_args()
     if args.cmd == "extract-claims":
-        if args.legacy or args.v2:
+        if args.legacy:
             if args.source or args.pages or args.prose_calls or args.packet_chars != 2000:
                 parser.error("旧抽取不能混用 --source/--pages/--prose-calls/--packet-chars")
         else:
             if not args.source or args.doc or vars(args).get("limit") is not None or args.dry_run:
-                parser.error("新抽取需要 --source；旧批处理参数须显式指定 --legacy 或 --v2")
+                parser.error("新抽取需要 --source；旧批处理参数须显式指定 --legacy")
             if args.prose_calls < 0 or not 100 <= args.packet_chars <= 2500:
                 parser.error("--prose-calls 必须非负；--packet-chars 必须在 100—2500")
     if args.cmd == "claims":
-        if args.legacy or args.v2:
+        if args.legacy:
             if args.run_id or args.purpose != "cite" or args.offset:
                 parser.error("旧查询不能混用新版 run-id/purpose/offset；旧表不提供计算许可")
         elif not args.run_id or args.doc:
@@ -2860,7 +2608,7 @@ def _main() -> int:
     svc = get_service(args.db)
 
     if args.cmd == "extract-claims":
-        if not (args.legacy or args.v2):
+        if not args.legacy:
             from plugins.corpus.evidence_pipeline import claim_run_context
 
             run = svc.extract_claims(
@@ -2899,7 +2647,7 @@ def _main() -> int:
             with contextlib.suppress(ValueError, OSError):  # 非主线程 / 平台不支持
                 previous_handlers[sig] = signal.signal(sig, _request_stop)
         try:
-            extract = svc.extract_claims_v2 if args.v2 else svc.extract_legacy_claims
+            extract = svc.extract_legacy_claims
             stats = extract(
                 doc_ids=doc_ids,
                 limit=args.limit,
@@ -2939,16 +2687,7 @@ def _main() -> int:
         return 1 if stats.failed else 0
 
     if args.cmd == "claims":
-        if args.v2:
-            subject = args.subject or args.ticker
-            rows = svc.claims_v2_of(
-                doc_id=args.doc,
-                subject=subject,
-                kind=args.kind,
-                quality_status=None if args.quality == "all" else args.quality,
-                limit=args.limit,
-            )
-        elif args.legacy:
+        if args.legacy:
             rows = svc.legacy_claims_of(
                 doc_id=args.doc, ticker=args.ticker, kind=args.kind, limit=args.limit
             )
@@ -2994,17 +2733,6 @@ def _main() -> int:
                 svc.fetch_evidence(args.run_id, args.packet_id),
                 ensure_ascii=False,
                 indent=2,
-            )
-        )
-        return 0
-
-    if args.cmd == "claim-diff":
-        print(
-            json.dumps(
-                svc.claim_version_diff(doc_id=args.doc, limit=args.limit),
-                ensure_ascii=False,
-                indent=2,
-                default=str,
             )
         )
         return 0

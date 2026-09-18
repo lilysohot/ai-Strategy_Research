@@ -1,0 +1,106 @@
+{
+  "binding": {
+    "configs": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4"
+    },
+    "evidence_and_probes": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9/guard-selfcheck.json": "afdca89542b7fd5d6e0ce54d62741185a315eab3d843417b96d4b08552e33aad",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py": "41fa540baf5d3a222c683deaf45801727b11274daee5e68c284b7dc2b84e95fc",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py": "5122e539729d7596e374668e75eba7f5d040c53203bff5403b1e69204dddb34c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i1_9_make_fixtures.py": "e01bf33582c016a916be73039b7b4348c92e289ec2ade1b838c6053fe9c8827c"
+    },
+    "fixtures": {
+      "tests/fixtures/corpus_preparation/synthetic-company-report.docx": "6f1b9b572b2c2d73843d06c920b8bdca8bdb460dadfffce7cb4c715cf4411a2d",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.md": "2e851f2a15987891b9b3d88f90b5c8cf0fb775405ff2bb3625bbacf5f3eae3be",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.pdf": "1732fe9f23d0c0fee6ddb270f85a1084d4c8801bf8bd4c85b9177365dd6d7483"
+    },
+    "implementation": {
+      "plugins/corpus/preparation/__init__.py": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+      "plugins/corpus/preparation/admission.py": "dd9701d394e3df4fae7f96bd85820bec93fdd67bb3f179f0fccc6ec59884879a",
+      "plugins/corpus/preparation/chunk.py": "957c85cb9266ebc34cccba31aa79b3bd2726ff8236cb84757655ae4e0139852f",
+      "plugins/corpus/preparation/clean.py": "610a6d664c0d7832cda09d3a5037432a8a0afd848b6b11297099926a9b7a8818",
+      "plugins/corpus/preparation/contract.py": "48890a1774faa9eebfea0c566eb7f3ff4938913c1158f6b3755eb7c5986c610e",
+      "plugins/corpus/preparation/engine.py": "ed429540bde28f964d02613843d3c3231c4cadcfc017fecfbd477ad986831160",
+      "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "plugins/corpus/preparation/readers/__init__.py": "98452a34de4fcb01fae3e059020f7b124e13553c7afb9bba91fb5beec76b3f21",
+      "plugins/corpus/preparation/readers/base.py": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87",
+      "plugins/corpus/preparation/readers/docx_reader.py": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+      "plugins/corpus/preparation/readers/md_reader.py": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d",
+      "plugins/corpus/preparation/repository.py": "c716c1868c4f43e81e5e98948d6591045fbe646b15542b8c22d96bc8221dbaf2",
+      "plugins/corpus/preparation/source.py": "82068f86ef3c08af547f6f323e05d63f56cd0e99235235f89f0183ca4d57fb79"
+    },
+    "tests": {
+      "tests/test_corpus_preparation_admission.py": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157",
+      "tests/test_corpus_preparation_chunk.py": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5",
+      "tests/test_corpus_preparation_clean.py": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a",
+      "tests/test_corpus_preparation_contract.py": "41e60040ecec2d1d58cdff42c2c133e5777b07148a3c6baf1994aed67a89123d",
+      "tests/test_corpus_preparation_engine.py": "23b07bcdb739e9604483edc467b3dd5a8de65e09c423ffeff15f8fd9707c8126",
+      "tests/test_corpus_preparation_fixtures.py": "5c364aba44139246c815876a023741441b830c52b780468ad4791a5ef6b317b7",
+      "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616",
+      "tests/test_corpus_preparation_readers.py": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4",
+      "tests/test_corpus_preparation_remediation.py": "61ec75f5a23afbd98b62bc288a3a8f03746687dba9610dde2580009111416067",
+      "tests/test_corpus_preparation_source.py": "82d5e0631416bd207bfd0b78015d0d8b6baf7b216331c2a26af5b2d6612f945a"
+    }
+  },
+  "created_at": "2026-09-16T12:00:00+00:00",
+  "m4_declaration": "not_declared_pending_review（全部必需用例本轮通过、哈希一致、未触 PG/留出、夹具 synthetic-only；M4 放行留待下一轮复核确认，与 I1 二次复核口径一致）",
+  "notes": [
+    "夹具 integrity 以 write-once + 本快照哈希为准；DOCX/PDF 重生成行为等价但非逐字节相同（zip 时间戳、PDF /ID）。",
+    "守卫审计：仓库根 runtime 读取放行 tests/fixtures 只读，i1.json 无需变更（哈希未重绑）。",
+    "MD 夹具问答标题不含触发词「实录」，避免 admission transcript_declaration 误判（合成夹具设计约束）。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-logic-contract-frozen-v1-20260915.json",
+    "sha256": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30",
+    "snapshot_id": "i0a5"
+  },
+  "phase": "i1",
+  "required_case_coverage_map": {
+    "admission": "covered（表驱动 52 用例 + 夹具 engine 全链：in_scope/excluded/未决不发布/policy_conflict）",
+    "authority": "I2+（当前 MemoryStore；真 PG 权威 fetch/verify 未实施）",
+    "cli_isolation": "partial（guard 19 项子进程守卫语义；CLI 全链真 Interface 属 I2）",
+    "coverage": "I3（检索覆盖三轴未实施）",
+    "fidelity": "covered（readers 全套 + remediation 15 + 合成夹具：重复标题/空页/纯图页/大图缺口/嵌套表/cell 图/char_span 保真）",
+    "legacy_regression": "I2+（既有回归入口待 I2 核定接入）",
+    "mapping": "covered（clean 映射 roundtrip 三格式参数化 + context_refs 引用式关联 + verify_clean_region）",
+    "publication_pg": "I2+（PG 未授权；engine publish 幂等/新激活递增已在内存语义收口）",
+    "retrieval_pg": "I3+（检索指标未实施）"
+  },
+  "revision": "r1",
+  "snapshot_id": "i1-r1",
+  "task": "I1-9 合成夹具与阶段冻结（corpus-ingestion-rebuild-tasks.md L157）",
+  "verification_matrix": {
+    "acceptance_probes_20260916_i1": {
+      "result": "20 passed"
+    },
+    "guard_pytest_normal_env": {
+      "result": "19 passed"
+    },
+    "guard_scope_business_9_files": {
+      "command": "env -i guard_pytest 9 business files",
+      "result": "170 passed"
+    },
+    "guard_selfcheck": {
+      "cases": 24,
+      "passed": 24,
+      "report": "audits/20260916-i1-9/guard-selfcheck.json",
+      "report_version": 2
+    },
+    "import_smoke_stage1": {
+      "result": "354/354"
+    },
+    "pyright_i1_scope": {
+      "result": "0 errors"
+    },
+    "remaining_boundaries_20260916_i1_retest": {
+      "result": "11 passed"
+    },
+    "ruff": {
+      "result": "All checks passed"
+    }
+  }
+}

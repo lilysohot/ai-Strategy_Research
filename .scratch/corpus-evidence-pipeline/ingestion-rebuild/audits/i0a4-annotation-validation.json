@@ -1,0 +1,25 @@
+{
+  "validation_kind": "annotation_schema_and_source_integrity_only_not_human_gold_freeze",
+  "working_sha256": "b201ab44b420115e11504b10b2ee98997d65bdc495666889bfeb770be2c2cb8b",
+  "label_slots": 23,
+  "expected_items": 87,
+  "query_slots": 30,
+  "role_counts": {
+    "body_evidence": 20,
+    "generic_statement": 3
+  },
+  "checks": {
+    "package_hash": "passed",
+    "original_pdf_hashes": "6/6 passed",
+    "immutable_slot_fields": "passed",
+    "quote_exact_substrings": "87/87 passed",
+    "quotes_in_original_pdf_normalized": "87/87 passed",
+    "existing_record_validators": "passed",
+    "domain_8_plus_2": "passed",
+    "source_allowlist": "passed"
+  },
+  "errors": [],
+  "human_review_status": "pending",
+  "frozen": false,
+  "important": "结构和引文校验通过不等于独立人工金标；6个负例仍需真人复核证据覆盖。"
+}

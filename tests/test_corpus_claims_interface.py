@@ -16,7 +16,12 @@ from plugins.corpus.service import CorpusService, _main
 @pytest.fixture
 def source(tmp_path):
     path = tmp_path / "2026-08-16_600519.SH.md"
-    path.write_text("# 600519.SH\n2025A 营业收入100元。2026E 营业收入120元。", encoding="utf-8")
+    # I2-7：文件名日期前缀会被 _title_from_filename 剥掉、不再派生 published，
+    # 来源日期必须由正文显式给出（source_explicit 语义）。
+    path.write_text(
+        "# 600519.SH\n发布日期：2026-08-16。\n2025A 营业收入100元。2026E 营业收入120元。",
+        encoding="utf-8",
+    )
     return path
 
 
@@ -40,7 +45,7 @@ def response(_prompt):
 
 
 @pytest.fixture
-def service(monkeypatch):
+def service(monkeypatch, source):
     svc = CorpusService("postgresql://unused")
     stored = {}
 
@@ -52,9 +57,22 @@ def service(monkeypatch):
     def load(run_id):
         return EvidenceRun.model_validate_json(stored[run_id])
 
+    # R1：extract_claims 由同源 corpus_units 投影，不再二次解析原文件。这里模拟
+    # 已入链的活动 build：单 prose 单元（raw_text=源全文），发布日期读 admission
+    # report_publication（R4 唯一落点）。_connect 仍作为「旧 blocks 直连」的绊线。
+    def units_for(source_id):
+        del source_id
+        return [{"seq": 0, "locator": "document", "text": source.read_text(encoding="utf-8")}]
+
+    def published_for(source_id):
+        del source_id
+        return "2026-08-16"  # 来源正文「发布日期：2026-08-16」→ report_publication.value
+
     monkeypatch.setattr(svc, "save_evidence_run", save)
     monkeypatch.setattr(svc, "load_evidence_run", load)
     monkeypatch.setattr(svc, "_connect", Mock(side_effect=AssertionError("legacy DB access")))
+    monkeypatch.setattr(svc, "_active_build_units", units_for)
+    monkeypatch.setattr(svc, "_active_report_publication", published_for)
     return svc
 
 
@@ -178,7 +196,7 @@ def test_invalid_filters_fail_closed(service, source, kwargs):
         ["claims"],
         ["claims", "--doc", "legacy-doc"],
         ["claims", "--legacy", "--purpose", "calculate"],
-        ["claims", "--v2", "--run-id", "test"],
+        ["claims", "--legacy", "--run-id", "test"],
     ],
 )
 def test_cli_requires_explicit_source_revision_or_legacy(monkeypatch, args):
@@ -282,3 +300,31 @@ def test_invalid_extraction_scope_fails_before_provider(service, source, kwargs,
     )
     with pytest.raises(ValueError):
         service.extract_claims(source, **kwargs)
+
+
+def test_extract_claims_projects_from_units_not_reparse(tmp_path, monkeypatch):
+    """R1：extract_claims 由同源 corpus_units 投影，禁止二次解析原文件。
+
+    对应审核反例 test_extract_claims_does_not_reparse_source：即使来源未入链
+    （units 为空），extract_claims 也绝不调用 parse_evidence 独立解析原文件。
+    """
+    from plugins.corpus import evidence_pipeline
+
+    path = tmp_path / "report.md"
+    path.write_text("# synthetic company report\n收入保持稳定。", encoding="utf-8")
+    parser = Mock(wraps=evidence_pipeline.parse_evidence)
+    monkeypatch.setattr(evidence_pipeline, "parse_evidence", parser)
+
+    svc = CorpusService("postgresql://unused")
+    units_calls = []
+    monkeypatch.setattr(
+        svc,
+        "_active_build_units",
+        lambda _: units_calls.append(1) or [],
+    )
+    monkeypatch.setattr(svc, "_active_report_publication", lambda _: None)
+
+    run = svc.extract_claims(path, persist=False, max_prose_calls=0)
+    assert not parser.called, "extract_claims 不应二次解析原文件（parse_evidence）"
+    assert units_calls, "extract_claims 应经 _active_build_units 从 units 投影"
+    assert run.facts == ()  # 未入链（无 units）→ 空 facts 的确定性空 run

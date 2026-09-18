@@ -1,0 +1,122 @@
+{
+  "audit": "20260916-i1-full-review",
+  "purpose": "Review snapshot only, not M4 phase freeze",
+  "files": [
+    {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py",
+      "sha256": "e883133e24d68164c6c3f35214694af35703b1d558bfeac4e276845e87c1ad3e"
+    },
+    {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+      "sha256": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4"
+    },
+    {
+      "path": "docs/plan/claims-market-closed-loop-plan.md",
+      "sha256": "e975878c8d8cd722a9454a97df643859a99968daa31c0246ffff0eb4801c2743"
+    },
+    {
+      "path": "docs/plan/corpus-ingestion-rebuild-architecture.md",
+      "sha256": "365d0f39e43f34e5d65afc222e7ac520dfe547707c15574312ccd574ea55f159"
+    },
+    {
+      "path": "docs/plan/corpus-ingestion-rebuild-tasks.md",
+      "sha256": "423617077fc1d0b4f343496a212731420aa0b4a3ddb0beeeb6e19fd6790bb995"
+    },
+    {
+      "path": "plugins/corpus/preparation/__init__.py",
+      "sha256": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654"
+    },
+    {
+      "path": "plugins/corpus/preparation/admission.py",
+      "sha256": "dd9701d394e3df4fae7f96bd85820bec93fdd67bb3f179f0fccc6ec59884879a"
+    },
+    {
+      "path": "plugins/corpus/preparation/chunk.py",
+      "sha256": "957c85cb9266ebc34cccba31aa79b3bd2726ff8236cb84757655ae4e0139852f"
+    },
+    {
+      "path": "plugins/corpus/preparation/clean.py",
+      "sha256": "610a6d664c0d7832cda09d3a5037432a8a0afd848b6b11297099926a9b7a8818"
+    },
+    {
+      "path": "plugins/corpus/preparation/contract.py",
+      "sha256": "48890a1774faa9eebfea0c566eb7f3ff4938913c1158f6b3755eb7c5986c610e"
+    },
+    {
+      "path": "plugins/corpus/preparation/engine.py",
+      "sha256": "ed429540bde28f964d02613843d3c3231c4cadcfc017fecfbd477ad986831160"
+    },
+    {
+      "path": "plugins/corpus/preparation/guard_pytest.py",
+      "sha256": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5"
+    },
+    {
+      "path": "plugins/corpus/preparation/guard.py",
+      "sha256": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794"
+    },
+    {
+      "path": "plugins/corpus/preparation/readers/__init__.py",
+      "sha256": "98452a34de4fcb01fae3e059020f7b124e13553c7afb9bba91fb5beec76b3f21"
+    },
+    {
+      "path": "plugins/corpus/preparation/readers/base.py",
+      "sha256": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87"
+    },
+    {
+      "path": "plugins/corpus/preparation/readers/docx_reader.py",
+      "sha256": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196"
+    },
+    {
+      "path": "plugins/corpus/preparation/readers/md_reader.py",
+      "sha256": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc"
+    },
+    {
+      "path": "plugins/corpus/preparation/readers/pdf_reader.py",
+      "sha256": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d"
+    },
+    {
+      "path": "plugins/corpus/preparation/repository.py",
+      "sha256": "c716c1868c4f43e81e5e98948d6591045fbe646b15542b8c22d96bc8221dbaf2"
+    },
+    {
+      "path": "plugins/corpus/preparation/source.py",
+      "sha256": "82068f86ef3c08af547f6f323e05d63f56cd0e99235235f89f0183ca4d57fb79"
+    },
+    {
+      "path": "tests/test_corpus_preparation_admission.py",
+      "sha256": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157"
+    },
+    {
+      "path": "tests/test_corpus_preparation_chunk.py",
+      "sha256": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5"
+    },
+    {
+      "path": "tests/test_corpus_preparation_clean.py",
+      "sha256": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a"
+    },
+    {
+      "path": "tests/test_corpus_preparation_contract.py",
+      "sha256": "41e60040ecec2d1d58cdff42c2c133e5777b07148a3c6baf1994aed67a89123d"
+    },
+    {
+      "path": "tests/test_corpus_preparation_engine.py",
+      "sha256": "23b07bcdb739e9604483edc467b3dd5a8de65e09c423ffeff15f8fd9707c8126"
+    },
+    {
+      "path": "tests/test_corpus_preparation_guard.py",
+      "sha256": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616"
+    },
+    {
+      "path": "tests/test_corpus_preparation_readers.py",
+      "sha256": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4"
+    },
+    {
+      "path": "tests/test_corpus_preparation_remediation.py",
+      "sha256": "61ec75f5a23afbd98b62bc288a3a8f03746687dba9610dde2580009111416067"
+    },
+    {
+      "path": "tests/test_corpus_preparation_source.py",
+      "sha256": "82d5e0631416bd207bfd0b78015d0d8b6baf7b216331c2a26af5b2d6612f945a"
+    }
+  ]
+}

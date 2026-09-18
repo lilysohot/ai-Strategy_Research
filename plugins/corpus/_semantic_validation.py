@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 
 from plugins.corpus.claims import parse_value
-from plugins.corpus.claims_v2 import ClaimRecord
+from plugins.corpus.claims_detail import ClaimRecord
 
 _PERIOD = re.compile(r"20\d{2}(?:[AEF]|年(?:[1-4]季度|上半年|下半年)?|Q[1-4]|H[12])?", re.I)
 _PAIR = re.compile(

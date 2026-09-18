@@ -1,0 +1,8 @@
+uname: Linux DESKTOP-FCRK3F2 6.6.114.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Mon Dec  1 20:46:23 UTC 2025 x86_64 GNU/Linux
+git HEAD: 8d4772ca8fb2e368d4a256554784c7384c8f24ea
+python: Python 3.12.14
+node: v24.21.0
+repo: /home/administrator/FrontierAgent
+28b65d55549c5973950f25e1e370963e3d352bd5facc395e501b1b16197498bf  /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-m4-review/README.md
+2527552a5a260fdba018e220173a8294a16d81b56f137b8dc481c3368b927c19  /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-m4-review/run_matrix.sh
+3915aa873c9f3e90e0e0d51ab7410f1c236a0101d79e1b65f4cb0db102d5dc46  /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-m4-review/verify_matrix.py

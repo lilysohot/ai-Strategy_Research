@@ -1,0 +1,295 @@
+{
+  "audit": "20260916-i1-remediation-retest",
+  "purpose": "Independent audit, not M4 approval",
+  "bindings": [
+    {
+      "group": "configs",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json",
+      "expected": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      "actual": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      "matched": true
+    },
+    {
+      "group": "configs",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+      "expected": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      "actual": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      "matched": true
+    },
+    {
+      "group": "configs",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+      "expected": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+      "actual": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9/guard-selfcheck.json",
+      "expected": "afdca89542b7fd5d6e0ce54d62741185a315eab3d843417b96d4b08552e33aad",
+      "actual": "afdca89542b7fd5d6e0ce54d62741185a315eab3d843417b96d4b08552e33aad",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-9-retest/test_i1_9_acceptance.py",
+      "expected": "06325401826611f34affa6d013fed6a22bb846aec4a99fcf50513123228b18d8",
+      "actual": "06325401826611f34affa6d013fed6a22bb846aec4a99fcf50513123228b18d8",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py",
+      "expected": "e883133e24d68164c6c3f35214694af35703b1d558bfeac4e276845e87c1ad3e",
+      "actual": "e883133e24d68164c6c3f35214694af35703b1d558bfeac4e276845e87c1ad3e",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py",
+      "expected": "bbfde1bd2b3644703729eccdf1430cd03a0da1eb59a08674c3ae3fb9171a1f21",
+      "actual": "bbfde1bd2b3644703729eccdf1430cd03a0da1eb59a08674c3ae3fb9171a1f21",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-remediation/verification-matrix.txt",
+      "expected": "07bfdcd23a545380a6d7913f851d9adee6bc1eb92c174fef95988e993678aeee",
+      "actual": "07bfdcd23a545380a6d7913f851d9adee6bc1eb92c174fef95988e993678aeee",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py",
+      "expected": "4a7bc08df866d78f99235a6473599cc073094bfc7e0cdb53d49c622cfe990d82",
+      "actual": "4a7bc08df866d78f99235a6473599cc073094bfc7e0cdb53d49c622cfe990d82",
+      "matched": true
+    },
+    {
+      "group": "evidence_and_probes",
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i1_9_make_fixtures.py",
+      "expected": "e01bf33582c016a916be73039b7b4348c92e289ec2ade1b838c6053fe9c8827c",
+      "actual": "e01bf33582c016a916be73039b7b4348c92e289ec2ade1b838c6053fe9c8827c",
+      "matched": true
+    },
+    {
+      "group": "fixtures",
+      "path": "tests/fixtures/corpus_preparation/synthetic-company-report.docx",
+      "expected": "6f1b9b572b2c2d73843d06c920b8bdca8bdb460dadfffce7cb4c715cf4411a2d",
+      "actual": "6f1b9b572b2c2d73843d06c920b8bdca8bdb460dadfffce7cb4c715cf4411a2d",
+      "matched": true
+    },
+    {
+      "group": "fixtures",
+      "path": "tests/fixtures/corpus_preparation/synthetic-company-report.md",
+      "expected": "2e851f2a15987891b9b3d88f90b5c8cf0fb775405ff2bb3625bbacf5f3eae3be",
+      "actual": "2e851f2a15987891b9b3d88f90b5c8cf0fb775405ff2bb3625bbacf5f3eae3be",
+      "matched": true
+    },
+    {
+      "group": "fixtures",
+      "path": "tests/fixtures/corpus_preparation/synthetic-company-report.pdf",
+      "expected": "1732fe9f23d0c0fee6ddb270f85a1084d4c8801bf8bd4c85b9177365dd6d7483",
+      "actual": "1732fe9f23d0c0fee6ddb270f85a1084d4c8801bf8bd4c85b9177365dd6d7483",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/__init__.py",
+      "expected": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+      "actual": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/admission.py",
+      "expected": "3521f495ab3533f8dcb63177d83b0dfc68a724b728ac6107dabac4beffb372b4",
+      "actual": "3521f495ab3533f8dcb63177d83b0dfc68a724b728ac6107dabac4beffb372b4",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/chunk.py",
+      "expected": "448b961b82b6b6c0e09bd2d664a4f4efe6a96fb641aca4f2ad564daa15634f25",
+      "actual": "448b961b82b6b6c0e09bd2d664a4f4efe6a96fb641aca4f2ad564daa15634f25",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/clean.py",
+      "expected": "32c94236257bb676cb5adfd15d2440f9e880abce1615c90494f3d2c34985ed74",
+      "actual": "32c94236257bb676cb5adfd15d2440f9e880abce1615c90494f3d2c34985ed74",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/contract.py",
+      "expected": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      "actual": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/engine.py",
+      "expected": "40b03f906da42eae1714aa97725a11f5451e130e666e91bcbfeaf7db1b83688e",
+      "actual": "40b03f906da42eae1714aa97725a11f5451e130e666e91bcbfeaf7db1b83688e",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/guard.py",
+      "expected": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "actual": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/guard_pytest.py",
+      "expected": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "actual": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/readers/__init__.py",
+      "expected": "9576b25705a1ad0bfbbf61261f088b9d13655b6ff534a9d4354008220484d5f4",
+      "actual": "9576b25705a1ad0bfbbf61261f088b9d13655b6ff534a9d4354008220484d5f4",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/readers/base.py",
+      "expected": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87",
+      "actual": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/readers/docx_reader.py",
+      "expected": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+      "actual": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/readers/md_reader.py",
+      "expected": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc",
+      "actual": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/readers/pdf_reader.py",
+      "expected": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d",
+      "actual": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/repository.py",
+      "expected": "04a3cf9ea7a04d04939f35794e9614f6496de52f2ace3bf122ce74f81189b3a2",
+      "actual": "04a3cf9ea7a04d04939f35794e9614f6496de52f2ace3bf122ce74f81189b3a2",
+      "matched": true
+    },
+    {
+      "group": "implementation",
+      "path": "plugins/corpus/preparation/source.py",
+      "expected": "fa0aa2d2f2f59437830c0a5047d3ffcac9629380bf682ea5844e2abc7956e3b8",
+      "actual": "fa0aa2d2f2f59437830c0a5047d3ffcac9629380bf682ea5844e2abc7956e3b8",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_admission.py",
+      "expected": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157",
+      "actual": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_chunk.py",
+      "expected": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5",
+      "actual": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_clean.py",
+      "expected": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a",
+      "actual": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_contract.py",
+      "expected": "8fa028a66f96dd91744ba7f812ed953bf29fc2e0a989c79be6ee4573eccadeaa",
+      "actual": "8fa028a66f96dd91744ba7f812ed953bf29fc2e0a989c79be6ee4573eccadeaa",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_counterexamples.py",
+      "expected": "2354e9c7ba1712a3567a346c4d14de538271eed89057bcadb8c71341b4cf1b9b",
+      "actual": "2354e9c7ba1712a3567a346c4d14de538271eed89057bcadb8c71341b4cf1b9b",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_engine.py",
+      "expected": "cab31be55dd40bbd2aadb3282be517dbe941678d6d827dd9860d2cbf7a3d53df",
+      "actual": "cab31be55dd40bbd2aadb3282be517dbe941678d6d827dd9860d2cbf7a3d53df",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_fixtures.py",
+      "expected": "3e43a5a5c984c7879e17017e2ca73c85a298d3365c7c6c3d93161dbdf17228cb",
+      "actual": "3e43a5a5c984c7879e17017e2ca73c85a298d3365c7c6c3d93161dbdf17228cb",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_guard.py",
+      "expected": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616",
+      "actual": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_readers.py",
+      "expected": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4",
+      "actual": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_release_gate.py",
+      "expected": "63e42f5450cfa50efd9e2cb7ee1c9e7f8e6a31f111349fa29540ded841a45dc8",
+      "actual": "63e42f5450cfa50efd9e2cb7ee1c9e7f8e6a31f111349fa29540ded841a45dc8",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_remediation.py",
+      "expected": "4e347bbfaee6137fc5a9f01acaefaaf986047af94ddef770519262f9c233fee2",
+      "actual": "4e347bbfaee6137fc5a9f01acaefaaf986047af94ddef770519262f9c233fee2",
+      "matched": true
+    },
+    {
+      "group": "tests",
+      "path": "tests/test_corpus_preparation_source.py",
+      "expected": "82d5e0631416bd207bfd0b78015d0d8b6baf7b216331c2a26af5b2d6612f945a",
+      "actual": "82d5e0631416bd207bfd0b78015d0d8b6baf7b216331c2a26af5b2d6612f945a",
+      "matched": true
+    }
+  ],
+  "r1_original_sha256": "d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957",
+  "r1_current_sha256": "72e5fba4b7c508b7bda3f1e863be6e8211e77408067bc5d2ab623f7db58f84a9",
+  "r1_changed": true,
+  "r1_index_matches": false,
+  "r2_sha256": "f02e28a22a3f2a303a4ee53d776ceb289e48c56aebcecb5eba19923aac0af757",
+  "r2_parent_matches": true,
+  "indexed_snapshots": [
+    "i1-r1"
+  ]
+}

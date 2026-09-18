@@ -6,7 +6,7 @@
 
 链路是完整的 P0a 设计：:
 
-    stub 研报 → ingest（真实解析，真实定位符）
+    stub 研报 → parse_evidence（真实解析，真实定位符）→ 手搓最小 sqlite 入库
         → position_sizing（算术）→ build_strategy_card（组装）
         → strategy_lint（在线校验）→ verify_card（离线三闸裁决）
 
@@ -18,15 +18,14 @@
 from __future__ import annotations
 
 import json
-import shutil
 import sqlite3
 from pathlib import Path
 from typing import Any
 
 import pytest
 
-from plugins.corpus.fetch import make_source_resolver
-from plugins.corpus.ingest import connect, init_db, parse_document, upsert_document
+from plugins.corpus.evidence import parse_evidence
+from plugins.corpus.fetch import connect, make_source_resolver
 from plugins.corpus.strategy_schema import (
     POSITION_SIZING_ID,
     STRATEGY_LINT_ID,
@@ -47,22 +46,73 @@ RISK_BUDGET_PCT = 2.0
 ENTRY_LOW, ENTRY_HIGH, STOP_LOSS, TARGET = 1295.0, 1320.0, 1270.0, 1430.0
 
 
+# 读侧最小 schema：列集按 fetch/verify 的实际 SELECT 反推（I2-7 后写链已退休，
+# 测试只负责把解析结果放进读侧认识的形状）。
+_STUB_DDL = """
+CREATE TABLE documents (
+    doc_id      TEXT PRIMARY KEY,
+    title       TEXT NOT NULL,
+    source_path TEXT NOT NULL,
+    mime        TEXT NOT NULL,
+    status      TEXT NOT NULL,
+    block_count INTEGER NOT NULL,
+    char_count  INTEGER NOT NULL
+);
+CREATE TABLE blocks (
+    doc_id  TEXT NOT NULL,
+    seq     INTEGER NOT NULL,
+    locator TEXT NOT NULL,
+    text    TEXT NOT NULL,
+    PRIMARY KEY (doc_id, seq)
+);
+"""
+
+
+def _stub_body(path: Path) -> str:
+    """stub md 的正文：剥掉头部 key: value 元数据区（fixture 的组织方式）。
+
+    parse_evidence 的 md 路径原文透传、不认识元数据区；溯源闸比对的
+    「原文」应当只含正文。
+    """
+    lines = path.read_text(encoding="utf-8").splitlines()
+    for i, line in enumerate(lines):
+        if line.startswith("# "):
+            return "\n".join(lines[i:])
+    return "\n".join(lines)
+
+
+def _load_stub_corpus(conn: sqlite3.Connection) -> None:
+    """stub 研报 → 真实解析 → 手搓最小 sqlite 写入。
+
+    I2-7：旧 ingest.parse_document/upsert_document 已随写链整体退休。
+    解析仍走生产同源（parse_evidence）：doc_id/title 不是手搓的；md 恒为
+    单页（locator="document"），整篇正文自然成为一块。
+    """
+    conn.executescript(_STUB_DDL)
+    for path in sorted(STUB_DIR.glob("*.md")):
+        doc = parse_evidence(path)
+        page = doc.pages[0]
+        conn.execute(
+            "INSERT INTO documents (doc_id, title, source_path, mime, status, block_count,"
+            " char_count) VALUES (?, ?, ?, 'text/markdown', 'active', 1, ?)",
+            (doc.doc_id, doc.title, doc.source_path, len(page.text)),
+        )
+        conn.execute(
+            "INSERT INTO blocks (doc_id, seq, locator, text) VALUES (?, 1, ?, ?)",
+            (doc.doc_id, page.locator, _stub_body(path)),
+        )
+    conn.commit()
+
+
 @pytest.fixture
 def corpus_db(tmp_path: Path):
-    """把 stub 研报 ingest 进临时库，返回连接。
+    """把 stub 研报解析进临时库，返回连接。
 
-    走真实 ingest 而不是手搓 dict：验收要验的是**这条链路**，
-    手搓一份 blocks 表等于把被测对象换掉了。
+    解析走生产同源（parse_evidence）而不是手搓 dict：验收要验的是**这条链路**，
+    手搓一份 blocks 文本等于把被测对象换掉了。
     """
-    root = tmp_path / "corpus"
-    root.mkdir()
-    for source in sorted(STUB_DIR.glob("*.md")):
-        shutil.copy(source, root / source.name)
-
     conn = connect(tmp_path / "index.db")
-    init_db(conn)
-    for path in sorted(root.glob("*.md")):
-        upsert_document(conn, parse_document(path))
+    _load_stub_corpus(conn)
     yield conn
     conn.close()
 

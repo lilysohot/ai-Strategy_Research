@@ -1,0 +1,64 @@
+{
+  "binding": {
+    "current_chain": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r4.json": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382"
+    },
+    "design_review": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/design-review.json": "3c346c61bdbff9104455cf77c20173d28385003f8dd41a873152275c0f7816f4"
+    },
+    "evidence_inputs": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r3.json": "f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-inventory.json": "1f1cf6a4a58860c153b76b22e071daeacd1557b6656fd50b20e4a8aa7677285b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-restore-report.json": "6ead6fd30617e2787cf35763adf005fe1810ef97f1b8c93d8e6c939e6518e652",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json": "97f057c80e3bcb934428f153226a4ed6492b65af836d6c2a861e1fb475a54758",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-logic-contract-frozen-v1-20260915.json": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0c-cleanup-list.json": "434bef9dc4bc2cb3a8373f5afa793ad06391f5ba7d0a61ba5fac56b4981c367c",
+      "docker/initdb/01-schema.sql": "5fb6cfa59dbac87ef4c80e4e5d78f4a8da2bcd532ea5dfc149d349825d53336d",
+      "docs/plan/corpus-ingestion-rebuild-architecture.md": "365d0f39e43f34e5d65afc222e7ac520dfe547707c15574312ccd574ea55f159",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "dee12ce867a5a211a8e8cd93414146811281801309c19e7d285d96e1c8b098f3",
+      "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+      "plugins/corpus/claims_v2.py": "b645d3e7ed90d86d32d616c65166a93df071442fa88dfae4b370de6c2f5b498e",
+      "plugins/corpus/preparation/contract.py": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      "plugins/corpus/preparation/engine.py": "42679761e8836c5cb209c8b0868ad72c7f96186f9bfd157969ac6428b15da4ad",
+      "plugins/corpus/preparation/repository.py": "a3e8268064cf6cc327b0d5bc25d5515e2652edd77c9452e63ed27a2443f58f81",
+      "plugins/corpus/service.py": "eb679e5323e0a6a8fda94ce98daa26439370938608101c7ffcecf84302c6d6c3"
+    }
+  },
+  "created_at": "2026-09-17T03:08:57+00:00",
+  "design_review_signed": {
+    "approved_by": "U（2026-09-17 会话：『好的，执行吧』——批准 r2 裁决清单（15 候选/分支/参数/i2_targets 处理方式/消费者矩阵），授权执行 I1 幂等协议修订（G2）与 I0C-3 冻结）",
+    "revision": "r2",
+    "sha256": "3c346c61bdbff9104455cf77c20173d28385003f8dd41a873152275c0f7816f4",
+    "signed": true
+  },
+  "lineage_anchors": {
+    "m1_snapshot": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-logic-contract-frozen-v1-20260915.json",
+      "sha256": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30"
+    },
+    "m2_evidence": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-restore-report.json",
+      "sha256": "6ead6fd30617e2787cf35763adf005fe1810ef97f1b8c93d8e6c939e6518e652"
+    }
+  },
+  "m5_declaration": "not_declared（I2 未启动；M5 待 I2 全部完成并实测）",
+  "notes": [
+    "I0C-1/2/4 已由 U 于 2026-09-17 签认（design-review.json r2，sha 见 design_review_signed）；G2/I1 发布幂等协议修订已落地并以 i1-r4 冻结。",
+    "九表布局（七表 + corpus_review_decisions + corpus_source_checkpoints）+ schema corpus + 分支 migrate_then_reset_limited + I0C-2 参数/目标 + I0C-4 消费者矩阵为冻结内容；DDL 实施在 I2-1 于隔离库演练。",
+    "i2_targets 已核定：演练库=corpus-db 新建 i2_sandbox_corpus（i0b2_verify_* 只读排除）、生产=原库 postgres 库 corpus schema（I4 窗口）、生产角色 corpus_app 待建（最小权限）、归档根默认 <repo>/data/corpus-archive（显式配置，U 可 I2-1 前改判）。",
+    "docs/chinese_docs 与表级 reset 候选均不在本冻结内授权执行；一切删除仍须 I4 停写窗口 + U 逐表签认。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r4.json",
+    "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382",
+    "snapshot_id": "i1-r4"
+  },
+  "phase": "i0c",
+  "revision": "r1",
+  "snapshot_id": "i0c-r1",
+  "task": "I0-C design review freeze (I0C-3) after U adjudication 2026-09-17"
+}

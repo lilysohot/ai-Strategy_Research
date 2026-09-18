@@ -1,0 +1,72 @@
+{
+  "binding": {
+    "apply": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_apply.py": "0812d15475ee1e53c6512dab60c46b7bda1681774c0ce707abbb04a4d0bce88b"
+    },
+    "ddl": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql": "4d587859b37da399b9c4e35515b22b5d6c4dbccb28cda50ea45d97cc79b0fb0f"
+    },
+    "design_review": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/design-review.json": "4bcbb39200899776a0c91b8b4e432a85794204b160f0d6ef5fef09ab759e6968"
+    },
+    "guard_i2": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i2-sandbox.json": "12d472a7d2cabcf347d3909ef8622d557541bbf59115330226843ee4166e1084"
+    },
+    "guard_report": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2-guard-report.json": "8e183dcbbfff9278b928fb2cedd38738e2d6cf02c62a482d0479849976f7344b"
+    },
+    "pg_protocol_probes": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260917-i0c-protocol/test_i0c_protocol_probes.py": "3ece4126a4417cc2db98f3bf181f91a45d69d00a0a0be75fb39876b5eb93f330"
+    },
+    "pg_tests": {
+      "tests/test_corpus_preparation_repository_pg.py": "656294d3412f40436befe5da0183d31727ebe1f049999c112877f1e6be2388bb"
+    },
+    "report_r2": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1-report-r2.json": "3b666fe6e7e2ecf8381ff2d0908074c45ae1fab7829efa02d59d8ff52356560a"
+    },
+    "repository_pg": {
+      "plugins/corpus/preparation/repository_pg.py": "94d9e350debc88831a0f2cb898e8000927be2d0f382c6d7f6b20730f5f5cec3f"
+    },
+    "teardown": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_teardown.py": "69993fb8bcbf3b587b6f6a98e904d0756a989f639f90d32caa23021b2eccf19c"
+    },
+    "verify": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_verify.py": "2d025461f87e61e1a627969943229c728d52765b3e9b67ec3fa8a967bef4ed71"
+    }
+  },
+  "corrections": {
+    "G6": "corpus_review_decisions.source_id 去 FK（审核终态先于新链接收存在），改索引 idx_review_decisions_source；EXPECTED_FKS 同步；沙箱库 teardown→re-apply 验证（i2s1-report-r2.json 26 项全 ok）"
+  },
+  "created_at": "2026-09-17T04:07:42+00:00",
+  "design_review_signed": {
+    "approved_by": "U（2026-09-17 会话：批准 r2 裁决清单，授权执行 I1 幂等协议修订与 I0C-3 冻结）",
+    "revision": "r2（含 i0c_r2_freeze 执行状态与 G6 修正登记）",
+    "sha256": "4bcbb39200899776a0c91b8b4e432a85794204b160f0d6ef5fef09ab759e6968",
+    "signed": true
+  },
+  "lineage_anchors": {
+    "m1_snapshot": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-logic-contract-frozen-v1-20260915.json",
+      "sha256": "71aa61affa8e84a4309187d5ed4d69e7b4dde27e3ed3d0156d603e3e77b5ca30"
+    },
+    "m2_evidence": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-restore-report.json",
+      "sha256": "6ead6fd30617e2787cf35763adf005fe1810ef97f1b8c93d8e6c939e6518e652"
+    }
+  },
+  "m5_declaration": "not_declared（I2 进行中：I2-1/I2-2 完成，I2-3/4/5/6/7/8 未完成）",
+  "notes": [
+    "I2-1 完成：i2_sandbox_corpus 建九表（i0c-r2 DDL，14 索引）+ 迁移/清理脚本三件套；i2s1-report-r2.json 26 项全 ok；负例 3 全拒（生产端口/teardown 无确认/apply 重入）。",
+    "I2-2 完成：repository_pg.py 实现 Store 全接口（每 attempt 行/fencing FOR UPDATE/DB 时间/发布幂等 v2/latest_admission 指针/G1 历史追加）+ 真库测试 15 passed（含 engine+PgStore 端到端发布冒烟）；普通/i1 env 模块级跳过且不导入 psycopg（sys.modules 零污染）。",
+    "沙箱库 i2_sandbox_corpus 保留供 I2-3（FTS）；生产库 I4 前零写入；R2-S4 预算仍未授权。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r1.json",
+    "sha256": "f775b9f8834ab657ad09233aa48c3f508ada9c4692bb5cc716126aa44cbaee70",
+    "snapshot_id": "i0c-r1"
+  },
+  "phase": "i0c",
+  "revision": "r2",
+  "snapshot_id": "i0c-r2",
+  "task": "I0-C freeze revision r2: G6 DDL correction + I2-1/I2-2 implementation"
+}

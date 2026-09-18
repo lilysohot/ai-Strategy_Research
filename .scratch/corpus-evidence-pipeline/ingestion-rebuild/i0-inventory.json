@@ -1,0 +1,167 @@
+{
+  "artifact": "i0-inventory.json",
+  "task": "I0A-1 PG 目标盘点",
+  "date": "2026-09-15",
+  "actor": "A（在线只读盘点；目标经用户核定，守卫单目标 allowlist 绑定）",
+  "guard_binding": {
+    "guard_report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0-guard-report.json",
+    "phase": "i0-inventory",
+    "network": "allowlist：仅 127.0.0.1:5432（用户核定原库）；CORPUS_DSN 保持投毒，盘点连接串经 CORPUS_INVENTORY_DSN 显式传入且须命中 allowed_targets",
+    "config_sha256": "51b28f22fc81e3e21683e9901b9d91c84720003743648f95225cae1bb34d099a",
+    "selfcheck": "12/12 通过（allowlist 配置下重跑）；tests/test_corpus_preparation_guard.py 10 passed"
+  },
+  "evidence": {
+    "findings_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json",
+    "findings_sha256": "97f057c80e3bcb934428f153226a4ed6492b65af836d6c2a861e1fb475a54758",
+    "observed_at": "2026-09-15T05:52:47+00:00",
+    "tool": "i0a1_inventory.py（psycopg dict_row；连接层 default_transaction_read_only=on；全部语句 SELECT，零 DDL/DML）"
+  },
+  "method_note": "用户核定原库为 pg 容器（pg18-zhvector，具名卷 pgdata，挂载 /var/lib/postgresql，映射 5432）并启动后，在守卫 allowlist 约束下完成在线只读盘点。此前『deny_all 仅本地配置』版清单被本轮在线盘点取代；unknown 项除明确标注外均已消解。",
+  "declared_pg_targets": [
+    {
+      "name": "corpus_primary_pg",
+      "container": "pg（8716f5d7bd4a，image pg18-zhvector:latest，volume pgdata -> /var/lib/postgresql）",
+      "host": "127.0.0.1",
+      "port": 5432,
+      "database": "postgres",
+      "user": "postgres",
+      "note": "凭据不落入本文件。同实例共库 apodex（见 shared_database）。",
+      "verified_live": true
+    }
+  ],
+  "live_listener_check": {
+    "method": "docker start pg + docker exec pg_isready + psycopg 实连（守卫放行）",
+    "observed_at": "2026-09-15T05:48:37+00:00 起服务",
+    "port_5432_listening": true,
+    "conclusion": "原库在线，PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2)，接受连接。"
+  },
+  "server_facts": {
+    "version": "18.6 (Debian 18.6-1.pgdg12+2)",
+    "data_directory": "/var/lib/postgresql/18/docker",
+    "config_file": "/var/lib/postgresql/18/docker/postgresql.conf",
+    "wal_level": "replica",
+    "max_connections": 100,
+    "fsync": "on",
+    "shared_preload_libraries": "（空——无 pg_cron 等后台任务设施）",
+    "roles": "仅 postgres 超级用户；无按职责分权（风险：所有消费者同权，I4 停写时无法按角色区分写入者）"
+  },
+  "documented_facts": [
+    {
+      "source": "docs/plan/pg-migration.md",
+      "fact": "2026-09-08 完成 SQLite(data/corpus/index.db)→PostgreSQL 18.6 迁移，当时迁入 17 份；全部 DB 访问收口 plugins/corpus/service.py"
+    },
+    {
+      "source": "data/corpus_full_backup_v2/manifest.json",
+      "fact": "2026-09-11 corpus-csv 备份快照：78 documents / 928 blocks / 0 claims（历史快照，非最终备份）"
+    },
+    {
+      "source": "在线盘点（evidence.findings_file）",
+      "fact": "当前库 documents=89（71 ok / 18 empty）、blocks=1101、claims=1318、claim_block_runs=290、corpus_evidence_runs=57、ingest_runs=11、ingest_failures=1、docs=3、chinese_docs=3；published 覆盖 2026-07-19 ~ 2026-09-11。库在迁移后持续增长，与 17 份迁移记录及 78 份快照均不一致——分母以在线盘点为准，差异溯源归 I0A-2"
+    }
+  ],
+  "objects": {
+    "schemas": ["public", "zhparser（扩展自有）"],
+    "tables": {
+      "public.documents": 89,
+      "public.blocks": 1101,
+      "public.claims": 1318,
+      "public.claims_v2": 0,
+      "public.claim_block_runs": 290,
+      "public.claim_block_runs_v2": 0,
+      "public.corpus_evidence_runs": 57,
+      "public.ingest_runs": 11,
+      "public.ingest_failures": 1,
+      "public.docs": 3,
+      "public.chinese_docs": 3,
+      "zhparser.zhprs_custom_word": 0,
+      "note": "documents/blocks 为服务层主表；claims* 为 D2 派生；docs/chinese_docs 疑似早期测试/遗留表（终态归 I0A-2/I0-C 裁决）"
+    },
+    "views": [],
+    "matviews": [],
+    "sequences": [
+      "public.chinese_docs_id_seq",
+      "public.claims_claim_id_seq",
+      "public.claims_v2_claim_id_seq",
+      "public.docs_id_seq",
+      "public.ingest_runs_run_id_seq"
+    ],
+    "indexes": 30,
+    "extensions": ["zhparser 2.4", "vector 0.8.6（留位未建列）", "pg_trgm 1.6（已启用未接入检索）", "plpgsql"],
+    "triggers": [],
+    "event_triggers": [],
+    "comments": "8 张应用表含 COMMENT（documents/blocks/claims/claims_v2/claim_block_runs/claim_block_runs_v2/ingest_runs/ingest_failures）"
+  },
+  "consumers": [
+    {
+      "path": "plugins/corpus/service.py",
+      "role": "唯一收口（get_service/CorpusService；ingest_path/ingest_dir 编排）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "plugins/tools/corpus_search.py",
+      "role": "读（检索工具）",
+      "evidence": "from plugins.corpus.service import get_service"
+    },
+    {
+      "path": "plugins/tools/corpus_fetch.py",
+      "role": "读（取证工具）",
+      "evidence": "同上（逐文件核实留待 I2-7/8 迁移矩阵复核）"
+    },
+    {
+      "path": "plugins/corpus/verify.py",
+      "role": "读（证据核验）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "plugins/corpus/golden.py",
+      "role": "读（旧 golden 评测）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "plugins/corpus/audit.py",
+      "role": "读写（审计）",
+      "evidence": "grep CorpusService + psycopg"
+    },
+    {
+      "path": "plugins/corpus/metadata.py",
+      "role": "读写（元数据补全）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "plugins/corpus/claims.py / claims_v2.py",
+      "role": "读写（claim 抽取）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "plugins/tools/data_coverage.py",
+      "role": "读（覆盖查询）",
+      "evidence": "grep CorpusService"
+    },
+    {
+      "path": "tests/test_corpus_*（13 个文件）",
+      "role": "测试读写",
+      "evidence": "grep CorpusService"
+    }
+  ],
+  "live_consumer_check": {
+    "method": "pg_stat_activity 快照（盘点时点）",
+    "result": "除盘点会话自身外无任何外部 client backend；全部为 PG 内部进程（io worker ×3、checkpointer、background writer、walwriter、autovacuum launcher、logical replication launcher）",
+    "caveat": "单点快照不证明历史无消费者；消费者完整性以代码侧清单 + I2-7/8 迁移矩阵复核为准"
+  },
+  "background_writers": "无：无 pg_cron（shared_preload_libraries 空、扩展未装）、无触发器/事件触发器、无复制槽/发布/订阅（wal_level=replica 仅默认值）；库内无定时写入任务",
+  "shared_database": {
+    "business_db": "apodex（同实例，9529 kB，owner postgres，datallowconn=true）",
+    "co_located": "已证实：同一 PG 实例同时承载语料库(postgres)与平台业务库(apodex)——I0-C 物理布局与 I4 清理必须按 database 精确限定，禁止实例级操作",
+    "risk": "架构 §10.1：不得按名称模糊匹配后 DROP CASCADE；reset 分支清理清单必须 schema+database 双重限定"
+  },
+  "holdout_note": "留出集尚未指定（I0A-2）；本轮在线盘点仅读系统目录与计数聚合，未读取任何正文内容",
+  "gaps_blocking": [
+    "隔离恢复目标与容量 → 阻断 I0B-1（候选 docker/corpus-db，空库、挂载路径待修复为 /var/lib/postgresql，需 U 核准 + 核定容量）",
+    "documents=89 在线分母 vs 盘点 73 个来源文件、78 份快照的差异溯源 → 阻断 I0A-2 来源终态登记（含 18 份 empty 文档处置）",
+    "旧人工审核导出的权威版本确认（候选：data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv 等 88 个文件）→ 阻断 I0A-2 终态登记",
+    "docs/chinese_docs 两张遗留表归属（语料派生 or 无关业务）→ 阻断 I0-C 清理清单",
+    "仅 postgres 超级用户单角色 → I4 停写窗口需要 U 提供按进程/客户端区分写入者的手段"
+  ],
+  "git_head": "8d4772ca8fb2e368d4a256554784c7384c8f24ea",
+  "status": "live_inventory_complete_pending_I0A-2_decisions"
+}

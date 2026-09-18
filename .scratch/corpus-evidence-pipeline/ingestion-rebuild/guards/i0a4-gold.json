@@ -1,0 +1,32 @@
+{
+  "config_version": 1,
+  "phase": "i0a4-gold-candidates",
+  "note": "I0A-4 候选金标包生成阶段：只读原 PDF（哈希与对照）+ 只读隔离验证库 i0b2_verify_postgres（corpus-db，127.0.0.1:543，I0B-2 恢复产物）+ 只读 .scratch 证据树（基线资产哈希）。零 DDL/DML、零模型、零子进程派生；连接串仅经显式环境变量 CORPUS_GOLD_DSN 传入且须命中 allowed_targets（543 隔离库，不含原库 5432）。输出仅写 .scratch/corpus-evidence-pipeline/ingestion-rebuild/ 下的候选包，write-once（open 'x' 独占创建）。data/ 受保护：禁止写入/删除/重命名。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 543,
+        "reason": "I0A-4 只读块锚点：corpus-db 隔离容器验证库 i0b2_verify_postgres（I0B-2 恢复产物，与原库隔离）"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": ["plugins.corpus._r2_"],
+    "poisoned_env": ["OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL"],
+    "poisoned_dsn": ["CORPUS_DSN", "CORPUS_INVENTORY_DSN"]
+  },
+  "sources": {
+    "read_roots": ["data/corpus", ".scratch/corpus-evidence-pipeline"],
+    "allowed_source_paths": ["data/corpus", ".scratch/corpus-evidence-pipeline"],
+    "forbidden_roots": [],
+    "protected_roots": ["data"]
+  }
+}

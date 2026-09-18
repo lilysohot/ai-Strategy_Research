@@ -1,0 +1,70 @@
+{
+ "artifact": "baseline-bindings.json",
+ "task": "I0A-4 旧基线与旧人工审核导出绑定（A 侧已核实部分 + 待补清单）",
+ "date": "2026-09-15",
+ "bindings": [
+  {
+   "category": "legacy_retrieval_golden",
+   "asset": "plugins/corpus/golden.py",
+   "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+   "metric_note": "旧 recall 为逐题通过口径（含 require_all），不转移为新索引标准集合召回（架构 §7.1/§12.3）",
+   "applicability": "适用旧检索题待 U 圈定范围后同口径重评",
+   "verified": true
+  },
+  {
+   "category": "old_doc_kind_review_export",
+   "asset": "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv",
+   "sha256": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+   "verified": true,
+   "note": "旧人工审核导出候选；权威版本待 U 确认（.audit 共 88 个 2026-09-12 工件）"
+  },
+  {
+   "category": "financial_controlled_recalc_57",
+   "asset": ".scratch/corpus-evidence-pipeline/prose-repair-report.md（L92：表格 57/57 字段维持通过）+ p0_baseline.py",
+   "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+   "status": "bound_to_cases_20260915",
+   "target": "57/57",
+   "note": "旧基线绑定到具体用例与运行入口，不再只绑报告数字；宏观 0/3 与失败题保留在基线范围",
+   "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.financial_controlled_recalc_57（预期资产 pilot_manifest.json+sha256 / 入口 verify_claims_entry.py+运行参数+副作用声明 / 机器记录）"
+  },
+  {
+   "category": "formula_7",
+   "asset": ".scratch/corpus-evidence-pipeline/prose-repair-report.md（L92：7/7 复算维持通过）+ p0_baseline.py",
+   "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+   "status": "bound_to_cases_20260915",
+   "target": "7/7",
+   "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.financial_controlled_recalc_57.formula_7（v3 起为 financial_controlled_recalc_57 子节点）",
+   "note": "旧基线绑定到具体用例与运行入口，不再只绑报告数字；宏观 0/3 与失败题保留在基线范围"
+  },
+  {
+   "category": "customer_table_12",
+   "asset": ".scratch/corpus-evidence-pipeline/semantic-repair-report.md（L15：贝特利客户表冻结单元格召回 0/12→12/12，行列/原值/单位精确匹配）",
+   "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+   "status": "bound_to_cases_20260915",
+   "target": "12/12",
+   "note": "旧基线绑定到具体用例与运行入口，不再只绑报告数字；宏观 0/3 与失败题保留在基线范围",
+   "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.customer_table_12（独立非回归入口待构建；verify_material_micro_gold.py 误引已撤销）"
+  },
+  {
+   "category": "prose_numbers_3",
+   "asset": ".scratch/corpus-evidence-pipeline/spec.md（L87 冻结阈值：正文数值 3/3）+ prose-repair-report.md（非农目标 0/2→4 次真实调用 2/2）",
+   "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+   "status": "bound_to_cases_20260915",
+   "target": "3/3",
+   "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.prose_numbers_3（复跑须另立预算授权）",
+   "note": "旧基线绑定到具体用例与运行入口，不再只绑报告数字；宏观 0/3 与失败题保留在基线范围"
+  },
+  {
+   "category": "macro_legacy_fields_0_of_3",
+   "asset": ".scratch/corpus-evidence-pipeline/spec.md（L87：宏观规范字段仍 0/3）",
+   "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+   "status": "bound_to_cases_20260915",
+   "target": "0/3 单列，不伪装为通过",
+   "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.macro_legacy_fields_0_of_3（失败基线保留，无通过入口）",
+   "note": "旧基线绑定到具体用例与运行入口，不再只绑报告数字；宏观 0/3 与失败题保留在基线范围"
+  }
+ ],
+ "discipline": "不得删掉仍在范围的旧失败题；新旧口径分别报告；此处绑定不是最终放行（任务清单 I3-5）；宏观 0/3 与全部失败题保留在基线范围",
+ "git_head": "8d4772ca8fb2e368d4a256554784c7384c8f24ea",
+ "superseded_note": "2026-09-15 U 评审后升级：绑定粒度从报告数字升级为用例级；明细见候选包 v3（baseline_bindings_v3；formula_7 为 financial_controlled_recalc_57 子节点，customer_table_12 入口待构建、误引已撤销）"
+}

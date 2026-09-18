@@ -1,0 +1,31 @@
+pg_restore: error: could not execute query: ERROR:  insert or update on table "audit_log" violates foreign key constraint "audit_log_user_id_fkey"
+DETAIL:  Key (user_id)=(7cdce09f-9e58-4e15-8904-a75e10b45a6b) is not present in table "users".
+Command was: ALTER TABLE ONLY public.audit_log
+    ADD CONSTRAINT audit_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+pg_restore: error: could not execute query: ERROR:  insert or update on table "runs" violates foreign key constraint "runs_session_id_fkey"
+DETAIL:  Key (session_id)=(4624c582-1a27-5bd8-b9ac-e704fc569bdf) is not present in table "sessions".
+Command was: ALTER TABLE ONLY public.runs
+    ADD CONSTRAINT runs_session_id_fkey FOREIGN KEY (session_id) REFERENCES public.sessions(id);
+
+
+pg_restore: error: could not execute query: ERROR:  insert or update on table "runs" violates foreign key constraint "runs_user_id_fkey"
+DETAIL:  Key (user_id)=(4c54897f-7129-4816-8e2a-ebce0d431ac2) is not present in table "users".
+Command was: ALTER TABLE ONLY public.runs
+    ADD CONSTRAINT runs_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+pg_restore: error: could not execute query: ERROR:  insert or update on table "sessions" violates foreign key constraint "sessions_user_id_fkey"
+DETAIL:  Key (user_id)=(4c54897f-7129-4816-8e2a-ebce0d431ac2) is not present in table "users".
+Command was: ALTER TABLE ONLY public.sessions
+    ADD CONSTRAINT sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+pg_restore: error: could not execute query: ERROR:  insert or update on table "turns" violates foreign key constraint "turns_run_id_fkey"
+DETAIL:  Key (run_id)=(96c54ee1-32d2-48fe-968a-bd1b78f863bf) is not present in table "runs".
+Command was: ALTER TABLE ONLY public.turns
+    ADD CONSTRAINT turns_run_id_fkey FOREIGN KEY (run_id) REFERENCES public.runs(id);
+
+
+pg_restore: warning: errors ignored on restore: 5

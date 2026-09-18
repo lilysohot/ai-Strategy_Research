@@ -1,0 +1,741 @@
+{
+ "artifact": "i0a2-review-brief.json",
+ "task": "I0A-2 来源与开发分母：待 U 签批复核清单（建议，不构成批准）",
+ "generated_at": "2026-09-15T08:06:07+00:00",
+ "method": "磁盘 rglob 清单 × PG documents 只读清单 × 2026-09-11 快照 CSV 三方对账；机器建议仅梳理，终态待 U",
+ "inputs": {
+  "dev-manifest.json": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+  "i0a2-doclist-findings.json": "f6f118f527b1d4c3dcbb4be5fc8d3a13490ce5ea7ba0ca29ad1f014491895376",
+  "documents_csv_snapshot": "b7c48a2dbcc5e8b390e28966f0a6c92840bd00ce9bd6c42f375ad95bd970cf98",
+  "c1_full84_doc_kind_review": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+  "c1_full87_doc_kind_review": "1e19274474fea3db874b4997fa83e363a4f198548764dea7925c1ccbd008dab2",
+  "expanded_holdout_manifest_hash": "008474d37099b5d2716ca2b73366f4b3a9e14f5eb9be73ebc3cea66676b0bfd3"
+ },
+ "reconciliation": {
+  "counts": {
+   "db_documents": 89,
+   "snapshot_2026_09_11": 78,
+   "disk_source_like_files": 73
+  },
+  "closed_math": [
+   "78→89：快照（09-11 导出）后新入库 11 条（4 PDF + 2 内部 md/docx + 卫星化学/工业富联 + 3 投委会反斜杠路径重复）；快照后从库消失 0 条",
+   "89→73：DB 89 条记录 = 68 条对应磁盘现存文件 + 21 条源文件已删（4 ok 脱水/评级/调研 PDF + 17 empty 财联社系）；磁盘 73 = 68 已入库 + 5 从未入库（4 流水线 md + README）",
+   "3 份投委会 md 各入库 2 次（反斜杠+正斜杠路径，content_hash 不同）：DB 记录层 +3 重复",
+   "empty=18：17 源文件已删 + 1 高盛茅台 PDF 在盘（解析产出 0 块，可重解析）",
+   "ingested_at 集合 09-08~09-14，与快照时点差自洽"
+  ],
+  "db_only_after_snapshot": [
+   "2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+   "2026-09-10_James-Bulltard_91026 盘面回顾.pdf",
+   "2026-09-11_Capital-Wars_债券国债QE与3-3-3-30政策框架.pdf",
+   "2026-09-11_James-Bulltard_91126 复盘.pdf",
+   "5月：锂电铜箔和电子铜箔.md",
+   "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+   "卫星化学_投委会决策报告_20260830.md",
+   "工业富联_投委会决策报告_20260829.md",
+   "data\\corpus\\天孚通信_投委会决策报告_20260830.md",
+   "data\\corpus\\源杰科技_投委会决策报告_20260831.md",
+   "data\\corpus\\生益科技_投委会决策报告_20260828.md"
+  ],
+  "ghost_paths_deleted_source": {
+   "ok_status": [
+    "0908脱水研报.pdf",
+    "0719脱水研报.pdf",
+    "0908调研日报.pdf",
+    "0908评级日报.pdf"
+   ],
+   "empty_status": [
+    "【风口研报·行业】算力持续拉动该行业需求，当前行业产能接近.pdf",
+    "【狙击龙虎榜】短线情绪提前释放风险 农业全链高潮 科技股静.pdf",
+    "【机构龙虎榜解读】高端PCB+光模块+存储，PCB产品已批量应用.pdf",
+    "【机构调研】这家激光设备制造商绝大部分在手订单预计将在.pdf",
+    "【公告全知道】PCB+交换机+华为+汽车电子+毫米波雷达.pdf",
+    "【电报解读】津巴布韦暂停锑出口以推动本土加工，快速整理锑.pdf",
+    "【风口研报·洞察】Anthropic有望继续扩大AI生命科学业务板图.pdf",
+    "【电报解读】人民币跨境支付系统专区首次落地，机构称伴随人民.pdf",
+    "【财联社早知道】DeepSeek新模型限时内测！机构称随着大模型迭代.pdf",
+    "【九点特供】高通与亚马逊达成协议，共同建设人工智能数据中心.pdf",
+    "【研选•研报数据】内需外贸双轮驱动，分析师看好军工行业开启中.pdf",
+    "【狙击龙虎榜午盘】指数分化情绪降温题材快速轮动 行情进入短.pdf",
+    "【大佬持仓跟踪】CPO设备+苹果，细分光芯片设备国内市占.pdf",
+    "【风口研报·公司】AI算力带动光模块测试设备量价齐升，这家公司.pdf",
+    "【点金互动易】CPO+6G，受益于光模块速率升级，这家公司为全.pdf",
+    "【风口研报·公司】公司深耕机器人触觉感知核心部件，订单规模已.pdf",
+    "【电报解读】中国光博会明日开幕！Coherent将携CPO、XPO等多.pdf"
+   ],
+   "backslash_duplicates": [
+    "天孚通信_投委会决策报告_20260830.md",
+    "源杰科技_投委会决策报告_20260831.md",
+    "生益科技_投委会决策报告_20260828.md"
+   ]
+  },
+  "never_ingested": [
+   "c1_labeling_flow_20260912.md",
+   "c1_smoke30_next_actions_20260912.md",
+   "c2_full180_block_validation_20260912.md",
+   "c3c4_field_gold_instructions_20260912.md",
+   "README.md"
+  ],
+  "empty_on_disk_reparse_candidate": [
+   "高盛：GS 贵州茅台：市场化方案五— 2026 年 7 月飞天茅台出厂价与建议零售价意外开启第二轮上调；买入.pdf"
+  ],
+  "zone_identifier_remnants": "37 个 Windows ADS 残留（*​:Zone.Identifier），rglob 观察到但未计入 73；建议列入 I0-C 清理清单"
+ },
+ "batch_decisions": [
+  {
+   "batch_id": "A",
+   "title": "流水线工作文件排除（5 份，非研报工作文件）",
+   "recommendation": "excluded / material_type=pipeline_artifact",
+   "basis": "任务清单 I0A-2 与架构 §1：流水线产物不是语料来源；其中 c3c4_field_gold_instructions 机器误标 broker_research，实为金标标注指引",
+   "items": [
+    {
+     "path": "data/corpus/.audit/c1_labeling_flow_20260912.md",
+     "source_id": "ca2556e193e6",
+     "note": "流水线工作笔记/README，非语料来源候选"
+    },
+    {
+     "path": "data/corpus/.audit/c1_smoke30_next_actions_20260912.md",
+     "source_id": "34a76c1deb02",
+     "note": "流水线工作笔记/README，非语料来源候选"
+    },
+    {
+     "path": "data/corpus/.audit/c2_full180_block_validation_20260912.md",
+     "source_id": "28a59259acf7",
+     "note": "流水线工作笔记/README，非语料来源候选"
+    },
+    {
+     "path": "data/corpus/README.md",
+     "source_id": "f2c5c2d59a62",
+     "note": "流水线工作笔记/README，非语料来源候选"
+    },
+    {
+     "path": "data/corpus/.audit/c3c4_field_gold_instructions_20260912.md",
+     "source_id": "30873d3c0544",
+     "note": "疑似券商研报，领域待人工判定"
+    }
+   ]
+  },
+  {
+   "batch_id": "B",
+   "title": "个人/外部订阅材料（19 份）",
+   "recommendation": "excluded_from_active / material_type=personal_or_external_subscription，保留原文与历史登记（架构 §1：个人记录等主线外材料保留原文与历史）",
+   "items": [
+    {
+     "path": "data/corpus/2026-08-31_James-Bulltard_83126 复盘.pdf",
+     "source_id": "53c7e300c13f"
+    },
+    {
+     "path": "data/corpus/2026-09-01_Capital-Wars_全球流动性观察每周更新.pdf",
+     "source_id": "1902c8d5abc4"
+    },
+    {
+     "path": "data/corpus/2026-09-01_James-Bulltard_9126 复盘.pdf",
+     "source_id": "605fcb808dd7"
+    },
+    {
+     "path": "data/corpus/2026-09-02_James-Bulltard_9226 市场回顾.pdf",
+     "source_id": "f273e2cabd00"
+    },
+    {
+     "path": "data/corpus/2026-09-03_Capital-Wars_全球流动性观察每周更新.pdf",
+     "source_id": "b88ab93632b6"
+    },
+    {
+     "path": "data/corpus/2026-09-03_James-Bulltard_9326 复盘.pdf",
+     "source_id": "810ef870625e"
+    },
+    {
+     "path": "data/corpus/2026-09-04 市场研判：油价突破与战争溢价下的新信号.md",
+     "source_id": "074b74715325"
+    },
+    {
+     "path": "data/corpus/2026-09-04_Simons-Substack_黄金的多头与空头逻辑.pdf",
+     "source_id": "ce9cac5359ae"
+    },
+    {
+     "path": "data/corpus/2026-09-05_Capital-Wars_不可能之事.pdf",
+     "source_id": "23c670ebdbcc"
+    },
+    {
+     "path": "data/corpus/2026-09-06_Capital-Wars_比特币的流动性悖论.pdf",
+     "source_id": "de159874c509"
+    },
+    {
+     "path": "data/corpus/2026-09-06_Macro-Charts_系好安全带.pdf",
+     "source_id": "06f7570585a5"
+    },
+    {
+     "path": "data/corpus/2026-09-07_Simons-Substack_白银矿股关注图表四.pdf",
+     "source_id": "5c5fce9234ea"
+    },
+    {
+     "path": "data/corpus/2026-09-08_Capital-Wars_全球流动性观察周度更新.pdf",
+     "source_id": "77b352bf163b"
+    },
+    {
+     "path": "data/corpus/2026-09-08_James-Bulltard_9826 复盘.pdf",
+     "source_id": "bc0309f302d5"
+    },
+    {
+     "path": "data/corpus/2026-09-09_James-Bulltard_1066 天实现 1000 收益率.pdf",
+     "source_id": "4d31e068e89a"
+    },
+    {
+     "path": "data/corpus/2026-09-10_James-Bulltard_91026 盘面回顾.pdf",
+     "source_id": "c46618abe9fc"
+    },
+    {
+     "path": "data/corpus/2026-09-11_Capital-Wars_债券国债QE与3-3-3-30政策框架.pdf",
+     "source_id": "fe046c1937fa"
+    },
+    {
+     "path": "data/corpus/2026-09-11_James-Bulltard_91126 复盘.pdf",
+     "source_id": "f8e1d627b113"
+    },
+    {
+     "path": "data/corpus/油价突破与战争溢价_小红书文案.docx",
+     "source_id": "46ddcd027feb"
+    }
+   ]
+  },
+  {
+   "batch_id": "C",
+   "title": "内部投委会决策报告（6 份，3 公司各双份入库）",
+   "recommendation": "excluded_from_active / material_type=internal_committee_report（主线外）；其 DB 重复记录（反斜杠+正斜杠各 1）列入 I0-C 清理建议，本清单不授权任何删除",
+   "items": [
+    {
+     "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+     "source_id": "d319aca1e554"
+    },
+    {
+     "path": "data/corpus/卫星化学_投委会决策报告_20260830.md",
+     "source_id": "c8f2c01c1017"
+    },
+    {
+     "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+     "source_id": "2a3e43875060"
+    },
+    {
+     "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+     "source_id": "f8fa22084535"
+    },
+    {
+     "path": "data/corpus/源杰科技_投委会决策报告_20260831.md",
+     "source_id": "4aef3d9e18d7"
+    },
+    {
+     "path": "data/corpus/生益科技_投委会决策报告_20260828.md",
+     "source_id": "fe057e6c0317"
+    }
+   ]
+  },
+  {
+   "batch_id": "D",
+   "title": "无署名/归属不明内部材料（2 份，待复核）",
+   "recommendation": "pending_review——机器分类冲突或无机构署名，需 U 判定材料类型；不猜测消解",
+   "items": [
+    {
+     "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+     "source_id": "48c05895798b",
+     "machine": "internal_or_unsigned_analysis",
+     "note": "docx 无署名内部技术分析"
+    },
+    {
+     "path": "data/corpus/5月：锂电铜箔和电子铜箔.md",
+     "source_id": "80b5a290df3d",
+     "machine": "broker_research（疑似误标）",
+     "note": "md 无机构/作者署名，DB 已入库 status=ok"
+    }
+   ]
+  }
+ ],
+ "per_item_broker_scope": {
+  "title": "券商研报 41 份逐条 scope 终态（company/industry/macro）",
+  "recommendation": "admitted / material_type=research_report，scope 按 suggested_scope 或 U 改判；低置信 9 条待 I0A-3 表达式对齐",
+  "items": [
+   {
+    "path": "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+    "source_id": "f0e67b732b3f",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-08-12_f0e67b73",
+    "is_holdout_frozen": true,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+    "source_id": "174b64628f35",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-08-13_174b6462",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-08-16_2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性-b4d3b59b.pdf",
+    "source_id": "7d3ca3b90dea",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-08-16_7d3ca3b9",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "source_id": "6f14cc145b79",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-08-16_6f14cc14",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+    "source_id": "c195233b4064",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-08-17_c195233b",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-05_2026.09.05-中信建投-行业数据周报9月第1期-市场普遍下跌-机构低配板块表现居前-a6a30359.pdf",
+    "source_id": "b7e932c80e88",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-05_b7e932c8",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-策略周报-外部加息扰动未消-短期以守为攻-880f5e5e.pdf",
+    "source_id": "d179b615e82e",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_d179b615",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+    "source_id": "bd0a65b7c6fe",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_bd0a65b7",
+    "is_holdout_frozen": true,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+    "source_id": "793b39673d31",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_793b3967",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-光大证券-金属行业周期品高频数据周报-焦煤期货收盘价周内下跌3-64-46877bac.pdf",
+    "source_id": "c1ddcd8aecb8",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_c1ddcd8a",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-兴业证券-数据面面观-9月议息会议前的关键周-3e7710e1.pdf",
+    "source_id": "c27ec5c878b9",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_c27ec5c8",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-兴业证券-极致轮动如何收敛-探讨几个契机-733fc399.pdf",
+    "source_id": "f3b28791e135",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_f3b28791",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+    "source_id": "cc03f55bc5a2",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_cc03f55b",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+    "source_id": "5e30537691c8",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_5e305376",
+    "is_holdout_frozen": true,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+    "source_id": "5525b38480a6",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_5525b384",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-周观点-美联储加息扩表可能性或已浮现-看好供给约束型周期品-da9260aa.pdf",
+    "source_id": "d01c64bf3447",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_d01c64bf",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+    "source_id": "f8e316969b7c",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_f8e31696",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+    "source_id": "dddc7cd0cb74",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_dddc7cd0",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": true
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国投证券-独立行情周报-地产与文旅中报尾部冲击主导走阔-68495486.pdf",
+    "source_id": "f25439aa0c79",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_f25439aa",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国投证券-策略定期报告-有转机-在何时-5e03dd1c.pdf",
+    "source_id": "695a208dadaf",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_695a208d",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-传媒行业双周报-后西游记-上线-ai视频渗透至长剧市场-0e8cb919.pdf",
+    "source_id": "5afe0912761c",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_5afe0912",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+    "source_id": "11ea15acc1b8",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_11ea15ac",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+    "source_id": "0c25f0e96b15",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_0c25f0e9",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国联民生证券-医药行业周报-cxo中报我们看到了什么-c1e12af2.pdf",
+    "source_id": "f86c6d2c054a",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_f86c6d2c",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国联民生证券-宏观周度观察-中国汽车出海的欧洲考验-cac4f407.pdf",
+    "source_id": "d0668d5a77f9",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_d0668d5a",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国联民生证券-通信行业周报-2026-cioe中国光博会前瞻-a87d1d3c.pdf",
+    "source_id": "8158cbb9b395",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_8158cbb9",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-ai行业周观察-7月手机市场大幅下滑-多家旗舰模型更新-b4a107f6.pdf",
+    "source_id": "9b1349de5c88",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_9b1349de",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-a股策略周报-迷雾与罗盘-fb9b3c67.pdf",
+    "source_id": "2f8aa7095818",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_2f8aa709",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf",
+    "source_id": "987d9f69f962",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_987d9f69",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+    "source_id": "1e141ab0b5e4",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_1e141ab0",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-有色金属行业小金属双周谈-钽价有望启动上行-关注锑价止跌回升-0af30fd5.pdf",
+    "source_id": "428e72227421",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_428e7222",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+    "source_id": "3f634514a0c1",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_3f634514",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf",
+    "source_id": "00f08e66e99a",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_00f08e66",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-国金证券-通信行业研究-hbm市场极度紧缺-字节获296亿美元银团贷款-7ee005e2.pdf",
+    "source_id": "a91d95c71fd0",
+    "suggested_scope": "industry",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_a91d95c7",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-天风证券-a股策略周报-非农大超预期-加息预期升温-5e671b67.pdf",
+    "source_id": "f7f65d7ee16d",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_f7f65d7e",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf",
+    "source_id": "d441478b684f",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-06_d441478b",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-06_2026.09.06-平安证券-a股策略周报-轮动整固-攻守均衡-76e079c9.pdf",
+    "source_id": "4f6854a46a50",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-06_4f6854a4",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-07_2026.09.07-东吴证券-策略周评-gpt-6-astra发布-前沿模型能力继续提升-dbfd9238.pdf",
+    "source_id": "acbf026ca117",
+    "suggested_scope": "macro",
+    "confidence": "low",
+    "note": "策略类归属（宏观 vs 行业）待 I0A-3 口径对齐",
+    "db_doc_id": "2026-09-07_acbf026c",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+    "source_id": "1e021a8c56f7",
+    "suggested_scope": "macro",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-07_1e021a8c",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/2026-09-08_FundaAI_Deep台达电子2H26 重新加速在即VPD 仍被忽视.pdf",
+    "source_id": "1ccf5074e6ee",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "2026-09-08_1ccf5074",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   },
+   {
+    "path": "data/corpus/高盛：GS 贵州茅台：市场化方案五— 2026 年 7 月飞天茅台出厂价与建议零售价意外开启第二轮上调；买入.pdf",
+    "source_id": "3738c927c6fb",
+    "suggested_scope": "company",
+    "confidence": "medium",
+    "note": "",
+    "db_doc_id": "undated_3738c927",
+    "is_holdout_frozen": false,
+    "is_dev_candidate": false
+   }
+  ],
+  "low_confidence_count": 9
+ },
+ "inheritance_and_holdout": {
+  "doc_kind_review_20260912": "c1_full84/87 两份 CSV 共 80 条 doc_kind 校正建议（industry→company 14、→macro 3），review_decision 全部为空——旧人工审核未出终态，仅作建议继承，不构成 I0A-2 裁决",
+  "gold_candidates": "c1_full87_gold_candidates_merged_smoke30（块级 claims 金标候选）与 r1/r2 material gold 契约冻结文件归属 I0A-4 金标线，不在本清单裁决",
+  "holdout_frozen": {
+   "rule": "历史留出身份必须继承：以下 3 份曾冻结为扩大留出（manifest_hash 008474d3…），不得登记为开发材料",
+   "items": [
+    {
+     "file": "…贝特利-2594e01d.pdf",
+     "page": 4,
+     "source_rev": "f0e67b732b3f6d7b",
+     "target": "客户销售额与收入占比 12 单元格"
+    },
+    {
+     "file": "…华泰宏观海外周报-d571f138.pdf",
+     "page": 1,
+     "source_rev": "5e30537691c88e4e",
+     "target": "非农 actual 16.2 / consensus 5.6"
+    },
+    {
+     "file": "…中银高频数据扫描-65b4b040.pdf",
+     "page": 1,
+     "source_rev": "bd0a65b7c6fe481d",
+     "target": "非农就业人数同比增长 0.38%"
+    }
+   ],
+   "dev_candidate_conflict": "无——3 份留出均不在 manifest 开发材料候选中"
+  }
+ },
+ "db_record_decisions": [
+  {
+   "id": "R1",
+   "title": "17 条 empty 财联社系（源文件已删）",
+   "recommendation": "保留 DB 记录为历史（不进入新分母）；源文件无法重新登记——登记分母以磁盘现存文件为准；如需找回源文件由 U 提供路径"
+  },
+  {
+   "id": "R2",
+   "title": "4 条 ok 脱水/评级/调研 PDF（源文件已删，聚合类）",
+   "recommendation": "同 R1：保留历史；聚合类材料类型归属待 U 定（research_report_aggregate 或 excluded）"
+  },
+  {
+   "id": "R3",
+   "title": "1 条 empty 在盘（高盛茅台 PDF，解析 0 块）",
+   "recommendation": "登记后重解析验证（I1 链路验证样本候选，非 I0 写操作）"
+  },
+  {
+   "id": "R4",
+   "title": "3 对投委会重复 DB 记录（content_hash 不同）",
+   "recommendation": "I0-C 清理清单建议项；本阶段不授权删除"
+  },
+  {
+   "id": "R5",
+   "title": "37 个 Zone.Identifier ADS 残留",
+   "recommendation": "I0-C 清理清单建议项；不影响 73 计数"
+  }
+ ],
+ "denominator_preview": {
+  "note": "按上述建议全部通过时的分母预览；任一批次被 U 改判则重算",
+  "disk_files": 73,
+  "excluded_pipeline": 5,
+  "excluded_from_active": 25,
+  "pending_review": 2,
+  "broker_scope_items": 41,
+  "holdout_protected": 3,
+  "dev_candidates_confirmed": [
+   "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0",
+   "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-",
+   "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc",
+   "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81",
+   "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅",
+   "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-"
+  ]
+ }
+}

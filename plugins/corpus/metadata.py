@@ -8,7 +8,7 @@
 | ``subject`` | company → 文档级标的；industry/macro → NULL | 3/78 | claim 坐标兜底 |
 | ``org`` | 标题 ``日期-机构-…`` 第二段 | 38/78（19 家） | **D4 一机构一票**的 join 键 |
 | ``analysts`` | 首块 ``分析师：X`` | 20/78 | 可选溯源字段 |
-| ``published`` | ingest 已填（doc_id 前缀）；undated 回退首块日期 | 54 → 59/78 | 时效排序、as_of 偏置 |
+| ``published`` | 标题日期 → 首块正文日期（**doc_id 前缀派生已废弃**，见下） | 54 → 59/78 | 时效排序、as_of 偏置 |
 
 **设计上已删除**（§3.5）：版本（研报只有发布日期）、来源系统（语料就是文件系统）、
 校验状态（``claim_block_runs.status`` 已承担）。
@@ -19,8 +19,13 @@
 - ``undated_*`` 文档的首块日期实测仅 5 份可解析，与 §3.5 "59/78 可解析" 吻合。
 
 非空即覆盖 vs 只回填：``doc_kind`` / ``subject`` / ``org`` / ``analysts`` 以派生为
-唯一权威（不存在手工编辑路径），**非空即覆盖**保证幂等；``published`` 里 ingest
-已写入的值是 doc_id 事实，**只回填 NULL** 不覆盖。
+唯一权威（不存在手工编辑路径），**非空即覆盖**保证幂等；``published`` 里已写入的
+值是原文事实，**只回填 NULL** 不覆盖。
+
+**发布日期唯一落点**（design-review 裁决，I2-7）：新链日期落
+``metadata_snapshot.report_publication``（§4.3，按原文依据/人工审核重建，
+``preparation.publication.probe_report_publication``）；doc_id 前缀派生语义废弃，
+本模块 ``derive_published`` 只认原文显式日期。
 """
 
 from __future__ import annotations
@@ -42,11 +47,8 @@ ALTER TABLE documents ADD COLUMN IF NOT EXISTS analysts  text[];
 #: 标题 ``2026.08.17-国信证券-…``：日期前缀 + 机构段（org 的唯一来源）
 _TITLE_ORG_RE = re.compile(r"^(20\d{2})\.(\d{2})\.(\d{2})-([^-]+)-")
 
-#: doc_id ``2026-08-17_c195233b`` 的日期前缀（ingest 现行口径）
-_DOC_ID_DATE_RE = re.compile(r"^(20\d{2})-(\d{2})-(\d{2})")
-
 #: 正文日期 ``2026/09/08`` / ``2026-09-08`` / ``2026年09月08`` / ``2026年08月31``
-_TEXT_DATE_RE = re.compile(r"(20\d{2})[/.年](\d{1,2})[/.月](\d{1,2})")
+_TEXT_DATE_RE = re.compile(r"(20\d{2})[/.年-](\d{1,2})[/.月-](\d{1,2})")
 
 #: 首块 ``分析师：张向伟（执业S1130525060002）`` / ``分析师：李浩(S0210524050003)``
 #: 只取姓名段——执业编号、多人顿号列表在语料中未出现，不做超前泛化
@@ -76,11 +78,12 @@ def derive_analysts(first_block: str | None) -> list[str]:
     return [m.group(1)] if m else []
 
 
-def derive_published(doc_id: str, title: str, first_block: str | None) -> date | None:
-    """发布日期：doc_id 前缀 → 标题日期 → 首块正文日期，逐级回退。实测 59/78。"""
-    m = _DOC_ID_DATE_RE.match(doc_id or "")
-    if m and (d := _as_date(*m.groups())):
-        return d
+def derive_published(title: str, first_block: str | None) -> date | None:
+    """发布日期：标题日期 → 首块正文日期，逐级回退。只认原文显式日期。
+
+    doc_id 前缀派生已废弃（§4.3/design-review：句柄不是原文依据，新链日期唯一
+    落点为 ``metadata_snapshot.report_publication``）。
+    """
     m = _TITLE_ORG_RE.match(title or "")
     if m and (d := _as_date(m.group(1), m.group(2), m.group(3))):
         return d
@@ -93,7 +96,6 @@ def derive_published(doc_id: str, title: str, first_block: str | None) -> date |
 
 
 def derive_metadata(
-    doc_id: str,
     title: str,
     texts: list[str],
     doc_kind_override: str | None = None,
@@ -112,5 +114,5 @@ def derive_metadata(
         "subject": subject,
         "org": derive_org(title),
         "analysts": derive_analysts(texts[0] if texts else None),
-        "published": derive_published(doc_id, title, texts[0] if texts else None),
+        "published": derive_published(title, texts[0] if texts else None),
     }

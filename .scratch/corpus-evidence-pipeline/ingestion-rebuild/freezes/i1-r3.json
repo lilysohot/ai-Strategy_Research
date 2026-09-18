@@ -1,0 +1,84 @@
+{
+  "binding": {
+    "configs": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4"
+    },
+    "current_audit_probes": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-full-review/test_chain_contracts.py": "e883133e24d68164c6c3f35214694af35703b1d558bfeac4e276845e87c1ad3e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-remediation-retest/test_remaining_contracts.py": "5dc50b3f0efe85e6eb9d9ad00558119c45298f11f12c38cadca0b44a14a4beaa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1-retest/test_remaining_boundaries.py": "bbfde1bd2b3644703729eccdf1430cd03a0da1eb59a08674c3ae3fb9171a1f21",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-i1/test_acceptance_probes.py": "4a7bc08df866d78f99235a6473599cc073094bfc7e0cdb53d49c622cfe990d82"
+    },
+    "fixtures": {
+      "tests/fixtures/corpus_preparation/synthetic-company-report.docx": "6f1b9b572b2c2d73843d06c920b8bdca8bdb460dadfffce7cb4c715cf4411a2d",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.md": "2e851f2a15987891b9b3d88f90b5c8cf0fb775405ff2bb3625bbacf5f3eae3be",
+      "tests/fixtures/corpus_preparation/synthetic-company-report.pdf": "1732fe9f23d0c0fee6ddb270f85a1084d4c8801bf8bd4c85b9177365dd6d7483"
+    },
+    "implementation": {
+      "plugins/corpus/preparation/__init__.py": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+      "plugins/corpus/preparation/admission.py": "3521f495ab3533f8dcb63177d83b0dfc68a724b728ac6107dabac4beffb372b4",
+      "plugins/corpus/preparation/chunk.py": "448b961b82b6b6c0e09bd2d664a4f4efe6a96fb641aca4f2ad564daa15634f25",
+      "plugins/corpus/preparation/clean.py": "856d37385f54d4dcca8bd65a3e1600ea9ea00fe08df9e8a3c679d17e766a53c4",
+      "plugins/corpus/preparation/contract.py": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      "plugins/corpus/preparation/engine.py": "d07d7dfb381c9c4f763ed528d00aaea0571f3c1008d067f9e446c13ec6b27fb2",
+      "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+      "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+      "plugins/corpus/preparation/readers/__init__.py": "9576b25705a1ad0bfbbf61261f088b9d13655b6ff534a9d4354008220484d5f4",
+      "plugins/corpus/preparation/readers/base.py": "24a49564a95543e3d69434e659504d7f236cc108e1be2d55ba0b3e7e4b8f4d87",
+      "plugins/corpus/preparation/readers/docx_reader.py": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+      "plugins/corpus/preparation/readers/md_reader.py": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "e36f08ab3a064b2ac57cc4720effc5da8c405179d964887006be85e56d2d1b9d",
+      "plugins/corpus/preparation/repository.py": "04a3cf9ea7a04d04939f35794e9614f6496de52f2ace3bf122ce74f81189b3a2",
+      "plugins/corpus/preparation/source.py": "20cd01ed16d38e5f88b158a4a42bd4b7491527ac60e5b59831d4d5bacb939f30"
+    },
+    "tests": {
+      "tests/test_corpus_preparation_admission.py": "38739f3985bb819b4163d488891adb01ed1056760ea19ec2969e5d5919e42157",
+      "tests/test_corpus_preparation_chunk.py": "aac5bc6d8a66093998151481a6cbf5d764295c9fc98d1fd5cac787de37d14ff5",
+      "tests/test_corpus_preparation_clean.py": "3b0a25173e93806863b652349cc1a54805f241cd92307a4b6de90f26590f009a",
+      "tests/test_corpus_preparation_contract.py": "8fa028a66f96dd91744ba7f812ed953bf29fc2e0a989c79be6ee4573eccadeaa",
+      "tests/test_corpus_preparation_counterexamples.py": "2354e9c7ba1712a3567a346c4d14de538271eed89057bcadb8c71341b4cf1b9b",
+      "tests/test_corpus_preparation_engine.py": "cab31be55dd40bbd2aadb3282be517dbe941678d6d827dd9860d2cbf7a3d53df",
+      "tests/test_corpus_preparation_fixtures.py": "3e43a5a5c984c7879e17017e2ca73c85a298d3365c7c6c3d93161dbdf17228cb",
+      "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616",
+      "tests/test_corpus_preparation_readers.py": "1e81bd1c8da7d4c41b8fcddc3aff1fdca5d97cd2f947410c42ba09632fa871f4",
+      "tests/test_corpus_preparation_release_gate.py": "e99a019281a33cf69844393e4a35d90eac1146b70456570f607195f28692a463",
+      "tests/test_corpus_preparation_remediation.py": "4e347bbfaee6137fc5a9f01acaefaaf986047af94ddef770519262f9c233fee2",
+      "tests/test_corpus_preparation_source.py": "2eb3525173abdc3d005bfc42fc91f56834880c21dfb24feaac1cb37eacb413b2"
+    }
+  },
+  "created_at": "2026-09-16T17:30:00+00:00",
+  "m4_declaration": "not_declared_pending_independent_review（本轮只收口 I1 边界与冻结链；不宣称 M4/I2 已通过）",
+  "notes": [
+    "i1-r1 已由审计目录中经 freeze-manifest 原哈希核验的副本精确恢复（d474…）；历史文件未再追加字段。",
+    "i1-r2 的字节和索引条目保持不改，但其 parent_snapshot 指向曾被原地补丁的 r1 状态，故仅作为历史审计记录，不作为本候选父快照。",
+    "本 r3 直接绑定已恢复的 i1-r1，并包含 R1—R5 的当前实现和永久回归；固定 r1 的历史完整性断言不被当作 r3 的运行验收。",
+    "范围、检查点、生命周期和归档改动已提升 clean/parse 行为版本；真实 PG 并发、M3/I0-C 和 M4 独立放行仍未完成。"
+  ],
+  "parent_snapshot": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r1.json",
+    "sha256": "d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957",
+    "snapshot_id": "i1-r1"
+  },
+  "phase": "i1",
+  "revision": "r3",
+  "snapshot_id": "i1-r3",
+  "task": "I1 remediation candidate after immutable-freeze repair",
+  "verification_matrix": {
+    "current_boundary_retest": {
+      "result": "9 passed",
+      "scope": "20260916-i1-remediation-retest/test_remaining_contracts.py"
+    },
+    "current_targeted_regression": {
+      "result": "52 passed",
+      "scope": "remaining contracts + engine + release gate + source"
+    },
+    "preparation_regression": {
+      "result": "205 passed",
+      "scope": "twelve test_corpus_preparation modules, run in two bounded groups"
+    },
+    "pyright": {"result": "0 errors, 0 warnings"},
+    "ruff": {"result": "All checks passed"}
+  }
+}

@@ -10,7 +10,8 @@ subject 只给 company 的纪律、refresh_metadata 的幂等与 published 只�
 
 from __future__ import annotations
 
-from datetime import date
+import os
+from datetime import UTC, date, datetime
 
 import psycopg
 import pytest
@@ -53,6 +54,35 @@ def meta_dsn():
     finally:
         with psycopg.connect(admin, autocommit=True) as conn:
             conn.execute(f'DROP SCHEMA IF EXISTS "{SCRATCH_SCHEMA}" CASCADE')
+
+
+I2_SANDBOX_DB = "i2_sandbox_corpus"
+_I2_TABLES = (
+    "corpus_source_checkpoints",
+    "corpus_jobs",
+    "corpus_publications",
+    "corpus_chunks",
+    "corpus_units",
+    "corpus_builds",
+    "corpus_admissions",
+    "corpus_review_decisions",
+    "corpus_sources",
+)
+
+
+@pytest.fixture()
+def i2_dsn():
+    """I2 演练环境守卫：``CORPUS_I2_DSN`` 指向隔离库才运行；用例前清 corpus 表。"""
+    sandbox_dsn = os.environ.get("CORPUS_I2_DSN", "")
+    if not sandbox_dsn:
+        pytest.skip("CORPUS_I2_DSN 未设置（非 I2 演练环境）")
+    with psycopg.connect(sandbox_dsn, autocommit=True) as conn:
+        row = conn.execute("SELECT current_database()").fetchone()
+        dbs = {r[0] for r in conn.execute("SELECT datname FROM pg_database WHERE datallowconn")}
+        if row is None or row[0] != I2_SANDBOX_DB or "apodex" in dbs:
+            pytest.fail(f"CORPUS_I2_DSN 未指向隔离演练库 {I2_SANDBOX_DB}（拒绝运行）")
+        conn.execute("TRUNCATE " + ", ".join(f"corpus.{t}" for t in _I2_TABLES))
+    yield sandbox_dsn
 
 
 def _seed(url: str) -> None:
@@ -121,31 +151,27 @@ def test_derive_analysts_strips_sac_number() -> None:
     assert derive_analysts(None) == []
 
 
-def test_derive_published_falls_back_in_order() -> None:
-    # ① doc_id 前缀
-    assert derive_published("2026-08-17_c195233b", "2026.08.10-x", None) == date(2026, 8, 17)
-    # ② 标题日期（undated doc_id）
-    assert derive_published("undated_x", "2026.08.16-华创证券-贵州茅台", None) == date(2026, 8, 16)
-    # ③ 首块正文日期（含中文日期，且 08 月不补零也能解析）
-    assert derive_published("undated_x", "0908脱水研报", "2026/09/08 摘要") == date(2026, 9, 8)
-    assert derive_published("undated_x", "投委会报告", "2026年08月31 通过") == date(2026, 8, 31)
+def test_derive_published_uses_explicit_text_only() -> None:
+    # §4.3/design-review：doc_id 前缀派生废弃——签名已无 doc_id，句柄不再是依据
+    assert derive_published("无题", None) is None
+    # 标题日期
+    assert derive_published("2026.08.16-华创证券-贵州茅台", None) == date(2026, 8, 16)
+    # 首块正文日期（含中文日期，且 08 月不补零也能解析）
+    assert derive_published("0908脱水研报", "2026/09/08 摘要") == date(2026, 9, 8)
+    assert derive_published("投委会报告", "2026年08月31 通过") == date(2026, 8, 31)
     # 非法日期不算命中；全无来源返回 None
-    assert derive_published("undated_x", "无题", "2026/13/45 是假日期，2026/09/08 是真的") == date(
-        2026, 9, 8
-    )
-    assert derive_published("undated_x", "无题", "没有任何日期") is None
+    assert derive_published("无题", "2026/13/45 是假日期，2026/09/08 是真的") == date(2026, 9, 8)
+    assert derive_published("无题", "没有任何日期") is None
 
 
 def test_derive_metadata_subject_only_for_company() -> None:
     texts = ["贵州茅台（600519.SH）2026H1 营业收入 1741 亿元。"]
-    meta = derive_metadata(
-        "2026-08-17_c195233b", "2026.08.17-国信证券-公司研究-贵州茅台-600519", texts
-    )
+    meta = derive_metadata("2026.08.17-国信证券-公司研究-贵州茅台-600519", texts)
     assert meta["doc_kind"] == "company"
     assert meta["subject"] == "600519.SH"
     assert meta["org"] == "国信证券"
     # industry/macro 的主体编码在 metric 前缀里，subject 给错比缺失更危险
-    macro = derive_metadata("undated_x", "0908脱水研报", ["市场下跌。"], "macro")
+    macro = derive_metadata("0908脱水研报", ["市场下跌。"], "macro")
     assert macro["doc_kind"] == "macro" and macro["subject"] is None
     assert macro["org"] is None
 
@@ -165,7 +191,7 @@ def test_refresh_metadata_fills_all_fields(meta_dsn: str) -> None:
     assert stats["org_filled"] == 2  # 国信证券 + 长江证券
     assert stats["analysts_filled"] == 1  # 仅茅台研报首块有"分析师："
     assert stats["subject_filled"] == 1  # subject 只给 company
-    assert stats["published_backfilled"] == 2  # ① doc_id 日期 + ② 首块日期；③ 已有值不补
+    assert stats["published_backfilled"] == 2  # ① 标题日期 + ② 首块日期；③ 已有值不补
 
     r1 = _row(meta_dsn, "2026-08-17_c195233b")
     assert (r1["doc_kind"], r1["subject"], r1["org"]) == ("company", "600519.SH", "国信证券")
@@ -209,25 +235,56 @@ def test_backup_columns_cover_new_fields() -> None:
         assert field in cols, field
 
 
-def test_ingest_hook_materializes_metadata(meta_dsn: str, tmp_path) -> None:
-    """P6 挂钩：新文档 ingest 落库即物化元数据，无需等 refresh-metadata 全量跑。"""
+def test_ingest_hook_materializes_metadata(i2_dsn: str, tmp_path) -> None:
+    """P6 挂钩（I2-7 新链语义）：ingest 发布即落权威元数据——发布日期唯一落点
+    为 admission ``metadata_snapshot.report_publication``（契约 §4.3，禁止
+    doc_id 前缀派生）。旧 documents 表物化随写路径退役；org/analysts 的
+    读取侧迁移在 I2-7 读路径步骤验收。
+    """
     doc = tmp_path / "2026.09.06-国金证券-电子行业研究-ai-pcb.html.md"
     doc.write_text(
+        "报告发布日期：2026年9月6日\n"
         "分析师：樊志远（执业S1130524060002）\n\n"
         "电子行业 2026 年 9 月第 1 周：AI PCB 板块营收 500 亿元，环比上升。\n",
         encoding="utf-8",
     )
-    svc = CorpusService(meta_dsn)
-    _status, inserted = svc.ingest_path(doc)
-    assert inserted
-    with psycopg.connect(meta_dsn, row_factory=psycopg.rows.dict_row) as conn:
-        row = conn.execute(
-            "SELECT doc_kind, subject, org, analysts, published FROM documents"
-            " WHERE source_path = %s",
-            (str(doc),),
-        ).fetchone()
-    assert row is not None
-    assert row["org"] == "国金证券"
-    assert row["analysts"] == ["樊志远"]
-    assert row["doc_kind"] == "industry"
-    assert row["published"] == date(2026, 9, 6)
+    from plugins.corpus.preparation.contract import (
+        MaterialType,
+        PublicationDateOrigin,
+        PublicationDatePrecision,
+        PublicationDateStatus,
+        ResearchDomain,
+        ReviewDecision,
+        ReviewedDecision,
+        sha256_of_bytes,
+    )
+    from plugins.corpus.preparation.repository_pg import PgStore
+
+    store = PgStore(i2_dsn, sandbox_db="i2_sandbox_corpus")
+    source_id = sha256_of_bytes(doc.read_bytes())
+    decision = ReviewedDecision(
+        decision_id=f"rev-meta-{source_id[:12]}",
+        source_id=source_id,
+        reviewer="metadata-gate",
+        reviewed_at=datetime.now(UTC),
+        decision=ReviewDecision.ADMITTED,
+        rationale="元数据挂钩测试合成决定（测试资产）",
+        material_type=MaterialType.RESEARCH_REPORT,
+        research_domain=ResearchDomain.INDUSTRY,
+    )
+    store.put_reviewed_decision(decision)
+
+    svc = CorpusService(i2_dsn)
+    status, published = svc.ingest_path(doc, review_decision_ids=(decision.decision_id,))
+    assert (status, published) == ("in_scope", True)
+
+    publication = store.get_publication(source_id)
+    assert publication is not None and publication.active_build_id is not None
+    admission = store.get_admission(publication.current_decision_id)
+    assert admission is not None
+    rp = admission.metadata_snapshot.report_publication
+    assert rp is not None
+    assert rp.status is PublicationDateStatus.KNOWN
+    assert rp.value == "2026-09-06"
+    assert rp.precision is PublicationDatePrecision.DATE
+    assert rp.origin is PublicationDateOrigin.SOURCE_EXPLICIT

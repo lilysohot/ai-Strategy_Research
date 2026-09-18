@@ -1,0 +1,38 @@
+{
+  "snapshot_id": "i0c-r16",
+  "revision": "r16",
+  "phase": "i0c",
+  "task": "M5 review package v2: re-anchor to i0c-r15 (I2 full-chain remediation), add chain-level evidence blocks, import-smoke judged by import closure",
+  "binding": {
+    "review_package": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/README.md": "b270c9c3ff1bfd0a007b0cda3f83ab38b7899e2a5d86f30866c434996ca9483e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/run_matrix.sh": "6548a5f12251d06a0af0f145813037c69de1658a21f8ca9d7bffda41b62a0902",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/verify_matrix.py": "4324050c28abda15330c8d2d05b558deff7263273243be9ab08ae4fb570cc75e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/cross-check.md": "c6e251df2fc633d43aad8b92cc53e91a5fc995d5ab2421e45cb4d9b64b81002f"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "0cac0f10dc506d75fc533b9f1344a90e1e625054bced6dfd08f2a5c2cc4df079"
+    },
+    "freeze_generator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/m5_review_package_v2_freeze.py": "09bb087db1bf5be98d444d0911c07288b18cc6b6f0cca145cf789d716e5a9572"
+    }
+  },
+  "corrections": {
+    "m5_review_package_v2": "M5 复核包 v2：复核对象由 i0c-r13 改绑 i0c-r15（RM-FC 整改变更了实现字节）；freeze-hashes 纳入 r14/r15；新增 i2-fullchain-probes（12）与 i2-gap-dispositions（13）两块（RM-FC-8 链级纳管）；import-smoke 判据由固定 358/358 改为「导入闭合」正则；I2_CHANGED_FILES 增 gaps.py/clean.py/缺口测试；§5/cross-check 增 X11—X15。",
+    "i0c-r15": "I2 全链路复核整改（F1—F4 / RM-FC-0～8）为本次复核对象修订。",
+    "RM-FC-8": "回路纳管（链级块进放行前置）+ 重冻 + 台账回填的收口项。",
+    "gate_rehearsal": "实测：v2 包字节未冻结时，矩阵前置门 freeze-validator 以 『review_package 4 文件哈希失配』exit=1 拦住——绑定零漂移门有效；该次被拦产物保留在 audits/20260918-m5-review/evidence-aborted-r15-pregate/（不作复核证据）。"
+  },
+  "notes": [
+    "仅绑定复核包与校验/生成器；实现/测试/文档绑定由 i0c-r15 持有，本修订不改其字节。",
+    "矩阵预期未放宽：六族 17/18/8/5/19/4、i28-i24 探针 6、i1 业务 188、guard 19 全部保持；新增两块为链级契约面（12 + 13）。",
+    "生产库 I4 前零写入；矩阵只对 i2_sandbox_corpus 运行。"
+  ],
+  "m5_declaration": "not_declared（本修订仅为复核备料重冻；放行由复核结论 + U 签认给出）",
+  "created_at": "2026-09-18T13:13:41+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r15",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r15.json",
+    "sha256": "c88cfa888bd2807293b95af0794dc46651121de7a2c83b31433f739a2de76dc8"
+  }
+}

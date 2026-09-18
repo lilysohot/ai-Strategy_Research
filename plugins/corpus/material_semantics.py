@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any, Literal
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from plugins.corpus.claims import LlmCallError, LlmResponse
-from plugins.corpus.claims_v2 import classify_doc_kind_detail, triage_block_detail
+from plugins.corpus.claims_detail import classify_doc_kind_detail, triage_block_detail
 from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprint
 
 if TYPE_CHECKING:
@@ -1194,11 +1194,15 @@ def _normalize_temporal_frame(
 ) -> str:
     normalized = str(value or "unknown").strip().lower()
     if semantic_type != "behavior":
-        return normalized if normalized in {"contemporaneous", "retrospective", "unknown"} else "unknown"
+        return (
+            normalized
+            if normalized in {"contemporaneous", "retrospective", "unknown"}
+            else "unknown"
+        )
     source_text = f"{text} {quote}".lower()
-    if re.search(r"\b(?:yesterday|previously|last\s+(?:week|month|year))\b", source_text) or re.search(
-        r"此前|过去|昨日|上周|上月|去年|已经平仓", source_text
-    ):
+    if re.search(
+        r"\b(?:yesterday|previously|last\s+(?:week|month|year))\b", source_text
+    ) or re.search(r"此前|过去|昨日|上周|上月|去年|已经平仓", source_text):
         return "retrospective"
     if re.search(r"\b(?:today|now|this\s+(?:week|month|year))\b", source_text) or re.search(
         r"当前|今日|今天|本周|本月|今年", source_text
@@ -1229,7 +1233,9 @@ def _deterministic_speech_role(
 ) -> str:
     if slot is not None and "question" in slot.signal_types:
         return "question"
-    label = slot.explicit_role if slot is not None else _nearest_dialogue_label(packet, evidence_start)
+    label = (
+        slot.explicit_role if slot is not None else _nearest_dialogue_label(packet, evidence_start)
+    )
     if label in {"问", "提问者", "投资者"}:
         return "question"
     if label in {"答", "回答者", "专家", "管理层", "嘉宾"}:
@@ -1293,9 +1299,7 @@ def _canonical_value(value: object, quote: str) -> str | None:
     added = re.search(r"\badded\s+([\d,]+).*?\bat\s+([\d.]+)", compact, re.I)
     if added:
         return f"{added.group(1)} at {added.group(2).rstrip('.')}"
-    calls = re.search(
-        r"\bsold\s+([\d,]+)\s+(\$[\d.]+)\s+calls.*?\bfor\s+([\d.]+)", compact, re.I
-    )
+    calls = re.search(r"\bsold\s+([\d,]+)\s+(\$[\d.]+)\s+calls.*?\bfor\s+([\d.]+)", compact, re.I)
     if calls:
         return f"{calls.group(1)} {calls.group(2)} calls at {calls.group(3).rstrip('.')}"
     level = re.search(r"(\$[\d.]+)\s+level", compact, re.I)
@@ -1629,9 +1633,7 @@ def _packet_records(
             )
             if fallback_used and deterministic is None:
                 raw_unknown_fields = tuple(
-                    dict.fromkeys(
-                        (*raw_unknown_fields, "speaker_identity", "speaker_reference")
-                    )
+                    dict.fromkeys((*raw_unknown_fields, "speaker_identity", "speaker_reference"))
                 )
             value = _canonical_value(raw.get("value"), quote)
             temporal_frame = _normalize_temporal_frame(

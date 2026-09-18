@@ -1,0 +1,66 @@
+{
+  "snapshot_id": "i0c-r11",
+  "revision": "r11",
+  "phase": "i0c",
+  "task": "I2-8/I2-4 independent-review remediation: handle-version document reads, withdrawn document signal, coverage publication_snapshot_ref + same-snapshot search, data_coverage three-axis, fetch spans, legacy chain unreachable, engine.expected_parse_rev single source, unified exit codes, argparse exit",
+  "binding": {
+    "implementation": {
+      "plugins/corpus/cli.py": "1feb300c9e5cefc99bcec9ae62ce308118c0e0ee660366c1667cb73817f81bb6",
+      "plugins/corpus/service.py": "e60312e1ab8c6ec453a6656279969897a0165990e651f13883a5dca2ba3d7e43",
+      "plugins/corpus/preparation/read_pg.py": "c69506e81264d79cc51cb8d7dff2e69bb6314692fb2d8c23c8f1d128a641d1f3",
+      "plugins/corpus/preparation/search_pg.py": "baa92875535231086d67364d540ef9e4ce9fa5174ef7ff0b2dce67bc66da44b5",
+      "plugins/corpus/preparation/engine.py": "b4cc3b1254ae98da7d29a56f371f7bf49f3d1a6145df1fc13d1f10b7576700c5",
+      "plugins/tools/corpus_search.py": "8ff78c11b69aa99dbb99aaa1cf4e9733463d0906d06cfa173ff5c7a180845446",
+      "plugins/tools/corpus_fetch.py": "aa1657d1fb235524378afdfcf67a4fb5f3987e311693d27014c24ec6627d8608",
+      "plugins/tools/data_coverage.py": "f2d91f885f3d8024db057c9179630289a6a315172f64719860eef6ea5c703b2f"
+    },
+    "tests": {
+      "tests/test_corpus_consumers_pg.py": "0b7a61efdf6bb98b211cd5cdd25c66c059c56990087b9967779e6b1bf438e532",
+      "tests/test_corpus_cli.py": "b2821f8051a227a1c7976969387c71290aa73b1eecef31e1eca51ced6a1614e0",
+      "tests/test_corpus_cli_pg.py": "6b483eb83b958a1afb563b8bd0657e7de342e24ddde686a078f8877c306b1e27",
+      "tests/test_corpus_coverage.py": "b9b091e9af87f79a5acb4cfc2cb2d757ea251304ec60e9dbb489da4ee4c89243",
+      "tests/test_data_coverage.py": "6c4b0e13a70986c93358e8747a18e1f2cb7918edf286df99fea6652b8e52188d"
+    },
+    "docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "f3c0dcc103ca3a31039b1afc47d57a9b4f64403abb0550f79d3b3e2d48c04c2c",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "3a428133edb2ee52923cd5510528a922070e07c1988791c30f7f6edede3a5f1c",
+      "docs/plan/corpus-ingestion-rebuild-architecture.md": "c4670fad401c13f42ebe7a7e19929d8840b994ac1d0f41cce533a924715d8278"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "4762c5040a90c8e3b4b88e810911012ec0083fc76e0ca0c0f08a190fa3d8e709"
+    },
+    "audit_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-8-i2-4-review/review.md": "02af532675c743713fea8faac766b180e35d3f20c0337b841361d7cb94891c9f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-8-i2-4-review/remediation-checklist.md": "5885a9d8f7573411077ddb7c51cfd982c37f198728674d635ed6717589e97421",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-8-i2-4-review/test_review_probes.py": "c4a6583a5f16d7f15e1f38328d8ef2494bf29817feaf17515927d1a8046d26aa"
+    }
+  },
+  "corrections": {
+    "RM-I28-0": "裁定写入架构 §7.2/§7.3 与 tasks.md I2-8 验收门：①文档级读取遵循句柄 build；②迁移目标 legacy 读路径不可达。",
+    "F1": "read_pg._DOC_SQL 改为按句柄 build 读取，DocumentEvidence.build_id=实际读取 build；fetch_document 先核来源当前准入（非 in_scope 抛 WithdrawnError）。",
+    "F2": "撤销后文档级返回 None（不再空串）；零单元 build 仍返回 \"\"，两者可区分。",
+    "F3": "coverage 补 publication_snapshot_ref（(source_id,active_build_id,generation) 全集 md5，与计数同一条 SQL）；新增 read_pg.search_with_coverage：命中与覆盖同一 REPEATABLE READ 事务读取，service/tools 改用组合读取。",
+    "F4": "data_coverage 透出 research_coverage（§7.3 三轴，与市场字段分层，verdict/guidance 不动）；补普通环境与真库回归并纳入本修订绑定。",
+    "F5": "corpus_fetch 透出 source_ranges（权威 code point）与 spans（text 内偏移，可复算 text）；引用不存在单元时返回空 text/空 spans，不伪造区间。",
+    "F6": "旧引用 doc_id→source_id 归档 manifest 顺延 I4（precondition=新链重建核对后），写入架构 §7.2 与 tasks.md；I2-8 仅交付 archive_required 拒绝路径。",
+    "F7": "golden carry-over 至 I3-5（design-review 矩阵 [6]）登记入 tasks.md。",
+    "F8": "read_chain() 严格化：迁移目标请求 legacy 即拒绝；无 corpus schema 库请求 new 亦拒绝；auto 仅作未迁移旧库过渡兜底。",
+    "F9": "parse 复用判定下沉 engine.expected_parse_rev(source)（_parse_rev_for 为唯一公式落点），CLI 只调用；补 DOCX 与非 MD、规则分量变化回归。",
+    "F10": "退出码同因同码：check/status 的 build 不存在统一 EXIT_UNAVAILABLE(5)，门未过保持 4。",
+    "F11": "main() 捕获 argparse SystemExit 归一为 EXIT_INPUT(2)。",
+    "F13": "批处理 scripts/corpus_holdout_eval.py、truncation_ab.py、truncation_metrics.py、corpus_evidence_pilot.py 归属裁定为 I3-5/I5-3（评测与退休核验）。"
+  },
+  "notes": [
+    "i0c-r9/r10 保留历史字节，不追改；本修订登记复核整改后的实现/测试/文档。",
+    "证据：复核探针 5 failed/1 passed → 6 passed；真库 consumers_pg(19)+cli_pg(4) 全 passed 零 skip；普通环境语料全量 425 passed/1 skipped；i1 守卫 env 188 passed。",
+    "I2-8 由 partial 转 complete（整改 DoD 1—6 满足）；M5 仍 not_declared（待 I2-6 与独立复核）。",
+    "生产库 I4 前零写入；真库动作仅限 i2_sandbox_corpus 的 corpus schema。"
+  ],
+  "m5_declaration": "not_declared（I2-1/2/3/4/5/7/8 完成；仍需 I2-6 与独立复核）",
+  "created_at": "2026-09-18T11:19:42+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r10",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r10.json",
+    "sha256": "f72be661499c0e4867cbe4204370d51a1eff6ef625bc71f1171a7fe8eb2d0e8a"
+  }
+}
