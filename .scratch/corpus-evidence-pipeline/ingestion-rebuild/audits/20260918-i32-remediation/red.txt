@@ -1,0 +1,57 @@
+$ /home/administrator/FrontierAgent/.venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py tests/test_corpus_scoring.py /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/test_review_probes.py -q --tb=short
+.FFFFFFFFFF........................................................      [100%]
+=================================== FAILURES ===================================
+_____________ test_source_specific_obligation_requires_that_source _____________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:39: in test_source_specific_obligation_requires_that_source
+    assert not check(case)["ready"]
+E   assert not True
+_________________ test_answer_constraint_cannot_inject_target __________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:49: in test_answer_constraint_cannot_inject_target
+    assert not check(case)["ready"]
+E   assert not True
+_______________ test_blanket_residual_cannot_waive_missing_facts _______________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:61: in test_blanket_residual_cannot_waive_missing_facts
+    assert not check(case)["ready"]
+E   assert not True
+_________________ test_search_hint_cannot_be_directly_approved _________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:68: in test_search_hint_cannot_be_directly_approved
+    assert not check(case)["ready"]
+E   assert not True
+______________________ test_metadata_cannot_replace_quote ______________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:74: in test_metadata_cannot_replace_quote
+    assert not check(case)["ready"]
+E   assert not True
+____ test_duplicate_or_unknown_reviews_rejected[question_reviews-query_id] _____
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:83: in test_duplicate_or_unknown_reviews_rejected
+    assert not check(case)["ready"]
+E   assert not True
+____ test_duplicate_or_unknown_reviews_rejected[negative_reviews-query_id] _____
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:83: in test_duplicate_or_unknown_reviews_rejected
+    assert not check(case)["ready"]
+E   assert not True
+___________________ test_facet_identity_must_match[query_id] ___________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:91: in test_facet_identity_must_match
+    assert not check(case)["ready"]
+E   assert not True
+___________________ test_facet_identity_must_match[facet_id] ___________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:91: in test_facet_identity_must_match
+    assert not check(case)["ready"]
+E   assert not True
+______________________ test_negative_review_needs_reason _______________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:96: in test_negative_review_needs_reason
+    assert not check(case)["ready"]
+E   assert not True
+=========================== short test summary info ============================
+FAILED ../../../dev::test_source_specific_obligation_requires_that_source - a...
+FAILED ../../../dev::test_answer_constraint_cannot_inject_target - assert not...
+FAILED ../../../dev::test_blanket_residual_cannot_waive_missing_facts - asser...
+FAILED ../../../dev::test_search_hint_cannot_be_directly_approved - assert no...
+FAILED ../../../dev::test_metadata_cannot_replace_quote - assert not True
+FAILED ../../../dev::test_duplicate_or_unknown_reviews_rejected[question_reviews-query_id]
+FAILED ../../../dev::test_duplicate_or_unknown_reviews_rejected[negative_reviews-query_id]
+FAILED ../../../dev::test_facet_identity_must_match[query_id] - assert not True
+FAILED ../../../dev::test_facet_identity_must_match[facet_id] - assert not True
+FAILED ../../../dev::test_negative_review_needs_reason - assert not True
+10 failed, 57 passed in 0.17s
+
+exit=1

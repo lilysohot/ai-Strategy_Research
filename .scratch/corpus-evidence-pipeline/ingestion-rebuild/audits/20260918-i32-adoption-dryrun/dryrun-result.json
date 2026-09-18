@@ -1,0 +1,1477 @@
+{
+  "artifact": "i3-2-adoption-dryrun-NOT-FORMAL-APPROVAL",
+  "generated_at": "2026-09-18T19:56:50+08:00",
+  "adoption": {
+    "adopted_by": "xyl",
+    "adopted_at": "2026-09-18T17:40:00+08:00",
+    "scope": "全文审核后全部采纳（含 Q1/Q2/Q3 处置口径）",
+    "human_reviewed_full_text": true,
+    "ai_reviewer": "Codex / AI-assisted source review; not a human signature"
+  },
+  "release": {
+    "artifact": "i3-2-source-gold-v4-candidate-NOT-FROZEN",
+    "file": "source-gold-v4-candidate.jsonl",
+    "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+    "frozen_records_preserved": 23,
+    "frozen_lines_byte_identical": true,
+    "adopted_new_slots": 13,
+    "adopted_new_items": 49,
+    "near_miss_slots": 6,
+    "near_miss_items": 7,
+    "unreferenced_moved_to_library": [
+      "industry-ai-supplement-2026-08-13_174b6462-p3#C-report-date",
+      "macro-ai-supplement-2026-09-06_793b3967-p5#N-conflict"
+    ],
+    "support_evidence_ids": [
+      "C-columns",
+      "C-footnote1",
+      "C-footnote2",
+      "C-footnote3",
+      "C-r32",
+      "C-r32-capacity",
+      "C-soda",
+      "C-table-title",
+      "C-urea",
+      "C-urea-capacity",
+      "C-years",
+      "G-identity",
+      "G-incentive",
+      "G-laser",
+      "G-model-orders",
+      "G-ownership",
+      "G-rating",
+      "G-table-cash",
+      "G-table-cash-header",
+      "G-table-eps",
+      "H-argon",
+      "H-date",
+      "H-indices1",
+      "H-indices2",
+      "H-ptfe",
+      "K-bottlenecks",
+      "K-date",
+      "K-fiscal",
+      "K-investment",
+      "K-path1",
+      "K-path2",
+      "K-path3",
+      "K-path4",
+      "K-propensity",
+      "K-property-note",
+      "K-risk",
+      "K-sample",
+      "K-subjects",
+      "M-eps",
+      "M-h1q2",
+      "M-identity",
+      "M-ownership",
+      "M-publisher",
+      "N-causal",
+      "N-condition-probability",
+      "N-event",
+      "N-month-header",
+      "N-month-values",
+      "N-participation"
+    ],
+    "near_miss_only_evidence_ids": [
+      "G-2027-forecast",
+      "H-resin-capacity",
+      "H-samsung-contract",
+      "N-date",
+      "N-probability-chart"
+    ],
+    "span_checks": [
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-identity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-eps",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-h1q2",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+        "evidence_id": "M-ownership",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+        "evidence_id": "M-publisher",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-identity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-incentive",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-rating",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+        "evidence_id": "G-model-orders",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+        "evidence_id": "G-laser",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p7",
+        "evidence_id": "G-ownership",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-eps",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-cash",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-cash-header",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p16",
+        "evidence_id": "G-2027-forecast",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-table-title",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote1",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote2",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote3",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-years",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-columns",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-soda",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-r32",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-r32-capacity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-urea",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-urea-capacity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p3",
+        "evidence_id": "C-report-date",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-date",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-indices1",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-indices2",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-ptfe",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-argon",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p6",
+        "evidence_id": "H-samsung-contract",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p7",
+        "evidence_id": "H-resin-capacity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-date",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-event",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-causal",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-condition-probability",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-participation",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+        "evidence_id": "N-month-header",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+        "evidence_id": "N-month-values",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+        "evidence_id": "N-probability-chart",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+        "evidence_id": "N-conflict",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-date",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-subjects",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path1",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path2",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path3",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-bottlenecks",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-fiscal",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-sample",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-path4",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-propensity",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-investment",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-risk",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p11",
+        "evidence_id": "K-property-note",
+        "page_matches": true,
+        "quote_matches_span": true,
+        "quote_sha256_matches": true,
+        "structural_fields": []
+      }
+    ],
+    "span_checks_all_pass": true,
+    "structural_identity_gaps": [
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-identity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-eps",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+        "evidence_id": "M-h1q2",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+        "evidence_id": "M-ownership",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+        "evidence_id": "M-publisher",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-identity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-incentive",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+        "evidence_id": "G-rating",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+        "evidence_id": "G-model-orders",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+        "evidence_id": "G-laser",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p7",
+        "evidence_id": "G-ownership",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-eps",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-cash",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+        "evidence_id": "G-table-cash-header",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p16",
+        "evidence_id": "G-2027-forecast",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-table-title",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote1",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote2",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-footnote3",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-years",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-columns",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-soda",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-r32",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-r32-capacity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-urea",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+        "evidence_id": "C-urea-capacity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p3",
+        "evidence_id": "C-report-date",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-date",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-indices1",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-indices2",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-ptfe",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+        "evidence_id": "H-argon",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p6",
+        "evidence_id": "H-samsung-contract",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p7",
+        "evidence_id": "H-resin-capacity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-date",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-event",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-causal",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-condition-probability",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+        "evidence_id": "N-participation",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+        "evidence_id": "N-month-header",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+        "evidence_id": "N-month-values",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+        "evidence_id": "N-probability-chart",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+        "evidence_id": "N-conflict",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-date",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-subjects",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path1",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path2",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-path3",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-bottlenecks",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-fiscal",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+        "evidence_id": "K-sample",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-path4",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-propensity",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-investment",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+        "evidence_id": "K-risk",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      },
+      {
+        "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p11",
+        "evidence_id": "K-property-note",
+        "kind": "body",
+        "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+      }
+    ],
+    "reviewer_attribution": {
+      "proposal_top_level_reviewer": "xyl",
+      "release_reviewer": "xyl",
+      "human_reviewed": "全文审核并确认署名（2026-09-18）",
+      "ai_assisted": true,
+      "note": "署名人为实际审核人（人类）；AI 仅作辅助核验，不构成人类签名。提案原先把 xyl 预填在『待真人复核』状态（未签先行），本版已补齐审核时间与 ai_assisted 标记。"
+    },
+    "generated_at": "2026-09-18T19:56:50+08:00"
+  },
+  "remap": {
+    "exit_code": 0,
+    "summary": {
+      "questions_total": 30,
+      "answerable_questions": 24,
+      "targets_total": 82,
+      "required_targets": 44,
+      "supplementary_targets": 20,
+      "suggested_targets": 18,
+      "machine_ready": 2,
+      "pending_human": 21,
+      "blocked": 1,
+      "negative_opt_out": 6,
+      "pending_decisions": 40,
+      "partial_anchors": 16,
+      "status_conflicts": 1
+    },
+    "rule_rev": "evidence-mapping-6"
+  },
+  "convert": {
+    "facet_decisions": 40,
+    "expected_items": 40,
+    "missing_items": [],
+    "unmapped": [],
+    "lexical_built": [
+      "I32-macro-004-01",
+      "I32-macro-004-03",
+      "I32-macro-005-01"
+    ],
+    "lexical_pending": [
+      {
+        "item_id": "I32-company-001-01",
+        "query_id": "company-001",
+        "uncovered_terms": [
+          "同时",
+          "年度",
+          "持强",
+          "时给"
+        ],
+        "chosen": [
+          "company-ai-supplement-2026-08-16_6f14cc14-p1#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-company-004-02",
+        "query_id": "company-004",
+        "uncovered_terms": [
+          "作实",
+          "利预",
+          "券商",
+          "商盈",
+          "实际",
+          "当作",
+          "盈利",
+          "际收",
+          "预测"
+        ],
+        "chosen": [
+          "company-ai-supplement-2026-09-06_dddc7cd0-p1#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-001-01",
+        "query_id": "industry-001",
+        "uncovered_terms": [
+          "格涨",
+          "涨幅",
+          "述期",
+          "间平"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#6",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#2"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-002-01",
+        "query_id": "industry-002",
+        "uncovered_terms": [
+          "产量",
+          "实际",
+          "属配",
+          "按注",
+          "解释",
+          "际产"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#3"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-002-02",
+        "query_id": "industry-002",
+        "uncovered_terms": [
+          "位窗",
+          "格分",
+          "窗口"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-003-01",
+        "query_id": "industry-003",
+        "uncovered_terms": [
+          "2026",
+          "分开",
+          "区分",
+          "测列",
+          "预测"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#4",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#9",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#10"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-006-01",
+        "query_id": "industry-006",
+        "uncovered_terms": [
+          "划用",
+          "告援",
+          "引供",
+          "援引",
+          "板主"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-09-06_f8e31696-p1#3"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-006-03",
+        "query_id": "industry-006",
+        "uncovered_terms": [
+          "保留",
+          "息来",
+          "来源",
+          "留消",
+          "限定"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-09-06_f8e31696-p1#3"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-008-01",
+        "query_id": "industry-008",
+        "uncovered_terms": [
+          "32",
+          "历史",
+          "史价"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#7",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-industry-008-02",
+        "query_id": "industry-008",
+        "uncovered_terms": [
+          "含义",
+          "料证",
+          "明统",
+          "用两",
+          "统计",
+          "计含",
+          "证明"
+        ],
+        "chosen": [
+          "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#7",
+          "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "industry-ai-supplement-2026-09-06_f8e31696-p1#0",
+          "industry-ai-supplement-2026-09-06_f8e31696-p1#4"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-001-01",
+        "query_id": "macro-001",
+        "uncovered_terms": [
+          "修订",
+          "值修",
+          "分开",
+          "据分"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_793b3967-p1#0",
+          "macro-ai-supplement-2026-09-06_793b3967-p3#0",
+          "macro-ai-supplement-2026-09-06_793b3967-p3#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-003-01",
+        "query_id": "macro-003",
+        "uncovered_terms": [
+          "条件",
+          "续通"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_793b3967-p1#2"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-003-02",
+        "query_id": "macro-003",
+        "uncovered_terms": [
+          "业降",
+          "低加",
+          "息顾",
+          "降低"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_793b3967-p1#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-003-03",
+        "query_id": "macro-003",
+        "uncovered_terms": [
+          "件判",
+          "决定",
+          "分附",
+          "判断",
+          "区分",
+          "式决",
+          "条件",
+          "正式",
+          "附条"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_793b3967-p1#2"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-004-02",
+        "query_id": "macro-004",
+        "uncovered_terms": [
+          "文聚",
+          "聚焦"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_cc03f55b-p1#1"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-006-01",
+        "query_id": "macro-006",
+        "uncovered_terms": [
+          "全国",
+          "有国",
+          "部发"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_cc03f55b-p1#7",
+          "macro-ai-supplement-2026-09-06_cc03f55b-p2#3"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      },
+      {
+        "item_id": "I32-macro-008-01",
+        "query_id": "macro-008",
+        "uncovered_terms": [
+          "业样"
+        ],
+        "chosen": [
+          "macro-ai-supplement-2026-09-06_cc03f55b-p2#3"
+        ],
+        "note": "这些词元在 chosen 原文里找不到字面出处，需人工逐词映射或补标注"
+      }
+    ],
+    "question_reviews": 24,
+    "negative_reviews": 6,
+    "clarifications": 1,
+    "decisions_sha256": "293b1a82e0b15eab22b32a57cb55baa8101be6d0f2c91ef71f26e0f7fdabb65d"
+  },
+  "gate": {
+    "ready": false,
+    "stage": "evaluated",
+    "counts": {
+      "facet_decisions_expected": 40,
+      "facet_decisions_present": 40,
+      "facet_decisions_unresolved": 17,
+      "question_reviews_expected": 24,
+      "question_reviews_present": 24,
+      "negative_reviews_expected": 6,
+      "negative_reviews_present": 6,
+      "status_clarifications_expected": 1,
+      "status_clarifications_present": 1
+    },
+    "blockers": [
+      "I32-company-001-01: chosen 仍未覆盖判别性词元 ['同时', '年度', '持强', '时给']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-company-004-02: chosen 仍未覆盖判别性词元 ['作实', '利预', '券商', '商盈', '实际', '当作', '盈利', '际收', '预测']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-001-01: chosen 仍未覆盖判别性词元 ['格涨', '涨幅', '述期', '间平']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-002-01: chosen 仍未覆盖判别性词元 ['产量', '实际', '属配', '按注', '解释', '际产']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-002-02: chosen 仍未覆盖判别性词元 ['位窗', '格分', '窗口']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-003-01: chosen 仍未覆盖判别性词元 ['2026', '分开', '区分', '测列', '预测']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-006-01: chosen 仍未覆盖判别性词元 ['划用', '告援', '引供', '援引', '板主']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-006-03: chosen 仍未覆盖判别性词元 ['保留', '息来', '来源', '留消', '限定']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-008-01: chosen 仍未覆盖判别性词元 ['32', '历史', '史价']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-industry-008-02: chosen 仍未覆盖判别性词元 ['含义', '料证', '明统', '用两', '统计', '计含', '证明']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-001-01: chosen 仍未覆盖判别性词元 ['修订', '值修', '分开', '据分']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-003-01: chosen 仍未覆盖判别性词元 ['条件', '续通']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-003-02: chosen 仍未覆盖判别性词元 ['业降', '低加', '息顾', '降低']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-003-03: chosen 仍未覆盖判别性词元 ['件判', '决定', '分附', '判断', '区分', '式决', '条件', '正式', '附条']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-004-02: chosen 仍未覆盖判别性词元 ['文聚', '聚焦']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-006-01: chosen 仍未覆盖判别性词元 ['全国', '有国', '部发']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "I32-macro-008-01: chosen 仍未覆盖判别性词元 ['业样']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "要件裁决未完成 17 项：['I32-company-001-01', 'I32-company-004-02', 'I32-industry-001-01', 'I32-industry-002-01', 'I32-industry-002-02', 'I32-industry-003-01', 'I32-industry-006-01', 'I32-industry-006-03', 'I32-industry-008-01', 'I32-industry-008-02', 'I32-macro-001-01', 'I32-macro-003-01', 'I32-macro-003-02', 'I32-macro-003-03', 'I32-macro-004-02', 'I32-macro-006-01', 'I32-macro-008-01']"
+    ],
+    "warnings": [
+      "I32-macro-004-01: 人工同义映射待审计（非机器语义证明）：五主",
+      "I32-macro-004-03: 人工同义映射待审计（非机器语义证明）：四路",
+      "I32-macro-005-01: 人工同义映射待审计（非机器语义证明）：入依、行拖、负偏"
+    ]
+  },
+  "verification": {
+    "exit_code": 2,
+    "file": "verification-v7-dryrun.json",
+    "sha256": "3fc6fa6f3c9fc5fc526da082bb9c5bdd92b9bfb39b029cc0717d364fc54f8c3d",
+    "ok": null,
+    "sections": {
+      "self_consistency": {
+        "failed": 0,
+        "checks": 30
+      },
+      "regression_probes": {
+        "failed": 1,
+        "checks": 16
+      },
+      "completeness_gate": {
+        "failed": null,
+        "checks": 0
+      }
+    },
+    "completeness_gate": false,
+    "completeness_blockers": 18
+  },
+  "final": {
+    "file": "decisions-final-dryrun.json",
+    "gate_file": "gate-final-dryrun.json",
+    "ready": true,
+    "blockers": [],
+    "warnings": 20,
+    "counts": {
+      "facet_decisions_expected": 40,
+      "facet_decisions_present": 40,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 24,
+      "question_reviews_present": 24,
+      "negative_reviews_expected": 6,
+      "negative_reviews_present": 6,
+      "status_clarifications_expected": 1,
+      "status_clarifications_present": 1
+    },
+    "projection": {
+      "questions": 30,
+      "approved_required": 79,
+      "supplementary": 20
+    },
+    "summary": {
+      "narrowed": [
+        {
+          "item_id": "I32-company-001-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-company-004-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-company-004-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-company-008-01",
+          "before": 4,
+          "after": 3
+        },
+        {
+          "item_id": "I32-company-008-03",
+          "before": 2,
+          "after": 1
+        },
+        {
+          "item_id": "I32-company-008-04",
+          "before": 2,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-001-01",
+          "before": 4,
+          "after": 2
+        },
+        {
+          "item_id": "I32-industry-002-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-002-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-003-01",
+          "before": 4,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-004-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-004-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-006-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-006-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-006-03",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-008-01",
+          "before": 3,
+          "after": 1
+        },
+        {
+          "item_id": "I32-industry-008-02",
+          "before": 5,
+          "after": 2
+        },
+        {
+          "item_id": "I32-industry-008-03",
+          "before": 3,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-001-01",
+          "before": 3,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-003-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-003-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-003-03",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-004-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-004-02",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-004-03",
+          "before": 4,
+          "after": 4
+        },
+        {
+          "item_id": "I32-macro-005-01",
+          "before": 1,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-006-01",
+          "before": 2,
+          "after": 1
+        },
+        {
+          "item_id": "I32-macro-008-01",
+          "before": 1,
+          "after": 1
+        }
+      ],
+      "supporting_total": 18,
+      "overrides": [
+        "I32-macro-004-01",
+        "I32-macro-004-02",
+        "I32-macro-004-03"
+      ],
+      "problems": []
+    },
+    "sha256": "e734e6358a9085521b80ce468c50391f1403d97d03fc8fcc6d9996fa05b99eaa"
+  },
+  "blocker_help": {
+    "count": 17,
+    "file": "blocker-help.json",
+    "sha256": "20d04d5204700adf6eda406d15675dc2ba588c2ecff2d54c0bac75601d0fda20"
+  },
+  "synonymy_variant": {
+    "file": "decisions-proposed-synonymy.json",
+    "gate_file": "gate-proposed-synonymy.json",
+    "ready": false,
+    "blockers": [
+      "I32-industry-008-02: chosen 仍未覆盖判别性词元 ['含义', '料证', '明统', '用两', '统计', '计含', '证明']；实质缺证须改选/补标注；仅词面差异可提交逐项原文 lexical_review，不得豁免事实",
+      "要件裁决未完成 1 项：['I32-industry-008-02']"
+    ],
+    "warnings": [
+      "I32-company-001-01: 人工同义映射待审计（非机器语义证明）：同时、年度、持强、时给",
+      "I32-company-004-02: 人工同义映射待审计（非机器语义证明）：作实、利预、券商、商盈、实际、当作、盈利、际收、预测",
+      "I32-industry-001-01: 人工同义映射待审计（非机器语义证明）：格涨、涨幅、述期、间平",
+      "I32-industry-002-01: 人工同义映射待审计（非机器语义证明）：产量、实际、属配、按注、解释、际产",
+      "I32-industry-002-02: 人工同义映射待审计（非机器语义证明）：位窗、格分、窗口",
+      "I32-industry-003-01: 人工同义映射待审计（非机器语义证明）：2026、分开、区分、测列、预测",
+      "I32-industry-006-01: 人工同义映射待审计（非机器语义证明）：划用、告援、引供、援引、板主",
+      "I32-industry-006-03: 人工同义映射待审计（非机器语义证明）：保留、息来、来源、留消、限定",
+      "I32-industry-008-01: 人工同义映射待审计（非机器语义证明）：32、历史、史价",
+      "I32-macro-001-01: 人工同义映射待审计（非机器语义证明）：修订、值修、分开、据分",
+      "I32-macro-003-01: 人工同义映射待审计（非机器语义证明）：条件、续通",
+      "I32-macro-003-02: 人工同义映射待审计（非机器语义证明）：业降、低加、息顾、降低",
+      "I32-macro-003-03: 人工同义映射待审计（非机器语义证明）：件判、决定、分附、判断、区分、式决、条件、正式、附条",
+      "I32-macro-004-01: 人工同义映射待审计（非机器语义证明）：五主",
+      "I32-macro-004-02: 人工同义映射待审计（非机器语义证明）：文聚、聚焦",
+      "I32-macro-004-03: 人工同义映射待审计（非机器语义证明）：四路",
+      "I32-macro-005-01: 人工同义映射待审计（非机器语义证明）：入依、行拖、负偏",
+      "I32-macro-006-01: 人工同义映射待审计（非机器语义证明）：全国、有国、部发",
+      "I32-macro-008-01: 人工同义映射待审计（非机器语义证明）：业样"
+    ],
+    "note": "对照口径，尚未获得 U 逐项确认；不得据此宣告 I3-2 完成",
+    "sha256": "b51f1684db5bbb638ba642b2414a2f67c3235978d35c8745e1ddf028dda7b18d"
+  },
+  "protected": {
+    "source-gold-frozen.jsonl": true,
+    "query-gold-frozen.jsonl": true,
+    "guards/i3.json": true,
+    "freezes/freeze-manifest.json": true,
+    "i3-2/evidence-targets-candidates.json": true,
+    "i3-2/approval-report.json": true
+  },
+  "files": {
+    "source-gold-v4-candidate.jsonl": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+    "source-gold-nearmiss-library.jsonl": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f",
+    "release-manifest.json": "1b5023d0320adc2ff20fa288652aa2b8fd99ec08ff95c60938d09bbe3e7482d9",
+    "candidates-v7-dryrun.json": "2c3877194799c9df0048aecda4383ebfcfd79983fd7681a6aff015377e9bffaf",
+    "review-v7-dryrun.md": "d517419ba1d23db99712f3720925edac42c0c55e460b47c6d84df8dd74f1aa54",
+    "adjudication-v7-dryrun.md": "699802339e4aa1ca6c9c235abd58e6187fbeddc152f7c86613fb77c13257669a",
+    "decisions-dryrun.json": "293b1a82e0b15eab22b32a57cb55baa8101be6d0f2c91ef71f26e0f7fdabb65d",
+    "gate-dryrun.json": "f7c7d6d0660214c1a18727f41db6348949366ae4a9541795fb6ae59bf3e8f700",
+    "blocker-help.json": "20d04d5204700adf6eda406d15675dc2ba588c2ecff2d54c0bac75601d0fda20",
+    "decisions-proposed-synonymy.json": "b51f1684db5bbb638ba642b2414a2f67c3235978d35c8745e1ddf028dda7b18d",
+    "gate-proposed-synonymy.json": "200d2c76ed085cbca10ced16f63d81f413b7e346147c80615c984a501219f371",
+    "decisions-final-dryrun.json": "e734e6358a9085521b80ce468c50391f1403d97d03fc8fcc6d9996fa05b99eaa",
+    "gate-final-dryrun.json": "45a6456ecc9b8bc668c0bcef52d6af45bda1777547348b0c21fd2d3d193829c9",
+    "verification-v7-dryrun.json": "3fc6fa6f3c9fc5fc526da082bb9c5bdd92b9bfb39b029cc0717d364fc54f8c3d",
+    "protected-artifacts-check.json": "45f5974355c525ad025be46e2d05bf2a664b7e4dac3769d6ee49f4b4fcf335ad"
+  }
+}

@@ -1,0 +1,12 @@
+$ /home/administrator/FrontierAgent/.venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py tests/test_corpus_scoring.py /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/test_review_probes.py -q --tb=short
+F..................................................................      [100%]
+=================================== FAILURES ===================================
+______________________ test_valid_approval_and_projection ______________________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py:24: in test_valid_approval_and_projection
+    assert check(case)["ready"]
+E   assert False
+=========================== short test summary info ============================
+FAILED ../../../dev::test_valid_approval_and_projection - assert False
+1 failed, 66 passed in 0.16s
+
+exit=1

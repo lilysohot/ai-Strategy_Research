@@ -1,0 +1,870 @@
+{
+  "artifact": "i3-2-source-gold-v4-candidate-NOT-FROZEN",
+  "file": "source-gold-v4-candidate.jsonl",
+  "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+  "frozen_records_preserved": 23,
+  "frozen_lines_byte_identical": true,
+  "adopted_new_slots": 13,
+  "adopted_new_items": 49,
+  "near_miss_slots": 6,
+  "near_miss_items": 7,
+  "unreferenced_moved_to_library": [
+    "industry-ai-supplement-2026-08-13_174b6462-p3#C-report-date",
+    "macro-ai-supplement-2026-09-06_793b3967-p5#N-conflict"
+  ],
+  "support_evidence_ids": [
+    "C-columns",
+    "C-footnote1",
+    "C-footnote2",
+    "C-footnote3",
+    "C-r32",
+    "C-r32-capacity",
+    "C-soda",
+    "C-table-title",
+    "C-urea",
+    "C-urea-capacity",
+    "C-years",
+    "G-identity",
+    "G-incentive",
+    "G-laser",
+    "G-model-orders",
+    "G-ownership",
+    "G-rating",
+    "G-table-cash",
+    "G-table-cash-header",
+    "G-table-eps",
+    "H-argon",
+    "H-date",
+    "H-indices1",
+    "H-indices2",
+    "H-ptfe",
+    "K-bottlenecks",
+    "K-date",
+    "K-fiscal",
+    "K-investment",
+    "K-path1",
+    "K-path2",
+    "K-path3",
+    "K-path4",
+    "K-propensity",
+    "K-property-note",
+    "K-risk",
+    "K-sample",
+    "K-subjects",
+    "M-eps",
+    "M-h1q2",
+    "M-identity",
+    "M-ownership",
+    "M-publisher",
+    "N-causal",
+    "N-condition-probability",
+    "N-event",
+    "N-month-header",
+    "N-month-values",
+    "N-participation"
+  ],
+  "near_miss_only_evidence_ids": [
+    "G-2027-forecast",
+    "H-resin-capacity",
+    "H-samsung-contract",
+    "N-date",
+    "N-probability-chart"
+  ],
+  "span_checks": [
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-identity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-eps",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-h1q2",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+      "evidence_id": "M-ownership",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+      "evidence_id": "M-publisher",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-identity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-incentive",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-rating",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+      "evidence_id": "G-model-orders",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+      "evidence_id": "G-laser",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p7",
+      "evidence_id": "G-ownership",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-eps",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-cash",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-cash-header",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p16",
+      "evidence_id": "G-2027-forecast",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-table-title",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote1",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote2",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote3",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-years",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-columns",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-soda",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-r32",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-r32-capacity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-urea",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-urea-capacity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p3",
+      "evidence_id": "C-report-date",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-date",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-indices1",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-indices2",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-ptfe",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-argon",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p6",
+      "evidence_id": "H-samsung-contract",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p7",
+      "evidence_id": "H-resin-capacity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-date",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-event",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-causal",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-condition-probability",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-participation",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+      "evidence_id": "N-month-header",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+      "evidence_id": "N-month-values",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+      "evidence_id": "N-probability-chart",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+      "evidence_id": "N-conflict",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-date",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-subjects",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path1",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path2",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path3",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-bottlenecks",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-fiscal",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-sample",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-path4",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-propensity",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-investment",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-risk",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p11",
+      "evidence_id": "K-property-note",
+      "page_matches": true,
+      "quote_matches_span": true,
+      "quote_sha256_matches": true,
+      "structural_fields": []
+    }
+  ],
+  "span_checks_all_pass": true,
+  "structural_identity_gaps": [
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-identity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-eps",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p1",
+      "evidence_id": "M-h1q2",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+      "evidence_id": "M-ownership",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-08-16_6f14cc14-p7",
+      "evidence_id": "M-publisher",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-identity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-incentive",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p1",
+      "evidence_id": "G-rating",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+      "evidence_id": "G-model-orders",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p3",
+      "evidence_id": "G-laser",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p7",
+      "evidence_id": "G-ownership",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-eps",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-cash",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p20",
+      "evidence_id": "G-table-cash-header",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "company-ai-supplement-2026-09-06_dddc7cd0-p16",
+      "evidence_id": "G-2027-forecast",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-table-title",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote1",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote2",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-footnote3",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-years",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-columns",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-soda",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-r32",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-r32-capacity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-urea",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p10",
+      "evidence_id": "C-urea-capacity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-08-13_174b6462-p3",
+      "evidence_id": "C-report-date",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-date",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-indices1",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-indices2",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-ptfe",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p1",
+      "evidence_id": "H-argon",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p6",
+      "evidence_id": "H-samsung-contract",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "industry-ai-supplement-2026-09-06_f8e31696-p7",
+      "evidence_id": "H-resin-capacity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-date",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-event",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-causal",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-condition-probability",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p1",
+      "evidence_id": "N-participation",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+      "evidence_id": "N-month-header",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p3",
+      "evidence_id": "N-month-values",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+      "evidence_id": "N-probability-chart",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_793b3967-p5",
+      "evidence_id": "N-conflict",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-date",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-subjects",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path1",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path2",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-path3",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-bottlenecks",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-fiscal",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p1",
+      "evidence_id": "K-sample",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-path4",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-propensity",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-investment",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p2",
+      "evidence_id": "K-risk",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    },
+    {
+      "gold_id": "macro-ai-supplement-2026-09-06_cc03f55b-p11",
+      "evidence_id": "K-property-note",
+      "kind": "body",
+      "note": "新条目是连续正文，没有 row/col/unit/period；表格类要求须与冻结单元格联合取证"
+    }
+  ],
+  "reviewer_attribution": {
+    "proposal_top_level_reviewer": "xyl",
+    "release_reviewer": "xyl",
+    "human_reviewed": "全文审核并确认署名（2026-09-18）",
+    "ai_assisted": true,
+    "note": "署名人为实际审核人（人类）；AI 仅作辅助核验，不构成人类签名。提案原先把 xyl 预填在『待真人复核』状态（未签先行），本版已补齐审核时间与 ai_assisted 标记。"
+  },
+  "generated_at": "2026-09-18T19:56:50+08:00"
+}

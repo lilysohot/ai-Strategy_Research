@@ -1,0 +1,649 @@
+{
+  "artifact": "i3-2-evidence-targets-verification",
+  "generated_at": "2026-09-18T15:54:13+08:00",
+  "inputs": {
+    "query_gold": {
+      "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+    },
+    "candidates": {
+      "sha256": "3399458ce0e4cd417ca2740d6fbdfe1758d56a4108fd164fbd286d1961659439",
+      "rule_rev": "evidence-mapping-4",
+      "summary": {
+        "questions_total": 30,
+        "targets_total": 54,
+        "required_targets": 35,
+        "supporting_targets": 4,
+        "suggested_targets": 15,
+        "machine_ready": 3,
+        "pending_human": 19,
+        "blocked": 2,
+        "negative_opt_out": 6,
+        "pending_decisions": 36,
+        "adjudication_pending": 30,
+        "adjudication_approved": 0
+      }
+    }
+  },
+  "generator": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py",
+    "sha256": "0c7b3923d72fdbd724e759cd6447819ea9c588183ac567cc7da8c64e8ebe2d00"
+  },
+  "self_consistency": {
+    "checks": [
+      {
+        "query_id": "company-001",
+        "machine_status": "machine_ready",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-002",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-003",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-004",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-005",
+        "machine_status": "machine_ready",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-006",
+        "machine_status": "machine_ready",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-007",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-008",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "company-009",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      },
+      {
+        "query_id": "company-010",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      },
+      {
+        "query_id": "industry-001",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-002",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-003",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-004",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-005",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-006",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-007",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-008",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "industry-009",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      },
+      {
+        "query_id": "industry-010",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      },
+      {
+        "query_id": "macro-001",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-002",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-003",
+        "machine_status": "blocked",
+        "passed": true,
+        "expectation": "blocked：缺承载 item 的要件由完整性门拦截，不参与自洽判定",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-004",
+        "machine_status": "blocked",
+        "passed": true,
+        "expectation": "blocked：缺承载 item 的要件由完整性门拦截，不参与自洽判定",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-005",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-006",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-007",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-008",
+        "machine_status": "pending_human",
+        "passed": true,
+        "expectation": "三项全过（模拟批准后候选自洽：来源归属/定位/逐字引文可用）",
+        "doc_recall": "1",
+        "question_pass": true,
+        "evidence_pass": true,
+        "failures": []
+      },
+      {
+        "query_id": "macro-009",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      },
+      {
+        "query_id": "macro-010",
+        "machine_status": "negative_opt_out",
+        "passed": true,
+        "expectation": "负例空命中：无误报、无伪造引用、不进证据分母",
+        "doc_recall": "None",
+        "question_pass": null,
+        "evidence_pass": null,
+        "failures": []
+      }
+    ],
+    "failed": 0,
+    "note": "模拟批准（required + suggested）后逐题自洽；合成观测由候选自身构造，只证明契约兼容与来源/定位可用，**不代表真实链路可达**，也不是补料完整性。"
+  },
+  "regression_probes": {
+    "checks": [
+      {
+        "probe_id": "P1-table-identity-required",
+        "description": "适配器只给 page 不给 row/col 时，表格目标必须失败（结构身份是契约的一部分）",
+        "passed": true,
+        "detail": {
+          "evidence_pass": false,
+          "failures": [
+            "evidence_target_missing:e1",
+            "evidence_target_missing:e2",
+            "evidence_target_missing:e3"
+          ]
+        }
+      },
+      {
+        "probe_id": "P2-same-value-different-cell",
+        "description": "两个 0.0% 分属价格分位/价差分位：只给价差分位不得顶替价格分位",
+        "passed": true,
+        "detail": {
+          "evidence_pass": false,
+          "failures": [
+            "evidence_target_missing:e1",
+            "evidence_target_missing:s1"
+          ]
+        }
+      },
+      {
+        "probe_id": "P3-missing-footnote-fails",
+        "description": "industry-004 只给注1、缺注2 时必须失败",
+        "passed": true,
+        "detail": {
+          "evidence_pass": false,
+          "failures": [
+            "evidence_target_missing:s2"
+          ]
+        }
+      },
+      {
+        "probe_id": "P4-minimal-correct-evidence-passes",
+        "description": "industry-004 的两条脚注是完整最小证据，不得再要求无关产品数值",
+        "passed": true,
+        "detail": {
+          "evidence_pass": true,
+          "notes": 2,
+          "failures": []
+        }
+      },
+      {
+        "probe_id": "P5-irrelevant-evidence-not-required",
+        "description": "company-005 的第2页型号清单与第11页订单句属可替代证据，缺失不得判失败",
+        "passed": true,
+        "detail": {
+          "evidence_pass": true,
+          "supporting": [
+            "company-024-claim-001"
+          ],
+          "failures": []
+        }
+      },
+      {
+        "probe_id": "P6-missing-condition-fails",
+        "description": "macro-003 缺『通胀下行有限』条件句时必须失败（条件是要件，不是可忽略部分）",
+        "passed": true,
+        "detail": {
+          "evidence_pass": false,
+          "failures": [
+            "evidence_target_missing:s1"
+          ]
+        }
+      },
+      {
+        "probe_id": "P7-model-suffix-boundary",
+        "description": "8230CF 不得作为 8230 的命中（型号后缀不是同一型号）",
+        "passed": true,
+        "detail": {
+          "company-060_targets": []
+        }
+      },
+      {
+        "probe_id": "P8-duplicate-source-rejected",
+        "description": "同一来源在 Top-k 出现两次必须被入口拒绝（不得靠重复条目顶替漏召回）",
+        "passed": true,
+        "detail": {
+          "reason": "industry-001: 文档排名含重复来源 ['2026-08-13_174b6462']；同一文档在 Top-k 里只能出现一次（chunk 须先聚合为文档排名，不得把多块当多文档）"
+        }
+      },
+      {
+        "probe_id": "P9-value-equivalence-declared",
+        "description": "13.40 与原文 13.4 的等价必须显式入队，且 quote 保持原文逐字（不改写成 13.40）",
+        "passed": true,
+        "detail": {
+          "queued": [
+            "I32-company-004-01"
+          ],
+          "quote_unchanged": true
+        }
+      }
+    ],
+    "failed": 0,
+    "note": "独立反例：结构身份、脚注、条件、可替代关系、型号边界与 fail-closed 入口都必须真的能把错误证据判失败、把最小正确证据判通过。"
+  },
+  "completeness_gate": {
+    "ready": false,
+    "approved_questions": 0,
+    "unapproved_questions": 30,
+    "blocked_questions": [
+      {
+        "query_id": "company-002",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-004",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-008",
+        "reasons": [
+          "4 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "company-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      },
+      {
+        "query_id": "industry-001",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-002",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-003",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-004",
+        "reasons": [
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "industry-005",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-006",
+        "reasons": [
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "industry-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-008",
+        "reasons": [
+          "3 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      },
+      {
+        "query_id": "macro-001",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-002",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-003",
+        "reasons": [
+          "存在无承载 item 的要件（需补人工标注）",
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-004",
+        "reasons": [
+          "存在无承载 item 的要件（需补人工标注）",
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "macro-005",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-006",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-008",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      }
+    ],
+    "unresolved_decisions": [
+      "I32-company-002-01",
+      "I32-company-003-01",
+      "I32-company-004-01",
+      "I32-company-004-02",
+      "I32-company-007-01",
+      "I32-company-008-01",
+      "I32-company-008-02",
+      "I32-company-008-03",
+      "I32-company-008-04",
+      "I32-industry-001-01",
+      "I32-industry-002-01",
+      "I32-industry-002-02",
+      "I32-industry-003-01",
+      "I32-industry-004-01",
+      "I32-industry-004-02",
+      "I32-industry-004-03",
+      "I32-industry-005-01",
+      "I32-industry-006-01",
+      "I32-industry-006-02",
+      "I32-industry-006-03",
+      "I32-industry-007-01",
+      "I32-industry-008-01",
+      "I32-industry-008-02",
+      "I32-industry-008-03",
+      "I32-macro-001-01",
+      "I32-macro-002-01",
+      "I32-macro-003-01",
+      "I32-macro-003-02",
+      "I32-macro-004-01",
+      "I32-macro-004-02",
+      "I32-macro-004-03",
+      "I32-macro-005-01",
+      "I32-macro-005-02",
+      "I32-macro-006-01",
+      "I32-macro-007-01",
+      "I32-macro-008-01"
+    ],
+    "note": "完整性门要求：全部正例已人工批准、无未决要件、无待补标注、负例覆盖已确认。候选阶段 ready 必须为 false——本段通过与否**不能**由自洽往返代替。"
+  },
+  "summary": {
+    "questions": 30,
+    "self_consistency_failed": 0,
+    "probes_total": 9,
+    "probes_failed": 0,
+    "completeness_ready": false,
+    "approved_questions": 0,
+    "blocked_questions": 24,
+    "unresolved_decisions": 36
+  },
+  "notes": [
+    "本轮不读原文正文、不连 PG、不调模型；生产库零写入。",
+    "completeness_gate.ready=false 是候选阶段的正常状态，不得读成『补料完整』，也不得用 self_consistency 通过替代人工裁决。"
+  ]
+}

@@ -1,0 +1,986 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "source_sha256:2026-08-13_174b6462",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_sha256:2026-08-16_6f14cc14",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_sha256:2026-09-06_793b3967",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_sha256:2026-09-06_cc03f55b",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_sha256:2026-09-06_f8e31696",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_sha256:2026-09-06_dddc7cd0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "only_six_sources_89_pages",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unique_span_ids",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:M-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:M-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:M-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:M-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:M-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:M-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:M-h1q2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:M-h1q2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:M-h1q2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:M-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:M-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:M-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:M-publisher",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:M-publisher",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:M-publisher",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-incentive",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-incentive",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-incentive",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-rating",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-rating",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-rating",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-model-orders",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-model-orders",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-model-orders",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-laser",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-laser",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-laser",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-ownership",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-table-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-table-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-table-eps",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-table-cash",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-table-cash",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-table-cash",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-table-cash-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-table-cash-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-table-cash-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:G-2027-forecast",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:G-2027-forecast",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:G-2027-forecast",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-table-title",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-table-title",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-table-title",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-footnote1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-footnote1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-footnote1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-footnote2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-footnote2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-footnote2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-footnote3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-footnote3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-footnote3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-years",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-years",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-years",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-columns",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-columns",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-columns",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-soda",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-soda",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-soda",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-r32",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-r32",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-r32",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-r32-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-r32-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-r32-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-urea",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-urea",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-urea",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-urea-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-urea-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-urea-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:C-report-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:C-report-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:C-report-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-indices1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-indices1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-indices1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-indices2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-indices2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-indices2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-ptfe",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-ptfe",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-ptfe",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-argon",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-argon",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-argon",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-samsung-contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-samsung-contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-samsung-contract",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:H-resin-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:H-resin-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:H-resin-capacity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-event",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-event",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-event",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-causal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-causal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-causal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-condition-probability",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-condition-probability",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-condition-probability",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-participation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-participation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-participation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-month-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-month-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-month-header",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-month-values",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-month-values",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-month-values",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-probability-chart",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-probability-chart",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-probability-chart",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:N-conflict",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:N-conflict",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:N-conflict",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-date",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-subjects",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-subjects",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-subjects",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-path1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-path1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-path1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-path2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-path2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-path2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-path3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-path3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-path3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-path4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-path4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-path4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-bottlenecks",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-bottlenecks",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-bottlenecks",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-fiscal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-fiscal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-fiscal",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-sample",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-sample",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-sample",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-propensity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-propensity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-propensity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-investment",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-investment",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-investment",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-risk",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-risk",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-risk",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "raw_slice:K-property-note",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "quote_sha:K-property-note",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "text_and_image_binding:K-property-note",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "all_40_facets_unique_exact_identity",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "answer_constraints_no_targets",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "other_facets_have_actual_references",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "source_specific_obligations_isolated",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "24_positive_reviews_no_omission",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "6_negative_reviews_no_omission",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_coverage_exact_scope",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "not_claiming_human_approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "frozen_source_gold_unchanged_prefix",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "new_annotations_explicit_AI_provenance",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "proposal_refs_match_exact_quote",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "frozen_files_unchanged",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "no_formal_approval_created",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "formal_gate_remains_closed_without_signoff",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "AI_draft_cannot_masquerade_as_approval",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "summary": {
+    "passed": 191,
+    "total": 191
+  },
+  "independent_reader_exact_whitespace_normalized_matches": 40,
+  "independent_reader_layout_differences": [
+    "M-eps",
+    "M-h1q2",
+    "G-identity",
+    "G-incentive",
+    "C-years",
+    "C-columns",
+    "C-soda",
+    "C-r32-capacity",
+    "C-urea",
+    "C-report-date",
+    "H-indices2",
+    "N-event",
+    "N-causal",
+    "N-condition-probability",
+    "K-subjects",
+    "K-bottlenecks"
+  ],
+  "limitations": "机器检查只证明引用字节、身份、完整性和隔离；AI语义判断/图表绑定由审阅记录承担，未声称独立人工验收。两阅读器的抽取顺序/重复字层导致部分长句非连续匹配，不篡改quote来强制匹配。",
+  "formal_gate_ready": false,
+  "draft_as_approval_ready": false
+}

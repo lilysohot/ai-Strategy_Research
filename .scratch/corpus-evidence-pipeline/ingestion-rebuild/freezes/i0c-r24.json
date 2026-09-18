@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "i0c-r24",
+  "revision": "r24",
+  "phase": "i0c",
+  "task": "I3-2 material prep remediation round 2 (independent review A1-A5): adjudication artifact -> approved projection -> completeness gate with per-kind validation, value/qualification facets registered per segment, anchor adequacy with uncovered terms, required/supplementary/suggested roles; candidates only, no gold freeze",
+  "binding": {
+    "i3_2_tooling": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_textutil.py": "a5c763a3a36ace35b6e775ad6da3171df36747ceebe39a23d50ef9e83154f2f0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py": "b0b5c694527630c178429ae0ac0fb9ba563f52c35ce03503f48f7bb2f56ac025",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py": "04a50cb7b1321eedb4cd180dbb114bbfad67cddc3d3f679396cc6f58821f8f76",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_apply_decisions.py": "ae9d91ef614a20f99a1da0af63e1a0611f79da0bca48ba7e8dfcbe4990292faf"
+    },
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md": "d4b837cd158a331d098eb3aa32e0cf34d02752abd475653d9882e8af86e162e4",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md": "778f651c4f88cbe099565ad030c2d2c3198d3b24ba5754e82181157f40e65f34",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json": "e212bf9a824dbd8771fd7779625b4ad7baf59ab9631ad700469271bcbb93a23d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report.json": "59a34df0a906afbbf1e620a8008eb84f903ee045da3c8b7ad1bc1cdca9df4e7c"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates-v4.json": "3399458ce0e4cd417ca2740d6fbdfe1758d56a4108fd164fbd286d1961659439",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review-v4.md": "9488c6cdc8135e51412f2e971763a3292b3f9907640d8935eb5d913b92216d24",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication-v1.md": "07a20dbe40d0084766eeaa5d41b75372a347c20fea2f12bb5c2b07b56a95b54a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification-v2.json": "f1da1b3f74ac6d36dfc514dcd50309357e6353bb9b398c99fdd86208026e3eb3"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "f31abb8381e80ac089ff7eae3b926eb410a8010a6c8a364dc91e7e9dabc5c255"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "9bec512492fb3a2ed23c1180d18995c4d256cd9c7819a2a5d83e1c5245474f31",
+      "docs/plan/claims-market-closed-loop-plan.md": "4c92b74ca0164a3c1c3f7e91e9f6e27c6f4e3f5960c82ae83c1ad376ff73570c"
+    }
+  },
+  "corrections": {
+    "I3-2_adjudication_review_remediation": "依据 audits/20260918-i32-adjudication-review/review.md（A1—A5）整改：A1 完整性门不再看候选 adjudication.status（改它不会开门）；A2 新增裁决应用器与审批件/批准投影/门三段路径（含 input 哈希过期检查）；A3 机器锚点给 adequacy/uncovered_terms 与面级 union 缺口，partial 必须改选/补标/residual；A4 数值与限定按段并行登记（含数字子句里的限定不再漏账）；A5 角色改 required/supplementary/suggested（不再称「可替代」）、裁决单直接展示 source_coverage 锚点、清除旧批次数字、写清四类待填项。",
+    "evidence_mapping_rule_rev": "规则 evidence-mapping-5 + 共享文本层 i3s2_textutil.py：分号/句号切子句，子句既有数值又有标记时再按逗号拆段；字母边界数值匹配 + 数值等价（Decimal 归一）；重复出现不去重；必需=最小覆盖集合（IDF 加权 + 未占用优先）；定性要件给 note_ref/内容重叠锚点并标覆盖度；答案侧口径记 answer_constraints。",
+    "approval_path": "evidence-targets-decisions.json → i3s2_apply_decisions.py → evidence-targets-approved.json + approval-report.json。门逐项核对要件裁决、整题验收、负例覆盖、来源状态澄清、锚点覆盖度与输入哈希；驳回不删除原题要求，补标注须先有新 source-gold 版本。",
+    "completeness_gate": "自检三段：self_consistency 0 failed；regression_probes 16/16（含审批门反例：状态翻转/空审阅人/要件缺项/负例未确认/审批过期不得开门，完整审批件可开门并产出投影）；completeness_gate = no_decisions / ready=false（候选阶段正确状态）。",
+    "human_adjudication": "裁决单四类待填：要件裁决 40 项、有答案题整题验收 24 题（含 machine_ready 题）、负例覆盖 6 题、来源槽位状态澄清 1 项（macro-039-claim-001）。机器已批准 0 项。"
+  },
+  "notes": [
+    "历史快照 r1..r23 保留字节，不追改；r23 绑定的候选/核对单/裁决单/验证报告已归档为 -v4/-v4/-v1/-v2 并在本修订 i3_2_archive 组绑定。",
+    "I3-0 复核整改（r21）仍在等待复核确认闭环与 U 签认；I3-2 完整任务（阈值/关键题/负例/旧基线映射与评分器冻结）未完成，本修订只交补料候选、裁决单与审批链路。",
+    "M5 报告 F3（validate_i1_freeze.py 既有失配）仍未修，已登记。",
+    "零模型、零 PG、零来源正文读取；生产库 I4 前零写入。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18）；I3-0 remediation_pending_confirmation；I3-2 material_candidates_pending_adjudication",
+  "created_at": "2026-09-18T16:41:27+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r23",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r23.json",
+    "sha256": "6ed26728a0d83a020485dd1a55b76cfe012d5fcf73fcbc293793b511126d910b"
+  }
+}

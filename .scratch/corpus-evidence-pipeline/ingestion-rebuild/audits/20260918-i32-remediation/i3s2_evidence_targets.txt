@@ -1,0 +1,8 @@
+$ python -B /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py
+archived previous revision: evidence-targets-candidates-v5.json, evidence-targets-review-v5.md, evidence-targets-adjudication-v2.md
+candidates written: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json sha256=2417c22d5256f403d90e8507ad633b02942d9d6d4f7fff0dcf87da11a848c44e
+review sheet: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md sha256=9023a53ff00f74b2ee40bd80c46e0206cbbb70c43aa1d64c5ccad9d5156739d7
+adjudication sheet: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md sha256=c82aa67b5e0e9c8e7a4baa098412fb12e39337eb47f825d1859fe444796d51c4
+{"questions_total": 30, "answerable_questions": 24, "targets_total": 54, "required_targets": 35, "supplementary_targets": 4, "suggested_targets": 15, "machine_ready": 2, "pending_human": 20, "blocked": 2, "negative_opt_out": 6, "pending_decisions": 40, "partial_anchors": 13, "status_conflicts": 1}
+
+exit=0

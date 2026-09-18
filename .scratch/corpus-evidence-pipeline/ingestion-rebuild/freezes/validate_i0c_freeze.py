@@ -21,6 +21,13 @@
    ``tests/test_corpus_scoring.py`` 与台账文字，**不得**借整改重绑守卫/金标/既有入库实现；
 11. i0c-r22 = I3-2 补料（证据目标候选 + 往返验证 + 待裁决清单）：只绑 ``i3_2_assets``／台账／验证器，
    **不得**出现 ``plugins/``／``tests/``／守卫绑定（本轮不碰实现）。
+12. i0c-r23 = I3-2 补料**独立复核 F1—F5 整改**（规则 evidence-mapping-4 + 人工裁决单 + 三自检段）：
+   只绑 ``i3_2_assets``／``i3_2_archive``（本轮归档件）／台账／验证器；同样**不得**出现
+   ``plugins/``／``tests/``／守卫绑定（评分器与守卫仍是 r19—r21 绑定字节）。
+13. i0c-r24 = I3-2 补料**二轮复核 A1—A5 整改**（规则 evidence-mapping-5 + 共享文本层 +
+   裁决应用器 + 审批件/批准投影/完整性门 + 16 条反例）：只绑 ``i3_2_tooling``／``i3_2_assets``／
+   ``i3_2_archive``（r23 被覆盖字节的归档）／台账／验证器；同样**不得**出现
+   ``plugins/``／``tests/``／守卫绑定。
 """
 from __future__ import annotations
 
@@ -116,6 +123,10 @@ check("i0c-r19" in by_id, "索引缺少 i0c-r19 条目")
 check("i0c-r20" in by_id, "索引缺少 i0c-r20 条目")
 check("i0c-r21" in by_id, "索引缺少 i0c-r21 条目")
 check("i0c-r22" in by_id, "索引缺少 i0c-r22 条目")
+check("i0c-r23" in by_id, "索引缺少 i0c-r23 条目")
+check("i0c-r24" in by_id, "索引缺少 i0c-r24 条目")
+check("i0c-r25" in by_id, "索引缺少 i0c-r25 条目")
+check("i0c-r26" in by_id, "索引缺少 i0c-r26 条目")
 check("i1-r4" in by_id, "索引缺少 i1-r4 条目")
 
 if "i0c-r1" in by_id:
@@ -646,10 +657,200 @@ if "i0c-r22" in by_id:
             check(not rel.startswith(("plugins/", "tests/")),
                   f"i0c-r22 越界绑定 {rel}（本轮不改实现与测试）")
 
-# 最新修订绑定优先（supersession）：i0c-r2..r22 显式重绑的路径改由合并后的
+if "i0c-r23" in by_id:
+    i0c23 = load_json(BASE / by_id["i0c-r23"].get("file", ""))
+    parent = i0c23.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r22",
+          f"i0c-r23.parent 应为 i0c-r22，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r22":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r23.parent(i0c-r22) 文件字节与声明哈希不一致")
+    binding23 = i0c23.get("binding", {})
+    merge_binding(i0c_current_binding, binding23)
+    corrections = json.dumps(i0c23.get("corrections", {}), ensure_ascii=False)
+    for finding in ("I3-2_material_review_remediation", "evidence_mapping_rule_rev",
+                    "evidence_pass_denominator", "completeness_gate", "human_adjudication"):
+        check(finding in corrections, f"i0c-r23 未登记 {finding}")
+    # 整改修订只绑补料产物/本轮归档件/裁决单/台账：不得借机改实现、测试或守卫。
+    i3_2 = binding23.get("i3_2_assets", {})
+    base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    for required in (
+        f"{base}/i3s2_evidence_targets.py",
+        f"{base}/i3s2_verify_candidates.py",
+        f"{base}/i3-2/evidence-targets-candidates.json",
+        f"{base}/i3-2/evidence-targets-review.md",
+        f"{base}/i3-2/evidence-targets-adjudication.md",
+        f"{base}/i3-2/evidence-targets-verification.json",
+    ):
+        check(required in i3_2, f"i0c-r23 未绑定补料产物 {required}")
+    archive = binding23.get("i3_2_archive", {})
+    for required in (
+        f"{base}/i3-2/evidence-targets-candidates-v3.json",
+        f"{base}/i3-2/evidence-targets-review-v3.md",
+        f"{base}/i3-2/evidence-targets-verification-v1.json",
+    ):
+        check(required in archive, f"i0c-r23 未绑定本轮归档件 {required}")
+    allowed_groups = {"i3_2_assets", "i3_2_archive", "docs", "freeze_validator"}
+    for group, items in binding23.items():
+        if group not in allowed_groups:
+            errors.append(f"i0c-r23 越界绑定组 {group}（整改只涉补料产物与台账）")
+        for rel in items:
+            check(not rel.startswith(("plugins/", "tests/")),
+                  f"i0c-r23 越界绑定 {rel}（本轮不改实现与测试）")
+
+if "i0c-r24" in by_id:
+    i0c24 = load_json(BASE / by_id["i0c-r24"].get("file", ""))
+    parent = i0c24.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r23",
+          f"i0c-r24.parent 应为 i0c-r23，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r23":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r24.parent(i0c-r23) 文件字节与声明哈希不一致")
+    binding24 = i0c24.get("binding", {})
+    merge_binding(i0c_current_binding, binding24)
+    corrections = json.dumps(i0c24.get("corrections", {}), ensure_ascii=False)
+    for finding in ("I3-2_adjudication_review_remediation", "evidence_mapping_rule_rev",
+                    "approval_path", "completeness_gate", "human_adjudication"):
+        check(finding in corrections, f"i0c-r24 未登记 {finding}")
+    base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    tooling = binding24.get("i3_2_tooling", {})
+    for required in (
+        f"{base}/i3s2_textutil.py",
+        f"{base}/i3s2_evidence_targets.py",
+        f"{base}/i3s2_verify_candidates.py",
+        f"{base}/i3s2_apply_decisions.py",
+    ):
+        check(required in tooling, f"i0c-r24 未绑定工具脚本 {required}")
+    assets = binding24.get("i3_2_assets", {})
+    for required in (
+        f"{base}/i3-2/evidence-targets-candidates.json",
+        f"{base}/i3-2/evidence-targets-review.md",
+        f"{base}/i3-2/evidence-targets-adjudication.md",
+        f"{base}/i3-2/evidence-targets-verification.json",
+        f"{base}/i3-2/approval-report.json",
+    ):
+        check(required in assets, f"i0c-r24 未绑定补料产物 {required}")
+    archive = binding24.get("i3_2_archive", {})
+    for required in (
+        f"{base}/i3-2/evidence-targets-candidates-v4.json",
+        f"{base}/i3-2/evidence-targets-review-v4.md",
+        f"{base}/i3-2/evidence-targets-adjudication-v1.md",
+        f"{base}/i3-2/evidence-targets-verification-v2.json",
+    ):
+        check(required in archive, f"i0c-r24 未绑定被覆盖字节的归档 {required}")
+    allowed_groups = {"i3_2_tooling", "i3_2_assets", "i3_2_archive", "docs", "freeze_validator"}
+    for group, items in binding24.items():
+        if group not in allowed_groups:
+            errors.append(f"i0c-r24 越界绑定组 {group}（整改只涉补料工具链与台账）")
+        for rel in items:
+            check(not rel.startswith(("plugins/", "tests/")),
+                  f"i0c-r24 越界绑定 {rel}（本轮不改实现与测试）")
+
+if "i0c-r25" in by_id:
+    i0c25 = load_json(BASE / by_id["i0c-r25"].get("file", ""))
+    parent = i0c25.get("parent_snapshot", {})
+    expected_parent = BASE / by_id["i0c-r24"]["file"]
+    check(parent.get("snapshot_id") == "i0c-r24", "r25 parent must be r24")
+    check(parent.get("path") == str(expected_parent.relative_to(ROOT)), "r25 parent path mismatch")
+    check(parent.get("sha256") == digest(expected_parent), "r25 parent bytes mismatch")
+    binding25 = i0c25.get("binding", {})
+    corrections = i0c25.get("corrections", {})
+    for finding in ("B1", "B2", "B3", "B4", "B5", "I3-5"):
+        check(finding in corrections, f"r25 missing correction {finding}")
+    base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    audit = f"{base}/audits/20260918-i32-remediation"
+    allowed = {
+        "i3_2_tooling": {f"{base}/{name}.py" for name in (
+            "i3s2_evidence_targets", "i3s2_apply_decisions", "i3s2_verify_candidates")},
+        "i3_2_assets": {f"{base}/i3-2/{name}" for name in (
+            "evidence-targets-candidates.json", "evidence-targets-adjudication.md",
+            "evidence-targets-review.md", "evidence-targets-verification.json", "approval-report.json")},
+        "docs": {"docs/plan/corpus-ingestion-rebuild-tasks.md", "docs/plan/claims-market-closed-loop-plan.md"},
+        "freeze_validator": {f"{base}/freezes/validate_i0c_freeze.py"},
+    }
+    check(set(binding25) == set(allowed) | {"i3_2_regressions", "i3_2_archive"}, "r25 binding groups mismatch")
+    for group, expected in allowed.items():
+        check(set(binding25.get(group, {})) == expected, f"r25 unexpected {group} scope")
+    for rel in binding25.get("i3_2_regressions", {}):
+        check(str(Path(rel).parent) == audit and ".." not in Path(rel).parts,
+              f"r25 regression binding out of scope {rel}")
+    for name in ("test_approval_contract.py", "green-final.txt", "review.md", "finalize.py"):
+        check(f"{audit}/{name}" in binding25.get("i3_2_regressions", {}), f"r25 missing regression {name}")
+    parent24 = load_json(expected_parent)
+    expected_archives = {}
+    for group in ("i3_2_tooling", "i3_2_assets", "docs", "freeze_validator"):
+        for rel, sha in parent24.get("binding", {}).get(group, {}).items():
+            expected_archives[f"{audit}/before-r24/{rel}"] = sha
+    check(binding25.get("i3_2_archive") == expected_archives, "r25 historical byte archive incomplete")
+    merge_binding(i0c_current_binding, binding25)
+
+
+if "i0c-r26" in by_id:
+    i0c26 = load_json(BASE / by_id["i0c-r26"].get("file", ""))
+    parent = i0c26.get("parent_snapshot", {})
+    expected_parent = BASE / by_id["i0c-r25"]["file"]
+    check(parent.get("snapshot_id") == "i0c-r25", "r26 parent must be r25")
+    check(parent.get("path") == str(expected_parent.relative_to(ROOT)), "r26 parent path mismatch")
+    check(parent.get("sha256") == digest(expected_parent), "r26 parent bytes mismatch")
+    binding26 = i0c26.get("binding", {})
+    corrections = i0c26.get("corrections", {})
+    for finding in ("I3-2_adoption", "human_signature", "required_supplementary_scope",
+                    "machine_status_override", "verifier_probe_update", "I3-5"):
+        check(finding in corrections, f"r26 missing correction {finding}")
+    base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    audit = f"{base}/audits/20260918-i32-adoption-dryrun"
+    allowed = {
+        "i3_2_tooling": {f"{base}/{name}.py" for name in (
+            "i3s2_evidence_targets", "i3s2_apply_decisions", "i3s2_verify_candidates",
+            "i3s2_textutil")},
+        "i3_2_source_gold": {f"{base}/{name}" for name in (
+            "source-gold-frozen.jsonl", "query-gold-frozen.jsonl")},
+        "i3_2_assets": {f"{base}/i3-2/{name}" for name in (
+            "evidence-targets-candidates.json", "evidence-targets-adjudication.md",
+            "evidence-targets-review.md", "evidence-targets-verification.json",
+            "approval-report.json", "evidence-targets-decisions.json",
+            "evidence-targets-approved.json", "source-gold-nearmiss-library.jsonl")},
+        "docs": {"docs/plan/corpus-ingestion-rebuild-tasks.md",
+                 "docs/plan/claims-market-closed-loop-plan.md"},
+        "freeze_validator": {f"{base}/freezes/validate_i0c_freeze.py"},
+    }
+    check(set(binding26) == set(allowed) | {"i3_2_regressions", "i3_2_archive"},
+          "r26 binding groups mismatch")
+    for group, expected in allowed.items():
+        check(set(binding26.get(group, {})) == expected, f"r26 unexpected {group} scope")
+    for name in ("evidence-targets-candidates-v6.json", "evidence-targets-review-v6.md",
+                 "evidence-targets-adjudication-v3.md", "evidence-targets-verification-v4.json",
+                 "approval-report-v2.json"):
+        check(f"{base}/i3-2/{name}" in binding26.get("i3_2_archive", {}),
+              f"r26 missing archive {name}")
+    gold_archive = f"{audit}/before-r26/{base}/source-gold-frozen.jsonl"
+    check(gold_archive in binding26.get("i3_2_archive", {}),
+          "r26 missing r25 source-gold byte archive")
+    for rel in binding26.get("i3_2_regressions", {}):
+        check(str(Path(rel).parent) == audit and ".." not in Path(rel).parts,
+              f"r26 regression binding out of scope {rel}")
+    for name in ("report.md", "run_adoption_dryrun.py", "promote_i3s2.py", "promote-log.json",
+                 "dryrun-result.json", "decisions-final-dryrun.json", "gate-final-dryrun.json",
+                 "release-manifest.json", "verification-v7-dryrun.json"):
+        check(f"{audit}/{name}" in binding26.get("i3_2_regressions", {}),
+              f"r26 missing regression {name}")
+    for group, items in binding26.items():
+        for rel in items:
+            check(not rel.startswith(("plugins/", "tests/", "guards/")),
+                  f"r26 越界绑定 {rel}（本轮不改实现/测试/守卫）")
+    check(
+        binding26.get("i3_2_source_gold", {}).get(f"{base}/source-gold-frozen.jsonl")
+        == digest(ROOT / f"{base}/source-gold-frozen.jsonl"),
+        "r26 source-gold binding mismatch",
+    )
+    merge_binding(i0c_current_binding, binding26)
+
+# 最新修订绑定优先（supersession）：i0c-r2..r26 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in ("i0c-r2", "i0c-r3", "i0c-r4", "i0c-r5", "i0c-r6", "i0c-r7", "i0c-r8", "i0c-r9", "i0c-r10", "i0c-r11", "i0c-r12", "i0c-r13", "i0c-r14", "i0c-r15", "i0c-r16", "i0c-r17", "i0c-r18", "i0c-r19", "i0c-r20", "i0c-r21", "i0c-r22"):
+for sid in ("i0c-r2", "i0c-r3", "i0c-r4", "i0c-r5", "i0c-r6", "i0c-r7", "i0c-r8", "i0c-r9", "i0c-r10", "i0c-r11", "i0c-r12", "i0c-r13", "i0c-r14", "i0c-r15", "i0c-r16", "i0c-r17", "i0c-r18", "i0c-r19", "i0c-r20", "i0c-r21", "i0c-r22", "i0c-r23", "i0c-r24", "i0c-r25"):
     entry = by_id.get(sid)
     if not entry:
         continue
@@ -692,8 +893,12 @@ if errors:
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
 print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
-      "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22 effective bindings (latest-revision-wins) + superseded "
-      "i1-r4 bindings ok, lineage i0c-r22->i0c-r21->i0c-r20->i0c-r19->i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->"
+      "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22/r23/r24 effective bindings (latest-revision-wins) + superseded "
+      "i1-r4 bindings ok, lineage i0c-r24->i0c-r23->i0c-r22->i0c-r21->i0c-r20->i0c-r19->i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->"
       "i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed, M5 released by U sign-off, "
       "I3-0 scorer (scoring.py) add-only revision r19, r20 = validator r19-block path fix, "
-      "r21 = I3-0 independent-review remediation F1-F5, r22 = I3-2 evidence-target candidates")
+      "r21 = I3-0 independent-review remediation F1-F5, r22 = I3-2 evidence-target candidates, "
+      "r23 = I3-2 material-review remediation F1-F5 (rule evidence-mapping-4, candidates only), "
+      "r24 = I3-2 adjudication-review remediation A1-A5 (rule evidence-mapping-5, "
+      "approval-path + gate, candidates only); "
+      + ("r26 I3-2 adoption verified (new source-gold 36 slots, 82 targets, filed decisions, gate ready=true, approved projection 79+20)" if "i0c-r26" in by_id else ""))

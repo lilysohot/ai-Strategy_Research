@@ -1,0 +1,7 @@
+$ python -B /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_apply_decisions.py
+archived previous: approval-report-v1.json
+approval report: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report.json sha256=3dc28ce94af0b15f720a103b20b75129d76e15eaa5dc2e7ae24a3dec9c06bcb5
+{"ready": false, "stage": "no_decisions"}
+  BLOCKED 缺少审批件 evidence-targets-decisions.json：批准必须走『审批件 → 批准投影 → 完整性门』，候选内的 adjudication.status 不作凭据
+
+exit=0

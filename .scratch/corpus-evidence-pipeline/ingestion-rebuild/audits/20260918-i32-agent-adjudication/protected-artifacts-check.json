@@ -1,0 +1,14 @@
+{
+  "unchanged": true,
+  "sha256": {
+    "source-gold-frozen.jsonl": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2",
+    "query-gold-frozen.jsonl": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+    "guards/i3.json": "655b4e1cfb6c65d7af5da642d91e703c499b0751212aab0690e217148409aee5",
+    "freezes/freeze-manifest.json": "104331c83f5ff65364b26340efc32e6ee8abe76c1376d406731a02847af4d300",
+    "freezes/i0c-r25.json": "17de00c53c9cd8e1bd0d4cdd32a925d1c75861b49d286f66b50c78cc7fb0cf48",
+    "i3-2/evidence-targets-candidates.json": "2417c22d5256f403d90e8507ad633b02942d9d6d4f7fff0dcf87da11a848c44e",
+    "i3-2/approval-report.json": "3dc28ce94af0b15f720a103b20b75129d76e15eaa5dc2e7ae24a3dec9c06bcb5"
+  },
+  "formal_decisions_exists": false,
+  "formal_approved_exists": false
+}

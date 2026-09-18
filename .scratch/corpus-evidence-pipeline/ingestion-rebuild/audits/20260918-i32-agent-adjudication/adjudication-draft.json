@@ -1,0 +1,1295 @@
+{
+  "artifact": "i3-2-agent-adjudication-draft-NOT-APPROVAL",
+  "author": "Codex (AI-assisted review, not xyl/human signature)",
+  "generated_at": "2026-09-18T09:21:38.185359+00:00",
+  "rule_rev": "evidence-mapping-6",
+  "authority": "用户授权代为补证与整理裁决；未授权把AI记录冒充独立人工签认",
+  "ready_for_gold_freeze": false,
+  "based_on": {
+    "candidates_sha256": "2417c22d5256f403d90e8507ad633b02942d9d6d4f7fff0dcf87da11a848c44e",
+    "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2",
+    "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+    "guard_sha256": "655b4e1cfb6c65d7af5da642d91e703c499b0751212aab0690e217148409aee5"
+  },
+  "source_reading": {
+    "raw_pdfs_read": 0,
+    "blocked_by": "i3 guard read_roots=[]; waiting for scoped read phase approval"
+  },
+  "facet_reviews": [
+    {
+      "item_id": "I32-company-001-01",
+      "query_id": "company-001",
+      "facet_id": "q5",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "26—28年与三个EPS数值按顺序对应；同句明确预测、一年目标价2030元及维持强推。'同时'是答案组织义务，原文引号/空格导致的词面差异不是缺事实。",
+      "evidence": [
+        {
+          "ref": "company-008-claim-001#4",
+          "source_id": "2026-08-16_6f14cc14",
+          "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "元",
+            "period": "报告日2026-08-16；目标价期限一年"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-001-02",
+      "query_id": "company-001",
+      "facet_id": "q6",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-002-01",
+      "query_id": "company-002",
+      "facet_id": "q9",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-003-01",
+      "query_id": "company-003",
+      "facet_id": "q7",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-003-02",
+      "query_id": "company-003",
+      "facet_id": "q8",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-004-01",
+      "query_id": "company-004",
+      "facet_id": "f5",
+      "kind": "value_equivalence",
+      "status": "supported",
+      "reason": "原文13.4与要求13.40数值等价；保留原文13.4不改写。",
+      "evidence": [
+        {
+          "ref": "company-018-claim-001#2",
+          "source_id": "2026-09-06_dddc7cd0",
+          "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "其设定的2026—2028 年的营业收入触发\n值和目标值分别为8.84/12.06/15.81 亿元（26-28 年同比增速为\n32%/36%/31% ）和9.38/13.4/18.09 亿元",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "亿元",
+            "period": "2026—2028"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-004-02",
+      "query_id": "company-004",
+      "facet_id": "q7",
+      "kind": "qualification",
+      "status": "needs_source_context",
+      "reason": "现有quote以'其设定'开头，虽有触发值/目标值，但股权激励主体只在text标注中；须补第1页该段前文，不能把text当原文。",
+      "evidence": [
+        {
+          "ref": "company-018-claim-001#2",
+          "source_id": "2026-09-06_dddc7cd0",
+          "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "其设定的2026—2028 年的营业收入触发\n值和目标值分别为8.84/12.06/15.81 亿元（26-28 年同比增速为\n32%/36%/31% ）和9.38/13.4/18.09 亿元",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "亿元",
+            "period": "2026—2028"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-007-01",
+      "query_id": "company-007",
+      "facet_id": "q2",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-008-01",
+      "query_id": "company-008",
+      "facet_id": "q1",
+      "kind": "source_coverage",
+      "status": "needs_source_context",
+      "reason": "两条具体评级及维持/首次覆盖均有原文；两段未出现公司名，须把报告首页主体与这两段绑定，不能把标题身份映射伪装为词面同义。",
+      "evidence": [
+        {
+          "ref": "company-008-claim-001#4",
+          "source_id": "2026-08-16_6f14cc14",
+          "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "元",
+            "period": "报告日2026-08-16；目标价期限一年"
+          }
+        },
+        {
+          "ref": "company-018-claim-001#3",
+          "source_id": "2026-09-06_dddc7cd0",
+          "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "我\n们预计公司2026—2028 年归母净利润分别为1.32/2.19/3.43 亿元，对\n应PE 分别为79/48/30 倍，首次覆盖给予“优于大市”评级。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "亿元；倍",
+            "period": "2026—2028E"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-008-02",
+      "query_id": "company-008",
+      "facet_id": "q2",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-008-03",
+      "query_id": "company-008",
+      "facet_id": null,
+      "kind": "source_coverage",
+      "status": "supported",
+      "reason": "绑定贵州茅台来源2026-08-16_6f14cc14；选择该来源具体维持强推引文，不使用另一来源评级或通用定义。",
+      "evidence": [
+        {
+          "ref": "company-008-claim-001#4",
+          "source_id": "2026-08-16_6f14cc14",
+          "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "元",
+            "period": "报告日2026-08-16；目标价期限一年"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-company-008-04",
+      "query_id": "company-008",
+      "facet_id": null,
+      "kind": "source_coverage",
+      "status": "supported",
+      "reason": "绑定光力科技来源2026-09-06_dddc7cd0；原文明确首次覆盖、优于大市。",
+      "evidence": [
+        {
+          "ref": "company-018-claim-001#3",
+          "source_id": "2026-09-06_dddc7cd0",
+          "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "我\n们预计公司2026—2028 年归母净利润分别为1.32/2.19/3.43 亿元，对\n应PE 分别为79/48/30 倍，首次覆盖给予“优于大市”评级。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "亿元；倍",
+            "period": "2026—2028E"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-001-01",
+      "query_id": "industry-001",
+      "facet_id": "q4",
+      "kind": "qualification",
+      "status": "needs_source_context",
+      "reason": "需联合纯碱行、价格/价差分位列及注1/注2，注2单独不能证明分位不是涨幅；表格身份目前在行列标注中，应回核第10页表头。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#0",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "0.0%",
+          "item_identity": {
+            "row": "纯碱",
+            "col": "价格分位",
+            "unit": "%",
+            "period": "2016-01-01至2026-07-27"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#1",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "0.0%",
+          "item_identity": {
+            "row": "纯碱",
+            "col": "价差分位",
+            "unit": "%",
+            "period": "2016-01-01至2026-07-27"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#2",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "82.9%",
+          "item_identity": {
+            "row": "纯碱",
+            "col": "开工率",
+            "unit": "%",
+            "period": "2026年年初至7月26日或1—6月平均（见注2）"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#9",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-002-01",
+      "query_id": "industry-002",
+      "facet_id": "q3",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "注3逐字注明R32产能为配额；不得改称实际产量是对此口径的保留，不需虚构来源说过同样的否定句。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#10",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-002-02",
+      "query_id": "industry-002",
+      "facet_id": "q4",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "注1明确价格/价差分位统计窗口；不能用裸值99.6%或其period元数据替代。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-003-01",
+      "query_id": "industry-003",
+      "facet_id": "q3",
+      "kind": "qualification",
+      "status": "needs_source_context",
+      "reason": "89.9%与8068.0分别属于开工率和2026E产能；须核对表头、万吨/年单位与E预测列，开工率脚注不能代替这些结构证据。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#6",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "89.9%",
+          "item_identity": {
+            "row": "尿素",
+            "col": "开工率",
+            "unit": "%",
+            "period": "2026年年初至7月26日或1—6月平均（见注2）"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#7",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "8068.0",
+          "item_identity": {
+            "row": "尿素",
+            "col": "2026E产能",
+            "unit": "万吨/年",
+            "period": "2026E"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-004-01",
+      "query_id": "industry-004",
+      "facet_id": "q1",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "选注1，日期范围2016-01-01至2026-07-27在原文；拒绝裸数值备选。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-004-02",
+      "query_id": "industry-004",
+      "facet_id": "q2",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "选注2，两个平均窗口及'或'均明确；不能按品种擅自分配窗口。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#9",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-004-03",
+      "query_id": "industry-004",
+      "facet_id": "q3",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-005-01",
+      "query_id": "industry-005",
+      "facet_id": "q4",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-006-01",
+      "query_id": "industry-006",
+      "facet_id": "q1",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "用途和计划已出现，但'供应链消息'只在text而不在quote；须补第1页上文来源归属。",
+      "evidence": [
+        {
+          "ref": "industry-057-claim-001#2",
+          "source_id": "2026-09-06_f8e31696",
+          "source_sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra 预计于2027 年推出。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": "报告时点；2027为预期"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-006-02",
+      "query_id": "industry-006",
+      "facet_id": "q2",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "原文明确Rubin Ultra预计2027年推出，不能改写为已经推出。",
+      "evidence": [
+        {
+          "ref": "industry-057-claim-001#2",
+          "source_id": "2026-09-06_f8e31696",
+          "source_sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra 预计于2027 年推出。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": "报告时点；2027为预期"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-006-03",
+      "query_id": "industry-006",
+      "facet_id": "q3",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "计划/预计可保留，消息来源仍缺原文；补齐后联合承载，不以lexical_review豁免。",
+      "evidence": [
+        {
+          "ref": "industry-057-claim-001#2",
+          "source_id": "2026-09-06_f8e31696",
+          "source_sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra 预计于2027 年推出。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": "报告时点；2027为预期"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-007-01",
+      "query_id": "industry-007",
+      "facet_id": "q5",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-008-01",
+      "query_id": "industry-008",
+      "facet_id": "q1",
+      "kind": "qualification",
+      "status": "needs_source_context",
+      "reason": "R32的99.6%需绑定价格分位列并结合注1；不能用纯碱/R134a或仅注1替代完整身份。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#3",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "99.6%",
+          "item_identity": {
+            "row": "R32",
+            "col": "价格分位",
+            "unit": "%",
+            "period": "2016-01-01至2026-07-27"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-008-02",
+      "query_id": "industry-008",
+      "facet_id": "q3",
+      "kind": "source_coverage",
+      "status": "needs_source_context",
+      "reason": "应联合R32行/列/统计窗口和氩气价格变化段，证明历史分位与区间涨幅不同；不把'引用两份'本身当来源事实。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#3",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "99.6%",
+          "item_identity": {
+            "row": "R32",
+            "col": "价格分位",
+            "unit": "%",
+            "period": "2016-01-01至2026-07-27"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        },
+        {
+          "ref": "industry-057-claim-001#4",
+          "source_id": "2026-09-06_f8e31696",
+          "source_sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "元/吨；%",
+            "period": "2026年5月初至9月2日"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-industry-008-03",
+      "query_id": "industry-008",
+      "facet_id": null,
+      "kind": "source_coverage",
+      "status": "supported",
+      "reason": "指定2026-08-13_174b6462来源，选择R32单元格与统计窗口，不能以华福周报单独完成双来源义务。",
+      "evidence": [
+        {
+          "ref": "industry-009-claim-001#3",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "99.6%",
+          "item_identity": {
+            "row": "R32",
+            "col": "价格分位",
+            "unit": "%",
+            "period": "2016-01-01至2026-07-27"
+          }
+        },
+        {
+          "ref": "industry-009-claim-001#8",
+          "source_id": "2026-08-13_174b6462",
+          "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "locator": {
+            "page": "10"
+          },
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-001-01",
+      "query_id": "macro-001",
+      "facet_id": "q5",
+      "kind": "qualification",
+      "status": "needs_source_context",
+      "reason": "前值修订关系明确，但当前quote缺'8月'和'7月'字样；需扩大第1页事件段引文以绑定月份，不能仅由period补足。",
+      "evidence": [
+        {
+          "ref": "macro-038-claim-001#0",
+          "source_id": "2026-09-06_793b3967",
+          "source_sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "新增非农就业16.2\n万人，预期5.6 万人，前值由-2.3 万人修正为2.1 万人",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "万人",
+            "period": "2026-08；2026-07前值修订"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-002-01",
+      "query_id": "macro-002",
+      "facet_id": "q7",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-003-01",
+      "query_id": "macro-003",
+      "facet_id": "q1",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "'若...下行幅度有限'明确条件关系；条件/后续通胀的词面差异可逐项原文说明。",
+      "evidence": [
+        {
+          "ref": "macro-038-claim-001#3",
+          "source_id": "2026-09-06_793b3967",
+          "source_sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": "2026-09预期"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-003-02",
+      "query_id": "macro-003",
+      "facet_id": "q2",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "冻结quote没有'强就业降低加息顾虑'的因果判断；回到光大非农点评第1页最后两段取完整原句，不能由题目要求生成quote。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-003-03",
+      "query_id": "macro-003",
+      "facet_id": "q4",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "联合'若...可能性'与'市场预期...超过60%'两段，分别承载条件判断和市场概率；不等同正式决议属于答案解释约束。",
+      "evidence": [
+        {
+          "ref": "macro-038-claim-001#3",
+          "source_id": "2026-09-06_793b3967",
+          "source_sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": "2026-09预期"
+          }
+        },
+        {
+          "ref": "macro-038-claim-001#4",
+          "source_id": "2026-09-06_793b3967",
+          "source_sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "在非农数据公布后，市场预期9 月加息的概\n率已经超过60%。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "%",
+            "period": "2026-09-04非农公布后"
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-004-01",
+      "query_id": "macro-004",
+      "facet_id": "q1",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "原文逐一列出政府、准财政、企业、居民、海外五主体；'五主体'和'五个主体'为词面差异。",
+      "evidence": [
+        {
+          "ref": "macro-039-claim-001#1",
+          "source_id": "2026-09-06_cc03f55b",
+          "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-004-02",
+      "query_id": "macro-004",
+      "facet_id": "q2",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "聚焦前四者只在text中，不在quote；须补华创宏观专题第1页相关原句。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-004-03",
+      "query_id": "macro-004",
+      "facet_id": "q3",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "五主体列表不能承载四条收敛路径；须从第1—2页四个路径标题/摘要分别取原文。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-005-01",
+      "query_id": "macro-005",
+      "facet_id": "q2",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "新旧动能行业分类不证明财政收入依赖旧动能及新动能税负偏低；须补第1页路径1的两条因果/税负判断。",
+      "evidence": [
+        {
+          "ref": "macro-039-claim-001#0",
+          "source_id": "2026-09-06_cc03f55b",
+          "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-005-02",
+      "query_id": "macro-005",
+      "facet_id": "q3",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-006-01",
+      "query_id": "macro-006",
+      "facet_id": "q5",
+      "kind": "qualification",
+      "status": "needs_source_supplement",
+      "reason": "数值与泛化样本风险均已有，但都不能证明'偏头部发债企业'；须补第1页路径2的具体样本定义。",
+      "evidence": [
+        {
+          "ref": "macro-039-claim-001#3",
+          "source_id": "2026-09-06_cc03f55b",
+          "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "locator": {
+            "page": "1"
+          },
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": "%",
+            "period": "2025；2024"
+          }
+        },
+        {
+          "ref": "macro-060-claim-001#4",
+          "source_id": "2026-09-06_cc03f55b",
+          "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "locator": {
+            "page": "2"
+          },
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-007-01",
+      "query_id": "macro-007",
+      "facet_id": "q7",
+      "kind": "answer_constraint",
+      "status": "answer_constraint_only",
+      "reason": "保留冻结要求中的答案表达约束，不新增证据目标；这不是对真实生成答案已合规的证明。",
+      "evidence": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "item_id": "I32-macro-008-01",
+      "query_id": "macro-008",
+      "facet_id": "q3",
+      "kind": "qualification",
+      "status": "supported",
+      "reason": "原文同时保留上市公司/发债企业、代表性欠佳、结论偏差及可能存在其他路径，不能删掉后两项。",
+      "evidence": [
+        {
+          "ref": "macro-060-claim-001#4",
+          "source_id": "2026-09-06_cc03f55b",
+          "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "locator": {
+            "page": "2"
+          },
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "item_identity": {
+            "row": null,
+            "col": null,
+            "unit": null,
+            "period": null
+          }
+        }
+      ],
+      "requires_user_confirmation": true
+    }
+  ],
+  "question_reviews": [
+    {
+      "query_id": "company-001",
+      "requirement": "必须同时给出EPS 67.74/70.77/73.84元与年度对应、一年目标价2030元、维持强推，并标明是报告预测。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "评级段已包含完整EPS年度序列、目标价和预测属性，可据冻结标注整理。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-002",
+      "requirement": "H1收入922.8亿元/+1.3%、归母445.2亿元/-2.0%；Q2收入375.8亿元/-5.2%、归母172.7亿元/-6.9%；不能混淆半年与单季。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "H1与单Q2有两条独立原文，数值及同比正负均应分别保留。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-003",
+      "requirement": "EPS依次0.36/0.59/0.93元；经营现金流依次-222/-138/-17百万元，括号须解为负数；引用第20页对应行列且标明预测。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "六项数值与行列/期间在已具名标注中；括号解释已有原审核依据，草案不把标注元数据冒充新增quote。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-004",
+      "requirement": "按年度同时列出触发值8.84/12.06/15.81亿元与目标值9.38/13.40/18.09亿元；不得当作实际收入或券商盈利预测。",
+      "status": "needs_source_review",
+      "reason": "补股权激励段主体上下文后才能完整确认。",
+      "open_items": [
+        "I32-company-004-02"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-005",
+      "requirement": "8230先进封装已批量应用；8231支持全切/DBG半切/Edge Trimming且已形成正式订单；9130 Low-k开槽、9320超薄硅/SiC/GaN/MEMS隐切，后两款均在客户验证。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "8230/8231与9130/9320的两条原文已区分批量应用、正式订单和客户验证，不能混为量产。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-006",
+      "requirement": "直接32.60%，经全资宁波万丰隆间接4.00%，合计36.60%；陈淑兰1.70%、赵彤亚0.57%不计入。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "32.60%+4.00%=36.60%；另条原文明确亲属1.70%/0.57%未计入。截止日期仍需保留已有期间依据。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-007",
+      "requirement": "茅台集团持有华创云信4.06%股份；华创云信为华创证券控股股东，不能误记成华创证券持有茅台集团。",
+      "status": "needs_source_review",
+      "reason": "持股方向原文明确；'本公司'指华创证券需回核声明页主体，不能靠同义映射补主体。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-008",
+      "requirement": "必须取得两份材料：贵州茅台为强推（维持），光力科技为优于大市（首次覆盖）；通用评级定义页不能代替具体评级。",
+      "status": "needs_source_review",
+      "reason": "具体评级有据，两份报告的公司主体上下文需绑定。",
+      "open_items": [
+        "I32-company-008-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-001",
+      "requirement": "图6续表纯碱行：价格分位0.0%、价差分位0.0%、开工率82.9%；分位不是价格涨幅，开工率是注2所述期间平均。",
+      "status": "needs_source_review",
+      "reason": "保留纯碱三列身份，联合注1与注2；需回核表头。",
+      "open_items": [
+        "I32-industry-001-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-002",
+      "requirement": "R32价格分位99.6%，2026E产能28.5万吨/年；按注3属配额，不能解释为实际产量。价格分位窗口2016-01-01至2026-07-27。",
+      "status": "needs_source_review",
+      "reason": "R32数值、配额脚注及窗口已有标注；2026E/单位结构还需按原表保留。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-003",
+      "requirement": "尿素开工率89.9%，2026E产能8068.0万吨/年；区分开工率与产能，2026E为预测列。",
+      "status": "needs_source_review",
+      "reason": "回核表头及单位，不以开工率脚注证明产能预测列。",
+      "open_items": [
+        "I32-industry-003-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-004",
+      "requirement": "价格/价差分位为2016-01-01至2026-07-27；开工率为2026-01-01至07-26平均或2026年1—6月平均；不得擅自把二选一窗口分配到各品种。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "两条脚注足以承载两个窗口；或关系必须原样保留。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-005",
+      "requirement": "从720元/吨升至2459元/吨；约四个月，报告称涨幅超过240%；不是所有电子特气共同涨幅，也不是单日涨幅。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "氩气从720到2459元/吨、四个月、超过240%均见同段。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-006",
+      "requirement": "报告援引供应链消息：计划用于NVSwitch板卡及Rubin Ultra正交背板主力选材；Rubin Ultra预计2027年推出。须保留消息来源与“计划/预计”限定。",
+      "status": "needs_source_review",
+      "reason": "补供应链消息归属，现有计划/预计和用途不能代替归属。",
+      "open_items": [
+        "I32-industry-006-01",
+        "I32-industry-006-03"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-007",
+      "requirement": "Wind新材料5611.65点、环比-4.2%；申万三级半导体材料12576.94点、环比-9.12%；保持指数名和数值配对。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "两条指数原文分别承载5611.65/-4.2%及12576.94/-9.12%，不得错配。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-008",
+      "requirement": "不能：R32为历史价格分位（2016-01-01至2026-07-27）；氩气为2026年5月初720至9月2日2459元/吨的价格涨幅。须引用两份材料证明统计含义不同。",
+      "status": "needs_source_review",
+      "reason": "联合R32表格身份与氩气价格段；不能把历史分位当涨幅。",
+      "open_items": [
+        "I32-industry-008-01",
+        "I32-industry-008-02"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-001",
+      "requirement": "8月16.2万人，预期5.6万人；7月由-2.3万人修正为2.1万人；前值修订与8月数据分开。",
+      "status": "needs_source_review",
+      "reason": "补月份上下文，修订关系与当月值不可混并。",
+      "open_items": [
+        "I32-macro-001-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-002",
+      "requirement": "失业率4.1%/前值4.1%，劳动参与率61.6%/前值61.4%，平均时薪同比3.1%/前值3.2%；均为报告所述。",
+      "status": "supported_by_frozen_annotation",
+      "reason": "三个指标和前值均有已冻结原文，保留报告归属。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-003",
+      "requirement": "条件是后续通胀下行幅度有限；强就业降低加息顾虑。报告称非农公布后市场预期概率超过60%，必须区分附条件判断、市场预期和正式决定。",
+      "status": "needs_source_review",
+      "reason": "补强就业因果判断；条件与概率分开，不能当正式决定。",
+      "open_items": [
+        "I32-macro-003-02"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-004",
+      "requirement": "五主体为政府、准财政、企业、居民、海外；本文聚焦前四者；四路径为财政支出增加、缓解城投化债压力、企业投资增加、居民支出增加。",
+      "status": "needs_source_review",
+      "reason": "需补聚焦前四者与四条路径，五主体列表不能替代。",
+      "open_items": [
+        "I32-macro-004-02",
+        "I32-macro-004-03"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-005",
+      "requirement": "两本账支出增速预计约-0.5%，低于名义GDP增速；堵点为收入依赖旧动能且受其下行拖累、新动能综合税负偏低。须标注预测。",
+      "status": "needs_source_review",
+      "reason": "支出预测有据，财政收入两个堵点缺直接引文。",
+      "open_items": [
+        "I32-macro-005-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-006",
+      "requirement": "央企4.6%对5.9%，地方国企6.1%对6.2%，均下降；样本为偏头部发债企业，不等于全国所有国企。",
+      "status": "needs_source_review",
+      "reason": "两年数值有据，具体样本定义缺直接引文。",
+      "open_items": [
+        "I32-macro-006-01"
+      ],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-007",
+      "requirement": "消费倾向=消费/可支配收入，2026/2025/2019Q2为67.5%/68.6%/70.5%；支出倾向=(消费+新房购房)/可支配收入，为80.3%/83.7%/110.3%；不能混用口径。",
+      "status": "needs_source_review",
+      "reason": "两条原文支持公式、六个比率；当年=2026需报告年份上下文，不由公式或数值推断。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-008",
+      "requirement": "2026年1—6月本年施工项目计划总投资同比-4.3%，本年新开工项目计划总投资增速-29.4%；上市公司/发债企业样本代表性可能欠佳，结论可能偏差且可能有其他收敛路径。",
+      "status": "needs_source_review",
+      "reason": "投资增速和风险两段已有标注；当前年2026需保留报告年份依据。",
+      "open_items": [],
+      "requires_user_confirmation": true
+    }
+  ],
+  "negative_reviews": [
+    {
+      "query_id": "company-009",
+      "requirement": "应说明没有该实际业绩证据；材料发布于2026年，2027年2.19亿元是预测，不可作为经审计实际值。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：六份材料日期均为2026年8—9月；光力科技第1/20页明确2027E预测，不能支持未来全年审计实际值。",
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "company-010",
+      "requirement": "应回答材料没有支持该唯一序列号的证据；产品型号8231和“正式订单”不能替代设备序列号。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：光力科技第3页仅披露型号、工艺和正式订单状态；开发材料是研究报告而非逐台设备交付记录。此负例仍需真人确认全文覆盖。",
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-009",
+      "requirement": "应说明无该实际全年均价证据；2026年9月2日报价2459元/吨不能替代2027年全年均价。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：材料出版于2026年8—9月，华福周报提供2026年的点时报价，不可能据此确定2027全年已实现成交均价。",
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "industry-010",
+      "requirement": "应说明缺少已签合同和确切采购吨数的证据；PTFE选材计划不等于实际合同量。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：华福周报第1页只援引供应链选材计划；无对应已签合同明细。此负例需真人确认全文覆盖，不能用未检索到当作充分依据。",
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-009",
+      "requirement": "应说明材料没有该最终决定证据；报告出版于9月上旬，只提供9月加息条件判断与市场概率，不得把超过60%解释成已经加息。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：非农点评第1页明确使用后续数据、9月可能性和市场预期；不包含会议决议文件。",
+      "requires_user_confirmation": true
+    },
+    {
+      "query_id": "macro-010",
+      "requirement": "应说明无逐户明细证据；宏观消费/支出倾向等汇总比率不能反推出每户支出。",
+      "status": "needs_full_text_review",
+      "full_text_coverage_confirmed": false,
+      "reason": "现有摘录与既有human_basis可作线索，但本次未读取六份开发PDF全文；不以未检索到或未来日期推断代替全文覆盖核验。",
+      "previous_human_basis": "真人复核。依据：宏观专题第2页披露的是汇总支出倾向，研究材料未提供逐户微观调查表。此负例需真人确认全文覆盖。",
+      "requires_user_confirmation": true
+    }
+  ],
+  "human_status_clarifications": [
+    {
+      "gold_id": "macro-039-claim-001",
+      "status": "unresolved",
+      "reason": "human_basis仍称待真人复核且已有xyl签名。不能替xyl认定残留笔误；待原文核验后请U确认是否为残留描述。"
+    }
+  ],
+  "summary": {
+    "facets": 40,
+    "facet_statuses": {
+      "supported": 14,
+      "answer_constraint_only": 12,
+      "needs_source_context": 7,
+      "needs_source_supplement": 7
+    },
+    "positive_questions": 24,
+    "negative_questions": 6,
+    "clarifications": 1,
+    "human_approved": 0
+  }
+}

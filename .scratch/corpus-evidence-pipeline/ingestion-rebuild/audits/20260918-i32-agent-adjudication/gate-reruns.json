@@ -1,0 +1,10 @@
+[
+  {
+    "name": "regression",
+    "exit_code": 0
+  },
+  {
+    "name": "freeze-validation",
+    "exit_code": 0
+  }
+]

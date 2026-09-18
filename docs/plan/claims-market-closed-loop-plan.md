@@ -123,7 +123,7 @@ I0G-1 拒绝契约缺口：既有安全测试子集 7 通过、3 排除；补充
 | ID    | 任务与问题文件                                                                                                                                                                                                                           | 需求                                  | 依赖                           | 状态与完成门槛                                                                                                                               |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | R1    | [最小输出与联合金标](../../.scratch/corpus-evidence-pipeline/issues/19-material-contract-gold.md)                                                                                                                                          | PR-DATA-09/10、PR-OUT-06/07          | 无外部接口依赖                      | **已完成**；契约和联合金标校验通过，电话交流纪要开发覆盖已补，独立留出缺口保留                                                                                             |
-| I0—I5 | [语料基础链路重构](corpus-ingestion-rebuild-architecture.md)                                                                                                                                                                              | PR-DATA-01/02/09/12、PR-OUT-04/06/07 | 三类范围已明确；候选设计待 I0 证据复核        | **I0-A 交付齐（M1 达成）、I0-B 完成（M2 证据齐备）、I0-C 完成（M3 达成）、I1/M4 放行、I2 全部任务完成且 M5 已独立复核放行并经 U 签认（2026-09-18）；I3-0 已交付并按独立复核 F1—F5 整改（复核探针 10/10、自身 46 passed，待复核确认闭环）；I3-2 补料候选已出（30 题 → mapped 20／partial 1／needs_human 3／负例 6，共 60 条证据目标，往返验证 30/30，待 U 裁决 4 项）；M6—M8 未放行**；强制零模型，生产库未写入/未清库，不依赖 R2 语义通过 |
+| I0—I5 | [语料基础链路重构](corpus-ingestion-rebuild-architecture.md)                                                                                                                                                                              | PR-DATA-01/02/09/12、PR-OUT-04/06/07 | 三类范围已明确；候选设计待 I0 证据复核        | **I0-A 交付齐（M1 达成）、I0-B 完成（M2 证据齐备）、I0-C 完成（M3 达成）、I1/M4 放行、I2 全部任务完成且 M5 已独立复核放行并经 U 签认（2026-09-18）；I3-0 已交付并按独立复核 F1—F5 整改（复核探针 10/10、自身 46 passed，待复核确认闭环）；I3-2 补料候选已按三轮复核（F1—F5、A1—A5、B1—B5）修复（规则 `evidence-mapping-6` + 裁决应用器：30 题 → machine_ready 2／pending_human 20／blocked 2／负例 6，目标 54 条；自洽 0 failed、既有探针 16/16、新旧回归 88/88（r25）、**I3-2 采纳稿已落正式路径并经门放行（i0c-r26：金标 36 槽位、目标 82 条、裁决件 40+24+6+1、门 ready=true／0 阻断／20 条人工同义 warning、批准投影 79 必需 + 20 补充、验证 30/30 自洽 + 探针 16/16）**）；M6—M8 未放行**；强制零模型，生产库未写入/未清库，不依赖 R2 语义通过 |
 | R2    | [历史语义任务](../../.scratch/corpus-evidence-pipeline/issues/20-material-semantics.md) · [三类研报清洗与收口方案](research-report-cleaning-scope-plan.md) · [归因评估](../../.scratch/corpus-evidence-pipeline/r2-p4-root-cause-and-legacy-review.md) | PR-DATA-01/02/09/12、PR-OUT-06/07    | R1 历史资产 + I 基础接口 + R2-S0 新分母 | **partial / 历史 P4 failed**；后续语义任务未实施，来源准备复用 I 链路，归并执行并修正验收；新模型预算未冻结                                                                   |
 | R3    | [材料读取与小样本闭环](../../.scratch/corpus-evidence-pipeline/issues/21-material-readout.md)                                                                                                                                               | PR-OUT-06/07、PR-DATA-12             | R2                           | 待执行；优先 CLI 正式命令与终端 Agent 材料读取、保存/取证、重放与交付，无同花顺数据亦可验收；Web 暂缓                                                                           |
 | D1    | [同花顺数据契约与调用证据](../../.scratch/corpus-evidence-pipeline/issues/22-ths-data-contract.md)                                                                                                                                            | PR-DATA-03/06/11/12                 | 用户接口资料/合法权限；复用既有工具           | 待确认/执行；先列真实可用能力，再单样本验证数据类型、单位、时间、版本和调用身份                                                                                              |
@@ -448,41 +448,77 @@ I3-2（预期与评分器冻结）前置已满足，可启动；I3-1 另需其 F
 ``evidence_requirement``，机器可读证据目标缺失）。本轮 A 侧**只做候选映射**：不改冻结金标、不调模型、
 不读原文正文（证据全部来自 I0A-4 人工标注槽位）。
 
-**规则（`evidence-mapping-3`，两次自我修正都留档）**
+**规则（`evidence-mapping-5`；v1—v4 缺陷都留档在 `supersedes`）**
 
-- 数字 token 用**边界匹配**（`(?<![\d.])TOKEN(?![\d.])`，非 `%` 结尾时后不得紧跟 `%`）——修复 v1 的子串误命中
-  （"第20页"的 `20` 命中 `2026`，company-003 曾爆到 28 条目标）；
-- `第N页` 页码提示剥离另存（只供人工对账，不参与匹配）；
-- 同一 `(槽位, item)` 内多个 token 合并为**一个** target（不重复计数）；
-- 无强数字 token 的**定性题不猜**：状态 `needs_human` + 候选槽位 + item 预览，交人工指定
-  （v2 曾用连续汉字串当关键词，把整句当词，已废弃并登记缺陷）；
-- target 数超护栏（8）显式降级 `needs_human`，避免宽目标集让 EvidencePass 不可达；
-- 负例题按评分器契约显式 `evidence_required=false`（该例外有独立业务依据，不得用于规避证据缺口）。
+- **要求覆盖账**（F1/A4）：`evidence_requirement` 按分号/句号切子句，**子句既有数值又有标记时再按逗号
+  拆段**，把"限定/口径"从数值旁边拆出来；`machine_ready` 只表示"数值要件全部有承载 item"，
+  **不代表题目要求已完整**，也不等于人工已核验。含数字子句里的限定不再漏账
+  （`macro-003`「区分附条件判断/市场预期/正式决定」、`company-001`「标明是报告预测」均已成项）。
+- **单元格身份**（F2）：表格 item 的 `row/col/cell/unit/period` 进 `constraints`，`row:/col:`
+  同时进 `locator` → 同值不同单元格在 `EvidenceTarget.matches` 下不可互换；I3-1 必须由权威侧
+  （页/行/列，如 `read_pg.fetch_cell`）产出这些 token，**不得由适配器从金标回填**。
+- **三层角色**（F3/A5）：`required`（覆盖全部数值要件的最小集合）／`supplementary`（补充，**非必需**，
+  本版**不声明任何替代关系**，不再叫"可替代"）／`suggested`（待批准锚点，批准前不得计入必需）。
+  数字 token 字母边界（`8230CF` 不命中 `8230`）；日期掩码；同一数值每次出现独立成一要件。
+- **锚点不得按词面相近冒充完整**（A3）：每条机器锚点给 `adequacy`（full/partial）与
+  `uncovered_terms`，面级另给 `union_uncovered_terms`（多锚点联合的**交集**缺口）；`partial` 锚点必须
+  改选、补标注或显式 `residual_accepted` 才可批准，备选标 `search_hint`（仅供检索线索）。
+- **审批路径与门**（A1/A2）：新 `i3s2_apply_decisions.py` 实现"审批件
+  `evidence-targets-decisions.json` → 批准投影 `evidence-targets-approved.json` → 完整性门
+  `approval-report.json`"。门逐项核对要件裁决（40）／有答案题整题验收（24，含 `machine_ready` 题）／
+  负例全文覆盖（6）／来源槽位状态澄清（1）／锚点覆盖度／审批件输入哈希；**候选文件里的
+  `adjudication.status` 不作凭据**（改它不会开门），`驳回` 不删除原题要求、`补标注` 须先有新
+  source-gold 版本。
+- 机器**不代决**的事显式入队：定性要件锚点、数值等价（`13.40` ↔ 原文 `13.4`，quote 不改写）、
+  多来源覆盖、答案侧口径（记 `answer_constraints`，核验落点 I3-5，不冒充证据评分）、负例覆盖依据、
+  target 数超护栏（8）。
+- **EvidencePass 分母 = 逐题**（架构 §12.3「满足全部证据的题数 / 证据题数」）。"逐 item vs 槽位聚合"
+  **二选一作废**：item 条数与槽位聚合只作诊断；要用槽位聚合降低必需证据要求须先改架构验收合同。
+- 负例题按评分器契约显式 `evidence_required=false`，但仍须参加误报/伪造引用检查并人工确认全文覆盖。
 
 **产物与证据**
 
-- 生成器 [i3s2_evidence_targets.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py)；
+- 生成器 [i3s2_evidence_targets.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py)
+  + 共享文本层 [i3s2_textutil.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_textutil.py)
+  + 裁决应用器 [i3s2_apply_decisions.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_apply_decisions.py)；
   候选 [evidence-targets-candidates.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json)
-  （write-once；v1/v2 归档为 `-v1`/`-v2` 并在 `supersedes` 登记缺陷）；
-  待裁决清单 [evidence-targets-review.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md)。
-- 覆盖：30 题 ⇒ **mapped 20 ／ partial 1 ／ needs_human 3 ／ 负例 6**，候选证据目标 **60** 条
-  （quote 均为原文逐字子串，locator 取槽位 page，source_id 取标注来源）。
-- 往返验证 [i3s2_verify_candidates.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py)
+  （write-once；v1—v4 归档并在 `supersedes` 登记缺陷）；
+  核对单 [evidence-targets-review.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md)；
+  **人工裁决单** [evidence-targets-adjudication.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md)。
+- 覆盖：30 题 ⇒ machine_ready **2** ／ pending_human **20** ／ blocked **2**（`macro-003`、`macro-004`
+  存在无承载 item 的要件）／ 负例 **6**；目标 54 条 = 必需 **35** ／ 补充 **4** ／ 待批准锚点 **15**
+  （其中 `partial` 锚点 9 条）；机器已批准 **0**。
+- 自检 [i3s2_verify_candidates.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py)
   → [evidence-targets-verification.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json)：
-  `gold_from_records` 接受"冻结金标 + 候选目标"合成记录（形状合契约）；**30/30 项检查通过**——
-  mapped/partial 题在合成观测下三项全过（候选自洽：来源归属/定位/逐字引文可用），
-  3 道待人工题按设计 `evidence_targets_absent` 阻断整轮（各类 EvidencePass 87.5%、关键题 company-008 未过），
-  负例空命中不产生误报与伪造引用。合成观测只证明候选自洽，**不代表真实链路可达**。
+  三段分开判定——① `self_consistency` 0 failed；② `regression_probes` **16/16 passed**（含审批门反例：
+  状态翻转/空审阅人/要件缺项/负例未确认/审批过期均不得开门，完整审批件可开门并产出投影）；
+  ③ `completeness_gate` = `stage=no_decisions`、`ready=false`——**候选阶段的正确状态**，A 段通过
+  不得读成"补料完整"，也不得用 B 段的合成夹具当成真实批准。
 
-**U 需裁决的 4 项（裁决前不得进正式冻结）**
+**U 需裁决的事项（裁决前不得进正式冻结）**
 
-1. 3 道定性题（`company-008`、`industry-006`、`macro-004`）人工指定证据目标（已给候选槽位与 item 预览）；
-2. `company-004` 未命中 token `13.40`（人工标注未覆盖？还是需人工指定？）；
-3. **EvidencePass 分母口径**：逐 item（严，60 条）还是槽位聚合（宽，按槽位计数）——本脚本不代决；
-4. 6 道负例 `evidence_required=false` 的批准。
+1. **要件裁决 40 项**（裁决单 §2）：定性锚点（`partial` 实质缺证须改选/补标，词面差异须原文映射，禁止 residual 豁免）、数值等价、
+   多来源覆盖、答案侧口径；
+2. **有答案题整题验收 24 题**（裁决单 §3，含 `machine_ready` 题）：对照冻结 `evidence_requirement`
+   逐段确认，漏项须补要件；
+3. **负例覆盖确认 6 题**（裁决单 §4；`company-010`/`industry-010`/`macro-010` 的 `human_basis`
+   仍写"需真人确认全文覆盖"）；
+4. **来源槽位状态澄清 1 项**（裁决单 §5：`macro-039-claim-001` 的 `human_basis` 写"待真人复核"
+   但已有 reviewer/reviewed_at）。
 
-**状态**：I3-2 补料候选完成（A 侧）；**未冻结金标、未宣告 I3-2 完成**——裁决后由 U 批准进入 I3-2 正式冻结
-（阈值/关键题/负例/旧基线映射同批冻结）。冻结修订 i0c-r22 只绑补料产物与台账，未改任何实现字节。
+**当前状态（r26 优先于本节历史 r25/r24 数据）**：I3-2 采纳稿落正式路径：新金标 36 槽位（冻结 23 条逐字节保留 + 采纳 13 槽/49 条，负例近似命中 7 条隔离成库）、候选 v7（82 条目标：必需 44／补充 20／锚点 18）、裁决件 40+24+6+1（署名 `xyl` + `ai_assisted`）、**门 ready=true（0 阻断／20 条人工同义 warning）**、批准投影 79 必需 + 20 补充、验证 30/30 自洽 + 探针 16/16。**未宣告 I3-2 完成**：其余冻结项与 I3-1/I3-5 未做。
+
+**历史 r25 状态**：I3-2 补料候选 v6 + 复验 B1—B5 修复交付；未冻结金标、未宣告 I3-2 完成。
+修复范围为来源专属绑定、答案约束隔离、逐项原文同义映射、检索线索改选核验、审批身份/唯一性和投影真源检查。
+`residual_accepted=true` 不再允许，词面差异用 `lexical_review`；原文缺证须补标，不能减少题目义务。
+评分器、清洗/切块/PG/公共模块未改；本轮零模型、零数据库写入、未读候选业务结果。
+回归、历史字节归档与命令见 [修复记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/review.md)。
+I3-5 的零模型答案约束门只核验登记/投影保真；真实生成答案语义验收仍未执行，须另行设计并授权预算。
+
+**历史 r24 状态**：I3-2 补料候选（A 侧，第三轮）+ 二轮复核 A1—A5 整改完成；**未冻结金标、未宣告 I3-2 完成**
+——裁决件经 `i3s2_apply_decisions.py` 校验通过（`ready=true`）后由 U 批准进入 I3-2 正式冻结
+（阈值/关键题/负例/旧基线映射同批冻结）。冻结修订 **i0c-r24** 只绑补料产物、文本层、裁决应用器、
+台账与验证器，未改任何实现字节（评分器与守卫保持 r19—r21 绑定的字节）。
 
 未单列的细任务仍为 `not_started`；I0-B 已完成（I0B-2 隔离恢复验证通过，M2 放行条件满足）；**M1 达成**（I0A-1～5 交付齐、守卫有效、资产按阶段冻结，U 联合确认）；**M4 已放行（2026-09-16 独立复核 + U 签认，见** **<a href="#m4-review-release">M4 复核</a>）**；**M3 已达成（2026-09-17 I0-C 冻结 i0c-r1，见** **<a href="#i0c-design-review">I0-C 设计复核</a>）**；**M5 已放行并经 U 签认（2026-09-18，见 <a href="#m5-review-signoff">M5 独立复核与 U 签认</a>：矩阵 20 块全绿零 skip、X1—X15 全过；复核人独立性偏差已显著登记并由 U 接受）**；**I3-0 已交付并自验过门（2026-09-18，见 <a href="#i3-0-delivery">I3-0 评分器交付</a>：三类指标评分器 + 31 合成用例 + i3 守卫 24/24 + 纯新增冻结 i0c-r19；按纪律待独立复核与 U 签认）**；M6—M8 未通过。I3 进行中：I3-2（预期与评分器冻结）可启动，须先补机器可读 `evidence_targets` 或显式 `evidence_required=false`。
 后续每次任务运行结束，应在同一轮回填：任务 ID、日期、实现状态、实际命令与结果、
@@ -1269,4 +1305,3 @@ uv run pyright
 3. M1 与 M2 可并行，但 M4 必须等待 M1、M2、M3 均满足发布门槛。
 4. 任一涉及时间、指标、单位或证据协议的范围变化，必须先更新关联设计文档和本清单。
 5. 全量 claims 重抽或面向真实任务启用新的市场证据协议前，必须归档差异报告并完成小范围验收。
-

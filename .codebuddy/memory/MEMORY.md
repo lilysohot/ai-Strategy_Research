@@ -76,15 +76,67 @@
 - **I3 守卫阶段**：`guards/i3.json`（deny_all 网络 + 零模型 + `read_roots: []` + protected `data`），
   自检报告 `i3-guard-report.json`（write-once，脚本 `i3_guard_selfcheck.py`）。I3-1 起需要开发来源 + 隔离 PG 时
   **另建 `i3-e2e.json`**，不改 i3.json（守卫配置一变就要重跑自检并绑定新哈希）。
-- **待补料（阻塞 M6 判据）**：冻结 `query-gold-frozen.jsonl` 30 题只有散文 `evidence_requirement`，
-  缺机器可读 `evidence_targets`；I3-2 必须补（可由 `source-gold-frozen.jsonl` 的 `locator`/`expected_items` 映射）
-  或显式 `evidence_required=False`。
-  **补料候选已出（2026-09-18，A 侧机器建议，未冻结金标）**：`i3-2/evidence-targets-candidates.json`
-  （当前 v3，规则 `evidence-mapping-3`；mapped 20／partial 1／needs_human 3／负例 6，共 60 条）
-  + `evidence-targets-review.md`（待裁决）+ `evidence-targets-verification.json`（评分器往返 30/30）；
-  生成器 `i3s2_evidence_targets.py`、验证器 `i3s2_verify_candidates.py`。**待 U 裁决 4 项**：
-  3 道定性题人工指定目标、`company-004` 的 `13.40` 未命中、EvidencePass 分母口径（逐 item／槽位聚合）、
-  6 道负例 `evidence_required=false` 批准。裁决前不得把候选当正式金标。
-  **映射规则要点（踩过的坑）**：数字 token 必须**边界匹配** `(?<![\d.])TOKEN(?![\d.])`
-  （否则 `第20页` 的 `20` 命中 `2026`，目标爆量）；不要用"连续汉字串"当关键词（会把整句当词）；
-  无强 token 的定性题**不猜**，标 `needs_human` 并给 item 预览交人工；target 超护栏即降级。
+- **I3-2 补料（阻塞 M6 判据，当前 i0c-r24）**：冻结 `query-gold-frozen.jsonl` 30 题只有散文
+  `evidence_requirement`，缺机器可读 `evidence_targets`，I3-2 必须补。
+  当前候选规则 **`evidence-mapping-5`**：30 题 ⇒ machine_ready 2／pending_human 20／blocked 2
+  （`macro-003`「强就业降低加息顾虑」、`macro-004`「本文聚焦前四者」无承载 item）／负例 6；
+  目标 54 = 必需 35／补充 4／待批准锚点 15（partial 9）。产物：`i3-2/evidence-targets-candidates.json`、
+  `evidence-targets-review.md`（核对单）、`evidence-targets-adjudication.md`（**人工裁决单**：
+  要件 40 + 整题 24 + 负例 6 + 状态澄清 1）、`evidence-targets-verification.json`（三段自检）、
+  `approval-report.json`（门）；工具：`i3s2_textutil.py`（共享切分/词元规则）、
+  `i3s2_evidence_targets.py`、`i3s2_verify_candidates.py`、`i3s2_apply_decisions.py`、
+  冻结脚本 `i3s2_remediation_freeze.py`(r23)／`i3s2_remediation_r24_freeze.py`(r24)。
+  **审批硬规矩（二轮复核 A1/A2 的核心）**：批准只能走
+  `evidence-targets-decisions.json` → `i3s2_apply_decisions.py` → `approved.json` + `approval-report.json`；
+  **候选里的 `adjudication.status` 是信息字段，门完全不读它**（v4 曾"改状态即开门"）。
+  门的必查项：要件逐 `item_id` 裁决（chosen 须在该题候选来源范围内、item 存在）／有答案题**整题验收**
+  （`reviewed_against_requirement=true`，`machine_ready` 题也要）／负例 `full_text_coverage_confirmed`／
+  来源状态澄清（`实质未决` 阻断）／锚点覆盖度／审批件三重输入哈希未过期／审阅人非空。
+  `驳回` 不删除原题要求；`补标注` 必须是**冻结标注中尚不存在**的 item 且声明新
+  `source_gold_revision`，否则保持未决。
+  **EvidencePass 分母 = 逐题**（架构 §12.3）；"逐 item vs 槽位聚合"二选一**已作废**，item/槽位计数只作诊断。
+  **覆盖账与角色**：`required`／`supplementary`（补充，非必需，**不声明替代关系**）／`suggested`
+  （待批准锚点，批准前不计入必需）；机器锚点给 `adequacy` + `uncovered_terms`，面级
+  `union_uncovered_terms` 取**各锚点未覆盖集合的交集**（取并集会误判；降噪：df ≤ max(2,20%×item 数)，
+  二元组按字序包含即视为覆盖）；`partial` 锚点须改选/补标/`residual_accepted` 才可批准；
+  备选标 `search_hint` 不进可批准集合。`machine_ready` 只表示"数值要件都有承载 item"。
+  表格 item 必须把 `row/col` 写进 `locator`、`row/col/cell/unit/period` 写进 `constraints`，
+  **I3-1 的 token 必须来自权威侧**（`read_pg.fetch_cell`），不得从金标回填。
+  **映射规则要点（踩过的坑）**：数值 token 用**字母边界** `(?<![\dA-Za-z.])TOKEN(?![\dA-Za-z.%])`
+  （修 v1 `20` 命中 `2026`、v3 `8230` 命中 `8230CF`）；日期先掩码；**同一数值的每次出现都是独立要件**
+  （`0.0%` ×2 ⇒ 两个不同单元格）；小数/百分数用 `Decimal.normalize()` 做数值等价（`13.40`↔`13.4`，
+  quote 不改写）；`item_text` 必须**逐字段归一化后分隔连接**（直接拼接会造假边界，令精确匹配失效）；
+  4 位数字紧跟元/点/倍等单位要升为强 token；不要用"连续汉字串"当关键词。
+  **分段纪律**：先按 `；;。` 切子句，**仅当子句既有数值又有标记时**才按逗号拆段——无差别逗号切分会把
+  "约四个月""均下降""括号须解为负数"切成无锚点假缺口（`blocked` 2→6）。含数值子句里的限定必须并行登记
+  （否则 `macro-003`「区分附条件判断/市场预期/正式决定」这类要求漏账）。
+  自检三段：`self_consistency` / `regression_probes`（16/16，含审批门反例）/ `completeness_gate`
+  （候选阶段 `no_decisions`/`ready=false` 是**正确状态**）；冻结脚本强制 `ready is False` +
+  审批件与批准投影不存在 + 输入哈希与 gold 一致才出包。
+  冻结件被同名覆盖前**先归档旧字节**（r24 已把 r23 的候选/核对单/裁决单/验证报告归档为
+  -v4/-v4/-v1/-v2 并绑定）；误删恢复：`.scratch` 已被 git 跟踪，
+  `git show HEAD:<path> > <归档名>`，还原后核对哈希等于旧修订绑定值。
+  **`runpy.run_path` 返回 globals 副本**：给"换输出路径/换输入件"打补丁必须用
+  `importlib.util.spec_from_file_location(...)+exec_module` 拿真模块对象，并加
+  `assert_patched()` 断言（否则补丁静默失效、脚本会在正式路径上跑——本会话真实踩过，
+  靠生成器自动归档 + r25 绑定哈希恢复）。
+  **采纳干跑（2026-09-18，i0c-r25 之后）**：`audits/20260918-i32-adoption-dryrun/`（U 全量采纳
+  AI 补证包后的干跑，未落正式路径）。结论：新 source-gold 版本候选 = 冻结节逐字节保留 + 采纳
+  13 槽/49 条（只收支持证据）+ 负例近似命中 7 条隔离成库；重映射 54→82、blocked 2→1（剩 macro-004）；
+  裁决件 40+24+6+1 全可机械生成；门机器口径 17 项未决 → 逐项同义确认口径 1 项未决
+  （纯日期 span 无内容词元会被拒）→ 两项假设叠加才 ready=true 但 approved_required=96（需 U 定
+  "必需/补充"口径）。
+  **署名口径（U 于 2026-09-18 晚确认）**：具名审核人 = **xyl**（本人已全文审核并确认署名），
+  `reviewer` 写 `xyl`，同时必须保留 `ai_assisted: true` + `ai_reviewer_label`（AI 辅助核验、
+  不是人类签名）——"AI 辅助"要注明，但署名是实际审核人；历史"待真人复核"字样按残留描述处理，
+  不改写/不删除历史字段。
+  **落地（i0c-r26，2026-09-18）**：I3-2 采纳稿已落正式路径——新金标 36 槽位（23 条冻结字节逐字保留 +
+  采纳 13 槽/49 条）、候选 v7（82 目标）、裁决件 40+24+6+1、**门 ready=true／0 阻断／20 条人工同义 warning**、
+  批准投影 79 必需 + 20 补充、验证 30/30 + 16/16；`validate_i0c_freeze.py` exit 0。
+  两条新约定：①**最小覆盖收窄**——批准 `chosen` 只留满足"未覆盖词元集合不变 + 每来源至少一条"的最小集，
+  移出者记 `supporting_anchors` 且不计入 EvidencePass；②**source-gold 首次被冻结修订直接绑定**
+  （新增 `i3_2_source_gold` 组），不再只靠候选内 `inputs.sha256` 传递。
+  落地脚本 `audits/20260918-i32-adoption-dryrun/promote_i3s2.py` + `freeze_r26.py`（含验证器 r26 规则 +
+  台账回填），落地记录 `landing-record.md`。仍未做：20 条同义映射审计、`macro-004` 机器 blocked 未消、
+  I3-2 其余冻结项、I3-1（E2E）、I3-5。
+  写中文引号别用 ASCII `"`（在双引号字符串里直接语法错误，本轮踩 4 次，统一 `「」`）。

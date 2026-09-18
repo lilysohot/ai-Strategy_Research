@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-09-18T19:58:13+08:00",
+  "steps": [
+    {
+      "step": "archive",
+      "items": [
+        {
+          "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+          "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/before-r26/.scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+          "sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+        }
+      ]
+    },
+    {
+      "step": "install_source_gold",
+      "before_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2",
+      "after_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+      "slots": 36,
+      "library_sha256": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f"
+    },
+    {
+      "step": "generator",
+      "exit_code": 0,
+      "candidates_sha256": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
+      "summary": {
+        "questions_total": 30,
+        "answerable_questions": 24,
+        "targets_total": 82,
+        "required_targets": 44,
+        "supplementary_targets": 20,
+        "suggested_targets": 18,
+        "machine_ready": 2,
+        "pending_human": 21,
+        "blocked": 1,
+        "negative_opt_out": 6,
+        "pending_decisions": 40,
+        "partial_anchors": 16,
+        "status_conflicts": 1
+      }
+    },
+    {
+      "step": "decisions",
+      "sha256": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74",
+      "facet_decisions": 40
+    },
+    {
+      "step": "applier",
+      "exit_code": 0,
+      "ready": true,
+      "blockers": 0,
+      "warnings": 20,
+      "approval_report_sha256": "8dd239bf913b1cf151dc3d73502194ccf4e15bf83eb072f2eb55e0b2b505ce75",
+      "approved_sha256": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+      "projection": {
+        "questions": 30,
+        "approved_required": 79,
+        "supplementary": 20
+      }
+    },
+    {
+      "step": "verifier_p5_updated",
+      "sha256": "4e85ca4129e357dbdd055eb9157a710035e5176e2688fba5e2881915b07f4098"
+    },
+    {
+      "step": "verifier",
+      "exit_code": 0,
+      "sha256": "8ac7dd60f4d631a760d881a201d2caf2705b595c6260c58d677d888d0e09f5a5",
+      "self_consistency_failed": 0,
+      "probes_failed": 0,
+      "gate_ready": true,
+      "gate_blockers": 0
+    }
+  ],
+  "result_hashes": {
+    "source-gold-frozen.jsonl": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+    "i3-2/evidence-targets-candidates.json": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
+    "i3-2/evidence-targets-decisions.json": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74",
+    "i3-2/evidence-targets-approved.json": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+    "i3-2/approval-report.json": "8dd239bf913b1cf151dc3d73502194ccf4e15bf83eb072f2eb55e0b2b505ce75",
+    "i3-2/evidence-targets-verification.json": "8ac7dd60f4d631a760d881a201d2caf2705b595c6260c58d677d888d0e09f5a5",
+    "i3s2_verify_candidates.py": "4e85ca4129e357dbdd055eb9157a710035e5176e2688fba5e2881915b07f4098"
+  }
+}

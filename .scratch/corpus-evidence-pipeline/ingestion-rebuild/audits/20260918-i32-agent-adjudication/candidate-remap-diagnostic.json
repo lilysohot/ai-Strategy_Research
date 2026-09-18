@@ -1,0 +1,202 @@
+{
+  "artifact": "proposal-remapping-diagnostic-NOT-APPROVAL",
+  "rule_rev": "evidence-mapping-6",
+  "warning": "仅离线检查补证对候选映射的影响；不是正式候选/批准投影/业务验收，不回写I3资产。",
+  "old_statuses": {
+    "pending_human": 20,
+    "machine_ready": 2,
+    "negative_opt_out": 6,
+    "blocked": 2
+  },
+  "proposed_statuses": {
+    "pending_human": 21,
+    "machine_ready": 2,
+    "negative_opt_out": 6,
+    "blocked": 1
+  },
+  "old_targets": 54,
+  "proposed_targets": 85,
+  "pending_decisions": 40,
+  "questions": [
+    {
+      "query_id": "company-001",
+      "machine_status": "pending_human",
+      "target_count": 5,
+      "pending_count": 2
+    },
+    {
+      "query_id": "company-002",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 1
+    },
+    {
+      "query_id": "company-003",
+      "machine_status": "pending_human",
+      "target_count": 7,
+      "pending_count": 2
+    },
+    {
+      "query_id": "company-004",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 2
+    },
+    {
+      "query_id": "company-005",
+      "machine_status": "machine_ready",
+      "target_count": 5,
+      "pending_count": 0
+    },
+    {
+      "query_id": "company-006",
+      "machine_status": "machine_ready",
+      "target_count": 3,
+      "pending_count": 0
+    },
+    {
+      "query_id": "company-007",
+      "machine_status": "pending_human",
+      "target_count": 2,
+      "pending_count": 1
+    },
+    {
+      "query_id": "company-008",
+      "machine_status": "pending_human",
+      "target_count": 2,
+      "pending_count": 4
+    },
+    {
+      "query_id": "company-009",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    },
+    {
+      "query_id": "company-010",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    },
+    {
+      "query_id": "industry-001",
+      "machine_status": "pending_human",
+      "target_count": 7,
+      "pending_count": 1
+    },
+    {
+      "query_id": "industry-002",
+      "machine_status": "pending_human",
+      "target_count": 5,
+      "pending_count": 2
+    },
+    {
+      "query_id": "industry-003",
+      "machine_status": "pending_human",
+      "target_count": 4,
+      "pending_count": 1
+    },
+    {
+      "query_id": "industry-004",
+      "machine_status": "pending_human",
+      "target_count": 2,
+      "pending_count": 3
+    },
+    {
+      "query_id": "industry-005",
+      "machine_status": "pending_human",
+      "target_count": 2,
+      "pending_count": 1
+    },
+    {
+      "query_id": "industry-006",
+      "machine_status": "pending_human",
+      "target_count": 1,
+      "pending_count": 3
+    },
+    {
+      "query_id": "industry-007",
+      "machine_status": "pending_human",
+      "target_count": 4,
+      "pending_count": 1
+    },
+    {
+      "query_id": "industry-008",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 3
+    },
+    {
+      "query_id": "industry-009",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    },
+    {
+      "query_id": "industry-010",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    },
+    {
+      "query_id": "macro-001",
+      "machine_status": "pending_human",
+      "target_count": 4,
+      "pending_count": 1
+    },
+    {
+      "query_id": "macro-002",
+      "machine_status": "pending_human",
+      "target_count": 5,
+      "pending_count": 1
+    },
+    {
+      "query_id": "macro-003",
+      "machine_status": "pending_human",
+      "target_count": 5,
+      "pending_count": 3
+    },
+    {
+      "query_id": "macro-004",
+      "machine_status": "blocked",
+      "target_count": 2,
+      "pending_count": 3
+    },
+    {
+      "query_id": "macro-005",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 2
+    },
+    {
+      "query_id": "macro-006",
+      "machine_status": "pending_human",
+      "target_count": 2,
+      "pending_count": 1
+    },
+    {
+      "query_id": "macro-007",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 1
+    },
+    {
+      "query_id": "macro-008",
+      "machine_status": "pending_human",
+      "target_count": 3,
+      "pending_count": 1
+    },
+    {
+      "query_id": "macro-009",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    },
+    {
+      "query_id": "macro-010",
+      "machine_status": "negative_opt_out",
+      "target_count": 0,
+      "pending_count": 0
+    }
+  ]
+}

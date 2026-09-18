@@ -1,0 +1,48 @@
+{
+  "snapshot_id": "i0c-r23",
+  "revision": "r23",
+  "phase": "i0c",
+  "task": "I3-2 material prep remediation (independent review F1-F5): requirement coverage ledger + table cell identity in locators + required/supporting/suggested split + value-equivalence queue + per-question EvidencePass denominator contract + independent regression probes and completeness gate; still candidates, no gold freeze",
+  "binding": {
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py": "fc4f2703d4659b6dc8e985e332fff15851dbae173597adee10a6018f62d0ca1f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py": "0c7b3923d72fdbd724e759cd6447819ea9c588183ac567cc7da8c64e8ebe2d00",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json": "3399458ce0e4cd417ca2740d6fbdfe1758d56a4108fd164fbd286d1961659439",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md": "9488c6cdc8135e51412f2e971763a3292b3f9907640d8935eb5d913b92216d24",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md": "07a20dbe40d0084766eeaa5d41b75372a347c20fea2f12bb5c2b07b56a95b54a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json": "f1da1b3f74ac6d36dfc514dcd50309357e6353bb9b398c99fdd86208026e3eb3"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates-v3.json": "ac3560a255eaffa2d8e560bc1d58778ee7363038fc1ac307f26fd483ae04d235",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review-v3.md": "9b4c06ebf7e30cdb2ed9da7529f6fc079665356a258e82fe5ea1710c6a63a19f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification-v1.json": "fda412bfb8273d37eaac8c662c5369a01f3037f2f60fb2e447f3dde4bb1338ca"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "969bb65b0f7539317a78f227331180a62f1c844443103517cd6d038aa04e9a92"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "5e1ccb106ff25e40e879e53d3c8ad49ec3b99a0cbbebef82137b2e6a2fe1126d",
+      "docs/plan/claims-market-closed-loop-plan.md": "c97b4baef74a7cab488b316dce8c110c5c3f733e71756556e03e8b42bdffbbe3"
+    }
+  },
+  "corrections": {
+    "I3-2_material_review_remediation": "依据 audits/20260918-i32-material-review/review.md（F1—F5）整改：F1 建要求覆盖账（定性要件不自动批准，批准状态单列）；F2 表格 row/col 进 locator、cell/unit/period 进 constraints（I3-1 须由权威侧产出 token）；F3 日期掩码 + 字母边界（8230CF 不命中 8230）+ 逐次出现计数 + 必需/可替代分层；F4 分母口径改为逐题并作废二选一；F5 自检拆成自洽/反例/完整性门三段。已登记人工项逐条处置见 audit 目录 remediation-checklist.md。",
+    "evidence_mapping_rule_rev": "规则 evidence-mapping-4：子句拆分 → 数值要件/定性要件/期间；数值 token 边界含字母；重复出现不去重；必需=覆盖全部数值要件的最小集合（IDF 加权重叠排序）；定性要件给 note_ref/内容重叠锚点并全部入队；答案侧用法约束记 answer_constraints；数值等价显式入队且不改写原文 quote。v1/v2/v3 缺陷在 supersedes 留档。",
+    "evidence_pass_denominator": "EvidencePass 分母 = 逐题（架构 §12.3：满足全部必需证据的题数/证据题数）；原『逐 item 60 条 vs 槽位聚合』二选一作废，item 覆盖统计只作诊断。台账与任务清单同批修正。",
+    "completeness_gate": "自检三段分开判定：self_consistency（模拟批准后往返）0 failed；regression_probes 9/9（结构身份缺失/同值错列/漏脚注/漏条件必须失败，最小正确证据必须通过，可替代证据缺失不得判失败，型号后缀不得伪装命中，重复来源被入口拒绝，数值等价必须显式入队）；completeness_gate.ready=false（0 题获批、24 题被拦）——候选阶段的正确状态，不得把自洽往返读成补料完整。",
+    "human_adjudication": "新增 evidence-targets-adjudication.md：24 道正例逐项（36 项）裁决模板，含负例覆盖确认与人工状态冲突（macro-039-claim-001 的 human_basis 与 reviewer 并存矛盾）；批准件另存 evidence-targets-decisions.json，与候选分开存储。待 U 裁决。"
+  },
+  "notes": [
+    "历史快照 r1..r22 保留字节，不追改。本修订不改任何实现/测试/守卫字节；评分器与 i3 守卫仍按 r19—r21 绑定核验。",
+    "I3-0 复核整改（r21）仍在等待复核确认闭环与 U 签认；I3-2 完整任务（阈值/关键题/负例/旧基线映射与评分器冻结）未完成，本修订只交补料候选与裁决单。",
+    "M5 报告 F3（validate_i1_freeze.py 既有失配）仍未修，已登记。",
+    "零模型、零 PG、零来源正文读取；生产库 I4 前零写入。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18）；I3-0 remediation_pending_confirmation；I3-2 material_candidates_pending_adjudication",
+  "created_at": "2026-09-18T15:58:28+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r22",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r22.json",
+    "sha256": "9ad6e06c489ab33ed6acde0705ad53d6254b56afd3c547ab25ddc5b7b5d031e1"
+  }
+}

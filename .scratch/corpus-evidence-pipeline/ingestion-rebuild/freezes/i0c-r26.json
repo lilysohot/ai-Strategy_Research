@@ -1,0 +1,85 @@
+{
+  "snapshot_id": "i0c-r26",
+  "revision": "r26",
+  "phase": "i0c",
+  "task": "I3-2 adoption of the AI-assisted supplement package: new source-gold (36 slots, frozen 23 byte-preserved), regenerated candidates (82 targets), filed human decisions (xyl, ai_assisted), gate ready=true with 20 manual-synonymy warnings, approved projection 79 required + 20 supplementary, verification 30/30 self-consistency + 16/16 probes",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r25",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r25.json",
+    "sha256": "17de00c53c9cd8e1bd0d4cdd32a925d1c75861b49d286f66b50c78cc7fb0cf48"
+  },
+  "binding": {
+    "i3_2_tooling": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py": "22fe79e342d6390b52674e21d3b03953a73a3967e46cca329afb6b3561fe4144",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_apply_decisions.py": "515b4adbd5d93067406a12aac877e26019d5340f2b87008cafc62f73e1e3d8a5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py": "4e85ca4129e357dbdd055eb9157a710035e5176e2688fba5e2881915b07f4098",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_textutil.py": "a5c763a3a36ace35b6e775ad6da3171df36747ceebe39a23d50ef9e83154f2f0"
+    },
+    "i3_2_source_gold": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+    },
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md": "699802339e4aa1ca6c9c235abd58e6187fbeddc152f7c86613fb77c13257669a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md": "1b8d627ee73a02c91eff116049a0864f1533e9095768132df7a52b5d93780eb7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json": "8ac7dd60f4d631a760d881a201d2caf2705b595c6260c58d677d888d0e09f5a5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report.json": "8dd239bf913b1cf151dc3d73502194ccf4e15bf83eb072f2eb55e0b2b505ce75",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/source-gold-nearmiss-library.jsonl": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates-v6.json": "2417c22d5256f403d90e8507ad633b02942d9d6d4f7fff0dcf87da11a848c44e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review-v6.md": "9023a53ff00f74b2ee40bd80c46e0206cbbb70c43aa1d64c5ccad9d5156739d7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication-v3.md": "c82aa67b5e0e9c8e7a4baa098412fb12e39337eb47f825d1859fe444796d51c4",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification-v4.json": "38e8e63911eaa0560aba640906fdc31ac3bca35b6c4e12385781a0b3d1144533",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report-v2.json": "3dc28ce94af0b15f720a103b20b75129d76e15eaa5dc2e7ae24a3dec9c06bcb5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/before-r26/.scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "i3_2_regressions": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/adjudication-v7-dryrun.md": "699802339e4aa1ca6c9c235abd58e6187fbeddc152f7c86613fb77c13257669a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/blocker-help.json": "20d04d5204700adf6eda406d15675dc2ba588c2ecff2d54c0bac75601d0fda20",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/candidates-v7-dryrun.json": "2c3877194799c9df0048aecda4383ebfcfd79983fd7681a6aff015377e9bffaf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/decisions-dryrun.json": "293b1a82e0b15eab22b32a57cb55baa8101be6d0f2c91ef71f26e0f7fdabb65d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/decisions-final-dryrun.json": "e734e6358a9085521b80ce468c50391f1403d97d03fc8fcc6d9996fa05b99eaa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/decisions-proposed-synonymy.json": "b51f1684db5bbb638ba642b2414a2f67c3235978d35c8745e1ddf028dda7b18d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/dryrun-result.json": "f0737c2e0756e60b16198bb47a5e54e00c4c920b78740d8bcc29214d7d8981fd",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/gate-dryrun.json": "f7c7d6d0660214c1a18727f41db6348949366ae4a9541795fb6ae59bf3e8f700",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/gate-final-dryrun.json": "45a6456ecc9b8bc668c0bcef52d6af45bda1777547348b0c21fd2d3d193829c9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/gate-proposed-synonymy.json": "200d2c76ed085cbca10ced16f63d81f413b7e346147c80615c984a501219f371",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/gate-upperbound.json": "f3986ff6e22a750d253b95e2aed81bcc937cba81f8b88f844ba746d8c793da3e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/promote-log.json": "dce843a57d6f9f35d53c4b0a0444c743d29284f1e0c06b8cc4cca75cded77618",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/promote_i3s2.py": "c73e7c77a98c40e9d0029a97a1645eb3ffaf2459bd2b4642741afeb16d90c5e1",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/protected-artifacts-check.json": "45f5974355c525ad025be46e2d05bf2a664b7e4dac3769d6ee49f4b4fcf335ad",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/release-manifest.json": "1b5023d0320adc2ff20fa288652aa2b8fd99ec08ff95c60938d09bbe3e7482d9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/report.md": "7547363c9d90780f66f950a0e5f5d927ef00b469a556daef051fad6df1ce5ed5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/review-v7-dryrun.md": "d517419ba1d23db99712f3720925edac42c0c55e460b47c6d84df8dd74f1aa54",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/run_adoption_dryrun.py": "ca6ed0d4195dfdeabd5c94d31d7ef4d55e32775766ef59654955f519e102c1cb",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/source-gold-nearmiss-library.jsonl": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/source-gold-v4-candidate.jsonl": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-adoption-dryrun/verification-v7-dryrun.json": "3fc6fa6f3c9fc5fc526da082bb9c5bdd92b9bfb39b029cc0717d364fc54f8c3d"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "4136b27d08d56170a627929450080ba69ec10f59a229b7fe61ed70ea63fe3b2d",
+      "docs/plan/claims-market-closed-loop-plan.md": "7f067dd131c31f85443e124779facbd7fe01eba0f3e8bac0710fe182e1d5ab9e"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "333dc897b691043ac7caed1e8fb9097924c9e76e72d9ac9799221d7dd4d26b4d"
+    }
+  },
+  "corrections": {
+    "I3-2_adoption": "U 全文审核后全部采纳 AI 辅助补证与裁决建议：金标 23 条冻结槽位逐字节保留 + 采纳 13 槽位/49 条支持证据，负例近似命中 7 条隔离成 i3-2/source-gold-nearmiss-library.jsonl",
+    "human_signature": "署名人为具名审核人 xyl（已全文审核），同时记录 ai_assisted=true 与 ai_reviewer_label（AI 复核者不是人类签名）；不冒签、不改写历史审核记录",
+    "required_supplementary_scope": "chosen 收窄到最小覆盖集（53→35），移出的 18 条锚点记 supporting_anchors 且不计入 EvidencePass；批准投影 = 必需 79 + 补充 20（30 题）",
+    "machine_status_override": "macro-004 的 blocked（q2『本文聚焦前四者』机器检索未登记承载项）由人工裁定以 macro-ai-supplement-2026-09-06_cc03f55b-p1#1 为承载；机器状态原样保留在候选里",
+    "verifier_probe_update": "P5-supplementary-not-required 期望值随补证采纳更新（company-005 补充目标新增 p3 槽位两条），属版本化改动，已在探针描述里写明理由",
+    "I3-5": "I3-5 真实生成答案语义验收仍未执行：本轮只完成零模型的证据目标批准链（门 ready=true），不代表答案语义通过"
+  },
+  "created_at": "2026-09-18T12:00:02.553195+00:00",
+  "notes": [
+    "source-gold 变更（23 条冻结槽位逐字节保留 + 13 个采纳槽位）；query-gold、守卫、评分器、公共模块、tests、数据库与模型均未改（零模型、零数据库写入）。",
+    "批准件的 20 条 warning 全为『人工同义映射待审计（非机器语义证明）』：机器只核 span 出处，语义等价由具名人工承担。",
+    "I3-2 其余冻结项（阈值/关键题/负例/旧基线映射）、I3-1（E2E）与 I3-5 未做；未宣告 I3-2 完成。"
+  ]
+}

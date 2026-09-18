@@ -1,0 +1,16 @@
+{
+  "artifact": "AI-assisted-review-package-NOT-FORMAL-GOLD",
+  "human_signoff": false,
+  "files": {
+    "review-completed.md": "476768fdd976e52a30f051d689d4da751936faab83f49280ed9b0c665f15eb15",
+    "evidence-appendix.md": "805e269b753c66feaa516d7d51c029f6a728a7c1e42504e68404f70f3fd7d952",
+    "adjudication-reviewed.json": "2f6b9774eee34c93fbc53c8dbfcaa00ca20e8c78bac3a2c62bce407c67e1c706",
+    "source-gold-supplements-proposed.json": "2a5c334675ac5e4685dbf0c5e01d8a3562476ab84f8b7f455ed7d60d2f191947",
+    "source-gold-proposed.jsonl": "da709a0512e0cb38ba9b5f0809a48353d3aeed7bc39e1e6908a616ab9484b705",
+    "verification.json": "756b93d1f3d7c38aabc001df54ef38c80711e9f85fcf058902b3731aa8f0d0b2",
+    "candidate-remap-diagnostic.json": "007f28b6f52df7a35b6b4e48404322429f4c7732a6a73df96b6db6eb6fed44b8",
+    "protected-artifacts-check.json": "88ada62fb4506acf2b2b4267d228b5d482682ec0b2e0cdddb655245a3d4f2ad7",
+    "regression.txt": "0c3b83a1f0797ffb2accd4a69434b4235ed13903084a41bf5612e0206ea3a1f2",
+    "freeze-validation.txt": "c109b146a2e6e615ecfda8d93eca8ac99a8ccb9c7260fcf29b1337235e425d69"
+  }
+}

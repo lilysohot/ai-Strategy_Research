@@ -1,0 +1,843 @@
+{
+  "count": 17,
+  "rows": [
+    {
+      "item_id": "I32-company-001-01",
+      "query_id": "company-001",
+      "clause": "必须同时给出EPS 67.74/70.77/73.84元与年度对应、一年目标价2030元、维持强推",
+      "chosen": [
+        "company-ai-supplement-2026-08-16_6f14cc14-p1#1"
+      ],
+      "missing_terms": [
+        "同时",
+        "年度",
+        "持强",
+        "时给"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "同时",
+          "candidates": [
+            {
+              "candidate": "company-008-claim-001#3",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "经营性现金流\n净额同增915.8%，主要系财务公司吸收集团公司成员单位存款增加及不可随\n时支取的同业存款减少所致。"
+            }
+          ]
+        },
+        {
+          "term": "年度",
+          "candidates": []
+        },
+        {
+          "term": "持强",
+          "candidates": [
+            {
+              "candidate": "company-008-claim-001#4",
+              "kind": "rating",
+              "match": "loose_chars",
+              "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。"
+            }
+          ]
+        },
+        {
+          "term": "时给",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-company-004-02",
+      "query_id": "company-004",
+      "clause": "不得当作实际收入或券商盈利预测",
+      "chosen": [
+        "company-ai-supplement-2026-09-06_dddc7cd0-p1#1"
+      ],
+      "missing_terms": [
+        "作实",
+        "利预",
+        "券商",
+        "商盈",
+        "实际",
+        "当作",
+        "盈利",
+        "际收",
+        "预测"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "作实",
+          "candidates": []
+        },
+        {
+          "term": "利预",
+          "candidates": []
+        },
+        {
+          "term": "券商",
+          "candidates": []
+        },
+        {
+          "term": "商盈",
+          "candidates": []
+        },
+        {
+          "term": "实际",
+          "candidates": [
+            {
+              "candidate": "company-044-claim-001#1",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。"
+            },
+            {
+              "candidate": "company-ai-supplement-2026-09-06_dddc7cd0-p7#0",
+              "kind": "body",
+              "match": "exact",
+              "quote": "截至2026 年6 月30 日，公司控股股东、\n实际控制人赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00"
+            }
+          ]
+        },
+        {
+          "term": "当作",
+          "candidates": []
+        },
+        {
+          "term": "盈利",
+          "candidates": []
+        },
+        {
+          "term": "际收",
+          "candidates": []
+        },
+        {
+          "term": "预测",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-001-01",
+      "query_id": "industry-001",
+      "clause": "分位不是价格涨幅，开工率是注2所述期间平均",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#6",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#2"
+      ],
+      "missing_terms": [
+        "格涨",
+        "涨幅",
+        "述期",
+        "间平"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "格涨",
+          "candidates": []
+        },
+        {
+          "term": "涨幅",
+          "candidates": []
+        },
+        {
+          "term": "述期",
+          "candidates": []
+        },
+        {
+          "term": "间平",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-002-01",
+      "query_id": "industry-002",
+      "clause": "按注3属配额，不能解释为实际产量",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#3"
+      ],
+      "missing_terms": [
+        "产量",
+        "实际",
+        "属配",
+        "按注",
+        "解释",
+        "际产"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "产量",
+          "candidates": [
+            {
+              "candidate": "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+              "kind": "body",
+              "match": "loose_chars",
+              "quote": "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率"
+            }
+          ]
+        },
+        {
+          "term": "实际",
+          "candidates": []
+        },
+        {
+          "term": "属配",
+          "candidates": []
+        },
+        {
+          "term": "按注",
+          "candidates": []
+        },
+        {
+          "term": "解释",
+          "candidates": []
+        },
+        {
+          "term": "际产",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-002-02",
+      "query_id": "industry-002",
+      "clause": "价格分位窗口2016-01-01至2026-07-27",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#1"
+      ],
+      "missing_terms": [
+        "位窗",
+        "格分",
+        "窗口"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "位窗",
+          "candidates": []
+        },
+        {
+          "term": "格分",
+          "candidates": [
+            {
+              "candidate": "industry-009-claim-001#8",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日"
+            },
+            {
+              "candidate": "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+              "kind": "body",
+              "match": "exact",
+              "quote": "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率"
+            }
+          ]
+        },
+        {
+          "term": "窗口",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-003-01",
+      "query_id": "industry-003",
+      "clause": "区分开工率与产能，2026E为预测列",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#4",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#9",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#10"
+      ],
+      "missing_terms": [
+        "2026",
+        "分开",
+        "区分",
+        "测列",
+        "预测"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "2026",
+          "candidates": [
+            {
+              "candidate": "industry-009-claim-001#8",
+              "kind": "condition",
+              "match": "exact",
+              "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日"
+            },
+            {
+              "candidate": "industry-009-claim-001#9",
+              "kind": "condition",
+              "match": "exact",
+              "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+            },
+            {
+              "candidate": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+              "kind": "body",
+              "match": "exact",
+              "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日"
+            }
+          ]
+        },
+        {
+          "term": "分开",
+          "candidates": []
+        },
+        {
+          "term": "区分",
+          "candidates": []
+        },
+        {
+          "term": "测列",
+          "candidates": []
+        },
+        {
+          "term": "预测",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-006-01",
+      "query_id": "industry-006",
+      "clause": "报告援引供应链消息：计划用于NVSwitch板卡及Rubin Ultra正交背板主力选材",
+      "chosen": [
+        "industry-ai-supplement-2026-09-06_f8e31696-p1#3"
+      ],
+      "missing_terms": [
+        "划用",
+        "告援",
+        "引供",
+        "援引",
+        "板主"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "划用",
+          "candidates": [
+            {
+              "candidate": "industry-057-claim-001#2",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra "
+            }
+          ]
+        },
+        {
+          "term": "告援",
+          "candidates": []
+        },
+        {
+          "term": "引供",
+          "candidates": []
+        },
+        {
+          "term": "援引",
+          "candidates": []
+        },
+        {
+          "term": "板主",
+          "candidates": [
+            {
+              "candidate": "industry-057-claim-001#2",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra "
+            }
+          ]
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-006-03",
+      "query_id": "industry-006",
+      "clause": "须保留消息来源与“计划/预计”限定",
+      "chosen": [
+        "industry-ai-supplement-2026-09-06_f8e31696-p1#3"
+      ],
+      "missing_terms": [
+        "保留",
+        "息来",
+        "来源",
+        "留消",
+        "限定"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "保留",
+          "candidates": []
+        },
+        {
+          "term": "息来",
+          "candidates": []
+        },
+        {
+          "term": "来源",
+          "candidates": []
+        },
+        {
+          "term": "留消",
+          "candidates": []
+        },
+        {
+          "term": "限定",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-008-01",
+      "query_id": "industry-008",
+      "clause": "不能：R32为历史价格分位（2016-01-01至2026-07-27）",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#7",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#1"
+      ],
+      "missing_terms": [
+        "32",
+        "历史",
+        "史价"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "32",
+          "candidates": [
+            {
+              "candidate": "industry-009-claim-001#10",
+              "kind": "condition",
+              "match": "exact",
+              "quote": "注3：制冷剂R22、R32、R134a 的产能为配额"
+            },
+            {
+              "candidate": "industry-ai-supplement-2026-08-13_174b6462-p10#3",
+              "kind": "body",
+              "match": "exact",
+              "quote": "注3：制冷剂R22、R32、R134a 的产能为配额"
+            },
+            {
+              "candidate": "industry-ai-supplement-2026-08-13_174b6462-p10#4",
+              "kind": "body",
+              "match": "loose_chars",
+              "quote": "2023\n2024\n2025\n2024\n2025\n2026E"
+            }
+          ]
+        },
+        {
+          "term": "历史",
+          "candidates": []
+        },
+        {
+          "term": "史价",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-industry-008-02",
+      "query_id": "industry-008",
+      "clause": "须引用两份材料证明统计含义不同",
+      "chosen": [
+        "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#7",
+        "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+        "industry-ai-supplement-2026-09-06_f8e31696-p1#0",
+        "industry-ai-supplement-2026-09-06_f8e31696-p1#4"
+      ],
+      "missing_terms": [
+        "含义",
+        "料证",
+        "明统",
+        "用两",
+        "统计",
+        "计含",
+        "证明"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "含义",
+          "candidates": []
+        },
+        {
+          "term": "料证",
+          "candidates": []
+        },
+        {
+          "term": "明统",
+          "candidates": []
+        },
+        {
+          "term": "用两",
+          "candidates": []
+        },
+        {
+          "term": "统计",
+          "candidates": []
+        },
+        {
+          "term": "计含",
+          "candidates": []
+        },
+        {
+          "term": "证明",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-001-01",
+      "query_id": "macro-001",
+      "clause": "前值修订与8月数据分开",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_793b3967-p1#0",
+        "macro-ai-supplement-2026-09-06_793b3967-p3#0",
+        "macro-ai-supplement-2026-09-06_793b3967-p3#1"
+      ],
+      "missing_terms": [
+        "修订",
+        "值修",
+        "分开",
+        "据分"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "修订",
+          "candidates": []
+        },
+        {
+          "term": "值修",
+          "candidates": [
+            {
+              "candidate": "macro-038-claim-001#0",
+              "kind": "value",
+              "match": "loose_chars",
+              "quote": "新增非农就业16.2\n万人，预期5.6 万人，前值由-2.3 万人修正为2.1 万人"
+            }
+          ]
+        },
+        {
+          "term": "分开",
+          "candidates": []
+        },
+        {
+          "term": "据分",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-003-01",
+      "query_id": "macro-003",
+      "clause": "条件是后续通胀下行幅度有限",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_793b3967-p1#2"
+      ],
+      "missing_terms": [
+        "条件",
+        "续通"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "条件",
+          "candidates": []
+        },
+        {
+          "term": "续通",
+          "candidates": [
+            {
+              "candidate": "macro-038-claim-001#3",
+              "kind": "condition",
+              "match": "loose_chars",
+              "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。"
+            }
+          ]
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-003-02",
+      "query_id": "macro-003",
+      "clause": "强就业降低加息顾虑",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_793b3967-p1#1"
+      ],
+      "missing_terms": [
+        "业降",
+        "低加",
+        "息顾",
+        "降低"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "业降",
+          "candidates": []
+        },
+        {
+          "term": "低加",
+          "candidates": [
+            {
+              "candidate": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+              "kind": "body",
+              "match": "loose_chars",
+              "quote": "8 月超预期的非农数据、回升的劳动参与率、处于低位的\n失业率数据，都指向就业市场韧性比之前市场预期的更强，若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的"
+            }
+          ]
+        },
+        {
+          "term": "息顾",
+          "candidates": [
+            {
+              "candidate": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+              "kind": "body",
+              "match": "loose_chars",
+              "quote": "8 月超预期的非农数据、回升的劳动参与率、处于低位的\n失业率数据，都指向就业市场韧性比之前市场预期的更强，若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的"
+            }
+          ]
+        },
+        {
+          "term": "降低",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-003-03",
+      "query_id": "macro-003",
+      "clause": "必须区分附条件判断、市场预期和正式决定",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_793b3967-p1#2"
+      ],
+      "missing_terms": [
+        "件判",
+        "决定",
+        "分附",
+        "判断",
+        "区分",
+        "式决",
+        "条件",
+        "正式",
+        "附条"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "件判",
+          "candidates": []
+        },
+        {
+          "term": "决定",
+          "candidates": []
+        },
+        {
+          "term": "分附",
+          "candidates": []
+        },
+        {
+          "term": "判断",
+          "candidates": []
+        },
+        {
+          "term": "区分",
+          "candidates": []
+        },
+        {
+          "term": "式决",
+          "candidates": []
+        },
+        {
+          "term": "条件",
+          "candidates": []
+        },
+        {
+          "term": "正式",
+          "candidates": []
+        },
+        {
+          "term": "附条",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-004-02",
+      "query_id": "macro-004",
+      "clause": "本文聚焦前四者",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_cc03f55b-p1#1"
+      ],
+      "missing_terms": [
+        "文聚",
+        "聚焦"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "文聚",
+          "candidates": []
+        },
+        {
+          "term": "聚焦",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-006-01",
+      "query_id": "macro-006",
+      "clause": "样本为偏头部发债企业，不等于全国所有国企",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_cc03f55b-p1#7",
+        "macro-ai-supplement-2026-09-06_cc03f55b-p2#3"
+      ],
+      "missing_terms": [
+        "全国",
+        "有国",
+        "部发"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "全国",
+          "candidates": [
+            {
+              "candidate": "macro-039-claim-001#4",
+              "kind": "value",
+              "match": "loose_chars",
+              "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI"
+            }
+          ]
+        },
+        {
+          "term": "有国",
+          "candidates": [
+            {
+              "candidate": "macro-039-claim-001#3",
+              "kind": "value",
+              "match": "loose_chars",
+              "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年"
+            }
+          ]
+        },
+        {
+          "term": "部发",
+          "candidates": []
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    },
+    {
+      "item_id": "I32-macro-008-01",
+      "query_id": "macro-008",
+      "clause": "上市公司/发债企业样本代表性可能欠佳，结论可能偏差且可能有其他收敛路径",
+      "chosen": [
+        "macro-ai-supplement-2026-09-06_cc03f55b-p2#3"
+      ],
+      "missing_terms": [
+        "业样"
+      ],
+      "per_term_candidates": [
+        {
+          "term": "业样",
+          "candidates": [
+            {
+              "candidate": "macro-039-claim-001#3",
+              "kind": "value",
+              "match": "exact",
+              "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年"
+            },
+            {
+              "candidate": "macro-ai-supplement-2026-09-06_cc03f55b-p1#7",
+              "kind": "body",
+              "match": "exact",
+              "quote": "3、国企的支出现状如何？我们借助其有息负债的增速观察其支出情况。选择\n偏头部的发债企业财务数据作为观察对象。2025 年，央企样本企业的有息负\n债增速为4.6%"
+            }
+          ]
+        }
+      ],
+      "options": [
+        "改选到含该词元的 item（须同时提交 anchor_review 原文承载映射）",
+        "补标注（新 source-gold 版本）后按新版本复核",
+        "若确属词面差异：提交逐项 lexical_review（terms 必须恰好等于未覆盖集合）"
+      ]
+    }
+  ]
+}

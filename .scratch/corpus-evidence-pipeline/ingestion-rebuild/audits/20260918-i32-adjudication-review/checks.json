@@ -1,0 +1,3146 @@
+{
+  "question_count": 30,
+  "summary": {
+    "questions_total": 30,
+    "targets_total": 54,
+    "required_targets": 35,
+    "supporting_targets": 4,
+    "suggested_targets": 15,
+    "machine_ready": 3,
+    "pending_human": 19,
+    "blocked": 2,
+    "negative_opt_out": 6,
+    "pending_decisions": 36,
+    "adjudication_pending": 30,
+    "adjudication_approved": 0
+  },
+  "adjudication_ids": 36,
+  "unique_ids": 36,
+  "queue_ids_exact": true,
+  "markdown_replay_exact": true,
+  "original_gate": {
+    "ready": false,
+    "approved_questions": 0,
+    "unapproved_questions": 30,
+    "blocked_questions": [
+      {
+        "query_id": "company-002",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-004",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "company-008",
+        "reasons": [
+          "4 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "company-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      },
+      {
+        "query_id": "industry-001",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-002",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-003",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-004",
+        "reasons": [
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "industry-005",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-006",
+        "reasons": [
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "industry-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-008",
+        "reasons": [
+          "3 项待裁决"
+        ]
+      },
+      {
+        "query_id": "industry-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      },
+      {
+        "query_id": "macro-001",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-002",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-003",
+        "reasons": [
+          "存在无承载 item 的要件（需补人工标注）",
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-004",
+        "reasons": [
+          "存在无承载 item 的要件（需补人工标注）",
+          "3 项待裁决",
+          "无必需证据目标"
+        ]
+      },
+      {
+        "query_id": "macro-005",
+        "reasons": [
+          "2 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-006",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-007",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-008",
+        "reasons": [
+          "1 项待裁决"
+        ]
+      },
+      {
+        "query_id": "macro-010",
+        "reasons": [
+          "负例 human_basis 仍写需确认全文覆盖"
+        ]
+      }
+    ],
+    "unresolved_decisions": [
+      "I32-company-002-01",
+      "I32-company-003-01",
+      "I32-company-004-01",
+      "I32-company-004-02",
+      "I32-company-007-01",
+      "I32-company-008-01",
+      "I32-company-008-02",
+      "I32-company-008-03",
+      "I32-company-008-04",
+      "I32-industry-001-01",
+      "I32-industry-002-01",
+      "I32-industry-002-02",
+      "I32-industry-003-01",
+      "I32-industry-004-01",
+      "I32-industry-004-02",
+      "I32-industry-004-03",
+      "I32-industry-005-01",
+      "I32-industry-006-01",
+      "I32-industry-006-02",
+      "I32-industry-006-03",
+      "I32-industry-007-01",
+      "I32-industry-008-01",
+      "I32-industry-008-02",
+      "I32-industry-008-03",
+      "I32-macro-001-01",
+      "I32-macro-002-01",
+      "I32-macro-003-01",
+      "I32-macro-003-02",
+      "I32-macro-004-01",
+      "I32-macro-004-02",
+      "I32-macro-004-03",
+      "I32-macro-005-01",
+      "I32-macro-005-02",
+      "I32-macro-006-01",
+      "I32-macro-007-01",
+      "I32-macro-008-01"
+    ],
+    "note": "完整性门要求：全部正例已人工批准、无未决要件、无待补标注、负例覆盖已确认。候选阶段 ready 必须为 false——本段通过与否**不能**由自洽往返代替。"
+  },
+  "all_status_approved_only": {
+    "ready": true,
+    "approved_questions": 30,
+    "unapproved_questions": 0,
+    "blocked_questions": [],
+    "unresolved_decisions": [],
+    "note": "完整性门要求：全部正例已人工批准、无未决要件、无待补标注、负例覆盖已确认。候选阶段 ready 必须为 false——本段通过与否**不能**由自洽往返代替。"
+  },
+  "all_status_approved_pending_items_retained": 36,
+  "only_blocked_status_approved": {
+    "ready": true,
+    "approved_questions": 24,
+    "unapproved_questions": 6,
+    "blocked_questions": [],
+    "unresolved_decisions": [],
+    "note": "完整性门要求：全部正例已人工批准、无未决要件、无待补标注、负例覆盖已确认。候选阶段 ready 必须为 false——本段通过与否**不能**由自洽往返代替。"
+  },
+  "existing_probes": {
+    "count": 9,
+    "failed": 0
+  },
+  "details": {
+    "company-001": {
+      "query_id": "company-001",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-08-16_6f14cc14"
+      ],
+      "evidence_required": true,
+      "machine_status": "machine_ready",
+      "machine_status_reason": "全部要求要件均为数值且已由人工标注 item 承载（必需 1 条）；仍需 U 批准后才成为金标",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "必须同时给出EPS 67.74/70.77/73.84元与年度对应、一年目标价2030元、维持强推，并标明是报告预测",
+          "period_tokens": [],
+          "value_facet_ids": [
+            "f1",
+            "f2",
+            "f3",
+            "f4"
+          ],
+          "qualification_facet_ids": []
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "f1",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "67.74",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "company-001-claim-001",
+              "item_index": 2,
+              "kind": "table_cell",
+              "forms": [
+                "67.74"
+              ],
+              "exact": true,
+              "shared_units": 4,
+              "score": 2.0,
+              "ratio": 0.2,
+              "has_quote": true
+            },
+            {
+              "gold_id": "company-008-claim-001",
+              "item_index": 4,
+              "kind": "rating",
+              "forms": [
+                "67.74"
+              ],
+              "exact": true,
+              "shared_units": 16,
+              "score": 12.0,
+              "ratio": 0.8,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f2",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "70.77",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "company-001-claim-001",
+              "item_index": 6,
+              "kind": "table_cell",
+              "forms": [
+                "70.77"
+              ],
+              "exact": true,
+              "shared_units": 4,
+              "score": 2.0,
+              "ratio": 0.2,
+              "has_quote": true
+            },
+            {
+              "gold_id": "company-008-claim-001",
+              "item_index": 4,
+              "kind": "rating",
+              "forms": [
+                "70.77"
+              ],
+              "exact": true,
+              "shared_units": 16,
+              "score": 12.0,
+              "ratio": 0.8,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f3",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "73.84",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "company-001-claim-001",
+              "item_index": 10,
+              "kind": "table_cell",
+              "forms": [
+                "73.84"
+              ],
+              "exact": true,
+              "shared_units": 4,
+              "score": 2.0,
+              "ratio": 0.2,
+              "has_quote": true
+            },
+            {
+              "gold_id": "company-008-claim-001",
+              "item_index": 4,
+              "kind": "rating",
+              "forms": [
+                "73.84"
+              ],
+              "exact": true,
+              "shared_units": 16,
+              "score": 12.0,
+              "ratio": 0.8,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f4",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "2030",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "company-008-claim-001",
+              "item_index": 4,
+              "kind": "rating",
+              "forms": [
+                "2030"
+              ],
+              "exact": true,
+              "shared_units": 16,
+              "score": 12.0,
+              "ratio": 0.8,
+              "has_quote": true
+            }
+          ]
+        }
+      ],
+      "answer_constraints": [],
+      "targets": [
+        {
+          "target_id": "e4",
+          "role": "required",
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "元",
+            "period": "报告日2026-08-16；目标价期限一年"
+          },
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 4,
+            "kind": "rating",
+            "matched_tokens": [
+              "67.74",
+              "70.77",
+              "73.84",
+              "2030"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f1",
+              "f2",
+              "f3",
+              "f4"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e1",
+          "role": "supporting",
+          "quote": "67.74",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2026E"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "constraints": {
+            "row": "EPS(摊薄)（元）",
+            "col": "2026E",
+            "cell": "EPS(摊薄)（元） × 2026E",
+            "unit": "元/股",
+            "period": "2026E"
+          },
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "67.74"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "role": "supporting",
+          "quote": "70.77",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2027E"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "constraints": {
+            "row": "EPS(摊薄)（元）",
+            "col": "2027E",
+            "cell": "EPS(摊薄)（元） × 2027E",
+            "unit": "元/股",
+            "period": "2027E"
+          },
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "70.77"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "role": "supporting",
+          "quote": "73.84",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2028E"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "constraints": {
+            "row": "EPS(摊薄)（元）",
+            "col": "2028E",
+            "cell": "EPS(摊薄)（元） × 2028E",
+            "unit": "元/股",
+            "period": "2028E"
+          },
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 10,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "73.84"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 0,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2026E"
+          ],
+          "quote": "178,657",
+          "text": "贵州茅台2026E 营业总收入为178,657百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 1,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2026E"
+          ],
+          "quote": "84,679",
+          "text": "贵州茅台2026E 归属母公司净利润为84,679百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 2,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2026E"
+          ],
+          "quote": "67.74",
+          "text": "贵州茅台2026E EPS(摊薄)（元）为67.74元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 3,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2026E"
+          ],
+          "quote": "25,756",
+          "text": "贵州茅台2026E 经营活动现金流为25,756百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 4,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2027E"
+          ],
+          "quote": "186,196",
+          "text": "贵州茅台2027E 营业总收入为186,196百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 5,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2027E"
+          ],
+          "quote": "88,470",
+          "text": "贵州茅台2027E 归属母公司净利润为88,470百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 6,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2027E"
+          ],
+          "quote": "70.77",
+          "text": "贵州茅台2027E EPS(摊薄)（元）为70.77元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 7,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2027E"
+          ],
+          "quote": "30,089",
+          "text": "贵州茅台2027E 经营活动现金流为30,089百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 8,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2028E"
+          ],
+          "quote": "194,063",
+          "text": "贵州茅台2028E 营业总收入为194,063百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 9,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2028E"
+          ],
+          "quote": "92,302",
+          "text": "贵州茅台2028E 归属母公司净利润为92,302百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 10,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2028E"
+          ],
+          "quote": "73.84",
+          "text": "贵州茅台2028E EPS(摊薄)（元）为73.84元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 11,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2028E"
+          ],
+          "quote": "35,014",
+          "text": "贵州茅台2028E 经营活动现金流为35,014百万元（预测）"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%。",
+          "text": "2026H1总收入922.8亿元，同比增长1.3%；归母净利润445.2亿元，同比下降2.0%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。",
+          "text": "2026Q2总收入375.8亿元，同比下降5.2%；归母净利润172.7亿元，同比下降6.9%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "单Q2 直销占比同比大幅提升17.8pcts 至61.1%，i 茅台收入同\n增282.6%至187.1 亿",
+          "text": "2026Q2直销占比61.1%，同比提高17.8个百分点；i茅台收入187.1亿元，同比增长282.6%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 3,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "经营性现金流\n净额同增915.8%，主要系财务公司吸收集团公司成员单位存款增加及不可随\n时支取的同业存款减少所致。",
+          "text": "经营现金流同比增长915.8%的解释为成员单位存款增加及不可随时支取的同业存款减少，不等同于主营经营同比增长915.8%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 4,
+          "kind": "rating",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "text": "2026—2028年EPS预测67.74/70.77/73.84元；一年目标价2030元；维持强推评级"
+        },
+        {
+          "slot": "company-013-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:7"
+          ],
+          "quote": "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股\n份。",
+          "text": "报告披露：茅台集团持有华创证券控股股东华创云信4.06%的股份"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "company-008-claim-001": 1,
+          "company-001-claim-001": 3
+        },
+        "by_role": {
+          "required": 1,
+          "supporting": 3
+        }
+      }
+    },
+    "company-008": {
+      "query_id": "company-008",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "satisfy_rule": "all",
+      "relevant_sources": [
+        "2026-08-16_6f14cc14",
+        "2026-09-06_dddc7cd0"
+      ],
+      "evidence_required": true,
+      "machine_status": "pending_human",
+      "machine_status_reason": "机器已定位全部数值要件（必需 0 条、可替代 0 条），但仍有 4 项需人工裁决（定性要件锚点/数值等价/多来源覆盖/答案侧口径）；批准前不得计入必需证据",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "必须取得两份材料：贵州茅台为强推（维持），光力科技为优于大市（首次覆盖）",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q1"
+          ]
+        },
+        {
+          "clause_id": "c2",
+          "text": "通用评级定义页不能代替具体评级",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q2"
+          ]
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "kind": "qualification",
+          "text": "必须取得两份材料：贵州茅台为强推（维持），光力科技为优于大市（首次覆盖）",
+          "period_tokens": [],
+          "coverage": "source_coverage",
+          "suggestions": [
+            {
+              "slot": "company-008-claim-001",
+              "source_id": "2026-08-16_6f14cc14",
+              "item_index": 4,
+              "kind": "rating",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.15)",
+              "shared_units": 2,
+              "primary": true
+            },
+            {
+              "slot": "company-018-claim-001",
+              "source_id": "2026-09-06_dddc7cd0",
+              "item_index": 3,
+              "kind": "rating",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "我\n们预计公司2026—2028 年归母净利润分别为1.32/2.19/3.43 亿元，对\n应PE 分别为79/48/30 倍，首次覆盖给予“优于大市”评级。",
+              "why": "content_overlap(shared=4, idf=3.33, ratio=0.31)",
+              "shared_units": 4,
+              "primary": true
+            },
+            {
+              "slot": "company-024-claim-001",
+              "source_id": "2026-09-06_dddc7cd0",
+              "item_index": 0,
+              "kind": "condition",
+              "locator": [
+                "page:2"
+              ],
+              "quote": "煤矿安全检测业务是公司的起家业务，是发展的基本盘。",
+              "why": "content_overlap(shared=3, idf=1.33, ratio=0.23)",
+              "shared_units": 3,
+              "primary": false
+            }
+          ]
+        },
+        {
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "通用评级定义页不能代替具体评级",
+          "period_tokens": [],
+          "coverage": "usage_constraint",
+          "suggestions": []
+        }
+      ],
+      "answer_constraints": [
+        {
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "text": "通用评级定义页不能代替具体评级",
+          "note": "答案侧用法约束：不产生证据目标，须在答案口径上与证据同时满足"
+        }
+      ],
+      "targets": [
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "元",
+            "period": "报告日2026-08-16；目标价期限一年"
+          },
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 4,
+            "kind": "rating",
+            "why": "content_overlap(shared=2, idf=2.00, ratio=0.15)",
+            "matched_facet_ids": [
+              "q1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "s2",
+          "role": "suggested",
+          "quote": "我\n们预计公司2026—2028 年归母净利润分别为1.32/2.19/3.43 亿元，对\n应PE 分别为79/48/30 倍，首次覆盖给予“优于大市”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "亿元；倍",
+            "period": "2026—2028E"
+          },
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 3,
+            "kind": "rating",
+            "why": "content_overlap(shared=4, idf=3.33, ratio=0.31)",
+            "matched_facet_ids": [
+              "q1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-company-008-01",
+          "kind": "source_coverage",
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "question": "该子句要求引用多份材料，已转由来源覆盖规则承接：'必须取得两份材料：贵州茅台为强推（维持），光力科技为优于大市（首次覆盖）'",
+          "clause": "必须取得两份材料：贵州茅台为强推（维持），光力科技为优于大市（首次覆盖）",
+          "suggestions": []
+        },
+        {
+          "item_id": "I32-company-008-02",
+          "kind": "answer_constraint",
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "question": "确认答案侧口径（不产生证据目标，但答案必须满足）：'通用评级定义页不能代替具体评级'",
+          "clause": "通用评级定义页不能代替具体评级",
+          "suggestions": []
+        },
+        {
+          "item_id": "I32-company-008-03",
+          "kind": "source_coverage",
+          "facet_id": null,
+          "clause_id": null,
+          "question": "该题 satisfy_rule=all：来源 2026-08-16_6f14cc14 目前没有必需证据目标，请指定承载 item（或裁定该来源不提供必需证据）",
+          "source_id": "2026-08-16_6f14cc14",
+          "suggestions": []
+        },
+        {
+          "item_id": "I32-company-008-04",
+          "kind": "source_coverage",
+          "facet_id": null,
+          "clause_id": null,
+          "question": "该题 satisfy_rule=all：来源 2026-09-06_dddc7cd0 目前没有必需证据目标，请指定承载 item（或裁定该来源不提供必需证据）",
+          "source_id": "2026-09-06_dddc7cd0",
+          "suggestions": []
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-003-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 0,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2026E"
+          ],
+          "quote": "178,657",
+          "text": "贵州茅台2026E 营业总收入为178,657百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 1,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2026E"
+          ],
+          "quote": "84,679",
+          "text": "贵州茅台2026E 归属母公司净利润为84,679百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 2,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2026E"
+          ],
+          "quote": "67.74",
+          "text": "贵州茅台2026E EPS(摊薄)（元）为67.74元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 3,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2026E"
+          ],
+          "quote": "25,756",
+          "text": "贵州茅台2026E 经营活动现金流为25,756百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 4,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2027E"
+          ],
+          "quote": "186,196",
+          "text": "贵州茅台2027E 营业总收入为186,196百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 5,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2027E"
+          ],
+          "quote": "88,470",
+          "text": "贵州茅台2027E 归属母公司净利润为88,470百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 6,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2027E"
+          ],
+          "quote": "70.77",
+          "text": "贵州茅台2027E EPS(摊薄)（元）为70.77元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 7,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2027E"
+          ],
+          "quote": "30,089",
+          "text": "贵州茅台2027E 经营活动现金流为30,089百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 8,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:营业总收入",
+            "col:2028E"
+          ],
+          "quote": "194,063",
+          "text": "贵州茅台2028E 营业总收入为194,063百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 9,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:归属母公司净利润",
+            "col:2028E"
+          ],
+          "quote": "92,302",
+          "text": "贵州茅台2028E 归属母公司净利润为92,302百万元（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 10,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:EPS(摊薄)（元）",
+            "col:2028E"
+          ],
+          "quote": "73.84",
+          "text": "贵州茅台2028E EPS(摊薄)（元）为73.84元/股（预测）"
+        },
+        {
+          "slot": "company-001-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 11,
+          "kind": "table_cell",
+          "locator": [
+            "page:3",
+            "row:经营活动现金流",
+            "col:2028E"
+          ],
+          "quote": "35,014",
+          "text": "贵州茅台2028E 经营活动现金流为35,014百万元（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 0,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:每股收益",
+            "col:2026E"
+          ],
+          "quote": "0.36",
+          "text": "光力科技2026E 每股收益为0.36元/股（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 1,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:P/E",
+            "col:2026E"
+          ],
+          "quote": "78.6",
+          "text": "光力科技2026E P/E为78.6倍（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 2,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:经营活动现金流",
+            "col:2026E"
+          ],
+          "quote": "(222)",
+          "text": "光力科技2026E 经营活动现金流为-222百万元（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 3,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:每股收益",
+            "col:2027E"
+          ],
+          "quote": "0.59",
+          "text": "光力科技2027E 每股收益为0.59元/股（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 4,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:P/E",
+            "col:2027E"
+          ],
+          "quote": "47.5",
+          "text": "光力科技2027E P/E为47.5倍（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 5,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:经营活动现金流",
+            "col:2027E"
+          ],
+          "quote": "(138)",
+          "text": "光力科技2027E 经营活动现金流为-138百万元（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 6,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:每股收益",
+            "col:2028E"
+          ],
+          "quote": "0.93",
+          "text": "光力科技2028E 每股收益为0.93元/股（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 7,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:P/E",
+            "col:2028E"
+          ],
+          "quote": "30.3",
+          "text": "光力科技2028E P/E为30.3倍（预测）"
+        },
+        {
+          "slot": "company-003-claim-001",
+          "source_id": "2026-09-06_dddc7cd0",
+          "item_index": 8,
+          "kind": "table_cell",
+          "locator": [
+            "page:20",
+            "row:经营活动现金流",
+            "col:2028E"
+          ],
+          "quote": "(17)",
+          "text": "光力科技2028E 经营活动现金流为-17百万元（预测）"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%。",
+          "text": "2026H1总收入922.8亿元，同比增长1.3%；归母净利润445.2亿元，同比下降2.0%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。",
+          "text": "2026Q2总收入375.8亿元，同比下降5.2%；归母净利润172.7亿元，同比下降6.9%"
+        },
+        {
+          "slot": "company-008-claim-001",
+          "source_id": "2026-08-16_6f14cc14",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "单Q2 直销占比同比大幅提升17.8pcts 至61.1%，i 茅台收入同\n增282.6%至187.1 亿",
+          "text": "2026Q2直销占比61.1%，同比提高17.8个百分点；i茅台收入187.1亿元，同比增长282.6%"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "company-008-claim-001": 1,
+          "company-018-claim-001": 1
+        },
+        "by_role": {
+          "suggested": 2
+        }
+      }
+    },
+    "industry-003": {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-08-13_174b6462"
+      ],
+      "evidence_required": true,
+      "machine_status": "pending_human",
+      "machine_status_reason": "机器已定位全部数值要件（必需 2 条、可替代 0 条），但仍有 1 项需人工裁决（定性要件锚点/数值等价/多来源覆盖/答案侧口径）；批准前不得计入必需证据",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "尿素开工率89.9%，2026E产能8068.0万吨/年",
+          "period_tokens": [],
+          "value_facet_ids": [
+            "f1",
+            "f2"
+          ],
+          "qualification_facet_ids": []
+        },
+        {
+          "clause_id": "c2",
+          "text": "区分开工率与产能，2026E为预测列",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q3"
+          ]
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "f1",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "89.9%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "industry-009-claim-001",
+              "item_index": 6,
+              "kind": "table_cell",
+              "forms": [
+                "89.9%"
+              ],
+              "exact": true,
+              "shared_units": 4,
+              "score": 4.0,
+              "ratio": 0.5,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f2",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "8068.0",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "industry-009-claim-001",
+              "item_index": 7,
+              "kind": "table_cell",
+              "forms": [
+                "8068.0"
+              ],
+              "exact": true,
+              "shared_units": 4,
+              "score": 4.0,
+              "ratio": 0.5,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q3",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "区分开工率与产能，2026E为预测列",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 9,
+              "kind": "condition",
+              "locator": [
+                "page:10"
+              ],
+              "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": true
+            },
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 2,
+              "kind": "table_cell",
+              "locator": [
+                "page:10",
+                "row:纯碱",
+                "col:开工率"
+              ],
+              "quote": "82.9%",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": false
+            },
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 6,
+              "kind": "table_cell",
+              "locator": [
+                "page:10",
+                "row:尿素",
+                "col:开工率"
+              ],
+              "quote": "89.9%",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "answer_constraints": [],
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "required",
+          "quote": "89.9%",
+          "locator": [
+            "page:10",
+            "row:尿素",
+            "col:开工率"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "constraints": {
+            "row": "尿素",
+            "col": "开工率",
+            "cell": "尿素 × 开工率",
+            "unit": "%",
+            "period": "2026年年初至7月26日或1—6月平均（见注2）"
+          },
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "89.9%"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "role": "required",
+          "quote": "8068.0",
+          "locator": [
+            "page:10",
+            "row:尿素",
+            "col:2026E产能"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "constraints": {
+            "row": "尿素",
+            "col": "2026E产能",
+            "cell": "尿素 × 2026E产能",
+            "unit": "万吨/年",
+            "period": "2026E"
+          },
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "8068.0"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": null,
+            "period": null
+          },
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 9,
+            "kind": "condition",
+            "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+            "matched_facet_ids": [
+              "q3"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-industry-003-01",
+          "kind": "qualification",
+          "facet_id": "q3",
+          "clause_id": "c2",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'区分开工率与产能，2026E为预测列'",
+          "clause": "区分开工率与产能，2026E为预测列",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 9,
+              "kind": "condition",
+              "locator": [
+                "page:10"
+              ],
+              "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": true
+            },
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 2,
+              "kind": "table_cell",
+              "locator": [
+                "page:10",
+                "row:纯碱",
+                "col:开工率"
+              ],
+              "quote": "82.9%",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": false
+            },
+            {
+              "slot": "industry-009-claim-001",
+              "source_id": "2026-08-13_174b6462",
+              "item_index": 6,
+              "kind": "table_cell",
+              "locator": [
+                "page:10",
+                "row:尿素",
+                "col:开工率"
+              ],
+              "quote": "89.9%",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.29)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [
+        "2026"
+      ],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 0,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:纯碱",
+            "col:价格分位"
+          ],
+          "quote": "0.0%",
+          "text": "纯碱的价格分位为0.0%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 1,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:纯碱",
+            "col:价差分位"
+          ],
+          "quote": "0.0%",
+          "text": "纯碱的价差分位为0.0%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 2,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:纯碱",
+            "col:开工率"
+          ],
+          "quote": "82.9%",
+          "text": "纯碱的开工率为82.9%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 3,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:R32",
+            "col:价格分位"
+          ],
+          "quote": "99.6%",
+          "text": "R32的价格分位为99.6%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 4,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:R32",
+            "col:2026E产能（配额）"
+          ],
+          "quote": "28.5",
+          "text": "R32的2026E产能（配额）为28.5万吨/年"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 5,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:R134a",
+            "col:价格分位"
+          ],
+          "quote": "98.8%",
+          "text": "R134a的价格分位为98.8%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 6,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:尿素",
+            "col:开工率"
+          ],
+          "quote": "89.9%",
+          "text": "尿素的开工率为89.9%"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 7,
+          "kind": "table_cell",
+          "locator": [
+            "page:10",
+            "row:尿素",
+            "col:2026E产能"
+          ],
+          "quote": "8068.0",
+          "text": "尿素的2026E产能为8068.0万吨/年"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 8,
+          "kind": "condition",
+          "locator": [
+            "page:10"
+          ],
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "text": "价格/价差分位统计窗口2016-01-01至2026-07-27；分位不是涨幅"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 9,
+          "kind": "condition",
+          "locator": [
+            "page:10"
+          ],
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "text": "开工率为年初至7月26日或1—6月平均，原注未逐品种说明采用哪个窗口"
+        },
+        {
+          "slot": "industry-009-claim-001",
+          "source_id": "2026-08-13_174b6462",
+          "item_index": 10,
+          "kind": "condition",
+          "locator": [
+            "page:10"
+          ],
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "text": "R22/R32/R134a表列产能按配额口径"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "industry-009-claim-001": 3
+        },
+        "by_role": {
+          "required": 2,
+          "suggested": 1
+        }
+      }
+    },
+    "macro-003": {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-09-06_793b3967"
+      ],
+      "evidence_required": true,
+      "machine_status": "blocked",
+      "machine_status_reason": "存在无承载 item 的要件 1 项：需补人工标注或由 U 裁定，候选不得据此冻结为金标",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "条件是后续通胀下行幅度有限",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q1"
+          ]
+        },
+        {
+          "clause_id": "c2",
+          "text": "强就业降低加息顾虑",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q2"
+          ]
+        },
+        {
+          "clause_id": "c3",
+          "text": "报告称非农公布后市场预期概率超过60%，必须区分附条件判断、市场预期和正式决定",
+          "period_tokens": [],
+          "value_facet_ids": [
+            "f3"
+          ],
+          "qualification_facet_ids": []
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "kind": "qualification",
+          "text": "条件是后续通胀下行幅度有限",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-038-claim-001",
+              "source_id": "2026-09-06_793b3967",
+              "item_index": 3,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+              "why": "content_overlap(shared=7, idf=7.00, ratio=1.00)",
+              "shared_units": 7,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "强就业降低加息顾虑",
+          "period_tokens": [],
+          "coverage": "missing",
+          "suggestions": []
+        },
+        {
+          "facet_id": "f3",
+          "clause_id": "c3",
+          "kind": "value",
+          "token": "60%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-038-claim-001",
+              "item_index": 4,
+              "kind": "value",
+              "forms": [
+                "60%"
+              ],
+              "exact": true,
+              "shared_units": 10,
+              "score": 10.0,
+              "ratio": 0.45454545454545453,
+              "has_quote": true
+            }
+          ]
+        }
+      ],
+      "answer_constraints": [],
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "required",
+          "quote": "在非农数据公布后，市场预期9 月加息的概\n率已经超过60%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "%",
+            "period": "2026-09-04非农公布后"
+          },
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "60%"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f3"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": null,
+            "period": "2026-09预期"
+          },
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 3,
+            "kind": "condition",
+            "why": "content_overlap(shared=7, idf=7.00, ratio=1.00)",
+            "matched_facet_ids": [
+              "q1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-macro-003-01",
+          "kind": "qualification",
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'条件是后续通胀下行幅度有限'",
+          "clause": "条件是后续通胀下行幅度有限",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-038-claim-001",
+              "source_id": "2026-09-06_793b3967",
+              "item_index": 3,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+              "why": "content_overlap(shared=7, idf=7.00, ratio=1.00)",
+              "shared_units": 7,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "item_id": "I32-macro-003-02",
+          "kind": "qualification",
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "question": "该定性要件在冻结标注中没有承载 item，需人工补标注或裁定：'强就业降低加息顾虑'",
+          "clause": "强就业降低加息顾虑",
+          "coverage": "missing",
+          "suggestions": []
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "macro-019-claim-001",
+        "macro-038-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "macro-038-claim-001",
+          "source_id": "2026-09-06_793b3967",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "新增非农就业16.2\n万人，预期5.6 万人，前值由-2.3 万人修正为2.1 万人",
+          "text": "2026年8月新增非农16.2万人，预期5.6万人；7月前值从-2.3万人上修为2.1万人"
+        },
+        {
+          "slot": "macro-038-claim-001",
+          "source_id": "2026-09-06_793b3967",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "8 月失业率4.1%，预期\n4.1%，前值4.1%；平均时薪同比升3.1%，预期升3.0%，前值升3.2%。",
+          "text": "2026年8月失业率4.1%（预期/前值均4.1%）；平均时薪同比3.1%（预期3.0%、前值3.2%）"
+        },
+        {
+          "slot": "macro-038-claim-001",
+          "source_id": "2026-09-06_793b3967",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "8 月劳动参与率为61.6%，高于上月的61.4%",
+          "text": "8月劳动参与率61.6%，7月61.4%"
+        },
+        {
+          "slot": "macro-038-claim-001",
+          "source_id": "2026-09-06_793b3967",
+          "item_index": 3,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "若后续公布的通胀数\n据下行幅度有限，美联储9 月加息的可能性将很难被忽视。",
+          "text": "报告把9月加息风险与后续通胀下行有限相联系，是附条件判断，不是已发生的政策决定"
+        },
+        {
+          "slot": "macro-038-claim-001",
+          "source_id": "2026-09-06_793b3967",
+          "item_index": 4,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "在非农数据公布后，市场预期9 月加息的概\n率已经超过60%。",
+          "text": "据报告，非农公布后市场预期9月加息概率超过60%；非实际加息结果"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "macro-038-claim-001": 2
+        },
+        "by_role": {
+          "required": 1,
+          "suggested": 1
+        }
+      }
+    },
+    "macro-004": {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-09-06_cc03f55b"
+      ],
+      "evidence_required": true,
+      "machine_status": "blocked",
+      "machine_status_reason": "存在无承载 item 的要件 1 项：需补人工标注或由 U 裁定，候选不得据此冻结为金标",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "五主体为政府、准财政、企业、居民、海外",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q1"
+          ]
+        },
+        {
+          "clause_id": "c2",
+          "text": "本文聚焦前四者",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q2"
+          ]
+        },
+        {
+          "clause_id": "c3",
+          "text": "四路径为财政支出增加、缓解城投化债压力、企业投资增加、居民支出增加",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q3"
+          ]
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "kind": "qualification",
+          "text": "五主体为政府、准财政、企业、居民、海外",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 1,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+              "why": "content_overlap(shared=6, idf=5.50, ratio=0.86)",
+              "shared_units": 6,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "本文聚焦前四者",
+          "period_tokens": [],
+          "coverage": "missing",
+          "suggestions": []
+        },
+        {
+          "facet_id": "q3",
+          "clause_id": "c3",
+          "kind": "qualification",
+          "text": "四路径为财政支出增加、缓解城投化债压力、企业投资增加、居民支出增加",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 1,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+              "why": "content_overlap(shared=4, idf=3.50, ratio=0.20)",
+              "shared_units": 4,
+              "primary": true
+            },
+            {
+              "slot": "macro-060-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 4,
+              "kind": "condition",
+              "locator": [
+                "page:2"
+              ],
+              "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.10)",
+              "shared_units": 2,
+              "primary": false
+            },
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 2,
+              "kind": "value",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.10)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "answer_constraints": [],
+      "targets": [
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": null,
+            "period": null
+          },
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "why": "content_overlap(shared=6, idf=5.50, ratio=0.86)",
+            "matched_facet_ids": [
+              "q1",
+              "q3"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-macro-004-01",
+          "kind": "qualification",
+          "facet_id": "q1",
+          "clause_id": "c1",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'五主体为政府、准财政、企业、居民、海外'",
+          "clause": "五主体为政府、准财政、企业、居民、海外",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 1,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+              "why": "content_overlap(shared=6, idf=5.50, ratio=0.86)",
+              "shared_units": 6,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "item_id": "I32-macro-004-02",
+          "kind": "qualification",
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "question": "该定性要件在冻结标注中没有承载 item，需人工补标注或裁定：'本文聚焦前四者'",
+          "clause": "本文聚焦前四者",
+          "coverage": "missing",
+          "suggestions": []
+        },
+        {
+          "item_id": "I32-macro-004-03",
+          "kind": "qualification",
+          "facet_id": "q3",
+          "clause_id": "c3",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'四路径为财政支出增加、缓解城投化债压力、企业投资增加、居民支出增加'",
+          "clause": "四路径为财政支出增加、缓解城投化债压力、企业投资增加、居民支出增加",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 1,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+              "why": "content_overlap(shared=4, idf=3.50, ratio=0.20)",
+              "shared_units": 4,
+              "primary": true
+            },
+            {
+              "slot": "macro-060-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 4,
+              "kind": "condition",
+              "locator": [
+                "page:2"
+              ],
+              "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.10)",
+              "shared_units": 2,
+              "primary": false
+            },
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 2,
+              "kind": "value",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.10)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+          "text": "新动能含装备制造、信息、租赁和商务服务；旧动能含地产、建筑、上游材料制造"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+          "text": "理论上有政府、准财政、企业、居民、海外五个主体；本报告聚焦前四个主体"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "text": "2026年两本账支出增速预测约-0.5%，低于名义GDP增速"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "text": "央企样本有息负债增速2025/2024为4.6%/5.9%；地方国企样本为6.1%/6.2%"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI200 成分股）为26.7%。",
+          "text": "2025上市公司投资相对资本形成比例：中国全部A股9.8%，美国标普500 20.4%，日本日经225 14.8%，韩国KOSPI200 26.7%；样本口径各异"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "1-6 月，本年施工项目计划总投资累计同比\n为-4.3%，本年新开工项目计划总投资增速为-29.4%。",
+          "text": "2026年1—6月本年施工项目计划总投资累计同比-4.3%，本年新开工项目计划总投资增速-29.4%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "2025 年，非\n金融企业人均薪酬增速为2.4%，低于2024 年的3.3%，以及2019 年的6.5%。",
+          "text": "A股非金融企业人均薪酬增速2025/2024/2019为2.4%/3.3%/6.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "text": "消费倾向=消费/可支配收入；2026Q2为67.5%，2025Q2为68.6%，2019Q2为70.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从支出倾向（消费叠加新房购房与可支配收入之比），2 季度\n为80.3%，低于2025 年同期的83.7%以及2019 年同期的110.3%。",
+          "text": "支出倾向=(消费+新房购房)/可支配收入；2026Q2为80.3%，2025Q2为83.7%，2019Q2为110.3%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "condition",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "text": "结论受上市公司/发债企业样本代表性限制，可能有偏差，也可能存在其他收敛路径"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "macro-039-claim-001": 1
+        },
+        "by_role": {
+          "suggested": 1
+        }
+      }
+    },
+    "macro-005": {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-09-06_cc03f55b"
+      ],
+      "evidence_required": true,
+      "machine_status": "pending_human",
+      "machine_status_reason": "机器已定位全部数值要件（必需 1 条、可替代 0 条），但仍有 2 项需人工裁决（定性要件锚点/数值等价/多来源覆盖/答案侧口径）；批准前不得计入必需证据",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "两本账支出增速预计约-0.5%，低于名义GDP增速",
+          "period_tokens": [],
+          "value_facet_ids": [
+            "f1"
+          ],
+          "qualification_facet_ids": []
+        },
+        {
+          "clause_id": "c2",
+          "text": "堵点为收入依赖旧动能且受其下行拖累、新动能综合税负偏低",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q2"
+          ]
+        },
+        {
+          "clause_id": "c3",
+          "text": "须标注预测",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q3"
+          ]
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "f1",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "0.5%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-039-claim-001",
+              "item_index": 2,
+              "kind": "value",
+              "forms": [
+                "0.5%"
+              ],
+              "exact": true,
+              "shared_units": 8,
+              "score": 7.0,
+              "ratio": 1.0,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "堵点为收入依赖旧动能且受其下行拖累、新动能综合税负偏低",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 0,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.14)",
+              "shared_units": 2,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q3",
+          "clause_id": "c3",
+          "kind": "qualification",
+          "text": "须标注预测",
+          "period_tokens": [],
+          "coverage": "usage_constraint",
+          "suggestions": []
+        }
+      ],
+      "answer_constraints": [
+        {
+          "facet_id": "q3",
+          "clause_id": "c3",
+          "text": "须标注预测",
+          "note": "答案侧用法约束：不产生证据目标，须在答案口径上与证据同时满足"
+        }
+      ],
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "required",
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "%",
+            "period": "2026E"
+          },
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "0.5%"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": null,
+            "period": null
+          },
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 0,
+            "kind": "condition",
+            "why": "content_overlap(shared=2, idf=2.00, ratio=0.14)",
+            "matched_facet_ids": [
+              "q2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-macro-005-01",
+          "kind": "qualification",
+          "facet_id": "q2",
+          "clause_id": "c2",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'堵点为收入依赖旧动能且受其下行拖累、新动能综合税负偏低'",
+          "clause": "堵点为收入依赖旧动能且受其下行拖累、新动能综合税负偏低",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 0,
+              "kind": "condition",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+              "why": "content_overlap(shared=2, idf=2.00, ratio=0.14)",
+              "shared_units": 2,
+              "primary": true
+            }
+          ]
+        },
+        {
+          "item_id": "I32-macro-005-02",
+          "kind": "answer_constraint",
+          "facet_id": "q3",
+          "clause_id": "c3",
+          "question": "确认答案侧口径（不产生证据目标，但答案必须满足）：'须标注预测'",
+          "clause": "须标注预测",
+          "suggestions": []
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+          "text": "新动能含装备制造、信息、租赁和商务服务；旧动能含地产、建筑、上游材料制造"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+          "text": "理论上有政府、准财政、企业、居民、海外五个主体；本报告聚焦前四个主体"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "text": "2026年两本账支出增速预测约-0.5%，低于名义GDP增速"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "text": "央企样本有息负债增速2025/2024为4.6%/5.9%；地方国企样本为6.1%/6.2%"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI200 成分股）为26.7%。",
+          "text": "2025上市公司投资相对资本形成比例：中国全部A股9.8%，美国标普500 20.4%，日本日经225 14.8%，韩国KOSPI200 26.7%；样本口径各异"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "1-6 月，本年施工项目计划总投资累计同比\n为-4.3%，本年新开工项目计划总投资增速为-29.4%。",
+          "text": "2026年1—6月本年施工项目计划总投资累计同比-4.3%，本年新开工项目计划总投资增速-29.4%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "2025 年，非\n金融企业人均薪酬增速为2.4%，低于2024 年的3.3%，以及2019 年的6.5%。",
+          "text": "A股非金融企业人均薪酬增速2025/2024/2019为2.4%/3.3%/6.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "text": "消费倾向=消费/可支配收入；2026Q2为67.5%，2025Q2为68.6%，2019Q2为70.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从支出倾向（消费叠加新房购房与可支配收入之比），2 季度\n为80.3%，低于2025 年同期的83.7%以及2019 年同期的110.3%。",
+          "text": "支出倾向=(消费+新房购房)/可支配收入；2026Q2为80.3%，2025Q2为83.7%，2019Q2为110.3%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "condition",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "text": "结论受上市公司/发债企业样本代表性限制，可能有偏差，也可能存在其他收敛路径"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "macro-039-claim-001": 2
+        },
+        "by_role": {
+          "required": 1,
+          "suggested": 1
+        }
+      }
+    },
+    "macro-006": {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "satisfy_rule": "any",
+      "relevant_sources": [
+        "2026-09-06_cc03f55b"
+      ],
+      "evidence_required": true,
+      "machine_status": "pending_human",
+      "machine_status_reason": "机器已定位全部数值要件（必需 1 条、可替代 0 条），但仍有 1 项需人工裁决（定性要件锚点/数值等价/多来源覆盖/答案侧口径）；批准前不得计入必需证据",
+      "adjudication": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "requirement_clauses": [
+        {
+          "clause_id": "c1",
+          "text": "央企4.6%对5.9%，地方国企6.1%对6.2%，均下降",
+          "period_tokens": [],
+          "value_facet_ids": [
+            "f1",
+            "f2",
+            "f3",
+            "f4"
+          ],
+          "qualification_facet_ids": []
+        },
+        {
+          "clause_id": "c2",
+          "text": "样本为偏头部发债企业，不等于全国所有国企",
+          "period_tokens": [],
+          "value_facet_ids": [],
+          "qualification_facet_ids": [
+            "q5"
+          ]
+        }
+      ],
+      "requirement_facets": [
+        {
+          "facet_id": "f1",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "4.6%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-039-claim-001",
+              "item_index": 3,
+              "kind": "value",
+              "forms": [
+                "4.6%"
+              ],
+              "exact": true,
+              "shared_units": 3,
+              "score": 3.0,
+              "ratio": 1.0,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f2",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "5.9%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-039-claim-001",
+              "item_index": 3,
+              "kind": "value",
+              "forms": [
+                "5.9%"
+              ],
+              "exact": true,
+              "shared_units": 3,
+              "score": 3.0,
+              "ratio": 1.0,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f3",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "6.1%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-039-claim-001",
+              "item_index": 3,
+              "kind": "value",
+              "forms": [
+                "6.1%"
+              ],
+              "exact": true,
+              "shared_units": 3,
+              "score": 3.0,
+              "ratio": 1.0,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "f4",
+          "clause_id": "c1",
+          "kind": "value",
+          "token": "6.2%",
+          "coverage": "required",
+          "candidates": [
+            {
+              "gold_id": "macro-039-claim-001",
+              "item_index": 3,
+              "kind": "value",
+              "forms": [
+                "6.2%"
+              ],
+              "exact": true,
+              "shared_units": 3,
+              "score": 3.0,
+              "ratio": 1.0,
+              "has_quote": true
+            }
+          ]
+        },
+        {
+          "facet_id": "q5",
+          "clause_id": "c2",
+          "kind": "qualification",
+          "text": "样本为偏头部发债企业，不等于全国所有国企",
+          "period_tokens": [],
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-060-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 4,
+              "kind": "condition",
+              "locator": [
+                "page:2"
+              ],
+              "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+              "why": "content_overlap(shared=3, idf=2.50, ratio=0.33)",
+              "shared_units": 3,
+              "primary": true
+            },
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 3,
+              "kind": "value",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.22)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "answer_constraints": [],
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "required",
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": "%",
+            "period": "2025；2024"
+          },
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "4.6%",
+              "5.9%",
+              "6.1%",
+              "6.2%"
+            ],
+            "value_equivalents": {},
+            "matched_facet_ids": [
+              "f1",
+              "f2",
+              "f3",
+              "f4"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "s1",
+          "role": "suggested",
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "constraints": {
+            "row": null,
+            "col": null,
+            "cell": null,
+            "unit": null,
+            "period": null
+          },
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 4,
+            "kind": "condition",
+            "why": "content_overlap(shared=3, idf=2.50, ratio=0.33)",
+            "matched_facet_ids": [
+              "q5"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "pending_human": [
+        {
+          "item_id": "I32-macro-006-01",
+          "kind": "qualification",
+          "facet_id": "q5",
+          "clause_id": "c2",
+          "question": "确认该定性要件已由下列候选原文承载（或改选/裁定需补标注）：'样本为偏头部发债企业，不等于全国所有国企'",
+          "clause": "样本为偏头部发债企业，不等于全国所有国企",
+          "coverage": "suggested",
+          "suggestions": [
+            {
+              "slot": "macro-060-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 4,
+              "kind": "condition",
+              "locator": [
+                "page:2"
+              ],
+              "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+              "why": "content_overlap(shared=3, idf=2.50, ratio=0.33)",
+              "shared_units": 3,
+              "primary": true
+            },
+            {
+              "slot": "macro-039-claim-001",
+              "source_id": "2026-09-06_cc03f55b",
+              "item_index": 3,
+              "kind": "value",
+              "locator": [
+                "page:1"
+              ],
+              "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+              "why": "content_overlap(shared=2, idf=1.50, ratio=0.22)",
+              "shared_units": 2,
+              "primary": false
+            }
+          ]
+        }
+      ],
+      "unmatched_tokens": [],
+      "weak_tokens": [],
+      "period_tokens": [],
+      "page_hints": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "item_without_quote": [],
+      "review_candidates": [
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "新动\n能（包括装备制造业、信息业、租赁和商务服务业），旧动能（地产、建筑、\n上游材料制造业）",
+          "text": "新动能含装备制造、信息、租赁和商务服务；旧动能含地产、建筑、上游材料制造"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "condition",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "这五个主体分别是政府、准财政（如城投等）、企业、居民、海\n外。",
+          "text": "理论上有政府、准财政、企业、居民、海外五个主体；本报告聚焦前四个主体"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "text": "2026年两本账支出增速预测约-0.5%，低于名义GDP增速"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "text": "央企样本有息负债增速2025/2024为4.6%/5.9%；地方国企样本为6.1%/6.2%"
+        },
+        {
+          "slot": "macro-039-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "value",
+          "locator": [
+            "page:1"
+          ],
+          "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI200 成分股）为26.7%。",
+          "text": "2025上市公司投资相对资本形成比例：中国全部A股9.8%，美国标普500 20.4%，日本日经225 14.8%，韩国KOSPI200 26.7%；样本口径各异"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 0,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "1-6 月，本年施工项目计划总投资累计同比\n为-4.3%，本年新开工项目计划总投资增速为-29.4%。",
+          "text": "2026年1—6月本年施工项目计划总投资累计同比-4.3%，本年新开工项目计划总投资增速-29.4%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 1,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "2025 年，非\n金融企业人均薪酬增速为2.4%，低于2024 年的3.3%，以及2019 年的6.5%。",
+          "text": "A股非金融企业人均薪酬增速2025/2024/2019为2.4%/3.3%/6.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 2,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "text": "消费倾向=消费/可支配收入；2026Q2为67.5%，2025Q2为68.6%，2019Q2为70.5%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 3,
+          "kind": "value",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "从支出倾向（消费叠加新房购房与可支配收入之比），2 季度\n为80.3%，低于2025 年同期的83.7%以及2019 年同期的110.3%。",
+          "text": "支出倾向=(消费+新房购房)/可支配收入；2026Q2为80.3%，2025Q2为83.7%，2019Q2为110.3%"
+        },
+        {
+          "slot": "macro-060-claim-001",
+          "source_id": "2026-09-06_cc03f55b",
+          "item_index": 4,
+          "kind": "condition",
+          "locator": [
+            "page:2"
+          ],
+          "quote": "使用上市公司或者发债企业的数据代表性可能欠佳，获得的结论有\n一定的偏差。可能存在其他收敛路径。",
+          "text": "结论受上市公司/发债企业样本代表性限制，可能有偏差，也可能存在其他收敛路径"
+        }
+      ],
+      "item_coverage": {
+        "by_slot": {
+          "macro-039-claim-001": 1,
+          "macro-060-claim-001": 1
+        },
+        "by_role": {
+          "required": 1,
+          "suggested": 1
+        }
+      }
+    }
+  }
+}

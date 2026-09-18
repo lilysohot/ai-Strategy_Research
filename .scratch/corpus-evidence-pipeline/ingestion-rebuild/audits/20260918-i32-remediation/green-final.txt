@@ -1,0 +1,6 @@
+$ /home/administrator/FrontierAgent/.venv/bin/python -B -m pytest --noconftest -c /dev/null -p no:cacheprovider -p plugins.corpus.preparation.guard_pytest /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py tests/test_corpus_scoring.py /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/test_review_probes.py -q --tb=short
+........................................................................ [ 81%]
+................                                                         [100%]
+88 passed in 0.24s
+
+exit=0

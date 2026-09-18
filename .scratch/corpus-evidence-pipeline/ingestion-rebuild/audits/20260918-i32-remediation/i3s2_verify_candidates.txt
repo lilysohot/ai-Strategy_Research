@@ -1,0 +1,6 @@
+$ python -B /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py
+archived previous verification: evidence-targets-verification-v3.json
+verification written: /home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json sha256=38e8e63911eaa0560aba640906fdc31ac3bca35b6c4e12385781a0b3d1144533
+{"questions": 30, "self_consistency_failed": 0, "probes_total": 16, "probes_failed": 0, "completeness_ready": false, "completeness_stage": "no_decisions"}
+
+exit=0

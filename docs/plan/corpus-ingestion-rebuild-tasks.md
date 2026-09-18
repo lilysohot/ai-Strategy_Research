@@ -141,7 +141,7 @@ I1 完整 review 修复轮完成（2026-09-16 按 [full-review](../../.scratch/c
 | M5 复核与签认 | [矩阵 20 块全绿零 skip + X1—X15 全过；复核报告 F1/F2/F3；独立性偏差已登记并由 U 接受；i0c-r16](claims-market-closed-loop-plan.md#m5-review-signoff) |
 | I3-0 评分器 | [三类指标评分器 + 合成检验 31 passed；i3 守卫自检 24/24；纯新增冻结 i0c-r19；待独立复核与 U 签认](claims-market-closed-loop-plan.md#i3-0) |
 | I3-0 复核整改 | [独立复核 9 红例按 F1—F5 修复不变量关闭；复核探针 10/10、自身 46 passed；i0c-r21](claims-market-closed-loop-plan.md#i3-0-review-remediation) |
-| I3-2 补料 | [证据目标候选（mapped 20／partial 1／needs_human 3／负例 6，共 60 条）+ 往返验证 30/30；待 U 裁决 4 项](claims-market-closed-loop-plan.md#i3-2-evidence-candidates) |
+| I3-2 补料 | [证据目标候选 v7 + **采纳稿落正式金标**（source-gold 36 槽位 = 冻结 23 条逐字节保留 + 采纳 13 槽/49 条；负例近似命中 7 条隔离成库）；目标 54→82（必需 44／补充 20／锚点 18）；`blocked` 2→1（`macro-004` 人工裁定覆盖）；裁决件 40+24+6+1 已落，门 **ready=true**（0 阻断／20 条人工同义 warning），批准投影 79 必需 + 20 补充；验证 30/30 自洽 + 探针 16/16；i0c-r26](claims-market-closed-loop-plan.md#i3-2-evidence-candidates) |
 
 每轮执行结束必须回填总台账，即使失败或只完成草稿；同时记录代码/配置/资产版本、
 命令与实际结果、报告链接、未决项及人工决定。不能把“文件存在”“自检通过”或“已写模板”
@@ -277,14 +277,43 @@ F5 直接构造入口同样校验（空 quote 拒绝）。复核探针（原文�
 I3-2 可启动，但**必须先补机器可读证据目标**（缺则评分器按设计阻断，不得用散文 `evidence_requirement` 顶替，
 也不得靠“没写”静默退出 EvidencePass 分母）；M5 报告 F3（`validate_i1_freeze.py` 既有失配）建议随 I3 前置修订理顺。
 
-**I3-2 补料候选已出（2026-09-18，A 侧，见总台账 [I3-2 补料](claims-market-closed-loop-plan.md#i3-2-evidence-candidates)）**：
-[i3s2_evidence_targets.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py) 按 `evidence-mapping-3`
-从 I0A-4 人工标注槽位映射 30 题证据目标 →
-[候选](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json)（mapped 20／partial 1／needs_human 3／负例 6，共 60 条）
-+ [待裁决清单](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md)
-+ [往返验证 30/30](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json)（3 道待人工题按设计 `evidence_targets_absent` 阻断，即缺料不放行真实生效）。
-**U 决策 4 项**：3 道定性题人工指定目标、`company-004` 的 `13.40` 未命中、EvidencePass 分母口径（逐 item／槽位聚合）、
-6 道负例 `evidence_required=false` 批准。裁决前**不得**把候选当正式金标，也不得先跑候选业务结果再补答案。
+**I3-2 采纳稿已落正式路径并冻结（2026-09-18，A 侧，规则仍 `evidence-mapping-6`；i0c-r26；见总台账
+[I3-2 补料](claims-market-closed-loop-plan.md#i3-2-evidence-candidates)）**：U 全文审核 AI 辅助补证与裁决建议后**全部采纳**（署名 `xyl` + `ai_assisted: true`，AI 复核者非人类签名）；新金标版本 = 23 条冻结槽位**逐字节保留** + 采纳 13 槽位/49 条（逐条对账页内切片：页号 + quote 逐字 + quote_sha256），负例的 7 条近似命中外移为
+[负例库](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/source-gold-nearmiss-library.jsonl)（不入映射池）；重映射后 30 题 → 目标 **82** 条（必需 44／补充 20／待批准锚点 18）、`machine_ready` 2／`pending_human` 21／`blocked` 1／负例 6；裁决件
+[40 要件 + 24 整题 + 6 负例 + 1 状态澄清](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json) 落盘后，
+[门](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report.json) **ready=true（0 阻断）**、
+[批准投影](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json) 30 题 = 必需 **79** + 补充 20 条、
+[验证](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json) 自洽 30/30 + 探针 16/16。
+四项口径：①AI 核验锚点逐项确认同义（门记 20 条 warning，机器不宣称语义等价）；②无内容词元的纯日期 span 不作承载映射；③chosen 收窄到最小覆盖集（53→35，移出的 18 条记 `supporting_anchors`，不计入 EvidencePass）；④`macro-004` 的 `blocked`（q2 机器检索未登记承载项）由人工裁定覆盖，机器状态原样保留供审计。**仍未宣告 I3-2 完成**：I3-2 其余冻结项、I3-1（E2E）与 I3-5 真实答案语义验收未做；强制零模型、未写生产库、未读候选业务结果。
+
+**（本节以下为 r25 历史：候选 54 条与审批门 `no_decisions`）**：
+**I3-2 补料候选已按复验报告 B1—B5 修复（2026-09-18，A 侧，规则 `evidence-mapping-6`；见总台账
+[I3-2 补料](claims-market-closed-loop-plan.md#i3-2-evidence-candidates)）**：
+[i3s2_evidence_targets.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py)
++ [i3s2_textutil.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_textutil.py)（共享切分/词元规则）
+从 I0A-4 人工标注槽位映射 30 题证据目标（要求覆盖账按段并行登记数值与限定 + 单元格身份 +
+required/supplementary/suggested 三层 + 锚点覆盖度与未覆盖词元 + 数值等价入队）→
+[候选](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json)
+（machine_ready 2／pending_human 20／blocked 2／负例 6；目标 54 条 = 必需 35／补充 4／待批准锚点 15）
++ [逐题核对单](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md)
++ [人工裁决单](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md)
+（要件 40 + 整题 24 + 负例 6 + 状态澄清 1）
++ [自检三段](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json)
+（`self_consistency` 0 failed、`regression_probes` 16/16、`completeness_gate` = no_decisions）。
+**审批路径**：`evidence-targets-decisions.json` →（[i3s2_apply_decisions.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_apply_decisions.py)）
+→ `evidence-targets-approved.json` + `approval-report.json`；候选文件里的 `adjudication.status`
+**不作凭据**（改它不会开门），`驳回` 不删除原题要求、`补标注` 须先有新 source-gold 版本。
+**EvidencePass 分母 = 逐题**（架构 §12.3）：item 条数与槽位聚合只作诊断，"逐 item vs 槽位聚合"二选一已作废。
+**U 决策事项**：40 项要件裁决 + 24 题整题验收（含 `machine_ready` 题）+ 6 题负例覆盖 + 1 项来源状态澄清。
+裁决前**不得**把候选当正式金标，也不得先跑候选业务结果再补答案；`ready=false` 是候选阶段的正确状态。
+
+**r25 修复边界**：来源专属项须绑定指定 source_id；答案约束禁止 chosen 且不得生成证据；
+`residual_accepted=true` 禁用，缺证须补标；仅词面差异可用 `lexical_review` 逐项绑定原文。
+检索线索提升须 `改选 + anchor_review`，不能把 text/period 元数据当原文。
+审批身份、重复项、负例依据及最终投影引用均 fail-closed。
+命令、修复前后结果及旧字节归档见
+[修复记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/review.md)。
+本轮只交付修复，不自我宣告 I3-2/M6 放行，也不代替 U 签认。
 
 | ID   | 任务与关键步骤                                                                             | 所需资源              | 负责人 | 起止（估）             | 前置               | 验收/质量门                                                                         |
 | ---- | ----------------------------------------------------------------------------------- | ----------------- | --- | ----------------- | ---------------- | ------------------------------------------------------------------------------ |
@@ -293,7 +322,7 @@ I3-2 可启动，但**必须先补机器可读证据目标**（缺则评分器�
 | I3-1 | 三类开发 E2E：每类≥2 份，登记→准入→解析→清洗→切块→build/check/publish→真实 search/fetch/verify           | 冻结开发范围、隔离 PG      | A+U | I3-2 后            | I3-2 + **I2 全链路复核 F1 闭环** | 记录领域×格式矩阵，缺格式门未过；本轮初步结果不能直接放行 I4；**前置**：缺口分级/坐标（RM-FC-1/2）闭环——材料含空白页等 `acknowledged` 缺口才可走完 publish，`blocking` 缺口按 `check`/`status` 的 `gaps` 机读处置（补 OCR/换料/转 review\_required）；先用 `corpus-plan` 预检筛料 |
 | I3-3 | 开发校准：检索/切块参数仅开发集试验；每轮先固定配置再执行 retrieval\_pg，报告数字/单位/语言及三类指标                         | 冻结预期、当前配置         | A   | I3-1 后            | I3-1             | 记录每轮失败和配置哈希，预先限定试验范围/停止条件；不改预期换分数；超过边界停下报告，不无限试探                               |
 | I3-4 | coverage 开发测试：空库/无匹配/排除/部分/未决/故障/更新失败/并发发布/跨域                                       | 隔离 PG             | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 三轴及 availability；no\_match 不自动 absent，failed 恒 unknown；最终版本仍须 I3-7 重验          |
-| I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列                  | baseline-bindings | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 按实际绑定资产核验而非只抄数字；不得删掉仍在范围的旧失败题；此处不是最终版本放行                                       |
+| I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 |
 | I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过                                             |
 | I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retrieval、authority/取证、coverage、CLI、旧检索/财务非回归及受影响 M4/M5 门 | 最终版本、隔离 PG        | A+U | I3-6 后            | I3-6             | 逐类三指标达冻结目标（候选 ≥95%）；关键引用 100%、适用旧通过基线不退化、伪引用负例 0；分母/格式/必需环境缺失不通过；全部结果与版本一致才 M6；**E2E 基线复用**：I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约，[test\_fullchain\_probes.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py)，write-once 不修改）+ [test\_corpus\_gap\_dispositions.py](../../tests/test_corpus_gap_dispositions.py) |
 
@@ -356,4 +385,3 @@ I4 全部继承 M6 和当前目标守卫。分支为 reset/migrate/defer：reset
 | manifest 语义不清       | I0C-3 改阶段快照，§5 不可变父子版本                               | 每报告绑定自己的运行版本，不追改历史                  |
 | 清理被固定成必选            | I0C-1 和 I4 reset/migrate/defer 分支                    | M7 衡量有效切换，不要求发生删除                   |
 | 枚举/人工量/备份生成/排期/退休细节 | I0A-2/4、I0B-1/2、§4、I5-3                              | 契约一致、范围有界、真实备份、按依赖标定                |
-

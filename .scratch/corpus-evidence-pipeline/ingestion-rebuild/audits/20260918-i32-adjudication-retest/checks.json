@@ -1,0 +1,457 @@
+{
+  "ids": 40,
+  "ids_unique": 40,
+  "ids_exact": true,
+  "markdown_replay_exact": true,
+  "existing_probes": {
+    "count": 16,
+    "failed": 0
+  },
+  "old_status_flip": {
+    "ready": false,
+    "stage": "no_decisions",
+    "blockers": [
+      "缺少审批件 evidence-targets-decisions.json：批准必须走『审批件 → 批准投影 → 完整性门』，候选内的 adjudication.status 不作凭据"
+    ],
+    "required": {
+      "facet_decisions": 40,
+      "question_reviews": 24,
+      "negative_reviews": 6,
+      "human_status_clarifications": 1
+    },
+    "unresolved_items": [
+      "I32-company-001-01",
+      "I32-company-001-02",
+      "I32-company-002-01",
+      "I32-company-003-01",
+      "I32-company-003-02",
+      "I32-company-004-01",
+      "I32-company-004-02",
+      "I32-company-007-01",
+      "I32-company-008-01",
+      "I32-company-008-02",
+      "I32-company-008-03",
+      "I32-company-008-04",
+      "I32-industry-001-01",
+      "I32-industry-002-01",
+      "I32-industry-002-02",
+      "I32-industry-003-01",
+      "I32-industry-004-01",
+      "I32-industry-004-02",
+      "I32-industry-004-03",
+      "I32-industry-005-01",
+      "I32-industry-006-01",
+      "I32-industry-006-02",
+      "I32-industry-006-03",
+      "I32-industry-007-01",
+      "I32-industry-008-01",
+      "I32-industry-008-02",
+      "I32-industry-008-03",
+      "I32-macro-001-01",
+      "I32-macro-002-01",
+      "I32-macro-003-01",
+      "I32-macro-003-02",
+      "I32-macro-003-03",
+      "I32-macro-004-01",
+      "I32-macro-004-02",
+      "I32-macro-004-03",
+      "I32-macro-005-01",
+      "I32-macro-005-02",
+      "I32-macro-006-01",
+      "I32-macro-007-01",
+      "I32-macro-008-01"
+    ],
+    "warnings": []
+  },
+  "positive_control": true,
+  "schema_mutations": {
+    "conflicting_question_reviews": {
+      "ready": true,
+      "stage": "evaluated",
+      "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+      "reviewed_at": "2026-01-01T00:00:00+08:00",
+      "based_on": {
+        "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+        "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+        "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+      },
+      "counts": {
+        "facet_decisions_expected": 1,
+        "facet_decisions_present": 1,
+        "facet_decisions_unresolved": 0,
+        "question_reviews_expected": 1,
+        "question_reviews_present": 1,
+        "negative_reviews_expected": 1,
+        "negative_reviews_present": 1,
+        "status_clarifications_expected": 0,
+        "status_clarifications_present": 0
+      },
+      "blockers": [],
+      "unresolved_items": [],
+      "warnings": [],
+      "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+    },
+    "negative_review_without_reason": {
+      "ready": true,
+      "stage": "evaluated",
+      "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+      "reviewed_at": "2026-01-01T00:00:00+08:00",
+      "based_on": {
+        "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+        "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+        "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+      },
+      "counts": {
+        "facet_decisions_expected": 1,
+        "facet_decisions_present": 1,
+        "facet_decisions_unresolved": 0,
+        "question_reviews_expected": 1,
+        "question_reviews_present": 1,
+        "negative_reviews_expected": 1,
+        "negative_reviews_present": 1,
+        "status_clarifications_expected": 0,
+        "status_clarifications_present": 0
+      },
+      "blockers": [],
+      "unresolved_items": [],
+      "warnings": [],
+      "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+    },
+    "mismatched_decision_identity": {
+      "ready": true,
+      "stage": "evaluated",
+      "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+      "reviewed_at": "2026-01-01T00:00:00+08:00",
+      "based_on": {
+        "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+        "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+        "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+      },
+      "counts": {
+        "facet_decisions_expected": 1,
+        "facet_decisions_present": 1,
+        "facet_decisions_unresolved": 0,
+        "question_reviews_expected": 1,
+        "question_reviews_present": 1,
+        "negative_reviews_expected": 1,
+        "negative_reviews_present": 1,
+        "status_clarifications_expected": 0,
+        "status_clarifications_present": 0
+      },
+      "blockers": [],
+      "unresolved_items": [],
+      "warnings": [],
+      "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+    }
+  },
+  "isolated_wrong_source_no_residual": {
+    "ready": true,
+    "stage": "evaluated",
+    "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+    "reviewed_at": "2026-01-01T00:00:00+08:00",
+    "based_on": {
+      "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+      "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "counts": {
+      "facet_decisions_expected": 1,
+      "facet_decisions_present": 1,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 1,
+      "question_reviews_present": 1,
+      "negative_reviews_expected": 1,
+      "negative_reviews_present": 1,
+      "status_clarifications_expected": 0,
+      "status_clarifications_present": 0
+    },
+    "blockers": [],
+    "unresolved_items": [],
+    "warnings": [],
+    "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+  },
+  "isolated_source_projection": {
+    "query_id": "probe-q1",
+    "domain": "probe",
+    "answer_existence": "answerable",
+    "satisfy_rule": "all",
+    "evidence_required": true,
+    "relevant_sources": [
+      "probe-source",
+      "probe-source-B"
+    ],
+    "requirement": "门槛为0.5%",
+    "approved_required": [
+      {
+        "target_id": "e1",
+        "role": "approved_required",
+        "quote": "0.5%",
+        "locator": [
+          "page:1"
+        ],
+        "source_id": "probe-source",
+        "constraints": {},
+        "basis": {
+          "gold_id": "probe-slot",
+          "item_index": 0
+        }
+      },
+      {
+        "target_id": "a-2",
+        "role": "approved_required",
+        "quote": "口径为年度累计",
+        "locator": [
+          "page:1"
+        ],
+        "source_id": "probe-source",
+        "constraints": {
+          "row": null,
+          "col": null,
+          "cell": null,
+          "unit": null,
+          "period": null
+        },
+        "basis": {
+          "gold_id": "probe-slot",
+          "item_index": 1,
+          "facet_id": null,
+          "decided_item_id": "I32-probe-q1-01",
+          "decision": "批准"
+        }
+      }
+    ],
+    "supplementary": [],
+    "answer_constraints": []
+  },
+  "answer_constraint_unchecked_chosen": {
+    "ready": true,
+    "stage": "evaluated",
+    "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+    "reviewed_at": "2026-01-01T00:00:00+08:00",
+    "based_on": {
+      "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+      "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "counts": {
+      "facet_decisions_expected": 1,
+      "facet_decisions_present": 1,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 1,
+      "question_reviews_present": 1,
+      "negative_reviews_expected": 1,
+      "negative_reviews_present": 1,
+      "status_clarifications_expected": 0,
+      "status_clarifications_present": 0
+    },
+    "blockers": [],
+    "unresolved_items": [],
+    "warnings": [],
+    "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+  },
+  "answer_constraint_projection": {
+    "query_id": "probe-q1",
+    "domain": "probe",
+    "answer_existence": "answerable",
+    "satisfy_rule": "any",
+    "evidence_required": true,
+    "relevant_sources": [
+      "probe-source"
+    ],
+    "requirement": "门槛为0.5%",
+    "approved_required": [
+      {
+        "target_id": "e1",
+        "role": "approved_required",
+        "quote": "0.5%",
+        "locator": [
+          "page:1"
+        ],
+        "source_id": "probe-source",
+        "constraints": {},
+        "basis": {
+          "gold_id": "probe-slot",
+          "item_index": 0
+        }
+      },
+      {
+        "target_id": "a-2",
+        "role": "approved_required",
+        "quote": "",
+        "locator": [],
+        "source_id": "None",
+        "constraints": {
+          "row": null,
+          "col": null,
+          "cell": null,
+          "unit": null,
+          "period": null
+        },
+        "basis": {
+          "gold_id": "nonexistent-slot",
+          "item_index": 999,
+          "facet_id": "q2",
+          "decided_item_id": "I32-probe-q1-01",
+          "decision": "批准"
+        }
+      }
+    ],
+    "supplementary": [],
+    "answer_constraints": []
+  },
+  "residual_waives_missing_facts": {
+    "ready": true,
+    "stage": "evaluated",
+    "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+    "reviewed_at": "2026-01-01T00:00:00+08:00",
+    "based_on": {
+      "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+      "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "counts": {
+      "facet_decisions_expected": 40,
+      "facet_decisions_present": 40,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 24,
+      "question_reviews_present": 24,
+      "negative_reviews_expected": 6,
+      "negative_reviews_present": 6,
+      "status_clarifications_expected": 1,
+      "status_clarifications_present": 1
+    },
+    "blockers": [],
+    "unresolved_items": [],
+    "warnings": [
+      "I32-company-001-01: 已声明 residual：同时、年度、时给",
+      "I32-company-004-01: 已声明 residual：13、40",
+      "I32-company-004-02: 已声明 residual：作实、利预、券商、商盈、当作、盈利、预测",
+      "I32-company-008-01: 已声明 residual：光力、力科、州茅、科技、茅台、贵州",
+      "I32-industry-001-01: 已声明 residual：价格、分位、格涨、涨幅、述期、间平",
+      "I32-industry-002-01: 已声明 residual：产量、实际、属配、按注、解释、际产",
+      "I32-industry-002-02: 已声明 residual：位窗、格分",
+      "I32-industry-003-01: 已声明 residual：2026、分开、区分、测列、预测",
+      "I32-industry-006-01: 已声明 residual：划用、告援、引供、援引、板主",
+      "I32-industry-006-03: 已声明 residual：保留、息来、来源、留消、限定",
+      "I32-industry-008-01: 已声明 residual：历史、史价",
+      "I32-industry-008-02: 已声明 residual：含义、料证、明统、用两、统计、计含、证明",
+      "I32-macro-001-01: 已声明 residual：分开、据分",
+      "I32-macro-003-02: 已声明 residual：业降、低加、加息、息顾、降低、顾虑",
+      "I32-macro-003-03: 已声明 residual：分附、区分、场预、市场、式决、正式",
+      "I32-macro-004-01: 已声明 residual：五主",
+      "I32-macro-004-02: 已声明 residual：文聚、聚焦",
+      "I32-macro-004-03: 已声明 residual：业投、债压、出增、化债、压力、四路、增加、投化、投资、支出、政支、民支、缓解、解城、资增、路径",
+      "I32-macro-005-01: 已声明 residual：依赖、偏低、入依、合税、堵点、拖累、收入、税负、综合、行拖、负偏、赖旧",
+      "I32-macro-006-01: 已声明 residual：偏头、全国、国企、头部、有国、部发"
+    ],
+    "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+  },
+  "all_rule_one_source_only": {
+    "ready": true,
+    "stage": "evaluated",
+    "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+    "reviewed_at": "2026-01-01T00:00:00+08:00",
+    "based_on": {
+      "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+      "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "counts": {
+      "facet_decisions_expected": 40,
+      "facet_decisions_present": 40,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 24,
+      "question_reviews_present": 24,
+      "negative_reviews_expected": 6,
+      "negative_reviews_present": 6,
+      "status_clarifications_expected": 1,
+      "status_clarifications_present": 1
+    },
+    "blockers": [],
+    "unresolved_items": [],
+    "warnings": [
+      "I32-company-001-01: 已声明 residual：同时、年度、时给",
+      "I32-company-004-01: 已声明 residual：13、40",
+      "I32-company-004-02: 已声明 residual：作实、利预、券商、商盈、当作、盈利、预测",
+      "I32-company-008-01: 已声明 residual：光力、力科、大市、州茅、次覆、科技、茅台、覆盖、贵州、首次",
+      "I32-industry-001-01: 已声明 residual：价格、分位、格涨、涨幅、述期、间平",
+      "I32-industry-002-01: 已声明 residual：产量、实际、属配、按注、解释、际产",
+      "I32-industry-002-02: 已声明 residual：位窗、格分",
+      "I32-industry-003-01: 已声明 residual：2026、分开、区分、测列、预测",
+      "I32-industry-006-01: 已声明 residual：划用、告援、引供、援引、板主",
+      "I32-industry-006-03: 已声明 residual：保留、息来、来源、留消、限定",
+      "I32-industry-008-01: 已声明 residual：历史、史价",
+      "I32-industry-008-02: 已声明 residual：含义、料证、明统、用两、统计、计含、证明",
+      "I32-macro-001-01: 已声明 residual：分开、据分",
+      "I32-macro-003-02: 已声明 residual：业降、低加、加息、息顾、降低、顾虑",
+      "I32-macro-003-03: 已声明 residual：分附、区分、场预、市场、式决、正式",
+      "I32-macro-004-01: 已声明 residual：五主",
+      "I32-macro-004-02: 已声明 residual：文聚、聚焦",
+      "I32-macro-004-03: 已声明 residual：业投、债压、出增、化债、压力、四路、增加、投化、投资、支出、政支、民支、缓解、解城、资增、路径",
+      "I32-macro-005-01: 已声明 residual：依赖、偏低、入依、合税、堵点、拖累、收入、税负、综合、行拖、负偏、赖旧",
+      "I32-macro-006-01: 已声明 residual：偏头、全国、国企、头部、有国、部发"
+    ],
+    "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+  },
+  "company_008_projected_identity": {
+    "relevant_sources": [
+      "2026-08-16_6f14cc14",
+      "2026-09-06_dddc7cd0"
+    ],
+    "satisfy_rule": "all",
+    "required_evidence_sources": [
+      "2026-08-16_6f14cc14"
+    ]
+  },
+  "footnote_replaced_by_search_hint": {
+    "ready": true,
+    "stage": "evaluated",
+    "reviewer": "SYNTHETIC-PROBE（仅用于验证门可开，不是真实批准）",
+    "reviewed_at": "2026-01-01T00:00:00+08:00",
+    "based_on": {
+      "candidates_sha256": "43ed1199672fc6bc963fc4f77df77e45ac350c85daa48d0154d2df4794c1abe5",
+      "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+      "source_gold_sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    },
+    "counts": {
+      "facet_decisions_expected": 40,
+      "facet_decisions_present": 40,
+      "facet_decisions_unresolved": 0,
+      "question_reviews_expected": 24,
+      "question_reviews_present": 24,
+      "negative_reviews_expected": 6,
+      "negative_reviews_present": 6,
+      "status_clarifications_expected": 1,
+      "status_clarifications_present": 1
+    },
+    "blockers": [],
+    "unresolved_items": [],
+    "warnings": [
+      "I32-company-001-01: 已声明 residual：同时、年度、时给",
+      "I32-company-004-01: 已声明 residual：13、40",
+      "I32-company-004-02: 已声明 residual：作实、利预、券商、商盈、当作、盈利、预测",
+      "I32-company-008-01: 已声明 residual：光力、力科、州茅、科技、茅台、贵州",
+      "I32-industry-001-01: 已声明 residual：价格、分位、格涨、涨幅、述期、间平",
+      "I32-industry-002-01: 已声明 residual：产量、实际、属配、按注、解释、际产",
+      "I32-industry-002-02: 已声明 residual：位窗、格分",
+      "I32-industry-003-01: 已声明 residual：2026、分开、区分、测列、预测",
+      "I32-industry-006-01: 已声明 residual：划用、告援、引供、援引、板主",
+      "I32-industry-006-03: 已声明 residual：保留、息来、来源、留消、限定",
+      "I32-industry-008-01: 已声明 residual：历史、史价",
+      "I32-industry-008-02: 已声明 residual：含义、料证、明统、用两、统计、计含、证明",
+      "I32-macro-001-01: 已声明 residual：分开、据分",
+      "I32-macro-003-02: 已声明 residual：业降、低加、加息、息顾、降低、顾虑",
+      "I32-macro-003-03: 已声明 residual：分附、区分、场预、市场、式决、正式",
+      "I32-macro-004-01: 已声明 residual：五主",
+      "I32-macro-004-02: 已声明 residual：文聚、聚焦",
+      "I32-macro-004-03: 已声明 residual：业投、债压、出增、化债、压力、四路、增加、投化、投资、支出、政支、民支、缓解、解城、资增、路径",
+      "I32-macro-005-01: 已声明 residual：依赖、偏低、入依、合税、堵点、拖累、收入、税负、综合、行拖、负偏、赖旧",
+      "I32-macro-006-01: 已声明 residual：偏头、全国、国企、头部、有国、部发"
+    ],
+    "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本"
+  },
+  "commands": {
+    "freeze-validation": 0,
+    "scorer-regression": 0
+  }
+}
