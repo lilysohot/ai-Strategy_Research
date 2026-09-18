@@ -79,3 +79,4 @@ uploads/
 # uses Postgres and Alembic.
 server/dev.db
 server/*.db
+.codebuddy/
