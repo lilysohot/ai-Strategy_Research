@@ -1,0 +1,45 @@
+{
+  "snapshot_id": "i0c-r21",
+  "revision": "r21",
+  "phase": "i0c",
+  "task": "I3-0 independent review remediation F1-F5: set-intersection recall + duplicate source rejection, evidence source attribution (EvidenceTarget.source_id, build_id provenance, verified must be explicit), NO_MATCH/FAILED payload rules, strict gold/observation validation shared by importer and score(), dataclass-level target invariants; overall semantics clarified",
+  "binding": {
+    "implementation": {
+      "plugins/corpus/scoring.py": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e"
+    },
+    "tests": {
+      "tests/test_corpus_scoring.py": "07423e32caf752626c8a43a554f1a5107bd820438f2dee8ce857c92c9d316285"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "bafc021295c4167a62c9ce55dff52e6862f9b249dbd38014befd8f04d1896fae"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "7972df2f7cff44da8d99eb498f0e189a376eb0cbc6315cb84188d540d829de59",
+      "docs/plan/claims-market-closed-loop-plan.md": "5af04160eaccd19d1764354766cd7bb1c4b95bf747dbe14d29c9f44d065353a6"
+    }
+  },
+  "corrections": {
+    "I3-0_review_remediation": "依据 audits/20260918-i30-review/review.md：既有 31 项全过，独立反例 9 failed / 1 passed。本轮只改 plugins/corpus/scoring.py 与 tests/test_corpus_scoring.py（外加台账文字与验证器），不改金标、不改阈值、不删失败题、不重绑守卫/i3 守卫报告/入库实现。",
+    "F1": "DocRecall/QuestionPass 由条目计数改为集合运算：分子 = relevant ∩ top_sources；all 规则改为集合包含（relevant <= top_sources）；观测入口拒绝重复 source_id（chunk 必须先聚合为文档 Top-k，不得把多块当多文档）。",
+    "F2": "证据匹配保留 (source_id, evidence) 不压平；EvidenceTarget 新增 source_id（显式绑定），默认允许来源集 = 该题相关文档集，来源不符记 evidence_source_mismatch；RetrievedDocument 新增 build_id 身份留痕（本版不参与计分，I3-1 接线扩展跨 build 判定）；FetchedEvidence.verified 默认改为 None = 未提交核验（漏接 verify 不再自动算成功）。",
+    "F3": "入口拒绝 NO_MATCH + 非空 documents 的矛盾输入；FAILED 提前返回三项未通过（分母保留），并留 stale_payload_ignored:<n> 诊断。状态校验发生在算分之前。",
+    "F4": "导入器与 score() 共用 _validate_gold：多文档题必须显式合法声明 any/all（缺字段或非法值如 'ALL' 一律拒绝，不降级为 any）；relevant_sources 必须是字符串数组（str/bytes 不得当容器、元素必须非空 str、不强转）；critical 必须为 bool；负例题不得带 satisfy_rule；相关集与 target_id 不得重复。",
+    "F5": "EvidenceTarget 在 dataclass 构造期校验（空 quote 会匹配一切文本，直接拒绝）；直接构造入口与 JSON 导入器共用同一套校验，dataclasses.replace 拼出的矛盾输入同样拦住。",
+    "contract_rewrite": "模块 docstring 重写接口契约：文档排名的身份/去重规则、chunk→文档 Top-k 聚合要求、NO_MATCH/FAILED 语义、证据来源归属与 verified 显式提交、build_id 留痕与 I3-1 待办。",
+    "overall_semantics": "ScoreReport.overall 口径显式化：三项均为类间宏平均（各类等权），同时给出 question_pass_counts / evidence_pass_counts 题数汇总；判定始终按类逐项，不使用该汇总。另统一执行清单 I0—I5 行 'M5—M8 未放行' 与后文的冲突表述。"
+  },
+  "notes": [
+    "历史快照 r1..r20 保留字节，不追改；r19 仍为 I3-0 纯新增修订，r20 为验证器路径修正，r21 为复核整改（只改评分器与测试）。",
+    "证据：复核方独立反例（原文件未改）tests/../audits/20260918-i30-review/test_review_probes.py 10 passed（9 红转绿 + 正控）；自身合成测试 46 passed（新增 15 项复核回归）；i3 守卫 env 46 passed；ruff（CI 范围）+format-check 通过；pyright plugins/corpus 0 errors；import_smoke --stage 1 360/360。",
+    "M5 不因评分器缺陷被推翻（复核明确不推翻 M5）；本轮未改消费者/检索/取证接线，无需重验 M5 门。",
+    "I3-2 仍须先补机器可读 evidence_targets 或显式 evidence_required=false；M5 报告 F3（validate_i1_freeze.py 既有失配）仍未修，已登记。",
+    "零模型、零 PG、零来源读取；生产库 I4 前零写入。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18）；I3-0 remediation_done_pending_review_confirmation_and_U_signoff",
+  "created_at": "2026-09-18T14:56:48+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r20",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r20.json",
+    "sha256": "dab7d0b89d9f8d1fd8287197eed21711cdaceda9d75b400b293287f86d95c44a"
+  }
+}

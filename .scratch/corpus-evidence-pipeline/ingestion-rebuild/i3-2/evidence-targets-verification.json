@@ -1,0 +1,345 @@
+{
+  "artifact": "i3-2-evidence-targets-verification",
+  "generated_at": "2026-09-18T15:04:26+08:00",
+  "inputs": {
+    "query_gold": {
+      "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+    },
+    "candidates": {
+      "sha256": "ac3560a255eaffa2d8e560bc1d58778ee7363038fc1ac307f26fd483ae04d235",
+      "rule_rev": "evidence-mapping-3"
+    }
+  },
+  "generator": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py",
+    "sha256": "5b4d2dba092017f4c64fb5b5f7986fa780f8b7befff0d52e54f26d614e972607"
+  },
+  "checks": [
+    {
+      "query_id": "company-001",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-002",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-003",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-004",
+      "status": "partial",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-005",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-006",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-007",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "company-008",
+      "status": "needs_human",
+      "passed": true,
+      "expectation": "evidence_targets_absent 阻断（缺料不放行）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_targets_absent"
+      ]
+    },
+    {
+      "query_id": "company-009",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    },
+    {
+      "query_id": "company-010",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    },
+    {
+      "query_id": "industry-001",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-002",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-003",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-004",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-005",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-006",
+      "status": "needs_human",
+      "passed": true,
+      "expectation": "evidence_targets_absent 阻断（缺料不放行）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_targets_absent"
+      ]
+    },
+    {
+      "query_id": "industry-007",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-008",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "industry-009",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    },
+    {
+      "query_id": "industry-010",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    },
+    {
+      "query_id": "macro-001",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-002",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-003",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-004",
+      "status": "needs_human",
+      "passed": true,
+      "expectation": "evidence_targets_absent 阻断（缺料不放行）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_targets_absent"
+      ]
+    },
+    {
+      "query_id": "macro-005",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-006",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-007",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-008",
+      "status": "mapped",
+      "passed": true,
+      "expectation": "三项全过（候选自洽：来源归属/定位/逐字引文均可用）",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": []
+    },
+    {
+      "query_id": "macro-009",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    },
+    {
+      "query_id": "macro-010",
+      "status": "negative_opt_out",
+      "passed": true,
+      "expectation": "负例空命中：无按误报、无伪造引用、不进证据分母",
+      "doc_recall": "None",
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": []
+    }
+  ],
+  "summary": {
+    "questions": 30,
+    "passed": 30,
+    "failed": 0,
+    "scored_passed": false,
+    "blockers": [
+      "missing_required_input:company-008:evidence_targets_absent",
+      "missing_required_input:industry-006:evidence_targets_absent",
+      "missing_required_input:macro-004:evidence_targets_absent",
+      "below_threshold:company:evidence_pass=87.5%",
+      "below_threshold:industry:evidence_pass=87.5%",
+      "below_threshold:macro:evidence_pass=87.5%",
+      "critical_failed:company-008:EvidencePass 未过"
+    ]
+  },
+  "notes": [
+    "合成观测由候选自身构造（quote/locator/source 取自候选，verified=True），只证明候选自洽与契约兼容，不代表真实链路可达。",
+    "needs_human 题被证实在缺目标时按设计阻断（evidence_targets_absent），不得当作通过。",
+    "本轮不读原文正文、不连 PG、不调模型；生产库零写入。"
+  ]
+}

@@ -1,20 +1,26 @@
-"""Verify the I0-C freeze chain (i0c-r1..r15) and its lineage to the I1 chain and M1.
+"""Verify the I0-C freeze chain (i0c-r1..r22) and its lineage to the I1 chain and M1.
 
 显式检查 + 非零退出；不使用 assert（不得依赖可被 -O 剥离的断言）。核验内容：
 
 1. freeze-manifest.json：条目 snapshot_id 唯一、每条目哈希与文件实际字节一致；
-2. 索引存在 i0c-r1..r6 与 i1-r4 条目；
+2. 索引存在 i0c-r1..r19 与 i1-r4 条目；
 3. 各修订 parent_snapshot 指向上一修订且文件字节与声明哈希一致
-   （i0c-r1.parent=i1-r4，r2.parent=r1，r3.parent=r2，r4.parent=r3，r5.parent=r4，
-   r6.parent=r5，r7.parent=r6，r8.parent=r7，r9.parent=r8，r10.parent=r9，r11.parent=r10，
-   r12.parent=r11，r13.parent=r12，r14.parent=r13，r15.parent=r14）；
-4. i0c-r2/r3/r4/r5/r6…r15 绑定按「最新修订优先」按路径合并为 i0c-current
+   （i0c-r1.parent=i1-r4，r2.parent=r1，…，r18.parent=r17，r19.parent=r18）；
+4. i0c-r2/r3/…/r19 绑定按「最新修订优先」按路径合并为 i0c-current
    （同一路径跨组重绑以最新修订为准，清除旧组残留条目）后逐一核验；
-5. supersession：被 i0c-r2…r15 显式重绑的路径豁免 i1-r4 旧哈希核对
+5. supersession：被 i0c-r2…r19 显式重绑的路径豁免 i1-r4 旧哈希核对
    （活文件合法演进，新哈希由 i0c-current 核验），其余 i1-r4 绑定仍逐一核验；
 6. 血缘：i1-r4.parent = i1-r3 @ f22525c3…；i1-r3.parent = i1-r1 @ d474bd6d…；
    i1-r1.parent = i0a5(M1) @ 71aa61af…（文件字节核验）；
-7. i0c-r1 绑定的 design-review.json 已签认（status/approved_by 非空）且 i1-r4 已记录。
+7. i0c-r1 绑定的 design-review.json 已签认（status/approved_by 非空）且 i1-r4 已记录；
+8. i0c-r19（I3-0 评分器）为**纯新增**：其 implementation 组只允许出现新模块
+   ``plugins/corpus/scoring.py``，出现任何既有实现文件即为越界；
+9. i0c-r20 只修本验证器 r19 块的路径拼装（未过门当轮发现）+ 台账文字，**不得**借机重绑
+   ``plugins/``／``tests/``／``guards/i3.json`` 字节；
+10. i0c-r21 = I3-0 独立复核（F1—F5）整改：只改 ``plugins/corpus/scoring.py``、
+   ``tests/test_corpus_scoring.py`` 与台账文字，**不得**借整改重绑守卫/金标/既有入库实现；
+11. i0c-r22 = I3-2 补料（证据目标候选 + 往返验证 + 待裁决清单）：只绑 ``i3_2_assets``／台账／验证器，
+   **不得**出现 ``plugins/``／``tests/``／守卫绑定（本轮不碰实现）。
 """
 from __future__ import annotations
 
@@ -106,6 +112,10 @@ check("i0c-r15" in by_id, "索引缺少 i0c-r15 条目")
 check("i0c-r16" in by_id, "索引缺少 i0c-r16 条目")
 check("i0c-r17" in by_id, "索引缺少 i0c-r17 条目")
 check("i0c-r18" in by_id, "索引缺少 i0c-r18 条目")
+check("i0c-r19" in by_id, "索引缺少 i0c-r19 条目")
+check("i0c-r20" in by_id, "索引缺少 i0c-r20 条目")
+check("i0c-r21" in by_id, "索引缺少 i0c-r21 条目")
+check("i0c-r22" in by_id, "索引缺少 i0c-r22 条目")
 check("i1-r4" in by_id, "索引缺少 i1-r4 条目")
 
 if "i0c-r1" in by_id:
@@ -505,10 +515,141 @@ if "i0c-r18" in by_id:
                 f"i0c-r18 越界绑定实现文件 {rel}（本修订只补记报告与台账）",
             )
 
-# 最新修订绑定优先（supersession）：i0c-r2..r16 显式重绑的路径改由合并后的
+if "i0c-r19" in by_id:
+    i0c19 = load_json(BASE / by_id["i0c-r19"].get("file", ""))
+    parent = i0c19.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r18",
+          f"i0c-r19.parent 应为 i0c-r18，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r18":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r19.parent(i0c-r18) 文件字节与声明哈希不一致")
+    binding19 = i0c19.get("binding", {})
+    merge_binding(i0c_current_binding, binding19)
+    corrections = json.dumps(i0c19.get("corrections", {}), ensure_ascii=False)
+    for finding in ("I3-0", "DocRecall", "QuestionPass", "EvidencePass",
+                    "evidence_targets_absent", "M5_F3_registered"):
+        check(finding in corrections, f"i0c-r19 未登记 {finding}")
+    impl19 = binding19.get("implementation", {})
+    check("plugins/corpus/scoring.py" in impl19, "i0c-r19 未绑定 plugins/corpus/scoring.py")
+    # 纯新增不变量：I3-0 只新增评分器，不得重绑任何既有实现文件。
+    for rel in impl19:
+        check(rel == "plugins/corpus/scoring.py",
+              f"i0c-r19 越界重绑既有实现文件 {rel}（I3-0 应为纯新增）")
+    tests19 = binding19.get("tests", {})
+    check("tests/test_corpus_scoring.py" in tests19,
+          "i0c-r19 未绑定 tests/test_corpus_scoring.py")
+    guard19 = binding19.get("guard", {})
+    guard_base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    for required in (
+        f"{guard_base}/guards/i3.json",
+        f"{guard_base}/i3-guard-report.json",
+        f"{guard_base}/i3_guard_selfcheck.py",
+    ):
+        check(required in guard19, f"i0c-r19 未绑定 I3 守卫资产 {required}")
+    docs19 = binding19.get("docs", {})
+    for required in ("docs/plan/corpus-ingestion-rebuild-tasks.md",
+                     "docs/plan/claims-market-closed-loop-plan.md"):
+        check(required in docs19, f"i0c-r19 未绑定 {required}")
+
+
+if "i0c-r20" in by_id:
+    i0c20 = load_json(BASE / by_id["i0c-r20"].get("file", ""))
+    parent = i0c20.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r19",
+          f"i0c-r20.parent 应为 i0c-r19，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r19":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r20.parent(i0c-r19) 文件字节与声明哈希不一致")
+    binding20 = i0c20.get("binding", {})
+    merge_binding(i0c_current_binding, binding20)
+    corrections = json.dumps(i0c20.get("corrections", {}), ensure_ascii=False)
+    check("validator_path_fix" in corrections, "i0c-r20 未登记 validator_path_fix")
+    check("freeze_validator" in binding20,
+          "i0c-r20 未重绑 freeze_validator（验证器修正后必须同版重绑）")
+    # 本修订只修验证器与台账文字：不得借机改实现/测试/守卫字节。
+    for group, items in binding20.items():
+        if group == "freeze_validator":
+            continue
+        for rel in items:
+            check(
+                not (rel.startswith("plugins/") or rel.startswith("tests/"))
+                and rel != ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+                f"i0c-r20 越界重绑 {rel}（本修订只修正验证器与台账文字）",
+            )
+
+if "i0c-r21" in by_id:
+    i0c21 = load_json(BASE / by_id["i0c-r21"].get("file", ""))
+    parent = i0c21.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r20",
+          f"i0c-r21.parent 应为 i0c-r20，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r20":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r21.parent(i0c-r20) 文件字节与声明哈希不一致")
+    binding21 = i0c21.get("binding", {})
+    merge_binding(i0c_current_binding, binding21)
+    corrections = json.dumps(i0c21.get("corrections", {}), ensure_ascii=False)
+    for finding in ("F1", "F2", "F3", "F4", "F5", "I3-0_review_remediation",
+                    "contract_rewrite", "overall_semantics"):
+        check(finding in corrections, f"i0c-r21 未登记 {finding}")
+    # 整改只动评分器/测试/台账：不得借复核整改重绑守卫、金标或既有入库实现。
+    for group, items in binding21.items():
+        if group in {"implementation", "tests", "docs", "freeze_validator"}:
+            continue
+        for rel in items:
+            errors.append(f"i0c-r21 越界绑定 {group}/{rel}（整改只涉评分器/测试/台账）")
+    impl21 = binding21.get("implementation", {})
+    check("plugins/corpus/scoring.py" in impl21,
+          "i0c-r21 未绑定 plugins/corpus/scoring.py（复核整改落点）")
+    for rel in impl21:
+        check(rel == "plugins/corpus/scoring.py",
+              f"i0c-r21 越界重绑既有实现文件 {rel}（整改只改评分器与测试）")
+    tests21 = binding21.get("tests", {})
+    check("tests/test_corpus_scoring.py" in tests21,
+          "i0c-r21 未绑定 tests/test_corpus_scoring.py")
+
+if "i0c-r22" in by_id:
+    i0c22 = load_json(BASE / by_id["i0c-r22"].get("file", ""))
+    parent = i0c22.get("parent_snapshot", {})
+    check(parent.get("snapshot_id") == "i0c-r21",
+          f"i0c-r22.parent 应为 i0c-r21，实际 {parent.get('snapshot_id')!r}")
+    if parent.get("snapshot_id") == "i0c-r21":
+        pfile = ROOT / parent.get("path", "")
+        if not pfile.is_file() or digest(pfile) != parent.get("sha256"):
+            errors.append("i0c-r22.parent(i0c-r21) 文件字节与声明哈希不一致")
+    binding22 = i0c22.get("binding", {})
+    merge_binding(i0c_current_binding, binding22)
+    corrections = json.dumps(i0c22.get("corrections", {}), ensure_ascii=False)
+    for finding in ("I3-2_evidence_targets_candidates", "evidence_mapping_rule_rev",
+                    "verification_roundtrip", "reconciliation_points"):
+        check(finding in corrections, f"i0c-r22 未登记 {finding}")
+    # 补料修订只绑候选产物/脚本/台账：不得借机改实现、测试或守卫。
+    i3_2 = binding22.get("i3_2_assets", {})
+    base = ".scratch/corpus-evidence-pipeline/ingestion-rebuild"
+    for required in (
+        f"{base}/i3s2_evidence_targets.py",
+        f"{base}/i3s2_verify_candidates.py",
+        f"{base}/i3-2/evidence-targets-candidates.json",
+        f"{base}/i3-2/evidence-targets-review.md",
+        f"{base}/i3-2/evidence-targets-verification.json",
+    ):
+        check(required in i3_2, f"i0c-r22 未绑定补料产物 {required}")
+    for group, items in binding22.items():
+        if group in {"i3_2_assets", "docs", "freeze_validator"}:
+            continue
+        for rel in items:
+            errors.append(f"i0c-r22 越界绑定 {group}/{rel}（补料修订只涉候选产物与台账）")
+    for group, items in binding22.items():
+        for rel in items:
+            check(not rel.startswith(("plugins/", "tests/")),
+                  f"i0c-r22 越界绑定 {rel}（本轮不改实现与测试）")
+
+# 最新修订绑定优先（supersession）：i0c-r2..r22 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in ("i0c-r2", "i0c-r3", "i0c-r4", "i0c-r5", "i0c-r6", "i0c-r7", "i0c-r8", "i0c-r9", "i0c-r10", "i0c-r11", "i0c-r12", "i0c-r13", "i0c-r14", "i0c-r15", "i0c-r16", "i0c-r17", "i0c-r18"):
+for sid in ("i0c-r2", "i0c-r3", "i0c-r4", "i0c-r5", "i0c-r6", "i0c-r7", "i0c-r8", "i0c-r9", "i0c-r10", "i0c-r11", "i0c-r12", "i0c-r13", "i0c-r14", "i0c-r15", "i0c-r16", "i0c-r17", "i0c-r18", "i0c-r19", "i0c-r20", "i0c-r21", "i0c-r22"):
     entry = by_id.get(sid)
     if not entry:
         continue
@@ -551,6 +692,8 @@ if errors:
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
 print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
-      "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18 effective bindings (latest-revision-wins) + superseded "
-      "i1-r4 bindings ok, lineage i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->"
-      "i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed, M5 released by U sign-off")
+      "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22 effective bindings (latest-revision-wins) + superseded "
+      "i1-r4 bindings ok, lineage i0c-r22->i0c-r21->i0c-r20->i0c-r19->i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->"
+      "i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed, M5 released by U sign-off, "
+      "I3-0 scorer (scoring.py) add-only revision r19, r20 = validator r19-block path fix, "
+      "r21 = I3-0 independent-review remediation F1-F5, r22 = I3-2 evidence-target candidates")

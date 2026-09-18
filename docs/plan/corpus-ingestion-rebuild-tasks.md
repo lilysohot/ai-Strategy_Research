@@ -92,6 +92,20 @@ I1 完整 review 修复轮完成（2026-09-16 按 [full-review](../../.scratch/c
   冻结 [i0c-r6](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r6.json)。
   I2-3/I2-7 独立审核整改（2026-09-17，[review](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260917-i23-i27-review/review.md) R1—R6，代码已改、快照待生成）：R3 内容寻址短路仅无显式 review_decision_ids 时生效；R4 发布日期只认显式报告日期声明；R5 FTS 查询侧/写侧共享 normalize_search_text 且 index_rev 升 index-3-zhcfg-2；R2 document_text/fetch/blocks_of 对 cv2: 句柄读 corpus_units；R1 extract_claims 由同源 corpus_units 投影（build_evidence_run_from_units，发布日期读 admission.report_publication），不再二次解析原文件；R6 补绑 publication.py + test_corpus_preparation_publication.py（脚本 `i0c_r7_freeze.py` 生成 i0c-r7）。M5 仍 not_declared。
   M4 独立复核材料已备（2026-09-16，[m4-review 包](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-m4-review/README.md)：复核纲要 + 放行条件核对清单 + 命令矩阵 run\_matrix.sh/verify\_matrix.py；同日按复核意见补齐五项执行控制——前置门 fail-fast（冻结验证器/哈希/可信副本/守卫自检失败即停 exit 2）、JUnit XML 精确核对计数与失败节点白名单、validate\_i1\_freeze.py 去 assert 并校验索引 ID 唯一/r3 条目/血缘 r3→r1→i0a5(M1)、运行后绑定零漂移门+脚本/探针/uv.lock 哈希与关键库版本留痕、受控最小环境（env -i+noconftest+禁插件自动加载，守卫 env 与普通 env 均不触 PG/模型）；修订后演练 16 块全 ok、write-once 拒绝路径 exit 2 实测；复核已于同日执行：16 块命中预期、独立交叉核验（哈希/血缘/逐文件用例数/对抗守卫探针/write-once）通过，[review.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260916-m4-review/review.md) 裁决 M4 放行（无 P1/P2，3 项 P3 不阻断），U 已签认；脚本退出码不构成裁决）。
+  I3-0 交付并自验过门（2026-09-18，见总台账 [I3-0 评分器交付](claims-market-closed-loop-plan.md#i3-0-delivery)）：
+  [scoring.py](../../plugins/corpus/scoring.py) 三类指标评分器（DocRecall@k 逐题召回率按类宏平均 /
+  QuestionPass@k 冻结 any·all / EvidencePass@k 逐目标逐字取证 + verified 门；`Fraction` 精确门槛，
+  10 题 95% 即 10/10；负例误报与伪造引用另计；关键题全项否决；零分母与缺必需输入一律计入分母并落
+  机读 `blockers`，不静默剔除）；[测试](../../tests/test_corpus_scoring.py) **31 passed**、
+  i3 守卫 env **31 passed** + 守卫自检 **24/24**、ruff（CI 范围）/pyright/`import_smoke`（360/360）全绿，
+  冻结 **i0c-r19**（纯新增：implementation 组仅 `scoring.py`，验证器强制）→ **i0c-r20**  （当轮发现验证器
+  r19 块路径拼装写错、未过门即修，只重绑验证器与台账文字）→ **i0c-r21**（2026-09-18 独立复核 F1—F5 整改，
+  只改评分器与测试）+ validate exit 0；
+  按纪律待独立复核与 U 签认（实现方不自我宣告 `complete`）。
+  **I3-2 已可启动但须先补料**：`query-gold-frozen.jsonl` 30 题缺机器可读 `evidence_targets`，
+  评分器按设计阻断（`missing_required_input:<qid>:evidence_targets_absent`）——I3-2 必须为每题补目标
+  （可由 source-gold 的 locator/expected_items 映射）或显式 `evidence_required=false`；
+  M5 报告 F3（`validate_i1_freeze.py` 既有失配，P3）本轮只登记未修。
   摘要从总台账同步，不是另一套可独立勾选的进度。完整证据见
   [首批交付复核报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/2026-09-15-status/review.md)
   与 [I0A-5 冻结报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-freeze-report-20260915.json)。
@@ -125,6 +139,9 @@ I1 完整 review 修复轮完成（2026-09-16 按 [full-review](../../.scratch/c
 | I2-6 authority + cli\_isolation | [同一权威 Interface + 坏副本/错 cell/坏哈希/悬空引用拒绝 + 真实 CLI 子进程与零模型陷阱（真库 77 passed；i0c-r13）](claims-market-closed-loop-plan.md#i2-6) |
 | I2 全链路复核整改 | [F1 缺口分级/坐标（`acknowledged`/`blocking`/`out_of_scope`）+ F2 check/status 机读缺口与恢复路径 + coverage `scoped`；回路 10 passed/2 failed→12 passed，六族仍 71 passed；i0c-r15](claims-market-closed-loop-plan.md#i2-fullchain-remediation) |
 | M5 复核与签认 | [矩阵 20 块全绿零 skip + X1—X15 全过；复核报告 F1/F2/F3；独立性偏差已登记并由 U 接受；i0c-r16](claims-market-closed-loop-plan.md#m5-review-signoff) |
+| I3-0 评分器 | [三类指标评分器 + 合成检验 31 passed；i3 守卫自检 24/24；纯新增冻结 i0c-r19；待独立复核与 U 签认](claims-market-closed-loop-plan.md#i3-0) |
+| I3-0 复核整改 | [独立复核 9 红例按 F1—F5 修复不变量关闭；复核探针 10/10、自身 46 passed；i0c-r21](claims-market-closed-loop-plan.md#i3-0-review-remediation) |
+| I3-2 补料 | [证据目标候选（mapped 20／partial 1／needs_human 3／负例 6，共 60 条）+ 往返验证 30/30；待 U 裁决 4 项](claims-market-closed-loop-plan.md#i3-2-evidence-candidates) |
 
 每轮执行结束必须回填总台账，即使失败或只完成草稿；同时记录代码/配置/资产版本、
 命令与实际结果、报告链接、未决项及人工决定。不能把“文件存在”“自检通过”或“已写模板”
@@ -246,6 +263,28 @@ I0 的文件清单/hash 与受控备份完整性检查不等于允许读取留�
 **M5 前置已解除**：M5 于 2026-09-18 完成独立复核并经 U 签认（矩阵 20 块全绿零 skip、X1—X15 全过，
 见 [M5 独立复核与 U 签认](claims-market-closed-loop-plan.md#m5-review-signoff)）；本节从 I3-0/I3-2
 （预期与评分器冻结）起步，I3-1 另需其 F1 前置（缺口分级/坐标，已于 i0c-r15 闭环）。
+
+**I3-0 已交付并自验过门（2026-09-18）**：评分器 [scoring.py](../../plugins/corpus/scoring.py) 与合成测试
+[test_corpus_scoring.py](../../tests/test_corpus_scoring.py)（31 passed；i3 守卫 env 31 passed）落定，
+守卫 [guards/i3.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json) 自检 24/24，
+冻结 **i0c-r19** → **i0c-r20**（仅修验证器路径拼装）→ **i0c-r21**（独立复核 F1—F5 整改；validate exit 0），详见总台账。
+**已按 2026-09-18 独立复核整改**（[报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/review.md)：既有 31 项全过、独立反例 9 failed/1 passed）：
+F1 集合交集与重复来源拒绝；F2 证据保留来源归属（`EvidenceTarget.source_id`、默认仅认相关集）+ `build_id` 留痕 + `verified` 必须显式提交；
+F3 `NO_MATCH` 带 payload 拒绝、`FAILED` 不计成功分；F4 导入器与 `score()` 共用严格校验（多文档 any/all 必须显式、sources 必须是字符串数组）；
+F5 直接构造入口同样校验（空 quote 拒绝）。复核探针（原文件未改）**10/10 passed**、自身 **46 passed**；
+待复核确认闭环 + U 签认
+[I3-0 评分器交付](claims-market-closed-loop-plan.md#i3-0-delivery)；按纪律待独立复核 + U 签认。
+I3-2 可启动，但**必须先补机器可读证据目标**（缺则评分器按设计阻断，不得用散文 `evidence_requirement` 顶替，
+也不得靠“没写”静默退出 EvidencePass 分母）；M5 报告 F3（`validate_i1_freeze.py` 既有失配）建议随 I3 前置修订理顺。
+
+**I3-2 补料候选已出（2026-09-18，A 侧，见总台账 [I3-2 补料](claims-market-closed-loop-plan.md#i3-2-evidence-candidates)）**：
+[i3s2_evidence_targets.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py) 按 `evidence-mapping-3`
+从 I0A-4 人工标注槽位映射 30 题证据目标 →
+[候选](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json)（mapped 20／partial 1／needs_human 3／负例 6，共 60 条）
++ [待裁决清单](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md)
++ [往返验证 30/30](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json)（3 道待人工题按设计 `evidence_targets_absent` 阻断，即缺料不放行真实生效）。
+**U 决策 4 项**：3 道定性题人工指定目标、`company-004` 的 `13.40` 未命中、EvidencePass 分母口径（逐 item／槽位聚合）、
+6 道负例 `evidence_required=false` 批准。裁决前**不得**把候选当正式金标，也不得先跑候选业务结果再补答案。
 
 | ID   | 任务与关键步骤                                                                             | 所需资源              | 负责人 | 起止（估）             | 前置               | 验收/质量门                                                                         |
 | ---- | ----------------------------------------------------------------------------------- | ----------------- | --- | ----------------- | ---------------- | ------------------------------------------------------------------------------ |

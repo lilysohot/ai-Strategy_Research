@@ -1,0 +1,3095 @@
+{
+  "artifact": "i3-2-evidence-targets-candidates",
+  "rule_rev": "evidence-mapping-1",
+  "generated_at": "2026-09-18T15:01:56+08:00",
+  "generator": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py",
+    "sha256": "cdfbf852574b044ec37aa7cd3d78b836d2c7db93056db228a52082bfc2bbf07f"
+  },
+  "inputs": {
+    "query_gold": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl",
+      "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+    },
+    "source_gold": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+      "sha256": "c360a132ad63c16caf58d2cd66e7081754c5ac801d4761b3cb9d0bb95b7768b2"
+    }
+  },
+  "summary": {
+    "mapped": 21,
+    "partial": 1,
+    "unmapped": 2,
+    "negative_opt_out": 6,
+    "targets_total": 133,
+    "questions_total": 30
+  },
+  "questions": [
+    {
+      "query_id": "company-001",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "67.74",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "67.74"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "70.77",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "70.77"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "73.84",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 10,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "73.84"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 4,
+            "kind": "rating",
+            "matched_tokens": [
+              "67.74",
+              "70.77",
+              "73.84"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-002",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "178,657",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "84,679",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "67.74",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "25,756",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "186,196",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "88,470",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "70.77",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e8",
+          "quote": "30,089",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e9",
+          "quote": "194,063",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 8,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e10",
+          "quote": "92,302",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 9,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e11",
+          "quote": "73.84",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 10,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e12",
+          "quote": "35,014",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-001-claim-001",
+            "item_index": 11,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e13",
+          "quote": "26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2 亿元，同降2.0%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "922.8",
+              "1.3%",
+              "445.2",
+              "2.0%",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e14",
+          "quote": "单Q2 总收入375.8 亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "2",
+              "375.8",
+              "5.2%",
+              "172.7",
+              "6.9%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e15",
+          "quote": "单Q2 直销占比同比大幅提升17.8pcts 至61.1%，i 茅台收入同\n增282.6%至187.1 亿",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e16",
+          "quote": "经营性现金流\n净额同增915.8%，主要系财务公司吸收集团公司成员单位存款增加及不可随\n时支取的同业存款减少所致。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 3,
+            "kind": "condition",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e17",
+          "quote": "我们维持26-28 年EPS 预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-008-claim-001",
+            "item_index": 4,
+            "kind": "rating",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e18",
+          "quote": "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股\n份。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-013-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "0.36",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "0.36",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "78.6",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "(222)",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "222",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "0.59",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "0.59",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "47.5",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "(138)",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "138",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "0.93",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "0.93",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e8",
+          "quote": "30.3",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e9",
+          "quote": "(17)",
+          "locator": [
+            "page:20"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-003-claim-001",
+            "item_index": 8,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "17",
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e10",
+          "quote": "2026 年上半年公\n司实现营业收入4.53 亿元，同比+57.23%；实现归母净利润0.74 亿元，\n同比+194.56%；扣非归母净利润0.70 亿元，同比+552.69%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e11",
+          "quote": "2026 年上半\n年半导体封测装备制造业务实现收入3.51 亿元，同比增长162.25%，收\n入占比提升至77.63%；毛利率44.97%，同比提升3.4 个百分点。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e12",
+          "quote": "其设定的2026—2028 年的营业收入触发\n值和目标值分别为8.84/12.06/15.81 亿元（26-28 年同比增速为\n32%/36%/31% ）和9.38/13.4/18.09 亿元",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e13",
+          "quote": "我\n们预计公司2026—2028 年归母净利润分别为1.32/2.19/3.43 亿元，对\n应PE 分别为79/48/30 倍，首次覆盖给予“优于大市”评级。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 3,
+            "kind": "rating",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e14",
+          "quote": "公司已推出激光开槽机9130 和激光隐切机9320。其中9130 主要用\n于Low-k 晶圆表面开槽，9320 主要用于超薄硅晶圆、碳化硅和氮化镓等第三代半\n导体材料及MEMS 器件的隐形切割。目前，两款设备均处于客户端验证阶段。",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-028-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e15",
+          "quote": "公司已布\n局晶圆研磨机3230 和研磨抛光一体机3330，分别面向常规晶圆减薄和超薄晶圆\n加工，具有高稳定性超薄化加工的能力。目前相关产品正处于客户验证及样机测\n试阶段。",
+          "locator": [
+            "page:4"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-032-claim-001",
+            "item_index": 0,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e16",
+          "quote": "子公司ADT 在刀片领域拥有\n长期技术和客户积累，产品已向全球客户供货。目前公司正在推进刀片国内产能\n爬坡，国产硬刀处于客户端验证阶段。",
+          "locator": [
+            "page:5"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-036-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e17",
+          "quote": "2025 年，公司半导体封测装备制造\n业务实现收入3.62 亿元，同比增长31.16%，占营业收入的53.99%；相关装备销\n量达351 台（套），同比增长28.57%。",
+          "locator": [
+            "page:6"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-040-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e18",
+          "quote": "赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-044-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e19",
+          "quote": "陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-044-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e20",
+          "quote": "2018—2025 年，公司营业收入由2.54 亿元增长至6.70 亿元，CAGR 为\n14.9%",
+          "locator": [
+            "page:9"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-052-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e21",
+          "quote": "2024 年受收入下降及商誉减值影响亏损1.13 亿元，2025 年归母净\n利润恢复至0.40 亿元、实现扭亏。",
+          "locator": [
+            "page:9"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-052-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e22",
+          "quote": "2026 年上半\n年，公司综合毛利率为50.39%，同比下降6.87 个百分点，主要系毛利率相对较\n低的半导体装备业务收入占比快速提升。",
+          "locator": [
+            "page:9"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-052-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e23",
+          "quote": "同期公司期间费用率由上年同期的50.64%下\n降至34.02%，其中销售、管理和研发费用率分别下降至12.50%、8.29%和12.21%",
+          "locator": [
+            "page:9"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-052-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e24",
+          "quote": "2025 年公司研发费用为1.11 亿元，2026\n年上半年研发投入0.55 亿元，同比增长2.52%；在收入快速增长带动下，研发费\n用率由上年同期的18.72%下降至12.21%。",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-056-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e25",
+          "quote": "ROE 进一步升至4.1%（未年化)",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-056-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e26",
+          "quote": "2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%",
+          "locator": [
+            "page:11"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-060-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e27",
+          "quote": "2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸",
+          "locator": [
+            "page:11"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-060-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e28",
+          "quote": "2026 年上半年，8230CF、\n82WT 等高端机型获得批量订单",
+          "locator": [
+            "page:11"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-060-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "20"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-003-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-004",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "partial",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "其设定的2026—2028 年的营业收入触发\n值和目标值分别为8.84/12.06/15.81 亿元（26-28 年同比增速为\n32%/36%/31% ）和9.38/13.4/18.09 亿元",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-018-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "8.84",
+              "12.06",
+              "15.81",
+              "9.38",
+              "18.09"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [
+        "13.40"
+      ],
+      "candidate_slots": [
+        "company-003-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "主\n要包括12 英寸全自动双轴划片机8230、8231，半自动双轴划片机6230、6231，\n用于第三代半导体切割的6110",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-024-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "8230",
+              "8231"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "8230 已在先进封装领域实现批量应用，8231 支持晶圆全切、DBG 半切\n及Edge Trimming 等工艺，并已形成正式订单。",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-028-claim-001",
+            "item_index": 0,
+            "kind": "condition",
+            "matched_tokens": [
+              "8230",
+              "8231"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "公司已推出激光开槽机9130 和激光隐切机9320。其中9130 主要用\n于Low-k 晶圆表面开槽，9320 主要用于超薄硅晶圆、碳化硅和氮化镓等第三代半\n导体材料及MEMS 器件的隐形切割。目前，两款设备均处于客户端验证阶段。",
+          "locator": [
+            "page:3"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-028-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "matched_tokens": [
+              "9130",
+              "9320"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "2026 年上半年，8230CF、\n82WT 等高端机型获得批量订单",
+          "locator": [
+            "page:11"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-060-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "8230"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-003-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-006",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-044-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "32.60%",
+              "4.00%",
+              "36.60%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-09-06_dddc7cd0",
+          "basis": {
+            "gold_id": "company-044-claim-001",
+            "item_index": 1,
+            "kind": "condition",
+            "matched_tokens": [
+              "36.60%",
+              "1.70%",
+              "0.57%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-003-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-007",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股\n份。",
+          "locator": [
+            "page:7"
+          ],
+          "source_id": "2026-08-16_6f14cc14",
+          "basis": {
+            "gold_id": "company-013-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "4.06%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-008",
+      "domain": "company",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "unmapped",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "company-001-claim-001",
+        "company-003-claim-001",
+        "company-008-claim-001",
+        "company-013-claim-001",
+        "company-018-claim-001",
+        "company-024-claim-001",
+        "company-028-claim-001",
+        "company-032-claim-001",
+        "company-036-claim-001",
+        "company-040-claim-001",
+        "company-044-claim-001",
+        "company-048-claim-001",
+        "company-052-claim-001",
+        "company-056-claim-001",
+        "company-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "company-009",
+      "domain": "company",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    },
+    {
+      "query_id": "company-010",
+      "domain": "company",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "0.0%",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "0.0%",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "82.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "82.9%",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "99.6%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "28.5",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "98.8%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "89.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e8",
+          "quote": "8068.0",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e9",
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 8,
+            "kind": "condition",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e10",
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 9,
+            "kind": "condition",
+            "matched_tokens": [
+              "6",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e11",
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 10,
+            "kind": "condition",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "99.6%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "32",
+              "99.6%",
+              "3",
+              "01",
+              "07",
+              "27"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "28.5",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "32",
+              "28.5",
+              "3"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "98.8%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "3",
+              "01",
+              "07",
+              "27"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 8,
+            "kind": "condition",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 10,
+            "kind": "condition",
+            "matched_tokens": [
+              "32",
+              "3"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "89.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "89.9%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "8068.0",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "8068.0"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-004",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "82.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "99.6%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "28.5",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "26",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "98.8%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "89.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e8",
+          "quote": "8068.0",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "26",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e9",
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 8,
+            "kind": "condition",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e10",
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 9,
+            "kind": "condition",
+            "matched_tokens": [
+              "26",
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e11",
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 10,
+            "kind": "condition",
+            "matched_tokens": [
+              "1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "720",
+              "2459",
+              "240%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-057-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-006",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra 预计于2027 年推出。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "2027"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-057-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-007",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "Wind 新材料指数收报5611.65 点，环比下跌4.2%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "5611.65",
+              "4.2%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "申万三级行业半导体材料指数收报12576.94 点，环比下跌\n9.12%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "12576.94",
+              "9.12%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-057-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 0,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "0.0%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 1,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "82.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 2,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "99.6%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 3,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "32",
+              "01",
+              "07",
+              "27",
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "28.5",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 4,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "32",
+              "5",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "98.8%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 5,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "89.9%",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 6,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e8",
+          "quote": "8068.0",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 7,
+            "kind": "table_cell",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e9",
+          "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 8,
+            "kind": "condition",
+            "matched_tokens": [
+              "01",
+              "07",
+              "27",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e10",
+          "quote": "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 9,
+            "kind": "condition",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e11",
+          "quote": "注3：制冷剂R22、R32、R134a 的产能为配额",
+          "locator": [
+            "page:10"
+          ],
+          "source_id": "2026-08-13_174b6462",
+          "basis": {
+            "gold_id": "industry-009-claim-001",
+            "item_index": 10,
+            "kind": "condition",
+            "matched_tokens": [
+              "32",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e12",
+          "quote": "Wind 新材料指数收报5611.65 点，环比下跌4.2%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "5",
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e13",
+          "quote": "申万三级行业半导体材料指数收报12576.94 点，环比下跌\n9.12%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "5",
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e14",
+          "quote": "英伟达计划在NVSwitch\n板卡中使用PTFE 材料，并将该材料作为英伟达新一代服务器平台Rubin Ultra\n正交背板的主力选材。Rubin Ultra 预计于2027 年推出。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 2,
+            "kind": "condition",
+            "matched_tokens": [
+              "27",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e15",
+          "quote": "10GHz 条件下介电常数Dk=2.1，介质损耗Dk 低至0.0004",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 3,
+            "kind": "condition",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e16",
+          "quote": "截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "5",
+              "720",
+              "9",
+              "2",
+              "2459"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e17",
+          "quote": "强于大市（维持评级）",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_f8e31696",
+          "basis": {
+            "gold_id": "industry-057-claim-001",
+            "item_index": 5,
+            "kind": "rating",
+            "matched_tokens": [
+              "9",
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "industry-009-claim-001",
+        "industry-020-claim-001",
+        "industry-057-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "industry-009",
+      "domain": "industry",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    },
+    {
+      "query_id": "industry-010",
+      "domain": "industry",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "新增非农就业16.2\n万人，预期5.6 万人，前值由-2.3 万人修正为2.1 万人",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "8",
+              "16.2",
+              "5.6",
+              "7",
+              "2.3",
+              "2.1"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "8 月失业率4.1%，预期\n4.1%，前值4.1%；平均时薪同比升3.1%，预期升3.0%，前值升3.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "8"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "8 月劳动参与率为61.6%，高于上月的61.4%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "8",
+              "7"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-019-claim-001",
+        "macro-038-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-002",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "8 月失业率4.1%，预期\n4.1%，前值4.1%；平均时薪同比升3.1%，预期升3.0%，前值升3.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "4.1%",
+              "3.1%",
+              "3.2%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "8 月劳动参与率为61.6%，高于上月的61.4%",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "61.6%",
+              "61.4%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-019-claim-001",
+        "macro-038-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "在非农数据公布后，市场预期9 月加息的概\n率已经超过60%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_793b3967",
+          "basis": {
+            "gold_id": "macro-038-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "60%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-019-claim-001",
+        "macro-038-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "unmapped",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "0.5%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "0.5%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "4.6%",
+              "5.9%",
+              "6.1%",
+              "6.2%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-007",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI200 成分股）为26.7%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "1-6 月，本年施工项目计划总投资累计同比\n为-4.3%，本年新开工项目计划总投资增速为-29.4%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "2025 年，非\n金融企业人均薪酬增速为2.4%，低于2024 年的3.3%，以及2019 年的6.5%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "2"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "2",
+              "67.5%",
+              "68.6%",
+              "70.5%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "从支出倾向（消费叠加新房购房与可支配收入之比），2 季度\n为80.3%，低于2025 年同期的83.7%以及2019 年同期的110.3%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "2",
+              "80.3%",
+              "83.7%",
+              "110.3%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "answer_existence": "answerable",
+      "evidence_required": true,
+      "status": "mapped",
+      "targets": [
+        {
+          "target_id": "e1",
+          "quote": "2026 年，预计\n两本账支出增速为-0.5%左右，仍低于名义GDP 增速。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "quote": "2025 年，央企样本企业的有息负\n债增速为4.6%，低于2024 年的5.9%。2025 年，地方国有企业样本企业的有\n息负债增速为6.1%，低于2024 年的6.2%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "quote": "2025 年，中国（使用全\n部A 股）为9.8%，美国（使用标普500 成分股）为20.4%，日本（使用日经\n225 成分股）为14.8%，韩国（使用KOSPI200 成分股）为26.7%。",
+          "locator": [
+            "page:1"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-039-claim-001",
+            "item_index": 4,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "quote": "1-6 月，本年施工项目计划总投资累计同比\n为-4.3%，本年新开工项目计划总投资增速为-29.4%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 0,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6",
+              "4.3%",
+              "29.4%"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "quote": "2025 年，非\n金融企业人均薪酬增速为2.4%，低于2024 年的3.3%，以及2019 年的6.5%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 1,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "quote": "从消费倾向（消费/可支配收\n入）来看，2 季度，消费倾向为67.5%，低于2025 年同期的68.6%以及2019\n年同期的70.5%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 2,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "quote": "从支出倾向（消费叠加新房购房与可支配收入之比），2 季度\n为80.3%，低于2025 年同期的83.7%以及2019 年同期的110.3%。",
+          "locator": [
+            "page:2"
+          ],
+          "source_id": "2026-09-06_cc03f55b",
+          "basis": {
+            "gold_id": "macro-060-claim-001",
+            "item_index": 3,
+            "kind": "value",
+            "matched_tokens": [
+              "1",
+              "6"
+            ],
+            "annotation_role": "body_evidence",
+            "must_preserve": true
+          }
+        }
+      ],
+      "unmatched_tokens": [],
+      "candidate_slots": [
+        "macro-020-claim-001",
+        "macro-039-claim-001",
+        "macro-060-claim-001"
+      ],
+      "notes": "",
+      "item_without_quote": []
+    },
+    {
+      "query_id": "macro-009",
+      "domain": "macro",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    },
+    {
+      "query_id": "macro-010",
+      "domain": "macro",
+      "answer_existence": "no_answer",
+      "evidence_required": false,
+      "status": "negative_opt_out",
+      "targets": [],
+      "unmatched_tokens": [],
+      "candidate_slots": [],
+      "notes": "负例题：其答案为『库中无答案』，不适用证据目标。按评分器契约显式 evidence_required=false；该例外有独立业务依据（负例任务本身即不得命中）"
+    }
+  ]
+}

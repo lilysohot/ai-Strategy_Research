@@ -1,0 +1,30 @@
+{
+  "config_version": 1,
+  "phase": "i3",
+  "note": "I3 阶段守卫（I3-0 起步：评分器与合成检验）。本阶段最保守：无网络（deny_all，不触真实 PG 与公网，无 allowed_targets）、零模型（模型客户端与智能解析模块导入即拒，OPENAI_* 与 CORPUS_DSN 投毒）、无来源读取（read_roots 空 ⇒ 除运行时临时目录外一切来源读取被拒，fail-closed）；data/ 受保护禁止写入/删除/重命名；3 份留出显式隔离；Python 子进程经命令行重写注入守卫，非 Python/exec/system 派生拒绝。守卫先于任何模块测试收集装载（guard_pytest 要求 CORPUS_GUARD_PHASE/CORPUS_GUARD_CONFIG 同时声明）。I3-1 起需要真实链路（开发来源读取 + 隔离 PG 127.0.0.1:543/corpus-db）时，另建 i3-e2e.json 阶段并单独重跑自检与绑定，不改本配置。",
+  "network": {
+    "mode": "deny_all",
+    "allowed_targets": []
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": ["plugins.corpus._r2_"],
+    "poisoned_env": ["OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL"],
+    "poisoned_dsn": ["CORPUS_DSN"]
+  },
+  "sources": {
+    "read_roots": [],
+    "allowed_source_paths": [],
+    "forbidden_roots": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf"
+    ],
+    "protected_roots": ["data"]
+  }
+}

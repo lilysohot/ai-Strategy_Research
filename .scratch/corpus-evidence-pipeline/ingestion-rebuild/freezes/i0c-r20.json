@@ -1,0 +1,31 @@
+{
+  "snapshot_id": "i0c-r20",
+  "revision": "r20",
+  "phase": "i0c",
+  "task": "fix validator i0c-r19 block guard-asset path construction (guard assets were looked up as .../guards/guards/i3.json); rebind validator + ledger text only",
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "811682180a963366d5a94b02032c6bea823f60e7e281d4cdb7b3ddaf1046623b"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "17523a82485ee5e29b28e93d750aebec4a376633c7a545e56baced59863c32b0",
+      "docs/plan/claims-market-closed-loop-plan.md": "216e5b9a1f369a7134ce73f15f588cc4164993a85ddbdb62bb6729d37bdefd74"
+    }
+  },
+  "corrections": {
+    "validator_path_fix": "i0c-r19 首次过门即失败：validate_i0c_freeze.py 的 r19 块把守卫资产路径拼成 .scratch/.../guards/guards/i3.json（多一层 guards/），报 'i0c-r19 未绑定 I3 守卫资产 guards/i3.json'（exit 1）。按 write-once 不追改 r19 快照字节，改为在本修订重绑验证器；同时把 r19/r20 块与索引/血缘/收尾输出同步到 r20。",
+    "scope": "本修订只重绑验证器与两份台账文字：plugins/、tests/、guards/i3.json、i3-guard-report.json、i3_guard_selfcheck.py 字节一律未变（验证器 r20 块强制该不变量）。"
+  },
+  "notes": [
+    "I3-0 交付面（评分器/测试/守卫/i3 守卫报告）仍以 i0c-r19 的绑定为准，本修订不覆盖其哈希。",
+    "证据未变：scoring 测试 31 passed（普通环境与 i3 守卫 env 各一次）；守卫自检 cases=24 failed=0；ruff（CI 范围）+format-check 通过；pyright plugins/corpus 0 errors；import_smoke --stage 1 360/360、--stage 2 409/409。",
+    "M5 已放行并经 U 签认；I3-0 按纪律待独立复核 + U 签认；生产库 I4 前零写入。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18）；I3-0 delivered_pending_independent_review",
+  "created_at": "2026-09-18T14:03:21+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r19",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r19.json",
+    "sha256": "69a1ef581b5164c365353ab10b8d5207166372adf14b31ad9749dc9bb5f8c4ef"
+  }
+}

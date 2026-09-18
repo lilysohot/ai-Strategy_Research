@@ -1,0 +1,41 @@
+{
+  "snapshot_id": "i0c-r22",
+  "revision": "r22",
+  "phase": "i0c",
+  "task": "I3-2 material prep: machine-readable evidence targets mapped from I0A-4 human annotations (rule evidence-mapping-3) + round-trip verification through the I3-0 scorer + reconciliation sheet for U adjudication; candidates only, no gold freeze",
+  "binding": {
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_evidence_targets.py": "b65f5997814971c4eaa1f93b7a1a97895d12cdb2ab362c8cb187de43919e066c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_verify_candidates.py": "5b4d2dba092017f4c64fb5b5f7986fa780f8b7befff0d52e54f26d614e972607",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json": "ac3560a255eaffa2d8e560bc1d58778ee7363038fc1ac307f26fd483ae04d235",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md": "9b4c06ebf7e30cdb2ed9da7529f6fc079665356a258e82fe5ea1710c6a63a19f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json": "fda412bfb8273d37eaac8c662c5369a01f3037f2f60fb2e447f3dde4bb1338ca"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "29a86c8be6e9f06a52ec2597dcb7d4bc26952fdbfaeeee7a989d8af5c9e388b7"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "1c3e50c5522cbdca842c7e3bd0543ea14f6c0dc6105bf2c333341b2950f7bde7",
+      "docs/plan/claims-market-closed-loop-plan.md": "f1af8777a72c87d93755be3d672fda945866b78ac99772e8ec46689e6794f039"
+    }
+  },
+  "corrections": {
+    "I3-2_evidence_targets_candidates": "补料候选（A 侧机器建议，非人工金标）：30 题 → mapped 20 ／ partial 1 ／ needs_human 3 ／ 负例 6，候选证据目标 60 条；证据全部取自 I0A-4 人工标注槽位（reviewer=xyl），不读原文正文、不调模型、不触 PG。",
+    "evidence_mapping_rule_rev": "规则 evidence-mapping-3：数字 token 边界匹配（修复 v1 子串误命中，如 20 命中 2026）、页码提示剥离另存、同 (槽位,item) 多 token 合并为一个 target、无强 token 的定性题不猜（needs_human + item 预览）、target 超护栏降级 needs_human、负例显式 evidence_required=false。v1/v2 归档保留并在 supersedes 登记缺陷。",
+    "verification_roundtrip": "i3s2_verify_candidates.py：gold_from_records 接受『冻结金标 + 候选目标』合成记录；30/30 项检查通过——mapped/partial 题在合成观测下三项全过（候选自洽），3 道待人工题按设计 evidence_targets_absent 阻断整轮（各类 EvidencePass 87.5%、关键题 company-008 未过），负例空命中无按误报与伪造引用；合成观测仅证明候选自洽，不代表真实链路可达。",
+    "reconciliation_points": "U 待裁决 4 项：①3 道定性题（company-008/industry-006/macro-004）人工指定证据目标；②company-004 的 13.40 未命中 token（缺标注或需人工指定）；③EvidencePass 分母口径（逐 item 严 60 条 vs 槽位聚合宽）；④6 道负例 evidence_required=false 的批准。裁决前候选不得当正式金标，也不得先跑候选业务结果再补答案。"
+  },
+  "notes": [
+    "历史快照 r1..r21 保留字节，不追改。本修订不改任何实现/测试/守卫字节（验证器 r22 块强制）。",
+    "I3-0 复核整改（r21）仍在等待复核确认闭环与 U 签认；I3-2 完整任务（阈值/关键题/负例/旧基线映射与评分器冻结）未完成，本修订只交补料候选。",
+    "M5 报告 F3（validate_i1_freeze.py 既有失配）仍未修，已登记。",
+    "零模型、零 PG、零来源正文读取；生产库 I4 前零写入。"
+  ],
+  "m5_declaration": "released_by_U_signoff（2026-09-18）；I3-0 remediation_pending_confirmation；I3-2 material_candidates_pending_adjudication",
+  "created_at": "2026-09-18T15:06:28+08:00",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r21",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r21.json",
+    "sha256": "0403a2edaf86f72f2ed767e320f9bd7ce4a5a9d7a4f2ab7e8d19dd5672735b4a"
+  }
+}
