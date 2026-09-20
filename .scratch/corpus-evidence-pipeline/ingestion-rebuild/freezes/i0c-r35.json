@@ -1,0 +1,43 @@
+{
+  "snapshot_id": "i0c-r35",
+  "revision": "r35",
+  "phase": "i0c",
+  "task": "M6 completion criterion now carries the §12.1 format gate (U instruction 2026-09-20): criterion wording only — no gate behaviour change, no code change",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r34",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r34.json",
+    "sha256": "918d74b43aeff7921ecdeec7c2301268bb98f40f3b2ee3421276131f103da3c5"
+  },
+  "binding": {
+    "m6_criterion_docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "9aff53a26fe69bac50b8eb381936f1f82330253258c3536d897806c87df181a9",
+      "docs/plan/claims-market-closed-loop-plan.md": "e23ee2a880c5d044d764823648cb26c0e6786e47eb007caa4ab052a5f3077175"
+    },
+    "m6_criterion_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/verify_m6_criterion.py": "54cdd4ac2132551d99303f5b574a386bfdfdc6b0ea9075d498c085f0d8b19743",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/m6-criterion-consistency.txt": "8b41534d3509c8b687fc07ea95042e7fae581629a67ac9e7e6d5f21fbc532339",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/freeze_r35.py": "a97bcc6e83149892e47ff19ddec487d9fddacc24d1a20ae9f72176f877253cf6",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/freeze-validation.txt": "717d5489c2ee6cb033a6e0eb72f93354ae3f05e1be5acf97cf3e7bfc68e0bc1a"
+    },
+    "m6_criterion_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/before-r35/docs/plan/corpus-ingestion-rebuild-tasks.md": "4d7ac148cec0ac8b07eb4f8497e8eddc137c605a56ef735522c2c80ccead60fa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-m6-format-criterion/before-r35/docs/plan/claims-market-closed-loop-plan.md": "f2fbaf2f86830cbaf974143a764d55add600894672c5f1b1668ebf111acdbb4e"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "21e1a347ad1962c6fd5780ddeed6d4710017f149cc649ee2e5a48d9f167181ca"
+    }
+  },
+  "corrections": {
+    "M6_format_gate_in_criterion": "M6 判据行追加「声称支持的格式（PDF/DOCX/MD）按架构 §12.1 各有真实已用开发样本、无未处置缺格（dev lane 样本计入但须标注 dev_lane）」——格式门自本修订起是 M6 的完成判据之一",
+    "M6_criterion_alignment": "三处口径对齐：M6 判据行 ↔ 架构 §12.1「缺格式样本则该格式真实门未通过，不能静默缩范围」↔ I3-7 行「分母/格式/必需环境缺失不通过」；此前 M6 行独缺「格式」字样",
+    "M6_no_behavior_change": "只改判据文字：格式门的执行仍在 §12.1 格式可得性对账（dev-manifest.format_availability）+ 取样前 preflight_scope_check.py 核对，门的行为与阈值一字未改；I3-1 格式门已于 r34 为 true，故本修订不新增阻塞（裁定①/company 0/2 状态不变）",
+    "M6_no_code_change": "纯文档修订：绑定范围内不得出现 plugins/ tests/ guards/ frontier_agent/ workflows/ 路径，由验证器 r35 块的越界绑定检查强制",
+    "M6_archive_discipline": "归档忠实性：本修订覆盖 2 条绑定路径（tasks.md、plan.md），其 pre-r35 字节由生成器按「编辑逆向」还原，逐条断言等于 i0c ≤34 的在效上一绑定（取值口径见 r34 教训：只在 i0c 链上绑定的路径必须取 i0c ≤34 合并值，不得被 i1-* 的陈旧值覆盖）"
+  },
+  "created_at": "2026-09-20T10:20:04+08:00",
+  "notes": [
+    "零代码改动、零模型、零 PG 写入；仅 tasks.md M6 判据行与导航表 + 台账回填两条文档路径。",
+    "改动前字节由生成器按编辑逆向还原，并逐条与在效上一修订绑定核对 sha256。",
+    "冻结链门日志在重绑日志后复跑产生，两次输出逐字节一致（日志即当前链门输出）。"
+  ]
+}

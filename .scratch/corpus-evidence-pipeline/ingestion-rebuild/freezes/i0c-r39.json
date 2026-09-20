@@ -1,0 +1,71 @@
+{
+  "snapshot_id": "i0c-r39",
+  "revision": "r39",
+  "phase": "i0c",
+  "status": "i33_calibrating_two_failed_runs_filed",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r38",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r38.json",
+    "sha256": "abf6a77e417809f0880f9426d9e165f80bd0116ecb53c481dff378825d49a256"
+  },
+  "binding": {
+    "calibration_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/README.md": "84627f3270cf40c2975ca489713f4e3cd77221cc585868e77dedfc76039138a6",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/archive_r39.py": "45213c1fd0d5ae9a5cd13dbdcaba5239dadf97ce73faad284e18c97933fc9a71",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/archives.json": "676fc4ba36ce36086569df7724d35aac536551704736f0a1228033dc6c3239ce",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/baseline_literal_websearch-observations.json": "8e056b1f1f8a4f7adb63c183c327cffb174056dd74a8feabe88d7d34e63a8952",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/baseline_literal_websearch-score.json": "572ede27c895b184fd8109909cc1ffcfcd1d9922487a28cc93e0e61fa28f8e4a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/baseline_literal_websearch-score.md": "5c634544a344069d7c1c76c8f8c1c7d0cefcad440b66cd645cbca6bc440846c9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/baseline_literal_websearch-trace.json": "228309db8d9a1c4e21abb5575c07adbd6030666169527ad0484c2b700b1c1e3b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibrate-before-import-fix.py": "d23eb4e11768fd70076a3021853bf3ccd261d1740154f54279543f85ff9d7dab",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibrate.py": "8c21b35e97dac9c6edde0557696b28b94ad1d6773f3c8fe280f49f674ec3e092",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-before-import-fix.json": "a94096fbc68561d79a427f5e6faa58329fef084c73067f1eccef96d2433eb58f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json": "7d490792b55760230418969db864ba0297c512ae7d4aea6116c6c9ec93b6579a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan.json": "a94096fbc68561d79a427f5e6faa58329fef084c73067f1eccef96d2433eb58f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-replay.txt": "842ccb7ac64c7b6cbc87e58b8dc79e831c14c8389c2ce32cfb6f43a5d22963fd",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-summary.json": "b518a1926bd86e3971038f71b88f32dd66f14bb3ddb74c43cdb0c59a5d72b64d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/candidate_question_lexemes_or-observations.json": "422a66f0764f448685585383115fa05aa368cb8395da508809584f62d19a1235",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/candidate_question_lexemes_or-score.json": "00b213987f0cfde276bf91af8c42c8fe8da574584916173a3a7ab7d8c1bb3dc9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/candidate_question_lexemes_or-score.md": "408d57e911f31df11ef35aff31fe61af49739a850e71bb8cab68d5e7939ff887",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/candidate_question_lexemes_or-trace.json": "3cee0082d0b15958eb6797f55c5fd1d7ca2293c3117a14d58c433b96e651ad65",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/collector-tests.txt": "9e02bad0f9f396159c816af9381159af6d5a919472227a352ecee54c8e9447c8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/diagnose_evidence.py": "b47bb0a03fbc6cc13cbe84b1f7fc849759a81c822e663d982092671cd86507de",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/evidence-diagnosis.json": "fc2f8d134876f989607e10d0bbda78f4f57d3f00c238915c486fbe7eb23fb794",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/fetch-receipts.json": "44940bd8e665c53e4f0feb541cf44a7ab9558a2249a6aaac5af0c857f3956b08",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/freeze-validation.txt": "717d5489c2ee6cb033a6e0eb72f93354ae3f05e1be5acf97cf3e7bfc68e0bc1a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/freeze_r39.py": "61abb4f0634e2d74fd9cc772ebb320b2ee7751a6842d841b2f844927070a0683",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/i3-2-completion.txt": "ffd37250bc7ace02f9c5375873ea787ebf0e7d718485488302e33595dda01fce",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/import-stage1.txt": "2a1266c5317f096b03cecfb50951b2d55fc64973aeb137cf7057b991d90f0bdc",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/import-stage2.txt": "9204cd50e6310b3491c96ffe738fe21dbe5591171123d3ace43f7c1c00a16d89",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/pyright.txt": "0d3645c9ec526566063643bf8bfae886bd9eaff04714c79196223ece4d5d308b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/ruff.txt": "8c85d0c9e11a7d68bdc83e1bb411c688dcf3025f06195d2bab096da46c0cfd67",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/run_validation.py": "435a7c7292dd98889969992b643f17e8cbc8e6c12a0e63d015851ac0426d970a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/source-identity-map.json": "7d13d7ed4b2af237bbe507fb81ba8c0a2fdab6fe3e120567069a91006372bf5a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/symbols.txt": "0b4dea67d3d95f60516792d22e73ffa1843d6e19b8977b9cdbf5eb609f4cc31d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/test_collector.py": "57916f3c482d9044747950919258f97258a90f6097b1c31af486b1e1d56dbf98",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/update_ledger.py": "01b01fdd87085687adfae4514749e94cafb4a8b77fe2b902c7e5fff3c1d1d8c0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/validation-results.json": "d3bce35f1651e796db2f352c6e2427612401511d1c993e0b29c5c832c0be385b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/verify_calibration.py": "9aed0273bdb191c5f331ccdb3920168dc80888dbfc1de0a2b62d11268216544e"
+    },
+    "calibration_docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "670ae525f5c4aa4f2319a4fb292cd2463738ab3cc2377a2a64c1c9c44e7c71a2",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "17936fc6a50c98ba711d8a133b743f914299c8523b6b2f503f1d8a86280688e7"
+    },
+    "calibration_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/docs/plan/corpus-ingestion-rebuild-tasks.md": "903a2d279015db719bb14a7e3873a43b94581b46271a9f5dee952e69d40e37e1",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/docs/plan/claims-market-closed-loop-plan.md": "ea36f8f470271b57c4ce591affb349862e1ea2c99a79cfe5729cdca9ea0813ef",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "a36f8b9a734b472e56e92a42b0b08bf535d59bcb5bf52cf4e9ad5a8c12d818b7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json": "65066a086a892c0705dfc70a6d5c4169ee2623ea8c522b3465101808e047056d"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "d68a2f7a2948652873270962dbbc7fe2dde6cd64b8cd816af0d26d4e802764be"
+    }
+  },
+  "i31_complete": true,
+  "i33_complete": false,
+  "m6_released": false,
+  "model_calls": 0,
+  "calibration_runs": 2,
+  "question_count": 30,
+  "created_at": "2026-09-20T06:23:34+00:00"
+}

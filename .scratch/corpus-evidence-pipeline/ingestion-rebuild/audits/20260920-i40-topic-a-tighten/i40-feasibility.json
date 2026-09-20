@@ -1,0 +1,816 @@
+[
+  {
+    "query_id": "company-004",
+    "target_id": "e2",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 159,
+    "cover": [
+      28,
+      32
+    ],
+    "pool": 112,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          21,
+          39
+        ],
+        "band_width": 19,
+        "band_pool": 13,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          20,
+          40
+        ],
+        "band_width": 21,
+        "band_pool": 13,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          12,
+          40
+        ],
+        "band_width": 29,
+        "band_pool": 17,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          11,
+          41
+        ],
+        "band_width": 31,
+        "band_pool": 17,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "a-2",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 159,
+    "cover": [
+      28,
+      32
+    ],
+    "pool": 112,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          21,
+          39
+        ],
+        "band_width": 19,
+        "band_pool": 13,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          20,
+          40
+        ],
+        "band_width": 21,
+        "band_pool": 13,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          12,
+          40
+        ],
+        "band_width": 29,
+        "band_pool": 17,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          11,
+          41
+        ],
+        "band_width": 31,
+        "band_pool": 17,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "a-3",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 159,
+    "cover": [
+      28,
+      32
+    ],
+    "pool": 112,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          21,
+          39
+        ],
+        "band_width": 19,
+        "band_pool": 13,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          20,
+          40
+        ],
+        "band_width": 21,
+        "band_pool": 13,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          12,
+          40
+        ],
+        "band_width": 29,
+        "band_pool": 17,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          11,
+          41
+        ],
+        "band_width": 31,
+        "band_pool": 17,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "e2",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 61,
+    "cover": [
+      71,
+      72
+    ],
+    "pool": 101,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          56,
+          88
+        ],
+        "band_width": 33,
+        "band_pool": 24,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          55,
+          89
+        ],
+        "band_width": 35,
+        "band_pool": 24,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          64,
+          100
+        ],
+        "band_width": 37,
+        "band_pool": 24,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          63,
+          101
+        ],
+        "band_width": 39,
+        "band_pool": 24,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "e3",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 108,
+    "cover": [
+      76,
+      78
+    ],
+    "pool": 101,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          56,
+          88
+        ],
+        "band_width": 33,
+        "band_pool": 24,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          55,
+          89
+        ],
+        "band_width": 35,
+        "band_pool": 24,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          64,
+          100
+        ],
+        "band_width": 37,
+        "band_pool": 24,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 3,
+        "band_span": [
+          63,
+          101
+        ],
+        "band_width": 39,
+        "band_pool": 24,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-2",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 42,
+    "cover": [
+      2,
+      3
+    ],
+    "pool": 148,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 8,
+        "band_span": [
+          1,
+          8
+        ],
+        "band_width": 8,
+        "band_pool": 4,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 8,
+        "band_span": [
+          0,
+          9
+        ],
+        "band_width": 10,
+        "band_pool": 4,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 7,
+        "band_span": [
+          0,
+          35
+        ],
+        "band_width": 36,
+        "band_pool": 24,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 7,
+        "band_span": [
+          0,
+          36
+        ],
+        "band_width": 37,
+        "band_pool": 24,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-3",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 73,
+    "cover": [
+      37,
+      39
+    ],
+    "pool": 148,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          31,
+          40
+        ],
+        "band_width": 10,
+        "band_pool": 8,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          30,
+          41
+        ],
+        "band_width": 12,
+        "band_pool": 8,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          32,
+          41
+        ],
+        "band_width": 10,
+        "band_pool": 6,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          31,
+          42
+        ],
+        "band_width": 12,
+        "band_pool": 6,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-5",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 73,
+    "cover": [
+      37,
+      39
+    ],
+    "pool": 148,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          31,
+          40
+        ],
+        "band_width": 10,
+        "band_pool": 8,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          30,
+          41
+        ],
+        "band_width": 12,
+        "band_pool": 8,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          32,
+          41
+        ],
+        "band_width": 10,
+        "band_pool": 6,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 4,
+        "band_span": [
+          31,
+          42
+        ],
+        "band_width": 12,
+        "band_pool": 6,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "macro-002",
+    "target_id": "e4",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 648,
+    "cover": [
+      5,
+      6
+    ],
+    "pool": 96,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          7
+        ],
+        "band_width": 8,
+        "band_pool": 6,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          8
+        ],
+        "band_width": 9,
+        "band_pool": 6,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          11
+        ],
+        "band_width": 12,
+        "band_pool": 7,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          12
+        ],
+        "band_width": 13,
+        "band_pool": 7,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "a-2",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 648,
+    "cover": [
+      5,
+      6
+    ],
+    "pool": 69,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          7
+        ],
+        "band_width": 8,
+        "band_pool": 6,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          8
+        ],
+        "band_width": 9,
+        "band_pool": 6,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          11
+        ],
+        "band_width": 12,
+        "band_pool": 7,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          12
+        ],
+        "band_width": 13,
+        "band_pool": 7,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "a-4",
+    "matched_band": true,
+    "layer": "band",
+    "quote_len": 648,
+    "cover": [
+      5,
+      6
+    ],
+    "pool": 69,
+    "sensitivity": [
+      {
+        "gap": 1,
+        "expand": 1,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          7
+        ],
+        "band_width": 8,
+        "band_pool": 6,
+        "provable_width_bound": 49,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 1,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          8
+        ],
+        "band_width": 9,
+        "band_pool": 6,
+        "provable_width_bound": 51,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 2,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          11
+        ],
+        "band_width": 12,
+        "band_pool": 7,
+        "provable_width_bound": 74,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      },
+      {
+        "gap": 2,
+        "expand": 3,
+        "coverable": true,
+        "rank": 1,
+        "band_span": [
+          0,
+          12
+        ],
+        "band_width": 13,
+        "band_pool": 7,
+        "provable_width_bound": 76,
+        "selected_in_band_cap": true,
+        "splice_contains_quote": true
+      }
+    ]
+  }
+]

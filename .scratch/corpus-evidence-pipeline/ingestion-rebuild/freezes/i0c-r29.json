@@ -1,0 +1,49 @@
+{
+  "snapshot_id": "i0c-r29",
+  "revision": "r29",
+  "phase": "i0c",
+  "task": "I3-2 Step 5 targeted review + remediation: P4 path baseline fixed to repo-root relative (4 defects found by independent review), review/diff-pack bound; stage sign-off pending U",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r28",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r28.json",
+    "sha256": "e5ad0cce6821b6b1a687c634f103eb68f8c4772d114a7010d9ecd8e43f2ddff4"
+  },
+  "binding": {
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p2/policy-and-lists-confirmation.json": "46ef2261cd5ba904eb1404ad998c50147bf1be29eba6167522ef6b7416d5c169",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p3/baseline-mapping-reconciliation.json": "69fca001e32d2af2b6e31632609f75c14f9b0935e7b6352fd7c296423ba25f7d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p4/experiment-initial-version.json": "56451c3b035cc6cbe324e4bcdb0b0378d37e30bfc1460b4bd0d8e6cb1f566a8c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p4/experiment-initial-version.md": "ac1be642e220326f95eedec51d9fcbd6baf3691a16fbd4966f0665138d448796"
+    },
+    "i3_2_step5": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-review.json": "3c0b67ff672621ea69dbcb6a2b0e02c971e417ed4142f9a93946a45d3c3814cf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-review.md": "ac6da31d15be2bc0b28004261ca24ef47d29abe80f2cd488eb2f9088817ea0f7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-diff-pack.md": "1443211a4ed159ac9733a8f2a106ec26fa26273c41396f190f194f95a59b7153",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5_review.py": "7b45fd3e524a202f2473a0d9f21476fb783676189fd09956c94997b469124f1e"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r29/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "42d0d526b6e21070e40eba7680123c27ec1226e30e510bbd1d7c47068696e832",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r29/docs/plan/corpus-ingestion-rebuild-tasks.md": "99b0d3d24f47116e4564998ea877f5f98da6762fcea073e6f75a804972563a45",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r29/docs/plan/claims-market-closed-loop-plan.md": "0b598b59ea58fabb048252d711fd5d97b931a39f146087f0b7581ff6f36534c5"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "810d1b2ac37650cc3754c977c37cfe85f3c9d10cdc2d01ced8c3bb0985e8e3ee",
+      "docs/plan/claims-market-closed-loop-plan.md": "80d4220caf0ec72b763d44aff27bfd32e4f657a203acfcf3ab9d234b2f811610"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "e53995ebb840abcdb30bfebe11ca96bfec4e665eb1422679c8459a73d74c3831"
+    }
+  },
+  "corrections": {
+    "I3-2_step5_review": "Step 5 针对性复核（独立重推 + 通用路径可解析检查）：派生关系/旧基线范围/初始版本逐项复核，结论通过；1 项观察项（prose 留出天风 5520fab6 未在 guard forbidden_roots）登记待定",
+    "I3-2_initial_manifest_paths": "抓到并修掉 P4 的 4 处路径基准不一致（policy.confirmation、baseline_mapping.reconciliation、decisions.path、approved_projection.path，含 source_gold/index/case_level），统一仓库根相对并重算 lineage",
+    "I3-5": "真实非回归与 E2E 仍未执行；阶段签认（signoff-record-i3-2）待 U 具名签署后另立修订入链",
+    "I3-2_archive_order_defect": "流程缺陷登记：P2/P3/P4 的 r28 字节在本轮**归档前已被重生成覆盖**，故未形成归档（原 4 条归档声明已删除，只保留真实归档：validate_i0c_freeze.py 与两份台账）；r28 记录中这 4 个文件的哈希自此无法用字节核验，历史审计以 r28 记录值为准。已修正顺序（先归档、后覆盖），并提示：生成器（generate_p2_p3_p4.py）从未入链，产物虽有哈希但生成器不可追溯——后续修订应同时绑定生成器。"
+  },
+  "created_at": "2026-09-19T10:09:15.173888+00:00",
+  "notes": [
+    "零模型、零数据库写入；只改 P2/P3/P4 的路径字段与复核产物，未触碰评分器/金标/守卫/审批原件。",
+    "签认记录有意**不**在本轮入链：签名会改变其字节，须在签名后由下一修订绑定（与 M5 放行先例一致）。",
+    "归档范围修正：i3_2_archive 只含 validate_i0c_freeze.py 与 docs 两份台账（真实 r28 字节）；P2/P3/P4 的 r28 字节因顺序错误未归档，已在 corrections 显式登记。"
+  ]
+}

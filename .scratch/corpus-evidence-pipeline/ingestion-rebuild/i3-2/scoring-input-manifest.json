@@ -1,0 +1,58 @@
+{
+  "artifact": "i3-2-scoring-input-manifest",
+  "version": "scoring-input-v1",
+  "generated_at": "2026-09-19T17:57:29+08:00",
+  "status": "frozen_r28",
+  "frozen_in": "i0c-r28",
+  "purpose": "把批准投影确定性材料化成**唯一**的正式评分输入；评分入口只允许按本清单指定的路径读取，禁止依赖旧默认路径或选择『最新文件』",
+  "lineage": {
+    "query_gold": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl",
+      "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+    },
+    "source_gold": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+      "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
+    },
+    "projection": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json",
+      "sha256": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25"
+    },
+    "decisions": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json",
+      "sha256": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74"
+    },
+    "materializer": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_scoring_input.py",
+      "sha256": "1c499a51803d73ad382186620ed93efb4d16ed25d662c7ac74ec5ea16cef60dd"
+    },
+    "scorer": {
+      "path": "plugins/corpus/scoring.py",
+      "sha256": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e"
+    }
+  },
+  "scoring_input": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl",
+    "sha256": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d"
+  },
+  "counts": {
+    "questions": 30,
+    "answerable": 24,
+    "no_answer": 6,
+    "required": 79,
+    "supplementary": 20
+  },
+  "rules": [
+    "只增字段：原 query gold 既有键值逐字段不变（校验会比对每题的每个原字段）",
+    "必需集合逐条等于批准投影 approved_required（含顺序）",
+    "补充证据放 supplementary_evidence_targets，不计入 EvidencePass",
+    "负例题（answer_existence=no_answer）不带任何目标（评分器自动 evidence_required=False）",
+    "每条 target 的 quote/source_id/locator 可回链到 source-gold 槽位与条目",
+    "任一上游哈希或目标集合变化 ⇒ 派生校验失败（score 入口必须先过本校验）"
+  ],
+  "approval_provenance": {
+    "decisions_reviewer": "xyl",
+    "approval_untouched": true,
+    "note": "派生件不改审批原件；原审批件与 r26 冻结件字节不变"
+  }
+}

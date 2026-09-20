@@ -1,0 +1,178 @@
+[
+  {
+    "query_id": "company-004",
+    "target_id": "e2",
+    "quote_len": 159,
+    "chunks": 197,
+    "pool": 112,
+    "cover": [
+      28,
+      32
+    ],
+    "span": 5,
+    "start_in_pool": true,
+    "end_in_pool": false,
+    "pool_inside": 4,
+    "max_neighbor": 1
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "a-2",
+    "quote_len": 159,
+    "chunks": 197,
+    "pool": 112,
+    "cover": [
+      28,
+      32
+    ],
+    "span": 5,
+    "start_in_pool": true,
+    "end_in_pool": false,
+    "pool_inside": 4,
+    "max_neighbor": 1
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "a-3",
+    "quote_len": 159,
+    "chunks": 197,
+    "pool": 112,
+    "cover": [
+      28,
+      32
+    ],
+    "span": 5,
+    "start_in_pool": true,
+    "end_in_pool": false,
+    "pool_inside": 4,
+    "max_neighbor": 1
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "e2",
+    "quote_len": 61,
+    "chunks": 197,
+    "pool": 101,
+    "cover": [
+      71,
+      72
+    ],
+    "span": 2,
+    "start_in_pool": true,
+    "end_in_pool": false,
+    "pool_inside": 1,
+    "max_neighbor": 1
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "e3",
+    "quote_len": 108,
+    "chunks": 197,
+    "pool": 101,
+    "cover": [
+      76,
+      78
+    ],
+    "span": 3,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 3,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-2",
+    "quote_len": 42,
+    "chunks": 197,
+    "pool": 148,
+    "cover": [
+      2,
+      3
+    ],
+    "span": 2,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 2,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-3",
+    "quote_len": 73,
+    "chunks": 197,
+    "pool": 148,
+    "cover": [
+      37,
+      39
+    ],
+    "span": 3,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 3,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "a-5",
+    "quote_len": 73,
+    "chunks": 197,
+    "pool": 148,
+    "cover": [
+      37,
+      39
+    ],
+    "span": 3,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 3,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "macro-002",
+    "target_id": "e4",
+    "quote_len": 648,
+    "chunks": 187,
+    "pool": 96,
+    "cover": [
+      5,
+      6
+    ],
+    "span": 2,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 2,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "a-2",
+    "quote_len": 648,
+    "chunks": 187,
+    "pool": 69,
+    "cover": [
+      5,
+      6
+    ],
+    "span": 2,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 2,
+    "max_neighbor": 0
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "a-4",
+    "quote_len": 648,
+    "chunks": 187,
+    "pool": 69,
+    "cover": [
+      5,
+      6
+    ],
+    "span": 2,
+    "start_in_pool": true,
+    "end_in_pool": true,
+    "pool_inside": 2,
+    "max_neighbor": 0
+  }
+]

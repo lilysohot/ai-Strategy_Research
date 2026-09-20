@@ -1,0 +1,20 @@
+{
+  "hit": 34,
+  "miss": 0,
+  "missed": [],
+  "recovered_vs_reader_pdf_3": [
+    "industry-003 a-3 p10",
+    "industry-005 e1 p1",
+    "industry-005 e2 p1",
+    "industry-008 a-2 p10",
+    "industry-008 a-4 p1",
+    "industry-008 e1 p1",
+    "macro-001 a-3 p3",
+    "macro-002 e4 p1",
+    "macro-003 a-2 p1",
+    "macro-003 a-4 p1",
+    "macro-003 e1 p1"
+  ],
+  "regressed_vs_reader_pdf_3": [],
+  "company001_p1_contiguous": true
+}

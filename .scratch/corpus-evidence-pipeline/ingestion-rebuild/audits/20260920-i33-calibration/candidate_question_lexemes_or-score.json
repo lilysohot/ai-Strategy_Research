@@ -1,0 +1,615 @@
+{
+  "policy": {
+    "top_k": 5,
+    "min_rate": "19/20",
+    "require_critical_all_pass": true,
+    "max_false_positives": 0,
+    "max_fabricated_citations": 0
+  },
+  "questions": [
+    {
+      "query_id": "company-001",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e4",
+        "evidence_target_missing:a-2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-002",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3",
+        "evidence_target_missing:e4",
+        "evidence_target_missing:e5",
+        "evidence_target_missing:e6"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-004",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e2",
+        "evidence_target_missing:a-2",
+        "evidence_target_missing:a-3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-006",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-007",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-008",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:a-1",
+        "evidence_target_missing:a-2",
+        "evidence_target_missing:a-3",
+        "evidence_target_missing:a-4",
+        "evidence_target_missing:a-5"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-009",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:57"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 57
+    },
+    {
+      "query_id": "company-010",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:56"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 56
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:a-3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-004",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-006",
+      "domain": "industry",
+      "critical": false,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-007",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:a-2",
+        "evidence_target_missing:a-3",
+        "evidence_target_missing:a-4",
+        "evidence_target_missing:a-5"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-009",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:51"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 51
+    },
+    {
+      "query_id": "industry-010",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:51"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 51
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:a-3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-002",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e3",
+        "evidence_target_missing:e4"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:a-2",
+        "evidence_target_missing:a-3",
+        "evidence_target_missing:a-4"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "critical": false,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:a-3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-007",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-009",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:51"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 51
+    },
+    {
+      "query_id": "macro-010",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:52"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 52
+    }
+  ],
+  "classes": [
+    {
+      "domain": "company",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 1,
+        "total": 8
+      }
+    },
+    {
+      "domain": "industry",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 2,
+        "total": 8
+      }
+    },
+    {
+      "domain": "macro",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 2,
+        "total": 8
+      }
+    }
+  ],
+  "false_positives": [
+    "company-009",
+    "company-010",
+    "industry-009",
+    "industry-010",
+    "macro-009",
+    "macro-010"
+  ],
+  "fabricated_citations": [
+    "company-009",
+    "company-010",
+    "industry-009",
+    "industry-010",
+    "macro-009",
+    "macro-010"
+  ],
+  "blockers": [
+    "below_threshold:company:evidence_pass=12.5%",
+    "below_threshold:industry:evidence_pass=25.0%",
+    "below_threshold:macro:evidence_pass=25.0%",
+    "critical_failed:company-001:EvidencePass 未过",
+    "critical_failed:company-002:EvidencePass 未过",
+    "critical_failed:company-003:EvidencePass 未过",
+    "critical_failed:company-004:EvidencePass 未过",
+    "critical_failed:company-005:EvidencePass 未过",
+    "critical_failed:company-007:EvidencePass 未过",
+    "critical_failed:company-008:EvidencePass 未过",
+    "critical_failed:company-009:负例被断言命中",
+    "critical_failed:company-010:负例被断言命中",
+    "critical_failed:industry-001:EvidencePass 未过",
+    "critical_failed:industry-002:EvidencePass 未过",
+    "critical_failed:industry-003:EvidencePass 未过",
+    "critical_failed:industry-005:EvidencePass 未过",
+    "critical_failed:industry-007:EvidencePass 未过",
+    "critical_failed:industry-008:EvidencePass 未过",
+    "critical_failed:industry-009:负例被断言命中",
+    "critical_failed:industry-010:负例被断言命中",
+    "critical_failed:macro-001:EvidencePass 未过",
+    "critical_failed:macro-002:EvidencePass 未过",
+    "critical_failed:macro-003:EvidencePass 未过",
+    "critical_failed:macro-005:EvidencePass 未过",
+    "critical_failed:macro-006:EvidencePass 未过",
+    "critical_failed:macro-007:EvidencePass 未过",
+    "critical_failed:macro-009:负例被断言命中",
+    "critical_failed:macro-010:负例被断言命中",
+    "false_positives:6>0",
+    "fabricated_citations:6>0"
+  ],
+  "passed": false
+}

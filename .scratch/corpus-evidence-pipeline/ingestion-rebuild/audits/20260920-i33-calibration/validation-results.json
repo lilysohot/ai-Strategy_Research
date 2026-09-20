@@ -1,0 +1,112 @@
+[
+  {
+    "check": "collector-tests",
+    "exit": 0,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "pytest",
+      "--noconftest",
+      "-c",
+      "/dev/null",
+      "-p",
+      "no:cacheprovider",
+      "-p",
+      "plugins.corpus.preparation.guard_pytest",
+      "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/test_collector.py",
+      "-q"
+    ],
+    "note": ""
+  },
+  {
+    "check": "ruff",
+    "exit": 0,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "ruff",
+      "check",
+      "plugins/corpus/preparation/gap_review.py",
+      "plugins/corpus/preparation/pdf_gap_regions.py",
+      "plugins/corpus/preparation/gaps.py",
+      "tests/test_corpus_gap_review.py"
+    ],
+    "note": ""
+  },
+  {
+    "check": "pyright",
+    "exit": 0,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "pyright",
+      "plugins/corpus/preparation/gap_review.py",
+      "plugins/corpus/preparation/pdf_gap_regions.py",
+      "plugins/corpus/preparation/gaps.py"
+    ],
+    "note": ""
+  },
+  {
+    "check": "symbols",
+    "exit": 0,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "plugins.corpus.preparation.guard",
+      "--config",
+      "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "--",
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "tools/check_symbols.py"
+    ],
+    "note": ""
+  },
+  {
+    "check": "import-stage1",
+    "exit": 1,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "plugins.corpus.preparation.guard",
+      "--config",
+      "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "--",
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "tools/import_smoke.py",
+      "--stage",
+      "1"
+    ],
+    "note": "Global imports may be blocked by mandatory zero-model guard; not counted as passed"
+  },
+  {
+    "check": "import-stage2",
+    "exit": 1,
+    "command": [
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "-m",
+      "plugins.corpus.preparation.guard",
+      "--config",
+      "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "--",
+      "/home/administrator/FrontierAgent/.venv/bin/python",
+      "-B",
+      "tools/import_smoke.py",
+      "--stage",
+      "2"
+    ],
+    "note": "Global imports may be blocked by mandatory zero-model guard; not counted as passed"
+  },
+  {
+    "check": "LLM preflight",
+    "status": "not_run",
+    "reason": "User's zero-model discipline: preflight issues a real model call."
+  }
+]

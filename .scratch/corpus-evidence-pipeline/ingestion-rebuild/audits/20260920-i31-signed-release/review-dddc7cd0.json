@@ -1,0 +1,22 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-2",
+  "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+  "build_id": "8796167bb6ec8e678f96ce8f88194d57005812de2459607d163ef18ee2f25163",
+  "build_fingerprint": "1ec8b33ff17cce5d48717121a20776872c35ce6e4772002f041e69b26d0726a9",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20T12:00:00+08:00",
+  "evidence_scope_ref": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json@sha256:5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+  "required_locators": [
+    "page:1",
+    "page:2",
+    "page:3",
+    "page:7",
+    "page:20"
+  ],
+  "scope_rationale": "所需证据位于 evidence-targets-approved.json 之 approved_required/supplementary，涉及 page:1/2/3/7/20（其中 page:20=每股收益 0.36/0.59/0.93、经营现金流 -222/-138/-17；page:7=赵彤宇直接 32.60%+间接 4.00%=合计 36.60%、陈淑兰 1.70%、赵彤亚 0.57%）。page:7 上的所需证据载体为纯文字，位于页上部 y=85-155，与图像缺口区域（组织架构图 bbox y=334.8-726.2）不相交。\n原具名核验全文：已目视核验并比对逐页提取结果：page:7 图像区域为「图4 公司核心业务主要子公司结构」组织架构图（bbox 476×391.4pt，y 区间 334.8-726.2），另有左上 logo；所需证据持股比例文字（赵彤宇 32.60%+4.00%=36.60% 等）位于页上部 y=85-155，完整可提取且与图像区域 bbox 不相交。该缺口为组织架构图，未承载所需证据文字，同页但区域不重叠，不影响所需证据。\n机器转写：完整展开签署所指 approved_required/supplementary 的页码为 page:1, page:2, page:3, page:7, page:20；未按缺口位置筛选或删除目标。",
+  "attestation": "human_verified_complete_scope_and_nonintersection",
+  "gaps": {
+    "issue:image_region_unreadable:page:7": "page:7 图像区为组织架构图（bbox y=334.8-726.2）；所需证据持股比例文字位于页上部 y=85-155，完整且与图像区域不重叠，同页但区域不相交，不影响所需证据（签认注明：与金标同页但图像区域与证据文字不重叠）。"
+  }
+}

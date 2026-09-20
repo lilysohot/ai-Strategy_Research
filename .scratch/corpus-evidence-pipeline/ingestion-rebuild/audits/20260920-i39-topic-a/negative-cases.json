@@ -1,0 +1,41 @@
+{
+  "note": "no-answer questions under S4 narrow (literal AND) retrieval",
+  "cases": [
+    {
+      "query_id": "company-009",
+      "question": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+      "retrieved_documents": 0,
+      "docs": []
+    },
+    {
+      "query_id": "company-010",
+      "question": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+      "retrieved_documents": 0,
+      "docs": []
+    },
+    {
+      "query_id": "industry-009",
+      "question": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+      "retrieved_documents": 0,
+      "docs": []
+    },
+    {
+      "query_id": "industry-010",
+      "question": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+      "retrieved_documents": 0,
+      "docs": []
+    },
+    {
+      "query_id": "macro-009",
+      "question": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+      "retrieved_documents": 0,
+      "docs": []
+    },
+    {
+      "query_id": "macro-010",
+      "question": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+      "retrieved_documents": 0,
+      "docs": []
+    }
+  ]
+}

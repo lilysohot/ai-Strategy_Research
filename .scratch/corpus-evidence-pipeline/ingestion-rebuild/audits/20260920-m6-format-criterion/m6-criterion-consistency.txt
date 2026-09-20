@@ -1,0 +1,45 @@
+{
+  "artifact": "m6-format-criterion-consistency",
+  "verdict": "PASS",
+  "checks": [
+    {
+      "item": "M6 判据行写入 §12.1 格式门",
+      "status": "pass",
+      "detail": "缺失要素=[]；行首='| M6  | I3 最终版本 E2E + 非回归 | I3-7 对 I3-6 '"
+    },
+    {
+      "item": "I3-7 行仍含格式要求（口径同源）",
+      "status": "pass",
+      "detail": "行首='| I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retri'"
+    },
+    {
+      "item": "架构 §12.1 格式可得性对账条款在位",
+      "status": "pass",
+      "detail": "需同时含『格式可得性对账』与 `format_availability`"
+    },
+    {
+      "item": "架构 §12.1 禁止静默缩范围条款在位",
+      "status": "pass",
+      "detail": "缺格式样本须显式处置（补料工单 / U 改声称）"
+    },
+    {
+      "item": "台账含 m6-format-criterion 节",
+      "status": "pass",
+      "detail": "反查链接目标必须存在"
+    },
+    {
+      "item": "导航表含指向该节的条目",
+      "status": "pass",
+      "detail": "tasks.md 导航表需可追"
+    },
+    {
+      "item": "M6 判据未引入与代码不一致的行为变更描述",
+      "status": "pass",
+      "detail": "只应改判据文字，不得声称新增/关闭任何门"
+    }
+  ],
+  "failed_items": [],
+  "note": "只读校验；格式门的实际执行仍在架构 §12.1 / dev-manifest.format_availability / preflight_scope_check.py。"
+}
+
+exit=0

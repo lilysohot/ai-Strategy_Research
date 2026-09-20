@@ -1,0 +1,32 @@
+{
+  "publication": {
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+    "current_decision_id": "dc5a40db5afa363ecaac169e870f6f061c70c175f98c5796f6eb368f718f3fdf",
+    "active_build_id": "fddf03bc7851ca1fcc6cd2d5c4a20b6312311c284a40e89dc33b6906e173f68e",
+    "generation": 1,
+    "activated_at": "2026-09-20 05:45:43.590572+00:00"
+  },
+  "checkpoint": {
+    "acknowledged_gaps": [
+      "issue:image_region_small:page:1",
+      "issue:image_region_small:page:2",
+      "issue:image_region_small:page:3",
+      "issue:image_region_small:page:4",
+      "issue:image_region_small:page:5",
+      "issue:image_region_small:page:6",
+      "issue:image_region_small:page:7",
+      "issue:image_region_small:page:8",
+      "issue:table_lines_without_extraction:page:6"
+    ],
+    "activated_at": "2026-09-20T05:45:43.590572+00:00",
+    "active_build_id": "fddf03bc7851ca1fcc6cd2d5c4a20b6312311c284a40e89dc33b6906e173f68e",
+    "decision_id": "dc5a40db5afa363ecaac169e870f6f061c70c175f98c5796f6eb368f718f3fdf",
+    "gap_policy_rev": "gap-policy-2",
+    "generation": 1,
+    "human_gap_review_id": "c03a621bc4b13fa167a54b4e7f370ece095ed16cb352eb5d963b33eba4eacfcb",
+    "operator": "Codex executing xyl signed gap review",
+    "owner_id": "i31-signed-release",
+    "schema_rev": "publish-record-1",
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a"
+  }
+}

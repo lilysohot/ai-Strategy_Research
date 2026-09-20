@@ -1,0 +1,77 @@
+{
+  "snapshot_id": "i0c-r37",
+  "revision": "r37",
+  "phase": "i0c",
+  "task": "I3-1 adopt completed human signatures and publish three sources",
+  "status": "signed_release_partial_with_i31_e2e_gates_passed",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r36",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r36.json",
+    "sha256": "2f6cbb50de30a4dff2e679db879e327991f6e5c543c2d6838f505c414e874828"
+  },
+  "binding": {
+    "i31_signed_inputs": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-174b6462.json": "8637faa74d27c23d9d27a26f88721ec573685473d8a852dd1c675f278a9d5ed7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-6f14cc14.json": "97fc880e9e04a285558ea3d61894dbd7c4a72580b62f37708cddd28e79c88265",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-793b3967.json": "c9766137cb48231081375121fdb1ed5709497e0cea8c952553137cdde1758690",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-dddc7cd0.json": "fca9073e9c4aed2e636d6498712fe65cc16bb01146312ea3d6a45add11bcd5e2"
+    },
+    "i31_release_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/README.md": "6ee1e9ff0ff473d534d94427e2eedb4cb0ff09c33b47bce8ff6f405857b6ed16",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/archive_r37.py": "d3a81058b00009d9e9d935a3dc3d2ab595c1d4d862a8dd15bd8d83f031d3eeb0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/archives.json": "c8c41b75521a22c26ed50308af44b2c88d3299ccd5ce351497fdc55d427f6c46",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/freeze-validation.txt": "717d5489c2ee6cb033a6e0eb72f93354ae3f05e1be5acf97cf3e7bfc68e0bc1a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/freeze_r37.py": "18c927d3d05136ab32fd68ce12fd18052bbcb001449ef7bac5385b35862cf009",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/historical-template-recovery.json": "d67651b4e19572b4ebdcbb5610961e52dc9c714707416bf60efafcfe1b957957",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/i3-2-completion.txt": "be8df3bc1c02a759ec000cae566dbaaac4c6a9e9d16f1718c2db5deaeb07b1eb",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/precheck.json": "654f939ede76b0ddc2defc5aca5b42da2bc7f60c7510466057c3d5b01ea238ba",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/publication-174b6462.json": "1805cbb68d50031155cd2aecb733fd8a47b9d559d2f97491ccf80a39932ffa97",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/publication-6f14cc14.json": "068a005452e1146586dba5611e553ce8dc32004a7900855cd442feb6fcdf2095",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/publication-793b3967.json": "eb2a4b73593e6ab8557b56419a8176d4a6c1ea173a532fe83211143306acddcb",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-174b6462.json": "276943a48c86a4799b9d3d2840bccc65ed2336fd2f51326847b5a90b6ef580cf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-6f14cc14.json": "de73b3d28233eba46d29aa30c8cb35bfae740fb1b2d95c320c80322909eb5856",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-793b3967.json": "e81ecb5ffcaeb01cf815fdab4248db46ef05c22a6f0808789e44d9e88ca80d79",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-dddc7cd0.json": "4a67ff93fd8eee13edc71b5d42f815d66cd668c0bc0c56a49e5d1ec92c527e5c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/release-e2e.json": "3a351ae9938ab2a283fdc6cd33ea045bd5559f1cd9e03d7da87fdecab5816456",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/release.py": "29e57b20bca68fc5acbe35591e5f33a550cc976cc3aed488325d9d99da25a5b0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/review-174b6462.json": "d326337e0daf77888f296809f4217a4fb96dc19c621da566aa1edd79461fe023",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/review-6f14cc14.json": "91ed90bb96a2d1c85e9f5e654fb7eb72c6768c8c9b18a74d418fa589f162e6ea",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/review-793b3967.json": "8c2c12349fd5242b83b3a7efda67e1c64226586c875e85e69b1720356b4b1ffb",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/review-dddc7cd0.json": "954e26986133278c8df2d5fb13016b1a6019697bb80520f03fde25d97cb69cd8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/submitted/unsigned-174b6462.json": "8637faa74d27c23d9d27a26f88721ec573685473d8a852dd1c675f278a9d5ed7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/submitted/unsigned-6f14cc14.json": "97fc880e9e04a285558ea3d61894dbd7c4a72580b62f37708cddd28e79c88265",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/submitted/unsigned-793b3967.json": "c9766137cb48231081375121fdb1ed5709497e0cea8c952553137cdde1758690",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/submitted/unsigned-dddc7cd0.json": "fca9073e9c4aed2e636d6498712fe65cc16bb01146312ea3d6a45add11bcd5e2"
+    },
+    "i31_release_docs": {
+      "docs/plan/claims-market-closed-loop-plan.md": "5b7d1f5338b35263b50bec2d90a520716614b47eb9906bee99dd9c13400610be",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "62c28644dc9c13e057010dd04292504a99175d74300884368ab85fd8aaf482af"
+    },
+    "i31_release_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/before-r37/docs/plan/corpus-ingestion-rebuild-tasks.md": "7181612ee5247166838dc1b7c6d08dcc4218beb078b4984a8b1ea0c3b9fb05ce",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/before-r37/docs/plan/claims-market-closed-loop-plan.md": "db08a9c0bfa17e3f899d4d5fab6041cc3ef23b6a832d2c0e8475223fc3dbff8a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/before-r37/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "686c692cec71269549dc45b85e2e29e4ab2aaa027bd5f41cf6f7c320ffd6cebe",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/before-r37/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json": "293de3790a4dbcaa9c72284e8253f97b6479948d53d56aff3eddaaeb18a3cf7e"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "fd7e3602e649057a91a29782186267dc0d5a4792dad1728b66c1c99097ff326e"
+    }
+  },
+  "real_review_records_written": 3,
+  "new_sources_published": 3,
+  "total_sources_published": 7,
+  "total_sources": 8,
+  "human_acknowledged": 12,
+  "remaining_blocking": 1,
+  "per_class_min_2": true,
+  "format_gate": true,
+  "model_calls": 0,
+  "notes": [
+    "All four human submissions are complete and preserved byte-for-byte at original paths.",
+    "Guangli page 7 remains blocked by page-only coordinate validation, not a missing signature.",
+    "Default dispositions, claimed scope, guards, source-gold, admission and implementation unchanged.",
+    "Coverage remains scoped; I3-1 counts, formats and real E2E pass; M6/I4 not released.",
+    "Historical r36 templates are explicitly reconstructed and verified against original frozen hashes."
+  ],
+  "created_at": "2026-09-20T05:52:25+00:00"
+}

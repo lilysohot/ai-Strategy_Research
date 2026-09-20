@@ -1,0 +1,152 @@
+[
+  {
+    "query_id": "company-001",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-002",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-003",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-004",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-005",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-006",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-007",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-008",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-009",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "company-010",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-001",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-002",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-003",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-004",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-005",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-006",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-007",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-008",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-009",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "industry-010",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-001",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-002",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-003",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-004",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-005",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-006",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-007",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-008",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-009",
+    "outcome": "no_match",
+    "documents": []
+  },
+  {
+    "query_id": "macro-010",
+    "outcome": "no_match",
+    "documents": []
+  }
+]

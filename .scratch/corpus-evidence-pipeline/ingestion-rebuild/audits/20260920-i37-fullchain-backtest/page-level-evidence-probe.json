@@ -1,0 +1,2175 @@
+{
+  "kind": "diagnostic counterfactual (NOT a frozen metric)",
+  "change": "evidence unit: per-document top-8 chunks -> all kept pages of retrieved docs",
+  "legality": "no gold facts used; same OR question-lexeme query; same top-5 document grouping",
+  "classes": [
+    {
+      "domain": "company",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 5,
+        "total": 8
+      }
+    },
+    {
+      "domain": "industry",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 5,
+        "total": 8
+      }
+    },
+    {
+      "domain": "macro",
+      "answerable_total": 8,
+      "doc_recall": {
+        "per_question": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      "question_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "evidence_pass": {
+        "passed": 8,
+        "total": 8
+      }
+    }
+  ],
+  "passed": false,
+  "blockers": [
+    "below_threshold:company:evidence_pass=62.5%",
+    "below_threshold:industry:evidence_pass=62.5%",
+    "critical_failed:company-003:EvidencePass 未过",
+    "critical_failed:company-007:EvidencePass 未过",
+    "critical_failed:company-008:EvidencePass 未过",
+    "critical_failed:company-009:负例被断言命中",
+    "critical_failed:company-010:负例被断言命中",
+    "critical_failed:industry-001:EvidencePass 未过",
+    "critical_failed:industry-002:EvidencePass 未过",
+    "critical_failed:industry-003:EvidencePass 未过",
+    "critical_failed:industry-009:负例被断言命中",
+    "critical_failed:industry-010:负例被断言命中",
+    "critical_failed:macro-009:负例被断言命中",
+    "critical_failed:macro-010:负例被断言命中",
+    "false_positives:6>0",
+    "fabricated_citations:6>0"
+  ],
+  "questions": [
+    {
+      "query_id": "company-001",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-002",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3",
+        "evidence_target_missing:e4",
+        "evidence_target_missing:e5",
+        "evidence_target_missing:e6"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-004",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-006",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-007",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-008",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:a-1"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "company-009",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:49"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 49
+    },
+    {
+      "query_id": "company-010",
+      "domain": "company",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:74"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 74
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2",
+        "evidence_target_missing:e3"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": false,
+      "failures": [
+        "evidence_target_missing:e1",
+        "evidence_target_missing:e2"
+      ],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-004",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-006",
+      "domain": "industry",
+      "critical": false,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-007",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "industry-009",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:52"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 52
+    },
+    {
+      "query_id": "industry-010",
+      "domain": "industry",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:52"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 52
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-002",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "critical": false,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-007",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "answerable",
+      "outcome": "ok",
+      "doc_recall": "1",
+      "question_pass": true,
+      "evidence_pass": true,
+      "failures": [],
+      "false_positive": false,
+      "fabricated_citations": 0
+    },
+    {
+      "query_id": "macro-009",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:60"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 60
+    },
+    {
+      "query_id": "macro-010",
+      "domain": "macro",
+      "critical": true,
+      "answer_existence": "no_answer",
+      "outcome": "ok",
+      "doc_recall": null,
+      "question_pass": null,
+      "evidence_pass": null,
+      "failures": [
+        "no_answer_false_positive",
+        "fabricated_citation:52"
+      ],
+      "false_positive": true,
+      "fabricated_citations": 52
+    }
+  ],
+  "targets": [
+    {
+      "query_id": "company-001",
+      "target_id": "e4",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 55,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "a-2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 74,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e1",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 44,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 41,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e3",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 97,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e1",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2026E"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e2",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2026E"
+      ],
+      "quote_len": 5,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e3",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2027E"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e4",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2027E"
+      ],
+      "quote_len": 5,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e5",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2028E"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e6",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2028E"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "e2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 159,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "a-2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 159,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "a-3",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 159,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:3"
+      ],
+      "quote_len": 61,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e3",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:3"
+      ],
+      "quote_len": 108,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e1",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:7"
+      ],
+      "quote_len": 69,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:7"
+      ],
+      "quote_len": 55,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e3",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:7"
+      ],
+      "quote_len": 149,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-007",
+      "target_id": "e1",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": false,
+      "locator_satisfied": false,
+      "locator": [
+        "page:7"
+      ],
+      "quote_len": 36,
+      "verdict": "text absent in pages"
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-1",
+      "domain": "company",
+      "matched": false,
+      "text_in_page": false,
+      "locator_satisfied": false,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 27,
+      "verdict": "text absent in pages"
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-2",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 42,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-3",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 73,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-4",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 74,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-5",
+      "domain": "company",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 73,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:纯碱",
+        "col:价格分位"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e2",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:纯碱",
+        "col:价差分位"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e3",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:纯碱",
+        "col:开工率"
+      ],
+      "quote_len": 5,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "a-4",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 31,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "a-5",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 52,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:R32",
+        "col:价格分位"
+      ],
+      "quote_len": 5,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "e2",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:R32",
+        "col:2026E产能（配额）"
+      ],
+      "quote_len": 4,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "a-3",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 25,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "a-4",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 31,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:尿素",
+        "col:开工率"
+      ],
+      "quote_len": 5,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e2",
+      "domain": "industry",
+      "matched": false,
+      "text_in_page": true,
+      "locator_satisfied": false,
+      "locator": [
+        "page:10",
+        "row:尿素",
+        "col:2026E产能"
+      ],
+      "quote_len": 6,
+      "verdict": "text present but locator missing"
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "a-3",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 42,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-004",
+      "target_id": "a-1",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 31,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-004",
+      "target_id": "a-2",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 52,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-005",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 48,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-005",
+      "target_id": "e2",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 102,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-1",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 97,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-2",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 97,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-3",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 97,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 28,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e2",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 34,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e3",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 32,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "e1",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 48,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-2",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 42,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-3",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 31,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-4",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 102,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-5",
+      "domain": "industry",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:10"
+      ],
+      "quote_len": 31,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 38,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "e2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 120,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "a-3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:3"
+      ],
+      "quote_len": 27,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 52,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 120,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e4",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 648,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 28,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 648,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 80,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-4",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 648,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 96,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 96,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 14,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-4",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 14,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-5",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 14,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-6",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 14,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-005",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 35,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-005",
+      "target_id": "a-2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 85,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 80,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "e2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 133,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "a-3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:1"
+      ],
+      "quote_len": 133,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 64,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 66,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 152,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "e1",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 49,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "e2",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 98,
+      "verdict": "matched"
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "a-3",
+      "domain": "macro",
+      "matched": true,
+      "text_in_page": true,
+      "locator_satisfied": true,
+      "locator": [
+        "page:2"
+      ],
+      "quote_len": 51,
+      "verdict": "matched"
+    }
+  ],
+  "was_kept_page_not_selected": [
+    "company-004 a-2",
+    "company-004 a-3",
+    "company-004 e2",
+    "company-005 e2",
+    "company-005 e3",
+    "company-008 a-2",
+    "company-008 a-3",
+    "company-008 a-5",
+    "industry-001 e1",
+    "industry-001 e2",
+    "industry-001 e3",
+    "industry-002 e1",
+    "industry-003 a-3",
+    "industry-003 e1",
+    "industry-003 e2",
+    "industry-008 a-2",
+    "industry-008 a-3",
+    "industry-008 a-5",
+    "macro-002 e4",
+    "macro-003 a-2",
+    "macro-003 a-4"
+  ],
+  "fixed": [
+    "company-004 e2",
+    "company-004 a-2",
+    "company-004 a-3",
+    "company-005 e2",
+    "company-005 e3",
+    "company-008 a-2",
+    "company-008 a-3",
+    "company-008 a-5",
+    "industry-003 a-3",
+    "industry-008 a-2",
+    "industry-008 a-3",
+    "industry-008 a-5",
+    "macro-002 e4",
+    "macro-003 a-2",
+    "macro-003 a-4"
+  ],
+  "locator_only": [
+    "industry-001 e1",
+    "industry-001 e2",
+    "industry-001 e3",
+    "industry-002 e1",
+    "industry-003 e1",
+    "industry-003 e2"
+  ],
+  "still_absent": [],
+  "traces": [
+    {
+      "query_id": "company-001",
+      "chunk_hits": 491,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-08-16_6f14cc14",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-16_6f14cc14": 7,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "company-002",
+      "chunk_hits": 353,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_cc03f55b",
+        "2026-08-16_6f14cc14"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-16_6f14cc14": 7
+      }
+    },
+    {
+      "query_id": "company-003",
+      "chunk_hits": 489,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_793b3967",
+        "2026-08-16_6f14cc14",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "2026-09-06_793b3967": 8,
+        "2026-08-16_6f14cc14": 7,
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "company-004",
+      "chunk_hits": 380,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "company-005",
+      "chunk_hits": 321,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "2026-09-06_f8e31696"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_f8e31696": 11
+      }
+    },
+    {
+      "query_id": "company-006",
+      "chunk_hits": 472,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "2026-09-06_793b3967",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_793b3967": 8,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "company-007",
+      "chunk_hits": 317,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-09-06_cc03f55b",
+        "2026-08-16_6f14cc14",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-16_6f14cc14": 7,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "company-008",
+      "chunk_hits": 447,
+      "documents": [
+        "2026-09-06_dddc7cd0",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-08-16_6f14cc14",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_dddc7cd0": 22,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-08-16_6f14cc14": 7,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "company-009",
+      "chunk_hits": 353,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-09-06_f8e31696",
+        "2026-09-06_dddc7cd0",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_dddc7cd0": 22,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0
+      }
+    },
+    {
+      "query_id": "company-010",
+      "chunk_hits": 268,
+      "documents": [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_f8e31696",
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_dddc7cd0": 22,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "chunk_hits": 492,
+      "documents": [
+        "2026-08-13_174b6462",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_f8e31696",
+        "2026-09-06_793b3967"
+      ],
+      "pages": {
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_793b3967": 8
+      }
+    },
+    {
+      "query_id": "industry-002",
+      "chunk_hits": 481,
+      "documents": [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-08-13_174b6462",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-09-06_cc03f55b",
+        "2026-09-06_dddc7cd0"
+      ],
+      "pages": {
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-08-13_174b6462": 25,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_dddc7cd0": 22
+      }
+    },
+    {
+      "query_id": "industry-003",
+      "chunk_hits": 332,
+      "documents": [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "2026-09-06_dddc7cd0"
+      ],
+      "pages": {
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_dddc7cd0": 22
+      }
+    },
+    {
+      "query_id": "industry-004",
+      "chunk_hits": 501,
+      "documents": [
+        "2026-08-13_174b6462",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-09-06_cc03f55b",
+        "2026-09-06_f8e31696",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-08-13_174b6462": 25,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_f8e31696": 11,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "industry-005",
+      "chunk_hits": 495,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-09-06_793b3967",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_793b3967": 8,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0
+      }
+    },
+    {
+      "query_id": "industry-006",
+      "chunk_hits": 284,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "industry-007",
+      "chunk_hits": 389,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-08-13_174b6462",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_cc03f55b",
+        "2026-09-06_dddc7cd0"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-08-13_174b6462": 25,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_dddc7cd0": 22
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "chunk_hits": 291,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "2026-09-06_793b3967",
+        "2026-08-16_6f14cc14"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_793b3967": 8,
+        "2026-08-16_6f14cc14": 7
+      }
+    },
+    {
+      "query_id": "industry-009",
+      "chunk_hits": 311,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-09-06_f8e31696",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_f8e31696": 11,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "industry-010",
+      "chunk_hits": 238,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "macro-001",
+      "chunk_hits": 400,
+      "documents": [
+        "2026-09-06_793b3967",
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-09-06_793b3967": 8,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "chunk_hits": 485,
+      "documents": [
+        "2026-09-06_793b3967",
+        "2026-09-06_cc03f55b",
+        "2026-08-16_6f14cc14",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_f8e31696"
+      ],
+      "pages": {
+        "2026-09-06_793b3967": 8,
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-16_6f14cc14": 7,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_f8e31696": 11
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "chunk_hits": 303,
+      "documents": [
+        "2026-09-06_793b3967",
+        "2026-08-13_174b6462",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_f8e31696",
+        "2026-09-06_cc03f55b"
+      ],
+      "pages": {
+        "2026-09-06_793b3967": 8,
+        "2026-08-13_174b6462": 25,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_f8e31696": 11,
+        "2026-09-06_cc03f55b": 16
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "chunk_hits": 436,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462",
+        "2026-09-06_dddc7cd0"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_dddc7cd0": 22
+      }
+    },
+    {
+      "query_id": "macro-005",
+      "chunk_hits": 456,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-09-06_dddc7cd0",
+        "2026-08-16_6f14cc14",
+        "2026-09-06_f8e31696",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_dddc7cd0": 22,
+        "2026-08-16_6f14cc14": 7,
+        "2026-09-06_f8e31696": 11,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0
+      }
+    },
+    {
+      "query_id": "macro-006",
+      "chunk_hits": 478,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_793b3967",
+        "2026-09-06_f8e31696"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_793b3967": 8,
+        "2026-09-06_f8e31696": 11
+      }
+    },
+    {
+      "query_id": "macro-007",
+      "chunk_hits": 423,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "2026-09-06_793b3967",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_dddc7cd0"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "2026-09-06_793b3967": 8,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_dddc7cd0": 22
+      }
+    },
+    {
+      "query_id": "macro-008",
+      "chunk_hits": 422,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "2026-08-13_174b6462",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_793b3967"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "2026-08-13_174b6462": 25,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_dddc7cd0": 22,
+        "2026-09-06_793b3967": 8
+      }
+    },
+    {
+      "query_id": "macro-009",
+      "chunk_hits": 347,
+      "documents": [
+        "2026-09-06_f8e31696",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_cc03f55b",
+        "2026-09-06_793b3967",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_f8e31696": 11,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_cc03f55b": 16,
+        "2026-09-06_793b3967": 8,
+        "2026-08-13_174b6462": 25
+      }
+    },
+    {
+      "query_id": "macro-010",
+      "chunk_hits": 242,
+      "documents": [
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-09-06_f8e31696",
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "2026-08-13_174b6462"
+      ],
+      "pages": {
+        "2026-09-06_cc03f55b": 16,
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 0,
+        "2026-09-06_f8e31696": 11,
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 0,
+        "2026-08-13_174b6462": 25
+      }
+    }
+  ]
+}

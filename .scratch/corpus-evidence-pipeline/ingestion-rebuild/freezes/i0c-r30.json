@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "i0c-r30",
+  "revision": "r30",
+  "phase": "i0c",
+  "task": "I3-2 stage sign-off: named human sign-off recorded and bound; generators bound (fixing the r29 'generator not traceable' defect); completion gate now requires a named, in-chain sign-off",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r29",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r29.json",
+    "sha256": "0806a380f28ab2e307d2b9010162a9b190637c13bec568c3300e25f2c9b8af9a"
+  },
+  "binding": {
+    "i3_2_signoff": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/signoff-record-i3-2.json": "efc8082806c098ba3611c26de8c2825887fdb726e4ebc0ee29e74ab1f220bf7e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/signoff-record-i3-2.md": "4c313aa3eb8dbb2f0901bf4ad3df6f7544b70be3b4a23d116c591dfc192ae81d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/sign_and_freeze_r30.py": "9964276867fd25ee9144e890e883ef770136c52a67ef6b74e4f8fb2582c5a57e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step-abc-record.md": "c3e0e9cbb1a545e1291b50a5526c4f883d934ee650879fb929c840e7872f84c2",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5_review.py": "80364cb7b92e03af571dcfd6d36f015b5376f798e57bd529ed728038575cf0f5"
+    },
+    "i3_2_generators": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/generate_p2_p3_p4.py": "37f86c3cb9e396fa4bc4f14e3cd3db89c18a49926179b131eaea2117d9be45d3",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/freeze_r29.py": "9b67a963f40bdfd7350b3b994a6827b9cdd3d586c2c0e6b23aa6c77b3e6e0a96",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/rebuild_r29.py": "07de6f9743dfaafd4e5da32783651e11a64fcee72b7388a51306800160858b27",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/fix_r29_archive.py": "e3e9107130f8c2f46e10c55fd531feb4f7fd93d94f7571baf41459f7ef1a123b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/fix_paths_r29.py": "6ec67a7abdbf2d9e715e7f51cecab8e0110008314b4c28a4abe48d88cb65b43f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/fix_r30_gate_constant.py": "db46f23a3fab9ec2a7ea9ba18d15e24fd98e7ab4118331ed15c9bb8f37cac055"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r30/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "e53995ebb840abcdb30bfebe11ca96bfec4e665eb1422679c8459a73d74c3831",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r30/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i3_2_completion.py": "93b313a9ed966dedd773e8587c03b00c1cc27c1a46e5deb59aa7f603ac0a7ea1",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r30/docs/plan/corpus-ingestion-rebuild-tasks.md": "810d1b2ac37650cc3754c977c37cfe85f3c9d10cdc2d01ced8c3bb0985e8e3ee",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r30/docs/plan/claims-market-closed-loop-plan.md": "80d4220caf0ec72b763d44aff27bfd32e4f657a203acfcf3ab9d234b2f811610"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "75318b8a8d127d5f89b190904c28530709b0b270696bda9d094050a108c90032",
+      "docs/plan/claims-market-closed-loop-plan.md": "5a3678347fcd7b512b351f7eddacde5713e72839af8a5963e2c84aab5366cf8b"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "43ce9a002ed4585e648ca9f3da4cad1067eed1ffd5b48805305da201825aaaf6",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i3_2_completion.py": "2251576336ff1743dae7babae935947366768215481ac8a7f58096af5557ee38"
+    }
+  },
+  "corrections": {
+    "I3-2_stage_signoff": "具名审核人 xyl 于 2026-09-19T20:10:00+08:00 确认 I3-2 阶段签认（复核通过 0 fail／1 观察项；签认 4 项 claim、明确 6 项不含：I3-5/I3-1/I3-7、20 条同义 warning、19 题映射人工复核、prose 留出、M5 F3）",
+    "I3-2_generator_binding": "修正 r29 登记的『生成器不可追溯』：绑 generate_p2_p3_p4.py 与 r28/r29 冻结脚本，产物自此可由生成器 + 输入复现",
+    "I3-2_review_no_write_guard": "复核脚本加『已签记录不得重写』守卫（原先每次运行都会重写含时间戳的签认/复核产物，会在签认后破坏签名与已绑定字节）",
+    "I3-5": "真实非回归与 I3-1 E2E 仍未执行，需环境与预算授权；本修订不改变该状态",
+    "I3-2_completion_gate_signoff_check": "完成门新增『阶段签认（具名 + 入链）』判据；补 SIGNOFF_JSON 常量后判据生效"
+  },
+  "created_at": "2026-09-19T10:21:00.541528+00:00",
+  "notes": [
+    "零模型、零数据库写入；本修订只写签认记录、脚本与台账，未触碰评分器/金标/守卫/审批原件。",
+    "完成门新增判据后，I3-2 的完成判定包含『签认具名且入链』——避免未签认即宣告完成。"
+  ]
+}

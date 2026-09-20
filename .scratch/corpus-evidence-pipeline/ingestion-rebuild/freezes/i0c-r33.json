@@ -1,0 +1,47 @@
+{
+  "snapshot_id": "i0c-r33",
+  "revision": "r33",
+  "phase": "i0c",
+  "task": "I3-0 stage sign-off: independent-review F1-F5 remediation closure signed by named human; review evidence face (report/probes/replay entry) bound so the ruling and its evidence share bytes",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r32",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r32.json",
+    "sha256": "83d46db7b6118335c2bd4600ec16019661562040ab59e945bacdf201f4ea3867"
+  },
+  "binding": {
+    "i3_0_signoff": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/signoff-record-i3-0.json": "ed4521cc31c9f275bd146214d81a1701c04b106d28a57594061c1640f08cab3a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/signoff-record-i3-0.md": "969e44f8ee1767e78ec1340628f4a236bfce9f55c016f02a103bf0079919e4b7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/sign_and_freeze_r33.py": "67bbdf31c4ebbc556ff8d608ebea163f30757407cd5edf0c7366a8f465c16d6d"
+    },
+    "i3_0_review": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/review.md": "af49cb9f547a40172a12a8d3bc0661576a1714d6d965abe47263b3bbe70b3c3f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/test_review_probes.py": "ae848543293ef50de056f4b168a6306855dc04243e90438787615949bfd05e5b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/run_review.py": "fb8e3f41bebb993b7ad752ed399779beeb7732b503394656417d9494e97f1302"
+    },
+    "i3_0_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/before-r33/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "30a6a0d2159ef81e99b72443c2eadb048b84abb80d4c37c885a6a49653ea2ef8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/before-r33/docs/plan/corpus-ingestion-rebuild-tasks.md": "c400152de88dadb9c382adf41320dfd0d55b64d86cc2551b506e7f7a26fb1035",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/before-r33/docs/plan/claims-market-closed-loop-plan.md": "f7a3061d48e330d4fad14c72ead7e0252910333bdabf41d725e3d2cb95aab340"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "379f115f7686d73e093fd73a773d53589325eb5070d8e2e506ca2d1a04bdfc1d",
+      "docs/plan/claims-market-closed-loop-plan.md": "d25a2175db1eb4dcb36350a0ebebd835650df51a52df21dc602868ed799eac99"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "4191a9ed4ec849708ef702f614c69edbd6ff38d6012a55477bfb5665ab579ab7"
+    }
+  },
+  "corrections": {
+    "I3-0_signoff": "具名审核人 xyl 于 2026-09-19T09:30:00+08:00 确认 I3-0 阶段签认：独立复核 F1—F5 以修复不变量方式闭环（探针 10/10、自身 46 passed）；签认 4 项 claim、明确 6 项不含",
+    "I3-0_review_evidence_bound": "绑定复核报告 review.md、独立反例 test_review_probes.py（原文件未改）与复跑入口 run_review.py，使 I3-0 裁决的字节面与证据面同一（同 M5 先例）",
+    "I3-0_not_covered": "I3-1（r32 单独入链，判定未完成）、I3-2 阶段（r30 签认）、I3-5 真实非回归、I3-7 语义验收、M5 F3 均不在本签认范围；本签认不代表 I4 放行",
+    "I3-5": "真实非回归与 I3-1/I3-7 仍未执行，需环境与预算授权；本修订不改变该状态",
+    "r32_archive_check_time_dependence_fix": "机制修正（同 r32 自身『机制缺陷修正』先例）：r32 块的 prev32 原合并『除 r32 外的全部快照』，r33 重绑 docs/validator 三路径后该检查会随后续修订变化而失真；改为仅合并 r31 及更早（revision_order >= 32 一律跳过），r32 归档忠实性断言自此对后续修订稳定"
+  },
+  "created_at": "2026-09-19T23:49:11+08:00",
+  "notes": [
+    "零模型、零数据库写入；本修订只写签认记录、收口脚本与台账，未触碰评分器/金标/守卫/审批原件。",
+    "评分器与测试字节仍是 r21 绑定（本轮不重绑 plugins/ 或 tests/）；验证器 r33 块强制该不变量。"
+  ]
+}

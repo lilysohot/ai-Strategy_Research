@@ -1,0 +1,8 @@
+{
+  "kind": "diagnostic (NOT a frozen regression)",
+  "scorer_working_tree_sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
+  "frozen_assets_ok": true,
+  "manifest_lineage_scorer": "patched in-memory to working-tree hash (disk manifest untouched)",
+  "note": "scorer 为工作树空白规约版（f61573d7），未冻结未采纳；本回测仅实测 S2+S3+S4 组合",
+  "checked_at": "2026-09-20T22:42:55+08:00"
+}

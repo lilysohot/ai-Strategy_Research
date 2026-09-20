@@ -1,0 +1,112 @@
+{
+  "artifact": "i3-2-completion-gate",
+  "generated_at": "2026-09-20T13:52:26",
+  "verdicts": {
+    "上游审批有效（建议件 → 批准投影 → 完整性门）": "pass",
+    "正式评分输入派生件一致": "pass",
+    "P2 阈值/关键题/负例与冻结物一致": "pass",
+    "旧基线身份/范围闭环（含『无未冻结指针』）": "pass",
+    "唯一初始实验 manifest": "pass",
+    "全部必要资产哈希入链": "pass",
+    "阶段签认（具名 + 入链）": "pass",
+    "留出隔离覆盖（guard ⊇ 留出清单）": "pass",
+    "旧锚点映射规则级复核关闭": "pass",
+    "尾巴收口记录（无 open 项 + 入链）": "pass"
+  },
+  "results": [
+    {
+      "item": "上游审批有效（建议件 → 批准投影 → 完整性门）",
+      "status": "pass",
+      "evidence": [
+        "ready=True；blockers=0；warnings=20",
+        "approval-report 与 decisions 绑定：based_on={\"candidates_sha256\": \"7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a5"
+      ]
+    },
+    {
+      "item": "正式评分输入派生件一致",
+      "status": "pass",
+      "evidence": [
+        "派生件 sha256=1b018ceb081f…；counts={\"questions\": 30, \"answerable\": 24, \"no_answer\": 6, \"required\": 79, \"supplementary\": 20}",
+        "manifest.status='frozen_r28'（**仍标 pending**，未随冻结更新）"
+      ]
+    },
+    {
+      "item": "P2 阈值/关键题/负例与冻结物一致",
+      "status": "pass",
+      "evidence": [
+        "policy 记录={\"top_k\": 5, \"min_rate\": \"19/20\", \"require_critical_all_pass\": true, \"max_false_positives\": 0, \"max_fabricated_citations\": 0}；代码现值={\"top_k\": 5, \"min_rate\": \"19/20\", \"require_critical_all_pass\": true, \"max_false_positives\": 0, \"max_fabricated_citations\": 0}",
+        "关键题 28（记录 28）；负例 6（记录 6）"
+      ]
+    },
+    {
+      "item": "旧基线身份/范围闭环（含『无未冻结指针』）",
+      "status": "pass",
+      "evidence": [
+        "manifest.status='frozen_r27'（pending_freeze=False）；待你定/补=0",
+        "引用资产**未入链** 0/14：{}",
+        "引用资产文件缺失：{}",
+        "仍未解决条（to_be_resolved/needs_definition/needs_user_scope）：[]"
+      ]
+    },
+    {
+      "item": "唯一初始实验 manifest",
+      "status": "pass",
+      "evidence": [
+        "status='frozen_r28'；缺组件=[]",
+        "唯一评分输入='.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl'（unique=True；草稿仅作 lineage 对照=True）",
+        "执行段（命令/环境/初始参数）=有；未实现入口登记=2 项"
+      ]
+    },
+    {
+      "item": "全部必要资产哈希入链",
+      "status": "pass",
+      "evidence": [
+        "正式评分输入: 入链",
+        "评分输入清单: 入链",
+        "评分输入派生器: 入链",
+        "P2 确认单: 入链",
+        "P3 对账: 入链",
+        "P4 清单: 入链",
+        "旧基线用例清单: 入链",
+        "阶段完成门: 入链"
+      ]
+    },
+    {
+      "item": "阶段签认（具名 + 入链）",
+      "status": "pass",
+      "evidence": [
+        "status='signed'；reviewer='xyl'；decision='批准（I3-2 阶段签认）'；reviewed_at='2026-09-19T20:10:00+08:00'",
+        "记录入链=是"
+      ]
+    },
+    {
+      "item": "留出隔离覆盖（guard ⊇ 留出清单）",
+      "status": "pass",
+      "evidence": [
+        "forbidden_roots=5 份；声明留出 1 项",
+        "未被覆盖：无"
+      ]
+    },
+    {
+      "item": "旧锚点映射规则级复核关闭",
+      "status": "pass",
+      "evidence": [
+        "status='rule_verified_closed'；锚点 22 个；未确认 0",
+        "复核 22 通过 / 0 失败；授权='U（2026-09-19 会话授权）'"
+      ]
+    },
+    {
+      "item": "尾巴收口记录（无 open 项 + 入链）",
+      "status": "pass",
+      "evidence": [
+        "条目 5 个；open=无；入链=是",
+        "T1=closed；T2=closed；T3=closed；T4=blocked_needs_environment；T5=registered_out_of_scope"
+      ]
+    }
+  ],
+  "failed_items": [],
+  "i3_2_complete": true,
+  "note": "本门只判『I3-2 的冻结物是否齐备且一致』；真实非回归与 E2E 属 I3-5/I3-1，恒为 not_run，不得用本门通过代替业务通过。"
+}
+
+exit=0

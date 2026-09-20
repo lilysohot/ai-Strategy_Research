@@ -1,0 +1,58 @@
+{
+  "snapshot_id": "i0c-r31",
+  "revision": "r31",
+  "phase": "i0c",
+  "task": "I3-2 tail closure (U-authorized): prose holdout added to guard forbidden_roots (4->5); legacy anchor mapping closed by rule verification; synonymy warnings registered as accepted risk; completion gate extended to 10 criteria; M5 F3 registered out of scope (i1 chain untouched)",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r30",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r30.json",
+    "sha256": "908b630ebc5679aeaea963deff37e38aa2d1210c171403941d2512bc92edfcc1"
+  },
+  "binding": {
+    "i3_2_closure": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/i3-2-closure.json": "b6417eae4b88eb597f4eed5b22bb6c7ba76550720f5b43ced9521eabf4ba9324",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/i3-2-closure.md": "d8ff27434d56ee1bb625ebd539062850c020a53c34eb5e85213ece9fa5ee18ce",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/close_i3_2_tail.py": "4d6db3644ed95866363269e2ff8136810203e3767ef0897e14da61fcbcf34410",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze_utils.py": "a31cf870430a78e46a04c8fb1c968c7d21ca9a26a7aa301603493ea48c4b9e9f"
+    },
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json": "7fbeda45c97819864a74bdd8ad9f0346810404f0fbcccca7f47ed3e74ef2ff46",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.md": "6a66305d76d4fc641a8aa97de4be5e64aea269637a88b13c97e8777385daa131",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.json": "4cc53b3d7f6a7ecdc010fdadcf559451fa6f405281af0c744d72740f683b7846",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.md": "d1b4da5f002b91e9344634b150bd4c2735452ae8750652ac43676180adeca05b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-review.json": "a312fbc016390d02371ed95ed4410c0d971ae7b0ed4ca558b528cb0b5c8268d4",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-review.md": "b3004f307465ea1ea8e72bc8c26266f5e7f90da7eaa4b78f4debdecbfa54b19d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-diff-pack.md": "9ed4ee200539b6fd6e386fb46163dca43e09e88627ca3e7b32eb5b174f36c74e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5_review.py": "2d184d0deef195cb55b2e2828bd52500f2cb8df85094b5cbff08de19273dbef6"
+    },
+    "guard": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json": "cd36e91f9e76c880dc1f291981c95d1210e0862017afb7eecff708e3546df593"
+    },
+    "i3_2_archive": {},
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "2c52d0fa9b20739c81329c7fc77a9b792cdc4a7523face89f65cf229bf8768cc",
+      "docs/plan/claims-market-closed-loop-plan.md": "15c5152e99ff0ecc8a0249f2074308a7045ae5cad90382cf763d0cd6e55c7364"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "8d937cbf2fc7dbeeb4144fe99a154eea280a19a26d0964cf16cd890a85fd2c55",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i3_2_completion.py": "d415afc50db3521cce34b39b0e7fec30cb7653d2f633b3d7e223c78f29ad8edf"
+    }
+  },
+  "corrections": {
+    "I3-2_prose_holdout_guard": "prose 留出件（天风 5520fab6，prose_holdout_manifest 声明的 held_out_prose_and_temporal_negative_control）此前未被守卫覆盖 → forbidden_roots 4→5；完成门新增『留出隔离覆盖』判据",
+    "I3-2_mapping_rule_verified": "19 题旧锚点映射按确定性规则复核关闭（标题子串唯一命中 + 来源路径在磁盘 + 与已标注 source-gold 同源）；声明 closure.kind=rule_verified_by_authorization（非逐题人工通读），基础材料可机器复算",
+    "I3-2_synonymy_warnings_accepted": "20 条人工同义映射 warning 作为已接受风险入册（字面出处机器核验、语义由具名人工按决定 1 承担；warning 原样保留供抽样审计，不改审批件）",
+    "I3-2_tail_closure": "收口记录 i3-2-closure.json：T1/T2/T3 closed，T4（I3-5/I3-1/I3-7）blocked_needs_environment，T5（M5 F3）registered_out_of_scope；完成门新增『收口记录无 open 项且入链』判据",
+    "M5-F3_registered": "validate_i1_freeze.py 的 13 项失配属 **i1 链**历史漂移（preparation 实现 4 件 + 测试 9 件在 I2 阶段被合法改动，i1-r3 绑定未随之更新）；按诊断稿单列跟踪，本轮不动 i1 链，建议后续 i1-r5 重绑",
+    "I3-5": "I3-5 真实非回归与 I3-1/I3-7 仍未执行，需隔离 PG、来源读取与预算授权",
+    "I3-2_archive_order_defect_2": "**同类流程缺陷第三次发生（本轮如实清空归档组）**：r31 的所有归档副本都是在改动之后复制的，因此**没有任何一条是真实的 pre-r31 字节**；已把 `i3_2_archive` 整个清空（不留假证据），本轮共删除 5 条不真实归档声明。**机制修复（已落地并入链）**：新增 `freezes/freeze_utils.py`（`archive_first` + `assert_archives_faithful`），新修订必须在任何写入之前调用 `archive_first`，并由 `assert_archives_faithful` 拒绝不忠实归档；验证器 r31 规则同步改为**正向不变量**：`i3_2_archive` 的每一条都必须等于上一修订对该原路径的绑定（空组合法，假归档必失败）。被覆盖文件的内容可由链上生成器复现，仅时间戳不可复现。",
+    "I3-2_archive_order_defect_3": "新增的『归档忠实性正不变量』检查**顺带暴露**：r29 的 3 条归档（validate_i0c_freeze.py 与两份台账）同样是 post-change 副本（同类顺序缺陷的第 5 次出现）。r29 已冻结、字节不可追改，故只把该判定**登记在此**，并在验证器里对 r29 降级为 NOTE（不失败）；**r31 起为硬不变量**（`i3_2_archive` 每条必须等于上一修订绑定，空组合法）。结论：r29/r31 的归档声明均不可作为\"改动前字节\"凭据；本会话的权威字节凭据只有各修订的绑定哈希。"
+  },
+  "created_at": "2026-09-19T10:26:13.137991+00:00",
+  "notes": [
+    "零模型、零数据库写入；本轮改动限于守卫留出清单、映射/清单收口标记、完成门判据与台账。",
+    "完成门 10 项判据全绿只表示 I3-2 冻结物与尾巴齐备，**不代替** I3-5/I3-1 的业务通过。",
+    "守卫 forbidden_roots 由 5 份（修正后）承担留出隔离：贝特利/中银/华泰/国信/天风；已剔除误收的 :Zone.Identifier 附属文件。",
+    "归档如实化：i3_2_archive 只含 5 条经上一绑定校验的真实归档；4 个文件的 pre-r31 字节不可得（已在 corrections 登记）。"
+  ]
+}

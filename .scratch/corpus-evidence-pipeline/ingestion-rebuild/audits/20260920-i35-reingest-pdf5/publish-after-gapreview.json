@@ -1,0 +1,26 @@
+{
+  "maotai": {
+    "exit": 0,
+    "gen": 1,
+    "active": "2fc48247fa4777681cdb3b726b1193b7b43e7d8968671178e54d502c4afdeb3f",
+    "error": null
+  },
+  "guangli": {
+    "exit": 0,
+    "gen": 1,
+    "active": "f3221a1e91e2b9edbb7c9ab1e6ed44e08c92462e5920bd251cfa912721213740",
+    "error": null
+  },
+  "changjiang": {
+    "exit": 0,
+    "gen": 1,
+    "active": "f467708311ed8c6409e1d9bcf2fd326735777ecc399ff3519afa13016962ee55",
+    "error": null
+  },
+  "guangda": {
+    "exit": 0,
+    "gen": 1,
+    "active": "9af73f907a8276c715f41cc55e29b7ef95d48db095be73e89739ce95763db677",
+    "error": null
+  }
+}

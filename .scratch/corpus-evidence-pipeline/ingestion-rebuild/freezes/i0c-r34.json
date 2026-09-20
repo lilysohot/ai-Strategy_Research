@@ -1,0 +1,97 @@
+{
+  "snapshot_id": "i0c-r34",
+  "revision": "r34",
+  "phase": "i0c",
+  "task": "I3-1 second run under U-decided dev lane: MD/DOCX real dev samples admitted dev-only, architecture §12.1 format gate satisfied while production in_scope judgement stays unchanged",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r33",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r33.json",
+    "sha256": "55567d4aa2a6cf9a500f05aa8a2dec4ca169d5c96081d7b19fa581d70cd32e99"
+  },
+  "binding": {
+    "i3_1_dev_lane_policy": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/admission-policy-dev.json": "0f9eb511b4afdd184fe52a8ceeb14ba2aba4a5060a355335e9619cc9d5616e2e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/dev-scope-manifest.json": "8487c51b548e4427b31da8d545a7aa91591f1b353290a06486483cabcfd9d4d1"
+    },
+    "i3_1_dev_lane_preflight": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/preflight_scope_check.py": "e66c3c0a524dc98b4737b596a62956902866e9eba972a3c8e3266d082459e60e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/preflight-scope-check.json": "c223fdbe20c7537a5dcc7c4d23217ab10b16581e05d6dde6c65bc69ba2769304",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/preflight-scope-check.failclosed-no-dev-lane.json": "8c493bd951f51e2332e11dc2a2011fa1adc8178e652d5a944270c5e76564828c"
+    },
+    "i3_1_dev_lane_guard": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/i3_e2e_guard_selfcheck.py": "1c4406debf64ec1f718273fa7351727594af43f457a63d1fc864250e6733f53a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/i3-e2e-guard-report.json": "2abab53d75c9f5d0354d956ef7dab1f0eb5de1c234d52c292f70bdd6e1262459",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json": "3faac9e01fc3aa5277cdbc7b181bce25680b478c5b8bdd3f40b6538d65701b6a"
+    },
+    "i3_1_dev_lane_run": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/run_i3_1_dev_lane.py": "c33391f63a07489a9c4b3cb2fa41e59463808442d544c790fb2b99f4d6453cc1",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/i3-1-dev-lane-e2e.json": "fd58dd680a8890b6a445c28b5b9b006ef542fd5de85fc5d74ca35d8ab9d62a7d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/i3-1-dev-lane-e2e.md": "56d1e4b03442fe9f05cd1f40ce58f255dd7b7b51517165499250ff98913219eb",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/verify_dev_lane_admissions.py": "314f8a7093f5e0470c407a31f9bc816b0ce50f3bc4572d24457fab50149a93b5",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/dev-lane-admission-verification.json": "1f2d04011ed2dce68c48b5cda3c7f45d5d2f9c97a0289dc036376529d36b17a3",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/freeze_r34.py": "1196833e17c5283b6591132ff1037686b2c2d3a1afa435dce3dcaeb8e4ae2469"
+    },
+    "i3_1_dev_lane_review": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/run_review.py": "cee522b6188d48910a80a4a550e4650cee1e6a09bc6796e527ad00cf29a04a08",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/test_dev_lane_probes.py": "328d9f0f6ecf12e8835fde5c4b4a97ac37b527813ccbff2465d0dbbc8a83ea0e",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/freeze-validation.txt": "9b0f9af5b53a5865cedf3e4a5792bad511ead8447e355769fd247adf82d77d11",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/baseline.txt": "1f8e9df5290deb8a0fc3b7ecc7cbcfd4365a19d0606c4c2ff6e7e763c4af9e52",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/independent-probes-r33.txt": "69a2c24e4f1409e91ee5a0f3e655ab88a6f094d1c225c0d758ec41a1452e2a8f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/independent-probes-dev-lane.txt": "79adf7d84abb120407de5feb211a0eeacb59bd772ec4dba349bb1ff777fa5cdf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/m5-evidence-recheck.json": "1cc7962fb191d3b77b5867d49ef2719dacfa8ec4d0f56fbd4449537086f9d17a"
+    },
+    "i3_1_dev_lane_code": {
+      "plugins/corpus/preparation/admission.py": "37b17e9b7aeccf99453e8de76b8437c9930628b6dace88361803ab5c287e7d80",
+      "plugins/corpus/preparation/contract.py": "d665bdc5734adc304bcfd7da5386c377cf16c6e41a272abb80fef8b513f413f0",
+      "plugins/corpus/cli.py": "4b23166e9cd5bd1d2cf7e2a31e7f25ca6090cca55f3637aebe20dffb0e15ede9",
+      "tests/test_corpus_preparation_admission.py": "ccfd2dd833b9dc582618339a92a5ed35c831e96a639802660d2c93ffed783ee7"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "4d7ac148cec0ac8b07eb4f8497e8eddc137c605a56ef735522c2c80ccead60fa",
+      "docs/plan/claims-market-closed-loop-plan.md": "f2fbaf2f86830cbaf974143a764d55add600894672c5f1b1668ebf111acdbb4e",
+      "docs/plan/corpus-ingestion-rebuild-architecture.md": "3e47047f006af0753d037a21515d4430b75381b06b99ca5faea839a513d410d2"
+    },
+    "i3_1_dev_lane_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/plugins/corpus/preparation/admission.py": "3521f495ab3533f8dcb63177d83b0dfc68a724b728ac6107dabac4beffb372b4",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/plugins/corpus/preparation/contract.py": "9bfabde208a2072acfd296b782db4a2426899210652f3531750cdcaed70ebed2",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/plugins/corpus/cli.py": "d02ea4044baa5a81f1320bffd6221c437a3e8b1d0b640bbc2cdc89d6a15320ed",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/docs/plan/corpus-ingestion-rebuild-architecture.md": "f786277d88a9cd5c05d0d90f1bca8d7e2738a758e125bce1f5b9305e3d50151d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/tests/test_corpus_preparation_admission.py": "062953f2ae964771de4c6cbec65c36131ee0b284d7703093f3fbba787710f041",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/docs/plan/corpus-ingestion-rebuild-tasks.md": "379f115f7686d73e093fd73a773d53589325eb5070d8e2e506ca2d1a04bdfc1d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/docs/plan/claims-market-closed-loop-plan.md": "d25a2175db1eb4dcb36350a0ebebd835650df51a52df21dc602868ed799eac99",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/before-r34/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json": "d7849ad21b2e16eff1903c779cdefe3fd329a0145b4063703018df80cf871214"
+    },
+    "i3_1_dev_lane_sources": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/17/174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0.pdf": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/48/48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f.docx": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/6f/6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11.pdf": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/79/793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a.pdf": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/cc/cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128.pdf": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/dd/dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa.pdf": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/f8/f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560.pdf": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane/f8/f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb.md": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "fa1c9860e01a2b8c5a6ba8ce83ac0916aeac778b327e52e61ed2dba997b861f8"
+    }
+  },
+  "corrections": {
+    "I3-1_format_gate": "§12.1 格式门满足：pdf 2/6 + docx 1/1 + md 1/1 均有可发布样本（8 份真跑，4440 单元 / 794 切块，审计冲突 0）",
+    "I3-1_dev_lane_design": "dev lane 为独立政策文件（policy_rev=v2-dev-20260920、scope=dev、production_in_scope_unchanged=true、逐源 dev_lane.sources），装载需显式 allow_dev_lane（CLI CORPUS_DEV_LANE=1），否则 fail-closed；生产政策 admission-policy.json(v1) 与 i0a2 终态逐字不改",
+    "I3-1_per_class_still_false": "逐类可发布 company 1/3、industry 2/3、macro 1/2 → per_class_min_2 仍为 false（裁定①阻断缺口处置路径未解，company 0/2 的 13 处缺口依旧）；本轮结果不构成 I4 放行依据",
+    "I3-1_production_unchanged_evidence": "双证：①dev lane 反例族（不给 allow_dev_lane 装载被拒 / v1 政策下仍 policy_conflict / 未列入清单来源不放宽）；②预检 fail-closed 反例（同清单不给 --dev-lane 判 FAIL、裁定冲突 2、格式仅 pdf）",
+    "I3-1_contract_policy_bound_material": "in_scope 允许材料类型改为按 policy_rev 绑定（contract.IN_SCOPE_MATERIALS_BY_POLICY_REV）；v1 逐字不变，未知 rev 落最严默认（fail-closed）；dev 落库材料类型如实为 internal_committee_report / internal_unattributed",
+    "I3-1_scope_eligibility_conflict": "§5.2 新增对账条款：准入按材料类型/领域判、不按文件后缀判；格式可得性为 §12.1 对账项，dev lane 是唯一分层例外；§12.1 增 format_availability 对账表与 I0A-2 前置",
+    "I3-1_supersedes_r32_guard_scope": "机制修正：r32 块断言 i3-e2e 守卫允许来源恰为批准集 6 份；r34 依 U 裁决追加 dev lane 2 份（合计 8）。r32 块改为在 r34 存在时按『批准集 + dev lane 清单』逐条一致核对（不得多、不得少），数量断言随之取 6 + len(dev_lane.sources)",
+    "I3-1_supersedes_r32_selfcheck": "机制修正：守卫配置变更使 r32 目录的旧自检报告不再等于当前守卫字节（旧报告 write-once 保留）。r32 块改为在 r34 存在时由 dev lane 目录的新自检报告（passed=true 且 config_sha256=当前守卫）承担",
+    "I3-1_review_evidence": "复核面与裁决面同一：本轮复核入口 run_review.py + 新增独立反例 test_dev_lane_probes.py（11 例）+ 日志（冻结链门/评分器基线 46 passed/r33 探针 10 passed/M5 证据 20 blocks 零 miss 零 error）一并入链；r33 目录绑定件未被重写（另建入口，写本目录）",
+    "I3-1_i1r4_supersession_fix": "机制修正：i1-r4 的 supersession 跳过集合原硬编码为 i0c-r2..r25，与其自身注释（『i0c-r2..r33 显式重绑的路径改由 i0c-current 核对』）不一致；r34 重绑了两条只被 i1-r4 绑定的路径（preparation/admission.py、contract.py），故把列表补齐到 i0c-r34",
+    "I3-1_archive_discipline": "归档忠实性：本修订覆盖 8 条绑定路径，其 pre-r34 字节以两法取得并逐条断言等于在效的上一修订绑定——①4 条由 git HEAD 还原（已核对 HEAD == 绑定）；②4 条由脚本逆向还原（tests/…admission.py、tasks.md、plan.md、guards/i3-e2e.json）。**在效绑定的取值口径**：只在 i0c 链上绑定的路径必须取 i0c ≤33 的合并值——`i1-*` 在合并序上晚于 `i0c-*`，会把 tests/test_…_admission.py 覆盖成 i1-r4 的陈旧值（38739f39…，真实在效值为 i0c-r5/r6 的 062953f2…）；只被 i1-* 绑定的路径（preparation/admission.py、contract.py）才回落到 i1-r4。验证器 r33 块的`merged_binding_from_all_but(\"i0c-r33\")` 同步改为 `merged_binding_upto_revision(32)`，消除其时间依赖（同 r33 修 r32 的先例）"
+  },
+  "created_at": "2026-09-20T09:57:42+08:00",
+  "notes": [
+    "零模型、零生产库写入；沙箱（i2_sandbox_corpus）先 teardown residue=0 后重建再执行。",
+    "改动前字节以 git HEAD（4 路径）与脚本逆向还原（4 路径）两法取得，均逐条断言 == 上一修订绑定。",
+    "dev lane 附加材料类型（internal_committee_report / internal_unattributed）仅在该政策 + 该来源清单内可进入 in_scope，且 evidence_refs 带 dev_lane= 标记。"
+  ]
+}

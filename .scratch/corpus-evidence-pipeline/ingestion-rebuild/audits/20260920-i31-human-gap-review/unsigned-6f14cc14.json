@@ -1,0 +1,16 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-2",
+  "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+  "build_id": "715809b9d713a2b12c8df0b3f1f14d13b1c260bdccca01478607f688d5756795",
+  "build_fingerprint": "a4b40db7921cc511e1d04627cf5ca9c07a8f8581265516ade2a14dd2b5ab9a9d",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20 12:00:00",
+  "evidence_scope_ref": "",
+  "required_locators": [],
+  "scope_rationale": "所需证据位于 evidence-targets-approved.json 之 approved_required/supplementary，涉及 page:1（EPS 67.74/70.77/73.84、目标价 2030、26H1 收入 922.8 亿）与 page:3（补充 EPS 表单元格）。本来源 13 处缺口外唯一的图像缺口 page:2 与所需证据页不相交。",
+  "attestation": "已目视核验并比对逐页提取结果：page:2 图像区为「图表1 茅台分季度拆分表」整版图（bbox [36.8,91.9]-[564.1,479.8]，占页宽 88.6%，区域内字符数=0，纯图无文字重叠），另有左上 logo 与 2 个小色块；页内正文、图表2/3 PE/PB Band 轴标签均在图像外完整可提取。该缺口为图表截图，未承载所需证据；所需证据 locator 页（1/3）与缺口页（2）不相交。",
+  "gaps": {
+    "issue:image_region_unreadable:page:2": "page:2 图像区为「图表1 茅台分季度拆分表」整版图（纯图，区域内无文字）；所需证据在 page:1/3，与之不相交，不影响所需证据。"
+  }
+}

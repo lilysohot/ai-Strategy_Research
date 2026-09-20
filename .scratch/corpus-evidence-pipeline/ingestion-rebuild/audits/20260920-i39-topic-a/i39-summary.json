@@ -1,0 +1,150 @@
+{
+  "artifact": "i3-9-topic-a-band",
+  "generated_at": "2026-09-20T23:05:03+08:00",
+  "kind": "diagnostic",
+  "corpus": "reader-pdf-5 reingest active (8 builds)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "band_params": {
+    "gap": 1,
+    "expand": 1,
+    "band_cap": 8
+  },
+  "layers": {
+    "base": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "13/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008",
+        "macro-002",
+        "macro-003"
+      ]
+    },
+    "band": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "17/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008"
+      ]
+    }
+  },
+  "negative": {
+    "s4_false_positives": []
+  },
+  "target_buckets_final": {
+    "matched": 61,
+    "selected_but_match_fail": 15,
+    "not_in_doc_unreachable": 2,
+    "kept_page_not_selected": 1
+  },
+  "topic_a": {
+    "total": 11,
+    "matched": 11,
+    "per_target": {
+      "company-004 e2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-004 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-004 a-3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-005 e2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-005 e3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-5": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-002 e4": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-003 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-003 a-4": {
+        "matched": true,
+        "layer": "band"
+      }
+    },
+    "band_cap_selected": 11
+  },
+  "model_calls": 0,
+  "questions": 30
+}

@@ -1,0 +1,19 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-3",
+  "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+  "build_id": "2fc48247fa4777681cdb3b726b1193b7b43e7d8968671178e54d502c4afdeb3f",
+  "build_fingerprint": "d0a85fcbaddb118467af6efd5c28dfd08fbc372d288822691baf08311398aace",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20T12:00:00+08:00",
+  "evidence_scope_ref": "evidence-targets-approved.json::approved_required+supplementary",
+  "required_locators": [
+    "page:1",
+    "page:3"
+  ],
+  "scope_rationale": "所需证据位于 evidence-targets-approved.json 之 approved_required/supplementary，涉及 page:1（EPS 67.74/70.77/73.84、目标价 2030、26H1 收入 922.8 亿）与 page:3（补充 EPS 表单元格）。本来源 13 处缺口外唯一的图像缺口 page:2 与所需证据页不相交。",
+  "attestation": "human_verified_complete_scope_and_nonintersection",
+  "gaps": {
+    "issue:image_region_unreadable:page:2": "page:2 图像区为「图表1 茅台分季度拆分表」整版图（纯图，区域内无文字）；所需证据在 page:1/3，与之不相交，不影响所需证据。"
+  }
+}

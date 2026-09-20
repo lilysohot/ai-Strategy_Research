@@ -1,0 +1,16 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-3",
+  "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+  "build_id": "9af73f907a8276c715f41cc55e29b7ef95d48db095be73e89739ce95763db677",
+  "build_fingerprint": "7f804493aa08c56a0b2f1baa692111fd11292e1d523171064255faa7363d3839",
+  "reviewer": "",
+  "reviewed_at": "",
+  "evidence_scope_ref": "",
+  "required_locators": [],
+  "scope_rationale": "",
+  "attestation": "",
+  "gaps": {
+    "issue:table_lines_without_extraction:page:6": ""
+  }
+}

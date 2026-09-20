@@ -1,0 +1,44 @@
+{
+  "snapshot_id": "i0c-r27",
+  "revision": "r27",
+  "phase": "i0c",
+  "task": "I3-2 old-baseline case manifest freeze: 7 categories (legacy_retrieval 19q excl O6, financial 57 tol=0, formula 7, customer_table 12 report-authority, prose 2 repro, macro 2 targets, doc_kind_review CSV authority), U decisions 2026-09-19, guard i3.json holdout 4th root (guosen bbba671e), draft_pending_freeze_r27 -> frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r26",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r26.json",
+    "sha256": "7577ba2da9395e76f1bd2995d1c1d9e29b01cc1de227d281a92b381a1331ede2"
+  },
+  "binding": {
+    "i3_2_old_baseline": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.json": "1136855c63db67ff9e4c341b89b1423cb6a54e0829c5e8d8981a3c65f7cfe750",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.md": "d1b4da5f002b91e9344634b150bd4c2735452ae8750652ac43676180adeca05b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/build_baseline_cases.py": "2647321782cddc4f426707b3bf87baa44fbbd241b4ddd36016ab25a2baaebf95",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/decision-old-doc-kind-review-authority-20260919.json": "2c3a7cc26dcddd83d9cb6f7a7459b0b78b6a9081e2a3ce5b18c6cd0e98560ba6",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/decision-old-doc-kind-review-authority-20260919.md": "ab70ae3a5ff909b2d6f681f29575effeca8cea02bef5aa8b7a8fc4c50a65ebfa",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/unified-status.md": "449276f8abda9c2d15b055ad6cb75ecb0b74995f8765d6079964e218b59a122f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/diagnosis-and-remediation.md": "4c55b96213fc55bf38e1577c46bc4d8b0ccc88b0a1388189325458c3c9ef6ac1"
+    },
+    "guard": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json": "f4f796fcfe4ac6a31de4038cdaba271887c24cecbd9c0b84adcd46b7ed93f037"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "c8964deba2873d511261cb6cd762a16d13fbafc36b1850d90ea1920d96dd5fd0",
+      "docs/plan/claims-market-closed-loop-plan.md": "1909c702229964de440c455ff576ef8a3f7440d94509de8aacd1eabeb0d0f85c"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "72902bb8f7f337fe205a404a2c7c6effc8d16784cc5cc5d47e2d89f9b09dcff8"
+    }
+  },
+  "corrections": {
+    "I3-2_old_baseline_scope": "U 2026-09-19 圈定并确认全部 7 类旧基线适用范围：doc_kind_review 以 full84 CSV（d69bbb1d…）为权威版本；legacy_retrieval 冻结 19 题、排除 O6（华泰联储加息属留出）；fin57 容差=规范化后精确匹配 tol=0、guosen_maotai_holdout 10 格纳入守卫留出链；customer_table_12 以报告为准、按历史非回归处置；prose 冻结 2 条可复现用例、第 3 条标注不可复现；macro 以机器记录 2 targets 为准、previous 移出分母",
+    "guard_holdout_4th": "i3.json forbidden_roots 由 3 份增至 4 份：追加国信茅台 bbba671e.pdf（对应 guosen_maotai_holdout 10 格留出）",
+    "I3-5": "I3-5 真实非回归重验仍未执行：本轮只完成冻结预期与适用范围的 I3-2 身份确定，不代表指标通过",
+    "validate_i3_2_completion": "阶段完成门 validate_i3_2_completion.py 尚未实现，登记为后续前置"
+  },
+  "created_at": "2026-09-19T17:35:00+08:00",
+  "notes": [
+    "本轮只冻结 I3-2 旧基线身份（预期/范围/守卫留出/决定），零模型调用、零数据库写入；未触碰评分器与查询金标。",
+    "manifest 内 guard.sha256 = 当前 i3.json 实哈希 f4f796fc…；改动 i3.json 需新修订重绑。",
+    "I3-2 其余冻结项（正式评分派生件接线、阶段完成门、初始 manifest）未做；未宣告 I3-2 完成。"
+  ]
+}

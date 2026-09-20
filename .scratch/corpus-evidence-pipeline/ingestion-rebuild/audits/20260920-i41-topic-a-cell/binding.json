@@ -1,0 +1,19 @@
+{
+  "kind": "diagnostic (NOT a frozen regression)",
+  "scorer_working_tree_sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
+  "frozen_assets_ok": true,
+  "manifest_lineage_scorer": "patched in-memory to working-tree hash (disk manifest untouched)",
+  "band_semantics": {
+    "gap": 1,
+    "expand": 1,
+    "band_cap": 8,
+    "span_cap_mode": "pool",
+    "pool_cap": 24,
+    "provable_width_bound": 49,
+    "cap_is_band_count": "max_chunks_per_top_document(8) 语义改为带数；不调 cap 值",
+    "selection": "带由 OR 词元命中池形成；不按金标词/页/行列补取",
+    "single_variable": "负例走 OR 词元检索路径（不混入 S4 窄检索）",
+    "s2": "对已选带内 chunk 的 table_row 单元派生 row:/col: 并发射 cell 证据（不改变选择）"
+  },
+  "checked_at": "2026-09-20T23:46:52+08:00"
+}

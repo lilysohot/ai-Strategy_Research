@@ -1,0 +1,21 @@
+
+==================================== ERRORS ====================================
+________________________ ERROR collecting test session _________________________
+tests/test_corpus_preparation_admission.py:530: in <module>
+    DEV_MD_SID = hashlib.sha256((REPO / DEV_MD_PATH).read_bytes()).hexdigest()
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+../.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/preparation/guard.py:340: in _audit
+    raise OSError(
+E   OSError: corpus preparation guard: 阶段 'i3' 禁止读取未绑定来源的受保护路径 /home/administrator/FrontierAgent/data/corpus/工业富联_投委会决策报告_20260829.md
+=========================== short test summary info ============================
+ERROR ../../../dev - OSError: corpus preparation guard: 阶段 'i3' 禁止读取未...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+3 skipped, 1 error in 0.73s
+
+exit=2

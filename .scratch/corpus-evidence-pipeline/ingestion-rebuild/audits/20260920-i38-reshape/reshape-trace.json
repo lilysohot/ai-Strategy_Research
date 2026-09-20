@@ -1,0 +1,548 @@
+[
+  {
+    "query_id": "company-001",
+    "mode": "or_main",
+    "input_question": "华创证券对贵州茅台2026—2028年EPS和一年目标价的预测分别是多少，维持什么评级？",
+    "executed_query": "\"2026\" OR \"2028\" OR \"eps\" OR \"—\" OR \"一\" OR \"什么\" OR \"创\" OR \"华\" OR \"和\" OR \"多少\" OR \"对\" OR \"年\" OR \"是\" OR \"的\" OR \"目标价\" OR \"维持\" OR \"证券\" OR \"评级\" OR \"贵州茅台\" OR \"预测\" OR \"，\" OR \"？\"",
+    "chunk_hits": 491,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 15,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 17,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 158
+    }
+  },
+  {
+    "query_id": "company-002",
+    "mode": "or_main",
+    "input_question": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+    "executed_query": "\"2026h1\" OR \"2026q2\" OR \"、\" OR \"与\" OR \"什么\" OR \"净利润\" OR \"及其\" OR \"变化\" OR \"同比\" OR \"归\" OR \"总收入\" OR \"是\" OR \"母\" OR \"的\" OR \"贵州茅台\" OR \"？\"",
+    "chunk_hits": 353,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 111,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 18,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 11,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 10
+    }
+  },
+  {
+    "query_id": "company-003",
+    "mode": "or_main",
+    "input_question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+    "executed_query": "\"2026e\" OR \"2027e\" OR \"2028e\" OR \"、\" OR \"中\" OR \"光\" OR \"力\" OR \"和\" OR \"国信\" OR \"多少\" OR \"收益\" OR \"是\" OR \"每股\" OR \"活动\" OR \"现金流\" OR \"的\" OR \"科技\" OR \"经营\" OR \"表\" OR \"证券\" OR \"财务\" OR \"预测\" OR \"，\" OR \"？\"",
+    "chunk_hits": 489,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 165,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 91,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 14,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "company-004",
+    "mode": "or_main",
+    "input_question": "光力科技2026—2028年股权激励的营业收入触发值和目标值各是多少？",
+    "executed_query": "\"2026\" OR \"2028\" OR \"—\" OR \"值\" OR \"光\" OR \"力\" OR \"各\" OR \"和\" OR \"多少\" OR \"年\" OR \"收入\" OR \"是\" OR \"激励\" OR \"的\" OR \"目标值\" OR \"科技\" OR \"股权\" OR \"营业\" OR \"触发\" OR \"？\"",
+    "chunk_hits": 380,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 112,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 17,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 127
+    }
+  },
+  {
+    "query_id": "company-005",
+    "mode": "or_main",
+    "input_question": "光力科技8230、8231、9130、9320的应用与商业化阶段有何区别？",
+    "executed_query": "\"8230\" OR \"8231\" OR \"9130\" OR \"9320\" OR \"、\" OR \"与\" OR \"何\" OR \"光\" OR \"力\" OR \"区别\" OR \"商业化\" OR \"应用\" OR \"有\" OR \"的\" OR \"科技\" OR \"阶段\" OR \"？\"",
+    "chunk_hits": 321,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 101,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 11,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 109,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 18
+    }
+  },
+  {
+    "query_id": "company-006",
+    "mode": "or_main",
+    "input_question": "截至2026年6月30日，赵彤宇如何控制光力科技36.60%股份，亲属持股是否计入？",
+    "executed_query": "\"2026\" OR \"30\" OR \"36.60\" OR \"6\" OR \"亲属\" OR \"光\" OR \"力\" OR \"如何\" OR \"宇\" OR \"年\" OR \"彤\" OR \"截至\" OR \"持股\" OR \"控制\" OR \"日\" OR \"是否\" OR \"月\" OR \"科技\" OR \"股份\" OR \"计入\" OR \"赵\" OR \"，\" OR \"？\"",
+    "chunk_hits": 472,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 139,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 159,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 97,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "company-007",
+    "mode": "or_main",
+    "input_question": "贵州茅台2026年中报点评的声明页披露了茅台集团与华创云信怎样的持股关系？",
+    "executed_query": "\"2026\" OR \"与\" OR \"了\" OR \"云\" OR \"信\" OR \"关系\" OR \"创\" OR \"华\" OR \"声明\" OR \"年中\" OR \"怎样\" OR \"报\" OR \"披露\" OR \"持股\" OR \"点评\" OR \"的\" OR \"茅台\" OR \"贵州茅台\" OR \"集团\" OR \"页\" OR \"？\"",
+    "chunk_hits": 317,
+    "base_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 21,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 10,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 17,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "company-008",
+    "mode": "or_main",
+    "input_question": "两份公司中报点评分别给贵州茅台和光力科技什么评级，属于维持还是首次覆盖？",
+    "executed_query": "\"两\" OR \"中报\" OR \"什么\" OR \"份\" OR \"公司\" OR \"力\" OR \"和光\" OR \"属于\" OR \"次\" OR \"点评\" OR \"科技\" OR \"给\" OR \"维持\" OR \"覆盖\" OR \"评级\" OR \"贵州茅台\" OR \"还是\" OR \"首\" OR \"，\" OR \"？\"",
+    "chunk_hits": 447,
+    "base_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8
+    },
+    "s3_selected": {
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 148,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 10,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 150
+    }
+  },
+  {
+    "query_id": "company-009",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+    "executed_query": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+    "chunk_hits": 0
+  },
+  {
+    "query_id": "company-010",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+    "executed_query": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+    "chunk_hits": 0
+  },
+  {
+    "query_id": "industry-001",
+    "mode": "or_main",
+    "input_question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+    "executed_query": "\"、\" OR \"一览表\" OR \"中\" OR \"价\" OR \"价格\" OR \"位\" OR \"分\" OR \"化工\" OR \"和\" OR \"多少\" OR \"差分\" OR \"开工率\" OR \"是\" OR \"景气\" OR \"的\" OR \"纯碱\" OR \"证券\" OR \"长江\" OR \"，\" OR \"？\"",
+    "chunk_hits": 492,
+    "base_selected": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8
+    },
+    "s3_selected": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 165,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 26,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 91
+    }
+  },
+  {
+    "query_id": "industry-002",
+    "mode": "or_main",
+    "input_question": "图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？",
+    "executed_query": "\"2026e\" OR \"6\" OR \"r32\" OR \"产能\" OR \"什么\" OR \"价格\" OR \"位\" OR \"分\" OR \"制冷剂\" OR \"及\" OR \"口径\" OR \"图\" OR \"多少\" OR \"是\" OR \"有\" OR \"特殊\" OR \"的\" OR \"续\" OR \"表\" OR \"，\" OR \"？\"",
+    "chunk_hits": 481,
+    "base_selected": {
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8
+    },
+    "s3_selected": {
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 159,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 158
+    }
+  },
+  {
+    "query_id": "industry-003",
+    "mode": "or_main",
+    "input_question": "图6续表的尿素开工率和2026E产能分别是多少？",
+    "executed_query": "\"2026e\" OR \"6\" OR \"产能\" OR \"和\" OR \"图\" OR \"多少\" OR \"尿素\" OR \"开工率\" OR \"是\" OR \"的\" OR \"续\" OR \"表\" OR \"？\"",
+    "chunk_hits": 332,
+    "base_selected": {
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8
+    },
+    "s3_selected": {
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 16,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 11,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 127,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 87
+    }
+  },
+  {
+    "query_id": "industry-004",
+    "mode": "or_main",
+    "input_question": "长江化工专题图6中，价格/价差分位与开工率分别使用什么统计窗口？",
+    "executed_query": "\"/\" OR \"6\" OR \"与\" OR \"专题\" OR \"中\" OR \"什么\" OR \"价\" OR \"价格\" OR \"位\" OR \"使用\" OR \"化工\" OR \"图\" OR \"差分\" OR \"开工率\" OR \"窗口\" OR \"统计\" OR \"长江\" OR \"，\" OR \"？\"",
+    "chunk_hits": 501,
+    "base_selected": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 203,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 24,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "industry-005",
+    "mode": "or_main",
+    "input_question": "2026年9月6日新材料周报所述，氩气价格从5月初到9月2日怎样变化？",
+    "executed_query": "\"2\" OR \"2026\" OR \"5\" OR \"6\" OR \"9\" OR \"从\" OR \"价格\" OR \"到\" OR \"变化\" OR \"周报\" OR \"年\" OR \"怎样\" OR \"所\" OR \"日\" OR \"日新\" OR \"月\" OR \"月初\" OR \"材料\" OR \"氩气\" OR \"述\" OR \"，\" OR \"？\"",
+    "chunk_hits": 495,
+    "base_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8
+    },
+    "s3_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 25,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 101,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 166,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19
+    }
+  },
+  {
+    "query_id": "industry-006",
+    "mode": "or_main",
+    "input_question": "华福新材料周报如何描述PTFE在英伟达平台的用途与Rubin Ultra的预计推出时间？",
+    "executed_query": "\"ptfe\" OR \"rubin\" OR \"ultra\" OR \"与\" OR \"华\" OR \"周报\" OR \"在\" OR \"如何\" OR \"平台\" OR \"推出\" OR \"描述\" OR \"时间\" OR \"材料\" OR \"用途\" OR \"的\" OR \"福新\" OR \"英伟\" OR \"达\" OR \"预计\" OR \"？\"",
+    "chunk_hits": 284,
+    "base_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8
+    },
+    "s3_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 22,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 16,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 102
+    }
+  },
+  {
+    "query_id": "industry-007",
+    "mode": "or_main",
+    "input_question": "该周报中Wind新材料指数和申万三级半导体材料指数的收盘点位及周度变化分别是多少？",
+    "executed_query": "\"wind\" OR \"万\" OR \"三级\" OR \"中\" OR \"半导体\" OR \"及\" OR \"变化\" OR \"周\" OR \"周报\" OR \"和\" OR \"多少\" OR \"度\" OR \"指数\" OR \"收盘\" OR \"新材料\" OR \"是\" OR \"材料\" OR \"点位\" OR \"申\" OR \"的\" OR \"该\" OR \"？\"",
+    "chunk_hits": 389,
+    "base_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8
+    },
+    "s3_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 24,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 129,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 124
+    }
+  },
+  {
+    "query_id": "industry-008",
+    "mode": "or_main",
+    "input_question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+    "executed_query": "\"240\" OR \"99.6\" OR \"r32\" OR \"“\" OR \"”\" OR \"与\" OR \"中\" OR \"化工\" OR \"同一\" OR \"周报\" OR \"当成\" OR \"把\" OR \"指标\" OR \"新材料\" OR \"景气\" OR \"氩气\" OR \"涨幅\" OR \"的\" OR \"种\" OR \"能否\" OR \"表\" OR \"超\" OR \"？\"",
+    "chunk_hits": 291,
+    "base_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 7
+    },
+    "s3_selected": {
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 16,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 11,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 120,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 44,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 7
+    }
+  },
+  {
+    "query_id": "industry-009",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+    "executed_query": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+    "chunk_hits": 0
+  },
+  {
+    "query_id": "industry-010",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+    "executed_query": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+    "chunk_hits": 0
+  },
+  {
+    "query_id": "macro-001",
+    "mode": "or_main",
+    "input_question": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+    "executed_query": "\"2026\" OR \"7\" OR \"8\" OR \"、\" OR \"什么\" OR \"修订\" OR \"值\" OR \"光大\" OR \"前\" OR \"及\" OR \"市场\" OR \"年\" OR \"所\" OR \"新增\" OR \"是\" OR \"月\" OR \"点评\" OR \"美国\" OR \"述\" OR \"非农\" OR \"预期\" OR \"？\"",
+    "chunk_hits": 400,
+    "base_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 101,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 111,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 18,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "macro-002",
+    "mode": "or_main",
+    "input_question": "该非农点评中，8月失业率、劳动参与率、平均时薪同比及对应前值是多少？",
+    "executed_query": "\"8\" OR \"、\" OR \"中\" OR \"值\" OR \"前\" OR \"劳动\" OR \"参与率\" OR \"及\" OR \"同比\" OR \"多少\" OR \"失业率\" OR \"对应\" OR \"平均\" OR \"时\" OR \"是\" OR \"月\" OR \"点评\" OR \"薪\" OR \"该\" OR \"非农\" OR \"，\" OR \"？\"",
+    "chunk_hits": 485,
+    "base_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8
+    },
+    "s3_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 96,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 12,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 25
+    }
+  },
+  {
+    "query_id": "macro-003",
+    "mode": "or_main",
+    "input_question": "该报告关于美联储9月加息的判断依赖什么通胀条件？报告所述市场概率是否等于政策已落地？",
+    "executed_query": "\"9\" OR \"什么\" OR \"依赖\" OR \"关于\" OR \"判断\" OR \"加息\" OR \"市场\" OR \"所\" OR \"报告\" OR \"政策\" OR \"是否\" OR \"月\" OR \"条件\" OR \"概率\" OR \"的\" OR \"等于\" OR \"美联储\" OR \"落地\" OR \"该\" OR \"述\" OR \"通胀\" OR \"？\"",
+    "chunk_hits": 303,
+    "base_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8
+    },
+    "s3_selected": {
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 69,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 109,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 14,
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 14
+    }
+  },
+  {
+    "query_id": "macro-004",
+    "mode": "or_main",
+    "input_question": "《从分化到收敛》识别哪些需求主体，重点研究的四条收敛路径是什么？",
+    "executed_query": "\"《\" OR \"》\" OR \"主体\" OR \"什么\" OR \"从\" OR \"分化\" OR \"到\" OR \"哪些\" OR \"四\" OR \"收敛\" OR \"是\" OR \"条\" OR \"的\" OR \"研究\" OR \"识别\" OR \"路径\" OR \"重点\" OR \"需求\" OR \"，\" OR \"？\"",
+    "chunk_hits": 436,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 12,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 19,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 144,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 140
+    }
+  },
+  {
+    "query_id": "macro-005",
+    "mode": "or_main",
+    "input_question": "华创宏观专题对2026年两本账支出增速作何预测，并指出财政收入端哪两个堵点？",
+    "executed_query": "\"2026\" OR \"专题\" OR \"两\" OR \"两个\" OR \"何\" OR \"作\" OR \"创\" OR \"华\" OR \"哪\" OR \"堵\" OR \"增速\" OR \"宏观\" OR \"对\" OR \"年\" OR \"并\" OR \"指出\" OR \"支出\" OR \"收入\" OR \"本\" OR \"点\" OR \"端\" OR \"财政\" OR \"账\" OR \"预测\" OR \"，\" OR \"？\"",
+    "chunk_hits": 456,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 8,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 13,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 141,
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": 12,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 20,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7
+    }
+  },
+  {
+    "query_id": "macro-006",
+    "mode": "or_main",
+    "input_question": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+    "executed_query": "\"2024\" OR \"2025\" OR \"与\" OR \"中\" OR \"企\" OR \"变化\" OR \"国企\" OR \"地方\" OR \"增速\" OR \"多少\" OR \"央\" OR \"如何\" OR \"年\" OR \"报告\" OR \"是\" OR \"有息\" OR \"样本\" OR \"负债\" OR \"，\" OR \"？\"",
+    "chunk_hits": 478,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 8
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 13,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 161,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 105,
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": 19
+    }
+  },
+  {
+    "query_id": "macro-007",
+    "mode": "or_main",
+    "input_question": "报告中2026年第二季度居民消费倾向、支出倾向的定义及与2025、2019年同期的比较是什么？",
+    "executed_query": "\"2019\" OR \"2025\" OR \"2026\" OR \"、\" OR \"与\" OR \"中\" OR \"二季度\" OR \"什么\" OR \"倾向\" OR \"及\" OR \"同期\" OR \"定义\" OR \"居民\" OR \"年\" OR \"年第\" OR \"报告\" OR \"支出\" OR \"是\" OR \"比较\" OR \"消费\" OR \"的\" OR \"？\"",
+    "chunk_hits": 423,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 13,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 140,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 93,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 128
+    }
+  },
+  {
+    "query_id": "macro-008",
+    "mode": "or_main",
+    "input_question": "报告用哪些项目计划投资增速说明固定资产投资偏弱，并提示哪些样本局限？",
+    "executed_query": "\"偏\" OR \"哪些\" OR \"固定资产\" OR \"增速\" OR \"局限\" OR \"并\" OR \"弱\" OR \"投资\" OR \"报告\" OR \"提示\" OR \"样本\" OR \"用\" OR \"计划\" OR \"说明\" OR \"项目\" OR \"，\" OR \"？\"",
+    "chunk_hits": 422,
+    "base_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 8,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 8,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 8,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 8
+    },
+    "s3_selected": {
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": 11,
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": 142,
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 7,
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": 134,
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": 81
+    }
+  },
+  {
+    "query_id": "macro-009",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+    "executed_query": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+    "chunk_hits": 0
+  },
+  {
+    "query_id": "macro-010",
+    "mode": "s4_literal_and",
+    "input_question": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+    "executed_query": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+    "chunk_hits": 0
+  }
+]

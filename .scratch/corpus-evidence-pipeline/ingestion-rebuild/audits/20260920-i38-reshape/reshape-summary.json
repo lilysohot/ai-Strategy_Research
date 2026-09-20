@@ -1,0 +1,192 @@
+{
+  "artifact": "i3-8-reshape",
+  "generated_at": "2026-09-20T22:43:03+08:00",
+  "kind": "diagnostic",
+  "corpus": "reader-pdf-5 reingest active (8 builds)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "layers": {
+    "base": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "13/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008",
+        "macro-002",
+        "macro-003"
+      ]
+    },
+    "s3": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "14/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "macro-002",
+        "macro-003"
+      ]
+    },
+    "s2s3": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "16/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "industry-002",
+        "industry-003",
+        "macro-002",
+        "macro-003"
+      ]
+    },
+    "s3b": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "20/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-007",
+        "company-008",
+        "industry-002",
+        "industry-003"
+      ]
+    }
+  },
+  "negative": {
+    "s4_false_positives": []
+  },
+  "target_first_hit_layer": {
+    "base": 49,
+    "s3": 4,
+    "s2": 11,
+    "s3b": 11,
+    "never": 4
+  },
+  "target_buckets_final": {
+    "matched": 75,
+    "not_in_doc_unreachable": 2,
+    "selected_but_match_fail": 2
+  },
+  "remaining_kept_page_not_selected": 0,
+  "row_col_targets_still_failed": [
+    {
+      "query_id": "industry-002",
+      "target_id": "e2",
+      "locator": [
+        "page:10",
+        "row:R32",
+        "col:2026E产能（配额）"
+      ]
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e2",
+      "locator": [
+        "page:10",
+        "row:尿素",
+        "col:2026E产能"
+      ]
+    }
+  ],
+  "model_calls": 0,
+  "questions": 30
+}

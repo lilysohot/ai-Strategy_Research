@@ -1,0 +1,38 @@
+{
+  "artifact": "i3-3-single-regression-reread-audit",
+  "revision": "i0c-r40",
+  "parent": "i0c-r39",
+  "corpus": "reader-pdf-5 reingest + gap-review republish (i35, sandbox teardown-rebuilt)",
+  "scorer": {
+    "r39_frozen_sha256": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e",
+    "used_in_this_rerun": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e",
+    "worktree_after_restore_sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
+    "note": "唯一变量为 corpus；scorer 保持 r39 严格码位包含口径"
+  },
+  "variant": "candidate_question_lexemes_or",
+  "question_count": 30,
+  "model_calls": 0,
+  "per_class": [
+    {"domain": "company", "doc_recall": "1", "question_pass": "8/8", "evidence_pass": "1/8"},
+    {"domain": "industry", "doc_recall": "1", "question_pass": "8/8", "evidence_pass": "3/8"},
+    {"domain": "macro", "doc_recall": "1", "question_pass": "8/8", "evidence_pass": "3/8"}
+  ],
+  "overall_evidence_pass": "7/24",
+  "evidence_target_missing": 43,
+  "evidence_target_missing_r39": 54,
+  "recovered_targets_vs_r39": 11,
+  "false_positives": [
+    "company-009", "company-010", "industry-009", "industry-010", "macro-009", "macro-010"
+  ],
+  "fabricated_citations": 6,
+  "gate": {
+    "evidence_pass_ge_95": false,
+    "critical_citations_100": false,
+    "negative_false_positives_zero": false,
+    "i33_released": false
+  },
+  "i33_complete": false,
+  "m6_released": false,
+  "decision": "I3-3 NOT released; evidence_target_missing recovered but hard gate still fails (EvidencePass 7/24 < 19/20, 6/6 negative false positives persist)",
+  "out_of_scope_finding": "working-tree scoring.py has an un-frozen whitespace-normalization change (EvidenceTarget.matches); manifest/freeze still bind strict scorer; adopting it needs a separate freeze revision"
+}

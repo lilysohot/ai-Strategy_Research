@@ -1,0 +1,28 @@
+{
+  "schema_rev": "human-gap-review-2",
+  "policy_rev": "gap-policy-3",
+  "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+  "build_id": "f3221a1e91e2b9edbb7c9ab1e6ed44e08c92462e5920bd251cfa912721213740",
+  "build_fingerprint": "3845592d56ba38331a73eaa55a4121c9608dc0b30e622cde1b3b215b4a7bb3f6",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20T12:00:00+08:00",
+  "evidence_scope_ref": "evidence-targets-approved.json::approved_required+supplementary",
+  "required_locators": [
+    "page:1",
+    "page:2",
+    "page:3",
+    "page:7",
+    "page:20"
+  ],
+  "scope_rationale": "所需证据位于 evidence-targets-approved.json 之 approved_required/supplementary，涉及 page:1/2/3/7/20（其中 page:20=每股收益 0.36/0.59/0.93、经营现金流 -222/-138/-17；page:7=赵彤宇直接 32.60%+间接 4.00%=合计 36.60%、陈淑兰 1.70%、赵彤亚 0.57%）。page:7 上的所需证据载体为纯文字，位于页上部 y=85-155，与图像缺口区域（组织架构图 bbox y=334.8-726.2）不相交。",
+  "attestation": "human_verified_complete_scope_and_nonintersection",
+  "gaps": {
+    "issue:image_region_unreadable:page:7": "page:7 图像区为组织架构图（bbox y=334.8-726.2）；所需证据持股比例文字位于页上部 y=85-155，完整且与图像区域不重叠，同页但区域不相交，不影响所需证据（签认注明：与金标同页但图像区域与证据文字不重叠）。"
+  },
+  "region_source_path": "/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+  "region_targets": {
+    "page:7": [
+      "实际控制人赵彤宇直接持有公司32.60%股份"
+    ]
+  }
+}

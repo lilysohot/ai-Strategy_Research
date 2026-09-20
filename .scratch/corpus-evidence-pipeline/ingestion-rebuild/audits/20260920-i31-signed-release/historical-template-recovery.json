@@ -1,0 +1,30 @@
+[
+  {
+    "original_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-6f14cc14.json",
+    "historical_template_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-6f14cc14.json",
+    "sha256": "de73b3d28233eba46d29aa30c8cb35bfae740fb1b2d95c320c80322909eb5856",
+    "method": "Reconstructed from earlier submitted copy by clearing reviewer/reviewed_at; exact r36 SHA-256 match. Not claimed as pre-edit archive of latest signed user bytes.",
+    "current_signed_sha256": "97fc880e9e04a285558ea3d61894dbd7c4a72580b62f37708cddd28e79c88265"
+  },
+  {
+    "original_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-174b6462.json",
+    "historical_template_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-174b6462.json",
+    "sha256": "276943a48c86a4799b9d3d2840bccc65ed2336fd2f51326847b5a90b6ef580cf",
+    "method": "Reconstructed from earlier submitted copy by clearing reviewer/reviewed_at; exact r36 SHA-256 match. Not claimed as pre-edit archive of latest signed user bytes.",
+    "current_signed_sha256": "8637faa74d27c23d9d27a26f88721ec573685473d8a852dd1c675f278a9d5ed7"
+  },
+  {
+    "original_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-793b3967.json",
+    "historical_template_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-793b3967.json",
+    "sha256": "e81ecb5ffcaeb01cf815fdab4248db46ef05c22a6f0808789e44d9e88ca80d79",
+    "method": "Reconstructed from earlier submitted copy by clearing reviewer/reviewed_at; exact r36 SHA-256 match. Not claimed as pre-edit archive of latest signed user bytes.",
+    "current_signed_sha256": "c9766137cb48231081375121fdb1ed5709497e0cea8c952553137cdde1758690"
+  },
+  {
+    "original_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/unsigned-dddc7cd0.json",
+    "historical_template_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/r36-template-recovery/unsigned-dddc7cd0.json",
+    "sha256": "4a67ff93fd8eee13edc71b5d42f815d66cd668c0bc0c56a49e5d1ec92c527e5c",
+    "method": "Reconstructed from earlier submitted copy by clearing reviewer/reviewed_at; exact r36 SHA-256 match. Not claimed as pre-edit archive of latest signed user bytes.",
+    "current_signed_sha256": "fca9073e9c4aed2e636d6498712fe65cc16bb01146312ea3d6a45add11bcd5e2"
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "snapshot_id": "i0c-r40",
+  "revision": "r40",
+  "phase": "i0c",
+  "status": "i36_single_regression_reader_pdf5_filed_i33_not_released",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r39",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r39.json",
+    "sha256": "0eb882426a21fb4a8ae0a0f4a2d80d885830a0ab35fc056635c75e64cc1e1fb0"
+  },
+  "binding": {
+    "reingest_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/reingest-report.json": "da8bd927a184796f024587949d864a88feaa06c0f4ac6b94336a35ae44a71243",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/reingest-report.md": "06d8f6edfc2a9f4cb7f2aaa339fb02395828441004d96b17b1f2fb08b83a35c9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/pg_kept_forensics.py": "7d92c9366e9c384553b6e20ff55f4dd97c11544e0b7e95dff076df247610b64c",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/i35-pg-kept-forensics.json": "e38d8fe79c6feab767074e87a4988c9557046258b701ebf2e2a2adbbd2ac28e7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/i35-pg-kept-forensics.md": "05b2888aa64d43426142174a36f9ddb6240d031f733b053449c41ad6e6999b0b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/publish-after-gapreview.json": "b11e6b35a53029dcf5d84c689fabf60614cb995d827e0d0390b406d10bc9cbaf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/register_gap_reviews.py": "293114905de6b7d507be6670b6fa996d477a1ce96c50474a072635e3b5465f75",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/register-results.json": "84e04a38bc3259019fa09b3ff289f6b1a5e782c4bf7a683623ae362f917082f3"
+    },
+    "regression_rerun": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/rerun_or.py": "b797a084b0580f1ea79e58ceb67929e6846115b9b43985b7d42eeb6307e9540f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/rerun-summary.json": "45f90c3de81ae06f82c8fbae06d376fc16c6dbdeb60312d45066acfd1c4f9f16",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/source-identity-map.json": "18e0acaed2fbbd119890b20870f60280765201551193f517b96fdab734c91ad3",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/candidate_question_lexemes_or-score.json": "c85368e62cc0c64771ebb900557b4f6c33b9a432d2ceb3dc74d3f3ee83ee440f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/candidate_question_lexemes_or-score.md": "2bff00d81a28dc9fc6bc00b32f3780e948824062147aa74e47c06fd8eadf0ad7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/candidate_question_lexemes_or-observations.json": "04f020517f8e0984740b6bd6bccc224a1e292821b00f06050fb51216de3ffb7f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/candidate_question_lexemes_or-trace.json": "a46372641a68d08df21a7b144dfae8fc982a639904e261f0268d531d3996de5d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/fetch-receipts.json": "e4a4926ca02d64d654f58536eec316d1155220e2f581ecb5a44ee45f4b24bf84",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/i33-reread-audit.json": "f18b8167f9a2781e2c3f0b6d4283294c9a729b78e759e399e30a011a408f7397",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/i33-reread-audit.md": "f6fa6d928f18096f867dd3c1f9f6dd583ddc7c92e03f9b4f7c3fd6f59ddaa5ad"
+    },
+    "guards": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json": "3faac9e01fc3aa5277cdbc7b181bce25680b478c5b8bdd3f40b6538d65701b6a"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "0162a4141bc84b38ca0badfebd63d9f1721b31148668860be61f16e31eb3cc6c"
+    }
+  },
+  "i31_complete": true,
+  "i33_complete": false,
+  "m6_released": false,
+  "model_calls": 0,
+  "question_count": 30,
+  "created_at": "2026-09-20T13:30:00+00:00"
+}

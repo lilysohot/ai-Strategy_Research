@@ -1,0 +1,132 @@
+{
+  "runs": [
+    {
+      "variant": "baseline_literal_websearch",
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "0",
+          "question_pass": "0/8",
+          "evidence_pass": "0/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "0",
+          "question_pass": "0/8",
+          "evidence_pass": "0/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "0",
+          "question_pass": "0/8",
+          "evidence_pass": "0/8"
+        }
+      ],
+      "no_match": 30,
+      "false_positives": [],
+      "critical_failures": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-006",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-004",
+        "industry-005",
+        "industry-007",
+        "industry-008",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-005",
+        "macro-006",
+        "macro-007",
+        "macro-008"
+      ],
+      "failures": {
+        "answer_expected_but_no_match": 24,
+        "doc_recall_incomplete": 24,
+        "question_rule_unsatisfied": 24,
+        "evidence_target_missing": 79
+      }
+    },
+    {
+      "variant": "candidate_question_lexemes_or",
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "1/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "2/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "2/8"
+        }
+      ],
+      "no_match": 0,
+      "false_positives": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "critical_failures": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "company-009",
+        "company-010",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-005",
+        "industry-007",
+        "industry-008",
+        "industry-009",
+        "industry-010",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-005",
+        "macro-006",
+        "macro-007",
+        "macro-009",
+        "macro-010"
+      ],
+      "failures": {
+        "evidence_target_missing": 54,
+        "no_answer_false_positive": 6,
+        "fabricated_citation": 6
+      }
+    }
+  ],
+  "questions": 30,
+  "scoring_input_unchanged": true,
+  "publication_unchanged": true,
+  "model_calls": 0,
+  "stop_reason": "predeclared_two_runs_complete",
+  "production_query_changed": false,
+  "note": "Development calibration only; no answer-generation semantics or M6 claim. Native page locators only; no inferred row/column labels."
+}

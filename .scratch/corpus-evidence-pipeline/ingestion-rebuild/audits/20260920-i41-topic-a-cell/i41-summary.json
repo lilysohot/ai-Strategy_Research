@@ -1,0 +1,1558 @@
+{
+  "artifact": "i4-1-topic-a-cell",
+  "generated_at": "2026-09-20T23:47:01+08:00",
+  "kind": "diagnostic",
+  "corpus": "reader-pdf-5 reingest active (8 builds)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "band_params": {
+    "gap": 1,
+    "expand": 1,
+    "band_cap": 8,
+    "span_cap_mode": "pool",
+    "pool_cap": 24,
+    "provable_width_bound": 49
+  },
+  "single_variable": "negative questions use OR token retrieval (no S4)",
+  "s2": "cell grid row:/col: projection on selected band chunks (no selection change)",
+  "layers": {
+    "base": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "13/24",
+      "false_positives": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "fabricated_citations": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "critical_failures": [
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "company-009",
+        "company-010",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008",
+        "industry-009",
+        "industry-010",
+        "macro-002",
+        "macro-003",
+        "macro-009",
+        "macro-010"
+      ]
+    },
+    "band": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "17/24",
+      "false_positives": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "fabricated_citations": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "critical_failures": [
+        "company-003",
+        "company-007",
+        "company-008",
+        "company-009",
+        "company-010",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ]
+    },
+    "band_s2": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "19/24",
+      "false_positives": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "fabricated_citations": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "critical_failures": [
+        "company-007",
+        "company-008",
+        "company-009",
+        "company-010",
+        "industry-002",
+        "industry-003",
+        "industry-008",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ]
+    }
+  },
+  "negative": {
+    "or_false_positives": [
+      "company-009",
+      "company-010",
+      "industry-009",
+      "industry-010",
+      "macro-009",
+      "macro-010"
+    ]
+  },
+  "volume": {
+    "max_band_width_measured": 33,
+    "provable_width_bound": 49,
+    "width_bound_ok": true,
+    "per_doc": [
+      {
+        "query_id": "company-001",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 19,
+        "union": 19,
+        "ratio": 0.9048
+      },
+      {
+        "query_id": "company-001",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 23,
+        "union": 23,
+        "ratio": 0.92
+      },
+      {
+        "query_id": "company-001",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-001",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-001",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 132,
+        "union": 132,
+        "ratio": 0.4648
+      },
+      {
+        "query_id": "company-002",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 111,
+        "union": 111,
+        "ratio": 0.5635
+      },
+      {
+        "query_id": "company-002",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-002",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-002",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 14,
+        "union": 14,
+        "ratio": 0.6667
+      },
+      {
+        "query_id": "company-002",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.64
+      },
+      {
+        "query_id": "company-003",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 169,
+        "union": 163,
+        "ratio": 0.8274
+      },
+      {
+        "query_id": "company-003",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 116,
+        "union": 112,
+        "ratio": 0.5989
+      },
+      {
+        "query_id": "company-003",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 22,
+        "union": 22,
+        "ratio": 0.88
+      },
+      {
+        "query_id": "company-003",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 3,
+        "sum_widths": 19,
+        "union": 19,
+        "ratio": 0.9048
+      },
+      {
+        "query_id": "company-003",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-004",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 103,
+        "union": 103,
+        "ratio": 0.5228
+      },
+      {
+        "query_id": "company-004",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "company-004",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-004",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-004",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 74,
+        "union": 74,
+        "ratio": 0.2606
+      },
+      {
+        "query_id": "company-005",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 103,
+        "union": 101,
+        "ratio": 0.5127
+      },
+      {
+        "query_id": "company-005",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-005",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 14,
+        "union": 14,
+        "ratio": 0.6667
+      },
+      {
+        "query_id": "company-005",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 70,
+        "union": 70,
+        "ratio": 0.2465
+      },
+      {
+        "query_id": "company-005",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 26,
+        "union": 26,
+        "ratio": 0.4815
+      },
+      {
+        "query_id": "company-006",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 155,
+        "union": 154,
+        "ratio": 0.7817
+      },
+      {
+        "query_id": "company-006",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 21,
+        "union": 21,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-006",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 116,
+        "union": 112,
+        "ratio": 0.3944
+      },
+      {
+        "query_id": "company-006",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 107,
+        "union": 103,
+        "ratio": 0.5508
+      },
+      {
+        "query_id": "company-006",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-007",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 6,
+        "sum_widths": 36,
+        "union": 36,
+        "ratio": 0.6667
+      },
+      {
+        "query_id": "company-007",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "company-007",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.72
+      },
+      {
+        "query_id": "company-007",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-007",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-008",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 136,
+        "union": 134,
+        "ratio": 0.6802
+      },
+      {
+        "query_id": "company-008",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-008",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.72
+      },
+      {
+        "query_id": "company-008",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-008",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 122,
+        "union": 120,
+        "ratio": 0.4225
+      },
+      {
+        "query_id": "industry-001",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 127,
+        "union": 125,
+        "ratio": 0.4401
+      },
+      {
+        "query_id": "industry-001",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 3,
+        "sum_widths": 19,
+        "union": 19,
+        "ratio": 0.9048
+      },
+      {
+        "query_id": "industry-001",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-001",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 2,
+        "sum_widths": 37,
+        "union": 37,
+        "ratio": 0.6852
+      },
+      {
+        "query_id": "industry-001",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 116,
+        "union": 112,
+        "ratio": 0.5989
+      },
+      {
+        "query_id": "industry-002",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-002",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 132,
+        "union": 128,
+        "ratio": 0.4507
+      },
+      {
+        "query_id": "industry-002",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-002",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.7619
+      },
+      {
+        "query_id": "industry-002",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 159,
+        "union": 154,
+        "ratio": 0.7817
+      },
+      {
+        "query_id": "industry-003",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-003",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-003",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "industry-003",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 114,
+        "union": 114,
+        "ratio": 0.4014
+      },
+      {
+        "query_id": "industry-003",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 86,
+        "union": 86,
+        "ratio": 0.4365
+      },
+      {
+        "query_id": "industry-004",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 205,
+        "union": 196,
+        "ratio": 0.6901
+      },
+      {
+        "query_id": "industry-004",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-004",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.8571
+      },
+      {
+        "query_id": "industry-004",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 4,
+        "sum_widths": 37,
+        "union": 37,
+        "ratio": 0.6852
+      },
+      {
+        "query_id": "industry-004",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-005",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 35,
+        "union": 35,
+        "ratio": 0.6481
+      },
+      {
+        "query_id": "industry-005",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 115,
+        "union": 111,
+        "ratio": 0.5936
+      },
+      {
+        "query_id": "industry-005",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 0.9524
+      },
+      {
+        "query_id": "industry-005",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 143,
+        "union": 137,
+        "ratio": 0.4824
+      },
+      {
+        "query_id": "industry-005",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-006",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 33,
+        "union": 33,
+        "ratio": 0.6111
+      },
+      {
+        "query_id": "industry-006",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.7619
+      },
+      {
+        "query_id": "industry-006",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-006",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-006",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 72,
+        "union": 72,
+        "ratio": 0.2535
+      },
+      {
+        "query_id": "industry-007",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 35,
+        "union": 35,
+        "ratio": 0.6481
+      },
+      {
+        "query_id": "industry-007",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 105,
+        "union": 105,
+        "ratio": 0.3697
+      },
+      {
+        "query_id": "industry-007",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-007",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 17,
+        "union": 17,
+        "ratio": 0.8095
+      },
+      {
+        "query_id": "industry-007",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 94,
+        "union": 92,
+        "ratio": 0.467
+      },
+      {
+        "query_id": "industry-008",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 5,
+        "sum_widths": 28,
+        "union": 28,
+        "ratio": 0.5185
+      },
+      {
+        "query_id": "industry-008",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "industry-008",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 93,
+        "union": 93,
+        "ratio": 0.3275
+      },
+      {
+        "query_id": "industry-008",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 58,
+        "union": 58,
+        "ratio": 0.3102
+      },
+      {
+        "query_id": "industry-008",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 4,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.64
+      },
+      {
+        "query_id": "macro-001",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 114,
+        "union": 112,
+        "ratio": 0.5989
+      },
+      {
+        "query_id": "macro-001",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 3,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 0.9524
+      },
+      {
+        "query_id": "macro-001",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 87,
+        "union": 87,
+        "ratio": 0.3063
+      },
+      {
+        "query_id": "macro-001",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-001",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-002",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 120,
+        "union": 118,
+        "ratio": 0.631
+      },
+      {
+        "query_id": "macro-002",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 3,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 0.9524
+      },
+      {
+        "query_id": "macro-002",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 5,
+        "sum_widths": 24,
+        "union": 24,
+        "ratio": 0.96
+      },
+      {
+        "query_id": "macro-002",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-002",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 35,
+        "union": 35,
+        "ratio": 0.6481
+      },
+      {
+        "query_id": "macro-003",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 86,
+        "union": 84,
+        "ratio": 0.4492
+      },
+      {
+        "query_id": "macro-003",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 81,
+        "union": 81,
+        "ratio": 0.2852
+      },
+      {
+        "query_id": "macro-003",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-003",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 5,
+        "sum_widths": 26,
+        "union": 26,
+        "ratio": 0.4815
+      },
+      {
+        "query_id": "macro-003",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 0.9524
+      },
+      {
+        "query_id": "macro-004",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.7619
+      },
+      {
+        "query_id": "macro-004",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-004",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-004",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 119,
+        "union": 117,
+        "ratio": 0.412
+      },
+      {
+        "query_id": "macro-004",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 138,
+        "union": 136,
+        "ratio": 0.6904
+      },
+      {
+        "query_id": "macro-005",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.8571
+      },
+      {
+        "query_id": "macro-005",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 156,
+        "union": 152,
+        "ratio": 0.7716
+      },
+      {
+        "query_id": "macro-005",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 22,
+        "union": 22,
+        "ratio": 0.88
+      },
+      {
+        "query_id": "macro-005",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 4,
+        "sum_widths": 32,
+        "union": 32,
+        "ratio": 0.5926
+      },
+      {
+        "query_id": "macro-005",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-006",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.8571
+      },
+      {
+        "query_id": "macro-006",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 112,
+        "union": 110,
+        "ratio": 0.3873
+      },
+      {
+        "query_id": "macro-006",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-006",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 112,
+        "union": 112,
+        "ratio": 0.5989
+      },
+      {
+        "query_id": "macro-006",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 4,
+        "sum_widths": 32,
+        "union": 32,
+        "ratio": 0.5926
+      },
+      {
+        "query_id": "macro-007",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 16,
+        "union": 16,
+        "ratio": 0.7619
+      },
+      {
+        "query_id": "macro-007",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 106,
+        "union": 104,
+        "ratio": 0.3662
+      },
+      {
+        "query_id": "macro-007",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 92,
+        "union": 90,
+        "ratio": 0.4813
+      },
+      {
+        "query_id": "macro-007",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-007",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 152,
+        "union": 152,
+        "ratio": 0.7716
+      },
+      {
+        "query_id": "macro-008",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 2,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "macro-008",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 98,
+        "union": 96,
+        "ratio": 0.338
+      },
+      {
+        "query_id": "macro-008",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "macro-008",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 151,
+        "union": 151,
+        "ratio": 0.7665
+      },
+      {
+        "query_id": "macro-008",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 97,
+        "union": 95,
+        "ratio": 0.508
+      }
+    ],
+    "max_union": 196,
+    "worst_ratio": {
+      "query_id": "company-001",
+      "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "n": 7,
+      "union": 7,
+      "ratio": 1.0
+    },
+    "flagged_queries": [
+      {
+        "query_id": "company-004",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 103,
+        "union": 103,
+        "ratio": 0.5228
+      },
+      {
+        "query_id": "company-004",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 15,
+        "union": 15,
+        "ratio": 0.7143
+      },
+      {
+        "query_id": "company-004",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-004",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-004",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 74,
+        "union": 74,
+        "ratio": 0.2606
+      },
+      {
+        "query_id": "company-005",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 103,
+        "union": 101,
+        "ratio": 0.5127
+      },
+      {
+        "query_id": "company-005",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-005",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 1,
+        "sum_widths": 14,
+        "union": 14,
+        "ratio": 0.6667
+      },
+      {
+        "query_id": "company-005",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 70,
+        "union": 70,
+        "ratio": 0.2465
+      },
+      {
+        "query_id": "company-005",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 3,
+        "sum_widths": 26,
+        "union": 26,
+        "ratio": 0.4815
+      },
+      {
+        "query_id": "company-008",
+        "source": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "n": 197,
+        "selected_bands": 8,
+        "sum_widths": 136,
+        "union": 134,
+        "ratio": 0.6802
+      },
+      {
+        "query_id": "company-008",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-008",
+        "source": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "n": 25,
+        "selected_bands": 3,
+        "sum_widths": 18,
+        "union": 18,
+        "ratio": 0.72
+      },
+      {
+        "query_id": "company-008",
+        "source": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "n": 20,
+        "selected_bands": 1,
+        "sum_widths": 20,
+        "union": 20,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "company-008",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 122,
+        "union": 120,
+        "ratio": 0.4225
+      },
+      {
+        "query_id": "industry-001",
+        "source": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "n": 284,
+        "selected_bands": 8,
+        "sum_widths": 127,
+        "union": 125,
+        "ratio": 0.4401
+      },
+      {
+        "query_id": "industry-001",
+        "source": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "n": 21,
+        "selected_bands": 3,
+        "sum_widths": 19,
+        "union": 19,
+        "ratio": 0.9048
+      },
+      {
+        "query_id": "industry-001",
+        "source": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "n": 7,
+        "selected_bands": 1,
+        "sum_widths": 7,
+        "union": 7,
+        "ratio": 1.0
+      },
+      {
+        "query_id": "industry-001",
+        "source": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "n": 54,
+        "selected_bands": 2,
+        "sum_widths": 37,
+        "union": 37,
+        "ratio": 0.6852
+      },
+      {
+        "query_id": "industry-001",
+        "source": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "n": 187,
+        "selected_bands": 8,
+        "sum_widths": 116,
+        "union": 112,
+        "ratio": 0.5989
+      }
+    ]
+  },
+  "target_buckets_final": {
+    "matched": 72,
+    "not_in_doc_unreachable": 2,
+    "selected_but_match_fail": 4,
+    "kept_page_not_selected": 1
+  },
+  "row_col": {
+    "total": 13,
+    "matched": 11,
+    "still_failed": [
+      {
+        "query_id": "industry-002",
+        "target_id": "e2",
+        "locator": [
+          "page:10",
+          "row:R32",
+          "col:2026E产能（配额）"
+        ],
+        "in_single_evidence": true
+      },
+      {
+        "query_id": "industry-003",
+        "target_id": "e2",
+        "locator": [
+          "page:10",
+          "row:尿素",
+          "col:2026E产能"
+        ],
+        "in_single_evidence": true
+      }
+    ]
+  },
+  "topic_a": {
+    "total": 11,
+    "matched": 11,
+    "per_target": {
+      "company-004 e2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-004 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-004 a-3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-005 e2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-005 e3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-3": {
+        "matched": true,
+        "layer": "band"
+      },
+      "company-008 a-5": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-002 e4": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-003 a-2": {
+        "matched": true,
+        "layer": "band"
+      },
+      "macro-003 a-4": {
+        "matched": true,
+        "layer": "band"
+      }
+    },
+    "band_cap_selected": 11
+  },
+  "model_calls": 0,
+  "questions": 30
+}

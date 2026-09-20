@@ -1,0 +1,253 @@
+{
+  "summary": {
+    "before": {
+      "miss": 22,
+      "hit": 12
+    },
+    "after": {
+      "miss": 20,
+      "hit": 14
+    },
+    "n": 34
+  },
+  "details": [
+    {
+      "query": "company-001",
+      "target": "e4",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-001",
+      "target": "a-2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-002",
+      "target": "e1",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-002",
+      "target": "e2",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "company-002",
+      "target": "e3",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-004",
+      "target": "e2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-004",
+      "target": "a-2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-004",
+      "target": "a-3",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-007",
+      "target": "e1",
+      "page": 7,
+      "before": true,
+      "after": false
+    },
+    {
+      "query": "company-008",
+      "target": "a-1",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "company-008",
+      "target": "a-2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "company-008",
+      "target": "a-4",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "industry-003",
+      "target": "a-3",
+      "page": 10,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "industry-005",
+      "target": "e1",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "industry-005",
+      "target": "e2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "industry-007",
+      "target": "e2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "industry-008",
+      "target": "e1",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "industry-008",
+      "target": "a-2",
+      "page": 10,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "industry-008",
+      "target": "a-4",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "macro-001",
+      "target": "e1",
+      "page": 1,
+      "before": false,
+      "after": true
+    },
+    {
+      "query": "macro-001",
+      "target": "e2",
+      "page": 1,
+      "before": false,
+      "after": true
+    },
+    {
+      "query": "macro-001",
+      "target": "a-3",
+      "page": 3,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-002",
+      "target": "e1",
+      "page": 1,
+      "before": false,
+      "after": true
+    },
+    {
+      "query": "macro-002",
+      "target": "e3",
+      "page": 1,
+      "before": false,
+      "after": true
+    },
+    {
+      "query": "macro-002",
+      "target": "e4",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "macro-003",
+      "target": "e1",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "macro-003",
+      "target": "a-2",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "macro-003",
+      "target": "a-4",
+      "page": 1,
+      "before": false,
+      "after": false
+    },
+    {
+      "query": "macro-005",
+      "target": "e1",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-006",
+      "target": "e1",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-006",
+      "target": "e2",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-006",
+      "target": "a-3",
+      "page": 1,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-007",
+      "target": "e1",
+      "page": 2,
+      "before": true,
+      "after": true
+    },
+    {
+      "query": "macro-007",
+      "target": "e3",
+      "page": 2,
+      "before": true,
+      "after": false
+    }
+  ]
+}

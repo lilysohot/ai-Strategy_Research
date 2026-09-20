@@ -1,0 +1,3 @@
+Both 30-question observations and scores reproduced from frozen native fetch receipts; all bindings match.
+
+exit=0

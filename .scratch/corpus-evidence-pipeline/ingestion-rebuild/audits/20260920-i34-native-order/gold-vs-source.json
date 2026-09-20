@@ -1,0 +1,218 @@
+{
+  "targets": [
+    {
+      "item": "company-001 e4 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-001 a-2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-002 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-002 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "company-002 e3 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-004 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-004 a-2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-004 a-3 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-007 e1 p7",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "company-008 a-1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-008 a-2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "company-008 a-4 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "industry-003 a-3 p10",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "industry-005 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "industry-005 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "industry-007 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "industry-008 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "industry-008 a-2 p10",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "industry-008 a-4 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-001 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-001 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-001 a-3 p3",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-002 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-002 e3 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-002 e4 p1",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-003 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-003 a-2 p1",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-003 a-4 p1",
+      "in_kept_reader_pdf_4": false,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": false
+    },
+    {
+      "item": "macro-005 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-006 e1 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-006 e2 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-006 a-3 p1",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-007 e1 p2",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    },
+    {
+      "item": "macro-007 e3 p2",
+      "in_kept_reader_pdf_4": true,
+      "in_native_reading_order": true,
+      "in_native_legacy_yx": true
+    }
+  ],
+  "A2_code_error": [
+    "industry-003 a-3 p10",
+    "industry-008 a-2 p10",
+    "macro-001 a-3 p3",
+    "macro-002 e4 p1",
+    "macro-003 a-2 p1",
+    "macro-003 a-4 p1"
+  ],
+  "B1_gold_fossil": [],
+  "B_unreachable": []
+}

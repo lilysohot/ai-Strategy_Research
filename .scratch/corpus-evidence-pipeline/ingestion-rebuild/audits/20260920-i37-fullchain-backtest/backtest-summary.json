@@ -1,0 +1,77 @@
+{
+  "artifact": "i3-7-fullchain-backtest",
+  "generated_at": "2026-09-20T21:24:42+08:00",
+  "kind": "diagnostic",
+  "corpus": "reader-pdf-5 reingest active (8 builds)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "passed": false,
+  "per_class": [
+    {
+      "domain": "company",
+      "doc_recall": "1",
+      "question_pass": "8/8",
+      "evidence_pass": "3/8"
+    },
+    {
+      "domain": "industry",
+      "doc_recall": "1",
+      "question_pass": "8/8",
+      "evidence_pass": "4/8"
+    },
+    {
+      "domain": "macro",
+      "doc_recall": "1",
+      "question_pass": "8/8",
+      "evidence_pass": "6/8"
+    }
+  ],
+  "evidence_pass_total": "13/24",
+  "false_positives": [
+    "company-009",
+    "company-010",
+    "industry-009",
+    "industry-010",
+    "macro-009",
+    "macro-010"
+  ],
+  "fabricated_citations": [
+    "company-009",
+    "company-010",
+    "industry-009",
+    "industry-010",
+    "macro-009",
+    "macro-010"
+  ],
+  "critical_failures": [
+    "company-003",
+    "company-004",
+    "company-005",
+    "company-007",
+    "company-008",
+    "company-009",
+    "company-010",
+    "industry-001",
+    "industry-002",
+    "industry-003",
+    "industry-008",
+    "industry-009",
+    "industry-010",
+    "macro-002",
+    "macro-003",
+    "macro-009",
+    "macro-010"
+  ],
+  "target_buckets": {
+    "matched": 49,
+    "selected_but_match_fail": 7,
+    "kept_page_not_selected": 21,
+    "doc_not_kept_clean_stage_loss": 2
+  },
+  "failures": {
+    "evidence_target_missing": 30,
+    "no_answer_false_positive": 6,
+    "fabricated_citation": 6
+  },
+  "model_calls": 0,
+  "questions": 30
+}

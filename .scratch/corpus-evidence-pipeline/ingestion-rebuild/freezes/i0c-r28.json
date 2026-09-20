@@ -1,0 +1,72 @@
+{
+  "snapshot_id": "i0c-r28",
+  "revision": "r28",
+  "phase": "i0c",
+  "task": "I3-2 remediation Step A-C: derived formal scoring input (gate-checkable) + baseline asset binding (no unfrozen external pointers) + legacy anchor mapping 19/19 unique + formula input declaration + completion gate implemented",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r27",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r27.json",
+    "sha256": "00feb146b47b6cb247ad3c53cf4b11cf42a2c5f96252bfd6a5900a1f3debe3ed"
+  },
+  "binding": {
+    "i3_2_assets": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "d0d76862eff732a123f2af0cb7a224fb5403e8d5501d0b7442f06eae226b20e7",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_scoring_input.py": "1c499a51803d73ad382186620ed93efb4d16ed25d662c7ac74ec5ea16cef60dd",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p2/policy-and-lists-confirmation.json": "5ac389b99f10dca96b47af7e850f746bb032c6e85324679c9714d68803c39507",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p3/baseline-mapping-reconciliation.json": "60dc71dfce5edcc14d07134004dccf8f25b3219eac4937f18b7b1998abb3edea",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p4/experiment-initial-version.json": "5b9aa9de136433015f23010bf91d5d924f56a67f138aae8e404e1ddabd333320",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p4/experiment-initial-version.md": "475e977c23b0bef46547bef2a487d0526d01504e1a84d78274124626412e610f",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.json": "a93981164f3b00dcf8add0dafce3065fce6c5c6eb346fe76fe0b9db36adf7303",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.md": "d1b4da5f002b91e9344634b150bd4c2735452ae8750652ac43676180adeca05b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json": "c41be391cc53f18872e2606c66fe8601ed74e65680c97e1d9d937f41595ebaf3",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.md": "2e234b14a0d027c3107040959d577c40f7fe3379240c921a2133e8e3bc00b8f0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/build_legacy_anchor_mapping.py": "c40f2f6123e074f953f1e9050e48f0a2c0399c07618d2e527f5f6224c285ce28",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/retrospective-i32.md": "e7cedc2fcf669f3c4f7997571272fa137175696b285bc2babc7b85dbefa71752"
+    },
+    "i3_2_baseline_assets": {
+      "plugins/corpus/golden.py": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+      "plugins/corpus/derivation.py": "c190fb4075685cbcd490a2bc4a59499e6c3263be74015049f339b09b84d1978b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-doclist-recount-20260915.json": "d98b0517ccbf62bf6f9201ae224744d2bcce05e8f84445a19ff6da51888bd0c9",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-candidates-v3-20260915.json": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b",
+      ".scratch/corpus-evidence-pipeline/verify_claims_entry.py": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+      ".scratch/corpus-evidence-pipeline/pilot_manifest.json": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+      ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+      ".scratch/corpus-evidence-pipeline/semantic-repair-report.md": "133e9c6ae9e63f7976602cc06932de7ff187566018e6f3d43bad895c99027a72",
+      ".scratch/corpus-evidence-pipeline/prose-repair-report.md": "d4f3210dbcaa97634c668e2cf56478841ff92f41eed7377e8a557073cca11fa3",
+      ".scratch/corpus-evidence-pipeline/spec.md": "0415b5c52c1159264847d216692b68882a0d7029e5101c9e767fe1cc16d7ef1c",
+      ".scratch/corpus-evidence-pipeline/prose_holdout_manifest.json": "45fe009d2e10aeb4e6307a0c7b5011204b85c4867f04c49b6147ef3813e3baca",
+      "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396"
+    },
+    "i3_2_archive": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r28/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.json": "a93981164f3b00dcf8add0dafce3065fce6c5c6eb346fe76fe0b9db36adf7303",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r28/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.md": "d1b4da5f002b91e9344634b150bd4c2735452ae8750652ac43676180adeca05b",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r28/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "72902bb8f7f337fe205a404a2c7c6effc8d16784cc5cc5d47e2d89f9b09dcff8",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r28/docs/plan/corpus-ingestion-rebuild-tasks.md": "c8964deba2873d511261cb6cd762a16d13fbafc36b1850d90ea1920d96dd5fd0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/before-r28/docs/plan/claims-market-closed-loop-plan.md": "1909c702229964de440c455ff576ef8a3f7440d94509de8aacd1eabeb0d0f85c"
+    },
+    "docs": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "99b0d3d24f47116e4564998ea877f5f98da6762fcea073e6f75a804972563a45",
+      "docs/plan/claims-market-closed-loop-plan.md": "0b598b59ea58fabb048252d711fd5d97b931a39f146087f0b7581ff6f36534c5"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "42d0d526b6e21070e40eba7680123c27ec1226e30e510bbd1d7c47068696e832",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i3_2_completion.py": "93b313a9ed966dedd773e8587c03b00c1cc27c1a46e5deb59aa7f603ac0a7ea1"
+    }
+  },
+  "corrections": {
+    "I3-2_derived_scoring_input": "正式评分输入派生件 `i3-2/query-gold-scoring-v1.jsonl`（79 必需 + 20 补充、负例无目标）+ lineage 清单 + 派生器与唯一读入口 `load_scoring_input`；审批原件未改（门仍 ready=true）",
+    "I3-2_baseline_asset_binding": "旧基线清单**引用的资产**（golden.py/derivation.py/pilot_manifest/机器记录/报告/CSV/verify_claims_entry/v3 明细/doclist）随本轮入链，消除『未冻结的必要外部指针』；plugins 只作引用资产（golden.py、derivation.py），不改实现",
+    "I3-2_legacy_anchor_mapping": "19 题旧锚点 (title_contains, doc_prefix) → 新 source 身份（i0a5-doclist 的 doc_id）首轮映射：19/19 唯一命中、source_path 22/22 在磁盘、其中 5 个 doc_id 与已标注 source-gold 同源；O6 因来源留出排除；confirmed=false 待人工复核",
+    "I3-2_formula_inputs": "7 条公式的输入指标按 plugins/corpus/derivation.py 声明逐条登记（formula_7 契约补全）",
+    "I3-2_completion_gate": "阶段完成门 `freezes/validate_i3_2_completion.py` 已实现并入链；I3-2 其余冻结项（正式评分输入接线、初始 manifest、完成门）本轮补齐",
+    "I3-5": "真实非回归与 E2E 仍未执行（I3-5/I3-1）；本修订只完成 I3-2 冻结物与其判据"
+  },
+  "created_at": "2026-09-19T10:00:42.703746+00:00",
+  "notes": [
+    "零模型、零数据库写入、未读留出原文：本轮只做派生/映射/绑定与门实现。",
+    "留出隔离仍由 guards/i3.json 的 4 个 forbidden_roots 承担；`prose_holdout_manifest.json`（天风 5520fab6）**未在** forbidden_roots 内——已登记为待核项，未擅自改守卫。",
+    "19 题映射 confirmed=false、20 条人工同义 warning、macro-004 机器 blocked 覆盖仍属人工复核项，完成门绿灯只表示冻结物齐备，不表示语义/业务通过。"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "review_id": "3b76419d4e6710d56f4ed129d25d71ca6733e93f663ea50b14ad35778e84728a",
+  "human_submission_sha256": "fca9073e9c4aed2e636d6498712fe65cc16bb01146312ea3d6a45add11bcd5e2",
+  "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+  "target_ids": [
+    "e1",
+    "e2",
+    "e3"
+  ],
+  "region_quotes": {
+    "page:7": [
+      "截至2026 年6 月30 日，公司控股股东、\n实际控制人赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。",
+      "赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。",
+      "陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。"
+    ]
+  },
+  "gap_summary": {
+    "total": 23,
+    "blocking": 0,
+    "acknowledged": 23,
+    "out_of_scope": 0,
+    "policy_rev": "gap-policy-3"
+  },
+  "evidence_units": [
+    {
+      "unit_id": "unit:0241",
+      "build_id": "8796167bb6ec8e678f96ce8f88194d57005812de2459607d163ef18ee2f25163",
+      "kind": "paragraph",
+      "raw_text": "公司股权结构清晰，实际控制权稳定。截至2026 年6 月30 日，公司控股股东、\n实际控制人赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。",
+      "content_hash": "d5f9da4789b982c22a0834370c7fd6b04b839dd5e3424c547369409213d74022",
+      "parent_id": null,
+      "ordinal": 241,
+      "location": {
+        "page": 7,
+        "element": null,
+        "char_span": null,
+        "bbox": [
+          170.0399932861328,
+          114.67345428466797,
+          538.5677490234375,
+          179.7602081298828
+        ],
+        "cells": []
+      },
+      "clean_view": "公司股权结构清晰，实际控制权稳定。截至2026 年6 月30 日，公司控股股东、实际控制人赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。陈淑兰和赵彤亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实际控制人控制比例。",
+      "mapping": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          80,
+          82
+        ],
+        [
+          120,
+          123
+        ],
+        [
+          160,
+          164
+        ]
+      ],
+      "status": "kept",
+      "reasons": []
+    }
+  ],
+  "normalization": "Existing signed scope/attestation unchanged. Complete approved page-7 quotes projected; all native image placements and whole retained evidence boxes independently checked. No caller-supplied boxes."
+}

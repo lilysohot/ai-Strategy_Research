@@ -1,0 +1,26 @@
+[
+  {
+    "name": "maotai-huachuang",
+    "record": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/signed-maotai-huachuang.json",
+    "exit_code": 0,
+    "output": "{\n  \"ok\": true,\n  \"command\": \"gap-review\",\n  \"build_id\": \"2fc48247fa4777681cdb3b726b1193b7b43e7d8968671178e54d502c4afdeb3f\",\n  \"review_id\": \"d0d3086fd1c8b9dccf88b99e76e4482e3fe574282c9c94c2115e6bdc4a56e258\",\n  \"reviewer\": \"xyl\",\n  \"evidence_scope_ref\": \"evidence-targets-approved.json::approved_required+supplementary\",\n  \"gap_policy_rev\": \"gap-policy-3\",\n  \"gap_summary\": {\n    \"total\": 8,\n    \"bloc"
+  },
+  {
+    "name": "guangli-guoxin",
+    "record": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/signed-guangli-guoxin.json",
+    "exit_code": 0,
+    "output": "{\n  \"ok\": true,\n  \"command\": \"gap-review\",\n  \"build_id\": \"f3221a1e91e2b9edbb7c9ab1e6ed44e08c92462e5920bd251cfa912721213740\",\n  \"review_id\": \"d483abded5cb648382fd17c2af3390a704a4d95793abd4caec2447f1f5a05e2c\",\n  \"reviewer\": \"xyl\",\n  \"evidence_scope_ref\": \"evidence-targets-approved.json::approved_required+supplementary\",\n  \"gap_policy_rev\": \"gap-policy-3\",\n  \"gap_summary\": {\n    \"total\": 23,\n    \"blo"
+  },
+  {
+    "name": "changjiang-shiwenda",
+    "record": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/signed-changjiang-shiwenda.json",
+    "exit_code": 0,
+    "output": "{\n  \"ok\": true,\n  \"command\": \"gap-review\",\n  \"build_id\": \"f467708311ed8c6409e1d9bcf2fd326735777ecc399ff3519afa13016962ee55\",\n  \"review_id\": \"d3d94f907d94ad3a11c16ea3baf970896c37068fd370b5197328f81f4f99f6f2\",\n  \"reviewer\": \"xyl\",\n  \"evidence_scope_ref\": \"evidence-targets-approved.json::approved_required+supplementary\",\n  \"gap_policy_rev\": \"gap-policy-3\",\n  \"gap_summary\": {\n    \"total\": 34,\n    \"blo"
+  },
+  {
+    "name": "guangda-feinong",
+    "record": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i35-reingest-pdf5/signed-guangda-feinong.json",
+    "exit_code": 0,
+    "output": "{\n  \"ok\": true,\n  \"command\": \"gap-review\",\n  \"build_id\": \"9af73f907a8276c715f41cc55e29b7ef95d48db095be73e89739ce95763db677\",\n  \"review_id\": \"608541493bcf5060c966fc5e242a2c847745252a5768c323d083aa5aa4f68c4e\",\n  \"reviewer\": \"xyl\",\n  \"evidence_scope_ref\": \"evidence-targets-approved.json::approved_required+supplementary\",\n  \"gap_policy_rev\": \"gap-policy-3\",\n  \"gap_summary\": {\n    \"total\": 9,\n    \"bloc"
+  }
+]

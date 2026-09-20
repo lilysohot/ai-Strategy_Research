@@ -1,0 +1,26 @@
+[
+  {
+    "path": "docs/plan/corpus-ingestion-rebuild-tasks.md",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/docs/plan/corpus-ingestion-rebuild-tasks.md",
+    "sha256": "903a2d279015db719bb14a7e3873a43b94581b46271a9f5dee952e69d40e37e1",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "docs/plan/claims-market-closed-loop-plan.md",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/docs/plan/claims-market-closed-loop-plan.md",
+    "sha256": "ea36f8f470271b57c4ce591affb349862e1ea2c99a79cfe5729cdca9ea0813ef",
+    "matches_previous_binding": true
+  },
+  {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+    "sha256": "a36f8b9a734b472e56e92a42b0b08bf535d59bcb5bf52cf4e9ad5a8c12d818b7",
+    "matches_previous_binding": true
+  },
+  {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/before-r39/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json",
+    "sha256": "65066a086a892c0705dfc70a6d5c4169ee2623ea8c522b3465101808e047056d",
+    "matches_previous_binding": true
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "with_split": {
+    "hit": 23,
+    "miss": 11,
+    "missed": [
+      "industry-003 a-3 p10",
+      "industry-005 e1 p1",
+      "industry-005 e2 p1",
+      "industry-008 e1 p1",
+      "industry-008 a-2 p10",
+      "industry-008 a-4 p1",
+      "macro-001 a-3 p3",
+      "macro-002 e4 p1",
+      "macro-003 e1 p1",
+      "macro-003 a-2 p1",
+      "macro-003 a-4 p1"
+    ]
+  },
+  "without_split": {
+    "hit": 28,
+    "miss": 6,
+    "missed": [
+      "industry-003 a-3 p10",
+      "industry-008 a-2 p10",
+      "macro-001 a-3 p3",
+      "macro-002 e4 p1",
+      "macro-003 a-2 p1",
+      "macro-003 a-4 p1"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "publication": {
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "current_decision_id": "6c5bc7ad623d05ddfb9c17ac77ba2a2ca9ddb23f245e0857829b4d6ba12ece77",
+    "active_build_id": "8796167bb6ec8e678f96ce8f88194d57005812de2459607d163ef18ee2f25163",
+    "generation": 1,
+    "activated_at": "2026-09-20 06:11:27.013776+00:00"
+  },
+  "checkpoint": {
+    "acknowledged_gaps": [
+      "issue:image_region_small:page:1",
+      "issue:image_region_small:page:10",
+      "issue:image_region_small:page:11",
+      "issue:image_region_small:page:12",
+      "issue:image_region_small:page:13",
+      "issue:image_region_small:page:14",
+      "issue:image_region_small:page:15",
+      "issue:image_region_small:page:16",
+      "issue:image_region_small:page:17",
+      "issue:image_region_small:page:18",
+      "issue:image_region_small:page:19",
+      "issue:image_region_small:page:2",
+      "issue:image_region_small:page:20",
+      "issue:image_region_small:page:21",
+      "issue:image_region_small:page:22",
+      "issue:image_region_small:page:3",
+      "issue:image_region_small:page:4",
+      "issue:image_region_small:page:5",
+      "issue:image_region_small:page:6",
+      "issue:image_region_small:page:7",
+      "issue:image_region_small:page:8",
+      "issue:image_region_small:page:9",
+      "issue:image_region_unreadable:page:7"
+    ],
+    "activated_at": "2026-09-20T06:11:27.013776+00:00",
+    "active_build_id": "8796167bb6ec8e678f96ce8f88194d57005812de2459607d163ef18ee2f25163",
+    "decision_id": "6c5bc7ad623d05ddfb9c17ac77ba2a2ca9ddb23f245e0857829b4d6ba12ece77",
+    "gap_policy_rev": "gap-policy-3",
+    "generation": 1,
+    "human_gap_review_id": "3b76419d4e6710d56f4ed129d25d71ca6733e93f663ea50b14ad35778e84728a",
+    "operator": "Codex executing xyl signed region review",
+    "owner_id": "i31-region-review",
+    "schema_rev": "publish-record-1",
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa"
+  }
+}

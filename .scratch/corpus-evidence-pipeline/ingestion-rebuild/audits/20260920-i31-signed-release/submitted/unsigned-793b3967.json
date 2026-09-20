@@ -1,0 +1,16 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-2",
+  "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+  "build_id": "fddf03bc7851ca1fcc6cd2d5c4a20b6312311c284a40e89dc33b6906e173f68e",
+  "build_fingerprint": "315072bebafb2594b2ef8de66dbfa03c160dc3453c68e3a4a2fcfae09db04efc",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20 12:00:00",
+  "evidence_scope_ref": "",
+  "required_locators": [],
+  "scope_rationale": "所需证据位于 evidence-targets-approved.json 之 approved_required/supplementary，涉及 page:1（16.2 万、失业率 4.1%、时薪 3.1%）与 page:3（新增非农总计 -156/214/148/63/31/21/162/71）。本来源唯一缺口页 page:6 与所需证据页不相交。",
+  "attestation": "已目视核验并比对逐页提取结果：page:6 无真实带格线数据表格，仅 1 张 logo（72×21.3pt）；extract_tables 返回的 2 个「表」实为图9 职位供需缺口的 X 轴刻度/图例误认与空表；正文（三、劳动参与率回升…图7-10 标题/轴标签/图例）完整在 text。无内容缺失，所需证据页（1/3）与缺口页（6）不相交。",
+  "gaps": {
+    "issue:table_lines_without_extraction:page:6": "page:6 无真实数据表格，仅 logo；extract_tables 命中的为图9 X 轴刻度/图例误认与空表，正文完整；无内容缺失，与所需证据页（1/3）不相交。"
+  }
+}
