@@ -294,13 +294,19 @@ class CharSpan:
 
 @dataclass(frozen=True)
 class UnitLocation:
-    """原文单元坐标（page/element/char/bbox/cells，架构 §4.1）。"""
+    """原文单元坐标（page/element/char/bbox/cells，架构 §4.1）。
+
+    ``cells`` 携带网格 (row, col) 数字；``label_path`` 携带与 ``cells`` 对齐的
+    结构标签路径（每格 = ``" ".join(行标签, 列标签, 列标签父级, ...)``，票 04
+    I-B1）。新增字段带默认值，不改 ``cells`` 既有语义。
+    """
 
     page: int | None = None
     element: str | None = None
     char_span: CharSpan | None = None
     bbox: tuple[float, float, float, float] | None = None
     cells: tuple[tuple[int, int], ...] = ()
+    label_path: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -392,6 +398,23 @@ class ReviewedDecision:
             raise ContractError("ReviewedDecision 必须有 rationale（依据）")
 
 
+# in_scope 允许的材料类型按 **policy_rev** 绑定（dev lane，U 2026-09-20 裁决）：
+# v1 冻结语义 = 仅 research_report（逐字保留，生产判定不变）；dev 政策可额外允许
+# U 显式指定的内部材料，且生效范围由 admission-policy-dev 的 dev_lane.sources 限定。
+# 未知 policy_rev 落到默认（最严）集合，fail-closed。
+DEFAULT_IN_SCOPE_MATERIALS: tuple[MaterialType, ...] = (MaterialType.RESEARCH_REPORT,)
+IN_SCOPE_MATERIALS_BY_POLICY_REV: dict[str, tuple[MaterialType, ...]] = {
+    "v1-20260915": DEFAULT_IN_SCOPE_MATERIALS,
+    # dev lane（U 2026-09-20 裁决）：仅新增 U 指定两份来源的材料类型，
+    # 逐源由 admission-policy-dev.json 的 dev_lane.sources 限定。
+    "v2-dev-20260920": (
+        MaterialType.RESEARCH_REPORT,
+        MaterialType.INTERNAL_COMMITTEE_REPORT,
+        MaterialType.INTERNAL_UNATTRIBUTED,
+    ),
+}
+
+
 @dataclass(frozen=True)
 class Admission:
     """准入记录（契约 §5.2 ``decide_admission`` 输出 + ``corpus_admissions``）。"""
@@ -419,7 +442,10 @@ class Admission:
             if code not in AdmissionReasonCode:
                 raise ContractError(f"admission.reason_codes 含非法码: {code!r}")
         if self.decision is AdmissionDecision.IN_SCOPE:
-            if self.material_type is not MaterialType.RESEARCH_REPORT:
+            allowed_materials = IN_SCOPE_MATERIALS_BY_POLICY_REV.get(
+                self.policy_rev, DEFAULT_IN_SCOPE_MATERIALS
+            )
+            if self.material_type not in allowed_materials:
                 raise ContractError("in_scope 材料必须为分析师研报（research_report）")
             if self.research_domain not in (
                 ResearchDomain.COMPANY,

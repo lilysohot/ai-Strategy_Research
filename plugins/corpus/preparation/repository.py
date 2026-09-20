@@ -31,6 +31,7 @@ from plugins.corpus.preparation.contract import (
     Unit,
     canonical_fingerprint,
 )
+from plugins.corpus.preparation.gap_review import REVIEW_STAGE_PREFIX, GapReview, apply_gap_review
 
 
 class StoreError(RuntimeError):
@@ -77,6 +78,28 @@ class Store(ABC):
 
     @abstractmethod
     def get_build(self, build_id: str) -> Build | None: ...
+
+    def get_gap_review(self, build_id: str) -> GapReview | None:
+        """Read a credential from the reserved, immutable checkpoint namespace."""
+        build = self.get_build(build_id)
+        if build is None:
+            return None
+        payload = self.get_source_checkpoint(build.source_id, REVIEW_STAGE_PREFIX + build_id)
+        return GapReview.from_json(payload) if payload is not None else None
+
+    def put_gap_review(self, review: GapReview) -> None:
+        """Validate before append; identical replay is allowed, replacement is not."""
+        from plugins.corpus.preparation.engine import gap_records_of
+
+        build = self.get_build(review.build_id)
+        if build is None:
+            raise StoreError("gap review build does not exist")
+        apply_gap_review(review, build, self.get_units(build.build_id), gap_records_of(build))
+        self._put_gap_review(build, review.to_json())
+
+    @abstractmethod
+    def _put_gap_review(self, build: Build, payload: str) -> None:
+        """Atomically append a credential; ordinary checkpoint writes cannot replace it."""
 
     @abstractmethod
     def put_units(
@@ -327,7 +350,15 @@ class MemoryStore(Store):
             raise StoreError(f"source_checkpoint.source_id 非法: {source_id!r}")
         if not stage:
             raise StoreError("source_checkpoint.stage 不能为空")
+        if stage.startswith(REVIEW_STAGE_PREFIX):
+            raise StoreError("human gap review namespace requires put_gap_review")
         self._source_checkpoints[(source_id, stage)] = checkpoint
+
+    def _put_gap_review(self, build: Build, payload: str) -> None:
+        key = (build.source_id, REVIEW_STAGE_PREFIX + build.build_id)
+        existing = self._source_checkpoints.setdefault(key, payload)
+        if existing != payload:
+            raise StoreError("human gap review conflict: immutable credential cannot be replaced")
 
     def get_source_checkpoint(self, source_id: str, stage: str) -> str | None:
         return self._source_checkpoints.get((source_id, stage))

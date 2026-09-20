@@ -1,0 +1,57 @@
+{
+  "config_version": 1,
+  "phase": "i3-e2e",
+  "note": "I3-1 三类开发 E2E 阶段守卫（独立于 guards/i3.json：本阶段允许真实读取开发来源与隔离 PG 写入）。允许路径历史：预检 6 → 换料自选 8/15 → **2026-09-19 深夜撤回 Agent 自选范围**，重置为 U 2026-09-15 批准的 dev_selection_approved 6 份（i0a2-adjudicated-20260915.json）。启用条件：① 开发范围经 U 批准并生成 dev-scope-manifest.json；② 隔离目标可达（127.0.0.1:543 的 corpus-db 容器，库名 i2_sandbox_corpus）；③ 守卫自检通过（i3-e2e-guard-report.json 合成反例全过）。2026-09-19（r32 首冻）：model 封锁面对齐 guards/i3.json（此前只拦 openai，自检实测 anthropic / material_semantics 未被拒），note 去重。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 543,
+        "reason": "I2-01 冻结的隔离容器 corpus-db（宿主映射端口 543）；仅此一个目标，不隐式连生产库"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": [
+      "plugins.corpus._r2_"
+    ],
+    "poisoned_env": [
+      "OPENAI_API_KEY",
+      "OPENAI_BASE_URL",
+      "OPENAI_MODEL"
+    ],
+    "poisoned_dsn": [
+      "CORPUS_DSN"
+    ]
+  },
+  "sources": {
+    "read_roots": [
+      "data/corpus"
+    ],
+    "allowed_source_paths": [
+      "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+    ],
+    "forbidden_roots": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+    ],
+    "protected_roots": [
+      "data"
+    ]
+  }
+}

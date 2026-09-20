@@ -7,7 +7,7 @@
 （Store 是写入契约，MemoryStore 不承载 FTS）。
 
 分词：``websearch_to_tsquery('zhcfg', …)`` 与写入侧 GENERATED 列
-``to_tsvector('zhcfg', search_text)`` 同配置（INDEX_REV_V3 = ``index-3-zhcfg-2``；
+``to_tsvector('zhcfg', search_text)`` 同配置（INDEX_REV_V3 = ``index-4-zhcfg-2``；
 zhcfg 全词性→simple 映射含 ``'m'`` 数词）。查询侧经
 :func:`~plugins.corpus.preparation.chunk.normalize_search_text` 与写侧同一规范化
 （R5：``%``/``％`` 归一化为空格，避免写侧已规范化而查询侧 token 不一致漏召回）。
@@ -20,7 +20,7 @@ zhcfg 或索引文本规则升级必须换新 index_rev 全量重建（新 build
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -67,7 +67,12 @@ LIMIT %(limit)s
 
 @dataclass(frozen=True)
 class SearchHit:
-    """读侧检索命中：定位 chunk 并回接活动来源（消费侧证据起点）。"""
+    """读侧检索命中：定位 chunk 并回接活动来源（消费侧证据起点）。
+
+    结构加深（票 02 I-D1）：``page``/``cells``/``label_path`` 取自该 chunk 引用
+    单元（corpus_units.location）——``label_path`` 为各单元结构标签路径的去重合并，
+    供结构重叠排序（票 04 I-B2）消费；非表格块为空。
+    """
 
     source_id: str
     build_id: str
@@ -81,6 +86,124 @@ class SearchHit:
     snippet: str = ""
     #: 研报发布日期（唯一落点 = admission.metadata_snapshot.report_publication，§4.3）。
     published: str | None = None
+    #: chunk 首个单元的页码（定位用）。
+    page: int | None = None
+    #: chunk 首个单元的网格坐标（表格块）。
+    cells: tuple[tuple[int, int], ...] = ()
+    #: 结构标签路径去重合并（I-B1 索引文本的消费侧投影，结构重叠信号的输入）。
+    label_path: tuple[str, ...] = ()
+
+
+_UNITS_LOCATION_SQL = """
+SELECT build_id, unit_id, location
+FROM corpus.corpus_units
+WHERE build_id = ANY(%(build_ids)s::text[])
+  AND unit_id = ANY(%(unit_ids)s::text[])
+"""
+
+
+def _enrich_hits(cur: psycopg.Cursor, hits: tuple[SearchHit, ...]) -> tuple[SearchHit, ...]:
+    """批量加深命中（票 02 I-D1）：同游标/快照内经 corpus_units 取 page/cells/label_path。
+
+    单条批量查询，不产生 SQL N+1；无单元引用的块原样返回（不加深）。
+    """
+    if not hits:
+        return hits
+    unit_ids: list[str] = []
+    build_ids: set[str] = set()
+    for hit in hits:
+        build_ids.add(hit.build_id)
+        unit_ids.extend(hit.unit_refs)
+    if not unit_ids:
+        return hits
+    cur.execute(
+        _UNITS_LOCATION_SQL,
+        {"build_ids": sorted(build_ids), "unit_ids": unit_ids},
+    )
+    by_build: dict[str, dict[str, dict]] = {}
+    for build_id, unit_id, location in cur.fetchall():
+        by_build.setdefault(str(build_id), {})[str(unit_id)] = (
+            location if isinstance(location, dict) else {}
+        )
+    enriched: list[SearchHit] = []
+    for hit in hits:
+        units = by_build.get(hit.build_id, {})
+        labels: list[str] = []
+        seen: set[str] = set()
+        page: int | None = None
+        cells: tuple[tuple[int, int], ...] = ()
+        for index, unit_id in enumerate(hit.unit_refs):
+            loc = units.get(unit_id)
+            if loc is None:
+                continue
+            if index == 0:
+                page = loc.get("page")
+                cells = tuple(
+                    (int(cell[0]), int(cell[1]))
+                    for cell in (loc.get("cells") or ())
+                    if isinstance(cell, (list, tuple)) and len(cell) == 2
+                )
+            for label in loc.get("label_path") or ():
+                if label and label not in seen:
+                    seen.add(label)
+                    labels.append(label)
+        enriched.append(replace(hit, page=page, cells=cells, label_path=tuple(labels)))
+    return tuple(enriched)
+
+
+def _label_tokens(hit: SearchHit) -> set[str]:
+    """hit 结构标签的 token 集合（结构重叠信号的比对侧）。"""
+    tokens: set[str] = set()
+    for label in hit.label_path:
+        tokens.update(label.split())
+    return tokens
+
+
+def rank_hits(
+    hits: tuple[SearchHit, ...],
+    *,
+    lexemes: tuple[str, ...] = (),
+    signals: tuple[str, ...] = ("lexical",),
+) -> tuple[SearchHit, ...]:
+    """按声明信号对候选排序（r39 纪律：检索/排序变更须预先声明）。
+
+    - 默认 ``signals=("lexical",)``：按 score 降序原样返回，与现状逐字节一致；
+    - 含 ``"structural"`` 时：排序键 = (结构重叠数, score) 降序。结构重叠数 =
+      查询词元（``zhcfg`` 提取，经 :func:`query_lexemes` 预先计算）在 hit
+      ``label_path`` token 中的**去重命中数**——词元重复不放大，标签缺失（非
+      表格块）得 0。**主键为结构重叠**，即任一结构命中的表格块整体优先于纯词法
+      高分块（用户确认的排序信号规则）。
+    """
+    if "structural" not in signals:
+        return hits
+    lexeme_set = set(lexemes)
+
+    def key(hit: SearchHit) -> tuple[int, float]:
+        overlap = len(lexeme_set & _label_tokens(hit))
+        return (overlap, hit.score)
+
+    return tuple(sorted(hits, key=key, reverse=True))
+
+
+def query_lexemes(dsn: str, query: str, *, sandbox_db: str = _SANDBOX_DB) -> tuple[str, ...]:
+    """查询侧词元（``zhcfg``，R5 规范化后提取）：结构重叠信号的输入。
+
+    与写侧 ``corpus_chunks.search_tsv`` 同配置（``to_tsvector('zhcfg', …)``），
+    保证比对双方 token 口径一致。
+    """
+    import psycopg
+
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT tsvector_to_array(to_tsvector('zhcfg', %s))",
+                (normalize_search_text(query),),
+            )
+            row = cur.fetchone()
+    if row is None:
+        raise StoreError("查询词元不可读")
+    return tuple(str(term) for term in row[0])
 
 
 def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
@@ -164,11 +287,12 @@ def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[Se
 
     ``params`` 由 :func:`search_chunks` 归一化后传入（query/domain/date_from/date_to/limit）；
     语义与 :func:`search_chunks` 完全一致，只是连接与事务由调用方持有——这是
-    「检索结果与覆盖元数据读同一数据库快照」（§7.3）的实现落点。
+    「检索结果与覆盖元数据读同一数据库快照」（§7.3）的实现落点。返回前在
+    同一游标内批量加深结构字段（票 02 I-D1）。
     """
     cur.execute(_SEARCH_SQL, params)
     rows = cur.fetchall()
-    return tuple(
+    hits = tuple(
         SearchHit(
             source_id=row[0],
             build_id=row[1],
@@ -183,3 +307,4 @@ def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[Se
         )
         for row in rows
     )
+    return _enrich_hits(cur, hits)

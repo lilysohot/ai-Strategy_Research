@@ -1,0 +1,62 @@
+{
+  "note": "I3-1 第二轮取样清单（U 2026-09-20 裁决）：U 2026-09-15 批准集 6 份 PDF（逐字保留）+ dev lane 追加 2 份（MD 内部投委会报告 / DOCX 无署名内部材料）。dev lane 只对 dev 构建生效，生产 in_scope 判定不变；装载需 CORPUS_DEV_LANE=1。",
+  "authority": {
+    "approved_set": "i0a2-adjudicated-20260915.json :: dev_selection_approved（U 2026-09-15，6 份）",
+    "dev_lane": "audits/20260920-i31-dev-lane/admission-policy-dev.json（U 2026-09-20，2 份）",
+    "policy": "audits/20260920-i31-dev-lane/admission-policy-dev.json"
+  },
+  "policy": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/admission-policy-dev.json",
+  "archive_root": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/archive-dev-lane",
+  "sources": [
+    {
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "domain_hint": "company",
+      "review_decision_ids": ["i3e1-approved-2b36f14b42"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "domain_hint": "company",
+      "review_decision_ids": ["i3e1-approved-dd259586a3"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": ["i3e1-approved-2cd3cadcf9"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": ["i3e1-approved-f269774bb4"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain_hint": "macro",
+      "review_decision_ids": ["i3e1-approved-43300146a2"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "domain_hint": "macro",
+      "review_decision_ids": ["i3e1-approved-9cdca024d2"],
+      "provenance": "approved_set"
+    },
+    {
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "domain_hint": "company",
+      "review_decision_ids": ["i0a2-c-f8fa2208", "devlane-md-f8fa2208"],
+      "provenance": "dev_lane",
+      "dev_lane_note": "取代链必须整条列出（production excluded_from_active → dev admitted），否则 conflicting_review"
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "domain_hint": "industry",
+      "review_decision_ids": ["i0a2-d-48c05895", "devlane-docx-48c05895"],
+      "provenance": "dev_lane",
+      "dev_lane_note": "同上；DOCX 管道能力已由 I3-1 格式探针证实（44 单元 / 7 切块 / 0 缺口）"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "artifact": "preflight-scope-check",
+  "generated_at": "2026-09-19T22:30:54+08:00",
+  "label": "批准集（U 2026-09-15 dev_selection_approved，6 份 PDF）",
+  "manifest": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-approved.json",
+    "sha256": "28880a412303553a15110c60228a15d92dcfc3478b10cb0b4f4290d53941ea25"
+  },
+  "authoritative_sources": {
+    "adjudication": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-adjudicated-20260915.json",
+      "sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea",
+      "decision_by": "U（2026-09-15 会话裁决：『按这个方案执行，无数据/空文件直接删除』）"
+    },
+    "guard_forbidden_roots": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "sha256": "cd36e91f9e76c880dc1f291981c95d1210e0862017afb7eecff708e3546df593",
+      "count": 5
+    },
+    "dev_manifest": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+      "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      "role": "非权威（dev_selection_candidates 为登记期旧文案，仅交叉参考）"
+    }
+  },
+  "summary": {
+    "sources": 6,
+    "pass": 6,
+    "fail": 0,
+    "adjudication_conflicts": 0,
+    "scope_drifts": 0,
+    "approved_dev_selection_size": 6,
+    "formats_covered_by_pass_set": [
+      "pdf"
+    ],
+    "verdict": "PASS"
+  },
+  "rows": [
+    {
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "company",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "company",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "industry",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "industry",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "macro",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "macro",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    }
+  ],
+  "note": "PASS 仅表示『取样未偏离裁定、未越权』，不等于这些材料都能发布——门（blocking 缺口）是另一层，须看 check/publish 结果。"
+}

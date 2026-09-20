@@ -12,6 +12,41 @@
 > [业务流程](../business-process.md) 为准。本文“当前执行清单”是跨层任务和顺序的唯一维护位置。
 > 原 M0—M6 详细设计保留在后半部分作历史参考，不再按其旧顺序自动执行；宏观 M1—M6 也不是本项目总计划。
 
+<a id="i31-human-gap-review"></a>
+
+<a id="i33-calibration"></a>
+
+**2026-09-20 I3-3 首轮校准（i0c-r39）：进行中、未达标。** r38 完成 I3-1 后，
+预先限定两轮30题零模型试验：整句基线全无命中；问题词元 OR 候选三类文档召回100%，
+证据通过 company 1/8、industry 2/8、macro 2/8，六负例误报。54条缺失证据分为
+34条逐字保留/映射待核查、14条块选择不足、6条原生坐标接线不足。两轮失败完整保留，
+候选未部署、评分器/gold/阈值/来源/活动发布未变，M6 未放行；下一轮先查证据保留和坐标。
+见[校准实测与失败分解](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/README.md)。
+
+**2026-09-20 最新（i0c-r38）：I3-1 完成。** 光力 p7 已有签认通过区域校验并发布，
+批准集 8/8（company 3、industry 3、macro 2），13 处 acknowledged、0 处 blocking，
+coverage 仍 scoped；旧三份 review_id 不变。回归 315 passed/7 skipped、守卫 19 passed，
+真实检索/取证通过、审计冲突 0；M6 未放行。详见
+[区域判级收口](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-region-review/README.md)。
+
+**2026-09-20 最新 · i0c-r37**：xyl 四份签署内容已完整收到，原文件及原字节均保留。
+将其自然语言签认转写为现有凭证字段，目标集合从签署明确引用的获批证据投影完整展开，
+本地审核时间按会话 Asia/Shanghai 补 +08:00；不代写核验结论。三份 / 12 处通过现有门，
+登记并发布；批准集现发布 7/8，逐类 company 2/3、industry 3/3、macro 2/2，
+`per_class_min_2=true`，格式门 true，search/fetch/verify 全过、被拒句柄 0、冲突 0。
+光力 p7 的区域说明与原 PDF 图像/文字坐标一致（文字块最大 y≈179.76 < 图像 y≈334.80），
+但页级验证器不能表达该不相交证明，保留 1 blocking；签署已完成，后续事项是坐标能力。
+缺口台账全部保留、coverage=scoped；I3-1 E2E 数量/格式门通过，不代表 M6/I4 获批。
+详见[签署采纳审计](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/README.md)。
+
+2026-09-20 I3-1 人工判级入口（i0c-r36）：依本轮用户选择实现 build 绑定具名凭证，
+发布/check/status 重验完整签署、缺口与所需证据不相交；默认分级仍 blocking，
+合法凭证只改变该 build 生命周期为 acknowledged，台账保留、coverage 仍 scoped。
+没有追加或替换开发材料，没有调用模型、修改守卫或扩大 claimed。
+已提供 4 份未签署模板覆盖 13 处缺口；真实人工判级/发布尚未执行，`per_class_min_2=false`，
+I3-1 和 M6 保持未完成。光力 p7 与金标同页无法通过当前页级不相交校验，须保留阻断。
+实现、核验与人工接续见[本轮审计说明](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/README.md)。
+
 2026-09-14 用户确认：Web 后续开发与接入暂缓，先在 CLI 打通材料、数据、分析链路。
 实施细化见 [R2 局部重设计与 CLI 闭环计划](r2-local-redesign-cli-closure-plan.md)；本文继续维护唯一
 跨层任务状态。计划已补齐八项执行条件，P0-A 通过、P0-PG 未验证；P1 契约已冻结、合成规划检查
@@ -146,7 +181,7 @@ I0G-1 拒绝契约缺口：既有安全测试子集 7 通过、3 排除；补充
 | I0 | A 实际对象/消费者/共库/准入与开发基线；B 首次恢复演练；C 证据驱动的字段级设计复核                 | 用户范围已明确；先 I0G-1 守卫，再按明确目标/权限运行 | **A 交付齐（M1 达成）、B 完成（M2 证据齐备）、C 完成（M3 达成，2026-09-17，见** **<a href="#i0c-design-review">I0-C 设计复核</a>）**；守卫已放行；I0A-1～5 全部完成并冻结（见台账）。零模型、不删除；相关 unknown 仍阻断对应物理/清理决定，仍可推翻物理候选                                                                                                                                                                                                                     |
 | I1 | 统一解析、保真清洗、结构切块与内存执行链                                          | I0-A 逻辑契约/开发基线冻结（M1）           | I1-8、I1-1～I1-7、I1-9 的实现交付已完成；F1—F7 与 R1—R5 边界整改及 R6 冻结链修复已回填（见 <a href="#i1-retest">i1-retest</a> 与 <a href="#i1-remediation-retest">整改复测</a>）。M4 已独立复核放行并由 U 签认（2026-09-16，对 i1-r3，见 <a href="#m4-review-release">M4 复核</a>）；2026-09-17 按 I0-C 协议精化修订产生 **i1-r4**（G2 发布幂等键，见 <a href="#i0c-design-review">I0-C 设计复核</a>），回归全绿；仅纯内存工作可不等 B/C                                                   |
 | I2 | 冻结 PG 布局/索引/发布/恢复 + I2-7/8 的 service/tools/verify/Evidence 接线 | I0-A/B/C + I1 + 显式隔离 PG        | **I2-1/2/3/5/7/8 与 I2-4 完成**（I2-2 独立复核 F1—F6、I2-5 复核 RM-1—13、I2-8/I2-4 复核 F1—F11 均已整改，分别见 <a href="#i2-2-independent-remediation">I2-2 回溯复核整改</a>、<a href="#i25-remediation">I2-5 复核整改</a>、<a href="#i28-i24-remediation">I2-8/I2-4 复核整改</a>）；**I2-6 完成（authority + cli\_isolation，见 <a href="#i2-6">I2-6</a>）——I2 全部任务（I2-1～I2-8）交付完毕**；**I2 全链路复核 F1—F4 已整改闭环**（缺口分级/坐标 + check/status 机读缺口 + coverage `scoped`，见 <a href="#i2-fullchain-remediation">I2 全链路复核整改</a>；I3-1 的 F1 前置解除）；**M5 已放行并经 U 签认（2026-09-18，见 <a href="#m5-review-signoff">M5 独立复核与 U 签认</a>）**；生产库 I4 前零写入 |
-| I3 | 三类各至少两份开发材料的 CLI/工具闭环、校准与 I3-7 最终重验                           | I2 + 先冻结来源/查询/证据 gold 与评分器     | **I3-0 交付并自验过门（2026-09-18，见 <a href="#i3-0">I3-0 评分器</a>）：三类指标评分器 + 合成检验（31 passed，i3 守卫 24/24，纯新增冻结 i0c-r19），待独立复核与 U 签认**；I3-2（预期与评分器冻结）前置已满足可启动——须先补机器可读 `evidence_targets`（或显式 `evidence_required=false`），否则评分器按设计阻断；I3-1 前置（缺口分级/坐标）已闭环；最终版本逐类指标、关键题、旧检索/财务及负例全满足，不继承校准前结果，不等待 R2                                                                                                                                                                                                                                                                                                                                                  |
+| I3 | 三类各至少两份开发材料的 CLI/工具闭环、校准与 I3-7 最终重验                           | I2 + 先冻结来源/查询/证据 gold 与评分器     | **I3-0 交付并自验过门（2026-09-18，见 <a href="#i3-0">I3-0 评分器</a>）：三类指标评分器 + 合成检验（31 passed，i3 守卫 24/24，纯新增冻结 i0c-r19），待独立复核与 U 签认**；I3-2（预期与评分器冻结）前置已满足可启动——须先补机器可读 `evidence_targets`（或显式 `evidence_required=false`），否则评分器按设计阻断；I3-1 前置（缺口分级/坐标）已闭环；**I3-1 已真跑两轮：①照 U 批准集 6 份（2026-09-19，i0c-r32）→ 可发布 2/6、阻断缺口 13 处、格式覆盖仅 PDF；②dev lane 纳入 MD/DOCX（2026-09-20，i0c-r34）→ 8 份可发布 4/8、`pdf 2/6 + docx 1/1 + md 1/1` 使**架构 §12.1 格式门=true**、新增检索命中 工业富联/光模块、审计冲突 0，但 `per_class_min_2` 仍为 **false**。裁定②已按「dev lane + 类型如实」口径满足（非生产放宽）；**裁定①（阻断缺口处置路径）未解**，I3-1 判定仍**未完成**（company 0/2）**；最终版本逐类指标、关键题、旧检索/财务及负例全满足，不继承校准前结果，不等待 R2                                                                                                                                                                                                                                                                                                                                                  |
 | I4 | 经复核批准的 reset/migrate 条件切换；defer 则不执行                          | I3 + 停写截止点后最终备份恢复 + 精确切换清单/批准  | 待执行；reset 才需删除清单，迁移不附带整包清理；旧演练不能替代最终恢复，原文/人工/审计保留，无污染且可恢复                                                                                                                                                                                                                                                                                                                                      |
 | I5 | 增量、版本升级重建与维护文档，退役旧入口                                          | I4                             | 待执行；重复执行、重解析、重切块和重索引可重复，无双写                                                                                                                                                                                                                                                                                                                                                                    |
 
@@ -437,7 +472,7 @@ I3-2（预期与评分器冻结）前置已满足，可启动；I3-1 另需其 F
 - 冻结 **i0c-r21**（parent=i0c-r20；验证器 r21 块强制"整改只涉评分器/测试/台账"），
   `validate_i0c_freeze.py` exit 0。
 
-**状态**：整改完成，**待复核确认闭环 + U 签认**；M5 不因评分器缺陷被推翻（复核亦明确不推翻），
+**状态**：整改完成，**已复核确认闭环并经 U 签认（i0c-r33）**；M5 不因评分器缺陷被推翻（复核亦明确不推翻），
 且本轮未改消费者/检索/取证接线，无需重验 M5 门。生产库 I4 前零写入。
 
 <a id="i3-2-evidence-candidates"></a>
@@ -507,6 +542,122 @@ I3-2（预期与评分器冻结）前置已满足，可启动；I3-1 另需其 F
    但已有 reviewer/reviewed_at）。
 
 **当前状态（r26 优先于本节历史 r25/r24 数据）**：I3-2 采纳稿落正式路径：新金标 36 槽位（冻结 23 条逐字节保留 + 采纳 13 槽/49 条，负例近似命中 7 条隔离成库）、候选 v7（82 条目标：必需 44／补充 20／锚点 18）、裁决件 40+24+6+1（署名 `xyl` + `ai_assisted`）、**门 ready=true（0 阻断／20 条人工同义 warning）**、批准投影 79 必需 + 20 补充、验证 30/30 自洽 + 探针 16/16。**未宣告 I3-2 完成**：其余冻结项与 I3-1/I3-5 未做。
+
+<a id="i3-1-e2e"></a>
+
+### 2026-09-19 I3-1 三类开发 E2E（照 U 批准集执行；i0c-r32 首次入链）
+
+**范围**：唯一权威源 `i0a2-adjudicated-20260915.json` 的 `dev_selection_approved`（U 2026-09-15 批准 6 份 PDF：
+company 华创茅台 `e034bdac` / 国信光力 `b6beb6ee`、industry 长江化工 `7463f4d0` / 华福新材料 `aa8e026a`、
+macro 华创宏观 `81e10069` / 光大非农 `6fc25e24`）。取样前 `preflight_scope_check.py` 判 **PASS**。
+Agent 早期"自选 + 换料"范围**已撤回**（`i3-1-retraction-record.*`；守卫允许路径 15→6；沙箱数据层
+teardown + 重建后按批准集重跑，逐源与矩阵完全复现）。
+
+**环境与守卫**：隔离沙箱 `corpus-db`（`127.0.0.1:543`，库 `i2_sandbox_corpus`，`corpus` schema 九表由
+`i2/i2s1_apply.py` 建、`i2s1_teardown.py` 拆）；阶段守卫 `guards/i3-e2e.json`
+（`config_version=1`、网络 allowlist 仅 `127.0.0.1:543`、零模型、`allowed_source_paths` = 批准集 6 份、
+`forbidden_roots` 与 `guards/i3.json` 逐字一致）**独立于** `guards/i3.json`；
+`i3-e2e-guard-report.json` 合成反例自检 **24/24**（write-once）。首冻前修正：该守卫 `model` 封锁面原先弱于
+`guards/i3.json`（只拦 `openai`，实测 `anthropic` / `plugins.corpus.material_semantics` 未被拒）→ 已对齐后重跑自检。
+
+**真实结果**（`i3-1-e2e-approved-set.{json,md}`、`-rerun.{json,md}`、`-record.*`、`-sources.*`）：
+6 份 build 全成功（**4305 单元 / 767 切块**）；**可发布 2/6**（company 0/2、industry 1/2、macro 1/2）；
+阻断缺口 **13 处**（`table_lines_without_extraction` 9 + `image_region_unreadable` 4）；检索 `同比` 4 命中、
+取证核验全过、被拒句柄 0、`audit_corpus_chain` 冲突 0、coverage `scoped`/`matched`。
+
+**判定（不得读成通过）**：`per_class_min_2_satisfied=false` —— I3-1 任务行的"三类每类≥2 份"在**现行门 +
+现行裁定**下无解（阻断缺口无处置路径）；格式覆盖仅 PDF（DOCX/MD 准入口径 0 份，§12.1 未满足）。
+两项**待 U 裁定**：①阻断缺口处置路径（补 OCR／人工认可入口／换料／显式登记不覆盖）；②MD·DOCX 是否声称覆盖。
+本轮初步结果**不得直接放行 I4**；I3-3/I3-4/I3-5/I3-7 另做（`i3-1-e2e-final.*` 第九/十节 +
+`retrospective-i3-1-scope.md` F1—F10）。
+
+**r33 优先状态（2026-09-19，I3-0 阶段签认）**：具名审核人 xyl 已签认 I3-0 阶段（F1—F5 整改闭环，
+探针 10/10、自身 46 passed）；冻结 **i0c-r33**（parent=r32）：签认记录 + 收口脚本 + 复核证据 + 台账。
+I3-1/I3-5/I3-7 状态不变（见下）。
+
+**r32 历史状态（I3-1 首次入链）**：台账回填 I3-1 真实结果；I3-1 审计产物（记录/脚本/清单）+
+批准集来源副本（`archive-approved/`，内容寻址）+ `i3-e2e` 守卫与自检 + 环境预检报告 + 台账 + 验证器
+绑定为 **i0c-r32**（parent=r31）。**判定：I3-1 未完成**（见上节两项待裁定）；I3-3/I3-4/I3-5/I3-6/I3-7 未做。
+I3-1 初步结果不构成 I4 放行依据。
+
+<a id="m6-format-criterion"></a>
+
+### 2026-09-20 M6 判据补齐格式门（i0c-r35 入链）
+
+**U 指令（2026-09-20）**：`tasks.md` 的 M6 判据行原无“格式”字样，而架构 §12.1 与 I3-7 行都有格式规则 →
+完成口径不一致；现把 §12.1 格式门**显式写入 M6 判据**。**只改判据文字，不改门的行为、不新增阻塞**：
+格式门的实际执行仍是 §12.1「格式可得性对账」（`dev-manifest.json` 的 `format_availability` + 取样前
+`preflight_scope_check.py` 核对），规则一字未改。
+
+**改动内容**：`tasks.md` M6 行追加“**声称支持的格式（PDF/DOCX/MD）按架构 §12.1 各有真实已用开发样本、
+无未处置缺格（dev lane 样本计入但须标注 `dev_lane`）**”，与 §12.1「缺格式样本则该格式真实门未通过，
+不能静默缩范围」、I3-7 行「分母/格式/必需环境缺失不通过」三处对齐；`tasks.md` 导航表补一行。
+
+**影响**：I3-1 的 §12.1 格式门已于 i0c-r34 为 true（pdf 2/6、docx 1/1、md 1/1），故本改动**不新增阻塞**，
+只消除“格式门算不算完成条件”的歧义；裁定①（阻断缺口处置路径）、company 0/2 与
+I3-3/I3-4/I3-5/I3-6/I3-7 状态**不变**。
+
+**r35 入链**：仅两条文档路径（`tasks.md`、本台账）按 `archive_first()` 归档后重绑，**代码零改动**；
+三门复跑（冻结链 / I3-2 完成门 / 语料族）全绿后收口。
+
+<a id="i3-1-dev-lane"></a>
+
+### 2026-09-20 I3-1 第二轮：dev lane 纳入 MD / DOCX（i0c-r34 入链）
+
+**U 裁决（2026-09-20）**：①新建 **dev lane**（只对 dev 构建生效，**不改变任何生产 in_scope 判定**）；
+②MD 料由 `5月：锂电铜箔和电子铜箔.md`（专家访谈实录、结构不适）改用
+`data/corpus/工业富联_投委会决策报告_20260829.md`；③DOCX 同批纳入
+`9月8日 光模块技术演进与供应链重构…docx`；④`material_type` **如实**保持
+（`internal_committee_report` / `internal_unattributed`），不得伪写为研报；⑤该 MD 系**自有流程生成产物**
+（通篇引用 mx-xuangu/mx-search，结构为「第零步数据验证 + 五脑辩论」），来源性质经 U 确认可接受并登记。
+
+**设计（不改生产判定）**：dev lane 是**独立政策文件** `admission-policy-dev.json`
+（`policy_rev=v2-dev-20260920`、`scope=dev`、`production_in_scope_unchanged=true`、逐源 `dev_lane.sources`）；
+装载需显式 `allow_dev_lane`（CLI：`CORPUS_DEV_LANE=1`），否则 fail-closed 拒绝。`in_scope` 的允许
+材料类型改为**按 `policy_rev` 绑定**（`contract.IN_SCOPE_MATERIALS_BY_POLICY_REV`；v1 逐字不变，
+未知 rev 落最严默认 fail-closed）。两份来源各起一条**完整取代链**：生产 `excluded_from_active` →
+dev `admitted`（`review_decision_ids` 列整条链，否则 `conflicting_review`）。生产政策
+`admission-policy.json`(v1) 与 `i0a2` 终态**逐字不改**。
+
+**真实结果**（`audits/20260920-i31-dev-lane/i3-1-dev-lane-e2e.{json,md}`；干净沙箱 teardown `residue=0` 后重建）：
+8 份 build 全成功（**4440 单元 / 794 切块**）；**可发布 4/8**（批准集 2/6 不变 + MD 1/1 + DOCX 1/1）；
+**架构 §12.1 格式门 = true**（pdf 2/6、docx 1/1、md 1/1 均有可发布样本）；新增检索命中
+`工业富联` 1 / `光模块` 5，取证核验全过、被拒句柄 0、`audit_corpus_chain` 冲突 0。
+
+**判定（不得读成通过）**：逐类可发布 company **1/3**、industry 2/3、macro 1/2 →
+**`per_class_min_2` 仍为 false**（裁定①未解：company 0/2 的 13 处阻断缺口依旧无处置路径）。
+格式覆盖（裁定②）**已按 U 的「dev lane + 如实类型」口径满足**，但**不构成生产口径放宽**。
+
+**双证（生产判定不变）**：① dev lane 反例族（`tests/test_corpus_preparation_admission.py`：不给
+`allow_dev_lane` 装载被拒 / v1 政策下仍 `policy_conflict` / 未列入清单来源不放宽 / 契约按
+`policy_rev` 绑定 / 未知 rev 落最严默认）；② 预检 fail-closed 反例（同一清单不给 `--dev-lane`
+→ FAIL、裁定冲突 2、格式仅 pdf）。另 `verify_dev_lane_admissions.py` 只读核验落库：两份来源
+`decision=in_scope`、`material_type` **如实**、`policy_rev=v2-dev-20260920`、含 `dev_lane=` 证据标记。
+
+**r34 入链**：dev lane 政策 + 取代链清单 + 预检扩展版（含反例报告）+ 守卫自检报告（允许路径 6→8）+
+运行脚本 + 核验脚本 + E2E 证据 + 台账；r32 版预检脚本/守卫/自检报告/台账按 `archive_first()` 归档后重绑。
+**尚未完成**：裁定①（缺口处置路径）未解 → company 0/2 仍不可满足；I3-3/I3-4/I3-5/I3-6/I3-7 未做；
+本轮结果同样**不构成 I4 放行依据**。
+
+**r31 历史状态**：prose 留出入守卫（4→5 根）、19 题映射规则级复核关闭、
+20 条同义 warning 作为已接受风险入册、完成门增至 10 项判据；冻结 **i0c-r31**（parent=r30）。
+M5 F3（i1 链 13 项）单列跟踪（建议 i1-r5）；I3-5/I3-1/I3-7 未执行。
+
+**r30 历史状态（I3-2 阶段签认）**：具名审核人 xyl 已签认 I3-2 阶段（复核通过，0 fail／1 观察项）；
+冻结 **i0c-r30**（parent=r29）：签认记录 + 复核脚本（含防重写守卫）+ 执行记录 + 生成器入链 + 台账；
+完成门新增『签认须具名且入链』判据。I3-5/I3-1 未执行（需授权）；prose 留出纳入 guard 与否待定。
+
+**r29 历史状态（Step 5 复核整改）**：针对性复核通过并修掉 P4 的 4 处路径基准缺陷，
+冻结 **i0c-r29**（parent=r28；绑修正后的 P2/P3/P4 + 复核/差异包 + 台账）。**阶段签认待 U**
+（`signoff-record-i3-2.md` 状态 `pending_user_signoff`，签认后另立修订入链）。
+
+**r28 历史状态（Step A—C 整改）**：正式评分输入已派生并入链
+（`i3-2/query-gold-scoring-v1.jsonl` `1b018ceb…` + lineage + 唯一读入口；审批原件未改，门 ready=true）；
+旧基线**引用资产全部入链**（消除未冻结外部指针）；19 题旧锚点→新 source 身份 **19/19 唯一命中**
+（`legacy-anchor-mapping.json`，待人工复核）；7 条公式输入指标已登记；阶段完成门
+`validate_i3_2_completion.py` 已实现；冻结 **i0c-r28**（parent=r27）。其余人工复核项与 I3-5/I3-1 未变。
+
+**r27 历史状态（旧基线冻结）**：I3-2 旧基线 7 类用例身份全部落定并冻结 **i0c-r27**（parent=i0c-r26；validate exit 0；case manifest status=frozen_r27）——legacy_retrieval_golden 冻结 **19 题**（排除留出冲突 O6，golden.py 原题保留）、financial_controlled_recalc_57 容差 = 规范化后精确匹配 tol=0、formula_7 沿用 1e-6、customer_table_12 以报告为准按历史非回归处置、prose_numbers_3 冻结 2 条可复现（第 3 条标不可复现）、macro_legacy_fields_0_of_3 以机器记录 2 targets 为准（previous 移出）、old_doc_kind_review 以 full84 CSV（d69bbb1d…）为权威版本；守卫留出 3→4 份（追加国信茅台 bbba671e.pdf，对应 guosen_maotai_holdout 10 格）。8 项 blocked 清零。**未宣告 I3-2 完成**：阶段完成门 `validate_i3_2_completion.py` 未实现（已登记）、legacy 旧锚点→新 locator 映射仍 `to_be_resolved`、I3-5 真实非回归未执行；零模型、未写生产库、未读留出原文。诊断稿与 manifest 见 [20260919-i32-diagnosis](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/)。
 
 **历史 r25 状态**：I3-2 补料候选 v6 + 复验 B1—B5 修复交付；未冻结金标、未宣告 I3-2 完成。
 修复范围为来源专属绑定、答案约束隔离、逐项原文同义映射、检索线索改选核验、审批身份/唯一性和投影真源检查。

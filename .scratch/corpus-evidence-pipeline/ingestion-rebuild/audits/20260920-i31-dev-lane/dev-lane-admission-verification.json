@@ -1,0 +1,48 @@
+{
+  "artifact": "dev-lane-admission-verification",
+  "generated_at": "2026-09-20T09:40:03+08:00",
+  "sandbox": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+  "lane_id": "i3-1-dev-lane-md-docx",
+  "dev_policy_rev": "v2-dev-20260920",
+  "rows": [
+    {
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "decision": "in_scope",
+      "material_type": "internal_committee_report",
+      "research_domain": "company",
+      "policy_rev": "v2-dev-20260920",
+      "review_ref": "devlane-md-f8fa2208",
+      "evidence_refs": [
+        "title_type_marker=matched:committee",
+        "heading_hierarchy=matched",
+        "dev_lane=i3-1-dev-lane-md-docx",
+        "admitted_material=internal_committee_report"
+      ],
+      "active_build_id": "c01bab5926fc7ea90c76916cb189f85e62fcc4171fabc89092d48fc55a7601b8",
+      "generation": 1,
+      "declared_material_type": "internal_committee_report",
+      "declared_i0a2_decision": "excluded_from_active"
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "decision": "in_scope",
+      "material_type": "internal_unattributed",
+      "research_domain": "industry",
+      "policy_rev": "v2-dev-20260920",
+      "review_ref": "devlane-docx-48c05895",
+      "evidence_refs": [
+        "dev_lane=i3-1-dev-lane-md-docx",
+        "admitted_material=internal_unattributed"
+      ],
+      "active_build_id": "010e9a900053c70ea3e62436f179bf0770d7c99507a8e5c2fc93b34587690cb9",
+      "generation": 1,
+      "declared_material_type": "internal_unattributed",
+      "declared_i0a2_decision": "excluded_from_active"
+    }
+  ],
+  "failures": [],
+  "verdict": "PASS",
+  "note": "本核验只证明 dev lane 在隔离沙箱内的落库事实（材料类型如实 + dev 政策 + 已发布）。生产判定不变由两处独立证据承担：① tests/test_corpus_preparation_admission.py 的 dev lane 族（关闭 dev lane / v1 政策 / 未列入来源均拒绝）；② preflight fail-closed 反例。"
+}

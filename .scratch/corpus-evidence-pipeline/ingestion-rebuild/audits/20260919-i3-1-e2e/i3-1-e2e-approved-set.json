@@ -1,0 +1,347 @@
+{
+  "artifact": "i3-1-e2e-approved-set",
+  "phase": "i3-1",
+  "generated_at": "2026-09-19T22:31:38+08:00",
+  "scope": {
+    "source": "i0a2-adjudicated-20260915.json :: dev_selection_approved（U 2026-09-15 批准）",
+    "size": 6,
+    "rule": "无自选、无换料、无越权：逐份与裁定终态一致",
+    "preflight_check": {
+      "verdict": "PASS",
+      "pass": 6,
+      "fail": 0,
+      "formats_covered": [
+        "pdf"
+      ]
+    }
+  },
+  "evidence": {
+    "stage1_build": "i3-1-e2e-record.json",
+    "stage2_per_source": "i3-1-e2e-sources.json",
+    "note": "第一/二阶段用的 6 份与批准集完全一致，故该批真实结果即批准集结果，无需重跑；沙箱自 2026-09-19 23:0x 起不可用（Docker 停），数据层重置登记为 pending。"
+  },
+  "summary": {
+    "sources": 6,
+    "publishable": 2,
+    "blocked": 4,
+    "total_units": 4305,
+    "total_chunks": 767,
+    "blocking_gaps_total": 13,
+    "search_hits": {
+      "营业收入": 0,
+      "景气": 0,
+      "非农": 0,
+      "同比": 4
+    },
+    "verify_all_ok": true,
+    "audit_conflicts": [],
+    "per_class_min_2_satisfied": false,
+    "per_class_min_2_why": "按批准集执行，可发布 = company 0/2、industry 1/2、macro 1/2 → **『三类每类≥2 份』在现行门 + 现行裁定下无法满足**；缺口无处置路径（见真问题 1）"
+  },
+  "matrix": {
+    "company:pdf": {
+      "total": 2,
+      "published": 0
+    },
+    "industry:pdf": {
+      "total": 2,
+      "published": 1
+    },
+    "macro:pdf": {
+      "total": 2,
+      "published": 1
+    }
+  },
+  "sources": [
+    {
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "unit_count": 778,
+      "chunk_count": 25,
+      "check_exit": 4,
+      "publishable": false,
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:2']（image_region_unreadable@page:2）"
+      },
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "blocking_count": 1,
+      "acknowledged_count": 7
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "unit_count": 798,
+      "chunk_count": 198,
+      "check_exit": 4,
+      "publishable": false,
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）"
+      },
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:7",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "blocking_count": 1,
+      "acknowledged_count": 22
+    },
+    {
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "unit_count": 1518,
+      "chunk_count": 282,
+      "check_exit": 4,
+      "publishable": false,
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:1', 'issue:image_region_unreadable:page:2', 'issue:table_lines_without_extraction:page:12', 'issue:table_lines_without_extraction:page:13', 'issue:table_lines_without_extraction:page:17', 'issue:table_lines_without_extraction:page:18', 'issue:table_lines_without_extraction:page:21', 'issue:table_lines_without_extraction:page:22', 'issue:table_lines_without_extraction:page:24', 'issue:table_lines_without_extraction:page:3']（image_region_unreadable@page:1, image_region_unreadable@page:2, table_lines_without_extraction@page:12, table_lines_without_extraction@page:13, table_lines_without_extraction@page:17, table_lines_without_extraction@page:18, table_lines_without_extraction@page:21, table_lines_without_extraction@page:22, table_lines_without_extraction@page:24, table_lines_without_extraction@page:3）"
+      },
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:1",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:12",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:13",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:17",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:18",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:21",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:22",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:24",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:3",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "blocking_count": 10,
+      "acknowledged_count": 24
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "unit_count": 258,
+      "chunk_count": 54,
+      "check_exit": 0,
+      "publishable": true,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1,
+        "active_build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8"
+      },
+      "blocking_gaps": [],
+      "blocking_count": 0,
+      "acknowledged_count": 11
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "unit_count": 258,
+      "chunk_count": 21,
+      "check_exit": 0,
+      "publishable": true,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1,
+        "active_build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281"
+      },
+      "blocking_gaps": [],
+      "blocking_count": 0,
+      "acknowledged_count": 16
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "unit_count": 695,
+      "chunk_count": 187,
+      "check_exit": 4,
+      "publishable": false,
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:6']（table_lines_without_extraction@page:6）"
+      },
+      "blocking_gaps": [
+        {
+          "key": "issue:table_lines_without_extraction:page:6",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "blocking_count": 1,
+      "acknowledged_count": 8
+    }
+  ],
+  "format_coverage": {
+    "pdf": "6 份（批准集全部为 PDF）",
+    "docx": "0 份 —— 语料内 DOCX 均被裁定 excluded_from_active → 准入口径下无样本",
+    "md": "0 份 —— 同上（6 份投委会报告 excluded_from_active，5 份 pipeline_artifact excluded）",
+    "conclusion": "§12.1『每种声称支持的格式均需真实样本』在现行裁定下**无法满足**；须补研报类 MD/DOCX 料，或 U 明确 v1 不声称覆盖（见真问题 2）"
+  },
+  "blocking_gap_inventory": [
+    {
+      "code": "table_lines_without_extraction",
+      "count": 9
+    },
+    {
+      "code": "image_region_unreadable",
+      "count": 4
+    }
+  ],
+  "read_path": [
+    {
+      "query": "营业收入",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "景气",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "非农",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "同比",
+      "hits": 4,
+      "verified": [
+        {
+          "doc_id": "cv2:f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+          "locator": "chunk:f6ce586247b5c88a:body:0014",
+          "units": 13,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "由于市场需求和公司战略发展需要，松下电子材料（上海）有限公司拟在环城\n北路148 号现有厂区内新建生产厂房，扩大环氧树脂成型材料产能，本项目"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0003",
+          "units": 18,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "宏观研究\n宏观专题  2026 年09 月06 日\n华创证券研究所 \n证券分析师：张瑜\n邮箱：zhangyu3@hcyjs.com \n执业编"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0006",
+          "units": 14,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "资料来源：Wind，华创证券预测；注：2026 年为预测值，主要预测参数是：税收全年增长6%，非税实现预算目标，\n政府性基金收入参考上半年增"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0007",
+          "units": 17,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "资料来源：wind，华创证券\n四、路径3：带动企业投资增加\n1、路径3 的理论猜想：新动能快速增长—>利润增加或者在政策支持下，获得股权融资"
+        }
+      ]
+    }
+  ],
+  "pending": {
+    "sandbox_data_reset": "Docker 不可用；恢复后执行：CONFIRM_TEARDOWN=i2_sandbox_corpus CORPUS_I2_DSN=… uv run python .scratch/…/i2/i2s1_teardown.py 然后 i2s1_apply.py —— 目的：清除越权样本（2 MD + DOCX + 5 自选 PDF）在沙箱留下的 publications/admissions",
+    "note": "沙箱为一次性环境；权威裁定（i0a2）与冻结链从未被改动"
+  },
+  "rerun_confirmation": {
+    "file": "i3-1-e2e-approved-set-rerun.json",
+    "at": "2026-09-19T22:32:58+08:00",
+    "identical": true,
+    "publishable": 2,
+    "blocking_gaps_total": 13,
+    "note": "干净沙箱（teardown residue=0 后重建 corpus schema）重跑，逐源结果与矩阵一致"
+  }
+}

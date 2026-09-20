@@ -1,0 +1,28 @@
+{
+  "artifact": "i3-0-signoff-record",
+  "status": "signed",
+  "scope": "I3-0 阶段签认（三类指标评分器 + 合成检验 + 独立复核 F1—F5 整改闭环）",
+  "prepared_at": "2026-09-19T09:30:00+08:00",
+  "review_result": "通过",
+  "claim_upon_signoff": [
+    "I3-0 独立复核 F1—F5 已整改闭环：以修复不变量而非放松断言的方式关闭 9 项红例（集合交集召回与重复来源拒绝；证据来源归属 source_id/build_id/verified 显式；NO_MATCH/FAILED payload 规则；导入器与 score() 共用严格 gold/观测校验；dataclass 构造期目标不变量）",
+    "复核方独立反例 10/10 passed（9 红转绿 + 正控仍绿），自身合成测试 46 passed（新增 15 项复核回归），i3 守卫 env 46 passed",
+    "评分器字节已冻结 i0c-r21（parent=r20，整改仅涉评分器/测试/台账），validate_i0c_freeze.py exit 0",
+    "M5 不因评分器缺陷被推翻（复核明确不推翻）；本轮未改消费者/检索/取证接线，无需重验 M5 门"
+  ],
+  "not_covered": [
+    "I3-1 三类开发 E2E 未执行（已在 i0c-r32 单独入链，判定未完成）",
+    "I3-2 阶段签认（预期与评分器冻结 + 派生评分输入 + 旧基线 + 初始实验版本）由 r30 独立签认，不属于本记录",
+    "I3-5 真实非回归（旧检索/财务/公式/客户表/正文/宏观）未执行（需环境与预算授权）",
+    "真实生成答案语义验收（I3-7）未执行",
+    "M5 F3（validate_i1_freeze.py 既有失配）单列跟踪，不属本签认范围",
+    "本签认只覆盖 I3-0 评分器与复核整改，不代表 I4 放行"
+  ],
+  "signature_fields": {
+    "reviewer": "xyl",
+    "reviewed_at": "2026-09-19T09:30:00+08:00",
+    "decision": "批准（I3-0 独立复核 F1—F5 整改签认）",
+    "note": "具名审核人于 2026-09-19 会话中确认签认 I3-0；签认范围与不含范围见本记录 claim/not_covered 两节。独立复核报告 audits/20260918-i30-review/review.md 的发现已按 F1—F5 以不变量方式闭环。"
+  },
+  "signed_in": "i0c-r33"
+}

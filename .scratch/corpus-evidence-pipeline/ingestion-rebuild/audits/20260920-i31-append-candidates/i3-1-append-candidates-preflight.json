@@ -1,0 +1,59 @@
+{
+  "artifact": "i3-1-append-candidates-preflight",
+  "generated_at": "2026-09-20T11:23:54+08:00",
+  "method": "本地只读：read_document + clean_reader_result + gaps 裁决（零 PG / 零模型 / 零网络；不写冻结件、不 replan PG）",
+  "candidates": [
+    {
+      "domain": "company",
+      "path": "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "on_disk": true,
+      "source_id": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "source_id_prefix": "c195233b",
+      "matches_expected_source_id": true,
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-2+pymupdf-1.28.2",
+      "unit_count": 439,
+      "region_status_counts": {
+        "kept": 420,
+        "noise": 25
+      },
+      "gap_summary": {
+        "total": 6,
+        "blocking": 0,
+        "acknowledged": 6,
+        "out_of_scope": 0,
+        "policy_rev": "gap-policy-1"
+      },
+      "blocking_gaps": [],
+      "publishable_local_precheck": true
+    },
+    {
+      "domain": "macro",
+      "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "on_disk": true,
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "source_id_prefix": "1e021a8c",
+      "matches_expected_source_id": true,
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-2+pymupdf-1.28.2",
+      "unit_count": 83,
+      "region_status_counts": {
+        "noise": 14,
+        "kept": 74
+      },
+      "gap_summary": {
+        "total": 5,
+        "blocking": 0,
+        "acknowledged": 5,
+        "out_of_scope": 0,
+        "policy_rev": "gap-policy-1"
+      },
+      "blocking_gaps": [],
+      "publishable_local_precheck": true
+    }
+  ],
+  "verdict": {
+    "all_clean": true,
+    "expected_counting_effect": "company 1→2、macro 1→2（industry 已 2/3，不动）→ per_class_min_2 预期转 true"
+  }
+}

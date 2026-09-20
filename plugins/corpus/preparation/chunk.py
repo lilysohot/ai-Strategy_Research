@@ -39,7 +39,7 @@ from plugins.corpus.preparation.clean import CleanRegion, CleanResult
 from plugins.corpus.preparation.contract import CHUNK_KINDS, UnitStatus
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderResult
 
-CHUNK_REV = "chunk-2"
+CHUNK_REV = "chunk-3"
 
 
 def normalize_search_text(text: str) -> str:
@@ -164,6 +164,39 @@ def _kept_regions(reader_result: ReaderResult, clean: CleanResult) -> list[tuple
         if region is not None and region.status is UnitStatus.KEPT and region.clean_view:
             kept.append((unit.ordinal, region))
     return kept
+
+
+def _table_row_label_prefix(unit: CandidateUnit | None) -> str:
+    """表格行的结构标签前缀（票 04 I-B1）：与 cells 对齐的 label_path 去重合并。
+
+    仅注入索引文本（search_text），不触碰 ``unit.raw_text``——引用取证仍逐字
+    来自原文；``label_path`` 为空的合成单元返回空串，行为与旧版逐字节一致。
+    """
+    if unit is None:
+        return ""
+    parts: list[str] = []
+    seen: set[str] = set()
+    for label in unit.location.label_path:
+        if label and label not in seen:
+            seen.add(label)
+            parts.append(label)
+    return " ".join(parts)
+
+
+def _table_row_pieces(ordinal: int, text: str, prefix: str) -> list[_Piece]:
+    """表格行 piece：结构标签前缀 + 行文本；单元格永不切断。
+
+    前缀推超上限的行显式标 ``oversized_unsplittable`` 复核，不静默越过
+    ``HARD_LIMIT``。
+    """
+    pieces = _region_pieces(ordinal, text, splittable=False)
+    if not prefix:
+        return pieces
+    out: list[_Piece] = []
+    for piece in pieces:
+        prefixed = f"{prefix}\n{piece.text}"
+        out.append(_Piece(piece.ordinals, prefixed, piece.oversized or len(prefixed) > HARD_LIMIT))
+    return out
 
 
 def _table_group_key(
@@ -406,13 +439,12 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
                     groups.append([(row_ordinal, row_region)])
                     group_keys.append(key)
             for group in groups:
-                pieces = [
-                    piece
-                    for row_ordinal, row_region in group
-                    for piece in _region_pieces(
-                        row_ordinal, row_region.clean_view or "", splittable=False
+                pieces: list[_Piece] = []
+                for row_ordinal, row_region in group:
+                    prefix = _table_row_label_prefix(unit_by_ordinal.get(row_ordinal))
+                    pieces.extend(
+                        _table_row_pieces(row_ordinal, row_region.clean_view or "", prefix)
                     )
-                ]
                 context = pieces[0] if len(pieces) > 1 else None
                 emit_run(
                     pieces,

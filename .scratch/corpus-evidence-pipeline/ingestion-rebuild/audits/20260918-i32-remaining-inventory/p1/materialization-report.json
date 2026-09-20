@@ -1,0 +1,1007 @@
+{
+  "artifact": "i3-2-p1-query-gold-with-targets-DRAFT",
+  "dryrun": true,
+  "not_filed": "草稿：位于审计目录，未写正式路径、未改冻结件",
+  "inputs": {
+    "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+    "projection_sha256": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+    "source_gold_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
+  },
+  "totals": {
+    "required": 79,
+    "supplementary": 20,
+    "answerable": 24,
+    "no_answer": 6
+  },
+  "scorer_gold_from_records": {
+    "status": "ok",
+    "questions": 30,
+    "evidence_targets_per_question": {
+      "company-001": 2,
+      "company-002": 3,
+      "company-003": 6,
+      "company-004": 3,
+      "company-005": 2,
+      "company-006": 3,
+      "company-007": 1,
+      "company-008": 5,
+      "company-009": 0,
+      "company-010": 0,
+      "industry-001": 5,
+      "industry-002": 4,
+      "industry-003": 3,
+      "industry-004": 2,
+      "industry-005": 2,
+      "industry-006": 3,
+      "industry-007": 3,
+      "industry-008": 5,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-001": 3,
+      "macro-002": 3,
+      "macro-003": 4,
+      "macro-004": 6,
+      "macro-005": 2,
+      "macro-006": 3,
+      "macro-007": 3,
+      "macro-008": 3,
+      "macro-009": 0,
+      "macro-010": 0
+    }
+  },
+  "errors": [],
+  "per_question": [
+    {
+      "query_id": "company-001",
+      "answer_existence": "answerable",
+      "required": 2,
+      "supplementary": 4,
+      "targets": [
+        {
+          "target_id": "e4",
+          "role": "approved_required",
+          "ref": "company-008-claim-001#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e1",
+          "role": "supplementary",
+          "ref": "company-001-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "company-001-claim-001#6",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "supplementary",
+          "ref": "company-001-claim-001#10",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e5",
+          "role": "supplementary",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p1#1",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-002",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "company-008-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "company-008-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p1#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-003",
+      "answer_existence": "answerable",
+      "required": 6,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e4",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#5",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e5",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#6",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e6",
+          "role": "approved_required",
+          "ref": "company-003-claim-001#8",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e7",
+          "role": "supplementary",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p20#1",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-004",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e1",
+          "role": "supplementary",
+          "ref": "company-018-claim-001#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-005",
+      "answer_existence": "answerable",
+      "required": 2,
+      "supplementary": 3,
+      "targets": [
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "company-028-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "company-028-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e1",
+          "role": "supplementary",
+          "ref": "company-024-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e4",
+          "role": "supplementary",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p3#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e5",
+          "role": "supplementary",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p3#1",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-006",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "company-044-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "company-044-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p7#0",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-007",
+      "answer_existence": "answerable",
+      "required": 1,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "company-013-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p7#0",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-008",
+      "answer_existence": "answerable",
+      "required": 5,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "a-1",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p1#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-08-16_6f14cc14-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-5",
+          "role": "approved_required",
+          "ref": "company-ai-supplement-2026-09-06_dddc7cd0-p1#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "company-009",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    },
+    {
+      "query_id": "company-010",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    },
+    {
+      "query_id": "industry-001",
+      "answer_existence": "answerable",
+      "required": 5,
+      "supplementary": 2,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-5",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e4",
+          "role": "supplementary",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#6",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e5",
+          "role": "supplementary",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#8",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-002",
+      "answer_existence": "answerable",
+      "required": 4,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-003",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#6",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "industry-009-claim-001#7",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "supplementary",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#9",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-004",
+      "answer_existence": "answerable",
+      "required": 2,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "a-1",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-005",
+      "answer_existence": "answerable",
+      "required": 2,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-057-claim-001#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#4",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-006",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "a-1",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#3",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-007",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-057-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "industry-057-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e4",
+          "role": "supplementary",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-008",
+      "answer_existence": "answerable",
+      "required": 5,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "industry-057-claim-001#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#5",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-5",
+          "role": "approved_required",
+          "ref": "industry-ai-supplement-2026-08-13_174b6462-p10#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "industry-ai-supplement-2026-09-06_f8e31696-p1#4",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "industry-009",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    },
+    {
+      "query_id": "industry-010",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    },
+    {
+      "query_id": "macro-001",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-038-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p3#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "supplementary",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-002",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 2,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-038-claim-001#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e4",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "macro-038-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e5",
+          "role": "supplementary",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#3",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-003",
+      "answer_existence": "answerable",
+      "required": 4,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-038-claim-001#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "macro-ai-supplement-2026-09-06_793b3967-p1#2",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-004",
+      "answer_existence": "answerable",
+      "required": 6,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "a-1",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#1",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-4",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-5",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#4",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-6",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p2#0",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-005",
+      "answer_existence": "answerable",
+      "required": 2,
+      "supplementary": 1,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-039-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#5",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "supplementary",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#6",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-006",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-039-claim-001#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#7",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p1#7",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-007",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-060-claim-001#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "macro-060-claim-001#3",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p2#1",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-008",
+      "answer_existence": "answerable",
+      "required": 3,
+      "supplementary": 0,
+      "targets": [
+        {
+          "target_id": "e1",
+          "role": "approved_required",
+          "ref": "macro-060-claim-001#0",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "e2",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p2#2",
+          "ok": true,
+          "reasons": []
+        },
+        {
+          "target_id": "a-3",
+          "role": "approved_required",
+          "ref": "macro-ai-supplement-2026-09-06_cc03f55b-p2#3",
+          "ok": true,
+          "reasons": []
+        }
+      ],
+      "targets_added": true
+    },
+    {
+      "query_id": "macro-009",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    },
+    {
+      "query_id": "macro-010",
+      "answer_existence": "no_answer",
+      "required": 0,
+      "supplementary": 0,
+      "targets_added": false
+    }
+  ],
+  "output_sha256": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d"
+}

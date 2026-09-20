@@ -132,7 +132,7 @@ def test_region_ledger_complete_with_synthetic_gaps() -> None:
     units = [
         _unit(1, "正文甲"),
         _unit(2, "……\ufffd……", status=UnitStatus.REVIEW_REQUIRED, reasons=("garbled_text",)),
-        _unit(3, "LEFT0 alpha", reasons=("multi_column_order_reconstructed",)),
+        _unit(3, "LEFT0 alpha", reasons=("multi_column_order_flagged",)),
     ]
     issues = (
         ReaderIssue("empty_page", "page:1", "无文字层且无图片"),
@@ -174,15 +174,15 @@ def test_reader_status_propagates_without_upgrade() -> None:
     units = [
         _unit(1, "乱码页文本", status=UnitStatus.REVIEW_REQUIRED, reasons=("garbled_text",)),
         _unit(2, "图片页占位", status=UnitStatus.NEEDS_OCR, reasons=("image_only_page",)),
-        _unit(3, "LEFT0 alpha beta", reasons=("multi_column_order_reconstructed",)),
+        _unit(3, "LEFT0 alpha beta", reasons=("multi_column_order_flagged",)),
     ]
     result = clean_reader_result(_result(units))
     regions = _regions_by_ordinal(result)
     assert regions[1].status is UnitStatus.REVIEW_REQUIRED  # 不升级为保留
     assert regions[1].clean_view is None
     assert regions[2].status is UnitStatus.NEEDS_OCR
-    assert regions[3].status is UnitStatus.KEPT  # 多栏重建后正常清洗
-    assert "multi_column_order_reconstructed" in regions[3].reasons
+    assert regions[3].status is UnitStatus.KEPT  # 多栏标记（不重排）后正常清洗
+    assert "multi_column_order_flagged" in regions[3].reasons
     assert regions[3].clean_view == "LEFT0 alpha beta"
 
 

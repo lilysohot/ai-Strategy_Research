@@ -70,6 +70,7 @@ from plugins.corpus.preparation.contract import (
     UnitStatus,
     canonical_fingerprint,
 )
+from plugins.corpus.preparation.gap_review import REVIEW_STAGE_PREFIX
 from plugins.corpus.preparation.repository import Store, StoreError
 
 _TERMINAL_STATES: frozenset[JobState] = frozenset(
@@ -186,6 +187,7 @@ def _location_to_dict(unit: Unit) -> dict:
         "char_span": [loc.char_span.start, loc.char_span.end] if loc.char_span else None,
         "bbox": list(loc.bbox) if loc.bbox else None,
         "cells": [list(cell) for cell in loc.cells],
+        "label_path": list(loc.label_path),
     }
 
 
@@ -199,6 +201,7 @@ def _location_from_dict(data: dict) -> UnitLocation:
         char_span=CharSpan(span[0], span[1]) if span else None,
         bbox=tuple(bbox) if bbox else None,
         cells=tuple(tuple(c) for c in cells),
+        label_path=tuple(data.get("label_path", ())),
     )
 
 
@@ -748,6 +751,8 @@ class PgStore(Store):
             raise StoreError(f"source_checkpoint.source_id 非法: {source_id!r}")
         if not stage:
             raise StoreError("source_checkpoint.stage 不能为空")
+        if stage.startswith(REVIEW_STAGE_PREFIX):
+            raise StoreError("human gap review namespace requires put_gap_review")
         with self._conn.transaction(), self._conn.cursor() as cur:
             cur.execute(
                 "INSERT INTO corpus.corpus_source_checkpoints (source_id, stage, checkpoint, "
@@ -756,6 +761,32 @@ class PgStore(Store):
                 "checkpoint = EXCLUDED.checkpoint, updated_at = now()",
                 (source_id, stage, Jsonb(json.loads(checkpoint))),
             )
+
+    def _put_gap_review(self, build: Build, payload: str) -> None:
+        from psycopg.types.json import Jsonb
+
+        stage = REVIEW_STAGE_PREFIX + build.build_id
+        data = json.loads(payload)
+        with self._conn.transaction(), self._conn.cursor() as cur:
+            # INSERT-first + DO NOTHING serializes concurrent first writers. Compare
+            # in the following statement so a conflicting winner is never overwritten.
+            cur.execute(
+                "INSERT INTO corpus.corpus_source_checkpoints "
+                "(source_id, stage, checkpoint, updated_at) VALUES (%s, %s, %s, now()) "
+                "ON CONFLICT (source_id, stage) DO NOTHING",
+                (build.source_id, stage, Jsonb(data)),
+            )
+            cur.execute(
+                "SELECT checkpoint FROM corpus.corpus_source_checkpoints "
+                "WHERE source_id = %s AND stage = %s",
+                (build.source_id, stage),
+            )
+            row = cur.fetchone()
+            existing = _json_text_from_db(row[0]) if row is not None else None
+            if existing is None or json.loads(existing) != data:
+                raise StoreError(
+                    "human gap review conflict: immutable credential cannot be replaced"
+                )
 
     def get_source_checkpoint(self, source_id: str, stage: str) -> str | None:
         with self._conn.cursor() as cur:

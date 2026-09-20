@@ -1,0 +1,27 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-2",
+  "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+  "build_id": "ee8f2bb75eb51d34106dcf732bfa97849165b2d1200526123eb3bf1b54e8a94a",
+  "build_fingerprint": "bb9f5d57f6ee7b0d445e2bb87a7ddf6d4eb075eec3eed011d896ec1898a41a9b",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20",
+  "evidence_scope_ref": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl@sha256:37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc; .scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json@sha256:5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+  "required_locators": [
+    "page:10"
+  ],
+  "scope_rationale": "",
+  "attestation": "",
+  "gaps": {
+    "issue:image_region_unreadable:page:1": "",
+    "issue:image_region_unreadable:page:2": "",
+    "issue:table_lines_without_extraction:page:12": "",
+    "issue:table_lines_without_extraction:page:13": "",
+    "issue:table_lines_without_extraction:page:17": "",
+    "issue:table_lines_without_extraction:page:18": "",
+    "issue:table_lines_without_extraction:page:21": "",
+    "issue:table_lines_without_extraction:page:22": "",
+    "issue:table_lines_without_extraction:page:24": "",
+    "issue:table_lines_without_extraction:page:3": ""
+  }
+}

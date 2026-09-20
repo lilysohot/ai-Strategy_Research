@@ -105,9 +105,24 @@ class FetchedEvidence:
             raise ScoringInputError("FetchedEvidence.locator 元素必须是非空字符串")
 
 
+def _no_whitespace(s: str) -> str:
+    """剥离全部空白（空格/tab/换行）用于引文包含判定。
+
+    权威引文的"逐字"按**非空白码位序列**判定，与金标构建时 ``exact()`` 的空白容忍语义一致
+    （金标 quote 常自带换行/行内空格的版面残留，而证据文本按单元 ``"\\n"`` 拼接整理过）；
+    数字格式（千分位逗号/小数点）、大小写、全半角等**非空白差异仍构成不命中**——见
+    ``test_evidence_quote_must_be_verbatim`` 中 ``84,679 ≠ 84679`` 的语义。
+    """
+    return "".join(ch for ch in s if not ch.isspace())
+
+
 @dataclass(frozen=True)
 class EvidenceTarget:
-    """一条必需的原文证据：``quote`` 必须在权威正文里逐字出现（code point 精确包含）。
+    """一条必需的原文证据：``quote`` 必须在权威正文里逐字出现（空白规约后的包含）。
+
+    判定口径与金标 ``exact()`` 一致：剥离全部空白后再作 **code point 精确包含**——版面换行/
+    行内空格不等效于删除内容；但数字/符号/大小写/全半角的差异照旧不命中。引文权威仍是
+    ``unit.raw_text``，此处只影响包含判定，不改任何正文。
 
     ``locator`` 为可选坐标 token（如 ``page:3``、``cell:营业总收入×2026E``）：非空时要求证据的
     locator **包含全部 token**（证据可携带更细坐标）。
@@ -140,7 +155,8 @@ class EvidenceTarget:
     def matches(self, evidence: FetchedEvidence) -> bool:
         if evidence.verified is not True:
             return False
-        if self.quote not in evidence.text:
+        # 空白规约后的码位包含（与金标 exact() 语义一致）；非空白差异仍不命中。
+        if _no_whitespace(self.quote) not in _no_whitespace(evidence.text):
             return False
         return all(token in evidence.locator for token in self.locator)
 

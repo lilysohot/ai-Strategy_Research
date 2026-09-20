@@ -1,0 +1,45 @@
+{
+  "scope": "synthetic input/approval contracts only; no E2E, model, or PG",
+  "scoring": {
+    "formal": {
+      "passed": false,
+      "missing_targets": 24,
+      "blocker_count": 49
+    },
+    "draft": {
+      "passed": true,
+      "missing_targets": 0,
+      "blocker_count": 0
+    }
+  },
+  "counts": {
+    "questions": 30,
+    "required_targets": 79,
+    "supplementary_targets": 20,
+    "critical": 28,
+    "negative": 6
+  },
+  "original_fields_unchanged": true,
+  "approval": {
+    "current_ready": true,
+    "current_blockers": [],
+    "current_warning_count": 20,
+    "naive_replacement_ready": false,
+    "naive_replacement_blockers": [
+      "审批件 based_on.query_gold_sha256 与当前冻结件不符（'6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f' != '1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d'）：审批已过期"
+    ]
+  },
+  "noncritical_macro004_evidence_failure": {
+    "passed": false,
+    "blockers": [
+      "below_threshold:macro:evidence_pass=87.5%"
+    ]
+  },
+  "inputs_sha256": {
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p1/query-gold-with-targets.jsonl": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+    "plugins/corpus/scoring.py": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e"
+  }
+}

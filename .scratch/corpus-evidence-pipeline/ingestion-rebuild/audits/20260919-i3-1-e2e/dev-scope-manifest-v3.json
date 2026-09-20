@@ -1,0 +1,87 @@
+{
+  "sources": [
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain_hint": "macro",
+      "review_decision_ids": [
+        "i3e2e-macro-43300146",
+        "i3e2e-scope-pdf-43300146"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-523c5d7f"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-industry-f269774b",
+        "i3e2e-scope-pdf-f269774b"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-beedf7bb"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-30442c75"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-d5273acf"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-bae1ecbe"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "domain_hint": "macro",
+      "review_decision_ids": [
+        "i3e2e-scope-pdf-704d63b2"
+      ]
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "domain_hint": "industry",
+      "review_decision_ids": [
+        "i3e2e-docx-21b0e21e",
+        "i3e2e-docx-21b0e21e-whatif",
+        "i3e2e-scope-docx-21b0e21e"
+      ]
+    },
+    {
+      "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "domain_hint": "company",
+      "review_decision_ids": [
+        "i3e2e-md-46a663e0",
+        "i3e2e-scope-md-46a663e0"
+      ]
+    },
+    {
+      "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+      "domain_hint": "company",
+      "review_decision_ids": [
+        "i3e2e-scope-md-e4411890"
+      ]
+    }
+  ],
+  "archive_root": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/archive"
+}

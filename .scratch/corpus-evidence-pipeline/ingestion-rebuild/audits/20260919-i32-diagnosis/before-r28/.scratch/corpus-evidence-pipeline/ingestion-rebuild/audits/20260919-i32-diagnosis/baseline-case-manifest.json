@@ -1,0 +1,2087 @@
+{
+  "artifact": "i3-2-baseline-case-manifest",
+  "generated_at": "2026-09-19T17:58:23+08:00",
+  "status": "frozen_r27",
+  "scope_note": "I3-2 只冻结『将来用哪些用例、按什么预期比较』；运行状态保持 not_run；I3-5/I3-7 才执行。",
+  "holdout_policy": "留出相关历史基线单列为历史非回归范围；开发校准不得读取其原文；即便以后获准重验，也不得据此声称新的独立留出评估。",
+  "freeze": {
+    "snapshot": "i0c-r27",
+    "freeze_manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json"
+  },
+  "guard": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+    "sha256": "f4f796fcfe4ac6a31de4038cdaba271887c24cecbd9c0b84adcd46b7ed93f037"
+  },
+  "categories": [
+    {
+      "categories": [
+        "legacy_retrieval_golden"
+      ],
+      "expected_asset": {
+        "path": "plugins/corpus/golden.py",
+        "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+        "selector": "GOLDEN_SET"
+      },
+      "case_count": 19,
+      "cases": [
+        {
+          "case_id": "legacy_retrieval|N1",
+          "category": "legacy_retrieval_golden",
+          "qid": "N1",
+          "question": "字节跳动获得的银团贷款规模是多少亿美元",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "字节获296亿美元银团贷款",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "字节获296亿美元银团贷款",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_a91d95c7",
+                "candidates": [
+                  "2026-09-06_a91d95c7"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "296 亿美元（国金证券通信行业研究）"
+        },
+        {
+          "case_id": "legacy_retrieval|N2",
+          "category": "legacy_retrieval_golden",
+          "qid": "N2",
+          "question": "Figure 加码 Helix 算力投入了多少亿美元",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "figure斥35亿美元加码helix算力",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "figure斥35亿美元加码helix算力",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_0c25f0e9",
+                "candidates": [
+                  "2026-09-06_0c25f0e9"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "35 亿美元（国泰海通机器人行业周报）"
+        },
+        {
+          "case_id": "legacy_retrieval|N3",
+          "category": "legacy_retrieval_golden",
+          "qid": "N3",
+          "question": "国盛证券提到增资银行保险的规模是多少亿",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "3600亿增资银行保险",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "3600亿增资银行保险",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-07_1e021a8c",
+                "candidates": [
+                  "2026-09-07_1e021a8c"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "3600 亿"
+        },
+        {
+          "case_id": "legacy_retrieval|N4",
+          "category": "legacy_retrieval_golden",
+          "qid": "N4",
+          "question": "华福证券基础化工周报提到电子特气涨幅超过多少",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "电子特气涨幅超24",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "电子特气涨幅超24",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_f8e31696",
+                "candidates": [
+                  "2026-09-06_f8e31696"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "涨幅超 24%"
+        },
+        {
+          "case_id": "legacy_retrieval|N5",
+          "category": "legacy_retrieval_golden",
+          "qid": "N5",
+          "question": "光大证券金属周报提到焦煤期货收盘价周内下跌多少",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "焦煤期货收盘价周内下跌3-64",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "焦煤期货收盘价周内下跌3-64",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_c1ddcd8a",
+                "candidates": [
+                  "2026-09-06_c1ddcd8a"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "3.64%"
+        },
+        {
+          "case_id": "legacy_retrieval|N6",
+          "category": "legacy_retrieval_golden",
+          "qid": "N6",
+          "question": "长江证券化工专题里小苏打出口占产量的比重是多少",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "长江证券-化工专题",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "长江证券-化工专题",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-13_174b6462",
+                "candidates": [
+                  "2026-08-13_174b6462"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "30% 左右"
+        },
+        {
+          "case_id": "legacy_retrieval|N7",
+          "category": "legacy_retrieval_golden",
+          "qid": "N7",
+          "question": "贵州茅台 2026 上半年收入同比增长百分之多少",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "国信证券",
+              "doc_prefix": "2026-08-17"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "国信证券",
+                  "doc_prefix": "2026-08-17"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-17_c195233b",
+                "candidates": [
+                  "2026-08-17_c195233b"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "1.3%"
+        },
+        {
+          "case_id": "legacy_retrieval|N8",
+          "category": "legacy_retrieval_golden",
+          "qid": "N8",
+          "question": "光力科技的主营业务和股票代码是什么",
+          "kind": "数字",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "光力科技",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "光力科技",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_dddc7cd0",
+                "candidates": [
+                  "2026-09-06_dddc7cd0"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "300480，半导体划片机国内龙头"
+        },
+        {
+          "case_id": "legacy_retrieval|O1",
+          "category": "legacy_retrieval_golden",
+          "qid": "O1",
+          "question": "华创证券对贵州茅台给出什么投资评级",
+          "kind": "观点",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "华创证券",
+              "doc_prefix": "2026-08-16"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "华创证券",
+                  "doc_prefix": "2026-08-16"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-16_6f14cc14",
+                "candidates": [
+                  "2026-08-16_6f14cc14"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "强推（维持）"
+        },
+        {
+          "case_id": "legacy_retrieval|O2",
+          "category": "legacy_retrieval_golden",
+          "qid": "O2",
+          "question": "摩根大通对中国人工智能板块的态度与评级",
+          "kind": "观点",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "jpmorgan",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "jpmorgan",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-16_7d3ca3b9",
+                "candidates": [
+                  "2026-08-16_7d3ca3b9"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "维持增持 / 中性，上调智谱 MiniMax 目标价"
+        },
+        {
+          "case_id": "legacy_retrieval|O3",
+          "category": "legacy_retrieval_golden",
+          "qid": "O3",
+          "question": "国金证券怎么看 AI PCB 与半导体设备的布局时机",
+          "kind": "观点",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "ai-pcb及半导体设备迎来布局良机",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "ai-pcb及半导体设备迎来布局良机",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_00f08e66",
+                "candidates": [
+                  "2026-09-06_00f08e66"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "迎来布局良机"
+        },
+        {
+          "case_id": "legacy_retrieval|O4",
+          "category": "legacy_retrieval_golden",
+          "qid": "O4",
+          "question": "华福证券为什么看好供给约束型周期品",
+          "kind": "观点",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "看好供给约束型周期品",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "看好供给约束型周期品",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_d01c64bf",
+                "candidates": [
+                  "2026-09-06_d01c64bf"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "美联储加息扩表可能性或已浮现"
+        },
+        {
+          "case_id": "legacy_retrieval|O5",
+          "category": "legacy_retrieval_golden",
+          "qid": "O5",
+          "question": "国金证券对钽价和锑价的判断是什么",
+          "kind": "观点",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "钽价有望启动上行",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "钽价有望启动上行",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_428e7222",
+                "candidates": [
+                  "2026-09-06_428e7222"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "钽价有望启动上行、关注锑价止跌回升"
+        },
+        {
+          "case_id": "legacy_retrieval|C1",
+          "category": "legacy_retrieval_golden",
+          "qid": "C1",
+          "question": "华创证券和国信证券分别对贵州茅台给出什么评级",
+          "kind": "对比",
+          "require_all": true,
+          "old_anchor": [
+            {
+              "title_contains": "华创证券",
+              "doc_prefix": "2026-08-16"
+            },
+            {
+              "title_contains": "国信证券",
+              "doc_prefix": "2026-08-17"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "华创证券",
+                  "doc_prefix": "2026-08-16"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-16_6f14cc14",
+                "candidates": [
+                  "2026-08-16_6f14cc14"
+                ],
+                "confirmed": false
+              },
+              {
+                "old_anchor": {
+                  "title_contains": "国信证券",
+                  "doc_prefix": "2026-08-17"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-08-17_c195233b",
+                "candidates": [
+                  "2026-08-17_c195233b"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "强推 vs 优于大市"
+        },
+        {
+          "case_id": "legacy_retrieval|C2",
+          "category": "legacy_retrieval_golden",
+          "qid": "C2",
+          "question": "国金证券和东吴证券分别对 GPT-6 Astra 发布有什么看法",
+          "kind": "对比",
+          "require_all": true,
+          "old_anchor": [
+            {
+              "title_contains": "gpt-6-astra-fable-5-1正式发布",
+              "doc_prefix": ""
+            },
+            {
+              "title_contains": "gpt-6-astra发布",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "gpt-6-astra-fable-5-1正式发布",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_987d9f69",
+                "candidates": [
+                  "2026-09-06_987d9f69"
+                ],
+                "confirmed": false
+              },
+              {
+                "old_anchor": {
+                  "title_contains": "gpt-6-astra发布",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-07_acbf026c",
+                "candidates": [
+                  "2026-09-07_acbf026c"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "国金：互联网行业研究；东吴：策略周评"
+        },
+        {
+          "case_id": "legacy_retrieval|C3",
+          "category": "legacy_retrieval_golden",
+          "qid": "C3",
+          "question": "光大证券和天风证券分别对 8 月美国非农数据给出了什么解读",
+          "kind": "对比",
+          "require_all": true,
+          "old_anchor": [
+            {
+              "title_contains": "2026年8月美国非农数据点评",
+              "doc_prefix": ""
+            },
+            {
+              "title_contains": "非农大超预期",
+              "doc_prefix": ""
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "2026年8月美国非农数据点评",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_793b3967",
+                "candidates": [
+                  "2026-09-06_793b3967"
+                ],
+                "confirmed": false
+              },
+              {
+                "old_anchor": {
+                  "title_contains": "非农大超预期",
+                  "doc_prefix": ""
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-06_f7f65d7e",
+                "candidates": [
+                  "2026-09-06_f7f65d7e"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "光大：强非农降低加息门槛；天风：非农大超预期、加息预期升温"
+        },
+        {
+          "case_id": "legacy_retrieval|T1",
+          "category": "legacy_retrieval_golden",
+          "qid": "T1",
+          "question": "James Bulltard 最新一期的复盘是哪一期",
+          "kind": "时效",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "James-Bulltard_9826",
+              "doc_prefix": "2026-09-08"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "James-Bulltard_9826",
+                  "doc_prefix": "2026-09-08"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-08_bc0309f3",
+                "candidates": [
+                  "2026-09-08_bc0309f3"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "5 期中最晚的 09-08（9826 复盘）"
+        },
+        {
+          "case_id": "legacy_retrieval|T2",
+          "category": "legacy_retrieval_golden",
+          "qid": "T2",
+          "question": "全球流动性观察最新一期是哪天发布的",
+          "kind": "时效",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "全球流动性观察",
+              "doc_prefix": "2026-09-08"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "全球流动性观察",
+                  "doc_prefix": "2026-09-08"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-08_77b352bf",
+                "candidates": [
+                  "2026-09-08_77b352bf"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "3 期中最晚的 09-08（周度更新）"
+        },
+        {
+          "case_id": "legacy_retrieval|T3",
+          "category": "legacy_retrieval_golden",
+          "qid": "T3",
+          "question": "Simons-Substack 最近一篇讲了什么",
+          "kind": "时效",
+          "require_all": false,
+          "old_anchor": [
+            {
+              "title_contains": "白银矿股",
+              "doc_prefix": "2026-09-07"
+            }
+          ],
+          "new_locator_or_mapping_rule": {
+            "rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+            "mapping_file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+            "status": "resolved_unique",
+            "anchors": [
+              {
+                "old_anchor": {
+                  "title_contains": "白银矿股",
+                  "doc_prefix": "2026-09-07"
+                },
+                "status": "resolved_unique",
+                "doc_id": "2026-09-07_5c5fce92",
+                "candidates": [
+                  "2026-09-07_5c5fce92"
+                ],
+                "confirmed": false
+              }
+            ]
+          },
+          "note": "2026-09-07 白银矿股关注图表四"
+        }
+      ],
+      "excluded_cases": [
+        {
+          "qid": "O6",
+          "question": "华泰证券宏观海外周报如何看待联储加息",
+          "kind": "观点",
+          "old_anchor": [
+            {
+              "title_contains": "联储加息悬念白热化",
+              "doc_prefix": ""
+            }
+          ],
+          "note": "联储加息悬念白热化",
+          "exclude_reason": "来源（华泰联储加息白热化，d571f138.pdf）在 guards/i3.json forbidden_roots 内，属留出范围"
+        }
+      ],
+      "require_all_true_count": 3,
+      "historical_status": "2026-09-08 语料 17 份时 Recall@5 = 100%（逐题通过口径，含 require_all）；U 2026-09-19 确认冻结 19 题、排除留出冲突 O6",
+      "scope_decision": {
+        "decided_by": "U",
+        "decided_at": "2026-09-19",
+        "decision": "冻结 19 题，排除 O6（留出冲突）",
+        "excluded": [
+          "O6"
+        ],
+        "note": "O6 来源属留出；排除出本轮冻结分母而非删除，golden.py 原题保留"
+      },
+      "metric_note": "旧 recall 为逐题通过口径，不转移为新索引的标准集合召回（架构 §7.1/§12.3）；本轮口径分母=19（排除 O6）",
+      "historical_record_ref": {
+        "path": "plugins/corpus/golden.py",
+        "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b"
+      },
+      "rerun_contract": {
+        "entry": "plugins/corpus/golden.py::run_golden(corpus, top_k=5)",
+        "params": "top_k=5；需真实语料库连接",
+        "side_effects": "只读（无写入）",
+        "runnable_now": false,
+        "why_not": "需 I3-1 的 i3-e2e 阶段（真实来源读取 + 隔离 PG），当前 i3 守卫 read_roots 为空"
+      },
+      "validation_stage": "I3-5（旧检索能力不退化，19 题口径）",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "适用题目范围",
+          "detail": "U 2026-09-19 确认冻结 19 题、排除 O6（来源华泰联储加息，属 forbidden_roots 留出）；分母=19"
+        },
+        {
+          "status": "mapped_pending_human_confirm",
+          "item": "旧锚点→新 locator 映射",
+          "detail": "首轮映射已产出（旧锚点→i0a5-doclist 的 doc_id）：唯一 19 题、多候选 0 题、零候选 0 题；O6 留出排除",
+          "proposed_method": "按 title_contains 匹配 data/corpus 文件名→source_id，映射表留人工确认位",
+          "resolution_doc": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+          "question": "多候选/零候选题需人工确认（或补充旧 doc_id 权威清单）："
+        }
+      ]
+    },
+    {
+      "categories": [
+        "old_doc_kind_review_export"
+      ],
+      "expected_asset": {
+        "path": "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv",
+        "sha256": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+        "sha256_matches_current": true,
+        "selector": "CSV 行（文档级 doc_kind 覆写候选）"
+      },
+      "case_count": null,
+      "cases": [],
+      "historical_status": "旧人工审核导出权威版本已由 U 确认（2026-09-19）并冻结；review_decision 全空，属建议继承而非裁决",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json",
+        "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b"
+      },
+      "rerun_contract": {
+        "entry": "不适用（人工审核导出，非可跑基线）",
+        "runnable_now": false
+      },
+      "validation_stage": "I3-2 冻结身份；无需重跑",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "权威版本确认",
+          "detail": "U 已于 2026-09-19 确认该文件为旧人工审核导出的权威版本（冻结身份 + 哈希，不再扩到 88 个工件）；决定记录见 `.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/decision-old-doc-kind-review-authority-20260919.json`"
+        }
+      ]
+    },
+    {
+      "categories": [
+        "financial_controlled_recalc_57"
+      ],
+      "expected_asset": {
+        "path": ".scratch/corpus-evidence-pipeline/pilot_manifest.json",
+        "sha256": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+        "selector": "samples[*].gold[*].{row,columns,values,unit}"
+      },
+      "case_count": 57,
+      "cases": [
+        {
+          "case_id": "fin57|maotai_financial_tables|研发费用|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "190",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "研发费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|研发费用|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "197",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "研发费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|研发费用|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "206",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "研发费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|研发费用|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "215",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "研发费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|财务费用|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-815",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "财务费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|财务费用|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-875",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "财务费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|财务费用|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-781",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "财务费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|财务费用|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-680",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "财务费用",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|P/E|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "20",
+          "unit": "倍",
+          "column": "2025A",
+          "row": "P/E",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|P/E|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "20",
+          "unit": "倍",
+          "column": "2026E",
+          "row": "P/E",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|P/E|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "19",
+          "unit": "倍",
+          "column": "2027E",
+          "row": "P/E",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|P/E|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "18",
+          "unit": "倍",
+          "column": "2028E",
+          "row": "P/E",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|应收票据|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "0",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "应收票据",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|应收票据|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "0",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "应收票据",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|应收票据|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "0",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "应收票据",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|应收票据|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "0",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "应收票据",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|营业总收入|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "172,054",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "营业总收入",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|营业总收入|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "178,657",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "营业总收入",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|归属母公司净利润|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "82,320",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "归属母公司净利润",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|归属母公司净利润|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "84,679",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "归属母公司净利润",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|经营活动现金流|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "61,522",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "经营活动现金流",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|经营活动现金流|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "25,756",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "经营活动现金流",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|净利润|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "85,310",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "净利润",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|净利润|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "87,841",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "净利润",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|资产合计|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "303,835",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "资产合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|资产合计|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "340,489",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "资产合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|负债合计|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "49,876",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "负债合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|负债合计|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "55,048",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "负债合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|所有者权益合计|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "253,959",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "所有者权益合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|所有者权益合计|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "285,441",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "所有者权益合计",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|少数股东损益|2025A",
+          "category": "financial_controlled_recalc_57",
+          "expected": "2,990",
+          "unit": "百万元",
+          "column": "2025A",
+          "row": "少数股东损益",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|maotai_financial_tables|少数股东损益|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "3,162",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "少数股东损益",
+          "sample": "maotai_financial_tables",
+          "sample_role": "development_regression",
+          "source_anchor": "*e034bdac.pdf",
+          "source_pages": [
+            3
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|营业收入(百万元)|2024",
+          "category": "financial_controlled_recalc_57",
+          "expected": "573",
+          "unit": "百万元",
+          "column": "2024",
+          "row": "营业收入(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|营业收入(百万元)|2025",
+          "category": "financial_controlled_recalc_57",
+          "expected": "670",
+          "unit": "百万元",
+          "column": "2025",
+          "row": "营业收入(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|营业收入(百万元)|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "997",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "营业收入(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|营业收入(百万元)|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "1,434",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "营业收入(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|营业收入(百万元)|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "1,832",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "营业收入(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|归母净利润(百万元)|2024",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-113",
+          "unit": "百万元",
+          "column": "2024",
+          "row": "归母净利润(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|归母净利润(百万元)|2025",
+          "category": "financial_controlled_recalc_57",
+          "expected": "40",
+          "unit": "百万元",
+          "column": "2025",
+          "row": "归母净利润(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|归母净利润(百万元)|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "132",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "归母净利润(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|归母净利润(百万元)|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "219",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "归母净利润(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|归母净利润(百万元)|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "343",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "归母净利润(百万元)",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|市盈率（PE）|2024",
+          "category": "financial_controlled_recalc_57",
+          "expected": "-87.6",
+          "unit": "倍",
+          "column": "2024",
+          "row": "市盈率（PE）",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|市盈率（PE）|2025",
+          "category": "financial_controlled_recalc_57",
+          "expected": "245.9",
+          "unit": "倍",
+          "column": "2025",
+          "row": "市盈率（PE）",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|市盈率（PE）|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "78.6",
+          "unit": "倍",
+          "column": "2026E",
+          "row": "市盈率（PE）",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|市盈率（PE）|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "47.5",
+          "unit": "倍",
+          "column": "2027E",
+          "row": "市盈率（PE）",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guangli_financial_table|市盈率（PE）|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "30.3",
+          "unit": "倍",
+          "column": "2028E",
+          "row": "市盈率（PE）",
+          "sample": "guangli_financial_table",
+          "sample_role": "comparison_sample",
+          "source_anchor": "*b6beb6ee.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": false
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|营业收入(百万元)|2024",
+          "category": "financial_controlled_recalc_57",
+          "expected": "174,144",
+          "unit": "百万元",
+          "column": "2024",
+          "row": "营业收入(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|营业收入(百万元)|2025",
+          "category": "financial_controlled_recalc_57",
+          "expected": "172,054",
+          "unit": "百万元",
+          "column": "2025",
+          "row": "营业收入(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|营业收入(百万元)|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "173,340",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "营业收入(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|营业收入(百万元)|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "183,763",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "营业收入(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|营业收入(百万元)|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "199,348",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "营业收入(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|净利润(百万元)|2024",
+          "category": "financial_controlled_recalc_57",
+          "expected": "86228",
+          "unit": "百万元",
+          "column": "2024",
+          "row": "净利润(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|净利润(百万元)|2025",
+          "category": "financial_controlled_recalc_57",
+          "expected": "82320",
+          "unit": "百万元",
+          "column": "2025",
+          "row": "净利润(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|净利润(百万元)|2026E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "82367",
+          "unit": "百万元",
+          "column": "2026E",
+          "row": "净利润(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|净利润(百万元)|2027E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "88628",
+          "unit": "百万元",
+          "column": "2027E",
+          "row": "净利润(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        },
+        {
+          "case_id": "fin57|guosen_maotai_holdout|净利润(百万元)|2028E",
+          "category": "financial_controlled_recalc_57",
+          "expected": "97249",
+          "unit": "百万元",
+          "column": "2028E",
+          "row": "净利润(百万元)",
+          "sample": "guosen_maotai_holdout",
+          "sample_role": "held_out_parser_check",
+          "source_anchor": "*bbba671e.pdf",
+          "source_pages": [
+            1
+          ],
+          "tolerance": 0,
+          "holdout_related": true
+        }
+      ],
+      "historical_status": "57/57 字段通过（历史 run：maotai 32／guangli 15／guosen 10）",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+        "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+        "selector": "samples[*].{name,run_id,fields_passed,facts_read}"
+      },
+      "rerun_contract": {
+        "entry": ".scratch/corpus-evidence-pipeline/verify_claims_entry.py",
+        "entry_sha256": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+        "params": "CorpusService.extract_claims(明确源文件, pages)；消费 pilot_manifest gold",
+        "side_effects": "向**原库 5432** 写 corpus_evidence_runs 新行（零模型但非零写）",
+        "required_environment": "隔离 PG 目标 + 显式预算授权（I3-5）",
+        "runnable_now": false,
+        "why_not": "I3 守卫 read_roots 为空、无网络；旧入口写原库，须先迁移到已核验隔离目标"
+      },
+      "validation_stage": "I3-5（非回归重验，需单独授权）；I3-2 只冻结预期与契约",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "字段容差（tolerance）",
+          "detail": "U 2026-09-19 确认；普通字段先规范化（去千分位逗号、去尾随/前导零、统一负号）后精确匹配 tolerance=0；公式沿用其 tolerance（1e-6）"
+        },
+        {
+          "status": "confirmed",
+          "item": "范围：guosen_maotai_holdout（10 格）与留出的关系",
+          "detail": "U 2026-09-19 确认纳入守卫留出链：i3.json forbidden_roots 第 4 份 = data/corpus/2026-08-17_…国信证券-…bbba671e.pdf；10 格列『历史非回归范围』，I3-5 才可重验、开发校准不读其原文"
+        }
+      ]
+    },
+    {
+      "categories": [
+        "formula_7"
+      ],
+      "expected_asset": {
+        "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+        "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+        "selector": "samples[name=maotai_financial_tables].formulas[*]"
+      },
+      "case_count": 7,
+      "cases": [
+        {
+          "case_id": "formula7|revenue_growth",
+          "category": "formula_7",
+          "calculation_id": "7b3872f8e753f373734e75ebba4925ef3568da1e2fa4ba696a46726cb5c6a16b",
+          "formula": "revenue_growth",
+          "expected": "3.837749",
+          "tolerance": "0.000001",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "revenue",
+            "revenue"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|parent_profit_growth",
+          "category": "formula_7",
+          "calculation_id": "ffb14c2e442ea9d5c5dc5a6ce59e95addd5e90cfa55a7975be6974cbda97c5a6",
+          "formula": "parent_profit_growth",
+          "expected": "2.865646",
+          "tolerance": "0.000001",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "parent_net_profit",
+            "parent_net_profit"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|operating_cash_growth",
+          "category": "formula_7",
+          "calculation_id": "7bdfa3569a1c91ef9a0d6cab7e9b98e4c286bce575229617a8f3e1979b446bbb",
+          "formula": "operating_cash_growth",
+          "expected": "-58.135301",
+          "tolerance": "0.000001",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "operating_cash_flow",
+            "operating_cash_flow"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|cash_profit_ratio",
+          "category": "formula_7",
+          "calculation_id": "32547c5da4af77aeace7fa2dd6fae1b5d6637405b89fd51f662e67a6c8ca68b6",
+          "formula": "cash_profit_ratio",
+          "expected": "30.416042",
+          "tolerance": "0.000001",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "operating_cash_flow",
+            "parent_net_profit"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|net_margin",
+          "category": "formula_7",
+          "calculation_id": "b2373b7a6b8d010e4d00a81ffcc131e2a57febbe543f936c9d97d6d6acd3c829",
+          "formula": "net_margin",
+          "expected": "49.167399",
+          "tolerance": "0.000001",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "net_profit",
+            "revenue"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|balance_residual",
+          "category": "formula_7",
+          "calculation_id": "51422c5887d87e716b81deb1b03f6424ec1c91a3bac981d151725ac103a15226",
+          "formula": "balance_residual",
+          "expected": "0",
+          "tolerance": "0",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "assets",
+            "liabilities",
+            "equity"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        },
+        {
+          "case_id": "formula7|profit_residual",
+          "category": "formula_7",
+          "calculation_id": "376663186d3e6e14654f910cace45327591d87e55b82e26d18e61102625c09b5",
+          "formula": "profit_residual",
+          "expected": "0",
+          "tolerance": "0",
+          "computed_by": "corpus-financial-formulas-1",
+          "run_id": "d328a21e74ee41e5a22c5124825706ec9e9b7390ef12ab7ce1b810ad9b2f58ac",
+          "passed_historically": true,
+          "parent_category": "financial_controlled_recalc_57",
+          "input_metrics": [
+            "net_profit",
+            "parent_net_profit",
+            "minority_profit"
+          ],
+          "input_metrics_source": "plugins/corpus/derivation.py"
+        }
+      ],
+      "historical_status": "7/7 复算通过（父项 financial_controlled_recalc_57 的子节点）",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+        "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb"
+      },
+      "rerun_contract": {
+        "entry": "corpus-financial-formulas-1（computed_by）",
+        "params": "同一 pilot_manifest 样本（derive=True 的茅台表）",
+        "side_effects": "随父项入口写原库（同上）",
+        "runnable_now": false
+      },
+      "validation_stage": "I3-5（随父项）",
+      "gaps": [
+        {
+          "status": "ok",
+          "item": "7 条公式 case_id/预期/容差/formula 名",
+          "detail": "已从机器记录逐条取出（calculation_id 唯一）"
+        },
+        {
+          "status": "confirmed",
+          "item": "输入字段（每公式依赖哪些冻结字段）",
+          "detail": "已按 plugins/corpus/derivation.py 的公式输入声明逐条登记（7/7 条）"
+        }
+      ]
+    },
+    {
+      "categories": [
+        "customer_table_12"
+      ],
+      "expected_asset": {
+        "path": null,
+        "sha256": null,
+        "selector": null,
+        "note": "12 个单元格（行/列/原值/单位）预期**无机器可读工件**：历史 run 0a1dbf39… 在仓库内找不到记录文件"
+      },
+      "case_count": 0,
+      "cases": [],
+      "historical_status": "贝特利客户表冻结单元格召回 0/12 → 12/12（semantic-repair-report L15）",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/semantic-repair-report.md",
+        "sha256": "133e9c6ae9e63f7976602cc06932de7ff187566018e6f3d43bad895c99027a72",
+        "note": "仅报告级记录：run_id 0a1dbf39dbfad8428b31eacdd7d5cf8a5fdef250e7df558eb55586690ed4e44f"
+      },
+      "rerun_contract": {
+        "entry": "待构建（v3 亦标『独立复现脚本需从冻结 run 重建，登记为 I3-5 前待办』）",
+        "side_effects": "未知",
+        "required_environment": "需从冻结 run 重建；开发校准阶段不得读原文",
+        "runnable_now": false
+      },
+      "validation_stage": "I3-5（非回归）；范围冲突需先裁定",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "12 个单元格预期（材料）+ 冻结 run 记录",
+          "detail": "U 2026-09-19 确认以报告为准、不再追要 12 格明细与 run 文件；权威依据 = semantic-repair-report（0/12→12/12 + run_id 0a1dbf39…）"
+        },
+        {
+          "status": "confirmed",
+          "item": "留出范围冲突",
+          "detail": "U 2026-09-19 确认按『历史非回归范围』处置：来源贝特利（2594e01d.pdf）已在守卫 forbidden_roots 第 1 份，I3-5 才可重验、开发校准不读原文"
+        }
+      ]
+    },
+    {
+      "categories": [
+        "prose_numbers_3"
+      ],
+      "expected_asset": {
+        "path": ".scratch/corpus-evidence-pipeline/pilot_manifest.json",
+        "sha256": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+        "selector": "samples[name=macro_prose].prose_gold[*]"
+      },
+      "authority_ref": {
+        "path": "data/corpus/.evidence/prose-repair/report-78a012e302a9a7fc38b79406b671a83e3402620abc30a38678ec0b036540630d.json",
+        "sha256": "8dc44327bcaf46c277e9c293c003b76cf1e5b2723068ea772c5fddbfe637d635"
+      },
+      "case_count": 2,
+      "cases": [
+        {
+          "case_id": "prose3|US|NFP|actual",
+          "category": "prose_numbers_3",
+          "subject": "US",
+          "metric": "NFP",
+          "period_end": "2026-08-31",
+          "expected": "16.2",
+          "unit": "万人",
+          "state": "actual",
+          "source_anchor": "*6fc25e24.pdf",
+          "quality_gate": "质量=review（不得由模型计算）"
+        },
+        {
+          "case_id": "prose3|US|NFP|consensus",
+          "category": "prose_numbers_3",
+          "subject": "US",
+          "metric": "NFP",
+          "period_end": "2026-08-31",
+          "expected": "5.6",
+          "unit": "万人",
+          "state": "consensus",
+          "source_anchor": "*6fc25e24.pdf",
+          "quality_gate": "质量=review（不得由模型计算）"
+        }
+      ],
+      "historical_status": "华泰/中银正文目标数字 2/3 → 3/3（semantic-repair-report）；非农目标 0/2 → 4 次真实调用 2/2（prose-repair-report）",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/semantic-repair-report.md",
+        "sha256": "133e9c6ae9e63f7976602cc06932de7ff187566018e6f3d43bad895c99027a72",
+        "note": "spec.md L87 只给集合级数字（3/3）"
+      },
+      "rerun_contract": {
+        "entry": "含模型调用的历史轮（prose-repair / semantic-repair）",
+        "side_effects": "非零写（历史轮）",
+        "required_environment": "另立预算授权",
+        "runnable_now": false
+      },
+      "validation_stage": "I3-5（且需预算授权）",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "第 3 个用例身份",
+          "detail": "U 2026-09-19 确认：以 prose-repair 最终 report json 为权威身份，仅有 2 条可复现的 prose_checks（NFP actual 16.2 / consensus 5.6）；第 3 条中银 0.38% 无可复现记录、标注『不可复现』，不进冻结分母"
+        },
+        {
+          "status": "confirmed",
+          "item": "历史 2/2 与最终 3/3 的集合关系",
+          "detail": "U 2026-09-19 确认：『4 次真实调用 2/2』指 prose report 的 2 条 prose_checks；『3/3』为 spec.md 集合级文字，与 prose-report 的 2 条非同一集合。冻结身份取 prose-report json（2 用例）"
+        }
+      ]
+    },
+    {
+      "categories": [
+        "macro_legacy_fields_0_of_3"
+      ],
+      "expected_asset": {
+        "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+        "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+        "selector": "macro_targets / macro_comparison_rows",
+        "note": "machine record: macro_targets=2、macro_comparison_rows=0；U 2026-09-19 确认以机器记录为准"
+      },
+      "case_count": 2,
+      "cases": [
+        {
+          "case_id": "macro0of3|actual",
+          "field": "actual",
+          "historical_status": "0/3（失败基线保留）"
+        },
+        {
+          "case_id": "macro0of3|consensus",
+          "field": "consensus",
+          "historical_status": "0/3（失败基线保留）"
+        }
+      ],
+      "historical_status": "0/3 单列、不伪装通过（spec.md L87）",
+      "historical_cat_status": "spec.md『3/3』为集合级文字口径；机器可读层仅 macro_targets=2（actual/consensus），previous 无独立机器身份、U 2026-09-19 确认移出冻结分母",
+      "failure_reasons": "华泰『万』不可验证岗位单位；预期指标未统一；中银 basis『同比』≠冻结 YoY",
+      "historical_record_ref": {
+        "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+        "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+        "note": "macro_reused_run=552942996489beb4f1f44b66d2ab944a48b1d5b9ff2e81ef59b6c61c71c65fbf"
+      },
+      "rerun_contract": {
+        "entry": "无通过入口（失败基线保留）；宏观实施 M1—M6 未执行",
+        "runnable_now": false
+      },
+      "validation_stage": "I3-5（保留为历史失败用例，不并入开发分母）",
+      "gaps": [
+        {
+          "status": "confirmed",
+          "item": "失败用例的机器可读身份（3 字段 vs 记录里的 2 targets）",
+          "detail": "U 2026-09-19 确认：以机器记录 macro_targets=2 为准（actual/consensus），previous 移出冻结分母；spec.md『3/3』为集合级文字口径，不作机器身份"
+        },
+        {
+          "status": "noted",
+          "item": "留出关系",
+          "detail": "华泰/中银两份来源在守卫 forbidden_roots 内（留出）；本条为历史失败基线，开发校准不读其原文"
+        }
+      ]
+    }
+  ],
+  "blocked_items": [],
+  "counts": {
+    "categories": 7,
+    "cases_total": 87,
+    "blocked_items": 0
+  },
+  "legacy_anchor_mapping": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/legacy-anchor-mapping.json",
+    "sha256": "c41be391cc53f18872e2606c66fe8601ed74e65680c97e1d9d937f41595ebaf3",
+    "status": "first_pass_pending_human_confirm",
+    "counts": {
+      "resolved_unique": 19,
+      "excluded_holdout": 1
+    }
+  }
+}

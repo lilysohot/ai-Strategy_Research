@@ -1,0 +1,629 @@
+{
+  "artifact": "i3-1-e2e-scope-v2",
+  "generated_at": "2026-09-19T19:11:27+08:00",
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "database": "i2_sandbox_corpus"
+  },
+  "scope_status": "proposed_pending_ratification",
+  "selection": {
+    "rule": "零阻断且非留出（换料，规范口径）+ U 补 DOCX + U 要求接受的 MD；company 类零阻断样本为 0（唯一干净者系留出件）",
+    "sources": [
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "domain": "macro",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+        "domain": "industry",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+        "domain": "macro",
+        "label": "pdf"
+      },
+      {
+        "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+        "domain": "industry",
+        "label": "docx"
+      },
+      {
+        "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+        "domain": "company",
+        "label": "md"
+      },
+      {
+        "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+        "domain": "company",
+        "label": "md"
+      }
+    ],
+    "company_gap": "company 类：3 份公司研报中 1 份零阻断但属留出件（不可用），另 2 份各 1 处 `image_region_unreadable`(needs_ocr/blocking)；规范内**无人工认可入口**（gaps.py 默认表把该代码固定为 blocking）→ company 需 U 决定：补料 / 改实现 / 显式登记未覆盖"
+  },
+  "guard": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "sha256": "ef0063240ad1ff812bcd1ca12c4bb2dfc59cb5660f2a17ca8c65154156fe513e",
+    "allowed_paths": 15
+  },
+  "decisions": [
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-43300146",
+      "superseded": [
+        "i3e2e-scope-pdf-43300146"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-523c5d7f",
+      "superseded": [
+        "i3e2e-scope-pdf-523c5d7f"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-f269774b",
+      "superseded": [
+        "i3e2e-scope-pdf-f269774b"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-beedf7bb",
+      "superseded": [
+        "i3e2e-scope-pdf-beedf7bb"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-30442c75",
+      "superseded": [
+        "i3e2e-scope-pdf-30442c75"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-d5273acf",
+      "superseded": [
+        "i3e2e-scope-pdf-d5273acf"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-bae1ecbe",
+      "superseded": [
+        "i3e2e-scope-pdf-bae1ecbe"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "label": "pdf",
+      "decision_id": "i3e2e-scope-pdf-704d63b2",
+      "superseded": [
+        "i3e2e-scope-pdf-704d63b2"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "label": "docx",
+      "decision_id": "i3e2e-scope-docx-21b0e21e",
+      "superseded": [
+        "i3e2e-scope-docx-21b0e21e"
+      ],
+      "material_type": null
+    },
+    {
+      "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "label": "md",
+      "decision_id": "i3e2e-scope-md-46a663e0",
+      "superseded": [
+        "i3e2e-scope-md-46a663e0"
+      ],
+      "material_type": "research_report"
+    },
+    {
+      "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+      "label": "md",
+      "decision_id": "i3e2e-scope-md-e4411890",
+      "superseded": [
+        "i3e2e-scope-md-e4411890"
+      ],
+      "material_type": "research_report"
+    }
+  ],
+  "steps": {
+    "build": {
+      "exit_code": 0,
+      "seconds": 2.05,
+      "count": 11
+    }
+  },
+  "per_source": [
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain": "macro",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "84deb9661c77b9a3caff997cd5d3a49ed130f959b5b8618803b88f9ed8cab85a",
+      "unit_count": 258,
+      "chunk_count": 21,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 16,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "7386a5bcdb134430981ce2b0cbd1669b2758858824013192d8aed7bc8e67f9e5",
+      "unit_count": 45,
+      "chunk_count": 13,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 2,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "b1fc83cb866f2f1fac8d07f58800e44b4897ab333daf76b0652af8695f3792cf",
+      "unit_count": 258,
+      "chunk_count": 54,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 11,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "71455bd7a77e0369e7c55d793b309cec9a49cab762411810a7728d324cf025ae",
+      "unit_count": 230,
+      "chunk_count": 34,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 8,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "306f81d9b4404bd2f1b996a67221bb025ea1d824fbdb4bfcccec84afb7650398",
+      "unit_count": 192,
+      "chunk_count": 38,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 11,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "34ef5a11251938ae629dce62aee0ad0b8affaedb25e467b2f1e9b07b94d08826",
+      "unit_count": 221,
+      "chunk_count": 24,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 4,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "domain": "industry",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "bcea23ae2e7ea21ae78cc17e77d1a85a5bbe90c89f339b72d1b40bdc1ebbca5b",
+      "unit_count": 322,
+      "chunk_count": 82,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 13,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "domain": "macro",
+      "label": "pdf",
+      "format": "pdf",
+      "decision": "in_scope",
+      "build_id": "21c6bce21d011f2efeda2f59288de8079cd7550628745ba4d3949913b89344ce",
+      "unit_count": 83,
+      "chunk_count": 10,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 5,
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      }
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "domain": "industry",
+      "label": "docx",
+      "format": "docx",
+      "decision": "in_scope",
+      "build_id": "49de93fba9297a4f4c610f349d124f8f05dea2272f4c8a82b2148e1299c599a8",
+      "unit_count": 44,
+      "chunk_count": 7,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 0,
+      "publish": {
+        "exit_code": 0,
+        "generation": 3
+      }
+    },
+    {
+      "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "domain": "company",
+      "label": "md",
+      "format": "md",
+      "decision": "in_scope",
+      "build_id": "71587c9c76a0a79f60f4ab43944d2cd56bd62547d3e41d35bfa38f8a15e30be6",
+      "unit_count": 244,
+      "chunk_count": 72,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 0,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1
+      }
+    },
+    {
+      "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+      "domain": "company",
+      "label": "md",
+      "format": "md",
+      "decision": "in_scope",
+      "build_id": "3f5f9b992a03f9956401461246cc6ba7be23129e7f8e9bb49e4f42fb32208c01",
+      "unit_count": 94,
+      "chunk_count": 20,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 0,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1
+      }
+    }
+  ],
+  "search": [
+    {
+      "query": "营业收入",
+      "hits": 1,
+      "verified": [
+        {
+          "locator": "chunk:3f5f9b992a03f995:body:0004",
+          "units": 6,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "### 大脑一 财务审计师\n关键发现：这不是「投资收益把归母顶起来」的中报，主业扣非几乎等于标题；审计要盯的是「无源把利"
+        }
+      ]
+    },
+    {
+      "query": "景气",
+      "hits": 5,
+      "verified": [
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0000",
+          "units": 1,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著："
+        },
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0001",
+          "units": 6,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "风光储：中国光伏行业协会发布《〈光伏行业成本核算模型通则〉问答手册》；国家能源集团启动2026 年第四批5GW 风\n机集"
+        },
+        {
+          "locator": "chunk:34ef5a11251938ae:body:0000",
+          "units": 2,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "本周房地产市场延续分化。新房景气度下行趋缓，成交面积环比回落，同比降幅收窄。二手房景气度底部企稳，成交\n面积环比季节性回"
+        },
+        {
+          "locator": "chunk:3f5f9b992a03f995:table:0001",
+          "units": 8,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "## 五维评分\n| 维 | 分 | 一句话 |\n|---|---|---|\n| 景气 | 3.5 / 5 | 无源真高增"
+        },
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0003",
+          "units": 9,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "总体来看，全球AI 服务器景气延续、国内800V 政策方向进一步明确、产业端产品加速落地，我们坚定看好订单兑现\n确定性强"
+        }
+      ]
+    },
+    {
+      "query": "非农",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "同比",
+      "hits": 5,
+      "verified": [
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0002",
+          "units": 3,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "全球AI 服务器需求持续高景气，服务器整机厂订单、积压订单及业绩指引进一步上修。9 月1 日，Dell 公布最新业\n绩，"
+        },
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0011",
+          "units": 9,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "电网：国网输变电设备第4批招标同比-19%，前四批招标同比-12%，主要系25年同期高基数及“十五五”开局部分\n项目仍处"
+        },
+        {
+          "locator": "chunk:34ef5a11251938ae:body:0000",
+          "units": 2,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "本周房地产市场延续分化。新房景气度下行趋缓，成交面积环比回落，同比降幅收窄。二手房景气度底部企稳，成交\n面积环比季节性回"
+        },
+        {
+          "locator": "chunk:bcea23ae2e7ea21a:body:0000",
+          "units": 1,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著："
+        },
+        {
+          "locator": "chunk:3f5f9b992a03f995:body:0008",
+          "units": 5,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "### 大脑五 投资决策者\n四选一：**持有 + 观望。**\n独立于任何账户：中报没有证伪无源高增和现金转换，现价也没有"
+        }
+      ]
+    },
+    {
+      "query": "光模块",
+      "hits": 5,
+      "verified": [
+        {
+          "locator": "chunk:49de93fba9297a4f:body:0002",
+          "units": 5,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "光模块提供的价值量相对有限，大约20%左右。这个数字加起来好像不是100%，但是意思就是这个意思，大量的价值不在光模块厂"
+        },
+        {
+          "locator": "chunk:49de93fba9297a4f:body:0001",
+          "units": 5,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "关心的少，NPO在国内国外是否存在差异？事实是国内的进展比国外要快，可以认为是同步启动，这个是公允的。国外本身也想要在互"
+        },
+        {
+          "locator": "chunk:49de93fba9297a4f:body:0005",
+          "units": 10,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "300端口-Mems的市场份额，lumentum 70%，谷歌自己30%，这是现状。外部代工还没起量，份额不是一成不变的"
+        },
+        {
+          "locator": "chunk:49de93fba9297a4f:body:0000",
+          "units": 8,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。\n互补"
+        },
+        {
+          "locator": "chunk:49de93fba9297a4f:body:0003",
+          "units": 8,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。目前反正是有新客户了，这些新的云不知道是什么原因。目前公"
+        }
+      ]
+    },
+    {
+      "query": "碳市场",
+      "hits": 3,
+      "verified": [
+        {
+          "locator": "chunk:7386a5bcdb134430:body:0003",
+          "units": 12,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "投资要点：\n\n四行业统一配额方案正式落地，碳市场扩围后的制度框架进一步清晰。近日生态\n环境部印发《全国碳排放权交易市场"
+        },
+        {
+          "locator": "chunk:7386a5bcdb134430:body:0004",
+          "units": 3,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "投资分析意见：我们认为全国碳市场正式进入“统一框架、边际收紧、奖优罚劣”\n的深化阶段。高耗能行业履约压力加大，多维度投资"
+        },
+        {
+          "locator": "chunk:7386a5bcdb134430:heading:0000",
+          "units": 1,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true,
+          "sample": "碳市场四行业配额方案落地，节能降"
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@8d6b981f862823c9f1d6ba954f9afdda",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 15,
+      "published": 11,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 31,
+      "published_with_gaps": 8
+    }
+  },
+  "audit": {
+    "available": true,
+    "conflicts": [],
+    "counts": {
+      "sources": 15,
+      "admissions": 23,
+      "builds": 31,
+      "units": 11782,
+      "chunks": 2124,
+      "active": 11
+    },
+    "codes": []
+  },
+  "summary": {
+    "sources": 11,
+    "buildable": 11,
+    "published": 11,
+    "review_required": 0,
+    "total_units": 1991,
+    "total_chunks": 375,
+    "search_hits": {
+      "营业收入": 1,
+      "景气": 5,
+      "非农": 0,
+      "同比": 5,
+      "光模块": 5,
+      "碳市场": 3
+    },
+    "verify_all_ok": true,
+    "refused_handles": 0,
+    "audit_conflicts": []
+  },
+  "withdrawn": true,
+  "withdrawn_at": "2026-09-19T22:31:38+08:00",
+  "withdrawn_reason": "U 2026-09-19 授权撤回：该范围用了 2 份被裁定 excluded_from_active 的材料（投委会报告 MD）与 1 份 excluded_from_active 的无署名 DOCX，并用『换料』替换了 U 已批准的 6 份中的 4 份——属裁定冲突 + 范围偏离。真实数据保留为证据，但**不得作为 I3-1 范围**。",
+  "superseded_by": "i3-1-e2e-approved-set.json"
+}

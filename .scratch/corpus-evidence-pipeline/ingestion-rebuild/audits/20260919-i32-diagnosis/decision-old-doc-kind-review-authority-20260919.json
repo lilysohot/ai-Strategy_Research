@@ -1,0 +1,22 @@
+{
+  "artifact": "i3-2-decision-old-doc-kind-review-authority",
+  "decided_by": "U",
+  "decided_at": "2026-09-19",
+  "generated_at": "2026-09-19T16:38:39+08:00",
+  "decision_text": "确认以 data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv（sha256 d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396）为旧人工审核导出的权威版本（即冻结它、不再扩到 88 个工件）",
+  "not_filed": "决定记录：位于审计目录；随 I3-2 冻结 r27 一并绑定",
+  "binding": {
+    "category": "old_doc_kind_review_export",
+    "asset": "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv",
+    "sha256": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+    "sha256_matches_current": true,
+    "selector": "CSV 行（文档级 doc_kind 覆写候选）",
+    "validation_stage": "I3-2 冻结身份；无需重跑",
+    "rerun_contract": "不适用（人工审核导出，非可跑基线）"
+  },
+  "notes": [
+    "该 CSV 为旧人工审核 doc_kind 校正建议导出（40 行，其中 industry→company 14 条、→macro 3 条），review_decision 全部为空，属建议继承而非人工终态裁决",
+    "本次确认只冻结该导出的权威版本（文件身份 + 哈希），不扩到 .audit 88 个工件；不改变其内容为‘建议’而非‘裁决’的语义",
+    "权威版本确认解除 baseline-case-manifest 中 old_doc_kind_review_export 的 blocked_needs_user 阻塞项"
+  ]
+}

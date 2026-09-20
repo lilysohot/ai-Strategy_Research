@@ -1,0 +1,287 @@
+{
+  "artifact": "i3-2-p3-baseline-mapping-reconciliation",
+  "generated_at": "2026-09-19T18:08:50+08:00",
+  "inputs": {
+    "baseline-bindings.json": {
+      "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b",
+      "git_head": "8d4772ca8fb2e368d4a256554784c7384c8f24ea",
+      "date": "2026-09-15",
+      "bound_in": [
+        "i0c-r1",
+        "i0c-r28"
+      ]
+    },
+    "i0a4-candidates-v3-20260915.json": {
+      "sha256": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943",
+      "bound_in": [
+        "i0c-r28"
+      ],
+      "has_case_level_detail": [
+        "customer_table_12",
+        "financial_controlled_recalc_57",
+        "legacy_retrieval_golden",
+        "macro_legacy_fields_0_of_3",
+        "prose_numbers_3"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "category": "legacy_retrieval_golden",
+      "index_entry": {
+        "asset": "plugins/corpus/golden.py",
+        "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+        "sha256_report": null,
+        "status": null,
+        "target": null,
+        "binding_detail": null,
+        "verified": true
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": [
+        "expectation_asset",
+        "runnable_entry"
+      ],
+      "inline_in_index": true,
+      "hash_checks": [
+        {
+          "path": "plugins/corpus/golden.py",
+          "exists": true,
+          "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+          "matches_declared": true,
+          "role": "expectation_asset",
+          "declared_sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b"
+        }
+      ],
+      "bindability": "hash_bound",
+      "bindability_detail": {
+        "hash_checked": [
+          {
+            "role": "expectation_asset",
+            "path": "plugins/corpus/golden.py",
+            "consistent": true
+          }
+        ],
+        "path_without_hash": []
+      }
+    },
+    {
+      "category": "old_doc_kind_review_export",
+      "index_entry": {
+        "asset": "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv",
+        "sha256": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+        "sha256_report": null,
+        "status": null,
+        "target": null,
+        "binding_detail": null,
+        "verified": true
+      },
+      "v3_detail_present": false,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": null,
+      "inline_in_index": true,
+      "hash_checks": [],
+      "bindability": "prose_only",
+      "bindability_detail": {
+        "hash_checked": [],
+        "path_without_hash": []
+      }
+    },
+    {
+      "category": "financial_controlled_recalc_57",
+      "index_entry": {
+        "asset": ".scratch/corpus-evidence-pipeline/prose-repair-report.md（L92：表格 57/57 字段维持通过）+ p0_baseline.py",
+        "sha256": null,
+        "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+        "status": "bound_to_cases_20260915",
+        "target": "57/57",
+        "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.financial_controlled_recalc_57（预期资产 pilot_manifest.json+sha256 / 入口 verify_claims_entry.py+运行参数+副作用声明 / 机器记录）",
+        "verified": null
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": [
+        "expectation_asset",
+        "formula_7",
+        "machine_record",
+        "metric_note",
+        "runnable_entry"
+      ],
+      "inline_in_index": false,
+      "hash_checks": [
+        {
+          "path": ".scratch/corpus-evidence-pipeline/pilot_manifest.json",
+          "exists": true,
+          "sha256": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+          "matches_declared": true,
+          "role": "expectation_asset",
+          "declared_sha256": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f"
+        },
+        {
+          "path": ".scratch/corpus-evidence-pipeline/verify_claims_entry.py",
+          "exists": true,
+          "sha256": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+          "matches_declared": true,
+          "role": "runnable_entry",
+          "declared_sha256": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391"
+        },
+        {
+          "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json",
+          "exists": true,
+          "sha256": "ef1d382c65de3c378b484d765887c62a0575aef51b901eade1aee19401ec97eb",
+          "matches_declared": null,
+          "role": "machine_record",
+          "declared_sha256": null
+        }
+      ],
+      "bindability": "hash_bound",
+      "bindability_detail": {
+        "hash_checked": [
+          {
+            "role": "expectation_asset",
+            "path": ".scratch/corpus-evidence-pipeline/pilot_manifest.json",
+            "consistent": true
+          },
+          {
+            "role": "runnable_entry",
+            "path": ".scratch/corpus-evidence-pipeline/verify_claims_entry.py",
+            "consistent": true
+          }
+        ],
+        "path_without_hash": [
+          {
+            "role": "machine_record",
+            "path": ".scratch/corpus-evidence-pipeline/claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json"
+          }
+        ]
+      }
+    },
+    {
+      "category": "formula_7",
+      "index_entry": {
+        "asset": ".scratch/corpus-evidence-pipeline/prose-repair-report.md（L92：7/7 复算维持通过）+ p0_baseline.py",
+        "sha256": null,
+        "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+        "status": "bound_to_cases_20260915",
+        "target": "7/7",
+        "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.financial_controlled_recalc_57.formula_7（v3 起为 financial_controlled_recalc_57 子节点）",
+        "verified": null
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": "financial_controlled_recalc_57",
+      "v3_detail_keys": [
+        "asset",
+        "case",
+        "expected"
+      ],
+      "inline_in_index": false,
+      "hash_checks": [],
+      "bindability": "prose_only",
+      "bindability_detail": {
+        "hash_checked": [],
+        "path_without_hash": []
+      }
+    },
+    {
+      "category": "customer_table_12",
+      "index_entry": {
+        "asset": ".scratch/corpus-evidence-pipeline/semantic-repair-report.md（L15：贝特利客户表冻结单元格召回 0/12→12/12，行列/原值/单位精确匹配）",
+        "sha256": null,
+        "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+        "status": "bound_to_cases_20260915",
+        "target": "12/12",
+        "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.customer_table_12（独立非回归入口待构建；verify_material_micro_gold.py 误引已撤销）",
+        "verified": null
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": [
+        "expectation_asset",
+        "report",
+        "runnable_entry"
+      ],
+      "inline_in_index": false,
+      "hash_checks": [],
+      "bindability": "prose_only",
+      "bindability_detail": {
+        "hash_checked": [],
+        "path_without_hash": []
+      }
+    },
+    {
+      "category": "prose_numbers_3",
+      "index_entry": {
+        "asset": ".scratch/corpus-evidence-pipeline/spec.md（L87 冻结阈值：正文数值 3/3）+ prose-repair-report.md（非农目标 0/2→4 次真实调用 2/2）",
+        "sha256": null,
+        "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+        "status": "bound_to_cases_20260915",
+        "target": "3/3",
+        "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.prose_numbers_3（复跑须另立预算授权）",
+        "verified": null
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": [
+        "expectation_asset",
+        "report",
+        "runnable_entry"
+      ],
+      "inline_in_index": false,
+      "hash_checks": [],
+      "bindability": "prose_only",
+      "bindability_detail": {
+        "hash_checked": [],
+        "path_without_hash": []
+      }
+    },
+    {
+      "category": "macro_legacy_fields_0_of_3",
+      "index_entry": {
+        "asset": ".scratch/corpus-evidence-pipeline/spec.md（L87：宏观规范字段仍 0/3）",
+        "sha256": null,
+        "sha256_report": "见 i0a4-candidates-20260915.json baseline_asset_updates",
+        "status": "bound_to_cases_20260915",
+        "target": "0/3 单列，不伪装为通过",
+        "binding_detail": "见 i0a4-candidates-v3-20260915.json baseline_bindings_v3.macro_legacy_fields_0_of_3（失败基线保留，无通过入口）",
+        "verified": null
+      },
+      "v3_detail_present": true,
+      "v3_detail_nested_under": null,
+      "v3_detail_keys": [
+        "expectation_asset",
+        "runnable_entry"
+      ],
+      "inline_in_index": false,
+      "hash_checks": [],
+      "bindability": "prose_only",
+      "bindability_detail": {
+        "hash_checked": [],
+        "path_without_hash": []
+      }
+    }
+  ],
+  "findings": [
+    "指针 vs 内联：`baseline-bindings.json` 的 5 个类别只写『见 i0a4-candidates-v3… baseline_bindings_v3.<x>』，用例级明细（预期资产+hash、可跑入口+hash、params/副作用/DB、机器记录）都在候选包 v3 里；两者哈希口径不同（index 里 `sha256: null` + `sha256_report`）",
+    "缺项：候选包 v3 只有 5 类，`old_doc_kind_review_export` 无用例级明细（该类别注记『权威版本待 U 确认（.audit 共 88 个 2026-09-12 工件）』）",
+    "重跑能力：v3 的 `runnable_entry` 明确带『向原库写 corpus_evidence_runs 新行（零模型但非零写）』与 `db: 原库 5432`，`prose_numbers_3` 标注『复跑须另立预算授权』——**在 I3 守卫（零写、无 PG、无网络）下不能重跑**，因此 I3-2 的『旧通过能力不退化』只能做非重跑绑定（期望资产 + 入口字节 + 机器记录），真实重验按既有分工排 I3-5 并需单独授权",
+    "绑定状态：`baseline-bindings.json` 仅 ['i0c-r1', 'i0c-r28'] 绑定；**候选包 v3 未被任何修订绑定**（['i0c-r28']）⇒ `baseline-bindings.json` 的 `binding_detail` 指向一个未入链的文件，I3-2 冻结时必须一起处理",
+    "可绑定度：7 类中只有 2 类可做『非重跑绑定』（`legacy_retrieval_golden` 的 `plugins/corpus/golden.py`、`financial_controlled_recalc_57` 的 `pilot_manifest.json` + `verify_claims_entry.py`，声明哈希与现况一致、0 漂移）；3 类（`customer_table_12`、`prose_numbers_3`、`macro_legacy_fields_0_of_3`）的用例级明细是**纯描述**（run_id／source_anchor／expected／status，无 path、无 sha256），因此目前无法作为非重跑绑定；`financial_controlled_recalc_57` 的 `machine_record` 有路径但**未声明哈希**"
+  ],
+  "drift": [],
+  "missing_case_level_categories": [
+    "old_doc_kind_review_export"
+  ],
+  "recommendation": {
+    "I3-2": [
+      "把 v3 的用例级明细**内联或强引用（双哈希：index sha + v3 sha）**后随 r27 重绑，避免『指针指向未被绑定的文件』（现 v3 零绑定）",
+      "给 3 个纯描述类目补 `path` + `sha256`（`customer_table_12` 用冻结 run `0a1dbf39…`、`prose_numbers_3` 用冻结目标/报告、`macro_legacy_fields_0_of_3` 用字段清单），并给 `financial_controlled_recalc_57.machine_record` 补声明哈希——否则『不退化』只能靠散文声明",
+      "`old_doc_kind_review_export` 在 v3 无条目：需 U 圈定权威版本（.audit 88 个工件）或明确降级",
+      "在冻结清单里写明：旧基线在 I3 守卫下**不重跑**，只作非重跑绑定；重验排 I3-5 + 单独授权"
+    ],
+    "对照方法（新旧口径）": [
+      "对每个旧基线用例：只比对『预期资产 + 机器记录』（历史通过数字）与新口径下的**同一用例**重评结果；旧口径（逐题通过含 require_all）与新召回标准**分别报告，不互相替代**",
+      "新链路跑不通时按 fail-closed 计入 `blockers`，不得以旧数字顶替"
+    ]
+  }
+}

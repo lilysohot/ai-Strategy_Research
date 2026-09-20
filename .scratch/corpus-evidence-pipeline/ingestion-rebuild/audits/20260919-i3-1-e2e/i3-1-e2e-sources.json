@@ -1,0 +1,1124 @@
+{
+  "artifact": "i3-1-e2e-per-source",
+  "generated_at": "2026-09-19T18:47:24+0800",
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "database": "i2_sandbox_corpus"
+  },
+  "guard": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "sha256": "1c238a62d0d70b97f5b075cd612e21eb16f8d1eaed492e3762acffb4e2c402cf"
+  },
+  "scope_status": "proposed_pending_ratification",
+  "sources": [
+    {
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "build_id": "a95779f6872d9e6103bcc755e947070e46a9ae6ec45f6156087356bdfc18b58f",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "unit_count": 778,
+      "chunk_count": 25,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 4,
+        "seconds": 0.14,
+        "publishable": false,
+        "gap_summary": {
+          "total": 8,
+          "blocking": 1,
+          "acknowledged": 7,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:2",
+            "code": "image_region_unreadable",
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:2']（image_region_unreadable@page:2）"
+      }
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "unit_count": 798,
+      "chunk_count": 198,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 4,
+        "seconds": 0.01,
+        "publishable": false,
+        "gap_summary": {
+          "total": 23,
+          "blocking": 1,
+          "acknowledged": 22,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:7",
+            "code": "image_region_unreadable",
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）"
+      }
+    },
+    {
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "build_id": "b7291df6abc1bed46d56e39f44eb594f61c172019f214a70e6fe226fb05facf4",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "unit_count": 1518,
+      "chunk_count": 282,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 4,
+        "seconds": 0.01,
+        "publishable": false,
+        "gap_summary": {
+          "total": 34,
+          "blocking": 10,
+          "acknowledged": 24,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:23",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:24",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:25",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:1",
+            "code": "image_region_unreadable",
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:2",
+            "code": "image_region_unreadable",
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:12",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:13",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:17",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:18",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:21",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:22",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:24",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:3",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:1', 'issue:image_region_unreadable:page:2', 'issue:table_lines_without_extraction:page:12', 'issue:table_lines_without_extraction:page:13', 'issue:table_lines_without_extraction:page:17', 'issue:table_lines_without_extraction:page:18', 'issue:table_lines_without_extraction:page:21', 'issue:table_lines_without_extraction:page:22', 'issue:table_lines_without_extraction:page:24', 'issue:table_lines_without_extraction:page:3']（image_region_unreadable@page:1, image_region_unreadable@page:2, table_lines_without_extraction@page:12, table_lines_without_extraction@page:13, table_lines_without_extraction@page:17, table_lines_without_extraction@page:18, table_lines_without_extraction@page:21, table_lines_without_extraction@page:22, table_lines_without_extraction@page:24, table_lines_without_extraction@page:3）"
+      }
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "unit_count": 258,
+      "chunk_count": 54,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 0,
+        "seconds": 0.03,
+        "publishable": true,
+        "gap_summary": {
+          "total": 11,
+          "blocking": 0,
+          "acknowledged": 11,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 0,
+        "generation": 1,
+        "active_build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8"
+      }
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "unit_count": 258,
+      "chunk_count": 21,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 0,
+        "seconds": 0.02,
+        "publishable": true,
+        "gap_summary": {
+          "total": 16,
+          "blocking": 0,
+          "acknowledged": 16,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 0,
+        "generation": 1,
+        "active_build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281"
+      }
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "build_id": "bf06d59c7c6639e10abe854485b063a818114fd9b38872a16cbec1e56a3f6a28",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "unit_count": 695,
+      "chunk_count": 187,
+      "format": "pdf",
+      "domain": null,
+      "check": {
+        "exit_code": 4,
+        "seconds": 0.01,
+        "publishable": false,
+        "gap_summary": {
+          "total": 9,
+          "blocking": 1,
+          "acknowledged": 8,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "status": "noise",
+            "disposition": "acknowledged",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:table_lines_without_extraction:page:6",
+            "code": "table_lines_without_extraction",
+            "status": "review_required",
+            "disposition": "blocking",
+            "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+          }
+        ]
+      },
+      "publish": {
+        "exit_code": 4,
+        "blocked": true,
+        "why": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:6']（table_lines_without_extraction@page:6）"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "what": "CLI `plan` 的 stdout 被 PyMuPDF 横幅（『Consider using the pymupdf_layout package…』）污染",
+      "effect": "严格按 JSON 解析 stdout 的调用方会解析失败；本阶段已改为取首个 `{` 起解析并记录前缀",
+      "evidence": {
+        "step": "plan",
+        "prefix": "Consider using the pymupdf_layout package for a greatly improved page layout analysis.\n{\n  \"ok\": true,\n  \"command\": \"pla"
+      },
+      "suggest": "PyMuPDF 输出应改道 stderr（或 plan 阶段显式抑制）；属 CLI stdout 契约缺陷，建议单列修复"
+    },
+    {
+      "id": "F2",
+      "what": "开发范围 73 份来源终态仍为 review_required（M1 未决）",
+      "effect": "本轮按 Agent 提案 3 类×2 份执行，登记决定作者已写明待追认；I3-1 不能据此宣告完成",
+      "suggest": "U 批准范围后重跑并冻结该清单"
+    },
+    {
+      "id": "F3",
+      "what": "docx 无开发样本",
+      "effect": "格式矩阵缺一格；按任务口径『缺格式门未过』登记",
+      "suggest": "U 定性：补 DOCX 样本 或 声明缺格式"
+    }
+  ],
+  "search": [
+    {
+      "query": "营业收入",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "景气",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "非农",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "同比",
+      "hits": 4,
+      "verified": [
+        {
+          "doc_id": "cv2:f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+          "locator": "chunk:f6ce586247b5c88a:body:0014",
+          "units": 13,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "由于市场需求和公司战略发展需要，松下电子材料（上海）有限公司拟在环城\n北路148 号现有厂区内新建生产厂房，扩大环氧树脂成型材料产能，本项目"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0003",
+          "units": 18,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "宏观研究\n宏观专题  2026 年09 月06 日\n华创证券研究所 \n证券分析师：张瑜\n邮箱：zhangyu3@hcyjs.com \n执业编"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0006",
+          "units": 14,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "资料来源：Wind，华创证券预测；注：2026 年为预测值，主要预测参数是：税收全年增长6%，非税实现预算目标，\n政府性基金收入参考上半年增"
+        },
+        {
+          "doc_id": "cv2:6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+          "locator": "chunk:6509bf635ab5dd2a:body:0007",
+          "units": 17,
+          "active": true,
+          "chunk_text_is_unit_join": true,
+          "units_in_document_text": true,
+          "sample": "资料来源：wind，华创证券\n四、路径3：带动企业投资增加\n1、路径3 的理论猜想：新动能快速增长—>利润增加或者在政策支持下，获得股权融资"
+        }
+      ]
+    }
+  ],
+  "published_sources": [
+    "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+    "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf"
+  ],
+  "blocked_sources": [
+    {
+      "name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ]
+    },
+    {
+      "name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:7",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ]
+    },
+    {
+      "name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:1",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:12",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:13",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:17",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:18",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:21",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:22",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:24",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:3",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ]
+    },
+    {
+      "name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "gaps": [
+        {
+          "key": "issue:table_lines_without_extraction:page:6",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@f223368972471e5499622e50adaca5ae",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 6,
+      "published": 2,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 6,
+      "published_with_gaps": 2
+    }
+  },
+  "audit": {
+    "available": true,
+    "conflicts": [],
+    "counts": {
+      "sources": 6,
+      "admissions": 6,
+      "builds": 6,
+      "units": 4305,
+      "chunks": 767,
+      "active": 2
+    },
+    "codes": []
+  }
+}

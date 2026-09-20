@@ -1,0 +1,745 @@
+{
+  "artifact": "i3-2-legacy-anchor-mapping",
+  "generated_at": "2026-09-19T17:58:23+08:00",
+  "status": "rule_verified_closed",
+  "inputs": {
+    "golden": {
+      "path": "plugins/corpus/golden.py",
+      "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b"
+    },
+    "doc_catalog": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a5-doclist-recount-20260915.json",
+      "sha256": "d98b0517ccbf62bf6f9201ae224744d2bcce05e8f84445a19ff6da51888bd0c9"
+    },
+    "derivation": {
+      "path": "plugins/corpus/derivation.py",
+      "sha256": "c190fb4075685cbcd490a2bc4a59499e6c3263be74015049f339b09b84d1978b"
+    }
+  },
+  "mapping_rule": "旧锚点 (title_contains, doc_prefix) → 旧文档目录 i0a5-doclist 的 doc_id（`YYYY-MM-DD_<8hex>`，即新体系的 source 身份）；先做归一化标题子串匹配，失败退回最长 CJK/数字 token 命中；多候选/零候选一律标 ambiguous/unmatched 且 confirmed=false",
+  "verification": {
+    "source_path_exists": 22,
+    "source_path_missing": 0,
+    "doc_id_space": "i0a5-doclist 的 doc_id 后缀是**内容哈希**，与 data/corpus 文件名后缀不是同一哈希空间；doc_id 与已标注 source-gold 的 source_id 同源（样例见下），因此锚点校验用 source_path + title，不用文件名后缀",
+    "doc_ids_matching_annotated_source_gold": [
+      "2026-08-13_174b6462",
+      "2026-08-16_6f14cc14",
+      "2026-09-06_793b3967",
+      "2026-09-06_dddc7cd0",
+      "2026-09-06_f8e31696"
+    ],
+    "note": "映射到的 doc_id 若在已标注 source-gold 中，可直接复用其 locator 体系；否则待该题进入开发范围时按同一 id 约定接入"
+  },
+  "counts": {
+    "resolved_unique": 19,
+    "excluded_holdout": 1
+  },
+  "question_count": 19,
+  "questions": [
+    {
+      "qid": "N1",
+      "question": "字节跳动获得的银团贷款规模是多少亿美元",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "字节获296亿美元银团贷款",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_a91d95c7",
+              "title": "2026.09.06-国金证券-通信行业研究-hbm市场极度紧缺-字节获296亿美元银团贷款",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国金证券-通信行业研究-hbm市场极度紧缺-字节获296亿美元银团贷款-7ee005e2.pdf",
+              "candidate_source_id": "2026-09-06_a91d95c7"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N2",
+      "question": "Figure 加码 Helix 算力投入了多少亿美元",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "figure斥35亿美元加码helix算力",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_0c25f0e9",
+              "title": "2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+              "candidate_source_id": "2026-09-06_0c25f0e9"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N3",
+      "question": "国盛证券提到增资银行保险的规模是多少亿",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "3600亿增资银行保险",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-07_1e021a8c",
+              "title": "2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号",
+              "source_path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+              "candidate_source_id": "2026-09-07_1e021a8c"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N4",
+      "question": "华福证券基础化工周报提到电子特气涨幅超过多少",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "电子特气涨幅超24",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_f8e31696",
+              "title": "2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+              "candidate_source_id": "2026-09-06_f8e31696"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N5",
+      "question": "光大证券金属周报提到焦煤期货收盘价周内下跌多少",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "焦煤期货收盘价周内下跌3-64",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_c1ddcd8a",
+              "title": "2026.09.06-光大证券-金属行业周期品高频数据周报-焦煤期货收盘价周内下跌3-64",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-光大证券-金属行业周期品高频数据周报-焦煤期货收盘价周内下跌3-64-46877bac.pdf",
+              "candidate_source_id": "2026-09-06_c1ddcd8a"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N6",
+      "question": "长江证券化工专题里小苏打出口占产量的比重是多少",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "长江证券-化工专题",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-13_174b6462",
+              "title": "2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答",
+              "source_path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+              "candidate_source_id": "2026-08-13_174b6462"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N7",
+      "question": "贵州茅台 2026 上半年收入同比增长百分之多少",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "国信证券",
+            "doc_prefix": "2026-08-17"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-17_c195233b",
+              "title": "2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革",
+              "source_path": "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+              "candidate_source_id": "2026-08-17_c195233b"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "N8",
+      "question": "光力科技的主营业务和股票代码是什么",
+      "kind": "数字",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "光力科技",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_dddc7cd0",
+              "title": "2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+              "candidate_source_id": "2026-09-06_dddc7cd0"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O1",
+      "question": "华创证券对贵州茅台给出什么投资评级",
+      "kind": "观点",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "华创证券",
+            "doc_prefix": "2026-08-16"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-16_6f14cc14",
+              "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+              "source_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+              "candidate_source_id": "2026-08-16_6f14cc14"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O2",
+      "question": "摩根大通对中国人工智能板块的态度与评级",
+      "kind": "观点",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "jpmorgan",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-16_7d3ca3b9",
+              "title": "2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性",
+              "source_path": "data/corpus/2026-08-16_2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性-b4d3b59b.pdf",
+              "candidate_source_id": "2026-08-16_7d3ca3b9"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O3",
+      "question": "国金证券怎么看 AI PCB 与半导体设备的布局时机",
+      "kind": "观点",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "ai-pcb及半导体设备迎来布局良机",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_00f08e66",
+              "title": "2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf",
+              "candidate_source_id": "2026-09-06_00f08e66"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O4",
+      "question": "华福证券为什么看好供给约束型周期品",
+      "kind": "观点",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "看好供给约束型周期品",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_d01c64bf",
+              "title": "2026.09.06-华福证券-华福证券-周观点-美联储加息扩表可能性或已浮现-看好供给约束型周期品",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-周观点-美联储加息扩表可能性或已浮现-看好供给约束型周期品-da9260aa.pdf",
+              "candidate_source_id": "2026-09-06_d01c64bf"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O5",
+      "question": "国金证券对钽价和锑价的判断是什么",
+      "kind": "观点",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "钽价有望启动上行",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_428e7222",
+              "title": "2026.09.06-国金证券-有色金属行业小金属双周谈-钽价有望启动上行-关注锑价止跌回升",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国金证券-有色金属行业小金属双周谈-钽价有望启动上行-关注锑价止跌回升-0af30fd5.pdf",
+              "candidate_source_id": "2026-09-06_428e7222"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "O6",
+      "question": "华泰证券宏观海外周报如何看待联储加息",
+      "kind": "观点",
+      "require_all": false,
+      "status": "excluded_holdout",
+      "reason": "O6（华泰证券联储加息）来源属留出（d571f138 在 guards/i3.json forbidden_roots），r27 已排除",
+      "anchors": []
+    },
+    {
+      "qid": "C1",
+      "question": "华创证券和国信证券分别对贵州茅台给出什么评级",
+      "kind": "对比",
+      "require_all": true,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "华创证券",
+            "doc_prefix": "2026-08-16"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-16_6f14cc14",
+              "title": "2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评",
+              "source_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+              "candidate_source_id": "2026-08-16_6f14cc14"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        },
+        {
+          "old_anchor": {
+            "title_contains": "国信证券",
+            "doc_prefix": "2026-08-17"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-08-17_c195233b",
+              "title": "2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革",
+              "source_path": "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+              "candidate_source_id": "2026-08-17_c195233b"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "C2",
+      "question": "国金证券和东吴证券分别对 GPT-6 Astra 发布有什么看法",
+      "kind": "对比",
+      "require_all": true,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "gpt-6-astra-fable-5-1正式发布",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_987d9f69",
+              "title": "2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf",
+              "candidate_source_id": "2026-09-06_987d9f69"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        },
+        {
+          "old_anchor": {
+            "title_contains": "gpt-6-astra发布",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-07_acbf026c",
+              "title": "2026.09.07-东吴证券-策略周评-gpt-6-astra发布-前沿模型能力继续提升",
+              "source_path": "data/corpus/2026-09-07_2026.09.07-东吴证券-策略周评-gpt-6-astra发布-前沿模型能力继续提升-dbfd9238.pdf",
+              "candidate_source_id": "2026-09-07_acbf026c"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "C3",
+      "question": "光大证券和天风证券分别对 8 月美国非农数据给出了什么解读",
+      "kind": "对比",
+      "require_all": true,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "2026年8月美国非农数据点评",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_793b3967",
+              "title": "2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+              "candidate_source_id": "2026-09-06_793b3967"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        },
+        {
+          "old_anchor": {
+            "title_contains": "非农大超预期",
+            "doc_prefix": ""
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-06_f7f65d7e",
+              "title": "2026.09.06-天风证券-a股策略周报-非农大超预期-加息预期升温",
+              "source_path": "data/corpus/2026-09-06_2026.09.06-天风证券-a股策略周报-非农大超预期-加息预期升温-5e671b67.pdf",
+              "candidate_source_id": "2026-09-06_f7f65d7e"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "T1",
+      "question": "James Bulltard 最新一期的复盘是哪一期",
+      "kind": "时效",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "James-Bulltard_9826",
+            "doc_prefix": "2026-09-08"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-08_bc0309f3",
+              "title": "James-Bulltard_9826 复盘",
+              "source_path": "data/corpus/2026-09-08_James-Bulltard_9826 复盘.pdf",
+              "candidate_source_id": "2026-09-08_bc0309f3"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "T2",
+      "question": "全球流动性观察最新一期是哪天发布的",
+      "kind": "时效",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "全球流动性观察",
+            "doc_prefix": "2026-09-08"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-08_77b352bf",
+              "title": "Capital-Wars_全球流动性观察周度更新",
+              "source_path": "data/corpus/2026-09-08_Capital-Wars_全球流动性观察周度更新.pdf",
+              "candidate_source_id": "2026-09-08_77b352bf"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    },
+    {
+      "qid": "T3",
+      "question": "Simons-Substack 最近一篇讲了什么",
+      "kind": "时效",
+      "require_all": false,
+      "status": "resolved_unique",
+      "anchors": [
+        {
+          "old_anchor": {
+            "title_contains": "白银矿股",
+            "doc_prefix": "2026-09-07"
+          },
+          "match_basis": "title_substring",
+          "matched_tokens": null,
+          "candidates": [
+            {
+              "doc_id": "2026-09-07_5c5fce92",
+              "title": "Simons-Substack_白银矿股关注图表四",
+              "source_path": "data/corpus/2026-09-07_Simons-Substack_白银矿股关注图表四.pdf",
+              "candidate_source_id": "2026-09-07_5c5fce92"
+            }
+          ],
+          "status": "resolved_unique",
+          "confirmed": true,
+          "confirmed_kind": "rule_verified_by_authorization",
+          "confirmed_basis": "确定性规则：归一化标题子串在旧文档目录唯一命中；来源路径在磁盘；命中 doc_id 与已标注 source-gold 同源者已单列。U 授权按此规则关闭（非逐题人工通读）。"
+        }
+      ],
+      "confirmed": true,
+      "confirmed_kind": "rule_verified_by_authorization"
+    }
+  ],
+  "formula_inputs": {
+    "revenue_growth": [
+      "revenue",
+      "revenue"
+    ],
+    "parent_profit_growth": [
+      "parent_net_profit",
+      "parent_net_profit"
+    ],
+    "operating_cash_growth": [
+      "operating_cash_flow",
+      "operating_cash_flow"
+    ],
+    "cash_profit_ratio": [
+      "operating_cash_flow",
+      "parent_net_profit"
+    ],
+    "net_margin": [
+      "net_profit",
+      "revenue"
+    ],
+    "balance_residual": [
+      "assets",
+      "liabilities",
+      "equity"
+    ],
+    "profit_residual": [
+      "net_profit",
+      "parent_net_profit",
+      "minority_profit"
+    ]
+  },
+  "closure": {
+    "closed_at": "2026-09-19T21:30:00+08:00",
+    "authorized_by": "U（2026-09-19 会话授权）",
+    "kind": "rule_verified_by_authorization",
+    "anchors_verified": 22,
+    "anchors_failed": 0,
+    "same_source_as_annotated": [
+      "2026-08-13_174b6462",
+      "2026-08-16_6f14cc14",
+      "2026-09-06_793b3967",
+      "2026-09-06_dddc7cd0",
+      "2026-09-06_f8e31696"
+    ],
+    "problems": []
+  }
+}

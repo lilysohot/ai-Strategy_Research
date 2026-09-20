@@ -1,0 +1,388 @@
+{
+  "artifact": "i3-1-e2e-approved-set-rerun",
+  "generated_at": "2026-09-19T22:32:58+08:00",
+  "scope": {
+    "authority": "i0a2-adjudicated-20260915.json :: dev_selection_approved",
+    "authority_sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea",
+    "size": 6,
+    "sources": [
+      {
+        "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "domain": "company"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "domain": "company"
+      },
+      {
+        "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "domain": "industry"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "domain": "industry"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "domain": "macro"
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+        "domain": "macro"
+      }
+    ],
+    "preflight_check": {
+      "verdict": "PASS",
+      "pass": 6,
+      "fail": 0,
+      "file": "preflight-scope-check.json"
+    },
+    "no_self_selection": true
+  },
+  "env": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "guard": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+      "sha256": "279d86662d5eca528aaa75fea3ccb0b8b59ec0b8ff460e23f56ef9f6e9dbeba5"
+    },
+    "sandbox": "干净沙箱（teardown residue=0 后重建 corpus schema）"
+  },
+  "build": {
+    "exit_code": 0,
+    "seconds": 8.98,
+    "count": 6
+  },
+  "per_source": [
+    {
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "decision": "in_scope",
+      "build_id": "01b6ccb34e6cacaab95f3dee1e66f185822765c97ce5cdc751450303ae3b912e",
+      "unit_count": 778,
+      "chunk_count": 25,
+      "check_exit": 4,
+      "publishable": false,
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 7,
+      "check_error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:2']（image_region_unreadable@page:2）",
+      "publish": {
+        "exit_code": 4,
+        "blocked": true
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "decision": "in_scope",
+      "build_id": "b00c2e8e3711d6adececdafb550963ac8be60ecd7f3949b40be257fc27d15e7b",
+      "unit_count": 798,
+      "chunk_count": 198,
+      "check_exit": 4,
+      "publishable": false,
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:7",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 22,
+      "check_error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）",
+      "publish": {
+        "exit_code": 4,
+        "blocked": true
+      }
+    },
+    {
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "decision": "in_scope",
+      "build_id": "65f1e00f1fbe40a5ef25013bec29f1570279d25bb4e0dc4bc9a908564150df7b",
+      "unit_count": 1518,
+      "chunk_count": 282,
+      "check_exit": 4,
+      "publishable": false,
+      "blocking_gaps": [
+        {
+          "key": "issue:image_region_unreadable:page:1",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:image_region_unreadable:page:2",
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:12",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:13",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:17",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:18",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:21",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:22",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:24",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "key": "issue:table_lines_without_extraction:page:3",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 24,
+      "check_error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:1', 'issue:image_region_unreadable:page:2', 'issue:table_lines_without_extraction:page:12', 'issue:table_lines_without_extraction:page:13', 'issue:table_lines_without_extraction:page:17', 'issue:table_lines_without_extraction:page:18', 'issue:table_lines_without_extraction:page:21', 'issue:table_lines_without_extraction:page:22', 'issue:table_lines_without_extraction:page:24', 'issue:table_lines_without_extraction:page:3']（image_region_unreadable@page:1, image_region_unreadable@page:2, table_lines_without_extraction@page:12, table_lines_without_extraction@page:13, table_lines_without_extraction@page:17, table_lines_without_extraction@page:18, table_lines_without_extraction@page:21, table_lines_without_extraction@page:22, table_lines_without_extraction@page:24, table_lines_without_extraction@page:3）",
+      "publish": {
+        "exit_code": 4,
+        "blocked": true
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "decision": "in_scope",
+      "build_id": "7587956e3f3fd04bfffbb3ba6e96140973967b7b5eb5366490b77ec056c3d6ce",
+      "unit_count": 258,
+      "chunk_count": 54,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 11,
+      "check_error": null,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "decision": "in_scope",
+      "build_id": "dc52ff5e20381405a267c51a65206ff09d2cad514912275494d3d2b1d2d2b44c",
+      "unit_count": 258,
+      "chunk_count": 21,
+      "check_exit": 0,
+      "publishable": true,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 16,
+      "check_error": null,
+      "publish": {
+        "exit_code": 0,
+        "generation": 1
+      }
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "decision": "in_scope",
+      "build_id": "e103070f075cdc5356b3cab7fda6ff4867c5dd4fbc51270c0f9f16bc9ea0b248",
+      "unit_count": 695,
+      "chunk_count": 187,
+      "check_exit": 4,
+      "publishable": false,
+      "blocking_gaps": [
+        {
+          "key": "issue:table_lines_without_extraction:page:6",
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 8,
+      "check_error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:6']（table_lines_without_extraction@page:6）",
+      "publish": {
+        "exit_code": 4,
+        "blocked": true
+      }
+    }
+  ],
+  "search": [
+    {
+      "query": "营业收入",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "景气",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "非农",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "同比",
+      "hits": 4,
+      "verified": [
+        {
+          "locator": "chunk:7587956e3f3fd04b:body:0014",
+          "units": 13,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true
+        },
+        {
+          "locator": "chunk:dc52ff5e20381405:body:0003",
+          "units": 18,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true
+        },
+        {
+          "locator": "chunk:dc52ff5e20381405:body:0006",
+          "units": 14,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true
+        },
+        {
+          "locator": "chunk:dc52ff5e20381405:body:0007",
+          "units": 17,
+          "active": true,
+          "join_ok": true,
+          "units_in_doc": true
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@5885fae7f998118861e87a71900f60a5",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 6,
+      "published": 2,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 6,
+      "published_with_gaps": 2
+    }
+  },
+  "audit": {
+    "available": true,
+    "conflicts": [],
+    "counts": {
+      "sources": 6,
+      "admissions": 6,
+      "builds": 6,
+      "units": 4305,
+      "chunks": 767,
+      "active": 2
+    },
+    "codes": []
+  },
+  "summary": {
+    "sources": 6,
+    "publishable": 2,
+    "blocked": 4,
+    "total_units": 4305,
+    "total_chunks": 767,
+    "blocking_gaps_total": 13,
+    "blocking_gap_inventory": {
+      "image_region_unreadable": 4,
+      "table_lines_without_extraction": 9
+    },
+    "matrix": {
+      "company:pdf": {
+        "total": 2,
+        "published": 0
+      },
+      "industry:pdf": {
+        "total": 2,
+        "published": 1
+      },
+      "macro:pdf": {
+        "total": 2,
+        "published": 1
+      }
+    },
+    "search_hits": {
+      "营业收入": 0,
+      "景气": 0,
+      "非农": 0,
+      "同比": 4
+    },
+    "verify_all_ok": true,
+    "refused_handles": 0,
+    "audit_conflicts": [],
+    "per_class_min_2_satisfied": false,
+    "per_class_min_2_why": "照批准集真实结果：company 0/2、industry 1/2、macro 1/2 可发布 → 『三类每类≥2 份』在现行门 + 现行裁定下不可满足；缺口无处置路径"
+  }
+}

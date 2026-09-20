@@ -1,0 +1,171 @@
+{
+  "artifact": "i3-2-remaining-inventory",
+  "generated_at": "2026-09-18",
+  "authority": "docs/plan/corpus-ingestion-rebuild-tasks.md:321（I3-2：确认 source/query gold、旧基线映射、各类阈值/关键题/负例，冻结评分器与试验初始版本）",
+  "baseline_revision": "i0c-r26",
+  "headline": "已闭环 2 项、部分闭环 2 项、完全未做 3 项、无缺口 1 项；最关键阻塞 = query-gold 30/30 缺 evidence_targets（评分器按设计阻断全部有答案题）",
+  "items": [
+    {
+      "id": "I3-2-1",
+      "name": "source gold",
+      "status": "frozen",
+      "evidence": {
+        "source-gold-frozen.jsonl": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+        "i3-2/source-gold-nearmiss-library.jsonl": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f",
+        "bound_in": "i0c-r26.i3_2_source_gold"
+      },
+      "gap": null,
+      "owner": null,
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-2",
+      "name": "query gold",
+      "status": "partial",
+      "evidence": {
+        "query-gold-frozen.jsonl": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+        "questions": 30,
+        "evidence_targets_present": 0,
+        "approved_projection": "i3-2/evidence-targets-approved.json @ 5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+        "projection_counts": {
+          "approved_required": 79,
+          "supplementary": 20,
+          "questions": 30
+        },
+        "scorer_behaviour": "gold_from_records 只读 target_id/quote/locator/source_id；_evidence_required(no_answer)=False；缺 targets 且 answerable ⇒ EVIDENCE_TARGETS_ABSENT + missing_required_input blocker"
+      },
+      "gap": "把批准投影材料化成评分器可读的 evidence_targets（补充证据须放非必需字段，避免计入 EvidencePass）；改金标需 U 签认 + 新修订",
+      "owner": "A（U 签认）",
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-3",
+      "name": "各类阈值",
+      "status": "confirmed_pending_freeze",
+      "evidence": {
+        "scoring.py": "plugins/corpus/scoring.py:261-265 ScoringPolicy 默认 top_k=5, min_rate=Fraction(19,20), require_critical_all_pass=True, max_false_positives=0, max_fabricated_citations=0",
+        "code_note": "docstring 声明『I3-2 冻结其取值；默认值为架构 §12.3 的开发基线』",
+        "scorer_binding": "i0c-r19 / i0c-r21（本轮未改）"
+      },
+      "gap": "取值已按默认确认（p2/policy-and-lists-confirmation.json）；随 r27 冻结记录",
+      "owner": "U 判 + A 出清单",
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-4",
+      "name": "关键题",
+      "status": "partial",
+      "evidence": {
+        "critical_true": 28,
+        "total": 30,
+        "critical_ids": [
+          "company-001..010",
+          "industry-001..005",
+          "industry-007..010",
+          "macro-001..003",
+          "macro-005..010"
+        ],
+        "non_critical": [
+          "industry-006",
+          "macro-004"
+        ],
+        "policy": "require_critical_all_pass=True（关键题全项否决）"
+      },
+      "gap": "U 确认维持 28/30 或收窄（收窄需新金标版本）；确认后与『全项否决』口径一并写进冻结清单",
+      "owner": "U 判",
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-5",
+      "name": "负例",
+      "status": "closed_list",
+      "evidence": {
+        "no_answer_ids": [
+          "company-009",
+          "company-010",
+          "industry-009",
+          "industry-010",
+          "macro-009",
+          "macro-010"
+        ],
+        "candidate_status": "negative_opt_out × 6",
+        "decisions": "i3-2/evidence-targets-decisions.json 中 negative_reviews × 6（full_text_coverage_confirmed=true）",
+        "near_miss_library": "i3-2/source-gold-nearmiss-library.jsonl（7 条近似命中，不入映射池）",
+        "scorer": "负例不进三指标分母；max_false_positives=0"
+      },
+      "gap": "口径落纸（负例是否全部 critical 与 I3-2-4 同判）",
+      "owner": "U 判 + A 记录",
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-6",
+      "name": "旧基线映射",
+      "status": "partial",
+      "evidence": {
+        "baseline-bindings.json": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json（I0A-4，2026-09-15，bindings × 7）",
+        "categories": [
+          "legacy_retrieval_golden",
+          "old_doc_kind_review_export",
+          "financial_controlled_recalc_57",
+          "formula_7",
+          "customer_table_12",
+          "prose_numbers_3",
+          "macro_legacy_fields_0_of_3"
+        ],
+        "bound_in": [
+          "i0c-r1"
+        ],
+        "superseded_note": "2026-09-15 U 评审后从报告数字升级为用例级；明细见候选包 v3（baseline_bindings_v3）"
+      },
+      "gap": "①核对 v3 用例级明细与现文件的差异；②I3-2 是否重绑；③定义新旧口径下『旧通过能力不退化』的对照方法（旧锚点↔新 locator/证据映射）",
+      "owner": "A 出对账表 + U 判口径",
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-7",
+      "name": "评分器冻结",
+      "status": "closed",
+      "evidence": {
+        "plugins/corpus/scoring.py": "bf9c8b80d7a936ecbbca…",
+        "bound_in": [
+          "i0c-r19",
+          "i0c-r21"
+        ],
+        "changed_this_round": false
+      },
+      "gap": null,
+      "owner": null,
+      "zero_model": true
+    },
+    {
+      "id": "I3-2-8",
+      "name": "试验初始版本",
+      "status": "draft_built_pending_signoff",
+      "evidence": {
+        "search": "全仓无 experiment/试验初始版本 产物"
+      },
+      "gap": "清单草稿已建（p4/experiment-initial-version.json）；唯一评分输入已派生，待 r27 冻结",
+      "owner": "A 出清单 + U 签认",
+      "zero_model": true
+    }
+  ],
+  "delivery_order": [
+    "P1 材料化 query-gold-with-targets + 自洽校验",
+    "P2 阈值/关键题/负例确认单",
+    "P3 旧基线映射对账",
+    "P4 试验初始版本清单",
+    "P5 冻结 r27 + validate"
+  ],
+  "boundaries": [
+    "评分器从未在真实 E2E 观测上跑过（I3-1 需 PG/模型与预算授权）",
+    "裁决件 20 条人工同义映射待审计",
+    "macro-004 机器 blocked 未消（建议 mapping-7 覆盖『短句由相邻段落承载』）",
+    "非 I3-2 冻结项：M5 报告 F3（validate_i1_freeze.py 对工作区 13 项失配）仍登记未修",
+    "强制零模型、未写生产库、未读候选业务结果；I3-5 未做"
+  ],
+  "corrections": [
+    "阈值『未确认』已更正为已确认（U 2026-09-19，按默认）。",
+    "试验初始版本『无产物』已更正为清单草稿已建。",
+    "缺 targets 阻断 24 道有答案题（不是 30 题）；6 道负例不需要 targets；阻塞已由 i3-2/query-gold-scoring-v1.jsonl 解除（待 r27 冻结）。"
+  ]
+}

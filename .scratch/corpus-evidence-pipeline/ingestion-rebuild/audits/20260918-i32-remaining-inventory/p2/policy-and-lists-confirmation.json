@@ -1,0 +1,122 @@
+{
+  "artifact": "i3-2-p2-policy-and-lists-confirmation",
+  "generated_at": "2026-09-19T18:08:50+08:00",
+  "decided_by": "U",
+  "decided_at": "2026-09-19",
+  "decision_text": "P2 按默认 + 关键题维持 28/30 + 负例全 critical",
+  "not_filed": "确认单：位于审计目录；随 P1 落正式时一并进 r27 绑定",
+  "items": [
+    {
+      "id": "P2-1",
+      "name": "各类阈值（ScoringPolicy 取值）",
+      "decision": "按默认确认（不改代码）",
+      "values": {
+        "top_k": 5,
+        "min_rate": "19/20",
+        "require_critical_all_pass": true,
+        "max_false_positives": 0,
+        "max_fabricated_citations": 0
+      },
+      "semantics": [
+        "min_rate 用 Fraction(19,20)=95%，10 题则要求 10/10（精确比较，无浮点漂移）",
+        "任意领域 DocRecall/QuestionPass/EvidencePass 低于 95% ⇒ below_threshold blocker",
+        "关键题未全过 ⇒ critical_question_failed blocker",
+        "误报、伪造引用上限均为 0（超出即 blocker）"
+      ],
+      "evidence": {
+        "source": "plugins/corpus/scoring.py::ScoringPolicy（默认值即架构 §12.3 开发基线）",
+        "scorer_sha256": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e",
+        "bound_in": [
+          "i0c-r19",
+          "i0c-r21"
+        ]
+      },
+      "effect": "不改评分器、不改金标；取值随 r27 记录为冻结口径"
+    },
+    {
+      "id": "P2-2",
+      "name": "关键题清单",
+      "decision": "维持 28/30（全项否决口径不变）",
+      "critical_count": 28,
+      "total": 30,
+      "critical_ids": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-006",
+        "company-007",
+        "company-008",
+        "company-009",
+        "company-010",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-004",
+        "industry-005",
+        "industry-007",
+        "industry-008",
+        "industry-009",
+        "industry-010",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-005",
+        "macro-006",
+        "macro-007",
+        "macro-008",
+        "macro-009",
+        "macro-010"
+      ],
+      "non_critical_ids": [
+        "industry-006",
+        "macro-004"
+      ],
+      "critical_list_sha256": "1f68cd98d774675ff9b1ba0e0f7dd7be6f52a7552c5f1881ea5f11ffed353519",
+      "evidence": {
+        "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+        "field": "critical"
+      },
+      "note": "非关键仅 industry-006、macro-004；6 道无答案负例也全部为关键题（见 P2-3）",
+      "effect": "不改金标；清单哈希随 r27 记录"
+    },
+    {
+      "id": "P2-3",
+      "name": "负例口径",
+      "decision": "6 道负例全 critical；误报上限 0；负例不进三指标分母；负例不需要 evidence_targets",
+      "negative_ids": [
+        "company-009",
+        "company-010",
+        "industry-009",
+        "industry-010",
+        "macro-009",
+        "macro-010"
+      ],
+      "negative_count": 6,
+      "negative_list_sha256": "422ae264af37e5c7b4b6e83e5f848b4261bfb6d7704301b5840c38fb587b1e76",
+      "scorer_semantics": [
+        "answer_existence=no_answer ⇒ _evidence_required=False、is_evidence_question=False ⇒ EvidencePass 不计入负例",
+        "max_false_positives=0：把无答案题答成有答案即 blocker",
+        "负例另设 require_critical_all_pass 项：负例答错同样否决"
+      ],
+      "evidence": {
+        "decisions_negative_reviews": "i3-2/evidence-targets-decisions.json 中 negative_reviews × 6（full_text_coverage_confirmed=true）",
+        "near_miss_library": "i3-2/source-gold-nearmiss-library.jsonl（7 条近似命中隔离，不入映射池）"
+      },
+      "effect": "不改金标与评分器；口径随 r27 记录"
+    }
+  ],
+  "gaps_from_inventory": {
+    "closed_by_this": [
+      "I3-2-3 阈值",
+      "I3-2-4 关键题",
+      "I3-2-5 负例口径"
+    ],
+    "still_open": [
+      "I3-2-2 材料化落正式",
+      "I3-2-6 旧基线重绑",
+      "I3-2-8 试验初始版本"
+    ]
+  }
+}

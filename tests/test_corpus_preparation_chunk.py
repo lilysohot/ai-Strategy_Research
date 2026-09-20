@@ -40,6 +40,8 @@ def _unit(
     page: int | None = None,
     bbox: tuple[float, float, float, float] | None = None,
     element: str | None = None,
+    cells: tuple[tuple[int, int], ...] = (),
+    label_path: tuple[str, ...] = (),
 ) -> CandidateUnit:
     return CandidateUnit(
         ordinal=ordinal,
@@ -47,7 +49,9 @@ def _unit(
         status=UnitStatus.KEPT,
         reasons=reasons,
         raw_text=raw_text,
-        location=UnitLocation(page=page, bbox=bbox, element=element),
+        location=UnitLocation(
+            page=page, bbox=bbox, element=element, cells=cells, label_path=label_path
+        ),
     )
 
 
@@ -217,6 +221,47 @@ def test_table_row_never_split_and_single_row_group() -> None:
     assert tables[0].review_reasons == ()
 
 
+def test_table_cell_index_text_carries_row_and_column_labels() -> None:
+    """I-B1：任一表格单元格的索引文本必须同时含列标签路径与行标签。
+
+    表格行单元携带与 cells 对齐的 label_path 时，其索引文本（search_text）注入
+    「行标签 × 列标签」前缀；无 label_path 的合成单元保持旧行为逐字节一致。
+    """
+    units = [
+        _unit(
+            1,
+            "尿素|89.9%",
+            kind="table_row",
+            reasons=("tbl[0]",),
+            page=10,
+            cells=((2, 0), (2, 8)),
+            label_path=("尿素", "尿素 开工率"),
+        ),
+        _unit(
+            2,
+            "纯碱|82.9%",
+            kind="table_row",
+            reasons=("tbl[0]",),
+            page=10,
+            cells=((27, 0), (27, 8)),
+            label_path=("纯碱", "纯碱 开工率"),
+        ),
+    ]
+    result = _chunk_of(units)
+    tables = [c for c in result.chunks if c.kind == "table"]
+    assert len(tables) == 1
+    text = tables[0].search_text
+    # 行标签与列标签成对出现在索引文本（I-B1）
+    assert "尿素 开工率" in text
+    assert "纯碱 开工率" in text
+    # 原文逐字内容仍在（不因注入标签而丢失；R5：% 归一化为空格，仅影响索引文本）
+    assert "尿素|89.9" in text and "纯碱|82.9" in text
+    assert "%" not in text  # normalize_search_text 归一化 % → 空格（R5）
+    # 无标签的合成单元（本文件其余表格用例）行为不变
+    plain = _chunk_of([_unit(3, "指标|数值|期间", kind="table_row", reasons=("tbl[0]",))])
+    assert next(c for c in plain.chunks if c.kind == "table").search_text == "指标|数值|期间"
+
+
 # --- 问答：问与答结构组，答案分段仍关联同一问题 ---
 
 
@@ -347,7 +392,5 @@ def test_chunk_does_not_import_pg_or_model_client() -> None:
         " 'openai', 'anthropic') if m in sys.modules];"
         "print(f'leaked: {bad}'); sys.exit(1 if bad else 0)"
     )
-    proc = subprocess.run(
-        [sys.executable, "-c", code], capture_output=True, text=True, check=False
-    )
+    proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False)
     assert proc.returncode == 0, proc.stdout + proc.stderr

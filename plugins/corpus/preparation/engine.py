@@ -106,7 +106,9 @@ PARSE_RULE_REV = "parse-2"
 # 属索引文本规则变更，index_rev 由 index-2-zhcfg-2 升为 index-3-zhcfg-2。
 # zhcfg 或文本规则任一升级必须换用新 index_rev，禁止同名配置原地沿用旧版本；
 # index_rev 进入 build_id，升级即全量重建（新 build 重算 search_tsv/GIN）。
-INDEX_REV_V3 = "index-3-zhcfg-2"
+# 票 04（结构标签入索引文本）：search_text 规则变更只升 index_rev，
+# index-3-zhcfg-2 -> index-4-zhcfg-2（表格块注入行/列标签，I-B1）。
+INDEX_REV_V3 = "index-4-zhcfg-2"
 
 _TITLE_KINDS = frozenset({"heading", "title"})
 # source 级解析检查点阶段名（与 store 检查点键控一致；非 JobStage）。
@@ -484,14 +486,14 @@ def _serialize_parse_checkpoint(
     """序列化解析检查点（值由 store 持有，键为 ``(source_id, "parse")``）。
 
     检查点记录：parse_rule_rev + source_id + extractor_rev + 逐单元 content_hash +
-    reader units 的精简投影（ordinal/kind/raw_text/坐标 + bbox + cells）。引擎
-    据此校验当前代码对该格式会产出的 extractor_rev 是否与检查点一致——不一致
+    reader units 的精简投影（ordinal/kind/raw_text/坐标 + bbox + cells + label_path）。
+    引擎据此校验当前代码对该格式会产出的 extractor_rev 是否与检查点一致——不一致
     即不可复用。
 
-    C6 保真：``bbox``（4 元组）与 ``cells`` 序列化必须完整——否则 PDF 恢复后
-    clean 结果漂移（同一 reader_result 走 clean 应得到同 clean_rev），检查点
-    重放复用的 ReaderResult 与原解析逐字段等价。``reparse_reason`` 记录本次
-    重算原因（检查点缺失/损坏/版本不匹配等，审计可追溯）。
+    C6 保真：``bbox``（4 元组）、``cells`` 与 ``label_path`` 序列化必须完整——
+    否则 PDF 恢复后 clean 结果漂移（同一 reader_result 走 clean 应得到同
+    clean_rev），检查点重放复用的 ReaderResult 与原解析逐字段等价。
+    ``reparse_reason`` 记录本次重算原因（检查点缺失/损坏/版本不匹配等，审计可追溯）。
     """
     payload = {
         "checkpoint_schema_rev": "parse-checkpoint-2",
@@ -513,6 +515,7 @@ def _serialize_parse_checkpoint(
                 "char_end": u.location.char_span.end if u.location.char_span else None,
                 "bbox": list(u.location.bbox) if u.location.bbox else None,
                 "cells": [list(cell) for cell in u.location.cells] if u.location.cells else None,
+                "label_path": list(u.location.label_path) if u.location.label_path else None,
             }
             for u in reader_result.units
         ],
@@ -588,7 +591,7 @@ def _validate_parse_checkpoint(
         char_span = (
             CharSpan(start=int(cs), end=int(ce)) if cs is not None and ce is not None else None
         )
-        # C6 保真：bbox/cells 必须完整恢复，否则 PDF 恢复后 clean 结果漂移。
+        # C6 保真：bbox/cells/label_path 必须完整恢复，否则 PDF 恢复后 clean 结果漂移。
         bbox_raw = entry.get("bbox")
         bbox: tuple[float, float, float, float] | None = None
         if bbox_raw is not None:
@@ -612,6 +615,14 @@ def _validate_parse_checkpoint(
                 cells = tuple((int(cell[0]), int(cell[1])) for cell in cells_raw)
             except (TypeError, ValueError, IndexError):
                 return None, "checkpoint_corrupt"
+        label_path_raw = entry.get("label_path")
+        label_path: tuple[str, ...] = ()
+        if label_path_raw is not None:
+            if not isinstance(label_path_raw, list) or not all(
+                isinstance(item, str) for item in label_path_raw
+            ):
+                return None, "checkpoint_corrupt"
+            label_path = tuple(label_path_raw)
         units.append(
             CandidateUnit(
                 ordinal=ordinal,
@@ -620,7 +631,12 @@ def _validate_parse_checkpoint(
                 reasons=reasons,
                 raw_text=raw_text,
                 location=UnitLocation(
-                    page=page, element=element, char_span=char_span, bbox=bbox, cells=cells
+                    page=page,
+                    element=element,
+                    char_span=char_span,
+                    bbox=bbox,
+                    cells=cells,
+                    label_path=label_path,
                 ),
             )
         )
@@ -1116,7 +1132,7 @@ def quality_ledger_of(build: Build) -> QualityLedger:
     )
 
 
-def gap_records_of(build: Build) -> tuple[GapRecord, ...]:
+def gap_records_of(build: Build, *, store: Store | None = None) -> tuple[GapRecord, ...]:
     """build 的缺口裁决记录（默认分级 + scope 归属）。
 
     发布门、``corpus-check``、``corpus-status``、``corpus-plan`` 预检共用本实现
@@ -1124,13 +1140,23 @@ def gap_records_of(build: Build) -> tuple[GapRecord, ...]:
     """
     ledger = quality_ledger_of(build)
     scope = _parse_scope_ref(build.scope_ref)
-    return evaluate_against_scope(
+    records = evaluate_against_scope(
         gap_records(ledger.gap_keys),
         tuple((entry.start, entry.end) for entry in scope),
     )
+    if store is not None:
+        from plugins.corpus.preparation.gap_review import GapReviewError, apply_gap_review
+
+        try:
+            review = store.get_gap_review(build.build_id)
+            if review is not None:
+                records = apply_gap_review(review, build, store.get_units(build.build_id), records)
+        except GapReviewError as exc:
+            raise EngineError(f"gap_regions human review rejected: {exc}") from exc
+    return records
 
 
-def _acknowledged_keys_of(build: Build | None) -> tuple[str, ...]:
+def _acknowledged_keys_of(build: Build | None, store: Store) -> tuple[str, ...]:
     """已放行（``acknowledged``）缺口的键，用于 PUBLISHED 检查点留痕。
 
     台账不可读时不抛异常：本函数只服务于「发布已成立」的留痕（发布门已单独校验），
@@ -1139,7 +1165,7 @@ def _acknowledged_keys_of(build: Build | None) -> tuple[str, ...]:
     if build is None:
         return ()
     try:
-        records = gap_records_of(build)
+        records = gap_records_of(build, store=store)
     except EngineError:
         return ()
     return tuple(record.key for record in acknowledged_gaps(records))
@@ -1170,7 +1196,7 @@ def _verify_publication_ready(
             f"publish 拒绝：CHUNKED 阶段未成功（build {build.build_id}），不得发布部分 build"
         )
     ledger = quality_ledger_of(build)
-    blocking = blocking_gaps(gap_records_of(build))
+    blocking = blocking_gaps(gap_records_of(build, store=store))
     if blocking:
         # 文案保留 ``gap_regions``（既有消费者/探针据此路由），并给出机读字段之外的
         # 人类可读摘要（码 + 坐标 + 恢复路径由 check/status 的 gaps/recovery 提供）。
@@ -1281,6 +1307,7 @@ def _publish_record(
     operator: str | None,
     owner_id: str,
     acknowledged_gap_keys: tuple[str, ...] = (),
+    human_gap_review_id: str | None = None,
 ) -> str:
     """PUBLISHED job 成功检查点：记录操作者、generation 与已放行缺口（I2-4 审计口径）。
 
@@ -1306,6 +1333,7 @@ def _publish_record(
             ),
             "gap_policy_rev": GAP_POLICY_REV,
             "acknowledged_gaps": sorted(acknowledged_gap_keys),
+            "human_gap_review_id": human_gap_review_id,
         },
         ensure_ascii=False,
         sort_keys=True,
@@ -1344,7 +1372,8 @@ def _reconcile_published_job(
             publication,
             operator=operator,
             owner_id=owner_id,
-            acknowledged_gap_keys=_acknowledged_keys_of(build),
+            acknowledged_gap_keys=_acknowledged_keys_of(build, store),
+            human_gap_review_id=_human_gap_review_id(store, build_id),
         )
         if publication is not None
         else None
@@ -1382,6 +1411,16 @@ def _reconcile_published_job(
     )
 
 
+def _human_gap_review_id(store: Store, build_id: str) -> str | None:
+    from plugins.corpus.preparation.gap_review import GapReviewError
+
+    try:
+        review = store.get_gap_review(build_id)
+        return review.review_id if review is not None else None
+    except GapReviewError as exc:
+        raise EngineError(f"gap_regions human review rejected: {exc}") from exc
+
+
 def publish_build(
     store: Store,
     build_id: str,
@@ -1408,6 +1447,24 @@ def publish_build(
     build = store.get_build(build_id)
     if build is None:
         raise EngineError(f"build 不存在，不得发布: {build_id}")
+    # Human approval is a live precondition even for retries/rollback. Never reuse
+    # an old success checkpoint after its credential is missing, stale or corrupt.
+    review_id = _human_gap_review_id(store, build_id)
+    published_job = store.get_job(build_id, JobStage.PUBLISHED)
+    recorded_review_id = None
+    if published_job is not None and published_job.checkpoint:
+        try:
+            recorded_review_id = json.loads(published_job.checkpoint).get("human_gap_review_id")
+        except (ValueError, AttributeError) as exc:
+            raise EngineError(
+                "published checkpoint cannot verify human gap review identity"
+            ) from exc
+    if recorded_review_id is not None and recorded_review_id != review_id:
+        raise EngineError(
+            "gap_regions human review is missing or differs from published credential"
+        )
+    if review_id is not None:
+        _verify_publication_ready(store, build)
     # 幂等重放短路：目标状态 (决定, build) 已发布 → 先补齐一致性再返回
     # （不以时间为键，响应丢失+时钟前进的重试恒幂等）。
     existing = store.get_publication(build.source_id)
@@ -1419,6 +1476,8 @@ def publish_build(
         # RM-3：这是「请求当前有效发布」，不是只读查询历史结果——准入已变更
         # （新排除/缩范围决定）而撤销动作未完成时，不得沿用旧发布结果。
         _verify_admission_still_current(store, build)
+        if blocking_gaps(gap_records_of(build)):
+            _verify_publication_ready(store, build)
         # RM-2：指针已切换但 PUBLISHED 终态未提交（断线于两次提交之间）时，
         # 直接返回会让该 job 永久停在 RUNNING；返回前补齐终态。
         _reconcile_published_job(
@@ -1472,7 +1531,8 @@ def publish_build(
             publication,
             operator=operator,
             owner_id=owner_id,
-            acknowledged_gap_keys=_acknowledged_keys_of(build),
+            acknowledged_gap_keys=_acknowledged_keys_of(build, store),
+            human_gap_review_id=review_id,
         ),
     )
     return publication

@@ -10,8 +10,8 @@
 - ``image_region_unreadable``：PDF 页有文字层但存在大面积图片区域（≥25% 页
   面积），文字层未覆盖该区域（混合页 OCR 缺口，needs_ocr 语义）。
 - ``garbled_text``：提取文本乱码比例超阈值（U+FFFD/控制字符）。
-- ``multi_column_order_unreliable``：检测到左右分栏并排文本；阅读次序已按
-  「先左栏后右栏」确定性重建，但保留该标记供复核。
+- ``multi_column_order_unreliable``：检测到左右分栏并排文本；阅读次序保留
+  pymupdf 原生序（不再强制按「先左栏后右栏」重建），但保留该标记供复核。
 - ``table_text_overlap``：表格区域内命中的正文文字已从正文单元剔除并计入
   表格行单元，不静默拼接两份重复正文。
 - ``table_extraction_failed``：表格提取器异常（失败 ≠ 原文没有表格）。

@@ -455,6 +455,22 @@ def test_evidence_quote_must_be_verbatim() -> None:
     assert f"{FailureCode.EVIDENCE_TARGET_MISSING}:e1" in report.questions[0].failures
 
 
+def test_evidence_quote_matches_with_whitespace_normalized() -> None:
+    """引文空白规约后逐字包含即命中（与金标 exact() 语义一致）：换行/行内空格不算缺失，
+    但非空白差异（如千分位逗号）仍不命中（见上一条 verbatim 测试）。"""
+
+    question = _one(targets=(_target(quote="净利润\n84 679 百万元"),))
+    report = _report(
+        question,
+        QueryObservation(
+            query_id="company-001",
+            documents=(_doc("src-1", _evidence("净利润 84679 百万元", locator=("page:3",))),),
+        ),
+    )
+    assert report.questions[0].evidence_pass is True
+    assert not any(f.startswith(f"{FailureCode.EVIDENCE_TARGET_MISSING}:") for f in report.questions[0].failures)
+
+
 # ── 负例：误报与伪造引用 ────────────────────────────────────────────────────
 
 

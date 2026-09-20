@@ -1,0 +1,19 @@
+{
+  "schema_rev": "human-gap-review-1",
+  "policy_rev": "gap-policy-2",
+  "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+  "build_id": "fddf03bc7851ca1fcc6cd2d5c4a20b6312311c284a40e89dc33b6906e173f68e",
+  "build_fingerprint": "315072bebafb2594b2ef8de66dbfa03c160dc3453c68e3a4a2fcfae09db04efc",
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-20",
+  "evidence_scope_ref": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl@sha256:37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc; .scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json@sha256:5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+  "required_locators": [
+    "page:1",
+    "page:3"
+  ],
+  "scope_rationale": "",
+  "attestation": "",
+  "gaps": {
+    "issue:table_lines_without_extraction:page:6": ""
+  }
+}

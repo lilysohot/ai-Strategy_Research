@@ -14,6 +14,80 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+2026-09-20 校准进展（i0c-r39）：在 r38 已完成 I3-1 后，按预先固定两轮方案实跑
+冻结30题。整句基线全无命中；问题词元 OR 候选三类 DocRecall/QuestionPass 均100%，
+EvidencePass 分别1/8、2/8、2/8，六个无答案负例全部误报，**I3-3 仍未通过**。
+54条缺失证据中34条尚未逐字匹配 kept 页文本、14条未进选中块、6条缺所需坐标。
+按两轮停止条件收口，候选未部署、gold/阈值未改；详见
+[I3-3 首轮开发校准](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/README.md)。
+
+2026-09-20 根因取证与评分口径修复（只读；不改金标/来源/索引/阈值）：
+对 54 条缺失证据做空白规约 + 全文 LCS 取证，重分类为——20 条字节保留（14 块选择 + 6 坐标）、
+14 条空白表征差异、2 条被清洗剔除、18 条金标改写/重建表述（全文任意处都不逐字出现）。
+评分器 `EvidenceTarget.matches` 引文包含判定改为**空白规约后的码位包含**（与金标本意 `exact()` 一致，
+非空白差异仍不命中）。对该轮原 OR 观测**只读重打分**：EvidencePass company 1/8、industry 2/8、
+**macro 2/8→5/8**，命中目标 +7。读取器对表格单元无结构化 cell 网格（`cells=[]`/`element=null`），
+row:/col: 表头标签按「宁缺坐标不贴错」置为结构不可映射，未接线脆弱解析器。剩余 20 条（18 改写重建 +
+2 清洗剔除）在检索/匹配层**不可达**，如实登记、**不改金标**。负例误报/伪造引用 6 条不受本修复影响
+（属 OR 过宽的负例策略，不在本次证据修复范围）。**I3-3 仍未通过，M6 不放行**。详见
+[I3-3 根因取证与修复收口](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/i33-rootcause.md)。
+
+2026-09-20 ingestion 侧修复可行性预检（只读；按「先只读复现验证再重摄入」）：
+对 guide 提出的 FIX-1「x 中心一维聚类分栏」做行级只读重排量测——54 条中 34 条
+`exact_quote_not_in_kept_page_text`，单栏流 fresh 行级读 hit 12 / miss 22，加聚类后
+hit 14 / miss 20（净恢复 ~2，company-001 第 1 页 x 中心 24→575 连续、全局 18% 阈值
+分不出浮动侧栏，`相关研究报告` 仍夹在句内）。**guide「32 条靠摄入侧修复直接转绿」
+在该批次页面布局下不成立，34→≤2 前提被证伪**。据此**回退**已试落的 `_split_columns`
+侧栏改动与 `reader-pdf-3` 版本号（`git diff` 为空，基线未动），**不 bump / 不重摄入**，
+代码与冻结基线一致。只有读证据与结论留档：详见
+[I3-3 行级重排预检](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/remediation-line-repro.md)。
+**I3-3 仍未通过，M6 不放行**；后续方向待 U 裁决（更细区域隔离 FIX-3，或接受
+「摄入侧部分有效 + 匹配侧等价 + 人工诊断」分级账）。
+
+2026-09-20 区域隔离 FIX-3 只读预检（按 U 选区「先验证 FIX-3 再定」）：
+行级策略对比 34 条连续命中——before 12/22、x中心聚类 14/20、**x0 左边缘聚类
+17/17**、x0+页眉/页脚带隔离仍 17/17。x0 是侧栏分离的正确信号（右栏 x0≈394–524 vs
+正文 x0≈41），但最优区域隔离最多把 miss 22→17，**net 仅 ~5 条**；页眉/页脚带零增益，
+且 17 条非连续在不动金标/评分器下**本质上不可由阅读顺序修复**（重摄入至多 miss 22→17，
+距 guide 的 34→≤2 差 15 条）。**据此判定不值得 bump + 全量重摄入**，回归当前基线。
+详见 [I3-3 区域隔离预检](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/remediation-region-repro.md)。
+**I3-3 仍未通过，M6 不放行**；结论：接受「摄入侧部分有效 + 匹配侧等价(已合入) +
+不可达分级账」收口，待 U 确认是否终结本证据修复簇并转入有界召回/负例策略。
+
+2026-09-20 阅读序改判与实施（已改代码 + 内存回归验证；未写 PG / 未重摄入）：
+上述「17 上限、不值得重摄入」的判定被**推翻**——根因不是侧栏/页眉分区，而是 reader 用
+全局 `(y,x)` 行重排（`pdf_reader.L405` 发射排序 + `_merge_lines` 内二次 `(y,x)` 排序）打散了
+pymupdf 原生块的跨块内聚性。两种独立机制（`blockraw` dict 块序 / `get_text("text")` 阅读序）
+在整页连续流上 34 条**全部命中**。据此落地核心修复：`READER_PDF_REV`→`reader-pdf-3`，
+发射与段装配改为**保留 pymupdf 原生块→行序**，不再全局几何重排（不改金标/评分器/locator/
+单元集合/判据）。真实 reader 全链路只读复算：before 12 → reader-pdf-3 **23 / 11**，
+再关闭 `_split_columns` 强制左→右重排可达 **28 / 6**（`_split_columns` 在本批页面为负收益，
+因原生序已正确；但影响真实双栏文档，语义风险大，列为后续杠杆未并入）。回归
+`pytest tests/test_corpus_*.py` **697 passed / 12 skipped / 0 failed**，ruff/pyright 干净。
+剩余 ~6 条（industry-003 a-3 p10、industry-008 a-2 p10、macro-001 a-3 p3、macro-002 e4 p1、
+macro-003 a-2/a-4 p1）多属**表格内文本改组**（表结构化重建类），非阅读序类。详见
+[I3-3 阅读序改判与落地](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/remediation-coord-deep.md)。
+**I3-3 仍未通过，M6 不放行**（须重摄入取 PG kept 文本准数 + 冻结链重绑 + 单一回归才能复核）。
+
+2026-09-20 最新（i0c-r38）：光力 p7 沿用 xyl 已有签认，经源哈希与真实区域框校验后
+已发布。批准开发集 **8/8** 发布，company **3/3**、industry **3/3**、macro **2/2**；
+13 处缺口均 acknowledged，仍保留原 blocking 默认分级及 scoped coverage。
+真实检索/逐字取证全过、审计冲突 0。**I3-1 已完成，可进入 I3-3/4/5 开发阶段**；
+M6 仍待最终冻结与重验。见[区域判级收口](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-region-review/README.md)。
+
+2026-09-20 最新（i0c-r37）：xyl 四份具名核验内容已提交并完整保留。现有门接受其中三份、
+12 处缺口，均已登记及发布；原批准 8 份现发布 **7/8**，company **2/3**、industry **3/3**、
+macro **2/2**，每类≥2 与 PDF/DOCX/MD 格式门均通过，真实 search/fetch/verify 无拒绝、
+取证全通过、审计冲突 0。缺口台账不删，coverage 仍 scoped。光力 p7 的人签同页区域说明
+已收到并与原 PDF 坐标核对，但现有门只识别页级不相交，仍保留 1 处 blocking；这是程序
+精度限制，不是待用户补签。I3-1 数量/格式/E2E 门已过，M6 与其余 I3 任务未据此放行。
+见[本轮签署采纳与发布记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-signed-release/README.md)。
+
+2026-09-20：I3-1 人工判级机制按用户选择落地（i0c-r36）：新增具名凭证、发布门重验与
+不相交反例，默认分级表和守卫不变。4 份受阻 build 的 13 处缺口已生成未签署模板；
+真实缺口尚未人工签署，I3-1 / M6 仍未通过。光力 p7 与所需证据 p7 同页时继续阻断。
+详见[人工判级实施与签署说明](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/README.md)。
+
 **查看最新状态：[总计划 · I0 细任务执行台账](claims-market-closed-loop-plan.md#i0-execution-ledger)。**
 截至 2026-09-15 深夜的回溯摘要：I0G-1 守卫已按审计修复并重验（反例 run3 12/12、v2 自检 24/24），
 U 已放行；I0A-1 复核通过；I0A-2 73 条终态回填（U 裁决）并完成冻结时点重测（89=71+18 零增删改）；
@@ -141,6 +215,9 @@ I1 完整 review 修复轮完成（2026-09-16 按 [full-review](../../.scratch/c
 | M5 复核与签认 | [矩阵 20 块全绿零 skip + X1—X15 全过；复核报告 F1/F2/F3；独立性偏差已登记并由 U 接受；i0c-r16](claims-market-closed-loop-plan.md#m5-review-signoff) |
 | I3-0 评分器 | [三类指标评分器 + 合成检验 31 passed；i3 守卫自检 24/24；纯新增冻结 i0c-r19；待独立复核与 U 签认](claims-market-closed-loop-plan.md#i3-0) |
 | I3-0 复核整改 | [独立复核 9 红例按 F1—F5 修复不变量关闭；复核探针 10/10、自身 46 passed；i0c-r21](claims-market-closed-loop-plan.md#i3-0-review-remediation) |
+| I3-1 三类 E2E | [已完成（i0c-r38）：批准集 8/8 发布、每类≥2、三格式覆盖、13 处人工确认缺口均合法处置；真实检索/取证通过，coverage scoped；r32/r34 为历史轮次](claims-market-closed-loop-plan.md#i31-human-gap-review) |
+| I3-1 第二轮 dev lane | [U 裁决 dev lane 纳入 MD/DOCX（8 份 → 可发布 4/8、**§12.1 格式门 true**、`每类≥2` 仍 false）；生产判定不变由 dev lane 反例族 + 预检 fail-closed 反例双证；i0c-r34 入链](claims-market-closed-loop-plan.md#i3-1-dev-lane) |
+| M6 判据补齐格式门 | [U 指令：把架构 §12.1 格式门显式写入 M6 判据（与 I3-7 行、§12.1 口径对齐）；只改判据文字，门行为与代码零改动、不新增阻塞；i0c-r35 入链](claims-market-closed-loop-plan.md#m6-format-criterion) |
 | I3-2 补料 | [证据目标候选 v7 + **采纳稿落正式金标**（source-gold 36 槽位 = 冻结 23 条逐字节保留 + 采纳 13 槽/49 条；负例近似命中 7 条隔离成库）；目标 54→82（必需 44／补充 20／锚点 18）；`blocked` 2→1（`macro-004` 人工裁定覆盖）；裁决件 40+24+6+1 已落，门 **ready=true**（0 阻断／20 条人工同义 warning），批准投影 79 必需 + 20 补充；验证 30/30 自洽 + 探针 16/16；i0c-r26](claims-market-closed-loop-plan.md#i3-2-evidence-candidates) |
 
 每轮执行结束必须回填总台账，即使失败或只完成草稿；同时记录代码/配置/资产版本、
@@ -180,7 +257,7 @@ M6 → I4：批准分支 → 停写截止点 → 最终备份/恢复 → 清单�
 | M3  | I0-C 冻结           | M1、M2 与 I0C 全部完成；必需项无未决，否决候选已有获准替代；design-review/冻结版本/代码与配置引用一致，不以填写“待证据”放行 DDL                                                                                       |
 | M4  | I1 内存链全绿          | M1 与 I1 全部完成；admission/fidelity/mapping 及接收/编排恢复测试 + 先行零模型守卫；不触真实 PG、不访问留出                                                                                            |
 | M5  | I2 PG 门           | M3、M4 与 I2 全部完成，旧消费者在隔离目标接线；publication\_pg/authority/cli\_isolation 实测含租约接管，核心 PG 门不得 skip。**复核材料已备（2026-09-18）**：[M5 复核包](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/README.md)（含命令矩阵与交叉核验清单）。**复核完成并经 U 签认（2026-09-18，见 <a href="claims-market-closed-loop-plan.md#m5-review-signoff">M5 独立复核与 U 签认</a>）**：矩阵 20 块 MATRIX OK（零 failure/error/skip）、X1—X15 全过、`verify_matrix.py --self-test` SELFTEST_OK；复核报告 [review.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-m5-review/review.md) 登记 3 项发现（F1 测试顺序依赖假红已修、F2 备料包锚点过时已按包 v2/i0c-r16 重发、F3 i1 冻结校验器既有失配），并显著登记「复核人 = 制备方会话」的**独立性偏差**（由 U 接受；不予接受则 M5 回到 `not_declared` 另派全新会话重做） |
-| M6  | I3 最终版本 E2E + 非回归 | I3-7 对 I3-6 冻结版本重验通过；逐类三指标达冻结目标，关键引用题 100%、适用旧检索/财务基线不退化、已知伪引用负例为 0；宏观 0/3 单列；缺资产/必需环境不通过                                                                             |
+| M6  | I3 最终版本 E2E + 非回归 | I3-7 对 I3-6 冻结版本重验通过；逐类三指标达冻结目标，关键引用题 100%、适用旧检索/财务基线不退化、已知伪引用负例为 0；宏观 0/3 单列；**声称支持的格式（PDF/DOCX/MD）按架构 §12.1 各有真实已用开发样本、无未处置缺格（dev lane 样本计入但须标注 `dev_lane`）**；缺资产/必需环境不通过                                                                             |
 | M7  | I4 切换完成           | 获准分支完成；停写截止点后的最终一致性备份恢复成功、精确切换清单已批准；清理分支另有 reset 清单，迁移分支不强制删除；活动索引无污染且真实 CLI/工具核验通过                                                                                   |
 | M8  | I5 退役完成           | 四种重复/变更场景可重复；旧入口退出；无隐藏双写                                                                                                                                              |
 
@@ -201,7 +278,7 @@ I0 的文件清单/hash 与受控备份完整性检查不等于允许读取留�
 | ID    | 任务与关键步骤                                                                                                                                                          | 所需资源           | 负责人 | 起止（估）            | 前置                         | 验收/质量门                                                                  |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | --- | ---------------- | -------------------------- | ----------------------------------------------------------------------- |
 | I0A-1 | PG 目标盘点：只读枚举 host/db/schema、表/视图/索引/序列/扩展；识别后台写入任务与全部读写消费者；确认共库；零 DDL/DML                                                                                        | 已确认只读权限、代码库 rg | A+U | 守卫通过后，耗时待盘点      | I0G-1                      | i0-inventory.json 不含凭据；每对象有 consumer 证据或 unknown；相关 unknown 阻断对应物理/清理决定 |
-| I0A-2 | 来源与开发分母：显式来源清单、SHA-256/格式/路径、旧人工审核导出；按已确认范围与人工决定登记 in\_scope/excluded\_by\_policy/review\_required；选三类开发材料每类≥2 份并隔离留出                                            | 来源目录、旧库只读      | A+U | I0A-1 后，人工吞吐待标定  | I0A-1                      | dev-manifest/review-queue；每来源合法终态且有依据；进入构建的仅 in\_scope。未决列队，不为凑样本放行     |
+| I0A-2 | 来源与开发分母：显式来源清单、SHA-256/格式/路径、旧人工审核导出；按已确认范围与人工决定登记 in\_scope/excluded\_by\_policy/review\_required；选三类开发材料每类≥2 份并隔离留出；**产出 `format_availability` 对账表（架构 §12.1：声称格式 × 已准入可得性，缺格须显式处置）**                                            | 来源目录、旧库只读      | A+U | I0A-1 后，人工吞吐待标定  | I0A-1                      | dev-manifest/review-queue；每来源合法终态且有依据；进入构建的仅 in\_scope。未决列队，不为凑样本放行；**缺格式格未处置（补料工单或 U 显式改声称）不得进 I3-1 取样**     |
 | I0A-3 | 按架构 §5.2 冻结 admission-policy：输入输出、判定次序、feature\_id/匹配表达式/扫描上限/extractor\_rev、正反例、自动决策禁用；校验 I0A-2 记录符合政策                                                          | 本批准入用例         | A+U | I0A-2 后          | I0A-2                      | 枚举一致；冲突退回复核；不得用特征建议代替人工决定；表驱动用例可据此编写                                    |
 | I0A-4 | 限本批开发范围：人工 source-gold 标原值/条件/评级/页段/cell；query-gold 每类≥10 条含关键题/any-all/无答案负例；baseline-bindings 绑定适用旧 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3、宏观失败资产及旧锚点到来源/证据映射 | 本批人工标注，原文依据    | A+U | I0A-3 后，按实际标注量排期 | I0A-2, I0A-3               | 不扩为全库逐字段标注；不模型出题、不从候选结果倒推答案、不改旧 gold；适用旧检索/关键题/负例均有清单与哈希，缺料阻断 M1        |
 | I0A-5 | 逻辑契约与开发基线联合冻结：decide\_admission、引用权威/日期、coverage 三轴、rev、job 状态机；绑定 I0A-1～4 产物形成 M1 阶段快照；物理候选仍待 I0-C                                                              | 逻辑规格及本批资产      | A+U | I0A-4 后          | I0A-1, I0A-2, I0A-3, I0A-4 | 逻辑与测试预期可实现、当前阶段快照不可变；M1 通过才开 I1，不以单独签名或部分样本放行                           |
@@ -272,10 +349,34 @@ I0 的文件清单/hash 与受控备份完整性检查不等于允许读取留�
 F1 集合交集与重复来源拒绝；F2 证据保留来源归属（`EvidenceTarget.source_id`、默认仅认相关集）+ `build_id` 留痕 + `verified` 必须显式提交；
 F3 `NO_MATCH` 带 payload 拒绝、`FAILED` 不计成功分；F4 导入器与 `score()` 共用严格校验（多文档 any/all 必须显式、sources 必须是字符串数组）；
 F5 直接构造入口同样校验（空 quote 拒绝）。复核探针（原文件未改）**10/10 passed**、自身 **46 passed**；
-待复核确认闭环 + U 签认
+已复核确认闭环并经 U 签认（i0c-r33）
 [I3-0 评分器交付](claims-market-closed-loop-plan.md#i3-0-delivery)；按纪律待独立复核 + U 签认。
 I3-2 可启动，但**必须先补机器可读证据目标**（缺则评分器按设计阻断，不得用散文 `evidence_requirement` 顶替，
 也不得靠“没写”静默退出 EvidencePass 分母）；M5 报告 F3（`validate_i1_freeze.py` 既有失配）建议随 I3 前置修订理顺。
+
+**I3-1 三类开发 E2E 已真实执行（2026-09-19 深夜，照 U 批准的开发集；**i0c-r32** 首次入链）**：
+环境 = 隔离沙箱 `corpus-db`（`127.0.0.1:543`，库 `i2_sandbox_corpus`，`corpus` schema 九表）；
+阶段守卫 [guards/i3-e2e.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json)
+（`config_version=1`、网络 allowlist 仅 `127.0.0.1:543`、零模型、`allowed_source_paths` = 批准集 6 份、
+留出根与 `guards/i3.json` 逐字一致），合成反例自检 **24/24**
+（[报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-e2e-guard-report.json)，
+write-once；首冻前发现 `model` 封锁面弱于 `guards/i3.json`——`anthropic` 与 `plugins.corpus.material_semantics`
+未被拒，已对齐后重跑）。范围唯一权威源 = `i0a2-adjudicated-20260915.json` 的 `dev_selection_approved`
+（U 2026-09-15 批准 6 份 PDF），取样前
+[preflight_scope_check.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/preflight_scope_check.py)
+判 **PASS**；**Agent 自选/换料范围已撤回**（保留
+[撤回记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-retraction-record.md)，
+守卫允许路径 15→6；沙箱数据层 teardown（`residue=0`）+ 重建后按批准集重跑，逐源与矩阵**完全复现**）。
+真实结果（[批准集记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-approved-set.md)
++ [干净沙箱重跑](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-approved-set-rerun.md)）：
+6 份 build 全成功（**4305 单元 / 767 切块**），**可发布 2/6**（company 0/2、industry 1/2、macro 1/2），
+阻断缺口 **13 处**（`table_lines_without_extraction` 9 + `image_region_unreadable` 4），检索 `同比` 4 命中、
+取证核验全过、被拒句柄 0、`audit_corpus_chain` 冲突 0、coverage `scoped`/`matched`。
+**判定：I3-1 未完成** —— `per_class_min_2_satisfied=false`（"三类每类≥2 份"在**现行门 + 现行裁定**下无解：
+阻断缺口无合法处置路径）；格式覆盖**仅 PDF**（DOCX/MD 在准入口径下 0 份，§12.1 未满足）。两项**待 U 裁定**：
+①阻断缺口的处置路径（补 OCR／人工认可入口／换料／显式登记不覆盖）；②MD·DOCX 是否声称覆盖。
+**本轮初步结果不得直接放行 I4**；I3-3/I3-4/I3-5/I3-7 另做（缺口分布 F1—F10 见
+[复盘](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/retrospective-i3-1-scope.md)）。
 
 **I3-2 采纳稿已落正式路径并冻结（2026-09-18，A 侧，规则仍 `evidence-mapping-6`；i0c-r26；见总台账
 [I3-2 补料](claims-market-closed-loop-plan.md#i3-2-evidence-candidates)）**：U 全文审核 AI 辅助补证与裁决建议后**全部采纳**（署名 `xyl` + `ai_assisted: true`，AI 复核者非人类签名）；新金标版本 = 23 条冻结槽位**逐字节保留** + 采纳 13 槽位/49 条（逐条对账页内切片：页号 + quote 逐字 + quote_sha256），负例的 7 条近似命中外移为
@@ -285,6 +386,64 @@ I3-2 可启动，但**必须先补机器可读证据目标**（缺则评分器�
 [批准投影](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json) 30 题 = 必需 **79** + 补充 20 条、
 [验证](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json) 自洽 30/30 + 探针 16/16。
 四项口径：①AI 核验锚点逐项确认同义（门记 20 条 warning，机器不宣称语义等价）；②无内容词元的纯日期 span 不作承载映射；③chosen 收窄到最小覆盖集（53→35，移出的 18 条记 `supporting_anchors`，不计入 EvidencePass）；④`macro-004` 的 `blocked`（q2 机器检索未登记承载项）由人工裁定覆盖，机器状态原样保留供审计。**仍未宣告 I3-2 完成**：I3-2 其余冻结项、I3-1（E2E）与 I3-5 真实答案语义验收未做；强制零模型、未写生产库、未读候选业务结果。
+
+**I3-2 尾巴收口（r31，2026-09-19，U 授权）**：签认记录 not_covered 的可收项已收口——
+① **prose 留出入守卫**：`guards/i3.json` forbidden_roots 4 → 5（追加天风 `5520fab6`），
+完成门新增『留出隔离覆盖』判据；② **19 题锚点映射规则级复核关闭**（归一化标题子串唯一命中 +
+来源路径在磁盘 + 5 个 doc_id 与已标注 source-gold 同源；`closure.kind=rule_verified_by_authorization`，
+非逐题人工通读）；③ **20 条人工同义 warning 作为已接受风险入册**（字面出处机器核验、语义由具名人工承担，
+warning 原样保留供抽样审计）；④ 完成门增至 **10 项判据**（新增留出隔离覆盖／映射规则复核／收口记录）。
+冻结 **i0c-r31**（parent=r30）。**M5 F3 按诊断稿单列跟踪**（i1 链 13 项 I2 阶段合法漂移，
+本轮不动 i1 链，建议后续 i1-r5 重绑）。I3-5/I3-1/I3-7 仍未执行（需环境与预算授权）。
+
+**I3-2 阶段签认（r30，2026-09-19）**：具名审核人 **xyl** 于 2026-09-19 确认[阶段签认记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/signoff-record-i3-2.md)
+（复核结论：通过，0 fail／1 观察项；签认 4 项 claim，明确 6 项不含）。冻结修订 **i0c-r30**（parent=r29）：
+绑定签认记录 + 复核脚本（含『已签记录不得重写』守卫）+ 执行记录 + **生成器入链**
+（`generate_p2_p3_p4.py` 与 r28/r29 冻结脚本，修正 r29 登记的『生成器不可追溯』缺陷）+ 两份台账；
+完成门新增判据：**阶段签认必须具名且记录已入链**。I3-5/I3-1 仍未执行；prose 留出（天风 5520fab6）
+是否纳入 `guards/i3.json` 待定。
+
+**I3-0 阶段签认（r33，2026-09-19）**：具名审核人 **xyl** 确认[I3-0 阶段签认记录](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i30-review/signoff-record-i3-0.md)
+（复核结论：通过；签认 4 项 claim，明确 6 项不含）。冻结修订 **i0c-r33**（parent=r32）：
+绑定签认记录 + 收口脚本 + 复核报告/独立探针/复跑入口（证据面与裁决面同一）+ 两份台账；
+I3-0 独立复核 F1—F5 以修复不变量方式闭环（探针 10/10、自身 46 passed，评分器字节 r21）。
+
+**I3-2 Step 5 针对性复核与整改（r29，2026-09-19）**：复核范围限定『新增派生关系／旧基线范围／初始版本』，
+复用既有审批（不重审补料链）。方法为**独立重推**（未复用产物自校验）+ 通用路径可解析检查。
+**抓到并修掉 4 处 P4 路径缺陷**：`policy.confirmation` 与 `baseline_mapping.reconciliation`、
+`decisions.path`、`approved_projection.path`（含 `source_gold`/`index`/`case_level`）基准目录不一致，
+从仓库根解析不到 → 统一为仓库根相对路径并重算 lineage。复核结论：**通过**
+（[step5-review.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/step5-review.md)），
+另 1 项观察项：prose 留出（天风 `5520fab6`）未纳入 `guards/i3.json` 的 `forbidden_roots`（待定，未擅自改守卫）。
+冻结修订 **i0c-r29**（parent=r28）：绑 P2/P3/P4 修正件 + Step 5 复核/差异包 + 台账；
+**阶段签认记录 `signoff-record-i3-2.{md,json}` 保持 `pending_user_signoff`，待 U 具名签认后再入链**。
+
+**I3-2 Step A—C 整改（r28，2026-09-19）**：按诊断稿 `20260919-i32-diagnosis` 的 Step A—C 完成三项：
+① **正式评分输入派生件** `i3-2/query-gold-scoring-v1.jsonl`（`1b018ceb…`，79 必需 + 20 补充、
+负例无目标、原字段零改动）+ `scoring-input-manifest.json` lineage + 派生器 `i3s2_scoring_input.py`
+（含唯一读入口 `load_scoring_input` 与 6 条变异反例）；审批原件未改（门仍 `ready=true`）。
+② **旧基线引用资产入链**：`golden.py`／`derivation.py`／`pilot_manifest.json`／机器记录／
+三份报告／`spec.md`／`prose_holdout_manifest.json`／doc_kind CSV／`verify_claims_entry.py`／
+`i0a5-doclist`／`i0a4-candidates-v3` 随 r28 绑定，消除『未冻结的必要外部指针』。
+③ **旧锚点映射与公式契约**：19 题旧锚点 → 新 source 身份（`i0a5-doclist` 的 `doc_id`）**19/19 唯一命中**、
+22/22 `source_path` 在磁盘、其中 5 个 doc_id 与已标注 source-gold 同源，O6 因留出排除
+（`legacy-anchor-mapping.json`，`confirmed=false` 待人工复核）；7 条公式的输入指标按
+`plugins/corpus/derivation.py` 声明登记；**阶段完成门** `validate_i3_2_completion.py` 已实现并入链。
+冻结修订 **i0c-r28**（parent=r27）。**仍未宣告 I3-2 完成**：19 题映射复核、20 条人工同义 warning、
+`macro-004` 机器 blocked 覆盖属人工复核项；I3-5/I3-1 未执行。
+
+**I3-2 旧基线冻结（r27，2026-09-19）**：7 类旧基线适用范围与预期全部经 U 逐项圈定并确认（诊断稿
+[diagnosis-and-remediation.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/diagnosis-and-remediation.md)、
+[baseline-case-manifest.md](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/baseline-case-manifest.md)，
+status=frozen_r27）：① old_doc_kind_review 以 `c1_full84_doc_kind_review_20260912.csv`（sha d69bbb1d…）为权威版本
+（决定件 [json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i32-diagnosis/decision-old-doc-kind-review-authority-20260919.json) / md）；② legacy_retrieval_golden 冻结 **19 题**、排除 O6
+（来源华泰联储加息属留出，golden.py 原题保留）；③ financial_controlled_recalc_57 容差 = 规范化后精确匹配 tol=0，
+guosen_maotai_holdout（国信茅台 bbba671e.pdf，10 格）纳入守卫留出链（[i3.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json)
+forbidden_roots 3→4）；④ formula_7 沿用既有 tolerance（1e-6）；⑤ customer_table_12 以报告为准、按历史非回归处置；
+⑥ prose_numbers_3 冻结 2 条可复现用例、第 3 条标不可复现；⑦ macro_legacy_fields_0_of_3 以机器记录 2 targets 为准、
+previous 移出分母。8 项 blocked 清零，冻结修订 **i0c-r27**（parent=i0c-r26，validate exit 0）。**仍未宣告 I3-2 完成**：
+阶段完成门 `validate_i3_2_completion.py` 未实现（已登记为后续前置）、legacy 旧锚点→新 locator 映射仍
+`to_be_resolved`、I3-5 真实非回归未执行；零模型、未写生产库、未读留出原文。
 
 **（本节以下为 r25 历史：候选 54 条与审批门 `no_decisions`）**：
 **I3-2 补料候选已按复验报告 B1—B5 修复（2026-09-18，A 侧，规则 `evidence-mapping-6`；见总台账
@@ -319,8 +478,8 @@ required/supplementary/suggested 三层 + 锚点覆盖度与未覆盖词元 + �
 | ---- | ----------------------------------------------------------------------------------- | ----------------- | --- | ----------------- | ---------------- | ------------------------------------------------------------------------------ |
 | I3-0 | 实现/合成测试评分器：DocRecall、QuestionPass、EvidencePass 的分母、any/all、负例与关键题否决；不读候选业务结果        | M3 指标定义、合成例       | A   | M5 后先做            | M5               | 多文档/零分母/缺资产/10 题 95% 等边界正确；不是 LLM judge，缺必需输入不能算通过                             |
 | I3-2 | 在本轮候选业务结果可见之前确认 source/query gold、旧基线映射、各类阈值/关键题/负例，冻结评分器与试验初始版本                    | 本批原文、人工依据         | A+U | I3-0 后，I3-1 前     | I3-0             | 不从 E2E 输出改答案；确需修订则保留旧失败、建新金标版本并同口径重评基线/候选；不冒称独立留出                              |
-| I3-1 | 三类开发 E2E：每类≥2 份，登记→准入→解析→清洗→切块→build/check/publish→真实 search/fetch/verify           | 冻结开发范围、隔离 PG      | A+U | I3-2 后            | I3-2 + **I2 全链路复核 F1 闭环** | 记录领域×格式矩阵，缺格式门未过；本轮初步结果不能直接放行 I4；**前置**：缺口分级/坐标（RM-FC-1/2）闭环——材料含空白页等 `acknowledged` 缺口才可走完 publish，`blocking` 缺口按 `check`/`status` 的 `gaps` 机读处置（补 OCR/换料/转 review\_required）；先用 `corpus-plan` 预检筛料 |
-| I3-3 | 开发校准：检索/切块参数仅开发集试验；每轮先固定配置再执行 retrieval\_pg，报告数字/单位/语言及三类指标                         | 冻结预期、当前配置         | A   | I3-1 后            | I3-1             | 记录每轮失败和配置哈希，预先限定试验范围/停止条件；不改预期换分数；超过边界停下报告，不无限试探                               |
+| I3-1 | 三类开发 E2E：每类≥2 份，登记→准入→解析→清洗→切块→build/check/publish→真实 search/fetch/verify           | 冻结开发范围、隔离 PG      | A+U | I3-2 后            | I3-2 + **I2 全链路复核 F1 闭环** | **最新 r38：已完成，8/8 发布、每类≥2、三格式、13 acknowledged/0 blocking，真实取证通过；以下为历史轮次。** 记录领域×格式矩阵，缺格式门未过；本轮初步结果不能直接放行 I4；**前置**：缺口分级/坐标（RM-FC-1/2）闭环——材料含空白页等 `acknowledged` 缺口才可走完 publish，`blocking` 缺口按 `check`/`status` 的 `gaps` 机读处置（补 OCR/换料/转 review\_required）；先用 `corpus-plan` 预检筛料。**2026-09-19 实跑（i0c-r32 入链）**：照 U 批准集 6 份 → 可发布 2/6（company 0/2、industry 1/2、macro 1/2）、阻断缺口 13 处、格式覆盖仅 PDF；`per_class_min_2` 未满足，判定**未完成**，待 U 裁定缺口处置路径与 MD/DOCX 覆盖声称。**2026-09-20 第二轮（U 裁决新建 dev lane，i0c-r34 入链）**：dev lane 纳入 U 指定 2 份（`工业富联_投委会决策报告_20260829.md` / `9月8日 光模块…docx`，材料类型如实为 `internal_committee_report` / `internal_unattributed`），与批准集 6 份合计 8 份真跑 → 可发布 **4/8**；**架构 §12.1 格式门满足=true**（pdf 2/6、docx 1/1、md 1/1 均有可发布样本）；逐类可发布 company 1/3、industry 2/3、macro 1/2 → **『每类≥2』仍为 False（裁定①未解，company 0/2 的 13 处阻断缺口依旧）**；证据 `audits/20260920-i31-dev-lane/i3-1-dev-lane-e2e.{json,md}`；生产判定不变由 dev lane 反例族 + 预检 fail-closed 反例双证 |
+| I3-3 | 开发校准：检索/切块参数仅开发集试验；每轮先固定配置再执行 retrieval\_pg，报告数字/单位/语言及三类指标                         | 冻结预期、当前配置         | A   | I3-1 后            | I3-1             | 记录每轮失败和配置哈希，预先限定试验范围/停止条件；不改预期换分数；超过边界停下报告，不无限试探                                **最新 r39：已进入校准，两轮30题均未达标；OR 候选三类 DocRecall=100%，EvidencePass=1/8、2/8、2/8，负例误报6；按预定两轮停止，保留失败，未部署候选。** |
 | I3-4 | coverage 开发测试：空库/无匹配/排除/部分/未决/故障/更新失败/并发发布/跨域                                       | 隔离 PG             | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 三轴及 availability；no\_match 不自动 absent，failed 恒 unknown；最终版本仍须 I3-7 重验          |
 | I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 |
 | I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过                                             |

@@ -4,13 +4,15 @@
 
 - 缺口恒进台账（``quality_report.gap_regions``），任何路径都**不得静默丢弃**；
 - 是否阻断发布由**默认分级表**（本模块 :data:`DEFAULT_GAP_DISPOSITION`，与架构 §7.3
-  表同源）与 **scope 归属**共同决定：
+  表同源）、**scope 归属**及 build 绑定的具名人工凭证共同决定：
 
   1. `out_of_scope`：缺口坐标可证落在获批 ``char:`` 区间之外（与任一区间无重叠）→
      该区域本就不在请求范围内，不阻断、不计入剩余范围；
   2. `blocking`：可能丢失获批正文（扫描页/表格抽取失败/未读取元素等）→ 拒绝发布；
   3. `acknowledged`：确知未丢失正文（空页/装饰图/未闭合围栏）→ 允许发布，但必须继续
      出现在 ``quality_report``、``check``/``status`` 的 ``gaps`` 与 ``coverage.reason_codes``。
+     ``gap_review.py`` 还允许经完整人工签署及不相交校验的具体 build 缺口进入此生命周期，
+     但原默认分级与台账保持不变（``engine.gap_records_of(..., store=...)`` 统一读取凭证）。
 
 缺口身份沿用既有台账编码 ``issue:<code>:<location>``（``quality_report`` 形状不变，
 仍为 ``gap_regions``/``oversized_chunks`` 两键）；编解码只在本模块
@@ -32,7 +34,7 @@ from types import MappingProxyType
 from plugins.corpus.preparation.contract import UnitStatus
 
 #: 缺口裁决口径版本（默认分级表 + 判定顺序的版本身份；变更须同步架构 §7.3 表）。
-GAP_POLICY_REV = "gap-policy-1"
+GAP_POLICY_REV = "gap-policy-3"
 
 _GAP_KEY_PREFIX = "issue"
 _PAGE_RE = re.compile(r"^page:([0-9]+)$")

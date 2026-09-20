@@ -1,0 +1,186 @@
+{
+  "artifact": "preflight-scope-check",
+  "generated_at": "2026-09-19T22:30:48+08:00",
+  "label": "撤回对象：Agent 自选范围（换料 8 + DOCX 1 + MD 2）",
+  "manifest": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-manifest-v3.json",
+    "sha256": "7aceb56fd85573e4a0743193c51142011464dd980590c2fa00dbad61259124a7"
+  },
+  "authoritative_sources": {
+    "adjudication": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-adjudicated-20260915.json",
+      "sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea",
+      "decision_by": "U（2026-09-15 会话裁决：『按这个方案执行，无数据/空文件直接删除』）"
+    },
+    "guard_forbidden_roots": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "sha256": "cd36e91f9e76c880dc1f291981c95d1210e0862017afb7eecff708e3546df593",
+      "count": 5
+    },
+    "dev_manifest": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+      "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      "role": "非权威（dev_selection_candidates 为登记期旧文案，仅交叉参考）"
+    }
+  },
+  "summary": {
+    "sources": 11,
+    "pass": 2,
+    "fail": 9,
+    "adjudication_conflicts": 3,
+    "scope_drifts": 6,
+    "approved_dev_selection_size": 6,
+    "formats_covered_by_pass_set": [
+      "pdf"
+    ],
+    "verdict": "FAIL"
+  },
+  "rows": [
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "macro",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "industry",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "format": "docx",
+      "adjudicated_decision": "excluded_from_active",
+      "adjudicated_material_type": "internal_unattributed",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "adjudication=excluded_from_active",
+        "material_type=internal_unattributed",
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "format": "md",
+      "adjudicated_decision": "excluded_from_active",
+      "adjudicated_material_type": "internal_committee_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "adjudication=excluded_from_active",
+        "material_type=internal_committee_report",
+        "not_in_approved_dev_selection"
+      ]
+    },
+    {
+      "path": "data/corpus/天孚通信_投委会决策报告_20260830.md",
+      "format": "md",
+      "adjudicated_decision": "excluded_from_active",
+      "adjudicated_material_type": "internal_committee_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "verdict": "FAIL",
+      "problems": [
+        "adjudication=excluded_from_active",
+        "material_type=internal_committee_report",
+        "not_in_approved_dev_selection"
+      ]
+    }
+  ],
+  "note": "PASS 仅表示『取样未偏离裁定、未越权』，不等于这些材料都能发布——门（blocking 缺口）是另一层，须看 check/publish 结果。"
+}

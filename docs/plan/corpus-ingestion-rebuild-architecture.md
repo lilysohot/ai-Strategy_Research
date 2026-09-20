@@ -221,6 +221,22 @@ I0 的“无歧义”指每条来源均有合法终态，待复核有原因和�
 进入构建的清单只能含 in_scope。`corpus-check` 验证规则、依据及清单一致性，材料语义分类的
 正确性由锁定人工样本验证，不能声称自动检查器能够替代人工判断。
 
+**准入与格式声称的对账（2026-09-20 补，I3-1 复盘缺口）**：§5.3/§12.1 声明的格式能力与本节
+的材料准入白名单**必须显式对账**——见 §12.1 的「格式可得性对账」。历史上两者各自成立、互不
+引用，导致「声称支持 PDF/DOCX/MD」与「语料内 MD/DOCX 全部因材料类型/署名被排除」长期并存而
+无人负责。判定责任链固定为：准入只按材料类型/领域/范围判，**不按文件后缀判**；格式可得性是
+§12.1 的对账项，不是准入的豁免项。
+
+**开发验证的 dev lane（2026-09-20 补，U 裁决）**：生产语料治理口径（合规、可引用）与开发验证
+口径必须分层。唯一允许的例外是显式 **dev lane**：一份独立政策文件（`scope=dev` +
+`production_in_scope_unchanged=true`）逐源列出 U 指定的来源，允许其以**如实的**材料类型进入
+`in_scope`；装载需调用方显式开关（CLI：`CORPUS_DEV_LANE=1`），否则 fail-closed 拒绝。
+硬约束：①dev lane **不得改变任何生产 `in_scope` 判定**（v1 政策逐字不改，生产路径不装载）；
+②`material_type` **不得伪写**为 `research_report`（伪写即类型失真，等同伪造凭证）；
+③放宽只对清单内来源生效，未列入者按冻结语义拒绝；④dev 判定必须在证据中带 `dev_lane=` 标记，
+并在 `corpus_admissions.policy_rev` 上留下 dev 政策版本以便审计区分。以上四条由反例测试锁定
+（`tests/test_corpus_preparation_admission.py` 的 dev lane 族）。
+
 ### 5.3 按格式解析
 
 | 格式 | 处理方式 | 失败/降级 |
@@ -398,13 +414,52 @@ scope 判定，也不可能被证明「在请求范围之外」）。本裁定�
 2. **默认分级**：`blocking` → 拒绝发布（错误文案仍含 `gap_regions`，原因机读）；
    `acknowledged` → 允许发布，但必须进 `quality_report`、`check`/`status` 的 `gaps` 输出与
    `coverage.reason_codes`。
+   **具名人工判级入口（2026-09-20，i0c-r36，`gap-policy-2`）**：上表默认分级逐项不变。
+   对具体 build，人工签署 `human-gap-review-1` 凭证后可将仍阻断缺口的生命周期判为
+   `acknowledged`，但 `disposition` 仍为 `blocking`。凭证绑定 source_id、build_id 和
+   完整 build 指纹（含准入决定、各 rev、scope、质量台账），并包含 reviewer、带时区
+   reviewed_at、逐缺口 rationale、获批所需证据完整集合 required_locators、其
+   evidence_scope_ref 与 scope_rationale。审核人必须显式签署
+   `human_verified_complete_scope_and_nonintersection`，确认集合完整且已逐处查看原始内容；
+   不得拿检索命中或机器选出的少量 locator 代替所需证据全集。与 admission 凭证相同，
+   这是受信任人工操作者提交的具名记录，不是密码学身份认证；内容哈希只用于绑定和追溯。
+   该凭证既签认本 build 的目标证据范围，也逐处判级；scope_ref 字段不得因此扩大。
+
+   `corpus gap-review --build <id>` 只导出空签署模板；人工填写后以
+   `--record <signed.json>` 登记。登记与发布/check/status 都重验：所有仍 blocking 的
+   已知缺口必须逐处具备理由；所需证据非空、已保留；缺口与每个 required locator
+   必须可证不相交。首版支持正页号 `page:N` 和有界半开区间 `char:a-b`；同页、字符
+   重叠、跨坐标类型、无坐标、未知码、缺字段/重复 JSON 字段、旧版本/错绑定一律拒绝。
+   不把页级缺口凭空缩成页内框，不以人工签署覆盖不相交校验。光力科技 p7 与金标 p7
+   重叠时仍 blocking；不得事先宣称 13 处全可放行或 I3-1 已通过。
+
+   **区域校验扩展（i0c-r38，gap-policy-3）**：`human-gap-review-2` 增加
+   `region_source_path` 与 `region_targets`（原 required page → 该页完整必需证据引文集合）。
+   原 required_locators 不删页；从已签署引用的批准投影完整展开该页必需与补充目标。
+   仅 `image_region_unreadable` 的同页情形可用此扩展：每次登记/check/status/publish
+   从文件读取一次字节并核对 source_id，再从同一字节提取全部图像位置；所有逐字匹配的
+   kept 单元完整 bbox 均须有原 PDF 文字支持，且与全部图像框严格分离（接触也拒绝）。
+   不接收调用方自填图框，不做 OCR；缺框、非有限坐标、越界、旋转页、缺源/变源、
+   引文未完整保留、其他缺口类型一律不获此豁免。当前仅支持单 kept 单元内完整引文。
+   原 `human-gap-review-1` / `gap-policy-2` 凭证按原页/字符规则兼容，序列化及 review_id
+   保持不变；新政策通过 schema/policy 组合显式选择，不能把旧凭证自动升级为区域认可。
+   此扩展不改默认分级、build、units、chunks、claimed 或缺口台账，coverage 仍 scoped。
+   光力 p7 沿用 xyl 已有同页区域签认，经上述校验完成登记与发布（详见 r38 实测）。
+
+   一份 build 一份完整凭证，登记前可修改草稿；登记后同内容幂等，异内容拒绝覆盖。
+   存储复用 corpus_source_checkpoints 的保留命名空间 `human-gap-review:<build_id>`，
+   该命名空间只允许专用追加入口，普通可覆盖检查点 API 拒绝写入；PG 以唯一键冲突
+   比较保证并发首写不覆盖。修改已登记裁决须退役该发布并以新的构建/准入身份重审，
+   不提供删除或 last-write-wins 豁免。PUBLISHED 记录保存 human_gap_review_id；
+   发布重试/回滚也重新检查凭证，丢失、损坏、旧版本或绑定变化仍拒绝。
 3. **coverage 如实反映**：活动 build 的缺口台账非空（含 `acknowledged`/`out_of_scope`）时，
    该来源的已发布集合只是**真子集** → `coverage.processing=scoped` 且 `reason_codes` 含
    `gap_regions_present`；缺口清单（含坐标与恢复路径）即「剩余范围」的机读形式。无缺口仍为
    `full`；未决/失败/零发布仍优先 `unknown`。
-4. **依据与记录人**：默认分级表即依据（`gap-policy-1`），记录人为 `publish --operator`
+4. **依据与记录人**：默认分级表即依据（当前 `gap-policy-3`；历史为 `gap-policy-1/2`），记录人为 `publish --operator`
    （写入 PUBLISHED job 检查点 `publish-record-1` 的 `acknowledged_gaps`/`gap_policy_rev`）。
    按码的个别豁免（政策 override）留待 I3 校准后外置为策略配置（policy v2），不在本裁定内。
+   具名人工判级的依据是独立凭证的 review_id，审核人来自 reviewer，不以发布操作者冒充。
 5. **CLI 可见性**：`corpus-check`（含被拒时）与 `corpus-status` 都必须输出结构化 `gaps`
    （码/坐标/状态/分级/恢复路径）与 `recovery`（可执行恢复路径），不得只给自然语言 `error`；
    `corpus-plan` 的预检与 `check` 共用同一分级与判定实现（不得各算一套）。
@@ -578,6 +633,14 @@ query-gold 从已准入开发材料的实际原文出题，公司/行业/宏观�
 观点、表格、时序与跨文档需求；不由模型出题，也不从候选搜索结果倒推“正确答案”。每类至少
 两份真实开发来源；PDF/DOCX/MD 每种声称支持的格式均需真实已用开发样本，领域×格式×版式
 矩阵记录实际覆盖和空缺，不捏造九格全覆盖。缺格式样本则该格式真实门未通过，不能静默缩范围。
+
+**格式可得性对账（2026-09-20 补）**：冻结开发范围**之前**必须产出一张「声称格式 × 已准入语料
+可得性」表（唯一落点 `dev-manifest.json` 的 `format_availability`），逐格式给出：已准入真实样本数、
+版式覆盖、缺口。缺格的格式**只允许两种处置，且必须显式登记其一**：（a）补料工单（谁/何时/什么料，
+来源须可引用）；（b）由 U 显式修改本节的声称范围（**不得静默缩范围**）。该表由
+`preflight_scope_check.py` 在取样前核对：缺格未处置即视为该阶段**前置未满足**。
+样本进入 dev 构建的例外口径见 §5.2 的 dev lane；dev lane 样本**计入**本节的格式门，但必须在
+矩阵与证据中标注 `dev_lane`，且其材料类型如实登记。
 
 规则/评分器在查看候选验收结果前冻结。开发发现问题可新建修订，保留失败报告并在同一新口径
 重评基线与候选；不能移动预期、删除失败题或覆盖历史报告来制造非回归。留出另设独立清单，

@@ -1,0 +1,145 @@
+{
+  "artifact": "i3-2-p4-experiment-initial-version",
+  "generated_at": "2026-09-19T18:08:50+08:00",
+  "phase": "I3-2 → I3-1 起点",
+  "status": "frozen_r28",
+  "not_filed": "清单草稿：随 P1 落正式 + r27 绑定后生效",
+  "purpose": "冻结『试验初始版本』：I3-1（E2E）与后续对照都以本清单为准，不得凭记忆或事后补录",
+  "components": {
+    "scorer": {
+      "path": "plugins/corpus/scoring.py",
+      "sha256": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e",
+      "entry": "gold_from_records(records) + score(questions, observations)",
+      "bound_in": [
+        "i0c-r19",
+        "i0c-r21"
+      ]
+    },
+    "query_gold": {
+      "scoring_input_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl",
+      "scoring_input_sha256": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
+      "scoring_input_manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json",
+      "scoring_input_manifest_sha256": "d0d76862eff732a123f2af0cb7a224fb5403e8d5501d0b7442f06eae226b20e7",
+      "unique": true,
+      "note": "执行器**只允许**读 scoring_input_path 指定的正式派生件（经 manifest 哈希校验，load_scoring_input）；query-gold-frozen.jsonl 仅作 lineage，不得作为评分输入",
+      "lineage": {
+        "query_gold_frozen": {
+          "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl",
+          "sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f"
+        },
+        "p1_draft_reference_only": {
+          "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p1/query-gold-with-targets.jsonl",
+          "sha256": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
+          "note": "仅作确定性对照（派生件与其逐字节一致），不是评分输入"
+        },
+        "materialization_report_sha256": "e703b1fcf96f71d71e6c4e3d0a36a8d5a26da6de8e662ca09ea8f68086ab21ce"
+      }
+    },
+    "execution": {
+      "status": "not_executable_yet",
+      "commands": [
+        "（评分契约）python -c \"from plugins.corpus.scoring import gold_from_records, score\"",
+        "（本清单校验）uv run python .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i3_2_completion.py"
+      ],
+      "runtime_policy": "运行时显式构造 ScoringPolicy（不依赖默认值），取值见 policy 段",
+      "environment": "I3-2 仍用 guards/i3.json（零模型/无网络/无来源读取）；I3-1 前另建 i3-e2e 配置",
+      "initial_params": {
+        "top_k": 5,
+        "min_rate": "19/20",
+        "dev_scope": "3 类 × ≥2 份开发材料（见 dev-manifest.json）"
+      },
+      "unimplemented_entrypoints": [
+        "I3-1 三类开发 E2E 运行入口（登记为前置，未实现，不得写成已可执行）",
+        "chunk→document Top-k 归并、真实 build_id、fetch/verify 故障与 no_match 转换规则（接线契约待实现）"
+      ]
+    },
+    "approved_projection": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json",
+      "sha256": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
+      "counts": {
+        "approved_required": 79,
+        "supplementary": 20,
+        "questions": 30
+      }
+    },
+    "decisions": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json",
+      "sha256": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74"
+    },
+    "source_gold": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
+      "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
+      "bound_in": [
+        "i0c-r26"
+      ]
+    },
+    "policy": {
+      "values": {
+        "top_k": 5,
+        "min_rate": "19/20",
+        "require_critical_all_pass": true,
+        "max_false_positives": 0,
+        "max_fabricated_citations": 0
+      },
+      "confirmation": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p2/policy-and-lists-confirmation.json",
+      "sha256": "46ef2261cd5ba904eb1404ad998c50147bf1be29eba6167522ef6b7416d5c169"
+    },
+    "lists": {
+      "critical": {
+        "count": 28,
+        "sha256": "1f68cd98d774675ff9b1ba0e0f7dd7be6f52a7552c5f1881ea5f11ffed353519",
+        "non_critical": [
+          "industry-006",
+          "macro-004"
+        ]
+      },
+      "negatives": {
+        "count": 6,
+        "sha256": "422ae264af37e5c7b4b6e83e5f848b4261bfb6d7704301b5840c38fb587b1e76",
+        "ids": [
+          "company-009",
+          "company-010",
+          "industry-009",
+          "industry-010",
+          "macro-009",
+          "macro-010"
+        ]
+      }
+    },
+    "baseline_mapping": {
+      "index": {
+        "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json",
+        "sha256": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b"
+      },
+      "case_level": {
+        "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a4-candidates-v3-20260915.json",
+        "sha256": "016c87e506aa0b0ba5a5515fd22c7b7851751111c5d1074634eb21f2b51e1943"
+      },
+      "reconciliation": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p3/baseline-mapping-reconciliation.json",
+      "reconciliation_sha256": "69fca001e32d2af2b6e31632609f75c14f9b0935e7b6352fd7c296423ba25f7d",
+      "drift": 0
+    }
+  },
+  "declarations": [
+    "零模型：不调用任何模型客户端（i3 守卫 blocked_modules + poisoned_env）",
+    "零数据库写入：I3 阶段守卫 read_roots 为空、无网络；旧基线**不重跑**（其入口非零写 + 原库 5432，需 I3-5 单独授权）",
+    "未读候选业务结果：本清单只绑定预期/金标/配置字节，不含任何检索或答案输出",
+    "留出隔离：3 份留出件仍在守卫 forbidden_roots 内（i3.json）"
+  ],
+  "pending_before_effective": [
+    "P1 材料化落正式（新 query-gold 版本）+ U 签认",
+    "P3 建议的旧基线重绑方式（内联或双哈希强引用）确认",
+    "r27 冻结：绑定上述全部 + P2/P3/P4 产物 + 台账回填",
+    "I3-1（E2E）另需 PG/模型与预算授权，且需 `i3-e2e.json` 阶段守卫（i3.json 注记）"
+  ],
+  "gaps_from_inventory": {
+    "closed_by_this": [
+      "I3-2-8 试验初始版本（清单已建）"
+    ],
+    "still_open": [
+      "I3-2-2 材料化落正式",
+      "I3-2-6 旧基线重绑",
+      "I3-1/I3-5、20 条同义映射审计、macro-004 blocked"
+    ]
+  }
+}

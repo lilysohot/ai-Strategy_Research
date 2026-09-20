@@ -1,0 +1,62 @@
+[
+  {
+    "path": "plugins/corpus/preparation/gaps.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/plugins/corpus/preparation/gaps.py",
+    "sha256": "ea4714ae3438c4f006447096e126e544259b7a04a883af5e91c7eebecd705d1a",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "plugins/corpus/preparation/engine.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/plugins/corpus/preparation/engine.py",
+    "sha256": "23a121ffcd46d179c07a2c04d07ab72b1c0022dc9e9cefbb37f5f1aaf1a6d4df",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "plugins/corpus/preparation/repository.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/plugins/corpus/preparation/repository.py",
+    "sha256": "6444ecd92d47181a3bc7e3818fdefa981b02347e564751b9f1db652295fb6745",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "plugins/corpus/preparation/repository_pg.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/plugins/corpus/preparation/repository_pg.py",
+    "sha256": "e7d0121cb266d47f126e046be2f7f2b68db940a71dc15b53cb32335de369eb17",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "plugins/corpus/cli.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/plugins/corpus/cli.py",
+    "sha256": "4b23166e9cd5bd1d2cf7e2a31e7f25ca6090cca55f3637aebe20dffb0e15ede9",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "docs/plan/corpus-ingestion-rebuild-architecture.md",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/docs/plan/corpus-ingestion-rebuild-architecture.md",
+    "sha256": "3e47047f006af0753d037a21515d4430b75381b06b99ca5faea839a513d410d2",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "docs/plan/corpus-ingestion-rebuild-tasks.md",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/docs/plan/corpus-ingestion-rebuild-tasks.md",
+    "sha256": "9aff53a26fe69bac50b8eb381936f1f82330253258c3536d897806c87df181a9",
+    "matches_previous_binding": true
+  },
+  {
+    "path": "docs/plan/claims-market-closed-loop-plan.md",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/docs/plan/claims-market-closed-loop-plan.md",
+    "sha256": "e23ee2a880c5d044d764823648cb26c0e6786e47eb007caa4ab052a5f3077175",
+    "matches_previous_binding": true
+  },
+  {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json",
+    "sha256": "4f807e650b2b14c03bb66a1febecfbb5491640713df03a0ea672daa3da6bc06c",
+    "matches_previous_binding": true
+  },
+  {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+    "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-human-gap-review/before-r36/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+    "sha256": "21e1a347ad1962c6fd5780ddeed6d4710017f149cc649ee2e5a48d9f167181ca",
+    "matches_previous_binding": true
+  }
+]

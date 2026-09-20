@@ -1,0 +1,465 @@
+{
+  "artifact": "i3-1-e2e-final",
+  "phase": "i3-1",
+  "generated_at": "2026-09-19T18:48:11+08:00",
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "database": "i2_sandbox_corpus"
+  },
+  "guard": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "sha256": "1c238a62d0d70b97f5b075cd612e21eb16f8d1eaed492e3762acffb4e2c402cf"
+  },
+  "scope_status": "proposed_pending_ratification",
+  "executed_for_real": {
+    "pipeline": "登记(ReviewedDecision)→准入→解析→清洗→切块→build→check→publish→status",
+    "read_path": "search→fetch_verbatim→(coverage / 同快照组合读取 / 审计)",
+    "pg": "隔离沙箱 i2_sandbox_corpus（corpus-db 容器；实例无 apodex=非生产）",
+    "model_calls": 0,
+    "synthetic_scores_reused": false
+  },
+  "summary": {
+    "sources": 8,
+    "published": 3,
+    "blocked": 5,
+    "total_units": 4349,
+    "total_chunks": 774,
+    "search_hits": {
+      "营业收入": 0,
+      "景气": 0,
+      "非农": 0,
+      "同比": 4
+    },
+    "verify_checks_passed": true,
+    "verify_rows": 4,
+    "audit_conflicts": [],
+    "coverage_processing": "scoped",
+    "coverage_query_status": "matched",
+    "format_coverage": {
+      "pdf": "6 份（2 可发布）",
+      "docx": "1 份（U 补料；1 可发布并已发布）",
+      "md": "1 份（投委会报告；review_required，格式门未过）"
+    }
+  },
+  "matrix": {
+    "company:pdf": {
+      "total": 2,
+      "publishable": 0
+    },
+    "industry:pdf": {
+      "total": 2,
+      "publishable": 1
+    },
+    "macro:pdf": {
+      "total": 2,
+      "publishable": 1
+    },
+    "industry:docx": {
+      "total": 1,
+      "publishable": 1
+    },
+    "company:md": {
+      "total": 1,
+      "publishable": 0
+    }
+  },
+  "sources": [
+    {
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "build_id": "a95779f6872d9e6103bcc755e947070e46a9ae6ec45f6156087356bdfc18b58f",
+      "unit_count": 778,
+      "chunk_count": 25,
+      "check_exit": 4,
+      "publishable": false,
+      "publish_exit": 4,
+      "generation": null,
+      "blocking_gaps": [
+        {
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "key": "issue:image_region_unreadable:page:2",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 7
+    },
+    {
+      "domain": "company",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+      "unit_count": 798,
+      "chunk_count": 198,
+      "check_exit": 4,
+      "publishable": false,
+      "publish_exit": 4,
+      "generation": null,
+      "blocking_gaps": [
+        {
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "key": "issue:image_region_unreadable:page:7",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 22
+    },
+    {
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "build_id": "b7291df6abc1bed46d56e39f44eb594f61c172019f214a70e6fe226fb05facf4",
+      "unit_count": 1518,
+      "chunk_count": 282,
+      "check_exit": 4,
+      "publishable": false,
+      "publish_exit": 4,
+      "generation": null,
+      "blocking_gaps": [
+        {
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "key": "issue:image_region_unreadable:page:1",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "key": "issue:image_region_unreadable:page:2",
+          "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:12",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:13",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:17",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:18",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:21",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:22",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:24",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        },
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:3",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 24
+    },
+    {
+      "domain": "industry",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+      "unit_count": 258,
+      "chunk_count": 54,
+      "check_exit": 0,
+      "publishable": true,
+      "publish_exit": 0,
+      "generation": 1,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 11
+    },
+    {
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "build_id": "bf06d59c7c6639e10abe854485b063a818114fd9b38872a16cbec1e56a3f6a28",
+      "unit_count": 695,
+      "chunk_count": 187,
+      "check_exit": 4,
+      "publishable": false,
+      "publish_exit": 4,
+      "generation": null,
+      "blocking_gaps": [
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "key": "issue:table_lines_without_extraction:page:6",
+          "remedy": "有成网制表线而提取为空：人工复核该页表格后重建；否则转 review_required"
+        }
+      ],
+      "acknowledged_gaps": 8
+    },
+    {
+      "domain": "macro",
+      "format": "pdf",
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+      "unit_count": 258,
+      "chunk_count": 21,
+      "check_exit": 0,
+      "publishable": true,
+      "publish_exit": 0,
+      "generation": 1,
+      "blocking_gaps": [],
+      "acknowledged_gaps": 16
+    }
+  ],
+  "blocking_gap_inventory": [
+    {
+      "code": "table_lines_without_extraction",
+      "status": "review_required",
+      "disposition": "blocking",
+      "count": 9
+    },
+    {
+      "code": "image_region_unreadable",
+      "status": "needs_ocr",
+      "disposition": "blocking",
+      "count": 4
+    }
+  ],
+  "read_path_verification": {
+    "basis": "PDF 正文由 PyMuPDF 解析而来：**字节级逐字不适用**；核验口径为『chunk 文本 == 所引单元原文的换行拼接』且『每个单元原文 ⊆ 该文档解析文本』，并核对句柄 active 与页号范围",
+    "hits": [
+      {
+        "query": "营业收入",
+        "hits": 0,
+        "verified": []
+      },
+      {
+        "query": "景气",
+        "hits": 0,
+        "verified": []
+      },
+      {
+        "query": "非农",
+        "hits": 0,
+        "verified": []
+      },
+      {
+        "query": "同比",
+        "hits": 4,
+        "verified": [
+          {
+            "locator": "chunk:f6ce586247b5c88a:body:0014",
+            "units": 13,
+            "active": true,
+            "join_ok": true,
+            "units_in_doc": true
+          },
+          {
+            "locator": "chunk:6509bf635ab5dd2a:body:0003",
+            "units": 18,
+            "active": true,
+            "join_ok": true,
+            "units_in_doc": true
+          },
+          {
+            "locator": "chunk:6509bf635ab5dd2a:body:0006",
+            "units": 14,
+            "active": true,
+            "join_ok": true,
+            "units_in_doc": true
+          },
+          {
+            "locator": "chunk:6509bf635ab5dd2a:body:0007",
+            "units": 17,
+            "active": true,
+            "join_ok": true,
+            "units_in_doc": true
+          }
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "what": "CLI `plan` 的 stdout 被 PyMuPDF 横幅（『Consider using the pymupdf_layout package…』）污染",
+      "effect": "严格按 JSON 解析 stdout 的调用方会解析失败；本阶段已改为取首个 `{` 起解析并记录前缀",
+      "evidence": {
+        "step": "plan",
+        "prefix": "Consider using the pymupdf_layout package for a greatly improved page layout analysis.\n{\n  \"ok\": true,\n  \"command\": \"pla"
+      },
+      "suggest": "PyMuPDF 输出应改道 stderr（或 plan 阶段显式抑制）；属 CLI stdout 契约缺陷，建议单列修复"
+    },
+    {
+      "id": "F2",
+      "what": "开发范围 73 份来源终态仍为 review_required（M1 未决）",
+      "effect": "本轮按 Agent 提案 3 类×2 份执行，登记决定作者已写明待追认；I3-1 不能据此宣告完成",
+      "suggest": "U 批准范围后重跑并冻结该清单"
+    },
+    {
+      "id": "F3",
+      "what": "docx 无开发样本",
+      "effect": "已解决：U 补入 DOCX 一份 → 该 DOCX 通过门并发布（见 F6）；MD 仍缺（投委会报告 review_required，另见 F6）",
+      "suggest": "无需再补 DOCX；MD 需 U 定性",
+      "status": "resolved_by_U_supply"
+    },
+    {
+      "id": "F4",
+      "what": "真实开发样本的缺口分布：4/6 份券商研报被门阻断，代码为 `image_region_unreadable`（status=needs_ocr）与 `table_lines_without_extraction`（status=review_required）",
+      "effect": "隔离库内 6 份来源 build 全成功（4305 单元 / 767 切块），但只有 2 份可发布；阻断项全部由 §7.3 机读分级给出，处置路径 = 补 OCR（图像区域）/ 换料或转 review_required（表格线未抽取）",
+      "suggest": "U 定缺口处置策略（补 OCR / 换料 / 接受为 review_required 并在范围上排除）；本轮不擅自降级门"
+    },
+    {
+      "id": "F5",
+      "what": "台账（docs/plan 两份）在本轮未更新",
+      "effect": "两份台账属 r31 绑定件，改动需新修订；I3-1 尚未冻结，故本轮只在审计目录留真实记录",
+      "suggest": "I3-1 首个冻结修订（范围获批后）一并回填台账"
+    },
+    {
+      "id": "F6",
+      "what": "U 补的 DOCX 经真实引擎判定为 `in_scope`（材料类型无机器冲突检出 → 按审阅人认定处理），DOCX 管道零缺口、可发布并已发布；同批 MD 投委会报告被判 `review_required`",
+      "effect": "格式矩阵：PDF ✓、DOCX ✓（已覆盖）、MD ✗（未过门）。docx 的 schema（44 单元/7 切块）与 PDF 差异巨大（258—1518 单元），检索侧样本量偏小，I3-3 校准时须按格式分层看指标",
+      "suggest": "① U 追认该 DOCX 纳入开发范围（并可确认其材料类型口径）；② MD 需 U 定性：换料 / 认定 / 接受缺格式门未过（按架构 §12.1 不得静默缩范围）"
+    },
+    {
+      "id": "F7",
+      "what": "**company 域素材缺口**：41 份券商研报中零阻断且非留出的只有 8 份（industry 6 / macro 2 / company 0）",
+      "effect": "唯一零阻断的公司研报恰是留出件（bbba671e）；另两份各带 1 处 `image_region_unreadable`。按规范（blocking 不可发布、无人工认可入口）→ company 在 I3-1 只覆盖 MD 2 份，**PDF 维度为 0**",
+      "suggest": "U 三选一：① 补公司研报（推荐，零代码变更）；② 批准改实现（给 needs_ocr 缺口加人工认可/review 入口 → 新修订 + 反例）；③ 显式登记『company:pdf 未覆盖』（按 §12.1 不得静默缩范围）"
+    },
+    {
+      "id": "F8",
+      "what": "**接口约束（本轮踩坑）**：`review_decision_ids` 必须列出**整条取代链**——引擎只按清单声明的 ids 解析历史，tip 的 `supersedes` 指向未声明的决定即判断链 → `conflicting_review`",
+      "effect": "首跑时 DOCX/MD 因此被判 review_required；清单补全链条后 11/11 `in_scope`",
+      "suggest": "建议写入 CLI/清单文档：改选/改写人工决定时，清单需带上完整历史链（或明确只允许单条决定）"
+    },
+    {
+      "id": "F9",
+      "what": "`corpus plan` 的缺口在 `entry.precheck.{gap_summary,gaps}`（不在顶层）；且该命令**整批失败时返回 exit 2 并给出 error**",
+      "effect": "解析错层级会得到『全干净』假象（本轮先出现假阴性，已修 + 加断言）",
+      "suggest": "筛料/预检脚本必须：解析 precheck 层级 + 校验 `ok is True` + 断言条数一致"
+    },
+    {
+      "id": "F10",
+      "what": "范围结构性缺陷复盘（为什么 MD/DOCX 不在初始范围 & 补料是否关键）已留档",
+      "effect": "结论：缺口不是被排除，而是从未被做成决定（要求只在架构 §12.1，未进 I3-1 任务验收行；上游把缺口写成条件句而非待决清单项）；补料只在 company 域局部成立，全局关键是缺口处置路径 + 格式/材料类型裁定流程",
+      "suggest": "见 retrospective-i3-1-scope.md 第三节的行动排序（1 处置路径 / 2 格式门前置清单 / 3 company 补料 / 4 接口纪律入库 / 5 分格式分层报告）"
+    },
+    {
+      "id": "F11",
+      "what": "撤回 c1/c2/c3 并改用 U 批准集执行；新增取样前自检器 preflight_scope_check.py",
+      "effect": "守卫允许路径重置 6 份（批准集）；自检器对自选范围判 FAIL、对批准集判 PASS；真实结果：可发布 2/6，『每类≥2』不可满足",
+      "suggest": "见 i3-1-retraction-record.md 与 i3-1-e2e-approved-set.md"
+    }
+  ],
+  "not_concluded": [
+    "I3-1 未宣告完成：开发范围未追认（M1），且 4/6 来源缺口处置策略未定",
+    "未做 I3-3（检索/切块参数校准）、I3-4（coverage 开发测试）、I3-5（非回归）；结果不得直接放行 I4",
+    "I3-1 未宣告完成：开发范围未追认（M1）；MD 格式门未过待 U 定性；4/6 PDF 缺口处置策略未定"
+  ],
+  "artifacts": {
+    "stage1": "i3-1-e2e-record.json",
+    "stage2": "i3-1-e2e-sources.json",
+    "manifest": "dev-scope-manifest.json",
+    "final": "i3-1-e2e-final.json"
+  },
+  "updated_at": "2026-09-19T18:59:46+08:00",
+  "format_probe": {
+    "source": "i3-1-e2e-format-probe.json",
+    "docx": {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "decision": "in_scope",
+      "build_id": "e3fa3cb577dad2130566e86e28f90eb069c8cc9cbe3a6a7878c04124a29d52cf",
+      "unit_count": 44,
+      "chunk_count": 7,
+      "check_exit": 0,
+      "publishable": true,
+      "gaps": [],
+      "publish": {
+        "exit_code": 0,
+        "generation": 2
+      },
+      "note": "无人为材料类型凭证时：机器未检出与『分析师研报』冲突的类型（无检出视作审阅人认定）→ `in_scope`；DOCX 管道 **零缺口、可发布并已发布**"
+    },
+    "md": {
+      "path": "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "decision": "review_required",
+      "reason": "机器检出 `internal_committee_report` → order-2 `POLICY_CONFLICT` → `review_required`",
+      "note": "MD（投委会报告）**格式门未过**：需 U 决定（是否认定研报=存疑 / 换料 / 接受缺格式门未过）"
+    }
+  },
+  "current_scope": {
+    "record": "i3-1-e2e-approved-set.json",
+    "source": "i0a2-adjudicated-20260915.json :: dev_selection_approved（U 2026-09-15 批准）",
+    "summary": {
+      "sources": 6,
+      "publishable": 2,
+      "blocked": 4,
+      "total_units": 4305,
+      "total_chunks": 767,
+      "blocking_gaps_total": 13,
+      "search_hits": {
+        "营业收入": 0,
+        "景气": 0,
+        "非农": 0,
+        "同比": 4
+      },
+      "verify_all_ok": true,
+      "audit_conflicts": [],
+      "per_class_min_2_satisfied": false,
+      "per_class_min_2_why": "按批准集执行，可发布 = company 0/2、industry 1/2、macro 1/2 → **『三类每类≥2 份』在现行门 + 现行裁定下无法满足**；缺口无处置路径（见真问题 1）"
+    },
+    "matrix": {
+      "company:pdf": {
+        "total": 2,
+        "published": 0
+      },
+      "industry:pdf": {
+        "total": 2,
+        "published": 1
+      },
+      "macro:pdf": {
+        "total": 2,
+        "published": 1
+      }
+    },
+    "withdrawn_previous_scope": {
+      "record": "i3-1-e2e-scope-v2.json",
+      "reason": "U 2026-09-19 授权撤回：该范围用了 2 份被裁定 excluded_from_active 的材料（投委会报告 MD）与 1 份 excluded_from_active 的无署名 DOCX，并用『换料』替换了 U 已批准的 6 份中的 4 份——属裁定冲突 + 范围偏离。真实数据保留为证据，但**不得作为 I3-1 范围**。"
+    }
+  }
+}

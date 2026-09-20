@@ -48,11 +48,18 @@ from plugins.corpus.preparation.contract import (
 )
 
 POLICY_REV_V1 = "v1-20260915"
+# dev lane 政策修订（U 2026-09-20 裁决：新建 dev lane，只对 dev 构建生效，
+# 不改变任何生产 in_scope 判定；material_type 如实保持 internal_committee_report）。
+POLICY_REV_V2_DEV = "v2-dev-20260920"
 RULE_REV = f"decision-order-{POLICY_REV_V1}"
 PROBE_REV = "admission-probe-1"
 
 # 本实现可执行的冻结政策版本集（复核 R5：版本绑定，拒绝未支持版本）。
-_SUPPORTED_POLICY_REVS = (POLICY_REV_V1,)
+_SUPPORTED_POLICY_REVS = (POLICY_REV_V1, POLICY_REV_V2_DEV)
+# v1 冻结语义：in_scope 只接受 research_report；dev 政策在文件里显式声明放宽集合。
+_DEFAULT_ALLOWED_MATERIALS: tuple[MaterialType, ...] = (MaterialType.RESEARCH_REPORT,)
+_SCOPE_PRODUCTION = "production"
+_SCOPE_DEV = "dev"
 
 _FEATURE_IDS = (
     "title_type_marker",
@@ -119,10 +126,18 @@ class SourceDescriptor:
 
 @dataclass(frozen=True)
 class AdmissionPolicy:
-    """已校验的冻结政策（policy_rev + 允许领域；探查上限内置）。"""
+    """已校验的冻结政策（policy_rev + 允许领域/材料 + 是否 dev lane；探查上限内置）。
+
+    ``scope=dev`` 的政策只在调用方显式 ``allow_dev_lane`` 时可装载，且其材料放宽
+    只对 ``dev_lane_sources``（U 指定来源的 source_id）生效——生产判定不受影响。
+    """
 
     policy_rev: str
     allowed_domains: tuple[ResearchDomain, ...]
+    allowed_materials: tuple[MaterialType, ...] = _DEFAULT_ALLOWED_MATERIALS
+    scope: str = _SCOPE_PRODUCTION
+    lane_id: str | None = None
+    dev_lane_sources: tuple[str, ...] = ()
 
 
 # --- 政策 §features 的冻结表达式（有序首中；上限内置） ---
@@ -236,11 +251,18 @@ def probe_features(payload: ProbeInput) -> tuple[FeatureProbe, ...]:
     )
 
 
-def load_admission_policy(path: str | Path) -> AdmissionPolicy:
-    """装载 I0A-3 冻结政策文件；frozen/auto_decision/版本绑定校验 fail-closed。
+def load_admission_policy(
+    path: str | Path, *, allow_dev_lane: bool = False
+) -> AdmissionPolicy:
+    """装载 I0A-3 冻结政策文件；frozen/auto_decision/版本绑定/deve lane 校验 fail-closed。
 
     复核 R5：``policy_rev`` 必须属于本实现绑定的受支持版本集——拒绝未支持版本，
     不以硬编码 v1 规则冒充任意版本的执行语义；政策升级须同步扩展实现并重跑验证。
+
+    dev lane（U 2026-09-20 裁决）：``scope=dev`` 的政策**不得**在生产路径装载——
+    除调用方显式传 ``allow_dev_lane=True`` 外一律拒绝；且其材料放宽只在
+    ``dev_lane.sources``（U 指定来源的 source_id）上生效。v1 冻结政策不含
+    ``scope``/``allowed_materials`` 字段，落到默认（仅 research_report）语义。
     """
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, dict):
@@ -258,7 +280,56 @@ def load_admission_policy(path: str | Path) -> AdmissionPolicy:
     auto = data.get("auto_decision")
     if not isinstance(auto, dict) or auto.get("enabled") is not False:
         raise AdmissionError("admission policy 自动准入未显式禁用，fail-closed")
-    return AdmissionPolicy(policy_rev=policy_rev, allowed_domains=_ALLOWED_DOMAINS_V1)
+
+    scope = data.get("scope", _SCOPE_PRODUCTION)
+    if scope not in (_SCOPE_PRODUCTION, _SCOPE_DEV):
+        raise AdmissionError(f"admission policy scope 非法: {scope!r}")
+    if scope == _SCOPE_DEV and not allow_dev_lane:
+        raise AdmissionError(
+            "dev lane 政策不得在生产路径装载（需调用方显式 allow_dev_lane=True）"
+        )
+
+    raw_materials = data.get("allowed_materials")
+    if raw_materials is None:
+        if scope == _SCOPE_DEV:
+            raise AdmissionError("dev lane 政策必须显式声明 allowed_materials")
+        allowed_materials = _DEFAULT_ALLOWED_MATERIALS
+    else:
+        if not isinstance(raw_materials, list) or not raw_materials:
+            raise AdmissionError("admission policy allowed_materials 必须是非空数组")
+        try:
+            allowed_materials = tuple(MaterialType(item) for item in raw_materials)
+        except ValueError as exc:
+            raise AdmissionError(f"admission policy allowed_materials 含非法材料: {exc}") from exc
+
+    lane_id: str | None = None
+    dev_lane_sources: tuple[str, ...] = ()
+    if scope == _SCOPE_DEV:
+        lane = data.get("dev_lane")
+        if not isinstance(lane, dict):
+            raise AdmissionError("dev lane 政策缺少 dev_lane 块")
+        lane_id = lane.get("lane_id")
+        if not isinstance(lane_id, str) or not lane_id:
+            raise AdmissionError("dev lane 缺少 lane_id")
+        sources = lane.get("sources")
+        if not isinstance(sources, list) or not sources:
+            raise AdmissionError("dev lane 必须列出 sources（U 指定来源）")
+        ids: list[str] = []
+        for item in sources:
+            source_id = item.get("source_id") if isinstance(item, dict) else None
+            if not isinstance(source_id, str) or len(source_id) != 64:
+                raise AdmissionError(f"dev lane sources[].source_id 非法: {source_id!r}")
+            ids.append(source_id)
+        dev_lane_sources = tuple(ids)
+
+    return AdmissionPolicy(
+        policy_rev=policy_rev,
+        allowed_domains=_ALLOWED_DOMAINS_V1,
+        allowed_materials=allowed_materials,
+        scope=scope,
+        lane_id=lane_id,
+        dev_lane_sources=dev_lane_sources,
+    )
 
 
 def _effective_decision(
@@ -468,7 +539,16 @@ def decide_admission(
     effective_material = effective.material_type or material
     effective_domain = effective.research_domain or source.domain_hint
     order2: list[AdmissionReasonCode] = []
-    if effective_material not in (MaterialType.RESEARCH_REPORT, MaterialType.UNKNOWN):
+    # 材料类型门：v1 冻结语义 = 仅 research_report/unknown。dev lane 政策（scope=dev）
+    # 可另行声明 allowed_materials，但**只对 dev_lane_sources 内 U 指定来源**生效；
+    # 其余来源仍按冻结语义拒绝（生产判定不变，见 tests 的 dev lane 反例）。
+    material_ok = effective_material in (MaterialType.RESEARCH_REPORT, MaterialType.UNKNOWN)
+    if not material_ok and policy.scope == _SCOPE_DEV:
+        material_ok = (
+            source.source_id in policy.dev_lane_sources
+            and effective_material in policy.allowed_materials
+        )
+    if not material_ok:
         # 冻结范围仅纳入分析师研报；admitted 非研报材料与政策冲突 → 复核。
         order2.append(AdmissionReasonCode.POLICY_CONFLICT)
     if effective.locators and not effective.scope_ref:
@@ -494,13 +574,26 @@ def decide_admission(
             review_ref=effective.decision_id,
             scope_ref=effective.scope_ref,
         )
+    # in_scope 落地的材料类型：v1 恒为 research_report（unknown 视作审阅人认定的研报）；
+    # dev lane 下如实记录人工凭证的类型（如 internal_committee_report），不伪造为研报。
+    in_scope_material = (
+        MaterialType.RESEARCH_REPORT
+        if effective_material is MaterialType.UNKNOWN
+        else effective_material
+    )
+    dev_evidence = (
+        [f"dev_lane={policy.lane_id}", f"admitted_material={effective_material.value}"]
+        if policy.scope == _SCOPE_DEV
+        and in_scope_material is not MaterialType.RESEARCH_REPORT
+        else []
+    )
     return _admission_of(
         source,
         policy,
         AdmissionDecision.IN_SCOPE,
-        MaterialType.RESEARCH_REPORT,
+        in_scope_material,
         probe_reasons,
-        evidence,
+        [*evidence, *dev_evidence],
         review_ref=effective.decision_id,
         scope_ref=effective.scope_ref,
         research_domain=effective_domain,
@@ -520,9 +613,12 @@ def _admission_of(
     research_domain: ResearchDomain | None = None,
 ) -> Admission:
     ordered = sorted(set(reasons), key=lambda code: _REASON_ORDER[code])
+    # v1 下 rule_rev == RULE_REV（逐字不变，decision_id 稳定）；dev 政策另起 rule_rev
+    # 使 dev 判定与生产判定指纹可区分。
+    rule_rev = f"decision-order-{policy.policy_rev}"
     decision_id = canonical_fingerprint(
         [
-            RULE_REV,
+            rule_rev,
             policy.policy_rev,
             source.source_id,
             decision.value,
@@ -544,5 +640,5 @@ def _admission_of(
         scope_ref=scope_ref,
         evidence_refs=tuple(evidence),
         review_ref=review_ref,
-        rule_rev=RULE_REV,
+        rule_rev=rule_rev,
     )

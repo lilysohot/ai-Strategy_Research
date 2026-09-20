@@ -78,7 +78,7 @@ from plugins.corpus.preparation.gaps import (
     recovery_paths,
 )
 from plugins.corpus.preparation.readers import read_document
-from plugins.corpus.preparation.repository import StoreError
+from plugins.corpus.preparation.repository import Store, StoreError
 from plugins.corpus.preparation.repository_pg import PgStore
 
 EXIT_OK = 0
@@ -95,6 +95,8 @@ _DEFAULT_POLICY = (
     / "ingestion-rebuild"
     / "admission-policy.json"
 )
+# dev lane 显式开关（U 2026-09-20 裁决）：未设置时 dev 政策一律拒绝装载。
+_DEV_LANE_ENV = "CORPUS_DEV_LANE"
 _STAGES = (
     JobStage.REGISTERED,
     JobStage.ADMISSION_DECIDED,
@@ -153,7 +155,8 @@ def _load_policy(args: argparse.Namespace, manifest_policy: Path | None) -> Admi
     path = (
         Path(args.policy) if getattr(args, "policy", None) else manifest_policy or _DEFAULT_POLICY
     )
-    return load_admission_policy(path)
+    # dev lane（U 2026-09-20 裁决）：dev 政策必须由显式 env 开关放行，否则 fail-closed。
+    return load_admission_policy(path, allow_dev_lane=os.environ.get(_DEV_LANE_ENV) == "1")
 
 
 def _resolve_archive_root(args: argparse.Namespace, manifest_root: Path | None) -> Path:
@@ -194,10 +197,10 @@ class _GapView:
         return payload
 
 
-def _gap_view(build: Build) -> _GapView:
+def _gap_view(build: Build, store: Store | None = None) -> _GapView:
     """build 的结构化缺口视图；台账不可读时显式报告，不伪装成「没有缺口」。"""
     try:
-        records = gap_records_of(build)
+        records = gap_records_of(build, store=store)
     except EngineError as exc:
         return _GapView(
             gaps=[],
@@ -352,7 +355,7 @@ def _cmd_check(args: argparse.Namespace) -> int:
         if build is None:
             _emit({"ok": False, "command": "check", "error": f"build 不存在: {args.build}"})
             return EXIT_UNAVAILABLE
-        view = _gap_view(build)
+        view = _gap_view(build, store)
         try:
             build = check_build_publishable(store, args.build)
         except EngineError as exc:
@@ -401,6 +404,35 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
 
 # ── publish ───────────────────────────────────────────────────
+
+
+def _cmd_gap_review(args: argparse.Namespace) -> int:
+    """Export an unsigned template, or register a human-supplied immutable credential."""
+    from plugins.corpus.preparation.gap_review import GapReview, review_template
+
+    with _open_store(args) as store:
+        build = store.get_build(args.build)
+        if build is None:
+            raise EngineError(f"build 不存在: {args.build}")
+        if args.record is None:
+            _emit(review_template(build, gap_records_of(build)))
+            return EXIT_OK
+        review = GapReview.from_json(Path(args.record).read_text(encoding="utf-8"))
+        if review.build_id != build.build_id:
+            raise EngineError("human gap review --build 与凭证绑定不一致")
+        store.put_gap_review(review)
+        _emit(
+            {
+                "ok": True,
+                "command": "gap-review",
+                "build_id": build.build_id,
+                "review_id": review.review_id,
+                "reviewer": review.reviewer,
+                "evidence_scope_ref": review.evidence_scope_ref,
+                **_gap_view(build, store).as_payload(),
+            }
+        )
+    return EXIT_OK
 
 
 def _cmd_publish(args: argparse.Namespace) -> int:
@@ -468,7 +500,7 @@ def _cmd_status(args: argparse.Namespace) -> int:
             )
         publication = store.get_publication(build.source_id)
         admission = store.latest_admission(build.source_id)
-        view = _gap_view(build)
+        view = _gap_view(build, store)
     coverage = read_pg.coverage_snapshot(dsn, sandbox_db=_SANDBOX_DB)
     failed = [
         str(entry["stage"])
@@ -628,6 +660,11 @@ def _build_parser() -> argparse.ArgumentParser:
     publish.add_argument("--operator", required=True, help="操作者（记入 generation 审计记录）")
     publish.add_argument("--dsn", default=None)
 
+    gap_review = sub.add_parser("gap-review", help="导出未签署模板或登记具名人工判级凭证")
+    gap_review.add_argument("--build", required=True)
+    gap_review.add_argument("--record", help="人工签署 JSON；省略时只输出未签署模板")
+    gap_review.add_argument("--dsn", default=None)
+
     status = sub.add_parser("status")
     status.add_argument("--build", required=True)
     status.add_argument("--dsn", default=None)
@@ -643,6 +680,7 @@ _HANDLERS = {
     "build": _cmd_build,
     "check": _cmd_check,
     "publish": _cmd_publish,
+    "gap-review": _cmd_gap_review,
     "status": _cmd_status,
     "rebuild-plan": _cmd_rebuild_plan,
 }

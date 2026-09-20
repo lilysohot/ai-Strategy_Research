@@ -1,0 +1,154 @@
+{
+  "artifact": "preflight-scope-check",
+  "generated_at": "2026-09-20T09:38:17+08:00",
+  "label": "I3-1 第二轮：批准集 6 + dev lane 2",
+  "manifest": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/dev-scope-manifest.json",
+    "sha256": "8487c51b548e4427b31da8d545a7aa91591f1b353290a06486483cabcfd9d4d1"
+  },
+  "authoritative_sources": {
+    "adjudication": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a2-adjudicated-20260915.json",
+      "sha256": "839166417b9731c1797b7d323ed907b7453a8093271635037eab9a9ed29bb3ea",
+      "decision_by": "U（2026-09-15 会话裁决：『按这个方案执行，无数据/空文件直接删除』）"
+    },
+    "guard_forbidden_roots": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json",
+      "sha256": "cd36e91f9e76c880dc1f291981c95d1210e0862017afb7eecff708e3546df593",
+      "count": 5
+    },
+    "dev_manifest": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+      "sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+      "role": "非权威（dev_selection_candidates 为登记期旧文案，仅交叉参考）"
+    },
+    "dev_lane": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/admission-policy-dev.json",
+      "sha256": "0f9eb511b4afdd184fe52a8ceeb14ba2aba4a5060a355335e9619cc9d5616e2e",
+      "policy_rev": "v2-dev-20260920",
+      "lane_id": "i3-1-dev-lane-md-docx",
+      "approved_by": "U（2026-09-20 会话裁决）",
+      "role": "dev-only：只对清单内来源放宽材料类型，不改变生产 in_scope 判定"
+    }
+  },
+  "summary": {
+    "sources": 8,
+    "pass": 8,
+    "fail": 0,
+    "adjudication_conflicts": 0,
+    "scope_drifts": 0,
+    "dev_lane_authorized": 2,
+    "approved_dev_selection_size": 6,
+    "formats_covered_by_pass_set": [
+      "docx",
+      "md",
+      "pdf"
+    ],
+    "verdict": "PASS"
+  },
+  "rows": [
+    {
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "company",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "company",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "industry",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "industry",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "macro",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "format": "pdf",
+      "adjudicated_decision": "admitted",
+      "adjudicated_material_type": "research_report",
+      "in_approved_dev_selection": true,
+      "approved_scope": "macro",
+      "holdout": false,
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "format": "md",
+      "adjudicated_decision": "excluded_from_active",
+      "adjudicated_material_type": "internal_committee_report",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "authorized_by": "dev_lane",
+      "dev_lane": {
+        "lane_id": "i3-1-dev-lane-md-docx",
+        "declared_material_type": "internal_committee_report",
+        "declared_domain": "company",
+        "i0a2_decision": "excluded_from_active"
+      },
+      "verdict": "DEV_LANE_OK",
+      "problems": []
+    },
+    {
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "format": "docx",
+      "adjudicated_decision": "excluded_from_active",
+      "adjudicated_material_type": "internal_unattributed",
+      "in_approved_dev_selection": false,
+      "approved_scope": null,
+      "holdout": false,
+      "authorized_by": "dev_lane",
+      "dev_lane": {
+        "lane_id": "i3-1-dev-lane-md-docx",
+        "declared_material_type": "internal_unattributed",
+        "declared_domain": "industry",
+        "i0a2_decision": "excluded_from_active"
+      },
+      "verdict": "DEV_LANE_OK",
+      "problems": []
+    }
+  ],
+  "note": "PASS 仅表示『取样未偏离裁定、未越权』（dev lane 行经 U 2026-09-20 裁决显式授权），不等于这些材料都能发布——门（blocking 缺口）是另一层，须看 check/publish 结果。不带 --dev-lane 时，dev lane 来源按默认口径判 FAIL（fail-closed 反例）。"
+}

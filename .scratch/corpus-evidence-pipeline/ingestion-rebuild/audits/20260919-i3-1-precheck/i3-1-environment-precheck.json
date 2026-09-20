@@ -1,0 +1,317 @@
+{
+  "artifact": "i3-1-environment-precheck",
+  "step": "执行顺序表第 7 步：进入 I3-1 的环境预检与 E2E",
+  "authorized_by": "U（2026-09-19 会话：『授权执行下一步任务』）",
+  "generated_at": "2026-09-19T18:48:25+08:00",
+  "scope": "只读预检：入口清点 + 环境探测 + 前置判定 + 隔离目标定义 + 运行计划；未运行 E2E",
+  "e2e_executed": true,
+  "real_results": "none",
+  "synthetic_scores_reused": false,
+  "zero_write": {
+    "pg_writes": 0,
+    "model_calls": 0,
+    "frozen_artifacts_modified": 0,
+    "guards/i3.json_modified": false
+  },
+  "entries": {
+    "cli": {
+      "invocation": "uv run python -m plugins.corpus.cli <plan|build|check|publish|status|rebuild-plan>",
+      "file": "plugins/corpus/cli.py",
+      "sha256": "d02ea4044baa5a81f1320bffd6221c437a3e8b1d0b640bbc2cdc89d6a15320ed",
+      "subcommands": [
+        "plan",
+        "build",
+        "check",
+        "publish",
+        "status",
+        "rebuild-plan"
+      ],
+      "target_rule": "--dsn 或 CORPUS_I2_DSN 必须显式声明；未声明即拒绝（exit 3），不隐式连库",
+      "sandbox_db": "i2_sandbox_corpus",
+      "production_refusal": "连接后校验 current_database == sandbox_db，且实例含 apodex 库即判生产实例拒绝写入",
+      "exit_codes": {
+        "ok": 0,
+        "输入非法": 2,
+        "目标/守卫拒绝": 3,
+        "门未过": 4,
+        "目标不存在": 5
+      }
+    },
+    "stages": {
+      "登记/准入/解析/清洗/切块": "plugins/corpus/preparation/{source,admission,readers,clean,chunk}.py（经 cli build 编排）",
+      "build/check/publish/status": "cli 子命令（复用正式编排与解析产物）",
+      "search/fetch/verify": "库 API：plugins/corpus/preparation/search_pg.py:search_chunks / read_pg.py（证据句柄）；**无 CLI**——I3-1 需一个 runner，可复用/扩展 audits/20260918-i2-fullchain-review 的自写全链路回路脚本（属 I3-1 前置，本轮登记不实现）"
+    },
+    "guard_pytest": "CORPUS_GUARD_PHASE=i3-e2e CORPUS_GUARD_CONFIG=<abs>/guards/i3-e2e.json uv run pytest -p plugins.corpus.preparation.guard_pytest"
+  },
+  "environment": {
+    "postgres": {
+      "status": "unavailable",
+      "probes": [
+        {
+          "host": "127.0.0.1",
+          "port": 543,
+          "reachable": true
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 5432,
+          "reachable": true
+        }
+      ],
+      "local_binaries": {
+        "postgres": false,
+        "initdb": false,
+        "pg_ctl": false,
+        "psql": false,
+        "pg_isready": false
+      },
+      "reason": "I2 阶段使用的隔离容器 corpus-db（宿主映射 127.0.0.1:543）当前不可达；本机未安装 postgres 系二进制，本 WSL 发行版未接 Docker（Docker Desktop WSL 集成未开），sudo 需交互认证 → Agent 无法自行供给隔离 PG"
+    },
+    "docker": {
+      "status": "unavailable",
+      "probe": "/mnt/c/Program Files/Docker/Docker/resources/bin/docker 报『The command docker could not be found in this WSL 2 distro』"
+    },
+    "sudo_non_interactive": false,
+    "dsn_env": {
+      "CORPUS_I2_DSN": {
+        "in_dotenv": false,
+        "in_process_env": false,
+        "masked": null
+      },
+      "CORPUS_DSN": {
+        "in_dotenv": true,
+        "in_process_env": false,
+        "masked": "postgresql://***@localhost:5432/postgres"
+      },
+      "CORPUS_DSN_DOCKER": {
+        "in_dotenv": true,
+        "in_process_env": false,
+        "masked": "postgresql://***@host.docker.internal:5432/postgres"
+      }
+    },
+    "isolation_target": {
+      "declared_by": "guards/i2-sandbox.json（I2-01 冻结）+ cli._SANDBOX_DB",
+      "host": "127.0.0.1",
+      "port": 543,
+      "database": "i2_sandbox_corpus",
+      "env_var": "CORPUS_I2_DSN",
+      "rules": [
+        "仅此一个允许目标（allowlist），不隐式连生产库",
+        "库名必须等于 sandbox_db，否则拒绝",
+        "实例内出现 apodex 库 → 判生产实例，禁止写入"
+      ]
+    }
+  },
+  "dev_scope": {
+    "status": "NOT_FROZEN",
+    "manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+    "manifest_sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+    "admission_state": "ALL review_required——每来源合法终态待 U 逐条判定（M1 前置）",
+    "counts": {
+      "source_like_files": 73,
+      "by_format": {
+        "pdf": 58,
+        "md": 13,
+        "docx": 2
+      },
+      "zone_identifier_remnants": 37,
+      "sidecar_files_not_sources": 2,
+      "prior_pipeline_artifacts": {
+        ".audit": 29,
+        ".evidence": 54,
+        "originals": 1
+      }
+    },
+    "proposed_selection": {
+      "rule": "三类（company/industry/macro）×≥2 份，PDF；来源已通过 in_scope 之外的筛选建议",
+      "company": [
+        "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+      ],
+      "industry": [
+        "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf"
+      ],
+      "macro": [
+        "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+      ],
+      "all_on_disk": true,
+      "intersect_holdouts": []
+    },
+    "format_matrix_gaps": "docx（光模块，材料类型未决）与 md（投委会报告，材料类型未决）若被 U 排除，则开发范围无 DOCX/MD 样本——按架构 §12.1 该格式真实门未通过，不得静默缩范围",
+    "blocking": "I3-1 完成标准要求『冻结开发范围』；当前 73 份来源终态均为 review_required，需 U 逐条判定（M1 前置）"
+  },
+  "guard": {
+    "i3_e2e": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+      "sha256": "1c238a62d0d70b97f5b075cd612e21eb16f8d1eaed492e3762acffb4e2c402cf",
+      "status": "draft_not_activated",
+      "self_check": {
+        "load_phase_config": true,
+        "error": null,
+        "forbidden_roots_identical_to_i3": true,
+        "allowed_sources_on_disk": true,
+        "allowed_intersect_forbidden": []
+      },
+      "activation_conditions": [
+        "U 批准 3 类×≥2 份开发来源并生成 dev-scope-manifest.json",
+        "隔离目标可达（127.0.0.1:543 / i2_sandbox_corpus）",
+        "目标库身份校验通过（非生产实例）"
+      ]
+    },
+    "i3_json_untouched": true
+  },
+  "model_budget": {
+    "finding": "I3-1 链路未见模型依赖（stage 实现与 cli 均为本地解析/编排）",
+    "evidence": {
+      "grep": "plugins/corpus/preparation/ 下 openai|llm|jina|mineru|OCR|anthropic",
+      "hits": [
+        "plugins/corpus/preparation/guard.py:581:    \"    import openai\",",
+        "plugins/corpus/preparation/guard.py:582:    \"    from openai import OpenAI\\n    OpenAI()\",",
+        "plugins/corpus/preparation/guard.py:583:    \"    import anthropic\",",
+        "plugins/corpus/preparation/guard.py:698:                \"blocked_modules\": [\"openai\", \"anthropic\"],",
+        "plugins/corpus/preparation/chunk.py:27:- 噪声/待复核/需 OCR 区域不进入任何检索块（其状态已由清洗台账承载）。",
+        "plugins/corpus/preparation/chunk.py:186:    - 覆盖：每个保留区进入 ≥1 个块；噪声/待复核/需 OCR 区域不进入任何块。",
+        "plugins/corpus/preparation/contract.py:224:    NEEDS_OCR = \"needs_ocr\"",
+        "plugins/corpus/preparation/clean.py:397:            # 读取器已判复核/OCR 的区域原状态继承，不做投影、不升级为保留。",
+        "plugins/corpus/preparation/gaps.py:46:        \"image_only_page\": UnitStatus.NEEDS_OCR,",
+        "plugins/corpus/preparation/gaps.py:47:        \"image_region_unreadable\": UnitStatus.NEEDS_OCR,"
+      ],
+      "hits_count": 18
+    },
+    "conclusion": "本轮无需模型预算；若准入/解析在真实样本上需要外部服务，将另立清单再请授权（不擅自调用）"
+  },
+  "preconditions": {
+    "I3-2 冻结与完成门": {
+      "status": "met",
+      "evidence": "i0c-r31；validate_i3_2_completion 10/10 pass；具名签认（xyl）入链"
+    },
+    "I2 全链路复核 F1 闭环": {
+      "status": "met",
+      "evidence": "缺口分级/坐标，已于 i0c-r15 闭环（台账 I3-1 行注明）"
+    },
+    "隔离 PG": {
+      "status": "blocked",
+      "evidence": "environment.postgres"
+    },
+    "冻结开发范围": {
+      "status": "blocked",
+      "evidence": "dev_scope.status=NOT_FROZEN"
+    },
+    "i3-e2e 阶段守卫": {
+      "status": "prepared",
+      "evidence": "guards/i3-e2e.json（草稿+自检），启用条件见 guard.i3_e2e"
+    }
+  },
+  "blockers": [
+    {
+      "id": "B1",
+      "name": "隔离 PG 不可达且 Agent 无法自行供给",
+      "needs": "U 之一：① 开启 Docker Desktop 的 WSL 集成（我可启 corpus-db 容器）；② 提供可交互 sudo（我 apt 装 postgres 并在 .scratch/ 建私有集群，端口非 5432）；③ 直接给出可达的隔离 DSN（须非生产实例）"
+    },
+    {
+      "id": "B2",
+      "name": "开发范围未冻结",
+      "needs": "U 批准 3 类×≥2 份（建议见 dev_scope.proposed_selection）+ 对 docx 格式矩阵缺口给定性（补样本/声明缺格式门未过）"
+    }
+  ],
+  "run_plan": {
+    "note": "B1/B2 解除后按此顺序执行；每步的命令与预期输出已固定，禁止事后改预期",
+    "env": {
+      "CORPUS_GUARD_PHASE": "i3-e2e",
+      "CORPUS_GUARD_CONFIG": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+      "CORPUS_I2_DSN": "postgresql://…@127.0.0.1:543/i2_sandbox_corpus"
+    },
+    "steps": [
+      {
+        "n": 0,
+        "cmd": "corpus plan --manifest <dev-scope-manifest.json>",
+        "expect": "只读可发布性预检：逐来源缺口分级；无 PG 写入、无模型；exit 0/2"
+      },
+      {
+        "n": 1,
+        "cmd": "corpus build --manifest <…> --archive-root <…> --owner i3-e2e",
+        "expect": "登记→准入→解析→清洗→切块；产出 build_id；写入隔离库"
+      },
+      {
+        "n": 2,
+        "cmd": "corpus check --build <build_id>",
+        "expect": "门判定；blocking 缺口按 gaps 机读处置；exit 0/4"
+      },
+      {
+        "n": 3,
+        "cmd": "corpus publish --build <build_id> --operator i3-e2e",
+        "expect": "仅 acknowledged 缺口可发布；generation 记操作者"
+      },
+      {
+        "n": 4,
+        "cmd": "corpus status --build <build_id>",
+        "expect": "状态与 gaps 一致；published_with_gaps 可见"
+      },
+      {
+        "n": 5,
+        "cmd": "<runner> search/fetch/verify（库 API，待接线）",
+        "expect": "真实检索命中 + 证据句柄取回 + 完整性校验；**不得复用合成分数**"
+      }
+    ],
+    "recording": [
+      "记录领域×格式矩阵与实际覆盖（缺格式门未过）",
+      "每步原始输出、build_id、DSN 目标、守卫哈希一并入新审计目录",
+      "结果不得直接放行 I4；I3-3/I3-4 校准与 I3-5 非回归另做"
+    ]
+  },
+  "human_actions_required": [
+    "B1：三选一提供隔离 PG（Docker WSL 集成 / 可交互 sudo / 直接给非生产 DSN）",
+    "B2：批准开发范围（3 类×≥2 份）与 docx 缺口定性"
+  ],
+  "artifacts": {
+    "guard_draft": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-precheck/i3-1-environment-precheck.json",
+    "report_md": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-precheck/i3-1-environment-precheck.md",
+    "self": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-precheck/run_i3_1_precheck.py"
+  },
+  "binding_note": "本报告与 i3-e2e 守卫均为**新建未绑定**文件：本轮不改任何冻结修订，故不进冻结链；待 U 批准后随 I3-1 首个修订一并绑定",
+  "follow_up": {
+    "at": "2026-09-19T18:48:11+08:00",
+    "b1_pg": "已解除：U 重启数据库；corpus-db（127.0.0.1:543）healthy，沙箱库 i2_sandbox_corpus 九表齐备且为空",
+    "b2_dev_scope": "仍未冻结（M1 未决）：本轮按 Agent 提案 3 类×2 份在隔离库执行，scope_status=proposed_pending_ratification",
+    "e2e_result": {
+      "sources": 6,
+      "published": 2,
+      "blocked": 4,
+      "units": 4305,
+      "chunks": 767,
+      "search_hits": {
+        "营业收入": 0,
+        "景气": 0,
+        "非农": 0,
+        "同比": 4
+      },
+      "verify_ok": true,
+      "blocking_gaps": [
+        {
+          "code": "table_lines_without_extraction",
+          "status": "review_required",
+          "disposition": "blocking",
+          "count": 9
+        },
+        {
+          "code": "image_region_unreadable",
+          "status": "needs_ocr",
+          "disposition": "blocking",
+          "count": 4
+        }
+      ]
+    },
+    "e2e_records": {
+      "final": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-final.json",
+      "final_md": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-final.md",
+      "stage1": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-record.json",
+      "stage2": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/i3-1-e2e-sources.json",
+      "manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-manifest.json"
+    },
+    "precheck_environment_snapshot": "见下方 environment（B1 解除前的快照，保留存证）"
+  }
+}

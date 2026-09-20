@@ -1,0 +1,89 @@
+{
+  "artifact": "i3-1-retraction-record",
+  "generated_at": "2026-09-19T22:31:38+08:00",
+  "authorized_by": "U（2026-09-19：『撤回 c1/c2/c3…改回照批准集 + 缺口如实登记，落地自检脚本』）",
+  "items": [
+    {
+      "id": "C1",
+      "what": "2 份投委会报告 MD 进入 I3-1 范围",
+      "action": "从范围移除；守卫允许路径已重置为批准集 6 份；scope-v2 记录标 withdrawn（保留证据）",
+      "why": "i0a2 裁定 excluded_from_active/internal_committee_report；我此前以新决定 supersede 了该裁定并把 material_type 写成 research_report（类型失真）",
+      "data_layer": "沙箱重置 pending（Docker 不可用）"
+    },
+    {
+      "id": "C2",
+      "what": "无署名 DOCX（光模块）进入 I3-1 范围",
+      "action": "同上移除",
+      "why": "i0a2 裁定 excluded_from_active/internal_unattributed",
+      "data_layer": "沙箱重置 pending"
+    },
+    {
+      "id": "C3",
+      "what": "『换料』替换了 U 批准集 6 份中的 4 份（自选 5 份零阻断 PDF）",
+      "action": "撤回自选；范围改回批准集；自选样本仍在语料中（多数为 admitted），仅**不作为开发集**使用",
+      "why": "范围偏离：admitted 但不在 dev_selection_approved 内，属未获批准的开发集替换",
+      "data_layer": "沙箱重置 pending"
+    },
+    {
+      "id": "C4",
+      "what": "『开发范围未冻结/待追认』的错误表述",
+      "action": "已更正为：范围由 U 2026-09-15 批准（i0a2.dev_selection_approved）；缺的是格式覆盖与缺口处置",
+      "why": "我读了 dev-manifest 的旧文案（dev_selection_candidates『待 U 批准』），未核对权威源",
+      "data_layer": "—"
+    }
+  ],
+  "preflight_checker": {
+    "path": "preflight_scope_check.py",
+    "on_withdrawn_scope": {
+      "file": "preflight-scope-check.withdrawn.json",
+      "summary": {
+        "sources": 11,
+        "pass": 2,
+        "fail": 9,
+        "adjudication_conflicts": 3,
+        "scope_drifts": 6,
+        "approved_dev_selection_size": 6,
+        "formats_covered_by_pass_set": [
+          "pdf"
+        ],
+        "verdict": "FAIL"
+      }
+    },
+    "on_approved_set": {
+      "file": "preflight-scope-check.json",
+      "summary": {
+        "sources": 6,
+        "pass": 6,
+        "fail": 0,
+        "adjudication_conflicts": 0,
+        "scope_drifts": 0,
+        "approved_dev_selection_size": 6,
+        "formats_covered_by_pass_set": [
+          "pdf"
+        ],
+        "verdict": "PASS"
+      }
+    }
+  },
+  "guard_reset": {
+    "allowed_before": 15,
+    "allowed_after": 6,
+    "removed": [
+      "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "data/corpus/仕佳光子_投委会决策报告_20260831.md",
+      "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "data/corpus/天孚通信_投委会决策报告_20260830.md"
+    ],
+    "sha256": "279d86662d5eca528aaa75fea3ccb0b8b59ec0b8ff460e23f56ef9f6e9dbeba5"
+  },
+  "not_touched": [
+    "i0a2-adjudicated-20260915.json（权威裁定）",
+    "queries/frozen 件",
+    "冻结链修订"
+  ]
+}

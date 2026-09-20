@@ -19,7 +19,17 @@ from docx import Document
 
 from plugins.corpus.preparation.contract import UnitStatus
 from plugins.corpus.preparation.readers import ReaderError, read_document
-from plugins.corpus.preparation.readers.pdf_reader import _garbled_ratio
+from plugins.corpus.preparation.readers.pdf_reader import (
+    _detect_header_rows,
+    _emit_table,
+    _garbled_ratio,
+    _is_data_like,
+    _row_text,
+    _Table,
+    _TableCell,
+    _TableModel,
+    _TableRow,
+)
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -221,6 +231,32 @@ def test_pdf_multicolumn_flagged_and_covered(tmp_path: Path) -> None:
     assert left_first < right_first  # 阅读次序：先左栏后右栏
 
 
+def test_pdf_true_two_column_native_order_kept(tmp_path: Path) -> None:
+    """真双栏且内容流按整栏写入：原生序本身即「先左栏后右栏」，不需要强制重排。
+
+    这是关闭 `_split_columns` 强制左→右重排后的正对照：证明移除重排不会让真正的
+    双栏文档串行（I3-3 关闭重排的唯一语义风险）。
+    """
+    doc = pymupdf.open()
+    page = doc.new_page()
+    ys = (80, 100, 120, 140)
+    for index, y in enumerate(ys):  # 整栏写：先写满左栏，再写满右栏
+        page.insert_text((60, y), f"LEFT{index} alpha beta", fontsize=11)
+    for index, y in enumerate(ys):
+        page.insert_text((360, y), f"RIGHT{index} gamma delta", fontsize=11)
+    path = tmp_path / "columns_native.pdf"
+    doc.save(str(path))
+    doc.close()
+
+    result = read_document(path)
+    assert "multi_column_order_unreliable" in [issue.code for issue in result.issues]
+    order = [u.raw_text for u in result.units]
+    left_idx = [i for i, text in enumerate(order) if "LEFT" in text]
+    right_idx = [i for i, text in enumerate(order) if "RIGHT" in text]
+    assert left_idx and right_idx
+    assert max(left_idx) < min(right_idx)  # 原生序已是先左栏后右栏
+
+
 def test_pdf_table_rows_no_silent_duplication(tmp_path: Path) -> None:
     doc = pymupdf.open()
     page = doc.new_page()
@@ -246,15 +282,142 @@ def test_pdf_table_rows_no_silent_duplication(tmp_path: Path) -> None:
     assert len(rows) >= 3
     table_text = "\n".join(u.raw_text for u in rows)
     assert "2024" in table_text and "9901" in table_text and "9902" in table_text
+    assert "|" not in table_text  # I1：不得插入原文没有的字符（旧实现插入 " | "）
     prose = [u for u in result.units if u.kind != "table_row"]
     assert not any("9901" in u.raw_text or "9902" in u.raw_text for u in prose)
     assert "table_text_overlap" in [issue.code for issue in result.issues]
+
+
+def test_table_row_text_invariants_native_order_and_source_characters() -> None:
+    """表格行发射的两条不变量（I3-3 表格类引文失败的共因）。
+
+    I1（字符保真）：单元格之间只用换行，不插入原文没有的字符。
+    I2（顺序保真）：文本顺序服从原生阅读序；网格行列只作为 locator 元数据下发，
+    不参与文本重排。
+    """
+    row = _TableRow(
+        cells=(
+            _TableCell(text="产品", row=0, col=1, native_pos=2),
+            _TableCell(text="产能（万吨/年）", row=0, col=9, native_pos=1),  # 内容流里先画
+            _TableCell(text="价格分位", row=0, col=6, native_pos=3),
+        )
+    )
+    text, cells = _row_text(row)
+    assert text == "产能（万吨/年）\n产品\n价格分位"  # 原生序，而非网格列序
+    assert "|" not in text
+    assert cells == ((0, 9), (0, 1), (0, 6))  # 行列仍在，只是降级为元数据
 
 
 def test_garbled_ratio_helper() -> None:
     assert _garbled_ratio("") == 0.0
     assert _garbled_ratio("正常文本") == 0.0
     assert _garbled_ratio("abc\ufffd\ufffd") == pytest.approx(0.4)
+
+
+# --- 表格结构模型（票 04：确定性表头识别 + 合并单元格 + label_path） ---
+
+
+def test_is_data_like_discriminates_values_from_period_years() -> None:
+    assert _is_data_like("5814.2")
+    assert _is_data_like("32.1")
+    assert _is_data_like("89.9%")
+    assert _is_data_like("-1,234.5")
+    assert not _is_data_like("尿素")
+    assert not _is_data_like("2023 2024 2025")  # 裸 4 位年份是期间标签，非数据值
+
+
+def test_detect_header_rows_stops_at_data_rows_and_skips_sparse() -> None:
+    # 数据形态占比 ≥50% 即停；稀疏行（整行合并标题）跳过不计数
+    grid = [
+        ["开工率", "价差", "产能", "价格分位"],
+        ["尿素", "5814.2", "32.1", "89.9%"],
+        ["纯碱", "6728.3", "10.9", "82.9%"],
+    ]
+    assert _detect_header_rows(grid) == (0,)
+    sparse = [
+        ["表 6 主要化工品景气跟踪"],  # 稀疏行：非空 <2，跳过
+        ["产品", "开工率", "产能"],
+        ["尿素", "32.1", "100"],
+    ]
+    assert _detect_header_rows(sparse) == (1,)
+    # 表头期间行（裸 4 位年份）豁免为表头而非数据行
+    with_years = [
+        ["产品", "2023", "2024", "2025"],
+        ["尿素", "5814.2", "32.1", "89.9%"],
+    ]
+    assert _detect_header_rows(with_years) == (0,)
+
+
+def test_table_model_label_path_merged_headers() -> None:
+    """I-B1 读侧投影：多级表头 + 合并单元格按 bbox 覆盖继承列标签。
+
+    ``开工率`` 跨列 2-3 合并（覆盖位 None）；``col_labels`` 自下而上遍历表头行，
+    数据行锚定单元格的列中心落入合并 bbox 即继承标签。
+    """
+    model = _TableModel(
+        page=10,
+        table_index=0,
+        header_rows=(0, 1),
+        grid=(
+            (None, "产品", "开工率", None),  # 合并单元格：开工率 横跨列 2-3
+            ("周期", "尿素", "纯碱", "纯碱"),
+            (None, "尿素", "5814.2", "8068.0"),  # 数据行
+        ),
+        anchored=(
+            ((1, (100.0, 200.0)), (2, (200.0, 400.0))),  # 合并 bbox 覆盖列 2-3
+            ((0, (50.0, 100.0)), (1, (100.0, 200.0)), (2, (200.0, 300.0)), (3, (300.0, 400.0))),
+            ((1, (100.0, 200.0)), (2, (200.0, 300.0)), (3, (300.0, 400.0))),
+        ),
+    )
+    # 数据行 cell(2, 3)：行标签 尿素 + 列标签链（纯碱 ← 开工率）
+    assert model.label_path(2, 3) == ("尿素", "纯碱", "开工率")
+    # cell(2, 2) 同属纯碱 列，且开工率 合并 bbox 覆盖列 2-3 → 同样继承完整链
+    assert model.label_path(2, 2) == ("尿素", "纯碱", "开工率")
+    # 表头行无行标签
+    assert model.label_path(1, 2) == ("纯碱", "开工率")
+    # 覆盖位空单元格不猜测内容
+    assert model.cell_text(0, 3) == ""
+
+
+def test_emit_table_model_label_path_aligned_and_row_text_untouched() -> None:
+    """保真反例：带 model 的表格发射不触碰原文。
+
+    ``raw_text`` 与 ``_row_text`` 逐字节一致（仍按 native_pos 排序、只用换行连接，
+    不插入 ``" | "``）；``label_path`` 与 ``cells`` 一一对齐（I-B1 读侧落点）。
+    """
+    model = _TableModel(
+        page=10,
+        table_index=0,
+        header_rows=(0,),
+        grid=(
+            ("产品", "开工率", "产能"),
+            ("尿素", "89.9%", "100"),
+        ),
+        anchored=(
+            ((0, (50.0, 100.0)), (1, (100.0, 200.0)), (2, (200.0, 300.0))),
+            ((0, (50.0, 100.0)), (1, (100.0, 200.0)), (2, (200.0, 300.0))),
+        ),
+    )
+    row = _TableRow(
+        cells=(
+            _TableCell(text="产能", row=1, col=2, native_pos=0),
+            _TableCell(text="尿素", row=1, col=0, native_pos=1),
+            _TableCell(text="89.9%", row=1, col=1, native_pos=2),
+        )
+    )
+    table = _Table(index=0, bbox=(50.0, 300.0, 300.0, 330.0), rows=[row], model=model)
+    units: list[object] = []
+    issues: list[object] = []
+    _emit_table(table, 0, page_no=10, page_lines=[], units=units, issues=issues)
+    assert len(units) == 1
+    unit = units[0]  # type: ignore[attr-defined]
+    text, cells = _row_text(row)
+    assert unit.raw_text == text == "产能\n尿素\n89.9%"  # 原生序 + 纯换行，不插 " | "
+    assert unit.location.cells == cells == ((1, 2), (1, 0), (1, 1))
+    assert len(unit.location.label_path) == len(cells)
+    # label_path 与 cells 顺序对齐（原生序）：产能→(尿素, 产能)、尿素→(尿素, 产品)、89.9%→(尿素, 开工率)
+    assert unit.location.label_path == ("尿素 产能", "尿素 产品", "尿素 开工率")
+    assert "|" not in unit.raw_text
 
 
 # --- 开发材料 smoke（守卫允许清单内的 6 份真实 PDF，只读） ---
@@ -271,7 +434,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-2+")
+        assert result.extractor_rev.startswith("reader-pdf-6+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:
@@ -282,7 +445,5 @@ def test_readers_do_not_import_pg_or_model_client() -> None:
         " 'openai', 'anthropic') if m in sys.modules];"
         "print(f'leaked: {bad}'); sys.exit(1 if bad else 0)"
     )
-    proc = subprocess.run(
-        [sys.executable, "-c", code], capture_output=True, text=True, check=False
-    )
+    proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False)
     assert proc.returncode == 0, proc.stdout + proc.stderr

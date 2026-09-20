@@ -1,0 +1,1417 @@
+{
+  "artifact": "i3-1-e2e-record",
+  "phase": "i3-1",
+  "generated_at": "2026-09-19T18:46:24+08:00",
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "database": "i2_sandbox_corpus",
+    "host": "127.0.0.1",
+    "port": 543
+  },
+  "guard": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "sha256": "1c238a62d0d70b97f5b075cd612e21eb16f8d1eaed492e3762acffb4e2c402cf",
+    "installed": true,
+    "poisoned_env": [
+      "OPENAI_API_KEY"
+    ],
+    "poisoned_dsn": [
+      "CORPUS_DSN"
+    ]
+  },
+  "scope_status": "proposed_pending_ratification",
+  "scope_note": "dev-manifest.json 的 73 份来源终态均为 review_required（M1 前置未决）。本轮按 Agent 提案的 3 类×2 份在隔离库执行，登记的审核决定作者已写明『Agent 提案，待 U 追认』；**本记录不构成开发范围冻结，也不宣告 I3-1 完成**。",
+  "steps": {
+    "plan": {
+      "argv": [
+        "plan",
+        "--manifest",
+        "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-manifest.json",
+        "--dsn",
+        "postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus"
+      ],
+      "exit_code": 0,
+      "seconds": 5.4,
+      "output": {
+        "raw": "Consider using the pymupdf_layout package for a greatly improved page layout analysis.\n{\n  \"ok\": true,\n  \"command\": \"plan\",\n  \"policy_rev\": \"v1-20260915\",\n  \"count\": 6,\n  \"gap_policy_rev\": \"gap-policy-1\",\n  \"entries\": [\n    {\n      \"path\": \"data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf\",\n      \"original_name\": \"2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf\",\n      \"format\": \"pdf\",\n      \"size_bytes\": 2101147,\n      \"domain_hint\": \"company\",\n      \"review_decision_ids\": [\n        \"i3e2e-company-2b36f14b\"\n      ],\n      \"precheck\": {\n        \"scope\": \"unscoped_precheck\",\n        \"publishable_prejudgement\": false,\n        \"gap_summary\": {\n          \"total\": 8,\n          \"blocking\": 1,\n          \"acknowledged\": 7,\n          \"out_of_scope\": 0,\n          \"policy_rev\": \"gap-policy-1\"\n        },\n        \"gaps\": [\n          {\n            \"key\": \"issue:image_region_small:page:1\",\n            \"code\": \"image_region_small\",\n            \"location\": \"page:1\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 1\n            },\n            \"status\": \"noise\",\n            \"disposition\": \"acknowledged\",\n            \"lifecycle\": \"acknowledged\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围\"\n          },\n          {\n            \"key\": \"issue:image_region_small:page:2\",\n            \"code\": \"image_region_small\",\n            \"location\": \"page:2\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 2\n            },\n            \"status\": \"noise\",\n            \"disposition\": \"acknowledged\",\n            \"lifecycle\": \"acknowledged\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围\"\n          },\n          {\n            \"key\": \"issue:image_region_unreadable:page:2\",\n            \"code\": \"image_region_unreadable\",\n            \"location\": \"page:2\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 2\n            },\n            \"status\": \"needs_ocr\",\n            \"disposition\": \"blocking\",\n            \"lifecycle\": \"blocking\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required\"\n          },\n          {\n            \"key\": \"issue:image_region_small:page:3\",\n            \"code\": \"image_region_small\",\n            \"location\": \"page:3\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 3\n            },\n            \"status\": \"noise\",\n            \"disposition\": \"acknowledged\",\n            \"lifecycle\": \"acknowledged\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围\"\n          },\n          {\n            \"key\": \"issue:image_region_small:page:4\",\n            \"code\": \"image_region_small\",\n            \"location\": \"page:4\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 4\n            },\n            \"status\": \"noise\",\n            \"disposition\": \"acknowledged\",\n            \"lifecycle\": \"acknowledged\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围\"\n          },\n          {\n            \"key\": \"issue:image_region_small:page:5\",\n            \"code\": \"image_region_small\",\n            \"location\": \"page:5\",\n            \"coordinates\": {\n              \"kind\": \"page\",\n              \"page\": 5\n            },\n            \"status\": \"noise\",\n            \"disposition\": \"acknowledged\",\n            \"lifecycle\": \"acknowledged\",\n            \"basis\": \"default_grading_table:gap-policy-1\",\n            \"remedy\": \"阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围\"\n          },\n          {\n            \"key\": \"issue:image_region_small:page:6\",\n            \"code\": \"image_region_small\",\n            \"location"
+      }
+    },
+    "build": {
+      "argv": [
+        "build",
+        "--manifest",
+        "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-manifest.json",
+        "--dsn",
+        "postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus",
+        "--owner",
+        "i3-e2e",
+        "--archive-root",
+        "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/archive"
+      ],
+      "exit_code": 0,
+      "seconds": 9.14,
+      "output": {
+        "ok": true,
+        "command": "build",
+        "owner_id": "i3-e2e",
+        "archive_root": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/archive",
+        "count": 6,
+        "outcomes": [
+          {
+            "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+            "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+            "decision_id": "8d38eba3375b225ea0e2556156f3ba44bf6a8cb1e20b7165523c34510f14ed44",
+            "decision": "in_scope",
+            "build_id": "a95779f6872d9e6103bcc755e947070e46a9ae6ec45f6156087356bdfc18b58f",
+            "unit_count": 778,
+            "chunk_count": 25,
+            "source_reused": false,
+            "archive_reused": false
+          },
+          {
+            "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+            "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+            "decision_id": "c18be2592012818f61e1cb0a5a9f53d73c91bbbaa84ff4b13b9a378dc59b8d97",
+            "decision": "in_scope",
+            "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+            "unit_count": 798,
+            "chunk_count": 198,
+            "source_reused": false,
+            "archive_reused": false
+          },
+          {
+            "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+            "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+            "decision_id": "5b7b8eff2972c3cc6350cbe89c7f50536e53948e9a69f776c709f133ce01a890",
+            "decision": "in_scope",
+            "build_id": "b7291df6abc1bed46d56e39f44eb594f61c172019f214a70e6fe226fb05facf4",
+            "unit_count": 1518,
+            "chunk_count": 282,
+            "source_reused": false,
+            "archive_reused": false
+          },
+          {
+            "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+            "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+            "decision_id": "70d9f1f319580c060529f3ca37b0d205106b28dfbaf452f28f7dffe53b7bbe6a",
+            "decision": "in_scope",
+            "build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+            "unit_count": 258,
+            "chunk_count": 54,
+            "source_reused": false,
+            "archive_reused": false
+          },
+          {
+            "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+            "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+            "decision_id": "345f60a9c3667f14e548e5e187942cf45fcbca82083be6645bfd3782b84c04f9",
+            "decision": "in_scope",
+            "build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+            "unit_count": 258,
+            "chunk_count": 21,
+            "source_reused": false,
+            "archive_reused": false
+          },
+          {
+            "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+            "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+            "decision_id": "43a81635d7a83a7c1c237a64be7d2297b4fc0250420153094b7602910263e2e5",
+            "decision": "in_scope",
+            "build_id": "bf06d59c7c6639e10abe854485b063a818114fd9b38872a16cbec1e56a3f6a28",
+            "unit_count": 695,
+            "chunk_count": 187,
+            "source_reused": false,
+            "archive_reused": false
+          }
+        ],
+        "hint": "build 不自动发布；发布请用 publish --build <id> --operator <who>"
+      }
+    },
+    "check": {
+      "argv": [
+        "check",
+        "--build",
+        "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+        "--dsn",
+        "postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus"
+      ],
+      "exit_code": 4,
+      "seconds": 0.01,
+      "output": {
+        "ok": false,
+        "command": "check",
+        "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "publishable": false,
+        "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）",
+        "gap_policy_rev": "gap-policy-1",
+        "gap_summary": {
+          "total": 23,
+          "blocking": 1,
+          "acknowledged": 22,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "location": "page:1",
+            "coordinates": {
+              "kind": "page",
+              "page": 1
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "location": "page:10",
+            "coordinates": {
+              "kind": "page",
+              "page": 10
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "location": "page:11",
+            "coordinates": {
+              "kind": "page",
+              "page": 11
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "location": "page:12",
+            "coordinates": {
+              "kind": "page",
+              "page": 12
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "location": "page:13",
+            "coordinates": {
+              "kind": "page",
+              "page": 13
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "location": "page:14",
+            "coordinates": {
+              "kind": "page",
+              "page": 14
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "location": "page:15",
+            "coordinates": {
+              "kind": "page",
+              "page": 15
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "location": "page:16",
+            "coordinates": {
+              "kind": "page",
+              "page": 16
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "location": "page:17",
+            "coordinates": {
+              "kind": "page",
+              "page": 17
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "location": "page:18",
+            "coordinates": {
+              "kind": "page",
+              "page": 18
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "location": "page:19",
+            "coordinates": {
+              "kind": "page",
+              "page": 19
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "location": "page:2",
+            "coordinates": {
+              "kind": "page",
+              "page": 2
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "location": "page:20",
+            "coordinates": {
+              "kind": "page",
+              "page": 20
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "location": "page:21",
+            "coordinates": {
+              "kind": "page",
+              "page": 21
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "location": "page:22",
+            "coordinates": {
+              "kind": "page",
+              "page": 22
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "location": "page:3",
+            "coordinates": {
+              "kind": "page",
+              "page": 3
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "location": "page:4",
+            "coordinates": {
+              "kind": "page",
+              "page": 4
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "location": "page:5",
+            "coordinates": {
+              "kind": "page",
+              "page": 5
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "location": "page:6",
+            "coordinates": {
+              "kind": "page",
+              "page": 6
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "location": "page:7",
+            "coordinates": {
+              "kind": "page",
+              "page": 7
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "location": "page:8",
+            "coordinates": {
+              "kind": "page",
+              "page": 8
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "location": "page:9",
+            "coordinates": {
+              "kind": "page",
+              "page": 9
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:7",
+            "code": "image_region_unreadable",
+            "location": "page:7",
+            "coordinates": {
+              "kind": "page",
+              "page": 7
+            },
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "lifecycle": "blocking",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          }
+        ],
+        "recovery": [
+          {
+            "gap": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_unreadable:page:7",
+            "code": "image_region_unreadable",
+            "lifecycle": "blocking",
+            "stage": "PARSED",
+            "action": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required",
+            "command": "uv run python -m plugins.corpus.cli build --manifest <manifest.json>（重跑该来源）"
+          }
+        ]
+      }
+    },
+    "publish": {
+      "argv": [
+        "publish",
+        "--build",
+        "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+        "--operator",
+        "i3-e2e",
+        "--dsn",
+        "postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus"
+      ],
+      "exit_code": 4,
+      "seconds": 0.01,
+      "output": {
+        "ok": false,
+        "command": "publish",
+        "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）"
+      }
+    },
+    "status": {
+      "argv": [
+        "status",
+        "--build",
+        "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+        "--dsn",
+        "postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus"
+      ],
+      "exit_code": 0,
+      "seconds": 0.02,
+      "output": {
+        "ok": true,
+        "command": "status",
+        "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "decision_id": "c18be2592012818f61e1cb0a5a9f53d73c91bbbaa84ff4b13b9a378dc59b8d97",
+        "admission": "in_scope",
+        "failed_stages": [],
+        "jobs": [
+          {
+            "stage": "registered",
+            "job": null
+          },
+          {
+            "stage": "admission_decided",
+            "job": null
+          },
+          {
+            "stage": "parsed",
+            "job": {
+              "attempt": 1,
+              "state": "succeeded",
+              "owner_id": "i3-e2e",
+              "error": null,
+              "checkpoint": null
+            }
+          },
+          {
+            "stage": "cleaned",
+            "job": null
+          },
+          {
+            "stage": "chunked",
+            "job": {
+              "attempt": 1,
+              "state": "succeeded",
+              "owner_id": "i3-e2e",
+              "error": null,
+              "checkpoint": null
+            }
+          },
+          {
+            "stage": "staged",
+            "job": null
+          },
+          {
+            "stage": "indexed",
+            "job": null
+          },
+          {
+            "stage": "verified",
+            "job": null
+          },
+          {
+            "stage": "published",
+            "job": null
+          }
+        ],
+        "gap_policy_rev": "gap-policy-1",
+        "gap_summary": {
+          "total": 23,
+          "blocking": 1,
+          "acknowledged": 22,
+          "out_of_scope": 0,
+          "policy_rev": "gap-policy-1"
+        },
+        "gaps": [
+          {
+            "key": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "location": "page:1",
+            "coordinates": {
+              "kind": "page",
+              "page": 1
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "location": "page:10",
+            "coordinates": {
+              "kind": "page",
+              "page": 10
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "location": "page:11",
+            "coordinates": {
+              "kind": "page",
+              "page": 11
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "location": "page:12",
+            "coordinates": {
+              "kind": "page",
+              "page": 12
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "location": "page:13",
+            "coordinates": {
+              "kind": "page",
+              "page": 13
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "location": "page:14",
+            "coordinates": {
+              "kind": "page",
+              "page": 14
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "location": "page:15",
+            "coordinates": {
+              "kind": "page",
+              "page": 15
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "location": "page:16",
+            "coordinates": {
+              "kind": "page",
+              "page": 16
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "location": "page:17",
+            "coordinates": {
+              "kind": "page",
+              "page": 17
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "location": "page:18",
+            "coordinates": {
+              "kind": "page",
+              "page": 18
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "location": "page:19",
+            "coordinates": {
+              "kind": "page",
+              "page": 19
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "location": "page:2",
+            "coordinates": {
+              "kind": "page",
+              "page": 2
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "location": "page:20",
+            "coordinates": {
+              "kind": "page",
+              "page": 20
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "location": "page:21",
+            "coordinates": {
+              "kind": "page",
+              "page": 21
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "location": "page:22",
+            "coordinates": {
+              "kind": "page",
+              "page": 22
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "location": "page:3",
+            "coordinates": {
+              "kind": "page",
+              "page": 3
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "location": "page:4",
+            "coordinates": {
+              "kind": "page",
+              "page": 4
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "location": "page:5",
+            "coordinates": {
+              "kind": "page",
+              "page": 5
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "location": "page:6",
+            "coordinates": {
+              "kind": "page",
+              "page": 6
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "location": "page:7",
+            "coordinates": {
+              "kind": "page",
+              "page": 7
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "location": "page:8",
+            "coordinates": {
+              "kind": "page",
+              "page": 8
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "location": "page:9",
+            "coordinates": {
+              "kind": "page",
+              "page": 9
+            },
+            "status": "noise",
+            "disposition": "acknowledged",
+            "lifecycle": "acknowledged",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "key": "issue:image_region_unreadable:page:7",
+            "code": "image_region_unreadable",
+            "location": "page:7",
+            "coordinates": {
+              "kind": "page",
+              "page": 7
+            },
+            "status": "needs_ocr",
+            "disposition": "blocking",
+            "lifecycle": "blocking",
+            "basis": "default_grading_table:gap-policy-1",
+            "remedy": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required"
+          }
+        ],
+        "recovery": [
+          {
+            "gap": "issue:image_region_small:page:1",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:10",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:11",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:12",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:13",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:14",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:15",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:16",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:17",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:18",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:19",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:2",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:20",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:21",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:22",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:3",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:4",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:5",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:6",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:7",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:8",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_small:page:9",
+            "code": "image_region_small",
+            "lifecycle": "acknowledged",
+            "stage": "PARSED",
+            "action": "阈值内装饰图已按噪声记账：无需动作；阈值校准属 I3 校准范围"
+          },
+          {
+            "gap": "issue:image_region_unreadable:page:7",
+            "code": "image_region_unreadable",
+            "lifecycle": "blocking",
+            "stage": "PARSED",
+            "action": "混合页大图区未覆盖：补 OCR（该区域）后重建；否则转 review_required",
+            "command": "uv run python -m plugins.corpus.cli build --manifest <manifest.json>（重跑该来源）"
+          }
+        ],
+        "publication": null,
+        "coverage": {
+          "requested_scope_ref": "corpus_schema",
+          "effective_scope_ref": "corpus_publications.active_build_id",
+          "publication_snapshot_ref": "corpus_publications@b37c0c0d63411276251b6608fa320ed6",
+          "processing": "unknown",
+          "query_status": "unknown",
+          "availability": "unknown",
+          "reason_codes": [],
+          "counts": {
+            "sources": 6,
+            "published": 0,
+            "withdrawn": 0,
+            "pending": 0,
+            "failed_jobs": 0,
+            "builds": 6,
+            "published_with_gaps": 0
+          }
+        },
+        "next": "存在 1 处阻断发布的缺口：按 recovery 处置（补 OCR/复核/换料）后重跑 build；或按 §7.3 口径人工裁定"
+      }
+    }
+  },
+  "problems": [],
+  "preflight": {
+    "current_database": "i2_sandbox_corpus",
+    "is_sandbox_db": true,
+    "instance_has_apodex": false,
+    "corpus_schema_present": true,
+    "databases": [
+      "i0b2_verify_apodex",
+      "i0b2_verify_postgres",
+      "i2_sandbox_corpus",
+      "postgres",
+      "template1"
+    ]
+  },
+  "selection": {
+    "company": [
+      "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+    ],
+    "industry": [
+      "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf"
+    ],
+    "macro": [
+      "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+    ]
+  },
+  "selection_on_disk": {
+    "company": [
+      true,
+      true
+    ],
+    "industry": [
+      true,
+      true
+    ],
+    "macro": [
+      true,
+      true
+    ]
+  },
+  "manifest": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/dev-scope-manifest.json",
+    "sha256": "451c1bee02e20ee221c5557f33b2b8e0ab475fc178703acca5cb9b63d570288b",
+    "sources": 6
+  },
+  "build_ids": [
+    "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+    "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+    "a95779f6872d9e6103bcc755e947070e46a9ae6ec45f6156087356bdfc18b58f",
+    "b7291df6abc1bed46d56e39f44eb594f61c172019f214a70e6fe226fb05facf4",
+    "bf06d59c7c6639e10abe854485b063a818114fd9b38872a16cbec1e56a3f6a28",
+    "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8"
+  ],
+  "outcome_decisions": [
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "a95779f6872d9e6103bcc755e947070e46a9ae6ec45f6156087356bdfc18b58f",
+      "material_type": null
+    },
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "3267838741573161a92e57493672f6f882bceda7f84b9d69fc85db85a6481493",
+      "material_type": null
+    },
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "b7291df6abc1bed46d56e39f44eb594f61c172019f214a70e6fe226fb05facf4",
+      "material_type": null
+    },
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "f6ce586247b5c88a6a1091f8f1f194366a14be57c17e664cd6d024a5caa5eca8",
+      "material_type": null
+    },
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "6509bf635ab5dd2a2090fad369b116c744c43d9be842d4c2c6f90569963f2281",
+      "material_type": null
+    },
+    {
+      "source": "?",
+      "decision": "in_scope",
+      "build_id": "bf06d59c7c6639e10abe854485b063a818114fd9b38872a16cbec1e56a3f6a28",
+      "material_type": null
+    }
+  ],
+  "search": [
+    {
+      "query": "营业收入",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "景气",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "非农",
+      "hits": 0,
+      "verified": []
+    },
+    {
+      "query": "同比",
+      "hits": 0,
+      "verified": []
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b37c0c0d63411276251b6608fa320ed6",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [],
+    "counts": {
+      "sources": 6,
+      "published": 0,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 6,
+      "published_with_gaps": 0
+    }
+  },
+  "coverage_with_hits": {
+    "hits": 0,
+    "same_snapshot_ok": false
+  },
+  "audit": {
+    "available": true,
+    "conflicts": [],
+    "counts": {
+      "sources": 6,
+      "admissions": 6,
+      "builds": 6,
+      "units": 4305,
+      "chunks": 767,
+      "active": 0
+    },
+    "codes": []
+  },
+  "matrix": {
+    "domains": {
+      "?": 6
+    },
+    "formats": {
+      "?": 6
+    },
+    "cells": {
+      "company:?": 0,
+      "industry:?": 0,
+      "macro:?": 0
+    },
+    "gaps": [
+      "docx：开发范围无 DOCX 样本 → 缺格式门未过（需 U 定性：补样本 或 声明缺格式）",
+      "pdf：company/industry/macro 各 2 份"
+    ]
+  }
+}
