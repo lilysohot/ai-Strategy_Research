@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import pytest
 
+from plugins.corpus.preparation.cross_boundary import _merge_chunk
+from plugins.corpus.preparation.read_pg import ChunkEvidence, UnitEvidence
 from plugins.corpus.preparation.search_pg import SearchHit, rank_hits
 from plugins.corpus.preparation.selection import (
     BandPolicy,
@@ -25,6 +27,11 @@ from plugins.corpus.preparation.selection import (
     select_band,
     select_structural,
 )
+
+
+def _ws_norm(s: str) -> str:
+    """剥离全部空白，做引文包含判定（与 scorer 空白规约一致）。"""
+    return "".join(ch for ch in s if not ch.isspace())
 
 
 def _hit(
@@ -486,3 +493,114 @@ def test_emit_cells_derives_row_col_on_aligned_grid_only() -> None:
     assert cell.text == "84,679"
     # 派生不改写输入块（冻结 dataclass，字段仍为原值）
     assert chunk.units == (u_header, u_row, u_unaligned, u_pagenone)
+
+
+# --- F4：跨 NOISE/kept 边界联合取证（I-ATT-1 反例） ---
+
+
+def _chunk_with_rating() -> ChunkEvidence:
+    """伪单元对：kept 评级行 u-rating（ord6）+ NOISE 表头 u-title（ord5），同页同水平带。"""
+    rating = UnitEvidence(
+        unit_id="u-rating", raw_text="强推（维持）", page=1, element="paragraph", cells=()
+    )
+    return ChunkEvidence(
+        source_id="S1",
+        build_id="b1",
+        chunk_id="c0",
+        kind="paragraph",
+        title_text=None,
+        section_path=(),
+        units=(rating,),
+        text="强推（维持）",
+        source_ranges=((0, 10),),
+        spans=(("u-rating", 0, 6)),
+        active=True,
+    )
+
+
+def test_cross_boundary_aggregates_noise_header_into_full_quote() -> None:
+    """I-ATT-1：引文横跨 NOISE/kept 时，联合取证取到完整引文且标题序在评级前。
+
+    a-1 反例：前半「贵州茅台（600519）2026 年中报点评」在 NOISE 表头（ord5），
+    后半「强推（维持）」在 kept 评级单元（ord6）。同页 + bbox 垂直重叠 ⇒ 表头按
+    ordinal 保序聚合进块证据，取证路径不静默丢半条。
+    """
+    kept = {
+        "u-rating": (
+            6,
+            "强推（维持）",
+            {"page": 1, "bbox": (0, 80, 500, 120)},
+            "ch",
+            ("heading_by_font_size",),
+        ),
+    }
+    noise = {
+        "u-title": (
+            5,
+            "贵州茅台（600519）2026 年中报点评",
+            {"page": 1, "bbox": (0, 40, 500, 110)},
+            "ch",
+            ("header_repeated_geometric", "heading_by_font_size"),
+        ),
+    }
+    merged = _merge_chunk(_chunk_with_rating(), kept, noise)
+    full = _ws_norm(merged.text)
+    assert "贵州茅台（600519）2026年中报点评" in full
+    assert "强推（维持）" in full
+    # 序正确：标题（ord5）位于评级（ord6）之前
+    assert full.index("贵州茅台（600519）") < full.index("强推（维持）")
+
+    # spans 自洽：按 (uid, start, end) 重建（单元间 "\n" 分隔）逐字节还原 text
+    rebuilt = ""
+    for i, (_uid, start, end) in enumerate(merged.spans):
+        if i:
+            rebuilt += "\n"
+        rebuilt += merged.text[start:end]
+    assert rebuilt == merged.text
+
+
+def test_cross_boundary_ignores_different_page_and_no_y_overlap() -> None:
+    """I-ATT-1 反向：不同页或 y 不重叠的 NOISE 不聚合，保持逐字块。"""
+    ev = _chunk_with_rating()
+    kept = {"u-rating": (6, "强推（维持）", {"page": 1, "bbox": (0, 80, 500, 120)}, "ch", ())}
+    noise_other_page = {
+        "u-title": (
+            5,
+            "贵州茅台（600519）2026 年中报点评",
+            {"page": 2, "bbox": (0, 40, 500, 110)},
+            "ch",
+            ("header_repeated_geometric",),
+        ),
+    }
+    assert _merge_chunk(ev, kept, noise_other_page) is ev  # 不同页 → 原样
+
+    noise_no_overlap = {
+        "u-title": (
+            5,
+            "贵州茅台（600519）2026 年中报点评",
+            {"page": 1, "bbox": (0, 300, 500, 340)},
+            "ch",
+            ("header_repeated_geometric",),
+        ),
+    }
+    assert _merge_chunk(ev, kept, noise_no_overlap) is ev  # y 不重叠 → 原样
+
+
+def test_cross_boundary_do_not_repeat_existing_unit() -> None:
+    """I-ATT-1：块内已有 NOISE 单元不重复聚合（保幂等）。"""
+    kept = {
+        "u-title": (
+            5,
+            "贵州茅台（600519）2026 年中报点评",
+            {"page": 1, "bbox": (0, 40, 500, 110)},
+            "ch",
+            ("header_repeated_geometric",),
+        ),
+        "u-rating": (6, "强推（维持）", {"page": 1, "bbox": (0, 80, 500, 120)}, "ch", ()),
+    }
+    noise = dict(kept)  # 全部视为 NOISE 候选
+    merged = _merge_chunk(_chunk_with_rating(), kept, noise)
+    # 标题已出现在块内（kept 侧），不得重复插入
+    assert merged.units[0].unit_id == "u-title"
+    assert merged.units[1].unit_id == "u-rating"
+    assert len([u for u in merged.units if u.unit_id == "u-title"]) == 1

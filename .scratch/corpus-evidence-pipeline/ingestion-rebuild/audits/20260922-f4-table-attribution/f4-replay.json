@@ -1,0 +1,32 @@
+{
+  "artifact": "f4-replay",
+  "generated_at": "2026-09-21T17:24:34+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "mode": "跨边界聚合可行性回放（0 model calls，只读，不落库）",
+  "evidence_pass": {
+    "off": "18/24",
+    "on": "18/24"
+  },
+  "company008_a1_matched": {
+    "off": false,
+    "on": true
+  },
+  "negative_retrieved_docs": {
+    "off": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    },
+    "on": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    }
+  }
+}

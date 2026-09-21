@@ -898,7 +898,7 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 | F1 | 负例误报 6→0（M6 硬判据） | 6 题 `retrieved_documents` 0、`max_false_positives=0`，不扰动有答案题 S1 | 无（独立） | ✅ **已完成**（2026-09-21，`audits/20260921-f1-negative/`） |
 | F2 | band 接生产 + 补 cell 投影 | 2a 17/24 生产生效；2b 当前语料 18/24（19/24 封口待 company-003 独立议题） | 新冻结 `i0c-r4n` + U 开关 | 2a（band）→ 2b（cell）顺序；U 已签收口口径 |
 | F3 | e1 `disclaimer_section` 判定粒度过宽 | company-007/e1 转绿 | 重摄入 + 新修订 + 阈值具名签认 | 独立 |
-| F4 | a-1 表头/正文边界（表归属） | company-008/a-1 归因转绿 | 与 F2 同批评估 | 弱耦合 F2 |
+| F4 | a-1 表头/正文边界（表归属） | company-008/a-1 归因转绿 | 与 F2 同批评估 | ✅ **已完成**（2026-09-21，`audits/20260922-f4-table-attribution/`，跨边界联合取证） |
 
 **F1：负例 6→0（M6 硬阻断，优先，独立）——✅ 实施完成（2026-09-21，`audits/20260921-f1-negative/`）**
 - 现状：6 条 no-answer 题（company/industry/macro-009/-010）走同一 OR 词元检索各命中 5 篇 → 每题误报
@@ -938,9 +938,13 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 机读复核（`audits/20260921-f3-disclaimer-granularity/`）：整库 8 build 回放，免责节中**仅 ord717 一单元** NOISE→KEPT，其余（716/718/719/720）仍 NOISE——变化范围单一且被归因；e1 事实句现落在 kept 单元；未达任何生产写库（重摄入随 F2 同批）。
 - 回归：全语料族 **745 passed / 12 skipped**（742 基线未回退，新增 3 条 I-E3 永驻测试）；ruff/pyright 全绿。
 
-**F4：a-1 表头 NOISE 与正文评级边界（表归属）**
+**F4：a-1 表头 NOISE 与正文评级边界（表归属）** ✅ 已完成（2026-09-21，`audits/20260922-f4-table-attribution/`）
 - 事实：company-008 引文前半"贵州茅台…点评"在 NOISE 表头（跨 p1–p7）、后半"强推（维持）"在 kept 单元 ⇒ 引文横跨 NOISE/kept 边界。
-- 动作：立为表归属/引文粒度议题（§10.4 已提示"更接近引文粒度/表归属，可能须另立"）；提供"跨 NOISE/kept 联合取证"或把承载真实评级的表头行降 kept 的判定路径，**先机读归因后定是否调阈值**；与 F2 同批评估（都动 table）。
+- 机读归因（`f4_attribute`/`f4_scan`）：**非本就该剔，属表归属缺失**。p1 封面标题（ord5，heading，bbox y88–101 在页顶带 `t_min+0.12*h=107.7`）与 p2–7 页眉文字相同被 `header_repeated_geometric`（+`heading_by_font_size`）连带剔除，右邻评级 ord6（kept）承载引文后半。全库扫描 355 个重复表头/脚注 NOISE 中 77 个 heading 型几乎全是真实页眉（华福证券/证券研究报告/行业定期报告…），p1 封面标题是唯一"文档标题"被连带剔除 ⇒ "首现保留/heading 豁免"会误留真实页眉，不可行。
+- 落地（issue 09 反向：不把整表头降 KEPT、不按金标补取证据、不改 clean 判定、不重摄入）：**跨边界联合取证**（消费侧读取路径）。新增 `plugins/corpus/preparation/cross_boundary.py`——`aggregate_band_chunks` 把与某 kept 单元**同页且水平行带（bbox 垂直重叠）**的 `header_repeated_geometric`/`footer_repeated_geometric` NOISE 单元按 `(ordinal, unit_id)` 保序聚合进块证据（含内容哈希校验 fail-closed），接线进 `service.search_bands`（band 读取链）。纯只读、0 model calls，改 read 字节不改写库。
+- 验证（`f4_replay.py`，0 model calls 只读 PG，与 F2 同口径）：产品接线路径 `on` 复用 `svc.search_bands`，**company-008/a-1 由 false→true 转绿**，EvidencePass `off/on 均 18/24` 不回退（e2 按题计，company-008 其余目标仍 fail），6 负例 `retrieved_documents=0` 不变。
+- 常驻测试：`tests/test_corpus_selection.py` 新增 3 条 I-ATT-1 永驻测试（伪单元对"表头 in NOISE + 评级句 in kept"取到完整引文且序正确；不同页/无 y 重叠不聚合；块内已有单元不重复）。selection 30 passed；corpus 家族 **751 passed / 12 skipped**（748 基线 +3 不回退）；ruff/pyright 全绿。
+- 冻结影响：接线改 `service.py` 字节（r4n 绑定 `service.py=54ef53b8` 现漂移）＋新增模块，**待 archive-first 建新冻结修订（U 门控，不并入 F2/F3 修订）**；不重摄入、不 publish、不 commit。
 
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。

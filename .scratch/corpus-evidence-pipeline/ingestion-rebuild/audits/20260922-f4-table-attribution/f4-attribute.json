@@ -1,0 +1,809 @@
+{
+  "artifact": "f4-table-attribution",
+  "generated_at": "2026-09-21T17:00:48+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "query_id": "company-008",
+  "target_id": "a-1",
+  "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+  "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+  "page": 1,
+  "quote": "贵州茅台（600519）2026 年中报点评 \n \n 强推 （维持）",
+  "locator": [
+    "page:1"
+  ],
+  "quote_norm_in_kept_any": false,
+  "quote_norm_in_full_doc": true,
+  "total_units": 727,
+  "kept_units": 708,
+  "page_bands": {
+    "1": {
+      "t_min": 12.251996994018555,
+      "b_max": 807.408935546875,
+      "height": 795.1569385528564,
+      "top_bound": 107.67082962036133,
+      "bottom_bound": 711.9901029205322
+    },
+    "2": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    },
+    "3": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    },
+    "4": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    },
+    "5": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    },
+    "6": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    },
+    "7": {
+      "t_min": 41.90098190307617,
+      "b_max": 807.719970703125,
+      "height": 765.8189888000488,
+      "top_bound": 133.79926055908203,
+      "bottom_bound": 715.8216920471191
+    }
+  },
+  "boundary": {
+    "title_ord5": {
+      "kind": "heading",
+      "status": "noise",
+      "header_banded": true,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    "rating_ord6": {
+      "kind": "heading",
+      "status": "kept",
+      "header_banded": true,
+      "raw": "强推（维持）"
+    },
+    "verdict": "表/标题归属缺失：p1 封面标题(ord5,heading) 与 p2-7 页眉文字相同，被 header_repeated_geometric 连带剔除；右邻评级 ord6(kept) 承载引文后半。引文横跨 NOISE(ord5)/kept(ord6) 边界。非本就该剔。"
+  },
+  "window_units_p1": [
+    {
+      "ordinal": 3,
+      "kind": "heading",
+      "status": "kept",
+      "reasons": [
+        "heading_by_font_size"
+      ],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        466.4200134277344,
+        12.251996994018555,
+        514.635986328125,
+        24.251996994018555
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "公司研究"
+    },
+    {
+      "ordinal": 4,
+      "kind": "paragraph",
+      "status": "kept",
+      "reasons": [],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        439.75,
+        63.14097213745117,
+        541.2999877929688,
+        73.10397338867188
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "白酒  2026 年08 月16 日"
+    },
+    {
+      "ordinal": 5,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        19.799999237060547,
+        88.56800842285156,
+        214.85000610351562,
+        101.85201263427734
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "ordinal": 6,
+      "kind": "heading",
+      "status": "kept",
+      "reasons": [
+        "heading_by_font_size"
+      ],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        395.7099914550781,
+        88.67036437988281,
+        468.3099365234375,
+        104.63036346435547
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "强推（维持）"
+    },
+    {
+      "ordinal": 7,
+      "kind": "heading",
+      "status": "kept",
+      "reasons": [
+        "heading_by_font_size"
+      ],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        25.200000762939453,
+        124.2380142211914,
+        260.1440124511719,
+        142.23800659179688
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "报表实质扎实，经营底部已过"
+    },
+    {
+      "ordinal": 8,
+      "kind": "paragraph",
+      "status": "kept",
+      "reasons": [],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        395.7099914550781,
+        115.46560668945312,
+        468.3399963378906,
+        126.49132537841797
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "目标价：2030 元"
+    },
+    {
+      "ordinal": 9,
+      "kind": "paragraph",
+      "status": "kept",
+      "reasons": [],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        395.7099914550781,
+        135.50564575195312,
+        480.8199768066406,
+        146.5313720703125
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "当前价：1341.99 元"
+    },
+    {
+      "ordinal": 10,
+      "kind": "heading",
+      "status": "kept",
+      "reasons": [
+        "heading_by_font_size"
+      ],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        19.799999237060547,
+        168.85659790039062,
+        52.92000198364258,
+        179.8966064453125
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "事项："
+    },
+    {
+      "ordinal": 11,
+      "kind": "paragraph",
+      "status": "kept",
+      "reasons": [],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        19.799999237060547,
+        188.4659423828125,
+        28.674358367919922,
+        199.46177673339844
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": ""
+    },
+    {
+      "ordinal": 12,
+      "kind": "paragraph",
+      "status": "kept",
+      "reasons": [],
+      "page": 1,
+      "element": null,
+      "bbox": [
+        41.040000915527344,
+        188.54562377929688,
+        376.4862976074219,
+        221.5313720703125
+      ],
+      "char_span": null,
+      "cells": null,
+      "label_path": null,
+      "raw_text": "公司公布2026 年中报，26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2亿元，同降2.0%。单Q2总收入375.8亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。"
+    }
+  ],
+  "needle_hits": {
+    "强推": [
+      {
+        "ordinal": 6,
+        "status": "kept",
+        "reasons": [
+          "heading_by_font_size"
+        ],
+        "page": 1,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          395.7099914550781,
+          88.67036437988281,
+          468.3099365234375,
+          104.63036346435547
+        ],
+        "cells": null,
+        "len": 6,
+        "raw": "强推（维持）"
+      },
+      {
+        "ordinal": 21,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          41.040000915527344,
+          549.7955932617188,
+          381.4195251464844,
+          626.8213500976562
+        ],
+        "cells": null,
+        "len": 257,
+        "raw": "投资建议：报表实质扎实，经营向上明确，重申“强推”评级。尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道，上半年初步验\n证公司市场化改革成效，尽管Q2 报表有所下滑，年内看兼顾报表和稳价稳中\n向好，下半年基数降低后增长确定性提高，且明年通过提价效应和产品结构增\n长路径清晰，中长期正构建“以需求为导向、消费者为中心”To C 营销体系。\n综上，茅台经营向上明确，底层逻辑未变，我们维持26-28年EPS预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。"
+      },
+      {
+        "ordinal": 713,
+        "status": "kept",
+        "reasons": [],
+        "page": 7,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          54.84000015258789,
+          185.92100524902344,
+          324.8900146484375,
+          240.88400268554688
+        ],
+        "cells": null,
+        "len": 118,
+        "raw": "强推：预期未来6 个月内超越基准指数20%以上；\n推荐：预期未来6 个月内超越基准指数10%－20%；\n中性：预期未来6 个月内相对基准指数变动幅度在-10%－10%之间；\n回避：预期未来6 个月内相对基准指数跌幅在10%－20%之间。"
+      }
+    ],
+    "维持": [
+      {
+        "ordinal": 6,
+        "status": "kept",
+        "reasons": [
+          "heading_by_font_size"
+        ],
+        "page": 1,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          395.7099914550781,
+          88.67036437988281,
+          468.3099365234375,
+          104.63036346435547
+        ],
+        "cells": null,
+        "len": 6,
+        "raw": "强推（维持）"
+      },
+      {
+        "ordinal": 21,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          41.040000915527344,
+          549.7955932617188,
+          381.4195251464844,
+          626.8213500976562
+        ],
+        "cells": null,
+        "len": 257,
+        "raw": "投资建议：报表实质扎实，经营向上明确，重申“强推”评级。尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道，上半年初步验\n证公司市场化改革成效，尽管Q2 报表有所下滑，年内看兼顾报表和稳价稳中\n向好，下半年基数降低后增长确定性提高，且明年通过提价效应和产品结构增\n长路径清晰，中长期正构建“以需求为导向、消费者为中心”To C 营销体系。\n综上，茅台经营向上明确，底层逻辑未变，我们维持26-28年EPS预测值\n67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。"
+      }
+    ],
+    "点评": [
+      {
+        "ordinal": 5,
+        "status": "noise",
+        "reasons": [
+          "heading_by_font_size",
+          "header_repeated_geometric"
+        ],
+        "page": 1,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          19.799999237060547,
+          88.56800842285156,
+          214.85000610351562,
+          101.85201263427734
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 85,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          394.3900146484375,
+          611.1943359375,
+          585.5860595703125,
+          644.0589599609375
+        ],
+        "cells": null,
+        "len": 44,
+        "raw": "相关研究报告\n《贵州茅台（600519）重大事项点评：再提价注入\n信心，市场化坚定推进》"
+      },
+      {
+        "ordinal": 86,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          394.3900146484375,
+          644.7310180664062,
+          585.7000122070312,
+          674.0889282226562
+        ],
+        "cells": null,
+        "len": 54,
+        "raw": "2026-07-19\n《贵州茅台（600519）2025 年度股东大会点评：\n股东会传递信心，凝聚价值共识》"
+      },
+      {
+        "ordinal": 100,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 2,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 123,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 3,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 617,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 4,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 640,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 5,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 689,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 6,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 706,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 7,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      }
+    ],
+    "贵州茅台": [
+      {
+        "ordinal": 5,
+        "status": "noise",
+        "reasons": [
+          "heading_by_font_size",
+          "header_repeated_geometric"
+        ],
+        "page": 1,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          19.799999237060547,
+          88.56800842285156,
+          214.85000610351562,
+          101.85201263427734
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 85,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          394.3900146484375,
+          611.1943359375,
+          585.5860595703125,
+          644.0589599609375
+        ],
+        "cells": null,
+        "len": 44,
+        "raw": "相关研究报告\n《贵州茅台（600519）重大事项点评：再提价注入\n信心，市场化坚定推进》"
+      },
+      {
+        "ordinal": 86,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          394.3900146484375,
+          644.7310180664062,
+          585.7000122070312,
+          674.0889282226562
+        ],
+        "cells": null,
+        "len": 54,
+        "raw": "2026-07-19\n《贵州茅台（600519）2025 年度股东大会点评：\n股东会传递信心，凝聚价值共识》"
+      },
+      {
+        "ordinal": 87,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          394.3900146484375,
+          674.760986328125,
+          585.6599731445312,
+          704.0889282226562
+        ],
+        "cells": null,
+        "len": 48,
+        "raw": "2026-06-14\n《贵州茅台（600519）深度研究报告：雄关漫道真\n如铁，而今迈步从头越》"
+      },
+      {
+        "ordinal": 97,
+        "status": "kept",
+        "reasons": [],
+        "page": 1,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          457.75,
+          587.6290893554688,
+          487.510009765625,
+          595.0690307617188
+        ],
+        "cells": null,
+        "len": 4,
+        "raw": "贵州茅台"
+      },
+      {
+        "ordinal": 100,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 2,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 105,
+        "status": "kept",
+        "reasons": [
+          "heading_by_font_size"
+        ],
+        "page": 2,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          36.84000015258789,
+          520.7010498046875,
+          166.4600067138672,
+          532.3909301757812
+        ],
+        "cells": null,
+        "len": 18,
+        "raw": "图表 2  贵州茅台PE Band "
+      },
+      {
+        "ordinal": 106,
+        "status": "kept",
+        "reasons": [
+          "heading_by_font_size"
+        ],
+        "page": 2,
+        "kind": "heading",
+        "element": null,
+        "bbox": [
+          307.7300109863281,
+          520.7010498046875,
+          437.3500061035156,
+          532.3909301757812
+        ],
+        "cells": null,
+        "len": 18,
+        "raw": "图表 3  贵州茅台PB Band "
+      },
+      {
+        "ordinal": 123,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 3,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 617,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 4,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 640,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 5,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 689,
+        "status": "noise",
+        "reasons": [
+          "multi_column_order_flagged",
+          "header_repeated_geometric"
+        ],
+        "page": 6,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 706,
+        "status": "noise",
+        "reasons": [
+          "header_repeated_geometric"
+        ],
+        "page": 7,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          417.54998779296875,
+          41.90098190307617,
+          564.2079467773438,
+          51.863983154296875
+        ],
+        "cells": null,
+        "len": 22,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "ordinal": 717,
+        "status": "noise",
+        "reasons": [
+          "disclaimer_section"
+        ],
+        "page": 7,
+        "kind": "paragraph",
+        "element": null,
+        "bbox": [
+          36.84000015258789,
+          352.6789855957031,
+          575.6199951171875,
+          409.15399169921875
+        ],
+        "cells": null,
+        "len": 193,
+        "raw": "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n分析师在本报告中对所提及的证券或发行人发表的任何建议和观点均准确地反映了其个人对该证券或发行人的看法和判断；分析师对\n任何其他券商发布的所有可能存在雷同的研究报告不负有任何直接或者间接的可能责任。\n本报告涉及股票贵州茅台（600519），根据上市公司公告，贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股"
+      }
+    ]
+  }
+}

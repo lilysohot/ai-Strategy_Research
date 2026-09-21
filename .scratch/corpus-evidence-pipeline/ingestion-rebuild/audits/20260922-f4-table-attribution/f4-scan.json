@@ -1,0 +1,7616 @@
+{
+  "artifact": "f4-scan",
+  "generated_at": "2026-09-21T16:59:12+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "stats": {
+    "builds": 8,
+    "total_noise_units": 355,
+    "heroes_heading_kind": 77,
+    "heading_kind_units": [
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 41,
+        "kind": "heading",
+        "page": 1,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 52,
+        "kind": "heading",
+        "page": 2,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 67,
+        "kind": "heading",
+        "page": 3,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 74,
+        "kind": "heading",
+        "page": 4,
+        "raw": "行业定期报告|基础化工"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 83,
+        "kind": "heading",
+        "page": 4,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 90,
+        "kind": "heading",
+        "page": 5,
+        "raw": "行业定期报告|基础化工"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 127,
+        "kind": "heading",
+        "page": 5,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 148,
+        "kind": "heading",
+        "page": 6,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 158,
+        "kind": "heading",
+        "page": 7,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 174,
+        "kind": "heading",
+        "page": 8,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 181,
+        "kind": "heading",
+        "page": 9,
+        "raw": "行业定期报告|基础化工"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 186,
+        "kind": "heading",
+        "page": 9,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 193,
+        "kind": "heading",
+        "page": 10,
+        "raw": "行业定期报告|基础化工"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 197,
+        "kind": "heading",
+        "page": 10,
+        "raw": "华福证券"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 204,
+        "kind": "heading",
+        "page": 11,
+        "raw": "行业定期报告|基础化工"
+      },
+      {
+        "src": "f8e316969b7cfdcd",
+        "build": "99bf1ba24564",
+        "ordinal": 228,
+        "kind": "heading",
+        "page": 11,
+        "raw": "华福证券"
+      },
+      {
+        "src": "6f14cc145b798b37",
+        "build": "58735cff57d8",
+        "ordinal": 5,
+        "kind": "heading",
+        "page": 1,
+        "raw": "贵州茅台（600519）2026 年中报点评"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 1,
+        "kind": "heading",
+        "page": 1,
+        "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 128,
+        "kind": "heading",
+        "page": 1,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 130,
+        "kind": "heading",
+        "page": 2,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 168,
+        "kind": "heading",
+        "page": 3,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 189,
+        "kind": "heading",
+        "page": 4,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 213,
+        "kind": "heading",
+        "page": 5,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 250,
+        "kind": "heading",
+        "page": 8,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 266,
+        "kind": "heading",
+        "page": 8,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 315,
+        "kind": "heading",
+        "page": 13,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 357,
+        "kind": "heading",
+        "page": 13,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 359,
+        "kind": "heading",
+        "page": 14,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 394,
+        "kind": "heading",
+        "page": 14,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 396,
+        "kind": "heading",
+        "page": 15,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 506,
+        "kind": "heading",
+        "page": 15,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 508,
+        "kind": "heading",
+        "page": 16,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 681,
+        "kind": "heading",
+        "page": 16,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 716,
+        "kind": "heading",
+        "page": 20,
+        "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 717,
+        "kind": "heading",
+        "page": 20,
+        "raw": "证券研究报告"
+      },
+      {
+        "src": "dddc7cd0cb74d085",
+        "build": "a3b681fdd55d",
+        "ordinal": 760,
+        "kind": "heading",
+        "page": 20,
+        "raw": "下载日志已记录，仅供内部参考"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 381,
+        "kind": "heading",
+        "page": 8,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 383,
+        "kind": "heading",
+        "page": 8,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 464,
+        "kind": "heading",
+        "page": 9,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 466,
+        "kind": "heading",
+        "page": 9,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 514,
+        "kind": "heading",
+        "page": 10,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 516,
+        "kind": "heading",
+        "page": 10,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 589,
+        "kind": "heading",
+        "page": 11,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 591,
+        "kind": "heading",
+        "page": 11,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 646,
+        "kind": "heading",
+        "page": 12,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 648,
+        "kind": "heading",
+        "page": 12,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 753,
+        "kind": "heading",
+        "page": 14,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 755,
+        "kind": "heading",
+        "page": 14,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 887,
+        "kind": "heading",
+        "page": 16,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 889,
+        "kind": "heading",
+        "page": 16,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 913,
+        "kind": "heading",
+        "page": 17,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 915,
+        "kind": "heading",
+        "page": 17,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 967,
+        "kind": "heading",
+        "page": 18,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 969,
+        "kind": "heading",
+        "page": 18,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 1001,
+        "kind": "heading",
+        "page": 19,
+        "raw": "请阅读最后评级说明和重要声明"
+      },
+      {
+        "src": "174b64628f35aca6",
+        "build": "1227c2a34d05",
+        "ordinal": 1003,
+        "kind": "heading",
+        "page": 19,
+        "raw": "行业研究 | 深度报告"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 57,
+        "kind": "heading",
+        "page": 3,
+        "raw": "敬请参阅最后一页特别声明 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 59,
+        "kind": "heading",
+        "page": 3,
+        "raw": "证券研究报告 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 60,
+        "kind": "heading",
+        "page": 3,
+        "raw": "宏观经济 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 108,
+        "kind": "heading",
+        "page": 3,
+        "raw": "仅供内部参考，请勿外传"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 109,
+        "kind": "heading",
+        "page": 4,
+        "raw": "敬请参阅最后一页特别声明 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 111,
+        "kind": "heading",
+        "page": 4,
+        "raw": "证券研究报告 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 112,
+        "kind": "heading",
+        "page": 4,
+        "raw": "宏观经济 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 178,
+        "kind": "heading",
+        "page": 4,
+        "raw": "仅供内部参考，请勿外传"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 179,
+        "kind": "heading",
+        "page": 5,
+        "raw": "敬请参阅最后一页特别声明 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 181,
+        "kind": "heading",
+        "page": 5,
+        "raw": "证券研究报告 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 182,
+        "kind": "heading",
+        "page": 5,
+        "raw": "宏观经济 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 251,
+        "kind": "heading",
+        "page": 5,
+        "raw": "仅供内部参考，请勿外传"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 252,
+        "kind": "heading",
+        "page": 6,
+        "raw": "敬请参阅最后一页特别声明 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 254,
+        "kind": "heading",
+        "page": 6,
+        "raw": "证券研究报告 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 255,
+        "kind": "heading",
+        "page": 6,
+        "raw": "宏观经济 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 390,
+        "kind": "heading",
+        "page": 6,
+        "raw": "仅供内部参考，请勿外传"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 391,
+        "kind": "heading",
+        "page": 7,
+        "raw": "敬请参阅最后一页特别声明 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 393,
+        "kind": "heading",
+        "page": 7,
+        "raw": "证券研究报告 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 394,
+        "kind": "heading",
+        "page": 7,
+        "raw": "宏观经济 "
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 477,
+        "kind": "heading",
+        "page": 7,
+        "raw": "仅供内部参考，请勿外传"
+      },
+      {
+        "src": "793b39673d31e8a8",
+        "build": "7734638eca66",
+        "ordinal": 512,
+        "kind": "heading",
+        "page": 8,
+        "raw": "仅供内部参考，请勿外传"
+      }
+    ],
+    "rows": 355,
+    "noise_kind_distribution": {
+      "paragraph": 278,
+      "heading": 77
+    }
+  },
+  "sources": [
+    "f8e316969b7cfdcd=99bf1ba24564",
+    "cc03f55bc5a24d3d=e3820ab34c2e",
+    "f8fa22084535e369=6b55ddbbcfdc",
+    "48c05895798ba009=6475cbacca15",
+    "6f14cc145b798b37=58735cff57d8",
+    "dddc7cd0cb74d085=a3b681fdd55d",
+    "174b64628f35aca6=1227c2a34d05",
+    "793b39673d31e8a8=7734638eca66"
+  ],
+  "all_header_footer_units": [
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 19,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        43.20000076293945,
+        812.516357421875,
+        79.19999694824219,
+        821.516357421875
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 20,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        88.19999694824219,
+        812.516357421875,
+        124.19999694824219,
+        821.516357421875
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 22,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        434.6400146484375,
+        812.516357421875,
+        542.6400146484375,
+        821.516357421875
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 41,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 43,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 44,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 45,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 52,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 54,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 55,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 56,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 67,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 69,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 70,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 71,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 73,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        434.3999938964844,
+        813.5963745117188,
+        542.4000244140625,
+        822.5963745117188
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 74,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        418.32000732421875,
+        39.302001953125,
+        552.719970703125,
+        55.44200134277344
+      ],
+      "len": 11,
+      "raw": "行业定期报告|基础化工"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 83,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 85,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 86,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 87,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 89,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        434.3999938964844,
+        813.5963745117188,
+        542.4000244140625,
+        822.5963745117188
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 90,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        418.32000732421875,
+        39.302001953125,
+        552.719970703125,
+        55.44200134277344
+      ],
+      "len": 11,
+      "raw": "行业定期报告|基础化工"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 127,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 129,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 130,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 131,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 148,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 150,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 151,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 152,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 158,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 160,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 161,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 162,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 174,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 176,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 177,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 178,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 180,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        434.3999938964844,
+        813.5963745117188,
+        542.4000244140625,
+        822.5963745117188
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 181,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        418.32000732421875,
+        39.302001953125,
+        552.719970703125,
+        55.44200134277344
+      ],
+      "len": 11,
+      "raw": "行业定期报告|基础化工"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 186,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 188,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 189,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 190,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 192,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        434.3999938964844,
+        813.5963745117188,
+        542.4000244140625,
+        822.5963745117188
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 193,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        418.32000732421875,
+        39.302001953125,
+        552.719970703125,
+        55.44200134277344
+      ],
+      "len": 11,
+      "raw": "行业定期报告|基础化工"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 197,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 199,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 200,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        42.95899963378906,
+        813.5963745117188,
+        78.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "诚信专业"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 201,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        87.95899963378906,
+        813.5963745117188,
+        123.95899963378906,
+        822.5963745117188
+      ],
+      "len": 4,
+      "raw": "发现价值"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 203,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        434.3999938964844,
+        813.5963745117188,
+        542.4000244140625,
+        822.5963745117188
+      ],
+      "len": 12,
+      "raw": "请务必阅读报告末页的声明"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 204,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        418.32000732421875,
+        39.302001953125,
+        552.719970703125,
+        55.44200134277344
+      ],
+      "len": 11,
+      "raw": "行业定期报告|基础化工"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 228,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        10.0,
+        16.331832885742188,
+        62.0,
+        29.331830978393555
+      ],
+      "len": 4,
+      "raw": "华福证券"
+    },
+    {
+      "src": "f8e316969b7cfdcd",
+      "build": "99bf1ba24564",
+      "ordinal": 229,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 2,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 26,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 27,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        36.84000015258789,
+        798.9200439453125,
+        278.92999267578125,
+        807.2889404296875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 34,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 35,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 36,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 44,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 45,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 46,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 50,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 51,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 55,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 56,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 68,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 69,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 70,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 81,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 82,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 89,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 90,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 101,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 102,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 103,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 115,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 116,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 117,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 125,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 126,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 145,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 146,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 147,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 153,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 154,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 155,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 203,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 204,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 205,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 221,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 222,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        528.0999755859375,
+        42.18898391723633,
+        564.2079467773438,
+        51.18898391723633
+      ],
+      "len": 4,
+      "raw": "宏观专题"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 223,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.92999267578125,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "cc03f55bc5a24d3d",
+      "build": "e3820ab34c2e",
+      "ordinal": 243,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        440.32000732421875,
+        6.401401519775391,
+        550.3200073242188,
+        16.40140151977539
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 2,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 5,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        19.799999237060547,
+        88.56800842285156,
+        214.85000610351562,
+        101.85201263427734
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 100,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 101,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 123,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 124,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 617,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 618,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 640,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 641,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 689,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 690,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 706,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        417.54998779296875,
+        41.90098190307617,
+        564.2079467773438,
+        51.863983154296875
+      ],
+      "len": 22,
+      "raw": "贵州茅台（600519）2026 年中报点评"
+    },
+    {
+      "src": "6f14cc145b798b37",
+      "build": "58735cff57d8",
+      "ordinal": 707,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        36.84000015258789,
+        799.0400390625,
+        278.80999755859375,
+        807.408935546875
+      ],
+      "len": 37,
+      "raw": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 1,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        33.55714416503906,
+        789.093994140625,
+        212.21658325195312,
+        797.2647705078125
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 91,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        218.63999938964844,
+        709.4254760742188,
+        231.60955810546875,
+        716.02294921875
+      ],
+      "len": 4,
+      "raw": "0.11"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 92,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        264.0,
+        709.4254760742188,
+        276.9695129394531,
+        716.02294921875
+      ],
+      "len": 4,
+      "raw": "0.36"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 93,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        309.239990234375,
+        709.4254760742188,
+        322.2095031738281,
+        716.02294921875
+      ],
+      "len": 4,
+      "raw": "0.59"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 94,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        354.6000061035156,
+        709.4254760742188,
+        367.56951904296875,
+        716.02294921875
+      ],
+      "len": 4,
+      "raw": "0.93"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 128,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 129,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 130,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 166,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 167,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 168,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 187,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 188,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 189,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 211,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 212,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 213,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 233,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 234,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 235,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 239,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 240,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 241,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 247,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        56.63999938964844,
+        738.5750122070312,
+        224.64495849609375,
+        746.7457885742188
+      ],
+      "len": 21,
+      "raw": "资料来源：公司公告，国信证券经济研究所整理"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 248,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 249,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 250,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 266,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 267,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 268,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 279,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 280,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 281,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 283,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        56.63999938964844,
+        89.73505401611328,
+        224.647216796875,
+        97.90579986572266
+      ],
+      "len": 21,
+      "raw": "资料来源：公司年报，国信证券经济研究所整理"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 284,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        295.67999267578125,
+        89.73505401611328,
+        463.68719482421875,
+        97.90579986572266
+      ],
+      "len": 21,
+      "raw": "资料来源：公司年报，国信证券经济研究所整理"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 290,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 291,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 303,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 304,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 313,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 314,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 315,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 357,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 358,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 359,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 394,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 395,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 396,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 451,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        154.1999969482422,
+        705.73046875,
+        173.0437774658203,
+        713.2921752929688
+      ],
+      "len": 5,
+      "raw": "2026E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 452,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        186.60000610351562,
+        705.73046875,
+        205.44378662109375,
+        713.2921752929688
+      ],
+      "len": 5,
+      "raw": "2027E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 453,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        221.39999389648438,
+        705.73046875,
+        240.2437744140625,
+        713.2921752929688
+      ],
+      "len": 5,
+      "raw": "2028E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 506,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 507,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 508,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 636,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        293.2799987792969,
+        708.7989501953125,
+        310.9144287109375,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2026E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 637,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        331.20001220703125,
+        708.7989501953125,
+        348.8344421386719,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2027E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 638,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        369.239990234375,
+        708.7989501953125,
+        386.8744201660156,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2028E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 640,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        445.0799865722656,
+        708.7989501953125,
+        462.71441650390625,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2026E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 641,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        483.0,
+        708.7989501953125,
+        500.6344299316406,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2027E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 642,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        521.0399780273438,
+        708.7989501953125,
+        538.6742553710938,
+        715.8532104492188
+      ],
+      "len": 5,
+      "raw": "2028E"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 673,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        258.0,
+        754.5694580078125,
+        272.8836364746094,
+        762.1311645507812
+      ],
+      "len": 4,
+      "raw": "0.11"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 674,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        295.9200134277344,
+        754.5694580078125,
+        310.80364990234375,
+        762.1311645507812
+      ],
+      "len": 4,
+      "raw": "0.36"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 675,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        333.8399963378906,
+        754.5694580078125,
+        348.7236328125,
+        762.1311645507812
+      ],
+      "len": 4,
+      "raw": "0.59"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 676,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        371.8800048828125,
+        754.5694580078125,
+        386.7636413574219,
+        762.1311645507812
+      ],
+      "len": 4,
+      "raw": "0.93"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 681,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 682,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 683,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 688,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 689,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 703,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 704,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 705,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 715,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 716,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        54.198143005371094,
+        782.0150146484375,
+        232.8575897216797,
+        790.185791015625
+      ],
+      "len": 22,
+      "raw": "请务必阅读正文之后的免责声明及其项下所有内容"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 717,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 760,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 761,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 21,
+      "bbox": [
+        475.67999267578125,
+        50.95344924926758,
+        538.807373046875,
+        61.56019973754883
+      ],
+      "len": 6,
+      "raw": "证券研究报告"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 779,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 21,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "dddc7cd0cb74d085",
+      "build": "a3b681fdd55d",
+      "ordinal": 786,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        425.29998779296875,
+        6.401401519775391,
+        565.2999877929688,
+        16.40140151977539
+      ],
+      "len": 14,
+      "raw": "下载日志已记录，仅供内部参考"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 3,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 4,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 5,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 6,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 7,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 9,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        42.480098724365234,
+        797.0936889648438,
+        154.55821228027344,
+        805.2542724609375
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 17,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 18,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 19,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 20,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 21,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 23,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        42.83980178833008,
+        797.4534301757812,
+        154.91790771484375,
+        805.614013671875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 62,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 63,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 65,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 76,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 77,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 78,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 79,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 80,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 82,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 86,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 87,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 88,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 89,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 90,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 92,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 248,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 249,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 251,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 374,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        42.599998474121094,
+        751.07275390625,
+        149.40689086914062,
+        760.7750244140625
+      ],
+      "len": 17,
+      "raw": "资料来源：Wind，长江证券研究所"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 375,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 376,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 377,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 378,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 379,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 381,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 383,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 458,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 459,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 460,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 461,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 462,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 464,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 466,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 511,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 512,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 9,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 514,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 516,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 583,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 584,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 585,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 586,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 587,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 10,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 589,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 591,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 640,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 641,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 642,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 643,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 644,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 11,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 646,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 648,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 731,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 732,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 12,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 734,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 741,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        42.599998474121094,
+        747.7125854492188,
+        161.51370239257812,
+        757.2965087890625
+      ],
+      "len": 17,
+      "raw": "资料来源：百川盈孚，长江证券研究所"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 747,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 748,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 749,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 750,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 751,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 13,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 753,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 755,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 813,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 814,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 815,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 816,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 817,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 14,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 819,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 884,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 885,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 15,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 887,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 889,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 907,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 908,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 909,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 910,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 911,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 16,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 913,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 915,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 961,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 962,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 963,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 964,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 965,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 17,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 967,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 969,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 998,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 999,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 18,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1001,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1003,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        483.3399963378906,
+        52.24641418457031,
+        557.4994506835938,
+        63.20493698120117
+      ],
+      "len": 11,
+      "raw": "行业研究 | 深度报告"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1086,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1087,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1088,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1089,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1090,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "header_repeated_geometric"
+      ],
+      "page": 19,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1092,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1152,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1153,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1154,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1155,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1156,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 20,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1158,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 21,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1172,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 21,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1173,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 21,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1175,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1195,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1196,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1197,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1198,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1199,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 22,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1201,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1205,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        5.070000171661377,
+        3.828012466430664,
+        12.934000015258789,
+        9.909611701965332
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1206,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        582.3599853515625,
+        3.8083996772766113,
+        590.2540283203125,
+        9.976880073547363
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1207,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        5.050000190734863,
+        831.733154296875,
+        12.925600051879883,
+        837.8582153320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1208,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        582.1799926757812,
+        831.6160278320312,
+        590.2540283203125,
+        838.3491821289062
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1209,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 23,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1211,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 24,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1239,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 24,
+      "bbox": [
+        5.070000171661377,
+        3.806809902191162,
+        12.968400001525879,
+        9.98976993560791
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1240,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 24,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1242,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        42.11989974975586,
+        796.6135864257812,
+        154.19801330566406,
+        804.774169921875
+      ],
+      "len": 14,
+      "raw": "请阅读最后评级说明和重要声明"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1250,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        4.699999809265137,
+        3.6015539169311523,
+        13.20680046081543,
+        10.827073097229004
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1251,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        582.1699829101562,
+        3.6699929237365723,
+        590.510009765625,
+        10.547992706298828
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1252,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        4.800000190734863,
+        831.585205078125,
+        13.13800048828125,
+        838.5066528320312
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1253,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        582.1300048828125,
+        831.5867919921875,
+        590.4580078125,
+        838.4937744140625
+      ],
+      "len": 2,
+      "raw": "%%"
+    },
+    {
+      "src": "174b64628f35aca6",
+      "build": "1227c2a34d05",
+      "ordinal": 1254,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 25,
+      "bbox": [
+        278.8699951171875,
+        3.8799586296081543,
+        316.4540710449219,
+        9.671958923339844
+      ],
+      "len": 18,
+      "raw": "research.95579.com"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 1,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 3,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 48,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 1,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 49,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        36.84000015258789,
+        830.6669311523438,
+        146.87600708007812,
+        839.6669311523438
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 51,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "footer_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        500.1400146484375,
+        830.6669311523438,
+        556.1559448242188,
+        839.6669311523438
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 52,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "multi_column_order_flagged",
+        "header_repeated_geometric"
+      ],
+      "page": 2,
+      "bbox": [
+        51.0,
+        40.01148986816406,
+        93.33503723144531,
+        49.97148895263672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 57,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 59,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 60,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        49.68000030517578,
+        39.53150939941406,
+        92.0150375366211,
+        49.49150848388672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 108,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 3,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 109,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 111,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 112,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        49.68000030517578,
+        39.53150939941406,
+        92.0150375366211,
+        49.49150848388672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 178,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 4,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 179,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 181,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 182,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        49.68000030517578,
+        39.53150939941406,
+        92.0150375366211,
+        49.49150848388672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 251,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 5,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 252,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 254,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 255,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        49.68000030517578,
+        39.53150939941406,
+        92.0150375366211,
+        49.49150848388672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 390,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 6,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 391,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        36.84000015258789,
+        826.4669189453125,
+        146.87600708007812,
+        835.4669189453125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 393,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "footer_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        500.1400146484375,
+        826.4669189453125,
+        556.1559448242188,
+        835.4669189453125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 394,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        49.68000030517578,
+        39.53150939941406,
+        92.0150375366211,
+        49.49150848388672
+      ],
+      "len": 5,
+      "raw": "宏观经济 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 477,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 7,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 478,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        36.84000015258789,
+        827.4268798828125,
+        146.87600708007812,
+        836.4268798828125
+      ],
+      "len": 13,
+      "raw": "敬请参阅最后一页特别声明 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 480,
+      "kind": "paragraph",
+      "status": "noise",
+      "reasons": [
+        "footer_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        500.1400146484375,
+        827.4268798828125,
+        556.1559448242188,
+        836.4268798828125
+      ],
+      "len": 7,
+      "raw": "证券研究报告 "
+    },
+    {
+      "src": "793b39673d31e8a8",
+      "build": "7734638eca66",
+      "ordinal": 512,
+      "kind": "heading",
+      "status": "noise",
+      "reasons": [
+        "heading_by_font_size",
+        "header_repeated_geometric"
+      ],
+      "page": 8,
+      "bbox": [
+        440.3199768066406,
+        6.401340484619141,
+        550.3199462890625,
+        16.40134048461914
+      ],
+      "len": 11,
+      "raw": "仅供内部参考，请勿外传"
+    }
+  ]
+}

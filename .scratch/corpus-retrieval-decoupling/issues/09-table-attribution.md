@@ -1,11 +1,11 @@
 # 09 a-1 表头 NOISE 与正文评级边界（表归属 / 引文粒度）
 
-Status: needs-triage
+Status: completed
 Type: task
 Depends: 与 F2（issues/07）同批评估（都动 table）
 Layer: 清洗边界 / 表归属（跨 NOISE–kept）
-Bound-byte impact: **待定**（若动 clean 判定则 `clean.py`；若动取证路径则消费侧）
-Reingest: 待定（若动 clean 判定⇒重摄入）
+Bound-byte impact: **消费侧读取路径**（新增 `cross_boundary.py` + 接线 `service.search_bands`；不改 clean 判定）
+Reingest: 否（不改 clean 判定，只读 PG）
 
 ## 问题
 
@@ -36,3 +36,11 @@ company-008/a-1（spec §10.4 / §7.5 归因）：引文前半「贵州茅台（
 
 - 不按金标词/页补取证据（评测量尺不得来自金标）。
 - 不把整个表头降 KEPT（需按"是否承载真实评级"甄别）。
+
+## 完成记录（2026-09-21，`audits/20260922-f4-table-attribution/`）
+
+- **机读归因**（`f4_attribute`/`f4_scan`，0 model calls）：a-1 = **非本就该剔，属表归属缺失**。p1 封面标题（ord5，heading）与 p2–7 页眉文字相同被 `header_repeated_geometric` 连带剔除；全库 355 个重复表头/脚注 NOISE 中 77 个 heading 型几乎全是真实页眉，"首现保留/heading 豁免"方案不成立（会误留真实页眉）。
+- **落地路径＝跨边界联合取证（消费侧）**：新增 `plugins/corpus/preparation/cross_boundary.py::aggregate_band_chunks`——把与 kept 单元同页且水平行带（bbox 垂直重叠）的 `header_repeated_geometric`/`footer_repeated_geometric` NOISE 单元按 `(ordinal, unit_id)` 保序聚合进块证据（内容哈希校验 fail-closed）；接线 `service.search_bands`。不改 clean 判定、不重摄入、不按金标补取。
+- **验证**（`f4_replay.py` 产品接线，与 F2 同口径）：a-1 `false→true`，EvidencePass `off/on 均 18/24` 不回退，6 负例 `retrieved_documents=0`。
+- **常驻测试**：`tests/test_corpus_selection.py` +3 条 I-ATT-1（伪单元对取完整引文且序正确 / 不同页或无 y 重叠不聚合 / 不重复聚合）。selection 30 passed；corpus 家族 **751 / 12 skipped**；ruff/pyright 全绿。
+- **冻结影响**：接线改 `service.py` 字节（r4n 绑定漂移）＋新增模块，待 archive-first 建新冻结修订（U 门控，不并入 F2/F3 修订）。不 publish、不 commit。
