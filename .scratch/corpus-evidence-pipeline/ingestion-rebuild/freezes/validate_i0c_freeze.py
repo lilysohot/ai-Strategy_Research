@@ -1372,8 +1372,28 @@ if "i0c-r34" in by_id:
     for group, expected in allowed.items():
         check(set(binding34.get(group, {})) == expected, f"r34 unexpected {group} scope")
     prev34 = merged_binding_upto_revision(33)
-    for _key, _value in merged_binding_from_all_but("i0c-r34").items():
-        prev34.setdefault(_key, _value)
+    # r34 历史归档忠实性：prev34 须是 r34 当时的**有效上一绑定**（pre-r34 字节）。
+    # 构造纪律：先应用创建时间 ≤ r34 的 i1 绑定，仅用于补齐 i0c 修订号 ≤ 33 未绑定的
+    # 路径（如 admission.py 的 pre-r34 字节 3521f495 源自 i1-r2/r3/r4）；i0c 已绑定的
+    # 路径（如 test_corpus_preparation_admission 权威 062953f2）不得被 i1 陈旧值覆盖。
+    # 绝不可用 merged_binding_from_all_but/按 created_at 放全部修订——会拉入创建晚于 r34
+    # 的修订（如 i1-r5 重绑 preparation、i0c-r36/r38/r39 改 cli/docs）覆盖 r34 归档时点
+    # 旧绑定，使历史比对失真。
+    _r34t = by_id["i0c-r34"].get("created_at", "")
+    _i1fill: dict = {}
+    for _sid34, _ent34 in by_id.items():
+        if not _sid34.startswith("i1-r"):
+            continue
+        if _ent34.get("created_at", "") > _r34t:
+            continue
+        _d34 = load_json(BASE / _ent34.get("file", ""))
+        for _its34 in (_d34.get("binding") or {}).values():
+            for _k34, _v34 in _its34.items():
+                _i1fill.pop(_k34, None)
+                _i1fill[_k34] = _v34
+    for _k34, _v34 in _i1fill.items():
+        if _k34 not in prev34:
+            prev34[_k34] = _v34
     check(bool(binding34.get("i3_1_dev_lane_archive")), "r34 必须归档本修订覆盖的绑定文件（archive-first）")
     for key, sha in binding34.get("i3_1_dev_lane_archive", {}).items():
         original = next((p for p in prev34 if key.endswith(p)), None)

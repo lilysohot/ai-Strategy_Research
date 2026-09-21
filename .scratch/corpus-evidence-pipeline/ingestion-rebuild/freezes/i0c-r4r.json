@@ -13,12 +13,12 @@
       "plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b"
     },
     "freeze_validator": {
-      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "494516bead4315c9d74c59a7ecc9cf9fbd1e83cac34f9817e79b53405f79457c"
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "dac07fcbe38d2eb2fcc300fee3ebc91a00fad1753595f328744b7334fb1032f7"
     }
   },
   "corrections": {
     "r39_read_pg_drift": "独立校准修订：r39 计划的校准产物 calibration-plan-v2.json 的 binding 记录了 r4n（F2 band 接入生产）前的 read_pg=fb87a771；随 F2/r4n 演进至权威 read_pg=52b182f7 后该历史绑定自然过期，触发验证器 r39 pre-run binding drift。按纪律不改写已关闭轮次审计产物（calibration-plan-v2.json 字节保持不动），改由本独立修订提供 supersession 豁免：验证器 r39 循环对已解决的路径改为核权威哈希 52b182f7 并确认历史旧值 fb87a771，read_pg 权威哈希经 chain_rebind_read_pg 组显式入链。",
-    "freeze_validator": "validate_i0c_freeze.py 重绑（r4q acdd7586 → 494516be）：新增 i0c-r4r 校验块（parent/边界/语义门：read_pg authoritative=52b182f7、r39 计划旧值=fb87a771、corrections 含 r39 drift 决议）并把 r4r 块置于 r39 块之前以预置 r39_superseded_bindings 映射；r39 循环对 superseded 路径改核权威哈希。r4r 为最新修订，其 merge 移至 r4q 块之后最后执行，避免 freeze_validator 被更早的 r4n/r4p/r4q 覆盖。"
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4q acdd7586 → 494516be → 956782ce → dac07fcb）：首次重绑新增 i0c-r4r 校验块并置 r39 块之前预置 r39_superseded_bindings，r4r 合并移至 r4q 块之后最后执行。其后两次重绑（956782ce→dac07fcb）为 r34 历史归档忠实性修正：i1-r5 重绑 preparation 会令原 merged_binding_from_all_but(r34) prev34 拉入创建晚于 r34 的修订覆盖 r34 归档时点旧绑定，遂改为 prev34 = merged_binding_upto_revision(33) 为基，仅用**创建时间 ≤ r34 的 i1 修订**补齐 i0c≤33 未绑定路径（最新 i1 生效，如 admission.py pre-r34=3521f495 源自 i1-r2/r3/r4），i0c 已绑定路径（如 test_corpus_preparation_admission 权威 062953f2）保持不被 i1 陈旧值覆盖，恢复 r34 历史比对真实性。"
   },
   "notes": [
     "r4r 为 r39 待办漂移的独立校准修订（spec 记录：已关闭轮次产物不改写，待独立修订承接）：使 validate_i0c_freeze.py 自 r4n 起的既有非零退出恢复为 exit 0，不改任何实现/测试/守卫字节，不改写 calibration-plan-v2.json。",

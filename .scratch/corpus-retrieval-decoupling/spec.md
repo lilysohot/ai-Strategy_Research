@@ -959,6 +959,14 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 验证：`validate_i0c_freeze.py` **exit 0**（链路全绿，r39 项不再报错；r29 NOTE 非失败为既有说明）；不改任何实现/测试/守卫字节。
 - 纪律：不 commit、不 publish、不重摄入；不触 scorer/金标；M5 尚未独立复核 + U 签认。
 
+**M5 F3＝i1 链重绑 i1-r5（2026-09-22，新冻结 `i1-r5`，parent=i1-r4）**
+- 机读归因：`validate_i1_freeze.py` 对工作区 17 项失配（issue `00-freeze-realign` 记 13 项）＝ i1-r3 的绑定未随 I2 合法改动更新；i1-r3/r4 均绑定 `admission.py=3521f495`，而当前权威源为 `37b17e9b`（I2 演进所致），i1-r3 旧绑定成为待办漂移。
+- 落地：新增 i1-r5 重绑链（8 项 implementation 含 `admission.py=37b17e9b`、`clean.py=d46491b2`；9 项 tests 含 `test_corpus_preparation_clean.py=655b2be1`；freeze_validator=validate_i1_freeze.py 新哈希），在 `validate_i1_freeze.py` 增 i1-r5 块并让 i1-r3 对被 supersession 路径豁免（`superseded_i5` 跳过，不改写历史 i1-r3 字节）。i1-r5 的父快照=i1-r4（字节与声明哈希一致）。
+- 存档：`audits/20260922-i1-r5-m5-rebind/before-r5/` 归档 pre-r5 验证器字节（4abfe8e9...）。
+- 验证：`validate_i1_freeze.py` **exit 0**；`validate_i0c_freeze.py` **exit 0**；`validate_i3_2_completion.py` **exit 0**。
+- **联动修正（r34 历史归档忠实性，随 i1-r5 引入而修正）**：创建 i1-r5（重绑 admission.py=37b17e9b）后，i0c 验证器原 r34 块用 `merged_binding_from_all_but(r34)` 重建 prev34，会拉入创建晚于 r34 的修订（含 i1-r5、i0c-r36/r38/r39）覆盖 r34 归档时点旧绑定，破坏 r34 历史比对。改为 `prev34 = merged_binding_upto_revision(33)` 为基，仅用**创建时间 ≤ r34 的 i1 修订**补齐 i0c≤33 未绑定路径（最新 i1 生效，admission.py pre-r34=3521f495 源自 i1-r2/r3/r4），i0c 已绑定路径（如 test_corpus_preparation_admission 权威 062953f2）不被 i1 陈旧值覆盖。该修正重绑 i0c-r4r 的 freeze_validator（494516be→956782ce→dac07fcb）。
+- 纪律：不 commit、不 publish、不重摄入；不调 `max_chunks_per_top_document=8`；M5 结论仍待独立复核 + U 签认。
+
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。
 - 每笔：不做"先调阈值再验归因"；不触金标；不调 `max_chunks_per_top_document=8`；负例误报不得回升。

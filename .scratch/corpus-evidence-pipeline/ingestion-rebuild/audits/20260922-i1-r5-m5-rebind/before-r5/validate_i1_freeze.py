@@ -61,25 +61,6 @@ for entry in snapshots:
 check("i1-r3" in by_id, "索引缺少 i1-r3 条目")
 check("i1-r1" in by_id, "索引缺少 i1-r1 条目")
 
-# i1-r5（随 I2 合法改动重绑 I1 冻结字节）：下列路径已由 i1-r5 绑定为当前版本，
-# i1-r3 中对应旧绑定按 supersession 豁免（最新修订优先，不改写历史 i1-r3 字节）。
-superseded_i5: set[str] = set()
-r5_binding: dict = {}
-if "i1-r5" in by_id:
-    r5 = load_json(BASE / by_id["i1-r5"].get("file", ""))
-    p5 = r5.get("parent_snapshot", {})
-    check(p5.get("snapshot_id") == "i1-r4",
-          f"r5.parent 应为 i1-r4，实际 {p5.get('snapshot_id')!r}")
-    if p5.get("snapshot_id") == "i1-r4":
-        pfile5 = ROOT / p5.get("path", "")
-        if not pfile5.is_file() or digest(pfile5) != p5.get("sha256"):
-            errors.append("r5.parent(i1-r4) 文件字节与声明哈希不一致")
-    r5_binding = r5.get("binding", {})
-    for items in r5_binding.values():
-        superseded_i5.update(items)
-    if not r5_binding:
-        errors.append("r5.binding 为空")
-
 if "i1-r3" in by_id:
     r3 = load_json(BASE / by_id["i1-r3"].get("file", ""))
     parent = r3.get("parent_snapshot", {})
@@ -93,20 +74,12 @@ if "i1-r3" in by_id:
     total = 0
     for group in sorted(binding):
         for rel in sorted(binding[group]):
-            if rel in superseded_i5:
-                continue  # 已由 i1-r5 重绑，i1-r3 旧绑定豁免
             total += 1
             f = ROOT / rel
             if not f.is_file() or digest(f) != binding[group][rel]:
                 errors.append(f"r3.binding[{group}]: {rel} 哈希失配或缺失")
-    if total == 0 and not superseded_i5:
+    if total == 0:
         errors.append("r3.binding 为空")
-    # i1-r5 重绑的路径逐一核到 i1-r5 声明的当前哈希
-    for group in sorted(r5_binding):
-        for rel in sorted(r5_binding[group]):
-            f = ROOT / rel
-            if not f.is_file() or digest(f) != r5_binding[group][rel]:
-                errors.append(f"r5.binding[{group}]: {rel} 哈希失配或缺失")
 
 if "i1-r1" in by_id:
     r1 = load_json(BASE / by_id["i1-r1"].get("file", ""))

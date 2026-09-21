@@ -1,0 +1,47 @@
+{
+  "snapshot_id": "i1-r5",
+  "revision": "i1-r5",
+  "scope": "M5 F3：I1 冻结随 I2 合法改动重绑（issue 00 另需单列跟踪）",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i1-r4",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r4.json",
+    "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382"
+  },
+  "binding": {
+    "implementation": {
+      "plugins/corpus/preparation/admission.py": "37b17e9b7aeccf99453e8de76b8437c9930628b6dace88361803ab5c287e7d80",
+      "plugins/corpus/preparation/chunk.py": "b0c034eaa38038fe79b217f43bc2437e6fe2c21fb2653c17e7a98434b85454fc",
+      "plugins/corpus/preparation/clean.py": "d46491b22a085b7e5167f53f27ac4791e9ab8a227f3695b6a4dee211b2f27245",
+      "plugins/corpus/preparation/contract.py": "8c4396307092a2158f8843f022d37cd47c799e55463de1fd35395459278d458b",
+      "plugins/corpus/preparation/engine.py": "3d7ec3f8ad3bc1c085e5002cd237ae70e7b6152c3d9b7c2cfdc0c6bcec0034cd",
+      "plugins/corpus/preparation/readers/base.py": "338c9f0874020c2098fc401b9741b0f578a507350ee50a568833f6b585c03bdf",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "bc8d069105d0726cce73aa8a8908023f5868b2017cab84ff9e8e45633d594c40",
+      "plugins/corpus/preparation/repository.py": "130e83c4d25d6f782d82d41e61964021c4081e924fc1f9c3f4e0c5541349b88d"
+    },
+    "tests": {
+      "tests/test_corpus_preparation_admission.py": "ccfd2dd833b9dc582618339a92a5ed35c831e96a639802660d2c93ffed783ee7",
+      "tests/test_corpus_preparation_chunk.py": "50e8ea6c9e0e2d62103d0ff3be93a6542bb40daea4a91dd30197dcd48cbbcf43",
+      "tests/test_corpus_preparation_clean.py": "655b2be1cdf42c111eb08e41405b86e74f3c8386e8a5c66ac1ce923dc2bf38f7",
+      "tests/test_corpus_preparation_contract.py": "b3128a420ba61b232aa1b516df69410f5ea8a3fd16e8afbdb8432ff396c79acd",
+      "tests/test_corpus_preparation_engine.py": "09317f44a3f5a42df66ff7225f6419393b8d8cb3ddc32f695833445c589ee99b",
+      "tests/test_corpus_preparation_fixtures.py": "1febafc5cade8579304c8b83eb6be6a10650c172f0ed86c1097d1f8d13823f92",
+      "tests/test_corpus_preparation_readers.py": "3c072e40147be5524ba0eaeb4dd0b055733263ca96beeb97a507af8c79e0f388",
+      "tests/test_corpus_preparation_release_gate.py": "0efd26f8ceda94cca4513088e32479dadd69e2c044ae2765b0453ae26a47ba39",
+      "tests/test_corpus_preparation_source.py": "4512d82ae2070dd4ad79168b56ffd6cfaef620bfbd75673d3f909fa7b945db9b"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i1_freeze.py": "71d8d60bd46d462a50daa4a636a6dfa71c9e0a7d0560689a340c959126611b9f"
+    }
+  },
+  "corrections": {
+    "i1_r3_binding_supersession": "validate_i1_freeze.py 对工作区 17 项失配的根因：i1-r3 的 binding 记录的是 I1-9 之后的 preparation 实现/测试字节，随后被 I2 合法改动演进（I3-3 重塑、r42 reader-pdf-5、F3 clean.py 句粒度，及对应测试族），i1-r3 旧绑定自然过期。本修订不改写历史 i1-r3 字节，改以 supersession 提供当前权威绑定：implementation(8) + tests(9) 逐路径重绑为当前哈希，freeze_validator 重绑验证器；i1-r3 块对上述 17 路径豁免，其余 i1-r3 条目（fixtures/configs/current_audit_probes 及未漂移实现/测试）仍逐一核验。"
+  },
+  "notes": [
+    "i1-r5 为 I1（M5）链随 I2 合法改动的重绑修订（parent=i1-r4）：使 validate_i1_freeze.py 自 I2 起失配恢复为 exit 0，不改任何运行字节语义、不改写已关闭的 i1-r3 冻结产物。",
+    "archive-first：修改前已归档验证器 pre-r5 字节（4abfe8e9…）至 audits/20260922-i1-r5-m5-rebind/before-r5/，sha256 留痕 pre-r5.sha256。",
+    "重绑哈希锚点：clean.py=d46491b2、test_corpus_preparation_clean.py=655b2be1 与 i0c-r4p（F3 冻结）逐字一致；其余为 I3-3/reader-pdf-5 后当前权威字节。",
+    "纪律：不 commit、不 publish；不触 I2/retrieval 层字节；I1 链为历史审计层，重绑仅更新校验锚点不改变语义。"
+  ],
+  "created_at": "2026-09-22T02:40:00+08:00"
+}
