@@ -946,6 +946,12 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 常驻测试：`tests/test_corpus_selection.py` 新增 3 条 I-ATT-1 永驻测试（伪单元对"表头 in NOISE + 评级句 in kept"取到完整引文且序正确；不同页/无 y 重叠不聚合；块内已有单元不重复）。selection 30 passed；corpus 家族 **751 passed / 12 skipped**（748 基线 +3 不回退）；ruff/pyright 全绿。
 - 冻结影响：接线改 `service.py` 字节（r4n 绑定 `service.py=54ef53b8` 现漂移）＋新增模块，**待 archive-first 建新冻结修订（U 门控，不并入 F2/F3 修订）**；不重摄入、不 publish、不 commit。
 
+**F4 冻结（2026-09-22，新冻结 `i0c-r4q`，parent=i0c-r4p）**
+- archive-first：先归档被覆盖的 r4n 绑定字节至 `audits/20260922-f4-table-attribution/before-r4q/`——`service.py`（=r4n 54ef53b8，c4e5803）与 `test_corpus_selection.py`（=r4n a1b654ec，c4e5803），逐条与 r4n 绑定一致（sha256 已核）。
+- 重绑：`chain_rebind_implementation[service.py]`（54ef53b8→`0227529c`，search_bands 接线 `cross_boundary.aggregate_band_chunks`）、`chain_rebind_implementation[cross_boundary.py]`（`85ee6be6`，**首次入链**，aggregate_band_chunks/_merge_chunk）、`chain_rebind_tests[test_corpus_selection.py]`（a1b654ec→`1d0ecc29`，3 条 I-ATT-1 门）；`freeze_validator` 重绑（r4p `8b995972`→`acdd7586`，新增 r4q 校验块）。
+- 校验：`validate_i0c_freeze.py` 增 r4q 块后，r4q 全部检查通过（parent/边界/语义门：service 含 `cross_boundary.aggregate_band_chunks`、cross_boundary 含 `aggregate_band_chunks/_merge_chunk`、tests 含 3 条 I-ATT-1）；其余**唯一失败项为 r39 既有待办漂移**（calibration-plan 历史 read_pg 绑旧哈希，已关闭轮次产物不改写，待独立校准修订承接，非 r4q 引入，r4n/r4p 时代即存在）。
+- 纪律：不重摄入、不 publish、不 commit 本冻结修订；不改 clean 判定、不调 `max_chunks_per_top_document=8`、不触 scorer/金标。company-003 / company-008 其余目标仍归独立议题。
+
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。
 - 每笔：不做"先调阈值再验归因"；不触金标；不调 `max_chunks_per_top_document=8`；负例误报不得回升。

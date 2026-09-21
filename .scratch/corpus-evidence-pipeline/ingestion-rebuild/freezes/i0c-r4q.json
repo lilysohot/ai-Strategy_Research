@@ -1,0 +1,39 @@
+{
+  "snapshot_id": "i0c-r4q",
+  "revision": "r4q",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4p",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4p.json",
+    "sha256": "3b7e32f0d62181a2dc33049634de57ef4c5e4055eddd12d3568c14994c0500ef"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/service.py": "0227529c07383defb3c15d0156941f3cf0d664e55628e7eb2ae6e9c7bc91c1ca",
+      "plugins/corpus/preparation/cross_boundary.py": "85ee6be6335a97387614ada9eafc4d85efd8d7b5e9623b822df924d53dfef567"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_selection.py": "1d0ecc29b9f1a25612df34f18e9077067a3e53a69f9af54379e2ccac2b64573d"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "acdd758681d8178e13728f91fe5641fad5a97b5f076e72d9ecac72d3aa982e82"
+    }
+  },
+  "corrections": {
+    "cross_boundary_aggregation": "F4 落地（spec §14.5 issues/09，company-008/a-1 表归属 / 跨边界联合取证）：新增 plugins/corpus/preparation/cross_boundary.py——aggregate_band_chunks（只读 PG i2_sandbox_corpus，0 model calls）把与 kept 单元同页且水平行带（bbox 垂直重叠）的 header_repeated_geometric/footer_repeated_geometric NOISE 单元按 (ordinal, unit_id) 保序聚合进块证据；纯 _merge_chunk 可离线测试（I-ATT-1）。消费侧读取接线 service.search_bands。",
+    "service_wiring": "plugins/corpus/service.py 重绑（r4n 54ef53b8 → 0227529c，first-in-chain 后首次 rebind）：search_bands 内 _assemble_band_documents 前对 fetch_bands 结果调用 cross_boundary.aggregate_band_chunks（与 f4_replay 验证同一接入点，product 接线）。",
+    "cross_boundary_first_in_chain": "plugins/corpus/preparation/cross_boundary.py 首次入链（85ee6be6，新模块）：携带 aggregate_band_chunks/_merge_chunk，只聚合四类重复几何表头/脚注 NOISE，不改 clean 判定、不重摄入。",
+    "tests": "tests/test_corpus_selection.py 重绑（r4n a1b654ec → 1d0ecc29，I-ATT-1 门）：新增 3 条永驻反例——表头 in NOISE + 评级句 in kept 取完整引文且标题序在前、不同页/无 y 重叠不聚合、块内已有单元不重复聚合（保幂等）。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4p 8b995972 → acdd7586）：新增 i0c-r4q 校验块（parent/边界/语义门：service 含 cross_boundary.aggregate_band_chunks，cross_boundary 含 aggregate_band_chunks/_merge_chunk，tests 含 3 条 I-ATT-1 门）；merge_binding 覆盖 r4p 的 freeze_validator 组。"
+  },
+  "notes": [
+    "r4q 为 F4（spec §14.5 issues/09，a-1 表头/正文边界表归属）链上重绑修订：闭合 F4 接线 service.py 的 r4n 漂移 + test_corpus_selection.py 的 r4n 漂移，并把新模块 cross_boundary.py 首次纳入绑定。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260922-f4-table-attribution/before-r4q/：service.py（=r4n 54ef53b8，c4e5803）与 test_corpus_selection.py（=r4n a1b654ec，c4e5803），逐条与 r4n 绑定一致（sha256 已核）。cross_boundary.py 为新增模块，无上一绑定。",
+    "F4 收口实测口径（audits/20260922-f4-table-attribution/）：a-1 false→true；EvidencePass off/on 均 18/24 不回退（e2 按题计，company-008 其余目标仍 fail 归既有 company-008 议题）；6 负例 retrieved_documents=0；I-ATT-1 判定层拒检兜底与 F1 negative_query 自洽（不触 search_pg/scoring 字节）。",
+    "回归（F4 已完成，冻结前复核）：tests/test_corpus_selection.py 30 passed（27+3）；corpus 家族 tests/test_corpus_*.py 751 passed / 12 skipped（748 基线+3，无回退）；ruff check / ruff format / pyright 全绿。",
+    "纪律：不重摄入、不 publish、不 commit 本冻结修订；不改 clean 判定、不调 max_chunks_per_top_document=8、不触 scorer/金标、不降 max_false_positives 门槛。company-003 / company-008 其余目标仍归独立议题。"
+  ],
+  "m5_declaration": "not_declared（F4 仅消费侧只读取证聚合，检索/选择/评分结论不受影响；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-22T01:40:00+08:00"
+}

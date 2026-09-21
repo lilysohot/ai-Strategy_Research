@@ -1901,6 +1901,39 @@ if "i0c-r4p" in by_id:
           "r4p test_corpus_preparation_clean must carry I-E3 keep/rating-threshold gates")
     merge_binding(i0c_current_binding, bindingr4p)
 
+if "i0c-r4q" in by_id:
+    r4q = load_json(BASE / by_id["i0c-r4q"]["file"])
+    parent43r4q = BASE / by_id["i0c-r4p"]["file"]
+    check(r4q.get("parent_snapshot") == {"snapshot_id": "i0c-r4p",
+          "path": str(parent43r4q.relative_to(ROOT)), "sha256": digest(parent43r4q)},
+          "r4q parent mismatch")
+    bindingr4q = r4q.get("binding", {})
+    check(set(bindingr4q) == {"chain_rebind_implementation", "chain_rebind_tests", "freeze_validator"},
+          "r4q binding groups mismatch")
+    check(set(bindingr4q.get("chain_rebind_implementation", {})) == {
+        "plugins/corpus/service.py",
+        "plugins/corpus/preparation/cross_boundary.py"},
+          "r4q service/cross_boundary implementation boundary mismatch")
+    check(set(bindingr4q.get("chain_rebind_tests", {})) == {
+        "tests/test_corpus_selection.py"}, "r4q test_corpus_selection tests boundary mismatch")
+    check(set(bindingr4q.get("freeze_validator", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
+          "r4q freeze_validator boundary mismatch")
+    # F4 跨边界取证的语义门：service.py 必须接线 cross_boundary 聚合，
+    # cross_boundary.py 必须实际携带聚合实现，tests 必须携带 I-ATT-1 门（spec §10.4 / issue 09）。
+    svc_src_r4q = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
+    check("cross_boundary.aggregate_band_chunks" in svc_src_r4q,
+          "r4q service.py must wire cross_boundary.aggregate_band_chunks into search_bands")
+    cb_src_r4q = (ROOT / "plugins/corpus/preparation/cross_boundary.py").read_text(encoding="utf-8")
+    check("def aggregate_band_chunks" in cb_src_r4q and "def _merge_chunk" in cb_src_r4q,
+          "r4q cross_boundary.py must carry aggregate_band_chunks/_merge_chunk")
+    tst_r4q = (ROOT / "tests/test_corpus_selection.py").read_text(encoding="utf-8")
+    check("test_cross_boundary_aggregates_noise_header_into_full_quote" in tst_r4q
+          and "test_cross_boundary_ignores_different_page_and_no_y_overlap" in tst_r4q
+          and "test_cross_boundary_do_not_repeat_existing_unit" in tst_r4q,
+          "r4q test_corpus_selection must carry I-ATT-1 gates")
+    merge_binding(i0c_current_binding, bindingr4q)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -1966,4 +1999,5 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green" if "i0c-r42" in by_id else "")
       + ("; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped" if "i0c-r43" in by_id else "")
       + ("; r4n F2 band/cell production default: search_with_coverage + search switch perdoc->band via _selected_chunk_hits, read_pg band read path bound (search_with_coverage_bands/fetch_bands), selection.py + test_corpus_selection/test_corpus_consumers_pg bound, I-BAND-1/I-CELL-1 gates, U 2026-09-21 named decision (spec §10.5 option A); clean.py(r4p) + r39 plan read_pg drift recorded as pending" if "i0c-r4n" in by_id else "")
-      + ("; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1)" if "i0c-r4p" in by_id else ""))
+      + ("; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1)" if "i0c-r4p" in by_id else "")
+      + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else ""))
