@@ -2001,6 +2001,37 @@ if "i0c-r4r" in by_id:
     _r4r_rb = load_json(BASE / by_id["i0c-r4r"]["file"]).get("binding", {})
     merge_binding(i0c_current_binding, _r4r_rb)
 
+if "i0c-r4s" in by_id:
+    r4s = load_json(BASE / by_id["i0c-r4s"]["file"])
+    parent43r4s = BASE / by_id["i0c-r4r"]["file"]
+    check(r4s.get("parent_snapshot") == {"snapshot_id": "i0c-r4r",
+          "path": str(parent43r4s.relative_to(ROOT)), "sha256": digest(parent43r4s)},
+          "r4s parent mismatch")
+    bindingr4s = r4s.get("binding", {})
+    check(set(bindingr4s) == {"chain_rebind_tests", "freeze_validator"},
+          "r4s binding groups mismatch")
+    check(set(bindingr4s.get("chain_rebind_tests", {})) == {
+        "tests/test_corpus_preparation_admission.py",
+        "tests/test_corpus_consumers_pg.py",
+        "tests/test_corpus_dev_lane.py"}, "r4s chain_rebind_tests boundary mismatch")
+    check(set(bindingr4s.get("freeze_validator", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
+          "r4s freeze_validator boundary mismatch")
+    # ① M5 consumers-pg 测试缺陷修复（decision_id 按 source 区分，RM-7 全局唯一）
+    cpg_src_r4s = (ROOT / "tests/test_corpus_consumers_pg.py").read_text(encoding="utf-8")
+    check("sel-d" in cpg_src_r4s and "decision_id=decision_id" in cpg_src_r4s,
+          "r4s consumers-pg must differentiate decision_id per source (sel-d)")
+    # ② dev-lane 测试拆出 i1（i1 守卫只放行 6 份材料）：admission 测试回归纯净
+    adm_src_r4s = (ROOT / "tests/test_corpus_preparation_admission.py").read_text(encoding="utf-8")
+    check("test_dev_lane" not in adm_src_r4s and "DEV_MD_PATH" not in adm_src_r4s,
+          "r4s admission test must be dev-lane free (i1 guard pure)")
+    # ② test_corpus_dev_lane.py 首次入链：dev-lane 用例仅在 i3-e2e 守卫下运行
+    devsrc_r4s = (ROOT / "tests/test_corpus_dev_lane.py").read_text(encoding="utf-8")
+    check("test_dev_lane_on_admits_declared_source_with_truthful_material" in devsrc_r4s
+          and "i3-1-dev-lane-md-docx" in devsrc_r4s,
+          "r4s test_corpus_dev_lane.py must carry the dev-lane on-admits gates")
+    merge_binding(i0c_current_binding, bindingr4s)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2068,4 +2099,5 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4n F2 band/cell production default: search_with_coverage + search switch perdoc->band via _selected_chunk_hits, read_pg band read path bound (search_with_coverage_bands/fetch_bands), selection.py + test_corpus_selection/test_corpus_consumers_pg bound, I-BAND-1/I-CELL-1 gates, U 2026-09-21 named decision (spec §10.5 option A); clean.py(r4p) + r39 plan read_pg drift recorded as pending" if "i0c-r4n" in by_id else "")
       + ("; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1)" if "i0c-r4p" in by_id else "")
       + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else "")
-      + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else ""))
+      + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else "")
+      + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else ""))

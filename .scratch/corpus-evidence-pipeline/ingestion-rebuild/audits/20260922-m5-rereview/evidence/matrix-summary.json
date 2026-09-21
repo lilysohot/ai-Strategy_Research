@@ -1,0 +1,141 @@
+{
+  "blocks": {
+    "freeze-validator": {
+      "exit": 0
+    },
+    "freeze-hashes": {
+      "exit": 0
+    },
+    "target-guard": {
+      "exit": 0
+    },
+    "guard-selfcheck": {
+      "exit": 0,
+      "selfcheck": {
+        "passed": true,
+        "cases": 24
+      }
+    },
+    "publication-pg": {
+      "exit": 0,
+      "junit": [
+        17,
+        0,
+        0,
+        0
+      ]
+    },
+    "repository-pg": {
+      "exit": 0,
+      "junit": [
+        18,
+        0,
+        0,
+        0
+      ]
+    },
+    "authority-pg": {
+      "exit": 0,
+      "junit": [
+        8,
+        0,
+        0,
+        0
+      ]
+    },
+    "cli-isolation": {
+      "exit": 0,
+      "junit": [
+        5,
+        0,
+        0,
+        0
+      ]
+    },
+    "consumers-pg": {
+      "exit": 1,
+      "junit": [
+        20,
+        1,
+        0,
+        0
+      ]
+    },
+    "cli-pg": {
+      "exit": 0,
+      "junit": [
+        4,
+        0,
+        0,
+        0
+      ]
+    },
+    "i28-i24-probes": {
+      "exit": 0,
+      "junit": [
+        6,
+        0,
+        0,
+        0
+      ]
+    },
+    "i2-fullchain-probes": {
+      "exit": 0,
+      "junit": [
+        12,
+        0,
+        0,
+        0
+      ]
+    },
+    "i2-gap-dispositions": {
+      "exit": 0,
+      "junit": [
+        13,
+        0,
+        0,
+        0
+      ]
+    },
+    "i1-business-guard-env": {
+      "exit": 2,
+      "junit": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    "guard-tests-normal-env": {
+      "exit": 0,
+      "junit": [
+        19,
+        0,
+        0,
+        0
+      ]
+    },
+    "ruff-check": {
+      "exit": 0
+    },
+    "ruff-format-check": {
+      "exit": 0
+    },
+    "pyright-i2-scope": {
+      "exit": 0
+    },
+    "import-smoke-stage1": {
+      "exit": 0
+    },
+    "postflight-freeze-revalidate": {
+      "exit": 0
+    }
+  },
+  "misses": [
+    "consumers-pg: exit=1 期望 0",
+    "consumers-pg: junit=(20, 1, 0, 0) 期望 (19, 0, 0, 0)",
+    "i1-business-guard-env: exit=2 期望 0",
+    "i1-business-guard-env: junit=(1, 0, 1, 0) 期望 (188, 0, 0, 0)"
+  ],
+  "errors": []
+}

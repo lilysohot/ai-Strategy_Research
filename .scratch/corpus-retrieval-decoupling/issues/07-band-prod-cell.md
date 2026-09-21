@@ -1,6 +1,12 @@
-# 07 band 接生产 + 补 cell 投影（17/24→19/24 生产生效）
+# 07 band 接生产 + 补 cell 投影（**生产默认已由 `i0c-r4n` 切换为 band**；当前语料 17→18/24）
 
-Status: completed
+Status: completed（F2 全部落地：band 读取路径 + cell 投影 + **生产默认 perdoc → band**）
+- **`i0c-r4n`（2026-09-21，frozen）已完成生产默认切换**：`service.py` `_selected_chunk_hits`
+  （`select_band` 选中带 → 带内原文序块摊平）、`read_pg.search_with_coverage_bands` / `fetch_bands` 首次入链、
+  `select_band` 为生产默认策略；**U 具名决策**（spec §10.5 选项 A）。
+- **成绩口径更正**（2026-09-21 审核）：标题原为"17/24→19/24 生产生效"。i41 的 19/24 测于**更早 reader-pdf-5 语料**；
+  当前 index-4-zhcfg-2 上 **band = 17/24、band+cell = 18/24**，自检如实标 `band_s2_evidence_pass_19: false`（不虚报）。
+  19/24 封口待 **company-003 独立议题**（文档级召回，band/cell 均不能修）。
 
 > **实施完成（2026-09-21，`audits/20260922-f2-band-prod-cell/`）——U 已签收口口径：17→18/24（当前语料）**
 > - 2a（band 接生产）：产品新增 band 读取路径，只读回测复现 **17/24**（company 5/8, industry 4/8, macro 8/8）——

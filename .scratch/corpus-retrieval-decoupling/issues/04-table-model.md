@@ -1,6 +1,7 @@
 # 04 表格结构模型（下沉到 reader）
 
-Status: needs-triage
+Status: completed（2026-09-21：`readers/pdf_reader.py:146` `TableModel.label_path`、`:519-533` 填入 `UnitLocation.label_path`；
+`contract.py:309`；`chunk.py:169` `_table_row_label_prefix` 注入索引文本。I-B1/I-B2 由 `tests/test_corpus_selection.py` 覆盖）
 Type: task
 Depends: 03
 Layer: reader

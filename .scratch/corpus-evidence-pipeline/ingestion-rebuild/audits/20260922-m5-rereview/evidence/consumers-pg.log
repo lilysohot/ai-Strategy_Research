@@ -1,0 +1,13 @@
+.F..................                                                     [100%]
+=================================== FAILURES ===================================
+_________________ test_service_search_applies_selection_policy _________________
+tests/test_corpus_consumers_pg.py:230: in test_service_search_applies_selection_policy
+    _register_source(store, source_id)
+tests/test_corpus_consumers_pg.py:116: in _register_source
+    store.put_admission(
+plugins/corpus/preparation/repository_pg.py:486: in put_admission
+    raise StoreError(
+E   plugins.corpus.preparation.repository.StoreError: admission 冲突：d1 已存在且内容不同，拒绝覆盖
+=========================== short test summary info ============================
+FAILED ../../../dev::test_service_search_applies_selection_policy - plugins.c...
+1 failed, 19 passed in 3.42s

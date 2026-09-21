@@ -1,6 +1,7 @@
 # 03 chunk：连续块区间（cover）与召回/排序拆分
 
-Status: needs-triage
+Status: completed（**本票已作废**：§10.5 归属裁决选 A —— "连续块区间"由**选择层 band** 承载，`chunk.cover` 不再实施；
+`rank_hits` 拆分部分已完成（`search_pg.py:162`，global 变体已弃用））
 Type: task
 Depends: 02
 Layer: chunk + search 排序

@@ -1,0 +1,34 @@
+{
+  "snapshot_id": "i0c-r4s",
+  "revision": "r4s",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4r",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4r.json",
+    "sha256": "68433519ff7296b04b830f9aa2b2adb6e5eb9b69f119ffa06d0568265439692a"
+  },
+  "binding": {
+    "chain_rebind_tests": {
+      "tests/test_corpus_preparation_admission.py": "6adbb2745c90ec28053255fa4b46d168548e38e040f6c9c8d7a42c4eb477fd78",
+      "tests/test_corpus_consumers_pg.py": "24c65f4749fee0b5700eec49f8c4dfd533955aaa28120bb984c005a83c263f6b",
+      "tests/test_corpus_dev_lane.py": "d126db7ed509daf7dc9aabaca2075d9f78f536a65a842ac45ce39fe61c83cc39"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "8babe171d38d8e5afd4289879deb7933fa20ddceab7aabe73f318d0c15ad7daf"
+    }
+  },
+  "corrections": {
+    "consumers_pg_decision_id": "M5 复核 ①（test_corpus_consumers_pg.py，R3 选择策略消费测例 19→20 失败）测试缺陷修复：单测循环对 6 个不同 source 复用 decision_id='d1'，put_admission 按 RM-7 强制全局唯一，第 2 轮起 StoreError 冲突（'admission 冲突：d1 已存在且内容不同'）；归因已由清库重跑确证为确定性测试缺陷（与 DB 残留无关）。落地=_register_source/_stage_units/_publish 增 decision_id 参数（默认 'd1' 不动存量单源测例），R3 循环改用 per-source 'sel-d{i}'（admission/build/publish 三处一致）。验证：真库 CORPUS_I2_DSN=postgres://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus 下全文件 20 passed。",
+    "dev_lane_split": "M5 复核 ②（i1-business-guard-env 收集失败）根因与拆解：dev-lane 用例（r34/I3-1 产物）落在 i1 阶段测试文件，模块顶层 read_bytes() 读 data/corpus/工业富联…md 不在 i1 允许清单（6 份）内，i1 守卫于收集期抛 OSError，整文件 53 个测试全数无法运行（ERROR 非 FAILED）。落地=新建 tests/test_corpus_dev_lane.py（9 条 test_dev_lane_* + 两路径常量 + 辅助函数）首次入链，仅于 guards/i3-e2e.json（8 份允许清单）下运行；test_corpus_preparation_admission.py 删除 dev-lane 块恢复纯净（i1 守卫回归 6 份材料语义，collection 恢复）。验证：i1 守卫下 admission 53 passed；i3-e2e 守卫下 dev_lane 9 passed。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4r dac07fcb → 8babe171）：新增 i0c-r4s 校验块（parent=i0c-r4r、chain_rebind_tests 三路径边界、语义门——consumers-pg 须含 sel-d 区分、admission 不得含 test_dev_lane/DEV_MD_PATH、dev_lane.py 须含 on-admits 门与 i3-1-dev-lane-md-docx），r4s 合并置于 r4r 之后最后执行（最新修订优先）。"
+  },
+  "notes": [
+    "r4s 为 M5 复核两处测试缺陷的链上重绑修订（parent=i0c-r4r）：① test_corpus_consumers_pg.py decision_id 按 source 区分；② dev-lane 测试拆至新文件 test_corpus_dev_lane.py（首次入链，i3-e2e 守卫下运行），admission 测试恢复 i1 纯净。不改任何运行实现/守卫/金标字节。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260922-r4s-rebind/before-r4s/：test_corpus_preparation_admission.py（=HEAD ccfd2dd8，与 i1-r5/r4n 绑定一致）与 test_corpus_consumers_pg.py（=HEAD c6bf0015，与 r4n 绑定一致）；test_corpus_dev_lane.py 为新增模块无上一绑定。同时备份沙箱库 i2_sandbox_corpus 全部 corpus 表至 before-r4s/backup/（psycopg 逻辑备份，无 pg_dump 环境）。",
+    "验证口径：真库 20 passed（consumers-pg）；i1 守卫下 admission 53 passed、i3-e2e 守卫下 dev_lane 9 passed（拆文件后各自守卫集合）；ruff 全绿；validate_i0c_freeze.py exit 0（r29 NOTE 为非失败既有项）。",
+    "纪律：不 commit、不 publish、不重摄入；不触 guards/i1.json 字节、不调 max_chunks_per_top_document=8、不降 max_false_positives 门槛；未改 run_matrix.sh（r17 已关闭轮次产物，i3-e2e 接线留待新版矩阵）。"
+  ],
+  "m5_declaration": "not_declared（r4s 仅重绑两个测试文件 + 新测试文件首次入链，不改任何运行字节；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-22T03:20:00+08:00"
+}

@@ -1,6 +1,6 @@
 # 02 SearchHit 加深：检索命中自带结构坐标
 
-Status: needs-triage
+Status: completed（2026-09-21：`search_pg.py:94` 增 `page`/`cells`/`label_path`，`:105` `_enrich_hits` 同游标批量加深，禁 N+1）
 Type: task
 Depends: 01
 Layer: search 接口

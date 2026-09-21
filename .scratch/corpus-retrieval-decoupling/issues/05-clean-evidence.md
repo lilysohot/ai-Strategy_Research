@@ -1,6 +1,8 @@
 # 05 清洗判定依据可机读
 
-Status: needs-triage
+Status: completed（2026-09-21：`audits/20260921-s5-noise-verdict/` 交付；`NoiseVerdict` + `CleanRegion.verdicts`
++ `verify_noise_verdicts`（I-E1/I-E2）落产品；常驻测试入 `tests/test_corpus_preparation_clean.py`。
+目标级归因：e1 = `disclaimer_section` 规则过宽（→ 票 08 已处理）；a-1 = 页眉本就该剔，损失归引文边界（→ 票 09）。**不调任何阈值**）
 Type: task
 Depends: 03
 Layer: clean

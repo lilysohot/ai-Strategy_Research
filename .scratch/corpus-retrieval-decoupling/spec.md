@@ -783,7 +783,20 @@ i42 `recall-funnel.json` 的 `not_in_doc_unreachable: 2` 应读作 **`doc_not_ke
 | `kept_not_candidate` | 11 | 11 | 0 |
 | `not_in_doc_unreachable` | 2 | 2 | 应恒为 2（不由管线修复） |
 
-> band-summary.json 的 `target_buckets` 用 s2 位置桶口径（`matched 60 / selected_but_match_fail 9 / kept_page_not_selected 8 / not_in_doc_unreachable 2`），与上表漏斗层分解不同，勿混用。
+> **⚠️ 两个「matched」是两套口径，必须区分，任何对比相减前先声明落点**（已在 §13.4 强化）。
+>
+> band/f2 四个产物（`band-report.md`/`band-summary.json`/`f2-report.md`/`f2-summary.json`，2026-09-21 已关闭轮次，字节 write-once 不改写）各自**同时**携带：
+>
+> | 字段 | 数值 | 口径 | 权威性 |
+> |---|---|---|---|
+> | `funnel.S4_matched` | **50** | **嵌套累计端到端**：`S0_kept ∧ S1_candidates ∧ S2_doc_topk ∧ S3_band_cover ∧ 逐字match`。目标「走完 S4 才存活」=产品真实可用命中 | **权威**；§13.3 表格、band 结论 `44→50 +6`、EvidencePass 17/24/18/24 均以此为准 |
+> | `target_buckets.matched` | **60** | **doc级逐字可达桶**（i42/s2 位置桶口径）：只要求引文 quote 在「已服务/选中文档的证据文本」里逐字出现，**不要求通过 S1/S2/S3** | 补充口径；量「引文在服务证据文本里到没到」（reach），非通过（pass） |
+>
+> **二者是父子集关系（band/f2 两套产物逐目标均核验一致）**：`funnel.S4_matched(50) ⊆ target_buckets.matched(60)`，差 **10** 条即「引文逐字存在于服务文本、却在更早漏斗层已丢失」：`company-004 e2/a-2/a-3`、`company-005 e2/e3`、`company-008 a-3/a-5`、`macro-002 e4`、`macro-003 a-2/a-4`。
+>
+> 两数各自自洽可加：漏斗桶 `50+9(selected_but_match_fail)+1(doc_topk_no_band)+6(candidates_no_doc)+11(kept_not_candidate)+2(not_in_doc)=79` ✓；position 桶 `60+9(selected_but_match_fail)+8(kept_page_not_selected)+2(not_in_doc)=79` ✓。
+>
+> 根因在 `backtest.py`（band/f2 同脚本）内部两个判定谓词：漏斗 `s4 = s3 and matched`（嵌套累计），桶赋用的 `matched` 却遍历 `obs.documents` 全局证据做 doc 级逐字判定、**不排查询失败层**。同为「matched」名字，一为 pass 一为 reach，故 50≠60。**产品对比一律取 `funnel.S4_matched`；`target_buckets.matched` 仅在不需 doc_topk/band 语义的「引文可达」统计里可用，不得与之相减。**
 
 **负例误报**（同步记录，不得缺失）
 
@@ -798,10 +811,11 @@ i42 `recall-funnel.json` 的 `not_in_doc_unreachable: 2` 应读作 **`doc_not_ke
 1. **同口径**：79 目标、嵌套累计、同一 scorer 字节、同一 active corpus（8 builds）
 2. **单变量**：一次对比只改一票（或一次合并冻结 `i0c-r41`），不得同时改口径
 3. **先钉 §13.1 的 S4 口径**，否则 `selected_but_match_fail` 不可比
-4. **每层都报 Δ**：不得以上层的提升掩盖下层的下降；任一层下降必须给出解释
-5. **负例误报同步报**：目标存活率上升但负例误报回升 = 无效
-6. **数据必须来自落盘产物**（脚本 + 输出文件），不得口述填入
-7. 在 §13.1 口径下 `not_in_doc_unreachable` 恒为 2（注意：**i37 口径下该桶为 0**，其 2 条落在 `doc_not_kept_clean_stage_loss`，见 §10.4）；若变化，须先确认是否换了桶定义，再判定是否金标/语料被改动
+4. **复用 band/f2 产物时，「matched」默认指 `funnel.S4_matched`（端到端 `44→50`、§13.3 门、EvidencePass 基线皆以此为准）**；`target_buckets.matched`（doc级可达 60）是补充口径，仅当对比明确不要求 doc_topk/band 语义时才可用，且必须就地注明是哪个数，**不得与 `S4_matched` 相减**（两套口径定义/断言见 §13.3 注）
+5. **每层都报 Δ**：不得以上层的提升掩盖下层的下降；任一层下降必须给出解释
+6. **负例误报同步报**：目标存活率上升但负例误报回升 = 无效
+7. **数据必须来自落盘产物**（脚本 + 输出文件），不得口述填入
+8. 在 §13.1 口径下 `not_in_doc_unreachable` 恒为 2（注意：**i37 口径下该桶为 0**，其 2 条落在 `doc_not_kept_clean_stage_loss`，见 §10.4）；若变化，须先确认是否换了桶定义，再判定是否金标/语料被改动
 
 ---
 
@@ -966,6 +980,14 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 验证：`validate_i1_freeze.py` **exit 0**；`validate_i0c_freeze.py` **exit 0**；`validate_i3_2_completion.py` **exit 0**。
 - **联动修正（r34 历史归档忠实性，随 i1-r5 引入而修正）**：创建 i1-r5（重绑 admission.py=37b17e9b）后，i0c 验证器原 r34 块用 `merged_binding_from_all_but(r34)` 重建 prev34，会拉入创建晚于 r34 的修订（含 i1-r5、i0c-r36/r38/r39）覆盖 r34 归档时点旧绑定，破坏 r34 历史比对。改为 `prev34 = merged_binding_upto_revision(33)` 为基，仅用**创建时间 ≤ r34 的 i1 修订**补齐 i0c≤33 未绑定路径（最新 i1 生效，admission.py pre-r34=3521f495 源自 i1-r2/r3/r4），i0c 已绑定路径（如 test_corpus_preparation_admission 权威 062953f2）不被 i1 陈旧值覆盖。该修正重绑 i0c-r4r 的 freeze_validator（494516be→956782ce→dac07fcb）。
 - 纪律：不 commit、不 publish、不重摄入；不调 `max_chunks_per_top_document=8`；M5 结论仍待独立复核 + U 签认。
+
+**M5 复核矩阵重跑（2026-09-22，`audits/20260922-m5-rereview/evidence`）**
+- 执行：沿用 r17 复核包 `run_matrix.sh`，`M5_REVIEW_EVIDENCE_DIR` 重定向至新目录（不改写 r17 正式证据），`CORPUS_I2_DSN=postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus`（=corpus-db 沙箱，主机 543；验证器 `current_database()=i2_sandbox_corpus` 且无 apodex）。run_matrix exit=1。
+- **全绿块**：freeze-validator/freeze-hashes/target-guard/guard-selfcheck(24)/publication-pg(17)/repository-pg(18)/authority-pg(8)/cli-isolation(5)/cli-pg(4)/i28-i24(6)/i2-fullchain(12)/i2-gap-dispositions(13)/guard-tests-normal-env(19)/ruff-check/ruff-format-check/pyright-i2-scope/import-smoke-stage1/postflight-freeze-revalidate **全部 exit 0/与预期一致**；**三冻结链验证器（i0c/i1/i3_2）exit 0**。
+- **4 处 MISS（两个真实块，机读归因均非冻结字节回归）**：
+  1. `consumers-pg`：测例 19→20（新增 R3 选择策略消费测例 `test_service_search_applies_selection_policy`）。**归因（U 授权清库后重跑确证，见 audits/20260922-m5-rereview/consumers-clean/）＝确定性测试缺陷，非环境残留**：该测例在单测试循环内对 6 个不同 source_id 复用同一 `decision_id="d1"`；`repository_pg.put_admission` 按 RM-7 对该 decision_id 强制唯一（同内容幂等重放才允许），第 2 轮起即 `admission 冲突：d1 已存在且内容不同，拒绝覆盖`。与数据库状态无关（TRUNCATE 后实测仍失败）。
+  2. `i1-business-guard-env`：在守卫 `i1.json`（stage i1）环境下收集 `test_corpus_preparation_admission.py` 时读 dev-lane 文件 `data/corpus/工业富联…md`，该路径不在 i1 许可清单（`工业富联` in i1.json=否）→ 守卫 `_audit` 拒绝 = **r34 dev-lane 时代引入的守卫环境组合漂移**，非冻结字节问题。
+- 结论：M5 里程碑技术门（冻结链 + PG 门 + 静态/导入闭合）在演化后 i0c-current 上仍绿；消费者/守卫两个真实 MISS 中，`consumers-pg` 已在 U 授权清库 `i2_sandbox_corpus` 后重跑（audits/20260922-m5-rereview/consumers-clean/，TRUNCATE 后仍 1 failed/20）——**实证否定环境残留说，确证为 R3 测例确定性测试缺陷**（复用 `decision_id="d1"` 违反 put_admission 唯一性）。跟进项（待 U 决策）：① 修 `tests/test_corpus_consumers_pg.py`（`_register_source`/`_stage_units` 的 decision_id 按 source_id 区分）或裁决是否承认 R3 测例缺陷；② 裁决 i1 business 块对 dev-lane admission 测例的守卫环境归属（独立 dev-lane 守卫 vs 放宽 i1 清单）。
 
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。

@@ -102,7 +102,7 @@ def store() -> PgStore:
     instance.close()
 
 
-def _register_source(store: PgStore, source_id: str = SOURCE_ID, decision_id: str = "d1") -> None:
+def _register_source(store: PgStore, source_id: str = SOURCE_ID) -> None:
     store.put_source(
         Source(
             source_id=source_id,
@@ -115,7 +115,7 @@ def _register_source(store: PgStore, source_id: str = SOURCE_ID, decision_id: st
     )
     store.put_admission(
         Admission(
-            decision_id=decision_id,
+            decision_id="d1",
             source_id=source_id,
             material_type=MaterialType.RESEARCH_REPORT,
             research_domain=ResearchDomain.COMPANY,
@@ -125,18 +125,12 @@ def _register_source(store: PgStore, source_id: str = SOURCE_ID, decision_id: st
     )
 
 
-def _stage_units(
-    store: PgStore,
-    build_id: str,
-    text: str,
-    source_id: str = SOURCE_ID,
-    decision_id: str = "d1",
-) -> None:
+def _stage_units(store: PgStore, build_id: str, text: str, source_id: str = SOURCE_ID) -> None:
     store.put_build(
         Build(
             build_id=build_id,
             source_id=source_id,
-            decision_id=decision_id,
+            decision_id="d1",
             parse_rev="parse-test",
             clean_rev="clean-test",
             chunk_rev="chunk-test",
@@ -166,11 +160,10 @@ def _publish(
     text: str = DEFAULT_TEXT,
     source_id: str = SOURCE_ID,
     ranges: tuple[tuple[int, int], ...] = (),
-    decision_id: str = "d1",
 ) -> str:
     """建并发布一个 build，返回 chunk_id。"""
-    _register_source(store, source_id, decision_id)
-    _stage_units(store, build_id, text, source_id, decision_id)
+    _register_source(store, source_id)
+    _stage_units(store, build_id, text, source_id)
     chunk_id = f"{build_id[:16]}:c0"
     store.register_job(build_id, JobStage.CHUNKED)
     chunked = store.acquire_job(build_id, JobStage.CHUNKED, "w1", NOW, LEASE)
@@ -193,9 +186,7 @@ def _publish(
 
     store.register_job(build_id, JobStage.PUBLISHED)
     published = store.acquire_job(build_id, JobStage.PUBLISHED, "w1", NOW, LEASE)
-    store.publish(
-        source_id, decision_id, build_id, NOW, owner_id="w1", fence_token=published.fence_token
-    )
+    store.publish(source_id, "d1", build_id, NOW, owner_id="w1", fence_token=published.fence_token)
     store.finish_job(
         build_id, JobStage.PUBLISHED, "w1", published.fence_token, NOW, JobState.SUCCEEDED
     )
@@ -236,9 +227,8 @@ def test_service_search_applies_selection_policy(store: PgStore, service: Corpus
     for i in range(6):
         build_id = sha256_of_bytes(f"i2s8:sel:build:{i}".encode())
         source_id = sha256_of_bytes(f"i2s8:sel:source:{i}".encode())
-        decision_id = f"sel-d{i}"
-        _register_source(store, source_id, decision_id)
-        _stage_units(store, build_id, "石英股份高纯砂产能", source_id, decision_id)
+        _register_source(store, source_id)
+        _stage_units(store, build_id, "石英股份高纯砂产能", source_id)
         store.register_job(build_id, JobStage.CHUNKED)
         chunked = store.acquire_job(build_id, JobStage.CHUNKED, "w1", NOW, LEASE)
         store.put_chunks(
@@ -263,12 +253,7 @@ def test_service_search_applies_selection_policy(store: PgStore, service: Corpus
         store.register_job(build_id, JobStage.PUBLISHED)
         published = store.acquire_job(build_id, JobStage.PUBLISHED, "w1", NOW, LEASE)
         store.publish(
-            source_id,
-            decision_id,
-            build_id,
-            NOW,
-            owner_id="w1",
-            fence_token=published.fence_token,
+            source_id, "d1", build_id, NOW, owner_id="w1", fence_token=published.fence_token
         )
         store.finish_job(
             build_id, JobStage.PUBLISHED, "w1", published.fence_token, NOW, JobState.SUCCEEDED

@@ -1,6 +1,7 @@
 # 01 证据选择策略落入产品代码
 
-Status: needs-triage
+Status: completed（2026-09-21：`plugins/corpus/preparation/selection.py` 落产品，含 `select` / `select_structural`；
+**r43 首次入链**。I-C1 由 `tests/test_corpus_selection.py` 覆盖）
 Type: task
 Depends: 00
 Layer: 证据选择

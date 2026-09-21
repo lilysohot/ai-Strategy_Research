@@ -1,0 +1,27 @@
+-- table corpus.corpus_admissions rows=1
+-- cols: decision_id,source_id,material_type,research_domain,decision,policy_rev,reason_codes,scope_ref,evidence_refs,review_ref,rule_rev,metadata_snapshot
+'d1'|'cbf58d57a44e58d84d0e9802aed4a56406489b613eccbace81c4df8f2d81cc4a'|'research_report'|'company'|'in_scope'|'v1-20260915'|[]|NULL|[]|NULL|''|{}
+-- table corpus.corpus_builds rows=1
+-- cols: build_id,source_id,decision_id,parse_rev,clean_rev,chunk_rev,index_rev,scope_ref,config_fingerprint,artifact_manifest,quality_report
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'cbf58d57a44e58d84d0e9802aed4a56406489b613eccbace81c4df8f2d81cc4a'|'d1'|'parse-test'|'clean-test'|'chunk-test'|'index-4-zhcfg-2'|NULL|NULL|[]|{'gap_regions': [], 'oversized_chunks': []}
+-- table corpus.corpus_chunks rows=1
+-- cols: build_id,chunk_id,kind,unit_refs,context_refs,search_text,title_text,section_path,source_ranges,search_tsv
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'ccededc2ea97f93f:c0'|'paragraph'|['u1']|[]|'石英股份产能 100 万吨'|NULL|[]|[]|"'100':4 '万':5 '产能':3 '吨':6 '石英':1 '股份':2"
+-- table corpus.corpus_jobs rows=3
+-- cols: build_id,stage,attempt,state,owner_id,fence_token,lease_until,heartbeat_at,error,checkpoint
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'parsed'|1|'succeeded'|'w1'|'59f0366b80cd44384b985318a419492e3f9a47f9b96293d7ae6e3dea8a4b6773'|NULL|datetime.datetime(2026, 9, 21, 11, 7, 40, 248958, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC'))|NULL|NULL
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'chunked'|1|'succeeded'|'w1'|'1a9fbda68e263100f0dd376fe645058c189f60692fff0470fc1daa89693b6ca7'|NULL|datetime.datetime(2026, 9, 21, 11, 7, 40, 269212, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC'))|NULL|NULL
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'published'|1|'succeeded'|'w1'|'e475eb5a6e0cde48f36e570793e2d03c94d56cb8943c2db6b5ee6527f211aaf7'|NULL|datetime.datetime(2026, 9, 21, 11, 7, 40, 290005, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC'))|NULL|NULL
+-- table corpus.corpus_publications rows=1
+-- cols: source_id,current_decision_id,active_build_id,generation,activated_at
+'cbf58d57a44e58d84d0e9802aed4a56406489b613eccbace81c4df8f2d81cc4a'|'d1'|'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|1|datetime.datetime(2026, 9, 21, 11, 7, 40, 295098, tzinfo=zoneinfo.ZoneInfo(key='Etc/UTC'))
+-- table corpus.corpus_review_decisions rows=0
+-- cols: decision_id,source_id,reviewer,reviewed_at,decision,rationale,scope_ref,supersedes,locators,material_type,research_domain
+-- table corpus.corpus_source_checkpoints rows=0
+-- cols: source_id,stage,checkpoint,updated_at
+-- table corpus.corpus_sources rows=1
+-- cols: source_id,format,mime_type,size_bytes,archive_path,original_names,current_decision_id
+'cbf58d57a44e58d84d0e9802aed4a56406489b613eccbace81c4df8f2d81cc4a'|'markdown'|'text/markdown'|128|'ab/cbf58d57a44e58d84d0e9802aed4a56406489b613eccbace81c4df8f2d81cc4a.md'|['consumer.md']|'d1'
+-- table corpus.corpus_units rows=1
+-- cols: build_id,unit_id,parent_id,ordinal,kind,raw_text,content_hash,location,clean_view,mapping,status,reasons
+'ccededc2ea97f93f13a9af19d01b2e9f38eb3507309eec4a0dfae5d1c787f467'|'u1'|NULL|1|'paragraph'|'石英股份产能 100 万吨'|'43ddde780066852ede470fcfbb88c1ce0917694e04e60b3fea862315f949b2ed'|{'bbox': None, 'page': None, 'cells': [], 'element': None, 'char_span': None, 'label_path': []}|NULL|[]|'kept'|[]
