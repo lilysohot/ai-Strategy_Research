@@ -1,4 +1,5 @@
-"""I3-3 校准选择语义落产品（票 01：选择策略，I-B3 的常驻落点）+ 议题 B 结构排序最终形态。
+"""I3-3 校准选择语义落产品（票 01：选择策略，I-B3 的常驻落点）+ 议题 B 结构排序最终形态
++ band 区间落产品（§10.5 选项 A）。
 
 :func:`group_hits`（calibrate.py）的语义在此固化：候选按 score 降序流入，
 **首个命中即确定来源出现**（first occurrence），前 ``top_k`` 个来源各取
@@ -14,12 +15,17 @@ token 中的去重命中数（词元重复不放大，非表格块得 0）。glo
 （``search_pg.rank_hits`` 的 structural 模式）已在 i42 回测中对照并弃用——
 它会把无关文档的结构命中块整体提前，扰动文档级召回（company-008 茅台落出
 top-5）。
+
+band 区间（i41 已验证 19/24，S2 判定后改道落产品）：:func:`select_band` 在
+**选择层**承载"连续区间"（原票 03 ``chunk.cover`` 落点作废），chunk 层不动。
+语义：文档内把命中块按原文位置聚簇成带（gap/expand），按带分取前 ``band_cap``
+个带；``band_cap=8`` 是 I-B3 的带语义（不调 cap 值，8 从"块数"改为"带数"）。
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Mapping, Protocol
 
 
 class SelectionError(ValueError):
@@ -119,4 +125,181 @@ def select_structural(
     for sid in order:
         bucket = sorted(grouped[sid], key=key, reverse=True)
         selected.extend(bucket[: policy.max_chunks_per_document])
+    return tuple(selected)
+
+
+@dataclass(frozen=True)
+class BandPolicy:
+    """带区间选择策略（§10.5 选项 A 落产品，i40/i41 已验证语义）。
+
+    - ``gap``：相邻池块间允许的最大非池块数（空隙容忍）；
+    - ``expand``：带两端各扩展的块数；
+    - ``band_cap``：每文档选带数上限（I-B3：cap=8 的带语义——不调 cap 值，
+      ``max_chunks_per_document=8`` 语义改为"每文档选带数 8"）；
+    - ``pool_cap``：带内池块数上限（span cap mode = "pool"；超限簇按池块锚拆子带）。
+    """
+
+    gap: int = 1
+    expand: int = 1
+    band_cap: int = 8
+    pool_cap: int = 24
+
+    def __post_init__(self) -> None:
+        if self.gap < 0 or self.expand < 0:
+            raise SelectionError(f"gap/expand 必须 >= 0: {self.gap}/{self.expand}")
+        if self.band_cap < 1 or self.pool_cap < 1:
+            raise SelectionError(
+                f"band_cap/pool_cap 必须 >= 1: {self.band_cap}/{self.pool_cap}"
+            )
+
+    @property
+    def provable_width_bound(self) -> int:
+        """可证带宽上界（块）：W_max = (pool_cap-1)*(gap+1)+1+2*expand。"""
+        return (self.pool_cap - 1) * (self.gap + 1) + 1 + 2 * self.expand
+
+
+@dataclass(frozen=True)
+class SelectedBand:
+    """一个选中带区间：原文序闭区间 [start, end] + 带分 + 池块位置。
+
+    ``chunk_ids`` 是原文序带内全部块 id（含扩展的非池块），由调用方按需装配
+    （本模块不做 IO）。``pool`` 是带内池块（查询命中块）的原文序位置。
+    """
+
+    source_id: str
+    build_id: str
+    start: int
+    end: int
+    score: float
+    pool: tuple[int, ...]
+
+    @property
+    def width(self) -> int:
+        return self.end - self.start + 1
+
+
+def _form_bands(
+    pool_positions: list[int],
+    score_by_pos: dict[int, float],
+    n: int,
+    gap: int,
+    expand: int,
+) -> list[dict]:
+    """池内位置聚簇 → 带区间（原文序闭区间），带分 = 簇内最大 ts_rank。
+
+    ``pool_positions`` 已按原文序排序。相邻池位置间隔（非池块数）≤ gap 视为同簇；
+    每簇两端各扩展 expand 块。返回按位置排序的带 [{start, end, score, pool}]。
+    """
+    clusters: list[list[int]] = []
+    for p in pool_positions:
+        if clusters and p - clusters[-1][-1] - 1 <= gap:
+            clusters[-1].append(p)
+        else:
+            clusters.append([p])
+    bands = []
+    for cl in clusters:
+        bands.append({
+            "start": max(0, cl[0] - expand),
+            "end": min(n - 1, cl[-1] + expand),
+            "score": max(score_by_pos[p] for p in cl),
+            "pool": list(cl),
+        })
+    return bands
+
+
+def _cap_split(
+    bands: list[dict],
+    score_by_pos: dict[int, float],
+    n: int,
+    pool_cap: int,
+    expand: int,
+) -> list[dict]:
+    """方案 C：带内池块数上限。簇内池块 > pool_cap 时按池块锚顺序拆为子带。
+
+    每子带 = 连续 ≤pool_cap 个池块 ± expand 扩展；子带分 = 子带内最大 ts_rank。
+    """
+    out = []
+    for band in bands:
+        bp = band["pool"]
+        if len(bp) <= pool_cap:
+            out.append(band)
+            continue
+        for i in range(0, len(bp), pool_cap):
+            group = bp[i:i + pool_cap]
+            out.append({
+                "start": max(0, group[0] - expand),
+                "end": min(n - 1, group[-1] + expand),
+                "score": max(score_by_pos[p] for p in group),
+                "pool": list(group),
+            })
+    return out
+
+
+def _rank_bands(bands: list[dict]) -> dict[int, int]:
+    """带分降序排名（并列按带起点）；返回 {带在 bands 中的索引: 排名(1-based)}。"""
+    order = sorted(range(len(bands)), key=lambda i: (-bands[i]["score"], bands[i]["start"]))
+    return {idx: rank + 1 for rank, idx in enumerate(order)}
+
+
+def select_band(
+    hits: tuple[_RankedHit, ...],
+    policy: SelectionPolicy,
+    band: BandPolicy,
+    *,
+    chunk_order_by_source: Mapping[str, tuple[str, ...]],
+) -> tuple[SelectedBand, ...]:
+    """带区间选择（§10.5 选项 A 落产品）：文档选择同 :func:`select`，
+    文档内把命中块聚簇成带（gap/expand），按带分取前 ``band_cap`` 个带。
+
+    - 文档序与 :func:`select` 逐字节一致（首个命中即确定来源排名，前 ``top_k`` 来源）；
+    - 每个文档：命中块位置 → :func:`_form_bands` 聚簇 → :func:`_cap_split` 拆超限簇
+      → :func:`_rank_bands` 排名 → 取前 ``band.band_cap`` 个带（并列按带起点）；
+    - ``chunk_order_by_source``：{source_id: 原文序全部块 id}，把命中块投影到原文位置
+      （本模块不做 IO，由调用方按 build 全量块装配）；
+    - 同一来源混用多个 build 抛 :class:`SelectionError`（同 :func:`select` 判据）；
+    - 命中块不在原文序清单（chunk_order_by_source 缺项）时抛 :class:`SelectionError`
+      （fail-closed，不静默丢块）。
+    """
+    if not hits:
+        return ()
+    grouped: dict[str, list[_RankedHit]] = {}
+    order: list[str] = []
+    for hit in hits:
+        if hit.source_id not in grouped:
+            if len(grouped) >= policy.top_k:
+                continue
+            grouped[hit.source_id] = []
+            order.append(hit.source_id)
+        bucket = grouped[hit.source_id]
+        if bucket and hit.build_id != bucket[0].build_id:
+            raise SelectionError(f"同一来源多个活动 build: {hit.source_id}")
+        bucket.append(hit)
+
+    selected: list[SelectedBand] = []
+    for source_id in order:
+        bucket = grouped[source_id]
+        ordered = chunk_order_by_source.get(source_id)
+        if ordered is None:
+            raise SelectionError(f"缺少 {source_id} 的原文序块清单")
+        pos_of = {chunk_id: i for i, chunk_id in enumerate(ordered)}
+        missing = [h.chunk_id for h in bucket if h.chunk_id not in pos_of]
+        if missing:
+            raise SelectionError(f"{source_id} 命中块不在原文序清单: {missing[:3]}")
+        pool_positions = sorted({pos_of[h.chunk_id] for h in bucket})
+        score_by_pos = {pos_of[h.chunk_id]: h.score for h in bucket}
+        bands = _form_bands(pool_positions, score_by_pos, len(ordered),
+                            band.gap, band.expand)
+        bands = _cap_split(bands, score_by_pos, len(ordered), band.pool_cap,
+                           band.expand)
+        ranking = _rank_bands(bands)
+        for index in sorted(
+            (i for i, rank in ranking.items() if rank <= band.band_cap),
+            key=lambda i: (-bands[i]["score"], bands[i]["start"]),
+        ):
+            b = bands[index]
+            selected.append(SelectedBand(
+                source_id=source_id, build_id=bucket[0].build_id,
+                start=b["start"], end=b["end"], score=b["score"],
+                pool=tuple(b["pool"]),
+            ))
     return tuple(selected)

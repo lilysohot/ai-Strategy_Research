@@ -1,9 +1,12 @@
 # 语料检索链：诊断 · 归因 · 层内解耦方案（汇总）
 
 Status: needs-triage — 待 U 审阅
-Baseline: 最新冻结修订 `i0c-r40`；诊断输入 i33 / i35 / i36 / i37 / i38
-日期: 2026-09-20
-性质: **本文档为方案文本。未动任何代码、未动冻结链、未动金标。**
+Baseline: 最新冻结修订 **`i0c-r41`**（scoped：仅绑空白规约 scorer + i40/i41 诊断证据；其余漂移登记为 t6）
+诊断输入: i33 / i35 / i36 / i37 / i38 / **i40 / i41 / i42**
+基线漏斗: 见 §13（79 目标嵌套累计，2026-09-21 实测；方案后须**同口径**对比）
+总体目标: **M6 放行**（`docs/plan/corpus-ingestion-rebuild-tasks.md`:260）；本方案定位见 §6.0
+日期: 2026-09-20 起，**2026-09-21 更正**
+性质: 本文档为方案文本。**未动任何代码、未动冻结链、未动金标。**
 自包含: 本文件是完整汇总，可独立阅读；可跟踪的工单视图见 `issues/00`–`issues/05`。
 
 ---
@@ -24,7 +27,16 @@ Baseline: 最新冻结修订 `i0c-r40`；诊断输入 i33 / i35 / i36 / i37 / i3
 **结论**：分层没有失效。i38 的消融已经证明分层能**可归因**（13→14→16→20/24 逐层分配、4 条残留逐条点名）。失效的是「分层 → 层内可证伪判据」这一步没有落地。**分层的价值是让失败可定位，不是让改动免联动；后者是数据依赖链的固有性质，设计消不掉。**
 
 **方案**：6 票，依赖 `00 → 01 → 02 → 03 → (04 ∥ 05)`。
-排序原则：**从不动被绑字节的改动开始，把"要全量重摄入"的压到最后，一次做完。**
+
+> **最新状态（2026-09-21 更正，详见 §14）**
+>
+> 1. **票 01 / 02 / 04 已被提前实现**；票 03 只实现了 `rank_hits`（`chunk.cover` 未做）；票 05 未做。
+> 2. **出现了本方案没有的 band 路线**：i40（17/24）、i41（**19/24**，topic A 11/11 全中），
+>    只存在于诊断脚本、**未落产品**；产品路径（i42）为 **12/24**。详见 §10.5。
+> 3. **冻结链已推进到 `i0c-r41`**（scoped）：17 处红 → **14 处**；剩余登记为 **t6 待办**；
+>    第二道门（I3-2）**仍红**（`scoring-input-manifest.json` 血缘未重建）。
+> 4. 复测结论：**代码门 6/6 全绿、冻结门 2/2 全红**——问题不在代码质量，在"入链"。
+> 5. **本方案全部落在 EvidencePass 侧**；按 M6 对账，**唯一零进展的是负例（恒 6）**，不在本方案范围内（§6.0）。
 
 ---
 
@@ -286,36 +298,87 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
 
 ---
 
-## 6. 方案：任务清单与排序理由
+## 6. 方案：在总体目标中的位置、执行清单与启动条件
 
-### 6.1 任务清单
+### 6.0 本方案在总体目标中的位置（先对账，再动手）
 
-| 票 | 层 | 依赖 | 动被绑字节 | 触发全量重摄入 | 验收 |
-|---|---|---|---|---|---|
-| [00 冻结链归位](issues/00-freeze-realign.md) | 流程 | — | 是（重绑/还原） | 否 | `validate_i0c_freeze.py` exit 0 |
-| [01 证据选择策略落产品](issues/01-selection-module.md) | 证据选择 | 00 | **否**（纯新增） | 否 | 与现行评测输出**逐字节等价**；默认 policy 不变 |
-| [02 SearchHit 加深](issues/02-search-hit-interface.md) | search 接口 | 01 | 是（`search_pg.py`） | 否（索引未变） | 新字段与 `fetch_verbatim` 回捞结果逐条一致 |
-| [03 chunk 连续块区间 + recall/rank](issues/03-chunk-cover.md) | chunk + search 排序 | 02 | 是（`chunk.py`、`search_pg.py`） | **是** | I-A1/A2/A3 + 议题 A 11 条 → matched |
-| [04 表格结构模型](issues/04-table-model.md) | reader | 03 | 是（reader + contract） | **是**（与 03 合并） | I-B1/B2/B3 + 议题 B 8 条 → matched |
-| [05 清洗判定依据](issues/05-clean-evidence.md) | clean | 03 | 是（`clean.py`） | **是**（与 03 合并） | 2 条 clean_loss 可机读归因 |
+总体目标 = **M6 放行**（`docs/plan/corpus-ingestion-rebuild-tasks.md`:260）。逐条对账：
 
-依赖链：`00 → 01 → 02 → 03 → (04 ∥ 05)`。
+| M6 判据 | 现状 | 状态 | 归属 |
+|---|---|---|---|
+| 逐类三指标达冻结目标 | 最好 19/24（band，未落产品）；产品 12/24；门槛 23/24 | **有进展**（13→19） | 本方案票 03/04/05 |
+| 关键引用题 100% | 未达 | 进行中 | 同上 |
+| **已知伪引用负例为 0** | **恒 6**（i33→i42 五轮不变） | **零进展** | **不在本方案范围，须另立** |
+| 旧检索/财务基线不退化 | 未验 | 未开始 | 超出范围 |
+| 格式覆盖 PDF/DOCX/MD | 已达标（r34/r37） | ✅ 完成 | — |
+| I3-7 对 I3-6 冻结版本重验 | I3-6 未定版 | 未开始 | 依赖本方案完成 |
 
-### 6.2 排序理由
+**两条结论**：
 
-原则：**从不动被绑字节的改动开始，把"要全量重摄入"的压到最后。**
+1. **本方案只覆盖 EvidencePass 侧**（票 03/04/05）。它不改善负例，也不改善旧基线非回归。
+2. **按"补短板"原则，负例（唯一零进展）应优先。** 本方案的 **票 04-S2 可并行启动**（一行成本、只消除已知回归），
+   但 **票 03/05 不应挤占负例的资源**。
 
-- **00 先做**：i36 §5 报告全链 `i0c-current` 为 red（8 条未冻结漂移）。**基线红着跑分，任何修复增益都读不准。**
-- **01 最先做**：纯新增文件，零算法改动，只是把审计脚本搬成产品 module + 参数注入。成本最低、收益最大——此后所有轮次结论可复现、可比较。
-- **02 次之**：纯接口加深，不改行为、不动索引。
-- **03/04/05 合并成一次冻结**：三者都改 reader/chunk 层字节 ⇒ 一次全量重摄入 + 一次双门复跑，避免"改一次 reader 就打回一轮"。
-- **04 最贵**：动 reader 与 contract，必须与 03 同批。
+> 排除项说明：**t6 重绑与 I3-2 门属"记账"，不是能力**——它们不改善任何一项 M6 判据，应随能力改动合并执行，
+> 不单独立项。`r41` 的定位是"恢复对账能力"，不是目标达成。
 
-现在的实际做法恰好相反——每轮都在改最贵的 reader/search，改一次就打回一轮。本方案把顺序倒过来。
+### 6.1 执行清单（含启动条件）
+
+> 原方案按"从零开始"编写；票 01 / 02 / 04 主体已被提前实现，故以**当前状态**为起点重排。
+
+| 步骤 | 内容 | 对应票 | 启动条件 | 阻塞 |
+|---|---|---|---|---|
+| **S1** | 清账：绑定当前字节 + **12/24 失败结果**；重建 `scoring-input-manifest.json` 血缘 | 00 | ✅ `r41` 已建（scoped），可作基线锚点 | 剩 14 处 t6 + I3-2 门 |
+| **S2** | ✅ **已完成**（2026-09-21，`audits/20260921-s2-injection-judgment/`）：注入对召回零贡献（S1 66→66），但**承载排名价值**（去注入 EvidencePass 12/24→2/24） | 04 副作用 | ✅ 已执行（`self_check_reproduces_i42: true`） | 无 |
+| **S3a** | ❌ **否决**（S2 判定）：label_tsv 隔离后排名机制不变，标签词元退出 `ts_rank` ⇒ 同崩至 ~2/24 | 04 | 已判定 | §10.2 |
+| **S3b** | ❌ **否决**（S2 判定）：删除注入摧毁排名，EvidencePass 12/24→2/24 | 04 | 已判定 | §10.2 |
+| **S4** | `chunk.cover`（议题 A 的 11 条） | 03 后半 | ⚠️ **须先定 band 归属**（§10.5） | **与 band 路线重复** |
+| **S5** | 清洗判定依据（**先定那 2 条目标的归因**，见 §10.4） | 05 | ❌ **前提矛盾未解** | **归因未定** |
+
+> **新增待立议题**（S2 判定派生）：**company-003 光力科技**——文档级召回问题，注入改法与 band **均不能修复**（§10.2）。
+
+**已完成的票**（不再执行，仅作复核基线）：
+
+| 内容 | 对应票 | 证据 |
+|---|---|---|
+| `selection.py` 落产品（含 `select_structural`） | 01 | `selection.py:54`、`:85` |
+| `SearchHit` 加深（`page`/`cells`/`label_path` + `_enrich_hits`） | 02 | `search_pg.py:94`、`:105` |
+| 表格结构模型下沉 reader（`TableModel.label_path`） | 04 主体 | `pdf_reader.py:146`、`:519-533`、`contract.py:309` |
+| `rank_hits` 拆分（global 变体已弃用） | 03 前半 | `search_pg.py:162` |
+
+### 6.2 启动结论（S2 完成后更新）
+
+**S2 已完成，结论是"改道"**：S3a / S3b **双否**（§10.2）⇒ **票 04 的副作用分支闭合**，
+改道 **band 落产品（§10.5 选项 A）**。原判据"注入价值可疑"被证伪——注入在**排名侧是必需的**（去注入 12/24 → 2/24）。
+
+**当前可启动的只剩 band**：i41 已在注入存在的池上验证 **19/24**，且不改 schema、不重摄入、不删注入。
+**S4 与 S5 各有前置阻塞**（§10.4 归因未定 / §10.5 band 归属须 U 定）。
+
+**按 M6 判据**：负例（6 → 0）是唯一"无论怎么优化 EvidencePass 都绕不过"的硬阻断
+（`scoring.py:279` `max_false_positives = 0`），应优先。**若以本方案为主线，等于把负例继续推后**——
+两者都要做，但有先后，须 U 明确。
+
+### 6.3 排序理由（修正版）
+
+原原则"从不动被绑字节的改动开始"已失效（改动既成事实）。当前原则：
+
+> **先还账、再花钱判定、最后才付大成本；同时不与 M6 短板抢资源。**
+
+- **S1**：账实不符时，任何"变好/变坏"都读不准；新改动还会叠加在未登记的旧改动之上。
+- **S2（已完成）**：把"要不要付 schema 改造 + 全量重摄入的代价"压缩成**一次一行实验**。结论：注入对召回零贡献（S1 66→66），但**承载排名价值**（去注入 EvidencePass 12/24→2/24）——原"注入价值可疑"的猜测只对了一半（召回侧成立，排名侧错误）。
+- **S3a/S3b 均已否决**（§10.2）：两条路都让标签词元退出 `ts_rank`，摧毁排名。改道 **band 落产品（§10.5 选项 A）**——注入存在池上已验证 19/24，不改 schema、不重摄入。
+- **S4/S5 最后**：两者都触发全量重摄入，且与 `ts_rank` 副作用无关，可合并成一次重摄入。
+
+对照另两条路：**直接删注入**（可能损失表格召回，是赌）；**直接改 schema**（若注入本就无效则白付一次重摄入）。
+本方案用一行成本先消除这个不确定性。
 
 ---
 
 ## 7. 票详情
+
+> **实现现状（2026-09-21 实测，详见 §14.3）**：票 01 / 02 / 04 **已落地**；票 03 **部分落地**
+> （`search_pg.rank_hits` 已实现且 global 变体已被 i42 弃用，`chunk.cover` **未实现**）；票 05 **未落地**。
+> 以下各票的"验收"按方案原文保留：对**未落地**部分是待办判据，对**已落地**部分是复核基线。
 
 ### 7.0 票 00：冻结链归位（先于一切）
 
@@ -367,6 +430,10 @@ i36 §5 的 8 条 red：
 约束：不得把 `page` 从 expected locator 抄来；`snippet` 维持"非权威展示"语义。
 
 ### 7.3 票 03：chunk 连续块区间 + recall/rank 拆分
+
+> ⚠️ **启动前必读**：本票与 i40/i41 的 **band 路线重复**（同一问题的两个落点）。
+> **须先按 §10.5 定归属**——若选 A（band 落产品），本票的 `cover` 部分**作废**；
+> 只有选 B 才照下面实施。`rank_hits` 部分**已完成**，不受影响。
 
 不变量：
 
@@ -423,6 +490,8 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 
 ## 8. 总验收判据
 
+**同口径总判据见 §13 的漏斗对比**（逐层存活 + 桶分布双表）。
+
 ### 8.1 层内不变量（主判据，必须先绿）
 
 | 编号 | 内容 | 归属票 |
@@ -442,7 +511,7 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 
 - DocRecall 不降（保持 1.0）
 - 负例误报数不增加（i38 基线为 0，**不得回升**）
-- `uv run pytest tests/test_corpus_*.py -q` 基线 **651 passed / 12 skipped** 不回退
+- `uv run pytest tests/test_corpus_*.py -q` 基线 **716 passed / 12 skipped**（2026-09-21 复测；旧记录 651 / 12）不回退
 - 静态门：`uv run ruff check <CI 范围>`（全仓既有告警不计）、`uv run pyright`（仅 `server/store.py` 既有缺依赖）、`python tools/import_smoke.py --stage 1|2`、`python tools/check_symbols.py`
 
 ### 8.3 分母分层（口径修正，不动门槛）
@@ -464,16 +533,99 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 
 ---
 
-## 10. 需 U 决策的岔口（票 00 内含）
+## 10. 需 U 决策的岔口
 
-票 00 不是"重绑一下就完事"，它内含一个决定基线取值的决策：
+**原岔口（"采纳 vs 还原"）已不适用**——票 01/02/04 已被提前实现并跑出结果（§14.3），不再是"未验证的漂移"。当前实际决策如下。
 
-| 选项 | 动作 | 后果 |
+### 10.1 顺序：先锚定再修，还是先修再绑？
+
+| 选项 | 动作 | 代价 |
 |---|---|---|
-| **采纳** | 新建 `i0c-r41` 绑定 reader-pdf-5 + whitespace-norm scorer 的新字节 | 需**另起新冻结修订重建 `scoring-input-manifest.json` 血缘**（i36 §4：不得在单一回归里混入空白 scorer） |
-| **不采纳** | 按 `git show HEAD:<path>` 逐字节还原工作树 | 核对 sha256 与 r39 绑定相等；`selected_but_match_fail` 7 条继续保持现状 |
+| **A（推荐）** | 先绑 `r41`（记录 reader-pdf-6 / chunk-3 / index-4 / `selection.py` **+ 失败结果 EvidencePass 12/24**）→ 链条转绿、现状可复现 → 再修副作用出 `r42` | 多一次冻结成本（生成器 + 归档 + 双门） |
+| B | 先修 `ts_rank` 副作用，修完一次性绑 | 修的过程中**无可比基线**（12/24 来自不可复现字节），且 17 处红里混着 6 类来源不同的改动，无法判责 |
 
-这个岔口决定 02–05 的基线取值，**必须先定**。
+依据：冻结链**允许失败修订入链**（r40 自身即 `passed=false`、`i33_released=false`）——它是"字节 ↔ 结果"对应表，不是成功登记簿。
+
+### 10.2 `ts_rank` 副作用的修法形态（**已由 S2 判定：原前提证伪，S3a/S3b 双否**）
+
+**原前提（已证伪）**：`chunk._table_row_pieces` 把结构标签前缀**无条件拼进 `search_text`** ⇒ 进 GENERATED 列 `search_tsv` ⇒ 改变 `ts_rank`。原假设是标签**稀释**正文词频、压低 `ts_rank`。
+
+**S2 判定实验**（`audits/20260921-s2-injection-judgment/`，读侧虚拟重建，0 model calls，`self_check_reproduces_i42: true`）：
+
+| 侧 | 结论 |
+|---|---|
+| 召回（S1_candidates） | 注入**零贡献**：66 → 66，0 条目标掉失（§6.3 对召回侧的怀疑成立） |
+| 排名（S2→S4 / EvidencePass） | 注入**承载排名价值**：去注入后 S2 60→30、S3 51→18、S4 44→13，EvidencePass **12/24 → 2/24**（31 条 matched → kept_page_not_selected） |
+| 机制 | 标签不是稀释，而是给表格块**注入额外匹配词元抬高 ts_rank**（norm=0 不受文本长度稀释） |
+| 负例误报 | 6 → 6，不回升（符合约束） |
+
+**决策（S3a/S3b 双否，改道 band 落产品）**：
+
+| 修法 | 判定 | 依据 |
+|---|---|---|
+| a（label_tsv 隔离、`ts_rank` 只看 `search_tsv`） | **否决** | 排名机制不变（标签词元退出 `ts_rank`），与直接去注入等价 ⇒ 同崩至 ~2/24 |
+| b（标签不进索引文本，查询侧独立通道） | **否决** | 同样让标签词元退出 `ts_rank`，排名侧崩塌同 a |
+| c（保留注入但 `setweight(..., 'D')` 降权） | **否决** | 排序仍被改变，且 S2 显示排序依赖注入词元 ⇒ 引入新回归风险 |
+| **S3b（直接删除注入）** | **否决** | S1 保持（66→66）但 EvidencePass 12/24→2/24，摧毁排名 |
+
+**改道**：`ts_rank` 副作用不再单独修。**band 落产品（§10.5 选项 A）为现成路径**——在注入存在的池上已验证 19/24，不删除注入、不改 schema、不重摄入，顺带规避本副作用议题。
+
+**三条路线实测对照**（同一 79 目标口径）：
+
+| 配置 | EvidencePass | 说明 |
+|---|---|---|
+| 无注入 + perdoc 选择 | **2/24** | ≈ S3a/S3b 实施后的等价状态 |
+| 有注入 + perdoc 选择（i42，**现状产品**） | **12/24** | 当前产品路径 |
+| 有注入 + band 选择（i41，**未落产品**） | **19/24** | §10.5 选项 A |
+
+⇒ **注入贡献 +10、band 贡献 +7，两者互补、都要**。这也从数据上支持"不改注入、改选择层"的改道。
+
+**判据教训（须作为后续实验规范）**：本次实验方法规范（读侧虚拟重建 + `self_check_reproduces_i42: true` 自检），
+但**初版判定只看 `S1_candidates` 就得出"支持删除注入"**，与 S2 起三层的暴跌方向相反。
+根因：**S1 是集合语义（引文在/不在候选集），而注入的作用在排序语义**。
+⇒ 判定"某改动是否有价值"**必须看 `S2_doc_topk` / `S4_matched`（端到端）**，**不得用单层指标下结论**。
+
+**company-003（光力科技）须单独立题**：注入对**有表格的文档**是净增益（额外匹配词元抬高 `ts_rank`；
+`norm=0` 不受文本长度稀释），对**表格少/无表格的文档**（如光力）形成**相对劣势** ⇒ doc rank 6、掉出 top-5、6 条证据全丢。
+该问题属**文档级召回**，**band 无法修复**（band 只改块内选择），须另立议题。
+
+> **I-B1 表述修订**（a、b 均否决后不再强制）：原约定"a、b 会让标签不在索引文本里，须把表述改为'可被结构信号召回'"——该约定随 a/b 否决而作废，I-B1 维持现状（索引文本含标签）。
+
+### 10.3 空白规约 scorer 的口径
+
+`validate_i3_2_completion.py` 当前红，根因即此项：`scoring-input-manifest.json` 的 `lineage.scorer.sha256`
+与实际 `scoring.py` 不符（§14.2）。若采纳空白规约语义，须**另起新冻结修订重建 manifest 血缘**（i36 §4）。
+
+### 10.4 `company-007/e1`、`company-008/a-1` 的归因（两处结论矛盾）
+
+| 来源 | 判定 | 含义 |
+|---|---|---|
+| i37 `backtest-report.md` | `doc_not_kept_clean_stage_loss` | 引文只在**非 kept 单元**（清洗剔除） |
+| i42 `backtest-report.md` | `not_in_doc_unreachable` | 全文任意处**不逐字出现**（金标改写/重建） |
+
+两个相反结论。**若是后者，方案票 05（清洗判定依据）就是白做**——必须先定。
+
+---
+
+### 10.5 band 路线与票 03 的重复（**归属已定：选项 A 落地**）
+
+**事实**：i40/i41 的 band 路线（选中块周围的"连续区间"，`gap=1`/`expand=1`/`band_cap=8`/`pool_cap=24`/可证带宽上界 49）
+与票 03 的 `chunk.cover(quote) -> (i,j)`（在 chunk 层承载"连续块区间"）**是同一件事的两个落点**：
+
+| | 落点 | 现状 | 成绩 |
+|---|---|---|---|
+| **band** | **选择层**（`selection.select_band`，产品代码） | **已落产品**（`BandPolicy`/`SelectedBand`，12 条常驻测试） | 回测 **17/24**（band 单独；注入存在池），实测带宽 33 ≤ 49 |
+| **票 03 `cover`** | **chunk 层**（产品代码） | 未实现 | — |
+
+**若照票 03 直接启动，等于把 band 已验证的成果在另一处重做一遍。** 归属裁决（2026-09-21，与 S2 判定同日落地）：
+
+| 选项 | 动作 | 代价 |
+|---|---|---|
+| **A（已选定并落地）** | band 落产品：把"连续区间"做进 `selection`，chunk 层不动 | 小；已有 19/24 验证；**不需改 schema/索引文本，顺带规避 `ts_rank` 副作用** |
+| B | 票 03 的 `cover`：在 chunk 层实现区间承载，band 作废 | 须重新验证；动 chunk ⇒ 全量重摄入 |
+| C | 两者都留 | 须说明职责边界，否则出现两套区间逻辑 |
+
+**裁决：选 A，已落地**。`selection.select_band`（`BandPolicy gap=1/expand=1/band_cap=8/pool_cap=24`，`provable_width_bound=49`）承载"连续区间选择"；chunk 层职责仍为"把文本切成块"，票 03 的 `cover` 部分**作废**。回测产物：`audits/20260921-band-product/`（EvidencePass 12/24 → **17/24**，负例误报 6 不回升，漏斗 S0/S1/S2 与 i42 逐字节一致，`self_check` 全绿）。
 
 ---
 
@@ -497,6 +649,172 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 
 ---
 
+## 13. 基线漏斗与方案后对比
+
+### 13.1 基线（2026-09-21 实测 **i42**，79 目标，嵌套累计）
+
+数据来源：`audits/20260920-i42-topic-b-reingest/recall-funnel.md`（链路 = `search_chunks → selection.select_structural(perdoc)
+→ fetch_verbatim → scoring`；scorer = 工作树空白规约，**NOT frozen**）。
+
+| 层 | 含义 | 存活 | 累计存活率 | 本层损失 |
+|---|---|---|---|---|
+| S0_kept | 引文在 kept 单元内 | 77/79 | 97.5% | — |
+| S1_candidates | 在候选块内（search 可召回） | 66/79 | 83.5% | **11** |
+| S2_doc_topk | 文档进 top-5（DocRecall） | 60/79 | 75.9% | **6** |
+| S3_chunk_top8 | 引文块进该文档选中 top-8（I-B2） | 51/79 | 64.6% | **9** |
+| S4_matched | `EvidenceTarget.matches` 逐字命中 | 44/79 | 55.7% | **7** |
+
+桶分布（首个断点，合计 79）：
+
+| 桶 | 条数 |
+|---|---|
+| `matched` | 44 |
+| `selected_but_match_fail` | 7 |
+| `doc_topk_no_chunk` | 9 |
+| `candidates_no_doc` | 6 |
+| `kept_not_candidate` | 11 |
+| `not_in_doc_unreachable` | 2 |
+
+**自洽性核算**（已校验）：77−11=66，66−6=60，60−9=51，51−7=44；44+7+9+6+11+2=79。
+
+**可修上限 = 33 条**（11+6+9+7）；`not_in_doc_unreachable` 2 条属金标侧，不由管线修复。
+
+#### 两个必须先钉死的口径问题
+
+1. **S4 的匹配口径未注明**：`EvidenceTarget.matches` 用的是严格码位（r39 冻结 `bf9c8b80`）还是工作树空白规约（`f61573d7`）？这直接决定 `selected_but_match_fail 7` 中有多少属于票 00 的决策范围。**复跑对比前必须先声明。**
+2. **本漏斗与 i38 消融不可相减**：i38 的 `matched 75/79` 是**实验增强后**（+S2/S3/S3b）且用未冻结的空白规约 scorer；本漏斗的 `44/79` 是**生产口径基线**。二者是"当前实际"与"策略上限"的关系——i38 已证明策略侧存在到 75/79 的路径，本方案负责把该路径沉淀为产品行为并逐层留痕。
+
+### 13.2 层 → 票 映射（哪层损失由哪票负责）
+
+| 层损失 | 条数 | 归属票 | 机制 |
+|---|---|---|---|
+| S0→S1 `kept_not_candidate` | 11 | **03** | 引文在 kept 但连候选池都没进 ⇒ 召回信号问题（词法未命中 / 索引文本缺结构标签） |
+| S1→S2 `candidates_no_doc` | 6 | **03** | 文档未进 top-5 ⇒ 文档级排名信号 |
+| S2→S3 `doc_topk_no_chunk` | 9 | **03 + 04** | 引文块未进 top-8 ⇒ 块区间覆盖（03）+ 结构标签进排序（04） |
+| S3→S4 `selected_but_match_fail` | 7 | **00（决策）** | 匹配口径：严格码位 vs 空白规约 |
+| `not_in_doc_unreachable` | 2 | 不修 | 金标改写/重建，管线不可达 |
+
+> **与 i37/i38 的口径差异（待确认，勿强行对齐）**：
+> - `matched`：本漏斗 44 / i37 49 / i38 75（实验增强）——三个数分属不同口径，对比前须逐一声明 scorer 字节与语料版本
+> - `not_in_doc_unreachable`：本漏斗 2，而 i37 该桶为 **0**（i37 的 2 条落在 `doc_not_kept_clean_stage_loss` 清洗剔除）⇒ **同一桶名在两处含义可能不同，须确认**
+> - 本漏斗 `kept_not_candidate 11` + `doc_topk_no_chunk 9` 疑似对应 i37 的 `kept_page_not_selected 21`（差 1 条，须确认归属）
+>
+> 这三组差异必须先对齐到同一口径，否则方案后对比会产出**假 Δ**。
+
+### 13.3 方案后对比（band 落产品已回测，2026-09-21）
+
+数据来源：`audits/20260921-band-product/band-summary.json`（产品 `selection.select_band`，79 目标、index-4-zhcfg-2、0 model calls；scorer = 工作树空白规约，NOT frozen，与 §13.1 同口径）。
+
+**逐层对比**
+
+| 层 | 基线 | 方案后（band） | Δ | 期望方向 |
+|---|---|---|---|---|
+| S0_kept | 77/79 (97.5%) | 77/79 | 0 | **不降**（保真约束，票 04 不得回退） |
+| S1_candidates | 66/79 (83.5%) | 66/79 | 0 | ↑，上限 77 |
+| S2_doc_topk | 60/79 (75.9%) | 60/79 | 0 | ↑，上限 66 |
+| S3_chunk_top8 → S3_band_cover | 51/79 (64.6%) | **59/79 (74.7%)** | **+8** | ↑，上限 60 |
+| S4_matched | 44/79 (55.7%) | **50/79 (63.3%)** | **+6** | ↑，上限见票 00 决策 |
+
+> S1/S2 与基线一致是**自检成立**（band 不碰 search 召回与文档 top-5 选择；`self_check.S0_S1_S2_match_i42 = true`）。
+> S3 层改名：band 语义为「引文在选中带文本内」而非「引文块进 top-8」，层含义变宽，故单独给行。
+
+**桶分布对比**（band 按漏斗层分解，与 i42 同口径可减）
+
+| 桶 | 基线 | 方案后（band） | Δ |
+|---|---|---|---|
+| `matched` | 44 | **50** | +6 |
+| `selected_but_match_fail` | 7 | **9** | +2 |
+| `doc_topk_no_chunk` → `doc_topk_no_band` | 9 | **1** | −8 |
+| `candidates_no_doc` | 6 | 6 | 0（company-003 全在此层，另立议题） |
+| `kept_not_candidate` | 11 | 11 | 0 |
+| `not_in_doc_unreachable` | 2 | 2 | 应恒为 2（不由管线修复） |
+
+> band-summary.json 的 `target_buckets` 用 s2 位置桶口径（`matched 60 / selected_but_match_fail 9 / kept_page_not_selected 8 / not_in_doc_unreachable 2`），与上表漏斗层分解不同，勿混用。
+
+**负例误报**（同步记录，不得缺失）
+
+| 指标 | 基线 | 方案后 |
+|---|---|---|
+| 负例误报（i42 OR 检索路径） | 6 | **6（不回升）** |
+
+> §13.3 早期模板写「0（i38 口径）」：i38 为实验增强口径，与当前 i42/band 的 OR 检索路径不同；band 回测沿用 i42 路径，误报 6 与基线一致。
+
+### 13.4 对比纪律
+
+1. **同口径**：79 目标、嵌套累计、同一 scorer 字节、同一 active corpus（8 builds）
+2. **单变量**：一次对比只改一票（或一次合并冻结 `i0c-r41`），不得同时改口径
+3. **先钉 §13.1 的 S4 口径**，否则 `selected_but_match_fail` 不可比
+4. **每层都报 Δ**：不得以上层的提升掩盖下层的下降；任一层下降必须给出解释
+5. **负例误报同步报**：目标存活率上升但负例误报回升 = 无效
+6. **数据必须来自落盘产物**（脚本 + 输出文件），不得口述填入
+7. 在 §13.1 口径下 `not_in_doc_unreachable` 恒为 2（注意：**i37 口径下该桶为 0**，其 2 条落在 `doc_not_kept_clean_stage_loss`，见 §10.4）；若变化，须先确认是否换了桶定义，再判定是否金标/语料被改动
+
+---
+
+## 14. 2026-09-21 全面复测
+
+### 14.1 八道门结果
+
+| 门 | 命令 | 结果 | 判定 |
+|---|---|---|---|
+| 语料族回归 | `uv run pytest tests/test_corpus_*.py -q` | **716 passed / 12 skipped**（42.32s） | ✅ 绿（旧基线 651，+65） |
+| Ruff | `uv run ruff check frontier_agent/ apodex/ benchmarks/ workflows/ plugins/ deploy/ tools/ scripts/` | `All checks passed!` | ✅ 绿 |
+| Pyright | `uv run pyright` | 19 errors / 7 文件 | ✅ 既有缺依赖（非回归） |
+| 导入冒烟 stage 1 | `uv run python tools/import_smoke.py --stage 1` | `[framework] 363/363`，exit 0 | ✅ 绿 |
+| 导入冒烟 stage 2 | `uv run python tools/import_smoke.py --stage 2` | `[eval] 412/412`，exit 0 | ✅ 绿 |
+| 符号闭包 | `uv run python tools/check_symbols.py` | `OK: 0 missing-symbol import(s) across 462 file(s)` | ✅ 绿 |
+| 冻结链门 | `uv run python .scratch/.../freezes/validate_i0c_freeze.py` | `FAILED: 17 error(s)`，exit 1 | ❌ **红** |
+| I3-2 完成门 | `uv run python .scratch/.../freezes/validate_i3_2_completion.py` | `i3_2_complete=false`，exit 1 | ❌ **红** |
+
+> **结论：代码门 6/6 全绿，冻结门 2/2 全红。问题不在代码质量，在"未入链"。**
+
+Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sqlite_to_pg.py`、`server/alembic/env.py`、
+`server/alembic/versions/0001_initial.py`、`server/alembic/versions/0002_run_usage.py`、`server/security.py`、
+`server/store.py`——全部为 `sqlalchemy` / `argon2` 未安装所致，与本次改动无关。
+（记录中旧称"仅 `server/store.py` 既有缺依赖"，实际范围更宽，须以本次为准。）
+
+### 14.2 I3-2 完成门红的原因（新发现）
+
+```
+"manifest.status='frozen_r28'（**仍标 pending**，未随冻结更新）"
+"manifest.lineage.scorer.sha256 与当前字节不符（上游已变）"
+```
+
+根因：`plugins/corpus/scoring.py` 改为空白规约版后，**未重建 `i3-2/scoring-input-manifest.json` 的血缘**。
+这正是 i36 §4 预警的事项 ⇒ 与 §10.3 是同一件事，**不是新问题**。
+
+其余 9 项检查全为 `pass`：P2 阈值/关键题/负例与冻结物一致、旧基线身份/范围闭环（含"无未冻结指针"）、
+唯一初始实验 manifest、全部必要资产哈希入链、阶段签认（具名 + 入链）、留出隔离覆盖、
+旧锚点映射规则级复核关闭、尾巴收口记录（无 open 项 + 入链）。
+
+### 14.3 实现现状 vs 方案票
+
+| 票 | 方案内容 | 实现状态 | 证据 |
+|---|---|---|---|
+| 01 | `selection.py` 落产品 | ✅ **已实现**（超出方案：含 `select_structural`） | `plugins/corpus/preparation/selection.py:54`（`select`）、`:85`（`select_structural`）；`SelectionPolicy` 默认 `top_k=5` / `max_chunks_per_document=8` |
+| 02 | `SearchHit` 加深 | ✅ **已实现** | `search_pg.py:94`（`label_path` 字段）、`:105`（`_enrich_hits`，同游标批量加深） |
+| 03 | `chunk.cover` + recall/rank 拆分 | ⚠️ **部分**：`rank_hits` 已实现（`search_pg.py:162`），global 变体已被 i42 弃用；**`cover` 未实现** | `chunk.py` 函数全表中无 `cover` |
+| 04 | 表格结构模型下沉 reader | ✅ **已实现**（但 `ts_rank` 副作用未清） | `readers/pdf_reader.py:146`（`TableModel.label_path`）、`:519-533`（填入 `UnitLocation.label_path`）；`contract.py:309`；`chunk.py:169`（`_table_row_label_prefix`） |
+| 05 | 清洗判定依据可机读 | ❌ **未实现** | `clean.py` 无 `verdicts` |
+| — | **band 路线**（本方案之外） | ⚠️ **仅诊断脚本，未落产品**：i40 17/24、i41 **19/24**（topic A 11/11 全中） | `audits/20260920-i40-topic-a-tighten/i40_band.py`、`audits/20260920-i41-topic-a-cell/i41_band_cell.py`；`grep -rln band plugins/corpus/` 只命中 `_BAND_RATIO`（页眉页脚带，无关） |
+| — | 冻结链 | `i0c-r41` **已建（scoped）**：17 → **14** 处红；剩余登记为 t6；I3-2 门**仍红** | `freezes/i0c-r41.json`（`status=scorer_r41_frozen_chain_pending_t6`）；`corrections.chain_drift_backlog_t6` 列明剩余漂移 |
+
+**常驻测试**：`tests/test_corpus_selection.py`（12 条）已覆盖 I-B2 / I-B3（含 `test_cap_unchanged_by_this_work`
+显式断言 cap=8），但 **I-B1、I-A1/A2/A3、I-E1/E2 仍无常驻测试**；band 的 topic A 11/11 亦无常驻测试。
+
+### 14.4 由复测得出的四条判断
+
+1. **票 00 的前提失效**：票 01/02/04 已落地 ⇒ 不是"未验证漂移"，而是"已裁决、已实现、结果低于基线"。见 §10.1。
+2. **负收益的根因单一且已定位**：`ts_rank` 被标签注入稀释 → company-003 光力科技 doc rank 6
+   （i42 `backtest-report.md:72`，且"两变体均受影响，与结构排序信号无关"）。修法见 §10.2。
+3. **入链是唯一缺口**：代码门全绿 + 冻结门全红 ⇒ 当前唯一的系统性问题是"17 处改动未登记 + manifest 血缘未重建"，
+   属流程而非代码。这也再次印证 §2 R2/R3：**判据挂在链尾，层内的对错无法被独立确认**。
+4. **最好成绩不在产品里**：band 路线 **19/24**（i41）只存在于诊断脚本，产品路径 **12/24**（i42）——
+   **这 7 分之差就是"未落产品"的部分**；且 **负例误报历轮恒 6**（i33→i42 五轮不变），是唯一零进展项，
+   属 M6 硬判据（§6.0、§10.5）。
+
+---
+
 ## 附录 A：证据索引
 
 | 主题 | 路径 |
@@ -509,7 +827,10 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 | 议题 B 结构化排序（10 条） | `audits/20260920-i37-fullchain-backtest/topic-b-structured-retrieval-ranking.md` |
 | 分层消融（13→20/24） | `audits/20260920-i38-reshape/reshape-report.md`、`reshape-score.md` |
 | 评测侧选择策略实现 | `audits/20260920-i33-calibration/calibrate.py:37-74` |
-| 冻结链 | `freezes/i0c-r40.json`、`freezes/validate_i0c_freeze.py` |
+| 冻结链 | `freezes/i0c-r41.json`（最新，scoped）、`freezes/validate_i0c_freeze.py` |
+| i40 band 收紧诊断 | `audits/20260920-i40-topic-a-tighten/i40-summary.json`、`i40-report.md`、`i40_band.py` |
+| i41 band+cell 诊断（19/24） | `audits/20260920-i41-topic-a-cell/i41-summary.json`、`i41-report.md`、`i41_band_cell.py` |
+| i42 议题 B 产品路径回测（12/24） | `audits/20260920-i42-topic-b-reingest/backtest-report.md`、`recall-funnel.md`、`recal-score.md` |
 
 ## 附录 B：关键代码位置速查
 

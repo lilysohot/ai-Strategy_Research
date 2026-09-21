@@ -310,6 +310,13 @@
       "sha256": "a01e6588662c3ef07220f11e2fabca6a26a498fdd9dbd5a3a32f235602c8a70e",
       "parent_snapshot_id": "i0c-r39",
       "created_at": "2026-09-20T13:30:00+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r41",
+      "file": "i0c-r41.json",
+      "sha256": "4871ebad5381048eeab73fa4c0560e338b136c6d60fc65875a38ee945e8c4244",
+      "parent_snapshot_id": "i0c-r40",
+      "created_at": "2026-09-21T10:24:33+08:00"
     }
   ]
 }

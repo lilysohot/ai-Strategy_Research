@@ -1726,10 +1726,41 @@ if "i0c-r40" in by_id:
           "r40 must not mark I3-3 complete/released")
     merge_binding(i0c_current_binding, binding40)
 
-# 最新修订绑定优先（supersession）：i0c-r2..r40 显式重绑的路径改由合并后的
+if "i0c-r41" in by_id:
+    r41 = load_json(BASE / by_id["i0c-r41"]["file"])
+    parent41 = BASE / by_id["i0c-r40"]["file"]
+    check(r41.get("parent_snapshot") == {"snapshot_id": "i0c-r40",
+          "path": str(parent41.relative_to(ROOT)), "sha256": digest(parent41)}, "r41 parent mismatch")
+    binding41 = r41.get("binding", {})
+    check(set(binding41) == {"scorer_implementation", "tests", "calibration_plan",
+                             "diagnostics_evidence", "freeze_validator"},
+          "r41 binding groups mismatch")
+    i41_dir = ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i41-topic-a-cell"
+    summary41 = load_json(ROOT / i41_dir / "i41-summary.json")
+    check(summary41.get("kind") == "diagnostic", "r41 must be a diagnostic run (not a frozen regression)")
+    check(summary41.get("model_calls") == 0 and summary41.get("questions") == 30,
+          "r41 invariant failed")
+    check(summary41.get("layers", {}).get("band_s2", {}).get("evidence_pass_total") == "19/24",
+          "r41 band_s2 evidence pass must be 19/24")
+    check(summary41.get("topic_a", {}).get("total") == 11
+          and summary41.get("topic_a", {}).get("matched") == 11,
+          "r41 must keep topic_a 11/11")
+    check(summary41.get("volume", {}).get("width_bound_ok") is True,
+          "r41 width bound must hold (measured <= provable)")
+    check(len(summary41.get("negative", {}).get("or_false_positives", [])) == 6,
+          "r41 must report 6 OR-path negative false positives")
+    scorer = ROOT / "plugins/corpus/scoring.py"
+    scorer_sha41 = "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c"
+    check(digest(scorer) == scorer_sha41, "r41 scorer must be f61573d7 (whitespace-norm)")
+    plan41 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
+    check(plan41.get("binding", {}).get("plugins/corpus/scoring.py") == scorer_sha41,
+          "r41 calibration plan must rebind scorer to f61573d7")
+    merge_binding(i0c_current_binding, binding41)
+
+# 最新修订绑定优先（supersession）：i0c-r2..r41 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in (f"i0c-r{number}" for number in range(2, 41)):
+for sid in (f"i0c-r{number}" for number in range(2, 42)):
     entry = by_id.get(sid)
     if not entry:
         continue
@@ -1786,4 +1817,5 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r30 I3-2 stage sign-off (named) + generators verified" if "i0c-r30" in by_id else "")
       + ("; r31 I3-2 tail closure (prose holdout guarded, mapping rule-verified, warnings accepted) verified" if "i0c-r31" in by_id else "")
       + ("; r32 I3-1 three-class dev E2E on the U-approved set filed (6 sources -> 2 publishable, 13 blocking gaps, per_class_min_2 NOT satisfied, i3-e2e guard + selfcheck frozen)" if "i0c-r32" in by_id else "") + ("; r33 I3-0 independent-review F1-F5 remediation sign-off (named) verified" if "i0c-r33" in by_id else "") + ("; r34 I3-1 dev-lane MD/DOCX coverage: format gate (pdf/docx/md all publishable) satisfied, per_class_min_2 still false, production in_scope unchanged (dev-only policy + truthful material types)" if "i0c-r34" in by_id else "") + ("; r35 M6 criterion carries the §12.1 format gate (docs-only: tasks.md M6 row + plan ledger; no behaviour change)" if "i0c-r35" in by_id else "")
-      + ("; r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released" if "i0c-r40" in by_id else ""))
+      + ("; r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released" if "i0c-r40" in by_id else "")
+      + ("; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6" if "i0c-r41" in by_id else ""))

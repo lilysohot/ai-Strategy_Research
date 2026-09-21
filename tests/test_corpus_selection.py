@@ -6,6 +6,9 @@
 最终形态（i42 回测裁决）：**perdoc**——`selection.select_structural` 为产品落点
 （文档序=词法，文档内按 (结构重叠, score) 重排）；`rank_hits` 的 structural
 模式是 global 全池重排原语，仅在 i42 审计回测对照中使用，不作为产品选择路径。
+
+band 区间（§10.5 选项 A 落产品）：`selection.select_band` 在**选择层**承载
+"连续区间"（原票 03 `chunk.cover` 落点作废）；band_cap=8 是 I-B3 的带语义。
 """
 
 from __future__ import annotations
@@ -14,9 +17,12 @@ import pytest
 
 from plugins.corpus.preparation.search_pg import SearchHit, rank_hits
 from plugins.corpus.preparation.selection import (
+    BandPolicy,
+    SelectedBand,
     SelectionError,
     SelectionPolicy,
     select,
+    select_band,
     select_structural,
 )
 
@@ -197,3 +203,173 @@ def test_select_structural_rejects_multiple_active_builds() -> None:
     )
     with pytest.raises(SelectionError):
         select_structural(hits, SelectionPolicy(), lexemes=("尿素",))
+
+
+# --- band 区间落产品（§10.5 选项 A，原票 03 chunk.cover 落点作废） ---
+
+
+def test_band_policy_defaults_preserve_cap_eight() -> None:
+    """I-B3（band 语义）：band_cap 默认 8（不调 cap 值，8 从块数改为带数）。"""
+    band = BandPolicy()
+    assert band.gap == 1
+    assert band.expand == 1
+    assert band.band_cap == 8
+    assert band.pool_cap == 24
+    assert band.provable_width_bound == 49  # (24-1)*(1+1)+1+2*1
+
+
+def test_band_policy_rejects_invalid_bounds() -> None:
+    with pytest.raises(SelectionError):
+        BandPolicy(gap=-1)
+    with pytest.raises(SelectionError):
+        BandPolicy(expand=-1)
+    with pytest.raises(SelectionError):
+        BandPolicy(band_cap=0)
+    with pytest.raises(SelectionError):
+        BandPolicy(pool_cap=0)
+
+
+def test_select_band_covers_consecutive_interval() -> None:
+    """I-A2（band 语义）：命中块聚簇成带，带覆盖原文序连续闭区间 [start, end]。
+
+    池块位置 [4, 5] 相邻（gap=1），expand=1 → 带 [3, 6]；带内全部块 id
+    由调用方按原文序装配（本模块不做 IO，只返回区间）。
+    """
+    chunk_order = ("c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7")
+    hits = (
+        _hit("A", "b1", 1.0, chunk_id="c4"),
+        _hit("A", "b1", 2.0, chunk_id="c5"),
+    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
+    assert len(bands) == 1
+    band = bands[0]
+    assert isinstance(band, SelectedBand)
+    assert (band.start, band.end) == (3, 6)  # expand=1 两端各扩展一块
+    assert band.width == 4
+    assert band.pool == (4, 5)
+    assert band.score == 2.0  # 带分 = 簇内最大 ts_rank
+
+
+def test_select_band_gap_splits_clusters() -> None:
+    """间隔 > gap 的命中块分属不同带（gap=1：间隔 2 块即断簇）。"""
+    chunk_order = tuple(f"c{i}" for i in range(10))
+    hits = (
+        _hit("A", "b1", 1.0, chunk_id="c1"),
+        _hit("A", "b1", 2.0, chunk_id="c4"),  # 4-1-1 = 2 > gap=1 → 断簇
+    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
+    # 带序 = (带分降序, 带起点升序)：c4 分更高排前
+    assert [b.pool for b in bands] == [(4,), (1,)]
+
+
+def test_select_band_dedup_repeat_hits_per_position() -> None:
+    """多个命中投影到同一原文位置时去重（不放大带内池块数）。"""
+    chunk_order = tuple(f"c{i}" for i in range(8))
+    hits = (
+        _hit("A", "b1", 1.0, chunk_id="c3"),
+        _hit("A", "b1", 0.5, chunk_id="c3"),
+    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
+    assert len(bands) == 1
+    assert bands[0].pool == (3,)
+
+
+def test_select_band_cap_split_exceeds_pool_cap() -> None:
+    """带内池块数 > pool_cap 时按池块锚拆子带（方案 C）。"""
+    pool_cap = 3
+    n = 30
+    chunk_order = tuple(f"c{i}" for i in range(n))
+    pool_positions = [2, 3, 4, 10, 11, 12, 13]  # 两簇，第二簇 4 块 > pool_cap=3
+    hits = tuple(_hit("A", "b1", float(p), chunk_id=f"c{p}") for p in pool_positions)
+    bands = select_band(hits, SelectionPolicy(),
+                        BandPolicy(gap=1, expand=1, pool_cap=pool_cap),
+                        chunk_order_by_source={"A": chunk_order})
+    # 带序 = (带分降序, 带起点升序)：第二簇拆带 (13,)/(10,11,12) 分高在前，第一簇 (2,3,4) 最后
+    assert len(bands) == 3
+    assert bands[0].pool == (13,)
+    assert bands[1].pool == (10, 11, 12)
+    assert bands[2].pool == (2, 3, 4)
+    # 拆带后每个子带宽度仍 ≤ 可证带宽上界
+    bound = (pool_cap - 1) * (1 + 1) + 1 + 2 * 1
+    for band in bands:
+        assert band.width <= bound
+
+
+def test_select_band_width_within_provable_bound() -> None:
+    """I-A3（band 语义）：任一选中带宽度 ≤ 可证带宽上界。"""
+    band = BandPolicy(gap=2, expand=1, pool_cap=5)
+    n = 60
+    chunk_order = tuple(f"c{i}" for i in range(n))
+    hits = tuple(_hit("A", "b1", float(i), chunk_id=f"c{i}") for i in range(0, n, 2))
+    bands = select_band(hits, SelectionPolicy(), band,
+                        chunk_order_by_source={"A": chunk_order})
+    assert bands
+    for b in bands:
+        assert b.width <= band.provable_width_bound
+
+
+def test_select_band_doc_order_first_occurrence_and_band_cap() -> None:
+    """文档序 = 词法首次出现（与 select 一致）；每文档取前 band_cap 个带。"""
+    chunk_order_a = tuple(f"a{i}" for i in range(12))
+    chunk_order_b = tuple(f"b{i}" for i in range(12))
+    hits = (
+        _hit("B", "b1", 9.0, chunk_id="b5"),
+        _hit("B", "b1", 8.0, chunk_id="b6"),
+        _hit("A", "b1", 1.0, chunk_id="a5"),
+        _hit("A", "b1", 0.9, chunk_id="a6"),
+    )
+    bands = select_band(
+        hits, SelectionPolicy(), BandPolicy(),
+        chunk_order_by_source={"A": chunk_order_a, "B": chunk_order_b},
+    )
+    sources = [b.source_id for b in bands]
+    assert sources.index("B") < sources.index("A")  # B 词法先行
+    # 每文档单簇单带；band_cap=8 不截断此处（簇数 < 8）
+    assert len(bands) == 2
+
+
+def test_select_band_missing_chunk_order_fails_closed() -> None:
+    """缺来源原文序清单 → fail-closed。"""
+    hits = (_hit("A", "b1", 1.0, chunk_id="c0"),)
+    with pytest.raises(SelectionError):
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={})
+
+
+def test_select_band_hit_outside_order_fails_closed() -> None:
+    """命中块不在原文序清单 → fail-closed（不静默丢块）。"""
+    chunk_order = ("c0", "c1")
+    hits = (_hit("A", "b1", 1.0, chunk_id="ghost"),)
+    with pytest.raises(SelectionError):
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={"A": chunk_order})
+
+
+def test_select_band_rejects_multiple_active_builds() -> None:
+    """同源多 build 混用 fail-closed（与 select 同判据）。"""
+    hits = (
+        _hit("A", "b1", 10.0, chunk_id="c0"),
+        _hit("A", "b2", 9.0, chunk_id="c1"),
+    )
+    with pytest.raises(SelectionError):
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={"A": ("c0", "c1")})
+
+
+def test_select_band_deterministic_and_stable_order() -> None:
+    """确定性：同输入两次运行逐字段一致；带序按 (带分降序, 带起点升序)。"""
+    chunk_order = tuple(f"c{i}" for i in range(20))
+    hits = (
+        _hit("A", "b1", 1.0, chunk_id="c3"),
+        _hit("A", "b1", 9.0, chunk_id="c10"),
+        _hit("A", "b1", 5.0, chunk_id="c16"),
+    )
+    first = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
+    second = select_band(hits, SelectionPolicy(), BandPolicy(),
+                         chunk_order_by_source={"A": chunk_order})
+    assert first == second
+    assert [b.score for b in first] == [9.0, 5.0, 1.0]

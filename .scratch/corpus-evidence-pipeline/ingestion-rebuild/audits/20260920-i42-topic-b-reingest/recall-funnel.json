@@ -1,0 +1,1230 @@
+{
+  "artifact": "i42-fullchain-recall-funnel",
+  "generated_at": "2026-09-21T01:16:48+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "selection": "product select_structural (perdoc)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "model_calls": 0,
+  "funnel": {
+    "S0_kept": 77,
+    "S1_candidates": 66,
+    "S2_doc_topk": 60,
+    "S3_chunk_top8": 51,
+    "S4_matched": 44
+  },
+  "funnel_losses": {
+    "S0_kept→S1_candidates": {
+      "dropped": 11,
+      "targets": [
+        "company-004 a-2",
+        "company-004 a-3",
+        "company-004 e2",
+        "company-005 e2",
+        "company-005 e3",
+        "company-008 a-2",
+        "company-008 a-3",
+        "company-008 a-5",
+        "macro-002 e4",
+        "macro-003 a-2",
+        "macro-003 a-4"
+      ]
+    },
+    "S1_candidates→S2_doc_topk": {
+      "dropped": 6,
+      "targets": [
+        "company-003 e1",
+        "company-003 e2",
+        "company-003 e3",
+        "company-003 e4",
+        "company-003 e5",
+        "company-003 e6"
+      ]
+    },
+    "S2_doc_topk→S3_chunk_top8": {
+      "dropped": 9,
+      "targets": [
+        "industry-001 a-4",
+        "industry-001 a-5",
+        "industry-002 a-3",
+        "industry-002 a-4",
+        "industry-004 a-1",
+        "industry-004 a-2",
+        "industry-008 a-2",
+        "industry-008 a-3",
+        "industry-008 a-5"
+      ]
+    },
+    "S3_chunk_top8→S4_matched": {
+      "dropped": 7,
+      "targets": [
+        "industry-001 e1",
+        "industry-001 e2",
+        "industry-001 e3",
+        "industry-002 e1",
+        "industry-002 e2",
+        "industry-003 e1",
+        "industry-003 e2"
+      ]
+    }
+  },
+  "targets_not_kept": [
+    "company-007 e1",
+    "company-008 a-1"
+  ],
+  "i37_target_buckets": {
+    "matched": 49,
+    "selected_but_match_fail": 7,
+    "kept_page_not_selected": 21,
+    "doc_not_kept_clean_stage_loss": 2
+  },
+  "i42_target_buckets": {
+    "matched": 44,
+    "selected_but_match_fail": 7,
+    "doc_topk_no_chunk": 9,
+    "candidates_no_doc": 6,
+    "kept_not_candidate": 11,
+    "not_in_doc_unreachable": 2
+  },
+  "per_class": [
+    {
+      "domain": "company",
+      "doc_recall": "7/8",
+      "question_pass": "7/8",
+      "evidence_pass": "3/8"
+    },
+    {
+      "domain": "industry",
+      "doc_recall": "1",
+      "question_pass": "8/8",
+      "evidence_pass": "3/8"
+    },
+    {
+      "domain": "macro",
+      "doc_recall": "1",
+      "question_pass": "8/8",
+      "evidence_pass": "6/8"
+    }
+  ],
+  "evidence_pass_total": "12/24",
+  "false_positives": [
+    "company-009",
+    "company-010",
+    "industry-009",
+    "industry-010",
+    "macro-009",
+    "macro-010"
+  ],
+  "topic_b": {
+    "total": 10,
+    "in_selection_range": 7
+  },
+  "per_target": {
+    "company-001 e4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-001 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-002 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-002 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-002 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-003 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-003 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-003 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-003 e4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-003 e5": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-003 e6": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": false,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-004 e2": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-004 a-2": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-004 a-3": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-005 e2": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-005 e3": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-006 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-006 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-006 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-007 e1": {
+      "S0_kept": false,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": false,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-008 a-1": {
+      "S0_kept": false,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": false,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-008 a-2": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-008 a-3": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "company-008 a-4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "company-008 a-5": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-001 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-001 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-001 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-001 a-4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-001 a-5": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-002 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-002 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-002 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-002 a-4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-003 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-003 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": false
+      }
+    },
+    "industry-003 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-004 a-1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-004 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-005 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-005 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-006 a-1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-006 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-006 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-007 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-007 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-007 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-008 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-008 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-008 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "industry-008 a-4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "industry-008 a-5": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "macro-001 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-001 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-001 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-002 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-002 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-002 e4": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "macro-003 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-003 a-2": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "macro-003 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-003 a-4": {
+      "S0_kept": true,
+      "S1_candidates": false,
+      "S2_doc_topk": false,
+      "S3_chunk_top8": false,
+      "S4_matched": false,
+      "independent": {
+        "kept": true,
+        "candidates": false,
+        "doc_topk": true,
+        "chunk_top8": false,
+        "matched": false
+      }
+    },
+    "macro-004 a-1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-004 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-004 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-004 a-4": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-004 a-5": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-004 a-6": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-005 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-005 a-2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-006 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-006 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-006 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-007 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-007 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-007 e3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-008 e1": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-008 e2": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    },
+    "macro-008 a-3": {
+      "S0_kept": true,
+      "S1_candidates": true,
+      "S2_doc_topk": true,
+      "S3_chunk_top8": true,
+      "S4_matched": true,
+      "independent": {
+        "kept": true,
+        "candidates": true,
+        "doc_topk": true,
+        "chunk_top8": true,
+        "matched": true
+      }
+    }
+  },
+  "questions": 30
+}

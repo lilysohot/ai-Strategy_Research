@@ -34,7 +34,7 @@
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_scoring_input.py": "1c499a51803d73ad382186620ed93efb4d16ed25d662c7ac74ec5ea16cef60dd",
-    "plugins/corpus/scoring.py": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e",
+    "plugins/corpus/scoring.py": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
     "plugins/corpus/preparation/search_pg.py": "baa92875535231086d67364d540ef9e4ce9fa5174ef7ff0b2dce67bc66da44b5",
     "plugins/corpus/preparation/read_pg.py": "fb87a771974b0393075da7f2e3b602a3e120ff1a0916a6fcf8c7e296c98ef8e1",
     "plugins/corpus/preparation/chunk.py": "56544aa12363a6a94460f69b0b26a512962a2e65a3cbea49b370190d8f519cf8",

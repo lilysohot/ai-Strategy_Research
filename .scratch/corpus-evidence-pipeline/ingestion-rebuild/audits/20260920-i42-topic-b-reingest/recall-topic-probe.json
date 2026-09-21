@@ -1,0 +1,144 @@
+[
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e1",
+    "quote": "0.0%",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:价格分位"
+    ],
+    "doc_rank": 1,
+    "doc_hits": 172,
+    "raw_rank": 9,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e2",
+    "quote": "0.0%",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:价差分位"
+    ],
+    "doc_rank": 1,
+    "doc_hits": 172,
+    "raw_rank": 9,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e3",
+    "quote": "82.9%",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:开工率"
+    ],
+    "doc_rank": 1,
+    "doc_hits": 172,
+    "raw_rank": 9,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "industry-002 e1",
+    "quote": "99.6%",
+    "locator": [
+      "page:10",
+      "row:R32",
+      "col:价格分位"
+    ],
+    "doc_rank": 2,
+    "doc_hits": 166,
+    "raw_rank": 3,
+    "selected_rank": 5,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 e1",
+    "quote": "89.9%",
+    "locator": [
+      "page:10",
+      "row:尿素",
+      "col:开工率"
+    ],
+    "doc_rank": 4,
+    "doc_hits": 134,
+    "raw_rank": 4,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 e2",
+    "quote": "8068.0",
+    "locator": [
+      "page:10",
+      "row:尿素",
+      "col:2026E产能"
+    ],
+    "doc_rank": 4,
+    "doc_hits": 134,
+    "raw_rank": 4,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 a-3",
+    "quote": "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率",
+    "locator": [
+      "page:10"
+    ],
+    "doc_rank": 4,
+    "doc_hits": 134,
+    "raw_rank": 4,
+    "selected_rank": 1,
+    "in_selection_range": true
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-2",
+    "quote": "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率",
+    "locator": [
+      "page:10"
+    ],
+    "doc_rank": 3,
+    "doc_hits": 120,
+    "raw_rank": 35,
+    "selected_rank": null,
+    "in_selection_range": false
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-3",
+    "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+    "locator": [
+      "page:10"
+    ],
+    "doc_rank": 3,
+    "doc_hits": 120,
+    "raw_rank": 49,
+    "selected_rank": null,
+    "in_selection_range": false
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-5",
+    "quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+    "locator": [
+      "page:10"
+    ],
+    "doc_rank": 3,
+    "doc_hits": 120,
+    "raw_rank": 49,
+    "selected_rank": null,
+    "in_selection_range": false
+  }
+]
