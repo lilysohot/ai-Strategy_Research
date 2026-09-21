@@ -1839,41 +1839,6 @@ if "i0c-r43" in by_id:
           "r43 must add the production selection policy test")
     merge_binding(i0c_current_binding, binding43)
 
-if "i0c-r4n" in by_id:
-    r4n = load_json(BASE / by_id["i0c-r4n"]["file"])
-    parent43r4n = BASE / by_id["i0c-r43"]["file"]
-    check(r4n.get("parent_snapshot") == {"snapshot_id": "i0c-r43",
-          "path": str(parent43r4n.relative_to(ROOT)), "sha256": digest(parent43r4n)},
-          "r4n parent mismatch")
-    bindingr4n = r4n.get("binding", {})
-    check(set(bindingr4n) == {"production_selection", "freeze_validator"},
-          "r4n binding groups mismatch")
-    check(set(bindingr4n.get("production_selection", {})) == {
-        "plugins/corpus/service.py",
-        "plugins/corpus/preparation/read_pg.py",
-        "plugins/corpus/preparation/selection.py",
-        "tests/test_corpus_selection.py",
-        "tests/test_corpus_consumers_pg.py"},
-          "r4n production_selection boundary mismatch")
-    check(set(bindingr4n.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r4n freeze_validator boundary mismatch")
-    # 生产默认 perdoc→band + cell 投影的语义门（U 2026-09-21 具名决策，spec §10.5 选项 A）：
-    svc_src_r4n = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
-    check("_selected_chunk_hits" in svc_src_r4n
-          and "_apply_selection_bands" in svc_src_r4n and "def _emit_cells" in svc_src_r4n,
-          "r4n service.py must wire band default + cell projection into production")
-    rpg_src_r4n = (ROOT / "plugins/corpus/preparation/read_pg.py").read_text(encoding="utf-8")
-    check("def search_with_coverage_bands" in rpg_src_r4n and "def fetch_bands" in rpg_src_r4n,
-          "r4n read_pg must carry band read path (search_with_coverage_bands/fetch_bands)")
-    sel_src_r4n = (ROOT / "plugins/corpus/preparation/selection.py").read_text(encoding="utf-8")
-    check("def select_band" in sel_src_r4n, "r4n selection.py must carry band strategy")
-    tst_r4n = (ROOT / "tests/test_corpus_selection.py").read_text(encoding="utf-8")
-    check("test_band_doc_set_matches_select_same_snapshot" in tst_r4n
-          and "test_emit_cells_derives_row_col_on_aligned_grid_only" in tst_r4n,
-          "r4n test_corpus_selection must carry I-BAND-1 / I-CELL-1 gates")
-    merge_binding(i0c_current_binding, bindingr4n)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -1937,5 +1902,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released" if "i0c-r40" in by_id else "")
       + ("; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6" if "i0c-r41" in by_id else "")
       + ("; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green" if "i0c-r42" in by_id else "")
-      + ("; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped" if "i0c-r43" in by_id else "")
-      + ("; r4n F2 band/cell production default: search_with_coverage + search switch perdoc->band via _selected_chunk_hits, read_pg band read path bound (search_with_coverage_bands/fetch_bands), selection.py + test_corpus_selection/test_corpus_consumers_pg bound, I-BAND-1/I-CELL-1 gates, U 2026-09-21 named decision (spec §10.5 option A); clean.py(r4p) + r39 plan read_pg drift recorded as pending" if "i0c-r4n" in by_id else ""))
+      + ("; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped" if "i0c-r43" in by_id else ""))

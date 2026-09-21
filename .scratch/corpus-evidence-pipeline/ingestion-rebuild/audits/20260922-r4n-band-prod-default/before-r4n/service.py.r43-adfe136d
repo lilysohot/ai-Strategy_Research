@@ -49,8 +49,6 @@ if TYPE_CHECKING:
     # psycopg 是可选依赖（PG 演练链路专属）：类型仅用于标注（本模块有
     # ``from __future__ import annotations``，运行时不求值）；实际连接在
     # 函数内惰性 import，普通 sqlite 环境零 psycopg。
-    from collections.abc import Mapping
-
     import psycopg
     from psycopg.rows import DictRow
 
@@ -60,7 +58,6 @@ if TYPE_CHECKING:
     from plugins.corpus.material_semantics import MaterialRun, MaterialType
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
-    from plugins.corpus.preparation.selection import SelectedBand
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -380,50 +377,6 @@ def _dedup_claims(claims: list[Claim]) -> list[Claim]:
         kept.append(claim)
     kept.reverse()
     return kept
-
-
-@dataclass(frozen=True)
-class EmittedCell:
-    """网格派生的对齐单元格证据（§10.5 选项 A + cell 投影）。
-
-    ``row``/``col`` 是相对网格坐标的权威标签文本（同一行左侧/同列上方最近的含字母
-    单元），不是原始行列号；``text`` 是坐标对应的逐胞对齐文本（raw_text ``"\\n"``
-    切分与 ``cells`` 精确对齐的格子内容）。
-    """
-
-    unit_id: str
-    page: int | None
-    row: str
-    col: str
-    text: str
-
-
-@dataclass(frozen=True)
-class BandEvidenceItem:
-    """一个选中带内的单块证据（原文序带内全部块，含扩展的非池块）。"""
-
-    chunk_id: str
-    title_text: str | None
-    section_path: tuple[str, ...]
-    text: str
-    pages: tuple[int, ...]
-
-
-@dataclass(frozen=True)
-class BandDocument:
-    """:meth:`CorpusService.search_bands` 的返回：一个选中文档的带区间检索结果。
-
-    ``bands`` 是 ``selection.select_band`` 的选中带（按带分降序、并列按带起点）；
-    ``chunks_by_band[i]`` 对应 ``bands[i]`` 带内原文序全部块的逐字证据（含扩展块）；
-    ``cells`` 是仅对选中带内对齐表单元派生的 row:/col: 证据（不改变选择）。
-    """
-
-    source_id: str
-    build_id: str
-    doc_handle: str
-    bands: tuple[SelectedBand, ...]
-    chunks_by_band: tuple[tuple[BandEvidenceItem, ...], ...]
-    cells: tuple[EmittedCell, ...]
 
 
 class CorpusService:
@@ -927,14 +880,13 @@ class CorpusService:
             return hits, self.coverage(query_status="matched" if hits else "no_match")
         from plugins.corpus.preparation import read_pg
 
-        raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
+        raw_hits, coverage = read_pg.search_with_coverage(
             self._dsn,
             query,
             limit=max(limit, _SELECTION_POOL_MIN),
             sandbox_db=_I2_SANDBOX_DB,
         )
-        # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-        raw_hits = self._selected_chunk_hits(raw_hits, chunk_order, limit)
+        raw_hits = self._apply_selection(raw_hits, query, limit)
         return (
             [
                 SearchHit(
@@ -953,217 +905,6 @@ class CorpusService:
             ],
             coverage,
         )
-
-    def search_bands(
-        self, query: str, *, limit: int = 10
-    ) -> tuple[list[BandDocument], dict[str, object]]:
-        """band 区间检索（§10.5 选项 A 落产品）：同快照命中 + 连续区间取回 + cell 投影。
-
-        新链专属（legacy 链不支持带选择，fail-closed 拒绝）。同一数据快照内取得
-        ``search_with_coverage_bands`` 的 (命中, 原文序块清单, 覆盖)，经
-        :meth:`_apply_selection_bands` 选中带，再批量取回带内逐字证据，并对选中带内
-        对齐表单元派生 row:/col: cell 证据（不改变选择）。返回 ``(list[BandDocument],
-        coverage)``；``limit`` 仍是返回条数/带数的上限语义。
-        """
-        from plugins.corpus.preparation import read_pg
-
-        if self.read_chain() != "new":
-            raise read_pg.LegacyHandleError(
-                f"目标库未承载 band 区间选择（read_chain={self.read_chain()}），需新链"
-            )
-        raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
-            self._dsn,
-            query,
-            limit=max(limit, _SELECTION_POOL_MIN),
-            sandbox_db=_I2_SANDBOX_DB,
-        )
-        bands = self._apply_selection_bands(raw_hits, chunk_order, limit)
-        chunk_evs = read_pg.fetch_bands(self._dsn, bands, chunk_order, sandbox_db=_I2_SANDBOX_DB)
-        docs = self._assemble_band_documents(bands, chunk_evs, chunk_order)
-        return docs, coverage
-
-    def _apply_selection_bands(
-        self,
-        raw_hits: tuple[SearchPgHit, ...],
-        chunk_order_by_source: Mapping[str, tuple[str, ...]],
-        limit: int,
-    ) -> tuple[SelectedBand, ...]:
-        """band 选择（§10.5 选项 A）：``select_band`` 前 ``top_k`` 来源 × 带数上限。
-
-        与 :meth:`_apply_selection` 平行的带路径——文档序与 perdoc ``select`` 逐字节
-        一致（首个命中确定来源排名），文档内把命中块聚簇成带并按带分取前 ``band_cap``
-        个带。空池原样返回（保持 no_match 语义）。
-        """
-        from plugins.corpus.preparation.selection import BandPolicy, SelectionPolicy, select_band
-
-        if not raw_hits:
-            return ()
-        bands = select_band(
-            raw_hits,
-            SelectionPolicy(),
-            BandPolicy(),
-            chunk_order_by_source=chunk_order_by_source,
-        )
-        return tuple(bands)[:limit]
-
-    def _selected_chunk_hits(
-        self,
-        raw_hits: tuple[SearchPgHit, ...],
-        chunk_order_by_source: Mapping[str, tuple[str, ...]],
-        limit: int,
-    ) -> tuple[SearchPgHit, ...]:
-        """生产默认：band 选中的 chunk 集（§10.5 选项 A，i0c-r4n U 决策）。
-
-        与 :meth:`_apply_selection`（perdoc）并列但为**生产默认**的带形态：文档选择与
-        ``select`` 逐字节一致（首个命中定来源排名），文档内按 ``select_band`` 选中带，
-        把带内 [start, end] 的原文序块（含扩展非池块）摊平为逐块命中返回，再截断到
-        ``limit``。仍以 ``chunk:<chunk_id>`` 取证句柄交给工具——硬闸①不变：snippet 截断，
-        逐字原文必须另走 ``corpus_fetch``。池块复用原命中的 snippet/score，扩展非池块
-        以带分占位、snippet 为空（只定位，不泄漏全文）。
-        """
-        from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHitAlias
-        from plugins.corpus.preparation.selection import SelectionError
-
-        bands = self._apply_selection_bands(raw_hits, chunk_order_by_source, limit)
-        if not bands:
-            return ()
-        by_key = {(h.build_id, h.chunk_id): h for h in raw_hits}
-        out: list[SearchPgHit] = []
-        for band in bands:
-            ordered = chunk_order_by_source.get(band.source_id)
-            if ordered is None:
-                raise SelectionError(f"缺少 {band.source_id} 的原文序块清单")
-            for i in range(band.start, band.end + 1):
-                if not (0 <= i < len(ordered)):
-                    continue
-                cid = ordered[i]
-                hit = by_key.get((band.build_id, cid))
-                if hit is None:
-                    # 带内扩展的非池块没有原始命中——只给取证件，不留全文。
-                    hit = SearchPgHitAlias(
-                        source_id=band.source_id,
-                        build_id=band.build_id,
-                        chunk_id=cid,
-                        kind="",
-                        title_text=None,
-                        section_path=(),
-                        unit_refs=(),
-                        score=band.score,
-                        snippet="",
-                        published=None,
-                    )
-                out.append(hit)
-                if len(out) >= limit:
-                    return tuple(out)
-        return tuple(out)
-
-    @staticmethod
-    def _has_letter(s: str) -> bool:
-        """含 CJK 或 ASCII 字母即视为行/列标签候选（排除纯数字/符号/占位符）。"""
-        return any(ch.isalpha() for ch in s)
-
-    def _emit_cells(self, chunk: ChunkEvidence) -> tuple[EmittedCell, ...]:
-        """对单块对齐表单元建网格，派生 row:/col: 标签并发射 cell 证据。
-
-        ``raw_text.split("\\n")`` 长度与 ``cells`` 精确对齐才入格（切分不对齐不派生）；
-        row = 同行左侧最近含字母单元，col = 同列上方最近含字母单元；两者都派生成功才
-        发射（否则诚实失败，不猜标签）。只派生、不改变块选择（遵守议题 A 硬约束）。
-        """
-        grid: dict[tuple[int, int], tuple[str, str]] = {}
-        page: int | None = None
-        for unit in chunk.units:
-            if not unit.cells or unit.page is None:
-                continue
-            parts = unit.raw_text.split("\n")
-            if len(parts) != len(unit.cells):
-                continue
-            if page is None:
-                page = unit.page
-            for (r, c), text in zip(unit.cells, parts, strict=True):
-                grid[(r, c)] = (text, unit.unit_id)
-        out: list[EmittedCell] = []
-        for (r, c), (text, unit_id) in grid.items():
-            row_label = col_label = None
-            for c2 in range(c - 1, -1, -1):
-                if grid.get((r, c2)) is not None and self._has_letter(grid[(r, c2)][0]):
-                    row_label = grid[(r, c2)][0]
-                    break
-            for r2 in range(r - 1, -1, -1):
-                if grid.get((r2, c)) is not None and self._has_letter(grid[(r2, c)][0]):
-                    col_label = grid[(r2, c)][0]
-                    break
-            if row_label is None or col_label is None:
-                continue
-            out.append(
-                EmittedCell(
-                    unit_id=unit_id,
-                    page=page,
-                    row=row_label,
-                    col=col_label,
-                    text=text,
-                )
-            )
-        return tuple(out)
-
-    def _assemble_band_documents(
-        self,
-        bands: tuple[SelectedBand, ...],
-        chunk_evs: tuple[ChunkEvidence, ...],
-        chunk_order_by_source: Mapping[str, tuple[str, ...]],
-    ) -> list[BandDocument]:
-        """把``select_band``选中带 + ``fetch_bands``逐字块装配为 :class:`BandDocument`。
-
-        ``chunk_evs`` 是扁平带序块（fetch_bands 已按 (build_id, chunk_id) 去重）；
-        ``chunk_order_by_source`` 提供原文序，把每个带闭区间 [start, end] 投影为带内块，
-        再补发射对齐 cell 证据。带内块仍按原文序（含扩展非池块；跨带共享块按带独立出现）。
-        """
-        from plugins.corpus.preparation import read_pg
-
-        ev_by_key = {(ev.build_id, ev.chunk_id): ev for ev in chunk_evs}
-        by_source: dict[str, list[SelectedBand]] = {}
-        for band in bands:
-            lst = by_source.setdefault(band.source_id, [])
-            if lst and lst[0].build_id != band.build_id:
-                raise read_pg.IntegrityError(f"band 来源跨多个活动 build: {band.source_id}")
-            lst.append(band)
-
-        docs: list[BandDocument] = []
-        for source_id, source_bands in by_source.items():
-            build_id = source_bands[0].build_id
-            ordered = chunk_order_by_source[source_id]
-            chunks_by_band: list[tuple[BandEvidenceItem, ...]] = []
-            cells: list[EmittedCell] = []
-            for band in source_bands:
-                items: list[BandEvidenceItem] = []
-                for p in range(band.start, band.end + 1):
-                    cid = ordered[p]
-                    ev = ev_by_key.get((build_id, cid))
-                    if ev is None:
-                        raise read_pg.IntegrityError(
-                            f"band 带内块缺失（装配）: {build_id[:12]}…/{cid}"
-                        )
-                    items.append(
-                        BandEvidenceItem(
-                            chunk_id=ev.chunk_id,
-                            title_text=ev.title_text,
-                            section_path=ev.section_path,
-                            text=ev.text,
-                            pages=tuple(sorted({u.page for u in ev.units if u.page is not None})),
-                        )
-                    )
-                    cells.extend(self._emit_cells(ev))
-                chunks_by_band.append(tuple(items))
-            docs.append(
-                BandDocument(
-                    source_id=source_id,
-                    build_id=build_id,
-                    doc_handle=read_pg.build_handle(build_id),
-                    bands=tuple(source_bands),
-                    chunks_by_band=tuple(chunks_by_band),
-                    cells=tuple(cells),
-                )
-            )
-        return docs
 
     def fetch_verbatim(self, doc_id: str, locator: str) -> ChunkEvidence:
         """按§7.2 句柄取回权威原文块（新链），失败即抛 :mod:`read_pg` 的拒绝类型。
@@ -1186,15 +927,15 @@ class CorpusService:
         if self.read_chain() == "new":
             # I2-8：检索只服务活动 build（PUBLISHED 指针），命中即§7.2 取证句柄。
             from plugins.corpus.preparation import read_pg
+            from plugins.corpus.preparation.search_pg import search_chunks
 
-            raw_hits, chunk_order, _coverage = read_pg.search_with_coverage_bands(
+            hits = search_chunks(
                 self._dsn,
                 q,
                 limit=max(limit, _SELECTION_POOL_MIN),
                 sandbox_db=_I2_SANDBOX_DB,
             )
-            # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-            hits = self._selected_chunk_hits(raw_hits, chunk_order, limit)
+            hits = self._apply_selection(hits, q, limit)
             return [
                 SearchHit(
                     doc_id=read_pg.build_handle(hit.build_id),

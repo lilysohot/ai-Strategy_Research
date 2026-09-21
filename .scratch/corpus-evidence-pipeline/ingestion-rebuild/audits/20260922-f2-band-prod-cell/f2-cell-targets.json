@@ -1,0 +1,145 @@
+[
+  {
+    "query_id": "company-003",
+    "target_id": "e1",
+    "locator": [
+      "page:20",
+      "row:每股收益",
+      "col:2026E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "e2",
+    "locator": [
+      "page:20",
+      "row:经营活动现金流",
+      "col:2026E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "e3",
+    "locator": [
+      "page:20",
+      "row:每股收益",
+      "col:2027E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "e4",
+    "locator": [
+      "page:20",
+      "row:经营活动现金流",
+      "col:2027E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "e5",
+    "locator": [
+      "page:20",
+      "row:每股收益",
+      "col:2028E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "e6",
+    "locator": [
+      "page:20",
+      "row:经营活动现金流",
+      "col:2028E"
+    ],
+    "matched": false,
+    "source_id": "2026-09-06_dddc7cd0"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "e1",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:价格分位"
+    ],
+    "matched": true,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "e2",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:价差分位"
+    ],
+    "matched": true,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "e3",
+    "locator": [
+      "page:10",
+      "row:纯碱",
+      "col:开工率"
+    ],
+    "matched": true,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "e1",
+    "locator": [
+      "page:10",
+      "row:R32",
+      "col:价格分位"
+    ],
+    "matched": true,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "e2",
+    "locator": [
+      "page:10",
+      "row:R32",
+      "col:2026E产能（配额）"
+    ],
+    "matched": false,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "e1",
+    "locator": [
+      "page:10",
+      "row:尿素",
+      "col:开工率"
+    ],
+    "matched": true,
+    "source_id": "2026-08-13_174b6462"
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "e2",
+    "locator": [
+      "page:10",
+      "row:尿素",
+      "col:2026E产能"
+    ],
+    "matched": false,
+    "source_id": "2026-08-13_174b6462"
+  }
+]

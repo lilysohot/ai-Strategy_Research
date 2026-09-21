@@ -896,7 +896,7 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 | 编号 | 议题 | 目标 | 依赖 | 阻塞条件 |
 |---|---|---|---|---|
 | F1 | 负例误报 6→0（M6 硬判据） | 6 题 `retrieved_documents` 0、`max_false_positives=0`，不扰动有答案题 S1 | 无（独立） | ✅ **已完成**（2026-09-21，`audits/20260921-f1-negative/`） |
-| F2 | band 接生产 + 补 cell 投影 | 17/24→19/24 **生产生效** | 新冻结 `i0c-r4n` + U 开关 | 2a（band）→ 2b（cell）顺序 |
+| F2 | band 接生产 + 补 cell 投影 | 2a 17/24 生产生效；2b 当前语料 18/24（19/24 封口待 company-003 独立议题） | 新冻结 `i0c-r4n` + U 开关 | 2a（band）→ 2b（cell）顺序；U 已签收口口径 |
 | F3 | e1 `disclaimer_section` 判定粒度过宽 | company-007/e1 转绿 | 重摄入 + 新修订 + 阈值具名签认 | 独立 |
 | F4 | a-1 表头/正文边界（表归属） | company-008/a-1 归因转绿 | 与 F2 同批评估 | 弱耦合 F2 |
 
@@ -911,6 +911,17 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 2a：`service.py::_apply_selection` perdoc→`select_band`；需在 `read_pg.search_with_coverage` **同快照**内按 build 装配该 source 原文序全量块清单（`chunk_order_by_source`，沿用 `_enrich_hits` 同游标，禁 N+1）；返回类型 `SearchHit`→`SelectedBand`，`fetch_verbatim` 需支持按区间取回带内全部块。验收＝复现 `band-summary.json` 17/24 + `self_check.S0_S1_S2_match_i42=true` + 带宽 ≤49 断言。
 - 2b：对命中带内 `cells` 非空 table 单元，用 `TableModel.label_path` 派生 `(page,row,col)` 并经 `service.py:1142 fetch_cell`（I2-6 权威）**发射 cell 证据**（只派生不改写、不再排一次序）。验收＝i41 的 13 个 `row:/col:` 目标 11 条转绿；industry-002 e2 / industry-003 e2（金标合成列标签）确认不可派生、保持 fail 不强行补取。
 - 新冻结 `i0c-r4n` 捆绑 U 签认 + archive-first。
+
+**F2 实施完成（2026-09-21，`audits/20260922-f2-band-prod-cell/`）——U 已签收口口径：17→18/24（当前语料），19/24 封口待 company-003 独立议题**
+- 2a（band 接生产）：产品新增 band 读取路径并只读回测复现 17/24——`read_pg.search_with_coverage_bands`（同一 REPEATABLE READ 快照内 命中+覆盖+`chunk_order_by_source`，`_chunk_order_by_source_on` 按 build 批量装配原文序全量块清单，禁 N+1）、`read_pg.fetch_bands`（批量取回带内逐字块，禁 N+1）、`service.search_bands`/`_apply_selection_bands`/`_assemble_band_documents`。漏斗 S0=77/S1=66/S2=60/S3_band_cover=59/S4_matched=50 与 i42 逐字节一致；实测最大带宽 33 ≤ 可证上界 49；负例 6→0；回归 corpus 家族 **748 passed / 12 skipped**，ruff/pyright 全绿。生产默认仍 perdoc，band 为并行路径（切换默认归 `i0c-r4n` + U 签认）。
+- 2b（cell 投影）：`_emit_cells` 对命中带内对齐 table 单元派生 `(page,row,col)` 并经 `fetch_cell` 权威路径发射 cell 证据（只派生、不改变选择）。当前语料 **band+cell = 18/24**、row:/col: **5/13** matched；industry-002 e2 / industry-003 e2（金标合成列标签）确认不可派生、保持 fail。**6 个 company-003 cell 目标**（每股收益/经营活动现金流 × 2026E/2027E/2028E）所在国信 doc 在**当前语料** rank-6 落出 top-5，非 cell 机制问题（i41 的 19/24 测于更早 reader-pdf-5 语料；当前 index-4-zhcfg-2 上 cell 无法触及该文档）——归并至既有 company-003 独立议题（§10.2 文档级召回，band/cell 均不修），F2 收口 18/24。
+- 自检：band 层 17/24 与 `audits/20260921-band-product/` 逐层一致（`self_check.S0_S1_S2_match_i42=true`、`width_le_provable=true`、`fp_not_increased=true`）；band_s2 层如实标 `19=false`（不虚报 19/24）。新常驻测试覆盖 I-BAND-1（同快照全量原文序清单 + select_band 文档集与 select 一致）、I-BAND-2（带宽 ≤ 可证上界）、I-CELL-1（仅选中带对齐表单元派生、不改变选择）。
+
+**F2 冻结落定：`i0c-r4n`（生产默认 perdoc→band + 启用 cell，2026-09-21）**
+- 新冻结修订 `i0c-r4n` 已创建（archive-first 归档上一绑定字节至 `audits/20260922-r4n-band-prod-default/before-r4n/`；`freeze-manifest.json` 追加条目）。U 具名决策：生产默认 perdoc→band、启用 cell 投影；机制=band 选 chunk、保持 chunk 取证（不改 `corpus_search/corpus_fetch` 工具契约，硬闸①不破坏）。
+- 绑定字节：`service.py=54ef53b8`、`read_pg.py=52b182f7`（首次入链，`search_with_coverage_bands`/`fetch_bands`）、`selection.py=9bd0a416`、`test_corpus_selection.py=a1b654ec`、`test_corpus_consumers_pg.py=c6bf0015`、`validate_i0c_freeze.py=f148ad36`。
+- 校验：`validate_i0c_freeze.py` 增 r4n 块（parent/边界/语义门），r4n 全部自检通过；服务/实现组漂移（service.py、read_pg.py）清零。剩余 3 项已知待办漂移均非 r4n 引入、记录在案：① `r39` calibration-plan 历史 `read_pg.py` 绑旧哈希（已关闭轮次审计产物，不就地改写，待独立校准修订）；②③ `clean.py`（pre-F3 绑定）与 `test_corpus_preparation_clean.py`——**F3 重摄入另立 `i0c-r4p` 承接**（U 决策：F2 与 F3 分修订，不并入）。
+- 回归：`tests/test_corpus_selection.py` 27 passed；corpus 家族 `tests/test_corpus_*.py` **748 passed / 12 skipped**（12 skip 为 I2 沙箱演练旧库监守）；ruff/pyright 全绿（r4n 触及字节 pyright 0 errors）。
 
 **F3：e1 `disclaimer_section` 判定粒度过宽** ✅ 已完成（2026-09-21）
 - 事实：company-007 ord=717 整段免责声明 NOISE，但同单元含实质事实句（华创云信 4.06% 持股）。

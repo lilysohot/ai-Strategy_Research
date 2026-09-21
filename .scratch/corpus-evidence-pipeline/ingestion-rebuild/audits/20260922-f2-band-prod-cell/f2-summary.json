@@ -1,0 +1,421 @@
+{
+  "artifact": "f2-band-prod-cell",
+  "generated_at": "2026-09-21T15:40:04+08:00",
+  "kind": "同口径回测（产品 band/cell 读取路径；非冻结回归）",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "selection": "product select_band (BandPolicy gap=1/expand=1/band_cap=8/pool_cap=24)",
+  "scorer": "working-tree whitespace-norm (NOT frozen)",
+  "model_calls": 0,
+  "production_default": "perdoc（未翻转；band 为 F2 新增并行路径，未接管默认）",
+  "band_params": {
+    "gap": 1,
+    "expand": 1,
+    "band_cap": 8,
+    "pool_cap": 24,
+    "provable_width_bound": 49,
+    "max_band_width_measured": 33
+  },
+  "layers": {
+    "base": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "7/8",
+          "question_pass": "7/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "3/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "6/8"
+        }
+      ],
+      "evidence_pass_total": "12/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-004",
+        "industry-008",
+        "macro-002",
+        "macro-003"
+      ]
+    },
+    "band": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "7/8",
+          "question_pass": "7/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "4/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "17/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-008"
+      ]
+    },
+    "band_s2": {
+      "passed": false,
+      "per_class": [
+        {
+          "domain": "company",
+          "doc_recall": "7/8",
+          "question_pass": "7/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "industry",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "5/8"
+        },
+        {
+          "domain": "macro",
+          "doc_recall": "1",
+          "question_pass": "8/8",
+          "evidence_pass": "8/8"
+        }
+      ],
+      "evidence_pass_total": "18/24",
+      "false_positives": [],
+      "fabricated_citations": [],
+      "critical_failures": [
+        "company-003",
+        "company-007",
+        "company-008",
+        "industry-002",
+        "industry-003",
+        "industry-008"
+      ]
+    }
+  },
+  "funnel": {
+    "S0_kept": 77,
+    "S1_candidates": 66,
+    "S2_doc_topk": 60,
+    "S3_band_cover": 59,
+    "S4_matched": 50
+  },
+  "i42_baseline": {
+    "funnel": {
+      "S0_kept": 77,
+      "S1_candidates": 66,
+      "S2_doc_topk": 60,
+      "S3_chunk_top8": 51,
+      "S4_matched": 44
+    },
+    "evidence_pass_total": "12/24",
+    "false_positives": 6
+  },
+  "self_check": {
+    "S0_S1_S2_match_i42": true,
+    "S4_ge_band_product": true,
+    "width_le_provable": true,
+    "fp_not_increased": true,
+    "band_equals_product": {
+      "S3_band_cover": true,
+      "S4_matched": true,
+      "band_evidence_pass_17": true,
+      "band_s2_evidence_pass_19": false
+    }
+  },
+  "target_buckets": {
+    "matched": 60,
+    "kept_page_not_selected": 8,
+    "not_in_doc_unreachable": 2,
+    "selected_but_match_fail": 9
+  },
+  "row_col": {
+    "total": 13,
+    "matched": 5,
+    "still_failed": [
+      {
+        "query_id": "company-003",
+        "target_id": "e1",
+        "locator": [
+          "page:20",
+          "row:每股收益",
+          "col:2026E"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "target_id": "e2",
+        "locator": [
+          "page:20",
+          "row:经营活动现金流",
+          "col:2026E"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "target_id": "e3",
+        "locator": [
+          "page:20",
+          "row:每股收益",
+          "col:2027E"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "target_id": "e4",
+        "locator": [
+          "page:20",
+          "row:经营活动现金流",
+          "col:2027E"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "target_id": "e5",
+        "locator": [
+          "page:20",
+          "row:每股收益",
+          "col:2028E"
+        ]
+      },
+      {
+        "query_id": "company-003",
+        "target_id": "e6",
+        "locator": [
+          "page:20",
+          "row:经营活动现金流",
+          "col:2028E"
+        ]
+      },
+      {
+        "query_id": "industry-002",
+        "target_id": "e2",
+        "locator": [
+          "page:10",
+          "row:R32",
+          "col:2026E产能（配额）"
+        ]
+      },
+      {
+        "query_id": "industry-003",
+        "target_id": "e2",
+        "locator": [
+          "page:10",
+          "row:尿素",
+          "col:2026E产能"
+        ]
+      }
+    ]
+  },
+  "negative": {
+    "certified_retrieved_documents_0": [
+      {
+        "query_id": "company-009",
+        "retrieved_documents": 0
+      },
+      {
+        "query_id": "company-010",
+        "retrieved_documents": 0
+      },
+      {
+        "query_id": "industry-009",
+        "retrieved_documents": 0
+      },
+      {
+        "query_id": "industry-010",
+        "retrieved_documents": 0
+      },
+      {
+        "query_id": "macro-009",
+        "retrieved_documents": 0
+      },
+      {
+        "query_id": "macro-010",
+        "retrieved_documents": 0
+      }
+    ],
+    "or_canary_retrieved_documents": [
+      {
+        "query_id": "company-009",
+        "retrieved_documents": 5
+      },
+      {
+        "query_id": "company-010",
+        "retrieved_documents": 5
+      },
+      {
+        "query_id": "industry-009",
+        "retrieved_documents": 5
+      },
+      {
+        "query_id": "industry-010",
+        "retrieved_documents": 5
+      },
+      {
+        "query_id": "macro-009",
+        "retrieved_documents": 5
+      },
+      {
+        "query_id": "macro-010",
+        "retrieved_documents": 5
+      }
+    ],
+    "or_false_positives_canary": 6
+  },
+  "facade_checks": [
+    {
+      "query_id": "company-001",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-002",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-003",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-004",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-005",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-006",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-007",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "company-008",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-001",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-002",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-003",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-004",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-005",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-006",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-007",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "industry-008",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-001",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-002",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-003",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-004",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-005",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-006",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-007",
+      "same_sources": true,
+      "same_band_intervals": true
+    },
+    {
+      "query_id": "macro-008",
+      "same_sources": true,
+      "same_band_intervals": true
+    }
+  ],
+  "questions": 30
+}

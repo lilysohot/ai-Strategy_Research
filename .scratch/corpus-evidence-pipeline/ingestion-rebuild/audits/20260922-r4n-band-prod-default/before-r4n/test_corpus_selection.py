@@ -172,7 +172,7 @@ def test_select_structural_keeps_lexical_doc_order() -> None:
     """
     lexemes = ("尿素", "开工率")
     hits = (
-        _hit("B", "b1", 9.0, chunk_id="b_prose", label_path=()),  # 词法先行文档
+        _hit("B", "b1", 9.0, chunk_id="b_prose", label_path=()),          # 词法先行文档
         _hit("B", "b1", 8.0, chunk_id="b_more", label_path=()),
         _hit("A", "b1", 1.0, chunk_id="a_cell", label_path=("尿素 开工率",)),
         _hit("A", "b1", 0.9, chunk_id="a_cell2", label_path=("尿素 开工率",)),
@@ -190,7 +190,9 @@ def test_select_structural_empty_lexemes_falls_back_to_select() -> None:
         _hit("A", "b1", 3.0, chunk_id="a"),
         _hit("B", "b1", 9.0, chunk_id="b"),
     )
-    assert select_structural(hits, SelectionPolicy(), lexemes=()) == select(hits, SelectionPolicy())
+    assert select_structural(hits, SelectionPolicy(), lexemes=()) == select(
+        hits, SelectionPolicy()
+    )
 
 
 def test_select_structural_rejects_multiple_active_builds() -> None:
@@ -238,9 +240,8 @@ def test_select_band_covers_consecutive_interval() -> None:
         _hit("A", "b1", 1.0, chunk_id="c4"),
         _hit("A", "b1", 2.0, chunk_id="c5"),
     )
-    bands = select_band(
-        hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order}
-    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
     assert len(bands) == 1
     band = bands[0]
     assert isinstance(band, SelectedBand)
@@ -257,9 +258,8 @@ def test_select_band_gap_splits_clusters() -> None:
         _hit("A", "b1", 1.0, chunk_id="c1"),
         _hit("A", "b1", 2.0, chunk_id="c4"),  # 4-1-1 = 2 > gap=1 → 断簇
     )
-    bands = select_band(
-        hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order}
-    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
     # 带序 = (带分降序, 带起点升序)：c4 分更高排前
     assert [b.pool for b in bands] == [(4,), (1,)]
 
@@ -271,9 +271,8 @@ def test_select_band_dedup_repeat_hits_per_position() -> None:
         _hit("A", "b1", 1.0, chunk_id="c3"),
         _hit("A", "b1", 0.5, chunk_id="c3"),
     )
-    bands = select_band(
-        hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order}
-    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
     assert len(bands) == 1
     assert bands[0].pool == (3,)
 
@@ -285,12 +284,9 @@ def test_select_band_cap_split_exceeds_pool_cap() -> None:
     chunk_order = tuple(f"c{i}" for i in range(n))
     pool_positions = [2, 3, 4, 10, 11, 12, 13]  # 两簇，第二簇 4 块 > pool_cap=3
     hits = tuple(_hit("A", "b1", float(p), chunk_id=f"c{p}") for p in pool_positions)
-    bands = select_band(
-        hits,
-        SelectionPolicy(),
-        BandPolicy(gap=1, expand=1, pool_cap=pool_cap),
-        chunk_order_by_source={"A": chunk_order},
-    )
+    bands = select_band(hits, SelectionPolicy(),
+                        BandPolicy(gap=1, expand=1, pool_cap=pool_cap),
+                        chunk_order_by_source={"A": chunk_order})
     # 带序 = (带分降序, 带起点升序)：第二簇拆带 (13,)/(10,11,12) 分高在前，第一簇 (2,3,4) 最后
     assert len(bands) == 3
     assert bands[0].pool == (13,)
@@ -308,7 +304,8 @@ def test_select_band_width_within_provable_bound() -> None:
     n = 60
     chunk_order = tuple(f"c{i}" for i in range(n))
     hits = tuple(_hit("A", "b1", float(i), chunk_id=f"c{i}") for i in range(0, n, 2))
-    bands = select_band(hits, SelectionPolicy(), band, chunk_order_by_source={"A": chunk_order})
+    bands = select_band(hits, SelectionPolicy(), band,
+                        chunk_order_by_source={"A": chunk_order})
     assert bands
     for b in bands:
         assert b.width <= band.provable_width_bound
@@ -325,9 +322,7 @@ def test_select_band_doc_order_first_occurrence_and_band_cap() -> None:
         _hit("A", "b1", 0.9, chunk_id="a6"),
     )
     bands = select_band(
-        hits,
-        SelectionPolicy(),
-        BandPolicy(),
+        hits, SelectionPolicy(), BandPolicy(),
         chunk_order_by_source={"A": chunk_order_a, "B": chunk_order_b},
     )
     sources = [b.source_id for b in bands]
@@ -340,7 +335,8 @@ def test_select_band_missing_chunk_order_fails_closed() -> None:
     """缺来源原文序清单 → fail-closed。"""
     hits = (_hit("A", "b1", 1.0, chunk_id="c0"),)
     with pytest.raises(SelectionError):
-        select_band(hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={})
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={})
 
 
 def test_select_band_hit_outside_order_fails_closed() -> None:
@@ -348,7 +344,8 @@ def test_select_band_hit_outside_order_fails_closed() -> None:
     chunk_order = ("c0", "c1")
     hits = (_hit("A", "b1", 1.0, chunk_id="ghost"),)
     with pytest.raises(SelectionError):
-        select_band(hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order})
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={"A": chunk_order})
 
 
 def test_select_band_rejects_multiple_active_builds() -> None:
@@ -358,9 +355,8 @@ def test_select_band_rejects_multiple_active_builds() -> None:
         _hit("A", "b2", 9.0, chunk_id="c1"),
     )
     with pytest.raises(SelectionError):
-        select_band(
-            hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": ("c0", "c1")}
-        )
+        select_band(hits, SelectionPolicy(), BandPolicy(),
+                    chunk_order_by_source={"A": ("c0", "c1")})
 
 
 def test_select_band_deterministic_and_stable_order() -> None:
@@ -371,118 +367,9 @@ def test_select_band_deterministic_and_stable_order() -> None:
         _hit("A", "b1", 9.0, chunk_id="c10"),
         _hit("A", "b1", 5.0, chunk_id="c16"),
     )
-    first = select_band(
-        hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order}
-    )
-    second = select_band(
-        hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": chunk_order}
-    )
+    first = select_band(hits, SelectionPolicy(), BandPolicy(),
+                        chunk_order_by_source={"A": chunk_order})
+    second = select_band(hits, SelectionPolicy(), BandPolicy(),
+                         chunk_order_by_source={"A": chunk_order})
     assert first == second
     assert [b.score for b in first] == [9.0, 5.0, 1.0]
-
-
-# --- band 落产品读取路径（F2）：同快照带宽不变式 + cell 派生只读 ---
-
-
-def test_band_doc_set_matches_select_same_snapshot() -> None:
-    """I-BAND-1：同一快照下 select_band 与 select 选中文档集一致。
-
-    band 仅改变块/带的选择形态与排序，不得新增或丢失来源文档——文档序=词法首次
-    出现，``band_cap=8`` 高于任何单源簇数，故来源集合与 perdoc ``select`` 逐字节
-    一致。``chunk_order_by_source`` 为同快照原文序（按每 chunk 引用单元最小 ordinal
-    升序），两端可证带宽上界一致。
-    """
-    chunk_order_a = tuple(f"a{i}" for i in range(24))
-    chunk_order_b = tuple(f"b{i}" for i in range(24))
-    hits = (
-        _hit("B", "b1", 9.0, chunk_id="b5"),  # B 词法先行
-        _hit("B", "b1", 8.0, chunk_id="b6"),
-        _hit("A", "b1", 1.0, chunk_id="a15"),
-        _hit("A", "b1", 0.9, chunk_id="a16"),
-    )
-    selected_docs = {h.source_id for h in select(hits, SelectionPolicy())}
-    bands = select_band(
-        hits,
-        SelectionPolicy(),
-        BandPolicy(),
-        chunk_order_by_source={"A": chunk_order_a, "B": chunk_order_b},
-    )
-    band_docs = {b.source_id for b in bands}
-    assert band_docs == selected_docs == {"A", "B"}
-    # 来源序 = 词法首次出现（B 先行）；文档内带按 (带分降序) 排列
-    assert [b.source_id for b in bands] == ["B", "A"]
-    # 同快照原文序全量覆盖：每来源命中块位都在其原文序清单内且解析为真实命中块
-    hit_chunks = {h.chunk_id for h in hits}
-    for b in bands:
-        order = {"A": chunk_order_a, "B": chunk_order_b}[b.source_id]
-        for pos in b.pool:
-            assert order[pos] in hit_chunks  # 原文序位置落到命中块 id
-
-
-def test_band_every_band_width_within_provable_bound_49() -> None:
-    """I-BAND-2：默认参数下任一选中带宽 ≤ 可证带宽上界 49。
-
-    ``provable_width_bound=(pool_cap-1)*(gap+1)+1+2*expand = 49``，是 §10.5 选项 A
-    的硬上界（回测实测最大带宽 33）；带宽既有下限保护（+expand 两头）又不会越界。
-    """
-    band = BandPolicy()
-    n = 120
-    chunk_order = tuple(f"c{i}" for i in range(n))
-    hits = tuple(_hit("A", "b1", float(i), chunk_id=f"c{i}") for i in range(0, n, 2))
-    bands = select_band(hits, SelectionPolicy(), band, chunk_order_by_source={"A": chunk_order})
-    assert bands
-    for b in bands:
-        assert b.width <= band.provable_width_bound
-        assert b.width <= 49
-    assert max(b.width for b in bands) <= 49
-
-
-def test_emit_cells_derives_row_col_on_aligned_grid_only() -> None:
-    """I-CELL-1：cell 证据只对选中带内对齐表单元派生，不改变块选择。
-
-    网格行/列标签派生规则：``raw_text.split("\\n")`` 长度 == ``cells`` 数才入格；
-    row = 同行左侧最近含字母单元、col = 同列上方最近含字母单元，二者都派生成功才发射。
-    数字格子无这两种标签之一即诚实失败；切分不对齐的单元整块不入格。派生是纯函数，
-    不改动输入块（冻结 dataclass），也不触及任何选择路径。
-    """
-    from plugins.corpus.preparation.read_pg import ChunkEvidence, UnitEvidence
-    from plugins.corpus.service import CorpusService
-
-    svc = CorpusService("dummy")  # 不触 DB：_emit_cells 只对传入 chunk 派生
-
-    def unit(
-        uid: str, text: str, cells: tuple[tuple[int, ...], ...], *, page: int | None = 1
-    ) -> UnitEvidence:
-        return UnitEvidence(unit_id=uid, raw_text=text, page=page, element="table", cells=cells)
-
-    # 对齐 2x2 网格 + 一个切分不对齐的单元 + 一个纯数字但缺行标签的单元
-    u_header = unit("u-h", "每股收益\n2025E", ((0, 0), (0, 1)))
-    u_row = unit("u-r", "营业总收入\n84,679", ((1, 0), (1, 1)))
-    u_unaligned = unit("u-ua", "甲\n乙\n丙", ((0, 2), (0, 3)))  # 3 行 vs 2 cells → 不入格
-    u_pagenone = unit("u-pg", "营业收入\n12.5", ((2, 0), (2, 1)), page=None)  # 无 page → 跳过
-
-    chunk = ChunkEvidence(
-        source_id="S1",
-        build_id="b1",
-        chunk_id="c0",
-        kind="table",
-        title_text=None,
-        section_path=(),
-        units=(u_header, u_row, u_unaligned, u_pagenone),
-        text="每股收益\n2025E\n营业总收入\n84,679",
-        source_ranges=((0, 40),),
-        spans=(("u-h", 0, 6), ("u-r", 7, 20)),
-        active=True,
-    )
-    emitted = svc._emit_cells(chunk)
-
-    # 唯一可发射格：(1,1)= "84,679"（row=营业总收入 / col=2025E）
-    assert len(emitted) == 1
-    cell = emitted[0]
-    assert cell.unit_id == "u-r"
-    assert cell.page == 1
-    assert cell.row == "营业总收入"
-    assert cell.col == "2025E"
-    assert cell.text == "84,679"
-    # 派生不改写输入块（冻结 dataclass，字段仍为原值）
-    assert chunk.units == (u_header, u_row, u_unaligned, u_pagenone)

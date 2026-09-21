@@ -1,0 +1,41 @@
+{
+  "snapshot_id": "i0c-r4n",
+  "revision": "r4n",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r43",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r43.json",
+    "sha256": "7d0e71ea2aed0ec3ec6062259f2fa774ffc85a4ae62a4000185444e40020ba29"
+  },
+  "binding": {
+    "production_selection": {
+      "plugins/corpus/service.py": "54ef53b8b2f49e79fadae9c5295b3b0fecaa2ce4073de4ec210897bdae057dc6",
+      "plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b",
+      "plugins/corpus/preparation/selection.py": "9bd0a416f42972db92185d6df7b722d5d9d030aa74c5169fa4e50652a1efdab2",
+      "tests/test_corpus_selection.py": "a1b654ece25afb38b71559f34da38ab63b4f60e95386e573224c2095787a95dc",
+      "tests/test_corpus_consumers_pg.py": "c6bf001546a5614b7291b4ae7773d1d96d21021b20c9a7c6fdc383784b1644a4"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "f148ad368bbfc56358209c8204ba86425a07e32659379af4181255af2ab69897"
+    }
+  },
+  "corrections": {
+    "production_band_default": "F2 落地（spec §14.5 issues/07，band 接生产 + cell 投影）：production service.py 权威读取链 search/search_with_coverage 新链路径由 perdoc 切换为 band 默认——_selected_chunk_hits（select_band 选中带 → 带内 [start,end] 原文序块摊平为逐块命中，扩展非池块 snippet 为空只定位不泄全文）替代 _apply_selection（perdoc 保留未改）；硬闸①不变（仍以 chunk:<id> 取证句柄，逐字走 corpus_fetch）。",
+    "read_pg_band_path_bound": "plugins/corpus/preparation/read_pg.py 首次正式入链：search_with_coverage_bands（同 REPEATABLE READ 快照内 命中+覆盖+chunk_order_by_source，按 build 批量装配、禁 N+1）与 fetch_bands（批量带内逐字块）成为生产默认读取路径的载体。",
+    "selection_rebind": "plugins/corpus/preparation/selection.py 重绑（9bd0a416 未变字节，r43 已入链）：select_band 为生产默认选择策略，BandPolicy gap=1/expand=1/band_cap=8/pool_cap=24 数值不改。",
+    "tests": "tests/test_corpus_selection.py 绑定（a1b654ec，含 I-BAND-1/I-BAND-2/I-CELL-1 语义门测试）；tests/test_corpus_consumers_pg.py 保持 c6bf0015（test_service_search_applies_selection_policy 在 band 默认下拓扑不变：top_k=5 来源 × 每源 ≤8 块仍成立）。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r43 1d0cf243 → 90611f92）：新增 i0c-r4n 校验块（parent/边界/语义门：service 含 _selected_chunk_hits/_apply_selection_bands/_emit_cells，read_pg 含 search_with_coverage_bands/fetch_bands，selection 含 select_band，tests 含 I-BAND-1/I-CELL-1 门）；supersession 合并区间不变（r2..r43），r4n 绑定经 merge_binding 覆盖旧组。"
+  },
+  "notes": [
+    "r4n 为 F2（corpus-retrieval-decoupling spec §14.5 issues/07）生产接入修订：把已验证的 band + cell 能力推进为生产默认（spec §10.5 选项 A），评测脚本与产品共享同一 seam。",
+    "U 2026-09-21 具名决策：生产默认由 perdoc 切换为 band 并启用 cell 投影；机制=band 选 chunk、保持 chunk 取证（不改 corpus_search/corpus_fetch 工具契约，硬闸①不破坏）。",
+    "regression：tests/test_corpus_*.py 748 passed / 12 skipped（与 F2 band 基线一致；12 skip 为 I2 沙箱演练旧库监守，CORPUS_I2_DSN 本地未指独立库）；ruff/pyright 全绿（r4n 触及字节 pyright 0 errors；server/ 目录缺失 sqlalchemy/argon2 的环境报错为既有、与本次无关）。",
+    "F2 收口实测口径（audits/20260922-f2-band-prod-cell/）：band=17/24、band_s2=18/24（self_check.band_s2_evidence_pass_19=false 诚实不虚报 19/24）、负例 6 retrieved=0 不回升、最大带宽 33≤可证上界 49；company-003 国信 doc（dddc7cd0）当前语料 rank-6 落出 top-5（归并既有公司-003 议题，band/cell 均不修）。",
+    "archive-first：修改前已归档上一绑定字节（git HEAD）service.py（r43=adfe136d）、read_pg.py（fb87a771）、selection.py（9bd0a416）、test_corpus_selection.py（a4359925）、test_corpus_consumers_pg.py（c6bf0015）与 validate_i0c_freeze.py（1d0cf243）至 audits/20260922-r4n-band-prod-default/before-r4n/，逐条与上一绑定一致。",
+    "已知待办（非 r4n 引入，记录在案）：(1) F3 的 clean.py/test_corpus_preparation_clean.py 已 commit（clean.py=d46491b2，F3 免责节句粒度）但未冻结，r42 仍绑 pre-F3 clean.py=e169bb6e，产生 chain_rebind 漂移——归 rp 修订（i0c-r4p）承接；(2) r39 calibration-plan-v2.json 的历史 read_pg.py 绑定为旧哈希，随 F2 变更后漂移，属已关闭轮次审计产物，不就地改写，待独立校准修订另行承接。",
+    "不改默认 policy 数值、不调 max_chunks_per_top_document=8、不触 scorer/金标、不重摄入（label_path/cells 已在现状语料就位）。"
+  ],
+  "m5_declaration": "not_declared（F2 仅接入生产默认选择形态，I3-3 评分/召回结论不受影响；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-21T23:45:00+08:00"
+}
