@@ -1,0 +1,36 @@
+{
+  "snapshot_id": "i0c-r43",
+  "revision": "r43",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r42",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r42.json",
+    "sha256": "056e5135a86b292c0867f209e43fe51d5436683d3cc8076e056e271c853f5c43"
+  },
+  "binding": {
+    "production_selection": {
+      "plugins/corpus/service.py": "adfe136d2e227be359c535290c30d1be7aeddb071b693f19ae2b42567bd6cd46",
+      "plugins/corpus/preparation/selection.py": "9bd0a416f42972db92185d6df7b722d5d9d030aa74c5169fa4e50652a1efdab2",
+      "tests/test_corpus_consumers_pg.py": "c6bf001546a5614b7291b4ae7773d1d96d21021b20c9a7c6fdc383784b1644a4"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "1d0cf2430addfa372755faea0eeb98625d76b94988b461242aea46793cbfb173"
+    }
+  },
+  "corrections": {
+    "production_selection_r3": "R3 闭环：生产 service.py 新链（search / search_with_coverage）接入 selection.select_structural（perdoc，i42 产品路径）——候选池 max(limit, 40) → query_lexemes → 选择 → 截断到 limit；selection.py 首次入链（此前 UNBOUND）。",
+    "selection_module_bound": "plugins/corpus/preparation/selection.py 入链（9bd0a416…）：选择策略（select/select_structural/select_band）从此有产品字节↔修订对应；_RankedHit 协议声明改为只读 property（兼容 frozen SearchHit，pyright 全绿）。",
+    "service_rebind": "plugins/corpus/service.py 重绑（r13 f57b5bf7 → adfe136d）：生产检索路径行为变更（接入 perdoc 选择），旧绑定由 supersession 覆盖。",
+    "tests": "tests/test_corpus_consumers_pg.py 重绑（r13 70ad4839 → c6bf0015）：新增 test_service_search_applies_selection_policy（6 来源 × 2 块 → 选择后 top_k=5 来源 10 条、每源 ≤8 块）。",
+    "freeze_validator": "validate_i0c_freeze.py 扩展 r43 校验块（结构性 + 语义门：service.py 必须含 _apply_selection/select_structural/_SELECTION_POOL_MIN）；supersession 合并区间由 r2..r42 扩至 r2..r43。"
+  },
+  "notes": [
+    "r43 为解耦主线（corpus-retrieval-decoupling spec §4.1/R3）的生产接入修订：把已验证的 perdoc 选择策略接入生产消费链，评测脚本与产品共享同一 seam。",
+    "回归：tests/test_corpus_*.py 731 passed / 12 skipped（与 S5/r42 基线一致）；ruff/pyright 全绿。",
+    "archive-first：修改前已归档 service.py 与 test_corpus_consumers_pg.py（git HEAD == r13 绑定）及 validate_i0c_freeze.py（== r42 绑定）至 audits/20260921-r43-production-selection/before-r43/，逐条与上一绑定一致。",
+    "不改默认 policy 数值、不调参数、不触碰 scorer/金标；band 路线（select_band）保持产品代码与测试，未接入生产默认（按 U 2026-09-21 决策，生产默认 perdoc）。"
+  ],
+  "m5_declaration": "not_declared（R3 闭环：生产检索路径接入选择策略，I3-3 侧行为释放；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-21T21:30:00+08:00"
+}

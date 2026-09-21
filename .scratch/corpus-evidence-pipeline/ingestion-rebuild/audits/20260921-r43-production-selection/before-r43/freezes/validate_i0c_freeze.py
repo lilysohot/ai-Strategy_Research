@@ -1810,39 +1810,10 @@ if "i0c-r42" in by_id:
           "r42 plan must keep scorer f61573d7")
     merge_binding(i0c_current_binding, binding42)
 
-if "i0c-r43" in by_id:
-    r43 = load_json(BASE / by_id["i0c-r43"]["file"])
-    parent43 = BASE / by_id["i0c-r42"]["file"]
-    check(r43.get("parent_snapshot") == {"snapshot_id": "i0c-r42",
-          "path": str(parent43.relative_to(ROOT)), "sha256": digest(parent43)}, "r43 parent mismatch")
-    binding43 = r43.get("binding", {})
-    check(set(binding43) == {"production_selection", "freeze_validator"},
-          "r43 binding groups mismatch")
-    check(set(binding43.get("production_selection", {})) == {
-        "plugins/corpus/service.py",
-        "plugins/corpus/preparation/selection.py",
-        "tests/test_corpus_consumers_pg.py"}, "r43 production_selection boundary mismatch")
-    check(set(binding43.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r43 freeze_validator boundary mismatch")
-    # R3 闭环的语义门：production service.py 必须实际接入选择策略（防静默回退）
-    svc_src43 = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
-    check("_apply_selection" in svc_src43 and "select_structural" in svc_src43,
-          "r43 service.py must wire select_structural into production search")
-    check("_SELECTION_POOL_MIN" in svc_src43,
-          "r43 service.py must define the selection candidate-pool floor")
-    sel_src43 = (ROOT / "plugins/corpus/preparation/selection.py").read_text(encoding="utf-8")
-    check("def select_structural" in sel_src43 and "def select_band" in sel_src43,
-          "r43 selection.py must carry the validated selection strategies")
-    tst_src43 = (ROOT / "tests/test_corpus_consumers_pg.py").read_text(encoding="utf-8")
-    check("test_service_search_applies_selection_policy" in tst_src43,
-          "r43 must add the production selection policy test")
-    merge_binding(i0c_current_binding, binding43)
-
-# 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
+# 最新修订绑定优先（supersession）：i0c-r2..r42 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in (f"i0c-r{number}" for number in range(2, 44)):
+for sid in (f"i0c-r{number}" for number in range(2, 43)):
     entry = by_id.get(sid)
     if not entry:
         continue
@@ -1901,5 +1872,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r32 I3-1 three-class dev E2E on the U-approved set filed (6 sources -> 2 publishable, 13 blocking gaps, per_class_min_2 NOT satisfied, i3-e2e guard + selfcheck frozen)" if "i0c-r32" in by_id else "") + ("; r33 I3-0 independent-review F1-F5 remediation sign-off (named) verified" if "i0c-r33" in by_id else "") + ("; r34 I3-1 dev-lane MD/DOCX coverage: format gate (pdf/docx/md all publishable) satisfied, per_class_min_2 still false, production in_scope unchanged (dev-only policy + truthful material types)" if "i0c-r34" in by_id else "") + ("; r35 M6 criterion carries the §12.1 format gate (docs-only: tasks.md M6 row + plan ledger; no behaviour change)" if "i0c-r35" in by_id else "")
       + ("; r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released" if "i0c-r40" in by_id else "")
       + ("; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6" if "i0c-r41" in by_id else "")
-      + ("; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green" if "i0c-r42" in by_id else "")
-      + ("; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped" if "i0c-r43" in by_id else ""))
+      + ("; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green" if "i0c-r42" in by_id else ""))

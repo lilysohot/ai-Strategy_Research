@@ -373,6 +373,15 @@ U 确认整体采纳工作树为权威版本，新建 **`i0c-r42`** 完成 t6 �
 （`scoring.py:279` `max_false_positives = 0`），应优先。**若以本方案为主线，等于把负例继续推后**——
 两者都要做，但有先后，须 U 明确。
 
+**再更新（2026-09-21，R3 闭环 / r43 后，U 指令"先解耦、后负例"落地）**：**R3 闭环完成**
+（§4.1 seam + §14.4 判断 4，`freezes/i0c-r43.json`）——生产 `service.py` 新链（`search` /
+`search_with_coverage`）接入 `selection.select_structural`（**perdoc**，i42 产品路径逐字节一致）：
+候选池 `max(limit, 40)` → `query_lexemes`（只依赖查询文本）→ 选择 → 截断到 `limit`；`selection.py`
+首次入链（此前 UNBOUND），`_RankedHit` 协议只读化后 pyright 全绿。按 U 2026-09-21 决策，生产默认形态为
+**perdoc select_structural**；band（`select_band`）保持产品代码与测试、**未接入生产默认**。
+回归 731 passed / 12 skipped；`validate_i0c_freeze.py` exit=0。**解耦主线收尾**；负例议题
+（M6 负例 6→0，§6.0）按 U 指令**推迟重新立项**。
+
 ### 6.3 排序理由（修正版）
 
 原原则"从不动被绑字节的改动开始"已失效（改动既成事实）。当前原则：
@@ -836,16 +845,18 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 
 | 票 | 方案内容 | 实现状态 | 证据 |
 |---|---|---|---|
-| 01 | `selection.py` 落产品 | ✅ **已实现**（超出方案：含 `select_structural`） | `plugins/corpus/preparation/selection.py:54`（`select`）、`:85`（`select_structural`）；`SelectionPolicy` 默认 `top_k=5` / `max_chunks_per_document=8` |
+| 01 | `selection.py` 落产品 | ✅ **已实现**（超出方案：含 `select_structural`） | `plugins/corpus/preparation/selection.py:54`（`select`）、`:85`（`select_structural`）；`SelectionPolicy` 默认 `top_k=5` / `max_chunks_per_document=8`；**生产接入（r43）**：`service.py::_apply_selection`（`search`/`search_with_coverage` 新链，候选池 `max(limit,40)` → `select_structural` → 截断） |
 | 02 | `SearchHit` 加深 | ✅ **已实现** | `search_pg.py:94`（`label_path` 字段）、`:105`（`_enrich_hits`，同游标批量加深） |
 | 03 | `chunk.cover` + recall/rank 拆分 | ⚠️ **部分**：`rank_hits` 已实现（`search_pg.py:162`），global 变体已被 i42 弃用；**`cover` 未实现** | `chunk.py` 函数全表中无 `cover` |
 | 04 | 表格结构模型下沉 reader | ✅ **已实现**（但 `ts_rank` 副作用未清） | `readers/pdf_reader.py:146`（`TableModel.label_path`）、`:519-533`（填入 `UnitLocation.label_path`）；`contract.py:309`；`chunk.py:169`（`_table_row_label_prefix`） |
-| 05 | 清洗判定依据可机读 | ❌ **未实现** | `clean.py` 无 `verdicts` |
-| — | **band 路线**（本方案之外） | ⚠️ **仅诊断脚本，未落产品**：i40 17/24、i41 **19/24**（topic A 11/11 全中） | `audits/20260920-i40-topic-a-tighten/i40_band.py`、`audits/20260920-i41-topic-a-cell/i41_band_cell.py`；`grep -rln band plugins/corpus/` 只命中 `_BAND_RATIO`（页眉页脚带，无关） |
-| — | 冻结链 | `i0c-r41` **已建（scoped）**：17 → **14** 处红；剩余登记为 t6；I3-2 门**仍红** | `freezes/i0c-r41.json`（`status=scorer_r41_frozen_chain_pending_t6`）；`corrections.chain_drift_backlog_t6` 列明剩余漂移 |
+| 05 | 清洗判定依据可机读 | ✅ **已实现**（2026-09-21，S5 / §7.5） | `clean.py`：`NoiseVerdict` + `CleanRegion.verdicts`（NOISE 分支机器可读判定依据）；`audits/20260921-s5-noise-verdict/` |
+| — | **band 路线**（本方案之外） | ✅ **已落产品代码**（`selection.select_band`，i40 17/24、i41 **19/24**、band 回测 17/24），**未接生产默认**（U 决策：生产默认 perdoc） | `selection.py::select_band`；`audits/20260920-i40-topic-a-tighten/i40_band.py`、`audits/20260920-i41-topic-a-cell/i41_band_cell.py`、`audits/20260921-band-product/`（§10.5 选项 A 落点） |
+| — | 冻结链 | **`i0c-r43` 已建（R3 闭环）**：`selection.py` 入链（此前 UNBOUND）、`service.py` 重绑（r13 → r43）、随行测试、validator 扩展；supersession 区间扩至 r2..r43 | `freezes/i0c-r43.json`（`production_selection`/`freeze_validator` 两组绑定）；`freezes/validate_i0c_freeze.py`（exit=0） |
 
 **常驻测试**：`tests/test_corpus_selection.py`（12 条）已覆盖 I-B2 / I-B3（含 `test_cap_unchanged_by_this_work`
 显式断言 cap=8），但 **I-B1、I-A1/A2/A3、I-E1/E2 仍无常驻测试**；band 的 topic A 11/11 亦无常驻测试。
+**生产路径测试（r43）**：`tests/test_corpus_consumers_pg.py::test_service_search_applies_selection_policy`
+（PG 门控：6 来源 × 2 块 → 选择后 top_k=5 来源 10 条、每源 ≤8 块）。
 
 ### 14.4 由复测得出的四条判断
 
@@ -854,9 +865,11 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
    （i42 `backtest-report.md:72`，且"两变体均受影响，与结构排序信号无关"）。修法见 §10.2。
 3. **入链是唯一缺口**：代码门全绿 + 冻结门全红 ⇒ 当前唯一的系统性问题是"17 处改动未登记 + manifest 血缘未重建"，
    属流程而非代码。这也再次印证 §2 R2/R3：**判据挂在链尾，层内的对错无法被独立确认**。
-4. **最好成绩不在产品里**：band 路线 **19/24**（i41）只存在于诊断脚本，产品路径 **12/24**（i42）——
-   **这 7 分之差就是"未落产品"的部分**；且 **负例误报历轮恒 6**（i33→i42 五轮不变），是唯一零进展项，
-   属 M6 硬判据（§6.0、§10.5）。
+4. **最好成绩不在产品里**（**已由 R3 闭环关闭**）：band 路线 **19/24**（i41）原只存在于诊断脚本，产品路径 **12/24**（i42）。
+   **r43 后生产检索路径已接入 perdoc `select_structural`**（i42 产品路径逐字节一致），"未落产品"缺口关闭；
+   band（17/24）与 perdoc（12/24）的差异仍在，但生产默认形态按 U 决策取 perdoc，band 切换生产默认留待后续
+   （§10.5 归属已定：选项 A 落产品代码，未接默认）。**负例误报历轮恒 6**（i33→i42 五轮不变）仍为唯一零进展项，
+   属 M6 硬判据（§6.0、§10.5）——按 U 指令**推迟重新立项**。
 
 ---
 

@@ -218,54 +218,6 @@ def test_search_returns_version_handles_and_fetch_is_verbatim(
     assert evidence.active is True
 
 
-def test_service_search_applies_selection_policy(store: PgStore, service: CorpusService) -> None:
-    """R3 闭环：生产 search 走 perdoc 选择策略（top_k 来源 × 每源块数上限）。
-
-    6 来源 × 2 块全部命中时，无选择策略会返回全部 12 块；接入 ``select_structural``
-    后只保留前 ``top_k=5`` 来源的块（10 条），且任何来源不超过 8 块。
-    """
-    for i in range(6):
-        build_id = sha256_of_bytes(f"i2s8:sel:build:{i}".encode())
-        source_id = sha256_of_bytes(f"i2s8:sel:source:{i}".encode())
-        _register_source(store, source_id)
-        _stage_units(store, build_id, "石英股份高纯砂产能", source_id)
-        store.register_job(build_id, JobStage.CHUNKED)
-        chunked = store.acquire_job(build_id, JobStage.CHUNKED, "w1", NOW, LEASE)
-        store.put_chunks(
-            build_id,
-            [
-                Chunk(
-                    chunk_id=f"{build_id[:16]}:c{j}",
-                    build_id=build_id,
-                    kind="paragraph",
-                    unit_refs=("u1",),
-                    search_text="石英股份高纯砂产能",
-                    source_ranges=(),
-                )
-                for j in range(2)
-            ],
-            owner_id="w1",
-            fence_token=chunked.fence_token,
-        )
-        store.finish_job(
-            build_id, JobStage.CHUNKED, "w1", chunked.fence_token, NOW, JobState.SUCCEEDED
-        )
-        store.register_job(build_id, JobStage.PUBLISHED)
-        published = store.acquire_job(build_id, JobStage.PUBLISHED, "w1", NOW, LEASE)
-        store.publish(
-            source_id, "d1", build_id, NOW, owner_id="w1", fence_token=published.fence_token
-        )
-        store.finish_job(
-            build_id, JobStage.PUBLISHED, "w1", published.fence_token, NOW, JobState.SUCCEEDED
-        )
-
-    hits = service.search("石英", limit=20)
-    sources = {hit.source_id for hit in hits}
-    assert len(sources) == 5  # top_k=5：第 6 个来源整体挤出
-    assert len(hits) == 10  # 5 来源 × 2 块（池 12 ≥ max(limit,40)，选择后截断不生效）
-    assert all(sum(1 for hit in hits if hit.source_id == source) <= 8 for source in sources)
-
-
 def test_unpublished_build_never_in_candidates(store: PgStore, service: CorpusService) -> None:
     _register_source(store)
     draft = sha256_of_bytes(b"i2s8:build:draft")

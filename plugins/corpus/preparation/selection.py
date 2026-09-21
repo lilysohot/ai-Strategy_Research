@@ -24,8 +24,9 @@ band 区间（i41 已验证 19/24，S2 判定后改道落产品）：:func:`sele
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping, Protocol
+from typing import Protocol
 
 
 class SelectionError(ValueError):
@@ -33,12 +34,26 @@ class SelectionError(ValueError):
 
 
 class _RankedHit(Protocol):
-    """选择策略只依赖的来源身份、排名字段与结构标签（鸭子类型，避免耦合 SearchHit）。"""
+    """选择策略只依赖的来源身份、排名字段与结构标签（鸭子类型，避免耦合 SearchHit）。
 
-    source_id: str
-    build_id: str
-    score: float
-    label_path: tuple[str, ...]
+    只读 property 声明：对 frozen dataclass（SearchHit）与可变实现均兼容，
+    且不要求实现者暴露可写字段（协议只读 = 消费者只读）。
+    """
+
+    @property
+    def source_id(self) -> str: ...
+
+    @property
+    def build_id(self) -> str: ...
+
+    @property
+    def chunk_id(self) -> str: ...
+
+    @property
+    def score(self) -> float: ...
+
+    @property
+    def label_path(self) -> tuple[str, ...]: ...
 
 
 @dataclass(frozen=True)
@@ -148,9 +163,7 @@ class BandPolicy:
         if self.gap < 0 or self.expand < 0:
             raise SelectionError(f"gap/expand 必须 >= 0: {self.gap}/{self.expand}")
         if self.band_cap < 1 or self.pool_cap < 1:
-            raise SelectionError(
-                f"band_cap/pool_cap 必须 >= 1: {self.band_cap}/{self.pool_cap}"
-            )
+            raise SelectionError(f"band_cap/pool_cap 必须 >= 1: {self.band_cap}/{self.pool_cap}")
 
     @property
     def provable_width_bound(self) -> int:
@@ -198,12 +211,14 @@ def _form_bands(
             clusters.append([p])
     bands = []
     for cl in clusters:
-        bands.append({
-            "start": max(0, cl[0] - expand),
-            "end": min(n - 1, cl[-1] + expand),
-            "score": max(score_by_pos[p] for p in cl),
-            "pool": list(cl),
-        })
+        bands.append(
+            {
+                "start": max(0, cl[0] - expand),
+                "end": min(n - 1, cl[-1] + expand),
+                "score": max(score_by_pos[p] for p in cl),
+                "pool": list(cl),
+            }
+        )
     return bands
 
 
@@ -225,13 +240,15 @@ def _cap_split(
             out.append(band)
             continue
         for i in range(0, len(bp), pool_cap):
-            group = bp[i:i + pool_cap]
-            out.append({
-                "start": max(0, group[0] - expand),
-                "end": min(n - 1, group[-1] + expand),
-                "score": max(score_by_pos[p] for p in group),
-                "pool": list(group),
-            })
+            group = bp[i : i + pool_cap]
+            out.append(
+                {
+                    "start": max(0, group[0] - expand),
+                    "end": min(n - 1, group[-1] + expand),
+                    "score": max(score_by_pos[p] for p in group),
+                    "pool": list(group),
+                }
+            )
     return out
 
 
@@ -287,19 +304,22 @@ def select_band(
             raise SelectionError(f"{source_id} 命中块不在原文序清单: {missing[:3]}")
         pool_positions = sorted({pos_of[h.chunk_id] for h in bucket})
         score_by_pos = {pos_of[h.chunk_id]: h.score for h in bucket}
-        bands = _form_bands(pool_positions, score_by_pos, len(ordered),
-                            band.gap, band.expand)
-        bands = _cap_split(bands, score_by_pos, len(ordered), band.pool_cap,
-                           band.expand)
+        bands = _form_bands(pool_positions, score_by_pos, len(ordered), band.gap, band.expand)
+        bands = _cap_split(bands, score_by_pos, len(ordered), band.pool_cap, band.expand)
         ranking = _rank_bands(bands)
         for index in sorted(
             (i for i, rank in ranking.items() if rank <= band.band_cap),
             key=lambda i: (-bands[i]["score"], bands[i]["start"]),
         ):
             b = bands[index]
-            selected.append(SelectedBand(
-                source_id=source_id, build_id=bucket[0].build_id,
-                start=b["start"], end=b["end"], score=b["score"],
-                pool=tuple(b["pool"]),
-            ))
+            selected.append(
+                SelectedBand(
+                    source_id=source_id,
+                    build_id=bucket[0].build_id,
+                    start=b["start"],
+                    end=b["end"],
+                    score=b["score"],
+                    pool=tuple(b["pool"]),
+                )
+            )
     return tuple(selected)

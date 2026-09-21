@@ -57,7 +57,6 @@ if TYPE_CHECKING:
     from plugins.corpus.fetch import FetchedBlock
     from plugins.corpus.material_semantics import MaterialRun, MaterialType
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence
-    from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -104,11 +103,6 @@ logger = logging.getLogger(__name__)
 # 的 plan→execute→publish；新链落隔离演练库（PgStore/_check_target fail-closed
 # 拒绝非 i2_sandbox_corpus 实例）。旧 documents/blocks 直写分支在本文件退役。
 _I2_SANDBOX_DB = "i2_sandbox_corpus"
-
-#: 生产检索候选池下限（R3 闭环）：选择策略需要足够大的候选池才能生效——
-#: ``top_k 来源 × max_chunks_per_document 块`` = 5×8。池取 ``max(limit, 40)``，
-#: 选择后仍截断到调用方 ``limit``（limit 语义 = 返回条数上限，不变）。
-_SELECTION_POOL_MIN = 40
 _I2_ARCHIVE_ROOT = Path(__file__).resolve().parents[2] / "data" / "corpus-archive"
 _I2_POLICY_PATH = (
     Path(__file__).resolve().parents[2]
@@ -844,36 +838,12 @@ class CorpusService:
             self._dsn, sandbox_db=_I2_SANDBOX_DB, query_status=query_status
         )
 
-    def _apply_selection(
-        self, raw_hits: tuple[SearchPgHit, ...], query: str, limit: int
-    ) -> tuple[SearchPgHit, ...]:
-        """生产检索路径的选择策略（R3 闭环，i42 perdoc 形态）。
-
-        ``raw_hits`` 是 :mod:`search_pg` 的扁平命中（score 降序候选池）；策略为
-        :func:`selection.select_structural`（perdoc：文档序=词法首次出现，文档内按
-        (结构重叠数, score) 重排），随后截断到调用方 ``limit``。词元
-        （``query_lexemes``）只依赖查询文本、不依赖语料快照，故在组合读取事务
-        之外调用不破坏同快照保证；空池原样返回（保持 no_match 语义）。
-        """
-        from plugins.corpus.preparation.search_pg import query_lexemes
-        from plugins.corpus.preparation.selection import SelectionPolicy, select_structural
-
-        if not raw_hits:
-            return raw_hits
-        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
-        # select_structural 只对 raw_hits 做选择/重排（返回其子序列），cast 到调用方
-        # 期望的具体类型是安全的。
-        selected = select_structural(raw_hits, SelectionPolicy(), lexemes=lexemes)
-        return cast(tuple[SearchPgHit, ...], tuple(selected))[:limit]
-
     def search_with_coverage(
         self, query: str, *, limit: int = 10
     ) -> tuple[list[SearchHit], dict[str, object]]:
         """检索 + 覆盖元数据取自**同一数据库快照**（§7.3 并发发布一致性）。
 
         工具层用本方法一次取回两者，避免「先取 hits 再取 coverage」拼接自两个时刻。
-        新链命中经选择策略（:meth:`_apply_selection`，perdoc）后返回，limit 仍是
-        返回条数上限。
         """
         if self.read_chain() != "new":
             hits = self.search(query, limit=limit)
@@ -881,12 +851,8 @@ class CorpusService:
         from plugins.corpus.preparation import read_pg
 
         raw_hits, coverage = read_pg.search_with_coverage(
-            self._dsn,
-            query,
-            limit=max(limit, _SELECTION_POOL_MIN),
-            sandbox_db=_I2_SANDBOX_DB,
+            self._dsn, query, limit=limit, sandbox_db=_I2_SANDBOX_DB
         )
-        raw_hits = self._apply_selection(raw_hits, query, limit)
         return (
             [
                 SearchHit(
@@ -929,13 +895,7 @@ class CorpusService:
             from plugins.corpus.preparation import read_pg
             from plugins.corpus.preparation.search_pg import search_chunks
 
-            hits = search_chunks(
-                self._dsn,
-                q,
-                limit=max(limit, _SELECTION_POOL_MIN),
-                sandbox_db=_I2_SANDBOX_DB,
-            )
-            hits = self._apply_selection(hits, q, limit)
+            hits = search_chunks(self._dsn, q, limit=limit, sandbox_db=_I2_SANDBOX_DB)
             return [
                 SearchHit(
                     doc_id=read_pg.build_handle(hit.build_id),
