@@ -30,7 +30,7 @@ Baseline: 最新冻结修订 **`i0c-r41`**（scoped：仅绑空白规约 scorer 
 
 > **最新状态（2026-09-21 更正，详见 §14）**
 >
-> 1. **票 01 / 02 / 04 已被提前实现**；票 03 只实现了 `rank_hits`（`chunk.cover` 未做）；票 05 未做。
+> 1. **票 01 / 02 / 04 已被提前实现**；票 03 只实现了 `rank_hits`（`chunk.cover` 未做）；**票 05 已实现**（2026-09-21，§7.5）。
 > 2. **出现了本方案没有的 band 路线**：i40（17/24）、i41（**19/24**，topic A 11/11 全中），
 >    只存在于诊断脚本、**未落产品**；产品路径（i42）为 **12/24**。详见 §10.5。
 > 3. **冻结链已推进到 `i0c-r41`**（scoped）：17 处红 → **14 处**；剩余登记为 **t6 待办**；
@@ -332,8 +332,9 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
 | **S2** | ✅ **已完成**（2026-09-21，`audits/20260921-s2-injection-judgment/`）：注入对召回零贡献（S1 66→66），但**承载排名价值**（去注入 EvidencePass 12/24→2/24） | 04 副作用 | ✅ 已执行（`self_check_reproduces_i42: true`） | 无 |
 | **S3a** | ❌ **否决**（S2 判定）：label_tsv 隔离后排名机制不变，标签词元退出 `ts_rank` ⇒ 同崩至 ~2/24 | 04 | 已判定 | §10.2 |
 | **S3b** | ❌ **否决**（S2 判定）：删除注入摧毁排名，EvidencePass 12/24→2/24 | 04 | 已判定 | §10.2 |
-| **S4** | `chunk.cover`（议题 A 的 11 条） | 03 后半 | ⚠️ **须先定 band 归属**（§10.5） | **与 band 路线重复** |
-| **S5** | 清洗判定依据（**先定那 2 条目标的归因**，见 §10.4） | 05 | ❌ **前提矛盾未解** | **归因未定** |
+| **S4** | ~~`chunk.cover`（议题 A 的 11 条）~~ | 03 后半 | **已闭合**：归属裁决选 A，band 落产品承载"连续区间"，`cover` 作废（§10.5） | 无 |
+| **S5** | 清洗判定依据（**已完成**，2026-09-21，`audits/20260921-s5-noise-verdict/`）：`NoiseVerdict` + `CleanRegion.verdicts` 落产品，I-E1/I-E2 常驻测试；目标级归因：**e1→`disclaimer_section` 规则过宽（粒度）**、**a-1→页眉本就该剔、损失归引文边界（另立议题）**；不调阈值 | 05 | ✅ 已解除阻塞：i37 成立，票 05 有活干；**e1→`disclaimer_section` 粒度、a-1→表头/正文边界（另立议题）** | 无（已完成） |
+| **S6** | band 落产品回测 | 01 后半 | ✅ **已完成**（2026-09-21，`audits/20260921-band-product/`）：EvidencePass 12/24→**17/24**，负例 6 不回升，`self_check` 全绿 | 无 |
 
 > **新增待立议题**（S2 判定派生）：**company-003 光力科技**——文档级召回问题，注入改法与 band **均不能修复**（§10.2）。
 
@@ -353,6 +354,13 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
 
 **当前可启动的只剩 band**：i41 已在注入存在的池上验证 **19/24**，且不改 schema、不重摄入、不删注入。
 **S4 与 S5 各有前置阻塞**（§10.4 归因未定 / §10.5 band 归属须 U 定）。
+
+**更新（2026-09-21，band 落地后）**：band **已完成**（§10.5 / §6.1 S6，17/24）；S4 随归属裁决**闭合**；
+S5 前置归因**已定**（§10.4：i37 成立，票 05 有活干）——当前清单只剩 **S5（票 05 清洗判定依据）** 与 **S1（清账，堵在 t6 + I3-2 门）** 两项待办。
+
+**再更新（2026-09-21，票 05 落地后）**：**S5 已完成**（§7.5 / §6.1，`audits/20260921-s5-noise-verdict/`）——
+`NoiseVerdict`/`verdicts` 落产品 + I-E1/I-E2 常驻测试；目标级归因 e1=规则过宽（`disclaimer_section` 粒度）、
+a-1=页眉本就该剔（损失归引文边界，另立议题）。**当前待办只剩 S1（清账，堵在 t6 + I3-2 门）。**
 
 **按 M6 判据**：负例（6 → 0）是唯一"无论怎么优化 EvidencePass 都绕不过"的硬阻断
 （`scoring.py:279` `max_false_positives = 0`），应优先。**若以本方案为主线，等于把负例继续推后**——
@@ -377,7 +385,7 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
 ## 7. 票详情
 
 > **实现现状（2026-09-21 实测，详见 §14.3）**：票 01 / 02 / 04 **已落地**；票 03 **部分落地**
-> （`search_pg.rank_hits` 已实现且 global 变体已被 i42 弃用，`chunk.cover` **未实现**）；票 05 **未落地**。
+> （`search_pg.rank_hits` 已实现且 global 变体已被 i42 弃用，`chunk.cover` **未实现**）；**票 05 已落地**（§7.5）。
 > 以下各票的"验收"按方案原文保留：对**未落地**部分是待办判据，对**已落地**部分是复核基线。
 
 ### 7.0 票 00：冻结链归位（先于一切）
@@ -486,6 +494,23 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 目标级：`company-007/e1`、`company-008/a-1` 给出机读归因，据此判定是"规则过宽"还是"本就该剔"。
 不做：不在本票内调整任何噪声阈值（调阈值须单独立项 + 具名签认）；不改 `reasons` 形状。
 
+**实现情况（2026-09-21 已完成，`audits/20260921-s5-noise-verdict/`）**：
+
+- 产品：`clean.py` 新增 `NoiseVerdict`（`code`/`rule`/`observed`/`threshold`）与
+  `CleanRegion.verdicts`；各 NOISE 分支（页眉/页脚带、目录、免责声明标题/整节/前缀、
+  分析师名单、合成缺口 `image_region_small`）填充机读依据；`verify_noise_verdicts`
+  构造后 fail-closed 校验 I-E1/I-E2。不改 `reasons` 形状、不调任何阈值。
+- 判定语义：NOISE 区只保留已触发（`code ∈ reasons`）的 verdict（I-E1）；KEPT 区可含
+  "评估过但未越阈值"的近似命中（如页眉只重复 2 页，`observed["repeat_pages"] == 2`）。
+- 测试：`tests/test_corpus_preparation_clean.py` 新增 3 条（I-E1/I-E2 全规则遍历 +
+  `verify_noise_verdicts` 拒绝破坏 + 2 页页眉反例）；`tests/test_corpus_*.py` 731 passed / 12 skipped。
+- 目标级归因（§10.4 目标重放，8 个命中单元 `status_match` 全真）：
+  **e1 = 规则过宽（`disclaimer_section` 粒度）**——ord=717 整段分析师声明被剔，
+  但同一单元含实质事实句（华创云信 4.06% 持股）；
+  **a-1 = 页眉本就该剔**——标题跨 p1–p7 重复 7 次 ≥ `_REPEAT_MIN_PAGES=3` 且处页顶带，
+  规则按定义正确触发；损失来自引文横跨 NOISE/kept 边界，另立议题。
+- 价值口径：票 05 只加机读记账，**不提升 EvidencePass**；价值在归因与后续阈值立项的依据。
+
 ---
 
 ## 8. 总验收判据
@@ -504,8 +529,8 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 | I-B3 | `max_chunks_per_top_document` 仍为 8 | 03 / 04 |
 | I-C1 | 策略可注入且默认不变 | 01 |
 | I-D1 | 检索命中自带结构坐标 | 02 |
-| I-E1 | 噪声判定可归因 | 05 |
-| I-E2 | 依据值非空 | 05 |
+| I-E1 | 噪声判定可归因 | 05 ✅（`verify_noise_verdicts` + 常驻测试） |
+| I-E2 | 依据值非空 | 05 ✅（同上） |
 
 ### 8.2 系统级（次判据，只读诊断）
 
@@ -596,7 +621,7 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 `validate_i3_2_completion.py` 当前红，根因即此项：`scoring-input-manifest.json` 的 `lineage.scorer.sha256`
 与实际 `scoring.py` 不符（§14.2）。若采纳空白规约语义，须**另起新冻结修订重建 manifest 血缘**（i36 §4）。
 
-### 10.4 `company-007/e1`、`company-008/a-1` 的归因（两处结论矛盾）
+### 10.4 `company-007/e1`、`company-008/a-1` 的归因（**已裁定：i37 成立，i42 为误标**）
 
 | 来源 | 判定 | 含义 |
 |---|---|---|
@@ -604,6 +629,19 @@ verdicts: tuple[NoiseVerdict, ...] = ()
 | i42 `backtest-report.md` | `not_in_doc_unreachable` | 全文任意处**不逐字出现**（金标改写/重建） |
 
 两个相反结论。**若是后者，方案票 05（清洗判定依据）就是白做**——必须先定。
+
+**裁定（2026-09-21，当前活动语料 index-4-zhcfg-2 实测，`audits/20260921-2targets-attribution/`）**：
+**i37 成立，i42 为误标**——i42 漏斗只检查 kept 单元（`in_kept_any`），从未检查全文（含非 kept 单元），
+故 `not_in_doc_unreachable` 命名失真。两条引文都**逐字存在于全文的非 kept（NOISE）单元**：
+
+| 目标 | 命中单元 | status / reasons | 判定 |
+|---|---|---|---|
+| company-007/e1 | 1 个：ord=717 p7 | `noise` / `disclaimer_section` | 整段免责声明被 NOISE，但其中含实质内容（华创云信 4.06% 持股事实） |
+| company-008/a-1 | 7 个：标题"贵州茅台（600519）2026 年中报点评"跨 p1–p7 | `noise` / `header_repeated_geometric`（+`heading_by_font_size` p1） | 引文前半在 NOISE 表头、后半"强推（维持）"在 **kept** 单元 ord=6 p1 ⇒ 引文横跨 NOISE/kept 边界 |
+
+**结论**：票 05 不白做——**e1 的 lever 是 `disclaimer_section` 判定粒度**（整段免责声明一锅端，吞掉实质事实句）；
+**a-1 的 lever 是表头 NOISE 与正文评级的边界**（更接近引文粒度/表归属问题，可能须另立议题，见 §13.1 note）。
+i42 `recall-funnel.json` 的 `not_in_doc_unreachable: 2` 应读作 **`doc_not_kept_clean_stage_loss: 2`**（该产物已关闭，不就地改写，以本裁定为准）。
 
 ---
 

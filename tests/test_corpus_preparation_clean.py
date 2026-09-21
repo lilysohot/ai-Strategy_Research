@@ -20,6 +20,7 @@ from plugins.corpus.preparation.clean import (
     clean_reader_result,
     resolve_mapping,
     verify_clean_region,
+    verify_noise_verdicts,
 )
 from plugins.corpus.preparation.contract import DocumentFormat, UnitLocation, UnitStatus
 from plugins.corpus.preparation.readers import read_document
@@ -276,6 +277,80 @@ def test_analyst_roster_versus_body_citation() -> None:
     assert regions[1].status is UnitStatus.NOISE and "analyst_roster" in regions[1].reasons
     assert regions[2].status is UnitStatus.NOISE
     assert regions[3].status is UnitStatus.KEPT  # 正文句内引用证书编号不因相似片段被删
+
+
+# --- 票 05：清洗判定依据可机读（I-E1/I-E2） ---
+
+
+def test_noise_verdicts_record_machine_readable_basis() -> None:
+    units: list[CandidateUnit] = []
+    ordinal = 0
+    for page in (1, 2, 3):
+        ordinal += 1
+        units.append(_unit(ordinal, "华创证券研究", page=page, bbox=(60.0, 20.0, 500.0, 40.0)))
+        ordinal += 1
+        units.append(_unit(ordinal, f"第{page}页正文内容", page=page, bbox=(60.0, 100.0, 500.0, 720.0)))
+    units.extend(
+        [
+            _unit(10, "免责声明", kind="heading"),
+            _unit(11, "本报告仅供签约客户使用。"),
+            _unit(12, "分析师：张三\n联系人：李四"),
+            _unit(13, "目录", kind="heading"),
+            _unit(14, "第一章 公司概况……3\n第二章 行业分析……7"),
+            _unit(15, "免责声明：本报告作者具有专业胜任能力。"),
+        ]
+    )
+    result = clean_reader_result(_result(units))
+    noise_regions = [r for r in result.regions if r.status is UnitStatus.NOISE]
+    assert noise_regions
+    for region in noise_regions:
+        assert region.verdicts, region.key  # I-E1：NOISE 区依据非空
+        assert all(v.code in region.reasons for v in region.verdicts), region.key  # I-E1
+        assert all(v.observed for v in region.verdicts), region.key  # I-E2：observed 非空
+    regions = _regions_by_ordinal(result)
+    header_verdicts = regions[1].verdicts  # type: ignore[attr-defined]
+    assert [v.observed["repeat_pages"] for v in header_verdicts] == [3]  # type: ignore[operator]
+    assert header_verdicts[0].threshold["min_pages"] == 3  # type: ignore[operator]
+    section_verdicts = regions[11].verdicts  # type: ignore[attr-defined]
+    assert [v.observed["origin_ordinal"] for v in section_verdicts] == [10]  # type: ignore[operator]
+    # 显式校验函数独立可用（构造后全量已过；这里验证其真的拒绝破坏）
+    verify_noise_verdicts(result.regions)
+
+
+def test_verify_noise_verdicts_rejects_violations() -> None:
+    region = _regions_by_ordinal(
+        clean_reader_result(_result([_unit(1, "免责声明", kind="heading")]))
+    )[1]
+    broken = region.__class__(
+        key=region.key,
+        ordinal=region.ordinal,
+        kind=region.kind,
+        status=UnitStatus.NOISE,
+        reasons=("some_other_reason",),  # type: ignore[arg-type]
+        clean_view=region.clean_view,
+        mapping=region.mapping,
+        verdicts=(),
+    )
+    with pytest.raises(CleanError):
+        verify_noise_verdicts((broken,))
+
+
+def test_header_repeated_two_pages_is_kept_with_repeat_pages_observed() -> None:
+    units = [
+        _unit(1, "研报页眉", page=1, bbox=(60.0, 20.0, 500.0, 40.0)),
+        _unit(2, "第1页正文", page=1, bbox=(60.0, 100.0, 500.0, 720.0)),
+        _unit(3, "研报页眉", page=2, bbox=(60.0, 20.0, 500.0, 40.0)),
+        _unit(4, "第2页正文", page=2, bbox=(60.0, 100.0, 500.0, 720.0)),
+        _unit(5, "另一页眉", page=3, bbox=(60.0, 20.0, 500.0, 40.0)),
+        _unit(6, "第3页正文", page=3, bbox=(60.0, 100.0, 500.0, 720.0)),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    for ordinal in (1, 3):
+        region = regions[ordinal]
+        assert region.status is UnitStatus.KEPT  # type: ignore[attr-defined]
+        assert "header_repeated_geometric" not in region.reasons  # type: ignore[attr-defined]
+        repeats = [v.observed["repeat_pages"] for v in region.verdicts]  # type: ignore[attr-defined]
+        assert repeats == [2]  # 低于 _REPEAT_MIN_PAGES=3：不删，但依据仍可机读复核
 
 
 # --- 开发材料 smoke（守卫允许清单内的 6 份真实 PDF，只读） ---

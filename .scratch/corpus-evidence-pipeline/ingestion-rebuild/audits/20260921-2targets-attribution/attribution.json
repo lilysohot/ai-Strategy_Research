@@ -1,0 +1,141 @@
+{
+  "artifact": "2targets-attribution",
+  "generated_at": "2026-09-21T11:38:18+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "targets": [
+    {
+      "query_id": "company-007",
+      "target_id": "e1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "page": 7,
+      "quote": "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股\n份。",
+      "in_kept_any": false,
+      "in_kept_declared_page": false,
+      "in_full_doc": true,
+      "bucket": "i37_clean_stage_loss",
+      "unit_hits": [
+        {
+          "ordinal": 717,
+          "status": "noise",
+          "reasons": [
+            "disclaimer_section"
+          ],
+          "page": 7,
+          "element": null,
+          "fragment": "贵州茅台的控股股东茅台集团持有本公司的控",
+          "len": 193,
+          "raw_head": "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n分析师在本报告中对所提及的证券或发行人发表的任何建议和观点均准确地反映了其个人对该证券或发行人的看法和判断；分析师对\n任何其他券商发布的所有可能存在雷同的研究报告不负有任何直接或"
+        }
+      ],
+      "total_units": 727,
+      "kept_units": 708
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "page": 1,
+      "quote": "贵州茅台（600519）2026 年中报点评 \n \n 强推 （维持）",
+      "in_kept_any": false,
+      "in_kept_declared_page": false,
+      "in_full_doc": true,
+      "bucket": "i37_clean_stage_loss",
+      "unit_hits": [
+        {
+          "ordinal": 5,
+          "status": "noise",
+          "reasons": [
+            "heading_by_font_size",
+            "header_repeated_geometric"
+          ],
+          "page": 1,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 100,
+          "status": "noise",
+          "reasons": [
+            "header_repeated_geometric"
+          ],
+          "page": 2,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 123,
+          "status": "noise",
+          "reasons": [
+            "header_repeated_geometric"
+          ],
+          "page": 3,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 617,
+          "status": "noise",
+          "reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "page": 4,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 640,
+          "status": "noise",
+          "reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "page": 5,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 689,
+          "status": "noise",
+          "reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "page": 6,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        },
+        {
+          "ordinal": 706,
+          "status": "noise",
+          "reasons": [
+            "header_repeated_geometric"
+          ],
+          "page": 7,
+          "element": null,
+          "fragment": "贵州茅台（600519）2026年中报点",
+          "len": 22,
+          "raw_head": "贵州茅台（600519）2026 年中报点评"
+        }
+      ],
+      "total_units": 727,
+      "kept_units": 708
+    }
+  ],
+  "verdict": "i37",
+  "meaning": "引文在全文（含非 kept 单元）逐字存在、kept 缺失 ⇒ i37 成立：清洗剔除，票 05 有活干"
+}

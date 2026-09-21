@@ -1,0 +1,297 @@
+{
+  "artifact": "s5-noise-verdict",
+  "generated_at": "2026-09-21T11:51:36+08:00",
+  "corpus": "index-4-zhcfg-2 active (8 builds)",
+  "method": "以 reader 态重放 clean_reader_result，还原 NOISE 判定机读依据；只读 PG + 0 model calls",
+  "targets": [
+    {
+      "query_id": "company-007",
+      "target_id": "e1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "page": 7,
+      "quote": "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股\n份。",
+      "total_units": 727,
+      "kept_units": 708,
+      "hit_units": [
+        {
+          "ordinal": 717,
+          "page": 7,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "disclaimer_section"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台的控股股东茅台集团持有本公司的控",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n分析师在本报告中对所提及的证券或发行人发表的任何建议和观点均准确地反映了其个人对该证券或发行人的看法和判断；分析师对\n任何其他券商发布的所有可能存在雷同的研究报告不负有任何直接或",
+          "verdicts": [
+            {
+              "code": "disclaimer_section",
+              "rule": "disclaimer_section_after_heading",
+              "observed": {
+                "origin_ordinal": "716",
+                "origin_heading": "分析师声明"
+              },
+              "threshold": {
+                "disclaimer_headings": "['免责声明', '免责条款', '分析师声明', '分析师申明', '评级说明', '重要声明']"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "page": 1,
+      "quote": "贵州茅台（600519）2026 年中报点评 \n \n 强推 （维持）",
+      "total_units": 727,
+      "kept_units": 708,
+      "hit_units": [
+        {
+          "ordinal": 5,
+          "page": 1,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "heading_by_font_size",
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "heading",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "1",
+                "bbox": "(19.799999237060547, 88.56800842285156, 214.85000610351562, 101.85201263427734)",
+                "top_bound": "107.67082962036133",
+                "bottom_bound": "711.9901029205322"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 100,
+          "page": 2,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "2",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 123,
+          "page": 3,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "3",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 617,
+          "page": 4,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "4",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 640,
+          "page": 5,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "5",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 689,
+          "page": 6,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "multi_column_order_flagged",
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "6",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 706,
+          "page": 7,
+          "stored_status": "noise",
+          "stored_reasons": [
+            "header_repeated_geometric"
+          ],
+          "replayed_status": "noise",
+          "status_match": true,
+          "quote_fragment": "贵州茅台（600519）2026年中报点",
+          "quote_contained": false,
+          "kind": "paragraph",
+          "raw_text": "贵州茅台（600519）2026 年中报点评",
+          "verdicts": [
+            {
+              "code": "header_repeated_geometric",
+              "rule": "banded_repeated_geometric",
+              "observed": {
+                "repeat_pages": "7",
+                "page": "7",
+                "bbox": "(417.54998779296875, 41.90098190307617, 564.2079467773438, 51.863983154296875)",
+                "top_bound": "133.79926055908203",
+                "bottom_bound": "715.8216920471191"
+              },
+              "threshold": {
+                "min_pages": "3",
+                "band_ratio": "0.12"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "judgments": [
+    {
+      "target_id": "e1",
+      "verdict_code": "disclaimer_section",
+      "judgment": "rules_too_wide",
+      "basis": "ord=717 p7 重放判定 disclaimer_section：observed={'origin_ordinal': '716', 'origin_heading': '分析师声明'}（含免责声明标题起点），threshold={'disclaimer_headings': \"['免责声明', '免责条款', '分析师声明', '分析师申明', '评级说明', '重要声明']\"}。规则按「标题→下一标题」整段剔除；该段确为分析师声明（免责声明节），但同一单元内含实质事实句「华创云信4.06%持股」，整段剔除粒度过宽。",
+      "lever": "disclaimer_section 判定粒度（整段 → 事实句保留/子句粒度）"
+    },
+    {
+      "target_id": "a-1",
+      "verdict_code": "header_repeated_geometric",
+      "judgment": "unit_level_fired_correctly_quote_boundary_issue",
+      "basis": "7 个命中单元（p1-p7）重放判定 header_repeated_geometric：observed.repeat_pages=7 ≥ threshold.min_pages=3 且在页顶带，规则按定义正确触发（页眉本就该剔）；但引文前半在该 NOISE 表头、后半「强推（维持）」在 kept 单元 ⇒ 引文横跨 NOISE/kept 边界，损失归表归属/引文粒度，另立议题，非规则过宽。",
+      "lever": "引文粒度/表归属边界（另立议题；不调 header 阈值）"
+    }
+  ],
+  "conclusion": "e1：disclaimer_section 规则过宽（粒度）——整段免责声明吞实质事实句；a-1：header_repeated_geometric 按定义本就该剔，损失来自引文横跨 NOISE/kept 边界（另立议题）。本票不调任何阈值。"
+}

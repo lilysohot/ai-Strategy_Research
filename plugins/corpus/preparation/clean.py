@@ -37,6 +37,7 @@ from dataclasses import dataclass
 from plugins.corpus.preparation.contract import UnitStatus
 from plugins.corpus.preparation.gaps import (
     GAP_CODE_STATUS,
+    GAP_POLICY_REV,
     GapCoordinates,
     gap_key,
     parse_gap_location,
@@ -85,6 +86,23 @@ class CleanError(ValueError):
 
 
 @dataclass(frozen=True)
+class NoiseVerdict:
+    """一条噪声判定的机读依据（票 05：清洗判定依据可机读）。
+
+    ``code`` 与 ``reasons`` 中的噪声码一致；``rule`` 是命中的具体规则名；
+    ``observed`` 记录可复核的依据值（重复页数/带边界/命中行/占比/坐标，非空）；
+    ``threshold`` 记录当时生效的阈值。区域为 KEPT 时，``verdicts`` 可含"评估过但
+    未越过阈值"的近似命中（如页眉只重复 2 页），此时 ``code`` 不在 ``reasons``；
+    仅 NOISE 区要求每条 ``code`` 都在 ``reasons`` 中（不变量 I-E1）。
+    """
+
+    code: str
+    rule: str
+    observed: dict[str, object]
+    threshold: dict[str, object]
+
+
+@dataclass(frozen=True)
 class CleanRegion:
     """一个来源区域的清洗台账记录（对应契约 ``Unit`` 的清洗侧投影字段）。
 
@@ -95,6 +113,9 @@ class CleanRegion:
     区域为 ``None``（其坐标在 ``Unit.location`` 上）；无法给出坐标的缺口显式
     ``GapCoordinateKind.UNLOCATABLE``，不做静默假设。裁定（是否阻断发布）由
     :mod:`plugins.corpus.preparation.gaps` 依架构 §7.3 表判定，本模块不判。
+
+    ``verdicts`` 是噪声判定的机读依据（票 05）：NOISE 区非空且每条 ``code`` 在
+    ``reasons`` 中（I-E1），``observed`` 非空含数值/坐标（I-E2）。
     """
 
     key: str
@@ -105,6 +126,7 @@ class CleanRegion:
     clean_view: str | None
     mapping: CleanMapping
     coordinates: GapCoordinates | None = None
+    verdicts: tuple[NoiseVerdict, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -185,6 +207,25 @@ def verify_clean_region(raw_text: str, clean_view: str | None, mapping: CleanMap
     for raw_index, char in enumerate(raw_text):
         if not char.isspace() and raw_index not in resolved:
             raise CleanError(f"raw 非空白字符偏移 {raw_index}({char!r}) 未被映射覆盖")
+
+
+def verify_noise_verdicts(regions: tuple[CleanRegion, ...]) -> None:
+    """校验票 05 不变量（I-E1/I-E2）；任何破坏抛 :class:`CleanError`。
+
+    - I-E1：任一 ``status is NOISE`` 的区域 ``verdicts`` 非空且每条 ``code`` 在
+      ``reasons`` 中（KEPT 区可含"评估过但未越阈值"的近似命中，不受约束）。
+    - I-E2：每条 ``verdicts[i].observed`` 非空（含可复核数值/坐标）。
+    """
+    for region in regions:
+        if region.status is UnitStatus.NOISE and not region.verdicts:
+            raise CleanError(f"{region.key}: NOISE 区缺少判定依据（I-E1）")
+        for verdict in region.verdicts:
+            if region.status is UnitStatus.NOISE and verdict.code not in region.reasons:
+                raise CleanError(
+                    f"{region.key}: verdict code {verdict.code!r} 不在 reasons 中（I-E1）"
+                )
+            if not verdict.observed:
+                raise CleanError(f"{region.key}: verdict observed 为空（I-E2）")
 
 
 def _is_cjk_char(char: str) -> bool:
@@ -330,8 +371,96 @@ def _is_analyst_roster(raw_text: str) -> bool:
     return role_lines >= 2 or (role_lines >= 1 and cert_lines >= 1)
 
 
+def _band_verdict(
+    code: str, unit: CandidateUnit, repeat_pages: int, bands: dict[int, tuple[float, float]]
+) -> NoiseVerdict:
+    """页眉/页脚带判定的机读依据（含低于 ``_REPEAT_MIN_PAGES`` 的近似命中）。"""
+    assert unit.location.page is not None and unit.location.bbox is not None
+    top_bound, bottom_bound = bands[unit.location.page]
+    return NoiseVerdict(
+        code=code,
+        rule="banded_repeated_geometric",
+        observed={
+            "repeat_pages": repeat_pages,
+            "page": unit.location.page,
+            "bbox": unit.location.bbox,
+            "top_bound": top_bound,
+            "bottom_bound": bottom_bound,
+        },
+        threshold={"min_pages": _REPEAT_MIN_PAGES, "band_ratio": _BAND_RATIO},
+    )
+
+
+def _toc_verdict(code: str, unit: CandidateUnit) -> NoiseVerdict:
+    if code == _NOISE_TOC_HEADING:
+        return NoiseVerdict(
+            code=code,
+            rule="exact_toc_heading",
+            observed={
+                "heading": unit.raw_text,
+                "kind": unit.kind,
+                "line_count": sum(1 for line in unit.raw_text.splitlines() if line.strip()),
+            },
+            threshold={"exact_headings": sorted(_TOC_EXACT)},
+        )
+    lines = [line for line in unit.raw_text.splitlines() if line.strip()]
+    leaders = sum(1 for line in lines if _TOC_LEADER.search(line))
+    return NoiseVerdict(
+        code=code,
+        rule="dot_leader_lines",
+        observed={"leader_lines": leaders, "nonempty_lines": len(lines)},
+        threshold={"min_leader_lines": 2},
+    )
+
+
+def _roster_verdict(unit: CandidateUnit) -> NoiseVerdict:
+    lines = [line for line in unit.raw_text.splitlines() if line.strip()]
+    role_lines = sum(1 for line in lines if _ROLE_LINE.search(line))
+    cert_lines = sum(1 for line in lines if _CERT_PATTERN.search(line))
+    return NoiseVerdict(
+        code=_NOISE_ROSTER,
+        rule="analyst_roster_lines",
+        observed={"role_lines": role_lines, "cert_lines": cert_lines},
+        threshold={"min_role_lines": 2, "min_role_with_cert": (1, 1)},
+    )
+
+
+def _disclaimer_heading_verdict(unit: CandidateUnit) -> NoiseVerdict:
+    return NoiseVerdict(
+        code=_NOISE_DISCLAIMER_HEADING,
+        rule="disclaimer_heading_exact",
+        observed={
+            "heading": unit.raw_text,
+            "kind": unit.kind,
+            "line_count": sum(1 for line in unit.raw_text.splitlines() if line.strip()),
+        },
+        threshold={"disclaimer_headings": sorted(_DISCLAIMER_HEADINGS)},
+    )
+
+
+def _disclaimer_section_verdict(origin: tuple[int, str]) -> NoiseVerdict:
+    return NoiseVerdict(
+        code=_NOISE_DISCLAIMER_SECTION,
+        rule="disclaimer_section_after_heading",
+        observed={"origin_ordinal": origin[0], "origin_heading": origin[1]},
+        threshold={"disclaimer_headings": sorted(_DISCLAIMER_HEADINGS)},
+    )
+
+
+def _disclaimer_prefix_verdict(unit: CandidateUnit) -> NoiseVerdict:
+    return NoiseVerdict(
+        code=_NOISE_DISCLAIMER_PREFIX,
+        rule="disclaimer_prefix_paragraph",
+        observed={"prefix": _normalized(unit.raw_text)[:16], "start_index": 0},
+        threshold={"prefixes": sorted(_DISCLAIMER_PREFIXES)},
+    )
+
+
 def _region_from_unit(
-    unit: CandidateUnit, status: UnitStatus, reasons: tuple[str, ...]
+    unit: CandidateUnit,
+    status: UnitStatus,
+    reasons: tuple[str, ...],
+    verdicts: tuple[NoiseVerdict, ...] = (),
 ) -> CleanRegion:
     if status is not UnitStatus.KEPT:
         return CleanRegion(
@@ -342,6 +471,7 @@ def _region_from_unit(
             reasons=reasons,
             clean_view=None,
             mapping=(),
+            verdicts=verdicts,
         )
     clean_view, mapping = _clean_view_of(unit)
     return CleanRegion(
@@ -352,6 +482,7 @@ def _region_from_unit(
         reasons=reasons,
         clean_view=clean_view,
         mapping=mapping,
+        verdicts=verdicts,
     )
 
 
@@ -366,6 +497,20 @@ def _synthetic_regions(issues: tuple[ReaderIssue, ...]) -> tuple[CleanRegion, ..
         if key in seen:
             continue
         seen.add(key)
+        coordinates = parse_gap_location(issue.location)
+        # I-E1/I-E2：NOISE 合成区（当前仅 image_region_small）也须带机读依据。
+        verdicts = (
+            (
+                NoiseVerdict(
+                    code=issue.code,
+                    rule="synthetic_gap_noise",
+                    observed={**coordinates.as_payload(), "location": issue.location},
+                    threshold={"gap_policy_rev": GAP_POLICY_REV},
+                ),
+            )
+            if status is UnitStatus.NOISE
+            else ()
+        )
         regions.append(
             CleanRegion(
                 key=key,
@@ -375,7 +520,8 @@ def _synthetic_regions(issues: tuple[ReaderIssue, ...]) -> tuple[CleanRegion, ..
                 reasons=(issue.code,),
                 clean_view=None,
                 mapping=(),
-                coordinates=parse_gap_location(issue.location),
+                coordinates=coordinates,
+                verdicts=verdicts,
             )
         )
     return tuple(regions)
@@ -388,34 +534,51 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
     bands = _page_bands(units)
     regions: list[CleanRegion] = []
     in_disclaimer = False
+    disclaimer_origin: tuple[int, str] | None = None
     for unit in units:
         is_heading = unit.kind in _HEADING_KINDS
         heading_is_disclaimer = is_heading and _norm_heading(unit.raw_text) in _DISCLAIMER_HEADINGS
         if is_heading:
             in_disclaimer = heading_is_disclaimer
+            disclaimer_origin = (unit.ordinal, unit.raw_text) if heading_is_disclaimer else None
         if unit.status is not UnitStatus.KEPT:
             # 读取器已判复核/OCR 的区域原状态继承，不做投影、不升级为保留。
             regions.append(_region_from_unit(unit, unit.status, tuple(unit.reasons)))
             continue
         noise: list[str] = []
+        verdicts: list[NoiseVerdict] = []
         banded = _banded_noise(unit, bands)
-        if banded is not None and repeated.get(_normalized(unit.raw_text), 0) >= _REPEAT_MIN_PAGES:
-            noise.append(banded)
+        if banded is not None:
+            repeat_pages = repeated.get(_normalized(unit.raw_text), 0)
+            verdicts.append(_band_verdict(banded, unit, repeat_pages, bands))
+            if repeat_pages >= _REPEAT_MIN_PAGES:
+                noise.append(banded)
         if is_heading and heading_is_disclaimer:
             noise.append(_NOISE_DISCLAIMER_HEADING)
+            verdicts.append(_disclaimer_heading_verdict(unit))
         elif in_disclaimer:
             noise.append(_NOISE_DISCLAIMER_SECTION)
+            assert disclaimer_origin is not None  # in_disclaimer 只能由免责声明标题置位
+            verdicts.append(_disclaimer_section_verdict(disclaimer_origin))
         toc = _toc_noise(unit)
         if toc is not None:
             noise.append(toc)
+            verdicts.append(_toc_verdict(toc, unit))
         if _is_analyst_roster(unit.raw_text):
             noise.append(_NOISE_ROSTER)
+            verdicts.append(_roster_verdict(unit))
         if unit.kind == "paragraph" and _normalized(unit.raw_text).startswith(_DISCLAIMER_PREFIXES):
             noise.append(_NOISE_DISCLAIMER_PREFIX)
+            verdicts.append(_disclaimer_prefix_verdict(unit))
         status = UnitStatus.NOISE if noise else UnitStatus.KEPT
+        if status is UnitStatus.NOISE:
+            # I-E1：NOISE 区只保留已触发（code ∈ noise）的判定；近命中仅在 KEPT 区记账。
+            verdicts = [v for v in verdicts if v.code in noise]
         reasons = (*unit.reasons, *noise)
-        regions.append(_region_from_unit(unit, status, reasons))
+        regions.append(_region_from_unit(unit, status, reasons, verdicts=tuple(verdicts)))
+    full_regions = (*regions, *_synthetic_regions(result.issues))
+    verify_noise_verdicts(full_regions)
     return CleanResult(
         clean_rev=CLEAN_REV,
-        regions=(*regions, *_synthetic_regions(result.issues)),
+        regions=full_regions,
     )
