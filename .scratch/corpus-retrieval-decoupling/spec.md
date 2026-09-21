@@ -1014,7 +1014,7 @@ F3 半闭环、F1 未闭环；M6 未闭环**。列出 7 项未闭环（B1–B7�
 | 可重入 | 生成器 `gen_i1_r6.py` 支持 `--no-write`，复跑产物确定（幂等命中） |
 
 **仍开放的 6 项（B2–B7，均未在 spec 登记，须 U 裁决）**：
-B2 F1 的 6→0 只在回测脚本（按金标 `NO_ANSWER` 分支收紧查询，产品无 abstain 通道、模块未入链）⇒ 产品侧负例仍 6；**已尝试接产品（`CORPUS_ABSTAIN_NO_ANSWER` 开关 + `service._abstain_decision` + `corpus_search` ABSTAIN_HINT + 6 条 B2 测试），机读归因确认该"统一全词元 AND 拒检"会误伤有答案题（S1 会降）**：company-001 内容词元含疑问词"什么/多少"，真实答案单元不引述它们→full-AND 预检必然归零。F1 S1=66 只因按金标分支只对负例收紧；**无缝对接且免金标的统一全词元门无法同时达成"负例归零 + S1=66 + 0 model calls"，三者互斥**。U 裁决：**暂停，保留开关默认关（生产零扰动、回归全绿），不建冻结修订、不宣称解决**；B2 需重新设计免金标判别器后另议；
+B2 F1 的 6→0 只在回测脚本（按金标 `NO_ANSWER` 分支收紧查询，产品无 abstain 通道、模块未入链）⇒ 产品侧负例仍 6；**已接产品并冻结（`i0c-r4t`）**：`CORPUS_ABSTAIN_NO_ANSWER` 开关（on|off，默认 off，fail-closed）+ `service._abstain_decision`（实质词元 websearch AND 预检 + `is_abstain_candidate` 单元级）+ `search_with_coverage` 拒检分支（空 + `query_status=abstain`）+ `corpus_search` ABSTAIN_HINT 分流；negative_query.py/test_corpus_negative_query.py 首次入链。**判别器关键修正**：初版"统一全词元 AND"会误杀有答案题（实证 24 条有答案题中 23 条含疑问词"什么/多少/如何…"，答案单元几乎不引述它们→full-AND 归零；F1 S1=66 只因按金标分支只对负例收紧），落地为 abstain 门剔除疑问词（`_QUESTION_WORDS`/`abstain_content_lexemes`，仅 abstain 门，F1 全局语义不变）；6 负例几乎不含疑问词故不受影响。开关默认关=产品检索字节零扰动（语料族 758/12、ruff/pyright、三门验证器全绿）。**仍阻塞**：真库负例归零/S1 不回退的 DB 级复验因 i2_sandbox_corpus 为空库（M5 consumers-clean TRUNCATE 后 30 题语料未重建）未执行，须授权重建语料后验证；负例归零未达；
 B3 F3 代码已冻结但重摄入未执行（e1 未转绿，且 f3 审计目录只有 `before-r4p/` 归档、无回放产物）；
 B4 company-003 未单独立题；B5 M6（18/24 vs 门槛 23/24、关键题 100%、旧基线非回归、I3-7）未达；
 B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md` 未提交、`f1_replay_readonly.py` 未归档）。

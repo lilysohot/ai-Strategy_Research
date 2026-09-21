@@ -1,0 +1,36 @@
+{
+  "snapshot_id": "i0c-r4t",
+  "revision": "r4t",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4s",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4s.json",
+    "sha256": "9b16f68e7012f814fea2c00556549656afadded56f047bd8b6c87f9cb20fba85"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/service.py": "9f7198148e26159c0b8d36aa515e531dfe2728c90d16da1224c79f45ef50c864",
+      "plugins/corpus/preparation/negative_query.py": "6db6876c550adc2c24927ce2e194d957753801316e47c5f974dc690501f276d0",
+      "plugins/tools/corpus_search.py": "c70e5b9ce79f84b3c0ad289388d8b2ce22a95037c45a23956c34a3a5d0d25489"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_negative_query.py": "63bafd4060cf7451911c50f3b59dfaaf09c767d040f9d02c67d7faf5fec7a5c3"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "17dc25d4e99acad2fd53d166b9cb532b466f9d454c495b7acf1e47b088a3524d"
+    }
+  },
+  "corrections": {
+    "b2_abstain_gate": "B2 no-answer abstain 拒检通道接产品（U 具名决策：判定层统一拒检 / U 受控开关默认关 / 拒检返回空结果+query_status=abstain 信号）。落地=service._abstain_decision（实质词元 websearch AND 预检 + is_abstain_candidate 单元级谓词）+ search_with_coverage 拒检分支 + corpus_search ABSTAIN_HINT 分流。判别器关键修正：统一全词元 AND 会误杀有答案题（实证 24 条有答案题中 23 条含疑问词『什么/多少/如何…』而答案单元几乎不引述它们，保留则 full-AND 归零）→ negative_query 新增 abstain_content_lexemes/is_abstain_candidate/_QUESTION_WORDS（仅 abstain 门剔除疑问词，F1 全局收紧语义不变）；6 负例几乎不含疑问词故不受影响。开关默认 off=产品检索字节零扰动。真库负例/S1 复验被空库（M5 consumers-clean TRUNCATE 后未重建）阻塞，须授权重建语料后验证。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4s 8babe171 → 17dc25d4）：新增 i0c-r4t 校验块（parent=i0c-r4s、binding 三组边界、语义门——service 须含 _abstain_decision/CORPUS_ABSTAIN_NO_ANSWER、negative_query 须含 abstain_content_lexemes/is_abstain_candidate/_QUESTION_WORDS、corpus_search 须含 ABSTAIN_HINT/coverage.get(\"abstain\")、测试须含 question-word answerable gate），r4t 合并置于 r4s 之后最后执行（最新修订优先）。"
+  },
+  "notes": [
+    "r4t 为 B2 产品 abstain 拒检通道的链上重绑修订（parent=i0c-r4s）：service.py（r4q 0227529c → 9f719814）与 corpus_search.py（r11 8ff78c11 → c70e5b9c，含 ABSTAIN_HINT，已于 fc39905 提交）重绑；negative_query.py 与 test_corpus_negative_query.py 首次入链。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260922-b2-abstain-reject/before-r4t/：service.py=0227529c（git b56c754）、corpus_search.py=8ff78c11（git 65ebffa）、validate_i0c_freeze.py=8babe171（r4s），sha256 已核与绑定一致。",
+    "验证口径：test_corpus_negative_query.py 18 passed；语料族 758 passed / 12 skipped（751 基线+7 B2 用例）；ruff 全绿；i1/i3_2 验证器 exit 0。真库负例归零/S1 不回退的 DB 级复验因 i2_sandbox_corpus 为空库（30 题语料不在）而阻塞，须授权重建语料后执行。",
+    "纪律：不 commit、不 publish、不重摄入；开关默认关，生产检索字节与 r4s 行为一致；不触 search_pg.py/scoring.py 字节；不调 max_chunks_per_top_document=8；不降 max_false_positives 门槛；不改 guards/i1.json、不改写已关闭轮次审计产物。"
+  ],
+  "m5_declaration": "not_declared（r4t 改动产品运行字节 service.py 检索路径——虽默认关，M5 结论仍待独立复核 + U 签认；M6 负例归零未达，真库验证阻塞）",
+  "created_at": "2026-09-22T05:00:00+08:00"
+}

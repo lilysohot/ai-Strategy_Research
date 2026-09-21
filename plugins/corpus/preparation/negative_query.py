@@ -24,6 +24,14 @@ _FUNCTION_WORDS = frozenset({
     "给出", "给", "出", "是否披露", "披露", "这六份", "那", "被", "已", "已经", "来",
 })
 
+# 疑问词/泛化词：几乎只出现在题面、不出现在答案单元。F1 全局收紧刻意保留它们
+# （对 no-answer 题收紧越严越好，且 6 负例几乎不含疑问词，剔不剔无差别）；B2 产品
+# abstain 门在**无金标**下须剔除——实证 24 条有答案题中 23 条含疑问词，真实答案单元
+# 不引述它们，保留则 full-AND 必然归零、误杀有答案题（S1 降）。
+_QUESTION_WORDS = frozenset({
+    "什么", "多少", "如何", "哪些", "怎么", "怎样", "哪个", "何种", "为何", "几",
+})
+
 
 def content_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
     """从 zhcfg 词元里筛出"内容词元"（去停用/去单字）——收紧查询只对它们 AND。
@@ -34,6 +42,15 @@ def content_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
     return tuple(t for t in lexemes if t not in _FUNCTION_WORDS and len(t) > 1)
 
 
+def abstain_content_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
+    """B2 abstain 门的实质词元：在 ``content_lexemes`` 之上再剔除疑问词/泛化词。
+
+    只供产品 abstain 判定使用（``_abstain_decision``）；F1 全局收紧查询仍走
+    ``content_lexemes`` 原语义，二者互不影响。
+    """
+    return tuple(t for t in content_lexemes(lexemes) if t not in _QUESTION_WORDS)
+
+
 def tighten_no_answer_query(lexemes: Sequence[str]) -> str:
     """no-answer 题的收紧查询：全部内容词元 websearch AND 连接。
 
@@ -41,6 +58,12 @@ def tighten_no_answer_query(lexemes: Sequence[str]) -> str:
     空内容词元返回空串（无候选）。
     """
     content = content_lexemes(lexemes)
+    return " ".join('"' + t.replace('"', " ") + '"' for t in content)
+
+
+def abstain_no_answer_query(lexemes: Sequence[str]) -> str:
+    """B2 abstain 门的收紧查询：实质词元（去疑问词）websearch AND 连接。"""
+    content = abstain_content_lexemes(lexemes)
     return " ".join('"' + t.replace('"', " ") + '"' for t in content)
 
 
@@ -56,6 +79,18 @@ def is_relevant_candidate(unit_text: str, lexemes: Sequence[str]) -> bool:
     本谓词要求全部内容词元在同一单元内共现，否则视为偶然命中、予以拒检。
     """
     content = content_lexemes(lexemes)
+    if not content:
+        return False
+    nt = _norm(unit_text)
+    return all(_norm(t) in nt for t in content)
+
+
+def is_abstain_candidate(unit_text: str, lexemes: Sequence[str]) -> bool:
+    """B2 abstain 门的单元级谓词：要求同一单元同时满足全部**实质词元**（去疑问词）。
+
+    与 :func:`is_relevant_candidate` 的区别仅在词元口径（``abstain_content_lexemes``）；
+    F1 全局语义不受影响。"""
+    content = abstain_content_lexemes(lexemes)
     if not content:
         return False
     nt = _norm(unit_text)

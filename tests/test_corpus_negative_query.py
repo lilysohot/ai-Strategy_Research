@@ -227,6 +227,30 @@ def test_abstain_on_releases_when_a_unit_carries_full_content(
     assert svc._abstain_decision("美联储9月会议利率决定如何？") is False
 
 
+def test_abstain_on_ignores_question_words_for_answerable(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """on + 题面含疑问词（什么/多少…）但单元含全部实质词元 → 放行（不误杀有答案题）。
+
+    实证：24 条有答案题中 23 条含疑问词，而答案单元几乎不引述疑问词——若保留疑问词
+    full-AND 必然归零误杀。abstain 门剔除疑问词后，实质词元共现即放行（S1 保护）。
+    """
+    _monkey_setenv(monkeypatch, "on")
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: ("光力", "科技", "净利润", "什么"),
+    )
+    hit = type("Hit", (), {"build_id": "b", "chunk_id": "c0"})()
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.search_pg.search_chunks", lambda *a, **k: (hit,)
+    )
+    ev = type("Ev", (), {"units": (type("U", (), {"raw_text": "光力科技全年归母净利润同比增长23.5%"})() ,)})()
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev
+    )
+    assert svc._abstain_decision("光力科技2027年经审计的归母净利润是多少？") is False
+
+
 def test_corpus_search_abstain_signal_splits_from_no_match(
     monkeypatch: pytest.MonkeyPatch
 ) -> None:

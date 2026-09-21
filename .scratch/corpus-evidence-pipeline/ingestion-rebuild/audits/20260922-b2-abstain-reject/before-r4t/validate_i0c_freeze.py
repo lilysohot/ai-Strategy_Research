@@ -2032,41 +2032,6 @@ if "i0c-r4s" in by_id:
           "r4s test_corpus_dev_lane.py must carry the dev-lane on-admits gates")
     merge_binding(i0c_current_binding, bindingr4s)
 
-if "i0c-r4t" in by_id:
-    r4t = load_json(BASE / by_id["i0c-r4t"]["file"])
-    parent43r4t = BASE / by_id["i0c-r4s"]["file"]
-    check(r4t.get("parent_snapshot") == {"snapshot_id": "i0c-r4s",
-          "path": str(parent43r4t.relative_to(ROOT)), "sha256": digest(parent43r4t)},
-          "r4t parent mismatch")
-    bindingr4t = r4t.get("binding", {})
-    check(set(bindingr4t) == {"chain_rebind_implementation", "chain_rebind_tests",
-                              "freeze_validator"},
-          "r4t binding groups mismatch")
-    check(set(bindingr4t.get("chain_rebind_implementation", {})) == {
-        "plugins/corpus/service.py",
-        "plugins/corpus/preparation/negative_query.py",
-        "plugins/tools/corpus_search.py"}, "r4t chain_rebind_implementation boundary mismatch")
-    check(set(bindingr4t.get("chain_rebind_tests", {})) == {
-        "tests/test_corpus_negative_query.py"}, "r4t chain_rebind_tests boundary mismatch")
-    check(set(bindingr4t.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r4t freeze_validator boundary mismatch")
-    # B2 abstain 拒检通道语义门（U 具名决策：判定层统一拒检 / 开关默认关 / 空结果+拒检信号）
-    svc_src_r4t = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
-    check("def _abstain_decision" in svc_src_r4t and "CORPUS_ABSTAIN_NO_ANSWER" in svc_src_r4t,
-          "r4t service.py must carry _abstain_decision + CORPUS_ABSTAIN_NO_ANSWER switch")
-    nq_src_r4t = (ROOT / "plugins/corpus/preparation/negative_query.py").read_text(encoding="utf-8")
-    check("abstain_content_lexemes" in nq_src_r4t and "is_abstain_candidate" in nq_src_r4t
-          and "_QUESTION_WORDS" in nq_src_r4t,
-          "r4t negative_query.py must carry abstain lexemes/predicate (question-words dropped)")
-    cs_src_r4t = (ROOT / "plugins/tools/corpus_search.py").read_text(encoding="utf-8")
-    check("ABSTAIN_HINT" in cs_src_r4t and 'coverage.get("abstain")' in cs_src_r4t,
-          "r4t corpus_search.py must carry ABSTAIN_HINT + abstain coverage split")
-    tnq_src_r4t = (ROOT / "tests/test_corpus_negative_query.py").read_text(encoding="utf-8")
-    check("test_abstain_on_ignores_question_words_for_answerable" in tnq_src_r4t,
-          "r4t test_corpus_negative_query.py must carry question-word answerable gate")
-    merge_binding(i0c_current_binding, bindingr4t)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2135,5 +2100,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1)" if "i0c-r4p" in by_id else "")
       + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else "")
       + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else "")
-      + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else "")
-      + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else ""))
+      + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else ""))
