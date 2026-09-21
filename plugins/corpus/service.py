@@ -113,6 +113,11 @@ _I2_SANDBOX_DB = "i2_sandbox_corpus"
 #: 选择后仍截断到调用方 ``limit``（limit 语义 = 返回条数上限，不变）。
 _SELECTION_POOL_MIN = 40
 _I2_ARCHIVE_ROOT = Path(__file__).resolve().parents[2] / "data" / "corpus-archive"
+
+#: B2 abstain 拒检通道：DB 级 websearch AND 预检的候选上限（F1 回测同口径，覆盖
+#: 全部命中池）。AND 收紧查询在真负例下归零→零 fetch；仅在收紧仍有命中时才按命中
+#: 逐块取原文跑单元级谓词（保险带，块数有界）。
+_ABSTAIN_PRE_CHECK_LIMIT = 2000
 _I2_POLICY_PATH = (
     Path(__file__).resolve().parents[2]
     / ".scratch"
@@ -913,6 +918,60 @@ class CorpusService:
         selected = select_structural(raw_hits, SelectionPolicy(), lexemes=lexemes)
         return cast(tuple[SearchPgHit, ...], tuple(selected))[:limit]
 
+    def _abstain_decision(self, query: str) -> bool:
+        """B2 no-answer 判定层拒检兜底（U 受控，默认关）。
+
+        F1 负例 6→0 只依赖金标分支收紧；产品侧无金标，故对所有查询统一走判定层
+        兜底：若语料里没有**任一单元同时满足全部内容词元**（websearch AND 预检归零，
+        或收紧命中后单元级谓词全拒），即判「有检索但无实质答案」→ 拒检（abstain）。
+        有实质答案的单元在 AND 收紧下仍含全部内容词元、score 高且必在候选池内 →
+        判定 False，产品查询路径原样返回（结构性保护 S1，不改查询路径、不改排序）。
+
+        开关 ``CORPUS_ABSTAIN_NO_ANSWER``（on|off，默认 off）：off 恒返回 False，
+        :meth:`search_with_coverage` 逐字节不变。非法值 fail-closed 抛
+        :class:`StoreError`（镜像 :meth:`read_chain` 惯例）。仅作用于新链。
+        """
+        cfg = os.environ.get("CORPUS_ABSTAIN_NO_ANSWER", "off").strip().lower()
+        if cfg not in ("on", "off"):
+            raise StoreError(
+                f"拒绝：CORPUS_ABSTAIN_NO_ANSWER 取值非法: {cfg!r}（须 on|off）"
+            )
+        if cfg != "on" or self.read_chain() != "new":
+            return False
+        from plugins.corpus.preparation.negative_query import (
+            content_lexemes,
+            is_relevant_candidate,
+            tighten_no_answer_query,
+        )
+        from plugins.corpus.preparation.search_pg import query_lexemes, search_chunks
+
+        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
+        if not content_lexemes(lexemes):
+            return False
+        # 主门：DB 级 websearch AND 预检（F1 真负例下归零 → 零 fetch）。
+        tight = tighten_no_answer_query(lexemes)
+        hits = search_chunks(
+            self._dsn,
+            tight,
+            limit=_ABSTAIN_PRE_CHECK_LIMIT,
+            sandbox_db=_I2_SANDBOX_DB,
+        )
+        if not hits:
+            return True
+        # 保险带：收紧仍有命中 → 按命中取权威单元，任一满足全部内容词元即放行。
+        from plugins.corpus.preparation import read_pg
+
+        for hit in hits:
+            ev = read_pg.fetch_verbatim(
+                self._dsn,
+                read_pg.build_handle(hit.build_id),
+                read_pg.chunk_locator(hit.chunk_id),
+                sandbox_db=_I2_SANDBOX_DB,
+            )
+            if any(is_relevant_candidate(u.raw_text, lexemes) for u in ev.units):
+                return False
+        return True
+
     def search_with_coverage(
         self, query: str, *, limit: int = 10
     ) -> tuple[list[SearchHit], dict[str, object]]:
@@ -921,6 +980,10 @@ class CorpusService:
         工具层用本方法一次取回两者，避免「先取 hits 再取 coverage」拼接自两个时刻。
         新链命中经选择策略（:meth:`_apply_selection`，perdoc）后返回，limit 仍是
         返回条数上限。
+
+        B2（``CORPUS_ABSTAIN_NO_ANSWER=on``）：终点判定若判「无实质答案」→ 拒检，
+        返回**空命中** + ``query_status="abstain"`` 的拒检覆盖信号（评分器对空观测
+        不计误报；与 ``no_match``「无研报覆盖」机器可区分）。开关默认关闭，不改返回。
         """
         if self.read_chain() != "new":
             hits = self.search(query, limit=limit)
@@ -933,6 +996,14 @@ class CorpusService:
             limit=max(limit, _SELECTION_POOL_MIN),
             sandbox_db=_I2_SANDBOX_DB,
         )
+        if self._abstain_decision(query):
+            abstain_cov = read_pg.coverage_snapshot(
+                self._dsn,
+                sandbox_db=_I2_SANDBOX_DB,
+                query_status="abstain",
+            )
+            abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
+            return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
         raw_hits = self._selected_chunk_hits(raw_hits, chunk_order, limit)
         return (

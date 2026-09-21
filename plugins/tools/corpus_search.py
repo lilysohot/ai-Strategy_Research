@@ -42,6 +42,17 @@ NO_COVERAGE_HINT = (
 )
 
 
+#: B2 abstain 拒检的分流提示：有检索候选但判定为无实质答案而过拒检（与
+#: ``no_match``「无研报覆盖」机器可区分）。同样是流程级指令：不许编造研报、不重试。
+ABSTAIN_HINT = (
+    "查询命中候选，但判定为**无实质答案**（query_status=abstain；availability=unknown"
+    "——只说明判为拒检，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，"
+    "切换市场数据路径并明确标注『无研报覆盖，结论基于市场数据与技术面』："
+    "① 用 market_resolve 消歧；② 用 market_quote 取实时行情；③ 用 market_history 取历史序列。"
+    "纪律：禁止编造或引用不存在的研报；最终结论不得凭空给出研报级数字。"
+)
+
+
 @tool
 async def corpus_search(query: str, limit: int = 10) -> str:
     """在研报语料库里检索，返回命中的文档与定位句柄（**不含**完整原文）。
@@ -106,6 +117,21 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         # 「没有相关研报」与「检索成功但为空」此前长得一样（ok=true + 空 hits），
         # 模型无法区分，容易硬凑。这里给出**显式覆盖度信号 + 明确的下一步**。
         # I2-8：空命中按 §7.3 表述为"该已查询范围无匹配"，不给 availability=absent。
+        # B2：被 abstain 拒检（有检索候选但无实质答案）与 no_match（无研报覆盖）
+        # 机器可区分——coverage["abstain"] 为真时走 ABSTAIN_HINT 并置顶层 abstain。
+        if coverage.get("abstain"):
+            return json.dumps(
+                {
+                    "ok": True,
+                    "query": query,
+                    "count": 0,
+                    "hits": [],
+                    "coverage": coverage,
+                    "abstain": True,
+                    "hint": ABSTAIN_HINT,
+                },
+                ensure_ascii=False,
+            )
         return json.dumps(
             {
                 "ok": True,

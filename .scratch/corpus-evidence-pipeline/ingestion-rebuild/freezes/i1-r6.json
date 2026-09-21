@@ -1,0 +1,29 @@
+{
+ "snapshot_id": "i1-r6",
+ "revision": "i1-r6",
+ "scope": "B1 收口：i1-r5 对 admission 测试的绑定随 r4s dev-lane 拆文件失效，重绑测试 + i1 校验器",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i1-r5",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i1-r5.json",
+  "sha256": "dfa9b3ceb1646021e0886cc2093258162a0924fba295b872c4658b388e2376cb"
+ },
+ "binding": {
+  "tests": {
+   "tests/test_corpus_preparation_admission.py": "6adbb2745c90ec28053255fa4b46d168548e38e040f6c9c8d7a42c4eb477fd78"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i1_freeze.py": "6a6e7c06add397644a5af60a87502f0bda01ac6b95e25b48e424640e2fb303f4"
+  }
+ },
+ "corrections": {
+  "r4s_dev_lane_split_invalidated_i1_r5": "r4s 修复 M5 复核 MISS②：dev-lane 9 条用例拆出 tests/test_corpus_dev_lane.py 后，tests/test_corpus_preparation_admission.py 恢复 i1 纯净（6 份材料）语义，字节由 ccfd2dd8… 变为 6adbb274…；i0c-r4s 已重绑，i1-r5 未同步 ⇒ i1 链转红。本修订按 supersession 重绑该测试 + i1 校验器（不改写 i1-r5 字节、不改任何运行语义）。"
+ },
+ "notes": [
+  "r6 为 i1 链的记账修订（parent=i1-r5）：仅重绑被 r4s 合法演进的绑定锚点，恢复 validate_i1_freeze.py exit 0；不改任何实现/测试字节。",
+  "重绑锚点：tests/test_corpus_preparation_admission.py = 6adbb2745c90…（i0c-r4s 同值），.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i1_freeze.py = 6a6e7c06add3…（新增 r6 块 + r5/r3 supersession 豁免）。",
+  "archive-first：被取代的 i1-r5 声明字节（ccfd2dd8…）取自 r4s 归档，已在 before-r6/ 留痕并断言一致。",
+  "纪律：不 commit、不 publish、不重摄入；不改 scorer/金标；不触 I2/检索层运行字节。"
+ ],
+ "created_at": "2026-09-22T04:10:00+08:00"
+}

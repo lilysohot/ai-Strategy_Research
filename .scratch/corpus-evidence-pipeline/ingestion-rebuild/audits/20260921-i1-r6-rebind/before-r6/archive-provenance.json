@@ -1,0 +1,20 @@
+{
+ "records": [
+  {
+   "path": "tests/test_corpus_preparation_admission.py",
+   "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260921-i1-r6-rebind/before-r6/tests/test_corpus_preparation_admission.py",
+   "sha256": "ccfd2dd833b9dc582618339a92a5ed35c831e96a639802660d2c93ffed783ee7",
+   "matches_previous_binding": true,
+   "archive_source": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260922-r4s-rebind/before-r4s/test_corpus_preparation_admission.py.pre-r4s",
+   "archive_source_sha256": "ccfd2dd833b9dc582618339a92a5ed35c831e96a639802660d2c93ffed783ee7",
+   "note": "r6 不改本文件字节；被取代的 i1-r5 声明字节由 r4s 归档留存（工作树已无该字节）"
+  },
+  {
+   "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i1_freeze.py",
+   "archived_as": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260921-i1-r6-rebind/before-r6/freezes/validate_i1_freeze.py.pre-r6",
+   "sha256": "71d8d60bd46d462a50daa4a636a6dfa71c9e0a7d0560689a340c959126611b9f",
+   "matches_previous_binding": true,
+   "note": "本修订改写 i1 校验器（新增 r6 块）；此前归档等价于 freeze_utils.archive_first"
+  }
+ ]
+}

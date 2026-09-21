@@ -1,0 +1,125 @@
+# i1-r6 三门验证与负例探针（2026-09-21）
+
+$ uv run python $F/validate_i1_freeze.py
+freeze chain verified: index ids unique, r3 bindings ok, lineage r3->r1->i0a5(M1) ok; i1-r5 supersession -> i1-r6 (admission test + i1 validator rebind)
+exit=0
+
+$ uv run python $F/validate_i0c_freeze.py
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/corpus-ingestion-rebuild-tasks.md
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/claims-market-closed-loop-plan.md
+i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22/r23/r24 effective bindings (latest-revision-wins) + superseded i1-r4 bindings ok, lineage i0c-r24->i0c-r23->i0c-r22->i0c-r21->i0c-r20->i0c-r19->i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->i0c-r1->i1-r4->i1-r3->i1-r1->i0a5(M1) ok, design-review signed, M5 released by U sign-off, I3-0 scorer (scoring.py) add-only revision r19, r20 = validator r19-block path fix, r21 = I3-0 independent-review remediation F1-F5, r22 = I3-2 evidence-target candidates, r23 = I3-2 material-review remediation F1-F5 (rule evidence-mapping-4, candidates only), r24 = I3-2 adjudication-review remediation A1-A5 (rule evidence-mapping-5, approval-path + gate, candidates only); r26 I3-2 adoption verified (new source-gold 36 slots, 82 targets, filed decisions, gate ready=true, approved projection 79+20); r28 I3-2 derived scoring input + baseline asset binding + legacy anchor mapping verified; r29 Step 5 review + P4 path fix verified; r30 I3-2 stage sign-off (named) + generators verified; r31 I3-2 tail closure (prose holdout guarded, mapping rule-verified, warnings accepted) verified; r32 I3-1 three-class dev E2E on the U-approved set filed (6 sources -> 2 publishable, 13 blocking gaps, per_class_min_2 NOT satisfied, i3-e2e guard + selfcheck frozen); r33 I3-0 independent-review F1-F5 remediation sign-off (named) verified; r34 I3-1 dev-lane MD/DOCX coverage: format gate (pdf/docx/md all publishable) satisfied, per_class_min_2 still false, production in_scope unchanged (dev-only policy + truthful material types); r35 M6 criterion carries the §12.1 format gate (docs-only: tasks.md M6 row + plan ledger; no behaviour change); r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped; r4n F2 band/cell production default: search_with_coverage + search switch perdoc->band via _selected_chunk_hits, read_pg band read path bound (search_with_coverage_bands/fetch_bands), selection.py + test_corpus_selection/test_corpus_consumers_pg bound, I-BAND-1/I-CELL-1 gates, U 2026-09-21 named decision (spec §10.5 option A); clean.py(r4p) + r39 plan read_pg drift recorded as pending; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1); r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG
+exit=0
+
+$ uv run python $F/validate_i3_2_completion.py
+{
+  "artifact": "i3-2-completion-gate",
+  "generated_at": "2026-09-21T22:32:05",
+  "verdicts": {
+    "上游审批有效（建议件 → 批准投影 → 完整性门）": "pass",
+    "正式评分输入派生件一致": "pass",
+    "P2 阈值/关键题/负例与冻结物一致": "pass",
+    "旧基线身份/范围闭环（含『无未冻结指针』）": "pass",
+    "唯一初始实验 manifest": "pass",
+    "全部必要资产哈希入链": "pass",
+    "阶段签认（具名 + 入链）": "pass",
+    "留出隔离覆盖（guard ⊇ 留出清单）": "pass",
+    "旧锚点映射规则级复核关闭": "pass",
+    "尾巴收口记录（无 open 项 + 入链）": "pass"
+  },
+  "results": [
+    {
+      "item": "上游审批有效（建议件 → 批准投影 → 完整性门）",
+      "status": "pass",
+      "evidence": [
+        "ready=True；blockers=0；warnings=20",
+        "approval-report 与 decisions 绑定：based_on={\"candidates_sha256\": \"7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a5"
+      ]
+    },
+    {
+      "item": "正式评分输入派生件一致",
+      "status": "pass",
+      "evidence": [
+        "派生件 sha256=1b018ceb081f…；counts={\"questions\": 30, \"answerable\": 24, \"no_answer\": 6, \"required\": 79, \"supplementary\": 20}",
+        "manifest.status='frozen'（已随冻结更新）"
+      ]
+    },
+    {
+      "item": "P2 阈值/关键题/负例与冻结物一致",
+      "status": "pass",
+      "evidence": [
+        "policy 记录={\"top_k\": 5, \"min_rate\": \"19/20\", \"require_critical_all_pass\": true, \"max_false_positives\": 0, \"max_fabricated_citations\": 0}；代码现值={\"top_k\": 5, \"min_rate\": \"19/20\", \"require_critical_all_pass\": true, \"max_false_positives\": 0, \"max_fabricated_citations\": 0}",
+        "关键题 28（记录 28）；负例 6（记录 6）"
+      ]
+    },
+    {
+      "item": "旧基线身份/范围闭环（含『无未冻结指针』）",
+      "status": "pass",
+      "evidence": [
+        "manifest.status='frozen_r27'（pending_freeze=False）；待你定/补=0",
+        "引用资产**未入链** 0/14：{}",
+        "引用资产文件缺失：{}",
+        "仍未解决条（to_be_resolved/needs_definition/needs_user_scope）：[]"
+      ]
+    },
+    {
+      "item": "唯一初始实验 manifest",
+      "status": "pass",
+      "evidence": [
+        "status='frozen_r28'；缺组件=[]",
+        "唯一评分输入='.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl'（unique=True；草稿仅作 lineage 对照=True）",
+        "执行段（命令/环境/初始参数）=有；未实现入口登记=2 项"
+      ]
+    },
+    {
+      "item": "全部必要资产哈希入链",
+      "status": "pass",
+      "evidence": [
+        "正式评分输入: 入链",
+        "评分输入清单: 入链",
+        "评分输入派生器: 入链",
+        "P2 确认单: 入链",
+        "P3 对账: 入链",
+        "P4 清单: 入链",
+        "旧基线用例清单: 入链",
+        "阶段完成门: 入链"
+      ]
+    },
+    {
+      "item": "阶段签认（具名 + 入链）",
+      "status": "pass",
+      "evidence": [
+        "status='signed'；reviewer='xyl'；decision='批准（I3-2 阶段签认）'；reviewed_at='2026-09-19T20:10:00+08:00'",
+        "记录入链=是"
+      ]
+    },
+    {
+      "item": "留出隔离覆盖（guard ⊇ 留出清单）",
+      "status": "pass",
+      "evidence": [
+        "forbidden_roots=5 份；声明留出 1 项",
+        "未被覆盖：无"
+      ]
+    },
+    {
+      "item": "旧锚点映射规则级复核关闭",
+      "status": "pass",
+      "evidence": [
+        "status='rule_verified_closed'；锚点 22 个；未确认 0",
+        "复核 22 通过 / 0 失败；授权='U（2026-09-19 会话授权）'"
+      ]
+    },
+    {
+      "item": "尾巴收口记录（无 open 项 + 入链）",
+      "status": "pass",
+      "evidence": [
+        "条目 5 个；open=无；入链=是",
+        "T1=closed；T2=closed；T3=closed；T4=blocked_needs_environment；T5=registered_out_of_scope"
+      ]
+    }
+  ],
+  "failed_items": [],
+  "i3_2_complete": true,
+  "note": "本门只判『I3-2 的冻结物是否齐备且一致』；真实非回归与 E2E 属 I3-5/I3-1，恒为 not_run，不得用本门通过代替业务通过。"
+}
+exit=0

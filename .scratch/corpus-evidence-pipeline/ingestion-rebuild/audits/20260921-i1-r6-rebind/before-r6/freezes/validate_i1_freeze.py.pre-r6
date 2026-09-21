@@ -80,27 +80,6 @@ if "i1-r5" in by_id:
     if not r5_binding:
         errors.append("r5.binding 为空")
 
-# i1-r6（B1 收口）：r4s 为修 M5 MISS② 把 dev-lane 用例拆出本测试文件，i1-r5 对该路径的
-# 绑定（ccfd2dd8…）随之失效；r6 重绑当前字节并同步重绑本校验器。i1-r5 / i1-r3 的对应
-# 旧绑定按 supersession 豁免（最新修订优先，不改写历史字节）。
-superseded_i6: set[str] = set()
-r6_binding: dict = {}
-if "i1-r6" in by_id:
-    r6 = load_json(BASE / by_id["i1-r6"].get("file", ""))
-    p6 = r6.get("parent_snapshot", {})
-    check(p6.get("snapshot_id") == "i1-r5",
-          f"r6.parent 应为 i1-r5，实际 {p6.get('snapshot_id')!r}")
-    if p6.get("snapshot_id") == "i1-r5":
-        pfile6 = ROOT / p6.get("path", "")
-        if not pfile6.is_file() or digest(pfile6) != p6.get("sha256"):
-            errors.append("r6.parent(i1-r5) 文件字节与声明哈希不一致")
-    r6_binding = r6.get("binding", {})
-    for items in r6_binding.values():
-        superseded_i6.update(items)
-    if not r6_binding:
-        errors.append("r6.binding 为空")
-
-
 if "i1-r3" in by_id:
     r3 = load_json(BASE / by_id["i1-r3"].get("file", ""))
     parent = r3.get("parent_snapshot", {})
@@ -114,8 +93,8 @@ if "i1-r3" in by_id:
     total = 0
     for group in sorted(binding):
         for rel in sorted(binding[group]):
-            if rel in superseded_i5 or rel in superseded_i6:
-                continue  # 已由 i1-r5/i1-r6 重绑，i1-r3 旧绑定豁免
+            if rel in superseded_i5:
+                continue  # 已由 i1-r5 重绑，i1-r3 旧绑定豁免
             total += 1
             f = ROOT / rel
             if not f.is_file() or digest(f) != binding[group][rel]:
@@ -125,17 +104,9 @@ if "i1-r3" in by_id:
     # i1-r5 重绑的路径逐一核到 i1-r5 声明的当前哈希
     for group in sorted(r5_binding):
         for rel in sorted(r5_binding[group]):
-            if rel in superseded_i6:
-                continue  # 已由 i1-r6 重绑
             f = ROOT / rel
             if not f.is_file() or digest(f) != r5_binding[group][rel]:
                 errors.append(f"r5.binding[{group}]: {rel} 哈希失配或缺失")
-    # i1-r6 重绑的路径逐一核到 i1-r6 声明的当前哈希
-    for group in sorted(r6_binding):
-        for rel in sorted(r6_binding[group]):
-            f = ROOT / rel
-            if not f.is_file() or digest(f) != r6_binding[group][rel]:
-                errors.append(f"r6.binding[{group}]: {rel} 哈希失配或缺失")
 
 if "i1-r1" in by_id:
     r1 = load_json(BASE / by_id["i1-r1"].get("file", ""))
@@ -152,6 +123,4 @@ if errors:
         print(f"FREEZE CHECK FAILED: {message}")
     print(f"freeze chain verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-print("freeze chain verified: index ids unique, r3 bindings ok, lineage r3->r1->i0a5(M1) ok"
-      + ("; i1-r5 supersession -> i1-r6 (admission test + i1 validator rebind)"
-         if "i1-r6" in by_id else ""))
+print("freeze chain verified: index ids unique, r3 bindings ok, lineage r3->r1->i0a5(M1) ok")

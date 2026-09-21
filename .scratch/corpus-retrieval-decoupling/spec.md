@@ -979,7 +979,7 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 存档：`audits/20260922-i1-r5-m5-rebind/before-r5/` 归档 pre-r5 验证器字节（4abfe8e9...）。
 - 验证：`validate_i1_freeze.py` **exit 0**；`validate_i0c_freeze.py` **exit 0**；`validate_i3_2_completion.py` **exit 0**。
 - **联动修正（r34 历史归档忠实性，随 i1-r5 引入而修正）**：创建 i1-r5（重绑 admission.py=37b17e9b）后，i0c 验证器原 r34 块用 `merged_binding_from_all_but(r34)` 重建 prev34，会拉入创建晚于 r34 的修订（含 i1-r5、i0c-r36/r38/r39）覆盖 r34 归档时点旧绑定，破坏 r34 历史比对。改为 `prev34 = merged_binding_upto_revision(33)` 为基，仅用**创建时间 ≤ r34 的 i1 修订**补齐 i0c≤33 未绑定路径（最新 i1 生效，admission.py pre-r34=3521f495 源自 i1-r2/r3/r4），i0c 已绑定路径（如 test_corpus_preparation_admission 权威 062953f2）不被 i1 陈旧值覆盖。该修正重绑 i0c-r4r 的 freeze_validator（494516be→956782ce→dac07fcb）。
-- 纪律：不 commit、不 publish、不重摄入；不调 `max_chunks_per_top_document=8`；M5 结论仍待独立复核 + U 签认。
+- 纪律：不 commit、不 publish、不重摄入；不调 `max_chunks_per_top_document=8`；M5 两处 MISS 已修复并随 `i0c-r4s` 冻结，M5 结论仍待独立复核 + U 签认。
 
 **M5 复核矩阵重跑（2026-09-22，`audits/20260922-m5-rereview/evidence`）**
 - 执行：沿用 r17 复核包 `run_matrix.sh`，`M5_REVIEW_EVIDENCE_DIR` 重定向至新目录（不改写 r17 正式证据），`CORPUS_I2_DSN=postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus`（=corpus-db 沙箱，主机 543；验证器 `current_database()=i2_sandbox_corpus` 且无 apodex）。run_matrix exit=1。
@@ -987,11 +987,37 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - **4 处 MISS（两个真实块，机读归因均非冻结字节回归）**：
   1. `consumers-pg`：测例 19→20（新增 R3 选择策略消费测例 `test_service_search_applies_selection_policy`）。**归因（U 授权清库后重跑确证，见 audits/20260922-m5-rereview/consumers-clean/）＝确定性测试缺陷，非环境残留**：该测例在单测试循环内对 6 个不同 source_id 复用同一 `decision_id="d1"`；`repository_pg.put_admission` 按 RM-7 对该 decision_id 强制唯一（同内容幂等重放才允许），第 2 轮起即 `admission 冲突：d1 已存在且内容不同，拒绝覆盖`。与数据库状态无关（TRUNCATE 后实测仍失败）。
   2. `i1-business-guard-env`：在守卫 `i1.json`（stage i1）环境下收集 `test_corpus_preparation_admission.py` 时读 dev-lane 文件 `data/corpus/工业富联…md`，该路径不在 i1 许可清单（`工业富联` in i1.json=否）→ 守卫 `_audit` 拒绝 = **r34 dev-lane 时代引入的守卫环境组合漂移**，非冻结字节问题。
-- 结论：M5 里程碑技术门（冻结链 + PG 门 + 静态/导入闭合）在演化后 i0c-current 上仍绿；消费者/守卫两个真实 MISS 中，`consumers-pg` 已在 U 授权清库 `i2_sandbox_corpus` 后重跑（audits/20260922-m5-rereview/consumers-clean/，TRUNCATE 后仍 1 failed/20）——**实证否定环境残留说，确证为 R3 测例确定性测试缺陷**（复用 `decision_id="d1"` 违反 put_admission 唯一性）。跟进项（待 U 决策）：① 修 `tests/test_corpus_consumers_pg.py`（`_register_source`/`_stage_units` 的 decision_id 按 source_id 区分）或裁决是否承认 R3 测例缺陷；② 裁决 i1 business 块对 dev-lane admission 测例的守卫环境归属（独立 dev-lane 守卫 vs 放宽 i1 清单）。
+- 结论：M5 里程碑技术门（冻结链 + PG 门 + 静态/导入闭合）在演化后 i0c-current 上仍绿；消费者/守卫两个真实 MISS 中，`consumers-pg` 已在 U 授权清库 `i2_sandbox_corpus` 后重跑（audits/20260922-m5-rereview/consumers-clean/，TRUNCATE 后仍 1 failed/20）——**实证否定环境残留说，确证为 R3 测例确定性测试缺陷**（复用 `decision_id="d1"` 违反 put_admission 唯一性）。
+- **两处 MISS 已修复并随 `i0c-r4s` 冻结（2026-09-22，audits/20260922-r4s-rebind/）**：① `tests/test_corpus_consumers_pg.py` 修复（`_register_source`/`_stage_units`/`_publish` 增 `decision_id` 参数，R3 选择策略测例循环改 per-source `sel-d{i}`，admission/build/publish 三处一致），真库 `CORPUS_I2_DSN=postgres://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus`（543 端口）下全文件 **20 passed**；② dev-lane admission 测例守卫归属＝拆文件：新建 `tests/test_corpus_dev_lane.py`（9 条 `test_dev_lane_*`，**首次入链**，仅于 `guards/i3-e2e.json`（8 份允许清单）下运行），`test_corpus_preparation_admission.py` 删 dev-lane 块恢复 i1 纯净（i1 守卫下 **53 passed**，collection error 消失）。`i0c-r4s` parent=i0c-r4r，chain_rebind_tests 重绑 admission/consumers-pg + dev_lane 首入链，freeze_validator 重绑 8babe171；manifest sha=9b16f68e。验证：`validate_i0c_freeze.py` exit 0（r29 NOTE 非失败既有）、`validate_i3_2_completion.py` exit 0、ruff 全绿；i3-e2e 守卫下 dev_lane **9 passed**。archive-first：before-r4s/ 归档上一绑定字节（admission=ccfd2dd8、consumers=c6bf0015）+ 沙箱库 psycopg 逻辑备份。纪律：不 commit/publish/重摄入；不动 `guards/i1.json` 字节；未改 r17 `run_matrix.sh`（i3-e2e 接线留待新版矩阵）。
 
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。
 - 每笔：不做"先调阈值再验归因"；不触金标；不调 `max_chunks_per_top_document=8`；负例误报不得回升。
+
+### 14.6 闭环性复核与 B1 收口（2026-09-21，`i1-r6`）
+
+**复核**：`audits/20260921-spec-closure-audit/review.md`（只读复核，未改代码/金标）。
+实测 `validate_i0c_freeze.py` exit 0、**`validate_i1_freeze.py` exit 1**、`validate_i3_2_completion.py` exit 0、
+`pytest tests/test_corpus_*.py` 751 passed / 12 skipped。判定：**票 00–05（解耦主线）闭环；F1–F4 中 F2/F4 闭环、
+F3 半闭环、F1 未闭环；M6 未闭环**。列出 7 项未闭环（B1–B7）。
+
+**B1（i1 冻结门转红）已闭环 —— 新修订 `i1-r6`（parent=i1-r5）**，证据 `audits/20260921-i1-r6-rebind/`：
+
+| 项 | 内容 |
+|---|---|
+| 根因 | r4s 为修 M5 复核 MISS② 把 dev-lane 用例拆出 `tests/test_corpus_preparation_admission.py`（`ccfd2dd8`→`6adbb274`），i0c-r4s 已重绑、**i1-r5 未同步** ⇒ `r5.binding[tests]` 失配 |
+| 收口 | `i1-r6` 重绑该测试 + i1 校验器（`71d8d60b`→`6a6e7c06`，新增 r6 块与 r5/r3 supersession 豁免）；不改任何运行字节、不改写 i1-r5 历史字节 |
+| archive-first | 被取代的 i1-r5 声明字节取自 r4s 归档（`before-r6/…pre-r4s` 副本，sha = `ccfd2dd8`）+ 归档 pre-r6 校验器（`71d8d60b`），`assert_archives_faithful` 通过 |
+| 三门 | `validate_i1_freeze.py` **exit 0**（新消息含 r6 段）、`validate_i0c_freeze.py` exit 0、`validate_i3_2_completion.py` exit 0（日志 `…/freeze-validation.txt`） |
+| 负例探针 | 篡改 `digest` 使 admission 测试哈希失真：报 `r6.binding[tests]` 且 **r5 不再报**（r6 门生效 + supersession 生效） |
+| 非回归 | `pytest tests/test_corpus_*.py` 751 passed / 12 skipped；`ruff check <CI 范围>` All checks passed；`pyright` 19 errors（与基线一致） |
+| 可重入 | 生成器 `gen_i1_r6.py` 支持 `--no-write`，复跑产物确定（幂等命中） |
+
+**仍开放的 6 项（B2–B7，均未在 spec 登记，须 U 裁决）**：
+B2 F1 的 6→0 只在回测脚本（按金标 `NO_ANSWER` 分支收紧查询，产品无 abstain 通道、模块未入链）⇒ 产品侧负例仍 6；**已尝试接产品（`CORPUS_ABSTAIN_NO_ANSWER` 开关 + `service._abstain_decision` + `corpus_search` ABSTAIN_HINT + 6 条 B2 测试），机读归因确认该"统一全词元 AND 拒检"会误伤有答案题（S1 会降）**：company-001 内容词元含疑问词"什么/多少"，真实答案单元不引述它们→full-AND 预检必然归零。F1 S1=66 只因按金标分支只对负例收紧；**无缝对接且免金标的统一全词元门无法同时达成"负例归零 + S1=66 + 0 model calls"，三者互斥**。U 裁决：**暂停，保留开关默认关（生产零扰动、回归全绿），不建冻结修订、不宣称解决**；B2 需重新设计免金标判别器后另议；
+B3 F3 代码已冻结但重摄入未执行（e1 未转绿，且 f3 审计目录只有 `before-r4p/` 归档、无回放产物）；
+B4 company-003 未单独立题；B5 M6（18/24 vs 门槛 23/24、关键题 100%、旧基线非回归、I3-7）未达；
+B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md` 未提交、`f1_replay_readonly.py` 未归档）。
 
 ---
 
