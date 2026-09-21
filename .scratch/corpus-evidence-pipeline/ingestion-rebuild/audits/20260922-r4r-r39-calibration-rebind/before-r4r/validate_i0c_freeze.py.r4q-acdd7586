@@ -1673,41 +1673,6 @@ if "i0c-r38" in by_id:
           len(record38["region_targets"]["page:7"]) == 3, "r38 complete page-7 refinement missing")
     merge_binding(i0c_current_binding, binding38)
 
-# r4r（独立校准修订）：解决 r39 计划历史 read_pg 绑定漂移，不改写已关闭审计产物。
-# r39 计划记录的是 r4n 前的 read_pg=fb87a771（pre-F2）；随 F2/r4n 演进至权威 read_pg=52b182f7
-# 后该历史绑定自然过期。r4r 不触 calibration-plan-v2.json 字节，而是用一个 supersession 豁免
-# 映射（rel -> 权威哈希）供下方 r39 块使用，并把 read_pg 的权威哈希显式入链。
-r39_superseded_bindings: dict[str, str] = {}
-
-if "i0c-r4r" in by_id:
-    r4r = load_json(BASE / by_id["i0c-r4r"]["file"])
-    parent43r4r = BASE / by_id["i0c-r4q"]["file"]
-    check(r4r.get("parent_snapshot") == {"snapshot_id": "i0c-r4q",
-          "path": str(parent43r4r.relative_to(ROOT)), "sha256": digest(parent43r4r)},
-          "r4r parent mismatch")
-    bindingr4r = r4r.get("binding", {})
-    # r4r = 独立校准修订：只绑 read_pg 权威哈希 + 验证器，不触其他实现/测试/守卫字节
-    check(set(bindingr4r) == {"chain_rebind_read_pg", "freeze_validator"},
-          "r4r binding groups mismatch")
-    check(set(bindingr4r.get("chain_rebind_read_pg", {})) == {
-        "plugins/corpus/preparation/read_pg.py"}, "r4r read_pg boundary mismatch")
-    check(set(bindingr4r.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r4r freeze_validator boundary mismatch")
-    # 权威 read_pg 哈希必须等于 r4n 入链的 52b182f7，且 r39 计划确实记录的是旧 fb87a771
-    rpg_hash_r4r = "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b"
-    check(digest(ROOT / "plugins/corpus/preparation/read_pg.py") == rpg_hash_r4r,
-          "r4r read_pg authoritative hash mismatch (expected 52b182f7)")
-    plan39r4r = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
-    check(plan39r4r.get("binding", {}).get("plugins/corpus/preparation/read_pg.py")
-          == "fb87a771974b0393075da7f2e3b602a3e120ff1a0916a6fcf8c7e296c98ef8e1",
-          "r4r r39 plan historical read_pg sha mismatch (must be fb87a771)")
-    check(any("r39" in key and "drift" in key for key in (r4r.get("corrections") or {})),
-          "r4r must record r39 read_pg drift resolution in corrections")
-    r39_superseded_bindings["plugins/corpus/preparation/read_pg.py"] = rpg_hash_r4r
-    # 注意：此处不 merge——r4r 为最新修订，须在 r4q 块之后最后合并（见 r4q 块末尾），
-    # 否则 freeze_validator 会被更靠后的 r4n/r4p/r4q 块覆盖为旧验证器哈希。
-
 if "i0c-r39" in by_id:
     r39 = load_json(BASE / by_id["i0c-r39"]["file"])
     parent39 = BASE / by_id["i0c-r38"]["file"]
@@ -1726,13 +1691,6 @@ if "i0c-r39" in by_id:
             check(sha39 == previous39[old39], f"r39 archive differs: {old39}")
     plan39 = load_json(ROOT / audit39 / "calibration-plan-v2.json")
     for rel39, sha39 in plan39.get("binding", {}).items():
-        if rel39 in r39_superseded_bindings:
-            # r39 计划在旧 read_pg=fb87a771 时记录；该路径现已被独立校准修订 r4r 解决的权威
-            # read_pg=52b182f7 取代——不改写已关闭审计产物，改为校验权威哈希 + 确认历史旧值。
-            check(digest(ROOT / rel39) == r39_superseded_bindings[rel39]
-                  and sha39 != r39_superseded_bindings[rel39],
-                  f"r39 superseded binding unresolved: {rel39}")
-            continue
         check((ROOT / rel39).is_file() and digest(ROOT / rel39) == sha39, f"r39 pre-run binding drift: {rel39}")
     check(plan39.get("max_runs") == 2 and plan39.get("policy", {}).get("top_k") == 5
           and plan39.get("policy", {}).get("min_rate") == "19/20", "r39 calibration bounds/policy mismatch")
@@ -1976,11 +1934,6 @@ if "i0c-r4q" in by_id:
           "r4q test_corpus_selection must carry I-ATT-1 gates")
     merge_binding(i0c_current_binding, bindingr4q)
 
-if "i0c-r4r" in by_id:
-    # r4r 为最新修订：须最后合并，确保 read_pg 权威哈希(52b182f7)与最新验证器哈希覆盖更早绑定。
-    _r4r_rb = load_json(BASE / by_id["i0c-r4r"]["file"]).get("binding", {})
-    merge_binding(i0c_current_binding, _r4r_rb)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2047,5 +2000,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r43 R3 closure: production service.py new-chain (search/search_with_coverage) wired to perdoc select_structural, selection.py first-bound, tests 731 passed / 12 skipped" if "i0c-r43" in by_id else "")
       + ("; r4n F2 band/cell production default: search_with_coverage + search switch perdoc->band via _selected_chunk_hits, read_pg band read path bound (search_with_coverage_bands/fetch_bands), selection.py + test_corpus_selection/test_corpus_consumers_pg bound, I-BAND-1/I-CELL-1 gates, U 2026-09-21 named decision (spec §10.5 option A); clean.py(r4p) + r39 plan read_pg drift recorded as pending" if "i0c-r4n" in by_id else "")
       + ("; r4p F3 clean sentence-granularity frozen: clean.py numeric-fact predicates (_has_numeric_fact_sentence/_disclaimer_fact_keep_verdict) + I-E3 tests (fact/money keep, rating-rule threshold stays noise) re-bound, chain_rebind clean drift closed (clean.py d46491b2, test_corpus_preparation_clean 655b2be1)" if "i0c-r4p" in by_id else "")
-      + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else "")
-      + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else ""))
+      + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else ""))

@@ -952,6 +952,13 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 校验：`validate_i0c_freeze.py` 增 r4q 块后，r4q 全部检查通过（parent/边界/语义门：service 含 `cross_boundary.aggregate_band_chunks`、cross_boundary 含 `aggregate_band_chunks/_merge_chunk`、tests 含 3 条 I-ATT-1）；其余**唯一失败项为 r39 既有待办漂移**（calibration-plan 历史 read_pg 绑旧哈希，已关闭轮次产物不改写，待独立校准修订承接，非 r4q 引入，r4n/r4p 时代即存在）。
 - 纪律：不重摄入、不 publish、不 commit 本冻结修订；不改 clean 判定、不调 `max_chunks_per_top_document=8`、不触 scorer/金标。company-003 / company-008 其余目标仍归独立议题。
 
+**F4 冻结 r4r＝r39 待办漂移独立校准修订（2026-09-22，新冻结 `i0c-r4r`，parent=i0c-r4q）**
+- 机读归因：r39 计划的 `calibration-plan-v2.json` 的 pre-run binding 记录了 r4n（F2 band 接入生产）前的 `read_pg.py=fb87a771`；F2/r4n 将 read_pg 演进为权威 `52b182f7` 后该历史绑定自然过期，触发验证器 `r39 pre-run binding drift`。该计划为 r29/r39 轮次已关闭审计产物，按纪律不就地改写。
+- 落地：不改 `calibration-plan-v2.json` 字节，改由独立修订 r4r 在验证器引入 supersession 豁免——r39 循环对被解决路径改核权威哈希 `52b182f7` 并确认历史旧值 `fb87a771`；read_pg 权威哈希经 `chain_rebind_read_pg` 组显式入链。r4r 置 r39 块之前以预置 `r39_superseded_bindings`，但 `merge_binding` 移至 r4q 块之后最后执行（r4r 为最新修订，避免 freeze_validator 被更早修订覆盖）。
+- 存档：`audits/20260922-r4r-r39-calibration-rebind/before-r4r/` 归档 r4q 验证器（acdd7586）与 r4n read_pg 绑定字节（52b182f7），sha256 与上一绑定一致。
+- 验证：`validate_i0c_freeze.py` **exit 0**（链路全绿，r39 项不再报错；r29 NOTE 非失败为既有说明）；不改任何实现/测试/守卫字节。
+- 纪律：不 commit、不 publish、不重摄入；不触 scorer/金标；M5 尚未独立复核 + U 签认。
+
 #### 优先级与原则
 - 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。
 - 每笔：不做"先调阈值再验归因"；不触金标；不调 `max_chunks_per_top_document=8`；负例误报不得回升。

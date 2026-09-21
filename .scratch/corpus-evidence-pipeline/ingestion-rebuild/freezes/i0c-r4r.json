@@ -1,0 +1,32 @@
+{
+  "snapshot_id": "i0c-r4r",
+  "revision": "r4r",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4q",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4q.json",
+    "sha256": "8273fc6b3462a107c09e1c1a4b27588cb0058c469a01df8e45e89285ffef23c0"
+  },
+  "binding": {
+    "chain_rebind_read_pg": {
+      "plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "494516bead4315c9d74c59a7ecc9cf9fbd1e83cac34f9817e79b53405f79457c"
+    }
+  },
+  "corrections": {
+    "r39_read_pg_drift": "独立校准修订：r39 计划的校准产物 calibration-plan-v2.json 的 binding 记录了 r4n（F2 band 接入生产）前的 read_pg=fb87a771；随 F2/r4n 演进至权威 read_pg=52b182f7 后该历史绑定自然过期，触发验证器 r39 pre-run binding drift。按纪律不改写已关闭轮次审计产物（calibration-plan-v2.json 字节保持不动），改由本独立修订提供 supersession 豁免：验证器 r39 循环对已解决的路径改为核权威哈希 52b182f7 并确认历史旧值 fb87a771，read_pg 权威哈希经 chain_rebind_read_pg 组显式入链。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4q acdd7586 → 494516be）：新增 i0c-r4r 校验块（parent/边界/语义门：read_pg authoritative=52b182f7、r39 计划旧值=fb87a771、corrections 含 r39 drift 决议）并把 r4r 块置于 r39 块之前以预置 r39_superseded_bindings 映射；r39 循环对 superseded 路径改核权威哈希。r4r 为最新修订，其 merge 移至 r4q 块之后最后执行，避免 freeze_validator 被更早的 r4n/r4p/r4q 覆盖。"
+  },
+  "notes": [
+    "r4r 为 r39 待办漂移的独立校准修订（spec 记录：已关闭轮次产物不改写，待独立修订承接）：使 validate_i0c_freeze.py 自 r4n 起的既有非零退出恢复为 exit 0，不改任何实现/测试/守卫字节，不改写 calibration-plan-v2.json。",
+    "机读归因：r39 计划 binding 中 read_pg.py=fb87a771 为 r4n 前的 pre-F2 字节；F2 在 r4n 将 read_pg 演进为 52b182f7（search_with_coverage_bands/fetch_bands band 读取链）。该计划是 r29/r39 轮次已关闭审计产物，其 pre-run binding 记录的是当时文件的快照，不因后续演进被就地改写。",
+    "archive-first：修改前已归档 r4q 验证器字节（acdd7586）与 r4n read_pg 绑定字节（52b182f7）至 audits/20260922-r4r-r39-calibration-rebind/before-r4r/，逐条与上一绑定一致（sha256 已核；read_pg 字节本身未变，入链不重写）。",
+    "验证：r39 校验块在 r4r 存在下对 read_pg 走 supersession 豁免路径，其余 r39 binding 条目仍逐条精确匹配；validate_i0c_freeze.py exit 0（链全绿：i0c-r4r 通过，i0c-current supersession 合并含 read_pg 权威哈希）。",
+    "纪律：不 commit、不 publish、不重摄入；不触 scorer/金标、不调 max_chunks_per_top_document=8、不降 max_false_positives 门槛。"
+  ],
+  "m5_declaration": "not_declared（r4r 仅为 r39 计划历史绑定漂移的归档/验证层校准，不改任何运行字节；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-22T02:10:00+08:00"
+}
