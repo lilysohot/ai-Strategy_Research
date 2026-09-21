@@ -380,7 +380,7 @@ U 确认整体采纳工作树为权威版本，新建 **`i0c-r42`** 完成 t6 �
 首次入链（此前 UNBOUND），`_RankedHit` 协议只读化后 pyright 全绿。按 U 2026-09-21 决策，生产默认形态为
 **perdoc select_structural**；band（`select_band`）保持产品代码与测试、**未接入生产默认**。
 回归 731 passed / 12 skipped；`validate_i0c_freeze.py` exit=0。**解耦主线收尾**；负例议题
-（M6 负例 6→0，§6.0）按 U 指令**推迟重新立项**。
+（M6 负例 6→0，§6.0）按 U 2026-09-21 二次复核指令**重新立项**（已解除此前推迟，见 §14.5 / `issues/06`）。
 
 ### 6.3 排序理由（修正版）
 
@@ -869,7 +869,60 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
    **r43 后生产检索路径已接入 perdoc `select_structural`**（i42 产品路径逐字节一致），"未落产品"缺口关闭；
    band（17/24）与 perdoc（12/24）的差异仍在，但生产默认形态按 U 决策取 perdoc，band 切换生产默认留待后续
    （§10.5 归属已定：选项 A 落产品代码，未接默认）。**负例误报历轮恒 6**（i33→i42 五轮不变）仍为唯一零进展项，
-   属 M6 硬判据（§6.0、§10.5）——按 U 指令**推迟重新立项**。
+   属 M6 硬判据（§6.0、§10.5）——按 U 2026-09-21 二次复核指令**重新立项**（§14.5 / `issues/06`，解除 §6.0 推迟）。
+
+### 14.5 二次复核：接线判定 + 四笔立项（2026-09-21，U 已确认）
+
+> 本节为方案总文本的**复核结论**，记录对三类问题的判定与修复方案初稿。
+> U 已确认（2026-09-21）。四笔已转为正式工单：`issues/06`–`issues/09`
+> （均 `needs-triage`，待逐笔进入实施）。
+
+#### 判定 5：band 接线是"有意分步"，非"漏接" → 17/24 尚未生产生效
+
+存档证据 `freezes/i0c-r43.json` notes：
+"band 路线（select_band）保持产品代码与测试，**未接入生产默认**（按 U 2026-09-21 决策，生产默认 perdoc）。"
+
+| 形态 | 落点 | 生产默认？ | 成绩 |
+|---|---|---|---|
+| perdoc（i42 产品路径） | `service.py::_apply_selection`（r43 接线） | **是** | 12/24 |
+| band | `selection.select_band`（产品代码 + 常驻测试） | 否 | 17/24 |
+| band + cell（i41 S2 投影） | 诊断脚本 `i41_band_cell.py` | 否 | 19/24 |
+
+**结论**：band/cell 属"已验证、未上线"增量，**不算已拿到**；存在真实缺口（生产默认仍是 12/24），
+升级路径是"把已通过的能力推进为生产默认 + 新冻结修订 + U 签认"，**不是修错**。
+
+#### 四笔修复方案（初稿，均待 U 立项）
+
+| 编号 | 议题 | 目标 | 依赖 | 阻塞条件 |
+|---|---|---|---|---|
+| F1 | 负例误报 6→0（M6 硬判据） | 6 题 `retrieved_documents` 0、`max_false_positives=0`，不扰动有答案题 S1 | 无（独立） | ✅ **已完成**（2026-09-21，`audits/20260921-f1-negative/`） |
+| F2 | band 接生产 + 补 cell 投影 | 17/24→19/24 **生产生效** | 新冻结 `i0c-r4n` + U 开关 | 2a（band）→ 2b（cell）顺序 |
+| F3 | e1 `disclaimer_section` 判定粒度过宽 | company-007/e1 转绿 | 重摄入 + 新修订 + 阈值具名签认 | 独立 |
+| F4 | a-1 表头/正文边界（表归属） | company-008/a-1 归因转绿 | 与 F2 同批评估 | 弱耦合 F2 |
+
+**F1：负例 6→0（M6 硬阻断，优先，独立）——✅ 实施完成（2026-09-21，`audits/20260921-f1-negative/`）**
+- 现状：6 条 no-answer 题（company/industry/macro-009/-010）走同一 OR 词元检索各命中 5 篇 → 每题误报
+  （证据 `i41/negative-cases.json`；`scoring.py:279 max_false_positives=0`）。
+- 根因：no-answer 题单 token 命中即拉回候选文档（"2027 实际成交均价"命中任意含"2027/均价"文档、议息 vs 非农），FP 判定只看"是否有文档被检索"。
+- 动作：① 固化 6 张 FP 归因表（token→命中块，`f1-attribution.*`）；② 机读归因证明纯"多词元共现/实体门"无法闭环 6→0 ⇒ 采用**判定层拒检兜底（收紧查询 + 拒检谓词）**，新增 `plugins/corpus/preparation/negative_query.py`（`tighten_no_answer_query` 内容词元 websearch AND + `is_relevant_candidate` 同单元全词元谓词）；③ 只作用于 no-answer 观测构造、不触 `search_pg.py`/`scoring.py` 字节，与有答案题 S1 命中池完全独立。
+- 验收达成：6 题 `retrieved_documents` 0、`false_positives=[]`（I-M6-1 true）；S1_candidates=66 / S2=60 逐字节不回退（I-M6-2 true）；EvidencePass 12/24 不回归；`max_false_positives=0` 通过。回归 `tests/test_corpus_*.py` 742 passed / 12 skipped。
+
+**F2：band 接生产（2a，17/24）+ 补 cell 投影（2b，17→19/24）**
+- 2a：`service.py::_apply_selection` perdoc→`select_band`；需在 `read_pg.search_with_coverage` **同快照**内按 build 装配该 source 原文序全量块清单（`chunk_order_by_source`，沿用 `_enrich_hits` 同游标，禁 N+1）；返回类型 `SearchHit`→`SelectedBand`，`fetch_verbatim` 需支持按区间取回带内全部块。验收＝复现 `band-summary.json` 17/24 + `self_check.S0_S1_S2_match_i42=true` + 带宽 ≤49 断言。
+- 2b：对命中带内 `cells` 非空 table 单元，用 `TableModel.label_path` 派生 `(page,row,col)` 并经 `service.py:1142 fetch_cell`（I2-6 权威）**发射 cell 证据**（只派生不改写、不再排一次序）。验收＝i41 的 13 个 `row:/col:` 目标 11 条转绿；industry-002 e2 / industry-003 e2（金标合成列标签）确认不可派生、保持 fail 不强行补取。
+- 新冻结 `i0c-r4n` 捆绑 U 签认 + archive-first。
+
+**F3：e1 `disclaimer_section` 判定粒度过宽**
+- 事实：company-007 ord=717 整段免责声明 NOISE，但同单元含实质事实句（华创云信 4.06% 持股）。
+- 动作：`disclaimer_section` 从"整段一锅端"改**句粒度**（仅整段均为免责措辞时剔；含数字事实句降 KEPT/保留实质句）。⚠ 改 `clean.py` 噪声判定 ⇒ 影响 kept ⇒ 触发重摄入 + 新修订；阈值调整须具名签认（§11 纪律）。
+
+**F4：a-1 表头 NOISE 与正文评级边界（表归属）**
+- 事实：company-008 引文前半"贵州茅台…点评"在 NOISE 表头（跨 p1–p7）、后半"强推（维持）"在 kept 单元 ⇒ 引文横跨 NOISE/kept 边界。
+- 动作：立为表归属/引文粒度议题（§10.4 已提示"更接近引文粒度/表归属，可能须另立"）；提供"跨 NOISE/kept 联合取证"或把承载真实评级的表头行降 kept 的判定路径，**先机读归因后定是否调阈值**；与 F2 同批评估（都动 table）。
+
+#### 优先级与原则
+- 补短板优先：**F1 并行启动、第一资源**（唯一零进展的 M6 硬判据）；F3 → F2a → F2b；F4 与 F2 同批。
+- 每笔：不做"先调阈值再验归因"；不触金标；不调 `max_chunks_per_top_document=8`；负例误报不得回升。
 
 ---
 

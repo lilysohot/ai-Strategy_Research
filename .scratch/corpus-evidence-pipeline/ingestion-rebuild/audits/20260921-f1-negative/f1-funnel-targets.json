@@ -1,0 +1,634 @@
+[
+  {
+    "query_id": "company-001",
+    "target_id": "company-001 e4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-001",
+    "target_id": "company-001 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-002",
+    "target_id": "company-002 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-002",
+    "target_id": "company-002 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-002",
+    "target_id": "company-002 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e4",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e5",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-003",
+    "target_id": "company-003 e6",
+    "S1_candidates": true,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "company-004 e2",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "company-004 a-2",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-004",
+    "target_id": "company-004 a-3",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "company-005 e2",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-005",
+    "target_id": "company-005 e3",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-006",
+    "target_id": "company-006 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-006",
+    "target_id": "company-006 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-006",
+    "target_id": "company-006 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-007",
+    "target_id": "company-007 e1",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "company-008 a-1",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "company-008 a-2",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "company-008 a-3",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "company-008 a-4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "company-008",
+    "target_id": "company-008 a-5",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 a-4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-001",
+    "target_id": "industry-001 a-5",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "industry-002 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "industry-002 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "industry-002 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-002",
+    "target_id": "industry-002 a-4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-003",
+    "target_id": "industry-003 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-004",
+    "target_id": "industry-004 a-1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-004",
+    "target_id": "industry-004 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-005",
+    "target_id": "industry-005 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-005",
+    "target_id": "industry-005 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-006",
+    "target_id": "industry-006 a-1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-006",
+    "target_id": "industry-006 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-006",
+    "target_id": "industry-006 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-007",
+    "target_id": "industry-007 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-007",
+    "target_id": "industry-007 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-007",
+    "target_id": "industry-007 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "industry-008",
+    "target_id": "industry-008 a-5",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "macro-001",
+    "target_id": "macro-001 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-001",
+    "target_id": "macro-001 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-001",
+    "target_id": "macro-001 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-002",
+    "target_id": "macro-002 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-002",
+    "target_id": "macro-002 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-002",
+    "target_id": "macro-002 e4",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "macro-003 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "macro-003 a-2",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "macro-003 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-003",
+    "target_id": "macro-003 a-4",
+    "S1_candidates": false,
+    "S2_doc_topk": false,
+    "S4_matched": false,
+    "bucket": "unmatched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-4",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-5",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-004",
+    "target_id": "macro-004 a-6",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-005",
+    "target_id": "macro-005 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-005",
+    "target_id": "macro-005 a-2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-006",
+    "target_id": "macro-006 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-006",
+    "target_id": "macro-006 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-006",
+    "target_id": "macro-006 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-007",
+    "target_id": "macro-007 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-007",
+    "target_id": "macro-007 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-007",
+    "target_id": "macro-007 e3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-008",
+    "target_id": "macro-008 e1",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-008",
+    "target_id": "macro-008 e2",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  },
+  {
+    "query_id": "macro-008",
+    "target_id": "macro-008 a-3",
+    "S1_candidates": true,
+    "S2_doc_topk": true,
+    "S4_matched": true,
+    "bucket": "matched"
+  }
+]
