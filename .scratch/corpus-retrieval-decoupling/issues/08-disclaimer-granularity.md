@@ -1,11 +1,12 @@
 # 08 e1 `disclaimer_section` 判定粒度过宽
 
-Status: needs-triage
+Status: completed
 Type: task
 Depends: S5（已完成，机读判定已就位）
 Layer: clean
 Bound-byte impact: **是**（`plugins/corpus/preparation/clean.py`）
-Reingest: **是**（改 kept 判定⇒全量重摄入）
+Reingest: **是**（改 kept 判定⇒全量重摄入；按约定并入 F2 同批）
+Resolved: 2026-09-21（见 `audits/20260921-f3-disclaimer-granularity/`）
 
 ## 问题
 

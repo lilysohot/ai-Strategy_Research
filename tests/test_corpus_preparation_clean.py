@@ -335,6 +335,55 @@ def test_verify_noise_verdicts_rejects_violations() -> None:
         verify_noise_verdicts((broken,))
 
 
+# --- 票 08：disclaimer_section 句粒度（I-E3 事实句降 KEPT） ---
+
+
+def test_disclaimer_fact_sentence_kept_instead_of_noise() -> None:
+    """免责节单元含『可复核数字事实句』→ 整段降 KEPT，不整段剔除（I-E3）。"""
+    units = [
+        _unit(1, "分析师声明", kind="heading"),
+        _unit(2, "每位分析师在此作以下声明：\n分析师对本报告任何建议均反映其个人判断。\n"
+                 "本报告涉及股票贵州茅台（600519），根据上市公司公告，贵州茅台的控股股东"
+                 "茅台集团持有本公司的控股股东华创云信4.06%的股份。"),
+        _unit(3, "免责声明", kind="heading"),
+        _unit(4, "本报告仅供签约客户使用，不构成投资建议。市场有风险，投资需谨慎。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    # ord2：含持股事实句与证券代码 → KEPT，verdict 留痕为『事实句保 KEPT』
+    assert regions[2].status is UnitStatus.KEPT  # type: ignore[attr-defined]
+    facts = [v for v in regions[2].verdicts if v.code == "disclaimer_section"]  # type: ignore[attr-defined]
+    assert facts and facts[0].rule == "disclaimer_section_numeric_fact_keep"
+    assert facts[0].observed["fact_markers"]["stake"] is True  # type: ignore[operator]
+    assert facts[0].observed["fact_markers"]["stock_code"] is True  # type: ignore[operator]
+    # ord4：纯免责措辞 → 仍 NOISE
+    assert regions[4].status is UnitStatus.NOISE  # type: ignore[attr-defined]
+    assert "disclaimer_section" in regions[4].reasons  # type: ignore[operator]
+    verify_noise_verdicts(clean_reader_result(_result(units)).regions)
+
+
+def test_disclaimer_money_fact_sentence_kept() -> None:
+    """货币金额类事实句也降 KEPT。"""
+    units = [
+        _unit(1, "免责声明", kind="heading"),
+        _unit(2, "本公司截至报送日持有标的公司1.5亿元未变现投资。其余声明均为免责措辞。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is UnitStatus.KEPT  # type: ignore[attr-defined]
+    facts = [v for v in regions[2].verdicts if v.code == "disclaimer_section"]  # type: ignore[attr-defined]
+    assert facts and facts[0].observed["fact_markers"]["money"] is True  # type: ignore[operator]
+
+
+def test_disclaimer_rating_rule_threshold_stays_noise() -> None:
+    """评级规则阈值句（裸百分比、无持股/代码/金额语境）不得误降 KEPT。"""
+    units = [
+        _unit(1, "评级说明", kind="heading"),
+        _unit(2, "买入指未来六个月内相对基准指数涨幅高于20%。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is UnitStatus.NOISE  # type: ignore[attr-defined]
+    assert "disclaimer_section" in regions[2].reasons  # type: ignore[operator]
+
+
 def test_header_repeated_two_pages_is_kept_with_repeat_pages_observed() -> None:
     units = [
         _unit(1, "研报页眉", page=1, bbox=(60.0, 20.0, 500.0, 40.0)),

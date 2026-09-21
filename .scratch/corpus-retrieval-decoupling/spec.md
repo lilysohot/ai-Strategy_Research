@@ -912,9 +912,13 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 2b：对命中带内 `cells` 非空 table 单元，用 `TableModel.label_path` 派生 `(page,row,col)` 并经 `service.py:1142 fetch_cell`（I2-6 权威）**发射 cell 证据**（只派生不改写、不再排一次序）。验收＝i41 的 13 个 `row:/col:` 目标 11 条转绿；industry-002 e2 / industry-003 e2（金标合成列标签）确认不可派生、保持 fail 不强行补取。
 - 新冻结 `i0c-r4n` 捆绑 U 签认 + archive-first。
 
-**F3：e1 `disclaimer_section` 判定粒度过宽**
+**F3：e1 `disclaimer_section` 判定粒度过宽** ✅ 已完成（2026-09-21）
 - 事实：company-007 ord=717 整段免责声明 NOISE，但同单元含实质事实句（华创云信 4.06% 持股）。
 - 动作：`disclaimer_section` 从"整段一锅端"改**句粒度**（仅整段均为免责措辞时剔；含数字事实句降 KEPT/保留实质句）。⚠ 改 `clean.py` 噪声判定 ⇒ 影响 kept ⇒ 触发重摄入 + 新修订；阈值调整须具名签认（§11 纪律）。
+- 落地：`plugins/corpus/preparation/clean.py` 新增三类『可复核数字事实句』机器可读谓词（持股百分比 `持有…X%…股份/股权`、6 位证券代码、带量词货币金额 `X元`），免责节单元命中即**整段降 KEPT** 并留 `disclaimer_section_numeric_fact_keep` verdict（I-E3）。谓词刻意不认评级规则阈值句（裸百分比，如『买入指…高于20%』），故不误降、既有 742 基线的 `评级说明` 阈值句仍 NOISE。
+- 阈值签认（§11，U 已签名）：谓词=三类命中；粒度=单元级整体降 KEPT（非句级切分）。
+- 机读复核（`audits/20260921-f3-disclaimer-granularity/`）：整库 8 build 回放，免责节中**仅 ord717 一单元** NOISE→KEPT，其余（716/718/719/720）仍 NOISE——变化范围单一且被归因；e1 事实句现落在 kept 单元；未达任何生产写库（重摄入随 F2 同批）。
+- 回归：全语料族 **745 passed / 12 skipped**（742 基线未回退，新增 3 条 I-E3 永驻测试）；ruff/pyright 全绿。
 
 **F4：a-1 表头 NOISE 与正文评级边界（表归属）**
 - 事实：company-008 引文前半"贵州茅台…点评"在 NOISE 表头（跨 p1–p7）、后半"强推（维持）"在 kept 单元 ⇒ 引文横跨 NOISE/kept 边界。

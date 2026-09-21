@@ -70,6 +70,13 @@ _TOC_LEADER = re.compile(r"[.．·…]{2,}\s*[0-9]{1,4}\s*$")
 _ROLE_LINE = re.compile(r"(?:分析师|研究助理|联系人|报告联系人)\s*[：:]")
 _CERT_PATTERN = re.compile(r"执业证书编号|\bS\d{8,12}\b")
 
+# 票 08（I-E3）：免责节内『可复核数字事实句』的三类机器可读命中。
+# 区分「规则阈值数字」vs「实测事实数字」：评级规则阈值句（『买入指…高于20%』）
+# 只含裸百分比，不含持股/证券代码/金额语境，故不命中、不误降。
+_NUMERIC_STAKE = re.compile(r"持有.{0,32}?\d+(?:\.\d+)?\s*%(?:[^。]{0,8})?(?:股份|股权|持股|股本)")
+_STOCK_CODE = re.compile(r"(?<![0-9A-Za-z._=\-])[0368]\d{5}(?!\d)")
+_MONEY_AMOUNT = re.compile(r"\d+(?:\.\d+)?\s*(?:亿|万|千|百)?\s*元(?!月|本|年)")
+
 # 无对应读取单元的缺口码 → 合成区域状态（每区有状态，不无记录消失）。
 # 词表唯一来源是 ``gaps.GAP_CODE_STATUS``（与默认分级表同键集，见架构 §7.3）：
 # 本模块只负责「读取缺口 → 合成区域」的投影，是否阻断发布由 ``gaps`` 裁决。
@@ -456,6 +463,38 @@ def _disclaimer_prefix_verdict(unit: CandidateUnit) -> NoiseVerdict:
     )
 
 
+def _has_numeric_fact_sentence(raw_text: str) -> bool:
+    """免责节单元是否含『可复核数字事实句』（票 08 三类命中，I-E3 判据）。
+
+    命中任一即视为承载可复核事实：① 持股百分比『持有…X%的股份/股权/持股/股本』；
+    ② 6 位证券代码（如 600519）；③ 带量词货币金额（X元/X亿元）。区域含此类句子
+    时不整段剔除、降 KEPT，避免吞掉实质事实句。
+    """
+    return bool(
+        _NUMERIC_STAKE.search(raw_text)
+        or _STOCK_CODE.search(raw_text)
+        or _MONEY_AMOUNT.search(raw_text)
+    )
+
+
+def _disclaimer_fact_keep_verdict(origin: tuple[int, str], raw_text: str) -> NoiseVerdict:
+    """免责节含事实句、降 KEPT 的机读留痕（区域为 KEPT，code 不要求入 reasons）。"""
+    return NoiseVerdict(
+        code=_NOISE_DISCLAIMER_SECTION,
+        rule="disclaimer_section_numeric_fact_keep",
+        observed={
+            "origin_ordinal": origin[0],
+            "origin_heading": origin[1],
+            "fact_markers": {
+                "stake": bool(_NUMERIC_STAKE.search(raw_text)),
+                "stock_code": bool(_STOCK_CODE.search(raw_text)),
+                "money": bool(_MONEY_AMOUNT.search(raw_text)),
+            },
+        },
+        threshold={"disclaimer_headings": sorted(_DISCLAIMER_HEADINGS)},
+    )
+
+
 def _region_from_unit(
     unit: CandidateUnit,
     status: UnitStatus,
@@ -557,9 +596,14 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
             noise.append(_NOISE_DISCLAIMER_HEADING)
             verdicts.append(_disclaimer_heading_verdict(unit))
         elif in_disclaimer:
-            noise.append(_NOISE_DISCLAIMER_SECTION)
             assert disclaimer_origin is not None  # in_disclaimer 只能由免责声明标题置位
-            verdicts.append(_disclaimer_section_verdict(disclaimer_origin))
+            if _has_numeric_fact_sentence(unit.raw_text):
+                # 票 08（I-E3）：免责节单元含『可复核数字事实句』→ 整段降 KEPT 保事实，
+                # 不整段剔除。区域为 KEPT，verdict 留痕为『已评估免责节但含事实句』。
+                verdicts.append(_disclaimer_fact_keep_verdict(disclaimer_origin, unit.raw_text))
+            else:
+                noise.append(_NOISE_DISCLAIMER_SECTION)
+                verdicts.append(_disclaimer_section_verdict(disclaimer_origin))
         toc = _toc_noise(unit)
         if toc is not None:
             noise.append(toc)
