@@ -923,6 +923,13 @@ Pyright 的 19 errors 分布：`deploy/huggingface/app.py`、`scripts/migrate_sq
 - 校验：`validate_i0c_freeze.py` 增 r4n 块（parent/边界/语义门），r4n 全部自检通过；服务/实现组漂移（service.py、read_pg.py）清零。剩余 3 项已知待办漂移均非 r4n 引入、记录在案：① `r39` calibration-plan 历史 `read_pg.py` 绑旧哈希（已关闭轮次审计产物，不就地改写，待独立校准修订）；②③ `clean.py`（pre-F3 绑定）与 `test_corpus_preparation_clean.py`——**F3 重摄入另立 `i0c-r4p` 承接**（U 决策：F2 与 F3 分修订，不并入）。
 - 回归：`tests/test_corpus_selection.py` 27 passed；corpus 家族 `tests/test_corpus_*.py` **748 passed / 12 skipped**（12 skip 为 I2 沙箱演练旧库监守）；ruff/pyright 全绿（r4n 触及字节 pyright 0 errors）。
 
+**F3 冻结落定：`i0c-r4p`（clean 句粒度链上重绑，2026-09-21）**
+- 新冻结修订 `i0c-r4p` 已创建（archive-first 归档 pre-F3 字节至 `audits/20260921-f3-disclaimer-granularity/before-r4p/`；`freeze-manifest.json` 追加条目；parent=`i0c-r4n`）。
+- 绑定字节：`chain_rebind_implementation[clean.py]=d46491b2`、`chain_rebind_tests[test_corpus_preparation_clean.py]=655b2be1`、`validate_i0c_freeze.py=8b995972`。
+- 校验：`validate_i0c_freeze.py` 增 r4p 块（parent/边界/语义门：clean.py 含 `_has_numeric_fact_sentence`/`_disclaimer_fact_keep_verdict`，tests 含 I-E3 keep/money/rating-threshold 门）；**clean.py 与 test_corpus_preparation_clean.py 链上漂移清零**；校验链现仅剩 1 项历史漂移 `r39` calibration-plan 的 read_pg 旧哈希（已关闭轮次产物不改写，待独立校准修订）。
+- 回归：`tests/test_corpus_preparation_clean.py` 19 passed；ruff 全绿。
+- 重摄入说明：本修订为字节绑定冻结；把 F3 clean 语义应用到现状语料（重摄入/建索引）属生产数据写，PG 写库未授权，另立作业承接。
+
 **F3：e1 `disclaimer_section` 判定粒度过宽** ✅ 已完成（2026-09-21）
 - 事实：company-007 ord=717 整段免责声明 NOISE，但同单元含实质事实句（华创云信 4.06% 持股）。
 - 动作：`disclaimer_section` 从"整段一锅端"改**句粒度**（仅整段均为免责措辞时剔；含数字事实句降 KEPT/保留实质句）。⚠ 改 `clean.py` 噪声判定 ⇒ 影响 kept ⇒ 触发重摄入 + 新修订；阈值调整须具名签认（§11 纪律）。

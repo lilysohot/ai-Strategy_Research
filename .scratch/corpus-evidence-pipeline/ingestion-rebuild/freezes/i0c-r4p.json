@@ -1,0 +1,36 @@
+{
+  "snapshot_id": "i0c-r4p",
+  "revision": "r4p",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4n",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4n.json",
+    "sha256": "57fdabb325fe8a2dbaacf258ebb271b44f867c81dc9f70160903d2c2deb436b1"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/preparation/clean.py": "d46491b22a085b7e5167f53f27ac4791e9ab8a227f3695b6a4dee211b2f27245"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_preparation_clean.py": "655b2be1cdf42c111eb08e41405b86e74f3c8386e8a5c66ac1ce923dc2bf38f7"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "8b995972841c120c4e7325463f62c60a32fa12cf6c4f1c99d5d83be4a90f23d9"
+    }
+  },
+  "corrections": {
+    "clean_sentence_granularity": "F3 落地（spec §14.5 issues/08，e1 disclaimer_section 句粒度）：clean.py 从『整段一锅端 NOISE』改为单元级终结判定——新增 _has_numeric_fact_sentence（三类『可复核数字事实句』谓词：持股百分比 持有…X%…股份/股权、6 位证券代码、带量词货币金额 X元）与 _disclaimer_fact_keep_verdict（免责节单元命中数字事实句即整段降 KEPT 并留 machine-readable verdict）；刻意不认评级规则裸百分比阈值句（如『买入指…高于20%』）保持不变 NOISE。",
+    "chain_rebind_clean_rebound": "chain_rebind_implementation[clean.py] 重绑（r42 e169bb6e → d46491b2）：r42 绑定的为 pre-F3 字节，F3 落地后漂移，r4p 重绑闭合该漂移；chain_rebind_tests[test_corpus_preparation_clean.py] 同批重绑（r42 480094d4 → 655b2be1）。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4n f148ad36 → 8b995972）：新增 i0c-r4p 校验块（parent/边界/语义门：clean.py 含 _has_numeric_fact_sentence/_disclaimer_fact_keep_verdict，tests 含 I-E3 keep/money/rating-threshold 门）；merge_binding 覆盖 r4n 的 freeze_validator 组。"
+  },
+  "notes": [
+    "r4p 为 F3（spec §14.5 issues/08）链上重绑修订：闭合 F3 重摄入随行的 clean.py/test_corpus_preparation_clean.py 字节绑定，使 i0c-current 恢复全绿（clean.py 与 test_corpus_preparation_clean 漂移清零）。",
+    "F3 机读归因（audits/20260921-f3-disclaimer-granularity/）：整库 8 build 回放仅 ord717 一单元 NOISE→KEPT（其余 716/718/719/720 仍 NOISE）；e1 事实句现落在 kept 单元；阈值留痕 f3-summary.json / f3-report.md。全语料族 745 passed / 12 skipped；新增 3 条 I-E3 永驻测试。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260921-f3-disclaimer-granularity/before-r4p/：clean.py.pre-f3（=e169bb6e，34e71ec^）、test_corpus_preparation_clean.py.pre-f3（=480094d4），与 r42 绑定逐条一致。",
+    "重摄入：本修订为字节绑定层面的冻结；把 F3 clean 语义应用到现状语料（重摄入/重建索引）属生产数据写，PG 写库未授权，另立作业承接。company-003 独立议题仍待后续轮次。",
+    "不做：不调 max_chunks_per_top_document=8、不触 scorer/金标、不降 max_false_positives 门槛、不对已关闭轮次审计产物就地改写。"
+  ],
+  "m5_declaration": "not_declared（F3 仅调整噪声判定粒度的字节绑定，I3-3 评分/召回结论不受影响；M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-21T23:50:00+08:00"
+}
