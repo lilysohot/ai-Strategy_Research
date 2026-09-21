@@ -362,6 +362,13 @@ S5 前置归因**已定**（§10.4：i37 成立，票 05 有活干）——当�
 `NoiseVerdict`/`verdicts` 落产品 + I-E1/I-E2 常驻测试；目标级归因 e1=规则过宽（`disclaimer_section` 粒度）、
 a-1=页眉本就该剔（损失归引文边界，另立议题）。**当前待办只剩 S1（清账，堵在 t6 + I3-2 门）。**
 
+**再更新（2026-09-21，S1 清账落地后）**：**S1 已完成**（票 00，`audits/20260921-s1-freeze-realign/`）——
+U 确认整体采纳工作树为权威版本，新建 **`i0c-r42`** 完成 t6 重绑（I3-3 重塑 + reader-pdf-5 + 随行测试 +
+回归脚本 + docs 全部钉当前字节，`i1-r4` readers 经 supersession 覆盖）；
+`scoring-input-manifest.json` **血缘重建**（`lineage.scorer.sha256`=空白规约 `f61573d7`、`status`=frozen）；
+两道门全绿：`validate_i0c_freeze.py` exit=0、`validate_i3_2_completion.py` **`i3_2_complete=true`**（10/10 pass）；
+语料族回归 **731 passed / 12 skipped** 不回退。**当前方案全部待办已清零。**
+
 **按 M6 判据**：负例（6 → 0）是唯一"无论怎么优化 EvidencePass 都绕不过"的硬阻断
 （`scoring.py:279` `max_false_positives = 0`），应优先。**若以本方案为主线，等于把负例继续推后**——
 两者都要做，但有先后，须 U 明确。

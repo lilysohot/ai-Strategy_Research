@@ -1,9 +1,9 @@
 {
   "artifact": "i3-2-scoring-input-manifest",
   "version": "scoring-input-v1",
-  "generated_at": "2026-09-21T20:35:00+08:00",
-  "status": "frozen",
-  "frozen_in": "i0c-r42",
+  "generated_at": "2026-09-19T17:57:29+08:00",
+  "status": "frozen_r28",
+  "frozen_in": "i0c-r28",
   "purpose": "把批准投影确定性材料化成**唯一**的正式评分输入；评分入口只允许按本清单指定的路径读取，禁止依赖旧默认路径或选择『最新文件』",
   "lineage": {
     "query_gold": {
@@ -28,7 +28,7 @@
     },
     "scorer": {
       "path": "plugins/corpus/scoring.py",
-      "sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c"
+      "sha256": "bf9c8b80d7a936ecbbca7a1d4907caa7a339575be7f3a6623cca141588d6326e"
     }
   },
   "scoring_input": {

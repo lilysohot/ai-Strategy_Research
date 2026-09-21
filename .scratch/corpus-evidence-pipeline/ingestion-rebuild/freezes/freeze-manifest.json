@@ -317,6 +317,13 @@
       "sha256": "4871ebad5381048eeab73fa4c0560e338b136c6d60fc65875a38ee945e8c4244",
       "parent_snapshot_id": "i0c-r40",
       "created_at": "2026-09-21T10:24:33+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r42",
+      "file": "i0c-r42.json",
+      "sha256": "056e5135a86b292c0867f209e43fe51d5436683d3cc8076e056e271c853f5c43",
+      "parent_snapshot_id": "i0c-r41",
+      "created_at": "2026-09-21T20:40:00+08:00"
     }
   ]
 }

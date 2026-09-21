@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "i0c-r42",
+  "revision": "r42",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r41",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r41.json",
+    "sha256": "4871ebad5381048eeab73fa4c0560e338b136c6d60fc65875a38ee945e8c4244"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/preparation/engine.py": "3d7ec3f8ad3bc1c085e5002cd237ae70e7b6152c3d9b7c2cfdc0c6bcec0034cd",
+      "plugins/corpus/preparation/repository_pg.py": "3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5",
+      "plugins/corpus/preparation/contract.py": "8c4396307092a2158f8843f022d37cd47c799e55463de1fd35395459278d458b",
+      "plugins/corpus/preparation/chunk.py": "b0c034eaa38038fe79b217f43bc2437e6fe2c21fb2653c17e7a98434b85454fc",
+      "plugins/corpus/preparation/clean.py": "e169bb6e555aac8b760c3d1bac17868da221dac8692034c1e0cf21ecde60a0b7",
+      "plugins/corpus/preparation/search_pg.py": "04bc7d61170175cc38fc6829b9fe7042e82df1904afe02efa32e75020170c009"
+    },
+    "chain_rebind_readers": {
+      "plugins/corpus/preparation/readers/base.py": "338c9f0874020c2098fc401b9741b0f578a507350ee50a568833f6b585c03bdf",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "bc8d069105d0726cce73aa8a8908023f5868b2017cab84ff9e8e45633d594c40"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_preparation_chunk.py": "50e8ea6c9e0e2d62103d0ff3be93a6542bb40daea4a91dd30197dcd48cbbcf43",
+      "tests/test_corpus_preparation_clean.py": "480094d432ec0ef91e0849f197ab1f2a329c5c580f33978b60630fae5216033b",
+      "tests/test_corpus_preparation_readers.py": "3c072e40147be5524ba0eaeb4dd0b055733263ca96beeb97a507af8c79e0f388"
+    },
+    "chain_rebind_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/rerun_or.py": "a8215e4cabc06a972cb27736ed853b6201e3f8a74cc98c68a6729f653f611651",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "14006ef887084d41a3cfee6e4becf24f40cf37747c6be2c9f3615be185ef4338"
+    },
+    "i3_2_relineage": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "ab1730b2f82bef27a84d7f6736c4523335863c439edf168c4d47c3f0e45b34fe",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json": "b82c8d947a2fbecf580548637089369a6c674c1ffdab1fc3b623b929ac2ff396"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "dc7af1e243b260ddfecddd6234b7cd8013e9be35a9cc8da02cf135444e2d6d29"
+    }
+  },
+  "corrections": {
+    "t6_chain_rebind": "按 U 2026-09-21 权威裁定（audits/20260921-s1-freeze-realign/decision-t6-authority-20260921.json）整体采纳工作树为权威版本：I3-3 重塑（search_pg/chunk/clean/engine/repository_pg/contract）、reader-pdf-5（readers/base.py、pdf_reader.py）、随行测试、i36 回归脚本 rerun_or.py、docs 文档全部重绑当前字节，关闭 r41 corrections.chain_drift_backlog_t6。",
+    "scoring_input_relineage": "另起新冻结修订重建 scoring-input-manifest.json 血缘：lineage.scorer.sha256=空白规约 f61573d7、status=frozen、frozen_in=i0c-r42（i36 §4：不得在单一回归中用空白 scorer 混入）；calibration-plan-v2.json 绑定同步 search_pg/chunk/manifest 至重建后字节。",
+    "readers_supersession": "i1-r4 绑定的 readers/base.py 与 pdf_reader.py 被 r42 显式重绑（supersession 覆盖），reader-pdf-5 为采纳实现。",
+    "validate_extension": "freeze_validator 更新至含 r42 校验块；supersession 合并区间由 r2..r41 扩至 r2..r42。"
+  },
+  "notes": [
+    "r42 为 t6 清账修订：冻结链 15 条漂移全部归位，I3-2 门（validate_i3_2_completion.py check_scoring_input）随血缘重建转绿。",
+    "零模型、零 PG 写入、零生产实现变更：仅冻结链/血缘/文档记录性改动，被绑字节语义一律不修改。",
+    "archive-first：修改前已归档 validate_i0c_freeze.py、calibration-plan-v2.json、scoring-input-manifest.json 至 audits/20260921-s1-freeze-realign/before-r42/，且与上一绑定逐条一致。"
+  ],
+  "m5_declaration": "not_applicable (t6 chain rebind / freeze-chain realignment; no behaviour release)",
+  "created_at": "2026-09-21T20:40:00+08:00"
+}

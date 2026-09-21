@@ -1757,63 +1757,10 @@ if "i0c-r41" in by_id:
           "r41 calibration plan must rebind scorer to f61573d7")
     merge_binding(i0c_current_binding, binding41)
 
-if "i0c-r42" in by_id:
-    r42 = load_json(BASE / by_id["i0c-r42"]["file"])
-    parent42 = BASE / by_id["i0c-r41"]["file"]
-    check(r42.get("parent_snapshot") == {"snapshot_id": "i0c-r41",
-          "path": str(parent42.relative_to(ROOT)), "sha256": digest(parent42)}, "r42 parent mismatch")
-    binding42 = r42.get("binding", {})
-    check(set(binding42) == {"chain_rebind_implementation", "chain_rebind_readers", "chain_rebind_tests",
-                             "chain_rebind_evidence", "i3_2_relineage", "freeze_validator"},
-          "r42 binding groups mismatch")
-    check(set(binding42.get("chain_rebind_implementation", {})) == {
-        "plugins/corpus/preparation/engine.py",
-        "plugins/corpus/preparation/repository_pg.py",
-        "plugins/corpus/preparation/contract.py",
-        "plugins/corpus/preparation/chunk.py",
-        "plugins/corpus/preparation/clean.py",
-        "plugins/corpus/preparation/search_pg.py"}, "r42 implementation boundary mismatch")
-    check(set(binding42.get("chain_rebind_readers", {})) == {
-        "plugins/corpus/preparation/readers/base.py",
-        "plugins/corpus/preparation/readers/pdf_reader.py"}, "r42 readers boundary mismatch")
-    check(set(binding42.get("chain_rebind_tests", {})) == {
-        "tests/test_corpus_preparation_chunk.py",
-        "tests/test_corpus_preparation_clean.py",
-        "tests/test_corpus_preparation_readers.py"}, "r42 tests boundary mismatch")
-    check(set(binding42.get("chain_rebind_evidence", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/rerun_or.py",
-        "docs/plan/corpus-ingestion-rebuild-tasks.md"}, "r42 evidence boundary mismatch")
-    check(set(binding42.get("i3_2_relineage", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json"},
-          "r42 relineage boundary mismatch")
-    check(set(binding42.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r42 freeze_validator boundary mismatch")
-    scorer_sha42 = "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c"
-    manifest42 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json")
-    check(manifest42.get("status") == "frozen", "r42 must freeze scoring-input manifest status")
-    check(manifest42.get("frozen_in") == "i0c-r42", "r42 manifest frozen_in must point at r42")
-    check(manifest42.get("lineage", {}).get("scorer", {}).get("sha256") == scorer_sha42,
-          "r42 manifest lineage.scorer must be whitespace-norm f61573d7")
-    plan42 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
-    check(plan42.get("binding", {}).get("plugins/corpus/preparation/search_pg.py") ==
-          digest(ROOT / "plugins/corpus/preparation/search_pg.py"),
-          "r42 plan must rebind search_pg to current bytes")
-    check(plan42.get("binding", {}).get("plugins/corpus/preparation/chunk.py") ==
-          digest(ROOT / "plugins/corpus/preparation/chunk.py"),
-          "r42 plan must rebind chunk to current bytes")
-    check(plan42.get("binding", {}).get(".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json") ==
-          digest(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json"),
-          "r42 plan must rebind scoring-input-manifest to rebuilt bytes")
-    check(plan42.get("binding", {}).get("plugins/corpus/scoring.py") == scorer_sha42,
-          "r42 plan must keep scorer f61573d7")
-    merge_binding(i0c_current_binding, binding42)
-
-# 最新修订绑定优先（supersession）：i0c-r2..r42 显式重绑的路径改由合并后的
+# 最新修订绑定优先（supersession）：i0c-r2..r41 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in (f"i0c-r{number}" for number in range(2, 43)):
+for sid in (f"i0c-r{number}" for number in range(2, 42)):
     entry = by_id.get(sid)
     if not entry:
         continue
@@ -1871,5 +1818,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r31 I3-2 tail closure (prose holdout guarded, mapping rule-verified, warnings accepted) verified" if "i0c-r31" in by_id else "")
       + ("; r32 I3-1 three-class dev E2E on the U-approved set filed (6 sources -> 2 publishable, 13 blocking gaps, per_class_min_2 NOT satisfied, i3-e2e guard + selfcheck frozen)" if "i0c-r32" in by_id else "") + ("; r33 I3-0 independent-review F1-F5 remediation sign-off (named) verified" if "i0c-r33" in by_id else "") + ("; r34 I3-1 dev-lane MD/DOCX coverage: format gate (pdf/docx/md all publishable) satisfied, per_class_min_2 still false, production in_scope unchanged (dev-only policy + truthful material types)" if "i0c-r34" in by_id else "") + ("; r35 M6 criterion carries the §12.1 format gate (docs-only: tasks.md M6 row + plan ledger; no behaviour change)" if "i0c-r35" in by_id else "")
       + ("; r40 I3-3 single-corpus regression on reader-pdf-5 (same r39 scorer): evidence_target_missing 54->43, EvidencePass 7/24, 6/6 negative FPs persist, NOT released" if "i0c-r40" in by_id else "")
-      + ("; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6" if "i0c-r41" in by_id else "")
-      + ("; r42 t6 chain rebind per U authority decision 2026-09-21: I3-3 reshape + reader-pdf-5 adopted, scoring-input-manifest relineaged (scorer f61573d7, status frozen), i1-r4 readers superseded, chain green" if "i0c-r42" in by_id else ""))
+      + ("; r41 whitespace-norm scorer f61573d7 frozen (band+S2: topic_a 11/11, band_s2 EvidencePass 19/24, OR negatives 6 FP, width 33<=49); chain rebind pending t6" if "i0c-r41" in by_id else ""))

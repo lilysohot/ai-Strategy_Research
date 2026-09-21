@@ -1,0 +1,128 @@
+{
+  "artifact": "i0c-t6-authority-decision",
+  "decided_by": "U",
+  "decided_at": "2026-09-21",
+  "generated_at": "2026-09-21T20:30:00+08:00",
+  "decision_text": "整体采纳工作树当前字节为权威版本：reader-pdf-5、whitespace-norm scorer（f61573d7，已于 r41 冻结）与 I3-3 重塑工作树（search_pg/chunk/clean/engine/repository_pg/contract 及随行测试）全部采纳；新建 i0c-r42 完成 t6 重绑，并另起新冻结修订重建 scoring-input-manifest.json 血缘（lineage.scorer.sha256=f61573d7、status=frozen）。",
+  "not_filed": "决定记录：位于审计目录 audits/20260921-s1-freeze-realign/；随 I0-C 冻结修订 i0c-r42 一并绑定",
+  "binding": [
+    {
+      "category": "scorer_whitespace_norm",
+      "asset": "plugins/corpus/scoring.py",
+      "sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
+      "adopted_in": "i0c-r41",
+      "confirmation": "whitespace-norm 语义已在 r41 冻结，band 产品（spec §10.5 option A）建立其上；本票沿用，不重钉"
+    },
+    {
+      "category": "reader_pdf5_implementation",
+      "asset": "plugins/corpus/preparation/readers/base.py",
+      "sha256": "338c9f0874020c2098fc401b9741b0f578a507350ee50a568833f6b585c03bdf",
+      "adopted_in": "i0c-r42",
+      "confirmation": "reader-pdf-5：i35–i41 全链已在其上重摄入/回测（i35 8/8 built、i36 54→43、i37/i40/i41 全链证据），采纳当前字节"
+    },
+    {
+      "category": "reader_pdf5_implementation",
+      "asset": "plugins/corpus/preparation/readers/pdf_reader.py",
+      "sha256": "bc8d069105d0726cce73aa8a8908023f5868b2017cab84ff9e8e45633d594c40",
+      "adopted_in": "i0c-r42",
+      "confirmation": "reader-pdf-5 实现本体；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/search_pg.py",
+      "sha256": "04bc7d61170175cc38fc6829b9fe7042e82df1904afe02efa32e75020170c009",
+      "adopted_in": "i0c-r42",
+      "confirmation": "议题 B perdoc 排序（spec §11.3 最终形态）落点；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/chunk.py",
+      "sha256": "b0c034eaa38038fe79b217f43bc2437e6fe2c21fb2653c17e7a98434b85454fc",
+      "adopted_in": "i0c-r42",
+      "confirmation": "议题 A band 区间 + max_chunks_per_document=8 断言点；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/clean.py",
+      "sha256": "e169bb6e555aac8b760c3d1bac17868da221dac8692034c1e0cf21ecde60a0b7",
+      "adopted_in": "i0c-r42",
+      "confirmation": "含 S5 NoiseVerdict（票 05）与既有清洗演进；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/engine.py",
+      "sha256": "3d7ec3f8ad3bc1c085e5002cd237ae70e7b6152c3d9b7c2cfdc0c6bcec0034cd",
+      "adopted_in": "i0c-r42",
+      "confirmation": "I3-3 重塑工作树；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/repository_pg.py",
+      "sha256": "3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5",
+      "adopted_in": "i0c-r42",
+      "confirmation": "I3-3 重塑工作树；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_implementation",
+      "asset": "plugins/corpus/preparation/contract.py",
+      "sha256": "8c4396307092a2158f8843f022d37cd47c799e55463de1fd35395459278d458b",
+      "adopted_in": "i0c-r42",
+      "confirmation": "I3-3 重塑工作树；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_tests",
+      "asset": "tests/test_corpus_preparation_chunk.py",
+      "sha256": "50e8ea6c9e0e2d62103d0ff3be93a6542bb40daea4a91dd30197dcd48cbbcf43",
+      "adopted_in": "i0c-r42",
+      "confirmation": "随议题 A/B 演进；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_tests",
+      "asset": "tests/test_corpus_preparation_clean.py",
+      "sha256": "480094d432ec0ef91e0849f197ab1f2a329c5c580f33978b60630fae5216033b",
+      "adopted_in": "i0c-r42",
+      "confirmation": "含 S5 新增 3 条常驻测试（I-E1/I-E2/2 页页眉反例）；采纳当前字节"
+    },
+    {
+      "category": "i3_3_reshape_tests",
+      "asset": "tests/test_corpus_preparation_readers.py",
+      "sha256": "3c072e40147be5524ba0eaeb4dd0b055733263ca96beeb97a507af8c79e0f388",
+      "adopted_in": "i0c-r42",
+      "confirmation": "随 reader-pdf-5 演进；采纳当前字节"
+    },
+    {
+      "category": "regression_rerun",
+      "asset": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i36-i33-reread-pdf5/rerun_or.py",
+      "sha256": "a8215e4cabc06a972cb27736ed853b6201e3f8a74cc98c68a6729f653f611651",
+      "adopted_in": "i0c-r42",
+      "confirmation": "i36 单一回归脚本（OR 词元变体）修复；采纳当前字节"
+    },
+    {
+      "category": "docs",
+      "asset": "docs/plan/corpus-ingestion-rebuild-tasks.md",
+      "sha256": "14006ef887084d41a3cfee6e4becf24f40cf37747c6be2c9f3615be185ef4338",
+      "adopted_in": "i0c-r42",
+      "confirmation": "方案/任务文档演进；采纳当前字节"
+    },
+    {
+      "category": "i3_2_relineage",
+      "asset": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json",
+      "sha256": "REBUILT_IN_R42",
+      "adopted_in": "i0c-r42",
+      "confirmation": "血缘重建：lineage.scorer.sha256=空白规约 f61573d7、status=frozen；不得在单一回归中用空白 scorer 混入"
+    },
+    {
+      "category": "calibration_plan",
+      "asset": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json",
+      "sha256": "REBUILT_IN_R42",
+      "adopted_in": "i0c-r42",
+      "confirmation": "绑定同步：search_pg/chunk 更新至重塑后字节，manifest 条目同步至重建后哈希"
+    }
+  ],
+  "notes": [
+    "本决定由 U 于 2026-09-21 确认（整体采纳并钉 r42），解除 r41 corrections.chain_drift_backlog_t6 登记的 236 项剩余漂移",
+    "不采纳路径（还原旧字节）会破坏议题 A/B、band 产品与票 05 的全部下游成果，未列入",
+    "被绑字节语义一律不修改：只钉当前工作树为权威版本",
+    "r42 另更新 freeze_validator 至含 r42 校验块的新字节；supersession 区间扩至 r42"
+  ]
+}

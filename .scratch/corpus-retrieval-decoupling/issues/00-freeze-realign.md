@@ -1,6 +1,6 @@
 # P-1 冻结链归位（先于一切检索改动）
 
-Status: needs-triage
+Status: **done**（2026-09-21，U 确认整体采纳并钉 `i0c-r42`）
 Type: task
 Depends: 无（**必须先于 01**）
 

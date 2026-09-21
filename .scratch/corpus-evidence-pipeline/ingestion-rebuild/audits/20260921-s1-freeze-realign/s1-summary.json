@@ -1,0 +1,34 @@
+{
+  "task": "S1（清账，票 00 冻结链归位）",
+  "completed_at": "2026-09-21T20:45:00+08:00",
+  "decision": "U 2026-09-21 确认整体采纳工作树为权威版本（reader-pdf-5 + whitespace-norm scorer + I3-3 重塑）",
+  "decision_record": "audits/20260921-s1-freeze-realign/decision-t6-authority-20260921.json",
+  "new_revision": "i0c-r42",
+  "rebound_paths": 16,
+  "gate_results": {
+    "validate_i0c_freeze.py": {"exit": 0, "note": "15 处漂移全清，r42 校验块生效，supersession 扩至 r42"},
+    "validate_i3_2_completion.py": {"i3_2_complete": true, "failed_items": 0, "pass_items": 10},
+    "scoring_input_manifest": {"status": "frozen", "lineage.scorer.sha256": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c"}
+  },
+  "regression": {"pytest_tests_test_corpus": "731 passed, 12 skipped", "baseline_unchanged": true},
+  "changes": {
+    "rebuilt": [
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json"
+    ],
+    "created": [
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r42.json",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260921-s1-freeze-realign/decision-t6-authority-20260921.json",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260921-s1-freeze-realign/decision-t6-authority-20260921.md"
+    ],
+    "archives": "audits/20260921-s1-freeze-realign/before-r42/（3 份，archive-first + 忠实性断言通过）"
+  },
+  "remaining_open": [
+    "M6 负例（6 → 0）硬阻断：不在本方案范围（spec §6.0）",
+    "company-003 光力科技文档级召回（I-B1 词法副作用，另立议题）",
+    "industry-008 表头/脚注引文归属（另立议题）",
+    "e1 disclaimer_section 粒度阈值（另立议题）"
+  ]
+}

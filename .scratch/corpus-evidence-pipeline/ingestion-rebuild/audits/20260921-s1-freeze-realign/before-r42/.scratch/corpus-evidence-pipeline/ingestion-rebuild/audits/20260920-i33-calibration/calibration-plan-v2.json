@@ -30,19 +30,18 @@
   ],
   "binding": {
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remaining-inventory/p4/experiment-initial-version.json": "56451c3b035cc6cbe324e4bcdb0b0378d37e30bfc1460b4bd0d8e6cb1f566a8c",
-    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "ab1730b2f82bef27a84d7f6736c4523335863c439edf168c4d47c3f0e45b34fe",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "d0d76862eff732a123f2af0cb7a224fb5403e8d5501d0b7442f06eae226b20e7",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_scoring_input.py": "1c499a51803d73ad382186620ed93efb4d16ed25d662c7ac74ec5ea16cef60dd",
     "plugins/corpus/scoring.py": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
-    "plugins/corpus/preparation/search_pg.py": "04bc7d61170175cc38fc6829b9fe7042e82df1904afe02efa32e75020170c009",
+    "plugins/corpus/preparation/search_pg.py": "baa92875535231086d67364d540ef9e4ce9fa5174ef7ff0b2dce67bc66da44b5",
     "plugins/corpus/preparation/read_pg.py": "fb87a771974b0393075da7f2e3b602a3e120ff1a0916a6fcf8c7e296c98ef8e1",
-    "plugins/corpus/preparation/chunk.py": "b0c034eaa38038fe79b217f43bc2437e6fe2c21fb2653c17e7a98434b85454fc",
+    "plugins/corpus/preparation/chunk.py": "56544aa12363a6a94460f69b0b26a512962a2e65a3cbea49b370190d8f519cf8",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json": "3faac9e01fc3aa5277cdbc7b181bce25680b478c5b8bdd3f40b6538d65701b6a",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r38.json": "abf6a77e417809f0880f9426d9e165f80bd0116ecb53c481dff378825d49a256",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibrate.py": "8c21b35e97dac9c6edde0557696b28b94ad1d6773f3c8fe280f49f674ec3e092",
     ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/test_collector.py": "57916f3c482d9044747950919258f97258a90f6097b1c31af486b1e1d56dbf98"
   },
-  "pre_run_correction": "Import-only fix document_handle -> build_handle; first attempt stopped before opening PG or querying. Original script and plan retained; same two variants and bounds.",
-  "chain_rebind_r42": "i0c-r42 按 U 确认的 t6 裁定同步本计划绑定：search_pg.py/chunk.py 更新至 I3-3 重塑后字节，scoring-input-manifest.json 更新至血缘重建后（lineage.scorer=whitespace-norm f61573d7）哈希；scorer 绑定沿用 r41 已冻结的 f61573d7。"
+  "pre_run_correction": "Import-only fix document_handle -> build_handle; first attempt stopped before opening PG or querying. Original script and plan retained; same two variants and bounds."
 }
