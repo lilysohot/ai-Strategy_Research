@@ -9,11 +9,9 @@ no-answer 题（answer_existence = no_answer）历轮误报的根因是：检索
 只当语料里确有一个单位**同时满足全部内容词元**时才有可能命中。实证：6 条负例
 （company/industry/macro-009/-010）收紧查询均归零，满足 M6 ``max_false_positives = 0``。
 
-该门：① 只作用于 no-answer
+该门：① 不触 ``search_pg.py`` / ``scoring.py`` 字节（冻结面稳定）；② 只作用于 no-answer
 题的观测构造，与有答案题的查询路径/S1 命中池完全独立，因此 S1_candidates=66 结构性零扰动；
-② 只收窄负例候选，不改金标、不降 FP 门槛。c′（i0c-r4v）追加排序信号词元
-（``is_punct_lexeme``/``rank_lexemes``）：供 ``search_pg`` 排序侧剔除功能词与标点
-（候选池与 tie-break 不变，I-1/I-2），本模块原有拒检语义零改动。
+③ 只收窄负例候选，不改金标、不降 FP 门槛。
 """
 
 from __future__ import annotations
@@ -51,26 +49,6 @@ def abstain_content_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
     ``content_lexemes`` 原语义，二者互不影响。
     """
     return tuple(t for t in content_lexemes(lexemes) if t not in _QUESTION_WORDS)
-
-
-def is_punct_lexeme(token: str) -> bool:
-    """标点词元的结构判定（非金标）：词元内不含任何字母/数字/汉字。
-
-    zhcfg 对标点产生的独立词元（如 "、""。"）无检索意义，留在排序信号里只稀释
-    ``ts_rank``；数字/字母/汉字任一存在即视为内容词元（"23.5"、"3D" 等照常参与排序）。
-    """
-    return not any(ch.isalnum() for ch in token)
-
-
-def rank_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
-    """排序信号词元（c′ prune_fn_punct）：剔除功能词与标点，**保留单字**。
-
-    与 :func:`content_lexemes`（收紧查询用：去功能词+去单字）口径不同——排序信号
-    保留单字（姊妹篇 c3-lexical-signal 实证去单字回退）。**全部被剔除时回退原词元**
-    （fail-closed）：rank_query 退化为查询本身，排序行为退回 base 而非零候选/零分。
-    """
-    kept = tuple(t for t in lexemes if t not in _FUNCTION_WORDS and not is_punct_lexeme(t))
-    return kept or tuple(lexemes)
 
 
 def tighten_no_answer_query(lexemes: Sequence[str]) -> str:

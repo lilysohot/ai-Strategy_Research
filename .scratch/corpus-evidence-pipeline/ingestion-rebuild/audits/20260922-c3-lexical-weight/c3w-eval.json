@@ -1,0 +1,338 @@
+{
+  "artifact": "c3w-eval",
+  "generated_at": "2026-09-22T15:20:47+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "c′ 第二半：实词加权 / 虚词标点降权 只读离线评估（0 model calls、只读 PG、corpus schema 零写入、不改产品字节）",
+  "scoring_formula": "score = 1.0*ts_rank(tsv, tsq_content) + w_f*ts_rank(tsv, tsq_function)",
+  "why_not_pg_weights": "写侧 to_tsvector 未 setweight ⇒ 词元同权重类，ts_rank(weights,…) 与 tsquery 的 :A/:B 标记无区分效果，故在排序调用侧用双 tsquery 加权和",
+  "single_variable": "(content 词元集合, function 词元集合, w_f)；候选池固定为产品 base 池",
+  "anchor_equals_product": true,
+  "arms": {
+    "anchor": "content=全词元、function=∅（退化成 base，锚定档）",
+    "prune_fn": "content=去 _FUNCTION_WORDS（保留单字与标点）、w_f=0",
+    "prune_fn_punct": "content=再去标点词元（结构判定）、w_f=0",
+    "w0.2": "content=去功能词、function=功能词、w_f=0.2（不删词只降权）",
+    "w0.5": "同上 w_f=0.5",
+    "prune_content": "content_lexemes（再剔单字）、w_f=0（对照档，预期回退）"
+  },
+  "per_arm": {
+    "anchor": {
+      "evidence_pass": "19/24",
+      "buckets_82_targets": {
+        "matched": 67,
+        "selected_but_match_fail": 6,
+        "not_selected": 6
+      },
+      "targets_matched": 67,
+      "diff_vs_anchor": {
+        "regressed": [],
+        "newly_matched": []
+      },
+      "selection_changed_vs_anchor": 0,
+      "band_width_max": 33
+    },
+    "prune_fn": {
+      "evidence_pass": "20/24",
+      "buckets_82_targets": {
+        "matched": 73,
+        "selected_but_match_fail": 6,
+        "not_selected": 0
+      },
+      "targets_matched": 73,
+      "diff_vs_anchor": {
+        "regressed": [],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6"
+        ]
+      },
+      "selection_changed_vs_anchor": 21,
+      "band_width_max": 33
+    },
+    "prune_fn_punct": {
+      "evidence_pass": "21/24",
+      "buckets_82_targets": {
+        "matched": 75,
+        "selected_but_match_fail": 4,
+        "not_selected": 0
+      },
+      "targets_matched": 75,
+      "diff_vs_anchor": {
+        "regressed": [],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6",
+          "company-008/a-2",
+          "industry-008/a-2"
+        ]
+      },
+      "selection_changed_vs_anchor": 24,
+      "band_width_max": 33
+    },
+    "w0.2": {
+      "evidence_pass": "20/24",
+      "buckets_82_targets": {
+        "matched": 73,
+        "selected_but_match_fail": 6,
+        "not_selected": 0
+      },
+      "targets_matched": 73,
+      "diff_vs_anchor": {
+        "regressed": [],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6"
+        ]
+      },
+      "selection_changed_vs_anchor": 21,
+      "band_width_max": 33
+    },
+    "w0.5": {
+      "evidence_pass": "17/24",
+      "buckets_82_targets": {
+        "matched": 57,
+        "selected_but_match_fail": 11,
+        "not_selected": 11
+      },
+      "targets_matched": 57,
+      "diff_vs_anchor": {
+        "regressed": [
+          "company-001/a-2",
+          "company-001/e4",
+          "company-002/e1",
+          "company-002/e2",
+          "company-002/e3",
+          "company-008/a-1",
+          "company-008/a-4",
+          "industry-002/a-3",
+          "industry-002/a-4",
+          "industry-002/e1"
+        ],
+        "newly_matched": []
+      },
+      "selection_changed_vs_anchor": 21,
+      "band_width_max": 34
+    },
+    "prune_content": {
+      "evidence_pass": "21/24",
+      "buckets_82_targets": {
+        "matched": 75,
+        "selected_but_match_fail": 4,
+        "not_selected": 0
+      },
+      "targets_matched": 75,
+      "diff_vs_anchor": {
+        "regressed": [],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6",
+          "company-008/a-2",
+          "industry-008/a-2"
+        ]
+      },
+      "selection_changed_vs_anchor": 24,
+      "band_width_max": 33
+    }
+  },
+  "delta_vs_anchor": {
+    "anchor": {
+      "evidence_pass": 0,
+      "matched": 0,
+      "not_selected": 0
+    },
+    "prune_fn": {
+      "evidence_pass": 1,
+      "matched": 6,
+      "not_selected": -6
+    },
+    "prune_fn_punct": {
+      "evidence_pass": 2,
+      "matched": 8,
+      "not_selected": -6
+    },
+    "w0.2": {
+      "evidence_pass": 1,
+      "matched": 6,
+      "not_selected": -6
+    },
+    "w0.5": {
+      "evidence_pass": -2,
+      "matched": -10,
+      "not_selected": 5
+    },
+    "prune_content": {
+      "evidence_pass": 2,
+      "matched": 8,
+      "not_selected": -6
+    }
+  },
+  "negatives": {
+    "real_search_diagnostic": {
+      "anchor": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "prune_fn": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "prune_fn_punct": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "w0.2": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "w0.5": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "prune_content": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      }
+    },
+    "main_path_retrieved": {
+      "anchor": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "prune_fn": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "prune_fn_punct": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "w0.2": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "w0.5": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "prune_content": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      }
+    }
+  },
+  "company003": {
+    "anchor": {
+      "content_n": 24,
+      "function_n": 0,
+      "w_f": 0.0,
+      "gold_selected": false,
+      "gold_position": null,
+      "targets_matched": 0
+    },
+    "prune_fn": {
+      "content_n": 22,
+      "function_n": 2,
+      "w_f": 0.0,
+      "gold_selected": true,
+      "gold_position": 2,
+      "targets_matched": 6
+    },
+    "prune_fn_punct": {
+      "content_n": 19,
+      "function_n": 5,
+      "w_f": 0.0,
+      "gold_selected": true,
+      "gold_position": 1,
+      "targets_matched": 6
+    },
+    "w0.2": {
+      "content_n": 22,
+      "function_n": 2,
+      "w_f": 0.2,
+      "gold_selected": true,
+      "gold_position": 5,
+      "targets_matched": 6
+    },
+    "w0.5": {
+      "content_n": 22,
+      "function_n": 2,
+      "w_f": 0.5,
+      "gold_selected": false,
+      "gold_position": null,
+      "targets_matched": 0
+    },
+    "prune_content": {
+      "content_n": 14,
+      "function_n": 10,
+      "w_f": 0.0,
+      "gold_selected": true,
+      "gold_position": 1,
+      "targets_matched": 6
+    }
+  },
+  "s2_lesson": "单层 rank/top5 变化不得单独下结论；本评估以 82 目标三桶 + EvidencePass 为准"
+}

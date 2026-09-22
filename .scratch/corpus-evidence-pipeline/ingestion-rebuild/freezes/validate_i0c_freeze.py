@@ -1728,6 +1728,57 @@ if "i0c-r4r" in by_id:
     # 注意：此处不 merge——r4r 为最新修订，须在 r4q 块之后最后合并（见 r4q 块末尾），
     # 否则 freeze_validator 会被更靠后的 r4n/r4p/r4q 块覆盖为旧验证器哈希。
 
+# r4v（c′ 排序信号修订）：prune_fn_punct 落地——排序信号剔除功能词+标点（I-1 候选池不变、
+# I-2 只有 score 变）。search_pg.py 由 r42 时代 04bc7d61 演进至权威 4d1db60c；r39 块与
+# r42 块对 calibration-plan-v2.json pre-run binding（仍记 04bc7d61）的 current-bytes 断言
+# 按 r4r 先例以 supersession 豁免承接（不改写已关闭审计产物，改核权威哈希 + 确认旧值）。
+# 该映射同时供下方 r39 块与 r42 块消费（同一计划文件的绑定值）。
+if "i0c-r4v" in by_id:
+    r4v = load_json(BASE / by_id["i0c-r4v"]["file"])
+    parent43r4v = BASE / by_id["i0c-r4u"]["file"]
+    check(r4v.get("parent_snapshot") == {"snapshot_id": "i0c-r4u",
+          "path": str(parent43r4v.relative_to(ROOT)), "sha256": digest(parent43r4v)},
+          "r4v parent mismatch")
+    bindingr4v = r4v.get("binding", {})
+    check(set(bindingr4v) == {"chain_rebind_implementation", "chain_rebind_tests", "freeze_validator"},
+          "r4v binding groups mismatch")
+    check(set(bindingr4v.get("chain_rebind_implementation", {})) == {
+        "plugins/corpus/preparation/search_pg.py",
+        "plugins/corpus/preparation/negative_query.py"}, "r4v implementation boundary mismatch")
+    check(set(bindingr4v.get("chain_rebind_tests", {})) == {
+        "tests/test_corpus_search_pg.py"}, "r4v chain_rebind_tests boundary mismatch")
+    check(set(bindingr4v.get("freeze_validator", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
+          "r4v freeze_validator boundary mismatch")
+    # prune_fn_punct 语义门：双 tsquery 接线（池=全词元 q.tsq、score=实词 q.tsq_rank）、
+    # 开关默认开、_rank_query_on 同游标取词元 + build_search_params 显式 rank_query 键；
+    # negative_query 须携带标点结构判定 + 全剔回退（fail-closed）；tests 须携带
+    # I-RANK-1 池不变/SQL 接线/序/开关回滚门。
+    spg_src_r4v = (ROOT / "plugins/corpus/preparation/search_pg.py").read_text(encoding="utf-8")
+    check("RANK_LEXEME_PRUNE = True" in spg_src_r4v
+          and "websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank" in spg_src_r4v
+          and "ts_rank(c.search_tsv, q.tsq_rank) AS score" in spg_src_r4v
+          and "c.search_tsv @@ q.tsq" in spg_src_r4v
+          and "def _rank_query_on" in spg_src_r4v
+          and '"rank_query" not in params' in spg_src_r4v,
+          "r4v search_pg.py must wire dual-tsquery ranking signal (pool=full lexemes, score=content)")
+    nq_src_r4v = (ROOT / "plugins/corpus/preparation/negative_query.py").read_text(encoding="utf-8")
+    check("def is_punct_lexeme" in nq_src_r4v and "def rank_lexemes" in nq_src_r4v
+          and "return kept or tuple(lexemes)" in nq_src_r4v,
+          "r4v negative_query.py must carry is_punct_lexeme/rank_lexemes with fail-closed fallback")
+    tspg_src_r4v = (ROOT / "tests/test_corpus_search_pg.py").read_text(encoding="utf-8")
+    check("test_candidate_pool_unchanged_live" in tspg_src_r4v
+          and "test_tie_break_order_live" in tspg_src_r4v
+          and "test_switch_off_rollback_field_equal" in tspg_src_r4v
+          and "test_search_sql_wiring_candidate_pool_vs_score" in tspg_src_r4v,
+          "r4v test_corpus_search_pg.py must carry I-RANK-1 pool/order/rollback gates")
+    # search_pg 权威哈希入 supersession 映射（下方 r39 块与 r42 块消费）；
+    # negative_query.py 不在计划 pre-run binding 内，无需豁免。
+    r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"] = \
+        "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+    # 注意：此处不 merge——r4v 为最新修订，须在 r4u 块之后最后合并（见 r4u 块末尾），
+    # 否则 freeze_validator 会被更靠前的 r4t/r4u 块覆盖为旧验证器哈希。
+
 if "i0c-r39" in by_id:
     r39 = load_json(BASE / by_id["i0c-r39"]["file"])
     parent39 = BASE / by_id["i0c-r38"]["file"]
@@ -1859,9 +1910,18 @@ if "i0c-r42" in by_id:
     check(manifest42.get("lineage", {}).get("scorer", {}).get("sha256") == scorer_sha42,
           "r42 manifest lineage.scorer must be whitespace-norm f61573d7")
     plan42 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
-    check(plan42.get("binding", {}).get("plugins/corpus/preparation/search_pg.py") ==
-          digest(ROOT / "plugins/corpus/preparation/search_pg.py"),
-          "r42 plan must rebind search_pg to current bytes")
+    if "plugins/corpus/preparation/search_pg.py" in r39_superseded_bindings:
+        # r4v 排序信号修订演进 search_pg（r42 记录 04bc7d61 → r4v 权威 4d1db60c）：
+        # 不改写已关闭审计产物，改核权威哈希 + 确认计划仍记录旧值。
+        check(digest(ROOT / "plugins/corpus/preparation/search_pg.py")
+              == r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"]
+              and plan42.get("binding", {}).get("plugins/corpus/preparation/search_pg.py")
+              != r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"],
+              "r42 superseded binding unresolved: search_pg.py")
+    else:
+        check(plan42.get("binding", {}).get("plugins/corpus/preparation/search_pg.py") ==
+              digest(ROOT / "plugins/corpus/preparation/search_pg.py"),
+              "r42 plan must rebind search_pg to current bytes")
     check(plan42.get("binding", {}).get("plugins/corpus/preparation/chunk.py") ==
           digest(ROOT / "plugins/corpus/preparation/chunk.py"),
           "r42 plan must rebind chunk to current bytes")
@@ -2099,6 +2159,12 @@ if "i0c-r4u" in by_id:
           "r4u test_corpus_selection must carry I-CONT-1 gates")
     merge_binding(i0c_current_binding, bindingr4u)
 
+if "i0c-r4v" in by_id:
+    # r4v 为最新修订：须最后合并，确保 search_pg/negative_query 权威哈希与最新验证器
+    # 哈希覆盖更早绑定（r42 search_pg 04bc7d61 / r4t negative_query 6db6876c）。
+    _r4v_rb = load_json(BASE / by_id["i0c-r4v"]["file"]).get("binding", {})
+    merge_binding(i0c_current_binding, _r4v_rb)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2169,4 +2235,5 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else "")
       + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else "")
       + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else "")
-      + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else ""))
+      + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else "")
+      + ("; r4v c3 prune_fn_punct ranking-signal frozen (offline-eval winner, U named sign-off pending M5): search_pg.py dual-tsquery (candidate pool keeps full lexemes via q.tsq, score = ts_rank on content-only q.tsq_rank, tie-break/ts_headline unchanged, RANK_LEXEME_PRUNE=True default-on, same-cursor _rank_query_on injection + explicit rank_query param in build_search_params), negative_query.py is_punct_lexeme/rank_lexemes (drop function-words+punct, keep single-char, fail-closed all-pruned fallback) reusing the F1/B2 non-gold lexicon (granularity change requiring named sign-off), tests/test_corpus_search_pg.py first-in-chain with I-RANK-1 unit gates + live gates (pool unchanged / virtual-only score 0 but stays in pool / tie-break / switch-off field-equal), r4u 'no search_pg bytes' constraint lifted for the first time (r42 plan binding superseded per r4r precedent), corpus family 772/18 vs pre-change same-env control 766/13, e2e replay 11/11 gates green (21/24, matched 75(+8), zero regression, negatives 6x5, width 33<=49, company-003 6/6 gold pos1)" if "i0c-r4v" in by_id else ""))

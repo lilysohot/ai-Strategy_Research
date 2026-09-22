@@ -1,0 +1,93 @@
+{
+  "artifact": "r4v-replay",
+  "generated_at": "2026-09-22T16:22:27+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "c′ prune_fn_punct 产品落地复验（i0c-r4v）：产品路径 vs 独立重算臂 vs c3w-eval.json 记录值；只读 PG、0 model calls、corpus schema 零写入",
+  "product_path": "svc.search_bands（search_pg 双 tsquery：WHERE 全词元 / score 实词）",
+  "gates": {
+    "G1_machinery_explicit_rank_query_equals_arm": true,
+    "G2_evidence_pass_21_24": true,
+    "G2_matched_75": true,
+    "G2_newly_matched_exact": true,
+    "G2_zero_regression": true,
+    "G2_selection_changed_24": true,
+    "G2_width_33_le_49": true,
+    "G2_company003_6_6_pos1": true,
+    "G3_switch_off_equals_anchor_arm": true,
+    "G3_switch_off_metrics_equal_anchor_record": true,
+    "G4_negatives_equal_record_and_no_raise": true
+  },
+  "product_funnel": {
+    "evidence_pass": "21/24",
+    "buckets_82_targets": {
+      "matched": 75,
+      "selected_but_match_fail": 4,
+      "not_selected": 0
+    },
+    "newly_matched_vs_switch_off": [
+      "company-003/e1",
+      "company-003/e2",
+      "company-003/e3",
+      "company-003/e4",
+      "company-003/e5",
+      "company-003/e6",
+      "company-008/a-2",
+      "industry-008/a-2"
+    ],
+    "regressed_vs_switch_off": [],
+    "selection_changed_vs_switch_off": 24,
+    "band_width_max": 33,
+    "company003": {
+      "gold_selected": true,
+      "gold_position": 1,
+      "targets_matched": 6
+    }
+  },
+  "diagnostics": {
+    "lexeme_source_note": "评估臂排序词元取自题面；产品默认路径取自收到的查询串（rollout-plan §3.2）。两口径在 82 目标漏斗上逐值等值（G2 全绿），band 划分可不同。",
+    "default_vs_arm_doc_mismatch": [
+      "company-001",
+      "company-002",
+      "company-003",
+      "company-004",
+      "company-005",
+      "company-006",
+      "company-007",
+      "company-008",
+      "industry-001",
+      "industry-002",
+      "industry-003",
+      "industry-004",
+      "industry-005",
+      "industry-006",
+      "industry-007",
+      "industry-008",
+      "macro-001",
+      "macro-002",
+      "macro-003",
+      "macro-004",
+      "macro-005",
+      "macro-006",
+      "macro-007",
+      "macro-008"
+    ]
+  },
+  "switch_off_funnel": {
+    "evidence_pass": "19/24",
+    "buckets_82_targets": {
+      "matched": 67,
+      "selected_but_match_fail": 6,
+      "not_selected": 6
+    },
+    "band_width_max": 33
+  },
+  "negatives_real_search": {
+    "company-009": 5,
+    "company-010": 5,
+    "industry-009": 5,
+    "industry-010": 5,
+    "macro-009": 5,
+    "macro-010": 5
+  },
+  "expected_source": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260922-c3-lexical-weight/c3w-eval.json"
+}

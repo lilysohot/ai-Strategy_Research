@@ -1,0 +1,901 @@
+{
+  "artifact": "c3-attribution",
+  "generated_at": "2026-09-22T12:19:14+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "只读机读归因（0 model calls；SELECT + 会话级 TEMP TABLE，corpus schema 零写入）",
+  "issue": ".scratch/corpus-retrieval-decoupling/issues/10-company003-doc-recall.md",
+  "query": {
+    "query_id": "company-003",
+    "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+    "or_query": "\"2026e\" OR \"2027e\" OR \"2028e\" OR \"、\" OR \"中\" OR \"光\" OR \"力\" OR \"和\" OR \"国信\" OR \"多少\" OR \"收益\" OR \"是\" OR \"每股\" OR \"活动\" OR \"现金流\" OR \"的\" OR \"科技\" OR \"经营\" OR \"表\" OR \"证券\" OR \"财务\" OR \"预测\" OR \"，\" OR \"？\"",
+    "lexemes": [
+      "2026e",
+      "2027e",
+      "2028e",
+      "、",
+      "中",
+      "光",
+      "力",
+      "和",
+      "国信",
+      "多少",
+      "收益",
+      "是",
+      "每股",
+      "活动",
+      "现金流",
+      "的",
+      "科技",
+      "经营",
+      "表",
+      "证券",
+      "财务",
+      "预测",
+      "，",
+      "？"
+    ]
+  },
+  "gold": {
+    "alias": "2026-09-06_dddc7cd0",
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"
+  },
+  "targets": [
+    {
+      "target_id": "e1",
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2026E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "0.36",
+      "s1_reproduced": true
+    },
+    {
+      "target_id": "e2",
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2026E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "(222)",
+      "s1_reproduced": true
+    },
+    {
+      "target_id": "e3",
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2027E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "0.59",
+      "s1_reproduced": true
+    },
+    {
+      "target_id": "e4",
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2027E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "(138)",
+      "s1_reproduced": true
+    },
+    {
+      "target_id": "e5",
+      "locator": [
+        "page:20",
+        "row:每股收益",
+        "col:2028E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "0.93",
+      "s1_reproduced": true
+    },
+    {
+      "target_id": "e6",
+      "locator": [
+        "page:20",
+        "row:经营活动现金流",
+        "col:2028E"
+      ],
+      "source_id": "2026-09-06_dddc7cd0",
+      "quote_head": "(17)",
+      "s1_reproduced": true
+    }
+  ],
+  "lexical_ranking": [
+    {
+      "rank": 1,
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "alias": "2026-09-06_793b3967",
+      "best_score": 0.037500046,
+      "hits": 91,
+      "gold": false
+    },
+    {
+      "rank": 2,
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "alias": "2026-08-16_6f14cc14",
+      "best_score": 0.03513952,
+      "hits": 23,
+      "gold": false
+    },
+    {
+      "rank": 3,
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "alias": "2026-09-06_cc03f55b",
+      "best_score": 0.03440014,
+      "hits": 23,
+      "gold": false
+    },
+    {
+      "rank": 4,
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "alias": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "best_score": 0.03417295,
+      "hits": 7,
+      "gold": false
+    },
+    {
+      "rank": 5,
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "alias": "2026-08-13_174b6462",
+      "best_score": 0.03294254,
+      "hits": 162,
+      "gold": false
+    },
+    {
+      "rank": 6,
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "alias": "2026-09-06_dddc7cd0",
+      "best_score": 0.032827195,
+      "hits": 174,
+      "gold": true
+    },
+    {
+      "rank": 7,
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "alias": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "best_score": 0.029780008,
+      "hits": 19,
+      "gold": false
+    },
+    {
+      "rank": 8,
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "alias": "2026-09-06_f8e31696",
+      "best_score": 0.024928411,
+      "hits": 27,
+      "gold": false
+    }
+  ],
+  "gold_lexical_rank": 6,
+  "production_selection": {
+    "selected_sources": [
+      "2026-09-06_793b3967",
+      "2026-08-16_6f14cc14",
+      "2026-09-06_cc03f55b",
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "2026-08-13_174b6462"
+    ],
+    "gold_excluded": true
+  },
+  "decomposition": {
+    "per_source": [
+      {
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "alias": "2026-09-06_793b3967",
+        "gold": false,
+        "n_hits": 91,
+        "best_full_score": 0.037500046,
+        "best_chunk": {
+          "chunk_id": "7734638eca662be9:body:0017",
+          "kind": "body",
+          "full_score": 0.037500046,
+          "body_only_score": 0.037500046,
+          "matched_lexemes": [
+            "、",
+            "中",
+            "和",
+            "是",
+            "活动",
+            "的",
+            "经营",
+            "证券",
+            "财务",
+            "预测",
+            "，"
+          ],
+          "matched_body_lexemes": [
+            "、",
+            "中",
+            "和",
+            "是",
+            "活动",
+            "的",
+            "经营",
+            "证券",
+            "财务",
+            "预测",
+            "，"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": []
+        }
+      },
+      {
+        "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "alias": "2026-08-16_6f14cc14",
+        "gold": false,
+        "n_hits": 23,
+        "best_full_score": 0.03513952,
+        "best_chunk": {
+          "chunk_id": "58735cff57d8d456:body:0005",
+          "kind": "body",
+          "full_score": 0.03513952,
+          "body_only_score": 0.03513952,
+          "matched_lexemes": [
+            "2026e",
+            "2027e",
+            "2028e",
+            "、",
+            "中",
+            "和",
+            "每股",
+            "经营",
+            "证券",
+            "财务",
+            "预测",
+            "，"
+          ],
+          "matched_body_lexemes": [
+            "2026e",
+            "2027e",
+            "2028e",
+            "、",
+            "中",
+            "和",
+            "每股",
+            "经营",
+            "证券",
+            "财务",
+            "预测",
+            "，"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": []
+        }
+      },
+      {
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "alias": "2026-09-06_cc03f55b",
+        "gold": false,
+        "n_hits": 23,
+        "best_full_score": 0.03440014,
+        "best_chunk": {
+          "chunk_id": "e3820ab34c2e3326:body:0007",
+          "kind": "body",
+          "full_score": 0.03440014,
+          "body_only_score": 0.031585664,
+          "matched_lexemes": [
+            "、",
+            "中",
+            "和",
+            "是",
+            "的",
+            "证券",
+            "财务",
+            "预测",
+            "，",
+            "？"
+          ],
+          "matched_body_lexemes": [
+            "、",
+            "中",
+            "和",
+            "是",
+            "的",
+            "证券",
+            "预测",
+            "，",
+            "？"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": [
+            "财务"
+          ]
+        }
+      },
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "alias": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "gold": false,
+        "n_hits": 7,
+        "best_full_score": 0.03417295,
+        "best_chunk": {
+          "chunk_id": "6475cbacca1575c5:body:0001",
+          "kind": "body",
+          "full_score": 0.03417295,
+          "body_only_score": 0.03417295,
+          "matched_lexemes": [
+            "、",
+            "中",
+            "光",
+            "和",
+            "多少",
+            "是",
+            "的",
+            "预测",
+            "，",
+            "？"
+          ],
+          "matched_body_lexemes": [
+            "、",
+            "中",
+            "光",
+            "和",
+            "多少",
+            "是",
+            "的",
+            "预测",
+            "，",
+            "？"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": []
+        }
+      },
+      {
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "alias": "2026-08-13_174b6462",
+        "gold": false,
+        "n_hits": 162,
+        "best_full_score": 0.03294254,
+        "best_chunk": {
+          "chunk_id": "1227c2a34d05170a:body:0022",
+          "kind": "body",
+          "full_score": 0.03294254,
+          "body_only_score": 0.03547557,
+          "matched_lexemes": [
+            "、",
+            "中",
+            "和",
+            "收益",
+            "是",
+            "的",
+            "科技",
+            "表",
+            "证券",
+            "，"
+          ],
+          "matched_body_lexemes": [
+            "、",
+            "中",
+            "和",
+            "收益",
+            "是",
+            "的",
+            "科技",
+            "表",
+            "证券",
+            "，"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": []
+        }
+      },
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "alias": "2026-09-06_dddc7cd0",
+        "gold": true,
+        "n_hits": 174,
+        "best_full_score": 0.032827195,
+        "best_chunk": {
+          "chunk_id": "a3b681fdd55d6e11:body:0023",
+          "kind": "body",
+          "full_score": 0.032827195,
+          "body_only_score": 0.032827195,
+          "matched_lexemes": [
+            "、",
+            "光",
+            "力",
+            "和",
+            "现金流",
+            "的",
+            "科技",
+            "经营",
+            "预测",
+            "，"
+          ],
+          "matched_body_lexemes": [
+            "、",
+            "光",
+            "力",
+            "和",
+            "现金流",
+            "的",
+            "科技",
+            "经营",
+            "预测",
+            "，"
+          ],
+          "matched_label_only_lexemes": [],
+          "unattributed_lexemes": []
+        }
+      }
+    ],
+    "unattributed_chunks": 1,
+    "note": "label_only = search_tsv 命中 − raw_text body 命中；注入串按产品 _table_row_label_prefix 重建"
+  },
+  "counterfactual_body_only": {
+    "company003_doc_order": [
+      "2026-09-06_793b3967",
+      "2026-08-13_174b6462",
+      "2026-08-16_6f14cc14",
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "2026-09-06_dddc7cd0",
+      "2026-09-06_cc03f55b",
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "2026-09-06_f8e31696"
+    ],
+    "gold_rank_body": 5,
+    "gold_in_top5_body": true,
+    "hypothesis_supported": true
+  },
+  "perturbation_surface": {
+    "positives": 24,
+    "top5_changed": 8,
+    "per_question": [
+      {
+        "query_id": "company-001",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_793b3967"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "company-002",
+        "top5_full": [
+          "2026-09-06_dddc7cd0",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-08-16_6f14cc14"
+        ],
+        "top5_body": [
+          "2026-09-06_dddc7cd0",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-08-16_6f14cc14"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "company-003",
+        "top5_full": [
+          "2026-09-06_793b3967",
+          "2026-08-16_6f14cc14",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-13_174b6462"
+        ],
+        "top5_body": [
+          "2026-09-06_793b3967",
+          "2026-08-13_174b6462",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "company-004",
+        "top5_full": [
+          "2026-09-06_dddc7cd0",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "top5_body": [
+          "2026-09-06_dddc7cd0",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "company-005",
+        "top5_full": [
+          "2026-09-06_dddc7cd0",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_f8e31696"
+        ],
+        "top5_body": [
+          "2026-09-06_dddc7cd0",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-08-16_6f14cc14"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "company-006",
+        "top5_full": [
+          "2026-09-06_dddc7cd0",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_793b3967",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "top5_body": [
+          "2026-09-06_dddc7cd0",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_793b3967",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "company-007",
+        "top5_full": [
+          "2026-08-16_6f14cc14",
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "top5_body": [
+          "2026-08-16_6f14cc14",
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "company-008",
+        "top5_full": [
+          "2026-09-06_dddc7cd0",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-16_6f14cc14",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "top5_body": [
+          "2026-09-06_dddc7cd0",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-16_6f14cc14",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "industry-001",
+        "top5_full": [
+          "2026-08-13_174b6462",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_f8e31696",
+          "2026-09-06_793b3967"
+        ],
+        "top5_body": [
+          "2026-08-13_174b6462",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0",
+          "2026-09-06_f8e31696",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "industry-002",
+        "top5_full": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0"
+        ],
+        "top5_body": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-13_174b6462",
+          "2026-09-06_dddc7cd0",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_cc03f55b"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "industry-003",
+        "top5_full": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_dddc7cd0"
+        ],
+        "top5_body": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "industry-004",
+        "top5_full": [
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_f8e31696",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "top5_body": [
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "industry-005",
+        "top5_full": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_793b3967",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+        ],
+        "top5_body": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_793b3967",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "industry-006",
+        "top5_full": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "top5_body": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "industry-007",
+        "top5_full": [
+          "2026-09-06_f8e31696",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0"
+        ],
+        "top5_body": [
+          "2026-09-06_f8e31696",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "industry-008",
+        "top5_full": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_793b3967",
+          "2026-08-16_6f14cc14"
+        ],
+        "top5_body": [
+          "2026-09-06_f8e31696",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_793b3967",
+          "2026-08-16_6f14cc14"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-001",
+        "top5_full": [
+          "2026-09-06_793b3967",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "top5_body": [
+          "2026-09-06_793b3967",
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": true
+      },
+      {
+        "query_id": "macro-002",
+        "top5_full": [
+          "2026-09-06_793b3967",
+          "2026-09-06_cc03f55b",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_f8e31696"
+        ],
+        "top5_body": [
+          "2026-09-06_793b3967",
+          "2026-08-16_6f14cc14",
+          "2026-09-06_cc03f55b",
+          "2026-09-06_f8e31696",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-003",
+        "top5_full": [
+          "2026-09-06_793b3967",
+          "2026-08-13_174b6462",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_f8e31696"
+        ],
+        "top5_body": [
+          "2026-08-13_174b6462",
+          "2026-08-16_6f14cc14",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_793b3967",
+          "2026-09-06_f8e31696"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-004",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462",
+          "2026-09-06_dddc7cd0"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "2026-08-13_174b6462",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-005",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0",
+          "2026-08-16_6f14cc14",
+          "2026-09-06_f8e31696",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0",
+          "2026-08-16_6f14cc14",
+          "2026-09-06_f8e31696",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-006",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_793b3967",
+          "2026-09-06_f8e31696"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_f8e31696",
+          "2026-09-06_793b3967"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-007",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_793b3967",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_dddc7cd0"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "2026-09-06_793b3967",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_dddc7cd0"
+        ],
+        "changed": false
+      },
+      {
+        "query_id": "macro-008",
+        "top5_full": [
+          "2026-09-06_cc03f55b",
+          "2026-09-06_dddc7cd0",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_793b3967"
+        ],
+        "top5_body": [
+          "2026-09-06_cc03f55b",
+          "2026-08-13_174b6462",
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "2026-09-06_793b3967",
+          "2026-09-06_f8e31696"
+        ],
+        "changed": true
+      }
+    ],
+    "negatives_note": "6 负例产品路径走判定层拒检（NO_MATCH），不受排序反事实影响",
+    "s2_lesson": "单层 top5 扰动不得单独下结论，须以端到端 EvidencePass 复验"
+  },
+  "self_check": {
+    "no_model_calls": true,
+    "read_only": true,
+    "targets_is_6": true,
+    "s1_all_reproduced": true,
+    "production_excludes_gold": true,
+    "gold_lexical_rank": 6,
+    "gold_rank_body": 5,
+    "hypothesis_supported": true,
+    "unattributed_chunks": 1
+  }
+}

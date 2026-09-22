@@ -1,0 +1,342 @@
+{
+  "artifact": "c3p-eval",
+  "generated_at": "2026-09-22T15:10:42+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "c′ 查询词元口径 A/B/C/D 离线评估（0 model calls；只读 PG，corpus schema 零写入；不改任何产品字节）",
+  "single_variable": "送给产品读链的 or_query 词元集合（其余逐行复用 f3b 回放主体）",
+  "arms": {
+    "base": "全 zhcfg 词元 OR（现生产/回测口径，基线）",
+    "minus_function": "去 _FUNCTION_WORDS（保留单字）",
+    "content": "content_lexemes：去功能词 + 去单字（c′ 主变体）",
+    "abstain": "abstain_content_lexemes：再剔 _QUESTION_WORDS（诊断档）"
+  },
+  "lexeme_source": "判据全部取自产品既有非金标词表 plugins/corpus/preparation/negative_query.py",
+  "anchor_base_equals_product": true,
+  "per_arm": {
+    "base": {
+      "evidence_pass": "19/24",
+      "buckets_82_targets": {
+        "matched": 67,
+        "selected_but_match_fail": 6,
+        "not_selected": 6
+      },
+      "targets_matched": 67,
+      "diff_vs_base": {
+        "regressed": [],
+        "newly_matched": []
+      },
+      "selection_changed_vs_base": [],
+      "band_width_max": 33,
+      "empty_query_questions": []
+    },
+    "minus_function": {
+      "evidence_pass": "20/24",
+      "buckets_82_targets": {
+        "matched": 73,
+        "selected_but_match_fail": 6,
+        "not_selected": 0
+      },
+      "targets_matched": 73,
+      "diff_vs_base": {
+        "regressed": [],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6"
+        ]
+      },
+      "selection_changed_vs_base": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-006",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-005",
+        "industry-006",
+        "industry-007",
+        "industry-008",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-004",
+        "macro-006",
+        "macro-007"
+      ],
+      "band_width_max": 35,
+      "empty_query_questions": []
+    },
+    "content": {
+      "evidence_pass": "20/24",
+      "buckets_82_targets": {
+        "matched": 72,
+        "selected_but_match_fail": 7,
+        "not_selected": 0
+      },
+      "targets_matched": 72,
+      "diff_vs_base": {
+        "regressed": [
+          "company-004/a-2",
+          "company-004/a-3",
+          "company-004/e2"
+        ],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6",
+          "company-008/a-2",
+          "industry-008/a-2"
+        ]
+      },
+      "selection_changed_vs_base": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-006",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-004",
+        "industry-005",
+        "industry-006",
+        "industry-007",
+        "industry-008",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-004",
+        "macro-005",
+        "macro-006",
+        "macro-007",
+        "macro-008"
+      ],
+      "band_width_max": 34,
+      "empty_query_questions": []
+    },
+    "abstain": {
+      "evidence_pass": "20/24",
+      "buckets_82_targets": {
+        "matched": 72,
+        "selected_but_match_fail": 7,
+        "not_selected": 0
+      },
+      "targets_matched": 72,
+      "diff_vs_base": {
+        "regressed": [
+          "company-004/a-2",
+          "company-004/a-3",
+          "company-004/e2"
+        ],
+        "newly_matched": [
+          "company-003/e1",
+          "company-003/e2",
+          "company-003/e3",
+          "company-003/e4",
+          "company-003/e5",
+          "company-003/e6",
+          "company-008/a-2",
+          "industry-008/a-2"
+        ]
+      },
+      "selection_changed_vs_base": [
+        "company-001",
+        "company-002",
+        "company-003",
+        "company-004",
+        "company-005",
+        "company-006",
+        "company-007",
+        "company-008",
+        "industry-001",
+        "industry-002",
+        "industry-003",
+        "industry-004",
+        "industry-005",
+        "industry-006",
+        "industry-007",
+        "industry-008",
+        "macro-001",
+        "macro-002",
+        "macro-003",
+        "macro-004",
+        "macro-005",
+        "macro-006",
+        "macro-007",
+        "macro-008"
+      ],
+      "band_width_max": 34,
+      "empty_query_questions": []
+    }
+  },
+  "delta_vs_base": {
+    "base": {
+      "evidence_pass": 0,
+      "matched": 0,
+      "selected_but_match_fail": 0,
+      "not_selected": 0
+    },
+    "minus_function": {
+      "evidence_pass": 1,
+      "matched": 6,
+      "selected_but_match_fail": 0,
+      "not_selected": -6
+    },
+    "content": {
+      "evidence_pass": 1,
+      "matched": 5,
+      "selected_but_match_fail": 1,
+      "not_selected": -6
+    },
+    "abstain": {
+      "evidence_pass": 1,
+      "matched": 5,
+      "selected_but_match_fail": 1,
+      "not_selected": -6
+    }
+  },
+  "negatives": {
+    "main_path_retrieved": {
+      "base": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "minus_function": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "content": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      },
+      "abstain": {
+        "company-009": 0,
+        "company-010": 0,
+        "industry-009": 0,
+        "industry-010": 0,
+        "macro-009": 0,
+        "macro-010": 0
+      }
+    },
+    "real_search_diagnostic": {
+      "base": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "minus_function": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "content": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      },
+      "abstain": {
+        "company-009": 5,
+        "company-010": 5,
+        "industry-009": 5,
+        "industry-010": 5,
+        "macro-009": 5,
+        "macro-010": 5
+      }
+    },
+    "note": "main_path = 判定层拒检 NO_MATCH（与 F2/F4/f3b 同口径）；real_search = 关闭拒检真跑，仅用于量词元收紧的误报风险（不得高于 base）"
+  },
+  "company003": {
+    "base": {
+      "gold_selected": false,
+      "gold_position_in_selection": null,
+      "selected_aliases": [
+        "2026-09-06_793b3967",
+        "2026-08-16_6f14cc14",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "2026-08-13_174b6462"
+      ],
+      "targets_matched": 0,
+      "targets_total": 6,
+      "lexemes_n": 24
+    },
+    "minus_function": {
+      "gold_selected": true,
+      "gold_position_in_selection": 2,
+      "selected_aliases": [
+        "2026-08-16_6f14cc14",
+        "2026-09-06_dddc7cd0",
+        "2026-09-06_793b3967",
+        "2026-09-06_cc03f55b",
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ],
+      "targets_matched": 6,
+      "targets_total": 6,
+      "lexemes_n": 22
+    },
+    "content": {
+      "gold_selected": true,
+      "gold_position_in_selection": 1,
+      "selected_aliases": [
+        "2026-09-06_dddc7cd0",
+        "2026-08-16_6f14cc14",
+        "2026-09-06_793b3967",
+        "2026-08-13_174b6462",
+        "2026-09-06_cc03f55b"
+      ],
+      "targets_matched": 6,
+      "targets_total": 6,
+      "lexemes_n": 14
+    },
+    "abstain": {
+      "gold_selected": true,
+      "gold_position_in_selection": 1,
+      "selected_aliases": [
+        "2026-09-06_dddc7cd0",
+        "2026-08-16_6f14cc14",
+        "2026-09-06_793b3967",
+        "2026-08-13_174b6462",
+        "2026-09-06_cc03f55b"
+      ],
+      "targets_matched": 6,
+      "targets_total": 6,
+      "lexemes_n": 13
+    }
+  },
+  "s2_lesson": "单层 rank/top5 变化不得单独下结论；本评估以 82 目标三桶 + EvidencePass 为准"
+}

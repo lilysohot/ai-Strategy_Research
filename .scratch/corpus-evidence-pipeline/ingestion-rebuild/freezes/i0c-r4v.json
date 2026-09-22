@@ -1,0 +1,38 @@
+{
+  "snapshot_id": "i0c-r4v",
+  "revision": "r4v",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4u",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4u.json",
+    "sha256": "4fb9487512fd6e7b451bacf676f7967766d457fc1a34cec773dcf0810959f794"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/preparation/search_pg.py": "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492",
+      "plugins/corpus/preparation/negative_query.py": "0f69d33cd8b1b978327607d3b4c94fb0c43948309ca2bcf8dd6286e3edab801d"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_search_pg.py": "e67ce2a9bf925dec18ce4d5b05282235f48eb477545b1226369e40fd5f37bac9"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "45b38930d96048b8216914ba57fb1d174c4d2eca2f04f93ec2361dedce71035c"
+    }
+  },
+  "corrections": {
+    "c3_prune_fn_punct": "c′ 排序信号修订落地（依据 audits/20260922-c3-lexical-weight/c3w-rollout-plan.md，离线评估获胜档 prune_fn_punct，U 指令『依据文档落实到执行中』）。落地四处（plan §3）：① negative_query.py 新增 is_punct_lexeme（标点结构判定：词元内无字母/数字/汉字）与 rank_lexemes（剔 _FUNCTION_WORDS + 标点、保留单字、全剔回退原词元 fail-closed）；② search_pg.py 模块常量 RANK_LEXEME_PRUNE=True（默认开，False ⇒ rank_query=query 逐字节回 base）；③ _SEARCH_SQL 双 tsquery：候选池 WHERE 仍 @@ q.tsq（全词元，I-1 候选池不收缩）、score 列改 ts_rank(c.search_tsv, q.tsq_rank)（实词）、ORDER BY tie-break 与 ts_headline（全词元）不变（I-2 只有 score 变）；④ _rank_query_on 在同一游标/同快照内取词元 + build_search_params 增可选 rank_query 键（唯一归一化入口保持）+ search_chunks_on 按开关注入。写侧未 setweight ⇒ 排序信号在排序调用侧实现，不改索引、不重摄入。r4u『不触 search_pg.py』约束首次解除（r42 plan binding 04bc7d61 → 4d1db60c，按 r4r 先例以 supersession 豁免承接 r39/r42 块的 current-bytes 断言，不改写已关闭审计产物）。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4u d4ff1513 → 45b38930）：新增 i0c-r4v 校验块（置于 r39 块前——supersession 映射须先于 r39/r42 块填充；parent=i0c-r4u、binding 三组边界、语义门——search_pg 须含 RANK_LEXEME_PRUNE=True/tsq_rank 双 tsquery 接线/_rank_query_on/rank_query 注入，negative_query 须含 is_punct_lexeme/rank_lexemes/fail-closed 回退，tests 须含 I-RANK-1 池不变/tie-break/开关回滚/SQL 接线门；search_pg 权威哈希入 r39_superseded_bindings 供 r39 块与 r42 块共同消费，r42 search_pg 检查改 supersession 分支）；r4v 合并置于 r4u 块之后最后执行（最新修订优先）。"
+  },
+  "notes": [
+    "r4v 为 c′ prune_fn_punct 排序信号的链上重绑修订（parent=i0c-r4u）：search_pg.py（r42 04bc7d61 → 4d1db60c，双 tsquery）与 negative_query.py（r4t 6db6876c → 0f69d33c，词元划分函数）重绑；tests/test_corpus_search_pg.py 首次入链（I-RANK-1：单元门 6 + 真库门 5，PG 门控 skipif）。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260922-c3w-landing/before-r4v/：search_pg.py=04bc7d61（r42）、negative_query.py=6db6876c（r4t），sha256 已核与冻结绑定一致。",
+    "口径/粒度变更声明（须 U 具名签认）：_FUNCTION_WORDS 原本只服务负例拒检（F1 tighten_no_answer_query / B2 abstain 判别器），本次复用到正例排序降噪——属口径/粒度变更，在 plan §7 已声明；本修订冻结其落地，但 M5 独立复核 + U 具名签认完成前不视为正式生效（m5_declaration=not_declared）。",
+    "验证口径：tests/test_corpus_search_pg.py 29 passed（带 DSN，无 DSN 时 24+5 skipped）；语料族 tests/test_corpus_*.py 772 passed / 18 skipped——改前同环境对照（还原 before-r4v 字节重跑同命令）= 766/13，净贡献 +6/+5，其余漂移为既有环境差异（hf-space 等缺失依赖 skip、test_web_* 集合错误），与本改动无关（对照实验已证）；ruff / pyright 0 errors 绿。",
+    "端到端复验（audits/20260922-c3w-landing/r4v_replay.py，11/11 门全绿，r4v-replay.json write-once）：产品路径 EvidencePass 21/24、82 目标 matched 75（sbf 4 / ns 0，+8）、newly 恰为 company-003×6 + company-008/a-2 + industry-008/a-2、零回退、selection_changed 24、带宽 33≤49、company-003 金标 pos1 且 6/6；G1 机制等价=显式 rank_query=臂排序串经产品装配与 c3w 臂重算逐字段相等（24/24）；G3 开关回滚=19/24/67/33 与 anchor 臂逐字段相等；G4 负例 6 题各 5 不回升。",
+    "词元来源口径（非门诊断，已记录于 r4v-replay.json）：评估臂排序词元取自题面 zhcfg 词元；产品默认路径按 rollout-plan §3.2 从收到的查询串提取（harness 传入题面词元的 OR 串，再分词产生 'or' 操作符词元/再切分差异）。两口径在 82 目标漏斗上逐值等值（G2 全绿），band 划分可不同（24/24 题文档集有差异）；需与臂逐字段一致时用 build_search_params(rank_query=…) 显式指定。",
+    "纪律：不 commit、不 publish、不重摄入、不写库（只读沙箱库 i2_sandbox_corpus:543）；不动选择策略（select_structural/select_band）、不动 band 聚合（stitch_continuation 默认开保持）、不动负例判定 AND 语义路径与 scoring.py、不改 EvidenceTarget.matches、不降 max_false_positives=0、max_chunks_per_document=8 保持；不改 guards/i1.json、不改写已关闭轮次审计产物。company-007 断句根治（路径 A）仍为独立待裁项；company-003 在 P1 解除后已 6/6，不再需要 P2 表格模型改造。"
+  ],
+  "m5_declaration": "not_declared（r4v 改排序信号字节 search_pg.py+negative_query.py——候选池/tie-break/ts_headline 不变、仅 score 重排，端到端零回退已实证；M5 结论仍待独立复核 + U 具名签认）",
+  "created_at": "2026-09-22T16:30:00+08:00"
+}

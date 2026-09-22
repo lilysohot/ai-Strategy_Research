@@ -14,11 +14,6 @@ zhcfg 全词性→simple 映射含 ``'m'`` 数词）。查询侧经
 zhcfg 或索引文本规则升级必须换新 index_rev 全量重建（新 build 重算 search_tsv/GIN），
 本模块只服务活动版本，不感知历史分词版本。
 
-排序信号（c′/i0c-r4v）：``score`` 列按**实词词元**计算（``negative_query.rank_lexemes``
-剔除功能词/标点，``RANK_LEXEME_PRUNE`` 开关可整体回退）；候选池（``WHERE search_tsv
-@@ q.tsq``）、``ORDER BY`` tie-break 与 ``ts_headline`` 仍用全词元查询串——候选池不
-收缩（I-1）、只有 score 变（I-2）。
-
 目标 fail-closed：与 :class:`PgStore` 同纪律——``current_database`` 必须等于隔离库；
 目标实例含 ``apodex`` 库即判定为生产实例并拒绝（读侧同样不允许触碰生产库）。
 """
@@ -36,20 +31,13 @@ if TYPE_CHECKING:
 
 from plugins.corpus.preparation.chunk import normalize_search_text
 from plugins.corpus.preparation.contract import ResearchDomain
-from plugins.corpus.preparation.negative_query import rank_lexemes
 from plugins.corpus.preparation.repository import StoreError
 
 _SANDBOX_DB = "i2_sandbox_corpus"
 
-# c′（i0c-r4v）排序信号开关：True ⇒ score 只按实词（rank_lexemes 剔除功能词/标点）；
-# False ⇒ rank_query 退化为 query 本身，行为与 base 逐字段一致（两级回滚的代码级开关）。
-RANK_LEXEME_PRUNE = True
-
 # 检索纪律（C13）：q（tsquery）→ GIN 候选（search_tsv @@ tsq）→ INNER JOIN
 # publications.active_build_id 收敛到活动范围 → admissions 供领域/发布日期过滤
 # → ts_rank 排名。ISO 文本序=时序（report_publication.value 为 ISO 日期文本）。
-# 候选池（@@ q.tsq）恒用全词元；score 列单独用 q.tsq_rank（实词，c′）——
-# I-1 候选池不收缩、I-2 只有 score 变（tie-break/ts_headline 均保持全词元侧）。
 _SEARCH_SQL = """
 SELECT p.source_id,
        c.build_id,
@@ -58,12 +46,11 @@ SELECT p.source_id,
        c.title_text,
        c.section_path,
        c.unit_refs,
-       ts_rank(c.search_tsv, q.tsq_rank) AS score,
+       ts_rank(c.search_tsv, q.tsq) AS score,
        ts_headline('zhcfg', c.search_text, q.tsq,
                    'MaxWords=28, MinWords=8, ShortWord=1') AS snippet,
        a.metadata_snapshot->'report_publication'->>'value' AS published
-FROM (SELECT websearch_to_tsquery('zhcfg', %(query)s)      AS tsq,
-             websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank) AS q
+FROM (SELECT websearch_to_tsquery('zhcfg', %(query)s) AS tsq) AS q
 JOIN corpus.corpus_chunks AS c ON c.search_tsv @@ q.tsq
 JOIN corpus.corpus_builds AS b ON b.build_id = c.build_id
 JOIN corpus.corpus_publications AS p ON p.active_build_id = c.build_id
@@ -219,23 +206,6 @@ def query_lexemes(dsn: str, query: str, *, sandbox_db: str = _SANDBOX_DB) -> tup
     return tuple(str(term) for term in row[0])
 
 
-def _rank_query_on(cur: psycopg.Cursor, query: str) -> str:
-    """排序信号 websearch OR 串（c′）：同游标/同快照取 zhcfg 词元后剔除功能词与标点。
-
-    与候选池查询串（全词元 ``query``）分离是 I-1 的落点：``WHERE`` 仍用全词元 tsq，
-    只有 score 列改用本串（I-2）。``rank_lexemes`` 全剔时回退原词元（fail-closed：
-    本串与 query 同词元集合，排序退化回 base 而非零候选/零分）。
-    """
-    cur.execute(
-        "SELECT tsvector_to_array(to_tsvector('zhcfg', %s))",
-        (normalize_search_text(query),),
-    )
-    row = cur.fetchone()
-    lexemes = tuple(str(t) for t in (row[0] if row and row[0] else ()))
-    kept = rank_lexemes(lexemes)
-    return " OR ".join('"' + t.replace('"', " ") + '"' for t in kept)
-
-
 def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
     """与 PgStore._check_target 同纪律：隔离库校验 + apodex 生产实例反证。"""
     with conn.cursor() as cur:
@@ -256,7 +226,6 @@ def build_search_params(
     published_from: str | None = None,
     published_to: str | None = None,
     limit: int = 20,
-    rank_query: str | None = None,
 ) -> dict[str, object]:
     """校验并归一化检索参数（**唯一**来源，供 search_chunks 与同快照组合读取复用）。
 
@@ -264,8 +233,6 @@ def build_search_params(
     ``%``/``％`` 归一化为空格，查询侧若原样传 "23.5%" 给 websearch_to_tsquery
     会得到独立 token "23.5%"，与索引 token "23.5" 不一致而漏召回。``%``/``％``
     不是 websearch 操作符（OR/引号/负号），替换为空格不破坏这些语法。
-    ``rank_query`` 显式指定排序信号查询串（c′，同样规范化）；缺省时由
-    :func:`search_chunks_on` 按开关（``RANK_LEXEME_PRUNE``）在同游标内计算。
     """
     if not query.strip():
         raise StoreError("query 不能为空")
@@ -273,16 +240,13 @@ def build_search_params(
         raise StoreError("limit 必须 >= 1")
     date_from = published_from.strip() or None if published_from else None
     date_to = published_to.strip() or None if published_to else None
-    params: dict[str, object] = {
+    return {
         "query": normalize_search_text(query),
         "domain": domain.value if domain is not None else None,
         "date_from": date_from,
         "date_to": date_to,
         "limit": limit,
     }
-    if rank_query is not None:
-        params["rank_query"] = normalize_search_text(rank_query)
-    return params
 
 
 def search_chunks(
@@ -321,18 +285,11 @@ def search_chunks(
 def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[SearchHit, ...]:
     """在**调用方给定的游标/事务**内检索（read_pg.search_with_coverage 复用以取得同快照）。
 
-    ``params`` 由 :func:`search_chunks` 归一化后传入（query/domain/date_from/date_to/limit，
-    ``rank_query`` 可选）；语义与 :func:`search_chunks` 完全一致，只是连接与事务由
-    调用方持有——这是「检索结果与覆盖元数据读同一数据库快照」（§7.3）的实现落点。
-    ``rank_query`` 缺省时在**同一游标/快照**内按开关注入（c′）：
-    ``RANK_LEXEME_PRUNE`` 开 ⇒ 实词排序串（:func:`_rank_query_on`），关 ⇒ 退化为
-    ``query`` 本身（行为与 base 逐字段一致）。返回前在同一游标内批量加深结构字段
-    （票 02 I-D1）。
+    ``params`` 由 :func:`search_chunks` 归一化后传入（query/domain/date_from/date_to/limit）；
+    语义与 :func:`search_chunks` 完全一致，只是连接与事务由调用方持有——这是
+    「检索结果与覆盖元数据读同一数据库快照」（§7.3）的实现落点。返回前在
+    同一游标内批量加深结构字段（票 02 I-D1）。
     """
-    if "rank_query" not in params:
-        params["rank_query"] = (
-            _rank_query_on(cur, str(params["query"])) if RANK_LEXEME_PRUNE else params["query"]
-        )
     cur.execute(_SEARCH_SQL, params)
     rows = cur.fetchall()
     hits = tuple(
