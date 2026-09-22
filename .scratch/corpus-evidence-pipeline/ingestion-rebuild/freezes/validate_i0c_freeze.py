@@ -2165,6 +2165,31 @@ if "i0c-r4v" in by_id:
     _r4v_rb = load_json(BASE / by_id["i0c-r4v"]["file"]).get("binding", {})
     merge_binding(i0c_current_binding, _r4v_rb)
 
+# r4w（M5 具名签认修订）：零运行字节改动——只落盘 U 对 r4v 口径/粒度变更
+# （_FUNCTION_WORDS 复用到正例排序）的具名签认（m5_declaration 翻转为 declared）
+# + 验证器重绑。签认修订不得借机重绑任何实现/测试/守卫字节。
+if "i0c-r4w" in by_id:
+    r4w = load_json(BASE / by_id["i0c-r4w"]["file"])
+    parent43r4w = BASE / by_id["i0c-r4v"]["file"]
+    check(r4w.get("parent_snapshot") == {"snapshot_id": "i0c-r4v",
+          "path": str(parent43r4w.relative_to(ROOT)), "sha256": digest(parent43r4w)},
+          "r4w parent mismatch")
+    bindingr4w = r4w.get("binding", {})
+    check(set(bindingr4w) == {"freeze_validator"},
+          "r4w binding groups mismatch (sign-off revision must bind validator only)")
+    check(set(bindingr4w.get("freeze_validator", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
+          "r4w freeze_validator boundary mismatch")
+    # 语义门：签认必须显式落盘——m5_declaration 以 declared 开头且携带 U 具名与签认日期，
+    # corrections 须含 M5 签认记录条目。
+    m5decl_r4w = str(r4w.get("m5_declaration") or "")
+    check(m5decl_r4w.startswith("declared") and "U" in m5decl_r4w
+          and "2026-09-22" in m5decl_r4w,
+          "r4w m5_declaration must record the named U sign-off (declared)")
+    check(any("m5" in k and "sign" in k for k in (r4w.get("corrections") or {})),
+          "r4w corrections must record the M5 sign-off entry")
+    merge_binding(i0c_current_binding, bindingr4w)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2236,4 +2261,5 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else "")
       + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else "")
       + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else "")
-      + ("; r4v c3 prune_fn_punct ranking-signal frozen (offline-eval winner, U named sign-off pending M5): search_pg.py dual-tsquery (candidate pool keeps full lexemes via q.tsq, score = ts_rank on content-only q.tsq_rank, tie-break/ts_headline unchanged, RANK_LEXEME_PRUNE=True default-on, same-cursor _rank_query_on injection + explicit rank_query param in build_search_params), negative_query.py is_punct_lexeme/rank_lexemes (drop function-words+punct, keep single-char, fail-closed all-pruned fallback) reusing the F1/B2 non-gold lexicon (granularity change requiring named sign-off), tests/test_corpus_search_pg.py first-in-chain with I-RANK-1 unit gates + live gates (pool unchanged / virtual-only score 0 but stays in pool / tie-break / switch-off field-equal), r4u 'no search_pg bytes' constraint lifted for the first time (r42 plan binding superseded per r4r precedent), corpus family 772/18 vs pre-change same-env control 766/13, e2e replay 11/11 gates green (21/24, matched 75(+8), zero regression, negatives 6x5, width 33<=49, company-003 6/6 gold pos1)" if "i0c-r4v" in by_id else ""))
+      + ("; r4v c3 prune_fn_punct ranking-signal frozen (offline-eval winner, U named sign-off pending M5): search_pg.py dual-tsquery (candidate pool keeps full lexemes via q.tsq, score = ts_rank on content-only q.tsq_rank, tie-break/ts_headline unchanged, RANK_LEXEME_PRUNE=True default-on, same-cursor _rank_query_on injection + explicit rank_query param in build_search_params), negative_query.py is_punct_lexeme/rank_lexemes (drop function-words+punct, keep single-char, fail-closed all-pruned fallback) reusing the F1/B2 non-gold lexicon (granularity change requiring named sign-off), tests/test_corpus_search_pg.py first-in-chain with I-RANK-1 unit gates + live gates (pool unchanged / virtual-only score 0 but stays in pool / tie-break / switch-off field-equal), r4u 'no search_pg bytes' constraint lifted for the first time (r42 plan binding superseded per r4r precedent), corpus family 772/18 vs pre-change same-env control 766/13, e2e replay 11/11 gates green (21/24, matched 75(+8), zero regression, negatives 6x5, width 33<=49, company-003 6/6 gold pos1)" if "i0c-r4v" in by_id else "")
+      + ("; r4w M5 named sign-off: _FUNCTION_WORDS granularity change (neg-only -> also positive ranking) approved by U (declared 2026-09-22), zero runtime byte change (sign-off revision binds validator only), r4v m5_declaration flipped to declared" if "i0c-r4w" in by_id else ""))

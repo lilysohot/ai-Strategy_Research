@@ -1,6 +1,6 @@
 # 10 company-003 光力科技文档级召回（doc rank 6 掉出 top-5）
 
-Status: completed（2026-09-22 c3 prune_fn_punct 落地解除 P1：company-003 金标 pos1、6/6 matched；冻结 i0c-r4v；M5 U 具名签认待 U）
+Status: completed（2026-09-22 c3 prune_fn_punct 落地解除 P1：company-003 金标 pos1、6/6 matched；冻结 i0c-r4v；M5 已 U 具名签认落盘 i0c-r4w declared）
 Type: task
 Depends: 无（独立；issues/07 收口时显式移出——"19/24 封口待 company-003 独立议题"）
 Layer: 文档级召回 / 词法排序（I-B1 标签注入副作用）
@@ -126,7 +126,13 @@ company-003（光力科技）的金标文档（国信 doc，别名 `dddc7cd0`）
   0f69d33c、test_corpus_search_pg.py 首绑、validate_i0c_freeze.py=45b38930）；r42 对
   calibration-plan-v2.json 的 search_pg 现字节断言按 r4r 先例 supersession 豁免（不改写已关闭
   审计产物）；**三门验证器 exit 0**。manifest sha=9474b85e。
-- **待办**：M5 独立复核 + **U 具名签认**（`_FUNCTION_WORDS` 复用到正例排序属口径/粒度变更，
-  冻结 notes 已写明；签认前不视为正式生效，一级回滚 = `RANK_LEXEME_PRUNE=False`）。
+- **待办**：~~M5 独立复核 + U 具名签认~~ → **已完成（2026-09-22，见下）**。
   词元来源口径非门诊断：臂取题面词元、产品默认取收到的查询串（plan §3.2），漏斗逐值等值、
   band 划分可不同（r4v-replay.json diagnostics）。
+- **M5 具名签认落盘（2026-09-22，冻结 `i0c-r4w` parent=i0c-r4v）**：U 对 M5 签认流程呈报
+  回复"好的，执行吧"= 具名批准。落盘为新签认修订（零运行字节改动，只翻转
+  `m5_declaration`：not_declared → **declared**，签认范围=i0c-r4v 落地内容）+ 验证器重绑
+  （45b38930 → fdc1f67d，r4w 块语义门：binding 仅 freeze_validator、m5_declaration 须
+  declared+U+日期、corrections 须含 m5_sign_off）；manifest sha=cc8fe3e6；**三门验证器
+  exit 0**。追加式纪律保持：i0c-r4v.json 已冻结字节未追改。排序信号自此为正式口径；
+  一级回滚 `RANK_LEXEME_PRUNE=False` 保留。

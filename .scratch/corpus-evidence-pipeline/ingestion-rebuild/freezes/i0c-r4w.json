@@ -1,0 +1,28 @@
+{
+  "snapshot_id": "i0c-r4w",
+  "revision": "r4w",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4v",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4v.json",
+    "sha256": "9474b85e57f8184245965d47f0711d750ce80789f22a9dfbdc4196c69ce7658d"
+  },
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "fdc1f67de6645bea2da10e9a7a23f375e38e58986b19738b84b7e9972401e4c8"
+    }
+  },
+  "corrections": {
+    "m5_sign_off": "U 2026-09-22 具名签认（对话指令『好的，执行吧』，对 M5 签认流程呈报的明确批准）：c′ prune_fn_punct 排序信号修订 i0c-r4v 的口径/粒度变更——_FUNCTION_WORDS 由『仅负例拒检（F1/B2）』复用到『正例排序降噪』——经 U 复核证据链（audits/20260922-c3w-landing/r4v-report.md：M2 语料族 772/18 对照 766/13、M3 三门 exit 0、M4 端到端 11/11 门 21/24 + 8 零回退负例不回升带宽 33≤49）后具名批准生效。签认范围=本修订（i0c-r4v）落地内容；一级回滚 RANK_LEXEME_PRUNE=False 保留（不改字节结构、行为逐字节回 base）。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4v 45b38930 → fdc1f67d）：新增 i0c-r4w 校验块（parent=i0c-r4v 字节核验、binding 边界=仅 freeze_validator——签认修订不得借机重绑任何实现/测试/守卫字节、语义门——m5_declaration 须以 declared 开头且携带 U 具名与签认日期 2026-09-22、corrections 须含 m5_sign_off 条目）；r4w merge 置于 r4v merge 之后最后执行。零运行字节改动。"
+  },
+  "notes": [
+    "r4w 为 M5 具名签认落盘修订（parent=i0c-r4v）：零运行字节改动——search_pg.py / negative_query.py / tests 均保持 r4v 绑定哈希不变，仅追加本快照落盘签认状态并重绑验证器。不触碰 i0c-r4v.json 已冻结字节（追加式索引纪律，manifest 历史条目不可追改）。",
+    "签认后的生效状态：r4v 绑定的排序信号字节（双 tsquery：候选池全词元 / score 实词）自本修订起视为正式口径；m5_declaration 由 not_declared 翻转为 declared（仅针对 i0c-r4v 修订的口径/粒度变更；历史修订 r4s/r4t/r4u 各自的 m5_declaration 语义不变）。",
+    "签认依据回顾（M2–M4 证据链，详见 r4v-report.md 与 r4v-replay.json）：I-1 候选池不收缩、I-2 只有 score 变两条不变式由 I-RANK-1 测试与真库门钉死；端到端 21/24、matched 75（+8）、零回退、负例 6 题各 5 不回升、带宽 33≤49、company-003 金标 pos1 且 6/6。",
+    "纪律：不 commit、不 publish、不重摄入、不写库；签认修订不重绑任何实现/测试/守卫字节；不改写已关闭轮次审计产物。一级回滚 = RANK_LEXEME_PRUNE=False（行为回 base 19/24/67/33）；二级回滚 = 按修订哈希 revert i0c-r4v 绑定字节。"
+  ],
+  "m5_declaration": "declared（U 2026-09-22 具名签认：i0c-r4v c′ prune_fn_punct 排序信号的口径/粒度变更经 U 复核证据链后具名批准生效；签认范围=i0c-r4v 落地内容，一级回滚 RANK_LEXEME_PRUNE=False 保留）",
+  "created_at": "2026-09-22T16:47:30+08:00"
+}
