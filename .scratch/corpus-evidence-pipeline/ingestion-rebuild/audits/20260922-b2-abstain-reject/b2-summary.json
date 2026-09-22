@@ -1,0 +1,72 @@
+{
+  "artifact": "b2-abstain-reject-replay",
+  "generated_at": "2026-09-22T10:21:01+08:00",
+  "kind": "B2 abstain 拒检通道真库复验（产品 search_with_coverage，只读）",
+  "corpus": "index-4-zhcfg-2 active (8 docs + legacy)",
+  "model_calls": 0,
+  "switch": "CORPUS_ABSTAIN_NO_ANSWER=on",
+  "negative": {
+    "cases": [
+      {
+        "query_id": "company-009",
+        "question": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      },
+      {
+        "query_id": "company-010",
+        "question": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      },
+      {
+        "query_id": "industry-009",
+        "question": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      },
+      {
+        "query_id": "industry-010",
+        "question": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      },
+      {
+        "query_id": "macro-009",
+        "question": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      },
+      {
+        "query_id": "macro-010",
+        "question": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+        "product_hits": 0,
+        "abstain": true,
+        "query_status": "abstain"
+      }
+    ]
+  },
+  "funnel": {
+    "S1_candidates": 66,
+    "S2_doc_topk": 60
+  },
+  "i42_baseline": {
+    "funnel": {
+      "S0_kept": 77,
+      "S1_candidates": 66,
+      "S2_doc_topk": 60,
+      "S3_chunk_top8": 51,
+      "S4_matched": 44
+    }
+  },
+  "self_check": {
+    "B2_a_negative_abstain": true,
+    "B2_b_S1_66": true,
+    "B2_b_S2_60": true
+  }
+}
