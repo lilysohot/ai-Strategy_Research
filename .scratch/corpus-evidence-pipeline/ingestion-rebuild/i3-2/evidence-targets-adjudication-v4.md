@@ -471,7 +471,7 @@
   "based_on": {
     "candidates_sha256": "<候选文件 sha256>",
     "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
-    "source_gold_sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
+    "source_gold_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
   },
   "question_reviews": [
     {

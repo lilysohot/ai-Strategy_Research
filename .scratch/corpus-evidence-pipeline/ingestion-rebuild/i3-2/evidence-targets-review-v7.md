@@ -1,7 +1,7 @@
 # I3-2 补料：证据目标候选核对单（待 U 裁决）
 
-- 生成时间：2026-09-23T00:27:47+08:00；规则版本：`evidence-mapping-6`
-- 输入：`query-gold-frozen.jsonl` sha256=6f6c5a25d55b…、`source-gold-frozen.jsonl` sha256=9387ab9651a3…
+- 生成时间：2026-09-18T19:58:13+08:00；规则版本：`evidence-mapping-6`
+- 输入：`query-gold-frozen.jsonl` sha256=6f6c5a25d55b…、`source-gold-frozen.jsonl` sha256=37662c77a76c…
 - 机器状态：machine_ready **2** ／ pending_human **21** ／ blocked **1** ／ 负例 **6**
 - 目标：必需 **44** ／ 补充（非必需）**20** ／ 待批准锚点 **18**（合计 82 条）
 - 要件裁决队列：**40** 项；另有整题验收 24 题、负例覆盖 6 题、来源状态澄清 1 项
@@ -307,7 +307,7 @@
 - 必需证据（计入 EvidencePass）：
     - `e1` 2026-08-13_174b6462 page:10 row:R32 col:价格分位 ← industry-009-claim-001#3（table_cell；约束 {'row': 'R32', 'col': '价格分位', 'cell': 'R32 × 价格分位', 'unit': '%', 'period': '2016-01-01至2026-07-27'}）
         - quote：'99.6%'
-    - `e2` 2026-08-13_174b6462 page:10 row:R32 col:产能（万吨/年）以及同比增长 ← industry-009-claim-001#4（table_cell；约束 {'row': 'R32', 'col': '产能（万吨/年）以及同比增长', 'cell': 'R32 × 产能（万吨/年）以及同比增长', 'unit': '万吨/年', 'period': '2026E'}）
+    - `e2` 2026-08-13_174b6462 page:10 row:R32 col:2026E产能（配额） ← industry-009-claim-001#4（table_cell；约束 {'row': 'R32', 'col': '2026E产能（配额）', 'cell': 'R32 × 2026E产能（配额）', 'unit': '万吨/年', 'period': '2026E'}）
         - quote：'28.5'
 - 待批准锚点（批准前不得计入必需）：
     - `s1` 2026-08-13_174b6462 page:10 ← industry-009-claim-001#10（condition；约束 {}）
@@ -340,7 +340,7 @@
 - 必需证据（计入 EvidencePass）：
     - `e1` 2026-08-13_174b6462 page:10 row:尿素 col:开工率 ← industry-009-claim-001#6（table_cell；约束 {'row': '尿素', 'col': '开工率', 'cell': '尿素 × 开工率', 'unit': '%', 'period': '2026年年初至7月26日或1—6月平均（见注2）'}）
         - quote：'89.9%'
-    - `e2` 2026-08-13_174b6462 page:10 row:尿素 col:产能（万吨/年）以及同比增长 ← industry-009-claim-001#7（table_cell；约束 {'row': '尿素', 'col': '产能（万吨/年）以及同比增长', 'cell': '尿素 × 产能（万吨/年）以及同比增长', 'unit': '万吨/年', 'period': '2026E'}）
+    - `e2` 2026-08-13_174b6462 page:10 row:尿素 col:2026E产能 ← industry-009-claim-001#7（table_cell；约束 {'row': '尿素', 'col': '2026E产能', 'cell': '尿素 × 2026E产能', 'unit': '万吨/年', 'period': '2026E'}）
         - quote：'8068.0'
 - 补充证据（非必需；不声明替代关系）：
     - `e3` 2026-08-13_174b6462 page:10 ← industry-ai-supplement-2026-08-13_174b6462-p10#9（body；约束 {}）

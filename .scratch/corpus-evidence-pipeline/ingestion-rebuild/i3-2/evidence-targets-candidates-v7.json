@@ -1,7 +1,7 @@
 {
   "artifact": "i3-2-evidence-targets-candidates",
   "rule_rev": "evidence-mapping-6",
-  "generated_at": "2026-09-23T00:27:47+08:00",
+  "generated_at": "2026-09-18T19:58:13+08:00",
   "contract": {
     "evidence_pass_denominator": "逐题：满足全部必需证据的题数 / 证据题数（架构 §12.3）；item 条数或槽位聚合只决定每题内部是否全部满足，不能替代分母",
     "item_coverage_is_diagnostic_only": true,
@@ -57,7 +57,7 @@
     },
     "source_gold": {
       "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
-      "sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
+      "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
     }
   },
   "summary": {
@@ -6854,7 +6854,7 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "quote": "28.5",
           "text": "R32的2026E产能（配额）为28.5万吨/年"
@@ -6893,7 +6893,7 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "quote": "8068.0",
           "text": "尿素的2026E产能为8068.0万吨/年"
@@ -7345,13 +7345,13 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "source_id": "2026-08-13_174b6462",
           "constraints": {
             "row": "R32",
-            "col": "产能（万吨/年）以及同比增长",
-            "cell": "R32 × 产能（万吨/年）以及同比增长",
+            "col": "2026E产能（配额）",
+            "cell": "R32 × 2026E产能（配额）",
             "unit": "万吨/年",
             "period": "2026E"
           },
@@ -7698,7 +7698,7 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "quote": "28.5",
           "text": "R32的2026E产能（配额）为28.5万吨/年"
@@ -7737,7 +7737,7 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "quote": "8068.0",
           "text": "尿素的2026E产能为8068.0万吨/年"
@@ -8133,13 +8133,13 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "source_id": "2026-08-13_174b6462",
           "constraints": {
             "row": "尿素",
-            "col": "产能（万吨/年）以及同比增长",
-            "cell": "尿素 × 产能（万吨/年）以及同比增长",
+            "col": "2026E产能",
+            "cell": "尿素 × 2026E产能",
             "unit": "万吨/年",
             "period": "2026E"
           },
@@ -8386,7 +8386,7 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "quote": "28.5",
           "text": "R32的2026E产能（配额）为28.5万吨/年"
@@ -8425,7 +8425,7 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "quote": "8068.0",
           "text": "尿素的2026E产能为8068.0万吨/年"
@@ -9145,7 +9145,7 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "quote": "28.5",
           "text": "R32的2026E产能（配额）为28.5万吨/年"
@@ -9184,7 +9184,7 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "quote": "8068.0",
           "text": "尿素的2026E产能为8068.0万吨/年"
@@ -11440,7 +11440,7 @@
           "locator": [
             "page:10",
             "row:R32",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能（配额）"
           ],
           "quote": "28.5",
           "text": "R32的2026E产能（配额）为28.5万吨/年"
@@ -11479,7 +11479,7 @@
           "locator": [
             "page:10",
             "row:尿素",
-            "col:产能（万吨/年）以及同比增长"
+            "col:2026E产能"
           ],
           "quote": "8068.0",
           "text": "尿素的2026E产能为8068.0万吨/年"

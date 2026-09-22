@@ -1,0 +1,313 @@
+{
+  "artifact": "b5-e2-col-probe",
+  "generated_at": "2026-09-23T00:23:21+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "产品路径 svc.search_bands；只读、0 model calls、不写库；不改任何冻结件",
+  "per_query": {
+    "industry-002": {
+      "target_id": "e2",
+      "quote": "28.5",
+      "locator_current": [
+        "page:10",
+        "row:R32",
+        "col:2026E产能（配额）"
+      ],
+      "col_current": "col:2026E产能（配额）",
+      "n_evidence": 642,
+      "evidence_locators_carrying_quote": [
+        [
+          "page:10"
+        ],
+        [
+          "page:10",
+          "row:R32",
+          "col:产能（万吨/年）以及同比增长"
+        ],
+        [
+          "page:5",
+          "page:6",
+          "page:7",
+          "page:8",
+          "page:9",
+          "page:10",
+          "page:11",
+          "page:12",
+          "page:13"
+        ],
+        [
+          "page:3",
+          "page:4",
+          "page:5",
+          "page:6",
+          "page:7"
+        ],
+        [
+          "page:1",
+          "page:2",
+          "page:3",
+          "page:4",
+          "page:5"
+        ]
+      ],
+      "evidence_locators_with_row_token": [
+        [
+          "page:10",
+          "row:R32",
+          "col:产能（万吨/年）以及同比增长"
+        ],
+        [
+          "page:10",
+          "row:R32",
+          "col:价格分位"
+        ],
+        [
+          "page:10",
+          "row:R32",
+          "col:价差分位"
+        ],
+        [
+          "page:10",
+          "row:R32",
+          "col:开工率"
+        ]
+      ],
+      "row_token": "row:R32",
+      "col_tokens_in_evidence": [
+        "col:2023 年 化工板块涨幅TOP5",
+        "col:2024 2025 2026E",
+        "col:2025 年 化工板块涨幅TOP5",
+        "col:2026E",
+        "col:2027E",
+        "col:2028E",
+        "col:caoyabo@hcyjs.com",
+        "col:guwu@hcyjs.com",
+        "col:jiangxi@hcyjs.com",
+        "col:jinkeyi@hcyjs.com",
+        "col:liuyi@hcyjs.com",
+        "col:luolandanbo@hcyjs.com",
+        "col:panyaqi@hcyjs.com",
+        "col:wangziyang@hcyjs.com",
+        "col:wujunshu@hcyjs.com",
+        "col:zhangting3@hcyjs.com",
+        "col:zhangyujie@hcyjs.com",
+        "col:上海分部",
+        "col:专用于光模块“V”型槽的高稳定、高精度、低振动值切割",
+        "col:产品类型",
+        "col:产能/市值",
+        "col:产能（万吨/年）以及同比增长",
+        "col:价差分位",
+        "col:价格分位",
+        "col:企业自由现金流",
+        "col:企业邮箱",
+        "col:公募机构销售总监",
+        "col:其它",
+        "col:其它融资现金流",
+        "col:利润总额",
+        "col:利润表（百万元）",
+        "col:副总监",
+        "col:副总经理、北京机构销售总监",
+        "col:办公电话",
+        "col:北京机构销售副总监",
+        "col:区间最高",
+        "col:可用于切削硅、碳化硅、石英等一系列材料的多种型号的切削设备",
+        "col:可用于切割石英、硅、陶瓷等光通讯常用基材的V 槽划切机",
+        "col:可用于半导体晶圆检测、光学检测等领域",
+        "col:地址：上海市浦东新区花园石桥路 33 号",
+        "col:地址：深圳市福田区香梅路 1061 号 中投国",
+        "col:基础化工",
+        "col:姓名",
+        "col:少数股东损益",
+        "col:广深分部",
+        "col:应用场景",
+        "col:开工率",
+        "col:归属于母公司净利润",
+        "col:当前市值",
+        "col:所得税费用",
+        "col:投资收益",
+        "col:投资活动现金流",
+        "col:折旧摊销",
+        "col:支付股利、利息",
+        "col:曹雅博",
+        "col:机构服务部总经理助理",
+        "col:权益产能",
+        "col:权益性融资",
+        "col:现金净变动",
+        "col:现金流量表（百万元）",
+        "col:管理费用",
+        "col:经营活动现金流",
+        "col:职务",
+        "col:股价表现介于市场代表性指数±10%之间",
+        "col:股价表现弱于市场代表性指数10%以上",
+        "col:花旗大厦 12 层",
+        "col:营业外净收支",
+        "col:营业成本",
+        "col:营业收入",
+        "col:营业税金及附加",
+        "col:营运资本变动",
+        "col:蛋氨酸",
+        "col:行业指数表现介于市场代表性指数±10%之间",
+        "col:表观消费量（万吨）以及同比增长",
+        "col:说明",
+        "col:负债净变化",
+        "col:财务费用",
+        "col:货币资金的期初余额",
+        "col:货币资金的期末余额",
+        "col:资产减值准备",
+        "col:资本开支",
+        "col:资深销售经理",
+        "col:邮编：200120",
+        "col:邮编：518034",
+        "col:销售助理",
+        "col:销售经理",
+        "col:销售费用",
+        "col:际商务中心 A 座 19 楼",
+        "col:高级销售经理",
+        "col:龙头最高"
+      ],
+      "derivable_col_candidates": [
+        "col:产能（万吨/年）以及同比增长"
+      ],
+      "verdict": "可派生（改 col 后 locator 条件可满足）"
+    },
+    "industry-003": {
+      "target_id": "e2",
+      "quote": "8068.0",
+      "locator_current": [
+        "page:10",
+        "row:尿素",
+        "col:2026E产能"
+      ],
+      "col_current": "col:2026E产能",
+      "n_evidence": 562,
+      "evidence_locators_carrying_quote": [
+        [
+          "page:10"
+        ],
+        [
+          "page:10",
+          "row:尿素",
+          "col:产能（万吨/年）以及同比增长"
+        ]
+      ],
+      "evidence_locators_with_row_token": [
+        [
+          "page:10",
+          "row:尿素",
+          "col:表观消费量（万吨）以及同比增长"
+        ],
+        [
+          "page:10",
+          "row:尿素",
+          "col:产能（万吨/年）以及同比增长"
+        ],
+        [
+          "page:10",
+          "row:尿素",
+          "col:价格分位"
+        ],
+        [
+          "page:10",
+          "row:尿素",
+          "col:价差分位"
+        ],
+        [
+          "page:10",
+          "row:尿素",
+          "col:开工率"
+        ]
+      ],
+      "row_token": "row:尿素",
+      "col_tokens_in_evidence": [
+        "col:2017 年 化工板块涨幅TOP5",
+        "col:2019 年 化工板块涨幅TOP5",
+        "col:2021 年 化工板块涨幅TOP5",
+        "col:2023 年 化工板块涨幅TOP5",
+        "col:2024 2025 2026E",
+        "col:2025 年 化工板块涨幅TOP5",
+        "col:2026E",
+        "col:2027E",
+        "col:2028E",
+        "col:专业和商业服务",
+        "col:专用于光模块“V”型槽的高稳定、高精度、低振动值切割",
+        "col:中性",
+        "col:临时服务",
+        "col:产品类型",
+        "col:产能/市值",
+        "col:产能（万吨/年）以及同比增长",
+        "col:价差分位",
+        "col:价格分位",
+        "col:企业自由现金流",
+        "col:休闲和酒店业",
+        "col:信息业",
+        "col:公用事业",
+        "col:其它",
+        "col:其它融资现金流",
+        "col:利润总额",
+        "col:利润表（百万元）",
+        "col:制造业",
+        "col:区间最高",
+        "col:医疗、社会救助",
+        "col:可用于切削硅、碳化硅、石英等一系列材料的多种型号的切削设备",
+        "col:可用于切割石英、硅、陶瓷等光通讯常用基材的V 槽划切机",
+        "col:可用于半导体晶圆检测、光学检测等领域",
+        "col:商品生产",
+        "col:基础化工",
+        "col:少数股东损益",
+        "col:应用场景",
+        "col:建筑业",
+        "col:开工率",
+        "col:归属于母公司净利润",
+        "col:当前市值",
+        "col:所得税费用",
+        "col:批发业",
+        "col:投资收益",
+        "col:投资活动现金流",
+        "col:折旧摊销",
+        "col:支付股利、利息",
+        "col:教育和保健",
+        "col:新增非农总计",
+        "col:服务生产",
+        "col:未来6-12 个月的投资收益率与市场基准指数的变动幅度相差-5%至5%；",
+        "col:未来6-12 个月的投资收益率落后市场基准指数5%至15%；",
+        "col:未来6-12 个月的投资收益率领先市场基准指数5%至15%；",
+        "col:权益产能",
+        "col:权益性融资",
+        "col:汽车及零部件",
+        "col:现金净变动",
+        "col:现金流量表（百万元）",
+        "col:私人部门",
+        "col:管理费用",
+        "col:经营活动现金流",
+        "col:耐用品",
+        "col:股价表现介于市场代表性指数±10%之间",
+        "col:股价表现弱于市场代表性指数10%以上",
+        "col:营业外净收支",
+        "col:营业成本",
+        "col:营业收入",
+        "col:营业税金及附加",
+        "col:营运资本变动",
+        "col:蛋氨酸",
+        "col:行业指数表现介于市场代表性指数±10%之间",
+        "col:表观消费量（万吨）以及同比增长",
+        "col:说明",
+        "col:负债净变化",
+        "col:财务费用",
+        "col:货币资金的期初余额",
+        "col:货币资金的期末余额",
+        "col:资产减值准备",
+        "col:资本开支",
+        "col:运输和仓储业",
+        "col:采矿业",
+        "col:金融活动",
+        "col:销售费用",
+        "col:零售业",
+        "col:非耐用品",
+        "col:龙头最高"
+      ],
+      "derivable_col_candidates": [
+        "col:产能（万吨/年）以及同比增长"
+      ],
+      "verdict": "可派生（改 col 后 locator 条件可满足）"
+    }
+  }
+}

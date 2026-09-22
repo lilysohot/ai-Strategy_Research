@@ -4,9 +4,9 @@
   "reviewer": "xyl",
   "reviewed_at": "2026-09-18T17:40:00+08:00",
   "based_on": {
-    "candidates_sha256": "de7e331bd5ea767715789cb7ebfd24f15aaa25a7559f5c28857b8dfd01959c09",
+    "candidates_sha256": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
     "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
-    "source_gold_sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
+    "source_gold_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
   },
   "counts": {
     "facet_decisions_expected": 40,
@@ -45,13 +45,13 @@
   ],
   "note": "门只看本审批件：候选文件里的 adjudication.status 改不动结论；驳回不删除原题要求，补标注须先形成新的 source-gold 版本",
   "artifact": "i3-2-evidence-targets-approval-report",
-  "generated_at": "2026-09-23T00:28:49+08:00",
+  "generated_at": "2026-09-18T19:58:13+08:00",
   "inputs": {
-    "candidates_sha256": "de7e331bd5ea767715789cb7ebfd24f15aaa25a7559f5c28857b8dfd01959c09",
+    "candidates_sha256": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
     "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
-    "source_gold_sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf",
+    "source_gold_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc",
     "decisions_present": true,
-    "decisions_sha256": "f0a86928088d934c652606ec5a7ca0823872c4a44423e21cf69d35d28cb71d99"
+    "decisions_sha256": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74"
   },
   "applier_sha256": "515b4adbd5d93067406a12aac877e26019d5340f2b87008cafc62f73e1e3d8a5"
 }

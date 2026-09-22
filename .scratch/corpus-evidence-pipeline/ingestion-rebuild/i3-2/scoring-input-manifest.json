@@ -1,9 +1,9 @@
 {
   "artifact": "i3-2-scoring-input-manifest",
   "version": "scoring-input-v1",
-  "generated_at": "2026-09-21T20:35:00+08:00",
-  "status": "frozen",
-  "frozen_in": "i0c-r42",
+  "generated_at": "2026-09-23T00:30:00+08:00",
+  "status": "frozen_r28",
+  "frozen_in": "i0c-r28",
   "purpose": "把批准投影确定性材料化成**唯一**的正式评分输入；评分入口只允许按本清单指定的路径读取，禁止依赖旧默认路径或选择『最新文件』",
   "lineage": {
     "query_gold": {
@@ -12,15 +12,15 @@
     },
     "source_gold": {
       "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl",
-      "sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
+      "sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
     },
     "projection": {
       "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json",
-      "sha256": "5b89d981e871b141db6d5a3f5c8a2720558dda417747f3204e033849b9d58d25"
+      "sha256": "b7bd752b16e08dcb33a4346e2d945210ad3da560cae390b9997bef56e3a8b9c9"
     },
     "decisions": {
       "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json",
-      "sha256": "09ed8429e01e609755a43d50a9f30fbccb9ee54b190775c5b36ca2a55b4a4c74"
+      "sha256": "f0a86928088d934c652606ec5a7ca0823872c4a44423e21cf69d35d28cb71d99"
     },
     "materializer": {
       "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3s2_scoring_input.py",
@@ -33,7 +33,7 @@
   },
   "scoring_input": {
     "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl",
-    "sha256": "1b018ceb081fe56e6a4b769873a1de751ede1a85fdbb8641976336f0ee25cf6d"
+    "sha256": "d311f9a855f3fc24cbe992dc621c24fe55f0e3e5eda847f3bf8192a91d41d4f5"
   },
   "counts": {
     "questions": 30,

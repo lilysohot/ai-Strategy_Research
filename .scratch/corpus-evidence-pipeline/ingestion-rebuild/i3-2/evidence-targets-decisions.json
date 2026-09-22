@@ -5,11 +5,11 @@
   "reviewed_at": "2026-09-18T17:40:00+08:00",
   "ai_assisted": true,
   "based_on": {
-    "candidates_sha256": "7d4a1c76d96a9205ae80224b184d5efdaa273af35c0008ba188ecf6a543c74f8",
+    "candidates_sha256": "de7e331bd5ea767715789cb7ebfd24f15aaa25a7559f5c28857b8dfd01959c09",
     "query_gold_sha256": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
-    "source_gold_sha256": "37662c77a76caa3e86a7f8480a1a7b4978ccc367e0b6e367fd5c5c7dc2ec2adc"
+    "source_gold_sha256": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
   },
-  "adoption_note": "具名审核人 xyl 已全文审核并确认采纳 AI 辅助补证与裁决建议（2026-09-18 会话确认）；署名人是实际审核人 xyl。AI 只做辅助核验（AI 复核者不是人类签名），因此所有记录都带 ``ai_assisted: true``，供后续审计区分「人工判断」与「AI 辅助」。",
+  "adoption_note": "具名审核人 xyl 已全文审核并确认采纳 AI 辅助补证与裁决建议（2026-09-18 会话确认）；署名人是实际审核人 xyl。AI 只做辅助核验（AI 复核者不是人类签名），因此所有记录都带 ``ai_assisted: true``，供后续审计区分「人工判断」与「AI 辅助」。2026-09-23 U 具名授权重绑：source-gold 的 industry-009-claim-001 两条 col/cell 由人工合成列名（2026E产能（配额）/2026E产能）改为原文可派生口径「产能（万吨/年）以及同比增长」，quote/row/unit/period/text 一律不动；依据＝原 PDF 第 10 页 ord529（尿素 7696.0/7956.0/8068.0）与 ord563（R32 24.0/28.5/28.5）列组与取值机读核对，加反事实探针 audits/20260923-b5-e2-col-probe/e2-col-probe.json（唯一可派生候选）。本件各项决定内容不变，仅 based_on 随上游哈希更新。",
   "facet_decisions": [
     {
       "item_id": "I32-company-001-01",
