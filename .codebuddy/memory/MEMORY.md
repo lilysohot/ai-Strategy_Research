@@ -1,146 +1,71 @@
 # MEMORY（跨会话长期事实）
 
-进度真源 = 仓库文档：`docs/plan/claims-market-closed-loop-plan.md`（总台账）+ `docs/plan/corpus-ingestion-rebuild-tasks.md`。
-本文件只放跨会话稳定事实与约定。
+进度真源 = `docs/plan/claims-market-closed-loop-plan.md` + `docs/plan/corpus-ingestion-rebuild-tasks.md`（M6 判据在 `tasks.md:260`）+ `.scratch/corpus-retrieval-decoupling/spec.md`。本文件只放稳定事实与约定；细节见 `.codebuddy/memory/2026-09-*.md` 与各 audit 目录。最近整理：2026-09-22。
 
-## 用户偏好
-- 用大白话 + 结合本项目实际给真实进度与下一步，不要泛泛方法论。
-- 交办的复核报告/整改清单要求**真改并留证据**；只有明说"只要文档"时才不动代码。
-- 结论必须可验证：给结论时一并给出实跑命令与结果，不要"应该没问题"。
+## 0. 判定纪律（U 偏好）
+- 大白话 + 真实进度与下一步；**结论必须附实跑命令与结果**。
+- 交办复核/整改要**真改并留证据**；只有明说「只要文档」才不动代码。未裁决不动产品字节。
+- **交付物口径**：纯文本报告/清单/方案**不算交付物**；只有入冻结链的改动（代码/金标/层内门禁/常驻测试/冻结修订）才算。
+- `complete`/里程碑放行只能由**独立复核 + U 具名签认**给出，实施方不得自宣。
+- **校验类脚本必须支持 `--no-write`** 且**幂等可重跑**；阈值/粒度类变更须**具名签认**。
+- 报分须区分「回测/诊断口径」与「生产默认口径」；引用负例数字必须带路径口径。
+- 同一信息被反复复述 ⇒ 缺的是共同口径而非产出量：停止复述，请 U 裁决。
 
-## 硬约定（流程）
-- 审计证据统一放 `.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/<日期>-<名称>/`（回仓库根 **5 层 `..`**）：
-  `review.md`（write-once）+ `remediation-checklist.md`；RM 编号分命名空间（`RM-1～13`／`RM-I28-*`／`RM-I32-*`／
-  `RM-I32R2-*`／`RM-FC-*`），文档内须声明不得混引。
-- 判定纪律：`complete`／M5 放行只能由独立复核 + U **具名**签认给出，实施方不得自宣；复核须全新会话，
-  代执行须在报告首段登记独立性偏差并由 U 接受；签认要具名 + 记录入链。
-- **校验类脚本必须支持 `--no-write`**，否则一跑就改写被绑定字节（含时间戳产物）导致链变红。
-  流程固定：「复核(write) → 刷新修订哈希 → 三门验证」；签认后不得重写签认件。
-- 静态门：`uv run ruff check <CI 范围>`（全仓有既有告警，不算回归）、`uv run pyright`（仅 `server/store.py` 既有缺依赖）、
-  `python tools/import_smoke.py --stage 1|2`、`python tools/check_symbols.py`。
-- 测试读 CLI stdout 一律**从首个 `{` 解析**：第三方库横幅（pymupdf）会污染 → "整文件绿、单跑红"的顺序依赖假红。
-- 语料族回归基线：`uv run pytest tests/test_corpus_*.py -q` → **651 passed / 12 skipped**。
+## 1. 环境硬约定
+- 审计证据放 `.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/<日期>-<名称>/`（回仓库根 **5 层 `..`**）：`review.md`（write-once）+ `remediation-checklist.md`；RM 编号分命名空间。流程 = 复核(write) → 刷新修订哈希 → 三门验证；签认后不得重写签认件。
+- **write-once 产物别放墙钟时间戳**（重跑字节必不同 ⇒ 假冲突）：比较用**语义逐字段**（剔 `generated_at`），语义全同则保留原产物字节，不同才报冲突 + 列差异字段。模板 = `c3_attribution.py`（已修）；**`f3_replay.py`/`f3b_replay.py` 仍是整文件字节比较、无 `--no-write` ⇒ 重跑必假红，待修**（2026-09-22 实跑撞到）。
+- 读 CLI stdout 一律**从首个 `{` 解析**（pymupdf 横幅 ⇒ 假红）。
+- `.scratch` 被 gitignore ⇒ `search_content` 搜不到，须 shell grep / read_file。
+- `tests/test_corpus_cli_isolation.py::test_subprocess_model_client_import_refused` 普通 pytest 下必 fail，须 `env -i … CORPUS_GUARD_PHASE=i2-verify` 守卫 env。
+- 查库走 `uv run python` + `psycopg`（**本机无 psql**）；DSN = `postgresql://postgres:postgres@127.0.0.1:543/i2_sandbox_corpus`（表在 `corpus` schema）或 `audits/20260920-i31-region-review/release.py::connect()`。**psycopg 里 SQL 别写裸 `%`**（`LIKE '%x%'` ⇒ `got '%u'`），用参数传。
+- 守卫 env：`env -u PYTHONPATH CORPUS_GUARD_PHASE=… CORPUS_GUARD_CONFIG=… CORPUS_I2_DSN=… uv run pytest <files> -q -p plugins.corpus.preparation.guard_pytest --noconftest -c /dev/null`（该模式 `/tmp` 不可写 ⇒ 临时来源放 `.scratch/.../i2/tmp/`）。guards：`i3.json`(0 条)、`i3-e2e.json`(allowlist `127.0.0.1:543`，8 条)、`i1.json`(6 条)；`config_version`=1。
 
-## 冻结链（`.scratch/.../freezes/`）
-- 链 = i0c-r1…**r35** + i1-r1…r4；门 = `validate_i0c_freeze.py`（exit 0）与 `validate_i3_2_completion.py`（`i3_2_complete=true`）。
-  改任何被绑字节 → 新修订重绑 + 两门复跑。
-- 工具 `freezes/freeze_utils.archive_first()`／`assert_archives_faithful()`：**改动前先归档**；正不变量 =
-  `i3_2_archive`/`i3_1_archive` 每条必须等于上一修订对该原路径的绑定（空组合法，假归档必失败）。
-  **权威凭据只有各修订绑定哈希**，归档目录仅供参考。
-- 合并「最新修订优先」必须按**修订号数值**排序（字典序会把 `i0c-r9` 排到 `i0c-r32` 之后，误判真实归档不忠实）。
-- **在效绑定取值口径**：`merged_binding_from_all_but` 把 `i1-*` 排在 `i0c-*` **之后**合并 → 只在 i0c 链上绑定的路径
-  （如 `tests/test_corpus_preparation_admission.py`）会取到 i1-r4 的**陈旧值**；真实在效值用
-  `merged_binding_upto_revision(N)`（i0c ≤N 合并优先，缺失才回落全量合并）。诊断：`exec(compile(prefix, V, "exec"))`
-  跑验证器前缀后查 `i0c_current_binding` 里该路径落在哪个组。
-- 历史块的归档检查必须**时间稳定**（只合并 ≤ 该修订号）；r33 块已改 `merged_binding_upto_revision(32)`。
-- i1-r4 supersession 跳过列表硬编码 `i0c-r2..r25`（与其注释不符），重绑 i1-r4 路径时须补进新修订号（已补到 r34）。
-- **可重入补丁必须锚顶层**：`text.index('if "i0c-rXX" in by_id:')` 会命中历史块内缩进同名串，把该块尾部
-  （含 `merge_binding(...)`）整段删除 → 一律用 `'\nif "i0c-rXX" ...'`。
-- 假绿陷阱：`"exit=0" in 日志` 会被失败文案自身命中 → 判定必须 `text.rstrip().endswith("exit=0")`；
-  链门绿性由验证器 **in-process** 承担，日志只作入链留证。
-- 新块**先 validate 再冻结**；更稳：先干跑生成器（`--no-write`：还原/归档忠实性/补丁锚点+幂等+语法）再动真实链。
-  生成器须**可重入且产物确定**（r35 已做到：复用已有 `created_at`，复跑 sha 不变）。
-- 冻结链门日志的绑定要避免循环：生成器分两轮——先写 r35（暂不绑日志）→ 跑门落 `freeze-validation.txt`
-  → 重绑日志再跑一次，**两次输出必须逐字节一致**（证明绑定的日志就是当前门输出）。
-- `tasks.md` 里程碑表 M6 行前缀是 `"| M6  |"`（M6 后**两个空格**）：导航表新行 `| M6 判据补齐格式门 | ...` 也以
-  `| M6 ` 开头，用 `"| M6 "` 取行会命中导航行 → 一律用 `"| M6  |"`。
-- 验证器块的幂等比较：插入块若以 `\n` 开头，则回读区间 `text[start:end]` 须与 `R35_BLOCK[1:]` 比（差首换行）。
-- 误改被绑字节要还原：查 rXX 绑定哈希 → 按编辑逆向／`git show HEAD:<path>` 逐字节还原 → 核对 sha 相等。
+## 2. 冻结链（`.scratch/.../freezes/`）
+**白话**：freezes = 项目拍照存档（代码/语料/尺子/分数，编号成父快照链；`validate_*_freeze.py` 校验；**红 = 照片与实物不符**）。git 答「代码长什么样」，freezes 答「结论是哪一版跑出来的」。
+- 链：i0c-r1…r43、**r4n→r4p→r4q→r4r→r4s→r4t→r4u（最新）**；i1-r1…**r6**。门 = `validate_i0c_freeze.py` / `validate_i1_freeze.py` / `validate_i3_2_completion.py`（2026-09-22 均 exit 0）。
+- 修订语义：r41 scoped / r42 S1 清账 / r43 R3 闭环(生产接 perdoc) / r4n F2 band 接生产+cell / r4p F3 clean 句粒度 / r4q F4 跨边界取证 / r4r r39 漂移豁免 / r4s M5 两处 MISS 重绑 / r4t B2 abstain 拒检(默认 off) / **r4u F3-B 续接片段聚合**（路径 B，免重摄入）。
+- **跨链联动坑**：路径只在 i1 链绑定时，i0c 侧重绑后须同步补 i1 修订。**改动前先归档** `archive_first()`／`assert_archives_faithful()`；权威凭据只有各修订绑定哈希。
+- 合并按**修订号数值**；**在效绑定**用 `merged_binding_upto_revision(N)`（`from_all_but` 会取 i1 陈旧值）；历史块归档检查须时间稳定（只合并 ≤ 该修订号）。
+- 其它坑：**可重入补丁锚顶层** `text.index('\nif "i0c-rXX" in by_id:')`；假绿判定须 `text.rstrip().endswith("exit=0")`（`"exit=0" in 日志` 不行；`cmd | tail; echo $?` 是 tail 的码）；i1 校验器 in-process 须 `exec(compile(...), {"__name__":"__main__","__file__": path})`；门日志绑定分两轮（两次输出逐字节一致）；`tasks.md` M6 行前缀 `"| M6  |"`（两空格）；误改被绑字节按 rXX 哈希 / `git show HEAD:<path>` 还原核 sha；"是否待批"只读 `freezes/` 最新修订。
 
-## 语料链（I2 现状）
-- 写链 `plugins/corpus/cli.py`(plan/build/check/publish/status/rebuild-plan) → `preparation/engine.py` → `repository_pg.py`；
-  读链唯一入口 `preparation/read_pg.py`（`cv2:<build_id>`／`chunk:<chunk_id>`），`service.CorpusService` 按 `CORPUS_READ_CHAIN` 路由。
-- 缺口语义 `preparation/gaps.py` + 架构 §7.3：`blocking`／`acknowledged`，范围外 `out_of_scope`；
-  `quality_report.gap_regions` 恒两键（`issue:<code>:<location>`）——**不要为加字段改台账形状**（牵动 5+ frozen 测试族）。
-- CLI 退出码 0/2/3/4/5（同因同码）；目标 fail-closed（`--dsn`/`CORPUS_I2_DSN` 必须显式；连上后校验
-  `current_database == i2_sandbox_corpus`，实例含 apodex 库即拒写）。
-- 真库纪律：只写 `i2_sandbox_corpus` 的 corpus schema；生产库 I4 前零写入；PG 门不得 skip。
-- 守卫 env 形态：`env -u PYTHONPATH CORPUS_GUARD_PHASE=… CORPUS_GUARD_CONFIG=… CORPUS_I2_DSN=… uv run pytest <files> -q -p plugins.corpus.preparation.guard_pytest --noconftest -c /dev/null`
-  （该模式下 `/tmp` 不可写 → 临时来源放仓库内 `.scratch/.../i2/tmp/`；TRUNCATE 写成 `TRUNCATE t1, t2, …`）。
-- 守卫分开：`guards/i3.json`（零模型/无网络/`read_roots: []`，自检报告 write-once）与 `guards/i3-e2e.json`
-  （allowlist 仅 `127.0.0.1:543`，`allowed_source_paths` 由 audit hook 按路径强制）；配置一变须重跑自检；
-  `config_version` 是**整数** `1`。
-- 生成器也要入链（否则产物不可复现）；`runpy.run_path` 返回 globals **副本** → 换输出路径必须用
-  `importlib.util.spec_from_file_location(...)+exec_module` + `assert_patched()`。
+## 3. 语料链（I2）
+- 写链 `plugins/corpus/cli.py`（`plan`/`build`/`check`/`publish`/`status`/`gap-review`/`rebuild-plan`）→ `preparation/engine.py` → `repository_pg.py`；读链唯一入口 `preparation/read_pg.py`（`cv2:<build_id>`／`chunk:<chunk_id>`），`service.CorpusService` 按 `CORPUS_READ_CHAIN` 路由。
+- **生产默认检索形态 = band**（r4n）：`service.search`/`search_with_coverage` → `read_pg.search_with_coverage_bands` → `_apply_selection`（`select_structural` 定来源序）→ `_selected_chunk_hits`（`select_band` 定文档内带）；cell 由 `_emit_cells`；`search_bands` 接 `cross_boundary.aggregate_band_chunks`（r4q 表头/脚注聚合 + r4u `stitch_continuation` 续接片段）。`selection.py`：`select(top_k=5)`／`select_structural(perdoc)`／`select_band`（G=1/K=1/带数=8/`POOL_CAP=24`，可证带宽上界 49，实测 max 33）。
+- 库形态 `corpus.corpus_{builds,sources,publications,units,chunks,admissions,review_decisions,jobs,source_checkpoints}`；块只收 kept 单元（`unit_refs` 形如 `unit:0717`）。**`corpus_builds` 无 `active` 列**（active 在 `corpus_publications.active_build_id`）。
+- 缺口语义 `preparation/gaps.py` + §7.3：`blocking`/`acknowledged`、范围外 `out_of_scope`；`quality_report.gap_regions` 恒两键。
+- CLI 退出码 0/2/3/4/5（同因同码）；fail-closed（`--dsn`/`CORPUS_I2_DSN` 显式必需，校验 `current_database == i2_sandbox_corpus`）。真库纪律：只写 `i2_sandbox_corpus` 的 corpus schema；生产库 I4 前零写入；PG 门不得 skip；**重摄入属生产数据写，须 U 授权**。
+- 约束：`review_decision_ids` 须列整条取代链；`corpus plan` 缺口在 `entry.precheck.{gap_summary,gaps}`（整批失败 exit 2）；`domain_hint` 须合法 `ResearchDomain`；`image_region_unreadable`/`image_only_page`/`table_lines_without_extraction` 无人工入口；`put_admission` 唯一性 = `decision_id` 全局唯一（RM-7，同内容幂等重放才允许）。
 
-## I3
-- **评分器**唯一落点 `plugins/corpus/scoring.py`（纯标准库、无模型/网络/PG/时钟/IO）：`score(gold, observations, policy)`／
-  `gold_from_records(records)`／`format_report(report)`；门槛用 `Fraction`（10 题 95% = 10/10）。
-  输入契约（改即改冻结）：`documents` 按相关性排序且来源唯一、只表示断言命中的文档；`no_match` = `outcome=NO_MATCH` + `documents=()`；
-  证据只从前 k 文档计分且带来源归属；`FetchedEvidence.verified` 默认 `None`（须显式 `True`）；`answer_existence` 缺失即报错；
-  有答案题默认 `evidence_required=True`；零分母/缺输入/关键题未满分 → 机读 `blockers`。
-  **输入一致性校验放 `score()` 入口**（`_validate_gold`/`_index_observations`），字段级不变量才放 `__post_init__`。
-- **I3-2**（r26→r31 全链）：金标 36 槽位（冻结 23 条逐字节保留 + 采纳 13 槽/49 条）、候选 82 目标、裁决件 40+24+6+1、
-  门 `ready=true`／0 阻断／20 条人工同义 warning、批准投影 79 必需 + 20 补充；正式评分输入
-  `i3-2/query-gold-scoring-v1.jsonl`（`1b018ceb…`）+ `scoring-input-manifest.json`（唯一读入口 `load_scoring_input`）。
-  批准只能走 `evidence-targets-decisions.json` → `i3s2_apply_decisions.py` → `approved.json`；候选里的
-  `adjudication.status` 门完全不读。完成门 exit 0（10/10）；签认件 `audits/20260919-i32-diagnosis/signoff-record-i3-2.*`（xyl）。
-  角色口径：`required`／`supplementary`（非必需、不声明替代）／`suggested`；EvidencePass 分母 = **逐题**。
-  映射规则（`evidence-mapping-6`）踩坑：数值 token 用 `(?<![\dA-Za-z.])TOKEN(?![\dA-Za-z.%])`；日期先掩码；
-  同一数值每次出现都是独立要件；小数/百分数用 `Decimal.normalize()` 等价；先按 `；;。` 切子句，**仅当子句既有数值
-  又有标记**才按逗号拆段；表格 item 必须带 `row/col/unit/period`，token 须来自权威侧 `read_pg.fetch_cell`。
-- **I3-1**：①2026-09-19 照 U 批准集 6 份 PDF → 可发布 2/6、阻断缺口 13 处、格式覆盖仅 PDF（**i0c-r32** 入链）；
-  ②2026-09-20 dev lane 8 份 → 可发布 4/8、**§12.1 格式门 = true**（pdf 2/6、docx 1/1、md 1/1）、新增检索命中
-  工业富联/光模块、审计冲突 0，但 `per_class_min_2` 仍 **false**（**i0c-r34** 入链）；证据 `audits/20260920-i31-dev-lane/`；
-  ③2026-09-20 **具名签署采纳 + 真实发布（i0c-r37）**：xyl 签署 4 份 → 原批准 8 份真实发布 **7/8**，company **2/3**／industry 3/3／macro 2/2
-  ⇒ **`per_class_min_2=true`**；格式门 true（pdf 5/6、docx 1/1、md 1/1）；12 处人工确认缺口 → `acknowledged`（默认 disposition 仍 `blocking`，
-  原 quality_report/units/chunks/claimed 范围未改）；**国信光力 `dddc7cd0` 未放行未发布**（p7 gap key 仅页级坐标、无页内区域框能力，
-  须把「可复验区域框证明」接入发布门 + 反例 + 新修订；不得删必需证据 p7、不得记为已发布，但**不再阻断每类≥2计数**）；
-  证据 `audits/20260920-i31-signed-release/`。**边界：仅过「数量+格式+真实 E2E」三门，不代表全部来源无阻断，不代表 M6/I4 放行**。
-  裁定②（MD/DOCX 覆盖声称）已由 dev lane 关闭；裁定①的方向已由「人工具名认可 + 拒发布被阻断来源」实现（非 P0 追加路线）。
-  范围唯一权威源 = `i0a2-adjudicated-20260915.json` 的 `dev_selection_approved`，**不是** `dev-manifest.dev_selection_candidates`；
-  `excluded_from_active` 是人工终态（`admission.py:454` 直接判 `excluded_by_policy`），想让其入范围必须用新 ADMITTED 决定 supersedes。
-- **dev lane 机制（U 2026-09-20 裁决）**：`contract.IN_SCOPE_MATERIALS_BY_POLICY_REV`（v1 仅 `research_report` 逐字不变；
-  `v2-dev-20260920` 加两个内部材料类型；未知 rev 落最严默认）；dev lane = **独立政策文件**（`scope=dev` +
-  `production_in_scope_unchanged=true` + 逐源 `dev_lane.sources`）；装载需 `allow_dev_lane`（CLI：`CORPUS_DEV_LANE=1`）
-  否则 `AdmissionError` fail-closed，`service.py` 生产路径默认 `False`；`material_type` **如实**（`internal_committee_report`／
-  `internal_unattributed`，不得伪写 research_report）；`evidence_refs` 加 `dev_lane=<lane_id>`；取代链列整条
-  （生产 `excluded_from_active` → dev `admitted`）。**v1 生产判定逐字不变**（in_scope 材料恒 research_report、
-  `rule_rev` 对 v1 == `RULE_REV`、evidence 无 dev 标记）。dev lane 样本**计入** §12.1 格式门但须在矩阵/证据标注 `dev_lane`。
-- CLI/引擎接口约束：`review_decision_ids` 必须列**整条取代链**（否则 `conflicting_review`）；`corpus plan` 的缺口在
-  `entry.precheck.{gap_summary,gaps}`，整批失败 exit 2；`domain_hint` 必须是合法 `ResearchDomain`（未知则省略）。
-  阻断码 `image_region_unreadable`／`image_only_page`／`table_lines_without_extraction` **无人工认可入口**（首版不允许自动 OCR）。
-- **I3 余项**：I3-3／I3-4／I3-5／I3-6／I3-7 未做（I3-5 只完成零模型审批契约门 + 89 用例清单 + 19 题锚点映射，
-  真实非回归重验 **not_run**）；I3-0 复核整改 F1—F5（r21）+ r33 具名签认；M5 F3（`validate_i1_freeze.py` 对工作区
-  13 项失配 = i1-r3 绑定未随 I2 合法改动更新）单列跟踪，建议随 i1-r5 重绑。
-- **M6 判据口径已对齐（i0c-r35，2026-09-20，U 指令）**：`tasks.md` M6 判据行写入「声称支持的格式（PDF/DOCX/MD）
-  按架构 §12.1 各有真实已用开发样本、无未处置缺格（dev lane 样本计入但须标注 `dev_lane`）」，与 §12.1、
-  I3-7 行三处同源；**只改判据文字，门行为/代码零改动**，故不新增阻塞。纯文档修订：r35 只绑 tasks.md + 台账
-  + 审计证据（校验脚本/一致性日志/链门日志/生成器/归档），验证器 r35 块含「越界绑定检查」禁止牵动代码。
+## 4. dev lane（U 2026-09-20 裁决）
+`contract.IN_SCOPE_MATERIALS_BY_POLICY_REV`（v1 仅 `research_report`；`v2-dev-20260920` 加两个内部类型；未知 rev 落最严）；dev lane = 独立政策文件（`scope=dev` + `production_in_scope_unchanged=true` + 逐源 `dev_lane.sources`），装载需 `allow_dev_lane`（`CORPUS_DEV_LANE=1`）否则 fail-closed；`evidence_refs` 加 `dev_lane=<lane_id>`。样本计入 §12.1 格式门但须标注。范围权威源 = `i0a2-adjudicated-20260915.json::dev_selection_approved`；`excluded_from_active` 是人工终态（`admission.py:454`）。测试 `tests/test_corpus_dev_lane.py`（9 条，仅 `i3-e2e` 守卫）。
 
-## 语料链"反复打转"的根因（2026-09-20 复盘，U 提问）
-结论：**分层没有失效，失效的是「分层 → 层内可证伪判据」未落地**。分层的价值是让失败**可归因**（i38 消融已证：
-13→14(S3)→16(S2)→20(S3b)、剩 4 条逐条点名），不是让改动**免联动**（块划分变→检索变，是语义耦合，设计消不掉）。
-三条真因：①**同一个上游洞在三层轮流露脸**——表格/版面结构信息缺失（i33 记 6 条 `cells=[]`/`element=null`）在
-read/chunk/search 分别表现为"页文本缺"/"跨块装不下"/"排名 11–62"，i37 议题 B §6 自述与表格结构重建是同一批工作；
-②**验收信号只挂链尾**端到端 EvidencePass，层内无独立判据 ⇒ 每层修复须整链重跑才能判值，观感即"打转"；
-③**分母混永不可达项 + 基线本身红**：18 条 `absent_in_extraction`（金标改写/重建）永不可命中却计入分母，叠加
-i36 报的 8 条未冻结漂移 ⇒ 增益读不准。
-解药（优先级）：1) 把 i37 §5 的 `I-A*`/`I-B*` 不变量草案**落成常驻测试并绑修订**，端到端回测降级为**只读诊断**；
-2) 回测分母分层：pipeline-reachable 与 gold-rewrite-unreachable **单列**（不动门槛）；3) 结构信息**一次性补在 reader**
-（cell 网格/表头层级），禁止在 chunk/search 打补丁；4) 先修 i36 的 8 条 red 再跑分。i38 剩 4 条须下一轮定去留：
-`company-007/e1`、`company-008/a-1`（clean 剔除）与 `industry-002/e2`、`industry-003/e2`（locator 不可派生候选）。
-冻结成本是"回合制"放大器：i33 §3 因成本明确"不接线脆弱解析器 / 本次收口不改金标"，把问题推到下一轮。
+## 5. 评分器与子项
+- **唯一落点** `plugins/corpus/scoring.py`（纯标准库、无模型/网络/PG/时钟/IO）：`score`/`gold_from_records`/`format_report`，门槛用 `Fraction`。当前字节 `f61573d7`（空白规约，r41 绑定；旧严格 `bf9c8b80`）。**No tuning after scores**（r39）。
+- 输入契约（改即改冻结）：`documents` 按相关性排序且来源唯一；`no_match` = `outcome=NO_MATCH` + `documents=()`；只从前 k 文档计分；`verified` 默认 `None`；`answer_existence` 缺失即报错；零分母/缺输入/关键题未满分 → `blockers`。
+- **`EvidenceTarget.matches`（易错）**：`verified is True` + **整条 `quote` 逐字包含（去空白后 code point）** + `locator` token 全在证据 locator 里；`basis.matched_tokens` 不参与。
+- **负例**：`NO_ANSWER` 走 `_score_negative`，三指标记 `None`；`documents` 非空即 `false_positive`，引文条数累加 `fabricated_citations`；默认 `max_false_positives=0`/`max_fabricated_citations=0` ⇒ 超限落 `blockers`；6 题 critical（company/industry/macro-009/010）。**24/24 也绕不过 1 条负例误报。**
+- **I3-2**：36 槽位 / 候选 82 / 批准投影 79+20；评分输入 `i3-2/query-gold-scoring-v1.jsonl` + `scoring-input-manifest.json`（唯一读入口 `load_scoring_input`）；批准只走 `evidence-targets-decisions.json` → `i3s2_apply_decisions.py` → `approved.json`；完成门 10/10 exit 0；签认件 `audits/20260919-i32-diagnosis/signoff-record-i3-2.*`（xyl）。映射坑：数值 token `(?<![\dA-Za-z.])TOKEN(?![\dA-Za-z.%])`、日期先掩码、`Decimal.normalize()`、先按 `；;。` 切句且仅当子句含数值+标记才按逗号拆段、表格 token 须来自 `read_pg.fetch_cell`。
+- **I3-1**：格式门达标（pdf 5/6、docx 1/1、md 1/1）、`per_class_min_2=true`（i0c-r37）；国信光力 `dddc7cd0` 未放行未发布。
+- **M6 判据**：I3-7 对 I3-6 冻结版重验通过；逐类三指标达冻结目标 + 关键引用题 100% + 旧检索/财务基线不退化 + **伪引用负例 0**；宏观 0/3 单列。**余项**：I3-3/4/5/6/7 均未完。
 
-### 层内解耦归因（2026-09-20，代码级）
-**结构性硬伤：证据选择策略不在产品代码里**——`group_hits` / `per_document=8` / `observations_for`（按页聚合）
-只存在于 `audits/*/calibrate.py`、`reshape.py`；`plugins/corpus/` grep 不到 `group_hits` / `max_chunks_per_top_document`。
-产品 `service.py` 只有 `search_with_coverage`+`fetch_verbatim` 原语，无选择策略 ⇒ "证据选择层"=每审计目录一份的一次性
-脚本副本，改它不沉淀产品行为。**解药**：抽 `preparation/selection.py`，小接口 `select(hits, policy)`，policy 注入
-（现有评测 + 生产两个消费者 = 真 seam）。其余解耦点：①`chunk.py` 的 `ChunkCandidate` 用一个 interface 同时承担
-`search_text`（要小纯）与 `unit_ordinals`（要覆盖引文），方向冲突 → 加连续块区间投影 `cover(quote)→(i,j)`；
-②`chunk.py:169-180`/`:416` 表格只有表序+首行，`contract.py:296-303 cells` 只有 `(row,col)` 无标签 → 表格结构模型
-必须做在 **reader** 层；③`search_pg.py:41-65` 单 SQL 焊死 GIN 召回+`ts_rank`+LIMIT → 拆 recall/rank seam（改信号不改阈值）；
-④`search_pg.py:68-83 SearchHit` 缺 page/cells/标签 → 补字段，否则"块→页"映射只能下移到评测脚本；
-⑤`clean.py:384-421` 噪声判定与投影同循环、`reasons` 无依据值。**勿动**：`pdf_reader.py:333-345 _row_text`
-"只用换行 + native_pos 排序"是刻意保真（插 `" | "`/重排是历史 bug）；`clean.py:26-28` 分级归 `gaps.py`；
-`verify_chunk_result`/`verify_clean_region`/`contract.__post_init__` 是现成 layer 门，接进常驻测试即可。
-落地顺序：`selection.py` → `SearchHit` 补字段 → `chunk.cover()` → reader `TableModel`（要全量重摄入，压最后）→ clean 依据值。
+## 6. 检索/取证修复簇（F1–F4 + r4u）
+- **打转的根因**：分层能可归因，失效的是「分层 → 层内可证伪判据」没落地。六解耦点：①选择策略落产品 ②`SearchHit` 补 `page`/`cells`/`label_path` ③拆 recall/rank（`rank_hits`；`chunk.cover` 作废→band）④连续块区间→band ⑤表格结构在 reader 层（`TableModel.label_path`）⑥clean 判定机读（`NoiseVerdict`，只记账不提升分数）。**勿动**：`pdf_reader.py:333-345 _row_text`；`clean.py:26-28` 分级归 `gaps.py`；`verify_chunk_result`/`verify_clean_region`/`contract.__post_init__` 是现成层内门。
+- **漏斗（79 目标，i42/band 口径，同口径可减）**：S0 77 → S1 66 → S2 60 → S3 51(perdoc)/59(band) → S4 44(perdoc)/**50(band)**。桶 = matched 50 / match_fail 9 / no_band 1 / candidates_no_doc 6 / kept_not_candidate 11 / not_in_doc 2。**`funnel.S4_matched`（50）权威；`target_buckets.matched`（60，doc 级"可达"）是补充口径，不得与 S4 相减**。对比纪律见 spec §13.4（同口径 + 单变量 + 每层报 Δ + 数据落盘 + 负例同步报）。
+- **标签注入（S2 判定）**：`search_tsv` 是 GENERATED 列 + GIN，查询侧剔不掉；注入词元抬高 `ts_rank`（`norm=0`）。实测：无注入+perdoc 2/24、有注入+perdoc 12/24、有注入+band 19/24 ⇒ 注入与 band 互补、都要。判定价值**必须看 `S2_doc_topk`/`S4_matched` 端到端**，不得用单层指标（S1 是集合语义）。
+- **F1–F4 + B2/B3 落点**：F1 `negative_query.py`（负例归零；B2 追加 abstain 拒检，默认 off）；F2 r4n band 接生产 + `_emit_cells`；F3 r4p `clean.py` 数字事实句谓词；F4 r4q `cross_boundary.aggregate_band_chunks`（表头/脚注聚合）；**r4u `stitch_continuation`（续接片段聚合，路径 B）**。工单 `.scratch/corpus-retrieval-decoupling/issues/00`–`10`（00–05 closed、03 作废、08/10 open）。**回测不可原地复跑 `calibrate.py`**（write-once 会 raise），须新目录。
+- **B2 三者互斥**：`negative_query.content_lexemes` 的 `_FUNCTION_WORDS` 不含疑问词 ⇒ 「负例归零 + S1=66 + 0 model calls」互斥；产品落地走判定层拒检（开关默认 off，生产零扰动）。
+- **中文检索口径**：裸 `websearch_to_tsquery('zhcfg', 题面)` 因无空格解析成相邻短语 ⇒ 命中 0；`plainto_tsquery`（全 AND）同样 0；实际生效的是 `service.py` 的 AND→OR 兜底（`& `→` | `，1033 块/15 build），与脚本显式 OR 词元集一致 ⇒ 回测口径可信。
 
-### 解耦方案落点（2026-09-20，文档态，未动代码）
-`.scratch/corpus-retrieval-decoupling/`：`spec.md` + `issues/00-freeze-realign.md`（P-1 修 i36 的 8 条 red，须先决策是否
-整体采纳 reader-pdf-5 + whitespace-norm）、`01-selection-module.md`（新增 `preparation/selection.py`，默认 policy 须与
-`calibrate.py:37-74` 逐字节等价、cap 锁死 8）、`02-search-hit-interface.md`、`03-chunk-cover.md`、`04-table-model.md`、
-`05-clean-evidence.md`。依赖 `00→01→02→03→(04∥05)`，原则 = 先做不动被绑字节的、把全量重摄入的压到最后合并一次
-（`i0c-r41`）。**新回测不可原地复跑 `calibrate.py`**（`calibration-summary.json` write-once 会 raise），必须新目录。
-`spec.md` 是**自包含汇总**（12 节 + 附录 A 证据索引 / 附录 B 代码位置速查），`issues/` 仅作工单视图。
+## 7. 当前状态与开放项（2026-09-22）
+- **门与回归（HEAD `8dc3ba2`）**：三门 exit 0（r4u 入链）；`pytest tests/test_corpus_*.py -q` **762 passed / 12 skipped**（skip 全为 `CORPUS_I2_DSN` 未设）；ruff CI 范围全通过；`pyright` 19 errors/7 文件（缺 `sqlalchemy`/`argon2`，与 corpus 无关）；`import_smoke` 365/365、414/414；`check_symbols` 0 missing。
+- **B8 已解除**：`i2_sandbox_corpus`@543 = 16 builds / 7686 units / 1649 chunks / 9 publications；**8 份 active builds 于 2026-09-22 02:16 UTC（本地 10:16）全量重建，`clean_rev=f1775328…`（含 F3）**（实证：company-007 ord717 = `kept`，F3 已在语料内）；`7e0e068edaee` active=None。
+- **B2 已闭环**（r4t + 真库复验）：开关 on 下 6 负例 `product_hits=0` + `query_status=abstain`，S1=66/S2=60 不回退。
+- **B3/F3 已闭环（路径 B，i0c-r4u，U 具名裁决）**：重摄入后 ord717 kept 但 ord718（「份。」，NOISE）不在块内 ⇒ 引文逐字不可承载；`cross_boundary.stitch_continuation`（默认开，免重摄入）保序聚合尾片段。2026-09-22 不落盘重跑 `f3b_replay.py` 复现：e1 off=false→on=true、82 目标零回退、新增恰 {company-007/e1}、EvidencePass **19/24**、负例 6×0、选择不变（带宽 33≤49）、产品 `svc.search_bands` 逐字段一致。全库精化谓词仅 ord717/718 一处（裸放宽 132 处会混入页眉/页脚）。
+  **残留**：路径 B **只在 band 读取链生效，perdoc 路径 e1 会回退**；且**召回侧吃不到「股份」词元**（索引向量未变，切开后 717→「股」/718→「份」「。」）。U 提出「单元级根治」= 路径 A（把尾片段并入单元），**待裁决，未动字节**；A 与 B 覆盖同一批样本 ⇒ 分数零增量，A 的真实收益 = chunk 文本完整 + 全读取路径受益，代价 = 重摄入 8 builds + 新冻结修订 + 粒度具名签认。
+- **company-003（issues/10，产物 `audits/20260922-company003-doc-recall/`）**：P1 金标 doc `dddc7cd0` 词法 rank 6、band top-5 不含它；**2026-09-22 归因修正**：top-6 best chunk 全为 body 块、`matched_label_only_lexemes` 全空 ⇒ rank-6 是**全池排序环境效应**（Δ vs rank5 ≈0.35%），非"竞品靠标签词元"；body-only 反事实金标回 rank5，但 8/24 题 top-5 变 ⇒ 全局去注入仍否。P2 叠加：e1–e6 locator 含 `row:/col:`，band 证据只带 `page:`、光力 `cells=[]` ⇒ P1 单独修不产生新 matched。候选 a(doc_topk 5→N)/b(公司名×标题先验，非单调)/c(P2 修复+重摄入，唯一能 19→20)/d(登记不修)。红线：不动注入、不降 `max_false_positives=0`、不改 `matches` 口径、`max_chunks_per_document=8`、负例不回升。
+- **排序机制根因（2026-09-22 细化，只读）**：文档名次由**最高分块**决定；金标最高分块 `body:0023`=0.0328272（只命中 光/力/科技/现金流/经营/预测 + 4 虚词），而**真正答题的 `table:0018`（含 2026e/2027e/2028e/每股/收益/现金流）=0.03207323 更低**；top-5 门槛 0.03294254 ⇒ 用最高分块差 0.35%，换答题块差 2.6%，**都进不去**。机制：`ts_rank`（norm=0）主要计"命中词元个数"，题面 24 词元中 8 个虚词/标点 ⇒ 无关正文块（命中 10 个含虚词）压过表块（命中 6 个全实词）；rank1 `793b3967` 命中 11 个全是通用词同理。去标签反事实"有效"是因 `cc03f55b` full 0.0344→body 0.03159 掉到金标下，非金标被压制。⇒ 新增路径 **c′ 排序信号侧（去虚词/实词加权）**，属排序改动，须端到端 EvidencePass + 负例复验。
+- **当前基线**：EvidencePass **19/24**、6 负例归零、S1=66/S2=60/S4=50；**M6 门槛 23/24（未达）**；关键题 100%、旧检索/财务非回归未验、I3-7 未开始。
+- **其它开放项**：B6 = M5 待独立复核 + U 签认；B7 = 工作树未收口（`spec.md`、`MEMORY.md` 未提交；`f1_replay_readonly.py` 未归档；`issues/08` status 仍 `in-progress` 未随 r4u 收口）。`r42/r43` 的 `i31_complete`/`i33_complete`/`m6_released` 回退为 `None`。
+
+## 8. 常用实跑命令
+`uv run pytest tests/test_corpus_*.py -q`（762/12）；`uv run ruff check <CI 范围>`；三门在 `.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/`（判绿须 `endswith("exit=0")`）。各 audit 目录自带回放脚本：`f3_replay.py`、`f3b_replay.py`（**write-once 假红，重跑须打补丁或改用语义比较**）、`b2_replay_abstain.py`、`c3_attribution.py [--no-write]`（模板）。
