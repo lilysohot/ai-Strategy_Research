@@ -1015,7 +1015,15 @@ F3 半闭环、F1 未闭环；M6 未闭环**。列出 7 项未闭环（B1–B7�
 
 **仍开放的 6 项（B2–B7，均未在 spec 登记，须 U 裁决）**：
 B2 F1 的 6→0 只在回测脚本（按金标 `NO_ANSWER` 分支收紧查询，产品无 abstain 通道、模块未入链）⇒ 产品侧负例仍 6；**已接产品并冻结（`i0c-r4t`）**：`CORPUS_ABSTAIN_NO_ANSWER` 开关（on|off，默认 off，fail-closed）+ `service._abstain_decision`（实质词元 websearch AND 预检 + `is_abstain_candidate` 单元级）+ `search_with_coverage` 拒检分支（空 + `query_status=abstain`）+ `corpus_search` ABSTAIN_HINT 分流；negative_query.py/test_corpus_negative_query.py 首次入链。**判别器关键修正**：初版"统一全词元 AND"会误杀有答案题（实证 24 条有答案题中 23 条含疑问词"什么/多少/如何…"，答案单元几乎不引述它们→full-AND 归零；F1 S1=66 只因按金标分支只对负例收紧），落地为 abstain 门剔除疑问词（`_QUESTION_WORDS`/`abstain_content_lexemes`，仅 abstain 门，F1 全局语义不变）；6 负例几乎不含疑问词故不受影响。开关默认关=产品检索字节零扰动（语料族 758/12、ruff/pyright、三门验证器全绿）。**仍阻塞**：真库负例归零/S1 不回退的 DB 级复验因 i2_sandbox_corpus 为空库（M5 consumers-clean TRUNCATE 后 30 题语料未重建）未执行，须授权重建语料后验证；负例归零未达；
-B3 F3 代码已冻结但重摄入未执行（e1 未转绿，且 f3 审计目录只有 `before-r4p/` 归档、无回放产物）；
+B3 F3 代码已冻结（`i0c-r4p`）；**重摄入已于 2026-09-22 随 B2 真库复验执行**（8 builds 全量重建，clean_rev 统一为含 F3 的版本）——
+**2026-09-22 复验结论：e1 仍未转绿，且重摄入本身不足以转绿**。机读归因（`audits/20260921-f3-disclaimer-granularity/f3-summary.json`）：
+ord717 已 NOISE→KEPT（F3 单元级判定生效），但事实句被版面切成 ord717（kept，止于「4.06%的股」）+ ord718（NOISE/`disclaimer_section`，仅「份。」）；
+块装配只收 kept 单元（`unit:0709-0715,0717`）⇒ 块文本在句中断开，引文「…4.06%的股份。」逐字不可承载（`quote_in_recalled_chunk=false`）；
+块与文档均可召回/入选（`chunk_with_717_recalled=true`、`doc_in_topk=true`）；把尾片段接回后引文逐字可承载（`stitch_tail_fragment_restores_quote=true`）。
+全库同构样本 **1**（`f3-fragment-scan.json`）。漏斗 S0=77/S1=66/S2=60/S3=59/S4=50 与 F2 基线逐层一致（F3+重摄入对 79 目标漏斗零位移）。
+⇒ 需 U 裁决修复路径：**(A) clean 侧句跨单元粒度**（改 `clean.py` ⇒ 再重摄入 + 新冻结修订 + 粒度具名签认）；
+**(B) 读取侧续接片段聚合**（免重摄入，仿 F4 `cross_boundary` 先例，需新冻结修订）；(C) 登记不修。
+回放产物：`f3_replay.py` / `f3-fragment-scan.json` / `f3-report.md`（0 model calls、只读、未改任何冻结字节、未写库）；
 B4 company-003 未单独立题；B5 M6（18/24 vs 门槛 23/24、关键题 100%、旧基线非回归、I3-7）未达；
 B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md` 未提交、`f1_replay_readonly.py` 未归档）。
 
