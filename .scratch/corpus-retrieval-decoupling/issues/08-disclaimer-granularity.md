@@ -1,6 +1,6 @@
 # 08 e1 `disclaimer_section` 判定粒度过宽
 
-Status: in-progress（2026-09-22 复验：验收 1 未达，见文末）
+Status: completed（2026-09-22：U 具名裁决路径 (B)，`i0c-r4u` 落地后 e1 转绿；见文末收口记录）
 Type: task
 Depends: S5（已完成，机读判定已就位）
 Layer: clean
@@ -72,3 +72,16 @@ company-007/e1（spec §10.4 / §7.5 归因）：ord=717 整段分析师免责�
 | C | 登记不修（e1 恒 `not_in_doc_unreachable`，M6 仍可被其它目标拖住） | 零代价，e1 永久不可达 |
 
 **未做（纪律）**：未改 `clean.py`/`service.py`/`cross_boundary.py` 任何字节；未重摄入；未写库；未 publish；未建冻结修订。
+
+## 2026-09-22 收口（U 具名裁决路径 (B)，`i0c-r4u` 落地）
+
+**裁决**：U 具名指定路径 (B)——读取侧续接片段聚合，免重摄入。
+
+**落地**（`audits/20260922-f3b-continuation-fragment/`，新冻结 `i0c-r4u` parent=`i0c-r4t`）：
+`cross_boundary.aggregate_band_chunks`/`_merge_chunk` 扩展结构谓词 `stitch_continuation`（kept 单元句中截断 + 紧邻下一 ordinal 的 NOISE 尾片段以句末标点收尾即拼接补全句子 + 同页 ⇒ 按 (ordinal, unit_id) 保序聚合进块证据，内容哈希 fail-closed 同 F4；`_SENTENCE_TERMINAL`；`_BOUNDARY_UNITS_SQL` 增第三支候选）。谓词纯结构、不绑噪声类型、不按金标；三层扫描：裸放宽 132 处混入页眉/页脚紧邻，精化谓词全库仅 ord717/718 一处、误伤面=0。service.py 字节零改动（`search_bands` 既有接线直接生效，默认开）。
+
+绑定：cross_boundary.py `85ee6be6`→`faa50936`、test_corpus_selection.py `1d0ecc29`→`b956fdc5`（+4 条 I-CONT-1 正/反向门）、freeze_validator→`d4ff1513`；manifest sha `4fb94875`。
+
+**复验**（`f3b_replay.py`，0 model calls、只读 PG）：e1 off→on 转 green；目标级零回退且新增恰为 {company-007/e1}；EvidencePass 18/24→19/24（F4 基线不回退）；6 负例 retrieved_documents=0；选择不变（band 集相等、带宽 33≤49）；stitch=True 手工链与产品 `svc.search_bands` 逐字段一致。常驻测试 selection 34 passed（+4）、语料族 762 passed/12 skipped、ruff（CI 范围）/触及字节 pyright 绿、三门验证器 exit 0。r4v 复验不回退（21/24）。
+
+**纪律**：不 commit、不 publish、不重摄入、不写库。

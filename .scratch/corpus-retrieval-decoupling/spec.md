@@ -1028,6 +1028,34 @@ ord717 已 NOISE→KEPT（F3 单元级判定生效），但事实句被版面切
 B4 company-003 未单独立题；B5 M6（18/24 vs 门槛 23/24、关键题 100%、旧基线非回归、I3-7）未达；
 B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md` 未提交、`f1_replay_readonly.py` 未归档）。
 
+### 14.7 2026-09-22 增量：B4 收口（issues/10 全链）+ c3 排序信号落地 + M5 具名签认
+
+（本节为 2026-09-22 追加登记；§14.6 已关闭小节正文不改写。 EvidencePass 演进：12/24 → 17 → 18 → 19 → **21/24**。）
+
+**B4 company-003 已闭环（issues/10 completed）**，全链四步：
+
+| 步 | 内容 | 证据 |
+|---|---|---|
+| 立项+归因 | 金标 doc dddc7cd0（国信光力）词法 distinct-source rank 6、top-5 差距 0.35%；机制精化=rank-6 是全池排序环境效应（top-6 来源 best chunk 全 body 块、label_only 词元全空，"竞品靠标签抬高"不成立）；P1（排序）/P2（cell 证据）双阻断初判；候选路径 a/b/c/d 呈 U，U 裁决=先登记、审核后再讨论 | `audits/20260922-company003-doc-recall/`（c3_attribution.py / c3-attribution.json / c3-attribution.md，0 model calls 只读）、`.scratch/corpus-retrieval-decoupling/issues/10-company003-doc-recall.md` |
+| 离线评估 | c′ 排序信号六臂（anchor / prune_fn / prune_fn_punct / w0.2 / w0.5 / prune_content），双 tsquery 线性实现（写侧未 setweight ⇒ 排序调用侧实现）；获胜档 **prune_fn_punct**（排序信号剔功能词+标点）：EvidencePass 19/24→21/24、82 目标 matched 67→75（+8）、零回退、负例不回升、带宽 33≤49；新增恰为 company-003×6 + company-008/a-2 + industry-008/a-2 | `audits/20260922-c3-lexical-weight/`（c3w_eval.py / c3w-eval.json / c3w-report.md / c3w-rollout-plan.md，write-once） |
+| 落地（M2–M4） | U 指令"依据文档落实到执行中"。四处改动：negative_query.py `is_punct_lexeme`/`rank_lexemes`（剔功能词+标点、**保单字**、全剔回退 fail-closed）；search_pg.py 双 tsquery——候选池 WHERE 仍 `@@ q.tsq` 全词元（**I-1 池不收缩**）、score=`ts_rank(search_tsv, q.tsq_rank)` 实词、ORDER BY tie-break 与 ts_headline 不变（**I-2 只有 score 变**）、`_rank_query_on` 同游标取词元 + `RANK_LEXEME_PRUNE=True` 默认开（False ⇒ 逐字节回 base）。I-RANK-1 常驻测试（tests/test_corpus_search_pg.py 首绑：单元门 6+真库门 5，29 passed）；语料族 772/18（改前同环境对照 766/13，漂移=既有环境差异）；**冻结 `i0c-r4v`**（parent=i0c-r4u；search_pg 04bc7d61→4d1db60c、negative_query 6db6876c→0f69d33c；r42 对 calibration-plan 的 search_pg 现字节断言按 r4r 先例 supersession 豁免；validator→45b38930；manifest sha 9474b85e）；端到端复验 **11/11 门全绿**（21/24、75、零回退、sel_changed 24、带宽 33、company-003 金标 pos1 且 6/6；G1 机制等价=显式 rank_query 与 c3w 臂逐字段相等；G3 回滚=19/24/67/33 与 anchor 臂逐字段相等；G4 负例 6×5）；**P2 预测被实测推翻**：当前 build 光力 doc 带 296 结构化 cells（r40/r42 reader-pdf-5 reshape 产物），"cells=[] ⇒ 至多 sbf、唯一提分路径=P2"前提过时，band+cell 证据共同承载 matches，**P2（issues/04 领地）不再需要** | `audits/20260922-c3w-landing/`（r4v_replay.py / r4v-replay.json / r4v-report.md / before-r4v/）、`freezes/i0c-r4v.json` |
+| M5 具名签认 | U 对签认流程呈报回复"好的，执行吧"=具名批准 `_FUNCTION_WORDS` 复用到正例排序（口径/粒度变更）。落盘为签认修订 **`i0c-r4w`**（parent=i0c-r4v）：**零运行字节改动**（binding 仅 freeze_validator→fdc1f67d），`m5_declaration` not_declared→**declared**（签认范围=i0c-r4v 落地内容；r4s/r4t/r4u 各自语义不变），r4w 块语义门钉死签认纪律（binding 仅 validator / declared+U+日期 / corrections 含 m5_sign_off）；manifest sha cc8fe3e6；三门验证器 exit 0；追加式纪律保持（i0c-r4v.json 已冻结字节未追改）。排序信号自此为正式口径；一级回滚 `RANK_LEXEME_PRUNE=False` 保留 | `freezes/i0c-r4w.json`、`freezes/freeze-manifest.json`、`freezes/validate_i0c_freeze.py` |
+
+**词元来源口径（非门诊断，已记录）**：评估臂取题面 zhcfg 词元、产品默认取收到的查询串（rollout-plan §3.2，再分词含 'or' 操作符词元）——两口径在 82 目标漏斗逐值等值（G2 全绿）但 band 划分可不同（24/24 文档集有差，`r4v-replay.json` diagnostics）；需逐字段一致用 `build_search_params(rank_query=…)` 显式指定。
+
+**对 §14.6 未闭环项的影响**：B4 **闭环**（issues/10 completed，M5 已签认）；B6 **部分闭环**（r4v 口径/粒度变更已具名签认 declared；历史修订 r4s/r4t/r4u 各自的 m5_declaration 语义不变）；B5（M6 大门槛 23/24）/B7（工作树未 commit）仍开放。纪律：不 commit、不 publish、不重摄入、不写库。
+
+### 14.8 2026-09-22 增量：B2 真库复验收口 + B6 收口 + issues/08 状态修正
+
+（追加式登记；§14.6/§14.7 已关闭正文不改写。）
+
+- **B2 闭环**：产品侧拒检通道已冻结（`i0c-r4t`），真库复验已执行（U 三次门控授权：重建沙箱 + publish + 复验）。按 M5 consumers-clean 清库后重建 8 份 dev-lane 语料（corpus-db `127.0.0.1:543/i2_sandbox_corpus`）、登记 10 条人审决定（i3e1-approved×6 + devlane/i0a2 取代链×4，reviewer=U）、4 份阻塞来源经 `gap-review --record` 重建当前 build 凭证、8 份全 publish generation=1 active。`CORPUS_ABSTAIN_NO_ANSWER=on` 下 `search_with_coverage` 产品真库复验（0 model calls、只读）：**6 负例全部 `hits=0` + `abstain=true` + `query_status=abstain`（I-M6-1 产品侧达成）**；有答案题 S1=66/S2=60 与 i42 基线逐字节一致不回退；self_check B2_a/B2_b 全 true。**M6 负例归零（产品侧）已达**。证据：`ingestion-rebuild/audits/20260922-b2-abstain-reject/`（b2_replay_abstain.py / b2-summary.json / b2-trace.json）。遗留（非阻断）：库内 1 份先导 synthetic 残档（source 7e0e068e，37B）非本轮语料，未删（不授权清库）；`f1_backtest.py` 的 `len(sources)==8` 硬断言在 9 份 active 下会拒，后续跑 f1_backtest 须先排除或说明。
+- **B6 闭环**：M5 已 U 具名签认（`i0c-r4w` declared，签认范围=i0c-r4v 落地内容），§14.7 记"部分闭环"自此升级为闭环；r4s/r4t/r4u 各自 `m5_declaration` 语义不变（按设计，非欠账）。
+- **issues/08 状态修正**：文末"修复路径须 U 裁决，未擅自实施"已过时——U 已具名裁决路径 (B)，`i0c-r4u` 落地（e1 off→on 转绿、零回退、EvidencePass 18→19/24），r4v 复验不回退（21/24）。Status: in-progress → **completed**。
+- **仍开放（仅 2 项）**：
+  - **B5（M6 大门槛，未达）**：EvidencePass 21/24 < 23/24（3 题未 pass，其中 industry-002/industry-003 e2 为金标合成列标签类、确认 cell 不可派生保持 fail）；关键引用题 100%、适用旧基线非回归、I3-7 对冻结版本重验、格式样本门（PDF/DOCX/MD dev lane）待独立复核。**M6 放行只能由独立复核 + U 具名签认给出**（§11 纪律），不以本方案放行。
+  - **B7（工作树未收口）**：`.scratch/corpus-retrieval-decoupling/spec.md` 与 `.codebuddy/memory/MEMORY.md` 修改未 commit，须 U 授权后收口。
+
 ---
 
 ## 附录 A：证据索引
@@ -1046,6 +1074,8 @@ B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md`
 | i40 band 收紧诊断 | `audits/20260920-i40-topic-a-tighten/i40-summary.json`、`i40-report.md`、`i40_band.py` |
 | i41 band+cell 诊断（19/24） | `audits/20260920-i41-topic-a-cell/i41-summary.json`、`i41-report.md`、`i41_band_cell.py` |
 | i42 议题 B 产品路径回测（12/24） | `audits/20260920-i42-topic-b-reingest/backtest-report.md`、`recall-funnel.md`、`recal-score.md` |
+| c′ 排序信号六臂离线评估（21/24） | `ingestion-rebuild/audits/20260922-c3-lexical-weight/c3w-eval.json`、`c3w-report.md`、`c3w-rollout-plan.md` |
+| c′ 落地复验 + M5 签认（r4v/r4w） | `ingestion-rebuild/audits/20260922-c3w-landing/r4v-replay.json`、`r4v-report.md`；`freezes/i0c-r4v.json`、`freezes/i0c-r4w.json` |
 
 ## 附录 B：关键代码位置速查
 
