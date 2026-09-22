@@ -1056,6 +1056,28 @@ B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md`
   - **B5（M6 大门槛，未达）**：EvidencePass 21/24 < 23/24（3 题未 pass，其中 industry-002/industry-003 e2 为金标合成列标签类、确认 cell 不可派生保持 fail）；关键引用题 100%、适用旧基线非回归、I3-7 对冻结版本重验、格式样本门（PDF/DOCX/MD dev lane）待独立复核。**M6 放行只能由独立复核 + U 具名签认给出**（§11 纪律），不以本方案放行。
   - **B7（工作树未收口）**：`.scratch/corpus-retrieval-decoupling/spec.md` 与 `.codebuddy/memory/MEMORY.md` 修改未 commit，须 U 授权后收口。
 
+### 14.9 2026-09-22 增量：B5 机读盘点与逐目标归因（呈 U 决策，未动产品字节）
+
+**B7 已收口**（U 授权"提交 B7 工作树"）：spec/issues 部分入库 8fcb6a9、MEMORY 1cd569b，工作树 clean。§14.8 所列开放项自此仅剩 B5。
+
+**B5 盘点执行**（`ingestion-rebuild/audits/20260922-b5-m6-inventory/`：b5_inventory.py → b5-inventory.json write-once/--no-write、b5-report.md、probe-attribution.txt；只读 PG、0 model calls）：产品路径 + 冻结 policy（min_rate=19/20）下 EvidencePass **21/24 = company 8/8 + industry 5/8 + macro 8/8**，逐类 doc_recall 均 1（候选 ≥95% 达标）；缺口**全部集中在 industry 类 3 道关键题**（industry-002/003/008，4 个失败目标，全部 `also_fails_under_switch_off=true` 非 r4v 回退），关键题 100% 与之同源；负例产品侧 0（B2）；`score().blockers` 机读为 `below_threshold:industry=62.5%` + 3 条 critical_failed。
+
+4 个失败目标逐个归因（同一来源 174b6462 图6 续表 page:10）：
+
+| 类 | 目标 | 机制 | 管线可修？ |
+|---|---|---|---|
+| A | industry-002/e2、industry-003/e2 | 金标合成列标签：quote 值均在带文本内，但 locator 列名（`2026E产能（配额）`/`2026E产能`）为人工合成，doc 列结构只有 `col:2026E` 等（"配额"语义来自注3 跨单元联结）——放宽 matches 语义=改 scorer，禁止 | ✘（金标修订[须原文依据+人工裁决] 或 §8.3 分母分层单列，U 裁决） |
+| B | industry-008/a-3、a-5 | 表注块未进带：注1/2/3 全文在 **ord518（kept，page:10）**，其块在 industry-002 下 doc 内 13/166（注3 同块已 match），industry-008 下 **47/120** 未进 band（预算 8 冻结）；词法重叠低，纯选择层到不了 | 可能（`cross_boundary` 扩展"表格来源注聚合"，F4/r4u 先例）；**误伤面实测=78 注段/5 sources、紧口径 139 配对**（远超 r4u 单例），须 U 立项+全量回放 |
+
+**呈 U 决策点**：D1 e2×2 处置（金标修订 vs 登记不修+分层单列——不修则 industry 8/8 恒不可达）；D2 a-3/a-5 是否立项来源注聚合（立项则 21→22，M6 仍差 e2×2）；D3 I3-5（旧检索/财务 57/57 等非回归，未执行需授权）→ I3-6 最终冻结 → I3-7 全链重验；D4 M6 独立复核 + U 具名签认安排。纪律：未获裁决不动产品字节；不 commit/publish/重摄入/写库。
+
+**U 裁决（2026-09-22，AskUserQuestion 具名答复）**：
+- **D1 = 暂不裁决**（e2×2 金标合成列标签处置挂起）；
+- **D2 = 不立项、登记不修**（industry-008 a-3/a-5「表格来源注聚合」不做，恒 fail 记录在案，误伤面 78 段/139 配对归因留档 `b5-report.md`）；
+- **D3 = 暂不执行**（I3-5 非回归本轮不跑）。
+
+⇒ **B5 自此阻塞于 D1**：e2×2 未处置前 industry 8/8 恒不可达（逐类门 95%×8 题=8/8），EvidencePass 产品上限 21/24；I3-5/6/7 与 M6 复核签认随 D1/D3 解冻后推进。本轮 B5 执行产出=盘点+归因+裁决登记（未动产品字节、未写库、不 commit）。
+
 ---
 
 ## 附录 A：证据索引

@@ -1,0 +1,823 @@
+{
+  "artifact": "b5-m6-inventory",
+  "generated_at": "2026-09-22T19:49:36+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "B5/M6 可只读实测判据盘点：产品路径（RANK_LEXEME_PRUNE 默认 on）+ 冻结 policy；只读 PG、0 model calls、corpus schema 零写入",
+  "frozen_policy": {
+    "min_rate": "19/20",
+    "top_k": 5,
+    "require_critical_all_pass": true,
+    "max_false_positives": 0,
+    "max_fabricated_citations": 0
+  },
+  "m6_evidence": {
+    "evidence_pass_counts": "21/24",
+    "question_pass_counts": "24/24",
+    "per_class": [
+      {
+        "domain": "company",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "8/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": true
+      },
+      {
+        "domain": "industry",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "5/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": false
+      },
+      {
+        "domain": "macro",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "8/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": true
+      }
+    ],
+    "all_class_gates_pass": false,
+    "critical_total_positives": 22,
+    "critical_evidence_pass_fails": [
+      "industry-002",
+      "industry-003",
+      "industry-008"
+    ],
+    "critical_all_pass": false,
+    "critical_failures_blockers": [
+      "industry-002",
+      "industry-003",
+      "industry-008"
+    ],
+    "false_positives": [],
+    "fabricated_citations": [],
+    "negatives_real_search_diagnostic": {
+      "company-009": 5,
+      "company-010": 5,
+      "industry-009": 5,
+      "industry-010": 5,
+      "macro-009": 5,
+      "macro-010": 5
+    },
+    "negatives_product_abstain": {
+      "evidence": "audits/20260922-b2-abstain-reject/b2-summary.json",
+      "result": "CORPUS_ABSTAIN_NO_ANSWER=on：6/6 hits=0 + abstain=true（I-M6-1 产品侧达成）"
+    }
+  },
+  "failing_questions": [
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:e2"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 4,
+      "n_matched": 3,
+      "fail_target_detail": [
+        {
+          "target_id": "e2",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": true,
+          "locator_missing": [
+            "page:10",
+            "row:R32",
+            "col:2026E产能（配额）"
+          ],
+          "needs_cell_locator": true,
+          "cell_locators_in_evidence_sample": [
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2024 2025 2026E",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:caoyabo@hcyjs.com",
+            "col:guwu@hcyjs.com",
+            "col:jiangxi@hcyjs.com",
+            "col:jinkeyi@hcyjs.com",
+            "col:liuyi@hcyjs.com",
+            "col:luolandanbo@hcyjs.com"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:e2"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 2,
+      "fail_target_detail": [
+        {
+          "target_id": "e2",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": true,
+          "locator_missing": [
+            "col:2026E产能"
+          ],
+          "needs_cell_locator": true,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2024 2025 2026E",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:专业和商业服务",
+            "col:专用于光模块“V”型槽的高稳定、高精度、低振动值切割",
+            "col:中性"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:a-3",
+        "evidence_target_missing:a-5"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 2,
+      "n_targets": 5,
+      "n_matched": 3,
+      "fail_target_detail": [
+        {
+          "target_id": "a-3",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": false,
+          "locator_missing": [],
+          "needs_cell_locator": false,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:liuyi@hcyjs.com",
+            "col:zhangting3@hcyjs.com",
+            "col:zhangyujie@hcyjs.com",
+            "col:上海分部"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        },
+        {
+          "target_id": "a-5",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": false,
+          "locator_missing": [],
+          "needs_cell_locator": false,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:liuyi@hcyjs.com",
+            "col:zhangting3@hcyjs.com",
+            "col:zhangyujie@hcyjs.com",
+            "col:上海分部"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    }
+  ],
+  "per_question": [
+    {
+      "query_id": "company-001",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 2,
+      "n_matched": 2,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-002",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 2,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 6,
+      "n_matched": 6,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-004",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 2,
+      "n_matched": 2,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-006",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-007",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 1,
+      "n_matched": 1,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "company-008",
+      "domain": "company",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 2,
+      "n_targets": 5,
+      "n_matched": 5,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 5,
+      "n_matched": 5,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:e2"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 4,
+      "n_matched": 3,
+      "fail_target_detail": [
+        {
+          "target_id": "e2",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": true,
+          "locator_missing": [
+            "page:10",
+            "row:R32",
+            "col:2026E产能（配额）"
+          ],
+          "needs_cell_locator": true,
+          "cell_locators_in_evidence_sample": [
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2024 2025 2026E",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:caoyabo@hcyjs.com",
+            "col:guwu@hcyjs.com",
+            "col:jiangxi@hcyjs.com",
+            "col:jinkeyi@hcyjs.com",
+            "col:liuyi@hcyjs.com",
+            "col:luolandanbo@hcyjs.com"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:e2"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 2,
+      "fail_target_detail": [
+        {
+          "target_id": "e2",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": true,
+          "locator_missing": [
+            "col:2026E产能"
+          ],
+          "needs_cell_locator": true,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2024 2025 2026E",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:专业和商业服务",
+            "col:专用于光模块“V”型槽的高稳定、高精度、低振动值切割",
+            "col:中性"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    },
+    {
+      "query_id": "industry-004",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 2,
+      "n_matched": 2,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 2,
+      "n_matched": 2,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-006",
+      "domain": "industry",
+      "critical": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-007",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": false,
+      "doc_recall": "1",
+      "failures": [
+        "evidence_target_missing:a-3",
+        "evidence_target_missing:a-5"
+      ],
+      "gold_doc_selected": true,
+      "gold_doc_position": 2,
+      "n_targets": 5,
+      "n_matched": 3,
+      "fail_target_detail": [
+        {
+          "target_id": "a-3",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": false,
+          "locator_missing": [],
+          "needs_cell_locator": false,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:liuyi@hcyjs.com",
+            "col:zhangting3@hcyjs.com",
+            "col:zhangyujie@hcyjs.com",
+            "col:上海分部"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        },
+        {
+          "target_id": "a-5",
+          "source_id": "2026-08-13_174b6462",
+          "bucket": "selected_but_match_fail",
+          "quote_in_band_text": false,
+          "locator_missing": [],
+          "needs_cell_locator": false,
+          "cell_locators_in_evidence_sample": [
+            "col:2017 年 化工板块涨幅TOP5",
+            "col:2019 年 化工板块涨幅TOP5",
+            "col:2021 年 化工板块涨幅TOP5",
+            "col:2023 年 化工板块涨幅TOP5",
+            "col:2025 年 化工板块涨幅TOP5",
+            "col:2026E",
+            "col:2027E",
+            "col:2028E",
+            "col:liuyi@hcyjs.com",
+            "col:zhangting3@hcyjs.com",
+            "col:zhangyujie@hcyjs.com",
+            "col:上海分部"
+          ],
+          "pages_needed": [
+            "page:10"
+          ],
+          "pages_in_bands_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "also_fails_under_switch_off": true
+        }
+      ]
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-002",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 4,
+      "n_matched": 4,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "critical": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 6,
+      "n_matched": 6,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 2,
+      "n_matched": 2,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-007",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "critical": true,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": [],
+      "gold_doc_selected": true,
+      "gold_doc_position": 1,
+      "n_targets": 3,
+      "n_matched": 3,
+      "fail_target_detail": []
+    }
+  ],
+  "score_report_passed": false,
+  "blockers": [
+    "below_threshold:industry:evidence_pass=62.5%",
+    "critical_failed:industry-002:EvidencePass 未过",
+    "critical_failed:industry-003:EvidencePass 未过",
+    "critical_failed:industry-008:EvidencePass 未过"
+  ],
+  "out_of_scope_pending": {
+    "I3-5_nonregression": "旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3、宏观 0/3 另列——未执行，需环境/预算授权",
+    "I3-6_final_freeze": "结束校准并冻结最终配置/代码/评分器/预期 + 不可变最终 manifest——未执行（前置 I3-3/4/5）",
+    "I3-7_reverify": "用 I3-6 版本重建/重索引并全链重验（E2E 12 项 + gap dispositions + 受影响 M4/M5 门）——未执行（前置 I3-6）",
+    "M6_signoff": "M6 放行只能由独立复核 + U 具名签认给出（plan 纪律），不以本脚本放行"
+  }
+}

@@ -1,0 +1,60 @@
+--- footnote-like units on page10: 1
+(518, 'unit:0518', 'paragraph', 'kept', [], '{"bbox": [42.599998474121094, 709.6527709960938, 380.5898742675781, 764.3749389648438], "page": 10, "cells": [], "element": null, "char_span": null, "label_path": []}', '资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）\n注1：价格、价差分位为2016 年1 月1 日至2026 ')
+--- page10 kind/status/reasons distribution:
+('table_row', 'kept', ['tbl[0]'], 78)
+('paragraph', 'noise', ['header_repeated_geometric'], 3)
+('paragraph', 'noise', ['footer_repeated_geometric'], 2)
+('paragraph', 'kept', [], 2)
+('heading', 'kept', ['heading_by_font_size'], 2)
+('heading', 'noise', ['heading_by_font_size', 'header_repeated_geometric'], 1)
+('heading', 'noise', ['heading_by_font_size', 'footer_repeated_geometric'], 1)
+ord 514 unit:0514 heading noise ['heading_by_font_size', 'footer_repeated_geometric']
+   bbox [42.1, 796.6, 154.2, 804.8] page 10
+   raw= "请阅读最后评级说明和重要声明"
+ord 515 unit:0515 heading kept ['heading_by_font_size']
+   bbox [524.4, 795.0, 554.7, 806.5] page 10
+   raw= "10 / 25 "
+ord 516 unit:0516 heading noise ['heading_by_font_size', 'header_repeated_geometric']
+   bbox [483.3, 52.2, 557.5, 63.2] page 10
+   raw= "行业研究 | 深度报告"
+ord 517 unit:0517 heading kept ['heading_by_font_size']
+   bbox [42.6, 100.3, 179.2, 111.5] page 10
+   raw= "图 6：重点化工品景气一览表（续表）"
+ord 518 unit:0518 paragraph kept []
+   bbox [42.6, 709.7, 380.6, 764.4] page 10
+   raw= "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）\n注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日\n注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均\n注3：制冷剂R22、R32、R134a 的产能为配额"
+ord 519 unit:0519 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率"
+ord 520 unit:0520 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "2023 2024 2025\n2024 2025 2026E"
+ord 521 unit:0521 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "10666.4 11878.7 13149.1\n19447.0 19477.0 19477.0\n大农业链\n磷矿石\n64.0%\n-\n63.0%"
+ord 522 unit:0522 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "-1.3%\n11.4%\n10.7%\n-1.2%\n0.2%\n0.0%"
+ord 523 unit:0523 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "893.7 969.0 979.8\n2449.0 2419.0 2419.0\nDAP\n98.3%\n2.6%\n52.9%"
+ord 524 unit:0524 table_row kept ['tbl[0]']
+   bbox [42.6, 112.0, 553.1, 704.2] page 10
+   raw= "-0.7%\n8.4%\n1.1%\n-1.6%\n-1.2%\n0.0%"
+chunk cols: ['build_id', 'chunk_id', 'kind', 'unit_refs', 'context_refs', 'search_text', 'title_text', 'section_path', 'source_ranges', 'search_tsv']
+Q industry-008: 能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？
+Q industry-002: 图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？
+ord518 chunk: [('1227c2a34d05', 'body', ['unit:0517', 'unit:0518'])]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+  File "/home/administrator/FrontierAgent/plugins/corpus/preparation/search_pg.py", line 271, in build_search_params
+    raise StoreError("query 不能为空")
+plugins.corpus.preparation.repository.StoreError: query 不能为空
+ord518 chunk_id: 1227c2a34d05170a
+-- industry-008: ord518chunk global_rank=[110] doc内名次=[47]/120
+   doc top10: [(3, '1227c2a34d', 0.0202), (4, '1227c2a34d', 0.0176), (6, '1227c2a34d', 0.016), (9, '1227c2a34d', 0.0128), (10, '1227c2a34d', 0.0128), (11, '1227c2a34d', 0.0121), (12, '1227c2a34d', 0.0121), (17, '1227c2a34d', 0.011), (18, '1227c2a34d', 0.0108), (19, '1227c2a34d', 0.0108)]
+-- industry-002: ord518chunk global_rank=[14] doc内名次=[13]/166
+   doc top10: [(1, '1227c2a34d', 0.0311), (2, '1227c2a34d', 0.0291), (3, '1227c2a34d', 0.0261), (4, '1227c2a34d', 0.0261), (5, '1227c2a34d', 0.0258), (6, '1227c2a34d', 0.0258), (7, '1227c2a34d', 0.0258), (8, '1227c2a34d', 0.0258), (9, '1227c2a34d', 0.0258), (10, '1227c2a34d', 0.0258)]
+active builds 中 kept 的 资料来源/注N 段落单元总数 = 78  涉及 sources = 5
+per-source: [('174b64628f35', 34), ('dddc7cd0cb74', 19), ('cc03f55bc5a2', 13), ('793b39673d31', 7), ('6f14cc145b79', 5)]
+紧口径（kept 注/来源段 与 kept 表行同页、y 相邻 <12pt）配对数 = 139
