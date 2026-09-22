@@ -1,0 +1,35 @@
+{
+  "snapshot_id": "i0c-r4u",
+  "revision": "r4u",
+  "phase": "i0c",
+  "status": "frozen",
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r4t",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4t.json",
+    "sha256": "e2be30cfa851eade53881761494d2d8e6e1ffcbce8169ed3ddb04a660821d10b"
+  },
+  "binding": {
+    "chain_rebind_implementation": {
+      "plugins/corpus/preparation/cross_boundary.py": "faa5093683d0639e97cfb5ee9d309ae812bfecff8a371819267ac3038d2f0c07"
+    },
+    "chain_rebind_tests": {
+      "tests/test_corpus_selection.py": "b956fdc5e1ffd0d8aa81af33739a80dafbfbd75948389a34abe459519d2d935c"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "d4ff15130c4519cebec28f4dd51711c8e3ca4e75ab9f57579bc7f63c22c00533"
+    }
+  },
+  "corrections": {
+    "b3_continuation_stitch": "B3/F3 读取侧续接片段聚合接产品（U 2026-09-22 具名裁决：路径 B，仿 F4 cross_boundary 先例，免重摄入）。机读归因：F3 单元级判定已生效（ord717 NOISE→KEPT，i0c-r4p）但事实句被版面切成 kept 前半（ord717，止于『…4.06%的股』）+ NOISE/disclaimer_section 尾片段（ord718，仅『份。』），块装配只收 kept 单元 ⇒ 引文『…4.06%的股份。』逐字不可承载（f3-summary.json quote_in_recalled_chunk=false、stitch_tail_fragment_restores_quote=true）。落地=cross_boundary.aggregate_band_chunks 扩展结构谓词 stitch_continuation（kept 句中截断即 raw_text 不以句末标点收尾 + 紧邻下一 ordinal 的 NOISE 单元以句末标点收尾即拼接补全句子 + 同页，按 (ordinal, unit_id) 保序聚合进块证据，内容哈希 fail-closed 同 F4）；谓词纯结构、不绑噪声类型、不按金标补取（与 f3-fragment-scan 及精化扫描同口径：全库 8 builds 裸相邻 132 处中仅 ord717/718 一处满足『拼接补全句子』，误伤面=0）；service.search_bands 既有接线不动（service.py 字节零改动），默认开、stitch_continuation=False 仅作复验 A/B 关断基线。",
+    "freeze_validator": "validate_i0c_freeze.py 重绑（r4t 17dc25d4 → d4ff1513）：新增 i0c-r4u 校验块（parent=i0c-r4t、binding 三组边界、语义门——cross_boundary 须含 _SENTENCE_TERMINAL/stitch_continuation/aggregate_band_chunks/_merge_chunk，tests 须含四条 I-CONT-1 正/反向门），r4u 合并置于 r4t 之后最后执行（最新修订优先）。"
+  },
+  "notes": [
+    "r4u 为 B3/F3 读取侧续接片段聚合的链上重绑修订（parent=i0c-r4t）：cross_boundary.py（r4q 85ee6be6 → faa50936，谓词扩展）与 test_corpus_selection.py（r4q 1d0ecc29 → b956fdc5，+4 条 I-CONT-1）重绑；service.py 字节不动（r4t 9f719814 绑定保持有效，search_bands 既有 aggregate_band_chunks 接线直接获得续接聚合）。",
+    "archive-first：修改前已归档上一绑定字节至 audits/20260922-f3b-continuation-fragment/before-r4u/：cross_boundary.py=85ee6be6（r4q）、test_corpus_selection.py=1d0ecc29（r4q）、validate_i0c_freeze.py=17dc25d4（r4t），sha256 已核与绑定一致。",
+    "谓词普遍性证据（20260922-f3b-continuation-fragment/）：裸放宽谓词（任意 NOISE + 句中截断）132 处但混入页眉/页脚/目录紧邻；精化谓词（句中截断 + 尾片段以句末标点收尾即拼接补全句子）全库仅 1 处 = company-007/e1 ord717/718。机制普遍（版面切句 + kept-only 装配的交集对任何未来摄入语料成立），触发极窄（结构判别力来自句末标点，非金标）。",
+    "验证口径：tests/test_corpus_selection.py 34 passed（30 基线 + 4 I-CONT）；语料族 tests/test_corpus_*.py 762 passed / 12 skipped（758 基线 + 4，零回退）；ruff（CI 范围）All checks passed、触及文件 format 干净；触及字节 pyright 0 errors。真库复验（f3b_replay.py 产品路径 A/B + 端到端）见同目录审计产物。",
+    "纪律：不 commit、不 publish、不重摄入、不写库（band 读取链只读）；不改 clean 判定、不触 search_pg.py/scoring.py 字节；不调 max_chunks_per_top_document=8；不降 max_false_positives 门槛；不改 guards/i1.json、不改写已关闭轮次审计产物。company-003 / company-008 其余目标仍归独立议题。"
+  ],
+  "m5_declaration": "not_declared（r4u 改 band 读取链证据聚合字节 cross_boundary.py——检索/选择不变、仅块证据文本按结构谓词增补，M5 结论仍待独立复核 + U 签认）",
+  "created_at": "2026-09-22T11:42:55+08:00"
+}

@@ -1024,6 +1024,7 @@ ord717 已 NOISE→KEPT（F3 单元级判定生效），但事实句被版面切
 ⇒ 需 U 裁决修复路径：**(A) clean 侧句跨单元粒度**（改 `clean.py` ⇒ 再重摄入 + 新冻结修订 + 粒度具名签认）；
 **(B) 读取侧续接片段聚合**（免重摄入，仿 F4 `cross_boundary` 先例，需新冻结修订）；(C) 登记不修。
 回放产物：`f3_replay.py` / `f3-fragment-scan.json` / `f3-report.md`（0 model calls、只读、未改任何冻结字节、未写库）；
+**2026-09-22 U 具名裁决：按路径 (B) 执行 → 已落地并冻结（`i0c-r4u`，parent=`i0c-r4t`）**：`cross_boundary.aggregate_band_chunks`/`_merge_chunk` 扩展结构谓词 `stitch_continuation`（kept 单元句中截断 + 紧邻下一 ordinal 的 NOISE 尾片段以句末标点收尾即拼接补全句子 + 同页 ⇒ 按 (ordinal, unit_id) 保序聚合进块证据，内容哈希 fail-closed 同 F4；`_SENTENCE_TERMINAL`；`_BOUNDARY_UNITS_SQL` 增第三支候选）；谓词纯结构、不绑噪声类型、不按金标（三层扫描：裸放宽 132 处混入页眉/页脚紧邻，精化谓词全库仅 ord717/718 一处、误伤面=0）；service.py 字节零改动（`search_bands` 既有接线直接生效，默认开）。绑定：cross_boundary.py `85ee6be6`→`faa50936`、test_corpus_selection.py `1d0ecc29`→`b956fdc5`（+4 条 I-CONT-1 正/反向门）、freeze_validator→`d4ff1513`；manifest sha `4fb94875`。**复验（`audits/20260922-f3b-continuation-fragment/f3b_replay.py`，0 model calls、只读）**：e1 off→on 转 green；目标级零回退且新增恰为 {company-007/e1}；EvidencePass 18/24→19/24（F4 基线不回退）；6 负例 retrieved_documents=0；选择不变（band 集相等、带宽 33≤49）；stitch=True 手工链与产品 `svc.search_bands` 逐字段一致。常驻测试 selection 34 passed（+4）、语料族 762 passed/12 skipped、ruff（CI 范围）/触及字节 pyright 绿、三门验证器 exit 0。不 commit、不 publish、不重摄入、不写库；
 B4 company-003 未单独立题；B5 M6（18/24 vs 门槛 23/24、关键题 100%、旧基线非回归、I3-7）未达；
 B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md` 未提交、`f1_replay_readonly.py` 未归档）。
 

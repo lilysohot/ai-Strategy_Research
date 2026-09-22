@@ -387,6 +387,13 @@
    "sha256": "e2be30cfa851eade53881761494d2d8e6e1ffcbce8169ed3ddb04a660821d10b",
    "parent_snapshot_id": "i0c-r4s",
    "created_at": "2026-09-22T05:00:00+08:00"
+  },
+  {
+   "snapshot_id": "i0c-r4u",
+   "file": "i0c-r4u.json",
+   "sha256": "4fb9487512fd6e7b451bacf676f7967766d457fc1a34cec773dcf0810959f794",
+   "parent_snapshot_id": "i0c-r4t",
+   "created_at": "2026-09-22T11:42:55+08:00"
   }
  ]
 }

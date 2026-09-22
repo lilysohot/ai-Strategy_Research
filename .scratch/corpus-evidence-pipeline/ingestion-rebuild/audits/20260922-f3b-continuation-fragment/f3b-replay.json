@@ -1,0 +1,53 @@
+{
+  "artifact": "f3b-replay",
+  "generated_at": "2026-09-22T11:54:34+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "读取侧续接片段聚合（stitch_continuation）A/B（0 model calls，只读，不落库）",
+  "stitch_predicate": "kept 句中截断（不以句末标点收尾）+ 紧邻下一 ordinal NOISE 尾片段以句末标点收尾（拼接即补全句子）+ 同页 ⇒ 保序聚合进块证据",
+  "company007_e1_matched": {
+    "off": false,
+    "on": true
+  },
+  "target_diff": {
+    "regressed": [],
+    "newly_matched": [
+      [
+        "company-007",
+        "e1"
+      ]
+    ]
+  },
+  "evidence_pass": {
+    "off": "18/24",
+    "on": "19/24",
+    "f4_baseline": "18/24",
+    "expected": "off 18/24 → on 19/24"
+  },
+  "negative_retrieved_docs": {
+    "off": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    },
+    "on": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    }
+  },
+  "selection": {
+    "unchanged": true,
+    "band_width_max": {
+      "off": 33,
+      "on": 33
+    },
+    "provable_width_bound": 49
+  },
+  "product_path_identical": true
+}

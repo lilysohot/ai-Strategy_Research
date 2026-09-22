@@ -10,14 +10,6 @@ p1 封面标题 NOISE 单元，后半在 kept ord=6 p1 评级行。band 读取�
 的 ``header_repeated_geometric``/``footer_repeated_geometric`` NOISE 单元，按其
 ``ordinal`` 保序聚合进该块的证据文本——跨边界联合取证，命中即补、留 NOISE 来源标记。
 
-F3-B（i0c-r4u，U 2026-09-22 具名裁决路径 B）：**读取侧续接片段聚合**——kept 单元
-句中截断（raw_text 不以句末标点收尾）且其**紧邻下一 ordinal** 的 NOISE 单元以句末
-标点收尾（拼接即补全句子）并同页时，把该 NOISE 尾片段按 ``ordinal`` 保序聚合进块
-证据（``stitch_continuation``）。同构样本＝company-007/e1『…4.06%的股』（kept
-ord717）+『份。』（NOISE/disclaimer_section ord718）；谓词纯结构、不绑噪声类型，
-与 ``f3-fragment-scan`` 及精化扫描同口径——全库 8 builds 裸相邻 132 处中仅此一处
-满足「拼接补全句子」（``20260922-f3b-continuation-fragment`` 扫描产物）。
-
 纪律（issue 09 不做）：
 - 不写库、不改 clean 判定、不重摄入（只读 ``i2_sandbox_corpus``）。
 - 不把整表头降 KEPT、不按金标词/页补取证据。
@@ -46,11 +38,7 @@ _SANDBOX_DB = "i2_sandbox_corpus"
 #: F4 只聚合这两类「重复几何表头/脚注」NOISE（与 f4_replay 同口径；不含普通 heading）。
 _HEADER_FOOTER = frozenset({"header_repeated_geometric", "footer_repeated_geometric"})
 
-#: F3-B 续接片段谓词的句末标点（与 f3-fragment-scan / 精化扫描同口径）。
-_SENTENCE_TERMINAL = ("。", "！", "？", "；", "…", "”", "」", "』", "）", ")", "]", "】")
-
 #: 候选 NOISE 单元 + 块内 kept 单元一并取回（kept 只需 bbox 作行带判据）。
-#: F3-B 第三支：紧邻某块内 kept 单元（ordinal-1）之后的 NOISE 单元（续接片段候选）。
 _BOUNDARY_UNITS_SQL = """
 SELECT u.build_id, u.unit_id, u.ordinal, u.raw_text, u.location, u.content_hash, u.status, u.reasons
 FROM corpus.corpus_units u
@@ -58,10 +46,6 @@ WHERE u.build_id = ANY(%(build_ids)s::text[])
   AND (
         u.unit_id = ANY(%(kept_ids)s::text[])
         OR (u.status = %(noise)s AND u.reasons && %(hf)s::text[])
-        OR (u.status = %(noise)s AND EXISTS (
-              SELECT 1 FROM corpus.corpus_units k
-              WHERE k.build_id = u.build_id AND k.ordinal = u.ordinal - 1
-                AND k.unit_id = ANY(%(kept_ids)s::text[])))
       )
 """
 
@@ -95,18 +79,12 @@ def aggregate_band_chunks(
     chunk_evs: tuple[ChunkEvidence, ...],
     *,
     sandbox_db: str = _SANDBOX_DB,
-    stitch_continuation: bool = True,
 ) -> tuple[ChunkEvidence, ...]:
     """跨边界联合取证：把同页同水平带 NOISE 表头/脚注保序聚合进块证据文本。
 
     对每个块的每个 kept 单元，取与其同页、bbox 垂直重叠、且不在该块内的
     `header_repeated_geometric`/`footer_repeated_geometric` NOISE 单元，按其
     ``ordinal`` 与块内单元共同排序重建 ``units``/``text``/``spans``。无候选则原样返回。
-
-    F3-B（``stitch_continuation``，默认开）：对每个 kept 单元，若其句中截断
-    （raw_text 不以句末标点收尾）且**紧邻下一 ordinal** 的 NOISE 单元以句末标点
-    收尾（拼接即补全句子）并同页，则该续接片段一并保序聚合（I-CONT-1）。
-    复验 A/B 用 ``stitch_continuation=False`` 取关断基线（生产行为不变）。
 
     纯只读、0 model calls。fail-closed：聚合的 NOISE 单元同样校验内容哈希，权威
     单元被篡改即 :class:`IntegrityError`，绝不把改过的正文当原文。
@@ -139,25 +117,15 @@ def aggregate_band_chunks(
             # build_id -> {unit_id: (ordinal, raw_text, location, content_hash, reasons)}
             kept_by_build: dict[str, dict[str, tuple]] = {}
             noise_by_build: dict[str, dict[str, tuple]] = {}
-            frag_by_build: dict[str, dict[str, tuple]] = {}
             for bid, uid, ordinal, raw, loc, chash, status, reasons in cur.fetchall():
                 cell = (ordinal, str(raw or ""), loc, str(chash or ""), tuple(reasons or ()))
-                if status == noise_status:
-                    if set(reasons or ()) & _HEADER_FOOTER:
-                        noise_by_build.setdefault(str(bid), {})[str(uid)] = cell
-                    # F3-B：全部取回的 NOISE 行都是续接片段候选（谓词在 _merge_chunk 内过滤）。
-                    frag_by_build.setdefault(str(bid), {})[str(uid)] = cell
-                else:  # kept 单元（bbox 判据 + 续接谓词的前半句判据）
+                if status == noise_status and set(reasons or ()) & _HEADER_FOOTER:
+                    noise_by_build.setdefault(str(bid), {})[str(uid)] = cell
+                else:  # kept 单元（bbox 判据）
                     kept_by_build.setdefault(str(bid), {})[str(uid)] = cell
 
-    frag_map = frag_by_build if stitch_continuation else {}
     out: list[ChunkEvidence] = [
-        _merge_chunk(
-            ev,
-            kept_by_build.get(ev.build_id, {}),
-            noise_by_build.get(ev.build_id, {}),
-            fragments=frag_map.get(ev.build_id, {}),
-        )
+        _merge_chunk(ev, kept_by_build.get(ev.build_id, {}), noise_by_build.get(ev.build_id, {}))
         for ev in chunk_evs
     ]
     return tuple(out)
@@ -167,16 +135,12 @@ def _merge_chunk(
     ev: ChunkEvidence,
     kept: dict[str, tuple],
     noise: dict[str, tuple],
-    fragments: dict[str, tuple] | None = None,
 ) -> ChunkEvidence:
-    """纯合并逻辑（可离线测试，I-ATT-1 / I-CONT-1）：把与块内 kept 单元同页同水平带
-    （bbox 垂直重叠）的 NOISE 表头/脚注，及「kept 句中截断 + 紧邻下一 ordinal NOISE
-    尾片段以句末标点收尾」的续接片段（F3-B），按 (ordinal, unit_id) 保序聚合进块
-    证据，重建 units/text/spans。
+    """纯合并逻辑（可离线测试，I-ATT-1）：把与块内 kept 单元同页同水平带（bbox 垂直
+    重叠）的 NOISE 表头/脚注，按 (ordinal, unit_id) 保序聚合进块证据，重建 units/text/spans。
 
-    ``kept``/``noise``/``fragments`` 为 ``unit_id -> (ordinal, raw_text, location,
-    content_hash, reasons)``；非本 build 单元调用方应先用``{unit_id: None}``和[]
-    控制，本函数只基于给定映射合并。
+    ``kept``/``noise`` 为 ``unit_id -> (ordinal, raw_text, location, content_hash, reasons)``；
+    非本 build 单元调用方应先用``{unit_id: None}``和[]控制，本函数只基于给定映射合并。
     """
     # 块内 kept 单元的 bbox
     kept_bbox: dict[str, tuple | None] = {}
@@ -203,29 +167,6 @@ def _merge_chunk(
             seen.add(nid)
             merges.append((nid, raw, nloc))
 
-    # F3-B（i0c-r4u）续接片段：kept 单元句中截断（不以句末标点收尾）时，其紧邻
-    # 下一 ordinal 的 NOISE 单元若以句末标点收尾（拼接即补全句子）且同页 ⇒ 保序聚合。
-    # 结构谓词、不绑噪声类型（与 f3-fragment-scan / 精化扫描同口径，全库同构样本=1）。
-    for unit in ev.units:
-        rec = kept.get(unit.unit_id)
-        if rec is None or unit.page is None:
-            continue
-        ord_k = rec[0]
-        head = str(rec[1] or "").rstrip()
-        if not head or head.endswith(_SENTENCE_TERMINAL):
-            continue
-        for fid, (ord_f, raw_f, loc_f, _chash, _rsn) in (fragments or {}).items():
-            if fid in seen or int(ord_f) != int(ord_k) + 1:
-                continue
-            floc = loc_f if isinstance(loc_f, dict) else {}
-            if floc.get("page") != unit.page:
-                continue
-            tail = str(raw_f or "").rstrip()
-            if not tail or not tail.endswith(_SENTENCE_TERMINAL):
-                continue
-            seen.add(fid)
-            merges.append((fid, raw_f, floc))
-
     if not merges:
         return ev
 
@@ -237,8 +178,6 @@ def _merge_chunk(
         merged_units.append((ordinal if ordinal is not None else -1, unit.unit_id, unit))
     for nid, raw, nloc in merges:
         rec = noise.get(nid)
-        if rec is None:  # F3-B 续接片段的 ordinal 在 fragments 映射
-            rec = (fragments or {}).get(nid)
         ordinal = rec[0] if rec is not None else 0
         merged_units.append(
             (ordinal if ordinal is not None else -1, nid, _unit_evidence(nid, raw, nloc))

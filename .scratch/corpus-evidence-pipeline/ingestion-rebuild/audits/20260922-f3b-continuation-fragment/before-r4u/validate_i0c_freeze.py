@@ -2067,38 +2067,6 @@ if "i0c-r4t" in by_id:
           "r4t test_corpus_negative_query.py must carry question-word answerable gate")
     merge_binding(i0c_current_binding, bindingr4t)
 
-if "i0c-r4u" in by_id:
-    r4u = load_json(BASE / by_id["i0c-r4u"]["file"])
-    parent43r4u = BASE / by_id["i0c-r4t"]["file"]
-    check(r4u.get("parent_snapshot") == {"snapshot_id": "i0c-r4t",
-          "path": str(parent43r4u.relative_to(ROOT)), "sha256": digest(parent43r4u)},
-          "r4u parent mismatch")
-    bindingr4u = r4u.get("binding", {})
-    check(set(bindingr4u) == {"chain_rebind_implementation", "chain_rebind_tests", "freeze_validator"},
-          "r4u binding groups mismatch")
-    check(set(bindingr4u.get("chain_rebind_implementation", {})) == {
-        "plugins/corpus/preparation/cross_boundary.py"},
-          "r4u cross_boundary implementation boundary mismatch")
-    check(set(bindingr4u.get("chain_rebind_tests", {})) == {
-        "tests/test_corpus_selection.py"}, "r4u test_corpus_selection tests boundary mismatch")
-    check(set(bindingr4u.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
-          "r4u freeze_validator boundary mismatch")
-    # B3/F3 读取侧续接片段聚合语义门（U 2026-09-22 具名裁决路径 B，仿 F4 cross_boundary 先例）：
-    # cross_boundary.py 须携带句末标点集合与续接谓词（stitch_continuation 默认开，
-    # service.search_bands 既有接线不动）；tests 须携带 I-CONT-1 正/反向门。
-    cb_src_r4u = (ROOT / "plugins/corpus/preparation/cross_boundary.py").read_text(encoding="utf-8")
-    check("_SENTENCE_TERMINAL" in cb_src_r4u and "stitch_continuation" in cb_src_r4u
-          and "def aggregate_band_chunks" in cb_src_r4u and "def _merge_chunk" in cb_src_r4u,
-          "r4u cross_boundary.py must carry sentence-terminal continuation stitch predicate")
-    tst_r4u = (ROOT / "tests/test_corpus_selection.py").read_text(encoding="utf-8")
-    check("test_continuation_stitch_merges_sentence_final_noise_fragment" in tst_r4u
-          and "test_continuation_stitch_ignores_non_sentence_final_fragment" in tst_r4u
-          and "test_continuation_stitch_requires_cut_head_adjacency_and_same_page" in tst_r4u
-          and "test_continuation_stitch_do_not_repeat_existing_unit" in tst_r4u,
-          "r4u test_corpus_selection must carry I-CONT-1 gates")
-    merge_binding(i0c_current_binding, bindingr4u)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2168,5 +2136,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4q F4 cross-boundary evidence frozen: cross_boundary.py aggregate_band_chunks/_merge_chunk first-in-chain, service.py search_bands wires cross_boundary.aggregate_band_chunks, I-ATT-1 tests (header-in-NOISE quote, cross-page/no-y-overlap no-merge, idempotency), chain_rebind service.py+test_corpus_selection drift closed" if "i0c-r4q" in by_id else "")
       + ("; r4r r39 calibration drift resolved: independent calibration revision exempts read_pg.py from r39 pre-run binding check (r39 plan records pre-F2 fb87a771, r4n authoritative 52b182f7), read_pg authoritative hash re-bound, closed-artifact untouched, chain green" if "i0c-r4r" in by_id else "")
       + ("; r4s M5 test-deficiency rebind: test_corpus_consumers_pg.py decision_id per-source (sel-d, RM-7 global-unique), dev-lane tests split out of test_corpus_preparation_admission.py to new first-in-chain test_corpus_dev_lane.py (i3-e2e guard only), i1 guard pure 6-material scope restored, consumers-pg 20 passed on sandbox PG" if "i0c-r4s" in by_id else "")
-      + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else "")
-      + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else ""))
+      + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else ""))
