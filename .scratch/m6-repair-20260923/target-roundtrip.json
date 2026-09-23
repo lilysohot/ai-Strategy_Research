@@ -1,0 +1,38 @@
+[
+  {
+    "query_id": "company-007",
+    "target": "e1",
+    "passed": true,
+    "authority_rev": "authority-context-2",
+    "context_unit_ids": [
+      "unit:0718"
+    ]
+  },
+  {
+    "query_id": "company-008",
+    "target": "a-1",
+    "passed": true,
+    "authority_rev": "authority-context-2",
+    "context_unit_ids": [
+      "unit:0005"
+    ]
+  },
+  {
+    "query_id": "industry-008",
+    "target": "a-3",
+    "passed": true,
+    "authority_rev": "authority-context-2",
+    "context_unit_ids": [
+      "unit:0518"
+    ]
+  },
+  {
+    "query_id": "industry-008",
+    "target": "a-5",
+    "passed": true,
+    "authority_rev": "authority-context-2",
+    "context_unit_ids": [
+      "unit:0518"
+    ]
+  }
+]

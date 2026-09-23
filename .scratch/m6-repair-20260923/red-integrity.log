@@ -1,0 +1,22 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_added_authority_unit_must_reject_invalid_hash[header] __________
+tests/test_corpus_context_integrity.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+_______ test_added_authority_unit_must_reject_invalid_hash[continuation] _______
+tests/test_corpus_context_integrity.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+_______ test_added_authority_unit_must_reject_invalid_hash[source_note] ________
+tests/test_corpus_context_integrity.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+=========================== short test summary info ============================
+FAILED tests/test_corpus_context_integrity.py::test_added_authority_unit_must_reject_invalid_hash[header]
+FAILED tests/test_corpus_context_integrity.py::test_added_authority_unit_must_reject_invalid_hash[continuation]
+FAILED tests/test_corpus_context_integrity.py::test_added_authority_unit_must_reject_invalid_hash[source_note]
+3 failed in 0.12s

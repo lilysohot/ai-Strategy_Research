@@ -1,0 +1,47 @@
+[
+  {
+    "configuration": "default",
+    "passed": false,
+    "qp": [
+      0,
+      24
+    ],
+    "ep": [
+      0,
+      24
+    ],
+    "fp": 0,
+    "failed_queries": 0,
+    "executed_queries": 30
+  },
+  {
+    "configuration": "explicit-or-diagnostic",
+    "passed": false,
+    "qp": [
+      22,
+      24
+    ],
+    "ep": [
+      13,
+      24
+    ],
+    "fp": 6,
+    "failed_queries": 0,
+    "executed_queries": 30
+  },
+  {
+    "configuration": "known-abstain-limit",
+    "passed": false,
+    "qp": [
+      0,
+      24
+    ],
+    "ep": [
+      0,
+      24
+    ],
+    "fp": 0,
+    "failed_queries": 0,
+    "executed_queries": 30
+  }
+]

@@ -1,0 +1,1472 @@
+[
+  {
+    "query": {
+      "query_id": "company-001",
+      "text": "华创证券对贵州茅台2026—2028年EPS和一年目标价的预测分别是多少，维持什么评级？"
+    },
+    "executed_query": "华创证券对贵州茅台2026—2028年EPS和一年目标价的预测分别是多少，维持什么评级？",
+    "observation": {
+      "query_id": "company-001",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "华创证券对贵州茅台2026—2028年EPS和一年目标价的预测分别是多少，维持什么评级？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "华创证券对贵州茅台2026—2028年EPS和一年目标价的预测分别是多少，维持什么评级？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-002",
+      "text": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？"
+    },
+    "executed_query": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+    "observation": {
+      "query_id": "company-002",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-003",
+      "text": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？"
+    },
+    "executed_query": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+    "observation": {
+      "query_id": "company-003",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-004",
+      "text": "光力科技2026—2028年股权激励的营业收入触发值和目标值各是多少？"
+    },
+    "executed_query": "光力科技2026—2028年股权激励的营业收入触发值和目标值各是多少？",
+    "observation": {
+      "query_id": "company-004",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "光力科技2026—2028年股权激励的营业收入触发值和目标值各是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "光力科技2026—2028年股权激励的营业收入触发值和目标值各是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-005",
+      "text": "光力科技8230、8231、9130、9320的应用与商业化阶段有何区别？"
+    },
+    "executed_query": "光力科技8230、8231、9130、9320的应用与商业化阶段有何区别？",
+    "observation": {
+      "query_id": "company-005",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "光力科技8230、8231、9130、9320的应用与商业化阶段有何区别？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "光力科技8230、8231、9130、9320的应用与商业化阶段有何区别？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-006",
+      "text": "截至2026年6月30日，赵彤宇如何控制光力科技36.60%股份，亲属持股是否计入？"
+    },
+    "executed_query": "截至2026年6月30日，赵彤宇如何控制光力科技36.60%股份，亲属持股是否计入？",
+    "observation": {
+      "query_id": "company-006",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "截至2026年6月30日，赵彤宇如何控制光力科技36.60%股份，亲属持股是否计入？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "截至2026年6月30日，赵彤宇如何控制光力科技36.60%股份，亲属持股是否计入？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-007",
+      "text": "贵州茅台2026年中报点评的声明页披露了茅台集团与华创云信怎样的持股关系？"
+    },
+    "executed_query": "贵州茅台2026年中报点评的声明页披露了茅台集团与华创云信怎样的持股关系？",
+    "observation": {
+      "query_id": "company-007",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "贵州茅台2026年中报点评的声明页披露了茅台集团与华创云信怎样的持股关系？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "贵州茅台2026年中报点评的声明页披露了茅台集团与华创云信怎样的持股关系？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-008",
+      "text": "两份公司中报点评分别给贵州茅台和光力科技什么评级，属于维持还是首次覆盖？"
+    },
+    "executed_query": "两份公司中报点评分别给贵州茅台和光力科技什么评级，属于维持还是首次覆盖？",
+    "observation": {
+      "query_id": "company-008",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "两份公司中报点评分别给贵州茅台和光力科技什么评级，属于维持还是首次覆盖？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "两份公司中报点评分别给贵州茅台和光力科技什么评级，属于维持还是首次覆盖？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-009",
+      "text": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？"
+    },
+    "executed_query": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+    "observation": {
+      "query_id": "company-009",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料能否给出光力科技2027年经审计的全年实际归母净利润（不是预测值）？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "company-010",
+      "text": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？"
+    },
+    "executed_query": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+    "observation": {
+      "query_id": "company-010",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料是否披露光力科技8231的首笔正式订单对应的设备唯一序列号？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-001",
+      "text": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？"
+    },
+    "executed_query": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+    "observation": {
+      "query_id": "industry-001",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-002",
+      "text": "图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？"
+    },
+    "executed_query": "图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？",
+    "observation": {
+      "query_id": "industry-002",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "图6续表的R32价格分位及2026E产能是多少，制冷剂产能有什么特殊口径？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-003",
+      "text": "图6续表的尿素开工率和2026E产能分别是多少？"
+    },
+    "executed_query": "图6续表的尿素开工率和2026E产能分别是多少？",
+    "observation": {
+      "query_id": "industry-003",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "图6续表的尿素开工率和2026E产能分别是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "图6续表的尿素开工率和2026E产能分别是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-004",
+      "text": "长江化工专题图6中，价格/价差分位与开工率分别使用什么统计窗口？"
+    },
+    "executed_query": "长江化工专题图6中，价格/价差分位与开工率分别使用什么统计窗口？",
+    "observation": {
+      "query_id": "industry-004",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "长江化工专题图6中，价格/价差分位与开工率分别使用什么统计窗口？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "长江化工专题图6中，价格/价差分位与开工率分别使用什么统计窗口？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-005",
+      "text": "2026年9月6日新材料周报所述，氩气价格从5月初到9月2日怎样变化？"
+    },
+    "executed_query": "2026年9月6日新材料周报所述，氩气价格从5月初到9月2日怎样变化？",
+    "observation": {
+      "query_id": "industry-005",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "2026年9月6日新材料周报所述，氩气价格从5月初到9月2日怎样变化？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "2026年9月6日新材料周报所述，氩气价格从5月初到9月2日怎样变化？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-006",
+      "text": "华福新材料周报如何描述PTFE在英伟达平台的用途与Rubin Ultra的预计推出时间？"
+    },
+    "executed_query": "华福新材料周报如何描述PTFE在英伟达平台的用途与Rubin Ultra的预计推出时间？",
+    "observation": {
+      "query_id": "industry-006",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "华福新材料周报如何描述PTFE在英伟达平台的用途与Rubin Ultra的预计推出时间？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "华福新材料周报如何描述PTFE在英伟达平台的用途与Rubin Ultra的预计推出时间？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-007",
+      "text": "该周报中Wind新材料指数和申万三级半导体材料指数的收盘点位及周度变化分别是多少？"
+    },
+    "executed_query": "该周报中Wind新材料指数和申万三级半导体材料指数的收盘点位及周度变化分别是多少？",
+    "observation": {
+      "query_id": "industry-007",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "该周报中Wind新材料指数和申万三级半导体材料指数的收盘点位及周度变化分别是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "该周报中Wind新材料指数和申万三级半导体材料指数的收盘点位及周度变化分别是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-008",
+      "text": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？"
+    },
+    "executed_query": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+    "observation": {
+      "query_id": "industry-008",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-009",
+      "text": "这六份开发材料能否给出2027年全年的氩气实际成交均价？"
+    },
+    "executed_query": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+    "observation": {
+      "query_id": "industry-009",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料能否给出2027年全年的氩气实际成交均价？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "industry-010",
+      "text": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？"
+    },
+    "executed_query": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+    "observation": {
+      "query_id": "industry-010",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料是否给出英伟达已签署PTFE采购合同的确切采购吨数？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-001",
+      "text": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？"
+    },
+    "executed_query": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+    "observation": {
+      "query_id": "macro-001",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-002",
+      "text": "该非农点评中，8月失业率、劳动参与率、平均时薪同比及对应前值是多少？"
+    },
+    "executed_query": "该非农点评中，8月失业率、劳动参与率、平均时薪同比及对应前值是多少？",
+    "observation": {
+      "query_id": "macro-002",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "该非农点评中，8月失业率、劳动参与率、平均时薪同比及对应前值是多少？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "该非农点评中，8月失业率、劳动参与率、平均时薪同比及对应前值是多少？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-003",
+      "text": "该报告关于美联储9月加息的判断依赖什么通胀条件？报告所述市场概率是否等于政策已落地？"
+    },
+    "executed_query": "该报告关于美联储9月加息的判断依赖什么通胀条件？报告所述市场概率是否等于政策已落地？",
+    "observation": {
+      "query_id": "macro-003",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "该报告关于美联储9月加息的判断依赖什么通胀条件？报告所述市场概率是否等于政策已落地？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "该报告关于美联储9月加息的判断依赖什么通胀条件？报告所述市场概率是否等于政策已落地？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-004",
+      "text": "《从分化到收敛》识别哪些需求主体，重点研究的四条收敛路径是什么？"
+    },
+    "executed_query": "《从分化到收敛》识别哪些需求主体，重点研究的四条收敛路径是什么？",
+    "observation": {
+      "query_id": "macro-004",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "《从分化到收敛》识别哪些需求主体，重点研究的四条收敛路径是什么？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "《从分化到收敛》识别哪些需求主体，重点研究的四条收敛路径是什么？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-005",
+      "text": "华创宏观专题对2026年两本账支出增速作何预测，并指出财政收入端哪两个堵点？"
+    },
+    "executed_query": "华创宏观专题对2026年两本账支出增速作何预测，并指出财政收入端哪两个堵点？",
+    "observation": {
+      "query_id": "macro-005",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "华创宏观专题对2026年两本账支出增速作何预测，并指出财政收入端哪两个堵点？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "华创宏观专题对2026年两本账支出增速作何预测，并指出财政收入端哪两个堵点？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-006",
+      "text": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？"
+    },
+    "executed_query": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+    "observation": {
+      "query_id": "macro-006",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-007",
+      "text": "报告中2026年第二季度居民消费倾向、支出倾向的定义及与2025、2019年同期的比较是什么？"
+    },
+    "executed_query": "报告中2026年第二季度居民消费倾向、支出倾向的定义及与2025、2019年同期的比较是什么？",
+    "observation": {
+      "query_id": "macro-007",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "报告中2026年第二季度居民消费倾向、支出倾向的定义及与2025、2019年同期的比较是什么？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "报告中2026年第二季度居民消费倾向、支出倾向的定义及与2025、2019年同期的比较是什么？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-008",
+      "text": "报告用哪些项目计划投资增速说明固定资产投资偏弱，并提示哪些样本局限？"
+    },
+    "executed_query": "报告用哪些项目计划投资增速说明固定资产投资偏弱，并提示哪些样本局限？",
+    "observation": {
+      "query_id": "macro-008",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "报告用哪些项目计划投资增速说明固定资产投资偏弱，并提示哪些样本局限？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "报告用哪些项目计划投资增速说明固定资产投资偏弱，并提示哪些样本局限？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-009",
+      "text": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？"
+    },
+    "executed_query": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+    "observation": {
+      "query_id": "macro-009",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料能否给出美联储2026年9月议息会议已经正式公布的最终利率决定？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  },
+  {
+    "query": {
+      "query_id": "macro-010",
+      "text": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？"
+    },
+    "executed_query": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+    "observation": {
+      "query_id": "macro-010",
+      "outcome": "no_match",
+      "documents": []
+    },
+    "calls": [
+      {
+        "tool": "corpus_search",
+        "args": {
+          "query": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+          "limit": 10
+        },
+        "response": {
+          "ok": true,
+          "query": "这六份开发材料能否给出2026Q2中国每户居民的逐户新房购房支出明细？",
+          "count": 0,
+          "hits": [],
+          "coverage": {
+            "requested_scope_ref": "corpus_schema",
+            "effective_scope_ref": "corpus_publications.active_build_id",
+            "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+            "processing": "scoped",
+            "query_status": "no_match",
+            "availability": "unknown",
+            "reason_codes": [
+              "gap_regions_present"
+            ],
+            "counts": {
+              "sources": 8,
+              "published": 8,
+              "withdrawn": 0,
+              "pending": 0,
+              "failed_jobs": 0,
+              "builds": 8,
+              "published_with_gaps": 6
+            }
+          },
+          "hint": "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；availability=unknown——只说明该范围无匹配，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**，切换到市场数据路径：① 用 market_resolve 把标的消歧成 thscode（数据端点不接受纯代码）；② 用 market_quote 取实时行情与估值（价格实时变化，务必带 as_of 时点）；③ 用 market_history 取历史序列，做区间 / 均线 / 波动等技术面分析。纪律：禁止编造或引用不存在的研报；技术指标的**数值**必须来自确定性工具并带 computed_by，不得由你自行计算（硬闸②）；最终结论请明确标注『无研报覆盖，结论基于市场数据与技术面』，并在 evidence 中如实反映数据来源（市场接口而非研报）。"
+        }
+      }
+    ],
+    "error": null
+  }
+]
