@@ -1,0 +1,2 @@
+run_id,path,reason
+2,data/corpus/__损坏测试文件.pdf,解析失败：Failed to open file 'data/corpus/__损坏测试文件.pdf' as type pdf.

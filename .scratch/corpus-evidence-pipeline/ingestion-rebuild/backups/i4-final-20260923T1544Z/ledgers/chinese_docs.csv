@@ -1,0 +1,4 @@
+id,title,content,embedding,tsv
+1,PostgreSQL全文检索,PostgreSQL 支持强大的全文搜索功能,"[0.1,0.2,0.3]",
+2,向量检索,pgvector 是向量相似度检索扩展,"[0.4,0.5,0.6]",
+3,中文分词,zhparser 让 PG 支持中文全文检索,"[0.7,0.8,0.9]",

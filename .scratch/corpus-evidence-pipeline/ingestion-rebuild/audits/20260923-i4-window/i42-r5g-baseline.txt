@@ -1,0 +1,7 @@
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/corpus-ingestion-rebuild-tasks.md
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/claims-market-closed-loop-plan.md
+I0C FREEZE CHECK FAILED: i0c-current.binding[docs]: docs/plan/README.md 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[m6_retrieval_state]: docs/plan/corpus-ingestion-rebuild-tasks.md 哈希失配或缺失
+i0c freeze verification FAILED: 2 error(s)
+exit=1

@@ -71,6 +71,7 @@ from plugins.corpus.preparation.contract import (
     canonical_fingerprint,
 )
 from plugins.corpus.preparation.gap_review import REVIEW_STAGE_PREFIX
+from plugins.corpus.preparation.pg_target import production_instance_authorized
 from plugins.corpus.preparation.repository import Store, StoreError
 
 _TERMINAL_STATES: frozenset[JobState] = frozenset(
@@ -270,7 +271,7 @@ class PgStore(Store):
                 )
             cur.execute("SELECT datname FROM pg_database WHERE datallowconn")
             dbs = {r[0] for r in cur.fetchall()}
-        if "apodex" in dbs:
+        if "apodex" in dbs and not production_instance_authorized():
             raise StoreError("拒绝：目标实例含 apodex 库——判定为生产实例，禁止写入")
 
     @staticmethod

@@ -1,0 +1,1595 @@
+{
+  "purpose": "I4-7 migrate：postgres 库新建 corpus schema（i0c-r1 冻结 DDL 九表），仅建 schema 不搬数据",
+  "executed_at": "2026-09-24T00:56:40+08:00",
+  "guard_config": "guards/i4-window.json",
+  "guard_config_sha256": "e599d9b438e26d6d6df97074e8611091b8120b1292c287da7999b90327e58ba0",
+  "target": {
+    "dsn_env": "CORPUS_WINDOW_DSN",
+    "instance": "127.0.0.1:5432（原库实例，含 apodex 库——生产实例）",
+    "database": "postgres",
+    "schema": "corpus（C9：原库 postgres 库内新建）",
+    "ddl": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql",
+      "frozen_in": "i0c-r1（corpus schema 九表，与 i2_sandbox_corpus 同构）",
+      "table_count": 9
+    },
+    "precondition_verified": {
+      "corpus_schema_absent": true,
+      "evidence": "audits/20260923-i4-window/i42-reset-facts.json（corpus_schema_present=false）"
+    }
+  },
+  "ddl": {
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql",
+    "sha256": "c4bc8aff02ccbc62f383356c7456200935e7dfe3a6a8158e6357dc800fb32eb9",
+    "frozen": "i0c-r4 binding（i0c-r5 声明字节未变沿用；cutover manifest ddl.frozen_in=i0c-r1 布局）"
+  },
+  "credentials_in_report": false,
+  "prior_incident": {
+    "record": "i47-migrate-incident.json",
+    "summary": "首跑 DDL 提交后验证器索引期望值错误（10 vs 19），按 cutover manifest rollback[0] 逐字 DROP SCHEMA corpus CASCADE，零残留核验通过后重跑本报告"
+  },
+  "server_version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2) on x86_64-pc-linux-gnu",
+  "wal_lsn_before": "0/503E6860",
+  "wal_lsn_after": "0/50464000",
+  "preconditions": {
+    "corpus_schema_absent": true,
+    "extensions_present": [
+      "pg_trgm",
+      "plpgsql",
+      "vector",
+      "zhparser"
+    ],
+    "zhcfg_baseline": {
+      "oid": 25011,
+      "token_count": 24,
+      "all_simple": true,
+      "missing_tokens": [],
+      "custom_words": 0,
+      "baseline_ok": true
+    },
+    "zhcfg_created": false,
+    "zhcfg_note": "postgres 库既有 zhcfg（旧链 initdb 产物）与沙箱基线逐字段一致，条件创建无操作",
+    "zero_drift_row_counts": {
+      "blocks": 1101,
+      "documents": 89,
+      "claims": 1318,
+      "claims_v2": 0,
+      "claim_block_runs": 290,
+      "claim_block_runs_v2": 0,
+      "corpus_evidence_runs": 57,
+      "ingest_runs": 11,
+      "ingest_failures": 1,
+      "docs": 3,
+      "chinese_docs": 3
+    }
+  },
+  "structure_check": {
+    "tables": 9,
+    "sequences": 0,
+    "indexes": [
+      "corpus_admissions_pkey",
+      "corpus_builds_pkey",
+      "corpus_chunks_pkey",
+      "corpus_jobs_pkey",
+      "corpus_publications_pkey",
+      "corpus_review_decisions_pkey",
+      "corpus_source_checkpoints_pkey",
+      "corpus_sources_pkey",
+      "corpus_units_pkey",
+      "idx_admissions_domain",
+      "idx_admissions_report_pub",
+      "idx_builds_decision",
+      "idx_builds_source",
+      "idx_chunks_tsv",
+      "idx_chunks_unitrefs",
+      "idx_jobs_current",
+      "idx_publications_active_build",
+      "idx_review_decisions_source",
+      "uq_jobs_single_running"
+    ],
+    "columns_identical_to_sandbox": true,
+    "constraints_identical_to_sandbox": true,
+    "indexes_identical_to_sandbox": true,
+    "sandbox_reference": "i2_sandbox_corpus.corpus（i0c-r1 同构权威参照，只读比对）"
+  },
+  "columns_dump": [
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "decision_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "source_id",
+      "ordinal_position": 2,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "material_type",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "research_domain",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "decision",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "policy_rev",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "''::text",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "reason_codes",
+      "ordinal_position": 7,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "scope_ref",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "evidence_refs",
+      "ordinal_position": 9,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "review_ref",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "rule_rev",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "''::text",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_admissions",
+      "column_name": "metadata_snapshot",
+      "ordinal_position": 12,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "build_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "source_id",
+      "ordinal_position": 2,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "decision_id",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "parse_rev",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "clean_rev",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "chunk_rev",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "index_rev",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "scope_ref",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "config_fingerprint",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "artifact_manifest",
+      "ordinal_position": 10,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_builds",
+      "column_name": "quality_report",
+      "ordinal_position": 11,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "build_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "chunk_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "kind",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "unit_refs",
+      "ordinal_position": 4,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "context_refs",
+      "ordinal_position": 5,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "search_text",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "title_text",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "section_path",
+      "ordinal_position": 8,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "source_ranges",
+      "ordinal_position": 9,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'[]'::jsonb",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_chunks",
+      "column_name": "search_tsv",
+      "ordinal_position": 10,
+      "data_type": "tsvector",
+      "udt_name": "tsvector",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "ALWAYS",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "build_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "stage",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "attempt",
+      "ordinal_position": 3,
+      "data_type": "integer",
+      "udt_name": "int4",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "state",
+      "ordinal_position": 4,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "owner_id",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "fence_token",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "lease_until",
+      "ordinal_position": 7,
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "heartbeat_at",
+      "ordinal_position": 8,
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "error",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_jobs",
+      "column_name": "checkpoint",
+      "ordinal_position": 10,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_publications",
+      "column_name": "source_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_publications",
+      "column_name": "current_decision_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_publications",
+      "column_name": "active_build_id",
+      "ordinal_position": 3,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_publications",
+      "column_name": "generation",
+      "ordinal_position": 4,
+      "data_type": "integer",
+      "udt_name": "int4",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_publications",
+      "column_name": "activated_at",
+      "ordinal_position": 5,
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "decision_id",
+      "ordinal_position": 1,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "source_id",
+      "ordinal_position": 2,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "reviewer",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "reviewed_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "decision",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "rationale",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "scope_ref",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "supersedes",
+      "ordinal_position": 8,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "locators",
+      "ordinal_position": 9,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "material_type",
+      "ordinal_position": 10,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_review_decisions",
+      "column_name": "research_domain",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_source_checkpoints",
+      "column_name": "source_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_source_checkpoints",
+      "column_name": "stage",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_source_checkpoints",
+      "column_name": "checkpoint",
+      "ordinal_position": 3,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_source_checkpoints",
+      "column_name": "updated_at",
+      "ordinal_position": 4,
+      "data_type": "timestamp with time zone",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "source_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "format",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "mime_type",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "size_bytes",
+      "ordinal_position": 4,
+      "data_type": "bigint",
+      "udt_name": "int8",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "archive_path",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "original_names",
+      "ordinal_position": 6,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_sources",
+      "column_name": "current_decision_id",
+      "ordinal_position": 7,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "build_id",
+      "ordinal_position": 1,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "unit_id",
+      "ordinal_position": 2,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "parent_id",
+      "ordinal_position": 3,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "ordinal",
+      "ordinal_position": 4,
+      "data_type": "integer",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "kind",
+      "ordinal_position": 5,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "raw_text",
+      "ordinal_position": 6,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "content_hash",
+      "ordinal_position": 7,
+      "data_type": "character",
+      "udt_name": "bpchar",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": 64
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "location",
+      "ordinal_position": 8,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'{}'::jsonb",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "clean_view",
+      "ordinal_position": 9,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "mapping",
+      "ordinal_position": 10,
+      "data_type": "jsonb",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": "'[]'::jsonb",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "status",
+      "ordinal_position": 11,
+      "data_type": "text",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "'kept'::text",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    },
+    {
+      "table_name": "corpus_units",
+      "column_name": "reasons",
+      "ordinal_position": 12,
+      "data_type": "ARRAY",
+      "udt_name": "_text",
+      "is_nullable": "NO",
+      "column_default": "'{}'::text[]",
+      "is_generated": "NEVER",
+      "character_maximum_length": null
+    }
+  ],
+  "constraints_dump": [
+    {
+      "conname": "corpus_admissions_decision_check",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "c",
+      "def": "CHECK ((decision = ANY (ARRAY['in_scope'::text, 'excluded_by_policy'::text, 'review_required'::text])))"
+    },
+    {
+      "conname": "corpus_admissions_decision_id_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL decision_id"
+    },
+    {
+      "conname": "corpus_admissions_decision_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL decision"
+    },
+    {
+      "conname": "corpus_admissions_evidence_refs_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL evidence_refs"
+    },
+    {
+      "conname": "corpus_admissions_metadata_snapshot_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL metadata_snapshot"
+    },
+    {
+      "conname": "corpus_admissions_pkey",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "p",
+      "def": "PRIMARY KEY (decision_id)"
+    },
+    {
+      "conname": "corpus_admissions_policy_rev_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL policy_rev"
+    },
+    {
+      "conname": "corpus_admissions_reason_codes_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL reason_codes"
+    },
+    {
+      "conname": "corpus_admissions_rule_rev_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL rule_rev"
+    },
+    {
+      "conname": "corpus_admissions_source_id_fkey",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "f",
+      "def": "FOREIGN KEY (source_id) REFERENCES corpus.corpus_sources(source_id)"
+    },
+    {
+      "conname": "corpus_admissions_source_id_not_null",
+      "tbl": "corpus.corpus_admissions",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "corpus_builds_artifact_manifest_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL artifact_manifest"
+    },
+    {
+      "conname": "corpus_builds_build_id_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL build_id"
+    },
+    {
+      "conname": "corpus_builds_chunk_rev_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL chunk_rev"
+    },
+    {
+      "conname": "corpus_builds_clean_rev_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL clean_rev"
+    },
+    {
+      "conname": "corpus_builds_decision_id_fkey",
+      "tbl": "corpus.corpus_builds",
+      "contype": "f",
+      "def": "FOREIGN KEY (decision_id) REFERENCES corpus.corpus_admissions(decision_id)"
+    },
+    {
+      "conname": "corpus_builds_decision_id_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL decision_id"
+    },
+    {
+      "conname": "corpus_builds_index_rev_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL index_rev"
+    },
+    {
+      "conname": "corpus_builds_parse_rev_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL parse_rev"
+    },
+    {
+      "conname": "corpus_builds_pkey",
+      "tbl": "corpus.corpus_builds",
+      "contype": "p",
+      "def": "PRIMARY KEY (build_id)"
+    },
+    {
+      "conname": "corpus_builds_source_id_fkey",
+      "tbl": "corpus.corpus_builds",
+      "contype": "f",
+      "def": "FOREIGN KEY (source_id) REFERENCES corpus.corpus_sources(source_id)"
+    },
+    {
+      "conname": "corpus_builds_source_id_not_null",
+      "tbl": "corpus.corpus_builds",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "corpus_chunks_build_id_fkey",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "f",
+      "def": "FOREIGN KEY (build_id) REFERENCES corpus.corpus_builds(build_id)"
+    },
+    {
+      "conname": "corpus_chunks_build_id_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL build_id"
+    },
+    {
+      "conname": "corpus_chunks_chunk_id_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL chunk_id"
+    },
+    {
+      "conname": "corpus_chunks_context_refs_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL context_refs"
+    },
+    {
+      "conname": "corpus_chunks_kind_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL kind"
+    },
+    {
+      "conname": "corpus_chunks_pkey",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "p",
+      "def": "PRIMARY KEY (build_id, chunk_id)"
+    },
+    {
+      "conname": "corpus_chunks_search_text_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL search_text"
+    },
+    {
+      "conname": "corpus_chunks_section_path_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL section_path"
+    },
+    {
+      "conname": "corpus_chunks_source_ranges_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL source_ranges"
+    },
+    {
+      "conname": "corpus_chunks_unit_refs_check",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "c",
+      "def": "CHECK ((array_length(unit_refs, 1) >= 1))"
+    },
+    {
+      "conname": "corpus_chunks_unit_refs_not_null",
+      "tbl": "corpus.corpus_chunks",
+      "contype": "n",
+      "def": "NOT NULL unit_refs"
+    },
+    {
+      "conname": "corpus_jobs_attempt_check",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "c",
+      "def": "CHECK ((attempt >= 1))"
+    },
+    {
+      "conname": "corpus_jobs_attempt_not_null",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "n",
+      "def": "NOT NULL attempt"
+    },
+    {
+      "conname": "corpus_jobs_build_id_fkey",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "f",
+      "def": "FOREIGN KEY (build_id) REFERENCES corpus.corpus_builds(build_id)"
+    },
+    {
+      "conname": "corpus_jobs_build_id_not_null",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "n",
+      "def": "NOT NULL build_id"
+    },
+    {
+      "conname": "corpus_jobs_pkey",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "p",
+      "def": "PRIMARY KEY (build_id, stage, attempt)"
+    },
+    {
+      "conname": "corpus_jobs_stage_not_null",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "n",
+      "def": "NOT NULL stage"
+    },
+    {
+      "conname": "corpus_jobs_state_check",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "c",
+      "def": "CHECK ((state = ANY (ARRAY['queued'::text, 'running'::text, 'succeeded'::text, 'failed'::text, 'cancelled'::text])))"
+    },
+    {
+      "conname": "corpus_jobs_state_not_null",
+      "tbl": "corpus.corpus_jobs",
+      "contype": "n",
+      "def": "NOT NULL state"
+    },
+    {
+      "conname": "corpus_publications_activated_at_not_null",
+      "tbl": "corpus.corpus_publications",
+      "contype": "n",
+      "def": "NOT NULL activated_at"
+    },
+    {
+      "conname": "corpus_publications_active_build_id_fkey",
+      "tbl": "corpus.corpus_publications",
+      "contype": "f",
+      "def": "FOREIGN KEY (active_build_id) REFERENCES corpus.corpus_builds(build_id)"
+    },
+    {
+      "conname": "corpus_publications_current_decision_id_fkey",
+      "tbl": "corpus.corpus_publications",
+      "contype": "f",
+      "def": "FOREIGN KEY (current_decision_id) REFERENCES corpus.corpus_admissions(decision_id)"
+    },
+    {
+      "conname": "corpus_publications_current_decision_id_not_null",
+      "tbl": "corpus.corpus_publications",
+      "contype": "n",
+      "def": "NOT NULL current_decision_id"
+    },
+    {
+      "conname": "corpus_publications_generation_check",
+      "tbl": "corpus.corpus_publications",
+      "contype": "c",
+      "def": "CHECK ((generation >= 1))"
+    },
+    {
+      "conname": "corpus_publications_generation_not_null",
+      "tbl": "corpus.corpus_publications",
+      "contype": "n",
+      "def": "NOT NULL generation"
+    },
+    {
+      "conname": "corpus_publications_pkey",
+      "tbl": "corpus.corpus_publications",
+      "contype": "p",
+      "def": "PRIMARY KEY (source_id)"
+    },
+    {
+      "conname": "corpus_publications_source_id_fkey",
+      "tbl": "corpus.corpus_publications",
+      "contype": "f",
+      "def": "FOREIGN KEY (source_id) REFERENCES corpus.corpus_sources(source_id)"
+    },
+    {
+      "conname": "corpus_publications_source_id_not_null",
+      "tbl": "corpus.corpus_publications",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "corpus_review_decisions_decision_check",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "c",
+      "def": "CHECK ((decision = ANY (ARRAY['admitted'::text, 'excluded'::text, 'excluded_from_active'::text])))"
+    },
+    {
+      "conname": "corpus_review_decisions_decision_id_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL decision_id"
+    },
+    {
+      "conname": "corpus_review_decisions_decision_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL decision"
+    },
+    {
+      "conname": "corpus_review_decisions_locators_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL locators"
+    },
+    {
+      "conname": "corpus_review_decisions_pkey",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "p",
+      "def": "PRIMARY KEY (decision_id)"
+    },
+    {
+      "conname": "corpus_review_decisions_rationale_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL rationale"
+    },
+    {
+      "conname": "corpus_review_decisions_reviewed_at_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL reviewed_at"
+    },
+    {
+      "conname": "corpus_review_decisions_reviewer_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL reviewer"
+    },
+    {
+      "conname": "corpus_review_decisions_source_id_not_null",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "corpus_review_decisions_supersedes_fkey",
+      "tbl": "corpus.corpus_review_decisions",
+      "contype": "f",
+      "def": "FOREIGN KEY (supersedes) REFERENCES corpus.corpus_review_decisions(decision_id)"
+    },
+    {
+      "conname": "corpus_source_checkpoints_checkpoint_not_null",
+      "tbl": "corpus.corpus_source_checkpoints",
+      "contype": "n",
+      "def": "NOT NULL checkpoint"
+    },
+    {
+      "conname": "corpus_source_checkpoints_pkey",
+      "tbl": "corpus.corpus_source_checkpoints",
+      "contype": "p",
+      "def": "PRIMARY KEY (source_id, stage)"
+    },
+    {
+      "conname": "corpus_source_checkpoints_source_id_not_null",
+      "tbl": "corpus.corpus_source_checkpoints",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "corpus_source_checkpoints_stage_not_null",
+      "tbl": "corpus.corpus_source_checkpoints",
+      "contype": "n",
+      "def": "NOT NULL stage"
+    },
+    {
+      "conname": "corpus_source_checkpoints_updated_at_not_null",
+      "tbl": "corpus.corpus_source_checkpoints",
+      "contype": "n",
+      "def": "NOT NULL updated_at"
+    },
+    {
+      "conname": "corpus_sources_archive_path_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL archive_path"
+    },
+    {
+      "conname": "corpus_sources_format_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL format"
+    },
+    {
+      "conname": "corpus_sources_mime_type_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL mime_type"
+    },
+    {
+      "conname": "corpus_sources_original_names_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL original_names"
+    },
+    {
+      "conname": "corpus_sources_pkey",
+      "tbl": "corpus.corpus_sources",
+      "contype": "p",
+      "def": "PRIMARY KEY (source_id)"
+    },
+    {
+      "conname": "corpus_sources_size_bytes_check",
+      "tbl": "corpus.corpus_sources",
+      "contype": "c",
+      "def": "CHECK ((size_bytes >= 0))"
+    },
+    {
+      "conname": "corpus_sources_size_bytes_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL size_bytes"
+    },
+    {
+      "conname": "corpus_sources_source_id_not_null",
+      "tbl": "corpus.corpus_sources",
+      "contype": "n",
+      "def": "NOT NULL source_id"
+    },
+    {
+      "conname": "fk_sources_current_decision",
+      "tbl": "corpus.corpus_sources",
+      "contype": "f",
+      "def": "FOREIGN KEY (current_decision_id) REFERENCES corpus.corpus_admissions(decision_id)"
+    },
+    {
+      "conname": "corpus_units_build_id_fkey",
+      "tbl": "corpus.corpus_units",
+      "contype": "f",
+      "def": "FOREIGN KEY (build_id) REFERENCES corpus.corpus_builds(build_id)"
+    },
+    {
+      "conname": "corpus_units_build_id_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL build_id"
+    },
+    {
+      "conname": "corpus_units_content_hash_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL content_hash"
+    },
+    {
+      "conname": "corpus_units_kind_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL kind"
+    },
+    {
+      "conname": "corpus_units_location_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL location"
+    },
+    {
+      "conname": "corpus_units_mapping_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL mapping"
+    },
+    {
+      "conname": "corpus_units_ordinal_check",
+      "tbl": "corpus.corpus_units",
+      "contype": "c",
+      "def": "CHECK (((ordinal IS NULL) OR (ordinal >= 0)))"
+    },
+    {
+      "conname": "corpus_units_pkey",
+      "tbl": "corpus.corpus_units",
+      "contype": "p",
+      "def": "PRIMARY KEY (build_id, unit_id)"
+    },
+    {
+      "conname": "corpus_units_raw_text_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL raw_text"
+    },
+    {
+      "conname": "corpus_units_reasons_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL reasons"
+    },
+    {
+      "conname": "corpus_units_status_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL status"
+    },
+    {
+      "conname": "corpus_units_unit_id_not_null",
+      "tbl": "corpus.corpus_units",
+      "contype": "n",
+      "def": "NOT NULL unit_id"
+    }
+  ],
+  "indexes_dump": [
+    {
+      "indexname": "corpus_admissions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_admissions_pkey ON corpus.corpus_admissions USING btree (decision_id)"
+    },
+    {
+      "indexname": "corpus_builds_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_builds_pkey ON corpus.corpus_builds USING btree (build_id)"
+    },
+    {
+      "indexname": "corpus_chunks_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_chunks_pkey ON corpus.corpus_chunks USING btree (build_id, chunk_id)"
+    },
+    {
+      "indexname": "corpus_jobs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_jobs_pkey ON corpus.corpus_jobs USING btree (build_id, stage, attempt)"
+    },
+    {
+      "indexname": "corpus_publications_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_publications_pkey ON corpus.corpus_publications USING btree (source_id)"
+    },
+    {
+      "indexname": "corpus_review_decisions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_review_decisions_pkey ON corpus.corpus_review_decisions USING btree (decision_id)"
+    },
+    {
+      "indexname": "corpus_source_checkpoints_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_source_checkpoints_pkey ON corpus.corpus_source_checkpoints USING btree (source_id, stage)"
+    },
+    {
+      "indexname": "corpus_sources_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_sources_pkey ON corpus.corpus_sources USING btree (source_id)"
+    },
+    {
+      "indexname": "corpus_units_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_units_pkey ON corpus.corpus_units USING btree (build_id, unit_id)"
+    },
+    {
+      "indexname": "idx_admissions_domain",
+      "indexdef": "CREATE INDEX idx_admissions_domain ON corpus.corpus_admissions USING btree (research_domain) WHERE (research_domain IS NOT NULL)"
+    },
+    {
+      "indexname": "idx_admissions_report_pub",
+      "indexdef": "CREATE INDEX idx_admissions_report_pub ON corpus.corpus_admissions USING btree ((((metadata_snapshot -> 'report_publication'::text) ->> 'value'::text))) WHERE (((metadata_snapshot -> 'report_publication'::text) ->> 'value'::text) IS NOT NULL)"
+    },
+    {
+      "indexname": "idx_builds_decision",
+      "indexdef": "CREATE INDEX idx_builds_decision ON corpus.corpus_builds USING btree (decision_id)"
+    },
+    {
+      "indexname": "idx_builds_source",
+      "indexdef": "CREATE INDEX idx_builds_source ON corpus.corpus_builds USING btree (source_id)"
+    },
+    {
+      "indexname": "idx_chunks_tsv",
+      "indexdef": "CREATE INDEX idx_chunks_tsv ON corpus.corpus_chunks USING gin (search_tsv)"
+    },
+    {
+      "indexname": "idx_chunks_unitrefs",
+      "indexdef": "CREATE INDEX idx_chunks_unitrefs ON corpus.corpus_chunks USING gin (unit_refs)"
+    },
+    {
+      "indexname": "idx_jobs_current",
+      "indexdef": "CREATE INDEX idx_jobs_current ON corpus.corpus_jobs USING btree (build_id, stage, attempt DESC)"
+    },
+    {
+      "indexname": "idx_publications_active_build",
+      "indexdef": "CREATE INDEX idx_publications_active_build ON corpus.corpus_publications USING btree (active_build_id)"
+    },
+    {
+      "indexname": "idx_review_decisions_source",
+      "indexdef": "CREATE INDEX idx_review_decisions_source ON corpus.corpus_review_decisions USING btree (source_id)"
+    },
+    {
+      "indexname": "uq_jobs_single_running",
+      "indexdef": "CREATE UNIQUE INDEX uq_jobs_single_running ON corpus.corpus_jobs USING btree (build_id, stage) WHERE (state = 'running'::text)"
+    }
+  ]
+}

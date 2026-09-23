@@ -1,0 +1,170 @@
+{
+  "purpose": "I4-7 reset 阶段 1：manifest 逐表 TRUNCATE 七表（U 2026-09-24 一次具名批准）",
+  "executed_at": "2026-09-24T00:59:13+08:00",
+  "manifest_sha256": "0e51663d006262cde85eda1f42afcd441461daf9f377bee1f8b502cfc48c3ac0",
+  "statements_source": "i4-reset-manifest.json phases[0].statements（运行时读取逐字执行）",
+  "export_binding_check": {
+    "artifact_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "ledgers": {
+      "ledgers/claim_block_runs.jsonl": "621ca8eb2b91a9cc6596bfe7920d5778a8849bf318820ea6088ba313454424ae",
+      "ledgers/claim_block_runs.csv": "310fd2423e27ea2e6a41428885772e198f3af6aaf79ca6346e8dd35d08332501",
+      "ledgers/claims.jsonl": "d5066b128f3c83afc3fcfa2f900be2894a66c1cb72c93caac3256e250be7c493",
+      "ledgers/claims.csv": "d5a9130023d6dc41137662114d072c6d9d134f0bc1442601527d3964dcb7aa3d",
+      "ledgers/corpus_evidence_runs.jsonl": "68d7766d1346692a2fe2609b36d46b9d5938724bf9413f3e4c257a47914708ab",
+      "ledgers/corpus_evidence_runs.csv": "e5c2f79733a1b14f221dfdc6403ce3be73bab525b2285e9f39930d8507dcfcbe",
+      "ledgers/ingest_failures.jsonl": "a0393f6ed045a7a3c090baf7e68dcd632b7704b9ec503161a0df989446231c10",
+      "ledgers/ingest_failures.csv": "f3eeaa7b75bdb891b5afe3884a3ff10f15be09ff80fafe0896900d9ee04d37ce",
+      "ledgers/ingest_runs.jsonl": "56e00f0e9c7c228a23f214d4ffd46b8d463c5780ce9de03558f01beec4c22896",
+      "ledgers/ingest_runs.csv": "4f926c6fe2cf929e6b98e692ccf8b085faf678635b555dfac8e365b87c9b4ecf",
+      "ledgers/_counts.json": "e9bb4f6ec7b97b138d487cff1252d201dd1f317438fce523e6c6078dd5fb278a"
+    }
+  },
+  "zero_model_calls": true,
+  "wal_lsn_before": "0/504717C8",
+  "pre": {
+    "table_counts": {
+      "claims_v2": 0,
+      "claim_block_runs_v2": 0,
+      "claim_block_runs": 290,
+      "claims": 1318,
+      "corpus_evidence_runs": 57,
+      "ingest_failures": 1,
+      "ingest_runs": 11
+    },
+    "statement_object_row_reconciliation": [
+      {
+        "statement": "TRUNCATE public.claims_v2 RESTART IDENTITY;",
+        "objects": [
+          "claims_v2"
+        ],
+        "rows_before": {
+          "claims_v2": 0
+        }
+      },
+      {
+        "statement": "TRUNCATE public.claim_block_runs_v2 RESTART IDENTITY;",
+        "objects": [
+          "claim_block_runs_v2"
+        ],
+        "rows_before": {
+          "claim_block_runs_v2": 0
+        }
+      },
+      {
+        "statement": "TRUNCATE public.claim_block_runs RESTART IDENTITY;",
+        "objects": [
+          "claim_block_runs"
+        ],
+        "rows_before": {
+          "claim_block_runs": 290
+        }
+      },
+      {
+        "statement": "TRUNCATE public.claims RESTART IDENTITY;",
+        "objects": [
+          "claims"
+        ],
+        "rows_before": {
+          "claims": 1318
+        }
+      },
+      {
+        "statement": "TRUNCATE public.corpus_evidence_runs RESTART IDENTITY;",
+        "objects": [
+          "corpus_evidence_runs"
+        ],
+        "rows_before": {
+          "corpus_evidence_runs": 57
+        }
+      },
+      {
+        "statement": "TRUNCATE public.ingest_failures, public.ingest_runs RESTART IDENTITY;",
+        "objects": [
+          "ingest_failures",
+          "ingest_runs"
+        ],
+        "rows_before": {
+          "ingest_failures": 1,
+          "ingest_runs": 11
+        }
+      }
+    ],
+    "sequences_before": {
+      "public.claims_claim_id_seq": {
+        "last_value": 2238,
+        "is_called": true
+      },
+      "public.claims_v2_claim_id_seq": {
+        "last_value": 1,
+        "is_called": false
+      },
+      "public.ingest_runs_run_id_seq": {
+        "last_value": 11,
+        "is_called": true
+      },
+      "public.docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      },
+      "public.chinese_docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      }
+    },
+    "witness_tables_before": {
+      "blocks": 1101,
+      "documents": 89,
+      "docs": 3,
+      "chinese_docs": 3
+    }
+  },
+  "wal_lsn_after": "0/50471D18",
+  "post": {
+    "table_counts_all_zero": {
+      "claims_v2": 0,
+      "claim_block_runs_v2": 0,
+      "claim_block_runs": 0,
+      "claims": 0,
+      "corpus_evidence_runs": 0,
+      "ingest_failures": 0,
+      "ingest_runs": 0
+    },
+    "sequences_after": {
+      "public.claims_claim_id_seq": {
+        "last_value": 1,
+        "is_called": false
+      },
+      "public.claims_v2_claim_id_seq": {
+        "last_value": 1,
+        "is_called": false
+      },
+      "public.ingest_runs_run_id_seq": {
+        "last_value": 1,
+        "is_called": false
+      },
+      "public.docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      },
+      "public.chinese_docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      }
+    },
+    "sequences_reset_verified": [
+      "public.claims_claim_id_seq",
+      "public.claims_v2_claim_id_seq",
+      "public.ingest_runs_run_id_seq"
+    ],
+    "retained_sequences_unchanged": [
+      "public.docs_id_seq",
+      "public.chinese_docs_id_seq"
+    ],
+    "witness_tables_after": {
+      "blocks": 1101,
+      "documents": 89,
+      "docs": 3,
+      "chinese_docs": 3
+    }
+  }
+}

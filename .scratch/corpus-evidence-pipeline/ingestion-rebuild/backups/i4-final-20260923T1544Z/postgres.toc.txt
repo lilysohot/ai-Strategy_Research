@@ -1,0 +1,206 @@
+;
+; Archive created at 2026-09-23 15:44:01 UTC
+;     dbname: postgres
+;     TOC Entries: 196
+;     Compression: gzip
+;     Dump Version: 1.16-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 18.6 (Debian 18.6-1.pgdg12+2)
+;     Dumped by pg_dump version: 18.6 (Debian 18.6-1.pgdg12+2)
+;
+;
+; Selected TOC Entries:
+;
+3; 3079 16716 EXTENSION - zhparser 
+3892; 0 0 COMMENT - EXTENSION zhparser 
+2; 3079 24930 EXTENSION - pg_trgm 
+3893; 0 0 COMMENT - EXTENSION pg_trgm 
+4; 3079 16388 EXTENSION - vector 
+3894; 0 0 COMMENT - EXTENSION vector 
+2370; 3602 16736 TEXT SEARCH CONFIGURATION public chinese postgres
+2371; 3602 24929 TEXT SEARCH CONFIGURATION public chn postgres
+2372; 3602 25011 TEXT SEARCH CONFIGURATION public zhcfg postgres
+229; 1259 25034 TABLE public blocks postgres
+3895; 0 0 COMMENT public TABLE blocks postgres
+3896; 0 0 COMMENT public COLUMN blocks.doc_id postgres
+3897; 0 0 COMMENT public COLUMN blocks.seq postgres
+3898; 0 0 COMMENT public COLUMN blocks.locator postgres
+3899; 0 0 COMMENT public COLUMN blocks.text postgres
+3900; 0 0 COMMENT public COLUMN blocks.tsv postgres
+225; 1259 16738 TABLE public chinese_docs postgres
+224; 1259 16737 SEQUENCE public chinese_docs_id_seq postgres
+3901; 0 0 SEQUENCE OWNED BY public chinese_docs_id_seq postgres
+235; 1259 34332 TABLE public claim_block_runs postgres
+3902; 0 0 COMMENT public TABLE claim_block_runs postgres
+3903; 0 0 COMMENT public COLUMN claim_block_runs.doc_id postgres
+3904; 0 0 COMMENT public COLUMN claim_block_runs.seq postgres
+3905; 0 0 COMMENT public COLUMN claim_block_runs.status postgres
+3906; 0 0 COMMENT public COLUMN claim_block_runs.claims_n postgres
+3907; 0 0 COMMENT public COLUMN claim_block_runs.attempts postgres
+3908; 0 0 COMMENT public COLUMN claim_block_runs.model postgres
+3909; 0 0 COMMENT public COLUMN claim_block_runs.extractor_version postgres
+3910; 0 0 COMMENT public COLUMN claim_block_runs.duration_ms postgres
+3911; 0 0 COMMENT public COLUMN claim_block_runs.prompt_tokens postgres
+3912; 0 0 COMMENT public COLUMN claim_block_runs.completion_tokens postgres
+3913; 0 0 COMMENT public COLUMN claim_block_runs.error postgres
+3914; 0 0 COMMENT public COLUMN claim_block_runs.updated_at postgres
+238; 1259 108942 TABLE public claim_block_runs_v2 postgres
+3915; 0 0 COMMENT public TABLE claim_block_runs_v2 postgres
+3916; 0 0 COMMENT public COLUMN claim_block_runs_v2.doc_id postgres
+3917; 0 0 COMMENT public COLUMN claim_block_runs_v2.source_rev postgres
+3918; 0 0 COMMENT public COLUMN claim_block_runs_v2.seq postgres
+3919; 0 0 COMMENT public COLUMN claim_block_runs_v2.status postgres
+3920; 0 0 COMMENT public COLUMN claim_block_runs_v2.accepted_n postgres
+3921; 0 0 COMMENT public COLUMN claim_block_runs_v2.review_n postgres
+3922; 0 0 COMMENT public COLUMN claim_block_runs_v2.rejected_n postgres
+3923; 0 0 COMMENT public COLUMN claim_block_runs_v2.attempts postgres
+3924; 0 0 COMMENT public COLUMN claim_block_runs_v2.model postgres
+3925; 0 0 COMMENT public COLUMN claim_block_runs_v2.extractor_version postgres
+3926; 0 0 COMMENT public COLUMN claim_block_runs_v2.lint_version postgres
+3927; 0 0 COMMENT public COLUMN claim_block_runs_v2.duration_ms postgres
+3928; 0 0 COMMENT public COLUMN claim_block_runs_v2.prompt_tokens postgres
+3929; 0 0 COMMENT public COLUMN claim_block_runs_v2.completion_tokens postgres
+3930; 0 0 COMMENT public COLUMN claim_block_runs_v2.truncated postgres
+3931; 0 0 COMMENT public COLUMN claim_block_runs_v2.diagnostics postgres
+3932; 0 0 COMMENT public COLUMN claim_block_runs_v2.error postgres
+3933; 0 0 COMMENT public COLUMN claim_block_runs_v2.updated_at postgres
+234; 1259 27999 TABLE public claims postgres
+3934; 0 0 COMMENT public TABLE claims postgres
+3935; 0 0 COMMENT public COLUMN claims.claim_id postgres
+3936; 0 0 COMMENT public COLUMN claims.doc_id postgres
+3937; 0 0 COMMENT public COLUMN claims.seq postgres
+3938; 0 0 COMMENT public COLUMN claims.locator postgres
+3939; 0 0 COMMENT public COLUMN claims.claim_text postgres
+3940; 0 0 COMMENT public COLUMN claims.kind postgres
+3941; 0 0 COMMENT public COLUMN claims.tickers postgres
+3942; 0 0 COMMENT public COLUMN claims.metric postgres
+3943; 0 0 COMMENT public COLUMN claims.value_text postgres
+3944; 0 0 COMMENT public COLUMN claims.period postgres
+3945; 0 0 COMMENT public COLUMN claims.confidence postgres
+3946; 0 0 COMMENT public COLUMN claims.extracted_at postgres
+3947; 0 0 COMMENT public COLUMN claims.value_num postgres
+3948; 0 0 COMMENT public COLUMN claims.unit postgres
+3949; 0 0 COMMENT public COLUMN claims.as_of postgres
+233; 1259 27998 SEQUENCE public claims_claim_id_seq postgres
+3950; 0 0 SEQUENCE OWNED BY public claims_claim_id_seq postgres
+237; 1259 108903 TABLE public claims_v2 postgres
+3951; 0 0 COMMENT public TABLE claims_v2 postgres
+3952; 0 0 COMMENT public COLUMN claims_v2.claim_id postgres
+3953; 0 0 COMMENT public COLUMN claims_v2.doc_id postgres
+3954; 0 0 COMMENT public COLUMN claims_v2.source_rev postgres
+3955; 0 0 COMMENT public COLUMN claims_v2.seq postgres
+3956; 0 0 COMMENT public COLUMN claims_v2.locator postgres
+3957; 0 0 COMMENT public COLUMN claims_v2.claim_text postgres
+3958; 0 0 COMMENT public COLUMN claims_v2.evidence_quote postgres
+3959; 0 0 COMMENT public COLUMN claims_v2.evidence_kind postgres
+3960; 0 0 COMMENT public COLUMN claims_v2.table_ref postgres
+3961; 0 0 COMMENT public COLUMN claims_v2.scope postgres
+3962; 0 0 COMMENT public COLUMN claims_v2.subject_raw postgres
+3963; 0 0 COMMENT public COLUMN claims_v2.subject postgres
+3964; 0 0 COMMENT public COLUMN claims_v2.metric_raw postgres
+3965; 0 0 COMMENT public COLUMN claims_v2.metric postgres
+3966; 0 0 COMMENT public COLUMN claims_v2.qualifiers postgres
+3967; 0 0 COMMENT public COLUMN claims_v2.kind postgres
+3968; 0 0 COMMENT public COLUMN claims_v2.value_text postgres
+3969; 0 0 COMMENT public COLUMN claims_v2.value_num postgres
+3970; 0 0 COMMENT public COLUMN claims_v2.unit_raw postgres
+3971; 0 0 COMMENT public COLUMN claims_v2.unit postgres
+3972; 0 0 COMMENT public COLUMN claims_v2.period_raw postgres
+3973; 0 0 COMMENT public COLUMN claims_v2.period_end postgres
+3974; 0 0 COMMENT public COLUMN claims_v2.period_grain postgres
+3975; 0 0 COMMENT public COLUMN claims_v2.observed_at postgres
+3976; 0 0 COMMENT public COLUMN claims_v2.known_at postgres
+3977; 0 0 COMMENT public COLUMN claims_v2.quality_status postgres
+3978; 0 0 COMMENT public COLUMN claims_v2.reason_codes postgres
+3979; 0 0 COMMENT public COLUMN claims_v2.model postgres
+3980; 0 0 COMMENT public COLUMN claims_v2.extractor_version postgres
+3981; 0 0 COMMENT public COLUMN claims_v2.lint_version postgres
+3982; 0 0 COMMENT public COLUMN claims_v2.extracted_at postgres
+236; 1259 108902 SEQUENCE public claims_v2_claim_id_seq postgres
+3983; 0 0 SEQUENCE OWNED BY public claims_v2_claim_id_seq postgres
+239; 1259 119288 TABLE public corpus_evidence_runs postgres
+227; 1259 16750 TABLE public docs postgres
+226; 1259 16749 SEQUENCE public docs_id_seq postgres
+3984; 0 0 SEQUENCE OWNED BY public docs_id_seq postgres
+228; 1259 25012 TABLE public documents postgres
+3985; 0 0 COMMENT public TABLE documents postgres
+3986; 0 0 COMMENT public COLUMN documents.doc_id postgres
+3987; 0 0 COMMENT public COLUMN documents.title postgres
+3988; 0 0 COMMENT public COLUMN documents.source_path postgres
+3989; 0 0 COMMENT public COLUMN documents.content_hash postgres
+3990; 0 0 COMMENT public COLUMN documents.mime postgres
+3991; 0 0 COMMENT public COLUMN documents.status postgres
+3992; 0 0 COMMENT public COLUMN documents.char_count postgres
+3993; 0 0 COMMENT public COLUMN documents.block_count postgres
+3994; 0 0 COMMENT public COLUMN documents.ingested_at postgres
+3995; 0 0 COMMENT public COLUMN documents.published postgres
+3996; 0 0 COMMENT public COLUMN documents.title_tsv postgres
+232; 1259 27533 TABLE public ingest_failures postgres
+3997; 0 0 COMMENT public TABLE ingest_failures postgres
+231; 1259 27503 TABLE public ingest_runs postgres
+3998; 0 0 COMMENT public TABLE ingest_runs postgres
+3999; 0 0 COMMENT public COLUMN ingest_runs.status postgres
+4000; 0 0 COMMENT public COLUMN ingest_runs.trigger postgres
+230; 1259 27502 SEQUENCE public ingest_runs_run_id_seq postgres
+4001; 0 0 SEQUENCE OWNED BY public ingest_runs_run_id_seq postgres
+3633; 2604 16741 DEFAULT public chinese_docs id postgres
+3650; 2604 28002 DEFAULT public claims claim_id postgres
+3657; 2604 108906 DEFAULT public claims_v2 claim_id postgres
+3634; 2604 16753 DEFAULT public docs id postgres
+3640; 2604 27506 DEFAULT public ingest_runs run_id postgres
+3874; 0 25034 TABLE DATA public blocks postgres
+3870; 0 16738 TABLE DATA public chinese_docs postgres
+3880; 0 34332 TABLE DATA public claim_block_runs postgres
+3883; 0 108942 TABLE DATA public claim_block_runs_v2 postgres
+3879; 0 27999 TABLE DATA public claims postgres
+3882; 0 108903 TABLE DATA public claims_v2 postgres
+3884; 0 119288 TABLE DATA public corpus_evidence_runs postgres
+3872; 0 16750 TABLE DATA public docs postgres
+3873; 0 25012 TABLE DATA public documents postgres
+3877; 0 27533 TABLE DATA public ingest_failures postgres
+3876; 0 27503 TABLE DATA public ingest_runs postgres
+4002; 0 0 SEQUENCE SET public chinese_docs_id_seq postgres
+4003; 0 0 SEQUENCE SET public claims_claim_id_seq postgres
+4004; 0 0 SEQUENCE SET public claims_v2_claim_id_seq postgres
+4005; 0 0 SEQUENCE SET public docs_id_seq postgres
+4006; 0 0 SEQUENCE SET public ingest_runs_run_id_seq postgres
+3683; 2606 25045 CONSTRAINT public blocks blocks_pkey postgres
+3672; 2606 16746 CONSTRAINT public chinese_docs chinese_docs_pkey postgres
+3699; 2606 34347 CONSTRAINT public claim_block_runs claim_block_runs_pkey postgres
+3710; 2606 108966 CONSTRAINT public claim_block_runs_v2 claim_block_runs_v2_pkey postgres
+3691; 2606 28021 CONSTRAINT public claims claims_doc_id_seq_claim_text_key postgres
+3693; 2606 28019 CONSTRAINT public claims claims_pkey postgres
+3703; 2606 108933 CONSTRAINT public claims_v2 claims_v2_doc_id_source_rev_seq_claim_text_evidence_quote_m_key postgres
+3705; 2606 108931 CONSTRAINT public claims_v2 claims_v2_pkey postgres
+3715; 2606 119325 CONSTRAINT public corpus_evidence_runs corpus_evidence_runs_pkey postgres
+3675; 2606 16758 CONSTRAINT public docs docs_pkey postgres
+3678; 2606 25033 CONSTRAINT public documents documents_content_hash_key postgres
+3680; 2606 25031 CONSTRAINT public documents documents_pkey postgres
+3688; 2606 27531 CONSTRAINT public ingest_runs ingest_runs_pkey postgres
+3713; 1259 119327 INDEX public corpus_evidence_runs_doc postgres
+3676; 1259 16759 INDEX public docs_tsv_idx postgres
+3684; 1259 25051 INDEX public idx_blocks_locator postgres
+3685; 1259 25052 INDEX public idx_blocks_tsv postgres
+3700; 1259 34354 INDEX public idx_claim_block_runs_fingerprint postgres
+3701; 1259 34353 INDEX public idx_claim_block_runs_status postgres
+3711; 1259 108973 INDEX public idx_claim_block_runs_v2_fingerprint postgres
+3712; 1259 108972 INDEX public idx_claim_block_runs_v2_status postgres
+3694; 1259 44588 INDEX public idx_claims_as_of postgres
+3695; 1259 28027 INDEX public idx_claims_doc postgres
+3696; 1259 28029 INDEX public idx_claims_kind postgres
+3697; 1259 28028 INDEX public idx_claims_tickers postgres
+3706; 1259 108939 INDEX public idx_claims_v2_doc postgres
+3707; 1259 108940 INDEX public idx_claims_v2_quality postgres
+3708; 1259 108941 INDEX public idx_claims_v2_subject_metric postgres
+3673; 1259 16747 INDEX public idx_docs_tsv postgres
+3681; 1259 25053 INDEX public idx_documents_published postgres
+3689; 1259 27546 INDEX public idx_ingest_failures_run postgres
+3686; 1259 27532 INDEX public idx_ingest_runs_started postgres
+3716; 2606 25046 FK CONSTRAINT public blocks blocks_doc_id_fkey postgres
+3719; 2606 34348 FK CONSTRAINT public claim_block_runs claim_block_runs_doc_id_fkey postgres
+3721; 2606 108967 FK CONSTRAINT public claim_block_runs_v2 claim_block_runs_v2_doc_id_fkey postgres
+3718; 2606 28022 FK CONSTRAINT public claims claims_doc_id_fkey postgres
+3720; 2606 108934 FK CONSTRAINT public claims_v2 claims_v2_doc_id_fkey postgres
+3717; 2606 27541 FK CONSTRAINT public ingest_failures ingest_failures_run_id_fkey postgres

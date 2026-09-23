@@ -1,0 +1,16 @@
+{
+  "baseline": "backup-time exact counts (restore verification基准)",
+  "counts": {
+    "claims": 1318,
+    "claim_block_runs": 290,
+    "corpus_evidence_runs": 57,
+    "ingest_runs": 11,
+    "ingest_failures": 1,
+    "docs": 3,
+    "chinese_docs": 3,
+    "claims_v2": 0,
+    "claim_block_runs_v2": 0,
+    "blocks": 1101,
+    "documents": 89
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "artifact": "i4-reset-manifest",
+  "manifest_version": 1,
+  "created_at": "2026-09-24T00:55:00+08:00",
+  "note": "I4-2 reset-limited 逐表清单（两阶段）。U 2026-09-24 一次具名批准（批准九表两阶段）；批准即锁定，锁定后不得改写，执行漂移即停不扩大删除。",
+  "method": "TRUNCATE ... RESTART IDENTITY（表级清空，不 DROP；owned 序列归零、索引保留于空表——design-review『sequences/indexes 随表』语义）",
+  "authority": "design-review.json i0c_1_branch reset_scope_candidates；逐表签认走独立授权（不借用 i0c-cleanup-list.json）",
+  "facts": "audits/20260923-i4-window/i42-reset-facts.json（生产只读采集；行数与 I4-6 恢复验证完全一致=截止点后零漂移）",
+  "export_binding": {
+    "dir": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/backups/i4-final-20260923T1544Z/ledgers",
+    "artifact_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "counts": "ledgers/_counts.json"
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "when": "I4-7（U 批准后、迁移 DDL 完成后），窗口内执行",
+      "statements": [
+        "TRUNCATE public.claims_v2 RESTART IDENTITY;",
+        "TRUNCATE public.claim_block_runs_v2 RESTART IDENTITY;",
+        "TRUNCATE public.claim_block_runs RESTART IDENTITY;",
+        "TRUNCATE public.claims RESTART IDENTITY;",
+        "TRUNCATE public.corpus_evidence_runs RESTART IDENTITY;",
+        "TRUNCATE public.ingest_failures, public.ingest_runs RESTART IDENTITY;"
+      ],
+      "tables": [
+        {"table": "public.claims_v2", "rows_before": 0, "export": "无导出需求（0 行影子表，design-review 预先定性）"},
+        {"table": "public.claim_block_runs_v2", "rows_before": 0, "export": "无导出需求（0 行影子表）"},
+        {"table": "public.claim_block_runs", "rows_before": 290, "export": "ledgers/claim_block_runs.jsonl + .csv"},
+        {"table": "public.claims", "rows_before": 1318, "export": "ledgers/claims.jsonl + .csv"},
+        {"table": "public.corpus_evidence_runs", "rows_before": 57, "export": "ledgers/corpus_evidence_runs.jsonl + .csv"},
+        {"table": "public.ingest_failures", "rows_before": 1, "export": "ledgers/ingest_failures.jsonl + .csv"},
+        {"table": "public.ingest_runs", "rows_before": 11, "export": "ledgers/ingest_runs.jsonl + .csv", "order_note": "与 ingest_failures 同语句、后者在前（ingest_failures→ingest_runs FK）"}
+      ],
+      "sequences_reset": [
+        "public.claims_claim_id_seq（owned by claims）",
+        "public.claims_v2_claim_id_seq（owned by claims_v2）",
+        "public.ingest_runs_run_id_seq（owned by ingest_runs）"
+      ]
+    },
+    {
+      "phase": 2,
+      "when": "新链重建并核对后（I4-4 验证通过 + U 复核）——design-review 前置条件；不在 I4-7 执行，随 I4-close 落地",
+      "statements": [
+        "TRUNCATE public.blocks, public.documents, public.claims, public.claims_v2, public.claim_block_runs, public.claim_block_runs_v2 RESTART IDENTITY;"
+      ],
+      "statement_note": "五张引用表阶段 1 后已空，但仍结构性引用 documents，须同语句列出（满足 FK 结构规则，不使用 CASCADE）；重复 TRUNCATE 空表无副作用",
+      "tables": [
+        {"table": "public.blocks", "rows_before": 1101, "export": "postgres.dump + originals-corpus.tar.gz 已覆盖；旧证据引用定位对照件随 I4-close 导出"},
+        {"table": "public.documents", "rows_before": 89, "export": "同上；doc_id→source_id 映射 manifest 随 I4-close 导出", "order_note": "最后清空（blocks 与五张 claims/claim_block_runs 表的 FK 均指向 documents）"}
+      ],
+      "sequences_reset": []
+    }
+  ],
+  "fk_order_basis": "i42-reset-facts.json reset_fk_edges_within_scope（6 条边：5 条→documents、1 条 ingest_failures→ingest_runs；blocks/documents 无 owned 序列）",
+  "not_in_scope": [
+    "public.docs / public.chinese_docs（C12 归属未定，默认保留）及其序列 docs_id_seq / chinese_docs_id_seq",
+    "apodex 库全部对象",
+    "扩展（pg_trgm/plpgsql/vector/zhparser）与 zhparser.zhprs_custom_word",
+    "旧人工审核导出（.audit 88 工件）与 I0B/I4 备份"
+  ],
+  "execution_gates": [
+    "守卫 i4-window.json 安装 + run_selfcheck 通过后执行",
+    "逐对象审计一一对应（语句/对象/行数三对账）",
+    "执行前逐表行数必须等于 rows_before（漂移即停）",
+    "执行后逐表行数必须为 0",
+    "零模型调用；留出件零读取"
+  ]
+}

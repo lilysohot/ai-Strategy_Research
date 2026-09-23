@@ -1,0 +1,123 @@
+{
+  "purpose": "I4-2 reset-limited 清单事实（生产只读采集）",
+  "collected_at": "2026-09-24T00:34:17+08:00",
+  "facts": {
+    "target": {
+      "database": "postgres",
+      "version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2) on x86_64-pc-linux-gnu",
+      "wal_lsn_at_collect": "0/502B40D8"
+    },
+    "row_counts": {
+      "blocks": 1101,
+      "documents": 89,
+      "claims": 1318,
+      "claims_v2": 0,
+      "claim_block_runs": 290,
+      "claim_block_runs_v2": 0,
+      "corpus_evidence_runs": 57,
+      "ingest_runs": 11,
+      "ingest_failures": 1,
+      "docs": 3,
+      "chinese_docs": 3
+    },
+    "foreign_keys": [
+      {
+        "constraint": "blocks_doc_id_fkey",
+        "from": "blocks",
+        "to": "documents"
+      },
+      {
+        "constraint": "claim_block_runs_doc_id_fkey",
+        "from": "claim_block_runs",
+        "to": "documents"
+      },
+      {
+        "constraint": "claim_block_runs_v2_doc_id_fkey",
+        "from": "claim_block_runs_v2",
+        "to": "documents"
+      },
+      {
+        "constraint": "claims_doc_id_fkey",
+        "from": "claims",
+        "to": "documents"
+      },
+      {
+        "constraint": "claims_v2_doc_id_fkey",
+        "from": "claims_v2",
+        "to": "documents"
+      },
+      {
+        "constraint": "ingest_failures_run_id_fkey",
+        "from": "ingest_failures",
+        "to": "ingest_runs"
+      }
+    ],
+    "sequences": [
+      {
+        "sequence": "chinese_docs_id_seq",
+        "owned_by": "chinese_docs"
+      },
+      {
+        "sequence": "claims_claim_id_seq",
+        "owned_by": "claims"
+      },
+      {
+        "sequence": "claims_v2_claim_id_seq",
+        "owned_by": "claims_v2"
+      },
+      {
+        "sequence": "docs_id_seq",
+        "owned_by": "docs"
+      },
+      {
+        "sequence": "ingest_runs_run_id_seq",
+        "owned_by": "ingest_runs"
+      }
+    ],
+    "corpus_schema_present": false,
+    "extensions": [
+      {
+        "name": "pg_trgm",
+        "version": "1.6"
+      },
+      {
+        "name": "plpgsql",
+        "version": "1.0"
+      },
+      {
+        "name": "vector",
+        "version": "0.8.6"
+      },
+      {
+        "name": "zhparser",
+        "version": "2.4"
+      }
+    ],
+    "reset_fk_edges_within_scope": [
+      [
+        "blocks",
+        "documents"
+      ],
+      [
+        "claim_block_runs",
+        "documents"
+      ],
+      [
+        "claim_block_runs_v2",
+        "documents"
+      ],
+      [
+        "claims",
+        "documents"
+      ],
+      [
+        "claims_v2",
+        "documents"
+      ],
+      [
+        "ingest_failures",
+        "ingest_runs"
+      ]
+    ]
+  }
+}

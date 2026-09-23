@@ -1,0 +1,161 @@
+{
+  "cases": [
+    {
+      "case": "import openai",
+      "detail": "REFUSED ImportError corpus preparation guard: 模块 'openai' 在阶段 'i4-window-backup' 被零模型守卫禁止导入",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "from openai import OpenAI;     OpenAI()",
+      "detail": "REFUSED ImportError corpus preparation guard: 模块 'openai' 在阶段 'i4-window-backup' 被零模型守卫禁止导入",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "import anthropic",
+      "detail": "REFUSED ImportError corpus preparation guard: 模块 'anthropic' 在阶段 'i4-window-backup' 被零模型守卫禁止导入",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "import plugins.corpus.material_semantics",
+      "detail": "REFUSED ImportError corpus preparation guard: 模块 'plugins.corpus.material_semantics' 在阶段 'i4-window-backup' 被零模型守卫禁止导入",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "import plugins.corpus._r2_runtime",
+      "detail": "REFUSED ImportError corpus preparation guard: 模块 'plugins.corpus._r2_runtime' 在阶段 'i4-window-backup' 被零模型守卫禁止导入",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "class _S:;         family = socket.AF_INET;     sys.audit('socket.connect', _S(), ('203.0.113.1', 443))",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'i4-window-backup' 禁止 socket 连接 ('203.0.113.1', 443)",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "class _U:;         family = socket.AF_UNIX;     sys.audit('socket.connect', _U(), '/synthetic-guard.sock')",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'i4-window-backup' 禁止 socket 连接 '/synthetic-guard.sock'",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "open('/tmp/tmpe35a0112/holdout/secret.md').read()",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止访问隔离路径 /tmp/tmpe35a0112/holdout/secret.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.chdir('/tmp/tmpe35a0112');     open('holdout/secret.md').read()",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止访问隔离路径 /tmp/tmpe35a0112/holdout/secret.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.chdir('/tmp/tmpe35a0112');     open('data/keep.md', 'w').write('x')",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止写入受保护路径 /tmp/tmpe35a0112/data/keep.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.unlink('/tmp/tmpe35a0112/data/keep.md')",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止删除受保护或隔离路径 /tmp/tmpe35a0112/data/keep.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.rename('/tmp/tmpe35a0112/data/keep.md', '/tmp/tmpe35a0112/moved.md')",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止重命名受保护或隔离路径 /tmp/tmpe35a0112/data/keep.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "open('/tmp/tmpe35a0112/sources/other.md').read()",
+      "detail": "REFUSED OSError corpus preparation guard: 路径 /tmp/tmpe35a0112/sources/other.md 不在阶段 'synthetic-selfcheck' 的开发来源允许清单内",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "open('/tmp/tmpe35a0112/sources/sample.md').read()",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 未绑定 read_roots，拒绝读取 /tmp/tmpe35a0112/sources/sample.md",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "import hashlib; h = hashlib.sha256(open('/tmp/tmpe35a0112/sources/sample.md', 'rb').read()).hexdigest(); assert len(h) == 64; print('HASH_OK')",
+      "detail": "",
+      "expected": "HASH_OK",
+      "passed": true
+    },
+    {
+      "case": "raise SystemExit(guard.main(sys.argv[1:]))",
+      "detail": "",
+      "expected": "GUARD_REFUSED",
+      "passed": true
+    },
+    {
+      "case": "import subprocess;     subprocess.run(['/bin/true'])",
+      "detail": "REFUSED GuardError corpus preparation guard: 拒绝派生非 Python 子进程（纯 Python 守卫无法保护其行为）: ['/bin/true']",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "import subprocess; child = subprocess.run([sys.executable, '-I', '-B', '-c', \"try:\\n    open('/tmp/tmpe35a0112/holdout/secret.md').read()\\nexcept OSError as exc:\\n    if 'corpus preparation guard' not in str(exc):\\n        raise\\n    print('GUARD_REFUSED')\\n    raise SystemExit(0)\\nprint('POLICY_BYPASS')\\nraise SystemExit(1)\\n\"], capture_output=True, text=True); assert child.returncode == 0 and 'GUARD_REFUSED' in child.stdout, child.stderr; print('CHILD_INHERITED')",
+      "detail": "",
+      "expected": "CHILD_INHERITED",
+      "passed": true
+    },
+    {
+      "case": "os.environ['CORPUS_GUARD_PHASE'] = 'synthetic-selfcheck';     os.environ.pop('CORPUS_GUARD_CONFIG', None);     from plugins.corpus.preparation import guard_pytest;     guard_pytest.pytest_load_initial_conftests([], None, None)",
+      "detail": "REFUSED GuardError corpus preparation guard: 检测到部分声明（CORPUS_GUARD_CONFIG 缺失）；CORPUS_GUARD_PHASE 与 CORPUS_GUARD_CONFIG 必须同时提供，否则拒绝运行",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.execvp('/home/administrator/FrontierAgent/.venv/bin/python3', ['/home/administrator/FrontierAgent/.venv/bin/python3', '-c', 'pass'])",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止 exec/system 派生不受守卫约束的进程",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.system('true')",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 禁止 exec/system 派生不受守卫约束的进程",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "os.posix_spawn('/home/administrator/FrontierAgent/.venv/bin/python3', ['/home/administrator/FrontierAgent/.venv/bin/python3', '-c', 'pass'], {})",
+      "detail": "REFUSED OSError corpus preparation guard: 阶段 'synthetic-selfcheck' 拒绝未受控子进程派生 '/home/administrator/FrontierAgent/.venv/bin/python3 /home/administrator/FrontierAgent/.venv/bin/python3 -c pass'",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "install fails when blocked module already loaded",
+      "detail": "REFUSED GuardError corpus preparation guard: 被禁模块已先于守卫加载: ['json']",
+      "expected": "refused",
+      "passed": true
+    },
+    {
+      "case": "unknown config field rejected",
+      "detail": "REFUSED GuardError guard config 存在未知字段: ['unexpected_field']",
+      "expected": "refused",
+      "passed": true
+    }
+  ],
+  "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i4-window-backup.json",
+  "config_sha256": "366f87609357d85f5297420f74fc6f92b08714e4eb0c9ac017c8120266cd0194",
+  "fingerprints": {
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+    "plugins/corpus/preparation/__init__.py": "e02a2fbee402dd6e9738eafdf863accbc2a36566458d16f30c18beb8d72ed654",
+    "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+    "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+    "tests/test_corpus_preparation_guard.py": "f41004faa563914b592d8445d92966e41863f2188e5adcb21ab29b06f4724616"
+  },
+  "passed": true,
+  "phase": "i4-window-backup",
+  "report_version": 2
+}

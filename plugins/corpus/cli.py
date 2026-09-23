@@ -77,6 +77,7 @@ from plugins.corpus.preparation.gaps import (
     gap_summary,
     recovery_paths,
 )
+from plugins.corpus.preparation.pg_target import resolve_target_db
 from plugins.corpus.preparation.readers import read_document
 from plugins.corpus.preparation.repository import Store, StoreError
 from plugins.corpus.preparation.repository_pg import PgStore
@@ -87,7 +88,7 @@ EXIT_TARGET = 3
 EXIT_GATE = 4
 EXIT_UNAVAILABLE = 5
 
-_SANDBOX_DB = "i2_sandbox_corpus"
+_SANDBOX_DB = resolve_target_db()
 _DEFAULT_POLICY = (
     Path(__file__).resolve().parents[2]
     / ".scratch"

@@ -1,0 +1,51 @@
+{
+  "config_version": 1,
+  "phase": "i4-window-backup",
+  "note": "I4 窗口备份/停写阶段守卫（I4-3 停写核验 + I4-6 最终备份与隔离恢复实测）。授权目标：原库 pg 容器（pg18-zhvector，具名卷 pgdata）127.0.0.1:5432（pg_dump 只读导出源）与隔离库 corpus-db 容器 127.0.0.1:543（一次性验证库恢复目标，pg_restore 仅写入隔离容器，排除原库任何写路径）。零模型（模型客户端与智能解析模块导入即拒，OPENAI_* 与 CORPUS_DSN 投毒）；无公网（仅本地 PG 目标）。来源 data/corpus 只读，data/ 受保护禁止写入/删除/重命名。forbidden_roots=[]（I0B-1 先例：备份阶段留出字节仅作完整原文归档，5 份留出件随全量 tar 入备份，不在窗口内被开发流程读取）。本配置不授权任何 DDL/DML 于 5432：I4-7 migrate/reset 须另建 i4-window 操作阶段守卫配置、单独自检并经 I4-2 manifest + U 逐表具名批准后绑定运行。连接串经显式环境变量传入（CORPUS_WINDOW_DSN / CORPUS_VERIFY_DSN），不读 CORPUS_DSN；对原库的连接层强制 default_transaction_read_only=on 兜底。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "reason": "I4-3/I4-6：原库 pg 容器只读源（停写核验系统目录 SELECT、pg_dump 一致性导出）；本阶段对原库零 DDL/DML"
+      },
+      {
+        "host": "127.0.0.1",
+        "port": 543,
+        "reason": "I4-6：corpus-db 隔离容器一次性验证库（pg_restore 写入 + 计数核对），U 2026-09-23 核定；验证后销毁"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": [
+      "plugins.corpus._r2_"
+    ],
+    "poisoned_env": [
+      "OPENAI_API_KEY",
+      "OPENAI_BASE_URL",
+      "OPENAI_MODEL"
+    ],
+    "poisoned_dsn": [
+      "CORPUS_DSN"
+    ]
+  },
+  "sources": {
+    "read_roots": [
+      "data/corpus"
+    ],
+    "allowed_source_paths": [
+      "data/corpus"
+    ],
+    "forbidden_roots": [],
+    "protected_roots": [
+      "data"
+    ]
+  }
+}

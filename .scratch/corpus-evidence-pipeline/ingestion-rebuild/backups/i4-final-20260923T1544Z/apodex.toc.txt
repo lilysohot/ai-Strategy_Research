@@ -1,0 +1,61 @@
+;
+; Archive created at 2026-09-23 15:44:01 UTC
+;     dbname: apodex
+;     TOC Entries: 50
+;     Compression: gzip
+;     Dump Version: 1.16-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 18.6 (Debian 18.6-1.pgdg12+2)
+;     Dumped by pg_dump version: 18.6 (Debian 18.6-1.pgdg12+2)
+;
+;
+; Selected TOC Entries:
+;
+219; 1259 29148 TABLE public alembic_version postgres
+226; 1259 29266 TABLE public artifacts postgres
+228; 1259 29282 TABLE public audit_log postgres
+227; 1259 29281 SEQUENCE public audit_log_id_seq postgres
+3524; 0 0 SEQUENCE OWNED BY public audit_log_id_seq postgres
+223; 1259 29209 TABLE public runs postgres
+222; 1259 29191 TABLE public sessions postgres
+225; 1259 29241 TABLE public turns postgres
+224; 1259 29240 SEQUENCE public turns_id_seq postgres
+3525; 0 0 SEQUENCE OWNED BY public turns_id_seq postgres
+221; 1259 29168 TABLE public user_llm_configs postgres
+220; 1259 29154 TABLE public users postgres
+3329; 2604 29285 DEFAULT public audit_log id postgres
+3326; 2604 29244 DEFAULT public turns id postgres
+3508; 0 29148 TABLE DATA public alembic_version postgres
+3515; 0 29266 TABLE DATA public artifacts postgres
+3517; 0 29282 TABLE DATA public audit_log postgres
+3512; 0 29209 TABLE DATA public runs postgres
+3511; 0 29191 TABLE DATA public sessions postgres
+3514; 0 29241 TABLE DATA public turns postgres
+3510; 0 29168 TABLE DATA public user_llm_configs postgres
+3509; 0 29154 TABLE DATA public users postgres
+3526; 0 0 SEQUENCE SET public audit_log_id_seq postgres
+3527; 0 0 SEQUENCE SET public turns_id_seq postgres
+3332; 2606 29153 CONSTRAINT public alembic_version alembic_version_pkc postgres
+3349; 2606 29275 CONSTRAINT public artifacts artifacts_pkey postgres
+3351; 2606 29292 CONSTRAINT public audit_log audit_log_pkey postgres
+3344; 2606 29223 CONSTRAINT public runs runs_pkey postgres
+3341; 2606 29202 CONSTRAINT public sessions sessions_pkey postgres
+3347; 2606 29254 CONSTRAINT public turns turns_pkey postgres
+3338; 2606 29184 CONSTRAINT public user_llm_configs user_llm_configs_pkey postgres
+3335; 2606 29166 CONSTRAINT public users users_pkey postgres
+3342; 1259 29239 INDEX public idx_runs_session postgres
+3339; 1259 29208 INDEX public idx_sessions_user postgres
+3345; 1259 29265 INDEX public idx_turns_session postgres
+3336; 1259 29190 INDEX public ix_user_llm_configs_user_id postgres
+3333; 1259 29167 INDEX public ix_users_username postgres
+3359; 2606 29276 FK CONSTRAINT public artifacts artifacts_run_id_fkey postgres
+3360; 2606 29293 FK CONSTRAINT public audit_log audit_log_user_id_fkey postgres
+3354; 2606 29234 FK CONSTRAINT public runs runs_llm_config_id_fkey postgres
+3355; 2606 29224 FK CONSTRAINT public runs runs_session_id_fkey postgres
+3356; 2606 29229 FK CONSTRAINT public runs runs_user_id_fkey postgres
+3353; 2606 29203 FK CONSTRAINT public sessions sessions_user_id_fkey postgres
+3357; 2606 29260 FK CONSTRAINT public turns turns_run_id_fkey postgres
+3358; 2606 29255 FK CONSTRAINT public turns turns_session_id_fkey postgres
+3352; 2606 29185 FK CONSTRAINT public user_llm_configs user_llm_configs_user_id_fkey postgres

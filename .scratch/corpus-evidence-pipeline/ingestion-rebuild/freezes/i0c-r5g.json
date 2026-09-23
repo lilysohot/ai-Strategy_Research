@@ -1,0 +1,39 @@
+{
+  "snapshot_id": "i0c-r5g",
+  "revision": "r5g",
+  "phase": "i0c",
+  "status": "i4_window_target_adapter",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5f",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5f.json",
+    "sha256": "d5059ac5cdda1c9d8f03188865ef9e5191bb415e9bb5a2c8f1187af94425816a"
+  },
+  "supersedes_validator_sha256": "1c010b135615e6ed060e7093620af31174007ef431c63c0363502442d56be5a6",
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "b44c0ee9ea56dba9439eeb455d7c04c62d7f1b6e5d1030dea461726c5c39dfdf"
+    },
+    "i4_window_target_adapter": {
+      "plugins/corpus/preparation/pg_target.py": "bb11ad7178b97c7dfb60607e5a2982df5575670da2d5a17ba9fa7ca50f4ff052",
+      "plugins/corpus/preparation/repository_pg.py": "85577f19bed7cd44d28f5549da0b8717657f5718cb25f1208d7b375bdf90c5d5",
+      "plugins/corpus/preparation/read_pg.py": "beae82955b4a597613c8c703b72acef551f2ef69c3e0a61bf6eb0cad87a56040",
+      "plugins/corpus/preparation/search_pg.py": "1f496a813274d505123a27d26f252765129ab00928b3a4a4dd9fa361564b2be0",
+      "plugins/corpus/preparation/cross_boundary.py": "51cd0269f89d8a69d81c7a592564e57bd352c1076e77a69fb54bdbd1d670551f",
+      "plugins/corpus/service.py": "c91dc3c8acc720dd93ddfda1fb39bc3305e39c30066ec14d49e90d8c449dc7d8",
+      "plugins/corpus/cli.py": "555c348a34184a86f294988c517ec56b4f1f42df5a68a1ec0797d01513f44a01"
+    },
+    "migrate_window_state": {
+      "docs/plan/README.md": "f25866ebb67931499e2f8d1c241c17f55b20b2e3a814f1e7a9f487d60ef152a6",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "87acd2ce32bee7cc8d2c65378d8f19675bbdd093b8e31d2e9f312757e02531f0"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5g.json": "4bb3f7329d89937be184e53ee0b48fb5aa1ea96020137c4d8ff7fad28c593517"
+    }
+  },
+  "correction": "I4 window target adapter: explicit CORPUS_TARGET_DB authorization for the read/write chain (default i2_sandbox_corpus fail-closed unchanged); docs rebound after I4-1 section-0 backfill per the r4z precedent (archive-first).",
+  "corrections": {
+    "i4_window_target_adapter": "r5g: pg_target.py first-in-chain; repository_pg/read_pg/search_pg production hard-reject gated on production_instance_authorized(); service/cli target-db resolution via resolve_target_db(); docs/plan/README.md + tasks.md rebound (post-r5f section-0 backfill)."
+  },
+  "created_at": "2026-09-24T00:32:00.265700+08:00"
+}

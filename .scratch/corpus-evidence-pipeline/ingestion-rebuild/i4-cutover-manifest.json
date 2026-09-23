@@ -1,0 +1,70 @@
+{
+  "artifact": "i4-cutover-manifest",
+  "manifest_version": 1,
+  "created_at": "2026-09-24T00:55:00+08:00",
+  "note": "I4-2 最终切换清单（migrate 分支）。本文件在 U 批准后锁定，锁定后不得改写；执行漂移即停。",
+  "branch": {
+    "chosen": "migrate_then_reset_limited",
+    "authority": "design-review.json i0c_1_branch（U 签认）"
+  },
+  "target": {
+    "dsn_env": "CORPUS_WINDOW_DSN",
+    "instance": "127.0.0.1:5432（原库实例，含 apodex 库——生产实例）",
+    "database": "postgres",
+    "schema": "corpus（C9：原库 postgres 库内新建）",
+    "ddl": {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql",
+      "frozen_in": "i0c-r1（corpus schema 九表，与 i2_sandbox_corpus 同构）",
+      "table_count": 9
+    },
+    "precondition_verified": {
+      "corpus_schema_absent": true,
+      "evidence": "audits/20260923-i4-window/i42-reset-facts.json（corpus_schema_present=false）"
+    }
+  },
+  "stop_write_binding": {
+    "cutoff_lsn": "0/4FB2BD00",
+    "cutoff_at": "2026-09-23T15:42:19.104234+00",
+    "evidence": "audits/20260923-i4-window/i43-stopwrite-findings.json（停写核验门禁 8/8）"
+  },
+  "backup_binding": {
+    "dir": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/backups/i4-final-20260923T1544Z",
+    "artifact_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "restore_verification": "audits/20260923-i4-window/i46-restore-verification.json（隔离恢复 11/11 计数一致、扩展 4/4，验证库已销毁）"
+  },
+  "code_version_binding": {
+    "freeze_chain_head": "i0c-r5g",
+    "chain_head_sha256": "5ef07ef0244f2f197a54f35eb63942f08741d30a778b962f0e12ee9f0bff0eb6",
+    "validator": "freezes/validate_i0c_freeze.py exit 0（audits/20260923-i4-window/i42-r5g-validation.txt）",
+    "target_adapter": "preparation/pg_target.py：默认 i2_sandbox_corpus fail-closed 不变；仅显式 CORPUS_TARGET_DB=postgres 放行生产实例反证（授权见 approval.code_change）"
+  },
+  "change_list_migrate": [
+    "I4-7-migrate：postgres 库执行 i2/sandbox_schema.sql（CREATE SCHEMA corpus + 九表 DDL + 扩展幂等 + zhcfg 条件创建），仅建 schema 不搬数据",
+    "I4-4：corpus schema 播种 8 份 ReviewedDecision（approved 6 + dev lane 2 supersede）→ cli build/check/publish → 活动集 8/8 核验",
+    "I4-5：真 CLI corpus_search/corpus_fetch 生产往返验收 + 旧写入口正式停用记录"
+  ],
+  "forbidden": [
+    "除 i4-reset-manifest.json 列名对象外的一切 DROP/DELETE/TRUNCATE/UPDATE",
+    "public 旧表零写入（reset 清单执行除外）",
+    "整库/实例级操作与 DROP ... CASCADE 模糊匹配（架构 §10.1）",
+    "apodex 库全部对象零触碰",
+    "docs/chinese_docs 零触碰（C12 归属未定，默认保留，U 单独裁决）"
+  ],
+  "retained": [
+    "扩展（pg_trgm/plpgsql/vector 0.8.6/zhparser 2.4）与 zhparser.zhprs_custom_word（C13 FTS 基线）",
+    "public.docs / public.chinese_docs（C12）",
+    "apodex 库全部对象",
+    "旧人工审核导出（.audit 88 工件）与 I0B/I4 备份（永久保留）"
+  ],
+  "rollback": [
+    "migrate 失败：DROP SCHEMA corpus CASCADE（仅限 corpus schema 本体，逐字记录于窗口审计后执行）",
+    "数据异常：立即停机，从 backup_binding.dir 的 postgres.dump 恢复（i46-restore-verification 已实证可恢复路径）"
+  ],
+  "approval": {
+    "window": "I4 停写窗口（I4-3 停写核验、I4-6 最终备份/恢复验证已完成）",
+    "migrate_authorized_by": "U 2026-09-23 停写窗口批准（连续执行核定）",
+    "code_change_authorized_by": "U 2026-09-24 具名追认（AskUserQuestion：追认授权）——r5g 目标适配已入冻结链 i0c-r5g，验证器 exit 0；记录：audits/20260923-i4-window/i42-approval.json",
+    "reset_authorized_by": "U 2026-09-24 一次具名批准（AskUserQuestion：批准九表两阶段）；逐表清单见 i4-reset-manifest.json；记录：audits/20260923-i4-window/i42-approval.json"
+  },
+  "locked_at": "2026-09-24T01:05:00+08:00"
+}

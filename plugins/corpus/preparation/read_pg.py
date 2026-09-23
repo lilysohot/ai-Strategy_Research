@@ -15,7 +15,8 @@
   一律 :class:`LegacyHandleError`（``archive_required``），绝不拿新链内容顶替。
 
 目标 fail-closed：与 :class:`PgStore` / :func:`search_pg.search_chunks` 同纪律——
-``current_database`` 必须等于隔离库，目标实例含 ``apodex`` 库即判定为生产实例并拒绝。
+``current_database`` 必须等于隔离库，目标实例含 ``apodex`` 库即判定为生产实例并拒绝；
+窗口期仅在显式 ``CORPUS_TARGET_DB`` 授权下放行（见 :mod:`pg_target`）。
 """
 
 from __future__ import annotations
@@ -31,9 +32,10 @@ if TYPE_CHECKING:
     from plugins.corpus.preparation.search_pg import SearchHit
 
 from plugins.corpus.preparation.contract import sha256_of_bytes
+from plugins.corpus.preparation.pg_target import production_instance_authorized, resolve_target_db
 from plugins.corpus.preparation.repository import StoreError
 
-_SANDBOX_DB = "i2_sandbox_corpus"
+_SANDBOX_DB = resolve_target_db()
 AUTHORITY_REV = "authority-context-2"
 
 _HANDLE_PREFIX = "cv2:"
@@ -169,7 +171,7 @@ def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
             raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {sandbox_db!r}")
         cur.execute("SELECT datname FROM pg_database WHERE datallowconn")
         dbs = {r[0] for r in cur.fetchall()}
-    if "apodex" in dbs:
+    if "apodex" in dbs and not production_instance_authorized():
         raise StoreError("拒绝：目标实例含 apodex 库——判定为生产实例，禁止读取")
 
 

@@ -1,0 +1,29 @@
+{
+  "artifact": "i4c-exports",
+  "created_at": "2026-09-24T01:31:44+08:00",
+  "authority": "i4-reset-manifest.json phases[1].tables[].export（随 I4-close 导出义务）",
+  "inputs": {
+    "backup_artifact_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "ledger_dir": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/backups/i4-final-20260923T1544Z/ledgers",
+    "reference_pairs_from_ledgers": 307,
+    "blocks_rows_read": 1101,
+    "documents_rows_read": 89,
+    "corpus_sources_rows_read": 8
+  },
+  "crosswalk": {
+    "file": "i4c-old-evidence-locator-crosswalk.jsonl",
+    "sha256": "a97fda27001695842b88a6d9817cf2559e314bb361f08839b3e6f7dc56a7b92b",
+    "rows": 307,
+    "matched": 290,
+    "unmatched_non_numeric": 17,
+    "unmatched_missing_block": 0
+  },
+  "docid_source_map": {
+    "file": "i4c-docid-source-map.json",
+    "sha256": "142273cb5f0093487eeb1af6bb12689bccb33bd31d5cf68dd7f729a5b67c7612",
+    "documents_total": 89,
+    "joined_to_new_chain": 8
+  },
+  "zero_model": true,
+  "db_tx": "READ ONLY（无双写；blocks/documents 仍为 1101/89，阶段 2 前原样）"
+}

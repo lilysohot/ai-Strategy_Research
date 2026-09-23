@@ -1,0 +1,3 @@
+count,path,pattern,reason
+,data/corpus/高盛：GS 贵州茅台：市场化方案五— 2026 年 7 月飞天茅台出厂价与建议零售价意外开启第二轮上调；买入.pdf,,U 裁决：空文件（解析 0 块）删除；与 DB empty 记录删除绑定
+37,,data/corpus/*:Zone.Identifier,Windows ADS 残留，U 裁决删除

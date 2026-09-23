@@ -1,0 +1,30 @@
+{
+  "snapshot_id": "i0c-r5h",
+  "revision": "r5h",
+  "phase": "i0c",
+  "status": "i4_close_execution",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5g",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5g.json",
+    "sha256": "5ef07ef0244f2f197a54f35eb63942f08741d30a778b962f0e12ee9f0bff0eb6"
+  },
+  "supersedes_validator_sha256": "b44c0ee9ea56dba9439eeb455d7c04c62d7f1b6e5d1030dea461726c5c39dfdf",
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "2cfad4447216383eb5ebf24a795199b7856150c5276f6a97d60df1c60f9ce768"
+    },
+    "i4_close_state": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "fd2a1e5dae3529b52ce1612a3a8d041bf82424f3de046c5e3fe4353a322ffb66"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5h.json": "b50c334a69105e5b8dd1465e3287fe3697c8d28ffc6fdc1b09ae7ff0136bf052"
+    }
+  },
+  "correction": "I4-close window execution: I4-3 stop-write (LSN 0/4FB2BD00), I4-6 final backup+restore 11/11, I4-2 dual manifests locked, I4-7 migrate (one controlled rollback per cutover rollback[0] after a verifier index-count defect, rerun green: 9 tables/19 indexes, sandbox-identical) + reset phase-1 seven tables verbatim, I4-4 production rebuild 8/8 identical to the I3-7 sandbox baseline, I4-5 real registered tool roundtrip + old write-entry deactivation ledger; tasks.md rebound archive-first after the section-0 backfill (r4z/r5g precedent); validator extended with the r5h section.",
+  "corrections": {
+    "i4_close_execution": "r5h: I4-3/6/2/7/4/5 results backfilled into tasks.md section 0; deviation registered — I4-5 ran in an unguarded subprocess lane (guard's fail-closed CORPUS_DSN poisoning makes dsn()-dependent registered tools structurally unavailable under the guard lane; I3-7 precedent with four compensating controls: zero data/ reads, structural zero-model assert, no-dual-write measurements, fixed script + write-once report); reset phase 2 deferred by U recheck ruling (blocks 1101 / documents 89 retained as-is; crosswalk 307 pairs + doc_id→source map 89 rows exported and awaiting use; rollback relies on the verified backup only).",
+    "i4_unguarded_lane_deviation": "无守卫 lane（I3-7 先例）：守卫对 CORPUS_DSN 的 fail-closed 投毒使 dsn() 依赖路径在守卫 lane 下结构性不可用；I4-5 以无守卫子进程 lane 执行并带四条补偿控制（零 data/ 读取、结构性零模型断言、无双写实测、固定脚本 write-once）。"
+  },
+  "created_at": "2026-09-24T01:55:00+08:00"
+}

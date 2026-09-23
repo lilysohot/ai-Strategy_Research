@@ -20,7 +20,8 @@ zhcfg 或索引文本规则升级必须换新 index_rev 全量重建（新 build
 chunk 的截断文本。
 
 目标 fail-closed：与 :class:`PgStore` 同纪律——``current_database`` 必须等于隔离库；
-目标实例含 ``apodex`` 库即判定为生产实例并拒绝（读侧同样不允许触碰生产库）。
+目标实例含 ``apodex`` 库即判定为生产实例并拒绝（读侧同样不允许触碰生产库）；
+窗口期仅在显式 ``CORPUS_TARGET_DB`` 授权下放行（见 :mod:`pg_target`）。
 """
 
 from __future__ import annotations
@@ -37,9 +38,10 @@ if TYPE_CHECKING:
 from plugins.corpus.preparation.chunk import normalize_search_text
 from plugins.corpus.preparation.contract import ResearchDomain
 from plugins.corpus.preparation.negative_query import rank_lexemes
+from plugins.corpus.preparation.pg_target import production_instance_authorized, resolve_target_db
 from plugins.corpus.preparation.repository import StoreError
 
-_SANDBOX_DB = "i2_sandbox_corpus"
+_SANDBOX_DB = resolve_target_db()
 
 # c′（i0c-r4v）排序信号开关：True ⇒ score 只按实词（rank_lexemes 剔除功能词/标点）；
 # False ⇒ rank_query 退化为 query 本身，行为与 base 逐字段一致（两级回滚的代码级开关）。
@@ -260,7 +262,7 @@ def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
             raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {sandbox_db!r}")
         cur.execute("SELECT datname FROM pg_database WHERE datallowconn")
         dbs = {r[0] for r in cur.fetchall()}
-    if "apodex" in dbs:
+    if "apodex" in dbs and not production_instance_authorized():
         raise StoreError("拒绝：目标实例含 apodex 库——判定为生产实例，禁止检索")
 
 

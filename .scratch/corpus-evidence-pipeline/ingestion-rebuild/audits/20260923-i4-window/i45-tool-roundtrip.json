@@ -1,0 +1,261 @@
+{
+  "artifact": "i45-tool-roundtrip",
+  "executed_at": "2026-09-24T01:22:46+08:00",
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:5432/postgres",
+    "database": "postgres"
+  },
+  "lane": {
+    "form": "无守卫子进程（I3-7 冻结偏差先例：守卫对 CORPUS_DSN 的 fail-closed 投毒使 dsn() 依赖路径在守卫 lane 下结构性不可用）",
+    "deviation_registration": "同 audits/20260923-i37-final-reverify/README.md 偏差登记；随 I4-close 冻结修订一并登记",
+    "compensating_controls": [
+      "零 data/ 读取（search/fetch 为纯读 DB 路径，不触 save_evidence_run）",
+      "结构性零模型断言（sys.modules 白名单反证）",
+      "无双写实测（往返前后旧链七表恒 0 + blocks/documents 见证不变）",
+      "固定脚本 + write-once 报告"
+    ]
+  },
+  "pre_row_counts": {
+    "claims": 0,
+    "claims_v2": 0,
+    "claim_block_runs": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "blocks": 1101,
+    "documents": 89
+  },
+  "active_publications": 8,
+  "search_positive": {
+    "query": "半导体划片机",
+    "hit_count": 4,
+    "query_status": "matched",
+    "first_hit": {
+      "doc_id": "cv2:a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "locator": "chunk:a3b681fdd55d6e11:body:0013",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0013",
+      "context_locators": [
+        "chunk:a3b681fdd55d6e11:heading:0002",
+        "chunk:a3b681fdd55d6e11:heading:0003",
+        "chunk:a3b681fdd55d6e11:heading:0004",
+        "chunk:a3b681fdd55d6e11:heading:0005",
+        "chunk:a3b681fdd55d6e11:body:0000",
+        "chunk:a3b681fdd55d6e11:body:0001",
+        "chunk:a3b681fdd55d6e11:body:0002",
+        "chunk:a3b681fdd55d6e11:heading:0006",
+        "chunk:a3b681fdd55d6e11:heading:0007",
+        "chunk:a3b681fdd55d6e11:heading:0008",
+        "chunk:a3b681fdd55d6e11:heading:0009",
+        "chunk:a3b681fdd55d6e11:heading:0010",
+        "chunk:a3b681fdd55d6e11:heading:0011",
+        "chunk:a3b681fdd55d6e11:heading:0012",
+        "chunk:a3b681fdd55d6e11:heading:0013",
+        "chunk:a3b681fdd55d6e11:heading:0014",
+        "chunk:a3b681fdd55d6e11:heading:0015",
+        "chunk:a3b681fdd55d6e11:heading:0016",
+        "chunk:a3b681fdd55d6e11:heading:0017",
+        "chunk:a3b681fdd55d6e11:heading:0018",
+        "chunk:a3b681fdd55d6e11:heading:0019",
+        "chunk:a3b681fdd55d6e11:heading:0020",
+        "chunk:a3b681fdd55d6e11:heading:0021",
+        "chunk:a3b681fdd55d6e11:heading:0022",
+        "chunk:a3b681fdd55d6e11:heading:0023",
+        "chunk:a3b681fdd55d6e11:heading:0024",
+        "chunk:a3b681fdd55d6e11:heading:0025",
+        "chunk:a3b681fdd55d6e11:heading:0026",
+        "chunk:a3b681fdd55d6e11:heading:0027",
+        "chunk:a3b681fdd55d6e11:heading:0028",
+        "chunk:a3b681fdd55d6e11:heading:0029",
+        "chunk:a3b681fdd55d6e11:heading:0030",
+        "chunk:a3b681fdd55d6e11:heading:0031",
+        "chunk:a3b681fdd55d6e11:heading:0032",
+        "chunk:a3b681fdd55d6e11:heading:0033",
+        "chunk:a3b681fdd55d6e11:heading:0034",
+        "chunk:a3b681fdd55d6e11:heading:0035",
+        "chunk:a3b681fdd55d6e11:heading:0036",
+        "chunk:a3b681fdd55d6e11:heading:0037",
+        "chunk:a3b681fdd55d6e11:heading:0038",
+        "chunk:a3b681fdd55d6e11:body:0003",
+        "chunk:a3b681fdd55d6e11:heading:0040",
+        "chunk:a3b681fdd55d6e11:heading:0041",
+        "chunk:a3b681fdd55d6e11:heading:0042",
+        "chunk:a3b681fdd55d6e11:heading:0043",
+        "chunk:a3b681fdd55d6e11:heading:0044",
+        "chunk:a3b681fdd55d6e11:heading:0045",
+        "chunk:a3b681fdd55d6e11:heading:0046",
+        "chunk:a3b681fdd55d6e11:heading:0047",
+        "chunk:a3b681fdd55d6e11:heading:0048",
+        "chunk:a3b681fdd55d6e11:heading:0049",
+        "chunk:a3b681fdd55d6e11:heading:0050",
+        "chunk:a3b681fdd55d6e11:body:0004",
+        "chunk:a3b681fdd55d6e11:table:0000",
+        "chunk:a3b681fdd55d6e11:body:0005",
+        "chunk:a3b681fdd55d6e11:table:0001",
+        "chunk:a3b681fdd55d6e11:body:0006",
+        "chunk:a3b681fdd55d6e11:heading:0051",
+        "chunk:a3b681fdd55d6e11:heading:0052",
+        "chunk:a3b681fdd55d6e11:heading:0053",
+        "chunk:a3b681fdd55d6e11:heading:0054",
+        "chunk:a3b681fdd55d6e11:heading:0055",
+        "chunk:a3b681fdd55d6e11:heading:0056",
+        "chunk:a3b681fdd55d6e11:heading:0057",
+        "chunk:a3b681fdd55d6e11:heading:0058",
+        "chunk:a3b681fdd55d6e11:heading:0059",
+        "chunk:a3b681fdd55d6e11:heading:0060",
+        "chunk:a3b681fdd55d6e11:body:0007",
+        "chunk:a3b681fdd55d6e11:body:0009",
+        "chunk:a3b681fdd55d6e11:table:0005",
+        "chunk:a3b681fdd55d6e11:heading:0066",
+        "chunk:a3b681fdd55d6e11:heading:0067",
+        "chunk:a3b681fdd55d6e11:heading:0068",
+        "chunk:a3b681fdd55d6e11:heading:0069",
+        "chunk:a3b681fdd55d6e11:table:0006",
+        "chunk:a3b681fdd55d6e11:heading:0070",
+        "chunk:a3b681fdd55d6e11:heading:0071",
+        "chunk:a3b681fdd55d6e11:heading:0073",
+        "chunk:a3b681fdd55d6e11:heading:0074",
+        "chunk:a3b681fdd55d6e11:body:0010",
+        "chunk:a3b681fdd55d6e11:table:0007",
+        "chunk:a3b681fdd55d6e11:heading:0075",
+        "chunk:a3b681fdd55d6e11:heading:0085",
+        "chunk:a3b681fdd55d6e11:table:0009",
+        "chunk:a3b681fdd55d6e11:table:0010",
+        "chunk:a3b681fdd55d6e11:table:0011",
+        "chunk:a3b681fdd55d6e11:body:0012",
+        "chunk:a3b681fdd55d6e11:body:0013",
+        "chunk:a3b681fdd55d6e11:body:0014",
+        "chunk:a3b681fdd55d6e11:heading:0112",
+        "chunk:a3b681fdd55d6e11:heading:0113",
+        "chunk:a3b681fdd55d6e11:heading:0114",
+        "chunk:a3b681fdd55d6e11:heading:0141",
+        "chunk:a3b681fdd55d6e11:heading:0142",
+        "chunk:a3b681fdd55d6e11:heading:0143",
+        "chunk:a3b681fdd55d6e11:body:0022",
+        "chunk:a3b681fdd55d6e11:body:0023",
+        "chunk:a3b681fdd55d6e11:body:0024",
+        "chunk:a3b681fdd55d6e11:heading:0155"
+      ],
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>半导体</b>行业需求增长,国产<b>划片</b>机"
+    },
+    "coverage": {
+      "requested_scope_ref": "corpus_schema",
+      "effective_scope_ref": "corpus_publications.active_build_id",
+      "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+      "processing": "scoped",
+      "query_status": "matched",
+      "availability": "unknown",
+      "reason_codes": [
+        "gap_regions_present"
+      ],
+      "counts": {
+        "sources": 8,
+        "published": 8,
+        "withdrawn": 0,
+        "pending": 0,
+        "failed_jobs": 0,
+        "builds": 8,
+        "published_with_gaps": 6
+      }
+    }
+  },
+  "fetch_positive": {
+    "doc_id": "cv2:a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+    "locator": "chunk:a3b681fdd55d6e11:body:0013",
+    "active": true,
+    "authority_rev": "authority-context-2",
+    "units_n": 18,
+    "text_len": 1189,
+    "text_head": "证券研究报告\n半导体划片机转入放量进程,煤矿业务企稳\n半导体行业需求增长,国产划片机仍处渗透初期\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\n预计2026 年市场规模有望接近万亿美元。与此同时",
+    "snippet_len": 29,
+    "spans_n": 18,
+    "spans_reassemble_text": true,
+    "snippet_is_highlight_projection": true
+  },
+  "failures": {
+    "bogus_cv2_handle": {
+      "ok": false,
+      "error": "取证失败（句柄不可解析、跨 build 或来源已撤销）：句柄不存在或跨 build：(000000000000…, does-not-exist)"
+    },
+    "legacy_handle": {
+      "ok": false,
+      "error": "archive_required：该 doc_id 是旧句柄（非 cv2:<build_id>），新链不以其取正文，也不以新版本冒称旧引用；历史引用请走已归档副本解释，或重新检索取得当前版本句柄。",
+      "archive_required_refusal": true
+    },
+    "garbage_search": {
+      "ok": true,
+      "hit_count": 5,
+      "query_status": "matched"
+    }
+  },
+  "recovery": {
+    "ok": true,
+    "same_text": true
+  },
+  "zero_model_assert": {
+    "blocked_modules_absent": true,
+    "checked": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ]
+  },
+  "post_row_counts": {
+    "claims": 0,
+    "claims_v2": 0,
+    "claim_block_runs": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "blocks": 1101,
+    "documents": 89
+  },
+  "no_dual_write": {
+    "phase1_tables_all_zero": true,
+    "witness_unchanged": {
+      "blocks": 1101,
+      "documents": 89
+    }
+  },
+  "old_write_entries_deactivated": [
+    {
+      "entry": "claims / claim_block_runs 写入（旧抽取落账）",
+      "location": "plugins/corpus/service.py:2169 / :2177",
+      "deactivation": "I4-3 停写核验 + i4-cutover-manifest forbidden[1]（public 旧表零写入）+ I4-7 reset 阶段 1 清空；本往返前后行数恒 0（无双写实测）"
+    },
+    {
+      "entry": "ingest_runs / ingest_failures 写入（旧 ingest 台账）",
+      "location": "plugins/corpus/service.py:2758 / :2806",
+      "deactivation": "同上；ingest 链路写路径唯一化至 preparation engine（I2-7 起）"
+    },
+    {
+      "entry": "corpus_evidence_runs 写入（save_evidence_run）",
+      "location": "plugins/corpus/service.py:1596（仅 parse_evidence / understand_material persist 路径调用；检索/取证纯读不触）",
+      "deactivation": "同上；I4-5 往返全程零新行"
+    },
+    {
+      "entry": "documents / blocks 直写",
+      "location": "I2-7 已退役（plugins/corpus 无 INSERT INTO documents/blocks 残留）",
+      "deactivation": "读侧旧句柄由 corpus_fetch archive_required 显式拒绝（本往返失败用例实测）"
+    }
+  ],
+  "switched": {
+    "schema": "corpus（postgres 库内新建，I4-7 migrate 九表）",
+    "active_set": "8/8 活动 build（I4-4，build_id 与 I3-7 沙箱基线逐一相同）",
+    "consumer_path": "corpus_search → search_pg（活动范围 FTS）+ corpus_fetch → read_pg（cv2 句柄逐字取证）；失败恢复核验通过",
+    "write_path": "唯一化 preparation engine（I2-7）；I4 窗口内生产写入=I4-4 播种/构建/发布"
+  },
+  "retained": {
+    "public.docs / public.chinese_docs": "C12 归属未定，默认保留（U 单独裁决）",
+    "blocks / documents": "阶段 2 TRUNCATE 随 I4-close（新链重建核对后，U 复核）",
+    "apodex 库": "零触碰",
+    "扩展与 zhcfg / 自定义词典挂点": "保留（C13 FTS 基线，zhparser.zhprs_custom_word 0 行）",
+    "旧人工审核导出与备份": "I0B/I4 备份永久保留；reset 后回退只靠已验证备份（不靠旧指针）"
+  }
+}

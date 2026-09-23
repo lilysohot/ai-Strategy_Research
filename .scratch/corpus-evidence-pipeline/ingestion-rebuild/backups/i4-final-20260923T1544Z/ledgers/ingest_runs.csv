@@ -1,0 +1,17 @@
+run_id,started_at,finished_at,duration_ms,root,total,added,skipped_duplicate,skipped_unchanged,needs_ocr,empty,failed,status,error,trigger
+1,2026-09-09 15:25:18.771615+00:00,2026-09-09 15:25:18.984963+00:00,204,data/corpus,57,0,0,57,0,0,0,ok,,script
+2,2026-09-09 15:26:38.543320+00:00,2026-09-09 15:26:38.702393+00:00,149,data/corpus,58,0,0,57,0,0,1,warn,,manual
+3,2026-09-09 15:27:14.843758+00:00,2026-09-09 15:27:14.932542+00:00,79,data/corpus,57,0,0,57,0,0,0,ok,,manual
+4,2026-09-10 04:53:50.070733+00:00,2026-09-10 04:53:51.546455+00:00,1463,data/corpus,79,21,1,57,0,18,0,warn,,script
+5,2026-09-12 06:04:53.270773+00:00,2026-09-12 06:04:56.109457+00:00,2828,data/corpus,63,6,0,57,0,0,0,ok,,script
+6,2026-09-12 06:18:32.277741+00:00,2026-09-12 06:18:32.424866+00:00,135,data/corpus,63,0,0,63,0,0,0,ok,,script
+7,2026-09-12 06:20:31.075731+00:00,2026-09-12 06:24:29.680549+00:00,238577,data/corpus,0,0,0,0,0,0,0,error,"deadlock detected
+LINE 1: INSERT INTO blocks (doc_id, seq, locator, text) VALUES ($1,$...
+                    ^
+DETAIL:  Process 3094 waits for RowExclusiveLock on relation 25034 of database 5; blocked by process 3105.
+Process 3105 waits for ShareLock on relation 25012 of database 5; blocked by process 3094.
+HINT:  See server log for query details.",manual
+8,2026-09-13 08:50:25.297914+00:00,2026-09-13 08:50:25.671839+00:00,364,data/corpus,67,1,3,63,0,0,0,ok,,manual
+9,2026-09-13 08:53:34.628429+00:00,2026-09-13 08:53:34.901551+00:00,264,data/corpus,67,0,3,64,0,0,0,ok,,script
+10,2026-09-13 08:53:52.586022+00:00,2026-09-13 08:53:52.694561+00:00,99,data/corpus,67,0,3,64,0,0,0,ok,,manual
+11,2026-09-14 01:34:32.801889+00:00,2026-09-14 01:34:33.134075+00:00,321,data/corpus,68,1,3,64,0,0,0,ok,,manual

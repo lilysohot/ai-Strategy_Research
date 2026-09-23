@@ -96,6 +96,7 @@ from plugins.corpus.preparation.engine import (
     plan_builds,
     publish_build,
 )
+from plugins.corpus.preparation.pg_target import resolve_target_db
 from plugins.corpus.preparation.repository import StoreError
 from plugins.corpus.preparation.repository_pg import PgStore
 from plugins.corpus.preparation.source import SourceIngestError
@@ -106,7 +107,7 @@ logger = logging.getLogger(__name__)
 # CorpusService 写路径唯一化：ingest_path/ingest_dir 一律走 preparation.engine
 # 的 plan→execute→publish；新链落隔离演练库（PgStore/_check_target fail-closed
 # 拒绝非 i2_sandbox_corpus 实例）。旧 documents/blocks 直写分支在本文件退役。
-_I2_SANDBOX_DB = "i2_sandbox_corpus"
+_I2_SANDBOX_DB = resolve_target_db()
 
 #: 生产检索候选池下限：先给最多五个来源各留 40 个候选，再执行有界 band 选择；
 #: 公共 ``limit`` 仍只约束返回的来源锚点数量，完整证据区通过 context locators 暴露。

@@ -1,0 +1,130 @@
+{
+  "purpose": "I4-2 r5g archive-first 台账：改动前归档 + 改前生效绑定提取",
+  "order_note": "prior 生效绑定按 validate_i0c_freeze.py 的 section 顺序 last-writer-wins 提取（r2..r43 数值序，随后 r4n..r4z、r5a..r5f），与 merge_binding 语义一致",
+  "prior_effective": {
+    "plugins/corpus/preparation/repository_pg.py": "3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5",
+    "plugins/corpus/preparation/read_pg.py": "8ba5aaf46dee0d5d9d137a0c838f1c471364c4d6fd12ff98b3e37d08b9ef5d8e",
+    "plugins/corpus/preparation/search_pg.py": "df35e5c7fc03740c892a6838b2fd4735ff12e0efb478f0891c645f6b8f430135",
+    "plugins/corpus/preparation/cross_boundary.py": "8801e8cf20099ac2cade7401cc77a8c58ca78e56039516d0fec2b5be0020e870",
+    "plugins/corpus/service.py": "e59f052970a11fb9c3b4b087253a9eb4dce13268d91a29e8b759bc1d8a726f5a",
+    "plugins/corpus/cli.py": "7b656d42caae86f385a47951c3fc94a7f5233c24538c6073b52f33065464bae2",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "1c010b135615e6ed060e7093620af31174007ef431c63c0363502442d56be5a6",
+    "docs/plan/README.md": "355e50bb94150683f511e4738b0826d115201b1aaf515c99dfbee2902c9093ff",
+    "docs/plan/corpus-ingestion-rebuild-tasks.md": "c48ed8b669c6b55e7aec81a56807d61c614e3a4f2ab4b6b71374d6faaf9d6fd9"
+  },
+  "checks": [
+    {
+      "check": "pg_target.py 尚不存在",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/preparation/repository_pg.py",
+      "ok": true,
+      "detail": "prior=3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5 disk=3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/preparation/read_pg.py",
+      "ok": true,
+      "detail": "prior=8ba5aaf46dee0d5d9d137a0c838f1c471364c4d6fd12ff98b3e37d08b9ef5d8e disk=8ba5aaf46dee0d5d9d137a0c838f1c471364c4d6fd12ff98b3e37d08b9ef5d8e"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/preparation/search_pg.py",
+      "ok": true,
+      "detail": "prior=df35e5c7fc03740c892a6838b2fd4735ff12e0efb478f0891c645f6b8f430135 disk=df35e5c7fc03740c892a6838b2fd4735ff12e0efb478f0891c645f6b8f430135"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/preparation/cross_boundary.py",
+      "ok": true,
+      "detail": "prior=8801e8cf20099ac2cade7401cc77a8c58ca78e56039516d0fec2b5be0020e870 disk=8801e8cf20099ac2cade7401cc77a8c58ca78e56039516d0fec2b5be0020e870"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/service.py",
+      "ok": true,
+      "detail": "prior=e59f052970a11fb9c3b4b087253a9eb4dce13268d91a29e8b759bc1d8a726f5a disk=e59f052970a11fb9c3b4b087253a9eb4dce13268d91a29e8b759bc1d8a726f5a"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: plugins/corpus/cli.py",
+      "ok": true,
+      "detail": "prior=7b656d42caae86f385a47951c3fc94a7f5233c24538c6073b52f33065464bae2 disk=7b656d42caae86f385a47951c3fc94a7f5233c24538c6073b52f33065464bae2"
+    },
+    {
+      "check": "非漂移路径 prior == 磁盘: .scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+      "ok": true,
+      "detail": "prior=1c010b135615e6ed060e7093620af31174007ef431c63c0363502442d56be5a6 disk=1c010b135615e6ed060e7093620af31174007ef431c63c0363502442d56be5a6"
+    },
+    {
+      "check": "docs 漂移符合预期（prior != 磁盘）: docs/plan/README.md",
+      "ok": true,
+      "detail": "prior=355e50bb94150683f511e4738b0826d115201b1aaf515c99dfbee2902c9093ff disk=f25866ebb67931499e2f8d1c241c17f55b20b2e3a814f1e7a9f487d60ef152a6"
+    },
+    {
+      "check": "docs 漂移符合预期（prior != 磁盘）: docs/plan/corpus-ingestion-rebuild-tasks.md",
+      "ok": true,
+      "detail": "prior=c48ed8b669c6b55e7aec81a56807d61c614e3a4f2ab4b6b71374d6faaf9d6fd9 disk=87acd2ce32bee7cc8d2c65378d8f19675bbdd093b8e31d2e9f312757e02531f0"
+    }
+  ],
+  "archive": [
+    {
+      "path": "plugins/corpus/preparation/repository_pg.py",
+      "sha256": "3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "plugins/corpus/preparation/read_pg.py",
+      "sha256": "8ba5aaf46dee0d5d9d137a0c838f1c471364c4d6fd12ff98b3e37d08b9ef5d8e",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "plugins/corpus/preparation/search_pg.py",
+      "sha256": "df35e5c7fc03740c892a6838b2fd4735ff12e0efb478f0891c645f6b8f430135",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "plugins/corpus/preparation/cross_boundary.py",
+      "sha256": "8801e8cf20099ac2cade7401cc77a8c58ca78e56039516d0fec2b5be0020e870",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "plugins/corpus/service.py",
+      "sha256": "e59f052970a11fb9c3b4b087253a9eb4dce13268d91a29e8b759bc1d8a726f5a",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "plugins/corpus/cli.py",
+      "sha256": "7b656d42caae86f385a47951c3fc94a7f5233c24538c6073b52f33065464bae2",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+      "sha256": "1c010b135615e6ed060e7093620af31174007ef431c63c0363502442d56be5a6",
+      "matches_prior_effective": true,
+      "drift_expected": false
+    },
+    {
+      "path": "docs/plan/README.md",
+      "sha256": "f25866ebb67931499e2f8d1c241c17f55b20b2e3a814f1e7a9f487d60ef152a6",
+      "matches_prior_effective": false,
+      "drift_expected": true
+    },
+    {
+      "path": "docs/plan/corpus-ingestion-rebuild-tasks.md",
+      "sha256": "87acd2ce32bee7cc8d2c65378d8f19675bbdd093b8e31d2e9f312757e02531f0",
+      "matches_prior_effective": false,
+      "drift_expected": true
+    },
+    {
+      "path": "plugins/corpus/preparation/pg_target.py",
+      "sha256": null,
+      "matches_prior_effective": null,
+      "drift_expected": false,
+      "note": "r5g 新文件（first-in-chain），无 prior 绑定，不归档"
+    }
+  ]
+}

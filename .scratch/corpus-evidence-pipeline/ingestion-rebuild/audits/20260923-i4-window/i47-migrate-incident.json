@@ -1,0 +1,42 @@
+{
+  "purpose": "I4-7 migrate 首跑提交后验证器期望值错误 → 按 cutover manifest rollback[0] 回滚",
+  "recorded_at": "2026-09-24T00:56:03+08:00",
+  "authority": "i4-cutover-manifest.json rollback[0]（仅限 corpus schema 本体，逐字记录）",
+  "incident": {
+    "expected_indexes": 10,
+    "actual_indexes": 19,
+    "root_cause": "验证器漏数 9 张表 PRIMARY KEY 支撑索引；DDL 字节 sha256=c4bc8aff… 与 i0c-r4 冻结绑定一致，schema 结构本身无漂移",
+    "ddl_committed": true
+  },
+  "rollback_statement": "DROP SCHEMA corpus CASCADE;",
+  "pre_rollback_verification": {
+    "tables": [
+      "corpus_admissions",
+      "corpus_builds",
+      "corpus_chunks",
+      "corpus_jobs",
+      "corpus_publications",
+      "corpus_review_decisions",
+      "corpus_source_checkpoints",
+      "corpus_sources",
+      "corpus_units"
+    ],
+    "indexes": 19,
+    "sequences": 0,
+    "row_counts_all_zero": {
+      "corpus_admissions": 0,
+      "corpus_builds": 0,
+      "corpus_chunks": 0,
+      "corpus_jobs": 0,
+      "corpus_publications": 0,
+      "corpus_review_decisions": 0,
+      "corpus_source_checkpoints": 0,
+      "corpus_sources": 0,
+      "corpus_units": 0
+    }
+  },
+  "post_rollback_verification": {
+    "namespace_present": false,
+    "relations_remaining": 0
+  }
+}

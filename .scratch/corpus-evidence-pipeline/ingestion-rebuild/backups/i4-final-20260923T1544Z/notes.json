@@ -1,0 +1,56 @@
+{
+  "artifact": "i4-final-backup-notes.json",
+  "task": "I4-6 停写状态最终一致性备份",
+  "status": "FINAL_BACKUP_I4_6",
+  "generated_at": "2026-09-23T15:46:09+00:00",
+  "authorization": "U 2026-09-23 本会话核定（migrate_then_reset_limited 窗口序列；I4-3 停写核验通过后执行）",
+  "cutoff_binding": {
+    "wal_lsn": "0/4FB2BD00",
+    "utc_time": "2026-09-23 15:42:19.104234+00",
+    "i43_findings": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i43-stopwrite-findings.json",
+    "i43_gate_passed": true
+  },
+  "wal_bracket": {
+    "dump_before": "0/4FB2BD00|2026-09-23 15:44:01.422395+00",
+    "dump_after": "0/4FB2BD00|2026-09-23 15:44:03.032097+00",
+    "archive_at": "0/4FB2BD00|2026-09-23 15:46:05.241409+00",
+    "note": "停写状态全程 LSN 0/4FB2BD00 无前进；备份与截止点一致（单 MVCC 快照）"
+  },
+  "method": {
+    "pg_dump": "docker exec pg pg_dump -F c（容器内 pg_dump 18.6 版本匹配）",
+    "globals": "pg_dumpall --globals-only",
+    "toc": "docker exec -i pg pg_restore --list < dump",
+    "originals": "受守卫 tar.gz（data/corpus 全量 196 文件，含 5 份留出件字节，I0B-1 先例）",
+    "ledgers": "psycopg 只读 SELECT → JSONL+CSV（5 台账表 + docs/chinese_docs C12 只读导出）"
+  },
+  "pg_objects": {
+    "table_counts_at_backup": {
+      "claims": 1318,
+      "claim_block_runs": 290,
+      "corpus_evidence_runs": 57,
+      "ingest_runs": 11,
+      "ingest_failures": 1,
+      "docs": 3,
+      "chinese_docs": 3,
+      "claims_v2": 0,
+      "claim_block_runs_v2": 0,
+      "blocks": 1101,
+      "documents": 89
+    },
+    "databases": [
+      "postgres",
+      "apodex"
+    ]
+  },
+  "originals": {
+    "included_files": 196,
+    "holdouts_included": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+    ]
+  },
+  "restore_target": "corpus-db 127.0.0.1:543 一次性验证库（i4_verify_20260923，验证后销毁）"
+}

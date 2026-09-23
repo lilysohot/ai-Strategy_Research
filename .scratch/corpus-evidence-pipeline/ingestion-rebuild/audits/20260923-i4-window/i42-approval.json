@@ -1,0 +1,25 @@
+{
+  "artifact": "i4-2-approval-record",
+  "recorded_at": "2026-09-24T01:05:00+08:00",
+  "channel": "AskUserQuestion（具名问答）",
+  "decisions": [
+    {
+      "question": "reset-limited 九表两阶段签认（阶段 1 七表 I4-7 执行 + 阶段 2 blocks/documents 新链核对后；TRUNCATE RESTART IDENTITY 非 DROP；导出台账已入 I4-6 备份）",
+      "answer": "批准九表两阶段",
+      "scope": [
+        {"phase": 1, "tables": ["public.claims_v2(0)", "public.claim_block_runs_v2(0)", "public.claim_block_runs(290)", "public.claims(1318)", "public.corpus_evidence_runs(57)", "public.ingest_failures(1)", "public.ingest_runs(11)"], "sequences": ["claims_claim_id_seq", "claims_v2_claim_id_seq", "ingest_runs_run_id_seq"]},
+        {"phase": 2, "tables": ["public.blocks(1101)", "public.documents(89)"], "when": "新链重建核对后（I4-close）"}
+      ],
+      "manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json"
+    },
+    {
+      "question": "r5g 目标适配代码变更追认（pg_target.py 显式 CORPUS_TARGET_DB；三处生产硬拒加显式授权闸；service/cli 解析走 pg_target；冻结链 i0c-r5g 验证器 exit 0）",
+      "answer": "追认授权",
+      "binding": "freezes/i0c-r5g.json（sha256 5ef07ef0244f2f197a54f35eb63942f08741d30a778b962f0e12ee9f0bff0eb6）"
+    }
+  ],
+  "manifest_lock": {
+    "cutover": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-cutover-manifest.json（locked_at 2026-09-24T01:05:00+08:00）",
+    "reset": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json（锁定于本记录同时刻）"
+  }
+}

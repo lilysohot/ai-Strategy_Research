@@ -1,0 +1,148 @@
+{
+  "artifact": "i43-stopwrite-findings.json",
+  "task": "I4-3 窗口内停写核验 + 截止点记录（授权：U 2026-09-23 本会话核定，migrate_then_reset_limited 分支窗口序列）",
+  "observed_at": "2026-09-23T15:41:49+00:00",
+  "guard": {
+    "phase": "i4-window-backup",
+    "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i4-window-backup.json",
+    "config_sha256": "366f87609357d85f5297420f74fc6f92b08714e4eb0c9ac017c8120266cd0194"
+  },
+  "target": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "database": "postgres",
+    "user": "postgres",
+    "note": "凭据不出现在本文件"
+  },
+  "errors": [],
+  "wal_bracket": {
+    "a": {
+      "lsn": "0/4FB2BD00",
+      "ts": "2026-09-23 15:41:49.086948+00",
+      "db_stats": {
+        "datname": "postgres",
+        "xact_commit": 5179,
+        "xact_rollback": 18,
+        "tup_inserted": 70602,
+        "tup_updated": 8726,
+        "tup_deleted": 69747
+      },
+      "backends_total": 8,
+      "backends_by_type": [
+        "autovacuum launcher",
+        "background writer",
+        "checkpointer",
+        "io worker",
+        "logical replication launcher",
+        "walwriter"
+      ],
+      "client_backends": [],
+      "client_backend_count": 0,
+      "idle_in_transaction": [],
+      "backend_pids": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22
+      ]
+    },
+    "b": {
+      "lsn": "0/4FB2BD00",
+      "ts": "2026-09-23 15:42:19.104234+00",
+      "db_stats": {
+        "datname": "postgres",
+        "xact_commit": 5184,
+        "xact_rollback": 18,
+        "tup_inserted": 70602,
+        "tup_updated": 8726,
+        "tup_deleted": 69747
+      },
+      "backends_total": 8,
+      "backends_by_type": [
+        "autovacuum launcher",
+        "background writer",
+        "checkpointer",
+        "io worker",
+        "logical replication launcher",
+        "walwriter"
+      ],
+      "client_backends": [],
+      "client_backend_count": 0,
+      "idle_in_transaction": [],
+      "backend_pids": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22
+      ]
+    },
+    "delta": {
+      "lsn_advanced": false,
+      "xact_commit_delta": 5,
+      "xact_rolled_back_delta": 0,
+      "tup_inserted_delta": 0,
+      "tup_updated_delta": 0,
+      "tup_deleted_delta": 0,
+      "self_statements_between": 6,
+      "interval_seconds": 30
+    }
+  },
+  "preconditions": {
+    "replication_slots": 0,
+    "cron_jobs": 0,
+    "cron_note": "pg_cron 未安装（UndefinedTable 按 0 计，与 I4-1 盘点一致）",
+    "schemas": [
+      "public",
+      "zhparser"
+    ],
+    "corpus_schema_objects": []
+  },
+  "cutoff": {
+    "wal_lsn": "0/4FB2BD00",
+    "utc_time": "2026-09-23 15:42:19.104234+00",
+    "definition": "停写截止点 = 第二次括号采样点（snapshot B）；此后窗口内不得有任何对原库的写入",
+    "write_once": true
+  },
+  "old_write_entries": {
+    "entries": [
+      "ingest",
+      "extract-claims",
+      "claim-runs(写)",
+      "derive-claims",
+      "reconcile-claims(写)",
+      "set-kind",
+      "audit(写)",
+      "backup/restore(写目标库)"
+    ],
+    "code_location": "plugins/corpus/service.py（CLI 子命令）",
+    "status": "window_no_callers（pg_stat_activity 零客户端后端 = 无任何调用者）；正式停用记录在 I4-5 落账",
+    "note": "I2-7 已退役消费者层 ingest/claims_v2 写路径；本清单为窗口内暂停批准范围 + I4-5 停用登记对象"
+  },
+  "source_archive_binding": {
+    "dev_manifest": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+    "dev_manifest_sha256": "72d105853c7ed45df2c15bb792b5e108a171f85739940938959f854d98a35961",
+    "source_count": 73,
+    "note": "完整归档清单与哈希在 I4-6 最终备份 artifact-manifest 落账"
+  },
+  "gate": {
+    "checks": {
+      "zero_client_backends": true,
+      "zero_idle_in_transaction": true,
+      "wal_lsn_stable": true,
+      "no_third_party_commits": true,
+      "no_tuple_writes": true,
+      "no_replication_slots": true,
+      "no_cron_jobs": true,
+      "corpus_schema_absent": true
+    },
+    "passed": true
+  }
+}

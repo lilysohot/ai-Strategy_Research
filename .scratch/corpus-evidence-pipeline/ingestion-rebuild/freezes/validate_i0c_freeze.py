@@ -1821,12 +1821,20 @@ if "i0c-r4v" in by_id:
           "r4v test_corpus_search_pg.py must carry I-RANK-1 pool/order/rollback gates")
     # search_pg 权威哈希入 supersession 映射（下方 r39 块与 r42 块消费）；
     # negative_query.py 不在计划 pre-run binding 内，无需豁免。
+    # 权威值随最新绑定修订推进：r5f 时解析为 r5e 检索实现；r5g 窗口目标适配
+    # 演进 search_pg 后按同一「最新修订优先」语义解析为 r5g 绑定值。
     r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"] = (
-        load_json(BASE / by_id["i0c-r5e"]["file"])
-        .get("binding", {}).get("m6_retrieval_implementation", {})
+        load_json(BASE / by_id["i0c-r5g"]["file"])
+        .get("binding", {}).get("i4_window_target_adapter", {})
         .get("plugins/corpus/preparation/search_pg.py")
-        if "i0c-r5e" in by_id
-        else "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+        if "i0c-r5g" in by_id
+        else (
+            load_json(BASE / by_id["i0c-r5e"]["file"])
+            .get("binding", {}).get("m6_retrieval_implementation", {})
+            .get("plugins/corpus/preparation/search_pg.py")
+            if "i0c-r5e" in by_id
+            else "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+        )
     )
     # 注意：此处不 merge——r4v 为最新修订，须在 r4u 块之后最后合并（见 r4u 块末尾），
     # 否则 freeze_validator 会被更靠前的 r4t/r4u 块覆盖为旧验证器哈希。
@@ -2702,6 +2710,157 @@ if "i0c-r5f" in by_id:
           "r5f validator supersession ledger mismatch")
     merge_binding(i0c_current_binding, bind5f)
 
+# r5g（I4 窗口目标适配入链）：读写两侧目标库解析最小变更——新增 pg_target.py，
+# 显式 ``CORPUS_TARGET_DB`` 才放行生产实例（默认 i2_sandbox_corpus 行为不变）；
+# 同时按 r4z 先例重绑 r5f 后因 I4-1 §0 回填而漂移的两份 docs。零模型调用、
+# 窗口外零写入、留出零读取。
+if "i0c-r5g" in by_id:
+    r5g = load_json(BASE / by_id["i0c-r5g"]["file"])
+    parent5g = BASE / by_id["i0c-r5f"]["file"]
+    check(r5g.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5f", "path": str(parent5g.relative_to(ROOT)),
+        "sha256": digest(parent5g)}, "r5g parent mismatch")
+    check(r5g.get("status") == "i4_window_target_adapter"
+          and r5g.get("business_accepted") is True,
+          "r5g must record the I4 window target-adapter revision")
+    bind5g = r5g.get("binding", {})
+    adapter5g = {
+        "plugins/corpus/preparation/pg_target.py",
+        "plugins/corpus/preparation/repository_pg.py",
+        "plugins/corpus/preparation/read_pg.py",
+        "plugins/corpus/preparation/search_pg.py",
+        "plugins/corpus/preparation/cross_boundary.py",
+        "plugins/corpus/service.py",
+        "plugins/corpus/cli.py",
+    }
+    state5g = {"docs/plan/README.md", "docs/plan/corpus-ingestion-rebuild-tasks.md"}
+    validator_path5g = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5g = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                   "audits/20260923-i4-window/previous-effective-bindings-r5g.json")
+    for group5g, expected5g in (
+            ("i4_window_target_adapter", adapter5g),
+            ("migrate_window_state", state5g),
+            ("previous_effective_bindings", {prev_path5g}),
+            ("freeze_validator", {validator_path5g})):
+        check(set(bind5g.get(group5g, {})) == expected5g,
+              f"r5g scope mismatch: {group5g}")
+    prior5g = load_json(ROOT / prev_path5g)
+    previous5g = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed_old5g = (
+        (adapter5g - {"plugins/corpus/preparation/pg_target.py"}) | state5g | {validator_path5g}
+    )
+    check(set(prior5g) == changed_old5g, "r5g previous-binding scope mismatch")
+    check("plugins/corpus/preparation/pg_target.py" not in previous5g,
+          "r5g pg_target.py must be first-in-chain")
+    for p in changed_old5g:
+        check(prior5g.get(p) == previous5g.get(p),
+              f"r5g previous effective hash mismatch: {p}")
+    # archive-first：非漂移路径的 before-r5g 归档必须等于改前生效绑定；两份 docs
+    # 因 r5f 后 §0 回填而漂移（r4z 先例），归档字节即 r5g 重绑来源。
+    before5g = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                       "audits/20260923-i4-window/before-r5g")
+    for p in changed_old5g:
+        archived5g = before5g / p
+        if p in state5g:
+            check(archived5g.is_file()
+                  and digest(archived5g) == bind5g.get("migrate_window_state", {}).get(p),
+                  f"r5g docs archive must carry the rebound bytes: {p}")
+            check(previous5g.get(p) != bind5g.get("migrate_window_state", {}).get(p),
+                  f"r5g docs rebind must actually change the binding: {p}")
+        else:
+            check(archived5g.is_file() and digest(archived5g) == prior5g.get(p),
+                  f"r5g archive must match pre-change effective binding: {p}")
+    # 语义门：默认 fail-closed 不变——pg_target 携带显式授权开关；写/读/检索三处
+    # 生产硬拒一律以 production_instance_authorized 为闸。
+    tgt5g = (ROOT / "plugins/corpus/preparation/pg_target.py").read_text(encoding="utf-8")
+    check("CORPUS_TARGET_DB" in tgt5g and "def resolve_target_db" in tgt5g
+          and "def production_instance_authorized" in tgt5g,
+          "r5g pg_target.py must carry the explicit production-authorization switch")
+    for mod5g, kind5g in (("plugins/corpus/preparation/repository_pg.py", "写入"),
+                          ("plugins/corpus/preparation/read_pg.py", "读取"),
+                          ("plugins/corpus/preparation/search_pg.py", "检索")):
+        src5g = (ROOT / mod5g).read_text(encoding="utf-8")
+        check("production_instance_authorized" in src5g,
+              f"r5g {kind5g} hard-reject must gate on explicit authorization: {mod5g}")
+    tasks5g = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    # 当前字节绑定的是「M7 计划 + I4-1 准备回填」状态；I4-3/I4-6 执行结果的 §0 回填
+    # 属 I4-close 步骤，届时按 r4z/r5g 先例另立修订重绑。
+    check("20260923-i41-window-prep" in tasks5g and "I4-6" in tasks5g and "I4-2" in tasks5g,
+          "r5g tasks.md must carry the I4 window plan and I4-1 backfill")
+    check(any("i4" in k for k in (r5g.get("corrections") or {})),
+          "r5g corrections must record the I4 window entry")
+    previous_validator5g = (
+        load_json(parent5g).get("binding", {}).get("freeze_validator", {})
+        .get(validator_path5g))
+    check(r5g.get("supersedes_validator_sha256") == previous_validator5g
+          and previous_validator5g != bind5g.get("freeze_validator", {}).get(validator_path5g),
+          "r5g validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5g)
+
+# r5h（I4-close 窗口执行入链）：I4-3/6/2/7/4/5 执行结果 §0 回填（r4z/r5g 先例重绑
+# tasks.md）+ 验证器新增 r5h 节。登记 I4-5 无守卫 lane 偏差（I3-7 先例 + 补偿控制）
+# 与 reset 阶段 2 U 复核暂缓裁决（blocks/documents 现状保留，对照件已导出）。
+# 零模型调用、归档先行。
+if "i0c-r5h" in by_id:
+    r5h = load_json(BASE / by_id["i0c-r5h"]["file"])
+    parent5h = BASE / by_id["i0c-r5g"]["file"]
+    check(r5h.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5g", "path": str(parent5h.relative_to(ROOT)),
+        "sha256": digest(parent5h)}, "r5h parent mismatch")
+    check(r5h.get("status") == "i4_close_execution"
+          and r5h.get("business_accepted") is True,
+          "r5h must record the I4-close window-execution revision")
+    bind5h = r5h.get("binding", {})
+    state5h = {"docs/plan/corpus-ingestion-rebuild-tasks.md"}
+    validator_path5h = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5h = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                   "audits/20260923-i4-window/previous-effective-bindings-r5h.json")
+    for group5h, expected5h in (
+            ("i4_close_state", state5h),
+            ("previous_effective_bindings", {prev_path5h}),
+            ("freeze_validator", {validator_path5h})):
+        check(set(bind5h.get(group5h, {})) == expected5h,
+              f"r5h scope mismatch: {group5h}")
+    prior5h = load_json(ROOT / prev_path5h)
+    previous5h = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed5h = state5h | {validator_path5h}
+    check(set(prior5h) == changed5h, "r5h previous-binding scope mismatch")
+    for p in changed5h:
+        check(prior5h.get(p) == previous5h.get(p),
+              f"r5h previous effective hash mismatch: {p}")
+    # archive-first：tasks.md 归档=重绑后字节（§0 回填漂移路径，r5g 先例）；
+    # 验证器归档=改前字节（新增 r5h 节前的 r5g 绑定字节）。
+    before5h = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                       "audits/20260923-i4-window/before-r5h")
+    arch5h = before5h / "docs/plan/corpus-ingestion-rebuild-tasks.md"
+    check(arch5h.is_file() and digest(arch5h) == bind5h.get("i4_close_state", {}).get(
+        "docs/plan/corpus-ingestion-rebuild-tasks.md"),
+        "r5h tasks.md archive must carry the rebound bytes")
+    check(previous5h.get("docs/plan/corpus-ingestion-rebuild-tasks.md")
+          != bind5h.get("i4_close_state", {}).get("docs/plan/corpus-ingestion-rebuild-tasks.md"),
+          "r5h tasks.md rebind must actually change the binding")
+    arch5h = before5h / validator_path5h
+    check(arch5h.is_file() and digest(arch5h) == prior5h.get(validator_path5h),
+          "r5h validator archive must match pre-change effective binding")
+    # 语义门：tasks.md 须携带 I4 窗口执行回填与阶段 2 暂缓裁决；corrections 须
+    # 记录 I4-close 条目并含无守卫 lane 偏差登记。
+    tasks5h = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    check("20260923-i4-window" in tasks5h and "I4-4" in tasks5h and "I4-5" in tasks5h,
+          "r5h tasks.md must carry the I4 window execution backfill")
+    check("暂缓" in tasks5h and "blocks 1101" in tasks5h,
+          "r5h tasks.md must record the phase-2 deferral ruling")
+    corr5h = r5h.get("corrections") or {}
+    check(any("i4" in k for k in corr5h)
+          and any("无守卫" in str(v) for v in corr5h.values()),
+          "r5h corrections must record the I4-close entry with the unguarded-lane deviation")
+    previous_validator5h = (
+        load_json(parent5h).get("binding", {}).get("freeze_validator", {})
+        .get(validator_path5h))
+    check(r5h.get("supersedes_validator_sha256") == previous_validator5h
+          and previous_validator5h != bind5h.get("freeze_validator", {}).get(validator_path5h),
+          "r5h validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5h)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2746,7 +2905,11 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-if "i0c-r5f" in by_id:
+if "i0c-r5h" in by_id:
+    print("CURRENT r5h: I4 window execution closed (migrate+reset-1 green, production rebuild 8/8, tool roundtrip verified); phase-2 reset deferred by U recheck; unguarded-lane deviation registered.")
+elif "i0c-r5g" in by_id:
+    print("CURRENT r5g: I4 window target adapter frozen (explicit CORPUS_TARGET_DB, default fail-closed unchanged); docs backfill rebound archive-first.")
+elif "i0c-r5f" in by_id:
     print("CURRENT r5f: r5e product acceptance retained; validator supersession verified.")
 elif "i0c-r5e" in by_id:
     print("CURRENT r5e: real product path 24/24 QP, 24/24 EP, 0 false positives; M6 product acceptance passed.")
@@ -2780,4 +2943,6 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else "")
       + ("; r4v c3 prune_fn_punct ranking-signal frozen (offline-eval winner, U named sign-off pending M5): search_pg.py dual-tsquery (candidate pool keeps full lexemes via q.tsq, score = ts_rank on content-only q.tsq_rank, tie-break/ts_headline unchanged, RANK_LEXEME_PRUNE=True default-on, same-cursor _rank_query_on injection + explicit rank_query param in build_search_params), negative_query.py is_punct_lexeme/rank_lexemes (drop function-words+punct, keep single-char, fail-closed all-pruned fallback) reusing the F1/B2 non-gold lexicon (granularity change requiring named sign-off), tests/test_corpus_search_pg.py first-in-chain with I-RANK-1 unit gates + live gates (pool unchanged / virtual-only score 0 but stays in pool / tie-break / switch-off field-equal), r4u 'no search_pg bytes' constraint lifted for the first time (r42 plan binding superseded per r4r precedent), corpus family 772/18 vs pre-change same-env control 766/13, e2e replay 11/11 gates green (21/24, matched 75(+8), zero regression, negatives 6x5, width 33<=49, company-003 6/6 gold pos1)" if "i0c-r4v" in by_id else "")
       + ("; r4w M5 named sign-off: _FUNCTION_WORDS granularity change (neg-only -> also positive ranking) approved by U (declared 2026-09-22), zero runtime byte change (sign-off revision binds validator only), r4v m5_declaration flipped to declared" if "i0c-r4w" in by_id else "")
-      + ("; r4x 金标 col 口径改写入链（U 2026-09-23 具名授权）：source-gold industry-009-claim-001 的 R32/尿素 两条 col/cell 由人工合成列名（2026E产能（配额）/2026E产能）改为原文可派生口径『产能（万吨/年）以及同比增长』（quote/row/unit/period 不变）；候选/审批件 based_on/批准投影/正式评分输入全部重派生，EvidencePass 21/24→23/24（industry 5/8→7/8），40 项决定在新候选下 unresolved=0；r26/r39/r42 对旧字节的断言按 r4r 先例以 supersession 承接" if "i0c-r4x" in by_id else ""))
+      + ("; r4x 金标 col 口径改写入链（U 2026-09-23 具名授权）：source-gold industry-009-claim-001 的 R32/尿素 两条 col/cell 由人工合成列名（2026E产能（配额）/2026E产能）改为原文可派生口径『产能（万吨/年）以及同比增长』（quote/row/unit/period 不变）；候选/审批件 based_on/批准投影/正式评分输入全部重派生，EvidencePass 21/24→23/24（industry 5/8→7/8），40 项决定在新候选下 unresolved=0；r26/r39/r42 对旧字节的断言按 r4r 先例以 supersession 承接" if "i0c-r4x" in by_id else "")
+      + ("; r5g I4 窗口目标适配入链：pg_target.py 显式 CORPUS_TARGET_DB 授权（默认 i2_sandbox_corpus 不变），写/读/检索三处生产硬拒加显式授权闸，service/cli 目标库解析走 pg_target，r5f 后 §0 回填的 docs/plan/README.md + tasks.md 按 r4z 先例重绑（archive-first），I4-3 停写核验与 I4-6 最终备份/恢复验证证据在案" if "i0c-r5g" in by_id else "")
+      + ("; r5h I4-close 入链：I4-3/6/2/7/4/5 执行结果 §0 回填（tasks.md 重绑），migrate 一次受控回滚后重跑绿色、reset 阶段 1 七表、I4-4 生产重建 8/8 与 I3-7 基线相同、I4-5 工具往返+旧写入口停用；无守卫 lane 偏差登记（I3-7 先例+补偿控制）；reset 阶段 2 U 复核暂缓（blocks/documents 现状保留，对照件已导出，另行安排）" if "i0c-r5h" in by_id else ""))
