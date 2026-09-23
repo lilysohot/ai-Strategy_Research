@@ -1,0 +1,36 @@
+{
+ "snapshot_id": "i0c-r5b",
+ "revision": "r5b",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r5a",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5a.json",
+  "sha256": "07ac7b29f3aae227e42afea5a780603fee022348db9e4529967faf40af5f2e24"
+ },
+ "binding": {
+  "i37_reverify_evidence": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/rebuild-report.json": "70ab66bd52f6beba37d0ff09c140b94724fd730b6277ed5bccac724c2dcf4f66",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/rebuild-report.md": "3f0b5ab11a44492ec67266bef1ba29dec6edcfc9e1387f4347616e622371d74f",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-score-results.json": "0fa79aedee52e731c52a76d39585d16720deae4201554bc29a2303f2f3abac00",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-tests-results.json": "53f7a5df46d2b0ab5ee6b16f351b5f9f64cc79627dca27ce842ad8c856958808",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-legacy-results.json": "de80c7f3beadf86c6029906c4a21bbfbf21189b7988972b6aa3ae62368dbfb52"
+  },
+  "chain_rebind_evidence": {
+   "docs/plan/corpus-ingestion-rebuild-tasks.md": "3e2413bea14c0f0bb7ad0f74a09515804049beaa50ac2582c56435f02bc3b0ec"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "1e1b63ecae0971b9791435a1bd7fe9b04694da7a8b7b81971e831c8cce7c7530"
+  }
+ },
+ "corrections": {
+  "i3_7_final_reverify": "I3-7 最终重验已执行并入链（audits/20260923-i37-final-reverify/，零模型、隔离 PG、留出零读取；对 I3-6 冻结版本 i0c-r4z）：重建 8/8 published+active（revs 与冻结报告逐一复现）；评分/取证/负例 14 门全绿（QuestionPass/EvidencePass 24/24、三类 DocRecall=1、关键题 22/22、FP=0/伪引用=0、b5 基线零回退、prune on 非劣化、abstain=on 负例 6/6、authority 回环全过）；测试电池 9 门全绿（7 lanes + 恢复后 build_id 确定性复现 + active 指针严格=8 源）；legacy 非回归与 I3-5 同口径全过。偏差登记：D2/D6 双重偏差（守卫对 CORPUS_DSN 投毒 → 无守卫 lane；legacy 形态前提 → 第三库 i2_d2d6_corpus 用后 DROP）与守卫 Popen 注入运行纪律（父 runner 不装守卫、恢复经 --restore 子进程）——均 fail-closed 行为正确非缺陷。pending（非 I3-7 门）：abstain=on 下 24/24 正例被拒检待 U 裁决。全部结果与冻结版本一致；M6 不放行（须独立复核 + U 具名签认）。",
+  "rebind_scope": "仅重绑 docs/plan/corpus-ingestion-rebuild-tasks.md（fd254523…→3e2413be…）、验证器自哈希（971312ae…→1e1b63ec…）与新增 I3-7 重验证据五件（rebuild/score/tests/legacy）；i3-final-freeze-manifest.json 沿用 r5a 绑定不重复；不借机触碰实现/测试/守卫/金标字节。"
+ },
+ "notes": [
+  "r5b 为 I3-7 最终重验入链修订（parent=i0c-r5a）：不触碰 i0c-r5a 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r5b/ 保存改前字节——tasks.md 取自 git HEAD（sha256 == i0c-r5a chain_rebind_evidence 绑定 fd254523…），validator 取自改块前盘面字节（sha256 == i0c-r5a freeze_validator 绑定 971312ae…）。",
+  "I3-7 重验证据五件以 i37_reverify_evidence 组哈希绑定，语义门断言各报告全绿；M6 放行仍须独立复核 + U 具名签认。"
+ ],
+ "m5_declaration": "not_declared"
+}

@@ -1,0 +1,192 @@
+{
+ "artifact": "i3-final-freeze-manifest",
+ "task": "I3-6 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；核定需重验的 M4/M5 门",
+ "generated_at": "2026-09-23T12:30:35+08:00",
+ "frozen_version": {
+  "chain_head": {
+   "snapshot_id": "i0c-r4z",
+   "file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4z.json",
+   "sha256": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b"
+  },
+  "chain_manifest": {
+   "file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/freeze-manifest.json",
+   "sha256": "419ad0f5ebf51690b5796394c609344abd0dc9051ba0de9f5b2f91f06f54449f",
+   "snapshots": 61
+  },
+  "freeze_validator": {
+   "file": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+   "sha256": "817b7779a502d8e9a4a0dc2894ed7356975ca534be2e47f8ba18caf64a6f982e"
+  },
+  "definition": "冻结版本 = i0c 冻结链全链（61+ 快照，追加式）经 validate_i0c_freeze.py 核验的 i0c-current 有效绑定 + validate_i1_freeze.py 核验的 i1 链有效绑定；本 manifest 是版本索引与核定记录，不复制绑定集合（以验证器为准），报告引用运行快照 ID/哈希（架构 §12.1）。"
+ },
+ "frozen_assets": {
+  "implementation": {
+   "plugins/corpus/service.py": "9f7198148e26159c0b8d36aa515e531dfe2728c90d16da1224c79f45ef50c864",
+   "plugins/corpus/cli.py": "7b656d42caae86f385a47951c3fc94a7f5233c24538c6073b52f33065464bae2",
+   "plugins/corpus/audit.py": "1641285b3d7352fd7fa71de5103063c01c230c79db28823d64ce8e2cd0a014d0",
+   "plugins/corpus/scoring.py": "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c",
+   "plugins/corpus/claims.py": "ed462b038a098202a767b1c64ba4bbfbbfef64863b064cc2e37fd8979822f9ba",
+   "plugins/corpus/claims_detail.py": "7ebf1d95e61f83cd68be42d7cc54ced4b592d4e38a0a2a8b57e414a060ae6dc6",
+   "plugins/corpus/preparation/contract.py": "8c4396307092a2158f8843f022d37cd47c799e55463de1fd35395459278d458b",
+   "plugins/corpus/preparation/engine.py": "3d7ec3f8ad3bc1c085e5002cd237ae70e7b6152c3d9b7c2cfdc0c6bcec0034cd",
+   "plugins/corpus/preparation/admission.py": "37b17e9b7aeccf99453e8de76b8437c9930628b6dace88361803ab5c287e7d80",
+   "plugins/corpus/preparation/source.py": "20cd01ed16d38e5f88b158a4a42bd4b7491527ac60e5b59831d4d5bacb939f30",
+   "plugins/corpus/preparation/clean.py": "d46491b22a085b7e5167f53f27ac4791e9ab8a227f3695b6a4dee211b2f27245",
+   "plugins/corpus/preparation/chunk.py": "b0c034eaa38038fe79b217f43bc2437e6fe2c21fb2653c17e7a98434b85454fc",
+   "plugins/corpus/preparation/selection.py": "9bd0a416f42972db92185d6df7b722d5d9d030aa74c5169fa4e50652a1efdab2",
+   "plugins/corpus/preparation/cross_boundary.py": "264a2da104db0e6bd21025aee478b0128d15de85e2a56ef0002022bb781013b6",
+   "plugins/corpus/preparation/publication.py": "7bb765aa74f85678020b630e01664b5cbc0138173703767e22abb7c4789641f7",
+   "plugins/corpus/preparation/repository.py": "130e83c4d25d6f782d82d41e61964021c4081e924fc1f9c3f4e0c5541349b88d",
+   "plugins/corpus/preparation/repository_pg.py": "3ae3d0f5c5ada768cf53bafc99ffc616c6c11b3c2a91901e186fc918bacc89e5",
+   "plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b",
+   "plugins/corpus/preparation/search_pg.py": "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492",
+   "plugins/corpus/preparation/negative_query.py": "0f69d33cd8b1b978327607d3b4c94fb0c43948309ca2bcf8dd6286e3edab801d",
+   "plugins/corpus/preparation/gaps.py": "861fc1c1f2a32397cef2429bd9852565a65945dd15ad7504c4395420e3d7d091",
+   "plugins/corpus/preparation/gap_review.py": "81df709216f0541e7389bece82c945e222b287456d2a7558cb830acda502e13c",
+   "plugins/corpus/preparation/pdf_gap_regions.py": "bc3c5ffee60c1dce3373769a50a44737cbafcd7f2ad3c2528de9508c18ac9b1f",
+   "plugins/corpus/preparation/guard.py": "093cb0b9f4490c88a653dc274a118d53dbbf8fd53601bec8764d9ac240c12794",
+   "plugins/corpus/preparation/guard_pytest.py": "122af564d099afa8906396b13107c2b1ac49b49acfd81c811f9b372b542af0c5",
+   "plugins/corpus/preparation/readers/pdf_reader.py": "bc8d069105d0726cce73aa8a8908023f5868b2017cab84ff9e8e45633d594c40",
+   "plugins/corpus/preparation/readers/docx_reader.py": "8bfd4adb71a1fc5e452f90488813c01ad86654daca0373c24161656e34008196",
+   "plugins/corpus/preparation/readers/md_reader.py": "ad1b67b746e5808033bee984892f1fca452bc63d5c88e8cbd6d3aa6bc91cabbc"
+  },
+  "rules_and_config": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/admission-policy.json": "5186f48ef9f024d1e86948a75ac14ac769af0317a532c6d9b161d3ac3bc20661",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/admission-policy-dev.json": "0f9eb511b4afdd184fe52a8ceeb14ba2aba4a5060a355335e9619cc9d5616e2e",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/design-review.json": "4bcbb39200899776a0c91b8b4e432a85794204b160f0d6ef5fef09ab759e6968",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/dev-scope-manifest.json": "8487c51b548e4427b31da8d545a7aa91591f1b353290a06486483cabcfd9d4d1"
+  },
+  "expectations_and_policy": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/query-gold-frozen.jsonl": "6f6c5a25d55be2b58c7f7ae65152b9b58c8e876aeb60101d13c08c9ccca7b39f",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/baseline-bindings.json": "a397aea92e772c585a71dc7ea45aaf2a41f247652ee8317cd131d82eca31209b",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json": "b82c8d947a2fbecf580548637089369a6c674c1ffdab1fc3b623b929ac2ff396",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/source-identity-map.json": "7d13d7ed4b2af237bbe507fb81ba8c0a2fdab6fe3e120567069a91006372bf5a"
+  },
+  "guards": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0-inventory.json": "d3025d525da9b2b7c312e7250c5dd0590ee9d70d413946c450ae336802779c05",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a4-freeze.json": "2a72ee67ffa4756b5e48ecf1cf5c69a5dfa4ad416e14055787528b425d25b179",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a4-gold.json": "5ea4679a46952f27bb2c896b4e176a59f7f5b526f7e2bb64b5256a39918daa2b",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i0a5-freeze.json": "d5d180a355d2a65f4e9b47fc8b9b348ec428f75c68e0ecc82c12b59df8d9e26c",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json": "45330fad33411fab9a94cec5d4f5a65871ad83d804c2704690bff34406f4abd4",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i2-sandbox.json": "12d472a7d2cabcf347d3909ef8622d557541bbf59115330226843ee4166e1084",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i2-verify.json": "f47ce4569e81088db0b5886097518595351ba6a9391259c6ec20ba3975f1622c",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3.json": "cd36e91f9e76c880dc1f291981c95d1210e0862017afb7eecff708e3546df593",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json": "3faac9e01fc3aa5277cdbc7b181bce25680b478c5b8bdd3f40b6538d65701b6a"
+  },
+  "infra_and_rebuild_path": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql": "c4bc8aff02ccbc62f383356c7456200935e7dfe3a6a8158e6357dc800fb32eb9",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_apply.py": "0812d15475ee1e53c6512dab60c46b7bda1681774c0ce707abbb04a4d0bce88b",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/i2s1_teardown.py": "69993fb8bcbf3b587b6f6a98e904d0756a989f639f90d32caa23021b2eccf19c",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py": "1ed78033176642d90fb0b1cfc2ea76014e7e2a0dc937ce138ec25b13b23118b8"
+  },
+  "test_anchors": {
+   "tests/test_corpus_gap_dispositions.py": "43a6cd6cd4dfec83490d6bae0a797981eaa933655c0d3693459fa6aa47a40ec9",
+   "tests/test_corpus_negative_query.py": "63bafd4060cf7451911c50f3b59dfaaf09c767d040f9d02c67d7faf5fec7a5c3",
+   "tests/test_corpus_search_pg.py": "e67ce2a9bf925dec18ce4d5b05282235f48eb477545b1226369e40fd5f37bac9",
+   "tests/test_corpus_selection.py": "b9b264493ce60287ba329b87e6f38fdee9b1d614a41d7067733a7d2277fbdf32",
+   "tests/test_corpus_dev_lane.py": "d126db7ed509daf7dc9aabaca2075d9f78f536a65a842ac45ce39fe61c83cc39",
+   "tests/test_corpus_consumers_pg.py": "24c65f4749fee0b5700eec49f8c4dfd533955aaa28120bb984c005a83c263f6b",
+   "tests/test_corpus_authority_pg.py": "4dbd4c13446e07a6166c5ad9f0573e57e6bfd704e4cd5dc1b05a2c43cd17a348",
+   "tests/test_corpus_cli_pg.py": "6b483eb83b958a1afb563b8bd0657e7de342e24ddde686a078f8877c306b1e27",
+   "tests/test_corpus_cli_isolation.py": "2a316a791e327cb32caca2b5c47f78a72c850921429a0da13597bfe935e65f6c",
+   "tests/test_corpus_preparation_publication_pg.py": "d91fea98595d0f01597dee76f994d3ee92246acd983730bdb498ac61ac87e148",
+   "tests/test_corpus_preparation_repository_pg.py": "021eb5309b24044836b4fe1aa74ce939a4374ed0779ed5fa0a1cc7832a01655e",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i32-remediation/test_approval_contract.py": "051955d577c6a9254e03fc262b4eab545ca81f8c2e4ed2a3f55be04af97ba0fa"
+  }
+ },
+ "runtime_configuration": {
+  "revs": {
+   "reader_pdf": "reader-pdf-6",
+   "reader_docx": "reader-docx-2",
+   "reader_md": "reader-md-2",
+   "clean": "clean-3",
+   "chunk": "chunk-3",
+   "index": "index-4-zhcfg-2",
+   "ingest": "ingest-1",
+   "admission_probe": "admission-probe-1"
+  },
+  "switches": [
+   {
+    "name": "RANK_LEXEME_PRUNE",
+    "default": "on",
+    "scope": "search_pg 双 tsquery 排序信号（r4v；M5 粒度签认 r4w declared）；一级回滚 = False"
+   },
+   {
+    "name": "stitch_continuation",
+    "default": "on",
+    "scope": "cross_boundary 续接聚合（r4u，read-side path B）"
+   },
+   {
+    "name": "attach_source_note",
+    "default": "on",
+    "scope": "cross_boundary 来源注谓词（r4y）"
+   },
+   {
+    "name": "CORPUS_ABSTAIN_NO_ANSWER",
+    "code_default": "off",
+    "m6_eval": "on",
+    "scope": "无答案拒检通道（r4t）；代码字节默认 off，M6 负例评测口径 =on（I-M6-1：B2 复验 6/6 hits=0 + abstain=true）"
+   },
+   {
+    "name": "CORPUS_READ_CHAIN",
+    "default": "auto",
+    "scope": "fail-closed 探测（目标库有 corpus schema 走 new 链）"
+   },
+   {
+    "name": "CORPUS_DEV_LANE",
+    "default": "unset",
+    "scope": "仅 dev lane 两份（工业富联 md / 光模块 docx）装载需 =1"
+   }
+  ],
+  "frozen_policy": {
+   "source": "audits/20260920-i33-calibration/calibration-plan-v2.json",
+   "min_rate": "19/20",
+   "top_k": 5,
+   "require_critical_all_pass": true,
+   "max_false_positives": 0,
+   "max_fabricated_citations": 0
+  }
+ },
+ "m4_m5_gates_to_reverify": [
+  "I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约）：audits/20260918-i2-fullchain-review/test_fullchain_probes.py（write-once 不修改），CORPUS_I2_DSN → 重建沙箱",
+  "缺口处置契约：tests/test_corpus_gap_dispositions.py",
+  "M4 内存链（admission/fidelity/mapping/编排/发布门 + 夹具）：tests/test_corpus_*.py corpus 家族（plain env）",
+  "M4 守卫门（i1 阶段零模型/零网络/六材料范围）：corpus 家族 i1 守卫 env",
+  "M5 PG 门（publication_pg/repository_pg/authority/cli_pg/cli_isolation/consumers_pg/search_pg/a1_ingest_search/claims/metadata）：i2-verify 守卫 env + CORPUS_I2_DSN → 重建沙箱，核心门零 skip",
+  "dev lane 门：tests/test_corpus_dev_lane.py（i3-e2e 守卫 env）",
+  "legacy 非回归（旧库 5432 只读）：旧检索 golden 19/19（O6 r27 排除）+ 财务 47/47 + 公式 7/7 + 高盛负控 + 客户表 12/12（冻结 run 复验）+ 正文冻结 2 例 + 宏观 0/3 单列 + 审批契约门 test_approval_contract.py",
+  "负例双口径：评分层 false_positives=0（冻结 policy）+ 产品层 CORPUS_ABSTAIN_NO_ANSWER=on 6/6 hits=0 + abstain=true",
+  "静态门：ruff（CI 范围）+ pyright + import_smoke --stage 1（分层规则）"
+ ],
+ "pending_items": [
+  {
+   "item": "prose_numbers 重抽取（4 次模型调用）",
+   "status": "not_run_pending_budget",
+   "note": "r27：复跑须另立预算授权；非冻结必需项"
+  },
+  {
+   "item": "真实答案语义测试",
+   "status": "not_run_pending_authorization",
+   "note": "任务行：另定输入/人工判据/有限预算，未授权前 not_run 不计通过；非冻结必需项"
+  },
+  {
+   "item": "guosen_maotai 留出 10 格 + customer_table 原文 re-parse",
+   "status": "held_out_guard_protected",
+   "note": "守卫 forbidden_roots（含 bbba671e）；独立留出另验须 U 显式授权解锁守卫，不在 I3-6/I3-7 开发口径内"
+  },
+  {
+   "item": "宏观旧规范字段 0/3",
+   "status": "preserved_failure",
+   "note": "失败基线保留单列，非待定项"
+  }
+ ],
+ "calibration_closure": "I3-3 校准按 r39 预定两轮停止后，经 r40—r4x 修复簇（reader-pdf-6 阅读序、clean-3 句粒度、band/cell 选择、cross_boundary 续接/来源注、prune_fn_punct 排序信号、abstain 拒检、金标 col 口径 r4x 具名授权）与 b5 盘点收敛：三类 DocRecall=100%、QuestionPass=24/24、EvidencePass=24/24、关键题 22/22、评分层 FP=0、产品层 abstain 6/6（audits/20260923-b5-final/b5-inventory.json，只读复验）。校准至此结束。",
+ "discipline": {
+  "zero_model": true,
+  "db_write": "none（本 manifest 生成零写库）",
+  "holdout_read": "none",
+  "git_ops": "none",
+  "note": "本 manifest 为 I3-6 冻结产物；I3-7 重验须对本冻结版本执行，I3-6 后任何影响运行的变更将使最终报告失效并回到重新冻结与 I3-7（任务清单 §3.6 尾注）。"
+ }
+}

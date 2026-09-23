@@ -31,22 +31,6 @@ pending（非 I3-7 门）：abstain=on 下 24/24 正例被拒检（S1「正例�
 [20260923-i37-final-reverify](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/README.md)。
 全部结果与冻结版本一致；M6 仍不放行（须独立复核 + U 具名签认）。
 
-2026-09-23 **M6 独立复核与 U 具名签认已完成，M6 放行**。独立复核
-（[20260923-m6-independent-review](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/review.md)，
-全新探针不 import I3-7 脚本，零模型、沙箱只读、留出零读取）：三门验证器 exit 0；r5b 绑定
-13 项对账 + 冻结 manifest 62 资产**零漂移**（chain_manifest 冻结时点字节在 git 8ec0cb6 精确
-复得，当前 63 快照=冻结面前缀相等+仅追加 r5a/r5b——追加式演进实证非篡改）；独立重评分
-30 题逐字段对账**零差异**（QP/EP 24/24、三类 DocRecall=1、FP=0/伪引用=0、b5 零回退、
-prune 改善名单一致、abstain 负例 6/6、正例拒检 24/24 独立复现、authority 自选样本回环过）；
-DB 直读核验 8 源 active、revs 冻结公式逐 build 重算全对、独立 search→fetch 回环 3/3、
-i2_d2d6_corpus 确已 DROP；纪律审计零模型/5432 零触碰/留出零读取全过；静态门复跑
-ruff/import_smoke(365/365)/pyright 0 err；README/tasks.md 宣称与产物逐项一致。
-**U（xyl）2026-09-23 具名签认：M6 放行**；abstain=on 下 24/24 正例拒检裁决为
-**接受为已知限制**（关闭 S1「正例不误拒」设计宣称并登记，负例冻结口径不受影响，
-评分层 24/24 不受影响；若日后需恢复该宣称，另立整改任务走版本冻结 + 重验）。
-签认记录 signoff-record-m6.{md,json}，签认入链 **i0c-r5c**（r30 先例：具名签认入链）。
-M6 后变更须按 I4 前置纪律另立版本冻结与授权。
-
 2026-09-23 I3-6 最终冻结已执行（零模型、零写库、留出零读取）：冻结版本=i0c 链头
 **i0c-r4z**（有效绑定以 validate_i0c_freeze.py 核验为准）；不可变最终 manifest
 [i3-final-freeze-manifest.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json)
@@ -539,7 +523,7 @@ required/supplementary/suggested 三层 + 锚点覆盖度与未覆盖词元 + �
 | I3-4 | coverage 开发测试：空库/无匹配/排除/部分/未决/故障/更新失败/并发发布/跨域                                       | 隔离 PG             | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 三轴及 availability；no\_match 不自动 absent，failed 恒 unknown；最终版本仍须 I3-7 重验          |
 | I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 **最新 2026-09-23：已执行（audits/20260923-i35-legacy-nonregress/，零模型、原库零写入、留出零读取）**：财务 47/47+公式 7/7+高盛负控 PASS（库级等价路径，偏差已登记——I2-7 后冻结契约 verify_claims_entry 写原库不可原样执行）；golden 19/19（O6 r27 排除，旧库 legacy 读链只读，无 skip）；客户表 12/12（冻结 run 复验，原文 holdout 不读）；正文冻结 2 例 2/2（重抽取 not_run 待预算授权）；宏观 0/3 保留单列；guosen_maotai 10 格 held_out_not_run_in_dev（I3-7 口径）；审批契约门 32 passed。I3-6/I3-7 另做 |
 | I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过 **最新 2026-09-23：已执行（audits/20260923-i36-final-freeze/ + i3-final-freeze-manifest.json，i0c-r5a 入链）**：冻结版本=i0c-r4z 链头；关键资产/运行时配置/校准收口（三类 100%、24/24、关键 22/22、FP=0）入 manifest；M4/M5 重验九组核定交 I3-7；待定项均为另立授权型，无冻结必需待定项。仅冻结版本，M6 不放行 |
-| I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retrieval、authority/取证、coverage、CLI、旧检索/财务非回归及受影响 M4/M5 门 | 最终版本、隔离 PG        | A+U | I3-6 后            | I3-6             | 逐类三指标达冻结目标（候选 ≥95%）；关键引用 100%、适用旧通过基线不退化、伪引用负例 0；分母/格式/必需环境缺失不通过；全部结果与版本一致才 M6；**E2E 基线复用**：I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约，[test\_fullchain\_probes.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py)，write-once 不修改）+ [test\_corpus\_gap\_dispositions.py](../../tests/test_corpus_gap_dispositions.py) **最新 2026-09-23：已执行（audits/20260923-i37-final-reverify/，零模型、隔离 PG、留出零读取；对 i0c-r4z 冻结版本）**：重建 8/8 published+active，revs 与冻结报告逐一复现；评分 14/14 门全绿（24/24、三类 DocRecall=1、关键 22/22、FP=0/伪引用=0、b5 零回退、prune on 非劣化、abstain=on 负例 6/6、取证回环全过）；测试电池 9 门全绿（m4-plain/i1 各 320+dev 9+search-live 11+fullchain 12 照原样+hermetic 74+d2d6 73；恢复后 build_id 确定性复现、active 指针严格=8 源）；legacy 与 I3-5 同口径全过；D2/D6 双重偏差与守卫 Popen 注入运行纪律已登记（fail-closed 行为正确非缺陷）；abstain 正例误拒 24/24 登记 pending 待 U 裁决（非本轮门）；静态门 ruff/import_smoke/pyright 0 err。全部结果与版本一致；M6 须独立复核 + U 具名签认，本轮不放行 **最新 2026-09-23 M6：独立复核通过（audits/20260923-m6-independent-review/review.md，零反例）+ U（xyl）具名签认放行；abstain 正例误拒 24/24 裁决为接受已知限制（S1 关闭登记，评分层与负例冻结口径不受影响）；签认记录 signoff-record-m6.{md,json} 入链 i0c-r5c** |
+| I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retrieval、authority/取证、coverage、CLI、旧检索/财务非回归及受影响 M4/M5 门 | 最终版本、隔离 PG        | A+U | I3-6 后            | I3-6             | 逐类三指标达冻结目标（候选 ≥95%）；关键引用 100%、适用旧通过基线不退化、伪引用负例 0；分母/格式/必需环境缺失不通过；全部结果与版本一致才 M6；**E2E 基线复用**：I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约，[test\_fullchain\_probes.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py)，write-once 不修改）+ [test\_corpus\_gap\_dispositions.py](../../tests/test_corpus_gap_dispositions.py) **最新 2026-09-23：已执行（audits/20260923-i37-final-reverify/，零模型、隔离 PG、留出零读取；对 i0c-r4z 冻结版本）**：重建 8/8 published+active，revs 与冻结报告逐一复现；评分 14/14 门全绿（24/24、三类 DocRecall=1、关键 22/22、FP=0/伪引用=0、b5 零回退、prune on 非劣化、abstain=on 负例 6/6、取证回环全过）；测试电池 9 门全绿（m4-plain/i1 各 320+dev 9+search-live 11+fullchain 12 照原样+hermetic 74+d2d6 73；恢复后 build_id 确定性复现、active 指针严格=8 源）；legacy 与 I3-5 同口径全过；D2/D6 双重偏差与守卫 Popen 注入运行纪律已登记（fail-closed 行为正确非缺陷）；abstain 正例误拒 24/24 登记 pending 待 U 裁决（非本轮门）；静态门 ruff/import_smoke/pyright 0 err。全部结果与版本一致；M6 须独立复核 + U 具名签认，本轮不放行 |
 
 ### 3.7 I4 迁移、清理与切换（M7；前置 M6 + 批准 + 维护窗口）
 

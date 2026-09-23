@@ -1,0 +1,30 @@
+{
+ "artifact": "m6-release-signoff-record",
+ "status": "signed",
+ "scope": "M6 最终版本放行签认（I3-6 冻结版本 i0c-r4z × I3-7 最终重验 × 独立复核 + U 具名签认）",
+ "prepared_at": "2026-09-23T15:20:00+08:00",
+ "review_result": "通过",
+ "evidence": [
+  "audits/20260923-i37-final-reverify/（I3-7 最终重验：重建 8/8 + 评分 14 门 + 测试 9 门 + legacy 同口径）",
+  "audits/20260923-m6-independent-review/review.md（独立复核：三门 exit 0；r5b 绑定 13 项 + 62 资产零漂移；独立重评分 30 题逐字段零差异；DB 直读 8 源/revs 重算/3 回环；纪律审计 + 静态门 0 err；宣称一致性逐项相符）",
+  "audits/20260923-m6-independent-review/m6-hashes.json / m6-rescore.json / m6-dbcheck.json（三份 write-once 探针产物，all_match/all_ok 全 true）"
+ ],
+ "claim_upon_signoff": [
+  "I3-7 全部结果与 I3-6 冻结版本一致：QuestionPass/EvidencePass 24/24、三类 DocRecall=1、关键题 22/22、评分层 FP=0/伪引用=0、b5 基线零回退、prune on 非劣化、abstain=on 负例 6/6（冻结口径）、authority 取证回环全过",
+  "独立复核（全新 harness，不 import I3-7 脚本）独立重证零反例，M6 放行三要件（I3-7 通过 + 独立复核 + U 具名签认）全部达成",
+  "冻结链完整性：validate_i0c_freeze.py / validate_i1_freeze.py / validate_i3_2_completion.py 全 exit 0；追加式索引纪律经 git 历史取证实证"
+ ],
+ "not_covered": [
+  "abstain=on 下 24/24 正例拒检：U 裁决为**接受为已知限制**（关闭 S1「正例不误拒」设计宣称并登记；负例 6/6 冻结口径与评分层 24/24 不受影响；恢复该宣称须另立整改任务走版本冻结 + 重验）",
+  "prose 重抽取 2 例（not_run，待预算授权）；真实答案语义测试（not_run，待授权）；留出 10 格含 guosen_maotai（held_out，守卫保护）",
+  "I4 迁移/清理/切换（M7）不在本签认范围，须按 I4 前置纪律另立授权与维护窗口",
+  "tasks.md 当前盘面未 commit（工作区 = r5c 回填后字节）；git 提交由 U 另行决定，不在本轮纪律内"
+ ],
+ "signature_fields": {
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-23T15:20:00+08:00",
+  "decision": "批准（M6 最终版本放行）",
+  "note": "具名审核人 xyl 于 2026-09-23 会话中确认：① 认可 M6 独立复核结论与 I3-7 全部结果，签认放行；② abstain=on 正例误拒 24/24 处置为接受已知限制。签认范围与不含范围见 claim/not_covered 两节。复核结论：通过（review.md §8：独立重证零反例）。"
+ },
+ "signed_in": "i0c-r5c"
+}

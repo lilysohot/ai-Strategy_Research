@@ -1,0 +1,32 @@
+{
+ "snapshot_id": "i0c-r5a",
+ "revision": "r5a",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r4z",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4z.json",
+  "sha256": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b"
+ },
+ "binding": {
+  "final_freeze_manifest": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json": "4152179ffeed7c188a222ea411bcd6c3c6f0f976064dfa6445dbca7bcfe38775"
+  },
+  "chain_rebind_evidence": {
+   "docs/plan/corpus-ingestion-rebuild-tasks.md": "fd2545235bbad93103c0e17a3dc1d0195541ac8cb4e3e2d409d15dd25f9c6614"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "971312ae4d2fbc4a9b8ecb305ec681e1dace2fcb80586e3ed2b5cb08b6f71d42"
+  }
+ },
+ "corrections": {
+  "i3_6_final_freeze": "I3-6 最终冻结已执行并入链（audits/20260923-i36-final-freeze/，零模型、零写库、留出零读取）：冻结版本=i0c-r4z 链头；不可变最终 manifest i3-final-freeze-manifest.json（关键资产哈希 62 项 + 运行时配置 + 校准收口 三类 DocRecall=100%、QuestionPass/EvidencePass 24/24、关键题 22/22、FP=0 + M4/M5 重验核定九组 + 待定项核定——均为另立授权型 not_run，无冻结必需待定项）。仅冻结版本，M6 不放行（须 I3-7 重验 + 独立复核 + U 具名签认）。",
+  "rebind_scope": "仅重绑 i3-final-freeze-manifest.json（新增，4152179f…）、docs/plan/corpus-ingestion-rebuild-tasks.md（aef577bd…→fd254523…）与验证器自哈希（817b7779…→971312ae…）；其余绑定沿用上游修订，不借机触碰实现/测试/守卫字节。"
+ },
+ "notes": [
+  "r5a 为 I3-6 最终冻结入链修订（parent=i0c-r4z）：不触碰 i0c-r4z 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r5a/ 保存改前字节——tasks.md 取自 git HEAD（sha256 == i0c-r4z chain_rebind_evidence 绑定 aef577bd…），validator 取自改块前盘面字节（sha256 == i0c-r4z freeze_validator 绑定 817b7779…）。",
+  "I3-7 重验须对本冻结版本执行；I3-6 后任何影响运行的变化将使最终报告失效，回到新的版本冻结与 I3-7。"
+ ],
+ "m5_declaration": "not_declared"
+}

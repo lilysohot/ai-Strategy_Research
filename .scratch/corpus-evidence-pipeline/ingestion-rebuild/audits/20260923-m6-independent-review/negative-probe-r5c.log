@@ -1,0 +1,6 @@
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/corpus-ingestion-rebuild-tasks.md
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/claims-market-closed-loop-plan.md
+I0C FREEZE CHECK FAILED: r5c signoff record must be named and release M6
+I0C FREEZE CHECK FAILED: i0c-current.binding[m6_signoff_record]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/signoff-record-m6.json 哈希失配或缺失
+i0c freeze verification FAILED: 2 error(s)

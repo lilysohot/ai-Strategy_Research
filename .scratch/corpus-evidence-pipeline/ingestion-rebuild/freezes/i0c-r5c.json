@@ -1,0 +1,39 @@
+{
+ "snapshot_id": "i0c-r5c",
+ "revision": "r5c",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r5b",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5b.json",
+  "sha256": "b332db86c728aeea07d103cf69fca2593a95a08c26d2bc940c85ee22306c2898"
+ },
+ "binding": {
+  "m6_review_evidence": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/review.md": "8a1607dc54dddf6698e010e12862de3990c3f4c995318cbb44b4fb808fecfe89",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/m6-hashes.json": "4f1515e7fc4d13c88d90845c80de7f00b9996a0f5e15e90035c2b6c1c7d5af8a",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/m6-rescore.json": "173dea5d935161e70303dc7551b0c5fe9d48fcf859e6d20eb4b7fbc20304b173",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/m6-dbcheck.json": "f23b22b00eb67784cef8cde3b97236e51c02f1f6318f3b4bf080f8fdb49a46a9"
+  },
+  "m6_signoff_record": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/signoff-record-m6.json": "cbab63b5be6d9211420a49c2c6325e111689f3af68f136f59c8898580bf49e02",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-m6-independent-review/signoff-record-m6.md": "5265a790e131622cbf990ca99f7b1c8e20da77b8ebc89a64fb7997f47a7a88d6"
+  },
+  "chain_rebind_evidence": {
+   "docs/plan/corpus-ingestion-rebuild-tasks.md": "4a11ee5407477cdde97700f58297637229d738ae84c7028d709ff0f96447906f"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "76346ed8a4a8f9856be786609471c81112ee485e76ebbc13d3718e15d6808ab6"
+  }
+ },
+ "corrections": {
+  "m6_signoff": "M6 独立复核与 U 具名签认已完成并入链（audits/20260923-m6-independent-review/，零模型、沙箱只读、留出零读取）：全新探针不 import I3-7 脚本；三门验证器 exit 0；r5b 绑定 13 项对账 + 冻结 manifest 62 资产零漂移（chain_manifest 冻结时点字节在 git 8ec0cb6 精确复得，当前面=冻结面前缀相等+仅追加 r5a/r5b——追加式演进实证）；独立重评分 30 题逐字段对账零差异（QP/EP 24/24、三类 DocRecall=1、FP=0/伪引用=0、b5 零回退、prune 名单一致、abstain 负例 6/6、正例拒检 24/24 独立复现、authority 自选样本回环过）；DB 直读 8 源 active、revs 逐 build 冻结公式重算全对、独立 search→fetch 回环 3/3、i2_d2d6_corpus 确已 DROP；纪律审计与静态门复跑全过。U（xyl）2026-09-23 具名签认：M6 放行；abstain=on 下 24/24 正例拒检裁决为接受为已知限制（关闭 S1 设计宣称并登记，负例冻结口径与评分层不受影响）。签认记录 signoff-record-m6.{md,json}（r30 先例：具名签认入链）。",
+  "rebind_scope": "仅重绑 docs/plan/corpus-ingestion-rebuild-tasks.md（3e2413be…→4a11ee54…）、验证器自哈希（1e1b63ec…→76346ed8…）与新增 M6 复核/签认证据六件（review + 三探针产物 + 签认记录两件）；i3-final-freeze-manifest.json 与 I3-7 证据五件沿用先前绑定不重复；不借机触碰实现/测试/守卫/金标字节。"
+ },
+ "notes": [
+  "r5c 为 M6 放行入链修订（parent=i0c-r5b）：不触碰 i0c-r5b 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r5c/ 保存改前字节——tasks.md 取自**当前盘面**（sha256 == i0c-r5b chain_rebind_evidence 绑定 3e2413be…；工作区未 commit，禁用 git show HEAD 模式），validator 取自改块前盘面字节（sha256 == i0c-r5b freeze_validator 绑定 1e1b63ec…）。",
+  "M6 放行三要件：I3-7 通过 + 独立复核通过 + U（xyl）具名签认——本修订后全部达成；M6 后变更须按 I4 前置纪律另立版本冻结与授权。"
+ ],
+ "m5_declaration": "not_declared"
+}

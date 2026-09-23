@@ -1,0 +1,132 @@
+{
+  "artifact": "m6-independent-review-hashes",
+  "generated_at": "2026-09-23T14:48:15+08:00",
+  "checks": [
+    {
+      "item": "r5b.binding.i37_reverify_evidence:.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/rebuild-report.json",
+      "expected": "70ab66bd52f6beba37d0ff09c140b94724fd730b6277ed5bccac724c2dcf4f66",
+      "actual": "70ab66bd52f6beba37d0ff09c140b94724fd730b6277ed5bccac724c2dcf4f66",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.i37_reverify_evidence:.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/rebuild-report.md",
+      "expected": "3f0b5ab11a44492ec67266bef1ba29dec6edcfc9e1387f4347616e622371d74f",
+      "actual": "3f0b5ab11a44492ec67266bef1ba29dec6edcfc9e1387f4347616e622371d74f",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.i37_reverify_evidence:.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-score-results.json",
+      "expected": "0fa79aedee52e731c52a76d39585d16720deae4201554bc29a2303f2f3abac00",
+      "actual": "0fa79aedee52e731c52a76d39585d16720deae4201554bc29a2303f2f3abac00",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.i37_reverify_evidence:.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-tests-results.json",
+      "expected": "53f7a5df46d2b0ab5ee6b16f351b5f9f64cc79627dca27ce842ad8c856958808",
+      "actual": "53f7a5df46d2b0ab5ee6b16f351b5f9f64cc79627dca27ce842ad8c856958808",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.i37_reverify_evidence:.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/i37-legacy-results.json",
+      "expected": "de80c7f3beadf86c6029906c4a21bbfbf21189b7988972b6aa3ae62368dbfb52",
+      "actual": "de80c7f3beadf86c6029906c4a21bbfbf21189b7988972b6aa3ae62368dbfb52",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.chain_rebind_evidence:docs/plan/corpus-ingestion-rebuild-tasks.md",
+      "expected": "3e2413bea14c0f0bb7ad0f74a09515804049beaa50ac2582c56435f02bc3b0ec",
+      "actual": "3e2413bea14c0f0bb7ad0f74a09515804049beaa50ac2582c56435f02bc3b0ec",
+      "match": true
+    },
+    {
+      "item": "r5b.binding.freeze_validator:.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py",
+      "expected": "1e1b63ecae0971b9791435a1bd7fe9b04694da7a8b7b81971e831c8cce7c7530",
+      "actual": "1e1b63ecae0971b9791435a1bd7fe9b04694da7a8b7b81971e831c8cce7c7530",
+      "match": true
+    },
+    {
+      "item": "r5b.parent:.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5a.json",
+      "expected": "07ac7b29f3aae227e42afea5a780603fee022348db9e4529967faf40af5f2e24",
+      "actual": "07ac7b29f3aae227e42afea5a780603fee022348db9e4529967faf40af5f2e24",
+      "match": true
+    },
+    {
+      "item": "r5a.parent:.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4z.json",
+      "expected": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b",
+      "actual": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b",
+      "match": true
+    },
+    {
+      "item": "r5a.binding.final_freeze_manifest (current)",
+      "expected": "4152179ffeed7c188a222ea411bcd6c3c6f0f976064dfa6445dbca7bcfe38775",
+      "actual": "4152179ffeed7c188a222ea411bcd6c3c6f0f976064dfa6445dbca7bcfe38775",
+      "match": true
+    },
+    {
+      "item": "freeze-manifest:i0c-r5a",
+      "expected": "07ac7b29f3aae227e42afea5a780603fee022348db9e4529967faf40af5f2e24",
+      "actual": "07ac7b29f3aae227e42afea5a780603fee022348db9e4529967faf40af5f2e24",
+      "match": true
+    },
+    {
+      "item": "freeze-manifest:i0c-r5b",
+      "expected": "b332db86c728aeea07d103cf69fca2593a95a08c26d2bc940c85ee22306c2898",
+      "actual": "b332db86c728aeea07d103cf69fca2593a95a08c26d2bc940c85ee22306c2898",
+      "match": true
+    },
+    {
+      "item": "final-manifest.chain_head:i0c-r4z",
+      "expected": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b",
+      "actual": "c0950bf76d06cd87fe92f52d7580f74ee66cf4c854534c4af742ba28ac2aa39b",
+      "match": true
+    }
+  ],
+  "r5a_binding_superseded_by_r5b": {
+    "tasks_md": {
+      "r5a": "fd2545235bbad93103c0e17a3dc1d0195541ac8cb4e3e2d409d15dd25f9c6614",
+      "r5b": "3e2413bea14c0f0bb7ad0f74a09515804049beaa50ac2582c56435f02bc3b0ec"
+    },
+    "validator": {
+      "r5a": "971312ae4d2fbc4a9b8ecb305ec681e1dace2fcb80586e3ed2b5cb08b6f71d42",
+      "r5b": "1e1b63ecae0971b9791435a1bd7fe9b04694da7a8b7b81971e831c8cce7c7530"
+    }
+  },
+  "freeze_manifest_snapshots_total": 63,
+  "chain_manifest_evolution": {
+    "declared_freeze_time_sha256": "419ad0f5ebf51690b5796394c609344abd0dc9051ba0de9f5b2f91f06f54449f",
+    "actual_now": "c0bfb03f25a50e74c90b32f23c560faa9033fedcac6766d8f8629f3ebff81db9",
+    "freeze_time_commit_found": "8ec0cb6",
+    "appended_snapshots_after_freeze": [
+      "i0c-r5a",
+      "i0c-r5b"
+    ],
+    "prefix_preserved": true,
+    "nonsnapshot_fields_unchanged": true,
+    "freeze_time_snapshot_count": 61,
+    "current_snapshot_count": 63
+  },
+  "final_manifest_freeze_time_validator": {
+    "declared_at_freeze": "817b7779a502d8e9a4a0dc2894ed7356975ca534be2e47f8ba18caf64a6f982e",
+    "actual_now": "1e1b63ecae0971b9791435a1bd7fe9b04694da7a8b7b81971e831c8cce7c7530",
+    "note": "冻结时点值；r5a/r5b 绑定修订后验证器演进为 1e1b63ec…（r5b 绑定，门 1 核验），此处不等属预期演进而非资产漂移"
+  },
+  "frozen_assets": {
+    "total": 62,
+    "mismatches": [],
+    "all_match": true
+  },
+  "tasks_md_states": {
+    "working_tree": {
+      "sha256": "3e2413bea14c0f0bb7ad0f74a09515804049beaa50ac2582c56435f02bc3b0ec",
+      "equals_r5b_binding": true
+    },
+    "git_head": {
+      "sha256": "fd2545235bbad93103c0e17a3dc1d0195541ac8cb4e3e2d409d15dd25f9c6614",
+      "equals_r5a_binding": true
+    },
+    "committed": false,
+    "note": "工作区=改后未 commit（r5b 绑定）；HEAD=fd254523（r5a 绑定）——签认轮若再改 tasks.md，archive-first 归档必须取当前盘面字节（== r5b 绑定哈希）"
+  },
+  "all_match": true,
+  "failures": []
+}
