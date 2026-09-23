@@ -1086,6 +1086,45 @@ B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md`
 - **r4x 后产品路径复测**（本日全量测试会话，产品 `svc.search_bands` + 冻结 policy，只读 PG/0 model calls）：**EvidencePass 23/24**（company 8/8、industry 7/8、macro 8/8）、**QuestionPass 24/24**、三类 doc_recall 全 1、FP=0；唯一失败题 = **industry-008**（a-3/a-5 表注未进带，D2 已裁决"不立项、登记不修"）。冻结 policy（min_rate=19/20、critical 全过）下剩余 blocker 机读仅两条：`below_threshold:industry:evidence_pass=87.5%` 与 `critical_failed:industry-008`。
 - **B5 收口条件更新**：EvidencePass "23/24" 字面已达标；M6 剩余要件=① **industry-008 口径裁决**（D2 不修 ⇒ 逐类 95% 门与关键题 100% 门对它恒红，须 U 显式处置：分层单列豁免 / 重开 D2 / 或调金标，三选一）② I3-5（旧检索/财务非回归，D3 暂不执行）③ I3-6 最终冻结 ④ I3-7 全链重验 ⑤ M6 独立复核 + U 具名签认。纪律不变：不 commit/publish/重摄入/写库，未获 U 裁决不动产品字节。
 
+### 14.11 2026-09-23 增量：D2 复议 → 实施 → 入链 `i0c-r4y`（EvidencePass **24/24**，逐类门全过）
+
+（追加式登记；**不改写 §14.10 正文**，但其两句已被本节取代，引用时以本节为准：
+§14.10 的「D2 已裁决"不立项、登记不修"」与「D2 不修 ⇒ industry-008 恒红」——U 已于 2026-09-23 复议 D2 并授权实施。）
+
+**① 复议依据（只读核对，未动字节）**
+
+- **a-3/a-5 真相**：两目标 `quote` **一字不差**（均为注1「价格、价差分位为2016 年1 月1 日至2026 年7 月27 日」），均来自槽位 `industry-ai-supplement-…174b6462-p10` 的 **idx1**；差别仅 `decided_item_id`（`I32-industry-008-02` facet=q3「批准」/ `I32-industry-008-03` **facet=null**「改选」，后者的 `anchor_review.reason` 仅写"仅记录改选来源"，无实质理由）。机器对 -03 的建议锚点本是 `99.6%`。
+- **关键否证**：即使判定 a-5 冗余并删除，单题门要 4/4（80% < 95%），而 **a-3 依旧依赖注1** ⇒ **不能解锁 industry-008**。因此"查重复登记"不是出路，唯一解 = 让注段进带。
+- **根因**：注段 `ord518`（kept，page:10）所在块在该题 doc 内名次 **47/120** > `pool_cap=24` ⇒ 不在任何证据带内（`quote_in_band_text=false`、`locator_missing=[]`、`pages_in_bands_sample` 含 page:10 ⇒ 不是整页没取到，是那段没取到）。同一段在 industry-002 排 13/166 才进带。
+- **普遍性论证（r4u 三层扫描法，`audits/20260923-d2-footnote-scan/`）**：L1 裸谓词 **91 段** → L2 含说明性分句（`注N：/注：/备注：/口径`）**16 段 / 5 份语料** → L3 同页 + 上方紧邻 kept 表格行（Δ<12pt）**4 条配对 / 2 份语料**（含目标 ord518←表ord582 Δ5.45pt）。判据纯结构、不绑金标，触发面与 r4u（全库 1 处）同量级。**§14.9/`b5-report.md` 曾报的"误伤面 78 段/139 配对"是裸谓词口径，高估**。
+- ⚠ **踩坑**：**ordinal 序 ≠ 版面序**——ord518 的 ordinal 排在表格单元 ord519+ **之前**，但版面上在表格**下方**；判上下只能按 bbox。
+
+**② 实施（U 2026-09-23 授权）**
+
+`plugins/corpus/preparation/cross_boundary.py`：新增 `attach_source_note`（**默认开**）、`_is_source_note`、`_SOURCE_NOTE_LEAD/_SOURCE_NOTE_EXPLAIN/_SOURCE_NOTE_MAX_GAP_PT=12.0`；`_BOUNDARY_UNITS_SQL` 增第四支候选；`_merge_chunk` 增 `notes` 参数与版面谓词（段形判据在 `_merge_chunk` 内**复算**，SQL 只粗筛 ⇒ 离线可测）。**`service.py` 字节零改动**（既有 `aggregate_band_chunks` 接线直接生效，仿 r4u）。
+
+**③ 复验（`audits/20260923-d2-footnote-landing/d2-replay.json`，A/B 仅差开关，0 model calls、只读）**
+
+| 判据 | 结果 |
+|---|---|
+| industry-008 a-3/a-5 | off `False,False` → on **`True,True`** |
+| 82 目标回退 / 新增 | **0** / 恰为 {a-3, a-5} |
+| EvidencePass | 23/24 → **24/24**（company 8/8、industry **8/8**、macro 8/8） |
+| 负例 | 6×0（off/on 均） |
+| 选择不变 / 带宽 | True / 33 ≤ 49 |
+| 产品路径逐字段相等 | True |
+
+**最终态盘点**（`audits/20260923-b5-final/b5-inventory.json`，产品路径 + 冻结 policy）：**24/24、逐类 8/8、三类 doc_recall 全 1、`blockers` 空、`score_report_passed=true`**。
+
+**④ 回归与入链**
+
+- `tests/test_corpus_selection.py` **38 passed**（+4 条 I-NOTE-1：正向聚合 / 纯来源标注不聚合 / 版面在上方·间距≥12·不同页均不聚合 / 非表格行不作锚）；语料族 **772 passed / 17 skipped**（768 基线不回退）；ruff（CI 范围）通过；pyright 触及文件 0 errors。
+- 冻结 **`i0c-r4y`**（parent=`i0c-r4x`，archive-first → `before-r4y/`，绑 cross_boundary / test_corpus_selection / validator）+ 验证器 r4y 语义块；**三门 exit 0**（i0c / i1 / i3_2）。
+
+**⑤ M6 现状**：『逐类三指标 ≥95%』『关键引用题 100%』『伪引用负例 0』**三条已达成**；未执行 = I3-5 非回归 / I3-6 最终冻结 / I3-7 重验 / 格式门（PDF/DOCX/MD dev lane）独立复核 / **M6 独立复核 + U 具名签认**。⇒ **本修订仍不构成 M6 放行**（放行只能由独立复核 + U 具名签认给出）。
+
+**⑥ 产物索引**：`audits/20260923-b5-e2-col-probe/`（e2 反事实探针 + 金标改写脚本）、`audits/20260923-r4x-gold-rebind/`（r4x 生成器 + before-r4x/）、`audits/20260923-d2-footnote-scan/`（普遍性三层扫描）、`audits/20260923-d2-footnote-landing/`（D2 复验）、`audits/20260923-r4y-footnote-rebind/`（r4y 生成器 + before-r4y/）、`audits/20260923-b5-final/`（最终态盘点）。
+
 ---
 
 ## 附录 A：证据索引
@@ -1106,6 +1145,12 @@ B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md`
 | i42 议题 B 产品路径回测（12/24） | `audits/20260920-i42-topic-b-reingest/backtest-report.md`、`recall-funnel.md`、`recal-score.md` |
 | c′ 排序信号六臂离线评估（21/24） | `ingestion-rebuild/audits/20260922-c3-lexical-weight/c3w-eval.json`、`c3w-report.md`、`c3w-rollout-plan.md` |
 | c′ 落地复验 + M5 签认（r4v/r4w） | `ingestion-rebuild/audits/20260922-c3w-landing/r4v-replay.json`、`r4v-report.md`；`freezes/i0c-r4v.json`、`freezes/i0c-r4w.json` |
+| 金标 col 口径改写（e2 反事实探针 + 改写脚本） | `ingestion-rebuild/audits/20260923-b5-e2-col-probe/e2-col-probe.json`、`apply_source_gold_col_fix.py`、`apply_decisions_rebind.py` |
+| r4x 入链（金标改写冻结） | `ingestion-rebuild/audits/20260923-r4x-gold-rebind/gen_i0c_r4x.py`、`before-r4x/`；`freezes/i0c-r4x.json` |
+| D2 普遍性三层扫描（91→16→4） | `ingestion-rebuild/audits/20260923-d2-footnote-scan/d2-footnote-scan.json`、`d2_footnote_scan.py` |
+| D2 落地 A/B 复验（23/24→24/24） | `ingestion-rebuild/audits/20260923-d2-footnote-landing/d2-replay.json`、`d2_replay.py` |
+| r4y 入链（D2 冻结） | `ingestion-rebuild/audits/20260923-r4y-footnote-rebind/gen_i0c_r4y.py`、`before-r4y/`；`freezes/i0c-r4y.json` |
+| B5 最终态盘点（24/24、逐类 8/8） | `ingestion-rebuild/audits/20260923-b5-final/b5-inventory.json` |
 
 ## 附录 B：关键代码位置速查
 
