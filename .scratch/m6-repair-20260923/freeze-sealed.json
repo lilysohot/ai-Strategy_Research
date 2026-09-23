@@ -1,0 +1,12 @@
+{
+  "validators": {
+    "i0c": 0,
+    "i1": 0,
+    "i32": 0
+  },
+  "snapshot_id": "i0c-r5d",
+  "snapshot_sha256": "687e16ce4f2c4871059240c7ce1296f2ebea40cd612b39794aaf9ed83b604bf4",
+  "index_sha256": "e2c00cc8aa5306312d451292af4f201cb9e85a3065cd9c320147c7cd0c85e6e8",
+  "business_accepted": false,
+  "git_diff_check": 0
+}

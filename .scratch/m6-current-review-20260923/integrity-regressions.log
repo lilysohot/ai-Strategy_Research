@@ -1,0 +1,22 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_added_authority_unit_must_reject_invalid_hash[header] __________
+.scratch/m6-current-review-20260923/test_integrity_regressions.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+_______ test_added_authority_unit_must_reject_invalid_hash[continuation] _______
+.scratch/m6-current-review-20260923/test_integrity_regressions.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+_______ test_added_authority_unit_must_reject_invalid_hash[source_note] ________
+.scratch/m6-current-review-20260923/test_integrity_regressions.py:30: in test_added_authority_unit_must_reject_invalid_hash
+    with patch('psycopg.connect',return_value=Conn()),patch('plugins.corpus.preparation.read_pg._check_target'),pytest.raises(IntegrityError):
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE IntegrityError
+=========================== short test summary info ============================
+FAILED .scratch/m6-current-review-20260923/test_integrity_regressions.py::test_added_authority_unit_must_reject_invalid_hash[header]
+FAILED .scratch/m6-current-review-20260923/test_integrity_regressions.py::test_added_authority_unit_must_reject_invalid_hash[continuation]
+FAILED .scratch/m6-current-review-20260923/test_integrity_regressions.py::test_added_authority_unit_must_reject_invalid_hash[source_note]
+3 failed in 0.10s

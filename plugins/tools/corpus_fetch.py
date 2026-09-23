@@ -4,7 +4,8 @@
 而不是来自 ``corpus_search`` 的 snippet，更不是来自模型的记忆。
 
 设计上刻意只做一件事——给 ``(doc_id, locator)`` 返回该块原文，
-不做摘要、不做改写、不做拼接。**任何加工都会让「逐字」这一性质失效**，
+不做摘要、不做改写；结构性上下文以明确单元标识附带，逐单元哈希验证，
+单元间以换行分隔，spans 保留各单元精确范围。
 而离线校验正是靠逐字比对来抓编造的。
 
 句柄契约（架构 §7.2，I2-8）：
@@ -21,6 +22,7 @@ from __future__ import annotations
 import json
 
 from frontier_agent.core.tool import tool
+from plugins.corpus.preparation.read_pg import AUTHORITY_REV
 from plugins.corpus.service import get_service
 
 
@@ -78,6 +80,8 @@ async def corpus_fetch(doc_id: str, locator: str) -> str:
             "chunk_id": evidence.chunk_id,
             "kind": evidence.kind,
             "active": evidence.active,
+            "authority_rev": AUTHORITY_REV,
+            "context_unit_ids": list(evidence.context_unit_ids),
             "units": [
                 {
                     "unit_id": unit.unit_id,

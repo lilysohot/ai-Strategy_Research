@@ -1,0 +1,115 @@
+{
+  "snapshot_id": "i0c-r5d",
+  "revision": "r5d",
+  "phase": "i0c",
+  "status": "frozen_repair_acceptance_failed",
+  "business_accepted": false,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5c",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5c.json",
+    "sha256": "f965ae1a68971dfe7ebc368756792ffc62917749ff085271180e808afc9b9a13"
+  },
+  "binding": {
+    "m6_repair_implementation": {
+      "plugins/corpus/preparation/cross_boundary.py": "8801e8cf20099ac2cade7401cc77a8c58ca78e56039516d0fec2b5be0020e870",
+      "plugins/corpus/preparation/read_pg.py": "8ba5aaf46dee0d5d9d137a0c838f1c471364c4d6fd12ff98b3e37d08b9ef5d8e",
+      "plugins/corpus/service.py": "0f555d58d5cc2be677e01949e3b3b5a38c3007bf6f46d046555718c233785d12",
+      "plugins/tools/corpus_fetch.py": "eaafe4b6d48d2d97a85827f7397fc6fd1b40b75aabda99a64ecaeba26c7041c3",
+      "tools/corpus_product_observations.py": "038783905c12c8f29480ce399cceaacac2a12ae57baa38aeebf8e752b969e6aa"
+    },
+    "m6_repair_tests": {
+      "tests/test_corpus_authority_pg.py": "c24c03771256e534b5ed0a4db70f0b8c7a9892255f49c2d0b3a519ccec9fde1e",
+      "tests/test_corpus_context_integrity.py": "f40b52193733008a192f1612c77537a24b99b98c76447f1351d1868a43cc3e62",
+      "tests/test_corpus_product_observations.py": "9bd0e0397183a8cda40e0284e312f5681fd28c92be325e0d70d85fc97223b220",
+      "tests/test_corpus_selection.py": "ad2868f109d92a7603f97776374977c1e826f6138200219d0fd7b5fff6b150d2"
+    },
+    "m6_repair_state": {
+      "docs/plan/claims-market-closed-loop-plan.md": "5f6f56a23ff602f4eb7450c2ec03379899bd3d450f8942f4682bc6b7e9512780",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "f12a89f39498f46621bbdef567920da620d46286ea557aa0a6c3f81955b5b6a1"
+    },
+    "m6_repair_archive": {
+      ".scratch/m6-repair-20260923/before/.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "76346ed8a4a8f9856be786609471c81112ee485e76ebbc13d3718e15d6808ab6",
+      ".scratch/m6-repair-20260923/before/docs/plan/claims-market-closed-loop-plan.md": "670ae525f5c4aa4f2319a4fb292cd2463738ab3cc2377a2a64c1c9c44e7c71a2",
+      ".scratch/m6-repair-20260923/before/docs/plan/corpus-ingestion-rebuild-tasks.md": "4a11ee5407477cdde97700f58297637229d738ae84c7028d709ff0f96447906f",
+      ".scratch/m6-repair-20260923/before/plugins/corpus/preparation/cross_boundary.py": "264a2da104db0e6bd21025aee478b0128d15de85e2a56ef0002022bb781013b6",
+      ".scratch/m6-repair-20260923/before/plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b",
+      ".scratch/m6-repair-20260923/before/plugins/corpus/service.py": "9f7198148e26159c0b8d36aa515e531dfe2728c90d16da1224c79f45ef50c864",
+      ".scratch/m6-repair-20260923/before/plugins/tools/corpus_fetch.py": "aa1657d1fb235524378afdfcf67a4fb5f3987e311693d27014c24ec6627d8608",
+      ".scratch/m6-repair-20260923/before/tests/test_corpus_authority_pg.py": "4dbd4c13446e07a6166c5ad9f0573e57e6bfd704e4cd5dc1b05a2c43cd17a348",
+      ".scratch/m6-repair-20260923/before/tests/test_corpus_selection.py": "b9b264493ce60287ba329b87e6f38fdee9b1d614a41d7067733a7d2277fbdf32"
+    },
+    "m6_repair_evidence": {
+      ".scratch/m6-repair-20260923/archive_before.py": "5dc61e74db5eac1e472c8a2afe6471a19b9bc0046f76bcfc1f62038f8556d35d",
+      ".scratch/m6-repair-20260923/archive_pg_test.py": "c21e7500d41f9bc527c3c93dc33c47ef4adfe8de16564a19d66e31d9240ce97a",
+      ".scratch/m6-repair-20260923/before-index.json": "cde7a783dcf4b5aa64bd2bfdec6778b1df84fd0a82dfb84f6d2454a2fa31e9a4",
+      ".scratch/m6-repair-20260923/before-manifest.json": "60fbd791833285d151fc57123f03cb0aba6685b6b6d5e8d565c3380114da7dde",
+      ".scratch/m6-repair-20260923/check_context_roundtrip.py": "2c2b46e15c6ae87dc12af9a1fd23e5d934af63e6b556553fd9df2728d7a46124",
+      ".scratch/m6-repair-20260923/check_freeze_controls.py": "40ab0b74c364236a83cf0a7fe0d9776bcdb0938a137b13d5350a674037022cb8",
+      ".scratch/m6-repair-20260923/context-roundtrip.log": "81076e270ec66cb12fef9f7cddc66115a403995eaeea4bdaf4947a447301d172",
+      ".scratch/m6-repair-20260923/freeze-negative-controls.json": "698aa184365e0567e200f4e95975ea7d33bda4d40e0322e35e1cb9e81d4ab9b1",
+      ".scratch/m6-repair-20260923/freeze_repair.py": "79d93e1e65e81e3f9c2f00e77b28b64d1753769d493012570235b64986771916",
+      ".scratch/m6-repair-20260923/full-pytest.exit": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      ".scratch/m6-repair-20260923/full-pytest.log": "6332dc45a1c23f3fe111914594f54a4c3d0f923e9aa9e47e78733f62f7611c1f",
+      ".scratch/m6-repair-20260923/i37-tests-results.json": "0845364a68e0dda4f2a950b9275e0220600778ba3404a2f76d8345e995f592b2",
+      ".scratch/m6-repair-20260923/implement_authority.py": "18f673058ce4e1621eef9e409df46d1249f1547770cec3251b3568319b1fc0af",
+      ".scratch/m6-repair-20260923/imports1.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/imports1.log": "bf9515b8a9929ba9cfbfb3730b0eb2838a174cdc0cb275ba7e59d326bc0284ec",
+      ".scratch/m6-repair-20260923/imports2.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/imports2.log": "faade8aae59329e3b1d2071e67ffcd5c9bd86c241f1f57f527ac9271b3925d35",
+      ".scratch/m6-repair-20260923/lane-dev-lane.txt": "9e02bad0f9f396159c816af9381159af6d5a919472227a352ecee54c8e9447c8",
+      ".scratch/m6-repair-20260923/lane-fullchain-12.txt": "154d292eff527b2e8f10d3aa3bdfacc8ff058612725f8f34e1fb60d54cabd5af",
+      ".scratch/m6-repair-20260923/lane-m4-i1.txt": "dd8f96616af76cfb8803a3d9925ce634f655bf377c0fa53eda8d7adb02e42551",
+      ".scratch/m6-repair-20260923/lane-m4-plain.txt": "006ccb62627fe965741d939bfc390b1e5bd696d5972647dcd120da9b34122066",
+      ".scratch/m6-repair-20260923/lane-m5-dsn-d2d6.txt": "3d224c8a9b780de58872832d72a84731b8be7b0d5dd5325e3c742e7f5fea0bce",
+      ".scratch/m6-repair-20260923/lane-m5-hermetic.txt": "406eab8aac6a93b11bc44a1b30fd7be9a514995112508e3295c01200d9092725",
+      ".scratch/m6-repair-20260923/lane-m5-search-live.txt": "8998c4dd7f83c5515e19ac67495ba4e7ead7b8cafd844855e4f88d23851a049f",
+      ".scratch/m6-repair-20260923/lane-restore.txt": "adcaf00c14614b0642be80daa2670d6240032eb1bb00fec42cd870ca08de4e95",
+      ".scratch/m6-repair-20260923/m6-spec-fetch-probe-results.json": "f170359f777e8b058ada09bd7dc5b66cc4a20ee9aa835be611923031d1c88994",
+      ".scratch/m6-repair-20260923/pg-battery.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/pg-battery.log": "978b69d63cc64e7a58b9b553fefa96b43f15e4c04998e475fd23b828be4cadf3",
+      ".scratch/m6-repair-20260923/product-default-trace.json": "29f4f1fc9c0a1ea60523867450ad56895f0bf3b993d031e669a7f86b4d252bbf",
+      ".scratch/m6-repair-20260923/product-default.json": "1a0e2d16c210724118715ff7a123b4a6cb9eb21e4bebdc2062eeefb3e452ce83",
+      ".scratch/m6-repair-20260923/product-default.txt": "5d12e9219691f3a274513b5663d325a67d1e36a6a6d9114ffb50a9cdce45b5d8",
+      ".scratch/m6-repair-20260923/product-evaluation-summary.json": "426c0382192fba2bf7106b6fbca5cc2e216d4254860575feda00019e750e0d12",
+      ".scratch/m6-repair-20260923/product-evaluation.log": "71963e8522f18bf5987996bc7a9785bea9e4b70e3892ec54316825dd89abce27",
+      ".scratch/m6-repair-20260923/product-explicit-or-diagnostic-trace.json": "04a50a13eb44ce310c1141c971a92e6287a124f966436df60c8336d41b2d6d97",
+      ".scratch/m6-repair-20260923/product-explicit-or-diagnostic.json": "b2baa784e7d5259a89d5c499a962dc79ebe982b3e1d27fd2b0bd7f5d60c465a3",
+      ".scratch/m6-repair-20260923/product-explicit-or-diagnostic.txt": "02d63ce9ff50e72beee6b1b1e476b250f64043fdf3c0bec8d39af929b88ee306",
+      ".scratch/m6-repair-20260923/product-known-abstain-limit-trace.json": "8c3a6b622c4e37706a97c5348ba2e0cef9fbb9ab488cac298bf6c082c4e036fa",
+      ".scratch/m6-repair-20260923/product-known-abstain-limit.json": "21a016f38440ea7e87b57c5914ddc2171c86c3886791353b9fffe37d4721f812",
+      ".scratch/m6-repair-20260923/product-known-abstain-limit.txt": "5d12e9219691f3a274513b5663d325a67d1e36a6a6d9114ffb50a9cdce45b5d8",
+      ".scratch/m6-repair-20260923/pyright.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/pyright.log": "f552d237ad0bd249c05f97eb62dbc65d2d0e4a5fe2346608e10fb7838dba9ed1",
+      ".scratch/m6-repair-20260923/red-integrity.log": "a2c3dbcc3aff9834655093d6ecc16182773c00bb87a83751391d278b01b29996",
+      ".scratch/m6-repair-20260923/repair-manifest.json": "069f590e08e74abc3c68be15be7cca3193361f476304ce0934a71b071e3e5762",
+      ".scratch/m6-repair-20260923/replay_pg_battery.py": "e3bf7b379b49c10b5ff875ac913a62e500e191b9732105a46f57dada1806f952",
+      ".scratch/m6-repair-20260923/report.md": "e3cc339dc10bf6abc8925e0201ceb65f750529078099d7183d80a41b11c4724d",
+      ".scratch/m6-repair-20260923/reverify_targets.py": "974cf864f09bdd60d070ac9baf3d0bfaf5635011ccd047d2223d21e4819f4016",
+      ".scratch/m6-repair-20260923/ruff.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      ".scratch/m6-repair-20260923/run_checks.py": "44893a19ce2dbaa71ce4532df30af0f5218a53fba55ada13dbd80cb277ec7386",
+      ".scratch/m6-repair-20260923/run_product_eval.py": "f661ebdb2279ae767acee7e21ecd44af547bd6ed774833e4dae7ef02a8124598",
+      ".scratch/m6-repair-20260923/spec.md": "6d3297c21020f5fb448119d1bcb4ac7894392ed9b27dc3a5266e1921ecfb60ff",
+      ".scratch/m6-repair-20260923/symbols.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      ".scratch/m6-repair-20260923/symbols.log": "74fb32c8fd62121c624337058e8665371009611f0f96390e81379a96eddd63f2",
+      ".scratch/m6-repair-20260923/target-roundtrip.json": "5c94f77ce5b0b67f36689360aa3a4c7e4beff0d550aebc31732961abe308f89a",
+      ".scratch/m6-repair-20260923/unit-authority.log": "27d8690f37ab31e6eaf72ba627d86521a58187339a2ca2dd15b9c8a58f6df8e7",
+      ".scratch/m6-repair-20260923/update_test_fixtures.py": "61475c2f117cb8b884fb8a1d64c9fb05a1b1322306f11684d4498a2b12700021"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "88bd3dcd29f31831e392cb42800b70431aff7a2000c7fd88efce928ad03d3bfd"
+    }
+  },
+  "corrections": {
+    "S1": "Verify hashes for all selected contextual units before exposing authority text.",
+    "F1": "Single and batch fetch share contextual projection inside a readonly repeatable-read snapshot.",
+    "F2": "Actual registered tool observations for all labels; unchanged raw default queries, bounded limits, no synthetic NO_MATCH.",
+    "historical_checks": "Three historical read_pg/service assertions use archived bytes bound to previous effective hashes; current bytes verified by r5d."
+  },
+  "notes": [
+    "All historical snapshots and final manifest unchanged.",
+    "Business gate remains failed; old signed r5c experiment results do not establish new product acceptance.",
+    "No scoring, gold, threshold, search strategy, index or abstain default change."
+  ],
+  "m5_declaration": "not_declared"
+}

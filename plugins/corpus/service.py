@@ -933,9 +933,7 @@ class CorpusService:
         """
         cfg = os.environ.get("CORPUS_ABSTAIN_NO_ANSWER", "off").strip().lower()
         if cfg not in ("on", "off"):
-            raise StoreError(
-                f"拒绝：CORPUS_ABSTAIN_NO_ANSWER 取值非法: {cfg!r}（须 on|off）"
-            )
+            raise StoreError(f"拒绝：CORPUS_ABSTAIN_NO_ANSWER 取值非法: {cfg!r}（须 on|off）")
         if cfg != "on" or self.read_chain() != "new":
             return False
         from plugins.corpus.preparation.negative_query import (
@@ -1037,7 +1035,7 @@ class CorpusService:
         对齐表单元派生 row:/col: cell 证据（不改变选择）。返回 ``(list[BandDocument],
         coverage)``；``limit`` 仍是返回条数/带数的上限语义。
         """
-        from plugins.corpus.preparation import cross_boundary, read_pg
+        from plugins.corpus.preparation import read_pg
 
         if self.read_chain() != "new":
             raise read_pg.LegacyHandleError(
@@ -1051,9 +1049,6 @@ class CorpusService:
         )
         bands = self._apply_selection_bands(raw_hits, chunk_order, limit)
         chunk_evs = read_pg.fetch_bands(self._dsn, bands, chunk_order, sandbox_db=_I2_SANDBOX_DB)
-        chunk_evs = cross_boundary.aggregate_band_chunks(
-            self._dsn, chunk_evs, sandbox_db=_I2_SANDBOX_DB
-        )  # F4 跨 NOISE/kept 边界联合取证
         docs = self._assemble_band_documents(bands, chunk_evs, chunk_order)
         return docs, coverage
 

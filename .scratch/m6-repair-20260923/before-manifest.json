@@ -1,0 +1,11 @@
+{
+  ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "76346ed8a4a8f9856be786609471c81112ee485e76ebbc13d3718e15d6808ab6",
+  "docs/plan/claims-market-closed-loop-plan.md": "670ae525f5c4aa4f2319a4fb292cd2463738ab3cc2377a2a64c1c9c44e7c71a2",
+  "docs/plan/corpus-ingestion-rebuild-tasks.md": "4a11ee5407477cdde97700f58297637229d738ae84c7028d709ff0f96447906f",
+  "plugins/corpus/preparation/cross_boundary.py": "264a2da104db0e6bd21025aee478b0128d15de85e2a56ef0002022bb781013b6",
+  "plugins/corpus/preparation/read_pg.py": "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b",
+  "plugins/corpus/service.py": "9f7198148e26159c0b8d36aa515e531dfe2728c90d16da1224c79f45ef50c864",
+  "plugins/tools/corpus_fetch.py": "aa1657d1fb235524378afdfcf67a4fb5f3987e311693d27014c24ec6627d8608",
+  "tests/test_corpus_authority_pg.py": "4dbd4c13446e07a6166c5ad9f0573e57e6bfd704e4cd5dc1b05a2c43cd17a348",
+  "tests/test_corpus_selection.py": "b9b264493ce60287ba329b87e6f38fdee9b1d614a41d7067733a7d2277fbdf32"
+}

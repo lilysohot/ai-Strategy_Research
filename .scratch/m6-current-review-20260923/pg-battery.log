@@ -1,0 +1,99 @@
+{
+  "lanes": [
+    {
+      "lane": "m4-plain",
+      "exit_code": 0,
+      "counts": {
+        "passed": 320,
+        "failed": 0,
+        "skipped": 7,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "m4-i1",
+      "exit_code": 0,
+      "counts": {
+        "passed": 320,
+        "failed": 0,
+        "skipped": 7,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "dev-lane",
+      "exit_code": 0,
+      "counts": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "m5-search-live",
+      "exit_code": 0,
+      "counts": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "fullchain-12",
+      "exit_code": 0,
+      "counts": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "m5-hermetic",
+      "exit_code": 0,
+      "counts": {
+        "passed": 74,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    },
+    {
+      "lane": "m5-dsn-d2d6",
+      "exit_code": 0,
+      "counts": {
+        "passed": 73,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    }
+  ],
+  "pointers": {
+    "restore_exit_code": 0,
+    "expected_real_builds": 8,
+    "build_ids_deterministic": true,
+    "active_set_strict_match": true,
+    "missing_active": [],
+    "extra_active": [],
+    "published": 8,
+    "active": 8,
+    "note": "teardown 重建后测试残留清零；active 指针须严格等于真实 8 源",
+    "d2d6_db_dropped_before_restore": true
+  },
+  "gates": {
+    "fullchain_12_pass": true,
+    "m4_plain_pass": true,
+    "m4_i1_pass": true,
+    "dev_lane_pass": true,
+    "m5_search_live_pass_zero_skip": true,
+    "m5_hermetic_pass_zero_skip": true,
+    "m5_dsn_d2_d6_pass_zero_skip": true,
+    "pre_restore_ready": true,
+    "restore_deterministic_build_ids": true,
+    "real_sources_active_strict": true
+  },
+  "passed": true
+}

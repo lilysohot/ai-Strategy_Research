@@ -33,12 +33,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    pass
+    import psycopg
 
 from plugins.corpus.preparation.contract import UnitStatus
 from plugins.corpus.preparation.read_pg import (
     ChunkEvidence,
     UnitEvidence,
+    verified_unit,
+    with_units,
 )
 
 _SANDBOX_DB = "i2_sandbox_corpus"
@@ -93,17 +95,6 @@ def _bbox_overlap_y(
     return not (a[3] <= b[1] or b[3] <= a[1])
 
 
-def _unit_evidence(uid: str, raw: str, loc: dict) -> UnitEvidence:
-    cells = tuple(tuple(int(v) for v in cell) for cell in (loc.get("cells") or ()))
-    return UnitEvidence(
-        unit_id=uid,
-        raw_text=raw,
-        page=loc.get("page"),
-        element=loc.get("element"),
-        cells=cells,
-    )
-
-
 def aggregate_band_chunks(
     dsn: str,
     chunk_evs: tuple[ChunkEvidence, ...],
@@ -140,6 +131,28 @@ def aggregate_band_chunks(
     if not chunk_evs:
         return chunk_evs
 
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+            return aggregate_band_chunks_on(
+                cur,
+                chunk_evs,
+                stitch_continuation=stitch_continuation,
+                attach_source_note=attach_source_note,
+            )
+
+
+def aggregate_band_chunks_on(
+    cur: psycopg.Cursor,
+    chunk_evs: tuple[ChunkEvidence, ...],
+    *,
+    stitch_continuation: bool = True,
+    attach_source_note: bool = True,
+) -> tuple[ChunkEvidence, ...]:
+    """Read bounded context in the same transaction as its chunk and authorization."""
+    if not chunk_evs:
+        return chunk_evs
     # 需要 bbox 的块内 kept 单元（ChunkEvidence.units 不含 bbox）+ 候选 NOISE 所在 build
     build_ids = sorted({ev.build_id for ev in chunk_evs})
     kept_ids: list[str] = [u.unit_id for ev in chunk_evs for u in ev.units]
@@ -147,38 +160,35 @@ def aggregate_band_chunks(
     kept_status = UnitStatus.KEPT.value
     hf = list(sorted(_HEADER_FOOTER))
 
-    with psycopg.connect(dsn, autocommit=True) as conn:
-        _check_target(conn, sandbox_db)
-        with conn.cursor() as cur:
-            cur.execute(
-                _BOUNDARY_UNITS_SQL,
-                {
-                    "build_ids": build_ids,
-                    "kept_ids": kept_ids,
-                    "noise": noise_status,
-                    "kept": kept_status,
-                    "hf": hf,
-                    "note_lead": _SOURCE_NOTE_LEAD,
-                    "note_explain": _SOURCE_NOTE_EXPLAIN,
-                },
-            )
-            # build_id -> {unit_id: (ordinal, raw_text, location, content_hash, reasons, kind)}
-            kept_by_build: dict[str, dict[str, tuple]] = {}
-            noise_by_build: dict[str, dict[str, tuple]] = {}
-            frag_by_build: dict[str, dict[str, tuple]] = {}
-            note_by_build: dict[str, dict[str, tuple]] = {}
-            for bid, uid, ordinal, raw, loc, chash, status, reasons in cur.fetchall():
-                cell = (ordinal, str(raw or ""), loc, str(chash or ""), tuple(reasons or ()))
-                if status == noise_status:
-                    if set(reasons or ()) & _HEADER_FOOTER:
-                        noise_by_build.setdefault(str(bid), {})[str(uid)] = cell
-                    # F3-B：全部取回的 NOISE 行都是续接片段候选（谓词在 _merge_chunk 内过滤）。
-                    frag_by_build.setdefault(str(bid), {})[str(uid)] = cell
-                else:  # kept 单元（bbox 判据 + 续接谓词的前半句判据）
-                    kept_by_build.setdefault(str(bid), {})[str(uid)] = cell
-                    # D2：形似来源注的 kept 段（谓词在 _merge_chunk 内按版面精化）。
-                    if _is_source_note(str(raw or "")):
-                        note_by_build.setdefault(str(bid), {})[str(uid)] = cell
+    cur.execute(
+        _BOUNDARY_UNITS_SQL,
+        {
+            "build_ids": build_ids,
+            "kept_ids": kept_ids,
+            "noise": noise_status,
+            "kept": kept_status,
+            "hf": hf,
+            "note_lead": _SOURCE_NOTE_LEAD,
+            "note_explain": _SOURCE_NOTE_EXPLAIN,
+        },
+    )
+    # build_id -> {unit_id: (ordinal, raw_text, location, content_hash, reasons, kind)}
+    kept_by_build: dict[str, dict[str, tuple]] = {}
+    noise_by_build: dict[str, dict[str, tuple]] = {}
+    frag_by_build: dict[str, dict[str, tuple]] = {}
+    note_by_build: dict[str, dict[str, tuple]] = {}
+    for bid, uid, ordinal, raw, loc, chash, status, reasons in cur.fetchall():
+        cell = (ordinal, str(raw or ""), loc, str(chash or ""), tuple(reasons or ()))
+        if status == noise_status:
+            if set(reasons or ()) & _HEADER_FOOTER:
+                noise_by_build.setdefault(str(bid), {})[str(uid)] = cell
+            # F3-B：全部取回的 NOISE 行都是续接片段候选（谓词在 _merge_chunk 内过滤）。
+            frag_by_build.setdefault(str(bid), {})[str(uid)] = cell
+        else:  # kept 单元（bbox 判据 + 续接谓词的前半句判据）
+            kept_by_build.setdefault(str(bid), {})[str(uid)] = cell
+            # D2：形似来源注的 kept 段（谓词在 _merge_chunk 内按版面精化）。
+            if _is_source_note(str(raw or "")):
+                note_by_build.setdefault(str(bid), {})[str(uid)] = cell
 
     frag_map = frag_by_build if stitch_continuation else {}
     note_map = note_by_build if attach_source_note else {}
@@ -318,28 +328,14 @@ def _merge_chunk(
             rec = (notes or {}).get(nid)
         ordinal = rec[0] if rec is not None else 0
         merged_units.append(
-            (ordinal if ordinal is not None else -1, nid, _unit_evidence(nid, raw, nloc))
+            (
+                ordinal if ordinal is not None else -1,
+                nid,
+                verified_unit(ev.build_id, nid, raw, nloc, str(rec[3]) if rec else ""),
+            )
         )
     merged_units.sort(key=lambda x: (x[0], x[1]))
 
-    units_out = [ue for *_a, ue in merged_units]
-    spans: list[tuple[str, int, int]] = []
-    offset = 0
-    for index, ue in enumerate(units_out):
-        if index:
-            offset += 1
-        spans.append((ue.unit_id, offset, offset + len(ue.raw_text)))
-        offset += len(ue.raw_text)
-    return ChunkEvidence(
-        source_id=ev.source_id,
-        build_id=ev.build_id,
-        chunk_id=ev.chunk_id,
-        kind=ev.kind,
-        title_text=ev.title_text,
-        section_path=ev.section_path,
-        units=tuple(units_out),
-        text="\n".join(ue.raw_text for ue in units_out if ue.raw_text),
-        source_ranges=ev.source_ranges,
-        spans=tuple(spans),
-        active=ev.active,
-    )
+    units_out = tuple(ue for *_a, ue in merged_units)
+    context_ids = tuple(dict.fromkeys((*ev.context_unit_ids, *(uid for uid, _, _ in merges))))
+    return with_units(ev, units_out, context_unit_ids=context_ids)

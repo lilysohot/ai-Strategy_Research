@@ -1,0 +1,27 @@
+..FF                                                                     [100%]
+=================================== FAILURES ===================================
+_____________________ test_market_hit_rate_is_100_percent ______________________
+tests/test_market_golden.py:257: in test_market_hit_rate_is_100_percent
+    assert warnings == [], warnings
+E   AssertionError: [{'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[0] 的 as_of 距今约 14 天（阈值 5）⇒ 价格可能已过时，请复核'}, {'gat...，请复核'}, {'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[2] 的 as_of 距今约 14 天（阈值 5）⇒ 价格可能已过时，请复核'}]
+E   assert [{'gate': 'ma...价格可能已过时，请复核'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[0] 的 as_of 距今约 14 天（阈值 5）⇒ 价格可能已过时，请复核'}
+E     Use -v to get more diff
+------------------------------ Captured log setup ------------------------------
+INFO     httpx:_client.py:1025 HTTP Request: GET https://example.test/api/a-share/prices/snapshot?thscodes=600519.SH "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1025 HTTP Request: GET https://example.test/api/a-share/valuations/snapshot?thscodes=600519.SH "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1025 HTTP Request: GET https://example.test/api/a-share/prices/historical?thscode=600519.SH&interval=1d&start=1735660800000&end=1767196800000&adjust=none "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1025 HTTP Request: GET https://example.test/api/a-share/financials/income-statements?thscode=600519.SH&period=annual "HTTP/1.1 200 OK"
+__________________ test_react_profile_binds_the_finance_tools __________________
+tests/test_research_discipline.py:41: in test_react_profile_binds_the_finance_tools
+    assert {"position_sizing", "strategy_lint"} <= names
+E   AssertionError: assert {'position_si...trategy_lint'} <= set()
+E     
+E     Extra items in the left set:
+E     'position_sizing'
+E     'strategy_lint'
+=========================== short test summary info ============================
+FAILED tests/test_market_golden.py::test_market_hit_rate_is_100_percent - Ass...
+FAILED tests/test_research_discipline.py::test_react_profile_binds_the_finance_tools
+2 failed, 2 passed in 1.04s

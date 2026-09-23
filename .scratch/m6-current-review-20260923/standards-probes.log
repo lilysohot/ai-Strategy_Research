@@ -1,0 +1,2 @@
+BUG: public aggregate_band_chunks accepts corrupted NOISE content_hash; text = 'TAMPERED HEADER\nVerified rating'
+limit=1 actual chunk/snippet = [('c0', '')] ; original exact hit = c1

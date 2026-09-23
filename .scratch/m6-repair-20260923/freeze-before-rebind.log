@@ -1,0 +1,13 @@
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：.scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/corpus-ingestion-rebuild-tasks.md
+NOTE（非失败）: r29 归档不是真实 pre-r29 字节（post-change 副本）：docs/plan/claims-market-closed-loop-plan.md
+I0C FREEZE CHECK FAILED: r4r read_pg authoritative hash mismatch (expected 52b182f7)
+I0C FREEZE CHECK FAILED: r39 superseded binding unresolved: plugins/corpus/preparation/read_pg.py
+I0C FREEZE CHECK FAILED: r4q service.py must wire cross_boundary.aggregate_band_chunks into search_bands
+I0C FREEZE CHECK FAILED: i0c-current.binding[chain_rebind_implementation]: plugins/corpus/preparation/cross_boundary.py 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[chain_rebind_implementation]: plugins/corpus/service.py 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[chain_rebind_read_pg]: plugins/corpus/preparation/read_pg.py 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[chain_rebind_tests]: tests/test_corpus_selection.py 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[implementation]: plugins/tools/corpus_fetch.py 哈希失配或缺失
+I0C FREEZE CHECK FAILED: i0c-current.binding[tests]: tests/test_corpus_authority_pg.py 哈希失配或缺失
+i0c freeze verification FAILED: 9 error(s)

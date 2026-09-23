@@ -50,6 +50,15 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def pre_m6_repair_path(rel: str) -> Path:
+    """Historical assertions use verified pre-repair bytes after explicit r5d rebind."""
+    if "i0c-r5d" in by_id and rel in {
+        "plugins/corpus/preparation/read_pg.py", "plugins/corpus/service.py"
+    }:
+        return ROOT / ".scratch/m6-repair-20260923/before" / rel
+    return ROOT / rel
+
+
 def check(cond: bool, message: str) -> None:
     if not cond:
         errors.append(message)
@@ -1741,7 +1750,7 @@ if "i0c-r4r" in by_id:
           "r4r freeze_validator boundary mismatch")
     # 权威 read_pg 哈希必须等于 r4n 入链的 52b182f7，且 r39 计划确实记录的是旧 fb87a771
     rpg_hash_r4r = "52b182f7353523e88fefd5c32455df8ee5a704b855952e1d5113b1c72fcf5a7b"
-    check(digest(ROOT / "plugins/corpus/preparation/read_pg.py") == rpg_hash_r4r,
+    check(digest(pre_m6_repair_path("plugins/corpus/preparation/read_pg.py")) == rpg_hash_r4r,
           "r4r read_pg authoritative hash mismatch (expected 52b182f7)")
     plan39r4r = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
     check(plan39r4r.get("binding", {}).get("plugins/corpus/preparation/read_pg.py")
@@ -1825,7 +1834,7 @@ if "i0c-r39" in by_id:
         if rel39 in r39_superseded_bindings:
             # r39 计划在旧 read_pg=fb87a771 时记录；该路径现已被独立校准修订 r4r 解决的权威
             # read_pg=52b182f7 取代——不改写已关闭审计产物，改为校验权威哈希 + 确认历史旧值。
-            check(digest(ROOT / rel39) == r39_superseded_bindings[rel39]
+            check(digest(pre_m6_repair_path(rel39)) == r39_superseded_bindings[rel39]
                   and sha39 != r39_superseded_bindings[rel39],
                   f"r39 superseded binding unresolved: {rel39}")
             continue
@@ -2077,7 +2086,7 @@ if "i0c-r4q" in by_id:
           "r4q freeze_validator boundary mismatch")
     # F4 跨边界取证的语义门：service.py 必须接线 cross_boundary 聚合，
     # cross_boundary.py 必须实际携带聚合实现，tests 必须携带 I-ATT-1 门（spec §10.4 / issue 09）。
-    svc_src_r4q = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
+    svc_src_r4q = pre_m6_repair_path("plugins/corpus/service.py").read_text(encoding="utf-8")
     check("cross_boundary.aggregate_band_chunks" in svc_src_r4q,
           "r4q service.py must wire cross_boundary.aggregate_band_chunks into search_bands")
     cb_src_r4q = (ROOT / "plugins/corpus/preparation/cross_boundary.py").read_text(encoding="utf-8")
@@ -2493,6 +2502,69 @@ if "i0c-r5c" in by_id:
           "r5c corrections must record the M6 signoff entry")
     merge_binding(i0c_current_binding, bindingr5c)
 
+if "i0c-r5d" in by_id:
+    r5d = load_json(BASE / by_id["i0c-r5d"]["file"])
+    parent5d = BASE / by_id["i0c-r5c"]["file"]
+    check(r5d.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5c", "path": str(parent5d.relative_to(ROOT)),
+        "sha256": digest(parent5d)}, "r5d parent mismatch")
+    check(r5d.get("business_accepted") is False
+          and r5d.get("status") == "frozen_repair_acceptance_failed",
+          "r5d must not claim business acceptance")
+    bind5d = r5d.get("binding", {})
+    check(set(bind5d) == {"m6_repair_implementation", "m6_repair_tests",
+          "m6_repair_evidence", "m6_repair_state", "m6_repair_archive", "freeze_validator"},
+          "r5d binding groups mismatch")
+    impl5d = {"plugins/corpus/preparation/read_pg.py",
+        "plugins/corpus/preparation/cross_boundary.py", "plugins/corpus/service.py",
+        "plugins/tools/corpus_fetch.py", "tools/corpus_product_observations.py"}
+    tests5d = {"tests/test_corpus_selection.py", "tests/test_corpus_authority_pg.py",
+        "tests/test_corpus_context_integrity.py", "tests/test_corpus_product_observations.py"}
+    docs5d = {"docs/plan/corpus-ingestion-rebuild-tasks.md",
+        "docs/plan/claims-market-closed-loop-plan.md"}
+    validator5d = {str(Path(__file__).resolve().relative_to(ROOT))}
+    for group5d, expected5d in (("m6_repair_implementation", impl5d),
+            ("m6_repair_tests", tests5d), ("m6_repair_state", docs5d),
+            ("freeze_validator", validator5d)):
+        check(set(bind5d.get(group5d, {})) == expected5d,
+              f"r5d scope mismatch: {group5d}")
+    prefix5d = ".scratch/m6-repair-20260923/"
+    check(all(p.startswith(prefix5d) for p in bind5d.get("m6_repair_evidence", {})),
+          "r5d evidence must remain in new repair directory")
+    previous5d = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    expected_old5d = (impl5d | tests5d | docs5d | validator5d) & previous5d.keys()
+    archive5d = bind5d.get("m6_repair_archive", {})
+    check(set(archive5d) == {prefix5d + "before/" + p for p in expected_old5d},
+          "r5d archive scope mismatch")
+    for p in expected_old5d:
+        check(archive5d.get(prefix5d + "before/" + p) == previous5d[p],
+              f"r5d archive must match previous effective binding: {p}")
+    repair5d = load_json(ROOT / prefix5d / "repair-manifest.json")
+    check(repair5d.get("business_accepted") is False
+          and repair5d.get("authority_rev") == "authority-context-2"
+          and repair5d.get("snapshot_id") == "i0c-r5d", "r5d repair identity/verdict mismatch")
+    for p, h in repair5d.get("implementation", {}).items():
+        check(bind5d.get("m6_repair_implementation", {}).get(p) == h,
+              f"r5d manifest implementation mismatch: {p}")
+    check(set(repair5d.get("implementation", {})) == impl5d,
+          "r5d manifest implementation incomplete")
+    for p, h in repair5d.get("unchanged_assets", {}).items():
+        check((ROOT / p).is_file() and digest(ROOT / p) == h,
+              f"r5d protected asset drift: {p}")
+    summary5d = json.loads((ROOT / prefix5d / "product-evaluation-summary.json").read_text())
+    check(summary5d == repair5d.get("product_results"), "r5d product summary mismatch")
+    check(len(summary5d) == 3 and all(x.get("executed_queries") == 30 for x in summary5d)
+          and summary5d[0].get("configuration") == "default"
+          and summary5d[0].get("passed") is False, "r5d real product gate must remain failed")
+    targets5d = json.loads((ROOT / prefix5d / "target-roundtrip.json").read_text())
+    check(len(targets5d) == 4 and all(t.get("passed") is True for t in targets5d),
+          "r5d four missing evidence targets must roundtrip")
+    pg5d = load_json(ROOT / prefix5d / "i37-tests-results.json")
+    check(pg5d.get("passed") is True
+          and pg5d.get("tested_version", {}).get("authority_rev") == "authority-context-2",
+          "r5d PG battery must pass on the repaired implementation")
+    merge_binding(i0c_current_binding, bind5d)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2538,6 +2610,8 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
+if "i0c-r5d" in by_id:
+    print("CURRENT r5d: repair bindings verified; real product acceptance FAILED; no new M6 release. Historical decisions follow.")
 print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22/r23/r24 effective bindings (latest-revision-wins) + superseded "
       "i1-r4 bindings ok, lineage i0c-r24->i0c-r23->i0c-r22->i0c-r21->i0c-r20->i0c-r19->i0c-r18->i0c-r17->i0c-r16->i0c-r15->i0c-r14->i0c-r13->i0c-r12->i0c-r11->i0c-r10->i0c-r9->i0c-r8->i0c-r7->i0c-r6->i0c-r5->i0c-r4->i0c-r3->i0c-r2->"

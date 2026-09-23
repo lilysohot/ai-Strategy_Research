@@ -1,0 +1,140 @@
+{
+  "artifact": "m6-independent-dbcheck",
+  "generated_at": "2026-09-23T15:28:09+08:00",
+  "dsn_fail_closed": {
+    "host": "127.0.0.1",
+    "port": 543,
+    "db": "i2_sandbox_corpus",
+    "read_only": "全程 SELECT + 检索/fetch，corpus schema 零写入"
+  },
+  "pointer_state": {
+    "active_publications": 8,
+    "unique_sources": 8,
+    "unique_active_builds": 8,
+    "counts": {
+      "corpus_sources": 8,
+      "corpus_builds": 8,
+      "corpus_chunks": 834,
+      "corpus_units": 3887
+    },
+    "i2_databases": [
+      "i2_sandbox_corpus"
+    ],
+    "d2d6_third_db_dropped": true
+  },
+  "code_revs_match_manifest": true,
+  "db_revs_recomputed": {
+    "all_match": true,
+    "rows": [
+      {
+        "source_id": "f8e316969b7cfdcd…",
+        "format": ".pdf",
+        "build_id": "99bf1ba2456419fd…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "cc03f55bc5a24d3d…",
+        "format": ".pdf",
+        "build_id": "e3820ab34c2e3326…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "f8fa22084535e369…",
+        "format": ".md",
+        "build_id": "6b55ddbbcfdc484d…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "48c05895798ba009…",
+        "format": ".docx",
+        "build_id": "6475cbacca1575c5…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "6f14cc145b798b37…",
+        "format": ".pdf",
+        "build_id": "58735cff57d8d456…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "dddc7cd0cb74d085…",
+        "format": ".pdf",
+        "build_id": "a3b681fdd55d6e11…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "174b64628f35aca6…",
+        "format": ".pdf",
+        "build_id": "1227c2a34d05170a…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      },
+      {
+        "source_id": "793b39673d31e8a8…",
+        "format": ".pdf",
+        "build_id": "7734638eca662be9…",
+        "parse_rev_match": true,
+        "clean_rev_match": true,
+        "chunk_rev_match": true,
+        "index_rev_match": true
+      }
+    ]
+  },
+  "rev_sets_match_rebuild_report": true,
+  "search_fetch_roundtrips": [
+    {
+      "source_id": "174b64628f35aca6…",
+      "unit_id": "unit:0013",
+      "n_query_lexemes": 40,
+      "hit": true,
+      "handle_format_ok": true,
+      "fetch_text_nonempty": true,
+      "build_id_match": true
+    },
+    {
+      "source_id": "f8e316969b7cfdcd…",
+      "unit_id": "unit:0028",
+      "n_query_lexemes": 3,
+      "hit": true,
+      "handle_format_ok": true,
+      "fetch_text_nonempty": true,
+      "build_id_match": true
+    },
+    {
+      "source_id": "f8fa22084535e369…",
+      "unit_id": "unit:0002",
+      "n_query_lexemes": 12,
+      "hit": true,
+      "handle_format_ok": true,
+      "fetch_text_nonempty": true,
+      "build_id_match": true
+    }
+  ],
+  "search_fetch_roundtrip_ok": true,
+  "all_ok": true,
+  "discipline": {
+    "model_calls": 0,
+    "guard": "guards/i3-e2e.json 已装载（零模型 / 网络仅 127.0.0.1:543 / forbidden_roots 留出零读取）",
+    "pg": "只读；生产库 5432 零触碰；_check_target fail-closed"
+  }
+}

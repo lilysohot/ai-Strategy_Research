@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import pytest
 
+from plugins.corpus.preparation.contract import sha256_of_bytes
 from plugins.corpus.preparation.cross_boundary import _merge_chunk
 from plugins.corpus.preparation.read_pg import ChunkEvidence, UnitEvidence
 from plugins.corpus.preparation.search_pg import SearchHit, rank_hits
@@ -530,7 +531,7 @@ def test_cross_boundary_aggregates_noise_header_into_full_quote() -> None:
             6,
             "强推（维持）",
             {"page": 1, "bbox": (0, 80, 500, 120)},
-            "ch",
+            sha256_of_bytes(("强推（维持）").encode()),
             ("heading_by_font_size",),
         ),
     }
@@ -539,7 +540,7 @@ def test_cross_boundary_aggregates_noise_header_into_full_quote() -> None:
             5,
             "贵州茅台（600519）2026 年中报点评",
             {"page": 1, "bbox": (0, 40, 500, 110)},
-            "ch",
+            sha256_of_bytes(("贵州茅台（600519）2026 年中报点评").encode()),
             ("header_repeated_geometric", "heading_by_font_size"),
         ),
     }
@@ -562,13 +563,21 @@ def test_cross_boundary_aggregates_noise_header_into_full_quote() -> None:
 def test_cross_boundary_ignores_different_page_and_no_y_overlap() -> None:
     """I-ATT-1 反向：不同页或 y 不重叠的 NOISE 不聚合，保持逐字块。"""
     ev = _chunk_with_rating()
-    kept = {"u-rating": (6, "强推（维持）", {"page": 1, "bbox": (0, 80, 500, 120)}, "ch", ())}
+    kept = {
+        "u-rating": (
+            6,
+            "强推（维持）",
+            {"page": 1, "bbox": (0, 80, 500, 120)},
+            sha256_of_bytes(("强推（维持）").encode()),
+            (),
+        )
+    }
     noise_other_page = {
         "u-title": (
             5,
             "贵州茅台（600519）2026 年中报点评",
             {"page": 2, "bbox": (0, 40, 500, 110)},
-            "ch",
+            sha256_of_bytes(("贵州茅台（600519）2026 年中报点评").encode()),
             ("header_repeated_geometric",),
         ),
     }
@@ -579,7 +588,7 @@ def test_cross_boundary_ignores_different_page_and_no_y_overlap() -> None:
             5,
             "贵州茅台（600519）2026 年中报点评",
             {"page": 1, "bbox": (0, 300, 500, 340)},
-            "ch",
+            sha256_of_bytes(("贵州茅台（600519）2026 年中报点评").encode()),
             ("header_repeated_geometric",),
         ),
     }
@@ -593,10 +602,16 @@ def test_cross_boundary_do_not_repeat_existing_unit() -> None:
             5,
             "贵州茅台（600519）2026 年中报点评",
             {"page": 1, "bbox": (0, 40, 500, 110)},
-            "ch",
+            sha256_of_bytes(("贵州茅台（600519）2026 年中报点评").encode()),
             ("header_repeated_geometric",),
         ),
-        "u-rating": (6, "强推（维持）", {"page": 1, "bbox": (0, 80, 500, 120)}, "ch", ()),
+        "u-rating": (
+            6,
+            "强推（维持）",
+            {"page": 1, "bbox": (0, 80, 500, 120)},
+            sha256_of_bytes(("强推（维持）").encode()),
+            (),
+        ),
     }
     noise = dict(kept)  # 全部视为 NOISE 候选
     merged = _merge_chunk(_chunk_with_rating(), kept, noise)
@@ -639,8 +654,18 @@ _E1_KEPT_HEAD = "贵州茅台的控股股东华创云信4.06%的股"
 def test_continuation_stitch_merges_sentence_final_noise_fragment() -> None:
     """I-CONT-1：紧邻下一 ordinal 的 NOISE 尾片段以句末标点收尾（拼接即补全句子）
     且同页 ⇒ 按 ordinal 保序聚合，引文『…4.06%的股份。』逐字可承载。"""
-    kept = {"u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, "ch", ())}
-    fragments = {"u-tail": (718, "份。", {"page": 7}, "ch", ("disclaimer_section",))}
+    kept = {
+        "u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, sha256_of_bytes((_E1_KEPT_HEAD).encode()), ())
+    }
+    fragments = {
+        "u-tail": (
+            718,
+            "份。",
+            {"page": 7},
+            sha256_of_bytes(("份。").encode()),
+            ("disclaimer_section",),
+        )
+    }
     merged = _merge_chunk(_chunk_cut_mid_sentence(), kept, {}, fragments=fragments)
     full = _ws_norm(merged.text)
     # 引文逐字可承载（句中不再断开），且前半（ord717）在尾片段（ord718）之前
@@ -659,13 +684,15 @@ def test_continuation_stitch_merges_sentence_final_noise_fragment() -> None:
 def test_continuation_stitch_ignores_non_sentence_final_fragment() -> None:
     """I-CONT-1 反向：尾片段不以句末标点收尾（如页脚『请务必阅读…』）不聚合。"""
     ev = _chunk_cut_mid_sentence()
-    kept = {"u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, "ch", ())}
+    kept = {
+        "u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, sha256_of_bytes((_E1_KEPT_HEAD).encode()), ())
+    }
     fragments = {
         "u-tail": (
             718,
             "请务必阅读报告末页的声明",
             {"page": 7},
-            "ch",
+            sha256_of_bytes(("请务必阅读报告末页的声明").encode()),
             ("footer_repeated_geometric",),
         )
     }
@@ -675,13 +702,47 @@ def test_continuation_stitch_ignores_non_sentence_final_fragment() -> None:
 def test_continuation_stitch_requires_cut_head_adjacency_and_same_page() -> None:
     """I-CONT-1 反向：kept 已句末收尾 / 不同页 / ordinal 不相邻 ⇒ 均不聚合。"""
     ev = _chunk_cut_mid_sentence()
-    kept = {"u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, "ch", ())}
-    tail = {"u-tail": (718, "份。", {"page": 7}, "ch", ("disclaimer_section",))}
-    kept_full = {"u-fact": (717, "增持至5.02%的股份。", {"page": 7}, "ch", ())}
+    kept = {
+        "u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, sha256_of_bytes((_E1_KEPT_HEAD).encode()), ())
+    }
+    tail = {
+        "u-tail": (
+            718,
+            "份。",
+            {"page": 7},
+            sha256_of_bytes(("份。").encode()),
+            ("disclaimer_section",),
+        )
+    }
+    kept_full = {
+        "u-fact": (
+            717,
+            "增持至5.02%的股份。",
+            {"page": 7},
+            sha256_of_bytes(("增持至5.02%的股份。").encode()),
+            (),
+        )
+    }
     assert _merge_chunk(ev, kept_full, {}, fragments=tail) is ev  # kept 已句末收尾
-    tail_page8 = {"u-tail": (718, "份。", {"page": 8}, "ch", ("disclaimer_section",))}
+    tail_page8 = {
+        "u-tail": (
+            718,
+            "份。",
+            {"page": 8},
+            sha256_of_bytes(("份。").encode()),
+            ("disclaimer_section",),
+        )
+    }
     assert _merge_chunk(ev, kept, {}, fragments=tail_page8) is ev  # 不同页
-    tail_gap = {"u-tail": (720, "份。", {"page": 7}, "ch", ("disclaimer_section",))}
+    tail_gap = {
+        "u-tail": (
+            720,
+            "份。",
+            {"page": 7},
+            sha256_of_bytes(("份。").encode()),
+            ("disclaimer_section",),
+        )
+    }
     assert _merge_chunk(ev, kept, {}, fragments=tail_gap) is ev  # ordinal 不相邻（717→720）
 
 
@@ -710,8 +771,8 @@ def test_continuation_stitch_do_not_repeat_existing_unit() -> None:
         active=True,
     )
     kept = {
-        "u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, "ch", ()),
-        "u-tail": (718, "份。", {"page": 7}, "ch", ()),
+        "u-fact": (717, _E1_KEPT_HEAD, {"page": 7}, sha256_of_bytes((_E1_KEPT_HEAD).encode()), ()),
+        "u-tail": (718, "份。", {"page": 7}, sha256_of_bytes(("份。").encode()), ()),
     }
     merged = _merge_chunk(ev, kept, {}, fragments=dict(kept))
     assert merged is ev  # 尾片段已在块内，谓词命中也不重复插入
@@ -762,8 +823,10 @@ _PURE_SOURCE = "资料来源：WIND，光大证券研究所"  # 无说明性分�
 def test_source_note_attached_below_table_row() -> None:
     """I-NOTE-1：注段在块内表格行**下方**且 Δ<12pt ⇒ 保序聚合，引文逐字可承载。"""
 
-    kept = {"u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, "ch", ())}
-    notes = {"u-note": (518, _NOTE_TEXT, _NOTE_LOC_OK, "ch", ())}
+    kept = {
+        "u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, sha256_of_bytes(b"0.0%\n4.5%\n0.0%"), ())
+    }
+    notes = {"u-note": (518, _NOTE_TEXT, _NOTE_LOC_OK, sha256_of_bytes((_NOTE_TEXT).encode()), ())}
     merged = _merge_chunk(_chunk_table_row(), kept, {}, notes=notes)
     assert [u.unit_id for u in merged.units] == ["u-note", "u-row"]  # ordinal 518 < 582
     assert "注1：价格、价差分位为2016年1月1日至2026年7月27日" in _ws_norm(merged.text)
@@ -779,8 +842,12 @@ def test_source_note_attached_below_table_row() -> None:
 def test_source_note_ignores_pure_source_label() -> None:
     """I-NOTE-1 反向：纯「资料来源：WIND，光大证券研究所」（无口径说明）不聚合。"""
 
-    kept = {"u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, "ch", ())}
-    notes = {"u-note": (518, _PURE_SOURCE, _NOTE_LOC_OK, "ch", ())}
+    kept = {
+        "u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, sha256_of_bytes(b"0.0%\n4.5%\n0.0%"), ())
+    }
+    notes = {
+        "u-note": (518, _PURE_SOURCE, _NOTE_LOC_OK, sha256_of_bytes((_PURE_SOURCE).encode()), ())
+    }
     ev = _chunk_table_row()
     assert _merge_chunk(ev, kept, {}, notes=notes) is ev
 
@@ -788,16 +855,30 @@ def test_source_note_ignores_pure_source_label() -> None:
 def test_source_note_requires_below_adjacent_and_same_page() -> None:
     """I-NOTE-1 反向：版面在表格之上 / 间距 ≥12pt / 不同页 ⇒ 均不聚合。"""
 
-    kept = {"u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, "ch", ())}
+    kept = {
+        "u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, sha256_of_bytes(b"0.0%\n4.5%\n0.0%"), ())
+    }
     for loc in (_NOTE_LOC_ABOVE, _NOTE_LOC_FAR, {"page": 11, "bbox": (42.6, 709.7, 380.6, 764.4)}):
         ev = _chunk_table_row()
-        assert _merge_chunk(ev, kept, {}, notes={"u-note": (518, _NOTE_TEXT, loc, "ch", ())}) is ev
+        assert (
+            _merge_chunk(
+                ev,
+                kept,
+                {},
+                notes={
+                    "u-note": (518, _NOTE_TEXT, loc, sha256_of_bytes((_NOTE_TEXT).encode()), ())
+                },
+            )
+            is ev
+        )
 
 
 def test_source_note_requires_table_row_anchor() -> None:
     """I-NOTE-1 反向：块内 kept 单元不是表格行（cells 为空）⇒ 不作为锚，不聚合。"""
 
-    kept = {"u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, "ch", ())}
-    notes = {"u-note": (518, _NOTE_TEXT, _NOTE_LOC_OK, "ch", ())}
+    kept = {
+        "u-row": (582, "0.0%\n4.5%\n0.0%", _TABLE_ROW_LOC, sha256_of_bytes(b"0.0%\n4.5%\n0.0%"), ())
+    }
+    notes = {"u-note": (518, _NOTE_TEXT, _NOTE_LOC_OK, sha256_of_bytes((_NOTE_TEXT).encode()), ())}
     ev = _chunk_table_row(cells=())
     assert _merge_chunk(ev, kept, {}, notes=notes) is ev

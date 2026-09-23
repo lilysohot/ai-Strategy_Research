@@ -1,0 +1,23 @@
+[
+  {
+    "control": "current-code",
+    "injection": "in-memory only",
+    "exit_code": 1,
+    "expected_diagnostic": "i0c-current.binding[m6_repair_implementation]",
+    "rejected": true
+  },
+  {
+    "control": "historical-archive",
+    "injection": "in-memory only",
+    "exit_code": 1,
+    "expected_diagnostic": "r4r read_pg authoritative hash mismatch",
+    "rejected": true
+  },
+  {
+    "control": "false-business-pass",
+    "injection": "in-memory only",
+    "exit_code": 1,
+    "expected_diagnostic": "r5d repair identity/verdict mismatch",
+    "rejected": true
+  }
+]

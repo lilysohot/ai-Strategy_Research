@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -34,6 +34,7 @@ from plugins.corpus.preparation.contract import sha256_of_bytes
 from plugins.corpus.preparation.repository import StoreError
 
 _SANDBOX_DB = "i2_sandbox_corpus"
+AUTHORITY_REV = "authority-context-2"
 
 _HANDLE_PREFIX = "cv2:"
 _LOCATOR_PREFIX = "chunk:"
@@ -96,6 +97,8 @@ class ChunkEvidence:
     #: 每个单元在 **本返回 text** 内的偏移 ``(unit_id, start, end)``——切片可复算出 text
     spans: tuple[tuple[str, int, int], ...]
     active: bool
+    #: Explicit contextual units; source_ranges still describes the original chunk only.
+    context_unit_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -190,6 +193,45 @@ ORDER BY ordinal NULLS LAST, unit_id
 """
 
 
+def verified_unit(
+    build_id: str, unit_id: str, raw_text: str, location: object, content_hash: str
+) -> UnitEvidence:
+    """Validate every authoritative unit before exposing its text or coordinates."""
+    if sha256_of_bytes(raw_text.encode()) != content_hash:
+        raise IntegrityError(f"权威单元内容哈希不符（疑似篡改）: {unit_id} @ {build_id[:12]}…")
+    loc = location if isinstance(location, dict) else {}
+    return UnitEvidence(
+        unit_id=unit_id,
+        raw_text=raw_text,
+        page=loc.get("page"),
+        element=loc.get("element"),
+        cells=tuple(tuple(int(v) for v in cell) for cell in (loc.get("cells") or ())),
+    )
+
+
+def with_units(
+    evidence: ChunkEvidence,
+    units: tuple[UnitEvidence, ...],
+    *,
+    context_unit_ids: tuple[str, ...] = (),
+) -> ChunkEvidence:
+    """Assemble text and offsets together, including empty units and context provenance."""
+    spans: list[tuple[str, int, int]] = []
+    offset = 0
+    for index, unit in enumerate(units):
+        if index:
+            offset += 1
+        spans.append((unit.unit_id, offset, offset + len(unit.raw_text)))
+        offset += len(unit.raw_text)
+    return replace(
+        evidence,
+        units=units,
+        text="\n".join(u.raw_text for u in units),
+        spans=tuple(spans),
+        context_unit_ids=context_unit_ids,
+    )
+
+
 def fetch_verbatim(
     dsn: str,
     doc_id: str,
@@ -197,74 +239,32 @@ def fetch_verbatim(
     *,
     sandbox_db: str = _SANDBOX_DB,
 ) -> ChunkEvidence:
-    """按版本句柄取回**逐字**权威原文（§7.2：跨发布仍读原 build，撤销才拒绝）。"""
+    """Fetch the versioned chunk and verified context within one read snapshot.
+
+    Context is the same bounded structural projection used by fetch_bands. The
+    original chunk ranges remain unchanged; added units are explicitly identified.
+    """
     import psycopg
+
+    from plugins.corpus.preparation.cross_boundary import aggregate_band_chunks_on
 
     build_id = parse_build_handle(doc_id)
     chunk_id = parse_chunk_locator(locator)
     with psycopg.connect(dsn, autocommit=True) as conn:
         _check_target(conn, sandbox_db)
-        with conn.cursor() as cur:
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             cur.execute(_CHUNK_SQL, {"build_id": build_id, "chunk_id": chunk_id})
             row = cur.fetchone()
             if row is None:
                 raise UnknownHandleError(f"句柄不存在或跨 build：({build_id[:12]}…, {chunk_id})")
-            decision = row[10]
-            if decision and decision != "in_scope":
-                raise WithdrawnError(
-                    f"来源当前准入为 {decision!r}，活动版本已撤下，不得继续服务该句柄"
-                )
             unit_ids = list(row[5] or ())
-            units: list[UnitEvidence] = []
+            unit_rows = []
             if unit_ids:
                 cur.execute(_UNITS_SQL, {"build_id": build_id, "unit_ids": unit_ids})
-                for unit_id, raw_text, location, content_hash in cur.fetchall():
-                    text = str(raw_text or "")
-                    # §4.2：权威单元必须自证——内容哈希不符即完整性错误（疑似篡改），
-                    # 不得把被改过的正文当原文返回。
-                    if sha256_of_bytes(text.encode()) != str(content_hash or ""):
-                        raise IntegrityError(
-                            f"权威单元内容哈希不符（疑似篡改）: {unit_id} @ {build_id[:12]}…"
-                        )
-                    loc = location if isinstance(location, dict) else {}
-                    cells = tuple(tuple(int(v) for v in cell) for cell in (loc.get("cells") or ()))
-                    units.append(
-                        UnitEvidence(
-                            unit_id=str(unit_id),
-                            raw_text=text,
-                            page=loc.get("page"),
-                            element=loc.get("element"),
-                            cells=cells,
-                        )
-                    )
-                resolved = {unit.unit_id for unit in units}
-                missing = [ref for ref in unit_ids if ref not in resolved]
-                if missing:
-                    # 引用悬空 = 权威集合不完整：拒绝，不返回"其余部分"当完整原文。
-                    raise IntegrityError(
-                        f"chunk 引用了不存在的单元（权威集合不完整）: {missing} @ {build_id[:12]}…"
-                    )
-    source_ranges = tuple((int(span[0]), int(span[1])) for span in (row[6] or ()))
-    spans: list[tuple[str, int, int]] = []
-    offset = 0
-    for index, unit in enumerate(units):
-        if index:
-            offset += 1  # text 以 "\n" 连接各单元
-        spans.append((unit.unit_id, offset, offset + len(unit.raw_text)))
-        offset += len(unit.raw_text)
-    return ChunkEvidence(
-        source_id=str(row[7]),
-        build_id=str(row[0]),
-        chunk_id=str(row[1]),
-        kind=str(row[2] or ""),
-        title_text=row[3],
-        section_path=tuple(row[4] or ()),
-        units=tuple(units),
-        text="\n".join(unit.raw_text for unit in units),
-        source_ranges=source_ranges,
-        spans=tuple(spans),
-        active=bool(row[9]),
-    )
+                unit_rows = [(build_id, *u, None) for u in cur.fetchall()]
+            evidence = _assemble_chunk_evidence(build_id, chunk_id, row, unit_rows)
+            return aggregate_band_chunks_on(cur, (evidence,))[0]
 
 
 _DOC_SQL = """
@@ -707,6 +707,8 @@ def fetch_bands(
     """
     import psycopg
 
+    from plugins.corpus.preparation.cross_boundary import aggregate_band_chunks_on
+
     wanted: dict[tuple[str, str], str] = {}  # (build_id, chunk_id) -> build_id
     for band in bands:
         ordered = chunk_order_by_source.get(band.source_id)
@@ -724,7 +726,8 @@ def fetch_bands(
 
     with psycopg.connect(dsn, autocommit=True) as conn:
         _check_target(conn, sandbox_db)
-        with conn.cursor() as cur:
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             cur.execute(
                 _BANDS_CHUNK_SQL,
                 {"build_ids": build_ids, "chunk_ids": chunk_ids},
@@ -766,23 +769,27 @@ def fetch_bands(
                         )
                     )
                     units_by_chunk[(bid, cid)] = rows
-    by_key = {
-        key: row
-        for key, row in zip([(str(r[0]), str(r[1])) for r in chunk_rows], chunk_rows, strict=True)
-    }
-    out: list[ChunkEvidence] = []
-    seen: set[tuple[str, str]] = set()
-    for band in bands:
-        ordered = chunk_order_by_source[band.source_id]
-        for p in range(band.start, band.end + 1):
-            bid = band.build_id
-            cid = ordered[p]
-            key = (bid, cid)
-            if key in seen:
-                continue
-            seen.add(key)
-            out.append(_assemble_chunk_evidence(bid, cid, by_key[key], units_by_chunk.get(key, [])))
-    return tuple(out)
+            by_key = {
+                key: row
+                for key, row in zip(
+                    [(str(r[0]), str(r[1])) for r in chunk_rows], chunk_rows, strict=True
+                )
+            }
+            out: list[ChunkEvidence] = []
+            seen: set[tuple[str, str]] = set()
+            for band in bands:
+                ordered = chunk_order_by_source[band.source_id]
+                for p in range(band.start, band.end + 1):
+                    bid = band.build_id
+                    cid = ordered[p]
+                    key = (bid, cid)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    out.append(
+                        _assemble_chunk_evidence(bid, cid, by_key[key], units_by_chunk.get(key, []))
+                    )
+            return aggregate_band_chunks_on(cur, tuple(out))
 
 
 def _assemble_chunk_evidence(
@@ -791,44 +798,28 @@ def _assemble_chunk_evidence(
     chunk_row: tuple,
     unit_rows: list[tuple],
 ) -> ChunkEvidence:
-    """把批量 chunk/unit 行装配为 :class:`ChunkEvidence`（语义同 fetch_verbatim）。"""
+    """The common integrity gate for individual and batched chunk reads."""
     decision = chunk_row[10]
     if decision and decision != "in_scope":
         raise WithdrawnError(f"来源当前准入为 {decision!r}，活动版本已撤下，不得继续服务该句柄")
-    units: list[UnitEvidence] = []
-    for _build_id, unit_id, raw_text, location, content_hash, _ordinal in unit_rows:
-        text = str(raw_text or "")
-        if sha256_of_bytes(text.encode()) != str(content_hash or ""):
-            raise IntegrityError(f"权威单元内容哈希不符（疑似篡改）: {unit_id} @ {build_id[:12]}…")
-        loc = location if isinstance(location, dict) else {}
-        cells = tuple(tuple(int(v) for v in cell) for cell in (loc.get("cells") or ()))
-        units.append(
-            UnitEvidence(
-                unit_id=str(unit_id),
-                raw_text=text,
-                page=loc.get("page"),
-                element=loc.get("element"),
-                cells=cells,
-            )
-        )
-    source_ranges = tuple((int(span[0]), int(span[1])) for span in (chunk_row[6] or ()))
-    spans: list[tuple[str, int, int]] = []
-    offset = 0
-    for index, unit in enumerate(units):
-        if index:
-            offset += 1
-        spans.append((unit.unit_id, offset, offset + len(unit.raw_text)))
-        offset += len(unit.raw_text)
-    return ChunkEvidence(
+    units = tuple(
+        verified_unit(build_id, str(uid), str(raw or ""), loc, str(digest or ""))
+        for _bid, uid, raw, loc, digest, _ordinal in unit_rows
+    )
+    missing = set(chunk_row[5] or ()) - {u.unit_id for u in units}
+    if missing:
+        raise IntegrityError(f"chunk 引用了不存在的单元: {sorted(missing)} @ {build_id[:12]}…")
+    evidence = ChunkEvidence(
         source_id=str(chunk_row[7]),
         build_id=build_id,
         chunk_id=chunk_id,
         kind=str(chunk_row[2] or ""),
         title_text=chunk_row[3],
         section_path=tuple(chunk_row[4] or ()),
-        units=tuple(units),
-        text="\n".join(unit.raw_text for unit in units),
-        source_ranges=source_ranges,
-        spans=tuple(spans),
+        units=(),
+        text="",
+        source_ranges=tuple((int(span[0]), int(span[1])) for span in (chunk_row[6] or ())),
+        spans=(),
         active=bool(chunk_row[9]),
     )
+    return with_units(evidence, units)

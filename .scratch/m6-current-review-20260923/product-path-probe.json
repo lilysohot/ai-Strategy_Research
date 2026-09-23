@@ -1,0 +1,1404 @@
+{
+  "configuration": {
+    "abstain": "off",
+    "tool_limit": 20,
+    "band_limit": 2000,
+    "readonly": true
+  },
+  "rows": [
+    {
+      "query_id": "company-001",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-002",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-003",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-004",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-005",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-006",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-007",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-008",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-009",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "company-010",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-001",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-002",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-003",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-004",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-005",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-006",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-007",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-008",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-009",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "industry-010",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-001",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-002",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-003",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-004",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-005",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-006",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-007",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-008",
+      "negative": false,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-009",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    },
+    {
+      "query_id": "macro-010",
+      "negative": true,
+      "raw_ok": true,
+      "raw_hits": 0,
+      "or_hits": 20,
+      "band_documents": 5
+    }
+  ],
+  "different_chunk_evidence": [
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:heading:0000",
+      "band_chars": 29,
+      "fetch_chars": 6,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "贵州茅台（600519）2026 年中报点评"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0006",
+      "band_chars": 48,
+      "fetch_chars": 10,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0008",
+      "band_chars": 220,
+      "fetch_chars": 182,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0012",
+      "band_chars": 1011,
+      "fetch_chars": 973,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0013",
+      "band_chars": 712,
+      "fetch_chars": 674,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0015",
+      "band_chars": 39,
+      "fetch_chars": 1,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0016",
+      "band_chars": 509,
+      "fetch_chars": 506,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "份。"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0003",
+      "band_chars": 1140,
+      "fetch_chars": 1102,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0005",
+      "band_chars": 578,
+      "fetch_chars": 502,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0006",
+      "band_chars": 1260,
+      "fetch_chars": 1184,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0007",
+      "band_chars": 1296,
+      "fetch_chars": 1210,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "宏观专题",
+        "宏观专题",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0008",
+      "band_chars": 1141,
+      "fetch_chars": 1103,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0009",
+      "band_chars": 448,
+      "fetch_chars": 367,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "宏观专题",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0011",
+      "band_chars": 259,
+      "fetch_chars": 183,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0013",
+      "band_chars": 40,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0008",
+      "band_chars": 1198,
+      "fetch_chars": 1178,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "诚信专业"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0009",
+      "band_chars": 559,
+      "fetch_chars": 526,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "诚信专业"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0011",
+      "band_chars": 70,
+      "fetch_chars": 47,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "请务必阅读报告末页的声明"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0012",
+      "band_chars": 65,
+      "fetch_chars": 42,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "请务必阅读报告末页的声明"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0003",
+      "band_chars": 123,
+      "fetch_chars": 113,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0004",
+      "band_chars": 437,
+      "fetch_chars": 404,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "诚信专业"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0006",
+      "band_chars": 80,
+      "fetch_chars": 57,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "请务必阅读报告末页的声明"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0012",
+      "band_chars": 1225,
+      "fetch_chars": 1105,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容",
+        "请务必阅读正文之后的免责声明及其项下所有内容",
+        "证券研究报告"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0013",
+      "band_chars": 1189,
+      "fetch_chars": 1159,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证券研究报告",
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:heading:0086",
+      "band_chars": 25,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0020",
+      "band_chars": 446,
+      "fetch_chars": 423,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0022",
+      "band_chars": 609,
+      "fetch_chars": 500,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "2026E",
+        "2027E",
+        "2028E"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0024",
+      "band_chars": 852,
+      "fetch_chars": 829,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:heading:0155",
+      "band_chars": 25,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0009",
+      "band_chars": 24,
+      "fetch_chars": 1,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0010",
+      "band_chars": 70,
+      "fetch_chars": 47,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0011",
+      "band_chars": 814,
+      "fetch_chars": 768,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容",
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:heading:0080",
+      "band_chars": 24,
+      "fetch_chars": 1,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:heading:0112",
+      "band_chars": 25,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-001",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:heading:0116",
+      "band_chars": 25,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0003",
+      "band_chars": 471,
+      "fetch_chars": 428,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "0.11",
+        "0.36",
+        "0.59"
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "chunk_id": "58735cff57d8d456:body:0014",
+      "band_chars": 39,
+      "fetch_chars": 1,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:body:0013",
+      "band_chars": 59,
+      "fetch_chars": 37,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:heading:0111",
+      "band_chars": 26,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:body:0004",
+      "band_chars": 30,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:table:0006",
+      "band_chars": 961,
+      "fetch_chars": 873,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：WIND，光大证券研究所；注：“前三个月滚动平均”指2026 年6 月至8 月平均值  ",
+        "备注：单元格的颜色是指，横向对比来看，红色数值代表偏热，绿色数值表示偏冷 "
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:heading:0013",
+      "band_chars": 26,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-002",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:heading:0003",
+      "band_chars": 26,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "chunk_id": "a3b681fdd55d6e11:body:0007",
+      "band_chars": 65,
+      "fetch_chars": 42,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请务必阅读正文之后的免责声明及其项下所有内容"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:heading:0034",
+      "band_chars": 26,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0016",
+      "band_chars": 90,
+      "fetch_chars": 48,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0021",
+      "band_chars": 496,
+      "fetch_chars": 463,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明",
+        "资料来源：Wind，长江证券研究所"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0056",
+      "band_chars": 358,
+      "fetch_chars": 337,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0058",
+      "band_chars": 236,
+      "fetch_chars": 221,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0060",
+      "band_chars": 1124,
+      "fetch_chars": 1118,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0188",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0022",
+      "band_chars": 245,
+      "fetch_chars": 187,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：Wind，国家统计局，长江证券研究所（注：2021.06 累计同比为498.4%，",
+        "因数据过大而未显示）"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0051",
+      "band_chars": 314,
+      "fetch_chars": 293,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0054",
+      "band_chars": 200,
+      "fetch_chars": 179,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0055",
+      "band_chars": 930,
+      "fetch_chars": 894,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明",
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0042",
+      "band_chars": 385,
+      "fetch_chars": 364,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0037",
+      "band_chars": 338,
+      "fetch_chars": 305,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明",
+        "资料来源：百川盈孚，长江证券研究所"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0038",
+      "band_chars": 551,
+      "fetch_chars": 545,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0131",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0161",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0045",
+      "band_chars": 42,
+      "fetch_chars": 36,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0173",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0014",
+      "band_chars": 305,
+      "fetch_chars": 290,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0042",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0017",
+      "band_chars": 538,
+      "fetch_chars": 359,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0011",
+      "band_chars": 605,
+      "fetch_chars": 426,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0012",
+      "band_chars": 543,
+      "fetch_chars": 364,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0013",
+      "band_chars": 562,
+      "fetch_chars": 383,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0014",
+      "band_chars": 590,
+      "fetch_chars": 411,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0015",
+      "band_chars": 556,
+      "fetch_chars": 377,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0016",
+      "band_chars": 584,
+      "fetch_chars": 405,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0031",
+      "band_chars": 8,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-003",
+      "build_id": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "chunk_id": "e3820ab34c2e3326:body:0012",
+      "band_chars": 40,
+      "fetch_chars": 2,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      ]
+    },
+    {
+      "query_id": "company-004",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0008",
+      "band_chars": 560,
+      "fetch_chars": 425,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-004",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0009",
+      "band_chars": 549,
+      "fetch_chars": 414,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-004",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:table:0010",
+      "band_chars": 307,
+      "fetch_chars": 172,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所",
+        "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+        "注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均，或2026 年1 月至2026 年6 月取平均"
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0019",
+      "band_chars": 22,
+      "fetch_chars": 7,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0024",
+      "band_chars": 287,
+      "fetch_chars": 281,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0047",
+      "band_chars": 563,
+      "fetch_chars": 557,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0186",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:body:0000",
+      "band_chars": 40,
+      "fetch_chars": 18,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-006",
+      "build_id": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "chunk_id": "7734638eca662be9:heading:0052",
+      "band_chars": 26,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "敬请参阅最后一页特别声明 ",
+        "证券研究报告 "
+      ]
+    },
+    {
+      "query_id": "company-008",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0007",
+      "band_chars": 22,
+      "fetch_chars": 7,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "company-008",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:heading:0043",
+      "band_chars": 23,
+      "fetch_chars": 8,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "industry-001",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0000",
+      "band_chars": 46,
+      "fetch_chars": 25,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%",
+        "请阅读最后评级说明和重要声明"
+      ]
+    },
+    {
+      "query_id": "industry-001",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0002",
+      "band_chars": 69,
+      "fetch_chars": 63,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    },
+    {
+      "query_id": "industry-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:heading:0016",
+      "band_chars": 9,
+      "fetch_chars": 4,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "华福证券"
+      ]
+    },
+    {
+      "query_id": "industry-001",
+      "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "chunk_id": "99bf1ba2456419fd:body:0000",
+      "band_chars": 39,
+      "fetch_chars": 16,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "诚信专业",
+        "发现价值",
+        "请务必阅读报告末页的声明"
+      ]
+    },
+    {
+      "query_id": "industry-004",
+      "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "chunk_id": "1227c2a34d05170a:body:0027",
+      "band_chars": 160,
+      "fetch_chars": 154,
+      "tool_equals_plain_fetch": true,
+      "lost_target_quotes": [],
+      "added_unit_text_examples": [
+        "%%",
+        "%%"
+      ]
+    }
+  ]
+}

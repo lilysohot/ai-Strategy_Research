@@ -1,0 +1,235 @@
+........................................................................ [  2%]
+........................................................................ [  4%]
+........................................................................ [  7%]
+........................................................................ [  9%]
+.ssssss........sss..sssssss.......s......s.......sss.......s..........s. [ 12%]
+........................................................................ [ 14%]
+....s.......................ssss........................................ [ 17%]
+.....s.................................................................. [ 19%]
+........................................................................ [ 22%]
+........................................ssss.s.......................... [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 29%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+sssss.......................................................sss......... [ 36%]
+........................................................................ [ 39%]
+........................................................................ [ 41%]
+........................................................................ [ 44%]
+....................FF.................................................. [ 46%]
+........................................................................ [ 48%]
+....F................................................................... [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 56%]
+.............F.......................................................... [ 58%]
+........................................................................ [ 61%]
+........................................................................ [ 63%]
+........................................................................ [ 66%]
+........................................................................ [ 68%]
+........................................................................ [ 71%]
+........................................................................ [ 73%]
+........................................................................ [ 75%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+........................................................................ [ 83%]
+........................................................................ [ 85%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+............................................................             [100%]
+=================================== FAILURES ===================================
+__________________ test_worker_injects_history_as_extra_input __________________
+tests/test_history_t26.py:342: in test_worker_injects_history_as_extra_input
+    rc = await worker_mod.run_once(args)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+server/worker.py:254: in run_once
+    _assert_llm_env(model, base_url, api_key)
+server/worker.py:75: in _assert_llm_env
+    raise SystemExit(f"partial LLM injection rejected; missing: {missing}")
+E   SystemExit: partial LLM injection rejected; missing: ['OPENAI_MODEL']
+______________________ test_worker_no_history_when_absent ______________________
+tests/test_history_t26.py:392: in test_worker_no_history_when_absent
+    await worker_mod.run_once(args)
+server/worker.py:254: in run_once
+    _assert_llm_env(model, base_url, api_key)
+server/worker.py:75: in _assert_llm_env
+    raise SystemExit(f"partial LLM injection rejected; missing: {missing}")
+E   SystemExit: partial LLM injection rejected; missing: ['OPENAI_MODEL']
+_____________________ test_market_hit_rate_is_100_percent ______________________
+tests/test_market_golden.py:257: in test_market_hit_rate_is_100_percent
+    assert warnings == [], warnings
+E   AssertionError: [{'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[0] 的 as_of 距今约 13 天（阈值 5）⇒ 价格可能已过时，请复核'}, {'gat...，请复核'}, {'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[2] 的 as_of 距今约 14 天（阈值 5）⇒ 价格可能已过时，请复核'}]
+E   assert [{'gate': 'ma...价格可能已过时，请复核'}] == []
+E     
+E     Left contains 3 more items, first extra item: {'gate': 'market', 'code': 'market_quote_stale', 'message': 'evidence[0] 的 as_of 距今约 13 天（阈值 5）⇒ 价格可能已过时，请复核'}
+E     Use -v to get more diff
+__________________ test_react_profile_binds_the_finance_tools __________________
+tests/test_research_discipline.py:41: in test_react_profile_binds_the_finance_tools
+    assert {"position_sizing", "strategy_lint"} <= names
+E   AssertionError: assert {'position_si...trategy_lint'} <= set()
+E     
+E     Extra items in the left set:
+E     'strategy_lint'
+E     'position_sizing'
+=============================== warnings summary ===============================
+tests/test_auth_t22.py::test_me_rejects_token_after_jwt_secret_rotation
+  /home/administrator/FrontierAgent/.venv/lib/python3.12/site-packages/jwt/api_jwt.py:368: InsecureKeyLengthWarning: The HMAC key is 21 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+apodex/tests/test_tui.py::test_workspace_index_keeps_whole_names_when_cwd_is_the_filesystem_root
+  apodex/tests/test_tui.py:354: PytestWarning: The test <Function test_workspace_index_keeps_whole_names_when_cwd_is_the_filesystem_root> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_workspace_index_keeps_whole_names_when_cwd_is_the_filesystem_root(
+
+apodex/tests/test_tui.py::test_folding_the_same_text_twice_reuses_one_marker
+  apodex/tests/test_tui.py:390: PytestWarning: The test <Function test_folding_the_same_text_twice_reuses_one_marker> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_folding_the_same_text_twice_reuses_one_marker(tmp_path) -> None:
+
+apodex/tests/test_tui.py::test_finished_subagent_duration_freezes_instead_of_ticking
+  apodex/tests/test_tui.py:763: PytestWarning: The test <Function test_finished_subagent_duration_freezes_instead_of_ticking> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_finished_subagent_duration_freezes_instead_of_ticking() -> None:
+
+apodex/tests/test_tui.py::test_finished_subagent_resumes_its_clock_on_the_next_task
+  apodex/tests/test_tui.py:786: PytestWarning: The test <Function test_finished_subagent_resumes_its_clock_on_the_next_task> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_finished_subagent_resumes_its_clock_on_the_next_task() -> None:
+
+apodex/tests/test_tui.py::test_interrupting_a_turn_settles_sub_agent_rows
+  apodex/tests/test_tui.py:802: PytestWarning: The test <Function test_interrupting_a_turn_settles_sub_agent_rows> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_interrupting_a_turn_settles_sub_agent_rows() -> None:
+
+apodex/tests/test_tui.py::test_queued_sub_agent_is_not_reported_as_running
+  apodex/tests/test_tui.py:825: PytestWarning: The test <Function test_queued_sub_agent_is_not_reported_as_running> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_queued_sub_agent_is_not_reported_as_running() -> None:
+
+apodex/tests/test_tui.py::test_unknown_sub_agent_status_is_not_painted_as_success
+  apodex/tests/test_tui.py:836: PytestWarning: The test <Function test_unknown_sub_agent_status_is_not_painted_as_success> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_unknown_sub_agent_status_is_not_painted_as_success() -> None:
+
+apodex/tests/test_tui.py::test_ready_sub_agent_does_not_double_count_its_report
+  apodex/tests/test_tui.py:845: PytestWarning: The test <Function test_ready_sub_agent_does_not_double_count_its_report> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_ready_sub_agent_does_not_double_count_its_report() -> None:
+
+apodex/tests/test_tui.py::test_sub_agent_specialty_is_inferred_from_the_coordinator_name
+  apodex/tests/test_tui.py:858: PytestWarning: The test <Function test_sub_agent_specialty_is_inferred_from_the_coordinator_name> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_sub_agent_specialty_is_inferred_from_the_coordinator_name() -> None:
+
+apodex/tests/test_tui.py::test_sub_agent_rows_are_distinguishable_by_marker_and_colour
+  apodex/tests/test_tui.py:868: PytestWarning: The test <Function test_sub_agent_rows_are_distinguishable_by_marker_and_colour> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_sub_agent_rows_are_distinguishable_by_marker_and_colour() -> None:
+
+apodex/tests/test_tui.py::test_sub_agent_identity_colour_is_stable_across_re_renders
+  apodex/tests/test_tui.py:894: PytestWarning: The test <Function test_sub_agent_identity_colour_is_stable_across_re_renders> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_sub_agent_identity_colour_is_stable_across_re_renders() -> None:
+
+apodex/tests/test_tui.py::test_activity_group_headings_carry_live_counts
+  apodex/tests/test_tui.py:903: PytestWarning: The test <Function test_activity_group_headings_carry_live_counts> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_activity_group_headings_carry_live_counts() -> None:
+
+apodex/tests/test_tui.py::test_no_block_rail_collides_with_the_review_cursor
+  apodex/tests/test_tui.py:3314: PytestWarning: The test <Function test_no_block_rail_collides_with_the_review_cursor> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_no_block_rail_collides_with_the_review_cursor() -> None:
+
+apodex/tests/test_tui.py::test_input_method_commits_survive_the_kitty_keyboard_protocol
+  apodex/tests/test_tui.py:3354: PytestWarning: The test <Function test_input_method_commits_survive_the_kitty_keyboard_protocol> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_input_method_commits_survive_the_kitty_keyboard_protocol() -> None:
+
+apodex/tests/test_tui.py::test_the_tui_widens_the_escape_limit_before_reading_input
+  apodex/tests/test_tui.py:3389: PytestWarning: The test <Function test_the_tui_widens_the_escape_limit_before_reading_input> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_the_tui_widens_the_escape_limit_before_reading_input() -> None:
+
+apodex/tests/test_tui.py::test_logo_never_exceeds_the_width_it_was_fitted_to
+  apodex/tests/test_tui.py:3472: PytestWarning: The test <Function test_logo_never_exceeds_the_width_it_was_fitted_to> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_logo_never_exceeds_the_width_it_was_fitted_to() -> None:
+
+apodex/tests/test_tui.py::test_logo_tiers_keep_the_wordmark_for_as_long_as_they_can
+  apodex/tests/test_tui.py:3497: PytestWarning: The test <Function test_logo_tiers_keep_the_wordmark_for_as_long_as_they_can> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_logo_tiers_keep_the_wordmark_for_as_long_as_they_can() -> None:
+
+apodex/tests/test_tui.py::test_logo_takes_every_colour_from_the_active_palette
+  apodex/tests/test_tui.py:3525: PytestWarning: The test <Function test_logo_takes_every_colour_from_the_active_palette> is marked with '@pytest.mark.asyncio' but it is not an async function. Please remove the asyncio mark. If the test is not marked explicitly, check for global marks applied via 'pytestmark'.
+    def test_logo_takes_every_colour_from_the_active_palette() -> None:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_corpus_a1_ingest_search.py:31: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_authority_pg.py:21: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_cli_isolation.py:27: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_cli_pg.py:20: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_consumers_pg.py:27: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_preparation_publication_pg.py:38: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_preparation_repository_pg.py:29: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:241: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:268: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:283: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:302: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:324: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] \\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:348: PG 不可用，跳过 D5 审计测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:157: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:182: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:193: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:337: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:366: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:388: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:410: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:438: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:478: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:499: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:586: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:689: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:808: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:850: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:894: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:1002: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_claims.py:1280: PG 不可用，跳过 D2 落库测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_evidence_pipeline.py:204: PostgreSQL unavailable
+SKIPPED [1] tests/test_corpus_gap_dispositions.py:434: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_gap_dispositions.py:462: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_gap_dispositions.py:499: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_gap_dispositions.py:537: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_golden.py:63: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_metadata.py:188: PG 不可用，跳过 D6 元数据测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_metadata.py:205: PG 不可用，跳过 D6 元数据测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_metadata.py:211: PG 不可用，跳过 D6 元数据测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_metadata.py:216: PG 不可用，跳过 D6 元数据测试：connection failed: connection to server at "127.0.0.1", port 1 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+SKIPPED [1] tests/test_corpus_metadata.py:238: CORPUS_I2_DSN 未设置（非 I2 演练环境）
+SKIPPED [1] tests/test_corpus_search_pg.py:90: CORPUS_I2_DSN 未设置（非隔离库环境，真库门跳过）
+SKIPPED [1] tests/test_corpus_search_pg.py:105: CORPUS_I2_DSN 未设置（非隔离库环境，真库门跳过）
+SKIPPED [1] tests/test_corpus_search_pg.py:120: CORPUS_I2_DSN 未设置（非隔离库环境，真库门跳过）
+SKIPPED [1] tests/test_corpus_search_pg.py:140: CORPUS_I2_DSN 未设置（非隔离库环境，真库门跳过）
+SKIPPED [1] tests/test_corpus_search_pg.py:149: CORPUS_I2_DSN 未设置（非隔离库环境，真库门跳过）
+SKIPPED [1] tests/test_corpus_verify_b7.py:86: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_verify_b7.py:99: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_verify_b7.py:111: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+FAILED tests/test_history_t26.py::test_worker_injects_history_as_extra_input
+FAILED tests/test_history_t26.py::test_worker_no_history_when_absent - System...
+FAILED tests/test_market_golden.py::test_market_hit_rate_is_100_percent - Ass...
+FAILED tests/test_research_discipline.py::test_react_profile_binds_the_finance_tools
+4 failed, 2894 passed, 49 skipped, 19 warnings in 218.87s (0:03:38)

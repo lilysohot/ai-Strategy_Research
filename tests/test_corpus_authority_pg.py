@@ -390,3 +390,55 @@ def test_audit_flags_chunk_with_dangling_unit_reference(store: PgStore) -> None:
     with psycopg.connect(DSN, autocommit=True) as conn:
         report = audit_corpus_chain(conn)
     assert "published_chunk_references_missing_unit" in report["conflicts"]
+
+
+# M6 repair: real registered fetch must expose and verify the same context as batch fetch.
+@pytest.mark.parametrize("corrupt", [False, True])
+def test_registered_fetch_context_matches_batch_and_checks_hash(store, service, corrupt):
+    from types import SimpleNamespace
+
+    from plugins.tools import get_builtin_tools
+
+    bid = sha256_of_bytes(b"m6-context-regression")
+    cid = _publish(store, build_id=bid)
+    tail = "的补充说明。"
+    with psycopg.connect(DSN, autocommit=True) as conn:
+        conn.execute(
+            "INSERT INTO corpus.corpus_units (build_id, unit_id, kind, raw_text, content_hash, "
+            "ordinal, location, status, reasons, clean_view) VALUES "
+            "(%s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s)",
+            (
+                bid,
+                "context-tail",
+                "paragraph",
+                tail,
+                "0" * 64 if corrupt else sha256_of_bytes(tail.encode()),
+                2,
+                json.dumps({"page": 1}),
+                UnitStatus.NOISE.value,
+                ["disclaimer_section"],
+                "",
+            ),
+        )
+    registry = get_builtin_tools()
+    result = json.loads(
+        asyncio.run(
+            registry["corpus_fetch"].ainvoke({"doc_id": f"cv2:{bid}", "locator": f"chunk:{cid}"})
+        )
+    )
+    band = SimpleNamespace(source_id=SOURCE_ID, build_id=bid, start=0, end=0)
+    if corrupt:
+        assert result["ok"] is False
+        assert "哈希" in result["error"]
+        with pytest.raises(read_pg.IntegrityError):
+            read_pg.fetch_bands(DSN, (band,), {SOURCE_ID: (cid,)})
+    else:
+        batch = read_pg.fetch_bands(DSN, (band,), {SOURCE_ID: (cid,)})[0]
+        assert result["ok"] is True
+        assert result["text"] == batch.text == RAW_TEXT + "\n" + tail
+        assert result["context_unit_ids"] == ["context-tail"]
+        assert batch.context_unit_ids == ("context-tail",)
+        assert result["source_ranges"] == [[0, 16]]
+        for span in result["spans"]:
+            text = result["text"][span["start"] : span["end"]]
+            assert text == (tail if span["unit_id"] == "context-tail" else RAW_TEXT)
