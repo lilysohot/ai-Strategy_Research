@@ -1,0 +1,17 @@
+{
+  "docs/plan/claims-market-closed-loop-plan.md": "5f6f56a23ff602f4eb7450c2ec03379899bd3d450f8942f4682bc6b7e9512780",
+  "docs/plan/corpus-ingestion-rebuild-tasks.md": "f12a89f39498f46621bbdef567920da620d46286ea557aa0a6c3f81955b5b6a1",
+  ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "88bd3dcd29f31831e392cb42800b70431aff7a2000c7fd88efce928ad03d3bfd",
+  "plugins/corpus/preparation/negative_query.py": "0f69d33cd8b1b978327607d3b4c94fb0c43948309ca2bcf8dd6286e3edab801d",
+  "plugins/corpus/preparation/search_pg.py": "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492",
+  "plugins/corpus/preparation/selection.py": "9bd0a416f42972db92185d6df7b722d5d9d030aa74c5169fa4e50652a1efdab2",
+  "plugins/corpus/service.py": "0f555d58d5cc2be677e01949e3b3b5a38c3007bf6f46d046555718c233785d12",
+  "plugins/tools/corpus_fetch.py": "eaafe4b6d48d2d97a85827f7397fc6fd1b40b75aabda99a64ecaeba26c7041c3",
+  "plugins/tools/corpus_search.py": "c70e5b9ce79f84b3c0ad289388d8b2ce22a95037c45a23956c34a3a5d0d25489",
+  "tests/test_corpus_authority_pg.py": "c24c03771256e534b5ed0a4db70f0b8c7a9892255f49c2d0b3a519ccec9fde1e",
+  "tests/test_corpus_negative_query.py": "63bafd4060cf7451911c50f3b59dfaaf09c767d040f9d02c67d7faf5fec7a5c3",
+  "tests/test_corpus_product_observations.py": "9bd0e0397183a8cda40e0284e312f5681fd28c92be325e0d70d85fc97223b220",
+  "tests/test_corpus_search_pg.py": "e67ce2a9bf925dec18ce4d5b05282235f48eb477545b1226369e40fd5f37bac9",
+  "tests/test_corpus_selection.py": "ad2868f109d92a7603f97776374977c1e826f6138200219d0fd7b5fff6b150d2",
+  "tools/corpus_product_observations.py": "038783905c12c8f29480ce399cceaacac2a12ae57baa38aeebf8e752b969e6aa"
+}

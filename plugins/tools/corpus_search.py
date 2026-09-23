@@ -156,6 +156,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                     "source_id": hit.source_id,
                     "build_id": hit.build_id,
                     "chunk_id": hit.chunk_id,
+                    "context_locators": list(hit.context_locators),
                     "title": hit.title,
                     "published": hit.published,
                     "snippet": hit.snippet,
@@ -167,7 +168,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
             "hint": (
                 "snippet 已截断，仅用于定位，禁止直接引用。"
                 "写 evidence 前请用 corpus_fetch(doc_id, locator) 取回逐字原文，"
-                "并把 locator 原样填进 evidence.page。"
+                "并依次取回 context_locators；这些句柄共同构成有界的文档证据区。"
             ),
         },
         ensure_ascii=False,

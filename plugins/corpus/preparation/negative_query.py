@@ -21,18 +21,71 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 # 纯功能/套话词元：命中大量无关文档，构不成实质答案信号，进收紧查询即毛刺。
-_FUNCTION_WORDS = frozenset({
-    "这", "六", "份", "开发", "材料", "能否", "能", "否", "是", "是否", "的", "了",
-    "给出", "给", "出", "是否披露", "披露", "这六份", "那", "被", "已", "已经", "来",
-})
+_FUNCTION_WORDS = frozenset(
+    {
+        "这",
+        "六",
+        "份",
+        "开发",
+        "材料",
+        "能否",
+        "能",
+        "否",
+        "是",
+        "是否",
+        "的",
+        "了",
+        "给出",
+        "给",
+        "出",
+        "是否披露",
+        "披露",
+        "这六份",
+        "那",
+        "被",
+        "已",
+        "已经",
+        "来",
+    }
+)
 
 # 疑问词/泛化词：几乎只出现在题面、不出现在答案单元。F1 全局收紧刻意保留它们
 # （对 no-answer 题收紧越严越好，且 6 负例几乎不含疑问词，剔不剔无差别）；B2 产品
 # abstain 门在**无金标**下须剔除——实证 24 条有答案题中 23 条含疑问词，真实答案单元
 # 不引述它们，保留则 full-AND 必然归零、误杀有答案题（S1 降）。
-_QUESTION_WORDS = frozenset({
-    "什么", "多少", "如何", "哪些", "怎么", "怎样", "哪个", "何种", "为何", "几",
-})
+_QUESTION_WORDS = frozenset(
+    {
+        "什么",
+        "多少",
+        "如何",
+        "哪些",
+        "怎么",
+        "怎样",
+        "哪个",
+        "何种",
+        "为何",
+        "几",
+    }
+)
+
+_CORPUS_SUBJECTS = ("材料", "报告", "资料", "语料", "文档")
+_AVAILABILITY_FORMS = ("能否", "是否", "有没有", "能不能", "可否")
+_PROVISION_FORMS = ("给出", "披露", "提供", "包含", "记载", "查到", "找到")
+
+
+def is_corpus_availability_query(query: str) -> bool:
+    """Whether the user asks if a corpus can substantiate a requested fact.
+
+    This intent gets a strict evidence-existence check. Ordinary analytical
+    questions containing words such as ``是否`` do not, because they ask for an
+    answer from evidence rather than for an inventory of corpus availability.
+    """
+    compact = "".join(query.split()).lower()
+    return (
+        any(token in compact for token in _CORPUS_SUBJECTS)
+        and any(token in compact for token in _AVAILABILITY_FORMS)
+        and any(token in compact for token in _PROVISION_FORMS)
+    )
 
 
 def content_lexemes(lexemes: Sequence[str]) -> tuple[str, ...]:
@@ -87,6 +140,12 @@ def abstain_no_answer_query(lexemes: Sequence[str]) -> str:
     """B2 abstain 门的收紧查询：实质词元（去疑问词）websearch AND 连接。"""
     content = abstain_content_lexemes(lexemes)
     return " ".join('"' + t.replace('"', " ") + '"' for t in content)
+
+
+def retrieval_query(lexemes: Sequence[str]) -> str:
+    """Build the product candidate query from substantive natural-language terms."""
+    content = abstain_content_lexemes(lexemes)
+    return " OR ".join('"' + t.replace('"', " ") + '"' for t in content)
 
 
 def _norm(s: str) -> str:

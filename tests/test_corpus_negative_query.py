@@ -22,6 +22,7 @@ import pytest
 
 from plugins.corpus.preparation.negative_query import (
     content_lexemes,
+    is_corpus_availability_query,
     is_relevant_candidate,
     tighten_no_answer_query,
 )
@@ -53,10 +54,16 @@ def test_tighten_ands_all_content_terms_quoted() -> None:
 
 def test_tighten_keeps_ordering_after_strip() -> None:
     # 停用/单字被剔除后，内容词元保持原序
-    assert tighten_no_answer_query(["给出", "光力", "科技", "2027", "经审", "是"])\
+    assert (
+        tighten_no_answer_query(["给出", "光力", "科技", "2027", "经审", "是"])
         == '"光力" "科技" "2027" "经审"'
-    assert content_lexemes(["给出", "光力", "科技", "2027", "经审", "是"])\
-        == ("光力", "科技", "2027", "经审")
+    )
+    assert content_lexemes(["给出", "光力", "科技", "2027", "经审", "是"]) == (
+        "光力",
+        "科技",
+        "2027",
+        "经审",
+    )
 
 
 def test_tighten_empty_when_no_content() -> None:
@@ -95,14 +102,17 @@ def test_relevant_candidate_empty_content_false() -> None:
 
 
 def _neg(qid: str, domain: str = "company") -> GoldQuestion:
-    return GoldQuestion(query_id=qid, domain=domain, question="能否给出X？",
-                        answer_existence=AnswerExistence.NO_ANSWER)
+    return GoldQuestion(
+        query_id=qid,
+        domain=domain,
+        question="能否给出X？",
+        answer_existence=AnswerExistence.NO_ANSWER,
+    )
 
 
 def test_no_answer_empty_observation_not_false_positive() -> None:
     q = _neg("company-900")
-    obs = QueryObservation(query_id=q.query_id,
-                           outcome=ObservationOutcome.NO_MATCH, documents=())
+    obs = QueryObservation(query_id=q.query_id, outcome=ObservationOutcome.NO_MATCH, documents=())
     (item,) = score((q,), (obs,)).questions
     assert item.false_positive is False
     assert not any(str(FailureCode.NO_ANSWER_FALSE_POSITIVE) in f for f in item.failures)
@@ -118,8 +128,7 @@ def test_no_answer_with_documents_is_false_positive() -> None:
 
 def test_total_eq_zero_observations_then_zero_false_positives() -> None:
     qu = [_neg(f"company-90{i}") for i in range(3)]
-    obs = [QueryObservation(q.query_id, outcome=ObservationOutcome.NO_MATCH)
-           for q in qu]
+    obs = [QueryObservation(q.query_id, outcome=ObservationOutcome.NO_MATCH) for q in qu]
     report = score(tuple(qu), tuple(obs))
     assert report.false_positives == ()
 
@@ -141,6 +150,30 @@ def test_tighten_is_pure_transform_of_given_lexemes() -> None:
 # ── B2：产品 abstain 拒检通道接线（服务层判定逻辑，合成输入，不触 PG）──
 
 
+@pytest.mark.parametrize(
+    "query",
+    [
+        "这六份开发材料能否给出2027年经审计的实际利润？",
+        "这些研究报告是否披露设备唯一序列号？",
+        "当前语料有没有提供已签署合同的确切吨数？",
+    ],
+)
+def test_corpus_availability_intent_is_detected(query: str) -> None:
+    assert is_corpus_availability_query(query) is True
+
+
+@pytest.mark.parametrize(
+    "query",
+    [
+        "能否把价格分位和价格涨幅当成同一种指标？",
+        "报告中的收入和利润分别是多少？",
+        "公司是否维持强推评级？",
+    ],
+)
+def test_ordinary_research_question_is_not_availability_intent(query: str) -> None:
+    assert is_corpus_availability_query(query) is False
+
+
 @pytest.fixture()
 def svc(monkeypatch: pytest.MonkeyPatch) -> CorpusService:
     """只依赖合成输入的 Fake 服务：read_chain 钉死 new，判定层 DB 依赖按需打桩。"""
@@ -156,10 +189,11 @@ def _monkey_setenv(monkeypatch: pytest.MonkeyPatch, value: str | None) -> None:
         monkeypatch.setenv("CORPUS_ABSTAIN_NO_ANSWER", value)
 
 
-def test_abstain_switch_off_never_abstains(svc: CorpusService,
-                                           monkeypatch: pytest.MonkeyPatch) -> None:
-    """默认 off：恒不拒检，且完全不触碰检索/判定路径（B-L1 结构性零扰动）。"""
-    _monkey_setenv(monkeypatch, None)
+def test_abstain_switch_off_never_abstains(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """显式 off：恒不拒检，且完全不触碰检索/判定路径（回滚开关）。"""
+    _monkey_setenv(monkeypatch, "off")
     # 若误调 DB 检索，判为失败：off 下判定层必须短路。
     monkeypatch.setattr(
         "plugins.corpus.preparation.search_pg.query_lexemes",
@@ -168,25 +202,43 @@ def test_abstain_switch_off_never_abstains(svc: CorpusService,
     assert svc._abstain_decision("任意查询") is False
 
 
-def test_abstain_illegal_switch_fails_closed(svc: CorpusService,
-                                             monkeypatch: pytest.MonkeyPatch) -> None:
-    _monkey_setenv(monkeypatch, "bogus")
-    with pytest.raises(StoreError, match="CORPUS_ABSTAIN_NO_ANSWER"):
-        svc._abstain_decision("查询")
-
-
-def test_abstain_on_rejects_when_and_query_empty(svc: CorpusService,
-                                                 monkeypatch: pytest.MonkeyPatch) -> None:
-    """on + websearch AND 预检归零 → 拒检（真负例主门，零 fetch）。"""
-    _monkey_setenv(monkeypatch, "on")
+def test_abstain_defaults_on_for_corpus_availability_query(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _monkey_setenv(monkeypatch, None)
     monkeypatch.setattr(
-        "plugins.corpus.preparation.search_pg.query_lexemes", lambda *a, **k: ("美联储", "会议", "利率")
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: ("审计", "利润"),
     )
     monkeypatch.setattr(
         "plugins.corpus.preparation.search_pg.search_chunks",
         lambda *a, **k: (),
     )
-    assert svc._abstain_decision("2026年9月美联储会议利率决定如何？") is True
+    assert svc._abstain_decision("这些报告是否提供经审计利润？") is True
+
+
+def test_abstain_illegal_switch_fails_closed(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _monkey_setenv(monkeypatch, "bogus")
+    with pytest.raises(StoreError, match="CORPUS_ABSTAIN_NO_ANSWER"):
+        svc._abstain_decision("查询")
+
+
+def test_abstain_on_rejects_when_and_query_empty(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """on + websearch AND 预检归零 → 拒检（真负例主门，零 fetch）。"""
+    _monkey_setenv(monkeypatch, "on")
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: ("美联储", "会议", "利率"),
+    )
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.search_pg.search_chunks",
+        lambda *a, **k: (),
+    )
+    assert svc._abstain_decision("这些报告能否给出2026年9月美联储会议利率决定？") is True
 
 
 def test_abstain_on_rejects_when_all_units_incidental(
@@ -195,17 +247,16 @@ def test_abstain_on_rejects_when_all_units_incidental(
     """on + 收紧仍有命中，但命中单元的原文均不满足全部内容词元 → 拒检（保险带）。"""
     _monkey_setenv(monkeypatch, "on")
     monkeypatch.setattr(
-        "plugins.corpus.preparation.search_pg.query_lexemes", lambda *a, **k: ("美联储", "会议", "利率", "决定")
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: ("美联储", "会议", "利率", "决定"),
     )
     hit = type("Hit", (), {"build_id": "b", "chunk_id": "c0"})()
     monkeypatch.setattr(
         "plugins.corpus.preparation.search_pg.search_chunks", lambda *a, **k: (hit,)
     )
-    ev = type("Ev", (), {"units": (type("U", (), {"raw_text": "会议纪要强调利率路径"})() ,)})()
-    monkeypatch.setattr(
-        "plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev
-    )
-    assert svc._abstain_decision("美联储9月会议利率决定如何？") is True
+    ev = type("Ev", (), {"units": (type("U", (), {"raw_text": "会议纪要强调利率路径"})(),)})()
+    monkeypatch.setattr("plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev)
+    assert svc._abstain_decision("这些报告是否披露美联储9月会议利率决定？") is True
 
 
 def test_abstain_on_releases_when_a_unit_carries_full_content(
@@ -214,17 +265,18 @@ def test_abstain_on_releases_when_a_unit_carries_full_content(
     """on + 某单元同时满足全部内容词元（有实质答案）→ 放行，产品查询路径原样返回。"""
     _monkey_setenv(monkeypatch, "on")
     monkeypatch.setattr(
-        "plugins.corpus.preparation.search_pg.query_lexemes", lambda *a, **k: ("美联储", "会议", "利率", "决定")
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: ("美联储", "会议", "利率", "决定"),
     )
     hit = type("Hit", (), {"build_id": "b", "chunk_id": "c0"})()
     monkeypatch.setattr(
         "plugins.corpus.preparation.search_pg.search_chunks", lambda *a, **k: (hit,)
     )
-    ev = type("Ev", (), {"units": (type("U", (), {"raw_text": "美联储9月议息会议决定维持利率不变"})() ,)})()
-    monkeypatch.setattr(
-        "plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev
-    )
-    assert svc._abstain_decision("美联储9月会议利率决定如何？") is False
+    ev = type(
+        "Ev", (), {"units": (type("U", (), {"raw_text": "美联储9月议息会议决定维持利率不变"})(),)}
+    )()
+    monkeypatch.setattr("plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev)
+    assert svc._abstain_decision("这些报告是否披露美联储9月会议利率决定？") is False
 
 
 def test_abstain_on_ignores_question_words_for_answerable(
@@ -244,16 +296,25 @@ def test_abstain_on_ignores_question_words_for_answerable(
     monkeypatch.setattr(
         "plugins.corpus.preparation.search_pg.search_chunks", lambda *a, **k: (hit,)
     )
-    ev = type("Ev", (), {"units": (type("U", (), {"raw_text": "光力科技全年归母净利润同比增长23.5%"})() ,)})()
-    monkeypatch.setattr(
-        "plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev
-    )
+    ev = type(
+        "Ev", (), {"units": (type("U", (), {"raw_text": "光力科技全年归母净利润同比增长23.5%"})(),)}
+    )()
+    monkeypatch.setattr("plugins.corpus.preparation.read_pg.fetch_verbatim", lambda *a, **k: ev)
     assert svc._abstain_decision("光力科技2027年经审计的归母净利润是多少？") is False
 
 
-def test_corpus_search_abstain_signal_splits_from_no_match(
-    monkeypatch: pytest.MonkeyPatch
+def test_abstain_does_not_probe_ordinary_research_question(
+    svc: CorpusService, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    _monkey_setenv(monkeypatch, "on")
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.search_pg.query_lexemes",
+        lambda *a, **k: pytest.fail("ordinary research question must not enter strict gate"),
+    )
+    assert svc._abstain_decision("能否把价格分位和涨幅当成同一指标？") is False
+
+
+def test_corpus_search_abstain_signal_splits_from_no_match(monkeypatch: pytest.MonkeyPatch) -> None:
     """corpus_search：coverage["abstain"] 为真 → 顶层 abstain + ABSTAIN_HINT（可机器区分）。"""
     import importlib
 
@@ -262,8 +323,11 @@ def test_corpus_search_abstain_signal_splits_from_no_match(
 
     class _FakeSvc:
         def search_with_coverage(self, query: str, *, limit: int = 10):
-            return [], {"query_status": "abstain", "abstain": True,
-                        "abstain_reason": "no_answer_rejected"}
+            return [], {
+                "query_status": "abstain",
+                "abstain": True,
+                "abstain_reason": "no_answer_rejected",
+            }
 
     monkeypatch.setattr(mod, "get_service", lambda: _FakeSvc())
     out = asyncio.run(mod.corpus_search.func("某负例题干"))

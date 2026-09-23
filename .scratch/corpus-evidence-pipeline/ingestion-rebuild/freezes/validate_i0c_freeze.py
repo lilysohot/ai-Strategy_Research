@@ -1789,13 +1789,26 @@ if "i0c-r4v" in by_id:
     # negative_query 须携带标点结构判定 + 全剔回退（fail-closed）；tests 须携带
     # I-RANK-1 池不变/SQL 接线/序/开关回滚门。
     spg_src_r4v = (ROOT / "plugins/corpus/preparation/search_pg.py").read_text(encoding="utf-8")
-    check("RANK_LEXEME_PRUNE = True" in spg_src_r4v
-          and "websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank" in spg_src_r4v
-          and "ts_rank(c.search_tsv, q.tsq_rank) AS score" in spg_src_r4v
-          and "c.search_tsv @@ q.tsq" in spg_src_r4v
-          and "def _rank_query_on" in spg_src_r4v
-          and '"rank_query" not in params' in spg_src_r4v,
-          "r4v search_pg.py must wire dual-tsquery ranking signal (pool=full lexemes, score=content)")
+    if "i0c-r5e" in by_id:
+        # r5e intentionally supersedes the r4v retrieval implementation.  The r5e
+        # previous-effective ledger proves the pre-r5e bytes were exactly r4v, so
+        # the historical dual-tsquery semantic gate must not be applied to current
+        # product-retrieval bytes.
+        prior5e_r4v = load_json(
+            ROOT / ".scratch/m6-retrieval-fix-20260923/previous-effective-bindings.json"
+        )
+        check(prior5e_r4v.get("plugins/corpus/preparation/search_pg.py")
+              == bindingr4v.get("chain_rebind_implementation", {}).get(
+                  "plugins/corpus/preparation/search_pg.py"),
+              "r5e must preserve the r4v search_pg.py predecessor hash")
+    else:
+        check("RANK_LEXEME_PRUNE = True" in spg_src_r4v
+              and "websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank" in spg_src_r4v
+              and "ts_rank(c.search_tsv, q.tsq_rank) AS score" in spg_src_r4v
+              and "c.search_tsv @@ q.tsq" in spg_src_r4v
+              and "def _rank_query_on" in spg_src_r4v
+              and '"rank_query" not in params' in spg_src_r4v,
+              "r4v search_pg.py must wire dual-tsquery ranking signal (pool=full lexemes, score=content)")
     nq_src_r4v = (ROOT / "plugins/corpus/preparation/negative_query.py").read_text(encoding="utf-8")
     check("def is_punct_lexeme" in nq_src_r4v and "def rank_lexemes" in nq_src_r4v
           and "return kept or tuple(lexemes)" in nq_src_r4v,
@@ -1808,8 +1821,13 @@ if "i0c-r4v" in by_id:
           "r4v test_corpus_search_pg.py must carry I-RANK-1 pool/order/rollback gates")
     # search_pg 权威哈希入 supersession 映射（下方 r39 块与 r42 块消费）；
     # negative_query.py 不在计划 pre-run binding 内，无需豁免。
-    r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"] = \
-        "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+    r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"] = (
+        load_json(BASE / by_id["i0c-r5e"]["file"])
+        .get("binding", {}).get("m6_retrieval_implementation", {})
+        .get("plugins/corpus/preparation/search_pg.py")
+        if "i0c-r5e" in by_id
+        else "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+    )
     # 注意：此处不 merge——r4v 为最新修订，须在 r4u 块之后最后合并（见 r4u 块末尾），
     # 否则 freeze_validator 会被更靠前的 r4t/r4u 块覆盖为旧验证器哈希。
 
@@ -2548,7 +2566,17 @@ if "i0c-r5d" in by_id:
               f"r5d manifest implementation mismatch: {p}")
     check(set(repair5d.get("implementation", {})) == impl5d,
           "r5d manifest implementation incomplete")
+    newer5e_paths: set[str] = set()
+    if "i0c-r5e" in by_id:
+        newer5e = load_json(BASE / by_id["i0c-r5e"]["file"])
+        newer5e_paths = {
+            path
+            for group in newer5e.get("binding", {}).values()
+            for path in group
+        }
     for p, h in repair5d.get("unchanged_assets", {}).items():
+        if p in newer5e_paths:
+            continue
         check((ROOT / p).is_file() and digest(ROOT / p) == h,
               f"r5d protected asset drift: {p}")
     summary5d = json.loads((ROOT / prefix5d / "product-evaluation-summary.json").read_text())
@@ -2565,12 +2593,120 @@ if "i0c-r5d" in by_id:
           "r5d PG battery must pass on the repaired implementation")
     merge_binding(i0c_current_binding, bind5d)
 
+if "i0c-r5e" in by_id:
+    r5e = load_json(BASE / by_id["i0c-r5e"]["file"])
+    parent5e = BASE / by_id["i0c-r5d"]["file"]
+    check(r5e.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5d", "path": str(parent5e.relative_to(ROOT)),
+        "sha256": digest(parent5e)}, "r5e parent mismatch")
+    check(r5e.get("business_accepted") is True
+          and r5e.get("status") == "frozen_product_acceptance_passed",
+          "r5e must record the passing product acceptance")
+    bind5e = r5e.get("binding", {})
+    check(set(bind5e) == {"m6_retrieval_implementation", "m6_retrieval_tests",
+          "m6_retrieval_evidence", "m6_retrieval_state",
+          "previous_effective_bindings", "freeze_validator"},
+          "r5e binding groups mismatch")
+    impl5e = {
+        "plugins/corpus/preparation/negative_query.py",
+        "plugins/corpus/preparation/search_pg.py",
+        "plugins/corpus/preparation/selection.py",
+        "plugins/corpus/service.py",
+        "plugins/tools/corpus_fetch.py",
+        "plugins/tools/corpus_search.py",
+        "tools/corpus_product_observations.py",
+    }
+    tests5e = {
+        "tests/test_corpus_authority_pg.py",
+        "tests/test_corpus_negative_query.py",
+        "tests/test_corpus_product_observations.py",
+        "tests/test_corpus_search_pg.py",
+        "tests/test_corpus_selection.py",
+    }
+    state5e = {
+        "docs/plan/claims-market-closed-loop-plan.md",
+        "docs/plan/corpus-ingestion-rebuild-tasks.md",
+    }
+    evidence5e = {
+        ".scratch/m6-retrieval-fix-20260923/product-summary.json",
+        ".scratch/m6-retrieval-fix-20260923/product-raw-default-details.json",
+        ".scratch/m6-retrieval-fix-20260923/report.md",
+        ".scratch/m6-retrieval-fix-20260923/rebuild-report.json",
+        ".scratch/m6-retrieval-fix-20260923/rebuild-report.md",
+        ".scratch/m6-retrieval-fix-20260923/spec.md",
+    }
+    previous_path5e = ".scratch/m6-retrieval-fix-20260923/previous-effective-bindings.json"
+    validator5e = {str(Path(__file__).resolve().relative_to(ROOT))}
+    for group5e, expected5e in (
+            ("m6_retrieval_implementation", impl5e),
+            ("m6_retrieval_tests", tests5e),
+            ("m6_retrieval_evidence", evidence5e),
+            ("m6_retrieval_state", state5e),
+            ("previous_effective_bindings", {previous_path5e}),
+            ("freeze_validator", validator5e)):
+        check(set(bind5e.get(group5e, {})) == expected5e,
+              f"r5e scope mismatch: {group5e}")
+    prior5e = load_json(ROOT / previous_path5e)
+    previous5e = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed5e = impl5e | tests5e | state5e | validator5e
+    check(set(prior5e) == changed5e, "r5e previous-binding scope mismatch")
+    for p in changed5e:
+        check(prior5e.get(p) == previous5e.get(p),
+              f"r5e previous effective hash mismatch: {p}")
+    product5e = load_json(ROOT / ".scratch/m6-retrieval-fix-20260923/product-summary.json")
+    check(product5e.get("passed") is True
+          and product5e.get("query_count") == 30
+          and product5e.get("question_pass") == [24, 24]
+          and product5e.get("evidence_pass") == [24, 24]
+          and product5e.get("false_positives") == 0
+          and product5e.get("tool_failures") == 0
+          and product5e.get("gold_changed") is False
+          and product5e.get("scorer_changed") is False
+          and product5e.get("threshold_changed") is False,
+          "r5e product gate must pass unchanged acceptance inputs")
+    rebuild5e = load_json(ROOT / ".scratch/m6-retrieval-fix-20260923/rebuild-report.json")
+    check(rebuild5e.get("summary", {}).get("published") == 8
+          and rebuild5e.get("summary", {}).get("active") == 8
+          and rebuild5e.get("summary", {}).get("all_new_build_active") is True,
+          "r5e sandbox must be restored to 8/8 published+active")
+    check(r5e.get("verification", {}).get("full_suite") == {
+          "passed": 2961, "failed": 2, "skipped": 17},
+          "r5e full-suite counts mismatch")
+    report5e = (ROOT / ".scratch/m6-retrieval-fix-20260923/report.md").read_text(
+        encoding="utf-8")
+    check("QuestionPass：24/24" in report5e and "EvidencePass：24/24" in report5e
+          and "false positive = 0" in report5e,
+          "r5e report must state the passing product result")
+    merge_binding(i0c_current_binding, bind5e)
+
+if "i0c-r5f" in by_id:
+    r5f = load_json(BASE / by_id["i0c-r5f"]["file"])
+    parent5f = BASE / by_id["i0c-r5e"]["file"]
+    check(r5f.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5e", "path": str(parent5f.relative_to(ROOT)),
+        "sha256": digest(parent5f)}, "r5f parent mismatch")
+    check(r5f.get("status") == "frozen_validator_supersession"
+          and r5f.get("business_accepted") is True,
+          "r5f must preserve r5e business acceptance")
+    bind5f = r5f.get("binding", {})
+    validator_path5f = str(Path(__file__).resolve().relative_to(ROOT))
+    check(set(bind5f) == {"freeze_validator"}
+          and set(bind5f.get("freeze_validator", {})) == {validator_path5f},
+          "r5f must bind only the corrected freeze validator")
+    previous_validator5f = (
+        load_json(parent5f).get("binding", {}).get("freeze_validator", {})
+        .get(validator_path5f)
+    )
+    check(r5f.get("supersedes_validator_sha256") == previous_validator5f
+          and previous_validator5f != bind5f.get("freeze_validator", {}).get(validator_path5f),
+          "r5f validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5f)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
-for sid in (f"i0c-r{number}" for number in range(2, 44)):
-    entry = by_id.get(sid)
-    if not entry:
+for sid, entry in by_id.items():
+    if not sid.startswith("i0c-r") or sid == "i0c-r1":
         continue
     snap = load_json(BASE / entry.get("file", ""))
     for items in snap.get("binding", {}).values():
@@ -2610,7 +2746,11 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-if "i0c-r5d" in by_id:
+if "i0c-r5f" in by_id:
+    print("CURRENT r5f: r5e product acceptance retained; validator supersession verified.")
+elif "i0c-r5e" in by_id:
+    print("CURRENT r5e: real product path 24/24 QP, 24/24 EP, 0 false positives; M6 product acceptance passed.")
+elif "i0c-r5d" in by_id:
     print("CURRENT r5d: repair bindings verified; real product acceptance FAILED; no new M6 release. Historical decisions follow.")
 print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       "i0c-r2/r3/r4/r5/r6/r7/r8/r9/r10/r11/r12/r13/r14/r15/r16/r17/r18/r19/r20/r21/r22/r23/r24 effective bindings (latest-revision-wins) + superseded "

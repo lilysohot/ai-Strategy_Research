@@ -42,6 +42,7 @@ def _hit(
     *,
     chunk_id: str | None = None,
     label_path: tuple[str, ...] = (),
+    page: int | None = None,
 ) -> SearchHit:
     return SearchHit(
         source_id=source_id,
@@ -53,6 +54,7 @@ def _hit(
         unit_refs=("u1",),
         score=score,
         label_path=label_path,
+        page=page,
     )
 
 
@@ -443,6 +445,49 @@ def test_band_every_band_width_within_provable_bound_49() -> None:
         assert b.width <= band.provable_width_bound
         assert b.width <= 49
     assert max(b.width for b in bands) <= 49
+
+
+def test_band_merges_sparse_hits_on_same_page_within_width_bound() -> None:
+    """A PDF page is one evidence region even when several nonmatching chunks separate its hits."""
+    order = tuple(f"c{i}" for i in range(20))
+    hits = (
+        _hit("A", "b1", 2.0, chunk_id="c2", page=7),
+        _hit("A", "b1", 1.0, chunk_id="c12", page=7),
+    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": order})
+    assert len(bands) == 1
+    assert bands[0].start == 1
+    assert bands[0].end == 13
+
+
+def test_band_does_not_merge_sparse_hits_from_different_pages() -> None:
+    order = tuple(f"c{i}" for i in range(20))
+    hits = (
+        _hit("A", "b1", 2.0, chunk_id="c2", page=7),
+        _hit("A", "b1", 1.0, chunk_id="c12", page=8),
+    )
+    bands = select_band(hits, SelectionPolicy(), BandPolicy(), chunk_order_by_source={"A": order})
+    assert len(bands) == 2
+
+
+def test_product_context_selection_returns_one_bounded_anchor_per_source() -> None:
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    hits = (
+        _hit("A", "ba", 5.0, chunk_id="a2", page=1),
+        _hit("B", "bb", 4.0, chunk_id="b1", page=3),
+        _hit("A", "ba", 3.0, chunk_id="a5", page=1),
+    )
+    selected = svc._selected_context_hits(
+        hits,
+        {"A": tuple(f"a{i}" for i in range(8)), "B": tuple(f"b{i}" for i in range(4))},
+        10,
+    )
+    assert [hit.source_id for hit in selected] == ["A", "B"]
+    assert selected[0].chunk_id == "a2"
+    assert selected[0].context_chunk_ids == tuple(f"a{i}" for i in range(1, 7))
+    assert selected[1].context_chunk_ids == ("b0", "b1", "b2")
 
 
 def test_emit_cells_derives_row_col_on_aligned_grid_only() -> None:

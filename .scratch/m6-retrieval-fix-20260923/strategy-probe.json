@@ -1,0 +1,17 @@
+[
+  {
+    "configuration": "product-raw-default",
+    "abstain": "on",
+    "passed": true,
+    "qp": [
+      24,
+      24
+    ],
+    "ep": [
+      24,
+      24
+    ],
+    "fp": 0,
+    "failed": 0
+  }
+]

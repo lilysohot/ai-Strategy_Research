@@ -1,0 +1,17 @@
+{
+  "configuration": "product-raw-default",
+  "query_count": 30,
+  "answerable_count": 24,
+  "no_answer_count": 6,
+  "limit": 10,
+  "abstain": "on",
+  "question_pass": [24, 24],
+  "evidence_pass": [24, 24],
+  "false_positives": 0,
+  "tool_failures": 0,
+  "passed": true,
+  "gold_changed": false,
+  "scorer_changed": false,
+  "threshold_changed": false,
+  "model_calls": 0
+}

@@ -1,0 +1,104 @@
+{
+  "snapshot_id": "i0c-r5e",
+  "revision": "r5e",
+  "phase": "i0c",
+  "status": "frozen_product_acceptance_passed",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5d",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5d.json",
+    "sha256": "687e16ce4f2c4871059240c7ce1296f2ebea40cd612b39794aaf9ed83b604bf4"
+  },
+  "binding": {
+    "m6_retrieval_implementation": {
+      "plugins/corpus/preparation/negative_query.py": "29a51a57f9781c2a54829a21ba981c99c758a09e8f60999c6f74e3096293a569",
+      "plugins/corpus/preparation/search_pg.py": "df35e5c7fc03740c892a6838b2fd4735ff12e0efb478f0891c645f6b8f430135",
+      "plugins/corpus/preparation/selection.py": "ca611d4222a282b71c42c7c3435e1d3c2203057085474f2da43feac0b6657432",
+      "plugins/corpus/service.py": "e59f052970a11fb9c3b4b087253a9eb4dce13268d91a29e8b759bc1d8a726f5a",
+      "plugins/tools/corpus_fetch.py": "b5c3afd3ba0efe04f1ef09ab49f68f110c9e09abbaa4bea2732854243e0ef976",
+      "plugins/tools/corpus_search.py": "0c02a6b1b916a87d3c2183633922ca8c892f1d51b9763e93583d15d17a9ce7b9",
+      "tools/corpus_product_observations.py": "e47c8aa8cbeda4b6e5af3999cad9928adc27d582dccf381a7078954465e3609b"
+    },
+    "m6_retrieval_tests": {
+      "tests/test_corpus_authority_pg.py": "ff7478de6d7d7e6bbcccd8fca486163e4e3895fc60c9f509ee1d3b44ff5297f0",
+      "tests/test_corpus_negative_query.py": "a5309bdcbe2de0eb8f409394552fd414a6219dab354ceb38d1e4f750ba03a6fe",
+      "tests/test_corpus_product_observations.py": "7b756f4250eed88cb860c82c28b2cff2c7977c2ea95870416ae2d14c7ed76d87",
+      "tests/test_corpus_search_pg.py": "d4b3890d6b740cbf411b9cef26fd0936d31b358c587de638a593fe48aed632b5",
+      "tests/test_corpus_selection.py": "f084146c28fa2e231f0dcf874fab64f607eb161592febcbf177d655ea390959f"
+    },
+    "m6_retrieval_evidence": {
+      ".scratch/m6-retrieval-fix-20260923/product-raw-default-details.json": "72276101ea33dbecf305eed23cc15099e1a355f3827592225bf5411961935583",
+      ".scratch/m6-retrieval-fix-20260923/product-summary.json": "3d3d26fc343ab0afe90423bf11bfb8addbfdd6b5b6973a23f264c0c036c774e1",
+      ".scratch/m6-retrieval-fix-20260923/rebuild-report.json": "3a547097a248516a2ef311e0abd937548a1b6a8fb00bf13160deaafe353e6f1d",
+      ".scratch/m6-retrieval-fix-20260923/rebuild-report.md": "a12ba5c930568a5e2917c4c88874401f9758f8682a69b66a071d5ec3818819a6",
+      ".scratch/m6-retrieval-fix-20260923/report.md": "4b4ca936d8b2abfe983f6297e914e67fa7fb05fc8c3f6c2e40c13731d43e1bd3",
+      ".scratch/m6-retrieval-fix-20260923/spec.md": "1fd0d6caef3f4c6c1c5d24246e01a856fa33fb34d2b62f6c73504bd7aba51381"
+    },
+    "m6_retrieval_state": {
+      "docs/plan/claims-market-closed-loop-plan.md": "61a27f8e2ff90dbcadbe95f6706d602365acbffb134a71bd9dc106bd7dac90be",
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "c48ed8b669c6b55e7aec81a56807d61c614e3a4f2ab4b6b71374d6faaf9d6fd9"
+    },
+    "previous_effective_bindings": {
+      ".scratch/m6-retrieval-fix-20260923/previous-effective-bindings.json": "3ff9e94aa2baee0eee012c731919d9dae83fcd58af08ea96a43192311ea8d951"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "1624c41f9670013e64c01c8fc7b12c8aab89faf2ab1b22dd2b2eb602dbc7d0cf"
+    }
+  },
+  "corrections": {
+    "retrieval": "Natural questions use substantive OR candidates, source-title recall, and a source-diversified bounded pool.",
+    "evidence": "Same-page bounded bands expose ordered authority context locators; semantic cells are checked against their unit spans.",
+    "negative": "The default-on strict abstain gate applies only to explicit corpus-availability questions."
+  },
+  "verification": {
+    "product": {
+      "queries": 30,
+      "question_pass": [
+        24,
+        24
+      ],
+      "evidence_pass": [
+        24,
+        24
+      ],
+      "false_positives": 0,
+      "tool_failures": 0
+    },
+    "full_suite": {
+      "passed": 2961,
+      "failed": 2,
+      "skipped": 17
+    },
+    "existing_failures": [
+      "test_market_hit_rate_is_100_percent",
+      "test_react_profile_binds_the_finance_tools"
+    ],
+    "postgres_authority": {
+      "passed": 12
+    },
+    "postgres_search": {
+      "passed": 11
+    },
+    "ruff_ci_paths": "passed",
+    "pyright_errors": 0,
+    "import_smoke": {
+      "stage1": [
+        365,
+        365
+      ],
+      "stage2": [
+        414,
+        414
+      ]
+    },
+    "missing_symbols": 0,
+    "model_calls": 0
+  },
+  "notes": [
+    "Gold, scorer, threshold, raw product questions, and limit=10 are unchanged.",
+    "All historical snapshots and r5d failure evidence remain byte-identical.",
+    "Sandbox was restored to 8/8 published+active after destructive PG tests.",
+    "No production 5432 access, held-out tuning, model preflight, or I4 action."
+  ],
+  "m5_declaration": "not_changed"
+}

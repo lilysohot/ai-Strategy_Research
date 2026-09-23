@@ -64,6 +64,7 @@ async def corpus_fetch(doc_id: str, locator: str) -> str:
     try:
         svc = get_service()
         evidence = svc.fetch_verbatim(doc_id, locator)
+        semantic_cells = svc.emit_cells(evidence)
     except Exception as exc:
         return json.dumps(
             {"ok": False, "error": f"取证失败（句柄不可解析、跨 build 或来源已撤销）：{exc}"},
@@ -90,6 +91,16 @@ async def corpus_fetch(doc_id: str, locator: str) -> str:
                     "cells": [list(cell) for cell in unit.cells],
                 }
                 for unit in evidence.units
+            ],
+            "semantic_cells": [
+                {
+                    "unit_id": cell.unit_id,
+                    "page": cell.page,
+                    "row": cell.row,
+                    "col": cell.col,
+                    "text": cell.text,
+                }
+                for cell in semantic_cells
             ],
             # 权威原文 code point 区间（§4.2，来自 corpus_chunks.source_ranges）
             "source_ranges": [list(span) for span in evidence.source_ranges],

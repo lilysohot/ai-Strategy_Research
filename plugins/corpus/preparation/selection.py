@@ -55,6 +55,9 @@ class _RankedHit(Protocol):
     @property
     def label_path(self) -> tuple[str, ...]: ...
 
+    @property
+    def page(self) -> int | None: ...
+
 
 @dataclass(frozen=True)
 class SelectionPolicy:
@@ -252,6 +255,36 @@ def _cap_split(
     return out
 
 
+def _merge_same_page_bands(
+    bands: list[dict],
+    page_by_pos: Mapping[int, int | None],
+    *,
+    max_width: int,
+    pool_cap: int,
+) -> list[dict]:
+    """Merge sparse PDF hits on one page without weakening the global width bound."""
+    merged: list[dict] = []
+    for original in bands:
+        band = dict(original)
+        pages = {page_by_pos.get(position) for position in band["pool"]}
+        page = next(iter(pages)) if len(pages) == 1 else None
+        if (
+            page is not None
+            and merged
+            and merged[-1].get("page") == page
+            and band["end"] - merged[-1]["start"] + 1 <= max_width
+            and len(merged[-1]["pool"]) + len(band["pool"]) <= pool_cap
+        ):
+            previous = merged[-1]
+            previous["end"] = band["end"]
+            previous["score"] = max(previous["score"], band["score"])
+            previous["pool"] = sorted({*previous["pool"], *band["pool"]})
+            continue
+        band["page"] = page
+        merged.append(band)
+    return merged
+
+
 def _rank_bands(bands: list[dict]) -> dict[int, int]:
     """带分降序排名（并列按带起点）；返回 {带在 bands 中的索引: 排名(1-based)}。"""
     order = sorted(range(len(bands)), key=lambda i: (-bands[i]["score"], bands[i]["start"]))
@@ -304,8 +337,15 @@ def select_band(
             raise SelectionError(f"{source_id} 命中块不在原文序清单: {missing[:3]}")
         pool_positions = sorted({pos_of[h.chunk_id] for h in bucket})
         score_by_pos = {pos_of[h.chunk_id]: h.score for h in bucket}
+        page_by_pos = {pos_of[h.chunk_id]: getattr(h, "page", None) for h in bucket}
         bands = _form_bands(pool_positions, score_by_pos, len(ordered), band.gap, band.expand)
         bands = _cap_split(bands, score_by_pos, len(ordered), band.pool_cap, band.expand)
+        bands = _merge_same_page_bands(
+            bands,
+            page_by_pos,
+            max_width=band.provable_width_bound,
+            pool_cap=band.pool_cap,
+        )
         ranking = _rank_bands(bands)
         for index in sorted(
             (i for i, rank in ranking.items() if rank <= band.band_cap),

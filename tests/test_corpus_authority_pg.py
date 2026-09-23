@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
 import json
 import os
 from datetime import UTC, datetime
@@ -235,6 +236,45 @@ def test_all_consumers_read_same_authoritative_units(
     )
     assert payload["text"] == ground_truth
     assert payload["build_id"] == build_id
+
+
+def test_product_search_recalls_natural_question_with_unmatched_terms(
+    store: PgStore, service: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The registered tool rewrites a natural question into a broad candidate query."""
+    build_id = sha256_of_bytes(b"i2s6:build:natural-query")
+    chunk_id = _publish(store, build_id=build_id)
+    module = importlib.import_module("plugins.tools.corpus_search")
+    monkeypatch.setattr(module, "get_service", lambda: service)
+
+    payload = json.loads(
+        asyncio.run(corpus_search.ainvoke({"query": "石英与不存在术语分别是什么？", "limit": 10}))
+    )
+
+    assert payload["ok"] is True
+    assert payload["count"] == 1
+    assert payload["hits"][0]["chunk_id"] == chunk_id
+    assert payload["hits"][0]["context_locators"] == [f"chunk:{chunk_id}"]
+
+
+def test_product_search_abstains_for_missing_corpus_fact(
+    store: PgStore, service: CorpusService, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An explicit corpus-availability question with no strict match returns no evidence."""
+    build_id = sha256_of_bytes(b"i2s6:build:negative-query")
+    _publish(store, build_id=build_id)
+    module = importlib.import_module("plugins.tools.corpus_search")
+    monkeypatch.setattr(module, "get_service", lambda: service)
+
+    payload = json.loads(
+        asyncio.run(corpus_search.ainvoke({"query": "这些报告是否提供经审计利润？", "limit": 10}))
+    )
+
+    assert payload["ok"] is True
+    assert payload["count"] == 0
+    assert payload["hits"] == []
+    assert payload["abstain"] is True
+    assert payload["coverage"]["query_status"] == "abstain"
 
 
 # ── 2. 坏哈希 / 篡改正文：同一 Interface 拒绝 ──────────────────

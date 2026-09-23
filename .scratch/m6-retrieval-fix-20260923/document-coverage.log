@@ -1,0 +1,30 @@
+{"id": "company-001", "kind": "answerable", "best": ["2026-08-16_6f14cc14", 9, 9, 1.0], "relevant": ["2026-08-16_6f14cc14", 9, 9, 1.0], "best_missing": []}
+{"id": "company-002", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 7, 8, 0.875], "relevant": ["2026-08-16_6f14cc14", 5, 8, 0.625], "best_missing": ["贵州茅台"]}
+{"id": "company-003", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 13, 13, 1.0], "relevant": ["2026-09-06_dddc7cd0", 13, 13, 1.0], "best_missing": []}
+{"id": "company-004", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 9, 9, 1.0], "relevant": ["2026-09-06_dddc7cd0", 9, 9, 1.0], "best_missing": []}
+{"id": "company-005", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 7, 9, 0.778], "relevant": ["2026-09-06_dddc7cd0", 7, 9, 0.778], "best_missing": ["区别", "商业化"]}
+{"id": "company-006", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 10, 10, 1.0], "relevant": ["2026-09-06_dddc7cd0", 10, 10, 1.0], "best_missing": []}
+{"id": "company-007", "kind": "answerable", "best": ["2026-08-16_6f14cc14", 8, 9, 0.889], "relevant": ["2026-08-16_6f14cc14", 8, 9, 0.889], "best_missing": ["持股"]}
+{"id": "company-008", "kind": "answerable", "best": ["2026-09-06_dddc7cd0", 8, 11, 0.727], "relevant": ["2026-09-06_dddc7cd0", 8, 11, 0.727], "best_missing": ["和光", "贵州茅台", "还是"]}
+{"id": "company-009", "kind": "no_answer", "best": ["2026-09-06_dddc7cd0", 5, 8, 0.625], "relevant": null, "best_missing": ["不是", "经审", "预测值"]}
+{"id": "company-010", "kind": "no_answer", "best": ["2026-09-06_dddc7cd0", 6, 8, 0.75], "relevant": null, "best_missing": ["唯一", "序列号"]}
+{"id": "industry-001", "kind": "answerable", "best": ["2026-08-13_174b6462", 9, 9, 1.0], "relevant": ["2026-08-13_174b6462", 9, 9, 1.0], "best_missing": []}
+{"id": "industry-002", "kind": "answerable", "best": ["2026-08-13_174b6462", 6, 7, 0.857], "relevant": ["2026-08-13_174b6462", 6, 7, 0.857], "best_missing": ["口径"]}
+{"id": "industry-003", "kind": "answerable", "best": ["2026-08-13_174b6462", 4, 4, 1.0], "relevant": ["2026-08-13_174b6462", 4, 4, 1.0], "best_missing": []}
+{"id": "industry-004", "kind": "answerable", "best": ["2026-08-13_174b6462", 8, 9, 0.889], "relevant": ["2026-08-13_174b6462", 8, 9, 0.889], "best_missing": ["窗口"]}
+{"id": "industry-005", "kind": "answerable", "best": ["2026-09-06_f8e31696", 6, 7, 0.857], "relevant": ["2026-09-06_f8e31696", 6, 7, 0.857], "best_missing": ["日新"]}
+{"id": "industry-006", "kind": "answerable", "best": ["2026-09-06_f8e31696", 9, 12, 0.75], "relevant": ["2026-09-06_f8e31696", 9, 12, 0.75], "best_missing": ["描述", "用途", "福新"]}
+{"id": "industry-007", "kind": "answerable", "best": ["2026-09-06_f8e31696", 7, 9, 0.778], "relevant": ["2026-09-06_f8e31696", 7, 9, 0.778], "best_missing": ["收盘", "点位"]}
+{"id": "industry-008", "kind": "answerable", "best": ["2026-08-13_174b6462", 9, 12, 0.75], "relevant": ["2026-08-13_174b6462", 9, 12, 0.75], "best_missing": ["同一", "周报", "氩气"]}
+{"id": "industry-009", "kind": "no_answer", "best": ["2026-08-13_174b6462", 4, 6, 0.667], "relevant": null, "best_missing": ["全年", "氩气"]}
+{"id": "industry-010", "kind": "no_answer", "best": ["2026-09-06_f8e31696", 4, 7, 0.571], "relevant": null, "best_missing": ["吨数", "确切", "采购"]}
+{"id": "macro-001", "kind": "answerable", "best": ["2026-09-06_793b3967", 9, 9, 1.0], "relevant": ["2026-09-06_793b3967", 9, 9, 1.0], "best_missing": []}
+{"id": "macro-002", "kind": "answerable", "best": ["2026-09-06_793b3967", 7, 8, 0.875], "relevant": ["2026-09-06_793b3967", 7, 8, 0.875], "best_missing": ["对应"]}
+{"id": "macro-003", "kind": "answerable", "best": ["2026-09-06_793b3967", 8, 13, 0.615], "relevant": ["2026-09-06_793b3967", 8, 13, 0.615], "best_missing": ["依赖", "政策", "条件", "等于", "落地"]}
+{"id": "macro-004", "kind": "answerable", "best": ["2026-08-13_174b6462", 7, 8, 0.875], "relevant": ["2026-09-06_cc03f55b", 7, 8, 0.875], "best_missing": ["路径"]}
+{"id": "macro-005", "kind": "answerable", "best": ["2026-09-06_cc03f55b", 9, 10, 0.9], "relevant": ["2026-09-06_cc03f55b", 9, 10, 0.9], "best_missing": ["指出"]}
+{"id": "macro-006", "kind": "answerable", "best": ["2026-09-06_cc03f55b", 10, 10, 1.0], "relevant": ["2026-09-06_cc03f55b", 10, 10, 1.0], "best_missing": []}
+{"id": "macro-007", "kind": "answerable", "best": ["2026-08-13_174b6462", 10, 13, 0.769], "relevant": ["2026-09-06_cc03f55b", 10, 13, 0.769], "best_missing": ["倾向", "居民", "支出"]}
+{"id": "macro-008", "kind": "answerable", "best": ["2026-09-06_cc03f55b", 9, 10, 0.9], "relevant": ["2026-09-06_cc03f55b", 9, 10, 0.9], "best_missing": ["局限"]}
+{"id": "macro-009", "kind": "no_answer", "best": ["2026-09-06_cc03f55b", 5, 7, 0.714], "relevant": null, "best_missing": ["正式", "美联储"]}
+{"id": "macro-010", "kind": "no_answer", "best": ["2026-09-06_cc03f55b", 5, 8, 0.625], "relevant": null, "best_missing": ["2026q2", "明细", "每户"]}

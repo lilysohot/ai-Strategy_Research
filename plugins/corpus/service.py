@@ -108,10 +108,9 @@ logger = logging.getLogger(__name__)
 # 拒绝非 i2_sandbox_corpus 实例）。旧 documents/blocks 直写分支在本文件退役。
 _I2_SANDBOX_DB = "i2_sandbox_corpus"
 
-#: 生产检索候选池下限（R3 闭环）：选择策略需要足够大的候选池才能生效——
-#: ``top_k 来源 × max_chunks_per_document 块`` = 5×8。池取 ``max(limit, 40)``，
-#: 选择后仍截断到调用方 ``limit``（limit 语义 = 返回条数上限，不变）。
-_SELECTION_POOL_MIN = 40
+#: 生产检索候选池下限：先给最多五个来源各留 40 个候选，再执行有界 band 选择；
+#: 公共 ``limit`` 仍只约束返回的来源锚点数量，完整证据区通过 context locators 暴露。
+_SELECTION_POOL_MIN = 200
 _I2_ARCHIVE_ROOT = Path(__file__).resolve().parents[2] / "data" / "corpus-archive"
 
 #: B2 abstain 拒检通道：DB 级 websearch AND 预检的候选上限（F1 回测同口径，覆盖
@@ -190,6 +189,7 @@ class SearchHit:
     source_id: str = ""
     build_id: str = ""
     chunk_id: str = ""
+    context_locators: tuple[str, ...] = ()
 
 
 @dataclass
@@ -927,11 +927,12 @@ class CorpusService:
         有实质答案的单元在 AND 收紧下仍含全部内容词元、score 高且必在候选池内 →
         判定 False，产品查询路径原样返回（结构性保护 S1，不改查询路径、不改排序）。
 
-        开关 ``CORPUS_ABSTAIN_NO_ANSWER``（on|off，默认 off）：off 恒返回 False，
-        :meth:`search_with_coverage` 逐字节不变。非法值 fail-closed 抛
-        :class:`StoreError`（镜像 :meth:`read_chain` 惯例）。仅作用于新链。
+        开关 ``CORPUS_ABSTAIN_NO_ANSWER``（on|off，默认 on）：仅当题面明确询问
+        “这些材料/报告是否提供某项事实”时进入严格证据存在性检查；普通研究问题
+        直接放行。off 可整体回滚该检查。非法值 fail-closed 抛 :class:`StoreError`
+        （镜像 :meth:`read_chain` 惯例）。仅作用于新链。
         """
-        cfg = os.environ.get("CORPUS_ABSTAIN_NO_ANSWER", "off").strip().lower()
+        cfg = os.environ.get("CORPUS_ABSTAIN_NO_ANSWER", "on").strip().lower()
         if cfg not in ("on", "off"):
             raise StoreError(f"拒绝：CORPUS_ABSTAIN_NO_ANSWER 取值非法: {cfg!r}（须 on|off）")
         if cfg != "on" or self.read_chain() != "new":
@@ -940,9 +941,12 @@ class CorpusService:
             abstain_content_lexemes,
             abstain_no_answer_query,
             is_abstain_candidate,
+            is_corpus_availability_query,
         )
         from plugins.corpus.preparation.search_pg import query_lexemes, search_chunks
 
+        if not is_corpus_availability_query(query):
+            return False
         lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
         if not abstain_content_lexemes(lexemes):
             return False
@@ -971,6 +975,60 @@ class CorpusService:
                 return False
         return True
 
+    def _selected_context_hits(
+        self,
+        raw_hits: tuple[SearchPgHit, ...],
+        chunk_order_by_source: Mapping[str, tuple[str, ...]],
+        limit: int,
+    ) -> tuple[SearchPgHit, ...]:
+        """Return one anchor per source plus all bounded selected-band locators.
+
+        The public ``limit`` continues to bound returned hits. Context locators
+        are provenance-only handles selected by the fixed five-source/eight-band
+        policy; they carry no snippet text and must be fetched through authority.
+        """
+        from dataclasses import replace as dataclass_replace
+
+        from plugins.corpus.preparation.selection import BandPolicy, SelectionPolicy, select_band
+
+        if not raw_hits:
+            return ()
+        policy = SelectionPolicy(top_k=min(SelectionPolicy().top_k, limit))
+        bands = select_band(
+            raw_hits,
+            policy,
+            BandPolicy(),
+            chunk_order_by_source=chunk_order_by_source,
+        )
+        by_source: dict[str, list[SelectedBand]] = {}
+        order: list[str] = []
+        for band in bands:
+            if band.source_id not in by_source:
+                by_source[band.source_id] = []
+                order.append(band.source_id)
+            by_source[band.source_id].append(band)
+        by_key = {(hit.build_id, hit.chunk_id): hit for hit in raw_hits}
+        selected: list[SearchPgHit] = []
+        for source_id in order:
+            source_bands = by_source[source_id]
+            build_id = source_bands[0].build_id
+            ordered = chunk_order_by_source[source_id]
+            positions = sorted(
+                {position for band in source_bands for position in range(band.start, band.end + 1)}
+            )
+            pool_positions = {position for band in source_bands for position in band.pool}
+            anchors = [
+                by_key[(build_id, ordered[position])]
+                for position in pool_positions
+                if (build_id, ordered[position]) in by_key
+            ]
+            if not anchors:
+                continue
+            anchor = max(anchors, key=lambda hit: (hit.score, hit.chunk_id))
+            context_ids = tuple(ordered[position] for position in positions)
+            selected.append(dataclass_replace(anchor, context_chunk_ids=context_ids))
+        return tuple(selected[:limit])
+
     def search_with_coverage(
         self, query: str, *, limit: int = 10
     ) -> tuple[list[SearchHit], dict[str, object]]:
@@ -988,10 +1046,17 @@ class CorpusService:
             hits = self.search(query, limit=limit)
             return hits, self.coverage(query_status="matched" if hits else "no_match")
         from plugins.corpus.preparation import read_pg
+        from plugins.corpus.preparation.negative_query import retrieval_query
+        from plugins.corpus.preparation.search_pg import query_lexemes
+
+        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
+        candidate_query = retrieval_query(lexemes)
+        if not candidate_query:
+            candidate_query = query
 
         raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
             self._dsn,
-            query,
+            candidate_query,
             limit=max(limit, _SELECTION_POOL_MIN),
             sandbox_db=_I2_SANDBOX_DB,
         )
@@ -1004,7 +1069,7 @@ class CorpusService:
             abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
             return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-        raw_hits = self._selected_chunk_hits(raw_hits, chunk_order, limit)
+        raw_hits = self._selected_context_hits(raw_hits, chunk_order, limit)
         return (
             [
                 SearchHit(
@@ -1018,6 +1083,9 @@ class CorpusService:
                     source_id=hit.source_id,
                     build_id=hit.build_id,
                     chunk_id=hit.chunk_id,
+                    context_locators=tuple(
+                        read_pg.chunk_locator(chunk_id) for chunk_id in hit.context_chunk_ids
+                    ),
                 )
                 for hit in raw_hits
             ],
@@ -1174,6 +1242,15 @@ class CorpusService:
                 )
             )
         return tuple(out)
+
+    def emit_cells(self, chunk: ChunkEvidence) -> tuple[EmittedCell, ...]:
+        """Expose verified structural cell labels for a fetched authority chunk.
+
+        The derivation remains the same fail-closed grid projection used by band
+        retrieval.  Callers receive no label when the authoritative cell grid is
+        incomplete or ambiguous.
+        """
+        return self._emit_cells(chunk)
 
     def _assemble_band_documents(
         self,

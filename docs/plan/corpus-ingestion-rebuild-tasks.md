@@ -14,6 +14,19 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-09-23 M6 产品门整改（i0c-r5e）：检索召回、证据完整性与负例拒答已通过。**
+沿用冻结 30 题、金标、评分器、95% 阈值、原始题干和 `limit=10`，真实注册
+`corpus_search` → `corpus_fetch` 链路为 QuestionPass **24/24**、EvidencePass
+**24/24**、6 个无答案负例 **0 误报**、工具失败 0。修复内容包括：自然问题实质词元
+OR 候选、来源标题召回与每来源候选上限、同页有界 band 合并、按权威原文序暴露
+`context_locators`、cell 对 `unit_id` 的 span 级校验，以及仅对明确语料可用性询问启用的
+默认拒答门。金标、评分器、阈值和活动语料均未为结果改写；零模型调用。
+真库回归 12 passed，重建后 8/8 published+active；全仓 **2961 passed / 2 个既有失败 /
+17 skipped**，CI 范围 ruff、pyright、两阶段 import smoke、symbol closure 均通过。
+本次 r5e 取代 r5d 的“产品门未通过”当前结论；r5d 及更早记录保留为历史失败证据。
+详见[整改报告](../../.scratch/m6-retrieval-fix-20260923/report.md)和
+[机器可读结果](../../.scratch/m6-retrieval-fix-20260923/product-summary.json)。
+
 **2026-09-23 M6 复核整改（i0c-r5d）：三项实现缺陷已修复，当前产品验收未通过。**
 补充证据单元已强制校验内容哈希；正式 `corpus_fetch` 与 band 读取在同一只读快照内使用
 共同的上下文装配，原先缺失的 4 个证据目标均已取回；新版观测采集器逐题调用真实注册

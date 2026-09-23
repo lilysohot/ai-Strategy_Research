@@ -1,15 +1,14 @@
-"""I-RANK-1（c′/i0c-r4v）：排序信号剔除功能词与标点——候选池不变、只有 score 变。
+"""I-RANK-1（c′/i0c-r4v）：排序信号、来源标题召回与来源内候选上限。
 
 门（c3w-rollout-plan §5；新文件落位，避开 r5/r6 绑定的 test_corpus_search.py）：
 
-- 候选池不变（I-1）：``WHERE search_tsv @@ q.tsq`` 恒用全词元——SQL 静态断言 +
+- rank_query 不改变候选池（I-1）：chunk/来源标题候选恒用全词元——SQL 静态断言 +
   真库只读对比（rank_query 变化不改变命中集合，limit=2000 覆盖全池）；
 - score 只由实词决定：纯 SELECT 表达式（corpus schema 零写入）——仅命中虚词的
   合成块 score=0 但仍在候选集（@@ 全词元 tsq 为真）；
 - 标点剔除 / 空兜底：``is_punct_lexeme`` / ``rank_lexemes`` 单元门（全为功能词/
   标点时回退原词元，fail-closed）；
-- tie-break 不变（I-2）：``ORDER BY score DESC, c.build_id, c.chunk_id`` 静态断言 +
-  真库命中序 = (-score, build_id, chunk_id)；
+- 来源内候选最多 40 个，最终顺序按来源最高分、块分、build/chunk 稳定键排列；
 - 开关回滚：``RANK_LEXEME_PRUNE=False`` ⇒ 注入的 rank_query == query，且结果与
   显式 ``rank_query=query`` 逐字段一致（SearchHit 冻结 dataclass 逐字段相等）。
 
@@ -71,13 +70,20 @@ def test_rank_lexemes_fallback_when_all_pruned():
 
 
 def test_search_sql_wiring_candidate_pool_vs_score():
-    """SQL 接线：候选池/ts_headline 用全词元 tsq（I-1）；score 单独用 tsq_rank，tie-break 不变（I-2）。"""
+    """SQL wires chunk/title recall, per-source bounds, and stable ranking separately."""
     sql = search_pg._SEARCH_SQL
-    assert "JOIN corpus.corpus_chunks AS c ON c.search_tsv @@ q.tsq" in sql
+    assert "JOIN corpus.corpus_chunks AS c ON true" in sql
+    assert "JOIN corpus.corpus_publications AS p ON p.active_build_id = c.build_id" in sql
+    assert "JOIN corpus.corpus_sources AS s ON s.source_id = p.source_id" in sql
+    assert "WHERE (c.search_tsv @@ q.tsq" in sql
+    assert "array_to_string(s.original_names, ' ')) @@ q.tsq" in sql
     assert "ts_headline('zhcfg', c.search_text, q.tsq," in sql
-    assert "ts_rank(c.search_tsv, q.tsq_rank) AS score" in sql
+    assert "ts_rank(c.search_tsv, q.tsq_rank)" in sql
+    assert "+ 2 * ts_rank(to_tsvector" in sql
     assert "websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank" in sql
-    assert "ORDER BY score DESC, c.build_id, c.chunk_id" in sql
+    assert "row_number() OVER (PARTITION BY source_id" in sql
+    assert "WHERE source_position <= 40" in sql
+    assert "ORDER BY source_score DESC, score DESC, build_id, chunk_id" in sql
 
 
 def test_build_search_params_rank_query_key():
@@ -139,10 +145,14 @@ def test_function_only_match_scores_zero_but_stays_in_pool():
 
 @requires_db
 def test_tie_break_order_live():
-    """I-2 真库门：命中序 = (-score, build_id, chunk_id)（tie-break 与 base 一致）。"""
+    """真库门：命中序按来源最高分、块分和稳定句柄排列。"""
     hits = search_pg.search_chunks(DSN, POOL_QUERY, limit=50)
     assert len(hits) > 1  # 门有效性：多命中才检验排序
-    keys = [(-h.score, h.build_id, h.chunk_id) for h in hits]
+    source_scores = {
+        source_id: max(hit.score for hit in hits if hit.source_id == source_id)
+        for source_id in {hit.source_id for hit in hits}
+    }
+    keys = [(-source_scores[h.source_id], -h.score, h.build_id, h.chunk_id) for h in hits]
     assert keys == sorted(keys)
 
 

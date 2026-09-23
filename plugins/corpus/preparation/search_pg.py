@@ -15,9 +15,9 @@ zhcfg 或索引文本规则升级必须换新 index_rev 全量重建（新 build
 本模块只服务活动版本，不感知历史分词版本。
 
 排序信号（c′/i0c-r4v）：``score`` 列按**实词词元**计算（``negative_query.rank_lexemes``
-剔除功能词/标点，``RANK_LEXEME_PRUNE`` 开关可整体回退）；候选池（``WHERE search_tsv
-@@ q.tsq``）、``ORDER BY`` tie-break 与 ``ts_headline`` 仍用全词元查询串——候选池不
-收缩（I-1）、只有 score 变（I-2）。
+剔除功能词/标点，``RANK_LEXEME_PRUNE`` 开关可整体回退）。候选来自 chunk 全文或来源
+原名，来源内最多保留 40 个候选，再按来源最高分和块分排序；``ts_headline`` 仍只展示
+chunk 的截断文本。
 
 目标 fail-closed：与 :class:`PgStore` 同纪律——``current_database`` 必须等于隔离库；
 目标实例含 ``apodex`` 库即判定为生产实例并拒绝（读侧同样不允许触碰生产库）。
@@ -45,35 +45,48 @@ _SANDBOX_DB = "i2_sandbox_corpus"
 # False ⇒ rank_query 退化为 query 本身，行为与 base 逐字段一致（两级回滚的代码级开关）。
 RANK_LEXEME_PRUNE = True
 
-# 检索纪律（C13）：q（tsquery）→ GIN 候选（search_tsv @@ tsq）→ INNER JOIN
+# 检索纪律（C13）：q（tsquery）→ chunk 全文/来源原名候选 → INNER JOIN
 # publications.active_build_id 收敛到活动范围 → admissions 供领域/发布日期过滤
-# → ts_rank 排名。ISO 文本序=时序（report_publication.value 为 ISO 日期文本）。
-# 候选池（@@ q.tsq）恒用全词元；score 列单独用 q.tsq_rank（实词，c′）——
-# I-1 候选池不收缩、I-2 只有 score 变（tie-break/ts_headline 均保持全词元侧）。
+# → 来源内截断 → ts_rank 排名。ISO 文本序=时序（report_publication.value 为 ISO 日期文本）。
+# score 用 q.tsq_rank（实词，c′）；来源原名权重用于把明确点名的文档拉入有界候选池。
 _SEARCH_SQL = """
-SELECT p.source_id,
-       c.build_id,
-       c.chunk_id,
-       c.kind,
-       c.title_text,
-       c.section_path,
-       c.unit_refs,
-       ts_rank(c.search_tsv, q.tsq_rank) AS score,
-       ts_headline('zhcfg', c.search_text, q.tsq,
-                   'MaxWords=28, MinWords=8, ShortWord=1') AS snippet,
-       a.metadata_snapshot->'report_publication'->>'value' AS published
-FROM (SELECT websearch_to_tsquery('zhcfg', %(query)s)      AS tsq,
-             websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank) AS q
-JOIN corpus.corpus_chunks AS c ON c.search_tsv @@ q.tsq
-JOIN corpus.corpus_builds AS b ON b.build_id = c.build_id
-JOIN corpus.corpus_publications AS p ON p.active_build_id = c.build_id
-JOIN corpus.corpus_admissions AS a ON a.decision_id = b.decision_id
-WHERE (%(domain)s::text IS NULL OR a.research_domain = %(domain)s)
-  AND (%(date_from)s::text IS NULL
-       OR a.metadata_snapshot->'report_publication'->>'value' >= %(date_from)s)
-  AND (%(date_to)s::text IS NULL
-       OR a.metadata_snapshot->'report_publication'->>'value' <= %(date_to)s)
-ORDER BY score DESC, c.build_id, c.chunk_id
+WITH q AS (
+  SELECT websearch_to_tsquery('zhcfg', %(query)s) AS tsq,
+         websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank
+), matches AS (
+  SELECT p.source_id, c.build_id, c.chunk_id, c.kind, c.title_text, c.section_path,
+         c.unit_refs,
+         (ts_rank(c.search_tsv, q.tsq_rank)
+          + 2 * ts_rank(to_tsvector('zhcfg', array_to_string(s.original_names, ' ')),
+                        q.tsq_rank)) AS score,
+         ts_headline('zhcfg', c.search_text, q.tsq,
+                     'MaxWords=28, MinWords=8, ShortWord=1') AS snippet,
+         a.metadata_snapshot->'report_publication'->>'value' AS published
+  FROM q
+  JOIN corpus.corpus_chunks AS c ON true
+  JOIN corpus.corpus_builds AS b ON b.build_id = c.build_id
+  JOIN corpus.corpus_publications AS p ON p.active_build_id = c.build_id
+  JOIN corpus.corpus_sources AS s ON s.source_id = p.source_id
+  JOIN corpus.corpus_admissions AS a ON a.decision_id = b.decision_id
+  WHERE (c.search_tsv @@ q.tsq
+         OR to_tsvector('zhcfg', array_to_string(s.original_names, ' ')) @@ q.tsq)
+    AND (%(domain)s::text IS NULL OR a.research_domain = %(domain)s)
+    AND (%(date_from)s::text IS NULL
+         OR a.metadata_snapshot->'report_publication'->>'value' >= %(date_from)s)
+    AND (%(date_to)s::text IS NULL
+         OR a.metadata_snapshot->'report_publication'->>'value' <= %(date_to)s)
+), ranked AS (
+  SELECT matches.*,
+         max(score) OVER (PARTITION BY source_id) AS source_score,
+         row_number() OVER (PARTITION BY source_id
+                            ORDER BY score DESC, build_id, chunk_id) AS source_position
+  FROM matches
+)
+SELECT source_id, build_id, chunk_id, kind, title_text, section_path, unit_refs,
+       score, snippet, published
+FROM ranked
+WHERE source_position <= 40
+ORDER BY source_score DESC, score DESC, build_id, chunk_id
 LIMIT %(limit)s
 """
 
@@ -105,6 +118,8 @@ class SearchHit:
     cells: tuple[tuple[int, int], ...] = ()
     #: 结构标签路径去重合并（I-B1 索引文本的消费侧投影，结构重叠信号的输入）。
     label_path: tuple[str, ...] = ()
+    #: Ordered authority chunks in the selected document evidence regions.
+    context_chunk_ids: tuple[str, ...] = ()
 
 
 _UNITS_LOCATION_SQL = """
