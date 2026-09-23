@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | **v1.4 · 技术实现参考**（产品范围与状态已归并到产品需求基线） |
+| 版本 / 状态 | **v1.5 · 技术实现参考**（产品范围与状态已归并到产品需求基线） |
 | 上游文档 | [product-requirements.md](./product-requirements.md)（唯一产品需求真源）· [business-process.md](./business-process.md)（业务流程真源） |
 | 验证物 | `server/spike.py` + `server/verify_spike.py`——A1–A7 门禁，退出码即结论；见 [plan.md](./plan/plan.md#m05-链路验证spike) |
 | 既定决策 | 业务数据库 = PostgreSQL 16；**语料库 = 独立 PostgreSQL 18.6 实例（zhparser，见 §3.1）**；部署 = Docker Compose；代码组织 = 仓库内延续（monorepo）；**沙箱后端 = `native`** |
@@ -15,6 +15,8 @@
 > 4. **`on_tool_call` 不是 OpenAI 线格式**——扁平 `{id, name, args}` 且此刻 `args` 为空，参数摘要须取 trajectory（§5.2）。
 >
 > **v1.4 文档归并**：需求、业务流程与技术实现分开维护；并按当前代码修正 Web 控制通道、市场数据源和工具暴露状态。
+> **v1.5 上下文收口**：明确语料检索、用户投资约束、市场观测和对话历史是四条独立通道；
+> 当前协议与入口状态见 [资料库检索与 Agent 上下文接线](corpus-retrieval.md)。
 > **v1.3 变更**：新增 **§3.1 语料数据层** 与 **ADR 13–15**——语料库由 SQLite 迁至**独立
 > PostgreSQL 18.6 实例**（zhparser 中文全文 + pgvector 留位 + psycopg 3），并记录排序校准结论。
 > 需求与实施细节见 [plan/pg-migration.md](./plan/pg-migration.md) v2.0。
@@ -106,6 +108,26 @@ api 容器 (frontier-web 镜像, FastAPI 单实例)
 
 > ⚠️ **版本分叉**：业务库 PG **16** vs 语料库 PG **18.6**。两者是**不同实例**，无需对齐版本；
 > 但部署、备份与升级文档必须分别标注，避免混淆（已列入 `pg-migration.md` §8 待办）。
+
+### 3.2 语料检索与业务上下文 seam
+
+语料库的深模块是 `CorpusService`；其对 Agent 的稳定界面是 `corpus_search` 和
+`corpus_fetch`。中文分词、`ts_rank`、标题加权、时效偏置及将来可能的向量融合都属于
+模块实现，不得泄漏成 Workflow 或 Web 的调用约定。
+
+在线运行不预先把全库注入 prompt：Agent 调用 `data_coverage → corpus_search → corpus_fetch`，
+`run_agent_loop` 把选中的工具结果追加为 ToolMessage。搜索 snippet 只用于定位，
+evidence 必须来自 fetch 的逐字原文。
+
+结构化投资约束不属于该 seam。目标实现需新增一个小界面：
+
+```python
+InvestmentContextResolver.resolve(user_id, run_id) -> InvestmentContext
+```
+
+该模块隐藏投资计划、实际持仓/成交、用户默认值与 Run 快照的优先级和版本化逻辑，
+只向 Workflow 返回已校验、可回放的 `investment_context` 和缺失字段清单。当前代码尚无该模块；
+`Run.prompt` 和 Turn 对话不能作为替代实现。
 
 ## 4. 运行时链路（M0.5 spike 实测逐段验证）
 

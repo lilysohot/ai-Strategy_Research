@@ -1,6 +1,6 @@
 # 多源资料库接入 Harness 架构设计（Discord + IMA）
 
-> ⚠️ **施工状态：本文档是历史远期探索，不是当前需求、流程或施工依据。**
+> 🗃️ **文档分类：已归档的历史远期探索，不是当前需求、流程、检索现状或施工依据。**
 > 当时架构评审收敛范围是 **P0（投研内核 + 最小资料库）**，
 > 历史规格见 **[p0-implementation-spec.md](p0-implementation-spec.md)**。
 > 本文档中以下部分**已推后至 P1 及以后**：Discord / IMA 接入、向量检索、信号层与
@@ -9,6 +9,8 @@
 > 当前产品状态与目标流程分别见 [product-requirements.md](product-requirements.md) 和
 > [business-process.md](business-process.md)；当前语料存储见
 > [plan/data-layer-architecture.md](plan/data-layer-architecture.md)。
+> 当前 Agent 检索协议、PostgreSQL 排序、非向量现状与 Web 接线结论统一见
+> [资料库检索与 Agent 上下文接线](corpus-retrieval.md)。
 > 2026-09-15：本轮新目标唯一候选见[重构草案 v1.1](plan/corpus-ingestion-rebuild-architecture.md)，
 > I0 复核后才冻结；本文不恢复向量、模型调用或全量入库授权，也不作为平行施工方案。
 

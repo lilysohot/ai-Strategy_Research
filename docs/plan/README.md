@@ -35,8 +35,8 @@
 这些文档可解释设计演进，但其“当前状态”和优先级不得覆盖产品需求基线：
 
 - [早期 Web 平台里程碑](plan.md)：M0–M3 历史台账；M4 已迁移到新需求和闭环计划。
-- [P0 投研内核](p0-research-kernel.md)：早期最小资料库验收记录。
-- [P1 语料规模化](p1-corpus-scaleup.md) 与 [每日增量](p1-daily-incremental.md)：后续数据运营输入，部分状态已被实际实施超越。
+- [P0 投研内核](p0-research-kernel.md)：早期最小资料库验收记录；页内进度为当时快照，已停止维护。
+- [P1 语料规模化](p1-corpus-scaleup.md) 与 [每日增量](p1-daily-incremental.md)：历史数据运营输入，页内待办与状态不再维护。
 - [投研双数据链路优化报告](research-data-closed-loop-optimization-report.md)：形成闭环计划前的评审输入。
 - [Web 语料库接入方案](web-corpus-integration.md)：产品诉求已归并到 `PR-DATA-04`，原状态不再作为现状判断。
 

@@ -2,7 +2,21 @@
 
 > 起草日期：2026-09-10
 > 目标来源：用户提出「网页端用户在进行交易策略时，也能够用上现在构建的资料库」
-> 状态：**待评审**（尚未动手实现）
+> 状态：**历史需求输入，不再作为现状或待办真源**
+>
+> 2026-09-23 整理：产品需求已归并到
+> [PR-DATA-04](../product-requirements.md#44-语料市场与证据)，当前检索协议、入口状态和最小验收见
+> [资料库检索与 Agent 上下文接线](../corpus-retrieval.md)。本文以下的数量、连接问题和分阶段是起草时快照，
+> 不得不经代码复核直接施工。
+
+### 当前差异摘要
+
+| 起草时判断 | 2026-09-23 当前事实 |
+|---|---|
+| `.env.example` 无 `CORPUS_DSN` | 已补充 `CORPUS_DSN` 与组件式配置 |
+| Web Compose 不向 API 传语料库地址 | `deploy/docker-compose.yml` 已显式传入 `CORPUS_DSN` |
+| 唯一核心问题是网络/连接 | 当前主要断点是 Web `profile_overrides` 遮蔽 corpus/market/sizing/lint 工具，且 worker 未注入投研纪律 |
+| 证据面板可直接建在当时句柄上 | 当前句柄已进化为 `cv2:<build_id>` + `chunk:<chunk_id>`，必须以现行 fetch 契约实现 |
 
 ## 一、目标
 
@@ -53,11 +67,14 @@ agent_tools: [web_search, web_fetch, bash, grep_search, glob_search, add_task,
 | **不可溯源** | 策略卡的 evidence（`doc_id`/`locator`）只作为文本混在回复里 | 无法一键查看"这句话出自哪篇原文"，硬闸①的价值没体现在 UI |
 | **不可运维** | claim 抽取只能走 CLI（`extract-claims`） | 624 个候选块抽了多少、失败多少，网页一概不知 |
 
-### 2.4 连接层三个坑（前置，不做则后续全空）
+### 2.4 起草时的连接层问题（历史快照）
 
-1. **两个 compose 栈网络不通**：`deploy/docker-compose.yml` 只有 `frontend/caddy/api`、无任何数据库；`corpus-db` 在独立的 `docker/docker-compose.yml`。两个栈各建网络，`api` 容器连不到 `corpus-db`。
-2. **`localhost:5432` 是致命默认值**：`plugins/corpus/service.py` 的 `dsn()` 默认 `postgresql://postgres:postgres@localhost:5432/postgres`（注释说明依赖 WSL2 localhost 转发，只适用于本机开发）。容器内的 `localhost` 指向容器自身。且 `CORPUS_DSN` / `CORPUS_DB_PASSWORD` **未写进根 `.env.example`**（隐形配置）。
-3. **同步驱动 + 无连接池**：每次 `_connect()` 都 `psycopg.connect` 新建连接（`connect_timeout=10`），而 `api` 是 async（SQLAlchemy async engine + FastAPI）。网页列表/轮询会握满连接，且同步调用会堵塞事件循环。
+1. **Compose 路由**：当时两个栈不共网；现在 Web Compose 通过 `CORPUS_DSN_DOCKER`
+   默认指向 `host.docker.internal`。实际可达性仍须做启动健康检查，但不再是“必然不通”。
+2. **DSN 配置**：容器仍不得使用 `localhost` 连宿主库；但 `.env.example` 和 Web Compose
+   已有显式 `CORPUS_DSN` 通道，“隐形配置”判断已过时。
+3. **同步驱动**：`CorpusService` 仍是同步 psycopg 读路；Agent 调用发生在独立 worker 中，
+   而将来新增 FastAPI 语料列表/轮询路由时仍须解决连接池与事件循环阻塞。
 
 > 补充：业务库与语料库**无需统一**。`server/config.py` 的 `database_url` 默认 `sqlite+aiosqlite:///./server/dev.db`，与 corpus 的 PG 各司其职，二者不需要 join；正确做法是让 **api 进程同时持有两个连接**。
 

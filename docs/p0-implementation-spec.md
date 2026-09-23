@@ -7,6 +7,18 @@
 > 完整远期架构见 [corpus-ingestion-architecture.md](corpus-ingestion-architecture.md)——
 > **该文档中 Discord / IMA 接入、向量检索、信号层、跨源共振均不在 P0 范围，已推后**。
 > 原则：**P0 验证机制，不验证质量；但绝不产出无法溯源的数字。**
+> 当前检索与上下文接线见
+> [资料库检索与 Agent 上下文接线](corpus-retrieval.md)。
+
+| 本文历史表述 | 当前替代事实 |
+|---|---|
+| SQLite + FTS5 + jieba + BM25 | PostgreSQL 18.6 + zhparser + 校准后 `ts_rank` |
+| 本地库文件 | `CORPUS_DSN` 连接的独立语料库 |
+| P0a/P0b “待施工”或旧进度 | 仅是当时快照，不表示当前待办或完成状态 |
+| 前端表单“用 server 现成通道” | 当前尚无结构化 `investment_context`/`input_required` 契约 |
+
+> 本文中仓位算法、三条硬闸和缺参数必须追问的原则仍有效；
+> 存储、检索、部署与当前待办均不再从本文推导。
 
 ---
 

@@ -2,9 +2,10 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | **v1.4 · 产品级流程真源** |
-| 更新日期 | 2026-09-15 |
+| 版本 / 状态 | **v1.5 · 产品级流程真源** |
+| 更新日期 | 2026-09-23 |
 | 上游需求 | [product-requirements.md](product-requirements.md) |
+| 检索契约 | [corpus-retrieval.md](corpus-retrieval.md) |
 | 目的 | 区分已可执行流程与目标投研闭环，明确降级、证据和责任边界 |
 
 > 本文描述业务阶段与决策，不重复数据库、类或部署细节。当前能力以代码为准，目标能力必须先进入
@@ -89,6 +90,7 @@ flowchart TD
 | 会话、运行、SSE、停止、插话、审批 | 可用 | 可用 | 已闭合 |
 | 附件、产物、预览、下载、diff/revert | 可用 | 可用 | 已闭合 |
 | 语料、市场、覆盖、仓位、策略校验工具 | `tui` profile 可用 | 默认 Web profile 未暴露 | 入口未闭合 |
+| 结构化买入/仓位输入与 Run 快照 | 仅自然语言追问 | 无业务表单与快照 | 数据真源未建立 |
 | Claims 抽取与审计 | 离线可用 | 无用户查询入口 | 属数据治理，不是在线研究能力 |
 | 用量采集 | 可用 | 无聚合页面 | 数据有、产品入口缺 |
 
@@ -157,11 +159,41 @@ flowchart LR
 映射见[重构草案 §7.3](plan/corpus-ingestion-rebuild-architecture.md#73-准入处理覆盖查询结果三轴契约)，
 当前 `data_coverage` 实现没有因文档修订自动改变。
 
+### 3.4 精确业务上下文与语料检索分流
+
+用户输入的计划买入价、总资金、风险预算、当前持仓、仓位上限和持有时间窗是业务事实，
+不是研究语料。目标流程必须将它们与对话和 corpus 分开：
+
+```text
+网页/CLI 结构化输入
+→ 服务端校验标的、币种、单位、范围和计划/已成交状态
+→ 保存投资计划或实际持仓
+→ 创建 Run 时冻结版本化输入快照
+→ InvestmentContextResolver 按 user_id + run_id 精确查询
+→ 类型化 investment_context 进入 Workflow State
+→ 缺少必填字段时发出一次结构化 input_required
+→ 字段完整后调用行情、仓位和策略校验工具
+```
+
+当前 Web 只把 `prompt` 和 Turn 对话作为跨运行信号，上述结构化快照、Resolver 和
+`input_required` 事件尚未实现。在实现前，不得把“聊天里可能提到过”宣称为可靠的仓位召回。
+
+语料证据另走受控工具链：
+
+```text
+data_coverage → corpus_search（只定位）→ corpus_fetch（逐字原文）
+→ ToolMessage 进入当前 Agent 上下文 → evidence 校验
+```
+
+完整协议、现有检索算法和 CLI/TUI/Web 接线状态见
+[资料库检索与 Agent 上下文接线](corpus-retrieval.md)。
+
 ## 4. 目标证据到判断闭环（To-Be）
 
 ```mermaid
 flowchart TD
-    A[研究问题与输出用途] --> B[按用途选择必要来源]
+    A[研究问题与输出用途] --> A1[校验并冻结本次结构化投资约束]
+    A1 --> B[按用途选择必要来源]
     B --> C[研究材料：研报 / 电话会议 / 个人交易与复盘]
     B --> D[数据：用户确认的同花顺接口]
     C --> E[保留语境、表达者和原文定位]
@@ -219,12 +251,13 @@ flowchart TD
 **产品可用闭环**：在对应小范围业务验收通过后，还须满足以下入口与治理条件：
 
 1. Web 默认 Run 可通过真实工具注册链访问允许的 corpus、market 和策略工具。
-2. 每条市场 evidence 精确绑定本 Run 的一个逻辑调用，跨 Run、错误 ID 或篡改内容必然失败。
-3. 每个来源明确区分 `available/absent/unknown`，失败不再被归入无数据。
-4. 研报预测与市场实际只有在标的、指标、单位、期间、口径和 `known_at` 全部兼容时才比较。
-5. 市场统计、仓位和差值由确定性模块生成并可用相同输入重算。
-6. 产物同时通过 schema、证据和算术校验；失败时补证据、修正或明确降级。
-7. 后续复盘先定位是来源、抽取、映射、口径还是判断问题，只有人工确认后的系统性问题才能修改全局规则。
+2. 用户输入的计划、实际持仓/成交和 Agent 策略分开存储；每个 Run 使用可回放的 `investment_context` 快照。
+3. 每条市场 evidence 精确绑定本 Run 的一个逻辑调用，跨 Run、错误 ID 或篡改内容必然失败。
+4. 每个来源明确区分 `available/absent/unknown`，失败不再被归入无数据。
+5. 研报预测与市场实际只有在标的、指标、单位、期间、口径和 `known_at` 全部兼容时才比较。
+6. 市场统计、仓位和差值由确定性模块生成并可用相同输入重算。
+7. 产物同时通过 schema、证据和算术校验；失败时补证据、修正或明确降级。
+8. 后续复盘先定位是来源、抽取、映射、口径还是判断问题，只有人工确认后的系统性问题才能修改全局规则。
 
 ## 7. 文档与实现落点
 
@@ -232,7 +265,8 @@ flowchart TD
 |---|---|
 | 用户、Run、SSE、文件与控制 | [tech-stack.md](tech-stack.md) 与 `server/` |
 | Web 交互 | [design/investment-research-workbench-prd.md](design/investment-research-workbench-prd.md) 与 `web/src/` |
-| 语料存储与检索 | [plan/data-layer-architecture.md](plan/data-layer-architecture.md) 与 `plugins/corpus/` |
+| 语料检索协议与上下文接线 | [corpus-retrieval.md](corpus-retrieval.md) |
+| 语料存储历史选型 | [plan/data-layer-architecture.md](plan/data-layer-architecture.md) 与 `plugins/corpus/` |
 | 材料理解与数据分析当前执行计划 | [plan/claims-market-closed-loop-plan.md](plan/claims-market-closed-loop-plan.md) |
 | 市场工具边界 | [plan/ths-market-data.md](plan/ths-market-data.md) 与 `plugins/market/` |
 | 旧 Claims 规则与验收记录 | [plan/d2-claims-optimization-plan.md](plan/d2-claims-optimization-plan.md)，仅作历史实施参考 |

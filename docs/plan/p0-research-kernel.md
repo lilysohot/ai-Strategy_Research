@@ -2,15 +2,17 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.1 · **P0a 已通过（11 项全部 ✅）** · P0b 进行中（B1 ✅ / B2 🔄 / B4 读侧 ✅） |
+| 版本 / 状态 | v1.1 · **历史进度快照，已停止维护**（当时：P0a 已通过，P0b 进行中） |
 | 上游文档 | [plan.md](./plan.md) · [trading-strategy-platform-feasibility.md](../tittel/trading-strategy-platform-feasibility.md) · [tech-stack.md](../tech-stack.md) |
 | 施工规格 | [p0-implementation-spec.md](../p0-implementation-spec.md)（算法、schema、改动点详见此文） |
 | 远期架构 | [corpus-ingestion-architecture.md](../corpus-ingestion-architecture.md)（Discord / IMA / 向量 / 信号层均推后） |
 | 任务清单 | [.scratch/p0a-research-kernel/issues/](../../.scratch/p0a-research-kernel/issues/)（一票一文件） |
 | 状态图例 | ✅ 已完成 · 🔄 进行中 · ⬜ 未开始 · 🅿️ 暂缓 · ⛔ 阻塞 |
 
-> **本文是 P0 的排期与验收入口**；实现细节（算法、schema、注册改动点）见施工规格，
-> 单票实施细节见 `.scratch/`。
+> 🗃️ **本文只保留 P0 当时的排期与验收记录。**当前需求和状态见
+> [产品需求基线](../product-requirements.md)、[业务流程](../business-process.md) 和
+> [资料库检索与 Agent 上下文接线](../corpus-retrieval.md)；不得根据本文的
+> “进行中/未开始”标记建立新待办。
 
 ---
 

@@ -19,6 +19,7 @@ useful when changing that subsystem rather than when getting started.
 | Extend the framework | [Developer guides](#developer-guides) |
 | Understand the investment-research product requirements | [Product requirements](product-requirements.md) |
 | Understand the current and target research process | [Business process](business-process.md) |
+| Understand how corpus retrieval enters Agent context and what is wired today | [Corpus retrieval and context wiring](corpus-retrieval.md) |
 
 ## Product and business design
 
@@ -28,6 +29,7 @@ The investment-research Web product has two canonical product documents:
 |---|---|
 | What must the product do, what is available now, and what remains? | [Product requirements](product-requirements.md) |
 | How do user runs, evidence, decisions, and review connect? | [Business process](business-process.md) |
+| How does the Agent retrieve corpus evidence, and which entry points are actually wired? | [Corpus retrieval and context wiring](corpus-retrieval.md) |
 | What comes next for research materials, structured data, and analysis? | [Unified execution plan](plan/claims-market-closed-loop-plan.md) |
 | What is the proposed source-to-index rebuild, and what must be verified before freezing it? | [Corpus preparation rebuild draft](plan/corpus-ingestion-rebuild-architecture.md) — candidate design, not implemented; authority and historical documents in §0 |
 | How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
@@ -115,6 +117,7 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Understand runtime flow, observers, teams, and package boundaries | [Framework architecture](framework.md) |
 | Understand product scope and delivery status | [Product requirements](product-requirements.md) |
 | Understand the evidence-to-decision business flow | [Business process](business-process.md) |
+| Understand corpus search/fetch, Agent context assembly, and Web wiring status | [Corpus retrieval and context wiring](corpus-retrieval.md) |
 | Author and register a workflow plugin | [Writing a workflow](workflows.md) |
 | Develop and submit changes | [Contributing](../CONTRIBUTING.md) |
 | Understand the frozen Textual + Rich decision | [TUI framework decision](python_terminal_tui_ai_agent_guide.md) **(design record, Chinese)** |
@@ -150,6 +153,7 @@ second set of commands:
 - root `README.md`: product story, capabilities, short quick start, and results;
 - `docs/product-requirements.md`: the single source of truth for investment-research product scope, requirement status, priorities, and acceptance;
 - `docs/business-process.md`: the single source of truth for current/target business stages, decision branches, and completion criteria;
+- `docs/corpus-retrieval.md`: the single source of truth for the current corpus retrieval protocol, Agent context wiring, retrieval limits, and CLI/TUI versus Web status;
 - `CONTEXT.md`: domain glossary only; it must not contain implementation or planning details;
 - `docs/design/investment-research-workbench-prd.md`: Web interaction expression of approved requirements, not a second product backlog;
 - `docs/plan/`: implementation sequence and progress only; plans must link to requirement IDs rather than redefining them;

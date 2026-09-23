@@ -2,15 +2,15 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.0 · **P0 已完成**（P0a 11/11 ✅ · P0b §7.2 五条验收 ✅）· **P1 未开始** |
+| 版本 / 状态 | v1.0 · **历史规模化计划，已停止维护**（当时快照：P0 已完成、P1 未开始） |
 | 上游文档 | [p0-research-kernel.md](./p0-research-kernel.md) · [plan.md](./plan.md) |
 | 远期架构 | [corpus-ingestion-architecture.md](../corpus-ingestion-architecture.md)（Discord / IMA / 向量 / 信号层，仍推后，本文不重复设计） |
 | 状态图例 | ✅ 已完成 · 🔄 进行中 · ⬜ 未开始 · 🅿️ 暂缓 · ⛔ 阻塞 |
 | ⚠️ 存储变更 | **数据层已定为 PostgreSQL**（zhparser 中文全文 + pgvector 留位），见 [data-layer-architecture.md](./data-layer-architecture.md) v2.0 与 [pg-migration.md](./pg-migration.md)。本文涉及 WAL / `VACUUM INTO` / FTS5 的描述**以那两份为准** |
 
-> **本文是 P0 之后的下一段排期入口**。P0 的施工规格见
-> [p0-implementation-spec.md](../p0-implementation-spec.md)，持续接入的远期设计见
-> `corpus-ingestion-architecture.md`。
+> 🗃️ **本文是历史需求和数据运营输入，不是当前排期入口。**
+> 当前执行状态只从 [计划索引](README.md) 的“当前有效计划”和对应总计划读取；
+> 检索现状见 [资料库检索与 Agent 上下文接线](../corpus-retrieval.md)。
 
 ---
 
