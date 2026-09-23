@@ -1,0 +1,32 @@
+{
+ "snapshot_id": "i0c-r4y",
+ "revision": "r4y",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r4x",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4x.json",
+  "sha256": "86a3695a8fa3d1bf3e2bc826469bae753c821d0a27c1a4dad39edeacb90ac339"
+ },
+ "binding": {
+  "chain_rebind_implementation": {
+   "plugins/corpus/preparation/cross_boundary.py": "264a2da104db0e6bd21025aee478b0128d15de85e2a56ef0002022bb781013b6"
+  },
+  "chain_rebind_tests": {
+   "tests/test_corpus_selection.py": "b9b264493ce60287ba329b87e6f38fdee9b1d614a41d7067733a7d2277fbdf32"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "6031239c1952bf9ce7490abe80ba154252af8557766d4104c77c92a1af04115a"
+  }
+ },
+ "corrections": {
+  "footnote_aggregation": "D2 表格来源注聚合落地（U 2026-09-23 授权）：cross_boundary.aggregate_band_chunks 新增 attach_source_note（默认开）——块内表格行（UnitEvidence.cells 非空）时，同页、版面在其下方且垂直间距 < 12pt、形似「来源注 + 说明性分句」的 kept 注段按 (ordinal, unit_id) 保序聚合。service.py 零改动。复验 A/B（d2-replay.json）：industry-008 a-3/a-5 off→on 转绿，82 目标零回退且新增恰为此两条，EvidencePass 23/24 → 24/24，逐类 8/8 全过，负例 6×0，选择不变（带宽 33≤49），产品路径逐字段相等。",
+  "generality": "普遍性按 r4u 三层扫描法论证（audits/20260923-d2-footnote-scan）：裸谓词 91 段 → 含说明性分句 16 段/5 份语料 → 同页+上方紧邻表格行（Δ<12pt）**4 条配对/2 份语料**；判据纯结构（不绑金标），触发面与 r4u（全库 1 处）同量级。注意 ordinal 序 ≠ 版面序，上下关系只能按 bbox 判定。"
+ },
+ "notes": [
+  "r4y 为 D2 落地入链修订（parent=i0c-r4x）：只动 cross_boundary.py 与 test_corpus_selection.py，不触碰 i0c-r4x 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r4y/ 保存改前字节（git HEAD 提取），逐条与 i0c-r4u/i0c-r4x 绑定一致。",
+  "M6 判据『逐类 ≥95%』与『关键引用题 100%』本轮达成（24/24、8/8）；I3-5 非回归 / I3-6 最终冻结 / I3-7 重验 / M6 独立复核 + U 具名签认仍未执行 ⇒ 本修订不放行 M6。"
+ ],
+ "m5_declaration": "not_declared"
+}

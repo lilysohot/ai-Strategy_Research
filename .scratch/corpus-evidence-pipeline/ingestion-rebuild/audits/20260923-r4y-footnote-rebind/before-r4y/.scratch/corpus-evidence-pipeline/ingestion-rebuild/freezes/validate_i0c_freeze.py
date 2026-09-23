@@ -2276,37 +2276,6 @@ if "i0c-r4x" in by_id:
           "r4x corrections must record the gold column revision")
     merge_binding(i0c_current_binding, bindingr4x)
 
-# r4y（D2 表格来源注聚合，U 2026-09-23 授权实施）：只重绑 cross_boundary.py /
-# test_corpus_selection.py / 验证器；service.py 字节零改动（既有接线直接生效）。
-if "i0c-r4y" in by_id:
-    r4y = load_json(BASE / by_id["i0c-r4y"]["file"])
-    parentr4y = BASE / by_id["i0c-r4x"]["file"]
-    check(r4y.get("parent_snapshot") == {"snapshot_id": "i0c-r4x",
-          "path": str(parentr4y.relative_to(ROOT)), "sha256": digest(parentr4y)},
-          "r4y parent mismatch")
-    bindingr4y = r4y.get("binding", {})
-    check(set(bindingr4y) == {"chain_rebind_implementation", "chain_rebind_tests",
-                             "freeze_validator"},
-          "r4y binding groups mismatch")
-    check(set(bindingr4y.get("chain_rebind_implementation", {})) == {
-        "plugins/corpus/preparation/cross_boundary.py"}, "r4y implementation boundary mismatch")
-    check(set(bindingr4y.get("chain_rebind_tests", {})) == {
-        "tests/test_corpus_selection.py"}, "r4y tests boundary mismatch")
-    # 语义门：来源注谓词落地（开关默认开 + 段形/版面双判据 + 免重摄入）
-    cb_src = (ROOT / "plugins/corpus/preparation/cross_boundary.py").read_text(encoding="utf-8")
-    check("attach_source_note: bool = True" in cb_src
-          and "def _is_source_note" in cb_src
-          and "_SOURCE_NOTE_MAX_GAP_PT" in cb_src
-          and "_SOURCE_NOTE_EXPLAIN" in cb_src,
-          "r4y cross_boundary must carry the source-note predicate")
-    ts_src = (ROOT / "tests/test_corpus_selection.py").read_text(encoding="utf-8")
-    for gate in ("test_source_note_attached_below_table_row", "test_source_note_ignores_pure_source_label", "test_source_note_requires_below_adjacent_and_same_page", "test_source_note_requires_table_row_anchor"):
-        check(gate in ts_src, f"r4y tests must carry I-NOTE-1 gate {gate}")
-    check(any("source_note" in k or "footnote" in k
-              for k in (r4y.get("corrections") or {})),
-          "r4y corrections must record the footnote aggregation")
-    merge_binding(i0c_current_binding, bindingr4y)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()

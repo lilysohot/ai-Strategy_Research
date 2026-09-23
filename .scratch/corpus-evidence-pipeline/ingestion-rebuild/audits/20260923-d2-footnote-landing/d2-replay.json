@@ -1,0 +1,68 @@
+{
+  "artifact": "d2-replay",
+  "generated_at": "2026-09-23T11:11:51+08:00",
+  "corpus": "i2_sandbox_corpus active publications",
+  "mode": "表格来源注聚合（attach_source_note）A/B（0 model calls、只读、不落库）",
+  "predicate": "块内表格行 kept 单元 + 同页 + 版面下方（注段上沿 ≥ 表格行下沿）+ 间距 < 12pt + 段形为「来源注 + 说明性分句」⇒ 保序聚合",
+  "industry008_a3_a5": {
+    "off": [
+      false,
+      false
+    ],
+    "on": [
+      true,
+      true
+    ]
+  },
+  "target_diff": {
+    "regressed": [],
+    "newly_matched": [
+      [
+        "industry-008",
+        "a-3"
+      ],
+      [
+        "industry-008",
+        "a-5"
+      ]
+    ]
+  },
+  "evidence_pass": {
+    "off": "23/24",
+    "on": "24/24",
+    "on_per_class": {
+      "company": "8/8",
+      "industry": "8/8",
+      "macro": "8/8"
+    },
+    "expected": "off 23/24 → on 24/24"
+  },
+  "negative_retrieved_docs": {
+    "off": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    },
+    "on": {
+      "company-009": 0,
+      "company-010": 0,
+      "industry-009": 0,
+      "industry-010": 0,
+      "macro-009": 0,
+      "macro-010": 0
+    }
+  },
+  "selection": {
+    "unchanged": true,
+    "band_width_max": {
+      "off": 33,
+      "on": 33
+    },
+    "provable_width_bound": 49
+  },
+  "product_path_identical": true,
+  "all_class_gates_pass": true
+}

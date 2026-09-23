@@ -1078,6 +1078,14 @@ B6 M5 待独立复核 + U 签认；B7 工作树未收口（`spec.md`/`MEMORY.md`
 
 ⇒ **B5 自此阻塞于 D1**：e2×2 未处置前 industry 8/8 恒不可达（逐类门 95%×8 题=8/8），EvidencePass 产品上限 21/24；I3-5/6/7 与 M6 复核签认随 D1/D3 解冻后推进。本轮 B5 执行产出=盘点+归因+裁决登记（未动产品字节、未写库、不 commit）。
 
+### 14.10 2026-09-23 增量：r4x 金标改写入链（D1 以金标修订路径解决）+ B5 现状更新
+
+（追加式登记；§14.9 的"D1=暂不裁决"被本日 U 具名授权取代，按追加纪律不改写 §14.9 正文。）
+
+- **r4x（U 2026-09-23 具名授权，并行会话执行）**：金标 col 口径改写入链——source-gold `industry-009-claim-001` 的 R32/尿素 两条 col/cell 由人工合成列名（`2026E产能（配额）`/`2026E产能`）改为原文可派生口径『产能（万吨/年）以及同比增长』（quote/row/unit/period 不变）；候选/审批件/批准投影/正式评分输入全部重派生（`i3-2/evidence-targets-{decisions,approved,verification}` + `query-gold-scoring-v1.jsonl` + manifest，2026-09-23 00:27–09:48）。冻结 `i0c-r4x.json` parent=`i0c-r4w` 入链（commit 36dabca，含 gen 脚本与 before-r4x 归档）；r26/r39/r42 对旧字节的断言按 r4r supersession 先例承接；**validate_i0c_freeze.py exit 0**（含 r4x 语义块）；i1 链新增 i1-r6（admission test + validator 重绑，**validate_i1_freeze.py exit 0**）；validate_i3_2_completion.py exit 0。
+- **r4x 后产品路径复测**（本日全量测试会话，产品 `svc.search_bands` + 冻结 policy，只读 PG/0 model calls）：**EvidencePass 23/24**（company 8/8、industry 7/8、macro 8/8）、**QuestionPass 24/24**、三类 doc_recall 全 1、FP=0；唯一失败题 = **industry-008**（a-3/a-5 表注未进带，D2 已裁决"不立项、登记不修"）。冻结 policy（min_rate=19/20、critical 全过）下剩余 blocker 机读仅两条：`below_threshold:industry:evidence_pass=87.5%` 与 `critical_failed:industry-008`。
+- **B5 收口条件更新**：EvidencePass "23/24" 字面已达标；M6 剩余要件=① **industry-008 口径裁决**（D2 不修 ⇒ 逐类 95% 门与关键题 100% 门对它恒红，须 U 显式处置：分层单列豁免 / 重开 D2 / 或调金标，三选一）② I3-5（旧检索/财务非回归，D3 暂不执行）③ I3-6 最终冻结 ④ I3-7 全链重验 ⑤ M6 独立复核 + U 具名签认。纪律不变：不 commit/publish/重摄入/写库，未获 U 裁决不动产品字节。
+
 ---
 
 ## 附录 A：证据索引

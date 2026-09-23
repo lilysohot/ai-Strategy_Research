@@ -1,0 +1,80 @@
+{
+  "artifact": "d2-footnote-scan",
+  "generated_at": "2026-09-23T11:03:37+08:00",
+  "corpus": "i2_sandbox_corpus active publications（8 builds）",
+  "mode": "只读 PG、0 model calls、不改任何字节；r4u 三层扫描法",
+  "predicate": {
+    "L1_lead": "kept 且段首为 资料来源 / 注N / 注： / 数据来源 / 说明：",
+    "L2_explanatory": "段内含 注N：/注：/备注：/口径 说明性分句（排除纯来源标注）",
+    "L3_anchored": "同页 + 上方紧邻 kept table_row（垂直间距 < 12.0pt）"
+  },
+  "counts": {
+    "active_kept_units": 3497,
+    "L1_lead": 91,
+    "L2_explanatory": 16,
+    "L3_anchored": 4,
+    "sources_affected_L3": 2
+  },
+  "per_source_L3": {
+    "1227c2a34d": 3,
+    "7734638eca": 1
+  },
+  "per_source_L2": {
+    "1227c2a34d": 3,
+    "58735cff57": 1,
+    "7734638eca": 4,
+    "a3b681fdd5": 2,
+    "e3820ab34c": 6
+  },
+  "pairs": [
+    {
+      "build": "1227c2a34d",
+      "page": "9",
+      "note_ordinal": 490,
+      "y_gap_pt": 8.53,
+      "anchor_ordinal": 510,
+      "anchor_text": "7.5%\n24.9%\n7.7%\n22.3%\n11.4%\n3.6%",
+      "note_text": "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所\n注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日\n注2：开工率数据为2026 年1 月1 日至2026 年7 月26 日取平均"
+    },
+    {
+      "build": "1227c2a34d",
+      "page": "10",
+      "note_ordinal": 518,
+      "y_gap_pt": 5.45,
+      "anchor_ordinal": 582,
+      "anchor_text": "0.0%\n4.5%\n0.0%",
+      "note_text": "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）\n注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日\n注2：开工率数据为2026 年1 月1 日"
+    },
+    {
+      "build": "1227c2a34d",
+      "page": "19",
+      "note_ordinal": 1018,
+      "y_gap_pt": 5.28,
+      "anchor_ordinal": 1048,
+      "anchor_text": "中国化工产品价格指数:CCPI（点）\n7000\n6000\n5000\n4000\n3000\n2000\n1000\n0\n14/0",
+      "note_text": "资料来源：Wind，国家统计局，长江证券研究所（注：2021.06 累计同比为498.4%，\n因数据过大而未显示）"
+    },
+    {
+      "build": "7734638eca",
+      "page": "3",
+      "note_ordinal": 107,
+      "y_gap_pt": 1.57,
+      "anchor_ordinal": 84,
+      "anchor_text": "(单位：千人） 2026/02 2026/03 2026/04 2026/05 2026/06 2026/07 2026",
+      "note_text": "资料来源：WIND，光大证券研究所；注：“前三个月滚动平均”指2026 年6 月至8 月平均值  \n备注：单元格的颜色是指，横向对比来看，红色数值代表偏热，绿色数值表示偏冷 "
+    }
+  ],
+  "industry008_ord518": {
+    "in_L3_pairs": true,
+    "pair": {
+      "build": "1227c2a34d",
+      "page": "10",
+      "note_ordinal": 518,
+      "y_gap_pt": 5.45,
+      "anchor_ordinal": 582,
+      "anchor_text": "0.0%\n4.5%\n0.0%",
+      "note_text": "资料来源：百川盈孚，卓创资讯，化纤信息网，Wind，长江证券研究所（部分信息因数据可得性原因未列示）\n注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日\n注2：开工率数据为2026 年1 月1 日"
+    },
+    "note": "industry-008 a-3/a-5 所引注1 所在单元；必须命中，否则谓词不成立"
+  }
+}
