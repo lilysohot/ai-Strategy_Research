@@ -1,0 +1,45 @@
+{
+ "snapshot_id": "i0c-r4x",
+ "revision": "r4x",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r4w",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4w.json",
+  "sha256": "cc8fe3e646142dcdf09623ca903f62234fda47ae9eca95b0b686747c01cd0228"
+ },
+ "binding": {
+  "i3_2_source_gold": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf"
+  },
+  "i3_2_assets": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-candidates.json": "de7e331bd5ea767715789cb7ebfd24f15aaa25a7559f5c28857b8dfd01959c09",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-adjudication.md": "317e5a8d325264b0c09377234ed96cefc66cb52753d219da1b5c04a835de7409",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-review.md": "26cf9bf0de3d816d59e43c4f9d2baeccb9c453f50addc7037dcbd01b9065c951",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-verification.json": "8ac7dd60f4d631a760d881a201d2caf2705b595c6260c58d677d888d0e09f5a5",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/approval-report.json": "49dc5e48de27d39cca2025cf680d723f898f6ff4b3c008cf8c2dcb9b07731400",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-decisions.json": "f0a86928088d934c652606ec5a7ca0823872c4a44423e21cf69d35d28cb71d99",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "b7bd752b16e08dcb33a4346e2d945210ad3da560cae390b9997bef56e3a8b9c9",
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/source-gold-nearmiss-library.jsonl": "0fc9dac38added9b0676fa087290cd11c9c6332f19e6523aa2e6aa3dbfb5e62f"
+  },
+  "i3_2_scoring_input": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "d311f9a855f3fc24cbe992dc621c24fe55f0e3e5eda847f3bf8192a91d41d4f5"
+  },
+  "i3_2_relineage": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "bbacb85e247b0bc6d9bc5e53a4051e0e8281b3bfba21c9d2b90c536f78a467ad"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "e954bb92ffe0456aafde08c5cdd3ebddc87937ce808838694329d69ada106a98"
+  }
+ },
+ "corrections": {
+  "gold_column_derivability": "U 2026-09-23 具名授权：I0A-4 标注 industry-009-claim-001 的两条 table_cell （row=R32 / row=尿素）的 col 原写作人工合成列名『2026E产能（配额）』『2026E产能』，机器不可派生。经原文机读核对（build 1227c2a34d… page:10：产能组列=2024/2025/2026E，ord563 R32=24.0/28.5/28.5、ord529 尿素=7696.0/7956.0/8068.0，两个 quote 均正确）与反事实探针（audits/20260923-b5-e2-col-probe/e2-col-probe.json：唯一可派生候选），改为原文列组标签『产能（万吨/年）以及同比增长』；quote/row/unit/period/text 一律不动。候选/审批件 based_on/批准投影/正式评分输入随之重派生。语义代价：locator 只锁产能列组、不再锁 2026E 年份列（当前两题取值无歧义）。",
+  "r26_r39_r42_supersession": "source-gold / scoring-input-manifest / query-gold-scoring-v1.jsonl / evidence-targets-approved.json 四路径的当前字节已随本修订演进；r26 的 source-gold 绑定、r39 与 r42 对已关闭审计产物 calibration-plan-v2.json 的 pre-run binding 断言按 r4r 先例以 supersession 承接（改核权威哈希 + 确认历史旧值），不改写任何已关闭审计产物字节。"
+ },
+ "notes": [
+  "r4x 为金标 col 口径改写的入链修订（parent=i0c-r4w）：零实现/测试/守卫字节改动，只重绑 source-gold、i3-2 八项资产、manifest 血缘与验证器；不触碰 i0c-r4w 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r4x/ 保存改前字节（git HEAD 提取），逐条与上一修订绑定一致。",
+  "EvidencePass 21/24 → 23/24（industry 5/8 → 7/8）；剩余 industry-008 a-3/a-5（表注未进带）未处置，故 M6 逐类门仍红（87.5% < 95%），本修订不构成 M6 放行。"
+ ],
+ "m5_declaration": "not_declared"
+}

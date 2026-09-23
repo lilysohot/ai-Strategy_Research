@@ -849,17 +849,6 @@ if "i0c-r25" in by_id:
     merge_binding(i0c_current_binding, binding25)
 
 
-# r4x 预置（U 2026-09-23 授权：金标 col 口径改写 → I3-2 全链重派生）：r26/r39/r42 对 source-gold / manifest / jsonl / approved 的『当前字节』断言改核本修订权威哈希（不改写已关闭审计产物，只确认历史旧值仍被记录）。
-r4x_superseded_bindings: dict[str, str] = {}
-if "i0c-r4x" in by_id:
-    r4x_superseded_bindings = {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl": "9387ab9651a3f48cc33534cef5542d603a8fa2c3edb608fa18745a82f0f135bf",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "bbacb85e247b0bc6d9bc5e53a4051e0e8281b3bfba21c9d2b90c536f78a467ad",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "d311f9a855f3fc24cbe992dc621c24fe55f0e3e5eda847f3bf8192a91d41d4f5",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "b7bd752b16e08dcb33a4346e2d945210ad3da560cae390b9997bef56e3a8b9c9",
-    }
-
-
 if "i0c-r26" in by_id:
     i0c26 = load_json(BASE / by_id["i0c-r26"].get("file", ""))
     parent = i0c26.get("parent_snapshot", {})
@@ -913,18 +902,11 @@ if "i0c-r26" in by_id:
         for rel in items:
             check(not rel.startswith(("plugins/", "tests/", "guards/")),
                   f"r26 越界绑定 {rel}（本轮不改实现/测试/守卫）")
-    _sg26 = f"{base}/source-gold-frozen.jsonl"
-    if _sg26 in r4x_superseded_bindings:
-        check(digest(ROOT / _sg26) == r4x_superseded_bindings[_sg26]
-              and binding26.get("i3_2_source_gold", {}).get(_sg26)
-              != r4x_superseded_bindings[_sg26],
-              "r26 superseded binding unresolved: source-gold-frozen.jsonl")
-    else:
-        check(
-            binding26.get("i3_2_source_gold", {}).get(_sg26)
-            == digest(ROOT / _sg26),
-            "r26 source-gold binding mismatch",
-        )
+    check(
+        binding26.get("i3_2_source_gold", {}).get(f"{base}/source-gold-frozen.jsonl")
+        == digest(ROOT / f"{base}/source-gold-frozen.jsonl"),
+        "r26 source-gold binding mismatch",
+    )
     merge_binding(i0c_current_binding, binding26)
 
 if "i0c-r27" in by_id:
@@ -1716,13 +1698,6 @@ if "i0c-r38" in by_id:
 # 后该历史绑定自然过期。r4r 不触 calibration-plan-v2.json 字节，而是用一个 supersession 豁免
 # 映射（rel -> 权威哈希）供下方 r39 块使用，并把 read_pg 的权威哈希显式入链。
 r39_superseded_bindings: dict[str, str] = {}
-NEW_R4X_ID = "i0c-r4x"
-if "i0c-r4x" in by_id:
-    r39_superseded_bindings.update({
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json": "bbacb85e247b0bc6d9bc5e53a4051e0e8281b3bfba21c9d2b90c536f78a467ad",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl": "d311f9a855f3fc24cbe992dc621c24fe55f0e3e5eda847f3bf8192a91d41d4f5",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/evidence-targets-approved.json": "b7bd752b16e08dcb33a4346e2d945210ad3da560cae390b9997bef56e3a8b9c9",
-    })
 
 if "i0c-r4r" in by_id:
     r4r = load_json(BASE / by_id["i0c-r4r"]["file"])
@@ -1931,11 +1906,7 @@ if "i0c-r42" in by_id:
     scorer_sha42 = "f61573d71b543f33022e9abe890efa35c4ca02342035a9ba6cd5ba9d4413ec9c"
     manifest42 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json")
     check(manifest42.get("status") == "frozen", "r42 must freeze scoring-input manifest status")
-    if f".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json" in r4x_superseded_bindings:
-        check(manifest42.get("frozen_in") == NEW_R4X_ID,
-              "r42 manifest frozen_in must be re-pointed at the latest gold revision")
-    else:
-        check(manifest42.get("frozen_in") == "i0c-r42", "r42 manifest frozen_in must point at r42")
+    check(manifest42.get("frozen_in") == "i0c-r42", "r42 manifest frozen_in must point at r42")
     check(manifest42.get("lineage", {}).get("scorer", {}).get("sha256") == scorer_sha42,
           "r42 manifest lineage.scorer must be whitespace-norm f61573d7")
     plan42 = load_json(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i33-calibration/calibration-plan-v2.json")
@@ -1954,14 +1925,9 @@ if "i0c-r42" in by_id:
     check(plan42.get("binding", {}).get("plugins/corpus/preparation/chunk.py") ==
           digest(ROOT / "plugins/corpus/preparation/chunk.py"),
           "r42 plan must rebind chunk to current bytes")
-    _mf42 = f".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json"
-    if _mf42 in r4x_superseded_bindings:
-        check(digest(ROOT / _mf42) == r4x_superseded_bindings[_mf42]
-              and plan42.get("binding", {}).get(_mf42) != r4x_superseded_bindings[_mf42],
-              "r42 superseded binding unresolved: scoring-input-manifest")
-    else:
-        check(plan42.get("binding", {}).get(_mf42) == digest(ROOT / _mf42),
-              "r42 plan must rebind scoring-input-manifest to rebuilt bytes")
+    check(plan42.get("binding", {}).get(".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json") ==
+          digest(ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json"),
+          "r42 plan must rebind scoring-input-manifest to rebuilt bytes")
     check(plan42.get("binding", {}).get("plugins/corpus/scoring.py") == scorer_sha42,
           "r42 plan must keep scorer f61573d7")
     merge_binding(i0c_current_binding, binding42)
@@ -2224,58 +2190,6 @@ if "i0c-r4w" in by_id:
           "r4w corrections must record the M5 sign-off entry")
     merge_binding(i0c_current_binding, bindingr4w)
 
-# r4x（金标 col 口径改写 → I3-2 全链重派生，U 2026-09-23 具名授权）：只重绑
-# source-gold / i3-2 资产 / manifest 血缘 / 验证器；不触碰任何实现/测试/守卫字节。
-if "i0c-r4x" in by_id:
-    r4x = load_json(BASE / by_id["i0c-r4x"]["file"])
-    parentr4x = BASE / by_id["i0c-r4w"]["file"]
-    check(r4x.get("parent_snapshot") == {"snapshot_id": "i0c-r4w",
-          "path": str(parentr4x.relative_to(ROOT)), "sha256": digest(parentr4x)},
-          "r4x parent mismatch")
-    bindingr4x = r4x.get("binding", {})
-    check(set(bindingr4x) == {"i3_2_source_gold", "i3_2_assets", "i3_2_scoring_input",
-                             "i3_2_relineage", "freeze_validator"},
-          "r4x binding groups mismatch")
-    check(set(bindingr4x.get("i3_2_source_gold", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl"}, "r4x source-gold boundary mismatch")
-    check(set(bindingr4x.get("i3_2_assets", {})) == {
-        f".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/{name}" for name in (
-            "evidence-targets-candidates.json", "evidence-targets-adjudication.md",
-            "evidence-targets-review.md", "evidence-targets-verification.json",
-            "approval-report.json", "evidence-targets-decisions.json",
-            "evidence-targets-approved.json", "source-gold-nearmiss-library.jsonl")},
-          "r4x i3_2_assets boundary mismatch")
-    check(set(bindingr4x.get("i3_2_scoring_input", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl"}, "r4x scoring-input boundary mismatch")
-    check(set(bindingr4x.get("i3_2_relineage", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json"}, "r4x relineage boundary mismatch")
-    check(set(bindingr4x.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"}, "r4x freeze_validator boundary mismatch")
-    # 语义门：金标 col 已改为原文可派生口径，且不得残留人工合成列名
-    gold_path = (ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/source-gold-frozen.jsonl")
-    gold9 = next(json.loads(line) for line in gold_path.read_text(encoding="utf-8")
-                 .splitlines() if line.strip()
-                 and json.loads(line).get("gold_id") == "industry-009-claim-001")
-    cap_items = [it for it in (gold9.get("expected_items") or [])
-                 if (it.get("unit") or "") == "万吨/年"]
-    check(len(cap_items) == 2, "r4x capacity items must stay 2 (R32 / 尿素)")
-    check(all(it.get("col") == "产能（万吨/年）以及同比增长" for it in cap_items),
-          "r4x expected_items col must use the derivable column label")
-    check(all("2026E产能" not in str(it.get("col") or "") for it in cap_items),
-          "r4x expected_items col must drop the synthetic column labels")
-    check(sorted(str(it.get("quote")) for it in cap_items) == ["28.5", "8068.0"],
-          "r4x must preserve quotes 28.5 / 8068.0")
-    manifest_r4x = load_json(ROOT / f".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json")
-    check(manifest_r4x.get("status") == "frozen" and manifest_r4x.get("frozen_in") == "i0c-r4x",
-          "r4x manifest must be frozen and point at r4x")
-    check(manifest_r4x.get("counts") == {"questions": 30, "answerable": 24,
-                                        "no_answer": 6, "required": 79,
-                                        "supplementary": 20},
-          "r4x manifest counts must stay 30/24/6/79/20")
-    check(any("col" in k or "gold" in k for k in (r4x.get("corrections") or {})),
-          "r4x corrections must record the gold column revision")
-    merge_binding(i0c_current_binding, bindingr4x)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2348,5 +2262,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4t B2 no-answer abstain gate frozen: CORPUS_ABSTAIN_NO_ANSWER switch (on|off, default off, fail-closed) + service._abstain_decision (substantive-lexeme websearch AND precheck + is_abstain_candidate unit gate, question-words dropped so answerable S1 protected), search_with_coverage abstain branch (empty hits + query_status=abstain), corpus_search ABSTAIN_HINT split, negative_query.py + test_corpus_negative_query.py first-in-chain, default off = production bytes unchanged" if "i0c-r4t" in by_id else "")
       + ("; r4u B3/F3 read-side continuation-fragment stitch frozen (U 2026-09-22 named decision, path B): cross_boundary.py extends aggregate_band_chunks/_merge_chunk with the structural sentence-terminal stitch predicate (_SENTENCE_TERMINAL, adjacent-ordinal NOISE fragment completing a mid-sentence kept unit, same page; corpus-wide isomorphic samples = 1), stitch_continuation default-on inside the existing search_bands wiring (service.py bytes unchanged), I-CONT-1 positive/negative gates in test_corpus_selection.py" if "i0c-r4u" in by_id else "")
       + ("; r4v c3 prune_fn_punct ranking-signal frozen (offline-eval winner, U named sign-off pending M5): search_pg.py dual-tsquery (candidate pool keeps full lexemes via q.tsq, score = ts_rank on content-only q.tsq_rank, tie-break/ts_headline unchanged, RANK_LEXEME_PRUNE=True default-on, same-cursor _rank_query_on injection + explicit rank_query param in build_search_params), negative_query.py is_punct_lexeme/rank_lexemes (drop function-words+punct, keep single-char, fail-closed all-pruned fallback) reusing the F1/B2 non-gold lexicon (granularity change requiring named sign-off), tests/test_corpus_search_pg.py first-in-chain with I-RANK-1 unit gates + live gates (pool unchanged / virtual-only score 0 but stays in pool / tie-break / switch-off field-equal), r4u 'no search_pg bytes' constraint lifted for the first time (r42 plan binding superseded per r4r precedent), corpus family 772/18 vs pre-change same-env control 766/13, e2e replay 11/11 gates green (21/24, matched 75(+8), zero regression, negatives 6x5, width 33<=49, company-003 6/6 gold pos1)" if "i0c-r4v" in by_id else "")
-      + ("; r4w M5 named sign-off: _FUNCTION_WORDS granularity change (neg-only -> also positive ranking) approved by U (declared 2026-09-22), zero runtime byte change (sign-off revision binds validator only), r4v m5_declaration flipped to declared" if "i0c-r4w" in by_id else "")
-      + ("; r4x 金标 col 口径改写入链（U 2026-09-23 具名授权）：source-gold industry-009-claim-001 的 R32/尿素 两条 col/cell 由人工合成列名（2026E产能（配额）/2026E产能）改为原文可派生口径『产能（万吨/年）以及同比增长』（quote/row/unit/period 不变）；候选/审批件 based_on/批准投影/正式评分输入全部重派生，EvidencePass 21/24→23/24（industry 5/8→7/8），40 项决定在新候选下 unresolved=0；r26/r39/r42 对旧字节的断言按 r4r 先例以 supersession 承接" if "i0c-r4x" in by_id else ""))
+      + ("; r4w M5 named sign-off: _FUNCTION_WORDS granularity change (neg-only -> also positive ranking) approved by U (declared 2026-09-22), zero runtime byte change (sign-off revision binds validator only), r4v m5_declaration flipped to declared" if "i0c-r4w" in by_id else ""))

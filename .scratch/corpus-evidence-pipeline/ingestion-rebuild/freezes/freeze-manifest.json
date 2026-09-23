@@ -1,413 +1,420 @@
 {
- "created_at": "2026-09-16T12:00:00+00:00",
- "manifest_version": 1,
- "note": "freezes/ 索引：仅作当前版本索引，不可追改历史（架构 §12.1 L492）；追加式，新快照仅新增条目。各条目 sha256 指该快照创建时的原始字节；i1-r1 已于 2026-09-16 按经校验的 audits/20260916-i1-remediation/i1-r1-original.json 副本恢复。i1-r2 保留其当时字节及错误父锚点，仅作历史审计记录，不作为当前候选父快照。",
- "snapshots": [
-  {
-   "created_at": "2026-09-16T12:00:00+00:00",
-   "file": "i1-r1.json",
-   "parent_snapshot_id": "i0a5",
-   "sha256": "d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957",
-   "snapshot_id": "i1-r1"
-  },
-  {
-   "created_at": "2026-09-16T16:30:00+00:00",
-   "file": "i1-r2.json",
-   "parent_snapshot_id": "i1-r1",
-   "sha256": "3d27a690519cb006b319da6fbc59dac2e81199b77b2b650983f700ea2f1f71e2",
-   "snapshot_id": "i1-r2"
-  },
-  {
-   "created_at": "2026-09-16T17:30:00+00:00",
-   "file": "i1-r3.json",
-   "parent_snapshot_id": "i1-r1",
-   "sha256": "f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59",
-   "snapshot_id": "i1-r3"
-  },
-  {
-   "created_at": "2026-09-17T03:06:44+00:00",
-   "file": "i1-r4.json",
-   "parent_snapshot_id": "i1-r3",
-   "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382",
-   "snapshot_id": "i1-r4"
-  },
-  {
-   "created_at": "2026-09-22T02:40:00+00:00",
-   "file": "i1-r5.json",
-   "parent_snapshot_id": "i1-r4",
-   "sha256": "dfa9b3ceb1646021e0886cc2093258162a0924fba295b872c4658b388e2376cb",
-   "snapshot_id": "i1-r5"
-  },
-  {
-   "created_at": "2026-09-17T03:08:57+00:00",
-   "file": "i0c-r1.json",
-   "parent_snapshot_id": "i1-r4",
-   "sha256": "f775b9f8834ab657ad09233aa48c3f508ada9c4692bb5cc716126aa44cbaee70",
-   "snapshot_id": "i0c-r1"
-  },
-  {
-   "created_at": "2026-09-17T04:07:42+00:00",
-   "file": "i0c-r2.json",
-   "parent_snapshot_id": "i0c-r1",
-   "sha256": "805372cb6cd83adfe81fe6ba41ca65fbae793db13b67bae7068fe2271d2a1563",
-   "snapshot_id": "i0c-r2"
-  },
-  {
-   "created_at": "2026-09-17T12:00:00+08:00",
-   "file": "i0c-r3.json",
-   "parent_snapshot_id": "i0c-r2",
-   "sha256": "cbf9e5f9e1c2a42e67af472bff38755b4979a320ad90cf6d81965ba386275745",
-   "snapshot_id": "i0c-r3"
-  },
-  {
-   "created_at": "2026-09-17T14:35:58+08:00",
-   "file": "i0c-r4.json",
-   "parent_snapshot_id": "i0c-r3",
-   "sha256": "f667a7f86dd531c5a1492ce65085c884e7a3217fd4adc83f01355adf4f7eaf0e",
-   "snapshot_id": "i0c-r4"
-  },
-  {
-   "created_at": "2026-09-17T19:37:25+08:00",
-   "file": "i0c-r5.json",
-   "parent_snapshot_id": "i0c-r4",
-   "sha256": "7e1ca82601a4354306f37ee19d246c3c77d8c8f770714b2865df3140078adc8b",
-   "snapshot_id": "i0c-r5"
-  },
-  {
-   "snapshot_id": "i0c-r6",
-   "file": "i0c-r6.json",
-   "sha256": "70961ca73dc183cd2f6bda8d8de54d0efb07f87821d485e72d477ebca6c90a16",
-   "parent_snapshot_id": "i0c-r5",
-   "created_at": "2026-09-17T21:14:38+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r7",
-   "file": "i0c-r7.json",
-   "sha256": "5d0f0e12d1f54be8ea2b8e19df8b2fe37a36054779498f58d00e7558a5fa7792",
-   "parent_snapshot_id": "i0c-r6",
-   "created_at": "2026-09-18T00:24:39+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r8",
-   "file": "i0c-r8.json",
-   "sha256": "b3e69d37e3da54ec757c22a6d5dce04c73aab2e2ceadeb01cedaaae2d23a2915",
-   "parent_snapshot_id": "i0c-r7",
-   "created_at": "2026-09-18T09:48:30+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r9",
-   "file": "i0c-r9.json",
-   "sha256": "b0af2969d773ac07a2ca7fbc6d25cac4d9fe92b3d385eae4fee91b1f4b1602d1",
-   "parent_snapshot_id": "i0c-r8",
-   "created_at": "2026-09-18T10:33:07+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r10",
-   "file": "i0c-r10.json",
-   "sha256": "f72be661499c0e4867cbe4204370d51a1eff6ef625bc71f1171a7fe8eb2d0e8a",
-   "parent_snapshot_id": "i0c-r9",
-   "created_at": "2026-09-18T10:35:37+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r11",
-   "file": "i0c-r11.json",
-   "sha256": "79ad48a12dd1c2faf303319cf0e4d4b785bb225f89062dc2fb2b439e7282c48e",
-   "parent_snapshot_id": "i0c-r10",
-   "created_at": "2026-09-18T11:19:42+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r12",
-   "file": "i0c-r12.json",
-   "sha256": "66c8080ccccc104e68ab5592b1bd4a2286318080b6e5f010c069cf17ec5a088e",
-   "parent_snapshot_id": "i0c-r11",
-   "created_at": "2026-09-18T11:23:25+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r13",
-   "file": "i0c-r13.json",
-   "sha256": "10af5ce6f1a35a094b70a5aa922e33836f02a68f5e6a668e228be78dc00830ab",
-   "parent_snapshot_id": "i0c-r12",
-   "created_at": "2026-09-18T11:36:20+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r14",
-   "file": "i0c-r14.json",
-   "sha256": "4e1180a6bd25c3c3aa92eb71f88c1fb846e56a46000615c535f132f1da263e00",
-   "parent_snapshot_id": "i0c-r13",
-   "created_at": "2026-09-18T12:26:16+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r15",
-   "file": "i0c-r15.json",
-   "sha256": "c88cfa888bd2807293b95af0794dc46651121de7a2c83b31433f739a2de76dc8",
-   "parent_snapshot_id": "i0c-r14",
-   "created_at": "2026-09-18T13:06:13+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r16",
-   "file": "i0c-r16.json",
-   "sha256": "76483697de59cda4f8589cf8d2d5e12de5d204a4691ee77db1748927473fba1f",
-   "parent_snapshot_id": "i0c-r15",
-   "created_at": "2026-09-18T13:13:41+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r17",
-   "file": "i0c-r17.json",
-   "sha256": "258ded6f17f3abda6d201c697de05fcc534fd28c2e3b8eb31011dbc9267f484f",
-   "parent_snapshot_id": "i0c-r16",
-   "created_at": "2026-09-18T13:19:58+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r18",
-   "file": "i0c-r18.json",
-   "sha256": "ee3fae42f4be48a646fe58216379ae5eabb6270e9e05ec0976d191fe33a9f216",
-   "parent_snapshot_id": "i0c-r17",
-   "created_at": "2026-09-18T13:20:33+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r19",
-   "file": "i0c-r19.json",
-   "sha256": "69a1ef581b5164c365353ab10b8d5207166372adf14b31ad9749dc9bb5f8c4ef",
-   "parent_snapshot_id": "i0c-r18",
-   "created_at": "2026-09-18T14:02:04+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r20",
-   "file": "i0c-r20.json",
-   "sha256": "dab7d0b89d9f8d1fd8287197eed21711cdaceda9d75b400b293287f86d95c44a",
-   "parent_snapshot_id": "i0c-r19",
-   "created_at": "2026-09-18T14:03:21+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r21",
-   "file": "i0c-r21.json",
-   "sha256": "0403a2edaf86f72f2ed767e320f9bd7ce4a5a9d7a4f2ab7e8d19dd5672735b4a",
-   "parent_snapshot_id": "i0c-r20",
-   "created_at": "2026-09-18T14:56:48+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r22",
-   "file": "i0c-r22.json",
-   "sha256": "9ad6e06c489ab33ed6acde0705ad53d6254b56afd3c547ab25ddc5b7b5d031e1",
-   "parent_snapshot_id": "i0c-r21",
-   "created_at": "2026-09-18T15:06:28+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r23",
-   "file": "i0c-r23.json",
-   "sha256": "6ed26728a0d83a020485dd1a55b76cfe012d5fcf73fcbc293793b511126d910b",
-   "parent_snapshot_id": "i0c-r22",
-   "created_at": "2026-09-18T15:58:28+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r24",
-   "file": "i0c-r24.json",
-   "sha256": "f91a7ad51a389094862a6d24ac936f22a77387fe782ade83b114b1c24edb0189",
-   "parent_snapshot_id": "i0c-r23",
-   "created_at": "2026-09-18T16:41:27+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r25",
-   "file": "i0c-r25.json",
-   "sha256": "17de00c53c9cd8e1bd0d4cdd32a925d1c75861b49d286f66b50c78cc7fb0cf48",
-   "parent_snapshot_id": "i0c-r24",
-   "created_at": "2026-09-18T09:12:28.847849+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r26",
-   "file": "i0c-r26.json",
-   "sha256": "7577ba2da9395e76f1bd2995d1c1d9e29b01cc1de227d281a92b381a1331ede2",
-   "parent_snapshot_id": "i0c-r25",
-   "created_at": "2026-09-18T12:00:02.553195+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r27",
-   "file": "i0c-r27.json",
-   "sha256": "00feb146b47b6cb247ad3c53cf4b11cf42a2c5f96252bfd6a5900a1f3debe3ed",
-   "parent_snapshot_id": "i0c-r26",
-   "created_at": "2026-09-19T17:35:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r28",
-   "file": "i0c-r28.json",
-   "sha256": "e5ad0cce6821b6b1a687c634f103eb68f8c4772d114a7010d9ecd8e43f2ddff4",
-   "parent_snapshot_id": "i0c-r27",
-   "created_at": "2026-09-19T10:00:42.703746+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r29",
-   "file": "i0c-r29.json",
-   "sha256": "0806a380f28ab2e307d2b9010162a9b190637c13bec568c3300e25f2c9b8af9a",
-   "parent_snapshot_id": "i0c-r28",
-   "created_at": "2026-09-19T10:09:15.173888+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r30",
-   "file": "i0c-r30.json",
-   "sha256": "908b630ebc5679aeaea963deff37e38aa2d1210c171403941d2512bc92edfcc1",
-   "parent_snapshot_id": "i0c-r29",
-   "created_at": "2026-09-19T10:21:00.541528+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r31",
-   "file": "i0c-r31.json",
-   "sha256": "9dfebade3b30abd8842f7dcbed61b31b7400e9b138e6b5b70c0f20457147a6a8",
-   "parent_snapshot_id": "i0c-r30",
-   "created_at": "2026-09-19T10:26:13.137991+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r32",
-   "file": "i0c-r32.json",
-   "sha256": "83d46db7b6118335c2bd4600ec16019661562040ab59e945bacdf201f4ea3867",
-   "parent_snapshot_id": "i0c-r31",
-   "created_at": "2026-09-19T14:51:36.227651+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r33",
-   "file": "i0c-r33.json",
-   "sha256": "55567d4aa2a6cf9a500f05aa8a2dec4ca169d5c96081d7b19fa581d70cd32e99",
-   "parent_snapshot_id": "i0c-r32",
-   "created_at": "2026-09-19T23:49:11+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r34",
-   "file": "i0c-r34.json",
-   "sha256": "918d74b43aeff7921ecdeec7c2301268bb98f40f3b2ee3421276131f103da3c5",
-   "parent_snapshot_id": "i0c-r33",
-   "created_at": "2026-09-20T09:57:42+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r35",
-   "file": "i0c-r35.json",
-   "sha256": "62d8ea977344ec33012bff90e1a8d3fcff88758ecbe22dfb317665827c40eb0a",
-   "parent_snapshot_id": "i0c-r34",
-   "created_at": "2026-09-20T10:20:04+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r36",
-   "file": "i0c-r36.json",
-   "sha256": "2f6cbb50de30a4dff2e679db879e327991f6e5c543c2d6838f505c414e874828",
-   "parent_snapshot_id": "i0c-r35",
-   "created_at": "2026-09-20T04:18:36+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r37",
-   "file": "i0c-r37.json",
-   "sha256": "b45948870665e2574732142bf23fc7899b4266b7193f73925411da00e2c58868",
-   "parent_snapshot_id": "i0c-r36",
-   "created_at": "2026-09-20T05:52:25+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r38",
-   "file": "i0c-r38.json",
-   "sha256": "abf6a77e417809f0880f9426d9e165f80bd0116ecb53c481dff378825d49a256",
-   "parent_snapshot_id": "i0c-r37",
-   "created_at": "2026-09-20T06:14:32+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r39",
-   "file": "i0c-r39.json",
-   "sha256": "0eb882426a21fb4a8ae0a0f4a2d80d885830a0ab35fc056635c75e64cc1e1fb0",
-   "parent_snapshot_id": "i0c-r38",
-   "created_at": "2026-09-20T06:23:34+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r40",
-   "file": "i0c-r40.json",
-   "sha256": "a01e6588662c3ef07220f11e2fabca6a26a498fdd9dbd5a3a32f235602c8a70e",
-   "parent_snapshot_id": "i0c-r39",
-   "created_at": "2026-09-20T13:30:00+00:00"
-  },
-  {
-   "snapshot_id": "i0c-r41",
-   "file": "i0c-r41.json",
-   "sha256": "4871ebad5381048eeab73fa4c0560e338b136c6d60fc65875a38ee945e8c4244",
-   "parent_snapshot_id": "i0c-r40",
-   "created_at": "2026-09-21T10:24:33+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r42",
-   "file": "i0c-r42.json",
-   "sha256": "056e5135a86b292c0867f209e43fe51d5436683d3cc8076e056e271c853f5c43",
-   "parent_snapshot_id": "i0c-r41",
-   "created_at": "2026-09-21T20:40:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r43",
-   "file": "i0c-r43.json",
-   "sha256": "7d0e71ea2aed0ec3ec6062259f2fa774ffc85a4ae62a4000185444e40020ba29",
-   "parent_snapshot_id": "i0c-r42",
-   "created_at": "2026-09-21T21:30:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4n",
-   "file": "i0c-r4n.json",
-   "sha256": "57fdabb325fe8a2dbaacf258ebb271b44f867c81dc9f70160903d2c2deb436b1",
-   "parent_snapshot_id": "i0c-r43",
-   "created_at": "2026-09-21T23:45:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4p",
-   "file": "i0c-r4p.json",
-   "sha256": "3b7e32f0d62181a2dc33049634de57ef4c5e4055eddd12d3568c14994c0500ef",
-   "parent_snapshot_id": "i0c-r4n",
-   "created_at": "2026-09-21T23:50:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4q",
-   "file": "i0c-r4q.json",
-   "sha256": "8273fc6b3462a107c09e1c1a4b27588cb0058c469a01df8e45e89285ffef23c0",
-   "parent_snapshot_id": "i0c-r4p",
-   "created_at": "2026-09-22T01:40:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4r",
-   "file": "i0c-r4r.json",
-   "sha256": "68433519ff7296b04b830f9aa2b2adb6e5eb9b69f119ffa06d0568265439692a",
-   "parent_snapshot_id": "i0c-r4q",
-   "created_at": "2026-09-22T02:10:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4s",
-   "file": "i0c-r4s.json",
-   "sha256": "9b16f68e7012f814fea2c00556549656afadded56f047bd8b6c87f9cb20fba85",
-   "parent_snapshot_id": "i0c-r4r",
-   "created_at": "2026-09-22T03:20:00+08:00"
-  },
-  {
-   "snapshot_id": "i1-r6",
-   "file": "i1-r6.json",
-   "sha256": "b5d9f46f4e64680d675c0f9956846daa5addf0743127c47ccb959487ac9786ad",
-   "parent_snapshot_id": "i1-r5",
-   "created_at": "2026-09-22T04:10:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4t",
-   "file": "i0c-r4t.json",
-   "sha256": "e2be30cfa851eade53881761494d2d8e6e1ffcbce8169ed3ddb04a660821d10b",
-   "parent_snapshot_id": "i0c-r4s",
-   "created_at": "2026-09-22T05:00:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4u",
-   "file": "i0c-r4u.json",
-   "sha256": "4fb9487512fd6e7b451bacf676f7967766d457fc1a34cec773dcf0810959f794",
-   "parent_snapshot_id": "i0c-r4t",
-   "created_at": "2026-09-22T11:42:55+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4v",
-   "file": "i0c-r4v.json",
-   "sha256": "9474b85e57f8184245965d47f0711d750ce80789f22a9dfbdc4196c69ce7658d",
-   "parent_snapshot_id": "i0c-r4u",
-   "created_at": "2026-09-22T16:30:00+08:00"
-  },
-  {
-   "snapshot_id": "i0c-r4w",
-   "file": "i0c-r4w.json",
-   "sha256": "cc8fe3e646142dcdf09623ca903f62234fda47ae9eca95b0b686747c01cd0228",
-   "parent_snapshot_id": "i0c-r4v",
-   "created_at": "2026-09-22T16:47:30+08:00"
-  }
- ]
+  "created_at": "2026-09-16T12:00:00+00:00",
+  "manifest_version": 1,
+  "note": "freezes/ 索引：仅作当前版本索引，不可追改历史（架构 §12.1 L492）；追加式，新快照仅新增条目。各条目 sha256 指该快照创建时的原始字节；i1-r1 已于 2026-09-16 按经校验的 audits/20260916-i1-remediation/i1-r1-original.json 副本恢复。i1-r2 保留其当时字节及错误父锚点，仅作历史审计记录，不作为当前候选父快照。",
+  "snapshots": [
+    {
+      "created_at": "2026-09-16T12:00:00+00:00",
+      "file": "i1-r1.json",
+      "parent_snapshot_id": "i0a5",
+      "sha256": "d474bd6d566e8cf5d72d0531de55fe918833ec49185f0b31322f97d603f85957",
+      "snapshot_id": "i1-r1"
+    },
+    {
+      "created_at": "2026-09-16T16:30:00+00:00",
+      "file": "i1-r2.json",
+      "parent_snapshot_id": "i1-r1",
+      "sha256": "3d27a690519cb006b319da6fbc59dac2e81199b77b2b650983f700ea2f1f71e2",
+      "snapshot_id": "i1-r2"
+    },
+    {
+      "created_at": "2026-09-16T17:30:00+00:00",
+      "file": "i1-r3.json",
+      "parent_snapshot_id": "i1-r1",
+      "sha256": "f22525c3957f8d09890600eb1df7e3cab3a6fce61f79b196c6067cbd9f39dd59",
+      "snapshot_id": "i1-r3"
+    },
+    {
+      "created_at": "2026-09-17T03:06:44+00:00",
+      "file": "i1-r4.json",
+      "parent_snapshot_id": "i1-r3",
+      "sha256": "7da9dc8ba9c10196ae080e499a376bd030edd5272e1726da29a40c8b66323382",
+      "snapshot_id": "i1-r4"
+    },
+    {
+      "created_at": "2026-09-22T02:40:00+00:00",
+      "file": "i1-r5.json",
+      "parent_snapshot_id": "i1-r4",
+      "sha256": "dfa9b3ceb1646021e0886cc2093258162a0924fba295b872c4658b388e2376cb",
+      "snapshot_id": "i1-r5"
+    },
+    {
+      "created_at": "2026-09-17T03:08:57+00:00",
+      "file": "i0c-r1.json",
+      "parent_snapshot_id": "i1-r4",
+      "sha256": "f775b9f8834ab657ad09233aa48c3f508ada9c4692bb5cc716126aa44cbaee70",
+      "snapshot_id": "i0c-r1"
+    },
+    {
+      "created_at": "2026-09-17T04:07:42+00:00",
+      "file": "i0c-r2.json",
+      "parent_snapshot_id": "i0c-r1",
+      "sha256": "805372cb6cd83adfe81fe6ba41ca65fbae793db13b67bae7068fe2271d2a1563",
+      "snapshot_id": "i0c-r2"
+    },
+    {
+      "created_at": "2026-09-17T12:00:00+08:00",
+      "file": "i0c-r3.json",
+      "parent_snapshot_id": "i0c-r2",
+      "sha256": "cbf9e5f9e1c2a42e67af472bff38755b4979a320ad90cf6d81965ba386275745",
+      "snapshot_id": "i0c-r3"
+    },
+    {
+      "created_at": "2026-09-17T14:35:58+08:00",
+      "file": "i0c-r4.json",
+      "parent_snapshot_id": "i0c-r3",
+      "sha256": "f667a7f86dd531c5a1492ce65085c884e7a3217fd4adc83f01355adf4f7eaf0e",
+      "snapshot_id": "i0c-r4"
+    },
+    {
+      "created_at": "2026-09-17T19:37:25+08:00",
+      "file": "i0c-r5.json",
+      "parent_snapshot_id": "i0c-r4",
+      "sha256": "7e1ca82601a4354306f37ee19d246c3c77d8c8f770714b2865df3140078adc8b",
+      "snapshot_id": "i0c-r5"
+    },
+    {
+      "snapshot_id": "i0c-r6",
+      "file": "i0c-r6.json",
+      "sha256": "70961ca73dc183cd2f6bda8d8de54d0efb07f87821d485e72d477ebca6c90a16",
+      "parent_snapshot_id": "i0c-r5",
+      "created_at": "2026-09-17T21:14:38+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r7",
+      "file": "i0c-r7.json",
+      "sha256": "5d0f0e12d1f54be8ea2b8e19df8b2fe37a36054779498f58d00e7558a5fa7792",
+      "parent_snapshot_id": "i0c-r6",
+      "created_at": "2026-09-18T00:24:39+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r8",
+      "file": "i0c-r8.json",
+      "sha256": "b3e69d37e3da54ec757c22a6d5dce04c73aab2e2ceadeb01cedaaae2d23a2915",
+      "parent_snapshot_id": "i0c-r7",
+      "created_at": "2026-09-18T09:48:30+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r9",
+      "file": "i0c-r9.json",
+      "sha256": "b0af2969d773ac07a2ca7fbc6d25cac4d9fe92b3d385eae4fee91b1f4b1602d1",
+      "parent_snapshot_id": "i0c-r8",
+      "created_at": "2026-09-18T10:33:07+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r10",
+      "file": "i0c-r10.json",
+      "sha256": "f72be661499c0e4867cbe4204370d51a1eff6ef625bc71f1171a7fe8eb2d0e8a",
+      "parent_snapshot_id": "i0c-r9",
+      "created_at": "2026-09-18T10:35:37+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r11",
+      "file": "i0c-r11.json",
+      "sha256": "79ad48a12dd1c2faf303319cf0e4d4b785bb225f89062dc2fb2b439e7282c48e",
+      "parent_snapshot_id": "i0c-r10",
+      "created_at": "2026-09-18T11:19:42+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r12",
+      "file": "i0c-r12.json",
+      "sha256": "66c8080ccccc104e68ab5592b1bd4a2286318080b6e5f010c069cf17ec5a088e",
+      "parent_snapshot_id": "i0c-r11",
+      "created_at": "2026-09-18T11:23:25+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r13",
+      "file": "i0c-r13.json",
+      "sha256": "10af5ce6f1a35a094b70a5aa922e33836f02a68f5e6a668e228be78dc00830ab",
+      "parent_snapshot_id": "i0c-r12",
+      "created_at": "2026-09-18T11:36:20+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r14",
+      "file": "i0c-r14.json",
+      "sha256": "4e1180a6bd25c3c3aa92eb71f88c1fb846e56a46000615c535f132f1da263e00",
+      "parent_snapshot_id": "i0c-r13",
+      "created_at": "2026-09-18T12:26:16+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r15",
+      "file": "i0c-r15.json",
+      "sha256": "c88cfa888bd2807293b95af0794dc46651121de7a2c83b31433f739a2de76dc8",
+      "parent_snapshot_id": "i0c-r14",
+      "created_at": "2026-09-18T13:06:13+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r16",
+      "file": "i0c-r16.json",
+      "sha256": "76483697de59cda4f8589cf8d2d5e12de5d204a4691ee77db1748927473fba1f",
+      "parent_snapshot_id": "i0c-r15",
+      "created_at": "2026-09-18T13:13:41+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r17",
+      "file": "i0c-r17.json",
+      "sha256": "258ded6f17f3abda6d201c697de05fcc534fd28c2e3b8eb31011dbc9267f484f",
+      "parent_snapshot_id": "i0c-r16",
+      "created_at": "2026-09-18T13:19:58+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r18",
+      "file": "i0c-r18.json",
+      "sha256": "ee3fae42f4be48a646fe58216379ae5eabb6270e9e05ec0976d191fe33a9f216",
+      "parent_snapshot_id": "i0c-r17",
+      "created_at": "2026-09-18T13:20:33+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r19",
+      "file": "i0c-r19.json",
+      "sha256": "69a1ef581b5164c365353ab10b8d5207166372adf14b31ad9749dc9bb5f8c4ef",
+      "parent_snapshot_id": "i0c-r18",
+      "created_at": "2026-09-18T14:02:04+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r20",
+      "file": "i0c-r20.json",
+      "sha256": "dab7d0b89d9f8d1fd8287197eed21711cdaceda9d75b400b293287f86d95c44a",
+      "parent_snapshot_id": "i0c-r19",
+      "created_at": "2026-09-18T14:03:21+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r21",
+      "file": "i0c-r21.json",
+      "sha256": "0403a2edaf86f72f2ed767e320f9bd7ce4a5a9d7a4f2ab7e8d19dd5672735b4a",
+      "parent_snapshot_id": "i0c-r20",
+      "created_at": "2026-09-18T14:56:48+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r22",
+      "file": "i0c-r22.json",
+      "sha256": "9ad6e06c489ab33ed6acde0705ad53d6254b56afd3c547ab25ddc5b7b5d031e1",
+      "parent_snapshot_id": "i0c-r21",
+      "created_at": "2026-09-18T15:06:28+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r23",
+      "file": "i0c-r23.json",
+      "sha256": "6ed26728a0d83a020485dd1a55b76cfe012d5fcf73fcbc293793b511126d910b",
+      "parent_snapshot_id": "i0c-r22",
+      "created_at": "2026-09-18T15:58:28+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r24",
+      "file": "i0c-r24.json",
+      "sha256": "f91a7ad51a389094862a6d24ac936f22a77387fe782ade83b114b1c24edb0189",
+      "parent_snapshot_id": "i0c-r23",
+      "created_at": "2026-09-18T16:41:27+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r25",
+      "file": "i0c-r25.json",
+      "sha256": "17de00c53c9cd8e1bd0d4cdd32a925d1c75861b49d286f66b50c78cc7fb0cf48",
+      "parent_snapshot_id": "i0c-r24",
+      "created_at": "2026-09-18T09:12:28.847849+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r26",
+      "file": "i0c-r26.json",
+      "sha256": "7577ba2da9395e76f1bd2995d1c1d9e29b01cc1de227d281a92b381a1331ede2",
+      "parent_snapshot_id": "i0c-r25",
+      "created_at": "2026-09-18T12:00:02.553195+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r27",
+      "file": "i0c-r27.json",
+      "sha256": "00feb146b47b6cb247ad3c53cf4b11cf42a2c5f96252bfd6a5900a1f3debe3ed",
+      "parent_snapshot_id": "i0c-r26",
+      "created_at": "2026-09-19T17:35:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r28",
+      "file": "i0c-r28.json",
+      "sha256": "e5ad0cce6821b6b1a687c634f103eb68f8c4772d114a7010d9ecd8e43f2ddff4",
+      "parent_snapshot_id": "i0c-r27",
+      "created_at": "2026-09-19T10:00:42.703746+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r29",
+      "file": "i0c-r29.json",
+      "sha256": "0806a380f28ab2e307d2b9010162a9b190637c13bec568c3300e25f2c9b8af9a",
+      "parent_snapshot_id": "i0c-r28",
+      "created_at": "2026-09-19T10:09:15.173888+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r30",
+      "file": "i0c-r30.json",
+      "sha256": "908b630ebc5679aeaea963deff37e38aa2d1210c171403941d2512bc92edfcc1",
+      "parent_snapshot_id": "i0c-r29",
+      "created_at": "2026-09-19T10:21:00.541528+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r31",
+      "file": "i0c-r31.json",
+      "sha256": "9dfebade3b30abd8842f7dcbed61b31b7400e9b138e6b5b70c0f20457147a6a8",
+      "parent_snapshot_id": "i0c-r30",
+      "created_at": "2026-09-19T10:26:13.137991+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r32",
+      "file": "i0c-r32.json",
+      "sha256": "83d46db7b6118335c2bd4600ec16019661562040ab59e945bacdf201f4ea3867",
+      "parent_snapshot_id": "i0c-r31",
+      "created_at": "2026-09-19T14:51:36.227651+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r33",
+      "file": "i0c-r33.json",
+      "sha256": "55567d4aa2a6cf9a500f05aa8a2dec4ca169d5c96081d7b19fa581d70cd32e99",
+      "parent_snapshot_id": "i0c-r32",
+      "created_at": "2026-09-19T23:49:11+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r34",
+      "file": "i0c-r34.json",
+      "sha256": "918d74b43aeff7921ecdeec7c2301268bb98f40f3b2ee3421276131f103da3c5",
+      "parent_snapshot_id": "i0c-r33",
+      "created_at": "2026-09-20T09:57:42+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r35",
+      "file": "i0c-r35.json",
+      "sha256": "62d8ea977344ec33012bff90e1a8d3fcff88758ecbe22dfb317665827c40eb0a",
+      "parent_snapshot_id": "i0c-r34",
+      "created_at": "2026-09-20T10:20:04+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r36",
+      "file": "i0c-r36.json",
+      "sha256": "2f6cbb50de30a4dff2e679db879e327991f6e5c543c2d6838f505c414e874828",
+      "parent_snapshot_id": "i0c-r35",
+      "created_at": "2026-09-20T04:18:36+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r37",
+      "file": "i0c-r37.json",
+      "sha256": "b45948870665e2574732142bf23fc7899b4266b7193f73925411da00e2c58868",
+      "parent_snapshot_id": "i0c-r36",
+      "created_at": "2026-09-20T05:52:25+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r38",
+      "file": "i0c-r38.json",
+      "sha256": "abf6a77e417809f0880f9426d9e165f80bd0116ecb53c481dff378825d49a256",
+      "parent_snapshot_id": "i0c-r37",
+      "created_at": "2026-09-20T06:14:32+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r39",
+      "file": "i0c-r39.json",
+      "sha256": "0eb882426a21fb4a8ae0a0f4a2d80d885830a0ab35fc056635c75e64cc1e1fb0",
+      "parent_snapshot_id": "i0c-r38",
+      "created_at": "2026-09-20T06:23:34+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r40",
+      "file": "i0c-r40.json",
+      "sha256": "a01e6588662c3ef07220f11e2fabca6a26a498fdd9dbd5a3a32f235602c8a70e",
+      "parent_snapshot_id": "i0c-r39",
+      "created_at": "2026-09-20T13:30:00+00:00"
+    },
+    {
+      "snapshot_id": "i0c-r41",
+      "file": "i0c-r41.json",
+      "sha256": "4871ebad5381048eeab73fa4c0560e338b136c6d60fc65875a38ee945e8c4244",
+      "parent_snapshot_id": "i0c-r40",
+      "created_at": "2026-09-21T10:24:33+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r42",
+      "file": "i0c-r42.json",
+      "sha256": "056e5135a86b292c0867f209e43fe51d5436683d3cc8076e056e271c853f5c43",
+      "parent_snapshot_id": "i0c-r41",
+      "created_at": "2026-09-21T20:40:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r43",
+      "file": "i0c-r43.json",
+      "sha256": "7d0e71ea2aed0ec3ec6062259f2fa774ffc85a4ae62a4000185444e40020ba29",
+      "parent_snapshot_id": "i0c-r42",
+      "created_at": "2026-09-21T21:30:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4n",
+      "file": "i0c-r4n.json",
+      "sha256": "57fdabb325fe8a2dbaacf258ebb271b44f867c81dc9f70160903d2c2deb436b1",
+      "parent_snapshot_id": "i0c-r43",
+      "created_at": "2026-09-21T23:45:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4p",
+      "file": "i0c-r4p.json",
+      "sha256": "3b7e32f0d62181a2dc33049634de57ef4c5e4055eddd12d3568c14994c0500ef",
+      "parent_snapshot_id": "i0c-r4n",
+      "created_at": "2026-09-21T23:50:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4q",
+      "file": "i0c-r4q.json",
+      "sha256": "8273fc6b3462a107c09e1c1a4b27588cb0058c469a01df8e45e89285ffef23c0",
+      "parent_snapshot_id": "i0c-r4p",
+      "created_at": "2026-09-22T01:40:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4r",
+      "file": "i0c-r4r.json",
+      "sha256": "68433519ff7296b04b830f9aa2b2adb6e5eb9b69f119ffa06d0568265439692a",
+      "parent_snapshot_id": "i0c-r4q",
+      "created_at": "2026-09-22T02:10:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4s",
+      "file": "i0c-r4s.json",
+      "sha256": "9b16f68e7012f814fea2c00556549656afadded56f047bd8b6c87f9cb20fba85",
+      "parent_snapshot_id": "i0c-r4r",
+      "created_at": "2026-09-22T03:20:00+08:00"
+    },
+    {
+      "snapshot_id": "i1-r6",
+      "file": "i1-r6.json",
+      "sha256": "b5d9f46f4e64680d675c0f9956846daa5addf0743127c47ccb959487ac9786ad",
+      "parent_snapshot_id": "i1-r5",
+      "created_at": "2026-09-22T04:10:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4t",
+      "file": "i0c-r4t.json",
+      "sha256": "e2be30cfa851eade53881761494d2d8e6e1ffcbce8169ed3ddb04a660821d10b",
+      "parent_snapshot_id": "i0c-r4s",
+      "created_at": "2026-09-22T05:00:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4u",
+      "file": "i0c-r4u.json",
+      "sha256": "4fb9487512fd6e7b451bacf676f7967766d457fc1a34cec773dcf0810959f794",
+      "parent_snapshot_id": "i0c-r4t",
+      "created_at": "2026-09-22T11:42:55+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4v",
+      "file": "i0c-r4v.json",
+      "sha256": "9474b85e57f8184245965d47f0711d750ce80789f22a9dfbdc4196c69ce7658d",
+      "parent_snapshot_id": "i0c-r4u",
+      "created_at": "2026-09-22T16:30:00+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4w",
+      "file": "i0c-r4w.json",
+      "sha256": "cc8fe3e646142dcdf09623ca903f62234fda47ae9eca95b0b686747c01cd0228",
+      "parent_snapshot_id": "i0c-r4v",
+      "created_at": "2026-09-22T16:47:30+08:00"
+    },
+    {
+      "snapshot_id": "i0c-r4x",
+      "file": "i0c-r4x.json",
+      "sha256": "86a3695a8fa3d1bf3e2bc826469bae753c821d0a27c1a4dad39edeacb90ac339",
+      "parent_snapshot_id": "i0c-r4w",
+      "created_at": "2026-09-23T09:42:17+08:00"
+    }
+  ]
 }
