@@ -1,0 +1,564 @@
+{
+ "asset_hashes": {
+  "pilot_manifest.json": {
+   "sha256": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+   "expected": "691581a5d6285b4259a698c47898abf92fa54c7066bdde4d3ca0ffe80c2f5e4f",
+   "match": true
+  },
+  "plugins/corpus/golden.py": {
+   "sha256": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+   "expected": "e983b3914be4f30a0e59250f22b6ef1b30a04c39a3f681f45323f1550e2cc52b",
+   "match": true
+  },
+  "verify_claims_entry.py": {
+   "sha256": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+   "expected": "e2c52d9e47b43bdd80e233ff002063e4cb4468f4752ebc26398b634a6430d391",
+   "match": true
+  },
+  "claims-entry-27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3.json": {
+   "sha256": "27dfab4cb9a97cf8ad72d269039d822afc3f39631601d76c0bed1b87645c0cb3",
+   "expected": null,
+   "match": true
+  },
+  "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv": {
+   "sha256": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+   "expected": "d69bbb1d49081ab8c27f10ad3dda141f099411b39598f27fa95be56c2d2ac396",
+   "match": true
+  }
+ },
+ "guard_forbidden_roots": [
+  "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+  "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+  "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+  "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+  "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+ ],
+ "financial_controlled_recalc_57": {
+  "scope": "maotai 32 字段 + 公式 7 + guangli 15 字段 + 高盛负控（库级等价路径）",
+  "financial_plus_formulas_passed": 54,
+  "target_dev_scope": 54,
+  "samples": {
+   "maotai_financial_tables": {
+    "field_passed": 32,
+    "field_total": 32,
+    "failed_fields": [],
+    "formulas_passed": 7,
+    "formulas_total": 7,
+    "formulas_detail": [
+     {
+      "formula": "revenue_growth",
+      "passed": true,
+      "expected": "3.837749",
+      "value": "3.837748613807293059155846400",
+      "tolerance": "0.000001"
+     },
+     {
+      "formula": "parent_profit_growth",
+      "passed": true,
+      "expected": "2.865646",
+      "value": "2.865646258503401360544217700",
+      "tolerance": "0.000001"
+     },
+     {
+      "formula": "operating_cash_growth",
+      "passed": true,
+      "expected": "-58.135301",
+      "value": "-58.13530119306914599655407822",
+      "tolerance": "0.000001"
+     },
+     {
+      "formula": "cash_profit_ratio",
+      "passed": true,
+      "expected": "30.416042",
+      "value": "30.41604175769671347087235324",
+      "tolerance": "0.000001"
+     },
+     {
+      "formula": "net_margin",
+      "passed": true,
+      "expected": "49.167399",
+      "value": "49.16739898240763026357769357",
+      "tolerance": "0.000001"
+     },
+     {
+      "formula": "balance_residual",
+      "passed": true,
+      "expected": "0",
+      "value": "0",
+      "tolerance": "0"
+     },
+     {
+      "formula": "profit_residual",
+      "passed": true,
+      "expected": "0",
+      "value": "0",
+      "tolerance": "0"
+     }
+    ]
+   },
+   "guangli_financial_table": {
+    "field_passed": 15,
+    "field_total": 15,
+    "failed_fields": []
+   },
+   "guosen_maotai_holdout": {
+    "status": "held_out_not_run_in_dev",
+    "note": "r27：国信茅台 bbba671e 10 格为守卫留出，I3-7 口径"
+   },
+   "macro_prose": {
+    "status": "not_run_pending_budget",
+    "note": "r27：重抽取须另立预算授权；冻结 2 例走冻结 run 复验"
+   },
+   "image_only_source": {
+    "field_passed": 0,
+    "field_total": 0,
+    "failed_fields": [],
+    "negative_control_passed": true
+   }
+  }
+ },
+ "customer_table_12": {
+  "frozen_run_id": "0a1dbf39dbfad8428b31eacdd7d5cf8a5fdef250e7df558eb55586690ed4e44f",
+  "doc_id": "2026-08-12_f0e67b73",
+  "cells_passed": 12,
+  "cells_total": 12,
+  "cells": [
+   {
+    "row": "上海银浆",
+    "column": "销售额（万元）",
+    "expected": "171,188.68",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "171,188.68",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "上海银浆",
+    "column": "占收入比例",
+    "expected": "46.95%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "46.95%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   },
+   {
+    "row": "帝科股份",
+    "column": "销售额（万元）",
+    "expected": "59,243.00",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "59,243.00",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "帝科股份",
+    "column": "占收入比例",
+    "expected": "16.25%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "16.25%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   },
+   {
+    "row": "贺利氏光伏",
+    "column": "销售额（万元）",
+    "expected": "7,541.37",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "7,541.37",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "贺利氏光伏",
+    "column": "占收入比例",
+    "expected": "2.07%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "2.07%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   },
+   {
+    "row": "苏州科德",
+    "column": "销售额（万元）",
+    "expected": "6,817.11",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "6,817.11",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "苏州科德",
+    "column": "占收入比例",
+    "expected": "1.87%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "1.87%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   },
+   {
+    "row": "日御光伏",
+    "column": "销售额（万元）",
+    "expected": "6,286.82",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "6,286.82",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "日御光伏",
+    "column": "占收入比例",
+    "expected": "1.72%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "1.72%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   },
+   {
+    "row": "合计",
+    "column": "销售额（万元）",
+    "expected": "251076.98",
+    "unit": "万元",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "251076.98",
+      "unit": "元",
+      "unit_raw": "万元"
+     }
+    ]
+   },
+   {
+    "row": "合计",
+    "column": "占收入比例",
+    "expected": "68.86%",
+    "unit": "%",
+    "passed": true,
+    "actual": [
+     {
+      "cell": "68.86%",
+      "unit": "%",
+      "unit_raw": "%"
+     }
+    ]
+   }
+  ],
+  "source_reparse": "not_run_holdout_protected",
+  "note": "绑定口径：复现入口从冻结 run 重建（原文在 guards/i3.json forbidden_roots，开发期不读）"
+ },
+ "macro_legacy_and_prose_frozen": {
+  "frozen_run_id": "552942996489beb4f1f44b66d2ab944a48b1d5b9ff2e81ef59b6c61c71c65fbf",
+  "frozen_pair_matches": true,
+  "machine_targets": 2,
+  "normalized_count": 0,
+  "legacy_status_preserved": "0/3（单列，不伪装通过；previous 移出分母后机器口径 0/2）",
+  "fields": {
+   "actual": {
+    "present": true,
+    "value": "16.2",
+    "usable_for": [
+     "cite"
+    ],
+    "calculate_ready": false
+   },
+   "consensus": {
+    "present": true,
+    "value": "5.6",
+    "usable_for": [
+     "cite"
+    ],
+    "calculate_ready": false
+   },
+   "previous": {
+    "present": true,
+    "note": "r27：previous 移出分母（机器记录 2 targets）"
+   }
+  },
+  "known_reasons": "华泰『万』不可验证岗位单位；预期指标未统一；中银 basis『同比』≠冻结 YoY（semantic-repair-report L94）",
+  "reextraction": "not_run_pending_budget"
+ },
+ "legacy_retrieval_golden": {
+  "read_chain": "legacy",
+  "denominator": "19 题（O6 按 r27 冻结排除）",
+  "passed": 19,
+  "total": 19,
+  "recall": 1.0,
+  "by_kind": {
+   "对比": {
+    "passed": 3,
+    "total": 3
+   },
+   "数字": {
+    "passed": 8,
+    "total": 8
+   },
+   "时效": {
+    "passed": 3,
+    "total": 3
+   },
+   "观点": {
+    "passed": 5,
+    "total": 5
+   }
+  },
+  "results": [
+   {
+    "qid": "N1",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-06_a91d95c7"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N2",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-06_0c25f0e9"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N3",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-07_1e021a8c"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N4",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-06_f8e31696"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N5",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-06_c1ddcd8a"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N6",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-08-13_174b6462"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N7",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-08-17_c195233b"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "N8",
+    "kind": "数字",
+    "hit": true,
+    "matched": [
+     "2026-09-06_dddc7cd0"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "O1",
+    "kind": "观点",
+    "hit": true,
+    "matched": [
+     "2026-08-16_6f14cc14"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "O2",
+    "kind": "观点",
+    "hit": true,
+    "matched": [
+     "2026-08-16_7d3ca3b9"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "O3",
+    "kind": "观点",
+    "hit": true,
+    "matched": [
+     "2026-09-06_00f08e66"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "O4",
+    "kind": "观点",
+    "hit": true,
+    "matched": [
+     "2026-09-06_d01c64bf"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "O5",
+    "kind": "观点",
+    "hit": true,
+    "matched": [
+     "2026-09-06_428e7222"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "C1",
+    "kind": "对比",
+    "hit": true,
+    "matched": [
+     "2026-08-16_6f14cc14",
+     "2026-08-17_c195233b"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "C2",
+    "kind": "对比",
+    "hit": true,
+    "matched": [
+     "2026-09-06_987d9f69",
+     "2026-09-07_acbf026c"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "C3",
+    "kind": "对比",
+    "hit": true,
+    "matched": [
+     "2026-09-06_793b3967",
+     "2026-09-06_f7f65d7e"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "T1",
+    "kind": "时效",
+    "hit": true,
+    "matched": [
+     "2026-09-08_bc0309f3"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "T2",
+    "kind": "时效",
+    "hit": true,
+    "matched": [
+     "2026-09-08_77b352bf"
+    ],
+    "missing": []
+   },
+   {
+    "qid": "T3",
+    "kind": "时效",
+    "hit": true,
+    "matched": [
+     "2026-09-07_5c5fce92"
+    ],
+    "missing": []
+   }
+  ],
+  "note": "逐题通过口径（含 require_all）；不得删旧失败题，失败题逐题留痕"
+ },
+ "zero_model_approval_contract_gate": {
+  "exit_code": 0,
+  "pytest_tail": [
+   "................................                                         [100%]",
+   "32 passed in 0.15s"
+  ],
+  "passed": true,
+  "asset": "audits/20260918-i32-remediation/test_approval_contract.py（离线合成，零模型零 PG）"
+ },
+ "summary": {
+  "financial_47_plus_formula_7": "PASS",
+  "negative_control": "PASS",
+  "guosen_maotai_holdout_10": "held_out_not_run_in_dev",
+  "customer_table_12": "PASS（冻结 run 复验）",
+  "macro_legacy_0_of_3": "PRESERVED（失败基线保留）",
+  "prose_numbers_frozen_2": "PASS（冻结 run 复验）",
+  "legacy_golden_19": "19/19",
+  "approval_contract_gate": "PASS",
+  "not_run_items": {
+   "prose_numbers_reextraction": "not_run_pending_budget（r27：复跑须另立预算授权）",
+   "guosen_maotai_holdout_10_cells": "held_out_not_run_in_dev（I3-7 口径）",
+   "customer_table_source_reparse": "not_run_holdout_protected",
+   "real_answer_semantics_test": "not_run（未授权前不计作通过）"
+  },
+  "deviations": [
+   "财务复验走 build_evidence_run 库级等价路径（原库零写入）：I2-7 后 canonical extract_claims 由 corpus_units 投影且 pilot 三份源不在 i0a2 批准开发集，冻结契约（verify_claims_entry.py 写原库 corpus_evidence_runs）不可原样执行；偏差如实登记，不宣称等同契约执行"
+  ]
+ },
+ "overall": {
+  "financial_formula_negative_customer_macro_gate": true,
+  "golden_passed": 19,
+  "note": "golden 逐题结果单列；I3-7 重验不构成 M6 最终放行（须另走独立复核 + U 签认）"
+ }
+}

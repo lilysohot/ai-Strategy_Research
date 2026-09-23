@@ -14,6 +14,18 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+2026-09-23 I3-6 最终冻结已执行（零模型、零写库、留出零读取）：冻结版本=i0c 链头
+**i0c-r4z**（有效绑定以 validate_i0c_freeze.py 核验为准）；不可变最终 manifest
+[i3-final-freeze-manifest.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json)
+落 §12.1 拟交付位置，显式哈希 28 实现+4 规则+5 预期/policy+9 守卫+4 基础设施+12 测试锚点
+（scoring.py f61573d7 未漂移），运行时配置（REV 常量 + 开关默认值 + M6 负例评测口径
+abstain=on）与校准收口声明（三类 DocRecall=100%、QuestionPass/EvidencePass 24/24、
+关键题 22/22、FP=0，b5 盘点）入 manifest；核定需重验的 M4/M5 门九组交 I3-7；
+待定项核定：prose 重抽取（预算）、真实答案语义测试（授权）、留出 10 格（守卫保护）
+均为另立授权型 not_run，**无冻结必需待定项**。证据：
+[20260923-i36-final-freeze](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i36-final-freeze/README.md)。
+本 manifest 仅冻结版本，M6 不在本轮放行（须 I3-7 重验 + 独立复核 + U 具名签认）。
+
 2026-09-23 I3-5 开发非回归已执行（零模型、原库零写入、留出零读取）：
 财务 47/47（茅台 32+广立微 15，tolerance=0）+ 公式 7/7 + 高盛负控 PASS；客户表 12/12
 （冻结 run 复验，原文留出不读）；正文冻结 2 例 2/2（冻结 run 复验；重抽取须另立预算
@@ -493,7 +505,7 @@ required/supplementary/suggested 三层 + 锚点覆盖度与未覆盖词元 + �
 | I3-3 | 开发校准：检索/切块参数仅开发集试验；每轮先固定配置再执行 retrieval\_pg，报告数字/单位/语言及三类指标                         | 冻结预期、当前配置         | A   | I3-1 后            | I3-1             | 记录每轮失败和配置哈希，预先限定试验范围/停止条件；不改预期换分数；超过边界停下报告，不无限试探                                **最新 r39：已进入校准，两轮30题均未达标；OR 候选三类 DocRecall=100%，EvidencePass=1/8、2/8、2/8，负例误报6；按预定两轮停止，保留失败，未部署候选。** |
 | I3-4 | coverage 开发测试：空库/无匹配/排除/部分/未决/故障/更新失败/并发发布/跨域                                       | 隔离 PG             | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 三轴及 availability；no\_match 不自动 absent，failed 恒 unknown；最终版本仍须 I3-7 重验          |
 | I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 **最新 2026-09-23：已执行（audits/20260923-i35-legacy-nonregress/，零模型、原库零写入、留出零读取）**：财务 47/47+公式 7/7+高盛负控 PASS（库级等价路径，偏差已登记——I2-7 后冻结契约 verify_claims_entry 写原库不可原样执行）；golden 19/19（O6 r27 排除，旧库 legacy 读链只读，无 skip）；客户表 12/12（冻结 run 复验，原文 holdout 不读）；正文冻结 2 例 2/2（重抽取 not_run 待预算授权）；宏观 0/3 保留单列；guosen_maotai 10 格 held_out_not_run_in_dev（I3-7 口径）；审批契约门 32 passed。I3-6/I3-7 另做 |
-| I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过                                             |
+| I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过 **最新 2026-09-23：已执行（audits/20260923-i36-final-freeze/ + i3-final-freeze-manifest.json，i0c-r5a 入链）**：冻结版本=i0c-r4z 链头；关键资产/运行时配置/校准收口（三类 100%、24/24、关键 22/22、FP=0）入 manifest；M4/M5 重验九组核定交 I3-7；待定项均为另立授权型，无冻结必需待定项。仅冻结版本，M6 不放行 |
 | I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retrieval、authority/取证、coverage、CLI、旧检索/财务非回归及受影响 M4/M5 门 | 最终版本、隔离 PG        | A+U | I3-6 后            | I3-6             | 逐类三指标达冻结目标（候选 ≥95%）；关键引用 100%、适用旧通过基线不退化、伪引用负例 0；分母/格式/必需环境缺失不通过；全部结果与版本一致才 M6；**E2E 基线复用**：I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约，[test\_fullchain\_probes.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py)，write-once 不修改）+ [test\_corpus\_gap\_dispositions.py](../../tests/test_corpus_gap_dispositions.py) |
 
 ### 3.7 I4 迁移、清理与切换（M7；前置 M6 + 批准 + 维护窗口）

@@ -2332,6 +2332,47 @@ if "i0c-r4z" in by_id:
           "r4z corrections must record the I3-5 backfill entry")
     merge_binding(i0c_current_binding, bindingr4z)
 
+# r5a（I3-6 最终冻结入链）：重绑最终 manifest + tasks.md + 验证器；
+# 零模型调用、零写库、留出零读取，不触碰任何实现/测试/守卫/金标字节。
+if "i0c-r5a" in by_id:
+    r5a = load_json(BASE / by_id["i0c-r5a"]["file"])
+    parentr5a = BASE / by_id["i0c-r4z"]["file"]
+    check(r5a.get("parent_snapshot") == {"snapshot_id": "i0c-r4z",
+          "path": str(parentr5a.relative_to(ROOT)), "sha256": digest(parentr5a)},
+          "r5a parent mismatch")
+    bindingr5a = r5a.get("binding", {})
+    check(set(bindingr5a) == {"final_freeze_manifest", "chain_rebind_evidence",
+                             "freeze_validator"},
+          "r5a binding groups mismatch")
+    check(set(bindingr5a.get("final_freeze_manifest", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json"}, "r5a final-manifest boundary mismatch")
+    check(set(bindingr5a.get("chain_rebind_evidence", {})) == {
+        "docs/plan/corpus-ingestion-rebuild-tasks.md"}, "r5a evidence boundary mismatch")
+    check(set(bindingr5a.get("freeze_validator", {})) == {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"}, "r5a freeze_validator boundary mismatch")
+    # 语义门：最终 manifest 须锚定链头并携带 M4/M5 重验核定与待定项核定。
+    fm = json.loads((ROOT / ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json").read_text(encoding="utf-8"))
+    check(fm.get("artifact") == "i3-final-freeze-manifest",
+          "r5a final manifest artifact mismatch")
+    check(fm.get("frozen_version", {}).get("chain_head", {}).get("snapshot_id")
+          == "i0c-r4z", "r5a final manifest must anchor the chain head")
+    check(digest(BASE / by_id["i0c-r4z"]["file"])
+          == fm.get("frozen_version", {}).get("chain_head", {}).get("sha256"),
+          "r5a final manifest chain-head sha must match the snapshot file")
+    check(len(fm.get("m4_m5_gates_to_reverify") or []) >= 9,
+          "r5a final manifest must carry the M4/M5 reverify list")
+    check(len(fm.get("pending_items") or []) >= 4
+          and fm.get("frozen_assets", {}).get("implementation"),
+          "r5a final manifest must carry pending items and asset hashes")
+    tasks_src = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    check("audits/20260923-i36-final-freeze" in tasks_src
+          and "I3-6" in tasks_src,
+          "r5a tasks.md must carry the I3-6 final-freeze backfill")
+    check(any("i3_6" in k or "i36" in k
+              for k in (r5a.get("corrections") or {})),
+          "r5a corrections must record the I3-6 freeze entry")
+    merge_binding(i0c_current_binding, bindingr5a)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()

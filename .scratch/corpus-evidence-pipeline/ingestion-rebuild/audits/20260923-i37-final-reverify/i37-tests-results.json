@@ -1,0 +1,190 @@
+{
+  "artifact": "i37-final-reverify-tests",
+  "generated_at": "2026-09-23T14:01:27+08:00",
+  "frozen_version": {
+    "final_manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json",
+    "chain_head_declared": "i0c-r4z",
+    "chain_binding_revision": "i0c-r5a"
+  },
+  "env": {
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "d2d6_dsn": "postgresql://***@127.0.0.1:543/i2_d2d6_corpus（无 corpus schema，legacy 形态前提库）",
+    "guards": {
+      "i2-verify": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i2-verify.json",
+      "i1": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i1.json",
+      "i3-e2e": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json"
+    },
+    "parent_guard": "无（父进程可信 runner；各 lane 子进程经 env 声明阶段守卫）"
+  },
+  "lanes": [
+    {
+      "lane": "m4-plain",
+      "exit_code": 0,
+      "counts": {
+        "passed": 320,
+        "failed": 0,
+        "skipped": 7,
+        "errors": 0
+      },
+      "guard": "plain",
+      "dsn_set": false,
+      "corpus_dsn_set": false,
+      "tests": [
+        "19 files"
+      ],
+      "log": "lane-m4-plain.txt"
+    },
+    {
+      "lane": "m4-i1",
+      "exit_code": 0,
+      "counts": {
+        "passed": 320,
+        "failed": 0,
+        "skipped": 7,
+        "errors": 0
+      },
+      "guard": "i1",
+      "dsn_set": false,
+      "corpus_dsn_set": false,
+      "tests": [
+        "19 files"
+      ],
+      "log": "lane-m4-i1.txt"
+    },
+    {
+      "lane": "dev-lane",
+      "exit_code": 0,
+      "counts": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i3-e2e",
+      "dsn_set": false,
+      "corpus_dsn_set": false,
+      "tests": [
+        "tests/test_corpus_dev_lane.py"
+      ],
+      "log": "lane-dev-lane.txt"
+    },
+    {
+      "lane": "m5-search-live",
+      "exit_code": 0,
+      "counts": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i2-verify",
+      "dsn_set": true,
+      "corpus_dsn_set": false,
+      "tests": [
+        "tests/test_corpus_search_pg.py"
+      ],
+      "log": "lane-m5-search-live.txt"
+    },
+    {
+      "lane": "fullchain-12",
+      "exit_code": 0,
+      "counts": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i2-verify",
+      "dsn_set": true,
+      "corpus_dsn_set": false,
+      "tests": [
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py"
+      ],
+      "log": "lane-fullchain-12.txt"
+    },
+    {
+      "lane": "m5-hermetic",
+      "exit_code": 0,
+      "counts": {
+        "passed": 74,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i2-verify",
+      "dsn_set": true,
+      "corpus_dsn_set": false,
+      "tests": [
+        "tests/test_corpus_preparation_publication_pg.py",
+        "tests/test_corpus_preparation_repository_pg.py",
+        "tests/test_corpus_authority_pg.py",
+        "tests/test_corpus_cli_pg.py",
+        "tests/test_corpus_cli_isolation.py",
+        "tests/test_corpus_consumers_pg.py",
+        "tests/test_corpus_a1_ingest_search.py"
+      ],
+      "log": "lane-m5-hermetic.txt"
+    },
+    {
+      "lane": "m5-dsn-d2d6",
+      "exit_code": 0,
+      "counts": {
+        "passed": 73,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "plain",
+      "dsn_set": true,
+      "corpus_dsn_set": true,
+      "tests": [
+        "tests/test_corpus_claims.py",
+        "tests/test_corpus_metadata.py"
+      ],
+      "log": "lane-m5-dsn-d2d6.txt"
+    }
+  ],
+  "pre_restore": {
+    "restore_exit_code": 0,
+    "expected_real_builds": 8,
+    "build_ids_deterministic": true,
+    "active_set_strict_match": true,
+    "missing_active": [],
+    "extra_active": [],
+    "published": 8,
+    "active": 8,
+    "note": "teardown 重建后测试残留清零；active 指针须严格等于真实 8 源"
+  },
+  "restore_and_pointer_recheck": {
+    "restore_exit_code": 0,
+    "expected_real_builds": 8,
+    "build_ids_deterministic": true,
+    "active_set_strict_match": true,
+    "missing_active": [],
+    "extra_active": [],
+    "published": 8,
+    "active": 8,
+    "note": "teardown 重建后测试残留清零；active 指针须严格等于真实 8 源",
+    "d2d6_db_dropped_before_restore": true
+  },
+  "gates": {
+    "fullchain_12_pass": true,
+    "m4_plain_pass": true,
+    "m4_i1_pass": true,
+    "dev_lane_pass": true,
+    "m5_search_live_pass_zero_skip": true,
+    "m5_hermetic_pass_zero_skip": true,
+    "m5_dsn_d2_d6_pass_zero_skip": true,
+    "pre_restore_ready": true,
+    "restore_deterministic_build_ids": true,
+    "real_sources_active_strict": true
+  },
+  "passed": true,
+  "discipline": {
+    "model_calls": 0,
+    "db": "沙箱 127.0.0.1:543/i2_sandbox_corpus（M5 自含 lane 逐用例 TRUNCATE）＋第三库 i2_d2d6_corpus（D2/D6 legacy 形态前提，无 corpus schema）；生产库 5432 零触碰",
+    "d2_d6_deviation": "claims/metadata 的 PG 用例走 service.dsn()，corpus 守卫对 CORPUS_DSN fail-closed 投毒（守卫 lane 下必 skip，前轮实测 21 skip 即此来源）→ 无守卫 lane 运行，零模型由测试假实现注入保证；D2/D6 另为 legacy 形态用例（legacy 句柄 fetch），沙箱含 corpus schema 使 auto 判 new 链即拒、强设 legacy 亦被拒（两轮实测均 fail-closed，冻结行为正确非产品缺陷）→ 在隔离 543 容器内新建无 corpus schema 第三库 i2_d2d6_corpus 忠实复现设计前提，生产库 5432 与沙箱零影响",
+    "lane_order": "search_pg _live 门需既有语料多命中故首跑；M5 自含 lane 逐用例 TRUNCATE 全 schema，故全部 destructive lane 排后并以内联重建收尾恢复真实 8 源",
+    "test_files": "write-once 不修改（fullchain 12 项照原样执行）"
+  }
+}

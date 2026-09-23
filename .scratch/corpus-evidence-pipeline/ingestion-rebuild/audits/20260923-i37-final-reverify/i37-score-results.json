@@ -1,0 +1,518 @@
+{
+  "artifact": "i37-final-reverify-score",
+  "generated_at": "2026-09-23T13:01:42+08:00",
+  "corpus": "i2_sandbox_corpus active publications（I3-7 重建步产物）",
+  "frozen_version": {
+    "final_manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-final-freeze-manifest.json",
+    "final_manifest_sha256": "4152179ffeed7c188a222ea411bcd6c3c6f0f976064dfa6445dbca7bcfe38775",
+    "chain_head_declared": "i0c-r4z",
+    "chain_binding_revision": "i0c-r5a"
+  },
+  "inputs": {
+    "scoring_manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/scoring-input-manifest.json",
+    "rebuild_report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i37-final-reverify/rebuild-report.json",
+    "rebuild_report_sha256": "70ab66bd52f6beba37d0ff09c140b94724fd730b6277ed5bccac724c2dcf4f66",
+    "b5_baseline": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-b5-final/b5-inventory.json",
+    "b5_baseline_sha256": "4cbeee4dc4ed90fb58a310a191af07c826b3654bda7342ce88b9f5fc7ca2f9ec",
+    "guard": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i3-e2e.json",
+    "guard_sha256": "3faac9e01fc3aa5277cdbc7b181bce25680b478c5b8bdd3f40b6538d65701b6a"
+  },
+  "frozen_policy": {
+    "min_rate": "19/20",
+    "top_k": 5,
+    "require_critical_all_pass": true,
+    "max_false_positives": 0,
+    "max_fabricated_citations": 0
+  },
+  "policy_matches_freeze": true,
+  "rebuild": {
+    "published": 8,
+    "active": 8,
+    "sources_in_db": 8,
+    "code_revs_match_freeze": true,
+    "db_revs_recomputed_match": true,
+    "revs_match_freeze": true
+  },
+  "read_chain": "new",
+  "scoring": {
+    "question_pass_counts": "24/24",
+    "evidence_pass_counts": "24/24",
+    "per_class": [
+      {
+        "domain": "company",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "8/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": true
+      },
+      {
+        "domain": "industry",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "8/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": true
+      },
+      {
+        "domain": "macro",
+        "answerable_total": 8,
+        "doc_recall": "1",
+        "question_pass": "8/8",
+        "evidence_pass": "8/8",
+        "gate_doc_recall_ge_19_20": true,
+        "gate_question_pass_ge_19_20": true,
+        "gate_evidence_pass_ge_19_20": true
+      }
+    ],
+    "critical_total_positives": 22,
+    "critical_evidence_pass_fails": [],
+    "critical_failures_blockers": [],
+    "false_positives": [],
+    "fabricated_citations": [],
+    "blockers": [],
+    "report_passed": true
+  },
+  "per_question": [
+    {
+      "query_id": "company-001",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-002",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-004",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-006",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-007",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-008",
+      "domain": "company",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "company-009",
+      "domain": "company",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    },
+    {
+      "query_id": "company-010",
+      "domain": "company",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-002",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-003",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-004",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-006",
+      "domain": "industry",
+      "critical": false,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-007",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-008",
+      "domain": "industry",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "industry-009",
+      "domain": "industry",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    },
+    {
+      "query_id": "industry-010",
+      "domain": "industry",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-002",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-003",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-004",
+      "domain": "macro",
+      "critical": false,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-005",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-006",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-007",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "critical": true,
+      "negative": false,
+      "question_pass": true,
+      "evidence_pass": true,
+      "doc_recall": "1",
+      "failures": []
+    },
+    {
+      "query_id": "macro-009",
+      "domain": "macro",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    },
+    {
+      "query_id": "macro-010",
+      "domain": "macro",
+      "critical": true,
+      "negative": true,
+      "question_pass": null,
+      "evidence_pass": null,
+      "doc_recall": null,
+      "failures": []
+    }
+  ],
+  "rank_lexeme_prune_comparison": {
+    "mode": "冻结默认 on（产品）vs off（锚定对照）；on 劣化 = 回退门",
+    "improvements_on_better_than_off": [
+      "company-003"
+    ],
+    "regressions_on_worse_than_off": []
+  },
+  "baseline_comparison": {
+    "b5_inventory": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-b5-final/b5-inventory.json",
+    "regressions": [],
+    "non_regression": true
+  },
+  "negatives": {
+    "product_abstain_on": {
+      "mode": "CORPUS_ABSTAIN_NO_ANSWER=on，产品形态 raw 题干（b2/I-M6-1 同款）",
+      "negatives": [
+        {
+          "query_id": "company-009",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        },
+        {
+          "query_id": "company-010",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        },
+        {
+          "query_id": "industry-009",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        },
+        {
+          "query_id": "industry-010",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        },
+        {
+          "query_id": "macro-009",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        },
+        {
+          "query_id": "macro-010",
+          "n_hits": 0,
+          "abstain": true,
+          "query_status": "abstain"
+        }
+      ],
+      "negatives_rejected_6_of_6": true,
+      "positives_diagnostic": {
+        "n_positives_rejected": 24,
+        "rejected_query_ids": [
+          "company-001",
+          "company-002",
+          "company-003",
+          "company-004",
+          "company-005",
+          "company-006",
+          "company-007",
+          "company-008",
+          "industry-001",
+          "industry-002",
+          "industry-003",
+          "industry-004",
+          "industry-005",
+          "industry-006",
+          "industry-007",
+          "industry-008",
+          "macro-001",
+          "macro-002",
+          "macro-003",
+          "macro-004",
+          "macro-005",
+          "macro-006",
+          "macro-007",
+          "macro-008"
+        ],
+        "representative_attribution": {
+          "representative": "company-001",
+          "n_content_lexemes": 9,
+          "and_precheck_hits": 0,
+          "finding": "abstain=on 下 24/24 正例被拒检：AND 预检要求单个单元同时含全部实质词元，真实语料归零（band 检索靠 OR+带聚合仍可命中）。b2/I-M6-1 冻结口径只断言负例 6/6（达成）；『正例不误拒』（S1）设计宣称未获正例证据——非 I3-7 门，登记 pending 待 U 裁决，不擅改冻结代码。"
+        },
+        "gate": "非 I3-7 门（冻结口径只断言负例 6/6）；发现登记 pending 待 U 裁决"
+      }
+    },
+    "scoring_layer_false_positives": []
+  },
+  "authority": {
+    "probe_source_alias": "2026-08-16_6f14cc14",
+    "doc_handle": "cv2:58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+    "handle_format_ok": true,
+    "locator": "chunk:58735cff57d8d456:body:0000",
+    "roundtrip": {
+      "build_id_match": true,
+      "chunk_id_match": true,
+      "n_units": 1,
+      "text_nonempty": true
+    },
+    "unknown_handle_rejected": true
+  },
+  "gates": {
+    "rebuild_all_new_build_active": true,
+    "frozen_policy_match": true,
+    "frozen_revs_match": true,
+    "sources_active_match_rebuild": true,
+    "read_chain_new": true,
+    "all_class_gates_ge_19_20": true,
+    "critical_all_pass": true,
+    "no_false_positives": true,
+    "no_fabricated_citations": true,
+    "score_report_passed": true,
+    "baseline_non_regression": true,
+    "prune_on_not_worse_than_off": true,
+    "abstain_negatives_6_of_6": true,
+    "authority_roundtrip_ok": true
+  },
+  "passed": true,
+  "discipline": {
+    "model_calls": 0,
+    "pg": "只读（corpus schema 零写入）；沙箱 127.0.0.1:543/i2_sandbox_corpus；生产库 5432 零触碰；_check_target fail-closed",
+    "guard": "guards/i3-e2e.json 装载（零模型/网络仅 543/forbidden_roots 留出零读取）",
+    "dsn": "postgresql://***@127.0.0.1:543/i2_sandbox_corpus",
+    "write_once": "i37-score-results.json（语义逐字段比较、剔 generated_at）"
+  },
+  "out_of_scope_pending": {
+    "abstain_positives_finding": "abstain=on 下 24/24 正例被拒检（AND 预检单单元全实质词元在真实语料归零；S1『正例不误拒』未获证）——非 I3-7 门，pending 待 U 裁决",
+    "legacy_nonregression": "旧检索/财务/公式/客户表等旧基线复验另列（i37_legacy.py）",
+    "e2e_gates": "fullchain 12 项 + gap dispositions + 守卫 env 测试电池另列（b3）",
+    "M6_signoff": "M6 放行只能由独立复核 + U 具名签认给出（plan 纪律），不以本脚本放行"
+  }
+}

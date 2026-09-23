@@ -1,0 +1,29 @@
+........................................................................ [ 45%]
+.......F.FF.........sss..sssssss.......s......s.......sss.......s....... [ 91%]
+...s....ssss..                                                           [100%]
+=================================== FAILURES ===================================
+______________________ test_candidate_pool_unchanged_live ______________________
+tests/test_corpus_search_pg.py:113: in test_candidate_pool_unchanged_live
+    assert len(base_hits) > 1  # 门有效性：池非平凡
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert 0 > 1
+E    +  where 0 = len(())
+__________________________ test_tie_break_order_live ___________________________
+tests/test_corpus_search_pg.py:144: in test_tie_break_order_live
+    assert len(hits) > 1  # 门有效性：多命中才检验排序
+    ^^^^^^^^^^^^^^^^^^^^
+E   assert 0 > 1
+E    +  where 0 = len(())
+_____________________ test_switch_off_rollback_field_equal _____________________
+tests/test_corpus_search_pg.py:160: in test_switch_off_rollback_field_equal
+    assert len(hits_off) > 1  # 门有效性
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert 0 > 1
+E    +  where 0 = len(())
+=========================== short test summary info ============================
+FAILED ../../../dev::test_candidate_pool_unchanged_live - assert 0 > 1
+FAILED ../../../dev::test_tie_break_order_live - assert 0 > 1
+FAILED ../../../dev::test_switch_off_rollback_field_equal - assert 0 > 1
+3 failed, 134 passed, 21 skipped in 21.52s
+
+exit=1
