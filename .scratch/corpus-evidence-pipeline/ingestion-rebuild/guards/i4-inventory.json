@@ -1,0 +1,52 @@
+{
+  "config_version": 1,
+  "phase": "i4-inventory",
+  "note": "I4-1 窗口前准备阶段守卫（只读盘点/演练范围）。仅放行原库 pg 容器（pg18-zhvector，具名卷 pgdata）127.0.0.1:5432 的只读盘点与预演备份（pg_dump 为源侧只读）；零模型（模型客户端与智能解析模块导入即拒，OPENAI_* 与 CORPUS_DSN 投毒）；无公网（仅本地 PG 目标）；来源仅 data/corpus 只读哈希核对（源文件漂移核验，I4 纪律：源漂移使相关证据失效），data/ 受保护禁止写入/删除/重命名；5 份留出显式禁读（继承 i3.json 全量清单）。本配置不授权任何 DDL/DML：I4-3 停写及后续窗口操作须另建 i4-window 守卫配置、单独自检并在窗口批准后绑定运行。连接串经显式环境变量传入（CORPUS_INVENTORY_DSN），不读 CORPUS_DSN；连接层强制 default_transaction_read_only=on 兜底。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "reason": "I4-1 只读盘点与预演备份：原库 pg 容器（pg18-zhvector，具名卷 pgdata）；I0A-1 先例（用户 2026-09-15 核定）+ I4-1 演练授权另行记录"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": [
+      "plugins.corpus._r2_"
+    ],
+    "poisoned_env": [
+      "OPENAI_API_KEY",
+      "OPENAI_BASE_URL",
+      "OPENAI_MODEL"
+    ],
+    "poisoned_dsn": [
+      "CORPUS_DSN"
+    ]
+  },
+  "sources": {
+    "read_roots": [
+      "data/corpus"
+    ],
+    "allowed_source_paths": [
+      "data/corpus"
+    ],
+    "forbidden_roots": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+    ],
+    "protected_roots": [
+      "data"
+    ]
+  }
+}

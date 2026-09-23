@@ -1,0 +1,69 @@
+{
+  "artifact": "i41-prep-summary.json",
+  "task": "I4-1 窗口前准备/演练（M7 首项）",
+  "date": "2026-09-23",
+  "status": "a_side_complete_window_approval_pending",
+  "note": "I4-1 未完成：停写窗口批准与预期操作范围待 U；批准前不进入 I4-3。defer 未选择，分支仍为 migrate_then_reset_limited。",
+  "approved_branch": "migrate_then_reset_limited",
+  "m6_final_version": {
+    "chain_head": "i0c-r5f",
+    "validator": "validate_i0c_freeze.py green",
+    "release": "U(xyl) 2026-09-23 r5c signoff + r5e product gate pass"
+  },
+  "guard": {
+    "phase": "i4-inventory",
+    "config_sha256_prefix": "0f45f21f7d3fdd5b",
+    "selfcheck": "24/24 passed"
+  },
+  "inventory": {
+    "corpus_schema_present": false,
+    "drift_changed_tables": [],
+    "reset_candidate_counts": {
+      "documents": 89,
+      "blocks": 1101,
+      "claims": 1318,
+      "claims_v2": 0,
+      "claim_block_runs": 290,
+      "claim_block_runs_v2": 0,
+      "corpus_evidence_runs": 57,
+      "ingest_runs": 11,
+      "ingest_failures": 1
+    },
+    "client_writers": 0,
+    "replication_slots": 0,
+    "cron_jobs": 0,
+    "extensions": {
+      "pg_trgm": "1.6",
+      "plpgsql": "1.0",
+      "vector": "0.8.6",
+      "zhparser": "2.4"
+    }
+  },
+  "source_drift": {
+    "matched": 68,
+    "changed": 0,
+    "missing": 0,
+    "holdouts_stat_only": 5
+  },
+  "rehearsal_backup": {
+    "dir": "backups/i4-rehearsal-20260923T1023Z-NOT-FINAL",
+    "status": "REHEARSAL_ONLY_NOT_FINAL_BACKUP",
+    "wal_bracket": [
+      "0/4FAFA088",
+      "0/4FB2BA40"
+    ],
+    "pg_dump_seconds_approx": 52,
+    "integrity": "sha256sum -c 9/9 OK",
+    "originals_included": 191,
+    "originals_excluded_holdouts": 5
+  },
+  "pending_u": [
+    "停写窗口时间批准",
+    "写入者区分手段确认（R1）",
+    "I4-6 隔离恢复目标核定",
+    "corpus_app 角色与归档根核定"
+  ],
+  "zero_model": true,
+  "production_ddl_dml": "none（仅只读 SELECT 与源侧备份读取）",
+  "holdout_reads": 0
+}

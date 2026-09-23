@@ -1,0 +1,718 @@
+{
+  "artifact": "i41-inventory-findings.json",
+  "task": "I4-1 生产库只读盘点刷新（窗口前准备；预演授权 U 2026-09-23 本会话核定）",
+  "observed_at": "2026-09-23T10:21:29+00:00",
+  "guard": {
+    "phase": "i4-inventory",
+    "config": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i4-inventory.json",
+    "config_sha256": "0f45f21f7d3fdd5b7f96a15dea93906d41f64ee047dac82f712490c815b69650"
+  },
+  "target": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "database": "postgres",
+    "user": "postgres",
+    "note": "凭据不出现在本文件"
+  },
+  "errors": [
+    {
+      "key": "scheduled_jobs",
+      "error": "UndefinedTable: relation \"cron.job\" does not exist\nLINE 1: SELECT jobid, schedule, command, active FROM cron.job ORDER ...\n                                                     ^"
+    }
+  ],
+  "identity": [
+    {
+      "version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+      "db": "postgres",
+      "usr": "postgres",
+      "start_time": "2026-09-23 01:33:36.735854+00:00",
+      "wal_lsn_now": "0/4FAF9F68"
+    }
+  ],
+  "databases": [
+    {
+      "datname": "apodex",
+      "size": "9686 kB",
+      "size_bytes": 9918143,
+      "datallowconn": true
+    },
+    {
+      "datname": "postgres",
+      "size": "26 MB",
+      "size_bytes": 27678399,
+      "datallowconn": true
+    },
+    {
+      "datname": "template0",
+      "size": "7521 kB",
+      "size_bytes": 7701007,
+      "datallowconn": false
+    },
+    {
+      "datname": "template1",
+      "size": "7593 kB",
+      "size_bytes": 7774735,
+      "datallowconn": true
+    }
+  ],
+  "schemas": [
+    {
+      "nspname": "public"
+    },
+    {
+      "nspname": "zhparser"
+    }
+  ],
+  "corpus_schema_objects": [],
+  "public_tables_exact_counts": [
+    {
+      "relname": "blocks",
+      "est": 1031,
+      "self_ref": 1
+    },
+    {
+      "relname": "chinese_docs",
+      "est": 3,
+      "self_ref": 1
+    },
+    {
+      "relname": "claim_block_runs",
+      "est": 231,
+      "self_ref": 1
+    },
+    {
+      "relname": "claim_block_runs_v2",
+      "est": -1,
+      "self_ref": 1
+    },
+    {
+      "relname": "claims",
+      "est": 1241,
+      "self_ref": 1
+    },
+    {
+      "relname": "claims_v2",
+      "est": -1,
+      "self_ref": 1
+    },
+    {
+      "relname": "corpus_evidence_runs",
+      "est": -1,
+      "self_ref": 1
+    },
+    {
+      "relname": "docs",
+      "est": 3,
+      "self_ref": 1
+    },
+    {
+      "relname": "documents",
+      "est": 78,
+      "self_ref": 1
+    },
+    {
+      "relname": "ingest_failures",
+      "est": -1,
+      "self_ref": 1
+    },
+    {
+      "relname": "ingest_runs",
+      "est": -1,
+      "self_ref": 1
+    }
+  ],
+  "exact_count:documents": [
+    {
+      "n": 89
+    }
+  ],
+  "exact_count:blocks": [
+    {
+      "n": 1101
+    }
+  ],
+  "exact_count:claims": [
+    {
+      "n": 1318
+    }
+  ],
+  "exact_count:claims_v2": [
+    {
+      "n": 0
+    }
+  ],
+  "exact_count:claim_block_runs": [
+    {
+      "n": 290
+    }
+  ],
+  "exact_count:claim_block_runs_v2": [
+    {
+      "n": 0
+    }
+  ],
+  "exact_count:corpus_evidence_runs": [
+    {
+      "n": 57
+    }
+  ],
+  "exact_count:ingest_runs": [
+    {
+      "n": 11
+    }
+  ],
+  "exact_count:ingest_failures": [
+    {
+      "n": 1
+    }
+  ],
+  "sequences_public": [
+    {
+      "sequencename": "chinese_docs_id_seq",
+      "last_value": 3
+    },
+    {
+      "sequencename": "claims_claim_id_seq",
+      "last_value": 2238
+    },
+    {
+      "sequencename": "claims_v2_claim_id_seq",
+      "last_value": null
+    },
+    {
+      "sequencename": "docs_id_seq",
+      "last_value": 3
+    },
+    {
+      "sequencename": "ingest_runs_run_id_seq",
+      "last_value": 11
+    }
+  ],
+  "candidate_indexes": [
+    {
+      "tablename": "blocks",
+      "indexname": "blocks_pkey",
+      "indexdef": "CREATE UNIQUE INDEX blocks_pkey ON public.blocks USING btree (doc_id, seq)"
+    },
+    {
+      "tablename": "blocks",
+      "indexname": "idx_blocks_locator",
+      "indexdef": "CREATE INDEX idx_blocks_locator ON public.blocks USING btree (doc_id, locator)"
+    },
+    {
+      "tablename": "blocks",
+      "indexname": "idx_blocks_tsv",
+      "indexdef": "CREATE INDEX idx_blocks_tsv ON public.blocks USING gin (tsv)"
+    },
+    {
+      "tablename": "claim_block_runs",
+      "indexname": "claim_block_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claim_block_runs_pkey ON public.claim_block_runs USING btree (doc_id, seq)"
+    },
+    {
+      "tablename": "claim_block_runs",
+      "indexname": "idx_claim_block_runs_fingerprint",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_fingerprint ON public.claim_block_runs USING btree (status, model, extractor_version)"
+    },
+    {
+      "tablename": "claim_block_runs",
+      "indexname": "idx_claim_block_runs_status",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_status ON public.claim_block_runs USING btree (status)"
+    },
+    {
+      "tablename": "claim_block_runs_v2",
+      "indexname": "claim_block_runs_v2_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claim_block_runs_v2_pkey ON public.claim_block_runs_v2 USING btree (doc_id, source_rev, seq)"
+    },
+    {
+      "tablename": "claim_block_runs_v2",
+      "indexname": "idx_claim_block_runs_v2_fingerprint",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_v2_fingerprint ON public.claim_block_runs_v2 USING btree (status, model, extractor_version, lint_version)"
+    },
+    {
+      "tablename": "claim_block_runs_v2",
+      "indexname": "idx_claim_block_runs_v2_status",
+      "indexdef": "CREATE INDEX idx_claim_block_runs_v2_status ON public.claim_block_runs_v2 USING btree (status)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "claims_doc_id_seq_claim_text_key",
+      "indexdef": "CREATE UNIQUE INDEX claims_doc_id_seq_claim_text_key ON public.claims USING btree (doc_id, seq, claim_text)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "claims_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claims_pkey ON public.claims USING btree (claim_id)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "idx_claims_as_of",
+      "indexdef": "CREATE INDEX idx_claims_as_of ON public.claims USING btree (as_of)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "idx_claims_doc",
+      "indexdef": "CREATE INDEX idx_claims_doc ON public.claims USING btree (doc_id, seq)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "idx_claims_kind",
+      "indexdef": "CREATE INDEX idx_claims_kind ON public.claims USING btree (kind)"
+    },
+    {
+      "tablename": "claims",
+      "indexname": "idx_claims_tickers",
+      "indexdef": "CREATE INDEX idx_claims_tickers ON public.claims USING gin (tickers)"
+    },
+    {
+      "tablename": "claims_v2",
+      "indexname": "claims_v2_doc_id_source_rev_seq_claim_text_evidence_quote_m_key",
+      "indexdef": "CREATE UNIQUE INDEX claims_v2_doc_id_source_rev_seq_claim_text_evidence_quote_m_key ON public.claims_v2 USING btree (doc_id, source_rev, seq, claim_text, evidence_quote, metric, period_end, value_text)"
+    },
+    {
+      "tablename": "claims_v2",
+      "indexname": "claims_v2_pkey",
+      "indexdef": "CREATE UNIQUE INDEX claims_v2_pkey ON public.claims_v2 USING btree (claim_id)"
+    },
+    {
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_doc",
+      "indexdef": "CREATE INDEX idx_claims_v2_doc ON public.claims_v2 USING btree (doc_id, source_rev, seq)"
+    },
+    {
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_quality",
+      "indexdef": "CREATE INDEX idx_claims_v2_quality ON public.claims_v2 USING btree (quality_status)"
+    },
+    {
+      "tablename": "claims_v2",
+      "indexname": "idx_claims_v2_subject_metric",
+      "indexdef": "CREATE INDEX idx_claims_v2_subject_metric ON public.claims_v2 USING btree (scope, subject, metric, period_end)"
+    },
+    {
+      "tablename": "corpus_evidence_runs",
+      "indexname": "corpus_evidence_runs_doc",
+      "indexdef": "CREATE INDEX corpus_evidence_runs_doc ON public.corpus_evidence_runs USING btree (doc_id, parse_rev)"
+    },
+    {
+      "tablename": "corpus_evidence_runs",
+      "indexname": "corpus_evidence_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX corpus_evidence_runs_pkey ON public.corpus_evidence_runs USING btree (run_id)"
+    },
+    {
+      "tablename": "documents",
+      "indexname": "documents_content_hash_key",
+      "indexdef": "CREATE UNIQUE INDEX documents_content_hash_key ON public.documents USING btree (content_hash)"
+    },
+    {
+      "tablename": "documents",
+      "indexname": "documents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX documents_pkey ON public.documents USING btree (doc_id)"
+    },
+    {
+      "tablename": "documents",
+      "indexname": "idx_documents_published",
+      "indexdef": "CREATE INDEX idx_documents_published ON public.documents USING btree (published DESC)"
+    },
+    {
+      "tablename": "ingest_failures",
+      "indexname": "idx_ingest_failures_run",
+      "indexdef": "CREATE INDEX idx_ingest_failures_run ON public.ingest_failures USING btree (run_id)"
+    },
+    {
+      "tablename": "ingest_runs",
+      "indexname": "idx_ingest_runs_started",
+      "indexdef": "CREATE INDEX idx_ingest_runs_started ON public.ingest_runs USING btree (started_at DESC)"
+    },
+    {
+      "tablename": "ingest_runs",
+      "indexname": "ingest_runs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX ingest_runs_pkey ON public.ingest_runs USING btree (run_id)"
+    }
+  ],
+  "extensions": [
+    {
+      "extname": "pg_trgm",
+      "extversion": "1.6"
+    },
+    {
+      "extname": "plpgsql",
+      "extversion": "1.0"
+    },
+    {
+      "extname": "vector",
+      "extversion": "0.8.6"
+    },
+    {
+      "extname": "zhparser",
+      "extversion": "2.4"
+    }
+  ],
+  "zhparser_dict": [
+    {
+      "n": 0
+    }
+  ],
+  "pg_stat_activity": [
+    {
+      "pid": 14,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:36.741980+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 15,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:36.742442+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 16,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:36.742547+00:00",
+      "state": null,
+      "backend_type": "io worker",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 17,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:36.742748+00:00",
+      "state": null,
+      "backend_type": "checkpointer",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 18,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:36.742975+00:00",
+      "state": null,
+      "backend_type": "background writer",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 20,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:42.426826+00:00",
+      "state": null,
+      "backend_type": "walwriter",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 21,
+      "usename": null,
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:42.427084+00:00",
+      "state": null,
+      "backend_type": "autovacuum launcher",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    },
+    {
+      "pid": 22,
+      "usename": "postgres",
+      "application_name": "",
+      "client_addr": null,
+      "backend_start": "2026-09-23 01:33:42.427370+00:00",
+      "state": null,
+      "backend_type": "logical replication launcher",
+      "query_head": "",
+      "write_query": false,
+      "in_open_xact": null
+    }
+  ],
+  "replication_slots": [],
+  "drift_vs_i0a1": {
+    "baseline": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/i0a1-inventory-findings.json",
+    "row_counts": {
+      "blocks": {
+        "baseline": null,
+        "now": 1101,
+        "changed": false
+      },
+      "chinese_docs": {
+        "baseline": null,
+        "now": 3,
+        "changed": false
+      },
+      "claim_block_runs": {
+        "baseline": null,
+        "now": 290,
+        "changed": false
+      },
+      "claim_block_runs_v2": {
+        "baseline": null,
+        "now": 0,
+        "changed": false
+      },
+      "claims": {
+        "baseline": null,
+        "now": 1318,
+        "changed": false
+      },
+      "claims_v2": {
+        "baseline": null,
+        "now": 0,
+        "changed": false
+      },
+      "corpus_evidence_runs": {
+        "baseline": null,
+        "now": 57,
+        "changed": false
+      },
+      "docs": {
+        "baseline": null,
+        "now": 3,
+        "changed": false
+      },
+      "documents": {
+        "baseline": null,
+        "now": 89,
+        "changed": false
+      },
+      "ingest_failures": {
+        "baseline": null,
+        "now": 1,
+        "changed": false
+      },
+      "ingest_runs": {
+        "baseline": null,
+        "now": 11,
+        "changed": false
+      }
+    },
+    "changed_tables": [],
+    "schemas": {
+      "baseline": [
+        "public",
+        "zhparser"
+      ],
+      "now": [
+        "public",
+        "zhparser"
+      ]
+    },
+    "extensions": {
+      "baseline": {},
+      "now": {
+        "pg_trgm": "1.6",
+        "plpgsql": "1.0",
+        "vector": "0.8.6",
+        "zhparser": "2.4"
+      }
+    }
+  },
+  "source_drift_vs_dev_manifest": {
+    "baseline": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/dev-manifest.json",
+    "matched": 68,
+    "changed": [],
+    "missing": [],
+    "added": [
+      "data/corpus/.audit/audit_runs.jsonl",
+      "data/corpus/.audit/c1_full84_baseline_20260912.json",
+      "data/corpus/.audit/c1_full84_doc_kind_review_20260912.csv",
+      "data/corpus/.audit/c1_full84_doc_kind_review_20260912.jsonl",
+      "data/corpus/.audit/c1_full84_gold_candidates_20260912.csv",
+      "data/corpus/.audit/c1_full84_gold_candidates_20260912.jsonl",
+      "data/corpus/.audit/c1_full84_v1_block_runs_snapshot_20260912.jsonl",
+      "data/corpus/.audit/c1_full84_v1_claims_snapshot_20260912.jsonl",
+      "data/corpus/.audit/c1_full87_baseline_20260912.json",
+      "data/corpus/.audit/c1_full87_doc_kind_review_20260912.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912.jsonl",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.before_consistency_cleanup.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.before_content_genre.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.before_genre_label_split.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.before_personal_trade_positive.csv",
+      "data/corpus/.audit/c1_full87_gold_candidates_20260912_merged_smoke30.csv",
+      "data/corpus/.audit/c1_full87_gold_claims_template_20260912.csv",
+      "data/corpus/.audit/c1_full87_v1_block_runs_snapshot_20260912.jsonl",
+      "data/corpus/.audit/c1_full87_v1_claims_snapshot_20260912.jsonl",
+      "data/corpus/.audit/c1_smoke30_annotation_review_20260912.json",
+      "data/corpus/.audit/c2_full180_block_validation_20260912.json",
+      "data/corpus/.audit/c2_full180_review_queue_20260912.csv",
+      "data/corpus/.audit/c3c4_field_dictionary_20260912.csv",
+      "data/corpus/.audit/c3c4_field_gold_all133_skeleton_20260912.csv",
+      "data/corpus/.audit/c3c4_field_gold_manifest_20260912.json",
+      "data/corpus/.audit/c3c4_field_gold_priority50_20260912.csv",
+      "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+      "data/corpus/.audit/r2_material_micro_gold_v1_20260913.json",
+      "data/corpus/.evidence/pilot/01f26a9ad4ad742e71e5b6ce4aa16cfa03983e1ab14685ae30e0c10fe047f442.json",
+      "data/corpus/.evidence/pilot/0679f8a65976f2c24d97c32d1de553606bfe72503b8a9121b98726c3b31c9f3a.json",
+      "data/corpus/.evidence/pilot/08f80d4d5100d5f5dd79940e98205f234e35f81e01e12cdc1198843535d501f6.json",
+      "data/corpus/.evidence/pilot/38b169f7248f9fce606f9923438cd6d24ea734deae1c22026553848b4b3041d2.json",
+      "data/corpus/.evidence/pilot/42785c9d9157fadb4d41309bab7d1a9299db9a6bf8d6fdfdc948a681fa49f294.json",
+      "data/corpus/.evidence/pilot/4a04eaa0e6bdd664bb402858a98ccdc8e2766dd21a9941b86682ac10d432dc37.json",
+      "data/corpus/.evidence/pilot/4af3279f0a693a7a00eba06b721c858f3a0e422cba8c53ef5ec6b85e937d0b89.json",
+      "data/corpus/.evidence/pilot/5987633c08543c689fc6e29df0fcf1068a05c40d1293a02c1d04858b989d6240.json",
+      "data/corpus/.evidence/pilot/6dbce5dbf44f41cb79bf8f6328e74de0c82de58a0c23e4a4992d6a3713cd011f.json",
+      "data/corpus/.evidence/pilot/8ac74575f9c6231c20ca2c1a1f0023e86e45e3a5af403b6bcbd0ec364b6e1320.json",
+      "data/corpus/.evidence/pilot/8fefe246f4f985429cef37a6b525f57c245426ea79f2a6ac41bf94363f3f7310.json",
+      "data/corpus/.evidence/pilot/9fe1af8972353ad21da563eda3e1d31f499c524f9bb9953221c9e274c874791f.json",
+      "data/corpus/.evidence/pilot/aa94c96d76d6375947c98e9cf9ae4c1bd60c2c0769e62f504f2ebfdda382ef32.json",
+      "data/corpus/.evidence/pilot/ab32d7c30cf43ad0b52c8fde49c13fdcc2cb8fb057283267564fdb384dc5c0c5.json",
+      "data/corpus/.evidence/pilot/adc39da7db9d63f5f18a15d18f5cf21a505d1f0b892adb00d80631104c2e09ee.json",
+      "data/corpus/.evidence/pilot/b7f70a1a90e1edf4680cea5a1512b362b6afa61277aceec4ffb2612d5b2a5d7a.json",
+      "data/corpus/.evidence/pilot/c391fe1713ff85fbf22778d7a4708260f2719186932b5753a330524ca9b1c257.json",
+      "data/corpus/.evidence/pilot/d5101fdbfb6841dd18d198a0a1a10d8d45fcce09cc2b8a49c7e4e0ebe84ba189.json",
+      "data/corpus/.evidence/pilot/db03ebd071a4eff8ad96094c105bc0910eff245afd0b3d4c1f4f981ba5ddc157.json",
+      "data/corpus/.evidence/pilot/dcbd223d84aa9a28a23545fee249f01ef2c744321fd2b358600232e4250dc859.json",
+      "data/corpus/.evidence/pilot/report-04629db362ece61f057445bb07127b46336faf8caa3ec21d633ab099219d8b50.json",
+      "data/corpus/.evidence/pilot/report-2402cf44c5be7e4867f4417dfcfab8bf2722f64f7c5ea4055fc41fc38e94c053.json",
+      "data/corpus/.evidence/pilot/report-b39ae9713aa82df35043a62ac0551eb349090c558b4916871accf6bb6e3dc519.json",
+      "data/corpus/.evidence/pilot/report-e9ec4b09aabc90a4d5c23a5e536c8a5d44cdb493da5eb304dd7fef6a43da5ea1.json",
+      "data/corpus/.evidence/prose-repair/025988cf6fb343f95d26f20adeeaf7536a5ca22778f21eaa7cbe856f1743a941.json",
+      "data/corpus/.evidence/prose-repair/06766c26107e9e98ce98caac49e4a938c3367eb0d340ab7928028b1e91156a45.json",
+      "data/corpus/.evidence/prose-repair/0b54e66222f02b50ae0f7a6459ee703bd406c185626d1748b6d68d4d1fc76d2c.json",
+      "data/corpus/.evidence/prose-repair/226ac9147429084381ee33c6e6a0ea126fdd2cdc179181342860fb6778a87182.json",
+      "data/corpus/.evidence/prose-repair/2843574e52a7836325d75aef9969a6f1a017a968290287a9649f05a11ef44984.json",
+      "data/corpus/.evidence/prose-repair/45ece759479819eedaea643ce1dd7239e03db9ad07e13784678b695d0d911896.json",
+      "data/corpus/.evidence/prose-repair/490e6ef5db261e6133f31e96c58e065702ba56e0be3d0d2d5c72afddd8ae3c0f.json",
+      "data/corpus/.evidence/prose-repair/552942996489beb4f1f44b66d2ab944a48b1d5b9ff2e81ef59b6c61c71c65fbf.json",
+      "data/corpus/.evidence/prose-repair/6aa7690ca5e4ad71003a3e6daac1671861d4e2eb4ae12929db97bcda04a68de4.json",
+      "data/corpus/.evidence/prose-repair/6ac847f61affa37a32871218bef6046f9693290236b7dc703df93fc36ab751e1.json",
+      "data/corpus/.evidence/prose-repair/701484549dc55d98011a5d53b78a0da1d94ebba1e20b3f1b532fbf671e0369d8.json",
+      "data/corpus/.evidence/prose-repair/7fdf861ce0c8ec6fd72fe9ac13d3b5806fec31df14c1305047ce004d45ee1b67.json",
+      "data/corpus/.evidence/prose-repair/8a3a43082c765c67f4cec2834038a692dbbe3ae552dc11fa1241d49ffec75839.json",
+      "data/corpus/.evidence/prose-repair/8e812be22bc3b3e564c34ad46754b744ea6f3057a0341d8f430a613a20f7f397.json",
+      "data/corpus/.evidence/prose-repair/9910314486eb3f492d9a43944a62606ad0ca580ca4bc61a30112c517b4c940dd.json",
+      "data/corpus/.evidence/prose-repair/bcf5a2e5f498b6e8644f61ed7b38cca93a5c25d1f421dfeb41883f747c2b2c56.json",
+      "data/corpus/.evidence/prose-repair/bd82442302315c7e991af2d63452e40a7537bd5b06fb8a43d3d44b26b035f7e2.json",
+      "data/corpus/.evidence/prose-repair/cb6a131a09d06534b6aa466159a132c6e1a9be07657992715679abda33b3487b.json",
+      "data/corpus/.evidence/prose-repair/cc95f6c9510e1c7242a17c31ad5d6781c3a82a214a9c6b8e4b69c67e7b884ad5.json",
+      "data/corpus/.evidence/prose-repair/d38cb83b80d6523aa46736499383fb737ad3d3f803520ec8cc23d0917d7aa011.json",
+      "data/corpus/.evidence/prose-repair/d7d7dc28c3a33721a2c4f887f40c2b0b2636bc29f55c982305c605ee6a236b5d.json",
+      "data/corpus/.evidence/prose-repair/f0a27504caaf563e124120f0dbf8ae971a8d1eca7edc274d128c257b912f0a52.json",
+      "data/corpus/.evidence/prose-repair/f43b62193c7de4bad4cf911a33ad21eeffab0860b1e1300ac6aa79b482d977bb.json",
+      "data/corpus/.evidence/prose-repair/report-1b6096bbf1cc0636bd05e74742b07126bf9c10633555359b15c7ee2c49c43b61.json",
+      "data/corpus/.evidence/prose-repair/report-2f469adf97acf7c1bda5b80a87e08d4aef051179665f11848c5fa4530b90f1b2.json",
+      "data/corpus/.evidence/prose-repair/report-3710ce29373df0fceb84f5d602e1e54499e7cfa537b32f127f99edfe1ac5c23f.json",
+      "data/corpus/.evidence/prose-repair/report-774b55bd2a95b0444beabc9c7461a251b7ace0ff64fa55f922364081c002e1e8.json",
+      "data/corpus/.evidence/prose-repair/report-78a012e302a9a7fc38b79406b671a83e3402620abc30a38678ec0b036540630d.json",
+      "data/corpus/.evidence/prose-repair/report-9123a417f9984c0588e163deae5bd3f510c192275195f1eec249b5f7c524c643.json",
+      "data/corpus/.evidence/prose-repair/report-a1e336284e16f1efcb433c07291ac2c735a01f32f724f53cf8f8115f4553b46d.json",
+      "data/corpus/.gitkeep",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-策略周报-外部加息扰动未消-短期以守为攻-880f5e5e.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-光大证券-金属行业周期品高频数据周报-焦煤期货收盘价周内下跌3-64-46877bac.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-兴业证券-数据面面观-9月议息会议前的关键周-3e7710e1.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-兴业证券-极致轮动如何收敛-探讨几个契机-733fc399.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-周观点-美联储加息扩表可能性或已浮现-看好供给约束型周期品-da9260aa.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国投证券-独立行情周报-地产与文旅中报尾部冲击主导走阔-68495486.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国投证券-策略定期报告-有转机-在何时-5e03dd1c.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-传媒行业双周报-后西游记-上线-ai视频渗透至长剧市场-0e8cb919.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国联民生证券-医药行业周报-cxo中报我们看到了什么-c1e12af2.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国联民生证券-宏观周度观察-中国汽车出海的欧洲考验-cac4f407.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国联民生证券-通信行业周报-2026-cioe中国光博会前瞻-a87d1d3c.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-ai行业周观察-7月手机市场大幅下滑-多家旗舰模型更新-b4a107f6.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-a股策略周报-迷雾与罗盘-fb9b3c67.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-有色金属行业小金属双周谈-钽价有望启动上行-关注锑价止跌回升-0af30fd5.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-国金证券-通信行业研究-hbm市场极度紧缺-字节获296亿美元银团贷款-7ee005e2.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-a股策略周报-非农大超预期-加息预期升温-5e671b67.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf:Zone.Identifier",
+      "data/corpus/2026-09-06_2026.09.06-平安证券-a股策略周报-轮动整固-攻守均衡-76e079c9.pdf:Zone.Identifier",
+      "data/corpus/2026-09-07_2026.09.07-东吴证券-策略周评-gpt-6-astra发布-前沿模型能力继续提升-dbfd9238.pdf:Zone.Identifier",
+      "data/corpus/2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf:Zone.Identifier",
+      "data/corpus/2026-09-08_Capital-Wars_全球流动性观察周度更新.pdf:Zone.Identifier",
+      "data/corpus/2026-09-08_FundaAI_Deep台达电子2H26 重新加速在即VPD 仍被忽视.pdf:Zone.Identifier",
+      "data/corpus/2026-09-08_James-Bulltard_9826 复盘.pdf:Zone.Identifier",
+      "data/corpus/2026-09-09_James-Bulltard_1066 天实现 1000 收益率.pdf:Zone.Identifier",
+      "data/corpus/index.db",
+      "data/corpus/originals/.gitkeep"
+    ],
+    "holdout_stat_only": [
+      {
+        "path": "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+        "size": 761085,
+        "mtime_ns": 1789190025325902122
+      },
+      {
+        "path": "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+        "size": 380170,
+        "mtime_ns": 1788831730822703663
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+        "size": 3460734,
+        "mtime_ns": 1788948612344061900
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+        "size": 1938358,
+        "mtime_ns": 1788948625403259100
+      },
+      {
+        "path": "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf",
+        "size": 741895,
+        "mtime_ns": 1788948737376347100
+      }
+    ],
+    "added_count": 123
+  },
+  "summary": {
+    "corpus_schema_present": false,
+    "reset_candidate_counts": {
+      "documents": 89,
+      "blocks": 1101,
+      "claims": 1318,
+      "claims_v2": 0,
+      "claim_block_runs": 290,
+      "claim_block_runs_v2": 0,
+      "corpus_evidence_runs": 57,
+      "ingest_runs": 11,
+      "ingest_failures": 1
+    },
+    "drift_changed_tables": [],
+    "source_files_matched": 68,
+    "source_files_changed": 0,
+    "source_files_missing": 0,
+    "source_files_added": 123,
+    "active_backends": 8,
+    "possibly_writing_backends": 0,
+    "replication_slots": 0,
+    "cron_jobs": 0,
+    "errors": 1
+  }
+}

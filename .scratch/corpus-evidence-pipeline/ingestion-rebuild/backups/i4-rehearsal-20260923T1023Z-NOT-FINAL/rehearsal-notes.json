@@ -1,0 +1,51 @@
+{
+  "artifact": "i4-rehearsal-backup-notes.json",
+  "task": "I4-1 窗口前预演备份",
+  "status": "REHEARSAL_ONLY_NOT_FINAL_BACKUP",
+  "warning": "本备份为窗口前演练产物，明确标注非最终备份；不满足 I4-6 停写截止点要求，不得用于切换清单签认",
+  "generated_at": "2026-09-23T10:26:21+00:00",
+  "authorization": "U 2026-09-23 本会话核定（I4-1 只读盘点+预演备份授权）",
+  "method": {
+    "pg_dump": "docker exec pg pg_dump -F c（custom，容器内 pg_dump 18.6 版本匹配，单 MVCC 快照）",
+    "globals": "pg_dumpall --globals-only",
+    "toc": "pg_restore --list（容器内 18.6）",
+    "originals": "受守卫 tar.gz（data/corpus 全量；5 份留出件守卫禁读显式排除，元数据见 i41-inventory-findings.json）"
+  },
+  "wal_bracket": {
+    "before": "0/4FAFA088|2026-09-23 10:23:57.337385+00",
+    "after": "0/4FB2BA40|2026-09-23 10:24:49.267788+00",
+    "note": "在线库未停写；预演窗口由 WAL LSN 前后括号记录；最终备份须停写截止点后生成"
+  },
+  "timing": {
+    "dump_wall_seconds_approx": 52,
+    "note": "含 dump+docker cp；最终窗口耗时标定以 I4-6 实测为准"
+  },
+  "pg_objects": {
+    "postgres_toc_entries": 206,
+    "postgres_table_data": 11,
+    "apodex_toc_entries": 61,
+    "apodex_table_data": 8
+  },
+  "databases": [
+    "postgres",
+    "apodex"
+  ],
+  "originals_rehearsal": {
+    "included_count": 191,
+    "excluded_holdouts": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+    ],
+    "excluded_note": "留出件字节未读未归档（守卫禁读）；完整原文归档属 I4-6 窗口守卫授权范围",
+    "tar_sha256": "bc9536d6e5150b7bab714bc714b72632ea926ee9612315212dd8e564fbb36084",
+    "tar_size": 90182779,
+    "generated_at": "2026-09-23T10:25:45+00:00"
+  },
+  "integrity": {
+    "artifact_manifest": "artifact-manifest.sha256 (8 entries)",
+    "verified_by": "sha256sum -c at I4-1 close"
+  }
+}

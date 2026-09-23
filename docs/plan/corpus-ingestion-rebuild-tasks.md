@@ -14,6 +14,21 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-09-23 I4-1 窗口前准备/演练 A 侧完成（M7 已启动；停写窗口批准待 U，未进入 I4-3）。**
+获准分支确认 `migrate_then_reset_limited`（i0c_1_branch 冻结裁决）；冻结链验证通过
+（链头 **i0c-r5f**，r5e 产品门结论保留）；新建 `i4-inventory` 阶段守卫（仅 5432 只读、
+零模型、5 份留出禁读）合成自检 **24/24**；生产只读盘点**零漂移**——corpus schema 确认
+不存在（窗口内 DDL 纪律）、重置候选九表行数与 I0A-1/设计复核逐一相等（claims 1318、
+claim_block_runs 290、corpus_evidence_runs 57、ingest_runs 11、ingest_failures 1 等）、
+零客户端写入者/复制槽/计划任务、dev-manifest 73 源 68/68 哈希匹配（0 变更 0 缺失，
+5 份留出仅 stat）；预演备份（**REHEARSAL_ONLY_NOT_FINAL**，WAL 括号 0/4FAFA088→
+0/4FB2BA40，dump ~52s，原文 tar 191 文件+5 留出显式排除）sha256 9/9 完整性通过。
+回退步骤、窗口操作范围草案与待 U 决定项（窗口时间、写入者区分手段 R1、I4-6 恢复
+目标、corpus_app 角色/归档根）见
+[I4-1 准备报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i41-window-prep/report.md)
+与[机读摘要](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i41-window-prep/i41-prep-summary.json)。
+本条不构成窗口批准或 M7 放行；defer 未选择，批准缺失不进 I4-3。
+
 **2026-09-23 M6 产品门整改（i0c-r5e）：检索召回、证据完整性与负例拒答已通过。**
 沿用冻结 30 题、金标、评分器、95% 阈值、原始题干和 `limit=10`，真实注册
 `corpus_search` → `corpus_fetch` 链路为 QuestionPass **24/24**、EvidencePass
