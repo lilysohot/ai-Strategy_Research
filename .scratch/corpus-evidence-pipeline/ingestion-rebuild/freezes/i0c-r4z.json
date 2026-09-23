@@ -1,0 +1,29 @@
+{
+ "snapshot_id": "i0c-r4z",
+ "revision": "r4z",
+ "phase": "i0c",
+ "status": "frozen",
+ "parent_snapshot": {
+  "snapshot_id": "i0c-r4y",
+  "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r4y.json",
+  "sha256": "84553bd361f9914fbc1feba3fa60461cfc6c1f7194721239406fcd8e514d5241"
+ },
+ "binding": {
+  "chain_rebind_evidence": {
+   "docs/plan/corpus-ingestion-rebuild-tasks.md": "aef577bd66761992c1ffc3388333ffdc2c19074b0bf09541c3f60f5d8ca3e239"
+  },
+  "freeze_validator": {
+   ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "817b7779a502d8e9a4a0dc2894ed7356975ca534be2e47f8ba18caf64a6f982e"
+  }
+ },
+ "corrections": {
+  "i3_5_nonregress_backfill": "I3-5 旧检索/财务非回归已执行并回填 tasks.md §0/§3.6（audits/20260923-i35-legacy-nonregress/，零模型、原库零写入、留出零读取）：财务 47/47+公式 7/7+高盛负控 PASS（库级等价路径 build_evidence_run+冻结 field_checks/calculations，I2-7 后冻结契约不可原样执行的偏差已登记）；golden 19/19（O6 按 r27 排除，旧库 legacy 读链只读）；客户表 12/12（冻结 run 复验）；正文冻结 2 例 2/2；宏观 0/3 保留单列；guosen_maotai 10 格 held_out_not_run_in_dev；答案约束登记/投影保真门（test_approval_contract.py）32 passed。I3-6/I3-7 另做，本修订不构成最终版本放行。",
+  "rebind_scope": "仅重绑 docs/plan/corpus-ingestion-rebuild-tasks.md（14006ef8…→aef577bd…）与验证器自哈希（6031239c…→817b7779…）；其余绑定沿用上游修订，不借机触碰实现/测试/守卫字节。"
+ },
+ "notes": [
+  "r4z 为 I3-5 台账回填入链修订（parent=i0c-r4y）：只重绑 tasks.md 与验证器，不触碰 i0c-r4y 及更早快照的已冻结字节（追加式索引纪律）。",
+  "archive-first：before-r4z/ 保存改前字节——tasks.md 取自 git HEAD（sha256 == i0c-r42 chain_rebind_evidence 绑定 14006ef8…），validator 取自改块前盘面字节（sha256 == i0c-r4y freeze_validator 绑定 6031239c…）。",
+  "I3-5 结果为非回归核验（适用旧基线逐项见 audits/20260923-i35-legacy-nonregress/README.md）；真实答案语义测试未授权前 not_run 不计作通过；此处不是最终版本放行。"
+ ],
+ "m5_declaration": "not_declared"
+}

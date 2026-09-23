@@ -14,17 +14,6 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
-2026-09-23 I3-5 开发非回归已执行（零模型、原库零写入、留出零读取）：
-财务 47/47（茅台 32+广立微 15，tolerance=0）+ 公式 7/7 + 高盛负控 PASS；客户表 12/12
-（冻结 run 复验，原文留出不读）；正文冻结 2 例 2/2（冻结 run 复验；重抽取须另立预算
-授权 not_run）；宏观 0/3 失败基线保留单列；旧检索 golden **19/19**（O6 按 r27 排除，
-旧库 5432 legacy 读链只读重评，无 skip）；零模型审批/投影契约门 32 passed。
-guosen_maotai 10 格 held_out_not_run_in_dev（I3-7 口径）。偏差登记：I2-7 后冻结契约
-（verify_claims_entry 写原库）不可原样执行，改走 `build_evidence_run` 库级等价路径
-（同冻结 gold/容差，任何库零写入）。结果 write-once：
-[20260923-i35-legacy-nonregress](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i35-legacy-nonregress/README.md)。
-I3-5 不是最终版本放行；I3-6/I3-7 另做。
-
 2026-09-20 校准进展（i0c-r39）：在 r38 已完成 I3-1 后，按预先固定两轮方案实跑
 冻结30题。整句基线全无命中；问题词元 OR 候选三类 DocRecall/QuestionPass 均100%，
 EvidencePass 分别1/8、2/8、2/8，六个无答案负例全部误报，**I3-3 仍未通过**。
@@ -492,7 +481,7 @@ required/supplementary/suggested 三层 + 锚点覆盖度与未覆盖词元 + �
 | I3-1 | 三类开发 E2E：每类≥2 份，登记→准入→解析→清洗→切块→build/check/publish→真实 search/fetch/verify           | 冻结开发范围、隔离 PG      | A+U | I3-2 后            | I3-2 + **I2 全链路复核 F1 闭环** | **最新 r38：已完成，8/8 发布、每类≥2、三格式、13 acknowledged/0 blocking，真实取证通过；以下为历史轮次。** 记录领域×格式矩阵，缺格式门未过；本轮初步结果不能直接放行 I4；**前置**：缺口分级/坐标（RM-FC-1/2）闭环——材料含空白页等 `acknowledged` 缺口才可走完 publish，`blocking` 缺口按 `check`/`status` 的 `gaps` 机读处置（补 OCR/换料/转 review\_required）；先用 `corpus-plan` 预检筛料。**2026-09-19 实跑（i0c-r32 入链）**：照 U 批准集 6 份 → 可发布 2/6（company 0/2、industry 1/2、macro 1/2）、阻断缺口 13 处、格式覆盖仅 PDF；`per_class_min_2` 未满足，判定**未完成**，待 U 裁定缺口处置路径与 MD/DOCX 覆盖声称。**2026-09-20 第二轮（U 裁决新建 dev lane，i0c-r34 入链）**：dev lane 纳入 U 指定 2 份（`工业富联_投委会决策报告_20260829.md` / `9月8日 光模块…docx`，材料类型如实为 `internal_committee_report` / `internal_unattributed`），与批准集 6 份合计 8 份真跑 → 可发布 **4/8**；**架构 §12.1 格式门满足=true**（pdf 2/6、docx 1/1、md 1/1 均有可发布样本）；逐类可发布 company 1/3、industry 2/3、macro 1/2 → **『每类≥2』仍为 False（裁定①未解，company 0/2 的 13 处阻断缺口依旧）**；证据 `audits/20260920-i31-dev-lane/i3-1-dev-lane-e2e.{json,md}`；生产判定不变由 dev lane 反例族 + 预检 fail-closed 反例双证 |
 | I3-3 | 开发校准：检索/切块参数仅开发集试验；每轮先固定配置再执行 retrieval\_pg，报告数字/单位/语言及三类指标                         | 冻结预期、当前配置         | A   | I3-1 后            | I3-1             | 记录每轮失败和配置哈希，预先限定试验范围/停止条件；不改预期换分数；超过边界停下报告，不无限试探                                **最新 r39：已进入校准，两轮30题均未达标；OR 候选三类 DocRecall=100%，EvidencePass=1/8、2/8、2/8，负例误报6；按预定两轮停止，保留失败，未部署候选。** |
 | I3-4 | coverage 开发测试：空库/无匹配/排除/部分/未决/故障/更新失败/并发发布/跨域                                       | 隔离 PG             | A   | I3-1 后，可与 I3-3 重叠 | I3-1             | 三轴及 availability；no\_match 不自动 absent，failed 恒 unknown；最终版本仍须 I3-7 重验          |
-| I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 **最新 2026-09-23：已执行（audits/20260923-i35-legacy-nonregress/，零模型、原库零写入、留出零读取）**：财务 47/47+公式 7/7+高盛负控 PASS（库级等价路径，偏差已登记——I2-7 后冻结契约 verify_claims_entry 写原库不可原样执行）；golden 19/19（O6 r27 排除，旧库 legacy 读链只读，无 skip）；客户表 12/12（冻结 run 复验，原文 holdout 不读）；正文冻结 2 例 2/2（重抽取 not_run 待预算授权）；宏观 0/3 保留单列；guosen_maotai 10 格 held_out_not_run_in_dev（I3-7 口径）；审批契约门 32 passed。I3-6/I3-7 另做 |
+| I3-5 | 开发非回归：适用旧检索 golden、财务 57/57、公式 7/7、客户表 12/12、正文 3/3 及正负控，宏观 0/3 另列；答案约束登记/投影保真门 | baseline-bindings、I3-2 批准投影与审批契约测试 | A | I3-1 后，可与 I3-3 重叠 | I3-1 | 按实际绑定资产核验；不得删旧失败题。零模型约束门：运行 audits/20260918-i32-remediation/test_approval_contract.py，确认 answer_constraints 原样保留、chosen 不生成证据、非法引用阻断；I3-5 时须重跑并绑定最终资产。该门不检验生成答案语义；真实答案语义测试须另定输入、人工判据和有限预算，未授权前 not_run，不计作通过。此处不是最终版本放行 |
 | I3-6 | 结束校准并冻结最终配置、代码、规则、评分器、预期与依赖；生成不可变最终 manifest，核定需重验的 M4/M5 门                         | 开发报告、最终版本         | A+U | I3-3/4/5 后        | I3-3, I3-4, I3-5 | 所有调整显式留档；无必需待定项；仅冻结版本，不复用校准前分数宣称通过                                             |
 | I3-7 | 用 I3-6 版本重新构建/索引并执行三类 E2E、retrieval、authority/取证、coverage、CLI、旧检索/财务非回归及受影响 M4/M5 门 | 最终版本、隔离 PG        | A+U | I3-6 后            | I3-6             | 逐类三指标达冻结目标（候选 ≥95%）；关键引用 100%、适用旧通过基线不退化、伪引用负例 0；分母/格式/必需环境缺失不通过；全部结果与版本一致才 M6；**E2E 基线复用**：I2 全链路回路 12 项（9 链不变量 + check/status 缺口契约，[test\_fullchain\_probes.py](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py)，write-once 不修改）+ [test\_corpus\_gap\_dispositions.py](../../tests/test_corpus_gap_dispositions.py) |
 

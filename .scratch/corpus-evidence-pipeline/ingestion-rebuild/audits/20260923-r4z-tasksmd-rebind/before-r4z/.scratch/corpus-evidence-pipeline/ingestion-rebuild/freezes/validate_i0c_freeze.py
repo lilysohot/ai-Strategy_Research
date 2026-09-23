@@ -2307,31 +2307,6 @@ if "i0c-r4y" in by_id:
           "r4y corrections must record the footnote aggregation")
     merge_binding(i0c_current_binding, bindingr4y)
 
-# r4z（I3-5 旧检索/财务非回归台账回填入链）：只重绑 tasks.md 与验证器；
-# 零模型调用、原库零写入、留出零读取，不触碰任何实现/测试/守卫/金标字节。
-if "i0c-r4z" in by_id:
-    r4z = load_json(BASE / by_id["i0c-r4z"]["file"])
-    parentr4z = BASE / by_id["i0c-r4y"]["file"]
-    check(r4z.get("parent_snapshot") == {"snapshot_id": "i0c-r4y",
-          "path": str(parentr4z.relative_to(ROOT)), "sha256": digest(parentr4z)},
-          "r4z parent mismatch")
-    bindingr4z = r4z.get("binding", {})
-    check(set(bindingr4z) == {"chain_rebind_evidence", "freeze_validator"},
-          "r4z binding groups mismatch")
-    check(set(bindingr4z.get("chain_rebind_evidence", {})) == {
-        "docs/plan/corpus-ingestion-rebuild-tasks.md"}, "r4z evidence boundary mismatch")
-    check(set(bindingr4z.get("freeze_validator", {})) == {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"}, "r4z freeze_validator boundary mismatch")
-    # 语义门：tasks.md 须携带 I3-5 执行状态回填及其证据目录指针。
-    tasks_src = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
-    check("audits/20260923-i35-legacy-nonregress" in tasks_src
-          and "I3-5" in tasks_src,
-          "r4z tasks.md must carry the I3-5 non-regression backfill")
-    check(any("i3_5" in k or "i35" in k
-              for k in (r4z.get("corrections") or {})),
-          "r4z corrections must record the I3-5 backfill entry")
-    merge_binding(i0c_current_binding, bindingr4z)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
