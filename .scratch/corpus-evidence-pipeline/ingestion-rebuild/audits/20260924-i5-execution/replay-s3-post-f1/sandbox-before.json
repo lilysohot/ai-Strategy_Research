@@ -1,0 +1,42 @@
+{
+  "corpus.corpus_admissions": {
+    "count": 8,
+    "sha256": "03cb0579f8f9b5928968beb8e82d8ba8b7b09893e3647c825f610915a009f85a"
+  },
+  "corpus.corpus_builds": {
+    "count": 16,
+    "sha256": "0488782b55ac23922c240b1d3113ed95d25d02d7e230befbe89c8c04ae90bb2a"
+  },
+  "corpus.corpus_chunks": {
+    "count": 1668,
+    "sha256": "60564940bedc3ecb419ef575af0dd1005b446f340cf4bb28ae832df47a3bd96e"
+  },
+  "corpus.corpus_jobs": {
+    "count": 44,
+    "sha256": "5eac16df35f3acd28f0def01dca98f4bcbfb476e0484a6f43efe5354be97156c"
+  },
+  "corpus.corpus_publications": {
+    "count": 8,
+    "sha256": "aa22abf1c713018678089c00a790855d8540814ff102f5f72a66b4fe4c951148"
+  },
+  "corpus.corpus_review_decisions": {
+    "count": 10,
+    "sha256": "2ff3c33e24255121fd33d5965b43c57599f1e089cf3d912d258e5e5aa0db229f"
+  },
+  "corpus.corpus_source_checkpoints": {
+    "count": 12,
+    "sha256": "d594672ddc42c837e2ed84835a96c88a8db285236368d95d62eb0b364098bed3"
+  },
+  "corpus.corpus_sources": {
+    "count": 8,
+    "sha256": "5b9d0a7f897a877c1a9a04080b63e505f15753e3355de6fe821b5a184c4ce3ee"
+  },
+  "corpus.corpus_units": {
+    "count": 7774,
+    "sha256": "a2c5030243e5409f5daca00b3ec40fec6db951dfa884f5bd1271694147274236"
+  },
+  "zhparser.zhprs_custom_word": {
+    "count": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
+}

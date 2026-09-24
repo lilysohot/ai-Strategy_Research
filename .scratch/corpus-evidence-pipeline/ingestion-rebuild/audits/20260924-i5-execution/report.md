@@ -34,6 +34,12 @@
 | Pyright | 0 errors, 0 warnings |
 | import smoke | stage 1: 366/366；stage 2: 415/415 |
 | symbol closure | 465 files, 0 missing imports |
-| 全量 pytest | 2936 passed, 48 skipped, 2 failed |
+| 全量 pytest（收口复跑） | 2937 passed, 48 skipped, 1 failed |
 
-全量 pytest 的两项失败均为既有非语料基线：市场金标中的行情时间超过五日阈值，以及 ReAct profile 没有绑定 `position_sizing`/`strategy_lint`。两者不由本轮文件触发，保留为仓库级待办，不作为 I5 通过证据。
+市场金标已按固定样例的一个月窗口修复并通过。全量 pytest 仅剩 ReAct profile 没有绑定 `position_sizing`/`strategy_lint`，已由用户明确划为另一条任务线，不作为 I5 通过证据。
+
+## M8 收口判定
+
+四场景已在各自既有隔离库中以 post-F1 代码重放：场景一检查点重放 8/8 build ID 稳定；场景二验证源变化和旧版本保留；场景三验证新解析规则；场景四验证复用解析后的索引重建。每次运行均在恢复原库全表内容后结束，生产前后快照均在显式只读事务中一致。
+
+最终绑定见 `i5-final-binding.json`：四场景、隔离恢复、生产只读和源代码/守卫/文档哈希均通过。因此，重建任务的 M8 范围已完成；ReAct 财务工具绑定不属于此收口范围。

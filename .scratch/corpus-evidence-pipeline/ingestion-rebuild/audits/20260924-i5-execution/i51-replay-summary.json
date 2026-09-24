@@ -1,0 +1,12 @@
+[
+  {
+    "scenario": "s3",
+    "scenario_database": "i51_s3_newrule",
+    "execution_exit_code": 0,
+    "sandbox_restored_exact_table_contents": true,
+    "production_readonly_pre_post_equal": true,
+    "production_snapshot_readonly": true,
+    "sandbox_dump_sha256": "d2f689e3bcc248fbf2578c3f1c902f6435684766db6bcf8cf4fb5c1c51225e21",
+    "restore_error": null
+  }
+]

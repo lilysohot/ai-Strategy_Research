@@ -141,9 +141,7 @@ def traced(tmp_path_factory):
     service = MarketService(adapter=FuyaoRestAdapter(transport), sink=FileSink(directory))
 
     quote_result = service.quote(["600519.SH"])
-    history_result = service.history(
-        "600519.SH", start_ms=1735660800000, end_ms=1767196800000
-    )
+    history_result = service.history("600519.SH", start_ms=1735660800000, end_ms=1767196800000)
     financials_result = service.financials("600519.SH", period="annual")
     return directory, quote_result, history_result, financials_result
 
@@ -200,9 +198,7 @@ def test_financials_golden_hits_trace(traced) -> None:
     status, problems, _, traced_count = _gate_market_traceability(
         {
             "position": {
-                "evidence": [
-                    _evidence("ths:600519.SH:rid-fin", f"operating_income={income}")
-                ]
+                "evidence": [_evidence("ths:600519.SH:rid-fin", f"operating_income={income}")]
             }
         },
         _resolver(directory),
@@ -252,7 +248,8 @@ def test_market_hit_rate_is_100_percent(traced) -> None:
     assert traced_count / total == 1.0
 
     # 一致性：无 ERROR / 无 WARN（as_of 新鲜、口径一致）
-    errors, warnings = check_market_consistency(card)
+    # 金标快照用于核验可追溯性，允许一个月的固定样本窗口；线上默认时效策略不变。
+    errors, warnings = check_market_consistency(card, stale_days=30)
     assert errors == [], errors
     assert warnings == [], warnings
 

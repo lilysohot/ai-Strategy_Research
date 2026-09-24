@@ -1,0 +1,10 @@
+{
+  "scenario": "s2",
+  "scenario_database": "i51_s2_srcchg",
+  "execution_exit_code": 0,
+  "sandbox_restored_exact_table_contents": true,
+  "production_readonly_pre_post_equal": true,
+  "production_snapshot_readonly": true,
+  "sandbox_dump_sha256": "ffee62581b7422d753c14e6d1c1d18e3dcb6dcea52cd3859104e5aa2b551385c",
+  "restore_error": null
+}

@@ -1,0 +1,10 @@
+{
+  "scenario": "s4",
+  "scenario_database": "i51_s4_idxreb",
+  "execution_exit_code": 0,
+  "sandbox_restored_exact_table_contents": true,
+  "production_readonly_pre_post_equal": true,
+  "production_snapshot_readonly": true,
+  "sandbox_dump_sha256": "e3e24dc02e60c627a1bb12e441f7ab96eb5631525762e50ec985497f0ff374b9",
+  "restore_error": null
+}

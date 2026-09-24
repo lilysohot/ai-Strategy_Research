@@ -1,0 +1,55 @@
+{
+  "artifact": "i5-final-binding",
+  "generated_at": "2026-09-24T09:17:04.975043+00:00",
+  "scope": "I5-1 four-scenario replay, I5-2 operations, I5-3 retirement verification",
+  "scenarios": {
+    "s1": {
+      "report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s1-post-f1/i51-s1-rerun-report.json",
+      "report_sha256": "cf0b6950693d42acecbd92ae349dcb9d583fecf1b4e49b0717f624fa5b4ba3b3",
+      "wrapper": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s1-post-f1/wrapper-results.json",
+      "wrapper_sha256": "1a1e89eacda848ac28b872f3a47ff17e9a8cb95c8f0f605d9c68e54f442e0891",
+      "passed": true
+    },
+    "s2": {
+      "report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s2-post-f1/i51-s2-srcchange-report.json",
+      "report_sha256": "896049a09bf8d048e2a7ad493223985f405eb5525ef6b9473a27cf778ed06d35",
+      "wrapper": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s2-post-f1/wrapper-results.json",
+      "wrapper_sha256": "6a492b7cbcfc7a574a324d300ce48b9c3ecb84a4b662957837fc4953aff689e8",
+      "passed": true
+    },
+    "s3": {
+      "report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s3-post-f1/i51-s3-newrule-report.json",
+      "report_sha256": "9e17fdd3ea17ac7b34de8bf5fbe76d064a69cc8f172fbd273bfa7c2fcdeae15f",
+      "wrapper": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s3-post-f1/wrapper-results.json",
+      "wrapper_sha256": "1625147409bf260963fcc1657a40bca890b82fa9f988fcecd82f3c1ce4416b3e",
+      "passed": true
+    },
+    "s4": {
+      "report": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s4-post-f1/i51-s4-idxreb-report.json",
+      "report_sha256": "d5c9592bc1061089a9c7e6a760a285ddbfb64916131bdb65001e2dba8239f705",
+      "wrapper": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay-s4-post-f1/wrapper-results.json",
+      "wrapper_sha256": "438c84407037e37e170dcaefa7b6e0713a9d444c1f3bf10fc2e14c4538d5d3dc",
+      "passed": true
+    }
+  },
+  "bound_files": {
+    "plugins/corpus/preparation/readers/__init__.py": "f345e402419bf8a31024dd56b6824ff49c850023f7b3da3b21d6f27c027bae9e",
+    "plugins/corpus/service.py": "7bb688723d9f097f76338468a91e4799a3970772f54a030a6306700ea0ab0f67",
+    "scripts/corpus_evidence_pilot.py": "fc8a1a4cda51d868ed0d8ada5e3133e78a5ae4e5f9d203d6565a425603894c89",
+    "scripts/corpus_holdout_eval.py": "8bcecbdebf18f72682a5ea6ec0088ef59aa761d38d3254e50aefb2c04842d3aa",
+    "tests/test_corpus_preparation_release_gate.py": "901d0df32af03378fa9b18bbf86de895f3c1055abb7cb70e4f9a99fe95f177a1",
+    "tests/test_corpus_consumers_pg.py": "742d1f5d87cc233cf5becccee0c2e1c07a751606ff09b830ff0ee68099f4f172",
+    "tests/test_corpus_ingest_retired.py": "75e41091fe45b13d1855dd506ef90ed6e51bbb4112b37b4bfc2edf9482cdd14a",
+    "docs/corpus-ingestion-operations.md": "31c086486b31dc2da6a30b61da836dc9cca41b92620c352510af35a0441e19f5",
+    "docs/corpus-ingestion-retirement-matrix.md": "421f03592d154acfb08732005bee14a8a6f4b48bc1c306630e0ce94646efdc2b",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i5-scenarios.json": "5c52f57188017fe171daee1f93594cd80b15414319bd2f436c4ecd808c9cc535",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_common.py": "9d14ae5305021b836b8a5d5c7a27e1897ca8c72cb919d3f9cc03dad0dc6a10ae",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i5-execution/replay_i51_scenarios.py": "fb4c3df4bbcfbc3a06d7875f6335f534f95e6c29cff55c872d60fa302a8b4bba"
+  },
+  "acceptance": {
+    "four_scenarios_passed": true,
+    "s1_checkpoint_replay_8_of_8_stable": true,
+    "each_sandbox_restored": true,
+    "each_production_snapshot_explicitly_readonly": true
+  }
+}
