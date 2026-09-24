@@ -1,0 +1,19 @@
+{
+  "real_network_connections": 0,
+  "real_database_connections": 0,
+  "model_sdk_modules_loaded": [],
+  "s1_late_env_service_target": "postgres",
+  "s1_late_env_read_search_checks_passed": true,
+  "s2_search_delegates_same_query_limit": true,
+  "g2_ingest_rejected_before_connection": true,
+  "g2_evidence_writer_still_returns_run_id": true,
+  "g2_evidence_writer_emitted_sql": [
+    "\nCREATE TABLE IF NOT EXISTS corpus_evidence_runs (\n    run_id text PRIMARY KEY, doc_id text NOT NULL, source_rev text NOT NULL,\n    parse_rev text NOT NULL, payload jsonb NOT NULL,\n    created_at timestamptz NOT NULL DEFAULT now()\n);\nCREATE INDEX IF NOT EXISTS corpus_evidence_runs_doc ON corpus_evidence_runs(doc_id, parse_rev);\n",
+    "INSERT INTO corpus_evidence_runs (run_id,doc_id,source_rev,parse_rev,payload) VALUES (%s,%s,%s,%s,%s::jsonb) ON CONFLICT (run_id) DO NOTHING"
+  ],
+  "requirements": [
+    "i4-cutover-manifest.json forbidden[1]: public old tables receive no writes",
+    "i45_tool_roundtrip.py lines 228-232: save_evidence_run recorded deactivated",
+    "I4-5: deactivate the approved old write entry points"
+  ]
+}

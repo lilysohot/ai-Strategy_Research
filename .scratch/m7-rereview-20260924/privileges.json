@@ -1,0 +1,9 @@
+{
+  "current_user": "postgres",
+  "superuser": true,
+  "can_insert_evidence": true,
+  "can_update_evidence": true,
+  "old_evidence_rows": 0,
+  "user_triggers": [],
+  "read_only_session": true
+}
