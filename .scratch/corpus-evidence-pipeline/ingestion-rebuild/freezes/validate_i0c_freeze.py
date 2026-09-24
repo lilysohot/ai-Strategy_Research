@@ -1822,18 +1822,25 @@ if "i0c-r4v" in by_id:
     # search_pg 权威哈希入 supersession 映射（下方 r39 块与 r42 块消费）；
     # negative_query.py 不在计划 pre-run binding 内，无需豁免。
     # 权威值随最新绑定修订推进：r5f 时解析为 r5e 检索实现；r5g 窗口目标适配
-    # 演进 search_pg 后按同一「最新修订优先」语义解析为 r5g 绑定值。
+    # 演进 search_pg 后按同一「最新修订优先」语义解析为 r5g 绑定值；
+    # r5j S1 去缓存修复后再解析为 r5j 绑定值。
     r39_superseded_bindings["plugins/corpus/preparation/search_pg.py"] = (
-        load_json(BASE / by_id["i0c-r5g"]["file"])
-        .get("binding", {}).get("i4_window_target_adapter", {})
+        load_json(BASE / by_id["i0c-r5j"]["file"])
+        .get("binding", {}).get("m7_fix_code", {})
         .get("plugins/corpus/preparation/search_pg.py")
-        if "i0c-r5g" in by_id
+        if "i0c-r5j" in by_id
         else (
-            load_json(BASE / by_id["i0c-r5e"]["file"])
-            .get("binding", {}).get("m6_retrieval_implementation", {})
+            load_json(BASE / by_id["i0c-r5g"]["file"])
+            .get("binding", {}).get("i4_window_target_adapter", {})
             .get("plugins/corpus/preparation/search_pg.py")
-            if "i0c-r5e" in by_id
-            else "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+            if "i0c-r5g" in by_id
+            else (
+                load_json(BASE / by_id["i0c-r5e"]["file"])
+                .get("binding", {}).get("m6_retrieval_implementation", {})
+                .get("plugins/corpus/preparation/search_pg.py")
+                if "i0c-r5e" in by_id
+                else "4d1db60c292eeb9d675ac1abc2f9b7c4255aa922850aae7aa475a0ee632f8492"
+            )
         )
     )
     # 注意：此处不 merge——r4v 为最新修订，须在 r4u 块之后最后合并（见 r4u 块末尾），
@@ -2050,10 +2057,19 @@ if "i0c-r4n" in by_id:
         ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"},
           "r4n freeze_validator boundary mismatch")
     # 生产默认 perdoc→band + cell 投影的语义门（U 2026-09-21 具名决策，spec §10.5 选项 A）：
+    # r5j S2 统一检索选择后 search() 委托 search_with_coverage（r5e 产品门口径），
+    # _selected_chunk_hits「每源多块」双入口分叉删除；band 选择与 cell 投影保留
+    # （r5e 豁免 r4v 检索门同一先例：历史语义门不施加于后续权威字节）。
     svc_src_r4n = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
-    check("_selected_chunk_hits" in svc_src_r4n
-          and "_apply_selection_bands" in svc_src_r4n and "def _emit_cells" in svc_src_r4n,
-          "r4n service.py must wire band default + cell projection into production")
+    if "i0c-r5j" in by_id:
+        check("_apply_selection_bands" in svc_src_r4n and "def _emit_cells" in svc_src_r4n
+              and "search_with_coverage(q, limit=limit)" in svc_src_r4n
+              and "_selected_chunk_hits" not in svc_src_r4n,
+              "r5j service.py must unify search() on search_with_coverage (S2; band/cell retained)")
+    else:
+        check("_selected_chunk_hits" in svc_src_r4n
+              and "_apply_selection_bands" in svc_src_r4n and "def _emit_cells" in svc_src_r4n,
+              "r4n service.py must wire band default + cell projection into production")
     rpg_src_r4n = (ROOT / "plugins/corpus/preparation/read_pg.py").read_text(encoding="utf-8")
     check("def search_with_coverage_bands" in rpg_src_r4n and "def fetch_bands" in rpg_src_r4n,
           "r4n read_pg must carry band read path (search_with_coverage_bands/fetch_bands)")
@@ -2861,6 +2877,199 @@ if "i0c-r5h" in by_id:
           "r5h validator supersession ledger mismatch")
     merge_binding(i0c_current_binding, bind5h)
 
+# r5i（reset 阶段 2 执行入链）：暂缓解除后 U 批准执行 manifest phases[2] 单语句
+# （六表同语句、无 CASCADE）单事务逐字 TRUNCATE；tasks.md §0 收尾回填（r4z/r5g/r5h
+# 先例重绑）+ 验证器新增 r5i 节。零模型调用、归档先行。
+if "i0c-r5i" in by_id:
+    r5i = load_json(BASE / by_id["i0c-r5i"]["file"])
+    parent5i = BASE / by_id["i0c-r5h"]["file"]
+    check(r5i.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5h", "path": str(parent5i.relative_to(ROOT)),
+        "sha256": digest(parent5i)}, "r5i parent mismatch")
+    check(r5i.get("status") == "i4_reset_phase2_execution"
+          and r5i.get("business_accepted") is True,
+          "r5i must record the reset phase-2 execution revision")
+    bind5i = r5i.get("binding", {})
+    state5i = {"docs/plan/corpus-ingestion-rebuild-tasks.md"}
+    validator_path5i = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5i = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                   "audits/20260923-i4-window/previous-effective-bindings-r5i.json")
+    for group5i, expected5i in (
+            ("i4_phase2_state", state5i),
+            ("previous_effective_bindings", {prev_path5i}),
+            ("freeze_validator", {validator_path5i})):
+        check(set(bind5i.get(group5i, {})) == expected5i,
+              f"r5i scope mismatch: {group5i}")
+    prior5i = load_json(ROOT / prev_path5i)
+    previous5i = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed5i = state5i | {validator_path5i}
+    check(set(prior5i) == changed5i, "r5i previous-binding scope mismatch")
+    for p in changed5i:
+        check(prior5i.get(p) == previous5i.get(p),
+              f"r5i previous effective hash mismatch: {p}")
+    # archive-first：tasks.md 归档=重绑后字节（§0 收尾回填，r5g/r5h 先例）；
+    # 验证器归档=改前字节（新增 r5i 节前的 r5h 绑定字节）。
+    before5i = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                       "audits/20260923-i4-window/before-r5i")
+    arch5i = before5i / "docs/plan/corpus-ingestion-rebuild-tasks.md"
+    check(arch5i.is_file() and digest(arch5i) == bind5i.get("i4_phase2_state", {}).get(
+        "docs/plan/corpus-ingestion-rebuild-tasks.md"),
+        "r5i tasks.md archive must carry the rebound bytes")
+    check(previous5i.get("docs/plan/corpus-ingestion-rebuild-tasks.md")
+          != bind5i.get("i4_phase2_state", {}).get("docs/plan/corpus-ingestion-rebuild-tasks.md"),
+          "r5i tasks.md rebind must actually change the binding")
+    arch5i = before5i / validator_path5i
+    check(arch5i.is_file() and digest(arch5i) == prior5i.get(validator_path5i),
+          "r5i validator archive must match pre-change effective binding")
+    # 语义门：tasks.md 须携带阶段 2 执行收尾回填（write-once 报告引用 + 解除暂缓
+    # 批准记录）；corrections 须记录 i4 phase-2 条目。
+    tasks5i = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    check("i4c-reset-phase2-report.json" in tasks5i and "11762f4e" in tasks5i
+          and "暂缓解除" in tasks5i and "blocks 1101" in tasks5i,
+          "r5i tasks.md must carry the phase-2 execution backfill")
+    check(any("i4" in k for k in (r5i.get("corrections") or {})),
+          "r5i corrections must record the phase-2 entry")
+    previous_validator5i = (
+        load_json(parent5i).get("binding", {}).get("freeze_validator", {})
+        .get(validator_path5i))
+    check(r5i.get("supersedes_validator_sha256") == previous_validator5i
+          and previous_validator5i != bind5i.get("freeze_validator", {}).get(validator_path5i),
+          "r5i validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5i)
+
+# r5j（M7 复核修复入链）：外部复核六项（G1/G2/S1/S2/G3/G4）修复落地——
+# G1：.env 交付 CORPUS_TARGET_DB=postgres（默认服务恢复，.env.example 同步）；
+# S1：目标库解析去 import 缓存（service/read_pg/search_pg/cross_boundary/cli
+# 构造/调用时动态解析）；G2：旧 ingest 写入口 fail-closed 恒定拒绝
+# （RetiredIngestError + CLI ingest 结构化拒绝 exit 2，零连接回归测试）；
+# S2：search() 统一委托 search_with_coverage（r5e 产品门 24/24 验收口径，
+# 删除 _selected_chunk_hits 双入口分叉）。同时绑定 I4 窗口关键证据
+# （窗口报告/双 manifest/三阶段报告/两执行脚本+往返产物，G4）。
+# tasks.md §0 修复回填（r4z/r5g/r5h/r5i 先例重绑）+ 验证器新增 r5j 节。
+# 零模型调用、归档先行。
+if "i0c-r5j" in by_id:
+    r5j = load_json(BASE / by_id["i0c-r5j"]["file"])
+    parent5j = BASE / by_id["i0c-r5i"]["file"]
+    check(r5j.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5i", "path": str(parent5j.relative_to(ROOT)),
+        "sha256": digest(parent5j)}, "r5j parent mismatch")
+    check(r5j.get("status") == "m7_review_remediation"
+          and r5j.get("business_accepted") is True,
+          "r5j must record the M7 review-remediation revision")
+    bind5j = r5j.get("binding", {})
+    code5j = {
+        "plugins/corpus/service.py",
+        "plugins/corpus/preparation/read_pg.py",
+        "plugins/corpus/preparation/search_pg.py",
+        "plugins/corpus/preparation/cross_boundary.py",
+        "plugins/corpus/cli.py",
+    }
+    tests5j = {"tests/test_corpus_consumers_pg.py", "tests/test_corpus_ingest_retired.py"}
+    win5j = {
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/report.md",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-cutover-manifest.json",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i47-reset-phase1-report.json",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i44-rebuild-report.json",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i45_tool_roundtrip.py",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i45-tool-roundtrip.json",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c_reset_phase2.py",
+        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c-reset-phase2-report.json",
+    }
+    state5j = {"docs/plan/corpus-ingestion-rebuild-tasks.md"}
+    validator_path5j = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5j = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                   "audits/20260923-i4-window/previous-effective-bindings-r5j.json")
+    for group5j, expected5j in (
+            ("m7_fix_code", code5j),
+            ("m7_fix_tests", tests5j),
+            ("m7_window_evidence", win5j),
+            ("m7_fix_state", state5j),
+            ("previous_effective_bindings", {prev_path5j}),
+            ("freeze_validator", {validator_path5j})):
+        check(set(bind5j.get(group5j, {})) == expected5j,
+              f"r5j scope mismatch: {group5j}")
+    prior5j = load_json(ROOT / prev_path5j)
+    previous5j = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed_old5j = code5j | {"tests/test_corpus_consumers_pg.py"} | state5j | {validator_path5j}
+    check(set(prior5j) == changed_old5j, "r5j previous-binding scope mismatch")
+    for p in changed_old5j:
+        check(prior5j.get(p) == previous5j.get(p),
+              f"r5j previous effective hash mismatch: {p}")
+    check("tests/test_corpus_ingest_retired.py" not in previous5j,
+          "r5j test_corpus_ingest_retired.py must be first-in-chain")
+    for p in win5j:
+        check(p not in previous5j, f"r5j window evidence must be first-in-chain: {p}")
+    # archive-first：改前生效路径的 before-r5j 归档必须等于改前生效绑定
+    # （代码/测试取 git HEAD 字节=链上绑定，验证器取扩展 r5j 节前字节）；
+    # tasks.md 因 §0 修复回填而漂移（r5g/r5h/r5i 先例），归档字节即重绑来源。
+    before5j = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
+                       "audits/20260923-i4-window/before-r5j")
+    for p in changed_old5j:
+        archived5j = before5j / p
+        if p in state5j:
+            check(archived5j.is_file()
+                  and digest(archived5j) == bind5j.get("m7_fix_state", {}).get(p),
+                  "r5j tasks.md archive must carry the rebound bytes")
+            check(previous5j.get(p) != bind5j.get("m7_fix_state", {}).get(p),
+                  "r5j tasks.md rebind must actually change the binding")
+        else:
+            check(archived5j.is_file() and digest(archived5j) == prior5j.get(p),
+                  f"r5j archive must match pre-change effective binding: {p}")
+    # 语义门（M7 复核修复）：
+    # S1——目标库不在 import 时缓存：service 无模块级解析常量（行首赋值），
+    # read_pg/search_pg 缺省目标调用时动态解析，cross_boundary 不再持常量；
+    # S2——search() 统一委托 search_with_coverage，选择分叉删除；
+    # G2——旧写入口 RetiredIngestError 恒定拒绝 + CLI 结构化拒绝；
+    # G1——.env 交付默认目标。
+    svc5j = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
+    check("class RetiredIngestError" in svc5j and "恒定拒绝" in svc5j,
+          "r5j service.py must carry the fail-closed retired-ingest entry (G2)")
+    # G2 的 CLI ``ingest`` 结构化拒绝（JSON + exit 2）实现在 service._main
+    # （corpus-service 入口），不在 plugins/corpus/cli.py（后者仅承 S1 动态解析）。
+    check("retired_ingest_entry" in svc5j and "def _main" in svc5j,
+          "r5j service._main must carry the structured CLI ingest rejection (G2)")
+    check("\n_I2_SANDBOX_DB" not in svc5j,
+          "r5j service.py must not cache the target at import time (S1)")
+    check("search_with_coverage(q, limit=limit)" in svc5j
+          and "_selected_chunk_hits" not in svc5j,
+          "r5j service.py search() must delegate to search_with_coverage (S2)")
+    for mod5j in ("plugins/corpus/preparation/read_pg.py",
+                  "plugins/corpus/preparation/search_pg.py"):
+        src5j = (ROOT / mod5j).read_text(encoding="utf-8")
+        check("sandbox_db if sandbox_db is not None else resolve_target_db()" in src5j,
+              f"r5j {mod5j} must resolve the default target at call time (S1)")
+    cb5j = (ROOT / "plugins/corpus/preparation/cross_boundary.py").read_text(encoding="utf-8")
+    check("_SANDBOX_DB =" not in cb5j,
+          "r5j cross_boundary.py must not cache the target at import time (S1)")
+    cli5j = (ROOT / "plugins/corpus/cli.py").read_text(encoding="utf-8")
+    check("\n_SANDBOX_DB =" not in cli5j and "sandbox_db=resolve_target_db()" in cli5j,
+          "r5j cli.py must resolve the default target at call time (S1)")
+    env5j = ROOT / ".env"
+    check(env5j.is_file()
+          and "CORPUS_TARGET_DB=postgres" in env5j.read_text(encoding="utf-8"),
+          "r5j .env must deliver the default target (G1)")
+    # 语义门（tasks.md）：r5h/r5i 既有门字符串必须保留，且携带 M7 修复回填。
+    tasks5j = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    check("20260923-i4-window" in tasks5j and "I4-4" in tasks5j and "I4-5" in tasks5j
+          and "暂缓" in tasks5j and "blocks 1101" in tasks5j
+          and "i4c-reset-phase2-report.json" in tasks5j and "11762f4e" in tasks5j
+          and "暂缓解除" in tasks5j,
+          "r5j tasks.md must retain the r5h/r5i gate strings")
+    check("m7-review-20260924" in tasks5j and "m7-fix-20260924" in tasks5j
+          and "i0c-r5j" in tasks5j,
+          "r5j tasks.md must carry the M7 remediation backfill")
+    corr5j = r5j.get("corrections") or {}
+    check(any("m7" in k.lower() for k in corr5j),
+          "r5j corrections must record the M7 remediation entry")
+    previous_validator5j = (
+        load_json(parent5j).get("binding", {}).get("freeze_validator", {})
+        .get(validator_path5j))
+    check(r5j.get("supersedes_validator_sha256") == previous_validator5j
+          and previous_validator5j != bind5j.get("freeze_validator", {}).get(validator_path5j),
+          "r5j validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5j)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -2905,7 +3114,11 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-if "i0c-r5h" in by_id:
+if "i0c-r5j" in by_id:
+    print("CURRENT r5j: M7 review remediation frozen — default target delivered via .env (G1), import-time target caching removed (S1), retired ingest entry fail-closed with zero-connection regression (G2), search() unified on search_with_coverage (S2); I4 window evidence bound (G4); PG battery replayed green (search-live 11 / fullchain 12 / hermetic 78 / d2d6 73) and full-repo pytest 2931 passed / 2 pre-existing failed / 49 skipped.")
+elif "i0c-r5i" in by_id:
+    print("CURRENT r5i: reset phase-2 executed after U lifted the deferral (single-statement six-table TRUNCATE, five gates green, retained sequences/witnesses unchanged); I4 window execution fully complete; M7 release still governed by the master ledger.")
+elif "i0c-r5h" in by_id:
     print("CURRENT r5h: I4 window execution closed (migrate+reset-1 green, production rebuild 8/8, tool roundtrip verified); phase-2 reset deferred by U recheck; unguarded-lane deviation registered.")
 elif "i0c-r5g" in by_id:
     print("CURRENT r5g: I4 window target adapter frozen (explicit CORPUS_TARGET_DB, default fail-closed unchanged); docs backfill rebound archive-first.")
@@ -2945,4 +3158,6 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r4w M5 named sign-off: _FUNCTION_WORDS granularity change (neg-only -> also positive ranking) approved by U (declared 2026-09-22), zero runtime byte change (sign-off revision binds validator only), r4v m5_declaration flipped to declared" if "i0c-r4w" in by_id else "")
       + ("; r4x 金标 col 口径改写入链（U 2026-09-23 具名授权）：source-gold industry-009-claim-001 的 R32/尿素 两条 col/cell 由人工合成列名（2026E产能（配额）/2026E产能）改为原文可派生口径『产能（万吨/年）以及同比增长』（quote/row/unit/period 不变）；候选/审批件 based_on/批准投影/正式评分输入全部重派生，EvidencePass 21/24→23/24（industry 5/8→7/8），40 项决定在新候选下 unresolved=0；r26/r39/r42 对旧字节的断言按 r4r 先例以 supersession 承接" if "i0c-r4x" in by_id else "")
       + ("; r5g I4 窗口目标适配入链：pg_target.py 显式 CORPUS_TARGET_DB 授权（默认 i2_sandbox_corpus 不变），写/读/检索三处生产硬拒加显式授权闸，service/cli 目标库解析走 pg_target，r5f 后 §0 回填的 docs/plan/README.md + tasks.md 按 r4z 先例重绑（archive-first），I4-3 停写核验与 I4-6 最终备份/恢复验证证据在案" if "i0c-r5g" in by_id else "")
-      + ("; r5h I4-close 入链：I4-3/6/2/7/4/5 执行结果 §0 回填（tasks.md 重绑），migrate 一次受控回滚后重跑绿色、reset 阶段 1 七表、I4-4 生产重建 8/8 与 I3-7 基线相同、I4-5 工具往返+旧写入口停用；无守卫 lane 偏差登记（I3-7 先例+补偿控制）；reset 阶段 2 U 复核暂缓（blocks/documents 现状保留，对照件已导出，另行安排）" if "i0c-r5h" in by_id else ""))
+      + ("; r5h I4-close 入链：I4-3/6/2/7/4/5 执行结果 §0 回填（tasks.md 重绑），migrate 一次受控回滚后重跑绿色、reset 阶段 1 七表、I4-4 生产重建 8/8 与 I3-7 基线相同、I4-5 工具往返+旧写入口停用；无守卫 lane 偏差登记（I3-7 先例+补偿控制）；reset 阶段 2 U 复核暂缓（blocks/documents 现状保留，对照件已导出，另行安排）" if "i0c-r5h" in by_id else "")
+      + ("; r5i reset 阶段 2 执行入链：U 解除暂缓后批准执行（解除同日「暂缓，先出窗口报告」裁决），manifest phases[2] 单语句六表单事务逐字 TRUNCATE（无 CASCADE）五门全过（前置 1101/89+四引用表 0 精确匹配、对照件三件 sha 命中、后置六表全 0、保留序列与见证不变），write-once i4c-reset-phase2-report.json 落章；I4 窗口执行全部完毕" if "i0c-r5i" in by_id else "")
+      + ("; r5j M7 复核修复入链：外部复核六项落实——G1 .env 交付默认目标（default 模式 30 题 24/24）、S1 目标库解析去 import 缓存、G2 旧写入口 fail-closed 恒定拒绝（零连接回归）、S2 search() 统一委托 search_with_coverage（r5e 口径）；窗口报告/双 manifest/三阶段报告/两执行脚本首次入链（G4）；冻结 PG 电池复放全绿（11/12/78/73）+ 全仓 pytest 2931/2 既有/49" if "i0c-r5j" in by_id else ""))

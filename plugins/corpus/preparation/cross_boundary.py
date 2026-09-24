@@ -36,7 +36,6 @@ if TYPE_CHECKING:
     import psycopg
 
 from plugins.corpus.preparation.contract import UnitStatus
-from plugins.corpus.preparation.pg_target import resolve_target_db
 from plugins.corpus.preparation.read_pg import (
     ChunkEvidence,
     UnitEvidence,
@@ -44,7 +43,8 @@ from plugins.corpus.preparation.read_pg import (
     with_units,
 )
 
-_SANDBOX_DB = resolve_target_db()
+# M7 复核 S1：目标库缺省解析移入 read_pg._check_target（调用时动态读取
+# CORPUS_TARGET_DB），本模块不再 import 时缓存（原 ``_SANDBOX_DB`` 常量已删）。
 
 #: F4 只聚合这两类「重复几何表头/脚注」NOISE（与 f4_replay 同口径；不含普通 heading）。
 _HEADER_FOOTER = frozenset({"header_repeated_geometric", "footer_repeated_geometric"})
@@ -100,7 +100,7 @@ def aggregate_band_chunks(
     dsn: str,
     chunk_evs: tuple[ChunkEvidence, ...],
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
     stitch_continuation: bool = True,
     attach_source_note: bool = True,
 ) -> tuple[ChunkEvidence, ...]:

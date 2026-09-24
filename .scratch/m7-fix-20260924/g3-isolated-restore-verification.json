@@ -1,0 +1,171 @@
+{
+  "artifact": "g3-isolated-restore-verification.json",
+  "task": "M7 复核 G3：I4-6 恢复验证补验（权限对账 + 历史证据引用回环 + 实测耗时）",
+  "review_ref": ".scratch/m7-review-20260924/report.md §G3",
+  "observed_at": "2026-09-24T04:14:03+00:00",
+  "source_backup": "backups/i4-final-20260923T1544Z（I4-6 最终备份，manifest 25 件 sha256sum -c OK）",
+  "restore": {
+    "target": "corpus-db 隔离实例 127.0.0.1:543 / 一次性库 i4_g3_restore_20260924（PG 18.6，与源匹配）",
+    "command": "pg_restore -U postgres --no-owner --exit-on-error < postgres.dump",
+    "exit_code": 0,
+    "measured_seconds": 1.433,
+    "measurement": "宿主机 time.perf_counter 墙钟（单次全量 custom-format 恢复）"
+  },
+  "table_counts": {
+    "blocks": {
+      "baseline": 1101,
+      "restored": 1101
+    },
+    "chinese_docs": {
+      "baseline": 3,
+      "restored": 3
+    },
+    "claim_block_runs": {
+      "baseline": 290,
+      "restored": 290
+    },
+    "claim_block_runs_v2": {
+      "baseline": 0,
+      "restored": 0
+    },
+    "claims": {
+      "baseline": 1318,
+      "restored": 1318
+    },
+    "claims_v2": {
+      "baseline": 0,
+      "restored": 0
+    },
+    "corpus_evidence_runs": {
+      "baseline": 57,
+      "restored": 57
+    },
+    "docs": {
+      "baseline": 3,
+      "restored": 3
+    },
+    "documents": {
+      "baseline": 89,
+      "restored": 89
+    },
+    "ingest_failures": {
+      "baseline": 1,
+      "restored": 1
+    },
+    "ingest_runs": {
+      "baseline": 11,
+      "restored": 11
+    }
+  },
+  "extensions": {
+    "expected": {
+      "pg_trgm": "1.6",
+      "plpgsql": "1.0",
+      "vector": "0.8.6",
+      "zhparser": "2.4"
+    },
+    "restored": {
+      "pg_trgm": "1.6",
+      "plpgsql": "1.0",
+      "vector": "0.8.6",
+      "zhparser": "2.4"
+    },
+    "zhprs_custom_word_rows": {
+      "restored": 0
+    }
+  },
+  "privilege_reconciliation": {
+    "method": "pg_roles / pg_database.datacl / pg_namespace.nspacl / pg_tables.tableowner / pg_class.relacl 五轴，生产基线（只读目录查询，read-only 会话）vs 恢复库",
+    "prod_roles": [
+      "postgres"
+    ],
+    "restored_roles": [
+      "postgres"
+    ],
+    "prod_only_roles": [],
+    "verify_only_roles": [],
+    "axes": {
+      "database_acl": {
+        "prod": "<default>",
+        "restored": "<default>",
+        "parity": true
+      },
+      "public_schema_acl": {
+        "prod": "public\u001f{pg_database_owner=UC/pg_database_owner,=U/pg_database_owner}",
+        "restored": "public\u001f{pg_database_owner=UC/pg_database_owner,=U/pg_database_owner}",
+        "parity": true
+      },
+      "public_tables": {
+        "prod": "11\u001f1\u001fpostgres",
+        "restored": "11\u001f1\u001fpostgres",
+        "parity": true
+      },
+      "public_nondefault_relacl_count": {
+        "prod": "0",
+        "restored": "0",
+        "parity": true
+      }
+    },
+    "note": "pg_restore --no-owner：所有权语句抑制；dump 无 ACL 条目（TOC 0 条），两侧均为 postgres 单角色默认权限态"
+  },
+  "reference_loop": {
+    "method": "回环 A：备份 claims.jsonl → 恢复库 blocks(doc_id, locator) 逐条解析（全量非抽样）；回环 B：备份 CSV 台账 \\copy 入临时表与恢复库双向 EXCEPT 逐行比对（恢复保真度回环，含 NULL/时间戳）",
+    "claims_to_blocks": {
+      "claims_rows": 1318,
+      "doc_resolved": 1318,
+      "locator_resolved": 1318,
+      "result": "全部解析"
+    },
+    "ledger_vs_restored_fidelity": {
+      "claims": {
+        "rows": 1318,
+        "except_diff_rows": "0/0"
+      },
+      "claim_block_runs": {
+        "rows": 290,
+        "except_diff_rows": "0/0"
+      },
+      "corpus_evidence_runs": {
+        "rows": 57,
+        "except_diff_rows": "0/0"
+      },
+      "ingest_runs": {
+        "rows": 11,
+        "except_diff_rows": "0/0"
+      },
+      "ingest_failures": {
+        "rows": 1,
+        "except_diff_rows": "0/0"
+      },
+      "docs": {
+        "rows": 3,
+        "except_diff_rows": "0/0"
+      },
+      "chinese_docs": {
+        "rows": 3,
+        "except_diff_rows": "0/0"
+      },
+      "result": "七表双向 EXCEPT 逐行一致"
+    },
+    "informational": {
+      "note": "claim_text 为模型抽取改写文本，逐字子串率不构成恢复保真度门；cbr.seq 为抽取批次序号（非 block 定位符）",
+      "claim_block_runs_claims_n_match_vs_restored_groups": "247/290",
+      "corpus_evidence_runs_source_rev_prefix_vs_block_md5": "0/57"
+    },
+    "result": "引用全解析 + 台账逐行一致"
+  },
+  "gate": {
+    "passed": true,
+    "checks": [
+      "manifest 25/25 OK",
+      "pg_restore exit 0",
+      "计数 11/11",
+      "扩展 4/4",
+      "权限对账五轴 parity",
+      "引用回环：claims→blocks 全解析 + 七表台账↔恢复库逐行一致",
+      "一次性库已销毁"
+    ]
+  },
+  "production_write_paths_touched": false,
+  "note": "I4-6 原记录（i46-restore-verification.json）保持不变；本件为其补验附录（G3 建议项：权限、旧引用往返、实测耗时）。不绑入冻结链（tasks.md r5j 条目注明另行执行）。"
+}

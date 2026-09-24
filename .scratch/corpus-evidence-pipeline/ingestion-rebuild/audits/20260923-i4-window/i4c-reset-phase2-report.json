@@ -1,0 +1,88 @@
+{
+  "purpose": "I4-reset 阶段 2：manifest phases[2] 单语句 TRUNCATE 六表（U 2026-09-24 复核窗口报告后批准执行「好的，执行吧」，解除同日「暂缓，先出窗口报告」裁决）",
+  "executed_at": "2026-09-24T09:44:36+08:00",
+  "manifest_sha256": "0e51663d006262cde85eda1f42afcd441461daf9f377bee1f8b502cfc48c3ac0",
+  "statements_source": "i4-reset-manifest.json phases[2].statements（运行时读取逐字执行）",
+  "when_precedent": {
+    "i4_4_verified": true,
+    "u_recheck_approval": "2026-09-24 窗口报告复核后批准执行（解除同日暂缓裁决）"
+  },
+  "export_binding_check": {
+    "backup_artifact_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "exports_manifest_sha256": "61d378a51655feaadaae23bc59f796ecb6c185c6532d4ef581f38461bdabd6b1",
+    "crosswalk_sha256": "a97fda27001695842b88a6d9817cf2559e314bb361f08839b3e6f7dc56a7b92b",
+    "crosswalk_lines": 307,
+    "docid_source_map_sha256": "142273cb5f0093487eeb1af6bb12689bccb33bd31d5cf68dd7f729a5b67c7612",
+    "files": {
+      "i4c-old-evidence-locator-crosswalk.jsonl": "a97fda27001695842b88a6d9817cf2559e314bb361f08839b3e6f7dc56a7b92b",
+      "i4c-docid-source-map.json": "142273cb5f0093487eeb1af6bb12689bccb33bd31d5cf68dd7f729a5b67c7612"
+    }
+  },
+  "zero_model_calls": true,
+  "wal_lsn_before": "0/50E52900",
+  "pre": {
+    "table_counts": {
+      "blocks": 1101,
+      "documents": 89,
+      "claims": 0,
+      "claims_v2": 0,
+      "claim_block_runs": 0,
+      "claim_block_runs_v2": 0
+    },
+    "statement_object_row_reconciliation": [
+      {
+        "statement": "TRUNCATE public.blocks, public.documents, public.claims, public.claims_v2, public.claim_block_runs, public.claim_block_runs_v2 RESTART IDENTITY;",
+        "objects": [
+          "blocks",
+          "documents",
+          "claims",
+          "claims_v2",
+          "claim_block_runs",
+          "claim_block_runs_v2"
+        ],
+        "rows_before": {
+          "blocks": 1101,
+          "documents": 89,
+          "claims": 0,
+          "claims_v2": 0,
+          "claim_block_runs": 0,
+          "claim_block_runs_v2": 0
+        }
+      }
+    ],
+    "retained_sequences_before": {
+      "public.docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      },
+      "public.chinese_docs_id_seq": {
+        "last_value": 3,
+        "is_called": true
+      }
+    },
+    "witness_tables_before": {
+      "docs": 3,
+      "chinese_docs": 3
+    }
+  },
+  "wal_lsn_after": "0/50E52900",
+  "post": {
+    "table_counts_all_zero": {
+      "blocks": 0,
+      "documents": 0,
+      "claims": 0,
+      "claims_v2": 0,
+      "claim_block_runs": 0,
+      "claim_block_runs_v2": 0
+    },
+    "sequences_reset": [],
+    "retained_sequences_unchanged": [
+      "public.docs_id_seq",
+      "public.chinese_docs_id_seq"
+    ],
+    "witness_tables_after": {
+      "docs": 3,
+      "chinese_docs": 3
+    }
+  }
+}

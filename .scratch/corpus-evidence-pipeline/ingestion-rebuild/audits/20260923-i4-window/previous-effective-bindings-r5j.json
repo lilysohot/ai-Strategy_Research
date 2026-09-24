@@ -1,0 +1,10 @@
+{
+  "plugins/corpus/preparation/read_pg.py": "beae82955b4a597613c8c703b72acef551f2ef69c3e0a61bf6eb0cad87a56040",
+  "plugins/corpus/preparation/search_pg.py": "1f496a813274d505123a27d26f252765129ab00928b3a4a4dd9fa361564b2be0",
+  "plugins/corpus/preparation/cross_boundary.py": "51cd0269f89d8a69d81c7a592564e57bd352c1076e77a69fb54bdbd1d670551f",
+  "plugins/corpus/service.py": "c91dc3c8acc720dd93ddfda1fb39bc3305e39c30066ec14d49e90d8c449dc7d8",
+  "plugins/corpus/cli.py": "555c348a34184a86f294988c517ec56b4f1f42df5a68a1ec0797d01513f44a01",
+  "tests/test_corpus_consumers_pg.py": "24c65f4749fee0b5700eec49f8c4dfd533955aaa28120bb984c005a83c263f6b",
+  "docs/plan/corpus-ingestion-rebuild-tasks.md": "7ee5cd86a9e52c45611563618eea054bbca6317f0b7ba84d5dcd5071ad396d35",
+  ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "c9e46bf9308ecc5a132ed706b2310b8da3181185b150890446dfa7ce808908c5"
+}

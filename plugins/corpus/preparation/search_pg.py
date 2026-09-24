@@ -41,8 +41,6 @@ from plugins.corpus.preparation.negative_query import rank_lexemes
 from plugins.corpus.preparation.pg_target import production_instance_authorized, resolve_target_db
 from plugins.corpus.preparation.repository import StoreError
 
-_SANDBOX_DB = resolve_target_db()
-
 # c′（i0c-r4v）排序信号开关：True ⇒ score 只按实词（rank_lexemes 剔除功能词/标点）；
 # False ⇒ rank_query 退化为 query 本身，行为与 base 逐字段一致（两级回滚的代码级开关）。
 RANK_LEXEME_PRUNE = True
@@ -215,7 +213,7 @@ def rank_hits(
     return tuple(sorted(hits, key=key, reverse=True))
 
 
-def query_lexemes(dsn: str, query: str, *, sandbox_db: str = _SANDBOX_DB) -> tuple[str, ...]:
+def query_lexemes(dsn: str, query: str, *, sandbox_db: str | None = None) -> tuple[str, ...]:
     """查询侧词元（``zhcfg``，R5 规范化后提取）：结构重叠信号的输入。
 
     与写侧 ``corpus_chunks.search_tsv`` 同配置（``to_tsvector('zhcfg', …)``），
@@ -253,13 +251,18 @@ def _rank_query_on(cur: psycopg.Cursor, query: str) -> str:
     return " OR ".join('"' + t.replace('"', " ") + '"' for t in kept)
 
 
-def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
-    """与 PgStore._check_target 同纪律：隔离库校验 + apodex 生产实例反证。"""
+def _check_target(conn: psycopg.Connection, sandbox_db: str | None) -> None:
+    """与 PgStore._check_target 同纪律：隔离库校验 + apodex 生产实例反证。
+
+    M7 复核 S1：缺省目标**调用时**动态解析（显式 ``CORPUS_TARGET_DB`` 优先），
+    不在 import 时缓存。
+    """
+    target = sandbox_db if sandbox_db is not None else resolve_target_db()
     with conn.cursor() as cur:
         cur.execute("SELECT current_database()")
         row = cur.fetchone()
-        if row is None or row[0] != sandbox_db:
-            raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {sandbox_db!r}")
+        if row is None or row[0] != target:
+            raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {target!r}")
         cur.execute("SELECT datname FROM pg_database WHERE datallowconn")
         dbs = {r[0] for r in cur.fetchall()}
     if "apodex" in dbs and not production_instance_authorized():
@@ -306,7 +309,7 @@ def search_chunks(
     dsn: str,
     query: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,

@@ -1,0 +1,51 @@
+{
+  "snapshot_id": "i0c-r5j",
+  "revision": "r5j",
+  "phase": "i0c",
+  "status": "m7_review_remediation",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5i",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5i.json",
+    "sha256": "0e4b1cebf551767468c30fa36e40ecd93bd021c41b29ab537de9a6a524802494"
+  },
+  "supersedes_validator_sha256": "c9e46bf9308ecc5a132ed706b2310b8da3181185b150890446dfa7ce808908c5",
+  "binding": {
+    "m7_fix_code": {
+      "plugins/corpus/service.py": "7f7b979715e83e920f785f112016b74a5ef182e077260e1287749a959dc83414",
+      "plugins/corpus/preparation/read_pg.py": "8627cc63a02348a1118412100d0a51653474152bb875c3b6d2258a3e2761c96e",
+      "plugins/corpus/preparation/search_pg.py": "1c3f998bd11d119c41fbd6db195c52532634d72f508ddac87ea549fa3ce00645",
+      "plugins/corpus/preparation/cross_boundary.py": "d95f71deb2ec2508a22aeb555684149685eff66dc97185f438d16ffc9553f6f9",
+      "plugins/corpus/cli.py": "6665f4456331d69d93dc6bb58baeb74a1c8467e27e5795ad4d3d0d7321165267"
+    },
+    "m7_fix_tests": {
+      "tests/test_corpus_consumers_pg.py": "48b926b133eaef7b4275f54fb8b1d264b98a348648fa036ab1b7ccde2145e76b",
+      "tests/test_corpus_ingest_retired.py": "9f0ec1ac5b4e737ba4e2e9ca066c7ab20b5e8eaaa1b3037df260b75d2893f09f"
+    },
+    "m7_window_evidence": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/report.md": "37afb42cd21d51cc580c89ba4e26b9c64dd72526b8bb44746fc087142470bccf",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-reset-manifest.json": "0e51663d006262cde85eda1f42afcd441461daf9f377bee1f8b502cfc48c3ac0",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-cutover-manifest.json": "543e851d29a9568cd8168a75aaf0efcf070fb706b0e78ea9cddde8334dc1fb06",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i47-reset-phase1-report.json": "cf0e9bccdfe95fe990c0e5f84308554df0367dc54436f81b466ab9e5289710b2",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i44-rebuild-report.json": "b68793452ea1367f45b96e6df6e2edae49d1720f4b8d771ab4c63fae873dfa46",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i45_tool_roundtrip.py": "282dbf79a05cea863fba28d93a02d5689257077be76983badb1d4e3c3e98f936",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i45-tool-roundtrip.json": "5c85279a0640dd6597eb106a8e9380727d4d684a1558d57a92ce0d3b8228e334",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c_reset_phase2.py": "84d56dc54ba20d75c04bc098beac4acfc7dbe95058ebe17bdb10e5a204d62e97",
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c-reset-phase2-report.json": "11762f4e4fb08b6e4ab7c0a7a63dee010db88bc0850f0bce6555428fd39b4d8f"
+    },
+    "m7_fix_state": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "6d2de92bfb32ae145fd94ae94c7f1602b1917fef5aaac97214c6d1bc6691d06f"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5j.json": "98ab5641cd0996744a6566f8293fbdd6029e0915e8ec6ba34024a59a743bbf1d"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "4b5885c2337442f49efe5ecb6363b96b775f0d198e5d4c89c1fb5df7cb0c778d"
+    }
+  },
+  "correction": "M7 external-review remediation frozen: G1 default target delivered via .env (CORPUS_TARGET_DB=postgres, default-mode acceptance 24/24), S1 target-db resolution de-cached from import time (service/read_pg/search_pg/cross_boundary/cli resolve at construction/call time), G2 retired ingest entry fail-closed (RetiredIngestError + CLI structured rejection, zero-connection regression test), S2 search() unified on search_with_coverage (r5e product-gate acceptance, _selected_chunk_hits removed); I4 window key evidence bound first-in-chain (window report, reset/cutover manifests, phase reports + exec scripts + roundtrip artifact, G4); frozen PG battery replayed green (search-live 11 / fullchain 12 / hermetic 78 / d2d6 73) and full-repo pytest 2931 passed / 2 pre-existing failed / 49 skipped. G3 isolated-restore supplementary verification runs separately.",
+  "corrections": {
+    "m7_review_remediation": "r5j: M7 复核六项修复入链（G1 .env 交付默认目标、S1 目标库解析去 import 缓存、G2 旧写入口 fail-closed 恒定拒绝（零连接回归）、S2 search() 统一委托 search_with_coverage；G4 窗口关键证据首次绑定；G3 隔离恢复补验另行执行）；tasks.md §0 回填重绑（archive-first，r4z/r5g/r5h/r5i 先例）。"
+  },
+  "created_at": "2026-09-24T11:50:48+08:00"
+}

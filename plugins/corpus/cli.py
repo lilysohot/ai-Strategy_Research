@@ -88,7 +88,8 @@ EXIT_TARGET = 3
 EXIT_GATE = 4
 EXIT_UNAVAILABLE = 5
 
-_SANDBOX_DB = resolve_target_db()
+# M7 复核 S1：目标库不再 import 时缓存——各命令执行时动态解析
+# （resolve_target_db：显式 CORPUS_TARGET_DB 优先）。
 _DEFAULT_POLICY = (
     Path(__file__).resolve().parents[2]
     / ".scratch"
@@ -120,7 +121,7 @@ def _open_store(args: argparse.Namespace) -> PgStore:
     dsn = (args.dsn or os.environ.get("CORPUS_I2_DSN", "")).strip()
     if not dsn:
         raise StoreError("拒绝：未声明目标库（--dsn 或 CORPUS_I2_DSN），CLI 不隐式连任何库")
-    return PgStore(dsn, sandbox_db=_SANDBOX_DB)
+    return PgStore(dsn, sandbox_db=resolve_target_db())
 
 
 def _load_manifest(path: Path) -> tuple[list[PlanEntry], Path | None, Path | None]:
@@ -375,7 +376,9 @@ def _cmd_check(args: argparse.Namespace) -> int:
         units = store.get_units(args.build)
         chunks = store.get_chunks(args.build)
         publication = store.get_publication(build.source_id)
-    coverage = read_pg.coverage_snapshot(dsn, sandbox_db=_SANDBOX_DB, query_status="unknown")
+    coverage = read_pg.coverage_snapshot(
+        dsn, sandbox_db=resolve_target_db(), query_status="unknown"
+    )
     _emit(
         {
             "ok": True,
@@ -502,7 +505,7 @@ def _cmd_status(args: argparse.Namespace) -> int:
         publication = store.get_publication(build.source_id)
         admission = store.latest_admission(build.source_id)
         view = _gap_view(build, store)
-    coverage = read_pg.coverage_snapshot(dsn, sandbox_db=_SANDBOX_DB)
+    coverage = read_pg.coverage_snapshot(dsn, sandbox_db=resolve_target_db())
     failed = [
         str(entry["stage"])
         for entry in jobs

@@ -40,7 +40,7 @@ from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar, LiteralString, cast
+from typing import TYPE_CHECKING, Any, ClassVar, LiteralString, NoReturn, cast
 from urllib.parse import quote
 
 if TYPE_CHECKING:
@@ -103,11 +103,25 @@ from plugins.corpus.preparation.source import SourceIngestError
 
 logger = logging.getLogger(__name__)
 
+
+class RetiredIngestError(RuntimeError):
+    """旧 ingest 写入口停用后的结构化拒绝（M7 复核 G2，fail-closed）。
+
+    I4-5 已批准停用旧写入口，但原 ``run_ingest`` 先写旧 ``ingest_runs`` 台账再入库，
+    入库失败路径同样执行 INSERT/UPDATE/COMMIT——停用未落实到入口。现入口恒定拒绝，
+    拒绝发生在任何数据库连接 / DDL / advisory lock / 台账写入之前：失败路径也
+    不写旧表。
+    """
+
+
 # ── I2-7：写路径代理新 preparation Module（design-review 消费者矩阵裁决）──────
 # CorpusService 写路径唯一化：ingest_path/ingest_dir 一律走 preparation.engine
 # 的 plan→execute→publish；新链落隔离演练库（PgStore/_check_target fail-closed
-# 拒绝非 i2_sandbox_corpus 实例）。旧 documents/blocks 直写分支在本文件退役。
-_I2_SANDBOX_DB = resolve_target_db()
+# 拒绝非授权实例）。旧 documents/blocks 直写分支在本文件退役。
+# M7 复核 S1：目标库**不在 import 时缓存**——实例构造时经 resolve_target_db()
+# 统一读取（显式 CORPUS_TARGET_DB 优先），读侧函数缺省时同样动态解析。
+#   （原 ``_I2_SANDBOX_DB = resolve_target_db()`` 模块常量使先 import 后加载
+#   .env 的入口——如 scripts/corpus_holdout_eval.py——永远拿到旧目标，已删。）
 
 #: 生产检索候选池下限：先给最多五个来源各留 40 个候选，再执行有界 band 选择；
 #: 公共 ``limit`` 仍只约束返回的来源锚点数量，完整证据区通过 context locators 暴露。
@@ -322,13 +336,6 @@ LEDGER_COMMENTS: tuple[str, ...] = (
     "COMMENT ON TABLE ingest_failures IS '单次跑批里失败的文件清单，带文件名与原因'",
 )
 
-# 台账 JSON 镜像目录：数据库挂了也能看最近跑批发生了什么
-# （诊断路径不能依赖被诊断对象）
-RUNS_DIR = Path("data/corpus_runs")
-# 防重入的 advisory lock key（固定值，'corp'）
-_INGEST_LOCK_KEY = 0x636F7270
-
-
 #: 语料库本机开发默认值。生产 / 容器环境请用 ``CORPUS_DSN``（完整连接串）覆盖，
 #: 或用 ``CORPUS_DB_HOST/PORT/NAME/USER/PASSWORD`` 组件式覆盖。
 DEFAULT_CORPUS_DB_HOST = "localhost"
@@ -437,6 +444,8 @@ class CorpusService:
 
     def __init__(self, dsn_url: str | None = None) -> None:
         self._dsn = dsn_url or dsn()
+        # M7 复核 S1：目标库构造时读取（显式 CORPUS_TARGET_DB 优先），不再 import 缓存。
+        self._target_db = resolve_target_db()
         self._lock = threading.Lock()
         # I2-7：新链写路径上下文（隔离演练库 Store + 冻结准入政策）惰性缓存。
         self._engine_store: PgStore | None = None
@@ -627,9 +636,9 @@ class CorpusService:
             if not sandbox_dsn:
                 raise RuntimeError(
                     "写路径已代理新 preparation Module（I2-7）：需要 CORPUS_I2_DSN 指向"
-                    f"隔离演练库 {_I2_SANDBOX_DB}；未配置则拒绝写入（无旧直写兜底）"
+                    f"隔离演练库 {self._target_db}；未配置则拒绝写入（无旧直写兜底）"
                 )
-            self._engine_store = PgStore(sandbox_dsn, sandbox_db=_I2_SANDBOX_DB)
+            self._engine_store = PgStore(sandbox_dsn, sandbox_db=self._target_db)
             self._engine_policy = load_admission_policy(_I2_POLICY_PATH)
         return self._engine_store, self._engine_policy
 
@@ -894,7 +903,7 @@ class CorpusService:
         from plugins.corpus.preparation import read_pg
 
         return read_pg.coverage_snapshot(
-            self._dsn, sandbox_db=_I2_SANDBOX_DB, query_status=query_status
+            self._dsn, sandbox_db=self._target_db, query_status=query_status
         )
 
     def _apply_selection(
@@ -913,7 +922,7 @@ class CorpusService:
 
         if not raw_hits:
             return raw_hits
-        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
+        lexemes = query_lexemes(self._dsn, query, sandbox_db=self._target_db)
         # select_structural 只对 raw_hits 做选择/重排（返回其子序列），cast 到调用方
         # 期望的具体类型是安全的。
         selected = select_structural(raw_hits, SelectionPolicy(), lexemes=lexemes)
@@ -948,7 +957,7 @@ class CorpusService:
 
         if not is_corpus_availability_query(query):
             return False
-        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
+        lexemes = query_lexemes(self._dsn, query, sandbox_db=self._target_db)
         if not abstain_content_lexemes(lexemes):
             return False
         # 主门：DB 级 websearch AND 预检（实质词元=去疑问词；F1 真负例下归零 → 零 fetch）。
@@ -958,7 +967,7 @@ class CorpusService:
             self._dsn,
             abstain_no_answer_query(lexemes),
             limit=_ABSTAIN_PRE_CHECK_LIMIT,
-            sandbox_db=_I2_SANDBOX_DB,
+            sandbox_db=self._target_db,
         )
         if not hits:
             return True
@@ -970,7 +979,7 @@ class CorpusService:
                 self._dsn,
                 read_pg.build_handle(hit.build_id),
                 read_pg.chunk_locator(hit.chunk_id),
-                sandbox_db=_I2_SANDBOX_DB,
+                sandbox_db=self._target_db,
             )
             if any(is_abstain_candidate(u.raw_text, lexemes) for u in ev.units):
                 return False
@@ -1050,7 +1059,7 @@ class CorpusService:
         from plugins.corpus.preparation.negative_query import retrieval_query
         from plugins.corpus.preparation.search_pg import query_lexemes
 
-        lexemes = query_lexemes(self._dsn, query, sandbox_db=_I2_SANDBOX_DB)
+        lexemes = query_lexemes(self._dsn, query, sandbox_db=self._target_db)
         candidate_query = retrieval_query(lexemes)
         if not candidate_query:
             candidate_query = query
@@ -1059,12 +1068,12 @@ class CorpusService:
             self._dsn,
             candidate_query,
             limit=max(limit, _SELECTION_POOL_MIN),
-            sandbox_db=_I2_SANDBOX_DB,
+            sandbox_db=self._target_db,
         )
         if self._abstain_decision(query):
             abstain_cov = read_pg.coverage_snapshot(
                 self._dsn,
-                sandbox_db=_I2_SANDBOX_DB,
+                sandbox_db=self._target_db,
                 query_status="abstain",
             )
             abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
@@ -1114,10 +1123,10 @@ class CorpusService:
             self._dsn,
             query,
             limit=max(limit, _SELECTION_POOL_MIN),
-            sandbox_db=_I2_SANDBOX_DB,
+            sandbox_db=self._target_db,
         )
         bands = self._apply_selection_bands(raw_hits, chunk_order, limit)
-        chunk_evs = read_pg.fetch_bands(self._dsn, bands, chunk_order, sandbox_db=_I2_SANDBOX_DB)
+        chunk_evs = read_pg.fetch_bands(self._dsn, bands, chunk_order, sandbox_db=self._target_db)
         docs = self._assemble_band_documents(bands, chunk_evs, chunk_order)
         return docs, coverage
 
@@ -1144,57 +1153,6 @@ class CorpusService:
             chunk_order_by_source=chunk_order_by_source,
         )
         return tuple(bands)[:limit]
-
-    def _selected_chunk_hits(
-        self,
-        raw_hits: tuple[SearchPgHit, ...],
-        chunk_order_by_source: Mapping[str, tuple[str, ...]],
-        limit: int,
-    ) -> tuple[SearchPgHit, ...]:
-        """生产默认：band 选中的 chunk 集（§10.5 选项 A，i0c-r4n U 决策）。
-
-        与 :meth:`_apply_selection`（perdoc）并列但为**生产默认**的带形态：文档选择与
-        ``select`` 逐字节一致（首个命中定来源排名），文档内按 ``select_band`` 选中带，
-        把带内 [start, end] 的原文序块（含扩展非池块）摊平为逐块命中返回，再截断到
-        ``limit``。仍以 ``chunk:<chunk_id>`` 取证句柄交给工具——硬闸①不变：snippet 截断，
-        逐字原文必须另走 ``corpus_fetch``。池块复用原命中的 snippet/score，扩展非池块
-        以带分占位、snippet 为空（只定位，不泄漏全文）。
-        """
-        from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHitAlias
-        from plugins.corpus.preparation.selection import SelectionError
-
-        bands = self._apply_selection_bands(raw_hits, chunk_order_by_source, limit)
-        if not bands:
-            return ()
-        by_key = {(h.build_id, h.chunk_id): h for h in raw_hits}
-        out: list[SearchPgHit] = []
-        for band in bands:
-            ordered = chunk_order_by_source.get(band.source_id)
-            if ordered is None:
-                raise SelectionError(f"缺少 {band.source_id} 的原文序块清单")
-            for i in range(band.start, band.end + 1):
-                if not (0 <= i < len(ordered)):
-                    continue
-                cid = ordered[i]
-                hit = by_key.get((band.build_id, cid))
-                if hit is None:
-                    # 带内扩展的非池块没有原始命中——只给取证件，不留全文。
-                    hit = SearchPgHitAlias(
-                        source_id=band.source_id,
-                        build_id=band.build_id,
-                        chunk_id=cid,
-                        kind="",
-                        title_text=None,
-                        section_path=(),
-                        unit_refs=(),
-                        score=band.score,
-                        snippet="",
-                        published=None,
-                    )
-                out.append(hit)
-                if len(out) >= limit:
-                    return tuple(out)
-        return tuple(out)
 
     @staticmethod
     def _has_letter(s: str) -> bool:
@@ -1325,39 +1283,19 @@ class CorpusService:
             raise read_pg.LegacyHandleError(
                 f"目标库未承载新链（read_chain={self.read_chain()}），句柄 {doc_id!r} 不可取证"
             )
-        return read_pg.fetch_verbatim(self._dsn, doc_id, locator, sandbox_db=_I2_SANDBOX_DB)
+        return read_pg.fetch_verbatim(self._dsn, doc_id, locator, sandbox_db=self._target_db)
 
     def search(self, query: str, *, limit: int = 10) -> list[SearchHit]:
         q = (query or "").strip()
         if not q:
             return []
         if self.read_chain() == "new":
-            # I2-8：检索只服务活动 build（PUBLISHED 指针），命中即§7.2 取证句柄。
-            from plugins.corpus.preparation import read_pg
-
-            raw_hits, chunk_order, _coverage = read_pg.search_with_coverage_bands(
-                self._dsn,
-                q,
-                limit=max(limit, _SELECTION_POOL_MIN),
-                sandbox_db=_I2_SANDBOX_DB,
-            )
-            # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-            hits = self._selected_chunk_hits(raw_hits, chunk_order, limit)
-            return [
-                SearchHit(
-                    doc_id=read_pg.build_handle(hit.build_id),
-                    locator=read_pg.chunk_locator(hit.chunk_id),
-                    title=hit.title_text
-                    or (hit.section_path[-1] if hit.section_path else hit.chunk_id),
-                    snippet=hit.snippet,
-                    score=float(hit.score),
-                    published=hit.published or "undated",
-                    source_id=hit.source_id,
-                    build_id=hit.build_id,
-                    chunk_id=hit.chunk_id,
-                )
-                for hit in hits
-            ]
+            # M7 复核 S2：新链检索与服务层旧入口**共用同一套选择语义**——直接委托
+            # search_with_coverage（候选改写 retrieval_query + _selected_context_hits
+            # 锚点选择，即 r5e 产品门 24/24 验收口径），消除 M6 起双入口的命中选择
+            # 分叉（冻结 test_fullchain_probes 回路因此恢复同句柄同正文）。
+            hits, _coverage = self.search_with_coverage(q, limit=limit)
+            return hits
         candidate_limit = max(50, limit * 10)
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
@@ -1512,7 +1450,7 @@ class CorpusService:
             from plugins.corpus.preparation import read_pg
 
             try:
-                return read_pg.fetch_document(self._dsn, doc_id, sandbox_db=_I2_SANDBOX_DB).text
+                return read_pg.fetch_document(self._dsn, doc_id, sandbox_db=self._target_db).text
             except read_pg.ReadError:
                 return None
         source_id = _source_id_from_cv2_handle(doc_id)
@@ -1557,7 +1495,7 @@ class CorpusService:
                 "目标库未承载新链，无法按 cell 坐标取权威原文（不回退旧 blocks表）"
             )
         return read_pg.fetch_cell(
-            self._dsn, doc_id, row=row, col=col, page=page, sandbox_db=_I2_SANDBOX_DB
+            self._dsn, doc_id, row=row, col=col, page=page, sandbox_db=self._target_db
         )
 
     def verify_evidence_against_authority(self, run: EvidenceRun) -> None:
@@ -2646,13 +2584,14 @@ class CorpusService:
             rows = cur.fetchall()
         return [dict(r) for r in rows]
 
-    # ── 跑批任务化（C1a）──────────────────────────────────────
+    # ── 旧跑批入口（已停用，fail-closed）──────────────────────
     #
-    # 跑批 = 加锁 → 开始记台账 → ingest_dir → 收尾记台账 → 返回退出码。
-    # 退出码语义（调度器唯一能看的东西）：
-    #   0 ok    全部成功
-    #   1 warn  跑完了，但有失败 / 空文档 / 需 OCR —— 需要人看
-    #   2 error 没跑起来（PG 不可达 / 已有跑批在跑 / 目录不存在）—— 必须处理
+    # C1a 跑批任务化已随 I4-5 停用批准退役（M7 复核 G2 落实）：原实现
+    # 「加锁 → _ledger_start 写旧 ingest_runs → ingest_dir → _ledger_finish
+    # UPDATE+COMMIT」——即使入库失败（exit 2）也写旧表，停用未真正落实到入口。
+    # 现入口恒定拒绝：无连接、无 DDL、无 advisory lock、无台账写，失败路径
+    # 同样不写旧表。新链入库唯一入口是 preparation.engine
+    # （:meth:`ingest_path` / :meth:`ingest_dir`）。
 
     def run_ingest(
         self,
@@ -2660,172 +2599,18 @@ class CorpusService:
         *,
         trigger: str = "manual",
         min_age: float = 60.0,
-    ) -> dict[str, object]:
-        """跑一次完整批：防重入 → 落台账 → 返回结果（含 ``exit_code``）。
+    ) -> NoReturn:
+        """旧写入口停用：**恒定拒绝**（fail-closed），不建立任何数据库连接。
 
-        ``trigger`` 记进台账，用来区分是谁触发的（手动 / 定时 / 脚本）。
-        ``min_age`` 默认 60 秒：跳过可能仍在拷贝中的文件，避免假失败。
+        参数仅为兼容旧签名保留（``trigger``/``min_age`` 原台账/防半拷贝语义随
+        入口一并退役）。CLI ``ingest`` 子命令把该拒绝输出为结构化 JSON（exit 2）；
+        编程调用方收到 :class:`RetiredIngestError`。
         """
-        started = time.monotonic()
-        try:
-            return self._ingest_inner(root, trigger=trigger, min_age=min_age)
-        except Exception as exc:
-            # 兜住"跑批没跑起来"的一切情况：数据库不可达、目录不存在、
-            # 权限问题…… 调度器只能看退出码，所以必须给 2，不能抛栈。
-            logger.exception("跑批未能启动")
-            record: dict[str, object] = {
-                "run_id": None,
-                "status": "error",
-                "error": f"{type(exc).__name__}: {exc}",
-                "total": 0,
-                "added": 0,
-                "skipped_duplicate": 0,
-                "skipped_unchanged": 0,
-                "skipped_fresh": 0,
-                "needs_ocr": 0,
-                "empty": 0,
-                "failed": 0,
-                "failures": [],
-                "duration_ms": int((time.monotonic() - started) * 1000),
-                "exit_code": 2,
-            }
-            # 数据库可能就是挂的那个 —— 这时更要留下痕迹，所以写磁盘镜像
-            self._ledger_json(record)
-            return record
-
-    def _ingest_inner(self, root: str | Path, *, trigger: str, min_age: float) -> dict[str, object]:
-        self.init_db()
-        with self._connect() as lock_conn:
-            got = lock_conn.execute(
-                "SELECT pg_try_advisory_lock(%s) AS got", (_INGEST_LOCK_KEY,)
-            ).fetchone()
-            if not got or not got["got"]:
-                msg = "已有跑批在运行（未取得 advisory lock），本次跳过"
-                logger.warning(msg)
-                return {
-                    "run_id": None,
-                    "status": "error",
-                    "error": msg,
-                    "exit_code": 2,
-                }
-            try:
-                return self._ingest_locked(root, trigger=trigger, min_age=min_age)
-            finally:
-                lock_conn.execute("SELECT pg_advisory_unlock(%s)", (_INGEST_LOCK_KEY,))
-                lock_conn.commit()
-
-    def _ingest_locked(
-        self, root: str | Path, *, trigger: str, min_age: float
-    ) -> dict[str, object]:
-        run_id = self._ledger_start(root, trigger)
-        started = time.monotonic()
-        try:
-            stats = self.ingest_dir(root, min_age=min_age)
-        except Exception as exc:  # 跑批整个挂了（如 PG 不可达）
-            logger.exception("跑批失败")
-            record = self._ledger_finish(
-                run_id,
-                None,
-                "error",
-                error=str(exc),
-                duration_ms=int((time.monotonic() - started) * 1000),
-            )
-            return {**record, "exit_code": 2}
-
-        # 空文档 / 需 OCR 不算"失败"，但必须让人看见 —— 否则报告静默搜不到
-        problems = stats.failed + stats.empty + stats.needs_ocr
-        status = "ok" if problems == 0 else "warn"
-        record = self._ledger_finish(
-            run_id,
-            stats,
-            status,
-            duration_ms=int((time.monotonic() - started) * 1000),
+        raise RetiredIngestError(
+            "旧 ingest 写入口已停用（I4-5 批准，M7 复核 G2 落实为 fail-closed 拒绝）："
+            "新链入库唯一入口是 preparation.engine（ingest_path/ingest_dir）；"
+            "旧 ingest_runs/ingest_failures 台账不再接受任何写入（含失败路径）。"
         )
-        exit_code = 0 if status == "ok" else 1
-        logger.info(
-            "跑批结束：status=%s added=%s failed=%s empty=%s needs_ocr=%s",
-            status,
-            stats.added,
-            stats.failed,
-            stats.empty,
-            stats.needs_ocr,
-        )
-        return {**record, "exit_code": exit_code}
-
-    def _ledger_start(self, root: str | Path, trigger: str) -> int:
-        with self._connect() as conn:
-            row = conn.execute(
-                "INSERT INTO ingest_runs (root, status, trigger) "
-                "VALUES (%s, 'running', %s) RETURNING run_id",
-                (str(root), trigger),
-            ).fetchone()
-            conn.commit()
-            # RETURNING always yields a row; a missing one means the insert did
-            # not happen, and continuing with a fabricated id would mis-attribute
-            # the whole run.
-            if row is None:
-                raise RuntimeError("创建 ingest_run 台账失败")
-            return int(row["run_id"])
-
-    def _ledger_finish(
-        self,
-        run_id: int,
-        stats: IngestStats | None,
-        status: str,
-        *,
-        error: str | None = None,
-        duration_ms: int,
-    ) -> dict[str, object]:
-        values = {
-            "run_id": run_id,
-            "status": status,
-            "error": error,
-            "duration_ms": duration_ms,
-            "total": stats.total if stats else 0,
-            "added": stats.added if stats else 0,
-            "skipped_duplicate": stats.skipped_duplicate if stats else 0,
-            "skipped_unchanged": stats.skipped_unchanged if stats else 0,
-            "skipped_fresh": stats.skipped_fresh if stats else 0,
-            "needs_ocr": stats.needs_ocr if stats else 0,
-            "empty": stats.empty if stats else 0,
-            "failed": stats.failed if stats else 0,
-        }
-        with self._connect() as conn:
-            conn.execute(
-                "UPDATE ingest_runs SET finished_at = now(), duration_ms = %(duration_ms)s, "
-                "total = %(total)s, added = %(added)s, "
-                "skipped_duplicate = %(skipped_duplicate)s, "
-                "skipped_unchanged = %(skipped_unchanged)s, needs_ocr = %(needs_ocr)s, "
-                "empty = %(empty)s, failed = %(failed)s, status = %(status)s, "
-                "error = %(error)s WHERE run_id = %(run_id)s",
-                values,
-            )
-            failures = list(stats.failures) if stats else []
-            for path, reason in failures:
-                conn.execute(
-                    "INSERT INTO ingest_failures (run_id, path, reason) VALUES (%s,%s,%s)",
-                    (run_id, path, reason),
-                )
-            conn.commit()
-
-        record = {k: v for k, v in values.items() if k != "run_id"}
-        record["run_id"] = run_id
-        record["failures"] = [{"path": p, "reason": r} for p, r in failures]
-        self._ledger_json(record)
-        return record
-
-    def _ledger_json(self, record: dict[str, object]) -> None:
-        """台账镜像到磁盘（JSONL）。
-
-        为什么还要一份：数据库出问题时，诊断信息不能只存在于"被诊断的对象"里。
-        JSONL 天然支持追加，不需要读-改-写。
-        """
-        try:
-            RUNS_DIR.mkdir(parents=True, exist_ok=True)
-            with (RUNS_DIR / "runs.jsonl").open("a", encoding="utf-8") as fh:
-                fh.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
-        except OSError as exc:  # 镜像失败不影响主流程，但必须留痕
-            logger.warning("台账 JSON 镜像写入失败：%s", exc)
 
     # ── 台账查询（C2a）────────────────────────────────────────
 
@@ -2887,7 +2672,7 @@ def _main() -> int:
     parser = argparse.ArgumentParser(prog="corpus-service", description="语料库 PG 服务层 CLI")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    p_ingest = sub.add_parser("ingest", help="跑批入库一个目录（幂等，并落台账）")
+    p_ingest = sub.add_parser("ingest", help="（已停用）旧写入口：恒定结构化拒绝，exit 2")
     p_ingest.add_argument("--dir", default=CORPUS_ROOT)
     p_ingest.add_argument("--db", default=None)
     p_ingest.add_argument(
@@ -3212,10 +2997,25 @@ def _main() -> int:
         return 0
 
     if args.cmd == "ingest":
-        result = svc.run_ingest(args.dir, trigger=args.trigger, min_age=args.min_age)
-        print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
-        code = result.get("exit_code", 2)
-        return code if isinstance(code, int) else 2
+        # M7 复核 G2：旧 ingest 入口 fail-closed——结构化拒绝，不触碰任何旧表。
+        print(
+            json.dumps(
+                {
+                    "ok": False,
+                    "status": "rejected",
+                    "reason": "retired_ingest_entry",
+                    "error": (
+                        "旧 ingest 写入口已停用（I4-5 批准，M7 复核 G2 落实）："
+                        "新链入库唯一入口是 preparation.engine"
+                        "（CorpusService.ingest_path/ingest_dir）；"
+                        "本命令恒定拒绝（exit 2），不建立数据库连接、不写旧表"
+                        "（含失败路径）。"
+                    ),
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 2
     elif args.cmd == "runs":
         svc.init_db()
         print(json.dumps(svc.recent_runs(args.limit), ensure_ascii=False, indent=2, default=str))

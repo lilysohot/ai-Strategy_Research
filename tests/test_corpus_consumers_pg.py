@@ -228,10 +228,13 @@ def test_search_returns_version_handles_and_fetch_is_verbatim(
 
 
 def test_service_search_applies_selection_policy(store: PgStore, service: CorpusService) -> None:
-    """R3 闭环：生产 search 走 perdoc 选择策略（top_k 来源 × 每源块数上限）。
+    """R3 闭环：生产 search 走统一选择策略（top_k 来源 × 每来源 1 锚点命中）。
 
-    6 来源 × 2 块全部命中时，无选择策略会返回全部 12 块；接入 ``select_structural``
-    后只保留前 ``top_k=5`` 来源的块（10 条），且任何来源不超过 8 块。
+    6 来源 × 2 块全部命中时，无选择策略会返回全部 12 块；接入统一选择后只保留
+    前 ``top_k=5`` 来源，每来源返回 1 个最高分锚点命中（band 池其余位置以
+    ``context_chunk_ids`` 附带溯源句柄，经 fetch 取回）。M7 复核 S2：``search()``
+    已委托 ``search_with_coverage``（r5e 产品门 24/24 验收口径），与旧
+    ``_selected_chunk_hits`` 的「每源多块」口径不再相同（本例 10 → 5）。
     """
     for i in range(6):
         build_id = sha256_of_bytes(f"i2s8:sel:build:{i}".encode())
@@ -277,7 +280,7 @@ def test_service_search_applies_selection_policy(store: PgStore, service: Corpus
     hits = service.search("石英", limit=20)
     sources = {hit.source_id for hit in hits}
     assert len(sources) == 5  # top_k=5：第 6 个来源整体挤出
-    assert len(hits) == 10  # 5 来源 × 2 块（池 12 ≥ max(limit,40)，选择后截断不生效）
+    assert len(hits) == 5  # 统一锚点选择：每来源 1 个锚点命中（S2 统一；旧口径为每源 2 块）
     assert all(sum(1 for hit in hits if hit.source_id == source) <= 8 for source in sources)
 
 

@@ -1,0 +1,29 @@
+{
+  "snapshot_id": "i0c-r5i",
+  "revision": "r5i",
+  "phase": "i0c",
+  "status": "i4_reset_phase2_execution",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5h",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5h.json",
+    "sha256": "7fb195cf6024ff03f2ea9974d302e8027f0ae4afc24bea2a0d8b8a6b4164d7d1"
+  },
+  "supersedes_validator_sha256": "2cfad4447216383eb5ebf24a795199b7856150c5276f6a97d60df1c60f9ce768",
+  "binding": {
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "c9e46bf9308ecc5a132ed706b2310b8da3181185b150890446dfa7ce808908c5"
+    },
+    "i4_phase2_state": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "7ee5cd86a9e52c45611563618eea054bbca6317f0b7ba84d5dcd5071ad396d35"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5i.json": "a93ae9111d09c49735d8da753b9e56a3d986663b3a1fb948072d8245db072b5d"
+    }
+  },
+  "correction": "Reset phase 2 executed after U lifted the same-day deferral (window report reviewed, approval '好的，执行吧'): manifest phases[2] single statement TRUNCATE six tables in one transaction verbatim (five reference tables listed with documents per the FK structural rule, no CASCADE); five gates green — guard selfcheck + I4-4 8/8 summary, backup/exports three-artifact sha hits (crosswalk 307 lines measured), pre-counts exactly 1101/89 + four reference tables 0, post all six tables 0, retained sequences docs_id_seq/chinese_docs_id_seq and witness docs/chinese_docs 3/3 unchanged; write-once i4c-reset-phase2-report.json (11762f4e). tasks.md rebound archive-first per the r4z/r5g/r5h precedent; validator extended with the r5i section. I4 window execution now fully complete; M7 release still governed by the master ledger.",
+  "corrections": {
+    "i4_phase2_execution": "r5i: reset 阶段 2 暂缓解除后执行完成（U 2026-09-24 复核窗口报告后批准，解除同日「暂缓，先出窗口报告」裁决）；manifest phases[2] 单语句六表单事务逐字执行，五门全过，write-once 报告落章；tasks.md §0 收尾回填并重绑（archive-first）。"
+  },
+  "created_at": "2026-09-24T09:55:00+08:00"
+}

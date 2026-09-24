@@ -65,16 +65,22 @@ postgres 与 i2_sandbox_corpus 两库 zhcfg 逐字段一致（24 token 全→sim
 - **零模型**：openai/anthropic/material_semantics/_r2_runtime 往返前后不在 sys.modules；
 - **无双写**：往返前后旧链七表恒 0 + blocks/documents 1101/89 不变；
 - **旧写入口停用记录**：claims/claim_block_runs（service.py:2169/2177）、ingest_runs/ingest_failures（:2758/2806）、corpus_evidence_runs（:1596，检索/取证纯读不触）、documents/blocks 直写（I2-7 退役）——共四条；
-- **switched**：corpus schema（I4-7 migrate 九表）/ 活动集 8/8（I4-4，build_id 与 I3-7 基线相同）/ 消费路径 search_pg+read_pg / 写路径唯一化 preparation engine；**retained**：docs/chinese_docs（C12）、blocks/documents（阶段 2 随 I4-close → 见 §7 暂缓）、apodex 库、扩展与 zhcfg、I0B/I4 备份。
+- **switched**：corpus schema（I4-7 migrate 九表）/ 活动集 8/8（I4-4，build_id 与 I3-7 基线相同）/ 消费路径 search_pg+read_pg / 写路径唯一化 preparation engine；**retained**：docs/chinese_docs（C12）、apodex 库、扩展与 zhcfg、I0B/I4 备份；blocks/documents 已于阶段 2（暂缓解除后）清空 → 见 §7。
 
-## 7. reset 阶段 2 —— U 复核裁决：暂缓
+## 7. reset 阶段 2 —— U 复核裁决暂缓，解除后执行完成
 
-- manifest phases[1] 前置「I4-4 验证通过 + U 复核」：前者满足，U 于 2026-09-24 AskUserQuestion 裁决**「暂缓，先出窗口报告」**；
-- 现状保留：blocks 1101 / documents 89（四张引用表仍为阶段 1 后的 0）；
-- **前置对照件已导出待用**（[i4c_exports.py](i4c_exports.py)，守卫 lane，READ ONLY）：
+- manifest phases[1] 前置「I4-4 验证通过 + U 复核」：前者满足，U 于 2026-09-24 AskUserQuestion 裁决**「暂缓，先出窗口报告」**；窗口报告交付后，U 复核批准执行（**「好的，执行吧」**，解除同日暂缓裁决）；
+- **已执行**（[i4c_reset_phase2.py](i4c_reset_phase2.py)，守卫 lane，五门全过；write-once 报告 [i4c-reset-phase2-report.json](i4c-reset-phase2-report.json)，sha `11762f4e…`）：
+  - 门 1：守卫自检通过且 config sha `e599d9b4…` 未变；I4-4 报告摘要 8/8 核对（phases[2].when 前置）；
+  - 门 2：备份 artifact-manifest `085abf4c…` + 对照件三件（清单 `61d378a5…` / crosswalk `a97fda27…` 实测 307 行 / 映射 `142273cb…`）逐一命中；
+  - 门 3：前置行数精确匹配——blocks 1101 / documents 89（manifest）+ 四引用表 0（阶段 1 报告 post），漂移即停未触发；语句/对象/行数三对账；
+  - 门 4：单事务逐字执行 phases[2].statements[0]（六表同语句、无 CASCADE）；
+  - 门 5：后置六表全 0；保留序列 docs_id_seq/chinese_docs_id_seq（3, true）不变；见证 docs/chinese_docs 3/3 不变；WAL 取样 0/50E52900（同事务两次取样同值，以行数全 0 与提交为准）；
+- 暂缓期间记录（保留为历史）：现状保留 blocks 1101 / documents 89（四张引用表仍为阶段 1 后的 0）；
+- **前置对照件已导出**（[i4c_exports.py](i4c_exports.py)，守卫 lane，READ ONLY；阶段 2 门 2 已核验命中）：
   - [i4c-old-evidence-locator-crosswalk.jsonl](i4c-exports/i4c-old-evidence-locator-crosswalk.jsonl)：台账引用对 307（claims/claim_block_runs/corpus_evidence_runs payload），290 精确联块（含块全文）、17 非数字 locator 如实保留、0 丢失（sha `a97fda27…`）；
   - [i4c-docid-source-map.json](i4c-exports/i4c-docid-source-map.json)：89 行源身份；content_hash16 为新链 corpus_sources.source_id 的 16-hex 前缀，8 行唯一精确 join（sha `142273cb…`；[清单](i4c-exports/i4c-exports-manifest.json)）；
-- 执行时回退只靠已验证备份（postgres.dump 恢复验证 11/11），不靠旧指针；语句仍以锁定 manifest 为准，届时另走执行门。
+- 执行时回退只靠已验证备份（postgres.dump 恢复验证 11/11），不靠旧指针；语句以锁定 manifest 为准（已落实，运行时读取逐字执行）。
 
 ## 8. 偏差与观察登记
 
@@ -98,14 +104,19 @@ postgres 与 i2_sandbox_corpus 两库 zhcfg 逐字段一致（24 token 全→sim
 | I4-5 | i45-tool-roundtrip.json | 5c85279a… |
 | I4-close | i4c-exports 三件（crosswalk / 映射 / 清单） | a97fda27… / 142273cb… / 61d378a5… |
 | I4-close | r5h 快照 / 验证输出 / prev-bindings | 7fb195cf… / 550c7719… / b50c334a… |
+| 阶段 2 | i4c-reset-phase2-report.json | 11762f4e… |
+| 阶段 2 收尾 | r5i 快照 / 验证输出 / prev-bindings | 0e4b1ceb… / a24b2279… / a93ae911… |
 
 冻结链收尾：新修订 **i0c-r5h**（parent r5g，快照 sha `7fb195cf…`），验证器 exit 0
 （[i4c-r5h-validation.txt](i4c-r5h-validation.txt)）；tasks.md 按 r4z/r5g 先例
 archive-first 重绑（before-r5h/ 归档=重绑后字节，验证器归档=改前字节
-`b44c0ee9…`）。
+`b44c0ee9…`）。阶段 2 执行后再入 **i0c-r5i**（parent r5h，快照 sha `0e4b1ceb…`，
+验证器 `c9e46bf9…`），验证器 exit 0（[i4c-r5i-validation.txt](i4c-r5i-validation.txt)）；
+tasks.md §0 阶段 2 收尾条目重绑（before-r5i/ 归档：tasks.md=重绑后字节
+`7ee5cd86…`，验证器=改前字节 `2cfad444…`）。链头现为 i0c-r5i。
 
 ## 10. 后续（非本窗口）
 
-- reset 阶段 2 另行安排（§7）；
+- reset 阶段 2 已于暂缓解除后执行完成（§7），回退仍只靠已验证备份；
 - I5-1 四场景复核、I5-2 维护说明定稿、I5-3 旧入口停用核验（将以本窗口 i45 停用记录为输入）；
 - 生产归档根归属（I4-4 用 i44-archive/）随 C12 类裁决定案。

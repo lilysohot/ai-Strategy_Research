@@ -35,7 +35,6 @@ from plugins.corpus.preparation.contract import sha256_of_bytes
 from plugins.corpus.preparation.pg_target import production_instance_authorized, resolve_target_db
 from plugins.corpus.preparation.repository import StoreError
 
-_SANDBOX_DB = resolve_target_db()
 AUTHORITY_REV = "authority-context-2"
 
 _HANDLE_PREFIX = "cv2:"
@@ -163,12 +162,15 @@ def chunk_locator(chunk_id: str) -> str:
     return f"{_LOCATOR_PREFIX}{chunk_id}"
 
 
-def _check_target(conn: psycopg.Connection, sandbox_db: str) -> None:
+def _check_target(conn: psycopg.Connection, sandbox_db: str | None) -> None:
+    # M7 复核 S1：显式传入优先；缺省时**调用时**动态解析（不在 import 时缓存），
+    # 使先 import 后加载 .env 的入口（如 scripts/corpus_holdout_eval.py）也能生效。
+    target = sandbox_db if sandbox_db is not None else resolve_target_db()
     with conn.cursor() as cur:
         cur.execute("SELECT current_database()")
         row = cur.fetchone()
-        if row is None or row[0] != sandbox_db:
-            raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {sandbox_db!r}")
+        if row is None or row[0] != target:
+            raise StoreError(f"拒绝：current_database={row[0] if row else None!r} ≠ {target!r}")
         cur.execute("SELECT datname FROM pg_database WHERE datallowconn")
         dbs = {r[0] for r in cur.fetchall()}
     if "apodex" in dbs and not production_instance_authorized():
@@ -239,7 +241,7 @@ def fetch_verbatim(
     doc_id: str,
     locator: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
 ) -> ChunkEvidence:
     """Fetch the versioned chunk and verified context within one read snapshot.
 
@@ -288,7 +290,7 @@ def fetch_document(
     dsn: str,
     doc_id: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
 ) -> DocumentEvidence:
     """取**句柄所绑定 build** 的全文（§7.2：文档级与块级同一版本语义）。
 
@@ -351,7 +353,7 @@ def fetch_cell(
     row: int,
     col: int,
     page: int | None = None,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
 ) -> CellEvidence:
     """按 (页, 行, 列) 取权威单元格原文（§4.2：cell 坐标也是引用绑定的一部分）。
 
@@ -523,7 +525,7 @@ def coverage_snapshot_on(
 def coverage_snapshot(
     dsn: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
     query_status: str = "unknown",
 ) -> dict[str, object]:
     """§7.3 三轴覆盖快照（不把 no_match 自动当 absent，failed 恒 unknown）。
@@ -546,7 +548,7 @@ def search_with_coverage(
     dsn: str,
     query: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
@@ -639,7 +641,7 @@ def search_with_coverage_bands(
     dsn: str,
     query: str,
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
@@ -699,7 +701,7 @@ def fetch_bands(
     bands: tuple,
     chunk_order_by_source: dict[str, tuple[str, ...]],
     *,
-    sandbox_db: str = _SANDBOX_DB,
+    sandbox_db: str | None = None,
 ) -> tuple[ChunkEvidence, ...]:
     """批量取回选中带内全部块的逐字证据（同一批 SQL，禁 N+1）。
 
