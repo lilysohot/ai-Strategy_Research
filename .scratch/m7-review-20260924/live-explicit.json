@@ -1,0 +1,819 @@
+{
+  "mode": "explicit",
+  "target_db_config_present": false,
+  "resolved_target": "postgres",
+  "pre_counts": {
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claim_block_runs": 0,
+    "claims_v2": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "docs": 3,
+    "chinese_docs": 3,
+    "new_chain": {
+      "corpus_sources": 8,
+      "corpus_builds": 8,
+      "corpus_units": 3887,
+      "corpus_chunks": 834,
+      "corpus_publications": 8
+    },
+    "active": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ]
+  },
+  "search": {
+    "ok": true,
+    "query": "半导体划片机",
+    "count": 4,
+    "hits": [
+      {
+        "doc_id": "cv2:a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+        "locator": "chunk:a3b681fdd55d6e11:body:0013",
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "build_id": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+        "chunk_id": "a3b681fdd55d6e11:body:0013",
+        "context_locators": [
+          "chunk:a3b681fdd55d6e11:heading:0002",
+          "chunk:a3b681fdd55d6e11:heading:0003",
+          "chunk:a3b681fdd55d6e11:heading:0004",
+          "chunk:a3b681fdd55d6e11:heading:0005",
+          "chunk:a3b681fdd55d6e11:body:0000",
+          "chunk:a3b681fdd55d6e11:body:0001",
+          "chunk:a3b681fdd55d6e11:body:0002",
+          "chunk:a3b681fdd55d6e11:heading:0006",
+          "chunk:a3b681fdd55d6e11:heading:0007",
+          "chunk:a3b681fdd55d6e11:heading:0008",
+          "chunk:a3b681fdd55d6e11:heading:0009",
+          "chunk:a3b681fdd55d6e11:heading:0010",
+          "chunk:a3b681fdd55d6e11:heading:0011",
+          "chunk:a3b681fdd55d6e11:heading:0012",
+          "chunk:a3b681fdd55d6e11:heading:0013",
+          "chunk:a3b681fdd55d6e11:heading:0014",
+          "chunk:a3b681fdd55d6e11:heading:0015",
+          "chunk:a3b681fdd55d6e11:heading:0016",
+          "chunk:a3b681fdd55d6e11:heading:0017",
+          "chunk:a3b681fdd55d6e11:heading:0018",
+          "chunk:a3b681fdd55d6e11:heading:0019",
+          "chunk:a3b681fdd55d6e11:heading:0020",
+          "chunk:a3b681fdd55d6e11:heading:0021",
+          "chunk:a3b681fdd55d6e11:heading:0022",
+          "chunk:a3b681fdd55d6e11:heading:0023",
+          "chunk:a3b681fdd55d6e11:heading:0024",
+          "chunk:a3b681fdd55d6e11:heading:0025",
+          "chunk:a3b681fdd55d6e11:heading:0026",
+          "chunk:a3b681fdd55d6e11:heading:0027",
+          "chunk:a3b681fdd55d6e11:heading:0028",
+          "chunk:a3b681fdd55d6e11:heading:0029",
+          "chunk:a3b681fdd55d6e11:heading:0030",
+          "chunk:a3b681fdd55d6e11:heading:0031",
+          "chunk:a3b681fdd55d6e11:heading:0032",
+          "chunk:a3b681fdd55d6e11:heading:0033",
+          "chunk:a3b681fdd55d6e11:heading:0034",
+          "chunk:a3b681fdd55d6e11:heading:0035",
+          "chunk:a3b681fdd55d6e11:heading:0036",
+          "chunk:a3b681fdd55d6e11:heading:0037",
+          "chunk:a3b681fdd55d6e11:heading:0038",
+          "chunk:a3b681fdd55d6e11:body:0003",
+          "chunk:a3b681fdd55d6e11:heading:0040",
+          "chunk:a3b681fdd55d6e11:heading:0041",
+          "chunk:a3b681fdd55d6e11:heading:0042",
+          "chunk:a3b681fdd55d6e11:heading:0043",
+          "chunk:a3b681fdd55d6e11:heading:0044",
+          "chunk:a3b681fdd55d6e11:heading:0045",
+          "chunk:a3b681fdd55d6e11:heading:0046",
+          "chunk:a3b681fdd55d6e11:heading:0047",
+          "chunk:a3b681fdd55d6e11:heading:0048",
+          "chunk:a3b681fdd55d6e11:heading:0049",
+          "chunk:a3b681fdd55d6e11:heading:0050",
+          "chunk:a3b681fdd55d6e11:body:0004",
+          "chunk:a3b681fdd55d6e11:table:0000",
+          "chunk:a3b681fdd55d6e11:body:0005",
+          "chunk:a3b681fdd55d6e11:table:0001",
+          "chunk:a3b681fdd55d6e11:body:0006",
+          "chunk:a3b681fdd55d6e11:heading:0051",
+          "chunk:a3b681fdd55d6e11:heading:0052",
+          "chunk:a3b681fdd55d6e11:heading:0053",
+          "chunk:a3b681fdd55d6e11:heading:0054",
+          "chunk:a3b681fdd55d6e11:heading:0055",
+          "chunk:a3b681fdd55d6e11:heading:0056",
+          "chunk:a3b681fdd55d6e11:heading:0057",
+          "chunk:a3b681fdd55d6e11:heading:0058",
+          "chunk:a3b681fdd55d6e11:heading:0059",
+          "chunk:a3b681fdd55d6e11:heading:0060",
+          "chunk:a3b681fdd55d6e11:body:0007",
+          "chunk:a3b681fdd55d6e11:body:0009",
+          "chunk:a3b681fdd55d6e11:table:0005",
+          "chunk:a3b681fdd55d6e11:heading:0066",
+          "chunk:a3b681fdd55d6e11:heading:0067",
+          "chunk:a3b681fdd55d6e11:heading:0068",
+          "chunk:a3b681fdd55d6e11:heading:0069",
+          "chunk:a3b681fdd55d6e11:table:0006",
+          "chunk:a3b681fdd55d6e11:heading:0070",
+          "chunk:a3b681fdd55d6e11:heading:0071",
+          "chunk:a3b681fdd55d6e11:heading:0073",
+          "chunk:a3b681fdd55d6e11:heading:0074",
+          "chunk:a3b681fdd55d6e11:body:0010",
+          "chunk:a3b681fdd55d6e11:table:0007",
+          "chunk:a3b681fdd55d6e11:heading:0075",
+          "chunk:a3b681fdd55d6e11:heading:0085",
+          "chunk:a3b681fdd55d6e11:table:0009",
+          "chunk:a3b681fdd55d6e11:table:0010",
+          "chunk:a3b681fdd55d6e11:table:0011",
+          "chunk:a3b681fdd55d6e11:body:0012",
+          "chunk:a3b681fdd55d6e11:body:0013",
+          "chunk:a3b681fdd55d6e11:body:0014",
+          "chunk:a3b681fdd55d6e11:heading:0112",
+          "chunk:a3b681fdd55d6e11:heading:0113",
+          "chunk:a3b681fdd55d6e11:heading:0114",
+          "chunk:a3b681fdd55d6e11:heading:0141",
+          "chunk:a3b681fdd55d6e11:heading:0142",
+          "chunk:a3b681fdd55d6e11:heading:0143",
+          "chunk:a3b681fdd55d6e11:body:0022",
+          "chunk:a3b681fdd55d6e11:body:0023",
+          "chunk:a3b681fdd55d6e11:body:0024",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ],
+        "title": "半导体划片机转入放量进程,煤矿业务企稳",
+        "published": "undated",
+        "snippet": "<b>半导体</b>行业需求增长,国产<b>划片</b>机"
+      },
+      {
+        "doc_id": "cv2:99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+        "locator": "chunk:99bf1ba2456419fd:body:0009",
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "build_id": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+        "chunk_id": "99bf1ba2456419fd:body:0009",
+        "context_locators": [
+          "chunk:99bf1ba2456419fd:heading:0019",
+          "chunk:99bf1ba2456419fd:body:0001",
+          "chunk:99bf1ba2456419fd:body:0002",
+          "chunk:99bf1ba2456419fd:body:0003",
+          "chunk:99bf1ba2456419fd:heading:0020",
+          "chunk:99bf1ba2456419fd:body:0004",
+          "chunk:99bf1ba2456419fd:heading:0021",
+          "chunk:99bf1ba2456419fd:table:0001",
+          "chunk:99bf1ba2456419fd:body:0008",
+          "chunk:99bf1ba2456419fd:body:0009",
+          "chunk:99bf1ba2456419fd:body:0010"
+        ],
+        "title": "图表9：本周涨跌幅后十",
+        "published": "undated",
+        "snippet": "<b>半导体</b>指数收报11735.26点，环比上涨"
+      },
+      {
+        "doc_id": "cv2:1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+        "locator": "chunk:1227c2a34d05170a:body:0021",
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "build_id": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+        "chunk_id": "1227c2a34d05170a:body:0021",
+        "context_locators": [
+          "chunk:1227c2a34d05170a:body:0016",
+          "chunk:1227c2a34d05170a:body:0017",
+          "chunk:1227c2a34d05170a:table:0000",
+          "chunk:1227c2a34d05170a:body:0018",
+          "chunk:1227c2a34d05170a:table:0001",
+          "chunk:1227c2a34d05170a:body:0019",
+          "chunk:1227c2a34d05170a:table:0002",
+          "chunk:1227c2a34d05170a:body:0020",
+          "chunk:1227c2a34d05170a:table:0003",
+          "chunk:1227c2a34d05170a:body:0021",
+          "chunk:1227c2a34d05170a:table:0004"
+        ],
+        "title": "一、为什么化工行业是一个好赛道？",
+        "published": "undated",
+        "snippet": "<b>半导体</b>光刻胶等\n300910.SZ"
+      },
+      {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locator": "chunk:6475cbacca1575c5:body:0002",
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "chunk_id": "6475cbacca1575c5:body:0002",
+        "context_locators": [
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003"
+        ],
+        "title": "6475cbacca1575c5:body:0002",
+        "published": "undated",
+        "snippet": "<b>半导体</b>级别的能力，但整体的"
+      }
+    ],
+    "coverage": {
+      "requested_scope_ref": "corpus_schema",
+      "effective_scope_ref": "corpus_publications.active_build_id",
+      "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+      "processing": "scoped",
+      "query_status": "matched",
+      "availability": "unknown",
+      "reason_codes": [
+        "gap_regions_present"
+      ],
+      "counts": {
+        "sources": 8,
+        "published": 8,
+        "withdrawn": 0,
+        "pending": 0,
+        "failed_jobs": 0,
+        "builds": 8,
+        "published_with_gaps": 6
+      }
+    },
+    "hint": "snippet 已截断，仅用于定位，禁止直接引用。写 evidence 前请用 corpus_fetch(doc_id, locator) 取回逐字原文，并依次取回 context_locators；这些句柄共同构成有界的文档证据区。"
+  },
+  "stats": {
+    "documents": 0,
+    "blocks": 0,
+    "by_status": {},
+    "by_mime": {},
+    "published_from": null,
+    "published_to": null,
+    "corpus_files": 68,
+    "fully_ingested": false,
+    "dsn": "<REDACTED>"
+  },
+  "product": {
+    "passed": true,
+    "qp": [
+      24,
+      24
+    ],
+    "ep": [
+      24,
+      24
+    ],
+    "false_positives": 0,
+    "failed_queries": 0,
+    "executed_queries": 30,
+    "report": {
+      "policy": {
+        "top_k": 5,
+        "min_rate": "19/20",
+        "require_critical_all_pass": true,
+        "max_false_positives": 0,
+        "max_fabricated_citations": 0
+      },
+      "questions": [
+        {
+          "query_id": "company-001",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-002",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-003",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-004",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-005",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-006",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-007",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-008",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-009",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "company-010",
+          "domain": "company",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-001",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-002",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-003",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-004",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-005",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-006",
+          "domain": "industry",
+          "critical": false,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-007",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-008",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-009",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "industry-010",
+          "domain": "industry",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-001",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-002",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-003",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-004",
+          "domain": "macro",
+          "critical": false,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-005",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-006",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-007",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-008",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "answerable",
+          "outcome": "ok",
+          "doc_recall": "1",
+          "question_pass": true,
+          "evidence_pass": true,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-009",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        },
+        {
+          "query_id": "macro-010",
+          "domain": "macro",
+          "critical": true,
+          "answer_existence": "no_answer",
+          "outcome": "no_match",
+          "doc_recall": null,
+          "question_pass": null,
+          "evidence_pass": null,
+          "failures": [],
+          "false_positive": false,
+          "fabricated_citations": 0
+        }
+      ],
+      "classes": [
+        {
+          "domain": "company",
+          "answerable_total": 8,
+          "doc_recall": {
+            "per_question": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ]
+          },
+          "question_pass": {
+            "passed": 8,
+            "total": 8
+          },
+          "evidence_pass": {
+            "passed": 8,
+            "total": 8
+          }
+        },
+        {
+          "domain": "industry",
+          "answerable_total": 8,
+          "doc_recall": {
+            "per_question": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ]
+          },
+          "question_pass": {
+            "passed": 8,
+            "total": 8
+          },
+          "evidence_pass": {
+            "passed": 8,
+            "total": 8
+          }
+        },
+        {
+          "domain": "macro",
+          "answerable_total": 8,
+          "doc_recall": {
+            "per_question": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ]
+          },
+          "question_pass": {
+            "passed": 8,
+            "total": 8
+          },
+          "evidence_pass": {
+            "passed": 8,
+            "total": 8
+          }
+        }
+      ],
+      "false_positives": [],
+      "fabricated_citations": [],
+      "blockers": [],
+      "passed": true
+    }
+  },
+  "post_counts": {
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claim_block_runs": 0,
+    "claims_v2": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "docs": 3,
+    "chinese_docs": 3,
+    "new_chain": {
+      "corpus_sources": 8,
+      "corpus_builds": 8,
+      "corpus_units": 3887,
+      "corpus_chunks": 834,
+      "corpus_publications": 8
+    },
+    "active": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ]
+  },
+  "counts_unchanged": true,
+  "models_absent": true
+}

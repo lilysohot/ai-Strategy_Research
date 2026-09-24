@@ -1,0 +1,24 @@
+...................F....                                                 [100%]
+=================================== FAILURES ===================================
+___________ test_database_versions_idempotence_and_backup_roundtrip ____________
+tests/test_corpus_evidence_pipeline.py:244: in test_database_versions_idempotence_and_backup_roundtrip
+    counts = service.restore(backup, urls[1])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/service.py:2507: in restore
+    return self._restore_csv(path, target_dsn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/service.py:2543: in _restore_csv
+    target.init_db()  # 建表 + 生成列（zhcfg 检索配置须已存在于目标库）
+    ^^^^^^^^^^^^^^^^
+plugins/corpus/service.py:508: in init_db
+    conn.execute(SCHEMA_SQL)
+.venv/lib/python3.12/site-packages/psycopg/connection.py:300: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedObject: text search configuration "zhcfg" does not exist
+E   LINE 13: ..._tsv    tsvector GENERATED ALWAYS AS (to_tsvector('zhcfg', t...
+E                                                                 ^
+=========================== short test summary info ============================
+FAILED ../../../dev::test_database_versions_idempotence_and_backup_roundtrip
+1 failed, 23 passed in 1.12s
+
+exit=1

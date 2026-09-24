@@ -1,0 +1,35 @@
+unformatted: File would be reformatted
+   --> plugins/corpus/evidence_pipeline.py:653:78
+    |
+652 |     packets = tuple(
+    -         _packet_from_unit(parse_rev, str(unit["locator"]), str(unit["text"]))
+    -         for unit in units
+653 +         _packet_from_unit(parse_rev, str(unit["locator"]), str(unit["text"])) for unit in units
+654 |     )
+    |
+
+unformatted: File would be reformatted
+   --> plugins/corpus/preparation/admission.py:254:27
+    |
+253 |
+    - def load_admission_policy(
+    -     path: str | Path, *, allow_dev_lane: bool = False
+    - ) -> AdmissionPolicy:
+254 + def load_admission_policy(path: str | Path, *, allow_dev_lane: bool = False) -> AdmissionPolicy:
+255 |     """装载 I0A-3 冻结政策文件；frozen/auto_decision/版本绑定/deve lane 校验 fail-closed。
+--------------------------------------------------------------------------------
+285 |     if scope == _SCOPE_DEV and not allow_dev_lane:
+    -         raise AdmissionError(
+    -             "dev lane 政策不得在生产路径装载（需调用方显式 allow_dev_lane=True）"
+    -         )
+286 +         raise AdmissionError("dev lane 政策不得在生产路径装载（需调用方显式 allow_dev_lane=True）")
+287 |
+--------------------------------------------------------------------------------
+581 |         [f"dev_lane={policy.lane_id}", f"admitted_material={effective_material.value}"]
+    -         if policy.scope == _SCOPE_DEV
+    -         and in_scope_material is not MaterialType.RESEARCH_REPORT
+582 +         if policy.scope == _SCOPE_DEV and in_scope_material is not MaterialType.RESEARCH_REPORT
+583 |         else []
+    |
+
+2 files would be reformatted, 50 files already formatted

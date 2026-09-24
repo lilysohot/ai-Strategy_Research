@@ -1,0 +1,18 @@
+{
+  "late_config": {
+    "resolved_now": "postgres",
+    "service_cached_target": "i2_sandbox_corpus",
+    "read_cached_target": "i2_sandbox_corpus",
+    "search_cached_target": "i2_sandbox_corpus"
+  },
+  "retired_ingest_entry": {
+    "exit_code": 2,
+    "sql": [
+      "INSERT INTO ingest_runs (root, status, trigger) VALUES (%s, 'running', %s) RETURNING run_id",
+      "UPDATE ingest_runs SET finished_at = now(), duration_ms = %(duration_ms)s, total = %(total)s, added = %(added)s, skipped_duplicate = %(skipped_duplicate)s, skipped_unchanged = %(skipped_unchanged)s, needs_ocr = %(needs_ocr)s, empty = %(empty)s, failed = %(failed)s, status = %(status)s, error = %(error)s WHERE run_id = %(run_id)s"
+    ],
+    "commit_count": 2,
+    "writes_legacy_ingest_runs": true,
+    "real_database_connections": 0
+  }
+}

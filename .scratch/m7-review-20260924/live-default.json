@@ -1,0 +1,131 @@
+{
+  "mode": "default",
+  "target_db_config_present": false,
+  "resolved_target": "i2_sandbox_corpus",
+  "pre_counts": {
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claim_block_runs": 0,
+    "claims_v2": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "docs": 3,
+    "chinese_docs": 3,
+    "new_chain": {
+      "corpus_sources": 8,
+      "corpus_builds": 8,
+      "corpus_units": 3887,
+      "corpus_chunks": 834,
+      "corpus_publications": 8
+    },
+    "active": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ]
+  },
+  "search": {
+    "ok": false,
+    "error": "检索失败（语料库可能未就绪）：拒绝：current_database='postgres' ≠ 'i2_sandbox_corpus'",
+    "hits": []
+  },
+  "stats": {
+    "documents": 0,
+    "blocks": 0,
+    "by_status": {},
+    "by_mime": {},
+    "published_from": null,
+    "published_to": null,
+    "corpus_files": 68,
+    "fully_ingested": false,
+    "dsn": "<REDACTED>"
+  },
+  "post_counts": {
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claim_block_runs": 0,
+    "claims_v2": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "docs": 3,
+    "chinese_docs": 3,
+    "new_chain": {
+      "corpus_sources": 8,
+      "corpus_builds": 8,
+      "corpus_units": 3887,
+      "corpus_chunks": 834,
+      "corpus_publications": 8
+    },
+    "active": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ]
+  },
+  "counts_unchanged": true,
+  "models_absent": true
+}

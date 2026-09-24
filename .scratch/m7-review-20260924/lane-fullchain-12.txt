@@ -1,0 +1,20 @@
+F...........                                                             [100%]
+=================================== FAILURES ===================================
+___________ test_control_full_chain_reaches_reference_free_evidence ____________
+.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py:200: in test_control_full_chain_reaches_reference_free_evidence
+    assert fetched["text"] == evidence.text, "工具层与 service 层读出的不是同一份权威原文"
+E   AssertionError: 工具层与 service 层读出的不是同一份权威原文
+E   assert '## 问答（合成）\n问...比提升 3.1 个百分点。' == '2026 年第二季度公司...%，主要由一次性计提导致。'
+E     
+E     - 2026 年第二季度公司营业收入为 12,345.6 万元，同比增长 23.5%；归母净利润为
+E     - -234.5 万元，同比下降 123.5%，主要由一次性计提导致。
+E     + ## 问答（合成）
+E     + 问：公司第二季度产能利用率如何？
+E     + 答：第二季度产能利用率约为 82.3%，环比提升 3.1 个百分点。
+------------------------------ Captured log setup ------------------------------
+WARNING  psycopg:_cursor_base.py:514 unknown PostgreSQL timezone: 'Etc/UTC'; will use UTC
+=========================== short test summary info ============================
+FAILED ../../../dev::test_control_full_chain_reaches_reference_free_evidence
+1 failed, 11 passed in 3.79s
+
+exit=1
