@@ -1,0 +1,40 @@
+{
+  "snapshot_id": "i0c-r5n",
+  "revision": "r5n",
+  "phase": "i0c",
+  "status": "m7_release_signoff",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5m",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5m.json",
+    "sha256": "a81589a798191a68a6c580e83b7c8cd22380258f712e1149691bed07cca512ef"
+  },
+  "supersedes_validator_sha256": "334e0a1723a9aee942c08f660bcdeecfd25c498209ce7cdf5c9dcec77191475a",
+  "binding": {
+    "m7_signoff_record": {
+      ".scratch/m7-rereview-20260924/signoff-record-m7.md": "2f22cbbec7ba14cf3f26184ce752ecebbdece2426cdc1a4b089cc311b197c66c",
+      ".scratch/m7-rereview-20260924/signoff-record-m7.json": "8291ac0446cf2cf25494592a019510820ec9a6cd72859d6fa8467098c2e27913"
+    },
+    "m7_release_state": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "4a6980f455a086cbfd49610a440c893d2f5e069a3f1d5c00689abc948af973fd",
+      "docs/plan/claims-market-closed-loop-plan.md": "644f33029c67a807c59a49767d7e2ba10cf65e765b91eaa3ae0280bd9e1e9fd7"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5n.json": "b6888f500e0adaaaf43fbb6fe9a97ee43216fddd105f53a52d27d69d358b66ae"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "0d71b3f95383dba5a9b1789ff0be2f1bfbfff3a9a81a85fb95408af5c2a1b4fc"
+    }
+  },
+  "corrections": {
+    "m7_signoff": "U（xyl）2026-09-24 具名签认：M7 放行。放行三要件全部达成——①I4 窗口执行完毕（I4-3→I4-6→I4-2→I4-7→I4-4→I4-5 全绿；reset 阶段 1 七表 + 阶段 2 六表 TRUNCATE 五门全过，旧九表归零、保留序列与见证不变）；②独立复核闭环（m7-review-20260924 六项整改 G1/S1/G2/S2/G3/G4 + m7-rereview-20260924 F1–F3 修复验证 m7-finalize-20260924）；③U 具名签认（signoff-record-m7.{md,json}，r5c/r30 先例：具名签认入链）。随签认登记已知项：stats/list_documents 迁移残留（归 I5-3 处置）、全仓 2 既有 failed 与 49 skip 同复核基线、abstain=on 正例拒检为 M6 签认已知限制。",
+    "m8_kickoff": "同日 U 裁定开启 M8（I5 增量与运维），I5-1 验证范围批准为全四场景 × 全部 8 个活动源（同源同版本重跑、源变化、新规则 build、复用解析重建索引；源变化/新规则/复用解析在隔离环境执行，不触碰生产活动来源），与 I2/I3 同场景结果对照。I5-1 执行结果另行回填。",
+    "rebind_scope": "仅重绑 docs/plan/corpus-ingestion-rebuild-tasks.md（65c82154…→4a6980f4…）与 docs/plan/claims-market-closed-loop-plan.md（61a27f8e…→644f3302…）、验证器自哈希（334e0a17…→0d71b3f9…，新增 r5n 节/banner/summary）与新增签认证据两件（signoff-record-m7.{md,json}）；不借机触碰实现/测试/守卫/金标字节。"
+  },
+  "notes": [
+    "r5n 为 M7 放行入链修订（parent=i0c-r5m）：不触碰 i0c-r5m 及更早快照的已冻结字节（追加式索引纪律）。",
+    "archive-first：before-r5n/ 保存两份计划文档的重绑后字节（r5g/r5h/r5i 先例）与验证器改前字节（sha256 == i0c-r5m freeze_validator 绑定 334e0a17…）。",
+    "M7 放行三要件：I4 窗口执行通过 + 独立复核闭环 + U（xyl）具名签认——本修订后全部达成；I5 执行与放行按 §3.8 门另行回填与复核。"
+  ],
+  "m5_declaration": "not_declared"
+}

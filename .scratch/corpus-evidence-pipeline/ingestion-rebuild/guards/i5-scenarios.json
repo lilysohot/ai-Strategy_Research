@@ -1,0 +1,64 @@
+{
+  "config_version": 1,
+  "phase": "i5-scenarios",
+  "note": "I5-1 四场景守卫（M8 启动，U 2026-09-24 批准全四场景×全部 8 个活动源；r5n m8_kickoff 逐字登记）。授权目标：隔离容器 corpus-db 127.0.0.1:543（四个一次性库 i51_s1_rerun/i51_s2_srcchg/i51_s3_newrule/i51_s4_idxreb，建库+corpus schema DDL+zhcfg+构建/发布/验证）与生产 pg 容器 127.0.0.1:5432 **仅只读**（基线采集与后置未变断言；脚本内 SET TRANSACTION READ ONLY，无任何写路径——I5-1 不触碰生产活动来源）。零模型（模型客户端与智能解析模块导入即拒，OPENAI_* 与 CORPUS_DSN 投毒）；无公网（仅本地 PG 目标）。来源 data/corpus 只读（8 源构建输入，源漂移使相关证据失效），data/ 受保护禁止写入/删除/重命名（场景二变异副本落审计工作区 .scratch，绝不写 data/）；5 份留出件显式禁读。场景三/四的规则版本变更通过运行时内存补丁模拟（engine.PARSE_RULE_REV / engine.INDEX_REV_V3），不修改任何冻结代码文件。目标库经 CORPUS_TARGET_DB=<一次性库名> 显式逐场景指定；缺省（含误连 i2_sandbox_corpus 默认值）视为配置错误即停。",
+  "network": {
+    "mode": "allowlist",
+    "allowed_targets": [
+      {
+        "host": "127.0.0.1",
+        "port": 543,
+        "reason": "I5-1：corpus-db 隔离容器（四个一次性场景库；唯一可写目标）"
+      },
+      {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "reason": "I5-1：生产 pg 容器**仅只读**基线采集与后置未变断言（脚本内只读事务；无写路径）"
+      }
+    ]
+  },
+  "model": {
+    "blocked_modules": [
+      "openai",
+      "anthropic",
+      "plugins.corpus.material_semantics",
+      "plugins.corpus._r2_runtime"
+    ],
+    "blocked_module_prefixes": [
+      "plugins.corpus._r2_"
+    ],
+    "poisoned_env": [
+      "OPENAI_API_KEY",
+      "OPENAI_BASE_URL",
+      "OPENAI_MODEL"
+    ],
+    "poisoned_dsn": [
+      "CORPUS_DSN"
+    ]
+  },
+  "sources": {
+    "read_roots": [
+      "data/corpus"
+    ],
+    "allowed_source_paths": [
+      "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+    ],
+    "forbidden_roots": [
+      "data/corpus/2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "data/corpus/2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "data/corpus/2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "data/corpus/2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "data/corpus/2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+    ],
+    "protected_roots": [
+      "data"
+    ]
+  }
+}

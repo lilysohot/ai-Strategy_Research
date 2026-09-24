@@ -1,0 +1,87 @@
+{
+  "artifact": "i51-summary",
+  "title": "I5-1 四场景复核总报告（M8；write-once）",
+  "generated_at": "2026-09-24",
+  "authority": {
+    "scope_approval": "U 2026-09-24 批准开启 M8，I5-1 验证范围=全四场景 × 全部 8 个活动源（i0c-r5n m8_kickoff）；源变化/新规则/复用解析在隔离环境执行，不触碰生产活动来源",
+    "guard": "guards/i5-scenarios.json（网络白名单：隔离实例 127.0.0.1:543 唯一可写 + 生产 127.0.0.1:5432 仅只读；零模型投毒防护；selfcheck passed）",
+    "manifest": "audits/20260920-i31-dev-lane/dev-scope-manifest.json（与生产 I4-4 同清单）",
+    "decision_chain": "每场景隔离库重播种与生产 I4-4 同决定链同 id（6 approved + 2 dev lane 取代链）"
+  },
+  "scenarios": {
+    "s1_rerun_same_source": {
+      "report": "i51-s1-rerun-report.json",
+      "sha256": "6891a3b6bd1d3cf3e78769b3a4c5056d1c75c58c2e075220aa1ba13d85c63cfc",
+      "db": "i51_s1_rerun",
+      "gate_passed": true,
+      "results": "全新隔离库首次构建 8/8 built/published/active；逐源 build_id 与生产 I4-4 基线全等（units 3887/chunks 834）；库级计数==生产 post_state；同 build 重复 publish generation 不推进；rebuild-plan 对检查点复用 build 全 reuse；生产前后快照全等"
+    },
+    "s2_source_changed": {
+      "report": "i51-s2-srcchange-report.json",
+      "sha256": "d2ad61d8ed992c5f5511b2c65978c84fcec2556ffb8eed3ef83dcf15907214ae",
+      "db": "i51_s2_srcchg",
+      "gate_passed": true,
+      "results": "8 份变异副本（data/ 零触碰）：6 in_scope 副本得新 source_id/build_id 且 units/chunks 与 v1 全等（2 直接源发布新版本、4 gap 源发布阻断 fail-closed）；2 dev lane 副本因 source_id 不在白名单被准入 fail-closed 拒绝（设计内）；检查点按新 source_id 键控（checkpoint_absent 首解析）；v1 全保留；生产零触碰"
+    },
+    "s3_new_rule_build": {
+      "report": "i51-s3-newrule-report.json",
+      "sha256": "95ee15e585228c1e8f79fe58a3dd74abb0d5052d384ab0046f412d50abd37c25",
+      "db": "i51_s3_newrule",
+      "gate_passed": true,
+      "results": "进程内补丁 PARSE_RULE_REV=parse-3-i5sim（冻结文件零修改，engine.py sha 前后相等）：解析检查点全部命中 rule_or_source_mismatch → reader spy 实测 8/8 真重解析 → 检查点整体重写（parse_rule_rev/reparse_reason/updated_at）→ 8/8 新 build_id 且 units/chunks 与 v1 全等；4 直接源发布 run2 → generation 1→2 活动切换；4 gap 源 run2 check 阻断（EXIT_GATE）且 v1 保持活动（generation 1）；v1 build 全部并存；生产零触碰"
+    },
+    "s4_reuse_parse_rebuild_index": {
+      "report": "i51-s4-idxreb-report.json",
+      "sha256": "732eaf689651dbbe1444172dec82fbcdcef783e93bcf24f6673e76eff0bd5937",
+      "db": "i51_s4_idxreb",
+      "gate_passed": true,
+      "results": "进程内补丁 INDEX_REV_V3=index-5-i5sim（冻结文件零修改）：解析检查点全程复用——reader spy 实测 0 次调用、检查点 updated_at/parse_rule_rev/reparse_reason 原样不动；8/8 新 build_id（index_rev 分量）；run2 chunks 的 search_text 多重集与 v1 全等且 search_tsv 全覆盖（GENERATED 列随新行重建，GIN 可服务）；MD 源 parse_rev 不变（其 build_id 变化可单独归因 index_rev），另 7 源 parse_rev 翻转与 F1 一致且全部等于 expected_parse_rev 公式值；4 直接源 gen2 切换、4 gap 源保持 v1；生产零触碰"
+    }
+  },
+  "comparison_with_i2_i3": {
+    "i2_fullchain_probe4_rerun": {
+      "anchor": "audits/20260918-i2-fullchain-review/review.md:58 + test_fullchain_probes.py::test_chain_rerun_is_idempotent",
+      "i2_claim": "同清单重跑得同 build_id；重复发布 generation/activated_at 不变",
+      "i2_scope": "探针链源为单一 MD（synthetic-company-report.md，静态读取器 rev）——重跑路径从未覆盖动态 rev 读取器（PDF/DOCX）",
+      "i5_1_result": "MD 源重跑 build_id 稳定（s1 唯一 stable 源；s4 MD parse_rev 不变）——I2 结论在其覆盖范围内被完整复现；同时 I5-1 将该结论的边界精确化：静态 rev 读取器重跑同 build_id，动态 rev 读取器在检查点有效重跑下翻转（F1），两者合并后与 I2 结果零矛盾"
+    },
+    "i3_first_run_correctness": {
+      "anchor": "I3-1 e2e（audits/20260919-i3-1-e2e/）与 I3-7 沙箱基线（经 I4-4 落生产）",
+      "i5_1_result": "s1 全新隔离库首次构建逐源 build_id/units/chunks 与 I3-7==I4-4 基线全等——首次正确性在全新环境可重现，未留到切换后验证（验收门明确要求）"
+    },
+    "i3_dev_lane": {
+      "anchor": "audits/20260920-i31-dev-lane/（admission 按 source_id 白名单生效）",
+      "i5_1_result": "s2 中白名单外变异副本被 fail-closed 拒绝（dev lane 材料放宽不随内容哈希扩散到新 source_id），与 I3 准入设计一致"
+    }
+  },
+  "finding_f1": {
+    "id": "F1",
+    "title": "检查点有效重跑下 build_id 不稳定（parse_rev 组装路径不对称）",
+    "behavior": "同一（parse 规则, 源, 读取器）在「新解析」与「检查点复用」两条路径得到不同 parse_rev：新解析 ReaderResult.extractor_rev 带 `<lib>-<version>` 后缀（pdf_reader._extractor_rev = reader-pdf-6+pymupdf-<ver>；docx 同理），而检查点复用回填 extractor_rev_for() 裸 rev（reader-pdf-6）。_parse_rev_for = canonical_fingerprint([PARSE_RULE_REV, source_id, extractor_rev])，两值不同 ⇒ 重跑 build_id 变化（s1 实测 7/8：6 PDF + DOCX 翻转；MD 静态 rev 稳定）",
+    "evidence": "s1 报告 finding_f1 节（检查点 extractor_rev=reader-pdf-6、重跑 revs 对比、内容全等）；s4 独立复证（7 动态源 parse_rev 翻转、8/8 == expected_parse_rev 复用公式值、MD 不翻转）",
+    "i2_boundary": "I2 重跑探针仅覆盖 MD（静态 rev），故当时全绿；引入时点无法由 git 史精确定位（corpus 插件代码于 65ebffa 2026-09-18 首次入库时后缀已存在）",
+    "impact": "违反 contract.py「重复执行确定且幂等」的 build_id 层声明；对已有检查点的库重跑构建将产生内容全等的版本翻新（新 build_id）；恢复场景不触发（恢复库已含 builds）",
+    "disposition": "I5-1 只登记不改码（冻结代码修改须新冻结修订与重验，另提 U 裁定）。待 U 裁定事项：①是否修（建议方向：统一两条路径取裸 rev 或统一取带后缀 rev，属冻结代码变更）；②I5-2 维护说明须如实写明重跑语义；③生产重跑操作在裁定前不得依赖「重跑得同 build_id」"
+  },
+  "incident_arch_doc_formatting": {
+    "what": "2026-09-24 14:24 docs/plan/corpus-ingestion-rebuild-architecture.md 被一次纯 markdown 格式化改动（表格补齐+_/*转义，零内容变化；非本执行会话所为），打破 i0c-current region_docs 绑定（期望 760a242a…，格式化后 fb4011d2…）",
+    "resolution": "U 2026-09-24 裁定回滚：git checkout 恢复 HEAD 字节（==冻结期望哈希 760a242a…），validate_i0c_freeze.py 复绿（CURRENT r5n）；无需新修订（绑定字节未变）",
+    "note": "tasks.md/claims-market 的未提交改动为 r5n 合法回填，与本次事件无关"
+  },
+  "acceptance_gate": {
+    "definition": "幂等、版本、缓存及失败恢复正确；与 I2/I3 同场景结果可对照；不将首次正确性验证留到切换后",
+    "idempotency": "s1：replay source_reused/archive_reused 全 True、内容全等、重复 publish generation 不推进、rebuild-plan 全 reuse（build_id 稳定性受 F1 影响，已登记）",
+    "versioning": "s3：规则升级→8/8 新 build_id、版本并存、4 直接源 gen2 切换、4 gap 源 fail-closed 保持 v1；s4：index_rev 升级→8/8 新 build_id（MD 单因 index_rev）、解析复用",
+    "caching": "s1：重跑命中解析检查点；s4：spy=0 + 检查点逐字段未动——缓存命中与失效路径（rule_or_source_mismatch/checkpoint_absent）均实测",
+    "failure_recovery": "s2：新 source_id 走 checkpoint_absent 首解析、dev lane 白名单外拒绝、gap 阻断 fail-closed；s3：新版本被阻断时 v1 继续活动（不强制上线）",
+    "first_correctness_not_deferred": "s1 全新库首跑==生产 I4-4 逐源全等",
+    "comparable_with_i2_i3": "见 comparison_with_i2_i3：I2 结论在其覆盖范围内复现并精确化边界；I3 首跑正确性与 dev lane fail-closed 复现",
+    "satisfied": true
+  },
+  "production_impact": "零：四场景全程守卫 lane，生产仅只读快照（每场景前后各一次，全等）；隔离一次性库 i51_s1_rerun/i51_s2_srcchg/i51_s3_newrule/i51_s4_idxreb 用后可弃",
+  "next": {
+    "I5_2": "维护说明定稿（增量、恢复、归档/GC、分支保留对象、故障交接）——必须纳入 F1 重跑语义与 s3/s4 的版本升级操作口径",
+    "I5_3": "旧入口停用核验（含 stats/list_documents 迁移残留处置，r5n 已登记）",
+    "pending_U": "F1 修复裁定；I5 放行另行走签认流程"
+  }
+}

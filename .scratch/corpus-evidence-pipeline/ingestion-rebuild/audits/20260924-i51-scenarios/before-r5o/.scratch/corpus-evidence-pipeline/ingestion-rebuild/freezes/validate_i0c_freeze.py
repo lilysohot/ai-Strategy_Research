@@ -3291,93 +3291,6 @@ if "i0c-r5n" in by_id:
           "r5n validator supersession ledger mismatch")
     merge_binding(i0c_current_binding, bind5n)
 
-# r5o（I5-1 四场景复核执行入链）：按 r5n 批准范围（全四场景×全部 8 活动源）执行全绿——
-# 场景一同源同版本重跑 8/8 幂等、场景二源变化隔离环境 6 in_scope 产物全等 + 2 dev lane
-# 拒绝 + 4 gap 阻断 fail-closed、场景三新规则 build 全量重解析（rule_or_source_mismatch）
-# 8/8 新 build_id（4 直接源 gen2 切换 / 4 gap 源保持 v1）、场景四复用解析重建索引 spy=0
-# 检查点未动 8/8 新 build_id + search_text 多重集全等。发现 F1（检查点复用路径回填裸
-# extractor_rev，动态 rev 源重跑 build_id 翻转）登记待 U 裁定。tasks.md §0 回填 +
-# claims-market I5 状态修正（archive-first 重绑）+ i5-1 五件证据首次入链 + 验证器新增
-# r5o 节。零模型调用。
-if "i0c-r5o" in by_id:
-    r5o = load_json(BASE / by_id["i0c-r5o"]["file"])
-    parent5o = BASE / by_id["i0c-r5n"]["file"]
-    check(r5o.get("parent_snapshot") == {
-        "snapshot_id": "i0c-r5n", "path": str(parent5o.relative_to(ROOT)),
-        "sha256": digest(parent5o)}, "r5o parent mismatch")
-    check(r5o.get("status") == "i5_1_scenarios_verified"
-          and r5o.get("business_accepted") is True,
-          "r5o must record the I5-1 four-scenario verification revision")
-    bind5o = r5o.get("binding", {})
-    state5o = {"docs/plan/corpus-ingestion-rebuild-tasks.md",
-               "docs/plan/claims-market-closed-loop-plan.md"}
-    evidence5o = {
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
-        "20260924-i51-scenarios/i51-summary-report.json",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
-        "20260924-i51-scenarios/i51-s1-rerun-report.json",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
-        "20260924-i51-scenarios/i51-s2-srcchange-report.json",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
-        "20260924-i51-scenarios/i51-s3-newrule-report.json",
-        ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
-        "20260924-i51-scenarios/i51-s4-idxreb-report.json"}
-    validator_path5o = str(Path(__file__).resolve().relative_to(ROOT))
-    prev_path5o = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
-                   "audits/20260924-i51-scenarios/previous-effective-bindings-r5o.json")
-    for group5o, expected5o in (
-            ("i5_1_backfill_state", state5o),
-            ("i5_1_evidence", evidence5o),
-            ("previous_effective_bindings", {prev_path5o}),
-            ("freeze_validator", {validator_path5o})):
-        check(set(bind5o.get(group5o, {})) == expected5o,
-              f"r5o scope mismatch: {group5o}")
-    prior5o = load_json(ROOT / prev_path5o)
-    previous5o = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
-    changed5o = state5o | {validator_path5o}
-    check(set(prior5o) == changed5o, "r5o previous-binding scope mismatch")
-    for p in changed5o:
-        check(prior5o.get(p) == previous5o.get(p),
-              f"r5o previous effective hash mismatch: {p}")
-    # archive-first：两份计划文档归档=重绑后字节（r5g/r5h/r5i/r5n 先例）；
-    # 验证器归档=改前字节（新增 r5o 节前的 r5n 绑定字节）。
-    before5o = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/"
-                       "audits/20260924-i51-scenarios/before-r5o")
-    for rel5o in state5o:
-        arch5o = before5o / rel5o
-        check(arch5o.is_file()
-              and digest(arch5o) == bind5o.get("i5_1_backfill_state", {}).get(rel5o),
-              f"r5o archive must carry the rebound bytes: {rel5o}")
-        check(previous5o.get(rel5o) != bind5o.get("i5_1_backfill_state", {}).get(rel5o),
-              f"r5o rebind must actually change the binding: {rel5o}")
-    arch5o = before5o / validator_path5o
-    check(arch5o.is_file() and digest(arch5o) == prior5o.get(validator_path5o),
-          "r5o validator archive must match pre-change effective binding")
-    for rel5o in evidence5o:
-        check((ROOT / rel5o).is_file()
-              and digest(ROOT / rel5o) == bind5o.get("i5_1_evidence", {}).get(rel5o),
-              f"r5o evidence bytes must match binding: {rel5o}")
-    # 语义门：tasks.md 须携带 I5-1 四场景执行完成 + F1 登记；claims-market 须同步
-    # I5-1 已执行；corrections 须记录 I5-1 执行与 F1 发现。
-    tasks5o = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
-    check("I5-1 四场景复核执行完成" in tasks5o and "i51-summary-report" in tasks5o
-          and "rule_or_source_mismatch" in tasks5o and "i0c-r5o" in tasks5o,
-          "r5o tasks.md must carry the I5-1 four-scenario completion and F1 finding")
-    plan5o = (ROOT / "docs/plan/claims-market-closed-loop-plan.md").read_text(encoding="utf-8")
-    check("I5-1 已执行" in plan5o and "i0c-r5o" in plan5o and "四场景全绿" in plan5o,
-          "r5o claims-market plan must carry the I5-1 executed status")
-    corr5o = r5o.get("corrections") or {}
-    check(any("i5_1" in k for k in corr5o)
-          and any("F1" in str(v) for v in corr5o.values()),
-          "r5o corrections must record the I5-1 execution and the F1 finding")
-    previous_validator5o = (
-        load_json(parent5o).get("binding", {}).get("freeze_validator", {})
-        .get(validator_path5o))
-    check(r5o.get("supersedes_validator_sha256") == previous_validator5o
-          and previous_validator5o != bind5o.get("freeze_validator", {}).get(validator_path5o),
-          "r5o validator supersession ledger mismatch")
-    merge_binding(i0c_current_binding, bind5o)
-
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -3422,9 +3335,7 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-if "i0c-r5o" in by_id:
-    print("CURRENT r5o: I5-1 FOUR-SCENARIO VERIFICATION PASSED — all four scenarios green on all 8 active sources in the guard lane (same-source rerun idempotent 8/8; source-change isolated: 6 in_scope byte-equal + 2 dev-lane rejections + 4 gap fail-closed; new-parse-rule full reparse: 8/8 new build_ids, direct sources switched to gen2 / gap sources held at v1; index-rebuild reusing parse: spy=0, checkpoints untouched, search_text multiset-equal); finding F1 (checkpoint-reuse backfills bare extractor_rev, dynamic-rev sources flip build_id on rerun) registered for U adjudication; M8 continues with I5-2/I5-3.")
-elif "i0c-r5n" in by_id:
+if "i0c-r5n" in by_id:
     print("CURRENT r5n: M7 RELEASED — U(xyl) named sign-off bound in chain (I4 window execution + m7-review G1-G4/S1-S2 remediation + m7-rereview F1-F3 fix verification); M8 started with I5-1 scope approved (all four scenarios x all 8 active sources).")
 elif "i0c-r5m" in by_id:
     print("CURRENT r5m: r5k F1-F3 evidence retained; validation clarifies that writer rejection, not legacy empty-table presence, is the F1 safety condition.")
@@ -3479,5 +3390,4 @@ print("i0c freeze chain verified: index ids unique, i0c-r1 bindings ok, "
       + ("; r5h I4-close 入链：I4-3/6/2/7/4/5 执行结果 §0 回填（tasks.md 重绑），migrate 一次受控回滚后重跑绿色、reset 阶段 1 七表、I4-4 生产重建 8/8 与 I3-7 基线相同、I4-5 工具往返+旧写入口停用；无守卫 lane 偏差登记（I3-7 先例+补偿控制）；reset 阶段 2 U 复核暂缓（blocks/documents 现状保留，对照件已导出，另行安排）" if "i0c-r5h" in by_id else "")
       + ("; r5i reset 阶段 2 执行入链：U 解除暂缓后批准执行（解除同日「暂缓，先出窗口报告」裁决），manifest phases[2] 单语句六表单事务逐字 TRUNCATE（无 CASCADE）五门全过（前置 1101/89+四引用表 0 精确匹配、对照件三件 sha 命中、后置六表全 0、保留序列与见证不变），write-once i4c-reset-phase2-report.json 落章；I4 窗口执行全部完毕" if "i0c-r5i" in by_id else "")
       + ("; r5j M7 复核修复入链：外部复核六项落实——G1 .env 交付默认目标（default 模式 30 题 24/24）、S1 目标库解析去 import 缓存、G2 旧写入口 fail-closed 恒定拒绝（零连接回归）、S2 search() 统一委托 search_with_coverage（r5e 口径）；窗口报告/双 manifest/三阶段报告/两执行脚本首次入链（G4）；冻结 PG 电池复放全绿（11/12/78/73）+ 全仓 pytest 2931/2 既有/49" if "i0c-r5j" in by_id else "")
-      + ("; r5n M7 放行入链：U（xyl）2026-09-24 具名签认 M7 放行（I4 窗口执行完毕 + m7-review 六项整改 + m7-rereview F1–F3 修复验证闭环），signoff-record-m7 两件首次入链，tasks.md §0 放行条目 + claims-market 执行清单 I4/I5 状态修正 archive-first 重绑；同日 U 批准开启 M8，I5-1 验证范围=全四场景×全部 8 活动源（后三场景隔离环境执行）" if "i0c-r5n" in by_id else "")
-      + ("; r5o I5-1 四场景复核执行入链：全四场景×全部 8 活动源（r5n 批准范围）守卫 lane 全绿——场景一重跑 8/8 幂等（与 I4-4 基线逐源全等）、场景二源变化隔离环境（6 in_scope 产物全等+2 dev lane 拒绝+4 gap 阻断 fail-closed）、场景三新规则全量重解析 rule_or_source_mismatch（8/8 新 build_id，4 直接源 gen2 切换/4 gap 源保持 v1）、场景四复用解析重建索引（spy=0 检查点未动+search_text 多重集全等）；发现 F1（检查点复用回填裸 extractor_rev 致动态 rev 源重跑 build_id 翻转）登记待 U 裁定；i5-1 五件证据首次入链，tasks.md §0 + claims-market I5 状态 archive-first 重绑" if "i0c-r5o" in by_id else ""))
+      + ("; r5n M7 放行入链：U（xyl）2026-09-24 具名签认 M7 放行（I4 窗口执行完毕 + m7-review 六项整改 + m7-rereview F1–F3 修复验证闭环），signoff-record-m7 两件首次入链，tasks.md §0 放行条目 + claims-market 执行清单 I4/I5 状态修正 archive-first 重绑；同日 U 批准开启 M8，I5-1 验证范围=全四场景×全部 8 活动源（后三场景隔离环境执行）" if "i0c-r5n" in by_id else ""))

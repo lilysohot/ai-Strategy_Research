@@ -14,40 +14,6 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
-**2026-09-24 I5-1 四场景复核执行完成（全绿；[总报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51-summary-report.json)（sha `1b571136…`）；i0c-r5o 冻结修订随本条入链）。**
-U 2026-09-24 批准范围（r5n m8_kickoff）：**全四场景 × 全部 8 个活动源**，源变化/新规则/复用解析
-在隔离环境执行；守卫 [i5-scenarios.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i5-scenarios.json)
-（隔离实例 543 唯一可写、生产 5432 仅只读）+ 每场景生产前后只读快照全等，**生产零触碰**。
-
-- **场景一 同源同版本重跑**（i51_s1_rerun，sha `6891a3b6…`）：全新隔离库首跑 8/8
-  built/published/active，逐源 build_id/units/chunks 与生产 I4-4 基线全等（3887/834），
-  库级计数==生产 post_state；重复 publish generation 不推进、rebuild-plan 全 reuse。
-  **发现 F1（登记待 U 裁定，不改冻结代码）**：检查点有效重跑下 7/8 源（6 PDF+DOCX）
-  build_id 翻转——parse_rev 组装在新解析（extractor_rev 带 `<lib>-<version>` 后缀）与
-  检查点复用（回填裸 rev）两路径不对称，产生内容全等的版本翻新；I2 重跑探针仅覆盖
-  MD（静态 rev）故未触发；生产重跑在裁定前不得依赖「重跑得同 build_id」。
-- **场景二 源变化**（i51_s2_srcchg，sha `d2ad61d8…`）：8 份变异副本 data/ 零触碰——
-  6 in_scope 新 source_id/build_id 且产物与 v1 全等（2 直接源发布新版本、4 gap 源
-  阻断 fail-closed）；2 dev lane 副本因 source_id 不在白名单被准入拒绝（设计内）；
-  检查点按新 source_id 键控（checkpoint_absent）；v1 全保留。
-- **场景三 新规则 build**（i51_s3_newrule，sha `95ee15e5…`）：进程内补丁
-  PARSE_RULE_REV（冻结文件零修改，engine.py sha 前后相等）：检查点全部
-  `rule_or_source_mismatch` → reader spy 实测 8/8 真重解析 → 检查点整体重写 →
-  8/8 新 build_id 内容全等；4 直接源 gen2 切换、4 gap 源 run2 阻断且 v1 保持活动
-  （generation 1）；v1 版本并存。
-- **场景四 复用解析重建索引**（i51_s4_idxreb，sha `732eaf68…`）：进程内补丁
-  INDEX_REV_V3（冻结文件零修改）：解析检查点全程复用（spy=0、检查点逐字段未动）、
-  8/8 新 build_id 重建索引（search_text 多重集与 v1 全等、search_tsv 全覆盖）；
-  MD 源 parse_rev 不变（build_id 变化单因 index_rev），另 7 源翻转与 F1 一致且全部
-  等于 expected_parse_rev 公式值。
-
-与 I2/I3 对照：I2 重跑幂等结论在其 MD 覆盖范围内被完整复现并精确化边界（静态 rev
-稳定、动态 rev 受 F1 影响），I3 首跑正确性与 dev lane fail-closed 复现；验收门
-（幂等、版本、缓存及失败恢复；首跑正确性不留到切换后）满足。同日事件：架构文档
-14:24 被外部纯格式化打破 i0c region_docs 绑定，经 U 裁定回滚恢复冻结哈希
-（760a242a…）校验器复绿后落本条。本条为执行事实回填，不构成 I5 放行；F1 修复裁定
-与 I5-2/I5-3 另行核定。
-
 **2026-09-24 M7 放行（U 具名签认入链 i0c-r5n）+ M8 启动（I5-1 验证范围批准）。**
 U（xyl）2026-09-24 具名签认：**M7 放行**，放行三要件全部达成——①I4 窗口执行完毕
 （I4-3→I4-6→I4-2→I4-7→I4-4→I4-5 全绿；reset 阶段 1 七表 + 阶段 2 六表 TRUNCATE 五门全过，

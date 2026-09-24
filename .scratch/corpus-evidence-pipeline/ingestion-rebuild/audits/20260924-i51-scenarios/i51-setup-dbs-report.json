@@ -1,0 +1,45 @@
+{
+  "artifact": "i51-setup-dbs",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 543,
+    "instance": "corpus-db（隔离容器）"
+  },
+  "sql_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql",
+  "sql_sha256": "c4bc8aff02ccbc62f383356c7456200935e7dfe3a6a8158e6357dc800fb32eb9",
+  "databases": {
+    "i51_s1_rerun": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "i51_s2_srcchg": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "i51_s3_newrule": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "i51_s4_idxreb": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    }
+  },
+  "summary": {
+    "scenario_dbs": 4,
+    "created_now": [
+      "i51_s1_rerun",
+      "i51_s2_srcchg",
+      "i51_s3_newrule",
+      "i51_s4_idxreb"
+    ]
+  }
+}

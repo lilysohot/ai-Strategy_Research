@@ -1,0 +1,33 @@
+{
+ "artifact": "m7-release-signoff-record",
+ "status": "signed",
+ "scope": "M7 放行签认（I4 迁移/清理/切换窗口执行 × m7-review 六项整改 × m7-rereview F1–F3 修复验证 + U 具名签认）",
+ "prepared_at": "2026-09-24T00:00:00+08:00",
+ "review_result": "通过",
+ "evidence": [
+  "audits/20260923-i4-window/report.md（I4 窗口执行：I4-3 停写 8/8、I4-6 恢复 11/11+扩展 4/4、I4-2 双 manifest、I4-7 migrate 九表重跑绿+reset 阶段 1 七表、I4-4 重建 8/8 与 I3-7 基线同、I4-5 工具往返+旧写入口停用；reset 阶段 2 五门全过 i4c-reset-phase2-report.json sha 11762f4e…）",
+  "../m7-review-20260924/report.md（六项复核：G1/S1/G2/S2 关闭、G3/G4 部分关闭转 F2/F3；U 批准全部修复；全仓 2931/2 既有/49）",
+  "../m7-fix-20260924/（G1/S1/G2/S2 修复 r5j 入链；冻结 PG 电池复放全绿 320/320/9/11/12/78/73）",
+  "../m7-rereview-20260924/report.md（F1 P1 + F2/F3 P2 验收证据缺口）",
+  "../m7-finalize-20260924/（F1 零连接拒绝验证 f1-retired-evidence-writer-verification.json；F2 恢复正文 290/290 逐字一致 g3b-isolated-restore-body-verification.json；F3 r5k 版本绑定；r5l/r5m 验证器语义澄清；链头 r5m 验证 exit 0）"
+ ],
+ "claim_upon_signoff": [
+  "I4 窗口执行全部完毕：migrate_then_reset_limited 获准分支按批准 manifest 执行，旧九表归零、保留序列（docs_id_seq/chinese_docs_id_seq）与见证表不变，活动集 8/8 published+active，build_id 与 I3-7 冻结基线逐一相同，无双写",
+  "M7 修复闭环：m7-review 六项（G1/S1/G2/S2/G3/G4）与 m7-rereview F1–F3 全部关闭；旧 ingest 与旧 evidence 写入口均 fail-closed 恒定拒绝（零数据库连接），恢复正文历史取证全量逐字一致",
+  "M7 放行三要件（I4 窗口执行通过 + 独立复核闭环 + U 具名签认）全部达成"
+ ],
+ "not_covered": [
+  "stats/list_documents 迁移残留观察项（旧表查询输出 0/0）：接受为已知观察项，由 I5-3 退休核验统一处置",
+  "全仓 2 既有 failed（market_golden stale-quote、research_discipline）与 49 skipped 口径同复核基线，非本轮引入",
+  "abstain=on 下 24/24 正例拒检：M6 签认已裁决为已知限制（延续有效）",
+  "I5（M8）执行结果不在本签认范围；I5-1 全四场景×全部 8 活动源验证范围经 U 同日批准，执行结果另行回填",
+  "tasks.md / claims-market 工作区改动未 commit，git 提交由 U 另行决定"
+ ],
+ "signature_fields": {
+  "reviewer": "xyl",
+  "reviewed_at": "2026-09-24T00:00:00+08:00",
+  "decision": "批准（M7 放行）",
+  "note": "U（xyl）于 2026-09-24 会话中具名确认：认可 I4 窗口执行结果、两轮独立复核结论与全部修复验证，签认 M7 放行。同日裁定开启 M8（I5 增量与运维）并批准 I5-1 验证范围为全四场景×全部 8 个活动源（属 M8 启动记录，不属本签认范围）。签认范围与不含范围见 claim/not_covered 两节。"
+ },
+ "signed_in": "i0c-r5n"
+}
