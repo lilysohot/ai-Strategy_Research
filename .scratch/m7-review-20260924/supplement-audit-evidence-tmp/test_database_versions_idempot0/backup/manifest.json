@@ -1,0 +1,75 @@
+{
+  "format": "corpus-csv",
+  "created_at": "2026-09-24T02:08:55.254804+00:00",
+  "counts": {
+    "corpus_evidence_runs": 2,
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claim_block_runs": 0
+  },
+  "columns": {
+    "corpus_evidence_runs": [
+      "run_id",
+      "doc_id",
+      "source_rev",
+      "parse_rev",
+      "payload",
+      "created_at"
+    ],
+    "documents": [
+      "doc_id",
+      "title",
+      "source_path",
+      "content_hash",
+      "mime",
+      "status",
+      "char_count",
+      "block_count",
+      "ingested_at",
+      "published",
+      "doc_kind_override",
+      "doc_kind",
+      "subject",
+      "org",
+      "analysts"
+    ],
+    "blocks": [
+      "doc_id",
+      "seq",
+      "locator",
+      "text"
+    ],
+    "claims": [
+      "claim_id",
+      "doc_id",
+      "seq",
+      "locator",
+      "claim_text",
+      "kind",
+      "tickers",
+      "metric",
+      "value_text",
+      "value_num",
+      "unit",
+      "period",
+      "as_of",
+      "confidence",
+      "extracted_at"
+    ],
+    "claim_block_runs": [
+      "doc_id",
+      "seq",
+      "status",
+      "claims_n",
+      "attempts",
+      "model",
+      "extractor_version",
+      "duration_ms",
+      "prompt_tokens",
+      "completion_tokens",
+      "error",
+      "updated_at"
+    ]
+  }
+}

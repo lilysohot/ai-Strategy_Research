@@ -1,0 +1,67 @@
+{
+  "lanes": [
+    {
+      "lane": "supplement-audit-evidence",
+      "exit_code": 1,
+      "counts": {
+        "passed": 23,
+        "failed": 1,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "plain",
+      "dsn_set": true,
+      "corpus_dsn_set": true,
+      "tests": [
+        "tests/test_corpus_audit.py",
+        "tests/test_corpus_evidence_pipeline.py"
+      ],
+      "log": "lane-supplement-audit-evidence.txt"
+    },
+    {
+      "lane": "supplement-gap",
+      "exit_code": 0,
+      "counts": {
+        "passed": 13,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i2-verify",
+      "dsn_set": true,
+      "corpus_dsn_set": false,
+      "tests": [
+        "tests/test_corpus_gap_dispositions.py"
+      ],
+      "log": "lane-supplement-gap.txt"
+    },
+    {
+      "lane": "fullchain-confirm",
+      "exit_code": 1,
+      "counts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "errors": 0
+      },
+      "guard": "i2-verify",
+      "dsn_set": true,
+      "corpus_dsn_set": false,
+      "tests": [
+        "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260918-i2-fullchain-review/test_fullchain_probes.py::test_control_full_chain_reaches_reference_free_evidence"
+      ],
+      "log": "lane-fullchain-confirm.txt"
+    }
+  ],
+  "restore": {
+    "restore_exit_code": 0,
+    "expected_real_builds": 8,
+    "build_ids_deterministic": true,
+    "active_set_strict_match": true,
+    "missing_active": [],
+    "extra_active": [],
+    "published": 8,
+    "active": 8,
+    "note": "teardown 重建后测试残留清零；active 指针须严格等于真实 8 源"
+  }
+}

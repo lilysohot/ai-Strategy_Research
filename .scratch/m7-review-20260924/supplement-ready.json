@@ -1,0 +1,22 @@
+{
+  "lane": {
+    "lane": "supplement-audit-evidence-ready",
+    "exit_code": 0,
+    "counts": {
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    "guard": "plain",
+    "dsn_set": true,
+    "corpus_dsn_set": true,
+    "tests": [
+      "tests/test_corpus_audit.py",
+      "tests/test_corpus_evidence_pipeline.py"
+    ],
+    "log": "lane-supplement-audit-evidence-ready.txt"
+  },
+  "prerequisite": "public.zhcfg initialized",
+  "temporary_db_removed": true
+}
