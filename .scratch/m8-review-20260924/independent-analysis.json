@@ -1,0 +1,298 @@
+{
+  "i51-s1-rerun-report.json": {
+    "keys": [
+      "artifact",
+      "scenario",
+      "authority",
+      "target",
+      "prod_pre",
+      "prod_pre_counts_match_i44",
+      "seeded_decisions",
+      "first_run",
+      "active_set",
+      "iso_counts_after_first_run",
+      "replay_build",
+      "replay_publish",
+      "rebuild_plan",
+      "summary",
+      "finding_f1",
+      "prod_post",
+      "prod_unchanged",
+      "gate_passed",
+      "gate_note"
+    ],
+    "script_gate": true,
+    "summary": {
+      "sources": 8,
+      "built": 8,
+      "published": 8,
+      "active": 8,
+      "build_id_match_i44": true,
+      "unit_chunk_match_i44": true,
+      "counts_after_first_run_match_prod": true,
+      "replay_source_reused": true,
+      "replay_content_identical": true,
+      "replay_publish_no_advance": true,
+      "replay_build_id_stable": [
+        "工业富联_投委会决策报告_20260829.md"
+      ],
+      "replay_build_id_churned": [
+        "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+        "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+      ],
+      "rebuild_plan_replay_all_reuse": true
+    },
+    "prod_unchanged": true
+  },
+  "i51-s2-srcchange-report.json": {
+    "keys": [
+      "artifact",
+      "scenario",
+      "authority",
+      "target",
+      "prod_pre",
+      "seeded_decisions_v1",
+      "v1_run",
+      "mutations",
+      "data_dir_untouched",
+      "s2_manifest_sha256",
+      "v2_build",
+      "v2_outcomes",
+      "v2_checkpoints",
+      "v1_retained",
+      "iso_counts_final",
+      "summary",
+      "prod_post",
+      "prod_unchanged",
+      "gate_passed",
+      "gate_note"
+    ],
+    "script_gate": true,
+    "summary": {
+      "v1_built": 8,
+      "v1_build_id_match_i44": true,
+      "v1_published": 8,
+      "v2_in_scope": 6,
+      "v2_excluded_fail_closed": 2,
+      "v2_new_source_ids": true,
+      "v2_new_build_ids": true,
+      "v2_units_chunks_equal_v1": true,
+      "v2_gap_blocked": 4,
+      "v2_published_new": 2,
+      "v2_checkpoints_fresh": true,
+      "v1_retained_active": true,
+      "mutations_all_bytes_changed": true
+    },
+    "prod_unchanged": true
+  },
+  "i51-s3-newrule-report.json": {
+    "keys": [
+      "artifact",
+      "scenario",
+      "authority",
+      "target",
+      "prod_pre",
+      "prod_pre_counts_match_i44",
+      "seeded_decisions",
+      "v1_run",
+      "v1_state",
+      "simulation",
+      "run2_build",
+      "run2_check_publish",
+      "checkpoints_after_run2",
+      "iso_counts_after_run2",
+      "summary",
+      "prod_post",
+      "prod_unchanged",
+      "gate_passed",
+      "gate_note"
+    ],
+    "script_gate": true,
+    "summary": {
+      "v1_built": 8,
+      "v1_published": 8,
+      "v1_active": 8,
+      "v1_build_id_match_i44": true,
+      "run2_exit_code": 0,
+      "run2_all_in_scope": true,
+      "run2_build_id_all_changed": true,
+      "run2_content_identical": true,
+      "run2_source_reused": true,
+      "reader_spy_calls": 8,
+      "checkpoints_all_rule_mismatch": true,
+      "direct_sources_switched": [
+        "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "工业富联_投委会决策报告_20260829.md",
+        "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+      ],
+      "direct_sources_total": 4,
+      "gap_sources_kept_v1": [
+        "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+      ],
+      "gap_sources_total": 4,
+      "v1_builds_all_retained": true,
+      "simulation_restored": true,
+      "counts_after_run2": {
+        "builds_doubled": true,
+        "units_doubled": true,
+        "chunks_doubled": true,
+        "publications_still_8": true,
+        "active_still_8": true
+      }
+    },
+    "prod_unchanged": true
+  },
+  "i51-s4-idxreb-report.json": {
+    "keys": [
+      "artifact",
+      "scenario",
+      "authority",
+      "target",
+      "prod_pre",
+      "prod_pre_counts_match_i44",
+      "seeded_decisions",
+      "v1_run",
+      "v1_state",
+      "simulation",
+      "run2_build",
+      "run2_build_revs",
+      "checkpoints_after_run2",
+      "iso_counts_after_run2",
+      "summary",
+      "prod_post",
+      "prod_unchanged",
+      "gate_passed",
+      "gate_note"
+    ],
+    "script_gate": true,
+    "summary": {
+      "v1_built": 8,
+      "v1_published": 8,
+      "v1_active": 8,
+      "v1_build_id_match_i44": true,
+      "run2_exit_code": 0,
+      "run2_all_in_scope": true,
+      "run2_build_id_all_changed": true,
+      "run2_content_identical": true,
+      "run2_source_reused": true,
+      "reader_spy_calls": 0,
+      "checkpoints_all_untouched": true,
+      "index_rev_all_simulated": true,
+      "search_text_multiset_all_equal": true,
+      "parse_rev_same_only_md": true,
+      "run2_parse_rev_matches_expected_formula": true,
+      "direct_sources_switched": [
+        "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "工业富联_投委会决策报告_20260829.md",
+        "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+      ],
+      "direct_sources_total": 4,
+      "gap_sources_kept_v1": [
+        "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+      ],
+      "gap_sources_total": 4,
+      "v1_builds_all_retained": true,
+      "simulation_restored": true,
+      "counts_after_run2": {
+        "builds_doubled": true,
+        "units_doubled": true,
+        "chunks_doubled": true,
+        "publications_still_8": true,
+        "active_still_8": true
+      }
+    },
+    "prod_unchanged": true
+  },
+  "strict_rerun": {
+    "all_build_ids_stable": false,
+    "stable": 1,
+    "total": 8,
+    "first_build_rebuild_plan": [
+      {
+        "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      },
+      {
+        "original_name": "工业富联_投委会决策报告_20260829.md",
+        "v1_rebuild_stages": []
+      },
+      {
+        "original_name": "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+        "v1_rebuild_stages": [
+          "parse"
+        ],
+        "replay_rebuild_stages": []
+      }
+    ]
+  },
+  "original_readonly_control_probe": {
+    "target": "isolated 127.0.0.1:543",
+    "before": "off",
+    "after": "off",
+    "notices": [
+      "SET TRANSACTION can only be used in transaction blocks"
+    ],
+    "writes_attempted": 0
+  },
+  "scenario_reproducibility_files_directly_bound_in_any_snapshot": {
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_common.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_s1_rerun.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_s2_srcchange.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_s3_newrule.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_s4_idxreb.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51_setup_dbs.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/r5o_finalize.py": false,
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i5-scenarios.json": false
+  }
+}

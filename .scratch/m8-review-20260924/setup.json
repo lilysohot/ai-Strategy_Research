@@ -1,0 +1,45 @@
+{
+  "artifact": "i51-setup-dbs",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 543,
+    "instance": "corpus-db（隔离容器）"
+  },
+  "sql_path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i2/sandbox_schema.sql",
+  "sql_sha256": "c4bc8aff02ccbc62f383356c7456200935e7dfe3a6a8158e6357dc800fb32eb9",
+  "databases": {
+    "m8_review_20260924_s1": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "m8_review_20260924_s2": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "m8_review_20260924_s3": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    },
+    "m8_review_20260924_s4": {
+      "created_now": true,
+      "zhcfg_created": true,
+      "tables": 9,
+      "indexes": 19
+    }
+  },
+  "summary": {
+    "scenario_dbs": 4,
+    "created_now": [
+      "m8_review_20260924_s1",
+      "m8_review_20260924_s2",
+      "m8_review_20260924_s3",
+      "m8_review_20260924_s4"
+    ]
+  }
+}

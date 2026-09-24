@@ -1,0 +1,8 @@
+{
+  "command": [
+    "python",
+    "tools/check_symbols.py"
+  ],
+  "exit_code": 0,
+  "seconds": 1.4
+}

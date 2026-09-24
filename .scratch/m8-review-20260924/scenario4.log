@@ -1,0 +1,44 @@
+{
+  "gate_passed": true,
+  "summary": {
+    "v1_built": 8,
+    "v1_published": 8,
+    "v1_active": 8,
+    "v1_build_id_match_i44": true,
+    "run2_exit_code": 0,
+    "run2_all_in_scope": true,
+    "run2_build_id_all_changed": true,
+    "run2_content_identical": true,
+    "run2_source_reused": true,
+    "reader_spy_calls": 0,
+    "checkpoints_all_untouched": true,
+    "index_rev_all_simulated": true,
+    "search_text_multiset_all_equal": true,
+    "parse_rev_same_only_md": true,
+    "run2_parse_rev_matches_expected_formula": true,
+    "direct_sources_switched": [
+      "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "工业富联_投委会决策报告_20260829.md",
+      "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+    ],
+    "direct_sources_total": 4,
+    "gap_sources_kept_v1": [
+      "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+    ],
+    "gap_sources_total": 4,
+    "v1_builds_all_retained": true,
+    "simulation_restored": true,
+    "counts_after_run2": {
+      "builds_doubled": true,
+      "units_doubled": true,
+      "chunks_doubled": true,
+      "publications_still_8": true,
+      "active_still_8": true
+    }
+  }
+}
+sha256: 5534ce0d657e6f0f …

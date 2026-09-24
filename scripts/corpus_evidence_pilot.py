@@ -1,6 +1,6 @@
 """Small, reproducible corpus usability pilot; writes only shadow runs and local artifacts.
 
-uv run python scripts/corpus_evidence_pilot.py --manifest .scratch/corpus-evidence-pipeline/pilot_manifest.json --out data/corpus/.evidence/pilot --persist --prose-calls 2
+uv run python scripts/corpus_evidence_pilot.py --manifest .scratch/corpus-evidence-pipeline/pilot_manifest.json --out data/corpus/.evidence/pilot --prose-calls 2
 """
 
 from __future__ import annotations
@@ -135,7 +135,6 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--root", type=Path, default=Path("data/corpus"))
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--persist", action="store_true")
     parser.add_argument("--prose-calls", type=int, default=0)
     parser.add_argument("--packet-chars", type=int, default=2000)
     args = parser.parse_args()
@@ -160,7 +159,9 @@ def main() -> int:
             model=configured_model() if use_model and llm else None,
             max_prose_calls=args.prose_calls if use_model else 0,
             packet_chars=args.packet_chars,
-            persist=args.persist,
+            # I4-5 retired corpus_evidence_runs.  The content-addressed artifact
+            # below is the durable, reviewable evaluation record instead.
+            persist=False,
         )
         run.verify_identity()
         # Content-addressed artifacts never overwrite an earlier different result.
@@ -169,18 +170,9 @@ def main() -> int:
         save_artifact(target, serialized)
         restored = EvidenceRun.model_validate_json(target.read_text(encoding="utf-8"))
         restored.verify_identity()
-        persisted = False
-        if args.persist:
-            restored = service.load_evidence_run(run.run_id)
-            assert service.fetch_evidence(run.run_id, run.document.packets[0].packet_id)
-            projection = service.claims_of(
-                run_id=run.run_id,
-                purpose="audit",
-                quality_status=None,
-                limit=1000,
-            )
-            assert projection["total"] == len(run.facts)
-            persisted = True
+        assert len(restored.facts) == len(run.facts)
+        for packet in restored.document.packets:
+            assert restored.document.fetch(packet.packet_id).packet_id == packet.packet_id
         checks = field_checks(restored, sample)
         prose_checks = []
         for gold in sample.get("prose_gold", []):
@@ -214,7 +206,7 @@ def main() -> int:
             **run.summary(),
             "source_rev": run.document.source_rev,
             "parse_rev": run.document.parse_rev,
-            "persisted_and_reloaded": persisted,
+            "artifact_reloaded_and_audited": True,
             "field_checks": checks,
             "field_passed": sum(bool(c["passed"]) for c in checks),
             "field_total": len(checks),

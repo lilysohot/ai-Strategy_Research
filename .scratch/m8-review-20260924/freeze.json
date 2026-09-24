@@ -1,0 +1,8 @@
+{
+  "command": [
+    "python",
+    ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py"
+  ],
+  "exit_code": 0,
+  "seconds": 0.42
+}

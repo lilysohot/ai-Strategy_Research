@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python",
+    "tools/import_smoke.py",
+    "--stage",
+    "1"
+  ],
+  "exit_code": 0,
+  "seconds": 1.98
+}

@@ -1,0 +1,23 @@
+F...F...................                                                 [100%]
+=================================== FAILURES ===================================
+_______________ test_completeness_gap_stale_and_zero_candidates ________________
+\\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:265: in test_completeness_gap_stale_and_zero_candidates
+    ???
+E   AssertionError: assert [{'table': 'c...created_at']}] == []
+E     
+E     Left contains one more item: {'table': 'corpus_evidence_runs', 'missing_in_db': ['run_id', 'doc_id', 'source_rev', 'parse_rev', 'payload', 'created_at']}
+E     Use -v to get more diff
+______________ test_exit_code_reflects_conflicts_and_jsonl_trace _______________
+\\wsl.localhost\Ubuntu\home\administrator\FrontierAgent\tests\test_corpus_audit.py:329: in test_exit_code_reflects_conflicts_and_jsonl_trace
+    ???
+E   AssertionError: assert {'backup_cove...ity.untraced'} == {'consistency...ity.untraced'}
+E     
+E     Extra items in the left set:
+E     'backup_coverage.drift'
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED ../../../dev::test_completeness_gap_stale_and_zero_candidates - Assert...
+FAILED ../../../dev::test_exit_code_reflects_conflicts_and_jsonl_trace - Asse...
+2 failed, 22 passed in 0.66s
+
+exit=1

@@ -1,0 +1,22 @@
+{
+  "lane": {
+    "lane": "i5-consumers-pg",
+    "exit_code": 0,
+    "counts": {
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    "guard": "i2-verify",
+    "dsn_set": true,
+    "corpus_dsn_set": true,
+    "tests": [
+      "tests/test_corpus_consumers_pg.py"
+    ],
+    "log": "lane-i5-consumers-pg.txt"
+  },
+  "sandbox_restored_exact_table_contents": true,
+  "dump_sha256": "53dd84a7a5978dca95993b585462768f24eac8909a8020599eec8d0ef46d7c70",
+  "restore_error": null
+}

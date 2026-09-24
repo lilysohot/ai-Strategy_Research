@@ -1,0 +1,19 @@
+{
+  "gate_passed": true,
+  "summary": {
+    "v1_built": 8,
+    "v1_build_id_match_i44": true,
+    "v1_published": 8,
+    "v2_in_scope": 6,
+    "v2_excluded_fail_closed": 2,
+    "v2_new_source_ids": true,
+    "v2_new_build_ids": true,
+    "v2_units_chunks_equal_v1": true,
+    "v2_gap_blocked": 4,
+    "v2_published_new": 2,
+    "v2_checkpoints_fresh": true,
+    "v1_retained_active": true,
+    "mutations_all_bytes_changed": true
+  }
+}
+sha256: b133d695525cb6ef …

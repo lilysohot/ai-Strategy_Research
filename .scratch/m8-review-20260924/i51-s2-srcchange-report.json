@@ -1,0 +1,393 @@
+{
+  "artifact": "i51-s2-srcchange",
+  "scenario": "源变化（8 份变异副本；隔离库；不改 data/ 字节）",
+  "authority": {
+    "guard_sha256": "5c52f57188017fe171daee1f93594cd80b15414319bd2f436c4ecd808c9cc535",
+    "manifest_sha256": "8487c51b548e4427b31da8d545a7aa91591f1b353290a06486483cabcfd9d4d1",
+    "scope": "U 2026-09-24 批准：全四场景×全部 8 个活动源（r5n m8_kickoff）"
+  },
+  "target": {
+    "dsn": "postgresql://***@127.0.0.1:543/m8_review_20260924_s2",
+    "resolve_target_db": "m8_review_20260924_s2"
+  },
+  "prod_pre": {
+    "counts": {
+      "sources": 8,
+      "decisions": 10,
+      "builds": 8,
+      "chunks": 834,
+      "units": 3887,
+      "publications": 8,
+      "active": 8
+    },
+    "active_by_source": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+    }
+  },
+  "seeded_decisions_v1": [
+    {
+      "orig_path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "path": "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "decisions": [
+        "i3e1-approved-2b36f14b42"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "decisions": [
+        "i3e1-approved-dd259586a3"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "decisions": [
+        "i3e1-approved-2cd3cadcf9"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "decisions": [
+        "i3e1-approved-f269774bb4"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "decisions": [
+        "i3e1-approved-43300146a2"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "decisions": [
+        "i3e1-approved-9cdca024d2"
+      ],
+      "kind": "approved_set"
+    },
+    {
+      "orig_path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "decisions": [
+        "i0a2-c-f8fa2208",
+        "devlane-md-f8fa2208"
+      ],
+      "kind": "dev_lane",
+      "material_type": "internal_committee_report"
+    },
+    {
+      "orig_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "decisions": [
+        "i0a2-d-48c05895",
+        "devlane-docx-48c05895"
+      ],
+      "kind": "dev_lane",
+      "material_type": "internal_unattributed"
+    }
+  ],
+  "v1_run": {
+    "build": {
+      "exit_code": 0,
+      "seconds": 9.44,
+      "count": 8
+    },
+    "built": 8,
+    "build_id_match_i44": true,
+    "published": 8
+  },
+  "mutations": {
+    "data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "sha256_after": "c3493fa222be43be01850c7e0bf29c7c3ee71e9e606b4a240d820d7db327c031",
+      "bytes_changed": true
+    },
+    "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "sha256_after": "ef9fd8e55d1d9fe99c8aa81b1fe430590737c49f9b020a1e76ecf3c393cd91e8",
+      "bytes_changed": true
+    },
+    "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "sha256_after": "383b650c4bdf0028f56cb14a8bff1a44d5d4668115ec3ec5e2101c1be67770e6",
+      "bytes_changed": true
+    },
+    "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "sha256_after": "7177d92b4dbc0efd990bef90fbf71cdd04d8ac4c10ca5f782eb3853a92c2b5b4",
+      "bytes_changed": true
+    },
+    "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "sha256_after": "e4633b305f64e7f47213ffb956d7fe4ff6f926bb9993a4c146e74f4b93741946",
+      "bytes_changed": true
+    },
+    "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf": {
+      "method": "pdf_metadata_producer_append（字节变化，正文不变）",
+      "sha256_before": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "sha256_after": "a9bc74c6eb80db8e472290312d84c0758a22414c6a47791e35061e1096709339",
+      "bytes_changed": true
+    },
+    "data/corpus/工业富联_投委会决策报告_20260829.md": {
+      "method": "md_append_paragraph（正文真实变化）",
+      "sha256_before": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "sha256_after": "3340c202f15da60e5e175eb4d058fce8a9b9c629f5547ebe2f7d11b5eced581a",
+      "bytes_changed": true
+    },
+    "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx": {
+      "method": "docx_add_paragraph（正文真实变化）",
+      "sha256_before": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "sha256_after": "f2dc75b545e4dc2f109e65c227da7c577d918fafd2e6a2271bf04f91a5f2629d",
+      "bytes_changed": true
+    }
+  },
+  "data_dir_untouched": true,
+  "s2_manifest_sha256": "d7e1317fbaea84882c55da97396ae1f5a639d23a3a6aaba282b42dd751ece3e9",
+  "v2_build": {
+    "exit_code": 0,
+    "seconds": 9.15,
+    "count": 8
+  },
+  "v2_outcomes": [
+    {
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 4,
+      "publish_blocked": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 4,
+      "publish_blocked": true
+    },
+    {
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 4,
+      "publish_blocked": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 0,
+      "publish_blocked": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 0,
+      "publish_blocked": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "decision": "in_scope",
+      "new_source_id_differs": true,
+      "new_build_id_differs": true,
+      "units_equal_v1": true,
+      "chunks_equal_v1": true,
+      "publish_exit": 4,
+      "publish_blocked": true
+    },
+    {
+      "original_name": "工业富联_投委会决策报告_20260829.md",
+      "decision": "review_required",
+      "new_source_id_differs": true,
+      "new_build_id_differs": false,
+      "units_equal_v1": null,
+      "chunks_equal_v1": null,
+      "publish_exit": null,
+      "publish_blocked": false
+    },
+    {
+      "original_name": "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "decision": "review_required",
+      "new_source_id_differs": true,
+      "new_build_id_differs": false,
+      "units_equal_v1": null,
+      "chunks_equal_v1": null,
+      "publish_exit": null,
+      "publish_blocked": false
+    }
+  ],
+  "v2_checkpoints": [
+    {
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "工业富联_投委会决策报告_20260829.md",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    },
+    {
+      "original_name": "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "reparse_reason": "checkpoint_absent",
+      "keyed_by_mutated_source_id": true
+    }
+  ],
+  "v1_retained": [
+    {
+      "original_name": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "工业富联_投委会决策报告_20260829.md",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    },
+    {
+      "original_name": "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "v1_build_present": true,
+      "v1_still_active": true,
+      "generation_unchanged": false
+    }
+  ],
+  "iso_counts_final": {
+    "sources": 16,
+    "decisions": 20,
+    "builds": 14,
+    "chunks": 1641,
+    "units": 7639,
+    "publications": 10,
+    "active": 10
+  },
+  "summary": {
+    "v1_built": 8,
+    "v1_build_id_match_i44": true,
+    "v1_published": 8,
+    "v2_in_scope": 6,
+    "v2_excluded_fail_closed": 2,
+    "v2_new_source_ids": true,
+    "v2_new_build_ids": true,
+    "v2_units_chunks_equal_v1": true,
+    "v2_gap_blocked": 4,
+    "v2_published_new": 2,
+    "v2_checkpoints_fresh": true,
+    "v1_retained_active": true,
+    "mutations_all_bytes_changed": true
+  },
+  "prod_post": {
+    "counts": {
+      "sources": 8,
+      "decisions": 10,
+      "builds": 8,
+      "chunks": 834,
+      "units": 3887,
+      "publications": 8,
+      "active": 8
+    },
+    "active_by_source": {
+      "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0": "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11": "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+      "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a": "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+      "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128": "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51",
+      "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa": "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+      "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560": "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+    }
+  },
+  "prod_unchanged": true,
+  "gate_passed": true,
+  "gate_note": "通过：6 源变化 → 新 source/build（元数据级变化、产物全等）；2 dev lane 变异副本按 source_id 白名单 fail-closed 拒绝（设计内）；4 gap 源变异 build 发布阻断且旧版本照常服务；v1 全保留；生产零触碰"
+}

@@ -173,10 +173,11 @@ def test_end_to_end_extract_and_query(e2e_svc) -> None:
     assert len(svc.legacy_claims_of(kind="forecast")) == 1
     assert len(svc.legacy_claims_of(kind="fact")) == 1
 
-    # ③ locator 与 blocks 对齐 ⇒ claim 可溯源回原文
+    # ③ 显式兼容链的 locator 与 blocks 对齐 ⇒ claim 可溯源回原文。
+    # 产品 fetch 在新链库只接受 cv2 句柄，不把此测试旧 doc_id 当回退入口。
     for row in by_ticker:
-        fetched = svc.fetch(row["doc_id"], row["locator"])
-        assert fetched is not None, "claim 的 locator 必须能取回原文块"
+        blocks = svc.blocks_of(str(row["doc_id"]))
+        assert any(str(block["locator"]) == str(row["locator"]) for block in blocks)
 
 
 def test_extract_is_idempotent(fresh_svc) -> None:
@@ -895,10 +896,10 @@ def test_set_doc_kind_validates_and_clears(fresh_svc) -> None:
     with pytest.raises(ValueError, match="doc_kind"):
         fresh_svc.set_doc_kind(COMMIT_DOC, "板块")
     fresh_svc.set_doc_kind(COMMIT_DOC, "macro")
-    row = {str(d["doc_id"]): d for d in fresh_svc.list_documents()}[COMMIT_DOC]
+    row = {str(d["doc_id"]): d for d in fresh_svc._legacy_documents()}[COMMIT_DOC]
     assert str(row["doc_kind_override"]) == "macro"
     fresh_svc.set_doc_kind(COMMIT_DOC, None)
-    row = {str(d["doc_id"]): d for d in fresh_svc.list_documents()}[COMMIT_DOC]
+    row = {str(d["doc_id"]): d for d in fresh_svc._legacy_documents()}[COMMIT_DOC]
     assert row["doc_kind_override"] is None, "None 必须清除覆盖、恢复自动分类"
 
 

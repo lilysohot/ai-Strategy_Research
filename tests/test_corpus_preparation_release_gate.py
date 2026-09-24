@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -220,7 +221,9 @@ def test_publish_idempotent_replay_and_generation(tmp_path: Path) -> None:
     first = publish_build(store, outcome.build.build_id, activated_at=NOW)
     replay = publish_build(store, outcome.build.build_id, activated_at=NOW)
     assert replay == first and first.generation == 1  # 幂等重放不递增 generation
-    lost_response = publish_build(store, outcome.build.build_id, activated_at=NOW + timedelta(seconds=1))
+    lost_response = publish_build(
+        store, outcome.build.build_id, activated_at=NOW + timedelta(seconds=1)
+    )
     # publish_idempotency_v2（I0-C 裁决）：幂等按目标状态比对，不以时间为键——
     # 响应丢失+时钟前进的重试恒返回已提交结果。
     assert lost_response == first and lost_response.generation == 1
@@ -308,6 +311,32 @@ def test_parse_checkpoint_written_and_reused_on_retry(tmp_path: Path) -> None:
     second = _execute(store, tmp_path, path, reader=spy_reader)
     assert second.build is not None
     assert len(reads) == 1, "有效检查点必须复用，重试不得重读原文"
+
+
+def test_dynamic_reader_revision_is_stable_across_checkpoint_replay(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """读取器依赖版本是 parse_rev 身份的一部分，重放不得丢失它。"""
+    store, path, sid = _make_store_and_source(tmp_path)
+    reads: list[Path] = []
+
+    def dynamic_reader(archived: Path):
+        reads.append(archived)
+        return replace(read_document(archived), extractor_rev="reader-test+dependency-1.2.3")
+
+    monkeypatch.setattr(
+        "plugins.corpus.preparation.engine.extractor_rev_for",
+        lambda _format: "reader-test+dependency-1.2.3",
+    )
+    first = _execute(store, tmp_path, path, reader=dynamic_reader)
+    second = _execute(store, tmp_path, path, reader=dynamic_reader)
+
+    assert first.build is not None and second.build is not None
+    assert first.build.build_id == second.build.build_id
+    assert first.build.parse_rev == second.build.parse_rev
+    assert len(reads) == 1
+    checkpoint = json.loads(store.get_source_checkpoint(sid, "parse"))
+    assert checkpoint["extractor_rev"] == "reader-test+dependency-1.2.3"
 
 
 def test_checkpoint_semantic_damage_reparses_and_keeps_quality_gate(tmp_path: Path) -> None:

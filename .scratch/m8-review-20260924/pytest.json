@@ -1,0 +1,12 @@
+{
+  "command": [
+    "pytest",
+    "tests",
+    "apodex/tests",
+    "-q",
+    "--tb=short",
+    "-ra"
+  ],
+  "exit_code": 1,
+  "seconds": 247.14
+}

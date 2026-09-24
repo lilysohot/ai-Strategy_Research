@@ -1,0 +1,16 @@
+{
+  "command": [
+    "ruff",
+    "check",
+    "frontier_agent/",
+    "apodex/",
+    "benchmarks/",
+    "workflows/",
+    "plugins/",
+    "deploy/",
+    "tools/",
+    "scripts/"
+  ],
+  "exit_code": 0,
+  "seconds": 0.21
+}

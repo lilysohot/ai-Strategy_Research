@@ -1,0 +1,7 @@
+ssss                                                                     [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_corpus_golden.py:63: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_verify_b7.py:86: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_verify_b7.py:99: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+SKIPPED [1] tests/test_corpus_verify_b7.py:111: PG 语料库不可用或无数据（默认 postgresql://postgres:postgres@localhost:5432/postgres）
+4 skipped in 0.38s

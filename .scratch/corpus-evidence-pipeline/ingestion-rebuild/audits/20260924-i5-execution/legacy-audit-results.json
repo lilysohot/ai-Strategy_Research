@@ -1,0 +1,22 @@
+{
+  "lane": {
+    "lane": "i5-legacy-audit",
+    "exit_code": 0,
+    "counts": {
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    "guard": "plain",
+    "dsn_set": true,
+    "corpus_dsn_set": true,
+    "tests": [
+      "tests/test_corpus_audit.py",
+      "tests/test_corpus_evidence_pipeline.py"
+    ],
+    "log": "lane-i5-legacy-audit.txt"
+  },
+  "temporary_legacy_database_removed": true,
+  "scope": "backup column coverage and retired evidence-writer behavior"
+}

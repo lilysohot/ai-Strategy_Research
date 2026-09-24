@@ -32,20 +32,20 @@ __all__ = [
 
 
 def extractor_rev_for(fmt: DocumentFormat) -> str:
-    """当前代码对指定格式的读取器版本（full-review C6：免解析查得）。
+    """当前代码对指定格式会实际产出的读取器版本（无需读取来源）。
 
     引擎校验解析检查点时使用：检查点记录的 ``extractor_rev`` 必须等于当前代码
     对该格式会产出的版本，否则检查点不可复用（读取器升级 → 重算 → 新
     ``parse_rev``）。惰性导入与 :func:`read_document` 一致，不加重模块装载。
     """
     if fmt is DocumentFormat.PDF:
-        from plugins.corpus.preparation.readers.pdf_reader import READER_PDF_REV
+        from plugins.corpus.preparation.readers.pdf_reader import _extractor_rev
 
-        return READER_PDF_REV
+        return _extractor_rev()
     if fmt is DocumentFormat.DOCX:
-        from plugins.corpus.preparation.readers.docx_reader import READER_DOCX_REV
+        from plugins.corpus.preparation.readers.docx_reader import _extractor_rev
 
-        return READER_DOCX_REV
+        return _extractor_rev()
     if fmt is DocumentFormat.MARKDOWN:
         from plugins.corpus.preparation.readers.md_reader import READER_MD_REV
 

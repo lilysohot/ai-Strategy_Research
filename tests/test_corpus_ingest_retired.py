@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import inspect
 import json
+from pathlib import Path
 
 import pytest
 
@@ -64,3 +65,13 @@ def test_evidence_write_rejected_without_any_connection(
 def test_extract_claims_does_not_request_retired_persistence_by_default() -> None:
     """正常 extraction 默认只返回内存 EvidenceRun，不能隐式写旧表。"""
     assert inspect.signature(CorpusService.extract_claims).parameters["persist"].default is False
+
+
+def test_evaluation_scripts_do_not_request_retired_evidence_storage() -> None:
+    """I5-3: 批处理评测只能回读自己的工件，不能重新接通旧 evidence 表。"""
+    root = Path(__file__).resolve().parents[1]
+    for relative in ("scripts/corpus_evidence_pilot.py", "scripts/corpus_holdout_eval.py"):
+        source = (root / relative).read_text(encoding="utf-8")
+        assert "load_evidence_run" not in source
+        assert "fetch_evidence" not in source
+        assert "persist=True" not in source

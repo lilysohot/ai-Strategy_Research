@@ -1,0 +1,5 @@
+{
+  "original": ".scratch/m7-fix-20260924/live_default_product.py",
+  "sha256": "93402021e24ba5cd04cc6b39e9a34545fdea30dfd14a3ff34b0a93e0b6752dae",
+  "adapter": "Only OUT is redirected. PGOPTIONS read-only and zero-model trap retained."
+}

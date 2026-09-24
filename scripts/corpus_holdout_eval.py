@@ -256,24 +256,25 @@ def main() -> int:
             if use_model
             else 0,
             packet_chars=manifest["limits"]["packet_chars"],
-            persist=True,
+            # I4-5 retired corpus_evidence_runs.  Holdout evidence is frozen in
+            # the content-addressed artifact immediately below.
+            persist=False,
         )
         run.verify_identity()
         save_artifact(args.out / f"{run.run_id}.json", run.model_dump_json(indent=2))
-        restored = service.load_evidence_run(run.run_id)
-        restored.verify_identity()
-        projection = service.claims_of(
-            run_id=run.run_id, purpose="audit", quality_status=None, limit=1000
+        restored = EvidenceRun.model_validate_json(
+            (args.out / f"{run.run_id}.json").read_text(encoding="utf-8")
         )
-        assert projection["total"] == len(run.facts)
+        restored.verify_identity()
+        assert len(restored.facts) == len(run.facts)
         for packet in restored.document.packets:
-            assert service.fetch_evidence(run.run_id, packet.packet_id)
+            assert restored.document.fetch(packet.packet_id).packet_id == packet.packet_id
         result = {
             "name": sample["name"],
             "source_path": str(path),
             "source_rev": run.document.source_rev,
             **run.summary(),
-            "persisted_reloaded_audited": True,
+            "artifact_reloaded_audited": True,
             "table_checks": field_checks(restored, sample),
             "prose_checks": [score_prose(restored, g) for g in sample.get("targets", [])],
             "negative_checks": negative_checks(restored, sample.get("negative_rules", [])),

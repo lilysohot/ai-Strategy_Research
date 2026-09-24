@@ -1827,7 +1827,10 @@ class CorpusService:
             done, dead = self._done_blocks(model=model_name, max_attempts=max_attempts)
         stats = ExtractStats()
 
-        documents = self.list_documents()
+        # This is an explicit compatibility entry for the retained financial
+        # extraction capability. It must not inherit public new-chain listings
+        # and turn cv2 handles into accidental old-table reads.
+        documents = self._legacy_documents()
         # 标题 / 发布日 / doc_kind 覆盖用于：文档级标的兜底、as_of 兜底、插槽选择
         # （券商研报的代码常只出现在标题里；published 是 as_of 的兜底来源，§5.1）
         titles = {str(row["doc_id"]): str(row["title"] or "") for row in documents}
@@ -2229,6 +2232,36 @@ class CorpusService:
             return list(cur.fetchall())
 
     def list_documents(self) -> list[dict[str, object]]:
+        if self.read_chain() == "new":
+            with self._connect() as conn, conn.cursor() as cur:
+                cur.execute(
+                    "SELECT p.active_build_id AS build_id, s.source_id, s.original_names, "
+                    "s.mime_type, s.archive_path, "
+                    "a.metadata_snapshot->'report_publication'->>'value' AS published "
+                    "FROM corpus.corpus_publications p "
+                    "JOIN corpus.corpus_sources s ON s.source_id = p.source_id "
+                    "JOIN corpus.corpus_admissions a ON a.decision_id = p.current_decision_id "
+                    "WHERE p.active_build_id IS NOT NULL "
+                    "ORDER BY p.active_build_id"
+                )
+                rows = cur.fetchall()
+            return [
+                {
+                    "doc_id": f"cv2:{row['build_id']}",
+                    "title": (row["original_names"] or [row["source_id"]])[0],
+                    "source_path": row["archive_path"],
+                    "content_hash": row["source_id"],
+                    "mime": row["mime_type"],
+                    "status": "published",
+                    "block_count": None,
+                    "char_count": None,
+                    "published": row["published"] or "undated",
+                    "doc_kind_override": None,
+                    "source_id": row["source_id"],
+                    "build_id": row["build_id"],
+                }
+                for row in rows
+            ]
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT doc_id, title, source_path, content_hash, mime, status, "
@@ -2237,6 +2270,17 @@ class CorpusService:
             )
             rows = cur.fetchall()
         return [dict(r) for r in rows]
+
+    def _legacy_documents(self) -> list[dict[str, object]]:
+        """Explicit old-table view retained for historical claims extraction only."""
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT doc_id, title, source_path, content_hash, mime, status, "
+                "block_count, char_count, published, doc_kind_override "
+                "FROM documents ORDER BY doc_id"
+            )
+            rows = cur.fetchall()
+        return [dict(row) for row in rows]
 
     def source_resolver(self) -> Callable[[str], str | None]:
         """给 ``verify_card`` 用的 ``doc_id -> 全文`` 解析器。"""
@@ -2260,14 +2304,6 @@ class CorpusService:
     # 台账是断点续跑的跳过标记，丢了它的后果不是"少几行"，而是恢复后所有块
     # 都被判定为"没做过" —— 已经花过的钱要再花一遍。
     _BACKUP_COLUMNS: ClassVar[dict[str, tuple[str, ...]]] = {
-        "corpus_evidence_runs": (
-            "run_id",
-            "doc_id",
-            "source_rev",
-            "parse_rev",
-            "payload",
-            "created_at",
-        ),
         "documents": (
             "doc_id",
             "title",
@@ -2540,6 +2576,46 @@ class CorpusService:
             return 0
 
     def stats(self) -> dict[str, object]:
+        if self.read_chain() == "new":
+            with self._connect() as conn, conn.cursor() as cur:
+                cur.execute(
+                    "SELECT COUNT(*) AS documents, "
+                    "COALESCE(SUM(chunk_counts.blocks), 0) AS blocks "
+                    "FROM corpus.corpus_publications p "
+                    "LEFT JOIN LATERAL ("
+                    "  SELECT COUNT(*) AS blocks FROM corpus.corpus_chunks c "
+                    "  WHERE c.build_id = p.active_build_id"
+                    ") AS chunk_counts ON true "
+                    "WHERE p.active_build_id IS NOT NULL"
+                )
+                totals = cur.fetchone()
+                cur.execute(
+                    "SELECT s.mime_type AS mime, COUNT(*) AS n "
+                    "FROM corpus.corpus_publications p "
+                    "JOIN corpus.corpus_sources s ON s.source_id = p.source_id "
+                    "WHERE p.active_build_id IS NOT NULL GROUP BY s.mime_type"
+                )
+                by_mime = {str(row["mime"]): int(row["n"]) for row in cur.fetchall()}
+                cur.execute(
+                    "SELECT MIN(a.metadata_snapshot->'report_publication'->>'value') AS lo, "
+                    "MAX(a.metadata_snapshot->'report_publication'->>'value') AS hi "
+                    "FROM corpus.corpus_publications p "
+                    "JOIN corpus.corpus_admissions a ON a.decision_id = p.current_decision_id "
+                    "WHERE p.active_build_id IS NOT NULL"
+                )
+                span = cur.fetchone()
+            total = int(totals["documents"]) if totals else 0
+            return {
+                "documents": total,
+                "blocks": int(totals["blocks"]) if totals else 0,
+                "by_status": {"published": total} if total else {},
+                "by_mime": by_mime,
+                "published_from": span["lo"] if span else None,
+                "published_to": span["hi"] if span else None,
+                "corpus_files": self.corpus_file_count(),
+                "fully_ingested": total == self.corpus_file_count(),
+                "dsn": self._dsn,
+            }
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) AS n FROM documents")
             row = cur.fetchone()
@@ -2567,6 +2643,8 @@ class CorpusService:
         }
 
     def list_by_status(self, status: str) -> list[dict[str, object]]:
+        if self.read_chain() == "new":
+            return self.list_documents() if status == "published" else []
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT doc_id, title, source_path, published FROM documents "

@@ -227,6 +227,39 @@ def test_search_returns_version_handles_and_fetch_is_verbatim(
     assert evidence.active is True
 
 
+def test_stats_and_document_listing_use_active_new_chain(
+    store: PgStore, service: CorpusService
+) -> None:
+    build_id = sha256_of_bytes(b"i2s8:build:stats")
+    _publish(store, build_id=build_id)
+
+    stats = service.stats()
+    assert stats["documents"] == 1
+    assert stats["blocks"] == 1
+    assert stats["by_status"] == {"published": 1}
+    assert stats["by_mime"] == {"text/markdown": 1}
+
+    documents = service.list_documents()
+    assert documents == [
+        {
+            "doc_id": f"cv2:{build_id}",
+            "title": "consumer.md",
+            "source_path": f"ab/{SOURCE_ID}.md",
+            "content_hash": SOURCE_ID,
+            "mime": "text/markdown",
+            "status": "published",
+            "block_count": None,
+            "char_count": None,
+            "published": "undated",
+            "doc_kind_override": None,
+            "source_id": SOURCE_ID,
+            "build_id": build_id,
+        }
+    ]
+    assert service.list_by_status("published") == documents
+    assert service.list_by_status("ok") == []
+
+
 def test_service_search_applies_selection_policy(store: PgStore, service: CorpusService) -> None:
     """R3 闭环：生产 search 走统一选择策略（top_k 来源 × 每来源 1 锚点命中）。
 

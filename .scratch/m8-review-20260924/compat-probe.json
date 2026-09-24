@@ -1,0 +1,36 @@
+{
+  "fresh_init_audit": {
+    "exit_code": 1,
+    "conflicts": [
+      "backup_coverage.drift"
+    ],
+    "coverage": {
+      "tables": [
+        "blocks",
+        "claim_block_runs",
+        "claims",
+        "documents"
+      ],
+      "drift": [
+        {
+          "table": "corpus_evidence_runs",
+          "missing_in_db": [
+            "run_id",
+            "doc_id",
+            "source_rev",
+            "parse_rev",
+            "payload",
+            "created_at"
+          ]
+        }
+      ],
+      "tables_not_backed_up": []
+    }
+  },
+  "csv_backup": {
+    "passed": false,
+    "error_type": "UndefinedTable",
+    "message": "relation \"corpus_evidence_runs\" does not exist"
+  },
+  "temporary_db_removed": true
+}
