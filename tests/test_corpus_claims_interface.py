@@ -73,6 +73,16 @@ def service(monkeypatch, source):
     monkeypatch.setattr(svc, "_connect", Mock(side_effect=AssertionError("legacy DB access")))
     monkeypatch.setattr(svc, "_active_build_units", units_for)
     monkeypatch.setattr(svc, "_active_report_publication", published_for)
+
+    # 本组覆盖 claims 投影/计算的内存版本仓；产品默认值已改为 persist=False，
+    # 这里显式模拟调用方自有的受控版本仓，避免重启已退休的 public 写入口。
+    extract = svc.extract_claims
+
+    def extract_for_projection(*args, **kwargs):
+        kwargs.setdefault("persist", True)
+        return extract(*args, **kwargs)
+
+    monkeypatch.setattr(svc, "extract_claims", extract_for_projection)
     return svc
 
 

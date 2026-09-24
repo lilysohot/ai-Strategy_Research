@@ -1,0 +1,4 @@
+{"mode": "default", "target_db_config_present": true, "resolved_target": "postgres", "counts_unchanged": true, "models_absent": true}
+search True None 4
+fetch True 18
+{"passed": true, "qp": [24, 24], "ep": [24, 24], "false_positives": 0, "failed_queries": 0, "executed_queries": 30}

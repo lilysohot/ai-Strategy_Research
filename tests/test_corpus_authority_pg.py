@@ -404,16 +404,14 @@ def test_evidence_copy_inconsistent_with_authority_refused(
     _publish(store, build_id=build_id)
 
     good = build_evidence_run_from_units(SOURCE_ID, [{"locator": "1", "text": RAW_TEXT}])
-    service.save_evidence_run(good)
-    assert service.load_evidence_run(good.run_id).run_id == good.run_id  # 一致副本可读
+    service.verify_evidence_against_authority(good)  # 一致内存副本可读
 
     # 自洽但内容与权威集合不符的副本（例如被改写后重算 run_id 的导出件）
     forged = build_evidence_run_from_units(
         SOURCE_ID, [{"locator": "1", "text": "石英股份产能 999 万吨（伪造）"}]
     )
-    service.save_evidence_run(forged)
     with pytest.raises(read_pg.IntegrityError, match="与权威集合不一致"):
-        service.load_evidence_run(forged.run_id)
+        service.verify_evidence_against_authority(forged)
 
 
 def test_audit_flags_chunk_with_dangling_unit_reference(store: PgStore) -> None:

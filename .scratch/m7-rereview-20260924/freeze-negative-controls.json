@@ -1,0 +1,22 @@
+[
+  {
+    "target": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c-reset-phase2-report.json",
+    "hashed_reads_intercepted": 1,
+    "exit_code": 1,
+    "relevant_output": [
+      "I0C FREEZE CHECK FAILED: i0c-current.binding[m7_window_evidence]: .scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c-reset-phase2-report.json 哈希失配或缺失"
+    ]
+  },
+  {
+    "target": ".scratch/m7-fix-20260924/g3-isolated-restore-verification.json",
+    "hashed_reads_intercepted": 0,
+    "exit_code": 0,
+    "relevant_output": []
+  },
+  {
+    "target": ".scratch/m7-fix-20260924/i37-tests-results.json",
+    "hashed_reads_intercepted": 0,
+    "exit_code": 0,
+    "relevant_output": []
+  }
+]

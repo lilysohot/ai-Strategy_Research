@@ -8,11 +8,12 @@ I4-5 已批准停用旧写入口，但原 ``run_ingest`` 先写旧 ``ingest_runs
 
 from __future__ import annotations
 
+import inspect
 import json
 
 import pytest
 
-from plugins.corpus.service import CorpusService, RetiredIngestError
+from plugins.corpus.service import CorpusService, RetiredEvidenceWriteError, RetiredIngestError
 
 
 @pytest.fixture()
@@ -49,3 +50,17 @@ def test_cli_ingest_subcommand_structured_rejection(
     assert payload["ok"] is False
     assert payload["status"] == "rejected"
     assert payload["reason"] == "retired_ingest_entry"
+
+
+def test_evidence_write_rejected_without_any_connection(
+    _forbid_psycopg_connect: None,
+) -> None:
+    """I4-5 登记的旧 evidence 写入口同样不能绕过停用门。"""
+    svc = CorpusService("postgresql://forbidden:forbidden@127.0.0.1:1/nowhere")
+    with pytest.raises(RetiredEvidenceWriteError, match="旧 evidence 写入口已停用"):
+        svc.save_evidence_run(object())  # type: ignore[arg-type]
+
+
+def test_extract_claims_does_not_request_retired_persistence_by_default() -> None:
+    """正常 extraction 默认只返回内存 EvidenceRun，不能隐式写旧表。"""
+    assert inspect.signature(CorpusService.extract_claims).parameters["persist"].default is False

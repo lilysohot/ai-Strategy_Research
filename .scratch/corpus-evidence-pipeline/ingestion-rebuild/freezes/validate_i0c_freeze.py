@@ -3070,6 +3070,151 @@ if "i0c-r5j" in by_id:
           "r5j validator supersession ledger mismatch")
     merge_binding(i0c_current_binding, bind5j)
 
+# r5k（M7 二次复核 F1—F3 闭环）：F1 退休 evidence 写入口 fail-closed，
+# F2 恢复历史正文逐字门，F3 将本轮运行证据绑定到实际 r5k 代码/测试版本；早期
+# M7 电池只作为明确标注的历史基线。所有被覆盖的既有路径均 archive-first。
+if "i0c-r5k" in by_id:
+    r5k = load_json(BASE / by_id["i0c-r5k"]["file"])
+    parent5k = BASE / by_id["i0c-r5j"]["file"]
+    check(r5k.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5j", "path": str(parent5k.relative_to(ROOT)),
+        "sha256": digest(parent5k)}, "r5k parent mismatch")
+    check(r5k.get("status") == "m7_rereview_closure" and r5k.get("business_accepted") is True,
+          "r5k must record M7 re-review closure")
+    bind5k = r5k.get("binding", {})
+    code5k = {"plugins/corpus/service.py"}
+    tests5k = {
+        "tests/test_corpus_ingest_retired.py", "tests/test_corpus_evidence_pipeline.py",
+        "tests/test_corpus_authority_pg.py", "tests/test_corpus_claims_interface.py",
+    }
+    runtime5k = {
+        ".scratch/m7-rereview-20260924/report.md",
+        ".scratch/m7-finalize-20260924/f1_retired_evidence_writer_verify.py",
+        ".scratch/m7-finalize-20260924/f1-retired-evidence-writer-verification.json",
+        ".scratch/m7-finalize-20260924/g3b_isolated_restore_body_verify.py",
+        ".scratch/m7-finalize-20260924/g3b-isolated-restore-body-verification.json",
+        ".scratch/m7-finalize-20260924/r5k_prepare.py",
+        ".scratch/m7-finalize-20260924/r5k_finalize.py",
+    }
+    baseline5k = {
+        ".scratch/m7-fix-20260924/replay_battery.py",
+        ".scratch/m7-fix-20260924/i37-tests-results.json",
+        ".scratch/m7-fix-20260924/live_default_product.py",
+        ".scratch/m7-fix-20260924/live-default.json",
+        ".scratch/m7-fix-20260924/product-trace-default.json",
+        ".scratch/m7-fix-20260924/g3_isolated_restore_verify.py",
+        ".scratch/m7-fix-20260924/g3-isolated-restore-verification.json",
+    }
+    state5k = {"docs/plan/corpus-ingestion-rebuild-tasks.md"}
+    validator_path5k = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5k = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                    "20260923-i4-window/previous-effective-bindings-r5k.json")
+    for group5k, expected5k in (
+            ("m7_rereview_code", code5k),
+            ("m7_rereview_tests", tests5k),
+            ("m7_rereview_runtime", runtime5k),
+            ("m7_reused_baseline", baseline5k),
+            ("m7_rereview_state", state5k),
+            ("previous_effective_bindings", {prev_path5k}),
+            ("freeze_validator", {validator_path5k})):
+        check(set(bind5k.get(group5k, {})) == expected5k,
+              f"r5k scope mismatch: {group5k}")
+    prior5k = load_json(ROOT / prev_path5k)
+    previous5k = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed5k = code5k | tests5k | state5k | {validator_path5k}
+    check(set(prior5k) == changed5k, "r5k previous-binding scope mismatch")
+    for p in changed5k:
+        check(prior5k.get(p) == previous5k.get(p),
+              f"r5k previous effective hash mismatch: {p}")
+        archived5k = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                              "20260923-i4-window/before-r5k") / p
+        check(archived5k.is_file() and digest(archived5k) == prior5k.get(p),
+              f"r5k archive must match pre-change effective binding: {p}")
+    for p in runtime5k | baseline5k:
+        check(p not in previous5k, f"r5k runtime evidence must be first-in-chain: {p}")
+    service5k = (ROOT / "plugins/corpus/service.py").read_text(encoding="utf-8")
+    check("class RetiredEvidenceWriteError" in service5k
+          and "persist: bool = False" in service5k
+          and "raise RetiredEvidenceWriteError" in service5k,
+          "r5k service.py must retire the old evidence writer before any DB write")
+    f1_5k = load_json(ROOT / ".scratch/m7-finalize-20260924/"
+                       "f1-retired-evidence-writer-verification.json")
+    g3b_5k = load_json(ROOT / ".scratch/m7-finalize-20260924/"
+                        "g3b-isolated-restore-body-verification.json")
+    check(f1_5k.get("gate", {}).get("passed") is True
+          and f1_5k.get("checks", {}).get("psycopg_connect_calls") == 0
+          and f1_5k.get("checks", {}).get("extract_claims_persist_default") is False,
+          "r5k F1 runtime evidence must prove zero-connection rejection and default non-persistence")
+    body5k = g3b_5k.get("body_comparison", {})
+    check(g3b_5k.get("gate", {}).get("passed") is True
+          and body5k.get("resolved_historical_bodies_expected") == 290
+          and body5k.get("missing") == body5k.get("mismatched") == body5k.get("ambiguous_locator_keys") == 0,
+          "r5k G3b runtime evidence must gate full historical body equality")
+    tasks5k = (ROOT / "docs/plan/corpus-ingestion-rebuild-tasks.md").read_text(encoding="utf-8")
+    check("M7 二次复核遗留项已修复并冻结" in tasks5k and "i0c-r5k" in tasks5k,
+          "r5k tasks.md must record F1-F3 closure and current freeze")
+    previous_validator5k = load_json(parent5k).get("binding", {}).get("freeze_validator", {}).get(validator_path5k)
+    check(r5k.get("supersedes_validator_sha256") == previous_validator5k
+          and previous_validator5k != bind5k.get("freeze_validator", {}).get(validator_path5k),
+          "r5k validator supersession ledger mismatch")
+    merge_binding(i0c_current_binding, bind5k)
+
+# r5l 是 r5k F1 回归测试的纯 import-order 格式修订；不改变 F1/F2 运行结论。
+if "i0c-r5l" in by_id:
+    r5l = load_json(BASE / by_id["i0c-r5l"]["file"])
+    parent5l = BASE / by_id["i0c-r5k"]["file"]
+    validator_path5l = str(Path(__file__).resolve().relative_to(ROOT))
+    test5l = "tests/test_corpus_ingest_retired.py"
+    prev_path5l = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                    "20260923-i4-window/previous-effective-bindings-r5l.json")
+    check(r5l.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5k", "path": str(parent5l.relative_to(ROOT)),
+        "sha256": digest(parent5l)}, "r5l parent mismatch")
+    bind5l = r5l.get("binding", {})
+    check(set(bind5l.get("ruff_rebind_test", {})) == {test5l}
+          and set(bind5l.get("previous_effective_bindings", {})) == {prev_path5l}
+          and set(bind5l.get("freeze_validator", {})) == {validator_path5l},
+          "r5l binding scope mismatch")
+    prior5l = load_json(ROOT / prev_path5l)
+    previous5l = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    changed5l = {test5l, validator_path5l}
+    check(set(prior5l) == changed5l, "r5l previous-binding scope mismatch")
+    before5l = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                        "20260923-i4-window/before-r5l")
+    for p in changed5l:
+        check(prior5l.get(p) == previous5l.get(p), f"r5l previous effective hash mismatch: {p}")
+        check((before5l / p).is_file() and digest(before5l / p) == prior5l.get(p),
+              f"r5l archive mismatch: {p}")
+    test_source5l = (ROOT / test5l).read_text(encoding="utf-8")
+    check("import inspect\nimport json" in test_source5l,
+          "r5l must retain the ruff-sorted F1 regression imports")
+    merge_binding(i0c_current_binding, bind5l)
+
+# r5m 仅澄清 r5k 的 F1 语义门：禁止的是写入口，不是历史空表结构是否存在。
+if "i0c-r5m" in by_id:
+    r5m = load_json(BASE / by_id["i0c-r5m"]["file"])
+    parent5m = BASE / by_id["i0c-r5l"]["file"]
+    validator_path5m = str(Path(__file__).resolve().relative_to(ROOT))
+    prev_path5m = (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                    "20260923-i4-window/previous-effective-bindings-r5m.json")
+    check(r5m.get("parent_snapshot") == {
+        "snapshot_id": "i0c-r5l", "path": str(parent5m.relative_to(ROOT)),
+        "sha256": digest(parent5m)}, "r5m parent mismatch")
+    bind5m = r5m.get("binding", {})
+    check(set(bind5m.get("freeze_validator", {})) == {validator_path5m}
+          and set(bind5m.get("previous_effective_bindings", {})) == {prev_path5m},
+          "r5m binding scope mismatch")
+    prior5m = load_json(ROOT / prev_path5m)
+    previous5m = {p: h for group in i0c_current_binding.values() for p, h in group.items()}
+    check(set(prior5m) == {validator_path5m}
+          and prior5m.get(validator_path5m) == previous5m.get(validator_path5m),
+          "r5m previous validator mismatch")
+    archived5m = ROOT / (".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/"
+                          "20260923-i4-window/before-r5m") / validator_path5m
+    check(archived5m.is_file() and digest(archived5m) == prior5m.get(validator_path5m),
+          "r5m validator archive mismatch")
+    merge_binding(i0c_current_binding, bind5m)
+
 # 最新修订绑定优先（supersession）：i0c-r2..r43 显式重绑的路径改由合并后的
 # i0c-current 绑定按新哈希核对，i1-r4 中对应旧绑定不再要求匹配。
 superseded: set[str] = set()
@@ -3114,7 +3259,13 @@ if errors:
         print(f"I0C FREEZE CHECK FAILED: {message}")
     print(f"i0c freeze verification FAILED: {len(errors)} error(s)")
     sys.exit(1)
-if "i0c-r5j" in by_id:
+if "i0c-r5m" in by_id:
+    print("CURRENT r5m: r5k F1-F3 evidence retained; validation clarifies that writer rejection, not legacy empty-table presence, is the F1 safety condition.")
+elif "i0c-r5l" in by_id:
+    print("CURRENT r5l: r5k M7 F1-F3 evidence retained; only the F1 regression test import order was ruff-normalized and rebound archive-first.")
+elif "i0c-r5k" in by_id:
+    print("CURRENT r5k: M7 re-review F1-F3 frozen — retired corpus_evidence_runs writer rejects before any connection and extract_claims defaults to non-persistence; isolated restore matched 290/290 archived historical bodies with 25/25 backup manifest and one-off teardown; current review/runners/reports/code/tests are bound, while prior M7 battery artifacts are explicitly historical baselines.")
+elif "i0c-r5j" in by_id:
     print("CURRENT r5j: M7 review remediation frozen — default target delivered via .env (G1), import-time target caching removed (S1), retired ingest entry fail-closed with zero-connection regression (G2), search() unified on search_with_coverage (S2); I4 window evidence bound (G4); PG battery replayed green (search-live 11 / fullchain 12 / hermetic 78 / d2d6 73) and full-repo pytest 2931 passed / 2 pre-existing failed / 49 skipped.")
 elif "i0c-r5i" in by_id:
     print("CURRENT r5i: reset phase-2 executed after U lifted the deferral (single-statement six-table TRUNCATE, five gates green, retained sequences/witnesses unchanged); I4 window execution fully complete; M7 release still governed by the master ledger.")

@@ -188,68 +188,14 @@ def test_source_view_does_not_apply_legacy_boilerplate_cleaning(tmp_path):
     assert "Parent" in doc.packets[0].context and "Child" in doc.packets[0].context
 
 
-def test_database_versions_idempotence_and_backup_roundtrip(tmp_path):
-    import uuid
-    from urllib.parse import quote
+def test_database_evidence_write_entry_is_retired(tmp_path):
+    """I4-5 后不能以版本幂等或备份语义重新启用旧 JSONB 表。"""
+    from plugins.corpus.service import CorpusService, RetiredEvidenceWriteError
 
-    import psycopg
-
-    from plugins.corpus.evidence_pipeline import build_evidence_run, extract_evidence
-    from plugins.corpus.service import CorpusService, dsn
-
-    admin = dsn()
-    try:
-        psycopg.connect(admin, connect_timeout=5).close()
-    except psycopg.OperationalError:
-        pytest.skip("PostgreSQL unavailable")
-    schemas = [f"corpus_evidence_test_{uuid.uuid4().hex[:12]}" for _ in range(2)]
-    urls = [
-        admin
-        + ("&" if "?" in admin else "?")
-        + "options="
-        + quote(f"-c search_path={schema},public")
-        for schema in schemas
-    ]
-    with psycopg.connect(admin, autocommit=True) as conn:
-        for schema in schemas:
-            conn.execute(psycopg.sql.SQL("CREATE SCHEMA {}").format(psycopg.sql.Identifier(schema)))
-    try:
-        service = CorpusService(urls[0])
-        service.init_db()
-        path = make_report(tmp_path)
-        # R1：extract_claims 现由同源 units 投影（本测试的 scratch schema 无 corpus
-        # schema），改为直接走 parse_evidence 的 build_evidence_run 以继续覆盖
-        # save/load/backup 的版本幂等与往返。
-        first = build_evidence_run(path)
-        second = extract_evidence(parse_evidence(path, packet_chars=300))
-        for run in (first, first, second):
-            service.save_evidence_run(run)
-            assert service.load_evidence_run(run.run_id) == run
-            projection = service.claims_of(
-                run_id=run.run_id,
-                purpose="audit",
-                quality_status=None,
-            )
-            assert projection["total"] == len(run.facts)
-            assert projection["run_id"] == run.run_id
-        assert len(service.claim_runs(doc_id=first.document.doc_id)) == 2
-        packet = first.document.packets[0]
-        assert service.fetch_evidence(first.run_id, packet.packet_id) == packet.model_dump(
-            mode="json"
-        )
-        with psycopg.connect(urls[0]) as conn:
-            assert conn.execute("SELECT count(*) FROM corpus_evidence_runs").fetchone()[0] == 2
-            assert conn.execute("SELECT count(*) FROM documents").fetchone()[0] == 0
-        backup = service.backup(tmp_path / "backup", mode="csv")
-        counts = service.restore(backup, urls[1])
-        assert counts["corpus_evidence_runs"] == 2
-        assert CorpusService(urls[1]).load_evidence_run(first.run_id) == first
-    finally:
-        with psycopg.connect(admin, autocommit=True) as conn:
-            for schema in schemas:
-                conn.execute(
-                    psycopg.sql.SQL("DROP SCHEMA {} CASCADE").format(psycopg.sql.Identifier(schema))
-                )
+    run = build_evidence_run(make_report(tmp_path))
+    service = CorpusService("postgresql://unused:unused@127.0.0.1:1/nowhere")
+    with pytest.raises(RetiredEvidenceWriteError, match="旧 evidence 写入口已停用"):
+        service.save_evidence_run(run)
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,4 @@
+{
+  "tests/test_corpus_ingest_retired.py": "233c808866f0cd26431aa1d54602f652fe8feb8651107f2a4178849753b5c55f",
+  ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "34f517b19c21fb40a27834e87dee4ee27e29834a76fb4e288f61339af07e86ad"
+}

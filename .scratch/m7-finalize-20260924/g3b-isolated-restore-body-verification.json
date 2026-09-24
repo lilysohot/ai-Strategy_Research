@@ -1,0 +1,40 @@
+{
+  "artifact": "g3b-isolated-restore-body-verification.json",
+  "task": "M7 re-review F2 remediation: I4-6 historical source-body restore gate",
+  "observed_at": "2026-09-24T05:15:08+00:00",
+  "source": {
+    "backup": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/backups/i4-final-20260923T1544Z",
+    "backup_manifest_entries": 25,
+    "backup_manifest_sha256": "085abf4c499bc0fc24a69abfe1e8d71634b4b9efbad097b81ca24d9f3bb648fb",
+    "crosswalk": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i4c-exports/i4c-old-evidence-locator-crosswalk.jsonl",
+    "crosswalk_sha256": "a97fda27001695842b88a6d9817cf2559e314bb361f08839b3e6f7dc56a7b92b",
+    "prior_g3_report": ".scratch/m7-fix-20260924/g3-isolated-restore-verification.json",
+    "prior_g3_report_sha256": "97b34cb73d9253bef53e11d7118bc104129cd1ea02456704f6f12035c5ca01f9"
+  },
+  "restore": {
+    "target": "corpus-db isolated instance / one-off i4_g3b_restore_20260924",
+    "command": "pg_restore --no-owner --exit-on-error < postgres.dump",
+    "exit_code": 0,
+    "measured_seconds": 1.263,
+    "production_write_paths_touched": false
+  },
+  "body_comparison": {
+    "method": "crosswalk resolved (doc_id, block_locator, block_text) vs restored public.blocks(doc_id, locator, text), exact UTF-8 byte-preserving comparison",
+    "crosswalk_rows": 307,
+    "resolved_historical_bodies_expected": 290,
+    "unresolved_non_numeric_locators_recorded": 17,
+    "restored_body_rows": 1101,
+    "missing": 0,
+    "mismatched": 0,
+    "ambiguous_locator_keys": 0,
+    "result": "all historical bodies exact"
+  },
+  "gate": {
+    "passed": true,
+    "checks": [
+      "backup manifest 25/25 exact",
+      "historical bodies 290/290 exact",
+      "one-off database destroyed"
+    ]
+  }
+}

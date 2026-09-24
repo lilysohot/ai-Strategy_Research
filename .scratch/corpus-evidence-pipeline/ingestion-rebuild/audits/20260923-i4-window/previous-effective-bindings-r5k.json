@@ -1,0 +1,9 @@
+{
+  "plugins/corpus/service.py": "7f7b979715e83e920f785f112016b74a5ef182e077260e1287749a959dc83414",
+  "tests/test_corpus_ingest_retired.py": "9f0ec1ac5b4e737ba4e2e9ca066c7ab20b5e8eaaa1b3037df260b75d2893f09f",
+  "tests/test_corpus_evidence_pipeline.py": "cc8e5b4ddf55d405f09e6b4c011f9f3c8124e37e83b33b49e8d308092b587309",
+  "tests/test_corpus_authority_pg.py": "ff7478de6d7d7e6bbcccd8fca486163e4e3895fc60c9f509ee1d3b44ff5297f0",
+  "tests/test_corpus_claims_interface.py": "c018abca6f17dafe42f939aeb97928fb69523e4dc57037caf949b4369e98791f",
+  "docs/plan/corpus-ingestion-rebuild-tasks.md": "6d2de92bfb32ae145fd94ae94c7f1602b1917fef5aaac97214c6d1bc6691d06f",
+  ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "4b5885c2337442f49efe5ecb6363b96b775f0d198e5d4c89c1fb5df7cb0c778d"
+}

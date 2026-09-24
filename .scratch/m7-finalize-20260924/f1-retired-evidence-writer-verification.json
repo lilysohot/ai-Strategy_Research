@@ -1,0 +1,26 @@
+{
+  "artifact": "f1-retired-evidence-writer-verification.json",
+  "task": "M7 re-review F1 remediation: retired corpus_evidence_runs writer",
+  "observed_at": "2026-09-24T05:17:21+00:00",
+  "source": {
+    "service": "plugins/corpus/service.py",
+    "service_sha256": "00818d8a211a6856621544518217cc16fe8f914d45e0a5d043f5eca9d06e51fc",
+    "regression_test": "tests/test_corpus_ingest_retired.py",
+    "regression_test_sha256": "233c808866f0cd26431aa1d54602f652fe8feb8651107f2a4178849753b5c55f",
+    "runner_sha256": "9fc518e6f1b1352b19a7894071a5f79cabe53a97a5885d6de4f8a89944fa86b2"
+  },
+  "checks": {
+    "save_evidence_run_rejected": true,
+    "exception": "RetiredEvidenceWriteError",
+    "message": "旧 evidence 写入口已停用（I4-5 批准）：corpus_evidence_runs 不再接受 CREATE/INSERT；请使用内存 EvidenceRun 或受控的新链持久化入口。",
+    "psycopg_connect_calls": 0,
+    "extract_claims_persist_default": false
+  },
+  "gate": {
+    "passed": true,
+    "checks": [
+      "old writer rejected before any database connection",
+      "extract_claims defaults to persist=False"
+    ]
+  }
+}

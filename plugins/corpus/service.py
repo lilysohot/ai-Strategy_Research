@@ -114,6 +114,15 @@ class RetiredIngestError(RuntimeError):
     """
 
 
+class RetiredEvidenceWriteError(RuntimeError):
+    """旧 evidence JSONB 写入口停用后的结构化拒绝（I4-5，fail-closed）。
+
+    ``corpus_evidence_runs`` 是 I4 切换清单登记的旧 public 表。保留
+    :class:`EvidenceRun` 的内存对象、离线导出和新链读侧，并不授权重新创建或
+    写入该旧表；拒绝必须先于任何数据库连接、DDL 或 INSERT 发生。
+    """
+
+
 # ── I2-7：写路径代理新 preparation Module（design-review 消费者矩阵裁决）──────
 # CorpusService 写路径唯一化：ingest_path/ingest_dir 一律走 preparation.engine
 # 的 plan→execute→publish；新链落隔离演练库（PgStore/_check_target fail-closed
@@ -174,16 +183,6 @@ def _iter_corpus_files(root: str | Path = CORPUS_ROOT) -> Iterable[Path]:
             and path.suffix.lower() in _INGEST_SUFFIXES
         ):
             yield path
-
-
-EVIDENCE_RUNS_SQL = """
-CREATE TABLE IF NOT EXISTS corpus_evidence_runs (
-    run_id text PRIMARY KEY, doc_id text NOT NULL, source_rev text NOT NULL,
-    parse_rev text NOT NULL, payload jsonb NOT NULL,
-    created_at timestamptz NOT NULL DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS corpus_evidence_runs_doc ON corpus_evidence_runs(doc_id, parse_rev);
-"""
 
 
 @dataclass
@@ -517,7 +516,6 @@ class CorpusService:
             conn.execute(SCHEMA_SQL)
             conn.execute(LEDGER_SQL)
             conn.execute(CLAIMS_SQL)  # D2：claim 抽取（幂等，不影响既有表）
-            conn.execute(EVIDENCE_RUNS_SQL)
             # 老库幂等迁移：三列事实列 + doc_kind_override + 删除 entities 死字段
             conn.execute(CLAIMS_MIGRATIONS_SQL)
             # P6（§3.5）：文档级元数据四列（doc_kind/subject/org/analysts）
@@ -1522,26 +1520,18 @@ class CorpusService:
             )
 
     def save_evidence_run(self, run: EvidenceRun) -> str:
-        """Persist a content-addressed shadow revision, without replacing legacy corpus rows."""
-        from plugins.corpus.evidence_pipeline import EvidenceRun
+        """拒绝旧 ``corpus_evidence_runs`` 写入，且绝不建立数据库连接。
 
-        if not isinstance(run, EvidenceRun):
-            raise TypeError("expected EvidenceRun")
-        run.verify_identity()
-        with self._lock, self._connect() as conn, conn.cursor() as cur:
-            cur.execute(EVIDENCE_RUNS_SQL)
-            cur.execute(
-                "INSERT INTO corpus_evidence_runs (run_id,doc_id,source_rev,parse_rev,payload) "
-                "VALUES (%s,%s,%s,%s,%s::jsonb) ON CONFLICT (run_id) DO NOTHING",
-                (
-                    run.run_id,
-                    run.document.doc_id,
-                    run.document.source_rev,
-                    run.document.parse_rev,
-                    run.model_dump_json(),
-                ),
-            )
-        return run.run_id
+        I4-5 切换后该 public 旧表已在 approved-retired 清单中。类型校验也不在
+        此处执行，避免调用方把无效对象当作可借机连库/DDL 的旁路；所有调用均以
+        同一明确异常结束。证据版本仍可由 ``extract_claims(..., persist=False)``
+        在内存中使用或由调用方自行导出为文件。
+        """
+        del run
+        raise RetiredEvidenceWriteError(
+            "旧 evidence 写入口已停用（I4-5 批准）：corpus_evidence_runs 不再接受 "
+            "CREATE/INSERT；请使用内存 EvidenceRun 或受控的新链持久化入口。"
+        )
 
     def load_evidence_run(self, run_id: str) -> EvidenceRun:
         """Fetch and validate the exact revision named by a calculation or evidence link."""
@@ -1577,12 +1567,14 @@ class CorpusService:
         model: str | None = None,
         max_prose_calls: int = 0,
         packet_chars: int = 2000,
-        persist: bool = True,
+        persist: bool = False,
     ) -> EvidenceRun:
         """Canonical extraction: source → verified evidence revision, never legacy tables.
 
         A positive prose budget explicitly enables model calls. Zero leaves prose deferred.
-        No full-corpus selection or legacy fallback is implicit in this interface.
+        No full-corpus selection, legacy fallback, or old-table persistence is implicit in
+        this interface. ``persist=True`` is retained only to fail closed for callers that
+        still request the retired ``corpus_evidence_runs`` write path.
 
         I2-7（R1）：Evidence 由同源 ``corpus_units`` 投影（按 source_id 从活动 build
         取 raw_text），不再二次解析原文件生成独立权威正文——``parse_evidence`` 的

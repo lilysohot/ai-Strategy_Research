@@ -1,0 +1,26 @@
+{
+  "snapshot_id": "i0c-r5l",
+  "revision": "r5l",
+  "phase": "i0c",
+  "status": "m7_rereview_lint_rebind",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5k",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5k.json",
+    "sha256": "fce3a45013890b7893c25888cb888090ef477e1b4671e03bd8a46319e733546e"
+  },
+  "supersedes_validator_sha256": "34f517b19c21fb40a27834e87dee4ee27e29834a76fb4e288f61339af07e86ad",
+  "binding": {
+    "ruff_rebind_test": {
+      "tests/test_corpus_ingest_retired.py": "4067d82e886f062f7813d1ed6049282316de81ac870b01822a9a60c8733619cc"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5l.json": "344b3a602cda32fe5417a8ae8e8930cdd46fe6f7eb53807be3a582cf1bd8b33d"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "0e6d7b044ced2151bbedd752f9e516dbae1ec3cfbfdd8a07fed82168325ec4f6"
+    }
+  },
+  "correction": "Ruff I001 import-order normalization only; r5k F1-F3 code and runtime evidence remain unchanged.",
+  "created_at": "2026-09-24T13:23:34+08:00"
+}

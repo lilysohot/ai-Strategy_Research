@@ -1,0 +1,56 @@
+{
+  "snapshot_id": "i0c-r5k",
+  "revision": "r5k",
+  "phase": "i0c",
+  "status": "m7_rereview_closure",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5j",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5j.json",
+    "sha256": "327890c1d1d8e9db1bff19d7ae94bcb1f36df7e3ea5af1ce7e3f80cef165305f"
+  },
+  "supersedes_validator_sha256": "4b5885c2337442f49efe5ecb6363b96b775f0d198e5d4c89c1fb5df7cb0c778d",
+  "binding": {
+    "m7_rereview_code": {
+      "plugins/corpus/service.py": "00818d8a211a6856621544518217cc16fe8f914d45e0a5d043f5eca9d06e51fc"
+    },
+    "m7_rereview_tests": {
+      "tests/test_corpus_ingest_retired.py": "233c808866f0cd26431aa1d54602f652fe8feb8651107f2a4178849753b5c55f",
+      "tests/test_corpus_evidence_pipeline.py": "da2f409fd6345a8f7cc4c12d92f5d0d5a015f185e6383a3827cbd554015cd971",
+      "tests/test_corpus_authority_pg.py": "f18919472886e10272dc08918da9bb02620fec032bbe690c670fa8989896a799",
+      "tests/test_corpus_claims_interface.py": "798f1e13d62184c89a5d83a52dd1a8e435bb601d14e6bc4124834de8133f5bec"
+    },
+    "m7_rereview_runtime": {
+      ".scratch/m7-rereview-20260924/report.md": "b22ef8b33a243fb4eb7247b6b3b0e9ee17e578d98728a70e7f7b4156ece46cb7",
+      ".scratch/m7-finalize-20260924/f1_retired_evidence_writer_verify.py": "9fc518e6f1b1352b19a7894071a5f79cabe53a97a5885d6de4f8a89944fa86b2",
+      ".scratch/m7-finalize-20260924/f1-retired-evidence-writer-verification.json": "d974dae362b0bd638345a4bd8e454088611ff6378012f3e37686ce208942bcad",
+      ".scratch/m7-finalize-20260924/g3b_isolated_restore_body_verify.py": "26c3cab06cff018875975bf1e44e4e8d07341546eca44c571b33b9b7fbeaf6bb",
+      ".scratch/m7-finalize-20260924/g3b-isolated-restore-body-verification.json": "fb212075acd830a91c4e194785737c4d75df01b6ce678eb1e35377a251e89865",
+      ".scratch/m7-finalize-20260924/r5k_prepare.py": "de8bf046ecb5b6a5fa6f5df680606f79edc9c8100d0e992b0e530c1d123234f7",
+      ".scratch/m7-finalize-20260924/r5k_finalize.py": "5eb8a412b461528f4611bba4975ab7d8e44da0360ca17507495f8c76c1c81a31"
+    },
+    "m7_reused_baseline": {
+      ".scratch/m7-fix-20260924/replay_battery.py": "a7e721f5277af1ec65d5c94c6685e5741221633030bab6dcbcae6074af33d1bb",
+      ".scratch/m7-fix-20260924/i37-tests-results.json": "1ffe3ea8afe34d19be4ec63268b519fe72cb04ffd6bee1c07f3b860c67bb97a5",
+      ".scratch/m7-fix-20260924/live_default_product.py": "93402021e24ba5cd04cc6b39e9a34545fdea30dfd14a3ff34b0a93e0b6752dae",
+      ".scratch/m7-fix-20260924/live-default.json": "821d379636dcae3723e51ac01f39e6680cd06f7217e96c8f4877e810f5867f4c",
+      ".scratch/m7-fix-20260924/product-trace-default.json": "00a4c396730e41b4a6a4877815e0d7ed086e2d7153338f324fbed21ab023c7b2",
+      ".scratch/m7-fix-20260924/g3_isolated_restore_verify.py": "fe7ef7a035872c1c42097e84317e1706591fb383298df886b1b3166388d39646",
+      ".scratch/m7-fix-20260924/g3-isolated-restore-verification.json": "97b34cb73d9253bef53e11d7118bc104129cd1ea02456704f6f12035c5ca01f9"
+    },
+    "m7_rereview_state": {
+      "docs/plan/corpus-ingestion-rebuild-tasks.md": "65c82154b3234700a2526291a7bbd1802ea4896d2f5e69e38c4edf82a2799b91"
+    },
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5k.json": "6c756663b6284b474adee253ccb5697b67668e99e4fec7eb514b40aed70e470e"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "34f517b19c21fb40a27834e87dee4ee27e29834a76fb4e288f61339af07e86ad"
+    }
+  },
+  "correction": "M7 re-review closure: F1 retires corpus_evidence_runs writes fail-closed before any connection and changes extract_claims default persistence to false; F2 binds an actual isolated restore whose 290 archived historical bodies exactly match restored blocks; F3 binds this review, runners, reports, code and tests at r5k. Earlier M7 battery/default product/G3 artifacts are retained only as explicitly labelled historical baselines.",
+  "corrections": {
+    "m7_rereview_f1_f3": "r5k closes F1 retired evidence writer, F2 historical body restore gate, and F3 current-version evidence binding; I5 remains out of scope."
+  },
+  "created_at": "2026-09-24T13:20:42+08:00"
+}

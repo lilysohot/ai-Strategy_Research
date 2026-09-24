@@ -1,0 +1,23 @@
+{
+  "snapshot_id": "i0c-r5m",
+  "revision": "r5m",
+  "phase": "i0c",
+  "status": "m7_rereview_gate_clarification",
+  "business_accepted": true,
+  "parent_snapshot": {
+    "snapshot_id": "i0c-r5l",
+    "path": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/i0c-r5l.json",
+    "sha256": "e6ae9f956aba414b7e0949d1395fc59db765c358c01d0688e4222e8090004ae3"
+  },
+  "supersedes_validator_sha256": "0e6d7b044ced2151bbedd752f9e516dbae1ec3cfbfdd8a07fed82168325ec4f6",
+  "binding": {
+    "previous_effective_bindings": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/previous-effective-bindings-r5m.json": "b8178978e4504fa53850b3f301072ecfc0b2dae2d6cedd05e634b199aaa712c3"
+    },
+    "freeze_validator": {
+      ".scratch/corpus-evidence-pipeline/ingestion-rebuild/freezes/validate_i0c_freeze.py": "334e0a1723a9aee942c08f660bcdeecfd25c498209ce7cdf5c9dcec77191475a"
+    }
+  },
+  "correction": "F1 checks fail-closed evidence writer behavior; it does not assert absence of a legacy table schema.",
+  "created_at": "2026-09-24T13:31:10+08:00"
+}

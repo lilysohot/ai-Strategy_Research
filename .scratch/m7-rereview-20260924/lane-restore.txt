@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "sources": 8,
+    "built": 8,
+    "published": 8,
+    "blocked": 0,
+    "active": 8,
+    "index_revs": [
+      "index-4-zhcfg-2"
+    ],
+    "chunk_revs": [
+      "ff430da84301a9210502a749da48f09f1da39f2ecc82a729336e393c44a04ee3"
+    ],
+    "parse_revs": [
+      "28fd6541c91aad284905e19175272b3fb3133293bd5417675ae9b57f732fdfcf",
+      "4949696523d10ca145fcaaef7bde4c0fcaa0f92de7afd95b2abc3f97d87a427a",
+      "5947b799bcf746ddbe648bc1430af544ebac6a37d995d38917147575a46f848d",
+      "6e9be61c68c9c3b3b3e99850883e6340cd69eea0f29cb667ab9e2a639b2b76c5",
+      "747860affaab837c29c5f6386cf76b6d0225c03a1490680a277752f03a15524a",
+      "7a505b2c771611a59a42f35a60f6e6e751302d83dc6b5b5cd3baae0ec70fd57d",
+      "b6efff470a194e3fa99f0aa64de5617f3f12e7f5f735da0dca9cb546d1c67008",
+      "b9e90e3845de2e3fc99d8fd30dd56a65f2de96c7c40ddf7f9de025968cfaac87"
+    ],
+    "clean_revs": [
+      "f17753283f310fe85f66f4b67593b7a24594c001520d3fb0767f7aa9b1dedf57"
+    ],
+    "all_new_build_active": true
+  },
+  "build": {
+    "exit_code": 0,
+    "seconds": 9.45,
+    "count": 8,
+    "errors": null
+  }
+}
+{"restore_exit_code": 0, "expected_real_builds": 8, "build_ids_deterministic": true, "active_set_strict_match": true, "missing_active": [], "extra_active": [], "published": 8, "active": 8, "note": "teardown \u91cd\u5efa\u540e\u6d4b\u8bd5\u6b8b\u7559\u6e05\u96f6\uff1bactive \u6307\u9488\u987b\u4e25\u683c\u7b49\u4e8e\u771f\u5b9e 8 \u6e90"}
