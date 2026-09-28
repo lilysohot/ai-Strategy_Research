@@ -26,7 +26,7 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_PDF_REV = "reader-pdf-6"
+READER_PDF_REV = "reader-pdf-7"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
@@ -44,11 +44,16 @@ BBox = tuple[float, float, float, float]
 
 @dataclass
 class _Line:
-    """单文本行：span 文本、几何 bbox 与最大字号。"""
+    """单文本行：文字、几何、字号，以及原生文本块的局部样式。"""
 
     text: str
     bbox: BBox
     size: float
+    # PDF 原生文本块仅作为局部结构信号。缺省值保留给合成测试或没有块信息的调用方。
+    block_index: int = -1
+    block_line_count: int = 1
+    block_min_size: float = 0.0
+    block_max_size: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -263,9 +268,10 @@ def _page_lines(page: pymupdf.Page) -> list[_Line]:
     """从 dict 提取行级文本与坐标（保留提取次序）。"""
     payload = cast(dict[str, Any], page.get_text("dict"))
     lines: list[_Line] = []
-    for block in payload.get("blocks", []):
+    for block_index, block in enumerate(payload.get("blocks", [])):
         if block.get("type") != 0:
             continue  # 图片块由 get_images 单独记账
+        block_lines: list[tuple[str, BBox, float]] = []
         for line in block.get("lines", []):
             spans = [s for s in line.get("spans", []) if str(s.get("text", "")).strip()]
             if not spans:
@@ -281,8 +287,22 @@ def _page_lines(page: pymupdf.Page) -> list[_Line]:
                 max(b[3] for b in boxes),
             )
             size = max(float(s.get("size", 0.0)) for s in spans)
+            block_lines.append((_join_spans([str(s["text"]) for s in spans]), bbox, size))
+        if not block_lines:
+            continue
+        block_min_size = min(line[2] for line in block_lines)
+        block_max_size = max(line[2] for line in block_lines)
+        for text, bbox, size in block_lines:
             lines.append(
-                _Line(text=_join_spans([str(s["text"]) for s in spans]), bbox=bbox, size=size)
+                _Line(
+                    text=text,
+                    bbox=bbox,
+                    size=size,
+                    block_index=block_index,
+                    block_line_count=len(block_lines),
+                    block_min_size=block_min_size,
+                    block_max_size=block_max_size,
+                )
             )
     return lines
 
@@ -327,7 +347,23 @@ def _merge_lines(lines: list[_Line]) -> list[list[_Line]]:
             prev_height = prev.bbox[3] - prev.bbox[1]
             gap = line.bbox[1] - prev.bbox[3]
             horizontal = min(prev.bbox[2], line.bbox[2]) - max(prev.bbox[0], line.bbox[0])
-            if prev_height > 0 and gap < prev_height * 0.8 and horizontal > 0:
+            same_known_block = (
+                prev.block_index >= 0
+                and line.block_index >= 0
+                and prev.block_index == line.block_index
+            )
+            crosses_multiline_blocks = (
+                prev.block_index >= 0
+                and line.block_index >= 0
+                and not same_known_block
+                and (prev.block_line_count > 1 or line.block_line_count > 1)
+            )
+            if (
+                not crosses_multiline_blocks
+                and prev_height > 0
+                and gap < prev_height * 0.8
+                and horizontal > 0
+            ):
                 merged[-1].append(line)
                 continue
         merged.append([line])
@@ -441,6 +477,15 @@ def _union_bbox(boxes: list[BBox]) -> BBox:
 
 def _is_heading(line: _Line, median_size: float) -> bool:
     """字号显著大于页中位数且长度有限的行判为标题（确定性字号规则）。"""
+    # 研报页常混排大量小字号表格／页脚，页中位数会被拉低。若一个原生多行文本块
+    # 的字号基本一致，它更像同一段排版正文；不能因为每一行都高于页面中位数就把
+    # 整段拆成 heading。块内存在明显字号层次时，仍由原有字号规则处理标题行。
+    uniform_multiline_block = (
+        line.block_line_count > 1
+        and line.block_max_size - line.block_min_size <= max(0.5, line.block_max_size * 0.05)
+    )
+    if uniform_multiline_block:
+        return False
     return (
         median_size > 0
         and line.size >= median_size * _HEADING_SIZE_FACTOR

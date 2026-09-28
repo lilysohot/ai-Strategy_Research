@@ -24,6 +24,8 @@ from plugins.corpus.preparation.readers.pdf_reader import (
     _emit_table,
     _garbled_ratio,
     _is_data_like,
+    _Line,
+    _merge_lines,
     _row_text,
     _Table,
     _TableCell,
@@ -188,6 +190,43 @@ def test_pdf_paragraphs_headings_bbox(tmp_path: Path) -> None:
     assert len(paragraphs) == 2
     assert paragraphs[0].raw_text == "First body line\nSecond body line"
     assert paragraphs[1].raw_text == "Separate paragraph"
+
+
+def test_pdf_uniform_multiline_block_is_not_split_into_headings(tmp_path: Path) -> None:
+    """小字号元数据不能把同一正文块的每一行误判为标题。"""
+    doc = pymupdf.open()
+    page = doc.new_page()
+    page.insert_text((72, 72), "Overview", fontsize=16)
+    body = "First body line\nSecond body line\nThird body line"
+    page.insert_textbox(pymupdf.Rect(72, 110, 360, 180), body, fontsize=11)
+    # 大量小字号行模拟表格／页脚，将页内中位字号压低到正文以下。
+    for index in range(8):
+        page.insert_text((400, 100 + index * 12), f"meta {index}", fontsize=6)
+    path = tmp_path / "uniform_body_block.pdf"
+    doc.save(str(path))
+    doc.close()
+
+    result = read_document(path)
+
+    assert [unit.raw_text for unit in result.units if unit.kind == "heading"] == ["Overview"]
+    assert body in [unit.raw_text for unit in result.units if unit.kind == "paragraph"]
+
+
+def test_pdf_multiline_text_blocks_do_not_merge_across_block_boundary() -> None:
+    """原生多行块是段落边界，几何相邻也不能合并。"""
+    lines = [
+        _Line("first-1", (0.0, 0.0, 100.0, 10.0), 11.0, 1, 2, 11.0, 11.0),
+        _Line("first-2", (0.0, 11.0, 100.0, 21.0), 11.0, 1, 2, 11.0, 11.0),
+        _Line("second-1", (0.0, 22.0, 100.0, 32.0), 11.0, 2, 2, 11.0, 11.0),
+        _Line("second-2", (0.0, 33.0, 100.0, 43.0), 11.0, 2, 2, 11.0, 11.0),
+    ]
+
+    paragraphs = _merge_lines(lines)
+
+    assert [[line.text for line in paragraph] for paragraph in paragraphs] == [
+        ["first-1", "first-2"],
+        ["second-1", "second-2"],
+    ]
 
 
 def test_pdf_empty_and_image_only_pages(tmp_path: Path) -> None:
@@ -434,7 +473,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-6+")
+        assert result.extractor_rev.startswith("reader-pdf-7+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:
