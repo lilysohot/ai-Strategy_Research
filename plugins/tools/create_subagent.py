@@ -317,7 +317,7 @@ def _runtime_tool_names(runtime: Any | None) -> set[str] | None:
 def _runtime_tools_override(runtime: Any | None) -> list[Any] | None:
     tools = getattr(runtime, "sub_agent_tools", None)
     if tools is not None:
-        return list(tools)
+        return _with_manifest(list(tools))
     names = getattr(runtime, "sub_agent_tool_names", None)
     if names is None:
         return None
@@ -327,7 +327,16 @@ def _runtime_tools_override(runtime: Any | None) -> list[Any] | None:
     if rm is None:
         return []
     all_tools = rm.all_tools
-    return [all_tools[name] for name in names if name in all_tools]
+    resolved = [all_tools[name] for name in names if name in all_tools]
+    return _with_manifest(resolved)
+
+
+def _with_manifest(tools: list[Any]) -> list[Any]:
+    """A4：语料检索工具的伴随绑定（评审 C4 配套）——清单生产者缺席时，
+    子代理无法产出可校验清单，报告边界恒为 draft。"""
+    from plugins.tools.corpus_manifest import with_manifest_tool
+
+    return with_manifest_tool(tools, role_id="agent_team_sub")
 
 
 def _disabled_web_tools_notice(runtime: Any | None = None) -> str:
@@ -521,6 +530,15 @@ async def create_subagent(agents: list[Any] | str = "") -> str:
     errors: list[str] = []
     renamed: list[tuple[str, str]] = []
 
+    # A4：清单生产者实际绑定时才注入提交义务提示（伴随绑定于 _runtime_tools_override）。
+    manifest_note = ""
+    override_tools = _runtime_tools_override(runtime)
+    if override_tools is not None:
+        from plugins.tools.corpus_manifest import MANIFEST_PROMPT_NOTE, MANIFEST_TOOL_NAME
+
+        if any(getattr(t, "name", "") == MANIFEST_TOOL_NAME for t in override_tools):
+            manifest_note = MANIFEST_PROMPT_NOTE
+
     # Workflow-aware name validation: strict mode enforces {topic}_{task_type};
     # agent_team (no SUBAGENT_TASK_TYPES) uses lenient role-label names.
     task_types = _resolve_task_types(runtime)
@@ -555,6 +573,8 @@ async def create_subagent(agents: list[Any] | str = "") -> str:
                 mcp_tool_specs=getattr(runtime, "mcp_tool_specs", None),
                 runtime=runtime,
             )
+            if manifest_note:
+                effective_prompt = f"{effective_prompt}{manifest_note}"
             runtime_spec = (
                 _build_runtime_spec(
                     runtime,

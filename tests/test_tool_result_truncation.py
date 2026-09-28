@@ -551,7 +551,10 @@ def test_structured_fit_returns_budget_error_when_body_alone_exceeds() -> None:
     assert "text" not in payload  # no partial body pretending to be complete
 
 
-def _corpus_fetch_envelope(*, text: str, units: int = 80, cursor: str = "c" * 200) -> str:
+def _corpus_fetch_envelope(
+    *, text: str, units: int = 80, cursor: str = "c" * 200,
+    item_errors: list | None = None, unresolved: list | None = None,
+) -> str:
     """An A2 page envelope whose body lives in ``items`` (not a legacy single block)."""
     return json.dumps(
         {
@@ -567,7 +570,8 @@ def _corpus_fetch_envelope(*, text: str, units: int = 80, cursor: str = "c" * 20
                 "relations": [], "relation_status": "unknown",
                 "units": [{"unit_id": f"u{i}", "page": 1} for i in range(units)],
             }],
-            "item_errors": [], "unresolved": [], "next_cursor": cursor,
+            "item_errors": item_errors or [], "unresolved": unresolved or [],
+            "next_cursor": cursor,
             "exhausted": False, "fetch_complete": False, "page_id": "fpage:abc",
             "hint": "hint" * 60,
         },
@@ -598,12 +602,55 @@ def test_structured_fit_never_treats_a_page_envelope_as_a_single_block() -> None
 def test_structured_fit_envelope_budget_error_keeps_the_cursor() -> None:
     from plugins.tools.corpus_fetch import fit_structured_payload
 
-    out = fit_structured_payload(_corpus_fetch_envelope(text="正文" * 800), 500)
+    out = fit_structured_payload(_corpus_fetch_envelope(text="正文" * 800), 900)
     payload = json.loads(out)
     assert payload["ok"] is False
     assert payload["error"].startswith("budget_exceeded")
     assert payload["next_cursor"]  # the caller can still tell where it stopped
     assert payload["text_chars"] == len("正文" * 800)
+    assert len(out) <= 900  # 评审 S2：错误信封自身也有界
+
+
+def test_structured_fit_budget_error_progressively_elides_oversize_fields() -> None:
+    """评审 S2：next_cursor/item_errors/unresolved 原样复制可超预算（评审实测
+    ~3276 > 2000）。错误信封必须渐进降级到 ≤ budget，游标最后才丢。"""
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    body = _corpus_fetch_envelope(
+        text="正文" * 800,
+        cursor="c" * 300,
+        item_errors=[
+            {"locator": f"chunk:c{i}", "code": "budget_exceeded", "error": "详" * 900}
+            for i in range(4)
+        ],
+        unresolved=[f"chunk:u{i}" for i in range(200)],
+    )
+    out = fit_structured_payload(body, 2_000)
+    assert out is not None
+    payload = json.loads(out)  # 仍是合法 JSON
+    assert len(out) <= 2_000
+    assert payload["ok"] is False and payload["error"].startswith("budget_exceeded")
+    # 明细装不下 → 计数化；游标仍保留（最后才丢）
+    assert "item_errors" not in payload and "unresolved" not in payload
+    assert payload["item_errors_count"] == 4 and payload["unresolved_count"] == 200
+    assert payload["next_cursor"] == "c" * 300
+
+
+def test_structured_fit_budget_error_drops_cursor_last_with_flag() -> None:
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    body = _corpus_fetch_envelope(
+        text="正文" * 800,
+        cursor="c" * 1_800,  # 连游标都装不下时才舍弃
+        unresolved=[f"chunk:u{i}" for i in range(200)],
+    )
+    out = fit_structured_payload(body, 2_000)
+    assert out is not None
+    payload = json.loads(out)
+    assert len(out) <= 2_000
+    assert "next_cursor" not in payload
+    assert payload["cursor_omitted"] is True  # 如实标注，不静默丢弃
+    assert payload["unresolved_count"] == 200
 
 
 def test_structured_fit_leaves_small_and_foreign_results_alone() -> None:

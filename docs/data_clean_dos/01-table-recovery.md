@@ -1,6 +1,6 @@
 # 01 · 原文与表格的取回和消费（A0–A4）
 
-> 修订：v2 · 2026-09-28。状态：A0–A4 已实施；A4 为**观测模式**（只记录状态，阻断约束尚未启用），B 组未实施。
+> 修订：v3 · 2026-09-28。状态：A0–A4 已实施；A4 按评审修订契约重做（C1–C7、S1/S2），清单生产者与全发布出口已落地，**A4_ENFORCE 默认关闭（观测模式），阻断默认启用暂缓**——评审结论：A4 尚不能作为可信的默认发布门。B 组未实施。
 > 关联：[总览](README.md)、[准备侧方案](02-fragment-chunking.md)。
 
 目标是让 Agent 取得足以支持当前结论的原文，并能识别标题、表体、未读范围和解析缺口。在相同证据质量下，减少元数据占用、重复补取和逐块调用成本。
@@ -176,34 +176,49 @@ async def corpus_fetch(
 
 局部报告可以发布，但必须限定范围，对证据不足的结论做修正、降级或删除；不能只附一句“可能不完整”便保留无支持的结论。
 
-### A4.3 实施落点（已接入，观测模式）
+### A4.3 实施落点（已接入，观测模式；评审修订契约已落地）
 
 账本与校验器落在 [ledger.py](../../plugins/corpus/ledger.py)，不依赖工作流层：
 
 - **四集合**：`offered`（`corpus_search` 的 `context_locators` + `scope_id`）、
   `requested`（`corpus_fetch` 调用参数）、`fetched`（服务成功返回的块／片段身份）、
-  `delivered`（在 `on_loop_end` 的最终消息边界按片段文本的 JSON 转义形式核验，
-  完整=``delivered``、半截=``truncated``、核验不到=``unknown``；跨路径合并只取更强状态，
-  不因某一路径看不到而降级）。
+  `delivered`（在消息边界按片段文本的 JSON 转义形式核验，完整=``delivered``、
+  半截=``truncated``、核验不到=``unknown``；跨路径合并只取更强状态，不因某一路径
+  看不到而降级）。`ConsumptionLedgerObserver.on_turn_end` **每轮增量核验**送达快照
+  （评审 C3：`last_finalized_turn` 区分「已核验未送达」与「新取片段待边界核验」）。
 - **两类完整性分开算**：范围完整性由账本按 `offered` scope 复算（含 `skipped`／
   `unresolved`／`item_errors`；`all_offered_fetched` 作为历史指标交叉核对）；结论证据
   充分性由 :func:`verify_manifest` 重算。
 - **校验器不信任落盘字段**：每条结论的状态由账本 + 权威原文重算，模型自报
-  `complete=true` 只被记录、不参与判定；缺清单的产物只能标 `draft`。
+  `complete=true` 只被记录、不参与判定；缺清单的产物只能标 `draft`。引文区间按
+  **已送达片段区间并集**覆盖判定（评审 C1：只读首段 ≠ 整块送达）；非 dict 证据／
+  结论条目一律拒绝（评审 C2）；校验基础设施故障整体记 `verification_error`，
+  与确定性缺口 `source_unresolvable` 分离（评审 C7）。
 - **接入实际路径**：`ConsumptionLedgerObserver` 同时挂到 stateful_react 主循环与
-  agent_team 的子代理／主代理观察者列表，共用同一 run 账本；agent_team 的
-  `agent_team_reporter` 在**最终报告边界**再触发一次校验并刷新工件（缺清单仍只能
-  标 draft）。接线回归由 `tests/test_runaway_and_repetition_wiring.py` 守住。
-- **落盘为独立 JSON 工件**：`<APODEX_RUN_DIR>/corpus/ledger.json` 与
-  `manifest_verification.json`（模型清单约定路径为同目录 `manifest.json`）；报告只引用
-  id，验证器读 JSON 重算。所有写盘／解析失败都吞掉记日志，**绝不阻断运行**。
+  agent_team 的子代理／主代理观察者列表，共用同一 run 账本；**全部发布出口**统一接
+  `publish_boundary`（评审 C5）——agent_team 的 `agent_team_reporter`、agent_team 主
+  代理直出／reporter 失败回退、stateful_react 最终答案。skip 条件 = 无 corpus 活动；
+  内部 fail-open（异常记日志不阻断），确定性判定结果才降级；enforce 路径追加
+  **锚定限定块**（逐条列出问题结论及其锚点）并把 `complete` 压为 `partial`（评审 C6），
+  由 `A4_ENFORCE` 显式开启，**默认关闭**。
+- **清单生产者已实现**（评审 C3/C4）：[`corpus_submit_manifest`](../../plugins/tools/corpus_manifest.py)
+  ——入口 schema 先行（非法条目即拒绝）、**每次提交独立落盘**
+  `<APODEX_RUN_DIR>/corpus/manifests/manifest-NNN.json`（多代理／多次提交互不覆盖，
+  边界汇总校验聚合、多文件时结论 id 加拥有者前缀防撞）、即时回验逐条返回问题驱动
+  **环内修正**（新取片段标 `pending_delivery`，下一轮重新提交确认）、**报告绑定**
+  （`report_quote` 逐字锚点 + `report_sha256`；锚点不在最终报告记 `not_in_report`
+  压 partial）。绑定语料检索工具即**伴随绑定**清单生产者并注入提示附注
+  （与 `web_fetch`→`download_file` 先例同构，profile 少配不静默降级）。
+- **落盘为独立 JSON 工件**：`<APODEX_RUN_DIR>/corpus/` 下的 `ledger.json`、
+  `manifests/*.json` 与 `manifest_verification.json`；报告只引用 id，验证器读 JSON
+  重算。所有写盘／解析失败都吞掉记日志，**绝不阻断运行**。
 
 已知未实现（不得据本文件声称已闭环）：
 
-1. **报告证据清单没有生产者**。仓库现有 `EvidenceCard`（[evidence.py](../../workflows/_shared/research/evidence.py)）
-   面向网络来源（`Source.url`），不含 `doc_id`／`locator`，无法用于语料库溯源；因此
-   `manifest.json` 目前无人产出，`verify_and_record` 恒定得到 `draft`。要让报告真正发布
-   「经校验」状态，需先定义清单契约并由报告工作流产出——这属于「约束启用」阶段，本轮未做。
+1. **清单提交的环内修正闭环未经真实模型验证**。生产者、即时回验与边界校验均已实现
+   并有测试覆盖，但现有 3 题真实模型 run 早于工具存在（验证状态如实为 `draft`）；
+   模型是否真能按逐条反馈完成「补取→改表述→重新提交」闭环，需真实运行验证后再
+   评审是否默认启用阻断（`A4_ENFORCE` 默认关闭）。
 2. **`corpus_inventory` 驱动的范围不计入 `offered`**。清单信封按页返回成员，只有当前页
    可见；若据此登记 `offered` 会得到偏小的分母，因此仍以 `corpus_search` 的
    `context_locators` 为唯一提供源。仅用 `corpus_inventory` 直接构造请求的场景下，范围
@@ -238,17 +253,26 @@ D2 预算承载的实测边界（决定契约形态的关键约束）：`block_e
 `offered_locators=5793`、`fetch_calls=5793`、`fetched_fragments=5793`、`delivered=5793`、
 `truncated=0`、`unknown=0`、`incomplete_locators=0`、`duplicate_fetches=0`、`errors=0`、
 `compact_fallback_items=257`、`questions_all_offered_fetched=24`、
-`questions_search_envelope_broken_of_with_hits=0`、**`cell_evidence_bearing_calls=684`
-（修复前分页路径为 0）**、最终消息输入 token 代理 `final_tokens_estimate≈5.08M`。
+`questions_search_envelope_broken_of_with_hits=0`、`cell_evidence_bearing_calls=684`、
+最终消息输入 token 代理 `final_tokens_estimate≈5.08M`。
 `compact_fallback_items` 从 v4 的 28 升至 257：D2 的整块证据参与预算探针后，更多大块按
-预期走了诚实 compact 回退（不是丢失——`delivered` 仍全量）。逐项见 `replay.json` 的
-`findings`（v5）。
+预期走了诚实 compact 回退（不是丢失——`delivered` 仍全量）。
+
+**评审修正（回放 v6）**：v5 的 `cell_evidence_bearing_calls=684` 是跨形状单一总数，
+不能用于判断分页路径的实际恢复比例（评审 §5.5）。v6 把单元格证据统计按**响应形状与
+回退状态分层**（`cell_evidence_layers`）：单块 684/5536 次调用携带；**分页信封路径
+0/257**——257 个信封 item 全部 compact 回退（与 `compact_fallback_items=257` 吻合），
+整块证据按设计随 compact 省去。即在本语料／6000 预算下，分页路径的行／列证据实际
+恢复比例为 0，依赖 compact＋产品门 fail-closed 兜底；「分页路径恢复单元格证据」在
+该预算约束下不成立，提升恢复比例需另立工作项（预算或证据分档），不得引用 684 宣称
+分页修复生效。逐项见 `replay.json` 的 `findings`（v6）。
 
 **真实模型冒烟（`replay_model.json` v1，3 题，glm-5.3-flash／react／每题独立会话）**：
 复现脚本 [replay_model.py](../../.scratch/a4-replay-20260928/replay_model.py)。选题每
 domain 一道 answerable、优先金标带 row/cell 约束的表格题：company-003（财务预测表）、
-industry-001（化工景气表）、macro-001（非农叙述题对照）。金标只做零成本正确性代理
-（逐字引文空白归一后是否出现在取回语料／最终答案），不参与选题与检索。
+industry-001（化工景气表）、macro-001（非农叙述题对照）。金标用于**分层选题和事后
+评分**（逐字引文空白归一后的取回侧／答案侧覆盖），不进入模型检索决策；**金标参与了
+选题与评分，因此这不是独立盲测**（评审 §5.4，原「不参与选题」表述已收敛）。
 
 | 题 | 取回侧覆盖 | 答案侧覆盖 | input tok | 墙钟 | 账本（offered/fetched/delivered） |
 |---|---|---|---|---|---|
@@ -264,6 +288,37 @@ industry-001（化工景气表）、macro-001（非农叙述题对照）。金�
 未发起对该页的 fetch——真实检索缺口，属 B0（准备侧）要回答的问题，不是消费侧接缝。
 另注意评分口径：`fetched_coverage` 按「金标引文解析自 trace 工具结果后子串匹配」计，
 初版因二次序列化把换行变成字面 `\n` 而全量假阴性，已修正（trace 结果先解析再展平）。
+
+**A4 状态的诚实读数（评审 §5.3 修正后）**：`replay_model.py` 曾误读 `verification.json`
+（实际工件名 `manifest_verification.json`，字段应为 `status`/`conclusions`），导致三题
+验证路径恒空。修正重算后，三题验证状态如实为 **`draft`**——这些 run 早于清单工具
+存在，模型未提交清单，验证器按「缺清单 = 草稿」标注；不能据此宣称 A4 校验在真实
+运行中通过或失败。
+
+### A4.5 评审修订契约（C1–C7、S1/S2，本轮）
+
+评审报告（[.scratch/a4-review-20260928/report.md](../../.scratch/a4-review-20260928/report.md)，
+基准 HEAD e4f4e23）结论：**A4 当前不能作为可信的默认发布门；默认启用暂缓**。
+按评审 §7 优先级完成的修复与反例回归：
+
+| 编号 | 评审指出 | 修复 | 回归测试 |
+|---|---|---|---|
+| C1 | 引文区间只按「locator 出现过」判送达，只读首段 ≠ 整块送达 | `_evidence_delivery`／`_covers_interval` 按**已送达片段区间并集**覆盖判定引文 `[start,end)`，缺口记 `not_delivered` | 两片段账本只送达首段的反例 |
+| C2 | 非 dict 证据／结论条目被静默跳过，空有效清单伪装通过 | `invalid_evidence`／`invalid_conclusion` 拒绝，属 `_UNSUPPORTED_CODES` | 反例两条 |
+| C3 | 即时回验无修正闭环；退出时补账诱发无效补取 | `on_turn_end` 增量核验送达快照；工具侧 `pending_delivery`（新取片段待下一轮边界核验）与 `not_delivered` 分开 | `test_on_turn_end_moves_pending_to_delivered` 等 |
+| C4 | 无报告绑定；多代理共享单文件被整体覆盖 | `report_quote` 锚点 + `report_sha256`（不在报告记 `not_in_report` 压 partial）；子清单独立落盘 `manifests/manifest-NNN.json`，边界聚合加拥有者前缀 | 锚点反例 + 子清单聚合/legacy 回退 |
+| C5 | 直出／失败回退出口无门 | `publish_boundary` 统一接 reporter、agent_team 直出／回退、stateful_react 三出口；skip=无 corpus 活动；内部 fail-open | 边界四态测试 |
+| C6 | 整体标签不能代替逐条处理 | enforce 路径追加**锚定限定块**（逐条问题结论+锚点，只加不删），`A4_ENFORCE` 显式开启、**默认关闭** | `test_enforcement_flag_parsing` 等 |
+| C7 | 异常吞掉使 fail-open 失效、缺口误判 | `_is_infra_error` 分类：基础设施故障 → 整体 `verification_error`（不得给已校验结论）；确定性拒绝 → `source_unresolvable` | 两类反例 |
+| S1 | full 视图合法原子行装不下时直接报错 | probe 循环按视图候选（full→compact）重试，原子粒度与视图无关；全部失败才报 `unit_too_large`（含 `views_tried`） | 两项分页回归 |
+| S2 | 错误响应自身可超预算（无界 `item_errors`） | 错误信封渐进降级：摘要化 → 计数化 → 游标最后丢弃并标记 `cursor_omitted` | 两项截断回归 |
+
+配套：清单生产者 [`corpus_submit_manifest`](../../plugins/tools/corpus_manifest.py) +
+伴随绑定 + 提示附注；分层约束修正（评审发现旧稿 `workflows/_shared/corpus_gate.py`
+会让 plugins 反向 import workflows，已删除，逻辑并入 `plugins/tools/corpus_manifest.py`）。
+测试：[test_corpus_ledger.py](../../tests/test_corpus_ledger.py) 34 项、
+[test_corpus_manifest_tool.py](../../tests/test_corpus_manifest_tool.py) 11 项、
+S1/S2 回归等 A4 相关 130 项全绿；ruff／pyright／import_smoke／check_symbols 通过。
 
 ## 2. 验收与交付顺序
 

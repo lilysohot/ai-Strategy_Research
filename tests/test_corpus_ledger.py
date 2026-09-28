@@ -7,15 +7,18 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 from frontier_agent.core.loop_types import AgentLoopResult, ToolResult, TurnContext
 from plugins.corpus.ledger import (
     DELIVERED,
+    PARTIAL,
     PUBLISH_DRAFT,
     PUBLISH_PARTIAL,
     PUBLISH_UNSUPPORTED,
+    PUBLISH_VERIFICATION_ERROR,
     PUBLISH_VERIFIED,
     SUPPORTED,
     TRUNCATED,
@@ -23,12 +26,16 @@ from plugins.corpus.ledger import (
     UNSUPPORTED,
     ConsumptionLedger,
     ConsumptionLedgerObserver,
+    enforcement_enabled,
     get_run_ledger,
     load_manifest,
+    load_manifest_files,
+    publish_boundary,
     reset_run_ledgers,
     verify_and_record,
     verify_manifest,
     write_ledger,
+    write_manifest_file,
 )
 
 DOC = "cv2:" + "a" * 64
@@ -314,7 +321,7 @@ def test_write_ledger_and_draft_without_manifest(tmp_path: Path) -> None:
     path = write_ledger(ledger, directory=tmp_path)
     assert path is not None and path.exists()
     payload = json.loads(path.read_text(encoding="utf-8"))
-    assert payload["schema_version"] == 1
+    assert payload["schema_version"] == 2
     assert payload["offered"] and payload["fetched"] and payload["delivered"]
 
     # 缺清单：只能标 draft，且不声称已通过校验。
@@ -388,7 +395,10 @@ async def test_reporter_boundary_writes_verification(tmp_path: Path, monkeypatch
     from workflows.agent_team.nodes import reporter as reporter_mod
 
     reset_run_ledgers()
-    get_run_ledger()
+    # 评审 C5：无 corpus 活动的 run 在边界直接 skip（非语料任务不写工件），
+    # 先给 run 账本播种一次取回，才能走到「缺清单 → draft」的校验路径。
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(_single_fetch("营业收入 1,234 万元。"))
 
     async def _fake_report(state, ctx):
         return "# 报告\n\n营业收入 1,234 万元。"
@@ -406,3 +416,280 @@ async def test_reporter_boundary_writes_verification(tmp_path: Path, monkeypatch
         (tmp_path / "corpus" / "manifest_verification.json").read_text(encoding="utf-8"),
     )
     assert verification["status"] == PUBLISH_DRAFT
+
+
+# ── 评审反例回归（C1／C2／C7）────────────────────────────────────────────
+
+
+def _two_fragment_ledger() -> tuple[ConsumptionLedger, str]:
+    """两片段信封：只有首段真正进入最终消息（第二段被预算挤出）。"""
+    text = "甲" * 200 + "乙" * 200
+    first = {"locator": "chunk:c1", "text": "甲" * 200,
+             "fragment": {"start": 0, "end": 200, "of_chars": 400}}
+    second = {"locator": "chunk:c1", "text": "乙" * 200,
+              "fragment": {"start": 200, "end": 400, "of_chars": 400}}
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_envelope_fetch([first, second]))
+    ledger.finalize(_msg(json.dumps({"ok": True, "items": [first]}, ensure_ascii=False)))
+    return ledger, text
+
+
+def test_c1_quote_in_delivered_region_supported() -> None:
+    ledger, text = _two_fragment_ledger()
+    manifest = _manifest({"id": "C1", "evidence": [
+        {"doc_id": DOC, "locator": "chunk:c1", "quote": "甲" * 50, "purpose": "value"}]})
+    result = verify_manifest(
+        manifest, ledger, resolver=_resolver({f"{DOC}|chunk:c1": text}),
+    )
+    assert result["conclusions"][0]["status"] == SUPPORTED
+    assert result["status"] == PUBLISH_VERIFIED
+
+
+def test_c1_quote_in_undelivered_region_is_partial_not_supported() -> None:
+    """评审 C1：引文区间必须被已送达片段覆盖——只读首段不等于整块送达。
+
+    旧判定「locator 出现过即 delivered」会把未送达区间里的引文误判 supported。
+    """
+    ledger, text = _two_fragment_ledger()
+    manifest = _manifest({"id": "C1", "evidence": [
+        {"doc_id": DOC, "locator": "chunk:c1", "quote": "乙" * 50, "purpose": "value"}]})
+    result = verify_manifest(
+        manifest, ledger, resolver=_resolver({f"{DOC}|chunk:c1": text}),
+    )
+    row = result["conclusions"][0]
+    assert row["status"] == PARTIAL
+    assert any(p["code"] == "not_delivered" for p in row["problems"])
+    assert result["status"] == PUBLISH_PARTIAL
+
+
+def test_c2_invalid_evidence_element_rejected() -> None:
+    """评审 C2：``evidence:[null]`` 必须拒绝登记——静默跳过会让零有效证据伪装通过。"""
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    manifest = _manifest({"id": "C1", "evidence": [None], "complete": True})
+    result = verify_manifest(
+        manifest, ledger, resolver=_resolver({f"{DOC}|chunk:c1": text}),
+    )
+    row = result["conclusions"][0]
+    assert row["status"] == UNSUPPORTED
+    assert any(p["code"] == "invalid_evidence" for p in row["problems"])
+    assert result["status"] == PUBLISH_UNSUPPORTED
+
+
+def test_c2_non_dict_conclusion_rejected() -> None:
+    ledger = ConsumptionLedger()
+    result = verify_manifest(_manifest("不是对象"), ledger)
+    row = result["conclusions"][0]
+    assert row["status"] == UNSUPPORTED
+    assert row["problems"][0]["code"] == "invalid_conclusion"
+    assert result["status"] == PUBLISH_UNSUPPORTED
+
+
+def test_c7_infra_failure_is_verification_error_not_gap() -> None:
+    """评审 C7：resolver 基础设施故障 → verification_error，整体不可信。"""
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+
+    def boom(doc_id: str, locator: str) -> str | None:
+        raise ConnectionError("store unavailable")
+
+    result = verify_manifest(
+        _manifest({"id": "C1", "evidence": [
+            {"doc_id": DOC, "locator": "chunk:c1", "quote": "营业收入", "purpose": "value"}]}),
+        ledger, resolver=boom,
+    )
+    assert result["status"] == PUBLISH_VERIFICATION_ERROR
+    assert any(
+        p["code"] == "verification_error"
+        for p in result["conclusions"][0]["problems"]
+    )
+
+
+def test_c7_deterministic_refusal_is_source_unresolvable() -> None:
+    """评审 C7：确定性拒绝（来源无法解析）→ 结论缺口，不与基础设施故障混同。"""
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    result = verify_manifest(
+        _manifest({"id": "C1", "evidence": [
+            {"doc_id": DOC, "locator": "chunk:c1", "quote": "营业收入", "purpose": "value"}]}),
+        ledger, resolver=lambda d, loc: None,
+    )
+    assert result["status"] == PUBLISH_UNSUPPORTED
+    assert any(
+        p["code"] == "source_unresolvable"
+        for p in result["conclusions"][0]["problems"]
+    )
+
+
+# ── 报告绑定（评审 C4）───────────────────────────────────────────────────
+
+
+def test_report_anchor_absent_from_final_text_presses_partial() -> None:
+    """report_quote 不在最终报告 → not_in_report 压 partial，不虚报 supported。"""
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    manifest = _manifest({"id": "C1", "report_quote": "这句话不在报告里", "evidence": [
+        {"doc_id": DOC, "locator": "chunk:c1", "quote": "营业收入 1,234", "purpose": "value"}]})
+    result = verify_manifest(
+        manifest, ledger, resolver=_resolver({f"{DOC}|chunk:c1": text}),
+        final_text="# 最终报告\n\n别的结论。",
+    )
+    row = result["conclusions"][0]
+    assert any(p["code"] == "not_in_report" for p in row["problems"])
+    assert row["status"] == PARTIAL
+    assert result["status"] == PUBLISH_PARTIAL
+
+
+def test_verify_and_record_binds_report_sha256(tmp_path: Path) -> None:
+    text = "营业收入 1,234 万元。"
+    final_text = f"报告：{text}"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    write_manifest_file({
+        "schema_version": 2,
+        "conclusions": [{"id": "C1", "report_quote": text, "evidence": [
+            {"doc_id": DOC, "locator": "chunk:c1", "quote": text, "purpose": "value"}]}],
+    }, directory=tmp_path)
+    verification = verify_and_record(
+        ledger, directory=tmp_path,
+        resolver=_resolver({f"{DOC}|chunk:c1": text}), final_text=final_text,
+    )
+    assert verification["status"] == PUBLISH_VERIFIED
+    assert verification["report_sha256"] == hashlib.sha256(
+        final_text.encode("utf-8"),
+    ).hexdigest()
+    assert verification["report_chars"] == len(final_text)
+
+
+# ── 子清单独立落盘与聚合（评审 C4）───────────────────────────────────────
+
+
+def test_manifest_files_never_overwrite_and_merge_with_owner_prefix(tmp_path: Path) -> None:
+    """多代理提交写独立子清单互不覆盖；聚合时结论 id 加拥有者前缀防撞。"""
+    p1 = write_manifest_file({"schema_version": 2, "owner_role": "lit_search",
+                              "conclusions": [{"id": "C1"}]}, directory=tmp_path)
+    p2 = write_manifest_file({"schema_version": 2, "owner_role": "final_verify",
+                              "conclusions": [{"id": "C1"}]}, directory=tmp_path)
+    assert p1 is not None and p2 is not None and p1 != p2
+    assert p1.name == "manifest-000.json" and p2.name == "manifest-001.json"
+
+    files = load_manifest_files(directory=tmp_path)
+    assert [path.name for path, _ in files] == ["manifest-000.json", "manifest-001.json"]
+
+    ledger = ConsumptionLedger()
+    verification = verify_and_record(ledger, directory=tmp_path, resolver=lambda d, loc: None)
+    assert [row["id"] for row in verification["conclusions"]] == [
+        "lit_search/C1", "final_verify/C1",
+    ]
+
+
+def test_manifest_files_fall_back_to_legacy_single_file(tmp_path: Path) -> None:
+    (tmp_path / "manifest.json").write_text(
+        json.dumps({"schema_version": 1, "conclusions": []}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    files = load_manifest_files(directory=tmp_path)
+    assert len(files) == 1 and files[0][0].name == "manifest.json"
+
+
+# ── 发布边界四态（评审 C5／C6）───────────────────────────────────────────
+
+
+def test_boundary_skips_runs_without_corpus_activity(tmp_path: Path) -> None:
+    """评审 C5：非语料任务的 run 在边界 skip，不写校验工件。"""
+    out = publish_boundary(
+        ConsumptionLedger(), final_text="报告", answer_status="complete",
+        directory=tmp_path,
+    )
+    assert out["boundary_action"] == "skip"
+    assert not (tmp_path / "manifest_verification.json").exists()
+
+
+def test_boundary_observe_by_default_records_without_blocking(tmp_path: Path, monkeypatch) -> None:
+    """默认（A4_ENFORCE 关闭）：缺清单 → draft 记录工件，但发布文本原样放行。"""
+    monkeypatch.delenv("A4_ENFORCE", raising=False)
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    out = publish_boundary(
+        ledger, final_text="报告正文", answer_status="complete", directory=tmp_path,
+    )
+    assert out["boundary_action"] == "observe"
+    assert out["publish_status"] == PUBLISH_DRAFT
+    assert out["final_text"] == "报告正文"
+    assert out["answer_status"] == "complete"
+    assert (tmp_path / "manifest_verification.json").exists()
+
+
+def test_boundary_downgrades_under_enforce_with_anchored_block(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """评审 C6：enforce 开启时未通过 → 追加锚定限定块（草稿保留，只加不删）。"""
+    monkeypatch.setenv("A4_ENFORCE", "1")
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    out = publish_boundary(
+        ledger, final_text="报告正文", answer_status="complete", directory=tmp_path,
+    )
+    assert out["boundary_action"] == "downgrade"
+    assert out["final_text"].startswith("报告正文")  # 原报告保留
+    assert "证据完整性校验（A4）" in out["final_text"]
+    assert out["answer_status"] == "partial"  # complete 降级
+
+
+def test_boundary_enforce_keeps_non_complete_answer_status(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    """not_found／best_effort 不往弱处反向升级。"""
+    monkeypatch.setenv("A4_ENFORCE", "1")
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    out = publish_boundary(
+        ledger, final_text="报告正文", answer_status="not_found", directory=tmp_path,
+    )
+    assert out["boundary_action"] == "downgrade"
+    assert out["answer_status"] == "not_found"
+
+
+def test_boundary_publishes_when_verified(tmp_path: Path) -> None:
+    text = "营业收入 1,234 万元。"
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(_single_fetch(text))
+    ledger.finalize(_msg(_single_fetch(text)))
+    write_manifest_file({
+        "schema_version": 2,
+        "conclusions": [{"id": "C1", "report_quote": text, "evidence": [
+            {"doc_id": DOC, "locator": "chunk:c1", "quote": text, "purpose": "value"}]}],
+    }, directory=tmp_path)
+    out = publish_boundary(
+        ledger, final_text=f"报告：{text}", answer_status="complete", directory=tmp_path,
+        resolver=_resolver({f"{DOC}|chunk:c1": text}),
+    )
+    assert out["boundary_action"] == "publish"
+    assert out["publish_status"] == PUBLISH_VERIFIED
+    assert out["answer_status"] == "complete"
+
+
+def test_enforcement_flag_parsing(monkeypatch) -> None:
+    for raw in ("1", "true", "Yes", "ON"):
+        monkeypatch.setenv("A4_ENFORCE", raw)
+        assert enforcement_enabled() is True
+    monkeypatch.delenv("A4_ENFORCE", raising=False)
+    assert enforcement_enabled() is False
+    for raw in ("", "0", "false", "off"):
+        monkeypatch.setenv("A4_ENFORCE", raw)
+        assert enforcement_enabled() is False

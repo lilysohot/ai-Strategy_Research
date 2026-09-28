@@ -6,14 +6,18 @@
 - **成本**：session.json 的 usage（input/output/cached token 与消息级 breakdown）、
   trace.jsonl 的 LLM 轮数与工具调用数、墙钟时间；
 - **A4 账本**：run 工件 ``corpus/ledger.json`` 的 offered/requested/fetched/delivered
-  四集合与范围完整性（观测模式，不阻断）；
+  四集合与范围完整性（观测模式，不阻断）；发布边界工件
+  ``corpus/manifest_verification.json``（发布状态与逐结论问题码，评审 §5.3 修正：
+  旧脚本误读 ``verification.json`` 导致该字段恒空）；
 - **正确性代理（零评分成本）**：冻结金标 ``evidence_targets`` 的逐字引文是否出现在
   (a) 取回的语料内容（trace 工具结果）→ 取回侧覆盖；(b) 最终答案 → 答案侧覆盖。
   引文按空白归一后子串匹配；**不用金标决定取哪些块**（agent 自己搜）。
 
-选题（确定性，冒烟规模 3）：三个 domain 各取第一道 answerable 且 evidence_targets
-带 row/cell 约束的题（company-003／industry-001，表格题是 D2 修复的直接受益场景）；
-macro 无 cell 约束题，取第一道 answerable（macro-001，叙述题对照）。
+选题（确定性，冒烟规模 3）：金标 ``evidence_targets`` 用于**分层选题**——三个 domain
+各取第一道 answerable 且带 row/cell 约束的题（company-003／industry-001，表格题是
+D2 修复的直接受益场景）；macro 无 cell 约束题取第一道 answerable（macro-001，叙述题
+对照）。金标同时用于事后评分（引文覆盖）；**金标参与了选题与评分，因此这不是独立
+盲测**。检索决策不使用金标：agent 自己搜，不用金标决定取哪些块。
 
 可续跑：每题结果落 ``model_runs/<query_id>/result.json``，已存在则跳过（与
 benchmarks 公共 harness 的 resumable 约定同口径）。只读保证：子进程 PGOPTIONS
@@ -128,9 +132,15 @@ def parse_ledger(run_dir: Path) -> dict:
         return {"present": False, "note": "无 corpus 调用或观察者未落盘"}
     data = json.loads(path.read_text(encoding="utf-8"))
     verification = None
-    ver_path = run_dir / "corpus" / "verification.json"
+    ver_path = run_dir / "corpus" / "manifest_verification.json"
     if ver_path.exists():
         verification = json.loads(ver_path.read_text(encoding="utf-8"))
+    problem_codes = Counter(
+        problem.get("code")
+        for row in (verification or {}).get("conclusions") or []
+        for problem in row.get("problems") or []
+        if isinstance(problem, dict)
+    )
     return {
         "present": True,
         "offered": len(data.get("offered") or []),
@@ -142,7 +152,10 @@ def parse_ledger(run_dir: Path) -> dict:
         "range_completeness": data.get("range_completeness") or [],
         "errors": data.get("errors") or [],
         "skipped": len(data.get("skipped") or []),
-        "verification_conclusion": (verification or {}).get("conclusion"),
+        "verification_status": (verification or {}).get("status"),
+        "verification_counts": (verification or {}).get("counts"),
+        "verification_errors": (verification or {}).get("verification_errors"),
+        "verification_problem_codes": dict(problem_codes),
         "verification_path": str(ver_path.relative_to(ROOT)) if verification else None,
     }
 
@@ -357,12 +370,12 @@ def main() -> None:
         "generated_at": now(),
         "tier": "real-model smoke (glm-5.3-flash, react, one-shot per question)",
         "scale": {"questions": len(rows), "ok": len(done)},
-        "selection_policy": "每 domain 一道 answerable；优先金标带 row/cell 约束的表格题（D2 受益场景）",
+        "selection_policy": "每 domain 一道 answerable；按金标 row/cell 约束分层优先表格题（D2 受益场景）——金标参与分层选题与事后评分",
         "policy": {
             "command": "uv run frontier-agent --mode react --no-tui --yes -p <question>",
             "pg_read_only": "PGOPTIONS default_transaction_read_only=on",
             "resumable": "model_runs/<query_id>/result.json 存在即跳过",
-            "gold_usage": "金标只做零成本正确性代理（引文覆盖），不参与选题与检索",
+            "gold_usage": "金标用于分层选题和事后评分（引文覆盖），不进入模型检索决策；因此这不是独立盲测",
         },
         "totals": {
             "wall_s": round(sum(r.get("wall_s") or 0 for r in done), 1),

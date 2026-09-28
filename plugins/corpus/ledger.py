@@ -50,9 +50,9 @@ from frontier_agent.core.messages import Message, text_of
 
 logger = logging.getLogger(__name__)
 
-LEDGER_SCHEMA_VERSION = 1
-MANIFEST_SCHEMA_VERSION = 1
-VERIFICATION_SCHEMA_VERSION = 1
+LEDGER_SCHEMA_VERSION = 2
+MANIFEST_SCHEMA_VERSION = 2
+VERIFICATION_SCHEMA_VERSION = 2
 
 # ── 四状态 + 补充词汇 ────────────────────────────────────────────────────
 DELIVERED = "delivered"
@@ -65,11 +65,14 @@ SUPPORTED = "supported"
 PARTIAL = "partial"
 UNSUPPORTED = "unsupported"
 
-# 产物发布状态（报告／最终回复）
+# 产物发布状态（报告／最终回复）。``verification_error`` 与 ``draft`` 分开：
+# 缺清单是确定性的「没有可校验对象」，基础设施故障是「校验本身不可信」——
+# 两者都不得标成已校验，但排查动作完全不同（评审 C7）。
 PUBLISH_VERIFIED = "verified"
 PUBLISH_PARTIAL = "partial"
 PUBLISH_UNSUPPORTED = "unsupported"
 PUBLISH_DRAFT = "draft"
+PUBLISH_VERIFICATION_ERROR = "verification_error"
 
 #: 交付状态强弱（合并时取更强，绝不因某一路径看不到而降级）。
 _DELIVERY_RANK = {UNKNOWN: 1, TRUNCATED: 2, DELIVERED: 3}
@@ -94,6 +97,9 @@ TRUNCATED_MIN_PREFIX = 32
 _ARTIFACT_SUBDIR = "corpus"
 LEDGER_FILENAME = "ledger.json"
 MANIFEST_FILENAME = "manifest.json"
+#: 子清单目录：各代理／各次提交独立落盘，绝不互相覆盖（评审 C4）；
+#: 边界汇总时聚合全部候选，最终以验证工件为准。
+MANIFESTS_SUBDIR = "manifests"
 VERIFICATION_FILENAME = "manifest_verification.json"
 
 _RUN_DIR_ENV = "APODEX_RUN_DIR"
@@ -109,6 +115,37 @@ def _sha256(text: str) -> str:
 def _escaped(text: str) -> str:
     """把片段文本转成它在 JSON 字符串里出现的形式（去掉两侧引号）。"""
     return json.dumps(text, ensure_ascii=False)[1:-1]
+
+
+def _merge_intervals(
+    intervals: list[tuple[int, int]],
+) -> list[tuple[int, int]]:
+    out: list[tuple[int, int]] = []
+    for start, end in sorted(intervals):
+        if end <= start:
+            continue
+        if out and start <= out[-1][1]:
+            out[-1] = (out[-1][0], max(out[-1][1], end))
+        else:
+            out.append((start, end))
+    return out
+
+
+def _covers_whole(intervals: list[tuple[int, int]], chars: int) -> bool:
+    """区间并集是否覆盖 ``[0, chars)``；长度未知（``chars<=0``）时一律 False。"""
+    if chars <= 0:
+        return False
+    merged = _merge_intervals(intervals)
+    return bool(merged) and merged[0][0] == 0 and merged[-1][1] >= chars
+
+
+def _covers_interval(
+    intervals: list[tuple[int, int]], start: int, end: int,
+) -> bool:
+    """区间并集是否覆盖连续区间 ``[start, end)``。"""
+    if end <= start:
+        return False
+    return any(lo <= start and hi >= end for lo, hi in _merge_intervals(intervals))
 
 
 def delivery_rank(status: str) -> int:
@@ -225,6 +262,9 @@ class ConsumptionLedger:
     notes: list[str] = field(default_factory=list)
     #: identity -> 交付状态（delivered／truncated／unknown），跨路径取强。
     delivered: dict[tuple[str, str, int, int], str] = field(default_factory=dict)
+    #: 最近一次在真实消息边界完成送达核验的 turn（-1 = 尚未核验过）。
+    #: 环内提交清单的工具用它区分「已核验未送达」与「新取片段待边界核验」。
+    last_finalized_turn: int = -1
     #: identity -> 片段 JSON 转义文本（仅内存，用于最终消息核验；不落盘）。
     _fragment_text: dict[tuple[str, str, int, int], str] = field(
         default_factory=dict, repr=False,
@@ -335,16 +375,24 @@ class ConsumptionLedger:
     def _record_error(self, message: str, turn: int) -> None:
         self.errors.append({"locator": "", "code": "", "error": message, "turn": turn})
 
-    # ── delivered：最终消息边界核验 ────────────────────────────────────
+    # ── delivered：真实消息边界核验 ────────────────────────────────────
     def finalize(self, messages: list[Message] | None) -> None:
-        """在最终消息里核验每个 fetched 片段是否**仍完整存在**。
+        """在消息里核验每个 fetched 片段是否**仍完整存在**。
 
         比对用片段文本的 JSON 转义形式（消息正文是 ``json.dumps(..., ensure_ascii=False)``
         的结果），既覆盖未截断的合法 JSON，也覆盖被 head-cap 切坏的 JSON。核验不了
         的片段保持 ``unknown``——不推断为已送达。合并只取更强状态。
+
+        已判定 ``delivered`` 的片段直接跳过（状态只会更强，重复扫描是纯浪费）；
+        这让观察者可以**每个 turn 边界增量调用**（评审 C3：环内校验依赖及时更新
+        的送达快照，而不是退出时补账）。
         """
         blob = _messages_blob(messages)
+        if not blob:
+            return
         for ref in self.fetched:
+            if self.delivered.get(ref.identity) == DELIVERED:
+                continue
             text = self._fragment_text.get(ref.identity)
             if text is None:
                 continue
@@ -356,20 +404,44 @@ class ConsumptionLedger:
     def delivered_status(self, identity: tuple[str, str, int, int]) -> str:
         return self.delivered.get(identity, UNKNOWN)
 
+    # ── 区间覆盖（评审 C1：出现 ≠ 完整）────────────────────────────────
+    def _intervals_for(
+        self, locator: str, *, delivered_only: bool = False,
+    ) -> list[tuple[int, int]]:
+        out: list[tuple[int, int]] = []
+        for ref in self.fetched:
+            if ref.locator != locator:
+                continue
+            if delivered_only and self.delivered_status(ref.identity) != DELIVERED:
+                continue
+            out.append((ref.start, ref.end))
+        return out
+
+    def _locator_chars(self, locator: str) -> int:
+        for ref in self.fetched:
+            if ref.locator == locator and ref.chars > 0:
+                return ref.chars
+        return 0
+
     # ── 范围完整性 ─────────────────────────────────────────────────────
     def range_completeness(self) -> list[dict[str, Any]]:
-        """按 offered scope 汇总：必需片段是否全部取回／送达（范围完整性）。"""
-        fetched_locators = {ref.locator for ref in self.fetched}
-        delivered_locators = {
-            ref.locator
-            for ref in self.fetched
-            if self.delivered_status(ref.identity) == DELIVERED
-        }
+        """按 offered scope 汇总：必需片段是否**全部**取回／送达（范围完整性）。
+
+        评审 C1：locator 出现 ≠ 范围完整。按片段 ``[start, end)`` 区间并集对比
+        整块长度（``chars``）判定；整块长度未知（``chars==0``）时按不完整处理，
+        不冒充通过。
+        """
         out: list[dict[str, Any]] = []
         for scope in self.offered:
             locators = list(scope.get("locators") or [])
-            missing = [loc for loc in locators if loc not in fetched_locators]
-            undelivered = [loc for loc in locators if loc not in delivered_locators]
+            missing: list[str] = []
+            undelivered: list[str] = []
+            for loc in locators:
+                chars = self._locator_chars(loc)
+                if not _covers_whole(self._intervals_for(loc), chars):
+                    missing.append(loc)
+                if not _covers_whole(self._intervals_for(loc, delivered_only=True), chars):
+                    undelivered.append(loc)
             skipped = [
                 str(item.get("locator"))
                 for item in self.skipped
@@ -384,7 +456,7 @@ class ConsumptionLedger:
                 "missing": missing,
                 "undelivered": undelivered,
                 "skipped": skipped,
-                # 有未解决错误或跳过 ⇒ 范围不完整。
+                # 有未取全、未送达或跳过 ⇒ 范围不完整。
                 "complete": not missing and not undelivered and not skipped,
             })
         return out
@@ -408,6 +480,7 @@ class ConsumptionLedger:
             "role_id": self.role_id,
             "pipeline_id": self.pipeline_id,
             "created_at": self.created_at,
+            "last_finalized_turn": self.last_finalized_turn,
             "offered": self.offered,
             "requested": self.requested,
             "fetched": [ref.to_dict() for ref in self.fetched],
@@ -535,7 +608,7 @@ def write_ledger(
 
 
 def load_manifest(*, directory: Path | None = None) -> dict[str, Any] | None:
-    """读取模型产出的报告证据清单；缺文件返回 ``None``（产物只能标 draft）。"""
+    """读取旧版单文件清单；缺文件返回 ``None``。新契约请用 :func:`load_manifest_files`。"""
     folder = directory or resolve_artifact_dir()
     if folder is None:
         return None
@@ -545,6 +618,97 @@ def load_manifest(*, directory: Path | None = None) -> dict[str, Any] | None:
     except (OSError, ValueError):
         return None
     return payload if isinstance(payload, dict) else None
+
+
+def load_manifest_files(
+    directory: Path | None = None,
+) -> list[tuple[Path, dict[str, Any]]]:
+    """按修订契约读取全部候选清单（评审 C4）。
+
+    ``manifests/*.json`` 为主（各代理／各次提交独立落盘，互不覆盖）；仅当该目录
+    为空时才回读旧版单文件 ``manifest.json``（兼容历史运行，不与新契约双算）。
+    """
+    folder = directory or resolve_artifact_dir()
+    if folder is None:
+        return []
+    out: list[tuple[Path, dict[str, Any]]] = []
+    sub = folder / MANIFESTS_SUBDIR
+    if sub.is_dir():
+        for path in sorted(sub.glob("*.json")):
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                logger.warning("corpus ledger: 清单 %s 不可解析，已跳过", path)
+                continue
+            if isinstance(payload, dict):
+                out.append((path, payload))
+    if out:
+        return out
+    legacy = folder / MANIFEST_FILENAME
+    if legacy.is_file():
+        try:
+            payload = json.loads(legacy.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return []
+        if isinstance(payload, dict):
+            out.append((legacy, payload))
+    return out
+
+
+def write_manifest_file(
+    payload: dict[str, Any], *, directory: Path | None = None,
+) -> Path | None:
+    """把一份候选清单落盘为独立子清单文件（``manifests/manifest-NNN.json``）。
+
+    文件名按现有序号递增，**绝不覆盖**既有清单；没有 run 目录时不落盘（返回
+    ``None``），调用方仍可做环内回验。写失败同样返回 ``None`` 并记日志。
+    """
+    folder = directory or resolve_artifact_dir()
+    if folder is None:
+        return None
+    try:
+        sub = folder / MANIFESTS_SUBDIR
+        sub.mkdir(parents=True, exist_ok=True)
+        index = 0
+        for path in sub.glob("manifest-*.json"):
+            stem = path.stem.removeprefix("manifest-")
+            if stem.isdigit():
+                index = max(index, int(stem) + 1)
+        target = sub / f"manifest-{index:03d}.json"
+        target.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8",
+        )
+        return target
+    except OSError as exc:
+        logger.warning("corpus ledger: 写子清单失败：%s", exc)
+        return None
+
+
+def _merge_manifests(
+    manifests: list[tuple[Path, dict[str, Any]]],
+) -> dict[str, Any]:
+    """把多份候选清单汇成一份待验证清单；多文件时结论 id 加拥有者前缀防撞。"""
+    conclusions: list[Any] = []
+    multi = len(manifests) > 1
+    for path, payload in manifests:
+        owner = str(payload.get("owner_role") or path.stem or "manifest")
+        rows = payload.get("conclusions")
+        if not isinstance(rows, list):
+            conclusions.append({
+                "invalid_manifest": True,
+                "owner": owner,
+                "reason": "清单缺 conclusions 数组",
+            })
+            continue
+        for row in rows:
+            if multi and isinstance(row, dict):
+                row = {**row, "id": f"{owner}/{row.get('id') or ''}"}
+            conclusions.append(row)
+    first = manifests[0][1]
+    return {
+        "schema_version": first.get("schema_version"),
+        "conclusions": conclusions,
+    }
 
 
 def write_verification(
@@ -561,13 +725,24 @@ def verify_and_record(
     manifest: dict[str, Any] | None = None,
     directory: Path | None = None,
     resolver: SourceResolver | None = None,
+    final_text: str | None = None,
+    extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """校验清单并落盘验证工件；缺清单则记录 draft。观测层：绝不抛。"""
+    """校验清单并落盘验证工件；缺清单则记录 draft。
+
+    - ``final_text`` 提供时做**报告绑定**校验（``report_quote`` 锚点必须出现在
+      最终文本中；评审 C4）；
+    - ``extra`` 合并进落盘工件（如边界动作、发布状态），schema 纯增量；
+    - 基础设施异常映射为 ``verification_error``，与确定性缺口/缺清单分开
+      （评审 C7）——校验失败绝不被描述成校验通过。
+    """
     folder = directory or resolve_artifact_dir()
     try:
-        if manifest is None:
-            manifest = load_manifest(directory=folder)
-        if manifest is None:
+        manifests = (
+            [(Path("<memory>"), manifest)] if manifest is not None
+            else load_manifest_files(folder)
+        )
+        if not manifests:
             verification = {
                 "schema_version": VERIFICATION_SCHEMA_VERSION,
                 "status": PUBLISH_DRAFT,
@@ -575,11 +750,24 @@ def verify_and_record(
                 "conclusions": [],
             }
         else:
-            verification = verify_manifest(manifest, ledger, resolver=resolver)
+            merged = _merge_manifests(manifests)
+            verification = verify_manifest(
+                merged, ledger, resolver=resolver, final_text=final_text,
+            )
+            verification["manifest_files"] = [str(path) for path, _ in manifests]
     except Exception as exc:
-        logger.warning("corpus ledger: 清单校验失败（忽略）：%s", exc)
-        return {"schema_version": VERIFICATION_SCHEMA_VERSION, "status": PUBLISH_DRAFT,
-                "reason": f"校验异常：{type(exc).__name__}: {exc}", "conclusions": []}
+        logger.warning("corpus ledger: 清单校验基础设施故障：%s", exc)
+        verification = {
+            "schema_version": VERIFICATION_SCHEMA_VERSION,
+            "status": PUBLISH_VERIFICATION_ERROR,
+            "reason": f"校验基础设施异常：{type(exc).__name__}: {exc}",
+            "conclusions": [],
+        }
+    if final_text is not None:
+        verification["report_sha256"] = _sha256(final_text)
+        verification["report_chars"] = len(final_text)
+    if extra:
+        verification.update(extra)
     path = write_verification(verification, directory=folder)
     verification["artifact_path"] = str(path) if path is not None else None
     return verification
@@ -592,26 +780,59 @@ SourceResolver = Callable[[str, str], "str | None"]
 
 
 def _default_resolver(doc_id: str, locator: str) -> str | None:
-    try:
-        from plugins.corpus.service import get_service
+    """权威原文解析：确定性拒绝（句柄不存在／旧句柄）返回 ``None``，
+    基础设施异常**向上抛**（由 ``_verify_conclusion`` 分类为 ``verification_error``，
+    评审 C7——吞掉异常会把故障误判成证据缺口）。"""
+    from plugins.corpus.service import get_service
 
-        return get_service().fetch_verbatim(doc_id, locator).text
-    except Exception:
-        return None
+    return get_service().fetch_verbatim(doc_id, locator).text
+
+
+_INFRA_ERROR_MARKERS = (
+    "timeout", "connection", "unavailable", "unreachable", "operational",
+    "storeerror", "refused", "reset",
+)
+
+
+def _is_infra_error(exc: Exception) -> bool:
+    """区分基础设施故障与确定性拒绝（评审 C7）。"""
+    if isinstance(exc, ConnectionError | TimeoutError | OSError):
+        return True
+    name = type(exc).__name__.lower()
+    if any(marker in name for marker in _INFRA_ERROR_MARKERS):
+        return True
+    text = str(exc).lower()
+    return any(marker in text for marker in _INFRA_ERROR_MARKERS)
 
 
 def _evidence_delivery(
-    ledger: ConsumptionLedger, doc_id: str, locator: str,
+    ledger: ConsumptionLedger,
+    doc_id: str,
+    locator: str,
+    quote_start: int,
+    quote_end: int,
 ) -> str:
-    """该 (doc_id, locator) 的原文是否完整送达：delivered／partial／unknown。"""
-    refs = [ref for ref in ledger.fetched if ref.doc_id == doc_id and ref.locator == locator]
+    """引文区间 ``[quote_start, quote_end)`` 是否被**已送达**片段覆盖。
+
+    评审 C1：只看「该 locator 有片段送达」不够——只读首段时，未送达区间里的
+    引文不能因服务端全文可查而放行。返回 ``delivered``（区间被已送达片段并集
+    覆盖）／``partial``（有已送达片段但未覆盖引文区间）／``unknown``（无可判定
+    的已送达片段）。
+    """
+    refs = [
+        ref for ref in ledger.fetched
+        if ref.doc_id == doc_id and ref.locator == locator
+    ]
     if not refs:
         return UNKNOWN
-    statuses = [ledger.delivered_status(ref.identity) for ref in refs]
-    if all(status == DELIVERED for status in statuses):
-        return DELIVERED
-    if all(delivery_rank(status) <= delivery_rank(UNKNOWN) for status in statuses):
+    delivered_intervals = [
+        (ref.start, ref.end) for ref in refs
+        if ledger.delivered_status(ref.identity) == DELIVERED
+    ]
+    if not delivered_intervals:
         return UNKNOWN
+    if _covers_interval(delivered_intervals, quote_start, quote_end):
+        return DELIVERED
     return "partial"
 
 
@@ -620,29 +841,64 @@ def verify_manifest(
     ledger: ConsumptionLedger,
     *,
     resolver: SourceResolver | None = None,
+    final_text: str | None = None,
+    pending_aware: bool = False,
 ) -> dict[str, Any]:
     """由账本与权威原文**重算**每条结论的状态；不接受模型自报通过。
 
     每条结论的 ``status``：
 
-    - ``unsupported``：证据缺失、quote 无法溯源（编造）或来源无法解析；
-    - ``partial``：quote 可溯源，但原文未完整送达，或声明的必要依赖（期间／单位／
-      表头／脚注）未被任何证据用途覆盖；
-    - ``supported``：quote 逐字可溯源、原文完整送达、声明依赖全覆盖。
+    - ``unsupported``：证据缺失或无效（评审 C2：非对象条目一律拒绝，不静默跳过）、
+      quote 无法溯源（编造）或来源无法解析；
+    - ``partial``：quote 可溯源，但引文区间未被完整送达（评审 C1：按区间覆盖判，
+      不是「locator 出现过」）、声明的必要依赖未被覆盖，或报告锚点缺失／不匹配
+      （评审 C4，仅在提供 ``final_text`` 时检查）；
+    - ``supported``：quote 逐字可溯源、引文区间完整送达、声明依赖全覆盖。
+
+    ``pending_aware=True`` 供**环内提交**使用：尚未经过消息边界核验的新取片段
+    记 ``pending`` 而不是 ``unknown``（评审 C3），问题消息区分「待核验」与
+    「确认未送达」。发布边界汇总时保持默认严格模式。
+
+    任一结论出现 ``verification_error``（校验基础设施故障）时，整体状态为
+    ``verification_error``——校验不可信时不得给出任何「已校验」结论（评审 C7）。
     """
     resolve = resolver or _default_resolver
     conclusions_out: list[dict[str, Any]] = []
     for index, conclusion in enumerate(manifest.get("conclusions") or []):
         if not isinstance(conclusion, dict):
+            # 评审 C2：非法结论条目不再静默跳过——跳过会让「空有效清单」伪装通过。
+            conclusions_out.append({
+                "id": f"C{index + 1}",
+                "status": UNSUPPORTED,
+                "evidence_count": 0,
+                "covered_purposes": [],
+                "missing_dependencies": [],
+                "delivery": [],
+                "problems": [{
+                    "code": "invalid_conclusion",
+                    "message": f"conclusions[{index}] 不是 JSON 对象，已拒绝",
+                }],
+                "model_claimed_complete": None,
+            })
             continue
         conclusions_out.append(
-            _verify_conclusion(conclusion, index, ledger, resolve),
+            _verify_conclusion(
+                conclusion, index, ledger, resolve, final_text,
+                pending_aware=pending_aware,
+            ),
         )
     counts = {SUPPORTED: 0, PARTIAL: 0, UNSUPPORTED: 0}
     for row in conclusions_out:
         counts[row["status"]] = counts.get(row["status"], 0) + 1
+    verification_errors = sum(
+        1
+        for row in conclusions_out
+        if any(p.get("code") == "verification_error" for p in row.get("problems") or [])
+    )
     if not conclusions_out:
         status = PUBLISH_DRAFT
+    elif verification_errors:
+        status = PUBLISH_VERIFICATION_ERROR
     elif counts[UNSUPPORTED] and counts[UNSUPPORTED] == len(conclusions_out):
         status = PUBLISH_UNSUPPORTED
     elif counts[PARTIAL] or counts[UNSUPPORTED]:
@@ -653,10 +909,18 @@ def verify_manifest(
         "schema_version": VERIFICATION_SCHEMA_VERSION,
         "status": status,
         "counts": counts,
+        "verification_errors": verification_errors,
         "range_completeness": ledger.range_completeness(),
         "all_offered_fetched": ledger.all_offered_fetched(),
         "conclusions": conclusions_out,
     }
+
+
+#: 未获支持即整体不可信的确定性缺口（评审 C2：无效条目属于此类，不静默）。
+_UNSUPPORTED_CODES = {
+    "no_evidence", "invalid_evidence", "invalid_conclusion",
+    "incomplete_evidence", "source_unresolvable", "quote_not_found",
+}
 
 
 def _verify_conclusion(
@@ -664,6 +928,9 @@ def _verify_conclusion(
     index: int,
     ledger: ConsumptionLedger,
     resolve: SourceResolver,
+    final_text: str | None = None,
+    *,
+    pending_aware: bool = False,
 ) -> dict[str, Any]:
     cid = str(conclusion.get("id") or f"C{index + 1}")
     evidence = conclusion.get("evidence")
@@ -671,13 +938,33 @@ def _verify_conclusion(
     covered_purposes: set[str] = set()
     deliveries: list[str] = []
 
+    # 评审 C4：报告绑定——结论必须能在最终报告中定位；清单与报告脱节即降级。
+    report_quote = str(conclusion.get("report_quote") or "").strip()
+    if final_text is not None:
+        if not report_quote:
+            problems.append({
+                "code": "not_in_report",
+                "message": "清单未提供报告定位锚点 report_quote，无法确认该结论位于最终报告",
+            })
+        elif report_quote not in final_text:
+            problems.append({
+                "code": "not_in_report",
+                "message": "report_quote 未出现在最终报告中（清单相对报告已过期）",
+            })
+
     if not isinstance(evidence, list) or not evidence:
         problems.append({"code": "no_evidence", "message": "结论未附任何证据"})
     else:
         for ev_index, item in enumerate(evidence):
-            if not isinstance(item, dict):
-                continue
             label = f"evidence[{ev_index}]"
+            if not isinstance(item, dict):
+                # 评审 C2：非法证据条目一律拒绝并登记，绝不静默跳过——
+                # 跳过会让「零有效证据」伪装成 supported。
+                problems.append({
+                    "code": "invalid_evidence",
+                    "message": f"{label} 不是 JSON 对象，已拒绝",
+                })
+                continue
             doc_id = str(item.get("doc_id") or "").strip()
             locator = str(item.get("locator") or "").strip()
             quote = str(item.get("quote") or "").strip()
@@ -690,25 +977,58 @@ def _verify_conclusion(
                     "message": f"{label} 缺少 doc_id／locator／quote，溯源链断开",
                 })
                 continue
-            source_text = resolve(doc_id, locator)
+            try:
+                source_text = resolve(doc_id, locator)
+            except Exception as exc:
+                # 评审 C7：基础设施故障与确定性缺口分开——
+                # 故障记 verification_error，整体校验状态降为不可信。
+                code = "verification_error" if _is_infra_error(exc) else "source_unresolvable"
+                problems.append({
+                    "code": code,
+                    "message": (
+                        f"{label} 的 {doc_id}|{locator} 解析权威原文时失败"
+                        f"（{type(exc).__name__}：{exc}）"
+                    ),
+                })
+                continue
             if source_text is None:
                 problems.append({
                     "code": "source_unresolvable",
                     "message": f"{label} 的 {doc_id}|{locator} 无法解析到原文",
                 })
                 continue
-            if quote not in source_text:
+            offset = source_text.find(quote)
+            if offset < 0:
                 problems.append({
                     "code": "quote_not_found",
                     "message": f"{label} 的 quote 未在原文中逐字出现：{quote[:60]!r}",
                 })
                 continue
-            delivery = _evidence_delivery(ledger, doc_id, locator)
+            if pending_aware:
+                delivery = evidence_delivery_for_submit(
+                    ledger, doc_id, locator, offset, offset + len(quote),
+                )
+                if delivery == "pending":
+                    problems.append({
+                        "code": "pending_delivery",
+                        "message": (
+                            f"{label} 的片段已取回但尚未经过下一轮消息边界核验；"
+                            "请下一轮重新提交完整清单确认"
+                        ),
+                    })
+                    continue
+            else:
+                delivery = _evidence_delivery(
+                    ledger, doc_id, locator, offset, offset + len(quote),
+                )
             deliveries.append(delivery)
             if delivery != DELIVERED:
                 problems.append({
                     "code": "not_delivered",
-                    "message": f"{label} 的原文未完整送达模型（{delivery}）",
+                    "message": (
+                        f"{label} 的引文区间未被已送达片段完整覆盖"
+                        f"（{delivery}）；评审 C1：只读首段不等于整块送达"
+                    ),
                 })
 
     required = [
@@ -721,9 +1041,7 @@ def _verify_conclusion(
             "message": "声明的必要依赖未被任何证据用途覆盖：" + "、".join(missing_deps),
         })
 
-    unsupported_codes = {"no_evidence", "incomplete_evidence", "source_unresolvable",
-                         "quote_not_found"}
-    if any(p["code"] in unsupported_codes for p in problems):
+    if any(p["code"] in _UNSUPPORTED_CODES for p in problems):
         status = UNSUPPORTED
     elif problems:
         status = PARTIAL
@@ -732,6 +1050,7 @@ def _verify_conclusion(
     return {
         "id": cid,
         "text_location": str(conclusion.get("text_location") or ""),
+        "report_quote": report_quote,
         "status": status,
         "evidence_count": len(evidence) if isinstance(evidence, list) else 0,
         "covered_purposes": sorted(covered_purposes),
@@ -741,6 +1060,148 @@ def _verify_conclusion(
         # 明确忽略模型自报：字段仅记录，不参与判定。
         "model_claimed_complete": conclusion.get("complete"),
     }
+
+
+# ── 发布边界（评审 C5/C6）────────────────────────────────────────────────
+#: 阻断开关：``A4_ENFORCE`` ∈ {1,true,yes,on}（大小写不敏感）时在发布边界
+#: 执行确定性降级；**默认关闭**（评审 §7：默认启用暂缓，先小规模观测对照）。
+_ENFORCE_ENV = "A4_ENFORCE"
+
+
+def enforcement_enabled() -> bool:
+    raw = os.environ.get(_ENFORCE_ENV, "").strip().lower()
+    return raw in {"1", "true", "yes", "on"}
+
+
+def _limitation_block(verification: dict[str, Any]) -> str:
+    """确定性降级块（评审 C6）：列出每条未支持结论及其**可定位锚点**与问题码。
+
+    只追加不删改——这是较弱的「草稿保留」产品目标：读者仍能看到原结论，但每条
+    未支持结论都带着锚点与问题码被显式标注，明细落盘可复算。完全的「修正／删除
+    无支持结论」需要在环内由清单反馈驱动修正后重新提交（工具契约），或未来引入
+    确定性的文本手术。
+    """
+    status = verification.get("status")
+    if status == PUBLISH_DRAFT:
+        return (
+            "---\n\n"
+            "> **证据完整性校验（A4）**：缺少结论证据清单（manifest），本报告只能"
+            "按未校验草稿对待，不得引用为已通过证据完整性校验；"
+            "明细见 corpus/manifest_verification.json。"
+        )
+    if status == PUBLISH_VERIFICATION_ERROR:
+        return (
+            "---\n\n"
+            "> **证据完整性校验（A4）**：校验基础设施故障，结论证据状态**无法可靠"
+            "判定**，本报告按未校验草稿对待；明细见 corpus/manifest_verification.json。"
+        )
+    lines: list[str] = []
+    for row in verification.get("conclusions") or []:
+        if not isinstance(row, dict) or row.get("status") == SUPPORTED:
+            continue
+        codes = sorted({
+            str(p.get("code") or "")
+            for p in row.get("problems") or []
+            if isinstance(p, dict)
+        })
+        anchor = str(row.get("report_quote") or row.get("text_location") or "").strip()
+        where = f"「{anchor[:40]}…」附近" if anchor else "位置未提供"
+        lines.append(
+            f"> - {row.get('id')}（{where}）：{'、'.join(codes) or '未获完整支持'}",
+        )
+    head = (
+        f"> **证据完整性校验（A4）**：本报告未完全通过结论证据校验"
+        f"（状态：{status}）。"
+    )
+    tail = "> 明细见 corpus/manifest_verification.json。"
+    if lines:
+        return "\n".join([
+            "---", "", head,
+            "> 以下结论未获「逐字可溯源且完整送达」的原文支持，请按未校验内容对待：",
+            *lines, tail,
+        ])
+    return "\n".join(["---", "", head, "> 部分结论未获完整证据支持。", tail])
+
+
+def publish_boundary(
+    ledger: ConsumptionLedger,
+    *,
+    final_text: str,
+    answer_status: str,
+    directory: Path | None = None,
+    resolver: SourceResolver | None = None,
+) -> dict[str, Any]:
+    """所有最终发布路径共用的 A4 边界（评审 C5）。
+
+    返回 ``{"boundary_action", "publish_status", "final_text", "answer_status",
+    "verification"}``：
+
+    - ``skip``：本 run 无 corpus 活动（非语料任务）——原样放行，不写工件；
+    - ``publish``：校验通过——原样放行（工件已落盘）；
+    - ``observe``：默认模式（``A4_ENFORCE`` 未开）或基础设施故障 fail-open——
+      记录状态与工件，不改变发布内容；**观测与放行不等于校验通过**；
+    - ``downgrade``：enforce 开启且未通过——按评审 C6 追加确定性限定块
+      （逐条锚定），``answer_status`` 由 ``complete`` 降为 ``partial``
+      （已是 ``not_found``／``best_effort`` 的保持原值，不往弱处反向升级）。
+    """
+    outcome: dict[str, Any] = {
+        "boundary_action": "observe",
+        "publish_status": "",
+        "final_text": final_text,
+        "answer_status": answer_status,
+        "verification": None,
+    }
+    try:
+        if not ledger.offered and not ledger.fetched:
+            outcome["boundary_action"] = "skip"
+            return outcome
+        verification = verify_and_record(
+            ledger, directory=directory, resolver=resolver, final_text=final_text,
+            extra={"boundary_answer_status": answer_status},
+        )
+        outcome["verification"] = verification
+        outcome["publish_status"] = verification.get("status") or ""
+        if outcome["publish_status"] == PUBLISH_VERIFIED:
+            outcome["boundary_action"] = "publish"
+            return outcome
+        if not enforcement_enabled():
+            return outcome
+        outcome["final_text"] = (
+            f"{final_text.rstrip()}\n\n{_limitation_block(verification)}"
+        )
+        if outcome["answer_status"] == "complete":
+            outcome["answer_status"] = "partial"
+        outcome["boundary_action"] = "downgrade"
+        return outcome
+    except Exception as exc:
+        logger.warning("corpus ledger: 发布边界执行失败（fail-open）：%s", exc)
+        outcome["boundary_action"] = "observe"
+        return outcome
+
+
+def evidence_delivery_for_submit(
+    ledger: ConsumptionLedger, doc_id: str, locator: str,
+    quote_start: int, quote_end: int,
+) -> str:
+    """环内提交清单用的送达判定：在 :func:`_evidence_delivery` 基础上区分
+    「已核验未送达」与「新取片段待边界核验」（评审 C3）。
+
+    返回 ``delivered``／``partial``／``truncated``／``pending``／``not_delivered``：
+    新取片段（取回 turn 晚于最近一次消息边界核验）标 ``pending``——它将在本轮
+    结束的消息边界被核验，下一轮重新提交即可确认，不诱发无效补取。
+    """
+    refs = [
+        ref for ref in ledger.fetched
+        if ref.doc_id == doc_id and ref.locator == locator
+    ]
+    if not refs:
+        return UNKNOWN
+    status = _evidence_delivery(ledger, doc_id, locator, quote_start, quote_end)
+    if status != UNKNOWN:
+        return status
+    if any(ref.turn > ledger.last_finalized_turn for ref in refs):
+        return "pending"
+    return "not_delivered"
 
 
 # ── 观察者（观测模式，绝不阻断）────────────────────────────────────────────
@@ -765,6 +1226,8 @@ class ConsumptionLedgerObserver(BaseObserver):
         self._role_id = role_id
         self._pipeline_id = pipeline_id
         self._ledger = ledger
+        # 本 loop 已扫描过的消息数（增量送达核验；评审 C3）。
+        self._scanned_messages = 0
 
     def _get_ledger(self) -> ConsumptionLedger:
         if self._ledger is None:
@@ -802,6 +1265,26 @@ class ConsumptionLedgerObserver(BaseObserver):
         except Exception as exc:
             logger.debug("ConsumptionLedgerObserver.on_tool_result: %s", exc)
 
+    async def on_turn_end(self, ctx: TurnContext) -> None:
+        """在每个 turn 结束（下一轮真实模型请求之前）增量核验送达快照。
+
+        评审 C3：环内提交清单需要**及时更新**的 delivered 状态；只在
+        ``on_loop_end`` 补账会让新取片段永远 ``unknown``，修正闭环失效。
+        只扫本轮新增的消息（``finalize`` 对已 delivered 片段幂等跳过，压缩改写
+        历史时按更坏情况整表重扫一次，合并取强不会降级）。
+        """
+        try:
+            ledger = self._get_ledger()
+            messages = list(ctx.messages or [])
+            start = self._scanned_messages if self._scanned_messages <= len(messages) else 0
+            if len(messages) > start:
+                ledger.finalize(messages[start:])
+            self._scanned_messages = len(messages)
+            if ctx.turn > ledger.last_finalized_turn:
+                ledger.last_finalized_turn = ctx.turn
+        except Exception as exc:
+            logger.debug("ConsumptionLedgerObserver.on_turn_end: %s", exc)
+
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         try:
             ledger = self._get_ledger()
@@ -818,12 +1301,14 @@ __all__ = [
     "DEPENDENCY_PURPOSES",
     "LEDGER_FILENAME",
     "LEDGER_SCHEMA_VERSION",
+    "MANIFESTS_SUBDIR",
     "MANIFEST_FILENAME",
     "MANIFEST_SCHEMA_VERSION",
     "PARTIAL",
     "PUBLISH_DRAFT",
     "PUBLISH_PARTIAL",
     "PUBLISH_UNSUPPORTED",
+    "PUBLISH_VERIFICATION_ERROR",
     "PUBLISH_VERIFIED",
     "SKIPPED",
     "SUPPORTED",
@@ -836,14 +1321,19 @@ __all__ = [
     "ConsumptionLedgerObserver",
     "FragmentRef",
     "delivery_rank",
+    "enforcement_enabled",
+    "evidence_delivery_for_submit",
     "evidence_rank",
     "get_run_ledger",
     "load_manifest",
+    "load_manifest_files",
+    "publish_boundary",
     "reset_run_ledgers",
     "resolve_artifact_dir",
     "run_ledger_key",
     "verify_and_record",
     "verify_manifest",
     "write_ledger",
+    "write_manifest_file",
     "write_verification",
 ]

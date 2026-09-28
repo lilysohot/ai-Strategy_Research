@@ -347,15 +347,21 @@ async def agent_team_reporter(
             exc,
         )
 
-    # A4 消费账本（观测模式）：报告已产出，在**最终报告边界**重算证据校验状态并
-    # 刷新工件（缺清单只能标 draft）。仅记录，不阻断报告发布。
+    # A4 消费账本（评审 C5：reporter 是最终发布出口之一）：在**最终报告边界**重算
+    # 证据校验状态并刷新工件。A4_ENFORCE 关闭（默认）时仅记录不阻断；开启时未
+    # 通过的报告追加锚定限定块并降级 answer_status（评审 C6）。
+    answer_status = "complete"
     try:
-        from plugins.corpus.ledger import get_run_ledger, verify_and_record
+        from plugins.corpus.ledger import get_run_ledger, publish_boundary
 
-        verify_and_record(get_run_ledger())
+        boundary = publish_boundary(
+            get_run_ledger(), final_text=report_md, answer_status=answer_status,
+        )
+        report_md = boundary["final_text"]
+        answer_status = boundary["answer_status"]
     except Exception as exc:
         logger.warning(
-            "agent_team_reporter: A4 evidence verification skipped (%s: %s)",
+            "agent_team_reporter: A4 publish boundary skipped (%s: %s)",
             type(exc).__name__,
             exc,
         )
@@ -364,7 +370,7 @@ async def agent_team_reporter(
         "final_answer": report_md,
         "final_content": report_md,
         "report_markdown": report_md,
-        "answer_status": "complete",
+        "answer_status": answer_status,
         "answer_sentinel": "",
         "final_answer_source": "reporter_llm",
         "final_answer_rescued": False,

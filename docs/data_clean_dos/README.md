@@ -1,6 +1,6 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
-> 修订：v4 · 2026-09-28。状态：A0–A4 已实施（A4 为观测模式，阻断约束未启用），隔离库检索回放与 3 题真实模型冒烟已完成，D1–D4 与转义记账全部修复；B0–B4 未实施。
+> 修订：v5 · 2026-09-28。状态：A0–A4 已实施；A4 按评审修订契约重做（清单生产者 `corpus_submit_manifest`、报告绑定、子清单落盘、全发布出口 `publish_boundary`），**A4_ENFORCE 默认关闭（观测模式），阻断默认启用暂缓**——评审结论：A4 尚不能作为可信的默认发布门。B0–B4 未实施。
 > 本次修订只调整方案文档与执行状态，不表示数据库、快照或历史报告已经变更。
 
 这组方案的首要目标是：让 Agent 用较少的无关上下文取得所需原文，知道自己实际读到了什么，并能说明结论依赖哪些证据。准备侧的解析、清洗和切块改动，须在消费侧改善后仍有明确缺陷证据时，再分项验证。
@@ -102,8 +102,9 @@ D3（固定字段撑爆预算）／D4（分页信封被当单块压缩、`items`
 D2（分页信封补回信封级 `block_evidence` 与 item `source_id`，消费者跟游标拼回后走同一
 权威校验）与「`_page` 转义长度记账」（改按序列化转义后长度）。修复后回放：`unknown=0`、
 `delivered=5793` 达 `fetched`、`questions_all_offered_fetched=24/24`、
-`search_envelope_broken_of_with_hits=0`、**`cell_evidence_bearing_calls=684`（分页路径
-修复前为 0）**、`compact_fallback_items=257`（整块证据参与预算探针后的诚实 compact 回退，
+`search_envelope_broken_of_with_hits=0`、**`cell_evidence_bearing_calls=684`（评审后 v6
+分层统计修正：684 次全部来自单块路径，分页信封路径实为 0/257——见下方评审修订）**、
+`compact_fallback_items=257`（整块证据参与预算探针后的诚实 compact 回退，
 `delivered` 仍全量）。细节见 [01 §A4.4](01-table-recovery.md#a44-隔离库检索回放与消费侧接缝缺陷本轮)。
 
 **真实模型冒烟（2026-09-28，3 题）**：`frontier-agent --mode react`（glm-5.3-flash）每题
@@ -112,6 +113,37 @@ D2（分页信封补回信封级 `block_evidence` 与 item `source_id`，消费�
 答案侧 2/3（唯一缺口是 agent 未 fetch 的 page:3 表格列——检索缺口，属 B0 待回答，不是
 消费侧接缝）。三题合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用。
 基线已取得，下一步决定是否启用 A4 阻断约束，以及 B0 是否仍有准备侧缺陷。
+
+**评审修订（2026-09-28，v5，依据 [.scratch/a4-review-20260928/report.md](../../.scratch/a4-review-20260928/report.md)）**：
+评审结论「A4 当前不能作为可信的默认发布门；默认启用暂缓」。按评审 §7 优先级完成：
+
+- **判定基础与分页边界反例修复**：C1 引文区间按**已送达片段区间并集**覆盖判定（只读
+  首段 ≠ 整块送达）；C2 非 dict 证据／结论条目拒绝（`invalid_evidence`／
+  `invalid_conclusion`，不静默跳过）；C7 校验基础设施故障分类为 `verification_error`
+  （整体不得给出已校验结论），与确定性缺口 `source_unresolvable` 分离；S1 `full` 视图
+  合法原子行装不下时自动尝试 `compact` 视图重试（`views_tried` 如实上报）；S2 错误响应
+  信封自身渐进降级有界化（`item_errors` 摘要化→计数化→游标最后丢弃并标记）。
+- **清单生产者按修订契约实现**：[corpus_submit_manifest](../../plugins/tools/corpus_manifest.py)
+  ——入口 schema 先行、**每次提交独立落盘** `manifests/manifest-NNN.json`（多代理互不
+  覆盖，评审 C4）、即时回验带 `pending_delivery`（新取片段待下一轮消息边界核验，评审
+  C3）、**报告绑定**（`report_quote` 逐字锚点 + `report_sha256`，锚点不在最终报告记
+  `not_in_report`）；绑定语料检索工具即**伴随绑定**清单生产者并注入提示附注。
+- **全发布出口接线（评审 C5）**：`publish_boundary` 统一接 reporter、agent_team 主代理
+  直出／reporter 失败回退、stateful_react 最终答案三个出口；skip 条件 = 无 corpus 活动；
+  内部 fail-open（异常记日志不阻断），确定性判定结果才降级。enforce 路径（评审 C6）=
+  **锚定限定块**（逐条列出问题结论及其锚点，草稿只加不删），`A4_ENFORCE` ∈
+  {1,true,yes,on} 时才把 `complete` 压为 `partial`，**默认关闭**。
+- **回放脚本修正（评审 §5.3–§5.5）**：`replay_model.py` 误读 `verification.json` 改为
+  `manifest_verification.json` 的 `status`/`conclusions`——三题真实 A4 状态为 `draft`
+  （run 早于清单工具存在，模型未提交清单，验证器如实标注）；选题说明收敛为「金标用于
+  分层选题和事后评分，不进入模型检索决策，**这不是独立盲测**」；回放 v6 把单元格证据
+  统计按**响应形状与回退状态分层**：684 次携带全部来自单块路径（5536 次单块调用），
+  **分页信封路径 0/257**（全部 compact 回退，与 `compact_fallback_items=257` 吻合）——
+  v5 的单一总数掩盖了「分页路径实际恢复比例为 0」这一事实。
+- 回归测试：[test_corpus_ledger.py](../../tests/test_corpus_ledger.py) 34 项、
+  [test_corpus_manifest_tool.py](../../tests/test_corpus_manifest_tool.py) 11 项、
+  S1/S2 分页与截断回归，A4 相关 130 项全绿；ruff／pyright／import_smoke 全部通过。
+  下一决策点：在真实运行中验证清单提交的环内修正闭环有效后，再评审是否默认启用阻断。
 
 ## 6. 统一验收标准
 
@@ -136,18 +168,19 @@ D2（分页信封补回信封级 `block_evidence` 与 item `source_id`，消费�
 | 原文送达 | `corpus_fetch` 正文优先字段序 + `compact` 视图；`fit_structured_payload` 保证超预算仍返回合法 JSON；`_overflow` 单轮聚合预算按名分派 |
 | 结构真实性 | `corpus_inventory` 按成员自身元数据出清单，未知表身份填 null；`structure_status` 仅依据可核验证据 |
 | 范围覆盖 | [ledger.py](../../plugins/corpus/ledger.py) 按 `offered` scope 复算范围完整性；`skipped`／`unresolved` 使范围不完整 |
-| 结论证据 | `verify_manifest` 由账本 + 权威原文重算每条结论，拒绝模型自报 `complete=true`；未送达记 `partial`，编造 quote 记 `unsupported` |
-| 分页可靠性 | 页信封 + 自描述校验和游标；`exhausted`／`fetch_complete`／`unresolved` 分开；`unit_too_large` 显式返回 |
-| 真实接入 | `ConsumptionLedgerObserver` 接入 stateful_react 主循环与 agent_team 子代理／主代理；`agent_team_reporter` 在报告边界再触发校验；产物落 `<APODEX_RUN_DIR>/corpus/*.json` |
-| 隔离库回放 | 30 题零模型 PG 只读回放（[replay.py](../../.scratch/a4-replay-20260928/replay.py) v5）：`delivered=5793` 达 `fetched`、`unknown=0`、`incomplete_locators=0`、`questions_all_offered_fetched=24/24`、`questions_search_envelope_broken_of_with_hits=0`、`compact_fallback_items=257`、`cell_evidence_bearing_calls=684` |
-| 真实模型冒烟 | 3 题真实模型回放（[replay_model.py](../../.scratch/a4-replay-20260928/replay_model.py)，glm-5.3-flash/react）：金标取回侧覆盖 6/6、5/5、2/3，答案侧 6/6、3/5、2/3；账本四集合随 run 落盘（`corpus/ledger.json`）；合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用 |
-| 测试 | [tests/test_corpus_ledger.py](../../tests/test_corpus_ledger.py)（18 项）、`test_runaway_and_repetition_wiring.py`（接线守卫）、`test_corpus_relations.py`、`test_corpus_fetch_paging.py`（含 D3 回归）、`test_corpus_search.py`、`test_tool_result_truncation.py`（含 D1／D4 回归）全绿 |
+| 结论证据 | `verify_manifest` 由账本 + 权威原文重算每条结论，拒绝模型自报 `complete=true`；引文区间按已送达片段区间并集覆盖判定（C1），无效条目拒绝（C2），校验基础设施故障记 `verification_error` 与确定性缺口分离（C7）；生产者 [`corpus_submit_manifest`](../../plugins/tools/corpus_manifest.py) 即时回验驱动环内修正 |
+| 分页可靠性 | 页信封 + 自描述校验和游标；`exhausted`／`fetch_complete`／`unresolved` 分开；原子行 full 装不下自动尝试 compact（S1，`views_tried` 如实上报）；错误信封自身渐进降级有界化（S2）；`unit_too_large` 显式返回 |
+| 真实接入 | `ConsumptionLedgerObserver` 接入 stateful_react 主循环与 agent_team 子代理／主代理，`on_turn_end` 增量核验送达快照（C3）；`publish_boundary` 统一接 reporter／agent_team 直出与失败回退／stateful_react 全部发布出口（C5）；产物落 `<APODEX_RUN_DIR>/corpus/`（`ledger.json`、`manifests/` 子清单、`manifest_verification.json`） |
+| 隔离库回放 | 30 题零模型 PG 只读回放（[replay.py](../../.scratch/a4-replay-20260928/replay.py) v6）：`delivered=5793` 达 `fetched`、`unknown=0`、`incomplete_locators=0`、`questions_all_offered_fetched=24/24`、`questions_search_envelope_broken_of_with_hits=0`、`compact_fallback_items=257`；单元格证据分层统计：单块 684/5536、信封 0/257（全部 compact 回退） |
+| 真实模型冒烟 | 3 题真实模型回放（[replay_model.py](../../.scratch/a4-replay-20260928/replay_model.py)，glm-5.3-flash/react）：金标取回侧覆盖 6/6、5/5、2/3，答案侧 6/6、3/5、2/3；账本四集合与验证工件随 run 落盘，**三题验证状态如实为 `draft`**（run 早于清单工具）；合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用 |
+| 测试 | [tests/test_corpus_ledger.py](../../tests/test_corpus_ledger.py)（34 项，含 C1/C2/C7 反例、边界四态、报告锚点、子清单聚合）、[tests/test_corpus_manifest_tool.py](../../tests/test_corpus_manifest_tool.py)（11 项，schema/落盘/伴随绑定/on_turn_end）、`test_corpus_fetch_paging.py`（含 S1 回归）、`test_tool_result_truncation.py`（含 S2 回归）等 A4 相关 130 项全绿 |
 
-尚缺：**报告证据清单的生产者**（现有 `EvidenceCard` 面向网络来源、不含语料 locator，故
-`manifest.json` 无人产出，校验恒为 `draft`）与全量 30 题的真实模型成本对照（冒烟仅 3 题，
-取得基线量级）。模拟／回放通过不等于真实运行通过；固定任务回放（零模型档 v5 + 真实模型
-冒烟档 v1）均已完成后，下一决策点是**是否启用 A4 阻断约束**，以及 **B0 是否仍有准备侧
-缺陷**（macro-001 的 page:3 表格列检索缺口是首个待归因样本）。
+尚缺：**清单提交的环内修正闭环未经真实模型验证**（三题冒烟的 run 早于
+`corpus_submit_manifest` 存在，验证状态如实为 `draft`；`A4_ENFORCE` 默认关闭，阻断默认
+启用暂缓——评审结论）与全量 30 题的真实模型成本对照（冒烟仅 3 题，取得基线量级）。
+模拟／回放通过不等于真实运行通过；下一决策点是**在真实运行中验证清单提交与修正闭环**，
+再评审是否默认启用阻断，以及 **B0 是否仍有准备侧缺陷**（macro-001 的 page:3 表格列检索
+缺口是首个待归因样本）。
 
 ## 7. 与既有架构和后续工作的关系
 

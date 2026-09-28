@@ -1,0 +1,30 @@
+{
+  "partial_page": {
+    "range_complete": true,
+    "verification": "verified"
+  },
+  "invalid_evidence": "verified",
+  "live_verification": "partial",
+  "resolver_exception": "draft",
+  "table_full": {
+    "errors": [
+      {
+        "locator": "chunk:t0",
+        "code": "unit_too_large",
+        "error": "最小原子单元 101 字符超过本片段预算 101；请提高 max_chars，或改用专门单元读取；本轮不宣称已取全",
+        "needed_chars": 101
+      }
+    ],
+    "items": 0
+  },
+  "table_compact": {
+    "ok": true,
+    "errors": [],
+    "has_text": true
+  },
+  "error_budget": {
+    "budget": 2000,
+    "actual": 3275,
+    "ok": false
+  }
+}

@@ -10,6 +10,7 @@ from plugins.tools.bash import bash
 from plugins.tools.collect_reports import collect_reports
 from plugins.tools.corpus_fetch import corpus_fetch
 from plugins.tools.corpus_inventory import corpus_inventory
+from plugins.tools.corpus_manifest import corpus_submit_manifest
 from plugins.tools.corpus_search import corpus_search
 from plugins.tools.create_file import create_file
 from plugins.tools.create_subagent import create_subagent
@@ -66,6 +67,9 @@ _BUILTIN_TOOLS: list[Tool] = [
     corpus_search,
     corpus_fetch,
     corpus_inventory,
+    # 报告证据清单生产者（A4 修订契约）。只写 run 工件目录（corpus/manifests/），
+    # 不碰语料库；绑定语义见各工作流的伴随注入（与 corpus_fetch 同进退）。
+    corpus_submit_manifest,
     # 数据源覆盖度探测（开局一次，串起 corpus 与 market，只读）。
     data_coverage,
     # 市场数据（同花顺 fuyao）。只读、无写入、按按需拉取（本模块不落库）。

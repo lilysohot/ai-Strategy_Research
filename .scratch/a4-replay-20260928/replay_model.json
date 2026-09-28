@@ -1,18 +1,18 @@
 {
   "artifact": "a4-replay-model",
   "version": 1,
-  "generated_at": "2026-09-28T07:55:18.311564+00:00",
+  "generated_at": "2026-09-28T09:45:05.673971+00:00",
   "tier": "real-model smoke (glm-5.3-flash, react, one-shot per question)",
   "scale": {
     "questions": 3,
     "ok": 3
   },
-  "selection_policy": "每 domain 一道 answerable；优先金标带 row/cell 约束的表格题（D2 受益场景）",
+  "selection_policy": "每 domain 一道 answerable；按金标 row/cell 约束分层优先表格题（D2 受益场景）——金标参与分层选题与事后评分",
   "policy": {
     "command": "uv run frontier-agent --mode react --no-tui --yes -p <question>",
     "pg_read_only": "PGOPTIONS default_transaction_read_only=on",
     "resumable": "model_runs/<query_id>/result.json 存在即跳过",
-    "gold_usage": "金标只做零成本正确性代理（引文覆盖），不参与选题与检索"
+    "gold_usage": "金标用于分层选题和事后评分（引文覆盖），不进入模型检索决策；因此这不是独立盲测"
   },
   "totals": {
     "wall_s": 847.5,
@@ -1234,8 +1234,11 @@
         ],
         "errors": [],
         "skipped": 0,
-        "verification_conclusion": null,
-        "verification_path": null
+        "verification_status": "draft",
+        "verification_counts": null,
+        "verification_errors": null,
+        "verification_problem_codes": {},
+        "verification_path": ".apodex/runs/20260928-153258+0800-react-087c/corpus/manifest_verification.json"
       },
       "gold": {
         "targets": 6,
@@ -2414,8 +2417,11 @@
         ],
         "errors": [],
         "skipped": 0,
-        "verification_conclusion": null,
-        "verification_path": null
+        "verification_status": "draft",
+        "verification_counts": null,
+        "verification_errors": null,
+        "verification_problem_codes": {},
+        "verification_path": ".apodex/runs/20260928-154210+0800-react-7ce7/corpus/manifest_verification.json"
       },
       "gold": {
         "targets": 5,
@@ -3099,8 +3105,11 @@
         ],
         "errors": [],
         "skipped": 0,
-        "verification_conclusion": null,
-        "verification_path": null
+        "verification_status": "draft",
+        "verification_counts": null,
+        "verification_errors": null,
+        "verification_problem_codes": {},
+        "verification_path": ".apodex/runs/20260928-154530+0800-react-eacb/corpus/manifest_verification.json"
       },
       "gold": {
         "targets": 3,

@@ -10,6 +10,7 @@ EXPECTED_TOOLS = {
     "corpus_fetch",
     "corpus_inventory",
     "corpus_search",
+    "corpus_submit_manifest",
     "create_file",
     "create_subagent",
     "data_coverage",

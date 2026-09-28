@@ -1126,8 +1126,11 @@
     ],
     "errors": [],
     "skipped": 0,
-    "verification_conclusion": null,
-    "verification_path": null
+    "verification_status": "draft",
+    "verification_counts": null,
+    "verification_errors": null,
+    "verification_problem_codes": {},
+    "verification_path": ".apodex/runs/20260928-154210+0800-react-7ce7/corpus/manifest_verification.json"
   },
   "gold": {
     "targets": 5,

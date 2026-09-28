@@ -595,7 +595,10 @@ def _tools_for_stateful_react(
     if skipped:
         logger.warning("stateful_react profile tools skipped: %s", skipped)
     logger.info("stateful_react tools selected by profile: %s", [t.name for t in tools])
-    return tools
+    # A4：语料检索工具的伴随绑定——清单生产者缺席时报告边界恒为 draft。
+    from plugins.tools.corpus_manifest import with_manifest_tool
+
+    return with_manifest_tool(tools, role_id="stateful_react")
 
 
 def _replace_tool_impls(tools: list[Any], agent_cfg: dict[str, Any]) -> list[Any]:
@@ -893,6 +896,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             "refusing unisolated host fallback"
         )
 
+    # A4：清单生产者实际绑定时才注入提交义务提示（伴随绑定于 _tools_for_stateful_react）。
+    if any(getattr(t, "name", "") == "corpus_submit_manifest" for t in tools):
+        from plugins.tools.corpus_manifest import MANIFEST_PROMPT_NOTE
+
+        system_prompt = f"{system_prompt}{MANIFEST_PROMPT_NOTE}"
+
     event_store = registry.get_optional(EventStore)
     model_name = extract_model_name(llm)
     observers: list[Any] = [
@@ -1160,6 +1169,23 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         }
         else "complete"
     )
+    # A4 消费账本（评审 C5：这是 stateful_react 的唯一最终发布出口）。A4_ENFORCE
+    # 关闭（默认）仅记录校验状态与工件；开启时未通过的答案追加锚定限定块并降级
+    # answer_status（评审 C6）。
+    try:
+        from plugins.corpus.ledger import get_run_ledger, publish_boundary
+
+        boundary = publish_boundary(
+            get_run_ledger(), final_text=final_text, answer_status=answer_status,
+        )
+        final_text = boundary["final_text"]
+        answer_status = boundary["answer_status"]
+    except Exception as exc:
+        logger.warning(
+            "stateful_react main_agent: A4 publish boundary skipped (%s: %s)",
+            type(exc).__name__,
+            exc,
+        )
     return {
         "final_answer": final_text,
         "final_content": final_text,

@@ -80,3 +80,4 @@ uploads/
 server/dev.db
 server/*.db
 .codebuddy/
+.codebuddy/memory/MEMORY.md

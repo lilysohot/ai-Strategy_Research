@@ -1685,6 +1685,25 @@ async def main_agent_node(
     # long-lived worker process (no-op if the agent never used add_task).
     clear_board(ctx.task_id)
 
+    # A4 消费账本（评审 C5：主代理直出与 reporter 失败回退共用此出口——reporter
+    # 缺席／失败时本节点的 final_answer 就是发布文本）。A4_ENFORCE 关闭（默认）
+    # 仅记录；开启时追加锚定限定块并降级 answer_status（评审 C6）。reporter 成功
+    # 时其文本随后覆盖，并由 reporter 出口重算边界（工件按最终发布文本刷新）。
+    try:
+        from plugins.corpus.ledger import get_run_ledger, publish_boundary
+
+        boundary = publish_boundary(
+            get_run_ledger(), final_text=final_text, answer_status=answer_status,
+        )
+        final_text = boundary["final_text"]
+        answer_status = boundary["answer_status"]
+    except Exception as exc:
+        logger.warning(
+            "agent_team main_agent: A4 publish boundary skipped (%s: %s)",
+            type(exc).__name__,
+            exc,
+        )
+
     return {
         "final_answer": final_text,
         # Mirror to ``final_content`` so the scheduler's terminal-output

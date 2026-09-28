@@ -21,10 +21,13 @@ offered 上下文，与 ``tools/corpus_product_observations.py`` 同口径）。
    ``structured_result_fit`` 分派（``fit_search_payload``：超限先去诊断字段、再按
    相关度**整条**舍弃尾部命中并标 ``hits_elided``，绝不硬切），并在两个后处理器里
    给了有界预算 20000（覆盖实测最大体 18.6K）。期望 ``search_envelope_broken=0``。
-2. **分页信封丢失单元级证据**——**未修（D2，方向待定）**：``corpus_fetch`` 超限转
-   分页信封后，item 不含 ``source_id``／``semantic_cells``，``units`` 只有
-   ``page``＋``unit_id``；行／列（row/col）证据在分页路径上不可恢复，既有消费者
-   （``tools/corpus_product_observations.py``）与产品门因此失效。
+2. **分页信封丢失单元级证据**——已修（D2）：单成员分页信封附信封级
+   ``block_evidence``（整块 ``source_id``／``units``／``spans``／``semantic_cells``，
+   块坐标），item 附 ``source_id``；既有消费者（``tools/corpus_product_observations.py``）
+   跟游标拼回整块后走同一权威校验。带派生单元格的表格在预算内 full＋block_evidence
+   不可达时诚实回退 compact，按 compact＋产品门 fail-closed 兜底。分层计数按
+   响应形状与回退状态分开统计（评审 §5.5）：实测（v6）单块路径携带 684 次，
+   分页信封路径 0 次（全部 compact 回退）——分页路径的实际恢复比例由此可判。
 3. **固定字段撑爆预算**——已修（D3）：``corpus_fetch._page`` 在 full 视图的 units
    清单独占 ``max_chars`` 时**自动改用 compact 视图重试一次**（item 标
    ``view_fallback``），不再让调用方自己领会；compact 仍装不下才报错，且提示换成
@@ -229,14 +232,53 @@ def valid_json(text: str) -> bool:
     return True
 
 
-def _has_cell_evidence(payload: dict) -> bool:
-    """该响应是否带行／列（row/col）单元证据（单块级／item 级／信封级整块证据）。"""
-    if payload.get("semantic_cells"):
-        return True
-    evidence = payload.get("block_evidence")
-    if isinstance(evidence, dict) and evidence.get("semantic_cells"):
-        return True
-    return any(item.get("semantic_cells") for item in payload.get("items") or [])
+def _empty_cell_layers() -> dict:
+    """单元格证据分层计数器（评审 §5.5：按响应形状与回退状态分层）。"""
+    return {
+        "legacy_calls": 0,
+        "legacy_with_cells": 0,
+        "envelope_calls": 0,
+        "envelope_block_evidence_calls": 0,
+        "envelope_items": 0,
+        "envelope_items_with_cells": 0,
+        "envelope_items_with_cells_compact_fallback": 0,
+    }
+
+
+def _cell_evidence_layers(payload: dict) -> dict:
+    """单次调用响应的单元格证据分层：单块（legacy）与分页信封（envelope）分开算。
+
+    - 单块：``semantic_cells``（块级）或 ``block_evidence.semantic_cells`` 任一存在
+      即携带；
+    - 信封：信封级 ``block_evidence`` 与 item 级 ``semantic_cells`` 分开计，
+      item 再按 ``view_fallback=compact`` 分层（compact 视图省去整块证据，
+      该层高说明分页路径在预算压力下实际恢复比例受限）。
+    """
+    items = payload.get("items")
+    if isinstance(items, list):
+        bearing = [
+            item for item in items
+            if isinstance(item, dict) and item.get("semantic_cells")
+        ]
+        return {
+            "shape": "envelope",
+            "envelope_block_evidence": bool(
+                isinstance(payload.get("block_evidence"), dict)
+                and payload["block_evidence"].get("semantic_cells")
+            ),
+            "items": len(items),
+            "items_with_cells": len(bearing),
+            "items_with_cells_compact_fallback": sum(
+                1 for item in bearing if item.get("view_fallback") == "compact"
+            ),
+        }
+    return {
+        "shape": "legacy_block",
+        "block_has_cells": bool(payload.get("semantic_cells")) or (
+            isinstance(payload.get("block_evidence"), dict)
+            and payload["block_evidence"].get("semantic_cells")
+        ),
+    }
 
 
 async def collect_question(
@@ -250,7 +292,7 @@ async def collect_question(
     incomplete: list[str] = []
     envelope_locators: list[str] = []
     legacy_locators: list[str] = []
-    cell_evidence_bearing = 0
+    cell_layers = _empty_cell_layers()
     compact_fallback_items = 0
     for locator in locators:
         args: dict = {"doc_id": doc_id, "locator": locator}
@@ -267,8 +309,20 @@ async def collect_question(
                     envelope_locators.append(locator)
             elif locator not in legacy_locators:
                 legacy_locators.append(locator)
-            if _has_cell_evidence(payload):
-                cell_evidence_bearing += 1
+            layers = _cell_evidence_layers(payload)
+            if layers["shape"] == "envelope":
+                cell_layers["envelope_calls"] += 1
+                cell_layers["envelope_block_evidence_calls"] += int(
+                    layers["envelope_block_evidence"]
+                )
+                cell_layers["envelope_items"] += layers["items"]
+                cell_layers["envelope_items_with_cells"] += layers["items_with_cells"]
+                cell_layers["envelope_items_with_cells_compact_fallback"] += layers[
+                    "items_with_cells_compact_fallback"
+                ]
+            else:
+                cell_layers["legacy_calls"] += 1
+                cell_layers["legacy_with_cells"] += int(layers["block_has_cells"])
             compact_fallback_items += sum(
                 1
                 for item in (payload.get("items") or [])
@@ -290,7 +344,7 @@ async def collect_question(
         "incomplete_locators": incomplete,
         "envelope_locators": len(envelope_locators),
         "legacy_locators": len(legacy_locators),
-        "cell_evidence_bearing": cell_evidence_bearing,
+        "cell_evidence": cell_layers,
         "compact_fallback_items": compact_fallback_items,
     }
 
@@ -363,7 +417,7 @@ async def main() -> None:
         paging = {"locators": 0, "pages": 0, "pages_per_locator_max": 0,
                   "multi_page_locators": 0, "incomplete_locators": [],
                   "envelope_locators": 0, "legacy_locators": 0,
-                  "cell_evidence_bearing": 0, "compact_fallback_items": 0}
+                  "compact_fallback_items": 0, "cell_evidence": _empty_cell_layers()}
         for hit in hits:
             doc_id = str(hit.get("doc_id") or "")
             locators = list(dict.fromkeys(str(x) for x in (hit.get("context_locators") or [])))
@@ -371,9 +425,10 @@ async def main() -> None:
                 continue
             part = await collect_question(fetch, doc_id, locators)
             for key in ("locators", "pages", "multi_page_locators", "envelope_locators",
-                        "legacy_locators", "cell_evidence_bearing",
-                        "compact_fallback_items"):
+                        "legacy_locators", "compact_fallback_items"):
                 paging[key] += part[key]
+            for key, value in part["cell_evidence"].items():
+                paging["cell_evidence"][key] += value
             paging["pages_per_locator_max"] = max(
                 paging["pages_per_locator_max"], part["pages_per_locator_max"]
             )
@@ -440,7 +495,7 @@ async def main() -> None:
     }
     result = {
         "artifact": "a4-replay",
-        "version": 5,
+        "version": 6,
         "generated_at": now(),
         "scope": "isolated-corpus retrieval replay (zero model, read-only PG)",
         "probe": probe,
@@ -481,9 +536,13 @@ async def main() -> None:
                     "spans", "units",
                 ],
                 "block_evidence_unit_keys": ["cells", "element", "page", "unit_id"],
-                "cell_evidence_bearing_calls": sum(
-                    row["cell_evidence_bearing"] for row in rows
-                ),
+                "cell_evidence_layers": {
+                    key: sum(row["cell_evidence"][key] for row in rows)
+                    for key in ("legacy_calls", "legacy_with_cells", "envelope_calls",
+                                "envelope_block_evidence_calls", "envelope_items",
+                                "envelope_items_with_cells",
+                                "envelope_items_with_cells_compact_fallback")
+                },
                 "legacy_shaped_locators": sum(row["legacy_locators"] for row in rows),
                 "envelope_shaped_locators": sum(row["envelope_locators"] for row in rows),
                 "note": "修复：单成员分页信封附信封级 block_evidence（整块 source_id／units/"
@@ -491,7 +550,13 @@ async def main() -> None:
                         "整块后走同一权威校验。单成员信封 item 不再重复携带 units（权威副本"
                         "在 block_evidence）；固定字段挤爆预算时诚实回退 compact（整块证据随"
                         "compact 省去，大表按 compact+产品门 fail-closed 兜底）。"
-                        "期望 cell_evidence_bearing_calls>0：分页路径行／列证据可恢复。",
+                        "评审 §5.5：单块／信封、item 与回退状态分层计数，"
+                        "不再用单一总数。实测（v6）：684 次携带全部来自单块路径"
+                        "（5536 次单块调用）；分页路径 envelope_items_with_cells=0"
+                        "——257 个信封 item 全部 compact 回退（与 d3 的"
+                        " compact_fallback_items=257 吻合），整块证据按设计省去，"
+                        "分页路径在本语料／6000 预算下实际恢复比例为 0，"
+                        "依赖 compact+产品门 fail-closed 兜底。",
             },
             "d3_fixed_fields_over_budget": {
                 "status": "fixed",

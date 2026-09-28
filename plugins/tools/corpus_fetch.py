@@ -429,30 +429,58 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
         compact_envelope = _compact_envelope(payload)
         if len(compact_envelope) <= budget:
             return compact_envelope
-        return json.dumps(
-            {
-                "ok": False,
-                "error": (
-                    "budget_exceeded：本页正文（items）超过本轮工具结果预算；"
-                    "为避免截断出非法 JSON 或丢掉正文，未返回本页。"
-                    "请减少 locators 数量或提高本轮工具结果预算后重试。"
-                ),
-                "doc_id": payload.get("doc_id"),
-                "build_id": payload.get("build_id"),
-                "scope_id": payload.get("scope_id"),
-                "next_cursor": payload.get("next_cursor"),
-                "item_errors": payload.get("item_errors") or [],
-                "unresolved": payload.get("unresolved") or [],
-                "items": len(payload.get("items") or []),
-                "text_chars": sum(
-                    len(str(item.get("text") or ""))
-                    for item in (payload.get("items") or [])
-                    if isinstance(item, dict)
-                ),
-                "budget": budget,
-            },
-            ensure_ascii=False,
+        # 评审 S2：预算错误信封自身必须有界——next_cursor／item_errors／unresolved
+        # 原样复制可能比预算还大（评审实测 ~3276 > 2000），错误反而承载了不可
+        # 送达的负载。渐进降级：item_errors 摘要化 → item_errors/unresolved
+        # 计数化 → 游标以 cursor_omitted 标志舍弃（最后丢，续取判断优先）。
+        error = (
+            "budget_exceeded：本页正文（items）超过本轮工具结果预算；"
+            "为避免截断出非法 JSON 或丢掉正文，未返回本页。"
+            "请减少 locators 数量或提高本轮工具结果预算后重试。"
         )
+        item_errors_raw = payload.get("item_errors") or []
+        item_errors = [e for e in item_errors_raw if isinstance(e, dict)]
+        unresolved = payload.get("unresolved") or []
+        out: dict[str, Any] = {
+            "ok": False,
+            "error": error,
+            "doc_id": payload.get("doc_id"),
+            "build_id": payload.get("build_id"),
+            "scope_id": payload.get("scope_id"),
+            "next_cursor": payload.get("next_cursor"),
+            "item_errors": item_errors,
+            "unresolved": unresolved,
+            "items": len(payload.get("items") or []),
+            "text_chars": sum(
+                len(str(item.get("text") or ""))
+                for item in (payload.get("items") or [])
+                if isinstance(item, dict)
+            ),
+            "budget": budget,
+        }
+
+        def _fits(fields: dict[str, Any]) -> bool:
+            return len(json.dumps(fields, ensure_ascii=False)) <= budget
+
+        if _fits(out):
+            return json.dumps(out, ensure_ascii=False)
+        # 降级 1：item_errors 明细（长报错文案）→ locator+code 摘要。
+        out["item_errors"] = [
+            {"locator": e.get("locator"), "code": e.get("code")} for e in item_errors
+        ]
+        if _fits(out):
+            return json.dumps(out, ensure_ascii=False)
+        # 降级 2：item_errors／unresolved 计数化。
+        del out["item_errors"]
+        del out["unresolved"]
+        out["item_errors_count"] = len(item_errors_raw)
+        out["unresolved_count"] = len(unresolved)
+        if _fits(out):
+            return json.dumps(out, ensure_ascii=False)
+        # 降级 3：游标舍弃（最后丢），以 cursor_omitted 如实标注。
+        del out["next_cursor"]
+        out["cursor_omitted"] = True
+        return json.dumps(out, ensure_ascii=False)
 
     compact = _compact_payload(payload)
     compact["diagnostics_elided"] = True
@@ -676,7 +704,13 @@ def _page(
         # block_evidence 与游标长度一起计入，避免控制字段撑爆实际预算。
         tried_views = ["compact"] if view == "compact" else [view, "compact"]
         member_view = view
-        fragment_budget = 0
+        ranges: list[tuple[int, int]] | None = None
+        atom_chars = 0
+        budget_ok = False
+        # 评审 S1：视图候选循环直到「剩余正文预算 >0 **且** 装得下最小原子行」。
+        # full 的固定字段大头（units 清单）吃掉正文预算、表格原子行装不下时，
+        # compact 视图释放的预算可能恰好容纳——不再于第一个 budget>0 的视图上
+        # 因 _AtomTooLarge 直接终止（原子粒度只取决于 text/kind，与视图无关）。
         for candidate in tried_views:
             empty_item = _item(
                 evidence,
@@ -699,23 +733,48 @@ def _page(
                     ensure_ascii=False,
                 )
             )
-            fragment_budget = max_chars - probe_len - _MARGIN
-            if fragment_budget > 0:
-                member_view = candidate
-                break
-        if fragment_budget <= 0:
-            item_errors.append(
-                {
-                    "locator": locator,
-                    "code": "budget_exceeded",
-                    "error": (
-                        "该块的固定字段（单元清单／整块证据／游标）已占满本次 max_chars，"
-                        f"自动改用 compact 视图后仍装不下（已尝试 {tried_views}）；"
-                        f"请提高 max_chars（当前 {max_chars}）后重试本 locator。"
-                    ),
-                    "views_tried": tried_views,
-                }
-            )
+            candidate_budget = max_chars - probe_len - _MARGIN
+            if candidate_budget <= 0:
+                continue
+            budget_ok = True
+            try:
+                candidate_ranges = _fragment_ranges(text, evidence.kind, candidate_budget, off)
+            except _AtomTooLarge as exc:
+                atom_chars = max(atom_chars, exc.chars)  # 原子粒度与视图无关，记录供报错
+                continue
+            member_view = candidate
+            ranges = candidate_ranges
+            break
+        if ranges is None:
+            diagnostics_on = False  # 成员失败：错误信封不携带装不下的大字段
+            if budget_ok:
+                # 各视图均有正文预算但都装不下最小原子行（评审 S1 收敛后的失败形态）。
+                item_errors.append(
+                    {
+                        "locator": locator,
+                        "code": "unit_too_large",
+                        "error": (
+                            f"最小原子单元 {atom_chars} 字符在视图 {tried_views} 下均超过"
+                            "片段预算；请提高 max_chars，或改用专门单元读取；"
+                            "本轮不宣称已取全"
+                        ),
+                        "needed_chars": atom_chars,
+                        "views_tried": tried_views,
+                    }
+                )
+            else:
+                item_errors.append(
+                    {
+                        "locator": locator,
+                        "code": "budget_exceeded",
+                        "error": (
+                            "该块的固定字段（单元清单／整块证据／游标）已占满本次 max_chars，"
+                            f"自动改用 compact 视图后仍装不下（已尝试 {tried_views}）；"
+                            f"请提高 max_chars（当前 {max_chars}）后重试本 locator。"
+                        ),
+                        "views_tried": tried_views,
+                    }
+                )
             if locator not in unresolved:
                 unresolved.append(locator)
             mi += 1
@@ -725,26 +784,6 @@ def _page(
         if member_view != view:  # 回退对调用方透明，但如实标注在 item 上供审计
             item_extra["view_fallback"] = member_view
         diagnostics_on = member_view == "full"  # compact 回退时整块证据一并省去
-        try:
-            ranges = _fragment_ranges(text, evidence.kind, fragment_budget, off)
-        except _AtomTooLarge as exc:
-            diagnostics_on = False  # 成员失败：错误信封不携带装不下的大字段
-            item_errors.append(
-                {
-                    "locator": locator,
-                    "code": "unit_too_large",
-                    "error": (
-                        f"最小原子单元 {exc.chars} 字符超过本片段预算 {fragment_budget}；"
-                        "请提高 max_chars，或改用专门单元读取；本轮不宣称已取全"
-                    ),
-                    "needed_chars": exc.chars,
-                }
-            )
-            if locator not in unresolved:
-                unresolved.append(locator)
-            mi += 1
-            off = 0
-            continue
         for frag_start, frag_end in ranges:
             item = _item(
                 evidence,

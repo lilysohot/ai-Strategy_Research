@@ -235,6 +235,45 @@ def test_atom_too_large_reports_error_and_resolves(stub) -> None:
     assert out["exhausted"] is True and out["fetch_complete"] is False
 
 
+# ── 评审 S1：full 装不下原子行时先试 compact 再终止 ─────────────────────
+
+
+def _long_row_table(rows: int = 6, row_len: int = 600):
+    """多行长表格：行是原子，full 的固定字段吃掉正文预算时行装不下。"""
+    specs = [
+        (f"u{i}", f"指标{i}：" + "甲" * (row_len - 10), 1, ((i, 0),)) for i in range(rows)
+    ]
+    return _evidence("t0", "table", specs)
+
+
+def test_full_view_atom_too_large_falls_back_to_compact(stub) -> None:
+    """full 剩余正文预算 >0 但装不下原子行时，compact 释放的预算可能容纳
+    ——预期 compact 回退成功取回，而不是在 full 上直接 unit_too_large（评审 S1）。"""
+    stub({"chunk:t0": _long_row_table()})
+
+    out = json.loads(_call(doc_id=_DOC, locator="chunk:t0", max_chars=2500))
+    assert out["ok"] is True
+    assert out["item_errors"] == [] and out["unresolved"] == []
+    (item,) = out["items"]
+    assert "甲" * 100 in item["text"]  # 原子行真的取回了
+    assert item["view_fallback"] == "compact"
+    assert out["next_cursor"]  # 一页装不下整块，续取正常
+
+
+def test_unit_too_large_reports_after_all_views_tried(stub) -> None:
+    """各视图均有正文预算但都装不下原子行才报 unit_too_large，并如实报告已试视图。"""
+    stub({"chunk:t0": _long_row_table()})
+
+    out = json.loads(_call(doc_id=_DOC, locator="chunk:t0", max_chars=2000))
+    assert out["ok"] is True
+    (err,) = out["item_errors"]
+    assert err["code"] == "unit_too_large"
+    assert err["needed_chars"] == 595
+    assert err["views_tried"] == ["full", "compact"]
+    assert out["unresolved"] == ["chunk:t0"]
+    assert out["fetch_complete"] is False
+
+
 # ── D3：固定字段超预算时自动回退 compact ───────────────────────────────
 
 
