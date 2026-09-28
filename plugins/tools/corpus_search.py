@@ -17,11 +17,35 @@ snippet 故意给不全，不是偷懒：如果这里就把整段原文吐出来
 from __future__ import annotations
 
 import json
+from typing import Any
 
 from frontier_agent.core.tool import tool
 from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
+
+#: 超预算压缩时逐命中保留的核心字段（模型据此定位并复取，缺一不可）。
+_HIT_CORE_KEYS = (
+    "doc_id",
+    "locator",
+    "source_id",
+    "build_id",
+    "chunk_id",
+    "scope_id",
+    "context_locators",
+)
+#: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
+_HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind")
+
+#: 命中被按预算整条舍弃时替换的提示（明确后续动作，不让模型以为检索已取全）。
+_ELIDED_HINT = (
+    "本次命中数超过工具结果预算，已按相关度**整条**舍弃尾部命中"
+    "（舍弃条数见 hits_elided，最相关的若干条仍完整保留）。"
+    "snippet 已截断，仅用于定位，禁止直接引用；"
+    "写 evidence 前请用 corpus_fetch(doc_id, locator) 取回逐字原文，"
+    "并依次取回 context_locators。需要看全被舍弃的命中时，"
+    "请用更具体的 query 或更小的 limit 重新检索。"
+)
 
 #: 无研报覆盖时的**流程级指令**（不是建议，是要求）。
 #:
@@ -71,7 +95,10 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         "build_id", "chunk_id", "title", "published", "snippet"}],
         "coverage": {...}, "hint": ...}``（I2-8：``doc_id`` 为 ``cv2:<build_id>``、
         ``locator`` 为 ``chunk:<chunk_id>``；``coverage`` 为 §7.3 三轴对象）；
-        语料库不存在时返回 ``ok=false``。
+        语料库不存在时返回 ``ok=false``。结果超过本轮工具结果预算时不会按字符硬切
+        （那样会破坏 JSON 与句柄），而是整条舍弃尾部命中并标 ``hits_elided``、
+        去掉可推导字段并标 ``diagnostics_elided``；连一条都装不下时返回
+        ``ok=false`` 的预算错误，提示缩小 query 或 limit。
     """
     if not isinstance(query, str) or not query.strip():
         return json.dumps(
@@ -178,6 +205,89 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                 "需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、"
                 "各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
             ),
+        },
+        ensure_ascii=False,
+    )
+
+
+def _compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
+    """逐命中只保留定位与复取必需字段（其余为可推导／诊断字段）。"""
+    out = {key: hit[key] for key in _HIT_CORE_KEYS if key in hit}
+    for key in _HIT_OPTIONAL_KEYS:
+        if key in hit:
+            out[key] = hit[key]
+    return out
+
+
+def fit_search_payload(body: str, budget: int) -> str | None:
+    """A0.3：把 ``corpus_search`` 的结构化 JSON 结果压进 ``budget``，始终返回**合法 JSON**。
+
+    与 ``corpus_fetch.fit_structured_payload`` 同一契约，策略按搜索结果的语义定：
+    命中按相关度排序，**整条命中**才是「一篇可去读的文档」这一原子单位，所以逐级
+    降级但绝不切开单条命中的 ``context_locators``——那是本次请求的取证范围，切开会让
+    「有界证据区」的承诺与账本的 offered 集合同时失真；也不按字符硬切（会同时破坏
+    JSON 与句柄）。降级阶梯：
+
+    1. ≤ ``budget``：原样返回，不改任何字段；
+    2. 超预算：逐命中只保留定位与复取必需字段（其余可推导／诊断字段去掉），装下即返回，
+       并标 ``diagnostics_elided``；
+    3. 仍超：按相关度从**尾部整条**舍弃命中（至少保留 1 条），标 ``hits_elided``；
+    4. 连 1 条都装不下：返回可识别的**预算错误**（仍为合法 JSON），不返回残缺正文。
+
+    非成功结果或不可解析时返回 ``None``（交回调用方按原策略处理）。
+    """
+    if budget <= 0 or not isinstance(body, str):
+        return None
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return None
+    if not isinstance(payload, dict) or payload.get("ok") is not True:
+        return None
+    if len(body) <= budget:
+        return body
+
+    hits = [hit for hit in (payload.get("hits") or []) if isinstance(hit, dict)]
+    if not hits:
+        return None
+
+    compact_hits = [_compact_hit(hit) for hit in hits]
+
+    def render(keep: list[dict[str, Any]]) -> str:
+        out: dict[str, Any] = {
+            "ok": True,
+            "query": payload.get("query"),
+            "count": payload.get("count", len(hits)),
+            "hits": keep,
+            "coverage": payload.get("coverage"),
+            "hint": payload.get("hint"),
+            "diagnostics_elided": True,
+        }
+        if len(keep) < len(hits):
+            out["hits_elided"] = len(hits) - len(keep)
+            out["hint"] = _ELIDED_HINT
+        return json.dumps(out, ensure_ascii=False)
+
+    candidate = render(compact_hits)
+    if len(candidate) <= budget:
+        return candidate
+
+    for keep in range(len(compact_hits) - 1, 0, -1):
+        candidate = render(compact_hits[:keep])
+        if len(candidate) <= budget:
+            return candidate
+
+    return json.dumps(
+        {
+            "ok": False,
+            "error": (
+                "budget_exceeded：本次检索命中的定位句柄超过本轮工具结果预算；"
+                "为避免截断出非法 JSON 或丢掉取证范围，未返回命中。"
+                "请用更具体的 query 或更小的 limit 重新检索。"
+            ),
+            "query": payload.get("query"),
+            "hits_total": len(hits),
+            "budget": budget,
         },
         ensure_ascii=False,
     )

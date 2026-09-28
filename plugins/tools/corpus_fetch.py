@@ -331,16 +331,38 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
     return compact
 
 
+def _compact_envelope(payload: dict[str, Any]) -> str:
+    """分页信封（A2.2）的协议压缩：保留 ``items`` 正文与续取控制字段，只去掉诊断性的
+    ``units`` 单元清单（等价 compact 视图）。
+
+    信封与单块结果**形状不同、语义也不同**：信封的正文在 ``items`` 里，续取靠
+    ``next_cursor``。此前把 ``ok: true`` 的信封当成单块结果交给 ``_compact_payload``，
+    会把 ``items`` 整个丢掉——正文、句柄、游标一起消失，只剩一个 ``text: null`` 的空壳，
+    正是「静默丢证据」。此处按信封语义压缩。
+    """
+    out = dict(payload)
+    out["items"] = [
+        {key: value for key, value in item.items() if key != "units"}
+        for item in (payload.get("items") or [])
+        if isinstance(item, dict)
+    ]
+    out["diagnostics_elided"] = True
+    out["view_fallback"] = "compact"
+    return json.dumps(out, ensure_ascii=False)
+
+
 def fit_structured_payload(body: str, budget: int) -> str | None:
     """A0.3：把 corpus_fetch 的结构化 JSON 结果压进 ``budget``，始终返回**合法 JSON**。
 
-    供工作流后处理与单轮聚合预算统一调用，替代按字符硬切 JSON：
+    供工作流后处理与单轮聚合预算统一调用，替代按字符硬切 JSON。两种返回形状分别处理，
+    绝不混用（混用会静默丢正文）：
 
     - 结果本身 ≤ ``budget``：原样返回；
-    - 超预算：先去诊断元数据（等价 compact 视图）再序列化；能装下即返回，
-      并标记 ``diagnostics_elided``；
-    - 去诊断后正文仍超预算：返回可识别的**预算错误**（仍为合法 JSON），
-      不返回残缺正文、不伪造「已取得全文」；
+    - **分页信封**（含 ``items``）：去掉诊断性的 ``units`` 清单，正文与续取控制字段原样保留；
+      仍装不下则返回可识别的预算错误，并带上 ``next_cursor``／``unresolved`` 供续取判断；
+    - **单块结果**：先去诊断元数据（等价 compact 视图）再序列化；能装下即返回，
+      并标记 ``diagnostics_elided``；去诊断后正文仍超预算则返回预算错误；
+    - 一律不返回残缺正文、不伪造「已取得全文」；
     - 非成功 corpus_fetch 结果或不可解析时返回 ``None``（交回调用方按原策略处理）。
     """
     if budget <= 0 or not isinstance(body, str):
@@ -353,6 +375,35 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
         return None
     if len(body) <= budget:
         return body
+
+    if "items" in payload:  # A2 分页信封：正文在 items，绝不能按单块结果压缩
+        compact_envelope = _compact_envelope(payload)
+        if len(compact_envelope) <= budget:
+            return compact_envelope
+        return json.dumps(
+            {
+                "ok": False,
+                "error": (
+                    "budget_exceeded：本页正文（items）超过本轮工具结果预算；"
+                    "为避免截断出非法 JSON 或丢掉正文，未返回本页。"
+                    "请减少 locators 数量或提高本轮工具结果预算后重试。"
+                ),
+                "doc_id": payload.get("doc_id"),
+                "build_id": payload.get("build_id"),
+                "scope_id": payload.get("scope_id"),
+                "next_cursor": payload.get("next_cursor"),
+                "item_errors": payload.get("item_errors") or [],
+                "unresolved": payload.get("unresolved") or [],
+                "items": len(payload.get("items") or []),
+                "text_chars": sum(
+                    len(str(item.get("text") or ""))
+                    for item in (payload.get("items") or [])
+                    if isinstance(item, dict)
+                ),
+                "budget": budget,
+            },
+            ensure_ascii=False,
+        )
 
     compact = _compact_payload(payload)
     compact["diagnostics_elided"] = True
@@ -521,31 +572,43 @@ def _page(
             off = 0
             continue
         status = _evidence_structure_status(svc, evidence)
-        # 本成员的片段文本预算：从「空正文 item + 真实游标」的实测信封反推，
-        # 连同 units 键开销与游标长度一起计入，避免控制字段撑爆实际预算。
-        empty_item = _item(
-            evidence, locator, 0, 0, view, status, relation_extra(locator, evidence.kind)
-        )
-        probe_len = len(
-            json.dumps(
-                envelope(
-                    [empty_item],
-                    _content_cursor(doc_id, build_id, request, view, mi, off, unresolved),
-                    False,
-                ),
-                ensure_ascii=False,
+        extra = relation_extra(locator, evidence.kind)
+        # D3：固定字段本身可能撑爆预算，而 full 视图的 units 单元清单正是体积大头。
+        # 此处按需**自动改用 compact 视图重试一次**（去掉该清单），对调用方透明——一次
+        # 请求就能取回正文，调用方不必自己领悟「pytest 改 view=compact」。游标仍绑定
+        # 页面视图，续取时同一成员会再次走同样的回退，故无需改游标 schema。
+        # 片段文本预算从「空正文 item + 真实游标」的实测信封反推，连同 units 键开销与
+        # 游标长度一起计入，避免控制字段撑爆实际预算。
+        tried_views = ["compact"] if view == "compact" else [view, "compact"]
+        member_view = view
+        fragment_budget = 0
+        for candidate in tried_views:
+            empty_item = _item(evidence, locator, 0, 0, candidate, status, extra)
+            probe_len = len(
+                json.dumps(
+                    envelope(
+                        [empty_item],
+                        _content_cursor(doc_id, build_id, request, view, mi, off, unresolved),
+                        False,
+                    ),
+                    ensure_ascii=False,
+                )
             )
-        )
-        fragment_budget = max_chars - probe_len - _MARGIN
+            fragment_budget = max_chars - probe_len - _MARGIN
+            if fragment_budget > 0:
+                member_view = candidate
+                break
         if fragment_budget <= 0:
             item_errors.append(
                 {
                     "locator": locator,
                     "code": "budget_exceeded",
                     "error": (
-                        "该块的固定字段（单元清单／游标）已占满本次 max_chars，无法承载正文；"
-                        "请提高 max_chars 或用更小范围取回"
+                        "该块的固定字段（单元清单／游标）已占满本次 max_chars，"
+                        f"自动改用 compact 视图后仍装不下（已尝试 {tried_views}）；"
+                        f"请提高 max_chars（当前 {max_chars}）后重试本 locator。"
                     ),
+                    "views_tried": tried_views,
                 }
             )
             if locator not in unresolved:
@@ -553,6 +616,9 @@ def _page(
             mi += 1
             off = 0
             continue
+        item_extra = dict(extra)
+        if member_view != view:  # 回退对调用方透明，但如实标注在 item 上供审计
+            item_extra["view_fallback"] = member_view
         try:
             ranges = _fragment_ranges(text, evidence.kind, fragment_budget, off)
         except _AtomTooLarge as exc:
@@ -578,9 +644,9 @@ def _page(
                 locator,
                 frag_start,
                 frag_end,
-                view,
+                member_view,
                 status,
-                relation_extra(locator, evidence.kind),
+                item_extra,
             )
             if items:
                 probe = json.dumps(

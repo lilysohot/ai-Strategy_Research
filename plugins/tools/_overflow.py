@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import hashlib
+import importlib
 import json
 import logging
 import os
@@ -258,21 +259,33 @@ def truncate_preview(text: str, budget: int, *, tool_name: str = "") -> str:
     return text[:head_end] + _elision(tail_start - head_end) + text[tail_start:]
 
 
+# ``(module, function)`` per tool whose result is protocol-shaped JSON. Both tools
+# are retrieval handles: char-cutting either one destroys the JSON *and* the
+# locators it carries, so the cut is not "less content" but "no content".
+_STRUCTURED_FITTERS: dict[str, tuple[str, str]] = {
+    "corpus_fetch": ("plugins.tools.corpus_fetch", "fit_structured_payload"),
+    "corpus_search": ("plugins.tools.corpus_search", "fit_search_payload"),
+}
+
+
 def structured_result_fit(tool_name: str, body: str, cap: int) -> str | None:
     """A0.3：结构化结果在截断前先按协议压缩，保证交付仍是合法 JSON。
 
-    当前只有 ``corpus_fetch`` 的取证结果属此类：它把逐字正文、引用映射与续取
-    控制字段包在一段 JSON 里，按字符硬切会同时破坏 JSON 与正文。具体压缩策略由
-    工具模块提供（超预算时先去诊断元数据、仍装不下则返回可识别预算错误），本函数
-    只做按名分派，避免通用截断层认识语料字段。返回 ``None`` 表示不适用原策略。
+    ``corpus_fetch`` 把逐字正文、引用映射与续取控制字段包在一段 JSON 里，
+    ``corpus_search`` 把定位句柄与证据区范围包在另一段 JSON 里；两者按字符硬切都会
+    同时破坏 JSON 与句柄。具体压缩策略由工具模块提供（超预算时先去诊断字段、仍装不下
+    则返回可识别预算错误），本函数只做按名分派，避免通用截断层认识语料字段。
+    返回 ``None`` 表示不适用原策略。
     """
-    if tool_name != "corpus_fetch":
+    target = _STRUCTURED_FITTERS.get(tool_name)
+    if target is None:
         return None
+    module_name, func_name = target
     try:
-        from plugins.tools.corpus_fetch import fit_structured_payload
+        module = importlib.import_module(module_name)
     except Exception:  # pragma: no cover - result shaping must not fail a tool call
         return None
-    return fit_structured_payload(body, cap)
+    return getattr(module, func_name)(body, cap)
 
 
 def budgeted_preview(

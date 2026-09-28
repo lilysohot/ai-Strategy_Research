@@ -211,6 +211,33 @@ async def corpus_fetch(
 3. **显式「跳过」无信号**。工具契约里没有「为什么放弃某块」的字段，`skipped` 只能记录
    游标模式下的 `unresolved`／`item_errors`；Agent 主动不取回的块只体现为 `missing`。
 
+### A4.4 隔离库检索回放与消费侧接缝缺陷（本轮）
+
+按 §2「三类结果分开报告」，本轮先做**隔离语料库检索回放**（30 道冻结题、零模型、PG 只读），
+复现脚本见 [.scratch/a4-replay-20260928/replay.py](../../.scratch/a4-replay-20260928/replay.py)
+与产物 `replay.json`。回放把「检索提供了什么」到「模型最终看到什么」这条链路上的接缝缺陷
+暴露为可复算的计数，共四个 + 一个次级问题：
+
+| 编号 | 缺陷 | 状态 | 落点 |
+|---|---|---|---|
+| D1 | `corpus_search` 结果超出工作流预算时被按字符**硬切**，成非法 JSON、丢句柄 | 已修 | `corpus_search` 纳入 `structured_result_fit` 分派（[`fit_search_payload`](../../plugins/tools/corpus_search.py)）；两个后处理器给有界预算 20000（覆盖实测最大体 ~18.6K） |
+| D2 | `corpus_fetch` 转分页信封后 item 不含 `source_id`／`semantic_cells`，行／列证据在分页路径不可恢复 | **未修（方向待定）** | 分页路径的既有消费者 [corpus_product_observations.py](../../tools/corpus_product_observations.py) 与产品门因此失效 |
+| D3 | `full` 视图的 `units` 单元清单撑爆 `max_chars`，报错无可执行退路 | 已修 | [corpus_fetch._page](../../plugins/tools/corpus_fetch.py) 固定字段超预算时**自动回退 compact** 重试一次（item 标 `view_fallback`），错误文案换成可执行退路 |
+| D4 | 分页信封同样以 `ok: true` 开头，被 `fit_structured_payload` 当单块结果压缩，`items`（正文＋句柄＋游标）整个丢失 | 已修 | [`fit_structured_payload`](../../plugins/tools/corpus_fetch.py) 按 `items` 判形；信封只去诊断性的 `units`、保留正文与 `next_cursor`；仍装不下则返回带 `next_cursor` 的预算错误，绝不丢正文 |
+| — | `_page` 的片段预算按**原始字符数**算，而信封序列化后换行转义为两字符，正文含多换行时信封略超自身 `max_chars`（实测 ~0.6%） | **未修（方向待定）** | 当前靠 D4 的防御性压缩兜住，无数据丢失，仅丢 `units` 诊断字段 |
+
+回放 v4 结果（D1/D3/D4 修复后）：`questions=30`、`questions_with_hits=24`、
+`offered_locators=5793`、`fetch_calls=5810`、`fetched_fragments=5810`、`delivered=5810`、
+`truncated=0`、`unknown=0`、`incomplete_locators=0`、`duplicate_fetches=0`、`errors=0`、
+`compact_fallback_items=28`、`questions_all_offered_fetched=24`、
+`questions_search_envelope_broken_of_with_hits=0`；最终消息输入 token 代理
+`final_tokens_estimate≈5.27M`。修复前为 `delivered=5793`／`unknown=17`／
+`questions_all_offered_fetched=9`／`search_envelope_broken_of_with_hits=24`，两处对照见
+`replay.json` 的 `findings`。
+
+**待用户定夺的方向（本轮未动）**：① D2——是把 `source_id`／单元证据补回信封，还是更新
+`collect_query` 消费者；② 次级问题——`_page` 片段预算是否改为按**序列化转义后**长度记账。
+
 ## 2. 验收与交付顺序
 
 | 测试类别 | 关键场景与通过条件 |

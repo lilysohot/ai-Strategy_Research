@@ -760,6 +760,11 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
         # keeps it effectively uncapped (bounded only by the 150K upstream
         # TOOL_RESULT_MAX_CHARS ceiling) rather than falling back to 6K.
         "collect_reports": 150_000,
+        # Same defect and same fix as react (see ReactToolResultPostProcessor):
+        # corpus_search is protocol-shaped JSON carrying the only retrieval
+        # handles, so a 6K head-cap yields invalid JSON with most context
+        # locators gone. Bounded, sized to the observed maximum payload (18.6K).
+        "corpus_search": 20_000,
     }
     _BUDGET_DEFAULT = 6_000
 

@@ -234,6 +234,43 @@ def test_atom_too_large_reports_error_and_resolves(stub) -> None:
     assert out["exhausted"] is True and out["fetch_complete"] is False
 
 
+# ── D3：固定字段超预算时自动回退 compact ───────────────────────────────
+
+
+def _unit_heavy_evidence(units: int = 250):
+    """单元清单很大、正文很小的一块：full 视图的 units 会独占预算。"""
+    return _evidence("c0", "body", [(f"u{i}", "字", 1, ()) for i in range(units)])
+
+
+def test_fixed_fields_over_budget_falls_back_to_compact(stub) -> None:
+    """清单撑爆预算时自动改用 compact 视图取回正文，而不是报错让调用方自己领会。"""
+    stub({"chunk:c0": _unit_heavy_evidence()})
+
+    out = json.loads(_call(doc_id=_DOC, locator="chunk:c0", max_chars=6000))
+    assert out["ok"] is True
+    assert out["item_errors"] == [] and out["unresolved"] == []
+    assert out["fetch_complete"] is True
+    (item,) = out["items"]
+    # 单元间以换行分隔，去掉分隔符即原文（正文真的取回了）
+    assert item["text"].replace("\n", "") == "字" * 250
+    assert item["view_fallback"] == "compact"  # 回退透明，但如实标注
+    assert "units" not in item             # 正是被省去的固定字段
+
+
+def test_fixed_fields_over_budget_error_names_an_executable_fallback(stub) -> None:
+    """连 compact 都装不下时才报错，且提示必须是真能执行的退路。"""
+    stub({"chunk:c0": _unit_heavy_evidence()})
+
+    out = json.loads(_call(doc_id=_DOC, locator="chunk:c0", max_chars=1000))
+    (err,) = out["item_errors"]
+    assert err["code"] == "budget_exceeded"
+    assert err["views_tried"] == ["full", "compact"]  # 回退已尝试过
+    assert "提高 max_chars" in err["error"]           # 退路真的可执行
+    assert "更小范围" not in err["error"]             # 不再给不可执行的建议
+    assert out["unresolved"] == ["chunk:c0"]
+    assert out["fetch_complete"] is False
+
+
 # ── 失败与前进性 ───────────────────────────────────────────────────────
 
 

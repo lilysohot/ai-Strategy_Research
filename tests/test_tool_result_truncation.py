@@ -551,6 +551,61 @@ def test_structured_fit_returns_budget_error_when_body_alone_exceeds() -> None:
     assert "text" not in payload  # no partial body pretending to be complete
 
 
+def _corpus_fetch_envelope(*, text: str, units: int = 80, cursor: str = "c" * 200) -> str:
+    """An A2 page envelope whose body lives in ``items`` (not a legacy single block)."""
+    return json.dumps(
+        {
+            "ok": True, "schema_version": 1, "cursor_type": "content",
+            "doc_id": "cv2:" + "b" * 64, "build_id": "b" * 64, "scope_id": "scope-1",
+            "view": "full",
+            "items": [{
+                "locator": "chunk:c0", "chunk_id": "c0", "kind": "body",
+                "build_id": "b" * 64, "text": text, "pages": [1],
+                "fragment": {"start": 0, "end": len(text), "of_chars": len(text) + 50},
+                "text_chars": len(text) + 50, "text_sha256": "d" * 64,
+                "structure_status": "unknown", "content_role": "body",
+                "relations": [], "relation_status": "unknown",
+                "units": [{"unit_id": f"u{i}", "page": 1} for i in range(units)],
+            }],
+            "item_errors": [], "unresolved": [], "next_cursor": cursor,
+            "exhausted": False, "fetch_complete": False, "page_id": "fpage:abc",
+            "hint": "hint" * 60,
+        },
+        ensure_ascii=False,
+    )
+
+
+def test_structured_fit_never_treats_a_page_envelope_as_a_single_block() -> None:
+    """A page envelope is ``ok: true`` too — compacting it as a single block once
+    dropped ``items`` entirely, silently destroying the retrieved text."""
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    text = "正文" * 1_500
+    body = _corpus_fetch_envelope(text=text)
+    assert len(body) > 6_000
+
+    out = fit_structured_payload(body, 6_000)
+    payload = json.loads(out)
+    assert payload["ok"] is True
+    assert payload["view_fallback"] == "compact" and payload["diagnostics_elided"] is True
+    # The body and the whole continuation contract survive.
+    assert payload["items"][0]["text"] == text
+    assert payload["next_cursor"] and payload["fetch_complete"] is False
+    assert payload["unresolved"] == []
+    assert "units" not in payload["items"][0]  # only the diagnostic list is dropped
+
+
+def test_structured_fit_envelope_budget_error_keeps_the_cursor() -> None:
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    out = fit_structured_payload(_corpus_fetch_envelope(text="正文" * 800), 500)
+    payload = json.loads(out)
+    assert payload["ok"] is False
+    assert payload["error"].startswith("budget_exceeded")
+    assert payload["next_cursor"]  # the caller can still tell where it stopped
+    assert payload["text_chars"] == len("正文" * 800)
+
+
 def test_structured_fit_leaves_small_and_foreign_results_alone() -> None:
     from plugins.tools.corpus_fetch import fit_structured_payload
 
@@ -572,6 +627,132 @@ def test_processors_keep_corpus_fetch_json_parseable(processor) -> None:
 
     payload = json.loads(out)  # raises if the processor hard-cut the JSON
     assert payload["text"] == "甲" * 400
+
+
+# ── D1: corpus_search results are handles, not prose ────────────────────
+#
+# corpus_search carries the ONLY retrieval handles (doc_id / locator plus the
+# context_locators that bound the evidence region). Measured at the product-gate
+# settings (limit=10), a 6_000 head-cap cut every hit-bearing result into invalid
+# JSON with barely half the locators visible. Like corpus_fetch it must be
+# reshaped by protocol — and because a hit is the atomic "one document to go
+# read", the degradation drops whole tail hits, never characters.
+
+
+def _corpus_search_body(
+    *, hits: int = 5, locators_per_hit: int = 100, diagnostic_blob: int = 0
+) -> str:
+    """A hit-bearing search result shaped like the measured worst case (~17K).
+
+    ``diagnostic_blob`` adds a non-core per-hit field the compaction is allowed to
+    drop; real payloads are dominated by ``context_locators`` (which must survive),
+    which is why the bounded budget — not compaction — is what saves them.
+    """
+
+    def _hit(h: int) -> dict:
+        out = {
+            "doc_id": f"cv2:{'b' * 64}",
+            "locator": f"chunk:c{h}",
+            "source_id": f"s{h}",
+            "build_id": "b" * 64,
+            "chunk_id": f"c{h}",
+            "context_locators": [
+                f"chunk:{'d' * 16}{h:02d}{i:04d}" for i in range(locators_per_hit)
+            ],
+            "scope_id": f"scope-{h}",
+            "total_chunks": locators_per_hit,
+            "by_kind": {"body": locators_per_hit - 2, "heading": 1, "table": 1},
+            "table_chunks": 1,
+            "title": f"研报 {h}",
+            "published": "2026-01-01",
+            "snippet": "定位片段" * 30,
+        }
+        if diagnostic_blob:
+            out["diagnostic_blob"] = "x" * diagnostic_blob
+        return out
+
+    return json.dumps(
+        {
+            "ok": True,
+            "query": "石英股份 产能",
+            "count": hits,
+            "hits": [_hit(h) for h in range(hits)],
+            "coverage": {"processing": "done", "query_status": "matched"},
+            "hint": "snippet 已截断，仅用于定位，禁止直接引用。",
+        },
+        ensure_ascii=False,
+    )
+
+
+def test_search_fit_leaves_in_budget_result_untouched() -> None:
+    from plugins.tools.corpus_search import fit_search_payload
+
+    body = _corpus_search_body(hits=1, locators_per_hit=10)
+    assert fit_search_payload(body, 20_000) == body
+    assert fit_search_payload("plain text " * 2_000, 100) is None  # not JSON
+    assert fit_search_payload(json.dumps({"ok": False, "error": "x"}), 1) is None
+
+
+def test_search_fit_drops_diagnostics_but_never_splits_a_hit() -> None:
+    from plugins.tools.corpus_search import fit_search_payload
+
+    body = _corpus_search_body(diagnostic_blob=4_000)
+    assert len(body) > 20_000
+
+    out = fit_search_payload(body, 20_000)
+    payload = json.loads(out)  # must stay legal JSON
+    assert payload["ok"] is True and payload["diagnostics_elided"] is True
+    assert len(payload["hits"]) == 5  # all hits survive; only diagnostics go
+    assert "hits_elided" not in payload
+    for hit in payload["hits"]:
+        # The evidence region is the load-bearing part: intact, in order, whole.
+        assert len(hit["context_locators"]) == 100
+        assert hit["context_locators"][0].startswith("chunk:")
+        assert hit["scope_id"] and hit["doc_id"] and hit["locator"]
+        assert "diagnostic_blob" not in hit
+
+
+def test_search_fit_elides_whole_tail_hits_and_says_so() -> None:
+    from plugins.tools.corpus_search import fit_search_payload
+
+    body = _corpus_search_body()
+    out = fit_search_payload(body, 8_000)
+    payload = json.loads(out)
+
+    assert payload["ok"] is True
+    assert 0 < len(payload["hits"]) < 5
+    assert payload["hits_elided"] == 5 - len(payload["hits"])
+    assert "hits_elided" in payload["hint"]  # the model is told, not left guessing
+    assert payload["count"] == 5  # original count preserved, not rewritten
+    for hit in payload["hits"]:
+        assert len(hit["context_locators"]) == 100  # retained hits are whole
+
+
+def test_search_fit_returns_budget_error_when_not_even_one_hit_fits() -> None:
+    from plugins.tools.corpus_search import fit_search_payload
+
+    out = fit_search_payload(_corpus_search_body(), 1_000)
+    payload = json.loads(out)
+    assert payload["ok"] is False
+    assert payload["error"].startswith("budget_exceeded")
+    assert payload["hits_total"] == 5
+    assert "hits" not in payload  # no partial handles pretending to be a result
+
+
+@pytest.mark.parametrize("processor", _processors())
+def test_processors_keep_corpus_search_json_parseable(processor) -> None:
+    from frontier_agent.core.loop_types import ToolResult
+
+    body = _corpus_search_body()
+    out = processor.process(ToolResult(
+        name="corpus_search", args={}, result=body, duration_ms=0,
+        tool_call_id="call-1", is_error=False,
+    ))
+
+    payload = json.loads(out)  # raises if the processor hard-cut the JSON
+    assert payload["ok"] is True
+    assert len(payload["hits"]) == 5  # a ~17K payload fits the bounded budget
+    assert len(payload["hits"][0]["context_locators"]) == 100
 
 
 @pytest.mark.parametrize("processor", _processors())

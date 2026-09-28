@@ -545,6 +545,15 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
     _BUDGETS: ClassVar[dict[str, int]] = {
         "grep_search": 10_000,
         "glob_search": 10_000,
+        # corpus_search is the only source of retrieval handles, and its result is
+        # protocol-shaped JSON the model consumes hit by hit: a head-cap breaks the
+        # JSON *and* the evidence region (measured at limit=10: every hit-bearing
+        # question was cut into invalid JSON with only ~49% of context locators
+        # visible). This is a BOUNDED budget, not pass-through — it covers the
+        # observed maximum payload (18.6K chars) with headroom, and is paired with
+        # ``corpus_search.fit_search_payload``, which degrades by dropping whole
+        # tail hits (marked ``hits_elided``) rather than cutting characters.
+        "corpus_search": 20_000,
     }
     _CONFIGURED_EXEC_TOOLS = frozenset({"bash", "run_python_code"})
     _EXEC_FOOTER_HEADROOM = 2_000
