@@ -18,6 +18,7 @@ import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
+import { dedupeAssistantTurns, sameRunId } from '@/utils/chat'
 import { summarizeDiff } from '@/utils/diff'
 import { formatElapsed } from '@/utils/statusbar'
 import RunDetailView from '@/views/RunDetailView.vue'
@@ -87,7 +88,7 @@ function escapeText(s: string): string {
 }
 
 const messages = computed<ChatMessage[]>(() => {
-  const out: ChatMessage[] = sessions.activeTurns.map((t) => ({
+  const out: ChatMessage[] = dedupeAssistantTurns(sessions.activeTurns).map((t) => ({
     id: `turn-${t.seq}`,
     role: t.role === 'assistant' ? 'assistant' : 'user',
     raw: t.content ?? '',
@@ -100,12 +101,15 @@ const messages = computed<ChatMessage[]>(() => {
   }))
 
   if (runStream.runId) {
-    const last = out[out.length - 1]
     const streamText = runStream.answer || runStream.finalAnswer || ''
     const streamingHtml = renderMarkdown(streamText)
-    if (last && last.run_id === runStream.runId && last.role === 'assistant') {
-      last.html = streamingHtml || last.html
-      last.raw = streamText || last.raw
+    const existing = out.find(
+      (message) =>
+        message.role === 'assistant' && sameRunId(message.run_id, runStream.runId),
+    )
+    if (existing) {
+      existing.html = streamingHtml || existing.html
+      existing.raw = streamText || existing.raw
     } else {
       out.push({
         id: `run-${runStream.runId}`,
