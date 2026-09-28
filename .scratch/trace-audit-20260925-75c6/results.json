@@ -1,0 +1,265 @@
+{
+  "checks": [
+    {
+      "name": "tool_call_result_pairing",
+      "passed": true,
+      "detail": {
+        "total": 35,
+        "turns": 20
+      }
+    },
+    {
+      "name": "fetch_identity_and_text",
+      "passed": true,
+      "detail": {
+        "fetched": 10
+      }
+    },
+    {
+      "name": "all_returned_context_fetched",
+      "passed": false,
+      "detail": {
+        "offered": 36,
+        "fetched": 10,
+        "missing": [
+          "chunk:58735cff57d8d456:body:0008",
+          "chunk:58735cff57d8d456:body:0009",
+          "chunk:58735cff57d8d456:body:0010",
+          "chunk:58735cff57d8d456:body:0011",
+          "chunk:58735cff57d8d456:body:0012",
+          "chunk:58735cff57d8d456:body:0013",
+          "chunk:58735cff57d8d456:body:0014",
+          "chunk:58735cff57d8d456:body:0015",
+          "chunk:58735cff57d8d456:body:0016",
+          "chunk:58735cff57d8d456:heading:0000",
+          "chunk:58735cff57d8d456:heading:0001",
+          "chunk:58735cff57d8d456:table:0000",
+          "chunk:58735cff57d8d456:table:0001",
+          "chunk:58735cff57d8d456:table:0002",
+          "chunk:58735cff57d8d456:table:0003",
+          "chunk:58735cff57d8d456:table:0004",
+          "chunk:58735cff57d8d456:table:0005",
+          "chunk:58735cff57d8d456:table:0006",
+          "chunk:58735cff57d8d456:table:0007",
+          "chunk:58735cff57d8d456:table:0008",
+          "chunk:58735cff57d8d456:table:0009",
+          "chunk:58735cff57d8d456:table:0010",
+          "chunk:58735cff57d8d456:table:0011",
+          "chunk:58735cff57d8d456:table:0012",
+          "chunk:58735cff57d8d456:table:0013",
+          "chunk:58735cff57d8d456:table:0014"
+        ]
+      }
+    },
+    {
+      "name": "research_coverage_proven_complete",
+      "passed": false,
+      "detail": {
+        "requested_scope_ref": "corpus_schema",
+        "effective_scope_ref": "corpus_publications.active_build_id",
+        "publication_snapshot_ref": "corpus_publications@72cfa661af1f40fe3474c37732a24b9b",
+        "processing": "scoped",
+        "query_status": "matched",
+        "availability": "unknown",
+        "reason_codes": [
+          "gap_regions_present"
+        ],
+        "counts": {
+          "sources": 8,
+          "published": 8,
+          "withdrawn": 0,
+          "pending": 0,
+          "failed_jobs": 0,
+          "builds": 8,
+          "published_with_gaps": 6
+        }
+      }
+    },
+    {
+      "name": "history_count_order_unique",
+      "passed": true,
+      "detail": {
+        "requested_calendar_days": 130,
+        "actual_rows": 92,
+        "first": "2026-05-19",
+        "last": "2026-09-24"
+      }
+    },
+    {
+      "name": "calculation_input_turn_14",
+      "passed": true,
+      "detail": {
+        "rows": 92,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "calculation_input_turn_15",
+      "passed": true,
+      "detail": {
+        "rows": 92,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "reported_technical_metrics",
+      "passed": true,
+      "detail": {
+        "MA20": 1281.34,
+        "MA60": 1286.32,
+        "return21_pct": -5.05,
+        "return63_pct": 3.52,
+        "max_drawdown_pct": -11.87,
+        "volatility60_pct": 23.5
+      }
+    },
+    {
+      "name": "recovered_slice_turn_7",
+      "passed": true,
+      "detail": {
+        "start": 1200,
+        "end": 9200,
+        "size": 11300
+      }
+    },
+    {
+      "name": "recovered_slice_turn_8",
+      "passed": true,
+      "detail": {
+        "start": 9200,
+        "end": 11300,
+        "size": 11300
+      }
+    },
+    {
+      "name": "recovered_slice_turn_10",
+      "passed": true,
+      "detail": {
+        "start": 26000,
+        "end": 34000,
+        "size": 56160
+      }
+    },
+    {
+      "name": "recovered_slice_turn_12",
+      "passed": true,
+      "detail": {
+        "start": 6000,
+        "end": 14000,
+        "size": 15489
+      }
+    },
+    {
+      "name": "recovered_slice_turn_13",
+      "passed": true,
+      "detail": {
+        "start": 14000,
+        "end": 15489,
+        "size": 15489
+      }
+    },
+    {
+      "name": "raw_history_500",
+      "passed": true,
+      "detail": {
+        "raw_lines": [
+          29
+        ]
+      }
+    },
+    {
+      "name": "raw_history_130",
+      "passed": true,
+      "detail": {
+        "raw_lines": [
+          31
+        ]
+      }
+    },
+    {
+      "name": "raw_quote_matches",
+      "passed": true,
+      "detail": {
+        "raw_lines": [
+          27
+        ],
+        "as_of": "2026-09-25T18:26:56+08:00"
+      }
+    },
+    {
+      "name": "raw_valuation_matches",
+      "passed": true,
+      "detail": {
+        "raw_lines": [
+          28
+        ]
+      }
+    },
+    {
+      "name": "raw_financials_match",
+      "passed": true,
+      "detail": {
+        "raw_lines": [
+          30
+        ],
+        "years": [
+          2025,
+          2024,
+          2023,
+          2022
+        ]
+      }
+    },
+    {
+      "name": "report_persisted_exactly",
+      "passed": true,
+      "detail": ".apodex/runs/20260925-182401+0800-react-75c6/outputs/report.md"
+    },
+    {
+      "name": "report_window_label",
+      "passed": false,
+      "detail": {
+        "actual_calendar_days": 130,
+        "actual_rows": 92,
+        "first_bar": "2026-05-19"
+      }
+    },
+    {
+      "name": "report_year_end_anchor",
+      "passed": false,
+      "detail": {
+        "last_observed_2025_bar": "2025-12-31",
+        "close": 1377.18,
+        "return_to_last_pct": -10.18
+      }
+    },
+    {
+      "name": "cashflow_statement_fetched",
+      "passed": false,
+      "detail": {
+        "actual_statements": [
+          "income"
+        ]
+      }
+    },
+    {
+      "name": "strategy_closure_exercised",
+      "passed": false,
+      "detail": "No sizing/lint calls or strategy card; original user supplied no sizing parameters."
+    }
+  ],
+  "semantic_failures_despite_is_error_false": [
+    {
+      "turn": 11,
+      "name": "recover_result",
+      "is_error": false
+    },
+    {
+      "turn": 14,
+      "name": "bash",
+      "is_error": false
+    }
+  ],
+  "passed": 17,
+  "not_passed": 6
+}
