@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import logging
 import os
@@ -58,7 +59,7 @@ if TYPE_CHECKING:
     from plugins.corpus.evidence_pipeline import EvidenceRun
     from plugins.corpus.fetch import FetchedBlock
     from plugins.corpus.material_semantics import MaterialRun, MaterialType
-    from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence
+    from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence, ChunkStructure
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
 
@@ -204,6 +205,10 @@ class SearchHit:
     build_id: str = ""
     chunk_id: str = ""
     context_locators: tuple[str, ...] = ()
+    #: A1：本次选出上下文成员范围的不可变身份（内容寻址；清单/游标绑定它）。
+    scope_id: str | None = None
+    #: A1：成员按 ``kind`` 的计数（内联 scope 摘要；须与成员集合核对，不补造）。
+    context_by_kind: tuple[tuple[str, int], ...] = ()
 
 
 @dataclass
@@ -408,6 +413,224 @@ class EmittedCell:
     row: str
     col: str
     text: str
+
+
+def _has_letter(s: str) -> bool:
+    """含 CJK 或 ASCII 字母即视为行/列标签候选（排除纯数字/符号/占位符）。"""
+    return any(ch.isalpha() for ch in s)
+
+
+def context_scope_id(build_id: str, chunk_ids: Sequence[str]) -> str:
+    """A1 清单/游标绑定的范围身份：``build_id`` + **有序**成员块 id 的内容寻址。
+
+    同一 build、同一成员序列 → 同一 ``scope_id``；成员或顺序变化 → 新身份。因此
+    续取游标可以校验「请求集合及顺序未被改动」（01 §A1.1、§A2.2）。
+    """
+    digest = hashlib.sha256("\n".join([build_id, *chunk_ids]).encode("utf-8")).hexdigest()
+    return f"scope:{digest[:32]}"
+
+
+def _region_id(build_id: str, start_chunk: str, end_chunk: str) -> str:
+    """一个「实际选择区间」的内容寻址身份（连续位置的首尾块决定，非首尾包络猜测）。"""
+    digest = hashlib.sha256(
+        f"{build_id}\n{start_chunk}\n{end_chunk}".encode()
+    ).hexdigest()
+    return f"region:{digest[:16]}"
+
+
+#: A3 关联依据只有两类——可核验（持久化结构树／表题归属）与候选（同章节邻接）。
+#: 两者必须严格分开：候选不得冒充确定归属，也不得自动满足任何表体依赖。
+_RELATION_VERIFIED = "verified"
+_RELATION_CANDIDATE = "candidate"
+
+
+@dataclass(frozen=True)
+class StructuralMember:
+    """A3 关联推导所需的最小成员投影（只用持久化结构证据，不读正文）。"""
+
+    locator: str
+    kind: str
+    title_text: str | None
+    section_path: tuple[str, ...]
+
+
+def content_role_for_kind(kind: str) -> str:
+    """A3 内容角色：``kind=heading`` 只证明**标题本身**被取回（``heading_only``），
+    不能用于证明表体、章节内容或数值已读取。"""
+    return "heading_only" if kind == "heading" else "content"
+
+
+def _structural_member(locator: str, structure: Any) -> StructuralMember:
+    """把 ``ChunkStructure`` 投影为 A3 最小成员（标题文本取自持久化 ``section_path``）。"""
+    return StructuralMember(
+        locator=locator,
+        kind=str(structure.kind or ""),
+        title_text=structure.title_text,
+        section_path=tuple(str(part) for part in (structure.section_path or ())),
+    )
+
+
+def _heading_relations(
+    relation: str, owners: Sequence[str], verified_basis: str, ambiguous_basis: str
+) -> list[dict[str, object]]:
+    """把「目标 heading locator 集合」转为关联项：唯一 → ``verified``；多个 → 全 ``candidate``。"""
+    if not owners:
+        return []
+    if len(owners) == 1:
+        return [
+            {
+                "target_locator": owners[0],
+                "target_kind": "heading",
+                "relation": relation,
+                "status": _RELATION_VERIFIED,
+                "basis": verified_basis,
+            }
+        ]
+    return [
+        {
+            "target_locator": owner,
+            "target_kind": "heading",
+            "relation": relation,
+            "status": _RELATION_CANDIDATE,
+            "basis": ambiguous_basis,
+        }
+        for owner in owners
+    ]
+
+
+def _dedupe_relations(relations: list[dict[str, object]]) -> list[dict[str, object]]:
+    seen: set[tuple[object, object]] = set()
+    out: list[dict[str, object]] = []
+    for item in relations:
+        key = (item.get("target_locator"), item.get("relation"))
+        if key not in seen:
+            seen.add(key)
+            out.append(item)
+    return out
+
+
+def structural_relation_fields(
+    members: Sequence[StructuralMember],
+) -> dict[str, dict[str, object]]:
+    """A3 标题身份与可信内容关联（只在**本次成员范围**内推导，不引入范围外块）。
+
+    - 标题成员 ``content_role="heading_only"``；其对外关系一律 ``candidate``（同章节
+      直接邻接）——**不得**把「后面的第一张表」固定为 ``points_to``；
+    - 非标题成员以**持久化结构树**证明所属章节（``section_member``）、以**持久化表题**
+      （``title_text``）证明归属（``caption_of``），唯一时 ``verified``；标题文本／章节
+      路径不唯一时降为 ``candidate``；有表题但范围内无对应标题块时记 ``candidate``
+      （目标为空，不猜目标块）；
+    - 无法判定 → ``relations=[]`` 且 ``relation_status="unknown"``。
+    """
+    by_path: dict[tuple[str, ...], list[str]] = {}
+    by_text: dict[str, list[str]] = {}
+    for member in members:
+        if member.kind == "heading" and member.section_path:
+            by_path.setdefault(member.section_path, []).append(member.locator)
+            by_text.setdefault(member.section_path[-1], []).append(member.locator)
+
+    out: dict[str, dict[str, object]] = {}
+    for member in members:
+        relations: list[dict[str, object]] = []
+        path = member.section_path
+        if member.kind == "heading":
+            for other in members:
+                if other.locator == member.locator or not path:
+                    continue
+                if other.section_path == path:  # 同章节直接邻接 → 候选，非确定归属
+                    relations.append(
+                        {
+                            "target_locator": other.locator,
+                            "target_kind": other.kind,
+                            "relation": "section_candidate",
+                            "status": _RELATION_CANDIDATE,
+                            "basis": "same_section",
+                        }
+                    )
+        else:
+            relations.extend(
+                _heading_relations(
+                    "section_member",
+                    by_path.get(path, []),
+                    "persisted_section_path",
+                    "persisted_section_path_ambiguous",
+                )
+            )
+            if member.title_text:
+                captions = by_text.get(str(member.title_text), [])
+                if captions:
+                    relations.extend(
+                        _heading_relations(
+                            "caption_of",
+                            captions,
+                            "persisted_title_text",
+                            "persisted_title_text_ambiguous",
+                        )
+                    )
+                else:
+                    relations.append(
+                        {
+                            "target_locator": None,
+                            "target_kind": "heading",
+                            "target_heading": str(member.title_text),
+                            "relation": "caption_of",
+                            "status": _RELATION_CANDIDATE,
+                            "basis": "title_text_without_member_heading",
+                        }
+                    )
+        relations = _dedupe_relations(relations)
+        if any(item["status"] == _RELATION_VERIFIED for item in relations):
+            status = _RELATION_VERIFIED
+        elif relations:
+            status = _RELATION_CANDIDATE
+        else:
+            status = "unknown"
+        out[member.locator] = {
+            "content_role": content_role_for_kind(member.kind),
+            "relations": relations,
+            "relation_status": status,
+        }
+    return out
+
+
+def emit_cells_from_units(units: Iterable[Any]) -> tuple[EmittedCell, ...]:
+    """对一组单元建网格、派生 row:/col: 标签并发射 cell 证据。
+
+    与 :meth:`CorpusService._emit_cells` 同口径（后者委托本函数）：``raw_text.split("\\n")``
+    长度与 ``cells`` 精确对齐才入格；row = 同行左侧最近含字母单元，col = 同列上方最近
+    含字母单元；两者都派生成功才发射（否则诚实失败，不猜标签）。输入只需具备
+    ``units``/``page``/``raw_text``/``cells``（:class:`UnitEvidence` 与清单的
+    ``UnitStructure`` 皆可），使 A1 清单不必重造 :class:`ChunkEvidence`。
+    """
+    grid: dict[tuple[int, int], tuple[str, str]] = {}
+    page: int | None = None
+    for unit in units:
+        if not unit.cells or unit.page is None:
+            continue
+        parts = unit.raw_text.split("\n")
+        if len(parts) != len(unit.cells):
+            continue
+        if page is None:
+            page = unit.page
+        for (r, c), text in zip(unit.cells, parts, strict=True):
+            grid[(r, c)] = (text, unit.unit_id)
+    out: list[EmittedCell] = []
+    for (r, c), (text, unit_id) in grid.items():
+        row_label = col_label = None
+        for c2 in range(c - 1, -1, -1):
+            if grid.get((r, c2)) is not None and _has_letter(grid[(r, c2)][0]):
+                row_label = grid[(r, c2)][0]
+                break
+        for r2 in range(r - 1, -1, -1):
+            if grid.get((r2, c)) is not None and _has_letter(grid[(r2, c)][0]):
+                col_label = grid[(r2, c)][0]
+                break
+        if row_label is None or col_label is None:
+            continue
+        out.append(
+            EmittedCell(unit_id=unit_id, page=page, row=row_label, col=col_label, text=text)
+        )
+    return tuple(out)
 
 
 @dataclass(frozen=True)
@@ -1078,8 +1301,20 @@ class CorpusService:
             return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
         raw_hits = self._selected_context_hits(raw_hits, chunk_order, limit)
-        return (
-            [
+        # A1：内联 scope 摘要——成员范围身份 + 按 kind 计数（只读块种类，不读几何）。
+        pairs = [(hit.build_id, cid) for hit in raw_hits for cid in hit.context_chunk_ids]
+        kinds = (
+            read_pg.fetch_chunk_kinds(self._dsn, pairs, sandbox_db=self._target_db)
+            if pairs
+            else {}
+        )
+        hits_out: list[SearchHit] = []
+        for hit in raw_hits:
+            counts: dict[str, int] = {}
+            for cid in hit.context_chunk_ids:
+                kind = kinds.get((hit.build_id, cid), "unknown")
+                counts[kind] = counts.get(kind, 0) + 1
+            hits_out.append(
                 SearchHit(
                     doc_id=read_pg.build_handle(hit.build_id),
                     locator=read_pg.chunk_locator(hit.chunk_id),
@@ -1094,11 +1329,11 @@ class CorpusService:
                     context_locators=tuple(
                         read_pg.chunk_locator(chunk_id) for chunk_id in hit.context_chunk_ids
                     ),
+                    scope_id=context_scope_id(hit.build_id, hit.context_chunk_ids),
+                    context_by_kind=tuple(sorted(counts.items())),
                 )
-                for hit in raw_hits
-            ],
-            coverage,
-        )
+            )
+        return hits_out, coverage
 
     def search_bands(
         self, query: str, *, limit: int = 10
@@ -1152,11 +1387,6 @@ class CorpusService:
         )
         return tuple(bands)[:limit]
 
-    @staticmethod
-    def _has_letter(s: str) -> bool:
-        """含 CJK 或 ASCII 字母即视为行/列标签候选（排除纯数字/符号/占位符）。"""
-        return any(ch.isalpha() for ch in s)
-
     def _emit_cells(self, chunk: ChunkEvidence) -> tuple[EmittedCell, ...]:
         """对单块对齐表单元建网格，派生 row:/col: 标签并发射 cell 证据。
 
@@ -1164,41 +1394,7 @@ class CorpusService:
         row = 同行左侧最近含字母单元，col = 同列上方最近含字母单元；两者都派生成功才
         发射（否则诚实失败，不猜标签）。只派生、不改变块选择（遵守议题 A 硬约束）。
         """
-        grid: dict[tuple[int, int], tuple[str, str]] = {}
-        page: int | None = None
-        for unit in chunk.units:
-            if not unit.cells or unit.page is None:
-                continue
-            parts = unit.raw_text.split("\n")
-            if len(parts) != len(unit.cells):
-                continue
-            if page is None:
-                page = unit.page
-            for (r, c), text in zip(unit.cells, parts, strict=True):
-                grid[(r, c)] = (text, unit.unit_id)
-        out: list[EmittedCell] = []
-        for (r, c), (text, unit_id) in grid.items():
-            row_label = col_label = None
-            for c2 in range(c - 1, -1, -1):
-                if grid.get((r, c2)) is not None and self._has_letter(grid[(r, c2)][0]):
-                    row_label = grid[(r, c2)][0]
-                    break
-            for r2 in range(r - 1, -1, -1):
-                if grid.get((r2, c)) is not None and self._has_letter(grid[(r2, c)][0]):
-                    col_label = grid[(r2, c)][0]
-                    break
-            if row_label is None or col_label is None:
-                continue
-            out.append(
-                EmittedCell(
-                    unit_id=unit_id,
-                    page=page,
-                    row=row_label,
-                    col=col_label,
-                    text=text,
-                )
-            )
-        return tuple(out)
+        return emit_cells_from_units(chunk.units)
 
     def emit_cells(self, chunk: ChunkEvidence) -> tuple[EmittedCell, ...]:
         """Expose verified structural cell labels for a fetched authority chunk.
@@ -1208,6 +1404,184 @@ class CorpusService:
         incomplete or ambiguous.
         """
         return self._emit_cells(chunk)
+
+    def context_inventory(
+        self, doc_id: str, locators: Sequence[str]
+    ) -> dict[str, object]:
+        """A1 有依据的上下文结构清单（不触写、不改选择）。
+
+        - 绑定不可变 ``scope_id``（build + 有序成员的内容寻址）与 ``build_id``；
+        - 成员是传入的**有序** locator 集合，按首次出现去重；只读**每个成员自身**的
+          chunk／unit 元数据，不把搜索锚点的首个引用单元坐标复制给邻接块；
+        - ``region_ids`` 由成员在**来源原文序**中的连续位置还原为「实际选择区间」：
+          连续位置合为一区间、缝隙断开——不用首尾包络代替，也不引入区间之间原本
+          未选中的块；
+        - 结构字段只在**确有其据**时填写：无持久化表身份 → ``table_ref`` 为 ``null``；
+          未掌握完整表网格 → ``table_rows``/``table_cols`` 为 ``null``（**不填 0**）；
+          ``structure_status`` 取 ``verified``/``partial``/``unknown``。
+
+        ``unknown_members`` 列出请求了但该 build 不存在的成员(不静默补造)。
+        """
+        from plugins.corpus.preparation import read_pg
+
+        build_id = read_pg.parse_build_handle(doc_id)
+        chunk_ids: list[str] = []
+        seen: set[str] = set()
+        for locator in locators:
+            chunk_id = read_pg.parse_chunk_locator(locator)
+            if chunk_id not in seen:
+                seen.add(chunk_id)
+                chunk_ids.append(chunk_id)
+        if not chunk_ids:
+            raise read_pg.UnknownHandleError("清单至少需要一个成员 locator")
+
+        structures = read_pg.fetch_chunk_structures(
+            self._dsn, build_id, chunk_ids, sandbox_db=self._target_db
+        )
+        order = read_pg.chunk_order_for_build(self._dsn, build_id, sandbox_db=self._target_db)
+        position = {cid: idx for idx, cid in enumerate(order)}
+
+        runs: list[tuple[int, int]] = []
+        for pos in sorted(position[cid] for cid in chunk_ids if cid in position):
+            if runs and pos == runs[-1][1] + 1:
+                runs[-1] = (runs[-1][0], pos)
+            else:
+                runs.append((pos, pos))
+        regions: list[dict[str, object]] = []
+        region_of_position: dict[int, str] = {}
+        for start, end in runs:
+            region_id = _region_id(build_id, order[start], order[end])
+            regions.append(
+                {
+                    "region_id": region_id,
+                    "start_locator": read_pg.chunk_locator(order[start]),
+                    "end_locator": read_pg.chunk_locator(order[end]),
+                    "chunk_count": end - start + 1,
+                }
+            )
+            for pos in range(start, end + 1):
+                region_of_position[pos] = region_id
+
+        members: list[dict[str, object]] = []
+        by_kind: dict[str, int] = {}
+        unknown_members: list[str] = []
+        relation_fields = structural_relation_fields(
+            [
+                _structural_member(read_pg.chunk_locator(cid), structures[cid])
+                for cid in chunk_ids
+                if cid in structures
+            ]
+        )
+        for chunk_id in chunk_ids:
+            structure = structures.get(chunk_id)
+            if structure is None:
+                unknown_members.append(read_pg.chunk_locator(chunk_id))
+                continue
+            by_kind[structure.kind] = by_kind.get(structure.kind, 0) + 1
+            member = self._inventory_member(structure, position, region_of_position)
+            member.update(
+                relation_fields.get(
+                    read_pg.chunk_locator(chunk_id),
+                    {
+                        "content_role": content_role_for_kind(structure.kind),
+                        "relations": [],
+                        "relation_status": "unknown",
+                    },
+                )
+            )
+            members.append(member)
+
+        return {
+            "doc_id": doc_id,
+            "build_id": build_id,
+            "scope_id": context_scope_id(build_id, chunk_ids),
+            "total_chunks": len(members),
+            "by_kind": by_kind,
+            "table_chunks": by_kind.get("table", 0),
+            "member_chunk_ids": tuple(chunk_ids),
+            "regions": regions,
+            "members": members,
+            "unknown_members": unknown_members,
+        }
+
+    def context_relations(
+        self, doc_id: str, locators: Sequence[str]
+    ) -> dict[str, dict[str, object]]:
+        """A3：按请求成员范围推导逐成员 ``content_role``／``relations``（只读结构，不取正文）。
+
+        与 :meth:`context_inventory` 共用 :func:`structural_relation_fields`，使
+        ``corpus_fetch`` 的批量／游标页与清单口径一致。关联是辅助信息：句柄不可解析、
+        来源撤销或完整性不符时返回**空映射**，既不伪造，也绝不阻断正文取回。
+        """
+        from plugins.corpus.preparation import read_pg
+
+        try:
+            build_id = read_pg.parse_build_handle(doc_id)
+            chunk_ids: list[str] = []
+            seen: set[str] = set()
+            for locator in locators:
+                chunk_id = read_pg.parse_chunk_locator(locator)
+                if chunk_id not in seen:
+                    seen.add(chunk_id)
+                    chunk_ids.append(chunk_id)
+            if not chunk_ids:
+                return {}
+            structures = read_pg.fetch_chunk_structures(
+                self._dsn, build_id, chunk_ids, sandbox_db=self._target_db
+            )
+        except Exception:
+            return {}
+        return structural_relation_fields(
+            [
+                _structural_member(read_pg.chunk_locator(cid), structures[cid])
+                for cid in chunk_ids
+                if cid in structures
+            ]
+        )
+
+    @staticmethod
+    def _inventory_member(
+        structure: ChunkStructure,
+        position: Mapping[str, int],
+        region_of_position: Mapping[int, str],
+    ) -> dict[str, object]:
+        """把一个成员的**自身**结构投影为清单行（未知一律 ``null``，不填 0）。"""
+        from plugins.corpus.preparation import read_pg
+
+        chunk_id = structure.chunk_id
+        units = structure.units
+        pages = sorted({u.page for u in units if u.page is not None})
+        has_cells = any(u.cells for u in units)
+        if emit_cells_from_units(units):
+            structure_status = "verified"
+        elif has_cells:
+            structure_status = "partial"
+        else:
+            structure_status = "unknown"
+        label_path: list[str] = []
+        for unit in units:
+            for label in unit.label_path:
+                if label not in label_path:
+                    label_path.append(label)
+        covered_rows = (
+            sorted({int(cell[0]) for u in units for cell in u.cells}) if has_cells else None
+        )
+        pos = position.get(chunk_id)
+        region = region_of_position.get(pos) if pos is not None else None
+        return {
+            "locator": read_pg.chunk_locator(chunk_id),
+            "chunk_id": chunk_id,
+            "kind": structure.kind,
+            "page_range": [pages[0], pages[-1]] if pages else None,
+            "region_ids": [region] if region is not None else [],
+            "table_ref": None,
+            "structure_status": structure_status,
+            "covered_rows": covered_rows,
+            "header_refs": None,
+            "label_path": label_path or None,
+            "table_rows": None,
+            "table_cols": None,
+        }
 
     def _assemble_band_documents(
         self,

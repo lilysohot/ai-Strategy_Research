@@ -157,6 +157,12 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                     "build_id": hit.build_id,
                     "chunk_id": hit.chunk_id,
                     "context_locators": list(hit.context_locators),
+                    # A1 内联 scope 摘要：成员范围身份 + 按 kind 计数 + 表块数。
+                    # 只报告**块**统计，不声称「共有几张表」（表身份未知时为 null）。
+                    "scope_id": hit.scope_id,
+                    "total_chunks": len(hit.context_locators),
+                    "by_kind": dict(hit.context_by_kind),
+                    "table_chunks": dict(hit.context_by_kind).get("table", 0),
                     "title": hit.title,
                     "published": hit.published,
                     "snippet": hit.snippet,
@@ -169,6 +175,8 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                 "snippet 已截断，仅用于定位，禁止直接引用。"
                 "写 evidence 前请用 corpus_fetch(doc_id, locator) 取回逐字原文，"
                 "并依次取回 context_locators；这些句柄共同构成有界的文档证据区。"
+                "需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、"
+                "各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
             ),
         },
         ensure_ascii=False,

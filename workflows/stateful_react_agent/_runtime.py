@@ -579,6 +579,14 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
             budget = self._BUDGETS.get(name, self._BUDGET_DEFAULT)
         if name == "bash":
             return self._compact_bash(content, budget)
+        # A0.3：结构化取证结果（corpus_fetch）先按协议压缩，绝不按字符硬切 JSON——
+        # 硬切会同时破坏 JSON 与逐字正文。超预算时先去诊断元数据，仍装不下则返回
+        # 可识别的预算错误（均为合法 JSON）。其他工具不受影响（返回 None）。
+        from plugins.tools._overflow import structured_result_fit
+
+        structured = structured_result_fit(name, content, budget)
+        if structured is not None:
+            return structured
         return self._head_cap(content, budget)
 
     def _head_cap(self, content: str, budget: int) -> str:

@@ -9,6 +9,7 @@ from plugins.tools.assign_task import assign_task
 from plugins.tools.bash import bash
 from plugins.tools.collect_reports import collect_reports
 from plugins.tools.corpus_fetch import corpus_fetch
+from plugins.tools.corpus_inventory import corpus_inventory
 from plugins.tools.corpus_search import corpus_search
 from plugins.tools.create_file import create_file
 from plugins.tools.create_subagent import create_subagent
@@ -64,6 +65,7 @@ _BUILTIN_TOOLS: list[Tool] = [
     # 加入本 allowlist 只让它们「可解析」，是否可见另由各 profile 决定。
     corpus_search,
     corpus_fetch,
+    corpus_inventory,
     # 数据源覆盖度探测（开局一次，串起 corpus 与 market，只读）。
     data_coverage,
     # 市场数据（同花顺 fuyao）。只读、无写入、按按需拉取（本模块不落库）。

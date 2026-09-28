@@ -144,6 +144,9 @@ TOOL_META: dict[str, ToolMeta] = {
     # 「逐字原文」切掉，evidence.quote 就不再逐字，硬闸①的溯源比对当场失效。
     "corpus_search": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance"),
     "corpus_fetch": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
+    # corpus_inventory 返回按 max_chars 自限的清单页信封（结构化 JSON）；与 corpus_fetch
+    # 同理，工具级不截断——按字符硬切会把信封切坏，清单一页就不再可解析。
+    "corpus_inventory": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
     # 市场数据（同花顺 fuyao）：只读网络调用。
     # timeout=15 而不是 10：一次 quote 内部是「消歧 + 行情 + 估值」多次请求串联，
     # 且要留时间给 transport 的退避重试（§5.2）。

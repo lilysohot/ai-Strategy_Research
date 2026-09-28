@@ -8,6 +8,7 @@ EXPECTED_TOOLS = {
     "bash",
     "collect_reports",
     "corpus_fetch",
+    "corpus_inventory",
     "corpus_search",
     "create_file",
     "create_subagent",

@@ -696,6 +696,14 @@ def _build_observers(
 
     observers.extend([EvidenceObserver(), AssertionObserver()])
 
+    # A4 消费账本（观测模式）：与子代理共用同一 run 账本，记录 offered/requested/
+    # fetched，并在各自 loop 结束核验 delivered、落盘工件；绝不阻断运行。
+    from plugins.corpus.ledger import ConsumptionLedgerObserver
+
+    observers.append(ConsumptionLedgerObserver(
+        task_id=task_id, role_id="main_agent", pipeline_id="agent_team",
+    ))
+
     if DuplicateQueryRollbackObserver.DEFAULT_TOOL_NAMES.intersection(tool_names):
         # The benchmark profile gives the coordinator web_search; the TUI one
         # does not. Mount only where it can fire.

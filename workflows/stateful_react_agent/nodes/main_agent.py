@@ -69,6 +69,7 @@ from frontier_agent.utils.language import (
     language_instruction,
     resolve_language,
 )
+from plugins.corpus.ledger import ConsumptionLedgerObserver
 from plugins.tools._bash_policy import reset_policy_mode, set_policy_mode
 from plugins.tools._sandbox import (
     BwrapSandbox,
@@ -906,6 +907,13 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             user_message=question,
         ),
         ReactStepTracker(),
+        # A4 消费账本（观测模式）：记录 offered/requested/fetched，并在 loop 结束
+        # 核验 delivered、落盘 ledger.json 与清单验证工件；绝不阻断运行。
+        ConsumptionLedgerObserver(
+            task_id=ctx.task_id,
+            role_id="stateful_react",
+            pipeline_id="stateful-react-agent",
+        ),
     ]
     if not direct:
         # Repetition stop-loss. Both of these stay hint-only: this agent IS

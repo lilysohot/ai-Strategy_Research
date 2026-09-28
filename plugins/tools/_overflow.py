@@ -258,6 +258,23 @@ def truncate_preview(text: str, budget: int, *, tool_name: str = "") -> str:
     return text[:head_end] + _elision(tail_start - head_end) + text[tail_start:]
 
 
+def structured_result_fit(tool_name: str, body: str, cap: int) -> str | None:
+    """A0.3：结构化结果在截断前先按协议压缩，保证交付仍是合法 JSON。
+
+    当前只有 ``corpus_fetch`` 的取证结果属此类：它把逐字正文、引用映射与续取
+    控制字段包在一段 JSON 里，按字符硬切会同时破坏 JSON 与正文。具体压缩策略由
+    工具模块提供（超预算时先去诊断元数据、仍装不下则返回可识别预算错误），本函数
+    只做按名分派，避免通用截断层认识语料字段。返回 ``None`` 表示不适用原策略。
+    """
+    if tool_name != "corpus_fetch":
+        return None
+    try:
+        from plugins.tools.corpus_fetch import fit_structured_payload
+    except Exception:  # pragma: no cover - result shaping must not fail a tool call
+        return None
+    return fit_structured_payload(body, cap)
+
+
 def budgeted_preview(
     body: str,
     *,
@@ -468,18 +485,21 @@ def check_aggregate_budget(
         if cap >= len(result):
             continue
         name = names[idx] if idx < len(names) else "tool"
-        spilled = (
-            _write_spill(name, result, require_visible=True)
-            if len(result) >= _SPILL_MIN_CHARS
-            else None
-        )
-        replacement = budgeted_preview(
-            result,
-            cap=cap,
-            ref=spilled[1] if spilled else "",
-            note="Cut further to fit the per-turn tool-result budget.",
-            tool_name=name,
-        )
+        # A0.3：结构化结果（corpus_fetch）先按协议压缩成合法 JSON，绝不按字符硬切。
+        replacement = structured_result_fit(name, result, cap)
+        if replacement is None:
+            spilled = (
+                _write_spill(name, result, require_visible=True)
+                if len(result) >= _SPILL_MIN_CHARS
+                else None
+            )
+            replacement = budgeted_preview(
+                result,
+                cap=cap,
+                ref=spilled[1] if spilled else "",
+                note="Cut further to fit the per-turn tool-result budget.",
+                tool_name=name,
+            )
         total -= len(result) - len(replacement)
         adjusted[idx] = replacement
 

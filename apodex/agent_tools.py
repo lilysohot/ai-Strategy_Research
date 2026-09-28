@@ -114,9 +114,11 @@ def terminal_tool_registry() -> dict[str, Any]:
     reg.setdefault("strategy_lint", strategy_lint)
     # 语料检索 / 取证（P0b）。同样是只读、无副作用，两个入口共用一份实现。
     from plugins.tools.corpus_fetch import corpus_fetch
+    from plugins.tools.corpus_inventory import corpus_inventory
     from plugins.tools.corpus_search import corpus_search
     reg.setdefault("corpus_fetch", corpus_fetch)
     reg.setdefault("corpus_search", corpus_search)
+    reg.setdefault("corpus_inventory", corpus_inventory)
     # 数据源覆盖度探测：开局一次看清有哪些源可用（只读，串起 corpus 与 market）。
     from plugins.tools.data_coverage import data_coverage
     reg.setdefault("data_coverage", data_coverage)
@@ -147,7 +149,7 @@ _READ_ONLY = frozenset({
     "position_sizing", "strategy_lint",
     # 语料检索 / 取证（P0b）：只读本地 SQLite。不加进来的话，
     # 不带 -y 时每一次检索与取证都要人工点确认。
-    "corpus_search", "corpus_fetch",
+    "corpus_search", "corpus_fetch", "corpus_inventory",
     # 数据源覆盖度探测：只读（研报检索 + 市场探测），无副作用。
     "data_coverage",
     # 市场数据（同花顺 fuyao）：只读网络读取，无副作用。

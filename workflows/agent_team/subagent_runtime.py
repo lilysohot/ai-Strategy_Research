@@ -785,6 +785,14 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
         budget = self._BUDGETS.get(name, self._BUDGET_DEFAULT)
         if name == "bash":
             return self._compact_bash(content, budget)
+        # A0.3：结构化取证结果（corpus_fetch）先按协议压缩，绝不按字符硬切 JSON——
+        # 硬切会同时破坏 JSON 与逐字正文。超预算时先去诊断元数据，仍装不下则返回
+        # 可识别的预算错误（均为合法 JSON）。其他工具不受影响（返回 None）。
+        from plugins.tools._overflow import structured_result_fit
+
+        structured = structured_result_fit(name, content, budget)
+        if structured is not None:
+            return structured
         return self._head_cap(content, budget)
 
     def _head_cap(self, content: str, budget: int) -> str:
@@ -942,6 +950,13 @@ def _swarm_observers(
         # this session_id; we inject the stop prompt at the next turn boundary.
         StopSignalObserver(session_id=f"{task_id}::{session_name}"),
     ]
+    # A4 消费账本（观测模式）：子代理是取证主体，与主代理共用同一 run 账本；
+    # 记录 offered/requested/fetched，loop 结束核验 delivered 并落盘工件。
+    from plugins.corpus.ledger import ConsumptionLedgerObserver
+
+    observers.append(ConsumptionLedgerObserver(
+        task_id=task_id, role_id="sub_agent", pipeline_id="agent_team",
+    ))
     if DuplicateQueryRollbackObserver.DEFAULT_TOOL_NAMES.intersection(tool_names):
         # Only meaningful for an agent that can search. The rollback pops the
         # turn before the duplicate search runs, so it costs an LLM call and

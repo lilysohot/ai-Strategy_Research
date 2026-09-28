@@ -492,3 +492,147 @@ def test_site3_keeps_the_self_pagination_pointer(processor, tool: str) -> None:
     # work instead of being handed the path or offset that continues it.
     assert "/spill/abc123.md" in out, f"{tool}: recovery pointer was cut"
     assert out == body, f"{tool}: body was shortened despite fitting gate ①"
+
+
+# ── A0.2/A0.3: corpus_fetch structured results under budget ─────────────
+#
+# corpus_fetch returns one JSON envelope (verbatim body + citation mapping +
+# control fields + heavy diagnostic metadata). A character cut corrupts BOTH
+# the JSON and the body, so the post-processors and the aggregate pass must
+# reshape it by protocol instead: drop diagnostics to fit, and when even the
+# body does not fit return an identifiable budget error — never a partial body.
+
+
+def _corpus_fetch_body(*, text: str, cells: int = 0, units: int = 0) -> str:
+    payload = {
+        "ok": True, "view": "full", "doc_id": "cv2:" + "b" * 64,
+        "locator": "chunk:c1", "kind": "table", "build_id": "b" * 64,
+        "text": text,
+        "spans": [{"unit_id": f"u{i}", "start": i, "end": i + 1} for i in range(units)],
+        "source_ranges": [[0, len(text)]], "hint": "h",
+        "source_id": "s1", "chunk_id": "c1", "active": True,
+        "authority_rev": "r", "context_unit_ids": [],
+        "units": [
+            {"unit_id": f"u{i}", "page": 1, "element": "table", "cells": [[0, 0]]}
+            for i in range(units)
+        ],
+        "semantic_cells": [
+            {"unit_id": f"u{i}", "page": 1, "row": "r", "col": "c", "text": "v" * 20}
+            for i in range(cells)
+        ],
+    }
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def test_structured_fit_preserves_body_and_drops_diagnostics() -> None:
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    body = _corpus_fetch_body(text="甲" * 400, cells=300, units=60)
+    assert len(body) > 6_000
+
+    out = fit_structured_payload(body, 6_000)
+    assert out is not None
+    payload = json.loads(out)  # stays valid JSON — no character cut
+    assert payload["ok"] is True and payload["view"] == "compact"
+    assert payload["diagnostics_elided"] is True
+    assert payload["text"] == "甲" * 400  # verbatim body survives intact
+    assert payload["structure_status"] == "verified"
+    assert "semantic_cells" not in payload  # heavy geometry removed
+
+
+def test_structured_fit_returns_budget_error_when_body_alone_exceeds() -> None:
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    out = fit_structured_payload(_corpus_fetch_body(text="乙" * 9_000), 6_000)
+    payload = json.loads(out)
+    assert payload["ok"] is False
+    assert payload["error"].startswith("budget_exceeded")
+    assert payload["text_chars"] == 9_000
+    assert "text" not in payload  # no partial body pretending to be complete
+
+
+def test_structured_fit_leaves_small_and_foreign_results_alone() -> None:
+    from plugins.tools.corpus_fetch import fit_structured_payload
+
+    small = _corpus_fetch_body(text="短")
+    assert fit_structured_payload(small, 6_000) == small  # untouched within budget
+    assert fit_structured_payload("plain text " * 2_000, 100) is None  # not JSON
+    assert fit_structured_payload(json.dumps({"ok": False, "error": "x" * 5_000}), 100) is None
+
+
+@pytest.mark.parametrize("processor", _processors())
+def test_processors_keep_corpus_fetch_json_parseable(processor) -> None:
+    from frontier_agent.core.loop_types import ToolResult
+
+    body = _corpus_fetch_body(text="甲" * 400, cells=300, units=60)
+    out = processor.process(ToolResult(
+        name="corpus_fetch", args={}, result=body, duration_ms=0,
+        tool_call_id="call-1", is_error=False,
+    ))
+
+    payload = json.loads(out)  # raises if the processor hard-cut the JSON
+    assert payload["text"] == "甲" * 400
+
+
+@pytest.mark.parametrize("processor", _processors())
+def test_processors_still_head_cap_other_tools(processor) -> None:
+    from frontier_agent.core.loop_types import ToolResult
+
+    body = "x" * 20_000
+    out = processor.process(ToolResult(
+        name="mystery_tool", args={}, result=body, duration_ms=0,
+        tool_call_id="call-1", is_error=False,
+    ))
+
+    assert out.startswith("x") and len(out) < len(body)
+
+
+def test_aggregate_budget_keeps_structured_results_valid() -> None:
+    body = _corpus_fetch_body(text="丙" * 300, cells=200, units=50)
+
+    adjusted = _overflow.check_aggregate_budget([body] * 30, ["corpus_fetch"] * 30)
+
+    assert sum(len(b) for b in adjusted) <= _overflow.MAX_AGGREGATE_RESULT_CHARS
+    for item in adjusted:
+        json.loads(item)  # every re-cut result is still valid JSON
+
+
+# ── A0.4 acceptance samples ─────────────────────────────────────────────
+
+
+def test_body_0005_like_result_keeps_body_locator_and_recovery() -> None:
+    """A0.4 回归：正文约 1,249 字符、诊断元数据约 20K 的块（形如历史 body:0005）。
+
+    最终模型消息必须仍能看到**正文**、**定位**与**续取**（完整元数据的可解析引用）。
+    """
+    from frontier_agent.core.loop_types import ToolResult
+    from workflows.stateful_react_agent._runtime import ReactToolResultPostProcessor
+
+    body = _corpus_fetch_body(text="正文" * 624 + "尾", cells=180, units=40)
+    assert len(body) > 10_000  # metadata dominates, like the historical block
+
+    out = ReactToolResultPostProcessor().process(ToolResult(
+        name="corpus_fetch", args={}, result=body, duration_ms=0,
+        tool_call_id="call-1", is_error=False,
+    ))
+
+    payload = json.loads(out)  # legal structure, not a hard-cut
+    assert payload["text"].startswith("正文") and payload["text"].endswith("尾")
+    assert payload["locator"] == "chunk:c1"        # 定位可见
+    assert payload["meta_ref"]["view"] == "full"    # 续取：完整元数据可解析引用
+
+
+def test_escaping_in_body_survives_the_reshape() -> None:
+    """A0.4：引号、反斜杠、换行、制表等转义字符逐字保留，且 JSON 仍合法。"""
+    from frontier_agent.core.loop_types import ToolResult
+    from workflows.stateful_react_agent._runtime import ReactToolResultPostProcessor
+
+    text = '引号" 反斜杠\\ 换行\n制表\t换页\f 引号\''
+    body = _corpus_fetch_body(text=text, cells=300, units=60)
+
+    out = ReactToolResultPostProcessor().process(ToolResult(
+        name="corpus_fetch", args={}, result=body, duration_ms=0,
+        tool_call_id="call-1", is_error=False,
+    ))
+
+    assert json.loads(out)["text"] == text  # exact characters, valid JSON

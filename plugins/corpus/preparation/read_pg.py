@@ -21,6 +21,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING
 
@@ -827,3 +828,209 @@ def _assemble_chunk_evidence(
         active=bool(chunk_row[9]),
     )
     return with_units(evidence, units)
+
+
+_STRUCTURE_KINDS_SQL = """
+SELECT c.build_id, c.chunk_id, c.kind
+FROM corpus.corpus_chunks c
+WHERE (c.build_id, c.chunk_id) IN (
+    SELECT b, u FROM unnest(%(build_ids)s::text[], %(chunk_ids)s::text[]) AS x(b, u)
+)
+"""
+
+
+@dataclass(frozen=True)
+class UnitStructure:
+    """清单用的单元结构投影（含 ``label_path``，故不能只复用 :class:`UnitEvidence`）。"""
+
+    unit_id: str
+    raw_text: str
+    page: int | None
+    element: str | None
+    cells: tuple[tuple[int, ...], ...]
+    label_path: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ChunkStructure:
+    """清单用的块结构投影：块身份 + 逐单元自身可用的结构元数据。
+
+    ``fetch_chunk_structures`` 为**每个成员**读其**自身**的 chunk／unit 元数据，
+    因此邻接块不会继承搜索锚点的首个引用单元坐标（01 §A1.1）。
+    """
+
+    chunk_id: str
+    kind: str
+    title_text: str | None
+    section_path: tuple[str, ...]
+    units: tuple[UnitStructure, ...]
+
+
+def fetch_chunk_kinds(
+    dsn: str,
+    pairs: tuple[tuple[str, str], ...] | list[tuple[str, str]],
+    *,
+    sandbox_db: str | None = None,
+) -> dict[tuple[str, str], str]:
+    """批量取 ``(build_id, chunk_id) -> kind``（一次 SQL，禁 N+1）。
+
+    只读块种类，用于检索时内联 scope 摘要（``by_kind``）而不必读单元几何。缺失的
+    对不出现在返回里——调用方按「成员集合与统计核对」处理，不补造。
+    """
+    import psycopg
+
+    wanted = {(str(b), str(c)) for b, c in pairs}
+    if not wanted:
+        return {}
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.cursor() as cur:
+            cur.execute(
+                _STRUCTURE_KINDS_SQL,
+                {
+                    "build_ids": sorted({b for b, _ in wanted}),
+                    "chunk_ids": sorted({c for _, c in wanted}),
+                },
+            )
+            rows = cur.fetchall()
+    out: dict[tuple[str, str], str] = {}
+    for build_id, chunk_id, kind in rows:
+        key = (str(build_id), str(chunk_id))
+        if key in wanted:
+            out[key] = str(kind or "")
+    return out
+
+
+def chunk_order_for_build(
+    dsn: str,
+    build_id: str,
+    *,
+    sandbox_db: str | None = None,
+) -> tuple[str, ...]:
+    """一个 build 的**全量原文序**块 id（与 :func:`_chunk_order_by_source_on` 同口径）。
+
+    原文序 = 按该块全部引用单元的最小 ``ordinal`` 升序（稳定排序，同值保留 DB 序）。
+    清单据此把成员位置还原为「实际选择区间」——连续位置合为一个区间、缝隙断开，
+    不用首尾包络代替，也不引入区间之间原本未选中的块。
+    """
+    import psycopg
+
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+            cur.execute(_BAND_CHUNK_ORDER_SQL, {"build_ids": [build_id]})
+            chunks = [
+                (str(row[1]), tuple(str(ref) for ref in (row[2] or ())))
+                for row in cur.fetchall()
+            ]
+            cur.execute(_BAND_CHUNK_UNITS_ORDINAL_SQL, {"build_ids": [build_id]})
+            ordinal_by_unit: dict[str, int] = {}
+            for _bid, unit_id, ordinal in cur.fetchall():
+                if ordinal is not None:
+                    ordinal_by_unit[str(unit_id)] = int(ordinal)
+
+    def min_ordinal(refs: tuple[str, ...]) -> int:
+        vals = [ordinal_by_unit[ref] for ref in refs if ref in ordinal_by_unit]
+        return min(vals) if vals else 10**9
+
+    ordered = sorted(chunks, key=lambda item: min_ordinal(item[1]))
+    return tuple(chunk_id for chunk_id, _ in ordered)
+
+
+def fetch_chunk_structures(
+    dsn: str,
+    build_id: str,
+    chunk_ids: tuple[str, ...] | list[str],
+    *,
+    sandbox_db: str | None = None,
+) -> dict[str, ChunkStructure]:
+    """批量取成员的**自身**结构投影（一次 chunks + 一次 units，禁 N+1）。
+
+    与块级读取同纪律：来源撤销 → :class:`WithdrawnError`；引用悬空或内容哈希不符 →
+    :class:`IntegrityError`。未知 ``chunk_id`` 不出现在返回里，由调用方判定。
+    """
+    import psycopg
+
+    wanted = [str(c) for c in chunk_ids]
+    if not wanted:
+        return {}
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+            cur.execute(
+                _BANDS_CHUNK_SQL,
+                {"build_ids": [build_id], "chunk_ids": sorted(set(wanted))},
+            )
+            chunk_rows = cur.fetchall()
+            refs_by_chunk: dict[str, list[str]] = {}
+            for row in chunk_rows:
+                refs_by_chunk[str(row[1])] = [str(u) for u in (row[5] or ())]
+            if not refs_by_chunk:
+                return {}
+            flat_units = [uid for uids in refs_by_chunk.values() for uid in uids]
+            unit_rows: dict[str, tuple] = {}
+            if flat_units:
+                cur.execute(
+                    _BANDS_UNITS_SQL,
+                    {
+                        "build_ids": [build_id] * len(flat_units),
+                        "unit_ids": flat_units,
+                    },
+                )
+                for row in cur.fetchall():
+                    unit_rows[str(row[1])] = row
+
+    out: dict[str, ChunkStructure] = {}
+    for row in chunk_rows:
+        chunk_id = str(row[1])
+        decision = row[10]
+        if decision and decision != "in_scope":
+            raise WithdrawnError(
+                f"来源当前准入为 {decision!r}，活动版本已撤下，不得继续服务该句柄"
+            )
+        unit_ids = refs_by_chunk.get(chunk_id, [])
+        missing = [uid for uid in unit_ids if uid not in unit_rows]
+        if missing:
+            raise IntegrityError(
+                f"chunk 引用了不存在的单元: {missing} @ {build_id[:12]}…/{chunk_id}"
+            )
+        units = [
+            _unit_structure(build_id, unit_rows[uid])
+            for uid in sorted(unit_ids, key=_unit_order_key(unit_rows))
+        ]
+        out[chunk_id] = ChunkStructure(
+            chunk_id=chunk_id,
+            kind=str(row[2] or ""),
+            title_text=row[3],
+            section_path=tuple(row[4] or ()),
+            units=tuple(units),
+        )
+    return out
+
+
+def _unit_order_key(unit_rows: dict[str, tuple]) -> Callable[[str], tuple[int, int, str]]:
+    def key(unit_id: str) -> tuple[int, int, str]:
+        row = unit_rows[unit_id]
+        ordinal = row[5]
+        return (1 if ordinal is None else 0, -1 if ordinal is None else int(ordinal), unit_id)
+
+    return key
+
+
+def _unit_structure(build_id: str, row: tuple) -> UnitStructure:
+    """校验并把单元行投影为 :class:`UnitStructure`（保留 ``label_path``）。"""
+    _bid, unit_id, raw_text, location, content_hash, _ordinal = row
+    text = str(raw_text or "")
+    if sha256_of_bytes(text.encode()) != str(content_hash or ""):
+        raise IntegrityError(f"权威单元内容哈希不符（疑似篡改）: {unit_id} @ {build_id[:12]}…")
+    loc = location if isinstance(location, dict) else {}
+    return UnitStructure(
+        unit_id=str(unit_id),
+        raw_text=text,
+        page=loc.get("page"),
+        element=loc.get("element"),
+        cells=tuple(tuple(int(v) for v in cell) for cell in (loc.get("cells") or ())),
+        label_path=tuple(str(label) for label in (loc.get("label_path") or ()) if label),
+    )
