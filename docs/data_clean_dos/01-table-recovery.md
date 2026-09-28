@@ -221,22 +221,49 @@ async def corpus_fetch(
 | 编号 | 缺陷 | 状态 | 落点 |
 |---|---|---|---|
 | D1 | `corpus_search` 结果超出工作流预算时被按字符**硬切**，成非法 JSON、丢句柄 | 已修 | `corpus_search` 纳入 `structured_result_fit` 分派（[`fit_search_payload`](../../plugins/tools/corpus_search.py)）；两个后处理器给有界预算 20000（覆盖实测最大体 ~18.6K） |
-| D2 | `corpus_fetch` 转分页信封后 item 不含 `source_id`／`semantic_cells`，行／列证据在分页路径不可恢复 | **未修（方向待定）** | 分页路径的既有消费者 [corpus_product_observations.py](../../tools/corpus_product_observations.py) 与产品门因此失效 |
+| D2 | `corpus_fetch` 转分页信封后 item 不含 `source_id`／`semantic_cells`，行／列证据在分页路径不可恢复 | 已修 | 单成员信封附信封级 `block_evidence`（整块 `source_id`／`units`／`spans`／`semantic_cells`，块坐标），item 附 `source_id`；消费者 [corpus_product_observations.py](../../tools/corpus_product_observations.py) 跟游标拼回整块后走同一权威校验，产品门 qp/ep 恢复可执行 |
 | D3 | `full` 视图的 `units` 单元清单撑爆 `max_chars`，报错无可执行退路 | 已修 | [corpus_fetch._page](../../plugins/tools/corpus_fetch.py) 固定字段超预算时**自动回退 compact** 重试一次（item 标 `view_fallback`），错误文案换成可执行退路 |
 | D4 | 分页信封同样以 `ok: true` 开头，被 `fit_structured_payload` 当单块结果压缩，`items`（正文＋句柄＋游标）整个丢失 | 已修 | [`fit_structured_payload`](../../plugins/tools/corpus_fetch.py) 按 `items` 判形；信封只去诊断性的 `units`、保留正文与 `next_cursor`；仍装不下则返回带 `next_cursor` 的预算错误，绝不丢正文 |
-| — | `_page` 的片段预算按**原始字符数**算，而信封序列化后换行转义为两字符，正文含多换行时信封略超自身 `max_chars`（实测 ~0.6%） | **未修（方向待定）** | 当前靠 D4 的防御性压缩兜住，无数据丢失，仅丢 `units` 诊断字段 |
+| — | `_page` 的片段预算按**原始字符数**算，而信封序列化后换行转义为两字符，正文含多换行时信封略超自身 `max_chars`（实测 ~0.6%） | 已修 | 片段预算改按**序列化转义后**长度记账（`_escaped_len`／`_largest_escaped_cut` 二分求切点），与页信封实际开销同口径；回归测试断言每页 `len ≤ max_chars` 且拼回即整块 |
 
-回放 v4 结果（D1/D3/D4 修复后）：`questions=30`、`questions_with_hits=24`、
-`offered_locators=5793`、`fetch_calls=5810`、`fetched_fragments=5810`、`delivered=5810`、
+D2 预算承载的实测边界（决定契约形态的关键约束）：`block_evidence` 与单块 full 视图的
+诊断字段内容相同，而分页信封固定开销（游标／`page_id`／`hint`）恒高于单块形状，故
+「单块装不下 → 一页 full 信封装得下」对**带派生单元格的表格**在 6000 预算内不成立
+（单元格证据随行数膨胀，数值列为含字母文本时 col 标签还会级联取上一行全文）。因此契约
+分两层：`block_evidence` 装得下时 full 档整体携带（表格 mid-size 或正文块）；装不下时
+诚实回退 compact（整块证据随 compact 省去），超大表由 compact＋产品门 fail-closed 兜底，
+回放量化了这一降级面。
+
+回放 v5 结果（D1/D2/D3/D4＋转义记账全部修复后）：`questions=30`、`questions_with_hits=24`、
+`offered_locators=5793`、`fetch_calls=5793`、`fetched_fragments=5793`、`delivered=5793`、
 `truncated=0`、`unknown=0`、`incomplete_locators=0`、`duplicate_fetches=0`、`errors=0`、
-`compact_fallback_items=28`、`questions_all_offered_fetched=24`、
-`questions_search_envelope_broken_of_with_hits=0`；最终消息输入 token 代理
-`final_tokens_estimate≈5.27M`。修复前为 `delivered=5793`／`unknown=17`／
-`questions_all_offered_fetched=9`／`search_envelope_broken_of_with_hits=24`，两处对照见
-`replay.json` 的 `findings`。
+`compact_fallback_items=257`、`questions_all_offered_fetched=24`、
+`questions_search_envelope_broken_of_with_hits=0`、**`cell_evidence_bearing_calls=684`
+（修复前分页路径为 0）**、最终消息输入 token 代理 `final_tokens_estimate≈5.08M`。
+`compact_fallback_items` 从 v4 的 28 升至 257：D2 的整块证据参与预算探针后，更多大块按
+预期走了诚实 compact 回退（不是丢失——`delivered` 仍全量）。逐项见 `replay.json` 的
+`findings`（v5）。
 
-**待用户定夺的方向（本轮未动）**：① D2——是把 `source_id`／单元证据补回信封，还是更新
-`collect_query` 消费者；② 次级问题——`_page` 片段预算是否改为按**序列化转义后**长度记账。
+**真实模型冒烟（`replay_model.json` v1，3 题，glm-5.3-flash／react／每题独立会话）**：
+复现脚本 [replay_model.py](../../.scratch/a4-replay-20260928/replay_model.py)。选题每
+domain 一道 answerable、优先金标带 row/cell 约束的表格题：company-003（财务预测表）、
+industry-001（化工景气表）、macro-001（非农叙述题对照）。金标只做零成本正确性代理
+（逐字引文空白归一后是否出现在取回语料／最终答案），不参与选题与检索。
+
+| 题 | 取回侧覆盖 | 答案侧覆盖 | input tok | 墙钟 | 账本（offered/fetched/delivered） |
+|---|---|---|---|---|---|
+| company-003 | 6/6 | 6/6 | 504,792 | 552s | 14 / 17 / 17 |
+| industry-001 | 5/5 | 3/5 | 139,724 | 200s | 14 / 1 / 1 |
+| macro-001 | 2/3 | 2/3 | 177,085 | 96s | 5 / 7 / 7 |
+
+三题合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用、墙钟 847.5s；
+量级参照：75c6 基线单题（茅台技术面任务）input 855,662／output 34,651、20 轮、35 次
+工具调用。两点观察：① 两个表格题金标引文**全部**出现在取回语料中，D2 修复后的分页
+路径与单块路径都能承载行／列证据；industry-001 仅 fetch 1 块即覆盖全部 5 个金标引文，
+说明检索命中率而非取回量决定成本。② macro-001 唯一缺口 a-3（page:3 表格列）是 agent
+未发起对该页的 fetch——真实检索缺口，属 B0（准备侧）要回答的问题，不是消费侧接缝。
+另注意评分口径：`fetched_coverage` 按「金标引文解析自 trace 工具结果后子串匹配」计，
+初版因二次序列化把换行变成字面 `\n` 而全量假阴性，已修正（trace 结果先解析再展平）。
 
 ## 2. 验收与交付顺序
 

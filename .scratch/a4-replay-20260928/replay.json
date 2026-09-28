@@ -1,7 +1,7 @@
 {
   "artifact": "a4-replay",
-  "version": 4,
-  "generated_at": "2026-09-28T06:27:29.211764+00:00",
+  "version": 5,
+  "generated_at": "2026-09-28T07:30:51.037975+00:00",
   "scope": "isolated-corpus retrieval replay (zero model, read-only PG)",
   "probe": {
     "transaction_read_only": "on",
@@ -35,8 +35,8 @@
       "note": "期望 broken=0：超限时按协议压缩（整条舍弃尾部命中）而非硬切。"
     },
     "d2_paging_envelope_drops_cell_evidence": {
-      "status": "open",
-      "item_keys_sample": [
+      "status": "fixed",
+      "envelope_item_keys_sample": [
         "build_id",
         "chunk_id",
         "content_role",
@@ -46,60 +46,70 @@
         "pages",
         "relation_status",
         "relations",
+        "source_id",
         "structure_status",
         "text",
         "text_chars",
-        "text_sha256",
+        "text_sha256"
+      ],
+      "block_evidence_keys": [
+        "chunk_id",
+        "locator",
+        "semantic_cells",
+        "source_id",
+        "spans",
         "units"
       ],
-      "unit_keys_sample": [
+      "block_evidence_unit_keys": [
+        "cells",
+        "element",
         "page",
         "unit_id"
       ],
       "cell_evidence_bearing_calls": 684,
       "legacy_shaped_locators": 5536,
       "envelope_shaped_locators": 257,
-      "note": "分页信封不含 source_id／semantic_cells，units 无 row/col；行／列证据在分页路径不可恢复，产品门 qp/ep 当前不可执行"
+      "note": "修复：单成员分页信封附信封级 block_evidence（整块 source_id／units/spans／semantic_cells，块坐标），item 附 source_id；消费者跟游标拼回整块后走同一权威校验。单成员信封 item 不再重复携带 units（权威副本在 block_evidence）；固定字段挤爆预算时诚实回退 compact（整块证据随compact 省去，大表按 compact+产品门 fail-closed 兜底）。期望 cell_evidence_bearing_calls>0：分页路径行／列证据可恢复。"
     },
     "d3_fixed_fields_over_budget": {
       "status": "fixed",
-      "compact_fallback_items": 28,
+      "compact_fallback_items": 257,
       "incomplete_locators": 0,
       "note": "期望 incomplete=0 且 fallback>0：full 装不下时自动改用 compact 重试。"
     },
     "d4_page_envelope_mangled_as_single_block": {
       "status": "fixed",
       "unknown": 0,
-      "delivered": 5810,
-      "fetched_fragments": 5810,
+      "delivered": 5793,
+      "fetched_fragments": 5793,
       "note": "A2 分页信封同样以 ok:true 开头，曾被 fit_structured_payload 当成单块结果交给 _compact_payload，items 整个丢失→正文静默消失（计 unknown）。修复：按 items 判形，信封只去 units、保留正文与 next_cursor；期望 unknown=0 且 delivered=fetched_fragments。"
     },
     "secondary_page_escape_length_accounting": {
-      "status": "open",
+      "status": "fixed",
       "evidence_locator": "chunk:58735cff57d8d456:body:0005",
-      "note": "_page 的片段预算按**原始字符数**算，而信封序列化后换行转义为两字符，正文含 ~77 个换行时信封实测超自身 max_chars 约 37 字符（0.6%），_MARGIN=64 不足覆盖。当前靠 D4 的防御性压缩兜住（无数据丢失，仅丢 units 诊断字段）；方向待定：是否改按序列化转义后长度记账。"
+      "note": "已修复：_page 的片段预算改为按**序列化转义后**长度记账（_escaped_len／_largest_escaped_cut 二分求切点），与页信封的实际序列化开销同口径；回归测试 test_paging_envelope_never_exceeds_max_chars_despite_escapes 断言换行密集正文每页 len ≤ max_chars 且拼回即整块。"
     }
   },
   "totals": {
     "questions": 30,
     "questions_with_hits": 24,
     "offered_locators": 5793,
-    "fetch_calls": 5810,
-    "pages": 5810,
-    "multi_page_locators": 17,
+    "fetch_calls": 5793,
+    "pages": 5793,
+    "multi_page_locators": 0,
     "incomplete_locators": 0,
-    "fetched_fragments": 5810,
-    "delivered": 5810,
+    "fetched_fragments": 5793,
+    "delivered": 5793,
     "truncated": 0,
     "unknown": 0,
     "duplicate_fetches": 0,
     "errors": 0,
     "skipped": 0,
-    "compact_fallback_items": 28,
+    "compact_fallback_items": 257,
     "aggregate_triggered": 0,
-    "raw_chars": 10675682,
-    "final_chars": 10629639,
-    "final_tokens_estimate": 5267075,
+    "raw_chars": 10199601,
+    "final_chars": 10199601,
+    "final_tokens_estimate": 5083398,
     "questions_all_offered_fetched": 24,
     "questions_search_envelope_broken": 0,
     "questions_search_envelope_broken_of_with_hits": 0
@@ -107,14 +117,14 @@
   "distribution": {
     "fetch_calls": {
       "count": 30,
-      "sum": 5810,
-      "median": 206.5,
+      "sum": 5793,
+      "median": 206.0,
       "max": 393
     },
     "pages": {
       "count": 30,
-      "sum": 5810,
-      "median": 206.5,
+      "sum": 5793,
+      "median": 206.0,
       "max": 393
     },
     "offered_locators": {
@@ -125,15 +135,15 @@
     },
     "final_tokens_estimate": {
       "count": 30,
-      "sum": 5267075,
-      "median": 187102.0,
-      "max": 323830
+      "sum": 5083398,
+      "median": 178582.0,
+      "max": 311738
     },
     "latency_ms": {
       "count": 30,
-      "sum": 218108.0,
-      "median": 8051.0,
-      "max": 14351.0
+      "sum": 211097.0,
+      "median": 7829.0,
+      "max": 14071.0
     }
   },
   "per_question": [
@@ -141,10 +151,10 @@
       "query_id": "company-001",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 10238.5,
-      "raw_chars": 507151,
-      "final_chars": 504440,
-      "final_tokens_estimate": 172061,
+      "latency_ms": 9308.8,
+      "raw_chars": 486024,
+      "final_chars": 486024,
+      "final_tokens_estimate": 167356,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -154,24 +164,24 @@
           "final_chars": 13252
         },
         "corpus_fetch": {
-          "calls": 257,
-          "cut": 1,
-          "raw_chars": 493899,
-          "final_chars": 491188
+          "calls": 256,
+          "cut": 0,
+          "raw_chars": 472772,
+          "final_chars": 472772
         }
       },
       "search_raw_chars": 13252,
       "search_final_chars": 13252,
       "search_envelope_valid_json": true,
       "locators": 256,
-      "pages": 257,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 256,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 10,
       "legacy_locators": 246,
       "cell_evidence_bearing": 43,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 10,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 256,
@@ -179,9 +189,9 @@
         "unknown": 255,
         "body": 1
       },
-      "requested_rows": 257,
-      "fetched_fragments": 257,
-      "delivered": 257,
+      "requested_rows": 256,
+      "fetched_fragments": 256,
+      "delivered": 256,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -192,10 +202,10 @@
       "query_id": "company-002",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 7648.4,
-      "raw_chars": 433180,
-      "final_chars": 430469,
-      "final_tokens_estimate": 216473,
+      "latency_ms": 7456.6,
+      "raw_chars": 415306,
+      "final_chars": 415306,
+      "final_tokens_estimate": 209833,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -205,24 +215,24 @@
           "final_chars": 12304
         },
         "corpus_fetch": {
-          "calls": 231,
-          "cut": 1,
-          "raw_chars": 420876,
-          "final_chars": 418165
+          "calls": 230,
+          "cut": 0,
+          "raw_chars": 403002,
+          "final_chars": 403002
         }
       },
       "search_raw_chars": 12304,
       "search_final_chars": 12304,
       "search_envelope_valid_json": true,
       "locators": 230,
-      "pages": 231,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 230,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 9,
       "legacy_locators": 221,
       "cell_evidence_bearing": 32,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 9,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 230,
@@ -230,9 +240,9 @@
         "unknown": 229,
         "body": 1
       },
-      "requested_rows": 231,
-      "fetched_fragments": 231,
-      "delivered": 231,
+      "requested_rows": 230,
+      "fetched_fragments": 230,
+      "delivered": 230,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -243,10 +253,10 @@
       "query_id": "company-003",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 10585.4,
-      "raw_chars": 517072,
-      "final_chars": 514363,
-      "final_tokens_estimate": 261194,
+      "latency_ms": 10404.0,
+      "raw_chars": 491559,
+      "final_chars": 491559,
+      "final_tokens_estimate": 251250,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -256,24 +266,24 @@
           "final_chars": 12320
         },
         "corpus_fetch": {
-          "calls": 233,
-          "cut": 1,
-          "raw_chars": 504752,
-          "final_chars": 502043
+          "calls": 232,
+          "cut": 0,
+          "raw_chars": 479239,
+          "final_chars": 479239
         }
       },
       "search_raw_chars": 12320,
       "search_final_chars": 12320,
       "search_envelope_valid_json": true,
       "locators": 232,
-      "pages": 233,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 232,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 15,
       "legacy_locators": 217,
       "cell_evidence_bearing": 52,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 15,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 232,
@@ -281,9 +291,9 @@
         "unknown": 231,
         "body": 1
       },
-      "requested_rows": 233,
-      "fetched_fragments": 233,
-      "delivered": 233,
+      "requested_rows": 232,
+      "fetched_fragments": 232,
+      "delivered": 232,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -294,10 +304,10 @@
       "query_id": "company-004",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 14351.2,
-      "raw_chars": 636852,
-      "final_chars": 634145,
-      "final_tokens_estimate": 310341,
+      "latency_ms": 14070.8,
+      "raw_chars": 603363,
+      "final_chars": 603363,
+      "final_tokens_estimate": 296957,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -307,24 +317,24 @@
           "final_chars": 18008
         },
         "corpus_fetch": {
-          "calls": 378,
-          "cut": 1,
-          "raw_chars": 618844,
-          "final_chars": 616137
+          "calls": 377,
+          "cut": 0,
+          "raw_chars": 585355,
+          "final_chars": 585355
         }
       },
       "search_raw_chars": 18008,
       "search_final_chars": 18008,
       "search_envelope_valid_json": true,
       "locators": 377,
-      "pages": 378,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 377,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 19,
       "legacy_locators": 358,
       "cell_evidence_bearing": 43,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 19,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 377,
@@ -332,9 +342,9 @@
         "unknown": 376,
         "body": 1
       },
-      "requested_rows": 378,
-      "fetched_fragments": 378,
-      "delivered": 378,
+      "requested_rows": 377,
+      "fetched_fragments": 377,
+      "delivered": 377,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -345,10 +355,10 @@
       "query_id": "company-005",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 4703.5,
-      "raw_chars": 200447,
-      "final_chars": 197740,
-      "final_tokens_estimate": 104656,
+      "latency_ms": 4372.9,
+      "raw_chars": 184717,
+      "final_chars": 184717,
+      "final_tokens_estimate": 98940,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -358,24 +368,24 @@
           "final_chars": 7853
         },
         "corpus_fetch": {
-          "calls": 114,
-          "cut": 1,
-          "raw_chars": 192594,
-          "final_chars": 189887
+          "calls": 113,
+          "cut": 0,
+          "raw_chars": 176864,
+          "final_chars": 176864
         }
       },
       "search_raw_chars": 7853,
       "search_final_chars": 7853,
       "search_envelope_valid_json": true,
       "locators": 113,
-      "pages": 114,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 113,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 6,
       "legacy_locators": 107,
       "cell_evidence_bearing": 9,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 6,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 113,
@@ -383,9 +393,9 @@
         "unknown": 112,
         "body": 1
       },
-      "requested_rows": 114,
-      "fetched_fragments": 114,
-      "delivered": 114,
+      "requested_rows": 113,
+      "fetched_fragments": 113,
+      "delivered": 113,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -396,10 +406,10 @@
       "query_id": "company-006",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 11453.4,
-      "raw_chars": 553027,
-      "final_chars": 553027,
-      "final_tokens_estimate": 272636,
+      "latency_ms": 11422.1,
+      "raw_chars": 532769,
+      "final_chars": 532769,
+      "final_tokens_estimate": 263884,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -411,8 +421,8 @@
         "corpus_fetch": {
           "calls": 336,
           "cut": 0,
-          "raw_chars": 536617,
-          "final_chars": 536617
+          "raw_chars": 516359,
+          "final_chars": 516359
         }
       },
       "search_raw_chars": 16410,
@@ -426,7 +436,7 @@
       "envelope_locators": 12,
       "legacy_locators": 324,
       "cell_evidence_bearing": 29,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 12,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 336,
@@ -447,10 +457,10 @@
       "query_id": "company-007",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 14325.9,
-      "raw_chars": 632999,
-      "final_chars": 630288,
-      "final_tokens_estimate": 308596,
+      "latency_ms": 14042.1,
+      "raw_chars": 600084,
+      "final_chars": 600084,
+      "final_tokens_estimate": 295460,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -460,24 +470,24 @@
           "final_chars": 18223
         },
         "corpus_fetch": {
-          "calls": 385,
-          "cut": 1,
-          "raw_chars": 614776,
-          "final_chars": 612065
+          "calls": 384,
+          "cut": 0,
+          "raw_chars": 581861,
+          "final_chars": 581861
         }
       },
       "search_raw_chars": 18223,
       "search_final_chars": 18223,
       "search_envelope_valid_json": true,
       "locators": 384,
-      "pages": 385,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 384,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 17,
       "legacy_locators": 367,
       "cell_evidence_bearing": 40,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 17,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 384,
@@ -485,9 +495,9 @@
         "unknown": 383,
         "body": 1
       },
-      "requested_rows": 385,
-      "fetched_fragments": 385,
-      "delivered": 385,
+      "requested_rows": 384,
+      "fetched_fragments": 384,
+      "delivered": 384,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -498,10 +508,10 @@
       "query_id": "company-008",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 8911.7,
-      "raw_chars": 419029,
-      "final_chars": 416318,
-      "final_tokens_estimate": 209454,
+      "latency_ms": 8433.0,
+      "raw_chars": 399838,
+      "final_chars": 399838,
+      "final_tokens_estimate": 202238,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -511,24 +521,24 @@
           "final_chars": 12624
         },
         "corpus_fetch": {
-          "calls": 239,
-          "cut": 1,
-          "raw_chars": 406405,
-          "final_chars": 403694
+          "calls": 238,
+          "cut": 0,
+          "raw_chars": 387214,
+          "final_chars": 387214
         }
       },
       "search_raw_chars": 12624,
       "search_final_chars": 12624,
       "search_envelope_valid_json": true,
       "locators": 238,
-      "pages": 239,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 238,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 9,
       "legacy_locators": 229,
       "cell_evidence_bearing": 20,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 9,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 238,
@@ -536,9 +546,9 @@
         "body": 1,
         "unknown": 237
       },
-      "requested_rows": 239,
-      "fetched_fragments": 239,
-      "delivered": 239,
+      "requested_rows": 238,
+      "fetched_fragments": 238,
+      "delivered": 238,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -549,7 +559,7 @@
       "query_id": "company-009",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 134.9,
+      "latency_ms": 134.0,
       "raw_chars": 869,
       "final_chars": 869,
       "final_tokens_estimate": 429,
@@ -591,7 +601,7 @@
       "query_id": "company-010",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 118.3,
+      "latency_ms": 116.4,
       "raw_chars": 865,
       "final_chars": 865,
       "final_tokens_estimate": 421,
@@ -633,10 +643,10 @@
       "query_id": "industry-001",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 8552.6,
-      "raw_chars": 491549,
-      "final_chars": 491549,
-      "final_tokens_estimate": 249824,
+      "latency_ms": 8459.8,
+      "raw_chars": 478263,
+      "final_chars": 478263,
+      "final_tokens_estimate": 244116,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -648,8 +658,8 @@
         "corpus_fetch": {
           "calls": 256,
           "cut": 0,
-          "raw_chars": 478327,
-          "final_chars": 478327
+          "raw_chars": 465041,
+          "final_chars": 465041
         }
       },
       "search_raw_chars": 13222,
@@ -663,7 +673,7 @@
       "envelope_locators": 9,
       "legacy_locators": 247,
       "cell_evidence_bearing": 39,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 9,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 256,
@@ -684,10 +694,10 @@
       "query_id": "industry-002",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 4357.4,
-      "raw_chars": 307391,
-      "final_chars": 307391,
-      "final_tokens_estimate": 160974,
+      "latency_ms": 4354.3,
+      "raw_chars": 301771,
+      "final_chars": 301771,
+      "final_tokens_estimate": 158562,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -699,8 +709,8 @@
         "corpus_fetch": {
           "calls": 136,
           "cut": 0,
-          "raw_chars": 298713,
-          "final_chars": 298713
+          "raw_chars": 293093,
+          "final_chars": 293093
         }
       },
       "search_raw_chars": 8678,
@@ -714,7 +724,7 @@
       "envelope_locators": 5,
       "legacy_locators": 131,
       "cell_evidence_bearing": 19,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 5,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 136,
@@ -735,10 +745,10 @@
       "query_id": "industry-003",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 6244.0,
-      "raw_chars": 302371,
-      "final_chars": 299664,
-      "final_tokens_estimate": 155799,
+      "latency_ms": 5933.6,
+      "raw_chars": 283638,
+      "final_chars": 283638,
+      "final_tokens_estimate": 148811,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -748,24 +758,24 @@
           "final_chars": 8287
         },
         "corpus_fetch": {
-          "calls": 126,
-          "cut": 1,
-          "raw_chars": 294084,
-          "final_chars": 291377
+          "calls": 125,
+          "cut": 0,
+          "raw_chars": 275351,
+          "final_chars": 275351
         }
       },
       "search_raw_chars": 8287,
       "search_final_chars": 8287,
       "search_envelope_valid_json": true,
       "locators": 125,
-      "pages": 126,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 125,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 10,
       "legacy_locators": 115,
       "cell_evidence_bearing": 19,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 10,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 125,
@@ -773,9 +783,9 @@
         "body": 1,
         "unknown": 124
       },
-      "requested_rows": 126,
-      "fetched_fragments": 126,
-      "delivered": 126,
+      "requested_rows": 125,
+      "fetched_fragments": 125,
+      "delivered": 125,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -786,10 +796,10 @@
       "query_id": "industry-004",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 5906.7,
-      "raw_chars": 312429,
-      "final_chars": 312429,
-      "final_tokens_estimate": 165919,
+      "latency_ms": 5919.0,
+      "raw_chars": 301505,
+      "final_chars": 301505,
+      "final_tokens_estimate": 161211,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -801,8 +811,8 @@
         "corpus_fetch": {
           "calls": 130,
           "cut": 0,
-          "raw_chars": 304047,
-          "final_chars": 304047
+          "raw_chars": 293123,
+          "final_chars": 293123
         }
       },
       "search_raw_chars": 8382,
@@ -816,7 +826,7 @@
       "envelope_locators": 7,
       "legacy_locators": 123,
       "cell_evidence_bearing": 35,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 7,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 130,
@@ -837,10 +847,10 @@
       "query_id": "industry-005",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 10371.8,
-      "raw_chars": 626640,
-      "final_chars": 626640,
-      "final_tokens_estimate": 307826,
+      "latency_ms": 10263.3,
+      "raw_chars": 612816,
+      "final_chars": 612816,
+      "final_tokens_estimate": 301862,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -852,8 +862,8 @@
         "corpus_fetch": {
           "calls": 393,
           "cut": 0,
-          "raw_chars": 608053,
-          "final_chars": 608053
+          "raw_chars": 594229,
+          "final_chars": 594229
         }
       },
       "search_raw_chars": 18587,
@@ -867,7 +877,7 @@
       "envelope_locators": 9,
       "legacy_locators": 384,
       "cell_evidence_bearing": 32,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 9,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 393,
@@ -888,10 +898,10 @@
       "query_id": "industry-006",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 2759.7,
-      "raw_chars": 170005,
-      "final_chars": 167296,
-      "final_tokens_estimate": 88890,
+      "latency_ms": 2542.8,
+      "raw_chars": 160316,
+      "final_chars": 160316,
+      "final_tokens_estimate": 85798,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -901,24 +911,24 @@
           "final_chars": 6827
         },
         "corpus_fetch": {
-          "calls": 87,
-          "cut": 1,
-          "raw_chars": 163178,
-          "final_chars": 160469
+          "calls": 86,
+          "cut": 0,
+          "raw_chars": 153489,
+          "final_chars": 153489
         }
       },
       "search_raw_chars": 6827,
       "search_final_chars": 6827,
       "search_envelope_valid_json": true,
       "locators": 86,
-      "pages": 87,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 86,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 2,
       "legacy_locators": 84,
       "cell_evidence_bearing": 4,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 2,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 86,
@@ -926,9 +936,9 @@
         "unknown": 85,
         "body": 1
       },
-      "requested_rows": 87,
-      "fetched_fragments": 87,
-      "delivered": 87,
+      "requested_rows": 86,
+      "fetched_fragments": 86,
+      "delivered": 86,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -939,10 +949,10 @@
       "query_id": "industry-007",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 9144.9,
-      "raw_chars": 370577,
-      "final_chars": 370577,
-      "final_tokens_estimate": 184734,
+      "latency_ms": 9174.3,
+      "raw_chars": 349902,
+      "final_chars": 349902,
+      "final_tokens_estimate": 175794,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -954,8 +964,8 @@
         "corpus_fetch": {
           "calls": 208,
           "cut": 0,
-          "raw_chars": 359138,
-          "final_chars": 359138
+          "raw_chars": 338463,
+          "final_chars": 338463
         }
       },
       "search_raw_chars": 11439,
@@ -969,7 +979,7 @@
       "envelope_locators": 14,
       "legacy_locators": 194,
       "cell_evidence_bearing": 20,
-      "compact_fallback_items": 1,
+      "compact_fallback_items": 14,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 208,
@@ -990,10 +1000,10 @@
       "query_id": "industry-008",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 7861.4,
-      "raw_chars": 327065,
-      "final_chars": 324358,
-      "final_tokens_estimate": 166315,
+      "latency_ms": 7759.8,
+      "raw_chars": 302627,
+      "final_chars": 302627,
+      "final_tokens_estimate": 156859,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1003,24 +1013,24 @@
           "final_chars": 9318
         },
         "corpus_fetch": {
-          "calls": 154,
-          "cut": 1,
-          "raw_chars": 317747,
-          "final_chars": 315040
+          "calls": 153,
+          "cut": 0,
+          "raw_chars": 293309,
+          "final_chars": 293309
         }
       },
       "search_raw_chars": 9318,
       "search_final_chars": 9318,
       "search_envelope_valid_json": true,
       "locators": 153,
-      "pages": 154,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 153,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 12,
       "legacy_locators": 141,
       "cell_evidence_bearing": 23,
-      "compact_fallback_items": 1,
+      "compact_fallback_items": 12,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 153,
@@ -1028,9 +1038,9 @@
         "unknown": 152,
         "body": 1
       },
-      "requested_rows": 154,
-      "fetched_fragments": 154,
-      "delivered": 154,
+      "requested_rows": 153,
+      "fetched_fragments": 153,
+      "delivered": 153,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1041,7 +1051,7 @@
       "query_id": "industry-009",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 97.5,
+      "latency_ms": 99.2,
       "raw_chars": 856,
       "final_chars": 856,
       "final_tokens_estimate": 413,
@@ -1083,7 +1093,7 @@
       "query_id": "industry-010",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 102.2,
+      "latency_ms": 104.2,
       "raw_chars": 861,
       "final_chars": 861,
       "final_tokens_estimate": 419,
@@ -1125,10 +1135,10 @@
       "query_id": "macro-001",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 11351.8,
-      "raw_chars": 535222,
-      "final_chars": 532513,
-      "final_tokens_estimate": 266309,
+      "latency_ms": 11177.3,
+      "raw_chars": 508534,
+      "final_chars": 508534,
+      "final_tokens_estimate": 255877,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1138,24 +1148,24 @@
           "final_chars": 14638
         },
         "corpus_fetch": {
-          "calls": 294,
-          "cut": 1,
-          "raw_chars": 520584,
-          "final_chars": 517875
+          "calls": 293,
+          "cut": 0,
+          "raw_chars": 493896,
+          "final_chars": 493896
         }
       },
       "search_raw_chars": 14638,
       "search_final_chars": 14638,
       "search_envelope_valid_json": true,
       "locators": 293,
-      "pages": 294,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 293,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 13,
       "legacy_locators": 280,
       "cell_evidence_bearing": 39,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 13,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 293,
@@ -1163,9 +1173,9 @@
         "unknown": 292,
         "body": 1
       },
-      "requested_rows": 294,
-      "fetched_fragments": 294,
-      "delivered": 294,
+      "requested_rows": 293,
+      "fetched_fragments": 293,
+      "delivered": 293,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1176,10 +1186,10 @@
       "query_id": "macro-002",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 11503.3,
-      "raw_chars": 592425,
-      "final_chars": 589718,
-      "final_tokens_estimate": 285268,
+      "latency_ms": 11396.1,
+      "raw_chars": 569222,
+      "final_chars": 569222,
+      "final_tokens_estimate": 276348,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1189,24 +1199,24 @@
           "final_chars": 17983
         },
         "corpus_fetch": {
-          "calls": 377,
-          "cut": 1,
-          "raw_chars": 574442,
-          "final_chars": 571735
+          "calls": 376,
+          "cut": 0,
+          "raw_chars": 551239,
+          "final_chars": 551239
         }
       },
       "search_raw_chars": 17983,
       "search_final_chars": 17983,
       "search_envelope_valid_json": true,
       "locators": 376,
-      "pages": 377,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 376,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 11,
       "legacy_locators": 365,
       "cell_evidence_bearing": 29,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 11,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 376,
@@ -1214,9 +1224,9 @@
         "unknown": 375,
         "body": 1
       },
-      "requested_rows": 377,
-      "fetched_fragments": 377,
-      "delivered": 377,
+      "requested_rows": 376,
+      "fetched_fragments": 376,
+      "delivered": 376,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1227,10 +1237,10 @@
       "query_id": "macro-003",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 7208.8,
-      "raw_chars": 348250,
-      "final_chars": 345543,
-      "final_tokens_estimate": 174353,
+      "latency_ms": 7103.0,
+      "raw_chars": 331818,
+      "final_chars": 331818,
+      "final_tokens_estimate": 168321,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1240,24 +1250,24 @@
           "final_chars": 11258
         },
         "corpus_fetch": {
-          "calls": 205,
-          "cut": 1,
-          "raw_chars": 336992,
-          "final_chars": 334285
+          "calls": 204,
+          "cut": 0,
+          "raw_chars": 320560,
+          "final_chars": 320560
         }
       },
       "search_raw_chars": 11258,
       "search_final_chars": 11258,
       "search_envelope_valid_json": true,
       "locators": 204,
-      "pages": 205,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 204,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 7,
       "legacy_locators": 197,
       "cell_evidence_bearing": 5,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 7,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 204,
@@ -1265,9 +1275,9 @@
         "unknown": 203,
         "body": 1
       },
-      "requested_rows": 205,
-      "fetched_fragments": 205,
-      "delivered": 205,
+      "requested_rows": 204,
+      "fetched_fragments": 204,
+      "delivered": 204,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1278,10 +1288,10 @@
       "query_id": "macro-004",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 6983.6,
-      "raw_chars": 381428,
-      "final_chars": 378719,
-      "final_tokens_estimate": 195502,
+      "latency_ms": 6765.0,
+      "raw_chars": 366774,
+      "final_chars": 366774,
+      "final_tokens_estimate": 190274,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1291,24 +1301,24 @@
           "final_chars": 10587
         },
         "corpus_fetch": {
-          "calls": 188,
-          "cut": 1,
-          "raw_chars": 370841,
-          "final_chars": 368132
+          "calls": 187,
+          "cut": 0,
+          "raw_chars": 356187,
+          "final_chars": 356187
         }
       },
       "search_raw_chars": 10587,
       "search_final_chars": 10587,
       "search_envelope_valid_json": true,
       "locators": 187,
-      "pages": 188,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 187,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 6,
       "legacy_locators": 181,
       "cell_evidence_bearing": 33,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 6,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 187,
@@ -1316,9 +1326,9 @@
         "unknown": 186,
         "body": 1
       },
-      "requested_rows": 188,
-      "fetched_fragments": 188,
-      "delivered": 188,
+      "requested_rows": 187,
+      "fetched_fragments": 187,
+      "delivered": 187,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1329,10 +1339,10 @@
       "query_id": "macro-005",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 11463.5,
-      "raw_chars": 554982,
-      "final_chars": 552275,
-      "final_tokens_estimate": 274907,
+      "latency_ms": 10867.5,
+      "raw_chars": 530323,
+      "final_chars": 530323,
+      "final_tokens_estimate": 265343,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1342,24 +1352,24 @@
           "final_chars": 15242
         },
         "corpus_fetch": {
-          "calls": 308,
-          "cut": 1,
-          "raw_chars": 539740,
-          "final_chars": 537033
+          "calls": 307,
+          "cut": 0,
+          "raw_chars": 515081,
+          "final_chars": 515081
         }
       },
       "search_raw_chars": 15242,
       "search_final_chars": 15242,
       "search_envelope_valid_json": true,
       "locators": 307,
-      "pages": 308,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 307,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 14,
       "legacy_locators": 293,
       "cell_evidence_bearing": 39,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 14,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 307,
@@ -1367,9 +1377,9 @@
         "unknown": 306,
         "body": 1
       },
-      "requested_rows": 308,
-      "fetched_fragments": 308,
-      "delivered": 308,
+      "requested_rows": 307,
+      "fetched_fragments": 307,
+      "delivered": 307,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1380,10 +1390,10 @@
       "query_id": "macro-006",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 8241.5,
-      "raw_chars": 429519,
-      "final_chars": 429519,
-      "final_tokens_estimate": 219219,
+      "latency_ms": 8159.9,
+      "raw_chars": 414343,
+      "final_chars": 414343,
+      "final_tokens_estimate": 212671,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1395,8 +1405,8 @@
         "corpus_fetch": {
           "calls": 226,
           "cut": 0,
-          "raw_chars": 417284,
-          "final_chars": 417284
+          "raw_chars": 402108,
+          "final_chars": 402108
         }
       },
       "search_raw_chars": 12235,
@@ -1410,7 +1420,7 @@
       "envelope_locators": 11,
       "legacy_locators": 215,
       "cell_evidence_bearing": 20,
-      "compact_fallback_items": 0,
+      "compact_fallback_items": 11,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 226,
@@ -1431,10 +1441,10 @@
       "query_id": "macro-007",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 14086.1,
-      "raw_chars": 650039,
-      "final_chars": 647332,
-      "final_tokens_estimate": 323830,
+      "latency_ms": 13057.5,
+      "raw_chars": 619486,
+      "final_chars": 619486,
+      "final_tokens_estimate": 311738,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1444,24 +1454,24 @@
           "final_chars": 16704
         },
         "corpus_fetch": {
-          "calls": 346,
-          "cut": 1,
-          "raw_chars": 633335,
-          "final_chars": 630628
+          "calls": 345,
+          "cut": 0,
+          "raw_chars": 602782,
+          "final_chars": 602782
         }
       },
       "search_raw_chars": 16704,
       "search_final_chars": 16704,
       "search_envelope_valid_json": true,
       "locators": 345,
-      "pages": 346,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 345,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 18,
       "legacy_locators": 327,
       "cell_evidence_bearing": 51,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 18,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 345,
@@ -1469,9 +1479,9 @@
         "unknown": 344,
         "body": 1
       },
-      "requested_rows": 346,
-      "fetched_fragments": 346,
-      "delivered": 346,
+      "requested_rows": 345,
+      "fetched_fragments": 345,
+      "delivered": 345,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1482,10 +1492,10 @@
       "query_id": "macro-008",
       "answer_existence": "answerable",
       "hits": 5,
-      "latency_ms": 9008.2,
-      "raw_chars": 370852,
-      "final_chars": 368145,
-      "final_tokens_estimate": 189470,
+      "latency_ms": 7898.4,
+      "raw_chars": 349422,
+      "final_chars": 349422,
+      "final_tokens_estimate": 181370,
       "aggregate_triggered": 0,
       "per_tool": {
         "corpus_search": {
@@ -1495,24 +1505,24 @@
           "final_chars": 11209
         },
         "corpus_fetch": {
-          "calls": 203,
-          "cut": 1,
-          "raw_chars": 359643,
-          "final_chars": 356936
+          "calls": 202,
+          "cut": 0,
+          "raw_chars": 338213,
+          "final_chars": 338213
         }
       },
       "search_raw_chars": 11209,
       "search_final_chars": 11209,
       "search_envelope_valid_json": true,
       "locators": 202,
-      "pages": 203,
-      "pages_per_locator_max": 2,
-      "multi_page_locators": 1,
+      "pages": 202,
+      "pages_per_locator_max": 1,
+      "multi_page_locators": 0,
       "incomplete_locators": [],
       "envelope_locators": 12,
       "legacy_locators": 190,
       "cell_evidence_bearing": 9,
-      "compact_fallback_items": 2,
+      "compact_fallback_items": 12,
       "duplicate_fetches": 0,
       "offered_scopes": 5,
       "offered_locators": 202,
@@ -1520,9 +1530,9 @@
         "unknown": 201,
         "body": 1
       },
-      "requested_rows": 203,
-      "fetched_fragments": 203,
-      "delivered": 203,
+      "requested_rows": 202,
+      "fetched_fragments": 202,
+      "delivered": 202,
       "truncated": 0,
       "unknown": 0,
       "errors": 0,
@@ -1533,7 +1543,7 @@
       "query_id": "macro-009",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 234.0,
+      "latency_ms": 192.7,
       "raw_chars": 867,
       "final_chars": 867,
       "final_tokens_estimate": 423,
@@ -1575,7 +1585,7 @@
       "query_id": "macro-010",
       "answer_existence": "no_answer",
       "hits": 0,
-      "latency_ms": 157.7,
+      "latency_ms": 108.7,
       "raw_chars": 863,
       "final_chars": 863,
       "final_tokens_estimate": 420,

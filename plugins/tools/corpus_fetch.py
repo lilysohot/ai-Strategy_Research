@@ -24,10 +24,15 @@
 分片与预算（A2.3）：
 
 - 正文块超限优先在段落／句读边界分片，必要时按 Unicode 码点边界硬分；
+- 片段预算按**序列化转义后**长度记账（换行转义为两字符等），页信封不会因转义
+  膨胀而超出自身 ``max_chars``；
 - 表格块只按完整行分片，**绝不硬切半个单元格**；最小原子单元仍超限则返回
   ``unit_too_large`` 并给出所需容量；
 - 分片用 ``fragment.start/end`` 标注**本块 ``text`` 内的 Unicode 码点区间**，
   并附整块内容身份（``text_sha256``／``text_chars``）供校验；
+- 单成员请求（单块超限的常态）附信封级 ``block_evidence``：整块 ``source_id``／
+  ``units``／``spans``／``semantic_cells``（块坐标），分页路径上行／列证据可恢复
+  （D2），拼回整块后与单块结果同构；批量请求每 item 附 ``source_id``；
 - ``exhausted`` 只表示这轮游标遍历到终点；有失败／未完成时 ``fetch_complete`` 仍为
   false，失败成员保留在 ``unresolved``（不得靠游标前移当作成功）。
 
@@ -65,7 +70,7 @@ _SCHEMA_VERSION = 1
 #: 分页预算下限：低于此值连页信封都装不下，直接返回可识别的预算错误。
 _MIN_BUDGET = 400
 
-#: 片段文本预算之外的固定余量（键名、数字位数、转义等抖动），避免「刚好塞满」。
+#: 片段文本预算之外的固定余量（键名、数字位数等抖动），避免「刚好塞满」。
 _MARGIN = 64
 
 #: 正文优先的引用提示（full 视图）。
@@ -152,8 +157,36 @@ def _break_points(text: str, kind: str, start: int) -> list[int]:
     return sorted(points)
 
 
+def _escaped_len(text: str, start: int, end: int) -> int:
+    """``text[start:end]`` 序列化为 JSON 字符串后的长度（去两侧引号）。
+
+    信封的实际开销按序列化长度算：换行转义为两字符、控制字符为六字符，
+    按原始字符数记账会让信封略超自身 ``max_chars``（实测 ~0.6%）。
+    """
+    return len(json.dumps(text[start:end], ensure_ascii=False)) - 2
+
+
+def _largest_escaped_cut(text: str, lo: int, hi: int, budget: int) -> int:
+    """``(lo, hi]`` 内最大切点 ``e``，使 ``text[lo:e]`` 转义后长度 ≤ ``budget``。
+
+    转义长度随切点单调不减，二分求界；返回值 ≥ ``lo + 1``，保证前进。
+    """
+    best, a, b = lo + 1, lo + 1, hi
+    while a <= b:
+        mid = (a + b) // 2
+        if _escaped_len(text, lo, mid) <= budget:
+            best = mid
+            a = mid + 1
+        else:
+            b = mid - 1
+    return best
+
+
 def _fragment_ranges(text: str, kind: str, budget: int, start: int) -> list[tuple[int, int]]:
-    """把 ``text[start:]`` 打包为片段：优先原子边界，表格原子超限即拒绝。"""
+    """把 ``text[start:]`` 打包为片段：优先原子边界，表格原子超限即拒绝。
+
+    ``budget`` 按**转义后**长度记账（与页信封的实际序列化开销同口径）。
+    """
     n = len(text)
     if start >= n:
         return []
@@ -162,16 +195,20 @@ def _fragment_ranges(text: str, kind: str, budget: int, start: int) -> list[tupl
     for atom_start, atom_end in pairwise(bounds):
         if atom_end <= atom_start:
             continue
-        if kind == "table" and atom_end - atom_start > budget:
+        if _escaped_len(text, atom_start, atom_end) <= budget:
+            pieces.append((atom_start, atom_end))
+            continue
+        if kind == "table":
             raise _AtomTooLarge(atom_start, atom_end)
         cursor = atom_start
-        while atom_end - cursor > budget:
-            pieces.append((cursor, cursor + budget))
-            cursor += budget
+        while _escaped_len(text, cursor, atom_end) > budget:
+            cut = _largest_escaped_cut(text, cursor, atom_end, budget)
+            pieces.append((cursor, cut))
+            cursor = cut
         pieces.append((cursor, atom_end))
     merged: list[tuple[int, int]] = []
     for piece_start, piece_end in pieces:
-        if merged and piece_end - merged[-1][0] <= budget:
+        if merged and _escaped_len(text, merged[-1][0], piece_end) <= budget:
             merged[-1] = (merged[-1][0], piece_end)
         else:
             merged.append((piece_start, piece_end))
@@ -190,12 +227,14 @@ def _pages_for(evidence: Any, start: int, end: int) -> list[int]:
     return sorted(pages)
 
 
-def _evidence_structure_status(svc: Any, evidence: Any) -> str:
-    if svc.emit_cells(evidence):
-        return "verified"
+def _structure_status_and_cells(svc: Any, evidence: Any) -> tuple[str, tuple[Any, ...]]:
+    """结构状态与对齐单元证据一次求出（``emit_cells`` 只调一次）。"""
+    cells = svc.emit_cells(evidence)
+    if cells:
+        return "verified", tuple(cells)
     if any(unit.cells for unit in evidence.units):
-        return "partial"
-    return "unknown"
+        return "partial", ()
+    return "unknown", ()
 
 
 def _page_id(scope_id: str, member_index: int, offset: int, budget: int) -> str:
@@ -238,6 +277,8 @@ def _item(
     view: str,
     status: str,
     extra: dict[str, Any] | None = None,
+    *,
+    include_units: bool = True,
 ) -> dict[str, Any]:
     text = evidence.text
     whole = start == 0 and end == len(text)
@@ -256,7 +297,13 @@ def _item(
     if extra:  # A3：content_role／relations／relation_status（小字段，正文之后、诊断之前）
         item.update(extra)
     if view == "full":
-        item["units"] = [{"unit_id": unit.unit_id, "page": unit.page} for unit in evidence.units]
+        item["source_id"] = evidence.source_id  # D2：分页路径保留来源身份
+        # 单成员信封附有 block_evidence（整块 units 权威副本），item 级清单冗余，
+        # 省去双份单元开销让 full 档能真正承载行／列证据。
+        if include_units:
+            item["units"] = [
+                {"unit_id": unit.unit_id, "page": unit.page} for unit in evidence.units
+            ]
     return item
 
 
@@ -333,7 +380,7 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
 
 def _compact_envelope(payload: dict[str, Any]) -> str:
     """分页信封（A2.2）的协议压缩：保留 ``items`` 正文与续取控制字段，只去掉诊断性的
-    ``units`` 单元清单（等价 compact 视图）。
+    ``units`` 单元清单与信封级 ``block_evidence``（等价 compact 视图）。
 
     信封与单块结果**形状不同、语义也不同**：信封的正文在 ``items`` 里，续取靠
     ``next_cursor``。此前把 ``ok: true`` 的信封当成单块结果交给 ``_compact_payload``，
@@ -341,6 +388,7 @@ def _compact_envelope(payload: dict[str, Any]) -> str:
     正是「静默丢证据」。此处按信封语义压缩。
     """
     out = dict(payload)
+    out.pop("block_evidence", None)
     out["items"] = [
         {key: value for key, value in item.items() if key != "units"}
         for item in (payload.get("items") or [])
@@ -358,7 +406,8 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
     绝不混用（混用会静默丢正文）：
 
     - 结果本身 ≤ ``budget``：原样返回；
-    - **分页信封**（含 ``items``）：去掉诊断性的 ``units`` 清单，正文与续取控制字段原样保留；
+    - **分页信封**（含 ``items``）：去掉诊断性的 ``units`` 清单与 ``block_evidence``，
+      正文与续取控制字段原样保留；
       仍装不下则返回可识别的预算错误，并带上 ``next_cursor``／``unresolved`` 供续取判断；
     - **单块结果**：先去诊断元数据（等价 compact 视图）再序列化；能装下即返回，
       并标记 ``diagnostics_elided``；去诊断后正文仍超预算则返回预算错误；
@@ -509,6 +558,12 @@ def _page(
     items: list[dict[str, Any]] = []
     item_errors: list[dict[str, Any]] = []
     unresolved = list(dict.fromkeys(unresolved_in))
+    # D2：单成员请求（单块超限的常态）附信封级整块证据；批量请求体量大，只在
+    # item 上保留 source_id，整块诊断可按 locator 单独复取。
+    block_evidence: dict[str, Any] | None = None
+    # 仅当成员成功产出 items 且视图为 full 时，最终信封才携带整块证据；
+    # 成员失败（预算／原子超限）时错误信封不再塞进装不下的大字段。
+    diagnostics_on = False
 
     # A3：关联在**整个请求范围**上算一次（与清单同口径），逐页稳定；读取失败则退回仅角色。
     relation_fields = svc.context_relations(doc_id, request)
@@ -527,8 +582,10 @@ def _page(
         items_: list[dict[str, Any]],
         next_cursor: str | None,
         exhausted: bool,
+        *,
+        diagnostics: bool = True,
     ) -> dict[str, Any]:
-        return {
+        out: dict[str, Any] = {
             "ok": True,
             "schema_version": _SCHEMA_VERSION,
             "cursor_type": CONTENT,
@@ -545,6 +602,9 @@ def _page(
             "page_id": _page_id(scope_id, member_index, offset, max_chars),
             "hint": _PAGE_HINT,
         }
+        if diagnostics and block_evidence is not None:
+            out["block_evidence"] = block_evidence
+        return out
 
     if len(json.dumps(envelope([], None, False), ensure_ascii=False)) + _MARGIN > max_chars:
         return _json_error(
@@ -566,30 +626,75 @@ def _page(
             mi += 1
             off = 0
             continue
+        # D2：整块证据（块坐标，与 _full_payload 的诊断字段同构）在取回后立即固化为
+        # 信封级字段；即使本块正文为空也随页返回，消费方可按同一契约校验。
+        if len(request) == 1:
+            cells_status, cells = _structure_status_and_cells(svc, evidence)
+            block_evidence = {
+                "locator": locator,
+                "source_id": evidence.source_id,
+                "chunk_id": evidence.chunk_id,
+                "units": [
+                    {
+                        "unit_id": unit.unit_id,
+                        "page": unit.page,
+                        "element": unit.element,
+                        "cells": [list(cell) for cell in unit.cells],
+                    }
+                    for unit in evidence.units
+                ],
+                "spans": [
+                    {"unit_id": unit_id, "start": span_start, "end": span_end}
+                    for unit_id, span_start, span_end in evidence.spans
+                ],
+                "semantic_cells": [
+                    {
+                        "unit_id": cell.unit_id,
+                        "page": cell.page,
+                        "row": cell.row,
+                        "col": cell.col,
+                        "text": cell.text,
+                    }
+                    for cell in cells
+                ],
+            }
+        else:
+            cells_status, cells = _structure_status_and_cells(svc, evidence)
+        status = cells_status
         text = evidence.text
         if off >= len(text):
+            diagnostics_on = True  # 空正文块：整块证据随页返回（本块无片段可装）
             mi += 1
             off = 0
             continue
-        status = _evidence_structure_status(svc, evidence)
         extra = relation_extra(locator, evidence.kind)
         # D3：固定字段本身可能撑爆预算，而 full 视图的 units 单元清单正是体积大头。
         # 此处按需**自动改用 compact 视图重试一次**（去掉该清单），对调用方透明——一次
         # 请求就能取回正文，调用方不必自己领悟「pytest 改 view=compact」。游标仍绑定
         # 页面视图，续取时同一成员会再次走同样的回退，故无需改游标 schema。
-        # 片段文本预算从「空正文 item + 真实游标」的实测信封反推，连同 units 键开销与
-        # 游标长度一起计入，避免控制字段撑爆实际预算。
+        # 片段文本预算从「空正文 item + 真实游标」的实测信封反推，连同固定字段、
+        # block_evidence 与游标长度一起计入，避免控制字段撑爆实际预算。
         tried_views = ["compact"] if view == "compact" else [view, "compact"]
         member_view = view
         fragment_budget = 0
         for candidate in tried_views:
-            empty_item = _item(evidence, locator, 0, 0, candidate, status, extra)
+            empty_item = _item(
+                evidence,
+                locator,
+                0,
+                0,
+                candidate,
+                status,
+                extra,
+                include_units=block_evidence is None,
+            )
             probe_len = len(
                 json.dumps(
                     envelope(
                         [empty_item],
                         _content_cursor(doc_id, build_id, request, view, mi, off, unresolved),
                         False,
+                        diagnostics=candidate == "full",  # compact 等价视图不携带整块证据
                     ),
                     ensure_ascii=False,
                 )
@@ -604,7 +709,7 @@ def _page(
                     "locator": locator,
                     "code": "budget_exceeded",
                     "error": (
-                        "该块的固定字段（单元清单／游标）已占满本次 max_chars，"
+                        "该块的固定字段（单元清单／整块证据／游标）已占满本次 max_chars，"
                         f"自动改用 compact 视图后仍装不下（已尝试 {tried_views}）；"
                         f"请提高 max_chars（当前 {max_chars}）后重试本 locator。"
                     ),
@@ -619,9 +724,11 @@ def _page(
         item_extra = dict(extra)
         if member_view != view:  # 回退对调用方透明，但如实标注在 item 上供审计
             item_extra["view_fallback"] = member_view
+        diagnostics_on = member_view == "full"  # compact 回退时整块证据一并省去
         try:
             ranges = _fragment_ranges(text, evidence.kind, fragment_budget, off)
         except _AtomTooLarge as exc:
+            diagnostics_on = False  # 成员失败：错误信封不携带装不下的大字段
             item_errors.append(
                 {
                     "locator": locator,
@@ -647,6 +754,7 @@ def _page(
                 member_view,
                 status,
                 item_extra,
+                include_units=block_evidence is None,
             )
             if items:
                 probe = json.dumps(
@@ -656,6 +764,7 @@ def _page(
                             doc_id, build_id, request, view, mi, frag_start, unresolved
                         ),
                         False,
+                        diagnostics=diagnostics_on,
                     ),
                     ensure_ascii=False,
                 )
@@ -663,12 +772,15 @@ def _page(
                     next_cursor = _content_cursor(
                         doc_id, build_id, request, view, mi, frag_start, unresolved
                     )
-                    return json.dumps(envelope(items, next_cursor, False), ensure_ascii=False)
+                    return json.dumps(
+                        envelope(items, next_cursor, False, diagnostics=diagnostics_on),
+                        ensure_ascii=False,
+                    )
             items.append(item)
         mi += 1
         off = 0
 
-    return json.dumps(envelope(items, None, True), ensure_ascii=False)
+    return json.dumps(envelope(items, None, True, diagnostics=diagnostics_on), ensure_ascii=False)
 
 
 @tool
@@ -705,7 +817,9 @@ async def corpus_fetch(
         批量／游标或单块超限时返回分页信封 ``{"ok": true, "schema_version",
         "cursor_type": "content", "doc_id", "build_id", "scope_id", "view", "items",
         "item_errors", "next_cursor", "exhausted", "fetch_complete", "unresolved",
-        "page_id", "hint"}``。每个 item 亦带 ``content_role``（标题块为
+        "page_id", "hint"}``；单成员请求另附信封级 ``block_evidence``（整块
+        ``source_id``／``units``／``spans``／``semantic_cells``，块坐标，供行／列证据
+        校验与跨页拼回整块）。每个 item 亦带 ``content_role``（标题块为
         ``heading_only``）与 ``relations``（本次请求范围内的结构关联，``verified`` 与
         ``candidate`` 严格分开）。旧句柄／来源已撤销／游标类型不符时返回 ``ok=false``。
     """

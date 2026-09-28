@@ -1,6 +1,6 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
-> 修订：v3 · 2026-09-28。状态：A0–A4 已实施（A4 为观测模式，阻断约束未启用），隔离库检索回放已完成；B0–B4 未实施。
+> 修订：v4 · 2026-09-28。状态：A0–A4 已实施（A4 为观测模式，阻断约束未启用），隔离库检索回放与 3 题真实模型冒烟已完成，D1–D4 与转义记账全部修复；B0–B4 未实施。
 > 本次修订只调整方案文档与执行状态，不表示数据库、快照或历史报告已经变更。
 
 这组方案的首要目标是：让 Agent 用较少的无关上下文取得所需原文，知道自己实际读到了什么，并能说明结论依赖哪些证据。准备侧的解析、清洗和切块改动，须在消费侧改善后仍有明确缺陷证据时，再分项验证。
@@ -90,18 +90,28 @@ A4 的观测设计可以提前开展；其阻断逻辑须等范围定义、分�
 **执行状态（2026-09-28）**：A0（正文优先视图与三层预算）、A1（结构清单 + `corpus_inventory`）、
 A2（批量分页与固定游标）、A3（标题身份与候选／确定关系分离）已实施；A4 的消费账本、
 结论证据校验器与 stateful_react／agent_team 双路径接入已落地，但为**观测模式**——只记录
-状态、不阻断运行。下一步为「固定任务回放与成本对照」，取得基线后再决定是否启用 A4 阻断
-约束，以及 B0 是否仍有准备侧缺陷。B0–B4 未实施，不重建语料、不开启受保护评测答案。
+状态、不阻断运行。固定任务回放与成本对照已完成（零模型档 30 题 + 真实模型冒烟 3 题，
+见下），基线已取得；下一决策点为是否启用 A4 阻断约束，以及 B0 是否仍有准备侧缺陷。
+B0–B4 未实施，不重建语料、不开启受保护评测答案。
 
-**隔离库检索回放（2026-09-28）**：已按 §2「三类结果分开报告」完成**隔离语料库检索回放**
+**隔离库检索回放（2026-09-28，v5）**：已按 §2「三类结果分开报告」完成**隔离语料库检索回放**
 （30 道冻结题、零模型、PG 只读），脚本与产物见
 [.scratch/a4-replay-20260928/](../../.scratch/a4-replay-20260928/)。回放暴露四个消费侧接缝
-缺陷 D1–D4 + 一个次级问题：D1（`corpus_search` 被硬切）／D3（固定字段撑爆预算）／
-D4（分页信封被当单块压缩、`items` 静默丢失）**已修**；D2（分页信封丢单元级证据）与
-「`_page` 转义长度记账」**未修、方向待定**。修复后回放：`unknown=0`、`delivered=5810`
-达到 `fetched`、`questions_all_offered_fetched=24/24`、
-`search_envelope_broken_of_with_hits=0`（修复前分别为 `unknown=17`、`delivered=5793`、
-`9/24`、`24/24`）。细节见 [01 §A4.4](01-table-recovery.md#a44-隔离库检索回放与消费侧接缝缺陷本轮)。
+缺陷 D1–D4 + 一个次级问题，经用户裁决后**全部修复**：D1（`corpus_search` 被硬切）／
+D3（固定字段撑爆预算）／D4（分页信封被当单块压缩、`items` 静默丢失）此前已修；本轮修
+D2（分页信封补回信封级 `block_evidence` 与 item `source_id`，消费者跟游标拼回后走同一
+权威校验）与「`_page` 转义长度记账」（改按序列化转义后长度）。修复后回放：`unknown=0`、
+`delivered=5793` 达 `fetched`、`questions_all_offered_fetched=24/24`、
+`search_envelope_broken_of_with_hits=0`、**`cell_evidence_bearing_calls=684`（分页路径
+修复前为 0）**、`compact_fallback_items=257`（整块证据参与预算探针后的诚实 compact 回退，
+`delivered` 仍全量）。细节见 [01 §A4.4](01-table-recovery.md#a44-隔离库检索回放与消费侧接缝缺陷本轮)。
+
+**真实模型冒烟（2026-09-28，3 题）**：`frontier-agent --mode react`（glm-5.3-flash）每题
+独立会话，金标逐字引文做零成本正确性代理。company-003（财务预测表）取回侧 6/6、答案侧
+6/6；industry-001（化工景气表）取回侧 5/5、答案侧 3/5；macro-001（叙述题）取回侧 2/3、
+答案侧 2/3（唯一缺口是 agent 未 fetch 的 page:3 表格列——检索缺口，属 B0 待回答，不是
+消费侧接缝）。三题合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用。
+基线已取得，下一步决定是否启用 A4 阻断约束，以及 B0 是否仍有准备侧缺陷。
 
 ## 6. 统一验收标准
 
@@ -129,13 +139,15 @@ D4（分页信封被当单块压缩、`items` 静默丢失）**已修**；D2（�
 | 结论证据 | `verify_manifest` 由账本 + 权威原文重算每条结论，拒绝模型自报 `complete=true`；未送达记 `partial`，编造 quote 记 `unsupported` |
 | 分页可靠性 | 页信封 + 自描述校验和游标；`exhausted`／`fetch_complete`／`unresolved` 分开；`unit_too_large` 显式返回 |
 | 真实接入 | `ConsumptionLedgerObserver` 接入 stateful_react 主循环与 agent_team 子代理／主代理；`agent_team_reporter` 在报告边界再触发校验；产物落 `<APODEX_RUN_DIR>/corpus/*.json` |
-| 隔离库回放 | 30 题零模型 PG 只读回放（[replay.py](../../.scratch/a4-replay-20260928/replay.py)）：`delivered=5810` 达 `fetched`、`unknown=0`、`incomplete_locators=0`、`questions_all_offered_fetched=24/24`、`questions_search_envelope_broken_of_with_hits=0`、`compact_fallback_items=28` |
+| 隔离库回放 | 30 题零模型 PG 只读回放（[replay.py](../../.scratch/a4-replay-20260928/replay.py) v5）：`delivered=5793` 达 `fetched`、`unknown=0`、`incomplete_locators=0`、`questions_all_offered_fetched=24/24`、`questions_search_envelope_broken_of_with_hits=0`、`compact_fallback_items=257`、`cell_evidence_bearing_calls=684` |
+| 真实模型冒烟 | 3 题真实模型回放（[replay_model.py](../../.scratch/a4-replay-20260928/replay_model.py)，glm-5.3-flash/react）：金标取回侧覆盖 6/6、5/5、2/3，答案侧 6/6、3/5、2/3；账本四集合随 run 落盘（`corpus/ledger.json`）；合计 821,601 input／27,271 output token、27 轮 LLM、32 次工具调用 |
 | 测试 | [tests/test_corpus_ledger.py](../../tests/test_corpus_ledger.py)（18 项）、`test_runaway_and_repetition_wiring.py`（接线守卫）、`test_corpus_relations.py`、`test_corpus_fetch_paging.py`（含 D3 回归）、`test_corpus_search.py`、`test_tool_result_truncation.py`（含 D1／D4 回归）全绿 |
 
 尚缺：**报告证据清单的生产者**（现有 `EvidenceCard` 面向网络来源、不含语料 locator，故
-`manifest.json` 无人产出，校验恒为 `draft`）、真实模型的成本对照（调用数／token／延迟）
-与效果评估——这些是启用 A4 阻断约束与判定 B0 的前置。隔离库检索回放已完成（零模型档），
-但模拟／回放通过不等于真实运行通过；D2 与「`_page` 转义长度记账」两个方向待定。
+`manifest.json` 无人产出，校验恒为 `draft`）与全量 30 题的真实模型成本对照（冒烟仅 3 题，
+取得基线量级）。模拟／回放通过不等于真实运行通过；固定任务回放（零模型档 v5 + 真实模型
+冒烟档 v1）均已完成后，下一决策点是**是否启用 A4 阻断约束**，以及 **B0 是否仍有准备侧
+缺陷**（macro-001 的 page:3 表格列检索缺口是首个待归因样本）。
 
 ## 7. 与既有架构和后续工作的关系
 

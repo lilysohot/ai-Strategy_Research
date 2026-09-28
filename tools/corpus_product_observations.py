@@ -6,7 +6,9 @@ scoring *after* collection, never to decide which queries to execute or abstain.
 
 from __future__ import annotations
 
+import hashlib
 import json
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -16,6 +18,9 @@ from plugins.corpus.scoring import (
     QueryObservation,
     RetrievedDocument,
 )
+
+#: 分页信封的安全页数上限（防御游标环；正常远小于此）。
+_MAX_PAGES = 200
 
 
 class Invokable(Protocol):
@@ -33,6 +38,97 @@ class CollectedQuery:
     observation: QueryObservation
     calls: tuple[dict[str, object], ...]
     error: str | None = None
+
+
+async def _collect_paged_block(
+    invoke: Callable[[str, Invokable, dict[str, object]], Awaitable[dict]],
+    fetch: Invokable,
+    first: dict[str, object],
+    doc_id: str,
+    expected_chunk: str,
+) -> dict[str, object]:
+    """D2：跟随 ``next_cursor`` 取全分页信封，并按 ``block_evidence`` 拼回整块。
+
+    单块超限时 ``corpus_fetch`` 返回分页信封：``items`` 持有正文分片
+    （``fragment.start/end`` 无缝覆盖整块），信封级 ``block_evidence`` 持有整块坐标的
+    ``source_id``／``units``／``spans``／``semantic_cells``。拼回整块后与单块结果同构，
+    后续权威校验（跨版本身份、span 切片、cell 对齐）逻辑不变。
+    """
+    frags: list[tuple[int, int, str]] = []
+    sha: object = None
+    chars: object = None
+    envelope: dict[str, object] = first
+    pages = 0
+    while True:
+        pages += 1
+        if pages > _MAX_PAGES:
+            raise ValueError("corpus_fetch: paging did not terminate")
+        if envelope.get("unresolved") or envelope.get("item_errors"):
+            raise ValueError("corpus_fetch: unresolved members in paged response")
+        items = envelope.get("items")
+        if not isinstance(items, list) or not items:
+            raise ValueError("corpus_fetch: paged response without items")
+        for item in items:
+            if not isinstance(item, dict) or item.get("chunk_id") != expected_chunk:
+                raise ValueError("corpus_fetch: paged response mixes blocks")
+            piece = item.get("text")
+            if not isinstance(piece, str):
+                raise ValueError("corpus_fetch: paged item without text")
+            fragment = item.get("fragment")
+            if fragment is None:
+                start, end = 0, len(piece)
+            elif (
+                isinstance(fragment, dict)
+                and isinstance(fragment.get("start"), int)
+                and isinstance(fragment.get("end"), int)
+            ):
+                start, end = fragment["start"], fragment["end"]
+            else:
+                raise ValueError("corpus_fetch: invalid fragment in paged item")
+            frags.append((start, end, piece))
+            item_sha, item_chars = item.get("text_sha256"), item.get("text_chars")
+            if sha is None and chars is None:
+                sha, chars = item_sha, item_chars
+            elif item_sha != sha or item_chars != chars:
+                raise ValueError("corpus_fetch: paged fragments disagree on block identity")
+        if envelope.get("exhausted"):
+            break
+        cursor = envelope.get("next_cursor")
+        if not isinstance(cursor, str) or not cursor:
+            raise ValueError("corpus_fetch: paged response without next_cursor")
+        envelope = await invoke("corpus_fetch", fetch, {"doc_id": doc_id, "cursor": cursor})
+
+    frags.sort(key=lambda triple: triple[0])
+    position = 0
+    for start, end, _piece in frags:
+        if start != position:
+            raise ValueError("corpus_fetch: paged fragments do not tile the block")
+        position = end
+    text = "".join(piece for _, _, piece in frags)
+    if chars is not None and position != chars:
+        raise ValueError("corpus_fetch: paged fragments do not cover the block")
+    if isinstance(sha, str) and hashlib.sha256(text.encode()).hexdigest() != sha:
+        raise ValueError("corpus_fetch: reassembled block fails content check")
+    evidence = first.get("block_evidence")
+    if not isinstance(evidence, dict):
+        raise ValueError("corpus_fetch: paged response missing block evidence")
+    units = evidence.get("units")
+    if not isinstance(units, list):
+        raise ValueError("corpus_fetch: invalid authority payload")
+    spans = evidence.get("spans")
+    if evidence.get("semantic_cells") and not isinstance(spans, list):
+        raise ValueError("corpus_fetch: semantic cells require authority spans")
+    return {
+        "ok": True,
+        "source_id": evidence.get("source_id"),
+        "build_id": first.get("build_id"),
+        "chunk_id": expected_chunk,
+        "locator": first.get("locator"),
+        "text": text,
+        "units": units,
+        "spans": spans,
+        "semantic_cells": evidence.get("semantic_cells") or [],
+    }
 
 
 async def collect_query(
@@ -104,6 +200,11 @@ async def collect_query(
                 body = await invoke(
                     "corpus_fetch", fetch, {"doc_id": hit["doc_id"], "locator": locator}
                 )
+                if isinstance(body.get("items"), list):
+                    # A2 分页信封（单块超限自动分片）：跟游标拼回整块再走同一校验（D2）。
+                    body = await _collect_paged_block(
+                        invoke, fetch, body, str(hit["doc_id"]), expected_chunk
+                    )
                 if (
                     body.get("source_id") != source
                     or body.get("build_id") != build

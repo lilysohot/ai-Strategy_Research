@@ -16,6 +16,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 import json
+from itertools import pairwise
 
 import pytest
 
@@ -120,7 +121,7 @@ def test_schema_keeps_selectors_optional() -> None:
 
 
 def test_requires_exactly_one_selector(stub) -> None:
-    stub({f"chunk:c0": _evidence("c0", "body", [("u0", "正文", 1, ())])})
+    stub({"chunk:c0": _evidence("c0", "body", [("u0", "正文", 1, ())])})
     both = json.loads(_call(doc_id=_DOC, locator="chunk:c0", locators=["chunk:c0"]))
     none = json.loads(_call(doc_id=_DOC))
     assert both["ok"] is False and none["ok"] is False
@@ -154,7 +155,7 @@ def test_batch_returns_envelope_with_whole_blocks(stub) -> None:
     out = json.loads(
         _call(doc_id=_DOC, locators=["chunk:c0", "chunk:c0", "chunk:c1"], max_chars=4000)
     )
-    assert _ENVELOPE_KEYS <= set(out)
+    assert set(out) >= _ENVELOPE_KEYS
     assert out["cursor_type"] == "content"
     assert [it["chunk_id"] for it in out["items"]] == ["c0", "c1"]  # 首次出现去重
     assert all(it["fragment"] is None for it in out["items"])
@@ -197,7 +198,7 @@ def test_single_oversize_fragments_tile_the_block(stub) -> None:
 
     # 片间无缝、无叠，拼回即整块
     assert "".join(collected) == text
-    for (_, prev_end), (next_start, _) in zip(frags, frags[1:]):
+    for (_, prev_end), (next_start, _) in pairwise(frags):
         assert prev_end == next_start
     assert page["exhausted"] is True and page["fetch_complete"] is True
 
@@ -254,7 +255,7 @@ def test_fixed_fields_over_budget_falls_back_to_compact(stub) -> None:
     # 单元间以换行分隔，去掉分隔符即原文（正文真的取回了）
     assert item["text"].replace("\n", "") == "字" * 250
     assert item["view_fallback"] == "compact"  # 回退透明，但如实标注
-    assert "units" not in item             # 正是被省去的固定字段
+    assert "units" not in item  # 正是被省去的固定字段
 
 
 def test_fixed_fields_over_budget_error_names_an_executable_fallback(stub) -> None:
@@ -265,10 +266,117 @@ def test_fixed_fields_over_budget_error_names_an_executable_fallback(stub) -> No
     (err,) = out["item_errors"]
     assert err["code"] == "budget_exceeded"
     assert err["views_tried"] == ["full", "compact"]  # 回退已尝试过
-    assert "提高 max_chars" in err["error"]           # 退路真的可执行
-    assert "更小范围" not in err["error"]             # 不再给不可执行的建议
+    assert "提高 max_chars" in err["error"]  # 退路真的可执行
+    assert "更小范围" not in err["error"]  # 不再给不可执行的建议
     assert out["unresolved"] == ["chunk:c0"]
     assert out["fetch_complete"] is False
+
+
+# ── D2：分页信封保留整块证据（source_id／units／spans／semantic_cells）──
+
+
+def _cell_table_evidence(rows: int = 7, pad: int = 200):
+    """两列表格（表头行+标签列+长数值列）：块超限进信封，且 full 视图恰好整体承载
+    block_evidence（含行/列证据）。数值用纯数字——含字母的值会让下方单元格的 col
+    标签级联取上一行全文，单元格证据体积翻倍，full 档就装不下整块证据了。
+    """
+    specs = [("uh0", "指标", 5, ((0, 0),)), ("uh1", "2026E", 5, ((0, 1),))]
+    for i in range(rows):
+        specs.append((f"u{i:02d}a", f"指标{i}", 5, ((i + 1, 0),)))
+        specs.append((f"u{i:02d}b", f"{i}.36" + "8" * pad, 5, ((i + 1, 1),)))
+    return _evidence("t0", "table", specs)
+
+
+def _walk_pages(doc_id: str, first: dict, **call_kwargs) -> list[dict]:
+    pages, page = [first], first
+    while not page["exhausted"]:
+        page = json.loads(_call(doc_id=doc_id, cursor=page["next_cursor"], **call_kwargs))
+        pages.append(page)
+    return pages
+
+
+def test_single_oversize_envelope_carries_block_evidence(stub) -> None:
+    """单块超限转分页后，整块证据（units／spans／语义单元格）随信封返回且可拼回校验。"""
+    stub({"chunk:t0": _cell_table_evidence()})
+
+    first = json.loads(_call(doc_id=_DOC, locator="chunk:t0", max_chars=6000))
+    pages = _walk_pages(_DOC, first, max_chars=6000)
+    assert first["ok"] is True
+    assert first["cursor_type"] == "content" and first["items"]  # 走的是信封路径
+    text = "".join(it["text"] for page in pages for it in page["items"])
+    for page in pages:
+        ev = page["block_evidence"]
+        assert ev["source_id"] == "src" and ev["chunk_id"] == "t0"
+        assert all(u["page"] == 5 and "unit_id" in u for u in ev["units"])
+        assert ev["spans"]
+        for cell in ev["semantic_cells"]:
+            assert set(cell) == {"unit_id", "page", "row", "col", "text"}
+            assert cell["text"] in text  # 行／列证据可回溯到拼回的整块原文
+    assert all(it["source_id"] == "src" for page in pages for it in page["items"])
+
+
+def test_block_evidence_survives_paging_and_reassembles(stub) -> None:
+    text = "\n".join(f"第{i}行：多页分片时整块证据仍随页携带。" for i in range(120))
+    stub({"chunk:c0": _evidence("c0", "body", [("u0", text, 1, ())])})
+
+    first = json.loads(_call(doc_id=_DOC, locator="chunk:c0", max_chars=2000))
+    pages = _walk_pages(_DOC, first, max_chars=2000)
+    assert len(pages) > 1
+    text_sha = first["items"][0]["text_sha256"]
+    collected = []
+    for page in pages:
+        ev = page["block_evidence"]
+        assert ev["source_id"] == "src" and ev["chunk_id"] == "c0"
+        assert ev["semantic_cells"] == []
+        assert all(it["source_id"] == "src" for it in page["items"])
+        collected.extend(it["text"] for it in page["items"])
+        for it in page["items"]:
+            assert it["text_sha256"] == text_sha and it["text_chars"] == len(text)
+    assert "".join(collected) == text
+
+
+def test_batch_envelope_has_no_block_evidence_but_items_keep_source_id(stub) -> None:
+    stub(
+        {
+            "chunk:c0": _evidence("c0", "body", [("u0", "第一段正文", 1, ())]),
+            "chunk:c1": _evidence("c1", "body", [("u1", "第二段正文", 2, ())]),
+        }
+    )
+    out = json.loads(_call(doc_id=_DOC, locators=["chunk:c0", "chunk:c1"], max_chars=4000))
+    assert "block_evidence" not in out  # 批量请求不附整块证据（按 locator 单独复取）
+    assert all(it["source_id"] == "src" for it in out["items"])
+
+
+def test_paging_envelope_never_exceeds_max_chars_despite_escapes(stub) -> None:
+    """转义记账：多换行正文分片后，每页序列化长度都不得超出自身 max_chars。"""
+    text = "\n".join(f"第{i}行：换行密集的正文，转义后长度大于原始字符数。" for i in range(120))
+    stub({"chunk:c0": _evidence("c0", "body", [("u0", text, 1, ())])})
+
+    first = json.loads(_call(doc_id=_DOC, locator="chunk:c0", max_chars=2000))
+    raw_pages = [_call(doc_id=_DOC, locator="chunk:c0", max_chars=2000)]
+    page = first
+    while not page["exhausted"]:
+        raw = _call(doc_id=_DOC, cursor=page["next_cursor"], max_chars=2000)
+        raw_pages.append(raw)
+        page = json.loads(raw)
+
+    assert all(len(raw) <= 2000 for raw in raw_pages)
+    assert (
+        "".join(it["text"] for p in (json.loads(r) for r in raw_pages) for it in p["items"]) == text
+    )
+
+
+def test_compact_envelope_drops_block_evidence() -> None:
+    envelope = {
+        "ok": True,
+        "items": [{"locator": "chunk:c0", "text": "正文", "units": [{"unit_id": "u0"}]}],
+        "next_cursor": None,
+        "block_evidence": {"source_id": "src", "units": [], "spans": [], "semantic_cells": []},
+    }
+    out = json.loads(fetch_module._compact_envelope(envelope))
+    assert "block_evidence" not in out
+    assert out["items"][0]["text"] == "正文"  # 正文与游标绝不丢
+    assert "units" not in out["items"][0]
 
 
 # ── 失败与前进性 ───────────────────────────────────────────────────────
@@ -293,9 +401,7 @@ def test_member_failure_is_reported_and_others_proceed(stub) -> None:
 
 def test_unresolved_carries_across_pages(stub) -> None:
     blocks = {
-        f"chunk:c{i}": _evidence(
-            f"c{i}", "body", [("u" + str(i), "正文" * 40, i + 1, ())]
-        )
+        f"chunk:c{i}": _evidence(f"c{i}", "body", [("u" + str(i), "正文" * 40, i + 1, ())])
         for i in range(6)
     }
     stub(blocks, fail={"chunk:c3"})

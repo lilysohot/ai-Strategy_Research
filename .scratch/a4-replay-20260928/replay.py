@@ -230,8 +230,11 @@ def valid_json(text: str) -> bool:
 
 
 def _has_cell_evidence(payload: dict) -> bool:
-    """该响应是否带行／列（row/col）单元证据。"""
+    """该响应是否带行／列（row/col）单元证据（单块级／item 级／信封级整块证据）。"""
     if payload.get("semantic_cells"):
+        return True
+    evidence = payload.get("block_evidence")
+    if isinstance(evidence, dict) and evidence.get("semantic_cells"):
         return True
     return any(item.get("semantic_cells") for item in payload.get("items") or [])
 
@@ -437,7 +440,7 @@ async def main() -> None:
     }
     result = {
         "artifact": "a4-replay",
-        "version": 4,
+        "version": 5,
         "generated_at": now(),
         "scope": "isolated-corpus retrieval replay (zero model, read-only PG)",
         "probe": probe,
@@ -466,20 +469,29 @@ async def main() -> None:
                 "note": "期望 broken=0：超限时按协议压缩（整条舍弃尾部命中）而非硬切。",
             },
             "d2_paging_envelope_drops_cell_evidence": {
-                "status": "open",
-                "item_keys_sample": [
+                "status": "fixed",
+                "envelope_item_keys_sample": [
                     "build_id", "chunk_id", "content_role", "fragment", "kind",
                     "locator", "pages", "relation_status", "relations",
-                    "structure_status", "text", "text_chars", "text_sha256", "units",
+                    "source_id", "structure_status", "text", "text_chars",
+                    "text_sha256",
                 ],
-                "unit_keys_sample": ["page", "unit_id"],
+                "block_evidence_keys": [
+                    "chunk_id", "locator", "semantic_cells", "source_id",
+                    "spans", "units",
+                ],
+                "block_evidence_unit_keys": ["cells", "element", "page", "unit_id"],
                 "cell_evidence_bearing_calls": sum(
                     row["cell_evidence_bearing"] for row in rows
                 ),
                 "legacy_shaped_locators": sum(row["legacy_locators"] for row in rows),
                 "envelope_shaped_locators": sum(row["envelope_locators"] for row in rows),
-                "note": "分页信封不含 source_id／semantic_cells，units 无 row/col；"
-                        "行／列证据在分页路径不可恢复，产品门 qp/ep 当前不可执行",
+                "note": "修复：单成员分页信封附信封级 block_evidence（整块 source_id／units/"
+                        "spans／semantic_cells，块坐标），item 附 source_id；消费者跟游标拼回"
+                        "整块后走同一权威校验。单成员信封 item 不再重复携带 units（权威副本"
+                        "在 block_evidence）；固定字段挤爆预算时诚实回退 compact（整块证据随"
+                        "compact 省去，大表按 compact+产品门 fail-closed 兜底）。"
+                        "期望 cell_evidence_bearing_calls>0：分页路径行／列证据可恢复。",
             },
             "d3_fixed_fields_over_budget": {
                 "status": "fixed",
@@ -498,12 +510,13 @@ async def main() -> None:
                         "期望 unknown=0 且 delivered=fetched_fragments。",
             },
             "secondary_page_escape_length_accounting": {
-                "status": "open",
+                "status": "fixed",
                 "evidence_locator": "chunk:58735cff57d8d456:body:0005",
-                "note": "_page 的片段预算按**原始字符数**算，而信封序列化后换行转义为两字符，"
-                        "正文含 ~77 个换行时信封实测超自身 max_chars 约 37 字符（0.6%），"
-                        "_MARGIN=64 不足覆盖。当前靠 D4 的防御性压缩兜住（无数据丢失，"
-                        "仅丢 units 诊断字段）；方向待定：是否改按序列化转义后长度记账。",
+                "note": "已修复：_page 的片段预算改为按**序列化转义后**长度记账"
+                        "（_escaped_len／_largest_escaped_cut 二分求切点），与页信封的实际"
+                        "序列化开销同口径；回归测试 "
+                        "test_paging_envelope_never_exceeds_max_chars_despite_escapes "
+                        "断言换行密集正文每页 len ≤ max_chars 且拼回即整块。",
             },
         },
         "totals": totals,
