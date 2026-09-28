@@ -23,7 +23,9 @@ from plugins.corpus.ledger import (
     UNSUPPORTED,
     ConsumptionLedger,
     ConsumptionLedgerObserver,
+    get_run_ledger,
     load_manifest,
+    reset_run_ledgers,
     verify_and_record,
     verify_manifest,
     write_ledger,
@@ -378,3 +380,29 @@ async def test_observer_collects_and_finalizes(tmp_path: Path, monkeypatch) -> N
     assert ledger.offered and ledger.requested and ledger.fetched
     assert ledger.delivered_status(ledger.fetched[0].identity) == DELIVERED
     assert (tmp_path / "corpus" / "ledger.json").exists()
+
+
+async def test_reporter_boundary_writes_verification(tmp_path: Path, monkeypatch) -> None:
+    """agent_team 报告边界必须触发 A4 校验并落盘（缺清单 → draft）。"""
+    monkeypatch.setenv("APODEX_RUN_DIR", str(tmp_path))
+    from workflows.agent_team.nodes import reporter as reporter_mod
+
+    reset_run_ledgers()
+    get_run_ledger()
+
+    async def _fake_report(state, ctx):
+        return "# 报告\n\n营业收入 1,234 万元。"
+
+    monkeypatch.setattr(
+        "workflows.agent_team.nodes.fast_reporter_v1._run_fast_reporter",
+        _fake_report,
+    )
+    monkeypatch.setattr(reporter_mod, "_refresh_trace_terminal", lambda *a, **k: None)
+
+    out = await reporter_mod.agent_team_reporter({"reporter_backend": "fast"}, object())
+
+    assert out["final_answer"]
+    verification = json.loads(
+        (tmp_path / "corpus" / "manifest_verification.json").read_text(encoding="utf-8"),
+    )
+    assert verification["status"] == PUBLISH_DRAFT

@@ -343,7 +343,21 @@ async def agent_team_reporter(
         logger.warning(
             "agent_team_reporter: failed to refresh terminal trace "
             "(%s: %s)",
-            type(exc).__name__, exc,
+            type(exc).__name__,
+            exc,
+        )
+
+    # A4 消费账本（观测模式）：报告已产出，在**最终报告边界**重算证据校验状态并
+    # 刷新工件（缺清单只能标 draft）。仅记录，不阻断报告发布。
+    try:
+        from plugins.corpus.ledger import get_run_ledger, verify_and_record
+
+        verify_and_record(get_run_ledger())
+    except Exception as exc:
+        logger.warning(
+            "agent_team_reporter: A4 evidence verification skipped (%s: %s)",
+            type(exc).__name__,
+            exc,
         )
 
     return {

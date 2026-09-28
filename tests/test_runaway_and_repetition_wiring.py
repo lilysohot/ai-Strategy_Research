@@ -200,3 +200,28 @@ def test_coordinator_mounts_the_rollback_only_when_it_can_search() -> None:
     # RepetitionGuard is deliberately absent from the coordinator: polling
     # collect_reports with identical arguments is correct behaviour there.
     assert RepetitionGuard not in searching
+
+
+# ── A4 consumption ledger is mounted on both paths ───────────────────
+
+
+def test_a4_ledger_observer_mounted_on_subagent_and_coordinator() -> None:
+    """A4 账本观察者必须同时接在子代理与协调者上——少了任一侧都会漏计取证。"""
+    from plugins.corpus.ledger import ConsumptionLedgerObserver
+
+    sub_types = _types(_swarm_observers(
+        SwarmSubagentRuntime(sub_agent_tool_names=_SUB_TOOLS),
+        task_id="task",
+        session_name="researcher",
+    ))
+    main_types = _types(_build_observers(
+        traj_dir=Path("/tmp/does-not-need-to-exist"),
+        task_id="task",
+        budget_tokens=None,
+        max_input_tokens=None,
+        event_store=None,
+        tool_names=["assign_task", "collect_reports", "corpus_search", "corpus_fetch"],
+    ))
+
+    assert ConsumptionLedgerObserver in sub_types
+    assert ConsumptionLedgerObserver in main_types

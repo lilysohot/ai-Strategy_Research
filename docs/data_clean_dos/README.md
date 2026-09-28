@@ -118,11 +118,12 @@ A2（批量分页与固定游标）、A3（标题身份与候选／确定关系�
 | 范围覆盖 | [ledger.py](../../plugins/corpus/ledger.py) 按 `offered` scope 复算范围完整性；`skipped`／`unresolved` 使范围不完整 |
 | 结论证据 | `verify_manifest` 由账本 + 权威原文重算每条结论，拒绝模型自报 `complete=true`；未送达记 `partial`，编造 quote 记 `unsupported` |
 | 分页可靠性 | 页信封 + 自描述校验和游标；`exhausted`／`fetch_complete`／`unresolved` 分开；`unit_too_large` 显式返回 |
-| 真实接入 | `ConsumptionLedgerObserver` 接入 stateful_react 主循环与 agent_team 子代理／主代理；产物落 `<APODEX_RUN_DIR>/corpus/*.json` |
-| 测试 | [tests/test_corpus_ledger.py](../../tests/test_corpus_ledger.py)（17 项）、`test_corpus_relations.py`、`test_corpus_fetch_paging.py`、`test_corpus_search.py` 全绿 |
+| 真实接入 | `ConsumptionLedgerObserver` 接入 stateful_react 主循环与 agent_team 子代理／主代理；`agent_team_reporter` 在报告边界再触发校验；产物落 `<APODEX_RUN_DIR>/corpus/*.json` |
+| 测试 | [tests/test_corpus_ledger.py](../../tests/test_corpus_ledger.py)（18 项）、`test_runaway_and_repetition_wiring.py`（接线守卫）、`test_corpus_relations.py`、`test_corpus_fetch_paging.py`、`test_corpus_search.py` 全绿 |
 
-尚缺：固定任务回放、成本对照（调用数／token／延迟）与真实模型效果评估——这些是启用 A4
-阻断约束与判定 B0 前置。模拟通过不等于真实运行通过。
+尚缺：**报告证据清单的生产者**（现有 `EvidenceCard` 面向网络来源、不含语料 locator，故
+`manifest.json` 无人产出，校验恒为 `draft`）、固定任务回放、成本对照（调用数／token／延迟）
+与真实模型效果评估——这些是启用 A4 阻断约束与判定 B0 的前置。模拟通过不等于真实运行通过。
 
 ## 7. 与既有架构和后续工作的关系
 

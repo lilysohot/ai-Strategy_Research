@@ -191,10 +191,25 @@ async def corpus_fetch(
 - **校验器不信任落盘字段**：每条结论的状态由账本 + 权威原文重算，模型自报
   `complete=true` 只被记录、不参与判定；缺清单的产物只能标 `draft`。
 - **接入实际路径**：`ConsumptionLedgerObserver` 同时挂到 stateful_react 主循环与
-  agent_team 的子代理／主代理观察者列表，共用同一 run 账本。
+  agent_team 的子代理／主代理观察者列表，共用同一 run 账本；agent_team 的
+  `agent_team_reporter` 在**最终报告边界**再触发一次校验并刷新工件（缺清单仍只能
+  标 draft）。接线回归由 `tests/test_runaway_and_repetition_wiring.py` 守住。
 - **落盘为独立 JSON 工件**：`<APODEX_RUN_DIR>/corpus/ledger.json` 与
   `manifest_verification.json`（模型清单约定路径为同目录 `manifest.json`）；报告只引用
   id，验证器读 JSON 重算。所有写盘／解析失败都吞掉记日志，**绝不阻断运行**。
+
+已知未实现（不得据本文件声称已闭环）：
+
+1. **报告证据清单没有生产者**。仓库现有 `EvidenceCard`（[evidence.py](../../workflows/_shared/research/evidence.py)）
+   面向网络来源（`Source.url`），不含 `doc_id`／`locator`，无法用于语料库溯源；因此
+   `manifest.json` 目前无人产出，`verify_and_record` 恒定得到 `draft`。要让报告真正发布
+   「经校验」状态，需先定义清单契约并由报告工作流产出——这属于「约束启用」阶段，本轮未做。
+2. **`corpus_inventory` 驱动的范围不计入 `offered`**。清单信封按页返回成员，只有当前页
+   可见；若据此登记 `offered` 会得到偏小的分母，因此仍以 `corpus_search` 的
+   `context_locators` 为唯一提供源。仅用 `corpus_inventory` 直接构造请求的场景下，范围
+   完整性无法计算（不冒充通过）。
+3. **显式「跳过」无信号**。工具契约里没有「为什么放弃某块」的字段，`skipped` 只能记录
+   游标模式下的 `unresolved`／`item_errors`；Agent 主动不取回的块只体现为 `missing`。
 
 ## 2. 验收与交付顺序
 
