@@ -1,7 +1,9 @@
 # E3 · 已知缺陷与反例登记
 
-> 版本：v2 · 2026-09-29。状态：**逐例复核完成**（§5 复核记录）；三修复包均已实施
-> （chunk-5 / reader-pdf-8 / clean-1，见 §5.5），待重建候选语料 + B4 分项对照。
+> 版本：v3.1 · 2026-09-29。状态：**reader-pdf-9 已实施，B4 候选对照基本通过 2/3 硬项**（§5.6）：
+> clean-1/chunk-5 达标；reader-pdf-9 修复 4 条 target 回归（e4/e3/a-3/a-2），NOISE 0 残留、
+> regressed_vs_base=0、19 条 chunking 恢复；仍open：e5 六值跨相邻行单元（in_concat 连续但非
+> 单块）+ doc 级字符差 672，冻结进 E5 前需复核），冻结进 E5 暂缓。
 > 依据：[B0 归因](../b0-attribution-20260928/report.md)、[B4 组合对照 §2.3](../b4-combined-20260929/report.md)、
 > [protocol.md](protocol.md) §3 九层链路与 §6 成功标准第 2 条。
 > 进入下一步条件：每条修复有证据、R1/R2 反例通过；必要修改均有对应 revision 和候选 build。
@@ -97,4 +99,53 @@ pypdf 提取 `174b6462` page 10：`24.0 28.5 28.5 - 18.8% 0.0%` 在源 PDF 文�
 实施顺序建议：chunk-5 守卫（反例已就位、可 TDD）→ reader-pdf-8 / clean-1（需补正向+反例测试）→
 重建候选语料 → B4 分项对照（chunking_impact 20 条恢复不回归 + NOISE 0 残留）→ 冻结候选 build 进 E5。
 
+### 5.6 B4 候选分项对照结果（2026-09-29，**未通过**）
+
+对照报告：[b4-candidate-20260929/report.md](../b4-candidate-20260929/report.md)（脚本 `b4_candidate.py`，
+零模型、PG 只读、纯内存，候选栈 identity 断言 reader-pdf-8/clean-4/chunk-5）。
+
+| 门槛项 | 结果 | 裁定 |
+|---|---|---|
+| chunking_impact 20 条恢复 | **19/20** | 17 条（chunk 规则）+ e1/e2（clean-1）单块命中；残留仅 a-1（§2.4 裁决项，`in_concat=true`、`all_crossed_kept=true`） |
+| NOISE 0 残留 | **达成** | 3/3 引文跨过单元全部 kept |
+| S1–S4 结构缺陷 | **4/4 修复** | company-001 e1/e2/e3 `table_has_cell_coords=true`；industry-001 e5 单块命中 |
+| ok 不回归 | **未达成（4 条）** | industry-001 e4、industry-003 a-3/e3、industry-008 a-2：ok→structure_error（`read_order_not_contiguous`） |
+| 0 字符丢失 | **未达成（30 字符）** | 6f14cc14 deficit=25（p3 行标签 ×20 + p1 ×3）；dddc7cd0 deficit=5（p1 数字 ×4 + p16 `资料来源：`） |
+
+根因（均 reader-pdf-8，逐例源流核验）：
+
+1. **p9/p10 行带装配顺序 ≠ 源流序**：4 条回归引文在源 PDF page 10 文本流中**全部连续**
+   （pymupdf get_text 归一 HIT）；reader-pdf-8 `_row_text` 按网格列序产出
+   「产品→产能→右栏→表观」，产品名与右栏值被产能值隔断、两行堆叠表头被数据行隔断。
+   基线旧行序同样非源流序（错法不同：e5 断、其余恰连续）。**gold = 源流序（5/5 已核验）**。
+2. **无线表装配覆盖损伤**：6f14cc14 p3 财务预测表 label 列丢失/garble（营业利润、
+   归属母公司净利润、经营/投资/融资活动现金流等 20 条，均源流连续）；dddc7cd0 p1
+   四个数字（1,832/56.71%/16.8%/19.6%）连续形态消失。均非 gold 引文，但违反 B1/B4
+   既测「0 字符丢失」标准。
+
+修复计划（**reader-pdf-9**，未实施）：行带/无线表装配以源流顺序为保真目标——行分组
+可重排、带内文本顺序保持抽取顺序；label 列与数字单元装配补 TDD 反例（p3 标签、p1
+数字、p10 带内顺序三组）；完成后重跑 `b4_candidate.py`，达成「20 条恢复不回归 +
+deficit=0 + NOISE 0」后再冻结进 E5。clean-1/chunk-5 无需改动。
+
+**普遍性核验（新增）**：`universality_probe.py` 对金标全部 99 条 non-empty 引文核验
+源流连续性——**99/99 = 100% `src_contiguous`**，0 例 `src_tokens_only`（即无任何引文需
+bbox 阅读序重排才能连续），`gold次序≠源流次序` 0 例。故「源流序为 reader-pdf-9 装配
+保真基线」是**安全且普遍成立**的，无需引入 bbox 左右序装配。一致性 94/99 align，5 例
+mismatch 全部为候选 build 覆盖/装配失败（4 例为本文档已列 174b6462 覆盖损伤、
+company-008 a-1 为已裁决的 R2-a 合并守卫），均不属「流序错误」证据，恰是 reader-pdf-9
+待修面。证据：`.scratch/b4-candidate-20260929/universality.json`。
+
 复核证据：源页引文见本节；反例测试代码见 tests/test_corpus_preparation_chunk.py:482-539。
+
+**reader-pdf-9 实施结果（2026-09-29）**：`_emit_table`/`_row_text` 改为按页面原生阅读序（native_pos）
+组发射（新增 `_native_groups`），rev 升 `reader-pdf-9`。第一轮修复 4 条 regression；硬化为**单块 e5**
+后，5 条 page-10 引文（industry-001 e4/e5、industry-003 e3/a-3、industry-008 a-2）全部 `ok`，
+`in_concat+in_single_chunk` 双真（e5 六值经 `_native_groups` 的数值续行合并落单一单元）。
+B4 候选对照硬项：`regressed_vs_base=0`（无新 ok→structure_error）、`structure_error→ok`=4、
+`chunking_impact→ok`=19、`still_chunking` 仅剩 company-008 a-1（R2-a 已裁决边界，非回归）、
+NOISE 0 残留（3/3 引文跨过单元全 kept）。
+**单 open（冻结 E5 前需 user 裁决）**：`doc_chars_lost` 相对 base = 672，全部来自 6f14cc14(327)+
+dddc7cd0(345)；agent 分类为相对 base（reader-pdf-6）的**单元化口径差异**（行重组所致），相关引文
+均 ok、非真实文本缺失；但 register §5.5 曾记这两源「30 字符 deficit」。是否以此口径接受
+「deficit≈0」并具冻结进 E5，需按 §5.5 三硬项逐一核证。

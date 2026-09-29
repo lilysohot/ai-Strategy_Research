@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -35,6 +36,8 @@ from plugins.corpus.preparation.readers.pdf_reader import (
 )
 
 REPO = Path(__file__).resolve().parents[1]
+
+_WS = re.compile(r"[\s\u3000\xa0\u200b]+")
 
 
 # --- Markdown ---
@@ -575,28 +578,28 @@ def test_r8_overlapping_grid_rows_detected() -> None:
 
 
 def test_r8_cross_column_continuation_row_order_kept() -> None:
-    """S4 跨栏续表：重叠网格行的行内顺序按列序修正，右半数值与下一行连续。
+    """S4/R9 跨栏续表：发射主键是页面原生序连续组，而非错乱 grid 行/行内序。
 
-    复现长江化工 174b6462 page10「图 6（续表）」：R32 逻辑行的右半
-    24.0/28.5/28.5（col9，native 序最前）与下一网格行的 -/18.8%/0.0%
-    （col9-11）被左半行名/数值隔断。标记 column_ordered_rows 后，重叠行
-    按列序发射：左半（col2-8）在前、右半（col9）在行尾，与 row47 的
-    '- 18.8% 0.0%' 相邻，六值 24.0 28.5 28.5 - 18.8% 0.0% 连续。
+    R9 修正：universality 探针证明页面原生流（``native_pos`` 次序）是 gold 引文的
+    地面真值阅读序。旧实现 S4 对网格错乱行强排"网格列序"，会把左半列数值插进
+    右半列标签与数值之间、打断引文连续。R9 改按 native 连续性切组并跨组发射：
+    同一逻辑行（R32 的产能值）native 218/221/222/223 连续成组，不被右半标签
+    （R32…，native 404-407 靠后）打断。
     """
     row46 = _TableRow(
         cells=(
-            _TableCell(text="24.0 28.5 28.5", row=46, col=9, native_pos=0),
-            _TableCell(text="R32", row=46, col=2, native_pos=9),
-            _TableCell(text="99.6%", row=46, col=6, native_pos=10),
-            _TableCell(text="-", row=46, col=7, native_pos=11),
-            _TableCell(text="51.6%", row=46, col=8, native_pos=12),
+            _TableCell(text="24.0 28.5 28.5", row=46, col=9, native_pos=218),
+            _TableCell(text="R32", row=46, col=2, native_pos=404),
+            _TableCell(text="99.6%", row=46, col=6, native_pos=405),
+            _TableCell(text="-", row=46, col=7, native_pos=406),
+            _TableCell(text="51.6%", row=46, col=8, native_pos=407),
         )
     )
     row47 = _TableRow(
         cells=(
-            _TableCell(text="-", row=47, col=9, native_pos=20),
-            _TableCell(text="18.8%", row=47, col=10, native_pos=21),
-            _TableCell(text="0.0%", row=47, col=11, native_pos=22),
+            _TableCell(text="-", row=47, col=9, native_pos=221),
+            _TableCell(text="18.8%", row=47, col=10, native_pos=222),
+            _TableCell(text="0.0%", row=47, col=11, native_pos=223),
         )
     )
     table = _Table(
@@ -608,15 +611,140 @@ def test_r8_cross_column_continuation_row_order_kept() -> None:
     units: list[object] = []
     issues: list[object] = []
     _emit_table(table, 0, page_no=10, page_lines=[], units=units, issues=issues)
-    assert len(units) == 2
-    joined = "\n".join(u.raw_text for u in units)  # type: ignore[attr-defined]
-    assert "24.0 28.5 28.5\n-\n18.8%\n0.0%" in joined, joined
-    # 未标记行保持原生序（I2 不回归）：同一行不带 column_ordered_rows 时仍按
-    # native_pos 排序（'24.0 28.5 28.5' 在前）。
-    plain = _Table(index=0, bbox=table.bbox, rows=[row46])
-    units_plain: list[object] = []
-    _emit_table(plain, 0, page_no=10, page_lines=[], units=units_plain, issues=issues)
-    assert units_plain[0].raw_text.startswith("24.0 28.5 28.5")  # type: ignore[attr-defined]
+    # native 218 / 221-223 连续 → 产能值组 + 续接组相邻，右半标签组在其后。
+    rendered = _WS.sub("", "".join(u.raw_text for u in units))  # type: ignore[attr-defined]
+    # I2：e5 六个取值（24.0 28.5 28.5 - 18.8% 0.0%）在发射文本内连续成串。
+    assert "24.028.528.5-18.8%0.0%" in rendered, rendered
+    # I1：只换行、无插入字符（每行即一个 c.text；全部单元格一行一次）。
+    emitted = [line for u in units for line in u.raw_text.split("\n")]  # type: ignore[attr-defined]
+    assert sorted(emitted) == sorted(c.text for row in (row46, row47) for c in row.cells)
+    # 覆盖：每个单元格恰好一行（无遗漏、无重复）。
+    assert len(emitted) == len(row46.cells) + len(row47.cells)
+
+
+# --- reader-pdf-9（R9：行内一律按原生阅读序发射，合并网格强排列序回归修正） ---
+
+
+def test_r9_cross_column_merged_grid_keeps_quote_contiguous() -> None:
+    """R9 图6 续表：合并网格行内按 native 连续性切组，尿素与价格分位连续成串。
+
+    构造尿素逻辑行：产能值（col3，native 62）、价格值（col9，native 65）、标签
+    尿素与价格分位（col2/6/7/8，native 349-352 连续）。即便该行被标 column_order，
+    R9 仍按 native 连续性把同一逻辑行的取值切成连续组发射，使「尿素 32.1% 
+    10.9% 89.9%」在发射文本内连续成串（不被产能/价格值打断）。
+    """
+    row = _TableRow(
+        cells=(
+            _TableCell(text="5814.2 6728.3 6759.6", row=10, col=3, native_pos=62),
+            _TableCell(text="7696.0 7956.0 8068.0", row=10, col=9, native_pos=65),
+            _TableCell(text="尿素", row=10, col=2, native_pos=349),
+            _TableCell(text="32.1%", row=10, col=6, native_pos=350),
+            _TableCell(text="10.9%", row=10, col=7, native_pos=351),
+            _TableCell(text="89.9%", row=10, col=8, native_pos=352),
+        )
+    )
+    table = _Table(
+        index=0, bbox=(69.8, 112.0, 513.2, 220.0), rows=[row], column_ordered_rows=frozenset({0})
+    )
+    units: list[object] = []
+    issues: list[object] = []
+    _emit_table(table, 0, page_no=10, page_lines=[], units=units, issues=issues)
+    # native 349-352 连续同行 → 自成一组；产能/价格值（native 62/65）另组。
+    rendered = "".join(u.raw_text for u in units)  # type: ignore[attr-defined]
+    merged = rendered.replace("\n", "")
+    # I2：e3 四值（尿素 32.1% 10.9% 89.9%）在发射文本内连续成串。
+    assert "尿素32.1%10.9%89.9%" in merged, rendered
+    # I1/覆盖：每个单元格恰好一行（无插入、无遗漏、无重复）。
+    emitted = [line for u in units for line in u.raw_text.split("\n")]  # type: ignore[attr-defined]
+    assert sorted(emitted) == sorted(c.text for c in row.cells)
+    assert len(emitted) == len(row.cells)
+
+
+def test_r9_header_row_source_order_kept() -> None:
+    """R9 表头行：行内按原生阅读序发射，产能/产品/表观/价格分位…回复源序。
+
+    旧实现 column_order 按列强排把 header 散成「产品/表观/价格分位/价差分位/
+    开工率/产能」，而来源序列是「产能/产品/表观/价格分位/价差分位/开工率」。
+    """
+    row = _TableRow(
+        cells=(
+            _TableCell(text="产品", row=0, col=1, native_pos=321),
+            _TableCell(text="表观消费量（万吨）以及同比增长", row=0, col=3, native_pos=322),
+            _TableCell(text="价格分位", row=0, col=6, native_pos=323),
+            _TableCell(text="价差分位", row=0, col=7, native_pos=324),
+            _TableCell(text="开工率", row=0, col=8, native_pos=325),
+            _TableCell(text="产能（万吨/年）以及同比增长", row=0, col=9, native_pos=320),
+        )
+    )
+    text, cells = _row_text(row)
+    rendered = " ".join(text.split())
+    assert rendered.startswith("产能（万吨/年）以及同比增长 产品 表观消费量（万吨）以及同比增长"), (
+        rendered
+    )
+    assert "价格分位 价差分位 开工率" in rendered, rendered
+    assert [col for _, col in cells] == [9, 1, 3, 6, 7, 8], cells
+
+
+def test_r9_label_and_number_columns_not_lost_under_native_order() -> None:
+    """R9 覆盖守卫：切换为原生序后，标签列与数字列单元格一律不丢。
+
+    标签列（行首科目）与数字列（数值）在合并网格中的 native 位散布在不同文本块，
+    一行内不得因重排而遗漏任何一格；I1 仅换行不变。
+    """
+    row = _TableRow(
+        cells=(
+            _TableCell(text="工业硅", row=3, col=0, native_pos=180),
+            _TableCell(text="尿素", row=3, col=2, native_pos=349),
+            _TableCell(text="32.1%", row=3, col=6, native_pos=350),
+            _TableCell(text="89.9%", row=3, col=8, native_pos=352),
+            _TableCell(text="5814.2 6728.3 6759.6", row=3, col=3, native_pos=62),
+        )
+    )
+    text, _ = _row_text(row)
+    lines = text.split("\n")
+    assert all(
+        cell in lines for cell in ("工业硅", "尿素", "32.1%", "89.9%", "5814.2 6728.3 6759.6")
+    )
+    # I1/覆盖：发射文本各行为单元格文本一一对应（无插入、无丢失、无重复）。
+    assert sorted(lines) == sorted(c.text for c in row.cells)
+
+
+def test_r9_value_and_growth_continuation_single_unit() -> None:
+    """R9 续行归并：产能取值行与其同比增长续行拆成两网格行时，六值入同一单元。
+
+    find_tables 把同一产品行拆成「取值行（含行标签/价格）」+「纯数值续行」。
+    续行不含行标签，应并入前一逻辑行；行内按 ``_NATIVE_MERGE_GAP`` 吞掉取值格
+    折叠子行的幻影空隙，使 e5 六值（24.0 28.5 28.5 - 18.8% 0.0%）落在**同一个**
+    table_row 单元，右半价格（R32 99.6% - 51.6%）仍在独立单元。
+    """
+    row46 = _TableRow(
+        cells=(
+            _TableCell(text="24.0 28.5 28.5", row=46, col=9, native_pos=218),
+            _TableCell(text="R32", row=46, col=2, native_pos=404),
+            _TableCell(text="99.6%", row=46, col=6, native_pos=405),
+            _TableCell(text="-", row=46, col=7, native_pos=406),
+            _TableCell(text="51.6%", row=46, col=8, native_pos=407),
+        )
+    )
+    row47 = _TableRow(  # 纯数值续行：无行标签，应并入 row46
+        cells=(
+            _TableCell(text="-", row=47, col=9, native_pos=221),
+            _TableCell(text="18.8%", row=47, col=10, native_pos=222),
+            _TableCell(text="0.0%", row=47, col=11, native_pos=223),
+        )
+    )
+    table = _Table(index=0, bbox=(42.6, 112.0, 553.1, 704.2), rows=[row46, row47])
+    units: list[object] = []
+    issues: list[object] = []
+    _emit_table(table, 0, page_no=10, page_lines=[], units=units, issues=issues)
+    e5_norm = _WS.sub("", "24.0\n28.5\n28.5\n-\n18.8%\n0.0%")
+    assert any(e5_norm in _WS.sub("", u.raw_text) for u in units), units  # type: ignore[attr-defined]
+    # 右半价格独立成单元（不与 e5 六值混在同一单元）：
+    assert any("R32" in str(u.raw_text) for u in units)  # type: ignore[attr-defined]
+    # I1/覆盖：每个单元格恰好一行，无插入/遗漏/重复。
+    emitted = [line for u in units for line in u.raw_text.split("\n")]  # type: ignore[attr-defined]
+    assert sorted(emitted) == sorted(c.text for row in (row46, row47) for c in row.cells)
+    assert len(emitted) == len(row46.cells) + len(row47.cells)
 
 
 # --- 开发材料 smoke（守卫允许清单内的 6 份真实 PDF，只读） ---
@@ -633,7 +761,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-8+")
+        assert result.extractor_rev.startswith("reader-pdf-9+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:

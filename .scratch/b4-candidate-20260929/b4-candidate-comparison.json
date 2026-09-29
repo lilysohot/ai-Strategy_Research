@@ -1,0 +1,2005 @@
+{
+  "artifact": "b4-candidate-comparison",
+  "version": 1,
+  "generated_at": "2026-09-29T15:56:38.709695+00:00",
+  "scope": "E3 candidate build comparison: reader-pdf-8 + clean-4 + chunk-5 vs base/B4-b1b3, zero model, read-only PG, no publish",
+  "policy": {
+    "gold": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i3-2/query-gold-scoring-v1.jsonl",
+    "variants": {
+      "base": "B0 活动 build（reader-pdf-6 时代，chunk-3），b0_attribution.json",
+      "b1b3": "B4 组合档：reader-pdf-7 → clean-3 → chunk-4（b4-combined-comparison.json）",
+      "candidate": "候选栈：reader-pdf-8 → clean-4 → chunk-5（当前代码，归档副本重读，纯内存）"
+    },
+    "offered_rule": "复用 B0 检索命中；命中文档 offered 覆盖其全部新块（B0 结构结论）",
+    "noise_residual_rule": "gold 引文跨过的单元在候选 clean 台账中必须全部 kept",
+    "limitations": [
+      "offered_locators 为 B0 保存值映射（来源命中→新块全量），非对新 build 索引重新检索",
+      "候选 artifacts 为纯内存重建，未建 PG 候选 build（冻结进 E5 另行执行）"
+    ]
+  },
+  "doc_level": [
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "gold_source_id": "2026-08-13_174b6462",
+      "old_units": 1255,
+      "new_units": 1329,
+      "old_chunks": 291,
+      "new_chunks": 146,
+      "kind_hist": {
+        "body": 71,
+        "heading": 42,
+        "table": 33
+      },
+      "old_doc_norm_chars": 28513,
+      "new_doc_norm_chars": 28513,
+      "chars_lost_vs_old": 0,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [
+        "unit:0313",
+        "unit:0340",
+        "unit:0493",
+        "unit:0495",
+        "unit:0497",
+        "unit:0499",
+        "unit:0501",
+        "unit:0503",
+        "unit:0505",
+        "unit:0507",
+        "unit:0509",
+        "unit:0521",
+        "unit:0523",
+        "unit:0525",
+        "unit:0527",
+        "unit:0529",
+        "unit:0531",
+        "unit:0533",
+        "unit:0535",
+        "unit:0537",
+        "unit:0539",
+        "unit:0541",
+        "unit:0543",
+        "unit:0545",
+        "unit:0547",
+        "unit:0549",
+        "unit:0551",
+        "unit:0553",
+        "unit:0555",
+        "unit:0557",
+        "unit:0559",
+        "unit:0561",
+        "unit:0563",
+        "unit:0565",
+        "unit:0567",
+        "unit:0569",
+        "unit:0571",
+        "unit:0573",
+        "unit:0575",
+        "unit:0577",
+        "unit:0579",
+        "unit:0581",
+        "unit:0902"
+      ],
+      "old_chunk_not_contiguous_in_new": [
+        "1227c2a34d05170a:body:0000",
+        "1227c2a34d05170a:body:0002",
+        "1227c2a34d05170a:body:0014",
+        "1227c2a34d05170a:body:0016",
+        "1227c2a34d05170a:body:0021",
+        "1227c2a34d05170a:table:0005",
+        "1227c2a34d05170a:table:0006",
+        "1227c2a34d05170a:body:0024",
+        "1227c2a34d05170a:body:0027",
+        "1227c2a34d05170a:table:0008",
+        "1227c2a34d05170a:table:0009",
+        "1227c2a34d05170a:table:0010",
+        "1227c2a34d05170a:table:0017",
+        "1227c2a34d05170a:table:0011",
+        "1227c2a34d05170a:table:0012",
+        "1227c2a34d05170a:table:0013",
+        "1227c2a34d05170a:table:0014",
+        "1227c2a34d05170a:table:0015",
+        "1227c2a34d05170a:table:0016",
+        "1227c2a34d05170a:body:0034",
+        "1227c2a34d05170a:body:0037",
+        "1227c2a34d05170a:body:0038",
+        "1227c2a34d05170a:body:0042",
+        "1227c2a34d05170a:body:0044",
+        "1227c2a34d05170a:table:0020",
+        "1227c2a34d05170a:table:0021",
+        "1227c2a34d05170a:body:0045",
+        "1227c2a34d05170a:body:0047",
+        "1227c2a34d05170a:body:0048",
+        "1227c2a34d05170a:body:0051",
+        "1227c2a34d05170a:table:0023",
+        "1227c2a34d05170a:table:0024",
+        "1227c2a34d05170a:body:0054",
+        "1227c2a34d05170a:body:0055",
+        "1227c2a34d05170a:body:0056",
+        "1227c2a34d05170a:body:0058",
+        "1227c2a34d05170a:body:0060"
+      ]
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "gold_source_id": "2026-08-16_6f14cc14",
+      "old_units": 727,
+      "new_units": 326,
+      "old_chunks": 36,
+      "new_chunks": 55,
+      "kind_hist": {
+        "body": 22,
+        "heading": 3,
+        "table": 30
+      },
+      "old_doc_norm_chars": 8817,
+      "new_doc_norm_chars": 8792,
+      "chars_lost_vs_old": 327,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [
+        "unit:0024",
+        "unit:0129",
+        "unit:0134",
+        "unit:0264",
+        "unit:0294",
+        "unit:0334",
+        "unit:0359",
+        "unit:0369",
+        "unit:0384",
+        "unit:0420",
+        "unit:0441",
+        "unit:0451",
+        "unit:0461",
+        "unit:0462",
+        "unit:0468",
+        "unit:0478",
+        "unit:0503",
+        "unit:0534",
+        "unit:0549",
+        "unit:0570",
+        "unit:0585",
+        "unit:0669"
+      ],
+      "old_chunk_not_contiguous_in_new": [
+        "58735cff57d8d456:body:0005",
+        "58735cff57d8d456:body:0006",
+        "58735cff57d8d456:body:0008",
+        "58735cff57d8d456:body:0009",
+        "58735cff57d8d456:body:0010",
+        "58735cff57d8d456:body:0011",
+        "58735cff57d8d456:body:0012",
+        "58735cff57d8d456:body:0013",
+        "58735cff57d8d456:table:0001",
+        "58735cff57d8d456:table:0002",
+        "58735cff57d8d456:table:0003",
+        "58735cff57d8d456:table:0004",
+        "58735cff57d8d456:table:0009",
+        "58735cff57d8d456:table:0005",
+        "58735cff57d8d456:table:0006",
+        "58735cff57d8d456:table:0007",
+        "58735cff57d8d456:table:0008",
+        "58735cff57d8d456:table:0011",
+        "58735cff57d8d456:table:0012",
+        "58735cff57d8d456:body:0016",
+        "58735cff57d8d456:table:0014"
+      ]
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "gold_source_id": "2026-09-06_793b3967",
+      "old_units": 512,
+      "new_units": 474,
+      "old_chunks": 187,
+      "new_chunks": 43,
+      "kind_hist": {
+        "body": 27,
+        "heading": 8,
+        "table": 8
+      },
+      "old_doc_norm_chars": 12370,
+      "new_doc_norm_chars": 12370,
+      "chars_lost_vs_old": 0,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [
+        "unit:0483",
+        "unit:0484",
+        "unit:0488",
+        "unit:0489"
+      ],
+      "old_chunk_not_contiguous_in_new": [
+        "7734638eca662be9:body:0000",
+        "7734638eca662be9:body:0004",
+        "7734638eca662be9:table:0005",
+        "7734638eca662be9:body:0013",
+        "7734638eca662be9:table:0009"
+      ]
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "gold_source_id": "2026-09-06_cc03f55b",
+      "old_units": 243,
+      "new_units": 269,
+      "old_chunks": 32,
+      "new_chunks": 30,
+      "kind_hist": {
+        "body": 15,
+        "table": 15
+      },
+      "old_doc_norm_chars": 13553,
+      "new_doc_norm_chars": 13553,
+      "chars_lost_vs_old": 0,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [
+        "unit:0183"
+      ],
+      "old_chunk_not_contiguous_in_new": [
+        "e3820ab34c2e3326:body:0003",
+        "e3820ab34c2e3326:table:0001",
+        "e3820ab34c2e3326:body:0005",
+        "e3820ab34c2e3326:body:0006",
+        "e3820ab34c2e3326:body:0007",
+        "e3820ab34c2e3326:body:0008",
+        "e3820ab34c2e3326:body:0009",
+        "e3820ab34c2e3326:body:0011",
+        "e3820ab34c2e3326:table:0002",
+        "e3820ab34c2e3326:table:0003",
+        "e3820ab34c2e3326:table:0004",
+        "e3820ab34c2e3326:table:0005",
+        "e3820ab34c2e3326:table:0006",
+        "e3820ab34c2e3326:table:0007",
+        "e3820ab34c2e3326:table:0008",
+        "e3820ab34c2e3326:table:0009",
+        "e3820ab34c2e3326:table:0011",
+        "e3820ab34c2e3326:table:0012",
+        "e3820ab34c2e3326:table:0014"
+      ]
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "gold_source_id": "2026-09-06_dddc7cd0",
+      "old_units": 786,
+      "new_units": 613,
+      "old_chunks": 206,
+      "new_chunks": 83,
+      "kind_hist": {
+        "body": 42,
+        "heading": 12,
+        "table": 29
+      },
+      "old_doc_norm_chars": 19822,
+      "new_doc_norm_chars": 19817,
+      "chars_lost_vs_old": 345,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [
+        "unit:0070",
+        "unit:0088",
+        "unit:0101",
+        "unit:0107",
+        "unit:0260",
+        "unit:0261",
+        "unit:0263",
+        "unit:0615"
+      ],
+      "old_chunk_not_contiguous_in_new": [
+        "a3b681fdd55d6e11:body:0003",
+        "a3b681fdd55d6e11:body:0007",
+        "a3b681fdd55d6e11:table:0003",
+        "a3b681fdd55d6e11:body:0010",
+        "a3b681fdd55d6e11:body:0011",
+        "a3b681fdd55d6e11:table:0009",
+        "a3b681fdd55d6e11:table:0010",
+        "a3b681fdd55d6e11:table:0011",
+        "a3b681fdd55d6e11:body:0012",
+        "a3b681fdd55d6e11:body:0013",
+        "a3b681fdd55d6e11:body:0018",
+        "a3b681fdd55d6e11:body:0021",
+        "a3b681fdd55d6e11:body:0022",
+        "a3b681fdd55d6e11:table:0015",
+        "a3b681fdd55d6e11:table:0016",
+        "a3b681fdd55d6e11:table:0017",
+        "a3b681fdd55d6e11:table:0018",
+        "a3b681fdd55d6e11:table:0019",
+        "a3b681fdd55d6e11:table:0020",
+        "a3b681fdd55d6e11:table:0022",
+        "a3b681fdd55d6e11:body:0025"
+      ]
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "gold_source_id": "2026-09-06_f8e31696",
+      "old_units": 229,
+      "new_units": 230,
+      "old_chunks": 55,
+      "new_chunks": 23,
+      "kind_hist": {
+        "body": 15,
+        "heading": 4,
+        "table": 4
+      },
+      "old_doc_norm_chars": 8904,
+      "new_doc_norm_chars": 8904,
+      "chars_lost_vs_old": 0,
+      "chars_gained_vs_old": 0,
+      "old_unit_not_contiguous_in_new": [],
+      "old_chunk_not_contiguous_in_new": [
+        "99bf1ba2456419fd:body:0000",
+        "99bf1ba2456419fd:body:0003",
+        "99bf1ba2456419fd:body:0004",
+        "99bf1ba2456419fd:body:0006",
+        "99bf1ba2456419fd:body:0008",
+        "99bf1ba2456419fd:body:0009",
+        "99bf1ba2456419fd:body:0011",
+        "99bf1ba2456419fd:body:0012",
+        "99bf1ba2456419fd:table:0003"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "query_id": "company-001",
+      "target_id": "e4",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "e1",
+      "tier": "supplementary",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "structure_error",
+      "b1b3_code": "structure_error",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "structure_error",
+      "b1b3_code": "structure_error",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "e3",
+      "tier": "supplementary",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "structure_error",
+      "b1b3_code": "structure_error",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-001",
+      "target_id": "e5",
+      "tier": "supplementary",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-002",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e4",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e5",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e6",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-003",
+      "target_id": "e7",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "20",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-004",
+      "target_id": "e1",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e1",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e4",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-005",
+      "target_id": "e5",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "7",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "7",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-006",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "7",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-007",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "chunking_impact",
+      "b1b3_code": "chunking_impact",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "7",
+        "table_has_cell_coords": false
+      },
+      "noise_residual_check": {
+        "in_concat": true,
+        "crossed_units": [
+          {
+            "unit_id": "unit:0315",
+            "page": "7",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              36.84000015258789,
+              352.6789855957031,
+              575.6199951171875,
+              409.15399169921875
+            ],
+            "chunk_kinds": [
+              "body"
+            ],
+            "raw_head": "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n分析师在本报告中对"
+          },
+          {
+            "unit_id": "unit:0316",
+            "page": "7",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              36.84000015258789,
+              415.0790100097656,
+              54.84000015258789,
+              424.0790100097656
+            ],
+            "chunk_kinds": [
+              "body"
+            ],
+            "raw_head": "份。"
+          }
+        ],
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      }
+    },
+    {
+      "query_id": "company-007",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "chunking_impact",
+      "b1b3_code": "chunking_impact",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "7",
+        "table_has_cell_coords": false
+      },
+      "noise_residual_check": {
+        "in_concat": true,
+        "crossed_units": [
+          {
+            "unit_id": "unit:0315",
+            "page": "7",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              36.84000015258789,
+              352.6789855957031,
+              575.6199951171875,
+              409.15399169921875
+            ],
+            "chunk_kinds": [
+              "body"
+            ],
+            "raw_head": "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n分析师在本报告中对"
+          },
+          {
+            "unit_id": "unit:0316",
+            "page": "7",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              36.84000015258789,
+              415.0790100097656,
+              54.84000015258789,
+              424.0790100097656
+            ],
+            "chunk_kinds": [
+              "body"
+            ],
+            "raw_head": "份。"
+          }
+        ],
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      }
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-1",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "chunking_impact",
+      "b1b3_code": "chunking_impact",
+      "candidate_code": "chunking_impact",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": false,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      },
+      "noise_residual_check": {
+        "in_concat": true,
+        "crossed_units": [
+          {
+            "unit_id": "unit:0005",
+            "page": "1",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              19.799999237060547,
+              88.56800842285156,
+              214.85000610351562,
+              101.85201263427734
+            ],
+            "chunk_kinds": [
+              "heading"
+            ],
+            "raw_head": "贵州茅台（600519）2026 年中报点评"
+          },
+          {
+            "unit_id": "unit:0006",
+            "page": "1",
+            "status": "kept",
+            "n_cells": 0,
+            "bbox": [
+              395.7099914550781,
+              88.67036437988281,
+              468.3099365234375,
+              104.63036346435547
+            ],
+            "chunk_kinds": [
+              "heading"
+            ],
+            "raw_head": "强推（维持）"
+          }
+        ],
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      }
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-08-16_6f14cc14",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "company-008",
+      "target_id": "a-5",
+      "tier": "required",
+      "source_id": "2026-09-06_dddc7cd0",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "a-5",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e4",
+      "tier": "supplementary",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-001",
+      "target_id": "e5",
+      "tier": "supplementary",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "structure_error",
+      "b1b3_code": "structure_error",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-002",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-003",
+      "target_id": "e3",
+      "tier": "supplementary",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-004",
+      "target_id": "a-1",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-004",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-005",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-005",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-1",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-006",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-007",
+      "target_id": "e4",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "a-5",
+      "tier": "required",
+      "source_id": "2026-08-13_174b6462",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "10",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "industry-008",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_f8e31696",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "3",
+        "table_has_cell_coords": true
+      }
+    },
+    {
+      "query_id": "macro-001",
+      "target_id": "e3",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e4",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-002",
+      "target_id": "e5",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-003",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_793b3967",
+      "base_code": "chunking_impact",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-1",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-4",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-5",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-004",
+      "target_id": "a-6",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-005",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-005",
+      "target_id": "a-2",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-005",
+      "target_id": "e2",
+      "tier": "supplementary",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-006",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "1",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-007",
+      "target_id": "e3",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "e1",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "e2",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    },
+    {
+      "query_id": "macro-008",
+      "target_id": "a-3",
+      "tier": "required",
+      "source_id": "2026-09-06_cc03f55b",
+      "base_code": "ok",
+      "b1b3_code": "ok",
+      "candidate_code": "ok",
+      "flags": {
+        "in_concat": true,
+        "in_single_chunk_any": true,
+        "page_hint": "2",
+        "table_has_cell_coords": false
+      }
+    }
+  ],
+  "summary": {
+    "targets": 99,
+    "transitions_vs_base": {
+      "b1b3_code": {
+        "chunking_impact->chunking_impact": 3,
+        "chunking_impact->ok": 17,
+        "ok->ok": 75,
+        "structure_error->structure_error": 4
+      },
+      "candidate_code": {
+        "chunking_impact->chunking_impact": 1,
+        "chunking_impact->ok": 19,
+        "ok->ok": 75,
+        "structure_error->ok": 4
+      }
+    },
+    "transitions_candidate_vs_b1b3": {
+      "chunking_impact->chunking_impact": 1,
+      "chunking_impact->ok": 2,
+      "ok->ok": 92,
+      "structure_error->ok": 4
+    },
+    "improved_vs_base": {
+      "chunking_impact_recovered": 19,
+      "structure_error_recovered": 4
+    },
+    "regressed_vs_base": 0,
+    "still_chunking_candidate": [
+      [
+        "company-008",
+        "a-1",
+        "2026-08-16_6f14cc14",
+        {
+          "in_concat": true,
+          "in_single_chunk_any": false,
+          "page_hint": "1",
+          "table_has_cell_coords": false
+        }
+      ]
+    ],
+    "noise_residual": [
+      {
+        "query_id": "company-007",
+        "target_id": "e1",
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      },
+      {
+        "query_id": "company-007",
+        "target_id": "e2",
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      },
+      {
+        "query_id": "company-008",
+        "target_id": "a-1",
+        "all_crossed_kept": true,
+        "noise_crossed": []
+      }
+    ],
+    "doc_chars_lost": 672,
+    "doc_old_units_not_contiguous": 78,
+    "doc_old_chunks_broken": 112,
+    "doc_chunks_delta": -427
+  }
+}

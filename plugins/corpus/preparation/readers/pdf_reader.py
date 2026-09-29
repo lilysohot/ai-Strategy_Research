@@ -26,7 +26,7 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_PDF_REV = "reader-pdf-8"
+READER_PDF_REV = "reader-pdf-9"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
@@ -48,6 +48,11 @@ _WIRELESS_HEADER_PAD = 30.0  # 数据块上方表头预留（pt）
 _WIRELESS_FOOT_PAD = 15.0  # 数据块下方预留（pt）
 # R8（S4）：相邻网格行 bbox 纵向重叠 → 行切分错乱，该行行内序改按网格列序。
 _ROW_OVERLAP_MIN = 1.0
+# R9：同一逻辑行的取值行与其「同比增长」续行被 find_tables 拆成相邻两网格行，且
+# 取值格把多个子值并成单个单元、在 native 序中留下幻影空隙。行内按 native 分组的
+# 容差放宽到 4：足以吞掉取值格折叠子行产生的空隙（≤3），又不会跨产品（产品由
+# 网格行对隔开）。
+_NATIVE_MERGE_GAP = 4
 _WIRELESS_PLACEHOLDER = "·"  # text 策略空位占位符（清洗为空格）
 
 _YEAR_TOKEN_RE = re.compile(r"^\d{4}$")
@@ -741,27 +746,79 @@ def _emit_paragraphs(
     return ordinal
 
 
-def _row_text(
-    row: _TableRow, *, column_order: bool = False
-) -> tuple[str, tuple[tuple[int, int], ...]]:
+def _row_text(row: _TableRow) -> tuple[str, tuple[tuple[int, int], ...]]:
     """行文本与结构定位（表格发射的两条不变量落点）。
 
     I1（字符保真）：单元格之间只用换行，不插入原文里不存在的字符（旧实现插入
     ``" | "``，破坏了"去空白连续"的口径）。
     I2（顺序保真）：文本顺序服从页面原生阅读序（``native_pos``）；网格行列只作为
     locator 元数据随单元下发，绝不用于重排文本。
-    例外（R8 S4）：``column_order`` 的行是网格错乱行（跨栏续表左右行高不一致、
-    行 bbox 纵向重叠），双栏内容流的 native_pos 交错会把同一逻辑行拆散，改按
-    网格列序发射——左半列在前、右半列在行尾，与相邻网格行的右半续接。
+    R9：双栏并存（跨栏续表/无线预测表）被 find_tables 揉成一张合并网格时，网格
+    行 bbox 会与相邻行大量纵向重叠，把几乎整表误判为错乱行。universality 探针
+    已证明页面原生流（``native_pos`` 次序）即为 gold 引文的地面真值阅读序，按
+    网格列序强排反而会把左半列数值插进右半列标签与数值之间、打断引文连续
+    （图6 续表「尿素/产能/价格分位」即此类）。故行内一律按 ``native_pos`` 原生
+    阅读序发射。
     """
-    if column_order:
-        ordered = sorted(row.cells, key=lambda cell: cell.col)
-    else:
-        ordered = sorted(row.cells, key=lambda cell: (cell.native_pos, cell.col))
+    ordered = sorted(row.cells, key=lambda cell: (cell.native_pos, cell.col))
     return (
         "\n".join(cell.text for cell in ordered),
         tuple((cell.row, cell.col) for cell in ordered),
     )
+
+
+def _is_bare_data_row(row: _TableRow) -> bool:
+    """纯数值续行判定：整行只有数据形态单元格、无行标签/表头。
+
+    跨栏续表里，同一逻辑产品行的「产能值」与其「同比增长」续行会被 find_tables
+    拆成相邻两行：续行不含产品名等标签，全是数值。它不属于独立逻辑行，应并入
+    前一行，否则会把同一产品行的 e5 取值（24.0 28.5 28.5 - 18.8% 0.0%）切成个
+    独立单元。
+    """
+    return bool(row.cells) and all(
+        _is_data_like(cell.text) or cell.text.strip() in ("-", "–", "—", "/") for cell in row.cells
+    )
+
+
+def _native_groups(table: _Table) -> list[tuple[_TableCell, ...]]:
+    """把整表单元格重排为发射单元（R9 核心：以页面原生阅读序为主键）。
+
+    合并网格（跨栏续表/无线预测表被 find_tables 揉成一张）的 grid 行 bbox 互相
+    咬合错乱：同一逻辑行（如 R32「24.0 28.5 28.5 - 18.8% 0.0%」）会被拆进相邻
+    网格行，而相邻逻辑行的右半格又插进中间（第 10 页图6 续表 12 列）。per-grid
+    row 发射无法同时守住 e3/e4 与 e5：先按行序再行内 native 序，等于仍以错乱
+    的 grid 行作主键。universality 探针已证明页面原生流（``native_pos`` 次序）是
+    gold 引文的地面真值阅读序。因此先做两层归并，再按 native 连续性切成组、随后
+    跨组统一按 native 序发射：
+    - 逻辑行归并：纯数值续行并入前一逻辑行（R9 续行修复）；
+    - 组内归并：同一逻辑行内按 native 连续性切组，容差 ``_NATIVE_MERGE_GAP``
+      吞掉取值格折叠子行留下的幻影空隙（R9），使 e5 六个取值归入一个单元。
+
+    普通有线表每行自带标签、无续行、行内 native 连续，归并不触发、组 == 行，
+    行为不变。
+    """
+    combined: list[list[_TableCell]] = []
+    for row in table.rows:
+        if combined and _is_bare_data_row(row):
+            combined[-1].extend(row.cells)
+        else:
+            combined.append(list(row.cells))
+    groups: list[tuple[_TableCell, ...]] = []
+    for cells in combined:
+        ordered = sorted(cells, key=lambda cell: (cell.native_pos, cell.col))
+        segment: list[_TableCell] = []
+        for cell in ordered:
+            if segment and cell.native_pos - segment[-1].native_pos > _NATIVE_MERGE_GAP:
+                groups.append(tuple(segment))
+                segment = []
+            segment.append(cell)
+        if segment:
+            groups.append(tuple(segment))
+    # 跨行/跨组统一按原生阅读序发射：native 位最靠前的单元格所在组优先。
+    groups.sort(
+        key=lambda group: (min(cell.native_pos for cell in group), min(cell.col for cell in group))
+    )
+    return groups
 
 
 def _emit_table(
@@ -773,7 +830,7 @@ def _emit_table(
     units: list[CandidateUnit],
     issues: list[ReaderIssue],
 ) -> int:
-    """发射一张表的行单元，并按页级行流记账 overlap；返回新的 ordinal。"""
+    """发射一张表的连续组单元，并按页级行流记账 overlap；返回新的 ordinal。"""
     overlap = sum(1 for line in page_lines if _inside_any(line.bbox, [table.bbox]))
     if overlap:
         issues.append(
@@ -784,8 +841,8 @@ def _emit_table(
                 "已从正文单元剔除并计入表格行",
             )
         )
-    for row_index, row in enumerate(table.rows):
-        row_text, cells = _row_text(row, column_order=row_index in table.column_ordered_rows)
+    for group in _native_groups(table):
+        row_text, cells = _row_text(_TableRow(cells=group))
         if not row_text.strip():
             continue
         ordinal += 1
