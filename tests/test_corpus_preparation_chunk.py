@@ -111,10 +111,11 @@ def test_heading_without_following_content_kept_standalone() -> None:
     ]
     result = _chunk_of(units)
     headings = [c for c in result.chunks if c.kind == "heading"]
-    assert len(headings) == 1  # 「一、摘要」无后文，独立保留不删除
-    assert headings[0].search_text == "一、摘要"
+    assert len(headings) == 1  # R2：连续标题合并为单一 heading 块，文本与单元不退场
+    assert headings[0].search_text == "一、摘要\n二、风险提示"
+    assert headings[0].unit_ordinals == (1, 2)
     body = next(c for c in result.chunks if c.kind == "body")
-    assert body.title_text == "二、风险提示"
+    assert body.title_text == "一、摘要\n二、风险提示"  # 合并标题作为后文首块标题关联
     assert body.section_path == ("一、摘要", "二、风险提示")
 
 
@@ -260,6 +261,88 @@ def test_table_cell_index_text_carries_row_and_column_labels() -> None:
     # 无标签的合成单元（本文件其余表格用例）行为不变
     plain = _chunk_of([_unit(3, "指标|数值|期间", kind="table_row", reasons=("tbl[0]",))])
     assert next(c for c in plain.chunks if c.kind == "table").search_text == "指标|数值|期间"
+
+
+# --- B3 候选（chunk-4）：单格表行并入正文 / 连续标题合并 ---
+
+
+def test_single_cell_table_row_joins_body_run() -> None:
+    """B3-R1：单格 prose 表行（cells 恰 1 个）按正文装配，不被表格分组腰斩。"""
+    units = [
+        _unit(1, "正文第一段。" + "甲" * 100),
+        _unit(
+            2,
+            "8 月超预期的非农数据、回升的劳动参与率都指向就业市场韧性。",
+            kind="table_row",
+            reasons=("tbl[3]",),
+            page=1,
+            cells=((0, 0),),
+        ),
+        _unit(3, "正文第二段。" + "乙" * 100),
+        _unit(
+            4,
+            "真实表格行|数值",
+            kind="table_row",
+            reasons=("tbl[3]",),
+            page=1,
+            cells=((0, 0), (0, 8)),
+        ),
+    ]
+    result = _chunk_of(units)
+    tables = [c for c in result.chunks if c.kind == "table"]
+    bodies = [c for c in result.chunks if c.kind == "body"]
+    # 单格 prose 行并入正文 run，不出现在任何 table 块
+    assert 2 not in {o for c in tables for o in c.unit_ordinals}
+    assert any(2 in c.unit_ordinals for c in bodies)
+    # 多格真实表格行仍成 table 组（不受 R1 影响）
+    assert any(4 in c.unit_ordinals for c in tables)
+    verify_chunk_result(clean_reader_result(_reader(units)), result)
+
+
+def test_multi_cell_table_rows_keep_table_grouping() -> None:
+    """B3-R1 反例：多格行仍按表格分组，cells=()（合成/MD 行）不受影响。"""
+    units = [
+        _unit(1, "指标|数值", kind="table_row", reasons=("tbl[0]",)),  # cells=() 非单格
+        _unit(2, "营收|12.5 亿", kind="table_row", reasons=("tbl[0]",), cells=((1, 0), (1, 8))),
+        _unit(3, "净利|3.2 亿", kind="table_row", reasons=("tbl[0]",), cells=((2, 0), (2, 8))),
+    ]
+    result = _chunk_of(units)
+    tables = [c for c in result.chunks if c.kind == "table"]
+    assert len(tables) == 1
+    assert tables[0].unit_ordinals == (1, 2, 3)
+    assert [c.kind for c in result.chunks] == ["table"]
+    verify_chunk_result(clean_reader_result(_reader(units)), result)
+
+
+def test_consecutive_headings_merged_into_single_chunk() -> None:
+    """B3-R2：连续 heading 合并为单一 heading 块，避免标题拆行碎片块。"""
+    units = [
+        _unit(1, "光力科技（300480.SZ）", kind="heading"),
+        _unit(2, "2026 年中报点评：半导体划片机国内龙头，经营拐点向上", kind="heading"),
+        _unit(3, "公司发布新一期股权激励……" + "甲" * 60),
+    ]
+    result = _chunk_of(units)
+    headings = [c for c in result.chunks if c.kind == "heading"]
+    assert len(headings) == 1
+    assert headings[0].search_text == "光力科技（300480.SZ）\n2026 年中报点评：半导体划片机国内龙头，经营拐点向上"
+    assert headings[0].unit_ordinals == (1, 2)
+    body = next(c for c in result.chunks if c.kind == "body")
+    assert body.title_text == headings[0].search_text  # 合并标题作后文标题关联
+    verify_chunk_result(clean_reader_result(_reader(units)), result)
+
+
+def test_consecutive_headings_at_doc_end_merged_once() -> None:
+    """B3-R2：文档以连续 heading 收尾时合并为一块，不重复发布、不挂 pending。"""
+    units = [
+        _unit(1, "标题一", kind="heading"),
+        _unit(2, "标题二", kind="heading"),
+    ]
+    result = _chunk_of(units)
+    headings = [c for c in result.chunks if c.kind == "heading"]
+    assert len(headings) == 1
+    assert headings[0].search_text == "标题一\n标题二"
+    assert headings[0].unit_ordinals == (1, 2)
+    verify_chunk_result(clean_reader_result(_reader(units)), result)
 
 
 # --- 问答：问与答结构组，答案分段仍关联同一问题 ---

@@ -33,7 +33,9 @@ The investment-research Web product has two canonical product documents:
 | What comes next for research materials, structured data, and analysis? | [Unified execution plan](plan/claims-market-closed-loop-plan.md) |
 | What is the proposed source-to-index rebuild, and what must be verified before freezing it? | [Corpus preparation rebuild draft](plan/corpus-ingestion-rebuild-architecture.md) — candidate design, not implemented; authority and historical documents in §0 |
 | How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
+| How should Web business data, versioned inputs, and price-triggered analysis work? | [Web business data and persistence specification](design/web-business-data-prd.md) — planning draft; scope/status live in product requirements §4.7 |
 | How is it implemented? | [Technical architecture](tech-stack.md) |
+| What Web storage and traceability defects need repair? | [Web runtime and trace repair report](plan/web-runtime-trace-repair-report.md) — source/configuration findings, verification limits, and seven local repair issues; not implemented |
 
 `requirements-user-layer.md` is retained only as a compatibility link to the
 integrated requirements. Files under `docs/plan/` are implementation plans and
@@ -156,6 +158,7 @@ second set of commands:
 - `docs/corpus-retrieval.md`: the single source of truth for the current corpus retrieval protocol, Agent context wiring, retrieval limits, and CLI/TUI versus Web status;
 - `CONTEXT.md`: domain glossary only; it must not contain implementation or planning details;
 - `docs/design/investment-research-workbench-prd.md`: Web interaction expression of approved requirements, not a second product backlog;
+- `docs/design/web-business-data-prd.md`: delegated interaction, persistence contracts, and acceptance detail for product requirements §4.7; no separate scope/status ledger;
 - `docs/plan/`: implementation sequence and progress only; plans must link to requirement IDs rather than redefining them;
 - `docs/plan/README.md`: status index for active, implemented, historical, and invalidated plans;
 - `docs/install/`: environment-specific installation and deployment;

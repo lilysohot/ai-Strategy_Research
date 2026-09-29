@@ -1,0 +1,625 @@
+{
+  "artifact": "b4.3-publish-drill",
+  "version": 1,
+  "generated_at": "2026-09-29T03:15:28.884808+00:00",
+  "scope": "B4.3 isolated publish & rollback drill (real engine × i2_sandbox_corpus)",
+  "isolation": {
+    "production_dsn_read_only": true,
+    "write_target": "i2_sandbox_corpus",
+    "zero_model": true,
+    "source_archive": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260919-i3-1-e2e/archive",
+    "new_archive": "/home/administrator/FrontierAgent/.scratch/b4.3-publish-20260929/archive"
+  },
+  "phases": {
+    "phase1_seed_old_world": {
+      "seeded": [
+        {
+          "source_id": "174b64628f35aca6",
+          "old_build_id": "1227c2a34d05170a",
+          "generation": 1
+        },
+        {
+          "source_id": "6f14cc145b798b37",
+          "old_build_id": "58735cff57d8d456",
+          "generation": 1
+        },
+        {
+          "source_id": "793b39673d31e8a8",
+          "old_build_id": "7734638eca662be9",
+          "generation": 1
+        },
+        {
+          "source_id": "cc03f55bc5a24d3d",
+          "old_build_id": "e3820ab34c2e3326",
+          "generation": 1
+        },
+        {
+          "source_id": "dddc7cd0cb74d085",
+          "old_build_id": "a3b681fdd55d6e11",
+          "generation": 1
+        },
+        {
+          "source_id": "f8e316969b7cfdcd",
+          "old_build_id": "99bf1ba2456419fd",
+          "generation": 1
+        }
+      ],
+      "publications": {
+        "174b64628f35aca6": {
+          "current_decision_id": "9b22b10883a8f0369fbc224f…",
+          "active_build_id": "1227c2a34d05170a909604bc…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:29.991548+00:00"
+        },
+        "6f14cc145b798b37": {
+          "current_decision_id": "0f7248ec6acf14fe0fbb5b2a…",
+          "active_build_id": "58735cff57d8d456eee75ce0…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:30.542362+00:00"
+        },
+        "793b39673d31e8a8": {
+          "current_decision_id": "dc5a40db5afa363ecaac169e…",
+          "active_build_id": "7734638eca662be978d67c66…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:30.954778+00:00"
+        },
+        "cc03f55bc5a24d3d": {
+          "current_decision_id": "3eb4850d300a592eb62743a0…",
+          "active_build_id": "e3820ab34c2e332647f4e67b…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:31.158438+00:00"
+        },
+        "dddc7cd0cb74d085": {
+          "current_decision_id": "6c5bc7ad623d05ddfb9c17ac…",
+          "active_build_id": "a3b681fdd55d6e11713d7ad7…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:31.838798+00:00"
+        },
+        "f8e316969b7cfdcd": {
+          "current_decision_id": "656f4e279b8f0ce5bd026c3a…",
+          "active_build_id": "99bf1ba2456419fd14e9a1fe…",
+          "generation": 1,
+          "activated_at": "2026-09-29 03:15:32.105931+00:00"
+        }
+      }
+    },
+    "phase4a_old_snapshot": {
+      "queries": 30,
+      "query_form": "retrieval_query(question)（实质词元 OR，websearch 语法）",
+      "old_active_build_ids": [
+        "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+        "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+        "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+        "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+        "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+        "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+      ],
+      "old_fetch_refs": 235,
+      "hit_count": 600
+    },
+    "phase2_build_new": {
+      "policy_rev": "v1-20260915",
+      "builds": {
+        "174b64628f35aca6": {
+          "new_build_id": "e0ae24d43910b663494105ccee675106c9988858cf3c45656c12a4b1a4625ea2",
+          "decision_id": "d242109e8ea4d0e69fee5fc5ed605fd725d4e4881e2f9b4c13ed55546d63f1d2",
+          "parse_rev": "66dd8066788c56fd",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 1310,
+          "chunk_count": 101,
+          "gap_review_acknowledged": 10,
+          "gap_review_keys": [
+            "issue:image_region_unreadable:page:1",
+            "issue:image_region_unreadable:page:2",
+            "issue:table_lines_without_extraction:page:12",
+            "issue:table_lines_without_extraction:page:13",
+            "issue:table_lines_without_extraction:page:17",
+            "issue:table_lines_without_extraction:page:18",
+            "issue:table_lines_without_extraction:page:21",
+            "issue:table_lines_without_extraction:page:22",
+            "issue:table_lines_without_extraction:page:24",
+            "issue:table_lines_without_extraction:page:3"
+          ]
+        },
+        "6f14cc145b798b37": {
+          "new_build_id": "31713f910497a0913e70208a10645d1e1f83f9e4b310eb72970bc2404892e57a",
+          "decision_id": "237bea4b92ca9d90beca14a883183475d90e3dbd2baf62f533bd12468c1c3d20",
+          "parse_rev": "e0d2ab2a84865bd5",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 735,
+          "chunk_count": 33,
+          "gap_review_acknowledged": 1,
+          "gap_review_keys": [
+            "issue:image_region_unreadable:page:2"
+          ]
+        },
+        "793b39673d31e8a8": {
+          "new_build_id": "e33fceb7c94de7055f8545bcbe81ff6b25f5855efabb98003e05afa6e412473f",
+          "decision_id": "6a3ae1b6c697677e2eb1b16d8438d37b93ff63fbaf8c072d46f639fc7de2e832",
+          "parse_rev": "2d1fc6464b5c6db4",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 482,
+          "chunk_count": 39,
+          "gap_review_acknowledged": 1,
+          "gap_review_keys": [
+            "issue:table_lines_without_extraction:page:6"
+          ]
+        },
+        "cc03f55bc5a24d3d": {
+          "new_build_id": "cc7d97a6993ba8e87a145b03f9ca427a05db1aded05177fe1a19cb8136a8089d",
+          "decision_id": "952e0137e7511e99d4b99f6092cd2d7710464270f913482fffb41d88c5a6c244",
+          "parse_rev": "0f5ee31d810fb7bb",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 268,
+          "chunk_count": 30,
+          "gap_review_acknowledged": 0,
+          "gap_review_keys": []
+        },
+        "dddc7cd0cb74d085": {
+          "new_build_id": "0462ab6e0bc5c4e0767f49a21617ae27b0ddb53505ec8aa0bc68b4b3aa176f86",
+          "decision_id": "45c1cce0d0fe65fe598533491282ea27d74b5f552ee62e33d745c5516011e9ae",
+          "parse_rev": "983cfab143d58603",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 686,
+          "chunk_count": 74,
+          "gap_review_acknowledged": 1,
+          "gap_review_keys": [
+            "issue:image_region_unreadable:page:7"
+          ]
+        },
+        "f8e316969b7cfdcd": {
+          "new_build_id": "3abce890b39de45ca133d72d47b814259d8249bbc39600be2598ca28c9714904",
+          "decision_id": "c819129b3ccb4ee1537cc1cd0cc2e8640d91b7fa4f33ef3dce2f74bdee9c1d72",
+          "parse_rev": "c436ab19d4359c33",
+          "clean_rev": "f17753283f310fe8",
+          "chunk_rev": "b049422964255618",
+          "unit_count": 230,
+          "chunk_count": 22,
+          "gap_review_acknowledged": 0,
+          "gap_review_keys": []
+        }
+      }
+    },
+    "phase3_reproducibility": {
+      "reproducible": true,
+      "rows": [
+        {
+          "source_id": "174b64628f35aca6",
+          "gold_source_id": "2026-08-13_174b6462",
+          "new_units": 1310,
+          "expected_units": 1310,
+          "new_chunks": 101,
+          "expected_chunks": 101,
+          "kind_hist": {
+            "body": 57,
+            "heading": 22,
+            "table": 22
+          },
+          "expected_kind_hist": {
+            "body": 57,
+            "heading": 22,
+            "table": 22
+          },
+          "doc_norm_chars": 28513,
+          "expected_doc_norm_chars": 28513,
+          "mismatches": []
+        },
+        {
+          "source_id": "6f14cc145b798b37",
+          "gold_source_id": "2026-08-16_6f14cc14",
+          "new_units": 735,
+          "expected_units": 735,
+          "new_chunks": 33,
+          "expected_chunks": 33,
+          "kind_hist": {
+            "body": 16,
+            "heading": 2,
+            "table": 15
+          },
+          "expected_kind_hist": {
+            "body": 16,
+            "heading": 2,
+            "table": 15
+          },
+          "doc_norm_chars": 8817,
+          "expected_doc_norm_chars": 8817,
+          "mismatches": []
+        },
+        {
+          "source_id": "793b39673d31e8a8",
+          "gold_source_id": "2026-09-06_793b3967",
+          "new_units": 482,
+          "expected_units": 482,
+          "new_chunks": 39,
+          "expected_chunks": 39,
+          "kind_hist": {
+            "body": 27,
+            "heading": 6,
+            "table": 6
+          },
+          "expected_kind_hist": {
+            "body": 27,
+            "heading": 6,
+            "table": 6
+          },
+          "doc_norm_chars": 12370,
+          "expected_doc_norm_chars": 12370,
+          "mismatches": []
+        },
+        {
+          "source_id": "cc03f55bc5a24d3d",
+          "gold_source_id": "2026-09-06_cc03f55b",
+          "new_units": 268,
+          "expected_units": 268,
+          "new_chunks": 30,
+          "expected_chunks": 30,
+          "kind_hist": {
+            "body": 15,
+            "table": 15
+          },
+          "expected_kind_hist": {
+            "body": 15,
+            "table": 15
+          },
+          "doc_norm_chars": 13553,
+          "expected_doc_norm_chars": 13553,
+          "mismatches": []
+        },
+        {
+          "source_id": "dddc7cd0cb74d085",
+          "gold_source_id": "2026-09-06_dddc7cd0",
+          "new_units": 686,
+          "expected_units": 686,
+          "new_chunks": 74,
+          "expected_chunks": 74,
+          "kind_hist": {
+            "body": 42,
+            "heading": 7,
+            "table": 25
+          },
+          "expected_kind_hist": {
+            "body": 42,
+            "heading": 7,
+            "table": 25
+          },
+          "doc_norm_chars": 19822,
+          "expected_doc_norm_chars": 19822,
+          "mismatches": []
+        },
+        {
+          "source_id": "f8e316969b7cfdcd",
+          "gold_source_id": "2026-09-06_f8e31696",
+          "new_units": 230,
+          "expected_units": 230,
+          "new_chunks": 22,
+          "expected_chunks": 22,
+          "kind_hist": {
+            "body": 14,
+            "heading": 4,
+            "table": 4
+          },
+          "expected_kind_hist": {
+            "body": 14,
+            "heading": 4,
+            "table": 4
+          },
+          "doc_norm_chars": 8904,
+          "expected_doc_norm_chars": 8904,
+          "mismatches": []
+        }
+      ],
+      "failures": []
+    },
+    "phase4b_publish_new_identity": {
+      "published": [
+        {
+          "source_id": "174b64628f35aca6",
+          "new_build_id": "e0ae24d43910b663",
+          "generation": 2
+        },
+        {
+          "source_id": "6f14cc145b798b37",
+          "new_build_id": "31713f910497a091",
+          "generation": 2
+        },
+        {
+          "source_id": "793b39673d31e8a8",
+          "new_build_id": "e33fceb7c94de705",
+          "generation": 2
+        },
+        {
+          "source_id": "cc03f55bc5a24d3d",
+          "new_build_id": "cc7d97a6993ba8e8",
+          "generation": 2
+        },
+        {
+          "source_id": "dddc7cd0cb74d085",
+          "new_build_id": "0462ab6e0bc5c4e0",
+          "generation": 2
+        },
+        {
+          "source_id": "f8e316969b7cfdcd",
+          "new_build_id": "3abce890b39de45c",
+          "generation": 2
+        }
+      ],
+      "new_active_build_ids": [
+        "0462ab6e0bc5c4e0767f49a21617ae27b0ddb53505ec8aa0bc68b4b3aa176f86",
+        "31713f910497a0913e70208a10645d1e1f83f9e4b310eb72970bc2404892e57a",
+        "3abce890b39de45ca133d72d47b814259d8249bbc39600be2598ca28c9714904",
+        "cc7d97a6993ba8e87a145b03f9ca427a05db1aded05177fe1a19cb8136a8089d",
+        "e0ae24d43910b663494105ccee675106c9988858cf3c45656c12a4b1a4625ea2",
+        "e33fceb7c94de7055f8545bcbe81ff6b25f5855efabb98003e05afa6e412473f"
+      ],
+      "old_handle_preserved": {
+        "refs": 376,
+        "changed": 0,
+        "build_id_flipped": [],
+        "all_old_hits_vanished_from_search": true
+      },
+      "publications": {
+        "174b64628f35aca6": {
+          "current_decision_id": "d242109e8ea4d0e69fee5fc5…",
+          "active_build_id": "e0ae24d43910b663494105cc…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:57.705067+00:00"
+        },
+        "6f14cc145b798b37": {
+          "current_decision_id": "237bea4b92ca9d90beca14a8…",
+          "active_build_id": "31713f910497a0913e70208a…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:57.850678+00:00"
+        },
+        "793b39673d31e8a8": {
+          "current_decision_id": "6a3ae1b6c697677e2eb1b16d…",
+          "active_build_id": "e33fceb7c94de7055f8545bc…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:57.919345+00:00"
+        },
+        "cc03f55bc5a24d3d": {
+          "current_decision_id": "952e0137e7511e99d4b99f60…",
+          "active_build_id": "cc7d97a6993ba8e87a145b03…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:57.954438+00:00"
+        },
+        "dddc7cd0cb74d085": {
+          "current_decision_id": "45c1cce0d0fe65fe59853349…",
+          "active_build_id": "0462ab6e0bc5c4e0767f49a2…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:58.024103+00:00"
+        },
+        "f8e316969b7cfdcd": {
+          "current_decision_id": "c819129b3ccb4ee1537cc1cd…",
+          "active_build_id": "3abce890b39de45ca133d72d…",
+          "generation": 2,
+          "activated_at": "2026-09-29 03:15:58.061369+00:00"
+        }
+      }
+    },
+    "phase5_rollback_replay": {
+      "retired": [
+        {
+          "source_id": "174b64628f35aca6",
+          "active_build_id": null,
+          "generation": 3
+        },
+        {
+          "source_id": "6f14cc145b798b37",
+          "active_build_id": null,
+          "generation": 3
+        },
+        {
+          "source_id": "793b39673d31e8a8",
+          "active_build_id": null,
+          "generation": 3
+        },
+        {
+          "source_id": "cc03f55bc5a24d3d",
+          "active_build_id": null,
+          "generation": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085",
+          "active_build_id": null,
+          "generation": 3
+        },
+        {
+          "source_id": "f8e316969b7cfdcd",
+          "active_build_id": null,
+          "generation": 3
+        }
+      ],
+      "rolled_back": [
+        {
+          "source_id": "174b64628f35aca6",
+          "old_build_id": "1227c2a34d05170a",
+          "generation": 4
+        },
+        {
+          "source_id": "6f14cc145b798b37",
+          "old_build_id": "58735cff57d8d456",
+          "generation": 4
+        },
+        {
+          "source_id": "793b39673d31e8a8",
+          "old_build_id": "7734638eca662be9",
+          "generation": 4
+        },
+        {
+          "source_id": "cc03f55bc5a24d3d",
+          "old_build_id": "e3820ab34c2e3326",
+          "generation": 4
+        },
+        {
+          "source_id": "dddc7cd0cb74d085",
+          "old_build_id": "a3b681fdd55d6e11",
+          "generation": 4
+        },
+        {
+          "source_id": "f8e316969b7cfdcd",
+          "old_build_id": "99bf1ba2456419fd",
+          "generation": 4
+        }
+      ],
+      "replay": {
+        "search_hits_match_old_snapshot": true,
+        "search_diff_queries": [],
+        "fetch_refs": 0,
+        "fetch_all_unchanged": true,
+        "pagination_rollback_matches_old": true,
+        "page_diff_queries": [],
+        "rolled_back_active_build_ids": [
+          "1227c2a34d05170a909604bc87bb9f34e6ad97a07498287e63d9e7b71e79d4be",
+          "58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c",
+          "7734638eca662be978d67c661595bccd331d81ac1c5fb5ee43d620dd4fdffe84",
+          "99bf1ba2456419fd14e9a1fee796eb09ac5b13b9abd30dbfee4d839d9bfe07c2",
+          "a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93",
+          "e3820ab34c2e332647f4e67b3b8401aa092a8cc26ffbd5b49b374d68699c3f51"
+        ],
+        "old_build_active_again": true
+      },
+      "publications": {
+        "174b64628f35aca6": {
+          "current_decision_id": "9b22b10883a8f0369fbc224f…",
+          "active_build_id": "1227c2a34d05170a909604bc…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:22.883292+00:00"
+        },
+        "6f14cc145b798b37": {
+          "current_decision_id": "0f7248ec6acf14fe0fbb5b2a…",
+          "active_build_id": "58735cff57d8d456eee75ce0…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:23.003899+00:00"
+        },
+        "793b39673d31e8a8": {
+          "current_decision_id": "dc5a40db5afa363ecaac169e…",
+          "active_build_id": "7734638eca662be978d67c66…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:23.073594+00:00"
+        },
+        "cc03f55bc5a24d3d": {
+          "current_decision_id": "3eb4850d300a592eb62743a0…",
+          "active_build_id": "e3820ab34c2e332647f4e67b…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:23.119725+00:00"
+        },
+        "dddc7cd0cb74d085": {
+          "current_decision_id": "6c5bc7ad623d05ddfb9c17ac…",
+          "active_build_id": "a3b681fdd55d6e11713d7ad7…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:23.238724+00:00"
+        },
+        "f8e316969b7cfdcd": {
+          "current_decision_id": "656f4e279b8f0ce5bd026c3a…",
+          "active_build_id": "99bf1ba2456419fd14e9a1fe…",
+          "generation": 4,
+          "activated_at": "2026-09-29 03:16:23.329934+00:00"
+        }
+      }
+    }
+  },
+  "old_world_sources": [
+    {
+      "source_id": "174b64628f35aca6",
+      "old_build_id": "1227c2a34d05170a",
+      "review": "i3e1-approved-2cd3cadcf9",
+      "decision_id": "9b22b10883a8f036",
+      "units": 1255,
+      "chunks": 291
+    },
+    {
+      "source_id": "6f14cc145b798b37",
+      "old_build_id": "58735cff57d8d456",
+      "review": "i3e1-approved-2b36f14b42",
+      "decision_id": "0f7248ec6acf14fe",
+      "units": 727,
+      "chunks": 36
+    },
+    {
+      "source_id": "793b39673d31e8a8",
+      "old_build_id": "7734638eca662be9",
+      "review": "i3e1-approved-9cdca024d2",
+      "decision_id": "dc5a40db5afa363e",
+      "units": 512,
+      "chunks": 187
+    },
+    {
+      "source_id": "cc03f55bc5a24d3d",
+      "old_build_id": "e3820ab34c2e3326",
+      "review": "i3e1-approved-43300146a2",
+      "decision_id": "3eb4850d300a592e",
+      "units": 243,
+      "chunks": 32
+    },
+    {
+      "source_id": "dddc7cd0cb74d085",
+      "old_build_id": "a3b681fdd55d6e11",
+      "review": "i3e1-approved-dd259586a3",
+      "decision_id": "6c5bc7ad623d05dd",
+      "units": 786,
+      "chunks": 206
+    },
+    {
+      "source_id": "f8e316969b7cfdcd",
+      "old_build_id": "99bf1ba2456419fd",
+      "review": "i3e1-approved-f269774bb4",
+      "decision_id": "656f4e279b8f0ce5",
+      "units": 229,
+      "chunks": 55
+    }
+  ],
+  "summary": {
+    "sources": 6,
+    "old_total_units": 3752,
+    "old_total_chunks": 807,
+    "new_total_units": 3711,
+    "new_total_chunks": 299,
+    "generation_sequence": {
+      "phase1_old_publish": {
+        "174b64628f35aca6": 1,
+        "6f14cc145b798b37": 1,
+        "793b39673d31e8a8": 1,
+        "cc03f55bc5a24d3d": 1,
+        "dddc7cd0cb74d085": 1,
+        "f8e316969b7cfdcd": 1
+      },
+      "phase4b_new_publish": {
+        "174b64628f35aca6": 2,
+        "6f14cc145b798b37": 2,
+        "793b39673d31e8a8": 2,
+        "cc03f55bc5a24d3d": 2,
+        "dddc7cd0cb74d085": 2,
+        "f8e316969b7cfdcd": 2
+      },
+      "phase5_retire": {
+        "174b64628f35aca6": 3,
+        "6f14cc145b798b37": 3,
+        "793b39673d31e8a8": 3,
+        "cc03f55bc5a24d3d": 3,
+        "dddc7cd0cb74d085": 3,
+        "f8e316969b7cfdcd": 3
+      },
+      "phase5_rollback_old": {
+        "174b64628f35aca6": 4,
+        "6f14cc145b798b37": 4,
+        "793b39673d31e8a8": 4,
+        "cc03f55bc5a24d3d": 4,
+        "dddc7cd0cb74d085": 4,
+        "f8e316969b7cfdcd": 4
+      }
+    },
+    "checks": {
+      "1_reproducible": true,
+      "2_identity_bound_new": true,
+      "3_old_build_still_available": true,
+      "4_old_cursor_not_upgraded": true,
+      "5_rollback_restores_compatible": true
+    },
+    "models_absent": true
+  }
+}

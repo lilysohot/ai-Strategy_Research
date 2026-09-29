@@ -22,6 +22,9 @@
 - 表格：以行为原子，按（页码/元素, 表序）分组——跨页不靠位置猜接，页界即分组
   边界（延续关系未验证前不连接，保守分开）；同组超上限按完整行分块，续块以
   首行（列头）作引用式 context 携带；单元格永不切断。
+- B3 候选（chunk-4，B4 组合对照验证中）：单格表格行（``cells`` 恰 1 个，PDF
+  单格 prose 行误判）按正文 run 装配，不被表格分组腰斩；连续 heading 单元合并
+  为单一 heading 块，不产生标题拆行碎片块。多格真实表格行与单行标题行为不变。
 - 超长不可安全拆分单元：保留原文独立成块并标 ``oversized_unsplittable`` 复核，
   不截断后宣称完整，不自动当常规块发布。
 - 噪声/待复核/需 OCR 区域不进入任何检索块（其状态已由清洗台账承载）。
@@ -39,7 +42,7 @@ from plugins.corpus.preparation.clean import CleanRegion, CleanResult
 from plugins.corpus.preparation.contract import CHUNK_KINDS, UnitStatus
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderResult
 
-CHUNK_REV = "chunk-3"
+CHUNK_REV = "chunk-4"
 
 
 def normalize_search_text(text: str) -> str:
@@ -197,6 +200,16 @@ def _table_row_pieces(ordinal: int, text: str, prefix: str) -> list[_Piece]:
         prefixed = f"{prefix}\n{piece.text}"
         out.append(_Piece(piece.ordinals, prefixed, piece.oversized or len(prefixed) > HARD_LIMIT))
     return out
+
+
+def _is_single_cell_row(unit: CandidateUnit | None) -> bool:
+    """单格表格行判定（B3 候选 R1）。
+
+    PDF 把单格 prose 行误判为表格（如正文句子被拆进 table 块）时以
+    ``len(cells)==1`` 识别并按正文处理。判定必须为 ``==1`` 而非 ``<=1``：
+    ``cells=()``（Markdown/docx 行与合成用例常态）不能误伤真实表格行。
+    """
+    return unit is not None and len(unit.location.cells) == 1
 
 
 def _table_group_key(
@@ -389,16 +402,41 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
         kind = region.kind
         text = region.clean_view or ""
         if kind in _HEADING_KINDS:
-            section_path.append(text)
-            del section_path[:-3]
-            if index + 1 < len(kept) and kept[index + 1][1].kind in _HEADING_KINDS:
-                # 无后文的标题独立保留，不按最小长度删除有效信号。
-                emit(
-                    [_Piece((ordinal,), text)], kind="heading", title=None, path=tuple(section_path)
-                )
-            else:
-                pending_title, pending_title_ordinal = text, ordinal
+            # R2（B3 候选 chunk-4）：连续 heading 单元合并为单一 heading 块，避免
+            # 标题拆行产生多个碎片块导致引文跨块；文本与单元都不退场。单行标题
+            # 维持既有行为（有后文作标题关联、无后文独立保留）。
+            heading_run = [(ordinal, text)]
             index += 1
+            while index < len(kept) and kept[index][1].kind in _HEADING_KINDS:
+                heading_run.append((kept[index][0], kept[index][1].clean_view or ""))
+                index += 1
+            if len(heading_run) == 1:
+                section_path.append(text)
+                del section_path[:-3]
+                if index < len(kept):
+                    pending_title, pending_title_ordinal = text, ordinal
+                else:
+                    emit(
+                        [_Piece((ordinal,), text)],
+                        kind="heading",
+                        title=None,
+                        path=tuple(section_path),
+                    )
+                continue
+            for heading_text in (ht for _, ht in heading_run):
+                section_path.append(heading_text)
+                del section_path[:-3]
+            merged_text = "\n".join(item_text for _, item_text in heading_run)
+            merged_ordinals = tuple(item_ordinal for item_ordinal, _ in heading_run)
+            emit(
+                [_Piece(merged_ordinals, merged_text)],
+                kind="heading",
+                title=None,
+                path=tuple(section_path),
+            )
+            if index < len(kept):
+                # 后文存在：合并标题作为后文首块标题关联（不按最小长度删除有效信号）。
+                pending_title, pending_title_ordinal = merged_text, merged_ordinals[0]
             continue
         if kind == _LIST_KIND:
             run: list[tuple[int, CleanRegion]] = []
@@ -422,9 +460,13 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
                 title_ordinal=title_ordinal,
             )
             continue
-        if kind == _TABLE_KIND:
+        if kind == _TABLE_KIND and not _is_single_cell_row(unit_by_ordinal.get(ordinal)):
             run = []
-            while index < len(kept) and kept[index][1].kind == _TABLE_KIND:
+            while (
+                index < len(kept)
+                and kept[index][1].kind == _TABLE_KIND
+                and not _is_single_cell_row(unit_by_ordinal.get(kept[index][0]))
+            ):
                 run.append(kept[index])
                 index += 1
             title, pending_title = pending_title, None
@@ -492,7 +534,13 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
         run = []
         while index < len(kept):
             run_ordinal, run_region = kept[index]
-            if run_region.kind in _HEADING_KINDS or run_region.kind in (_LIST_KIND, _TABLE_KIND):
+            if run_region.kind in _HEADING_KINDS or run_region.kind == _LIST_KIND:
+                break
+            # R1（B3 候选 chunk-4）：单格 prose 表行按正文装配，不再被表格分组腰斩；
+            # 多格真实表格行仍作表格边界断组。
+            if run_region.kind == _TABLE_KIND and not _is_single_cell_row(
+                unit_by_ordinal.get(run_ordinal)
+            ):
                 break
             if run_region.kind == "paragraph" and _QUESTION_TURN.match(run_region.clean_view or ""):
                 break

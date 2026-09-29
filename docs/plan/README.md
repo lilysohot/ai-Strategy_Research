@@ -17,6 +17,7 @@
 | [排除纪要后的测试结论](../../.scratch/corpus-evidence-pipeline/r2-nonminutes-report-v1.md) | 非纪要范围仍未通过：v13重评分24/25；当前P4为24义务、4合法/4非法/16未评估；55项基础工程测试通过，1项PG跳过，新增模型调用0 |
 | [R2 P1 Interface 与验收契约](r2-p1-interface-contract.md) | P1 前瞻设计冻结：有限候选不冒充已验证原子命题；终态、容量、运行时/开发评分分离；不是生产验收 |
 | [Web 平台加固计划](web-platform-hardening.md) | 历史实施与后续加固范围保留；2026-09-14 用户决定 Web 后续工作暂缓，先打通 CLI 数据链路 |
+| [Web 运行存储与轨迹追溯缺陷修复报告](web-runtime-trace-repair-report.md) | 2026-09-29 静态核查报告；7 项发现已拆成本地 issue，待分诊与实施；不改变既有排期，备份/清理验收归并 T5/T6 |
 
 ## 已实施的设计与决策记录
 

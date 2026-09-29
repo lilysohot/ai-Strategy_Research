@@ -1,8 +1,12 @@
 # 02 · 解析、清洗与切块的受控改进（B0–B4）
 
-> 修订：v4 · 2026-09-29。状态：B0 已实施（准备层归因，零模型、只读、固定金标集，见
+> 修订：v7 · 2026-09-29。状态：B0 已实施（准备层归因，零模型、只读、固定金标集，见
 > [B0 归因报告](../../.scratch/b0-attribution-20260928/report.md)）；B1 的已定位 reader 缺陷已修复为
-> `reader-pdf-7`，尚未构建候选 build 或发布；B2–B4 未实施。
+> `reader-pdf-7`，并经 B4.1 **B1-only 分项对照**（2026-09-29）验证**单独通过**（11 改善／0 回归／
+> 零字符丢失）；B3 候选规则（chunk-4：R1 单格表行并入正文、R2 连续标题合并）已实现并经
+> B4.1 **B4 组合对照**（2026-09-29）验证（B3-only 恢复 17/20、B1+B3 同集、0 回归、0 字符丢失、
+> chunk 合计 −508）；**B4.3 隔离发布与回滚演练（2026-09-29）已执行，五项契约全部通过**，见
+> [§B4.3 执行结果](#b43-执行结果2026-09-29)；尚未重建生产语料、未切换生产指针；B2 未实施。
 > 关联：[总览](README.md)、[消费侧方案](01-table-recovery.md)。
 
 本方案只在准备产物存在可复现缺陷时，改进 reader、clean 或 chunk。目标是保存正确的原文、阅读序和结构关系，同时改善检索与取证；短块和特殊符号的数量不作为单独的通过标准。
@@ -60,7 +64,8 @@
 固定查询下检索召回非主因，不能外推到「无任何检索缺陷」，故不下「也非检索召回不足」的
 强结论（见 [归因报告 §5 限制](../../.scratch/b0-attribution-20260928/report.md)）。
 据此 B1（reader 分组）与 B3（chunk 边界）有证据、B2（噪声）无证据；缺陷为局部逐表/逐段，
-符合「缺陷清单而非整体重建」的定位，是否值得改由 B4 分项对照决定。
+符合「缺陷清单而非整体重建」的定位，是否值得改由 B4 分项对照决定。B1-only 分项对照已于
+2026-09-29 执行，结论见 [B4.1 对照执行](#b41-对照执行2026-09-29)。
 
 ## B1 · reader：保留文本，谨慎调整分组
 
@@ -87,8 +92,8 @@ reader 现保留原生文本块的行数与字号范围：同一多行块字号�
 `reader-pdf-7`。真实样本中“公司发布新一期股权激励……”至“营业收入触发\n值”的六行原文现为
 一个 215 字符的 `paragraph`，原始换行保留。
 
-本轮仅完成代码和 PDF 回归验证，未构建候选 build、重建语料或切换发布指针；B4 的独立样本对照、
-隔离 build 验证与发布／回滚演练仍是后续门槛。
+本轮代码修复后经 PDF 回归验证与 B4.1 B1-only 分项对照（2026-09-29，11 改善／0 回归）通过；
+仍未构建可发布候选 build、重建语料或切换发布指针；B4 的隔离 build 验证与发布／回滚演练仍是后续门槛。
 
 ### B1.2 特殊符号与列表处理
 
@@ -164,6 +169,91 @@ reader 现保留原生文本块的行数与字号范围：同一多行块字号�
 
 不要求三个候选全部实施。准备层指标和端到端任务指标一起报告；一个候选若只有块数减少、没有质量或成本收益，可以不采纳。
 
+### B4.1 对照执行（2026-09-29）
+
+B1-only 分项对照已执行，脚本与产物见
+[.scratch/b1-comparison-20260929/](../../.scratch/b1-comparison-20260929/)（`b1_comparison.py`／
+`report.md`／`b1_comparison.json`）。固定样本同 B0（30 题／99 target／6 来源），仅 reader
+候选逻辑变化（`_is_heading` 新增 `uniform_multiline_block`，clean-3／chunk-3 不变）；零模型
+（import 陷阱）、PG 只读，新产物由归档副本经 reader-pdf-7 → clean → chunk 纯内存重建，
+不写库、不建索引、不发布，符合 B4.3「只读源和新的产物位置」。
+
+**冻结规则**（仍以代码常量表达，本次对照验证后冻结）：
+
+> `uniform_multiline_block`：PDF 原生多行文本块（`block_line_count > 1`）内字号一致
+> （`block_max_size − block_min_size ≤ max(0.5, block_max_size × 0.05)`）时，该行**不判为
+> 标题**，按正文进入段落装配，无论行字号是否高于页中位数；块内存在明显字号层次时仍走
+> 原字号规则。原因：研报页混排小字号表格／页脚拉低页中位数，连续正文每行都「高于中位数」
+> 而被误拆为 heading。
+
+**结果（99 target）**：
+
+| 转移 | 数量 |
+|---|---|
+| `chunking_impact → ok` | **11**（company-004 e1/e2/a-2/a-3、company-005 e1–e5、company-008 a-3/a-5，均来自 dddc7cd0，即 B0 F1 标题误判缺陷本体） |
+| `chunking_impact → chunking_impact` | 9（残留，跨 `body`/`table` 边界，属 B3 证据） |
+| `ok → ok` | **75** |
+| `ok → *非 ok*` | **0（无回归）** |
+| `structure_error → structure_error` | 4（F2/F3 未变化，不在 B1 作用面） |
+
+**B1.3 原文保护核验（6/6 来源通过）**：`chars_lost=0`、`chars_gained=0`；旧单元逐字仍是
+新文档连续子串（`old_unit_not_contiguous_in_new=[]`）；旧单元序列在新文档中为**有序子序列**
+（无跨单元重排）。`old_chunks_broken=98` 属块重分组（单元合并改变块边界），由单元级有序
+子序列 + 零字符丢失排除真实阅读序损伤。
+
+**结论**：B1 **单独通过**——分组改善（11/20 标题误判目标恢复单块可取），零字符丢失、零
+阅读序损伤，75 个 `ok` 零回归，满足 §B1.3「对照修改前初始提取 + 字符覆盖 + 阅读序」门槛。
+残留 9 条（macro-001 e3、macro-002 e4、macro-003 a-2/a-4/e2、company-007 e1/e2、
+company-008 a-1/a-2）与 structure_error 4 条分别归 B3 与表格结构通道，不否决 B1。
+下一步：由 B4 组合对照（单项通过的候选组合）决定 B3 是否有必要实施；B4.3 的隔离 build
+验证与发布／回滚演练仍属发布级事项——本对照为对照验证，未构建可发布 build、未重建语料、
+未切换指针。
+
+### B4.1 组合对照（2026-09-29，B3-only + B1+B3）
+
+B3 候选规则以 `chunk.py` 代码实现并冻结（`CHUNK_REV = "chunk-4"`），与 B1-only 相同基线
+（30 题／99 target／6 来源）跑两个变体：**B3-only**（旧 PG 单元反投影 + chunk-4，不换
+reader）与 **B1+B3**（归档副本重读 reader-pdf-7 → clean → chunk-4）。脚本与产物见
+[.scratch/b4-combined-20260929/](../../.scratch/b4-combined-20260929/)（`b4_combined.py`／
+`report.md`／`b4-combined-comparison.json`）。零模型、PG 只读、纯内存重建，符合 B4.3。
+
+**冻结规则（B3，chunk-4）**：
+
+> **R1 单格表行**：`table_row` 且 `len(location.cells)==1` 时按正文 run 装配——PDF 把
+> 单格 prose 行误判为表格（正文句子被腰斩进 table 块）时恢复连续。判定必须 `==1` 而非
+> `<=1`：`cells=()`（MD/docx 行与合成用例常态）不能误伤真实表格行。
+>
+> **R2 连续标题合并**：连续 heading 单元（无正文隔开）合并为单一 heading 块（文本
+> `"\n"` 拼接），单行标题维持既有行为——消除标题拆行产生的碎片块。
+
+**结果（99 target）**：
+
+| 转移（相对 base） | `b1`（B1-only） | `b3`（B3-only） | `b1b3`（B1+B3） |
+|---|---|---|---|
+| `chunking_impact → ok` | 11 | **17** | **17** |
+| `chunking_impact → chunking_impact` | 9 | 3 | 3 |
+| `ok → ok` | 75 | 75 | 75 |
+| `ok → 非 ok` | 0 | **0** | **0** |
+| `structure_error → structure_error` | 4 | 4 | 4 |
+
+- **恢复集嵌套**：`b1` 恢复 11 条 ⊂ `b3` 恢复 17 条，`b3 == b1b3`（恢复集完全相同）。
+  `b3 − b1` 恰为预测的 6 条：macro-001 e3／macro-002 e4／macro-003 a-2/a-4/e2
+  （`793b3967`，单格表行，R1）+ company-008 a-2（`dddc7cd0`，标题拆两行，R2）。
+  → 17 条可修残留根因都在 chunk 装配层，B3 单独即可全部恢复（B1 的 11 条同一批目标被覆盖）。
+- **残留 3 条（chunk 层不可修）**：company-007 e1/e2、company-008 a-1（`6f14cc14`），
+  `in_concat=True` 且 `in_single_chunk_any=False`——引文位于 **NOISE 单元**（clean_view 空、
+  按设计不进块；running-header 去重误伤标题首行、免责 fact-keep 切句），根因在 clean 层，
+  记 **B2/clean 层证据**，不否决 B3。
+- **文档级核验**：`chars_lost=0`、`old_unit_not_contiguous_in_new=[]`；`old_chunks_broken=98`
+  与 B1-only 逐来源完全一致（30/17/4/19/19/9），chunk-4 未新增任何块断裂。
+- **成本**：chunk 合计 807 → `b3` 322（−485）→ `b1b3` 299（−508），heading 碎片块基本消除、
+  单格表行回正文；覆盖不变（0 回归），索引/检索成本净下降，块均变大（粒度变粗）是唯一权衡。
+
+**结论**：**B3 有必要实施**（chunk-4 R1/R2），单独即恢复全部 17 条可修残留；**B1+B3 组合
+不引入新错误、综合成本净下降**（−508 chunk、0 回归、0 字符丢失）。B1 与 B3 不冲突，发布时
+一并冻结；3 条 NOISE 残留为 clean 层证据，另行归 B2。对照为验证性，未构建可发布 build、
+未重建语料、未切换指针；B4.3 隔离发布演练已于 2026-09-29 执行（见下）。
+
 ### B4.2 revision 和重建范围
 
 核对时现有版本为 `reader-pdf-6`、`clean-3`、`chunk-3`。这些是本次评审基线，不是预定的下一个发布号。
@@ -189,6 +279,32 @@ reader 现保留原生文本块的行数与字号范围：同一多行块字号�
 5. 回滚时能够恢复完整兼容组合，并重放旧引用、检索和分页请求。
 
 “切换指针”只有在上述兼容条件验证成立时才可作为具体步骤，不能单独代表可回滚。记录回滚步骤、缓存处理及实际演练结果，而非只保留旧 revision 常量。
+
+### B4.3 执行结果（2026-09-29）
+
+演练在隔离环境完成：**零模型**（`DenyModels` MetaPathFinder 拒绝 openai/anthropic 及
+`material_semantics`/`_r2_`）、只读源（i3-1 e2e 审计归档副本）、仅向隔离库
+`i2_sandbox_corpus` 写入、生产连接显式 `SET default_transaction_read_only=on`，新产物
+全部落在 `.scratch/b4.3-publish-20260929/`（脚本
+[b43_publish_drill.py](../../.scratch/b4.3-publish-20260929/b43_publish_drill.py)、结果
+[b43-publish-drill.json](../../.scratch/b4.3-publish-20260929/b43-publish-drill.json)、
+[报告 report.md](../../.scratch/b4.3-publish-20260929/report.md)）。
+
+- **五项契约全部通过**：① 新 build 由真实引擎 `reader-pdf-7`+`clean-3`+`chunk-4` 重建，
+  units 3711／chunks 299 与 B4.1 b1b3 期望逐来源全等、`_verify_publication_ready` 通过；
+  ② 新发布后检索命中绑定新 build 集、旧句柄逐字不变；③ 旧 build 在活动期仍可逐字取回
+  （376 引用 0 changed）；④ 固定快照先于发布取定、发布后旧引用重放与旧快照逐条一致；
+  ⑤ retire→复位指针→重发旧 build，重放检索/取回/分页与发布前旧快照逐条全等。
+- **Generation 序列**（每来源一致）：旧 gen1 → 新 gen2 → retire gen3 → 回滚旧 gen4。
+- **记录的限制**：Store Seam 无指针回退 API（`put_admission` 只前移
+  `current_decision_id`），回滚以操作者 SQL 复位指针后走正式 `publish_build` 重发；
+  新 build 与旧 build 阻断缺口同码（`image_region_unreadable`/`table_lines_without_extraction`），
+  须对新 build 指纹重签 `human-gap-review` 凭证（演练由操作者代签 4/6，2/6 全为非阻断默认
+  放行）；快照比对基于产品候选查询 `retrieval_query`（问题原文在 websearch 语义下 0 命中，
+  非本次演练缺陷）。
+- 预检：ruff／pyright／pytest（发布/回放子集 20 + PG 17 真跑 + chunk 20）全绿。本次另修正
+  B3 会话遗留的 [chunk.py](../../plugins/corpus/preparation/chunk.py) R2 标题合并分支变量
+  复用导致的 4 处 pyright 类型冲突（`run`→`heading_run`，仅改名、行为不变）。
 
 ## 2. 验收与停止条件
 
