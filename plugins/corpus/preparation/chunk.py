@@ -22,9 +22,10 @@
 - 表格：以行为原子，按（页码/元素, 表序）分组——跨页不靠位置猜接，页界即分组
   边界（延续关系未验证前不连接，保守分开）；同组超上限按完整行分块，续块以
   首行（列头）作引用式 context 携带；单元格永不切断。
-- B3 候选（chunk-4，B4 组合对照验证中）：单格表格行（``cells`` 恰 1 个，PDF
-  单格 prose 行误判）按正文 run 装配，不被表格分组腰斩；连续 heading 单元合并
-  为单一 heading 块，不产生标题拆行碎片块。多格真实表格行与单行标题行为不变。
+- B3 候选（chunk-5，含 E3 守卫）：单格表格行（``cells`` 恰 1 个，PDF 单格 prose
+  行误判）仅在与同表其他行结构关联且无注释框语义时按正文 run 装配，孤行成框或
+  注释框保守保留表格身份；连续 heading 单元仅在同栏（bbox 横向重叠）且文档收尾
+  时后者非新章节序号起头才合并为单一 heading 块。多格真实表格行与单行标题不变。
 - 超长不可安全拆分单元：保留原文独立成块并标 ``oversized_unsplittable`` 复核，
   不截断后宣称完整，不自动当常规块发布。
 - 噪声/待复核/需 OCR 区域不进入任何检索块（其状态已由清洗台账承载）。
@@ -35,6 +36,7 @@
 
 from __future__ import annotations
 
+import itertools
 import re
 from dataclasses import dataclass
 
@@ -42,7 +44,7 @@ from plugins.corpus.preparation.clean import CleanRegion, CleanResult
 from plugins.corpus.preparation.contract import CHUNK_KINDS, UnitStatus
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderResult
 
-CHUNK_REV = "chunk-4"
+CHUNK_REV = "chunk-5"
 
 
 def normalize_search_text(text: str) -> str:
@@ -74,6 +76,19 @@ _LIST_KIND = "list_item"
 
 _QUESTION_TURN = re.compile(r"^(?:问|提问者|提问|投资者)\s*[：:]")
 _SENTENCE_END = re.compile(r"[。！？!?；;…]")
+# E3 守卫信号（chunk-5）：注释/来源框前缀（R1 不并入正文）；新章节序号起头
+# （R2 文档收尾连续标题保守不合并）。
+_NOTE_TEXT_PREFIX = re.compile(
+    r"^\s*(?:注\s*[：:]|注释\s*[：:]?|资料来源\s*[：:]?|数据来源\s*[：:]?|来源\s*[：:])"
+)
+_SECTION_NUMBER_PREFIX = re.compile(
+    r"^\s*(?:[一二三四五六七八九十百]+\s*[、.．]"
+    r"|\d+\s*[、.．]"
+    r"|\d+(?:\.\d+)+"
+    r"|[（(]\s*[一二三四五六七八九十百]+\s*[）)]"
+    r"|第\s*[一二三四五六七八九十百\d]+\s*[部章节篇])"
+)
+_COLUMN_GAP_EPS = 2.0  # bbox 横向重叠判定的浮点容差（pt）
 
 
 class ChunkError(ValueError):
@@ -203,11 +218,12 @@ def _table_row_pieces(ordinal: int, text: str, prefix: str) -> list[_Piece]:
 
 
 def _is_single_cell_row(unit: CandidateUnit | None) -> bool:
-    """单格表格行判定（B3 候选 R1）。
+    """单格表格行判定（B3 候选 R1 的 cells 原语）。
 
-    PDF 把单格 prose 行误判为表格（如正文句子被拆进 table 块）时以
-    ``len(cells)==1`` 识别并按正文处理。判定必须为 ``==1`` 而非 ``<=1``：
-    ``cells=()``（Markdown/docx 行与合成用例常态）不能误伤真实表格行。
+    ``len(cells)==1`` 是伪表格 prose 行的必要非充分条件：是否并入正文由
+    :func:`_pseudo_single_cell_rows` 的结构/语义守卫裁决。判定必须为 ``==1``
+    而非 ``<=1``：``cells=()``（Markdown/docx 行与合成用例常态）不能误伤真实
+    表格行。
     """
     return unit is not None and len(unit.location.cells) == 1
 
@@ -224,6 +240,62 @@ def _table_group_key(
         element = unit.location.element or ""
     tbl = next((reason for reason in region.reasons if reason.startswith("tbl[")), "")
     return (page or element.split(":")[0], tbl)
+
+
+def _pseudo_single_cell_rows(
+    kept: list[tuple[int, CleanRegion]], unit_by_ordinal: dict[int, CandidateUnit]
+) -> frozenset[int]:
+    """伪表格 prose 行集合（B3-R1 + E3 守卫）：单格行并入正文需正向证据。
+
+    仅当单格行与同表其他行存在结构关联（同分组 ≥2 行——真实 prose 行成组出现，
+    如 793b3967 的整段逐行误判），且同组无注释/来源框语义（注：/资料来源等前缀）
+    时按正文装配；孤行成框或注释框判不准，保守保留表格身份。
+    """
+    groups: dict[tuple[str, str], list[tuple[int, CleanRegion]]] = {}
+    for ordinal, region in kept:
+        if region.kind == _TABLE_KIND:
+            groups.setdefault(_table_group_key(unit_by_ordinal, ordinal, region), []).append(
+                (ordinal, region)
+            )
+    pseudo: set[int] = set()
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        if any(_NOTE_TEXT_PREFIX.match(region.clean_view or "") for _, region in members):
+            continue
+        pseudo.update(
+            ordinal for ordinal, _ in members if _is_single_cell_row(unit_by_ordinal.get(ordinal))
+        )
+    return frozenset(pseudo)
+
+
+def _same_column(prev: CandidateUnit | None, nxt: CandidateUnit | None) -> bool:
+    """同栏判定（R2 守卫）：同页双方均有 bbox 时要求横向区间重叠（含浮点容差）。
+
+    任一方缺页码/bbox、或跨页（无并排可能，标题拆页续行保守允许合并）时不反对。
+    """
+    if prev is None or nxt is None or prev.location.page is None or nxt.location.page is None:
+        return True
+    if prev.location.page != nxt.location.page:
+        return True
+    prev_bbox, next_bbox = prev.location.bbox, nxt.location.bbox
+    if prev_bbox is None or next_bbox is None:
+        return True
+    gap = max(next_bbox[0] - prev_bbox[2], prev_bbox[0] - next_bbox[2], 0.0)
+    return gap <= _COLUMN_GAP_EPS
+
+
+def _headings_mergeable(
+    prev: CandidateUnit | None, nxt: CandidateUnit | None, next_text: str, *, at_doc_end: bool
+) -> bool:
+    """相邻 heading 可合并判定（B3-R2 + E3 守卫）：同栏且确属同一标题拆行。
+
+    多栏并排（bbox 横向分离）一律不合并；文档收尾的连续标题没有后文佐证，
+    后者以新章节序号（一、/1./（一）等）起头时保守视为独立章节不合并。
+    """
+    if not _same_column(prev, nxt):
+        return False
+    return not (at_doc_end and _SECTION_NUMBER_PREFIX.match(next_text))
 
 
 def verify_chunk_result(clean: CleanResult, result: ChunkResult) -> None:
@@ -274,6 +346,7 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
     """对保留区做结构优先切块：章节/段落/句界 + 问答/表格/列表分组 + 超长复核。"""
     kept = _kept_regions(reader_result, clean)
     unit_by_ordinal: dict[int, CandidateUnit] = {unit.ordinal: unit for unit in reader_result.units}
+    pseudo_rows = _pseudo_single_cell_rows(kept, unit_by_ordinal)
     chunks: list[ChunkCandidate] = []
     oversized: list[int] = []
     counters: dict[str, int] = {}
@@ -402,41 +475,55 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
         kind = region.kind
         text = region.clean_view or ""
         if kind in _HEADING_KINDS:
-            # R2（B3 候选 chunk-4）：连续 heading 单元合并为单一 heading 块，避免
-            # 标题拆行产生多个碎片块导致引文跨块；文本与单元都不退场。单行标题
-            # 维持既有行为（有后文作标题关联、无后文独立保留）。
+            # R2（B3 候选 + chunk-5 守卫）：连续 heading 按相邻对守卫切分合并组——
+            # 仅「同栏且（文档收尾时）后者非新章节序号起头」并入同一 heading 块；
+            # 多栏并排/跨章节保守拆开独立保留，文本与单元都不退场。单行标题维持
+            # 既有行为（有后文作标题关联、无后文独立保留）。
             heading_run = [(ordinal, text)]
             index += 1
             while index < len(kept) and kept[index][1].kind in _HEADING_KINDS:
                 heading_run.append((kept[index][0], kept[index][1].clean_view or ""))
                 index += 1
-            if len(heading_run) == 1:
-                section_path.append(text)
-                del section_path[:-3]
-                if index < len(kept):
-                    pending_title, pending_title_ordinal = text, ordinal
+            at_doc_end = index >= len(kept)
+            merge_groups: list[list[tuple[int, str]]] = [[heading_run[0]]]
+            for prev_item, curr_item in itertools.pairwise(heading_run):
+                if _headings_mergeable(
+                    unit_by_ordinal.get(prev_item[0]),
+                    unit_by_ordinal.get(curr_item[0]),
+                    curr_item[1],
+                    at_doc_end=at_doc_end,
+                ):
+                    merge_groups[-1].append(curr_item)
                 else:
-                    emit(
-                        [_Piece((ordinal,), text)],
-                        kind="heading",
-                        title=None,
-                        path=tuple(section_path),
-                    )
-                continue
-            for heading_text in (ht for _, ht in heading_run):
-                section_path.append(heading_text)
-                del section_path[:-3]
-            merged_text = "\n".join(item_text for _, item_text in heading_run)
-            merged_ordinals = tuple(item_ordinal for item_ordinal, _ in heading_run)
-            emit(
-                [_Piece(merged_ordinals, merged_text)],
-                kind="heading",
-                title=None,
-                path=tuple(section_path),
-            )
-            if index < len(kept):
-                # 后文存在：合并标题作为后文首块标题关联（不按最小长度删除有效信号）。
-                pending_title, pending_title_ordinal = merged_text, merged_ordinals[0]
+                    merge_groups.append([curr_item])
+            for group_pos, group in enumerate(merge_groups):
+                is_last_group = group_pos == len(merge_groups) - 1
+                for heading_text in (ht for _, ht in group):
+                    section_path.append(heading_text)
+                    del section_path[:-3]
+                if len(group) == 1:
+                    item_ordinal, item_text = group[0]
+                    if is_last_group and not at_doc_end:
+                        pending_title, pending_title_ordinal = item_text, item_ordinal
+                    else:
+                        emit(
+                            [_Piece((item_ordinal,), item_text)],
+                            kind="heading",
+                            title=None,
+                            path=tuple(section_path),
+                        )
+                    continue
+                merged_text = "\n".join(item_text for _, item_text in group)
+                merged_ordinals = tuple(item_ordinal for item_ordinal, _ in group)
+                emit(
+                    [_Piece(merged_ordinals, merged_text)],
+                    kind="heading",
+                    title=None,
+                    path=tuple(section_path),
+                )
+                if is_last_group and not at_doc_end:
+                    # 后文存在：合并标题作为后文首块标题关联（不按最小长度删除有效信号）。
+                    pending_title, pending_title_ordinal = merged_text, merged_ordinals[0]
             continue
         if kind == _LIST_KIND:
             run: list[tuple[int, CleanRegion]] = []
@@ -460,12 +547,12 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
                 title_ordinal=title_ordinal,
             )
             continue
-        if kind == _TABLE_KIND and not _is_single_cell_row(unit_by_ordinal.get(ordinal)):
+        if kind == _TABLE_KIND and ordinal not in pseudo_rows:
             run = []
             while (
                 index < len(kept)
                 and kept[index][1].kind == _TABLE_KIND
-                and not _is_single_cell_row(unit_by_ordinal.get(kept[index][0]))
+                and kept[index][0] not in pseudo_rows
             ):
                 run.append(kept[index])
                 index += 1
@@ -536,11 +623,9 @@ def chunk_clean_result(reader_result: ReaderResult, clean: CleanResult) -> Chunk
             run_ordinal, run_region = kept[index]
             if run_region.kind in _HEADING_KINDS or run_region.kind == _LIST_KIND:
                 break
-            # R1（B3 候选 chunk-4）：单格 prose 表行按正文装配，不再被表格分组腰斩；
-            # 多格真实表格行仍作表格边界断组。
-            if run_region.kind == _TABLE_KIND and not _is_single_cell_row(
-                unit_by_ordinal.get(run_ordinal)
-            ):
+            # R1（B3 候选 + chunk-5 守卫）：伪表格单格 prose 行按正文装配，不被表格
+            # 分组腰斩；孤行成框/注释框保留表格身份，多格真实表格行仍作表格边界断组。
+            if run_region.kind == _TABLE_KIND and run_ordinal not in pseudo_rows:
                 break
             if run_region.kind == "paragraph" and _QUESTION_TURN.match(run_region.clean_view or ""):
                 break

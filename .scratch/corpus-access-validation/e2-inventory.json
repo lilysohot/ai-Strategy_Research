@@ -1,0 +1,483 @@
+{
+  "dev_hits": {
+    "174b6462": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+    "6f14cc14": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+    "793b3967": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+    "cc03f55b": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+    "f8e31696": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+    "dddc7cd0": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+  },
+  "entries": [
+    {
+      "file": "2026-08-12_2026.08.12-国泰海通-国内研报-国泰海通证券-ipo专题-新股精要-国内领先的电子材料和化工新材料生产企业贝特利-2594e01d.pdf",
+      "sha256": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "sha256_8": "f0e67b73",
+      "author": "国泰海通证券",
+      "report_type": "company",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "sha256_8": "174b6462",
+      "author": "长江证券",
+      "report_type": "industry",
+      "is_dev_source": true
+    },
+    {
+      "file": "2026-08-16_2026.08.16-jpmorgan-摩根大通-中国人工智能-glm-5-3和deepseek的重新定价改变了能力成本前沿-raise-智谱minimax目标价-维持增持评级中性-b4d3b59b.pdf",
+      "sha256": "7d3ca3b90deaafe68f4eae4de6013bcc7a924d59a9e3d7e4b02e4b4d68d428c8",
+      "sha256_8": "7d3ca3b9",
+      "author": "jpmorgan",
+      "report_type": "industry",
+      "is_dev_source": false,
+      "review_note": "P1「China Artificial Intelligence / Hong Kong Internet」多标的（Zhipu/MiniMax）调价，行业主题研究而非单公司"
+    },
+    {
+      "file": "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "sha256_8": "6f14cc14",
+      "author": "华创证券",
+      "report_type": "company",
+      "is_dev_source": true
+    },
+    {
+      "file": "2026-08-17_2026.08.17-国信证券-张向伟-王新雨-公司研究-业绩点评-贵州茅台-600519-2026上半年收入同比增长1-3-继续深化市场化改革-bbba671e.pdf",
+      "sha256": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "sha256_8": "c195233b",
+      "author": "国信证券",
+      "report_type": "company",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-08-31_James-Bulltard_83126 复盘.pdf",
+      "sha256": "53c7e300c13fcffbc027bfb0bf547aec91dc2b95e1cc708438e366fdd1e64ae9",
+      "sha256_8": "53c7e300",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-01_Capital-Wars_全球流动性观察每周更新.pdf",
+      "sha256": "1902c8d5abc412a764977bc658ba597f14a3bbe175c1315a5ba5f19b5b07d407",
+      "sha256_8": "1902c8d5",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-01_James-Bulltard_9126 复盘.pdf",
+      "sha256": "605fcb808dd79a2fafca07fae3a1d63ef95432155d6c21a6eea40b6c9fa058bc",
+      "sha256_8": "605fcb80",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-02_James-Bulltard_9226 市场回顾.pdf",
+      "sha256": "f273e2cabd00df63d0924637427b27c12b6e494c247b57904706b1c9a40ab5e3",
+      "sha256_8": "f273e2ca",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-03_Capital-Wars_全球流动性观察每周更新.pdf",
+      "sha256": "b88ab93632b6b51ec6b0d1abdfd1e1b557981f1938b55597458569175fde2f99",
+      "sha256_8": "b88ab936",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-03_James-Bulltard_9326 复盘.pdf",
+      "sha256": "810ef870625e7856c39812818f1b6226caa6d786ba8ff1d5e26bb2b0947c2139",
+      "sha256_8": "810ef870",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-04_Simons-Substack_黄金的多头与空头逻辑.pdf",
+      "sha256": "ce9cac5359aea57d9b7930676169f3f79fe6cc5c064b068e95ea3d6226bcb959",
+      "sha256_8": "ce9cac53",
+      "author": "Simons-Substack",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-05_2026.09.05-中信建投-行业数据周报9月第1期-市场普遍下跌-机构低配板块表现居前-a6a30359.pdf",
+      "sha256": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "sha256_8": "b7e932c8",
+      "author": "中信建投",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-05_Capital-Wars_不可能之事.pdf",
+      "sha256": "23c670ebdbccdc6c5806cc7ef8b35e1d203e05e9143d900b8e7652fd419d9eec",
+      "sha256_8": "23c670eb",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-中银国际-中银证券-策略周报-外部加息扰动未消-短期以守为攻-880f5e5e.pdf",
+      "sha256": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "sha256_8": "d179b615",
+      "author": "中银国际",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf",
+      "sha256": "bd0a65b7c6fe481d854aa040ecf2d73ee55f5ac43709db8af3625b665b67bbb6",
+      "sha256_8": "bd0a65b7",
+      "author": "中银国际",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "sha256_8": "793b3967",
+      "author": "光大证券",
+      "report_type": "macro",
+      "is_dev_source": true,
+      "review_note": "P1 非农宏观点评；与开发集域标注 macro-001..003 一致"
+    },
+    {
+      "file": "2026-09-06_2026.09.06-光大证券-金属行业周期品高频数据周报-焦煤期货收盘价周内下跌3-64-46877bac.pdf",
+      "sha256": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "sha256_8": "c1ddcd8a",
+      "author": "光大证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-兴业证券-数据面面观-9月议息会议前的关键周-3e7710e1.pdf",
+      "sha256": "c27ec5c878b92f5ec735afdd152e2d1b69c01863bebe57212888c991db8e58d6",
+      "sha256_8": "c27ec5c8",
+      "author": "兴业证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-兴业证券-极致轮动如何收敛-探讨几个契机-733fc399.pdf",
+      "sha256": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "sha256_8": "f3b28791",
+      "author": "兴业证券",
+      "report_type": "macro",
+      "is_dev_source": false,
+      "review_note": "P1「策略研究|A股市场策略」（张启尧团队），2026-09-29 用户确认归宏观"
+    },
+    {
+      "file": "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "sha256_8": "cc03f55b",
+      "author": "华创证券",
+      "report_type": "macro",
+      "is_dev_source": true
+    },
+    {
+      "file": "2026-09-06_2026.09.06-华泰证券-宏观海外周报-联储加息悬念白热化-d571f138.pdf",
+      "sha256": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "sha256_8": "5e305376",
+      "author": "华泰证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf",
+      "sha256": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "sha256_8": "5525b384",
+      "author": "华源证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-华福证券-华福证券-周观点-美联储加息扩表可能性或已浮现-看好供给约束型周期品-da9260aa.pdf",
+      "sha256": "d01c64bf344746b90627b5c0c4641c4ad616b9c8d99c8d443781f6b6203ae655",
+      "sha256_8": "d01c64bf",
+      "author": "华福证券",
+      "report_type": "macro",
+      "is_dev_source": false,
+      "review_note": "P1「策略研究·策略定期报告」；「周期品」系观点非行业归属"
+    },
+    {
+      "file": "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "sha256_8": "f8e31696",
+      "author": "华福证券",
+      "report_type": "industry",
+      "is_dev_source": true
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "sha256_8": "dddc7cd0",
+      "author": "国信证券",
+      "report_type": "company",
+      "is_dev_source": true
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国投证券-独立行情周报-地产与文旅中报尾部冲击主导走阔-68495486.pdf",
+      "sha256": "f25439aa0c7950b488ee4003ae2d305aa709549d7ec58e70334ed12219525cca",
+      "sha256_8": "f25439aa",
+      "author": "国投证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国投证券-策略定期报告-有转机-在何时-5e03dd1c.pdf",
+      "sha256": "695a208dadaf333ee2a1a1849c14e71c52e694b0f034ce7b0927a4f1fdc34276",
+      "sha256_8": "695a208d",
+      "author": "国投证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国泰海通-国泰海通证券-传媒行业双周报-后西游记-上线-ai视频渗透至长剧市场-0e8cb919.pdf",
+      "sha256": "5afe0912761c214fff69fe34818ae1906f36744d9e691b91f36eab32ab93d1fc",
+      "sha256_8": "5afe0912",
+      "author": "国泰海通证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf",
+      "sha256": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "sha256_8": "11ea15ac",
+      "author": "国泰海通证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国泰海通-国泰海通证券-机器人行业周报-figure斥35亿美元加码helix算力-李飞飞创企world-labs发布全模态世界模型atlas-dd6c23f9.pdf",
+      "sha256": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "sha256_8": "0c25f0e9",
+      "author": "国泰海通证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国联民生证券-医药行业周报-cxo中报我们看到了什么-c1e12af2.pdf",
+      "sha256": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "sha256_8": "f86c6d2c",
+      "author": "国联民生证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国联民生证券-宏观周度观察-中国汽车出海的欧洲考验-cac4f407.pdf",
+      "sha256": "d0668d5a77f9f71385b63d3555136425a62624c86f288df22664211dc3b4f8ae",
+      "sha256_8": "d0668d5a",
+      "author": "国联民生证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国联民生证券-通信行业周报-2026-cioe中国光博会前瞻-a87d1d3c.pdf",
+      "sha256": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "sha256_8": "8158cbb9",
+      "author": "国联民生证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-ai行业周观察-7月手机市场大幅下滑-多家旗舰模型更新-b4a107f6.pdf",
+      "sha256": "9b1349de5c88d47c207569fceae30d7ba3ea67fb0b885d32beb92ccc3c1b62a5",
+      "sha256_8": "9b1349de",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-a股策略周报-迷雾与罗盘-fb9b3c67.pdf",
+      "sha256": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "sha256_8": "2f8aa709",
+      "author": "国金证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf",
+      "sha256": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "sha256_8": "987d9f69",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf",
+      "sha256": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "sha256_8": "1e141ab0",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-有色金属行业小金属双周谈-钽价有望启动上行-关注锑价止跌回升-0af30fd5.pdf",
+      "sha256": "428e722274218df598234f97cdc7d37ad2985130c04f5cdb4e5990886c37f7b6",
+      "sha256_8": "428e7222",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf",
+      "sha256": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "sha256_8": "3f634514",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf",
+      "sha256": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "sha256_8": "00f08e66",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-国金证券-通信行业研究-hbm市场极度紧缺-字节获296亿美元银团贷款-7ee005e2.pdf",
+      "sha256": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "sha256_8": "a91d95c7",
+      "author": "国金证券",
+      "report_type": "industry",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-天风证券-a股策略周报-非农大超预期-加息预期升温-5e671b67.pdf",
+      "sha256": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "sha256_8": "f7f65d7e",
+      "author": "天风证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf",
+      "sha256": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "sha256_8": "d441478b",
+      "author": "天风证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_2026.09.06-平安证券-a股策略周报-轮动整固-攻守均衡-76e079c9.pdf",
+      "sha256": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "sha256_8": "4f6854a4",
+      "author": "平安证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_Capital-Wars_比特币的流动性悖论.pdf",
+      "sha256": "de159874c509a90f4c44cbdc559635edd59646c013d364a9e41db6ae7da514b4",
+      "sha256_8": "de159874",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-06_Macro-Charts_系好安全带.pdf",
+      "sha256": "06f7570585a5351032c5a01eb618fd0389834b3cc255abafe36569a4033a9dee",
+      "sha256_8": "06f75705",
+      "author": "Macro-Charts",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-07_2026.09.07-东吴证券-策略周评-gpt-6-astra发布-前沿模型能力继续提升-dbfd9238.pdf",
+      "sha256": "acbf026ca117b4f99e5b45a9559005a159194228bda5aed2416e5671b9091c0a",
+      "sha256_8": "acbf026c",
+      "author": "东吴证券",
+      "report_type": "macro",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf",
+      "sha256": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "sha256_8": "1e021a8c",
+      "author": "国盛证券",
+      "report_type": "macro",
+      "is_dev_source": false,
+      "review_note": "P1「证券研究报告|宏观研究·宏观点评」；「银行保险」系事件非行业归属"
+    },
+    {
+      "file": "2026-09-07_Simons-Substack_白银矿股关注图表四.pdf",
+      "sha256": "5c5fce9234ea4c5278c242f597567c4b1c2dea18cd14f8206f12e0ea74544ba9",
+      "sha256_8": "5c5fce92",
+      "author": "Simons-Substack",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-08_Capital-Wars_全球流动性观察周度更新.pdf",
+      "sha256": "77b352bf163bd100c1a2a7047b0f2f47c710007fd5af7b443995d8a84efa1ea6",
+      "sha256_8": "77b352bf",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-08_FundaAI_Deep台达电子2H26 重新加速在即VPD 仍被忽视.pdf",
+      "sha256": "1ccf5074e6ee188a2e1c6ed9644a69c934d547413630dac856a91d675f05ec0b",
+      "sha256_8": "1ccf5074",
+      "author": "FundaAI",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-08_James-Bulltard_9826 复盘.pdf",
+      "sha256": "bc0309f302d54d7461db8edf00e84f23b8412f9987467c89fd648162d61ece12",
+      "sha256_8": "bc0309f3",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-09_James-Bulltard_1066 天实现 1000 收益率.pdf",
+      "sha256": "4d31e068e89adecec6b14e0d97e4f6d5b93e5ca6d6a87bcd94289051548d2727",
+      "sha256_8": "4d31e068",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-10_James-Bulltard_91026 盘面回顾.pdf",
+      "sha256": "c46618abe9fcac8d0fcab9aa28d0e818fb542e4b66f295cea191089bab2fb70e",
+      "sha256_8": "c46618ab",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-11_Capital-Wars_债券国债QE与3-3-3-30政策框架.pdf",
+      "sha256": "fe046c1937fa155808f3febde47202f2afb416f1b3fe683d8a5041ce7e59b2b9",
+      "sha256_8": "fe046c19",
+      "author": "Capital-Wars",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "2026-09-11_James-Bulltard_91126 复盘.pdf",
+      "sha256": "f8e1d627b1135d7835af6359d31fb69e50241a6718415715953ae50028ef1521",
+      "sha256_8": "f8e1d627",
+      "author": "James-Bulltard",
+      "report_type": "non_research",
+      "is_dev_source": false
+    },
+    {
+      "file": "高盛：GS 贵州茅台：市场化方案五— 2026 年 7 月飞天茅台出厂价与建议零售价意外开启第二轮上调；买入.pdf",
+      "sha256": "3738c927c6fb11b8f795d6d76ebf33294e8aef88ed7c98d16e55c56cf80c6c49",
+      "sha256_8": "3738c927",
+      "author": "高盛",
+      "report_type": "company",
+      "is_dev_source": false,
+      "review_note": "GS 茅台单标的评级研报（文件名）；P1/P2 图片型无文本层，若纳入按 protocol §1 记提取支持缺口",
+      "excluded_from_holdout": "图片型 PDF（P1/P2 无文本层，pypdf 提取为空），2026-09-29 用户裁决剔除出留出集"
+    }
+  ]
+}

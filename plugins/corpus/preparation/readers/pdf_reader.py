@@ -26,7 +26,7 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_PDF_REV = "reader-pdf-7"
+READER_PDF_REV = "reader-pdf-8"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
@@ -35,6 +35,20 @@ _COLUMN_GAP_RATIO = 0.12
 _MIN_GRID_LINES = 6
 _IMAGE_REGION_RATIO = 0.25  # 混合页大图缺口阈值（占页面积比例）
 _MAX_HEADER_ROWS = 2  # 表格结构模型：最多识别 2 行表头（多级表头按层级展开）
+
+# R8（S1-S3）：无线表格 fallback——lines 策略 0 表时的确定性形态信号与提取参数。
+_WIRELESS_MIN_ROWS = 5  # 表格化数据块最少连续数据视觉行
+_WIRELESS_MIN_TOKENS = 3  # 数据视觉行最少数字 token 数
+_WIRELESS_ROW_BREAK = 20.0  # 数据块纵向断裂间隔（pt）
+_WIRELESS_MIN_COLS = 3  # 表格化判定：数字格 x0 对齐列数下限
+_WIRELESS_COL_TOL = 3.0  # 数字格列对齐容差（pt）
+_WIRELESS_SEAM_RATIO = 0.5  # 中缝判别：右栏视觉行起头于中缝右缘的最小占比
+_WIRELESS_SEAM_TOL = 12.0  # 「起头于中缝右缘」的 x 容差（容纳二级科目缩进约一字宽）
+_WIRELESS_HEADER_PAD = 30.0  # 数据块上方表头预留（pt）
+_WIRELESS_FOOT_PAD = 15.0  # 数据块下方预留（pt）
+# R8（S4）：相邻网格行 bbox 纵向重叠 → 行切分错乱，该行行内序改按网格列序。
+_ROW_OVERLAP_MIN = 1.0
+_WIRELESS_PLACEHOLDER = "·"  # text 策略空位占位符（清洗为空格）
 
 _YEAR_TOKEN_RE = re.compile(r"^\d{4}$")
 _NUMERIC_TOKEN_RE = re.compile(r"^[+-]?\d[\d,]*(?:\.\d+)?%?$")
@@ -81,6 +95,8 @@ class _Table:
     bbox: BBox
     rows: list[_TableRow]
     model: _TableModel | None = None
+    # R8 S4：行网格错乱（相邻行 bbox 纵向重叠）的行号；发射时行内序改按网格列序。
+    column_ordered_rows: frozenset[int] = frozenset()
 
 
 @dataclass(frozen=True)
@@ -385,14 +401,252 @@ def _count_grid_lines(page: pymupdf.Page) -> int:
     return horizontal + vertical if (horizontal >= 3 and vertical >= 3) else 0
 
 
+def _overlapping_row_indices(raw_rows: list[Any]) -> frozenset[int]:
+    """相邻网格行 bbox 纵向重叠的行号集合（行切分错乱信号，R8 S4）。
+
+    正常表格行边界链式相接；跨栏续表左右两侧行高不一致时，find_tables 的统一
+    行网格互相咬合（重叠），重叠行的 ``native_pos`` 序会被跨栏内容流打乱。
+    """
+    out: set[int] = set()
+    for index in range(len(raw_rows) - 1):
+        upper = raw_rows[index].bbox
+        lower = raw_rows[index + 1].bbox
+        overlap = min(float(upper[3]), float(lower[3])) - max(float(upper[1]), float(lower[1]))
+        if overlap > _ROW_OVERLAP_MIN:
+            out.add(index)
+            out.add(index + 1)
+    return frozenset(out)
+
+
+def _clean_grid(grid: list[list[str | None]]) -> list[list[str | None]]:
+    """规整提取网格：text 策略的空位占位符 ``·`` 清洗为 None（不猜测内容）。"""
+    return [
+        [
+            None if value is None or str(value).strip() == _WIRELESS_PLACEHOLDER else str(value)
+            for value in row
+        ]
+        for row in grid
+    ]
+
+
+def _build_table(page_no: int, index: int, table: Any, lines: list[_Line]) -> _Table:
+    """把一次 find_tables 的原始结果装配为 :class:`_Table`（结构事实，不做文本拼接）。"""
+    grid = _clean_grid(table.extract())
+    raw_rows: list[Any] = list(table.rows)
+    bbox: BBox = (
+        float(table.bbox[0]),
+        float(table.bbox[1]),
+        float(table.bbox[2]),
+        float(table.bbox[3]),
+    )
+    model = _TableModel(
+        page=page_no,
+        table_index=index,
+        header_rows=_detect_header_rows(grid),
+        grid=tuple(tuple(values) for values in grid),
+        anchored=_anchored_cells(raw_rows, len(grid), len(grid[0]) if grid else 0),
+    )
+    rows: list[_TableRow] = []
+    for row_index, values in enumerate(grid):
+        rects: tuple[Any, ...] = (
+            tuple(raw_rows[row_index].cells) if row_index < len(raw_rows) else ()
+        )
+        rows.append(
+            _TableRow(
+                cells=tuple(
+                    _TableCell(
+                        text=str(value),
+                        row=row_index,
+                        col=col_index,
+                        native_pos=_cell_native_pos(
+                            rects[col_index] if col_index < len(rects) else None, lines
+                        ),
+                    )
+                    for col_index, value in enumerate(values)
+                    if value is not None and str(value).strip()
+                )
+            )
+        )
+    return _Table(
+        index=index,
+        bbox=bbox,
+        rows=rows,
+        model=model,
+        column_ordered_rows=_overlapping_row_indices(raw_rows),
+    )
+
+
+def _visual_rows(lines: list[_Line]) -> list[tuple[float, float, list[_Line]]]:
+    """按 y 重叠把行级单元聚成视觉行（仅用于无线表格形态检测，不改发射顺序）。"""
+    rows: list[tuple[float, float, list[_Line]]] = []
+    for line in sorted(lines, key=lambda item: (item.bbox[1], item.bbox[0])):
+        if rows:
+            top, bottom, members = rows[-1]
+            overlap = min(bottom, line.bbox[3]) - max(top, line.bbox[1])
+            height = min(bottom - top, line.bbox[3] - line.bbox[1])
+            if height > 0 and overlap > height * 0.5:
+                rows[-1] = (min(top, line.bbox[1]), max(bottom, line.bbox[3]), [*members, line])
+                continue
+        rows.append((line.bbox[1], line.bbox[3], [line]))
+    return rows
+
+
+def _is_data_line(line: _Line) -> bool:
+    """行级单元含至少一个数字 token（百分比/千分位/小数均算）。"""
+    return any(_NUMERIC_TOKEN_RE.match(token) for token in line.text.split())
+
+
+def _wireless_table_block(
+    lines: list[_Line],
+) -> tuple[float, float, float, float, list[_Line]] | None:
+    """无线表格形态检测（确定性：连续数据视觉行 + 数字格列对齐，无样式启发）。
+
+    返回 ``(x0, y_top, x1, y_bottom, 块内行级单元)``；无表格形态返回 None。
+    条件足够严格：页脚散数字、纯正文段落不构成候选（行数/每行 token 数/列对齐
+    三重门槛），因此 fallback 只在真正的无线预测表页触发。
+    """
+    runs: list[list[tuple[float, float, list[_Line]]]] = []
+    run: list[tuple[float, float, list[_Line]]] = []
+    for row in _visual_rows(lines):
+        token_count = sum(
+            1
+            for member in row[2]
+            for token in member.text.split()
+            if _NUMERIC_TOKEN_RE.match(token)
+        )
+        if token_count >= _WIRELESS_MIN_TOKENS:
+            if run and row[0] - run[-1][1] > _WIRELESS_ROW_BREAK:
+                runs.append(run)
+                run = []
+            run.append(row)
+        elif run:
+            runs.append(run)
+            run = []
+    if run:
+        runs.append(run)
+    qualifying = [item for item in runs if len(item) >= _WIRELESS_MIN_ROWS]
+    if not qualifying:
+        return None
+    data_lines = [
+        line for item in qualifying for row in item for line in row[2] if _is_data_line(line)
+    ]
+    # 列对齐（锚点法）：数字格 x0 聚类数须 ≥ 下限，排除页脚/尾注散数字。
+    anchors: list[float] = []
+    for x in sorted(line.bbox[0] for line in data_lines):
+        if not anchors or x - anchors[-1] > _WIRELESS_COL_TOL:
+            anchors.append(x)
+    if len(anchors) < _WIRELESS_MIN_COLS:
+        return None
+    y_top = min(row[0] for item in qualifying for row in item) - _WIRELESS_HEADER_PAD
+    y_bottom = max(row[1] for item in qualifying for row in item) + _WIRELESS_FOOT_PAD
+    x0 = min(line.bbox[0] for item in qualifying for row in item for line in row[2])
+    x1 = max(line.bbox[2] for item in qualifying for row in item for line in row[2])
+    # 分栏检测需要块内**全部**行级单元（含行标签列）：中缝判别依赖右栏首列
+    # 的左对齐非数字形态，只有数字格 x 区间看不出对齐方式；且空白带由全部行级
+    # 单元的 x 间隙构成，clip 边界才不会把右栏首列文字（如「EPS(摊薄)（元）」）撕开。
+    block_lines = [line for item in qualifying for row in item for line in row[2]]
+    return max(x0, 0.0), max(y_top, 0.0), x1, y_bottom, block_lines
+
+
+def _wireless_split_x(lines: list[_Line], page_width: float) -> tuple[float, float] | None:
+    """并排分栏中缝检测：返回零文本空白带 ``(left_edge, right_edge)``。
+
+    中缝的判别特征不是「最宽间隙」（无线表内部列间隙常与中缝同量级），而是
+    **右栏行首对齐**：中缝右侧是另一张表的首列（行标签，左对齐），其几乎每个
+    视觉行都有一条**非数字**行级单元从中缝右缘起头；表内列间隙右侧是右对齐
+    数字格，起头散布且均为数字，达不到占比。clip 边界落在空白带内，不会撕裂
+    任何文本行。
+    """
+    min_gap = max(5.0, page_width * 0.008)
+    ordered = sorted(lines, key=lambda line: (line.bbox[0], line.bbox[2]))
+    best: tuple[float, float, float] | None = None  # (宽度, left_edge, right_edge)
+    for left, right in pairwise(ordered):
+        lo, hi = left.bbox[2], right.bbox[0]
+        if hi - lo < min_gap:
+            continue
+        if not _seam_right_aligned(lines, lo, hi):
+            continue
+        if best is None or hi - lo > best[0]:
+            best = (hi - lo, lo, hi)
+    if best is None:
+        return None
+    return best[1], best[2]
+
+
+def _seam_right_aligned(lines: list[_Line], lo: float, hi: float) -> bool:
+    """候选空白带右缘是否呈「右栏行首对齐」形态（并排两表首列的确定性特征）。
+
+    左右两侧各自聚成视觉行：任一侧行数不足（不成表）即否决；右栏视觉行中
+    起头于右缘 ``hi`` 附近（容差内含二级科目缩进）的占比低于阈值即否决；
+    起头单元以数字为主也否决（右对齐数字列即使等宽聚拢，起头单元仍是数字，
+    不构成标签列形态）。
+    """
+    left_rows = _visual_rows([line for line in lines if line.bbox[2] <= lo + 0.5])
+    right_rows = _visual_rows([line for line in lines if line.bbox[0] >= hi - 0.5])
+    if len(left_rows) < _WIRELESS_MIN_ROWS or len(right_rows) < _WIRELESS_MIN_ROWS:
+        return False
+    aligned = [
+        member
+        for _, _, members in right_rows
+        for member in members
+        if member.bbox[0] <= hi + _WIRELESS_SEAM_TOL
+    ]
+    aligned_rows = sum(
+        1
+        for _, _, members in right_rows
+        if any(member.bbox[0] <= hi + _WIRELESS_SEAM_TOL for member in members)
+    )
+    if aligned_rows / len(right_rows) < _WIRELESS_SEAM_RATIO:
+        return False
+    non_numeric = sum(1 for member in aligned if not _is_data_line(member))
+    return non_numeric / len(aligned) >= _WIRELESS_SEAM_RATIO
+
+
+def _extract_wireless_tables(page: pymupdf.Page, lines: list[_Line]) -> list[_Table]:
+    """lines 策略 0 表时的无线表格 fallback：数据块 → 分栏 clip → text 策略。
+
+    R8 S1-S3：财务预测表常无制表线（lines 策略检测不到），且资产负债表｜利润表
+    双栏并排、左右行高不一致——整页单网格会把左右两栏揉成一张错乱大表。按数字
+    格 x 空隙切分左右栏、各自 ``find_tables(clip, strategy="text")`` 独立成表，
+    行/列网格与 cells 才能逐表正确。text 策略对无表格形态区域提取为空，即安全阀。
+    """
+    block = _wireless_table_block(lines)
+    if block is None:
+        return []
+    x0, y_top, x1, y_bottom, block_lines = block
+    page_width = float(page.rect.width)
+    # 中缝是零文本空白带，clip 边界取带内中点，不会撕裂任何文本行。
+    seam = _wireless_split_x(block_lines, page_width)
+    if seam is not None:
+        lo, hi = seam
+        middle = (lo + hi) / 2.0
+        clips = [
+            pymupdf.Rect(max(x0, 0.0), y_top, middle, y_bottom),
+            pymupdf.Rect(middle, y_top, x1, y_bottom),
+        ]
+    else:
+        clips = [pymupdf.Rect(max(x0, 0.0), y_top, x1, y_bottom)]
+    tables: list[_Table] = []
+    assert page.number is not None
+    for clip in clips:
+        try:
+            finder = page.find_tables(clip=clip, strategy="text")
+        except Exception:  # fallback 失败不致命：保持 0 表现状，不猜测内容
+            continue
+        for raw in finder.tables:  # type: ignore[union-attr]
+            tables.append(_build_table(page.number + 1, len(tables), raw, lines))
+    return tables
+
+
 def _extract_tables(
     page: pymupdf.Page, lines: list[_Line]
 ) -> tuple[list[_Table], list[ReaderIssue]]:
-    """受控表格读取（单次 find_tables 调用）；失败/冲突全部显式记账。
+    """受控表格读取；失败/冲突全部显式记账。
 
     只读取结构事实（单元格文本 + 网格坐标 + 原生序位置），**不决定文本形态**：
     拼接交给 ``_row_text``，以守住 I1（不插入原文没有的字符）与 I2（顺序服从
-    页面原生阅读序）。
+    页面原生阅读序）。lines 策略 0 表且页面存在无线表格形态时，走
+    ``_extract_wireless_tables`` fallback（R8 S1-S3）。
     """
     issues: list[ReaderIssue] = []
     assert page.number is not None
@@ -408,45 +662,11 @@ def _extract_tables(
                 detail=f"表格提取器异常: {type(exc).__name__}: {exc}",
             )
         ]
-    tables: list[_Table] = []
-    for index, table in enumerate(raw_tables):
-        grid: list[list[str | None]] = table.extract()
-        raw_rows: list[Any] = list(table.rows)
-        bbox: BBox = (
-            float(table.bbox[0]),
-            float(table.bbox[1]),
-            float(table.bbox[2]),
-            float(table.bbox[3]),
-        )
-        model = _TableModel(
-            page=page.number + 1,
-            table_index=index,
-            header_rows=_detect_header_rows(grid),
-            grid=tuple(tuple(values) for values in grid),
-            anchored=_anchored_cells(raw_rows, len(grid), len(grid[0]) if grid else 0),
-        )
-        rows: list[_TableRow] = []
-        for row_index, values in enumerate(grid):
-            rects: tuple[Any, ...] = (
-                tuple(raw_rows[row_index].cells) if row_index < len(raw_rows) else ()
-            )
-            rows.append(
-                _TableRow(
-                    cells=tuple(
-                        _TableCell(
-                            text=str(value),
-                            row=row_index,
-                            col=col_index,
-                            native_pos=_cell_native_pos(
-                                rects[col_index] if col_index < len(rects) else None, lines
-                            ),
-                        )
-                        for col_index, value in enumerate(values)
-                        if value is not None and str(value).strip()
-                    )
-                )
-            )
-        tables.append(_Table(index=index, bbox=bbox, rows=rows, model=model))
+    tables = [
+        _build_table(page.number + 1, index, table, lines) for index, table in enumerate(raw_tables)
+    ]
+    if not tables:
+        tables = _extract_wireless_tables(page, lines)
     if not tables:
         grid_lines = _count_grid_lines(page)
         if grid_lines >= _MIN_GRID_LINES:
@@ -521,15 +741,23 @@ def _emit_paragraphs(
     return ordinal
 
 
-def _row_text(row: _TableRow) -> tuple[str, tuple[tuple[int, int], ...]]:
+def _row_text(
+    row: _TableRow, *, column_order: bool = False
+) -> tuple[str, tuple[tuple[int, int], ...]]:
     """行文本与结构定位（表格发射的两条不变量落点）。
 
     I1（字符保真）：单元格之间只用换行，不插入原文里不存在的字符（旧实现插入
     ``" | "``，破坏了"去空白连续"的口径）。
     I2（顺序保真）：文本顺序服从页面原生阅读序（``native_pos``）；网格行列只作为
     locator 元数据随单元下发，绝不用于重排文本。
+    例外（R8 S4）：``column_order`` 的行是网格错乱行（跨栏续表左右行高不一致、
+    行 bbox 纵向重叠），双栏内容流的 native_pos 交错会把同一逻辑行拆散，改按
+    网格列序发射——左半列在前、右半列在行尾，与相邻网格行的右半续接。
     """
-    ordered = sorted(row.cells, key=lambda cell: (cell.native_pos, cell.col))
+    if column_order:
+        ordered = sorted(row.cells, key=lambda cell: cell.col)
+    else:
+        ordered = sorted(row.cells, key=lambda cell: (cell.native_pos, cell.col))
     return (
         "\n".join(cell.text for cell in ordered),
         tuple((cell.row, cell.col) for cell in ordered),
@@ -556,8 +784,8 @@ def _emit_table(
                 "已从正文单元剔除并计入表格行",
             )
         )
-    for row in table.rows:
-        row_text, cells = _row_text(row)
+    for row_index, row in enumerate(table.rows):
+        row_text, cells = _row_text(row, column_order=row_index in table.column_ordered_rows)
         if not row_text.strip():
             continue
         ordinal += 1

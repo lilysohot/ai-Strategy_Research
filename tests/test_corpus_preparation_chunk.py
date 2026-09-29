@@ -477,3 +477,63 @@ def test_chunk_does_not_import_pg_or_model_client() -> None:
     )
     proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False)
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+# --- E3 复核反例：R1/R2 在真实场景误伤时应失败（失败即守卫条件的证据） ---
+
+
+def test_r1_counterexample_real_single_cell_note_box_keeps_table_identity() -> None:
+    """E3-R1 反例：真实的单格表格（独立注释框）不应被当作伪表格并入正文。
+
+    注释框 cells 恰为 1 但确属表格语义（tbl 分组内的独立注释行）；期望保留
+    表格身份（进入 table 块），不被 _is_single_cell_row 当伪表格吞进 prose。
+    """
+    units = [
+        _unit(1, "公司主营乙二醇与PTA现货贸易。" + "甲" * 80),
+        _unit(
+            2,
+            "注：本表数据来源于经审计的年度财务报告，口径为合并报表。",
+            kind="table_row",
+            reasons=("tbl[0]",),
+            page=2,
+            cells=((0, 0),),
+        ),
+        _unit(3, "下半年公司计划扩大仓储产能。" + "乙" * 80),
+    ]
+    result = _chunk_of(units)
+    tables = [c for c in result.chunks if c.kind == "table"]
+    bodies = [c for c in result.chunks if c.kind == "body"]
+    assert any(2 in c.unit_ordinals for c in tables), "单格注释框应保留表格身份（table 块）"
+    assert not any(2 in c.unit_ordinals for c in bodies), "注释框不应被并入正文 prose 块"
+
+
+def test_r2_counterexample_a_multicolumn_headings_not_merged() -> None:
+    """E3-R2(a) 反例：多栏并排标题（版式上不同栏）不应被连续合并规则吞并。
+
+    UnitLocation 无栏位字段，以 bbox 横向坐标区分左右两栏；两个 heading 并排
+    分属不同栏（如版面左右栏各自的栏目标题），语义并非同一标题的拆行，期望不合并。
+    """
+    units = [
+        _unit(1, "行业动态", kind="heading", page=1, bbox=(50.0, 100.0, 280.0, 120.0)),
+        _unit(2, "公司公告", kind="heading", page=1, bbox=(320.0, 100.0, 550.0, 120.0)),
+    ]
+    result = _chunk_of(units)
+    headings = [c for c in result.chunks if c.kind == "heading"]
+    assert len(headings) == 2, "不同栏的并排标题不应被合并为单一 heading 块"
+    assert [c.search_text for c in headings] == ["行业动态", "公司公告"]
+
+
+def test_r2_counterexample_b_distinct_section_headings_not_merged() -> None:
+    """E3-R2(b) 反例：分属不同章节的相邻标题（中间无正文）不应被合并。
+
+    「一、公司概况」「二、财务分析」是两个独立章节标题，仅当确属同一标题被
+    拆行时才应合并；期望保持两个独立 heading 块，章节层级不被抹平。
+    """
+    units = [
+        _unit(1, "一、公司概况", kind="heading"),
+        _unit(2, "二、财务分析", kind="heading"),
+    ]
+    result = _chunk_of(units)
+    headings = [c for c in result.chunks if c.kind == "heading"]
+    assert len(headings) == 2, "不同章节的相邻标题不应被合并"
+    assert [c.search_text for c in headings] == ["一、公司概况", "二、财务分析"]

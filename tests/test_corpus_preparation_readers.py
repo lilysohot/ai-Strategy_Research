@@ -26,6 +26,7 @@ from plugins.corpus.preparation.readers.pdf_reader import (
     _is_data_like,
     _Line,
     _merge_lines,
+    _overlapping_row_indices,
     _row_text,
     _Table,
     _TableCell,
@@ -459,6 +460,165 @@ def test_emit_table_model_label_path_aligned_and_row_text_untouched() -> None:
     assert "|" not in unit.raw_text
 
 
+# --- reader-pdf-8（R8：双栏无线预测表 cells 丢失 + 跨栏续表行序断裂） ---
+
+
+def _r8_two_column_wireless_pdf(path: Path) -> None:
+    """构造双栏并排、无制表线的预测表页：左表 甲~己 ×3 列、右表 甲~己 ×3 列。
+
+    左右两表水平并排（x 空隙 > 页宽 25%），行 y 并排；不画任何制表线，
+    复现华创茅台 6f14cc14 page3「附录：财务预测表」的无线双栏形态。
+    """
+    doc = pymupdf.open()
+    page = doc.new_page()
+    left_values = (
+        ("甲", "311", "312", "313"),
+        ("乙", "321", "322", "323"),
+        ("丙", "331", "332", "333"),
+        ("丁", "341", "342", "343"),
+        ("戊", "351", "352", "353"),
+        ("己", "361", "362", "363"),
+    )
+    right_values = (
+        ("甲", "911", "912", "913"),
+        ("乙", "921", "922", "923"),
+        ("丙", "931", "932", "933"),
+        ("丁", "941", "942", "943"),
+        ("戊", "951", "952", "953"),
+        ("己", "961", "962", "963"),
+    )
+    for row_index, row in enumerate(left_values):
+        for col, value in enumerate(row):
+            page.insert_text((60 + col * 45, 300 + row_index * 18), value, fontsize=9)
+    for row_index, row in enumerate(right_values):
+        for col, value in enumerate(row):
+            page.insert_text((330 + col * 45, 300 + row_index * 18), value, fontsize=9)
+    doc.save(str(path))
+    doc.close()
+
+
+def test_r8_side_by_side_wireless_tables_keep_cells_per_column(tmp_path: Path) -> None:
+    """S1-S3 双栏并排无线预测表：两表各自 cells 非空且坐标互不串栏。
+
+    修复前：find_tables(lines) 全页 0 表，数字行全部退化为 paragraph 单元
+    （location.cells 为空）。修复后：无线表格 fallback 按 x 区间切分左右两栏
+    各自成表，表格行单元携带 (row, col)，且左表行不含右栏值（反之亦然）。
+    """
+    path = tmp_path / "r8_wireless.pdf"
+    _r8_two_column_wireless_pdf(path)
+
+    result = read_document(path)
+    rows = [u for u in result.units if u.kind == "table_row"]
+    assert rows, "双栏无线表必须产出 table_row 单元（而非扁平数字段落）"
+    assert all(u.location.cells for u in rows), "每个表格行单元的 cells 必须非空"
+
+    def _tokens(unit: object) -> list[str]:
+        return [tok for tok in str(unit.raw_text).split() if tok[0].isdigit()]  # type: ignore[attr-defined]
+
+    # 左表行（值 3xx）与右表行（值 9xx）互不串栏；列号各自独立成表且 ≤3。
+    left_rows = [u for u in rows if any(tok.startswith("3") for tok in _tokens(u))]
+    right_rows = [u for u in rows if any(tok.startswith("9") for tok in _tokens(u))]
+    assert left_rows and right_rows
+    for unit in left_rows:
+        assert all(tok.startswith("3") for tok in _tokens(unit)), unit.raw_text
+        assert max(col for _, col in unit.location.cells) <= 3
+    for unit in right_rows:
+        assert all(tok.startswith("9") for tok in _tokens(unit)), unit.raw_text
+        assert max(col for _, col in unit.location.cells) <= 3
+
+
+def test_r8_single_column_ruled_table_cells_regression(tmp_path: Path) -> None:
+    """S0 对照（dddc7cd0 形态）：单栏有线表格 cells 逐行非空、(row, col) 连续。
+
+    既有用例 test_pdf_table_rows_no_silent_duplication 只断言文本与记账；
+    本用例补齐 cells 坐标断言，守住无线 fallback 引入后单栏有线表不回归。
+    """
+    doc = pymupdf.open()
+    page = doc.new_page()
+    xs = [50, 150, 250, 350]
+    ys = [300, 330, 360, 390]
+    for x in xs:
+        page.draw_line((x, ys[0]), (x, ys[-1]))
+    for y in ys:
+        page.draw_line((xs[0], y), (xs[-1], y))
+    grid = [["Yr", "Rev", "NP"], ["2024", "9901", "11"], ["2025", "9902", "12"]]
+    for row_index, row in enumerate(grid):
+        for col, value in enumerate(row):
+            page.insert_text(
+                ((xs[col] + xs[col + 1]) / 2 - 6, ys[row_index] + 20), value, fontsize=9
+            )
+    path = tmp_path / "r8_ruled.pdf"
+    doc.save(str(path))
+    doc.close()
+
+    result = read_document(path)
+    rows = [u for u in result.units if u.kind == "table_row"]
+    assert len(rows) >= 3
+    for index, unit in enumerate(rows):
+        cells = unit.location.cells
+        assert cells, "单栏有线表每行 cells 非空"
+        assert all(row == index for row, _ in cells), f"row {index} 网格行号连续"
+        assert [col for _, col in cells] == sorted(col for _, col in cells)
+
+
+def test_r8_overlapping_grid_rows_detected() -> None:
+    """S4 信号：相邻网格行 bbox 纵向重叠 → 行切分错乱，须按列序修正行内顺序。"""
+    # fake 行对象只需 bbox=(x0, y0, x1, y1)：row47 的 y 区间嵌进 row46（跨栏续表
+    # 左侧行高 ≠ 右侧行高时 find_tables 的行网格互相咬合）。
+    rows = [
+        type("R", (), {"bbox": (42.0, 513.9, 553.1, 531.5)})(),
+        type("R", (), {"bbox": (42.0, 522.7, 553.1, 531.5)})(),
+        type("R", (), {"bbox": (42.0, 531.5, 553.1, 549.4)})(),
+    ]
+    assert _overlapping_row_indices(rows) == frozenset({0, 1})
+    assert _overlapping_row_indices(rows[:1]) == frozenset()
+
+
+def test_r8_cross_column_continuation_row_order_kept() -> None:
+    """S4 跨栏续表：重叠网格行的行内顺序按列序修正，右半数值与下一行连续。
+
+    复现长江化工 174b6462 page10「图 6（续表）」：R32 逻辑行的右半
+    24.0/28.5/28.5（col9，native 序最前）与下一网格行的 -/18.8%/0.0%
+    （col9-11）被左半行名/数值隔断。标记 column_ordered_rows 后，重叠行
+    按列序发射：左半（col2-8）在前、右半（col9）在行尾，与 row47 的
+    '- 18.8% 0.0%' 相邻，六值 24.0 28.5 28.5 - 18.8% 0.0% 连续。
+    """
+    row46 = _TableRow(
+        cells=(
+            _TableCell(text="24.0 28.5 28.5", row=46, col=9, native_pos=0),
+            _TableCell(text="R32", row=46, col=2, native_pos=9),
+            _TableCell(text="99.6%", row=46, col=6, native_pos=10),
+            _TableCell(text="-", row=46, col=7, native_pos=11),
+            _TableCell(text="51.6%", row=46, col=8, native_pos=12),
+        )
+    )
+    row47 = _TableRow(
+        cells=(
+            _TableCell(text="-", row=47, col=9, native_pos=20),
+            _TableCell(text="18.8%", row=47, col=10, native_pos=21),
+            _TableCell(text="0.0%", row=47, col=11, native_pos=22),
+        )
+    )
+    table = _Table(
+        index=0,
+        bbox=(42.6, 112.0, 553.1, 704.2),
+        rows=[row46, row47],
+        column_ordered_rows=frozenset({0, 1}),
+    )
+    units: list[object] = []
+    issues: list[object] = []
+    _emit_table(table, 0, page_no=10, page_lines=[], units=units, issues=issues)
+    assert len(units) == 2
+    joined = "\n".join(u.raw_text for u in units)  # type: ignore[attr-defined]
+    assert "24.0 28.5 28.5\n-\n18.8%\n0.0%" in joined, joined
+    # 未标记行保持原生序（I2 不回归）：同一行不带 column_ordered_rows 时仍按
+    # native_pos 排序（'24.0 28.5 28.5' 在前）。
+    plain = _Table(index=0, bbox=table.bbox, rows=[row46])
+    units_plain: list[object] = []
+    _emit_table(plain, 0, page_no=10, page_lines=[], units=units_plain, issues=issues)
+    assert units_plain[0].raw_text.startswith("24.0 28.5 28.5")  # type: ignore[attr-defined]
+
+
 # --- 开发材料 smoke（守卫允许清单内的 6 份真实 PDF，只读） ---
 
 
@@ -473,7 +633,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-7+")
+        assert result.extractor_rev.startswith("reader-pdf-8+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:
