@@ -1,12 +1,14 @@
 # E3 · 已知缺陷与反例登记
 
-> 版本：v3.1 · 2026-09-29。状态：**reader-pdf-9 已实施，B4 候选对照基本通过 2/3 硬项**（§5.6）：
-> clean-1/chunk-5 达标；reader-pdf-9 修复 4 条 target 回归（e4/e3/a-3/a-2），NOISE 0 残留、
-> regressed_vs_base=0、19 条 chunking 恢复；仍open：e5 六值跨相邻行单元（in_concat 连续但非
-> 单块）+ doc 级字符差 672，冻结进 E5 前需复核），冻结进 E5 暂缓。
+> 版本：v3.2 · 2026-09-29。状态：**E5 已冻结** —— 候选栈 reader-pdf-9→clean-4→chunk-5 已在生产 PG
+> 全量重建并发布为活动 build（generation=2，6 源全部 `published`）。4 源 blocking 缺口经 09-29
+> 源页零模型复核确认零 content_loss（图页 image_only_no_text / 表页 content_retained），登记
+> human gap-review 凭证（reviewer=xyl 09-21 签认同源同缺口语逐字一致）后按发布门放行、绝不绕过；
+> `doc_chars_lost=672` 定为单元化口径差异（σ4.2），符合 §6 成功标准第 2 条。
 > 依据：[B0 归因](../b0-attribution-20260928/report.md)、[B4 组合对照 §2.3](../b4-combined-20260929/report.md)、
+> [B4 候选对照 §5.6](#56-b4-候选分项对照-结果2026-09-29未通过)、[E5 冻结执行](../b4-candidate-20260929/e5-freeze-result.json)、
 > [protocol.md](protocol.md) §3 九层链路与 §6 成功标准第 2 条。
-> 进入下一步条件：每条修复有证据、R1/R2 反例通过；必要修改均有对应 revision 和候选 build。
+> 进入下一步条件：每条修复有证据、R1/R2 反例通过；必要修改均有对应 revision 和候选 build（已满足）。
 
 ## 1. 结构缺陷（structure_error ×4，B4.1 后仍残留）
 
@@ -149,3 +151,21 @@ NOISE 0 残留（3/3 引文跨过单元全 kept）。
 dddc7cd0(345)；agent 分类为相对 base（reader-pdf-6）的**单元化口径差异**（行重组所致），相关引文
 均 ok、非真实文本缺失；但 register §5.5 曾记这两源「30 字符 deficit」。是否以此口径接受
 「deficit≈0」并具冻结进 E5，需按 §5.5 三硬项逐一核证。
+
+### 5.7 E5 冻结执行（2026-09-29，**通过 → 已冻结**）
+
+- **口径裁决**：`doc_chars_lost=672` 接受为**单元化口径差异**（非真实内容丢失）——相关引文在
+  gen-2 build 全部 `ok`，不构成支持缺口；据此具冻结进 E5（§6 成功标准第 2 条）。
+- **全量重建发布**：候选栈 `reader-pdf-9→clean-4→chunk-5` 经生产管线（`plan_builds`→`execute_builds`→
+  `publish_build`）在目标库 `postgres` 重建并发布；6 源全部 `published`、`generation=2`、活动
+  build=new build。执行记录：[e5-freeze-result.json](../b4-candidate-20260929/e5-freeze-result.json)、
+  [e5_freeze_driver.py](../b4-candidate-20260929/e5_freeze_driver.py)。
+- **发布门 fail-closed 放行（4 源）**：174b6462 / 6f14cc14 / 793b3967 / dddc7cd0 的 gen-2 build
+  存在 blocking 缺口（图页 image_region_unreadable / 表页 table_lines_without_extraction）。
+  09-29 对 4 源缺口页**零模型源页复核**判定零 content_loss（`image_only_no_text` / `content_retained`），
+  与既有评审者 `xyl` 09-21 对同一来源同缺口语逐字一致。据此原样重建并绑定到 gen-2 build 指纹，
+  经 `store.put_gap_review` → `apply_gap_review`（保留/不相交/区域几何校验，dddc7cd0 走 region
+  schema human-gap-review-2，pymupdf 校验 page:7 持股文字 bbox 与图像区不相交）校验通过，按发布门
+  放行并重发——gap 仍可见、coverage scoped，未绕过 fail-closed。
+- 6 源 gap-review：174b6462/6f14cc14/793b3967/dddc7cd0 各绑 1 凭证；cc03f55b/f8e31696 无 blocking
+  缺口无需凭证。

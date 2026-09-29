@@ -1,0 +1,135 @@
+{
+  "target_db": "postgres",
+  "stack": "reader-pdf-9/clean-4/chunk-5",
+  "applied_at": "2026-09-29T16:36:07.893309+00:00",
+  "sources": [
+    {
+      "source": "2026-08-13_174b6462",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "decision_id": [
+        "i3e1-approved-2cd3cadcf9"
+      ],
+      "admission": "in_scope",
+      "unit_count": 1329,
+      "chunk_count": 146,
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "build_revs": {
+        "parse_rev": "1839a56224900eb9a6810c490c4e4a6de7de5f8e4955a4bc43613161d37855a9",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "gap_review": true,
+      "gap_review_id": "0df54c124bbe8b0fdb1fc01564bb922164c5fb59f2122b224fad9a7be62e3821",
+      "outcome": "published",
+      "active_build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "generation": 2
+    },
+    {
+      "source": "2026-08-16_6f14cc14",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf",
+      "decision_id": [
+        "i3e1-approved-2b36f14b42"
+      ],
+      "admission": "in_scope",
+      "unit_count": 326,
+      "chunk_count": 55,
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "build_revs": {
+        "parse_rev": "2b451eec1b815942ac319a5c48629b2189bdac44438b7cc3f9248e4550083a44",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "gap_review": true,
+      "gap_review_id": "7f4197aed491ccc013065673314ccf73bd550ad090b2a1e68f0164c95888e771",
+      "outcome": "published",
+      "active_build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "generation": 2
+    },
+    {
+      "source": "2026-09-06_793b3967",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "decision_id": [
+        "i3e1-approved-9cdca024d2"
+      ],
+      "admission": "in_scope",
+      "unit_count": 474,
+      "chunk_count": 43,
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "build_revs": {
+        "parse_rev": "9f3d2b60d51f6b65d07778025e872d75de95d650c2e51bda946f39c3d7994fbf",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "gap_review": true,
+      "gap_review_id": "bc014fdf0ed6867beb6d824fb2b813f98624f4d92a544bb09c3995b3f1780ca4",
+      "outcome": "published",
+      "active_build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "generation": 2
+    },
+    {
+      "source": "2026-09-06_cc03f55b",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "decision_id": [
+        "i3e1-approved-43300146a2"
+      ],
+      "admission": "in_scope",
+      "unit_count": 269,
+      "chunk_count": 30,
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "build_revs": {
+        "parse_rev": "f57fae4096c0a6ee08052dcab94bdccfbe8eee46d28ed691031c30211a1b29a3",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "outcome": "published",
+      "active_build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "generation": 2
+    },
+    {
+      "source": "2026-09-06_dddc7cd0",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "decision_id": [
+        "i3e1-approved-dd259586a3"
+      ],
+      "admission": "in_scope",
+      "unit_count": 613,
+      "chunk_count": 83,
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "build_revs": {
+        "parse_rev": "b53584814f8304976ecbf8f5830f0fcd414a658ccb5abaa368d5afb2e4f5a8f4",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "gap_review": true,
+      "gap_review_id": "6d359b4b34b3eb06cc2c0771c2c18f0282351d57781f4cfb40da8705f92765e5",
+      "outcome": "published",
+      "active_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "generation": 2
+    },
+    {
+      "source": "2026-09-06_f8e31696",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "pdf": "/home/administrator/FrontierAgent/data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "decision_id": [
+        "i3e1-approved-f269774bb4"
+      ],
+      "admission": "in_scope",
+      "unit_count": 230,
+      "chunk_count": 23,
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "build_revs": {
+        "parse_rev": "f3264968fb5e8324912ce089bc651ad0f761ac72ac0a0229db72c43654c9c074",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f"
+      },
+      "outcome": "published",
+      "active_build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "generation": 2
+    }
+  ]
+}
