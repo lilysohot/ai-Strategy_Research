@@ -1,0 +1,51 @@
+== company-003 :: 国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少…
+   status=ok wall=618.1s submits=2 feedback=True resolved=True final=verified
+{
+  "questions": [
+    {
+      "query_id": "company-003",
+      "status": "ok",
+      "loop": {
+        "manifest_tool_calls": 2,
+        "had_feedback": true,
+        "feedback_submit_seqs": [
+          0
+        ],
+        "feedback_codes": {
+          "missing_dependencies": 1
+        },
+        "resolved_conclusions": [
+          {
+            "id": "C1",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          },
+          {
+            "id": "C2",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          },
+          {
+            "id": "C3",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          },
+          {
+            "id": "C4",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          }
+        ],
+        "resolved": true,
+        "final_publish_status": "verified",
+        "final_counts": {
+          "supported": 5,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "corpus_fetch_calls": 9,
+        "corpus_fetch_locators": 18
+      }
+    }
+  ]
+}

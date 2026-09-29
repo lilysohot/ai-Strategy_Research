@@ -1,0 +1,277 @@
+{
+  "artifact": "a4-loop-probe-question",
+  "query_id": "company-003",
+  "domain": "company",
+  "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+  "guided": false,
+  "status": "ok",
+  "wall_s": 344.6,
+  "session": {
+    "present": true,
+    "session_id": "20260929-130738+0800-react-04b4",
+    "model": "glm-5.3-flash",
+    "run_dir": ".apodex/runs/20260929-130738+0800-react-04b4",
+    "usage": {
+      "input": 494987,
+      "output": 15410,
+      "cached": 435648
+    }
+  },
+  "trace": {
+    "present": true,
+    "llm_turns": 13,
+    "tool_counts": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 4,
+      "corpus_inventory": 1,
+      "corpus_fetch": 6,
+      "corpus_submit_manifest": 1,
+      "create_file": 1
+    },
+    "corpus_timeline": [
+      {
+        "turn": 2,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_inventory",
+        "is_error": false
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0000",
+          "chunk:a3b681fdd55d6e11:heading:0001",
+          "chunk:a3b681fdd55d6e11:heading:0002",
+          "chunk:a3b681fdd55d6e11:heading:0003",
+          "chunk:a3b681fdd55d6e11:heading:0004",
+          "chunk:a3b681fdd55d6e11:heading:0005",
+          "chunk:a3b681fdd55d6e11:body:0000",
+          "chunk:a3b681fdd55d6e11:body:0001",
+          "chunk:a3b681fdd55d6e11:body:0002"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0154",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0016",
+          "chunk:a3b681fdd55d6e11:table:0017"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0018",
+          "chunk:a3b681fdd55d6e11:table:0019"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0020",
+          "chunk:a3b681fdd55d6e11:table:0021"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 10,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 4,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 4,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "c0",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ],
+    "manifest_submits": [
+      {
+        "turn": 10,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 4,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 4,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "c0",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "c3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ]
+  },
+  "manifests": {
+    "count": 1,
+    "files": [
+      ".apodex/runs/20260929-130738+0800-react-04b4/corpus/manifests/manifest-000.json"
+    ]
+  },
+  "verification": {
+    "present": true,
+    "status": "partial",
+    "counts": {
+      "supported": 0,
+      "partial": 4,
+      "unsupported": 0
+    },
+    "verification_errors": 0,
+    "problem_codes": {
+      "not_in_report": 4
+    },
+    "boundary_action": null,
+    "manifest_files": [
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-130738+0800-react-04b4/corpus/manifests/manifest-000.json"
+    ],
+    "path": ".apodex/runs/20260929-130738+0800-react-04b4/corpus/manifest_verification.json"
+  },
+  "loop": {
+    "manifest_tool_calls": 1,
+    "had_feedback": false,
+    "feedback_submit_seqs": [],
+    "feedback_codes": {},
+    "resolved_conclusions": [],
+    "resolved": false,
+    "final_publish_status": "verified",
+    "final_counts": {
+      "supported": 4,
+      "partial": 0,
+      "unsupported": 0
+    },
+    "corpus_fetch_calls": 6,
+    "corpus_fetch_locators": 19
+  },
+  "gold": {
+    "targets": 6,
+    "fetched_hit": 6,
+    "answer_hit": 6
+  },
+  "generated_at": "2026-09-29T05:13:23.101288+00:00"
+}

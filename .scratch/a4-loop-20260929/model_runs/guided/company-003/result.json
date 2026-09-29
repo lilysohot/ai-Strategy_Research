@@ -1,0 +1,471 @@
+{
+  "artifact": "a4-loop-probe-question",
+  "query_id": "company-003",
+  "domain": "company",
+  "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+  "guided": true,
+  "status": "ok",
+  "wall_s": 618.1,
+  "session": {
+    "present": true,
+    "session_id": "20260929-133319+0800-react-f30d",
+    "model": "glm-5.3-flash",
+    "run_dir": ".apodex/runs/20260929-133319+0800-react-f30d",
+    "usage": {
+      "input": 777980,
+      "output": 23378,
+      "cached": 708160
+    }
+  },
+  "trace": {
+    "present": true,
+    "llm_turns": 17,
+    "tool_counts": {
+      "add_task": 1,
+      "update_task": 4,
+      "data_coverage": 1,
+      "corpus_search": 4,
+      "corpus_fetch": 9,
+      "corpus_submit_manifest": 2
+    },
+    "corpus_timeline": [
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0018"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0000",
+          "chunk:a3b681fdd55d6e11:body:0000",
+          "chunk:a3b681fdd55d6e11:body:0001",
+          "chunk:a3b681fdd55d6e11:body:0002"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0017",
+          "chunk:a3b681fdd55d6e11:table:0019"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "cursor"
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015",
+          "chunk:a3b681fdd55d6e11:table:0016"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0001",
+          "chunk:a3b681fdd55d6e11:heading:0002",
+          "chunk:a3b681fdd55d6e11:body:0003",
+          "chunk:a3b681fdd55d6e11:table:0000",
+          "chunk:a3b681fdd55d6e11:table:0001"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "cursor"
+      },
+      {
+        "turn": 10,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 10,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0154",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ]
+      },
+      {
+        "turn": 11,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0024"
+        ]
+      },
+      {
+        "turn": 13,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 1,
+          "partial": 4,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C3",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C4",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 4
+        }
+      },
+      {
+        "turn": 14,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 5,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ],
+    "manifest_submits": [
+      {
+        "turn": 13,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 1,
+          "partial": 4,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C3",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C4",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 4
+        }
+      },
+      {
+        "turn": 14,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 5,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ]
+  },
+  "manifests": {
+    "count": 2,
+    "files": [
+      ".apodex/runs/20260929-133319+0800-react-f30d/corpus/manifests/manifest-000.json",
+      ".apodex/runs/20260929-133319+0800-react-f30d/corpus/manifests/manifest-001.json"
+    ]
+  },
+  "verification": {
+    "present": true,
+    "status": "partial",
+    "counts": {
+      "supported": 6,
+      "partial": 4,
+      "unsupported": 0
+    },
+    "verification_errors": 0,
+    "problem_codes": {
+      "missing_dependencies": 4
+    },
+    "boundary_action": null,
+    "manifest_files": [
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-133319+0800-react-f30d/corpus/manifests/manifest-000.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-133319+0800-react-f30d/corpus/manifests/manifest-001.json"
+    ],
+    "path": ".apodex/runs/20260929-133319+0800-react-f30d/corpus/manifest_verification.json"
+  },
+  "loop": {
+    "manifest_tool_calls": 2,
+    "had_feedback": true,
+    "feedback_submit_seqs": [
+      0
+    ],
+    "feedback_codes": {
+      "missing_dependencies": 1
+    },
+    "resolved_conclusions": [
+      {
+        "id": "C1",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      },
+      {
+        "id": "C2",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      },
+      {
+        "id": "C3",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      },
+      {
+        "id": "C4",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      }
+    ],
+    "resolved": true,
+    "final_publish_status": "verified",
+    "final_counts": {
+      "supported": 5,
+      "partial": 0,
+      "unsupported": 0
+    },
+    "corpus_fetch_calls": 9,
+    "corpus_fetch_locators": 18
+  },
+  "gold": {
+    "targets": 6,
+    "fetched_hit": 6,
+    "answer_hit": 6
+  },
+  "generated_at": "2026-09-29T05:43:36.982203+00:00"
+}
