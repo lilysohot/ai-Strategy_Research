@@ -220,10 +220,17 @@ def test_header_footer_requires_repetition_and_band() -> None:
 
     regions = _regions_by_ordinal(clean_reader_result(_result(units)))
     header_regions = [r for r in regions.values() if "header_repeated_geometric" in r.reasons]
-    assert len(header_regions) == 4  # 重复 4 页 + 顶带共同判定
+    assert {r.ordinal for r in header_regions} == {3, 5, 7}  # 首现（P1）保留，P2 起真页眉照删
     footer_regions = [r for r in regions.values() if "footer_repeated_geometric" in r.reasons]
-    assert len(footer_regions) == 3
+    assert {r.ordinal for r in footer_regions} == {10, 11}  # 同上：P1 首现保留
     assert all(r.status is UnitStatus.NOISE for r in header_regions + footer_regions)
+    for ordinal in (1, 9):  # clean-1 N3：去重保留首次出现（不得删除首现标题/首现页眉）
+        assert regions[ordinal].status is UnitStatus.KEPT, ordinal
+        first_kept = [
+            v for v in regions[ordinal].verdicts if v.rule == "banded_repeated_geometric_first_kept"
+        ]
+        assert first_kept, ordinal
+    assert regions[1].verdicts[0].observed["repeat_pages"] == 4  # P1 标题同文页数仍可机读复核
     twice = [r for r in regions.values() if r.ordinal == 12]
     assert twice[0].status is UnitStatus.KEPT  # 仅重复 2 页 < 阈值，不删
     body = [r for r in regions.values() if r.ordinal == 2]
@@ -400,6 +407,100 @@ def test_header_repeated_two_pages_is_kept_with_repeat_pages_observed() -> None:
         assert "header_repeated_geometric" not in region.reasons  # type: ignore[attr-defined]
         repeats = [v.observed["repeat_pages"] for v in region.verdicts]  # type: ignore[attr-defined]
         assert repeats == [2]  # 低于 _REPEAT_MIN_PAGES=3：不删，但依据仍可机读复核
+
+
+# --- clean-1：N1/N2 免责节跨单元切句整体保留；N3 页眉去重保留首现（E3 修复包） ---
+
+
+def test_disclaimer_split_fact_sentence_tail_unit_kept() -> None:
+    """n1/n2（E3，2026-08-16_6f14cc14 page 7）：免责节事实句被切成跨单元片段时，
+    尾段单元单独无事实标记（「份。」），曾按 disclaimer_section 整删，致金标 e1
+    子串与 e2 全句均不可单块命中。句子游程整体判定：含事实则整句各段保留。"""
+    units = [
+        _unit(1, "分析师声明", kind="heading"),
+        _unit(
+            2,
+            "每位负责撰写本研究报告全部或部分内容的分析师在此作以下声明：\n"
+            "本报告涉及股票贵州茅台（600519），根据上市公司公告，贵州茅台的控股股东"
+            "茅台集团持有本公司的控股股东华创云信4.06%的股",
+        ),
+        _unit(3, "份。"),
+        _unit(4, "本报告版权仅为本公司所有，未经许可不得以任何形式翻版、复制、转发。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    # 跨单元事实句整体保留：头段与尾段都须 KEPT
+    assert regions[2].status is UnitStatus.KEPT  # type: ignore[attr-defined]
+    assert regions[3].status is UnitStatus.KEPT  # type: ignore[attr-defined]
+    # 金标 e1 子串在两段 clean_view 归一拼接中完整还原（单块可达）
+    joined = "".join(regions[2].clean_view.split()) + "".join(  # type: ignore[union-attr]
+        regions[3].clean_view.split()  # type: ignore[union-attr]
+    )
+    assert "贵州茅台的控股股东茅台集团持有本公司的控股股东华创云信4.06%的股份。" in joined
+    # 尾段 KEPT 同样过保真不变式，且 verdict 记录游程级事实判定
+    verify_clean_region(units[2].raw_text, regions[3].clean_view, regions[3].mapping)  # type: ignore[arg-type]
+    facts = [v for v in regions[3].verdicts if v.code == "disclaimer_section"]  # type: ignore[attr-defined]
+    assert facts and facts[0].rule == "disclaimer_section_numeric_fact_keep"
+    assert facts[0].observed["run_ordinals"] == [2, 3]  # type: ignore[operator]
+    # 事实句之后的纯免责措辞仍删：事实判定不豁免整节
+    assert regions[4].status is UnitStatus.NOISE  # type: ignore[attr-defined]
+    assert "disclaimer_section" in regions[4].reasons  # type: ignore[attr-defined]
+
+
+def test_disclaimer_split_without_fact_stays_noise() -> None:
+    """n1 反例守卫：免责节切句但拼接后仍无可复核事实 → 维持 NOISE 不放宽。"""
+    units = [
+        _unit(1, "分析师声明", kind="heading"),
+        _unit(
+            2,
+            "分析师在本报告中对所提及的证券或发行人发表的任何建议和观点均准确地反映了其个人对",
+        ),
+        _unit(3, "该证券或发行人的看法和判断。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    for ordinal in (2, 3):
+        assert regions[ordinal].status is UnitStatus.NOISE, ordinal
+        assert "disclaimer_section" in regions[ordinal].reasons, ordinal
+
+
+def test_running_header_dedup_keeps_first_occurrence_title() -> None:
+    """n3（E3，2026-08-16_6f14cc14 page 1）：P1 标题与 P2 起页眉同文时，去重
+    不得删除首次出现——首现标题承载「强推（维持）」评级所在标题区。"""
+    units = [
+        _unit(
+            1,
+            "贵州茅台（600519）2026 年中报点评",
+            kind="heading",
+            page=1,
+            bbox=(19.8, 88.6, 214.9, 101.9),
+        ),
+        _unit(2, "强推（维持）", kind="heading", page=1, bbox=(60.0, 130.0, 500.0, 150.0)),
+        _unit(3, "第1页正文", page=1, bbox=(60.0, 200.0, 500.0, 700.0)),
+    ]
+    ordinal = 3
+    for page in (2, 3, 4):
+        ordinal += 1
+        units.append(
+            _unit(
+                ordinal,
+                "贵州茅台（600519）2026 年中报点评",
+                page=page,
+                bbox=(417.5, 41.9, 564.2, 51.9),
+            )
+        )
+        ordinal += 1
+        units.append(_unit(ordinal, f"第{page}页正文", page=page, bbox=(60.0, 100.0, 500.0, 700.0)))
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    # 首现（P1 标题）保留；P2 起真页眉照删
+    assert regions[1].status is UnitStatus.KEPT  # type: ignore[attr-defined]
+    assert "header_repeated_geometric" not in regions[1].reasons  # type: ignore[attr-defined]
+    for ordinal in (4, 6, 8):
+        assert regions[ordinal].status is UnitStatus.NOISE, ordinal
+        assert "header_repeated_geometric" in regions[ordinal].reasons, ordinal
+    assert regions[2].status is UnitStatus.KEPT  # 评级行不同文，不受去重影响
+    # 首现豁免留痕（I-E2 observed 非空，重复页数可机读复核）
+    kept = [v for v in regions[1].verdicts if v.code == "header_repeated_geometric"]  # type: ignore[attr-defined]
+    assert kept and kept[0].rule == "banded_repeated_geometric_first_kept"
+    assert kept[0].observed["repeat_pages"] == 4  # type: ignore[operator]
 
 
 # --- 开发材料 smoke（守卫允许清单内的 6 份真实 PDF，只读） ---

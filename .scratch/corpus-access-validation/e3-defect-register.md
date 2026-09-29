@@ -1,6 +1,7 @@
 # E3 · 已知缺陷与反例登记
 
-> 版本：v2 · 2026-09-29。状态：**逐例复核完成**（§5 复核记录）；修复实施待启动。
+> 版本：v2 · 2026-09-29。状态：**逐例复核完成**（§5 复核记录）；三修复包均已实施
+> （chunk-5 / reader-pdf-8 / clean-1，见 §5.5），待重建候选语料 + B4 分项对照。
 > 依据：[B0 归因](../b0-attribution-20260928/report.md)、[B4 组合对照 §2.3](../b4-combined-20260929/report.md)、
 > [protocol.md](protocol.md) §3 九层链路与 §6 成功标准第 2 条。
 > 进入下一步条件：每条修复有证据、R1/R2 反例通过；必要修改均有对应 revision 和候选 build。
@@ -90,7 +91,7 @@ pypdf 提取 `174b6462` page 10：`24.0 28.5 28.5 - 18.8% 0.0%` 在源 PDF 文�
 | 修复包 | 覆盖 | 内容 | 候选 build 计划 |
 |---|---|---|---|
 | `reader-pdf-8` | S1–S3, S4 | **已实施（2026-09-29）**：`READER_PDF_REV=reader-pdf-8`。根因①茅台 p3 无制表线→lines 策略 0 表、数字退化为扁平段落，新增 `_extract_wireless_tables`（中缝 clip 双栏各自成表，`_seam_right_aligned` 判缝）；②化工 p10 续表左右栏行高不一、行网格纵向重叠致行序错乱，`_overlapping_row_indices`+`_row_text` 按网格列序重排。真实 PDF 验证：EPS 行 `cells=((22,0)..(22,4))` 且 67.74/70.77/73.84 就位；S4 六值连续恢复；对照页光力 p20 cells 与基线一致（cols 0..5,7..12），光大/华福逐项同基线。新增 4 个 r8_ 用例，`tests -k corpus_preparation` 242 通过/8 跳过，ruff/pyright 干净。已知妥协：中缝检测要求右栏含非数字标签列，纯数字并排表退化为单表提取（不丢数据） | 待重建语料后 B4 分项对照 |
-| `clean-1` | N1, N2, N3 | 声明节事实句整体保留；running-header 去重保留首现/按位置识别 | 同上 |
+| `clean-1` | N1, N2, N3 | **已实施（2026-09-29）**：`CLEAN_REV=clean-4`（修复包号 clean-1，模块版本顺延）。①N1/N2——免责节改**句子游程整体判定**：游程在句末标点/标题/非保留单元/文档末结算，拼接（去空白）含可复核事实则整句各段降 KEPT，verdict 留痕 `disclaimer_section_numeric_fact_keep` 并带 `run_ordinals`；无事实游程逐段 NOISE（相比逐单元判定只多保不少），事实判定不豁免节内其他噪声规则（roster/prefix 权威）。②N3——带判定去重**豁免同文首次出现**（`first_seen` 按 (page, ordinal)），首现留痕 verdict `banded_repeated_geometric_first_kept`（repeat_pages 可机读复核）；真实 PDF 验证：unit 5 标题「贵州茅台（600519）2026 年中报点评」KEPT，P2–P7 真页眉照删。测试：3 新用例（n1/n2 跨单元切句保留 + n1 反例守卫「无事实切句仍删」+ n3 首现豁免）+ 页眉/页脚测试期望更新为「首现保留、其余照删」，`tests -k corpus_preparation` 245 通过/8 跳过，ruff/pyright 干净。B0 权威口径（raw_text 按 \n 连接 + 去全部空白）端到端抽验：**e1、e2 单块命中 body:0022**。已知边界：company-008 a-1（标题+评级）跨 unit 5/6，两单元左右栏并排（x [19.8,214.9] vs [395.7,468.3] 不相交），chunk-5 R2-a 守卫「多栏并排标题不合并」按设计拒绝合并（heading:0000/0001 两块）——a-1 单块恢复非 clean 层可修，留待 B4 对照时裁决（读侧 masthead 分组或对照口径），不以放宽 R2-a 为代价 | 同上 |
 | `chunk-5` | R1/R2 守卫 | **已实施（2026-09-29）**：R1 守卫 `_pseudo_single_cell_rows`（同组 ≥2 行且无注释前缀才并入正文，孤行/注释框保表格身份）；R2 守卫 `_same_column`+`_headings_mergeable`（同栏 bbox 重叠 + 非新章节序号起头才合并）。3 反例转绿，`tests -k corpus_preparation` 238 通过/8 跳过，ruff/pyright 干净；正向路径实测不回归（793b3967 24 条伪表格行仍并入、华福拆行标题仍合并），`CHUNK_REV=chunk-5` | 待重建语料后 B4 分项对照 |
 
 实施顺序建议：chunk-5 守卫（反例已就位、可 TDD）→ reader-pdf-8 / clean-1（需补正向+反例测试）→

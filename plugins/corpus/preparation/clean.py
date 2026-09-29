@@ -16,10 +16,14 @@
   code point 偏移。引用唯一权威仍是 ``raw_text`` + 原始坐标（契约 §4.2），
   ``clean_view`` 不是引用权威。
 - 噪声判定保守（要求正向命中，宁漏勿删）：页眉/页脚需「归一化文本重复 ≥3 页 +
-  几何顶/底带」共同判定，不凭单个词删除整页/整行；目录需点线引导行 ≥2 或精确
-  标题；免责/评级说明按精确标题节与两个明确段落前缀进入噪声，节内单元保留原
-  单元与原因；分析师名单需 ≥2 角色行或角色行+证书编号行。风险提示与实际评级
-  不在任何噪声词表内（§6.1 相似前缀不删实际评级/风险提示/条件句）。
+  几何顶/底带」共同判定，不凭单个词删除整页/整行，且去重保留同文**首次出现**
+  （clean-1 N3：首页标题与页眉同文时首现是标题，不得删除）；目录需点线引导行
+  ≥2 或精确标题；免责/评级说明按精确标题节与两个明确段落前缀进入噪声，节内
+  单元保留原单元与原因，且按**句子游程整体判定**（clean-1 N1/N2：reader 按版面
+  装配段落可把一句话切成多个单元，游程拼接后含可复核数字事实则整句各段保留，
+  不得因尾段单独无事实标记而整删）；分析师名单需 ≥2 角色行或角色行+证书编号行。
+  风险提示与实际评级不在任何噪声词表内（§6.1 相似前缀不删实际评级/风险提示/
+  条件句）。
 - 读取缺口（空页/图片页/表格冲突/不可读元素/未闭合围栏/未知元素）转为合成区域
   并继承缺口状态与结构化坐标，不静默吞掉；``garbled_text``/``multi_column_*``/
   ``table_text_overlap`` 已由读取单元的状态与原因承载，不重复立区。
@@ -44,7 +48,7 @@ from plugins.corpus.preparation.gaps import (
 )
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderIssue, ReaderResult
 
-CLEAN_REV = "clean-3"
+CLEAN_REV = "clean-4"  # clean-4（E3 修复包 clean-1）：N1/N2 句子游程整体保留 + N3 去重保留首现
 
 # --- 开发起点参数（架构 §6.1；I3 校准前不外置） ---
 _REPEAT_MIN_PAGES = 3
@@ -247,6 +251,15 @@ def _norm_heading(text: str) -> str:
     return _normalized(text).rstrip("：:。．.")
 
 
+_SENTENCE_END_CHARS = "。！？"
+
+
+def _ends_sentence(raw_text: str) -> bool:
+    """单元是否以句末标点收束（clean-1 N1/N2：免责节句子游程的结算边界之一）。"""
+    stripped = raw_text.rstrip()
+    return bool(stripped) and stripped[-1] in _SENTENCE_END_CHARS
+
+
 def _strip_line(segment: str, base: int) -> list[tuple[str, int]]:
     """折叠行内水平空白：行首/行尾丢弃，内部 run 压成单空格（映射到 run 起点）。"""
     out: list[tuple[str, int]] = []
@@ -398,6 +411,32 @@ def _band_verdict(
     )
 
 
+def _band_first_kept_verdict(
+    code: str, unit: CandidateUnit, repeat_pages: int, bands: dict[int, tuple[float, float]]
+) -> NoiseVerdict:
+    """clean-1（N3）：同文首次出现豁免去重的机读留痕（区域为 KEPT，code 不要求入 reasons）。
+
+    页眉去重按全文同文匹配时，首现可能是首页标题而非页眉（源头发源地）；
+    豁免首现后，重复页数与带边界仍可机读复核。
+    """
+    assert unit.location.page is not None and unit.location.bbox is not None
+    top_bound, bottom_bound = bands[unit.location.page]
+    return NoiseVerdict(
+        code=code,
+        rule="banded_repeated_geometric_first_kept",
+        observed={
+            "repeat_pages": repeat_pages,
+            "page": unit.location.page,
+            "bbox": unit.location.bbox,
+            "top_bound": top_bound,
+            "bottom_bound": bottom_bound,
+            "first_page": unit.location.page,
+            "first_ordinal": unit.ordinal,
+        },
+        threshold={"min_pages": _REPEAT_MIN_PAGES, "band_ratio": _BAND_RATIO},
+    )
+
+
 def _toc_verdict(code: str, unit: CandidateUnit) -> NoiseVerdict:
     if code == _NOISE_TOC_HEADING:
         return NoiseVerdict(
@@ -445,11 +484,15 @@ def _disclaimer_heading_verdict(unit: CandidateUnit) -> NoiseVerdict:
     )
 
 
-def _disclaimer_section_verdict(origin: tuple[int, str]) -> NoiseVerdict:
+def _disclaimer_section_verdict(origin: tuple[int, str], run_ordinals: list[int]) -> NoiseVerdict:
     return NoiseVerdict(
         code=_NOISE_DISCLAIMER_SECTION,
         rule="disclaimer_section_after_heading",
-        observed={"origin_ordinal": origin[0], "origin_heading": origin[1]},
+        observed={
+            "origin_ordinal": origin[0],
+            "origin_heading": origin[1],
+            "run_ordinals": run_ordinals,
+        },
         threshold={"disclaimer_headings": sorted(_DISCLAIMER_HEADINGS)},
     )
 
@@ -477,14 +520,21 @@ def _has_numeric_fact_sentence(raw_text: str) -> bool:
     )
 
 
-def _disclaimer_fact_keep_verdict(origin: tuple[int, str], raw_text: str) -> NoiseVerdict:
-    """免责节含事实句、降 KEPT 的机读留痕（区域为 KEPT，code 不要求入 reasons）。"""
+def _disclaimer_fact_keep_verdict(
+    origin: tuple[int, str], raw_text: str, run_ordinals: list[int]
+) -> NoiseVerdict:
+    """免责节句子游程含事实句、降 KEPT 的机读留痕（区域为 KEPT，code 不要求入 reasons）。
+
+    ``raw_text`` 是游程各段归一拼接（clean-1 N1/N2：事实句可跨单元，标记按拼接
+    判定）；``run_ordinals`` 记录共同结算的单元序号。
+    """
     return NoiseVerdict(
         code=_NOISE_DISCLAIMER_SECTION,
         rule="disclaimer_section_numeric_fact_keep",
         observed={
             "origin_ordinal": origin[0],
             "origin_heading": origin[1],
+            "run_ordinals": run_ordinals,
             "fact_markers": {
                 "stake": bool(_NUMERIC_STAKE.search(raw_text)),
                 "stock_code": bool(_STOCK_CODE.search(raw_text)),
@@ -571,16 +621,64 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
     units = sorted(result.units, key=lambda unit: unit.ordinal)
     repeated = _repeated_page_counts(units)
     bands = _page_bands(units)
+    # clean-1（N3）：每个归一化同文文本的首次出现 (page, ordinal)——带判定去重时
+    # 豁免首现（页眉与首页标题同文时，首现是标题源头发源地，不得删除）。
+    first_seen: dict[str, tuple[int, int]] = {}
+    for unit in units:
+        page = unit.location.page
+        if page is None or unit.location.bbox is None:
+            continue
+        key = (page, unit.ordinal)
+        norm = _normalized(unit.raw_text)
+        if norm not in first_seen or key < first_seen[norm]:
+            first_seen[norm] = key
     regions: list[CleanRegion] = []
     in_disclaimer = False
     disclaimer_origin: tuple[int, str] | None = None
+    # clean-1（N1/N2）：免责节句子游程缓冲。reader 按版面装配段落，一句话可能被
+    # 切成多个单元（如「……4.06%的股」+「份。」），逐单元单独判定会因尾段缺事实
+    # 标记而整删。游程在句末标点/标题/非保留单元/文档结束处结算：拼接后含可复核
+    # 事实则整句各段保留，否则逐段 NOISE（相比逐单元判定只多保不少，宁漏勿删）。
+    run: list[tuple[CandidateUnit, list[str], list[NoiseVerdict]]] = []
+
+    def _flush_run() -> None:
+        nonlocal run
+        if not run:
+            return
+        assert disclaimer_origin is not None  # 游程只在免责节内产生
+        concat = _normalized("".join(unit.raw_text for unit, _n, _v in run))
+        has_fact = _has_numeric_fact_sentence(concat)
+        ordinals = [unit.ordinal for unit, _n, _v in run]
+        for unit, other_noise, other_verdicts in run:
+            if has_fact and not other_noise:
+                # 事实句整体保留；verdict 留痕『游程含事实句』（KEPT 区，code 不入 reasons）。
+                verdicts = (
+                    *other_verdicts,
+                    _disclaimer_fact_keep_verdict(disclaimer_origin, concat, ordinals),
+                )
+                regions.append(_region_from_unit(unit, UnitStatus.KEPT, unit.reasons, verdicts))
+                continue
+            reasons = (*unit.reasons, *other_noise)
+            verdicts = tuple(other_verdicts)
+            if not has_fact:
+                # 游程无事实：维持免责节判定；其他噪声规则（banded/toc/roster/prefix）
+                # 结论原样生效，仅 disclaimer_section 追加在 reasons 末尾。
+                reasons = (*reasons, _NOISE_DISCLAIMER_SECTION)
+                verdicts = (*verdicts, _disclaimer_section_verdict(disclaimer_origin, ordinals))
+            # has_fact 但其他噪声规则命中：其他规则权威，维持 NOISE，免责判定不记
+            # （I-E1：未触发的 code 不得进入 NOISE 区 verdicts）。
+            regions.append(_region_from_unit(unit, UnitStatus.NOISE, reasons, verdicts))
+        run = []
+
     for unit in units:
         is_heading = unit.kind in _HEADING_KINDS
         heading_is_disclaimer = is_heading and _norm_heading(unit.raw_text) in _DISCLAIMER_HEADINGS
         if is_heading:
+            _flush_run()  # 标题是句子游程边界：先结算上一节游程，再切换免责节状态
             in_disclaimer = heading_is_disclaimer
             disclaimer_origin = (unit.ordinal, unit.raw_text) if heading_is_disclaimer else None
         if unit.status is not UnitStatus.KEPT:
+            _flush_run()  # 非保留单元中断句子游程
             # 读取器已判复核/OCR 的区域原状态继承，不做投影、不升级为保留。
             regions.append(_region_from_unit(unit, unit.status, tuple(unit.reasons)))
             continue
@@ -588,22 +686,19 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
         verdicts: list[NoiseVerdict] = []
         banded = _banded_noise(unit, bands)
         if banded is not None:
-            repeat_pages = repeated.get(_normalized(unit.raw_text), 0)
-            verdicts.append(_band_verdict(banded, unit, repeat_pages, bands))
-            if repeat_pages >= _REPEAT_MIN_PAGES:
-                noise.append(banded)
-        if is_heading and heading_is_disclaimer:
-            noise.append(_NOISE_DISCLAIMER_HEADING)
-            verdicts.append(_disclaimer_heading_verdict(unit))
-        elif in_disclaimer:
-            assert disclaimer_origin is not None  # in_disclaimer 只能由免责声明标题置位
-            if _has_numeric_fact_sentence(unit.raw_text):
-                # 票 08（I-E3）：免责节单元含『可复核数字事实句』→ 整段降 KEPT 保事实，
-                # 不整段剔除。区域为 KEPT，verdict 留痕为『已评估免责节但含事实句』。
-                verdicts.append(_disclaimer_fact_keep_verdict(disclaimer_origin, unit.raw_text))
+            norm = _normalized(unit.raw_text)
+            repeat_pages = repeated.get(norm, 0)
+            assert unit.location.page is not None  # banded 判定已要求 page/bbox 非空
+            if repeat_pages >= _REPEAT_MIN_PAGES and first_seen.get(norm) == (
+                unit.location.page,
+                unit.ordinal,
+            ):
+                # clean-1（N3）：同文首次出现豁免去重；KEPT 区留痕仍可机读复核。
+                verdicts.append(_band_first_kept_verdict(banded, unit, repeat_pages, bands))
             else:
-                noise.append(_NOISE_DISCLAIMER_SECTION)
-                verdicts.append(_disclaimer_section_verdict(disclaimer_origin))
+                verdicts.append(_band_verdict(banded, unit, repeat_pages, bands))
+                if repeat_pages >= _REPEAT_MIN_PAGES:
+                    noise.append(banded)
         toc = _toc_noise(unit)
         if toc is not None:
             noise.append(toc)
@@ -614,12 +709,26 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
         if unit.kind == "paragraph" and _normalized(unit.raw_text).startswith(_DISCLAIMER_PREFIXES):
             noise.append(_NOISE_DISCLAIMER_PREFIX)
             verdicts.append(_disclaimer_prefix_verdict(unit))
-        status = UnitStatus.NOISE if noise else UnitStatus.KEPT
-        if status is UnitStatus.NOISE:
-            # I-E1：NOISE 区只保留已触发（code ∈ noise）的判定；近命中仅在 KEPT 区记账。
-            verdicts = [v for v in verdicts if v.code in noise]
-        reasons = (*unit.reasons, *noise)
-        regions.append(_region_from_unit(unit, status, reasons, verdicts=tuple(verdicts)))
+        buffered = False
+        if is_heading and heading_is_disclaimer:
+            noise.append(_NOISE_DISCLAIMER_HEADING)
+            verdicts.append(_disclaimer_heading_verdict(unit))
+        elif in_disclaimer:
+            # clean-1（N1/N2）：缓冲进句子游程，结算时按拼接统一判定。
+            # noise/verdicts 以同一列表对象入游程，上方 banded/toc/roster/prefix
+            # 的追加对结算可见；缓冲后不再走下方统一发射。
+            run.append((unit, noise, verdicts))
+            buffered = True
+            if _ends_sentence(unit.raw_text):
+                _flush_run()
+        if not buffered:
+            status = UnitStatus.NOISE if noise else UnitStatus.KEPT
+            if status is UnitStatus.NOISE:
+                # I-E1：NOISE 区只保留已触发（code ∈ noise）的判定；近命中仅在 KEPT 区记账。
+                verdicts = [v for v in verdicts if v.code in noise]
+            reasons = (*unit.reasons, *noise)
+            regions.append(_region_from_unit(unit, status, reasons, verdicts=tuple(verdicts)))
+    _flush_run()
     full_regions = (*regions, *_synthetic_regions(result.issues))
     verify_noise_verdicts(full_regions)
     return CleanResult(
