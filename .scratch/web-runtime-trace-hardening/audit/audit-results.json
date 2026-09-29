@@ -1,0 +1,180 @@
+{
+  "timestamp_utc": "2026-09-29T06:23:46Z",
+  "exit_code": 1,
+  "network_blocked": true,
+  "subprocesses_blocked": true,
+  "production_data_accessed": false,
+  "targets": [
+    "/home/administrator/FrontierAgent/.scratch/web-runtime-trace-hardening/audit/test_storage_chain.py"
+  ],
+  "records": [
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f08_submit_rejects_foreign_session_without_mutation",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.03419739099990693,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:64: in test_f08_submit_rejects_foreign_session_without_mutation\n    assert response.status_code == 404 and not turns, (\nE   AssertionError: foreign submission status=202, foreign messages=1\nE   assert (202 == 404)\nE    +  where 202 = <Response [202 Accepted]>.status_code"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f01_uuid_returned_by_api_reads_same_trace",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.007459618000211776,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:71: in test_f01_uuid_returned_by_api_reads_same_trace\n    assert canonical.json()[\"records\"] == compact.json()[\"records\"], \"hyphenated UUID loses stored trace\"\nE   AssertionError: hyphenated UUID loses stored trace\nE   assert [] == [{'t': 'llm',... 'synthetic'}]\nE     \nE     Right contains one more item: {'t': 'llm', 'turn': 1, 'content': 'synthetic'}\nE     Use -v to get more diff"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f03_trace_uses_same_redaction_as_replay",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.003905351999492268,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:77: in test_f03_trace_uses_same_redaction_as_replay\n    assert fake not in response.text, \"synthetic credential returned unredacted\"\nE   AssertionError: synthetic credential returned unredacted\nE   assert 'sk-AuditSynthetic123456' not in '{\"run_id\":\"...ic123456\"}]}'\nE     \nE     'sk-AuditSynthetic123456' is contained here:\nE       content\":\"sk-AuditSynthetic123456\"}]}"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f04_observer_call_id_survives_jsonl",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.00800494799932494,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:88: in test_f04_observer_call_id_survives_jsonl\n    assert starts[0][\"tool_call_id\"] == \"vendor-id\"\nE   AssertionError: assert 'call_1_0' == 'vendor-id'\nE     \nE     - vendor-id\nE     + call_1_0"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f09_late_subscription_finishes",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.10089938200053439,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:106: in test_f09_late_subscription_finishes\n    assert not timed_out, \"finished run's new live subscriber never receives terminal/sentinel\"\nE   AssertionError: finished run's new live subscriber never receives terminal/sentinel\nE   assert not True"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f12_rejected_batch_leaves_no_uploaded_files",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.004698430000644294,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:115: in test_f12_rejected_batch_leaves_no_uploaded_files\n    assert not leftovers, f\"rejected batch left {len(leftovers)} files\"\nE   AssertionError: rejected batch left 1 files\nE   assert not [PosixPath('/tmp/frontier-storage-audit-8wjbet6z/pytest/test_f12_rejected_batch_leaves0/runs/3f12c6bc4b4941d89131e5fb8dc8e45f/inputs/ok.txt')]"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f14_queued_future_message_excluded_from_history",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.011541099000169197,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:132: in test_f14_queued_future_message_excluded_from_history\n    assert \"FUTURE_MARKER\" not in captured[\"history\"]\nE   AssertionError: assert 'FUTURE_MARKER' not in '## Conversa...UTURE_MARKER'\nE     \nE     'FUTURE_MARKER' is contained here:\nE       ## Conversation so far\nE       User: FUTURE_MARKER"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_missing_trace_is_not_measured_zero_usage",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.00041287699968961533,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:136: in test_missing_trace_is_not_measured_zero_usage\n    assert usage.get(\"status\") in {\"unavailable\", \"partial\"} or usage.get(\"total_tokens\") is None, (\nE   AssertionError: missing trace is indistinguishable from verified zero usage\nE   assert (None in {'partial', 'unavailable'} or 0 is None)\nE    +  where None = <built-in method get of dict object at 0x7dcf8cea6000>('status')\nE    +    where <built-in method get of dict object at 0x7dcf8cea6000> = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0, 'cache_read_tokens': 0, ...}.get\nE    +  and   0 = <built-in method get of dict object at 0x7dcf8cea6000>('total_tokens')\nE    +    where <built-in method get of dict object at 0x7dcf8cea6000> = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0, 'cache_read_tokens': 0, ...}.get"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_artifact_root_symlink_cannot_rebase_containment",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.0005997380003464059,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:146: in test_artifact_root_symlink_cannot_rebase_containment\n    assert resolve_artifact_path(env.rid.hex, \"synthetic.txt\") is None, (\nE   AssertionError: symlinked outputs root changes containment boundary\nE   assert PosixPath('/tmp/frontier-storage-audit-8wjbet6z/pytest/test_artifact_root_symlink_can0/foreign/synthetic.txt') is None\nE    +  where PosixPath('/tmp/frontier-storage-audit-8wjbet6z/pytest/test_artifact_root_symlink_can0/foreign/synthetic.txt') = resolve_artifact_path('34621a4abe6a4a5c8c8e8bd0f6651c8d', 'synthetic.txt')\nE    +    where '34621a4abe6a4a5c8c8e8bd0f6651c8d' = UUID('34621a4a-be6a-4a5c-8c8e-8bd0f6651c8d').hex\nE    +      where UUID('34621a4a-be6a-4a5c-8c8e-8bd0f6651c8d') = namespace(cfg=ServerConfig(host='0.0.0.0', port=8000, worker_pool_size=2, wall_timeout_s=900, max_turns=60, stop_grace...ject at 0x7dcf8d012e70>, root=PosixPath('/tmp/frontier-storage-audit-8wjbet6z/pytest/test_artifact_root_symlink_can0')).rid"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_orphan_recovery_restores_saved_answer_to_session",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.007591302000037103,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:156: in test_orphan_recovery_restores_saved_answer_to_session\n    assert any(\"saved-answer\" in t.content for t in turns), (\nE   AssertionError: saved answer only recovered to run row (stopped); restored messages=0\nE   assert False\nE    +  where False = any(<generator object test_orphan_recovery_restores_saved_answer_to_session.<locals>.<genexpr> at 0x7dcf8cee92f0>)"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_session_owner_read_guard_remains_enforced",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0029710210001212545,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_artifact_child_traversal_guard_remains_enforced",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0005982469992886763,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_terminal_frame_replay_does_not_duplicate_assistant_turn",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.014778613000089535,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:182: in test_terminal_frame_replay_does_not_duplicate_assistant_turn\n    assert len(turns) == 1, f\"same terminal frame created {len(turns)} assistant turns\"\nE   AssertionError: same terminal frame created 2 assistant turns\nE   assert 2 == 1\nE    +  where 2 = len([<server.store.Turn object at 0x7dcf8cfdec60>, <server.store.Turn object at 0x7dcf8cfdeba0>])"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_orphan_recovery_rebuilds_artifact_and_usage_indexes",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.008255093999650853,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:191: in test_orphan_recovery_rebuilds_artifact_and_usage_indexes\n    assert run.total_tokens == 15 and len(artifacts) == 1, (\nE   AssertionError: files exist but restored usage=None, artifact rows=0\nE   assert (None == 15)\nE    +  where None = <server.store.Run object at 0x7dcf8ce95130>.total_tokens"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_queue_continues_after_launch_failure",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.0003092899996772758,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:208: in test_queue_continues_after_launch_failure\n    assert calls == [\"a\", \"b\"], f\"launch failure abandoned subsequent queue: {calls}\"\nE   AssertionError: launch failure abandoned subsequent queue: ['a']\nE   assert ['a'] == ['a', 'b']\nE     \nE     Right contains one more item: 'b'\nE     Use -v to get more diff"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_revert_updates_artifact_hash_index",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.013951303999419906,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:226: in test_revert_updates_artifact_hash_index\n    assert artifacts[0].sha256 == hashlib.sha256(file.read_bytes()).hexdigest(), \"revert left stale sha256 in DB\"\nE   AssertionError: revert left stale sha256 in DB\nE   assert '11507a0e2f5e...1b36fff21c437' == 'cba06b5736fa...69e1263ccfbd4'\nE     \nE     - cba06b5736faf67e54b07b561eae94395e774c517a7d910a54369e1263ccfbd4\nE     + 11507a0e2f5e69d5dfa40a62a1bd7b6ee57e6bcd85c67c9b8431b36fff21c437"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_sqlite_declared_foreign_keys_are_enforced",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.0011101500003860565,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:232: in test_sqlite_declared_foreign_keys_are_enforced\n    assert enabled == 1, \"SQLite declares FKs but enforcement is disabled\"\nE   AssertionError: SQLite declares FKs but enforcement is disabled\nE   assert 0 == 1"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_concurrent_message_sequence_is_unique",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.06076156400013133,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:239: in test_concurrent_message_sequence_is_unique\n    assert len(set(seqs)) == len(seqs), f\"concurrent MAX(seq)+1 allocated duplicate sequences: {seqs}\"\nE   AssertionError: concurrent MAX(seq)+1 allocated duplicate sequences: [1, 2, 2, 2, 2, 2, 2, 2]\nE   assert 2 == 8\nE    +  where 2 = len({1, 2})\nE    +    where {1, 2} = set([1, 2, 2, 2, 2, 2, ...])\nE    +  and   8 = len([1, 2, 2, 2, 2, 2, ...])"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_revert_rejects_symlinked_baseline",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.0071522250000271015,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:252: in test_revert_rejects_symlinked_baseline\n    assert response.json()[\"results\"][0][\"status\"] == \"rejected\", \"revert copied external symlink target into outputs\"\nE   AssertionError: revert copied external symlink target into outputs\nE   assert 'restored' == 'rejected'\nE     \nE     - rejected\nE     + restored"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_submit_records_nonsecret_model_snapshot",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.02098017499974958,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:260: in test_submit_records_nonsecret_model_snapshot\n    assert run.llm_snapshot_json and run.llm_snapshot_json.get(\"model\") == \"synthetic-model\", (\nE   AssertionError: configured model has no run snapshot\nE   assert (None)\nE    +  where None = <server.store.Run object at 0x7dcf8cd538f0>.llm_snapshot_json"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_health_distinguishes_unavailable_storage",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.0012859260004915996,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:266: in test_health_distinguishes_unavailable_storage\n    assert response.status_code == 503 or response.json().get(\"status\") != \"ok\", (\nE   AssertionError: storage unavailable but health always says ok; readiness gate absent\nE   assert (200 == 503 or 'ok' != 'ok')\nE    +  where 200 = <Response [200 OK]>.status_code\nE    +  and   'ok' = <built-in method get of dict object at 0x7dcf8c44a480>('status')\nE    +    where <built-in method get of dict object at 0x7dcf8c44a480> = {'status': 'ok'}.get\nE    +      where {'status': 'ok'} = json()\nE    +        where json = <Response [200 OK]>.json"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_run_started_event_updates_persistent_status",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.004442478999408195,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:277: in test_run_started_event_updates_persistent_status\n    assert run.status == \"running\" and run.started_at is not None, (\nE   AssertionError: worker start not persisted: status=queued, started_at=None\nE   assert ('queued' == 'running'\nE     \nE     - running\nE     + queued)"
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_alembic_empty_database_upgrade_matches_orm_columns",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.39087302700045257,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_absolute_file_tool_path_can_be_reverted",
+      "phase": "call",
+      "outcome": "failed",
+      "duration_s": 0.15650279600049544,
+      "evidence": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py:310: in test_absolute_file_tool_path_can_be_reverted\n    assert response.json()[\"results\"][0][\"status\"] == \"restored\", \"valid absolute snapshot path rejected by revert resolver\"\nE   AssertionError: valid absolute snapshot path rejected by revert resolver\nE   assert 'rejected' == 'restored'\nE     \nE     - restored\nE     + rejected"
+    }
+  ]
+}

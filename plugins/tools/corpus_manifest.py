@@ -7,9 +7,11 @@
 - **schema 先行**：非法结论／证据条目在入口即拒绝（非对象、缺 doc_id/locator/quote、
   杜撰 purpose），绝不静默跳过——权威校验器（``plugins.corpus.ledger``）不信任清单，
   入口放进的垃圾只会在边界变成 unsupported；
-- **独立落盘**：每次提交写独立子清单文件（``<APODEX_RUN_DIR>/corpus/manifests/
-  manifest-NNN.json``），多代理／多次提交互不覆盖，最终报告边界统一汇总校验
-  （评审 C4：共享单文件会被后提交的子代理整体覆盖）；
+- **独立落盘 + 同拥有者取代**：每次提交写独立子清单文件（``<APODEX_RUN_DIR>/corpus/
+  manifests/manifest-NNN.json``），多代理／多次提交互不覆盖，最终报告边界统一汇总
+  校验（评审 C4：共享单文件会被后提交的子代理整体覆盖）。落盘时写入 ``owner_role``
+  （当前代理实例的 ``ExecutionScope.task_id``）；边界聚合**跨拥有者并集、同拥有者
+  取最新**——同一代理「重新提交完整清单」取代自己先前的候选，不同代理之间互补；
 - **即时回验**：提交后立即由账本 + 权威原文重算每条结论状态并随结果返回，
   问题（quote 编造／引文区间未送达／依赖缺失）直接反馈给模型驱动**环内修正**；
   新取片段尚未经过下一轮消息边界核验时如实标 ``pending``，提示下一轮重新提交
@@ -28,6 +30,7 @@ import json
 import logging
 from typing import Any
 
+from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.tool import tool
 from plugins.corpus.ledger import (
     DEPENDENCY_PURPOSES,
@@ -122,6 +125,23 @@ def _validate_conclusions(conclusions: Any) -> list[str]:
     return errors
 
 
+def _current_owner() -> str:
+    """当前代理实例的稳定标识，用作清单的拥有者（聚合键）。
+
+    取当前 ``ExecutionScope`` 的 ``task_id``：每个代理实例一个，且在该代理的多次
+    提交之间不变——于是「同代理重新提交」取代自己先前的候选，而不同代理／子代理
+    之间仍跨拥有者并集（评审 C4）。取不到时返回空串，落盘退回文件名语义。
+    """
+    scope = get_current_execution_scope()
+    if scope is None:
+        return ""
+    task_id = str(getattr(scope, "task_id", "") or "").strip()
+    role_id = str(getattr(scope, "role_id", "") or "").strip()
+    if task_id and role_id:
+        return f"{role_id}:{task_id}"
+    return task_id or role_id
+
+
 @tool
 async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
     """提交报告结论证据清单（A4），立即回验并返回逐条问题以驱动环内修正。
@@ -164,11 +184,12 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         entry.setdefault("id", f"C{index + 1}")
         numbered.append(entry)
 
+    owner = _current_owner()
     payload = {
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "conclusions": numbered,
     }
-    path = write_manifest_file(payload)
+    path = write_manifest_file(payload, owner=owner)
 
     # 即时回验（评审 C3）：用当前送达快照重算，新取片段标 pending；环内无最终
     # 报告文本，不做 report_quote 锚点检查（那是发布边界的事）。
@@ -183,6 +204,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             {
                 "ok": True,
                 "manifest_file": str(path) if path else None,
+                "owner": owner or None,
                 "verification_error": f"{type(exc).__name__}: {exc}",
                 "hint": "校验基础设施故障；请稍后重新提交确认",
             },
@@ -204,6 +226,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         {
             "ok": True,
             "manifest_file": str(path) if path else None,
+            "owner": owner or None,
             "publish_status": verification.get("status"),
             "counts": verification.get("counts"),
             "conclusions": conclusions_out,

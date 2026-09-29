@@ -82,7 +82,37 @@ turn 13 SUBMIT  → verified  {supported 2, partial 0}   c1/c2 全部 supported
 - **结论**：A4 的「补取 → 改表述 → 重新提交」闭环**在真实运行中成立**（两档独立复现，含补取分支）。但**发布边界的汇总语义存在缺陷（F2）**，使闭环成果无法反映到最终判定；连同 F3，**A4 仍不能作为可信的默认发布门**——与既有评审结论（`A4_ENFORCE` 默认关闭）一致，且给出了新的具体原因。
 - **限制**：单题（company-003）、n=3 档，非独立盲测（题目选自冻结集）；`--guided`/`--early` 为**机制验证档**（显式要求迭代提交），非自然效果度量；自然档未触发反馈，故「自然使用下闭环是否被需要」未直接观测。
 
-## 6. 复现
+## 6. 修复（2026-09-29）：F2 发布边界聚合语义
+
+**改动**（校验语义变更 + 回归测试）：
+
+| 落点 | 改动 |
+|---|---|
+| [`plugins/corpus/ledger.py`](../../plugins/corpus/ledger.py) | `write_manifest_file(..., owner=)` 写入 `owner_role`（显式值不覆盖）；`_merge_manifests` 改为**跨拥有者并集、同拥有者取最新**；`load_manifest_files` 按提交序号**数值**排序（>999 也保持「后者取代前者」） |
+| [`plugins/tools/corpus_manifest.py`](../../plugins/tools/corpus_manifest.py) | `_current_owner()` 取当前 `ExecutionScope.task_id`（每个代理实例一个、跨该代理多次提交不变）→ 落盘 `owner_role`，并在响应回显 `owner` |
+
+拥有者身份用 `ExecutionScope.task_id` 而非代理角色：角色（`stateful_react`/`sub_agent`）会把
+同一任务的多**个子代理**混成一个拥有者、互相取代；`task_id` 才是 per-agent 实例。
+
+**确定性前后对照**（[`replay_f2_fix.py`](./replay_f2_fix.py)，零模型，直接重放早提交档的真实 run 产物，不传 `final_text` 以隔离聚合语义本身）：
+
+| 口径 | status | counts | 结论 ids |
+|---|---|---|---|
+| 修复前（全量并集） | `partial` | supported 2／partial 2 | `manifest-000/c1`、`manifest-000/c2`、`manifest-001/c1`、`manifest-001/c2` |
+| 修复后（同拥有者取最新） | **`verified`** | supported 2 | `c1`、`c2` |
+
+**回归测试**：`tests/test_corpus_ledger.py`（`owner` 注入、同拥有者取代、跨拥有者并集）、
+`tests/test_corpus_manifest_tool.py`（作用域 owner + 同代理重提取代、无作用域降级）。
+修复前这两条新用例必失败（并集/无 `owner` 字段），修复后通过。
+
+**修复后真实运行复核**（`--early --tag early-fixed`，2026-09-29，run
+`20260929-141806+0800-react-7406`）：turn 3 提交 → `unsupported`（`quote_not_found`）→
+补取 → turn 8 重新提交 → `verified`（7 条 supported），两次提交 `owner` 均为
+`stateful_react:3173adfdc7d6`；**发布边界重算 `status=verified`（supported 7／partial 0／
+unsupported 0），结论 id 无前缀**——同一路径修复前为 `partial`。墙钟 676.9s，
+input 382,186／output 26,881。
+
+## 7. 复现
 
 ```bash
 # 自然档

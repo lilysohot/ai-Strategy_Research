@@ -620,10 +620,22 @@ def load_manifest(*, directory: Path | None = None) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
+def _manifest_sort_key(path: Path) -> tuple[int, str]:
+    """子清单排序键：按 ``manifest-NNN`` 的**数值**序号，缺序号退回文件名。
+
+    数值排序而非字典序，才能保证「后者取代前者」（:func:`_merge_manifests` 用文件
+    顺序确定同拥有者的最新提交）在序号过千（``manifest-1000``）时仍然成立。
+    """
+    stem = path.stem.removeprefix("manifest-")
+    if stem.isdigit():
+        return (int(stem), path.name)
+    return (1 << 30, path.name)
+
+
 def load_manifest_files(
     directory: Path | None = None,
 ) -> list[tuple[Path, dict[str, Any]]]:
-    """按修订契约读取全部候选清单（评审 C4）。
+    """按修订契约读取全部候选清单（评审 C4），按提交序号升序。
 
     ``manifests/*.json`` 为主（各代理／各次提交独立落盘，互不覆盖）；仅当该目录
     为空时才回读旧版单文件 ``manifest.json``（兼容历史运行，不与新契约双算）。
@@ -634,7 +646,7 @@ def load_manifest_files(
     out: list[tuple[Path, dict[str, Any]]] = []
     sub = folder / MANIFESTS_SUBDIR
     if sub.is_dir():
-        for path in sorted(sub.glob("*.json")):
+        for path in sorted(sub.glob("*.json"), key=_manifest_sort_key):
             try:
                 payload = json.loads(path.read_text(encoding="utf-8"))
             except (OSError, ValueError):
@@ -656,16 +668,23 @@ def load_manifest_files(
 
 
 def write_manifest_file(
-    payload: dict[str, Any], *, directory: Path | None = None,
+    payload: dict[str, Any], *, directory: Path | None = None, owner: str = "",
 ) -> Path | None:
     """把一份候选清单落盘为独立子清单文件（``manifests/manifest-NNN.json``）。
 
     文件名按现有序号递增，**绝不覆盖**既有清单；没有 run 目录时不落盘（返回
     ``None``），调用方仍可做环内回验。写失败同样返回 ``None`` 并记日志。
+
+    ``owner`` 非空时写入 ``owner_role``（已有值不覆盖）：它是**聚合键**——跨拥有
+    者并集、同拥有者取最新（见 :func:`_merge_manifests`）。因此同一代理的多次提交
+    会取代自己先前的候选（「重新提交完整清单」），而不同代理／子代理之间仍互补。
     """
     folder = directory or resolve_artifact_dir()
     if folder is None:
         return None
+    document = dict(payload)
+    if owner and not document.get("owner_role"):
+        document["owner_role"] = owner
     try:
         sub = folder / MANIFESTS_SUBDIR
         sub.mkdir(parents=True, exist_ok=True)
@@ -676,7 +695,7 @@ def write_manifest_file(
                 index = max(index, int(stem) + 1)
         target = sub / f"manifest-{index:03d}.json"
         target.write_text(
-            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8",
+            json.dumps(document, ensure_ascii=False, indent=2), encoding="utf-8",
         )
         return target
     except OSError as exc:
@@ -684,14 +703,36 @@ def write_manifest_file(
         return None
 
 
+def _manifest_owner(path: Path, payload: dict[str, Any]) -> str:
+    """候选清单的拥有者：显式 ``owner_role`` 优先，否则退回文件名。
+
+    ``owner_role`` 由提交方（``corpus_submit_manifest``）按当前代理实例写入，是
+    「同拥有者取代」的聚合键。退回文件名只用于兼容历史／手工产物——它会让每次
+    提交各成一个拥有者、退化为「全量并集」（旧行为），不再具备取代语义。
+    """
+    return str(payload.get("owner_role") or path.stem or "manifest")
+
+
 def _merge_manifests(
     manifests: list[tuple[Path, dict[str, Any]]],
 ) -> dict[str, Any]:
-    """把多份候选清单汇成一份待验证清单；多文件时结论 id 加拥有者前缀防撞。"""
-    conclusions: list[Any] = []
-    multi = len(manifests) > 1
+    """把多份候选清单汇成一份待验证清单：**跨拥有者并集、同拥有者取最新**。
+
+    多拥有者（多代理／多子代理）时结论 id 加拥有者前缀防撞并互相补充；同一拥有者
+    的多次提交是「重新提交完整清单」，按提交序号**后者取代前者**——否则环内已修正
+    的结论会被它自己的旧候选拖回 ``partial``（校验语义缺陷 F2）。
+    """
+    latest: dict[str, tuple[Path, dict[str, Any]]] = {}
+    order: list[str] = []
     for path, payload in manifests:
-        owner = str(payload.get("owner_role") or path.stem or "manifest")
+        owner = _manifest_owner(path, payload)
+        if owner not in latest:
+            order.append(owner)
+        latest[owner] = (path, payload)  # 载入序即提交序 → 后者取代前者
+    multi = len(order) > 1
+    conclusions: list[Any] = []
+    for owner in order:
+        payload = latest[owner][1]
         rows = payload.get("conclusions")
         if not isinstance(rows, list):
             conclusions.append({

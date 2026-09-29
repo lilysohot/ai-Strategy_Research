@@ -1,0 +1,429 @@
+{
+  "artifact": "a4-loop-probe-question",
+  "query_id": "company-003",
+  "domain": "company",
+  "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+  "guided": false,
+  "status": "ok",
+  "wall_s": 676.9,
+  "session": {
+    "present": true,
+    "session_id": "20260929-141806+0800-react-7406",
+    "model": "glm-5.3-flash",
+    "run_dir": ".apodex/runs/20260929-141806+0800-react-7406",
+    "usage": {
+      "input": 382186,
+      "output": 26881,
+      "cached": 326208
+    }
+  },
+  "trace": {
+    "present": true,
+    "llm_turns": 10,
+    "tool_counts": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 1,
+      "corpus_submit_manifest": 2,
+      "corpus_inventory": 1,
+      "corpus_fetch": 9
+    },
+    "corpus_timeline": [
+      {
+        "turn": 2,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 2,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "unsupported",
+        "counts": {
+          "supported": 0,
+          "partial": 0,
+          "unsupported": 2
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "unsupported",
+            "delivery": [],
+            "codes": [
+              "quote_not_found"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "unsupported",
+            "delivery": [],
+            "codes": [
+              "quote_not_found"
+            ]
+          }
+        ],
+        "problem_codes": {
+          "quote_not_found": 2
+        }
+      },
+      {
+        "turn": 4,
+        "name": "corpus_inventory",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0000"
+        ]
+      },
+      {
+        "turn": 4,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0018"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0003"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0013"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0017"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0001",
+          "chunk:a3b681fdd55d6e11:heading:0002",
+          "chunk:a3b681fdd55d6e11:heading:0003",
+          "chunk:a3b681fdd55d6e11:heading:0121",
+          "chunk:a3b681fdd55d6e11:heading:0122",
+          "chunk:a3b681fdd55d6e11:heading:0123",
+          "chunk:a3b681fdd55d6e11:heading:0154",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015",
+          "chunk:a3b681fdd55d6e11:table:0016",
+          "chunk:a3b681fdd55d6e11:table:0019",
+          "chunk:a3b681fdd55d6e11:table:0020",
+          "chunk:a3b681fdd55d6e11:table:0021"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0080",
+          "chunk:a3b681fdd55d6e11:heading:0085",
+          "chunk:a3b681fdd55d6e11:heading:0104",
+          "chunk:a3b681fdd55d6e11:heading:0115"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015",
+          "chunk:a3b681fdd55d6e11:table:0016"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 7,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 7,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C0",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C6",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ],
+    "manifest_submits": [
+      {
+        "turn": 3,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 2,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "unsupported",
+        "counts": {
+          "supported": 0,
+          "partial": 0,
+          "unsupported": 2
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "unsupported",
+            "delivery": [],
+            "codes": [
+              "quote_not_found"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "unsupported",
+            "delivery": [],
+            "codes": [
+              "quote_not_found"
+            ]
+          }
+        ],
+        "problem_codes": {
+          "quote_not_found": 2
+        }
+      },
+      {
+        "turn": 8,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 7,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "verified",
+        "counts": {
+          "supported": 7,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C0",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C1",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C6",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {}
+      }
+    ]
+  },
+  "manifests": {
+    "count": 2,
+    "files": [
+      ".apodex/runs/20260929-141806+0800-react-7406/corpus/manifests/manifest-000.json",
+      ".apodex/runs/20260929-141806+0800-react-7406/corpus/manifests/manifest-001.json"
+    ]
+  },
+  "verification": {
+    "present": true,
+    "status": "verified",
+    "counts": {
+      "supported": 7,
+      "partial": 0,
+      "unsupported": 0
+    },
+    "verification_errors": 0,
+    "problem_codes": {},
+    "boundary_action": null,
+    "manifest_files": [
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-141806+0800-react-7406/corpus/manifests/manifest-000.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-141806+0800-react-7406/corpus/manifests/manifest-001.json"
+    ],
+    "path": ".apodex/runs/20260929-141806+0800-react-7406/corpus/manifest_verification.json"
+  },
+  "loop": {
+    "manifest_tool_calls": 2,
+    "had_feedback": true,
+    "feedback_submit_seqs": [
+      0
+    ],
+    "feedback_codes": {
+      "quote_not_found": 1
+    },
+    "resolved_conclusions": [
+      {
+        "id": "C1",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      },
+      {
+        "id": "C2",
+        "problem_at_submit": 0,
+        "resolved_at_submit": 1
+      }
+    ],
+    "resolved": true,
+    "final_publish_status": "verified",
+    "final_counts": {
+      "supported": 7,
+      "partial": 0,
+      "unsupported": 0
+    },
+    "corpus_fetch_calls": 9,
+    "corpus_fetch_locators": 26
+  },
+  "gold": {
+    "targets": 6,
+    "fetched_hit": 6,
+    "answer_hit": 6
+  },
+  "generated_at": "2026-09-29T06:29:23.438826+00:00"
+}

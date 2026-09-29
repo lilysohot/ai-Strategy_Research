@@ -1,0 +1,733 @@
+{
+  "timestamp_utc": "2026-09-29T06:19:59Z",
+  "exit_code": 2,
+  "network_blocked": true,
+  "subprocesses_blocked": true,
+  "production_data_accessed": false,
+  "targets": [
+    "--tb=no"
+  ],
+  "records": [
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_session_spawn_registers_job_before_eager_task_starts",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00048560899995209184,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_wait_reconciles_cancelled_task_instead_of_fake_timeout",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0004810519994862261,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_wait_reports_actual_timeout_only_for_live_task",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.020505418000539066,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_wait_reports_unpublished_when_a_task_ends_empty_handed",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.020478476999414852,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_session_snapshot_freezes_a_finished_worker_duration",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.050572013999953924,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_wait_distinguishes_no_pending_work_from_timeout",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00020702100027847337,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_collect_reports_describes_actual_wait_not_requested_ceiling",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.11106404099973588,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_intervention_cancels_collect_reports_wait_immediately",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.02088582100077474,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_progress_heartbeat_survives_a_failing_observer",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.11067401099990093,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_current_job_metadata_exposes_what_a_stop_would_interrupt",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00018977600029757014,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_bus_waiting.py::test_immediate_dispatch_preserves_current_job_metadata",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000301064000268525,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_both_write_surfaces_record_the_same_refusal_once",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0004136360003030859,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_an_unverifiable_read_is_not_recast_as_a_failed_write",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003974050005126628,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_the_shared_scratch_area_is_not_a_refused_deliverable",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00046872399980202317,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_a_publisher_records_only_what_falls_outside_its_manifest",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00018273800014867447,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_nothing_is_recorded_outside_a_task",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000167408999914187,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_the_non_publisher_note_contradicts_a_false_success_claim",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001084100003936328,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_the_publisher_note_does_not_claim_the_manifest_was_lost",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00010318699969502632,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_no_denials_means_no_note",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00011194299986527767,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_a_refusal_inside_the_task_reaches_the_coordinators_report",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0008739340000829543,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_an_unverifiable_access_is_not_metadata_labeled_as_a_write",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0008395349996135337,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_a_clean_task_report_is_passed_through_unchanged",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00036971700046706246,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_one_tasks_refusal_does_not_follow_the_next_one",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0004932530000587576,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_denial_escalation.py::test_an_abandoned_job_log_cannot_grow_without_bound",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0010055689999717288,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Write your reply to the user as /outputs/answer.md.-expected0]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00012212799992994405,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Save the edited workbook to /outputs/Model_v2.xlsx-expected1]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00014154299969959538,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[cp /workspace/draft.md /outputs/answer.md-expected2]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00011244899997109314,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[python3 build.py > /outputs/report.csv-expected3]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00010673900032998063,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Read /outputs/answer.md and audit every figure in it.-expected4]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 9.713300005387282e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Audit the draft answer against the published file /outputs/answer.md.-expected5]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000121586000204843,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Do not write anything to /outputs/answer.md.-expected6]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00014420399929804262,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Never create /outputs/answer.md yourself.-expected7]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00015832200006116182,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Put intermediate tables in /outputs/scratch/tables.csv-expected8]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00010493799982214114,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Do not create any other file in /outputs.-expected9]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 9.186799979943316e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[Run `ls -la /outputs` and report what you see.-expected10]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00012608900033228565,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_detector_matches_directives_and_not_mentions[No /outputs anywhere in this prompt.-expected11]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 7.92419996287208e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_workspace_only_agent_is_told_who_owns_the_inherited_path",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00040179000006901333,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_question_without_a_directive_still_gets_the_generic_override",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003073289999520057,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_publisher_keeps_its_publishing_contract_untouched",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000352100999407412,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_self_contradictory_assignment_dispatches_and_is_reported_back",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00034264599980815547,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_plain_workspace_assignment_produces_no_notice",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00026451799931237474,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_the_contract_does_not_promise_a_publisher_that_does_not_exist",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0004889680003543617,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_publisher_in_the_same_dispatch_covers_the_path",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0006326790007733507,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_publisher_recorded_in_an_earlier_round_still_owns_the_path",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003245110001444118,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_round_with_no_publisher_tells_the_coordinator_so",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0004470020003282116,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_rejected_publisher_does_not_suppress_the_notice",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00036595999972632853,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_publisher_for_another_manifest_does_not_own_this_path",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00038887000027898466,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_manifest_alone_dispatches_an_authorized_publisher",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003323179998915293,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_manifest_alone_still_bounds_the_run_to_one_publisher",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00033313699987047585,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_inherited_publish_directive.py::test_a_manifest_alone_still_cannot_go_to_a_verifier",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00029660199925274355,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_capacity_counts_queued_tasks_and_treats_a_missing_session_as_capped",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 8.954399982030736e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_publish_work_detection_covers_running_and_queued_jobs",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 9.897800009639468e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_the_publisher_role_does_not_move_while_publish_work_exists[running]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003038929999092943,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_the_publisher_role_does_not_move_while_publish_work_exists[queued]",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00028113200005464023,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_a_second_publisher_is_refused_while_the_first_can_still_work",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00029976899986650096,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_the_publisher_role_moves_on_once_the_incumbent_is_capped",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003608450006140629,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_the_role_moves_on_when_the_incumbent_session_is_gone",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00035778900019067805,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_a_transfer_still_cannot_quietly_change_the_manifest",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00037360099940997316,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_publish_deadlock.py::test_the_capped_incumbent_is_still_refused_its_own_retry",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00027055600003222935,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_agent_team_registers_canonical_and_legacy_pipelines",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00013224999929661863,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_reporter_defaults_are_fast_and_reporter_off_is_supported",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 8.909999996831175e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_heavy_reporter_fails_with_actionable_error",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00022261999947659206,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_fast_reporter_review_cannot_invent_a_url",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001680610002949834,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_agent_team_ships_consistent_profiles",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001815329997043591,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_main_prompt_requires_read_file_delegation",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00010289000056218356,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_default_profile_aliases_benchmark",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.019690559999617108,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_profile_selects_web_fetch_implementation",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0007410970001728856,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_native_publish_contract_maps_virtual_manifest_to_physical_root",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001540220000606496,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_native_physical_output_paths_still_obey_virtual_manifest_policy",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0011052300005758298,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_spill_store_is_read_only_for_structured_and_symlinked_paths",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00039556199953949545,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_bash_allows_spill_reads_but_rejects_mutations",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.003737504999662633,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_write_tools_reject_spill_before_acquiring_a_sandbox",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003948559997297707,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_native_main_prompt_distinguishes_manifest_and_filesystem_paths",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000141355000778276,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_assignment_validation_reports_stale_agent_in_same_failure",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 9.11939996512956e-05,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_bash_allows_spill_reads_that_publish_elsewhere",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0015986150001481292,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_spill_gate_still_refuses_mutations_that_also_redirect_to_outputs",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.001085087999854295,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_spill_cd_refusal_explains_the_real_reason",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00022211699979379773,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_bwrap_mounts_the_spill_store_read_only",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0002431130005788873,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_the_shipped_writer_agrees_with_the_authoritative_spill_rule",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0010273349998897174,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_agent_team_workflow.py::test_spill_gate_refuses_verbs_that_can_name_their_own_write_target",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.002328486999431334,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_anthropic_bedrock_client.py::test_bedrock_client_injects_bearer_auth_with_locked_transport",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.5158898640002008,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_the_flag_is_off_unless_a_launcher_sets_it_to_one",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001359529996989295,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_pinned_inputs_keep_the_mount_the_launcher_declared",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00020049100021424238,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_pinned_inputs_require_the_canonical_mount_point_to_exist",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0002827280004567001,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_a_pinned_read_only_inputs_mount_does_not_break_startup",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0002594190000309027,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_a_pinned_inputs_dir_that_is_genuinely_missing_still_raises",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0002578650000941707,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_a_separate_pinned_agent_dir_must_also_exist",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0002768300000752788,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_unpinned_mkdir_errors_are_not_swallowed_for_an_existing_directory",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0003189059998476296,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_unpinned_inputs_still_get_a_private_per_session_directory",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00024518699956388446,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_pinned_outputs_and_workspace_are_left_on_their_mounts",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.000367516999176587,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_pinned_workspace_activation_updates_the_run_identity",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00033885699940583436,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_unpinned_outputs_and_workspace_still_follow_the_run",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0006646370002272306,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_pinned_mounts_make_path_rewriting_a_no_op",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001423580006303382,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_a_launchers_mounts_survive_a_whole_session_startup",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0005731000001105713,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_apex_mount_pinning.py::test_without_the_pin_the_same_startup_loses_every_mount",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0008317889996760641,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_scan_outputs_records_size_and_sha256",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0005568200003835955,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_scan_outputs_empty_when_nothing_written",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0001877290005722898,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_scan_outputs_ignores_escaping_symlink",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00030201599929569056,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_resolve_artifact_path_accepts_inside_and_rejects_escape",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.001305486999626737,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_resolve_artifact_path_rejects_symlink_escape",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00033533700025145663,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_record_artifacts_upserts_and_isolates_owners",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.04588108100051613,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_artifact_endpoints_require_auth",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.01356835500064335,
+      "evidence": ""
+    },
+    {
+      "test": "tests/test_artifacts_t29.py::test_artifact_listing_404_for_foreign_run",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.01738973600004101,
+      "evidence": ""
+    }
+  ]
+}

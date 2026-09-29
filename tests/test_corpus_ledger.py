@@ -592,6 +592,58 @@ def test_manifest_files_never_overwrite_and_merge_with_owner_prefix(tmp_path: Pa
     ]
 
 
+def test_write_manifest_file_injects_owner_role(tmp_path: Path) -> None:
+    """``owner`` 参数写入 ``owner_role``（聚合键）；已有显式值不覆盖。"""
+    path = write_manifest_file(
+        {"schema_version": 2, "conclusions": []}, directory=tmp_path, owner="agent:a",
+    )
+    assert path is not None
+    assert json.loads(path.read_text(encoding="utf-8"))["owner_role"] == "agent:a"
+
+    keep = write_manifest_file(
+        {"schema_version": 2, "owner_role": "explicit", "conclusions": []},
+        directory=tmp_path, owner="agent:a",
+    )
+    assert keep is not None
+    assert json.loads(keep.read_text(encoding="utf-8"))["owner_role"] == "explicit"
+
+
+def test_same_owner_resubmission_supersedes_earlier(tmp_path: Path) -> None:
+    """F2：同拥有者的重新提交取代先前候选，不再与被取代的旧版本求并集。"""
+    write_manifest_file(
+        {"schema_version": 2, "owner_role": "agent:a",
+         "conclusions": [{"id": "C1"}, {"id": "C2"}]},
+        directory=tmp_path,
+    )
+    write_manifest_file(
+        {"schema_version": 2, "owner_role": "agent:a",
+         "conclusions": [{"id": "C1"}]},
+        directory=tmp_path,
+    )
+    verification = verify_and_record(
+        ConsumptionLedger(), directory=tmp_path, resolver=lambda d, loc: None,
+    )
+    assert [row["id"] for row in verification["conclusions"]] == ["C1"]
+
+
+def test_cross_owner_submissions_are_unioned(tmp_path: Path) -> None:
+    """多拥有者（多代理）仍跨拥有者并集、加前缀防撞，互不取代。"""
+    write_manifest_file(
+        {"schema_version": 2, "owner_role": "agent:a", "conclusions": [{"id": "C1"}]},
+        directory=tmp_path,
+    )
+    write_manifest_file(
+        {"schema_version": 2, "owner_role": "agent:b", "conclusions": [{"id": "C1"}]},
+        directory=tmp_path,
+    )
+    verification = verify_and_record(
+        ConsumptionLedger(), directory=tmp_path, resolver=lambda d, loc: None,
+    )
+    assert [row["id"] for row in verification["conclusions"]] == [
+        "agent:a/C1", "agent:b/C1",
+    ]
+
+
 def test_manifest_files_fall_back_to_legacy_single_file(tmp_path: Path) -> None:
     (tmp_path / "manifest.json").write_text(
         json.dumps({"schema_version": 1, "conclusions": []}, ensure_ascii=False),

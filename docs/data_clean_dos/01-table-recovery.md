@@ -223,13 +223,19 @@ async def corpus_fetch(
    `partial`（`not_delivered`+`missing_dependencies`），模型据反馈补取 13 次 `corpus_fetch`
    后于 t13 重新提交收敛为 `verified`。**闭环成立**，但验证同时暴露两项边界缺口，故
    `A4_ENFORCE` 仍默认关闭（阻断默认启用继续暂缓）：
-   （a）**发布边界汇总把被取代的旧候选并入**——`ledger._merge_manifests` 以 `path.stem`
-   作 owner，同一代理的重复提交被视为不同 owner **求并集**而非取最新，导致环内已
-   `verified` 的修正到边界仍判 `partial`（两档均复现；多代理聚合与同 owner 取代需分开），
-   （b）`report_quote` 锚点仅在边界检查、环内不可见，模型无法在环内修正该类问题。
-2. **发布边界汇总语义未覆盖「同 owner 重新提交」**（上条 (a) 的具体化）：需要按 owner
-   取最新候选、同时保留历史候选供审计；改前须明确 owner 身份来源（当前 `write_manifest_file`
-   不写 `owner_role`），属校验语义变更，须具名签认后再改。
+   （a）~~**发布边界汇总把被取代的旧候选并入**~~ → **2026-09-29 已修复**（校验语义变更，
+   含回归测试）：`write_manifest_file` 现写入代理实例的 `owner_role`（取
+   `ExecutionScope.task_id`，每个代理实例一个、跨该代理多次提交不变），
+   `_merge_manifests` 改为**跨拥有者并集、同拥有者取最新**，`load_manifest_files` 按
+   提交序号数值排序。确定性前后对照（零模型、真实 run 产物
+   [replay_f2_fix.py](../../.scratch/a4-loop-20260929/replay_f2_fix.py)）：同一 run 由
+   `partial`（supported 2／partial 2，4 条并集）→ `verified`（supported 2，2 条取最新）；
+   多代理仍跨拥有者并集（回归测试覆盖）。
+   （b）`report_quote` 锚点仅在边界检查、环内不可见，模型无法在环内修正该类问题（见下条）。
+2. **`report_quote` 锚点缺环内反馈（F3）**：自然档 4/4 结论在边界记 `not_in_report` 并压
+   `partial`，而环内工具（按设计）不做报告绑定检查，模型看不到、无法在环内修正。要让
+   该类问题可环内修正，需让工具端拿到（或近似）最终文本锚点，或把锚点检查前移——属
+   产品／契约决策，未实施。
 3. **`corpus_inventory` 驱动的范围不计入 `offered`**。清单信封按页返回成员，只有当前页
    可见；若据此登记 `offered` 会得到偏小的分母，因此仍以 `corpus_search` 的
    `context_locators` 为唯一提供源。仅用 `corpus_inventory` 直接构造请求的场景下，范围

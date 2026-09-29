@@ -162,6 +162,55 @@ def test_resolver_infra_failure_surfaces_verification_error(run_env, monkeypatch
     assert out["conclusions"][0]["problems"][0]["code"] == "verification_error"
 
 
+# ── 同拥有者取代（F2：校验语义修复）──────────────────────────────────────
+
+
+def test_resubmit_from_same_agent_supersedes_and_records_owner(run_env) -> None:
+    """清单按当前代理实例的 owner 落盘；同代理重新提交取代先前候选（F2）。
+
+    修复前：每次提交各成一个 owner（退回文件名），边界把被取代的旧候选并入，
+    环内已 ``verified`` 的修正到边界仍判 ``partial``。
+    """
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
+    )
+    from plugins.corpus.ledger import (
+        get_run_ledger,
+        load_manifest_files,
+        verify_and_record,
+    )
+
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(_fetch_body())
+    ledger.finalize([{"role": "tool", "content": _fetch_body()}])
+
+    token = set_current_execution_scope(
+        ExecutionScope(task_id="run-1", role_id="stateful_react"),
+    )
+    try:
+        first = _submit([_conclusion()])
+        second = _submit([_conclusion()])
+    finally:
+        reset_current_execution_scope(token)
+
+    assert first["owner"] == second["owner"] == "stateful_react:run-1"
+    assert [p.name for p, _ in load_manifest_files()] == [
+        "manifest-000.json", "manifest-001.json",
+    ]
+    # 同拥有者取最新 → 只有一份结论，不重复、无前缀（修复前会是两条）。
+    verification = verify_and_record(ledger, resolver=lambda d, loc: TEXT)
+    assert [row["id"] for row in verification["conclusions"]] == ["C1"]
+
+
+def test_submit_without_scope_still_succeeds(run_env) -> None:
+    """无执行作用域（直接调用／脚本）时不报错，owner 退回空（文件名语义）。"""
+    out = _submit([_conclusion()])
+    assert out["ok"] is True
+    assert out["owner"] is None
+
+
 # ── 伴随绑定（评审 C4 配套）──────────────────────────────────────────────
 
 

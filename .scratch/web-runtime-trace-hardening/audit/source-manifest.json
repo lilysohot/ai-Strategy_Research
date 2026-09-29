@@ -1,0 +1,95 @@
+{
+  "head": "1770155a9c1227562a31044c8ca9fbcfee37e2c7",
+  "captured_at_utc": "2026-09-29T06:25:48.8227504Z",
+  "clean_snapshot": false,
+  "files": [
+    {
+      "sha256": "82b377bc0931ca4fcef471ab6774f49402487811ac4167049f78a279ba7d973b",
+      "path": "server/config.py"
+    },
+    {
+      "sha256": "c51f7ce0e77b420263f5641106053ff11d4d2cee409dbd7454b9a32dda64e323",
+      "path": "server/store.py"
+    },
+    {
+      "sha256": "3e81f6205268df23761c5f5ee046926944b052735b928129a11e65f04dd3980d",
+      "path": "server/routes/runs.py"
+    },
+    {
+      "sha256": "074d7616c5d62e1cdc0e1ec0a86dd179eedd8722ab43c5299a5a7fda39ea5223",
+      "path": "server/routes/artifacts.py"
+    },
+    {
+      "sha256": "da57dac54cf4d51591c456550fc2d1e26ab60290ee85162e3c1a5a29e8a9f4eb",
+      "path": "server/routes/sessions.py"
+    },
+    {
+      "sha256": "a2b85d75ae16e0adce39d974132719eb79f1a278d0ccb76e58c0b4b48c626fc9",
+      "path": "server/orchestrator.py"
+    },
+    {
+      "sha256": "b51d9037d83638d19c760ca2f3536e9fa748a5cf53e88b4ebd01b6c144156095",
+      "path": "server/worker.py"
+    },
+    {
+      "sha256": "e65d597bbe5446a65c286e88e86ac9e32df407230936d98900178ecbd7f99604",
+      "path": "server/history.py"
+    },
+    {
+      "sha256": "8c32d46605ed0dbf42a87805eaaac46564a64ebbf543d5d502abb0344fd24620",
+      "path": "server/relay.py"
+    },
+    {
+      "sha256": "9001cd1fff2dd0d680f30ebbfb203a03616d0cc6df2316e9bd7c6c8aa66cf516",
+      "path": "server/usage.py"
+    },
+    {
+      "sha256": "e6c1c7b1cda8514bf8765dcdc697ed6e9c2ed1ba6758fd72c6e183905884cb26",
+      "path": "server/artifacts.py"
+    },
+    {
+      "sha256": "072ac12e2920e0538b1ea66fd4395146d4db03ee8a2fb7d84023ae045ab2121c",
+      "path": "server/diff.py"
+    },
+    {
+      "sha256": "7d7fa220b92e06e9350ff3f6a7f79701aa703d15517a7b67800ff486fcef81c9",
+      "path": "server/app.py"
+    },
+    {
+      "sha256": "a96a942baf47d24fc2accf01bfddfcbcbe48e5d4f58d95040926a82ccfdbad2e",
+      "path": "server/steer.py"
+    },
+    {
+      "sha256": "e83a3dfb398e55d0a52bae17475d14512532bc913fa4247d2f3c1e70c2106417",
+      "path": "server/approval.py"
+    },
+    {
+      "sha256": "c237f4ddedacd87ff23991a1f8ebf7228ac7b07d402015d5a5be0ea743254387",
+      "path": "frontier_agent/components/observers/trajectory.py"
+    },
+    {
+      "sha256": "48caf6811d7c11f0503849740801fcfd7874204d89992842de31d07adc5fdb64",
+      "path": "web/src/stores/runs.ts"
+    },
+    {
+      "sha256": "11205377ad99d1cbe9fb50d2d07796a9b271e35b248c7f23392648afc3f0195a",
+      "path": "web/src/sse.ts"
+    },
+    {
+      "sha256": "da5b393279e428a07b49ff74767c8aa1b1f1dac0a21ac1e737cddb5159596ee1",
+      "path": "web/src/utils/statusbar.ts"
+    },
+    {
+      "sha256": "49264beb136f2cb513bb5bf075990f38253e692642e611d73b239e61dfc71957",
+      "path": "deploy/docker-compose.yml"
+    },
+    {
+      "sha256": "8459d0f73be532273005f622f019b57ded5d193ad0ebbdc6a938eaaa34721657",
+      "path": "deploy/Dockerfile.web"
+    },
+    {
+      "sha256": "e59589d912fd5858cbfc72f93a7a655754b012904c2e16a04c49e053486f8dec",
+      "path": ".dockerignore"
+    }
+  ]
+}

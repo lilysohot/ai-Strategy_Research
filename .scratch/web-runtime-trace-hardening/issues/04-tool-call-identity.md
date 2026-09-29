@@ -20,3 +20,4 @@ Requirements: PR-RUN-02, PR-GOV-02
 ## Comments
 
 - 2026-09-29：字段丢失与回放合成 ID 的差异确认，端到端动态复现未执行。
+- 2026-09-29 全面复核：真实 observer → JSONL → replay 的调用 ID 丢失已复现。 执行结果见 `audit/` 及全面复核记录，未修复。
