@@ -1,0 +1,102 @@
+== company-003 :: 国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少…
+   status=ok wall=1240.7s submits=8 feedback=True resolved=False final=partial
+{
+  "questions": [
+    {
+      "query_id": "company-003",
+      "status": "ok",
+      "loop": {
+        "manifest_tool_calls": 8,
+        "had_feedback": true,
+        "feedback_submit_seqs": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "feedback_codes": {
+          "missing_dependencies": 8
+        },
+        "resolved_conclusions": [],
+        "resolved": false,
+        "final_publish_status": "partial",
+        "final_counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "corpus_fetch_calls": 16,
+        "corpus_fetch_locators": 23
+      }
+    }
+  ]
+}
+== company-003 :: 国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少…
+   status=ok wall=529.3s submits=0 feedback=False resolved=False final=None
+{
+  "questions": [
+    {
+      "query_id": "company-003",
+      "status": "ok",
+      "loop": {
+        "manifest_tool_calls": 0,
+        "had_feedback": false,
+        "feedback_submit_seqs": [],
+        "feedback_codes": {},
+        "resolved_conclusions": [],
+        "resolved": false,
+        "final_publish_status": null,
+        "final_counts": {},
+        "corpus_fetch_calls": 6,
+        "corpus_fetch_locators": 34
+      }
+    }
+  ]
+}
+== company-003 :: 国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少…
+   status=ok wall=613.1s submits=2 feedback=True resolved=True final=verified
+{
+  "questions": [
+    {
+      "query_id": "company-003",
+      "status": "ok",
+      "loop": {
+        "manifest_tool_calls": 2,
+        "had_feedback": true,
+        "feedback_submit_seqs": [
+          0
+        ],
+        "feedback_codes": {
+          "missing_dependencies": 1,
+          "not_delivered": 1,
+          "quote_not_found": 1
+        },
+        "resolved_conclusions": [
+          {
+            "id": "c1",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          },
+          {
+            "id": "c2",
+            "problem_at_submit": 0,
+            "resolved_at_submit": 1
+          }
+        ],
+        "resolved": true,
+        "final_publish_status": "verified",
+        "final_counts": {
+          "supported": 2,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "corpus_fetch_calls": 5,
+        "corpus_fetch_locators": 11
+      }
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "artifact": "a4-loop-probe-question",
+  "query_id": "company-003",
+  "domain": "company",
+  "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+  "guided": true,
+  "status": "ok",
+  "wall_s": 529.3,
+  "session": {
+    "present": true,
+    "session_id": "20260929-150241+0800-react-eac1",
+    "model": "glm-5.3-flash",
+    "run_dir": ".apodex/runs/20260929-150241+0800-react-eac1",
+    "usage": {
+      "input": 338723,
+      "output": 15105,
+      "cached": 287296
+    }
+  },
+  "trace": {
+    "present": true,
+    "llm_turns": 10,
+    "tool_counts": {
+      "add_task": 1,
+      "update_task": 2,
+      "corpus_search": 4,
+      "corpus_inventory": 1,
+      "corpus_fetch": 6
+    },
+    "corpus_timeline": [
+      {
+        "turn": 2,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_inventory",
+        "is_error": false
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0080",
+          "chunk:a3b681fdd55d6e11:table:0011",
+          "chunk:a3b681fdd55d6e11:body:0012",
+          "chunk:a3b681fdd55d6e11:body:0013",
+          "chunk:a3b681fdd55d6e11:body:0014"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0154",
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015",
+          "chunk:a3b681fdd55d6e11:table:0016",
+          "chunk:a3b681fdd55d6e11:table:0017",
+          "chunk:a3b681fdd55d6e11:table:0018",
+          "chunk:a3b681fdd55d6e11:table:0019",
+          "chunk:a3b681fdd55d6e11:table:0020",
+          "chunk:a3b681fdd55d6e11:table:0021"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "cursor"
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0017",
+          "chunk:a3b681fdd55d6e11:table:0018",
+          "chunk:a3b681fdd55d6e11:table:0019",
+          "chunk:a3b681fdd55d6e11:table:0020",
+          "chunk:a3b681fdd55d6e11:table:0021",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0000",
+          "chunk:a3b681fdd55d6e11:body:0000",
+          "chunk:a3b681fdd55d6e11:body:0001",
+          "chunk:a3b681fdd55d6e11:body:0002",
+          "chunk:a3b681fdd55d6e11:table:0000",
+          "chunk:a3b681fdd55d6e11:table:0001",
+          "chunk:a3b681fdd55d6e11:table:0002"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0001",
+          "chunk:a3b681fdd55d6e11:heading:0002",
+          "chunk:a3b681fdd55d6e11:heading:0003",
+          "chunk:a3b681fdd55d6e11:heading:0004",
+          "chunk:a3b681fdd55d6e11:heading:0005",
+          "chunk:a3b681fdd55d6e11:body:0021",
+          "chunk:a3b681fdd55d6e11:body:0022"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_search",
+        "is_error": false
+      }
+    ],
+    "manifest_submits": []
+  },
+  "manifests": {
+    "count": 0,
+    "files": []
+  },
+  "verification": {
+    "present": true,
+    "status": "draft",
+    "counts": null,
+    "verification_errors": null,
+    "problem_codes": {},
+    "boundary_action": null,
+    "manifest_files": null,
+    "path": ".apodex/runs/20260929-150241+0800-react-eac1/corpus/manifest_verification.json"
+  },
+  "loop": {
+    "manifest_tool_calls": 0,
+    "had_feedback": false,
+    "feedback_submit_seqs": [],
+    "feedback_codes": {},
+    "resolved_conclusions": [],
+    "resolved": false,
+    "final_publish_status": null,
+    "final_counts": {},
+    "corpus_fetch_calls": 6,
+    "corpus_fetch_locators": 34
+  },
+  "gold": {
+    "targets": 6,
+    "fetched_hit": 6,
+    "answer_hit": 0
+  },
+  "generated_at": "2026-09-29T07:11:30.781711+00:00"
+}

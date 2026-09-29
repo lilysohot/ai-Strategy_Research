@@ -1,0 +1,71 @@
+_quote must be verbatim anchors in my final answer. Let me fix the final answer sentences now (they must appear verbatim):
+
+Anchor sentences:
+- "国信证券经济研究所《光力科技（300480.SZ）2026年中报点评：半导体划片机国内龙头，经营拐点向上》（2026年9月6日发布，分析师吴双），第20页附表「财务预测与估值」。"
+- "每股收益（单位：元）：2026E 0.36、2027E 0.59、2028E 0.93。"
+- "经营活动现金流（单位：百万元，表中括号为负值）：2026E -222（记作(222)）、2027E -138（记作(138)）、2028E -17（记作(17)）。"
+- "EPS 高增对应估值消化：P/E 由2026E的78.6倍降至2028E的30.3倍。"
+- "经营现金流三年均为净流出，主因收入高增长（2026E +49%、2027E +44%、2028E +28%）下营运资本变动大额为负（2026E -428、2027E -439、2028E -387百万元）。"
+
+Hmm, but wait: EPS unit 元 — the table doesn't say 元 explicitly in the extracted text. The 每股红利/每股净资产 rows with decimals, and 收盘价 28.07元. P/E = 28.07/0.36 = 78.0 ≈ 78.6 (they used pre-close or different price). Unit for EPS is 元 by convention; I'll state "单位：元（依报告惯例，每股指标为人民币元）" — or safer: note it as 元 based on P/E consistency check: 28.07/0.36≈78.0 close to P/E 78.6. Actually I shouldn't over-claim; I'll write 单位：元 and mark in manifest required_dependencies include unit with the 每股收益 row quote; the validator may flag. Let me just present it carefully: "每股收益（元/股）：..." and cite. If the manifest complains about unit support, I'll adjust.
+
+Actually, to be safe about unit: the 现金流量表（百万元） header explicitly gives unit for OCF. For EPS, the 关键财务与估值指标 block header exists but no explicit unit. Guosen convention: EPS in 元. I'll say 单位：元 with note "（每股指标，元）". In manifest dependencies I'll include purpose "header" with the 关键财务与估值指标 quote, and for OCF purpose "unit" with 现金流量表（百万元） quote from table:0016.
+
+Now submit manifest. Conclusions:
+
+C1 EPS:
+- report_quote: "每股收益（元/股）：2026E 0.36、2027E 0.59、2028E 0.93。"
+- evidence: 
+  - doc_id cv2:a3b68..., locator chunk:a3b681fdd55d6e11:table:0018, quote: "关键财务与估值指标\n2024\n2025\n2026E\n2027E\n2028E\n营运资本变动\n154\n(197)\n(428)\n(439)\n(387)\n每股收益\n(0.32)\n0.11\n0.36\n0.59\n0.93", purpose: "value"
+  - same locator, quote "每股收益\n(0.32)\n0.11\n0.36\n0.59\n0.93", purpose "value"
+  - header quote "2024\n2025\n2026E\n2027E\n2028E" purpose "period"
+- required_dependencies: ["value","period","unit"]
+
+C2 OCF:
+- report_quote: "经营活动现金流（单位：百万元，表中负值以括号记）：2026E −222（记作(222)）、2027E −138（记作(138)）、2028E −17（记作(17)）。"
+
+Hmm, I must be careful: report_quote must be VERBATIM anchor in final answer. I'll finalize exact strings. Let me use simple hyphen-minus "-222". And decide final answer text now, then submit manifest with exact anchors, then write final answer identical.
+
+Final answer text (exact sentences):
+
+1. "数据出处：国信证券经济研究所发布的《光力科技（300480.SZ）2026年中报点评：半导体划片机国内龙头，经营拐点向上》（2026年9月6日，分析师吴双），答案取自报告第20页附表「财务预测与估值」（表末注明：资料来源：Wind、国信证券经济研究所预测）。"
+2. "每股收益（元/股）：2026E 0.36、2027E 0.59、2028E 0.93。"
+3. "经营活动现金流（百万元，表中负值以括号表示）：2026E -222（记作(222)）、2027E -138（记作(138)）、2028E -17（记作(17)）。"
+4. "参照同表：P/E 由2026E的78.6倍降至2028E的30.3倍，收入增长2026E +49%、2027E +44%、2028E +28%，营运资本变动2026E -428、2027E -439、2028E -387百万元。"
+5. "简析：国信证券预测光力科技利润端快速修复（EPS由2025年0.11元升至2028E 0.93元），但预测期经营现金流连续三年为净流出，反映收入高增长下营运资金占用较大，利润改善与现金回款存在时间差——这是理解该预测表时需要注意的反方风险点。"
+
+These will be my anchors. In the manifest, report_quote values = exact substrings above.
+
+Evidence quotes (verbatim from fetched item.text, with real newlines):
+
+- EPS row: "每股收益\n(0.32)\n0.11\n0.36\n0.59\n0.93" (table:0018)
+- OCF row: "经营活动现金流\n176\n(105)\n(222)\n(138)\n(17)" (table:0018)
+- header periods: "关键财务与估值指标\n2024\n2025\n2026E\n2027E\n2028E" (table:0018)
+- unit header: "现金流量表（百万元）\n2024\n2025\n2026E\n2027E\n2028E\n净利润\n(113)\n40\n132\n219\n343" (table:0016)
+- 营运资本变动 row: "营运资本变动\n154\n(197)\n(428)\n(439)\n(387)" (table:0018)
+- 收入增长 row (table:0019): "收入增长\n-13%\n17%\n49%\n44%\n28%"
+- P/E row (table:0020): "P/E\n(87.6)\n245.9\n78.6\n47.5\n30.3"
+- source note (table:0020): "资料来源：Wind、国信证券经济研究所预测"
+- identification: heading:0000 "证券研究报告|2026年09月06日"; heading:0002 "光力科技（[LLM] stream model=glm-5.3-flash ttft=1.39s total=69.22s chunks=4082
+[0m
+⟳ the model's reasoning ran long — recovering
+■ run incomplete · turns=14 · tools=0 · no_tool · partial output was not saved as a final report
+
+--- stderr ---
+36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m50233[0m[2m->[0m[1;2;36m1139[0m
+已确认报告要素：国信证券 2026年09月06日研报，机械设备·专用设备，分析师吴双（guosen.com.cn），评级「[1;35m优于大市[0m[1m([0m首次[1m)[0m」，合理估值 [1;36m32.54[0m–[1;36m39.98[0m 
+元，内容为半导体封测装备+煤矿安全监控装备（光力科技业务特征）。现在取报告标题与「光力科技」逐字提及处，并检索首页「盈利预测和财务指标」表交叉核验。
+  [33mtool corpus_fetch[0m  [1;2m{[0m[2;32m"doc_id"[0m[2m: [0m[2;32m"cv2:a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"[0m[2m, [0m[2;32m"locators"[0m[2m: [0m[1;2m[[0m[2;32m"chunk:a3b681fdd55d6e11:heading:0001"[0m[2m, [0m[2;32m"chunk:a3b681fdd55d6e11:heading:0002"[0m[2m, [0m
+[2;32m"chunk:a3b681fdd55d6e11:heading:0003"[0m[2m, [0m[2;32m"chunk:a3b681fdd55d6e11:heading:0004"[0m[2m, [0m[2;32m"chunk:a3b681fdd55d6e11:heading:0005"[0m[2m, [0m[2;32m"chunk:a3b681fdd55d6e11:body:0021"[0m[2m, [0m[2;32m"chunk:a3b681fdd55d6e11:body:0022"[0m[1;2m][0m[2m, [0m[2;32m"view"[0m[2m: [0m
+[2;32m"compact"[0m[1;2m}[0m
+  [33mtool corpus_search[0m  [1;2m{[0m[2;32m"query"[0m[2m: [0m[2;32m"盈利预测和财务指标 每股收益 市盈率"[0m[1;2m}[0m
+  [32m-> [0m[1;32m{[0m[32m"ok"[0m[32m: true, [0m[32m"schema_version"[0m[32m: [0m[1;32m1[0m[32m, [0m[32m"cursor_type"[0m[32m: [0m[32m"content"[0m[32m, [0m[32m"doc_id"[0m[32m: [0m[32m"cv2:a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"[0m[32m, [0m[32m"build_id"[0m[32m: [0m
+[32m"a3b681fdd55d6e11713d7ad7d679ffc9d876fa94541a65d5e18080c53e978a93"[0m[32m, [0m[32m"scope_id"[0m[32m: [0m[32m"scope:2fe0f3fa3b4ec469225814a40cd2a7f4"[0m[32m, [0m[32m"view"[0m[32m: [0m[32m"compact"[0m[32m, [0m[32m"items"[0m[32m: [0m[1;32m[[0m[1;32m{[0m[32m"locator"[0m[32m: [0m
+[32m"chunk:a3b681fdd55d6e11:heading:0001"[0m[32m, [0m[32m"chunk_id"[0m[32m: [0m[32m"a3b681fdd55d6e11:heading:0001"[0m[32m,[0m[32m...[0m
+  [32m-> [0m[1;32m{[0m[32m"ok"[0m[32m: true, [0m[32m"query"[0m[32m: [0m[32m"盈利预测和财务指标 每股收益 市盈率"[0m[32m, [0m[32m"count"[0m[32m: [0m[1;32m5[0m[32m, [0m[32m"hits"[0m[32m: [0m[1;32m[[0m[1;32m{[0m[32m"doc_id"[0m[32m: [0m[32m"cv2:58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"[0m[32m, [0m[32m"locator"[0m[32m: [0m
+[32m"chunk:58735cff57d8d456:body:0005"[0m[32m, [0m[32m"source_id"[0m[32m: [0m[32m"6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"[0m[32m, [0m[32m"build_id"[0m[32m: [0m[32m"58735cff57d8d456eee75ce0c9621df612d2a63c430766caf5927a275ed63d9c"[0m[32m, [0m
+[32m"chunk_id"[0m[32m: [0m[32m"58735cff57d8d456:body:0005"[0m[32m, "c[0m[32m...[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m10[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m58320[0m[2m->[0m[1;2;36m4096[0m
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m10[0m  [33mtool_calls[0m=[1;36m14[0m  [33mstopped_by[0m=[35mno_tool[0m

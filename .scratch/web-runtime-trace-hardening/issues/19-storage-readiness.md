@@ -17,3 +17,4 @@ Requirements: PR-GOV-01
 ## Comments
 
 - 2026-09-29：全面存储复核新增，详见报告证据等级；运行代码尚未修改。
+- 2026-09-29 证据补正：替身检查不等于真实 DB 断连；healthz 200 仅证明存活，不证明就绪。正常链路先复用原环境，故障按[环境方案](../../../docs/plan/web-storage-validation-environment.md)隔离，T8 验收仍待执行。

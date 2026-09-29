@@ -5,14 +5,15 @@
 | 状态 | 有效审核记录 · 已执行隔离检查，未修复/未迁移 |
 | 日期 | 2026-09-29 |
 | 范围 | Web 输入、业务库、执行文件、回放、文件读取/回滚、生命周期及部署配置 |
-| 关联 | [修复报告 v1.3](web-runtime-trace-repair-report.md)；[21 项任务](../../.scratch/web-runtime-trace-hardening/spec.md) |
+| 关联 | [修复报告 v1.4](web-runtime-trace-repair-report.md)；[21 项任务](../../.scratch/web-runtime-trace-hardening/spec.md)；[环境准备与执行边界](web-storage-validation-environment.md) |
 | 基线 | 当前非干净工作区；本轮记录时 HEAD `1770155a9c1227562a31044c8ca9fbcfee37e2c7`；上轮报告基线不同，核验文件哈希见 [source-manifest.json](../../.scratch/web-runtime-trace-hardening/audit/source-manifest.json) |
 
 ## 结论
 
 目录移出源码树仍是必交付项，但单独迁移不能修好整条存储链路。本轮补充 F15—F21，
 并将多个此前静态发现提升为隔离可复现缺陷。多用户上线优先阻断 F08 会话归属问题；
-迁移前必须建立可信目录边界、可恢复落账、消息约束与备份清单。
+迁移前必须核定实际部署，补齐与迁移相关的可信路径、恢复和备份清单；
+不把全部消息/模型/前端修复一律设成目录迁移前置。具体门槛见环境准备方案。
 
 本轮使用 diagnosing-bugs 的隔离复现方法。只修改报告、任务和审计脚本，没有修改运行代码，
 没有启动真实 worker、调用模型、连接业务数据库、读取用户轨迹正文或迁移数据。
@@ -79,7 +80,9 @@ flowchart LR
 | 前端源码行为检查 | **5 个：5 失败** | [脚本](../../.scratch/web-runtime-trace-hardening/audit/frontend-audit.mjs)、[结果](../../.scratch/web-runtime-trace-hardening/audit/frontend-results.json) |
 | 已有相关回归测试 | **57 通过、5 未选入** | [结果](../../.scratch/web-runtime-trace-hardening/audit/baseline-results.json) |
 
-失败断言表达期望的修复后契约，当前失败即缺陷证据，不是把现有测试改坏。
+失败断言证明当前路径不满足所写的期望契约；其中包含已规定功能的缺陷，也包含新增的恢复/
+可观测性目标。须按代码事实、隔离复现、真实环境复现和目标契约分别归类，
+不能把每个失败都直接称为已确认生产故障，或未经契约核定就列为强制修复。
 24+5 个检查不是 29 个独立缺陷，多个检查映射同一 F 编号。3 个正向项是外部 Run 读取拒绝、
 产物子路径越界拒绝、空 SQLite 经 Alembic 升级后表列与 ORM 匹配。
 已有测试覆盖常规行为；其中部分测试容许未关联实体写入或将缺失用量视为零，
@@ -90,11 +93,11 @@ flowchart LR
 ```bash
 .venv/bin/python .scratch/web-runtime-trace-hardening/audit/run_audit.py
 node .scratch/web-runtime-trace-hardening/audit/frontend-audit.mjs
-.venv/bin/python .scratch/web-runtime-trace-hardening/audit/run_audit.py \\
-  --audit-report baseline-results.json \\
-  tests/test_history_t26.py tests/test_orphan_run_reconcile.py \\
-  tests/test_artifacts_t29.py tests/test_usage_t211.py \\
-  tests/test_upload_t210.py tests/test_web_p2_diff.py \\
+.venv/bin/python .scratch/web-runtime-trace-hardening/audit/run_audit.py \
+  --audit-report baseline-results.json \
+  tests/test_history_t26.py tests/test_orphan_run_reconcile.py \
+  tests/test_artifacts_t29.py tests/test_usage_t211.py \
+  tests/test_upload_t210.py tests/test_web_p2_diff.py \
   -k 'not worker and not scans_outputs_and_downloads and not metered_from_trajectory and not reaches_agent'
 ```
 
@@ -119,19 +122,27 @@ node .scratch/web-runtime-trace-hardening/audit/frontend-audit.mjs
 - F16：并发 seq 出现重复；SQLite 外键状态为 0。重复分布随调度变化，不能依赖固定序列值。
 - F17：产物根链接被接受；回滚将外部合成基线复制到 outputs，普通子链接拒绝仍有效。
 - F18：回滚成功但哈希未变；合法绝对快照路径被回滚器拒绝。
-- F19/F20：存储探活失败仍 200/ok；模型快照空；worker 启动后 DB 仍 queued、started_at 空。
+- F19：将数据库探活替身设为失败，healthz 仍为 200/ok；未断开真实 DB，证明的是就绪信号缺口。
+- F20：模型快照空；处理合成 run_started 帧后 DB 仍 queued、started_at 空，未启动真实 worker。
 - F21：目前为源码证据；控制动作完整恢复与各轨迹格式的保留范围需要专门测试。
 
 ## 迁移前的闭环要求
 
-1. 先修准入与可信路径（F08/F17），确定服务身份、数据目录权限、命名卷与密钥恢复方式。
-2. F15/F16/F20 明确 Run/消息/配置/文件的完成和重试契约；F18 统一相对路径与产物索引。
+1. 先复用原环境核实服务身份、有效配置、数据目录/挂载及备份；F08/F17 按相关测试边界处理。
+2. F15/F18 中影响迁移的恢复与相对定位/索引必须有验证方案；F16/F20 可并行推进，
+   不把数据库约束重构和模型快照一概列为迁移前提。
 3. F01 盘点旧目录及数据库引用、停写或排空、备份、dry-run、校验后切换；处理 diff/base、
    manifest、outputs_baseline、messages.spool 等容易遗漏的文件，不能只搬轨迹 JSONL。
 4. F02 排除镜像；F19 校验数据目录、schema 就绪；F07 在独立环境恢复库、文件和所需密钥。
 5. 验收旧 Run、新 Run、上传、下载、回滚、回放、用量和下一轮历史，并记录切换后新数据的回退办法。
 
 ## 未覆盖或未获生产证据的部分
+
+> 后续执行准备核查补正：Docker 中没有 Web API 容器，不代表本机没有运行 Web 服务。
+> 已只读验证 `127.0.0.1:8000/healthz` 为 200、`/openapi.json` 标识为
+> FrontierAgent 投研平台 0.1.0，`127.0.0.1:5173/` 返回投研 Agent 平台页面。
+> 这些只证明服务可访问；没有提交真实 Run、验证其数据库/模型连接，也没有证明当前进程加载的
+> 代码与工作区一致。此前检查仅到容器清单，环境核查不完整，此处明确补正。
 
 - PostgreSQL 实例的 schema、锁、RLS、约束、备份任务和恢复演练未检查，避免以测试连接触碰业务库；
   本次 SQLite 验证不能代替 PG 验收。
@@ -146,3 +157,17 @@ node .scratch/web-runtime-trace-hardening/audit/frontend-audit.mjs
 - 价格监控、账户事实版本、业务快照仍属待建设需求；其存储模型必须遵循本报告修正后的契约。
 
 本次完成的是全链路代码审查与有边界的动态复核，不是生产可靠性签收。
+
+## 后续真实链路验证的执行准备
+
+此前将整套隔离栈列为统一前提，现已纠正；唯一执行准备口径见
+[环境准备与执行边界](web-storage-validation-environment.md)，不在此维护第二份环境清单。
+
+顺序改为：E0 复用现有环境只读核验 → E1 专用测试账号走正常真实链路 →
+按需 E2 同 PG 实例独立测试库/第二 API → 仅实例故障采用 E3 独立实例/卷 →
+相关验收通过后 E4 在原部署正式切换存储。
+
+新端口不等于隔离；第二个 API 不能连接原业务库，否则启动恢复可能误标其他进程的活跃 Run。
+父子进程配置、PG 版本/库、前端代理、模型来源和清理清单必须核定；
+原 SQLite 审计命令不能作为 PG/真实 worker 验收入口。
+基础设施可用不代表配置与真实冒烟已经通过。本轮纠正方案，没有新建实例、重启服务或迁移数据。

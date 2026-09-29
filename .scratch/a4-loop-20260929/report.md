@@ -124,3 +124,23 @@ uv run python .scratch/a4-loop-20260929/a4_loop_probe.py --query-ids company-003
 ```
 
 逐题产物在 `model_runs/<tag>/<query_id>/result.json`（存在即跳过，可续跑）；run 工件在 `.apodex/runs/<session-id>/corpus/`。
+
+## 8. 修复后复核（Round 2，2026-09-29）
+
+用与 Round 1 完全相同的方式重跑 `company-003` 三档（详见
+[`round2_review.md`](./round2_review.md)）：
+
+| 档 | 提交次数 | 候选清单 owner | 环内闭环 | 发布边界 | 边界 counts |
+|---|---|---|---|---|---|
+| 自然 | **8** | 8/8 同一 owner | 否（同一 `missing_dependencies` 8 次未修） | `partial` | supported 4／partial 1 |
+| 引导 | **0** | 无 | 未触发 | `draft` | — |
+| 早提交 | 2 | 2/2 同一 owner | **是** | **`verified`** | supported 2／partial 0 |
+
+- **F2 修复确认**：每份候选都带同一 `owner_role`；自然档 8 份候选共 40 条结论，边界 counts
+  恰为**最新一份**的 5 条（不再并集）；早提交档边界 `verified`（修复前同路径 `partial`）。
+- **边界是「最新提交」的忠实反映**：自然档 `partial` 是模型确实未满足自报 `value` 依赖，
+  属诚实信号而非污染。
+- **新发现 F4（模型行为方差）**：引导档本轮**零提交**（合规不保证）→ 边界 `draft`；
+  自然档 **8 次重提无进展**（1240.7s、1.45M input token）＝ thrashing。二者都是
+  「是否默认启用阻断」的直接输入：本轮三档会有 **2/3 被降级**，且原因在模型行为层，
+  不是校验机制缺陷。

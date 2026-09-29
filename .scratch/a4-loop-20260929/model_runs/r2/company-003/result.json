@@ -1,0 +1,1293 @@
+{
+  "artifact": "a4-loop-probe-question",
+  "query_id": "company-003",
+  "domain": "company",
+  "question": "国信证券财务预测表中，光力科技2026E、2027E、2028E的每股收益和经营活动现金流分别是多少？",
+  "guided": false,
+  "status": "ok",
+  "wall_s": 1240.7,
+  "session": {
+    "present": true,
+    "session_id": "20260929-144201+0800-react-5233",
+    "model": "glm-5.3-flash",
+    "run_dir": ".apodex/runs/20260929-144201+0800-react-5233",
+    "usage": {
+      "input": 1447537,
+      "output": 58863,
+      "cached": 1336768
+    }
+  },
+  "trace": {
+    "present": true,
+    "llm_turns": 22,
+    "tool_counts": {
+      "add_task": 1,
+      "update_task": 5,
+      "data_coverage": 1,
+      "corpus_search": 4,
+      "corpus_inventory": 1,
+      "corpus_fetch": 16,
+      "corpus_submit_manifest": 8,
+      "create_file": 1
+    },
+    "corpus_timeline": [
+      {
+        "turn": 2,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_inventory",
+        "is_error": false
+      },
+      {
+        "turn": 3,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 4,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "batch",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0154",
+          "chunk:a3b681fdd55d6e11:body:0022",
+          "chunk:a3b681fdd55d6e11:table:0014",
+          "chunk:a3b681fdd55d6e11:table:0015",
+          "chunk:a3b681fdd55d6e11:table:0016",
+          "chunk:a3b681fdd55d6e11:table:0017",
+          "chunk:a3b681fdd55d6e11:table:0018",
+          "chunk:a3b681fdd55d6e11:heading:0155"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0154"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0018"
+        ]
+      },
+      {
+        "turn": 5,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0014"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0015"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0016"
+        ]
+      },
+      {
+        "turn": 6,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:table:0017"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0000"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0000"
+        ]
+      },
+      {
+        "turn": 7,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0001"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0001"
+        ]
+      },
+      {
+        "turn": 8,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0002"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:heading:0002"
+        ]
+      },
+      {
+        "turn": 9,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 10,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 11,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 12,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 2,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 13,
+        "name": "corpus_search",
+        "is_error": false
+      },
+      {
+        "turn": 14,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0023"
+        ]
+      },
+      {
+        "turn": 14,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0024"
+        ]
+      },
+      {
+        "turn": 15,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 3,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 16,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 4,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 17,
+        "name": "corpus_fetch",
+        "is_error": false,
+        "mode": "single",
+        "locators": [
+          "chunk:a3b681fdd55d6e11:body:0003"
+        ]
+      },
+      {
+        "turn": 18,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 5,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 19,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 6,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 20,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 7,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      }
+    ],
+    "manifest_submits": [
+      {
+        "turn": 10,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 0,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 11,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 1,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 12,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 2,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 15,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 3,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 16,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 4,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 18,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 5,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 19,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 6,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      },
+      {
+        "turn": 20,
+        "name": "corpus_submit_manifest",
+        "is_error": false,
+        "seq": 7,
+        "n_conclusions": 5,
+        "parseable": true,
+        "ok": true,
+        "publish_status": "partial",
+        "counts": {
+          "supported": 4,
+          "partial": 1,
+          "unsupported": 0
+        },
+        "errors": null,
+        "conclusions": [
+          {
+            "id": "C1",
+            "status": "partial",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": [
+              "missing_dependencies"
+            ]
+          },
+          {
+            "id": "C2",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C3",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C4",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          },
+          {
+            "id": "C5",
+            "status": "supported",
+            "delivery": [
+              "delivered"
+            ],
+            "codes": []
+          }
+        ],
+        "problem_codes": {
+          "missing_dependencies": 1
+        }
+      }
+    ]
+  },
+  "manifests": {
+    "count": 8,
+    "files": [
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-000.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-001.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-002.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-003.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-004.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-005.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-006.json",
+      ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-007.json"
+    ]
+  },
+  "verification": {
+    "present": true,
+    "status": "partial",
+    "counts": {
+      "supported": 4,
+      "partial": 1,
+      "unsupported": 0
+    },
+    "verification_errors": 0,
+    "problem_codes": {
+      "missing_dependencies": 1
+    },
+    "boundary_action": null,
+    "manifest_files": [
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-000.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-001.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-002.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-003.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-004.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-005.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-006.json",
+      "/home/administrator/FrontierAgent/.apodex/runs/20260929-144201+0800-react-5233/corpus/manifests/manifest-007.json"
+    ],
+    "path": ".apodex/runs/20260929-144201+0800-react-5233/corpus/manifest_verification.json"
+  },
+  "loop": {
+    "manifest_tool_calls": 8,
+    "had_feedback": true,
+    "feedback_submit_seqs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "feedback_codes": {
+      "missing_dependencies": 8
+    },
+    "resolved_conclusions": [],
+    "resolved": false,
+    "final_publish_status": "partial",
+    "final_counts": {
+      "supported": 4,
+      "partial": 1,
+      "unsupported": 0
+    },
+    "corpus_fetch_calls": 16,
+    "corpus_fetch_locators": 23
+  },
+  "gold": {
+    "targets": 6,
+    "fetched_hit": 6,
+    "answer_hit": 6
+  },
+  "generated_at": "2026-09-29T07:02:41.443965+00:00"
+}

@@ -2,10 +2,11 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v1.3 · 2026-09-29；全面复核新增 F15—F21，F01 存储位置整改仍为必交付项 |
+| 版本 / 日期 | v1.4 · 2026-09-29；纠正环境准备、证据状态与迁移前置范围，F01 仍为必交付项 |
 | 状态 | 有效缺陷报告 · 21 项待分诊、待修复；已执行隔离复核，未修改运行代码 |
 | 检查基线 | 当前工作区；HEAD `a48cd25eb5c0bb4fa724cee7c69bb5b6e2fa1ed2`，工作区非干净快照 |
 | 最新复核 | 上行保留初次检查基线；v1.3 基线、文件哈希、覆盖矩阵及执行结果见[全面存储链路复核](web-storage-chain-audit.md) |
+| 执行准备 | [环境准备与执行边界](web-storage-validation-environment.md)：优先复用现有环境；按测试影响范围选择独立库/实例，不统一另建整套服务 |
 | 来源 | 本次关于 Web 启动架构、模型/工具追溯及 `server/runs` 存储位置的检查 |
 | 范围 | Web 默认 ReAct 链路的运行文件、构建、持久化、轨迹接口、会话准入、上下文与实时/历史展示 |
 | 上游要求 | [产品需求](../product-requirements.md)：PR-RUN-02/04、PR-GOV-01/02/03/05/06、PR-BIZ-04/05/06 |
@@ -22,6 +23,8 @@ v1.0—v1.2 完成源码与配置核对；v1.3 已执行隔离 ASGI/SQLite/文�
 未修改应用代码、迁移运行数据、重建镜像、操作生产数据库或调用 LLM，未读取真实用户轨迹正文。
 下文早期条目的“待执行验证”保留为完整修复验收清单；哪些子场景已复现以最新覆盖矩阵为准，
 不能将隔离复现当作生产事故证据，也不能将复现完成当作修复完成。
+v1.4 补正：新增检查包含待核定的目标契约，26 个失败不能直接当作 26 个生产缺陷；
+最终修复范围按需求适用性和真实链路验证收口。F19 的检查未断开真实 DB，只证明缺少就绪信号。
 
 事实边界：
 
@@ -56,10 +59,10 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 
 | 编号 | 建议优先级 | 发现 | 证据强度 | 任务 |
 |---|---|---|---|---|
-| F01 | P1 | 运行根目录与显式持久卷不匹配，根目录迁移缺少旧 Run 解析契约 | 配置及读取路径确认；部署覆盖待核验 | [01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) |
+| F01 | P1 | 运行根目录与显式持久卷不匹配，根目录迁移缺少旧 Run 解析契约 | UUID 定位差异隔离复现；部署覆盖待核验 | [01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) |
 | F02 | P1 | Web 构建会复制 `server/`，Docker ignore 未排除运行目录 | 构建入口与复制链确认；历史镜像是否含数据未验证 | [02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md) |
-| F03 | P1 | `/trace` 返回原始记录，与 SSE 的脱敏不一致 | 路由与输出路径确认；未使用真实敏感数据复现 | [03](../../.scratch/web-runtime-trace-hardening/issues/03-trace-redaction.md) |
-| F04 | P1 | JSONL 请求记录丢弃工具调用 ID，回放与结果可能无法配对 | 生产者/消费者字段不一致确认 | [04](../../.scratch/web-runtime-trace-hardening/issues/04-tool-call-identity.md) |
+| F03 | P1 | `/trace` 返回原始记录，与 SSE 的脱敏不一致 | 合成凭据经 ASGI 原样返回已复现；全出口待验 | [03](../../.scratch/web-runtime-trace-hardening/issues/03-trace-redaction.md) |
+| F04 | P1 | JSONL 请求记录丢弃工具调用 ID，回放与结果可能无法配对 | observer/relay 调用 ID 差异隔离复现 | [04](../../.scratch/web-runtime-trace-hardening/issues/04-tool-call-identity.md) |
 | F05 | P2 | 历史轨迹页不展示已保存推理，工具结果仅有短预览 | 模板及截断逻辑确认；浏览器验收待执行 | [05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md) |
 | F06 | P1 | 未完成流式响应无持久化保证，完整性状态和文档承诺不准确 | 回调与写入策略确认；故障注入待执行 | [06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md) |
 | F07 | P1 | 业务库与运行文件的联合备份、保留和删除缺少闭环验收 | 计划待办及设计要求确认；运维现状待调查 | [07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md) |
@@ -68,13 +71,13 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 
 | 编号 | 建议优先级 | 发现 | 证据强度 | 任务 |
 |---|---|---|---|---|
-| F08 | P1 | 提交 Run 缺少会话归属校验 | 源码路径确认；隔离动态复现待执行 | [08](../../.scratch/web-runtime-trace-hardening/issues/08-session-ownership.md) |
-| F09 | P1 | SSE 游标与终态恢复协议存在缺口 | 源码路径确认；隔离动态复现待执行 | [09](../../.scratch/web-runtime-trace-hardening/issues/09-stream-replay-contract.md) |
-| F10 | P1 | 流式去重导致文字缺失与用量漏计或重复 | 源码路径确认；隔离动态复现待执行 | [10](../../.scratch/web-runtime-trace-hardening/issues/10-replay-text-usage.md) |
-| F11 | P1 | 切换 Run 后旧异步响应可能覆盖新视图 | 源码路径确认；隔离动态复现待执行 | [11](../../.scratch/web-runtime-trace-hardening/issues/11-watch-generation.md) |
-| F12 | P1 | 上传校验与运行创建缺少失败清理 | 源码路径确认；隔离动态复现待执行 | [12](../../.scratch/web-runtime-trace-hardening/issues/12-upload-atomicity.md) |
+| F08 | P1 | 提交 Run 缺少会话归属校验 | 双合成用户 ASGI 越权写入已复现；生产影响未调查 | [08](../../.scratch/web-runtime-trace-hardening/issues/08-session-ownership.md) |
+| F09 | P1 | SSE 游标与终态恢复协议存在缺口 | 迟订阅/游标子场景隔离复现；浏览器待验 | [09](../../.scratch/web-runtime-trace-hardening/issues/09-stream-replay-contract.md) |
+| F10 | P1 | 流式去重导致文字缺失与用量漏计或重复 | 实际前端源码方法隔离复现；浏览器待验 | [10](../../.scratch/web-runtime-trace-hardening/issues/10-replay-text-usage.md) |
+| F11 | P1 | 切换 Run 后旧异步响应可能覆盖新视图 | 实际前端源码方法隔离复现；浏览器待验 | [11](../../.scratch/web-runtime-trace-hardening/issues/11-watch-generation.md) |
+| F12 | P1 | 上传校验与运行创建缺少失败清理 | 拒绝批次遗留文件隔离复现；完整补偿待验 | [12](../../.scratch/web-runtime-trace-hardening/issues/12-upload-atomicity.md) |
 | F13 | P2 | 轨迹读取与事件缓冲缺少容量边界 | 源码路径确认；隔离动态复现待执行 | [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) |
-| F14 | P1 | 排队 Run 的历史上下文没有明确截止点 | 源码路径确认；隔离动态复现待执行 | [14](../../.scratch/web-runtime-trace-hardening/issues/14-history-boundary.md) |
+| F14 | P1 | 排队 Run 的历史上下文没有明确截止点 | 未来消息进入历史隔离复现；真实 worker 待验 | [14](../../.scratch/web-runtime-trace-hardening/issues/14-history-boundary.md) |
 
 ## 4. 逐项修复说明
 
@@ -86,7 +89,7 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 | F16 | P1 | 消息序号与关系约束不足 | 隔离子场景已复现，完整验收待执行 | [16](../../.scratch/web-runtime-trace-hardening/issues/16-database-invariants.md) |
 | F17 | P1 | 产物根目录与回滚基线可经符号链接越界 | 隔离子场景已复现，完整验收待执行 | [17](../../.scratch/web-runtime-trace-hardening/issues/17-storage-trust-boundary.md) |
 | F18 | P1 | 产物索引与回滚后的文件不一致 | 隔离子场景已复现，完整验收待执行 | [18](../../.scratch/web-runtime-trace-hardening/issues/18-artifact-index-consistency.md) |
-| F19 | P1 | 存储与迁移故障缺少就绪门禁 | 隔离子场景已复现，完整验收待执行 | [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md) |
+| F19 | P1 | 存储与迁移故障缺少就绪门禁 | 源码及替身检查确认信号缺口；真实故障未注入 | [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md) |
 | F20 | P1 | Run 模型快照与启动状态未接入持久化 | 隔离子场景已复现，完整验收待执行 | [20](../../.scratch/web-runtime-trace-hardening/issues/20-run-metadata-snapshot.md) |
 | F21 | P1 | 用户纠正与审批决定缺少持久追溯契约 | 源码确认；动态恢复待验 | [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) |
 
@@ -116,12 +119,13 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 默认位置；本地与生产均采用源码树之外的专用数据目录。JSONL 格式继续使用，目录整改不要求
 将全部轨迹转存 PostgreSQL，也不改变 CLI 的 `.apodex/runs` 契约。
 
-本次实施目标如下（以下是待实施配置，不表示当前已经切换）：
+以下保留建议目标布局，实施前必须匹配实际运行模式和服务身份，不表示当前已经切换，
+也不要求将本机服务改成容器部署：
 
 | 环境 | Web 运行根目录 | 持久化方式 |
 |---|---|---|
 | Docker Compose | `/var/lib/frontier-agent/web/runs` | 显式设置 `SERVER_RUNS_ROOT`；现有 `agent_data` 命名卷的目标挂载点统一到 `/var/lib/frontier-agent/web`，先盘点卷内容，保留实际卷身份 |
-| 本地 Linux / WSL | `${XDG_DATA_HOME:-$HOME/.local/share}/frontier-agent/web/runs` | 应用在代码中解析用户数据目录，不依赖配置字符串的 shell 展开；当前 WSL 用户未设置 XDG 时为 `/home/administrator/.local/share/frontier-agent/web/runs` |
+| 本地 Linux / WSL 交互运行 | `${XDG_DATA_HOME:-$HOME/.local/share}/frontier-agent/web/runs` | 由实际运行用户解析；不得固定 administrator 用户名。系统服务另显式设置稳定服务数据目录，不能随 HOME 或账号变化漂移 |
 | 自定义部署 | 管理员配置的源码树外绝对路径 | 使用 `SERVER_RUNS_ROOT` 覆盖，明确目录权限、卷和备份落点 |
 
 每个 Run 的 `inputs/`、`ws/outputs/`、`run/`、`spill/`、历史及摘要一同迁移，保持内部相对布局。
@@ -140,10 +144,11 @@ Run，避免一半写旧目录一半读新目录。迁移后验证旧/新 Run，
 未完成迁移的记录必须明确提示，不能展示为空轨迹。回退先停止写入并核对切换后的新数据，
 不能只把环境变量改回去而丢下新 Run。
 
-**待执行验证**：隔离测试部署创建两次 Run，检查卷挂载；重建容器后读取历史；切换测试数据根目录
-并验证兼容读取或受控迁移。无文件、已清理、损坏和正常空轨迹应返回不同状态。
+**待执行验证**：按环境准备方案选取 E1 正常流程、E2 测试目录迁移及必要的 E3 故障场景。
+以实际部署方式验证两次 Run、服务重启/重新部署后历史读取；容器交付另验证卷挂载与重建。
+切换测试数据根目录并验证兼容读取或受控迁移。无文件、已清理、损坏和正常空轨迹应返回不同状态。
 
-**验收**：显式可识别持久卷；重启和重新部署后可读；旧 Run 与新 Run 均可追溯；数据库路径与
+**验收**：明确持久数据落点，容器部署使用显式可识别持久卷；重启和重新部署后可读；旧 Run 与新 Run 均可追溯；数据库路径与
 存储定位一致；越界路径拒绝；恢复/回退有记录。不能仅以“配置变量已改”关闭任务。
 此外，新部署及本地默认启动不再向源码树写 Web 运行数据；旧轨迹、输入、产物、历史及摘要
 均有迁移清单与校验结果；应用升级/容器重建后可读，F02 镜像排除与 F07 恢复验收共同通过。
@@ -282,7 +287,7 @@ JSONL 必需配置缺失可检测；文档不再把“已 flush 的记录”扩�
 
 **影响**：指定另一用户的会话 ID 可以进入其会话的写入/历史回填路径；两用户直接调用 API
 且均省略会话 ID，也会映射到同一个默认会话。Run 自身的所有者校验不能阻止此前混入上下文，
-也不能阻止另一用户消息写入原会话。这是代码确认的授权缺口，尚未进行双用户动态复现，
+也不能阻止另一用户消息写入原会话。这是代码确认且经双合成用户 ASGI 隔离复现的授权缺口，
 没有证据证明生产数据已经泄露。应作为多用户上线阻断项优先修复。
 
 **建议与验收**：创建任何文件、Run 或消息之前校验会话归属与可用状态；外部会话统一 404。
@@ -398,6 +403,11 @@ usage 与产物索引仍为空。重复处理同一个 `run_finished` 生成两�
 [worker.py](../../server/worker.py) 先发终态，再生成 diff 和非原子写 summary；summary 没有显式完成版本，
 最终文本静默截取 50,000 字符。不能把其存在当作全部落账成功。
 
+**环境准备补查**：启动恢复扫描共享库全部活跃 Run，仅排除本进程 handles；第二个 API
+可能将原进程任务误标失败/停止。此项为源码证据，未在现有服务上做双进程故障测试。
+在未实现并验收跨进程任务所有权/存活判定前，不支持以多个 API 进程共享业务库来并行验证；
+E2 使用独立测试库。正式部署也须核验多 worker、副本及滚动发布是否触发此问题。
+
 **修复/验收**：明确 queued/running/finalizing/terminal 或等价状态契约；先保存可恢复结果，
 再发布可供用户确认的完成状态。Run/助手消息幂等，派生索引可补算、有未完成标记；
 启动/定期恢复扫描包含“终态但落账不全”。启动失败落失败原因且不阻塞后续 Run。
@@ -512,10 +522,11 @@ F01 迁移需设服务专用目录权限，不能照搬默认 755 就宣称用�
 `persist` 应实现真实跨 Run 规则或改成准确范围文案/API，不扩大已有授权。
 断线前后、未采用即结束、审批超时、重启、下一轮历史、权限与脱敏均须验收。
 
-## 5. 修复顺序与职责（v1.3 更新）
+## 5. 修复顺序与职责（v1.4 更新）
 
-0. 优先 F08 会话归属与无副作用准入、F17 可信文件边界；F15/F16/F18/F20 的恢复、约束、
-   索引和运行元数据契约作为目录迁移前提。F09/F10 传输与计量可并行推进，F19 衔接 T8。
+0. 先按环境准备方案 E0/E1 核定原部署与真实链路；F08 准入、F17 文件边界优先。
+   F15/F18 中影响目录迁移的恢复、定位与索引须修复或提供已验证兼容方案；
+   F16/F20 等不全部设为迁移前置。F09/F10 可并行推进，F19 衔接 T8。
 
 1. F02 构建排除、F03 安全出口优先，可独立进行。
 2. F01 先盘点/备份/定义兼容方案，再改根目录与挂载；F07 的最低备份能力是迁移前提。

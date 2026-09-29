@@ -35,7 +35,8 @@ The investment-research Web product has two canonical product documents:
 | How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
 | How should Web business data, versioned inputs, and price-triggered analysis work? | [Web business data and persistence specification](design/web-business-data-prd.md) — planning draft; scope/status live in product requirements §4.7 |
 | How is it implemented? | [Technical architecture](tech-stack.md) |
-| What Web storage and traceability defects need repair? | [Web runtime and trace repair report](plan/web-runtime-trace-repair-report.md) — v1.3: twenty-one repair issues; [storage-chain audit](plan/web-storage-chain-audit.md) records isolated reproductions and coverage limits; not fixed |
+| What Web storage and traceability defects need repair? | [Web runtime and trace repair report](plan/web-runtime-trace-repair-report.md) — v1.4: twenty-one issues, corrected evidence and migration gates; [storage-chain audit](plan/web-storage-chain-audit.md) records isolated reproductions and coverage limits; not fixed |
+| How should the Web storage validation environment be prepared? | [Environment preparation](plan/web-storage-validation-environment.md) — reuse existing services first; separate test database for a second API, separate instance for instance faults; real-chain acceptance pending |
 
 `requirements-user-layer.md` is retained only as a compatibility link to the
 integrated requirements. Files under `docs/plan/` are implementation plans and
