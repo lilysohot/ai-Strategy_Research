@@ -1,0 +1,10 @@
+{
+  "query_id": "macro-009",
+  "answer_existence": "no_answer",
+  "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/macro-009/.apodex/runs/20260930-125214+0800-react-cfef",
+  "checks": [],
+  "has_negative_marker": false,
+  "fabrication_risk": false,
+  "answer_preview": "",
+  "verdict": "hallucination_risk"
+}
