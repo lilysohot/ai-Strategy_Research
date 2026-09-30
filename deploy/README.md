@@ -114,6 +114,22 @@ handle /api/* {
 `Dockerfile.web` **不再声明 `VOLUME`**：在源码树内声明会静默创建匿名卷，反而破坏
 可识别备份与恢复。备份与保留策略见 `web-platform-hardening.md` 的 T5/T6。
 
+## 数据库连接（业务库 / 语料库）
+
+两个库在**同一 PostgreSQL 实例**上，仅库名不同：业务 `apodex`、语料 `postgres`。
+
+容器内 `localhost` 指向容器自身，因此 compose 必须把两条连接串都显式指向宿主
+（`host.docker.internal`），否则读到的 `localhost:5432/…` 不可达：
+
+| 用途 | compose 键 | 覆盖来源 |
+| --- | --- | --- |
+| 业务库（用户 / 会话 / run 记录） | `SERVER_DATABASE_URL` | `SERVER_DATABASE_URL_DOCKER` |
+| 语料库 | `CORPUS_DSN` | `CORPUS_DSN_DOCKER` |
+
+两个 `_DOCKER` 变量都写在仓库根 `.env`（compose 用 `--env-file ../.env` 读取）。业务库
+scheme 必须是 `postgresql+asyncpg://`——漏掉或写成裸 `postgresql://` 会让 API 容器起来后
+`/healthz` 返回 **503 `storage_unavailable`**。
+
 ## 安全说明
 
 ### 密钥（`SERVER_MASTER_KEY` / `SERVER_JWT_SECRET`）

@@ -39,7 +39,12 @@
 - `e6-data-delivery-published.json`：3 份已发布材料 13/13；
 - `e6-data-delivery-holdout.json`：51 个目标的完整失败分类；
 - `e5_data_delivery.py`：零模型验证器；
-- `e6_prepare_holdout_db.py`：隔离库构建器，不伪造人工缺口裁决。
+- `e6_prepare_holdout_db.py`：隔离库构建器，不伪造人工缺口裁决；
+- `e6-human-gap-review-packet.md` / `.json`：9 份未放行材料的人工缺口复核包（逐份列出缺口页、
+  该页已提取文本样例与被阻断目标），由 `e6_review_packet.py` 只读生成，供真实人工裁决，
+  本身不含任何裁决、不写 `human-gap-review`；
+- `e6-gap-prescreening.md` / `.json`：缺口预筛（非裁决），把 38 项被阻断目标的 `expected_quote`
+  与冻结 build 的已提取文本、证据页是否落在缺口页做字面比对，由 `e6_gap_prescreen.py` 只读生成。
 
 ## 尚未放行的 9 份材料
 
@@ -58,6 +63,18 @@
 这些缺口必须由真实人工复核作出 `acknowledged`／重新提取等裁决后才能发布。本轮没有代签
 `human-gap-review`，也没有绕过发布门。完成裁决后，重跑隔离构建与 51 项数据送达验证；
 在达到 51/51 之前，E6 和端到端总任务保持未关闭。
+
+供裁决使用的复核包见 `e6-human-gap-review-packet.md`（同目录 `.json` 为结构化版本）：逐份给出
+缺口页清单、该页已提取单元与文本样例、被阻断目标（`target_id`／所需引文／问题），并留出
+`acknowledged`／`re-extract`／`reject` + reviewer 的空白裁决栏。该包只读冻结产物与隔离库
+（只读事务），不代签、不动发布门。
+
+在此基础上，`e6-gap-prescreening.md` 对 38 项被阻断目标做了机械预筛（**非裁决**）：把每项
+所需引文做归一化后与冻结 build 的已提取文本比对，并核对证据页是否落在缺口页上。分布为
+`leaning-acknowledge` 28（引文整条已提取，证据页最多只有 `image_region_small`）、`needs-human` 7
+（证据页带 `image_region_unreadable` 或 `table_lines_without_extraction`）、`leaning-re-extract` 3
+（`c1ddcd8a-summarytable`、`d179b615-chart3`、`f3b28791-table1`——引文与片段均未提取，缺口疑似正
+压在该证据上）。该预筛不重跑检索/取回，引文存在不等于检索可达，仍须人工签署裁决。
 
 ## 工程门
 

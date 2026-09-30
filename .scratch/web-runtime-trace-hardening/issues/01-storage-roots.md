@@ -138,3 +138,49 @@ Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
   `moved 1 / CONFLICT: 1`；冲突目录仍留旧根、目标目录**仅含 `unrelated.txt`**（无 `clash/` 嵌套）、
   其 `run_dir` 仍指向旧根；同状态 dry-run 显示 `TARGET-EXISTS` + `WILL SKIP`。
   剩余未完成：**仅容器实测**（镜像无法构建，见工单 02）。
+- 2026-10-01：**容器实测已完成（首次真实镜像 + 卷落点 + 重建后历史 Run 可读）**，并暴露一个致命部署缺口。
+  ① **镜像可构建**：此前记录的 registry 阻断（`auth.docker.io` 连接超时）为**瞬时故障**——本轮
+  `docker pull python:3.12-slim` 成功、容器内 `apt-get` 直连 `deb.debian.org` 正常。
+  `docker build -f deploy/Dockerfile.web -t frontier-agent-web:verify .` **exit 0**，1.64 GB / 18 层，
+  runtime stage = `python:3.12-slim`（日志 `/tmp/f01-web-build.log`）。工单 02 的"真实构建未执行"随之闭合。
+  ② **卷落点（F01 核心）**：compose 等价的 `docker run`（`-v <vol>:/var/lib/frontier-agent/web` +
+  `SERVER_RUNS_ROOT=/var/lib/frontier-agent/web/runs`）容器内
+  `runs_root = /var/lib/frontier-agent/web/runs`、`run_dir_for()` 落该根、`ensure_dirs()` 在卷内建出 `runs/`；
+  **连字符与紧凑两种 id 写法解析到同一目录**（`canonical_run_id` 生效）。
+  负向对照：不设 `SERVER_RUNS_ROOT` 时容器读到挂载 `.env` 的**宿主 WSL 路径**
+  `/home/administrator/.local/share/frontier-agent/web/runs` —— 证明 compose 那行 env 是必需的，不是可选。
+  ③ **重建后历史 Run 可读**：卷内 seed 1 条 completed run（`ws/outputs`、`inputs`、`spill`、
+  `run/agent/trajectories/react_agent.jsonl`、`summary.json`）→ `docker rm -f` + 同卷重启 →
+  轨迹与 `summary.json` **sha256 前后逐字节一致**（`d438abb1…` / `1816881b…`），
+  `inspect_trajectory` 仍返回 `partial / valid_lines=3 / corrupt_lines=0`（partial 为用例未写终结标记所致，非缺陷），
+  DB 行 `status=completed / run_dir=/var/lib/frontier-agent/web/runs/e0744a42…` 完好，`/healthz` **200**。
+  ④ **新发现的致命缺口：compose 未覆盖 `SERVER_DATABASE_URL`**。
+  `deploy/docker-compose.yml` 覆盖了 `CORPUS_DSN`，但 `SERVER_DATABASE_URL` 未设；而
+  `server/config.py` 的 `env_file=/app/.env`（compose 已挂载 `../.env`），故容器内解析出
+  `postgresql+asyncpg://postgres:***@localhost:5432/apodex` —— 容器内 localhost 是容器自身。
+  **实测**：按现 compose 环境启动容器 → `ConnectionRefusedError: [Errno 111]` →
+  `GET /healthz` = **503 `storage_unavailable`**。即按现配置部署，API 容器**起不到可用状态**。
+  两点加重：它默认指向**生产库名 `apodex`**（只是因不可达而未误连）；且这是 fail-closed 暴露，
+  若宿主 PG 恰好在容器 localhost 可达，反而会静默连到生产库。
+  ⑤ **隔离与清理**：一次性库 `apodex_f01_container`（已 DROP，`pg_database` 仅剩 `apodex`）、
+  临时卷 `f01-verify-agent-data`（已删）、两个测试容器（已删）；**业务库全程未触碰**。
+- 2026-10-01：**已修 `SERVER_DATABASE_URL` 的容器覆盖（口径经用户确认：比照 `CORPUS_DSN`）**。
+  ① **改动**：`deploy/docker-compose.yml` 的 `api.environment` 新增
+  `SERVER_DATABASE_URL: ${SERVER_DATABASE_URL_DOCKER:-postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex}`
+  （紧邻既有的 `CORPUS_DSN`）；仓库根 `.env` 与 `.env.example` 各增 `SERVER_DATABASE_URL_DOCKER`
+  （说明容器内必须用宿主地址、scheme 必须 `+asyncpg`、业务库 `apodex` ≠ 语料库 `postgres`）；
+  `deploy/README.md` 新增「数据库连接（业务库 / 语料库）」一节，列出两处 `_DOCKER` 覆盖来源。
+  ② **解析验证**：`docker compose --env-file ../.env --profile full config` 现输出
+  `SERVER_DATABASE_URL: postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex`
+  （修复前该项缺失）；`SERVER_RUNS_ROOT` / `CORPUS_DSN` 不变。
+  ③ **端到端（隔离库 `apodex_f01_dbfix`，生产 `apodex` 全程未触碰）**：
+  容器内 `-e SERVER_DATABASE_URL=…host.docker.internal:5432/apodex_f01_dbfix` →
+  `GET /healthz` **200 `{"status":"ok"}`**，容器内 `get_config().database_url` 与 `runs_root`
+  解析正确。**负向对照**：同一镜像改为 `…localhost:5432/…` → `GET /healthz` **503 `storage_unavailable`**，
+  确认用例非空（200 不是平凡返回），并复现修复前机理。
+  ④ **清理**：容器 `f01-dbfix-api` / `f01-dbfix-neg`、临时卷 `f01-dbfix-data`、一次性库
+  `apodex_f01_dbfix` 均已删；`pg_database` 仅剩 `apodex`。
+  剩余未完成：无（容器实测三项 + 本缺口修复均已闭环）。
+  附观察（未在本轮修，属既有配置、需按实际宿主判定）：`host.docker.internal` 在原生
+  Linux Docker 引擎上需 `extra_hosts: host-gateway` 才可解析，现 compose 未声明；Docker Desktop
+  （WSL2 / Windows）自带该名，故本机 WSL 不受影响，`CORPUS_DSN` 亦同此前提。
