@@ -154,6 +154,8 @@ dddc7cd0(345)；agent 分类为相对 base（reader-pdf-6）的**单元化口径
 
 ### 5.7 E5 冻结执行（2026-09-29，**通过 → 已冻结**）
 
+> **链路总览**：E5 全链闭环请见 **[e5-closure-report.md](../b4-candidate-20260929/e5-closure-report.md)**（§1-7）。
+
 - **口径裁决**：`doc_chars_lost=672` 接受为**单元化口径差异**（非真实内容丢失）——相关引文在
   gen-2 build 全部 `ok`，不构成支持缺口；据此具冻结进 E5（§6 成功标准第 2 条）。
 - **全量重建发布**：候选栈 `reader-pdf-9→clean-4→chunk-5` 经生产管线（`plan_builds`→`execute_builds`→
@@ -169,3 +171,27 @@ dddc7cd0(345)；agent 分类为相对 base（reader-pdf-6）的**单元化口径
   放行并重发——gap 仍可见、coverage scoped，未绕过 fail-closed。
 - 6 源 gap-review：174b6462/6f14cc14/793b3967/dddc7cd0 各绑 1 凭证；cc03f55b/f8e31696 无 blocking
   缺口无需凭证。
+
+### 5.8 检索层验证（gen-2 冻结 build 金标评分，2026-09-30，**通过**）
+
+回溯收尾 #1：对已冻结的 **gen-2 活跃 build**（`corpus_publications.active_build_id`）**不用内存重算**，
+而是直读生产 PG 权威单元/chunk（`b0.load_source_artifacts`）经 `attr_target` 判定链路重跑金标评分。
+零模型（`MODELS_ABSENT=True`）、只读 PG（`RO=True`）。产物：[e5-gold-score.json](../b4-candidate-20260929/e5-gold-score.json)、
+[e5_gold_score.py](../b4-candidate-20260929/e5_gold_score.py)。
+
+- **99 条引文：98 `ok`，1 `chunking_impact`**（`company-008 a-1`，R2-a 已裁决边界，非回归）。
+- 转移：`chunking_impact→ok` **19**、`structure_error→ok` **4**（company-001 e1/e2/e3、industry-001 e5），
+  **base ok→冻结非 ok 回归 0**。
+- 冻结 build 与发布记录一致（6 源 `BUILD_MATCH` 全部 True）。
+- 局限：B0 形状无 clean `status`，NOISE 三引文在本脚本仅核 `in_concat`（全 true，company-007 e1/e2
+  已单块恢复），"跨过的单元全 kept"仍由 §5.6 候选台账独立闭环。
+
+#### 5.8.1 发布门内部状态正向确证（2026-09-30，**通过**）
+
+对 6 个冻结 build 复刻 `_verify_publication_ready` 三硬项正向断言（只读、零模型，非"未抛错"负向信号）。
+产物：[e5-publish-gate.json](../b4-candidate-20260929/e5-publish-gate.json)、
+[e5_publish_gate.py](../b4-candidate-20260929/e5_publish_gate.py)。**ALL_PASS=True**：全部 PARSED/CHUNKED
+SUCCEEDED、oversized 空、blocking 0（凭证已放行）、**保留单元集合==chunk 引用集合完全相等**
+（kept/referenced：174b6462=1177、6f14cc14=310、793b3967=442、cc03f55b=223、dddc7cd0=542、
+f8e31696=167，无越界引用、无缺引）。缺口经 `apply_gap_review` 放行但仍保持可见（ack>0，含
+image_region_small 等默认分级项），符合架构 §7.3"放行但不隐藏"。
