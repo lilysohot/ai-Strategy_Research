@@ -342,6 +342,37 @@ def apply_cleanup(actions: list[PlannedAction], runs_root: Path) -> list[str]:
 # ── CLI ──────────────────────────────────────────────────────────────────
 
 
+def build_orphan_class(
+    kind: str,
+    detail_rows: list[tuple],
+    impact_rows: list[tuple] | None = None,
+    limit: int = 20,
+) -> OrphanClass:
+    """Shape raw probe rows into an inventory entry. Pure, so it is testable.
+
+    The row layout is (id, detail, created_at, reference) for every class; only
+    the meaning of ``detail``/``reference`` varies. Nothing here carries user
+    text — the queries select identifiers and timestamps on purpose.
+    """
+    sample: list[dict[str, str]] = []
+    for row in detail_rows[:limit]:
+        values = ["" if v is None else str(v) for v in row]
+        sample.append({
+            "id": values[0] if len(values) > 0 else "",
+            "detail": values[1] if len(values) > 1 else "",
+            "created_at": values[2] if len(values) > 2 else "",
+            "reference": values[3] if len(values) > 3 else "",
+        })
+    impact = {str(name): int(n) for name, n in (impact_rows or [])}
+    return OrphanClass(
+        kind=kind,
+        count=len(detail_rows),
+        impact=impact,
+        sample=sample,
+        remediation=ORPHAN_REMEDIATION.get(kind, ()),
+    )
+
+
 #: Read-only orphan probes (T6 step 4). Each returns a count that should be 0.
 #: They exist because these rows are what makes a plain ``pg_restore`` onto a
 #: clean database fail — the data copies, then the FK cannot be added back.
@@ -372,6 +403,120 @@ ORPHAN_CHECKS: tuple[tuple[str, str], ...] = (
 _TABLES: tuple[str, ...] = (
     "users", "sessions", "runs", "turns", "artifacts", "user_llm_configs", "audit_log",
 )
+
+
+#: What a human can do about each class. Deliberately *not* executable: the
+#: choice between destroying data and re-homing it is a product decision, and the
+#: script must never make it on its own.
+ORPHAN_REMEDIATION: dict[str, tuple[str, ...]] = {
+    "runs -> missing session": (
+        "挂到占位 session（保留研究内容，推荐先评估）",
+        "删除这些 run 及其 turns/artifacts（连带影响见 impact）",
+        "保留但标记，外键暂不补（恢复演练仍会失败）",
+    ),
+    "runs -> missing user": (
+        "挂到占位 user（审计上要明确这些 run 的真实归属已不可考）",
+        "删除这些 run 及其 turns/artifacts",
+        "保留但标记，外键暂不补",
+    ),
+    "sessions -> missing user": (
+        "挂到占位 user（会连带影响其下 runs 的归属链）",
+        "删除这些 session 及其下 runs/turns",
+        "保留但标记，外键暂不补",
+    ),
+    "turns -> missing run": (
+        "删除这些 turn（其 run 已不存在，内容无法归属）",
+        "保留但标记，外键暂不补",
+    ),
+    "turns -> missing session": (
+        "挂到占位 session 或删除",
+    ),
+    "audit_log -> missing user": (
+        "挂到占位 user（审计记录通常不建议删除）",
+        "删除这些审计行（会留下审计空白，需确认合规要求）",
+        "保留但标记，外键暂不补",
+    ),
+    "artifacts -> missing run": (
+        "删除这些产物索引（文件是否仍存在需另行核对）",
+        "保留但标记，外键暂不补",
+    ),
+}
+
+#: Detail + impact probes per class. Identifiers and timestamps only — never
+#: prompt/answer/audit payloads, so the exported inventory carries no user text.
+ORPHAN_DETAIL: dict[str, tuple[str, str]] = {
+    "runs -> missing session": (
+        "select r.id::text, r.status, r.created_at::text, r.session_id::text "
+        "from runs r left join sessions s on r.session_id = s.id where s.id is null "
+        "order by r.created_at",
+        "select 'turns', count(*) from turns where run_id in "
+        "(select r.id from runs r left join sessions s on r.session_id = s.id where s.id is null) "
+        "union all select 'artifacts', count(*) from artifacts where run_id in "
+        "(select r.id from runs r left join sessions s on r.session_id = s.id where s.id is null)",
+    ),
+    "runs -> missing user": (
+        "select r.id::text, r.status, r.created_at::text, r.user_id::text "
+        "from runs r left join users u on r.user_id = u.id where u.id is null "
+        "order by r.created_at",
+        "select 'turns', count(*) from turns where run_id in "
+        "(select r.id from runs r left join users u on r.user_id = u.id where u.id is null) "
+        "union all select 'artifacts', count(*) from artifacts where run_id in "
+        "(select r.id from runs r left join users u on r.user_id = u.id where u.id is null)",
+    ),
+    "sessions -> missing user": (
+        "select s.id::text, coalesce(s.title,''), s.created_at::text, s.user_id::text "
+        "from sessions s left join users u on s.user_id = u.id where u.id is null "
+        "order by s.created_at",
+        "select 'runs', count(*) from runs where session_id in "
+        "(select s.id from sessions s left join users u on s.user_id = u.id where u.id is null) "
+        "union all select 'turns', count(*) from turns where session_id in "
+        "(select s.id from sessions s left join users u on s.user_id = u.id where u.id is null)",
+    ),
+    "turns -> missing run": (
+        "select t.id::text, t.role, t.created_at::text, t.run_id::text from turns t "
+        "left join runs r on t.run_id = r.id where t.run_id is not null and r.id is null "
+        "order by t.created_at",
+        "",
+    ),
+    "turns -> missing session": (
+        "select t.id::text, t.role, t.created_at::text, t.session_id::text from turns t "
+        "left join sessions s on t.session_id = s.id where s.id is null order by t.created_at",
+        "",
+    ),
+    "audit_log -> missing user": (
+        "select a.id::text, coalesce(a.action,''), a.created_at::text, a.user_id::text "
+        "from audit_log a left join users u on a.user_id = u.id "
+        "where a.user_id is not null and u.id is null order by a.created_at",
+        "",
+    ),
+    # artifacts is keyed by (run_id, rel_path) — there is no surrogate id column.
+    "artifacts -> missing run": (
+        "select ar.run_id::text, coalesce(ar.rel_path,''), ar.created_at::text, "
+        "ar.run_id::text from artifacts ar left join runs r on ar.run_id = r.id "
+        "where r.id is null",
+        "",
+    ),
+}
+
+
+@dataclass(frozen=True)
+class OrphanClass:
+    """One class of orphan rows, with everything a human needs to decide."""
+
+    kind: str
+    count: int
+    impact: dict[str, int] = field(default_factory=dict)
+    sample: list[dict[str, str]] = field(default_factory=list)
+    remediation: tuple[str, ...] = ()
+
+    def to_dict(self) -> dict:
+        return {
+            "kind": self.kind,
+            "count": self.count,
+            "impact": self.impact,
+            "sample": self.sample,
+            "remediation": list(self.remediation),
+        }
 
 
 def verdict_for(counts: list[tuple[str, int]]) -> str:
@@ -440,11 +585,154 @@ async def _run_consistency_check() -> tuple[list[tuple[str, int]], list[tuple[st
     return counts, orphans
 
 
+async def _collect_orphan_classes(sample_limit: int = 20) -> list[OrphanClass]:
+    """Read-only inventory: one entry per orphan class, with impact."""
+    from sqlalchemy import text
+
+    from server.store import get_sessionmaker
+
+    maker = get_sessionmaker()
+    classes: list[OrphanClass] = []
+    async with maker() as session:
+        for kind, (detail_sql, impact_sql) in ORPHAN_DETAIL.items():
+            rows = [tuple(r) for r in (await session.execute(text(detail_sql))).all()]
+            impact_rows: list[tuple] = []
+            if impact_sql:
+                impact_rows = [tuple(r) for r in (await session.execute(text(impact_sql))).all()]
+            classes.append(build_orphan_class(kind, rows, impact_rows, sample_limit))
+    return classes
+
+
+#: Orphan remediation (T6 step 1, human-decided). The *policy* is not encoded
+#: here as an automatic rule — each class was chosen by a human and is applied
+#: once. What the code owns is the safety around it.
+PLACEHOLDER_USERNAME = "__orphan_placeholder__"
+#: Not a valid argon2 digest, so nothing can authenticate as this account.
+PLACEHOLDER_PASSWORD_HASH = "!orphan-placeholder-disabled"
+PLACEHOLDER_STATUS = "disabled"
+
+
+async def _remediate(*, apply: bool, placeholder: str) -> dict[str, int]:
+    """Apply the agreed orphan policy. Returns what it found / changed.
+
+    Guarantees regardless of ``apply``:
+    - Never deletes a run that still has turns or artifacts (re-checked here,
+      not trusted from the inventory).
+    - Idempotent: a second run changes nothing.
+    - One transaction: either every step lands or none does.
+    """
+    from sqlalchemy import text
+
+    from server.store import get_sessionmaker
+
+    maker = get_sessionmaker()
+    summary: dict[str, int] = {}
+    async with maker() as session:
+        async def scalar(sql: str) -> int:
+            return int((await session.execute(text(sql))).scalar_one())
+
+        summary["runs_orphan_session"] = await scalar(
+            "select count(*) from runs r left join sessions s on r.session_id = s.id "
+            "where s.id is null")
+        summary["runs_orphan_session_turns"] = await scalar(
+            "select count(*) from turns where run_id in "
+            "(select r.id from runs r left join sessions s on r.session_id = s.id "
+            "where s.id is null)")
+        summary["runs_orphan_session_artifacts"] = await scalar(
+            "select count(*) from artifacts where run_id in "
+            "(select r.id from runs r left join sessions s on r.session_id = s.id "
+            "where s.id is null)")
+        summary["runs_orphan_user"] = await scalar(
+            "select count(*) from runs r left join users u on r.user_id = u.id "
+            "where u.id is null")
+        summary["sessions_orphan_user"] = await scalar(
+            "select count(*) from sessions s left join users u on s.user_id = u.id "
+            "where u.id is null")
+        summary["turns_orphan_run"] = await scalar(
+            "select count(*) from turns t where t.run_id is not null "
+            "and not exists (select 1 from runs r where r.id = t.run_id)")
+        summary["audit_orphan_user"] = await scalar(
+            "select count(*) from audit_log a where a.user_id is not null "
+            "and not exists (select 1 from users u where u.id = a.user_id)")
+
+        if not apply:
+            return summary
+
+        if summary["runs_orphan_session_turns"] or summary["runs_orphan_session_artifacts"]:
+            raise SystemExit(
+                "refusing to delete: the orphan runs still have turns/artifacts "
+                f"({summary['runs_orphan_session_turns']} turns, "
+                f"{summary['runs_orphan_session_artifacts']} artifacts)"
+            )
+
+        await session.execute(
+            text(
+                "insert into users (id, username, password_hash, status, created_at) "
+                "values (gen_random_uuid(), :name, :hash, :status, now()) "
+                "on conflict (username) do nothing"
+            ),
+            {"name": placeholder, "hash": PLACEHOLDER_PASSWORD_HASH,
+             "status": PLACEHOLDER_STATUS},
+        )
+        ph = (await session.execute(
+            text("select id from users where username = :name"), {"name": placeholder},
+        )).scalar_one()
+
+        # Re-home rather than destroy (audit trail + research rows stay intact).
+        await session.execute(
+            text("update audit_log set user_id = :ph where user_id is not null "
+                 "and not exists (select 1 from users u where u.id = audit_log.user_id)"),
+            {"ph": ph},
+        )
+        await session.execute(
+            text("update sessions set user_id = :ph where "
+                 "not exists (select 1 from users u where u.id = sessions.user_id)"),
+            {"ph": ph},
+        )
+        await session.execute(
+            text("update runs set user_id = :ph where "
+                 "not exists (select 1 from users u where u.id = runs.user_id)"),
+            {"ph": ph},
+        )
+
+        # Deleting the placeholder user's own runs is not intended; the guard
+        # above already proved they carry no turns or artifacts.
+        deleted = await session.execute(
+            text("delete from runs where "
+                 "not exists (select 1 from sessions s where s.id = runs.session_id)")
+        )
+        summary["deleted_runs"] = deleted.rowcount or 0
+
+        # Turns whose run is gone: release the dangling reference instead of
+        # inventing a placeholder run (a fake run would pollute run counts and
+        # show up in the UI). run_id is nullable and 45 rows already sit in this
+        # state legitimately.
+        await session.execute(
+            text("update turns set run_id = null where run_id is not null "
+                 "and not exists (select 1 from runs r where r.id = turns.run_id)")
+        )
+        await session.commit()
+    return summary
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("check", help="read-only orphan + row-count report")
+
+    p_remediate = sub.add_parser(
+        "remediate", help="apply the agreed orphan policy (dry-run by default)",
+    )
+    p_remediate.add_argument("--apply", action="store_true")
+    p_remediate.add_argument("--yes", action="store_true", help="required with --apply")
+    p_remediate.add_argument("--placeholder", default=PLACEHOLDER_USERNAME)
+
+    p_orphans = sub.add_parser(
+        "orphans", help="export an orphan inventory for a human decision (read-only)",
+    )
+    p_orphans.add_argument("--out", type=Path, default=None)
+    p_orphans.add_argument("--sample", type=int, default=20)
 
     p_manifest = sub.add_parser("manifest", help="record every run's storage + digests")
     p_manifest.add_argument("--out", required=True, type=Path)
@@ -463,6 +751,35 @@ def main(argv: list[str] | None = None) -> int:
     p_verify.add_argument("--runs-root", type=Path, default=None)
 
     args = parser.parse_args(argv)
+
+    if args.command == "remediate":
+        if args.apply and not args.yes:
+            print("refusing to change data: --apply requires --yes", file=sys.stderr)
+            return 2
+        summary = asyncio.run(_remediate(apply=args.apply, placeholder=args.placeholder))
+        for key, value in summary.items():
+            print(f"{key}\t{value}")
+        if not args.apply:
+            print("\ndry-run: nothing changed (add --apply --yes to apply)")
+        return 0
+
+    if args.command == "orphans":
+        classes = asyncio.run(_collect_orphan_classes(args.sample))
+        payload = {
+            "generated_at": datetime.now(UTC).isoformat(),
+            "note": "identifiers and timestamps only — no prompt/answer/audit payloads",
+            "classes": [c.to_dict() for c in classes],
+        }
+        if args.out:
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
+                                encoding="utf-8")
+            print(f"wrote {args.out}")
+        for c in classes:
+            print(f"{c.count}\t{c.kind}\timpact={c.impact or '{}'}")
+        total = sum(c.count for c in classes)
+        print(f"\ntotal orphan rows: {total} — no action taken (this command is read-only)")
+        return 1 if total else 0
 
     if args.command == "check":
         counts, orphans = asyncio.run(_run_consistency_check())

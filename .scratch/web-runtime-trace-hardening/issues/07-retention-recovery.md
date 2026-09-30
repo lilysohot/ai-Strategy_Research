@@ -49,6 +49,39 @@ Requirements: PR-GOV-05, PR-BIZ-06
   文件侧真实演练：四类 run（超期/未到期/活动中/目录丢失）→ `verify` 报 `missing_dir`、
   `plan` 正确给出四种 disposition 且不删除、删掉一个文件后 `verify` 报 `missing_files`、
   `--apply --yes` 只删除超期那一个，未到期与活动项均保留。
+- 2026-09-30：**T6 第 1 步「统计并导出孤儿清单」已执行**（只读，未改动任何存量数据）。
+  `uv run python scripts/run_retention.py orphans --out <file>` 导出
+  [f07-orphan-inventory.json](../audit/f07-orphan-inventory.json)（20,967 B，7 类，
+  **仅标识符与时间戳，不含 prompt/answer/audit 正文**）。合计 **592 条孤儿行**：
+
+  | 孤儿类 | 行数 | 连带影响（impact） |
+  |---|---|---|
+  | runs → 缺失 session | **517** | turns 0、artifacts 0 |
+  | runs → 缺失 user | 17 | turns 21、artifacts 0 |
+  | sessions → 缺失 user | 18 | runs 18、turns 24 |
+  | turns → 缺失 run | 11 | — |
+  | audit_log → 缺失 user | 29 | — |
+  | turns → 缺失 session | 0 | — |
+  | artifacts → 缺失 run | 0 | — |
+
+  **对决策最关键的一条**：最大的那 517 条（无 session 的 runs）**没有任何 turns 或 artifacts 连带**
+  ——它们是空壳 run（从未产生消息或产物），因此「删除」这一选项在这类上的连带损失为 0，
+  与另外两类（17 条连带 21 turns、18 条连带 18 runs + 24 turns）性质完全不同。
+  每类附三项处置选项（挂占位 / 删除 / 保留但标记）供人工选择；脚本**不执行**任何处置。
+- 2026-09-30：**处置已执行（第 1 步完成）**。口径由用户确认；执行前取 `pg_dump` 快照
+  （`/tmp/apodex-pre-t6.dump`，容器内，回滚唯一依据），全程单事务：
+  517 条无 session 的 runs **删除**（脚本二次校验 turns=0/artifacts=0 后才执行）；
+  17 runs + 18 sessions + 29 audit_log **挂占位 user**；
+  11 条无 run 的 turns **解除悬挂引用**（`run_id = NULL`，未制造占位 run —— 占位 run 会污染
+  run 计数、无轨迹文件会在备份清单里变成新 missing 项；`run_id` 可空且已有 45 条同类合法行）。
+  占位实体 `__orphan_placeholder__`（status=disabled，password_hash 非合法 argon2 → 不可登录）。
+  处置后 `check`：**verdict clean**，七类孤儿全 0；runs 1271→754、users 28→29，
+  turns/artifacts/audit_log **一条未丢**。
+- 2026-09-30：**恢复演练复演通过（T5 完成标准达成）**。处置后重新
+  `pg_dump` → 独立库 `pg_restore`：**零错误**（此前 5 个 `ADD CONSTRAINT` 失败消失），
+  外键 **恢复库 9 / 源库 9**（此前 4/9），7 张表行数逐一一致
+  （users 29 / sessions 141 / runs 754 / turns 1093 / artifacts 296 / user_llm_configs 164 / audit_log 1978）。
+  演练库与 post dump 已清理；**pre 快照保留**（容器内，随容器重建丢失，需长期回滚能力请自行导出）。
 - 2026-09-30：**仍未验收（故维持 ready-for-human）**：
   ① 没有一条命令的运维备份脚本（`pg_dump`/`pg_restore` 包装）与**异地存放**——本轮只有演练记录；
   ② 恢复演练只到"行数一致"，**联合恢复**（业务库 + 运行文件的 Run/轨迹/产物引用核对）未演练；

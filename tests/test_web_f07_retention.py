@@ -200,6 +200,31 @@ def test_manifest_round_trip(tmp_path):
     assert restored.runs[0].status == "completed"
 
 
+def test_orphan_inventory_shapes_rows_without_user_text():
+    from scripts.run_retention import build_orphan_class
+
+    rows = [("run-1", "completed", "2026-09-01", "session-x"),
+            ("run-2", "failed", "2026-09-02", "session-y")]
+    cls = build_orphan_class("runs -> missing session", rows,
+                             [("turns", 3), ("artifacts", 0)], limit=1)
+
+    assert cls.count == 2, "count is the whole class, not the sample"
+    assert cls.impact == {"turns": 3, "artifacts": 0}
+    assert len(cls.sample) == 1, "sample is capped so the export stays small"
+    assert cls.sample[0]["id"] == "run-1"
+    assert cls.sample[0]["reference"] == "session-x"
+    assert cls.remediation, "a class with no documented option cannot be decided on"
+
+
+def test_orphan_inventory_tolerates_null_columns():
+    from scripts.run_retention import build_orphan_class
+
+    cls = build_orphan_class("turns -> missing run", [("t-1", None, None, None)], None)
+    assert cls.sample[0]["detail"] == ""
+    assert cls.sample[0]["created_at"] == ""
+    assert cls.impact == {}
+
+
 def test_verdict_distinguishes_clean_from_dirty():
     from scripts.run_retention import verdict_for
 
