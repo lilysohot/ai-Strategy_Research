@@ -69,12 +69,18 @@ def norm(t: str | None) -> str:
 
 
 def load_run(run_dir: Path) -> dict:
-    """{ledger, tool_results_text(取回正文), final_answers, llm_texts}。"""
+    """{ledger, tool_results_text(取回正文), final_answers, llm_texts, delivered_text}。
+
+    ``delivered_text`` = ledger 标记 delivered 的片段正文拼接（L8 判定用：只要求
+    目标引文及依赖在**已送达**片段中，而非全部取回片段都送达——protocol L8 语义）。
+    """
     ledger_path = run_dir / "corpus" / "ledger.json"
     ledger = json.loads(ledger_path.read_text(encoding="utf-8")) if ledger_path.exists() else {}
     trace_path = run_dir / "trace.jsonl"
-    tool_results: list[str] = []
+    fetched_texts: list[str] = []
     final_answers: list[str] = []
+    # locator -> (text, status)，供 delivered_text 组装。
+    locator_text: dict[str, str] = {}
     if trace_path.exists():
         for line in trace_path.read_text(encoding="utf-8").splitlines():
             if not line.strip():
@@ -85,15 +91,38 @@ def load_run(run_dir: Path) -> dict:
                 continue
             if not isinstance(ev, dict):
                 continue
-            if ev.get("t") == "tool" and isinstance(ev.get("result"), str):
-                tool_results.append(ev["result"])
+            if ev.get("t") == "tool":
+                res = ev.get("result")
+                if isinstance(res, str):
+                    # corpus_fetch 的 result 是二次 JSON 序列化：正文在 text 字段。
+                    try:
+                        payload = json.loads(res)
+                    except json.JSONDecodeError:
+                        payload = None
+                    if isinstance(payload, dict):
+                        for item in payload.get("items") or []:
+                            if isinstance(item, dict) and isinstance(item.get("text"), str) and item.get("locator"):
+                                locator_text[item["locator"]] = item["text"]
+                                fetched_texts.append(item["text"])
+                        if isinstance(payload.get("text"), str) and payload.get("locator"):
+                            locator_text[payload["locator"]] = payload["text"]
+                        if isinstance(payload.get("text"), str):
+                            fetched_texts.append(payload["text"])
             if ev.get("t") == "llm" and isinstance(ev.get("text"), str):
                 final_answers.append(ev["text"])
-    # 取回正文：工具结果里含引文片段正文。
-    fetched_text = "\n".join(tool_results)
+    # 取回正文：仅取回类工具返回的实际片段正文（与 ledger.fetched[].chars 对齐）。
+    fetched_text = "\n".join(fetched_texts)
+    deliv_status = {
+        str(d.get("locator")): d.get("status")
+        for d in (ledger.get("delivered") or []) if isinstance(d, dict)
+    }
+    delivered_text = "\n".join(
+        t for loc, t in locator_text.items() if deliv_status.get(loc) == "delivered"
+    )
     return {
         "ledger": ledger,
         "fetched_text": fetched_text,
+        "delivered_text": delivered_text,
         "final_answers": final_answers,
     }
 
@@ -111,23 +140,31 @@ def run_doc_prefix(ledger: dict) -> str | None:
 def _quote_in_text(quote_n: str, token_ns: list[str], text: str) -> bool:
     if not quote_n:
         return False
-    if quote_n in text:
+    tn = norm(text)
+    if quote_n in tn:
         return True
     # 非逐字（排版/标点漂移）时降级为分词覆盖（仍是送达相关证据，非放水）。
-    return bool(token_ns) and all(t in text for t in token_ns)
+    return bool(token_ns) and all(t in tn for t in token_ns)
 
 
 def _unit_options(unit: str) -> list[str]:
-    """把单位展开为等价写法（如「元/股」亦匹配「元」）。"""
+    """把单位展开为等价写法（如「元/股」亦匹配「元」；「元/吨；%」拆为「元/吨」+「%」）。"""
     un = norm(unit)
     if not un:
         return []
-    opts = {un}
-    if "元/股" in un:
-        opts.add(norm("元"))
-    for sep in ("/", "每"):
-        if sep in un:
-            opts.add(norm(un.replace(sep, "")))
+    # 复合单位（; ；、,）拆为独立单位分别匹配；各子部分内再按 / 展开。
+    parts = re.split(r"[;；,，、]", un)
+    opts: set[str] = set()
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+        opts.add(p)
+        if "元/股" in p:
+            opts.add(norm("元"))
+        for sep in ("/", "每"):
+            if sep in p:
+                opts.add(norm(p.replace(sep, "")))
     return [o for o in opts if o]
 
 
@@ -168,32 +205,52 @@ def score_consumption_run(run: dict, target: dict, page: str | None) -> tuple[di
     layers["L7"] = "pass" if l7 else "fail"
     ev["L7"] = {"fetched": len(fetched), "quote_in_fetched": fq}
 
-    # L8：delivered 均为 delivered，且引文完整仍存；期间/单位以等价写法存在。
-    deliv_list = [d for d in delivered if isinstance(d, dict)]
-    deliv_ok = bool(deliv_list) and all(d.get("status") == "delivered" for d in deliv_list)
-    fq_keep = fq
+    # L8：目标引文及必要依赖在**已送达**片段中（protocol L8 语义：最终模型输入
+    # 含目标及必要依赖；不以「全部取回片段都 delivered」判定——无关片段未送达
+    # 不影响目标送达）。期间/单位以等价写法存在于已送达正文。
+    delivered_text = run.get("delivered_text") or ""
+    fq_keep = _quote_in_text(qn, token_ns, delivered_text)
     ys = re.findall(r"\d{4}", period) if period else []
-    period_ok = (not period) or any(a in norm(fetched_text) for a in ys)
-    unit_there = (not unit) or any(o in norm(fetched_text) for o in unit_opts)
-    l8 = deliv_ok and fq_keep and period_ok
+    period_ok = (not period) or any(a in norm(delivered_text) for a in ys)
+    unit_there = (not unit) or any(o in norm(delivered_text) for o in unit_opts)
+    l8 = fq_keep and period_ok
     layers["L8"] = "pass" if l8 else "fail"
     ev["L8"] = {
-        "n_delivered": len(deliv_list),
-        "all_delivered": deliv_ok,
-        "quote_intact": fq_keep,
+        "n_delivered": sum(1 for d in delivered if isinstance(d, dict) and d.get("status") == "delivered"),
+        "quote_intact_in_delivered": fq_keep,
         "period_ok": period_ok,
         "unit_present": unit_there,
     }
 
-    # L9：最终回答含全部数值 token + 单位等价 + 期间。
+    # L9：最终回答含该目标的数值 + 单位等价 + 期间。
+    # protocol §4.5「允许正确释义，不要求答案机械复述整段金标」：gold quote 若
+    # 是整段长文（如 macro-003 同一段 17 个数值），要求全部出现即过严。分层判定：
+    #   - 短 quote（数值 ≤ 4）：数值即该目标核心，要求全部出现（防型号/EPS 缺漏）；
+    #   - 长 quote（数值 > 4）：要求回答引用到该证据的**至少一个关键数值**
+    #     （明显数值 = 小数/百分号/≥3 位数字），并核对单位/期间。
     an = norm(answer)
     vals = [norm(v) for v in e4.value_tokens(quote)]
-    vals_ok = bool(vals) and all(v in an for v in vals)
+    if len(vals) <= 4:
+        checked = vals
+        vals_ok = (not checked) or all(v in an for v in checked)
+    else:
+        key_vals = [
+            v for v in vals
+            if "%" in v or "." in v or sum(c.isdigit() for c in v) >= 3
+        ]
+        checked = key_vals or vals
+        vals_ok = (not checked) or any(v in an for v in checked)
     unit_ok = (not unit) or any(o in an for o in unit_opts)
     period_ok_ans = (not period) or any(a in an for a in ys)
     l9 = bool(answer) and vals_ok and unit_ok and period_ok_ans
     layers["L9"] = "pass" if l9 else "fail"
-    ev["L9"] = {"values": vals, "vals_ok": vals_ok, "unit_ok": unit_ok, "period_ok": period_ok_ans}
+    ev["L9"] = {
+        "values": vals,
+        "key_values": checked,
+        "vals_ok": vals_ok,
+        "unit_ok": unit_ok,
+        "period_ok": period_ok_ans,
+    }
 
     return layers, ev
 

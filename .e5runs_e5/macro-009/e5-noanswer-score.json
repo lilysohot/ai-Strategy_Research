@@ -1,0 +1,10 @@
+{
+  "query_id": "macro-009",
+  "answer_existence": "no_answer",
+  "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/macro-009/.apodex/runs/20260930-181832+0800-react-ba59",
+  "checks": [],
+  "has_negative_marker": false,
+  "fabrication_risk": true,
+  "answer_preview": "\n## 结论：**不能。**\n\n这批材料**无法**给出美联储 2026 年 9 月议息会议已经正式公布的最终利率决定。理由如下：\n\n**一、材料的时间点全部早于会议**\n\n材料中唯一涉及美联储的文档是《强非农降低了年内加息的门槛——2026 年 8 月美国非农数据点评》，落款日期为 **2026 年 9 月 5 日** `[stub:cv2:9ebd323f… heading:0000 / body:0000, p1]`，而 9 月议息会议于 **2026 年 9 月 15–16 日** 举行（美联储官方日历，federalreserve.gov/monetarypolicy/fomccal",
+  "verdict": "hallucination_risk"
+}
