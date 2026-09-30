@@ -802,6 +802,49 @@ def test_processors_keep_corpus_search_json_parseable(processor) -> None:
     assert len(payload["hits"][0]["context_locators"]) == 100
 
 
+def test_search_compact_payload_keeps_document_bound_fetch_plan() -> None:
+    """A compact search result must keep the binding between build and locators.
+
+    A model can otherwise accidentally combine a locator from one hit with the
+    document handle from another hit; the fetch call then returns no evidence
+    while still looking superficially successful.
+    """
+    from plugins.tools.corpus_search import fit_search_payload
+
+    body = json.dumps(
+        {
+            "ok": True,
+            "hits": [
+                {
+                    "doc_id": "cv2:" + "a" * 64,
+                    "locator": "chunk:a:body:0001",
+                    "source_id": "source-a",
+                    "build_id": "a" * 64,
+                    "chunk_id": "a:body:0001",
+                    "scope_id": "scope:a",
+                    "context_locators": ["chunk:a:body:0001", "chunk:a:body:0002"],
+                    "fetch_plan": {
+                        "doc_id": "cv2:" + "a" * 64,
+                        "locator": "chunk:a:body:0001",
+                        "locators": ["chunk:a:body:0001", "chunk:a:body:0002"],
+                        "scope_id": "scope:a",
+                        "view": "compact",
+                    },
+                    "snippet": "snippet",
+                }
+            ],
+            "coverage": {},
+        },
+        ensure_ascii=False,
+    )
+
+    payload = json.loads(fit_search_payload(body, 2_000))
+    plan = payload["hits"][0]["fetch_plan"]
+    assert plan["doc_id"] == payload["hits"][0]["doc_id"]
+    assert plan["locators"] == payload["hits"][0]["context_locators"]
+    assert plan["view"] == "compact"
+
+
 @pytest.mark.parametrize("processor", _processors())
 def test_processors_still_head_cap_other_tools(processor) -> None:
     from frontier_agent.core.loop_types import ToolResult

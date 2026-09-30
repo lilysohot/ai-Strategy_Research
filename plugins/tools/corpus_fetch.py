@@ -89,6 +89,8 @@ _COMPACT_HINT = (
 #: 分页信封提示。
 _PAGE_HINT = (
     "本页 items 是取回的正文（可能为整块或分片）；quote 必须逐字取自 item.text。"
+    "ok=false 表示本次没有取回任何权威正文；fetch_complete=false 表示仍有未解决项"
+    "或分页未结束；这两种状态下都不得把 items 当作完整证据。"
     "分片用 fragment.start/end 标注**本块 text 内**的 Unicode 码点区间，"
     "text_sha256/text_chars 是整块内容身份，可用于校验分片确来自该块。"
     "续取用 next_cursor；exhausted 只表示这轮遍历到终点——有失败项时 fetch_complete "
@@ -357,7 +359,7 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
         "spans": full.get("spans"),
         "source_ranges": full.get("source_ranges"),
     }
-    for key in ("content_role", "relations", "relation_status"):
+    for key in ("content_role", "relations", "relation_status", "label_path"):
         if key in full:
             compact[key] = full[key]
     compact.update(
@@ -573,7 +575,12 @@ def _page(
     offset: int,
     unresolved_in: list[str],
 ) -> str:
-    """A2.2 一致的分页信封：逐成员取回、超限分片、失败进 ``item_errors``／``unresolved``。"""
+    """A2.2 一致的分页信封：逐成员取回、超限分片、失败进 ``item_errors``／``unresolved``。
+
+    ``ok=false`` 表示本次请求没有取回任何权威正文；``fetch_complete=false``
+    表示仍有 locator 未解决或分页尚未结束。调用方在这两种状态下都不能把
+    ``items`` 当作完整证据。
+    """
     from plugins.corpus.preparation import read_pg
 
     try:
@@ -691,7 +698,17 @@ def _page(
         status = cells_status
         text = evidence.text
         if off >= len(text):
-            diagnostics_on = True  # 空正文块：整块证据随页返回（本块无片段可装）
+            # 空正文不是“成功取回但没有内容”。把它标成未解决，避免上层把
+            # ``ok=true/items=[]`` 当成证据已送达。
+            item_errors.append(
+                {
+                    "locator": locator,
+                    "code": "empty_content",
+                    "error": "权威块正文为空，本轮不宣称已取回证据",
+                }
+            )
+            if locator not in unresolved:
+                unresolved.append(locator)
             mi += 1
             off = 0
             continue
@@ -819,7 +836,14 @@ def _page(
         mi += 1
         off = 0
 
-    return json.dumps(envelope(items, None, True, diagnostics=diagnostics_on), ensure_ascii=False)
+    result = envelope(items, None, True, diagnostics=diagnostics_on)
+    if not items and item_errors:
+        # 全部请求失败时必须是显式失败；保留每个 locator 的错误，便于调用方
+        # 修正 doc_id/locator 或继续处理 cursor，而不是猜测“结果为空”。
+        result["ok"] = False
+        result["error"] = "fetch_failed：本次请求没有成功取回任何权威正文"
+        result["fetch_complete"] = False
+    return json.dumps(result, ensure_ascii=False)
 
 
 @tool
@@ -947,11 +971,20 @@ async def corpus_fetch(
     except Exception as exc:
         return _json_error(f"取证失败（句柄不可解析、跨 build 或来源已撤销）：{exc}")
 
+    if not evidence.text:
+        # Keep the single-locator fast path consistent with paged fetches:
+        # an empty authoritative block is not evidence successfully delivered.
+        return _json_error(
+            "fetch_failed：empty_content；权威块正文为空，本轮不宣称已取回证据",
+            doc_id=doc_id,
+            locator=locator,
+        )
+
     # A0.1 正文优先：字段顺序按「身份 → 正文 → 引用映射/控制字段 → 诊断元数据」
     # 排列，任何 head-only 截断下模型都先见到 text 与续取所需控制字段，体积较大的
     # 诊断元数据（units/semantic_cells）置于其后。字段与语义保持不变。
     # A3：单块请求范围只有本块，故无同范围关联；content_role 仍按块种类给出。
-    extra = {
+    extra = svc.context_relations(doc_id, [locator]).get(locator) or {
         "content_role": content_role_for_kind(evidence.kind),
         "relations": [],
         "relation_status": "unknown",

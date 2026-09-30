@@ -470,7 +470,7 @@ def test_band_does_not_merge_sparse_hits_from_different_pages() -> None:
     assert len(bands) == 2
 
 
-def test_product_context_selection_returns_one_bounded_anchor_per_source() -> None:
+def test_product_context_selection_returns_one_bounded_anchor_per_band() -> None:
     from plugins.corpus.service import CorpusService
 
     svc = CorpusService("dummy")
@@ -488,6 +488,105 @@ def test_product_context_selection_returns_one_bounded_anchor_per_source() -> No
     assert selected[0].chunk_id == "a2"
     assert selected[0].context_chunk_ids == tuple(f"a{i}" for i in range(1, 7))
     assert selected[1].context_chunk_ids == ("b0", "b1", "b2")
+
+
+def test_product_context_selection_keeps_disjoint_bands_separate_and_round_robins_sources() -> None:
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    hits = (
+        _hit("A", "ba", 8.0, chunk_id="a2", page=1),
+        _hit("A", "ba", 7.0, chunk_id="a12", page=2),
+        _hit("B", "bb", 6.0, chunk_id="b4", page=1),
+    )
+    selected = svc._selected_context_hits(
+        hits,
+        {"A": tuple(f"a{i}" for i in range(16)), "B": tuple(f"b{i}" for i in range(8))},
+        10,
+    )
+
+    assert [hit.source_id for hit in selected] == ["A", "B", "A"]
+    assert selected[0].context_chunk_ids == ("a1", "a2", "a3")
+    assert selected[1].context_chunk_ids == ("b3", "b4", "b5")
+    assert selected[2].context_chunk_ids == ("a11", "a12", "a13")
+
+
+def test_product_context_selection_uses_structural_overlap_inside_document() -> None:
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    hits = (
+        _hit("A", "ba", 9.0, chunk_id="a2", page=1),
+        _hit(
+            "A",
+            "ba",
+            1.0,
+            chunk_id="a12",
+            page=2,
+            label_path=("纯碱 价格分位", "纯碱 开工率"),
+        ),
+    )
+    selected = svc._selected_context_hits(
+        hits,
+        {"A": tuple(f"a{i}" for i in range(16))},
+        10,
+        lexemes=("纯碱", "开工率"),
+    )
+
+    assert [hit.chunk_id for hit in selected] == ["a12", "a2"]
+
+
+def test_product_context_selection_promotes_casefolded_product_identifier() -> None:
+    """A specific identifier such as R32 outranks a generic matching table label."""
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    hits = (
+        _hit("A", "ba", 9.0, chunk_id="a2", page=1, label_path=("涨幅",)),
+        _hit("A", "ba", 1.0, chunk_id="a12", page=2, label_path=("R32 价格分位",)),
+    )
+    selected = svc._selected_context_hits(
+        hits,
+        {"A": tuple(f"a{i}" for i in range(16))},
+        10,
+        lexemes=("r32", "涨幅"),
+    )
+
+    assert [hit.chunk_id for hit in selected] == ["a12", "a2"]
+
+
+def test_product_context_attaches_same_page_table_header() -> None:
+    from dataclasses import replace
+    from types import SimpleNamespace
+
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    row = _hit(
+        "A",
+        "ba",
+        3.0,
+        chunk_id="a12",
+        page=10,
+        label_path=("R32 产品", "R32 价格分位", "R32 价差分位", "R32 开工率"),
+    )
+    row = replace(row, context_chunk_ids=("a11", "a12", "a13"))
+    header_unit = SimpleNamespace(
+        page=10,
+        label_path=("产品", "价格分位", "价差分位", "开工率"),
+    )
+    structures = {
+        "a4": SimpleNamespace(kind="table", units=(header_unit,)),
+        "a12": SimpleNamespace(kind="table", units=()),
+    }
+
+    enriched = svc._attach_table_header_context(
+        (row,),
+        {"A": tuple(f"a{i}" for i in range(16))},
+        {"A": structures},
+    )
+
+    assert enriched[0].context_chunk_ids == ("a4", "a11", "a12", "a13")
 
 
 def test_emit_cells_derives_row_col_on_aligned_grid_only() -> None:

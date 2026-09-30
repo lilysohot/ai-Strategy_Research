@@ -48,7 +48,7 @@ from plugins.corpus.preparation.gaps import (
 )
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderIssue, ReaderResult
 
-CLEAN_REV = "clean-4"  # clean-4（E3 修复包 clean-1）：N1/N2 句子游程整体保留 + N3 去重保留首现
+CLEAN_REV = "clean-5"  # clean-5：免责游程 NOISE verdict 与实际触发 reasons 保持一致
 
 # --- 开发起点参数（架构 §6.1；I3 校准前不外置） ---
 _REPEAT_MIN_PAGES = 3
@@ -659,7 +659,10 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
                 regions.append(_region_from_unit(unit, UnitStatus.KEPT, unit.reasons, verdicts))
                 continue
             reasons = (*unit.reasons, *other_noise)
-            verdicts = tuple(other_verdicts)
+            # 与主循环的 NOISE 发射保持同一不变量：带判定的近命中（例如仅处于
+            # 页底、但重复页数不足）只允许留在 KEPT 区；游程因免责规则转为
+            # NOISE 后，只携带实际触发、已经进入 reasons 的判定。
+            verdicts = tuple(verdict for verdict in other_verdicts if verdict.code in other_noise)
             if not has_fact:
                 # 游程无事实：维持免责节判定；其他噪声规则（banded/toc/roster/prefix）
                 # 结论原样生效，仅 disclaimer_section 追加在 reasons 末尾。

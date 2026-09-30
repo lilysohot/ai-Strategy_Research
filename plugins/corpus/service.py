@@ -1211,12 +1211,18 @@ class CorpusService:
         raw_hits: tuple[SearchPgHit, ...],
         chunk_order_by_source: Mapping[str, tuple[str, ...]],
         limit: int,
+        *,
+        lexemes: tuple[str, ...] = (),
     ) -> tuple[SearchPgHit, ...]:
-        """Return one anchor per source plus all bounded selected-band locators.
+        """Return one document-bound hit per selected evidence band.
 
-        The public ``limit`` continues to bound returned hits. Context locators
-        are provenance-only handles selected by the fixed five-source/eight-band
-        policy; they carry no snippet text and must be fetched through authority.
+        Combining every selected band from a source into one context made a
+        superficially single hit span many disjoint document regions.  The
+        resulting fetch request could require dozens of pages and exhaust the
+        normal tool budget before the relevant band reached the model.  Each
+        returned hit now owns exactly one bounded, contiguous band.  Bands are
+        emitted round-robin by source so the first page retains source diversity;
+        the public ``limit`` still bounds the total number of returned hits.
         """
         from dataclasses import replace as dataclass_replace
 
@@ -1224,6 +1230,38 @@ class CorpusService:
 
         if not raw_hits:
             return ()
+        if lexemes:
+            # Keep document order lexical, but rank bands inside each document
+            # by the established structural-overlap signal first.  The
+            # fractional lexical component remains the tie-breaker.
+            lexeme_set = {token.casefold() for token in lexemes}
+
+            def structural_score(hit: SearchPgHit) -> float:
+                labels = {
+                    token.casefold()
+                    for label in hit.label_path
+                    for token in str(label).split()
+                    if token
+                }
+                matched = lexeme_set & labels
+                # Product/model identifiers such as R32 are substantially more
+                # selective than generic labels such as ``涨幅``.  zhparser
+                # lower-cases the query token while PDF label paths preserve the
+                # source case, so compare case-insensitively and give an exact
+                # alpha-numeric identifier match one additional structural vote.
+                # This remains a document-local band ranking signal; it cannot
+                # reorder source documents.
+                overlap = len(matched) + sum(
+                    any(char.isascii() and char.isalpha() for char in token)
+                    and any(char.isdigit() for char in token)
+                    for token in matched
+                )
+                lexical = max(0.0, float(hit.score))
+                return float(overlap) + lexical / (1.0 + lexical)
+
+            raw_hits = tuple(
+                dataclass_replace(hit, score=structural_score(hit)) for hit in raw_hits
+            )
         policy = SelectionPolicy(top_k=min(SelectionPolicy().top_k, limit))
         bands = select_band(
             raw_hits,
@@ -1240,25 +1278,90 @@ class CorpusService:
             by_source[band.source_id].append(band)
         by_key = {(hit.build_id, hit.chunk_id): hit for hit in raw_hits}
         selected: list[SearchPgHit] = []
-        for source_id in order:
-            source_bands = by_source[source_id]
-            build_id = source_bands[0].build_id
-            ordered = chunk_order_by_source[source_id]
-            positions = sorted(
-                {position for band in source_bands for position in range(band.start, band.end + 1)}
-            )
-            pool_positions = {position for band in source_bands for position in band.pool}
-            anchors = [
-                by_key[(build_id, ordered[position])]
-                for position in pool_positions
-                if (build_id, ordered[position]) in by_key
-            ]
-            if not anchors:
+        band_index = 0
+        while len(selected) < limit:
+            emitted = False
+            for source_id in order:
+                source_bands = by_source[source_id]
+                if band_index >= len(source_bands):
+                    continue
+                emitted = True
+                band = source_bands[band_index]
+                build_id = band.build_id
+                ordered = chunk_order_by_source[source_id]
+                positions = range(band.start, band.end + 1)
+                pool_positions = band.pool
+                anchors = [
+                    by_key[(build_id, ordered[position])]
+                    for position in pool_positions
+                    if (build_id, ordered[position]) in by_key
+                ]
+                if not anchors:
+                    continue
+                anchor = max(anchors, key=lambda hit: (hit.score, hit.chunk_id))
+                context_ids = tuple(ordered[position] for position in positions)
+                selected.append(dataclass_replace(anchor, context_chunk_ids=context_ids))
+                if len(selected) >= limit:
+                    break
+            if not emitted:
+                break
+            band_index += 1
+        return tuple(selected)
+
+    @staticmethod
+    def _attach_table_header_context(
+        hits: tuple[SearchPgHit, ...],
+        chunk_order_by_source: Mapping[str, tuple[str, ...]],
+        structures_by_source: Mapping[str, Mapping[str, Any]],
+    ) -> tuple[SearchPgHit, ...]:
+        """Attach a same-page persisted table-header chunk to row-only hits.
+
+        PDF extraction often stores a repeated table header once and later rows
+        in separate chunks.  A row hit therefore may return the right values and
+        footnotes but omit the column names needed to interpret those values.
+        Use only persisted ``label_path`` and page metadata to find the minimal
+        header carrier; no text or model inference participates in the match.
+        """
+        from dataclasses import replace as dataclass_replace
+
+        enriched: list[SearchPgHit] = []
+        for hit in hits:
+            if hit.kind != "table" or hit.page is None or not hit.label_path:
+                enriched.append(hit)
                 continue
-            anchor = max(anchors, key=lambda hit: (hit.score, hit.chunk_id))
-            context_ids = tuple(ordered[position] for position in positions)
-            selected.append(dataclass_replace(anchor, context_chunk_ids=context_ids))
-        return tuple(selected[:limit])
+            ordered = chunk_order_by_source.get(hit.source_id, ())
+            structures = structures_by_source.get(hit.source_id, {})
+            position = {chunk_id: index for index, chunk_id in enumerate(ordered)}
+            row_labels = {
+                str(label).split()[-1].casefold()
+                for label in hit.label_path
+                if str(label).split()
+            }
+            candidates: list[tuple[int, int, str]] = []
+            for chunk_id, structure in structures.items():
+                if chunk_id == hit.chunk_id or structure.kind != "table":
+                    continue
+                pages = {unit.page for unit in structure.units if unit.page is not None}
+                if hit.page not in pages:
+                    continue
+                labels = {
+                    str(label).casefold()
+                    for unit in structure.units
+                    for label in unit.label_path
+                    if str(label).strip()
+                }
+                overlap = len(row_labels & labels)
+                if overlap >= 2 and chunk_id in position:
+                    candidates.append((-overlap, position[chunk_id], chunk_id))
+            if not candidates:
+                enriched.append(hit)
+                continue
+            header_id = min(candidates)[2]
+            context_ids = tuple(
+                sorted({*hit.context_chunk_ids, header_id}, key=position.__getitem__)
+            )
+            enriched.append(dataclass_replace(hit, context_chunk_ids=context_ids))
+        return tuple(enriched)
 
     def search_with_coverage(
         self, query: str, *, limit: int = 10
@@ -1300,7 +1403,24 @@ class CorpusService:
             abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
             return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-        raw_hits = self._selected_context_hits(raw_hits, chunk_order, limit)
+        raw_hits = self._selected_context_hits(raw_hits, chunk_order, limit, lexemes=lexemes)
+        table_sources = {
+            hit.source_id: (hit.build_id, chunk_order[hit.source_id])
+            for hit in raw_hits
+            if hit.kind == "table" and hit.label_path
+        }
+        structures_by_source = {
+            source_id: read_pg.fetch_chunk_structures(
+                self._dsn,
+                build_id,
+                list(chunk_ids),
+                sandbox_db=self._target_db,
+            )
+            for source_id, (build_id, chunk_ids) in table_sources.items()
+        }
+        raw_hits = self._attach_table_header_context(
+            raw_hits, chunk_order, structures_by_source
+        )
         # A1：内联 scope 摘要——成员范围身份 + 按 kind 计数（只读块种类，不读几何）。
         pairs = [(hit.build_id, cid) for hit in raw_hits for cid in hit.context_chunk_ids]
         kinds = (
@@ -1507,11 +1627,17 @@ class CorpusService:
     def context_relations(
         self, doc_id: str, locators: Sequence[str]
     ) -> dict[str, dict[str, object]]:
-        """A3：按请求成员范围推导逐成员 ``content_role``／``relations``（只读结构，不取正文）。
+        """Return per-member relation and label metadata from persisted structure.
 
         与 :meth:`context_inventory` 共用 :func:`structural_relation_fields`，使
         ``corpus_fetch`` 的批量／游标页与清单口径一致。关联是辅助信息：句柄不可解析、
         来源撤销或完整性不符时返回**空映射**，既不伪造，也绝不阻断正文取回。
+
+        ``label_path`` is returned alongside the relation fields because table
+        row text can contain values without its repeated column headers.  The
+        labels are persisted ingestion output, not inferred at fetch time, and
+        let the consumer bind values such as ``R32 / 99.6%`` to
+        ``R32 / 价格分位`` without a second search.
         """
         from plugins.corpus.preparation import read_pg
 
@@ -1531,13 +1657,33 @@ class CorpusService:
             )
         except Exception:
             return {}
-        return structural_relation_fields(
+        fields = structural_relation_fields(
             [
                 _structural_member(read_pg.chunk_locator(cid), structures[cid])
                 for cid in chunk_ids
                 if cid in structures
             ]
         )
+        for chunk_id in chunk_ids:
+            structure = structures.get(chunk_id)
+            if structure is None:
+                continue
+            labels: list[str] = []
+            for unit in structure.units:
+                for label in unit.label_path:
+                    value = str(label)
+                    if value and value not in labels:
+                        labels.append(value)
+            if labels:
+                fields.setdefault(
+                    read_pg.chunk_locator(chunk_id),
+                    {
+                        "content_role": content_role_for_kind(structure.kind),
+                        "relations": [],
+                        "relation_status": "unknown",
+                    },
+                )["label_path"] = labels
+        return fields
 
     @staticmethod
     def _inventory_member(

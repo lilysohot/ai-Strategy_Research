@@ -1,0 +1,728 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-09-30T13:18:30.766561+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "dev",
+    "samples": 1,
+    "targets": 6
+  },
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "failure_classes": {},
+    "by_role": {
+      "required": {
+        "passed": 5,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "failure_classes": {}
+      },
+      "supplementary": {
+        "passed": 1,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "failure_classes": {}
+      }
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e1",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5419,
+          "delivered": 5419
+        },
+        {
+          "raw": 5582,
+          "delivered": 5582
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 4372,
+          "delivered": 4372
+        },
+        {
+          "raw": 5493,
+          "delivered": 5493
+        },
+        {
+          "raw": 1584,
+          "delivered": 1584
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 7671,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-2",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0023",
+          "context_count": 4,
+          "snippet": "<b>R32</b>产品<b>R32</b>价格分位<b>R32</b>价"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 37,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4222,
+          "delivered": 4222
+        },
+        {
+          "raw": 5946,
+          "delivered": 5946
+        },
+        {
+          "raw": 5259,
+          "delivered": 5259
+        },
+        {
+          "raw": 5832,
+          "delivered": 5832
+        },
+        {
+          "raw": 5203,
+          "delivered": 5203
+        },
+        {
+          "raw": 2028,
+          "delivered": 2028
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "产能（万吨/年）以及同比增长\n产品\n表观消费量（万吨）以及同比增长\n价格分位\n价差分位\n开工率",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8489,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-3",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0023",
+          "context_count": 4,
+          "snippet": "<b>R32</b>产品<b>R32</b>价格分位<b>R32</b>价"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 37,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4222,
+          "delivered": 4222
+        },
+        {
+          "raw": 5946,
+          "delivered": 5946
+        },
+        {
+          "raw": 5259,
+          "delivered": 5259
+        },
+        {
+          "raw": 5832,
+          "delivered": 5832
+        },
+        {
+          "raw": 5203,
+          "delivered": 5203
+        },
+        {
+          "raw": 2028,
+          "delivered": 2028
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8489,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-4",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5419,
+          "delivered": 5419
+        },
+        {
+          "raw": 5582,
+          "delivered": 5582
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 4372,
+          "delivered": 4372
+        },
+        {
+          "raw": 5493,
+          "delivered": 5493
+        },
+        {
+          "raw": 1584,
+          "delivered": 1584
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "国内氩气市场又走出一轮暴涨行情。自今年5 月\n涨价以来，7—8 月价格加速拉升，部分区域单日涨幅显著。数据显示，截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 7671,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-5",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0023",
+          "context_count": 4,
+          "snippet": "<b>R32</b>产品<b>R32</b>价格分位<b>R32</b>价"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 37,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4222,
+          "delivered": 4222
+        },
+        {
+          "raw": 5946,
+          "delivered": 5946
+        },
+        {
+          "raw": 5259,
+          "delivered": 5259
+        },
+        {
+          "raw": 5832,
+          "delivered": 5832
+        },
+        {
+          "raw": 5203,
+          "delivered": 5203
+        },
+        {
+          "raw": 2028,
+          "delivered": 2028
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "注1：价格、价差分位为2016 年1 月1 日至2026 年7 月27 日",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8489,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e2",
+      "role": "supplementary",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16192,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5419,
+          "delivered": 5419
+        },
+        {
+          "raw": 5582,
+          "delivered": 5582
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 4372,
+          "delivered": 4372
+        },
+        {
+          "raw": 5493,
+          "delivered": 5493
+        },
+        {
+          "raw": 1584,
+          "delivered": 1584
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "国内氩气市场又走出一轮暴涨行情。自今年5 月\n涨价以来，7—8 月价格加速拉升，部分区域单日涨幅显著。数据显示，截至9\n月2 日，氩气价格报2459 元/吨，相比5 月初的720 元/吨，在4 个月时间里涨\n幅超过240%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 7671,
+      "all_pass": true,
+      "first_fail": null
+    }
+  ]
+}

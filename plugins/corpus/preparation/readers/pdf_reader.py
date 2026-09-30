@@ -26,7 +26,7 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_PDF_REV = "reader-pdf-9"
+READER_PDF_REV = "reader-pdf-10"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
@@ -35,6 +35,8 @@ _COLUMN_GAP_RATIO = 0.12
 _MIN_GRID_LINES = 6
 _IMAGE_REGION_RATIO = 0.25  # 混合页大图缺口阈值（占页面积比例）
 _MAX_HEADER_ROWS = 2  # 表格结构模型：最多识别 2 行表头（多级表头按层级展开）
+_MAX_LABEL_LINES = 2  # 超过两行通常是 find_tables 把整列数据折进了一个网格格
+_MAX_LABEL_CHARS = 80  # 结构标签只收紧凑标题；长文本仍完整保留在 raw_text
 
 # R8（S1-S3）：无线表格 fallback——lines 策略 0 表时的确定性形态信号与提取参数。
 _WIRELESS_MIN_ROWS = 5  # 表格化数据块最少连续数据视觉行
@@ -151,7 +153,10 @@ class _TableModel:
                 continue
             if _is_data_like(text):
                 break
-            parts.append(text)
+            label = _compact_structural_label(text)
+            if not label:
+                return ""
+            parts.append(label)
         return " ".join(parts)
 
     def col_labels(self, col: int) -> tuple[str, ...]:
@@ -165,8 +170,9 @@ class _TableModel:
                     if x0 <= center <= x1:
                         label = self.cell_text(header_row, cell_col)
                         break
-            if label and label not in out:
-                out.append(label)
+            compact = _compact_structural_label(label or "")
+            if compact and compact not in out:
+                out.append(compact)
         return tuple(out)
 
     def label_path(self, row: int, col: int) -> tuple[str, ...]:
@@ -176,6 +182,20 @@ class _TableModel:
         if row_label:
             return (row_label, *column_labels)
         return column_labels
+
+
+def _compact_structural_label(text: str) -> str:
+    """返回可信的紧凑结构标签；整列折叠数据保守降级为空标签。
+
+    PDF ``find_tables`` 偶尔会把一个视觉列（表头及全部行值）折进单个网格格。
+    这种内容不是标签，若复制到每个 ``label_path`` 会把几十字的真实行膨胀到
+    数千字并阻断发布。这里只约束派生结构元数据，不改写权威 ``raw_text``。
+    """
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if not lines or len(lines) > _MAX_LABEL_LINES:
+        return ""
+    compact = " ".join(lines)
+    return compact if len(compact) <= _MAX_LABEL_CHARS else ""
 
 
 def _is_data_like(text: str) -> bool:

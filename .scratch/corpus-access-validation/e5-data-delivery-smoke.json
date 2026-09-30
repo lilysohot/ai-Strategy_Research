@@ -1,0 +1,951 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-09-30T12:54:33.335896+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "dev",
+    "samples": 1,
+    "targets": 7
+  },
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "pass_rate": 0.8571428571428571,
+    "failure_classes": {
+      "quote_not_delivered": 1
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e1",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e2",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e3",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-4",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-5",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e4",
+      "role": "supplementary",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e5",
+      "role": "supplementary",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    }
+  ]
+}

@@ -164,6 +164,27 @@ def test_batch_returns_envelope_with_whole_blocks(stub) -> None:
     assert out["next_cursor"] is None
 
 
+def test_fetch_returns_persisted_label_path_for_table_value_binding(stub) -> None:
+    svc = stub({"chunk:t0": _evidence("t0", "table", [("u0", "R32\n99.6%", 10, ())])})
+    svc.context_relations = lambda _doc_id, _locators: {
+        "chunk:t0": {
+            "content_role": "content",
+            "relations": [],
+            "relation_status": "unknown",
+            "label_path": ["R32 价格分位", "R32 价差分位", "R32 开工率"],
+        }
+    }
+
+    batch = json.loads(
+        _call(doc_id=_DOC, locators=["chunk:t0"], view="compact", max_chars=4000)
+    )
+    single = json.loads(_call(doc_id=_DOC, locator="chunk:t0", view="compact"))
+
+    expected = ["R32 价格分位", "R32 价差分位", "R32 开工率"]
+    assert batch["items"][0]["label_path"] == expected
+    assert single["label_path"] == expected
+
+
 def test_batch_empty_list_rejected(stub) -> None:
     stub({})
     out = json.loads(_call(doc_id=_DOC, locators=[]))
@@ -227,7 +248,7 @@ def test_atom_too_large_reports_error_and_resolves(stub) -> None:
     stub({"chunk:t0": _evidence("t0", "table", [("u0", huge_row, 1, [[0, 0]])])})
 
     out = json.loads(_call(doc_id=_DOC, locator="chunk:t0", max_chars=2000))
-    assert out["ok"] is True
+    assert out["ok"] is False
     errors = {e["code"] for e in out["item_errors"]}
     assert "unit_too_large" in errors
     assert out["unresolved"] == ["chunk:t0"]
@@ -265,7 +286,7 @@ def test_unit_too_large_reports_after_all_views_tried(stub) -> None:
     stub({"chunk:t0": _long_row_table()})
 
     out = json.loads(_call(doc_id=_DOC, locator="chunk:t0", max_chars=2000))
-    assert out["ok"] is True
+    assert out["ok"] is False
     (err,) = out["item_errors"]
     assert err["code"] == "unit_too_large"
     assert err["needed_chars"] == 595
@@ -436,6 +457,30 @@ def test_member_failure_is_reported_and_others_proceed(stub) -> None:
     assert [e["locator"] for e in out["item_errors"]] == ["chunk:c1"]
     assert out["unresolved"] == ["chunk:c1"]
     assert out["exhausted"] is True and out["fetch_complete"] is False
+
+
+def test_all_member_failures_are_explicit_tool_failure(stub) -> None:
+    """A wrong build/locator pair must never look like an empty successful fetch."""
+    stub({}, fail={"chunk:wrong"})
+
+    out = json.loads(_call(doc_id=_DOC, locators=["chunk:wrong"], max_chars=4000))
+
+    assert out["ok"] is False
+    assert "没有成功取回" in out["error"]
+    assert out["items"] == []
+    assert out["unresolved"] == ["chunk:wrong"]
+    assert out["fetch_complete"] is False
+
+
+def test_empty_authority_content_is_not_reported_as_success(stub) -> None:
+    """An existing chunk with empty authoritative text still needs remediation."""
+    stub({"chunk:empty": _evidence("empty", "body", [("u0", "", 1, ())])})
+
+    out = json.loads(_call(doc_id=_DOC, locator="chunk:empty", max_chars=4000))
+
+    assert out["ok"] is False, json.dumps(out, ensure_ascii=False)
+    assert "empty_content" in out["error"]
+    assert out["doc_id"] == _DOC and out["locator"] == "chunk:empty"
 
 
 def test_unresolved_carries_across_pages(stub) -> None:

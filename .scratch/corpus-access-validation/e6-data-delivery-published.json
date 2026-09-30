@@ -1,0 +1,1852 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-09-30T13:56:22.148922+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); exact quote or frozen equivalent structural evidence; ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "holdout",
+    "samples": 3,
+    "targets": 13
+  },
+  "summary": {
+    "passed": 13,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "failure_classes": {},
+    "by_role": {
+      "required": {
+        "passed": 9,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "failure_classes": {}
+      },
+      "supplementary": {
+        "passed": 4,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "failure_classes": {}
+      }
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-mt-h1",
+      "role": "required",
+      "question": "根据这篇贵州茅台研报，公司2026年上半年实现的总营收和归母净利润分别是多少，同比变化如何？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 6,
+      "delivered_search_chars": 13636,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0005",
+          "context_count": 25,
+          "snippet": "<b>公司</b>名称<b>公司</b>\n<b>公司</b><b>公司</b>\n代码"
+        },
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0015",
+          "context_count": 14,
+          "snippet": "<b>净利润</b>增长率2024<b>净利润</b>增长率2025<b>净利润</b>增长率"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:b9a8ac3c9f11b1f5:heading:0000",
+        "chunk:b9a8ac3c9f11b1f5:heading:0001",
+        "chunk:b9a8ac3c9f11b1f5:heading:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0000",
+        "chunk:b9a8ac3c9f11b1f5:body:0001",
+        "chunk:b9a8ac3c9f11b1f5:body:0002",
+        "chunk:b9a8ac3c9f11b1f5:body:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0004",
+        "chunk:b9a8ac3c9f11b1f5:table:0000",
+        "chunk:b9a8ac3c9f11b1f5:table:0001",
+        "chunk:b9a8ac3c9f11b1f5:table:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0003",
+        "chunk:b9a8ac3c9f11b1f5:table:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0006",
+        "chunk:b9a8ac3c9f11b1f5:heading:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0007",
+        "chunk:b9a8ac3c9f11b1f5:table:0008",
+        "chunk:b9a8ac3c9f11b1f5:body:0007",
+        "chunk:b9a8ac3c9f11b1f5:heading:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0009",
+        "chunk:b9a8ac3c9f11b1f5:table:0010",
+        "chunk:b9a8ac3c9f11b1f5:table:0011",
+        "chunk:b9a8ac3c9f11b1f5:table:0012",
+        "chunk:b9a8ac3c9f11b1f5:table:0013",
+        "chunk:b9a8ac3c9f11b1f5:table:0014",
+        "chunk:b9a8ac3c9f11b1f5:table:0015",
+        "chunk:b9a8ac3c9f11b1f5:table:0016",
+        "chunk:b9a8ac3c9f11b1f5:table:0017",
+        "chunk:b9a8ac3c9f11b1f5:body:0008",
+        "chunk:b9a8ac3c9f11b1f5:table:0018",
+        "chunk:b9a8ac3c9f11b1f5:body:0009",
+        "chunk:b9a8ac3c9f11b1f5:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "贵州茅台发布2026半年报，公司2026H1实现总营收922.78亿元，同比增长1.3%，实现归母净利润445.17亿元，同比减少2.0%；实现扣非归母净利润444.64亿元，同比减少2.0%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-imt-q2",
+      "role": "required",
+      "question": "研报中说i茅台在2026Q2表现出高增长，那么这季度i茅台的收入是多少亿元、同比增长多少、在直销收入中占比多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 7,
+      "delivered_search_chars": 11714,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:body:0003",
+          "context_count": 25,
+          "snippet": "<b>2026Q2</b><b>直销</b><b>收入</b>224.6亿元，<b>同比</b>"
+        },
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0015",
+          "context_count": 14,
+          "snippet": "<b>收入</b><b>增长</b>2024<b>收入</b><b>增长</b>2025<b>收入</b><b>增长</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:b9a8ac3c9f11b1f5:heading:0000",
+        "chunk:b9a8ac3c9f11b1f5:heading:0001",
+        "chunk:b9a8ac3c9f11b1f5:heading:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0000",
+        "chunk:b9a8ac3c9f11b1f5:body:0001",
+        "chunk:b9a8ac3c9f11b1f5:body:0002",
+        "chunk:b9a8ac3c9f11b1f5:body:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0004",
+        "chunk:b9a8ac3c9f11b1f5:table:0000",
+        "chunk:b9a8ac3c9f11b1f5:table:0001",
+        "chunk:b9a8ac3c9f11b1f5:table:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0003",
+        "chunk:b9a8ac3c9f11b1f5:table:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0006",
+        "chunk:b9a8ac3c9f11b1f5:heading:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0007",
+        "chunk:b9a8ac3c9f11b1f5:table:0008",
+        "chunk:b9a8ac3c9f11b1f5:body:0007",
+        "chunk:b9a8ac3c9f11b1f5:heading:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0009",
+        "chunk:b9a8ac3c9f11b1f5:table:0010",
+        "chunk:b9a8ac3c9f11b1f5:table:0011",
+        "chunk:b9a8ac3c9f11b1f5:table:0012",
+        "chunk:b9a8ac3c9f11b1f5:table:0013",
+        "chunk:b9a8ac3c9f11b1f5:table:0014",
+        "chunk:b9a8ac3c9f11b1f5:table:0015",
+        "chunk:b9a8ac3c9f11b1f5:table:0016",
+        "chunk:b9a8ac3c9f11b1f5:table:0017",
+        "chunk:b9a8ac3c9f11b1f5:body:0008",
+        "chunk:b9a8ac3c9f11b1f5:table:0018",
+        "chunk:b9a8ac3c9f11b1f5:body:0009",
+        "chunk:b9a8ac3c9f11b1f5:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2026Q2直销收入224.6亿元，同比增长33.8%，其中i茅台收入187.1亿元，同比增长282.6%，占直销收入83.3%。批发代理收入143.1亿元，同比减少34.9%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-xlw",
+      "role": "supplementary",
+      "question": "研报中提到系列酒短期承压，那么系列酒2026Q2的收入是多少、同比变化多少，当季末经销商数量为多少家、较上季度末净增多少家？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14511,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:body:0003",
+          "context_count": 25,
+          "snippet": "<b>系列</b>酒<b>短期</b><b>承压</b>。分产品看"
+        },
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0015",
+          "context_count": 14,
+          "snippet": "<b>收入</b>增长2024<b>收入</b>增长2025<b>收入</b>增长"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:b9a8ac3c9f11b1f5:heading:0000",
+        "chunk:b9a8ac3c9f11b1f5:heading:0001",
+        "chunk:b9a8ac3c9f11b1f5:heading:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0000",
+        "chunk:b9a8ac3c9f11b1f5:body:0001",
+        "chunk:b9a8ac3c9f11b1f5:body:0002",
+        "chunk:b9a8ac3c9f11b1f5:body:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0004",
+        "chunk:b9a8ac3c9f11b1f5:table:0000",
+        "chunk:b9a8ac3c9f11b1f5:table:0001",
+        "chunk:b9a8ac3c9f11b1f5:table:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0003",
+        "chunk:b9a8ac3c9f11b1f5:table:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0006",
+        "chunk:b9a8ac3c9f11b1f5:heading:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0007",
+        "chunk:b9a8ac3c9f11b1f5:table:0008",
+        "chunk:b9a8ac3c9f11b1f5:body:0007",
+        "chunk:b9a8ac3c9f11b1f5:heading:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0009",
+        "chunk:b9a8ac3c9f11b1f5:table:0010",
+        "chunk:b9a8ac3c9f11b1f5:table:0011",
+        "chunk:b9a8ac3c9f11b1f5:table:0012",
+        "chunk:b9a8ac3c9f11b1f5:table:0013",
+        "chunk:b9a8ac3c9f11b1f5:table:0014",
+        "chunk:b9a8ac3c9f11b1f5:table:0015",
+        "chunk:b9a8ac3c9f11b1f5:table:0016",
+        "chunk:b9a8ac3c9f11b1f5:table:0017",
+        "chunk:b9a8ac3c9f11b1f5:body:0008",
+        "chunk:b9a8ac3c9f11b1f5:table:0018",
+        "chunk:b9a8ac3c9f11b1f5:body:0009",
+        "chunk:b9a8ac3c9f11b1f5:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "系列酒2026Q2收入50.5亿元，同比降低25.0%，2026年第二季度末经销商数量2426家、较第一季度末净增204家，单季增加228家、减少24家",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-ktable",
+      "role": "supplementary",
+      "question": "研报的可比公司估值表里，贵州茅台对应的收盘价、总市值，以及2026E、2027E的归母净利润和PE分别是多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 14994,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0008",
+          "context_count": 25,
+          "snippet": "<b>收盘价</b>总<b>市值</b><b>2026E</b>归母净利<b>2026E</b>"
+        },
+        {
+          "locator": "chunk:b9a8ac3c9f11b1f5:table:0013",
+          "context_count": 14,
+          "snippet": "<b>估值</b>指标20242025<b>2026E</b><b>2027E</b>2028E营运"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:b9a8ac3c9f11b1f5:heading:0000",
+        "chunk:b9a8ac3c9f11b1f5:heading:0001",
+        "chunk:b9a8ac3c9f11b1f5:heading:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0000",
+        "chunk:b9a8ac3c9f11b1f5:body:0001",
+        "chunk:b9a8ac3c9f11b1f5:body:0002",
+        "chunk:b9a8ac3c9f11b1f5:body:0003",
+        "chunk:b9a8ac3c9f11b1f5:body:0004",
+        "chunk:b9a8ac3c9f11b1f5:table:0000",
+        "chunk:b9a8ac3c9f11b1f5:table:0001",
+        "chunk:b9a8ac3c9f11b1f5:table:0002",
+        "chunk:b9a8ac3c9f11b1f5:heading:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0003",
+        "chunk:b9a8ac3c9f11b1f5:table:0004",
+        "chunk:b9a8ac3c9f11b1f5:body:0006",
+        "chunk:b9a8ac3c9f11b1f5:heading:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0005",
+        "chunk:b9a8ac3c9f11b1f5:table:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0007",
+        "chunk:b9a8ac3c9f11b1f5:table:0008",
+        "chunk:b9a8ac3c9f11b1f5:body:0007",
+        "chunk:b9a8ac3c9f11b1f5:heading:0006",
+        "chunk:b9a8ac3c9f11b1f5:table:0009",
+        "chunk:b9a8ac3c9f11b1f5:table:0010",
+        "chunk:b9a8ac3c9f11b1f5:table:0011",
+        "chunk:b9a8ac3c9f11b1f5:table:0012",
+        "chunk:b9a8ac3c9f11b1f5:table:0013",
+        "chunk:b9a8ac3c9f11b1f5:table:0014",
+        "chunk:b9a8ac3c9f11b1f5:table:0015",
+        "chunk:b9a8ac3c9f11b1f5:table:0016",
+        "chunk:b9a8ac3c9f11b1f5:table:0017",
+        "chunk:b9a8ac3c9f11b1f5:body:0008",
+        "chunk:b9a8ac3c9f11b1f5:table:0018",
+        "chunk:b9a8ac3c9f11b1f5:body:0009",
+        "chunk:b9a8ac3c9f11b1f5:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "600519.SH 贵州茅台 优于大市 1,342.0 16,776.0 823.7 886.3 20.4 18.9",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-overview",
+      "role": "required",
+      "question": "根据这篇贝特利IPO研报，公司2025年的营业收入和归母净利润大概是多少？研报给的可比公司平均市盈率是多少倍？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 7,
+      "delivered_search_chars": 13825,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0020",
+          "context_count": 16,
+          "snippet": "<b>2025</b>年\n归母净利\n润"
+        },
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0001",
+          "context_count": 25,
+          "snippet": "<b>可比</b><b>公司</b>对应<b>2025</b>/2026/2027"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:f566a41f2ee96a32:table:0003",
+        "chunk:f566a41f2ee96a32:body:0016",
+        "chunk:f566a41f2ee96a32:body:0017",
+        "chunk:f566a41f2ee96a32:body:0018",
+        "chunk:f566a41f2ee96a32:body:0019",
+        "chunk:f566a41f2ee96a32:table:0004",
+        "chunk:f566a41f2ee96a32:body:0020",
+        "chunk:f566a41f2ee96a32:table:0005",
+        "chunk:f566a41f2ee96a32:body:0021",
+        "chunk:f566a41f2ee96a32:table:0006",
+        "chunk:f566a41f2ee96a32:body:0022",
+        "chunk:f566a41f2ee96a32:body:0023",
+        "chunk:f566a41f2ee96a32:body:0024",
+        "chunk:f566a41f2ee96a32:body:0025",
+        "chunk:f566a41f2ee96a32:body:0026",
+        "chunk:f566a41f2ee96a32:body:0027",
+        "chunk:f566a41f2ee96a32:body:0000",
+        "chunk:f566a41f2ee96a32:heading:0000",
+        "chunk:f566a41f2ee96a32:body:0001",
+        "chunk:f566a41f2ee96a32:body:0002",
+        "chunk:f566a41f2ee96a32:body:0003",
+        "chunk:f566a41f2ee96a32:body:0004",
+        "chunk:f566a41f2ee96a32:heading:0001",
+        "chunk:f566a41f2ee96a32:body:0005",
+        "chunk:f566a41f2ee96a32:body:0006",
+        "chunk:f566a41f2ee96a32:table:0000",
+        "chunk:f566a41f2ee96a32:body:0007",
+        "chunk:f566a41f2ee96a32:table:0001",
+        "chunk:f566a41f2ee96a32:body:0008",
+        "chunk:f566a41f2ee96a32:heading:0002",
+        "chunk:f566a41f2ee96a32:body:0009",
+        "chunk:f566a41f2ee96a32:table:0002",
+        "chunk:f566a41f2ee96a32:body:0010",
+        "chunk:f566a41f2ee96a32:heading:0003",
+        "chunk:f566a41f2ee96a32:body:0011",
+        "chunk:f566a41f2ee96a32:body:0012",
+        "chunk:f566a41f2ee96a32:body:0013",
+        "chunk:f566a41f2ee96a32:body:0014",
+        "chunk:f566a41f2ee96a32:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2025 年公司实现营收/归母净利润 36.46/1.16 亿元。截至 2026 年 8 月 11 日，可比公司对应 2025/2026/2027 年平均 PE 分别为 35.50/22.87/17.61 倍（均剔除极端值）。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-top5cust",
+      "role": "supplementary",
+      "question": "贝特利2025年前五大客户中排第一的客户是谁，销售额和占收入比例大概是多少？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 7,
+      "delivered_search_chars": 13115,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f566a41f2ee96a32:table:0006",
+          "context_count": 16,
+          "snippet": "<b>2025</b>（倍）2026E（倍）"
+        },
+        {
+          "locator": "chunk:f566a41f2ee96a32:table:0002",
+          "context_count": 25,
+          "snippet": "<b>收入</b><b>比例</b>\n序号<b>客户</b>名称<b>销售额</b>（"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:f566a41f2ee96a32:table:0003",
+        "chunk:f566a41f2ee96a32:body:0016",
+        "chunk:f566a41f2ee96a32:body:0017",
+        "chunk:f566a41f2ee96a32:body:0018",
+        "chunk:f566a41f2ee96a32:body:0019",
+        "chunk:f566a41f2ee96a32:table:0004",
+        "chunk:f566a41f2ee96a32:body:0020",
+        "chunk:f566a41f2ee96a32:table:0005",
+        "chunk:f566a41f2ee96a32:body:0021",
+        "chunk:f566a41f2ee96a32:table:0006",
+        "chunk:f566a41f2ee96a32:body:0022",
+        "chunk:f566a41f2ee96a32:body:0023",
+        "chunk:f566a41f2ee96a32:body:0024",
+        "chunk:f566a41f2ee96a32:body:0025",
+        "chunk:f566a41f2ee96a32:body:0026",
+        "chunk:f566a41f2ee96a32:body:0027",
+        "chunk:f566a41f2ee96a32:body:0000",
+        "chunk:f566a41f2ee96a32:heading:0000",
+        "chunk:f566a41f2ee96a32:body:0001",
+        "chunk:f566a41f2ee96a32:body:0002",
+        "chunk:f566a41f2ee96a32:body:0003",
+        "chunk:f566a41f2ee96a32:body:0004",
+        "chunk:f566a41f2ee96a32:heading:0001",
+        "chunk:f566a41f2ee96a32:body:0005",
+        "chunk:f566a41f2ee96a32:body:0006",
+        "chunk:f566a41f2ee96a32:table:0000",
+        "chunk:f566a41f2ee96a32:body:0007",
+        "chunk:f566a41f2ee96a32:table:0001",
+        "chunk:f566a41f2ee96a32:body:0008",
+        "chunk:f566a41f2ee96a32:heading:0002",
+        "chunk:f566a41f2ee96a32:body:0009",
+        "chunk:f566a41f2ee96a32:table:0002",
+        "chunk:f566a41f2ee96a32:body:0010",
+        "chunk:f566a41f2ee96a32:heading:0003",
+        "chunk:f566a41f2ee96a32:body:0011",
+        "chunk:f566a41f2ee96a32:body:0012",
+        "chunk:f566a41f2ee96a32:body:0013",
+        "chunk:f566a41f2ee96a32:body:0014",
+        "chunk:f566a41f2ee96a32:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "1 上海银浆 171,188.68 46.95%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-petable",
+      "role": "supplementary",
+      "question": "研报的可比公司估值表中，贝特利自身的2025年营收、归母净利润，以及2023-2025年的营收和净利润复合增速分别是多少？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 7,
+      "delivered_search_chars": 13803,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0020",
+          "context_count": 16,
+          "snippet": "<b>2025</b>年\n归母净利\n润"
+        },
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0001",
+          "context_count": 25,
+          "snippet": "<b>可比</b><b>公司</b>对应<b>2025</b>/2026/2027"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:f566a41f2ee96a32:table:0003",
+        "chunk:f566a41f2ee96a32:body:0016",
+        "chunk:f566a41f2ee96a32:body:0017",
+        "chunk:f566a41f2ee96a32:body:0018",
+        "chunk:f566a41f2ee96a32:body:0019",
+        "chunk:f566a41f2ee96a32:table:0004",
+        "chunk:f566a41f2ee96a32:body:0020",
+        "chunk:f566a41f2ee96a32:table:0005",
+        "chunk:f566a41f2ee96a32:body:0021",
+        "chunk:f566a41f2ee96a32:table:0006",
+        "chunk:f566a41f2ee96a32:body:0022",
+        "chunk:f566a41f2ee96a32:body:0023",
+        "chunk:f566a41f2ee96a32:body:0024",
+        "chunk:f566a41f2ee96a32:body:0025",
+        "chunk:f566a41f2ee96a32:body:0026",
+        "chunk:f566a41f2ee96a32:body:0027",
+        "chunk:f566a41f2ee96a32:body:0000",
+        "chunk:f566a41f2ee96a32:heading:0000",
+        "chunk:f566a41f2ee96a32:body:0001",
+        "chunk:f566a41f2ee96a32:body:0002",
+        "chunk:f566a41f2ee96a32:body:0003",
+        "chunk:f566a41f2ee96a32:body:0004",
+        "chunk:f566a41f2ee96a32:heading:0001",
+        "chunk:f566a41f2ee96a32:body:0005",
+        "chunk:f566a41f2ee96a32:body:0006",
+        "chunk:f566a41f2ee96a32:table:0000",
+        "chunk:f566a41f2ee96a32:body:0007",
+        "chunk:f566a41f2ee96a32:table:0001",
+        "chunk:f566a41f2ee96a32:body:0008",
+        "chunk:f566a41f2ee96a32:heading:0002",
+        "chunk:f566a41f2ee96a32:body:0009",
+        "chunk:f566a41f2ee96a32:table:0002",
+        "chunk:f566a41f2ee96a32:body:0010",
+        "chunk:f566a41f2ee96a32:heading:0003",
+        "chunk:f566a41f2ee96a32:body:0011",
+        "chunk:f566a41f2ee96a32:body:0012",
+        "chunk:f566a41f2ee96a32:body:0013",
+        "chunk:f566a41f2ee96a32:body:0014",
+        "chunk:f566a41f2ee96a32:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "301697.SZ 贝特利 36.46 1.16 26.66% 16.42%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-risk",
+      "role": "required",
+      "question": "研报风险提示中提到，哪些情形可能导致大客户对贝特利的采购需求下滑？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 6,
+      "delivered_search_chars": 10207,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0024",
+          "context_count": 16,
+          "snippet": "<b>可能</b><b>导致</b>客户W对公司的<b>采购</b>"
+        },
+        {
+          "locator": "chunk:f566a41f2ee96a32:body:0002",
+          "context_count": 25,
+          "snippet": "<b>风险</b><b>提示</b>：1）贵金属供应与"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:f566a41f2ee96a32:table:0003",
+        "chunk:f566a41f2ee96a32:body:0016",
+        "chunk:f566a41f2ee96a32:body:0017",
+        "chunk:f566a41f2ee96a32:body:0018",
+        "chunk:f566a41f2ee96a32:body:0019",
+        "chunk:f566a41f2ee96a32:table:0004",
+        "chunk:f566a41f2ee96a32:body:0020",
+        "chunk:f566a41f2ee96a32:table:0005",
+        "chunk:f566a41f2ee96a32:body:0021",
+        "chunk:f566a41f2ee96a32:table:0006",
+        "chunk:f566a41f2ee96a32:body:0022",
+        "chunk:f566a41f2ee96a32:body:0023",
+        "chunk:f566a41f2ee96a32:body:0024",
+        "chunk:f566a41f2ee96a32:body:0025",
+        "chunk:f566a41f2ee96a32:body:0026",
+        "chunk:f566a41f2ee96a32:body:0027",
+        "chunk:f566a41f2ee96a32:body:0000",
+        "chunk:f566a41f2ee96a32:heading:0000",
+        "chunk:f566a41f2ee96a32:body:0001",
+        "chunk:f566a41f2ee96a32:body:0002",
+        "chunk:f566a41f2ee96a32:body:0003",
+        "chunk:f566a41f2ee96a32:body:0004",
+        "chunk:f566a41f2ee96a32:heading:0001",
+        "chunk:f566a41f2ee96a32:body:0005",
+        "chunk:f566a41f2ee96a32:body:0006",
+        "chunk:f566a41f2ee96a32:table:0000",
+        "chunk:f566a41f2ee96a32:body:0007",
+        "chunk:f566a41f2ee96a32:table:0001",
+        "chunk:f566a41f2ee96a32:body:0008",
+        "chunk:f566a41f2ee96a32:heading:0002",
+        "chunk:f566a41f2ee96a32:body:0009",
+        "chunk:f566a41f2ee96a32:table:0002",
+        "chunk:f566a41f2ee96a32:body:0010",
+        "chunk:f566a41f2ee96a32:heading:0003",
+        "chunk:f566a41f2ee96a32:body:0011",
+        "chunk:f566a41f2ee96a32:body:0012",
+        "chunk:f566a41f2ee96a32:body:0013",
+        "chunk:f566a41f2ee96a32:body:0014",
+        "chunk:f566a41f2ee96a32:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "未来，若出现性能更好的材料替代了硅橡胶，或下游客户无法接受硅橡胶的成本，或下游客户需求减少，则可能导致客户 W 对公司的采购需求下滑",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-figure35",
+      "role": "required",
+      "question": "Figure 为训练 Helix 大模型承诺采购的首期算力规模是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 10984,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:915a5feebe238207:body:0003",
+          "context_count": 25,
+          "snippet": "<b>首期</b>算力<b>采购</b><b>承诺</b><b>规模</b>35亿"
+        },
+        {
+          "locator": "chunk:915a5feebe238207:body:0017",
+          "context_count": 3,
+          "snippet": "地址\n上海市黄浦区中山南路888号\n"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:915a5feebe238207:body:0000",
+        "chunk:915a5feebe238207:table:0000",
+        "chunk:915a5feebe238207:body:0001",
+        "chunk:915a5feebe238207:body:0002",
+        "chunk:915a5feebe238207:body:0003",
+        "chunk:915a5feebe238207:body:0004",
+        "chunk:915a5feebe238207:body:0005",
+        "chunk:915a5feebe238207:body:0006",
+        "chunk:915a5feebe238207:body:0007",
+        "chunk:915a5feebe238207:body:0008",
+        "chunk:915a5feebe238207:body:0009",
+        "chunk:915a5feebe238207:table:0001",
+        "chunk:915a5feebe238207:table:0002",
+        "chunk:915a5feebe238207:body:0010",
+        "chunk:915a5feebe238207:table:0003",
+        "chunk:915a5feebe238207:table:0004",
+        "chunk:915a5feebe238207:table:0005",
+        "chunk:915a5feebe238207:body:0011",
+        "chunk:915a5feebe238207:table:0006",
+        "chunk:915a5feebe238207:body:0012",
+        "chunk:915a5feebe238207:table:0007",
+        "chunk:915a5feebe238207:body:0013",
+        "chunk:915a5feebe238207:body:0014",
+        "chunk:915a5feebe238207:body:0015",
+        "chunk:915a5feebe238207:body:0016",
+        "chunk:915a5feebe238207:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "Figure 宣布采购 35 亿美元算力训练 Helix， 规划最高配置 10 万张 GPU。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-dele",
+      "role": "required",
+      "question": "深度跃迁发布的 DELE-w0.5 在真机实验中取得了多高的完整任务成功率？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 6,
+      "delivered_search_chars": 8948,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:915a5feebe238207:body:0003",
+          "context_count": 25,
+          "snippet": "<b>深度</b><b>跃迁</b><b>发布</b>世界动作模型<b>DELE-w</b><b>0.5</b>"
+        },
+        {
+          "locator": "chunk:915a5feebe238207:body:0016",
+          "context_count": 3,
+          "snippet": "<b>发布</b>后的12个月内的"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:915a5feebe238207:body:0000",
+        "chunk:915a5feebe238207:table:0000",
+        "chunk:915a5feebe238207:body:0001",
+        "chunk:915a5feebe238207:body:0002",
+        "chunk:915a5feebe238207:body:0003",
+        "chunk:915a5feebe238207:body:0004",
+        "chunk:915a5feebe238207:body:0005",
+        "chunk:915a5feebe238207:body:0006",
+        "chunk:915a5feebe238207:body:0007",
+        "chunk:915a5feebe238207:body:0008",
+        "chunk:915a5feebe238207:body:0009",
+        "chunk:915a5feebe238207:table:0001",
+        "chunk:915a5feebe238207:table:0002",
+        "chunk:915a5feebe238207:body:0010",
+        "chunk:915a5feebe238207:table:0003",
+        "chunk:915a5feebe238207:table:0004",
+        "chunk:915a5feebe238207:table:0005",
+        "chunk:915a5feebe238207:body:0011",
+        "chunk:915a5feebe238207:table:0006",
+        "chunk:915a5feebe238207:body:0012",
+        "chunk:915a5feebe238207:table:0007",
+        "chunk:915a5feebe238207:body:0013",
+        "chunk:915a5feebe238207:body:0014",
+        "chunk:915a5feebe238207:body:0015",
+        "chunk:915a5feebe238207:body:0016",
+        "chunk:915a5feebe238207:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "在 640 次真机实验中，DELE-w0.5 取得 62.5% 的完整任务成功率与 81.3% 的平均阶段进度， 均显著优于基线",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-musk",
+      "role": "required",
+      "question": "马斯克在 G20 会议对未来十年全球人形机器人部署规模作了什么预测？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13956,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:915a5feebe238207:body:0005",
+          "context_count": 25,
+          "snippet": "<b>马斯克</b><b>G20</b><b>会议</b><b>预测</b><b>未来</b>十年<b>全球</b>"
+        },
+        {
+          "locator": "chunk:915a5feebe238207:body:0016",
+          "context_count": 3,
+          "snippet": "<b>未来</b>市场表现与基准指数相比无"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:915a5feebe238207:body:0000",
+        "chunk:915a5feebe238207:table:0000",
+        "chunk:915a5feebe238207:body:0001",
+        "chunk:915a5feebe238207:body:0002",
+        "chunk:915a5feebe238207:body:0003",
+        "chunk:915a5feebe238207:body:0004",
+        "chunk:915a5feebe238207:body:0005",
+        "chunk:915a5feebe238207:body:0006",
+        "chunk:915a5feebe238207:body:0007",
+        "chunk:915a5feebe238207:body:0008",
+        "chunk:915a5feebe238207:body:0009",
+        "chunk:915a5feebe238207:table:0001",
+        "chunk:915a5feebe238207:table:0002",
+        "chunk:915a5feebe238207:body:0010",
+        "chunk:915a5feebe238207:table:0003",
+        "chunk:915a5feebe238207:table:0004",
+        "chunk:915a5feebe238207:table:0005",
+        "chunk:915a5feebe238207:body:0011",
+        "chunk:915a5feebe238207:table:0006",
+        "chunk:915a5feebe238207:body:0012",
+        "chunk:915a5feebe238207:table:0007",
+        "chunk:915a5feebe238207:body:0013",
+        "chunk:915a5feebe238207:body:0014",
+        "chunk:915a5feebe238207:body:0015",
+        "chunk:915a5feebe238207:body:0016",
+        "chunk:915a5feebe238207:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "马斯克在 9 月 1 日 G20 创新部长级会议上表示， 未来十年全球将至少部署 10 亿台人形机器人， 单台产出约相当于 5 个普通人",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-turnover",
+      "role": "required",
+      "question": "当周（2026/8/31-2026/9/4）机器人板块相关公司的成交金额是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 6,
+      "delivered_search_chars": 13654,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:915a5feebe238207:body:0008",
+          "context_count": 25,
+          "snippet": "<b>机器人</b><b>板块</b><b>相关</b><b>公司</b><b>成交</b><b>金额</b>为4553"
+        },
+        {
+          "locator": "chunk:915a5feebe238207:body:0016",
+          "context_count": 3,
+          "snippet": "<b>公司</b>股价（或行业指数）的"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:915a5feebe238207:body:0000",
+        "chunk:915a5feebe238207:table:0000",
+        "chunk:915a5feebe238207:body:0001",
+        "chunk:915a5feebe238207:body:0002",
+        "chunk:915a5feebe238207:body:0003",
+        "chunk:915a5feebe238207:body:0004",
+        "chunk:915a5feebe238207:body:0005",
+        "chunk:915a5feebe238207:body:0006",
+        "chunk:915a5feebe238207:body:0007",
+        "chunk:915a5feebe238207:body:0008",
+        "chunk:915a5feebe238207:body:0009",
+        "chunk:915a5feebe238207:table:0001",
+        "chunk:915a5feebe238207:table:0002",
+        "chunk:915a5feebe238207:body:0010",
+        "chunk:915a5feebe238207:table:0003",
+        "chunk:915a5feebe238207:table:0004",
+        "chunk:915a5feebe238207:table:0005",
+        "chunk:915a5feebe238207:body:0011",
+        "chunk:915a5feebe238207:table:0006",
+        "chunk:915a5feebe238207:body:0012",
+        "chunk:915a5feebe238207:table:0007",
+        "chunk:915a5feebe238207:body:0013",
+        "chunk:915a5feebe238207:body:0014",
+        "chunk:915a5feebe238207:body:0015",
+        "chunk:915a5feebe238207:body:0016",
+        "chunk:915a5feebe238207:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "周度 （2026/8/31-2026/9/4） 机器人板块相关公司成交金额为 4553 亿元，在全部 A 股周度成交金额中占比约 4.6%，环比上升。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-eptable",
+      "role": "required",
+      "question": "根据表 1 盈利预测表，珞石机器人（3752.HK）当周的周度涨跌幅是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14236,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:915a5feebe238207:table:0002",
+          "context_count": 25,
+          "snippet": "<b>3752</b>.<b>HK</b>1021.<b>HK</b>2590.<b>HK</b>"
+        },
+        {
+          "locator": "chunk:915a5feebe238207:body:0016",
+          "context_count": 3,
+          "snippet": "<b>涨跌幅</b>相对同期的沪深300指数"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:915a5feebe238207:body:0000",
+        "chunk:915a5feebe238207:table:0000",
+        "chunk:915a5feebe238207:body:0001",
+        "chunk:915a5feebe238207:body:0002",
+        "chunk:915a5feebe238207:body:0003",
+        "chunk:915a5feebe238207:body:0004",
+        "chunk:915a5feebe238207:body:0005",
+        "chunk:915a5feebe238207:body:0006",
+        "chunk:915a5feebe238207:body:0007",
+        "chunk:915a5feebe238207:body:0008",
+        "chunk:915a5feebe238207:body:0009",
+        "chunk:915a5feebe238207:table:0001",
+        "chunk:915a5feebe238207:table:0002",
+        "chunk:915a5feebe238207:body:0010",
+        "chunk:915a5feebe238207:table:0003",
+        "chunk:915a5feebe238207:table:0004",
+        "chunk:915a5feebe238207:table:0005",
+        "chunk:915a5feebe238207:body:0011",
+        "chunk:915a5feebe238207:table:0006",
+        "chunk:915a5feebe238207:body:0012",
+        "chunk:915a5feebe238207:table:0007",
+        "chunk:915a5feebe238207:body:0013",
+        "chunk:915a5feebe238207:body:0014",
+        "chunk:915a5feebe238207:body:0015",
+        "chunk:915a5feebe238207:body:0016",
+        "chunk:915a5feebe238207:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "3752.HK 珞石机器人 143 54.10 -17.34% -0.25 0.64 1.29 - 85 42 -",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    }
+  ]
+}

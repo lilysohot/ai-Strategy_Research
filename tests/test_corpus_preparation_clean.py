@@ -462,6 +462,20 @@ def test_disclaimer_split_without_fact_stays_noise() -> None:
         assert "disclaimer_section" in regions[ordinal].reasons, ordinal
 
 
+def test_disclaimer_noise_drops_untriggered_band_verdict() -> None:
+    """免责游程转 NOISE 时，不得夹带仅评估、未达阈值的页脚 verdict。"""
+    units = [
+        _unit(1, "免责声明", kind="heading", page=1, bbox=(60.0, 100.0, 500.0, 120.0)),
+        _unit(2, "无锡", page=1, bbox=(60.0, 760.0, 500.0, 780.0)),
+    ]
+
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+
+    assert regions[2].status is UnitStatus.NOISE
+    assert regions[2].reasons == ("disclaimer_section",)
+    assert tuple(verdict.code for verdict in regions[2].verdicts) == ("disclaimer_section",)
+
+
 def test_running_header_dedup_keeps_first_occurrence_title() -> None:
     """n3（E3，2026-08-16_6f14cc14 page 1）：P1 标题与 P2 起页眉同文时，去重
     不得删除首次出现——首现标题承载「强推（维持）」评级所在标题区。"""

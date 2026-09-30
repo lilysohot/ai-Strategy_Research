@@ -234,9 +234,12 @@ def score_consumption_run(run: dict, target: dict, page: str | None) -> tuple[di
         checked = vals
         vals_ok = (not checked) or all(v in an for v in checked)
     else:
+        # 关键数值 = 有明确数值含义的 token：含小数/百分号/负号，或 ≥3 位但
+        # 非纯年份（2026 之类由期间检查覆盖，混入会让"含年份"回答假阳性通过）。
         key_vals = [
             v for v in vals
-            if "%" in v or "." in v or sum(c.isdigit() for c in v) >= 3
+            if ("%" in v or "." in v or "-" in v)
+            or (sum(c.isdigit() for c in v) >= 3 and not re.fullmatch(r"\d{4}", v))
         ]
         checked = key_vals or vals
         vals_ok = (not checked) or any(v in an for v in checked)

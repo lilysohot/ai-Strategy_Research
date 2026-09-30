@@ -33,6 +33,7 @@ _HIT_CORE_KEYS = (
     "chunk_id",
     "scope_id",
     "context_locators",
+    "fetch_plan",
 )
 #: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
 _HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind")
@@ -92,7 +93,8 @@ async def corpus_search(query: str, limit: int = 10) -> str:
 
     Returns:
         JSON 字符串：``{"ok": true, "hits": [{"doc_id", "locator", "source_id",
-        "build_id", "chunk_id", "title", "published", "snippet"}],
+        "build_id", "chunk_id", "context_locators", "fetch_plan", "title",
+        "published", "snippet"}],
         "coverage": {...}, "hint": ...}``（I2-8：``doc_id`` 为 ``cv2:<build_id>``、
         ``locator`` 为 ``chunk:<chunk_id>``；``coverage`` 为 §7.3 三轴对象）；
         语料库不存在时返回 ``ok=false``。结果超过本轮工具结果预算时不会按字符硬切
@@ -184,6 +186,15 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                     "build_id": hit.build_id,
                     "chunk_id": hit.chunk_id,
                     "context_locators": list(hit.context_locators),
+                    # 把文档句柄与上下文范围组成一个不可拆的复取计划。
+                    # 这避免调用方从不同命中拼接 doc_id 与 locator。
+                    "fetch_plan": {
+                        "doc_id": hit.doc_id,
+                        "locator": hit.locator,
+                        "locators": list(hit.context_locators),
+                        "scope_id": hit.scope_id,
+                        "view": "compact",
+                    },
                     # A1 内联 scope 摘要：成员范围身份 + 按 kind 计数 + 表块数。
                     # 只报告**块**统计，不声称「共有几张表」（表身份未知时为 null）。
                     "scope_id": hit.scope_id,
@@ -200,8 +211,9 @@ async def corpus_search(query: str, limit: int = 10) -> str:
             # hint 显式告诉模型下一步该做什么，而不是让它自己领会
             "hint": (
                 "snippet 已截断，仅用于定位，禁止直接引用。"
-                "写 evidence 前请用 corpus_fetch(doc_id, locator) 取回逐字原文，"
-                "并依次取回 context_locators；这些句柄共同构成有界的文档证据区。"
+                "写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与"
+                "fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、"
+                "locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。"
                 "需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、"
                 "各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
             ),

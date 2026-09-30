@@ -1,0 +1,174 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-09-30T13:24:01.949238+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "holdout",
+    "samples": 1,
+    "targets": 4
+  },
+  "summary": {
+    "passed": 0,
+    "failed": 4,
+    "pass_rate": 0.0,
+    "failure_classes": {
+      "search_error": 4
+    },
+    "by_role": {
+      "required": {
+        "passed": 0,
+        "failed": 2,
+        "pass_rate": 0.0,
+        "failure_classes": {
+          "search_error": 2
+        }
+      },
+      "supplementary": {
+        "passed": 0,
+        "failed": 2,
+        "pass_rate": 0.0,
+        "failure_classes": {
+          "search_error": 2
+        }
+      }
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-mt-h1",
+      "role": "required",
+      "question": "根据这篇贵州茅台研报，公司2026年上半年实现的总营收和归母净利润分别是多少，同比变化如何？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": false,
+      "search_hits": 0,
+      "delivered_search_chars": 182,
+      "source_offered": false,
+      "source_hit_ids": [],
+      "source_hit_summaries": [],
+      "plans": 0,
+      "requested_locators": 0,
+      "delivered_locators": [],
+      "pages": 0,
+      "fetch_complete": false,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [],
+      "quote_delivered": false,
+      "expected_quote": "贵州茅台发布2026半年报，公司2026H1实现总营收922.78亿元，同比增长1.3%，实现归母净利润445.17亿元，同比减少2.0%；实现扣非归母净利润444.64亿元，同比减少2.0%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 0,
+      "all_pass": false,
+      "first_fail": "search_error"
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-imt-q2",
+      "role": "required",
+      "question": "研报中说i茅台在2026Q2表现出高增长，那么这季度i茅台的收入是多少亿元、同比增长多少、在直销收入中占比多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": false,
+      "search_hits": 0,
+      "delivered_search_chars": 182,
+      "source_offered": false,
+      "source_hit_ids": [],
+      "source_hit_summaries": [],
+      "plans": 0,
+      "requested_locators": 0,
+      "delivered_locators": [],
+      "pages": 0,
+      "fetch_complete": false,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [],
+      "quote_delivered": false,
+      "expected_quote": "2026Q2直销收入224.6亿元，同比增长33.8%，其中i茅台收入187.1亿元，同比增长282.6%，占直销收入83.3%。批发代理收入143.1亿元，同比减少34.9%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 0,
+      "all_pass": false,
+      "first_fail": "search_error"
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-xlw",
+      "role": "supplementary",
+      "question": "研报中提到系列酒短期承压，那么系列酒2026Q2的收入是多少、同比变化多少，当季末经销商数量为多少家、较上季度末净增多少家？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": false,
+      "search_hits": 0,
+      "delivered_search_chars": 182,
+      "source_offered": false,
+      "source_hit_ids": [],
+      "source_hit_summaries": [],
+      "plans": 0,
+      "requested_locators": 0,
+      "delivered_locators": [],
+      "pages": 0,
+      "fetch_complete": false,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [],
+      "quote_delivered": false,
+      "expected_quote": "系列酒2026Q2收入50.5亿元，同比降低25.0%，2026年第二季度末经销商数量2426家、较第一季度末净增204家，单季增加228家、减少24家",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 0,
+      "all_pass": false,
+      "first_fail": "search_error"
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-ktable",
+      "role": "supplementary",
+      "question": "研报的可比公司估值表里，贵州茅台对应的收盘价、总市值，以及2026E、2027E的归母净利润和PE分别是多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": false,
+      "search_hits": 0,
+      "delivered_search_chars": 182,
+      "source_offered": false,
+      "source_hit_ids": [],
+      "source_hit_summaries": [],
+      "plans": 0,
+      "requested_locators": 0,
+      "delivered_locators": [],
+      "pages": 0,
+      "fetch_complete": false,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [],
+      "quote_delivered": false,
+      "expected_quote": "600519.SH 贵州茅台 优于大市 1,342.0 16,776.0 823.7 886.3 20.4 18.9",
+      "dependencies": {
+        "header_refs": false,
+        "row_labels": false,
+        "footnotes": false
+      },
+      "delivered_chars": 0,
+      "all_pass": false,
+      "first_fail": "search_error"
+    }
+  ]
+}

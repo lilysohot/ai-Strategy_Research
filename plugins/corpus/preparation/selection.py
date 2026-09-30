@@ -102,7 +102,7 @@ def _label_tokens(hit: _RankedHit) -> set[str]:
     """hit 结构标签的 token 集合（结构重叠信号的比对侧，与 search_pg._label_tokens 同规则）。"""
     tokens: set[str] = set()
     for label in hit.label_path:
-        tokens.update(label.split())
+        tokens.update(token.casefold() for token in label.split())
     return tokens
 
 
@@ -122,7 +122,7 @@ def select_structural(
     """
     if not lexemes:
         return select(hits, policy)
-    lexeme_set = set(lexemes)
+    lexeme_set = {token.casefold() for token in lexemes}
     grouped: dict[str, list[_RankedHit]] = {}
     order: list[str] = []
     for hit in hits:

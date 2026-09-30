@@ -1,0 +1,2800 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-09-30T12:55:36.065517+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "dev",
+    "samples": 5,
+    "targets": 23
+  },
+  "summary": {
+    "passed": 19,
+    "failed": 4,
+    "pass_rate": 0.8260869565217391,
+    "failure_classes": {
+      "quote_not_delivered": 4
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "company-002",
+      "split": "dev",
+      "domain": "company",
+      "target_id": "e1",
+      "role": "required",
+      "question": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+      "doc_identity": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15197,
+      "source_offered": true,
+      "source_hit_ids": [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0000",
+          "context_count": 25,
+          "snippet": "<b>总收入</b>(百万)2025A营业<b>总收入</b>"
+        },
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0009",
+          "context_count": 15,
+          "snippet": "<b>净利润</b>增长率2025A归母<b>净利润</b>增长率2026E"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 40,
+      "delivered_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0009",
+        "chunk:9fa4cd7cf1ab602a:table:0004",
+        "chunk:9fa4cd7cf1ab602a:table:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0006",
+        "chunk:9fa4cd7cf1ab602a:table:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0010",
+        "chunk:9fa4cd7cf1ab602a:table:0008",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009",
+        "chunk:9fa4cd7cf1ab602a:body:0012",
+        "chunk:9fa4cd7cf1ab602a:table:0010",
+        "chunk:9fa4cd7cf1ab602a:body:0013",
+        "chunk:9fa4cd7cf1ab602a:table:0011",
+        "chunk:9fa4cd7cf1ab602a:body:0014",
+        "chunk:9fa4cd7cf1ab602a:table:0012",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016",
+        "chunk:9fa4cd7cf1ab602a:table:0014",
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5855,
+          "delivered": 5855
+        },
+        {
+          "raw": 5759,
+          "delivered": 5759
+        },
+        {
+          "raw": 5664,
+          "delivered": 5664
+        },
+        {
+          "raw": 5906,
+          "delivered": 5906
+        },
+        {
+          "raw": 5995,
+          "delivered": 5995
+        },
+        {
+          "raw": 2332,
+          "delivered": 2332
+        },
+        {
+          "raw": 5921,
+          "delivered": 5921
+        },
+        {
+          "raw": 5739,
+          "delivered": 5739
+        },
+        {
+          "raw": 1737,
+          "delivered": 1737
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6708,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "company-002",
+      "split": "dev",
+      "domain": "company",
+      "target_id": "e2",
+      "role": "required",
+      "question": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+      "doc_identity": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15197,
+      "source_offered": true,
+      "source_hit_ids": [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0000",
+          "context_count": 25,
+          "snippet": "<b>总收入</b>(百万)2025A营业<b>总收入</b>"
+        },
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0009",
+          "context_count": 15,
+          "snippet": "<b>净利润</b>增长率2025A归母<b>净利润</b>增长率2026E"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 40,
+      "delivered_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0009",
+        "chunk:9fa4cd7cf1ab602a:table:0004",
+        "chunk:9fa4cd7cf1ab602a:table:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0006",
+        "chunk:9fa4cd7cf1ab602a:table:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0010",
+        "chunk:9fa4cd7cf1ab602a:table:0008",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009",
+        "chunk:9fa4cd7cf1ab602a:body:0012",
+        "chunk:9fa4cd7cf1ab602a:table:0010",
+        "chunk:9fa4cd7cf1ab602a:body:0013",
+        "chunk:9fa4cd7cf1ab602a:table:0011",
+        "chunk:9fa4cd7cf1ab602a:body:0014",
+        "chunk:9fa4cd7cf1ab602a:table:0012",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016",
+        "chunk:9fa4cd7cf1ab602a:table:0014",
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5855,
+          "delivered": 5855
+        },
+        {
+          "raw": 5759,
+          "delivered": 5759
+        },
+        {
+          "raw": 5664,
+          "delivered": 5664
+        },
+        {
+          "raw": 5906,
+          "delivered": 5906
+        },
+        {
+          "raw": 5995,
+          "delivered": 5995
+        },
+        {
+          "raw": 2332,
+          "delivered": 2332
+        },
+        {
+          "raw": 5921,
+          "delivered": 5921
+        },
+        {
+          "raw": 5739,
+          "delivered": 5739
+        },
+        {
+          "raw": 1737,
+          "delivered": 1737
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6708,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "company-002",
+      "split": "dev",
+      "domain": "company",
+      "target_id": "e3",
+      "role": "required",
+      "question": "贵州茅台2026H1与2026Q2的总收入、归母净利润及其同比变化分别是什么？",
+      "doc_identity": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15197,
+      "source_offered": true,
+      "source_hit_ids": [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0000",
+          "context_count": 25,
+          "snippet": "<b>总收入</b>(百万)2025A营业<b>总收入</b>"
+        },
+        {
+          "locator": "chunk:9fa4cd7cf1ab602a:table:0009",
+          "context_count": 15,
+          "snippet": "<b>净利润</b>增长率2025A归母<b>净利润</b>增长率2026E"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 40,
+      "delivered_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0009",
+        "chunk:9fa4cd7cf1ab602a:table:0004",
+        "chunk:9fa4cd7cf1ab602a:table:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0006",
+        "chunk:9fa4cd7cf1ab602a:table:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0010",
+        "chunk:9fa4cd7cf1ab602a:table:0008",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009",
+        "chunk:9fa4cd7cf1ab602a:body:0012",
+        "chunk:9fa4cd7cf1ab602a:table:0010",
+        "chunk:9fa4cd7cf1ab602a:body:0013",
+        "chunk:9fa4cd7cf1ab602a:table:0011",
+        "chunk:9fa4cd7cf1ab602a:body:0014",
+        "chunk:9fa4cd7cf1ab602a:table:0012",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016",
+        "chunk:9fa4cd7cf1ab602a:table:0014",
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5855,
+          "delivered": 5855
+        },
+        {
+          "raw": 5759,
+          "delivered": 5759
+        },
+        {
+          "raw": 5664,
+          "delivered": 5664
+        },
+        {
+          "raw": 5906,
+          "delivered": 5906
+        },
+        {
+          "raw": 5995,
+          "delivered": 5995
+        },
+        {
+          "raw": 2332,
+          "delivered": 2332
+        },
+        {
+          "raw": 5921,
+          "delivered": 5921
+        },
+        {
+          "raw": 5739,
+          "delivered": 5739
+        },
+        {
+          "raw": 1737,
+          "delivered": 1737
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6708,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e1",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e2",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e3",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-4",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-5",
+      "role": "required",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e4",
+      "role": "supplementary",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-001",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e5",
+      "role": "supplementary",
+      "question": "长江证券化工景气一览表中，纯碱的价格分位、价差分位和开工率分别是多少？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19767,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0022",
+          "context_count": 25,
+          "snippet": "<b>纯碱</b>价<b>差分</b>位<b>纯碱</b><b>开工率</b>\n<b>纯碱</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0010",
+          "context_count": 7,
+          "snippet": "<b>价格</b>分位价<b>差分</b>位<b>开工率</b>\n<b>价格</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0052",
+          "context_count": 6,
+          "snippet": "<b>长江</b><b>证券</b>研究所\n<b>纯碱</b>终端应用广泛"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:table:0016",
+        "chunk:82dac0d446ef83cd:table:0017",
+        "chunk:82dac0d446ef83cd:body:0035",
+        "chunk:82dac0d446ef83cd:table:0018",
+        "chunk:82dac0d446ef83cd:body:0036",
+        "chunk:82dac0d446ef83cd:table:0019",
+        "chunk:82dac0d446ef83cd:body:0037",
+        "chunk:82dac0d446ef83cd:table:0020",
+        "chunk:82dac0d446ef83cd:body:0038",
+        "chunk:82dac0d446ef83cd:table:0021",
+        "chunk:82dac0d446ef83cd:body:0039",
+        "chunk:82dac0d446ef83cd:table:0022",
+        "chunk:82dac0d446ef83cd:body:0040",
+        "chunk:82dac0d446ef83cd:table:0023",
+        "chunk:82dac0d446ef83cd:body:0041",
+        "chunk:82dac0d446ef83cd:table:0024",
+        "chunk:82dac0d446ef83cd:body:0042",
+        "chunk:82dac0d446ef83cd:table:0025",
+        "chunk:82dac0d446ef83cd:body:0043",
+        "chunk:82dac0d446ef83cd:table:0026",
+        "chunk:82dac0d446ef83cd:body:0044",
+        "chunk:82dac0d446ef83cd:table:0027",
+        "chunk:82dac0d446ef83cd:body:0045",
+        "chunk:82dac0d446ef83cd:table:0028",
+        "chunk:82dac0d446ef83cd:body:0046",
+        "chunk:82dac0d446ef83cd:body:0031",
+        "chunk:82dac0d446ef83cd:table:0010",
+        "chunk:82dac0d446ef83cd:body:0032",
+        "chunk:82dac0d446ef83cd:table:0011",
+        "chunk:82dac0d446ef83cd:body:0033",
+        "chunk:82dac0d446ef83cd:body:0034",
+        "chunk:82dac0d446ef83cd:table:0014",
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5634,
+          "delivered": 5634
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5626,
+          "delivered": 5626
+        },
+        {
+          "raw": 5696,
+          "delivered": 5696
+        },
+        {
+          "raw": 1363,
+          "delivered": 1363
+        },
+        {
+          "raw": 5458,
+          "delivered": 5458
+        },
+        {
+          "raw": 1891,
+          "delivered": 1891
+        },
+        {
+          "raw": 5768,
+          "delivered": 5768
+        },
+        {
+          "raw": 3091,
+          "delivered": 3091
+        }
+      ],
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8866,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e1",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 8,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5374,
+          "delivered": 5374
+        },
+        {
+          "raw": 5537,
+          "delivered": 5537
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 5948,
+          "delivered": 5948
+        },
+        {
+          "raw": 2139,
+          "delivered": 2139
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6705,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-2",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0066",
+          "context_count": 5,
+          "snippet": "<b>化工</b><b>新材料</b>行业技术不断变革，如果"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004",
+        "chunk:82dac0d446ef83cd:table:0032",
+        "chunk:82dac0d446ef83cd:body:0065",
+        "chunk:82dac0d446ef83cd:body:0066",
+        "chunk:82dac0d446ef83cd:body:0067",
+        "chunk:82dac0d446ef83cd:body:0068"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 5882,
+          "delivered": 5882
+        },
+        {
+          "raw": 5752,
+          "delivered": 5752
+        },
+        {
+          "raw": 3695,
+          "delivered": 3695
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        },
+        {
+          "raw": 5735,
+          "delivered": 5735
+        },
+        {
+          "raw": 1740,
+          "delivered": 1740
+        }
+      ],
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8393,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-3",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0066",
+          "context_count": 5,
+          "snippet": "<b>化工</b><b>新材料</b>行业技术不断变革，如果"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004",
+        "chunk:82dac0d446ef83cd:table:0032",
+        "chunk:82dac0d446ef83cd:body:0065",
+        "chunk:82dac0d446ef83cd:body:0066",
+        "chunk:82dac0d446ef83cd:body:0067",
+        "chunk:82dac0d446ef83cd:body:0068"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 5882,
+          "delivered": 5882
+        },
+        {
+          "raw": 5752,
+          "delivered": 5752
+        },
+        {
+          "raw": 3695,
+          "delivered": 3695
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        },
+        {
+          "raw": 5735,
+          "delivered": 5735
+        },
+        {
+          "raw": 1740,
+          "delivered": 1740
+        }
+      ],
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8393,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-4",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 8,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5374,
+          "delivered": 5374
+        },
+        {
+          "raw": 5537,
+          "delivered": 5537
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 5948,
+          "delivered": 5948
+        },
+        {
+          "raw": 2139,
+          "delivered": 2139
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6705,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "a-5",
+      "role": "required",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:82dac0d446ef83cd:table:0004",
+          "context_count": 18,
+          "snippet": "<b>涨幅</b>2024年<b>化工</b>板块<b>涨幅</b>TOP5<b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0014",
+          "context_count": 15,
+          "snippet": "<b>景气</b>，布局<b>新材料</b>——基础<b>化工</b>"
+        },
+        {
+          "locator": "chunk:82dac0d446ef83cd:body:0066",
+          "context_count": 5,
+          "snippet": "<b>化工</b><b>新材料</b>行业技术不断变革，如果"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:82dac0d446ef83cd:body:0016",
+        "chunk:82dac0d446ef83cd:body:0017",
+        "chunk:82dac0d446ef83cd:table:0000",
+        "chunk:82dac0d446ef83cd:body:0018",
+        "chunk:82dac0d446ef83cd:table:0001",
+        "chunk:82dac0d446ef83cd:body:0019",
+        "chunk:82dac0d446ef83cd:table:0002",
+        "chunk:82dac0d446ef83cd:body:0020",
+        "chunk:82dac0d446ef83cd:table:0003",
+        "chunk:82dac0d446ef83cd:body:0021",
+        "chunk:82dac0d446ef83cd:table:0004",
+        "chunk:82dac0d446ef83cd:body:0022",
+        "chunk:82dac0d446ef83cd:table:0005",
+        "chunk:82dac0d446ef83cd:body:0023",
+        "chunk:82dac0d446ef83cd:table:0006",
+        "chunk:82dac0d446ef83cd:body:0024",
+        "chunk:82dac0d446ef83cd:heading:0005",
+        "chunk:82dac0d446ef83cd:body:0025",
+        "chunk:82dac0d446ef83cd:body:0002",
+        "chunk:82dac0d446ef83cd:heading:0003",
+        "chunk:82dac0d446ef83cd:body:0003",
+        "chunk:82dac0d446ef83cd:body:0004",
+        "chunk:82dac0d446ef83cd:body:0005",
+        "chunk:82dac0d446ef83cd:body:0006",
+        "chunk:82dac0d446ef83cd:body:0007",
+        "chunk:82dac0d446ef83cd:body:0008",
+        "chunk:82dac0d446ef83cd:body:0009",
+        "chunk:82dac0d446ef83cd:body:0010",
+        "chunk:82dac0d446ef83cd:body:0011",
+        "chunk:82dac0d446ef83cd:body:0012",
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004",
+        "chunk:82dac0d446ef83cd:table:0032",
+        "chunk:82dac0d446ef83cd:body:0065",
+        "chunk:82dac0d446ef83cd:body:0066",
+        "chunk:82dac0d446ef83cd:body:0067",
+        "chunk:82dac0d446ef83cd:body:0068"
+      ],
+      "pages": 9,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 5882,
+          "delivered": 5882
+        },
+        {
+          "raw": 5752,
+          "delivered": 5752
+        },
+        {
+          "raw": 3695,
+          "delivered": 3695
+        },
+        {
+          "raw": 5542,
+          "delivered": 5542
+        },
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 4833,
+          "delivered": 4833
+        },
+        {
+          "raw": 5735,
+          "delivered": 5735
+        },
+        {
+          "raw": 1740,
+          "delivered": 1740
+        }
+      ],
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8393,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "industry-008",
+      "split": "dev",
+      "domain": "industry",
+      "target_id": "e2",
+      "role": "supplementary",
+      "question": "能否把化工景气表中R32的99.6%与新材料周报中氩气“超240%”当成同一种涨幅指标？",
+      "doc_identity": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16090,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:1d0117eb6e17c63c:body:0001",
+          "context_count": 23,
+          "snippet": "<b>涨幅</b>超<b>240</b>。国内<b>氩气</b>市场又"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 23,
+      "delivered_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "pages": 8,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5553,
+          "delivered": 5553
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4701,
+          "delivered": 4701
+        },
+        {
+          "raw": 5374,
+          "delivered": 5374
+        },
+        {
+          "raw": 5537,
+          "delivered": 5537
+        },
+        {
+          "raw": 4983,
+          "delivered": 4983
+        },
+        {
+          "raw": 5948,
+          "delivered": 5948
+        },
+        {
+          "raw": 2139,
+          "delivered": 2139
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6705,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-001",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "e1",
+      "role": "required",
+      "question": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+      "doc_identity": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19983,
+      "source_offered": true,
+      "source_hit_ids": [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9ebd323f89e55cc1:body:0001",
+          "context_count": 27,
+          "snippet": "<b>美国</b><b>新增</b><b>非农</b>就业超<b>预期</b>反弹，"
+        },
+        {
+          "locator": "chunk:9ebd323f89e55cc1:table:0005",
+          "context_count": 18,
+          "snippet": "<b>市场</b>基准指数15以上说明\n评级"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 45,
+      "delivered_locators": [
+        "chunk:9ebd323f89e55cc1:body:0000",
+        "chunk:9ebd323f89e55cc1:heading:0000",
+        "chunk:9ebd323f89e55cc1:body:0001",
+        "chunk:9ebd323f89e55cc1:table:0000",
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003",
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015",
+        "chunk:9ebd323f89e55cc1:heading:0005",
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005",
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "pages": 14,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4147,
+          "delivered": 4147
+        },
+        {
+          "raw": 5834,
+          "delivered": 5834
+        },
+        {
+          "raw": 5916,
+          "delivered": 5916
+        },
+        {
+          "raw": 5540,
+          "delivered": 5540
+        },
+        {
+          "raw": 5643,
+          "delivered": 5643
+        },
+        {
+          "raw": 4246,
+          "delivered": 4246
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5935,
+          "delivered": 5935
+        },
+        {
+          "raw": 2638,
+          "delivered": 2638
+        },
+        {
+          "raw": 5981,
+          "delivered": 5981
+        },
+        {
+          "raw": 5468,
+          "delivered": 5468
+        },
+        {
+          "raw": 5651,
+          "delivered": 5651
+        },
+        {
+          "raw": 4123,
+          "delivered": 4123
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 11583,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-001",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "e2",
+      "role": "required",
+      "question": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+      "doc_identity": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19983,
+      "source_offered": true,
+      "source_hit_ids": [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9ebd323f89e55cc1:body:0001",
+          "context_count": 27,
+          "snippet": "<b>美国</b><b>新增</b><b>非农</b>就业超<b>预期</b>反弹，"
+        },
+        {
+          "locator": "chunk:9ebd323f89e55cc1:table:0005",
+          "context_count": 18,
+          "snippet": "<b>市场</b>基准指数15以上说明\n评级"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 45,
+      "delivered_locators": [
+        "chunk:9ebd323f89e55cc1:body:0000",
+        "chunk:9ebd323f89e55cc1:heading:0000",
+        "chunk:9ebd323f89e55cc1:body:0001",
+        "chunk:9ebd323f89e55cc1:table:0000",
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003",
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015",
+        "chunk:9ebd323f89e55cc1:heading:0005",
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005",
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "pages": 14,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4147,
+          "delivered": 4147
+        },
+        {
+          "raw": 5834,
+          "delivered": 5834
+        },
+        {
+          "raw": 5916,
+          "delivered": 5916
+        },
+        {
+          "raw": 5540,
+          "delivered": 5540
+        },
+        {
+          "raw": 5643,
+          "delivered": 5643
+        },
+        {
+          "raw": 4246,
+          "delivered": 4246
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5935,
+          "delivered": 5935
+        },
+        {
+          "raw": 2638,
+          "delivered": 2638
+        },
+        {
+          "raw": 5981,
+          "delivered": 5981
+        },
+        {
+          "raw": 5468,
+          "delivered": 5468
+        },
+        {
+          "raw": 5651,
+          "delivered": 5651
+        },
+        {
+          "raw": 4123,
+          "delivered": 4123
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 11583,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-001",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "a-3",
+      "role": "required",
+      "question": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+      "doc_identity": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19983,
+      "source_offered": true,
+      "source_hit_ids": [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9ebd323f89e55cc1:body:0001",
+          "context_count": 27,
+          "snippet": "<b>美国</b><b>新增</b><b>非农</b>就业超<b>预期</b>反弹，"
+        },
+        {
+          "locator": "chunk:9ebd323f89e55cc1:table:0005",
+          "context_count": 18,
+          "snippet": "<b>市场</b>基准指数15以上说明\n评级"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 45,
+      "delivered_locators": [
+        "chunk:9ebd323f89e55cc1:body:0000",
+        "chunk:9ebd323f89e55cc1:heading:0000",
+        "chunk:9ebd323f89e55cc1:body:0001",
+        "chunk:9ebd323f89e55cc1:table:0000",
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003",
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015",
+        "chunk:9ebd323f89e55cc1:heading:0005",
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005",
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "pages": 14,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4147,
+          "delivered": 4147
+        },
+        {
+          "raw": 5834,
+          "delivered": 5834
+        },
+        {
+          "raw": 5916,
+          "delivered": 5916
+        },
+        {
+          "raw": 5540,
+          "delivered": 5540
+        },
+        {
+          "raw": 5643,
+          "delivered": 5643
+        },
+        {
+          "raw": 4246,
+          "delivered": 4246
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5935,
+          "delivered": 5935
+        },
+        {
+          "raw": 2638,
+          "delivered": 2638
+        },
+        {
+          "raw": 5981,
+          "delivered": 5981
+        },
+        {
+          "raw": 5468,
+          "delivered": 5468
+        },
+        {
+          "raw": 5651,
+          "delivered": 5651
+        },
+        {
+          "raw": 4123,
+          "delivered": 4123
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 11583,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-001",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "e3",
+      "role": "supplementary",
+      "question": "光大非农点评所述2026年8月美国新增非农、市场预期及7月前值修订分别是什么？",
+      "doc_identity": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19983,
+      "source_offered": true,
+      "source_hit_ids": [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9ebd323f89e55cc1:body:0001",
+          "context_count": 27,
+          "snippet": "<b>美国</b><b>新增</b><b>非农</b>就业超<b>预期</b>反弹，"
+        },
+        {
+          "locator": "chunk:9ebd323f89e55cc1:table:0005",
+          "context_count": 18,
+          "snippet": "<b>市场</b>基准指数15以上说明\n评级"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 45,
+      "delivered_locators": [
+        "chunk:9ebd323f89e55cc1:body:0000",
+        "chunk:9ebd323f89e55cc1:heading:0000",
+        "chunk:9ebd323f89e55cc1:body:0001",
+        "chunk:9ebd323f89e55cc1:table:0000",
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003",
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015",
+        "chunk:9ebd323f89e55cc1:heading:0005",
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005",
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "pages": 14,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4147,
+          "delivered": 4147
+        },
+        {
+          "raw": 5834,
+          "delivered": 5834
+        },
+        {
+          "raw": 5916,
+          "delivered": 5916
+        },
+        {
+          "raw": 5540,
+          "delivered": 5540
+        },
+        {
+          "raw": 5643,
+          "delivered": 5643
+        },
+        {
+          "raw": 4246,
+          "delivered": 4246
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5935,
+          "delivered": 5935
+        },
+        {
+          "raw": 2638,
+          "delivered": 2638
+        },
+        {
+          "raw": 5981,
+          "delivered": 5981
+        },
+        {
+          "raw": 5468,
+          "delivered": 5468
+        },
+        {
+          "raw": 5651,
+          "delivered": 5651
+        },
+        {
+          "raw": 4123,
+          "delivered": 4123
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 11583,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-006",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "e1",
+      "role": "required",
+      "question": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+      "doc_identity": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14785,
+      "source_offered": true,
+      "source_hit_ids": [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:147e841aab35836a:body:0007",
+          "context_count": 10,
+          "snippet": "<b>地方</b>国有企业<b>样本</b>企业的<b>有息</b><b>负债</b><b>增速</b>"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:147e841aab35836a:body:0001",
+        "chunk:147e841aab35836a:body:0002",
+        "chunk:147e841aab35836a:body:0003",
+        "chunk:147e841aab35836a:body:0004",
+        "chunk:147e841aab35836a:body:0005",
+        "chunk:147e841aab35836a:body:0006",
+        "chunk:147e841aab35836a:body:0007",
+        "chunk:147e841aab35836a:body:0008",
+        "chunk:147e841aab35836a:body:0009",
+        "chunk:147e841aab35836a:body:0010"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5893,
+          "delivered": 5893
+        },
+        {
+          "raw": 5747,
+          "delivered": 5747
+        },
+        {
+          "raw": 5432,
+          "delivered": 5432
+        },
+        {
+          "raw": 3839,
+          "delivered": 3839
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8482,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-006",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "e2",
+      "role": "required",
+      "question": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+      "doc_identity": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14785,
+      "source_offered": true,
+      "source_hit_ids": [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:147e841aab35836a:body:0007",
+          "context_count": 10,
+          "snippet": "<b>地方</b>国有企业<b>样本</b>企业的<b>有息</b><b>负债</b><b>增速</b>"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:147e841aab35836a:body:0001",
+        "chunk:147e841aab35836a:body:0002",
+        "chunk:147e841aab35836a:body:0003",
+        "chunk:147e841aab35836a:body:0004",
+        "chunk:147e841aab35836a:body:0005",
+        "chunk:147e841aab35836a:body:0006",
+        "chunk:147e841aab35836a:body:0007",
+        "chunk:147e841aab35836a:body:0008",
+        "chunk:147e841aab35836a:body:0009",
+        "chunk:147e841aab35836a:body:0010"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5893,
+          "delivered": 5893
+        },
+        {
+          "raw": 5747,
+          "delivered": 5747
+        },
+        {
+          "raw": 5432,
+          "delivered": 5432
+        },
+        {
+          "raw": 3839,
+          "delivered": 3839
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8482,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "macro-006",
+      "split": "dev",
+      "domain": "macro",
+      "target_id": "a-3",
+      "role": "required",
+      "question": "报告中2025年央企与地方国企样本有息负债增速分别是多少，相对2024年如何变化？",
+      "doc_identity": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14785,
+      "source_offered": true,
+      "source_hit_ids": [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:147e841aab35836a:body:0007",
+          "context_count": 10,
+          "snippet": "<b>地方</b>国有企业<b>样本</b>企业的<b>有息</b><b>负债</b><b>增速</b>"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:147e841aab35836a:body:0001",
+        "chunk:147e841aab35836a:body:0002",
+        "chunk:147e841aab35836a:body:0003",
+        "chunk:147e841aab35836a:body:0004",
+        "chunk:147e841aab35836a:body:0005",
+        "chunk:147e841aab35836a:body:0006",
+        "chunk:147e841aab35836a:body:0007",
+        "chunk:147e841aab35836a:body:0008",
+        "chunk:147e841aab35836a:body:0009",
+        "chunk:147e841aab35836a:body:0010"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5893,
+          "delivered": 5893
+        },
+        {
+          "raw": 5747,
+          "delivered": 5747
+        },
+        {
+          "raw": 5432,
+          "delivered": 5432
+        },
+        {
+          "raw": 3839,
+          "delivered": 3839
+        }
+      ],
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8482,
+      "all_pass": true,
+      "first_fail": null
+    }
+  ]
+}

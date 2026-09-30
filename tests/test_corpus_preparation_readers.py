@@ -422,6 +422,28 @@ def test_table_model_label_path_merged_headers() -> None:
     assert model.cell_text(0, 3) == ""
 
 
+def test_table_model_rejects_multiline_column_dump_as_labels() -> None:
+    """表格解析器把整列折进一格时，该数据列不得污染每个单元的 label_path。"""
+    model = _TableModel(
+        page=8,
+        table_index=0,
+        header_rows=(0,),
+        grid=(
+            (
+                "公司名称\n甲公司\n乙公司\n丙公司",
+                "周度涨跌幅\n1.0%\n2.0%\n3.0%",
+            ),
+            ("甲公司\n乙公司\n丙公司", "1.0%\n2.0%\n3.0%"),
+        ),
+        anchored=(
+            ((0, (50.0, 150.0)), (1, (150.0, 250.0))),
+            ((0, (50.0, 150.0)), (1, (150.0, 250.0))),
+        ),
+    )
+
+    assert model.label_path(1, 1) == ()
+
+
 def test_emit_table_model_label_path_aligned_and_row_text_untouched() -> None:
     """保真反例：带 model 的表格发射不触碰原文。
 
@@ -761,7 +783,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-9+")
+        assert result.extractor_rev.startswith("reader-pdf-10+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:
