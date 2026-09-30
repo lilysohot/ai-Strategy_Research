@@ -11,6 +11,7 @@ data, no pg_dump.
 from __future__ import annotations
 
 import json
+import uuid
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -20,7 +21,10 @@ from scripts.run_retention import (
     Disposition,
     Manifest,
     RetentionPolicy,
+    RunMigration,
     RunStorage,
+    _apply_root_migration,
+    active_migrations,
     apply_cleanup,
     main,
     plan_cleanup,
@@ -261,3 +265,161 @@ def test_cli_apply_without_yes_is_refused(tmp_path):
 def test_every_active_status_is_protected(status):
     actions = plan_cleanup([_run("r1", status=status, days_ago=999, exists=True)], POLICY, NOW)
     assert actions[0].disposition is Disposition.ACTIVE
+
+
+# — root migration: active runs never straddle the two roots ————————————————
+def _migration(run_id: str, status: str) -> RunMigration:
+    return RunMigration(
+        run_id=run_id, source=f"/old/{run_id}", target=f"/new/{run_id}",
+        source_exists=True, status=status,
+    )
+
+
+@pytest.mark.parametrize("status", sorted({"queued", "running"}))
+def test_active_migrations_flags_every_live_status(status):
+    others = [_migration("r2", "completed"), _migration("r3", "failed")]
+    assert [m.run_id for m in active_migrations([*others, _migration("r1", status)])] == ["r1"]
+    assert active_migrations(others) == []
+
+
+async def _seed_run(*, status: str, run_dir: Path) -> uuid.UUID:
+    """A real user + session + run row, so the FK-bearing schema accepts it."""
+    from server.store import create_run, create_session, create_user, init_db
+
+    await init_db()
+    user = await create_user(username=f"u-{uuid.uuid4().hex[:8]}", password_hash="x")
+    session = await create_session(user_id=user.id, title=None)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    (run_dir / "summary.json").write_text("{}", encoding="utf-8")
+    run = await create_run(
+        run_id=uuid.uuid4(), session_id=session.id, user_id=user.id, prompt="hi",
+        pipeline_id="stateful-react-agent", run_dir=str(run_dir), status=status,
+    )
+    return run.id
+
+
+async def _stored_run_dir(run_id: uuid.UUID) -> str:
+    from server.store import Run, get_sessionmaker
+
+    async with get_sessionmaker()() as session:
+        row = await session.get(Run, run_id)
+        assert row is not None
+        return row.run_dir
+
+
+async def test_apply_refuses_while_a_run_is_active(tmp_path):
+    old_root, new_root = tmp_path / "old", tmp_path / "new"
+    finished_dir = old_root / "finished"
+    active_dir = old_root / "active"
+    finished_id = await _seed_run(status="completed", run_dir=finished_dir)
+    active_id = await _seed_run(status="running", run_dir=active_dir)
+    before = await _stored_run_dir(active_id)
+
+    with pytest.raises(SystemExit, match="refusing to migrate"):
+        await _apply_root_migration(old_root, new_root, remove_orphans=False)
+
+    # Nothing moved, nothing rewritten: a refusal is not a partial migration.
+    assert finished_dir.is_dir() and active_dir.is_dir()
+    assert not new_root.exists()
+    assert await _stored_run_dir(finished_id) == str(finished_dir)
+    assert await _stored_run_dir(active_id) == before
+
+
+async def test_apply_moves_finished_runs_when_none_are_active(tmp_path):
+    old_root, new_root = tmp_path / "old", tmp_path / "new"
+    run_dir = old_root / "finished"
+    run_id = await _seed_run(status="completed", run_dir=run_dir)
+
+    moved, missing, removed, conflicted = await _apply_root_migration(
+        old_root, new_root, remove_orphans=False
+    )
+
+    assert (moved, missing, removed, conflicted) == ([run_id.hex], [], [], [])
+    assert (new_root / run_id.hex / "summary.json").is_file()
+    assert not run_dir.exists()
+    # ``_plan_root_migration`` resolves both roots, so the rewrite carries the
+    # resolved new-root path.
+    assert Path(await _stored_run_dir(run_id)) == new_root.resolve() / run_id.hex
+
+
+async def test_apply_stops_on_a_target_conflict_without_merging(tmp_path):
+    """Both roots holding one run id is a stop-and-report, never a merge."""
+    old_root, new_root = tmp_path / "old", tmp_path / "new"
+    run_dir = old_root / "src"
+    run_id = await _seed_run(status="completed", run_dir=run_dir)
+    before = await _stored_run_dir(run_id)
+    target = new_root / run_id.hex
+    target.mkdir(parents=True)
+    (target / "unrelated.txt").write_text("do not touch", encoding="utf-8")
+
+    moved, missing, removed, conflicted = await _apply_root_migration(
+        old_root, new_root, remove_orphans=False
+    )
+
+    assert (moved, missing, removed, conflicted) == ([], [], [], [run_id.hex])
+    # Neither copy moved: no nesting of the source inside the pre-existing dir
+    # (what a bare ``shutil.move`` would have done), and no overwrite.
+    assert (run_dir / "summary.json").is_file()
+    assert sorted(p.name for p in target.iterdir()) == ["unrelated.txt"]
+    assert not (target / "src").exists()
+    # The row must not be repointed at a directory nobody verified.
+    assert await _stored_run_dir(run_id) == before
+
+
+async def test_a_conflict_does_not_block_the_rest_of_the_plan(tmp_path):
+    old_root, new_root = tmp_path / "old", tmp_path / "new"
+    good_dir = old_root / "good"
+    bad_dir = old_root / "bad"
+    good_id = await _seed_run(status="completed", run_dir=good_dir)
+    bad_id = await _seed_run(status="completed", run_dir=bad_dir)
+    (new_root / bad_id.hex).mkdir(parents=True)
+
+    moved, _missing, _removed, conflicted = await _apply_root_migration(
+        old_root, new_root, remove_orphans=False
+    )
+
+    assert moved == [good_id.hex]
+    assert conflicted == [bad_id.hex]
+    assert (new_root / good_id.hex / "summary.json").is_file()
+    assert bad_dir.is_dir()
+
+
+def test_cli_dry_run_reports_the_refusal(tmp_path, capsys, monkeypatch):
+    """The dry-run must warn *before* an operator tries --apply.
+
+    Sync on purpose: ``main`` drives its own ``asyncio.run``, and the planner is
+    stubbed so this stays a display test with no database (the DB-backed refusal
+    is covered by ``test_apply_refuses_while_a_run_is_active``).
+    """
+    from scripts import run_retention
+
+    async def _plan(old_root, new_root):
+        return [_migration("abc123", "running")], []
+
+    monkeypatch.setattr(run_retention, "_plan_root_migration", _plan)
+
+    assert main(["migrate-runs-root", "--old-root", str(tmp_path / "old"),
+                 "--new-root", str(tmp_path / "new")]) == 0
+    out = capsys.readouterr().out
+    assert "REFUSES TO APPLY" in out
+    assert "abc123" in out
+
+
+def test_cli_dry_run_warns_about_target_conflicts(tmp_path, capsys, monkeypatch):
+    """A pre-existing target is a skip, and the dry-run says so up front."""
+    from scripts import run_retention
+
+    async def _plan(old_root, new_root):
+        return [RunMigration(
+            run_id="deadbeef", source="/old/deadbeef", target="/new/deadbeef",
+            source_exists=True, status="completed", target_exists=True,
+        )], []
+
+    monkeypatch.setattr(run_retention, "_plan_root_migration", _plan)
+
+    assert main(["migrate-runs-root", "--old-root", str(tmp_path / "old"),
+                 "--new-root", str(tmp_path / "new")]) == 0
+    out = capsys.readouterr().out
+    assert "TARGET-EXISTS" in out
+    assert "WILL SKIP" in out
+    assert "deadbeef" in out

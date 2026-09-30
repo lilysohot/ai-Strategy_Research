@@ -60,3 +60,81 @@ Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
   ② WSL 部署（`/home/administrator/FrontierAgent`，663 条 run）与 `/tmp` 85 条的历史兼容与迁移未做；
   ③ 活动 Run 跨新旧根保护、真实重启后新旧 Run 追溯未做。
   另记录：环境存在批量删除守卫，单轮删除文件数 > 500 会拦截（迁移工具因此需分批），非代码缺陷。
+- 2026-09-30：**WSL 侧迁移已完成（口径经用户确认）**，上条②的"663 条 run"前提被纠正为 DB `run_dir` 行数。
+  ① **核查**：`/home/administrator/FrontierAgent/server/runs` 实有 837 个目录，其中仅 **244 个被 DB 引用且存在**、
+  **419 个已缺失**（全盘 find 无果）、**593 个不被 DB 引用**（09-23 后占 386 个）；`/tmp` 的 85 条 `run_dir`
+  均为字面量 `/tmp/x`（非真实目录），另有 6 条 Windows `C:\…` 路径。
+  ② **口径（用户定）**：孤儿**一律不删**；419 条缺失行**保持指向旧根、不改写**。
+  ③ **工具改动**：`scripts/run_retention.py migrate-runs-root` 增 `--keep-orphans` 与 `--only-moved`，
+  默认行为不变；验证 `ruff check` 通过、`tests/test_web_f07_retention.py` **22/22**、一次性库 `apodex_f01_sim`
+  端到端对照两种口径（新口径 removed 0 且缺失行未改写；默认口径 removed 2 且缺失行改写）。
+  ④ **备份**：`~/.local/share/frontier-agent/backups/f01-wsl-20260930/`（仓库外、非容器 /tmp）——
+  `apodex-pre-f01.dump` 183,697 B（可 `pg_restore --list`，含 runs TABLE DATA）、`server-runs-pre-f01.tar.gz`
+  7,451,755 B、`SHA256SUMS`。
+  ⑤ **执行**：moved **244** / already missing **419** / removed **0**；目录 593+244=837、文件 3459+1688=5147
+  （守恒，零丢失）；DB 新根 244、旧根 419、`/tmp` 85、`C:\` 6。`SERVER_RUNS_ROOT` 已写入 `.env`
+  （= `/home/administrator/.local/share/frontier-agent/web/runs`），API 已重启（64560 → 49379，`/healthz` 200）。
+  ⑥ **历史兼容无需改代码**：`inspect_trajectory` 对 `/tmp/x` 与 419 缺失均返回 `unavailable`、
+  已迁移 run 返回 `complete`，F06 三态已覆盖，不渲染为空轨迹。
+  ⑦ **孤儿已归档**（用户确认口径）：593 个孤儿（19.4 MB / 3459 文件）整体移到仓库外
+  `~/.local/share/frontier-agent/archive/f01-orphans-20260930/runs/`，附 `MANIFEST-orphans.json`；
+  守恒 593 目录 / 3459 文件，`server/runs` 现为 **0**（源码树不再残留运行数据）。
+  剩余未完成：容器实测、活动 Run 跨新旧根保护（回退演练已于同日完成，见下条）。
+- 2026-09-30：**回退演练完成（隔离复演，生产全程未触碰，已清理）**。"回退包含切换后新写入的保护"一项由此闭合，工单 07
+  "保留切换后新数据的回退路径，不能只改回根目录变量"的要求得到实证。
+  ① **重建迁移前状态**：独立库 `apodex_f01_rollback` + 临时根。`pg_restore` 零错误，7 张表行数逐一吻合
+  （users 29 / sessions 141 / runs 754 / turns 1093 / artifacts 296 / llm_configs 164 / audit_log 1978）、外键 9/9；
+  tar 解包 837 run 目录 / 6758 嵌套目录 / 5147 文件，与清单一致。
+  ② **模拟切换后新写入**：3 条（2 completed + 1 running）落在隔离新根（含 inputs/summary/history/ws/outputs/spill/轨迹），
+  并写入对应 runs/turns/artifacts 行（757/1094/298），留存 post 快照。
+  ③ **负向对照（复现失败）**：仅把 `SERVER_RUNS_ROOT` 切回旧根 → 切换后 3/3 run 解析为 `dir_exists=False`、`unavailable`；
+  仅恢复 pre 业务库 → 切换后 3 行剩余 **0**。证实"只改根目录变量"不可接受。
+  ④ **正向流程四步**：恢复 pre 业务库 → 文件从新根移回旧根 → COPY 合并切换后 runs/turns/artifacts → **重定位** `run_dir`。
+  ⑤ **终验全过**：文件守恒 840 目录 / 5168 文件（837+3 / 5147+21）；切换后文件 sha256+size **21/21**；
+  引用完整性 **247 可解析 / 510 缺失**（247 = 244 pre + 3 post；510 = 419 缺失 + 85 `/tmp` + 6 `C:\`）；
+  轨迹三态 post `complete`/`partial`/`complete`、pre 抽样 `complete`；行数 757/1094/298、外键 9/9。
+  ⑥ **代码级机理**：读取侧一律 `run_dir_for(id) = runs_root / canonical_run_id(id)`（inspect_trajectory、relay、artifacts、revert、worker），
+  **不读**表中存储的绝对 `run_dir`——故只改根变量必然打散新写入；但 `orchestrator._read_run_summary(row.run_dir)`
+  与 `routes/runs.py` 响应使用存储值，故合并后若不重定位，这两条路径会指向已清空的新根。
+  ⑦ 证据：[audit/f01-rollback-drill.json](../audit/f01-rollback-drill.json)。
+  剩余未完成：容器实测、活动 Run 跨新旧根保护。
+- 2026-09-30：**活动 Run 跨新旧根保护已实现（拒绝式，用户选定口径）**。
+  ① **根因**：`_plan_root_migration` 不区分状态，`_apply_root_migration` 会把 queued/running 的 run 目录
+  一并搬走并改写 `run_dir`；而 worker 的绝对路径（`FRONTIER_AGENT_*_DIR` / `_trial_dir` / `CODING_WORKSPACE_ROOT`）
+  是 spawn 时从**旧根**烘焙进环境与 metadata 的，读取侧却一律走 `run_dir_for`（当前根）——同一条 run
+  一半写旧根、一半读新根，正是 F01 禁止的"活动 Run 跨新旧根读写"。
+  ② **口径**：不采用"跳过/延后"。延后会把文件留在旧根而 `run_dir_for` 读新根，是同一分裂反过来的形态；
+  只有终态才证明该 run 可以搬。故命中活动 run 时**整体拒绝**，不做部分迁移。
+  ③ **实现**（`scripts/run_retention.py`）：`RunMigration` 增 `status`；`_plan_root_migration` 读取
+  `Run.status`（仍不按状态过滤，计划保持自描述）；新增纯函数 `active_migrations()` 与
+  `_refuse_active_migrations()`；`_apply_root_migration` 在**任何文件移动之前**调用守卫，命中即
+  `SystemExit`（退出码 1），不移动目录、不改写 `run_dir`；dry-run 逐行标 `ACTIVE-REFUSED` 并打印
+  `REFUSES TO APPLY` + run id 清单，提示"先结束，或重启 API 让启动 reconcile 收口，再重跑"；
+  模块"不可协商设计规则"第 3 条补记该严格语义。
+  ④ **测试**：`tests/test_web_f07_retention.py` 由 22 → **27/27 通过**（新增 5 项：活动状态判定 ×2、
+  DB 级拒绝且"拒绝不是部分迁移"——目录不动 / `run_dir` 不变 / 新根不创建、无活动时照常移动并改写
+  `run_dir`、dry-run 报告）。**负向对照**：临时注释守卫后
+  `test_apply_refuses_while_a_run_is_active` 以 `DID NOT RAISE SystemExit` 失败，确认用例非空。
+  ⑤ **真实 PG 端到端**（一次性库 `apodex_f01_active`，已 DROP、临时目录已删，业务库全程未触碰）：
+  seed 1 completed + 1 running 于临时旧根 → `--apply --yes` **拒绝**、退出 1、只列出活动 run id、
+  两目录仍在旧根、新根未创建；把该行改为终态后重跑 → `moved 2 / missing 0`、旧根空、
+  `run_dir` 全部改写为新根路径。
+  ⑥ **无回归**：对真库（当前无 queued/running）干跑 `migrate-runs-root` 仍计划 419 条、0 孤儿、无拒绝。
+  当时记下的"**未修**项：新/旧同 ID 目录冲突时停止并报告"已于同日修复，见下条。
+- 2026-10-01：**迁移冲突处理已实现（报告 F01「发现新旧同 ID 文件冲突时停止该项并报告，不覆盖未知内容」，上条列为未修）**。
+  ① **根因**：`_apply_root_migration` 对已存在的目标无检查，`shutil.move(str(src), str(dst))` 在 `dst`
+  已是目录时会把 `src` **移进 `dst` 之内**（错位，且随后仍把 `run_dir` 改写成 `dst`，指向未经核验的内容）；
+  若 `dst` 是文件则直接覆盖。
+  ② **实现**：`RunMigration` 增 `target_exists`（plan 期按 `new_root/<id>` 探测，供 dry-run 预告）；
+  `_apply_root_migration` 在移动前**按活文件系统复核** `dst.exists()`——命中即计入 `conflicted`、`continue`，
+  **不移动、不改写 `run_dir`**，其余条目照常迁移；返回值扩为
+  `(moved, missing, removed, conflicted)`；dry-run 逐行标 `TARGET-EXISTS` 并打印 `WILL SKIP`；
+  apply 打印 `CONFLICT` 段并提示"人工确认哪份为准后重跑"。
+  ③ **测试**：`tests/test_web_f07_retention.py` 由 27 → **30/30 通过**（新增：冲突即停且**不嵌套不覆盖**
+  / `run_dir` 不动、冲突不阻塞其余条目、dry-run 预告）。**负向对照**：把 `if dst.exists()` 短路为
+  `if False` 后两个冲突用例均失败（`moved` 多出冲突 id、`conflicted` 为空），确认用例非空。
+  ④ **真实 PG 端到端**（一次性库 `apodex_f01_conflict`，已 DROP、临时目录已删）：seed 2 completed +
+  在新根预置其中 1 个同 ID 目录（内含 `unrelated.txt`）→ `--apply --yes --keep-orphans` 输出
+  `moved 1 / CONFLICT: 1`；冲突目录仍留旧根、目标目录**仅含 `unrelated.txt`**（无 `clash/` 嵌套）、
+  其 `run_dir` 仍指向旧根；同状态 dry-run 显示 `TARGET-EXISTS` + `WILL SKIP`。
+  剩余未完成：**仅容器实测**（镜像无法构建，见工单 02）。

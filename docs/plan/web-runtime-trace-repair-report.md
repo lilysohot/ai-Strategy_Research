@@ -646,9 +646,9 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 （SIGKILL / 取消 / 磁盘写满 / 断电耐久）与**请求尝试身份**（失败·重试是否入契约）——契约已定义并
 有合成文件证据，见[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)、F07 的
 **运维备份脚本、异地存放、联合恢复演练与孤儿处置决策**（演练已证「行数可恢复、约束不可恢复」，
-见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01 的**容器实测与 WSL 迁移**
+见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01 的**容器实测**
 （Compose 卷挂载与 Dockerfile `VOLUME` 已同步、`compose config` 已通过，但镜像无法构建故未实测；
-WSL 663 条与 `/tmp` 85 条的历史兼容、活动 Run 跨根保护仍未做——本机 Windows 与容器配置部分已完成）、
+WSL 侧历史路径迁移、历史三态兼容、回退演练与**活动 Run 跨根保护**均已完成——本机 Windows、容器配置与 WSL 迁移部分已完成）、
 F13 容量边界、F21 控制历史持久化、
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
