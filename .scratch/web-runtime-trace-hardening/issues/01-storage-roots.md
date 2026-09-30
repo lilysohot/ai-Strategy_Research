@@ -44,9 +44,19 @@ Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
   ④ 验证：`server/runs` 目录数 103 → **0**；迁移后 `inspect_trajectory('0be1fc12…')` 返回
   `state: complete, valid_lines: 5`（`run_dir_for` 按新默认路径可读）；DB `run_dir` 前缀为
   `/home` 663、`/tmp` 85、本机新路径 6。回归 80/80 通过。
-- 2026-09-30：**仍未验收（维持 ready-for-human）**：① 容器部署——`deploy/docker-compose.yml`
-  的卷仍挂 `/app/agent_data`、`deploy/Dockerfile.web` 仍声明 `VOLUME /app/server/runs`，未同步到
-  源码树外目标；② WSL 部署（`/home/administrator/FrontierAgent`，663 条 run）与 `/tmp` 85 条的
-  历史兼容与迁移未做；③ 活动 Run 跨新旧根保护、真实重启后新旧 Run 追溯、容器重建验收未做；
-  ④ `.env.example` / 部署文档尚未写明新默认与 `SERVER_RUNS_ROOT` 覆盖。
+- 2026-09-30：**容器侧配置与文档已同步**。① `deploy/Dockerfile.web` 移除
+  `VOLUME ["/app/server/runs", "/app/uploads"]` —— 在源码树内声明 `VOLUME` 会静默创建匿名卷、
+  反而破坏可识别备份；② `deploy/docker-compose.yml`：`api.environment` 增加
+  `SERVER_RUNS_ROOT=/var/lib/frontier-agent/web/runs`，`agent_data` 卷挂载点由 `/app/agent_data`
+  改为 `/var/lib/frontier-agent/web`（保留卷名以维持卷身份）；③ `deploy/README.md` 数据持久化
+  一节与 `docs/tech-stack.md` §7.1 缺口描述更新为已对齐；④ `.env.example` 新增 `SERVER_RUNS_ROOT`
+  说明（并实测空值不会覆盖默认路径）。
+  **验证**：`docker compose config --quiet` 退出码 0；`--profile full config` 解析出
+  `SERVER_RUNS_ROOT: /var/lib/frontier-agent/web/runs` 与 `agent_data → /var/lib/frontier-agent/web`。
+  另注：**容器从未部署过**——`agent_data` 命名卷不存在、无 Web 容器，因此本次是纯配置改动，
+  无历史容器数据需要迁移或保留。
+- 2026-09-30：**仍未验收（维持 ready-for-human）**：① 容器**实测**未做——镜像无法构建
+  （registry 不可达，见工单 02），`docker compose up` 后卷落点、容器重建后历史 Run 可读性均未验证；
+  ② WSL 部署（`/home/administrator/FrontierAgent`，663 条 run）与 `/tmp` 85 条的历史兼容与迁移未做；
+  ③ 活动 Run 跨新旧根保护、真实重启后新旧 Run 追溯未做。
   另记录：环境存在批量删除守卫，单轮删除文件数 > 500 会拦截（迁移工具因此需分批），非代码缺陷。

@@ -53,8 +53,11 @@ COPY --from=build /opt/venv /opt/venv
 COPY --from=build /build /app
 WORKDIR /app
 
-# Persistent run artifacts + user uploads (mounted as volumes in compose).
-VOLUME ["/app/server/runs", "/app/uploads"]
+# Run data lives OUTSIDE the source tree (F01): the compose `agent_data` volume
+# mounts /var/lib/frontier-agent/web and SERVER_RUNS_ROOT points inside it.
+# Deliberately NO VOLUME declaration here — declaring one at an in-tree path
+# would silently create an anonymous volume there and defeat the whole point.
+# (`uploads/` is gone entirely: uploads are written to <runs_root>/<id>/inputs.)
 
 EXPOSE 8000
 CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "8000"]

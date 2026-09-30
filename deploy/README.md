@@ -97,19 +97,22 @@ handle /api/* {
 | 卷 | 内容 |
 | --- | --- |
 | `web_dist` | 前端构建产物（由 `frontend` 写入，Caddy 只读挂载） |
-| `agent_data` | Agent 运行时数据（⚠️ F01 待同步：应挂到源码树外运行目录） |
+| `agent_data` | Web 运行数据（挂 `/var/lib/frontier-agent/web`，源码树外） |
 | `caddy_data` | TLS 证书与 ACME 状态（**不要删除**，否则会重复申请证书） |
 | `caddy_config` | Caddy 运行时配置 |
 
 宿主目录挂载：`../config`（只读）、`../.env`（只读）、`../data`。
 
-**运行数据目录（F01）**：Web 运行数据（run 轨迹 / 输入 / 产物 / spill）默认已落到
-**源码树外**——Windows `%LOCALAPPDATA%\frontier-agent\web\runs`、POSIX
-`$XDG_DATA_HOME/frontier-agent/web/runs`，可用 `SERVER_RUNS_ROOT` 覆盖到稳定目录。
+**运行数据目录（F01）**：Web 运行数据（run 轨迹 / 输入 / 产物 / spill）位于**源码树外**：
 
-⚠️ **容器部署尚未同步**：当前 `Dockerfile.web` 仍对 `/app/server/runs` 与 `/app/uploads`
-声明 `VOLUME`、Compose 卷仍挂 `/app/agent_data`，会形成匿名卷、不满足可识别备份与恢复。
-生产发布前须把命名卷挂到 `SERVER_RUNS_ROOT` 指向的源码树外路径（见 F01 工单）。
+- 容器：命名卷 `agent_data` 挂到 `/var/lib/frontier-agent/web`，
+  并设 `SERVER_RUNS_ROOT=/var/lib/frontier-agent/web/runs`（见 `docker-compose.yml`）。
+- 本机：Windows `%LOCALAPPDATA%\frontier-agent\web\runs`，POSIX
+  `$XDG_DATA_HOME/frontier-agent/web/runs`。
+- 自定义部署：用 `SERVER_RUNS_ROOT` 指定源码树外的稳定绝对路径。
+
+`Dockerfile.web` **不再声明 `VOLUME`**：在源码树内声明会静默创建匿名卷，反而破坏
+可识别备份与恢复。备份与保留策略见 `web-platform-hardening.md` 的 T5/T6。
 
 ## 安全说明
 
