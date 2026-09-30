@@ -1,0 +1,8 @@
+INFO:     Started server process [23800]
+INFO:     Waiting for application startup.
+SERVER_DEBUG is on: starting with the default SERVER_MASTER_KEY. Stored LLM api_keys are NOT protected.
+orphan run reconciled: run_id=6109bf602edd4ae78bdc5bd6359c7087 status=failed
+orphan run reconciled: run_id=d40a6d74a5044ad589bbf2c0f81ca604 status=failed
+orphan-run reconcile: closed 2 run(s)
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
