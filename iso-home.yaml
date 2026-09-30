@@ -1,0 +1,54 @@
+- generic [ref=e29]:
+  - main [ref=e31]:
+    - generic [ref=e32]:
+      - complementary "研究导航" [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: 投研 Agent
+            - generic [ref=e37]: 研究工作台
+          - button "新建研究" [ref=e38] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=e43]
+        - generic [ref=e45]:
+          - generic [ref=e46]: 最近
+          - generic [ref=e47]: "0"
+        - navigation "研究列表" [ref=e48]:
+          - generic [ref=e49]: 还没有研究
+        - button "F f09-iso 模型与连接" [ref=e52] [cursor=pointer]:
+          - generic [ref=e53]: F
+          - generic [ref=e54]:
+            - generic [ref=e55]: f09-iso
+            - generic [ref=e56]: 模型与连接
+      - main "对话编排" [ref=e57]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: 未命名研究
+          - generic [ref=e61]: 选择或新建研究后开始
+        - paragraph [ref=e82]: 开始你的第一项研究
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - button "深度研究" [ref=e85] [cursor=pointer]
+            - button "报告产出" [ref=e86] [cursor=pointer]
+            - button "快速追问" [ref=e87] [cursor=pointer]
+          - generic [ref=e88]:
+            - button "附件" [ref=e89] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=e92]
+            - button "发送" [disabled] [ref=e93]
+      - complementary "研究画布" [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: 本次研究
+            - generic [ref=e99]: 尚未选择运行
+          - generic [ref=e100]:
+            - button "刷新" [disabled] [ref=e101]
+            - button "专注阅读" [ref=e103] [cursor=pointer]
+        - generic [ref=e105]:
+          - tablist [ref=e109]:
+            - tab "结论" [selected] [ref=e111]
+            - tab "产物" [ref=e112]
+            - tab "执行" [ref=e113]
+          - tabpanel "结论" [ref=e115]:
+            - article [ref=e116]:
+              - generic [ref=e117]: 运行的回答或 Markdown 产物会显示在这里。
+  - note "免责声明" [ref=e118]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=e119]: 不构成投资建议
+    - text: 。据此操作，风险自担。

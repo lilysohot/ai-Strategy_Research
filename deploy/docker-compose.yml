@@ -73,6 +73,9 @@ services:
       # 用 CORPUS_DSN_DOCKER 覆盖；默认走 Docker Desktop 宿主网关。本机 CLI 读
       # ../.env 的 CORPUS_DSN，不受此项影响。
       CORPUS_DSN: ${CORPUS_DSN_DOCKER:-postgresql://postgres:postgres@host.docker.internal:5432/postgres}
+      # F01: run data (trajectories / inputs / outputs / spill) lives outside the
+      # source tree, on the named volume mounted below — never in the image.
+      SERVER_RUNS_ROOT: /var/lib/frontier-agent/web/runs
     ports:
       # API is published only to aid debugging; Caddy is the supported path.
       - ${API_DEBUG_PORT:-8000}:8000
@@ -80,7 +83,10 @@ services:
       - ../config:/app/config:ro
       - ../.env:/app/.env:ro
       - ../data:/app/data
-      - agent_data:/app/agent_data
+      # F01: the run-data volume mounts at the source-tree-external root the API
+      # is configured to write to. Keep the `agent_data` name so an existing
+      # volume keeps its identity rather than being replaced by a new one.
+      - agent_data:/var/lib/frontier-agent/web
     working_dir: /app
     # Bubblewrap user namespaces need these; see the Dockerfile notes.
     security_opt:

@@ -22,6 +22,9 @@
  *     advanced by them, because advancing would skip an unread trajectory line.
  *     (Before ``seq`` existed the client had to count frames, which conflated
  *     the two.)
+ *   - Control frames (``steer_queued`` and friends) are excluded too, even when
+ *     they carry a numeric ``seq``: their counter is a per-run control sequence,
+ *     not a trajectory line, and honouring it skipped unread lines (F09).
  *
  * Terminal semantics: the server closes the stream once the run's trajectory is
  * fully replayed (``summary.json`` exists), and the terminal frames
@@ -99,6 +102,20 @@ export interface SseStreamHandle {
 
 /** 4xx statuses that mean "retrying this exact request cannot succeed". */
 const FATAL_STATUSES: ReadonlySet<number> = new Set([400, 401, 403, 404, 422])
+
+/**
+ * Control-plane frames: emitted from memory by the orchestrator/approval layer,
+ * never derived from a trajectory line.
+ *
+ * They carry their own counters (``steer_seq``), so a ``seq`` riding along on
+ * one is not a trajectory line and must not advance the replay cursor — doing so
+ * made the next reconnect resume past lines the client had never read (F09).
+ */
+const CONTROL_EVENT_TYPES: ReadonlySet<string> = new Set([
+  'steer_queued',
+  'approval_requested',
+  'approval_resolved',
+])
 
 function resolveToken(token: SseStreamOptions['token']): string | null {
   return typeof token === 'function' ? token() : token
@@ -358,7 +375,11 @@ export function openRunStream(options: SseStreamOptions): SseStreamHandle {
           const event = payload as SseEvent
           if (typeof event.type !== 'string') continue
 
-          if (typeof event.seq === 'number') advanceCursor(event.seq)
+          // Only a trajectory line advances the cursor. Control frames are
+          // excluded even if they carry a numeric `seq` (see CONTROL_EVENT_TYPES).
+          if (typeof event.seq === 'number' && !CONTROL_EVENT_TYPES.has(event.type)) {
+            advanceCursor(event.seq)
+          }
           onEvent(event)
 
           if (terminalTypes.includes(event.type)) {

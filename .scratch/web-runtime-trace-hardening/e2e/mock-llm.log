@@ -1,0 +1,2 @@
+mock OpenAI-compatible endpoint: http://127.0.0.1:8018/v1
+OPENAI_BASE_URL=http://127.0.0.1:8018/v1

@@ -1,0 +1,74 @@
+- generic [ref=e29]:
+  - main [ref=e31]:
+    - generic [ref=e32]:
+      - complementary "研究导航" [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: 投研 Agent
+            - generic [ref=e37]: 研究工作台
+          - button "新建研究" [ref=e38] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=e43]
+        - generic [ref=e45]:
+          - generic [ref=e46]: 最近
+          - generic [ref=e47]: "1"
+        - navigation "研究列表" [ref=e48]:
+          - button "新对话 0 条 · 2026-09-30 移除" [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]: 新对话
+            - generic [ref=e127]: 0 条 · 2026-09-30
+            - button "移除" [ref=e128]
+        - button "F f09-iso 模型与连接" [ref=e52] [cursor=pointer]:
+          - generic [ref=e53]: F
+          - generic [ref=e54]:
+            - generic [ref=e55]: f09-iso
+            - generic [ref=e56]: 模型与连接
+      - main "对话编排" [ref=e57]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: 新对话
+          - generic [ref=e61]: Run 72c61374
+        - generic [ref=e135]:
+          - generic [ref=e138]:
+            - generic [ref=e139]: 已停止
+            - generic [ref=e140]:
+              - generic [ref=e141]: 0s
+              - generic [ref=e142]: stateful-react-agent
+              - generic [ref=e143]: llm_fallback_chain[mock-frontier-model]
+              - generic [ref=e144]: ctx 0%
+              - generic [ref=e145]: tools 9
+          - button "查看过程" [ref=e147] [cursor=pointer]
+        - generic [ref=e62]:
+          - generic [ref=e149]: 已经是最早的消息
+          - article [ref=e151]:
+            - generic [ref=e152]: 你
+            - generic [ref=e153]: 用一句话介绍你自己，直接回答即可。
+          - article [ref=e154]:
+            - generic [ref=e155]: Agent
+            - paragraph [ref=e157]: This is a mock answer from the FrontierAgent demo endpoint.
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - button "深度研究" [ref=e85] [cursor=pointer]
+            - button "报告产出" [ref=e86] [cursor=pointer]
+            - button "快速追问" [ref=e87] [cursor=pointer]
+          - generic [ref=e88]:
+            - button "附件" [ref=e89] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=e92]
+            - button "发送" [disabled] [ref=e158]
+      - complementary "研究画布" [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: 新对话
+            - generic [ref=e99]: 本次回答
+          - generic [ref=e100]:
+            - button "刷新" [ref=e101] [cursor=pointer]
+            - button "专注阅读" [ref=e103] [cursor=pointer]
+        - generic [ref=e105]:
+          - tablist [ref=e109]:
+            - tab "结论" [selected] [ref=e111]
+            - tab "产物" [ref=e112]
+            - tab "执行" [ref=e113]
+          - tabpanel "结论" [ref=e115]:
+            - article [ref=e116]:
+              - paragraph [ref=e161]: This is a mock answer from the FrontierAgent demo endpoint.
+  - note "免责声明" [ref=e118]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=e119]: 不构成投资建议
+    - text: 。据此操作，风险自担。

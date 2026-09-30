@@ -584,7 +584,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | 编号 | 实现位置（要点） | 契约检查 |
 |---|---|---|
 | F08 | `server/routes/runs.py` 提交前完成会话归属准入（外部/已删会话 404 且零副作用）；`server/store.py::ensure_session` 失败即拒绝；`server/orchestrator.py::_session_uuid` 命名空间按用户隔离 | `test_f08_submit_rejects_foreign_session_without_mutation` |
-| F01 | `server/config.py::canonical_run_id` + `run_dir_for` 统一 ID 规范形式；`runs.py` 的控制/事件路由按同一形式取句柄 | `test_f01_uuid_returned_by_api_reads_same_trace` |
+| F01 | `server/config.py::canonical_run_id` + `run_dir_for` 统一 ID 规范形式；`runs.py` 控制/事件路由按同一形式取句柄；**目录迁移（本机）**：`runs_root` 默认移到源码树外（Windows `%LOCALAPPDATA%\frontier-agent\web\runs`，POSIX XDG），移除无消费者的 `uploads_root`；`scripts/run_retention.py migrate-runs-root` 迁移本机 4 个 run 目录 + 更新 DB `run_dir` + 清理 99 个孤儿磁盘目录 | `test_f01_uuid_returned_by_api_reads_same_trace`；迁移后 `inspect_trajectory` 读到 `state: complete`；`server/runs` 清空 |
 | F03 | `server/relay.py::trajectory_records_for_egress`：`/trace` 与 SSE 共用同一脱敏出口，记录形状不变 | `test_f03_trace_uses_same_redaction_as_replay` |
 | F04 | `frontier_agent/components/observers/trajectory.py` JSONL 记录保留工具调用 ID（framework 最小范围例外，见下） | `test_f04_observer_call_id_survives_jsonl` |
 | F12 | `server/routes/runs.py` 上传批次失败即回收整个 per-run 目录，不再遗留孤儿文件 | `test_f12_rejected_batch_leaves_no_uploaded_files` |
@@ -595,7 +595,13 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | F18 | manifest 存平台规范显示路径；回滚同时接受规范路径与宿主绝对路径；回滚后 `sync_run_artifacts` 重算索引并清理失效行；显示路径改用 POSIX 语义 | `test_revert_updates_artifact_hash_index`、`test_absolute_file_tool_path_can_be_reverted` |
 | F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`），新增 `/readyz` | `test_health_distinguishes_unavailable_storage` |
 | F20 | 提交时落非密钥模型快照与配置引用；worker `run_started` 帧持久化 `running`/`started_at` | `test_submit_records_nonsecret_model_snapshot`、`test_run_started_event_updates_persistent_status` |
-| F09 | `Orchestrator` 记录已关闭的运行流，迟订阅者立即收到结束哨兵（后端契约）；前端游标语义仍待验收 | `test_f09_late_subscription_finishes` |
+| F09 | `Orchestrator.has_worker` + `server.routes.runs._live_queue_for` 按权威状态判定：本进程无 handle 且行状态非 queued/running → replay-only，不再订阅死队列；本进程结束的流由 `_closed_stream_ids` 兜底（后端契约）；前端游标语义：`Orchestrator.steer` 的 `steer_queued` 改用 `steer_seq`（不再占用轨迹游标 `seq`），`web/src/sse.ts` 新增 `CONTROL_EVENT_TYPES` 使控制帧不推进游标，浏览器端到端仍待验收 | `test_f09_late_subscription_finishes`、`test_f09_finished_in_another_process_replays_and_ends`、`test_f09_active_run_without_a_handle_still_subscribes`、`test_live_queue_decision_uses_the_persisted_status`、前端审计 `F09_steer_sequence_is_not_trajectory_cursor`（由 10 !== 0 转为通过） |
+| F07 | 新增 [scripts/run_retention.py](../../scripts/run_retention.py)：`manifest`（逐 run 存储引用 + sha256 + F06 轨迹状态）、`plan`（默认 dry-run，`expired/retained/active/unfinished/missing/out_of_scope` 六类，删除需 `--apply --yes` 且复核包含关系）、`verify`（文件齐全与校验值）、`check`（只读孤儿与行数）；缺失与过期严格区分 | `tests/test_web_f07_retention.py` 20/20（负向对照 5 条失败）；文件侧 CLI 演练四类 run 正确；真实 `pg_dump`→独立库 `pg_restore` 行数逐一一致（**但只建成 4/9 外键**，孤儿阻塞） |
+| F10 | [web/src/stores/runs.ts](../../web/src/stores/runs.ts)：按轮保存文本（`turnTexts`），回放的整轮记录**替换**该轮而非被跳过（可修复背压丢帧），`streamedTurns` 移除；usage 计量移到文本判定**之前独立处理**；`reconcile` 用新增的 `usageTotalsFrom()` **替换**总量而非累加（[statusbar.ts](../../web/src/utils/statusbar.ts)） | 前端审计 `F10_full_replay_repairs_missing_live_text`、`F10_live_turn_still_counts_replay_usage`、`F10_final_usage_reconciliation_is_not_additive` 三项 failed→passed（负向对照逐项失败） |
+| F11 | [web/src/stores/runs.ts](../../web/src/stores/runs.ts)：订阅代次 `generation`（`watch`/`reset` 递增），`reconcile` 在 `await` 后校验 runId+代次，过期响应整体丢弃；摘要获取失败时给可见「待核实」提示而非按 EOF 推定成功 | 前端审计 `F11_old_run_summary_cannot_overwrite_current_run` failed→passed（负向对照移除校验即失败） |
+| F06 | 新增 [server/trajectory_status.py](../../server/trajectory_status.py) 定义并判定 `complete/partial/unavailable`（终端 `{"t":"end"}` 是否存在；半行不掩盖有效行）；`/trace` 返回 `completeness`，历史页在记录旁告警；写入屏障：`TrajectoryFileObserver._close_jsonl` 关闭前 `fsync`（framework 最小范围例外）；[tech-stack.md](../../docs/tech-stack.md) 收窄「完整轨迹 / SIGKILL 安全」四处表述 | `tests/test_web_f06_trace_completeness.py` 10/10（负向对照：判据恒为 complete → 2 条失败）；共享 observer 回归 21/21 |
+| F05 | 展示逻辑抽到 [web/src/utils/traceView.ts](../../web/src/utils/traceView.ts)：推理按轮折叠且只展示散文型（缺失/空/加密签名块各有明确文案，不伪造），工具结果 300 字符预览 + 「继续读取」按 2000 字符有界解锁并显式剩余/总数，切片按 code point；`RunDetailView.vue` 消费之，F03 脱敏边界未移动 | 前端审计 `frontend-f05-audit.mjs` 10/10（负向对照 3 条失败）；`tests/test_web_f05_trace_projection.py` 4/4；`vite build` 通过 |
+| F02 | 根 [.dockerignore](../../.dockerignore) 排除 `server/runs/`、`uploads/`、`data/`、`server/*.db(+wal/shm)` 及前端产物与本地大目录；附带修 `**/__pycache__/`（原规则只匹配根级）与惰性 `web/.dockerignore`（规则镜像到根） | `tests/test_build_context_ignore.py`（40 项，含负向对照）；真实仓库 `COPY . /ctx` 探针：33.18 MB / 1110 文件，运行数据全 absent、构建输入全 present |
 
 **framework 最小范围例外（F04）**：仅改动 `TrajectoryFileObserver.on_llm_response` 的 JSONL
 记录字段（新增 `tool_calls[].id`），不动调用协议、不动工具执行、不改其他观察器。
@@ -632,16 +638,43 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 现有库需执行一次 `alembic upgrade head`（`init_db()` 的 `create_all` 不会改动已存在的表）。
 迁移在存在重复 `(session_id, seq)` 时会显式报错而不改数，由人工决定如何重排。
 
-**仍未完成（不得视为已验收）**：F02 构建排除、F05 历史界面、F06 中断完整性契约、
-F07 备份/保留闭环、F10/F11 前端回放与代次、F13 容量边界、F21 控制历史持久化、
+**仍未完成（不得视为已验收）**：F02 的**真实镜像构建**（本机 registry 不可达，
+`python:3.12-slim` 无法拉取；现有证据为 `FROM scratch` 探针测量「哪些文件进入镜像文件系统」，
+不含 `uv sync` 与 runtime 真实层，待可访问 registry 的环境补跑，见
+[工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收**（实现与契约审计已完成，见
+[工单 05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md)）、F06 的**真实故障注入**
+（SIGKILL / 取消 / 磁盘写满 / 断电耐久）与**请求尝试身份**（失败·重试是否入契约）——契约已定义并
+有合成文件证据，见[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)、F07 的
+**运维备份脚本、异地存放、联合恢复演练与孤儿处置决策**（演练已证「行数可恢复、约束不可恢复」，
+见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01 的**容器实测与 WSL 迁移**
+（Compose 卷挂载与 Dockerfile `VOLUME` 已同步、`compose config` 已通过，但镜像无法构建故未实测；
+WSL 663 条与 `/tmp` 85 条的历史兼容、活动 Run 跨根保护仍未做——本机 Windows 与容器配置部分已完成）、
+F13 容量边界、F21 控制历史持久化、
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
 
-**F09 的已知覆盖盲区**（契约通过但有洞，回溯核查时复现）：本次修复把「已结束的运行流」记在
-**进程内**的 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。
-对**结束于其它进程**的运行（API 重启后、被启动期 orphan reconcile 收口的运行、或 id 已被窗口淘汰），
-`run_events` 仍会订阅并等待一个永不到来的哨兵。已用隔离复现确认：重放事件正常产出、流在 5s 内不结束。
-修法应改为按权威状态判定（本进程无 handle 且运行已处于终态 → 走 replay-only 路径），
-而不是依赖进程内记忆；在改动前，F09 的前端游标语义与此盲区一并视为待验收。本机（Windows 原生）另有既有限制：shell 工具依赖 POSIX 语义、
+**F09 的已知覆盖盲区（已按权威状态修复）**：此前的修复把「已结束的运行流」记在**进程内**的
+`_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。对**结束于其它进程**
+的运行（API 重启后、被启动期 orphan reconcile 收口的运行、或 id 已被窗口淘汰），`run_events` 仍会订阅
+并等待一个永不到来的哨兵。已用隔离复现确认：重放事件正常产出、流在 5s 内不结束。
+
+现改为按权威状态判定，不再依赖进程内记忆：`Orchestrator.has_worker` 报告本进程是否持有该 run 的
+worker handle；`server/routes/runs.py` 的 `_live_queue_for` 仅在「本进程有 handle」**或**「行状态仍在
+`ACTIVE_RUN_STATUSES`（queued/running）」时订阅，否则返回 `None`，由 `sse_for_run` 走 replay-only
+分支——只回放轨迹后自然结束（前端把干净 EOF 视为 `completed`，再经 `GET /{run_id}` 对账终态）。
+本进程结束的流仍由 `_closed_stream_ids` 兜底，用于「handle 尚在、哨兵刚发出」的窗口。
+回归证据：`tests/test_web_f09_stream_termination.py` 四条用例（含「queued/running 且无 handle 仍必须订阅」
+的反向守卫）；把判据临时还原为「总是订阅」后，`test_f09_finished_in_another_process_replays_and_ends`
+以 15s `TimeoutError` 失败，确认该用例确实抓住修复前行为。
+2026-09-30 回溯重跑三项证据均与上轮一致：隔离审计契约 **24/24 通过**（独立报告
+`audit/f09-recheck-results.json`，不覆盖 `post-fix-results.json`；注意该契约只覆盖「本进程结束」，
+盲区路径由 `tests/` 的回归补上）、盲区回归 **4/4 通过**、前端审计
+`F09_steer_sequence_is_not_trajectory_cursor` **仍失败**（10 !== 0）。
+2026-09-30 补充：**盲区本体的浏览器/多进程端到端验收已通过**——隔离栈（mock LLM + 同库双 API 进程
+8471 + vite 5273 + Playwright/Edge）下，跨进程重订阅已在浏览器内实测 19ms EOF，B 上新 run 活流无回归；
+完整记录见 `.scratch/web-runtime-trace-hardening/e2e/e2e-record.md`。  **F09 前端游标语义已于 2026-09-30 修复**（`steer_seq` 独立字段 + 前端控制帧不推进游标），
+前端审计断言由 `10 !== 0` 转为通过，双向负向对照确认两侧都真被测到。
+工单 [09](../../.scratch/web-runtime-trace-hardening/issues/09-stream-replay-contract.md)
+**仅剩真实浏览器端到端验收**（steer 后断线重连不跳行），在此之前维持 `ready-for-human`。本机（Windows 原生）另有既有限制：shell 工具依赖 POSIX 语义、
 `test_web_p2_diff`/`test_web_p3_revert`/`test_artifacts_t29` 等仍有与本轮无关的失败，
 因此“通过”仅以隔离契约检查与逐文件基线对比为准，不代表整机验收。

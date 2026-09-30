@@ -336,9 +336,13 @@ class Orchestrator:
         handle.steer_seq += 1
         self._publish(
             run_id,
+            # ``steer_seq``, not ``seq``: ``seq`` is reserved for the trajectory
+            # line number, which is the reconnect cursor (``?after=seq``). Reusing
+            # it for the steer counter jumped the cursor past unread lines on the
+            # next reconnect (F09).
             make_event(
                 "steer_queued",
-                seq=handle.steer_seq,
+                steer_seq=handle.steer_seq,
                 message=redact_deep(message),
             ),
         )
@@ -378,6 +382,18 @@ class Orchestrator:
         return True
 
     # — live event fan-out ————————————————————————————————————
+    def has_worker(self, run_id: str) -> bool:
+        """True when THIS process owns the worker running ``run_id``.
+
+        Only the process that spawned the worker receives its frames, so a run
+        with no handle here cannot publish another live event to this process.
+        Absence alone does not mean the run is over — a freshly submitted run has
+        no handle until the session queue drains — which is why the caller pairs
+        this with the run's persisted status; see
+        ``server.routes.runs._live_queue_for`` (F09).
+        """
+        return run_id in self._handles
+
     def subscribe(self, run_id: str) -> asyncio.Queue[dict[str, Any] | None]:
         """Register an SSE client for ``run_id`` and return its event queue.
 
@@ -389,9 +405,13 @@ class Orchestrator:
         sees the replay and then a closed stream instead of hanging forever on a
         queue that will never be published to again.
 
-        Only runs whose stream ended in THIS process are known to be over —
-        checking ``_handles`` instead would be wrong, because a freshly submitted
-        run has no handle yet while its worker is still starting.
+        This is the in-process fast path: it can only know about runs whose stream
+        ended HERE. A run that ended in another process (an API restart, a
+        start-up orphan sweep) is filtered out one layer up, before subscribing at
+        all, by the runs routes — see ``_live_queue_for``, which pairs
+        ``has_worker`` with the run's persisted status. Handle absence alone is
+        not a terminal test, because a freshly submitted run has no handle yet
+        while its worker is still starting.
         """
         q: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
         self._subscribers.setdefault(run_id, set()).add(q)

@@ -12,5 +12,50 @@ benchmarks/datasets
 benchmarks/results
 benchmarks/tasks-generated
 results
+# Bare `__pycache__` / `*.pyc` only match at the context root in .dockerignore
+# (unlike .gitignore), so nested bytecode still got copied in. `**` spans dirs.
+**/__pycache__/
+**/*.pyc
 __pycache__
 *.pyc
+
+# ── Web runtime data (F02) ─────────────────────────────────────
+# Must never reach a build context or an image layer. server/config.py defaults
+# runs_root/uploads_root into the source tree, and deploy/Dockerfile.web does
+# `COPY server ./server`, so trajectories, inputs, outputs and diffs would be
+# baked in. .gitignore does not affect Docker, and a volume mounted later only
+# masks the path — it does not remove files already committed to a layer.
+server/runs/
+uploads/
+# Service data mounted by deploy/docker-compose.yml (`../data:/app/data`).
+data/
+# Local SQLite business DB (ServerConfig.database_url default) + WAL sidecars.
+server/*.db
+server/*.db-wal
+server/*.db-shm
+
+# ── Frontend dependencies / build output ────────────────────────
+# web/.dockerignore is inert: deploy/Dockerfile.frontend builds with the repo
+# root as its context and Docker only reads <context-root>/.dockerignore, so
+# these rules have to live here.
+web/node_modules/
+web/dist/
+web/dist-ssr/
+web/coverage/
+web/*.local
+web/.env
+web/.env.*
+!web/.env.example
+web/npm-debug.log*
+web/.vscode/
+web/.idea/
+
+# ── Local scratch, worktrees and tool state ─────────────────────
+.kilo/
+.scratch/
+.e5runs*/
+.playwright-cli/
+.codebuddy/
+.trae/
+.pytest_cache/
+.ruff_cache/

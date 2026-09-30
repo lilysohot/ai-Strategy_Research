@@ -210,8 +210,11 @@ export interface SseEvent {
   // from the trajectory replay.
   text?: string
   thinking_text?: string
-  // steer_queued (P3.1, §7): ``message`` is the redacted steer text, ``seq``
-  // (overloaded with the trajectory cursor above) is the per-run steer order.
+  // steer_queued (P3.1, §7): ``message`` is the redacted steer text.
+  // ``steer_seq`` is the per-run steer order — deliberately NOT ``seq``: that
+  // field is the trajectory line number / reconnect cursor, and overloading it
+  // made a steer jump the cursor past unread lines (F09).
+  steer_seq?: number
   message?: string
   // approval_requested / approval_resolved (P3.2, §6.1). ``risk`` mirrors the
   // worker's risk assessment; ``decision`` is the POSTed verdict echoed back.
@@ -255,6 +258,18 @@ export interface RunTraceRecord {
   max_turns?: number | null
   // llm
   content?: string | null
+  /**
+   * Readable chain-of-thought, when the model returned one and the observer
+   * recorded it (F05). Absent means "not recorded", which the UI must say
+   * instead of rendering nothing and calling it a complete answer.
+   */
+  thinking?: string | null
+  /**
+   * Verbatim native reasoning blocks (signatures / ``encrypted_content``) kept
+   * for protocol replay. Deliberately NOT prose — the UI must not render it as
+   * human-readable reasoning.
+   */
+  thinking_blocks?: unknown
   tool_calls?: Array<{
     id?: string
     name?: string
@@ -269,7 +284,25 @@ export interface RunTraceRecord {
   [key: string]: unknown
 }
 
+/**
+ * F06: how much of a run's trace survived.
+ *
+ * ``partial`` means records exist but the run never wrote its terminal marker —
+ * everything on disk is readable, the tail is not guaranteed to be the whole
+ * story. The UI must surface this instead of presenting an interrupted run as a
+ * complete one.
+ */
+export interface TraceCompleteness {
+  state: 'complete' | 'partial' | 'unavailable'
+  valid_lines: number
+  trailing_partial_line: boolean
+  corrupt_lines: number
+  reason: string
+}
+
 export interface RunTraceResponse {
   run_id: string
   records: RunTraceRecord[]
+  /** Absent only on pre-F06 servers; treat as unknown, not as complete. */
+  completeness?: TraceCompleteness
 }

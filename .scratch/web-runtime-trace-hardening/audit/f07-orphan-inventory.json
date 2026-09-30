@@ -1,0 +1,609 @@
+{
+  "generated_at": "2026-09-30T12:05:56.270926+00:00",
+  "note": "identifiers and timestamps only — no prompt/answer/audit payloads",
+  "classes": [
+    {
+      "kind": "runs -> missing session",
+      "count": 517,
+      "impact": {
+        "turns": 0,
+        "artifacts": 0
+      },
+      "sample": [
+        {
+          "id": "6a2f7f5c-e2f9-46e4-8eab-230e11e66156",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:30:55+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "449ec1b1-1072-4034-a002-7fa5a5327778",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:31:34+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "629b9120-51e5-446b-a325-56d778e919cc",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:43:01+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "00ff2c13-b8d2-48cf-b8fe-44945c6db31a",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:45:48+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "80c55188-f8c6-4a0e-b59c-8cf70d136c1d",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:53:42+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "bfa269fe-a131-4ce7-a05c-3e728cceac21",
+          "detail": "completed",
+          "created_at": "2026-09-01 07:54:13+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "25f7a2a7-9bac-47b2-95ff-71f6289dc040",
+          "detail": "completed",
+          "created_at": "2026-09-01 08:05:42+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "b4d307d5-3905-4d88-994d-9b38df20b894",
+          "detail": "completed",
+          "created_at": "2026-09-01 12:48:38+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "70a46df7-1554-447e-a4f9-d580f1d7ac78",
+          "detail": "completed",
+          "created_at": "2026-09-01 12:54:29+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "e464fc42-55dc-48ba-ab5e-082c08933b8d",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:17:45+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "eacf8e35-3a2e-4d8e-86b8-b852dc433e56",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:25:37+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "be96b4bd-a798-4112-a47f-b81558025a4d",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:27:35+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "961f02d8-d13d-4a5a-8bea-1e66effb68d8",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:30:47+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "24a2bd81-21aa-4121-9793-f44bd64e0b2e",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:32:57+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "2a5cbf14-e1c5-49d1-9e65-748a7766fb3f",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:37:56+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "35c0905a-210e-4852-93dc-1d4c1d2dbf76",
+          "detail": "completed",
+          "created_at": "2026-09-01 14:41:21+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "759b0faf-01fc-4bfe-a35b-9ef787c1e463",
+          "detail": "completed",
+          "created_at": "2026-09-02 04:36:16+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "8bacf199-2567-4eac-b8c3-e39690842ec5",
+          "detail": "completed",
+          "created_at": "2026-09-02 04:59:19+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "532a906b-12b4-427e-968a-98a8fa9eb49b",
+          "detail": "completed",
+          "created_at": "2026-09-03 02:28:03+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        },
+        {
+          "id": "c59dc3c0-848b-4a7b-8877-caf215576346",
+          "detail": "completed",
+          "created_at": "2026-09-03 02:45:55+00",
+          "reference": "4624c582-1a27-5bd8-b9ac-e704fc569bdf"
+        }
+      ],
+      "remediation": [
+        "挂到占位 session（保留研究内容，推荐先评估）",
+        "删除这些 run 及其 turns/artifacts（连带影响见 impact）",
+        "保留但标记，外键暂不补（恢复演练仍会失败）"
+      ]
+    },
+    {
+      "kind": "runs -> missing user",
+      "count": 17,
+      "impact": {
+        "turns": 21,
+        "artifacts": 0
+      },
+      "sample": [
+        {
+          "id": "53ac1dd5-baa7-4c5a-ad7a-d6ea9f26c44b",
+          "detail": "stopped",
+          "created_at": "2026-09-01 14:10:53+00",
+          "reference": "4c54897f-7129-4816-8e2a-ebce0d431ac2"
+        },
+        {
+          "id": "d874e134-6f52-4131-98c5-4478ad01bfb5",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:28:43+00",
+          "reference": "5dc0c6a4-dbda-499f-86ce-e07ad2f70ee0"
+        },
+        {
+          "id": "6e74bcf5-1ba0-4866-b74c-ccd14f716dd5",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:38:23+00",
+          "reference": "c793848b-7c26-4ce9-abc9-0eda09c2bcf3"
+        },
+        {
+          "id": "a2069af6-333e-4418-bf7c-e1aa7c09b0da",
+          "detail": "stopped",
+          "created_at": "2026-09-02 13:41:17+00",
+          "reference": "7e8b949d-3948-4e38-9876-8033bdfc5944"
+        },
+        {
+          "id": "10d20746-5871-4cc5-ab19-99e199d97227",
+          "detail": "stopped",
+          "created_at": "2026-09-02 13:44:14+00",
+          "reference": "b899fd19-3d7c-41e3-b2d0-0b0bfdb95cf4"
+        },
+        {
+          "id": "b3b4f5a6-9c7e-41ab-8268-e099823495d1",
+          "detail": "stopped",
+          "created_at": "2026-09-02 13:47:07+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "48fdcfb6-fe34-4ed4-94e9-a4248a8aee43",
+          "detail": "stopped",
+          "created_at": "2026-09-02 13:47:14+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "9c37a680-3e8c-4c78-9a38-67fb2fd4c192",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:47:20+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "b8f50864-bee2-4c14-9dc7-4d7d258cc99a",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:47:26+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "d4086722-31c6-4b43-af66-f2c110561acb",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:49:02+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "905d0c40-37d2-4b17-bf24-ba08137fd988",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:49:52+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "f1e8a49b-a0c7-43e2-b405-3f6671e5715f",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:51:18+00",
+          "reference": "0218dd1a-67de-4d2d-89cf-da1553357e45"
+        },
+        {
+          "id": "a782a844-f342-494e-9e89-b0671021ed58",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:51:18+00",
+          "reference": "0218dd1a-67de-4d2d-89cf-da1553357e45"
+        },
+        {
+          "id": "fd8fae96-9a0e-461a-970c-e524d92dcbec",
+          "detail": "failed",
+          "created_at": "2026-09-02 13:51:50+00",
+          "reference": "e74772ce-b00f-4d67-ae14-c5a21f3d80e9"
+        },
+        {
+          "id": "7e207fdb-ec31-49c0-a487-3e8319dd0723",
+          "detail": "stopped",
+          "created_at": "2026-09-02 13:57:50+00",
+          "reference": "463507a3-8b3c-4e94-9c11-869c0b16cd4f"
+        },
+        {
+          "id": "9a60e257-6a32-4c3a-b4f1-75320d666683",
+          "detail": "stopped",
+          "created_at": "2026-09-03 01:51:21+00",
+          "reference": "d628907e-7917-4b54-ba7d-632daebac3a3"
+        },
+        {
+          "id": "8a484028-cafd-40fd-84ef-489550670d54",
+          "detail": "stopped",
+          "created_at": "2026-09-03 01:52:46+00",
+          "reference": "4ded922b-af96-4da9-92f0-d8c1daac7c76"
+        }
+      ],
+      "remediation": [
+        "挂到占位 user（审计上要明确这些 run 的真实归属已不可考）",
+        "删除这些 run 及其 turns/artifacts",
+        "保留但标记，外键暂不补"
+      ]
+    },
+    {
+      "kind": "sessions -> missing user",
+      "count": 18,
+      "impact": {
+        "runs": 18,
+        "turns": 24
+      },
+      "sample": [
+        {
+          "id": "8f359232-e5cb-4a7d-ad8a-0f64207e5318",
+          "detail": "t",
+          "created_at": "2026-09-01 14:10:53+00",
+          "reference": "4c54897f-7129-4816-8e2a-ebce0d431ac2"
+        },
+        {
+          "id": "6bb2533e-c1f9-49c7-b95b-277476c8752d",
+          "detail": "冒烟会话",
+          "created_at": "2026-09-02 11:11:57+00",
+          "reference": "7cdce09f-9e58-4e15-8904-a75e10b45a6b"
+        },
+        {
+          "id": "6ca39a67-a1fd-56bd-a38e-25001ab5b97f",
+          "detail": "测试",
+          "created_at": "2026-09-02 13:28:43+00",
+          "reference": "5dc0c6a4-dbda-499f-86ce-e07ad2f70ee0"
+        },
+        {
+          "id": "079c4722-8f4e-5a98-9521-9305d19c46c0",
+          "detail": "测试",
+          "created_at": "2026-09-02 13:38:23+00",
+          "reference": "c793848b-7c26-4ce9-abc9-0eda09c2bcf3"
+        },
+        {
+          "id": "ca0e81cb-bc98-5acb-be63-b0f0406bffe9",
+          "detail": "测试",
+          "created_at": "2026-09-02 13:41:17+00",
+          "reference": "7e8b949d-3948-4e38-9876-8033bdfc5944"
+        },
+        {
+          "id": "e81b76b3-e18d-5f1c-b2e4-99930fe536b8",
+          "detail": "用一句话介绍北京",
+          "created_at": "2026-09-02 13:44:14+00",
+          "reference": "b899fd19-3d7c-41e3-b2d0-0b0bfdb95cf4"
+        },
+        {
+          "id": "4b10dc53-9226-57bf-8e7b-45c8b46db6ec",
+          "detail": "测试1",
+          "created_at": "2026-09-02 13:47:07+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "7fcc12ef-d16e-5914-b5e1-a4699774ecfd",
+          "detail": "测试2",
+          "created_at": "2026-09-02 13:47:13+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "28dad18f-9adc-5a97-9b51-b5d4bfa6208e",
+          "detail": "测试A",
+          "created_at": "2026-09-02 13:47:20+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "2e5c6acf-3b83-5c32-9bc7-7297ad755414",
+          "detail": "测试B",
+          "created_at": "2026-09-02 13:47:26+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "2b3eb992-f47c-539f-adc4-536dacfe1cd7",
+          "detail": "A",
+          "created_at": "2026-09-02 13:49:02+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "8fae8e94-cd87-5a75-aeca-011fc813ef6f",
+          "detail": "B",
+          "created_at": "2026-09-02 13:49:52+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "759adc95-799a-5a1c-b6c6-b8af8cdcbf59",
+          "detail": "一句话介绍上海",
+          "created_at": "2026-09-02 13:51:18+00",
+          "reference": "0218dd1a-67de-4d2d-89cf-da1553357e45"
+        },
+        {
+          "id": "ba9c27a2-1f20-5f71-abcc-cf97c0015634",
+          "detail": "测试null",
+          "created_at": "2026-09-02 13:51:18+00",
+          "reference": "0218dd1a-67de-4d2d-89cf-da1553357e45"
+        },
+        {
+          "id": "10d3b82f-d441-5bb9-b529-c2c8cc20fed3",
+          "detail": "一句话介绍上海",
+          "created_at": "2026-09-02 13:51:50+00",
+          "reference": "e74772ce-b00f-4d67-ae14-c5a21f3d80e9"
+        },
+        {
+          "id": "110e2278-e16c-5eb2-b988-01a0dc1f46e5",
+          "detail": "一句话介绍广州",
+          "created_at": "2026-09-02 13:57:50+00",
+          "reference": "463507a3-8b3c-4e94-9c11-869c0b16cd4f"
+        },
+        {
+          "id": "eff855f3-c168-5f4f-9ddd-e509d73afd43",
+          "detail": "用三句话介绍广州",
+          "created_at": "2026-09-03 01:51:21+00",
+          "reference": "d628907e-7917-4b54-ba7d-632daebac3a3"
+        },
+        {
+          "id": "0fbe7879-8793-505d-9612-a9d18e7419e1",
+          "detail": "用三句话介绍广州",
+          "created_at": "2026-09-03 01:52:46+00",
+          "reference": "4ded922b-af96-4da9-92f0-d8c1daac7c76"
+        }
+      ],
+      "remediation": [
+        "挂到占位 user（会连带影响其下 runs 的归属链）",
+        "删除这些 session 及其下 runs/turns",
+        "保留但标记，外键暂不补"
+      ]
+    },
+    {
+      "kind": "turns -> missing run",
+      "count": 11,
+      "impact": {},
+      "sample": [
+        {
+          "id": "1",
+          "detail": "user",
+          "created_at": "2026-09-01 04:44:54+00",
+          "reference": "96c54ee1-32d2-48fe-968a-bd1b78f863bf"
+        },
+        {
+          "id": "2",
+          "detail": "user",
+          "created_at": "2026-09-01 04:45:54+00",
+          "reference": "31188022-f06c-445c-a63b-cbac15b0692c"
+        },
+        {
+          "id": "3",
+          "detail": "user",
+          "created_at": "2026-09-01 04:46:04+00",
+          "reference": "20e00a06-602c-45c4-b256-c078e0b653e8"
+        },
+        {
+          "id": "4",
+          "detail": "user",
+          "created_at": "2026-09-01 04:46:17+00",
+          "reference": "3f2fc9d6-4dc6-408a-a597-22f534954190"
+        },
+        {
+          "id": "5",
+          "detail": "user",
+          "created_at": "2026-09-01 04:50:17+00",
+          "reference": "6958ca69-b207-4cb7-a7e7-74b1c93d8ffc"
+        },
+        {
+          "id": "6",
+          "detail": "assistant",
+          "created_at": "2026-09-01 04:50:18+00",
+          "reference": "6958ca69-b207-4cb7-a7e7-74b1c93d8ffc"
+        },
+        {
+          "id": "7",
+          "detail": "user",
+          "created_at": "2026-09-01 04:50:54+00",
+          "reference": "60b7e97a-7888-40e0-a9dc-c92f8727b551"
+        },
+        {
+          "id": "8",
+          "detail": "assistant",
+          "created_at": "2026-09-01 04:50:55+00",
+          "reference": "60b7e97a-7888-40e0-a9dc-c92f8727b551"
+        },
+        {
+          "id": "9",
+          "detail": "user",
+          "created_at": "2026-09-01 04:50:56+00",
+          "reference": "25becebc-9a6b-40cb-9a98-7a267769b351"
+        },
+        {
+          "id": "10",
+          "detail": "user",
+          "created_at": "2026-09-01 04:51:06+00",
+          "reference": "956b8882-a2b1-459f-b9d2-03380bbde9c6"
+        },
+        {
+          "id": "354",
+          "detail": "user",
+          "created_at": "2026-09-02 13:37:32+00",
+          "reference": "bba52e51-c507-4a49-aea5-3a583e127998"
+        }
+      ],
+      "remediation": [
+        "删除这些 turn（其 run 已不存在，内容无法归属）",
+        "保留但标记，外键暂不补"
+      ]
+    },
+    {
+      "kind": "turns -> missing session",
+      "count": 0,
+      "impact": {},
+      "sample": [],
+      "remediation": [
+        "挂到占位 session 或删除"
+      ]
+    },
+    {
+      "kind": "audit_log -> missing user",
+      "count": 29,
+      "impact": {},
+      "sample": [
+        {
+          "id": "445",
+          "detail": "register",
+          "created_at": "2026-09-02 11:11:43+00",
+          "reference": "7cdce09f-9e58-4e15-8904-a75e10b45a6b"
+        },
+        {
+          "id": "446",
+          "detail": "login",
+          "created_at": "2026-09-02 11:11:43+00",
+          "reference": "7cdce09f-9e58-4e15-8904-a75e10b45a6b"
+        },
+        {
+          "id": "447",
+          "detail": "login",
+          "created_at": "2026-09-02 11:11:57+00",
+          "reference": "7cdce09f-9e58-4e15-8904-a75e10b45a6b"
+        },
+        {
+          "id": "448",
+          "detail": "register",
+          "created_at": "2026-09-02 11:15:17+00",
+          "reference": "c7f2d1d4-707a-4f21-aac9-a928af7c1ede"
+        },
+        {
+          "id": "449",
+          "detail": "login",
+          "created_at": "2026-09-02 11:15:17+00",
+          "reference": "c7f2d1d4-707a-4f21-aac9-a928af7c1ede"
+        },
+        {
+          "id": "455",
+          "detail": "register",
+          "created_at": "2026-09-02 13:22:48+00",
+          "reference": "c1165383-96d4-4342-b146-3687e5573f8c"
+        },
+        {
+          "id": "456",
+          "detail": "login",
+          "created_at": "2026-09-02 13:22:48+00",
+          "reference": "c1165383-96d4-4342-b146-3687e5573f8c"
+        },
+        {
+          "id": "457",
+          "detail": "register",
+          "created_at": "2026-09-02 13:28:43+00",
+          "reference": "5dc0c6a4-dbda-499f-86ce-e07ad2f70ee0"
+        },
+        {
+          "id": "458",
+          "detail": "login",
+          "created_at": "2026-09-02 13:28:43+00",
+          "reference": "5dc0c6a4-dbda-499f-86ce-e07ad2f70ee0"
+        },
+        {
+          "id": "459",
+          "detail": "register",
+          "created_at": "2026-09-02 13:38:23+00",
+          "reference": "c793848b-7c26-4ce9-abc9-0eda09c2bcf3"
+        },
+        {
+          "id": "460",
+          "detail": "login",
+          "created_at": "2026-09-02 13:38:23+00",
+          "reference": "c793848b-7c26-4ce9-abc9-0eda09c2bcf3"
+        },
+        {
+          "id": "461",
+          "detail": "register",
+          "created_at": "2026-09-02 13:41:17+00",
+          "reference": "7e8b949d-3948-4e38-9876-8033bdfc5944"
+        },
+        {
+          "id": "462",
+          "detail": "login",
+          "created_at": "2026-09-02 13:41:17+00",
+          "reference": "7e8b949d-3948-4e38-9876-8033bdfc5944"
+        },
+        {
+          "id": "463",
+          "detail": "register",
+          "created_at": "2026-09-02 13:44:14+00",
+          "reference": "b899fd19-3d7c-41e3-b2d0-0b0bfdb95cf4"
+        },
+        {
+          "id": "464",
+          "detail": "login",
+          "created_at": "2026-09-02 13:44:14+00",
+          "reference": "b899fd19-3d7c-41e3-b2d0-0b0bfdb95cf4"
+        },
+        {
+          "id": "465",
+          "detail": "register",
+          "created_at": "2026-09-02 13:47:07+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "466",
+          "detail": "login",
+          "created_at": "2026-09-02 13:47:07+00",
+          "reference": "057a4ded-b650-40e4-9b6d-b86e5064a84f"
+        },
+        {
+          "id": "467",
+          "detail": "register",
+          "created_at": "2026-09-02 13:49:02+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "468",
+          "detail": "login",
+          "created_at": "2026-09-02 13:49:02+00",
+          "reference": "d439e0ec-237f-4058-bca5-032fc137744d"
+        },
+        {
+          "id": "469",
+          "detail": "register",
+          "created_at": "2026-09-02 13:51:18+00",
+          "reference": "0218dd1a-67de-4d2d-89cf-da1553357e45"
+        }
+      ],
+      "remediation": [
+        "挂到占位 user（审计记录通常不建议删除）",
+        "删除这些审计行（会留下审计空白，需确认合规要求）",
+        "保留但标记，外键暂不补"
+      ]
+    },
+    {
+      "kind": "artifacts -> missing run",
+      "count": 0,
+      "impact": {},
+      "sample": [],
+      "remediation": [
+        "删除这些产物索引（文件是否仍存在需另行核对）",
+        "保留但标记，外键暂不补"
+      ]
+    }
+  ]
+}

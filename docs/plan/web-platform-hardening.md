@@ -44,8 +44,8 @@
 | T3 | 密钥加固与启动校验 | P0 | T1 | 已完成 |
 | T3b | 测试数据库隔离 | P0 | — | 已完成 |
 | T4 | 列表接口分页 | P0 | T1 | 已完成 |
-| T5 | 业务库备份与恢复预案 | P1 | — | 待开始 |
-| T6 | 孤儿数据清理与外键策略 | P1 | T5 | 待开始 |
+| T5 | 业务库备份与恢复预案 | P1 | — | **恢复演练已通过**（2026-09-30：行数逐一一致 + 外键 9/9 全部建成）；运维备份脚本与异地存放仍缺 |
+| T6 | 孤儿数据清理与外键策略 | P1 | T5 | **第 1 步已完成**（2026-09-30：592 条孤儿按人工口径处置，恢复演练转 clean）；第 2/3 步未做 |
 | T7 | request id 与结构化日志 | P1 | T1 | 待开始 |
 | T8 | `/healthz` 真实探活 | P1 | T7 | 待开始 |
 | T9 | `/api/runs` 限流与配额 | P1 | T7 | 待开始 |
@@ -267,6 +267,34 @@ Status: 已完成
 - 一条命令可完成备份；恢复演练成功，且恢复后行数与备份前一致。
 - 文档中写明备份频率与存放位置（非本机）。
 
+**实际结果（2026-09-30，部分完成）**
+
+备份与恢复**已真实演练**（E2 范围：只读业务库 + 同实例独立库 `apodex_f07_restore`，演练后已删除，dump 未落宿主）：
+
+- `pg_dump -Fc --no-owner --no-acl` 成功，225,999 字节；
+- `pg_restore` 到独立库：**7 张表行数与源库逐一一致**
+  （users 28 / sessions 141 / runs 1271 / turns 1093 / artifacts 296 / user_llm_configs 164 / audit_log 1978）；
+- **但恢复库只建成 4 个外键，源库有 9 个**——5 个 `ALTER TABLE … ADD CONSTRAINT` 因孤儿行失败
+  （`audit_log_user_id_fkey`、`runs_session_id_fkey`、`runs_user_id_fkey`、`sessions_user_id_fkey`、
+  `turns_run_id_fkey`）。
+
+**结论（初次演练）：备份存在 ≠ 可恢复。** 数据能复制回来，但恢复出的库完整性弱于源库，直到 T6 的孤儿被处置。
+
+**处置后复演（2026-09-30，通过）**：T6 第 1 步处置完 592 条孤儿后重新演练 ——
+
+- `pg_restore` **零错误**（此前 5 个 `ADD CONSTRAINT` 失败全部消失）；
+- 外键 **恢复库 9 / 源库 9**（此前 4/9）；
+- 行数逐一一致：users 29 / sessions 141 / runs 754 / turns 1093 / artifacts 296 / user_llm_configs 164 / audit_log 1978。
+
+即 **T5 的完成标准「恢复演练成功、行数一致」已达成**。仍缺的是一条命令的运维备份脚本与**非本机存放位置**。
+
+> ⚠️ 另发现（与本轮无关，属既有状态）：数据库容器的 `/tmp` 下存有 2026-09-15、09-23 的历史
+> `*-apodex.dump` / `*-postgres.dump`。它们含真实业务数据、**随容器重建即丢失**，不能视为备份。
+> 本轮处置前的快照 `/tmp/apodex-pre-t6.dump` 同样只在容器内——如需保留回滚能力，请自行导出到安全位置。
+
+运行文件侧的备份清单、保留计划与恢复校验由 `scripts/run_retention.py` 提供（见 F07 工单）；
+`pg_dump`/`pg_restore` 的**运维脚本与异地存放**仍未建立 —— 本轮只有演练记录，没有可一条命令调用的备份脚本。
+
 ---
 
 ### T6 孤儿数据清理与外键策略
@@ -283,6 +311,77 @@ Status: 已完成
 - 一致性检查脚本输出全 0（或全为确认保留的行）。
 - 新建迁移后 `alembic upgrade head` 在空库和现有库都能跑通。
 - 删除一个会话后，其子资源状态符合第 2 步定义的语义。
+
+**实际结果（2026-09-30，进行中）**
+
+第 4 步的只读检查脚本已交付并可随时复跑：
+
+```bash
+uv run python scripts/run_retention.py check
+```
+
+2026-09-30 实测（只读，业务库 `apodex`）：
+
+| 孤儿类型 | 行数 |
+|---|---|
+| runs → 缺失 session | **517** |
+| runs → 缺失 user | 17 |
+| sessions → 缺失 user | 18 |
+| turns → 缺失 run（`run_id` 非空） | 11 |
+| audit_log → 缺失 user | **29** |
+| artifacts → 缺失 run | 0 |
+
+前两类与本节原记录（runs 517 / audit_log 29）吻合。另注：`turns.run_id IS NULL` 的行有 45 条，
+属**合法**（并非所有 turn 都归属某个 run），不应计入孤儿——检查脚本已按此区分。
+
+**孤儿清单已导出（第 1 步的统计部分，2026-09-30）**
+
+```bash
+uv run python scripts/run_retention.py orphans \
+  --out .scratch/web-runtime-trace-hardening/audit/f07-orphan-inventory.json
+```
+
+合计 **592 条孤儿行**，清单只含标识符与时间戳（不含 prompt/answer/audit 正文）：
+
+| 孤儿类 | 行数 | 连带影响 |
+|---|---|---|
+| runs → 缺失 session | **517** | **turns 0、artifacts 0** |
+| runs → 缺失 user | 17 | turns 21、artifacts 0 |
+| sessions → 缺失 user | 18 | runs 18、turns 24 |
+| turns → 缺失 run | 11 | — |
+| audit_log → 缺失 user | 29 | — |
+| turns → 缺失 session / artifacts → 缺失 run | 0 | — |
+
+**决策要点**：最大的 517 条**没有任何连带数据**（空壳 run，从未产生消息或产物），
+因此「删除」在这类上的连带损失为 0；另外两类则分别会带走 21 条 turns 与 18 runs + 24 turns，
+性质不同，不应套用同一个处置口径。每类在清单里都带有三项候选处置（挂占位 / 删除 / 保留但标记）。
+
+**处置已执行（第 1 步，2026-09-30）**
+
+口径由人工确认（删除 / 挂占位 / 保留标记三选一），脚本只读不擅自决策；执行前先取了
+`pg_dump` 快照，全程单事务：
+
+| 类别 | 行数 | 处置 | 结果 |
+|---|---|---|---|
+| runs → 缺失 session | 517 | **删除** | 已删除（依赖 turns/artifacts 均为 0，脚本二次校验后才执行） |
+| runs → 缺失 user | 17 | 挂占位 user | 已重挂 |
+| sessions → 缺失 user | 18 | 挂占位 user | 已重挂 |
+| audit_log → 缺失 user | 29 | 挂占位 user | 已重挂（审计行未删除） |
+| turns → 缺失 run | 11 | **解除悬挂引用**（`run_id = NULL`） | 已释放；未制造占位 run |
+
+关于最后一行的实现选择：这 11 条 turn 的 run 已不存在，若「挂占位 run」就要凭空造一条 run，
+它会污染 run 计数与 UI 列表、且没有轨迹文件（在备份清单里会变成一个新的 missing 项）。
+`run_id` 本身可空，且表里已有 45 条合法的 `run_id IS NULL` 行，故按既有语义解除引用。
+如需改为挂占位 run，可回退重做——回滚依据是处置前快照。
+
+占位实体：`users.username = __orphan_placeholder__`，`status = disabled`，
+`password_hash = !orphan-placeholder-disabled`（不是合法 argon2 串，任何验证都无法通过，不可登录）。
+
+处置后 `scripts/run_retention.py check` 输出 **verdict: clean**，七类孤儿全为 0；
+行数变化：runs 1271 → 754、users 28 → 29，其余表不变（turns/artifacts/audit_log 一条未丢）。
+
+**未做**：第 2 步的会话删除语义、第 3 步的外键 `ON DELETE` 行为与迁移 ——
+两者都涉及删除语义的产品决策，不在本次处置口径内。
 
 ---
 

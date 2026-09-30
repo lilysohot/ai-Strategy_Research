@@ -137,7 +137,11 @@ async def test_orchestrator_steer_writes_stdin_and_publishes() -> None:
 
     event = await asyncio.wait_for(q.get(), timeout=1)
     assert event["type"] == "steer_queued"
-    assert event["seq"] == 1
+    # F09: ``seq`` is reserved for the trajectory line number — the reconnect
+    # cursor (``?after=seq``). The steer counter travels as ``steer_seq`` so a
+    # steer can never jump a reconnecting client past unread lines.
+    assert event["steer_seq"] == 1
+    assert "seq" not in event
     # Egress redaction (§7): the raw secret never reaches the SSE payload.
     assert "sk-abcdef123456" not in event["message"]
     assert "(redacted)" in event["message"]
@@ -145,7 +149,8 @@ async def test_orchestrator_steer_writes_stdin_and_publishes() -> None:
     # Per-run seq increments so clients can order queued steers.
     assert await orch.steer(handle.run_id, "second") == 2
     event2 = await asyncio.wait_for(q.get(), timeout=1)
-    assert event2["seq"] == 2
+    assert event2["steer_seq"] == 2
+    assert "seq" not in event2
 
 
 async def test_orchestrator_steer_unknown_or_dead_run() -> None:

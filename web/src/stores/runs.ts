@@ -28,7 +28,13 @@ import {
   type ApprovalRequest,
 } from '../utils/approval'
 import { interruptInFlight, toolStepStatus, type StepStatus } from '../utils/activity'
-import { accumulateUsage, mergeRunMeta, type RunMeta, type UsageTotals } from '../utils/statusbar'
+import {
+  accumulateUsage,
+  mergeRunMeta,
+  usageTotalsFrom,
+  type RunMeta,
+  type UsageTotals,
+} from '../utils/statusbar'
 import { useAuthStore } from './auth'
 
 export interface TimelineEntry {
@@ -117,14 +123,22 @@ export const useRunStreamStore = defineStore('runStream', () => {
   let handle: SseStreamHandle | null = null
   let nextId = 0
   let nextStepId = 0
-  /**
-   * Turns whose text arrived as live token fragments. The trajectory replay later
-   * re-emits the same turn as one whole record; without this set the answer would
-   * be rendered twice (once streamed, once replayed).
-   */
-  const streamedTurns = new Set<number>()
   /** Turns whose usage has been added to the totals (replay dedup). */
   const usageTurns = new Set<number>()
+  /**
+   * Each turn's current best text (F10). Live deltas APPEND; a replayed
+   * whole-turn record REPLACES, because the replay is the complete copy and can
+   * therefore also *repair* a turn whose live fragments were dropped under
+   * backpressure. Keeping the text per turn is what makes that repair possible
+   * without appending the same words twice.
+   */
+  const turnTexts = new Map<number, string>()
+  /**
+   * Subscription generation (F11). Bumped on every fresh subscribe / reset, so
+   * an async reply that lands after the user switched runs can be discarded
+   * instead of overwriting the run now on screen.
+   */
+  let generation = 0
 
   const isStreaming = computed(
     () => connection.value === 'connecting' || connection.value === 'open' || connection.value === 'reconnecting',
@@ -173,6 +187,32 @@ export const useRunStreamStore = defineStore('runStream', () => {
     steps.value.push({ id: nextStepId++, kind, turn, content: chunk })
   }
 
+  /**
+   * Set the whole text of the last step of ``kind`` for ``turn`` (F10).
+   *
+   * Replacing rather than appending is what makes a replay idempotent: a
+   * reconnect that re-sends the same whole-turn record lands on exactly the same
+   * content instead of doubling it.
+   */
+  function setStepContent(kind: RunStep['kind'], turn: number | undefined, content: string): void {
+    for (let i = steps.value.length - 1; i >= 0; i--) {
+      const step = steps.value[i]
+      if (step.kind === kind && step.turn === turn) {
+        step.content = content
+        return
+      }
+    }
+    steps.value.push({ id: nextStepId++, kind, turn, content })
+  }
+
+  /** Rebuild the accumulated answer from the per-turn texts, in turn order. */
+  function recomputeAnswer(): void {
+    answer.value = [...turnTexts.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([, text]) => text)
+      .join('')
+  }
+
   /** Apply one event's effect on the run's visible state. */
   function applyEvent(event: SseEvent): void {
     switch (event.type) {
@@ -188,31 +228,42 @@ export const useRunStreamStore = defineStore('runStream', () => {
       case 'assistant_delta': {
         if (status.value !== 'running') status.value = 'running'
         // Two producers feed this event type and they carry the SAME text:
-        //   * live  — one event per token fragment (`text` / `thinking_text`)
+        //   * live   — one event per token fragment (`text` / `thinking_text`)
         //   * replay — one whole-turn record (`content` / `thinking`, full=true)
-        // Dropping the replay copy of any turn already streamed live is what
-        // stops the answer from appearing twice.
+        // They are reconciled by REPLACEMENT, not by dropping: the replay copy
+        // is the complete record, so it both de-duplicates (same words land on
+        // the same slot) and repairs a turn whose live deltas were dropped under
+        // backpressure. Skipping the replay instead is what used to leave holes
+        // in the answer with no way to fill them (F10).
         const replay = event.full === true
         const turn = event.turn ?? -1
-        if (replay && streamedTurns.has(turn)) break
 
         const thinking = replay ? (event.thinking ?? '') : (event.thinking_text ?? '')
         const text = replay ? (event.content ?? '') : (event.text ?? '')
 
-        if (!replay && (text || thinking)) streamedTurns.add(turn)
-
-        // Per-turn usage rides only on the replayed whole-turn record; count
-        // each turn once even if a reconnect replays it again.
+        // F10: metering is decided independently of the text. The old code
+        // `break`-ed out of the whole case for a replay of a live-streamed turn,
+        // which dropped that turn's usage too — so a turn received live was
+        // never metered at all.
         if (replay && event.usage && !usageTurns.has(turn)) {
           usageTurns.add(turn)
           usage.value = accumulateUsage(usage.value, event.usage)
         }
 
         // Reasoning comes before the visible reply of that turn.
-        if (thinking) appendStep('thinking', event.turn, thinking)
+        if (thinking) {
+          if (replay) setStepContent('thinking', event.turn, thinking)
+          else appendStep('thinking', event.turn, thinking)
+        }
         if (text) {
-          answer.value += text
-          appendStep('text', event.turn, text)
+          if (replay) {
+            turnTexts.set(turn, text)
+            setStepContent('text', event.turn, text)
+          } else {
+            turnTexts.set(turn, (turnTexts.get(turn) ?? '') + text)
+            appendStep('text', event.turn, text)
+          }
+          recomputeAnswer()
         }
         break
       }
@@ -291,6 +342,9 @@ export const useRunStreamStore = defineStore('runStream', () => {
   function watch(id: string, after?: number): void {
     close()
     runId.value = id
+    // F11: a fresh generation invalidates any async reply still in flight for
+    // the run we were watching a moment ago.
+    generation += 1
     status.value = 'queued'
     timeline.value = []
     answer.value = ''
@@ -299,7 +353,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     if (!after) {
       steps.value = []
       nextStepId = 0
-      streamedTurns.clear()
+      turnTexts.clear()
       usageTurns.clear()
       meta.value = {}
       usage.value = { prompt: 0, completion: 0, total: 0, cacheRead: 0, cacheWrite: 0 }
@@ -369,20 +423,30 @@ export const useRunStreamStore = defineStore('runStream', () => {
    * Fire-and-forget from ``onDone``: it only enriches an already-finished run.
    */
   async function reconcile(): Promise<void> {
-    if (!runId.value) return
+    const requestedRunId = runId.value
+    const requestedGeneration = generation
+    if (!requestedRunId) return
     try {
-      const summary = await runsApi.get(runId.value)
+      const summary = await runsApi.get(requestedRunId)
+      // F11: this reply belongs to `requestedRunId`, but the user may have
+      // switched runs (or reset / logged out) while it was in flight. Applying
+      // it would overwrite the run now on screen with the old run's outcome.
+      if (runId.value !== requestedRunId || generation !== requestedGeneration) return
       if (runDir.value === null) runDir.value = summary.run_dir ?? null
       if (summary.status) status.value = summary.status as RunStatus
       finalAnswer.value = summary.final_answer ?? finalAnswer.value
       const reason = summary.error || (summary.stopped_by ? `已停止（${summary.stopped_by}）` : null)
       if (reason) errorMessage.value = reason
       if (summary.usage) {
-        usage.value = accumulateUsage(usage.value, summary.usage)
+        // F10: the server's whole-run figure is authoritative, so it REPLACES the
+        // running total. Adding it instead double-counts every turn the live
+        // stream already metered.
+        usage.value = usageTotalsFrom(summary.usage)
       }
     } catch {
-      // Non-fatal: the SSE outcome already stands; the detail view simply lacks
-      // the run directory, and a failed run keeps its banner-less status.
+      // Non-fatal, but not silent: a clean EOF is not proof the run succeeded,
+      // so surface the outcome as unconfirmed rather than quietly final (F11).
+      lastError.value = '运行已结束，但未能与服务端对账，结果待核实'
     }
   }
 
@@ -415,11 +479,14 @@ export const useRunStreamStore = defineStore('runStream', () => {
   function reset(): void {
     close()
     runId.value = null
+    // F11: as with a run switch, invalidate anything in flight (logout, drawer
+    // close) so a late summary cannot repopulate a cleared view.
+    generation += 1
     status.value = 'idle'
     timeline.value = []
     steps.value = []
     nextStepId = 0
-    streamedTurns.clear()
+    turnTexts.clear()
     usageTurns.clear()
     meta.value = {}
     usage.value = { prompt: 0, completion: 0, total: 0, cacheRead: 0, cacheWrite: 0 }

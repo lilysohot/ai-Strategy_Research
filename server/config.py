@@ -13,6 +13,7 @@ CAP_SYS_ADMIN inside the container.
 
 from __future__ import annotations
 
+import os
 import uuid
 from functools import lru_cache
 from pathlib import Path
@@ -20,6 +21,25 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _default_web_data_dir() -> Path:
+    """Source-tree-external default for Web run data (F01).
+
+    The runtime must never write user data into the source tree: a build context
+    and image layer would then carry it (F02), and a checkout wipe would lose it.
+    Defaults follow the platform's per-user data convention; a service account or
+    containerised deploy must set ``SERVER_RUNS_ROOT`` explicitly instead of
+    inheriting a HOME/LOCALAPPDATA that may drift.
+    """
+    if os.name == "nt":
+        base = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
+        return Path(base) / "frontier-agent" / "web"
+    base = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
+    return Path(base) / "frontier-agent" / "web"
+
+
+_DEFAULT_WEB_DATA_DIR = _default_web_data_dir()
 
 #: Placeholder the server refuses to run with outside of ``SERVER_DEBUG``. It is
 #: a constant (rather than an inline literal) so the startup check and the
@@ -64,10 +84,9 @@ class ServerConfig(BaseSettings):
     max_upload_files: int = 20                # files per run submission
 
     # — Paths ————————————————————————————————————————————————
-    # Root for all per-run artifacts + trajectory. Must be a persistent volume.
-    runs_root: Path = REPO_ROOT / "server" / "runs"
-    # Uploaded inputs (e.g. financial PDFs). Sibling to runs_root.
-    uploads_root: Path = REPO_ROOT / "uploads"
+    # Root for all per-run artifacts + trajectory. Source-tree-external by
+    # default (F01); set SERVER_RUNS_ROOT to pin a stable service path.
+    runs_root: Path = _DEFAULT_WEB_DATA_DIR / "runs"
 
     # — Database ——————————————————————————————————————————————
     database_url: str = "sqlite+aiosqlite:///./server/dev.db"
@@ -113,7 +132,6 @@ class ServerConfig(BaseSettings):
 
     def ensure_dirs(self) -> None:
         self.runs_root.mkdir(parents=True, exist_ok=True)
-        self.uploads_root.mkdir(parents=True, exist_ok=True)
 
 
 @lru_cache(maxsize=1)
