@@ -97,11 +97,19 @@ handle /api/* {
 | 卷 | 内容 |
 | --- | --- |
 | `web_dist` | 前端构建产物（由 `frontend` 写入，Caddy 只读挂载） |
-| `agent_data` | Agent 运行时数据 |
+| `agent_data` | Agent 运行时数据（⚠️ F01 待同步：应挂到源码树外运行目录） |
 | `caddy_data` | TLS 证书与 ACME 状态（**不要删除**，否则会重复申请证书） |
 | `caddy_config` | Caddy 运行时配置 |
 
 宿主目录挂载：`../config`（只读）、`../.env`（只读）、`../data`。
+
+**运行数据目录（F01）**：Web 运行数据（run 轨迹 / 输入 / 产物 / spill）默认已落到
+**源码树外**——Windows `%LOCALAPPDATA%\frontier-agent\web\runs`、POSIX
+`$XDG_DATA_HOME/frontier-agent/web/runs`，可用 `SERVER_RUNS_ROOT` 覆盖到稳定目录。
+
+⚠️ **容器部署尚未同步**：当前 `Dockerfile.web` 仍对 `/app/server/runs` 与 `/app/uploads`
+声明 `VOLUME`、Compose 卷仍挂 `/app/agent_data`，会形成匿名卷、不满足可识别备份与恢复。
+生产发布前须把命名卷挂到 `SERVER_RUNS_ROOT` 指向的源码树外路径（见 F01 工单）。
 
 ## 安全说明
 
