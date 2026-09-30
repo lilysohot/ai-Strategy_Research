@@ -1,0 +1,16 @@
+INFO:     127.0.0.1:64174 - "GET /api/runs/72c613740aa44420a6c34c347ddc367b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64180 - "GET /api/runs/72c613740aa44420a6c34c347ddc367b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52892 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63879 - "GET /api/sessions?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63880 - "GET /api/sessions?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63881 - "GET /api/sessions/a2f9d950-fc4e-4db1-aaf5-4cd0827fe33f/turns?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63882 - "GET /api/runs/72c61374-0aa4-4420-a6c3-4c347ddc367b/artifacts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63286 - "GET /api/runs/72c613740aa44420a6c34c347ddc367b/events?after=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51059 - "GET /api/sessions/a2f9d950-fc4e-4db1-aaf5-4cd0827fe33f/turns?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49978 - "POST /api/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:50383 - "GET /api/runs/d93fd9418fcb435189f2a0b7c5b822b3/events?after=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52501 - "GET /api/runs/d93fd9418fcb435189f2a0b7c5b822b3/artifacts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58388 - "GET /api/runs/d93fd9418fcb435189f2a0b7c5b822b3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62857 - "GET /api/sessions/a2f9d950-fc4e-4db1-aaf5-4cd0827fe33f/turns?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61678 - "GET /api/runs/d93fd9418fcb435189f2a0b7c5b822b3/diff HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/runs/d93fd9418fcb435189f2a0b7c5b822b3/artifacts HTTP/1.1" 200 OK

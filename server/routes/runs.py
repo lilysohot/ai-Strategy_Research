@@ -35,10 +35,10 @@ from server.artifacts import scan_outputs
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
 from server.deps import get_current_user
 from server.diff import revert_paths
-from server.orchestrator import _session_uuid, get_orchestrator
+from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.relay import sse_for_run, trajectory_records_for_egress
-from server.store import User as UserModel
 from server.store import (
+    ACTIVE_RUN_STATUSES,
     build_llm_snapshot,
     create_run,
     ensure_session,
@@ -48,6 +48,8 @@ from server.store import (
     session_exists,
     sync_run_artifacts,
 )
+from server.store import Run as RunModel
+from server.store import User as UserModel
 
 logger = logging.getLogger(__name__)
 
@@ -247,6 +249,32 @@ def _flatten_filename(name: str) -> str:
     return name.strip() or ""
 
 
+def _live_queue_for(
+    orch: Orchestrator, run_id: str, run: RunModel
+) -> asyncio.Queue[dict[str, Any] | None] | None:
+    """Join the run's live fan-out, or return None to serve it by replay alone.
+
+    A subscriber that joins a stream which can no longer produce events waits
+    forever: nothing pushes the end-of-stream sentinel, so the browser shows a run
+    that never finishes (F09). Whether a run is still live cannot be answered from
+    the orchestrator's memory of closed streams — a run can end in *another*
+    process (an API restart, a start-up orphan sweep) or age out of that bounded
+    window — so the decision is made on two authoritative facts instead:
+
+    * this process holds no worker handle for the run (only the spawning process
+      ever receives its frames), and
+    * the persisted row is no longer queued/running.
+
+    Both must hold to skip the subscription: a freshly submitted run has no handle
+    yet while its worker is still starting, so absence alone would truncate a live
+    stream. Whenever either fact says the run may still emit frames, the caller
+    gets a queue and the stream ends on the worker's sentinel as before.
+    """
+    if not orch.has_worker(run_id) and run.status not in ACTIVE_RUN_STATUSES:
+        return None
+    return orch.subscribe(run_id)
+
+
 @router.get("/{run_id}/events")
 async def run_events(
     run_id: str,
@@ -255,7 +283,9 @@ async def run_events(
 ) -> StreamingResponse:
     # Ownership check: a run that isn't the caller's reads as 404, so an
     # unguessable id alone is not enough to subscribe to someone else's stream.
-    if not await _run_visible(run_id, user.id):
+    # The row also carries the status the live-vs-replay decision needs (F09).
+    row = await _visible_run(run_id, user.id)
+    if row is None:
         raise HTTPException(status_code=404, detail="run not found")
     # Live fan-out is keyed by the id the orchestrator spawned the worker with
     # (the compact hex form), so a hyphenated request would otherwise subscribe
@@ -266,8 +296,9 @@ async def run_events(
     # receives as stdout frames and fans out to subscribers. Subscribing here is
     # what lets token deltas reach the browser while the run is still going;
     # without it the stream is replay-only and the answer appears all at once.
+    # A run that can no longer produce events must NOT subscribe — see F09.
     orch = get_orchestrator()
-    queue = orch.subscribe(run_id)
+    queue = _live_queue_for(orch, run_id, row)
 
     async def event_stream() -> AsyncIterator[str]:
         try:
@@ -275,8 +306,10 @@ async def run_events(
                 yield frame
         finally:
             # A disconnected client must stop receiving fan-out, or its queue
-            # grows unbounded for the rest of the run.
-            orch.unsubscribe(run_id, queue)
+            # grows unbounded for the rest of the run. Nothing to release when the
+            # stream was served by replay alone.
+            if queue is not None:
+                orch.unsubscribe(run_id, queue)
 
     return StreamingResponse(
         event_stream(),
@@ -487,15 +520,24 @@ async def run_get(
     )
 
 
-async def _run_visible(run_id: str, user_id: uuid.UUID) -> bool:
-    """True iff the run exists and belongs to ``user_id``.
+async def _visible_run(run_id: str, user_id: uuid.UUID) -> RunModel | None:
+    """Return the caller's run row, or None when it is absent or another's.
 
-    Used by the read/control routes so a guessed run id yields 404 rather than
-    leaking existence or streaming another user's events. The DB is the authority;
-    a run row without a matching owner is invisible regardless of disk state.
+    The DB is the authority: a run row without a matching owner is invisible
+    regardless of disk state (anti-IDOR), and the row's status is what decides
+    whether a run's event stream can still produce events (F09).
     """
     try:
         rid = uuid.UUID(run_id)
     except ValueError:
-        return False
-    return await get_run(run_id=rid, user_id=user_id) is not None
+        return None
+    return await get_run(run_id=rid, user_id=user_id)
+
+
+async def _run_visible(run_id: str, user_id: uuid.UUID) -> bool:
+    """True iff the run exists and belongs to ``user_id``.
+
+    Used by the read/control routes so a guessed run id yields 404 rather than
+    leaking existence or streaming another user's events.
+    """
+    return await _visible_run(run_id, user_id) is not None

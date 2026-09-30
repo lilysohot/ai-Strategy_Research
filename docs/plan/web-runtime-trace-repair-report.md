@@ -595,7 +595,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | F18 | manifest 存平台规范显示路径；回滚同时接受规范路径与宿主绝对路径；回滚后 `sync_run_artifacts` 重算索引并清理失效行；显示路径改用 POSIX 语义 | `test_revert_updates_artifact_hash_index`、`test_absolute_file_tool_path_can_be_reverted` |
 | F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`），新增 `/readyz` | `test_health_distinguishes_unavailable_storage` |
 | F20 | 提交时落非密钥模型快照与配置引用；worker `run_started` 帧持久化 `running`/`started_at` | `test_submit_records_nonsecret_model_snapshot`、`test_run_started_event_updates_persistent_status` |
-| F09 | `Orchestrator` 记录已关闭的运行流，迟订阅者立即收到结束哨兵（后端契约）；前端游标语义仍待验收 | `test_f09_late_subscription_finishes` |
+| F09 | `Orchestrator.has_worker` + `server.routes.runs._live_queue_for` 按权威状态判定：本进程无 handle 且行状态非 queued/running → replay-only，不再订阅死队列；本进程结束的流由 `_closed_stream_ids` 兜底（后端契约）；前端游标语义仍待验收 | `test_f09_late_subscription_finishes`、`test_f09_finished_in_another_process_replays_and_ends`、`test_f09_active_run_without_a_handle_still_subscribes`、`test_live_queue_decision_uses_the_persisted_status` |
 
 **framework 最小范围例外（F04）**：仅改动 `TrajectoryFileObserver.on_llm_response` 的 JSONL
 记录字段（新增 `tool_calls[].id`），不动调用协议、不动工具执行、不改其他观察器。
@@ -637,11 +637,27 @@ F07 备份/保留闭环、F10/F11 前端回放与代次、F13 容量边界、F21
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
 
-**F09 的已知覆盖盲区**（契约通过但有洞，回溯核查时复现）：本次修复把「已结束的运行流」记在
-**进程内**的 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。
-对**结束于其它进程**的运行（API 重启后、被启动期 orphan reconcile 收口的运行、或 id 已被窗口淘汰），
-`run_events` 仍会订阅并等待一个永不到来的哨兵。已用隔离复现确认：重放事件正常产出、流在 5s 内不结束。
-修法应改为按权威状态判定（本进程无 handle 且运行已处于终态 → 走 replay-only 路径），
-而不是依赖进程内记忆；在改动前，F09 的前端游标语义与此盲区一并视为待验收。本机（Windows 原生）另有既有限制：shell 工具依赖 POSIX 语义、
+**F09 的已知覆盖盲区（已按权威状态修复）**：此前的修复把「已结束的运行流」记在**进程内**的
+`_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。对**结束于其它进程**
+的运行（API 重启后、被启动期 orphan reconcile 收口的运行、或 id 已被窗口淘汰），`run_events` 仍会订阅
+并等待一个永不到来的哨兵。已用隔离复现确认：重放事件正常产出、流在 5s 内不结束。
+
+现改为按权威状态判定，不再依赖进程内记忆：`Orchestrator.has_worker` 报告本进程是否持有该 run 的
+worker handle；`server/routes/runs.py` 的 `_live_queue_for` 仅在「本进程有 handle」**或**「行状态仍在
+`ACTIVE_RUN_STATUSES`（queued/running）」时订阅，否则返回 `None`，由 `sse_for_run` 走 replay-only
+分支——只回放轨迹后自然结束（前端把干净 EOF 视为 `completed`，再经 `GET /{run_id}` 对账终态）。
+本进程结束的流仍由 `_closed_stream_ids` 兜底，用于「handle 尚在、哨兵刚发出」的窗口。
+回归证据：`tests/test_web_f09_stream_termination.py` 四条用例（含「queued/running 且无 handle 仍必须订阅」
+的反向守卫）；把判据临时还原为「总是订阅」后，`test_f09_finished_in_another_process_replays_and_ends`
+以 15s `TimeoutError` 失败，确认该用例确实抓住修复前行为。
+2026-09-30 回溯重跑三项证据均与上轮一致：隔离审计契约 **24/24 通过**（独立报告
+`audit/f09-recheck-results.json`，不覆盖 `post-fix-results.json`；注意该契约只覆盖「本进程结束」，
+盲区路径由 `tests/` 的回归补上）、盲区回归 **4/4 通过**、前端审计
+`F09_steer_sequence_is_not_trajectory_cursor` **仍失败**（10 !== 0）。
+2026-09-30 补充：**盲区本体的浏览器/多进程端到端验收已通过**——隔离栈（mock LLM + 同库双 API 进程
+8471 + vite 5273 + Playwright/Edge）下，跨进程重订阅已在浏览器内实测 19ms EOF，B 上新 run 活流无回归；
+完整记录见 `.scratch/web-runtime-trace-hardening/e2e/e2e-record.md`。**仍未验收**：F09 的前端游标语义
+（steer 序号被当作轨迹游标）——这是工单 [09](../../.scratch/web-runtime-trace-hardening/issues/09-stream-replay-contract.md)
+维持 `ready-for-human` 的唯一剩余项。本机（Windows 原生）另有既有限制：shell 工具依赖 POSIX 语义、
 `test_web_p2_diff`/`test_web_p3_revert`/`test_artifacts_t29` 等仍有与本轮无关的失败，
 因此“通过”仅以隔离契约检查与逐文件基线对比为准，不代表整机验收。
