@@ -1,0 +1,10 @@
+{
+  "query_id": "industry-010",
+  "answer_existence": "no_answer",
+  "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/industry-010/.apodex/runs/20260930-172030+0800-react-2df0",
+  "checks": [],
+  "has_negative_marker": true,
+  "fabrication_risk": true,
+  "answer_preview": "\n**结论：没有。** 这批材料均未给出英伟达已签署 PTFE 采购合同的确切采购吨数——材料里甚至没有出现「英伟达已签署 PTFE 采购合同」这一事实本身。\n\n**核查过程与依据**（证据清单已提交并通过校验，3/3 supported）：\n\n1. **语料库全量检索**：以「PTFE」「英伟达 PTFE」「PTFE 订单/供应协议/采购/吨」「聚四氟乙烯 液冷」等多组关键词检索，PTFE 仅在 2 份材料中出现，其余材料完全未涉及该主题；所有检索均未命中任何与英伟达 PTFE 采购相关的吨位数字（材料中出现的「元/吨」仅为氩气价格，与 PTFE 无关）。\n\n2. **材料 1（华福证券《新",
+  "verdict": "weak_negative"
+}
