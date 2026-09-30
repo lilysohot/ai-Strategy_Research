@@ -584,7 +584,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | 编号 | 实现位置（要点） | 契约检查 |
 |---|---|---|
 | F08 | `server/routes/runs.py` 提交前完成会话归属准入（外部/已删会话 404 且零副作用）；`server/store.py::ensure_session` 失败即拒绝；`server/orchestrator.py::_session_uuid` 命名空间按用户隔离 | `test_f08_submit_rejects_foreign_session_without_mutation` |
-| F01 | `server/config.py::canonical_run_id` + `run_dir_for` 统一 ID 规范形式；`runs.py` 的控制/事件路由按同一形式取句柄 | `test_f01_uuid_returned_by_api_reads_same_trace` |
+| F01 | `server/config.py::canonical_run_id` + `run_dir_for` 统一 ID 规范形式；`runs.py` 控制/事件路由按同一形式取句柄；**目录迁移（本机）**：`runs_root` 默认移到源码树外（Windows `%LOCALAPPDATA%\frontier-agent\web\runs`，POSIX XDG），移除无消费者的 `uploads_root`；`scripts/run_retention.py migrate-runs-root` 迁移本机 4 个 run 目录 + 更新 DB `run_dir` + 清理 99 个孤儿磁盘目录 | `test_f01_uuid_returned_by_api_reads_same_trace`；迁移后 `inspect_trajectory` 读到 `state: complete`；`server/runs` 清空 |
 | F03 | `server/relay.py::trajectory_records_for_egress`：`/trace` 与 SSE 共用同一脱敏出口，记录形状不变 | `test_f03_trace_uses_same_redaction_as_replay` |
 | F04 | `frontier_agent/components/observers/trajectory.py` JSONL 记录保留工具调用 ID（framework 最小范围例外，见下） | `test_f04_observer_call_id_survives_jsonl` |
 | F12 | `server/routes/runs.py` 上传批次失败即回收整个 per-run 目录，不再遗留孤儿文件 | `test_f12_rejected_batch_leaves_no_uploaded_files` |
@@ -644,8 +644,9 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 （SIGKILL / 取消 / 磁盘写满 / 断电耐久）与**请求尝试身份**（失败·重试是否入契约）——契约已定义并
 有合成文件证据，见[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)、F07 的
 **运维备份脚本、异地存放、联合恢复演练与孤儿处置决策**（演练已证「行数可恢复、约束不可恢复」，
-见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、
-F07 备份/保留闭环、F10/F11 前端回放与代次、F13 容量边界、F21 控制历史持久化、
+见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01 的**容器/多部署迁移**
+（Compose 卷挂载与 Dockerfile `VOLUME` 同步、WSL 663 条与 `/tmp` 85 条的历史兼容、活动 Run 跨根保护、
+环境样例同步——本机 Windows 部分已完成）、F10/F11 前端回放与代次、F13 容量边界、F21 控制历史持久化、
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
 

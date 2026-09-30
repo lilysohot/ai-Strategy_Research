@@ -585,6 +585,103 @@ async def _run_consistency_check() -> tuple[list[tuple[str, int]], list[tuple[st
     return counts, orphans
 
 
+@dataclass(frozen=True)
+class RunMigration:
+    """One run whose directory should move from the old root to the new root."""
+
+    run_id: str
+    source: str
+    target: str
+    source_exists: bool
+
+
+async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[RunMigration], list[str]]:
+    """Plan moving run data out of the source tree (F01).
+
+    Returns ``(migrations, orphan_dirs)``: migrations are runs whose recorded
+    ``run_dir`` lives under ``old_root``; orphan_dirs are directories under
+    ``old_root`` that no run references (test residue). Only runs whose run_dir
+    is actually under ``old_root`` are touched — runs pointing elsewhere (a WSL
+    checkout, /tmp) are left alone.
+    """
+    from sqlalchemy import select
+
+    from server.store import Run, get_sessionmaker
+
+    maker = get_sessionmaker()
+    old_root = old_root.resolve()
+    new_root = new_root.resolve()
+    migrations: list[RunMigration] = []
+    db_ids: set[str] = set()
+    async with maker() as session:
+        rows = [(str(r[0]).replace("-", ""), r[1]) for r in
+                (await session.execute(select(Run.id, Run.run_dir))).all()]
+    for run_id, run_dir in rows:
+        db_ids.add(run_id)
+        path = Path(run_dir)
+        try:
+            resolved = path.resolve()
+        except OSError:
+            resolved = path
+        if resolved == old_root or old_root in resolved.parents:
+            migrations.append(RunMigration(
+                run_id=run_id, source=str(path),
+                target=str(new_root / run_id), source_exists=path.is_dir(),
+            ))
+    orphan_dirs: list[str] = []
+    if old_root.is_dir():
+        orphan_dirs = sorted(
+            d.name for d in old_root.iterdir()
+            if d.is_dir() and d.name not in db_ids
+        )
+    return migrations, orphan_dirs
+
+
+async def _apply_root_migration(
+    old_root: Path, new_root: Path,
+) -> tuple[list[str], list[str], list[str]]:
+    """Move runs to the new root and remove unreferenced directories.
+
+    Returns ``(moved, missing, removed)``. Orphan directories are re-validated
+    against the run table immediately before removal, so a stale plan cannot
+    delete a directory that became referenced in the meantime.
+    """
+    import uuid as _uuid
+
+    from sqlalchemy import update
+
+    from server.store import Run, get_sessionmaker
+
+    migrations, orphan_dirs = await _plan_root_migration(old_root, new_root)
+    maker = get_sessionmaker()
+    moved: list[str] = []
+    missing: list[str] = []
+    async with maker() as session:
+        for migration in migrations:
+            src = Path(migration.source)
+            dst = Path(migration.target)
+            if src.is_dir():
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(src), str(dst))
+                moved.append(migration.run_id)
+            else:
+                missing.append(migration.run_id)
+            await session.execute(
+                update(Run)
+                .where(Run.id == _uuid.UUID(migration.run_id))
+                .values(run_dir=str(dst))
+            )
+        await session.commit()
+
+    removed: list[str] = []
+    for name in orphan_dirs:
+        target = old_root / name
+        if target.is_dir():
+            shutil.rmtree(target)
+            removed.append(name)
+    return moved, missing, removed
+
+
 async def _collect_orphan_classes(sample_limit: int = 20) -> list[OrphanClass]:
     """Read-only inventory: one entry per orphan class, with impact."""
     from sqlalchemy import text
@@ -734,6 +831,15 @@ def main(argv: list[str] | None = None) -> int:
     p_orphans.add_argument("--out", type=Path, default=None)
     p_orphans.add_argument("--sample", type=int, default=20)
 
+    p_migrate = sub.add_parser(
+        "migrate-runs-root", help="move run data out of the source tree (F01)",
+    )
+    p_migrate.add_argument("--old-root", type=Path, default=None)
+    p_migrate.add_argument("--new-root", type=Path, default=None)
+    p_migrate.add_argument("--orphans-out", type=Path, default=None)
+    p_migrate.add_argument("--apply", action="store_true")
+    p_migrate.add_argument("--yes", action="store_true", help="required with --apply")
+
     p_manifest = sub.add_parser("manifest", help="record every run's storage + digests")
     p_manifest.add_argument("--out", required=True, type=Path)
     p_manifest.add_argument("--runs-root", type=Path, default=None)
@@ -751,6 +857,39 @@ def main(argv: list[str] | None = None) -> int:
     p_verify.add_argument("--runs-root", type=Path, default=None)
 
     args = parser.parse_args(argv)
+
+    if args.command == "migrate-runs-root":
+        from server.config import REPO_ROOT, get_config
+
+        old_root = (args.old_root or REPO_ROOT / "server" / "runs").resolve()
+        new_root = (args.new_root or get_config().runs_root).resolve()
+
+        if args.apply and not args.yes:
+            print("refusing to move data: --apply requires --yes", file=sys.stderr)
+            return 2
+
+        if args.apply:
+            # A single asyncio.run: the asyncpg engine is bound to one event loop,
+            # so planning and applying must share it, not straddle two loops.
+            moved, missing, removed = asyncio.run(_apply_root_migration(old_root, new_root))
+            print(f"moved {len(moved)} run dir(s), {len(missing)} already missing, "
+                  f"removed {len(removed)} orphan dir(s)")
+            return 0
+
+        migrations, orphan_dirs = asyncio.run(_plan_root_migration(old_root, new_root))
+        if args.orphans_out:
+            args.orphans_out.parent.mkdir(parents=True, exist_ok=True)
+            args.orphans_out.write_text(
+                json.dumps({"old_root": str(old_root), "orphan_dirs": orphan_dirs},
+                           ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"orphan list -> {args.orphans_out}")
+        for migration in migrations:
+            state = "exists" if migration.source_exists else "MISSING-ON-DISK"
+            print(f"move\t{migration.run_id}\t[{state}]")
+            print(f"     {migration.source} -> {migration.target}")
+        print(f"\n{len(migrations)} run(s) to migrate, {len(orphan_dirs)} orphan dir(s)")
+        print("dry-run: nothing moved (add --apply --yes to apply)")
+        return 0
 
     if args.command == "remediate":
         if args.apply and not args.yes:

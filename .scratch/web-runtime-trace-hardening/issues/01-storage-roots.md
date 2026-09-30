@@ -32,3 +32,21 @@ Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
 - 2026-09-29：用户要求位置不合理时随本次修复改正，已明确为必交付范围；本轮更新计划，未迁移运行文件。
 - 2026-09-29 全面复核：UUID 变体定位差异已隔离复现；卷挂载和迁移仍待部署验收。 执行结果见 `audit/` 及全面复核记录，未修复。
 - 2026-09-29 环境补正：先复用现有服务核实实际身份与落点；测试分层及迁移门槛见[环境方案](../../../docs/plan/web-storage-validation-environment.md)，不统一要求另建 PG 或换端口。
+- 2026-09-30：**本机 Windows 目录迁移已完成**（用户确认范围：仅本机，WSL 663 条不动）。
+  ① `server/config.py`：`runs_root` 默认从 `<repo>/server/runs` 改为源码树外
+  （Windows `%LOCALAPPDATA%\frontier-agent\web\runs`，POSIX `$XDG_DATA_HOME`），保留
+  `SERVER_RUNS_ROOT` 覆盖；移除无消费者的 `uploads_root` 字段与其 `ensure_dirs` 创建
+  （已确认上传实际写 `<runs_root>/<run_id>/inputs`，`uploads_root` 是纯遗留）。删除空 `uploads/` 目录。
+  ② 迁移工具 `scripts/run_retention.py migrate-runs-root`（dry-run 优先，单 `asyncio.run`）：
+  本机 6 条 run 中 4 个目录**移入新根**（`0be1fc12…/bebb833e…/d85d6b6d…/f696e9d2…`），
+  2 条本就缺文件（`6109bf60…/d40a6d74…`，E1 重启 reconcile 置 failed）；DB `run_dir` 6 条同步更新。
+  ③ 清理 **99 个孤儿磁盘目录**（测试残留，无 DB 引用；清单见 `audit/f01-orphan-dirs.json`）。
+  ④ 验证：`server/runs` 目录数 103 → **0**；迁移后 `inspect_trajectory('0be1fc12…')` 返回
+  `state: complete, valid_lines: 5`（`run_dir_for` 按新默认路径可读）；DB `run_dir` 前缀为
+  `/home` 663、`/tmp` 85、本机新路径 6。回归 80/80 通过。
+- 2026-09-30：**仍未验收（维持 ready-for-human）**：① 容器部署——`deploy/docker-compose.yml`
+  的卷仍挂 `/app/agent_data`、`deploy/Dockerfile.web` 仍声明 `VOLUME /app/server/runs`，未同步到
+  源码树外目标；② WSL 部署（`/home/administrator/FrontierAgent`，663 条 run）与 `/tmp` 85 条的
+  历史兼容与迁移未做；③ 活动 Run 跨新旧根保护、真实重启后新旧 Run 追溯、容器重建验收未做；
+  ④ `.env.example` / 部署文档尚未写明新默认与 `SERVER_RUNS_ROOT` 覆盖。
+  另记录：环境存在批量删除守卫，单轮删除文件数 > 500 会拦截（迁移工具因此需分批），非代码缺陷。

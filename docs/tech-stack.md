@@ -426,10 +426,12 @@ frontend（一次性构建 Vite） ──> web_dist ──> caddy（静态站点
 - Compose 不创建 PostgreSQL 服务；业务库和 corpus 库必须由 `.env`/环境变量指向已部署实例。
 - `frontend` 写 `web_dist` 后退出，Caddy 等待构建成功再启动；Caddy 默认发布 8080/8443，API 的 8000 端口只用于调试。
 - API 只读挂载配置与 `.env`，并挂载 `data` 和 `agent_data`。
-- **当前持久化缺口**：`ServerConfig.runs_root` 是 `/app/server/runs`，但 Compose 的命名卷
-  `agent_data` 挂在 `/app/agent_data`；`Dockerfile.web` 对 `/app/server/runs` 和 `/app/uploads` 的
-  `VOLUME` 会形成匿名卷，不能满足可识别备份与恢复。生产发布前必须把命名卷直接挂到
-  `runs_root/uploads_root`，并完成 PR-GOV-05 的重启、备份和恢复验收。
+- **持久化缺口（F01，2026-09-30 部分修复）**：`ServerConfig.runs_root` 默认已移到源码树外
+  （Windows `%LOCALAPPDATA%\frontier-agent\web\runs`，POSIX `$XDG_DATA_HOME`，可用 `SERVER_RUNS_ROOT`
+  覆盖；`uploads_root` 已移除）。**容器侧尚未同步**：Compose 的命名卷 `agent_data` 仍挂
+  `/app/agent_data`，`Dockerfile.web` 仍对 `/app/server/runs` 与 `/app/uploads` 声明 `VOLUME`，
+  会形成匿名卷——生产发布前必须把命名卷直接挂到 `runs_root`，并完成 PR-GOV-05 的重启、备份和
+  恢复验收（备份/恢复演练已通过，见 hardening T5/T6）。
 
 ### 7.2 镜像与沙箱
 
