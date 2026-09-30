@@ -1,6 +1,6 @@
 # 20：Run 模型快照与启动状态未接入持久化
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-01/03、PR-RUN-01

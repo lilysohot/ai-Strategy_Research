@@ -2330,6 +2330,24 @@ def resolve_mount_dirs() -> tuple[str, str, str]:
     return ws, out, inp
 
 
+def host_user_token() -> str:
+    """A stable per-account token for the shared temp store's directory name.
+
+    ``os.getuid`` is POSIX-only, and it used to be called inline while resolving
+    the spill root — so on Windows every caller of ``resolve_runtime_path`` blew
+    up with ``AttributeError: module 'os' has no attribute 'getuid'``. The
+    failure is not loud where it matters: the diff/snapshot path swallows it
+    (``DiffRecorder`` is best-effort), which silently disabled first-touch
+    baselines and therefore revert.
+
+    Windows already runs the process as one user, so a constant keeps the
+    property the name exists for — two accounts must not share a store — while
+    the POSIX path keeps the uid it always had.
+    """
+    getuid = getattr(os, "getuid", None)
+    return str(getuid()) if getuid is not None else "windows"
+
+
 def spill_root() -> Path:
     """Physical root of the spill store, outside every root the agent can write.
 
@@ -2355,7 +2373,7 @@ def spill_root() -> Path:
     # one conversation out of another's recovery files is ``_path_auth``, which
     # authorizes only the current scope plus the stores this process created —
     # a local user with their own shell is outside that model either way.
-    return Path(tempfile.gettempdir()) / f"apodex-spill-{os.getuid()}"
+    return Path(tempfile.gettempdir()) / f"apodex-spill-{host_user_token()}"
 
 
 def is_spill_path(path: str) -> bool:

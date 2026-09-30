@@ -1,0 +1,131 @@
+{
+  "batch": "E1-20260930",
+  "stage": "E1",
+  "purpose": "复用现有 Web 服务与业务库，用专用测试账号走正常真实链路，验证存储链路契约。",
+  "registered_at": "2026-09-30",
+  "operator": "agent",
+  "status": "partial — 已执行并记录；产物/回滚类用例被 Windows 工具执行缺陷阻塞；本批对象与后台进程按决定保留待后续复验",
+  "disposition": {
+    "decided_at": "2026-09-30",
+    "batch_objects": "保留（不清理）：测试账号、llm_config、会话、Run 行与运行目录",
+    "background_processes": "保留运行：本地 mock、前端 dev server、API 进程",
+    "browser_dom_verification": "暂不做真实浏览器；DOM/SSE 重连/切换类验收转为待办",
+    "reason": "便于继续 E1 复验；未安装浏览器自动化依赖"
+  },
+  "runtime_state_after_batch": {
+    "api": "监听 127.0.0.1:8000（PID 20940 launcher / 23800 interpreter）；本批 Run 6 已泄漏 1 个槽位 → 仅剩 1 个可用槽位，再运行 1 次即需再次重启",
+    "mock": "监听 127.0.0.1:8899（PID 24192 / 23948），MOCK_MODE=text，MOCK_DELAY_S=30",
+    "frontend": "监听 [::1]:5173（PID 5168 / 21464），VITE_API_PROXY=http://127.0.0.1:8000",
+    "cleanup_note": "待复验结束后按本文件 cleanup_list 受控清理；%TEMP% 下的令牌文件已删除"
+  },
+  "deferred": [
+    {"item": "产物索引/下载/diff/回滚（F17/F18/产物索引）", "blocked_by": "本机 shell 工具不可用，运行无法产生 /outputs 文件", "recheck_in": "POSIX 环境（WSL 或容器）"},
+    {"item": "浏览器 DOM 层：store applyEvent/reconcile、切换 Run、SQL 重连渲染（F10/F11）", "blocked_by": "未安装浏览器自动化依赖，本次决定不做真实浏览器", "recheck_in": "安装浏览器自动化后，或人工浏览器复核"},
+    {"item": "F08 跨用户越权提交动态复验", "blocked_by": "本批仅创建账号 B，未提交", "recheck_in": "E1 续跑（账号已就绪）"},
+    {"item": "真实供应商返回格式差异（本地 mock 通过不能宣称供应商兼容）", "blocked_by": "本批限定 mock 出口", "recheck_in": "用户批准后单独执行并记录用量"} 
+  ],
+  "environment": {
+    "api": "127.0.0.1:8000 (Windows 原生 uvicorn, 单 worker)；本批中重启过一次（已获批准），重启后 healthz=200",
+    "frontend": "127.0.0.1:5173 → 实际仅绑定 [::1]:5173；http://localhost:5173 返回 200（vite 5.4.21）",
+    "database": "postgresql 18.6 容器 pg, 库 apodex, 角色 postgres",
+    "runs_root": "<repo>/server/runs (源码树内)",
+    "uploads_root": "<repo>/uploads (源码树内)",
+    "sandbox_backend": "native",
+    "code_head": "a1a9c764b2ad4a75f53ee468cea666b410368608",
+    "code_matches_audit_baseline": true
+  },
+  "resource_headroom": {
+    "disk_free_e": "73 GiB",
+    "active_runs_at_start": 0,
+    "worker_pool_size": 2,
+    "wall_timeout_s": 900,
+    "max_turns": 60,
+    "concurrency": 1
+  },
+  "accounts": [
+    {
+      "role": "A",
+      "username": "e1test_a_20260930",
+      "purpose": "正常流程验证 + F08 跨用户检查的受害方",
+      "user_id": "b89692df-3038-43bf-b2a8-4fa007c49c8b",
+      "created": true,
+      "login_verified": true,
+      "password_recorded": false
+    },
+    {
+      "role": "B",
+      "username": "e1test_b_20260930",
+      "purpose": "F08 越权提交方（本批未提交，保留给越权检查）",
+      "user_id": "98421771-e8f2-40e8-b9e1-37a38e038e7f",
+      "created": true,
+      "login_verified": true,
+      "password_recorded": false
+    }
+  ],
+  "model_source": {
+    "decision": "local-mock",
+    "script": ".scratch/web-runtime-trace-hardening/e1/mock_model.py",
+    "endpoint": "http://127.0.0.1:8899/v1",
+    "call_log": ".scratch/web-runtime-trace-hardening/e1/mock-requests.jsonl",
+    "egress": "全部 client=127.0.0.1；无外部供应商调用",
+    "per_account_config": [
+      {"user": "e1test_a_20260930", "config_id": "70c7ae2d-8ea2-45ec-afbf-cf46a31fd82e", "is_default": true},
+      {"user": "e1test_b_20260930", "config_id": "f3a8d8aa-a07c-49a1-810f-2c80f83268a1", "is_default": true}
+    ],
+    "egress_guard": "测试账号均有默认配置，worker 不会回退到服务器 .env 的真实供应商"
+  },
+  "scope": {
+    "allowed": ["提交合成 Run", "合成文件上传", "轨迹/产物读取与下载", "会话刷新与历史读取", "测试 Run 的停止/回滚", "浏览器/SSE 正常重连"],
+    "forbidden": ["复用真实业务会话", "在共享目录构造越界链接", "修改共享默认模型/Run 根/全局环境", "修改挂载或重启共享 PG", "并发 > 1"]
+  },
+  "created_objects": [
+    {"type": "user", "id": "b89692df-3038-43bf-b2a8-4fa007c49c8b", "name": "e1test_a_20260930"},
+    {"type": "user", "id": "98421771-e8f2-40e8-b9e1-37a38e038e7f", "name": "e1test_b_20260930"},
+    {"type": "llm_config", "id": "70c7ae2d-8ea2-45ec-afbf-cf46a31fd82e", "owner": "A"},
+    {"type": "llm_config", "id": "f3a8d8aa-a07c-49a1-810f-2c80f83268a1", "owner": "B"},
+    {"type": "session", "id": "24785626-e223-55a3-ac6b-8d8debca5980", "name": "e1-a-s1"},
+    {"type": "session", "id": "unknown-e1-a-s2", "name": "e1-a-s2"},
+    {"type": "session", "id": "unknown-e1-a-s4", "name": "e1-a-s4"},
+    {"type": "session", "id": "ab53b65c-2b13-563b-af40-a7c2ec9f158d", "name": "e1-a-s5"},
+    {"type": "session", "id": "74cf28fb-e03c-55f6-afd9-0891529c1b75", "name": "e1-a-s6"},
+    {"type": "run", "id": "d85d6b6d-cc56-45b4-92ee-b2bbacfe85cc", "session": "e1-a-s1", "final_status": "stopped", "stopped_by": "no_tool"},
+    {"type": "run", "id": "bebb833e-8b7a-427d-a2ad-9d3c2711d641", "session": "e1-a-s2", "final_status": "stopped", "stopped_by": "no_tool"},
+    {"type": "run", "id": "6109bf60-2edd-4ae7-8bdc-5bd6359c7087", "session": "e1-a-s1", "final_status": "failed", "stopped_by": "server_restart"},
+    {"type": "run", "id": "d40a6d74-a504-4ad5-89bb-f2c0f81ca604", "session": "e1-a-s4", "final_status": "failed", "stopped_by": "server_restart"},
+    {"type": "run", "id": "0be1fc1215154491b47964c29cc8db9d", "session": "e1-a-s5", "final_status": "stopped", "stopped_by": "no_tool", "note": "含上传文件与工具调用"},
+    {"type": "run", "id": "f696e9d253bc4a96ab6bc9cab1513163", "session": "e1-a-s6", "final_status": "stopped", "stopped_by": "user_stop"}
+  ],
+  "cleanup_list": {
+    "note": "仅清理本批登记对象；证据先保存。禁止直接删关系表绕过约束。",
+    "items": [
+      "2 个已完成软收口的 Run（6109bf60…、d40a6d74…）已由 orphan reconcile 置为 failed/server_restart",
+      "本批 5 个 session 及其 turns/artifacts 行（s1/s2/s4/s5/s6）",
+      "本批 2 个测试账号与 2 个 llm_config",
+      "本批 6 个 run 目录 <repo>/server/runs/<run_id>",
+      "后台进程：本地 mock（e1/mock_model.py）、前端 dev server（vite 5173）",
+      "临时文件：%TEMP%\\e1-tok.txt（令牌，需删除）、%TEMP%\\e1-upload-sample.csv"
+    ]
+  },
+  "evidence": [
+    {"check": "worker 依赖链导入（不调用模型）", "result": "IMPORT-OK"},
+    {"check": "测试账号注册 + 登录", "result": "两个账号 201/active；登录返回 24h 令牌"},
+    {"check": "限出口", "evidence_file": "e1/mock-requests.jsonl", "result": "所有模型调用 client=127.0.0.1；Run1/2 各 1 次、Run5 两次（tool→text）、Run6 一次"},
+    {"check": "Run 1 全链路", "result": "202 → worker → 轨迹 jsonl/json → /trace 3 条 → turns user seq1/assistant seq2 → diff.json {\"files\":[]}"},
+    {"check": "上传落盘", "result": "Run 5 的 inputs/e1-upload-sample.csv（50 B）写入；prompt_addendum 注入"},
+    {"check": "用量未落账", "result": "Run1/2/5/6 的 runs.usage_json 为 SQL NULL；轨迹内 usage 存在（prompt 8 / completion 8）；独立复算 aggregate_usage 正常 → 入账被跳过"},
+    {"check": "started_at 未落账", "result": "本批所有 Run 的 started_at 均为 NULL（F20 症状真实复现）"},
+    {"check": "llm_snapshot 全库为空 JSON", "result": "llm_snapshot_json::text='null' 的运行数 = 1263（全库）"},
+    {"check": "纯文本完成被记成 stopped", "result": "no_tool_behavior=\"stop\" → stopped_by=no_tool → status=stopped；会话里该回答被加 _[partial: no_tool]_ 标签"},
+    {"check": "根因确认", "command": "python -c \"import os; print(hasattr(os,'getpgid'),hasattr(os,'killpg'))\" + 直接调用 _kill_handle", "result": "False False；_kill_handle 抛 AttributeError: module 'os' has no attribute 'killpg'"},
+    {"check": "工具执行同样失败", "evidence": "Run 5 轨迹 t=result name=bash result=\"Error: AttributeError: module 'os' has no attribute 'killpg'\"; engine.log: WARNING plugins.tools.bash: bash tool error", "result": "bash/create_file/read_file/grep/glob 等 shell 工具在本机全部不可用"},
+    {"check": "沙箱告警", "evidence": "engine.log", "result": "CurrentSandbox 以 harness 自身 uid 运行（无 OS 隔离）；ulimit -d 在 win32 无效果（模型命令无内存上限）"},
+    {"check": "后果：worker 池槽位泄漏", "result": "每次 Run 泄漏 1 个槽位；pool_size=2 → 2 次 Run 后 Run 3（同会话）与 Run 4（新会话）永久 queued，任何新 Run 都无法启动"},
+    {"check": "恢复路径", "result": "重启 API 后 healthz=200；orphan reconcile 将 2 条 queued 置为 failed/server_restart（错误串「服务重启导致运行中断」）"},
+    {"check": "停止路径", "result": "POST /runs/{id}/control {\"action\":\"stop\"} → {\"stopped\":true}；终态 stopped / user_stop"},
+    {"check": "SSE 迟订阅（运行结束后）", "result": "1612 B；事件 run_started=1, tool_started=1, tool_finished=1, assistant_delta=2；无任何终态事件（run_completed/run_failed/run_stopped）→ 客户端无法判定结束（F09 症状）"},
+    {"check": "会话/消息接口", "result": "GET /api/sessions → {\"sessions\":[...]}；GET /api/sessions/{id}/turns → {\"turns\":[...],\"has_more\":false}"},
+    {"check": "前端", "result": "vite 5.4.21 ready；仅监听 [::1]:5173（127.0.0.1 不可达）；http://localhost:5173/ 200；/api/* 正确代理到 8000（未带令牌返回 401）"},
+    {"check": "未完成（被阻塞）", "result": "产物索引/下载、回滚、diff 生效类用例：本机 shell 工具不可用 → 运行无法产生 /outputs 文件；需在 POSIX 环境（WSL/容器）复验"},
+    {"check": "方法学备注", "result": "Start-Process 传 curl 的 -H 会按空格拆分，导致 401；须把整串参数作为一个带内嵌引号的参数传入"}
+  ]
+}

@@ -566,3 +566,82 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 本报告完成的是发现归档、隔离复现与修复任务准备，21 项问题的实现状态不因此改变。
 双用户接口及部分故障/竞态已在隔离环境复现；真实浏览器、PG、容器恢复、磁盘故障和容量验收
 仍未完成，不能据此宣称“已无遗漏”或生产验收通过。F15—F21 与迁移的顺序见全面复核记录。
+
+## 8. 修复执行记录（2026-09-30）
+
+本节记录本轮代码修复与验收。上一段“21 项状态不因本报告改变”针对报告 v1.4 当时的结果；
+此后已按下表实现并跑通隔离契约检查。
+
+**验收命令与结果**（隔离运行器：临时数据根 + SQLite，禁网络/子进程）：
+
+```bash
+.venv/Scripts/python.exe .scratch/web-runtime-trace-hardening/audit/run_audit.py \
+  --audit-report <name>.json
+```
+
+修复前 `4 通过 / 20 失败`，修复后 **`24 通过 / 0 失败`**（同一批契约检查，未放宽任何断言）。
+
+| 编号 | 实现位置（要点） | 契约检查 |
+|---|---|---|
+| F08 | `server/routes/runs.py` 提交前完成会话归属准入（外部/已删会话 404 且零副作用）；`server/store.py::ensure_session` 失败即拒绝；`server/orchestrator.py::_session_uuid` 命名空间按用户隔离 | `test_f08_submit_rejects_foreign_session_without_mutation` |
+| F01 | `server/config.py::canonical_run_id` + `run_dir_for` 统一 ID 规范形式；`runs.py` 的控制/事件路由按同一形式取句柄 | `test_f01_uuid_returned_by_api_reads_same_trace` |
+| F03 | `server/relay.py::trajectory_records_for_egress`：`/trace` 与 SSE 共用同一脱敏出口，记录形状不变 | `test_f03_trace_uses_same_redaction_as_replay` |
+| F04 | `frontier_agent/components/observers/trajectory.py` JSONL 记录保留工具调用 ID（framework 最小范围例外，见下） | `test_f04_observer_call_id_survives_jsonl` |
+| F12 | `server/routes/runs.py` 上传批次失败即回收整个 per-run 目录，不再遗留孤儿文件 | `test_f12_rejected_batch_leaves_no_uploaded_files` |
+| F14 | `server/orchestrator.py::_turns_as_of_submission`：历史以本 Run 提交时刻为截止 | `test_f14_queued_future_message_excluded_from_history` |
+| F15 | 终态帧幂等；`_drain_session` 单次启动失败不中断队列且任务结束可自愈；孤儿收口同时恢复消息、产物索引与用量；`server/usage.py` 区分 `complete/partial/unavailable` | 4 项 F15 契约 + `test_queue_continues_after_launch_failure` |
+| F16 | `server/store.py` 每连接 `PRAGMA foreign_keys=ON`；`turns` 唯一索引 + `append_turn` 冲突重试；迁移 `0003_turn_seq_unique` | `test_sqlite_declared_foreign_keys_are_enforced`、`test_concurrent_message_sequence_is_unique` |
+| F17 | `server/artifacts.py::_trusted_outputs_root` 拒绝符号链接根；`server/diff.py` 拒绝符号链接基线 | `test_artifact_root_symlink_cannot_rebase_containment`、`test_revert_rejects_symlinked_baseline` |
+| F18 | manifest 存平台规范显示路径；回滚同时接受规范路径与宿主绝对路径；回滚后 `sync_run_artifacts` 重算索引并清理失效行；显示路径改用 POSIX 语义 | `test_revert_updates_artifact_hash_index`、`test_absolute_file_tool_path_can_be_reverted` |
+| F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`），新增 `/readyz` | `test_health_distinguishes_unavailable_storage` |
+| F20 | 提交时落非密钥模型快照与配置引用；worker `run_started` 帧持久化 `running`/`started_at` | `test_submit_records_nonsecret_model_snapshot`、`test_run_started_event_updates_persistent_status` |
+| F09 | `Orchestrator` 记录已关闭的运行流，迟订阅者立即收到结束哨兵（后端契约）；前端游标语义仍待验收 | `test_f09_late_subscription_finishes` |
+
+**framework 最小范围例外（F04）**：仅改动 `TrajectoryFileObserver.on_llm_response` 的 JSONL
+记录字段（新增 `tool_calls[].id`），不动调用协议、不动工具执行、不改其他观察器。
+需回归的消费者：Web 轨迹回放（`server/relay`）、CLI/apodex 轨迹读取、benchmark 结果解析。
+
+**随修复一起调整的既有测试**（非新契约，而是原测试编码了旧行为）：
+
+- `tests/test_history_t26.py`、`test_sessions_t27.py`、`test_artifacts_t29.py`、
+  `test_web_p2_diff.py`、`test_web_p3_revert.py`、`test_web_p3_approval.py`：补齐 runs/turns 的
+  用户、会话与运行父行。它们是“容许未关联实体写入”的用例；PostgreSQL 一直强制外键，
+  只有 SQLite 在 F16 前静默放行。
+- `tests/test_history_t26.py::test_ensure_session_idempotent`：改为“同属主幂等 + 他人被拒”。
+
+**非 F 清单的可移植性修复**（本机 Windows 复现，随 F 缺陷一并处理）：
+
+- `server/orchestrator.py::_signal_worker`：`os.killpg/getpgid` 缺失时**不发送信号**（显式早返回并记 debug），
+  由调用方原有的有界等待 + 升级路径完成回收。原先该调用在回收路径无条件执行，抛出的
+  `AttributeError` 逃出 `contextlib.suppress`，使产物索引、用量入账与池槽位释放一并被跳过，
+  并终止会话 drain 任务——真实链路实测中每次运行泄漏一个 worker 池槽位，两次后服务无法再启动任何 Run。
+
+  **曾尝试并否决的替代方案**：无进程组 API 时改用 `proc.terminate()/kill()`。它只覆盖 worker 自身、
+  无法覆盖其派生的子进程，且在本平台**把编排器收尾卡死**：隔离停止/升级用例
+  `tests/test_stop_t28.py` 由「3/3 正常完成（36s）」变为「3 次中 2 次无限挂起」。定位过程：
+  二分确认由该改动引入；边界探针显示执行停在信令调用内部（`kill:enter` 之后无后续日志）；
+  独立最小复现中 `terminate()` 立即返回，说明失败依赖当时的传输/进程状态而非调用本身。
+  判定「进程组是不可分割的回收单位」，故回退为不发信号，保留原语义。
+
+  该修复的直接证据：`tests/test_usage_t211.py` 由修复前 `1 失败 / 9 通过（62s）` 变为
+  **`10 全部通过（4s）`**——此前被跳过的池槽位释放使同进程内后续运行无法启动。
+- `plugins/tools/_sandbox.py::host_user_token` 与 `_writer_core.py` 同式回退：`os.getuid`
+  仅存在于 POSIX，缺失时会让 `resolve_runtime_path` 抛错，静默禁用首次快照与回滚。
+
+**部署注意**：新唯一索引经 `server/alembic/versions/0003_turn_seq_unique.py` 下发，
+现有库需执行一次 `alembic upgrade head`（`init_db()` 的 `create_all` 不会改动已存在的表）。
+迁移在存在重复 `(session_id, seq)` 时会显式报错而不改数，由人工决定如何重排。
+
+**仍未完成（不得视为已验收）**：F02 构建排除、F05 历史界面、F06 中断完整性契约、
+F07 备份/保留闭环、F10/F11 前端回放与代次、F13 容量边界、F21 控制历史持久化、
+F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
+真实供应商格式差异）。
+
+**F09 的已知覆盖盲区**（契约通过但有洞，回溯核查时复现）：本次修复把「已结束的运行流」记在
+**进程内**的 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。
+对**结束于其它进程**的运行（API 重启后、被启动期 orphan reconcile 收口的运行、或 id 已被窗口淘汰），
+`run_events` 仍会订阅并等待一个永不到来的哨兵。已用隔离复现确认：重放事件正常产出、流在 5s 内不结束。
+修法应改为按权威状态判定（本进程无 handle 且运行已处于终态 → 走 replay-only 路径），
+而不是依赖进程内记忆；在改动前，F09 的前端游标语义与此盲区一并视为待验收。本机（Windows 原生）另有既有限制：shell 工具依赖 POSIX 语义、
+`test_web_p2_diff`/`test_web_p3_revert`/`test_artifacts_t29` 等仍有与本轮无关的失败，
+因此“通过”仅以隔离契约检查与逐文件基线对比为准，不代表整机验收。

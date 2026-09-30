@@ -1,6 +1,6 @@
 # 08：提交 Run 缺少会话归属校验
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-06, PR-RUN-02

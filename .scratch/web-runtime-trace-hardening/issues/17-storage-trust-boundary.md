@@ -1,6 +1,6 @@
 # 17：产物根目录与回滚基线可经符号链接越界
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-06、PR-RUN-06

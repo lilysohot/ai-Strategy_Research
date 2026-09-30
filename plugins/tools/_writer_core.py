@@ -430,10 +430,22 @@ def _spill_roots():
         roots.append(
             os.path.join(run_dir, "spill") if run_dir
             else os.path.join(
-                tempfile.gettempdir(), f"apodex-spill-{os.getuid()}",
+                tempfile.gettempdir(), f"apodex-spill-{_host_user_token()}",
             )
         )
     return roots
+
+
+def _host_user_token():
+    """Same token ``plugins.tools._sandbox.host_user_token`` computes.
+
+    Duplicated rather than imported: this file is a source FRAGMENT concatenated
+    into the standalone writer bundle, which has no package imports. The two
+    must agree exactly, or the writer would refuse to read a store the harness
+    authorised. ``os.getuid`` is POSIX-only, so it is looked up defensively.
+    """
+    getuid = getattr(os, "getuid", None)
+    return str(getuid()) if getuid is not None else "windows"
 
 
 def _is_spill_path(path):

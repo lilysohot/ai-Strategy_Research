@@ -1,6 +1,6 @@
 # 19：存储与迁移故障缺少就绪门禁
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-01

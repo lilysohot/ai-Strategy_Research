@@ -1,6 +1,6 @@
 # 18：产物索引与回滚后的文件不一致
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-06、PR-GOV-01

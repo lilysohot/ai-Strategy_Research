@@ -47,6 +47,7 @@ import hashlib
 import json
 import logging
 import os
+import posixpath
 from pathlib import Path
 from typing import Any
 
@@ -73,6 +74,30 @@ _MAX_SCAN_FILES = 500
 def _is_binary(data: bytes) -> bool:
     """NUL-byte sniff — the same cheap oracle the preview classifier uses."""
     return b"\x00" in data[:8_192]
+
+
+def _display_alias_for(host: Path, *, workspace: str, outputs: str) -> str | None:
+    """``/outputs/…`` or ``/workspace/…`` for a host path, else ``None``.
+
+    The inverse of ``resolve_runtime_path`` for the two writable roots, and the
+    canonical display form every other layer (artifacts, the diff tab, revert)
+    speaks. ``/outputs`` is tested first because it is nested inside
+    ``/workspace``; the other order would label every deliverable ``/workspace``.
+    """
+    try:
+        real = host.resolve()
+    except (OSError, ValueError):
+        return None
+    for alias, root in (("/outputs", outputs), ("/workspace", workspace)):
+        if not root:
+            continue
+        try:
+            root_real = Path(root).resolve()
+            if real.is_relative_to(root_real):
+                return f"{alias}/{real.relative_to(root_real).as_posix()}"
+        except (OSError, ValueError):
+            continue
+    return None
 
 
 def _hash_tree(root: Path, *, skip: Path | None = None) -> dict[str, str]:
@@ -178,25 +203,23 @@ class DiffRecorder:
         raw = args.get("path")
         if not isinstance(raw, str) or not raw.strip():
             return
-        display = os.path.normpath(raw)
-        if display in self._entries:
-            return  # first touch wins — the baseline must predate every write
+        request_path = os.path.normpath(raw)
 
         from plugins.tools._sandbox import resolve_mount_dirs, resolve_runtime_path
 
-        host = Path(resolve_runtime_path(display))
+        host = Path(resolve_runtime_path(request_path))
         workspace, outputs, _inputs = resolve_mount_dirs()
-        try:
-            real = host.resolve()
-            contained = any(
-                real.is_relative_to(Path(root).resolve())
-                for root in (workspace, outputs)
-                if root
-            )
-        except (OSError, ValueError):
-            return
-        if not contained:
+        # F18: the manifest key is the platform's canonical display path
+        # (``/outputs/report.txt``), NOT the raw argument. In native mode the
+        # tools are handed an absolute host path, and storing that made the
+        # manifest unmatchable: the diff tab listed a host path the rest of the
+        # platform never uses, and a revert of the very same path was refused as
+        # "outside_roots" because it does not start with an alias.
+        display = _display_alias_for(host, workspace=workspace, outputs=outputs)
+        if display is None:
             return  # fail-closed: never read outside the writable roots
+        if display in self._entries:
+            return  # first touch wins — the baseline must predate every write
 
         if not host.is_file():
             self._entries[display] = {"snapshot": None}
@@ -415,7 +438,11 @@ def resolve_run_display_path(run_root: Path, display: str) -> Path | None:
     """
     if not display or not display.startswith("/"):
         return None
-    normalized = os.path.normpath(display)
+    # POSIX semantics on purpose: these are the platform's sandbox aliases, and
+    # ``os.path.normpath`` rewrites ``/outputs/x`` to ``\outputs\x`` on Windows,
+    # which then fails the ``startswith("/")`` aliases below and rejected every
+    # legitimate revert with "outside_roots".
+    normalized = posixpath.normpath(display)
     workspace, outputs = run_writable_roots(run_root)
     for alias, root in (("/workspace", workspace), ("/outputs", outputs)):
         if normalized == alias:
@@ -432,6 +459,37 @@ def resolve_run_display_path(run_root: Path, display: str) -> Path | None:
             return None
         return candidate if contained else None
     return None
+
+
+def _manifest_key_for(run_root: Path, raw: str) -> str:
+    """The manifest key ``raw`` refers to (F18), accepting both spellings.
+
+    The diff tab sends the canonical display path (``/outputs/report.txt``); a
+    client that copied the path out of a file tool's arguments may send the
+    absolute HOST path instead. Only the run's own two writable roots are
+    translated, so a foreign path cannot be turned into a key it does not own —
+    an untranslatable value is returned unchanged and simply misses the manifest.
+    """
+    text = str(raw).strip()
+    # Already canonical (the diff tab's spelling) — return it as the key. Using
+    # ``os.path.normpath`` here would rewrite ``/outputs/x`` to ``\outputs\x`` on
+    # Windows and stop it matching the manifest the worker wrote.
+    if text.startswith(("/outputs/", "/workspace/")):
+        return posixpath.normpath(text)
+    normalized = os.path.normpath(text)
+    workspace, outputs = run_writable_roots(run_root)
+    try:
+        real = Path(normalized).resolve()
+    except (OSError, ValueError):
+        return normalized
+    for alias, root in (("/outputs", outputs), ("/workspace", workspace)):
+        try:
+            root_real = root.resolve()
+            if real.is_relative_to(root_real):
+                return f"{alias}/{real.relative_to(root_real).as_posix()}"
+        except (OSError, ValueError):
+            continue
+    return normalized
 
 
 #: Refusal reasons, with the operator-facing wording the terminal also gives.
@@ -485,7 +543,7 @@ def revert_paths(run_root: Path, paths: list[str]) -> dict[str, Any]:
     results: list[dict[str, Any]] = []
 
     for raw in paths:
-        display = os.path.normpath(str(raw))
+        display = _manifest_key_for(run_root, raw)
         entry = manifest.get(display)
         if not isinstance(entry, dict):
             results.append(_revert_result(display, "rejected", "not_snapshotted"))
@@ -500,7 +558,10 @@ def revert_paths(run_root: Path, paths: list[str]) -> dict[str, Any]:
             # Basename only: the manifest is worker-written, but its contents are
             # still data — never let a name in it climb out of the snapshot dir.
             snap = base_dir / Path(str(snapshot)).name
-            if not snap.is_file():
+            # A symlinked baseline is not a baseline we wrote: it would make the
+            # revert copy an arbitrary host file into the deliverable (the audit's
+            # synthetic case). Refuse it rather than follow it.
+            if snap.is_symlink() or not snap.is_file():
                 results.append(_revert_result(display, "rejected", "missing_baseline"))
                 continue
             try:

@@ -1,6 +1,6 @@
 # 04：保留工具调用 ID 并修复回放配对
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-GOV-02

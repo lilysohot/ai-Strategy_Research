@@ -26,6 +26,7 @@ from server.artifacts import resolve_artifact_path, scan_outputs
 from server.config import build_run_paths, get_config, run_dir_for
 from server.store import (
     create_run,
+    ensure_session,
     init_db,
     list_artifacts,
     record_artifacts,
@@ -190,10 +191,21 @@ async def test_record_artifacts_upserts_and_isolates_owners(monkeypatch, tmp_pat
     await init_db()
 
     try:
-        owner = uuid.uuid4()
-        other = uuid.uuid4()
+        # Real user + session rows: ``runs`` references both, and foreign-key
+        # enforcement (F16) is what PostgreSQL has always applied.
+        owner = (
+            await store.create_user(
+                username=f"t29-o-{uuid.uuid4().hex[:8]}", password_hash="synthetic"
+            )
+        ).id
+        other = (
+            await store.create_user(
+                username=f"t29-x-{uuid.uuid4().hex[:8]}", password_hash="synthetic"
+            )
+        ).id
         sid = uuid.uuid4()
         run_id = uuid.uuid4()
+        await ensure_session(session_id=sid, user_id=owner, title="t")
         await create_run(
             run_id=run_id, session_id=sid, user_id=owner, prompt="p",
             pipeline_id="stateful-react-agent", run_dir="/tmp/x", status="completed",
@@ -249,6 +261,8 @@ async def test_artifact_listing_404_for_foreign_run(app_client, auth_headers,
     uid = _user_id(auth_headers)
     sid = _session_uuid("t29-iso")
     run_id = uuid.uuid4()
+    # The session row must exist first: ``runs.session_id`` is a foreign key.
+    await ensure_session(session_id=sid, user_id=uid, title="t")
     await create_run(
         run_id=run_id, session_id=sid, user_id=uid, prompt="p",
         pipeline_id="stateful-react-agent", run_dir="/tmp/x", status="completed",

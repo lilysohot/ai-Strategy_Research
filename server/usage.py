@@ -120,9 +120,23 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
 
     Best-effort by design: a missing or corrupt trajectory yields a zeroed
     aggregate rather than raising — metering must never break the run lifecycle.
+
+    The aggregate carries a ``status`` (F15) so a consumer can tell the three
+    cases apart. Without it a run whose trajectory could not be read was stored
+    as a verified "0 tokens", which is indistinguishable from a run that really
+    spent nothing — and the UI showed the same thing for both.
+
+      ``complete``     every recorded turn reported usage
+      ``partial``      the trajectory exists but no turn was metered
+      ``unavailable``  no trajectory file (never written, or already gone)
     """
     try:
         records = trajectory_records(run_id)
     except OSError:
-        return aggregate_usage([])
-    return aggregate_usage(records)
+        return {**aggregate_usage([]), "status": "unavailable"}
+    if not records:
+        return {**aggregate_usage([]), "status": "unavailable"}
+    aggregate = aggregate_usage(records)
+    if not aggregate["llm_calls"]:
+        return {**aggregate, "status": "partial"}
+    return {**aggregate, "status": "complete"}

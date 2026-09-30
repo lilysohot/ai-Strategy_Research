@@ -1,5 +1,6 @@
 """Isolated storage audit: no production DB, worker, network or model calls."""
 from __future__ import annotations
+import asyncio  # imported BEFORE the Popen guard — see below
 import os
 import json
 import time
@@ -28,9 +29,37 @@ with tempfile.TemporaryDirectory(prefix="frontier-storage-audit-") as tmp:
             raise RuntimeError("Audit forbids network connections")
         return original_connect(sock, address)
     socket.socket.connect = connect_guard
+
+    # Windows portability: the proactor event loop builds its self-pipe with
+    # ``socket.socketpair()``, which CPython emulates over an AF_INET loopback
+    # connect — refused by the guard above, so no test could even start
+    # ("Audit forbids network connections" at fixture setup). A socketpair can
+    # only ever produce a connected LOCAL pair, so letting just that call
+    # through opens no network path; the guard is restored immediately after.
+    original_socketpair = socket.socketpair
+
+    def socketpair_guard(*args, **kwargs):
+        socket.socket.connect = original_connect
+        try:
+            return original_socketpair(*args, **kwargs)
+        finally:
+            socket.socket.connect = connect_guard
+
+    socket.socketpair = socketpair_guard
     def subprocess_guard(*args, **kwargs):
         raise RuntimeError("Audit forbids child processes / real workers")
     subprocess.Popen = subprocess_guard
+    # Windows portability of this guard (no behaviour change on POSIX):
+    #  1) ``asyncio`` is imported at module top so ``asyncio.windows_utils``
+    #     captures the REAL ``subprocess.Popen`` before it is replaced —
+    #     otherwise its ``class Popen(subprocess.Popen)`` fails with
+    #     "argument 'code' must be code, not str".
+    #  2) The asyncio spawn helpers are blocked explicitly, because on Windows
+    #     they reach the Popen class captured at import, not the patched
+    #     attribute — so patching ``subprocess.Popen`` alone would not stop a
+    #     ``create_subprocess_exec`` from starting a real worker.
+    asyncio.create_subprocess_exec = subprocess_guard  # type: ignore[assignment]
+    asyncio.create_subprocess_shell = subprocess_guard  # type: ignore[assignment]
     import pytest
     args = list(sys.argv[1:])
     report_name = "audit-results.json"

@@ -12,8 +12,9 @@ import contextlib
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 
+from server import store
 from server.orchestrator import get_orchestrator
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
@@ -56,6 +57,38 @@ app.include_router(artifacts_routes.router)
 app.include_router(runs_routes.router)
 
 
-@app.get("/healthz")
-async def healthz() -> dict[str, str]:
+async def _storage_probe(response: Response) -> dict[str, str]:
+    """Shared liveness+readiness answer (F19).
+
+    A process that is up but cannot reach its database must not be handed new
+    work. Before this, health answered 200/``ok`` unconditionally, so a load
+    balancer, an orchestrator or a human all read a storage outage as "fine" —
+    and ``POST /api/runs`` kept accepting runs whose worker could not persist
+    anything. ``store.check_db`` is looked up on the module at call time so the
+    probe reflects the live engine (and is patchable in tests).
+
+    Scope note: this proves the database ANSWERS. It does not yet assert that
+    the schema is the one this build expects — that check belongs with the
+    migration story (F19's remaining half) rather than here.
+    """
+    if not await store.check_db():
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {"status": "storage_unavailable"}
     return {"status": "ok"}
+
+
+@app.get("/healthz")
+async def healthz(response: Response) -> dict[str, str]:
+    """Liveness probe, now coupled to storage readiness (F19).
+
+    The path is unchanged on purpose: the container healthcheck and Caddy
+    already probe it, so an existing deployment picks the signal up instead of
+    having to be reconfigured to notice a dead store.
+    """
+    return await _storage_probe(response)
+
+
+@app.get("/readyz")
+async def readyz(response: Response) -> dict[str, str]:
+    """Explicit readiness probe (F19), for orchestrators that separate the two."""
+    return await _storage_probe(response)

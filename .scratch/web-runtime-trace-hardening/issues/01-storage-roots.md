@@ -1,6 +1,6 @@
 # 01：对齐运行根目录与持久卷，兼容历史 Run
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06

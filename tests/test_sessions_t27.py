@@ -23,6 +23,7 @@ from server.config import get_config
 from server.orchestrator import Orchestrator, _session_uuid
 from server.store import (
     create_run,
+    ensure_session,
     get_run,
     init_db,
     reset_engine,
@@ -216,11 +217,15 @@ async def test_run_row_persisted_and_scoped(client, tmp_path):
     await reset_engine()
     await init_db()
 
-    uid_a = uuid.uuid4()
-    uid_b = uuid.uuid4()
+    # Real user + session rows: ``runs`` references both, and with foreign-key
+    # enforcement on (F16) — as PostgreSQL has always had — an orphan run row
+    # cannot be inserted at all.
+    uid_a = uuid.UUID(await _register(client, f"t27-a-{uuid.uuid4().hex[:8]}"))
+    uid_b = uuid.UUID(await _register(client, f"t27-b-{uuid.uuid4().hex[:8]}"))
     sid = uuid.uuid4()
     run_id = uuid.uuid4()
 
+    await ensure_session(session_id=sid, user_id=uid_a, title="t")
     await create_run(run_id=run_id, session_id=sid, user_id=uid_a,
                     prompt="do the thing", pipeline_id="stateful-react-agent",
                     run_dir="/tmp/x", status="queued")
@@ -251,9 +256,10 @@ async def test_orchestrator_persists_run_result_on_finished(client, tmp_path):
     await reset_engine()
     await init_db()
 
-    uid = uuid.uuid4()
+    uid = uuid.UUID(await _register(client, f"t27-o-{uuid.uuid4().hex[:8]}"))
     sid = uuid.uuid4()
     run_id = uuid.uuid4()
+    await ensure_session(session_id=sid, user_id=uid, title="t")
     await create_run(run_id=run_id, session_id=sid, user_id=uid,
                     prompt="p", pipeline_id="stateful-react-agent",
                     run_dir="/tmp/y", status="queued")

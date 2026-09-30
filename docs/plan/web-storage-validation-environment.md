@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 状态 | v1.0 · 2026-09-29 · 有效执行准备方案；尚未完成真实链路验收 |
+| 版本 / 状态 | v1.1 · 2026-09-30 · 有效执行准备方案；E0 已完成只读核验，尚未完成真实链路验收 |
 | 依据 | 用户要求优先沿用旧环境，并回查纠正前述环境准备遗漏 |
 | 关联 | [修复报告](web-runtime-trace-repair-report.md)、[已执行审核记录](web-storage-chain-audit.md)、[任务状态](../../.scratch/web-runtime-trace-hardening/spec.md) |
 | 需求 | PR-RUN-01/02、PR-GOV-01/02/03/05/06；F01—F21 的验证安排，不新增产品功能 |
@@ -30,7 +30,7 @@
 
 ## 2. 当前环境台账与证据边界
 
-以下是上一轮准备检查的观测快照，实际执行当天需刷新；本轮没有重新启动或改变这些服务。
+以下是上一轮准备检查的观测快照；2026-09-30 执行前刷新见 §2.1。两轮均未重新启动或改变这些服务。
 
 | 对象 | 已观察到的事实 | 尚未确认 |
 |---|---|---|
@@ -47,6 +47,86 @@
 数据库可用只读连接核验 current_database、current_user、server_version、
 扩展及 Alembic revision，无需先启动一套新数据库。先确认连接身份与目标，
 不要仅凭容器名称选择库。按最小范围查询系统元数据，不扫描用户消息/轨迹正文。
+
+### 2.1 2026-09-30 执行前刷新（E0 只读核验）
+
+实际执行当天重新核验，与上一轮快照存在下列差异；本次未重启或改变任何服务。
+
+| 对象 | 本次观测（2026-09-30） | 与上一轮差异 |
+|---|---|---|
+| 代码基线 | HEAD `a1a9c764b2ad4a75f53ee468cea666b410368608`，分支 `x-画面更新`，工作区干净 | 上一轮基线为 `1770155…`，非干净工作区 |
+| 部署代码一致性 | `git diff 1770155 a1a9c76` 在 `server/`、`web/src/`、`deploy/`、`frontier_agent/components/observers/trajectory.py` 上无差异；22 个审计源文件 LF 规范化后 SHA-256 全部匹配 | 缺陷代码未被修改，上一轮证据仍有效 |
+| API 执行环境 | **Windows 原生**：`.venv\Scripts\python.exe`（venv launcher）→ uv-managed CPython 3.12.13；`-m uvicorn server.app:app --host 127.0.0.1 --port 8000` | 上一轮按 WSL/Linux（`.venv/bin/python`）记录 |
+| API 进程 | PID 464（venv launcher）/ 3308（真实解释器），单 worker，无 `--reload`；父进程（PID 1492）已退出 → 手工交互式启动，无服务管理器；启动 2026-09-30 08:55:18 | 上一轮未核验进程身份 |
+| 依赖 / 工具链 | Windows Python 3.12.13、Node v22.22.3、uv 0.12.10；WSL Ubuntu 仅 `/usr/bin/python3`，无 uv、非交互 PATH 无 node | 上一轮记 Python 3.12.14、Node 24.21.0 |
+| 前端 | 127.0.0.1:5173 **未运行**（无监听）；`web/` 含 `dist/`、`node_modules/`、`vite.config.ts`（proxy 默认 `http://127.0.0.1:8000`，无 `.env.local` 覆盖） | 上一轮记 5173 页面可访问 |
+| 业务库 | PostgreSQL **18.6**（Debian）容器 `pg`（镜像 `pg18-zhvector`），命名卷 `pgdata`，宿主 `5432`；库 `apodex`、角色 `postgres`；8 张表；Alembic revision `0002_run_usage`；扩展仅 `plpgsql` | 上一轮未查服务端版本 / schema |
+| 业务数据 | `users=25`、`sessions=134`、`runs=1263`（completed 437 / failed 377 / stopped 449，**无 queued/running**）、`turns=1079`、`artifacts=296`、`user_llm_configs=161`、`audit_log=1948` | 首次确认库承载真实业务数据；当前无活跃 Run |
+| 运行根 / 上传根 | 未设 `SERVER_RUNS_ROOT`/`SERVER_UPLOADS_ROOT` → 默认 `<repo>\server\runs`、`<repo>\uploads`（**均在源码树内**，F01 未修复）；两者当前为空 | 与 F01 结论一致 |
+| 配置 | `SERVER_DATABASE_URL=postgresql+asyncpg://postgres:***@localhost:5432/apodex`；**`SERVER_DEBUG=true`**（跳过启动密钥检查）；`OPENAI_BASE_URL` 指向火山 ark 代理；`OPENAI_MODEL=glm-5.3-flash`；`.env` mtime 2026-09-30 08:54:18 | 新增：DEBUG 开启属环境差异 |
+| 磁盘 | `E:` 182 GiB 总、**73 GiB 可用** | 上一轮记 877 GiB |
+| Docker | `pg`、`corpus-db`（healthy）运行约 41 分钟；无 Web API 容器 | 无 API 容器一项一致 |
+| 审计入口 | `.venv` 为 **Windows venv（有 `Scripts/`，无 `bin/`）且未安装 `pytest`** → 文档中 `.venv/bin/python … run_audit.py` 在当前环境不可直接复现 | 新发现的执行前缺口 |
+
+本次观测形成的对应关系（浏览器 → API 进程 → 实际业务库/schema → Run 根 → worker → 文件）：
+
+```text
+浏览器 (5173 未运行)
+  → API 127.0.0.1:8000  Windows 原生 uvicorn 单 worker (PID 464/3308, .venv → uv CPython 3.12.13)
+  → PG 18.6 容器 pg (localhost:5432, 卷 pgdata)  库 apodex / 角色 postgres / rev 0002_run_usage
+  → runs_root = <repo>\server\runs (源码树内, 空)
+  → uploads_root = <repo>\uploads (源码树内, 空)
+  → sandbox_backend = native (无 OS 隔离)
+  → worker 子进程: 未验证 (需 E1 提交 Run)
+```
+
+核验方法注意：本机 `core.autocrlf=true`，工作区文件为 CRLF。直接对工作区文件算 SHA-256 会与审计 manifest（LF）不符，
+须先做 LF 规范化（或用 git blob 哈希）再比较，否则会误判为“全部文件已漂移”。
+
+**E0 结论与 E1 门槛**
+
+- E0 已完成：进程身份 / 启动方式、实际配置、实际业务库与服务端版本 / schema / revision、
+  运行根与上传根位置、前端代理默认值、代码指纹均已只读核定。
+- 上一轮审计证据仍适用于当前部署：关键代码与基线提交内容一致，缺陷未被修改。
+- 进入 E1 前尚未满足：两个专用测试账号与登记清单、模型出口限制、测试数据隔离声明；
+  且必须先确认业务库 `apodex` 承载 1263 条真实 Run，E1 只能用专用测试账号与合成输入。
+- 审计入口缺口：需按仓库约定用 `uv` 补齐 `dev` 依赖或改用隔离环境后方可复现隔离检查；
+  不得为复核擅自改动共享 `.venv` 或锁文件。
+
+### 2.2 2026-09-30 E1 执行结果（复用现有服务与业务库）
+
+批次、账号、Run 与清理清单见[批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-batch-registry.json)。
+两个专用测试账号各自建立指向**本地 mock**（`127.0.0.1:8899`）的默认模型配置，全部模型调用落在 loopback，
+未触达真实供应商；未复用任何真实业务会话，并发为 1。
+
+**已通过**：提交（202 + UUID）、worker 子进程启动与轨迹写入、`/trace` 回放、会话消息回填与读取
+（`/api/sessions/{id}/turns`）、上传落盘到 `inputs/`、协作式停止（`stopped` / `user_stop`）、
+前端 dev server 与 `/api` 代理链路。
+
+**真实链路新复现的问题**（详见批次登记 evidence）：
+
+| 现象 | 说明 |
+|---|---|
+| 纯文本正常结束被记为 `stopped` | `no_tool_behavior="stop"` → `stopped_by=no_tool` → `status=stopped`；会话中该回答被加上 `_[partial: no_tool]_` |
+| `usage_json` 与 token 计数不落账 | 轨迹中已有 `usage`，独立复算聚合正常，但入账被跳过 |
+| `started_at` 始终为空 | 本批所有 Run 均无 `started_at`（F20 症状） |
+| `llm_snapshot_json` 全库为 JSON `null` | 1263 条运行全部如此，非本批个别 |
+| 运行结束后 SSE 无终态事件 | 迟订阅只得 `run_started`/工具事件/`assistant_delta`，无终止帧（F09 症状） |
+
+**本机（Windows 原生）环境级阻断**：该解释器没有 `os.getpgid` / `os.killpg`，
+`Orchestrator._kill_handle` 抛 `AttributeError`（不被 `contextlib.suppress(ProcessLookupError)` 覆盖），导致
+`_record_artifacts` / `_record_usage` / `_release_slot` 被跳过、会话 drain 任务终止、**worker 池每运行泄漏一个槽位**；
+`CurrentSandbox` 的同类回收路径也失败，**shell 工具（bash / create_file / read_file / grep / glob）在本机全部不可用**。
+后果：连续 2 次运行后池耗尽，任何新 Run 只能停留在 `queued`；运行无法产生 `/outputs` 文件，
+产物索引、下载与回滚类用例在本机**不可验收**。本批通过重启 API 进程收口（orphan reconcile 将残留置为 `failed`）。
+
+**结论**：E1 的提交/轨迹/会话/停止/前端链路可用；工具执行与产物类用例必须在 POSIX 环境（WSL 或容器）
+复验，不能以本机结果代替。修复该跨平台缺陷前，本机部署无法产出交付物，且每两次运行即需重启。
+
+**本批处置（2026-09-30）**：测试账号、会话、Run 与运行目录，以及 mock 与前端进程**保留**待后续复验。
+待办项：产物索引/下载/diff/回滚（需 POSIX 环境）、浏览器 DOM 层验收（F10/F11，需浏览器自动化或人工复核）、
+F08 跨用户越权动态复验（账号 B 已就绪）、真实供应商返回格式差异（需另行批准）。明细见批次登记 `deferred`。
+注意：本批结束后 API 仍有 1 个泄漏槽位，再运行一次即需重启进程。
 
 ## 3. 按测试内容选择环境
 
@@ -158,14 +238,14 @@ F01 的目标仍是源码树之外的长期运行数据目录；复用现有 API
 
 | 进入阶段 | 必需证据 | 当前判断 |
 |---|---|---|
-| E0 | 可访问服务与只读核验入口 | 可执行；端点身份已观测，完整环境映射待完成 |
-| E1 | E0 映射、测试账号/范围、模型来源、资源余量和清理清单 | 尚未验收这些前提；不能把 API 200 当作冒烟通过 |
+| E0 | 可访问服务与只读核验入口 | **已执行（2026-09-30）**；环境映射完成，见 §2.1 |
+| E1 | E0 映射、测试账号/范围、模型来源、资源余量和清理清单 | **已部分执行（2026-09-30）**：账号/mock 出口/资源/清理清单齐备，提交·轨迹·会话·停止·前端链路通过；产物/回滚类被本机 shell 工具缺陷阻塞，须在 POSIX 环境复验（见 §2.2） |
 | E2 | 独立测试库/角色、父子配置一致、新服务就绪、真实 PG/worker 证据 | 基础条件可用，集成入口与测试服务尚未组装验证 |
 | E3 | 对应版本的独立故障域、合成/受控恢复集、终止及清理方式 | 尚未建立，不影响先做 E0/E1 |
 | E4 | 迁移相关修复及恢复演练通过，原部署切换清单已核验 | 未达到；本轮只纠正方案 |
 
 “没有外部硬阻塞”与“已可直接运行现有命令完成验收”是两回事。
-当前可以推进 E0，再按门槛开展 E1；只为具体场景准备 E2/E3。无需先复制完整环境，
+E0 已于 2026-09-30 完成，可继续按门槛开展 E1；只为具体场景准备 E2/E3。无需先复制完整环境，
 也不因 E3 未准备就停下现状核验。既有授权范围内的只读、准备和可逆验证继续执行，
 不增加每个步骤都要求用户确认的流程。
 

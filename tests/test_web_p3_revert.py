@@ -28,7 +28,7 @@ import pytest
 
 from server.config import get_config
 from server.diff import DiffRecorder, revert_paths
-from server.store import create_run, init_db
+from server.store import create_run, ensure_session, init_db
 
 # ── helpers ────────────────────────────────────────────────────────
 
@@ -340,9 +340,14 @@ async def _make_run(client, headers, tmp_path, monkeypatch, *, session: str, sta
     token = headers["Authorization"].removeprefix("Bearer ").strip()
     uid = decode_access_token(token)
     run_id = uuid.uuid4()
+    session_id = _session_uuid(session)
+    # The session row must exist before the run: ``runs.session_id`` is a
+    # foreign key, and PostgreSQL (the deployment database) has always enforced
+    # it — SQLite only started to once F16 turned the pragma on.
+    await ensure_session(session_id=session_id, user_id=uid, title="t")
     await create_run(
         run_id=run_id,
-        session_id=_session_uuid(session),
+        session_id=session_id,
         user_id=uid,
         prompt="p",
         pipeline_id="stateful-react-agent",

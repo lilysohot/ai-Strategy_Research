@@ -18,6 +18,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     LargeBinary,
     String,
@@ -27,6 +28,7 @@ from sqlalchemy import (
     select,
     update,
 )
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -142,7 +144,15 @@ class Turn(Base):
     run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = ()
+    # F16: a session's turns are ordered by ``seq`` and read back as a
+    # conversation, so two rows sharing one ``seq`` silently corrupt the
+    # transcript. A UNIQUE index (rather than a table constraint) is what both
+    # SQLite and PostgreSQL can add to an existing table, so the same object is
+    # declared here and created by migration 0003 — see ``append_turn`` for how
+    # a lost race is detected and retried.
+    __table_args__ = (
+        Index("uq_turns_session_seq", "session_id", "seq", unique=True),
+    )
 
 
 class Artifact(Base):
@@ -195,6 +205,12 @@ def _apply_sqlite_pragmas(engine: AsyncEngine) -> None:
         try:
             cursor.execute("PRAGMA journal_mode=WAL")
             cursor.execute("PRAGMA busy_timeout=10000")
+            # F16: SQLite ignores declared FOREIGN KEYs unless this is set PER
+            # CONNECTION. The schema has always declared them (turns.session_id →
+            # sessions.id, runs.session_id → sessions.id, ...), so an isolated
+            # test database happily accepted rows whose parent did not exist —
+            # the constraint was documentation, not enforcement.
+            cursor.execute("PRAGMA foreign_keys=ON")
         finally:
             cursor.close()
 
@@ -626,12 +642,26 @@ async def build_llm_snapshot(*, user_id: uuid.UUID | None) -> dict:
 # ── Sessions & turns (T2.6 multi-turn backfill) ────────────────────
 
 
+class SessionOwnershipError(Exception):
+    """Raised when a session exists and belongs to another user (F08).
+
+    Distinct from "absent" because the two are answered differently *inside*
+    the server (create lazily vs reject) while both read as 404 to the caller.
+    """
+
+
 async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: str) -> Session:
     """Idempotently obtain a session row, creating it if absent.
 
     Sessions are created lazily on the first run of a conversation thread
     (T2.7 exposes full CRUD); this keeps the run path self-contained without a
     separate session-creation call.
+
+    Fail-closed ownership (F08): a session that already belongs to a DIFFERENT
+    user is never returned. Returning it is exactly how one user's prompt used
+    to land in another user's conversation — the HTTP boundary checks ownership
+    first, but the orchestrator reaches this function too, so the check is
+    repeated here rather than trusted to the caller.
     """
     async with get_sessionmaker()() as session:
         row = await session.get(Session, session_id)
@@ -639,7 +669,17 @@ async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: st
             row = Session(id=session_id, user_id=user_id, title=title)
             session.add(row)
             await session.commit()
+            return row
+        if row.user_id != user_id:
+            raise SessionOwnershipError(str(session_id))
         return row
+
+
+#: How many times ``append_turn`` re-reads ``MAX(seq)`` after losing the unique
+#: constraint. Contention is between two writers OF THE SAME SESSION (the user
+#: turn written at submission and the assistant turn written at completion, plus
+#: any queued run in that session), so a handful of retries is ample.
+_APPEND_TURN_ATTEMPTS = 5
 
 
 async def append_turn(
@@ -653,7 +693,33 @@ async def append_turn(
 
     ``seq`` is computed as ``max(existing seq)+1`` within the session so turns
     stay ordered even when many arrive in the same second.
+
+    F16: two writers can read the same ``max`` before either inserts, so the
+    read-then-write is not atomic on its own. ``uq_turns_session_seq`` turns that
+    lost race into an ``IntegrityError``, and the retry re-reads the maximum; the
+    loser then lands on the next free slot instead of duplicating one. Without
+    the constraint the database accepted both rows and the transcript silently
+    contained two messages at the same position.
     """
+    for attempt in range(_APPEND_TURN_ATTEMPTS):
+        try:
+            return await _insert_turn(
+                session_id=session_id, role=role, content=content, run_id=run_id
+            )
+        except IntegrityError:
+            if attempt == _APPEND_TURN_ATTEMPTS - 1:
+                raise
+    raise AssertionError("unreachable")  # pragma: no cover - loop always returns or raises
+
+
+async def _insert_turn(
+    *,
+    session_id: uuid.UUID,
+    role: str,
+    content: str,
+    run_id: uuid.UUID | None,
+) -> Turn:
+    """One ``MAX(seq)+1`` attempt; callers retry on the unique-constraint loss."""
     async with get_sessionmaker()() as session:
         result = await session.execute(
             select(func.coalesce(func.max(Turn.seq), 0)).where(Turn.session_id == session_id)
@@ -747,6 +813,19 @@ async def get_session(*, session_id: uuid.UUID, user_id: uuid.UUID) -> Session |
         if row.user_id != user_id or row.deleted_at is not None:
             return None
         return row
+
+
+async def session_exists(session_id: uuid.UUID) -> bool:
+    """Whether a session row exists at all, regardless of owner or soft delete.
+
+    Paired with :func:`get_session` at the run-submission boundary (F08):
+    ``get_session`` returning ``None`` means "not yours, or gone", and this
+    tells the caller whether to answer 404 for an existing-but-foreign session
+    or to lazily create a brand-new one. The distinction never leaves the
+    server — a caller cannot use it to probe which session ids exist.
+    """
+    async with get_sessionmaker()() as session:
+        return (await session.get(Session, session_id)) is not None
 
 
 async def list_sessions(
@@ -889,6 +968,26 @@ async def update_run_result(
         await session.commit()
 
 
+async def mark_run_started(*, run_id: uuid.UUID) -> None:
+    """Record that a worker actually began (F20).
+
+    A run row is inserted ``queued`` at submission, and the only proof the
+    worker launched is its ``run_started`` frame. Nothing used to consume that
+    frame, so the row stayed ``queued`` with an empty ``started_at`` for the
+    whole (arbitrarily long) run: the UI could not tell a running run apart from
+    one whose worker never started, and a crash left no way to reconstruct when
+    it began. The first frame wins — a replayed frame must not move the clock.
+    """
+    async with get_sessionmaker()() as session:
+        row = await session.get(Run, run_id)
+        if row is None:
+            return
+        row.status = "running"
+        if row.started_at is None:
+            row.started_at = datetime.now(UTC)
+        await session.commit()
+
+
 async def update_run_usage(*, run_id: uuid.UUID, usage: dict) -> None:
     """Persist a run's aggregated token usage (T2.11).
 
@@ -950,6 +1049,36 @@ async def record_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> list[
                 existing.sha256 = item.get("sha256")
                 row = existing
             rows.append(row)
+        await session.commit()
+    return rows
+
+
+async def sync_run_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> list[Artifact]:
+    """Make a run's artifact index match a fresh scan (F18).
+
+    ``record_artifacts`` upserts, which is right when a run finishes but wrong
+    after a revert: a file restored to its baseline keeps its row, and only its
+    SIZE and HASH changed — the index then described a file that no longer
+    existed in that form, so the UI offered a stale digest and could not tell a
+    reverted deliverable from an untouched one. Rows whose path is gone from the
+    scan are removed for the same reason.
+
+    Pruning is skipped when the scan hit its file bound: a truncated scan is not
+    evidence that the unlisted files disappeared.
+    """
+    from server.artifacts import _MAX_FILES
+
+    rows = await record_artifacts(run_id=run_id, artifacts=artifacts)
+    if len(artifacts) >= _MAX_FILES:
+        return rows
+    present = {item.get("rel_path") for item in artifacts if item.get("rel_path")}
+    async with get_sessionmaker()() as session:
+        existing = (
+            await session.execute(select(Artifact).where(Artifact.run_id == run_id))
+        ).scalars().all()
+        for row in existing:
+            if row.rel_path not in present:
+                await session.delete(row)
         await session.commit()
     return rows
 

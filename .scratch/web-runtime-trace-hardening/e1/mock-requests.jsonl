@@ -1,0 +1,12 @@
+{"ts": "2026-09-30T09:17:20", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "text"}
+{"ts": "2026-09-30T09:17:22", "path": "/v1/chat/completions", "client": "127.0.0.1", "model": "mock", "stream": false, "n_messages": 1, "roles": ["user"], "n_tools": 0, "reply_kind": "text"}
+{"ts": "2026-09-30T09:17:33", "path": "/v1/chat/completions", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 1, "roles": ["user"], "n_tools": 0, "reply_kind": "text"}
+{"ts": "2026-09-30T09:23:50", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "text"}
+{"ts": "2026-09-30T09:23:52", "path": "/v1/chat/completions", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 1, "roles": ["user"], "n_tools": 0, "reply_kind": "text"}
+{"ts": "2026-09-30T09:24:10", "path": "/v1/chat/completions?x-upstream-session-id=e1-a-s1", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "text"}
+{"ts": "2026-09-30T09:25:43", "path": "/v1/chat/completions?x-upstream-session-id=e1-a-s2", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "text"}
+{"ts": "2026-09-30T09:28:36", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "tool"}
+{"ts": "2026-09-30T09:28:40", "path": "/v1/chat/completions?x-upstream-session-id=e1-a-s5", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "tool"}
+{"ts": "2026-09-30T09:28:52", "path": "/v1/chat/completions?x-upstream-session-id=e1-a-s5", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 4, "roles": ["system", "user", "assistant", "tool"], "n_tools": 9, "reply_kind": "text"}
+{"ts": "2026-09-30T09:30:00", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "text"}
+{"ts": "2026-09-30T09:30:03", "path": "/v1/chat/completions?x-upstream-session-id=e1-a-s6", "client": "127.0.0.1", "model": "mock", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "text"}

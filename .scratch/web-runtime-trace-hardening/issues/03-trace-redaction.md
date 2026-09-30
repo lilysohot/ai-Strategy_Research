@@ -1,6 +1,6 @@
 # 03：统一实时、回放和详情轨迹的安全返回契约
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-06, PR-BIZ-04

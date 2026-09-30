@@ -1,6 +1,6 @@
 # 14：排队 Run 的历史上下文没有明确截止点
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-BIZ-04, PR-BIZ-06

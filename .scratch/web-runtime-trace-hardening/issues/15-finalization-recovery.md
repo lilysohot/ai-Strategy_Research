@@ -1,6 +1,6 @@
 # 15：运行落账与崩溃恢复缺少一致性及幂等
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-01/02、PR-GOV-01/03

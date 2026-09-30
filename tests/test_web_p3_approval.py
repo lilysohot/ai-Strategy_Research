@@ -428,14 +428,18 @@ def isolated_orchestrator(monkeypatch):
 
 async def _create_owned_run(auth_headers, *, status: str = "running") -> str:
     from server.security import decode_access_token
-    from server.store import create_run
+    from server.store import create_run, ensure_session
 
     token = auth_headers["Authorization"].removeprefix("Bearer ").strip()
     user_id = decode_access_token(token)
     run_id = uuid.uuid4()
+    session_id = uuid.uuid4()
+    # The session must exist first: ``runs.session_id`` is a foreign key, which
+    # PostgreSQL has always enforced (SQLite only started to with F16).
+    await ensure_session(session_id=session_id, user_id=user_id, title="t")
     await create_run(
         run_id=run_id,
-        session_id=uuid.uuid4(),
+        session_id=session_id,
         user_id=user_id,
         prompt="p",
         pipeline_id="stateful-react-agent",

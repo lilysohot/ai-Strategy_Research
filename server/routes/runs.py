@@ -15,6 +15,8 @@ client — credentials are resolved server-side from the user's default LLM conf
 from __future__ import annotations
 
 import asyncio
+import logging
+import shutil
 import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
@@ -29,17 +31,25 @@ from pydantic import BaseModel
 # False and would silently drop every uploaded file. The base class matches both.
 from starlette.datastructures import UploadFile
 
-from server.config import build_run_paths, get_config, run_dir_for
+from server.artifacts import scan_outputs
+from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
 from server.deps import get_current_user
 from server.diff import revert_paths
 from server.orchestrator import _session_uuid, get_orchestrator
-from server.relay import sse_for_run, trajectory_records
+from server.relay import sse_for_run, trajectory_records_for_egress
 from server.store import User as UserModel
 from server.store import (
+    build_llm_snapshot,
     create_run,
     ensure_session,
+    get_default_llm_config,
     get_run,
+    get_session,
+    session_exists,
+    sync_run_artifacts,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 
@@ -113,6 +123,22 @@ async def submit_run(
 
     cfg = get_config()
 
+    # F08 — session admission BEFORE any side effect. A session belongs to
+    # exactly one user, and a foreign (or soft-deleted) one must read as absent:
+    # answer 404 and, crucially, write NOTHING — no uploaded inputs, no run row,
+    # no session message. Validating after the uploads (as this used to) let user
+    # B append to user A's conversation and still get a 202.
+    session_uuid = _session_uuid(session_id, user_id)
+    # "Not mine" and "does not exist" are the same answer to the caller; only the
+    # server needs to tell them apart, to decide whether to create the session
+    # lazily below. Short-circuits, so the existence probe only runs when the
+    # caller is not already the owner.
+    if (
+        await get_session(session_id=session_uuid, user_id=user_id) is None
+        and await session_exists(session_uuid)
+    ):
+        raise HTTPException(status_code=404, detail="会话不存在")
+
     # T2.10: write uploaded files into the run's inputs dir (read-only to the
     # agent). Bounds are enforced here so a single request can't exhaust disk:
     # per-file byte cap and a per-request file-count cap. Both paths write to the
@@ -126,26 +152,36 @@ async def submit_run(
             )
         paths = build_run_paths(run_id_hex)
         inputs_dir = paths["inputs"]
-        for part in files:
-            # Reject empty / unnamed parts and any path-like filename — we flatten
-            # every upload to a single basename inside inputs_dir.
-            raw_name = (part.filename or "").strip()
-            if not raw_name:
-                continue
-            safe_name = _flatten_filename(raw_name)
-            if not safe_name:
-                continue
-            data = await part.read()
-            if len(data) > cfg.max_upload_bytes:
-                raise HTTPException(
-                    status_code=413,
-                    detail=(
-                        f"file {safe_name} too large: {len(data)} > {cfg.max_upload_bytes} bytes"
-                    ),
-                )
-            dest = inputs_dir / safe_name
-            dest.write_bytes(data)
-            uploaded_names.append(safe_name)
+        # F12: the batch is all-or-nothing. A cap breach (or an I/O failure) on
+        # the LAST file used to leave the earlier ones on disk, orphaned — the
+        # run row is never created, so nothing would ever reference them and no
+        # cleanup path would ever find them. Any failure after the first write
+        # removes the whole per-run tree: this request created it, and no run row
+        # points at it yet.
+        try:
+            for part in files:
+                # Reject empty / unnamed parts and any path-like filename — we flatten
+                # every upload to a single basename inside inputs_dir.
+                raw_name = (part.filename or "").strip()
+                if not raw_name:
+                    continue
+                safe_name = _flatten_filename(raw_name)
+                if not safe_name:
+                    continue
+                data = await part.read()
+                if len(data) > cfg.max_upload_bytes:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=(
+                            f"file {safe_name} too large: {len(data)} > {cfg.max_upload_bytes} bytes"
+                        ),
+                    )
+                dest = inputs_dir / safe_name
+                dest.write_bytes(data)
+                uploaded_names.append(safe_name)
+        except BaseException:
+            shutil.rmtree(paths["root"], ignore_errors=True)
+            raise
 
     # Surface the uploaded input files to the agent via the system-prompt addendum
     # (worker.py forwards this into metadata["_sys_prompt_addendum"], which the
@@ -163,13 +199,19 @@ async def submit_run(
             f"(native: read directly from {inputs_path})"
         )
 
-    # Map the (possibly free-form) session id to a stable UUID and make sure the
-    # session row exists so the turns table and Run FK stay consistent.
-    session_uuid = _session_uuid(session_id)
+    # The session was admitted (or is about to be created) above; make sure the
+    # row exists so the turns table and the Run FK stay consistent.
     await ensure_session(session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话")
 
-    # Persist the Run row up-front (status="queued"); the orchestrator updates it
-    # to its terminal state when the worker emits run_finished.
+    # F20: record WHICH model drove this run — never the secret. The column has
+    # existed since T2.5 but nothing ever filled it, so a finished run could not
+    # say which model produced it and the UI read ``model: null``.
+    default_llm = await get_default_llm_config(user_id=user_id)
+    snapshot = await build_llm_snapshot(user_id=user_id)
+
+    # Persist the Run row up-front (status="queued"); the orchestrator flips it to
+    # "running" when the worker reports run_started and to its terminal state when
+    # the worker emits run_finished.
     await create_run(
         run_id=run_id,
         session_id=session_uuid,
@@ -178,6 +220,8 @@ async def submit_run(
         pipeline_id=cfg.pipeline_id,
         run_dir=str(run_dir_for(run_id_hex)),
         status="queued",
+        llm_config_id=default_llm.id if default_llm is not None else None,
+        llm_snapshot_json=snapshot,
     )
 
     await orch.submit(
@@ -213,6 +257,10 @@ async def run_events(
     # unguessable id alone is not enough to subscribe to someone else's stream.
     if not await _run_visible(run_id, user.id):
         raise HTTPException(status_code=404, detail="run not found")
+    # Live fan-out is keyed by the id the orchestrator spawned the worker with
+    # (the compact hex form), so a hyphenated request would otherwise subscribe
+    # to a channel nobody publishes on (F01).
+    run_id = canonical_run_id(run_id)
 
     # Live events come from the worker's BridgeObserver, which the orchestrator
     # receives as stdout frames and fans out to subscribers. Subscribing here is
@@ -245,7 +293,12 @@ async def run_trace(
 ) -> dict[str, Any]:
     if not await _run_visible(run_id, user.id):
         raise HTTPException(status_code=404, detail="run not found")
-    return {"run_id": run_id, "records": trajectory_records(run_id, after_line=after)}
+    # F03: this endpoint is an HTTP egress like SSE, so it uses the same
+    # redaction boundary — the trajectory on disk holds whatever a tool echoed.
+    return {
+        "run_id": run_id,
+        "records": trajectory_records_for_egress(run_id, after_line=after),
+    }
 
 
 @router.post("/{run_id}/control")
@@ -257,6 +310,9 @@ async def run_control(
     # A stop on a run you don't own must fail closed (404), not 409.
     if not await _run_visible(run_id, user.id):
         raise HTTPException(status_code=404, detail="run not found")
+    # The live handle is keyed by the spawned id form (F01): stop a hyphenated
+    # spelling without this and it would silently answer "run not running".
+    run_id = canonical_run_id(run_id)
     action = body.get("action")
     if action != "stop":
         raise HTTPException(status_code=400, detail="unknown action")
@@ -281,6 +337,7 @@ async def run_steer(
     # A steer on a run you don't own must fail closed (404), like stop.
     if not await _run_visible(run_id, user.id):
         raise HTTPException(status_code=404, detail="run not found")
+    run_id = canonical_run_id(run_id)  # live handle key form (F01)
     if not body.message.strip():
         raise HTTPException(status_code=422, detail="message is required")
     seq = await get_orchestrator().steer(run_id, body.message)
@@ -309,6 +366,7 @@ async def run_approve(
 ) -> dict[str, Any]:
     if not await _run_visible(run_id, user.id):
         raise HTTPException(status_code=404, detail="run not found")
+    run_id = canonical_run_id(run_id)  # live handle key form (F01)
     ok = await get_orchestrator().approve(
         run_id, body.approval_id, body.decision, body.replacement_command,
     )
@@ -358,6 +416,18 @@ async def run_revert(
 
     # Blocking file IO (baseline read + write back), so keep it off the loop.
     outcome = await asyncio.to_thread(revert_paths, run_dir_for(run_id), body.paths)
+    # F18: the files just changed underneath the index, so re-derive it before
+    # answering. Without this the artifact list kept the size and sha256 of the
+    # content the user had just reverted away, and a reverted deliverable was
+    # indistinguishable from an untouched one. Best-effort: the revert itself has
+    # already happened and must still be reported.
+    if outcome.get("reverted"):
+        try:
+            await sync_run_artifacts(
+                run_id=rid, artifacts=scan_outputs(run_id)
+            )
+        except Exception:
+            logger.exception("artifact index refresh after revert failed for %s", run_id)
     return {"run_id": run_id, **outcome}
 
 

@@ -473,9 +473,21 @@ class TrajectoryFileObserver(BaseObserver):
             "t": "llm",
             "turn": ctx.turn,
             "content": ctx.ai_text,
+            # F04: keep the tool-call ID the runtime was handed. The JSONL line
+            # is what replay reads (SSE and /trace), and without the ID the only
+            # thing it could publish was a synthesised ``call_<turn>_<idx>``,
+            # which matches no ``result`` line — so a started step could not be
+            # paired with its own result, and a turn with parallel calls could
+            # not be addressed per call at all. The synthesis fallback stays for
+            # providers that return calls without an id, and matches the id the
+            # JSON envelope uses for the same turn.
             "tool_calls": [
-                {"name": tc.get("name"), "args": tc.get("args", {})}
-                for tc in (ctx.tool_calls or [])
+                {
+                    "id": tc.get("id") or self._synth_id(ctx.turn, idx),
+                    "name": tc.get("name"),
+                    "args": tc.get("args", {}),
+                }
+                for idx, tc in enumerate(ctx.tool_calls or [])
             ],
         }
         if ctx.thinking:

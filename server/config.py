@@ -13,6 +13,7 @@ CAP_SYS_ADMIN inside the container.
 
 from __future__ import annotations
 
+import uuid
 from functools import lru_cache
 from pathlib import Path
 
@@ -122,6 +123,27 @@ def get_config() -> ServerConfig:
     return cfg
 
 
+def canonical_run_id(run_id: str) -> str:
+    """The one canonical spelling of a run id: 32 lowercase hex characters.
+
+    Run ids reach us in two legal forms — ``submit`` returns the compact hex
+    form while the session/run read models return the hyphenated UUID — and both
+    are valid inputs to every run route. Because the per-run directory is built
+    by *concatenating* the string, the two spellings addressed DIFFERENT
+    directories, so a hyphenated id produced an empty trace that looked like
+    "no trajectory was ever recorded" (F01). Normalising here means every
+    spelling of an id resolves to the same run.
+
+    A value that is not a UUID is returned unchanged: the caller's ownership
+    lookup then rejects it as "not found", and no path is ever built from an
+    unparsed string in a way the parse would have made safe.
+    """
+    try:
+        return uuid.UUID(run_id).hex
+    except (ValueError, AttributeError, TypeError):
+        return run_id
+
+
 def run_dir_for(run_id: str) -> Path:
     """Per-run directory tree for ``<run_id>``.
 
@@ -131,8 +153,11 @@ def run_dir_for(run_id: str) -> Path:
             inputs/       FRONTIER_AGENT_INPUTS_DIR (uploads, read-only)
             spill/        APODEX_SPILL_DIR
             run/          _trial_dir (agent/trajectories + engine.log)
+
+    ``run_id`` is canonicalised first (see :func:`canonical_run_id`) so the
+    hyphenated and compact spellings of the same id land on the same directory.
     """
-    return get_config().runs_root / run_id
+    return get_config().runs_root / canonical_run_id(run_id)
 
 
 def build_run_paths(run_id: str) -> dict[str, Path]:

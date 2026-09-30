@@ -86,6 +86,10 @@ def trajectory_records(run_id: str, after_line: int = 0) -> list[dict]:
 
     Used by the ``/trace`` replay endpoint and by the usage aggregator. Returns
     raw records (the ``t`` field discriminates start/llm/result/compaction).
+
+    RAW means raw: this is the reader for internal consumers (usage aggregation
+    needs the real token counts). Anything that crosses the HTTP boundary must
+    go through :func:`trajectory_records_for_egress` instead.
     """
     traj = run_dir_for(run_id) / _TRAJ
     if not traj.exists():
@@ -103,6 +107,21 @@ def trajectory_records(run_id: str, after_line: int = 0) -> list[dict]:
             except json.JSONDecodeError:
                 continue
     return out
+
+
+def trajectory_records_for_egress(run_id: str, after_line: int = 0) -> list[dict]:
+    """Trajectory records with the SAME egress redaction as the SSE replay.
+
+    The trajectory file is written unredacted by the runtime, and the two replay
+    paths disagreed about that: SSE mapped records into events and masked every
+    string (``_traj_record_to_events`` → ``redact_deep``), while ``/trace``
+    returned the raw records — so a credential a tool echoed back was masked on
+    the live stream and handed out verbatim by the one-shot endpoint (F03).
+
+    The record SHAPE is deliberately unchanged: the timeline view consumes these
+    records directly, so only the values are masked.
+    """
+    return [redact_deep(rec) for rec in trajectory_records(run_id, after_line=after_line)]
 
 
 async def _merge_async(

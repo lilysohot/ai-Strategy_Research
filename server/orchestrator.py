@@ -26,6 +26,7 @@ import os
 import signal
 import sys
 import uuid
+from collections import deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -41,6 +42,7 @@ from server.store import (
     ensure_session,
     list_active_runs,
     list_turns,
+    mark_run_started,
     record_artifacts,
     resolve_user_llm_env,
     update_run_result,
@@ -51,6 +53,70 @@ from server.usage import usage_for_run
 logger = logging.getLogger(__name__)
 
 WorkerCallback = Callable[[str, dict[str, Any]], None]
+
+
+def _signal_worker(proc: asyncio.subprocess.Process, sig: int) -> None:
+    """Signal a worker through its process group, where the platform has one.
+
+    ``os.killpg``/``os.getpgid`` are POSIX-only, and they were called
+    unconditionally from the reaping path. Where they are absent the call raised
+    ``AttributeError`` — which the surrounding ``contextlib.suppress`` did not
+    cover (it only suppresses ``ProcessLookupError``). That exception escaped
+    ``_spawn``'s ``finally``, so the artifact scan, the usage metering and the
+    pool-slot release were all skipped, and it then terminated the session's
+    drain task. Reproduced live: every run silently lost its usage row and
+    leaked one worker-pool slot, wedging the whole service after two runs.
+
+    Where there is no process-group API the correct behaviour is therefore to
+    signal NOTHING and let the caller's bounded ``wait`` (grace, then the SIGKILL
+    escalation) do the reaping — the same thing the code did before, minus the
+    exception. Substituting a per-process ``terminate()``/``kill()`` was tried
+    and rejected: it only reaches the worker, never the children it spawned, and
+    on this platform it wedged the orchestrator's teardown (the escalation path
+    never returned; the isolated stop/escalation suite hung 2 runs in 3 where the
+    un-signalled version completed every time). It is also not what a
+    process-group kill means: the group is the unit that must die together.
+    """
+    killpg = getattr(os, "killpg", None)
+    getpgid = getattr(os, "getpgid", None)
+    if killpg is None or getpgid is None:
+        logger.debug(
+            "no process-group API on this platform; worker %s not signalled "
+            "(grace wait and escalation still bound the reaping)",
+            getattr(proc, "pid", "?"),
+        )
+        return
+    with contextlib.suppress(ProcessLookupError, PermissionError):
+        killpg(getpgid(proc.pid), sig)
+
+
+def _turns_as_of_submission(
+    turns: list[Any], *, current_run_id: uuid.UUID | None
+) -> list[Any]:
+    """The conversation as it stood when ``current_run_id`` was submitted (F14.
+
+    Subtraction — "every turn except mine" — was not the same thing: a run is
+    created ``queued`` and its worker may start much later, while the user keeps
+    talking. Those later messages are already in ``turns``, so the model could be
+    handed a question the user had not asked yet and answer it, or take a
+    message that belonged to a run still waiting in the queue.
+
+    ``submit`` writes this run's own user turn BEFORE enqueueing it, so turns
+    ahead of that one are exactly the conversation the run was submitted against;
+    everything after it belongs to a later submission. A run with no turn on
+    record (a resumed or externally driven run) falls back to excluding only its
+    own turns, which is the previous behaviour.
+    """
+    my_index = next(
+        (i for i, turn in enumerate(turns) if turn.run_id == current_run_id), None
+    )
+    if my_index is None:
+        return [turn for turn in turns if turn.run_id != current_run_id]
+    return [
+        turn
+        for i, turn in enumerate(turns)
+        if i < my_index and turn.run_id != current_run_id
+    ]
 
 
 def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
@@ -75,6 +141,12 @@ def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
 # maps to the same UUID across restarts — important for persistent history.
 _SESSION_NS = uuid.uuid5(uuid.NAMESPACE_URL, "frontier-agent/session")
 
+#: How many recently-finished runs keep their "stream already closed" marker
+#: (F09). Only a subscriber that connects just after a run ends benefits from
+#: it, so a bounded window is enough — and it keeps a long-lived process from
+#: accumulating one entry per run it has ever executed.
+_CLOSED_STREAM_MEMORY = 512
+
 
 def _looks_like_uuid(value: str) -> bool:
     try:
@@ -84,15 +156,27 @@ def _looks_like_uuid(value: str) -> bool:
         return False
 
 
-def _session_uuid(session_id: str) -> uuid.UUID:
+def _session_uuid(session_id: str, user_id: uuid.UUID | None = None) -> uuid.UUID:
     """Map a session identifier (UUID or arbitrary string) to a UUID.
 
     A proper UUID passes through unchanged; any other string is hashed into a
-    deterministic UUID v5 under a fixed namespace.
+    deterministic UUID v5.
+
+    The namespace is scoped per user (F08). A client that omits ``session_id``
+    sends the literal ``"default"``, and under one shared namespace every user's
+    "default" collapsed onto the SAME session — the first user to create it then
+    owned everyone else's runs, and every later user's submission was a foreign
+    write. Scoping the namespace by ``user_id`` gives each user their own
+    conversation while keeping the mapping deterministic across restarts.
+
+    ``user_id=None`` keeps the historical mapping, for callers that genuinely
+    have no identity (the orchestrator's last-resort fallback); every
+    identity-bearing call site passes it explicitly.
     """
     if _looks_like_uuid(session_id):
         return uuid.UUID(session_id)
-    return uuid.uuid5(_SESSION_NS, session_id)
+    ns = _SESSION_NS if user_id is None else uuid.uuid5(_SESSION_NS, str(user_id))
+    return uuid.uuid5(ns, session_id)
 
 
 @dataclass
@@ -129,6 +213,13 @@ class Orchestrator:
         # subprocess, so realtime bridge events reach us as stdout frames and
         # are fanned out here; each subscriber is a queue drained by relay.py.
         self._subscribers: dict[str, set[asyncio.Queue[dict[str, Any] | None]]] = {}
+        # Runs whose frame stream has already ended in THIS process (F09). A
+        # subscriber that arrives afterwards must be told immediately, otherwise
+        # its SSE generator waits on a queue nothing will ever publish to and the
+        # browser shows a run that never finishes. Bounded: only recent runs can
+        # have an in-flight reconnect.
+        self._closed_streams: deque[str] = deque(maxlen=_CLOSED_STREAM_MEMORY)
+        self._closed_stream_ids: set[str] = set()
 
     # — public API ————————————————————————————————————————————
     async def submit(
@@ -160,7 +251,7 @@ class Orchestrator:
         # string (e.g. "default"); we synthesise a stable UUID from it so the
         # runs/turns tables key on a proper foreign key. A fixed namespace keeps
         # the same string mapping to the same id across restarts.
-        session_uuid = _session_uuid(session_id)
+        session_uuid = _session_uuid(session_id, user_id)
         if user_id is not None:
             await ensure_session(
                 session_id=session_uuid, user_id=user_id, title=prompt[:80] or "New chat"
@@ -176,9 +267,17 @@ class Orchestrator:
 
         async with self._lock:
             q = self._session_queues.setdefault(session_id, asyncio.Queue())
-            if session_id not in self._session_tasks:
-                task = asyncio.create_task(self._drain_session(session_id, q))
-                self._session_tasks[session_id] = task
+            task = self._session_tasks.get(session_id)
+            # Start a drain task only if this session has none, or the one it had
+            # is already finished. Checking ``done()`` is what makes a session
+            # self-healing: a drain task that ended (a queue sentinel, or an
+            # error that slipped past its guard) used to leave the session
+            # permanent — every later submission was enqueued to a queue nobody
+            # was reading, so the run sat "queued" forever.
+            if task is None or task.done():
+                self._session_tasks[session_id] = asyncio.create_task(
+                    self._drain_session(session_id, q)
+                )
         params: dict[str, Any] = {
             "run_id": run_id,
             "session_id": session_id,
@@ -284,9 +383,20 @@ class Orchestrator:
 
         A ``None`` sentinel is pushed when the worker's frame stream ends, which
         is what lets the relay's live producer terminate.
+
+        F09: when the run's stream already ended, the sentinel is queued BEFORE
+        the caller's generator starts, so a late (or reconnecting) subscriber
+        sees the replay and then a closed stream instead of hanging forever on a
+        queue that will never be published to again.
+
+        Only runs whose stream ended in THIS process are known to be over —
+        checking ``_handles`` instead would be wrong, because a freshly submitted
+        run has no handle yet while its worker is still starting.
         """
         q: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
         self._subscribers.setdefault(run_id, set()).add(q)
+        if run_id in self._closed_stream_ids:
+            q.put_nowait(None)
         return q
 
     def unsubscribe(self, run_id: str, q: asyncio.Queue[dict[str, Any] | None]) -> None:
@@ -306,7 +416,20 @@ class Orchestrator:
             q.put_nowait(payload)
 
     def _close_streams(self, run_id: str) -> None:
-        """Signal every subscriber that no more live events will arrive."""
+        """Signal every subscriber that no more live events will arrive.
+
+        The run is also remembered as closed (F09) so a subscriber that connects
+        AFTER this point is terminated immediately, instead of waiting for a
+        sentinel that has already been delivered to the subscribers that were
+        present at the time.
+        """
+        if run_id not in self._closed_stream_ids:
+            if len(self._closed_streams) == self._closed_streams.maxlen:
+                # ``append`` below evicts this entry; drop it from the mirror set
+                # so the two structures cannot drift apart.
+                self._closed_stream_ids.discard(self._closed_streams[0])
+            self._closed_streams.append(run_id)
+            self._closed_stream_ids.add(run_id)
         for q in tuple(self._subscribers.get(run_id, ())):
             q.put_nowait(None)
 
@@ -352,6 +475,24 @@ class Orchestrator:
                 error=error or ("服务重启导致运行中断" if status == "failed" else None),
                 stopped_by="server_restart",
             )
+            # F15: the row is only half the record. Whatever the worker had
+            # already written — the answer the user was watching, the deliverables
+            # in ws/outputs, the tokens it spent — is recovered here, so a restart
+            # no longer leaves a "stopped" run whose conversation has no message,
+            # whose artifact index is empty and whose usage reads null while the
+            # trajectory sits on disk.
+            try:
+                await self._recover_finished_run(
+                    run_id=row.id,
+                    session_id=row.session_id,
+                    final_answer=final_answer,
+                    stopped_by="server_restart",
+                    error=error,
+                )
+            except Exception:
+                # One unrecoverable run must not abort the sweep — the remaining
+                # rows still need closing out.
+                logger.exception("orphan recovery failed for run_id=%s", run_id)
             closed += 1
             logger.warning("orphan run reconciled: run_id=%s status=%s", run_id, status)
 
@@ -374,14 +515,25 @@ class Orchestrator:
                 await task
 
     # — internals —————————————————————————————————————————————
-    async def _drain_session(self, session_id: str, q: asyncio.Queue[dict[str, Any]]) -> None:
+    async def _drain_session(self, session_id: str, q: asyncio.Queue[dict[str, Any] | None]) -> None:
         while not self._shutting_down:
             params = await q.get()
-            if self._shutting_down:
+            # ``None`` is the end-of-queue sentinel: drain what is already queued
+            # and retire this task instead of blocking on an empty queue forever.
+            if params is None or self._shutting_down:
                 q.task_done()
                 break
             try:
                 await self._spawn(**params)
+            except Exception:
+                # F15: one run that fails to launch must not abandon the items
+                # already queued behind it in the same session. Letting the
+                # exception escape killed this drain task, so every later run of
+                # that session stayed "queued" forever with no worker coming.
+                logger.exception(
+                    "run launch failed for session=%s run_id=%s; continuing queue",
+                    session_id, params.get("run_id"),
+                )
             finally:
                 q.task_done()
 
@@ -398,9 +550,9 @@ class Orchestrator:
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
             turns = await list_turns(session_id=session_uuid)
-            if current is not None:
-                turns = [t for t in turns if t.run_id != current]
-            history = render_session_history(turns)
+            history = render_session_history(
+                _turns_as_of_submission(turns, current_run_id=current)
+            )
         handle: RunHandle | None = None
         try:
             handle = await self._launch(run_id, params, history=history)
@@ -431,6 +583,19 @@ class Orchestrator:
             # early-returns without touching the semaphore — releasing only
             # there would leak a slot per completed run and wedge the pool.
             await self._release_slot()
+
+    async def _persist_run_started(self, handle: RunHandle) -> None:
+        """Persist "this run is executing now" (F20).
+
+        Best-effort like the other lifecycle sinks: a bookkeeping failure must
+        not abort the frame pump and leave the run's stream unread.
+        """
+        if not _looks_like_uuid(handle.run_id):
+            return
+        try:
+            await mark_run_started(run_id=uuid.UUID(handle.run_id))
+        except Exception:
+            logger.exception("run_started persist failed for %s", handle.run_id)
 
     async def _record_usage(self, handle: RunHandle) -> None:
         """Aggregate the run's per-turn usage from its trajectory and persist it.
@@ -572,11 +737,22 @@ class Orchestrator:
                     # Rehydrate and fan them out to any SSE subscribers.
                     if frame.get("type") == "event":
                         self._publish(handle.run_id, frame.get("payload"))
+                    # F20: the worker's own start frame is the only proof it
+                    # launched — persist it, or the row reads "queued" forever.
+                    if frame.get("type") == "run_started":
+                        await self._persist_run_started(handle)
                     # Backfill the assistant turn and persist the run row when the
                     # run terminates (T2.6 / T2.7 / T2.8): take ONLY the
                     # final_answer from the worker's summary — never the workflow's
                     # internal messages.
                     if frame.get("type") == "run_finished":
+                        if handle._finished:
+                            # F15: a terminal frame can arrive twice (a resumed
+                            # stdout stream, a retried read, a worker that emits
+                            # its summary and then exits). Processing it again
+                            # appended a SECOND assistant turn for the same run,
+                            # so the conversation showed the answer twice.
+                            continue
                         handle._finished = True
                         await self._backfill_assistant_turn(handle, frame)
                         await self._persist_run_result(handle, frame)
@@ -705,6 +881,41 @@ class Orchestrator:
         await self._backfill_assistant_turn(handle, frame)
         await self._persist_run_result(handle, frame)
 
+    async def _recover_finished_run(
+        self,
+        *,
+        run_id: uuid.UUID,
+        session_id: uuid.UUID,
+        final_answer: str,
+        stopped_by: str,
+        error: str,
+    ) -> None:
+        """Rebuild the parts of a crashed run's record that live outside its row.
+
+        F15. Recovery used to stop at the ``runs`` row, so after a restart the
+        conversation had no assistant message, the artifact index was empty and
+        the token counters were null — even though the summary, the deliverables
+        and the trajectory were all still on disk. Each step is idempotent: the
+        message is appended only when this run has no assistant turn yet, the
+        artifact scan upserts on ``(run_id, rel_path)`` and usage is a pure sum
+        over the trajectory.
+        """
+        if final_answer:
+            existing = await list_turns(session_id=session_id)
+            already_recorded = any(
+                turn.role == "assistant" and turn.run_id == run_id for turn in existing
+            )
+            if not already_recorded:
+                tag = stopped_by or error
+                content = final_answer if not tag else f"{final_answer}\n\n_[partial: {tag}]_"
+                await append_turn(
+                    session_id=session_id, role="assistant", content=content, run_id=run_id
+                )
+        found = scan_outputs(run_id.hex)
+        if found:
+            await record_artifacts(run_id=run_id, artifacts=found)
+        await update_run_usage(run_id=run_id, usage=usage_for_run(run_id.hex))
+
     def _session_uuid_for(self, handle: RunHandle) -> uuid.UUID | None:
         """Resolve the session UUID for a handle from its enqueued params."""
         # The session uuid is stored on the handle at spawn time via params; we
@@ -721,13 +932,11 @@ class Orchestrator:
         grace = self._cfg.stop_grace_period_s if grace is None else grace
         # Send SIGTERM to the whole process group; escalate to SIGKILL if the
         # worker ignores it past the grace period (orphan containment, §5.1).
-        with contextlib.suppress(ProcessLookupError):
-            os.killpg(os.getpgid(handle.proc.pid), signal.SIGTERM)
+        _signal_worker(handle.proc, signal.SIGTERM)
         try:
             await asyncio.wait_for(handle.proc.wait(), timeout=grace)
         except TimeoutError:
-            with contextlib.suppress(ProcessLookupError):
-                os.killpg(os.getpgid(handle.proc.pid), signal.SIGKILL)
+            _signal_worker(handle.proc, signal.SIGKILL)
             # Bound the reaping wait so a defunct/zombie worker can never pin
             # the slot semaphore forever (which would wedge every later run at
             # _acquire_slot). The slot itself is released by _spawn's finally.

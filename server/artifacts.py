@@ -50,6 +50,27 @@ def outputs_dir_for(run_id: str) -> Path:
     return run_dir_for(run_id) / _OUTPUTS_REL
 
 
+def _trusted_outputs_root(run_id: str) -> Path | None:
+    """The deliverable root, or ``None`` when the tree is not a real directory.
+
+    F17: containment was computed with ``Path.resolve()`` on the root, and
+    ``resolve()`` FOLLOWS links — so replacing ``ws/outputs`` with a symlink to
+    ``/etc`` (or to another user's run) silently redefined the boundary and the
+    download endpoint served whatever the link pointed at. The same shape is
+    refused here once for every reader: the run directory, its ``ws`` child and
+    ``outputs`` must all be real directories, not links.
+    """
+    run_root = run_dir_for(run_id)
+    root = run_root / _OUTPUTS_REL
+    for candidate in (run_root, root.parent, root):
+        try:
+            if candidate.is_symlink():
+                return None
+        except OSError:
+            return None
+    return root
+
+
 def _sha256_of(path: Path) -> str | None:
     """Stream a file through sha256; ``None`` if unreadable or too large."""
     try:
@@ -95,7 +116,9 @@ def scan_outputs(run_id: str) -> list[dict]:
     stat or hash are still recorded (with size/sha256 ``None``) so the UI can show
     that something was produced; only the count bound stops the scan early.
     """
-    root = outputs_dir_for(run_id)
+    root = _trusted_outputs_root(run_id)
+    if root is None:
+        return []
     out: list[dict] = []
     for path in _iter_files(root):
         if len(out) >= _MAX_FILES:
@@ -127,7 +150,9 @@ def resolve_artifact_path(run_id: str, rel_path: str) -> Path | None:
     # a relative, posix-shaped path.
     if len(rel_path) > 1 and rel_path[1] == ":":
         return None
-    root = outputs_dir_for(run_id)
+    root = _trusted_outputs_root(run_id)
+    if root is None:
+        return None
     try:
         candidate = (root / rel_path).resolve()
         root_resolved = root.resolve()

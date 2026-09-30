@@ -1,6 +1,6 @@
 # 09：SSE 游标与终态恢复协议存在缺口
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-RUN-04, PR-GOV-02

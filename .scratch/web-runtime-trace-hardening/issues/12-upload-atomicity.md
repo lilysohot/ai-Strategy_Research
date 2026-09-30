@@ -1,6 +1,6 @@
 # 12：上传校验与运行创建缺少失败清理
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-GOV-01, PR-GOV-06

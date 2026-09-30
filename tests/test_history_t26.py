@@ -26,7 +26,10 @@ from server.history import (
 )
 from server.orchestrator import Orchestrator, _session_uuid
 from server.store import (
+    SessionOwnershipError,
     append_turn,
+    create_run,
+    create_user,
     ensure_session,
     init_db,
     list_turns,
@@ -130,18 +133,58 @@ def test_extract_empty_when_missing():
 
 
 # ── store: sessions & turns (T2.6) ────────────────────────────────
+async def _new_user() -> uuid.UUID:
+    """A real user row: ``sessions.user_id`` is a foreign key."""
+    user = await create_user(
+        username=f"t26-{uuid.uuid4().hex[:10]}", password_hash="synthetic"
+    )
+    return user.id
+
+
+async def _seed_session() -> tuple[uuid.UUID, uuid.UUID]:
+    """``(user_id, session_id)`` with both rows present.
+
+    F16 turned SQLite's foreign-key enforcement on, which is what PostgreSQL
+    (the deployment database) has always done. These tests used to write turns
+    into sessions that did not exist — a shape the real database rejects.
+    """
+    user_id = await _new_user()
+    sid = uuid.uuid4()
+    await ensure_session(session_id=sid, user_id=user_id, title="t")
+    return user_id, sid
+
+
+async def _seed_run(session_id: uuid.UUID, user_id: uuid.UUID) -> uuid.UUID:
+    """A run row, so a turn may legally reference it."""
+    rid = uuid.uuid4()
+    await create_run(
+        run_id=rid,
+        session_id=session_id,
+        user_id=user_id,
+        prompt="synthetic",
+        pipeline_id="stateful-react-agent",
+        run_dir=str(run_dir_for(rid.hex)),
+    )
+    return rid
+
+
 @pytest.mark.asyncio
 async def test_ensure_session_idempotent(db):
     sid = uuid.uuid4()
-    await ensure_session(session_id=sid, user_id=uuid.uuid4(), title="t")
-    await ensure_session(session_id=sid, user_id=uuid.uuid4(), title="t2")
+    owner = await _new_user()
+    await ensure_session(session_id=sid, user_id=owner, title="t")
+    # Same owner: idempotent, and the first title is the one that sticks.
+    await ensure_session(session_id=sid, user_id=owner, title="t2")
     turns = await list_turns(session_id=sid)
     assert turns == []  # no turns yet, but session exists exactly once
+    # F08: a second user can never adopt (or write into) an existing session.
+    with pytest.raises(SessionOwnershipError):
+        await ensure_session(session_id=sid, user_id=await _new_user(), title="t3")
 
 
 @pytest.mark.asyncio
 async def test_append_and_list_turns_order(db):
-    sid = uuid.uuid4()
+    _user_id, sid = await _seed_session()
     await append_turn(session_id=sid, role="user", content="q1")
     await append_turn(session_id=sid, role="assistant", content="a1")
     await append_turn(session_id=sid, role="user", content="q2")
@@ -153,15 +196,15 @@ async def test_append_and_list_turns_order(db):
 
 @pytest.mark.asyncio
 async def test_append_turn_links_run_id(db):
-    sid = uuid.uuid4()
-    rid = uuid.uuid4()
+    user_id, sid = await _seed_session()
+    rid = await _seed_run(sid, user_id)
     t = await append_turn(session_id=sid, role="user", content="q", run_id=rid)
     assert t.run_id == rid
 
 
 @pytest.mark.asyncio
 async def test_list_turns_limit_keeps_recent(db):
-    sid = uuid.uuid4()
+    _user_id, sid = await _seed_session()
     for i in range(5):
         await append_turn(session_id=sid, role="user", content=f"m{i}")
     rows = await list_turns(session_id=sid, limit=2)
@@ -217,13 +260,14 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
 
     sid = "sess-t26"
     suuid = _session_uuid(sid)
-    user_id = uuid.uuid4()
+    user_id = await _new_user()
 
     # Drive the spawn path directly (bypassing the queue) for deterministic order.
     await ensure_session(session_id=suuid, user_id=user_id, title="t")
-    run1 = uuid.uuid4().hex
+    run1_uuid = await _seed_run(suuid, user_id)
+    run1 = run1_uuid.hex
     await append_turn(session_id=suuid, role="user", content="first question",
-                      run_id=uuid.UUID(run1))
+                      run_id=run1_uuid)
     await orch._spawn(
         run_id=run1, session_id=sid, session_uuid=suuid,
         prompt="first question", user_id=user_id,
@@ -233,9 +277,10 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
     assert rows[1].content == "answer-A"
 
     # Second message in the same session should render the prior transcript.
-    run2 = uuid.uuid4().hex
+    run2_uuid = await _seed_run(suuid, user_id)
+    run2 = run2_uuid.hex
     await append_turn(session_id=suuid, role="user", content="second question",
-                      run_id=uuid.UUID(run2))
+                      run_id=run2_uuid)
     await orch._spawn(
         run_id=run2, session_id=sid, session_uuid=suuid,
         prompt="second question", user_id=user_id,
@@ -254,8 +299,8 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
 @pytest.mark.asyncio
 async def test_assistant_backfill_partial_tagging(db):
     orch = Orchestrator()
-    suuid = uuid.uuid4()
-    run_id = uuid.uuid4().hex
+    user_id, suuid = await _seed_session()
+    run_id = (await _seed_run(suuid, user_id)).hex
     params = {"run_id": run_id, "session_id": "x", "session_uuid": suuid}
     handle = type("H", (), {"run_id": run_id, "_params": params,
                             "session_id": "x"})()

@@ -1,6 +1,6 @@
 # 16：消息序号与关系约束不足
 
-Status: needs-triage
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-01、PR-GOV-01/06
