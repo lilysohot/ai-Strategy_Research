@@ -1,0 +1,9 @@
+{
+ "seq": 1,
+ "op": "replace_text",
+ "path": "/home/administrator/FrontierAgent/.e5runs_e5/company-003/.apodex/runs/20260930-105126+0800-react-9ef9/outputs/report.md",
+ "args": {
+  "find": "- 该表五列年份为 2024 / 2025 / 2026E / 2027E / 2028E，现金流量表单位为百万元；表中**括号表示负值（净流出）** [R01 p20]。",
+  "replace": "- 该表五列年份为 2024 / 2025 / 2026E / 2027E / 2028E，现金流量表单位为百万元 [R01 p20]；表中数值采用括号记法（如 (222)），按财务报表通用记法表示负值（净流出）。"
+ }
+}

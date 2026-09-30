@@ -1,0 +1,5964 @@
+{
+  "generated_at": "2026-09-30T04:58:02.686825+00:00",
+  "policy": "SANDBOX_BACKEND=bwrap + 冻结预算(40轮/30min/2M in/100k out/60 tools)；生成侧=e4-validate；消费侧=ledger+trace；零模型",
+  "queries": {
+    "company-001": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T02:42:46.680379+00:00",
+      "run": ".e5runs_e5/company-001/.apodex/runs/20260930-103814+0800-react-6085",
+      "query_id": "company-001",
+      "doc_prefix": "9fa4cd7c",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e4",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "26",
+                "-28",
+                "67.74",
+                "70.77",
+                "73.84",
+                "2030"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "26",
+                "-28",
+                "67.74",
+                "70.77",
+                "73.84",
+                "2030"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e1",
+          "tier": "supplementary",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "67.74"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "70.77"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "supplementary",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "73.84"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 2,
+              "locators": 11,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "26",
+                "-28",
+                "67.74",
+                "70.77",
+                "73.84",
+                "2030"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 6,
+        "all_pass": 6,
+        "per_layer_fail": {},
+        "per_class_fail": {},
+        "fail_targets": []
+      }
+    },
+    "company-002": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T02:51:25.431154+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-002/.apodex/runs/20260930-104335+0800-react-79dc",
+      "query_id": "company-002",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "26",
+                "1",
+                "922.8",
+                "1.3%",
+                "445.2",
+                "2.0%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "2",
+                "375.8",
+                "5.2%",
+                "172.7",
+                "6.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "26",
+                "1",
+                "922.8",
+                "1.3%",
+                "445.2",
+                "2.0%",
+                "2",
+                "375.8",
+                "5.2%",
+                "172.7",
+                "6.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "company-003": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T03:04:15.614872+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-003/.apodex/runs/20260930-105126+0800-react-9ef9",
+      "query_id": "company-003",
+      "doc_prefix": "568f9e75",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "0.36"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "(222)"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "0.59"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "(138)"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "0.93"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e6",
+          "tier": "required",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "(17)"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e7",
+          "tier": "supplementary",
+          "page": "20",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 7,
+              "locators": 23,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 20,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 20,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "176",
+                "(105)",
+                "(222)",
+                "(138)",
+                "(17)"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 7,
+        "all_pass": 7,
+        "per_layer_fail": {},
+        "per_class_fail": {},
+        "fail_targets": []
+      }
+    },
+    "company-004": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T03:11:11.199034+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-004/.apodex/runs/20260930-110416+0800-react-7ce7",
+      "query_id": "company-004",
+      "doc_prefix": "568f9e75",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 3,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 3,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "2028",
+                "8.84",
+                "12.06",
+                "15.81",
+                "26",
+                "-28",
+                "32%",
+                "36%",
+                "31%",
+                "9.38",
+                "13.4",
+                "18.09",
+                "40%",
+                "43%",
+                "35%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 3,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 3,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "2028",
+                "8.84",
+                "12.06",
+                "15.81",
+                "26",
+                "-28",
+                "32%",
+                "36%",
+                "31%",
+                "9.38",
+                "13.4",
+                "18.09",
+                "40%",
+                "43%",
+                "35%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 3,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 3,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "2028",
+                "8.84",
+                "12.06",
+                "15.81",
+                "26",
+                "-28",
+                "32%",
+                "36%",
+                "31%",
+                "9.38",
+                "13.4",
+                "18.09",
+                "40%",
+                "43%",
+                "35%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e1",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 3,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 3,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "2028",
+                "8.84",
+                "12.06",
+                "15.81",
+                "26",
+                "-28",
+                "32%",
+                "36%",
+                "31%",
+                "9.38",
+                "13.4",
+                "18.09"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 4,
+        "all_pass": 4,
+        "per_layer_fail": {},
+        "per_class_fail": {},
+        "fail_targets": []
+      }
+    },
+    "company-005": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T03:29:36.720922+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-005/.apodex/runs/20260930-111112+0800-react-ecd7",
+      "query_id": "company-005",
+      "doc_prefix": "568f9e75",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 4,
+              "locators": 15,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 15,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 15,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8230",
+                "8231"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 4,
+              "locators": 15,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 15,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 15,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "9130",
+                "9320"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e1",
+          "tier": "supplementary",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "fail"
+          },
+          "first_fail": "L9",
+          "failure_class": "错用结构",
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 4,
+              "locators": 15,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 15,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 15,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "12",
+                "8230",
+                "8231",
+                "6230",
+                "6231",
+                "6110"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "tier": "supplementary",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 4,
+              "locators": 15,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 15,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 15,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8230",
+                "8231"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "tier": "supplementary",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 4,
+              "locators": 15,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 15,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 15,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "9130",
+                "9320"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 5,
+        "all_pass": 4,
+        "per_layer_fail": {
+          "L9": 1
+        },
+        "per_class_fail": {
+          "错用结构": 1
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L9",
+            "错用结构"
+          ]
+        ]
+      }
+    },
+    "company-006": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T03:35:56.610166+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-006/.apodex/runs/20260930-112937+0800-react-8c21",
+      "query_id": "company-006",
+      "doc_prefix": "568f9e75",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "7",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "fail",
+            "L9": "pass"
+          },
+          "first_fail": "L8",
+          "failure_class": "截断",
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 3,
+              "locators": 12,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": false,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "32.60%",
+                "100%",
+                "4.00%",
+                "36.60%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "7",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "fail",
+            "L9": "pass"
+          },
+          "first_fail": "L8",
+          "failure_class": "截断",
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 3,
+              "locators": 12,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": false,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1.70%",
+                "0.57%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "7",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "fail",
+            "L9": "pass"
+          },
+          "first_fail": "L8",
+          "failure_class": "截断",
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 3,
+              "locators": 12,
+              "doc_prefix": "568f9e75"
+            },
+            "L7": {
+              "fetched": 7,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 7,
+              "all_delivered": false,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "6",
+                "30",
+                "32.60%",
+                "100%",
+                "4.00%",
+                "36.60%",
+                "1.70%",
+                "0.57%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L8": 3
+        },
+        "per_class_fail": {
+          "截断": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L8",
+            "截断"
+          ],
+          [
+            "e2",
+            "L8",
+            "截断"
+          ],
+          [
+            "e3",
+            "L8",
+            "截断"
+          ]
+        ]
+      }
+    },
+    "company-007": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T03:38:01.879653+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/company-007/.apodex/runs/20260930-113557+0800-react-d28a",
+      "query_id": "company-007",
+      "doc_prefix": "9fa4cd7c",
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "7",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 4,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 4,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "4.06%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "7",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "pass",
+            "L7": "pass",
+            "L8": "pass",
+            "L9": "pass"
+          },
+          "first_fail": null,
+          "failure_class": null,
+          "all_pass": true,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 1,
+              "locators": 4,
+              "doc_prefix": "9fa4cd7c"
+            },
+            "L7": {
+              "fetched": 4,
+              "quote_in_fetched": true
+            },
+            "L8": {
+              "n_delivered": 4,
+              "all_delivered": true,
+              "quote_intact": true,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "600519",
+                "4.06%"
+              ],
+              "vals_ok": true,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 2,
+        "all_pass": 2,
+        "per_layer_fail": {},
+        "per_class_fail": {},
+        "fail_targets": []
+      }
+    },
+    "company-009": {
+      "query_id": "company-009",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/company-009/.apodex/runs/20260930-114442+0800-react-0ba5",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": true,
+      "answer_preview": "关键事实已确认：\n- 当前时点：**2026-09-30**（行情 as_of）\n- 最新已披露年报：**FY2025**（2026-04-23 披露，归母净利 4028 万元）；FY2026 年报尚未产生，**FY2027 尚未开始**\n\n也就是说「2027 年经审计实际值」在时间上不可能存在。现在进一步枚举语料库中提及光力科技的文档，并检索 2027 相关数字是预测还是实际。\n发现语料库中存在疑似光力科技的公司研报（doc 568f9e75：含「300480.SZ」「2026年中报」「盈利预测和财务指标 2024…2027E」）。现在并行：①枚举语料库全部文档（确认「六份材料」构成）；②取",
+      "verdict": "hallucination_risk"
+    },
+    "company-010": {
+      "query_id": "company-010",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/company-010/.apodex/runs/20260930-115731+0800-react-55ab",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": false,
+      "answer_preview": "",
+      "verdict": "hallucination_risk"
+    },
+    "industry-001": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:03:11.750370+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-001/.apodex/runs/20260930-120020+0800-react-db7c",
+      "query_id": "industry-001",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "0.0%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "0.0%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "82.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-4",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1",
+                "2016",
+                "2026",
+                "7",
+                "27"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-5",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2",
+                "2026",
+                "1",
+                "7",
+                "26",
+                "6"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "tier": "supplementary",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "0.0%",
+                "82.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "tier": "supplementary",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "24.0",
+                "28.5",
+                "-18.8%",
+                "0.0%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 7,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 7
+        },
+        "per_class_fail": {
+          "null": 7
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ],
+          [
+            "a-4",
+            "L6",
+            null
+          ],
+          [
+            "a-5",
+            "L6",
+            null
+          ],
+          [
+            "e4",
+            "L6",
+            null
+          ],
+          [
+            "e5",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-002": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:06:09.496135+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-002/.apodex/runs/20260930-120312+0800-react-fb09",
+      "query_id": "industry-002",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "99.6%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "28.5"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "22",
+                "32",
+                "134"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-4",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1",
+                "2016",
+                "2026",
+                "7",
+                "27"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 4,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 4
+        },
+        "per_class_fail": {
+          "null": 4
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "a-4",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-003": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:09:00.383019+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-003/.apodex/runs/20260930-120610+0800-react-6aa5",
+      "query_id": "industry-003",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "89.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "8068.0"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "supplementary",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "32.1%",
+                "10.9%",
+                "89.9%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 4,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 4
+        },
+        "per_class_fail": {
+          "null": 4
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-004": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:11:58.615214+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-004/.apodex/runs/20260930-120901+0800-react-21f0",
+      "query_id": "industry-004",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "a-1",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1",
+                "2016",
+                "2026",
+                "7",
+                "27"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2",
+                "2026",
+                "1",
+                "7",
+                "26",
+                "6"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 2,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 2
+        },
+        "per_class_fail": {
+          "null": 2
+        },
+        "fail_targets": [
+          [
+            "a-1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-005": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:14:49.561873+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-005/.apodex/runs/20260930-121159+0800-react-b413",
+      "query_id": "industry-005",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "9",
+                "2",
+                "2459",
+                "5",
+                "720",
+                "4",
+                "240%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "5",
+                "7",
+                "8",
+                "9",
+                "2",
+                "2459",
+                "720",
+                "4",
+                "240%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 2,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 2
+        },
+        "per_class_fail": {
+          "null": 2
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-006": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:17:40.989539+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-006/.apodex/runs/20260930-121450+0800-react-cf32",
+      "query_id": "industry-006",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "a-1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2027"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2027"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2027"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "a-1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-007": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:20:36.069770+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-007/.apodex/runs/20260930-121741+0800-react-f04b",
+      "query_id": "industry-007",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "5611.65",
+                "4.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "12576.94",
+                "9.12%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "5611.65",
+                "4.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "12576.94",
+                "9.12%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 4,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 4
+        },
+        "per_class_fail": {
+          "null": 4
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ],
+          [
+            "e4",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-008": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:23:26.237972+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/industry-008/.apodex/runs/20260930-122036+0800-react-24aa",
+      "query_id": "industry-008",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "9",
+                "2",
+                "2459",
+                "5",
+                "720",
+                "4",
+                "240%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1",
+                "2016",
+                "2026",
+                "7",
+                "27"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-4",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "5",
+                "7",
+                "8",
+                "9",
+                "2",
+                "2459",
+                "720",
+                "4",
+                "240%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-5",
+          "tier": "required",
+          "page": "10",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1",
+                "2016",
+                "2026",
+                "7",
+                "27"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "5",
+                "7",
+                "8",
+                "9",
+                "2",
+                "2459",
+                "720",
+                "4",
+                "240%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 6,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 6
+        },
+        "per_class_fail": {
+          "null": 6
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "a-4",
+            "L6",
+            null
+          ],
+          [
+            "a-5",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "industry-009": {
+      "query_id": "industry-009",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/industry-009/.apodex/runs/20260930-122326+0800-react-f7ba",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": false,
+      "answer_preview": "",
+      "verdict": "hallucination_risk"
+    },
+    "industry-010": {
+      "query_id": "industry-010",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/industry-010/.apodex/runs/20260930-122623+0800-react-a988",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": false,
+      "answer_preview": "",
+      "verdict": "hallucination_risk"
+    },
+    "macro-001": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:32:08.233025+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-001/.apodex/runs/20260930-122917+0800-react-a6d7",
+      "query_id": "macro-001",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "16.2",
+                "5.6",
+                "-2.3",
+                "2.1"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "9",
+                "4",
+                "8",
+                "16.2",
+                "5.6",
+                "-2.3",
+                "2.1",
+                "4.1%",
+                "3.1%",
+                "3.0%",
+                "3.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "3",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "-156",
+                "214",
+                "148",
+                "63",
+                "31",
+                "21",
+                "162",
+                "71"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "9",
+                "6.2",
+                "-2.1",
+                "-2.3",
+                "-5.0",
+                "3.5",
+                "4.2",
+                "61.6%",
+                "61.4%",
+                "11.5",
+                "3",
+                "4.1%",
+                "8.2",
+                "15.3",
+                "5.4",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 4,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 4
+        },
+        "per_class_fail": {
+          "null": 4
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-002": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:35:01.472191+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-002/.apodex/runs/20260930-123208+0800-react-b9ff",
+      "query_id": "macro-002",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "8",
+                "4.1%",
+                "3.1%",
+                "3.0%",
+                "3.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "9",
+                "4",
+                "8",
+                "16.2",
+                "5.6",
+                "-2.3",
+                "2.1",
+                "4.1%",
+                "3.1%",
+                "3.0%",
+                "3.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e4",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "9",
+                "6.2",
+                "-2.1",
+                "-2.3",
+                "-5.0",
+                "3.5",
+                "4.2",
+                "61.6%",
+                "61.4%",
+                "11.5",
+                "3",
+                "4.1%",
+                "8.2",
+                "15.3",
+                "5.4",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "8",
+                "61.6%",
+                "61.4%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e5",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "61.6%",
+                "61.4%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 5,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 5
+        },
+        "per_class_fail": {
+          "null": 5
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ],
+          [
+            "e4",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "e5",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-003": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:37:51.367935+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-003/.apodex/runs/20260930-123502+0800-react-1be1",
+      "query_id": "macro-003",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "9",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "9",
+                "6.2",
+                "-2.1",
+                "-2.3",
+                "-5.0",
+                "3.5",
+                "4.2",
+                "61.6%",
+                "61.4%",
+                "11.5",
+                "3",
+                "4.1%",
+                "8.2",
+                "15.3",
+                "5.4",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-4",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "9",
+                "6.2",
+                "-2.1",
+                "-2.3",
+                "-5.0",
+                "3.5",
+                "4.2",
+                "61.6%",
+                "61.4%",
+                "11.5",
+                "3",
+                "4.1%",
+                "8.2",
+                "15.3",
+                "5.4",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "8",
+                "9",
+                "6.2",
+                "-2.1",
+                "-2.3",
+                "-5.0",
+                "3.5",
+                "4.2",
+                "61.6%",
+                "61.4%",
+                "11.5",
+                "3",
+                "4.1%",
+                "8.2",
+                "15.3",
+                "5.4",
+                "60%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 5,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 5
+        },
+        "per_class_fail": {
+          "null": 5
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "a-4",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-004": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:40:40.816556+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-004/.apodex/runs/20260930-123752+0800-react-c137",
+      "query_id": "macro-004",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "a-1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "1"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-4",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-5",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-6",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "4"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 6,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 6
+        },
+        "per_class_fail": {
+          "null": 6
+        },
+        "fail_targets": [
+          [
+            "a-1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ],
+          [
+            "a-4",
+            "L6",
+            null
+          ],
+          [
+            "a-5",
+            "L6",
+            null
+          ],
+          [
+            "a-6",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-005": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:43:30.302909+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-005/.apodex/runs/20260930-124041+0800-react-43bf",
+      "query_id": "macro-005",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "2026",
+                "-0.5%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "2",
+                "1"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "supplementary",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "2021",
+                "-2025",
+                "2026",
+                "-0.5%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "a-2",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-006": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:46:28.224090+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-006/.apodex/runs/20260930-124331+0800-react-3566",
+      "query_id": "macro-006",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "2025",
+                "4.6%",
+                "2024",
+                "5.9%",
+                "6.1%",
+                "6.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "2025",
+                "4.6%",
+                "2024",
+                "5.9%",
+                "6.1%",
+                "6.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "1",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "2025",
+                "4.6%",
+                "2024",
+                "5.9%",
+                "6.1%",
+                "6.2%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-007": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:49:20.228951+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-007/.apodex/runs/20260930-124629+0800-react-95a1",
+      "query_id": "macro-007",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "2",
+                "67.5%",
+                "2025",
+                "68.6%",
+                "2019",
+                "70.5%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "2",
+                "80.3%",
+                "2025",
+                "83.7%",
+                "2019",
+                "110.3%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e3",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "2",
+                "67.5%",
+                "2025",
+                "68.6%",
+                "2019",
+                "70.5%",
+                "80.3%",
+                "83.7%",
+                "110.3%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "e3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-008": {
+      "artifact": "e5-run-score",
+      "generated_at": "2026-09-30T04:52:14.171034+00:00",
+      "run": "/home/administrator/FrontierAgent/.e5runs_e5/macro-008/.apodex/runs/20260930-124921+0800-react-2aab",
+      "query_id": "macro-008",
+      "doc_prefix": null,
+      "policy": "生成侧=e4-validate（冻结 gen-2）；消费侧=run ledger/trace 直读；零模型",
+      "targets": [
+        {
+          "target_id": "e1",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": false,
+              "unit_present": false
+            },
+            "L9": {
+              "values": [
+                "1",
+                "-6",
+                "-4.3%",
+                "-29.4%"
+              ],
+              "vals_ok": false,
+              "unit_ok": false,
+              "period_ok": false
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "e2",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [
+                "3",
+                "1",
+                "-6",
+                "-4.3%",
+                "-29.4%"
+              ],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        },
+        {
+          "target_id": "a-3",
+          "tier": "required",
+          "page": "2",
+          "layers": {
+            "L1": "pass",
+            "L2": "pass",
+            "L3": "pass",
+            "L4": "pass",
+            "L5": "pass",
+            "L6": "fail",
+            "L7": "fail",
+            "L8": "fail",
+            "L9": "fail"
+          },
+          "first_fail": "L6",
+          "failure_class": null,
+          "all_pass": false,
+          "run_evidence": {
+            "L6": {
+              "requested_entries": 0,
+              "locators": 0,
+              "doc_prefix": null
+            },
+            "L7": {
+              "fetched": 0,
+              "quote_in_fetched": false
+            },
+            "L8": {
+              "n_delivered": 0,
+              "all_delivered": false,
+              "quote_intact": false,
+              "period_ok": true,
+              "unit_present": true
+            },
+            "L9": {
+              "values": [],
+              "vals_ok": false,
+              "unit_ok": true,
+              "period_ok": true
+            }
+          },
+          "prep": {
+            "in_clean_contiguous": true,
+            "single_chunk_hit": true,
+            "offered_contains": true
+          }
+        }
+      ],
+      "summary": {
+        "targets": 3,
+        "all_pass": 0,
+        "per_layer_fail": {
+          "L6": 3
+        },
+        "per_class_fail": {
+          "null": 3
+        },
+        "fail_targets": [
+          [
+            "e1",
+            "L6",
+            null
+          ],
+          [
+            "e2",
+            "L6",
+            null
+          ],
+          [
+            "a-3",
+            "L6",
+            null
+          ]
+        ]
+      }
+    },
+    "macro-009": {
+      "query_id": "macro-009",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/macro-009/.apodex/runs/20260930-125214+0800-react-cfef",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": false,
+      "answer_preview": "",
+      "verdict": "hallucination_risk"
+    },
+    "macro-010": {
+      "query_id": "macro-010",
+      "answer_existence": "no_answer",
+      "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/macro-010/.apodex/runs/20260930-125508+0800-react-966b",
+      "checks": [],
+      "has_negative_marker": false,
+      "fabrication_risk": false,
+      "answer_preview": "",
+      "verdict": "hallucination_risk"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "query_id": "company-010",
+  "answer_existence": "no_answer",
+  "run_dir": "/home/administrator/FrontierAgent/.e5runs_e5/company-010/.apodex/runs/20260930-115731+0800-react-55ab",
+  "checks": [],
+  "has_negative_marker": false,
+  "fabrication_risk": false,
+  "answer_preview": "",
+  "verdict": "hallucination_risk"
+}
