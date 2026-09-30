@@ -262,6 +262,16 @@ class TrajectoryFileObserver(BaseObserver):
 
     def _close_jsonl(self) -> None:
         if self._jsonl_handle is not None:
+            # F06 write barrier. ``flush()`` only hands bytes to the OS; that is
+            # enough to survive the *process* being killed, which is what the
+            # per-record flush already buys. ``fsync`` is what makes them survive
+            # the machine going away. Best effort only: a failure here must never
+            # take the already-written records down with it.
+            try:
+                self._jsonl_handle.flush()
+                os.fsync(self._jsonl_handle.fileno())
+            except (OSError, ValueError):
+                pass
             self._jsonl_handle.close()
             self._jsonl_handle = None
 

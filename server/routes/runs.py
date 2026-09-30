@@ -37,6 +37,7 @@ from server.deps import get_current_user
 from server.diff import revert_paths
 from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.relay import sse_for_run, trajectory_records_for_egress
+from server.trajectory_status import inspect_trajectory
 from server.store import (
     ACTIVE_RUN_STATUSES,
     build_llm_snapshot,
@@ -328,9 +329,14 @@ async def run_trace(
         raise HTTPException(status_code=404, detail="run not found")
     # F03: this endpoint is an HTTP egress like SSE, so it uses the same
     # redaction boundary — the trajectory on disk holds whatever a tool echoed.
+    #
+    # F06: records alone cannot tell a finished run from an interrupted one, so
+    # the completeness verdict travels with them and the UI shows the gap
+    # instead of presenting a cut-short trace as the whole story.
     return {
         "run_id": run_id,
         "records": trajectory_records_for_egress(run_id, after_line=after),
+        "completeness": inspect_trajectory(run_id).as_dict(),
     }
 
 

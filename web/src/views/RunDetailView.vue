@@ -27,7 +27,7 @@ import {
   thinkingView,
   type ThinkingView,
 } from '@/utils/traceView'
-import type { RunTraceRecord } from '@/types'
+import type { RunTraceRecord, TraceCompleteness } from '@/types'
 import { useRunStreamStore } from '@/stores/runs'
 
 const props = defineProps<{ runId: string | null }>()
@@ -37,8 +37,21 @@ const runStream = useRunStreamStore()
 const records = ref<RunTraceRecord[]>([])
 const loading = ref(false)
 const errorMsg = ref('')
+/** F06: null until the server reports it — never assume "complete". */
+const completeness = ref<TraceCompleteness | null>(null)
 
 const hasContent = computed(() => records.value.length > 0)
+
+/**
+ * F06: an interrupted run must say so. A `partial` trace is still readable, so
+ * this is a warning beside the records, not an error that replaces them.
+ */
+const completenessNotice = computed(() => {
+  const c = completeness.value
+  if (!c || c.state === 'complete') return ''
+  if (c.state === 'unavailable') return c.reason || '没有可读的轨迹记录'
+  return c.reason || '运行未正常结束，已保存的记录可能缺少最后一部分内容'
+})
 
 async function load() {
   if (!props.runId) {
@@ -50,6 +63,7 @@ async function load() {
   try {
     const res = await runsApi.trace(props.runId)
     records.value = res.records
+    completeness.value = res.completeness ?? null
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
       errorMsg.value = '该运行不存在或无权限查看'
@@ -57,6 +71,7 @@ async function load() {
       errorMsg.value = err instanceof ApiError ? err.message : '加载轨迹失败'
     }
     records.value = []
+    completeness.value = null
   } finally {
     loading.value = false
   }
@@ -72,6 +87,7 @@ watch(
   () => props.runId,
   (id) => {
     revealed.value = {}
+    completeness.value = null
     if (id) load()
     else records.value = []
   },
@@ -156,6 +172,18 @@ defineExpose({ load })
       v-if="errorMsg"
       :title="errorMsg"
       type="error"
+      show-icon
+      :closable="false"
+    />
+
+    <!--
+      F06: completeness sits beside the records, not in place of them — a
+      partial trace is still readable and must stay readable.
+    -->
+    <el-alert
+      v-if="completenessNotice"
+      :title="completenessNotice"
+      type="warning"
       show-icon
       :closable="false"
     />

@@ -2,6 +2,9 @@
 
 > **2026-09-29 追溯能力核查**：本文历史描述中的“完整轨迹 / SIGKILL 安全”需限定为已写入的记录，
 > 不代表未完成流式响应、所有失败尝试或断电后的持久性保证；`flush()` 也不等于 `fsync()`。
+> **2026-09-30 更新（F06 已部分落实）**：轨迹完整性现在**可判定**——`server/trajectory_status.py` 给出
+> `complete / partial / unavailable`，`/trace` 响应与历史轨迹页展示该状态；写入端在关闭时补了一次
+> `fsync` 屏障。**仍需限定**：不覆盖未完成的流式 delta、失败尝试，也不等于断电/硬件故障下的绝对保证。
 > 另发现持久卷与默认目录不匹配、构建目录排除、接口脱敏、工具 ID 关联和历史展示等缺口。
 > 代码证据、验证边界与后续验收见[修复报告](plan/web-runtime-trace-repair-report.md)，当前尚未修复。
 > 报告 v1.1 又补充会话归属、SSE 游标/终态、用量对账、异步切换、上传清理、容量与排队历史边界；
@@ -20,7 +23,7 @@
 | 原则 | 复用 FrontierAgent 运行时既有挂载点，Web 层为纯新增，不修改 `frontier_agent/` 内核；本文不重新定义产品优先级 |
 
 > **v1.2 相对 v1.1 的四处实质修正**（均由 spike 实测得出，非推测）：
-> 1. **事件持久化不需要自研**——运行时 `TrajectoryFileObserver` 已增量落盘完整轨迹（含参数、用量、system_prompt、SIGKILL 安全），原 ADR-4 基于不完整复审（§5.2、§6.2）。
+> 1. **事件持久化不需要自研**——运行时 `TrajectoryFileObserver` 已增量落盘**轮次级**轨迹（含参数、用量、system_prompt；进程被杀时已写记录仍可读，非断电保证），原 ADR-4 基于不完整复审（§5.2、§6.2）。
 > 2. **默认 profile 没有文件工具**——`agent.agent_tools` 决定工具集，`simple`/`benchmark` 无 `read_file`/`create_file`，仅 `tui` 有（§5.4）。
 > 3. **native 模式忽略 `_sandbox_mounts`**——bind mount 只在 bwrap 分支，上传直接进 `FRONTIER_AGENT_INPUTS_DIR`（§5.1）。
 > 4. **`on_tool_call` 不是 OpenAI 线格式**——扁平 `{id, name, args}` 且此刻 `args` 为空，参数摘要须取 trajectory（§5.2）。
@@ -84,7 +87,7 @@ api 容器 (frontier-web 镜像, FastAPI 单实例)
 | DB 访问 | SQLAlchemy 2.0 async + asyncpg + Alembic | SQLA ≥2.0 | 异步原生；Alembic 管 schema 演进 |
 | 认证 | PyJWT (HS256) + argon2-cffi | — | argon2id 抗暴力破解；JWT 24h；落选 session-cookie、passlib(维护停滞) |
 | 密钥加密 | cryptography Fernet | — | 主密钥来自 `MASTER_KEY` 环境变量 |
-| **事件持久化** | **运行时 `TrajectoryFileObserver`（不自建）** | — | v1.2 修正：EventStore 确为 no-op，但轨迹另有一套且已增量 flush、SIGKILL 安全、含参数与用量；见 §5.2 |
+| **事件持久化** | **运行时 `TrajectoryFileObserver`（不自建）** | — | v1.2 修正：EventStore 确为 no-op，但轨迹另有一套且已增量 flush（关闭时 fsync）、进程被杀时已写记录仍可读、含参数与用量；完整性状态见 F06 / §5.2 |
 | **流式推送** | 自研 BridgeObserver → stdout JSONL → SSE | — | 运行时轨迹不含 delta，只补这一层；**不落盘**，回放走 trajectory tail；见 §5.2 |
 | Agent 编排 | asyncio.create_subprocess_exec + JSONL IPC | — | run-per-subprocess；落选 Celery(重)、K8s Job(过度设计) |
 | 多轮对话 | `render_session_history` / `build_session_turn` / `SessionHistoryCompactor` | frontier_agent.core.runtime.session_history | 与 TUI 同一压缩范式；注意：位于**运行时核心**（非 apodex），直接 import |
@@ -193,7 +196,14 @@ JSON snapshots are atomically replaced; JSONL events are flushed incrementally
 so partial runs remain readable without retaining full payloads in memory.
 ```
 
-每 record `flush()`（`:261`），JSON 信封 `os.replace` 原子替换、首次 flush 立即发生，注释明写理由是 *"which matters when the process is SIGKILLed (OOM)"*（`:171-175`）。spike 实测输出：
+每 record `flush()`（`:261`），JSON 信封 `os.replace` 原子替换、首次 flush 立即发生，注释明写理由是 *"which matters when the process is SIGKILLed (OOM)"*（`:171-175`）。
+
+> **F06 边界（2026-09-30）**：`flush()` 只把记录交给 OS——进程被杀时已写记录仍在，但这不等于
+> `fsync()`。关闭句柄时现已补一次 `fsync` 作为写入屏障，提升已写记录的耐久，仍**不是**断电或
+> 硬件故障下的绝对保证。未完成的流式 delta 不落盘；被截断的尾部由完整性状态 `partial` 明确标出
+> （`server/trajectory_status.py`，随 `/trace` 返回并在历史页提示）。
+
+spike 实测输出：
 
 ```json
 {"t":"start","model_name":"…","system_prompt":"…","tool_names":[…]}
@@ -209,7 +219,7 @@ so partial runs remain readable without retaining full payloads in memory.
 | 工具调用**参数**、结果、耗时 | 运行时 trajectory | `tool_calls[].args` 完整；`result` 带 `error`/`ms` |
 | token 用量（PR-GOV-03） | 运行时 trajectory | 每轮 `usage` 字段，run 结束聚合进 runs 表 |
 | system_prompt 归档（L5） | 运行时 trajectory | `start` 记录 |
-| SIGKILL 后仍可回放（PR-GOV-02） | 运行时 trajectory | 增量 flush，非进程结束时才写 |
+| SIGKILL 后仍可回放（PR-GOV-02） | 运行时 trajectory | 增量 flush + 关闭时 fsync；**仅限已写入的轮次记录**，被截断的尾部以 `partial` 标出（F06） |
 | **流式 delta 实时推送** | **自研 BridgeObserver** | 轨迹只存每轮最终 content，无 delta |
 | 生命周期事件（run_started/finished） | 自研 BridgeObserver | 纯推送，不落盘 |
 
@@ -380,7 +390,7 @@ CREATE TABLE audit_log (
 | `result` | `turn`、`name`、`tool_call_id`、`result`、`error`、`ms` | PR-GOV-02 工具结果 |
 | `compaction` | 被丢弃与被保留的内容 | 长程运行的可解释性 |
 
-- **理由**：与自建方案相比，运行时版本额外提供参数、用量、system_prompt 与 SIGKILL 安全，且随 run 目录整体归档，满足 PR-GOV-01/02。自研只剩“delta 实时推送”一层，且该层**不落盘**——delta 丢了也不影响留痕；导出和保留期仍属 PR-GOV-05 待办。
+- **理由**：与自建方案相比，运行时版本额外提供参数、用量、system_prompt 与「进程被杀后已写记录仍可读」（不等同断电/硬件保证，F06 已用 `complete/partial/unavailable` 显式标出缺口），且随 run 目录整体归档，满足 PR-GOV-01/02。自研只剩“delta 实时推送”一层，且该层**不落盘**——delta 丢了也不影响留痕；导出和保留期仍属 PR-GOV-05 待办。
 - **代价**：无跨 run SQL 查询（轨迹查询本就是单 run 粒度，可接受）；run 目录必须持久卷挂载；`.jsonl` 的字段契约属上游，升级时需比对（建议 T1.11 加一条 schema 断言：四个 `t` 值均出现且 `llm.usage` 可解析）。
 - **EventStore 仍是 no-op**，与本节不冲突：它和轨迹是两套东西，不要再用它论证"持久化需自建"。
 
@@ -438,7 +448,7 @@ frontend（一次性构建 Vite） ──> web_dist ──> caddy（静态站点
 | 1 | 业务库 PostgreSQL（既定） | SQLite | 多写者并发、JSONB、审计与多用户扩展 |
 | 2 | **monorepo：仓库内延续** | 另起仓库 | import 图谱 + CWD 敏感发现 + Docker 上下文三重约束；边界靠目录规则维持 |
 | 3 | run-per-subprocess，worker **CWD=仓库根**，**永不池化** | 线程并发 / CWD=run目录 / worker 池 | 全局注册表隔离 + pipeline CWD 相对发现；`_llm_cache`/`ResourceManager`/`_sandbox` 单例/`get_config()` 皆为进程级 |
-| 4 | ~~事件自研 events.jsonl~~ **→ 运行时 trajectory + 自研仅 delta 推送** | 自研 events.jsonl / 事件入 Postgres / 运行时 EventStore | **v1.2 推翻**：EventStore 确为 no-op，但 `TrajectoryFileObserver` 已增量 flush 且含参数、用量、system_prompt、SIGKILL 安全。自研面从"整套事件持久化"缩小到"delta 实时推送，不落盘" |
+| 4 | ~~事件自研 events.jsonl~~ **→ 运行时 trajectory + 自研仅 delta 推送** | 自研 events.jsonl / 事件入 Postgres / 运行时 EventStore | **v1.2 推翻**：EventStore 确为 no-op，但 `TrajectoryFileObserver` 已增量 flush 且含参数、用量、system_prompt；进程被杀时已写记录仍可读（**非断电保证**，F06 用完整性状态显式标出缺口）。自研面从"整套事件持久化"缩小到"delta 实时推送，不落盘" |
 | 5 | ~~steer 降级 P2~~ → **Web 安全边界 steer + 审批已实现** | 仅停止后追问 | worker stdin + Observer 已验证可在运行中补充方向并处理 confirm 级调用；UI 必须表达延迟生效和真实确认态 |
 | 6 | 沙箱后端 **强制 `native`**（功能前提，非仅安全） | `auto`/bwrap-in-docker | 只有 container/native 分支读 `FRONTIER_AGENT_*_DIR`；同时避免 CAP_SYS_ADMIN，P1 不跑不受信代码 |
 | 7 | fetch 封装 SSE | EventSource | 需 Authorization 头与游标重连 |

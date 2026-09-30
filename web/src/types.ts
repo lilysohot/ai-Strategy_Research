@@ -284,7 +284,25 @@ export interface RunTraceRecord {
   [key: string]: unknown
 }
 
+/**
+ * F06: how much of a run's trace survived.
+ *
+ * ``partial`` means records exist but the run never wrote its terminal marker —
+ * everything on disk is readable, the tail is not guaranteed to be the whole
+ * story. The UI must surface this instead of presenting an interrupted run as a
+ * complete one.
+ */
+export interface TraceCompleteness {
+  state: 'complete' | 'partial' | 'unavailable'
+  valid_lines: number
+  trailing_partial_line: boolean
+  corrupt_lines: number
+  reason: string
+}
+
 export interface RunTraceResponse {
   run_id: string
   records: RunTraceRecord[]
+  /** Absent only on pre-F06 servers; treat as unknown, not as complete. */
+  completeness?: TraceCompleteness
 }
