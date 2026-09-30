@@ -90,6 +90,28 @@ export interface UsageFields {
   cache_creation_tokens?: unknown
 }
 
+/** Zeroed totals: the starting point for both accumulation and replacement. */
+export const EMPTY_USAGE: UsageTotals = {
+  prompt: 0,
+  completion: 0,
+  total: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+}
+
+/**
+ * Absolute totals for one usage block, using the SAME normalisation as
+ * {@link accumulateUsage}.
+ *
+ * Needed because a whole-run figure from the server is authoritative and must
+ * **replace** the running totals rather than be added to them: the live stream
+ * already metered each turn, so adding the server's total on top double-counts
+ * every one of them (F10).
+ */
+export function usageTotalsFrom(usage?: UsageFields | null): UsageTotals {
+  return accumulateUsage(EMPTY_USAGE, usage)
+}
+
 /**
  * Add one turn's usage deltas, applying the server's T2.11 semantics so the
  * bar and the platform metering never disagree: alias fallback (prompt→input,

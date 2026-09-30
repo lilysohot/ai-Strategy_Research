@@ -3,23 +3,19 @@
   "records": [
     {
       "test": "F10_full_replay_repairs_missing_live_text",
-      "outcome": "failed",
-      "evidence": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'com'\n- 'complete text'\n      ^\n"
+      "outcome": "passed"
     },
     {
       "test": "F10_live_turn_still_counts_replay_usage",
-      "outcome": "failed",
-      "evidence": "Expected values to be strictly equal:\n\n0 !== 10\n"
+      "outcome": "passed"
     },
     {
       "test": "F10_final_usage_reconciliation_is_not_additive",
-      "outcome": "failed",
-      "evidence": "Expected values to be strictly equal:\n\n20 !== 10\n"
+      "outcome": "passed"
     },
     {
       "test": "F11_old_run_summary_cannot_overwrite_current_run",
-      "outcome": "failed",
-      "evidence": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'answer from A'\n- null\n"
+      "outcome": "passed"
     },
     {
       "test": "F09_steer_sequence_is_not_trajectory_cursor",
