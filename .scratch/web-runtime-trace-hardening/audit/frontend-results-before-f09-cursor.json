@@ -23,7 +23,8 @@
     },
     {
       "test": "F09_steer_sequence_is_not_trajectory_cursor",
-      "outcome": "passed"
+      "outcome": "failed",
+      "evidence": "Expected values to be strictly equal:\n\n10 !== 0\n"
     }
   ]
 }

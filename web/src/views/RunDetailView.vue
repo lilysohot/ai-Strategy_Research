@@ -19,6 +19,14 @@ import { ApiError } from '@/api/client'
 import { runs as runsApi } from '@/api'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactDeep, redactSecrets } from '@/utils/redact'
+import {
+  initialResultChars,
+  nextResultChars,
+  resultView,
+  thinkingLabel,
+  thinkingView,
+  type ThinkingView,
+} from '@/utils/traceView'
 import type { RunTraceRecord } from '@/types'
 import { useRunStreamStore } from '@/stores/runs'
 
@@ -54,10 +62,16 @@ async function load() {
   }
 }
 
+// How many characters of each tool result the reader has unlocked. Keyed by
+// record index, reset on every (re)load so a previous run's expansion state
+// never leaks into the next one (F05: reading is progressive, not lossy).
+const revealed = ref<Record<number, number>>({})
+
 // Reload whenever the active run changes (drawer may be reused across runs).
 watch(
   () => props.runId,
   (id) => {
+    revealed.value = {}
     if (id) load()
     else records.value = []
   },
@@ -88,13 +102,49 @@ function renderContent(c: string | null | undefined): string {
  * Tool results are rendered as text, not markdown, so they do not pass through
  * ``renderMarkdown``'s redaction — a ``read_file`` of an env file would
  * otherwise print its secrets verbatim. Redact deeply (results can be objects)
- * before stringifying, then truncate.
+ * before stringifying.
+ *
+ * Truncation is now *progressive* rather than a silent 300-char cut: the first
+ * slice is a preview and each further slice is explicit, so an error that begins
+ * at char 301 stays reachable (F05).
  */
-function shortResult(r: unknown): string {
-  if (r == null) return ''
-  const safe = redactDeep(r)
-  const s = typeof safe === 'string' ? safe : JSON.stringify(safe)
-  return s.length > 300 ? s.slice(0, 300) + '…' : s
+function resultText(rec: RunTraceRecord): string {
+  if (rec.result == null) return ''
+  const safe = redactDeep(rec.result)
+  return typeof safe === 'string' ? safe : JSON.stringify(safe)
+}
+
+function shownChars(i: number): number {
+  return revealed.value[i] ?? initialResultChars()
+}
+
+function viewOf(rec: RunTraceRecord, i: number) {
+  return resultView(resultText(rec), shownChars(i))
+}
+
+/** Unlock the next slice of one result. A button, so it is keyboard-reachable. */
+function readMore(i: number): void {
+  revealed.value[i] = nextResultChars(shownChars(i))
+}
+
+/**
+ * Reasoning is shown only when it is prose. A turn with nothing recorded — or
+ * one whose only reasoning is an encrypted/signed native block — gets an
+ * explicit note instead of a fabricated explanation (F05).
+ */
+function thinkingOf(rec: RunTraceRecord): ThinkingView {
+  return thinkingView({ thinking: rec.thinking, thinking_blocks: rec.thinking_blocks })
+}
+
+/** Readable reasoning text, or null when there is none to show. */
+function thinkingText(rec: RunTraceRecord): string | null {
+  const view = thinkingOf(rec)
+  return view.state === 'visible' ? view.text : null
+}
+
+/** Note shown in place of reasoning when it is absent, empty or restricted. */
+function thinkingNote(rec: RunTraceRecord): string {
+  return thinkingLabel(thinkingOf(rec))
 }
 
 defineExpose({ load })
@@ -153,6 +203,17 @@ defineExpose({ load })
               class="tl-content bubble-assistant"
               v-html="renderContent(rec.content)"
             />
+            <!--
+              F05: the model's visible reasoning, collapsed by default (it can be
+              long) and rendered as text — never as markdown, so it cannot inject
+              markup. A turn without readable reasoning states why instead of
+              showing an empty box.
+            -->
+            <details v-if="thinkingText(rec)" class="tl-thinking">
+              <summary class="tl-thinking__summary">模型推理 / 说明</summary>
+              <pre class="tl-thinking__body">{{ thinkingText(rec) }}</pre>
+            </details>
+            <div v-else class="tl-thinking-none">{{ thinkingNote(rec) }}</div>
             <div v-if="rec.tool_calls?.length" class="tl-toolcalls">
               <div v-for="(tc, j) in rec.tool_calls" :key="j" class="tl-toolcall">
                 <code>{{ redactSecrets(tc.name ?? '') }}</code>
@@ -184,7 +245,23 @@ defineExpose({ load })
               <span class="tl-meta">{{ rec.name }}</span>
               <span v-if="rec.ms != null" class="tl-meta">{{ rec.ms }}ms</span>
             </div>
-            <pre v-if="rec.result != null" class="tl-result">{{ shortResult(rec.result) }}</pre>
+            <!--
+              F05: results keep a short preview, but the tail is never dropped
+              silently — "继续读取" unlocks the next bounded slice so a failure
+              message past char 300 stays reachable.
+            -->
+            <template v-if="rec.result != null">
+              <pre class="tl-result">{{ viewOf(rec, i).visible }}</pre>
+              <button
+                v-if="viewOf(rec, i).hasMore"
+                type="button"
+                class="tl-result__more"
+                @click="readMore(i)"
+              >
+                继续读取（还有 {{ viewOf(rec, i).hidden }} 字符，共
+                {{ viewOf(rec, i).total }} 字符）
+              </button>
+            </template>
           </template>
 
           <!-- compaction / unknown -->
@@ -337,6 +414,60 @@ defineExpose({ load })
 .tl-args {
   color: var(--el-text-color-secondary);
   word-break: break-all;
+}
+
+/* F05: collapsible reasoning. <details>/<summary> gives keyboard support and
+   focus for free; long reasoning is collapsed by default. */
+.tl-thinking {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.tl-thinking__summary {
+  cursor: pointer;
+  color: var(--el-text-color-secondary);
+  user-select: none;
+}
+
+.tl-thinking__summary:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 2px;
+}
+
+.tl-thinking__body {
+  margin: 4px 0 0;
+  padding: 8px;
+  background: var(--el-fill-color-light);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.tl-thinking-none {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--el-text-color-placeholder);
+}
+
+/* F05: the "read more" control for truncated tool results. */
+.tl-result__more {
+  margin-top: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--el-color-primary);
+  background: transparent;
+  border: 1px solid var(--el-border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tl-result__more:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 2px;
 }
 
 .tl-result {

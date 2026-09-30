@@ -336,9 +336,13 @@ class Orchestrator:
         handle.steer_seq += 1
         self._publish(
             run_id,
+            # ``steer_seq``, not ``seq``: ``seq`` is reserved for the trajectory
+            # line number, which is the reconnect cursor (``?after=seq``). Reusing
+            # it for the steer counter jumped the cursor past unread lines on the
+            # next reconnect (F09).
             make_event(
                 "steer_queued",
-                seq=handle.steer_seq,
+                steer_seq=handle.steer_seq,
                 message=redact_deep(message),
             ),
         )
