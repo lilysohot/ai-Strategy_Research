@@ -12,9 +12,41 @@ Requirements: PR-GOV-01
 
 - 以隔离合成数据复现，不以真实账户/轨迹作为测试输入。
 - 执行报告列明的正常、失败、恢复及兼容性验收。
-- 未实现；相关失败断言是待修复证据，不能按“测试已执行”关闭。
+- 已实现（2026-10-01）；验收与未完成项见下方 Comments，未完成项不得视为已验收。
 
 ## Comments
 
 - 2026-09-29：全面存储复核新增，详见报告证据等级；运行代码尚未修改。
 - 2026-09-29 证据补正：替身检查不等于真实 DB 断连；healthz 200 仅证明存活，不证明就绪。正常链路先复用原环境，故障按[环境方案](../../../docs/plan/web-storage-validation-environment.md)隔离，T8 验收仍待执行。
+- 2026-10-01：**F19 后半（schema 门禁 + 迁移显式步骤）已实现**。
+  ① **拆开两个探针**：`/healthz` 只回答"数据库是否应答"（`store.check_db` 由 `SELECT count(*) FROM users`
+  改为 `SELECT 1`——表读会让"空库"被报成"不可达"，两者的处置办法不同）；新增 `server/readiness.py`，
+  `/readyz` 在应答之上再要求 **schema 版本匹配** 与 **运行数据根可写**，未就绪返回 503
+  `{"status":"not_ready","reasons":[...]}`。
+  ② **状态判定**（`server/readiness.py`，只读、从不迁移/修复）：head 由迁移脚本的 `revision`/`down_revision`
+  链推出（不 import，避免执行迁移代码）；已打戳则必须等于 head（落后=`schema_behind`、超前或未知
+  revision=`schema_ahead`、多 head=`schema_ambiguous`）；未打戳（`create_all` 路径）则要求
+  **所有 ORM 表都在**（缺表=`schema_missing`）；数据根用**真实写探针**（`os.access` 在 Windows/只读挂载上会骗人），
+  探针文件随即删除。
+  ③ **启动失败阻断**：`lifespan` 跑同一门禁，未就绪且非 `SERVER_DEBUG` 时抛
+  `StorageNotReadyError` 拒绝服务（此前 `init_db`/reconcile 的异常被 `contextlib.suppress` 吞掉后照常接单）；
+  debug 下仅告警，且此时**跳过** 孤儿 reconcile（库里状态不可信时不改写 run 行）。
+  ④ **迁移是独立步骤**：新增 `deploy/entrypoint.web.sh`（`alembic upgrade head` → `exec uvicorn`，`set -e` 失败阻断），
+  `Dockerfile.web` 的 `CMD` 改指它；`deploy/README.md` 新增「数据库迁移与就绪门禁」一节，写明两探针分工、
+  `reasons` 取值、启动拒绝语义与**绝不 downgrade** 的回退规则。
+  **证据**：`tests/test_web_f19_schema_gate.py` **15/15**（空库/落后/到 head/未打戳但有表/未知 revision 报超前/
+  双 head/不可写根/探针不留残留/启动在 prod 抛错且 dev 降级为告警/断连时不给"去迁移"的错误建议/两个探针确实不同/
+  迁移后 200），负向对照（去掉 schema 分支、去掉可写检查、去掉 raise）**6 条失败**，确认判据非空。
+  **真实容器实测**（`frontier-agent-web:f19`，1.64 GB，`docker build` exit 0）：空 SQLite 库启动 →
+  日志显示 `0001→0002→0003→0004` 依次迁移、`alembic current` 在容器内为 `0004_control_records (head)`、
+  `/healthz` 与 `/readyz` 均 **200**；**负向对照**：数据库不可达 → 入口脚本在 alembic 处失败、容器 `exit 1`、
+  uvicorn 从未启动；schema 停在 `0003` 且绕过入口直接起 uvicorn → `StorageNotReadyError: ... schema_behind
+  ({'expected_head': '0004_control_records', 'current_revision': '0003_turn_seq_unique'})`、`exit 3`；
+  debug 逃生舱（`SERVER_DEBUG=1`）→ 告警后启动成功，而 `/readyz` 仍 **503 `schema_behind`**、`/healthz` **200**；
+  数据库断连（不可达 DSN）→ `/healthz` **503 `storage_unavailable`**、`/readyz` **503 `database_unavailable`**
+  （即 T8 的完成标准"停库后 503、恢复后 200"在容器内成立）。容器与临时数据已清理，业务库全程未触碰。
+  **只读核对**：业务库 `apodex` 现为 `0002_run_usage`，head 为 `0004_control_records` → 门禁判定
+  `schema_behind`；即**正式部署前必须先迁移（0003/0004 均未应用）**，本机 debug 模式不受影响。
+  隔离审计契约（F19 首半）**24/24** 仍通过；`ruff`/`pyright` 在 `server/` 仅剩 1 处既有类型错误。
+  **未完成**：磁盘满注入、真实只读挂载（本轮用"父路径是文件"等价复现）、compose 未接 `service_healthy`
+  healthcheck、旧版镜像回退演练只写在文档而未实测。

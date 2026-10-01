@@ -4,6 +4,11 @@ Routes are wired as they land: M1 brought the run lifecycle, T2.2 adds auth.
 ``/healthz`` stays public so the container healthcheck and Caddy can probe it
 without credentials; everything under ``/api`` is expected to declare the
 ``get_current_user`` dependency (see ``server/deps.py``) as it is built out.
+
+Two probes, because the remedies differ: ``/healthz`` reports whether storage
+answers at all, ``/readyz`` additionally requires the schema this build expects
+and a writable run-data root (F19). Startup applies the same gate and refuses to
+serve when it fails — except in ``SERVER_DEBUG`` mode.
 """
 
 from __future__ import annotations
@@ -15,7 +20,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Response, status
 
 from server import store
+from server.config import get_config
 from server.orchestrator import get_orchestrator
+from server.readiness import enforce_startup_readiness, storage_readiness
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
 from server.routes import models as models_routes
@@ -31,15 +38,23 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # tokens with a secret anyone can read out of the repository.
     check_startup_secrets()
     # Best-effort schema creation; prod uses Alembic before container start.
-    # A DB that is briefly unavailable at boot must not take the API down: the
-    # health endpoint reports the DB independently.
     with contextlib.suppress(Exception):
         await init_db()
+    # F19: a store this build cannot serve must stop the process taking work.
+    # Previously every boot error was swallowed and the API answered "ok" on top
+    # of a schema from an older revision, so the failure surfaced much later as
+    # an opaque query error. Dev mode (SERVER_DEBUG) downgrades this to a loud
+    # warning, because local SQLite databases are created unstamped.
+    readiness = await storage_readiness()
+    enforce_startup_readiness(readiness, debug=get_config().debug)
     # Runs still marked queued/running belong to a worker from a previous
     # process; nothing in this one will ever finish them, so close them out now
-    # instead of leaving the UI waiting on a stream that can never end.
-    with contextlib.suppress(Exception):
-        await get_orchestrator().reconcile_orphan_runs()
+    # instead of leaving the UI waiting on a stream that can never end. Skipped
+    # when the store is not ready: a dev-mode boot into a broken database must
+    # not rewrite run rows it cannot read reliably.
+    if readiness.ok:
+        with contextlib.suppress(Exception):
+            await get_orchestrator().reconcile_orphan_runs()
     yield
     await get_orchestrator().shutdown()
 
@@ -58,7 +73,7 @@ app.include_router(runs_routes.router)
 
 
 async def _storage_probe(response: Response) -> dict[str, str]:
-    """Shared liveness+readiness answer (F19).
+    """Storage-connectivity answer (F19, first half).
 
     A process that is up but cannot reach its database must not be handed new
     work. Before this, health answered 200/``ok`` unconditionally, so a load
@@ -67,9 +82,9 @@ async def _storage_probe(response: Response) -> dict[str, str]:
     anything. ``store.check_db`` is looked up on the module at call time so the
     probe reflects the live engine (and is patchable in tests).
 
-    Scope note: this proves the database ANSWERS. It does not yet assert that
-    the schema is the one this build expects — that check belongs with the
-    migration story (F19's remaining half) rather than here.
+    Scope: this proves the database ANSWERS. Schema revision and data-root
+    writability are added by :func:`readyz` on top, so a deployment whose only
+    probe is the container healthcheck keeps its current semantics.
     """
     if not await store.check_db():
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
@@ -79,7 +94,7 @@ async def _storage_probe(response: Response) -> dict[str, str]:
 
 @app.get("/healthz")
 async def healthz(response: Response) -> dict[str, str]:
-    """Liveness probe, now coupled to storage readiness (F19).
+    """Liveness probe, now coupled to storage connectivity (F19).
 
     The path is unchanged on purpose: the container healthcheck and Caddy
     already probe it, so an existing deployment picks the signal up instead of
@@ -89,6 +104,15 @@ async def healthz(response: Response) -> dict[str, str]:
 
 
 @app.get("/readyz")
-async def readyz(response: Response) -> dict[str, str]:
-    """Explicit readiness probe (F19), for orchestrators that separate the two."""
-    return await _storage_probe(response)
+async def readyz(response: Response) -> dict[str, object]:
+    """Readiness probe: connectivity **and** the schema/data root (F19).
+
+    Distinct from ``/healthz`` because the remedies differ. Connectivity is
+    infrastructure (retry); an unready schema means "this build must not run
+    against this database until it is migrated", which an operator has to act on
+    — and which the process itself now refuses to start with (see ``lifespan``).
+    """
+    readiness = await storage_readiness()
+    if not readiness.ok:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    return readiness.as_body()

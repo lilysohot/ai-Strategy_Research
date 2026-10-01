@@ -27,6 +27,7 @@ from sqlalchemy import (
     event,
     func,
     select,
+    text,
     update,
 )
 from sqlalchemy.exc import IntegrityError
@@ -303,10 +304,16 @@ async def init_db() -> None:
 
 
 async def check_db() -> bool:
-    """Lightweight health check."""
+    """Connectivity probe: does the database answer at all (F19).
+
+    Deliberately ``SELECT 1`` rather than a table read. Whether the *schema* is
+    the one this build expects is a different question with a different remedy
+    ("migrate" vs "retry"), and it is answered by ``server.readiness``; a table
+    read here conflated an empty database with an unreachable one.
+    """
     try:
-        async with get_sessionmaker()() as s:
-            await s.execute(select(func.count()).select_from(User.__table__))
+        async with get_engine().connect() as conn:
+            await conn.execute(text("SELECT 1"))
         return True
     except Exception:
         return False

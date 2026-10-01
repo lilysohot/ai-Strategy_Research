@@ -59,5 +59,11 @@ WORKDIR /app
 # would silently create an anonymous volume there and defeat the whole point.
 # (`uploads/` is gone entirely: uploads are written to <runs_root>/<id>/inputs.)
 
+# F19: the entrypoint runs `alembic upgrade head` before uvicorn, so the schema
+# is an explicit, fail-blocking step rather than an assumption. `create_all` (the
+# dev path inside server.app) cannot upgrade an existing table.
+COPY deploy/entrypoint.web.sh /app/entrypoint.web.sh
+RUN chmod +x /app/entrypoint.web.sh
+
 EXPOSE 8000
-CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/entrypoint.web.sh"]

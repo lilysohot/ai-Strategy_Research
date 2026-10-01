@@ -47,7 +47,7 @@
 | T5 | 业务库备份与恢复预案 | P1 | — | **恢复演练已通过**（2026-09-30：行数逐一一致 + 外键 9/9 全部建成）；运维备份脚本与异地存放仍缺 |
 | T6 | 孤儿数据清理与外键策略 | P1 | T5 | **第 1 步已完成**（2026-09-30：592 条孤儿按人工口径处置，恢复演练转 clean）；第 2/3 步未做 |
 | T7 | request id 与结构化日志 | P1 | T1 | 待开始 |
-| T8 | `/healthz` 真实探活 | P1 | T7 | 待开始 |
+| T8 | `/healthz` 真实探活 | P1 | T7 | **部分完成**（2026-10-01：连通探活 + 就绪分离已落地并容器实测；compose healthcheck 未接） |
 | T9 | `/api/runs` 限流与配额 | P1 | T7 | 待开始 |
 | T10 | run 指标与成本观测 | P1 | T7 | 待开始 |
 | T11 | 前端测试接入与 CI 覆盖 | P2 | — | 已完成 |
@@ -220,6 +220,13 @@ Status: 已完成
 **完成标准**
 - `uv run pytest -q` 全绿（实测：**2165 passed, 3 skipped，0 failed / 0 errors**；修复前为 2 failed + 40 errors）。
 - 跑测试前后，PG 业务库的各表行数不变。
+
+> **2026-10-01 补充（同一条规则扩展到运行数据根）**：`tests/conftest.py` 此前只隔离 `database_url`，
+> 而 worker 是**独立进程**、按自己的环境重新推导运行目录（`server/worker.py` 自己调 `run_dir_for`）——
+> 于是 `test_web_m1`/`test_upload_t210`/`test_stop_t28` 等 worker e2e 把 run 目录写进了**真实数据根**
+> （DB 行在一次性 SQLite 里），一天积累 26 个孤儿目录（与 F01 曾清理的 99 个同类）。
+> 现 conftest 同时重定向 `cfg.runs_root` **并**设置 `SERVER_RUNS_ROOT` 环境变量（跨进程传递只能走它，
+> 父进程改配置对象到不了子进程），复跑 worker e2e 后真实数据根零新增。
 
 ---
 
@@ -414,6 +421,19 @@ uv run python scripts/run_retention.py orphans \
 **完成标准**
 - 停掉 PG 后 `/healthz` 返回 503，恢复后 200。
 - compose 的 `depends_on: service_healthy` 语义与之一致。
+
+**实际结果（2026-10-01，部分完成 —— 与 F19 合并实施）**
+
+- `/healthz` 与 `/readyz` 拆成两个语义（`server/app.py` + `server/readiness.py`）：
+  `/healthz` 回答"数据库是否应答"（`store.check_db` 由表读改为 `SELECT 1`），`/readyz` 在此之上
+  再要求 **schema 版本匹配** 与 **运行数据根可写**，未就绪返回 503 `{"status":"not_ready","reasons":[…]}`。
+- 启动走同一门禁：未就绪且非 `SERVER_DEBUG` 时抛 `StorageNotReadyError` 拒绝服务（此前启动异常被吞掉后照常接单）。
+- 容器实测（`frontier-agent-web:f19`）：空库启动 → `0001→0004` 依次迁移、两探针 **200**；
+  数据库**不可达** → `/healthz` **503 `storage_unavailable`**、`/readyz` **503 `database_unavailable`**；
+  schema 停在 `0003` → `/readyz` **503 `schema_behind`** 而 `/healthz` **200**。
+  即"停库 503 / 恢复 200"已在真实容器内成立（未触碰共享 PG）。
+- **未做**：compose 的 `healthcheck` + `depends_on: service_healthy` 尚未接入（compose 里 api 服务目前没有
+  healthcheck）；未测真实 PG 重启时序。二者留待 T8 收尾。
 
 ---
 

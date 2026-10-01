@@ -130,6 +130,33 @@ handle /api/* {
 scheme 必须是 `postgresql+asyncpg://`——漏掉或写成裸 `postgresql://` 会让 API 容器起来后
 `/healthz` 返回 **503 `storage_unavailable`**。
 
+## 数据库迁移与就绪门禁（F19）
+
+**迁移是一个显式步骤，并且在失败时阻断启动。** `deploy/entrypoint.web.sh` 先执行
+`alembic -c server/alembic.ini upgrade head`，成功后才 `exec uvicorn`；`set -e` 保证迁移失败
+时容器以非零码退出，而不是起一个半迁移的 API。应用自身只做 `create_all`（无法升级既有表），
+所以这一步不能省。`alembic upgrade head` 幂等，重启不必担心重复执行。
+
+两个探针，职责不同（**不要只依赖其中一个**）：
+
+| 路径 | 检查 | 典型用途 |
+| --- | --- | --- |
+| `/healthz` | 数据库**是否应答**（`SELECT 1`） | 容器 healthcheck / Caddy；连接断开 → 503 `storage_unavailable` |
+| `/readyz` | 应答 **且** schema 版本匹配 **且** 运行数据根可写 | 编排器就绪判定；未就绪 → 503 `not_ready` + `reasons` |
+
+`reasons` 取值：`database_unavailable`、`schema_missing`、`schema_behind`、`schema_ahead`、
+`schema_ambiguous`、`data_root_unwritable`。
+
+**启动即拒绝**：启动时同一门禁会再跑一次。schema 与本构建不符（落后**或超前**）时，非
+`SERVER_DEBUG` 下进程直接拒绝启动（`StorageNotReadyError`，实测 `docker run` 退出码 3）；
+`SERVER_DEBUG=1` 只降级为告警，例如本地 SQLite 由 `create_all` 建出、本来就没有 alembic 版本戳。
+
+**回退规则**：入口脚本**从不 downgrade**。回滚请用上一个镜像启动（同一数据库），门禁在
+schema 比构建**超前**时同样拒绝服务——先确认数据库版本与镜像匹配，再决定是否回退数据。
+
+> 部署前检查：`docker compose ... logs api | grep "alembic upgrade"` 与
+> `curl -s localhost:8000/readyz`；`/readyz` 不是 200 就不要放流量进来。
+
 ## 安全说明
 
 ### 密钥（`SERVER_MASTER_KEY` / `SERVER_JWT_SECRET`）

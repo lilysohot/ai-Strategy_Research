@@ -593,7 +593,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | F16 | `server/store.py` 每连接 `PRAGMA foreign_keys=ON`；`turns` 唯一索引 + `append_turn` 冲突重试；迁移 `0003_turn_seq_unique` | `test_sqlite_declared_foreign_keys_are_enforced`、`test_concurrent_message_sequence_is_unique` |
 | F17 | `server/artifacts.py::_trusted_outputs_root` 拒绝符号链接根；`server/diff.py` 拒绝符号链接基线 | `test_artifact_root_symlink_cannot_rebase_containment`、`test_revert_rejects_symlinked_baseline` |
 | F18 | manifest 存平台规范显示路径；回滚同时接受规范路径与宿主绝对路径；回滚后 `sync_run_artifacts` 重算索引并清理失效行；显示路径改用 POSIX 语义 | `test_revert_updates_artifact_hash_index`、`test_absolute_file_tool_path_can_be_reverted` |
-| F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`），新增 `/readyz` | `test_health_distinguishes_unavailable_storage` |
+| F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`）；后半：新增 `server/readiness.py`（head 由 `revision`/`down_revision` 链推出、不 import 迁移模块；打戳必须等于 head，未打戳要求全部 ORM 表在；数据根用真实写探针），`/healthz` 只报连通（`check_db` 改 `SELECT 1`），`/readyz` 追加 schema 与数据根；`app.lifespan` 同一门禁，未就绪且非 `SERVER_DEBUG` 抛 `StorageNotReadyError`（并跳过孤儿 reconcile）；新增 `deploy/entrypoint.web.sh`（`alembic upgrade head` → `exec uvicorn`，`set -e` 阻断），`Dockerfile.web` CMD 改指它；`deploy/README.md` 增迁移与门禁一节 | `test_health_distinguishes_unavailable_storage`；`tests/test_web_f19_schema_gate.py` 15/15（负向对照 6 条失败）；真实镜像 `frontier-agent-web:f19` 实测：空库启动依次迁移 0001→0004、`alembic current`=`head`、两探针 200；不可达库→exit 1 且 uvicorn 未启动；库停在 0003→`schema_behind` exit 3；debug 下 `/readyz` 503 而 `/healthz` 200；断连→两探针均 503 |
 | F20 | 提交时落非密钥模型快照与配置引用；worker `run_started` 帧持久化 `running`/`started_at` | `test_submit_records_nonsecret_model_snapshot`、`test_run_started_event_updates_persistent_status` |
 | F09 | `Orchestrator.has_worker` + `server.routes.runs._live_queue_for` 按权威状态判定：本进程无 handle 且行状态非 queued/running → replay-only，不再订阅死队列；本进程结束的流由 `_closed_stream_ids` 兜底（后端契约）；前端游标语义：`Orchestrator.steer` 的 `steer_queued` 改用 `steer_seq`（不再占用轨迹游标 `seq`），`web/src/sse.ts` 新增 `CONTROL_EVENT_TYPES` 使控制帧不推进游标，浏览器端到端仍待验收 | `test_f09_late_subscription_finishes`、`test_f09_finished_in_another_process_replays_and_ends`、`test_f09_active_run_without_a_handle_still_subscribes`、`test_live_queue_decision_uses_the_persisted_status`、前端审计 `F09_steer_sequence_is_not_trajectory_cursor`（由 10 !== 0 转为通过） |
 | F07 | 新增 [scripts/run_retention.py](../../scripts/run_retention.py)：`manifest`（逐 run 存储引用 + sha256 + F06 轨迹状态）、`plan`（默认 dry-run，`expired/retained/active/unfinished/missing/out_of_scope` 六类，删除需 `--apply --yes` 且复核包含关系）、`verify`（文件齐全与校验值）、`check`（只读孤儿与行数）；缺失与过期严格区分 | `tests/test_web_f07_retention.py` 20/20（负向对照 5 条失败）；文件侧 CLI 演练四类 run 正确；真实 `pg_dump`→独立库 `pg_restore` 行数逐一一致（**但只建成 4/9 外键**，孤儿阻塞） |
@@ -652,9 +652,15 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
-[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界、
-F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
-真实供应商格式差异）。
+[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界；
+以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、真实供应商格式差异）。
+
+**F19 后半（schema 门禁 + 迁移显式步骤）已于 2026-10-01 实现**（`server/readiness.py` + `deploy/entrypoint.web.sh`，
+见工单 [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)）：`/healthz` 只报"数据库是否应答"
+（`check_db` 改 `SELECT 1`），`/readyz` 追加 schema 版本与运行数据根可写；启动同一门禁，未就绪且非 `SERVER_DEBUG`
+即拒绝服务；容器入口把 `alembic upgrade head` 作为显式失败阻断步骤。**未完成**：磁盘满注入、真实只读挂载、
+compose `service_healthy`、回退演练实测。**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
+→ 部署前必须先迁移。
 
 **F21 已于 2026-10-01 实现**（契约与验收见
 [f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，

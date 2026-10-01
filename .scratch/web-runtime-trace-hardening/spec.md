@@ -111,3 +111,33 @@ Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 c
   三处失败为本机 Windows 既有限制（`test_approval_end_to_end`/`test_upload_t210` 依赖 `create_file` 产物落盘、
   `test_stop_t28::sigkill` 依赖 `signal.SIGKILL`）需 POSIX 复验；`uv run pyright` 在 `server/orchestrator.py:296`
   报 1 处**既有**类型错误（未在本次改动行上，未修）。工单 [21](issues/21-control-history.md) → `ready-for-human`。
+- 2026-10-01：**F19 后半（schema 门禁 + 迁移显式步骤）实现完成**。`/healthz` 与 `/readyz` 分工：
+  前者只回答"数据库是否应答"（`store.check_db` 由 `SELECT count(*) FROM users` 改为 `SELECT 1`——表读会把"空库"
+  误报成"不可达"），后者在应答之上再要求 **schema 版本等于本构建 head** 与 **运行数据根可写**，未就绪返回
+  503 `not_ready` + `reasons`（`database_unavailable`/`schema_missing`/`schema_behind`/`schema_ahead`/
+  `schema_ambiguous`/`data_root_unwritable`）；新增 `server/readiness.py`（只读、从不迁移；head 由
+  `revision`/`down_revision` 链推出，不 import 迁移模块）；`app.lifespan` 跑同一门禁，未就绪且非 `SERVER_DEBUG`
+  即抛 `StorageNotReadyError` 拒绝服务（并跳过孤儿 reconcile）。`deploy/entrypoint.web.sh` 把
+  `alembic upgrade head` 变成**显式且失败阻断**的步骤（`set -e`），`Dockerfile.web` 的 CMD 改指它；
+  `deploy/README.md` 增「数据库迁移与就绪门禁」（两探针分工、reasons、启动拒绝、绝不 downgrade 的回退规则）。
+  **证据**：`tests/test_web_f19_schema_gate.py` 15/15（负向对照 6 条失败）；真实镜像 `frontier-agent-web:f19`
+  容器实测——空库启动 `0001→0004` 依次迁移、`alembic current`=`0004_control_records (head)`、两探针 200；
+  不可达库 → 入口脚本失败、容器 exit 1、uvicorn 未启动；库停在 `0003` 且绕过入口 → `schema_behind` exit 3；
+  debug 逃生舱下启动成功但 `/readyz` 仍 503、`/healthz` 200；断连 → 两探针均 503（即 T8 完成标准在容器内成立）。
+  隔离审计契约 24/24 仍通过。**只读核对**：业务库 `apodex` 现为 `0002_run_usage`（head `0004_control_records`）
+  → **部署前必须先执行迁移**（0003/0004 均未应用）；本机 `SERVER_DEBUG=true` 不受影响。
+  **未完成**：磁盘满注入、真实只读挂载、compose `service_healthy`、回退演练实测。工单 [19](issues/19-storage-readiness.md)
+  维持 `ready-for-human`。
+- 2026-10-01：**测试残留清理 + conftest 数据根隔离（F19 收尾顺带发现）**。跑 `tests/test_web_m1.py`
+  时"卡住"：定位为第二条用例 `test_worker_killed_api_survives`——它在 Windows 上 `os.getpgid`/
+  `signal.SIGKILL` 不存在（与既有 `test_stop_t28::test_sigkill_recovers_stopped_run` 同根因），
+  kill 落空后**活 worker 存活到 teardown**，套件不退出（实测看门狗 150s 强杀，`F` 已打出但进程悬挂）；
+  第一条用例 `test_m1_run_chain_writes_trajectory` 本机 **3 秒通过**。处置：该用例加
+  `skipif(无 getpgid/SIGKILL)`（POSIX 照跑；不用 `proc.kill()` 替代——报告 §8 已否决，无进程组的回收路径会卡死），
+  整文件现为 1 passed + 1 skipped、3.8s。**顺带发现并修复真问题**：conftest 只隔离了 `database_url`，
+  而 worker 独立进程按自己的环境重新推导运行目录，worker e2e 把 run 目录写进了**真实数据根**——
+  今天累计 **26+2 个孤儿目录**（与 F01 清理过的 99 个同类，全部数据库零引用，逐个即时复核后删除）。
+  根因修复：`tests/conftest.py` 现同时重定向 `cfg.runs_root` **并**设置 `SERVER_RUNS_ROOT` 环境变量
+  （跨进程传递只能走它；父进程改配置对象到不了子进程——即环境方案 §4 的"父子配置一致"规则的测试版），
+  复跑 worker e2e 后真实数据根**零新增**（4 目录全部被业务库引用）。T3b 规则随之扩展，见
+  [web-platform-hardening.md](../../docs/plan/web-platform-hardening.md) T3b 补充。

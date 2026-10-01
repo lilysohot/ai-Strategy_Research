@@ -168,6 +168,17 @@ async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers
 
 
 @pytest.mark.asyncio
+# The kill IS the test: it targets the worker's process group via
+# ``os.getpgid``/``signal.SIGKILL``, which exist only on POSIX. On Windows the
+# call raises ``AttributeError`` — and because the kill never lands, a live
+# worker subprocess outlives the test and the fixture teardown never finishes,
+# so the suite hangs instead of failing. Rather than substitute a non-group
+# kill (rejected before: without the process group the reaping path deadlocks,
+# see web-runtime-trace-repair-report.md §8), skip where the API is absent.
+@pytest.mark.skipif(
+    not hasattr(os, "getpgid") or not hasattr(signal, "SIGKILL"),
+    reason="process-group SIGKILL is POSIX-only; a partial substitute deadlocks reaping",
+)
 async def test_worker_killed_api_survives(mock_llm, app_client, auth_headers, monkeypatch):
     """Killing a worker subprocess must not take the API down.
 

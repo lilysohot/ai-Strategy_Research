@@ -1,0 +1,180 @@
+{
+  "timestamp_utc": "2026-10-01T02:39:04Z",
+  "exit_code": 0,
+  "network_blocked": true,
+  "subprocesses_blocked": true,
+  "production_data_accessed": false,
+  "targets": [
+    "E:\\ai交易策略\\ai-Strategy_Research\\.scratch\\web-runtime-trace-hardening\\audit\\test_storage_chain.py"
+  ],
+  "records": [
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f08_submit_rejects_foreign_session_without_mutation",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.02993629999946279,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f01_uuid_returned_by_api_reads_same_trace",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.008048699999562814,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f03_trace_uses_same_redaction_as_replay",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.005836299999828043,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f04_observer_call_id_survives_jsonl",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0140307000001485,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f09_late_subscription_finishes",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.003239499999835971,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f12_rejected_batch_leaves_no_uploaded_files",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.04384260000006179,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_f14_queued_future_message_excluded_from_history",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.022079399999711313,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_missing_trace_is_not_measured_zero_usage",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.00039990000004763715,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_artifact_root_symlink_cannot_rebase_containment",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0028459999994083773,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_orphan_recovery_restores_saved_answer_to_session",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.03341719999934867,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_session_owner_read_guard_remains_enforced",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0036743000000569737,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_artifact_child_traversal_guard_remains_enforced",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0025130000003628084,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_terminal_frame_replay_does_not_duplicate_assistant_turn",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.01580420000027516,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_orphan_recovery_rebuilds_artifact_and_usage_indexes",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.027687499999956344,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_queue_continues_after_launch_failure",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.001311600000008184,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_revert_updates_artifact_hash_index",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0295285000001968,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_sqlite_declared_foreign_keys_are_enforced",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0010191999999733525,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_concurrent_message_sequence_is_unique",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.1178475000006074,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_revert_rejects_symlinked_baseline",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.012067499999830034,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_submit_records_nonsecret_model_snapshot",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.5857366000000184,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_health_distinguishes_unavailable_storage",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.0014281000003393274,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_run_started_event_updates_persistent_status",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.009805199999391334,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_alembic_empty_database_upgrade_matches_orm_columns",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.38800309999987803,
+      "evidence": ""
+    },
+    {
+      "test": ".scratch/web-runtime-trace-hardening/audit/test_storage_chain.py::test_absolute_file_tool_path_can_be_reverted",
+      "phase": "call",
+      "outcome": "passed",
+      "duration_s": 0.3301346999996895,
+      "evidence": ""
+    }
+  ]
+}
