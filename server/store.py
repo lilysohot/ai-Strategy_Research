@@ -653,6 +653,37 @@ async def record_verify_result(
         await session.commit()
 
 
+class LLMCredentialError(Exception):
+    """The user's default LLM config exists but its api_key cannot be decrypted.
+
+    Distinct from "no config": a missing default legitimately falls back to the
+    server's own provider, but an *undecryptable* key (SERVER_MASTER_KEY rotated
+    or lost, ciphertext corrupted) used to be swallowed into the same ``None``
+    — so the run silently ran on the server's credentials while its snapshot
+    still claimed ``user-config`` (F07-KEY-1). Callers must treat this as
+    fail-closed: refuse the submission instead of rerouting it.
+    """
+
+
+async def user_llm_cred_state(*, user_id: uuid.UUID) -> str:
+    """Classify the user's default LLM credential without leaking the secret.
+
+    Returns ``"ok"`` (a default config exists and decrypts), ``"none"`` (no
+    default config — the server default is the legitimate route), or
+    ``"error"`` (a default config exists but decryption fails). The submission
+    route uses this as its gate so a master-key loss becomes a 503 instead of
+    a silently rerouted run.
+    """
+    default = await get_default_llm_config(user_id=user_id)
+    if default is None:
+        return "none"
+    try:
+        await get_decrypted_api_key(user_id=user_id, config_id=default.id)
+    except Exception:
+        return "error"
+    return "ok"
+
+
 async def resolve_user_llm_env(*, user_id: uuid.UUID) -> dict | None:
     """Resolve a user's default LLM config into worker env vars, or None.
 
@@ -663,14 +694,21 @@ async def resolve_user_llm_env(*, user_id: uuid.UUID) -> dict | None:
     route a user key to the wrong endpoint. The api_key is decrypted in-process
     and handed straight to the environment — it is never logged or returned in any
     serialized form.
+
+    An *undecryptable* key raises :class:`LLMCredentialError` rather than
+    returning ``None`` (F07-KEY-1): "no config" and "config exists but the key
+    is lost" are different situations, and only the former may reroute to the
+    server default.
     """
     default = await get_default_llm_config(user_id=user_id)
     if default is None:
         return None
     try:
         key = await get_decrypted_api_key(user_id=user_id, config_id=default.id)
-    except Exception:
-        return None
+    except Exception as exc:
+        raise LLMCredentialError(
+            f"LLM config {default.id} exists but its api_key cannot be decrypted"
+        ) from exc
     if not (default.model and default.base_url and key):
         return None
     return {

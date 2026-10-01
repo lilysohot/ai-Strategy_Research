@@ -665,7 +665,10 @@ sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可�
 **③④ 已于 2026-10-02（凌晨）隔离复演完成**（`audit/f07-key-ondelete-drill.json`，隔离库 + 隔离 API 零生产写）：
 ③ 12 外键全 `NO ACTION` 三路硬删全拒 + 会话软删（列表隐藏 / run 存档可达），建议维持现状无需迁移；
 ④ 错误 `master_key` 复演发现 **F07-KEY-1 缺陷候选**（run 静默改道 server-default 且快照失真，需人工决策是否改为 fail-closed）
-与观察项 F07-KEY-2（密文重置无 HTTP 路由）；正确密钥/重置密文路径均恢复生效。仍余 ⑤ 定值（推荐：备份 30 天/每日 1 次、
+与观察项 F07-KEY-2（密文重置无 HTTP 路由）；正确密钥/重置密文路径均恢复生效。**F07-KEY-1 已于 2026-10-02 修复**
+（用户批准）：`user_llm_cred_state` 提交门禁（error → 503 零副作用）+ `resolve_user_llm_env` 解密失败抛
+`LLMCredentialError`（"无配置"与"密钥丢失"分家，仅前者可回落）+ `_resolve_llm_env` 第二道防线传播；
+回归 `tests/test_web_f07_key_gate.py` 6/6、web 套件 184 passed。仍余 ⑤ 定值（推荐：备份 30 天/每日 1 次、
 runs 文件 90 天、`SERVER_MASTER_KEY` 进部署清单——当前 live 以默认密钥 debug 运行、异地待挂载），F01
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加

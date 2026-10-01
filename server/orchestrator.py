@@ -45,6 +45,7 @@ from server.store import (
     APPROVAL_REJECTED,
     CONTROL_KIND_APPROVAL,
     STEER_ADOPTED,
+    LLMCredentialError,
     append_turn,
     close_open_controls,
     create_control,
@@ -976,14 +977,25 @@ class Orchestrator:
 
         ``None`` means "inject nothing" — the worker then falls back to the
         server's own ``.env``. The three vars are only ever injected together.
+
+        F07-KEY-1: an undecryptable key is NOT "no config" — swallowing it into
+        ``None`` here made the worker silently run on the server's provider while
+        the run's snapshot still claimed ``user-config``. That error therefore
+        propagates (the spawn fails and the run closes as failed) instead of
+        rerouting; the submission route's ``user_llm_cred_state`` gate already
+        refuses such runs up front, this is the second line of defence for keys
+        that go bad between the gate and the spawn.
         """
         if user_id is None:
             return None
         try:
             return await resolve_user_llm_env(user_id=user_id)
+        except LLMCredentialError:
+            raise
         except Exception:
-            # A store/decrypt failure must not crash run submission; fall back to
-            # the server default rather than injecting a broken partial set.
+            # A store failure (transient DB hiccup etc.) must not crash run
+            # submission; fall back to the server default rather than injecting
+            # a broken partial set.
             return None
 
     async def _pump_frames(self, handle: RunHandle) -> None:

@@ -271,5 +271,17 @@
       "item5": "推荐：备份 30 天/每日 1 次、runs 文件 90 天、master_key 进部署清单（当前 live 用默认密钥 debug 运行）、异地待挂载",
       "isolation": "f07_semantics 隔离库（生产 dump 192,933 B）+ 隔离 API :8001，演练后 DROP"
     }
+  },
+  "f07_key1_fix_20261002": {
+    "executed_at": "2026-10-02T00:30-01:00+08:00",
+    "task": "F07-KEY-1 修复（用户批准）",
+    "result": {
+      "changes": [
+        "store.py: LLMCredentialError + user_llm_cred_state 探针（ok/none/error）+ resolve_user_llm_env 解密失败抛出",
+        "routes/runs.py: 提交门禁 error→503 零副作用（快照/Run 行落库前）",
+        "orchestrator.py: _resolve_llm_env 对 LLMCredentialError 传播（第二道防线），暂态异常仍回落"
+      ],
+      "tests": "tests/test_web_f07_key_gate.py 6/6；web 套件 184 passed（p2_files 6 errors 既有）；ruff 过；pyright 仅既有项"
+    }
   }
 }

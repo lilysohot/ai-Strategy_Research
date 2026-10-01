@@ -129,3 +129,14 @@ Requirements: PR-GOV-05, PR-BIZ-06
   **另记（并入 ⑤ 部署清单）**：生产 .env 无 `SERVER_MASTER_KEY`，live API 以 debug + 默认密钥运行（非 debug 启动会被拒）。
   **⑤ 定值**仍需人工：推荐 备份 30 天/每日 1 次、runs 文件 90 天、master_key/jwt_secret 进部署清单、
   异地待第二台机器挂载后指向 `--out-dir`（脚本已支持）。
+- 2026-10-02：**F07-KEY-1 已修复（用户批准）**。三处改动：
+  ① `server/store.py`：新增 `LLMCredentialError` 与探针 `user_llm_cred_state`（区分 ok / none / error），
+  `resolve_user_llm_env` 对解密失败改为抛出而非吞成 `None`——"无配置"与"配置存在但密钥丢失"从此分家，
+  只有前者允许回落 server-default；
+  ② `server/routes/runs.py`：提交门禁在快照/Run 行落库之前探针，`error` → 503（"用户 LLM 凭据无法解密……
+  请恢复密钥或重置"），零副作用——静默改道与快照失真同时消除；
+  ③ `server/orchestrator.py` `_resolve_llm_env`：`LLMCredentialError` 向上传播（spawn 失败 → run 失败收口），
+  作为密钥在门禁与 spawn 之间变坏的第二道防线；其余暂态 store 异常仍回落（维持可用性语义）。
+  回归 `tests/test_web_f07_key_gate.py` **6/6**（503 零副作用、无配置仍 202、密钥正常 202、探针三态、
+  resolve 抛出、orchestrator 第二道防线传播）；web 套件 184 passed（p2_files 6 errors 为既有 FK 环境问题）；
+  ruff 全过；pyright 仅既有 Queue 不变型一项。复演证据 `audit/f07-key-ondelete-drill.json` 场景 a 即修复前行为。

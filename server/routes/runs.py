@@ -58,6 +58,7 @@ from server.store import (
     resolve_control,
     session_exists,
     sync_run_artifacts,
+    user_llm_cred_state,
 )
 from server.store import Run as RunModel
 from server.store import User as UserModel
@@ -143,6 +144,16 @@ async def submit_run(
     # user_id, if any, is ignored — credentials are resolved from this user's own
     # default LLM config and injected into the worker env, never from the request.
     user_id = user.id
+
+    # F07-KEY-1: an existing-but-undecryptable default key must refuse the run
+    # instead of silently rerouting it to the server's provider. "No default
+    # config" is the legitimate fallback case and passes through.
+    if await user_llm_cred_state(user_id=user_id) == "error":
+        raise HTTPException(
+            status_code=503,
+            detail="用户 LLM 凭据无法解密（SERVER_MASTER_KEY 已变更或损坏）；"
+            "请恢复密钥或重置该 API key 后再提交",
+        )
     run_id = uuid.uuid4()
     run_id_hex = run_id.hex
 
