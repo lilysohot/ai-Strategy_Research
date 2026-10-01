@@ -670,7 +670,14 @@ sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可�
 以及 E1 结转项——**POSIX 环境的产物/回滚复验与 F08 越权动态复验已于 2026-10-01 完成**
 （E1-WSL 批次：产物索引/下载/diff/回滚真链路全过；B 账号越权提交 404 + 零副作用 + 默认会话隔离；见
 [批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-wsl-batch-registry.json)），
-仍余**真实供应商格式差异**（浏览器 DOM 层已于 2026-10-01 验收完成，工单 05 closed）。
+其中**真实供应商格式差异**（浏览器 DOM 层已于 2026-10-01 验收完成，工单 05 closed）亦已验证（见下）。
+**真实供应商格式差异已于 2026-10-01 完成验证**（用户批准真实调用 + 用量登记）：火山方舟
+`deepseek-v4-flash` 跑 3 个隔离 run（纯问答 / 工具+审批链 / 实时流监听），F04/F06/F09/F10/F13/F15/F20/F21
+在真实流下全部按设计工作；5 项真实 vs mock 差异中 4 项为观测面增强或口径差异（token 级分片密度、
+thinking 字段、缓存命中 usage、模型幻觉工具被注册表 fail-closed 拒绝后自愈），1 项（server-default
+快照不含模型名）登记为可观测性观察项。用量 3 run / 7 calls / 59,445 tokens 入账核对。
+见 [证据](../../.scratch/web-runtime-trace-hardening/audit/real-provider-format.json) 与批次登记
+`real_provider_20261001`。
 
 **F19 后半（schema 门禁 + 迁移显式步骤）已于 2026-10-01 实现**（`server/readiness.py` + `deploy/entrypoint.web.sh`，
 见工单 [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)）：`/healthz` 只报"数据库是否应答"

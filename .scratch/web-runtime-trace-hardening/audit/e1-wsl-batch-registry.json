@@ -15,42 +15,148 @@
     "mock": ".scratch/web-runtime-trace-hardening/e1/mock_model.py，127.0.0.1:8899，出口仅 loopback；日志 mock-requests-wsl.jsonl / mock-requests-wsl-f06.jsonl"
   },
   "accounts": [
-    {"role": "A", "username": "e1wsl_a_20261001", "user_id": "9940d513-22d9-4bf7-a3f0-0a78a3027d23", "llm_config": "e2dffad3-a127-48db-8b08-77f2902f61bb（默认，指向 mock）"},
-    {"role": "B", "username": "e1wsl_b_20261001", "user_id": "8c8e0fe0-43a0-46d5-bed5-c9a4f401b841", "note": "仅用于 F08 越权提交，无模型配置"}
+    {
+      "role": "A",
+      "username": "e1wsl_a_20261001",
+      "user_id": "9940d513-22d9-4bf7-a3f0-0a78a3027d23",
+      "llm_config": "e2dffad3-a127-48db-8b08-77f2902f61bb（默认，指向 mock）"
+    },
+    {
+      "role": "B",
+      "username": "e1wsl_b_20261001",
+      "user_id": "8c8e0fe0-43a0-46d5-bed5-c9a4f401b841",
+      "note": "仅用于 F08 越权提交，无模型配置"
+    }
   ],
   "created_objects": [
-    {"type": "run", "id": "ad480a183a984313868f9934b25e0f87", "session": "e1wsl-a-s1", "final_status": "stopped/no_tool", "note": "create_file 审批 300s 超时被拒（fail-closed 佐证）；control_records 状态 expired"},
-    {"type": "run", "id": "0dc1c69387254e97b73f426cfed72734", "session": "e1wsl-a-s1", "final_status": "stopped/no_tool", "note": "审批 adopted/once 后 create_file 落盘；产物四连验通过"},
-    {"type": "run", "id": "0b2c1e50d9564ba2821f07bc79aa8ed8", "session": "e1wsl-a-s1", "final_status": "stopped/killed", "note": "F06 SIGKILL 注入"},
-    {"type": "control_records", "note": "本批 **2** 条 approval 记录：`expired`/decision=reject/detail.source=timeout（Run1 300s 超时）与 `adopted`/decision=once/detail.source=user（Run2）；2026-10-01 回溯直查业务库 `control_records` 复核（原记「3 条」有误，已核正）"}
+    {
+      "type": "run",
+      "id": "ad480a183a984313868f9934b25e0f87",
+      "session": "e1wsl-a-s1",
+      "final_status": "stopped/no_tool",
+      "note": "create_file 审批 300s 超时被拒（fail-closed 佐证）；control_records 状态 expired"
+    },
+    {
+      "type": "run",
+      "id": "0dc1c69387254e97b73f426cfed72734",
+      "session": "e1wsl-a-s1",
+      "final_status": "stopped/no_tool",
+      "note": "审批 adopted/once 后 create_file 落盘；产物四连验通过"
+    },
+    {
+      "type": "run",
+      "id": "0b2c1e50d9564ba2821f07bc79aa8ed8",
+      "session": "e1wsl-a-s1",
+      "final_status": "stopped/killed",
+      "note": "F06 SIGKILL 注入"
+    },
+    {
+      "type": "control_records",
+      "note": "本批 **2** 条 approval 记录：`expired`/decision=reject/detail.source=timeout（Run1 300s 超时）与 `adopted`/decision=once/detail.source=user（Run2）；2026-10-01 回溯直查业务库 `control_records` 复核（原记「3 条」有误，已核正）"
+    }
   ],
   "evidence": [
-    {"check": "POSIX 依赖用例（Windows 既有限制三处）", "command": "uv run pytest tests/test_web_p3_approval.py::test_approval_end_to_end tests/test_upload_t210.py tests/test_web_m1.py tests/test_stop_t28.py::test_sigkill_recovers_stopped_run", "result": "9/9 通过（SIGKILL 用例 3.27s，无挂起）；test_web_p2_diff + test_web_p3_revert + test_artifacts_t29 43/43 通过（Windows 上这些套件因 POSIX 语义失败）"},
-    {"check": "工具执行真实链路（Windows 全不可用项）", "result": "create_file 经审批后真实落盘 34B 到 /outputs；轨迹含 t=result（tool_call_id=call_e1_1，F04 JSONL 保留调用 ID 生效）"},
-    {"check": "产物索引（F18）", "result": "GET /artifacts → rel_path/size=34/sha256=01d481e7…；回滚后索引重算为空（失效行清理）"},
-    {"check": "下载（F17 边界内）", "result": "GET /artifacts/download?path= → HTTP 200，sha256 与索引一致"},
-    {"check": "diff", "result": "GET /diff → status=added, source=file_tool, hunks +3 行"},
-    {"check": "回滚（F18）", "result": "POST /revert → status=removed；ws/outputs 清空；索引同步重算"},
-    {"check": "F08 跨用户越权动态复验", "result": "B 用 A 的 session_id 提交 → 404 会话不存在；A 会话 turns=4/runs=2 零变化；无新 run 目录；B 默认会话列表为空（默认会话按用户命名空间隔离）"},
-    {"check": "F15 用量落账（E1 批次症状）", "result": "GET /runs/{id} usage={prompt:16,completion:16,total:32,llm_calls:2,status:complete}——不再为 NULL"},
-    {"check": "F20 快照与启动时间（E1 批次症状）", "result": "DB started_at 非 NULL；llm_snapshot_json={source:user-config, config_id, model, base_url}（非密钥）"},
-    {"check": "F21 审批持久追溯（真链路）", "result": "pending → adopted/once（Run2）与 pending → expired（Run1 超时）均落 control_records；GET /controls 可重建待审批状态；当时 /controls 投影不含 external_id——刷新页无法从该接口取到 approve 所需 approval_id（记为 F21 遗留观察，**已于同日 38d73bc 修复**：投影暴露 external_id、前端优先使用，浏览器闭环复验通过）"},
-    {"check": "F06 SIGKILL 真实故障注入", "result": "mock 25s 延迟制造流中窗口 → kill -9 worker → API /healthz 200 存活；Run 立即收口 stopped/killed + finished_at；/trace completeness={state:partial, valid_lines:1, trailing_partial_line:false}，reason 文案正确；已存记录可读"},
-    {"check": "F19 只读挂载注入（E3）", "result": "镜像 frontier-agent-web:f19 + 只读卷 /data/runs:ro → 非_DEBUG 启动 StorageNotReadyError: data_root_unwritable，exit 3，uvicorn 未起；debug 下 /healthz 200 而 /readyz 503 data_root_unwritable"},
-    {"check": "F19 磁盘满注入（E3，发现缺陷）", "result": "tmpfs size=64k 填满 → 修复前 /readyz 200（误报 ready）：probe_data_root 写 0 字节文件在满 tmpfs 上成功（数据页耗尽而非 inode）；修复为写 b'readyz-probe' 后 /readyz 503 data_root_unwritable、/healthz 200；回归 test_data_root_probe_writes_real_bytes（16/16）"},
-    {"check": "F19 compose healthcheck + caddy 消费方", "result": "deploy/docker-compose.yml api 增加 /readyz healthcheck（30s/5s/3 次/start 60s）；**caddy 增加 depends_on: api: {condition: service_healthy}（2026-10-01 用户确认后接线）**，`docker compose --profile full config` 解析出该依赖（exit 0）；同款 healthcheck 命令在镜像内实测 health=healthy（一次性库+可写根）。即 T8 完成标准「depends_on: service_healthy 语义与之一致」达成"},
-    {"check": "F17 部署侧观测", "result": "worker/工具进程身份 euid=1000(administrator)，tool-user 降权不激活（非 root 无法 setuid agent-tool，engine.log 有 harness uid 告警）；native 无挂载；runs 根与 run 目录 755 administrator:administrator——与 F01 迁移口径一致，非 root 部署下用户隔离边界=文件系统权限，已在 issue 17 记录"},
-    {"check": "F19 部署门禁真链路（业务库 0002）", "result": "/healthz 200、/readyz 503 schema_behind——与『部署前必须先迁移』结论一致；本轮未做业务库迁移"},
-    {"check": "回溯核验（2026-10-01，独立复跑 + 只读直查业务库）", "result": "① 复跑 POSIX 套件 52 passed（4 项定向 + diff/revert/artifacts），与登记 9/9 + 43/43 一致；② 直查 control_records 仅 2 行（expired/timeout、adopted/user）——原记「3 条」已核正；③ F15 usage=complete（Run1/Run2；Run3 partial）、F20 started_at 非空且 llm_snapshot=user-config，与登记一致；④ control_to_dict 投影**当时**确不含 external_id（该观察随后由 38d73bc 修复：投影已暴露该字段）；⑤ 回溯处置：登记两处失真已核正（approval 记录 3→2 条、code_head 非 HEAD 内容），本轮代码改动已提交 84258f3，`caddy` 已接 `depends_on: api: service_healthy`"}
+    {
+      "check": "POSIX 依赖用例（Windows 既有限制三处）",
+      "command": "uv run pytest tests/test_web_p3_approval.py::test_approval_end_to_end tests/test_upload_t210.py tests/test_web_m1.py tests/test_stop_t28.py::test_sigkill_recovers_stopped_run",
+      "result": "9/9 通过（SIGKILL 用例 3.27s，无挂起）；test_web_p2_diff + test_web_p3_revert + test_artifacts_t29 43/43 通过（Windows 上这些套件因 POSIX 语义失败）"
+    },
+    {
+      "check": "工具执行真实链路（Windows 全不可用项）",
+      "result": "create_file 经审批后真实落盘 34B 到 /outputs；轨迹含 t=result（tool_call_id=call_e1_1，F04 JSONL 保留调用 ID 生效）"
+    },
+    {
+      "check": "产物索引（F18）",
+      "result": "GET /artifacts → rel_path/size=34/sha256=01d481e7…；回滚后索引重算为空（失效行清理）"
+    },
+    {
+      "check": "下载（F17 边界内）",
+      "result": "GET /artifacts/download?path= → HTTP 200，sha256 与索引一致"
+    },
+    {
+      "check": "diff",
+      "result": "GET /diff → status=added, source=file_tool, hunks +3 行"
+    },
+    {
+      "check": "回滚（F18）",
+      "result": "POST /revert → status=removed；ws/outputs 清空；索引同步重算"
+    },
+    {
+      "check": "F08 跨用户越权动态复验",
+      "result": "B 用 A 的 session_id 提交 → 404 会话不存在；A 会话 turns=4/runs=2 零变化；无新 run 目录；B 默认会话列表为空（默认会话按用户命名空间隔离）"
+    },
+    {
+      "check": "F15 用量落账（E1 批次症状）",
+      "result": "GET /runs/{id} usage={prompt:16,completion:16,total:32,llm_calls:2,status:complete}——不再为 NULL"
+    },
+    {
+      "check": "F20 快照与启动时间（E1 批次症状）",
+      "result": "DB started_at 非 NULL；llm_snapshot_json={source:user-config, config_id, model, base_url}（非密钥）"
+    },
+    {
+      "check": "F21 审批持久追溯（真链路）",
+      "result": "pending → adopted/once（Run2）与 pending → expired（Run1 超时）均落 control_records；GET /controls 可重建待审批状态；当时 /controls 投影不含 external_id——刷新页无法从该接口取到 approve 所需 approval_id（记为 F21 遗留观察，**已于同日 38d73bc 修复**：投影暴露 external_id、前端优先使用，浏览器闭环复验通过）"
+    },
+    {
+      "check": "F06 SIGKILL 真实故障注入",
+      "result": "mock 25s 延迟制造流中窗口 → kill -9 worker → API /healthz 200 存活；Run 立即收口 stopped/killed + finished_at；/trace completeness={state:partial, valid_lines:1, trailing_partial_line:false}，reason 文案正确；已存记录可读"
+    },
+    {
+      "check": "F19 只读挂载注入（E3）",
+      "result": "镜像 frontier-agent-web:f19 + 只读卷 /data/runs:ro → 非_DEBUG 启动 StorageNotReadyError: data_root_unwritable，exit 3，uvicorn 未起；debug 下 /healthz 200 而 /readyz 503 data_root_unwritable"
+    },
+    {
+      "check": "F19 磁盘满注入（E3，发现缺陷）",
+      "result": "tmpfs size=64k 填满 → 修复前 /readyz 200（误报 ready）：probe_data_root 写 0 字节文件在满 tmpfs 上成功（数据页耗尽而非 inode）；修复为写 b'readyz-probe' 后 /readyz 503 data_root_unwritable、/healthz 200；回归 test_data_root_probe_writes_real_bytes（16/16）"
+    },
+    {
+      "check": "F19 compose healthcheck + caddy 消费方",
+      "result": "deploy/docker-compose.yml api 增加 /readyz healthcheck（30s/5s/3 次/start 60s）；**caddy 增加 depends_on: api: {condition: service_healthy}（2026-10-01 用户确认后接线）**，`docker compose --profile full config` 解析出该依赖（exit 0）；同款 healthcheck 命令在镜像内实测 health=healthy（一次性库+可写根）。即 T8 完成标准「depends_on: service_healthy 语义与之一致」达成"
+    },
+    {
+      "check": "F17 部署侧观测",
+      "result": "worker/工具进程身份 euid=1000(administrator)，tool-user 降权不激活（非 root 无法 setuid agent-tool，engine.log 有 harness uid 告警）；native 无挂载；runs 根与 run 目录 755 administrator:administrator——与 F01 迁移口径一致，非 root 部署下用户隔离边界=文件系统权限，已在 issue 17 记录"
+    },
+    {
+      "check": "F19 部署门禁真链路（业务库 0002）",
+      "result": "/healthz 200、/readyz 503 schema_behind——与『部署前必须先迁移』结论一致；本轮未做业务库迁移"
+    },
+    {
+      "check": "回溯核验（2026-10-01，独立复跑 + 只读直查业务库）",
+      "result": "① 复跑 POSIX 套件 52 passed（4 项定向 + diff/revert/artifacts），与登记 9/9 + 43/43 一致；② 直查 control_records 仅 2 行（expired/timeout、adopted/user）——原记「3 条」已核正；③ F15 usage=complete（Run1/Run2；Run3 partial）、F20 started_at 非空且 llm_snapshot=user-config，与登记一致；④ control_to_dict 投影**当时**确不含 external_id（该观察随后由 38d73bc 修复：投影已暴露该字段）；⑤ 回溯处置：登记两处失真已核正（approval 记录 3→2 条、code_head 非 HEAD 内容），本轮代码改动已提交 84258f3，`caddy` 已接 `depends_on: api: service_healthy`"
+    }
   ],
   "wsl_closure_20261001_pm": {
     "purpose": "用户批准的四项 WSL 收尾（w-1..w-4）：镜像重建、旧版镜像回退演练、整栈 compose 就绪门禁、F06 运行级磁盘写满。",
     "code_head": "cd59cc7（工作区干净）",
     "items": [
-      {"id": "w-1", "item": "镜像重建（含 84258f3 探针修复 + 38d73bc external_id）", "result": "frontier-agent-web:head (036bbd787437) 构建成功；镜像内断言 `probe writes real bytes: True`、`control_to_dict has external_id: True`", "verdict": "pass"},
-      {"id": "w-2", "item": "旧版镜像回退演练（同一隔离库）", "result": "D1 新镜像 entrypoint 迁移空库→0004，/healthz 200 /readyz {\"status\":\"ok\"}；D2 上一镜像同库迁移幂等（版本不变）；D3a 版本超前(zz_future) 上一镜像 entrypoint exit=255（alembic Can't locate revision）；D3b 新镜像直起 uvicorn exit=3（StorageNotReadyError schema_ahead）", "evidence": "audit/f19-rollback-drill.json", "verdict": "pass"},
-      {"id": "w-3", "item": "整栈 compose 就绪门禁（Caddy 不放行 / 放行）", "result": "反例：不可达库 → compose `dependency failed to start: container e1wsl-api is unhealthy`，caddy State=created 未启动，站点 000；正例：空库 → api healthy → caddy Started → HTTPS 根 200 且 <title>投研 Agent 平台</title>；业务库全程 0002", "evidence": "audit/f19-stack-gating.json", "verdict": "pass"},
-      {"id": "w-4", "item": "F06 运行级磁盘写满（轨迹写入与 Run 收口）", "result": "在飞 run 不挂起（ENOSPC 被非 critical observer 吞掉，仍收口 stopped/no_tool；/trace 不误报）；**发现 3 处缺陷并已修复**：F06-RUN-1（高）提交路径已消费 probe_data_root（满盘 503）+ _drain_session 启动失败即收口（mark_run_failed_if_active）；F06-RUN-2（中）干净完成但轨迹 0 字节 → 助手轮追加『存储降级』可见标记；F06-RUN-3（低）summary 原子写 + 清理 .tmp/0 字节 spool；回归 tests/test_web_f22_disk_full.py 6/6，全量 tests 相对 HEAD 无新增失败；**修复后镜像本体真实注入复验**：空盘基线 202 → dd 填满（/readyz 503）→ 满盘提交 503、零副作用（frontier-agent-web:head 重建 b903e9e28900）", "evidence": "audit/f06-run-disk-full.json；工单 22；tests/test_web_f22_disk_full.py", "verdict": "defect found → 已修复（回归 6/6 + 镜像本体真实注入 503）"}
+      {
+        "id": "w-1",
+        "item": "镜像重建（含 84258f3 探针修复 + 38d73bc external_id）",
+        "result": "frontier-agent-web:head (036bbd787437) 构建成功；镜像内断言 `probe writes real bytes: True`、`control_to_dict has external_id: True`",
+        "verdict": "pass"
+      },
+      {
+        "id": "w-2",
+        "item": "旧版镜像回退演练（同一隔离库）",
+        "result": "D1 新镜像 entrypoint 迁移空库→0004，/healthz 200 /readyz {\"status\":\"ok\"}；D2 上一镜像同库迁移幂等（版本不变）；D3a 版本超前(zz_future) 上一镜像 entrypoint exit=255（alembic Can't locate revision）；D3b 新镜像直起 uvicorn exit=3（StorageNotReadyError schema_ahead）",
+        "evidence": "audit/f19-rollback-drill.json",
+        "verdict": "pass"
+      },
+      {
+        "id": "w-3",
+        "item": "整栈 compose 就绪门禁（Caddy 不放行 / 放行）",
+        "result": "反例：不可达库 → compose `dependency failed to start: container e1wsl-api is unhealthy`，caddy State=created 未启动，站点 000；正例：空库 → api healthy → caddy Started → HTTPS 根 200 且 <title>投研 Agent 平台</title>；业务库全程 0002",
+        "evidence": "audit/f19-stack-gating.json",
+        "verdict": "pass"
+      },
+      {
+        "id": "w-4",
+        "item": "F06 运行级磁盘写满（轨迹写入与 Run 收口）",
+        "result": "在飞 run 不挂起（ENOSPC 被非 critical observer 吞掉，仍收口 stopped/no_tool；/trace 不误报）；**发现 3 处缺陷并已修复**：F06-RUN-1（高）提交路径已消费 probe_data_root（满盘 503）+ _drain_session 启动失败即收口（mark_run_failed_if_active）；F06-RUN-2（中）干净完成但轨迹 0 字节 → 助手轮追加『存储降级』可见标记；F06-RUN-3（低）summary 原子写 + 清理 .tmp/0 字节 spool；回归 tests/test_web_f22_disk_full.py 6/6，全量 tests 相对 HEAD 无新增失败；**修复后镜像本体真实注入复验**：空盘基线 202 → dd 填满（/readyz 503）→ 满盘提交 503、零副作用（frontier-agent-web:head 重建 b903e9e28900）",
+        "evidence": "audit/f06-run-disk-full.json；工单 22；tests/test_web_f22_disk_full.py",
+        "verdict": "defect found → 已修复（回归 6/6 + 镜像本体真实注入 503）"
+      }
     ]
   },
   "capacity_bounds_20261001": {
@@ -88,10 +194,30 @@
     "verdict": "pass（工单 02 全部遗留项闭合，维持 ready-for-human 待人工复核）"
   },
   "deferred": [
-    {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排", "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"},
-    {"item": "真实供应商返回格式差异", "blocked_by": "需用户批准并单独登记用量", "recheck_in": "另行批准"},
-    {"item": "F06 断电耐久（存储级）", "blocked_by": "断电耐久属存储级验证，普通注入不可替代", "recheck_in": "E3 存储级专项", "note": "运行级磁盘写满已于 2026-10-01 下午完成（见 wsl_closure_20261001_pm.w-4 与工单 22，发现 3 处缺陷）"},
-    {"item": "F21 /controls 投影缺 external_id", "note": "刷新页从 GET /controls 重建待审批弹窗后无法直接调 approve（approval_id 不可得）", "recheck_in": "issue 21", "resolved_at": "2026-10-01（38d73bc：投影暴露 external_id + 前端 resumeForSession，浏览器闭环复验 Run 0c65cbf3 通过）"}
+    {
+      "item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）",
+      "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核",
+      "recheck_in": "另行安排",
+      "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"
+    },
+    {
+      "item": "真实供应商返回格式差异",
+      "blocked_by": "已于 2026-10-01 获用户批准并执行",
+      "recheck_in": "另行批准",
+      "resolved_at": "2026-10-01（real_provider_20261001 批次：3 run / 59,445 tokens，契约全过，5 项差异登记，证据 real-provider-format.json）"
+    },
+    {
+      "item": "F06 断电耐久（存储级）",
+      "blocked_by": "断电耐久属存储级验证，普通注入不可替代",
+      "recheck_in": "E3 存储级专项",
+      "note": "运行级磁盘写满已于 2026-10-01 下午完成（见 wsl_closure_20261001_pm.w-4 与工单 22，发现 3 处缺陷）"
+    },
+    {
+      "item": "F21 /controls 投影缺 external_id",
+      "note": "刷新页从 GET /controls 重建待审批弹窗后无法直接调 approve（approval_id 不可得）",
+      "recheck_in": "issue 21",
+      "resolved_at": "2026-10-01（38d73bc：投影暴露 external_id + 前端 resumeForSession，浏览器闭环复验 Run 0c65cbf3 通过）"
+    }
   ],
   "cleanup_list": {
     "disposition": "已执行",
@@ -103,5 +229,21 @@
       "业务库 apodex 除本批测试账号产生的行外未触碰；schema 仍为 0002（迁移是部署侧显式步骤，未混入本轮）",
       "（2026-10-01 回溯补充）/tmp 另留诊断脚本 repro_sandbox.py 与 api-wsl-e1.log，均无敏感内容（脚本用于排除沙箱原语问题，日志为 API 输出），随系统临时目录清理"
     ]
+  },
+  "real_provider_20261001": {
+    "batch_id": "real_provider_20261001",
+    "executed_at": "2026-10-01T19:45-20:05+08:00",
+    "task": "真实供应商返回格式差异验证（E1 结转项，用户批准真实调用 + 用量登记）",
+    "evidence": [
+      "real-provider-format.json"
+    ],
+    "result": {
+      "provider": "火山方舟 deepseek-v4-flash（OpenAI 兼容）",
+      "isolation": "独立账号 e1real_20261001 + 会话 e1real-s1，密钥不入业务库（server-default 路径）",
+      "runs": "3（纯问答 / 工具+审批 / 实时流），7 次 LLM 调用，59,445 tokens 入账",
+      "contract_checks": "F04 tool_call_id 配对、F06 轨迹 complete ×3、F09 终态实时可达+重连流关闭、F10 full 标记、F13 有界队列高密度分片下健康、F15 真实 usage（含缓存命中）入账、F20 started_at+快照、F21 审批 pending→adopted→落盘",
+      "differences": "5 项真实 vs mock 差异：4 项观测面增强/口径差异（分片密度、thinking、缓存 usage、幻觉工具 fail-closed 拒绝后自愈），1 项可观测性观察项（server-default 快照无模型名）",
+      "verdict": "真实供应商格式差异不破坏既有契约，该项结转关闭"
+    }
   }
 }

@@ -1,0 +1,79 @@
+{
+  "task": "真实供应商返回格式差异验证（E1 结转项，用户批准 2026-10-01）",
+  "executed_at": "2026-10-01T19:45-20:05+08:00",
+  "provider": {
+    "endpoint": "火山方舟 ark.cn-beijing.volces.com（OpenAI 兼容 /api/v3）",
+    "requested_model": "deepseek-v4-flash",
+    "provider_reported_model": "deepseek-flash",
+    "auth_path": "测试账号无 llm_config → server-default（.env），真实密钥不入业务库"
+  },
+  "isolation": {
+    "user": "e1real_20261001 (5363939f-3e2d-40ab-bbff-4ca923d705d8)",
+    "session": "e1real-s1 (7dd764f2-e7f8-5f81-9853-f783c61be0ce)",
+    "live_api": "127.0.0.1:8000，/healthz + /readyz 200"
+  },
+  "runs": [
+    {
+      "name": "Run A 纯问答",
+      "run_id": "fd174b85757c43dcb7489433d8c14091",
+      "message": "用一句话回答：17 乘 23 等于多少？",
+      "status": "stopped/no_tool",
+      "final_answer": "17 × 23 = 391。",
+      "usage": {"prompt_tokens": 16442, "completion_tokens": 159, "total_tokens": 16601, "cache_read_tokens": 8064, "llm_calls": 2},
+      "trace_completeness": "complete (5 records)",
+      "verified": ["F06 complete", "F15 真实 usage 映射", "F20 started_at + 快照", "SSE replay-only 流关闭（无终态事件为设计：_live_queue_for 双事实判定返回 None，流关闭即终态信号）"]
+    },
+    {
+      "name": "Run B 工具+审批链",
+      "run_id": "37956bd3fdad47ff8b0125fb5f27ba98",
+      "message": "请创建文件 real_b.txt，内容为 f13-real-b",
+      "status": "stopped/no_tool",
+      "usage": {"prompt_tokens": 34005, "completion_tokens": 435, "total_tokens": 34440, "cache_read_tokens": 26240, "llm_calls": 4},
+      "tool_calls_paired": [
+        "call_00_xDnO5WEMM6tvzpuRJk2m2691 add_task（模型幻觉的不可用工具，注册表 fail-closed 拒绝）",
+        "call_00_Ge7S3TXgIfkQrV7LHsOv9185 create_file（审批 adopted 后成功落盘）",
+        "call_00_bbq4slqowK3QSbjeu3dt4279 read_file（模型自验）"
+      ],
+      "approval": {
+        "external_id": "ed4c68d2c1b940578d3cca4e23036bed",
+        "request": {"tool_name": "create_file", "target": "/outputs/real_b.txt", "risk": "normal"},
+        "resolution": "adopted / once / source=user"
+      },
+      "artifact": "ws/outputs/real_b.txt 11 字节，内容 'f13-real-b' 逐字核对一致",
+      "trace_completeness": "complete (9 records)",
+      "verified": ["F04 tool_call_id 配对 ×3", "F21 审批链真实触发→持久化→adopted", "F06 complete"]
+    },
+    {
+      "name": "Run C 实时流监听",
+      "run_id": "86dce5485815487ba9acc46732c5f664",
+      "message": "用一句话回答：地球绕太阳一圈要多久？",
+      "status": "stopped/no_tool",
+      "final_answer": "地球绕太阳公转一圈大约需要365.25天（即一年）",
+      "usage": {"prompt_tokens": 8079, "completion_tokens": 325, "total_tokens": 8404, "cache_read_tokens": 1024, "llm_calls": 1},
+      "sse_facts": {
+        "live_delta_fragments": 326,
+        "replay_full_copies": 1,
+        "terminal": "run_stopped 实时到达后流正常关闭"
+      },
+      "verified": ["F10 去重契约（带 queue 路径 replay 副本 full=True）", "F09 进行中 run 实时终态", "F13 有界队列在真实高密度分片下健康"]
+    }
+  ],
+  "usage_ledger": {
+    "runs_total": 3,
+    "llm_calls_total": 7,
+    "prompt_tokens_total": 58526,
+    "completion_tokens_total": 919,
+    "total_tokens_total": 59445,
+    "cache_read_tokens_total": 35328,
+    "note": "均经业务库 runs.usage_json 入账并与 API 响应核对"
+  },
+  "real_vs_mock_differences": [
+    {"id": "D1", "diff": "流式分片密度：真实供应商产生 token 级小分片（Run C 单轮 326 条 live delta），mock 为整块输出", "impact": "F13 有界队列（256）+ 丢 delta 策略只在真实密度下承受真实压力——实测健康，终态/哨兵必达"},
+    {"id": "D2", "diff": "真实响应携带 thinking（推理内容）字段，mock 无", "impact": "轨迹与 SSE 均透传（_traj_record_to_events thinking=rec.get('thinking')），审计面反而更全，无适配缺口"},
+    {"id": "D3", "diff": "usage 为供应商真实口径：model 为供应商别名 deepseek-flash（≠请求名 deepseek-v4-flash），含 cache_read_tokens/cached_tokens（第 2 轮起命中），mock 固定 16/16", "impact": "F15 字段映射完整透传入账；模型别名仅影响展示口径，不影响记账"},
+    {"id": "D4", "diff": "真实模型会幻觉不可用工具（add_task，自称系统提示要求先建任务）；mock 从不幻觉", "impact": "工具注册表 fail-closed 拒绝（unknown tool + 可用列表），模型第 2 轮自愈正确作答——守卫按设计生效，run 正常收口"},
+    {"id": "D5", "diff": "server-default 路径的 llm_snapshot 仅 {\"source\":\"server-default\"}，run 行 model=None；实际模型名只在轨迹 start 记录（model_name='llm_fallback_chain[deepseek-v4-flash]'）", "impact": "非缺陷（密钥不入库的代价，模型名轨迹可审计）；登记为可观测性观察项：若需要 run 列表按模型筛选，需把 worker 回报的 model_name 并入快照"}
+  ],
+  "sse_replay_only_semantics_note": "已结束 run 重连走 replay-only（_live_queue_for：无 worker handle 且状态非 active → queue=None）：不加 full 标记（无 live 分片可去重，语义自洽）、不发合成终态（流关闭即终态信号）。浏览器 DOM 验收（工单 05）已覆盖该路径，非缺陷。",
+  "verdict": "真实供应商格式差异不破坏任何既有契约：F04/F06/F09/F10/F13/F15/F20/F21 在真实流下全部按设计工作；5 项真实差异中 4 项为观测面增强或口径差异，1 项（D5）为已登记可观测性观察项。"
+}
