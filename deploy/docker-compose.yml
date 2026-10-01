@@ -73,6 +73,11 @@ services:
       # 用 CORPUS_DSN_DOCKER 覆盖；默认走 Docker Desktop 宿主网关。本机 CLI 读
       # ../.env 的 CORPUS_DSN，不受此项影响。
       CORPUS_DSN: ${CORPUS_DSN_DOCKER:-postgresql://postgres:postgres@host.docker.internal:5432/postgres}
+      # 业务库：与 CORPUS_DSN 同理——容器内 localhost 指向容器自身，必须显式指向宿主，
+      # 否则 server/config.py 从挂载的 ../.env 读到 `localhost:5432/apodex`，容器起不到
+      # 可用状态（实测 /healthz = 503 storage_unavailable）。用 SERVER_DATABASE_URL_DOCKER
+      # 覆盖；scheme 必须是 +asyncpg。库名与语料库不同：业务 apodex、语料 postgres。
+      SERVER_DATABASE_URL: ${SERVER_DATABASE_URL_DOCKER:-postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex}
       # F01: run data (trajectories / inputs / outputs / spill) lives outside the
       # source tree, on the named volume mounted below — never in the image.
       SERVER_RUNS_ROOT: /var/lib/frontier-agent/web/runs

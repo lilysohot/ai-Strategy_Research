@@ -1,0 +1,46 @@
+{
+  "task": "F01 回退演练：回退必须保护切换后新写入，且不能只改回根目录变量",
+  "date": "2026-09-30",
+  "scope": "隔离复演。独立库 apodex_f01_rollback + 临时根；生产库/生产根/服务全程未触碰，演练后已清理。",
+  "inputs": {
+    "pre_db_dump": "~/.local/share/frontier-agent/backups/f01-wsl-20260930/apodex-pre-f01.dump (183,697 B; sha256sum -c OK)",
+    "pre_files_tar": "~/.local/share/frontier-agent/backups/f01-wsl-20260930/server-runs-pre-f01.tar.gz (7,451,755 B; sha256sum -c OK)",
+    "tar_manifest": { "run_dirs": 837, "nested_dirs": 6758, "files": 5147 }
+  },
+  "step1_pre_restore": {
+    "pg_restore_exit": 0,
+    "rows": { "users": 29, "sessions": 141, "runs": 754, "turns": 1093, "artifacts": 296, "user_llm_configs": 164, "audit_log": 1978 },
+    "fk_count": 9,
+    "run_dir_distribution": { "old_root": 663, "tmp_x": 40, "tmp_other(tmp/alice-run 等)": 45, "windows_c": 6 },
+    "extract_check": { "top_level_run_dirs": 837, "nested_dirs": 6758, "files": 5147 }
+  },
+  "step2_post_switch_simulation": {
+    "runs_created": 3,
+    "statuses": ["completed", "running", "completed"],
+    "files": 21,
+    "db_after": { "runs": 757, "turns": 1094, "artifacts": 298 },
+    "snapshot": "post 行 CSV 提取（runs 3 / turns 1 / artifacts 2）+ f01_post.dump 184,124 B（容器内，已清理）"
+  },
+  "step3_negative_controls": [
+    { "id": "N1", "action": "仅把 SERVER_RUNS_ROOT 切回旧根，文件与 DB 均不动", "result": "3/3 切换后 run dir_exists=False，state=unavailable（轨迹文件不存在）", "verdict": "打散切换后新写入 —— 失败" },
+    { "id": "N2", "action": "仅恢复 pre 业务库，不合并切换后行", "result": "切换后 3 行剩余 0（runs 由 757 回到 754）", "verdict": "丢失切换后新写入 —— 失败" }
+  ],
+  "step4_positive_rollback": {
+    "steps": ["恢复 pre 业务库（drop/create/pg_restore）", "新根 3 个 run 目录移回旧根", "COPY CSV 合并回切换后 runs/turns/artifacts", "UPDATE runs 把合并行的 run_dir 重定位到回退后的根"],
+    "final_rows": { "runs": 757, "turns": 1094, "artifacts": 298, "note": "pre 754 + post 3，turns/artifacts 增量一致" },
+    "fk_count": 9
+  },
+  "step5_verification": {
+    "file_conservation": { "dirs": 840, "files": 5168, "expected": [840, 5168], "pass": true },
+    "post_switch_file_integrity": { "files": 21, "sha256_or_size_failures": 0, "pass": true },
+    "reference_integrity": { "runs": 757, "dir_resolvable": 247, "dir_missing": 510, "expected": [247, 510], "pass": true, "note": "247 = 244(pre) + 3(post)；510 = 419 缺失 + 85 /tmp + 6 C:\\" },
+    "trajectory_states": { "post_completed": "complete", "post_active": "partial", "pre_sample_0048692e": "complete", "pass": true }
+  },
+  "findings": [
+    "读取侧一律走 run_dir_for(id) = runs_root / canonical_run_id(id)，不读 runs 表里存的绝对 run_dir（inspect_trajectory / relay / artifacts / revert / worker 均如此）——所以只把根变量切回去，就会让落在新根的新写入解析为 unavailable。",
+    "但 orchestrator._read_run_summary(row.run_dir) 与 routes/runs.py 的响应使用存储的 run_dir；因此回退合并切换后行之后，必须把 run_dir 重定位到回退后的根，否则这两条路径指向已被清空的新根。",
+    "run 目录名必须是 canonical_run_id(id).hex（uuid 的版本位/变体位不可臆造）；两者不一致时按 id 解析会落空。",
+    "结论：回退流程必须包含「恢复业务库 + 文件回位 + 合并切换后行 + 重定位 run_dir」四步；缺任一步即出现打散或丢失。"
+  ],
+  "cleanup": "隔离库已 DROP；临时根 /tmp/f01-drill、/tmp/f01-drill-new 已删；容器 /tmp 演练快照已删。生产校验：live runs=754、新数据根 244 目录、server/runs=0、/healthz=200。"
+}

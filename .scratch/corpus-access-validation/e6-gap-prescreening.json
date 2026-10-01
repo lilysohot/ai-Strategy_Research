@@ -1,0 +1,2167 @@
+{
+  "artifact": "e6-gap-prescreening",
+  "note": "Mechanical pre-screen only. No decision is recorded and no human-gap-review is written; every direction here is a reading aid and a reviewer still signs the packet.",
+  "method": "对每个被阻断目标，取其 expected_quote，做 NFKC+去空白归一化后，在冻结 build 的 corpus_units 文本（kept 与全量两套）中做字面比对：整条引文 / 按句切分的片段是否已在已提取文本中，以及命中的证据页是否落在门禁 gap_regions 标记的页上。",
+  "limitations": [
+    "只比对『引文是否已被提取』，不重跑 corpus_search / fetch_plan / corpus_fetch；被阻断 build 未发布，无法做真实投递验证。",
+    "引文存在 ≠ 检索可达：目标仍可能因分块或检索未命中而失败。",
+    "方向列（leaning-*）由字面比对机械得出，不是裁决、不带签名。"
+  ],
+  "source_artifacts": {
+    "gate": "e6-holdout-build.json",
+    "delivery": "e6-data-delivery-holdout.json",
+    "packet": "e6-human-gap-review-packet.json",
+    "corpus_db": "e6_holdout_corpus"
+  },
+  "summary": {
+    "materials": 9,
+    "blocked_targets": 38,
+    "outcomes": {
+      "absent": 3,
+      "benign_overlap": 28,
+      "overlap": 7
+    },
+    "directions": {
+      "leaning-acknowledge": 28,
+      "leaning-re-extract": 3,
+      "needs-human": 7
+    }
+  },
+  "materials": [
+    {
+      "sample_id": "holdout-industry-003",
+      "domain": "industry",
+      "source_id": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "build_id": "907957c865f6b551f70e6254a270a29b2baab31adf98d24c3250d964278432db",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 14,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 15,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 16,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 17,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 18,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 19,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 20,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 21,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 22,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 1092,
+      "extracted_units": {
+        "kept": 1004,
+        "noise": 88
+      },
+      "unit_kinds": {
+        "heading": 76,
+        "paragraph": 888,
+        "table_row": 128
+      },
+      "targets": [
+        {
+          "target_id": "c1ddcd8a-coalprice",
+          "role": "required",
+          "question": "研报中动力煤现货价格和国内主要地区主焦煤平均价格本周分别是多少元/吨，环比涨了多少？",
+          "quote_chars": 65,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "(3)动力煤价格为967元/吨,环比+9.14%;(4)国内主要地区主焦煤平均价格为2224元/吨,环比上周+9.34%。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "c1ddcd8a-summarytable",
+          "role": "supplementary",
+          "question": "研报的量价利汇总表中，螺纹钢在2026-9-4的价格、7日涨幅、30日涨幅和年内涨幅分别是多少？",
+          "quote_chars": 39,
+          "outcome": "absent",
+          "direction": "leaning-re-extract",
+          "quote_norm": "螺纹钢元/吨32400.9%4.2%-2.4%-0.6%6000",
+          "coverage": 0.0,
+          "fragments_total": 1,
+          "fragments_found": 0,
+          "evidence_pages": [],
+          "noise_only_pages": [],
+          "overlap_pages": [],
+          "overlap_kinds": [],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "引文与其所有片段均未出现在已提取文本中；相关缺口页：page 1, page 2, page 3, page 4, page 5, page 6, page 7, page 8, page 9, page 10, page 11, page 12, page 13, page 14, page 15, page 16, page 17, page 18, page 19, page 20, page 21, page 22"
+        },
+        {
+          "target_id": "c1ddcd8a-realestate",
+          "role": "supplementary",
+          "question": "研报中说钛白粉、玻璃价格处在低位，那么本周它们价格环比分别变化多少，平板玻璃开工率又是多少？",
+          "quote_chars": 69,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "地产竣工链条:钛白粉、玻璃价格处于低位水平。本周钛白粉、玻璃的价格环比分别-0.36%、-0.97%,平板玻璃本周开工率67.19%。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1,
+            9
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            9
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "c1ddcd8a-invest",
+          "role": "supplementary",
+          "question": "研报的投资建议中对钢铁和煤炭行业是怎么看的，提到了2026年7月原煤产量是多少、同比变化多少，并推荐了哪些公司？",
+          "quote_chars": 136,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "当前钢铁行业供需两弱,普钢板块相对PB处于较低水平,后续板块表现取决于具体减产力度,推荐估值处于低位的行业龙头宝钢股份;7月原煤产量3.43亿吨,同比-10.10%,同比降幅进一步扩大,带动煤炭价格持续修复,推荐中国神华、中煤能源、陕西煤业、山西焦煤、潞安环能。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1,
+            20
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            20
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "absent": 1,
+        "benign_overlap": 3
+      }
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "domain": "industry",
+      "source_id": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "build_id": "590bb1199568dd8a78083d2b6dc856c7b3b9cff32a2b8a811c34a3820ea23814",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 14,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 15,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 16,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 17,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 18,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 19,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 20,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 21,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 22,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 23,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 24,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 25,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 26,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 27,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        }
+      ],
+      "unit_count": 1153,
+      "extracted_units": {
+        "kept": 1102,
+        "noise": 51
+      },
+      "unit_kinds": {
+        "heading": 79,
+        "paragraph": 643,
+        "table_row": 431
+      },
+      "targets": [
+        {
+          "target_id": "b7e932c8-index",
+          "role": "required",
+          "question": "本周A股各主要宽基指数表现如何，上证综指、沪深300、创业板指等分别涨跌了多少？",
+          "quote_chars": 84,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "本周主要宽基指数普遍下跌,上证综指、东财全A分别下跌0.56%、1.20%,沪深300下跌1.33%;成长风格方面,创业板指下跌4.03%,科创50下跌5.10%",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            2,
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            2,
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ],
+          "serious_overlap_kinds": [
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 2（image_region_small, image_region_unreadable）, page 4（image_region_small, image_region_unreadable, table_lines_without_extraction）"
+        },
+        {
+          "target_id": "b7e932c8-industry",
+          "role": "required",
+          "question": "本周申万行业中有多少个录得正收益？涨幅居前和跌幅居前的是哪些行业、涨跌幅分别是多少？",
+          "quote_chars": 112,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "行业层面,本周申万31个行业中14个录得正收益,机构低配板块表现居前,传媒、银行和农林牧渔涨幅居前,分别上涨6.0%、4.0%、3.3%;电子、有色金属和建筑材料表现较弱,分别下跌5.4%、5.0%、4.3%。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            2,
+            6
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            2,
+            6
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ],
+          "serious_overlap_kinds": [
+            "image_region_unreadable",
+            "table_lines_without_extraction"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 2（image_region_small, image_region_unreadable）, page 6（image_region_small, image_region_unreadable, table_lines_without_extraction）"
+        },
+        {
+          "target_id": "b7e932c8-pmi",
+          "role": "supplementary",
+          "question": "8月制造业采购经理指数是多少、较上月变化如何？生产指数和新订单指数分别是多少？",
+          "quote_chars": 83,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "国家统计局发布数据显示,8月制造业采购经理指数(PMI)为49.8%,较上月上升0.6个百分点;生产指数和新订单指数分别为50.4%和50.6%,均位于扩张区间",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            3
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            3
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ],
+          "serious_overlap_kinds": [
+            "image_region_unreadable"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 3（image_region_small, image_region_unreadable）"
+        },
+        {
+          "target_id": "b7e932c8-eptable",
+          "role": "supplementary",
+          "question": "研报的一级行业盈利预测表中，电子行业本周涨跌幅、2026E盈利预测（亿元），以及2026年盈利增速预测的调整变化分别是多少？",
+          "quote_chars": 62,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "电子-5.4%-5.5%180053948006169.3%48.6%2.8%6.8%1.0%4.0%",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            7
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            7
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ],
+          "serious_overlap_kinds": [
+            "image_region_unreadable"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 7（image_region_small, image_region_unreadable）"
+        }
+      ],
+      "outcome_counts": {
+        "overlap": 4
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "source_id": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "build_id": "00b99a5809fc5dd51f29588f10778e90f8a579ef68cf2bfe4a3710ba926e4af7",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 14,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 15,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 16,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 17,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 18,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 19,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 20,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 469,
+      "extracted_units": {
+        "kept": 361,
+        "noise": 108
+      },
+      "unit_kinds": {
+        "heading": 52,
+        "paragraph": 361,
+        "table_row": 56
+      },
+      "targets": [
+        {
+          "target_id": "f86c6d2c-cxo-h1",
+          "role": "required",
+          "question": "2026H1 国联民生选取的 20 家 CXO 样本公司合计实现的营业收入和同比增长是多少？",
+          "quote_chars": 125,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "2026H1年20家CXO企业合计实现收入562亿元,同比+24.5%,合计实现归母净利润132亿元,同比+17%;2026年Q2共实现营业收入307亿元,同比+29.4%,合计实现归母净利润73亿元,同比+13%。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            3
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            3
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ],
+          "serious_overlap_kinds": [
+            "table_lines_without_extraction"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 3（image_region_small, table_lines_without_extraction）"
+        },
+        {
+          "target_id": "f86c6d2c-wuqi-order",
+          "role": "required",
+          "question": "截至 2026Q2，药明康德持续经营业务的在手订单金额和同比增速是多少？",
+          "quote_chars": 45,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "1)截至2026Q2,药明康德持续经营业务在手订单664.3亿元,同比+25.2%。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            5
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            5
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f86c6d2c-medamt",
+          "role": "required",
+          "question": "当周（08.31-09.04）医药行业的成交额占沪深总成交额的比例是多少？",
+          "quote_chars": 82,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "医药成交总额5233.99亿元,沪深总成交额为97451.96亿元,医药成交额占比沪深总成交额比例为5.37%(2013年以来成交额均值为6.98%)。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1,
+            15
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            15
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f86c6d2c-cxotable",
+          "role": "supplementary",
+          "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+          "quote_chars": 23,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "药明康德288.9739%4,693.7",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f86c6d2c-glp1",
+          "role": "supplementary",
+          "question": "2026H1 替尔泊肽和司美格鲁肽两款 GLP-1 减重降糖大单品的全球销售额合计是多少？",
+          "quote_chars": 70,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "2026H1,两款GLP-1减重降糖大单品替尔泊肽、司美格鲁肽全球销售额合计超450亿美元,分别登顶全球药品销售额第一名/第二名。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            6
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            6
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ],
+          "serious_overlap_kinds": [
+            "image_region_unreadable"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 6（image_region_small, image_region_unreadable）"
+        }
+      ],
+      "outcome_counts": {
+        "benign_overlap": 3,
+        "overlap": 2
+      }
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "domain": "industry",
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "build_id": "c9624c5c39909971c39ccd4a8017ab1fd7eaa3626ce8b4b9a8edf893d8bee593",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 14,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 681,
+      "extracted_units": {
+        "kept": 630,
+        "noise": 51
+      },
+      "unit_kinds": {
+        "heading": 137,
+        "paragraph": 540,
+        "table_row": 4
+      },
+      "targets": [
+        {
+          "target_id": "a91d95c7-hbm",
+          "role": "required",
+          "question": "2026 年全球 HBM 市场规模预计增长多少至多少亿美元？",
+          "quote_chars": 68,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "2026年全球HBM市场规模预计增长58%至546亿美元,占DRAM市场近四成,产能缺口仍维持在50%至60%。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "a91d95c7-bytedance",
+          "role": "required",
+          "question": "字节跳动获得的银团贷款规模是今年的亚洲第几大美元贷款，资本支出计划提升至多少？",
+          "quote_chars": 93,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "字节跳动获296亿美元的银团贷款,为今年亚洲规模第二大的美元贷款,充裕的现金流储备为公司激进扩张提供了有力支撑。公司正考虑将今年资本支出提升至高达700亿美元,超过去年总额两倍",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1,
+            11
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            11
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "a91d95c7-hbmprice",
+          "role": "required",
+          "question": "36GB 的 HBM3E 与 16 层 HBM4 的现货售价分别为多少美元？",
+          "quote_chars": 98,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "据内存市场研究公司MegaGridSupply数据,一块36GB的HBM3E产品现货售价为2100美元,约为长约价格的四到五倍;16层HBM4现货价格更高达3500美元。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            8
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            8
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "a91d95c7-cxmt",
+          "role": "required",
+          "question": "长鑫存储 LPDDR6 内存落地商用在产业上意味着什么？",
+          "quote_chars": 65,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "长鑫存储LPDDR6内存正式量产,实现全球首次落地商用,标志着中国存储企业首次在高端内存标准上打破海外厂商长期垄断产品先发的局面",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "benign_overlap": 4
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "build_id": "313426724dd6b55b978887cc06818f78ba66aa445c37b95c8eeaff554fc0e6e8",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 14,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 15,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 16,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 17,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 18,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 1432,
+      "extracted_units": {
+        "kept": 1304,
+        "noise": 128
+      },
+      "unit_kinds": {
+        "heading": 400,
+        "paragraph": 933,
+        "table_row": 99
+      },
+      "targets": [
+        {
+          "target_id": "5e305376-nonfarm",
+          "role": "required",
+          "question": "美国 8 月新增非农就业人数是多少，与市场预期相比如何？",
+          "quote_chars": 48,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "美国8月新增非农就业为16.2万,大幅高于预期的5.6万,前两个月累计上修5.5万。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "5e305376-fedrate",
+          "role": "required",
+          "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+          "quote_chars": 26,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "联储年内剩余累计加息预期下降3bp至35bp。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "5e305376-oil",
+          "role": "required",
+          "question": "当周布伦特原油期货上涨多少至每桶多少美元？",
+          "quote_chars": 104,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "布伦特原油期货上涨7.8%至96.3美元/桶,COMEX期金下跌1.2%至4476.6美元/盎司,伦敦现银下跌0.3%至66.2美元/盎司,LME现铜下跌0.5%至14325美元/吨。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "5e305376-dxy",
+          "role": "required",
+          "question": "当周美元指数、日元和欧元相对美元分别变动至多少？",
+          "quote_chars": 67,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "汇率方面,日央行紧缩预期升温导致日元升值2.4%至156.3,美元指数下行0.5%至99.2,欧元升值0.3%至1.16。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "5e305376-gdpnow",
+          "role": "supplementary",
+          "question": "亚特兰大联储 GDPNow 将美国三季度 GDP 增速预测上调至多少？",
+          "quote_chars": 39,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "增长方面,亚特兰大联储GDPNow上调三季度GDP增速预测至4.7%。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "benign_overlap": 5
+      }
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "build_id": "45383590029c0b354f7aeb28a0021ccb789bc852159fed3095ce6a5754740538",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small",
+            "image_region_unreadable"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 176,
+      "extracted_units": {
+        "kept": 146,
+        "noise": 30
+      },
+      "unit_kinds": {
+        "heading": 18,
+        "paragraph": 152,
+        "table_row": 6
+      },
+      "targets": [
+        {
+          "target_id": "f7f65d7e-payroll",
+          "role": "required",
+          "question": "2026年8月美国新增非农就业人数和失业率数据各是多少？",
+          "quote_chars": 109,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "8月美国非农就业数据高于预期,失业率持平。8月失业率报4.1%,前值4.1%,预期4.1%。8月新增非农就业人数增16.2万人,预期增5.6万人,前值自-2.3万人修正至+2.1万人。",
+          "coverage": 1.0,
+          "fragments_total": 3,
+          "fragments_found": 3,
+          "evidence_pages": [
+            7
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            7
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f7f65d7e-cme",
+          "role": "required",
+          "question": "据CME美联储观察，美联储2026年9月加息25基点的概率有多高？",
+          "quote_chars": 77,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "据CME“美联储观察”,截至2026/9/5,美联储2026年9月加息25基点的概率为59.4%,维持现有利率的概率为40.6%。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1,
+            8
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            8
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f7f65d7e-alloc",
+          "role": "required",
+          "question": "本期研报建议投资者关注哪几个投资主线方向？",
+          "quote_chars": 166,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "根据经济复苏与市场流动性,可以把投资主线降维为三个方向:1)AI产业革命带来的算力、存力、电力及应用的科技主线机会,2)内外共振,经济逐步修复,牛市主线风格“强者恒强”,但周期后半段易有所表现,3)赔率思维,即考虑风格轮动、底部反转的可能性。连续三年跑输但第四年跑赢概率较大的行业有食品饮料、农林牧渔、社会服务、医药生物。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1,
+            8
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            8
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f7f65d7e-risk",
+          "role": "supplementary",
+          "question": "本期研报列出了哪些主要风险提示？",
+          "quote_chars": 28,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "地缘冲突超预期,海外通胀持续性超预期,流动性收紧超预期。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1,
+            10
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            10
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "benign_overlap": 4
+      }
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "domain": "macro",
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "build_id": "fc7ab34ae8cc16e8f805096db5fb6ab7d2ec221e410a335b4d6032d4278a8519",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 481,
+      "extracted_units": {
+        "kept": 451,
+        "noise": 30
+      },
+      "unit_kinds": {
+        "heading": 59,
+        "paragraph": 327,
+        "table_row": 95
+      },
+      "targets": [
+        {
+          "target_id": "d179b615-hikerate",
+          "role": "required",
+          "question": "非农数据发布后，市场对9月加息的定价以及美债长端利率有何变化？",
+          "quote_chars": 103,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "非农强化加息预期,短期利率扰动难消。8月非农数据发布后,市场对9月加息的定价进一步抬升。当前CME隐含的9月加息概率已升至59%,美债长端利率随之走高,10年期收益率一度触及4.79%。",
+          "coverage": 1.0,
+          "fragments_total": 3,
+          "fragments_found": 3,
+          "evidence_pages": [
+            1,
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "d179b615-passive",
+          "role": "required",
+          "question": "历史复盘显示被动补库阶段各类资产的月均表现如何？",
+          "quote_chars": 100,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "被动补库阶段多为权益资产表现最差的时期。万得全A月均收益-1.83%、胜率仅13%,上证月均-1.80%、胜率0%;大类资产角度,债券资产则全面占优,中证全债月均+0.29%、胜率75%。",
+          "coverage": 1.0,
+          "fragments_total": 3,
+          "fragments_found": 3,
+          "evidence_pages": [
+            1,
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "d179b615-chart3",
+          "role": "required",
+          "question": "被动补库阶段，各类资产及A股指数的月均涨跌幅是多少？",
+          "quote_chars": 116,
+          "outcome": "absent",
+          "direction": "leaning-re-extract",
+          "quote_norm": "涨跌幅:%万得全A南华商品中证全债上证沪深300创业板工业品金属能化农产品被动补库(1.83)(0.10)0.29(1.80)(2.21)(1.28)0.210.290.14(0.26)",
+          "coverage": 0.0,
+          "fragments_total": 1,
+          "fragments_found": 0,
+          "evidence_pages": [],
+          "noise_only_pages": [],
+          "overlap_pages": [],
+          "overlap_kinds": [],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "引文与其所有片段均未出现在已提取文本中；相关缺口页：page 1, page 2, page 3, page 4, page 5, page 6, page 7, page 8, page 9, page 10, page 11"
+        },
+        {
+          "target_id": "d179b615-goldoil",
+          "role": "supplementary",
+          "question": "当前金油比数值是多少？自高点回落和自低点修复的幅度各是多少？",
+          "quote_chars": 48,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "当前金油比43.61,自本轮高点回落40.6%,自4月7日本轮低点修复36.7%。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            7
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            7
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "absent": 1,
+        "benign_overlap": 3
+      }
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "domain": "macro",
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "build_id": "ffb0ccd22615b21f3a4e4f22967fb4c45ed8f25ae84bc111777d0938e0efd5f4",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 12,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 13,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 232,
+      "extracted_units": {
+        "kept": 231,
+        "noise": 1
+      },
+      "unit_kinds": {
+        "heading": 12,
+        "paragraph": 155,
+        "table_row": 65
+      },
+      "targets": [
+        {
+          "target_id": "2f8aa709-hike",
+          "role": "required",
+          "question": "国金证券认为市场对美联储9月加息概率定价在什么区间？8月新增非农就业人数是多少？",
+          "quote_chars": 155,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "8月私营部门就业人数远低于市场预期,以及威廉姆斯+沃勒发表鸽派言论使得降息预期有所回落;(3)但周五晚的新增非农就业16.2万人,远超市场预期(5.6万人),同时上修了6月、7月的非农就业数据,这又让9月加息预期再度上升。尽管数据本身结构上具有争议,目前来看,9月加息预期在50%-60%之间",
+          "coverage": 1.0,
+          "fragments_total": 3,
+          "fragments_found": 3,
+          "evidence_pages": [
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "2f8aa709-oil",
+          "role": "required",
+          "question": "美伊冲突再度升级背景下，霍尔木兹海峡通航量和布油价格情况如何？",
+          "quote_chars": 41,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "与之对应的是,霍尔木兹海峡通航量再度接近清零,布油价格重回95美元/桶以上。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            8
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            8
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "2f8aa709-alloc",
+          "role": "required",
+          "question": "国金证券在当前市况下的主要配置推荐有哪些？",
+          "quote_chars": 223,
+          "outcome": "overlap",
+          "direction": "needs-human",
+          "quote_norm": "第一,商品侧,能源是首要推荐,以煤炭、石油、油运和炼化为代表的能化链条将继续受益于全球对能源的补库需求。有色金属(铜、金、铝)作为美元对立面资产,当前压制因素只是外生变量,9月FOMC会议之前等待时机。第二,防御思维下,红利风格受益于绝对收益者的切换,高股息+低波动+稳定现金流的红利资产仍是绝对收益资金的核心回流方向。第三,紧缩预期下,全球制造复苏阶段性需等待逆风过去,出口链条(工程机械、电网设备等)等资产仍具备配置价值。",
+          "coverage": 1.0,
+          "fragments_total": 4,
+          "fragments_found": 4,
+          "evidence_pages": [
+            1,
+            11
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            11
+          ],
+          "overlap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ],
+          "serious_overlap_kinds": [
+            "table_lines_without_extraction"
+          ],
+          "spanning_pages": false,
+          "note": "证据页带缺口：page 1（image_region_small）, page 11（image_region_small, table_lines_without_extraction）"
+        },
+        {
+          "target_id": "2f8aa709-fedtable",
+          "role": "supplementary",
+          "question": "报告中美联储官员沃什、威廉姆斯、沃勒对通胀与加息的表态各是什么？",
+          "quote_chars": 73,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "美联储官员表态通胀仍是第一优先级:通胀仍然高于2%的目标,因此美联储当前的主要关注点应该放在价格上;以PCE衡量的2%目标是坚定、固定的目标。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            4
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            4
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "benign_overlap": 3,
+        "overlap": 1
+      }
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "domain": "macro",
+      "source_id": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "build_id": "fa066c5a178c02128b5058d62ccaff442fa3004bd6d43e1189f6f75257900209",
+      "gap_pages": [
+        {
+          "page": 1,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 2,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 3,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 4,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 5,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 6,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 7,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 8,
+          "gap_kinds": [
+            "image_region_small",
+            "table_lines_without_extraction"
+          ]
+        },
+        {
+          "page": 9,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 10,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        },
+        {
+          "page": 11,
+          "gap_kinds": [
+            "image_region_small"
+          ]
+        }
+      ],
+      "unit_count": 278,
+      "extracted_units": {
+        "kept": 244,
+        "noise": 34
+      },
+      "unit_kinds": {
+        "heading": 86,
+        "paragraph": 136,
+        "table_row": 56
+      },
+      "targets": [
+        {
+          "target_id": "f3b28791-rotation",
+          "role": "required",
+          "question": "兴业证券认为近期A股市场呈现什么特征？行业轮动强度指标走势如何？",
+          "quote_chars": 55,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "近期市场给人的最大感受,依然是混沌、轮动、缺乏主线。我们构造的行业轮动强度指标仍在持续上行,本周再创年内新高。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            1,
+            3
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            3
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f3b28791-fedwatch",
+          "role": "required",
+          "question": "兴业证券建议重点观察哪些影响美联储决策、有助于降低宏观不确定性的事件节点？",
+          "quote_chars": 74,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "几个影响美联储决策的重要观察点已不远,有助于市场分歧的弥合、宏观不确定性的下降。包括9.11美国CPI数据,以及9.17FOMC会议。",
+          "coverage": 1.0,
+          "fragments_total": 2,
+          "fragments_found": 2,
+          "evidence_pages": [
+            6
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            6
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        },
+        {
+          "target_id": "f3b28791-table1",
+          "role": "required",
+          "question": "兴业证券表1中，7月以来2026E净利润上修的典型细分方向包括哪些？电子光学光电子的数据如何？",
+          "quote_chars": 132,
+          "outcome": "absent",
+          "direction": "leaning-re-extract",
+          "quote_norm": "板块一级行业二级行业7月以来2026E净利润上修幅度2026年预测净利润增速7月以来涨跌幅年初以来涨跌幅龙一龙二龙三AI算力硬件电子光学光电子27.1%194%-29.6%6.9%京东方A惠科股份TCL科技",
+          "coverage": 0.0,
+          "fragments_total": 1,
+          "fragments_found": 0,
+          "evidence_pages": [],
+          "noise_only_pages": [],
+          "overlap_pages": [],
+          "overlap_kinds": [],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "引文与其所有片段均未出现在已提取文本中；相关缺口页：page 1, page 2, page 3, page 4, page 5, page 6, page 7, page 8, page 9, page 10, page 11"
+        },
+        {
+          "target_id": "f3b28791-regression",
+          "role": "required",
+          "question": "在极致轮动收敛之后，兴业证券认为哪种投资风格有望回归？",
+          "quote_chars": 68,
+          "outcome": "benign_overlap",
+          "direction": "leaning-acknowledge",
+          "quote_norm": "随着后续轮动收敛的契机临近、基本面定价权重提升,对于今年宏观流动性收紧、定价主要矛盾转向盈利的市场环境中,受益的仍将是景气投资的回归。",
+          "coverage": 1.0,
+          "fragments_total": 1,
+          "fragments_found": 1,
+          "evidence_pages": [
+            1,
+            9
+          ],
+          "noise_only_pages": [],
+          "overlap_pages": [
+            1,
+            9
+          ],
+          "overlap_kinds": [
+            "image_region_small"
+          ],
+          "serious_overlap_kinds": [],
+          "spanning_pages": false,
+          "note": "证据页仅有 image_region_small：小图片区域不覆盖正文/表格行"
+        }
+      ],
+      "outcome_counts": {
+        "absent": 1,
+        "benign_overlap": 3
+      }
+    }
+  ]
+}

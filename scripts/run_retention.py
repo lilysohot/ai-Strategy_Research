@@ -21,7 +21,9 @@ Design rules that are not negotiable
    *recovery* problem, not a *cleanup* one. They get separate dispositions so a
    retention sweep can never report a lost study as "tidied up".
 3. **Active and unfinished runs are protected**, as are runs outside the
-   requested user scope.
+   requested user scope. For the root migration this is stricter than a skip: a
+   run still queued/running is never moved at all, and its presence aborts the
+   whole migration (`_refuse_active_migrations`) rather than leaving it behind.
 4. A digest is an integrity check, not tamper evidence: it proves the bytes
    match what was recorded, nothing about who changed them.
 
@@ -593,6 +595,44 @@ class RunMigration:
     source: str
     target: str
     source_exists: bool
+    #: The row's status, so the *apply* step can refuse to move a run a live
+    #: worker is still writing into (see :func:`active_migrations`).
+    status: str = ""
+    #: True when something already sits at ``target``: the old *and* new roots
+    #: both hold this run id. Such a run is left alone and reported, never
+    #: merged — see :func:`_apply_root_migration`.
+    target_exists: bool = False
+
+
+def active_migrations(migrations: list[RunMigration]) -> list[RunMigration]:
+    """The migrations that must NOT proceed because their run is still active.
+
+    A run whose worker is alive holds absolute paths under the **old** root: the
+    worker baked ``FRONTIER_AGENT_*_DIR`` / ``_trial_dir`` from its own
+    ``get_config().runs_root`` at spawn, while every reader resolves through
+    ``run_dir_for`` (the *current* root). Moving the directory out from under it
+    therefore splits one run across two roots — the worker keeps writing the old
+    path, readers look in the new one — which is exactly what F01 forbids
+    ("活动 Run 不跨新旧根目录读写"). So this is a hard stop, not a skip: skipping
+    would leave the files at the old root while ``run_dir_for`` reads the new one,
+    which is the same split with the roles reversed. Deferring is only safe if
+    the run is genuinely finished, and only the terminal status proves that.
+    """
+    return [m for m in migrations if m.status in ACTIVE_STATUSES]
+
+
+def _refuse_active_migrations(migrations: list[RunMigration]) -> None:
+    """Abort before touching the filesystem when any active run would move."""
+    blocked = active_migrations(migrations)
+    if not blocked:
+        return
+    ids = ", ".join(m.run_id for m in blocked)
+    raise SystemExit(
+        f"refusing to migrate: {len(blocked)} run(s) are still queued/running and "
+        "must not be moved across roots (their worker writes the old root while "
+        "readers resolve the new one). Wait for them to finish, or restart the API "
+        "so start-up reconciliation closes them, then re-run. Active run ids: " + ids
+    )
 
 
 async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[RunMigration], list[str]]:
@@ -603,6 +643,10 @@ async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[Run
     ``old_root`` that no run references (test residue). Only runs whose run_dir
     is actually under ``old_root`` are touched — runs pointing elsewhere (a WSL
     checkout, /tmp) are left alone.
+
+    The plan records each run's ``status`` but does not filter on it: the caller
+    decides, and :func:`_refuse_active_migrations` is what stops a plan that
+    contains a live run.
     """
     from sqlalchemy import select
 
@@ -614,9 +658,9 @@ async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[Run
     migrations: list[RunMigration] = []
     db_ids: set[str] = set()
     async with maker() as session:
-        rows = [(str(r[0]).replace("-", ""), r[1]) for r in
-                (await session.execute(select(Run.id, Run.run_dir))).all()]
-    for run_id, run_dir in rows:
+        rows = [(str(r[0]).replace("-", ""), r[1], r[2] or "") for r in
+                (await session.execute(select(Run.id, Run.run_dir, Run.status))).all()]
+    for run_id, run_dir, status in rows:
         db_ids.add(run_id)
         path = Path(run_dir)
         try:
@@ -624,9 +668,11 @@ async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[Run
         except OSError:
             resolved = path
         if resolved == old_root or old_root in resolved.parents:
+            target = new_root / run_id
             migrations.append(RunMigration(
                 run_id=run_id, source=str(path),
-                target=str(new_root / run_id), source_exists=path.is_dir(),
+                target=str(target), source_exists=path.is_dir(),
+                status=status, target_exists=target.exists(),
             ))
     orphan_dirs: list[str] = []
     if old_root.is_dir():
@@ -638,13 +684,29 @@ async def _plan_root_migration(old_root: Path, new_root: Path) -> tuple[list[Run
 
 
 async def _apply_root_migration(
-    old_root: Path, new_root: Path,
-) -> tuple[list[str], list[str], list[str]]:
-    """Move runs to the new root and remove unreferenced directories.
+    old_root: Path, new_root: Path, *, remove_orphans: bool = True,
+    only_moved: bool = False,
+) -> tuple[list[str], list[str], list[str], list[str]]:
+    """Move runs to the new root and optionally remove unreferenced directories.
 
-    Returns ``(moved, missing, removed)``. Orphan directories are re-validated
-    against the run table immediately before removal, so a stale plan cannot
-    delete a directory that became referenced in the meantime.
+    Returns ``(moved, missing, removed, conflicted)``. Orphan directories are
+    re-validated against the run table immediately before removal, so a stale
+    plan cannot delete a directory that became referenced in the meantime.
+
+    Refuses outright — before any file is moved — when the plan contains a run
+    still marked queued/running: moving it would straddle the two roots (see
+    :func:`active_migrations`).
+
+    A run whose id already has a directory at the target is ``conflicted``: its
+    move is stopped and reported, its files and ``run_dir`` are left untouched,
+    and the rest of the plan still runs. Nothing is ever merged into or written
+    over at the new root.
+
+    ``remove_orphans=False`` leaves unreferenced directories in place, for the
+    reviewed policy where orphans are decided separately instead of being swept
+    up by the move. ``only_moved=True`` rewrites ``run_dir`` only for runs whose
+    directory was actually moved, so a run whose files were already missing
+    keeps its recorded path instead of being relabelled as migrated.
     """
     import uuid as _uuid
 
@@ -653,19 +715,31 @@ async def _apply_root_migration(
     from server.store import Run, get_sessionmaker
 
     migrations, orphan_dirs = await _plan_root_migration(old_root, new_root)
+    _refuse_active_migrations(migrations)
     maker = get_sessionmaker()
     moved: list[str] = []
     missing: list[str] = []
+    conflicted: list[str] = []
     async with maker() as session:
         for migration in migrations:
             src = Path(migration.source)
             dst = Path(migration.target)
             if src.is_dir():
+                # Re-check against the live filesystem, not the plan: ``dst`` may
+                # have appeared since planning. When both roots hold this run id
+                # the move is stopped, not merged — ``shutil.move(src, dst)``
+                # would nest src *inside* an existing dst directory (or clobber a
+                # file), and the row would be repointed at content nobody verified.
+                if dst.exists():
+                    conflicted.append(migration.run_id)
+                    continue
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(src), str(dst))
                 moved.append(migration.run_id)
             else:
                 missing.append(migration.run_id)
+                if only_moved:
+                    continue
             await session.execute(
                 update(Run)
                 .where(Run.id == _uuid.UUID(migration.run_id))
@@ -674,12 +748,13 @@ async def _apply_root_migration(
         await session.commit()
 
     removed: list[str] = []
-    for name in orphan_dirs:
-        target = old_root / name
-        if target.is_dir():
-            shutil.rmtree(target)
-            removed.append(name)
-    return moved, missing, removed
+    if remove_orphans:
+        for name in orphan_dirs:
+            target = old_root / name
+            if target.is_dir():
+                shutil.rmtree(target)
+                removed.append(name)
+    return moved, missing, removed, conflicted
 
 
 async def _collect_orphan_classes(sample_limit: int = 20) -> list[OrphanClass]:
@@ -839,6 +914,10 @@ def main(argv: list[str] | None = None) -> int:
     p_migrate.add_argument("--orphans-out", type=Path, default=None)
     p_migrate.add_argument("--apply", action="store_true")
     p_migrate.add_argument("--yes", action="store_true", help="required with --apply")
+    p_migrate.add_argument("--keep-orphans", action="store_true",
+                           help="leave unreferenced dirs under --old-root in place")
+    p_migrate.add_argument("--only-moved", action="store_true",
+                           help="rewrite run_dir only for runs whose dir was moved")
 
     p_manifest = sub.add_parser("manifest", help="record every run's storage + digests")
     p_manifest.add_argument("--out", required=True, type=Path)
@@ -871,9 +950,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.apply:
             # A single asyncio.run: the asyncpg engine is bound to one event loop,
             # so planning and applying must share it, not straddle two loops.
-            moved, missing, removed = asyncio.run(_apply_root_migration(old_root, new_root))
+            moved, missing, removed, conflicted = asyncio.run(_apply_root_migration(
+                old_root, new_root,
+                remove_orphans=not args.keep_orphans,
+                only_moved=args.only_moved,
+            ))
             print(f"moved {len(moved)} run dir(s), {len(missing)} already missing, "
                   f"removed {len(removed)} orphan dir(s)")
+            if conflicted:
+                # Stopped, not merged: both roots hold this run id. The operator
+                # has to say which copy is authoritative before either is touched.
+                print(f"CONFLICT: {len(conflicted)} run dir(s) already exist at "
+                      "the new root and were left alone (nothing merged or "
+                      "overwritten): " + ", ".join(conflicted))
+                print("inspect both copies, then move or discard the stale one by "
+                      "hand and re-run")
             return 0
 
         migrations, orphan_dirs = asyncio.run(_plan_root_migration(old_root, new_root))
@@ -883,11 +974,33 @@ def main(argv: list[str] | None = None) -> int:
                 json.dumps({"old_root": str(old_root), "orphan_dirs": orphan_dirs},
                            ensure_ascii=False, indent=2), encoding="utf-8")
             print(f"orphan list -> {args.orphans_out}")
+        blocked = active_migrations(migrations)
+        blocked_ids = {m.run_id for m in blocked}
         for migration in migrations:
             state = "exists" if migration.source_exists else "MISSING-ON-DISK"
-            print(f"move\t{migration.run_id}\t[{state}]")
+            flag = ""
+            if migration.run_id in blocked_ids:
+                flag = "\tACTIVE-REFUSED"
+            elif migration.source_exists and migration.target_exists:
+                flag = "\tTARGET-EXISTS"
+            print(f"move\t{migration.run_id}\t[{state}]{flag}")
             print(f"     {migration.source} -> {migration.target}")
+        conflicts = [m for m in migrations
+                     if m.source_exists and m.target_exists
+                     and m.run_id not in blocked_ids]
         print(f"\n{len(migrations)} run(s) to migrate, {len(orphan_dirs)} orphan dir(s)")
+        if conflicts:
+            print(f"WILL SKIP: {len(conflicts)} run dir(s) already exist at the new "
+                  "root and will be left alone, not merged: "
+                  + ", ".join(m.run_id for m in conflicts))
+        if blocked:
+            # Say it now, not after --apply has already read the whole plan: the
+            # operator needs to wait for these runs (or restart the API so the
+            # start-up sweep closes them) before this migration can run at all.
+            print(f"REFUSES TO APPLY: {len(blocked)} run(s) still queued/running: "
+                  + ", ".join(m.run_id for m in blocked))
+            print("resolve them first (finish, or restart the API so reconciliation "
+                  "closes them), then re-run")
         print("dry-run: nothing moved (add --apply --yes to apply)")
         return 0
 

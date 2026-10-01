@@ -49,3 +49,13 @@ Requirements: PR-GOV-01, PR-GOV-06
   的完整镜像构建未执行**；上述证据用 `FROM scratch` 探针测量「哪些文件进入镜像文件系统」，
   未覆盖 `uv sync` 及 runtime stage 的真实层。须在可访问 registry 的环境补跑真实构建并核对
   镜像层。历史已发布镜像是否含数据仍未调查（本轮不擅自处置镜像）。
+- 2026-10-01：**真实构建已补跑，镜像层核对通过（上条的验收前提闭合）**。
+  此前记录的 registry 阻断为瞬时故障；`docker build -f deploy/Dockerfile.web -t frontier-agent-web:verify .`
+  **exit 0**（1.64 GB / 18 层，runtime stage = `python:3.12-slim`，`uv sync --frozen --extra sandbox
+  --extra document-readers --extra eval --extra dev --group web` 全部完成）。
+  在**真实构建产物**内核对：`server/runs`、`uploads`、`data`、`.git`、`.venv`、`.scratch`、
+  `web/node_modules`、`web/dist` **全部 absent**；`*.pyc` **0**；`server/*.db` 不存在；
+  `server/app.py`、`pyproject.toml`、`uv.lock`、`config/providers.yaml`、
+  `frontier_agent/core/runtime/loop/agent_loop.py` **全部 present**。
+  即此前用 `FROM scratch` 探针测得的结论在真实镜像上复现一致，根 `.dockerignore` 在完整构建链路中同样生效。
+  历史已发布镜像是否含数据仍未调查（本轮不擅自处置镜像）。
