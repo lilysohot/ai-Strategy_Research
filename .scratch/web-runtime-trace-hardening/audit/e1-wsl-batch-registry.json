@@ -4,10 +4,10 @@
   "purpose": "在 WSL（POSIX）环境复验 Windows 本机被阻塞的 E1 结转项：产物索引/下载/diff/回滚、F08 越权动态复验、POSIX 依赖用例；并执行 F06 SIGKILL 注入与 F19 只读挂载/磁盘满/compose service_healthy。",
   "registered_at": "2026-10-01",
   "operator": "agent",
-  "status": "已完成——除浏览器 DOM 层与真实供应商两项（非 POSIX 范围）外，E1 结转全部闭环；注入中发现并修复 F19 探针缺陷（0 字节写）",
+  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）",
   "environment": {
     "host": "WSL Ubuntu（Linux）, /home/administrator/FrontierAgent",
-    "code_head": "批次执行时点 6435f73（x-画面更新，含 F08–F21 全部修复）；本轮改动（server/readiness.py 探针修复、tests/test_web_f19_schema_gate.py 回归、deploy/docker-compose.yml healthcheck + caddy 依赖、e1/mock_model.py 环境覆盖）执行时**尚未提交**（2026-10-01 回溯核正），随后已提交为 **84258f3**（分支 x-web改造）",
+    "code_head": "批次执行时点 6435f73（x-画面更新，含 F08–F21 全部修复）；本轮改动（server/readiness.py 探针修复、tests/test_web_f19_schema_gate.py 回归、deploy/docker-compose.yml healthcheck + caddy 依赖、e1/mock_model.py 环境覆盖）执行时**尚未提交**（2026-10-01 回溯核正），随后已提交为 **84258f3**（分支 x-web改造）；登记文件随 339e562 入库，工作区其后并入 555c4a0（合并 x-画面更新，含上游 38d73bc 的 F21 external_id/刷新恢复修复与 F05 浏览器 DOM 验收 closed）",
     "api": "127.0.0.1:8000，uv run uvicorn（.venv Python 3.12.14），SERVER_DEBUG=true（.env 既有），业务库 schema 停在 0002（/readyz 503 schema_behind 属预期，未做业务库迁移）",
     "database": "postgresql 18.6 容器 pg，业务库 apodex（754 runs，未触碰写入；控制记录/运行行来自本批测试账号）",
     "runs_root": "/home/administrator/.local/share/frontier-agent/web/runs（F01 迁移后 XDG 根）",
@@ -34,20 +34,20 @@
     {"check": "F08 跨用户越权动态复验", "result": "B 用 A 的 session_id 提交 → 404 会话不存在；A 会话 turns=4/runs=2 零变化；无新 run 目录；B 默认会话列表为空（默认会话按用户命名空间隔离）"},
     {"check": "F15 用量落账（E1 批次症状）", "result": "GET /runs/{id} usage={prompt:16,completion:16,total:32,llm_calls:2,status:complete}——不再为 NULL"},
     {"check": "F20 快照与启动时间（E1 批次症状）", "result": "DB started_at 非 NULL；llm_snapshot_json={source:user-config, config_id, model, base_url}（非密钥）"},
-    {"check": "F21 审批持久追溯（真链路）", "result": "pending → adopted/once（Run2）与 pending → expired（Run1 超时）均落 control_records；GET /controls 可重建待审批状态；/controls 投影不含 external_id——刷新页无法从该接口取到 approve 所需 approval_id（记为 F21 遗留观察）"},
+    {"check": "F21 审批持久追溯（真链路）", "result": "pending → adopted/once（Run2）与 pending → expired（Run1 超时）均落 control_records；GET /controls 可重建待审批状态；当时 /controls 投影不含 external_id——刷新页无法从该接口取到 approve 所需 approval_id（记为 F21 遗留观察，**已于同日 38d73bc 修复**：投影暴露 external_id、前端优先使用，浏览器闭环复验通过）"},
     {"check": "F06 SIGKILL 真实故障注入", "result": "mock 25s 延迟制造流中窗口 → kill -9 worker → API /healthz 200 存活；Run 立即收口 stopped/killed + finished_at；/trace completeness={state:partial, valid_lines:1, trailing_partial_line:false}，reason 文案正确；已存记录可读"},
     {"check": "F19 只读挂载注入（E3）", "result": "镜像 frontier-agent-web:f19 + 只读卷 /data/runs:ro → 非_DEBUG 启动 StorageNotReadyError: data_root_unwritable，exit 3，uvicorn 未起；debug 下 /healthz 200 而 /readyz 503 data_root_unwritable"},
     {"check": "F19 磁盘满注入（E3，发现缺陷）", "result": "tmpfs size=64k 填满 → 修复前 /readyz 200（误报 ready）：probe_data_root 写 0 字节文件在满 tmpfs 上成功（数据页耗尽而非 inode）；修复为写 b'readyz-probe' 后 /readyz 503 data_root_unwritable、/healthz 200；回归 test_data_root_probe_writes_real_bytes（16/16）"},
     {"check": "F19 compose healthcheck + caddy 消费方", "result": "deploy/docker-compose.yml api 增加 /readyz healthcheck（30s/5s/3 次/start 60s）；**caddy 增加 depends_on: api: {condition: service_healthy}（2026-10-01 用户确认后接线）**，`docker compose --profile full config` 解析出该依赖（exit 0）；同款 healthcheck 命令在镜像内实测 health=healthy（一次性库+可写根）。即 T8 完成标准「depends_on: service_healthy 语义与之一致」达成"},
     {"check": "F17 部署侧观测", "result": "worker/工具进程身份 euid=1000(administrator)，tool-user 降权不激活（非 root 无法 setuid agent-tool，engine.log 有 harness uid 告警）；native 无挂载；runs 根与 run 目录 755 administrator:administrator——与 F01 迁移口径一致，非 root 部署下用户隔离边界=文件系统权限，已在 issue 17 记录"},
     {"check": "F19 部署门禁真链路（业务库 0002）", "result": "/healthz 200、/readyz 503 schema_behind——与『部署前必须先迁移』结论一致；本轮未做业务库迁移"},
-    {"check": "回溯核验（2026-10-01，独立复跑 + 只读直查业务库）", "result": "① 复跑 POSIX 套件 52 passed（4 项定向 + diff/revert/artifacts），与登记 9/9 + 43/43 一致；② 直查 control_records 仅 2 行（expired/timeout、adopted/user）——原记「3 条」已核正；③ F15 usage=complete（Run1/Run2；Run3 partial）、F20 started_at 非空且 llm_snapshot=user-config，与登记一致；④ control_to_dict 投影确不含 external_id（deferred 观察成立）；⑤ 回溯处置：登记两处失真已核正（approval 记录 3→2 条、code_head 非 HEAD 内容），本轮代码改动已提交 84258f3，`caddy` 已接 `depends_on: api: service_healthy`"}
+    {"check": "回溯核验（2026-10-01，独立复跑 + 只读直查业务库）", "result": "① 复跑 POSIX 套件 52 passed（4 项定向 + diff/revert/artifacts），与登记 9/9 + 43/43 一致；② 直查 control_records 仅 2 行（expired/timeout、adopted/user）——原记「3 条」已核正；③ F15 usage=complete（Run1/Run2；Run3 partial）、F20 started_at 非空且 llm_snapshot=user-config，与登记一致；④ control_to_dict 投影**当时**确不含 external_id（该观察随后由 38d73bc 修复：投影已暴露该字段）；⑤ 回溯处置：登记两处失真已核正（approval 记录 3→2 条、code_head 非 HEAD 内容），本轮代码改动已提交 84258f3，`caddy` 已接 `depends_on: api: service_healthy`"}
   ],
   "deferred": [
-    {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排"},
+    {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排", "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"},
     {"item": "真实供应商返回格式差异", "blocked_by": "需用户批准并单独登记用量", "recheck_in": "另行批准"},
     {"item": "F06 磁盘写满时的轨迹写入行为（运行级）与断电耐久", "blocked_by": "断电耐久属存储级验证，普通注入不可替代；运行级磁盘满未单独演练", "recheck_in": "E3 存储级专项"},
-    {"item": "F21 /controls 投影缺 external_id", "note": "刷新页从 GET /controls 重建待审批弹窗后无法直接调 approve（approval_id 不可得）；需前端从 live 帧或响应体获取，或投影补字段", "recheck_in": "issue 21"}
+    {"item": "F21 /controls 投影缺 external_id", "note": "刷新页从 GET /controls 重建待审批弹窗后无法直接调 approve（approval_id 不可得）", "recheck_in": "issue 21", "resolved_at": "2026-10-01（38d73bc：投影暴露 external_id + 前端 resumeForSession，浏览器闭环复验 Run 0c65cbf3 通过）"}
   ],
   "cleanup_list": {
     "disposition": "已执行",

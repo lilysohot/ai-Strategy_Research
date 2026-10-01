@@ -107,9 +107,10 @@ Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 c
   **证据**：`tests/test_web_f21_control_history.py` 14/14（负向对照 4 条失败）、`tests/test_web_p3_steer.py` 12/12（含真实 worker e2e；
   同时修好 3 条 fixture 缺 session 父行的既有失败）、隔离审计契约 24/24（夹具随 F01 失效的 `uploads_root` 已修）、
   前端单测 70/70 + `vue-tsc` + `vite build` + `audit/frontend-audit.mjs` 10/10（F21 ×5，负向对照 2 条失败）、ruff（含 `server/`）通过。
-  **未完成**：业务库未执行 `alembic upgrade head`（0003/0004 均未应用）、浏览器 DOM 层复核、真实重启后观测；
-  三处失败为本机 Windows 既有限制（`test_approval_end_to_end`/`test_upload_t210` 依赖 `create_file` 产物落盘、
-  `test_stop_t28::sigkill` 依赖 `signal.SIGKILL`）需 POSIX 复验；`uv run pyright` 在 `server/orchestrator.py:296`
+  **未完成**：业务库未执行 `alembic upgrade head`（0003/0004 均未应用）、真实重启后观测（浏览器 DOM 层复核已于
+  2026-10-01 完成，工单 05 closed）。此前记的三处本机（Windows）失败
+  （`test_approval_end_to_end`/`test_upload_t210` 依赖 `create_file` 产物落盘、
+  `test_stop_t28::sigkill` 依赖 `signal.SIGKILL`）已在 WSL 复验通过（E1-WSL 批次 9/9）；`uv run pyright` 在 `server/orchestrator.py:296`
   报 1 处**既有**类型错误（未在本次改动行上，未修）。工单 [21](issues/21-control-history.md) → `ready-for-human`。
 - 2026-10-01：**F19 后半（schema 门禁 + 迁移显式步骤）实现完成**。`/healthz` 与 `/readyz` 分工：
   前者只回答"数据库是否应答"（`store.check_db` 由 `SELECT count(*) FROM users` 改为 `SELECT 1`——表读会把"空库"

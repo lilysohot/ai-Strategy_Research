@@ -642,8 +642,8 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 **仍未完成（不得视为已验收）**（2026-10-01 更新：F01 容器实测、F02 真实镜像构建、F07 联合恢复演练与孤儿处置已完成，
 下段已按其现状改写）：F02 的**历史已发布镜像是否含数据**仍未调查（真实镜像构建已于 2026-10-01 补跑、
 镜像层核对通过，registry 阻断系瞬时故障，见
-[工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收**（实现与契约审计已完成，见
-[工单 05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md)）、F06 的**真实故障注入**（SIGKILL 已于 2026-10-01 在 WSL 真实注入通过：mock 流中窗口 kill -9 worker →
+[工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收已于 2026-10-01 完成**（工单
+[05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md) 已 closed：验收中发现并修复一处"已结束 Run 的轨迹页只渲染元信息框、0 条记录"的渲染缺陷）、F06 的**真实故障注入**（SIGKILL 已于 2026-10-01 在 WSL 真实注入通过：mock 流中窗口 kill -9 worker →
 API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`，协作式取消已在 E1 首批覆盖，见
 [工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)）尚余**运行级磁盘写满、
 断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
@@ -657,7 +657,7 @@ API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`
 以及 E1 结转项——**POSIX 环境的产物/回滚复验与 F08 越权动态复验已于 2026-10-01 完成**
 （E1-WSL 批次：产物索引/下载/diff/回滚真链路全过；B 账号越权提交 404 + 零副作用 + 默认会话隔离；见
 [批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-wsl-batch-registry.json)），
-仍余**浏览器 DOM 层、真实供应商格式差异**。
+仍余**真实供应商格式差异**（浏览器 DOM 层已于 2026-10-01 验收完成，工单 05 closed）。
 
 **F19 后半（schema 门禁 + 迁移显式步骤）已于 2026-10-01 实现**（`server/readiness.py` + `deploy/entrypoint.web.sh`，
 见工单 [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)）：`/healthz` 只报"数据库是否应答"
@@ -676,13 +676,14 @@ compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内�
 工单 [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) 转 `ready-for-human`）：
 `control_records` 表 + 状态机 + 终态收口 + 生效 steer 写成 `turns` + `GET /controls` + 前端刷新恢复；
 **未完成**：业务库 `apodex` 尚未执行 `alembic upgrade head`（`0003`/`0004` 均未应用，本轮验证全在隔离
-SQLite/ASGI 内，业务库未触碰）、浏览器 DOM 层复核、真实重启后观测。另修两处既有缺陷：隔离审计夹具随 F01
+SQLite/ASGI 内，业务库未触碰）、真实重启后观测（浏览器 DOM 层复核已于 2026-10-01 完成，见工单 05/21）。另修两处既有缺陷：隔离审计夹具随 F01
 失效的 `uploads_root` 一行（曾使 24 个检查全部 setup ERROR）、`server/trajectory_status.py` 一处 SIM105 lint。
 2026-10-01 E1-WSL 批次补齐真链路证据：`pending → adopted/once`（审批后 `create_file` 真实落盘）与
 `pending → expired`（300s 超时 fail-closed，source=timeout 未被记成用户拒绝）均落 `control_records`；
-三处 POSIX 用例（approval e2e/upload_t210/stop sigkill）9/9 通过。**遗留观察（deferred，未修）**：
-`control_to_dict` 投影不含 `external_id`，刷新页从 `GET /controls` 重建待审批后拿不到 approve 所需 ID
-（见[工单 21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md)）。
+三处 POSIX 用例（approval e2e/upload_t210/stop sigkill）9/9 通过。**遗留观察（已于 2026-10-01 下午随上游提交 `38d73bc` 修复）**：当时 `control_to_dict` 投影不含 `external_id`，刷新页从 `GET /controls` 重建待审批后拿不到 approve 所需 ID；
+现已由 `38d73bc` 修复——投影暴露 `external_id`、前端 `resumeForSession` 重建弹窗并优先使用该字段，
+浏览器闭环复验通过（Run 0c65cbf3：刷新→弹窗重建→批准→`adopted/once/external_id`），
+见[工单 21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md)。
 
 **F09 的已知覆盖盲区（已按权威状态修复）**：此前的修复把「已结束的运行流」记在**进程内**的
 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。对**结束于其它进程**

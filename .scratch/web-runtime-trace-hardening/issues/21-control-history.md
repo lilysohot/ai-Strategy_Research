@@ -89,4 +89,8 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   `external_id`（worker 生成的 approval_id）——真链路批准时经直查业务库 `control_records` 才取得该 ID，
   刷新页从 `GET /controls` 重建待审批弹窗后同样拿不到 approve 所需 ID，前端须从 live 帧或审批响应体取，
   或投影补字段。`Status` 维持 `ready-for-human`（deferred 项与浏览器 DOM 层复核未闭环）。
+- 2026-10-01（回溯核正）：上条的「遗留观察（deferred，未修）」已由同日下午的 `38d73bc` 修复——
+  `control_to_dict` 暴露 `external_id`、前端 `resumeForSession` 重建弹窗并优先使用该字段，浏览器闭环
+  （Run 0c65cbf3）复验通过；「浏览器 DOM 层复核」亦已完成（工单 05 closed）。本条保留为"发现时点"记录。
+  当前仍为 `ready-for-human`，剩余：业务库迁移、真实重启后观测。
 
