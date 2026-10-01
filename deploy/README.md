@@ -158,7 +158,9 @@ python3 -c "import secrets; print(secrets.token_urlsafe(48))"
   默认为 `localhost`（自签证书）；部署到公网请使用真实域名走自动 HTTPS。
 - API 容器启用了 `SYS_PTRACE` 与宽松的 seccomp/apparmor，这是 bubblewrap
   沙箱创建用户命名空间所必需的，属于有意配置，详见 `Dockerfile.web`。
-- 数据库与 trace 文件落在宿主的 `../data`，备份时一并纳入。
+- **备份须覆盖三处**：① 业务库在**宿主 PostgreSQL**（如容器 `pg` 的 `apodex` 库，见上节）；
+  ② 运行数据（轨迹 / 输入 / 产物 / spill）在命名卷 `agent_data`（挂 `/var/lib/frontier-agent/web`）；
+  ③ `../data`（挂 `/app/data`）是**研究语料**数据。三者互不重叠，不能只备其一。
 
 ## 离线/无 Docker 环境
 

@@ -1,12 +1,13 @@
 # Web 运行存储与轨迹追溯修复
 
-Status: needs-triage
+Status: partial — F01 closed（2026-10-01）；其余 20 项进度见 issues/ 与报告 §8
 Type: repair-spec
 Date: 2026-09-29
 
 用户要求将本次发现整理为后续修复报告，未要求本轮实施修复或迁移数据。
 后续用户明确要求存储位置不合理时在此次修复一并改正：F01 已升级为必交付范围，
-具体新路径、历史迁移和回退验收见报告 v1.4；当前仍处于计划整理阶段。
+具体新路径、历史迁移和回退验收见报告 v1.4。2026-09-30 起进入实施：报告 §8 记录已实现项与证据，
+F01 于 2026-10-01 完成并关闭；其余未完成项见 §8「仍未完成」。
 
 详细证据、影响、修复建议和验收唯一正文见
 [修复报告](../../docs/plan/web-runtime-trace-repair-report.md)。产品范围与完成定义依从
@@ -29,7 +30,7 @@ Date: 2026-09-29
 | [06 轨迹完整性](issues/06-trace-completeness.md) | F06 | 与 04 协调格式契约 |
 | [07 保留与恢复](issues/07-retention-recovery.md) | F07 | 盘点先行；联合验收在 01/03/06 后 |
 
-Status 行遵循仓库 triage labels；本轮均待分诊，不代表可无人值守迁移生产数据。
+Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 closed），不代表可无人值守迁移生产数据。
 补充复核新增 08—14，其中 08 为多用户上线阻断项，优先处理。
 
 | 补充任务 | 报告发现 | 依赖 |
@@ -89,3 +90,4 @@ Status 行遵循仓库 triage labels；本轮均待分诊，不代表可无人�
 - 2026-09-30：**F01 活动 Run 跨新旧根保护完成（拒绝式，口径经用户确认）**。根因：`_plan_root_migration` 不区分状态，`_apply_root_migration` 会搬走 queued/running 的目录并改写 `run_dir`，而 worker 的绝对路径在 spawn 时从旧根烘焙、读取侧一律走 `run_dir_for`（当前根）→ 同一条 run 一半写旧根一半读新根。口径：不"跳过/延后"（延后是同一分裂反过来的形态），而是**整体拒绝**、不做部分迁移。实现 `scripts/run_retention.py`：`RunMigration.status`、纯函数 `active_migrations()`、`_refuse_active_migrations()`，`_apply_root_migration` 在移动前守卫并以 `SystemExit` 退出 1；dry-run 标 `ACTIVE-REFUSED` 并打印 `REFUSES TO APPLY`。证据：`tests/test_web_f07_retention.py` **27/27**（新增 5 项；负向对照注释守卫后该用例 `DID NOT RAISE` 失败）；一次性库 `apodex_f01_active`（已 DROP、临时目录已删、业务库未触碰）端到端——活动 run 存在时 `--apply` 拒绝且零移动，改终态后 `moved 2 / run_dir` 全部改写；真库干跑无回归（419 条 / 0 孤儿 / 无拒绝）。**未完成**：仅容器实测（见工单 02）。工单 [01](issues/01-storage-roots.md) 维持 `ready-for-human`。
 - 2026-10-01：**F01 迁移冲突处理完成**（报告要求「发现新旧同 ID 文件冲突时停止该项并报告，不覆盖未知内容」，上一轮列为未修）。根因：`_apply_root_migration` 对已存在目标无检查，`shutil.move(src, dst)` 在 `dst` 已是目录时会把 `src` 移进 `dst` 之内并仍改写 `run_dir`（若 `dst` 是文件则覆盖）。实现：`RunMigration.target_exists`；apply 在移动前按活文件系统复核 `dst.exists()`，命中即计入 `conflicted` 且**不移动不改写**、其余照常，返回值扩为 `(moved, missing, removed, conflicted)`；dry-run 标 `TARGET-EXISTS`/`WILL SKIP`，apply 打印 `CONFLICT`。证据：`tests/test_web_f07_retention.py` **30/30**（负向对照短路 `if False` 后冲突用例失败）；一次性库 `apodex_f01_conflict`（已 DROP、临时目录已删）端到端 `moved 1 / CONFLICT 1`、目标目录零嵌套零覆盖、冲突行 `run_dir` 不动。
 - 2026-10-01：**F01 容器实测完成（首次），并暴露一个致命部署缺口**。此前记录的 registry 阻断为**瞬时故障**：本轮 `docker pull python:3.12-slim` 成功、容器内 `apt-get` 直连 `deb.debian.org` 正常，`docker build -f deploy/Dockerfile.web -t frontier-agent-web:verify .` **exit 0**（1.64 GB / 18 层，runtime stage `python:3.12-slim`，`uv sync` 各 extra 全部完成）。**卷落点**：compose 等价容器内 `runs_root=/var/lib/frontier-agent/web/runs`、`run_dir_for()` 落该根、`ensure_dirs()` 在卷内建出 `runs/`，两种 id 写法解析到同一目录；负向对照——不设 `SERVER_RUNS_ROOT` 时容器读到挂载 `.env` 的**宿主 WSL 路径**，证明该 env 行必需。**重建后可读**：卷内 seed 1 条 completed run → `docker rm -f` + 同卷重启 → 轨迹与 `summary.json` sha256 **逐字节一致**、`inspect_trajectory` 仍可读、DB 行完好、`/healthz` 200。**新缺陷（致命）**：`deploy/docker-compose.yml` 覆盖了 `CORPUS_DSN` 却未覆盖 `SERVER_DATABASE_URL`，而 `server/config.py` 的 `env_file=/app/.env`（compose 已挂载）→ 容器内解析为 `…@localhost:5432/apodex`，实测 `ConnectionRefusedError` → `/healthz` **503 `storage_unavailable`**；且默认指向**生产库名**（因不可达才未误连）。**镜像层核对（闭合工单 02 遗留项）**：真实镜像内 `server/runs`、`uploads`、`data`、`.git`、`.venv`、`.scratch`、`web/node_modules`、`web/dist` 全 absent、`*.pyc` 0、无 `server/*.db`，关键源码全 present。隔离与清理：一次性库 `apodex_f01_container` 已 DROP（仅剩 `apodex`）、临时卷与两个测试容器已删、业务库未触碰。**未完成**：修 `SERVER_DATABASE_URL` 容器覆盖（待确认口径）。工单 [01](issues/01-storage-roots.md) 维持 `ready-for-human`。
+- 2026-10-01：**F01 致命部署缺口已修 + 工单 01 关闭**（口径经用户确认：比照 `CORPUS_DSN`）。上条暴露的 `SERVER_DATABASE_URL` 容器覆盖缺口：`deploy/docker-compose.yml` 的 `api.environment` 增 `SERVER_DATABASE_URL: ${SERVER_DATABASE_URL_DOCKER:-postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex}`；仓库根 `.env` 与 `.env.example` 各增 `SERVER_DATABASE_URL_DOCKER`（注明容器内须用宿主地址、scheme 必为 `+asyncpg`、业务 `apodex` ≠ 语料 `postgres`）；`deploy/README.md` 增「数据库连接（业务库 / 语料库）」一节并修正备份说明（原「数据库与 trace 在 `../data`」不实——`../data` 只放语料）。**验证**：`docker compose --env-file ../.env --profile full config` 现解析出 `SERVER_DATABASE_URL`（修复前缺失）、exit 0；隔离库 `apodex_f01_dbfix` 端到端——`host.docker.internal` → `/healthz` **200 `{"status":"ok"}`**，负向对照 `localhost` → **503 `storage_unavailable`**；回归 `tests/test_web_f07_retention.py` **30/30**。隔离资源全清理，生产 `apodex` 未触碰。**工单 [01](issues/01-storage-roots.md) `ready-for-human` → `closed`**。附观察（既有前提，未修）：`host.docker.internal` 在原生 Linux 引擎需 `extra_hosts: host-gateway`，`CORPUS_DSN` 同此前提，Docker Desktop（WSL2/Windows）不受影响。
