@@ -75,7 +75,8 @@
     "gates": "web 套件 206 passed（6 error 为 p2_files FK 既有环境问题）；ruff 全绿；pyright 仅 orchestrator.py:304 既有错误",
     "note": "测试陷阱：wait_for(gen.__anext__, timeout) 会取消 __anext__ 并向生成器注入 CancelledError 使其终止（后续 __anext__ 抛 StopAsyncIteration）——断行 defer 用真实 sleep 推进多轮 poll 后补换行验证；测量脚本与合成轨迹（/tmp/f13_pre.py、/tmp/f13_post.py、/tmp/f13-runs）验证后已清理",
     "evidence": "audit/f13-capacity.json",
-    "verdict": "pass（工单 13 转 ready-for-human，待人工复核关闭）"
+    "closure": "2026-10-01 用户指示复核收口：验收条款逐条满足（pre 基线实测 / 三路径齐备 / 历史兼容 limit=0 与 T3.1 游标 / F03·F06 边界未回退），收口前复跑 F13+F05+F09+M1 18/18，代码随 293e130 入库，工单 13 已 closed",
+    "verdict": "pass（工单 13 已关闭）"
   },
   "f02_historical_images_20261001": {
     "purpose": "F02 遗留项：历史已发布镜像是否含数据的调查（工单 02），只记录不处置。",

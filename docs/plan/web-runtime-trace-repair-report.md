@@ -76,7 +76,7 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 | F10 | P1 | 流式去重导致文字缺失与用量漏计或重复 | 实际前端源码方法隔离复现；浏览器待验 | [10](../../.scratch/web-runtime-trace-hardening/issues/10-replay-text-usage.md) |
 | F11 | P1 | 切换 Run 后旧异步响应可能覆盖新视图 | 实际前端源码方法隔离复现；浏览器待验 | [11](../../.scratch/web-runtime-trace-hardening/issues/11-watch-generation.md) |
 | F12 | P1 | 上传校验与运行创建缺少失败清理 | 拒绝批次遗留文件隔离复现；完整补偿待验 | [12](../../.scratch/web-runtime-trace-hardening/issues/12-upload-atomicity.md) |
-| F13 | P2 | 轨迹读取与事件缓冲缺少容量边界 | 已修复并动态验证（2026-10-01），待人工复核 | [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) |
+| F13 | P2 | 轨迹读取与事件缓冲缺少容量边界 | 已修复并动态验证，复核通过已关闭（2026-10-01） | [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) |
 | F14 | P1 | 排队 Run 的历史上下文没有明确截止点 | 未来消息进入历史隔离复现；真实 worker 待验 | [14](../../.scratch/web-runtime-trace-hardening/issues/14-history-boundary.md) |
 
 ## 4. 逐项修复说明
