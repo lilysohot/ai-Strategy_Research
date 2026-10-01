@@ -1,0 +1,41 @@
+{
+  "artifact": "F13 容量边界验证：增量 tail / 分页 /trace / 有界订阅队列",
+  "batch": "E1-20261001-WSL（收尾）",
+  "executed_at": "2026-10-01",
+  "operator": "agent",
+  "deliverable": "server/relay.py（trajectory_tail 字节偏移增量读 + _locate_offset 游标转换 + trajectory_page 分页 + merge 队列 1024）；server/orchestrator.py（订阅队列 maxsize=256 + _q_put_bounded：满时丢 droppable delta、终态/哨兵挂 waiter）；server/routes/runs.py（/trace 改 asyncio.to_thread + after/limit 分页，limit=0 保持历史全量契约）",
+  "environment": {
+    "synthetic_trajectory": "/tmp/f13-runs run id f13synthetic0000000000000000000000：20,000 行 / 2,328,688 B（测量后已清理）",
+    "measurement_scripts": "/tmp/f13_pre.py、/tmp/f13_post.py（测量后已清理）"
+  },
+  "pre_fix_baseline": {
+    "trajectory_tail": "每 250ms poll 从文件头重扫：2 轮 poll 共迭代 40,000 行（每轮全文件 O(N)），大轨迹下随文件增长 CPU 线性恶化且持续重读全部历史字节",
+    "trace_endpoint": "全量同步读整个轨迹文件且跑在 event loop 上（阻塞所有并发请求）",
+    "subscriber_queue": "asyncio.Queue() 无界：灌 10,000 条 delta 后 qsize=10,000，慢浏览器可无限占用内存"
+  },
+  "post_fix_verification": [
+    {
+      "check": "tail 增量读（字节偏移）",
+      "result": "整轮 tail 总字节读 = 2,328,688 B == 文件大小（每字节只读一次）；修复前每轮 poll 重读全文件。断行（无换行尾行）defer 到下一 poll，不消费不误发"
+    },
+    {
+      "check": "有界订阅队列（maxsize=256）",
+      "result": "delta 洪峰（maxsize+50）后 qsize=256 封顶；满队列时 run_completed 终态 preserved=True、end-of-stream 哨兵 delivered=True（droppable delta 被丢弃，轨迹重放兜底）"
+    },
+    {
+      "check": "/trace 分页（after/limit 游标）",
+      "result": "page1=100 条 next_line=100 has_more=true；page2=100 条 next_line=200 has_more=true；末页 5 条无重叠无缺口；limit=0 全量 20,000 条契约不变（has_more=false）。同步读已移出 event loop（asyncio.to_thread）"
+    }
+  ],
+  "regression_tests": {
+    "file": "tests/test_web_f13_capacity.py",
+    "result": "8 passed（tail 精确行号 / after 游标续读 / 断行 defer / 终态可解析残尾仍发出 / 分页游标与边界 / limit=0 契约 / 队列封顶保终态 / 满队列哨兵送达）",
+    "note": "断行 defer 测试不得用 wait_for(gen.__anext__, timeout) 验证——timeout 取消 __anext__ 会向生成器注入 CancelledError 使其终止（后续 __anext__ 抛 StopAsyncIteration）；改为真实 sleep 推进多轮 poll 再补换行断言增量读出"
+  },
+  "gates": {
+    "affected_suites": "tests -k web：206 passed, 8 skipped（6 errors 为 test_web_p2_files.py FK 既有环境问题，HEAD stash 复跑证实非本轮引入）",
+    "ruff": "tests/test_web_f13_capacity.py All checks passed（初版 E741 + RUF059×3 已修）",
+    "pyright": "relay.py / runs.py / 新测试 0 错误；orchestrator.py:304 Queue 不变型为既有错误（非本轮）"
+  },
+  "conclusion": "F13 三处容量缺陷（O(N)/poll 重扫、/trace 全量同步读阻塞 loop、订阅队列无界）均已修复并动态验证通过，正常/边界/恢复路径（游标续读、截断重扫、断行 defer、终态 drain、满队列降级）覆盖"
+}

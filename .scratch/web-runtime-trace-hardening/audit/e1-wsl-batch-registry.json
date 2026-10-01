@@ -4,7 +4,7 @@
   "purpose": "在 WSL（POSIX）环境复验 Windows 本机被阻塞的 E1 结转项：产物索引/下载/diff/回滚、F08 越权动态复验、POSIX 依赖用例；并执行 F06 SIGKILL 注入与 F19 只读挂载/磁盘满/compose service_healthy。",
   "registered_at": "2026-10-01",
   "operator": "agent",
-  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）；（2026-10-01 下午）四项 WSL 收尾 w-1 镜像重建、w-2 旧版镜像回退演练、w-3 整栈 compose 就绪门禁已闭环；w-4 F06 运行级磁盘写满完成并**发现 3 处缺陷**（满盘时新提交 run 永久卡 queued 等，见 audit/f06-run-disk-full.json，已开票 22）",
+  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）；（2026-10-01 下午）四项 WSL 收尾 w-1 镜像重建、w-2 旧版镜像回退演练、w-3 整栈 compose 就绪门禁已闭环；w-4 F06 运行级磁盘写满完成并**发现 3 处缺陷**（满盘时新提交 run 永久卡 queued 等，见 audit/f06-run-disk-full.json，已开票 22）；（2026-10-01 晚间续）T8 真实 PG 重启时序（audit/t8-pg-restart.json）、F07 运维备份脚本（audit/f07-backup-script.json）、F13 容量边界（见 capacity_bounds_20261001 段）均闭环，工单 13 转 ready-for-human",
   "environment": {
     "host": "WSL Ubuntu（Linux）, /home/administrator/FrontierAgent",
     "code_head": "批次执行时点 6435f73（x-画面更新，含 F08–F21 全部修复）；本轮改动（server/readiness.py 探针修复、tests/test_web_f19_schema_gate.py 回归、deploy/docker-compose.yml healthcheck + caddy 依赖、e1/mock_model.py 环境覆盖）执行时**尚未提交**（2026-10-01 回溯核正），随后已提交为 **84258f3**（分支 x-web改造）；登记文件随 339e562 入库，工作区其后并入 555c4a0（合并 x-画面更新，含上游 38d73bc 的 F21 external_id/刷新恢复修复与 F05 浏览器 DOM 验收 closed）",
@@ -52,6 +52,30 @@
       {"id": "w-3", "item": "整栈 compose 就绪门禁（Caddy 不放行 / 放行）", "result": "反例：不可达库 → compose `dependency failed to start: container e1wsl-api is unhealthy`，caddy State=created 未启动，站点 000；正例：空库 → api healthy → caddy Started → HTTPS 根 200 且 <title>投研 Agent 平台</title>；业务库全程 0002", "evidence": "audit/f19-stack-gating.json", "verdict": "pass"},
       {"id": "w-4", "item": "F06 运行级磁盘写满（轨迹写入与 Run 收口）", "result": "在飞 run 不挂起（ENOSPC 被非 critical observer 吞掉，仍收口 stopped/no_tool；/trace 不误报）；**发现 3 处缺陷并已修复**：F06-RUN-1（高）提交路径已消费 probe_data_root（满盘 503）+ _drain_session 启动失败即收口（mark_run_failed_if_active）；F06-RUN-2（中）干净完成但轨迹 0 字节 → 助手轮追加『存储降级』可见标记；F06-RUN-3（低）summary 原子写 + 清理 .tmp/0 字节 spool；回归 tests/test_web_f22_disk_full.py 6/6，全量 tests 相对 HEAD 无新增失败；**修复后镜像本体真实注入复验**：空盘基线 202 → dd 填满（/readyz 503）→ 满盘提交 503、零副作用（frontier-agent-web:head 重建 b903e9e28900）", "evidence": "audit/f06-run-disk-full.json；工单 22；tests/test_web_f22_disk_full.py", "verdict": "defect found → 已修复（回归 6/6 + 镜像本体真实注入 503）"}
     ]
+  },
+  "capacity_bounds_20261001": {
+    "purpose": "F13 容量边界验证（工单 13）：先基线后修复再动态验证，覆盖正常/失败/恢复路径。",
+    "pre_fix_baseline": {
+      "synthetic_trajectory": "20,000 行 / 2,328,688 B",
+      "trajectory_tail": "每 250ms poll 全文件重扫（2 轮 poll 迭代 40,000 行，O(N)/poll）",
+      "subscriber_queue": "无界（灌 10,000 条 delta 后 qsize=10,000）",
+      "trace_endpoint": "全量同步读跑在 event loop 上"
+    },
+    "fixes": [
+      "server/relay.py：trajectory_tail 字节偏移增量读 + _locate_offset 游标换算 + trajectory_page 分页（limit=0 保持历史全量契约）+ merge 队列 1024",
+      "server/orchestrator.py：订阅队列 maxsize=256 + _q_put_bounded（满时丢 droppable delta，终态/哨兵挂 waiter task）",
+      "server/routes/runs.py：/trace 改 asyncio.to_thread + after/limit 分页游标"
+    ],
+    "post_fix": {
+      "tail_bytes_read": "2,328,688 B == 文件大小（每字节只读一次）",
+      "queue": "delta 洪峰封顶 256；run_completed preserved=True；end-of-stream 哨兵 delivered=True",
+      "pagination": "page1=100/next=100/more、page2=100/next=200/more、全量 20,000 契约不变，无重叠无缺口"
+    },
+    "regression": "tests/test_web_f13_capacity.py 8/8（断行 defer / 终态残尾 / 游标续读 / 分页边界 / 队列封顶 / 哨兵必达）",
+    "gates": "web 套件 206 passed（6 error 为 p2_files FK 既有环境问题）；ruff 全绿；pyright 仅 orchestrator.py:304 既有错误",
+    "note": "测试陷阱：wait_for(gen.__anext__, timeout) 会取消 __anext__ 并向生成器注入 CancelledError 使其终止（后续 __anext__ 抛 StopAsyncIteration）——断行 defer 用真实 sleep 推进多轮 poll 后补换行验证；测量脚本与合成轨迹（/tmp/f13_pre.py、/tmp/f13_post.py、/tmp/f13-runs）验证后已清理",
+    "evidence": "audit/f13-capacity.json",
+    "verdict": "pass（工单 13 转 ready-for-human，待人工复核关闭）"
   },
   "deferred": [
     {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排", "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"},

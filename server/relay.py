@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -31,52 +32,106 @@ from server.events import EventType, is_droppable, make_event, to_sse
 _TRAJ = "run/agent/trajectories/react_agent.jsonl"
 
 
+def _locate_offset(path: os.PathLike[str], after_line: int) -> tuple[int, int]:
+    """Byte offset just past the ``after_line``-th line, plus lines actually seen.
+
+    ``trajectory_tail`` resumes from a line-number cursor (T3.1 reconnect). The
+    tail reads are byte-offset based (see below), so a reconnect cursor must be
+    translated to an offset exactly once per connection. Returns
+    ``(offset, count)`` where ``count`` is how many complete lines were found;
+    a file shorter than the cursor returns (EOF, real count) and the tail
+    resumes at the true next line number.
+    """
+    offset = 0
+    count = 0
+    try:
+        with open(path, "rb") as fh:
+            while count < after_line:
+                line = fh.readline()
+                if not line:
+                    break
+                if line.endswith(b"\n"):
+                    count += 1
+                    offset = fh.tell()
+                else:
+                    break  # partial tail line: never count it
+    except OSError:
+        pass
+    return offset, count
+
+
 async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tuple[int, dict]]:
     """Yield ``(line_number, record)`` from ``after_line`` (1-based) onward.
 
     Blocks (polling) for new lines until the run's summary.json appears, then
     drains any remainder and stops. Used for both initial replay and live tail.
 
+    Reads are **byte-offset incremental** (F13): each poll seeks to the byte
+    offset of the last consumed line and reads only the bytes added since, so
+    the cost is O(delta) per poll, not O(file) — a large trajectory is no
+    longer re-scanned from line 1 every 250 ms. A trailing line without a
+    newline is a *broken* (mid-write) line and is deferred to the next poll;
+    on the terminal drain a parseable tail without a trailing newline is still
+    emitted, preserving the old iterator semantics.
+
     The line number is yielded alongside the record so the SSE layer can stamp
-    every replayed event with the trajectory cursor it came from (T3.1). Without
-    it a client can only *count* events to resubscribe, which breaks the moment a
-    non-trajectory event (a live bridge delta) shares the stream.
+    every replayed event with the trajectory cursor it came from (T3.1).
     """
     traj = run_dir_for(run_id) / _TRAJ
     finished = run_dir_for(run_id) / "summary.json"
-    cursor = after_line
+    if after_line > 0:
+        offset, line_no = _locate_offset(traj, after_line)
+    else:
+        offset, line_no = 0, 0
     seen_finished = finished.exists()
     while True:
+        partial = ""
         if traj.exists():
-            with traj.open("r", encoding="utf-8") as fh:
-                for i, line in enumerate(fh, start=1):
-                    if i <= cursor:
-                        continue
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        yield i, json.loads(line)
-                    except json.JSONDecodeError:
-                        continue
-                    cursor = i
+            try:
+                with traj.open("rb") as fh:
+                    size = fh.seek(0, os.SEEK_END)
+                    if offset > size:
+                        # Truncated / rotated: restart from the top. Rare — the
+                        # trajectory is append-only — so a one-time rescan is fine.
+                        offset, line_no = 0, 0
+                    fh.seek(offset)
+                    data = fh.read().decode("utf-8", "replace")
+            except OSError:
+                data = ""
+            start = 0
+            consumed = 0
+            while True:
+                nl = data.find("\n", start)
+                if nl == -1:
+                    break  # broken tail: re-read next poll, do not consume
+                line = data[start:nl].strip()
+                start = nl + 1
+                consumed = start
+                line_no += 1
+                if not line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                yield line_no, rec
+            offset += consumed
+            partial = data[start:]
         if finished.exists() and not seen_finished:
             seen_finished = True
         if seen_finished:
-            # Drain once more in case the file grew between the read and the check.
-            if traj.exists():
-                with traj.open("r", encoding="utf-8") as fh:
-                    for i, line in enumerate(fh, start=1):
-                        if i <= cursor:
-                            continue
-                        line = line.strip()
-                        if not line:
-                            continue
-                        try:
-                            yield i, json.loads(line)
-                        except json.JSONDecodeError:
-                            continue
-                        cursor = i
+            # Terminal drain: a parseable record with no trailing newline is
+            # still read (old iterator semantics), even if the summary landed in
+            # the same poll as the last (mid-write) line.
+            if partial.strip():
+                line_no += 1
+                try:
+                    rec = json.loads(partial.strip())
+                except json.JSONDecodeError:
+                    rec = None
+                if rec is not None:
+                    offset += len(partial)
+                    yield line_no, rec
             return
         await asyncio.sleep(0.25)
 
@@ -124,6 +179,40 @@ def trajectory_records_for_egress(run_id: str, after_line: int = 0) -> list[dict
     return [redact_deep(rec) for rec in trajectory_records(run_id, after_line=after_line)]
 
 
+def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[list[dict], int, bool]:
+    """Paged trajectory read (F13): ``(records, next_line, has_more)``.
+
+    ``limit`` bounds how many records are read at once, so a very large
+    trajectory is never materialised in full by one ``/trace`` request.
+    ``next_line`` is the resume cursor for the next page (pass it back as
+    ``after``); ``has_more`` is True exactly when a further page exists.
+    ``limit=0`` keeps the historical behaviour: everything is returned and
+    ``has_more`` is always False.
+    """
+    traj = run_dir_for(run_id) / _TRAJ
+    if not traj.exists():
+        return [], after_line, False
+    out: list[dict] = []
+    consumed_last = after_line
+    with traj.open("r", encoding="utf-8") as fh:
+        for i, line in enumerate(fh, start=1):
+            if i <= after_line:
+                continue
+            line = line.strip()
+            if not line:
+                continue
+            if limit and len(out) >= limit:
+                # Line ``i`` is the first not-returned line: resume before it.
+                return out, i - 1, True
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            out.append(rec)
+            consumed_last = i
+    return out, consumed_last, False
+
+
 async def _merge_async(
     *sources: AsyncIterator[str],
 ) -> AsyncIterator[str]:
@@ -137,7 +226,9 @@ async def _merge_async(
     A producer that raises still counts as finished, so one failing source
     cannot hang the stream; the other source keeps feeding it.
     """
-    queue: asyncio.Queue[str | None] = asyncio.Queue()
+    # F13: bounded buffer. ``await queue.put`` is the backpressure — a fast
+    # producer stalls on the slow consumer instead of buffering without limit.
+    queue: asyncio.Queue[str | None] = asyncio.Queue(maxsize=1024)
     remaining = len(sources)
 
     async def pump(source: AsyncIterator[str]) -> None:

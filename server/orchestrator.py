@@ -35,7 +35,7 @@ from typing import Any
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
-from server.events import EventType, make_event
+from server.events import EventType, is_droppable, make_event
 from server.history import STEER_TURN_PREFIX, extract_final_answer, render_session_history
 from server.store import (
     APPROVAL_ABANDONED,
@@ -158,6 +158,12 @@ _SESSION_NS = uuid.uuid5(uuid.NAMESPACE_URL, "frontier-agent/session")
 #: it, so a bounded window is enough — and it keeps a long-lived process from
 #: accumulating one entry per run it has ever executed.
 _CLOSED_STREAM_MEMORY = 512
+
+#: Bounded in-memory fan-out per SSE subscriber (F13). A slow browser must not
+#: make the relay buffer grow without limit; when a queue is full the droppable
+#: delta class is discarded (the trajectory holds it for replay) and only
+#: terminal/control events are parked as waiters.
+_SUBSCRIBER_QUEUE_MAXSIZE = 256
 
 
 def _looks_like_uuid(value: str) -> bool:
@@ -443,7 +449,7 @@ class Orchestrator:
         not a terminal test, because a freshly submitted run has no handle yet
         while its worker is still starting.
         """
-        q: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
+        q: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue(maxsize=_SUBSCRIBER_QUEUE_MAXSIZE)
         self._subscribers.setdefault(run_id, set()).add(q)
         if run_id in self._closed_stream_ids:
             q.put_nowait(None)
@@ -457,13 +463,34 @@ class Orchestrator:
         if not subs:
             self._subscribers.pop(run_id, None)
 
+    @staticmethod
+    def _q_put_bounded(q: asyncio.Queue[dict[str, Any] | None], payload: dict[str, Any] | None) -> None:
+        """Put into a bounded subscriber queue; under pressure drop deltas only.
+
+        F13: a slow SSE consumer must not make the in-memory fan-out grow
+        without bound. ``put_nowait`` raises when the queue is full; the
+        droppable event class (``assistant_delta``) is discarded — the
+        trajectory holds the full per-turn content for replay — while
+        terminal/control events and the end-of-stream sentinel are parked as a
+        single waiter task that completes once the consumer drains (rare
+        lifecycle frames, so bounded by construction).
+        """
+        try:
+            q.put_nowait(payload)
+            return
+        except asyncio.QueueFull:
+            pass
+        if isinstance(payload, dict) and is_droppable(payload):
+            return
+        asyncio.get_running_loop().create_task(q.put(payload))
+
     def _publish(self, run_id: str, payload: Any) -> None:
         """Fan one live event (or the ``None`` sentinel) out to subscribers."""
         if not isinstance(payload, dict):
             return
         for q in tuple(self._subscribers.get(run_id, ())):
             # Never block the frame reader on a slow client.
-            q.put_nowait(payload)
+            self._q_put_bounded(q, payload)
 
     def _close_streams(self, run_id: str) -> None:
         """Signal every subscriber that no more live events will arrive.
@@ -481,7 +508,7 @@ class Orchestrator:
             self._closed_streams.append(run_id)
             self._closed_stream_ids.add(run_id)
         for q in tuple(self._subscribers.get(run_id, ())):
-            q.put_nowait(None)
+            self._q_put_bounded(q, None)
 
     async def reconcile_orphan_runs(self) -> int:
         """Close out runs left active by a process that no longer exists.

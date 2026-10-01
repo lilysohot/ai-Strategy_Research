@@ -38,7 +38,7 @@ from server.deps import get_current_user
 from server.diff import revert_paths
 from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.readiness import probe_data_root
-from server.relay import sse_for_run, trajectory_records_for_egress
+from server.relay import sse_for_run, trajectory_page
 from server.store import (
     ACTIVE_RUN_STATUSES,
     CONTROL_KIND_APPROVAL,
@@ -345,6 +345,7 @@ async def run_events(
 async def run_trace(
     run_id: str,
     after: int = 0,
+    limit: int = 0,
     user: UserModel = Depends(get_current_user),
 ) -> dict[str, Any]:
     if not await _run_visible(run_id, user.id):
@@ -355,10 +356,20 @@ async def run_trace(
     # F06: records alone cannot tell a finished run from an interrupted one, so
     # the completeness verdict travels with them and the UI shows the gap
     # instead of presenting a cut-short trace as the whole story.
+    #
+    # F13: the file read is blocking I/O and used to run synchronously on the
+    # event loop, and the whole trajectory was materialised regardless of size.
+    # The read now happens in a worker thread and is paged when ``limit`` is
+    # given; ``limit=0`` keeps the historical "return everything" contract.
+    records, next_line, has_more = await asyncio.to_thread(
+        trajectory_page, run_id, after, limit
+    )
     return {
         "run_id": run_id,
-        "records": trajectory_records_for_egress(run_id, after_line=after),
+        "records": [redact_deep(rec) for rec in records],
         "completeness": inspect_trajectory(run_id).as_dict(),
+        "next_line": next_line,
+        "has_more": has_more,
     }
 
 

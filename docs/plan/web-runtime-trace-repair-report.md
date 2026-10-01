@@ -76,7 +76,7 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 | F10 | P1 | 流式去重导致文字缺失与用量漏计或重复 | 实际前端源码方法隔离复现；浏览器待验 | [10](../../.scratch/web-runtime-trace-hardening/issues/10-replay-text-usage.md) |
 | F11 | P1 | 切换 Run 后旧异步响应可能覆盖新视图 | 实际前端源码方法隔离复现；浏览器待验 | [11](../../.scratch/web-runtime-trace-hardening/issues/11-watch-generation.md) |
 | F12 | P1 | 上传校验与运行创建缺少失败清理 | 拒绝批次遗留文件隔离复现；完整补偿待验 | [12](../../.scratch/web-runtime-trace-hardening/issues/12-upload-atomicity.md) |
-| F13 | P2 | 轨迹读取与事件缓冲缺少容量边界 | 源码路径确认；隔离动态复现待执行 | [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) |
+| F13 | P2 | 轨迹读取与事件缓冲缺少容量边界 | 已修复并动态验证（2026-10-01），待人工复核 | [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) |
 | F14 | P1 | 排队 Run 的历史上下文没有明确截止点 | 未来消息进入历史隔离复现；真实 worker 待验 | [14](../../.scratch/web-runtime-trace-hardening/issues/14-history-boundary.md) |
 
 ## 4. 逐项修复说明
@@ -664,7 +664,7 @@ sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可�
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
-[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界；
+[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、
 以及 E1 结转项——**POSIX 环境的产物/回滚复验与 F08 越权动态复验已于 2026-10-01 完成**
 （E1-WSL 批次：产物索引/下载/diff/回滚真链路全过；B 账号越权提交 404 + 零副作用 + 默认会话隔离；见
 [批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-wsl-batch-registry.json)），
@@ -695,6 +695,19 @@ compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内�
 **T8 真实 PG 重启时序已于 2026-10-01 实测闭环**（隔离 `t8pg`+`t8api`，业务库未触碰，见
 `audit/t8-pg-restart.json`）：`docker stop` → `/healthz`/`/readyz` 双双 **503** 全程 fail-closed；
 `start`/`restart` → ~2s 内双双翻 **200**；API 进程存活不假死。「停库 503 / 恢复 200」成立。
+
+**F13 容量边界已于 2026-10-01 修复并动态验证**（先基线后修复，证据 `audit/f13-capacity.json`，
+工单 [13](../../.scratch/web-runtime-trace-hardening/issues/13-capacity-bounds.md) 转 `ready-for-human`）：
+修复前基线（合成轨迹 20,000 行 / 2,328,688 B）证实三处缺陷——`trajectory_tail` 每 250 ms poll 全文件重扫
+（2 轮 poll 迭代 40,000 行）、订阅队列无界（灌 10,000 条 delta 后 qsize=10,000）、`/trace` 全量同步读跑在
+event loop 上。修复：`server/relay.py` 改字节偏移增量读（`_locate_offset` 把 T3.1 行号游标换算为字节偏移，
+断行 defer、终态可解析残尾仍发出、截断/轮转重扫）+ `trajectory_page` 分页（`limit=0` 保持历史全量契约）；
+[orchestrator.py](../../server/orchestrator.py) 订阅队列 `maxsize=256`（满时丢 droppable delta、终态/哨兵挂
+waiter task）；[runs.py](../../server/routes/runs.py) `/trace` 改 `asyncio.to_thread` + `after`/`limit` 游标。
+修复后实测：tail 总字节读 == 文件大小（每字节只读一次）、delta 洪峰队列封顶 256 且 `run_completed`/哨兵必达、
+分页无重叠无缺口。回归 `tests/test_web_f13_capacity.py` 8/8；web 套件 206 passed（6 error 为 p2_files FK
+既有环境问题）、ruff 全绿、pyright 仅既有错误。测试侧发现并绕开的陷阱：`wait_for(gen.__anext__, timeout)`
+会取消 `__anext__` 并向生成器注入 CancelledError 使其终止——断行 defer 只能用真实 sleep 推进 poll 验证。
 
 **F21 已于 2026-10-01 实现**（契约与验收见
 [f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，
