@@ -59,3 +59,14 @@ Requirements: PR-GOV-01, PR-GOV-06
   `frontier_agent/core/runtime/loop/agent_loop.py` **全部 present**。
   即此前用 `FROM scratch` 探针测得的结论在真实镜像上复现一致，根 `.dockerignore` 在完整构建链路中同样生效。
   历史已发布镜像是否含数据仍未调查（本轮不擅自处置镜像）。
+- 2026-10-01（晚）：**历史已发布镜像数据调查完成（上条遗留项闭合）**，证据
+  [audit/f02-historical-image-data.json](../audit/f02-historical-image-data.json)。
+  **结论：历史受影响镜像集合为空，无需处置。** ① 修复（2026-09-30 `.dockerignore`）之前从未成功构建过
+  web 镜像（Windows 侧 registry 阻断，本工单 2026-09-30 注释记录「完整镜像构建未执行」），本机现存 3 个
+  web 镜像（verify/f19/head）全部构建于 2026-10-01 即修复后，无 dangling 镜像；② 对 3 个现存镜像逐层核对
+  （docker history COPY/ADD 层 + Config.Env + 容器内逐路径存在性）：COPY 层仅源码 13.4–13.6MB + venv
+  1.11GB，`server/runs`/`uploads`/`data`/`.git`/`.env`/`.scratch`/`web/node_modules`/`web/dist`/`*.db`/
+  `/data` 全部 absent，`*.pyc`=0，`providers.yaml` 唯一 api_key 命中为 `${OPENAI_API_KEY}` 占位符，
+  config env 无密钥。范围外记录：`docker-corpus-db`（语料库 PG 镜像，数据在卷属设计使然）、
+  `more-*`（其它项目）、其余为上游官方镜像。处置建议：无需删除；`:verify`/`:f19` 验证 tag 如需释放
+  磁盘可另行确认后清理。

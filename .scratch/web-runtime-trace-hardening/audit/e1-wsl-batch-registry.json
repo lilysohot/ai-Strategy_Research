@@ -4,7 +4,7 @@
   "purpose": "在 WSL（POSIX）环境复验 Windows 本机被阻塞的 E1 结转项：产物索引/下载/diff/回滚、F08 越权动态复验、POSIX 依赖用例；并执行 F06 SIGKILL 注入与 F19 只读挂载/磁盘满/compose service_healthy。",
   "registered_at": "2026-10-01",
   "operator": "agent",
-  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）；（2026-10-01 下午）四项 WSL 收尾 w-1 镜像重建、w-2 旧版镜像回退演练、w-3 整栈 compose 就绪门禁已闭环；w-4 F06 运行级磁盘写满完成并**发现 3 处缺陷**（满盘时新提交 run 永久卡 queued 等，见 audit/f06-run-disk-full.json，已开票 22）；（2026-10-01 晚间续）T8 真实 PG 重启时序（audit/t8-pg-restart.json）、F07 运维备份脚本（audit/f07-backup-script.json）、F13 容量边界（见 capacity_bounds_20261001 段）均闭环，工单 13 转 ready-for-human",
+  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）；（2026-10-01 下午）四项 WSL 收尾 w-1 镜像重建、w-2 旧版镜像回退演练、w-3 整栈 compose 就绪门禁已闭环；w-4 F06 运行级磁盘写满完成并**发现 3 处缺陷**（满盘时新提交 run 永久卡 queued 等，见 audit/f06-run-disk-full.json，已开票 22）；（2026-10-01 晚间续）T8 真实 PG 重启时序（audit/t8-pg-restart.json）、F07 运维备份脚本（audit/f07-backup-script.json）、F13 容量边界（见 capacity_bounds_20261001 段）、F02 历史已发布镜像数据调查（见 f02_historical_images_20261001 段，受影响集合为空）均闭环",
   "environment": {
     "host": "WSL Ubuntu（Linux）, /home/administrator/FrontierAgent",
     "code_head": "批次执行时点 6435f73（x-画面更新，含 F08–F21 全部修复）；本轮改动（server/readiness.py 探针修复、tests/test_web_f19_schema_gate.py 回归、deploy/docker-compose.yml healthcheck + caddy 依赖、e1/mock_model.py 环境覆盖）执行时**尚未提交**（2026-10-01 回溯核正），随后已提交为 **84258f3**（分支 x-web改造）；登记文件随 339e562 入库，工作区其后并入 555c4a0（合并 x-画面更新，含上游 38d73bc 的 F21 external_id/刷新恢复修复与 F05 浏览器 DOM 验收 closed）",
@@ -76,6 +76,15 @@
     "note": "测试陷阱：wait_for(gen.__anext__, timeout) 会取消 __anext__ 并向生成器注入 CancelledError 使其终止（后续 __anext__ 抛 StopAsyncIteration）——断行 defer 用真实 sleep 推进多轮 poll 后补换行验证；测量脚本与合成轨迹（/tmp/f13_pre.py、/tmp/f13_post.py、/tmp/f13-runs）验证后已清理",
     "evidence": "audit/f13-capacity.json",
     "verdict": "pass（工单 13 转 ready-for-human，待人工复核关闭）"
+  },
+  "f02_historical_images_20261001": {
+    "purpose": "F02 遗留项：历史已发布镜像是否含数据的调查（工单 02），只记录不处置。",
+    "historical_affected_images": "空集——.dockerignore 修复（2026-09-30）前从未成功构建过 web 镜像（Windows 侧 registry 阻断）；现存 3 个 web 镜像（verify 8d0797648672 / f19 8dee765cb888 / head b903e9e28900）全部构建于 2026-10-01 即修复后；无 dangling 镜像",
+    "per_image_checks": "docker history COPY/ADD 层审计（仅源码 13.4–13.6MB + venv 1.11GB + entrypoint）+ Config.Env 无密钥 + 容器内逐路径核对：server/runs、uploads、data、.git、.env、.scratch、web/node_modules、web/dist、*.db、/data 全部 absent，*.pyc=0，providers.yaml 唯一 api_key 命中为 ${OPENAI_API_KEY} 占位符",
+    "out_of_scope": "docker-corpus-db（语料库 PG 镜像，数据在卷属设计使然）、more-backend/more-frontend（其它项目）、其余上游官方镜像",
+    "disposition": "无需删除任何镜像；:verify/:f19 验证 tag 如需释放磁盘可另行确认后清理",
+    "evidence": "audit/f02-historical-image-data.json",
+    "verdict": "pass（工单 02 全部遗留项闭合，维持 ready-for-human 待人工复核）"
   },
   "deferred": [
     {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排", "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"},

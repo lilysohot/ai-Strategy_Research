@@ -60,7 +60,7 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 | 编号 | 建议优先级 | 发现 | 证据强度 | 任务 |
 |---|---|---|---|---|
 | F01 | P1 | 运行根目录与显式持久卷不匹配，根目录迁移缺少旧 Run 解析契约 | UUID 定位差异隔离复现；部署覆盖待核验 | [01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) |
-| F02 | P1 | Web 构建会复制 `server/`，Docker ignore 未排除运行目录 | 构建入口与复制链确认；历史镜像是否含数据未验证 | [02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md) |
+| F02 | P1 | Web 构建会复制 `server/`，Docker ignore 未排除运行目录 | 已修复并验证（构建探针+真实构建+回归 40 项）；历史镜像调查完毕：受影响集合为空（2026-10-01） | [02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md) |
 | F03 | P1 | `/trace` 返回原始记录，与 SSE 的脱敏不一致 | 合成凭据经 ASGI 原样返回已复现；全出口待验 | [03](../../.scratch/web-runtime-trace-hardening/issues/03-trace-redaction.md) |
 | F04 | P1 | JSONL 请求记录丢弃工具调用 ID，回放与结果可能无法配对 | observer/relay 调用 ID 差异隔离复现 | [04](../../.scratch/web-runtime-trace-hardening/issues/04-tool-call-identity.md) |
 | F05 | P2 | 历史轨迹页不展示已保存推理，工具结果仅有短预览 | 模板及截断逻辑确认；浏览器验收待执行 | [05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md) |
@@ -640,7 +640,9 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 迁移在存在重复 `(session_id, seq)` 时会显式报错而不改数，由人工决定如何重排。
 
 **仍未完成（不得视为已验收）**（2026-10-01 更新：F01 容器实测、F02 真实镜像构建、F07 联合恢复演练与孤儿处置已完成，
-下段已按其现状改写）：F02 的**历史已发布镜像是否含数据**仍未调查（真实镜像构建已于 2026-10-01 补跑、
+下段已按其现状改写）：F02 的**历史已发布镜像是否含数据已调查完毕（2026-10-01 晚：历史受影响镜像集合为空——
+修复前从未成功构建过 web 镜像，现存 3 个镜像（全部 2026-10-01 修复后构建）逐层核对 server/runs/uploads/
+data/.env/*.db/密钥全部 absent，见 `audit/f02-historical-image-data.json`）**（真实镜像构建已于 2026-10-01 补跑、
 镜像层核对通过，registry 阻断系瞬时故障，见
 [工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收已于 2026-10-01 完成**（工单
 [05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md) 已 closed：验收中发现并修复一处"已结束 Run 的轨迹页只渲染元信息框、0 条记录"的渲染缺陷）、F06 的**真实故障注入**（SIGKILL 已于 2026-10-01 在 WSL 真实注入通过：mock 流中窗口 kill -9 worker →

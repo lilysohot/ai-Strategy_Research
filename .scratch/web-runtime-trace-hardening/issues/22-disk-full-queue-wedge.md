@@ -1,6 +1,6 @@
 # 22：满盘时提交的运行永久卡在 queued（磁盘写满的运行级收口缺口）
 
-Status: ready-for-agent
+Status: ready-for-human
 Priority: P1
 Type: bug
 Requirements: PR-RUN-02, PR-GOV-02

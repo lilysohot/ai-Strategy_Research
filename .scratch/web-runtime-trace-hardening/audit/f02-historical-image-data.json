@@ -1,0 +1,29 @@
+{
+  "artifact": "F02 历史已发布镜像数据调查（工单 02 遗留项）",
+  "batch": "E1-20261001-WSL（收尾）",
+  "executed_at": "2026-10-01",
+  "operator": "agent",
+  "scope": "调查本机全部已构建镜像是否将运行数据/密钥打进镜像层；只记录范围与处置建议，不擅自处置镜像",
+  "conclusion": {
+    "historical_affected_images": "空集——.dockerignore 修复（2026-09-30）之前从未成功构建过 web 镜像（Windows 侧 registry 阻断，工单 02 2026-09-30 注释记录「真实 Dockerfile.web 的完整镜像构建未执行」）；现存 3 个 web 镜像全部构建于 2026-10-01（修复后），无 dangling 镜像",
+    "verdict": "无需处置任何历史镜像；现存镜像全部干净"
+  },
+  "existing_web_images": [
+    {"image": "frontier-agent-web:verify", "id": "8d0797648672", "built_at": "2026-10-01 01:19", "verdict": "clean"},
+    {"image": "frontier-agent-web:f19", "id": "8dee765cb888", "built_at": "2026-10-01 10:02", "verdict": "clean"},
+    {"image": "frontier-agent-web:head", "id": "b903e9e28900", "built_at": "2026-10-01 15:40", "verdict": "clean"}
+  ],
+  "per_image_checks": {
+    "copy_layers": "COPY /build /app = 13.4–13.6MB（纯源码）+ COPY /opt/venv = 1.11GB（依赖）+ entrypoint 12.3kB（f19/head）；无其它 COPY/ADD 层",
+    "sensitive_paths_absent": "server/runs、uploads、data、.git、.env、.env.local、.scratch、web/node_modules、web/dist、server/dev.db、/data —— 三镜像容器内核对全部不存在",
+    "db_files": "*.db / *.db-wal / *.db-shm = 0；*.pyc = 0",
+    "secrets": "config/providers.yaml 唯一 api_key 命中为占位符 `api_key: ${OPENAI_API_KEY}`（env 注入设计）；镜像 config env 仅配置性变量（UV_PROJECT_ENVIRONMENT/SANDBOX_BACKEND 等），无密钥"
+  },
+  "out_of_scope_notes": [
+    {"image": "docker-corpus-db:latest", "note": "E 线语料库自定义 postgres 镜像（zhparser/scws vendor 987MB 为 RUN 安装非 COPY 数据），PGDATA 数据在运行时卷不在镜像层，数据含语料属设计使然——非 F02 的 web 运行数据范畴"},
+    {"image": "more-backend / more-frontend", "note": "其它项目镜像，范围外"},
+    {"image": "python/caddy/alpine/node/postgres/redis/pgvector/pg18-zhvector", "note": "上游官方镜像或基础镜像，范围外"}
+  ],
+  "disposition_recommendation": "无需删除任何镜像；frontier-agent-web:verify 与 :f19 为验证用 tag，如需释放磁盘可另行确认后清理（非本轮动作）",
+  "method": "docker images 全量清单（含 dangling 过滤）→ docker history COPY/ADD 层审计 → docker inspect Config.Env → docker run 逐路径存在性核对（与工单 02 真实构建核对口径一致）"
+}
