@@ -1,14 +1,17 @@
-# E5/E6 数据返回链路收尾报告
+# E5/E6 数据返回链路收尾报告（带例外闭环）
 
-> 执行日期：2026-09-30。口径：只验证数据是否能经正式
+> 执行日期：2026-09-30；收口及复核日期：2026-10-01。口径：只验证数据是否能经正式
 > `corpus_search → fetch_plan → corpus_fetch` 分页链路完整返回；零模型调用。
 > 留出材料只写入隔离数据库 `e6_holdout_corpus`，生产语料库未改动。
+> 最终状态：`CLOSED_WITH_ACCEPTED_EXCEPTIONS`。这是风险接受后的行政闭环，不表示原冻结
+> 协议 51/51 通过，也不覆盖原模型侧 90/99 的历史结论。
 
 ## 结论
 
-（2026-10-01 更新）12 份留出材料已全部通过正式发布门（12/12 published）；51 个评测目标中
-42 个经 `corpus_search → fetch_plan → corpus_fetch` 正式链路完整送达。其余 9 项失败经零模型
-逐项归因，全部单列为暂不支持项（见文末「2026-10-01 收口」），开发集 79/79 必需证据不受影响。
+12 份留出材料已全部在隔离库形成活动发布（12/12 active）；51 个评测目标中 42 个经
+`corpus_search → fetch_plan → corpus_fetch` 正式链路完整送达。其余 9 项已完成零模型逐项归因，
+原始分母和失败结果均保留为 **42/51**。基于继续修复的投入产出比，项目负责人接受这 9 项
+残余风险，本阶段按“带例外验收”关闭；开发集 79/79 必需证据不受影响。
 
 ## 本轮修复
 
@@ -27,16 +30,18 @@
 |---|---:|---|
 | 开发集必需证据 | 79/79 | 全部经正常问题、检索、同命中取回和分页送达 |
 | 开发集全部证据 | 98/99 | 唯一失败为 `industry-001/e5` 补充数字序列，不影响该题必需证据 |
-| 留出构建 | 3/12 发布，9/12 门禁阻断 | 12 份均完成构建，0 清洗/分块执行失败 |
-| 已发布留出材料 | 13/13 | 必需 9/9、补充 4/4，正文与结构依赖均送达 |
-| 全部留出目标 | 13/51 | 其余 38 项全部为 `source_not_offered`，与 9 份未发布材料一一对应 |
+| 留出构建与发布 | 12/12 active | 12 份均完成构建；4 份在人工复核和 gap-review 后放行；生产库未改动 |
+| 全部留出目标 | 42/51 | 必需 31/36、补充 11/15；9 项作为已接受例外保留，不改分母 |
+| 关闭复核 | 复现 42/51 | 2026-10-01 重新执行零模型、只读验证，结果及失败分类与前次一致 |
 
 主要证据：
 
 - `e5-data-delivery-dev.json`：开发集全量数据送达结果；
-- `e6-holdout-build.json`：12 份留出材料的独立构建与正式发布门结果；
+- `e6-holdout-build.json`：12 份留出材料的独立构建及 gap-review 前发布门快照；
 - `e6-data-delivery-published.json`：3 份已发布材料 13/13；
 - `e6-data-delivery-holdout.json`：51 个目标的完整失败分类；
+- `e6-closure-verification.json`：当前数据库 12/12 活动发布及冻结矩阵 42/51 的重新核验；
+- `e6-closure-decision.md`：带例外验收决定、风险边界和重新开启条件；
 - `e5_data_delivery.py`：零模型验证器；
 - `e6_prepare_holdout_db.py`：隔离库构建器，不伪造人工缺口裁决；
 - `e6-human-gap-review-packet.md` / `.json`：9 份未放行材料的人工缺口复核包（逐份列出缺口页、
@@ -62,9 +67,9 @@
 | `holdout-macro-011` | 页 11 表格线缺口 |
 | `holdout-macro-012` | 页 8 表格线缺口 |
 
-这些缺口必须由真实人工复核作出 `acknowledged`／重新提取等裁决后才能发布。本轮没有代签
-`human-gap-review`，也没有绕过发布门。完成裁决后，重跑隔离构建与 51 项数据送达验证；
-在达到 51/51 之前，E6 和端到端总任务保持未关闭。
+这是 2026-09-30 当时的门禁状态：这些缺口必须由真实人工复核作出 `acknowledged`／重新提取
+等裁决后才能发布，当轮没有代签 `human-gap-review`，也没有绕过发布门。其后裁决、放行和
+51 项重跑均已完成，最终结果见下方收口章节。
 
 供裁决使用的复核包见 `e6-human-gap-review-packet.md`（同目录 `.json` 为结构化版本）：逐份给出
 缺口页清单、该页已提取单元与文本样例、被阻断目标（`target_id`／所需引文／问题），并留出
@@ -84,7 +89,7 @@
 - 检索、选择、取回、分页、消费与截断回归：157 passed，1 skipped；
 - 目标文件 Ruff：通过。
 
-## 2026-10-01 收口：12/12 发布、42/51 送达、9 项单列
+## 2026-10-01 收口：12/12 发布、42/51 送达、9 项例外接受
 
 ### 本轮经过
 
@@ -116,28 +121,40 @@
 关键结论：**「% / - 拆分」不是主要失败模式**（9 项中仅 1 项 supplementary 为真），主要失败
 模式是检索选择策略把 raw score 最高的正文引文 chunk 挤出送达窗口（3 项，含 2 required）。
 
-### 单列决定与协议注记
+### 例外接受与协议注记
 
-按用户 2026-10-01 裁定，上述 9 项依 protocol §1「范围外与暂不支持项在验收报告中单列，
-不计入分母，也不从分母移除」全部单列：支持范围内分母 42，送达 42/42。
+按用户 2026-10-01 的投入产出裁定，上述 9 项作为已知限制接受，不再为本阶段继续投入修复。
+真实验收结果保持 **42/51**，不得改写成 42/42；其中包含 5 项 required 和 4 项 supplementary。
+因此本阶段状态为 `CLOSED_WITH_ACCEPTED_EXCEPTIONS`，而非 `PASSED`。
 
-**注记（诚实披露）**：§6.3 要求「预先指定的关键目标及其必要依赖 L1–L9 全通过」，本批
-单列中含 5 项 required（index/industry/table1/fedrate/hikerate）。这些项的数据本身完整
-（引文在库、可复算），失败发生在检索选择、fetch 预算与验证器比对口径三层机制，均为
-已定位、可修的工程缺陷而非数据缺陷。若后续按严格口径复核，修复优先级为：
-① 检索选择保底（perdoc 截断保 raw top-1 命中）；② fetch 超长块分片；③ 表头跨单元
-quote 口径（`_quote_in_text` 允许部件级 span 匹配）；④ reader 单元格拼接（随 B 线
-语料重建顺带）。
+**协议注记（诚实披露）**：protocol §6.3 要求「预先指定的关键目标及其必要依赖 L1–L9
+全通过」，故原冻结协议的严格结论仍为未通过。5 项 required 为
+index/industry/table1/fedrate/hikerate。9 项中 8 项位于检索选择、fetch 预算或验证器比对层；
+`c1ddcd8a-summarytable` 是 reader 文本流中 `%`、负号和小数拆失，不能概括为纯检索缺陷。
+该目标及相同版式不得被宣传为可靠数字证据。
+
+重新开启条件如下：
+
+- 例外目标或同类版式进入生产高频／关键决策场景；
+- 用户投诉、线上指标或抽检显示正确来源未提供、超长块无法取回或数字符号失真；
+- 任何流程把不完整取回或损坏数字当成完整、可信证据；
+- 后续检索、分页、PDF/OCR 改造能够低成本顺带修复并重跑冻结 51 项矩阵。
+
+若重新开启，优先顺序仍为：① per-doc 保留 raw top-1；② fetch 超长块分片；③ 跨单元表头
+和行标签匹配；④ reader 单元格拼接。修复后的新结果另立版本，不回写本次失败历史。
 
 ### 证据
 
 - `e6-data-delivery-holdout-rerun.json`：42/51 重跑结果（`CORPUS_DSN` + `CORPUS_TARGET_DB`
   均指向隔离库）；
+- `e6-closure-verification.json`：收口时重新核验 12 个源的活动 build 均与预期 build 一致，
+  并再次得到 42/51（required 31/36、supplementary 11/15）；
+- `e6-holdout-build.json` 的 8 published / 4 blocked 是 gap-review 放行前快照；当前发布状态以
+  数据库只读查询和 `e6-closure-verification.json` 为准，不篡改历史快照；
 - `e6_diag_fetch.py` / `e6_diag_fetch2.py` / `e6_diag_table1.py`：引文 chunk 全 build 装配比对
   与 delivered 集合交叉验证；
 - 检索链路复算：`query_lexemes → retrieval_query → search_with_coverage_bands` 候选池排名
   与选带内容（body:0002 池 #0 / body:0001 池 #1 / table:0015 池 #2，均在带内）；
-- `e6-human-gap-review-packet.md`（已回填裁决）、`e6_apply_gap_review.py`（4 份放行记录）、
-  `e6-holdout-build.json`（12/12 构建与发布门结果）；
+- `e6-human-gap-review-packet.md`（已回填裁决）、`e6_apply_gap_review.py`（4 份后续放行）、
+  `e6-holdout-build.json`（12/12 构建、放行前 8 published / 4 blocked 快照）；
 - 回归：corpus 全量 306 passed（含新增反例 4）。
-

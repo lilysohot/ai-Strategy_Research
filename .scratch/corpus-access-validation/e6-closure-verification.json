@@ -1,0 +1,1133 @@
+{
+  "artifact": "e6-closure-verification",
+  "generated_at": "2026-10-01T04:05:33.722353+00:00",
+  "mode": "zero-model; read-only; isolated database",
+  "target_db": "e6_holdout_corpus",
+  "publication_summary": {
+    "sources": 12,
+    "active": 12,
+    "expected_build_active": 12
+  },
+  "publications": [
+    {
+      "sample_id": "holdout-company-001",
+      "source_id": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "expected_build_id": "ecc26968ccdb53ddf0dbe5e3684aa8d5cb6a3cc920b15faaf77230e70cea5763",
+      "active_build_id": "ecc26968ccdb53ddf0dbe5e3684aa8d5cb6a3cc920b15faaf77230e70cea5763",
+      "generation": 3,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "source_id": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "expected_build_id": "0acdab0a7583d0d607129377db777cb6a841f7f0b72a078c64cbcd36c4b6a50e",
+      "active_build_id": "0acdab0a7583d0d607129377db777cb6a841f7f0b72a078c64cbcd36c4b6a50e",
+      "generation": 3,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "source_id": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "expected_build_id": "a6be5fb919b5ca0f46bb6a820c3cee77a9f809c37188962ee6f4383e954a7030",
+      "active_build_id": "a6be5fb919b5ca0f46bb6a820c3cee77a9f809c37188962ee6f4383e954a7030",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "source_id": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "expected_build_id": "5a213a956083ee6461e2c07dc060bd9b2b748ff5b18bb7ffd9e7fab200fe4be6",
+      "active_build_id": "5a213a956083ee6461e2c07dc060bd9b2b748ff5b18bb7ffd9e7fab200fe4be6",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "expected_build_id": "f6a8d012f8aa2bbecd09daf504d651a8a3254ece950123d16e78c6cce648b3e5",
+      "active_build_id": "f6a8d012f8aa2bbecd09daf504d651a8a3254ece950123d16e78c6cce648b3e5",
+      "generation": 2,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "source_id": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f",
+      "active_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "expected_build_id": "7b066b2a05b1d6fcfc4aa3a2801ebd823b59972385e3aee7fe6c6cc904bf68db",
+      "active_build_id": "7b066b2a05b1d6fcfc4aa3a2801ebd823b59972385e3aee7fe6c6cc904bf68db",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c",
+      "active_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "expected_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f",
+      "active_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "expected_build_id": "9465684d3a781404bc33521b337016486851f64c4ecf7109a264b5926ca5c9d8",
+      "active_build_id": "9465684d3a781404bc33521b337016486851f64c4ecf7109a264b5926ca5c9d8",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "expected_build_id": "dd3db0fdfdffec2bad3e8dd3f5decd019a1d8c9a500bf516488f5fd2d1566e09",
+      "active_build_id": "dd3db0fdfdffec2bad3e8dd3f5decd019a1d8c9a500bf516488f5fd2d1566e09",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "source_id": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "expected_build_id": "bb6c4f161d46eee93fe5da141dea7a6e8cc272835b75f44029ab40e4501c23c7",
+      "active_build_id": "bb6c4f161d46eee93fe5da141dea7a6e8cc272835b75f44029ab40e4501c23c7",
+      "generation": 1,
+      "active": true,
+      "expected_build_active": true
+    }
+  ],
+  "delivery_summary": {
+    "targets": 51,
+    "passed": 42,
+    "failed": 9,
+    "failure_classes": {
+      "quote_not_delivered": 5,
+      "dependency_not_delivered": 1,
+      "fetch_incomplete": 2,
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 31,
+        "failed": 5,
+        "failure_classes": {
+          "quote_not_delivered": 3,
+          "fetch_incomplete": 2
+        }
+      },
+      "supplementary": {
+        "passed": 11,
+        "failed": 4,
+        "failure_classes": {
+          "quote_not_delivered": 2,
+          "dependency_not_delivered": 1,
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "target_results": [
+    {
+      "sample_id": "holdout-company-001",
+      "target_id": "c195233b-mt-h1",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 16,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "target_id": "c195233b-imt-q2",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 16,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "target_id": "c195233b-xlw",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 16,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "target_id": "c195233b-ktable",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 16,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "target_id": "f0e67b73-overview",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "target_id": "f0e67b73-top5cust",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "target_id": "f0e67b73-petable",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "target_id": "f0e67b73-risk",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "target_id": "c1ddcd8a-coalprice",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 3,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "target_id": "c1ddcd8a-summarytable",
+      "role": "supplementary",
+      "all_pass": false,
+      "first_fail": "quote_not_delivered",
+      "search_hits": 9,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 11,
+      "fetch_complete": true,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "target_id": "c1ddcd8a-realestate",
+      "role": "supplementary",
+      "all_pass": false,
+      "first_fail": "quote_not_delivered",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "target_id": "c1ddcd8a-invest",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 5,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "target_id": "b7e932c8-index",
+      "role": "required",
+      "all_pass": false,
+      "first_fail": "quote_not_delivered",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "target_id": "b7e932c8-industry",
+      "role": "required",
+      "all_pass": false,
+      "first_fail": "quote_not_delivered",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "target_id": "b7e932c8-pmi",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "target_id": "b7e932c8-eptable",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 22,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "target_id": "0c25f0e9-figure35",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "target_id": "0c25f0e9-dele",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "target_id": "0c25f0e9-musk",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "target_id": "0c25f0e9-turnover",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "target_id": "0c25f0e9-eptable",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "target_id": "f86c6d2c-cxo-h1",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "target_id": "f86c6d2c-wuqi-order",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "target_id": "f86c6d2c-medamt",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "target_id": "f86c6d2c-cxotable",
+      "role": "supplementary",
+      "all_pass": false,
+      "first_fail": "dependency_not_delivered",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 15,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": false,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "target_id": "f86c6d2c-glp1",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "target_id": "a91d95c7-hbm",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "target_id": "a91d95c7-bytedance",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 20,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "target_id": "a91d95c7-hbmprice",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 20,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "target_id": "a91d95c7-cxmt",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "target_id": "5e305376-nonfarm",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 2,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "target_id": "5e305376-fedrate",
+      "role": "required",
+      "all_pass": false,
+      "first_fail": "fetch_incomplete",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 3,
+      "pages": 28,
+      "fetch_complete": false,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "target_id": "5e305376-oil",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 3,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "target_id": "5e305376-dxy",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 2,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "target_id": "5e305376-gdpnow",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 6,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "target_id": "f7f65d7e-payroll",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 1,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "target_id": "f7f65d7e-cme",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 1,
+      "pages": 7,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "target_id": "f7f65d7e-alloc",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "target_id": "f7f65d7e-risk",
+      "role": "supplementary",
+      "all_pass": false,
+      "first_fail": "source_not_offered",
+      "search_hits": 10,
+      "source_offered": false,
+      "plans": 0,
+      "pages": 0,
+      "fetch_complete": false,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "target_id": "d179b615-hikerate",
+      "role": "required",
+      "all_pass": false,
+      "first_fail": "fetch_incomplete",
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 3,
+      "pages": 21,
+      "fetch_complete": false,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "target_id": "d179b615-passive",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 5,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "target_id": "d179b615-chart3",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 6,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "target_id": "d179b615-goldoil",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 3,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "target_id": "2f8aa709-hike",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 9,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 18,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "target_id": "2f8aa709-oil",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 4,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "target_id": "2f8aa709-alloc",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 18,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "target_id": "2f8aa709-fedtable",
+      "role": "supplementary",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 3,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "target_id": "f3b28791-rotation",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 10,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 8,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "target_id": "f3b28791-fedwatch",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 10,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "target_id": "f3b28791-table1",
+      "role": "required",
+      "all_pass": false,
+      "first_fail": "quote_not_delivered",
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": false,
+      "dependencies": {
+        "header_refs": false,
+        "row_labels": true,
+        "footnotes": false
+      }
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "target_id": "f3b28791-regression",
+      "role": "required",
+      "all_pass": true,
+      "first_fail": null,
+      "search_hits": 8,
+      "source_offered": true,
+      "plans": 2,
+      "pages": 12,
+      "fetch_complete": true,
+      "quote_delivered": true,
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      }
+    }
+  ],
+  "failures": [
+    {
+      "target_id": "c1ddcd8a-summarytable",
+      "role": "supplementary",
+      "first_fail": "quote_not_delivered",
+      "sample_id": "holdout-industry-003"
+    },
+    {
+      "target_id": "c1ddcd8a-realestate",
+      "role": "supplementary",
+      "first_fail": "quote_not_delivered",
+      "sample_id": "holdout-industry-003"
+    },
+    {
+      "target_id": "b7e932c8-index",
+      "role": "required",
+      "first_fail": "quote_not_delivered",
+      "sample_id": "holdout-industry-004"
+    },
+    {
+      "target_id": "b7e932c8-industry",
+      "role": "required",
+      "first_fail": "quote_not_delivered",
+      "sample_id": "holdout-industry-004"
+    },
+    {
+      "target_id": "f86c6d2c-cxotable",
+      "role": "supplementary",
+      "first_fail": "dependency_not_delivered",
+      "sample_id": "holdout-industry-006"
+    },
+    {
+      "target_id": "5e305376-fedrate",
+      "role": "required",
+      "first_fail": "fetch_incomplete",
+      "sample_id": "holdout-macro-008"
+    },
+    {
+      "target_id": "f7f65d7e-risk",
+      "role": "supplementary",
+      "first_fail": "source_not_offered",
+      "sample_id": "holdout-macro-009"
+    },
+    {
+      "target_id": "d179b615-hikerate",
+      "role": "required",
+      "first_fail": "fetch_incomplete",
+      "sample_id": "holdout-macro-010"
+    },
+    {
+      "target_id": "f3b28791-table1",
+      "role": "required",
+      "first_fail": "quote_not_delivered",
+      "sample_id": "holdout-macro-012"
+    }
+  ],
+  "decision": {
+    "status": "closed_with_accepted_exceptions",
+    "strict_protocol_pass": false,
+    "accepted_exception_count": 9,
+    "basis": "owner accepted the documented retrieval/fetch residual risk"
+  }
+}
