@@ -1,0 +1,156 @@
+- generic [ref=f1e37]:
+  - main [ref=f1e39]:
+    - generic [ref=f1e40]:
+      - complementary "研究导航" [ref=f1e41]:
+        - generic [ref=f1e42]:
+          - generic [ref=f1e43]:
+            - generic [ref=f1e44]: 投研 Agent
+            - generic [ref=f1e45]: 研究工作台
+          - button "新建研究" [ref=f1e46] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=f1e51]
+        - generic [ref=f1e53]:
+          - generic [ref=f1e54]: 最近
+          - generic [ref=f1e55]: "1"
+        - navigation "研究列表" [ref=f1e56]:
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f1e133] [cursor=pointer]:
+            - generic [ref=f1e134]: 新对话
+            - generic [ref=f1e135]: 0 条 · 2026-10-01
+            - button "移除" [ref=f1e136]
+        - button "F f05e2e 模型与连接" [ref=f1e60] [cursor=pointer]:
+          - generic [ref=f1e61]: F
+          - generic [ref=f1e62]:
+            - generic [ref=f1e63]: f05e2e
+            - generic [ref=f1e64]: 模型与连接
+      - main "对话编排" [ref=f1e65]:
+        - generic [ref=f1e67]:
+          - generic [ref=f1e68]: 新对话
+          - generic [ref=f1e69]: Run 8225c4bd
+        - generic [ref=f1e143]:
+          - generic [ref=f1e146]:
+            - generic [ref=f1e147]: 执行中
+            - generic [ref=f1e148]:
+              - generic [ref=f1e170]: 0s
+              - generic [ref=f1e171]: stateful-react-agent
+              - generic [ref=f1e172]: llm_fallback_chain[mock-frontier-model]
+              - generic [ref=f1e173]: ctx 0%
+              - generic [ref=f1e174]: tools 9
+          - button "收起过程" [ref=f1e188] [cursor=pointer]
+        - region "运行过程" [ref=f1e189]:
+          - generic [ref=f1e190]:
+            - tablist [ref=f1e194]:
+              - tab "计划" [ref=f1e196]
+              - tab "活动" [ref=f1e197]
+              - tab "轨迹" [selected] [ref=f1e198]
+            - tabpanel "轨迹" [ref=f1e222]:
+              - generic [ref=f1e223]:
+                - generic [ref=f1e225]:
+                  - generic [ref=f1e226]: 运行目录
+                  - code [ref=f1e227]: C:\Users\Administrator\AppData\Local\Temp\f05e2e\runs\8225c4bdf0c542cd811e926c68e65f0f
+                - generic [ref=f1e228]:
+                  - generic [ref=f1e231]:
+                    - generic [ref=f1e232]:
+                      - generic [ref=f1e233]: 运行开始
+                      - generic [ref=f1e234]: 模型：mock-frontier-model
+                    - generic [ref=f1e235]: 工具集：bash、read_file、write_file
+                    - generic [ref=f1e236]: 最大轮次：60
+                  - generic [ref=f1e239]:
+                    - generic [ref=f1e240]: 第 1 轮 · 模型
+                    - paragraph [ref=f1e243]: 我先读取文件再总结。
+                    - group [ref=f1e244]:
+                      - generic "模型推理 / 说明" [active] [ref=f1e245] [cursor=pointer]
+                      - generic [ref=f1e325]: 用户要验证推理展示。第一步应读取 notes.txt，检查内容后给出结论。
+                    - generic [ref=f1e247]:
+                      - code [ref=f1e248]: read_file
+                      - text: "{\"path\":\"notes.txt\"}"
+                    - generic [ref=f1e249]: tokens：prompt 128 · completion 20
+                  - generic [ref=f1e252]:
+                    - generic [ref=f1e253]:
+                      - generic [ref=f1e254]: 工具结果
+                      - generic [ref=f1e255]: 成功
+                      - generic [ref=f1e257]: read_file
+                      - generic [ref=f1e258]: 12ms
+                    - generic [ref=f1e259]: notes 内容很短：一切正常。
+                  - generic [ref=f1e262]:
+                    - generic [ref=f1e263]: 第 2 轮 · 模型
+                    - paragraph [ref=f1e266]: 运行诊断命令检查写入能力。
+                    - generic [ref=f1e267]: 该轮未记录可见推理
+                    - generic [ref=f1e269]:
+                      - code [ref=f1e270]: bash
+                      - text: "{\"command\":\"diag --write-probe\"}"
+                    - generic [ref=f1e271]: tokens：prompt 128 · completion 20
+                  - generic [ref=f1e274]:
+                    - generic [ref=f1e275]:
+                      - generic [ref=f1e276]: 工具结果
+                      - generic [ref=f1e277]: 失败
+                      - generic [ref=f1e279]: bash
+                      - generic [ref=f1e280]: 45ms
+                    - generic [ref=f1e281]: OKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK【关键错误】磁盘已满，无法写入 checkpoint（本信息位于第 300 字符之后）--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                  - generic [ref=f1e284]:
+                    - generic [ref=f1e285]:
+                      - generic [ref=f1e286]: 工具结果
+                      - generic [ref=f1e287]: 成功
+                      - generic [ref=f1e289]: bash
+                      - generic [ref=f1e290]: 3ms
+                    - generic [ref=f1e291]: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA😀BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+                  - generic [ref=f1e295]:
+                    - generic [ref=f1e296]: 第 3 轮 · 模型
+                    - paragraph [ref=f1e299]: 第三轮：空推理。
+                    - generic [ref=f1e300]: 该轮记录了空的推理
+                    - generic [ref=f1e301]: tokens：prompt 128 · completion 20
+                  - generic [ref=f1e304]:
+                    - generic [ref=f1e305]: 第 4 轮 · 模型
+                    - paragraph [ref=f1e308]: 第四轮：仅有加密推理块。
+                    - generic [ref=f1e309]: 该轮仅有加密/签名推理块（用于协议回放），不可作为可读推理展示
+                    - generic [ref=f1e310]: tokens：prompt 128 · completion 20
+                  - generic [ref=f1e313]:
+                    - generic [ref=f1e314]: 第 5 轮 · 模型
+                    - paragraph [ref=f1e317]: 第五轮：完全没有推理字段。
+                    - generic [ref=f1e318]: 该轮未记录可见推理
+                    - generic [ref=f1e319]: tokens：prompt 128 · completion 20
+                  - generic [ref=f1e320]: end
+        - generic [ref=f1e70]:
+          - generic [ref=f1e157]: 已经是最早的消息
+          - article [ref=f1e159]:
+            - generic [ref=f1e160]: 你
+            - generic [ref=f1e161]: 测试一：请直接回答一句话
+          - article [ref=f1e162]:
+            - generic [ref=f1e163]: Agent
+            - generic [ref=f1e164]:
+              - paragraph [ref=f1e175]: This is a mock answer from the FrontierAgent demo endpoint.
+              - paragraph [ref=f1e176]:
+                - emphasis [ref=f1e177]: "[partial: no_tool]"
+          - article [ref=f1e178]:
+            - generic [ref=f1e179]: 你
+            - generic [ref=f1e180]: 测试二：请直接回答一句话
+          - article [ref=f1e181]:
+            - generic [ref=f1e182]: Agent
+            - paragraph [ref=f1e184]: This is a mock answer from the FrontierAgent demo endpoint.
+        - generic [ref=f1e91]:
+          - generic [ref=f1e92]:
+            - button "深度研究" [ref=f1e93] [cursor=pointer]
+            - button "报告产出" [ref=f1e94] [cursor=pointer]
+            - button "快速追问" [ref=f1e95] [cursor=pointer]
+          - generic [ref=f1e96]:
+            - button "附件" [ref=f1e97] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=f1e100]
+            - button "发送" [disabled] [ref=f1e185]
+      - complementary "研究画布" [ref=f1e103]:
+        - generic [ref=f1e104]:
+          - generic [ref=f1e105]:
+            - generic [ref=f1e106]: 新对话
+            - generic [ref=f1e107]: 本次回答
+          - generic [ref=f1e108]:
+            - button "刷新" [disabled] [ref=f1e109]
+            - button "专注阅读" [ref=f1e111] [cursor=pointer]
+        - generic [ref=f1e113]:
+          - tablist [ref=f1e117]:
+            - tab "结论" [selected] [ref=f1e119]
+            - tab "产物" [ref=f1e120]
+            - tab "执行" [ref=f1e121]
+          - tabpanel "结论" [ref=f1e123]:
+            - article [ref=f1e124]:
+              - paragraph [ref=f1e187]: This is a mock answer from the FrontierAgent demo endpoint.
+  - note "免责声明" [ref=f1e126]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=f1e127]: 不构成投资建议
+    - text: 。据此操作，风险自担。

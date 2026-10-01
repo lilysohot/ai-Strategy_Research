@@ -55,3 +55,11 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   ③ **请求尝试身份**（失败/重试是否纳入契约）本轮未实现——已确认现状是「只保存已返回轮次」；
   ④ 流式检查点（恢复已显示文本）未实现：产品若要该能力需另立范围，本轮不承诺；
   ⑤ 前端提示未在浏览器验证（与 F05 同一限制）。
+- 2026-10-01：**第 ⑤ 项完成**（隔离栈 + Playwright/Edge，记录见
+  [e2e/f05e2e/e2e-record.md](../e2e/f05e2e/e2e-record.md)）：partial → warning alert
+  「运行未正常结束，已保存的记录可读，但可能缺少最后一部分内容」且 9 条记录全部可读
+  （告警在记录旁，不替代记录）；文件删除 → unavailable 文案 + 空态；complete → 无告警。
+  过程中发现并修复 `RunDetailView.vue` 的条件链缺陷（已结束 Run 时间线不渲染，详见
+  [工单 05](05-history-trace-ui.md) 2026-10-01 条目）。
+  **仍未验收**：①② 真实故障注入（SIGKILL / 取消 / 磁盘写满 / 断电耐久）与
+  ③ 请求尝试身份维持不变。`Status 维持 ready-for-human`。

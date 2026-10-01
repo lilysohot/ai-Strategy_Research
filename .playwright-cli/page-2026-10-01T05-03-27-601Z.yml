@@ -1,0 +1,15 @@
+- generic [ref=f1e3]:
+  - generic [ref=f1e5]:
+    - heading "注册" [level=1] [ref=f1e29]
+    - paragraph [ref=f1e7]: FrontierAgent 私有部署控制台
+    - generic [ref=f1e8]:
+      - textbox "用户名（3-64 个字符）" [ref=f1e14]
+      - textbox "密码（至少 8 位，含字母与数字）" [ref=f1e20]
+      - textbox "再次输入密码" [ref=f1e35]
+      - button "注册并登录" [disabled] [ref=f1e36]
+    - generic [ref=f1e23]: 已有账号？点击登录
+    - paragraph [ref=f1e26]: 注册即表示你已知悉本系统为私有部署，所有 API Key 与对话数据仅存储于本服务器。
+  - note "免责声明" [ref=f1e27]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=f1e28]: 不构成投资建议
+    - text: 。据此操作，风险自担。

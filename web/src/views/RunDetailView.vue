@@ -188,7 +188,12 @@ defineExpose({ load })
       :closable="false"
     />
 
-    <!-- §6.4 P2：本次运行的工作目录（outputs/inputs 落点）+ 失败原因 -->
+    <!--
+      §6.4 P2：本次运行的工作目录（outputs/inputs 落点）+ 失败原因。
+      Kept OUT of the v-if/else chain below: chaining it made the timeline the
+      `v-else` branch, so any finished run (reconcile fills runDir) rendered the
+      meta box *instead of* its records. Found by the F05 browser validation.
+    -->
     <div v-if="runStream.runDir || runStream.errorMessage" class="run-detail__meta">
       <div v-if="runStream.runDir" class="run-detail__meta-row">
         <span class="run-detail__meta-label">运行目录</span>
@@ -201,7 +206,7 @@ defineExpose({ load })
     </div>
 
     <el-empty
-      v-else-if="!loading && !hasContent"
+      v-if="!loading && !hasContent"
       description="暂无轨迹记录（运行可能尚未产生输出）"
     />
 

@@ -1,6 +1,6 @@
 # 21：用户纠正与审批决定缺少持久追溯契约
 
-Status: ready-for-human
+Status: ready-for-agent
 Priority: P1
 Type: task
 Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
@@ -45,4 +45,20 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   **未完成**：业务库 `apodex` 尚未执行 `alembic upgrade head`（0003/0004 均未应用，本轮全部验证在隔离 SQLite/ASGI 内）；
   浏览器 DOM 层复核、真实重启后观测；`test_approval_end_to_end`/`test_upload_t210`/`test_stop_t28::sigkill` 三处失败为本机 Windows 既有限制（需 POSIX 复验）。
   `Status → ready-for-human`。
+- 2026-10-01：**浏览器 DOM 层复核完成：实时链路通过；「刷新恢复」发现实现缺口**（记录见
+  [e2e/f05e2e/e2e-record.md](../e2e/f05e2e/e2e-record.md)）。
+  **通过**（隔离栈 + 真实审批门 + Playwright/Edge）：live 弹窗（`approval-dialog`、目标/原因/沙箱警示、
+  默认聚焦拒绝）、D1 修正文案、steer 在下一工具边界生效 → 状态栏「插话 1 / 插话已生效 1」、
+  生效 steer 落为 `[运行中补充方向]` 消息、`GET /controls` 返回 steer=`adopted`、
+  approval=`adopted(session_all)`。
+  **缺口（刷新恢复未通过）**：Run 停在审批门时刷新页面——会话与消息恢复，但
+  **无弹窗、无任何 Run 标识**（等待 11s 无变化）；同一时刻
+  `GET /controls?kind=approval&status=pending` 返回完整 pending 记录。根因：
+  `loadPendingApproval()` 只在 store `watch()` 内调用，而 `watch()` 仅被 ChatView
+  的发送消息路径调用；刷新后 `runId` 为 null，且 UI 无任何入口对「停在审批门的运行」
+  重新订阅（`retry()` 也需要非空 runId）。证据截图 `e2e/f05e2e/f21-refresh-no-dialog.png`。
+  **修复方向**：`restoreSession` 后（或活跃会话轮询中）检测 pending 控制记录 /
+  活跃 Run 并 `watch(run_id)` 或就地重建弹窗。该缺口与工单 05 记录的
+  「刷新后无法重开历史 Run」同源。`Status → ready-for-agent`（仅剩此前端缺口 +
+  业务库迁移 + POSIX 复验项）。
 

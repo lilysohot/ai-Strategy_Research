@@ -1,6 +1,6 @@
 # 05：补齐历史可见推理和完整工具结果阅读
 
-Status: ready-for-human
+Status: closed
 Priority: P2
 Type: task
 Requirements: PR-RUN-02, PR-GOV-02
@@ -47,3 +47,17 @@ Depends on: 03, 04
   历史运行、长文本、无推理、权限失败（404）及键盘操作。本机未安装浏览器自动化依赖
   （E1 已记录该限制）；现有证据为转译真实 TS 的契约审计 + 后端投影单测 + 构建通过，
   不含 DOM 渲染验证。
+- 2026-10-01：**浏览器 DOM 层验收完成，并发现且修复一个渲染缺陷**。
+  **缺陷**：`RunDetailView.vue` 模板把「运行目录」元信息块（`v-if`）与 `el-empty`（`v-else-if`）、
+  时间线（`v-else`）串成条件链——reconcile 对每个已结束 Run 都填 `runDir`，导致
+  **凡已结束 Run 的轨迹页只渲染元信息框、0 条记录**（页面内 `/trace` 实测返回 10 条记录
+  且 `complete`，DOM 无 `.tl-item`）。修复：`el-empty` 改独立 `v-if`，meta 块脱离条件链；
+  `vue-tsc` 0 错误、`npm run test` 70/70、修复后 10 条记录全部渲染。
+  **验收**（隔离栈 mock LLM + 8471/5273 + Playwright/Edge，记录见
+  [e2e/f05e2e/e2e-record.md](../e2e/f05e2e/e2e-record.md)）：散文推理折叠/键盘 Enter 切换、
+  缺失/空/加密块三种文案、300 字符预览恰好截断、「继续读取」有界解锁且第 400 字符错误可达、
+  读满按钮消失、299A+😀+50B 按 code point 切片无 U+FFFD、短结果无按钮、
+  Run 切换展开状态重置、404（路由注入）→「该运行不存在或无权限查看」——全部通过。
+  **遗留如实记录**：刷新后 `runStream.runId` 归零且 UI 无重开历史 Run 的入口
+  （`watch()` 仅挂在发送消息路径，与工单 21 发现同源）；「刷新后一致」以 Run 切换重载与
+  `/trace` 重取验证。`Status → closed`。

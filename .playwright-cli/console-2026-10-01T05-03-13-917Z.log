@@ -1,0 +1,19 @@
+[     843ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5273/favicon.ico:0
+[     942ms] [WARNING] ElementPlusError: [el-link] [API] The underline option (boolean) is about to be deprecated in version 3.0.0, please use 'always' | 'hover' | 'never' instead.
+For more detail, please visit: https://element-plus.org/en-US/component/link.html#underline
+
+    at debugWarn (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10594:37)
+    at watch.immediate (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10638:14)
+    at callWithErrorHandling (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2404:19)
+    at callWithAsyncErrorHandling (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2411:17)
+    at baseWatchOptions.call (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3102:47)
+    at job (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2134:18)
+    at watch (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2169:7)
+    at doWatch (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3130:23)
+    at watch2 (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3063:10)
+    at useDeprecated (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10637:3) @ http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10594
+[   13266ms] [VERBOSE] [DOM] Password forms should have (optionally hidden) username fields for accessibility: (More info: https://www.chromium.org/developers/design-documents/create-amazing-password-forms) %o @ http://localhost:5273/login:0
+[  337901ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://localhost:5273/api/runs/8225c4bdf0c542cd811e926c68e65f0f/trace:0
+[  807331ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5273/api/runs/e7dbbfb859384bbe89ee0c1cf099bf07/trace?after=0:0
+[ 1254050ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5273/api/runs/d4433a01:0
+[ 1503350ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5273/api/runs/6681061fdcbe49d2bb8af2f161a5e8ef/stop:0

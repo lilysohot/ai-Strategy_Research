@@ -1,0 +1,108 @@
+- generic [ref=f1e37]:
+  - main [ref=f1e39]:
+    - generic [ref=f1e40]:
+      - complementary "研究导航" [ref=f1e41]:
+        - generic [ref=f1e42]:
+          - generic [ref=f1e43]:
+            - generic [ref=f1e44]: 投研 Agent
+            - generic [ref=f1e45]: 研究工作台
+          - button "新建研究" [ref=f1e46] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=f1e51]
+        - generic [ref=f1e53]:
+          - generic [ref=f1e54]: 最近
+          - generic [ref=f1e55]: "2"
+        - navigation "研究列表" [ref=f1e56]:
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f1e739] [cursor=pointer]:
+            - generic [ref=f1e740]: 新对话
+            - generic [ref=f1e741]: 0 条 · 2026-10-01
+            - button "移除" [ref=f1e742]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f1e133] [cursor=pointer]:
+            - generic [ref=f1e134]: 新对话
+            - generic [ref=f1e135]: 0 条 · 2026-10-01
+            - button "移除" [ref=f1e136]
+        - button "F f05e2e 模型与连接" [ref=f1e60] [cursor=pointer]:
+          - generic [ref=f1e61]: F
+          - generic [ref=f1e62]:
+            - generic [ref=f1e63]: f05e2e
+            - generic [ref=f1e64]: 模型与连接
+      - main "对话编排" [ref=f1e65]:
+        - generic [ref=f1e67]:
+          - generic [ref=f1e68]: 新对话
+          - generic [ref=f1e69]: Run 5cb2fbbd
+        - generic [ref=f1e770]:
+          - generic [ref=f1e773]:
+            - generic [ref=f1e774]: 执行中
+            - generic [ref=f1e775]:
+              - generic [ref=f1e896]: 0s
+              - generic [ref=f1e897]: stateful-react-agent
+              - generic [ref=f1e898]: mock-frontier-model
+              - generic [ref=f1e899]: ctx 0%
+              - generic [ref=f1e900]: tools 9
+          - button "查看过程" [ref=f1e782] [cursor=pointer]
+        - generic [ref=f1e70]:
+          - generic [ref=f1e784]: 已经是最早的消息
+          - article [ref=f1e786]:
+            - generic [ref=f1e787]: 你
+            - generic [ref=f1e788]: 测试四：执行审批流程
+          - article [ref=f1e789]:
+            - generic [ref=f1e790]: Agent
+            - generic [ref=f1e791]:
+              - paragraph [ref=f1e802]: �õģ����յ�����˵�����������ջش�
+              - paragraph [ref=f1e803]:
+                - emphasis [ref=f1e804]: "[partial: no_tool]"
+          - article [ref=f1e805]:
+            - generic [ref=f1e806]: 你
+            - generic [ref=f1e807]: 测试五：审批流程重试
+          - article [ref=f1e808]:
+            - generic [ref=f1e809]: Agent
+            - generic [ref=f1e810]:
+              - paragraph [ref=f1e854]: Approval flow finished. This is the final answer.
+              - paragraph [ref=f1e855]:
+                - emphasis [ref=f1e856]: "[partial: no_tool]"
+          - article [ref=f1e857]:
+            - generic [ref=f1e858]: 你
+            - generic [ref=f1e859]: 测试六：审批与插话
+          - article [ref=f1e889]:
+            - generic [ref=f1e890]: 你
+            - generic [ref=f1e891]: "[运行中补充方向] 补充：产出文件标题请用中文"
+          - article [ref=f1e892]:
+            - generic [ref=f1e893]: Agent
+            - generic [ref=f1e894]:
+              - paragraph [ref=f1e901]: Approval flow finished. This is the final answer.
+              - paragraph [ref=f1e902]:
+                - emphasis [ref=f1e903]: "[partial: no_tool]"
+          - article [ref=f1e904]:
+            - generic [ref=f1e905]: 你
+            - generic [ref=f1e906]: 测试七：刷新恢复测试
+          - article [ref=f1e907]:
+            - generic [ref=f1e908]: Agent
+            - paragraph [ref=f1e910]: Approval flow finished. This is the final answer.
+        - generic [ref=f1e91]:
+          - generic [ref=f1e92]:
+            - button "深度研究" [ref=f1e93] [cursor=pointer]
+            - button "报告产出" [ref=f1e94] [cursor=pointer]
+            - button "快速追问" [ref=f1e95] [cursor=pointer]
+          - generic [ref=f1e96]:
+            - button "附件" [ref=f1e97] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [active] [ref=f1e100]
+            - button "发送" [disabled] [ref=f1e911]
+      - complementary "研究画布" [ref=f1e103]:
+        - generic [ref=f1e104]:
+          - generic [ref=f1e105]:
+            - generic [ref=f1e106]: 新对话
+            - generic [ref=f1e107]: 本次回答
+          - generic [ref=f1e108]:
+            - button "刷新" [disabled] [ref=f1e109]
+            - button "专注阅读" [ref=f1e111] [cursor=pointer]
+        - generic [ref=f1e113]:
+          - tablist [ref=f1e117]:
+            - tab "结论" [selected] [ref=f1e119]
+            - tab "产物" [ref=f1e120]
+            - tab "执行" [ref=f1e121]
+          - tabpanel "结论" [ref=f1e123]:
+            - article [ref=f1e124]:
+              - paragraph [ref=f1e913]: Approval flow finished. This is the final answer.
+  - note "免责声明" [ref=f1e126]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=f1e127]: 不构成投资建议
+    - text: 。据此操作，风险自担。
