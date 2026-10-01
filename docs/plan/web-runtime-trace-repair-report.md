@@ -647,8 +647,11 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`，协作式取消已在 E1 首批覆盖，见
 [工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)）；**运行级磁盘写满已于
 2026-10-01 下午完成**（WSL 隔离库 + tmpfs 真实 ENOSPC：在飞 run 不挂起、`/trace` 判定不误报，
-但**发现 3 处新缺陷**——满盘时新提交的 run 永久卡 `queued`（[orchestrator.py](../../server/orchestrator.py#L877-L880)
-写 history 抛 ENOSPC 被 `_drain_session` 吞掉且无终态）、轨迹/用量丢失静默、0 字节侧车残留，见
+但**发现 3 处新缺陷并已修复**——满盘时新提交的 run 永久卡 `queued`（已修：提交路径
+消费数据根探针满盘 503 + `_drain_session` 启动失败即写终态 `failed`）、轨迹/用量丢失静默
+（已修：干净完成但轨迹 0 字节时助手轮追加「存储降级」可见标记）、0 字节侧车残留
+（已修：`summary.json` 原子写 + 清理 `.tmp`/0 字节 spool），回归
+`tests/test_web_f22_disk_full.py` 6/6，见
 [工单 22](../../.scratch/web-runtime-trace-hardening/issues/22-disk-full-queue-wedge.md)）；
 尚余**断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
 **运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**

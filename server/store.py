@@ -1030,6 +1030,27 @@ async def update_run_result(
         await session.commit()
 
 
+async def mark_run_failed_if_active(*, run_id: uuid.UUID, error: str) -> bool:
+    """Close a run that failed to launch (F22 / F06-RUN-1).
+
+    A submission is accepted and queued *before* the worker starts. When the
+    launch itself fails — e.g. the run-data root is full and writing
+    ``history.txt`` raises ENOSPC — the row must not be left ``queued`` forever
+    with no worker and no terminal state. Only an ACTIVE run is closed: a run
+    that already reached a terminal state is left alone, so a late launch error
+    can never overwrite a real outcome. Returns True when it closed a run.
+    """
+    async with get_sessionmaker()() as session:
+        row = await session.get(Run, run_id)
+        if row is None or row.status not in ACTIVE_RUN_STATUSES:
+            return False
+        row.status = "failed"
+        row.error = error
+        row.finished_at = datetime.now(UTC)
+        await session.commit()
+        return True
+
+
 async def mark_run_started(*, run_id: uuid.UUID) -> None:
     """Record that a worker actually began (F20).
 

@@ -37,6 +37,7 @@ from server.config import build_run_paths, canonical_run_id, get_config, run_dir
 from server.deps import get_current_user
 from server.diff import revert_paths
 from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
+from server.readiness import probe_data_root
 from server.relay import sse_for_run, trajectory_records_for_egress
 from server.store import (
     ACTIVE_RUN_STATUSES,
@@ -122,6 +123,17 @@ async def submit_run(
     user: UserModel = Depends(get_current_user),
 ) -> dict[str, Any]:
     orch = get_orchestrator()
+
+    # F22 / F06-RUN-1: refuse work the process cannot persist. A full (or
+    # read-only) run-data root made the worker's history write fail with ENOSPC
+    # *after* the run was accepted — it then sat "queued" forever with no worker
+    # and no terminal state. The /readyz probe is the same cheap real-bytes
+    # write, so gate submission on it too, before any side effect.
+    if probe_data_root() is not None:
+        raise HTTPException(
+            status_code=503,
+            detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行",
+        )
 
     message, session_id, files = await _parse_submit(request)
     if not message:

@@ -464,9 +464,15 @@ async def run_once(args: argparse.Namespace) -> int:
         "stopped_by": _stopped_by,
         "duration_s": round(time.time() - started, 2),
     }
-    (run_root / "summary.json").write_text(
-        json.dumps(summary, ensure_ascii=False), encoding="utf-8"
-    )
+    # F22 / F06-RUN-3: write atomically so a failed write cannot leave a partial
+    # (0-byte) summary that the orchestrator reads as "no data". A write failure
+    # is logged but must never mask the run outcome.
+    try:
+        summary_tmp = run_root / "summary.json.tmp"
+        summary_tmp.write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
+        os.replace(summary_tmp, run_root / "summary.json")
+    except OSError:
+        logging.getLogger("worker").warning("summary write failed", exc_info=True)
     return 0 if not error else 1
 
 

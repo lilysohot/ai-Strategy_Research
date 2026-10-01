@@ -93,4 +93,5 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   **F06-RUN-3（低）**：部分写入留下陈旧/孤立 0 字节侧车（`react_agent.json` 停在 start 快照、
   `.json.tmp`、`.messages.spool`、`summary.json` 0 字节——`server/worker.py` 的 summary 写未加保护）。
   **仍未完成**：断电耐久（存储级，维持不做）、请求尝试身份、流式检查点、真实供应商格式差异；
-  F06-RUN-1/2/3 待修。`Status 维持 ready-for-human`。
+  F06-RUN-1/2/3 已于同日修复（见工单 [22](22-disk-full-queue-wedge.md)，回归
+  `tests/test_web_f22_disk_full.py` 6/6）。`Status 维持 ready-for-human`。

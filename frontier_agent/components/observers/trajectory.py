@@ -293,9 +293,16 @@ class TrajectoryFileObserver(BaseObserver):
         if self._message_spool_handle is not None:
             self._message_spool_handle.close()
             self._message_spool_handle = None
+        spool_path = self._message_spool_path()
         if cleanup:
             with contextlib.suppress(FileNotFoundError):
-                self._message_spool_path().unlink()
+                spool_path.unlink()
+        elif spool_path.exists() and spool_path.stat().st_size == 0:
+            # F22 / F06-RUN-3: a 0-byte spool means every append failed (e.g.
+            # ENOSPC) — it holds nothing recoverable, so it is only a confusing
+            # sidecar. Keep the forensic spool only when it has content.
+            with contextlib.suppress(OSError):
+                spool_path.unlink()
 
     def _write_envelope(self, path: Path) -> None:
         """Stream one compatible JSON envelope without materialising it."""
@@ -369,8 +376,17 @@ class TrajectoryFileObserver(BaseObserver):
         self._last_flush_at = time.monotonic()
         path = self._path("json")
         tmp = path.with_suffix(path.suffix + ".tmp")
-        self._write_envelope(tmp)
-        os.replace(tmp, path)
+        try:
+            self._write_envelope(tmp)
+            os.replace(tmp, path)
+        except OSError:
+            # F22 / F06-RUN-3: a failed envelope write (e.g. ENOSPC) must not
+            # leave a partial ``.tmp`` sidecar behind. The observer isolation
+            # (non-critical) already keeps the failure from aborting the loop,
+            # so this only cleans up after it.
+            with contextlib.suppress(OSError):
+                tmp.unlink()
+            raise
 
     @staticmethod
     def _synth_id(turn: int, idx: int) -> str:

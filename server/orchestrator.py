@@ -34,7 +34,7 @@ from typing import Any
 
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
-from server.config import REPO_ROOT, get_config, run_dir_for
+from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
 from server.events import EventType, make_event
 from server.history import STEER_TURN_PREFIX, extract_final_answer, render_session_history
 from server.store import (
@@ -52,6 +52,7 @@ from server.store import (
     get_control,
     list_active_runs,
     list_turns,
+    mark_run_failed_if_active,
     mark_run_started,
     record_artifacts,
     resolve_control,
@@ -577,7 +578,7 @@ class Orchestrator:
                 break
             try:
                 await self._spawn(**params)
-            except Exception:
+            except Exception as exc:
                 # F15: one run that fails to launch must not abandon the items
                 # already queued behind it in the same session. Letting the
                 # exception escape killed this drain task, so every later run of
@@ -586,8 +587,32 @@ class Orchestrator:
                     "run launch failed for session=%s run_id=%s; continuing queue",
                     session_id, params.get("run_id"),
                 )
+                # F22 / F06-RUN-1: a launch failure used to leave the run row
+                # "queued" with no worker and no terminal state — a full
+                # run-data root (ENOSPC on the history write) wedged the row
+                # forever. Close it now so it is not a zombie in the UI.
+                await self._mark_launch_failed(params, exc)
             finally:
                 q.task_done()
+
+    async def _mark_launch_failed(self, params: dict[str, Any], exc: Exception) -> None:
+        """Close the run row of a run that failed to launch (F22 / F06-RUN-1).
+
+        Best-effort: the run data root may be full (the launch failure itself)
+        but the database is a separate store, so closing the row usually
+        succeeds. A row that already reached a terminal state is never touched.
+        """
+        run_id = params.get("run_id")
+        if not run_id or not _looks_like_uuid(run_id):
+            return
+        reason = str(exc).strip().replace("\n", " ")[:500] or type(exc).__name__
+        try:
+            await mark_run_failed_if_active(
+                run_id=uuid.UUID(run_id),
+                error=f"launch failed: {reason}",
+            )
+        except Exception:
+            logger.exception("failed to close run %s after launch error", run_id)
 
     async def _spawn(self, **params: Any) -> None:
         run_id = params["run_id"]
@@ -1002,6 +1027,24 @@ class Orchestrator:
             # its SSE generator can terminate instead of hanging forever.
             self._close_streams(handle.run_id)
 
+    @staticmethod
+    def _trajectory_degraded(run_id: str) -> bool:
+        """True when the run's trajectory file exists but holds no data (F22).
+
+        The trajectory JSONL is created on the observer's first write. An
+        existing-but-empty file therefore means every write failed (a full
+        run-data root) — NOT that recording was disabled, which leaves no file
+        at all. Only a cleanly-finished run is checked by the caller, so an
+        empty file here is a silent storage loss, not a partial stop.
+        """
+        if not _looks_like_uuid(run_id):
+            return False
+        try:
+            path = build_run_paths(run_id)["run"] / "agent" / "trajectories" / "react_agent.jsonl"
+            return path.exists() and path.stat().st_size == 0
+        except OSError:
+            return False
+
     async def _backfill_assistant_turn(self, handle: RunHandle, frame: dict[str, Any]) -> None:
         """Append the assistant's reply (from ``final_answer``) to the session.
 
@@ -1026,6 +1069,12 @@ class Orchestrator:
         if stopped_by or error:
             tag = stopped_by or "error"
             content = f"{answer}\n\n_[partial: {tag}]_"
+        elif self._trajectory_degraded(handle.run_id):
+            # F22 / F06-RUN-2: a run that finished cleanly MUST have recorded a
+            # trajectory; an existing-but-empty file means every observer write
+            # failed (e.g. ENOSPC on a full run-data root), and the loss was
+            # silent — the row read as a normal completion. Surface it.
+            content = f"{answer}\n\n_[存储降级：轨迹未落盘，用量不可统计]_"
         await append_turn(
             session_id=session_uuid,
             role="assistant",
