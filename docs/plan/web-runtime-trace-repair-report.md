@@ -656,7 +656,11 @@ API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`
 尚余**断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
 **运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**
 （联合恢复演练与孤儿处置已于 2026-09-30 完成，见
-[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01
+[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)；**运维备份脚本已于
+2026-10-01 晚交付并验证**：`scripts/web_backup.py`（`pg_dump -Fc` 包装 + `pg_restore --list` 校验 +
+sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可指向异地挂载），真实业务库备份
+→ 独立库恢复演练 8 表行数一致、外键 12/12、版本 0004，见 `audit/f07-backup-script.json`；
+仍余 ③ ON DELETE/会话删除语义、④ 密钥不可用组合恢复、⑤ 保留期/频率/位置定值与异地跨机挂载），F01
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单

@@ -1,0 +1,42 @@
+{
+  "artifact": "F07 operational backup script + restore drill",
+  "batch": "E1-20261001-WSL（收尾）",
+  "executed_at": "2026-10-01",
+  "operator": "agent",
+  "deliverable": "scripts/web_backup.py（单命令运维备份：pg_dump -Fc 包装 + pg_restore --list 完整性校验 + sha256 清单 + 保留期清理 + fail-closed 目标 + 可配置异地目录）",
+  "environment": {
+    "host_pg_client": "无（宿主无 pg_dump）→ 脚本自动回退 docker exec pg",
+    "target_db": "真实业务库 apodex（localhost:5432，pg18-zhvector 18.6）",
+    "out_dir": "/home/administrator/backups/web-backups（仓库外；异地跨机需运维挂载第二台机器）",
+    "business_db": "apodex 全程只读（pg_dump 备份），版本保持 0004_control_records"
+  },
+  "verifications": [
+    {
+      "check": "真实备份（业务库）",
+      "result": "apodex-20261001T083249Z.dump（191,240 B），pg_restore --list 校验通过（60 TOC 项：8 表 + 全部索引含 uq_turns_session_seq + 12 外键）；清单 apodex-*.json 含 ts/db/bytes/sha256/keep_days"
+    },
+    {
+      "check": "恢复演练（隔离库 apodex_f07b_verify，脚本产出 dump 恢复）",
+      "result": "pg_restore --no-owner --no-acl 退出 0；**8 表行数逐一一致**（users/sessions/runs/turns/artifacts/user_llm_configs/audit_log/control_records）；外键 **源 12 / 恢复 12**；alembic_version 均 0004_control_records。演练库已 DROP"
+    },
+    {
+      "check": "保留期（--keep-days 30，隔离临时目录）",
+      "result": "--dry-run 正确列出 40 天前的旧 dump；apply 后 40 天前被清理、2 天前保留、非匹配文件 untouched；新备份正常生成"
+    },
+    {
+      "check": "fail-closed 负向",
+      "result": "out-dir 为文件 → 报「备份目标不可写 [Errno 17]」exit=1 未产生备份；只读目录 → 报 [Errno 13] exit=1；/proc 目录 exit=1"
+    },
+    {
+      "check": "回归测试",
+      "result": "tests/test_web_backup_script.py 5/5（URL 解析/默认端口/畸形拒绝/探针 fail-closed/prune 选择且不删非匹配）；ruff/pyright 全通过"
+    }
+  ],
+  "still_open": [
+    "③ ON DELETE 行为与会话删除语义（T6 第 2–3 步）——需人工/产品决策",
+    "④ 密钥不可用（SERVER_MASTER_KEY 丢失 → api_key_cipher 不可解密）的组合恢复未演练——建议在真实部署前做隔离复演",
+    "⑤ 保留期/备份频率/存放位置定值——脚本默认 --keep-days 30，具体运维值待产品/运维定",
+    "异地跨机存放——脚本支持任意 --out-dir（可指向挂载），真异地需第二台机器挂载"
+  ],
+  "cleanup": "演练库 apodex_f07b_verify 已 DROP；容器内临时 dump 已删；业务库只读未变（0004）；live API /healthz、/readyz 均 200"
+}

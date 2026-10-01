@@ -99,6 +99,17 @@ Requirements: PR-GOV-05, PR-BIZ-06
   [audit/f01-rollback-drill.json](../audit/f01-rollback-drill.json)。
   该项仍未覆盖：密钥不可用、过期清理与缺文件的组合边界（第 ④ 项其余部分），以及第 ① 项（单命令备份脚本与**异地存放**，
   本轮备份落在宿主仓库外但同机，仍非异地）。
+- 2026-10-01（晚）：**第 ① 项完成——运维备份脚本 + 真实备份 + 恢复演练**。交付
+  [scripts/web_backup.py](../../../scripts/web_backup.py)（`pg_dump -Fc` 单命令包装：
+  fail-closed 目标探针、`pg_restore --list` 完整性校验、sha256 清单、`--keep-days` 保留期清理、
+  `--out-dir` 可指向异地挂载、宿主无 pg 客户端时自动回退 `docker exec pg`）。证据
+  [audit/f07-backup-script.json](../audit/f07-backup-script.json)：真实业务库备份
+  `apodex-20261001T083249Z.dump`（191 KB，list 校验通过）→ 独立库恢复演练 **8 表行数一致、
+  外键 12/12、版本 0004**；保留期 40 天清理/2 天保留；不可写目标 fail-closed exit 1；
+  回归 `tests/test_web_backup_script.py` 5/5。
+  **仍未覆盖**：③ ON DELETE 与会话删除语义（T6 第 2–3 步，需人工决策）、④ 密钥不可用组合恢复
+  （`SERVER_MASTER_KEY` 丢失 → api_key_cipher 不可解密，建议部署前隔离复演）、⑤ 保留期/频率/位置定值
+  （脚本默认 `--keep-days 30`）、异地跨机存放（脚本支持任意 out-dir，真异地需第二台机器挂载）。
   **另需记录（越界操作，须保留痕迹）**：本次演练清理时误删了容器内 `/tmp/apodex-pre-t6.dump`——即 T6 孤儿处置前的
   pre 快照，上条明确记为"**pre 快照保留**"。该文件位于容器 `/tmp`，按上条自身口径"随容器重建丢失"，本已非持久；F01 备份
   （宿主侧、仓库外）完好，F01 回退能力不受影响，但该 T6 回滚点已不可恢复。
