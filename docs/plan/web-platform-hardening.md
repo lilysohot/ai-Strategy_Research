@@ -47,7 +47,7 @@
 | T5 | 业务库备份与恢复预案 | P1 | — | **恢复演练已通过**（2026-09-30：行数逐一一致 + 外键 9/9 全部建成）；运维备份脚本与异地存放仍缺 |
 | T6 | 孤儿数据清理与外键策略 | P1 | T5 | **第 1 步已完成**（2026-09-30：592 条孤儿按人工口径处置，恢复演练转 clean）；第 2/3 步未做 |
 | T7 | request id 与结构化日志 | P1 | T1 | 待开始 |
-| T8 | `/healthz` 真实探活 | P1 | T7 | **部分完成**（2026-10-01：连通探活 + 就绪分离已落地并容器实测；compose healthcheck 未接） |
+| T8 | `/healthz` 真实探活 | P1 | T7 | **已完成（2026-10-01）**：连通探活 + 就绪分离 + compose `/readyz` healthcheck + `caddy` 依赖 `api` 的 `service_healthy` 均已落地并容器实测；仅真实 PG 重启时序未测 |
 | T9 | `/api/runs` 限流与配额 | P1 | T7 | 待开始 |
 | T10 | run 指标与成本观测 | P1 | T7 | 待开始 |
 | T11 | 前端测试接入与 CI 覆盖 | P2 | — | 已完成 |
@@ -432,8 +432,14 @@ uv run python scripts/run_retention.py orphans \
   数据库**不可达** → `/healthz` **503 `storage_unavailable`**、`/readyz` **503 `database_unavailable`**；
   schema 停在 `0003` → `/readyz` **503 `schema_behind`** 而 `/healthz` **200**。
   即"停库 503 / 恢复 200"已在真实容器内成立（未触碰共享 PG）。
-- **未做**：compose 的 `healthcheck` + `depends_on: service_healthy` 尚未接入（compose 里 api 服务目前没有
-  healthcheck）；未测真实 PG 重启时序。二者留待 T8 收尾。
+- **2026-10-01 续（E1-WSL 批次）**：`deploy/docker-compose.yml` 的 `api` 服务已接 `/readyz`
+  healthcheck（30s/5s/3 次，`start_period` 60s；注释说明为何不用 `/healthz`），`docker compose config`
+  解析通过、同款命令在镜像内实测 `health=healthy`；另测得真实**只读挂载**（非 debug 启动 exit 3、
+  debug 下 `/readyz` 503 而 `/healthz` 200）与**磁盘满**（发现并修复 0 字节探针缺陷），见
+  [工单 19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)。
+- **2026-10-01 收尾（用户确认后接线）**：`caddy` 已增加 `depends_on: api: {condition: service_healthy}`
+  ——`/readyz` 不是 200 时站点不被放行，完成标准后半句"compose 的 `depends_on: service_healthy`
+  语义与之一致"达成（`docker compose --profile full config` 解析出该依赖）。**仍未完成**：真实 PG 重启时序。
 
 ---
 

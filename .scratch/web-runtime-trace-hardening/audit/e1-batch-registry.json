@@ -19,10 +19,10 @@
     "cleanup_note": "待复验结束后按本文件 cleanup_list 受控清理；%TEMP% 下的令牌文件已删除"
   },
   "deferred": [
-    {"item": "产物索引/下载/diff/回滚（F17/F18/产物索引）", "blocked_by": "本机 shell 工具不可用，运行无法产生 /outputs 文件", "recheck_in": "POSIX 环境（WSL 或容器）"},
-    {"item": "浏览器 DOM 层：store applyEvent/reconcile、切换 Run、SQL 重连渲染（F10/F11）", "blocked_by": "未安装浏览器自动化依赖，本次决定不做真实浏览器", "recheck_in": "安装浏览器自动化后，或人工浏览器复核"},
-    {"item": "F08 跨用户越权提交动态复验", "blocked_by": "本批仅创建账号 B，未提交", "recheck_in": "E1 续跑（账号已就绪）"},
-    {"item": "真实供应商返回格式差异（本地 mock 通过不能宣称供应商兼容）", "blocked_by": "本批限定 mock 出口", "recheck_in": "用户批准后单独执行并记录用量"} 
+    {"item": "产物索引/下载/diff/回滚（F17/F18/产物索引）", "blocked_by": "本机 shell 工具不可用，运行无法产生 /outputs 文件", "recheck_in": "POSIX 环境（WSL 或容器）", "resolved_at": "2026-10-01（E1-WSL 批次真链路全过，见 e1-wsl-batch-registry.json）"},
+    {"item": "浏览器 DOM 层：store applyEvent/reconcile、切换 Run、SQL 重连渲染（F10/F11）", "blocked_by": "未安装浏览器自动化依赖，本次决定不做真实浏览器", "recheck_in": "安装浏览器自动化后，或人工浏览器复核", "status": "未完成"},
+    {"item": "F08 跨用户越权提交动态复验", "blocked_by": "本批仅创建账号 B，未提交", "recheck_in": "E1 续跑（账号已就绪）", "resolved_at": "2026-10-01（E1-WSL 批次 B 账号越权提交 404 + 零副作用）"},
+    {"item": "真实供应商返回格式差异（本地 mock 通过不能宣称供应商兼容）", "blocked_by": "本批限定 mock 出口", "recheck_in": "用户批准后单独执行并记录用量", "status": "未完成"}
   ],
   "environment": {
     "api": "127.0.0.1:8000 (Windows 原生 uvicorn, 单 worker)；本批中重启过一次（已获批准），重启后 healthz=200",

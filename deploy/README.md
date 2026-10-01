@@ -141,11 +141,14 @@ scheme 必须是 `postgresql+asyncpg://`——漏掉或写成裸 `postgresql://`
 
 | 路径 | 检查 | 典型用途 |
 | --- | --- | --- |
-| `/healthz` | 数据库**是否应答**（`SELECT 1`） | 容器 healthcheck / Caddy；连接断开 → 503 `storage_unavailable` |
-| `/readyz` | 应答 **且** schema 版本匹配 **且** 运行数据根可写 | 编排器就绪判定；未就绪 → 503 `not_ready` + `reasons` |
+| `/healthz` | 数据库**是否应答**（`SELECT 1`） | 存活探针 / Caddy；连接断开 → 503 `storage_unavailable` |
+| `/readyz` | 应答 **且** schema 版本匹配 **且** 运行数据根可写 | 编排器就绪判定，以及 **compose `api` healthcheck**（`deploy/docker-compose.yml`，`test` 打的就是 `/readyz`）；未就绪 → 503 `not_ready` + `reasons` |
 
 `reasons` 取值：`database_unavailable`、`schema_missing`、`schema_behind`、`schema_ahead`、
 `schema_ambiguous`、`data_root_unwritable`。
+
+栈内消费方：`caddy` 通过 `depends_on: api: {condition: service_healthy}` 等待门禁通过后才接流量，
+因此 `/readyz` 不是 200 时站点不会被放行。
 
 **启动即拒绝**：启动时同一门禁会再跑一次。schema 与本构建不符（落后**或超前**）时，非
 `SERVER_DEBUG` 下进程直接拒绝启动（`StorageNotReadyError`，实测 `docker run` 退出码 3）；

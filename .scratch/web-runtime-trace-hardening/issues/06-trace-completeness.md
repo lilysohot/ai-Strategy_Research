@@ -55,3 +55,13 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   ③ **请求尝试身份**（失败/重试是否纳入契约）本轮未实现——已确认现状是「只保存已返回轮次」；
   ④ 流式检查点（恢复已显示文本）未实现：产品若要该能力需另立范围，本轮不承诺；
   ⑤ 前端提示未在浏览器验证（与 F05 同一限制）。
+- 2026-10-01：**SIGKILL 真实故障注入完成（WSL，真实 worker/真实链路）**（批次
+  [e1-wsl-batch-registry.json](../audit/e1-wsl-batch-registry.json)）：mock 模型 25s 延迟制造
+  流中窗口，`kill -9` worker 后——API `/healthz` 200 存活；Run **立即**收口
+  `stopped/stopped_by=killed` 且 `finished_at` 落账（无需等重启 reconcile）；
+  `/trace` 返回 `completeness={state:"partial", valid_lines:1, trailing_partial_line:false,
+  corrupt_lines:0}`，reason 文案「运行未正常结束，已保存的记录可读，但可能缺少最后一部分内容」
+  正确，已存 `t=start` 行可读。协作式取消（user_stop/no_tool 路径）已在本批 Run1/Run2 真链路
+  再证。**仍未完成**：磁盘写满时的轨迹写入行为未做运行级注入（就绪门禁层面的磁盘满已在
+  issue 19 覆盖）；断电耐久属存储级验证（维持不做）；请求尝试身份与流式检查点维持原范围决定；
+  浏览器提示未验。

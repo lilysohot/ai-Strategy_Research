@@ -593,7 +593,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | F16 | `server/store.py` 每连接 `PRAGMA foreign_keys=ON`；`turns` 唯一索引 + `append_turn` 冲突重试；迁移 `0003_turn_seq_unique` | `test_sqlite_declared_foreign_keys_are_enforced`、`test_concurrent_message_sequence_is_unique` |
 | F17 | `server/artifacts.py::_trusted_outputs_root` 拒绝符号链接根；`server/diff.py` 拒绝符号链接基线 | `test_artifact_root_symlink_cannot_rebase_containment`、`test_revert_rejects_symlinked_baseline` |
 | F18 | manifest 存平台规范显示路径；回滚同时接受规范路径与宿主绝对路径；回滚后 `sync_run_artifacts` 重算索引并清理失效行；显示路径改用 POSIX 语义 | `test_revert_updates_artifact_hash_index`、`test_absolute_file_tool_path_can_be_reverted` |
-| F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`）；后半：新增 `server/readiness.py`（head 由 `revision`/`down_revision` 链推出、不 import 迁移模块；打戳必须等于 head，未打戳要求全部 ORM 表在；数据根用真实写探针），`/healthz` 只报连通（`check_db` 改 `SELECT 1`），`/readyz` 追加 schema 与数据根；`app.lifespan` 同一门禁，未就绪且非 `SERVER_DEBUG` 抛 `StorageNotReadyError`（并跳过孤儿 reconcile）；新增 `deploy/entrypoint.web.sh`（`alembic upgrade head` → `exec uvicorn`，`set -e` 阻断），`Dockerfile.web` CMD 改指它；`deploy/README.md` 增迁移与门禁一节 | `test_health_distinguishes_unavailable_storage`；`tests/test_web_f19_schema_gate.py` 15/15（负向对照 6 条失败）；真实镜像 `frontier-agent-web:f19` 实测：空库启动依次迁移 0001→0004、`alembic current`=`head`、两探针 200；不可达库→exit 1 且 uvicorn 未启动；库停在 0003→`schema_behind` exit 3；debug 下 `/readyz` 503 而 `/healthz` 200；断连→两探针均 503 |
+| F19 | `server/app.py` 健康检查纳入存储探活（503 + `storage_unavailable`）；后半：新增 `server/readiness.py`（head 由 `revision`/`down_revision` 链推出、不 import 迁移模块；打戳必须等于 head，未打戳要求全部 ORM 表在；数据根用真实写探针），`/healthz` 只报连通（`check_db` 改 `SELECT 1`），`/readyz` 追加 schema 与数据根；`app.lifespan` 同一门禁，未就绪且非 `SERVER_DEBUG` 抛 `StorageNotReadyError`（并跳过孤儿 reconcile）；新增 `deploy/entrypoint.web.sh`（`alembic upgrade head` → `exec uvicorn`，`set -e` 阻断），`Dockerfile.web` CMD 改指它；`deploy/README.md` 增迁移与门禁一节 | `test_health_distinguishes_unavailable_storage`；`tests/test_web_f19_schema_gate.py` 16/16（负向对照 6 条失败；新增 `test_data_root_probe_writes_real_bytes`——E3 磁盘满注入发现 0 字节探针在满 tmpfs 上误报 ready）；真实镜像 `frontier-agent-web:f19` 实测：空库启动依次迁移 0001→0004、`alembic current`=`head`、两探针 200；不可达库→exit 1 且 uvicorn 未启动；库停在 0003→`schema_behind` exit 3；debug 下 `/readyz` 503 而 `/healthz` 200；断连→两探针均 503 |
 | F20 | 提交时落非密钥模型快照与配置引用；worker `run_started` 帧持久化 `running`/`started_at` | `test_submit_records_nonsecret_model_snapshot`、`test_run_started_event_updates_persistent_status` |
 | F09 | `Orchestrator.has_worker` + `server.routes.runs._live_queue_for` 按权威状态判定：本进程无 handle 且行状态非 queued/running → replay-only，不再订阅死队列；本进程结束的流由 `_closed_stream_ids` 兜底（后端契约）；前端游标语义：`Orchestrator.steer` 的 `steer_queued` 改用 `steer_seq`（不再占用轨迹游标 `seq`），`web/src/sse.ts` 新增 `CONTROL_EVENT_TYPES` 使控制帧不推进游标，浏览器端到端仍待验收 | `test_f09_late_subscription_finishes`、`test_f09_finished_in_another_process_replays_and_ends`、`test_f09_active_run_without_a_handle_still_subscribes`、`test_live_queue_decision_uses_the_persisted_status`、前端审计 `F09_steer_sequence_is_not_trajectory_cursor`（由 10 !== 0 转为通过） |
 | F07 | 新增 [scripts/run_retention.py](../../scripts/run_retention.py)：`manifest`（逐 run 存储引用 + sha256 + F06 轨迹状态）、`plan`（默认 dry-run，`expired/retained/active/unfinished/missing/out_of_scope` 六类，删除需 `--apply --yes` 且复核包含关系）、`verify`（文件齐全与校验值）、`check`（只读孤儿与行数）；缺失与过期严格区分 | `tests/test_web_f07_retention.py` 20/20（负向对照 5 条失败）；文件侧 CLI 演练四类 run 正确；真实 `pg_dump`→独立库 `pg_restore` 行数逐一一致（**但只建成 4/9 外键**，孤儿阻塞） |
@@ -643,9 +643,10 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 下段已按其现状改写）：F02 的**历史已发布镜像是否含数据**仍未调查（真实镜像构建已于 2026-10-01 补跑、
 镜像层核对通过，registry 阻断系瞬时故障，见
 [工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收**（实现与契约审计已完成，见
-[工单 05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md)）、F06 的**真实故障注入**
-（SIGKILL / 取消 / 磁盘写满 / 断电耐久）与**请求尝试身份**（失败·重试是否入契约）——契约已定义并
-有合成文件证据，见[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)、F07 的
+[工单 05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md)）、F06 的**真实故障注入**（SIGKILL 已于 2026-10-01 在 WSL 真实注入通过：mock 流中窗口 kill -9 worker →
+API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`，协作式取消已在 E1 首批覆盖，见
+[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)）尚余**运行级磁盘写满、
+断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
 **运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**
 （联合恢复演练与孤儿处置已于 2026-09-30 完成，见
 [工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01
@@ -653,13 +654,21 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
 [01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界；
-以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、真实供应商格式差异）。
+以及 E1 结转项——**POSIX 环境的产物/回滚复验与 F08 越权动态复验已于 2026-10-01 完成**
+（E1-WSL 批次：产物索引/下载/diff/回滚真链路全过；B 账号越权提交 404 + 零副作用 + 默认会话隔离；见
+[批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-wsl-batch-registry.json)），
+仍余**浏览器 DOM 层、真实供应商格式差异**。
 
 **F19 后半（schema 门禁 + 迁移显式步骤）已于 2026-10-01 实现**（`server/readiness.py` + `deploy/entrypoint.web.sh`，
 见工单 [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)）：`/healthz` 只报"数据库是否应答"
 （`check_db` 改 `SELECT 1`），`/readyz` 追加 schema 版本与运行数据根可写；启动同一门禁，未就绪且非 `SERVER_DEBUG`
-即拒绝服务；容器入口把 `alembic upgrade head` 作为显式失败阻断步骤。**未完成**：磁盘满注入、真实只读挂载、
-compose `service_healthy`、回退演练实测。**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
+即拒绝服务；容器入口把 `alembic upgrade head` 作为显式失败阻断步骤。**2026-10-01 E3 注入补齐（E1-WSL 批次）**：
+真实只读挂载（非 debug 启动 `StorageNotReadyError: data_root_unwritable` exit 3、debug 下 `/readyz` 503 而
+`/healthz` 200）、磁盘满注入（**发现并修复探针真缺陷**：0 字节写在满 tmpfs 上仍成功——数据页耗尽而非 inode，
+`probe_data_root` 改写真实字节 `b"readyz-probe"`，回归 `test_data_root_probe_writes_real_bytes`，套件 16/16）、
+compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内实测 healthy；`caddy` 以
+`depends_on: condition: service_healthy` 等待门禁通过后再接流量）。
+**未完成**：旧版镜像回退演练实测（修复后镜像未重建，本轮复测经 bind-mount）。**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
 → 部署前必须先迁移。
 
 **F21 已于 2026-10-01 实现**（契约与验收见
@@ -669,6 +678,11 @@ compose `service_healthy`、回退演练实测。**只读核对**：业务库 `a
 **未完成**：业务库 `apodex` 尚未执行 `alembic upgrade head`（`0003`/`0004` 均未应用，本轮验证全在隔离
 SQLite/ASGI 内，业务库未触碰）、浏览器 DOM 层复核、真实重启后观测。另修两处既有缺陷：隔离审计夹具随 F01
 失效的 `uploads_root` 一行（曾使 24 个检查全部 setup ERROR）、`server/trajectory_status.py` 一处 SIM105 lint。
+2026-10-01 E1-WSL 批次补齐真链路证据：`pending → adopted/once`（审批后 `create_file` 真实落盘）与
+`pending → expired`（300s 超时 fail-closed，source=timeout 未被记成用户拒绝）均落 `control_records`；
+三处 POSIX 用例（approval e2e/upload_t210/stop sigkill）9/9 通过。**遗留观察（deferred，未修）**：
+`control_to_dict` 投影不含 `external_id`，刷新页从 `GET /controls` 重建待审批后拿不到 approve 所需 ID
+（见[工单 21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md)）。
 
 **F09 的已知覆盖盲区（已按权威状态修复）**：此前的修复把「已结束的运行流」记在**进程内**的
 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。对**结束于其它进程**

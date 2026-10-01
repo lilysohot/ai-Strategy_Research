@@ -1,0 +1,5 @@
+{"ts": "2026-10-01T12:57:10", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "tool"}
+{"ts": "2026-10-01T12:58:07", "path": "/v1/chat/completions?x-upstream-session-id=e1wsl-a-s1", "client": "127.0.0.1", "model": "mock-e1", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "tool"}
+{"ts": "2026-10-01T13:03:07", "path": "/v1/chat/completions?x-upstream-session-id=e1wsl-a-s1", "client": "127.0.0.1", "model": "mock-e1", "stream": true, "n_messages": 4, "roles": ["system", "user", "assistant", "tool"], "n_tools": 9, "reply_kind": "text"}
+{"ts": "2026-10-01T13:05:54", "path": "/v1/chat/completions?x-upstream-session-id=e1wsl-a-s1", "client": "127.0.0.1", "model": "mock-e1", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "tool"}
+{"ts": "2026-10-01T13:09:15", "path": "/v1/chat/completions?x-upstream-session-id=e1wsl-a-s1", "client": "127.0.0.1", "model": "mock-e1", "stream": true, "n_messages": 4, "roles": ["system", "user", "assistant", "tool"], "n_tools": 9, "reply_kind": "text"}

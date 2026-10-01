@@ -141,3 +141,19 @@ Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 c
   （跨进程传递只能走它；父进程改配置对象到不了子进程——即环境方案 §4 的"父子配置一致"规则的测试版），
   复跑 worker e2e 后真实数据根**零新增**（4 目录全部被业务库引用）。T3b 规则随之扩展，见
   [web-platform-hardening.md](../../docs/plan/web-platform-hardening.md) T3b 补充。
+- 2026-10-01：**E1 结转 POSIX 复验批次完成（E1-20261001-WSL）**，环境、账号、Run、证据、deferred 与清理清单见
+  [批次登记](../../.scratch/web-runtime-trace-hardening/audit/e1-wsl-batch-registry.json)。通过项：① POSIX 依赖用例
+  **9/9**（approval e2e / upload_t210 / web_m1 含 SIGKILL skipif / stop_t28 sigkill 3.27s 无挂起），
+  diff/revert/artifacts 套件 **43/43**（Windows 上因 POSIX 语义失败的套件）；② E1 结转「产物索引/下载/diff/回滚」
+  真链路全过（create_file 经审批落盘 34B、sha256 一致、diff added+3、revert removed 后索引重算清空）；
+  ③ F08 越权动态复验（B 用 A 会话提交 → 404 + 零副作用 + 默认会话按用户隔离）；④ F15 usage complete、
+  F20 started_at/llm_snapshot 落账、F21 真链路 adopted/once 与 expired 落库；⑤ F06 SIGKILL 真实注入
+  （API 存活、Run 收口 stopped/killed、/trace completeness=partial）；⑥ F19 三项注入全过——只读挂载
+  （非 debug exit 3、debug 下 /readyz 503）、磁盘满（**发现并修复探针真缺陷**：0 字节写在满 tmpfs 上仍成功，
+  probe 改写真实字节 + 回归 `test_data_root_probe_writes_real_bytes`，16/16）、compose `/readyz` healthcheck
+  （镜像内实测 healthy；`caddy` 已接 `depends_on: api: service_healthy`）；⑦ F17 部署侧观测（euid=1000、tool-user 降权不激活、755 权限、符号链接契约 43/43）。
+  **仍未完成（deferred）**：浏览器 DOM 层、真实供应商格式差异、F06 运行级磁盘满与断电耐久、
+  F21 `/controls` 投影缺 external_id。隔离资源已清理（一次性库/卷/容器/令牌文件）；mock 已停，
+  API（新代码）保留运行。issue [19](issues/19-storage-readiness.md)/[06](issues/06-trace-completeness.md)/
+  [08](issues/08-session-ownership.md)/[17](issues/17-storage-trust-boundary.md)/[18](issues/18-artifact-index-consistency.md)/
+  [21](issues/21-control-history.md) 已追加 dated 记录；报告 §8「仍未完成」已同步。

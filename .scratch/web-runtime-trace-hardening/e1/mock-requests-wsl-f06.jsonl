@@ -1,0 +1,2 @@
+{"ts": "2026-10-01T13:11:47", "event": "started", "host": "127.0.0.1", "port": 8899, "mode": "text"}
+{"ts": "2026-10-01T13:12:00", "path": "/v1/chat/completions?x-upstream-session-id=e1wsl-a-s1", "client": "127.0.0.1", "model": "mock-e1", "stream": true, "n_messages": 2, "roles": ["system", "user"], "n_tools": 9, "reply_kind": "text"}
