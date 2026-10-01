@@ -1,6 +1,6 @@
 # 01：对齐运行根目录与持久卷，兼容历史 Run
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
@@ -184,3 +184,8 @@ Requirements: PR-GOV-01, PR-GOV-05, PR-BIZ-06
   附观察（未在本轮修，属既有配置、需按实际宿主判定）：`host.docker.internal` 在原生
   Linux Docker 引擎上需 `extra_hosts: host-gateway` 才可解析，现 compose 未声明；Docker Desktop
   （WSL2 / Windows）自带该名，故本机 WSL 不受影响，`CORPUS_DSN` 亦同此前提。
+- 2026-10-01：**关闭（用户指示）**。F01 验收项全部闭环：本机迁移 / WSL 迁移 / 孤儿归档 /
+  回退演练 / 活动 Run 跨新旧根拒绝 / 冲突非覆盖 / 容器实测（可构建 · 卷落点 · 重建后可读）/
+  容器业务库覆盖修复；迁移工具回归 `tests/test_web_f07_retention.py` 30/30。
+  上条附观察（`host.docker.internal` 在原生 Linux 引擎需 `extra_hosts`）为既有配置前提
+  （`CORPUS_DSN` 同此），不属本工单引入的缺口，另记、不阻塞关闭。`Status → closed`。
