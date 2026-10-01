@@ -40,6 +40,22 @@
     {
       "test": "F21_steer_applied_is_counted_apart_from_queued",
       "outcome": "passed"
+    },
+    {
+      "test": "F21_resume_resubscribes_the_active_run_and_rebuilds_the_dialog",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_resume_ignores_a_finished_run",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_resume_cannot_attach_after_a_session_switch",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_resume_never_clobbers_an_already_watched_run",
+      "outcome": "passed"
     }
   ]
 }

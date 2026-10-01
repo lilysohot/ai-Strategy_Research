@@ -179,6 +179,11 @@ export interface RunSummary {
  */
 export interface RunControlRecord {
   control_id: string
+  /**
+   * Worker-side id (the SSE frame's ``approval_id``). A decision must echo THIS
+   * id — the worker's gate matches on it, not on the row id.
+   */
+  external_id?: string | null
   run_id: string
   kind: 'steer' | 'approval'
   /** steer: queued | adopted | dropped | undelivered; approval: pending | adopted | rejected | expired | abandoned. */

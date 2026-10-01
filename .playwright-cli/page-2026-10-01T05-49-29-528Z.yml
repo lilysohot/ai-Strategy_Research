@@ -1,0 +1,68 @@
+- generic [ref=e1]:
+  - generic [ref=e39]:
+    - main [ref=e41]:
+      - generic [ref=e42]:
+        - complementary "研究导航" [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - generic [ref=e46]: 投研 Agent
+              - generic [ref=e47]: 研究工作台
+            - button "新建研究" [ref=e48] [cursor=pointer]
+          - textbox "筛选已加载研究" [ref=e53]
+          - generic [ref=e55]:
+            - generic [ref=e56]: 最近
+            - generic [ref=e57]: "3"
+          - navigation "研究列表" [ref=e58]:
+            - button "新对话 0 条 · 2026-10-01 移除" [ref=e172] [cursor=pointer]:
+              - generic [ref=e173]: 新对话
+              - generic [ref=e174]: 0 条 · 2026-10-01
+              - button "移除" [ref=e175]
+            - button "新对话 0 条 · 2026-10-01 移除" [ref=e59] [cursor=pointer]:
+              - generic [ref=e60]: 新对话
+              - generic [ref=e61]: 0 条 · 2026-10-01
+              - button "移除" [ref=e62]
+            - button "新对话 0 条 · 2026-10-01 移除" [ref=e64] [cursor=pointer]:
+              - generic [ref=e65]: 新对话
+              - generic [ref=e66]: 0 条 · 2026-10-01
+              - button "移除" [ref=e67]
+          - button "F f05e2e 模型与连接" [ref=e71] [cursor=pointer]:
+            - generic [ref=e72]: F
+            - generic [ref=e73]:
+              - generic [ref=e74]: f05e2e
+              - generic [ref=e75]: 模型与连接
+        - main "对话编排" [ref=e76]:
+          - generic [ref=e78]:
+            - generic [ref=e79]: 新对话
+            - generic [ref=e80]: 选择或新建研究后开始
+          - paragraph [ref=e196]: 开始你的第一项研究
+          - generic [ref=e132]:
+            - generic [ref=e133]:
+              - button "深度研究" [ref=e134] [cursor=pointer]
+              - button "报告产出" [ref=e135] [cursor=pointer]
+              - button "快速追问" [ref=e136] [cursor=pointer]
+            - generic [ref=e137]:
+              - button "附件" [ref=e138] [cursor=pointer]
+              - textbox "描述研究主题、时间范围、约束或继续追问..." [active] [ref=e141]
+              - button "发送" [disabled] [ref=e142]
+        - complementary "研究画布" [ref=e144]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]: 新对话
+              - generic [ref=e148]: 尚未选择运行
+            - generic [ref=e149]:
+              - button "刷新" [disabled] [ref=e150]
+              - button "专注阅读" [ref=e152] [cursor=pointer]
+          - generic [ref=e154]:
+            - tablist [ref=e158]:
+              - tab "结论" [selected] [ref=e160]
+              - tab "产物" [ref=e161]
+              - tab "执行" [ref=e162]
+            - tabpanel "结论" [ref=e164]:
+              - article [ref=e165]:
+                - generic [ref=e197]: 运行的回答或 Markdown 产物会显示在这里。
+    - note "免责声明" [ref=e170]:
+      - text: 本平台输出由 AI 生成，仅供参考，
+      - strong [ref=e171]: 不构成投资建议
+      - text: 。据此操作，风险自担。
+  - alert [ref=e198]:
+    - paragraph [ref=e202]: 已新建研究

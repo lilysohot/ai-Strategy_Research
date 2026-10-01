@@ -1,0 +1,114 @@
+- generic [ref=f2e3]:
+  - main [ref=f2e5]:
+    - generic [ref=f2e6]:
+      - complementary "研究导航" [ref=f2e7]:
+        - generic [ref=f2e8]:
+          - generic [ref=f2e9]:
+            - generic [ref=f2e10]: 投研 Agent
+            - generic [ref=f2e11]: 研究工作台
+          - button "新建研究" [ref=f2e12] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=f2e17]
+        - generic [ref=f2e19]:
+          - generic [ref=f2e20]: 最近
+          - generic [ref=f2e21]: "4"
+        - navigation "研究列表" [ref=f2e22]:
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f2e23] [cursor=pointer]:
+            - generic [ref=f2e24]: 新对话
+            - generic [ref=f2e25]: 0 条 · 2026-10-01
+            - button "移除" [ref=f2e26]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f2e28] [cursor=pointer]:
+            - generic [ref=f2e29]: 新对话
+            - generic [ref=f2e30]: 0 条 · 2026-10-01
+            - button "移除" [ref=f2e31]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f2e33] [cursor=pointer]:
+            - generic [ref=f2e34]: 新对话
+            - generic [ref=f2e35]: 0 条 · 2026-10-01
+            - button "移除" [ref=f2e36]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f2e38] [cursor=pointer]:
+            - generic [ref=f2e39]: 新对话
+            - generic [ref=f2e40]: 0 条 · 2026-10-01
+            - button "移除" [ref=f2e41]
+        - button "F f05e2e 模型与连接" [ref=f2e45] [cursor=pointer]:
+          - generic [ref=f2e46]: F
+          - generic [ref=f2e47]:
+            - generic [ref=f2e48]: f05e2e
+            - generic [ref=f2e49]: 模型与连接
+      - main "对话编排" [ref=f2e50]:
+        - generic [ref=f2e52]:
+          - generic [ref=f2e53]: 新对话
+          - generic [ref=f2e54]: Run 0c65cbf3
+        - generic [ref=f2e118]:
+          - generic [ref=f2e121]:
+            - generic [ref=f2e122]: 执行中
+            - generic [ref=f2e123]:
+              - generic [ref=f2e124]: 3s
+              - generic [ref=f2e125]: stateful-react-agent
+              - generic [ref=f2e126]: llm_fallback_chain[mock-frontier-model]
+              - generic [ref=f2e127]: ctx 0%
+              - generic [ref=f2e128]: tools 9
+          - generic [ref=f2e129]:
+            - button "停止" [ref=f2e130] [cursor=pointer]
+            - button "查看过程" [ref=f2e132] [cursor=pointer]
+        - generic [ref=f2e134]:
+          - generic [ref=f2e135]:
+            - generic [ref=f2e136]:
+              - generic [ref=f2e137]: 等待你决定：create_file
+              - generic [ref=f2e138]: Agent 已暂停在权限边界，提交结果以后才会继续。
+            - generic [ref=f2e139]: 需确认
+          - generic [ref=f2e141]:
+            - generic [ref=f2e142]:
+              - term [ref=f2e143]: 目标
+              - definition [ref=f2e144]:
+                - code [ref=f2e145]: /outputs/answer.md
+            - generic [ref=f2e146]:
+              - term [ref=f2e147]: 原因
+              - definition [ref=f2e148]: writes a file in the sandbox
+          - alert [ref=f2e149]:
+            - generic [ref=f2e153]: 当前运行时不是操作系统级沙箱：获批的操作将以你的用户权限执行。
+          - textbox "替代指令（可选）：拒绝时作为反馈告知模型该怎么做" [ref=f2e156]
+          - generic [ref=f2e157]:
+            - button "拒绝" [active] [ref=f2e158] [cursor=pointer]
+            - button "允许一次" [ref=f2e160] [cursor=pointer]
+            - button "本次运行内允许" [ref=f2e162] [cursor=pointer]
+            - button "本次运行内始终允许" [ref=f2e164] [cursor=pointer]
+        - generic [ref=f2e55]:
+          - generic [ref=f2e166]: 已经是最早的消息
+          - article [ref=f2e168]:
+            - generic [ref=f2e169]: 你
+            - generic [ref=f2e170]: 测试十一：完整闭环验证
+          - article [ref=f2e171]:
+            - generic [ref=f2e172]: Agent
+            - generic [ref=f2e173]: 生成中...
+            - generic [ref=f2e174]: 生成中
+        - generic [ref=f2e76]:
+          - generic [ref=f2e175]:
+            - textbox "补充方向（下一工具边界生效）" [ref=f2e178]
+            - button "补充方向" [disabled] [ref=f2e179]
+          - generic [ref=f2e77]:
+            - button "深度研究" [ref=f2e78] [cursor=pointer]
+            - button "报告产出" [ref=f2e79] [cursor=pointer]
+            - button "快速追问" [ref=f2e80] [cursor=pointer]
+          - generic [ref=f2e81]:
+            - button "附件" [ref=f2e82] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=f2e85]
+            - button "停止" [ref=f2e181] [cursor=pointer]
+      - complementary "研究画布" [ref=f2e88]:
+        - generic [ref=f2e89]:
+          - generic [ref=f2e90]:
+            - generic [ref=f2e91]: 新对话
+            - generic [ref=f2e92]: 本次回答
+          - generic [ref=f2e93]:
+            - button "刷新" [disabled] [ref=f2e94]
+            - button "专注阅读" [ref=f2e96] [cursor=pointer]
+        - generic [ref=f2e98]:
+          - tablist [ref=f2e102]:
+            - tab "结论" [selected] [ref=f2e104]
+            - tab "产物" [ref=f2e105]
+            - tab "执行" [ref=f2e106]
+          - tabpanel "结论" [ref=f2e108]:
+            - article [ref=f2e109]:
+              - generic [ref=f2e110]: 运行的回答或 Markdown 产物会显示在这里。
+  - note "免责声明" [ref=f2e111]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=f2e112]: 不构成投资建议
+    - text: 。据此操作，风险自担。

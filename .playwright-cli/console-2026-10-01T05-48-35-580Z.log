@@ -1,0 +1,14 @@
+[    2132ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5273/favicon.ico:0
+[    2343ms] [WARNING] ElementPlusError: [el-link] [API] The underline option (boolean) is about to be deprecated in version 3.0.0, please use 'always' | 'hover' | 'never' instead.
+For more detail, please visit: https://element-plus.org/en-US/component/link.html#underline
+
+    at debugWarn (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10594:37)
+    at watch.immediate (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10638:14)
+    at callWithErrorHandling (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2404:19)
+    at callWithAsyncErrorHandling (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2411:17)
+    at baseWatchOptions.call (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3102:47)
+    at job (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2134:18)
+    at watch (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:2169:7)
+    at doWatch (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3130:23)
+    at watch2 (http://localhost:5273/node_modules/.vite/deps/chunk-HERIHSTX.js?v=04ea847b:3063:10)
+    at useDeprecated (http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10637:3) @ http://localhost:5273/node_modules/.vite/deps/element-plus.js?v=04ea847b:10594

@@ -223,6 +223,10 @@ async function onSend(text: string, files: File[]): Promise<void> {
       created_at: null,
     })
     const res = await runsApi.submit(buildRunPayload(text, files))
+    // F21: remember the newest submitted run per session so a refresh can
+    // re-subscribe it while it is still active (a run parked on the approval
+    // gate has no assistant turn yet — turns alone cannot point at it).
+    if (sessions.activeId) runStream.rememberRun(sessions.activeId, res.run_id)
     detailsOpen.value = false
     runStream.watch(res.run_id)
   } catch (err) {
@@ -343,7 +347,12 @@ async function restoreSession(): Promise<void> {
     await sessions.select(target.id)
   } catch {
     ElMessage.error(sessions.error ?? '打开研究失败')
+    return
   }
+  // F21: a run still queued/running (e.g. parked on the approval gate) must
+  // re-attach after the refresh — otherwise the dialog was live-only and the
+  // run looked stuck with no way to answer it.
+  await runStream.resumeForSession(target.id, () => sessions.activeId === target.id)
 }
 
 onMounted(async () => {

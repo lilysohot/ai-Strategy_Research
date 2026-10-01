@@ -15,6 +15,16 @@ async function check(name,fn) {
   try { await fn(); results.push({test:name,outcome:'passed'}); }
   catch(e) { results.push({test:name,outcome:'failed',evidence:e.message}); }
 }
+// Browser localStorage double (F21 refresh-restore remembers the newest run
+// per session); backed by a Map so tests can seed and inspect it.
+const localStorage=(()=>{
+  const backing=new Map();
+  return {
+    getItem:k=>backing.has(k)?backing.get(k):null,
+    setItem:(k,v)=>{backing.set(k,String(v))},
+    removeItem:k=>{backing.delete(k)},
+  };
+})();
 function storeHarness() {
   let callbacks;
   let getSummary=async()=>({status:'completed',usage:{total_tokens:10,prompt_tokens:8,completion_tokens:2}});
@@ -37,12 +47,12 @@ function storeHarness() {
       if(spec.startsWith('.')) return load(path.resolve(path.dirname(file),spec));
       throw Error('Unexpected dependency '+spec);
     }
-    vm.runInNewContext('(function(require,module,exports){'+source+'\n})',{console,Date,Set,Promise})(localRequire,module,module.exports);
+    vm.runInNewContext('(function(require,module,exports){'+source+'\n})',{console,Date,Set,Promise,localStorage})(localRequire,module,module.exports);
     return module.exports;
   }
   const store=load(path.join(root,'web/src/stores/runs.ts')).useRunStreamStore();
   return {store,setGet:fn=>{getSummary=fn},setControls:fn=>{getControls=fn},
-    done:()=>callbacks.onDone('completed')};
+    localStorage,done:()=>callbacks.onDone('completed')};
 }
 const replay={type:'assistant_delta',turn:1,full:true,content:'complete text',thinking:'',usage:{total_tokens:10,prompt_tokens:8,completion_tokens:2}};
 await check('F10_full_replay_repairs_missing_live_text',async()=>{
@@ -132,6 +142,48 @@ await check('F21_steer_applied_is_counted_apart_from_queued',async()=>{
   store.applyEvent({type:'steer_applied',control_id:'c-1',steer_seq:1,turn_index:3});
   assert.equal(store.steerQueued.value,1);
   assert.equal(store.steerApplied.value,1);
+});
+// F21 refresh-restore: the resume path re-attaches the remembered run of a
+// restored session only while the server says it is still active, and only
+// when the session is still the one on screen.
+const pendingApprovalControl={controls:[{control_id:'row-1',external_id:'approval-worker-1',run_id:'R',kind:'approval',status:'pending',
+  request:{tool_name:'create_file',target:'/outputs/answer.md',reason:'writes a file in the sandbox',preview:'',risk:'normal'}}]};
+await check('F21_resume_resubscribes_the_active_run_and_rebuilds_the_dialog',async()=>{
+  const h=storeHarness();
+  h.store.rememberRun('S','R');
+  assert.equal(h.localStorage.getItem('frontier-agent.lastRun:S'),'R');
+  h.setGet(id=>{assert.equal(id,'R'); return Promise.resolve({status:'running'})});
+  h.setControls(()=>Promise.resolve(pendingApprovalControl));
+  await h.store.resumeForSession('S',()=>true); await tick();
+  assert.equal(h.store.runId.value,'R');
+  // The rebuilt dialog must carry the WORKER-side id — a decision echoing the
+  // row id can never be matched by the gate and the run stays parked (this was
+  // the second half of the refresh-restore bug, found in the browser).
+  assert.equal(h.store.pendingApproval.value?.approvalId,'approval-worker-1');
+  assert.equal(h.store.pendingApproval.value?.toolName,'create_file');
+});
+await check('F21_resume_ignores_a_finished_run',async()=>{
+  const h=storeHarness();
+  h.store.rememberRun('S','R');
+  h.setGet(()=>Promise.resolve({status:'completed'}));
+  await h.store.resumeForSession('S',()=>true); await tick();
+  assert.equal(h.store.runId.value,null);
+  assert.equal(h.store.pendingApproval.value,null);
+});
+await check('F21_resume_cannot_attach_after_a_session_switch',async()=>{
+  const h=storeHarness();
+  h.store.rememberRun('S','R');
+  h.setGet(()=>Promise.resolve({status:'running'}));
+  await h.store.resumeForSession('S',()=>false); await tick();
+  assert.equal(h.store.runId.value,null);
+});
+await check('F21_resume_never_clobbers_an_already_watched_run',async()=>{
+  const h=storeHarness();
+  h.store.rememberRun('S','R');
+  h.setGet(()=>new Promise(()=>{}));
+  h.store.watch('B');
+  await h.store.resumeForSession('S',()=>true);
+  assert.equal(h.store.runId.value,'B');
 });
 fs.writeFileSync(path.join(dir,'frontend-results.json'),JSON.stringify({mode:'actual source; reactive/HTTP doubles; no browser',records:results},null,2));
 for(const r of results) console.log(r.outcome+' '+r.test+(r.evidence?' '+r.evidence.replaceAll('\n',' '):''));

@@ -1,0 +1,122 @@
+- generic [ref=e39]:
+  - main [ref=e41]:
+    - generic [ref=e42]:
+      - complementary "研究导航" [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - generic [ref=e46]: 投研 Agent
+            - generic [ref=e47]: 研究工作台
+          - button "新建研究" [ref=e48] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=e53]
+        - generic [ref=e55]:
+          - generic [ref=e56]: 最近
+          - generic [ref=e57]: "3"
+        - navigation "研究列表" [ref=e58]:
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=e172] [cursor=pointer]:
+            - generic [ref=e173]: 新对话
+            - generic [ref=e174]: 0 条 · 2026-10-01
+            - button "移除" [ref=e175]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]: 新对话
+            - generic [ref=e61]: 0 条 · 2026-10-01
+            - button "移除" [ref=e62]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=e64] [cursor=pointer]:
+            - generic [ref=e65]: 新对话
+            - generic [ref=e66]: 0 条 · 2026-10-01
+            - button "移除" [ref=e67]
+        - button "F f05e2e 模型与连接" [ref=e71] [cursor=pointer]:
+          - generic [ref=e72]: F
+          - generic [ref=e73]:
+            - generic [ref=e74]: f05e2e
+            - generic [ref=e75]: 模型与连接
+      - main "对话编排" [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]: 新对话
+          - generic [ref=e80]: Run 0f42d0e6
+        - generic [ref=e203]:
+          - generic [ref=e206]:
+            - generic [ref=e207]: 执行中
+            - generic [ref=e208]:
+              - generic [ref=e230]: 3s
+              - generic [ref=e231]: stateful-react-agent
+              - generic [ref=e232]: llm_fallback_chain[mock-frontier-model]
+              - generic [ref=e233]: ctx 0%
+              - generic [ref=e234]: tools 9
+          - generic [ref=e214]:
+            - button "停止" [ref=e235] [cursor=pointer]
+            - button "查看过程" [ref=e215] [cursor=pointer]
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - generic [ref=e240]: 等待你决定：create_file
+              - generic [ref=e241]: Agent 已暂停在权限边界，提交结果以后才会继续。
+            - generic [ref=e242]: 需确认
+          - generic [ref=e244]:
+            - generic [ref=e245]:
+              - term [ref=e246]: 目标
+              - definition [ref=e247]:
+                - code [ref=e248]: /outputs/answer.md
+            - generic [ref=e249]:
+              - term [ref=e250]: 原因
+              - definition [ref=e251]: writes a file in the sandbox
+          - alert [ref=e252]:
+            - generic [ref=e256]: 当前运行时不是操作系统级沙箱：获批的操作将以你的用户权限执行。
+          - textbox "替代指令（可选）：拒绝时作为反馈告知模型该怎么做" [ref=e259]
+          - generic [ref=e260]:
+            - button "拒绝" [active] [ref=e261] [cursor=pointer]
+            - button "允许一次" [ref=e263] [cursor=pointer]
+            - button "本次运行内允许" [ref=e265] [cursor=pointer]
+            - button "本次运行内始终允许" [ref=e267] [cursor=pointer]
+        - generic [ref=e81]:
+          - generic [ref=e217]: 已经是最早的消息
+          - article [ref=e219]:
+            - generic [ref=e220]: 你
+            - generic [ref=e221]: 测试九：刷新恢复修复验证
+          - article [ref=e222]:
+            - generic [ref=e223]: Agent
+            - generic [ref=e224]:
+              - paragraph [ref=e269]: This is a mock answer from the FrontierAgent demo endpoint.
+              - paragraph [ref=e270]:
+                - emphasis [ref=e271]: "[partial: no_tool]"
+          - article [ref=e272]:
+            - generic [ref=e273]: 你
+            - generic [ref=e274]: 测试十：刷新恢复修复验证
+          - article [ref=e275]:
+            - generic [ref=e276]: Agent
+            - generic [ref=e277]: 生成中...
+            - generic [ref=e278]: 生成中
+        - generic [ref=e132]:
+          - generic [ref=e279]:
+            - textbox "补充方向（下一工具边界生效）" [ref=e282]
+            - button "补充方向" [disabled] [ref=e283]
+          - generic [ref=e133]:
+            - button "深度研究" [ref=e134] [cursor=pointer]
+            - button "报告产出" [ref=e135] [cursor=pointer]
+            - button "快速追问" [ref=e136] [cursor=pointer]
+          - generic [ref=e137]:
+            - button "附件" [ref=e138] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=e141]
+            - button "停止" [ref=e285] [cursor=pointer]
+      - complementary "研究画布" [ref=e144]:
+        - generic [ref=e145]:
+          - generic [ref=e146]:
+            - generic [ref=e147]: 新对话
+            - generic [ref=e148]: 本次回答
+          - generic [ref=e149]:
+            - button "刷新" [disabled] [ref=e150]
+            - button "专注阅读" [ref=e152] [cursor=pointer]
+        - generic [ref=e154]:
+          - tablist [ref=e158]:
+            - tab "结论" [selected] [ref=e160]
+            - tab "产物" [ref=e161]
+            - tab "执行" [ref=e162]
+          - tabpanel "结论" [ref=e164]:
+            - article [ref=e165]:
+              - generic [ref=e228]:
+                - paragraph [ref=e287]: This is a mock answer from the FrontierAgent demo endpoint.
+                - paragraph [ref=e288]:
+                  - emphasis [ref=e289]: "[partial: no_tool]"
+  - note "免责声明" [ref=e170]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=e171]: 不构成投资建议
+    - text: 。据此操作，风险自担。

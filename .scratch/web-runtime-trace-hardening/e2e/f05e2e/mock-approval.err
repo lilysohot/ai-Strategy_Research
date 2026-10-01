@@ -1,10 +1,8 @@
-127.0.0.1 - - [01/Oct/2026 13:23:03] "POST /v1/chat/completions?x-upstream-session-id=44dd56ea-468b-46c1-9bcd-ac002463828c HTTP/1.1" 200 -
-127.0.0.1 - - [01/Oct/2026 13:23:44] "POST /v1/chat/completions?x-upstream-session-id=44dd56ea-468b-46c1-9bcd-ac002463828c HTTP/1.1" 200 -
-127.0.0.1 - - [01/Oct/2026 13:24:37] "POST /v1/chat/completions?x-upstream-session-id=44dd56ea-468b-46c1-9bcd-ac002463828c HTTP/1.1" 200 -
-127.0.0.1 - - [01/Oct/2026 13:26:02] "POST /reset HTTP/1.1" 200 -
-127.0.0.1 - - [01/Oct/2026 13:26:05] "POST /v1/chat/completions?x-upstream-session-id=44dd56ea-468b-46c1-9bcd-ac002463828c HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 13:51:02] "POST /v1/chat/completions?x-upstream-session-id=98bb9df0-5c60-4e7b-ab91-599e496d1753 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 13:56:02] "POST /v1/chat/completions?x-upstream-session-id=98bb9df0-5c60-4e7b-ab91-599e496d1753 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 13:57:21] "POST /reset HTTP/1.1" 200 -
 ----------------------------------------
-Exception occurred during processing of request from ('127.0.0.1', 52473)
+Exception occurred during processing of request from ('127.0.0.1', 58201)
 Traceback (most recent call last):
   File "C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\socketserver.py", line 697, in process_request_thread
     self.finish_request(request, client_address)
@@ -22,4 +20,5 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^
 ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
 ----------------------------------------
-127.0.0.1 - - [01/Oct/2026 13:31:06] "POST /v1/chat/completions?x-upstream-session-id=44dd56ea-468b-46c1-9bcd-ac002463828c HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 13:58:07] "POST /v1/chat/completions?x-upstream-session-id=726c1c53-d8e6-4599-b103-d8c78c3d17e9 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Oct/2026 13:59:07] "POST /v1/chat/completions?x-upstream-session-id=726c1c53-d8e6-4599-b103-d8c78c3d17e9 HTTP/1.1" 200 -

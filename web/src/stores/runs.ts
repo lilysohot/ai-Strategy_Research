@@ -147,6 +147,59 @@ export const useRunStreamStore = defineStore('runStream', () => {
    */
   let generation = 0
 
+  /** Session-scoped memory of the newest submitted run (F21 refresh-restore). */
+  function lastRunKey(sessionId: string): string {
+    return `frontier-agent.lastRun:${sessionId}`
+  }
+
+  /**
+   * Record the newest submitted run of a session (F21).
+   *
+   * After a refresh the stream store is empty and nothing knows which run to
+   * re-subscribe — the last turn carrying a run_id does not exist yet for a run
+   * parked before its first assistant message, so the submit path records the
+   * id here instead. Storage failures are a preference-cache miss only.
+   */
+  function rememberRun(sessionId: string, id: string): void {
+    try {
+      localStorage.setItem(lastRunKey(sessionId), id)
+    } catch {
+      // Storage is a preference cache only.
+    }
+  }
+
+  /**
+   * Re-subscribe the remembered run of a restored session while it is active
+   * (F21). A run parked on the approval gate keeps its dialog only through the
+   * live stream, which a refresh destroys; the server-side status (and the
+   * durable pending control record `loadPendingApproval` reads) decide whether
+   * a resume is warranted — a finished run is left to the history alone.
+   *
+   * ``isCurrent`` guards the async window: if the user has meanwhile switched
+   * to another session (or something else started watching a run), the reply
+   * must not attach the stream to a view that is no longer on screen.
+   */
+  async function resumeForSession(sessionId: string, isCurrent: () => boolean): Promise<void> {
+    if (runId.value || !isCurrent()) return
+    let remembered: string | null = null
+    try {
+      remembered = localStorage.getItem(lastRunKey(sessionId))
+    } catch {
+      remembered = null
+    }
+    if (!remembered) return
+    try {
+      const summary = await runsApi.get(remembered)
+      if (!isCurrent() || runId.value) return
+      if (summary.status !== 'queued' && summary.status !== 'running') return
+      watch(remembered)
+    } catch {
+      // Best-effort resume: an unreadable summary must never break restoring
+      // the conversation itself.
+      return
+    }
+  }
+
   const isStreaming = computed(
     () => connection.value === 'connecting' || connection.value === 'open' || connection.value === 'reconnecting',
   )
@@ -574,6 +627,8 @@ export const useRunStreamStore = defineStore('runStream', () => {
     isStreaming,
     watch,
     retry,
+    rememberRun,
+    resumeForSession,
     stop,
     approve,
     close,

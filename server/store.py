@@ -1205,9 +1205,17 @@ def control_is_open(record: ControlRecord) -> bool:
 
 
 def control_to_dict(record: ControlRecord) -> dict:
-    """Project a record for the HTTP surface (``request_json`` already redacted)."""
+    """Project a record for the HTTP surface (``request_json`` already redacted).
+
+    ``external_id`` is the worker-side id (the ``approval_id`` a decision must
+    echo for the gate to match it). Without it a dialog rebuilt from the durable
+    record after a refresh could only send the row id — which the worker's gate
+    cannot match, so the decision was silently dropped and the run stayed parked
+    until the gate timed out (found by the F21 browser validation).
+    """
     return {
         "control_id": record.id.hex,
+        "external_id": record.external_id,
         "run_id": record.run_id.hex,
         "kind": record.kind,
         "status": record.status,

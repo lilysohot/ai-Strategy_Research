@@ -1,0 +1,84 @@
+- generic [ref=f3e3]:
+  - main [ref=f3e5]:
+    - generic [ref=f3e6]:
+      - complementary "研究导航" [ref=f3e7]:
+        - generic [ref=f3e8]:
+          - generic [ref=f3e9]:
+            - generic [ref=f3e10]: 投研 Agent
+            - generic [ref=f3e11]: 研究工作台
+          - button "新建研究" [ref=f3e12] [cursor=pointer]
+        - textbox "筛选已加载研究" [ref=f3e17]
+        - generic [ref=f3e19]:
+          - generic [ref=f3e20]: 最近
+          - generic [ref=f3e21]: "4"
+        - navigation "研究列表" [ref=f3e22]:
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f3e23] [cursor=pointer]:
+            - generic [ref=f3e24]: 新对话
+            - generic [ref=f3e25]: 0 条 · 2026-10-01
+            - button "移除" [ref=f3e26]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f3e28] [cursor=pointer]:
+            - generic [ref=f3e29]: 新对话
+            - generic [ref=f3e30]: 0 条 · 2026-10-01
+            - button "移除" [ref=f3e31]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f3e33] [cursor=pointer]:
+            - generic [ref=f3e34]: 新对话
+            - generic [ref=f3e35]: 0 条 · 2026-10-01
+            - button "移除" [ref=f3e36]
+          - button "新对话 0 条 · 2026-10-01 移除" [ref=f3e38] [cursor=pointer]:
+            - generic [ref=f3e39]: 新对话
+            - generic [ref=f3e40]: 0 条 · 2026-10-01
+            - button "移除" [ref=f3e41]
+        - button "F f05e2e 模型与连接" [ref=f3e45] [cursor=pointer]:
+          - generic [ref=f3e46]: F
+          - generic [ref=f3e47]:
+            - generic [ref=f3e48]: f05e2e
+            - generic [ref=f3e49]: 模型与连接
+      - main "对话编排" [ref=f3e50]:
+        - generic [ref=f3e52]:
+          - generic [ref=f3e53]: 新对话
+          - generic [ref=f3e54]: Run 0c65cbf3
+        - generic [ref=f3e55]:
+          - generic [ref=f3e58]:
+            - generic [ref=f3e59]: 已停止
+            - generic [ref=f3e60]:
+              - generic [ref=f3e154]: 23s
+              - generic [ref=f3e62]: llm_fallback_chain[mock-frontier-model]
+              - generic [ref=f3e63]: tools 9
+          - button "查看过程" [ref=f3e67] [cursor=pointer]
+        - generic [ref=f3e101]:
+          - generic [ref=f3e102]: 已经是最早的消息
+          - article [ref=f3e104]:
+            - generic [ref=f3e105]: 你
+            - generic [ref=f3e106]: 测试十一：完整闭环验证
+          - article [ref=f3e107]:
+            - generic [ref=f3e108]: Agent
+            - paragraph [ref=f3e155]: Approval flow finished. This is the final answer.
+        - generic [ref=f3e111]:
+          - generic [ref=f3e118]:
+            - button "深度研究" [ref=f3e119] [cursor=pointer]
+            - button "报告产出" [ref=f3e120] [cursor=pointer]
+            - button "快速追问" [ref=f3e121] [cursor=pointer]
+          - generic [ref=f3e122]:
+            - button "附件" [ref=f3e123] [cursor=pointer]
+            - textbox "描述研究主题、时间范围、约束或继续追问..." [ref=f3e126]
+            - button "发送" [disabled] [ref=f3e156]
+      - complementary "研究画布" [ref=f3e129]:
+        - generic [ref=f3e130]:
+          - generic [ref=f3e131]:
+            - generic [ref=f3e132]: 新对话
+            - generic [ref=f3e133]: 本次回答
+          - generic [ref=f3e134]:
+            - button "刷新" [ref=f3e135] [cursor=pointer]
+            - button "专注阅读" [ref=f3e137] [cursor=pointer]
+        - generic [ref=f3e139]:
+          - tablist [ref=f3e143]:
+            - tab "结论" [selected] [ref=f3e145]
+            - tab "产物" [ref=f3e146]
+            - tab "执行" [ref=f3e147]
+          - tabpanel "结论" [ref=f3e149]:
+            - article [ref=f3e150]:
+              - paragraph [ref=f3e159]: Approval flow finished. This is the final answer.
+  - note "免责声明" [ref=f3e152]:
+    - text: 本平台输出由 AI 生成，仅供参考，
+    - strong [ref=f3e153]: 不构成投资建议
+    - text: 。据此操作，风险自担。

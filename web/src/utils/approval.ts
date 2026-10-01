@@ -47,7 +47,9 @@ export function approvalRequestFromRecord(record: RunControlRecord): ApprovalReq
   if (record.kind !== 'approval' || record.status !== 'pending') return null
   const request = (record.request ?? {}) as Record<string, unknown>
   return {
-    approvalId: record.control_id,
+    // The worker's gate matches decisions by ITS id — the frame's
+    // ``approval_id``, persisted as ``external_id`` — never by the row id.
+    approvalId: record.external_id ?? record.control_id,
     toolName: typeof request.tool_name === 'string' ? request.tool_name : 'tool',
     target: typeof request.target === 'string' ? request.target : '',
     reason: typeof request.reason === 'string' ? request.reason : '',
