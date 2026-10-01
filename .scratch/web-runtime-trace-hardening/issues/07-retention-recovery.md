@@ -1,6 +1,6 @@
 # 07：建立业务库与运行文件联合恢复及保留策略
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-05, PR-BIZ-06
@@ -158,3 +158,4 @@ Requirements: PR-GOV-05, PR-BIZ-06
   同时更新密钥轮换表：补「恢复路径」列（F07-KEY-1 门禁 503 + KEY-2 PATCH 重置）。
   定值命令已实测（`--out-dir /tmp` 真实备份 192,933 B 校验通过后清理）。
   **F07 ①②③④⑤ 全部闭环**，工单转 ready-for-human 待复核；唯一环境依赖遗留：异地备份挂载点。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——① 运维备份脚本 + 真实备份与恢复演练（audit/f07-backup-script.json，8 表一致、FK 12/12）；② 联合恢复演练（audit/f01-rollback-drill.json，业务库+运行文件四步回退口径，负向对照齐备）；③ ON DELETE/会话删除语义复演（audit/f07-key-ondelete-drill.json）；④ 密钥不可用组合复演 + F07-KEY-1 门禁修复（提交 6339ff2）+ KEY-2 重置路由（提交 2960920）；⑤ 定值落地 deploy/README.md「备份与保留定值（F07 ⑤）」（提交 caa2bbc）；孤儿量化与处置（audit/f07-orphan-inventory.json，处置后 verdict clean）；恢复演练证据充分（首演练暴露 FK 缺口→处置后复演零错误）。复跑 tests/test_web_f07_retention.py + tests/test_web_backup_script.py + tests/test_web_f07_key_gate.py + tests/test_web_f07_key_reset.py 45/45 通过。转 closed。

@@ -1,6 +1,6 @@
 # 02：排除 Web 运行数据进入构建上下文和镜像
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-01, PR-GOV-06
@@ -70,3 +70,4 @@ Requirements: PR-GOV-01, PR-GOV-06
   config env 无密钥。范围外记录：`docker-corpus-db`（语料库 PG 镜像，数据在卷属设计使然）、
   `more-*`（其它项目）、其余为上游官方镜像。处置建议：无需删除；`:verify`/`:f19` 验证 tag 如需释放
   磁盘可另行确认后清理。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——合成 sentinel 复现（不触真实数据）→ 根 `.dockerignore` 修复 → 真实 `deploy/Dockerfile.web` 构建产物与镜像层核对通过（2026-10-01），历史已发布镜像调查 [audit/f02-historical-image-data.json](../audit/f02-historical-image-data.json) 结论受影响集合为空、无需处置（提交 58a4dc4），回归测试带负向对照非空转。复跑 tests/test_build_context_ignore.py 40/40 通过。转 closed。

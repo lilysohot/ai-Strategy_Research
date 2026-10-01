@@ -1,6 +1,6 @@
 # 21：用户纠正与审批决定缺少持久追溯契约
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
@@ -106,3 +106,10 @@ live API 进程 kill + 重启后：`GET /controls` 投影从 `control_records` �
 external_id 与 request 投影可见）；run 详情/usage/finished_at 全部 DB 持久化可读；`/readyz` 200。
 待审批语义跨重启已由 E1-WSL 批次 `pending → expired`（fail-closed）与浏览器刷新恢复（38d73bc）覆盖；
 本次补齐的是"重启后持久投影可用性"一环。**F21 真实重启观测通过，「剩余」项清零。**
+
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——control_records 落库/状态机（adopted·expired 终态幂等、
+  source 区分 timeout）/收口/下一轮历史/刷新恢复（38d73bc external_id 投影 + resumeForSession 浏览器闭环）
+  证据齐备：audit/f21-recheck-results.json 24/24、audit/e1-wsl-batch-registry.json 真链路 adopted/once 与
+  expired(timeout) 落库；「剩余」项已清零——业务库迁移 `0004`（commit a7b25dd）与真实重启后观测
+  （restart_obs_20261001：GET /controls 重启后投影完整重建）均已完成。复跑
+  tests/test_web_f21_control_history.py 14/14、tests/test_web_p3_steer.py 12/12 通过。转 closed。

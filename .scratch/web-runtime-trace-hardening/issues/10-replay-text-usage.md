@@ -1,6 +1,6 @@
 # 10：流式去重导致文字缺失与用量漏计或重复
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-GOV-03
@@ -36,3 +36,10 @@ Requirements: PR-RUN-02, PR-GOV-03
 - 2026-09-30：**仍未验收（维持 ready-for-human）**：真实浏览器端到端——断线/背压后重连的缺字补齐、
   多轮混合（部分轮 live、部分轮回放）、重复回放的幂等性、仅 thinking 片段的轮次——均未在浏览器实测。
   现有证据为转译真实 TS 的契约审计与单测，不含 DOM 与真实 SSE 时序。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——三处根因修复各有断言：按轮保存文本整轮替换
+  （F10_full_replay_repairs_missing_live_text）、usage 先于文本判定独立计量（F10_live_turn_still_counts_replay_usage）、
+  reconcile 用 usageTotalsFrom 替换而非累加（F10_final_usage_reconciliation_is_not_additive），
+  三项均 failed→passed 且负向对照逐项确认（frontend-results.json）；修复前偏差（文本不补齐、0/10、20/10）已留存；
+  替换语义使重复回放天然幂等；运行时路径由真实供应商批次（real_provider_20261001 契约检查含 F10 full 标记）
+  与浏览器刷新→重订阅→回放渲染闭环（工单 05 e2e，E1 批次登记 deferred 项 2026-10-01 resolved）覆盖。
+  复跑 web 前端单测 70/70（含 statusbar usageTotalsFrom）、隔离契约 24/24（含终态回放不重复落助手轮）。转 closed。

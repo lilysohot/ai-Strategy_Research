@@ -1,6 +1,6 @@
 # 11：切换 Run 后旧异步响应可能覆盖新视图
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-GOV-02
@@ -33,3 +33,9 @@ Requirements: PR-RUN-02, PR-GOV-02
   契约审计，不含 DOM 与真实请求时序。另：`spec.md` 提到的「为每次 watch 建立独立 Run 状态」
   采用**代次校验**方案（轻量、改动面小），未改为每 Run 独立状态容器；如后续需要同时保留
   多个 Run 的完整状态，需要另行设计。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——订阅代次 `generation`（watch/reset 递增）+
+  reconcile await 后 runId+代次双校验有断言（F11_old_run_summary_cannot_overwrite_current_run
+  failed→passed，负向对照移除校验即恢复 `'answer from A'`，frontend-results.json）；摘要获取失败
+  不凭 EOF 推定成功的「待核实」提示已实现；watch（含重连）/reset 全部递增使退出登录、关闭抽屉、
+  手动重试路径同受保护；浏览器切换 Run 与刷新恢复场景由工单 05 e2e 闭环（E1 批次登记将
+  「浏览器 DOM 层（F10/F11）」deferred 项于 2026-10-01 标记 resolved）。复跑 web 前端单测 70/70。转 closed。

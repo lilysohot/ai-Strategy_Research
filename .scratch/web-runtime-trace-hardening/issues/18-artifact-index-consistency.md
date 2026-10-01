@@ -1,6 +1,6 @@
 # 18：产物索引与回滚后的文件不一致
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-06、PR-GOV-01
@@ -22,3 +22,8 @@ Requirements: PR-RUN-06、PR-GOV-01
   经审批落盘 → 索引 rel_path/size/sha256 正确；下载 sha256 与索引一致；diff `added +3`；
   `POST /revert` → 文件移除且索引**同步重算清空**（F18 修复的行为在真链路成立）。
   Windows 上不可验收的根因（shell/文件工具不可用）随 POSIX 复验消除。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——audit/e1-wsl-batch-registry.json 记录真链路（WSL E1）
+  产物四连验：索引 rel_path/size=34/sha256 正确、下载 sha256 与索引一致、diff `added +3`、`POST /revert`
+  后文件移除且索引同步重算清空（恢复/删除/新增/下载与索引一致性均覆盖）；回滚与定位的路径契约、
+  越界拒绝由 diff/revert/artifacts 回归套件守护。复跑 tests/test_web_p2_diff.py +
+  tests/test_web_p3_revert.py + tests/test_artifacts_t29.py 43/43 通过。转 closed。

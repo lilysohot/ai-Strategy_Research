@@ -1,6 +1,6 @@
 # 08：提交 Run 缺少会话归属校验
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-06, PR-RUN-02
@@ -22,3 +22,4 @@ Requirements: PR-GOV-06, PR-RUN-02
   session（`58855436-…`）提交 Run → **404 「会话不存在」**；零副作用核验——A 会话 turns=4 /
   runs=2 前后不变、无新 run 目录；B 省略 session_id 时会话列表为空（默认会话按用户命名空间
   隔离，`_session_uuid` 修复生效）。修复前行为（2026-09-29 隔离复现的越权写入）在新代码下不可复现。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——修复前以隔离环境合成双用户经真实提交路由固定触发条件（2026-09-29 基线记录 202+越权写入）；修复后 2026-10-01 于 WSL 真实 API + 业务库动态复验（audit/e1-wsl-batch-registry.json「F08 跨用户越权动态复验」条目）：账号 B 对账号 A 的 session 提交 Run 返回 404「会话不存在」，A 会话 turns=4/runs=2 前后不变、无新 run 目录，默认会话按用户命名空间隔离，满足「只有动态验证通过才能关闭」。复跑：工单未标注回归测试，以该 audit JSON 动态复验记录为证据。转 closed。

@@ -1,6 +1,6 @@
 # 06：定义并落实中断后的轨迹完整性
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
@@ -124,3 +124,4 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   不受扰、egress 过滤+游标含 attempt 行、真实轮次不受扰）；m1 端到端测试的对账口径同步修正
   （RAW vs egress 差异即为 attempt 行）；web 全量 **200 passed**（+4）；ruff/pyright 全过。
   **F06 执行侧至此全部闭环**（F06-RUN-1/2/3 + completeness + 断电耐久 + 请求尝试身份）。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——complete/partial/unavailable + trailing_partial_line 契约与 `/trace` 出口告警落地，fsync 写入屏障（提交 285a610）与请求尝试身份 summary-only 契约（提交 0bc0265）收口；真实故障注入齐备：SIGKILL 与协作取消（audit/e1-wsl-batch-registry.json）、运行级磁盘写满（audit/f06-run-disk-full.json，F06-RUN-1/2/3 经工单 22 修复）、断电残留语义注入复演、半行/损坏行/配置关闭检测；文档过度保证已收窄，前端提示经 e2e 验证（e2e/f05e2e/e2e-record.md）；流式检查点按 2026-09-30 冻结的耐久级别明确不承诺，属登记范围决定。复跑 tests/test_web_f06_trace_completeness.py + tests/test_web_f06_power_durability.py + tests/test_web_f06_attempt_identity.py 22/22 通过。转 closed。

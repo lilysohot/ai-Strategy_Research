@@ -1,6 +1,6 @@
 # 19：存储与迁移故障缺少就绪门禁
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-01
@@ -83,3 +83,9 @@ Requirements: PR-GOV-01
   `audit/f19-stack-gating.json`。
   **仍未完成（非 F19 范围）**：业务库正式迁移——**已于 2026-10-01 晚完成**（`apodex` → `0004_control_records`，
   0003 upgrade + 0004 stamp 因 create_all 已建表，备份 `~/backups/apodex-20261001-161402.sql`；live API `/readyz` 翻绿 200）。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——双探针拆分/schema 门禁/真实写探针/启动阻断（T8
+  「停库 503、恢复 200」容器实测成立）回归 tests/test_web_f19_schema_gate.py 16/16（含满盘 0 字节
+  探针缺陷修复 `test_data_root_probe_writes_real_bytes`）；真实只读挂载/磁盘满注入/compose
+  service_healthy 见 audit/e1-wsl-batch-registry.json，旧版镜像回退演练见 audit/f19-rollback-drill.json
+  （D1–D3b pass），整栈 compose 门禁正反例见 audit/f19-stack-gating.json；业务库已迁移 `0004` 且
+  live `/readyz` 200。复跑 tests/test_web_f19_schema_gate.py 16/16 通过。转 closed。

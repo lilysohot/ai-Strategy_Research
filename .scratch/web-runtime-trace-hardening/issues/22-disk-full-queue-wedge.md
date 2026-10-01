@@ -1,6 +1,6 @@
 # 22：满盘时提交的运行永久卡在 queued（磁盘写满的运行级收口缺口）
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: bug
 Requirements: PR-RUN-02, PR-GOV-02
@@ -77,3 +77,9 @@ Depends on: 06, 19
   满盘提交 **503** `{"detail":"运行数据根不可写（磁盘满或只读），无法持久化新的运行"}`，
   被拒请求**零副作用**（turns 仍为基线 1 条，无新 run 行）——「满盘不再 202、不再永久 queued」成立。
   清理：容器 `f22v` 移除、隔离库 DROP、业务库 `apodex` 复核仍 `0002_run_usage`。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——F06-RUN-1/2/3 契约均有对应修复与回归（提交消费
+  `probe_data_root` 满盘 503、`mark_run_failed_if_active` 启动失败即收口且不覆盖终态、轨迹降级可见标记、
+  summary 原子写 + `.tmp`/0 字节 spool 清理），缺陷原始注入证据见 audit/f06-run-disk-full.json，修复后
+  镜像本体真实注入复验（空盘 202 → dd 填满 `/readyz` 503 → 满盘提交 503 零副作用）见
+  audit/e1-wsl-batch-registry.json w-4；修复提交 6302bd2 存在于 git 历史。复跑
+  tests/test_web_f22_disk_full.py 6/6 通过。转 closed。

@@ -1,6 +1,6 @@
 # 09：SSE 游标与终态恢复协议存在缺口
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-RUN-02, PR-RUN-04, PR-GOV-02
@@ -69,3 +69,4 @@ closed-stream 进程内记忆清空，SSE 重连已结束 run 由 `_live_queue_f
 DB 状态非 active）正确路由 replay-only——流正常关闭（exit=0，非悬挂），11 条重放事件与轨迹行数学吻合。
 多进程盲区复核：另一进程结束的 run 重连行为与同进程一致（判定只依赖 DB 与 handle，不依赖记忆窗口）。
 **真实重启观测通过，无代码改动。**
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——修复前行为有复现与基线留存（frontend-results-before-f09-cursor.json；判据还原即 15s TimeoutError / 10 !== 0 双向负向对照）；后端盲区（`_live_queue_for` 按 has_worker+DB 双事实路由 replay-only）、steer 游标分离（后端 `steer_seq` 独立字段 + 前端 `CONTROL_EVENT_TYPES` 不推进游标）各有回归与真实 TS 审计断言；浏览器/多进程端到端三场景见 e2e/e2e-record.md；2026-10-01 真实重启观测（批次登记 restart_obs_20261001：11 条重放事件与轨迹行数学吻合、跨进程重连判定一致、exit=0 不悬挂）补齐最后缺口。复跑 tests/test_web_f09_stream_termination.py 4/4、tests/test_web_f13_capacity.py 8/8、tests/test_web_p3_steer.py 12/12（与 F06/F22 套件合跑 26/26）、隔离契约 24/24（含 test_f09_late_subscription_finishes）。转 closed。

@@ -1,6 +1,6 @@
 # 17：产物根目录与回滚基线可经符号链接越界
 
-Status: ready-for-human
+Status: closed
 Priority: P1
 Type: task
 Requirements: PR-GOV-06、PR-RUN-06
@@ -24,3 +24,9 @@ Requirements: PR-GOV-06、PR-RUN-06
   native 后端无挂载；runs 根与 run 目录均为 755 administrator:administrator（F01 迁移口径）。
   符号链接越界拒绝（`_trusted_outputs_root`/基线链接）已有隔离契约与 43/43 回归
   （diff/revert/artifacts 套件在 POSIX 全过）；共享目录构造越界链接按环境方案仍属 E2，未在真库演练。
+- 2026-10-02（复核关闭）：验收条款逐条复核通过——符号链接越界拒绝（根/父目录/基线链接）有隔离契约回归
+  （含 `test_resolve_artifact_path_rejects_symlink_escape`/`test_revert_refuses_symlink_escape`），
+  部署侧「进程身份、挂载、native 权限」由 audit/e1-wsl-batch-registry.json「F17 部署侧观测」覆盖
+  （euid=1000、tool-user 降权不激活已如实登记、native 无挂载、runs 根 755 与 F01 口径一致）；报告 F17
+  验收清单不含 master_key/debug 类项，共享目录构造越界链接按工单注释声明仍属 E2 环境方案项。
+  复跑 tests/test_web_p2_diff.py + tests/test_web_p3_revert.py + tests/test_artifacts_t29.py 43/43 通过。转 closed。
