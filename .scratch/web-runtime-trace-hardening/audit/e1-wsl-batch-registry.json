@@ -305,5 +305,15 @@
       "verified": "定值命令真实备份 192,933 B 校验通过（临时目录已清理）",
       "item_status": "F07 ①②③④⑤ 全部闭环，待人工复核"
     }
+  },
+  "f06_power_durability_20261002": {
+    "executed_at": "2026-10-02T09:00-09:40+08:00",
+    "task": "F06 断电耐久（持久化链路审计 + fsync 修复 + 断电后果注入复演）",
+    "result": {
+      "audit": "PG 侧事务/WAL 免疫；文件侧发现 summary 原子写无 fsync + fsync_directory 死代码",
+      "fix": "worker.persist_summary：tmp fsync → rename → 目录 fsync + 轨迹终态 fsync（全部 best-effort）",
+      "tests": "test_web_f06_power_durability.py 8/8（截断/零字节/残缺 summary/无轨迹/无 fsync 平台/ENOSPC）；web 全量 196 passed",
+      "known_edges": "artifacts 断电后索引在文件缺 → 下载 404 fail-closed；整机掉电验证需硬件环境，以文件层等价注入收口"
+    }
   }
 }

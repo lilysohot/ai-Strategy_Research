@@ -95,3 +95,17 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   **仍未完成**：断电耐久（存储级，维持不做）、请求尝试身份、流式检查点、真实供应商格式差异；
   F06-RUN-1/2/3 已于同日修复（见工单 [22](22-disk-full-queue-wedge.md)，回归
   `tests/test_web_f22_disk_full.py` 6/6）。`Status 维持 ready-for-human`。
+- 2026-10-02：**断电耐久项处理完成**（真实掉电无法在本机注入；按"持久化链路审计 + 断电后果注入复演"
+  等价执行，用户指示继续处理）。三部分：
+  **① 持久化链路审计**：PG 侧（runs/turns/control_records/usage）事务 + WAL，断电恢复由 PostgreSQL
+  保证，无需我方动作；文件侧发现 `fsync_directory` 为死代码（定义后无人调用）、summary.json 原子
+  rename 无 fsync（断电后 rename 可见而内容空——`_read_run_summary` 的 `{}` 容错兜底，但数据丢失）。
+  **② fsync 修复**：worker 收口逻辑提取为 `persist_summary()`——tmp 文件 fsync → rename → 目录 fsync
+  （`fsync_directory` 从此投入使用）+ 轨迹终态一次性 fsync（运行时流式 append 不逐行 fsync：断电至多
+  丢最后未刷增量 = PARTIAL 契约，不丢整文件）；全部 best-effort（无 fsync 平台仍正常写）。
+  **③ 断电后果注入复演**：`tests/test_web_f06_power_durability.py` **8/8** 固定断电残留物语义——
+  半行截断（PARTIAL + trailing_partial）、零字节/残缺 summary（读作 `{}`，服务不 500）、轨迹缺失
+  （UNAVAILABLE）、持久化路径（durable 落盘 + tmp 清理 + 无 fsync 平台容错 + ENOSPC 不上抛）。
+  既有 completeness 套件 10/10 回归全过。**已知边界登记**：断电后 artifacts 可能索引在而文件缺，
+  下载 404 fail-closed 属可接受降级（不扩 scope）；真实掉电的整机验证仍需硬件级环境，本项以文件层
+  等价注入收口。

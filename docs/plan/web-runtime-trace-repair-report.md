@@ -253,7 +253,13 @@ system prompt、文件正文及推理块也没有独立的返回字段策略。�
 
 **待执行验证**：隔离进程内模拟正常结束、流式中取消、SIGKILL、写入失败、末尾半行；
 验证已完成轮次可读、未完成部分不会冒充完整、缺失状态可见。真实断电耐久另需存储级验证，
-不能用普通进程 kill 测试替代。
+不能用普通进程 kill 测试替代。**→ 上述验证已于 2026-10-01 完成（见批次登记
+`wsl_closure_20261001_pm`），断电耐久亦已于 2026-10-02 以"持久化链路审计 + fsync 修复 + 断电后果
+文件层等价注入"收口**：`worker.persist_summary`（tmp fsync → rename → 目录 fsync + 轨迹终态 fsync，
+全部 best-effort）修复审计发现的 summary 原子写无 fsync 与 `fsync_directory` 死代码问题；
+`tests/test_web_f06_power_durability.py` 8/8 固定断电残留物语义（半行截断/零字节与残缺 summary/
+轨迹缺失/无 fsync 平台/ENOSPC）；PG 侧由事务 + WAL 免疫。整机掉电的硬件级验证仍超出本机能力，
+以文件层等价注入收口（artifacts 断电后 404 fail-closed 登记为已知边界）。
 
 **验收**：承诺、实现和 UI 一致；记录缺口有明确状态；有效旧行不因半行损坏而不可读；
 JSONL 必需配置缺失可检测；文档不再把“已 flush 的记录”扩大为全部流式或硬件级无丢失保证。

@@ -55,6 +55,47 @@ def _frame(type_: str, **data: Any) -> None:
     sys.stdout.flush()
 
 
+def persist_summary(run_root: Path, summary: dict[str, Any]) -> None:
+    """Durably persist ``summary.json`` (F06-RUN-3 + F06 power durability).
+
+    The rename is atomic against concurrent *readers*, but against a power cut
+    the page cache can lose the tmp file's content while keeping the (empty)
+    renamed entry — so the file is fsynced before the replace and the directory
+    entry after it. The trajectory is fsynced once here too (terminal state):
+    a crash then loses at most the last unflushed deltas, never the whole file.
+    Every fsync is best-effort — a platform without fsync must still write its
+    summary, and an OSError from the write itself is logged, never raised (it
+    must not mask the run outcome).
+    """
+    from server.trajectory_status import fsync_directory
+
+    traj = run_root / "run" / "agent" / "trajectories" / "react_agent.jsonl"
+    try:
+        if traj.exists():
+            fd = os.open(str(traj), os.O_RDONLY)
+            try:
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+    except OSError:
+        pass
+    try:
+        summary_tmp = run_root / "summary.json.tmp"
+        summary_tmp.write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
+        try:
+            fd = os.open(str(summary_tmp), os.O_RDONLY)
+            try:
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+        except OSError:
+            pass
+        os.replace(summary_tmp, run_root / "summary.json")
+        fsync_directory(run_root)
+    except OSError:
+        logging.getLogger("worker").warning("summary write failed", exc_info=True)
+
+
 def _assert_llm_env(model: str, base_url: str, api_key: str) -> None:
     """Reject partial LLM injection (tech-stack.md §5.3).
 
@@ -464,15 +505,9 @@ async def run_once(args: argparse.Namespace) -> int:
         "stopped_by": _stopped_by,
         "duration_s": round(time.time() - started, 2),
     }
-    # F22 / F06-RUN-3: write atomically so a failed write cannot leave a partial
-    # (0-byte) summary that the orchestrator reads as "no data". A write failure
-    # is logged but must never mask the run outcome.
-    try:
-        summary_tmp = run_root / "summary.json.tmp"
-        summary_tmp.write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
-        os.replace(summary_tmp, run_root / "summary.json")
-    except OSError:
-        logging.getLogger("worker").warning("summary write failed", exc_info=True)
+    # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
+    # persist_summary). A write failure is logged but must never mask the outcome.
+    persist_summary(run_root, summary)
     return 0 if not error else 1
 
 
