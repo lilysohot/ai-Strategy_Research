@@ -19,3 +19,19 @@ INFO:     127.0.0.1:60109 - "GET /api/sessions HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60116 - "POST /api/auth/login HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60116 - "GET /api/sessions HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60190 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:61088 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61088 - "GET /%40vite/client HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65351 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65351 - "GET /%40vite/client HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58110 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49535 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49535 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49535 - "GET /api/sessions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49542 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49542 - "DELETE /api/models/bdb32aac-ae49-45b3-a363-cb0ba6670534 HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:49542 - "DELETE /api/sessions/b93def09-4508-4da1-bfc5-995e0965b2b1 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:61718 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61718 - "POST /api/models HTTP/1.1" 201 Created
+INFO:     127.0.0.1:61718 - "DELETE /api/models/bdb32aac-ae49-45b3-a363-cb0ba6670534 HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:61719 - "DELETE /api/models/481354c1-2724-4a5f-9df3-c23d72174704 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:61719 - "GET /api/models HTTP/1.1" 200 OK
