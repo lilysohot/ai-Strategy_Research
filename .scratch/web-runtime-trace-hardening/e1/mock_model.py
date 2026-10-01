@@ -28,6 +28,12 @@ from pathlib import Path
 
 DEFAULT_TEXT = "E1 mock model: synthetic answer (no external provider was called)."
 DEFAULT_TOOL_COMMAND = "echo e1-mock"
+#: Optional full override for the issued tool call (E1-WSL batch: create_file
+#: into /outputs so artifact/diff/revert cases can run in the real chain).
+DEFAULT_TOOL_NAME = (os.environ.get("MOCK_TOOL_NAME") or "bash").strip()
+DEFAULT_TOOL_ARGS = os.environ.get("MOCK_TOOL_ARGS") or json.dumps(
+    {"command": DEFAULT_TOOL_COMMAND, "description": "e1 mock"}, ensure_ascii=False
+)
 
 LOG_PATH = Path(os.environ.get("MOCK_LOG") or Path(__file__).with_name("mock-requests.jsonl"))
 MODE = (os.environ.get("MOCK_MODE") or "text").strip().lower()
@@ -59,10 +65,8 @@ def _decide(messages: list[dict]) -> tuple[str, dict]:
     saw_tool_result = any(m.get("role") == "tool" for m in messages)
     if MODE == "tool" and not saw_tool_result:
         return "tool", {
-            "name": "bash",
-            "arguments": json.dumps(
-                {"command": DEFAULT_TOOL_COMMAND, "description": "e1 mock"}, ensure_ascii=False
-            ),
+            "name": DEFAULT_TOOL_NAME,
+            "arguments": DEFAULT_TOOL_ARGS,
         }
     return "text", {"content": DEFAULT_TEXT}
 

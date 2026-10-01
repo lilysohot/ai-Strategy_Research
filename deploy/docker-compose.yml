@@ -32,9 +32,14 @@ services:
     image: caddy:2-alpine
     container_name: ${CONTAINER_PREFIX}-caddy
     restart: unless-stopped
+    # F19/T8: Caddy proxies /api and the SSE stream, so it must not accept
+    # traffic while the API is storage-unready (schema behind / data root
+    # unwritable). The api healthcheck below gates on /readyz, not /healthz.
     depends_on:
       frontend:
         condition: service_completed_successfully
+      api:
+        condition: service_healthy
     ports:
       # Host:container. The container listens on 80 (plain) and 443 (TLS);
       # publishing 80/443 would collide with anything already on the host, so
@@ -84,6 +89,15 @@ services:
     ports:
       # API is published only to aid debugging; Caddy is the supported path.
       - ${API_DEBUG_PORT:-8000}:8000
+    # F19: health gates on /readyz (database + schema version + run-data root),
+    # NOT /healthz — a storage-unready API must not report healthy. Consumers
+    # (orchestrators, `depends_on: condition: service_healthy`) key off this.
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request as u,sys; sys.exit(0 if u.urlopen('http://127.0.0.1:8000/readyz', timeout=3).status == 200 else 1)\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     volumes:
       - ../config:/app/config:ro
       - ../.env:/app/.env:ro

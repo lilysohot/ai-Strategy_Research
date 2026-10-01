@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import pathlib
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
@@ -167,6 +168,24 @@ async def test_data_root_probe_leaves_nothing_behind(env):
     assert leftovers == []
 
 
+async def test_data_root_probe_writes_real_bytes(env, monkeypatch):
+    """A 0-byte create still succeeds on a full tmpfs — data pages run out, not
+    inodes — so an empty probe payload reported a full disk as ready (found by
+    the E3 disk-full injection, 2026-10-01). The probe must write actual bytes."""
+    await store.init_db()
+    written: list[bytes] = []
+    real_write_bytes = pathlib.Path.write_bytes
+
+    def spy(self: pathlib.Path, data: bytes) -> int:
+        if self.name.startswith(".readyz-probe-"):
+            written.append(data)
+        return real_write_bytes(self, data)
+
+    monkeypatch.setattr(pathlib.Path, "write_bytes", spy)
+    assert readiness.probe_data_root() is None
+    assert written == [b"readyz-probe"]
+
+
 def test_startup_gate_raises_in_production_and_warns_in_dev(caplog):
     verdict = readiness.Readiness(ok=False, reasons=(readiness.SCHEMA_BEHIND,))
     with pytest.raises(readiness.StorageNotReadyError) as excinfo:
@@ -198,9 +217,7 @@ async def test_readyz_is_stricter_than_healthz(env):
     await _migrate(env, BEHIND)
     from server.app import app
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://gate"
-    ) as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://gate") as client:
         health = await client.get("/healthz")
         ready = await client.get("/readyz")
     # The database answers, so liveness/storage connectivity is fine...
@@ -215,9 +232,7 @@ async def test_readyz_ok_after_migrating(env):
     await _migrate(env, "head")
     from server.app import app
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://gate"
-    ) as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://gate") as client:
         response = await client.get("/readyz")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}

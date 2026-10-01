@@ -166,15 +166,18 @@ def probe_data_root(path: Path | None = None) -> str | None:
     """Return a reason code when the run-data root cannot be written to.
 
     A real write is the only honest probe: ``os.access`` lies on Windows and on
-    read-only mounts it is the mount that decides. The probe file is removed
-    again, and a failure is reported as a code — the root path itself never
-    reaches the HTTP body.
+    read-only mounts it is the mount that decides. The probe writes actual
+    bytes — a 0-byte create still succeeds on a full tmpfs (data pages, not
+    inodes, are what run out), so an empty payload would report a full disk as
+    ready (found by the E3 disk-full injection, 2026-10-01). The probe file is
+    removed again, and a failure is reported as a code — the root path itself
+    never reaches the HTTP body.
     """
     root = Path(path) if path is not None else Path(get_config().runs_root)
     probe = root / f".readyz-probe-{uuid.uuid4().hex[:8]}"
     try:
         root.mkdir(parents=True, exist_ok=True)
-        probe.write_bytes(b"")
+        probe.write_bytes(b"readyz-probe")
     except OSError:
         return DATA_ROOT_UNWRITABLE
     finally:
