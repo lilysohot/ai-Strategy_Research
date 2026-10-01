@@ -184,3 +184,78 @@ def test_condition_sentence_wrapped_across_lines_keeps_all_chars(tmp_path: Path)
     assert publication.active_build_id == outcome.build.build_id
     quality = json.loads(outcome.build.quality_report)
     assert quality == {"gap_regions": [], "oversized_chunks": []}
+
+
+# --- 反例 4：图表页坐标轴/刻度线不得误报“有线无表”缺口（E6 M1/M7 回归） ---
+#
+# 折线图/柱状图的坐标轴、刻度线与曲线碎片也是矢量线段，若仅按“横竖线段
+# 数量 ≥3”计数，图表页会被误判成 `table_lines_without_extraction` 而阻断
+# 整篇发布。真实表格的格线相互交叉成网；图表轴与刻度线多为单轴排列、
+# 交点稀少。本反例合成一张“文字 + 带坐标轴和大量刻度线的图表”页，断言：
+#   - 不产生 `table_lines_without_extraction` 缺口；
+#   - 正文行仍被提取；
+#   - 发布门放行（无 blocking gap）。
+
+
+def _write_chart_page_pdf(path: Path) -> None:
+    """合成图表页：横/纵坐标轴 + 大量短刻度线，无真实表格。"""
+    doc = pymupdf.open()
+    page = doc.new_page()
+    page.insert_text((72, 72), "证券公司研究", fontsize=11, fontname="china-s")
+    page.insert_text((72, 100), "行业景气度持续修复", fontsize=10.5, fontname="china-s")
+    # 坐标轴：一条长横轴、一条长纵轴
+    page.draw_line((72, 600), (520, 600), color=(0, 0, 0), width=1)
+    page.draw_line((72, 200), (72, 600), color=(0, 0, 0), width=1)
+    # 刻度线：沿横轴密布短竖线、沿纵轴密布短横线（<40pt，模拟图表刻度）
+    for i in range(30):
+        x = 72 + i * 15
+        page.draw_line((x, 595), (x, 605), color=(0, 0, 0), width=0.5)
+    for i in range(20):
+        y = 200 + i * 20
+        page.draw_line((67, y), (77, y), color=(0, 0, 0), width=0.5)
+    # 一条曲线（多段短线近似）
+    import math
+
+    prev = (72, 580)
+    for i in range(1, 30):
+        x = 72 + i * 15
+        y = 580 - 120 * math.sin(i / 3.0)
+        page.draw_line(prev, (x, y), color=(0.2, 0.4, 0.8), width=1)
+        prev = (x, y)
+    doc.save(str(path))
+    doc.close()
+
+
+def test_chart_page_lines_do_not_trigger_table_gap(tmp_path: Path) -> None:
+    path = tmp_path / "chart-page.pdf"
+    _write_chart_page_pdf(path)
+    parsed = read_document(path)
+    codes = [issue.code for issue in parsed.issues]
+    assert "table_lines_without_extraction" not in codes, codes
+    assert "table_extraction_failed" not in codes, codes
+    text = "\n".join(u.raw_text for u in parsed.units)
+    assert "行业景气度持续修复" in text  # 正文行仍被提取
+    # 全链：无 blocking 缺口 → 发布门放行。
+    store = MemoryStore(clock=lambda: NOW)
+    sid = source_id_from_bytes(path.read_bytes())
+    store.put_reviewed_decision(
+        ReviewedDecision("r1", sid, "reviewer", NOW, ReviewDecision.ADMITTED, "approval")
+    )
+    plan = plan_builds(
+        [PlanEntry(str(path), domain_hint=ResearchDomain.COMPANY, review_decision_ids=("r1",))],
+        policy=POLICY,
+    )
+    outcome = execute_builds(
+        store,
+        plan,
+        policy=POLICY,
+        archive_root=tmp_path / "archive",
+        owner_id="n4",
+        now=NOW,
+        lease=LEASE,
+    ).outcomes[0]
+    assert outcome.build is not None
+    quality = json.loads(outcome.build.quality_report)
+    assert quality == {"gap_regions": [], "oversized_chunks": []}
+    publication = publish_build(store, outcome.build.build_id, activated_at=NOW)
+    assert publication.active_build_id == outcome.build.build_id

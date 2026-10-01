@@ -1,0 +1,6062 @@
+{
+  "artifact": "e5-data-delivery",
+  "generated_at": "2026-10-01T02:52:16.384613+00:00",
+  "policy": "zero-model; normal question -> corpus_search(limit=10) -> same-hit fetch_plan -> corpus_fetch(all cursor pages); exact quote or frozen equivalent structural evidence; ReAct budgets search=20000/fetch=6000",
+  "scope": {
+    "split": "holdout",
+    "samples": 12,
+    "targets": 51
+  },
+  "summary": {
+    "passed": 42,
+    "failed": 9,
+    "pass_rate": 0.8235294117647058,
+    "failure_classes": {
+      "quote_not_delivered": 5,
+      "dependency_not_delivered": 1,
+      "fetch_incomplete": 2,
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 31,
+        "failed": 5,
+        "pass_rate": 0.8611111111111112,
+        "failure_classes": {
+          "quote_not_delivered": 3,
+          "fetch_incomplete": 2
+        }
+      },
+      "supplementary": {
+        "passed": 11,
+        "failed": 4,
+        "pass_rate": 0.7333333333333333,
+        "failure_classes": {
+          "quote_not_delivered": 2,
+          "dependency_not_delivered": 1,
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "targets": [
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-mt-h1",
+      "role": "required",
+      "question": "根据这篇贵州茅台研报，公司2026年上半年实现的总营收和归母净利润分别是多少，同比变化如何？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 18815,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0005",
+          "context_count": 25,
+          "snippet": "<b>公司</b>名称<b>公司</b>\n<b>公司</b><b>公司</b>\n代码"
+        },
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0015",
+          "context_count": 14,
+          "snippet": "<b>净利润</b>增长率2024<b>净利润</b>增长率2025<b>净利润</b>增长率"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:ecc26968ccdb53dd:heading:0000",
+        "chunk:ecc26968ccdb53dd:heading:0001",
+        "chunk:ecc26968ccdb53dd:heading:0002",
+        "chunk:ecc26968ccdb53dd:heading:0003",
+        "chunk:ecc26968ccdb53dd:body:0000",
+        "chunk:ecc26968ccdb53dd:body:0001",
+        "chunk:ecc26968ccdb53dd:body:0002",
+        "chunk:ecc26968ccdb53dd:body:0003",
+        "chunk:ecc26968ccdb53dd:body:0004",
+        "chunk:ecc26968ccdb53dd:table:0000",
+        "chunk:ecc26968ccdb53dd:table:0001",
+        "chunk:ecc26968ccdb53dd:table:0002",
+        "chunk:ecc26968ccdb53dd:heading:0004",
+        "chunk:ecc26968ccdb53dd:body:0005",
+        "chunk:ecc26968ccdb53dd:table:0003",
+        "chunk:ecc26968ccdb53dd:table:0004",
+        "chunk:ecc26968ccdb53dd:body:0006",
+        "chunk:ecc26968ccdb53dd:heading:0005",
+        "chunk:ecc26968ccdb53dd:table:0005",
+        "chunk:ecc26968ccdb53dd:table:0006",
+        "chunk:ecc26968ccdb53dd:table:0007",
+        "chunk:ecc26968ccdb53dd:table:0008",
+        "chunk:ecc26968ccdb53dd:body:0007",
+        "chunk:ecc26968ccdb53dd:heading:0006",
+        "chunk:ecc26968ccdb53dd:table:0009",
+        "chunk:ecc26968ccdb53dd:table:0010",
+        "chunk:ecc26968ccdb53dd:table:0011",
+        "chunk:ecc26968ccdb53dd:table:0012",
+        "chunk:ecc26968ccdb53dd:table:0013",
+        "chunk:ecc26968ccdb53dd:table:0014",
+        "chunk:ecc26968ccdb53dd:table:0015",
+        "chunk:ecc26968ccdb53dd:table:0016",
+        "chunk:ecc26968ccdb53dd:table:0017",
+        "chunk:ecc26968ccdb53dd:body:0008",
+        "chunk:ecc26968ccdb53dd:table:0018",
+        "chunk:ecc26968ccdb53dd:body:0009",
+        "chunk:ecc26968ccdb53dd:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "贵州茅台发布2026半年报，公司2026H1实现总营收922.78亿元，同比增长1.3%，实现归母净利润445.17亿元，同比减少2.0%；实现扣非归母净利润444.64亿元，同比减少2.0%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-imt-q2",
+      "role": "required",
+      "question": "研报中说i茅台在2026Q2表现出高增长，那么这季度i茅台的收入是多少亿元、同比增长多少、在直销收入中占比多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16596,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:ecc26968ccdb53dd:body:0003",
+          "context_count": 25,
+          "snippet": "<b>2026Q2</b><b>直销</b><b>收入</b>224.6亿元，<b>同比</b>"
+        },
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0015",
+          "context_count": 14,
+          "snippet": "<b>收入</b><b>增长</b>2024<b>收入</b><b>增长</b>2025<b>收入</b><b>增长</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:ecc26968ccdb53dd:heading:0000",
+        "chunk:ecc26968ccdb53dd:heading:0001",
+        "chunk:ecc26968ccdb53dd:heading:0002",
+        "chunk:ecc26968ccdb53dd:heading:0003",
+        "chunk:ecc26968ccdb53dd:body:0000",
+        "chunk:ecc26968ccdb53dd:body:0001",
+        "chunk:ecc26968ccdb53dd:body:0002",
+        "chunk:ecc26968ccdb53dd:body:0003",
+        "chunk:ecc26968ccdb53dd:body:0004",
+        "chunk:ecc26968ccdb53dd:table:0000",
+        "chunk:ecc26968ccdb53dd:table:0001",
+        "chunk:ecc26968ccdb53dd:table:0002",
+        "chunk:ecc26968ccdb53dd:heading:0004",
+        "chunk:ecc26968ccdb53dd:body:0005",
+        "chunk:ecc26968ccdb53dd:table:0003",
+        "chunk:ecc26968ccdb53dd:table:0004",
+        "chunk:ecc26968ccdb53dd:body:0006",
+        "chunk:ecc26968ccdb53dd:heading:0005",
+        "chunk:ecc26968ccdb53dd:table:0005",
+        "chunk:ecc26968ccdb53dd:table:0006",
+        "chunk:ecc26968ccdb53dd:table:0007",
+        "chunk:ecc26968ccdb53dd:table:0008",
+        "chunk:ecc26968ccdb53dd:body:0007",
+        "chunk:ecc26968ccdb53dd:heading:0006",
+        "chunk:ecc26968ccdb53dd:table:0009",
+        "chunk:ecc26968ccdb53dd:table:0010",
+        "chunk:ecc26968ccdb53dd:table:0011",
+        "chunk:ecc26968ccdb53dd:table:0012",
+        "chunk:ecc26968ccdb53dd:table:0013",
+        "chunk:ecc26968ccdb53dd:table:0014",
+        "chunk:ecc26968ccdb53dd:table:0015",
+        "chunk:ecc26968ccdb53dd:table:0016",
+        "chunk:ecc26968ccdb53dd:table:0017",
+        "chunk:ecc26968ccdb53dd:body:0008",
+        "chunk:ecc26968ccdb53dd:table:0018",
+        "chunk:ecc26968ccdb53dd:body:0009",
+        "chunk:ecc26968ccdb53dd:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2026Q2直销收入224.6亿元，同比增长33.8%，其中i茅台收入187.1亿元，同比增长282.6%，占直销收入83.3%。批发代理收入143.1亿元，同比减少34.9%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-xlw",
+      "role": "supplementary",
+      "question": "研报中提到系列酒短期承压，那么系列酒2026Q2的收入是多少、同比变化多少，当季末经销商数量为多少家、较上季度末净增多少家？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16873,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:ecc26968ccdb53dd:body:0003",
+          "context_count": 25,
+          "snippet": "<b>系列</b>酒<b>短期</b><b>承压</b>。分产品看"
+        },
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0015",
+          "context_count": 14,
+          "snippet": "<b>收入</b>增长2024<b>收入</b>增长2025<b>收入</b>增长"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:ecc26968ccdb53dd:heading:0000",
+        "chunk:ecc26968ccdb53dd:heading:0001",
+        "chunk:ecc26968ccdb53dd:heading:0002",
+        "chunk:ecc26968ccdb53dd:heading:0003",
+        "chunk:ecc26968ccdb53dd:body:0000",
+        "chunk:ecc26968ccdb53dd:body:0001",
+        "chunk:ecc26968ccdb53dd:body:0002",
+        "chunk:ecc26968ccdb53dd:body:0003",
+        "chunk:ecc26968ccdb53dd:body:0004",
+        "chunk:ecc26968ccdb53dd:table:0000",
+        "chunk:ecc26968ccdb53dd:table:0001",
+        "chunk:ecc26968ccdb53dd:table:0002",
+        "chunk:ecc26968ccdb53dd:heading:0004",
+        "chunk:ecc26968ccdb53dd:body:0005",
+        "chunk:ecc26968ccdb53dd:table:0003",
+        "chunk:ecc26968ccdb53dd:table:0004",
+        "chunk:ecc26968ccdb53dd:body:0006",
+        "chunk:ecc26968ccdb53dd:heading:0005",
+        "chunk:ecc26968ccdb53dd:table:0005",
+        "chunk:ecc26968ccdb53dd:table:0006",
+        "chunk:ecc26968ccdb53dd:table:0007",
+        "chunk:ecc26968ccdb53dd:table:0008",
+        "chunk:ecc26968ccdb53dd:body:0007",
+        "chunk:ecc26968ccdb53dd:heading:0006",
+        "chunk:ecc26968ccdb53dd:table:0009",
+        "chunk:ecc26968ccdb53dd:table:0010",
+        "chunk:ecc26968ccdb53dd:table:0011",
+        "chunk:ecc26968ccdb53dd:table:0012",
+        "chunk:ecc26968ccdb53dd:table:0013",
+        "chunk:ecc26968ccdb53dd:table:0014",
+        "chunk:ecc26968ccdb53dd:table:0015",
+        "chunk:ecc26968ccdb53dd:table:0016",
+        "chunk:ecc26968ccdb53dd:table:0017",
+        "chunk:ecc26968ccdb53dd:body:0008",
+        "chunk:ecc26968ccdb53dd:table:0018",
+        "chunk:ecc26968ccdb53dd:body:0009",
+        "chunk:ecc26968ccdb53dd:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "系列酒2026Q2收入50.5亿元，同比降低25.0%，2026年第二季度末经销商数量2426家、较第一季度末净增204家，单季增加228家、减少24家",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-001",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "c195233b-ktable",
+      "role": "supplementary",
+      "question": "研报的可比公司估值表里，贵州茅台对应的收盘价、总市值，以及2026E、2027E的归母净利润和PE分别是多少？",
+      "doc_identity": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 17155,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0008",
+          "context_count": 25,
+          "snippet": "<b>收盘价</b>总<b>市值</b><b>2026E</b>归母净利<b>2026E</b>"
+        },
+        {
+          "locator": "chunk:ecc26968ccdb53dd:table:0013",
+          "context_count": 14,
+          "snippet": "<b>估值</b>指标20242025<b>2026E</b><b>2027E</b>2028E营运"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 39,
+      "delivered_locators": [
+        "chunk:ecc26968ccdb53dd:heading:0000",
+        "chunk:ecc26968ccdb53dd:heading:0001",
+        "chunk:ecc26968ccdb53dd:heading:0002",
+        "chunk:ecc26968ccdb53dd:heading:0003",
+        "chunk:ecc26968ccdb53dd:body:0000",
+        "chunk:ecc26968ccdb53dd:body:0001",
+        "chunk:ecc26968ccdb53dd:body:0002",
+        "chunk:ecc26968ccdb53dd:body:0003",
+        "chunk:ecc26968ccdb53dd:body:0004",
+        "chunk:ecc26968ccdb53dd:table:0000",
+        "chunk:ecc26968ccdb53dd:table:0001",
+        "chunk:ecc26968ccdb53dd:table:0002",
+        "chunk:ecc26968ccdb53dd:heading:0004",
+        "chunk:ecc26968ccdb53dd:body:0005",
+        "chunk:ecc26968ccdb53dd:table:0003",
+        "chunk:ecc26968ccdb53dd:table:0004",
+        "chunk:ecc26968ccdb53dd:body:0006",
+        "chunk:ecc26968ccdb53dd:heading:0005",
+        "chunk:ecc26968ccdb53dd:table:0005",
+        "chunk:ecc26968ccdb53dd:table:0006",
+        "chunk:ecc26968ccdb53dd:table:0007",
+        "chunk:ecc26968ccdb53dd:table:0008",
+        "chunk:ecc26968ccdb53dd:body:0007",
+        "chunk:ecc26968ccdb53dd:heading:0006",
+        "chunk:ecc26968ccdb53dd:table:0009",
+        "chunk:ecc26968ccdb53dd:table:0010",
+        "chunk:ecc26968ccdb53dd:table:0011",
+        "chunk:ecc26968ccdb53dd:table:0012",
+        "chunk:ecc26968ccdb53dd:table:0013",
+        "chunk:ecc26968ccdb53dd:table:0014",
+        "chunk:ecc26968ccdb53dd:table:0015",
+        "chunk:ecc26968ccdb53dd:table:0016",
+        "chunk:ecc26968ccdb53dd:table:0017",
+        "chunk:ecc26968ccdb53dd:body:0008",
+        "chunk:ecc26968ccdb53dd:table:0018",
+        "chunk:ecc26968ccdb53dd:body:0009",
+        "chunk:ecc26968ccdb53dd:body:0010"
+      ],
+      "pages": 16,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5613,
+          "delivered": 5613
+        },
+        {
+          "raw": 5006,
+          "delivered": 5006
+        },
+        {
+          "raw": 5515,
+          "delivered": 5515
+        },
+        {
+          "raw": 5264,
+          "delivered": 5264
+        },
+        {
+          "raw": 4780,
+          "delivered": 4780
+        },
+        {
+          "raw": 5711,
+          "delivered": 5711
+        },
+        {
+          "raw": 5982,
+          "delivered": 5982
+        },
+        {
+          "raw": 3443,
+          "delivered": 3443
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 5727,
+          "delivered": 5727
+        },
+        {
+          "raw": 3932,
+          "delivered": 3932
+        },
+        {
+          "raw": 4152,
+          "delivered": 4152
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 4766,
+          "delivered": 4766
+        },
+        {
+          "raw": 3928,
+          "delivered": 3928
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "600519.SH 贵州茅台 优于大市 1,342.0 16,776.0 823.7 886.3 20.4 18.9",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 20890,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-overview",
+      "role": "required",
+      "question": "根据这篇贝特利IPO研报，公司2025年的营业收入和归母净利润大概是多少？研报给的可比公司平均市盈率是多少倍？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 17408,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0020",
+          "context_count": 16,
+          "snippet": "<b>2025</b>年\n归母净利\n润"
+        },
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0001",
+          "context_count": 25,
+          "snippet": "<b>可比</b><b>公司</b>对应<b>2025</b>/2026/2027"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:0acdab0a7583d0d6:table:0003",
+        "chunk:0acdab0a7583d0d6:body:0016",
+        "chunk:0acdab0a7583d0d6:body:0017",
+        "chunk:0acdab0a7583d0d6:body:0018",
+        "chunk:0acdab0a7583d0d6:body:0019",
+        "chunk:0acdab0a7583d0d6:table:0004",
+        "chunk:0acdab0a7583d0d6:body:0020",
+        "chunk:0acdab0a7583d0d6:table:0005",
+        "chunk:0acdab0a7583d0d6:body:0021",
+        "chunk:0acdab0a7583d0d6:table:0006",
+        "chunk:0acdab0a7583d0d6:body:0022",
+        "chunk:0acdab0a7583d0d6:body:0023",
+        "chunk:0acdab0a7583d0d6:body:0024",
+        "chunk:0acdab0a7583d0d6:body:0025",
+        "chunk:0acdab0a7583d0d6:body:0026",
+        "chunk:0acdab0a7583d0d6:body:0027",
+        "chunk:0acdab0a7583d0d6:body:0000",
+        "chunk:0acdab0a7583d0d6:heading:0000",
+        "chunk:0acdab0a7583d0d6:body:0001",
+        "chunk:0acdab0a7583d0d6:body:0002",
+        "chunk:0acdab0a7583d0d6:body:0003",
+        "chunk:0acdab0a7583d0d6:body:0004",
+        "chunk:0acdab0a7583d0d6:heading:0001",
+        "chunk:0acdab0a7583d0d6:body:0005",
+        "chunk:0acdab0a7583d0d6:body:0006",
+        "chunk:0acdab0a7583d0d6:table:0000",
+        "chunk:0acdab0a7583d0d6:body:0007",
+        "chunk:0acdab0a7583d0d6:table:0001",
+        "chunk:0acdab0a7583d0d6:body:0008",
+        "chunk:0acdab0a7583d0d6:heading:0002",
+        "chunk:0acdab0a7583d0d6:body:0009",
+        "chunk:0acdab0a7583d0d6:table:0002",
+        "chunk:0acdab0a7583d0d6:body:0010",
+        "chunk:0acdab0a7583d0d6:heading:0003",
+        "chunk:0acdab0a7583d0d6:body:0011",
+        "chunk:0acdab0a7583d0d6:body:0012",
+        "chunk:0acdab0a7583d0d6:body:0013",
+        "chunk:0acdab0a7583d0d6:body:0014",
+        "chunk:0acdab0a7583d0d6:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2025 年公司实现营收/归母净利润 36.46/1.16 亿元。截至 2026 年 8 月 11 日，可比公司对应 2025/2026/2027 年平均 PE 分别为 35.50/22.87/17.61 倍（均剔除极端值）。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-top5cust",
+      "role": "supplementary",
+      "question": "贝特利2025年前五大客户中排第一的客户是谁，销售额和占收入比例大概是多少？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18039,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:0acdab0a7583d0d6:table:0006",
+          "context_count": 16,
+          "snippet": "<b>2025</b>（倍）2026E（倍）"
+        },
+        {
+          "locator": "chunk:0acdab0a7583d0d6:table:0002",
+          "context_count": 25,
+          "snippet": "<b>收入</b><b>比例</b>\n序号<b>客户</b>名称<b>销售额</b>（"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:0acdab0a7583d0d6:table:0003",
+        "chunk:0acdab0a7583d0d6:body:0016",
+        "chunk:0acdab0a7583d0d6:body:0017",
+        "chunk:0acdab0a7583d0d6:body:0018",
+        "chunk:0acdab0a7583d0d6:body:0019",
+        "chunk:0acdab0a7583d0d6:table:0004",
+        "chunk:0acdab0a7583d0d6:body:0020",
+        "chunk:0acdab0a7583d0d6:table:0005",
+        "chunk:0acdab0a7583d0d6:body:0021",
+        "chunk:0acdab0a7583d0d6:table:0006",
+        "chunk:0acdab0a7583d0d6:body:0022",
+        "chunk:0acdab0a7583d0d6:body:0023",
+        "chunk:0acdab0a7583d0d6:body:0024",
+        "chunk:0acdab0a7583d0d6:body:0025",
+        "chunk:0acdab0a7583d0d6:body:0026",
+        "chunk:0acdab0a7583d0d6:body:0027",
+        "chunk:0acdab0a7583d0d6:body:0000",
+        "chunk:0acdab0a7583d0d6:heading:0000",
+        "chunk:0acdab0a7583d0d6:body:0001",
+        "chunk:0acdab0a7583d0d6:body:0002",
+        "chunk:0acdab0a7583d0d6:body:0003",
+        "chunk:0acdab0a7583d0d6:body:0004",
+        "chunk:0acdab0a7583d0d6:heading:0001",
+        "chunk:0acdab0a7583d0d6:body:0005",
+        "chunk:0acdab0a7583d0d6:body:0006",
+        "chunk:0acdab0a7583d0d6:table:0000",
+        "chunk:0acdab0a7583d0d6:body:0007",
+        "chunk:0acdab0a7583d0d6:table:0001",
+        "chunk:0acdab0a7583d0d6:body:0008",
+        "chunk:0acdab0a7583d0d6:heading:0002",
+        "chunk:0acdab0a7583d0d6:body:0009",
+        "chunk:0acdab0a7583d0d6:table:0002",
+        "chunk:0acdab0a7583d0d6:body:0010",
+        "chunk:0acdab0a7583d0d6:heading:0003",
+        "chunk:0acdab0a7583d0d6:body:0011",
+        "chunk:0acdab0a7583d0d6:body:0012",
+        "chunk:0acdab0a7583d0d6:body:0013",
+        "chunk:0acdab0a7583d0d6:body:0014",
+        "chunk:0acdab0a7583d0d6:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "1 上海银浆 171,188.68 46.95%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-petable",
+      "role": "supplementary",
+      "question": "研报的可比公司估值表中，贝特利自身的2025年营收、归母净利润，以及2023-2025年的营收和净利润复合增速分别是多少？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 17911,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0020",
+          "context_count": 16,
+          "snippet": "<b>2025</b>年\n归母净利\n润"
+        },
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0001",
+          "context_count": 25,
+          "snippet": "<b>可比</b><b>公司</b>对应<b>2025</b>/2026/2027"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:0acdab0a7583d0d6:table:0003",
+        "chunk:0acdab0a7583d0d6:body:0016",
+        "chunk:0acdab0a7583d0d6:body:0017",
+        "chunk:0acdab0a7583d0d6:body:0018",
+        "chunk:0acdab0a7583d0d6:body:0019",
+        "chunk:0acdab0a7583d0d6:table:0004",
+        "chunk:0acdab0a7583d0d6:body:0020",
+        "chunk:0acdab0a7583d0d6:table:0005",
+        "chunk:0acdab0a7583d0d6:body:0021",
+        "chunk:0acdab0a7583d0d6:table:0006",
+        "chunk:0acdab0a7583d0d6:body:0022",
+        "chunk:0acdab0a7583d0d6:body:0023",
+        "chunk:0acdab0a7583d0d6:body:0024",
+        "chunk:0acdab0a7583d0d6:body:0025",
+        "chunk:0acdab0a7583d0d6:body:0026",
+        "chunk:0acdab0a7583d0d6:body:0027",
+        "chunk:0acdab0a7583d0d6:body:0000",
+        "chunk:0acdab0a7583d0d6:heading:0000",
+        "chunk:0acdab0a7583d0d6:body:0001",
+        "chunk:0acdab0a7583d0d6:body:0002",
+        "chunk:0acdab0a7583d0d6:body:0003",
+        "chunk:0acdab0a7583d0d6:body:0004",
+        "chunk:0acdab0a7583d0d6:heading:0001",
+        "chunk:0acdab0a7583d0d6:body:0005",
+        "chunk:0acdab0a7583d0d6:body:0006",
+        "chunk:0acdab0a7583d0d6:table:0000",
+        "chunk:0acdab0a7583d0d6:body:0007",
+        "chunk:0acdab0a7583d0d6:table:0001",
+        "chunk:0acdab0a7583d0d6:body:0008",
+        "chunk:0acdab0a7583d0d6:heading:0002",
+        "chunk:0acdab0a7583d0d6:body:0009",
+        "chunk:0acdab0a7583d0d6:table:0002",
+        "chunk:0acdab0a7583d0d6:body:0010",
+        "chunk:0acdab0a7583d0d6:heading:0003",
+        "chunk:0acdab0a7583d0d6:body:0011",
+        "chunk:0acdab0a7583d0d6:body:0012",
+        "chunk:0acdab0a7583d0d6:body:0013",
+        "chunk:0acdab0a7583d0d6:body:0014",
+        "chunk:0acdab0a7583d0d6:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "301697.SZ 贝特利 36.46 1.16 26.66% 16.42%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "split": "holdout",
+      "domain": "company",
+      "target_id": "f0e67b73-risk",
+      "role": "required",
+      "question": "研报风险提示中提到，哪些情形可能导致大客户对贝特利的采购需求下滑？",
+      "doc_identity": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14970,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0024",
+          "context_count": 16,
+          "snippet": "<b>可能</b><b>导致</b>客户W对公司的<b>采购</b>"
+        },
+        {
+          "locator": "chunk:0acdab0a7583d0d6:body:0002",
+          "context_count": 25,
+          "snippet": "<b>风险</b><b>提示</b>：1）贵金属供应与"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:0acdab0a7583d0d6:table:0003",
+        "chunk:0acdab0a7583d0d6:body:0016",
+        "chunk:0acdab0a7583d0d6:body:0017",
+        "chunk:0acdab0a7583d0d6:body:0018",
+        "chunk:0acdab0a7583d0d6:body:0019",
+        "chunk:0acdab0a7583d0d6:table:0004",
+        "chunk:0acdab0a7583d0d6:body:0020",
+        "chunk:0acdab0a7583d0d6:table:0005",
+        "chunk:0acdab0a7583d0d6:body:0021",
+        "chunk:0acdab0a7583d0d6:table:0006",
+        "chunk:0acdab0a7583d0d6:body:0022",
+        "chunk:0acdab0a7583d0d6:body:0023",
+        "chunk:0acdab0a7583d0d6:body:0024",
+        "chunk:0acdab0a7583d0d6:body:0025",
+        "chunk:0acdab0a7583d0d6:body:0026",
+        "chunk:0acdab0a7583d0d6:body:0027",
+        "chunk:0acdab0a7583d0d6:body:0000",
+        "chunk:0acdab0a7583d0d6:heading:0000",
+        "chunk:0acdab0a7583d0d6:body:0001",
+        "chunk:0acdab0a7583d0d6:body:0002",
+        "chunk:0acdab0a7583d0d6:body:0003",
+        "chunk:0acdab0a7583d0d6:body:0004",
+        "chunk:0acdab0a7583d0d6:heading:0001",
+        "chunk:0acdab0a7583d0d6:body:0005",
+        "chunk:0acdab0a7583d0d6:body:0006",
+        "chunk:0acdab0a7583d0d6:table:0000",
+        "chunk:0acdab0a7583d0d6:body:0007",
+        "chunk:0acdab0a7583d0d6:table:0001",
+        "chunk:0acdab0a7583d0d6:body:0008",
+        "chunk:0acdab0a7583d0d6:heading:0002",
+        "chunk:0acdab0a7583d0d6:body:0009",
+        "chunk:0acdab0a7583d0d6:table:0002",
+        "chunk:0acdab0a7583d0d6:body:0010",
+        "chunk:0acdab0a7583d0d6:heading:0003",
+        "chunk:0acdab0a7583d0d6:body:0011",
+        "chunk:0acdab0a7583d0d6:body:0012",
+        "chunk:0acdab0a7583d0d6:body:0013",
+        "chunk:0acdab0a7583d0d6:body:0014",
+        "chunk:0acdab0a7583d0d6:body:0015"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5690,
+          "delivered": 5690
+        },
+        {
+          "raw": 4688,
+          "delivered": 4688
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        },
+        {
+          "raw": 5652,
+          "delivered": 5652
+        },
+        {
+          "raw": 5839,
+          "delivered": 5839
+        },
+        {
+          "raw": 4066,
+          "delivered": 4066
+        },
+        {
+          "raw": 5777,
+          "delivered": 5777
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4465,
+          "delivered": 4465
+        },
+        {
+          "raw": 4458,
+          "delivered": 4458
+        },
+        {
+          "raw": 5757,
+          "delivered": 5757
+        },
+        {
+          "raw": 1633,
+          "delivered": 1633
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "未来，若出现性能更好的材料替代了硅橡胶，或下游客户无法接受硅橡胶的成本，或下游客户需求减少，则可能导致客户 W 对公司的采购需求下滑",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 15776,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "c1ddcd8a-coalprice",
+      "role": "required",
+      "question": "研报中动力煤现货价格和国内主要地区主焦煤平均价格本周分别是多少元/吨，环比涨了多少？",
+      "doc_identity": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15630,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:body:0001",
+          "context_count": 4,
+          "snippet": "<b>国内</b>主要<b>地区</b><b>主焦煤</b><b>平均</b><b>价格</b>为2224"
+        },
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:body:0027",
+          "context_count": 5,
+          "snippet": "<b>国内</b>主要<b>地区</b><b>主焦煤</b><b>平均</b><b>价格</b>为2224"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 9,
+      "delivered_locators": [
+        "chunk:a6be5fb919b5ca0f:heading:0000",
+        "chunk:a6be5fb919b5ca0f:body:0001",
+        "chunk:a6be5fb919b5ca0f:body:0002",
+        "chunk:a6be5fb919b5ca0f:table:0000",
+        "chunk:a6be5fb919b5ca0f:table:0024",
+        "chunk:a6be5fb919b5ca0f:body:0027",
+        "chunk:a6be5fb919b5ca0f:table:0025",
+        "chunk:a6be5fb919b5ca0f:body:0028",
+        "chunk:a6be5fb919b5ca0f:table:0026"
+      ],
+      "pages": 3,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5658,
+          "delivered": 5658
+        },
+        {
+          "raw": 1519,
+          "delivered": 1519
+        },
+        {
+          "raw": 5026,
+          "delivered": 5026
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "（3）动力煤价格为 967 元/吨，环比+9.14%；（4）国内主要地区主焦煤平均价格为 2224 元/吨，环比上周+9.34%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 3345,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "c1ddcd8a-summarytable",
+      "role": "supplementary",
+      "question": "研报的量价利汇总表中，螺纹钢在2026-9-4的价格、7日涨幅、30日涨幅和年内涨幅分别是多少？",
+      "doc_identity": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "search_ok": true,
+      "search_hits": 9,
+      "delivered_search_chars": 19427,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:table:0004",
+          "context_count": 14,
+          "snippet": "<b>涨幅</b>4.2<b>30</b>日<b>涨幅</b>.<b>年内</b><b>涨幅</b>"
+        },
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:body:0030",
+          "context_count": 14,
+          "snippet": "<b>螺纹钢</b>价差：本周五该价差为"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:a6be5fb919b5ca0f:body:0006",
+        "chunk:a6be5fb919b5ca0f:table:0001",
+        "chunk:a6be5fb919b5ca0f:table:0002",
+        "chunk:a6be5fb919b5ca0f:table:0003",
+        "chunk:a6be5fb919b5ca0f:table:0004",
+        "chunk:a6be5fb919b5ca0f:table:0005",
+        "chunk:a6be5fb919b5ca0f:table:0006",
+        "chunk:a6be5fb919b5ca0f:table:0007",
+        "chunk:a6be5fb919b5ca0f:table:0008",
+        "chunk:a6be5fb919b5ca0f:body:0007",
+        "chunk:a6be5fb919b5ca0f:table:0009",
+        "chunk:a6be5fb919b5ca0f:table:0010",
+        "chunk:a6be5fb919b5ca0f:table:0011",
+        "chunk:a6be5fb919b5ca0f:body:0008",
+        "chunk:a6be5fb919b5ca0f:table:0027",
+        "chunk:a6be5fb919b5ca0f:body:0029",
+        "chunk:a6be5fb919b5ca0f:heading:0006",
+        "chunk:a6be5fb919b5ca0f:body:0030",
+        "chunk:a6be5fb919b5ca0f:table:0028",
+        "chunk:a6be5fb919b5ca0f:table:0029",
+        "chunk:a6be5fb919b5ca0f:table:0030",
+        "chunk:a6be5fb919b5ca0f:table:0031",
+        "chunk:a6be5fb919b5ca0f:body:0031",
+        "chunk:a6be5fb919b5ca0f:heading:0007",
+        "chunk:a6be5fb919b5ca0f:body:0032",
+        "chunk:a6be5fb919b5ca0f:heading:0008",
+        "chunk:a6be5fb919b5ca0f:body:0033",
+        "chunk:a6be5fb919b5ca0f:table:0032"
+      ],
+      "pages": 11,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5812,
+          "delivered": 5812
+        },
+        {
+          "raw": 5504,
+          "delivered": 5504
+        },
+        {
+          "raw": 5099,
+          "delivered": 5099
+        },
+        {
+          "raw": 5611,
+          "delivered": 5611
+        },
+        {
+          "raw": 5533,
+          "delivered": 5533
+        },
+        {
+          "raw": 3034,
+          "delivered": 3034
+        },
+        {
+          "raw": 4739,
+          "delivered": 4739
+        },
+        {
+          "raw": 5429,
+          "delivered": 5429
+        },
+        {
+          "raw": 5440,
+          "delivered": 5440
+        },
+        {
+          "raw": 4670,
+          "delivered": 4670
+        },
+        {
+          "raw": 3647,
+          "delivered": 3647
+        }
+      ],
+      "quote_delivered": false,
+      "expected_quote": "螺纹钢 元/吨 3240 0.9% 4.2% -2.4% -0.6% 6000",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 16864,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "c1ddcd8a-realestate",
+      "role": "supplementary",
+      "question": "研报中说钛白粉、玻璃价格处在低位，那么本周它们价格环比分别变化多少，平板玻璃开工率又是多少？",
+      "doc_identity": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12816,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:table:0009",
+          "context_count": 9,
+          "snippet": "<b>钛白粉</b>元/吨7日涨幅竣工"
+        },
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:table:0002",
+          "context_count": 8,
+          "snippet": "<b>钛白粉</b>元/吨3240数值竣工<b>钛白粉</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 17,
+      "delivered_locators": [
+        "chunk:a6be5fb919b5ca0f:body:0007",
+        "chunk:a6be5fb919b5ca0f:table:0009",
+        "chunk:a6be5fb919b5ca0f:table:0010",
+        "chunk:a6be5fb919b5ca0f:table:0011",
+        "chunk:a6be5fb919b5ca0f:body:0008",
+        "chunk:a6be5fb919b5ca0f:heading:0002",
+        "chunk:a6be5fb919b5ca0f:body:0009",
+        "chunk:a6be5fb919b5ca0f:body:0010",
+        "chunk:a6be5fb919b5ca0f:heading:0003",
+        "chunk:a6be5fb919b5ca0f:body:0006",
+        "chunk:a6be5fb919b5ca0f:table:0001",
+        "chunk:a6be5fb919b5ca0f:table:0002",
+        "chunk:a6be5fb919b5ca0f:table:0003",
+        "chunk:a6be5fb919b5ca0f:table:0004",
+        "chunk:a6be5fb919b5ca0f:table:0005",
+        "chunk:a6be5fb919b5ca0f:table:0006",
+        "chunk:a6be5fb919b5ca0f:table:0007"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5897,
+          "delivered": 5897
+        },
+        {
+          "raw": 4663,
+          "delivered": 4663
+        },
+        {
+          "raw": 4712,
+          "delivered": 4712
+        },
+        {
+          "raw": 5527,
+          "delivered": 5527
+        },
+        {
+          "raw": 5219,
+          "delivered": 5219
+        },
+        {
+          "raw": 4814,
+          "delivered": 4814
+        },
+        {
+          "raw": 2691,
+          "delivered": 2691
+        }
+      ],
+      "quote_delivered": false,
+      "expected_quote": "地产竣工链条：钛白粉、玻璃价格处于低位水平。 本周钛白粉、玻璃的价格环比分别-0.36%、-0.97%，平板玻璃本周开工率 67.19%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 12614,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "c1ddcd8a-invest",
+      "role": "supplementary",
+      "question": "研报的投资建议中对钢铁和煤炭行业是怎么看的，提到了2026年7月原煤产量是多少、同比变化多少，并推荐了哪些公司？",
+      "doc_identity": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18450,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:body:0033",
+          "context_count": 7,
+          "snippet": "<b>投资建议</b>当前<b>钢铁</b><b>行业</b>供需两弱，"
+        },
+        {
+          "locator": "chunk:a6be5fb919b5ca0f:body:0002",
+          "context_count": 9,
+          "snippet": "<b>投资建议</b>：当前<b>钢铁</b><b>行业</b>供需两弱"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 16,
+      "delivered_locators": [
+        "chunk:a6be5fb919b5ca0f:table:0031",
+        "chunk:a6be5fb919b5ca0f:body:0031",
+        "chunk:a6be5fb919b5ca0f:heading:0007",
+        "chunk:a6be5fb919b5ca0f:body:0032",
+        "chunk:a6be5fb919b5ca0f:heading:0008",
+        "chunk:a6be5fb919b5ca0f:body:0033",
+        "chunk:a6be5fb919b5ca0f:table:0032",
+        "chunk:a6be5fb919b5ca0f:body:0000",
+        "chunk:a6be5fb919b5ca0f:heading:0000",
+        "chunk:a6be5fb919b5ca0f:body:0001",
+        "chunk:a6be5fb919b5ca0f:body:0002",
+        "chunk:a6be5fb919b5ca0f:table:0000",
+        "chunk:a6be5fb919b5ca0f:body:0003",
+        "chunk:a6be5fb919b5ca0f:heading:0001",
+        "chunk:a6be5fb919b5ca0f:body:0004",
+        "chunk:a6be5fb919b5ca0f:body:0005"
+      ],
+      "pages": 5,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5883,
+          "delivered": 5883
+        },
+        {
+          "raw": 4444,
+          "delivered": 4444
+        },
+        {
+          "raw": 5345,
+          "delivered": 5345
+        },
+        {
+          "raw": 5831,
+          "delivered": 5831
+        },
+        {
+          "raw": 1542,
+          "delivered": 1542
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "当前钢铁行业供需两弱，普钢板块相对 PB 处于较低水平，后续板块表现取决于具体减产力度，推荐估值处于低位的行业龙头宝钢股份；7 月原煤产量 3.43 亿吨，同比-10.10%，同比降幅进一步扩大，带动煤炭价格持续修复，推荐中国神华、中煤能源、陕西煤业、山西焦煤、潞安环能。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 5029,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-index",
+      "role": "required",
+      "question": "本周A股各主要宽基指数表现如何，上证综指、沪深300、创业板指等分别涨跌了多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14467,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:5a213a956083ee64:table:0014",
+          "context_count": 8,
+          "snippet": "<b>本周</b>\n涨跌幅<b>本周</b>近一周变化"
+        },
+        {
+          "locator": "chunk:5a213a956083ee64:table:0022",
+          "context_count": 9,
+          "snippet": "<b>本周</b>\n涨跌幅<b>本周</b>近一周变化"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 17,
+      "delivered_locators": [
+        "chunk:5a213a956083ee64:body:0013",
+        "chunk:5a213a956083ee64:table:0010",
+        "chunk:5a213a956083ee64:table:0009",
+        "chunk:5a213a956083ee64:table:0011",
+        "chunk:5a213a956083ee64:table:0012",
+        "chunk:5a213a956083ee64:table:0013",
+        "chunk:5a213a956083ee64:table:0014",
+        "chunk:5a213a956083ee64:body:0014",
+        "chunk:5a213a956083ee64:body:0018",
+        "chunk:5a213a956083ee64:table:0018",
+        "chunk:5a213a956083ee64:table:0019",
+        "chunk:5a213a956083ee64:table:0020",
+        "chunk:5a213a956083ee64:table:0021",
+        "chunk:5a213a956083ee64:table:0022",
+        "chunk:5a213a956083ee64:table:0023",
+        "chunk:5a213a956083ee64:table:0024",
+        "chunk:5a213a956083ee64:body:0019"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5958,
+          "delivered": 5958
+        },
+        {
+          "raw": 5125,
+          "delivered": 5125
+        },
+        {
+          "raw": 5177,
+          "delivered": 5177
+        },
+        {
+          "raw": 5964,
+          "delivered": 5964
+        },
+        {
+          "raw": 5203,
+          "delivered": 5203
+        },
+        {
+          "raw": 5227,
+          "delivered": 5227
+        },
+        {
+          "raw": 2417,
+          "delivered": 2417
+        }
+      ],
+      "quote_delivered": false,
+      "expected_quote": "本周主要宽基指数普遍下跌 ，上证综指、东财全A分别下跌0.56%、1.20%，沪深300下跌1.33%；成长风格方面 ，创业板指下跌 4.03%，科创50下跌5.10%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 14983,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-industry",
+      "role": "required",
+      "question": "本周申万行业中有多少个录得正收益？涨幅居前和跌幅居前的是哪些行业、涨跌幅分别是多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16317,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:5a213a956083ee64:table:0066",
+          "context_count": 5,
+          "snippet": "<b>行业</b>电子<b>涨跌幅</b><b>本周</b>近一周变化"
+        },
+        {
+          "locator": "chunk:5a213a956083ee64:table:0070",
+          "context_count": 4,
+          "snippet": "<b>行业</b>半导体<b>涨跌幅</b><b>本周</b>近一周变化"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 9,
+      "delivered_locators": [
+        "chunk:5a213a956083ee64:body:0038",
+        "chunk:5a213a956083ee64:table:0065",
+        "chunk:5a213a956083ee64:table:0066",
+        "chunk:5a213a956083ee64:table:0067",
+        "chunk:5a213a956083ee64:body:0039",
+        "chunk:5a213a956083ee64:body:0043",
+        "chunk:5a213a956083ee64:table:0069",
+        "chunk:5a213a956083ee64:table:0070",
+        "chunk:5a213a956083ee64:table:0071"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5819,
+          "delivered": 5819
+        },
+        {
+          "raw": 2687,
+          "delivered": 2687
+        },
+        {
+          "raw": 5611,
+          "delivered": 5611
+        },
+        {
+          "raw": 1765,
+          "delivered": 1765
+        }
+      ],
+      "quote_delivered": false,
+      "expected_quote": "行业层面 ，本周申万 31个行业中 14个录得正收益 ，机构低配板块表现居前 ，传媒、银行和农林牧渔涨幅居前 ，分别上涨 6.0%、4.0%、3.3%；电子、有色金属和建筑材料表现较弱，分别下跌5.4%、5.0%、4.3%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6080,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-pmi",
+      "role": "supplementary",
+      "question": "8月制造业采购经理指数是多少、较上月变化如何？生产指数和新订单指数分别是多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15567,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:5a213a956083ee64:body:0004",
+          "context_count": 5,
+          "snippet": "<b>制造业</b><b>采购</b><b>经理</b><b>指数</b>（PMI）为"
+        },
+        {
+          "locator": "chunk:5a213a956083ee64:table:0066",
+          "context_count": 5,
+          "snippet": "<b>变化</b>电子\n电子-5.4-5.5"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:5a213a956083ee64:body:0001",
+        "chunk:5a213a956083ee64:body:0002",
+        "chunk:5a213a956083ee64:body:0003",
+        "chunk:5a213a956083ee64:body:0004",
+        "chunk:5a213a956083ee64:body:0005",
+        "chunk:5a213a956083ee64:body:0038",
+        "chunk:5a213a956083ee64:table:0065",
+        "chunk:5a213a956083ee64:table:0066",
+        "chunk:5a213a956083ee64:table:0067",
+        "chunk:5a213a956083ee64:body:0039"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4713,
+          "delivered": 4713
+        },
+        {
+          "raw": 3337,
+          "delivered": 3337
+        },
+        {
+          "raw": 5819,
+          "delivered": 5819
+        },
+        {
+          "raw": 2687,
+          "delivered": 2687
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "国家统计局发布数据显示 ，8月制造业采购经理指数 （PMI）为49.8%，较上月上升0.6个百分点；生产指数和新订单指数分别为 50.4%和50.6%，均位于扩张区间",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 5886,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-eptable",
+      "role": "supplementary",
+      "question": "研报的一级行业盈利预测表中，电子行业本周涨跌幅、2026E盈利预测（亿元），以及2026年盈利增速预测的调整变化分别是多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 19098,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:5a213a956083ee64:table:0006",
+          "context_count": 23,
+          "snippet": "<b>2026E</b>2027E<b>盈利</b><b>增速</b><b>预测</b><b>2026E</b>2027E<b>2026</b>"
+        },
+        {
+          "locator": "chunk:5a213a956083ee64:table:0022",
+          "context_count": 11,
+          "snippet": "<b>2026E</b>2027E<b>盈利</b><b>增速</b><b>预测</b><b>2026E</b>2027E<b>2026</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 34,
+      "delivered_locators": [
+        "chunk:5a213a956083ee64:body:0009",
+        "chunk:5a213a956083ee64:heading:0003",
+        "chunk:5a213a956083ee64:body:0010",
+        "chunk:5a213a956083ee64:table:0000",
+        "chunk:5a213a956083ee64:table:0001",
+        "chunk:5a213a956083ee64:table:0002",
+        "chunk:5a213a956083ee64:table:0003",
+        "chunk:5a213a956083ee64:table:0004",
+        "chunk:5a213a956083ee64:table:0005",
+        "chunk:5a213a956083ee64:table:0006",
+        "chunk:5a213a956083ee64:table:0007",
+        "chunk:5a213a956083ee64:body:0011",
+        "chunk:5a213a956083ee64:table:0008",
+        "chunk:5a213a956083ee64:body:0012",
+        "chunk:5a213a956083ee64:heading:0004",
+        "chunk:5a213a956083ee64:body:0013",
+        "chunk:5a213a956083ee64:table:0010",
+        "chunk:5a213a956083ee64:table:0009",
+        "chunk:5a213a956083ee64:table:0011",
+        "chunk:5a213a956083ee64:table:0012",
+        "chunk:5a213a956083ee64:table:0013",
+        "chunk:5a213a956083ee64:table:0014",
+        "chunk:5a213a956083ee64:body:0014",
+        "chunk:5a213a956083ee64:body:0017",
+        "chunk:5a213a956083ee64:heading:0005",
+        "chunk:5a213a956083ee64:body:0018",
+        "chunk:5a213a956083ee64:table:0018",
+        "chunk:5a213a956083ee64:table:0019",
+        "chunk:5a213a956083ee64:table:0020",
+        "chunk:5a213a956083ee64:table:0021",
+        "chunk:5a213a956083ee64:table:0022",
+        "chunk:5a213a956083ee64:table:0023",
+        "chunk:5a213a956083ee64:table:0024",
+        "chunk:5a213a956083ee64:body:0019"
+      ],
+      "pages": 22,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3579,
+          "delivered": 3579
+        },
+        {
+          "raw": 5810,
+          "delivered": 5810
+        },
+        {
+          "raw": 4163,
+          "delivered": 4163
+        },
+        {
+          "raw": 4201,
+          "delivered": 4201
+        },
+        {
+          "raw": 4178,
+          "delivered": 4178
+        },
+        {
+          "raw": 4184,
+          "delivered": 4184
+        },
+        {
+          "raw": 4197,
+          "delivered": 4197
+        },
+        {
+          "raw": 4208,
+          "delivered": 4208
+        },
+        {
+          "raw": 5603,
+          "delivered": 5603
+        },
+        {
+          "raw": 4775,
+          "delivered": 4775
+        },
+        {
+          "raw": 5093,
+          "delivered": 5093
+        },
+        {
+          "raw": 4197,
+          "delivered": 4197
+        },
+        {
+          "raw": 4396,
+          "delivered": 4396
+        },
+        {
+          "raw": 4362,
+          "delivered": 4362
+        },
+        {
+          "raw": 4166,
+          "delivered": 4166
+        },
+        {
+          "raw": 4391,
+          "delivered": 4391
+        },
+        {
+          "raw": 3638,
+          "delivered": 3638
+        },
+        {
+          "raw": 5501,
+          "delivered": 5501
+        },
+        {
+          "raw": 5648,
+          "delivered": 5648
+        },
+        {
+          "raw": 5643,
+          "delivered": 5643
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 2759,
+          "delivered": 2759
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "电子 -5.4% -5.5% 1800 5394 8006 169.3% 48.6% 2.8% 6.8% 1.0% 4.0%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 24878,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-figure35",
+      "role": "required",
+      "question": "Figure 为训练 Helix 大模型承诺采购的首期算力规模是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13504,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0003",
+          "context_count": 25,
+          "snippet": "<b>首期</b>算力<b>采购</b><b>承诺</b><b>规模</b>35亿"
+        },
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0017",
+          "context_count": 3,
+          "snippet": "地址\n上海市黄浦区中山南路888号\n"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:f6a8d012f8aa2bbe:body:0000",
+        "chunk:f6a8d012f8aa2bbe:table:0000",
+        "chunk:f6a8d012f8aa2bbe:body:0001",
+        "chunk:f6a8d012f8aa2bbe:body:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0003",
+        "chunk:f6a8d012f8aa2bbe:body:0004",
+        "chunk:f6a8d012f8aa2bbe:body:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0008",
+        "chunk:f6a8d012f8aa2bbe:body:0009",
+        "chunk:f6a8d012f8aa2bbe:table:0001",
+        "chunk:f6a8d012f8aa2bbe:table:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0010",
+        "chunk:f6a8d012f8aa2bbe:table:0003",
+        "chunk:f6a8d012f8aa2bbe:table:0004",
+        "chunk:f6a8d012f8aa2bbe:table:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0011",
+        "chunk:f6a8d012f8aa2bbe:table:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0012",
+        "chunk:f6a8d012f8aa2bbe:table:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0013",
+        "chunk:f6a8d012f8aa2bbe:body:0014",
+        "chunk:f6a8d012f8aa2bbe:body:0015",
+        "chunk:f6a8d012f8aa2bbe:body:0016",
+        "chunk:f6a8d012f8aa2bbe:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "Figure 宣布采购 35 亿美元算力训练 Helix， 规划最高配置 10 万张 GPU。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-dele",
+      "role": "required",
+      "question": "深度跃迁发布的 DELE-w0.5 在真机实验中取得了多高的完整任务成功率？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13485,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0003",
+          "context_count": 25,
+          "snippet": "<b>深度</b><b>跃迁</b><b>发布</b>世界动作模型<b>DELE-w</b><b>0.5</b>"
+        },
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0016",
+          "context_count": 3,
+          "snippet": "<b>发布</b>后的12个月内的"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:f6a8d012f8aa2bbe:body:0000",
+        "chunk:f6a8d012f8aa2bbe:table:0000",
+        "chunk:f6a8d012f8aa2bbe:body:0001",
+        "chunk:f6a8d012f8aa2bbe:body:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0003",
+        "chunk:f6a8d012f8aa2bbe:body:0004",
+        "chunk:f6a8d012f8aa2bbe:body:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0008",
+        "chunk:f6a8d012f8aa2bbe:body:0009",
+        "chunk:f6a8d012f8aa2bbe:table:0001",
+        "chunk:f6a8d012f8aa2bbe:table:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0010",
+        "chunk:f6a8d012f8aa2bbe:table:0003",
+        "chunk:f6a8d012f8aa2bbe:table:0004",
+        "chunk:f6a8d012f8aa2bbe:table:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0011",
+        "chunk:f6a8d012f8aa2bbe:table:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0012",
+        "chunk:f6a8d012f8aa2bbe:table:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0013",
+        "chunk:f6a8d012f8aa2bbe:body:0014",
+        "chunk:f6a8d012f8aa2bbe:body:0015",
+        "chunk:f6a8d012f8aa2bbe:body:0016",
+        "chunk:f6a8d012f8aa2bbe:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "在 640 次真机实验中，DELE-w0.5 取得 62.5% 的完整任务成功率与 81.3% 的平均阶段进度， 均显著优于基线",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-musk",
+      "role": "required",
+      "question": "马斯克在 G20 会议对未来十年全球人形机器人部署规模作了什么预测？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 14288,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0005",
+          "context_count": 25,
+          "snippet": "<b>马斯克</b><b>G20</b><b>会议</b><b>预测</b><b>未来</b>十年<b>全球</b>"
+        },
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0016",
+          "context_count": 3,
+          "snippet": "<b>未来</b>市场表现与基准指数相比无"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:f6a8d012f8aa2bbe:body:0000",
+        "chunk:f6a8d012f8aa2bbe:table:0000",
+        "chunk:f6a8d012f8aa2bbe:body:0001",
+        "chunk:f6a8d012f8aa2bbe:body:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0003",
+        "chunk:f6a8d012f8aa2bbe:body:0004",
+        "chunk:f6a8d012f8aa2bbe:body:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0008",
+        "chunk:f6a8d012f8aa2bbe:body:0009",
+        "chunk:f6a8d012f8aa2bbe:table:0001",
+        "chunk:f6a8d012f8aa2bbe:table:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0010",
+        "chunk:f6a8d012f8aa2bbe:table:0003",
+        "chunk:f6a8d012f8aa2bbe:table:0004",
+        "chunk:f6a8d012f8aa2bbe:table:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0011",
+        "chunk:f6a8d012f8aa2bbe:table:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0012",
+        "chunk:f6a8d012f8aa2bbe:table:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0013",
+        "chunk:f6a8d012f8aa2bbe:body:0014",
+        "chunk:f6a8d012f8aa2bbe:body:0015",
+        "chunk:f6a8d012f8aa2bbe:body:0016",
+        "chunk:f6a8d012f8aa2bbe:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "马斯克在 9 月 1 日 G20 创新部长级会议上表示， 未来十年全球将至少部署 10 亿台人形机器人， 单台产出约相当于 5 个普通人",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-turnover",
+      "role": "required",
+      "question": "当周（2026/8/31-2026/9/4）机器人板块相关公司的成交金额是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19662,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0008",
+          "context_count": 25,
+          "snippet": "<b>机器人</b><b>板块</b><b>相关</b><b>公司</b><b>成交</b><b>金额</b>为4553"
+        },
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0016",
+          "context_count": 3,
+          "snippet": "<b>公司</b>股价（或行业指数）的"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:f6a8d012f8aa2bbe:body:0000",
+        "chunk:f6a8d012f8aa2bbe:table:0000",
+        "chunk:f6a8d012f8aa2bbe:body:0001",
+        "chunk:f6a8d012f8aa2bbe:body:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0003",
+        "chunk:f6a8d012f8aa2bbe:body:0004",
+        "chunk:f6a8d012f8aa2bbe:body:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0008",
+        "chunk:f6a8d012f8aa2bbe:body:0009",
+        "chunk:f6a8d012f8aa2bbe:table:0001",
+        "chunk:f6a8d012f8aa2bbe:table:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0010",
+        "chunk:f6a8d012f8aa2bbe:table:0003",
+        "chunk:f6a8d012f8aa2bbe:table:0004",
+        "chunk:f6a8d012f8aa2bbe:table:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0011",
+        "chunk:f6a8d012f8aa2bbe:table:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0012",
+        "chunk:f6a8d012f8aa2bbe:table:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0013",
+        "chunk:f6a8d012f8aa2bbe:body:0014",
+        "chunk:f6a8d012f8aa2bbe:body:0015",
+        "chunk:f6a8d012f8aa2bbe:body:0016",
+        "chunk:f6a8d012f8aa2bbe:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "周度 （2026/8/31-2026/9/4） 机器人板块相关公司成交金额为 4553 亿元，在全部 A 股周度成交金额中占比约 4.6%，环比上升。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "0c25f0e9-eptable",
+      "role": "required",
+      "question": "根据表 1 盈利预测表，珞石机器人（3752.HK）当周的周度涨跌幅是多少？",
+      "doc_identity": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16321,
+      "source_offered": true,
+      "source_hit_ids": [
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:table:0002",
+          "context_count": 25,
+          "snippet": "<b>3752</b>.<b>HK</b>1021.<b>HK</b>2590.<b>HK</b>"
+        },
+        {
+          "locator": "chunk:f6a8d012f8aa2bbe:body:0016",
+          "context_count": 3,
+          "snippet": "<b>涨跌幅</b>相对同期的沪深300指数"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 28,
+      "delivered_locators": [
+        "chunk:f6a8d012f8aa2bbe:body:0000",
+        "chunk:f6a8d012f8aa2bbe:table:0000",
+        "chunk:f6a8d012f8aa2bbe:body:0001",
+        "chunk:f6a8d012f8aa2bbe:body:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0003",
+        "chunk:f6a8d012f8aa2bbe:body:0004",
+        "chunk:f6a8d012f8aa2bbe:body:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0008",
+        "chunk:f6a8d012f8aa2bbe:body:0009",
+        "chunk:f6a8d012f8aa2bbe:table:0001",
+        "chunk:f6a8d012f8aa2bbe:table:0002",
+        "chunk:f6a8d012f8aa2bbe:body:0010",
+        "chunk:f6a8d012f8aa2bbe:table:0003",
+        "chunk:f6a8d012f8aa2bbe:table:0004",
+        "chunk:f6a8d012f8aa2bbe:table:0005",
+        "chunk:f6a8d012f8aa2bbe:body:0011",
+        "chunk:f6a8d012f8aa2bbe:table:0006",
+        "chunk:f6a8d012f8aa2bbe:body:0012",
+        "chunk:f6a8d012f8aa2bbe:table:0007",
+        "chunk:f6a8d012f8aa2bbe:body:0013",
+        "chunk:f6a8d012f8aa2bbe:body:0014",
+        "chunk:f6a8d012f8aa2bbe:body:0015",
+        "chunk:f6a8d012f8aa2bbe:body:0016",
+        "chunk:f6a8d012f8aa2bbe:body:0017"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5314,
+          "delivered": 5314
+        },
+        {
+          "raw": 5872,
+          "delivered": 5872
+        },
+        {
+          "raw": 5953,
+          "delivered": 5953
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 4247,
+          "delivered": 4247
+        },
+        {
+          "raw": 4195,
+          "delivered": 4195
+        },
+        {
+          "raw": 5942,
+          "delivered": 5942
+        },
+        {
+          "raw": 5789,
+          "delivered": 5789
+        },
+        {
+          "raw": 5928,
+          "delivered": 5928
+        },
+        {
+          "raw": 1828,
+          "delivered": 1828
+        },
+        {
+          "raw": 4402,
+          "delivered": 4402
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "3752.HK 珞石机器人 143 54.10 -17.34% -0.25 0.64 1.29 - 85 42 -",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18651,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "f86c6d2c-cxo-h1",
+      "role": "required",
+      "question": "2026H1 国联民生选取的 20 家 CXO 样本公司合计实现的营业收入和同比增长是多少？",
+      "doc_identity": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18626,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:3cc347ca9ed8e789:table:0000",
+          "context_count": 25,
+          "snippet": "<b>公司</b>206H1<b>营业</b>收<b>收入</b>yoy市值\n入"
+        },
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0015",
+          "context_count": 9,
+          "snippet": "wind，<b>国联</b><b>民生</b>证券研究所\n18"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 34,
+      "delivered_locators": [
+        "chunk:3cc347ca9ed8e789:body:0000",
+        "chunk:3cc347ca9ed8e789:heading:0000",
+        "chunk:3cc347ca9ed8e789:body:0001",
+        "chunk:3cc347ca9ed8e789:body:0002",
+        "chunk:3cc347ca9ed8e789:heading:0001",
+        "chunk:3cc347ca9ed8e789:body:0003",
+        "chunk:3cc347ca9ed8e789:heading:0002",
+        "chunk:3cc347ca9ed8e789:body:0004",
+        "chunk:3cc347ca9ed8e789:table:0000",
+        "chunk:3cc347ca9ed8e789:table:0001",
+        "chunk:3cc347ca9ed8e789:body:0005",
+        "chunk:3cc347ca9ed8e789:body:0006",
+        "chunk:3cc347ca9ed8e789:heading:0003",
+        "chunk:3cc347ca9ed8e789:body:0007",
+        "chunk:3cc347ca9ed8e789:heading:0004",
+        "chunk:3cc347ca9ed8e789:body:0008",
+        "chunk:3cc347ca9ed8e789:table:0002",
+        "chunk:3cc347ca9ed8e789:body:0009",
+        "chunk:3cc347ca9ed8e789:table:0003",
+        "chunk:3cc347ca9ed8e789:body:0010",
+        "chunk:3cc347ca9ed8e789:body:0011",
+        "chunk:3cc347ca9ed8e789:body:0012",
+        "chunk:3cc347ca9ed8e789:heading:0005",
+        "chunk:3cc347ca9ed8e789:body:0013",
+        "chunk:3cc347ca9ed8e789:heading:0006",
+        "chunk:3cc347ca9ed8e789:heading:0007",
+        "chunk:3cc347ca9ed8e789:body:0014",
+        "chunk:3cc347ca9ed8e789:table:0004",
+        "chunk:3cc347ca9ed8e789:body:0015",
+        "chunk:3cc347ca9ed8e789:body:0016",
+        "chunk:3cc347ca9ed8e789:heading:0008",
+        "chunk:3cc347ca9ed8e789:body:0017"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3717,
+          "delivered": 3717
+        },
+        {
+          "raw": 5022,
+          "delivered": 5022
+        },
+        {
+          "raw": 5335,
+          "delivered": 5335
+        },
+        {
+          "raw": 3923,
+          "delivered": 3923
+        },
+        {
+          "raw": 4829,
+          "delivered": 4829
+        },
+        {
+          "raw": 5695,
+          "delivered": 5695
+        },
+        {
+          "raw": 5737,
+          "delivered": 5737
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5844,
+          "delivered": 5844
+        },
+        {
+          "raw": 4752,
+          "delivered": 4752
+        },
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 3639,
+          "delivered": 3639
+        },
+        {
+          "raw": 5033,
+          "delivered": 5033
+        },
+        {
+          "raw": 5060,
+          "delivered": 5060
+        },
+        {
+          "raw": 1881,
+          "delivered": 1881
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2026H1 年 20 家 CXO 企业合计实现收入 562 亿元，同比+24.5%，合计实现归母净利润 132 亿元，同比+17%；2026 年 Q2 共实现营业收入 307 亿元， 同比+29.4%， 合计实现归母净利润73 亿元，同比+13%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 13695,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "f86c6d2c-wuqi-order",
+      "role": "required",
+      "question": "截至 2026Q2，药明康德持续经营业务的在手订单金额和同比增速是多少？",
+      "doc_identity": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15043,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0006",
+          "context_count": 10,
+          "snippet": "<b>截至</b><b>2026Q2</b>，药明<b>康德</b><b>持续</b><b>经营业务</b>"
+        },
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0001",
+          "context_count": 4,
+          "snippet": "<b>在手</b><b>订单</b>与业绩目标夯实确定性，"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 14,
+      "delivered_locators": [
+        "chunk:3cc347ca9ed8e789:body:0003",
+        "chunk:3cc347ca9ed8e789:heading:0002",
+        "chunk:3cc347ca9ed8e789:body:0004",
+        "chunk:3cc347ca9ed8e789:table:0000",
+        "chunk:3cc347ca9ed8e789:table:0001",
+        "chunk:3cc347ca9ed8e789:body:0005",
+        "chunk:3cc347ca9ed8e789:body:0006",
+        "chunk:3cc347ca9ed8e789:heading:0003",
+        "chunk:3cc347ca9ed8e789:body:0007",
+        "chunk:3cc347ca9ed8e789:heading:0004",
+        "chunk:3cc347ca9ed8e789:heading:0000",
+        "chunk:3cc347ca9ed8e789:body:0001",
+        "chunk:3cc347ca9ed8e789:body:0002",
+        "chunk:3cc347ca9ed8e789:heading:0001"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3953,
+          "delivered": 3953
+        },
+        {
+          "raw": 4110,
+          "delivered": 4110
+        },
+        {
+          "raw": 4975,
+          "delivered": 4975
+        },
+        {
+          "raw": 5675,
+          "delivered": 5675
+        },
+        {
+          "raw": 3349,
+          "delivered": 3349
+        },
+        {
+          "raw": 4818,
+          "delivered": 4818
+        },
+        {
+          "raw": 2704,
+          "delivered": 2704
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "1）截至 2026Q2，药明康德持续经营业务在手订单 664.3 亿元，同比+25.2%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8646,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "f86c6d2c-medamt",
+      "role": "required",
+      "question": "当周（08.31-09.04）医药行业的成交额占沪深总成交额的比例是多少？",
+      "doc_identity": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13624,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0011",
+          "context_count": 25,
+          "snippet": "<b>当周</b>（<b>08.31</b>-<b>09.04</b>）<b>医药行业</b>交易"
+        },
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0014",
+          "context_count": 9,
+          "snippet": "<b>成交额</b>占沪深总<b>成交额</b><b>比例</b>\n17"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 34,
+      "delivered_locators": [
+        "chunk:3cc347ca9ed8e789:body:0000",
+        "chunk:3cc347ca9ed8e789:heading:0000",
+        "chunk:3cc347ca9ed8e789:body:0001",
+        "chunk:3cc347ca9ed8e789:body:0002",
+        "chunk:3cc347ca9ed8e789:heading:0001",
+        "chunk:3cc347ca9ed8e789:body:0003",
+        "chunk:3cc347ca9ed8e789:heading:0002",
+        "chunk:3cc347ca9ed8e789:body:0004",
+        "chunk:3cc347ca9ed8e789:table:0000",
+        "chunk:3cc347ca9ed8e789:table:0001",
+        "chunk:3cc347ca9ed8e789:body:0005",
+        "chunk:3cc347ca9ed8e789:body:0006",
+        "chunk:3cc347ca9ed8e789:heading:0003",
+        "chunk:3cc347ca9ed8e789:body:0007",
+        "chunk:3cc347ca9ed8e789:heading:0004",
+        "chunk:3cc347ca9ed8e789:body:0008",
+        "chunk:3cc347ca9ed8e789:table:0002",
+        "chunk:3cc347ca9ed8e789:body:0009",
+        "chunk:3cc347ca9ed8e789:table:0003",
+        "chunk:3cc347ca9ed8e789:body:0010",
+        "chunk:3cc347ca9ed8e789:body:0011",
+        "chunk:3cc347ca9ed8e789:body:0012",
+        "chunk:3cc347ca9ed8e789:heading:0005",
+        "chunk:3cc347ca9ed8e789:body:0013",
+        "chunk:3cc347ca9ed8e789:heading:0006",
+        "chunk:3cc347ca9ed8e789:heading:0007",
+        "chunk:3cc347ca9ed8e789:body:0014",
+        "chunk:3cc347ca9ed8e789:table:0004",
+        "chunk:3cc347ca9ed8e789:body:0015",
+        "chunk:3cc347ca9ed8e789:body:0016",
+        "chunk:3cc347ca9ed8e789:heading:0008",
+        "chunk:3cc347ca9ed8e789:body:0017"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3717,
+          "delivered": 3717
+        },
+        {
+          "raw": 5022,
+          "delivered": 5022
+        },
+        {
+          "raw": 5335,
+          "delivered": 5335
+        },
+        {
+          "raw": 3923,
+          "delivered": 3923
+        },
+        {
+          "raw": 4829,
+          "delivered": 4829
+        },
+        {
+          "raw": 5695,
+          "delivered": 5695
+        },
+        {
+          "raw": 5737,
+          "delivered": 5737
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5844,
+          "delivered": 5844
+        },
+        {
+          "raw": 4752,
+          "delivered": 4752
+        },
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 3639,
+          "delivered": 3639
+        },
+        {
+          "raw": 5033,
+          "delivered": 5033
+        },
+        {
+          "raw": 5060,
+          "delivered": 5060
+        },
+        {
+          "raw": 1881,
+          "delivered": 1881
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "医药成交总额5233.99 亿元， 沪深总成交额为97451.96 亿元， 医药成交额占比沪深总成交额比例为5.37%（2013 年以来成交额均值为 6.98%）。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 13695,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "f86c6d2c-cxotable",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "doc_identity": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18137,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:3cc347ca9ed8e789:table:0000",
+          "context_count": 25,
+          "snippet": "<b>市值</b>\n公司206H1<b>营业</b>收<b>收入</b>yoy"
+        },
+        {
+          "locator": "chunk:3cc347ca9ed8e789:table:0004",
+          "context_count": 9,
+          "snippet": "个股涨跌幅（）\n个股涨跌幅（"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 34,
+      "delivered_locators": [
+        "chunk:3cc347ca9ed8e789:body:0000",
+        "chunk:3cc347ca9ed8e789:heading:0000",
+        "chunk:3cc347ca9ed8e789:body:0001",
+        "chunk:3cc347ca9ed8e789:body:0002",
+        "chunk:3cc347ca9ed8e789:heading:0001",
+        "chunk:3cc347ca9ed8e789:body:0003",
+        "chunk:3cc347ca9ed8e789:heading:0002",
+        "chunk:3cc347ca9ed8e789:body:0004",
+        "chunk:3cc347ca9ed8e789:table:0000",
+        "chunk:3cc347ca9ed8e789:table:0001",
+        "chunk:3cc347ca9ed8e789:body:0005",
+        "chunk:3cc347ca9ed8e789:body:0006",
+        "chunk:3cc347ca9ed8e789:heading:0003",
+        "chunk:3cc347ca9ed8e789:body:0007",
+        "chunk:3cc347ca9ed8e789:heading:0004",
+        "chunk:3cc347ca9ed8e789:body:0008",
+        "chunk:3cc347ca9ed8e789:table:0002",
+        "chunk:3cc347ca9ed8e789:body:0009",
+        "chunk:3cc347ca9ed8e789:table:0003",
+        "chunk:3cc347ca9ed8e789:body:0010",
+        "chunk:3cc347ca9ed8e789:body:0011",
+        "chunk:3cc347ca9ed8e789:body:0012",
+        "chunk:3cc347ca9ed8e789:heading:0005",
+        "chunk:3cc347ca9ed8e789:body:0013",
+        "chunk:3cc347ca9ed8e789:heading:0006",
+        "chunk:3cc347ca9ed8e789:heading:0007",
+        "chunk:3cc347ca9ed8e789:body:0014",
+        "chunk:3cc347ca9ed8e789:table:0004",
+        "chunk:3cc347ca9ed8e789:body:0015",
+        "chunk:3cc347ca9ed8e789:body:0016",
+        "chunk:3cc347ca9ed8e789:heading:0008",
+        "chunk:3cc347ca9ed8e789:body:0017"
+      ],
+      "pages": 15,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3717,
+          "delivered": 3717
+        },
+        {
+          "raw": 5022,
+          "delivered": 5022
+        },
+        {
+          "raw": 5335,
+          "delivered": 5335
+        },
+        {
+          "raw": 3923,
+          "delivered": 3923
+        },
+        {
+          "raw": 4829,
+          "delivered": 4829
+        },
+        {
+          "raw": 5695,
+          "delivered": 5695
+        },
+        {
+          "raw": 5737,
+          "delivered": 5737
+        },
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5844,
+          "delivered": 5844
+        },
+        {
+          "raw": 4752,
+          "delivered": 4752
+        },
+        {
+          "raw": 5610,
+          "delivered": 5610
+        },
+        {
+          "raw": 3639,
+          "delivered": 3639
+        },
+        {
+          "raw": 5033,
+          "delivered": 5033
+        },
+        {
+          "raw": 5060,
+          "delivered": 5060
+        },
+        {
+          "raw": 1881,
+          "delivered": 1881
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "药明康德 288.97 39% 4,693.7",
+      "dependencies": {
+        "header_refs": false,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 13695,
+      "all_pass": false,
+      "first_fail": "dependency_not_delivered"
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "f86c6d2c-glp1",
+      "role": "supplementary",
+      "question": "2026H1 替尔泊肽和司美格鲁肽两款 GLP-1 减重降糖大单品的全球销售额合计是多少？",
+      "doc_identity": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12501,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:3cc347ca9ed8e789:body:0006",
+          "context_count": 6,
+          "snippet": "<b>格鲁</b>肽<b>全球</b><b>销售额</b><b>合计</b>超450亿"
+        },
+        {
+          "locator": "chunk:3cc347ca9ed8e789:heading:0002",
+          "context_count": 4,
+          "snippet": "<b>2026H1</b>年20家CXO企业<b>合计</b>实"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:3cc347ca9ed8e789:table:0001",
+        "chunk:3cc347ca9ed8e789:body:0005",
+        "chunk:3cc347ca9ed8e789:body:0006",
+        "chunk:3cc347ca9ed8e789:heading:0003",
+        "chunk:3cc347ca9ed8e789:body:0007",
+        "chunk:3cc347ca9ed8e789:heading:0004",
+        "chunk:3cc347ca9ed8e789:body:0003",
+        "chunk:3cc347ca9ed8e789:heading:0002",
+        "chunk:3cc347ca9ed8e789:body:0004",
+        "chunk:3cc347ca9ed8e789:table:0000"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5660,
+          "delivered": 5660
+        },
+        {
+          "raw": 4007,
+          "delivered": 4007
+        },
+        {
+          "raw": 5735,
+          "delivered": 5735
+        },
+        {
+          "raw": 2966,
+          "delivered": 2966
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2026H1，两款 GLP-1 减重降糖大单品替尔泊肽、司美格鲁肽全球销售额合计超 450 亿美元， 分别登顶全球药品销售额第一名/第二名。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6361,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "a91d95c7-hbm",
+      "role": "required",
+      "question": "2026 年全球 HBM 市场规模预计增长多少至多少亿美元？",
+      "doc_identity": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18867,
+      "source_offered": true,
+      "source_hit_ids": [
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0001",
+          "context_count": 8,
+          "snippet": "<b>2026</b>年<b>全球</b><b>HBM</b><b>市场</b><b>规模</b><b>预计</b><b>增长</b>"
+        },
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0029",
+          "context_count": 13,
+          "snippet": "<b>美元</b>，同比<b>增长</b>86，环比<b>增长</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 21,
+      "delivered_locators": [
+        "chunk:7b066b2a05b1d6fc:body:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0001",
+        "chunk:7b066b2a05b1d6fc:heading:0002",
+        "chunk:7b066b2a05b1d6fc:body:0001",
+        "chunk:7b066b2a05b1d6fc:body:0002",
+        "chunk:7b066b2a05b1d6fc:body:0003",
+        "chunk:7b066b2a05b1d6fc:heading:0003",
+        "chunk:7b066b2a05b1d6fc:body:0020",
+        "chunk:7b066b2a05b1d6fc:heading:0032",
+        "chunk:7b066b2a05b1d6fc:body:0021",
+        "chunk:7b066b2a05b1d6fc:body:0022",
+        "chunk:7b066b2a05b1d6fc:body:0023",
+        "chunk:7b066b2a05b1d6fc:body:0024",
+        "chunk:7b066b2a05b1d6fc:body:0025",
+        "chunk:7b066b2a05b1d6fc:body:0026",
+        "chunk:7b066b2a05b1d6fc:body:0027",
+        "chunk:7b066b2a05b1d6fc:body:0028",
+        "chunk:7b066b2a05b1d6fc:body:0029",
+        "chunk:7b066b2a05b1d6fc:body:0030",
+        "chunk:7b066b2a05b1d6fc:body:0031"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5356,
+          "delivered": 5356
+        },
+        {
+          "raw": 3434,
+          "delivered": 3434
+        },
+        {
+          "raw": 5710,
+          "delivered": 5710
+        },
+        {
+          "raw": 5937,
+          "delivered": 5937
+        },
+        {
+          "raw": 5452,
+          "delivered": 5452
+        },
+        {
+          "raw": 5497,
+          "delivered": 5497
+        },
+        {
+          "raw": 5029,
+          "delivered": 5029
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "2026 年全球 HBM 市场规模预计增长 58%至 546 亿美元， 占 DRAM 市场近四成， 产能缺口仍维持在 50%至 60%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 12431,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "a91d95c7-bytedance",
+      "role": "required",
+      "question": "字节跳动获得的银团贷款规模是今年的亚洲第几大美元贷款，资本支出计划提升至多少？",
+      "doc_identity": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16110,
+      "source_offered": true,
+      "source_hit_ids": [
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0030",
+          "context_count": 29,
+          "snippet": "<b>美元</b><b>银团</b><b>贷款</b>，为<b>今年</b><b>亚洲</b><b>规模</b>"
+        },
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0001",
+          "context_count": 18,
+          "snippet": "<b>美元</b>的<b>银团</b><b>贷款</b>，为<b>今年</b><b>亚洲</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 47,
+      "delivered_locators": [
+        "chunk:7b066b2a05b1d6fc:heading:0027",
+        "chunk:7b066b2a05b1d6fc:body:0013",
+        "chunk:7b066b2a05b1d6fc:heading:0028",
+        "chunk:7b066b2a05b1d6fc:body:0014",
+        "chunk:7b066b2a05b1d6fc:body:0015",
+        "chunk:7b066b2a05b1d6fc:body:0016",
+        "chunk:7b066b2a05b1d6fc:heading:0029",
+        "chunk:7b066b2a05b1d6fc:body:0017",
+        "chunk:7b066b2a05b1d6fc:body:0018",
+        "chunk:7b066b2a05b1d6fc:heading:0030",
+        "chunk:7b066b2a05b1d6fc:body:0019",
+        "chunk:7b066b2a05b1d6fc:heading:0031",
+        "chunk:7b066b2a05b1d6fc:body:0020",
+        "chunk:7b066b2a05b1d6fc:heading:0032",
+        "chunk:7b066b2a05b1d6fc:body:0021",
+        "chunk:7b066b2a05b1d6fc:body:0022",
+        "chunk:7b066b2a05b1d6fc:body:0023",
+        "chunk:7b066b2a05b1d6fc:body:0024",
+        "chunk:7b066b2a05b1d6fc:body:0025",
+        "chunk:7b066b2a05b1d6fc:body:0026",
+        "chunk:7b066b2a05b1d6fc:body:0027",
+        "chunk:7b066b2a05b1d6fc:body:0028",
+        "chunk:7b066b2a05b1d6fc:body:0029",
+        "chunk:7b066b2a05b1d6fc:body:0030",
+        "chunk:7b066b2a05b1d6fc:body:0031",
+        "chunk:7b066b2a05b1d6fc:heading:0033",
+        "chunk:7b066b2a05b1d6fc:body:0032",
+        "chunk:7b066b2a05b1d6fc:body:0033",
+        "chunk:7b066b2a05b1d6fc:heading:0034",
+        "chunk:7b066b2a05b1d6fc:body:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0001",
+        "chunk:7b066b2a05b1d6fc:heading:0002",
+        "chunk:7b066b2a05b1d6fc:body:0001",
+        "chunk:7b066b2a05b1d6fc:body:0002",
+        "chunk:7b066b2a05b1d6fc:body:0003",
+        "chunk:7b066b2a05b1d6fc:heading:0003",
+        "chunk:7b066b2a05b1d6fc:heading:0004",
+        "chunk:7b066b2a05b1d6fc:body:0004",
+        "chunk:7b066b2a05b1d6fc:body:0005",
+        "chunk:7b066b2a05b1d6fc:body:0006",
+        "chunk:7b066b2a05b1d6fc:body:0007",
+        "chunk:7b066b2a05b1d6fc:heading:0005",
+        "chunk:7b066b2a05b1d6fc:body:0008",
+        "chunk:7b066b2a05b1d6fc:body:0009",
+        "chunk:7b066b2a05b1d6fc:body:0010",
+        "chunk:7b066b2a05b1d6fc:heading:0006"
+      ],
+      "pages": 20,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4965,
+          "delivered": 4965
+        },
+        {
+          "raw": 4990,
+          "delivered": 4990
+        },
+        {
+          "raw": 4316,
+          "delivered": 4316
+        },
+        {
+          "raw": 5375,
+          "delivered": 5375
+        },
+        {
+          "raw": 5707,
+          "delivered": 5707
+        },
+        {
+          "raw": 5391,
+          "delivered": 5391
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4763,
+          "delivered": 4763
+        },
+        {
+          "raw": 4518,
+          "delivered": 4518
+        },
+        {
+          "raw": 4333,
+          "delivered": 4333
+        },
+        {
+          "raw": 4511,
+          "delivered": 4511
+        },
+        {
+          "raw": 4384,
+          "delivered": 4384
+        },
+        {
+          "raw": 5984,
+          "delivered": 5984
+        },
+        {
+          "raw": 5701,
+          "delivered": 5701
+        },
+        {
+          "raw": 2401,
+          "delivered": 2401
+        },
+        {
+          "raw": 5835,
+          "delivered": 5835
+        },
+        {
+          "raw": 5279,
+          "delivered": 5279
+        },
+        {
+          "raw": 5883,
+          "delivered": 5883
+        },
+        {
+          "raw": 5621,
+          "delivered": 5621
+        },
+        {
+          "raw": 2739,
+          "delivered": 2739
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "字节跳动获 296 亿美元的银团贷款， 为今年亚洲规模第二大的美元贷款，充裕的现金流储备为公司激进扩张提供了有力支撑。公司正考虑将今年资本支出提升至高达 700 亿美元，超过去年总额两倍",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 21304,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "a91d95c7-hbmprice",
+      "role": "required",
+      "question": "36GB 的 HBM3E 与 16 层 HBM4 的现货售价分别为多少美元？",
+      "doc_identity": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 17322,
+      "source_offered": true,
+      "source_hit_ids": [
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0021",
+          "context_count": 29,
+          "snippet": "<b>36</b><b>GB</b>的<b>HBM3E</b>产品<b>现货</b><b>售价</b>为"
+        },
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0001",
+          "context_count": 18,
+          "snippet": "<b>16</b>亿<b>美元</b>，商业化闭环加速形成"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 47,
+      "delivered_locators": [
+        "chunk:7b066b2a05b1d6fc:heading:0027",
+        "chunk:7b066b2a05b1d6fc:body:0013",
+        "chunk:7b066b2a05b1d6fc:heading:0028",
+        "chunk:7b066b2a05b1d6fc:body:0014",
+        "chunk:7b066b2a05b1d6fc:body:0015",
+        "chunk:7b066b2a05b1d6fc:body:0016",
+        "chunk:7b066b2a05b1d6fc:heading:0029",
+        "chunk:7b066b2a05b1d6fc:body:0017",
+        "chunk:7b066b2a05b1d6fc:body:0018",
+        "chunk:7b066b2a05b1d6fc:heading:0030",
+        "chunk:7b066b2a05b1d6fc:body:0019",
+        "chunk:7b066b2a05b1d6fc:heading:0031",
+        "chunk:7b066b2a05b1d6fc:body:0020",
+        "chunk:7b066b2a05b1d6fc:heading:0032",
+        "chunk:7b066b2a05b1d6fc:body:0021",
+        "chunk:7b066b2a05b1d6fc:body:0022",
+        "chunk:7b066b2a05b1d6fc:body:0023",
+        "chunk:7b066b2a05b1d6fc:body:0024",
+        "chunk:7b066b2a05b1d6fc:body:0025",
+        "chunk:7b066b2a05b1d6fc:body:0026",
+        "chunk:7b066b2a05b1d6fc:body:0027",
+        "chunk:7b066b2a05b1d6fc:body:0028",
+        "chunk:7b066b2a05b1d6fc:body:0029",
+        "chunk:7b066b2a05b1d6fc:body:0030",
+        "chunk:7b066b2a05b1d6fc:body:0031",
+        "chunk:7b066b2a05b1d6fc:heading:0033",
+        "chunk:7b066b2a05b1d6fc:body:0032",
+        "chunk:7b066b2a05b1d6fc:body:0033",
+        "chunk:7b066b2a05b1d6fc:heading:0034",
+        "chunk:7b066b2a05b1d6fc:body:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0000",
+        "chunk:7b066b2a05b1d6fc:heading:0001",
+        "chunk:7b066b2a05b1d6fc:heading:0002",
+        "chunk:7b066b2a05b1d6fc:body:0001",
+        "chunk:7b066b2a05b1d6fc:body:0002",
+        "chunk:7b066b2a05b1d6fc:body:0003",
+        "chunk:7b066b2a05b1d6fc:heading:0003",
+        "chunk:7b066b2a05b1d6fc:heading:0004",
+        "chunk:7b066b2a05b1d6fc:body:0004",
+        "chunk:7b066b2a05b1d6fc:body:0005",
+        "chunk:7b066b2a05b1d6fc:body:0006",
+        "chunk:7b066b2a05b1d6fc:body:0007",
+        "chunk:7b066b2a05b1d6fc:heading:0005",
+        "chunk:7b066b2a05b1d6fc:body:0008",
+        "chunk:7b066b2a05b1d6fc:body:0009",
+        "chunk:7b066b2a05b1d6fc:body:0010",
+        "chunk:7b066b2a05b1d6fc:heading:0006"
+      ],
+      "pages": 20,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4965,
+          "delivered": 4965
+        },
+        {
+          "raw": 4990,
+          "delivered": 4990
+        },
+        {
+          "raw": 4316,
+          "delivered": 4316
+        },
+        {
+          "raw": 5375,
+          "delivered": 5375
+        },
+        {
+          "raw": 5707,
+          "delivered": 5707
+        },
+        {
+          "raw": 5391,
+          "delivered": 5391
+        },
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 4763,
+          "delivered": 4763
+        },
+        {
+          "raw": 4518,
+          "delivered": 4518
+        },
+        {
+          "raw": 4333,
+          "delivered": 4333
+        },
+        {
+          "raw": 4511,
+          "delivered": 4511
+        },
+        {
+          "raw": 4384,
+          "delivered": 4384
+        },
+        {
+          "raw": 5984,
+          "delivered": 5984
+        },
+        {
+          "raw": 5701,
+          "delivered": 5701
+        },
+        {
+          "raw": 2401,
+          "delivered": 2401
+        },
+        {
+          "raw": 5835,
+          "delivered": 5835
+        },
+        {
+          "raw": 5279,
+          "delivered": 5279
+        },
+        {
+          "raw": 5883,
+          "delivered": 5883
+        },
+        {
+          "raw": 5621,
+          "delivered": 5621
+        },
+        {
+          "raw": 2739,
+          "delivered": 2739
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "据内存市场研究公司 MegaGrid Supply 数据，一块36GB 的 HBM3E 产品现货售价为 2100 美元，约为长约价格的四到五倍；16 层 HBM4 现货价格更高达 3500 美元。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 21304,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "a91d95c7-cxmt",
+      "role": "required",
+      "question": "长鑫存储 LPDDR6 内存落地商用在产业上意味着什么？",
+      "doc_identity": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12397,
+      "source_offered": true,
+      "source_hit_ids": [
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+        "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0002",
+          "context_count": 4,
+          "snippet": "<b>落地</b><b>商用</b>，标志着中国<b>存储</b>企业"
+        },
+        {
+          "locator": "chunk:7b066b2a05b1d6fc:body:0026",
+          "context_count": 7,
+          "snippet": "<b>存储</b>的<b>内存</b>。此前数周长鑫"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 11,
+      "delivered_locators": [
+        "chunk:7b066b2a05b1d6fc:heading:0002",
+        "chunk:7b066b2a05b1d6fc:body:0001",
+        "chunk:7b066b2a05b1d6fc:body:0002",
+        "chunk:7b066b2a05b1d6fc:body:0003",
+        "chunk:7b066b2a05b1d6fc:body:0025",
+        "chunk:7b066b2a05b1d6fc:body:0026",
+        "chunk:7b066b2a05b1d6fc:body:0027",
+        "chunk:7b066b2a05b1d6fc:body:0028",
+        "chunk:7b066b2a05b1d6fc:body:0029",
+        "chunk:7b066b2a05b1d6fc:body:0030",
+        "chunk:7b066b2a05b1d6fc:body:0031"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4934,
+          "delivered": 4934
+        },
+        {
+          "raw": 5168,
+          "delivered": 5168
+        },
+        {
+          "raw": 5212,
+          "delivered": 5212
+        },
+        {
+          "raw": 5029,
+          "delivered": 5029
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "长鑫存储LPDDR6 内存正式量产，实现全球首次落地商用，标志着中国存储企业首次在高端内存标准上打破海外厂商长期垄断产品先发的局面",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8482,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "5e305376-nonfarm",
+      "role": "required",
+      "question": "美国 8 月新增非农就业人数是多少，与市场预期相比如何？",
+      "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13838,
+      "source_offered": true,
+      "source_hit_ids": [
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:table:0024",
+          "context_count": 3,
+          "snippet": "<b>美国</b>标普500指数股指9月"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0004",
+          "context_count": 4,
+          "snippet": "<b>美国</b>8月<b>新增</b><b>非农</b><b>就业</b>为16.2"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 7,
+      "delivered_locators": [
+        "chunk:88ad6cf30eb10c3c:body:0028",
+        "chunk:88ad6cf30eb10c3c:table:0024",
+        "chunk:88ad6cf30eb10c3c:table:0025",
+        "chunk:88ad6cf30eb10c3c:table:0002",
+        "chunk:88ad6cf30eb10c3c:body:0004",
+        "chunk:88ad6cf30eb10c3c:body:0005",
+        "chunk:88ad6cf30eb10c3c:heading:0001"
+      ],
+      "pages": 2,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5444,
+          "delivered": 5444
+        },
+        {
+          "raw": 4921,
+          "delivered": 4921
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "美国 8 月新增非农就业为 16.2 万，大幅高于预期的 5.6万，前两个月累计上修 5.5万。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 4904,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "5e305376-fedrate",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19299,
+      "source_offered": true,
+      "source_hit_ids": [
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0005",
+          "context_count": 11,
+          "snippet": "<b>联储</b><b>年内</b><b>剩余</b><b>累计</b><b>加息</b><b>预期</b>下降3bp"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:heading:0128",
+          "context_count": 35,
+          "snippet": "<b>联储</b>2026年<b>加息</b><b>预期</b>下降3bp至"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0009",
+          "context_count": 4,
+          "snippet": "<b>变化</b>\n0.8\n8.5\n-25.7"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 50,
+      "delivered_locators": [
+        "chunk:88ad6cf30eb10c3c:body:0000",
+        "chunk:88ad6cf30eb10c3c:heading:0000",
+        "chunk:88ad6cf30eb10c3c:body:0001",
+        "chunk:88ad6cf30eb10c3c:table:0000",
+        "chunk:88ad6cf30eb10c3c:body:0002",
+        "chunk:88ad6cf30eb10c3c:table:0001",
+        "chunk:88ad6cf30eb10c3c:body:0003",
+        "chunk:88ad6cf30eb10c3c:table:0002",
+        "chunk:88ad6cf30eb10c3c:body:0004",
+        "chunk:88ad6cf30eb10c3c:body:0005",
+        "chunk:88ad6cf30eb10c3c:heading:0001",
+        "chunk:88ad6cf30eb10c3c:heading:0126",
+        "chunk:88ad6cf30eb10c3c:heading:0127",
+        "chunk:88ad6cf30eb10c3c:body:0022",
+        "chunk:88ad6cf30eb10c3c:table:0003",
+        "chunk:88ad6cf30eb10c3c:table:0004",
+        "chunk:88ad6cf30eb10c3c:table:0005",
+        "chunk:88ad6cf30eb10c3c:table:0006",
+        "chunk:88ad6cf30eb10c3c:table:0007",
+        "chunk:88ad6cf30eb10c3c:table:0008",
+        "chunk:88ad6cf30eb10c3c:table:0009",
+        "chunk:88ad6cf30eb10c3c:table:0010",
+        "chunk:88ad6cf30eb10c3c:table:0011",
+        "chunk:88ad6cf30eb10c3c:table:0021",
+        "chunk:88ad6cf30eb10c3c:table:0012",
+        "chunk:88ad6cf30eb10c3c:table:0013",
+        "chunk:88ad6cf30eb10c3c:table:0014",
+        "chunk:88ad6cf30eb10c3c:table:0015",
+        "chunk:88ad6cf30eb10c3c:table:0016",
+        "chunk:88ad6cf30eb10c3c:table:0017",
+        "chunk:88ad6cf30eb10c3c:table:0018",
+        "chunk:88ad6cf30eb10c3c:table:0019",
+        "chunk:88ad6cf30eb10c3c:table:0020",
+        "chunk:88ad6cf30eb10c3c:table:0022",
+        "chunk:88ad6cf30eb10c3c:body:0023",
+        "chunk:88ad6cf30eb10c3c:heading:0129",
+        "chunk:88ad6cf30eb10c3c:body:0024",
+        "chunk:88ad6cf30eb10c3c:heading:0130",
+        "chunk:88ad6cf30eb10c3c:heading:0131",
+        "chunk:88ad6cf30eb10c3c:heading:0132",
+        "chunk:88ad6cf30eb10c3c:heading:0133",
+        "chunk:88ad6cf30eb10c3c:body:0025",
+        "chunk:88ad6cf30eb10c3c:heading:0134",
+        "chunk:88ad6cf30eb10c3c:heading:0135",
+        "chunk:88ad6cf30eb10c3c:heading:0136",
+        "chunk:88ad6cf30eb10c3c:heading:0042",
+        "chunk:88ad6cf30eb10c3c:body:0009",
+        "chunk:88ad6cf30eb10c3c:body:0010",
+        "chunk:88ad6cf30eb10c3c:heading:0043"
+      ],
+      "pages": 28,
+      "fetch_complete": false,
+      "unresolved": [
+        "chunk:88ad6cf30eb10c3c:heading:0128"
+      ],
+      "item_errors": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:heading:0128",
+          "code": "budget_exceeded",
+          "error": "该块的固定字段（单元清单／整块证据／游标）已占满本次 max_chars，自动改用 compact 视图后仍装不下（已尝试 ['compact']）；请提高 max_chars（当前 6000）后重试本 locator。",
+          "views_tried": [
+            "compact"
+          ]
+        }
+      ],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4787,
+          "delivered": 4787
+        },
+        {
+          "raw": 5763,
+          "delivered": 5763
+        },
+        {
+          "raw": 5811,
+          "delivered": 5811
+        },
+        {
+          "raw": 1386,
+          "delivered": 1386
+        },
+        {
+          "raw": 5208,
+          "delivered": 5208
+        },
+        {
+          "raw": 4871,
+          "delivered": 4871
+        },
+        {
+          "raw": 4843,
+          "delivered": 4843
+        },
+        {
+          "raw": 4869,
+          "delivered": 4869
+        },
+        {
+          "raw": 4845,
+          "delivered": 4845
+        },
+        {
+          "raw": 4849,
+          "delivered": 4849
+        },
+        {
+          "raw": 4859,
+          "delivered": 4859
+        },
+        {
+          "raw": 4857,
+          "delivered": 4857
+        },
+        {
+          "raw": 4855,
+          "delivered": 4855
+        },
+        {
+          "raw": 4851,
+          "delivered": 4851
+        },
+        {
+          "raw": 4845,
+          "delivered": 4845
+        },
+        {
+          "raw": 5141,
+          "delivered": 5141
+        },
+        {
+          "raw": 5303,
+          "delivered": 5303
+        },
+        {
+          "raw": 5183,
+          "delivered": 5183
+        },
+        {
+          "raw": 4855,
+          "delivered": 4855
+        },
+        {
+          "raw": 5287,
+          "delivered": 5287
+        },
+        {
+          "raw": 5218,
+          "delivered": 5218
+        },
+        {
+          "raw": 5254,
+          "delivered": 5254
+        },
+        {
+          "raw": 4843,
+          "delivered": 4843
+        },
+        {
+          "raw": 5163,
+          "delivered": 5163
+        },
+        {
+          "raw": 5767,
+          "delivered": 5767
+        },
+        {
+          "raw": 5974,
+          "delivered": 5974
+        },
+        {
+          "raw": 3249,
+          "delivered": 3249
+        },
+        {
+          "raw": 5410,
+          "delivered": 5410
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "联储年内剩余累计加息预期下降 3bp 至 35bp。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 28325,
+      "all_pass": false,
+      "first_fail": "fetch_incomplete"
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "5e305376-oil",
+      "role": "required",
+      "question": "当周布伦特原油期货上涨多少至每桶多少美元？",
+      "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16328,
+      "source_offered": true,
+      "source_hit_ids": [
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0005",
+          "context_count": 4,
+          "snippet": "<b>布伦特</b><b>原油</b><b>期货</b><b>上涨</b>7.8至96.3<b>美元</b>"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0032",
+          "context_count": 7,
+          "snippet": "<b>布伦特</b><b>原油</b><b>期货</b>价格\nWTI<b>原油</b><b>期货</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 11,
+      "delivered_locators": [
+        "chunk:88ad6cf30eb10c3c:table:0002",
+        "chunk:88ad6cf30eb10c3c:body:0004",
+        "chunk:88ad6cf30eb10c3c:body:0005",
+        "chunk:88ad6cf30eb10c3c:heading:0001",
+        "chunk:88ad6cf30eb10c3c:body:0030",
+        "chunk:88ad6cf30eb10c3c:body:0031",
+        "chunk:88ad6cf30eb10c3c:table:0027",
+        "chunk:88ad6cf30eb10c3c:table:0028",
+        "chunk:88ad6cf30eb10c3c:body:0032",
+        "chunk:88ad6cf30eb10c3c:heading:0164",
+        "chunk:88ad6cf30eb10c3c:heading:0165"
+      ],
+      "pages": 3,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4921,
+          "delivered": 4921
+        },
+        {
+          "raw": 5361,
+          "delivered": 5361
+        },
+        {
+          "raw": 2958,
+          "delivered": 2958
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "布伦特原油期货上涨 7.8%至 96.3 美元/桶，COMEX 期金下跌 1.2%至 4476.6 美元/盎司，伦 敦现银下跌 0.3%至 66.2美元/盎司，LME现铜下跌 0.5%至 14325美元/吨。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 4214,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "5e305376-dxy",
+      "role": "required",
+      "question": "当周美元指数、日元和欧元相对美元分别变动至多少？",
+      "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 16969,
+      "source_offered": true,
+      "source_hit_ids": [
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0034",
+          "context_count": 3,
+          "snippet": "<b>欧元</b><b>日元</b>货币互换基差持平\n资料"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0005",
+          "context_count": 4,
+          "snippet": "<b>日元</b>升值2.4至156.3，<b>美元</b><b>指数</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 7,
+      "delivered_locators": [
+        "chunk:88ad6cf30eb10c3c:heading:0192",
+        "chunk:88ad6cf30eb10c3c:body:0034",
+        "chunk:88ad6cf30eb10c3c:heading:0193",
+        "chunk:88ad6cf30eb10c3c:table:0002",
+        "chunk:88ad6cf30eb10c3c:body:0004",
+        "chunk:88ad6cf30eb10c3c:body:0005",
+        "chunk:88ad6cf30eb10c3c:heading:0001"
+      ],
+      "pages": 2,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3662,
+          "delivered": 3662
+        },
+        {
+          "raw": 4921,
+          "delivered": 4921
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "汇率方面，日央行紧缩预期升温导致日元升值 2.4%至 156.3，美元指数下行 0.5%至 99.2，欧元升值 0.3%至 1.16。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 2966,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "5e305376-gdpnow",
+      "role": "supplementary",
+      "question": "亚特兰大联储 GDPNow 将美国三季度 GDP 增速预测上调至多少？",
+      "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15405,
+      "source_offered": true,
+      "source_hit_ids": [
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:table:0024",
+          "context_count": 4,
+          "snippet": "<b>美国</b>标普500指数股指9月"
+        },
+        {
+          "locator": "chunk:88ad6cf30eb10c3c:body:0004",
+          "context_count": 11,
+          "snippet": "<b>亚特兰大</b><b>联储</b><b>GDPNow</b><b>上调</b><b>三季度</b><b>GDP</b><b>增速</b><b>预测</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 15,
+      "delivered_locators": [
+        "chunk:88ad6cf30eb10c3c:heading:0154",
+        "chunk:88ad6cf30eb10c3c:body:0028",
+        "chunk:88ad6cf30eb10c3c:table:0024",
+        "chunk:88ad6cf30eb10c3c:table:0025",
+        "chunk:88ad6cf30eb10c3c:body:0000",
+        "chunk:88ad6cf30eb10c3c:heading:0000",
+        "chunk:88ad6cf30eb10c3c:body:0001",
+        "chunk:88ad6cf30eb10c3c:table:0000",
+        "chunk:88ad6cf30eb10c3c:body:0002",
+        "chunk:88ad6cf30eb10c3c:table:0001",
+        "chunk:88ad6cf30eb10c3c:body:0003",
+        "chunk:88ad6cf30eb10c3c:table:0002",
+        "chunk:88ad6cf30eb10c3c:body:0004",
+        "chunk:88ad6cf30eb10c3c:body:0005",
+        "chunk:88ad6cf30eb10c3c:heading:0001"
+      ],
+      "pages": 6,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5691,
+          "delivered": 5691
+        },
+        {
+          "raw": 2709,
+          "delivered": 2709
+        },
+        {
+          "raw": 4787,
+          "delivered": 4787
+        },
+        {
+          "raw": 5763,
+          "delivered": 5763
+        },
+        {
+          "raw": 5811,
+          "delivered": 5811
+        },
+        {
+          "raw": 1386,
+          "delivered": 1386
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "增长方面，亚特兰大联储 GDPNow上调三季度 GDP 增速预测至 4.7%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6461,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f7f65d7e-payroll",
+      "role": "required",
+      "question": "2026年8月美国新增非农就业人数和失业率数据各是多少？",
+      "doc_identity": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19746,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:07873d962c0568d7:body:0013",
+          "context_count": 19,
+          "snippet": "<b>美国</b><b>非农</b><b>就业</b><b>数据</b>高于预期，<b>失业率</b>"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 19,
+      "delivered_locators": [
+        "chunk:07873d962c0568d7:body:0000",
+        "chunk:07873d962c0568d7:body:0001",
+        "chunk:07873d962c0568d7:body:0002",
+        "chunk:07873d962c0568d7:heading:0000",
+        "chunk:07873d962c0568d7:body:0003",
+        "chunk:07873d962c0568d7:heading:0001",
+        "chunk:07873d962c0568d7:body:0004",
+        "chunk:07873d962c0568d7:body:0005",
+        "chunk:07873d962c0568d7:body:0006",
+        "chunk:07873d962c0568d7:body:0007",
+        "chunk:07873d962c0568d7:body:0008",
+        "chunk:07873d962c0568d7:body:0009",
+        "chunk:07873d962c0568d7:body:0010",
+        "chunk:07873d962c0568d7:body:0011",
+        "chunk:07873d962c0568d7:body:0012",
+        "chunk:07873d962c0568d7:body:0013",
+        "chunk:07873d962c0568d7:body:0014",
+        "chunk:07873d962c0568d7:body:0015",
+        "chunk:07873d962c0568d7:body:0016"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5457,
+          "delivered": 5457
+        },
+        {
+          "raw": 5842,
+          "delivered": 5842
+        },
+        {
+          "raw": 5152,
+          "delivered": 5152
+        },
+        {
+          "raw": 5136,
+          "delivered": 5136
+        },
+        {
+          "raw": 5211,
+          "delivered": 5211
+        },
+        {
+          "raw": 4639,
+          "delivered": 4639
+        },
+        {
+          "raw": 3930,
+          "delivered": 3930
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "8 月美国非农就业数据 高于预期，失业率 持平 。8 月失业率报 4.1%，前值 4.1%，预期 4.1%。8 月新增非农就业人数 增 16.2 万人，预期增 5.6 万人，前值自 -2.3 万人修正至+2.1 万人。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 9221,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f7f65d7e-cme",
+      "role": "required",
+      "question": "据CME美联储观察，美联储2026年9月加息25基点的概率有多高？",
+      "doc_identity": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19786,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:07873d962c0568d7:body:0013",
+          "context_count": 19,
+          "snippet": "<b>美联储</b><b>2026</b>年9月<b>加息</b><b>25</b><b>基点</b>"
+        }
+      ],
+      "plans": 1,
+      "requested_locators": 19,
+      "delivered_locators": [
+        "chunk:07873d962c0568d7:body:0000",
+        "chunk:07873d962c0568d7:body:0001",
+        "chunk:07873d962c0568d7:body:0002",
+        "chunk:07873d962c0568d7:heading:0000",
+        "chunk:07873d962c0568d7:body:0003",
+        "chunk:07873d962c0568d7:heading:0001",
+        "chunk:07873d962c0568d7:body:0004",
+        "chunk:07873d962c0568d7:body:0005",
+        "chunk:07873d962c0568d7:body:0006",
+        "chunk:07873d962c0568d7:body:0007",
+        "chunk:07873d962c0568d7:body:0008",
+        "chunk:07873d962c0568d7:body:0009",
+        "chunk:07873d962c0568d7:body:0010",
+        "chunk:07873d962c0568d7:body:0011",
+        "chunk:07873d962c0568d7:body:0012",
+        "chunk:07873d962c0568d7:body:0013",
+        "chunk:07873d962c0568d7:body:0014",
+        "chunk:07873d962c0568d7:body:0015",
+        "chunk:07873d962c0568d7:body:0016"
+      ],
+      "pages": 7,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5457,
+          "delivered": 5457
+        },
+        {
+          "raw": 5842,
+          "delivered": 5842
+        },
+        {
+          "raw": 5152,
+          "delivered": 5152
+        },
+        {
+          "raw": 5136,
+          "delivered": 5136
+        },
+        {
+          "raw": 5211,
+          "delivered": 5211
+        },
+        {
+          "raw": 4639,
+          "delivered": 4639
+        },
+        {
+          "raw": 3930,
+          "delivered": 3930
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "据 CME“美联储观察” ，截至 2026/9/5，美联储 2026 年 9 月加息 25 基点的概率为 59.4%，维持现有利率的概率 为 40.6%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 9221,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f7f65d7e-alloc",
+      "role": "required",
+      "question": "本期研报建议投资者关注哪几个投资主线方向？",
+      "doc_identity": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12459,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+        "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:07873d962c0568d7:body:0002",
+          "context_count": 4,
+          "snippet": "<b>投资</b><b>主线</b>降维为三个<b>方向</b>："
+        },
+        {
+          "locator": "chunk:07873d962c0568d7:body:0013",
+          "context_count": 6,
+          "snippet": "<b>投资</b><b>主线</b>降维为三个<b>方向</b>："
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 10,
+      "delivered_locators": [
+        "chunk:07873d962c0568d7:body:0000",
+        "chunk:07873d962c0568d7:body:0001",
+        "chunk:07873d962c0568d7:body:0002",
+        "chunk:07873d962c0568d7:heading:0000",
+        "chunk:07873d962c0568d7:body:0011",
+        "chunk:07873d962c0568d7:body:0012",
+        "chunk:07873d962c0568d7:body:0013",
+        "chunk:07873d962c0568d7:body:0014",
+        "chunk:07873d962c0568d7:body:0015",
+        "chunk:07873d962c0568d7:body:0016"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4671,
+          "delivered": 4671
+        },
+        {
+          "raw": 4595,
+          "delivered": 4595
+        },
+        {
+          "raw": 5947,
+          "delivered": 5947
+        },
+        {
+          "raw": 2006,
+          "delivered": 2006
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "根据经济复苏与市场流动性，可以把投资主线降维为三个方向： 1）AI 产业革命带来的算力、存力、电力及应用的科技主线机会， 2）内外共振，经济逐步修复，牛市主线风格“强者恒强” ，但周期后半段易有所表现， 3）赔率思维，即考虑风格轮动、底部反转的可能性。连续三年跑输但第四年跑赢概率较大的行业有食品饮料、农林牧渔、社会服务、医药生物。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6160,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f7f65d7e-risk",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "doc_identity": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 11386,
+      "source_offered": false,
+      "source_hit_ids": [],
+      "source_hit_summaries": [],
+      "plans": 0,
+      "requested_locators": 0,
+      "delivered_locators": [],
+      "pages": 0,
+      "fetch_complete": false,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [],
+      "quote_delivered": false,
+      "expected_quote": "地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 0,
+      "all_pass": false,
+      "first_fail": "source_not_offered"
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "d179b615-hikerate",
+      "role": "required",
+      "question": "非农数据发布后，市场对9月加息的定价以及美债长端利率有何变化？",
+      "doc_identity": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19826,
+      "source_offered": true,
+      "source_hit_ids": [
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9465684d3a781404:body:0004",
+          "context_count": 15,
+          "snippet": "<b>非农</b>强化<b>加息</b>预期，短期<b>利率</b>扰动"
+        },
+        {
+          "locator": "chunk:9465684d3a781404:body:0009",
+          "context_count": 11,
+          "snippet": "<b>市场</b>表现的历史规律与被动补"
+        },
+        {
+          "locator": "chunk:9465684d3a781404:table:0015",
+          "context_count": 36,
+          "snippet": "<b>市场</b>0.00.32.5\nMSCI新兴<b>市场</b>"
+        }
+      ],
+      "plans": 3,
+      "requested_locators": 62,
+      "delivered_locators": [
+        "chunk:9465684d3a781404:body:0000",
+        "chunk:9465684d3a781404:heading:0000",
+        "chunk:9465684d3a781404:body:0001",
+        "chunk:9465684d3a781404:body:0002",
+        "chunk:9465684d3a781404:body:0003",
+        "chunk:9465684d3a781404:body:0004",
+        "chunk:9465684d3a781404:table:0000",
+        "chunk:9465684d3a781404:body:0005",
+        "chunk:9465684d3a781404:table:0001",
+        "chunk:9465684d3a781404:body:0006",
+        "chunk:9465684d3a781404:table:0002",
+        "chunk:9465684d3a781404:body:0007",
+        "chunk:9465684d3a781404:table:0003",
+        "chunk:9465684d3a781404:body:0008",
+        "chunk:9465684d3a781404:table:0004",
+        "chunk:9465684d3a781404:table:0005",
+        "chunk:9465684d3a781404:body:0009",
+        "chunk:9465684d3a781404:table:0006",
+        "chunk:9465684d3a781404:body:0010",
+        "chunk:9465684d3a781404:table:0007",
+        "chunk:9465684d3a781404:body:0011",
+        "chunk:9465684d3a781404:table:0008",
+        "chunk:9465684d3a781404:body:0012",
+        "chunk:9465684d3a781404:table:0009",
+        "chunk:9465684d3a781404:body:0013",
+        "chunk:9465684d3a781404:table:0010",
+        "chunk:9465684d3a781404:table:0014",
+        "chunk:9465684d3a781404:body:0014",
+        "chunk:9465684d3a781404:body:0015",
+        "chunk:9465684d3a781404:table:0015",
+        "chunk:9465684d3a781404:table:0016",
+        "chunk:9465684d3a781404:body:0016",
+        "chunk:9465684d3a781404:table:0017",
+        "chunk:9465684d3a781404:body:0017",
+        "chunk:9465684d3a781404:table:0018",
+        "chunk:9465684d3a781404:body:0018",
+        "chunk:9465684d3a781404:heading:0001",
+        "chunk:9465684d3a781404:body:0019",
+        "chunk:9465684d3a781404:body:0020",
+        "chunk:9465684d3a781404:body:0021",
+        "chunk:9465684d3a781404:table:0019",
+        "chunk:9465684d3a781404:body:0022",
+        "chunk:9465684d3a781404:table:0020",
+        "chunk:9465684d3a781404:body:0023",
+        "chunk:9465684d3a781404:table:0021",
+        "chunk:9465684d3a781404:body:0024",
+        "chunk:9465684d3a781404:table:0022",
+        "chunk:9465684d3a781404:body:0025",
+        "chunk:9465684d3a781404:table:0023",
+        "chunk:9465684d3a781404:body:0026",
+        "chunk:9465684d3a781404:table:0024",
+        "chunk:9465684d3a781404:body:0027",
+        "chunk:9465684d3a781404:table:0025",
+        "chunk:9465684d3a781404:body:0028",
+        "chunk:9465684d3a781404:table:0026",
+        "chunk:9465684d3a781404:body:0029",
+        "chunk:9465684d3a781404:body:0030",
+        "chunk:9465684d3a781404:body:0031",
+        "chunk:9465684d3a781404:body:0032",
+        "chunk:9465684d3a781404:body:0033",
+        "chunk:9465684d3a781404:heading:0003"
+      ],
+      "pages": 21,
+      "fetch_complete": false,
+      "unresolved": [
+        "chunk:9465684d3a781404:heading:0002"
+      ],
+      "item_errors": [
+        {
+          "locator": "chunk:9465684d3a781404:heading:0002",
+          "code": "budget_exceeded",
+          "error": "该块的固定字段（单元清单／整块证据／游标）已占满本次 max_chars，自动改用 compact 视图后仍装不下（已尝试 ['compact']）；请提高 max_chars（当前 6000）后重试本 locator。",
+          "views_tried": [
+            "compact"
+          ]
+        }
+      ],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5078,
+          "delivered": 5078
+        },
+        {
+          "raw": 5772,
+          "delivered": 5772
+        },
+        {
+          "raw": 5550,
+          "delivered": 5550
+        },
+        {
+          "raw": 4368,
+          "delivered": 4368
+        },
+        {
+          "raw": 5549,
+          "delivered": 5549
+        },
+        {
+          "raw": 4980,
+          "delivered": 4980
+        },
+        {
+          "raw": 2589,
+          "delivered": 2589
+        },
+        {
+          "raw": 5118,
+          "delivered": 5118
+        },
+        {
+          "raw": 4750,
+          "delivered": 4750
+        },
+        {
+          "raw": 5966,
+          "delivered": 5966
+        },
+        {
+          "raw": 5922,
+          "delivered": 5922
+        },
+        {
+          "raw": 5567,
+          "delivered": 5567
+        },
+        {
+          "raw": 5394,
+          "delivered": 5394
+        },
+        {
+          "raw": 5324,
+          "delivered": 5324
+        },
+        {
+          "raw": 5211,
+          "delivered": 5211
+        },
+        {
+          "raw": 5929,
+          "delivered": 5929
+        },
+        {
+          "raw": 5249,
+          "delivered": 5249
+        },
+        {
+          "raw": 4627,
+          "delivered": 4627
+        },
+        {
+          "raw": 4444,
+          "delivered": 4444
+        },
+        {
+          "raw": 4901,
+          "delivered": 4901
+        },
+        {
+          "raw": 3283,
+          "delivered": 3283
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "非农强化加息预期， 短期利率扰动难消。8 月非农数据发布后， 市场对9 月加息的定价进一步抬升。当前 CME 隐含的 9 月加息概率已升至59%， 美债长端利率随之走高，10 年期收益率一度触及4.79%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 18886,
+      "all_pass": false,
+      "first_fail": "fetch_incomplete"
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "d179b615-passive",
+      "role": "required",
+      "question": "历史复盘显示被动补库阶段各类资产的月均表现如何？",
+      "doc_identity": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13514,
+      "source_offered": true,
+      "source_hit_ids": [
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9465684d3a781404:body:0004",
+          "context_count": 7,
+          "snippet": "<b>历史</b><b>复盘</b>可见，<b>被动</b>补库<b>阶段</b>"
+        },
+        {
+          "locator": "chunk:9465684d3a781404:body:0009",
+          "context_count": 11,
+          "snippet": "<b>表现</b>的<b>历史</b>规律与<b>被动</b>补库"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 18,
+      "delivered_locators": [
+        "chunk:9465684d3a781404:heading:0000",
+        "chunk:9465684d3a781404:body:0001",
+        "chunk:9465684d3a781404:body:0002",
+        "chunk:9465684d3a781404:body:0003",
+        "chunk:9465684d3a781404:body:0004",
+        "chunk:9465684d3a781404:table:0000",
+        "chunk:9465684d3a781404:body:0005",
+        "chunk:9465684d3a781404:table:0005",
+        "chunk:9465684d3a781404:body:0009",
+        "chunk:9465684d3a781404:table:0006",
+        "chunk:9465684d3a781404:body:0010",
+        "chunk:9465684d3a781404:table:0007",
+        "chunk:9465684d3a781404:body:0011",
+        "chunk:9465684d3a781404:table:0008",
+        "chunk:9465684d3a781404:body:0012",
+        "chunk:9465684d3a781404:table:0009",
+        "chunk:9465684d3a781404:body:0013",
+        "chunk:9465684d3a781404:table:0010"
+      ],
+      "pages": 5,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5706,
+          "delivered": 5706
+        },
+        {
+          "raw": 4647,
+          "delivered": 4647
+        },
+        {
+          "raw": 5549,
+          "delivered": 5549
+        },
+        {
+          "raw": 4980,
+          "delivered": 4980
+        },
+        {
+          "raw": 2589,
+          "delivered": 2589
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "被动补库阶段多为权益资产表现最差的时期。 万得全A 月均收益-1.83%、 胜率仅13%， 上证月均-1.80%、胜率 0%；大类资产角度，债券资产则全面占优，中证全债月均+0.29%、胜率 75%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6586,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "d179b615-chart3",
+      "role": "required",
+      "question": "被动补库阶段，各类资产及A股指数的月均涨跌幅是多少？",
+      "doc_identity": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12977,
+      "source_offered": true,
+      "source_hit_ids": [
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9465684d3a781404:table:0015",
+          "context_count": 13,
+          "snippet": "<b>涨跌幅</b>()年初以来<b>涨跌幅</b>()\n股"
+        },
+        {
+          "locator": "chunk:9465684d3a781404:body:0004",
+          "context_count": 7,
+          "snippet": "<b>被动</b>补库<b>阶段</b>多为权益<b>资产</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 20,
+      "delivered_locators": [
+        "chunk:9465684d3a781404:table:0014",
+        "chunk:9465684d3a781404:body:0014",
+        "chunk:9465684d3a781404:body:0015",
+        "chunk:9465684d3a781404:table:0015",
+        "chunk:9465684d3a781404:table:0016",
+        "chunk:9465684d3a781404:body:0016",
+        "chunk:9465684d3a781404:table:0017",
+        "chunk:9465684d3a781404:body:0017",
+        "chunk:9465684d3a781404:table:0018",
+        "chunk:9465684d3a781404:body:0018",
+        "chunk:9465684d3a781404:heading:0001",
+        "chunk:9465684d3a781404:body:0019",
+        "chunk:9465684d3a781404:body:0020",
+        "chunk:9465684d3a781404:heading:0000",
+        "chunk:9465684d3a781404:body:0001",
+        "chunk:9465684d3a781404:body:0002",
+        "chunk:9465684d3a781404:body:0003",
+        "chunk:9465684d3a781404:body:0004",
+        "chunk:9465684d3a781404:table:0000",
+        "chunk:9465684d3a781404:body:0005"
+      ],
+      "pages": 6,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5831,
+          "delivered": 5831
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 5079,
+          "delivered": 5079
+        },
+        {
+          "raw": 1818,
+          "delivered": 1818
+        },
+        {
+          "raw": 5706,
+          "delivered": 5706
+        },
+        {
+          "raw": 4647,
+          "delivered": 4647
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "涨跌幅:% 万得全 A 南华商品 中证全债 上证 沪深 300 创业板 工业品 金属 能化 农产品 被动补库 (1.83) (0.10) 0.29 (1.80) (2.21) (1.28) 0.21 0.29 0.14 (0.26)",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 8116,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "d179b615-goldoil",
+      "role": "supplementary",
+      "question": "当前金油比数值是多少？自高点回落和自低点修复的幅度各是多少？",
+      "doc_identity": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 11721,
+      "source_offered": true,
+      "source_hit_ids": [
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:9465684d3a781404:body:0015",
+          "context_count": 3,
+          "snippet": "<b>前金</b>油比43.61，自本轮<b>高点</b>"
+        },
+        {
+          "locator": "chunk:9465684d3a781404:body:0002",
+          "context_count": 6,
+          "snippet": "<b>回落</b>；节前若持续调整，节后"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 9,
+      "delivered_locators": [
+        "chunk:9465684d3a781404:body:0014",
+        "chunk:9465684d3a781404:body:0015",
+        "chunk:9465684d3a781404:table:0015",
+        "chunk:9465684d3a781404:heading:0000",
+        "chunk:9465684d3a781404:body:0001",
+        "chunk:9465684d3a781404:body:0002",
+        "chunk:9465684d3a781404:body:0003",
+        "chunk:9465684d3a781404:body:0004",
+        "chunk:9465684d3a781404:table:0000"
+      ],
+      "pages": 3,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4168,
+          "delivered": 4168
+        },
+        {
+          "raw": 5659,
+          "delivered": 5659
+        },
+        {
+          "raw": 3975,
+          "delivered": 3975
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "当前金油比 43.61，自本轮高点回落 40.6%，自 4 月 7 日本轮低点修复 36.7%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 4585,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "2f8aa709-hike",
+      "role": "required",
+      "question": "国金证券认为市场对美联储9月加息概率定价在什么区间？8月新增非农就业人数是多少？",
+      "doc_identity": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "search_ok": true,
+      "search_hits": 9,
+      "delivered_search_chars": 18201,
+      "source_offered": true,
+      "source_hit_ids": [
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0005",
+          "context_count": 30,
+          "snippet": "<b>新增</b><b>非农</b><b>就业</b><b>人数</b>大超<b>市场</b>预期"
+        },
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0027",
+          "context_count": 21,
+          "snippet": "<b>证券</b>股份有限公司经中国<b>证券</b>监督管理委员会"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 51,
+      "delivered_locators": [
+        "chunk:dd3db0fdfdffec2b:table:0000",
+        "chunk:dd3db0fdfdffec2b:body:0000",
+        "chunk:dd3db0fdfdffec2b:body:0001",
+        "chunk:dd3db0fdfdffec2b:table:0001",
+        "chunk:dd3db0fdfdffec2b:body:0002",
+        "chunk:dd3db0fdfdffec2b:table:0002",
+        "chunk:dd3db0fdfdffec2b:body:0003",
+        "chunk:dd3db0fdfdffec2b:body:0004",
+        "chunk:dd3db0fdfdffec2b:table:0003",
+        "chunk:dd3db0fdfdffec2b:body:0005",
+        "chunk:dd3db0fdfdffec2b:body:0006",
+        "chunk:dd3db0fdfdffec2b:table:0004",
+        "chunk:dd3db0fdfdffec2b:body:0007",
+        "chunk:dd3db0fdfdffec2b:body:0008",
+        "chunk:dd3db0fdfdffec2b:body:0009",
+        "chunk:dd3db0fdfdffec2b:table:0005",
+        "chunk:dd3db0fdfdffec2b:table:0006",
+        "chunk:dd3db0fdfdffec2b:table:0007",
+        "chunk:dd3db0fdfdffec2b:body:0010",
+        "chunk:dd3db0fdfdffec2b:table:0008",
+        "chunk:dd3db0fdfdffec2b:body:0011",
+        "chunk:dd3db0fdfdffec2b:body:0012",
+        "chunk:dd3db0fdfdffec2b:table:0009",
+        "chunk:dd3db0fdfdffec2b:body:0013",
+        "chunk:dd3db0fdfdffec2b:body:0014",
+        "chunk:dd3db0fdfdffec2b:table:0010",
+        "chunk:dd3db0fdfdffec2b:body:0015",
+        "chunk:dd3db0fdfdffec2b:table:0011",
+        "chunk:dd3db0fdfdffec2b:body:0016",
+        "chunk:dd3db0fdfdffec2b:table:0012",
+        "chunk:dd3db0fdfdffec2b:body:0017",
+        "chunk:dd3db0fdfdffec2b:table:0013",
+        "chunk:dd3db0fdfdffec2b:body:0018",
+        "chunk:dd3db0fdfdffec2b:body:0019",
+        "chunk:dd3db0fdfdffec2b:table:0014",
+        "chunk:dd3db0fdfdffec2b:body:0020",
+        "chunk:dd3db0fdfdffec2b:heading:0000",
+        "chunk:dd3db0fdfdffec2b:heading:0001",
+        "chunk:dd3db0fdfdffec2b:heading:0002",
+        "chunk:dd3db0fdfdffec2b:body:0021",
+        "chunk:dd3db0fdfdffec2b:heading:0003",
+        "chunk:dd3db0fdfdffec2b:body:0022",
+        "chunk:dd3db0fdfdffec2b:heading:0004",
+        "chunk:dd3db0fdfdffec2b:body:0023",
+        "chunk:dd3db0fdfdffec2b:body:0024",
+        "chunk:dd3db0fdfdffec2b:body:0025",
+        "chunk:dd3db0fdfdffec2b:table:0015",
+        "chunk:dd3db0fdfdffec2b:body:0026",
+        "chunk:dd3db0fdfdffec2b:table:0016",
+        "chunk:dd3db0fdfdffec2b:body:0027"
+      ],
+      "pages": 18,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5484,
+          "delivered": 5484
+        },
+        {
+          "raw": 5591,
+          "delivered": 5591
+        },
+        {
+          "raw": 5606,
+          "delivered": 5606
+        },
+        {
+          "raw": 5620,
+          "delivered": 5620
+        },
+        {
+          "raw": 5753,
+          "delivered": 5753
+        },
+        {
+          "raw": 5445,
+          "delivered": 5445
+        },
+        {
+          "raw": 5843,
+          "delivered": 5843
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 5673,
+          "delivered": 5673
+        },
+        {
+          "raw": 5705,
+          "delivered": 5705
+        },
+        {
+          "raw": 3176,
+          "delivered": 3176
+        },
+        {
+          "raw": 4230,
+          "delivered": 4230
+        },
+        {
+          "raw": 5616,
+          "delivered": 5616
+        },
+        {
+          "raw": 5655,
+          "delivered": 5655
+        },
+        {
+          "raw": 5018,
+          "delivered": 5018
+        },
+        {
+          "raw": 5333,
+          "delivered": 5333
+        },
+        {
+          "raw": 4498,
+          "delivered": 4498
+        },
+        {
+          "raw": 2944,
+          "delivered": 2944
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "8 月私营部门就业人数远低于市场预期，以及威廉姆斯+沃勒发表鸽派言论使得降息预期有所回落； （3）但周五晚的新增非农就业16.2 万人，远超市场预期（5.6 万人） ，同时上修了6 月、7 月的非农就业数据，这又让9 月加息预期再度上升。尽管数据本身结构上具有争议，目前来看，9 月加息预期在50%-60%之间",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 25234,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "2f8aa709-oil",
+      "role": "required",
+      "question": "美伊冲突再度升级背景下，霍尔木兹海峡通航量和布油价格情况如何？",
+      "doc_identity": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 12467,
+      "source_offered": true,
+      "source_hit_ids": [
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0015",
+          "context_count": 5,
+          "snippet": "<b>冲突</b>再度<b>升级</b>图表17：<b>霍尔木兹海峡</b><b>通航</b>"
+        },
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0000",
+          "context_count": 3,
+          "snippet": "<b>冲突</b>再度<b>升级</b>，<b>霍尔木兹海峡</b><b>通航</b>量再度"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 8,
+      "delivered_locators": [
+        "chunk:dd3db0fdfdffec2b:table:0010",
+        "chunk:dd3db0fdfdffec2b:body:0015",
+        "chunk:dd3db0fdfdffec2b:table:0011",
+        "chunk:dd3db0fdfdffec2b:body:0016",
+        "chunk:dd3db0fdfdffec2b:table:0012",
+        "chunk:dd3db0fdfdffec2b:table:0000",
+        "chunk:dd3db0fdfdffec2b:body:0000",
+        "chunk:dd3db0fdfdffec2b:body:0001"
+      ],
+      "pages": 4,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5653,
+          "delivered": 5653
+        },
+        {
+          "raw": 1575,
+          "delivered": 1575
+        },
+        {
+          "raw": 4208,
+          "delivered": 4208
+        },
+        {
+          "raw": 3336,
+          "delivered": 3336
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "与之对应的是， 霍尔木兹海峡通航量再度接近清零， 布油价格重回95 美元/桶以上。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 6357,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "2f8aa709-alloc",
+      "role": "required",
+      "question": "国金证券在当前市况下的主要配置推荐有哪些？",
+      "doc_identity": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 17658,
+      "source_offered": true,
+      "source_hit_ids": [
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0000",
+          "context_count": 30,
+          "snippet": "<b>配置</b>能源的投资者而言可能担忧特朗普"
+        },
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0023",
+          "context_count": 21,
+          "snippet": "<b>当前</b>全球原油及成品油库存显著低于"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 51,
+      "delivered_locators": [
+        "chunk:dd3db0fdfdffec2b:table:0000",
+        "chunk:dd3db0fdfdffec2b:body:0000",
+        "chunk:dd3db0fdfdffec2b:body:0001",
+        "chunk:dd3db0fdfdffec2b:table:0001",
+        "chunk:dd3db0fdfdffec2b:body:0002",
+        "chunk:dd3db0fdfdffec2b:table:0002",
+        "chunk:dd3db0fdfdffec2b:body:0003",
+        "chunk:dd3db0fdfdffec2b:body:0004",
+        "chunk:dd3db0fdfdffec2b:table:0003",
+        "chunk:dd3db0fdfdffec2b:body:0005",
+        "chunk:dd3db0fdfdffec2b:body:0006",
+        "chunk:dd3db0fdfdffec2b:table:0004",
+        "chunk:dd3db0fdfdffec2b:body:0007",
+        "chunk:dd3db0fdfdffec2b:body:0008",
+        "chunk:dd3db0fdfdffec2b:body:0009",
+        "chunk:dd3db0fdfdffec2b:table:0005",
+        "chunk:dd3db0fdfdffec2b:table:0006",
+        "chunk:dd3db0fdfdffec2b:table:0007",
+        "chunk:dd3db0fdfdffec2b:body:0010",
+        "chunk:dd3db0fdfdffec2b:table:0008",
+        "chunk:dd3db0fdfdffec2b:body:0011",
+        "chunk:dd3db0fdfdffec2b:body:0012",
+        "chunk:dd3db0fdfdffec2b:table:0009",
+        "chunk:dd3db0fdfdffec2b:body:0013",
+        "chunk:dd3db0fdfdffec2b:body:0014",
+        "chunk:dd3db0fdfdffec2b:table:0010",
+        "chunk:dd3db0fdfdffec2b:body:0015",
+        "chunk:dd3db0fdfdffec2b:table:0011",
+        "chunk:dd3db0fdfdffec2b:body:0016",
+        "chunk:dd3db0fdfdffec2b:table:0012",
+        "chunk:dd3db0fdfdffec2b:body:0017",
+        "chunk:dd3db0fdfdffec2b:table:0013",
+        "chunk:dd3db0fdfdffec2b:body:0018",
+        "chunk:dd3db0fdfdffec2b:body:0019",
+        "chunk:dd3db0fdfdffec2b:table:0014",
+        "chunk:dd3db0fdfdffec2b:body:0020",
+        "chunk:dd3db0fdfdffec2b:heading:0000",
+        "chunk:dd3db0fdfdffec2b:heading:0001",
+        "chunk:dd3db0fdfdffec2b:heading:0002",
+        "chunk:dd3db0fdfdffec2b:body:0021",
+        "chunk:dd3db0fdfdffec2b:heading:0003",
+        "chunk:dd3db0fdfdffec2b:body:0022",
+        "chunk:dd3db0fdfdffec2b:heading:0004",
+        "chunk:dd3db0fdfdffec2b:body:0023",
+        "chunk:dd3db0fdfdffec2b:body:0024",
+        "chunk:dd3db0fdfdffec2b:body:0025",
+        "chunk:dd3db0fdfdffec2b:table:0015",
+        "chunk:dd3db0fdfdffec2b:body:0026",
+        "chunk:dd3db0fdfdffec2b:table:0016",
+        "chunk:dd3db0fdfdffec2b:body:0027"
+      ],
+      "pages": 18,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5484,
+          "delivered": 5484
+        },
+        {
+          "raw": 5591,
+          "delivered": 5591
+        },
+        {
+          "raw": 5606,
+          "delivered": 5606
+        },
+        {
+          "raw": 5620,
+          "delivered": 5620
+        },
+        {
+          "raw": 5753,
+          "delivered": 5753
+        },
+        {
+          "raw": 5445,
+          "delivered": 5445
+        },
+        {
+          "raw": 5843,
+          "delivered": 5843
+        },
+        {
+          "raw": 5667,
+          "delivered": 5667
+        },
+        {
+          "raw": 5673,
+          "delivered": 5673
+        },
+        {
+          "raw": 5705,
+          "delivered": 5705
+        },
+        {
+          "raw": 3176,
+          "delivered": 3176
+        },
+        {
+          "raw": 4230,
+          "delivered": 4230
+        },
+        {
+          "raw": 5616,
+          "delivered": 5616
+        },
+        {
+          "raw": 5655,
+          "delivered": 5655
+        },
+        {
+          "raw": 5018,
+          "delivered": 5018
+        },
+        {
+          "raw": 5333,
+          "delivered": 5333
+        },
+        {
+          "raw": 4498,
+          "delivered": 4498
+        },
+        {
+          "raw": 2944,
+          "delivered": 2944
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "第一， 商品侧，能源是首要推荐，以煤炭、石油、油运和炼化为代表的能化链条将继续受益于全球对能源的补库需求。有色金属（铜、金、铝）作为美元对立面资产，当前压制因素只是外生变量，9 月 FOMC 会议之前等待时机。 第二， 防御思维下， 红利风格受益于绝对收益者的切换，高股息+低波动+稳定现金流的红利资产仍是绝对收益资金的核心回流方向。 第三， 紧缩预期下， 全球制造复苏阶段性需等待逆风过去，出口链条（工程机械、电网设备等）等资产仍具备配置价值。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 25234,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "2f8aa709-fedtable",
+      "role": "supplementary",
+      "question": "报告中美联储官员沃什、威廉姆斯、沃勒对通胀与加息的表态各是什么？",
+      "doc_identity": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 18497,
+      "source_offered": true,
+      "source_hit_ids": [
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+        "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0005",
+          "context_count": 3,
+          "snippet": "<b>沃勒</b>则偏鸽派美联储<b>官员</b><b>表态</b><b>通胀</b>"
+        },
+        {
+          "locator": "chunk:dd3db0fdfdffec2b:body:0000",
+          "context_count": 3,
+          "snippet": "<b>威廉姆斯</b>与<b>沃勒</b>的鸽派言论，<b>加息</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 6,
+      "delivered_locators": [
+        "chunk:dd3db0fdfdffec2b:table:0003",
+        "chunk:dd3db0fdfdffec2b:body:0005",
+        "chunk:dd3db0fdfdffec2b:body:0006",
+        "chunk:dd3db0fdfdffec2b:table:0000",
+        "chunk:dd3db0fdfdffec2b:body:0000",
+        "chunk:dd3db0fdfdffec2b:body:0001"
+      ],
+      "pages": 3,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 3850,
+          "delivered": 3850
+        },
+        {
+          "raw": 4208,
+          "delivered": 4208
+        },
+        {
+          "raw": 3336,
+          "delivered": 3336
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "美联储官员 表态 通胀仍是第一优先级：通胀仍然高于2%的目标，因此美联储当前的主要关注点应该放在价格上；以PCE衡量的2%目标是坚定、固定的目标。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 5431,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f3b28791-rotation",
+      "role": "required",
+      "question": "兴业证券认为近期A股市场呈现什么特征？行业轮动强度指标走势如何？",
+      "doc_identity": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 19514,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:bb6c4f161d46eee9:table:0000",
+          "context_count": 23,
+          "snippet": "<b>证券</b>研究报告\n策略研究|A股"
+        },
+        {
+          "locator": "chunk:bb6c4f161d46eee9:body:0019",
+          "context_count": 7,
+          "snippet": "<b>行业</b>轮动<b>强度</b><b>指标</b>与哑铃策略"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 30,
+      "delivered_locators": [
+        "chunk:bb6c4f161d46eee9:table:0000",
+        "chunk:bb6c4f161d46eee9:body:0000",
+        "chunk:bb6c4f161d46eee9:body:0001",
+        "chunk:bb6c4f161d46eee9:table:0001",
+        "chunk:bb6c4f161d46eee9:body:0002",
+        "chunk:bb6c4f161d46eee9:heading:0000",
+        "chunk:bb6c4f161d46eee9:body:0003",
+        "chunk:bb6c4f161d46eee9:heading:0001",
+        "chunk:bb6c4f161d46eee9:body:0004",
+        "chunk:bb6c4f161d46eee9:heading:0002",
+        "chunk:bb6c4f161d46eee9:body:0005",
+        "chunk:bb6c4f161d46eee9:table:0002",
+        "chunk:bb6c4f161d46eee9:body:0006",
+        "chunk:bb6c4f161d46eee9:body:0007",
+        "chunk:bb6c4f161d46eee9:heading:0003",
+        "chunk:bb6c4f161d46eee9:body:0008",
+        "chunk:bb6c4f161d46eee9:table:0003",
+        "chunk:bb6c4f161d46eee9:body:0009",
+        "chunk:bb6c4f161d46eee9:body:0010",
+        "chunk:bb6c4f161d46eee9:heading:0004",
+        "chunk:bb6c4f161d46eee9:body:0011",
+        "chunk:bb6c4f161d46eee9:heading:0005",
+        "chunk:bb6c4f161d46eee9:table:0004",
+        "chunk:bb6c4f161d46eee9:table:0013",
+        "chunk:bb6c4f161d46eee9:body:0018",
+        "chunk:bb6c4f161d46eee9:body:0019",
+        "chunk:bb6c4f161d46eee9:heading:0011",
+        "chunk:bb6c4f161d46eee9:body:0020",
+        "chunk:bb6c4f161d46eee9:heading:0012",
+        "chunk:bb6c4f161d46eee9:table:0014"
+      ],
+      "pages": 8,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 5521,
+          "delivered": 5521
+        },
+        {
+          "raw": 5404,
+          "delivered": 5404
+        },
+        {
+          "raw": 5607,
+          "delivered": 5607
+        },
+        {
+          "raw": 5396,
+          "delivered": 5396
+        },
+        {
+          "raw": 4449,
+          "delivered": 4449
+        },
+        {
+          "raw": 5971,
+          "delivered": 5971
+        },
+        {
+          "raw": 3799,
+          "delivered": 3799
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "近期市场给人的最大感受，依然是混沌、轮动、缺乏主线。我们构造的行业轮动强度指标仍在持续上行，本周再创年内新高。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 5563,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f3b28791-fedwatch",
+      "role": "required",
+      "question": "兴业证券建议重点观察哪些影响美联储决策、有助于降低宏观不确定性的事件节点？",
+      "doc_identity": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 17867,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:bb6c4f161d46eee9:body:0001",
+          "context_count": 23,
+          "snippet": "<b>不确定性</b>的<b>宏观</b>环境，和风险偏好"
+        },
+        {
+          "locator": "chunk:bb6c4f161d46eee9:heading:0007",
+          "context_count": 15,
+          "snippet": "<b>影响</b><b>美联储</b><b>决策</b>的重要观察点已不远"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 38,
+      "delivered_locators": [
+        "chunk:bb6c4f161d46eee9:table:0000",
+        "chunk:bb6c4f161d46eee9:body:0000",
+        "chunk:bb6c4f161d46eee9:body:0001",
+        "chunk:bb6c4f161d46eee9:table:0001",
+        "chunk:bb6c4f161d46eee9:body:0002",
+        "chunk:bb6c4f161d46eee9:heading:0000",
+        "chunk:bb6c4f161d46eee9:body:0003",
+        "chunk:bb6c4f161d46eee9:heading:0001",
+        "chunk:bb6c4f161d46eee9:body:0004",
+        "chunk:bb6c4f161d46eee9:heading:0002",
+        "chunk:bb6c4f161d46eee9:body:0005",
+        "chunk:bb6c4f161d46eee9:table:0002",
+        "chunk:bb6c4f161d46eee9:body:0006",
+        "chunk:bb6c4f161d46eee9:body:0007",
+        "chunk:bb6c4f161d46eee9:heading:0003",
+        "chunk:bb6c4f161d46eee9:body:0008",
+        "chunk:bb6c4f161d46eee9:table:0003",
+        "chunk:bb6c4f161d46eee9:body:0009",
+        "chunk:bb6c4f161d46eee9:body:0010",
+        "chunk:bb6c4f161d46eee9:heading:0004",
+        "chunk:bb6c4f161d46eee9:body:0011",
+        "chunk:bb6c4f161d46eee9:heading:0005",
+        "chunk:bb6c4f161d46eee9:table:0004",
+        "chunk:bb6c4f161d46eee9:table:0006",
+        "chunk:bb6c4f161d46eee9:body:0012",
+        "chunk:bb6c4f161d46eee9:heading:0006",
+        "chunk:bb6c4f161d46eee9:body:0013",
+        "chunk:bb6c4f161d46eee9:heading:0007",
+        "chunk:bb6c4f161d46eee9:body:0014",
+        "chunk:bb6c4f161d46eee9:heading:0008",
+        "chunk:bb6c4f161d46eee9:table:0007",
+        "chunk:bb6c4f161d46eee9:body:0015",
+        "chunk:bb6c4f161d46eee9:table:0008",
+        "chunk:bb6c4f161d46eee9:body:0016",
+        "chunk:bb6c4f161d46eee9:heading:0009",
+        "chunk:bb6c4f161d46eee9:body:0017",
+        "chunk:bb6c4f161d46eee9:heading:0010",
+        "chunk:bb6c4f161d46eee9:table:0009"
+      ],
+      "pages": 10,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 5521,
+          "delivered": 5521
+        },
+        {
+          "raw": 5404,
+          "delivered": 5404
+        },
+        {
+          "raw": 5607,
+          "delivered": 5607
+        },
+        {
+          "raw": 5396,
+          "delivered": 5396
+        },
+        {
+          "raw": 4449,
+          "delivered": 4449
+        },
+        {
+          "raw": 5998,
+          "delivered": 5998
+        },
+        {
+          "raw": 5979,
+          "delivered": 5979
+        },
+        {
+          "raw": 5624,
+          "delivered": 5624
+        },
+        {
+          "raw": 3244,
+          "delivered": 3244
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "几个影响美联储决策的重要观察点已不远，有助于市场分歧的弥合、宏观不确定性的下降。包括 9.11 美国 CPI 数据，以及 9.17 FOMC 会议。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 5953,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f3b28791-table1",
+      "role": "required",
+      "question": "兴业证券表1中，7月以来2026E净利润上修的典型细分方向包括哪些？电子光学光电子的数据如何？",
+      "doc_identity": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 17384,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:bb6c4f161d46eee9:table:0015",
+          "context_count": 19,
+          "snippet": "<b>净利润</b>上修幅7月<b>以来</b><b>2026E</b>"
+        },
+        {
+          "locator": "chunk:bb6c4f161d46eee9:body:0003",
+          "context_count": 22,
+          "snippet": "<b>以来</b><b>2026E</b><b>净利润</b>上修的<b>典型</b><b>细分</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 41,
+      "delivered_locators": [
+        "chunk:bb6c4f161d46eee9:table:0013",
+        "chunk:bb6c4f161d46eee9:body:0018",
+        "chunk:bb6c4f161d46eee9:body:0019",
+        "chunk:bb6c4f161d46eee9:heading:0011",
+        "chunk:bb6c4f161d46eee9:body:0020",
+        "chunk:bb6c4f161d46eee9:heading:0012",
+        "chunk:bb6c4f161d46eee9:table:0014",
+        "chunk:bb6c4f161d46eee9:body:0021",
+        "chunk:bb6c4f161d46eee9:table:0015",
+        "chunk:bb6c4f161d46eee9:heading:0013",
+        "chunk:bb6c4f161d46eee9:body:0022",
+        "chunk:bb6c4f161d46eee9:table:0016",
+        "chunk:bb6c4f161d46eee9:body:0023",
+        "chunk:bb6c4f161d46eee9:table:0017",
+        "chunk:bb6c4f161d46eee9:body:0024",
+        "chunk:bb6c4f161d46eee9:body:0025",
+        "chunk:bb6c4f161d46eee9:body:0026",
+        "chunk:bb6c4f161d46eee9:body:0027",
+        "chunk:bb6c4f161d46eee9:body:0028",
+        "chunk:bb6c4f161d46eee9:table:0000",
+        "chunk:bb6c4f161d46eee9:body:0000",
+        "chunk:bb6c4f161d46eee9:body:0001",
+        "chunk:bb6c4f161d46eee9:table:0001",
+        "chunk:bb6c4f161d46eee9:body:0002",
+        "chunk:bb6c4f161d46eee9:heading:0000",
+        "chunk:bb6c4f161d46eee9:body:0003",
+        "chunk:bb6c4f161d46eee9:heading:0001",
+        "chunk:bb6c4f161d46eee9:body:0004",
+        "chunk:bb6c4f161d46eee9:heading:0002",
+        "chunk:bb6c4f161d46eee9:body:0005",
+        "chunk:bb6c4f161d46eee9:table:0002",
+        "chunk:bb6c4f161d46eee9:body:0006",
+        "chunk:bb6c4f161d46eee9:body:0007",
+        "chunk:bb6c4f161d46eee9:heading:0003",
+        "chunk:bb6c4f161d46eee9:body:0008",
+        "chunk:bb6c4f161d46eee9:table:0003",
+        "chunk:bb6c4f161d46eee9:body:0009",
+        "chunk:bb6c4f161d46eee9:body:0010",
+        "chunk:bb6c4f161d46eee9:heading:0004",
+        "chunk:bb6c4f161d46eee9:body:0011",
+        "chunk:bb6c4f161d46eee9:heading:0005"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 5918,
+          "delivered": 5918
+        },
+        {
+          "raw": 5356,
+          "delivered": 5356
+        },
+        {
+          "raw": 5995,
+          "delivered": 5995
+        },
+        {
+          "raw": 5472,
+          "delivered": 5472
+        },
+        {
+          "raw": 2504,
+          "delivered": 2504
+        },
+        {
+          "raw": 5620,
+          "delivered": 5620
+        },
+        {
+          "raw": 5473,
+          "delivered": 5473
+        },
+        {
+          "raw": 5356,
+          "delivered": 5356
+        },
+        {
+          "raw": 5559,
+          "delivered": 5559
+        },
+        {
+          "raw": 5348,
+          "delivered": 5348
+        },
+        {
+          "raw": 3183,
+          "delivered": 3183
+        }
+      ],
+      "quote_delivered": false,
+      "expected_quote": "板块 一级行业 二级行业 7 月以来 2026E 净利润上修幅度 2026 年预测净利润增速 7 月以来 涨跌幅 年初以来 涨跌幅 龙一 龙二 龙三 AI 算力硬件 电子 光学光电子 27.1% 194% -29.6% 6.9% 京东方 A 惠科股份 TCL 科技",
+      "dependencies": {
+        "header_refs": false,
+        "row_labels": true,
+        "footnotes": false
+      },
+      "delivered_chars": 9746,
+      "all_pass": false,
+      "first_fail": "quote_not_delivered"
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "split": "holdout",
+      "domain": "macro",
+      "target_id": "f3b28791-regression",
+      "role": "required",
+      "question": "在极致轮动收敛之后，兴业证券认为哪种投资风格有望回归？",
+      "doc_identity": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "search_ok": true,
+      "search_hits": 8,
+      "delivered_search_chars": 18024,
+      "source_offered": true,
+      "source_hit_ids": [
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+        "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:bb6c4f161d46eee9:body:0001",
+          "context_count": 23,
+          "snippet": "<b>收敛</b>后，景气<b>投资</b><b>有望</b><b>回归</b>\n⚫"
+        },
+        {
+          "locator": "chunk:bb6c4f161d46eee9:body:0025",
+          "context_count": 19,
+          "snippet": "<b>兴业</b><b>证券</b>股份有限公司经中国<b>证券</b>监督管理"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 42,
+      "delivered_locators": [
+        "chunk:bb6c4f161d46eee9:table:0000",
+        "chunk:bb6c4f161d46eee9:body:0000",
+        "chunk:bb6c4f161d46eee9:body:0001",
+        "chunk:bb6c4f161d46eee9:table:0001",
+        "chunk:bb6c4f161d46eee9:body:0002",
+        "chunk:bb6c4f161d46eee9:heading:0000",
+        "chunk:bb6c4f161d46eee9:body:0003",
+        "chunk:bb6c4f161d46eee9:heading:0001",
+        "chunk:bb6c4f161d46eee9:body:0004",
+        "chunk:bb6c4f161d46eee9:heading:0002",
+        "chunk:bb6c4f161d46eee9:body:0005",
+        "chunk:bb6c4f161d46eee9:table:0002",
+        "chunk:bb6c4f161d46eee9:body:0006",
+        "chunk:bb6c4f161d46eee9:body:0007",
+        "chunk:bb6c4f161d46eee9:heading:0003",
+        "chunk:bb6c4f161d46eee9:body:0008",
+        "chunk:bb6c4f161d46eee9:table:0003",
+        "chunk:bb6c4f161d46eee9:body:0009",
+        "chunk:bb6c4f161d46eee9:body:0010",
+        "chunk:bb6c4f161d46eee9:heading:0004",
+        "chunk:bb6c4f161d46eee9:body:0011",
+        "chunk:bb6c4f161d46eee9:heading:0005",
+        "chunk:bb6c4f161d46eee9:table:0004",
+        "chunk:bb6c4f161d46eee9:table:0013",
+        "chunk:bb6c4f161d46eee9:body:0018",
+        "chunk:bb6c4f161d46eee9:body:0019",
+        "chunk:bb6c4f161d46eee9:heading:0011",
+        "chunk:bb6c4f161d46eee9:body:0020",
+        "chunk:bb6c4f161d46eee9:heading:0012",
+        "chunk:bb6c4f161d46eee9:table:0014",
+        "chunk:bb6c4f161d46eee9:body:0021",
+        "chunk:bb6c4f161d46eee9:table:0015",
+        "chunk:bb6c4f161d46eee9:heading:0013",
+        "chunk:bb6c4f161d46eee9:body:0022",
+        "chunk:bb6c4f161d46eee9:table:0016",
+        "chunk:bb6c4f161d46eee9:body:0023",
+        "chunk:bb6c4f161d46eee9:table:0017",
+        "chunk:bb6c4f161d46eee9:body:0024",
+        "chunk:bb6c4f161d46eee9:body:0025",
+        "chunk:bb6c4f161d46eee9:body:0026",
+        "chunk:bb6c4f161d46eee9:body:0027",
+        "chunk:bb6c4f161d46eee9:body:0028"
+      ],
+      "pages": 12,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5668,
+          "delivered": 5668
+        },
+        {
+          "raw": 5521,
+          "delivered": 5521
+        },
+        {
+          "raw": 5404,
+          "delivered": 5404
+        },
+        {
+          "raw": 5607,
+          "delivered": 5607
+        },
+        {
+          "raw": 5396,
+          "delivered": 5396
+        },
+        {
+          "raw": 4449,
+          "delivered": 4449
+        },
+        {
+          "raw": 5836,
+          "delivered": 5836
+        },
+        {
+          "raw": 5918,
+          "delivered": 5918
+        },
+        {
+          "raw": 5356,
+          "delivered": 5356
+        },
+        {
+          "raw": 5995,
+          "delivered": 5995
+        },
+        {
+          "raw": 5472,
+          "delivered": 5472
+        },
+        {
+          "raw": 2504,
+          "delivered": 2504
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "随着后续轮动收敛的契机临近、 基本面定价权重提升，对于今年宏观流动性收紧、定价主要矛盾转向盈利的市场环境中，受益的仍将是景气投资的回归。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 9962,
+      "all_pass": true,
+      "first_fail": null
+    }
+  ]
+}
