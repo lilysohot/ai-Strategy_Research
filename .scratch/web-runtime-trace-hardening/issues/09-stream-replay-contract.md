@@ -61,3 +61,11 @@ Requirements: PR-RUN-02, PR-RUN-04, PR-GOV-02
   （`FOREIGN KEY constraint failed`），负向对照前后均失败，非本次引入。
   **仍未验收**：真实浏览器下端到端确认「steer 后重连不跳行」——现有证据为转译真实 TS 的前端审计
   与后端单测，未跑真实 SSE 断线重连。故状态维持 `ready-for-human`。
+
+## 2026-10-01 真实重启后观测（批次登记 restart_obs_20261001）
+
+live API 进程 kill + 重启（观测材料：real_provider_20261001 的 3 个真实供应商 run）。F09 项：重启后
+closed-stream 进程内记忆清空，SSE 重连已结束 run 由 `_live_queue_for` 双事实判定（无 worker handle +
+DB 状态非 active）正确路由 replay-only——流正常关闭（exit=0，非悬挂），11 条重放事件与轨迹行数学吻合。
+多进程盲区复核：另一进程结束的 run 重连行为与同进程一致（判定只依赖 DB 与 handle，不依赖记忆窗口）。
+**真实重启观测通过，无代码改动。**

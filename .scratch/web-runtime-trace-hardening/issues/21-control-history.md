@@ -99,3 +99,10 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   `pg_dump` 备份（`~/backups/apodex-20261001-161402.sql`）；live API `/readyz` 翻绿 200。
   **剩余**：真实重启后观测（API 进程重启后待审批语义与 F09 多进程盲区复核）。
 
+
+## 2026-10-01 真实重启后观测（批次登记 restart_obs_20261001）
+
+live API 进程 kill + 重启后：`GET /controls` 投影从 `control_records` 重建完整（adopted/once 审批含
+external_id 与 request 投影可见）；run 详情/usage/finished_at 全部 DB 持久化可读；`/readyz` 200。
+待审批语义跨重启已由 E1-WSL 批次 `pending → expired`（fail-closed）与浏览器刷新恢复（38d73bc）覆盖；
+本次补齐的是"重启后持久投影可用性"一环。**F21 真实重启观测通过，「剩余」项清零。**

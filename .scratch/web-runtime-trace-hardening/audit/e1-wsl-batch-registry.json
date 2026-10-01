@@ -245,5 +245,18 @@
       "differences": "5 项真实 vs mock 差异：4 项观测面增强/口径差异（分片密度、thinking、缓存 usage、幻觉工具 fail-closed 拒绝后自愈），1 项可观测性观察项（server-default 快照无模型名）",
       "verdict": "真实供应商格式差异不破坏既有契约，该项结转关闭"
     }
+  },
+  "restart_obs_20261001": {
+    "executed_at": "2026-10-01T20:15-20:25+08:00",
+    "task": "F21/F09 真实重启后观测（live API 进程 kill + 重启，观测材料为 real_provider_20261001 的 3 个真实 run）",
+    "procedure": "基线登录 + 取 Run B id → pkill uvicorn（进程消失确认）→ 重新启动 → 四项观测 → 停止清理",
+    "observations": {
+      "F19_readyz": "重启后 /readyz 200（schema + 数据根门禁通过）",
+      "F20_persistence": "Run B 详情重启后完整可读：status=stopped、finished_at、usage.llm_calls=4（DB 持久化，无进程内存依赖）",
+      "F21_controls": "GET /controls 投影重启后从 control_records 重建：adopted/once/external_id=create_file 审批完整可见（不依赖 _closed_stream_ids 等进程内状态）",
+      "F09_reconnect": "重启后 SSE 重连已结束 run：exit=0 流正常关闭（不悬挂），11 条重放事件与轨迹数学吻合（start 1 + 3×(delta+tool_started) + 3×tool_finished + 终 delta）——closed-stream 记忆清空后由 _live_queue_for 双事实判定（无 handle + DB 非 active）正确路由 replay-only"
+    },
+    "verdict": "F09/F19/F20/F21 在真实重启后全部按设计工作，无需代码改动",
+    "cleanup": "观测用 API 已停止，token/run id/SSE 临时文件已删"
   }
 }

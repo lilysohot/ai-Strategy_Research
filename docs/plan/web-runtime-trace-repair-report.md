@@ -722,8 +722,13 @@ waiter task）；[runs.py](../../server/routes/runs.py) `/trace` 改 `asyncio.to
 [f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，
 工单 [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) 转 `ready-for-human`）：
 `control_records` 表 + 状态机 + 终态收口 + 生效 steer 写成 `turns` + `GET /controls` + 前端刷新恢复；
-**未完成**：真实重启后观测（浏览器 DOM 层复核已于 2026-10-01 完成，见工单 05/21；业务库迁移已于
-2026-10-01 晚完成——见上方 F19 段「已闭环」）。另修两处既有缺陷：隔离审计夹具随 F01
+**真实重启后观测已于 2026-10-01 完成**（批次登记 `restart_obs_20261001`）：live API 进程 kill + 重启，
+以 3 个真实供应商 run 为材料观测——F19 `/readyz` 200、F20 run 详情/usage DB 持久化完整可读、F21 `/controls`
+投影从 `control_records` 重建（adopted 审批含 external_id 完整可见）、F09 重连已结束 run 流正常关闭
+（exit=0，11 条重放事件与轨迹数学吻合；closed-stream 记忆清空后由 `_live_queue_for` 双事实判定正确路由
+replay-only）。F09/F19/F20/F21 真实重启后全部按设计工作，无需代码改动。浏览器 DOM 层复核已于
+2026-10-01 完成，见工单 05/21；业务库迁移已于
+2026-10-01 晚完成——见上方 F19 段「已闭环」。另修两处既有缺陷：隔离审计夹具随 F01
 失效的 `uploads_root` 一行（曾使 24 个检查全部 setup ERROR）、`server/trajectory_status.py` 一处 SIM105 lint。
 2026-10-01 E1-WSL 批次补齐真链路证据：`pending → adopted/once`（审批后 `create_file` 真实落盘）与
 `pending → expired`（300s 超时 fail-closed，source=timeout 未被记成用户拒绝）均落 `control_records`；
