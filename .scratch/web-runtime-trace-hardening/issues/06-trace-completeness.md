@@ -73,3 +73,24 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   再证。**仍未完成**：磁盘写满时的轨迹写入行为未做运行级注入（就绪门禁层面的磁盘满已在
   issue 19 覆盖）；断电耐久属存储级验证（维持不做）；请求尝试身份与流式检查点维持原范围决定；
   浏览器提示未验。
+- 2026-10-01（下午）：**运行级磁盘写满注入完成（WSL，隔离库 + tmpfs，真实链路全跑）**（批次
+  [e1-wsl-batch-registry.json](../audit/e1-wsl-batch-registry.json)，证据
+  [f06-run-disk-full.json](../audit/f06-run-disk-full.json)）。隔离库 `apodex_f06_mem` + 容器
+  `f06run`（`/data/runs` 用 `size=2m` tmpfs）+ 本地 mock（`MOCK_MODE=tool, DELAY=30s`），在 run
+  在飞期间 `dd` 填到真实 ENOSPC（后续 1 字节写返回 0）。
+  **结论**：① **在飞 run 不挂起**——ENOSPC 被非 critical observer 隔离吞掉（`trajectory.py` 各
+  hook WARNING 一次后转 DEBUG），run 仍正常收口 `stopped/no_tool`、`finished_at` 落账；
+  `/trace` 完整性判定**不误报**（真失败的读 `unavailable`、幸存的读 `complete`）。
+  ② 但**发现三处新缺陷**（详见工单 [22](22-disk-full-queue-wedge.md)）：
+  **F06-RUN-1（高）**：满盘时**新提交**的 run 返回 202 `queued` 后**永久卡在 queued**——
+  [orchestrator.py](../../../server/orchestrator.py#L877-L880) `history_path.write_text` 抛 ENOSPC，
+  被 [`_drain_session`](../../../server/orchestrator.py#L578-L590)（F15 路径）吞掉并 "continuing queue"，
+  run 行**无终态**（`finished_at=None`），释放空间后仍 queued，只有重启孤儿清扫才关闭；根因是
+  提交路径不消费 `/readyz`（此时 `/readyz` 正确 503 `data_root_unwritable`）。
+  **F06-RUN-2（中）**：轨迹/用量丢失**静默无运行级信号**——run 行呈现为正常 `stopped` 且
+  `final_answer` 非空，但 `react_agent.jsonl` 0 字节、`/trace` `unavailable`、usage
+  `{llm_calls:0,status:unavailable}`（模型实际被调 2 次），原因只在 engine.log 留一条 WARNING。
+  **F06-RUN-3（低）**：部分写入留下陈旧/孤立 0 字节侧车（`react_agent.json` 停在 start 快照、
+  `.json.tmp`、`.messages.spool`、`summary.json` 0 字节——`server/worker.py` 的 summary 写未加保护）。
+  **仍未完成**：断电耐久（存储级，维持不做）、请求尝试身份、流式检查点、真实供应商格式差异；
+  F06-RUN-1/2/3 待修。`Status 维持 ready-for-human`。

@@ -1,0 +1,46 @@
+{
+  "artifact": "F19 image-rollback drill (isolated DB)",
+  "batch": "E1-20261001-WSL",
+  "executed_at": "2026-10-01",
+  "operator": "agent",
+  "environment": {
+    "engine": "Docker Desktop (WSL2), Kernel 6.6.114.1-microsoft-standard-WSL2",
+    "host_gateway": "host.docker.internal resolves (容器→宿主 pg 可达)",
+    "database": "隔离库 apodex_f19_drill（宿主 pg 容器；不触碰业务库 apodex）",
+    "runs_root": "/tmp/f19drill-runs（容器内一次性路径）",
+    "images": {
+      "new": "frontier-agent-web:head (036bbd787437, 含 84258f3 探针修复 + 38d73bc external_id)",
+      "previous": "frontier-agent-web:f19 (8dee765cb888, 10:02 构建, 修复前)"
+    },
+    "startup_env": "SERVER_DEBUG=false, SERVER_MASTER_KEY/SERVER_JWT_SECRET=合成值（仅本次隔离库），SERVER_DATABASE_URL=隔离库"
+  },
+  "steps": [
+    {
+      "id": "D1",
+      "desc": "新镜像（head）entrypoint：alembic upgrade head 迁移 + uvicorn 服务",
+      "fresh_db": "alembic_version 表不存在（空库）",
+      "result": "迁移 0001→head；/healthz=200；/readyz=200 {\"status\":\"ok\"}；alembic_version=0004_control_records",
+      "verdict": "pass"
+    },
+    {
+      "id": "D2",
+      "desc": "上一个镜像（f19）对同一库启动：迁移应幂等",
+      "result": "/healthz=200；/readyz=200；alembic_version 仍为 0004_control_records（未变动）",
+      "verdict": "pass（幂等）"
+    },
+    {
+      "id": "D3a",
+      "desc": "库版本超前（UPDATE alembic_version='zz_future'）后，上一个镜像走 entrypoint 路径",
+      "result": "exit=255；`FAILED: Can't locate revision identified by 'zz_future'` / `ERROR [alembic.util.messaging]`",
+      "verdict": "pass（迁移步骤失败阻断，容器不启动）"
+    },
+    {
+      "id": "D3b",
+      "desc": "同一超前库，新镜像跳过 entrypoint 直接 uvicorn（直接检验就绪门禁）",
+      "result": "exit=3；`server.readiness.StorageNotReadyError: storage not ready: schema_ahead ({'expected_head': '0004_control_records', 'current_revision': 'zz_future'}); run alembic upgrade head ...`",
+      "verdict": "pass（门禁在 schema 超前时拒绝服务）"
+    }
+  ],
+  "note": "首轮复跑曾因未设 SERVER_JWT_SECRET 被 check_startup_secrets 拦截（exit 非门禁所致），已补齐合成 JWT 后重跑并取得上述有效结果；结论：entrypoint 显式迁移 + 就绪门禁双层防护均按设计工作。",
+  "report_ref": "docs/plan/web-runtime-trace-repair-report.md §8 F19 段「未完成：旧版镜像回退演练实测」已由本文件闭环"
+}

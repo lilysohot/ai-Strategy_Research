@@ -645,8 +645,12 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 [工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收已于 2026-10-01 完成**（工单
 [05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md) 已 closed：验收中发现并修复一处"已结束 Run 的轨迹页只渲染元信息框、0 条记录"的渲染缺陷）、F06 的**真实故障注入**（SIGKILL 已于 2026-10-01 在 WSL 真实注入通过：mock 流中窗口 kill -9 worker →
 API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`，协作式取消已在 E1 首批覆盖，见
-[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)）尚余**运行级磁盘写满、
-断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
+[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)）；**运行级磁盘写满已于
+2026-10-01 下午完成**（WSL 隔离库 + tmpfs 真实 ENOSPC：在飞 run 不挂起、`/trace` 判定不误报，
+但**发现 3 处新缺陷**——满盘时新提交的 run 永久卡 `queued`（[orchestrator.py](../../server/orchestrator.py#L877-L880)
+写 history 抛 ENOSPC 被 `_drain_session` 吞掉且无终态）、轨迹/用量丢失静默、0 字节侧车残留，见
+[工单 22](../../.scratch/web-runtime-trace-hardening/issues/22-disk-full-queue-wedge.md)）；
+尚余**断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
 **运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**
 （联合恢复演练与孤儿处置已于 2026-09-30 完成，见
 [工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01
@@ -668,7 +672,14 @@ API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`
 `probe_data_root` 改写真实字节 `b"readyz-probe"`，回归 `test_data_root_probe_writes_real_bytes`，套件 16/16）、
 compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内实测 healthy；`caddy` 以
 `depends_on: condition: service_healthy` 等待门禁通过后再接流量）。
-**未完成**：旧版镜像回退演练实测（修复后镜像未重建，本轮复测经 bind-mount）。**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
+**已闭环（2026-10-01 下午）**：镜像已重建（`frontier-agent-web:head`，镜像内断言探针写真实字节、
+展示投影含 `external_id`）；**旧版镜像回退演练实测通过**（新镜像 entrypoint 迁移空库→`0004`、`/healthz` 200
+`/readyz {"status":"ok"}`；上一镜像对同库迁移幂等；schema 超前 `zz_future` 时上一镜像 entrypoint `exit=255`
+（alembic 无法定位 revision）、新镜像直起 uvicorn `exit=3` `StorageNotReadyError: schema_ahead`，见
+`audit/f19-rollback-drill.json`）；**整栈 compose 就绪门禁实测通过**（不可达库时 compose 报
+`dependency failed to start: container e1wsl-api is unhealthy`、`caddy` 容器 `created` 但未启动、站点不可达；
+空库就绪后 api `healthy` → caddy 启动 → HTTPS 根 200 且返回前端 `index.html` 标题，见 `audit/f19-stack-gating.json`）。
+**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
 → 部署前必须先迁移。
 
 **F21 已于 2026-10-01 实现**（契约与验收见

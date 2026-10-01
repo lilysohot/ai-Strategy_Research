@@ -440,6 +440,11 @@ uv run python scripts/run_retention.py orphans \
 - **2026-10-01 收尾（用户确认后接线）**：`caddy` 已增加 `depends_on: api: {condition: service_healthy}`
   ——`/readyz` 不是 200 时站点不被放行，完成标准后半句"compose 的 `depends_on: service_healthy`
   语义与之一致"达成（`docker compose --profile full config` 解析出该依赖）。**仍未完成**：真实 PG 重启时序。
+- **2026-10-01 整栈实测**（隔离项目 `e1wsl`，端口 8125/8199/8444 避让）：**反例**——不可达库时 compose 报
+  `dependency failed to start: container e1wsl-api is unhealthy`、`caddy` 容器 `State=created` **未启动**、
+  站点不可达；**正例**——空库就绪后 api `healthy` → caddy `Started` → `https://localhost:8444/`（--resolve）
+  **200** 且返回前端 `<title>投研 Agent 平台</title>`；业务库全程 `0002_run_usage`。
+  见 [audit/f19-stack-gating.json](../../.scratch/web-runtime-trace-hardening/audit/f19-stack-gating.json)。
 
 ---
 

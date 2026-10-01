@@ -65,3 +65,20 @@ Requirements: PR-GOV-01
   （业务库 0002 → `/readyz` 503 `schema_behind`）已在 WSL 原样复现。**仍未完成**：旧版镜像
   回退演练实测（文档规则已就绪）；修复后镜像未重建（复测用 bind-mount 补丁文件，发布前需
   按常规构建一次）。
+- 2026-10-01（下午）：**上条「仍未完成」三项全部闭环**。
+  ① **镜像重建**：按常规构建 `frontier-agent-web:head`（`036bbd787437`，含 `84258f3` 探针修复与 `38d73bc`
+  展示投影 `external_id`）；镜像内断言 `probe writes real bytes: True`、`control_to_dict has external_id: True`。
+  ② **旧版镜像回退演练实测**（隔离库 `apodex_f19_drill`）：新镜像 entrypoint 迁移空库→`0004`、`/healthz` 200、
+  `/readyz {"status":"ok"}`；上一镜像 `frontier-agent-web:f19` 对同库启动迁移**幂等**（版本不变）；
+  将 `alembic_version` 置 `zz_future`（schema 超前）后——上一镜像 entrypoint **exit 255**（`Can't locate
+  revision identified by 'zz_future'`）、新镜像跳过 entrypoint 直起 uvicorn **exit 3**
+  `StorageNotReadyError: schema_ahead ({expected_head: 0004_control_records, current_revision: zz_future})`。
+  见 `audit/f19-rollback-drill.json`。
+  ③ **整栈 compose 就绪门禁实测**（隔离项目 `e1wsl`，端口 8125/8199/8444 避让）：**反例**——
+  `SERVER_DATABASE_URL_DOCKER` 指向不存在的库 → entrypoint 在 alembic 处失败、compose 报
+  `dependency failed to start: container e1wsl-api is unhealthy`、`caddy` 容器 `State=created` **未启动**、
+  站点不可达；**正例**——空库 `apodex_f19_stack` → entrypoint 迁移到 `0004`、api `healthy`、caddy
+  `Starting→Started`、`https://localhost:8444/`（--resolve）**200** 且返回 `<title>投研 Agent 平台</title>`。
+  业务库 `apodex` 全程 `0002_run_usage`（每轮前后核对），隔离资源已 `compose down` 清理。见
+  `audit/f19-stack-gating.json`。
+  **仍未完成（非 F19 范围）**：业务库正式迁移（`0003`/`0004` 仍未应用，属部署步骤）。

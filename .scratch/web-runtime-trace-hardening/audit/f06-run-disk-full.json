@@ -1,0 +1,135 @@
+{
+  "check": "F06 — run-level behaviour when the run-data root fills up MID-RUN",
+  "batch": "E3 storage-level drill (run-level, previously deferred)",
+  "executed_at": "2026-10-01T14:33–14:39 Asia/Shanghai (UTC 06:33–06:39)",
+  "operator": "agent",
+  "verdict": "defect found",
+  "summary": "A run already in flight when the root fills does NOT hang: it closes in the DB (stopped) instead of wedging, and the API stays alive (/healthz 200, /readyz 503 data_root_unwritable). But (1) all TrajectoryFileObserver writes fail with ENOSPC and are swallowed by the non-critical-observer isolation, so the trajectory degrades SILENTLY (jsonl empty -> /trace 'unavailable'; the JSON snapshot + summary.json silently corrupt), and (2) a run SUBMITTED while the root is full is accepted (202 queued) and then wedged at 'queued' FOREVER, because _launch's history_path.write_text raises ENOSPC and _drain_session swallows it ('continuing queue') without closing the run row.",
+
+  "environment": {
+    "host": "WSL Ubuntu (Linux), /home/administrator/FrontierAgent",
+    "image": "frontier-agent-web:head (id 036bbd787437)",
+    "api_container": "f06run — docker run, entrypoint deploy/entrypoint.web.sh (alembic upgrade head + uvicorn :8000), published on host :18130",
+    "runs_root": "tmpfs mounted at /data/runs inside the container (size=2m,mode=777) so it can be genuinely filled",
+    "isolated_db": "apodex_f06_mem (created for this drill only; migrated to head by the entrypoint, never the business db)",
+    "business_db": "apodex — asserted at alembic 0002_run_usage before and after; never migrated",
+    "mock_llm": ".scratch/web-runtime-trace-hardening/e1/mock_model.py bound 0.0.0.0:8899, MOCK_MODE=tool MOCK_DELAY_S=30, MOCK_LOG=/tmp/f06/mock-requests.jsonl; container reaches it at http://host.docker.internal:8899/v1",
+    "secrets": "synthetic throwaway values only (SERVER_MASTER_KEY=f06-synth-master-key-not-secret, SERVER_JWT_SECRET=f06-synth-jwt-secret-not-secret, api_key=sk-synth-not-secret)",
+    "host_ports_8000_8080": "untouched; drill used :18130 and :8899 only"
+  },
+
+  "exact_commands": [
+    "docker exec pg psql -U postgres -c \"CREATE DATABASE apodex_f06_mem;\"",
+    "docker run -d --name f06run --tmpfs /data/runs:size=2m,mode=777 -e SERVER_DEBUG=true -e SERVER_MASTER_KEY=<syn> -e SERVER_JWT_SECRET=<syn> -e SERVER_DATABASE_URL=postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex_f06_mem -e SERVER_RUNS_ROOT=/data/runs -e FRONTIER_AGENT_CONFIG=/app/config/config.yaml -e FRONTIER_AGENT_ENV=/app/.env -v /home/administrator/FrontierAgent/config:/app/config:ro -v /home/administrator/FrontierAgent/.env:/app/.env:ro -p 18130:8000 frontier-agent-web:head",
+    "MOCK_HOST=0.0.0.0 MOCK_PORT=8899 MOCK_MODE=tool MOCK_DELAY_S=30 MOCK_LOG=/tmp/f06/mock-requests.jsonl python3 mock_model.py",
+    "curl -X POST $B/api/auth/register {username:f06run_a_20261001,...}",
+    "curl -X POST $B/api/auth/login   -> Bearer token",
+    "curl -X POST $B/api/models {name:f06-mock, base_url:http://host.docker.internal:8899/v1, model:mock-model, is_default:true}",
+    "curl -X POST $B/api/sessions {title:'f06 disk-full drill'} -> session 5b5df800-7bd1-4eba-8f52-7109049857ba",
+    "curl -X POST $B/api/runs {message:'f06 disk full probe', session_id:<sid>} -> run1 202 queued",
+    "docker exec f06run sh -c 'dd if=/dev/zero of=/data/runs/fill bs=1k count=100000'   # during run1 (fill at 06:33:50, before the 30s LLM reply)",
+    "docker exec f06run sh -c 'dd if=/dev/zero of=/data/runs/fill2 bs=1 count=100000'  # during run3, to consume the last bytes",
+    "curl $B/api/runs/{id} ; curl $B/api/runs/{id}/trace ; curl $B/healthz ; curl $B/readyz ; docker logs f06run ; cat <run_dir>/run/engine.log"
+  ],
+
+  "observation_a_trajectory_writes": {
+    "mechanism": "frontier_agent/components/observers/trajectory.py TrajectoryFileObserver has critical=False. frontier_agent/core/loop_types.py notify_observers() runs non-critical hooks as background tasks and isolates their exceptions (_handle_observer_error: WARNING on the first failure, DEBUG afterwards). An ENOSPC therefore NEVER propagates to the agent loop and NEVER aborts the run.",
+    "engine_log_verbatim_errors": [
+      "06:37:44 WARNING ... Observer TrajectoryFileObserver.on_loop_start raised: [Errno 28] No space left on device — subsequent failures DEBUG only (trajectory.py:475 -> _write_jsonl:261)",
+      "06:34:01 WARNING ... Observer TrajectoryFileObserver.on_llm_response raised: [Errno 28] ... (trajectory.py:523 -> _append_message:289)",
+      "06:34:01 WARNING ... Observer TrajectoryFileObserver.on_tool_result raised: [Errno 28] ... (trajectory.py:597 -> _append_message:289)",
+      "06:34:31 WARNING ... Observer TrajectoryFileObserver.on_loop_end raised: [Errno 28] ... (trajectory.py:649 -> _flush_json:372 -> _write_envelope:322), then _close_message_spool:294"
+    ],
+    "run1_filled_after_start_with_residual_space": {
+      "react_agent.jsonl": "8103 B, 5 valid lines (start,llm,result,llm,end) — the append path still accepted writes",
+      "react_agent.json": "STALE, mtime 06:33:31 (start-only snapshot); the terminal JSON flush failed",
+      "leftovers": "0-byte react_agent.json.tmp and 0-byte react_agent.messages.spool",
+      "summary.json": "0 bytes — worker's (run_root/'summary.json').write_text also raised ENOSPC (worker.py:467, unguarded)"
+    },
+    "run3_filled_before_any_record": {
+      "react_agent.jsonl": "0 bytes (on_loop_start itself failed, so even the 'start' record is missing)",
+      "trace": "completeness 'unavailable', records=0",
+      "usage": "usage_json = {llm_calls:0, status:'unavailable'} — token usage LOST even though the model was called twice",
+      "summary.json": "0 bytes"
+    }
+  },
+
+  "observation_b_run_closure_db": {
+    "run1_in_flight_when_filled": {
+      "run_id": "26d3f1f79bcc44ef8cac9444af3f4eaf",
+      "final_status": "stopped",
+      "stopped_by": "no_tool",
+      "finished_at": "2026-10-01T06:34:31.705483+00:00",
+      "final_answer": "E1 mock model: synthetic answer (no external provider was called).",
+      "usage": "{prompt:16,completion:16,total:32,llm_calls:2,status:complete}",
+      "closure": "CLOSED normally (did not hang); ENOSPC did not reach the run row"
+    },
+    "run2_submitted_while_full": {
+      "run_id": "0ac4fb6974d345acacfe1678908bfa1d",
+      "submit_response": "202 {status: queued}",
+      "final_status": "queued (STUCK — finished_at=None, error=None, stopped_by=None)",
+      "failure_point": "orchestrator.py:880 history_path.write_text(history) -> OSError [Errno 28] No space left on device",
+      "exception_handling": "orchestrator.py:579 _drain_session catches it, logs 'run launch failed for session=... run_id=...; continuing queue', and moves on — the runs row is left queued with no worker and no terminal write",
+      "persisted": "stayed 'queued' even after the tmpfs was freed and /readyz returned to ok — the drain task already consumed the item; only a restart orphan sweep would close it",
+      "note": "the submit route does not consult /readyz; it accepts work the process cannot persist"
+    },
+    "run3_in_flight_when_filled": {
+      "run_id": "347871d7de064fb2a211998372b5529c",
+      "final_status": "stopped",
+      "stopped_by": "no_tool",
+      "finished_at": "2026-10-01T06:38:44.613996+00:00",
+      "closure": "CLOSED normally (did not hang) despite every trajectory write failing"
+    }
+  },
+
+  "observation_c_trace_completeness": {
+    "run1": "complete (valid_lines=5, trailing_partial_line=false, corrupt_lines=0) — the .jsonl genuinely held every record; note the contract only inspects .jsonl, so it reports complete while the sibling .json snapshot was silently corrupt/stale",
+    "run2": "unavailable (records=0, reason '轨迹文件不存在（运行可能未产生输出）')",
+    "run3": "unavailable (valid_lines=0, reason '轨迹文件为空（运行尚未写入记录）')",
+    "assessment": "the completeness verdict never falsely claims 'complete': where the trajectory truly failed it reads unavailable / where it survived it reads complete. It does NOT surface the corrupt .json snapshot / 0-byte summary.json degradation, but that is outside its stated contract."
+  },
+
+  "observation_d_api_liveness": {
+    "throughout_fill": "GET /healthz = 200 (liveness never lost)",
+    "while_full": "GET /readyz = 503 {\"status\":\"not_ready\",\"reasons\":[\"data_root_unwritable\"]} — fail-closed and correct",
+    "after_freeing": "GET /readyz = 200 {\"status\":\"ok\"} — recovers, not permanently latched",
+    "gap": "the writable-root gate exists on /readyz but is NOT enforced on POST /api/runs, so a full root still yields a 202 + a wedged queued run"
+  },
+
+  "defects_found": [
+    {
+      "id": "F06-RUN-1",
+      "severity": "high",
+      "axis": "Run closure in DB (b)",
+      "title": "A run submitted while the run-data root is full is accepted (202 queued) then wedged at 'queued' forever",
+      "evidence": "run_id 0ac4fb6974d345acacfe1678908bfa1d: _launch -> history_path.write_text raised ENOSPC; _drain_session swallowed it ('continuing queue'); the runs row never got a terminal status and stayed queued even after space returned",
+      "impact": "the UI shows a run that can never start and never ends; the user is never told the root is full even though /readyz said so"
+    },
+    {
+      "id": "F06-RUN-2",
+      "severity": "medium",
+      "axis": "Trajectory writes (a)",
+      "title": "Trajectory loss on a full root is silent — no run-level signal",
+      "evidence": "run3: every TrajectoryFileObserver hook raised ENOSPC and was swallowed (non-critical observer); react_agent.jsonl ended 0 bytes, /trace 'unavailable', usage 'unavailable' (llm_calls:0) while the run itself closed as a normal 'stopped/no_tool' run with a non-null final_answer",
+      "impact": "the run row presents a successful-looking stopped run whose trace and usage are nevertheless gone; only engine.log carries the reason (one WARNING)"
+    },
+    {
+      "id": "F06-RUN-3",
+      "severity": "low",
+      "axis": "Trajectory artifacts (a)",
+      "title": "Silent corruption / orphaned 0-byte sidecars on partial writes",
+      "evidence": "run1: stale react_agent.json (start-only) plus 0-byte react_agent.json.tmp and react_agent.messages.spool; run1 & run3: 0-byte summary.json (worker.py:467 write is unguarded)"
+    }
+  ],
+
+  "raw_observations": {
+    "df_full": "tmpfs 2048 2048 0 100% /data/runs ; dd bs=1k -> '2004+0 records out' / a follow-up 1-byte-class write -> '0 bytes copied' (hard ENOSPC)",
+    "mock_log": "/tmp/f06/mock-requests.jsonl recorded the chat requests (client 127.0.0.1 = container via host gateway; reply_kind=tool)",
+    "business_db_check": {
+      "before": "docker exec pg psql -U postgres -d apodex -c 'select version_num from alembic_version;' -> 0002_run_usage",
+      "after": "0002_run_usage (asserted post-cleanup)"
+    }
+  },
+
+  "cleanup": "performed: container f06run removed; tmpfs discarded with it; DROP DATABASE apodex_f06_mem; mock process killed; /tmp/f06 files removed; host ports 8000/8080 untouched; business db apodex left at 0002_run_usage"
+}

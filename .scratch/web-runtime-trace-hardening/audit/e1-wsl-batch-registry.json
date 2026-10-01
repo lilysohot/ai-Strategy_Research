@@ -4,7 +4,7 @@
   "purpose": "在 WSL（POSIX）环境复验 Windows 本机被阻塞的 E1 结转项：产物索引/下载/diff/回滚、F08 越权动态复验、POSIX 依赖用例；并执行 F06 SIGKILL 注入与 F19 只读挂载/磁盘满/compose service_healthy。",
   "registered_at": "2026-10-01",
   "operator": "agent",
-  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）",
+  "status": "已完成——E1 结转全部闭环；浏览器 DOM 层验收随后由上游完成（工单 05 closed，2026-10-01）；真实供应商格式差异仍待用户批准；注入中发现并修复 F19 探针缺陷（0 字节写）；（2026-10-01 下午）四项 WSL 收尾 w-1 镜像重建、w-2 旧版镜像回退演练、w-3 整栈 compose 就绪门禁已闭环；w-4 F06 运行级磁盘写满完成并**发现 3 处缺陷**（满盘时新提交 run 永久卡 queued 等，见 audit/f06-run-disk-full.json，已开票 22）",
   "environment": {
     "host": "WSL Ubuntu（Linux）, /home/administrator/FrontierAgent",
     "code_head": "批次执行时点 6435f73（x-画面更新，含 F08–F21 全部修复）；本轮改动（server/readiness.py 探针修复、tests/test_web_f19_schema_gate.py 回归、deploy/docker-compose.yml healthcheck + caddy 依赖、e1/mock_model.py 环境覆盖）执行时**尚未提交**（2026-10-01 回溯核正），随后已提交为 **84258f3**（分支 x-web改造）；登记文件随 339e562 入库，工作区其后并入 555c4a0（合并 x-画面更新，含上游 38d73bc 的 F21 external_id/刷新恢复修复与 F05 浏览器 DOM 验收 closed）",
@@ -43,10 +43,20 @@
     {"check": "F19 部署门禁真链路（业务库 0002）", "result": "/healthz 200、/readyz 503 schema_behind——与『部署前必须先迁移』结论一致；本轮未做业务库迁移"},
     {"check": "回溯核验（2026-10-01，独立复跑 + 只读直查业务库）", "result": "① 复跑 POSIX 套件 52 passed（4 项定向 + diff/revert/artifacts），与登记 9/9 + 43/43 一致；② 直查 control_records 仅 2 行（expired/timeout、adopted/user）——原记「3 条」已核正；③ F15 usage=complete（Run1/Run2；Run3 partial）、F20 started_at 非空且 llm_snapshot=user-config，与登记一致；④ control_to_dict 投影**当时**确不含 external_id（该观察随后由 38d73bc 修复：投影已暴露该字段）；⑤ 回溯处置：登记两处失真已核正（approval 记录 3→2 条、code_head 非 HEAD 内容），本轮代码改动已提交 84258f3，`caddy` 已接 `depends_on: api: service_healthy`"}
   ],
+  "wsl_closure_20261001_pm": {
+    "purpose": "用户批准的四项 WSL 收尾（w-1..w-4）：镜像重建、旧版镜像回退演练、整栈 compose 就绪门禁、F06 运行级磁盘写满。",
+    "code_head": "cd59cc7（工作区干净）",
+    "items": [
+      {"id": "w-1", "item": "镜像重建（含 84258f3 探针修复 + 38d73bc external_id）", "result": "frontier-agent-web:head (036bbd787437) 构建成功；镜像内断言 `probe writes real bytes: True`、`control_to_dict has external_id: True`", "verdict": "pass"},
+      {"id": "w-2", "item": "旧版镜像回退演练（同一隔离库）", "result": "D1 新镜像 entrypoint 迁移空库→0004，/healthz 200 /readyz {\"status\":\"ok\"}；D2 上一镜像同库迁移幂等（版本不变）；D3a 版本超前(zz_future) 上一镜像 entrypoint exit=255（alembic Can't locate revision）；D3b 新镜像直起 uvicorn exit=3（StorageNotReadyError schema_ahead）", "evidence": "audit/f19-rollback-drill.json", "verdict": "pass"},
+      {"id": "w-3", "item": "整栈 compose 就绪门禁（Caddy 不放行 / 放行）", "result": "反例：不可达库 → compose `dependency failed to start: container e1wsl-api is unhealthy`，caddy State=created 未启动，站点 000；正例：空库 → api healthy → caddy Started → HTTPS 根 200 且 <title>投研 Agent 平台</title>；业务库全程 0002", "evidence": "audit/f19-stack-gating.json", "verdict": "pass"},
+      {"id": "w-4", "item": "F06 运行级磁盘写满（轨迹写入与 Run 收口）", "result": "在飞 run 不挂起（ENOSPC 被非 critical observer 吞掉，仍收口 stopped/no_tool；/trace 不误报）；**发现 3 处缺陷**：F06-RUN-1（高）满盘时新提交 run 永久卡 queued（orchestrator.py:880 写 history 抛 ENOSPC → _drain_session 吞掉、无终态）、F06-RUN-2（中）轨迹/用量丢失静默、F06-RUN-3（低）0 字节侧车残留；API 全程 /healthz 200、满盘 /readyz 503 data_root_unwritable", "evidence": "audit/f06-run-disk-full.json；工单 22", "verdict": "defect found（已开票 22）"}
+    ]
+  },
   "deferred": [
     {"item": "浏览器 DOM 层验收（F05/F10/F11/F21 刷新恢复）", "blocked_by": "非 POSIX 范围；需浏览器自动化或人工复核", "recheck_in": "另行安排", "resolved_at": "2026-10-01（工单 05 closed；F21 刷新恢复与 external_id 由 38d73bc 修复并浏览器闭环复验）"},
     {"item": "真实供应商返回格式差异", "blocked_by": "需用户批准并单独登记用量", "recheck_in": "另行批准"},
-    {"item": "F06 磁盘写满时的轨迹写入行为（运行级）与断电耐久", "blocked_by": "断电耐久属存储级验证，普通注入不可替代；运行级磁盘满未单独演练", "recheck_in": "E3 存储级专项"},
+    {"item": "F06 断电耐久（存储级）", "blocked_by": "断电耐久属存储级验证，普通注入不可替代", "recheck_in": "E3 存储级专项", "note": "运行级磁盘写满已于 2026-10-01 下午完成（见 wsl_closure_20261001_pm.w-4 与工单 22，发现 3 处缺陷）"},
     {"item": "F21 /controls 投影缺 external_id", "note": "刷新页从 GET /controls 重建待审批弹窗后无法直接调 approve（approval_id 不可得）", "recheck_in": "issue 21", "resolved_at": "2026-10-01（38d73bc：投影暴露 external_id + 前端 resumeForSession，浏览器闭环复验 Run 0c65cbf3 通过）"}
   ],
   "cleanup_list": {

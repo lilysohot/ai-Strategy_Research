@@ -1,0 +1,41 @@
+{
+  "artifact": "F19/T8 full-stack compose gating (negative + positive)",
+  "batch": "E1-20261001-WSL",
+  "executed_at": "2026-10-01",
+  "operator": "agent",
+  "environment": {
+    "engine": "Docker Desktop (WSL2)",
+    "compose_project": "e1wsl (隔离项目名，卷与容器均隔离)",
+    "ports": {"api_debug": 8125, "caddy_http": 8199, "caddy_https": 8444, "note": "避让用户已占用的 8000/8080"},
+    "images": ["e1wsl-api:latest (Dockerfile.web runtime)", "e1wsl-frontend:latest (Dockerfile.frontend)"],
+    "database": "正例用一次性空库 apodex_f19_stack；反例指向不存在的库 nonexistent_db；业务库 apodex 全程未被触碰",
+    "override_note": "`.env` 自带 SERVER_DATABASE_URL_DOCKER=.../apodex（业务库），故必须在 shell 显式覆盖，否则 entrypoint 会对业务库执行 alembic upgrade head"
+  },
+  "negative_case": {
+    "setup": "SERVER_DATABASE_URL_DOCKER=.../nonexistent_db compose up -d",
+    "observed": [
+      "entrypoint: asyncpg InvalidCatalogNameError: database \"nonexistent_db\" does not exist → alembic 失败，uvicorn 未起",
+      "compose: `Container e1wsl-api Error dependency api failed to start` / `dependency failed to start: container e1wsl-api is unhealthy`",
+      "api: running health=starting（entrypoint 失败后处于重启态，从未 healthy）",
+      "caddy: 容器已创建但 State=created（**未启动**，depends_on service_healthy 未满足）",
+      "site http://127.0.0.1:8199/ → 000（不可达）"
+    ],
+    "verdict": "pass —— 存储未就绪时 Caddy 不放行（容器不启动、站点不可达）"
+  },
+  "positive_case": {
+    "setup": "SERVER_DATABASE_URL_DOCKER=.../apodex_f19_stack（空库）compose up -d",
+    "observed": [
+      "entrypoint 迁移空库 → alembic_version=0004_control_records",
+      "api: healthy（healthcheck 命中 /readyz 200）",
+      "caddy: Starting → Started（depends_on service_healthy 满足后启动）",
+      "http://127.0.0.1:8199/ → 308（Caddy 自动 HTTP→HTTPS 跳转，SITE_ADDRESS=localhost）",
+      "https://localhost:8444/（--resolve）→ **200**，<title>投研 Agent 平台</title>（静态 bundle 经 Caddy 正常服务）"
+    ],
+    "verdict": "pass —— 就绪后 Caddy 放行并正常服务前端 bundle"
+  },
+  "invariants": {
+    "business_db": "全程 alembic_version=0002_run_usage（每次用例前后核对，未被迁移）",
+    "teardown": "每轮 `compose -p e1wsl down --remove-orphans` 已执行"
+  },
+  "report_ref": "docs/plan/web-runtime-trace-repair-report.md §8 F19 段；工单 19；接入 web-platform-hardening.md T8 完成标准"
+}
