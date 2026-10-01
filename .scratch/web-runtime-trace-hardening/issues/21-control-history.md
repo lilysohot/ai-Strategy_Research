@@ -93,4 +93,9 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   `control_to_dict` 暴露 `external_id`、前端 `resumeForSession` 重建弹窗并优先使用该字段，浏览器闭环
   （Run 0c65cbf3）复验通过；「浏览器 DOM 层复核」亦已完成（工单 05 closed）。本条保留为"发现时点"记录。
   当前仍为 `ready-for-human`，剩余：业务库迁移、真实重启后观测。
+- 2026-10-01（晚）：**业务库迁移完成**——`apodex` 已至 `0004_control_records`（head）：0003 经
+  `alembic upgrade 0003_turn_seq_unique`（无重复 `(session_id, seq)`）；0004 的 `control_records` 因
+  live API `create_all` 已建（含本批 2 行审批记录），核对列/索引一致后 `alembic stamp 0004`；迁移前
+  `pg_dump` 备份（`~/backups/apodex-20261001-161402.sql`）；live API `/readyz` 翻绿 200。
+  **剩余**：真实重启后观测（API 进程重启后待审批语义与 F09 多进程盲区复核）。
 

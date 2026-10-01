@@ -682,15 +682,19 @@ compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内�
 `audit/f19-rollback-drill.json`）；**整栈 compose 就绪门禁实测通过**（不可达库时 compose 报
 `dependency failed to start: container e1wsl-api is unhealthy`、`caddy` 容器 `created` 但未启动、站点不可达；
 空库就绪后 api `healthy` → caddy 启动 → HTTPS 根 200 且返回前端 `index.html` 标题，见 `audit/f19-stack-gating.json`）。
-**只读核对**：业务库 `apodex` 仍为 `0002_run_usage`（head `0004_control_records`）
-→ 部署前必须先迁移。
+**已闭环（2026-10-01 晚）**：业务库 `apodex` 已迁移至 **`0004_control_records`（head）**——
+0003 走 `alembic upgrade 0003_turn_seq_unique`（预检无重复 `(session_id, seq)` 后建唯一索引）；
+0004 的 `control_records` 表因 live API 的 `create_all` 已先建出（含 2 行 E1-WSL 批次审批记录），
+已核对列与索引与迁移完全一致后 `alembic stamp 0004_control_records`（不重建、不丢数据）；
+迁移前后 `runs=757/turns=1098/sessions=142/users=31` 全不变，live API `/readyz` 由 503 `schema_behind` 翻绿
+**`{"status":"ok"}`**。迁移前已 `pg_dump` 备份（`~/backups/apodex-20261001-161402.sql`）。
 
 **F21 已于 2026-10-01 实现**（契约与验收见
 [f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，
 工单 [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) 转 `ready-for-human`）：
 `control_records` 表 + 状态机 + 终态收口 + 生效 steer 写成 `turns` + `GET /controls` + 前端刷新恢复；
-**未完成**：业务库 `apodex` 尚未执行 `alembic upgrade head`（`0003`/`0004` 均未应用，本轮验证全在隔离
-SQLite/ASGI 内，业务库未触碰）、真实重启后观测（浏览器 DOM 层复核已于 2026-10-01 完成，见工单 05/21）。另修两处既有缺陷：隔离审计夹具随 F01
+**未完成**：真实重启后观测（浏览器 DOM 层复核已于 2026-10-01 完成，见工单 05/21；业务库迁移已于
+2026-10-01 晚完成——见上方 F19 段「已闭环」）。另修两处既有缺陷：隔离审计夹具随 F01
 失效的 `uploads_root` 一行（曾使 24 个检查全部 setup ERROR）、`server/trajectory_status.py` 一处 SIM105 lint。
 2026-10-01 E1-WSL 批次补齐真链路证据：`pending → adopted/once`（审批后 `create_file` 真实落盘）与
 `pending → expired`（300s 超时 fail-closed，source=timeout 未被记成用户拒绝）均落 `control_records`；

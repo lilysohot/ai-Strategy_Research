@@ -81,4 +81,5 @@ Requirements: PR-GOV-01
   `Starting→Started`、`https://localhost:8444/`（--resolve）**200** 且返回 `<title>投研 Agent 平台</title>`。
   业务库 `apodex` 全程 `0002_run_usage`（每轮前后核对），隔离资源已 `compose down` 清理。见
   `audit/f19-stack-gating.json`。
-  **仍未完成（非 F19 范围）**：业务库正式迁移（`0003`/`0004` 仍未应用，属部署步骤）。
+  **仍未完成（非 F19 范围）**：业务库正式迁移——**已于 2026-10-01 晚完成**（`apodex` → `0004_control_records`，
+  0003 upgrade + 0004 stamp 因 create_all 已建表，备份 `~/backups/apodex-20261001-161402.sql`；live API `/readyz` 翻绿 200）。
