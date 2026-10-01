@@ -26,14 +26,16 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_PDF_REV = "reader-pdf-10"
+READER_PDF_REV = "reader-pdf-11"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
 _HEADING_MAX_CHARS = 80
 _COLUMN_GAP_RATIO = 0.12
 _MIN_GRID_LINES = 6
+_GRID_LINE_MIN_LEN = 40.0  # 图表刻度线/曲线碎片（通常 <40pt）不计为制表线
 _IMAGE_REGION_RATIO = 0.25  # 混合页大图缺口阈值（占页面积比例）
+_FULLPAGE_BG_RATIO = 0.95  # 面积≈整页的图像视为衬底背景图，不按大图缺口记账
 _MAX_HEADER_ROWS = 2  # 表格结构模型：最多识别 2 行表头（多级表头按层级展开）
 _MAX_LABEL_LINES = 2  # 超过两行通常是 find_tables 把整列数据折进了一个网格格
 _MAX_LABEL_CHARS = 80  # 结构标签只收紧凑标题；长文本仍完整保留在 raw_text
@@ -412,18 +414,38 @@ def _merge_lines(lines: list[_Line]) -> list[list[_Line]]:
 
 
 def _count_grid_lines(page: pymupdf.Page) -> int:
-    """统计近似水平/垂直的制表线数量（用于“有线无表”冲突检测）。"""
-    horizontal = vertical = 0
+    """统计近似水平/垂直的**长制表线**数量（用于“有线无表”冲突检测）。
+
+    图表（折线/柱状图）的坐标轴、刻度线和曲线碎片也是矢量线段，若只按
+    “横竖线段数量”计数会把图表页误判成“有线无表”缺口。这里只统计长度
+    超过 ``_GRID_LINE_MIN_LEN`` 的长线段，并要求它们**交叉成网**（横线与
+    竖线有足够交点）——真表格的边框/格线是互相交叉的，图表轴与刻度线
+    通常只沿单轴排列、交点稀少。
+    """
+    horizontal: list[tuple[float, float, float]] = []  # (x0, x1, y)
+    vertical: list[tuple[float, float, float]] = []  # (y0, y1, x)
     for drawing in page.get_drawings():
         for item in drawing.get("items", []):
             if item[0] != "l":
                 continue
             p1, p2 = item[1], item[2]
-            if abs(p1.y - p2.y) < 0.5 and abs(p1.x - p2.x) > 20:
-                horizontal += 1
-            elif abs(p1.x - p2.x) < 0.5 and abs(p1.y - p2.y) > 20:
-                vertical += 1
-    return horizontal + vertical if (horizontal >= 3 and vertical >= 3) else 0
+            if abs(p1.y - p2.y) < 0.5 and abs(p1.x - p2.x) > _GRID_LINE_MIN_LEN:
+                horizontal.append((min(p1.x, p2.x), max(p1.x, p2.x), p1.y))
+            elif abs(p1.x - p2.x) < 0.5 and abs(p1.y - p2.y) > _GRID_LINE_MIN_LEN:
+                vertical.append((min(p1.y, p2.y), max(p1.y, p2.y), p1.x))
+    if len(horizontal) < _MIN_GRID_LINES or len(vertical) < _MIN_GRID_LINES:
+        return 0
+    # 真网格：横线穿过竖线的跨度、竖线穿过横线的跨度——交叉点数至少等于
+    # 线数之和（图表轴/刻度线多为单轴排列，交叉远少于此）。
+    crossings = sum(
+        1
+        for hx0, hx1, hy in horizontal
+        for vy0, vy1, vx in vertical
+        if hx0 <= vx <= hx1 and vy0 <= hy <= vy1
+    )
+    if crossings < len(horizontal) + len(vertical):
+        return 0
+    return len(horizontal) + len(vertical)
 
 
 def _overlapping_row_indices(raw_rows: list[Any]) -> frozenset[int]:
@@ -962,6 +984,20 @@ def read_pdf(path: str | Path) -> ReaderResult:
                 for rect in page.get_image_rects(image[0]):
                     area = (rect.x1 - rect.x0) * (rect.y1 - rect.y0)
                     if page_area <= 0:
+                        continue
+                    # 整页背景图/水印：面积≈页面的图像是衬底，不遮挡其上的文字层，
+                    # 不是“文字层未覆盖的大图区”。若把它记为大图缺口，带背景图的
+                    # 研报会被整篇阻断（E6 M2 每页均触发）。
+                    if area >= page_area * _FULLPAGE_BG_RATIO:
+                        issues.append(
+                            ReaderIssue(
+                                code="image_region_small",
+                                location=f"page:{page_no}",
+                                detail=f"整页背景图 ({rect.x0:.0f},{rect.y0:.0f},"
+                                f"{rect.x1:.0f},{rect.y1:.0f}) 占页面 {area / page_area:.0%}，"
+                                "为页面衬底/水印，文字层在其上，按装饰噪声记账",
+                            )
+                        )
                         continue
                     if area >= page_area * _IMAGE_REGION_RATIO:
                         issues.append(

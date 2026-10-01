@@ -4,8 +4,8 @@
     "created_schema": false,
     "target_db": "e6_holdout_corpus",
     "sources": 12,
-    "published": 3,
-    "blocked": 9,
+    "published": 8,
+    "blocked": 4,
     "failed": 0
   },
   "sources": [
@@ -17,9 +17,9 @@
       "admission": "in_scope",
       "unit_count": 196,
       "chunk_count": 37,
-      "build_id": "b9a8ac3c9f11b1f5bde13787936f27354d9d92ac866fa3c2c28ed769b441141e",
+      "build_id": "ecc26968ccdb53ddf0dbe5e3684aa8d5cb6a3cc920b15faaf77230e70cea5763",
       "outcome": "published",
-      "generation": 2,
+      "generation": 3,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -40,9 +40,9 @@
       "admission": "in_scope",
       "unit_count": 433,
       "chunk_count": 39,
-      "build_id": "f566a41f2ee96a32c6699ba3443ed5b8585e06db20744f7926aa0a063daf59ac",
+      "build_id": "0acdab0a7583d0d607129377db777cb6a841f7f0b72a078c64cbcd36c4b6a50e",
       "outcome": "published",
-      "generation": 2,
+      "generation": 3,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -68,9 +68,9 @@
       "admission": "in_scope",
       "unit_count": 1092,
       "chunk_count": 86,
-      "build_id": "907957c865f6b551f70e6254a270a29b2baab31adf98d24c3250d964278432db",
-      "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:11', 'issue:table_lines_without_extraction:page:16', 'issue:table_lines_without_extraction:page:18', 'issue:table_lines_without_extraction:page:19', 'issue:table_lines_without_extraction:page:3', 'issue:table_lines_without_extraction:page:8']（table_lines_without_extraction@page:11, table_lines_without_extraction@page:16, table_lines_without_extraction@page:18, table_lines_without_extraction@page:19, table_lines_without_extraction@page:3, table_lines_without_extraction@page:8）",
+      "build_id": "a6be5fb919b5ca0f46bb6a820c3cee77a9f809c37188962ee6f4383e954a7030",
+      "outcome": "published",
+      "generation": 1,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -94,13 +94,7 @@
           "issue:image_region_small:page:6",
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
-          "issue:image_region_small:page:9",
-          "issue:table_lines_without_extraction:page:11",
-          "issue:table_lines_without_extraction:page:16",
-          "issue:table_lines_without_extraction:page:18",
-          "issue:table_lines_without_extraction:page:19",
-          "issue:table_lines_without_extraction:page:3",
-          "issue:table_lines_without_extraction:page:8"
+          "issue:image_region_small:page:9"
         ],
         "oversized_chunks": []
       }
@@ -113,9 +107,9 @@
       "admission": "in_scope",
       "unit_count": 1153,
       "chunk_count": 154,
-      "build_id": "590bb1199568dd8a78083d2b6dc856c7b3b9cff32a2b8a811c34a3820ea23814",
-      "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:1', 'issue:image_region_unreadable:page:10', 'issue:image_region_unreadable:page:11', 'issue:image_region_unreadable:page:12', 'issue:image_region_unreadable:page:13', 'issue:image_region_unreadable:page:14', 'issue:image_region_unreadable:page:15', 'issue:image_region_unreadable:page:16', 'issue:image_region_unreadable:page:17', 'issue:image_region_unreadable:page:18', 'issue:image_region_unreadable:page:19', 'issue:image_region_unreadable:page:2', 'issue:image_region_unreadable:page:20', 'issue:image_region_unreadable:page:21', 'issue:image_region_unreadable:page:22', 'issue:image_region_unreadable:page:23', 'issue:image_region_unreadable:page:24', 'issue:image_region_unreadable:page:25', 'issue:image_region_unreadable:page:26', 'issue:image_region_unreadable:page:27', 'issue:image_region_unreadable:page:3', 'issue:image_region_unreadable:page:4', 'issue:image_region_unreadable:page:5', 'issue:image_region_unreadable:page:6', 'issue:image_region_unreadable:page:7', 'issue:image_region_unreadable:page:8', 'issue:image_region_unreadable:page:9', 'issue:table_lines_without_extraction:page:13', 'issue:table_lines_without_extraction:page:16', 'issue:table_lines_without_extraction:page:17', 'issue:table_lines_without_extraction:page:18', 'issue:table_lines_without_extraction:page:19', 'issue:table_lines_without_extraction:page:4', 'issue:table_lines_without_extraction:page:5', 'issue:table_lines_without_extraction:page:6']（image_region_unreadable@page:1, image_region_unreadable@page:10, image_region_unreadable@page:11, image_region_unreadable@page:12, image_region_unreadable@page:13, image_region_unreadable@page:14, image_region_unreadable@page:15, image_region_unreadable@page:16, image_region_unreadable@page:17, image_region_unreadable@page:18, image_region_unreadable@page:19, image_region_unreadable@page:2, image_region_unreadable@page:20, image_region_unreadable@page:21, image_region_unreadable@page:22, image_region_unreadable@page:23, image_region_unreadable@page:24, image_region_unreadable@page:25, image_region_unreadable@page:26, image_region_unreadable@page:27, image_region_unreadable@page:3, image_region_unreadable@page:4, image_region_unreadable@page:5, image_region_unreadable@page:6, image_region_unreadable@page:7, image_region_unreadable@page:8, image_region_unreadable@page:9, table_lines_without_extraction@page:13, table_lines_without_extraction@page:16, table_lines_without_extraction@page:17, table_lines_without_extraction@page:18, table_lines_without_extraction@page:19, table_lines_without_extraction@page:4, table_lines_without_extraction@page:5, table_lines_without_extraction@page:6）",
+      "build_id": "5a213a956083ee6461e2c07dc060bd9b2b748ff5b18bb7ffd9e7fab200fe4be6",
+      "outcome": "published",
+      "generation": 1,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -144,42 +138,7 @@
           "issue:image_region_small:page:6",
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
-          "issue:image_region_small:page:9",
-          "issue:image_region_unreadable:page:1",
-          "issue:image_region_unreadable:page:10",
-          "issue:image_region_unreadable:page:11",
-          "issue:image_region_unreadable:page:12",
-          "issue:image_region_unreadable:page:13",
-          "issue:image_region_unreadable:page:14",
-          "issue:image_region_unreadable:page:15",
-          "issue:image_region_unreadable:page:16",
-          "issue:image_region_unreadable:page:17",
-          "issue:image_region_unreadable:page:18",
-          "issue:image_region_unreadable:page:19",
-          "issue:image_region_unreadable:page:2",
-          "issue:image_region_unreadable:page:20",
-          "issue:image_region_unreadable:page:21",
-          "issue:image_region_unreadable:page:22",
-          "issue:image_region_unreadable:page:23",
-          "issue:image_region_unreadable:page:24",
-          "issue:image_region_unreadable:page:25",
-          "issue:image_region_unreadable:page:26",
-          "issue:image_region_unreadable:page:27",
-          "issue:image_region_unreadable:page:3",
-          "issue:image_region_unreadable:page:4",
-          "issue:image_region_unreadable:page:5",
-          "issue:image_region_unreadable:page:6",
-          "issue:image_region_unreadable:page:7",
-          "issue:image_region_unreadable:page:8",
-          "issue:image_region_unreadable:page:9",
-          "issue:table_lines_without_extraction:page:13",
-          "issue:table_lines_without_extraction:page:16",
-          "issue:table_lines_without_extraction:page:17",
-          "issue:table_lines_without_extraction:page:18",
-          "issue:table_lines_without_extraction:page:19",
-          "issue:table_lines_without_extraction:page:4",
-          "issue:table_lines_without_extraction:page:5",
-          "issue:table_lines_without_extraction:page:6"
+          "issue:image_region_small:page:9"
         ],
         "oversized_chunks": []
       }
@@ -192,9 +151,9 @@
       "admission": "in_scope",
       "unit_count": 171,
       "chunk_count": 26,
-      "build_id": "915a5feebe2382070b4784a126c94dea963f07fc8384866f395978c240ed48c2",
+      "build_id": "f6a8d012f8aa2bbecd09daf504d651a8a3254ece950123d16e78c6cce648b3e5",
       "outcome": "published",
-      "generation": 1,
+      "generation": 2,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -220,9 +179,9 @@
       "admission": "in_scope",
       "unit_count": 469,
       "chunk_count": 32,
-      "build_id": "00b99a5809fc5dd51f29588f10778e90f8a579ef68cf2bfe4a3710ba926e4af7",
+      "build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f",
       "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:6', 'issue:table_lines_without_extraction:page:14', 'issue:table_lines_without_extraction:page:3']（image_region_unreadable@page:6, table_lines_without_extraction@page:14, table_lines_without_extraction@page:3）",
+      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:6']（image_region_unreadable@page:6）",
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -245,9 +204,7 @@
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
           "issue:image_region_small:page:9",
-          "issue:image_region_unreadable:page:6",
-          "issue:table_lines_without_extraction:page:14",
-          "issue:table_lines_without_extraction:page:3"
+          "issue:image_region_unreadable:page:6"
         ],
         "oversized_chunks": []
       }
@@ -260,9 +217,9 @@
       "admission": "in_scope",
       "unit_count": 681,
       "chunk_count": 71,
-      "build_id": "c9624c5c39909971c39ccd4a8017ab1fd7eaa3626ce8b4b9a8edf893d8bee593",
-      "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:6', 'issue:table_lines_without_extraction:page:7']（table_lines_without_extraction@page:6, table_lines_without_extraction@page:7）",
+      "build_id": "7b066b2a05b1d6fcfc4aa3a2801ebd823b59972385e3aee7fe6c6cc904bf68db",
+      "outcome": "published",
+      "generation": 1,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -278,9 +235,7 @@
           "issue:image_region_small:page:6",
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
-          "issue:image_region_small:page:9",
-          "issue:table_lines_without_extraction:page:6",
-          "issue:table_lines_without_extraction:page:7"
+          "issue:image_region_small:page:9"
         ],
         "oversized_chunks": []
       }
@@ -293,9 +248,9 @@
       "admission": "in_scope",
       "unit_count": 1432,
       "chunk_count": 318,
-      "build_id": "313426724dd6b55b978887cc06818f78ba66aa445c37b95c8eeaff554fc0e6e8",
+      "build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c",
       "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:11', 'issue:table_lines_without_extraction:page:14', 'issue:table_lines_without_extraction:page:15', 'issue:table_lines_without_extraction:page:4', 'issue:table_lines_without_extraction:page:5', 'issue:table_lines_without_extraction:page:9']（image_region_unreadable@page:11, table_lines_without_extraction@page:14, table_lines_without_extraction@page:15, table_lines_without_extraction@page:4, table_lines_without_extraction@page:5, table_lines_without_extraction@page:9）",
+      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:11']（image_region_unreadable@page:11）",
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -316,12 +271,7 @@
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
           "issue:image_region_small:page:9",
-          "issue:image_region_unreadable:page:11",
-          "issue:table_lines_without_extraction:page:14",
-          "issue:table_lines_without_extraction:page:15",
-          "issue:table_lines_without_extraction:page:4",
-          "issue:table_lines_without_extraction:page:5",
-          "issue:table_lines_without_extraction:page:9"
+          "issue:image_region_unreadable:page:11"
         ],
         "oversized_chunks": []
       }
@@ -334,7 +284,7 @@
       "admission": "in_scope",
       "unit_count": 176,
       "chunk_count": 19,
-      "build_id": "45383590029c0b354f7aeb28a0021ccb789bc852159fed3095ce6a5754740538",
+      "build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f",
       "outcome": "blocked_by_publish_gate",
       "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:9']（image_region_unreadable@page:9）",
       "quality_report": {
@@ -363,9 +313,9 @@
       "admission": "in_scope",
       "unit_count": 481,
       "chunk_count": 65,
-      "build_id": "fc7ab34ae8cc16e8f805096db5fb6ab7d2ec221e410a335b4d6032d4278a8519",
-      "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:8']（table_lines_without_extraction@page:8）",
+      "build_id": "9465684d3a781404bc33521b337016486851f64c4ecf7109a264b5926ca5c9d8",
+      "outcome": "published",
+      "generation": 1,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -378,8 +328,7 @@
           "issue:image_region_small:page:6",
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
-          "issue:image_region_small:page:9",
-          "issue:table_lines_without_extraction:page:8"
+          "issue:image_region_small:page:9"
         ],
         "oversized_chunks": []
       }
@@ -392,9 +341,9 @@
       "admission": "in_scope",
       "unit_count": 232,
       "chunk_count": 50,
-      "build_id": "ffb0ccd22615b21f3a4e4f22967fb4c45ed8f25ae84bc111777d0938e0efd5f4",
-      "outcome": "blocked_by_publish_gate",
-      "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:11']（table_lines_without_extraction@page:11）",
+      "build_id": "dd3db0fdfdffec2bad3e8dd3f5decd019a1d8c9a500bf516488f5fd2d1566e09",
+      "outcome": "published",
+      "generation": 1,
       "quality_report": {
         "gap_regions": [
           "issue:image_region_small:page:1",
@@ -409,8 +358,7 @@
           "issue:image_region_small:page:6",
           "issue:image_region_small:page:7",
           "issue:image_region_small:page:8",
-          "issue:image_region_small:page:9",
-          "issue:table_lines_without_extraction:page:11"
+          "issue:image_region_small:page:9"
         ],
         "oversized_chunks": []
       }
@@ -423,7 +371,7 @@
       "admission": "in_scope",
       "unit_count": 278,
       "chunk_count": 61,
-      "build_id": "fa066c5a178c02128b5058d62ccaff442fa3004bd6d43e1189f6f75257900209",
+      "build_id": "bb6c4f161d46eee93fe5da141dea7a6e8cc272835b75f44029ab40e4501c23c7",
       "outcome": "blocked_by_publish_gate",
       "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:table_lines_without_extraction:page:8']（table_lines_without_extraction@page:8）",
       "quality_report": {
