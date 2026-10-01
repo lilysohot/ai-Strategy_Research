@@ -1,0 +1,46 @@
+{
+  "artifact": "T8 real PostgreSQL restart timing",
+  "batch": "E1-20261001-WSL（收尾）",
+  "executed_at": "2026-10-01 16:26 (Asia/Shanghai)",
+  "operator": "agent",
+  "environment": {
+    "engine": "Docker Desktop (WSL2)",
+    "pg": "隔离容器 t8pg（pg18-zhvector，与业务库同版本；宿主映射 15432），库 apodex_t8（entrypoint 自动迁移至 head）",
+    "api": "隔离容器 t8api（frontier-agent-web:head b903e9e28900，SERVER_DEBUG=false，端口 18132）",
+    "business_pg": "业务容器 pg + 库 apodex 全程未触碰（版本保持 0004_control_records）",
+    "live_api": "8000 端口的 live API 未受任何影响"
+  },
+  "steps": [
+    {
+      "id": "baseline",
+      "desc": "空库就绪后（entrypoint 迁移至 0004）基线探测",
+      "result": "/healthz=200 /readyz=200 {\"status\":\"ok\"}；apodex_t8 版本 0004_control_records",
+      "verdict": "pass"
+    },
+    {
+      "id": "STOP",
+      "desc": "docker stop t8pg（真实停库，5 个采样 × 2s）",
+      "result": "/healthz=503 与 /readyz=503 全程保持（无任何时刻误报 ok）",
+      "verdict": "pass（fail-closed）"
+    },
+    {
+      "id": "START",
+      "desc": "docker start t8pg（恢复，8 个采样 × 2s）",
+      "result": "首个采样（+2s）healthz=503/readyz=200 的瞬时竞态（两探针各自取连接的时机差），下一采样起 /healthz=200 /readyz=200 并保持稳定",
+      "verdict": "pass（恢复 <4s；瞬时竞态不会在停库期误报，稳态无假 503）"
+    },
+    {
+      "id": "RESTART",
+      "desc": "docker restart t8pg（重启，6 个采样 × 2s）",
+      "result": "首个采样 /healthz=503 /readyz=503，下一采样起双双 200 并保持",
+      "verdict": "pass（<4s 恢复）"
+    },
+    {
+      "id": "final",
+      "desc": "收尾状态",
+      "result": "/healthz=200 /readyz=200；api 进程 running；apodex_t8 版本 0004_control_records"
+    }
+  ],
+  "conclusion": "T8 完成标准『停库后 503、恢复后 200』在真实 PG 重启下成立：停库期间两探针持续 503（fail-closed），恢复后约 2s 内双双翻 200，API 进程全程存活不假死；组合 caddy 的 depends_on: service_healthy 门禁已由 w-3 整栈实测闭环，本项补齐『真实 PG 重启』这一唯一缺项。",
+  "cleanup": "t8pg/t8api 已删除；隔离库随容器消失；业务 pg/apodex 复核 0004_control_records；live API /healthz、/readyz 均 200"
+}

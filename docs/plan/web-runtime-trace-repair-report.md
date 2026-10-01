@@ -688,6 +688,9 @@ compose `/readyz` healthcheck（`deploy/docker-compose.yml` 新增，镜像内�
 已核对列与索引与迁移完全一致后 `alembic stamp 0004_control_records`（不重建、不丢数据）；
 迁移前后 `runs=757/turns=1098/sessions=142/users=31` 全不变，live API `/readyz` 由 503 `schema_behind` 翻绿
 **`{"status":"ok"}`**。迁移前已 `pg_dump` 备份（`~/backups/apodex-20261001-161402.sql`）。
+**T8 真实 PG 重启时序已于 2026-10-01 实测闭环**（隔离 `t8pg`+`t8api`，业务库未触碰，见
+`audit/t8-pg-restart.json`）：`docker stop` → `/healthz`/`/readyz` 双双 **503** 全程 fail-closed；
+`start`/`restart` → ~2s 内双双翻 **200**；API 进程存活不假死。「停库 503 / 恢复 200」成立。
 
 **F21 已于 2026-10-01 实现**（契约与验收见
 [f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，

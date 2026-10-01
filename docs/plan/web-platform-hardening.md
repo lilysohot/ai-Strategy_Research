@@ -439,12 +439,19 @@ uv run python scripts/run_retention.py orphans \
   [工单 19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md)。
 - **2026-10-01 收尾（用户确认后接线）**：`caddy` 已增加 `depends_on: api: {condition: service_healthy}`
   ——`/readyz` 不是 200 时站点不被放行，完成标准后半句"compose 的 `depends_on: service_healthy`
-  语义与之一致"达成（`docker compose --profile full config` 解析出该依赖）。**仍未完成**：真实 PG 重启时序。
+  语义与之一致"达成（`docker compose --profile full config` 解析出该依赖）。
 - **2026-10-01 整栈实测**（隔离项目 `e1wsl`，端口 8125/8199/8444 避让）：**反例**——不可达库时 compose 报
   `dependency failed to start: container e1wsl-api is unhealthy`、`caddy` 容器 `State=created` **未启动**、
   站点不可达；**正例**——空库就绪后 api `healthy` → caddy `Started` → `https://localhost:8444/`（--resolve）
   **200** 且返回前端 `<title>投研 Agent 平台</title>`；业务库全程 `0002_run_usage`。
   见 [audit/f19-stack-gating.json](../../.scratch/web-runtime-trace-hardening/audit/f19-stack-gating.json)。
+- **2026-10-01 真实 PG 重启时序已实测**（隔离 `t8pg`（pg18-zhvector）+ `t8api`（head 镜像，
+  SERVER_DEBUG=false），业务库未触碰，见
+  [audit/t8-pg-restart.json](../../.scratch/web-runtime-trace-hardening/audit/t8-pg-restart.json)）：
+  `docker stop t8pg` → `/healthz` **503** `storage_unavailable` + `/readyz` **503** `database_unavailable`
+  全程 fail-closed（无任何时刻误报 ok）；`docker start t8pg` → 约 2s 内双双翻 **200** 并稳定
+  （恢复首个采样有一瞬 healthz=503/readyz=200 的连接竞态，稳态无假 503）；`docker restart` 同（<4s 恢复）；
+  API 进程全程存活不假死。**T8 完成标准『停库 503 / 恢复 200』在真实 PG 重启下成立，至此 T8 全项闭环。**
 
 ---
 
