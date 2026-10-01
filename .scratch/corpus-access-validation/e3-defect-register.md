@@ -195,3 +195,14 @@ SUCCEEDED、oversized 空、blocking 0（凭证已放行）、**保留单元集�
 （kept/referenced：174b6462=1177、6f14cc14=310、793b3967=442、cc03f55b=223、dddc7cd0=542、
 f8e31696=167，无越界引用、无缺引）。缺口经 `apply_gap_review` 放行但仍保持可见（ack>0，含
 image_region_small 等默认分级项），符合架构 §7.3"放行但不隐藏"。
+
+### 5.9 E6 收口：留出 12/12 发布、51 项送达 42/51、9 项单列（2026-10-01，**按 §1 收口**）
+
+留出材料经人工裁决（38 acknowledge）+ `reader-pdf-11` 普遍性修复（制表线判据 >40pt 且交叉成网、
+整页背景图按 `image_region_small` 记账，新增反例回归）+ 4 份合规 gap-review（3 PAGE 级 +
+industry-006 REGION 级）后 12/12 过发布门。重跑 51 项数据送达验证 **42/51**，其余 9 项经用户
+裁定按 protocol §1 单列为暂不支持项（支持范围内 42/42）。逐项根因与修复 backlog
+（①检索选择保底 ②fetch 超长块分片 ③表头 quote 口径 ④reader 单元格拼接）见
+[e6-data-closure-report.md](e6-data-closure-report.md)「2026-10-01 收口」章节。
+要点：**「% / - 拆分」仅 1 项 supplementary 为真**；主要失败模式（3 项，含 2 required）是
+检索选择策略把候选池 raw score 第 1 的正文引文 chunk 挤出送达窗口——数据本身完整、可复算。

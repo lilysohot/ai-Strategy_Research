@@ -6,10 +6,9 @@
 
 ## 结论
 
-数据返回机制本身已经闭环：凡通过正式发布门、进入活动语料的留出材料，冻结问题所需的
-正文、表格行、表头、单位和必要脚注均能正确返回。当前总任务仍不能整体关闭，因为 12 份
-留出材料只有 3 份通过发布门；另外 9 份存在真实读取质量缺口，38 个目标因此正确地表现为
-`source_not_offered`，而不是模型错误、搜索错误或分页错误。
+（2026-10-01 更新）12 份留出材料已全部通过正式发布门（12/12 published）；51 个评测目标中
+42 个经 `corpus_search → fetch_plan → corpus_fetch` 正式链路完整送达。其余 9 项失败经零模型
+逐项归因，全部单列为暂不支持项（见文末「2026-10-01 收口」），开发集 79/79 必需证据不受影响。
 
 ## 本轮修复
 
@@ -48,6 +47,9 @@
 
 ## 尚未放行的 9 份材料
 
+> （2026-10-01 注：本节为历史状态。9 份材料此后全部经人工裁决（38 acknowledge）+
+> `reader-pdf-11` 普遍性修复 + 4 份合规 gap-review 放行，12/12 published。见文末收口章节。）
+
 | 样本 | 发布门缺口 |
 |---|---|
 | `holdout-industry-003` | `table_lines_without_extraction`：页 3、8、11、16、18、19 |
@@ -81,4 +83,61 @@
 - 清洗、PDF 读取、分块回归：77 passed；
 - 检索、选择、取回、分页、消费与截断回归：157 passed，1 skipped；
 - 目标文件 Ruff：通过。
+
+## 2026-10-01 收口：12/12 发布、42/51 送达、9 项单列
+
+### 本轮经过
+
+1. **人工裁决回填**：复核包 38 项全部 `acknowledged`（逐项源页诊断证据：3 项预筛 absent 为
+   误报——引文已完整保留在 kept 单元；缺口页均为图表页假阳性或真大图页且证据页不相交）。
+2. **reader-pdf-11 普遍性修复**：`_count_grid_lines` 只计 >40pt 长线段且要求交叉成网
+   （`crossings >= H+V`），消除图表坐标轴/刻度线误判（25 处假阳性）；整页衬底背景图按
+   `image_region_small` 记账。新增反例回归 `test_chart_page_lines_do_not_trigger_table_gap`。
+3. **隔离重建与发布**：12/12 过发布门（generation=2 全部 published）；其中 4 份真实缺口
+   （M6 页9 / M5 页11 / M3 页6 真大图、M9 页8 真表格）经合规 gap-review 放行——PAGE 级
+   （缺口页 ≠ 证据页）3 份 + REGION 级（引文在单个 kept 单元精确出现且单元 bbox 与全部
+   图像 bbox 不相交）1 份（industry-006），`store.put_gap_review` 内部校验全部通过。
+4. **重跑 51 项数据送达验证**：42/51（`e6-data-delivery-holdout-rerun.json`）。
+
+### 9 项失败的逐项归因（零模型、只读证据）
+
+| target_id | role | first_fail | 根因与证据 |
+|---|---|---|---|
+| `b7e932c8-index` | required | quote_not_delivered | 引文 chunk `5a213a95:body:0002` 在候选池排 **#0** 且选带内含，但最终 10 条命中中该文档仅保留 `table:0014/0022`（perdoc 截断 + 结构重叠重排把表格挤前），引文 chunk 未进任何送达窗口。引文数据完好 |
+| `b7e932c8-industry` | required | quote_not_delivered | 同上（同一 chunk `body:0002`、同一文档、同一机制） |
+| `c1ddcd8a-realestate` | supplementary | quote_not_delivered | 同机制：引文 chunk `a6be5fb9:body:0001` 池排 **#1**（score 0.047），该文档仅 `table:0009/0002` 进最终命中。引文含全部 %/- 数据，整条存在于 kept 单元 unit:0011 |
+| `f3b28791-table1` | required | quote_not_delivered | 引文核心 chunk `bb6c4f16:table:0015` **已送达**；27 个引文 token 中 25 个命中，仅 2 个表头 token（“净利润上修幅度”“年预测净利润增速”）因表头多行单元格跨单元拆散而不连续，验证器 `verbatim_quote` all-token 全量要求失败。数据（27.1%/194%/-29.6%/6.9%）完整在库 |
+| `5e305376-fedrate` | required | fetch_incomplete | 单个 heading 块超 6000 字符 fetch 预算（`budget_exceeded`），compact 视图下分片未生效 |
+| `d179b615-hikerate` | required | fetch_incomplete | 同上 |
+| `f86c6d2c-cxotable` | supplementary | dependency_not_delivered | `row_labels` 依赖未命中（`_structured_label_in_text` 跨度内分词匹配失败） |
+| `f7f65d7e-risk` | supplementary | source_not_offered | 检索 top-10 未提供该源 |
+| `c1ddcd8a-summarytable` | supplementary | quote_not_delivered | **唯一真「单元格 % 拆分」**：unit:0053 = `螺纹钢\n元/吨\n3240\n0.9\n4.2\n.\n-0.\n6000`，`%` 全丢、`-2.4` 记为 `.`。reader-pdf-11 后仍存在，属 PDF 文本流单元格拆分 |
+
+关键结论：**「% / - 拆分」不是主要失败模式**（9 项中仅 1 项 supplementary 为真），主要失败
+模式是检索选择策略把 raw score 最高的正文引文 chunk 挤出送达窗口（3 项，含 2 required）。
+
+### 单列决定与协议注记
+
+按用户 2026-10-01 裁定，上述 9 项依 protocol §1「范围外与暂不支持项在验收报告中单列，
+不计入分母，也不从分母移除」全部单列：支持范围内分母 42，送达 42/42。
+
+**注记（诚实披露）**：§6.3 要求「预先指定的关键目标及其必要依赖 L1–L9 全通过」，本批
+单列中含 5 项 required（index/industry/table1/fedrate/hikerate）。这些项的数据本身完整
+（引文在库、可复算），失败发生在检索选择、fetch 预算与验证器比对口径三层机制，均为
+已定位、可修的工程缺陷而非数据缺陷。若后续按严格口径复核，修复优先级为：
+① 检索选择保底（perdoc 截断保 raw top-1 命中）；② fetch 超长块分片；③ 表头跨单元
+quote 口径（`_quote_in_text` 允许部件级 span 匹配）；④ reader 单元格拼接（随 B 线
+语料重建顺带）。
+
+### 证据
+
+- `e6-data-delivery-holdout-rerun.json`：42/51 重跑结果（`CORPUS_DSN` + `CORPUS_TARGET_DB`
+  均指向隔离库）；
+- `e6_diag_fetch.py` / `e6_diag_fetch2.py` / `e6_diag_table1.py`：引文 chunk 全 build 装配比对
+  与 delivered 集合交叉验证；
+- 检索链路复算：`query_lexemes → retrieval_query → search_with_coverage_bands` 候选池排名
+  与选带内容（body:0002 池 #0 / body:0001 池 #1 / table:0015 池 #2，均在带内）；
+- `e6-human-gap-review-packet.md`（已回填裁决）、`e6_apply_gap_review.py`（4 份放行记录）、
+  `e6-holdout-build.json`（12/12 构建与发布门结果）；
+- 回归：corpus 全量 306 passed（含新增反例 4）。
 
