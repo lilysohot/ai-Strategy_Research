@@ -113,3 +113,19 @@ Requirements: PR-GOV-05, PR-BIZ-06
   **另需记录（越界操作，须保留痕迹）**：本次演练清理时误删了容器内 `/tmp/apodex-pre-t6.dump`——即 T6 孤儿处置前的
   pre 快照，上条明确记为"**pre 快照保留**"。该文件位于容器 `/tmp`，按上条自身口径"随容器重建丢失"，本已非持久；F01 备份
   （宿主侧、仓库外）完好，F01 回退能力不受影响，但该 T6 回滚点已不可恢复。
+- 2026-10-02（凌晨）：**第 ③ ④ 项隔离复演完成**（证据
+  [audit/f07-key-ondelete-drill.json](../audit/f07-key-ondelete-drill.json)；隔离库 f07_semantics 由生产 dump
+  192,933 B 恢复 + 隔离 API :8001，零生产写，演练后已 DROP）。
+  **③ ON DELETE/会话删除语义**：12 外键全 `NO ACTION`，硬删（会话 57 runs / user 被 audit_log 引用 / run 有 turns）
+  三路全被数据库拒绝；会话删除为软删除（`deleted_at`），软删后列表隐藏而 run 详情仍 200（存档语义）。
+  **建议维持 NO ACTION，无需 0005 迁移**——真正清理只能走 run_retention 带复核路径；「软删隐藏 + run 存档可达」
+  登记为既定语义待人工确认。
+  **④ 密钥不可用组合复演**（合成用户 + 已知密钥三场景对照）：
+  - 错误 master_key：提交 202 不拒、快照仍声称 `user-config`（失真），实际解密失败被 `_resolve_llm_env` 静默吞掉 →
+    worker 回落 .env 真实供应商跑完（8,202 tokens，models=glm 别名）——**发现 F07-KEY-1（缺陷候选，需人工决策）**：
+    密钥丢失时静默改道 + 计费归属错乱 + 快照失真，且展示路径（masked_api_key）无 HTTP 暴露面，用户侧零信号；
+  - 正确密钥：注入恢复（不可达 base_url 如实 failed，stopped/llm_error 零消耗）——错钥只拒不解、无数据损坏；
+  - 永久丢失处置 = 重置密文（DB 层重加密后恢复生效）；**观察项 F07-KEY-2**：无 HTTP 路由可重置密文。
+  **另记（并入 ⑤ 部署清单）**：生产 .env 无 `SERVER_MASTER_KEY`，live API 以 debug + 默认密钥运行（非 debug 启动会被拒）。
+  **⑤ 定值**仍需人工：推荐 备份 30 天/每日 1 次、runs 文件 90 天、master_key/jwt_secret 进部署清单、
+  异地待第二台机器挂载后指向 `--out-dir`（脚本已支持）。

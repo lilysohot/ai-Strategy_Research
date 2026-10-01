@@ -258,5 +258,18 @@
     },
     "verdict": "F09/F19/F20/F21 在真实重启后全部按设计工作，无需代码改动",
     "cleanup": "观测用 API 已停止，token/run id/SSE 临时文件已删"
+  },
+  "f07_key_ondelete_20261002": {
+    "executed_at": "2026-10-02T00:00-00:20+08:00",
+    "task": "F07 剩余 ③④ 隔离复演（⑤ 现状盘点 + 推荐定值）",
+    "evidence": [
+      "f07-key-ondelete-drill.json"
+    ],
+    "result": {
+      "item3": "12 FK 全 NO ACTION，三路硬删全拒；软删会话列表隐藏 + run 存档可达；建议维持现状无需迁移",
+      "item4": "错误 master_key → 静默改道 server-default 且快照失真（发现 F07-KEY-1 缺陷候选，需人工决策）；正确密钥 → 注入如实生效（llm_error 零消耗）；永久丢失处置 = 重置密文（无 HTTP 路由，观察项 F07-KEY-2）",
+      "item5": "推荐：备份 30 天/每日 1 次、runs 文件 90 天、master_key 进部署清单（当前 live 用默认密钥 debug 运行）、异地待挂载",
+      "isolation": "f07_semantics 隔离库（生产 dump 192,933 B）+ 隔离 API :8001，演练后 DROP"
+    }
   }
 }

@@ -1,0 +1,56 @@
+{
+  "task": "F07 剩余项 ③ ON DELETE/会话删除语义 + ④ 密钥不可用组合恢复（隔离复演）+ ⑤ 定值现状盘点",
+  "executed_at": "2026-10-01T23:50-2026-10-02T00:20+08:00",
+  "isolation": "同实例独立库 f07_semantics（生产 pg_dump 192,933 B 恢复：runs 760 / sessions 143 / llm_cfgs 165 / users 32）+ 隔离 API :8001（SERVER_DATABASE_URL 指向隔离库），零生产写",
+  "item_3_on_delete_and_session_deletion": {
+    "db_facts": "12 个外键全部 ON DELETE NO ACTION（artifacts→runs, audit_log→users, control_records→runs/sessions/users, runs→sessions/user_llm_configs/users, sessions→users, turns→runs/sessions, user_llm_configs→users）",
+    "code_facts": "会话删除是软删除（store.delete_session 置 deleted_at，幂等 + 防 IDOR）；config_to_dict 的 masked_api_key 展示路径当前无 HTTP 路由暴露",
+    "drill": [
+      "软删会话（UPDATE deleted_at）→ 成功（t），FK 不干预",
+      "硬删有 57 runs 的会话 → 被拒：Key still referenced from table runs",
+      "硬删有引用的 user → 被拒：referenced from table audit_log",
+      "硬删有 turns 的 run → 被拒：referenced from table turns",
+      "软删后 GET /api/sessions 列表隐藏（0 条）；GET run 详情仍 200（存档语义）",
+      "演练后软删标记复原"
+    ],
+    "verdict": "双层 fail-closed 成立：数据库层 NO ACTION 拒一切引用中的硬删，业务层软删除不级联。**建议维持 NO ACTION，无需 0005 迁移**；真正的清理只能走 run_retention.py 的带复核路径。删除语义现状：会话隐藏但 runs 存档可达（审计友好），登记为既定语义供人工确认"
+  },
+  "item_4_master_key_unavailable": {
+    "setup": "隔离库合成用户 f07sem + default llm_config（base_url=http://127.0.0.1:9 不可达、密文以 KEY_A 加密 'sk-test-12345678'），三场景对照",
+    "scenario_a_wrong_key": {
+      "steps": "SERVER_MASTER_KEY=KEY_B 启动 → 登录 → 提交 run",
+      "observed": [
+        "提交 202 不拒绝",
+        "llm_snapshot 仍记录 {\"source\":\"user-config\",\"base_url\":\"http://127.0.0.1:9\"}（提交时只读 config 元数据，不解密）",
+        "_resolve_llm_env 解密 InvalidToken 被捕获 → None → worker 未注入用户配置 → 回落 .env 真实供应商",
+        "run 正常跑完：usage 8,202 tokens、models=['glm-5-3-flash-260828']、stopped/no_tool",
+        "展示路径（masked_api_key）无 HTTP 暴露面 → 用户侧无任何异常信号"
+      ],
+      "finding": "**F07-KEY-1（缺陷候选，需人工决策）**：master_key 丢失/错误时 run 静默改道 server 默认供应商（计费归属错乱）且快照失真（声称 user-config 实际用 server-default）。根因 orchestrator._resolve_llm_env 的 except Exception: return None（可用性优先的设计注释与密钥治理冲突）"
+    },
+    "scenario_b_correct_key": {
+      "steps": "KEY_A 重启 → 提交 run",
+      "observed": "快照 user-config 与实际一致 → 用户配置真实注入（127.0.0.1:9 不可达）→ stopped/llm_error、usage None（llm_calls=0）",
+      "verdict": "密钥找回即恢复，Fernet 认证加密错钥只拒不解，无数据损坏"
+    },
+    "scenario_c_permmanent_loss_reset": {
+      "steps": "DB 层以 KEY_B 重加密新密文（模拟重置）→ KEY_B 启动 → 提交 run",
+      "observed": "解密成功 → 注入恢复生效（stopped/llm_error、usage 0/partial）",
+      "verdict": "密钥永久丢失处置 = 重置密文；**当前无 HTTP 路由可重置 llm_config 密文，只能 DB 层操作**（观察项 F07-KEY-2）"
+    },
+    "prod_note": "生产 .env 无 SERVER_MASTER_KEY（live API 以 SERVER_DEBUG=true + 默认密钥运行）——非 debug 启动会被 check_startup_secrets 拒绝；正式部署清单必须含该项（并入 ⑤ 定值）"
+  },
+  "item_5_values_status": {
+    "keep_days": "脚本默认 --keep-days 30，尚未由产品/运维定值",
+    "frequency": "未定（业务库当前 <1MB，每日 1 次足够）",
+    "location": "备份可落任意 --out-dir，但当前全部同机（宿主仓库外）——真异地需第二台机器/对象存储挂载，本环境不具备，维持登记",
+    "recommendation_for_decision": [
+      "备份保留 30 天 / 每日 1 次（cron 或 systemd timer）",
+      "runs 文件保留 90 天（run_retention.py --keep-days 90）",
+      "SERVER_MASTER_KEY + SERVER_JWT_SECRET 进部署清单与密钥托管（丢失→重置流程见场景 c）",
+      "异地：待第二台机器或对象存储挂载后把 --out-dir 指向挂载点（脚本已支持，无需改动）"
+    ]
+  },
+  "cleanup": "隔离库 f07_semantics 已 DROP；dump/token/临时文件已删；隔离 API 已停（pid kill）",
+  "files_changed": "无代码改动（③ 建议维持现状）；仅登记"
+}
