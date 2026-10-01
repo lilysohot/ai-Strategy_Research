@@ -638,18 +638,20 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 现有库需执行一次 `alembic upgrade head`（`init_db()` 的 `create_all` 不会改动已存在的表）。
 迁移在存在重复 `(session_id, seq)` 时会显式报错而不改数，由人工决定如何重排。
 
-**仍未完成（不得视为已验收）**：F02 的**真实镜像构建**（本机 registry 不可达，
-`python:3.12-slim` 无法拉取；现有证据为 `FROM scratch` 探针测量「哪些文件进入镜像文件系统」，
-不含 `uv sync` 与 runtime 真实层，待可访问 registry 的环境补跑，见
+**仍未完成（不得视为已验收）**（2026-10-01 更新：F01 容器实测、F02 真实镜像构建、F07 联合恢复演练与孤儿处置已完成，
+下段已按其现状改写）：F02 的**历史已发布镜像是否含数据**仍未调查（真实镜像构建已于 2026-10-01 补跑、
+镜像层核对通过，registry 阻断系瞬时故障，见
 [工单 02](../../.scratch/web-runtime-trace-hardening/issues/02-build-context.md)）、F05 的**浏览器 DOM 层验收**（实现与契约审计已完成，见
 [工单 05](../../.scratch/web-runtime-trace-hardening/issues/05-history-trace-ui.md)）、F06 的**真实故障注入**
 （SIGKILL / 取消 / 磁盘写满 / 断电耐久）与**请求尝试身份**（失败·重试是否入契约）——契约已定义并
 有合成文件证据，见[工单 06](../../.scratch/web-runtime-trace-hardening/issues/06-trace-completeness.md)、F07 的
-**运维备份脚本、异地存放、联合恢复演练与孤儿处置决策**（演练已证「行数可恢复、约束不可恢复」，
-见[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01 的**容器实测**
-（Compose 卷挂载与 Dockerfile `VOLUME` 已同步、`compose config` 已通过，但镜像无法构建故未实测；
-WSL 侧历史路径迁移、历史三态兼容、回退演练与**活动 Run 跨根保护**均已完成——本机 Windows、容器配置与 WSL 迁移部分已完成）、
-F13 容量边界、F21 控制历史持久化、
+**运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**
+（联合恢复演练与孤儿处置已于 2026-09-30 完成，见
+[工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)）、F01
+**容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
+并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
+`SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
+[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界、F21 控制历史持久化、
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
 
