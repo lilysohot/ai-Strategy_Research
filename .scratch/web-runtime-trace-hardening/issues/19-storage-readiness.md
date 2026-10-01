@@ -50,3 +50,18 @@ Requirements: PR-GOV-01
   隔离审计契约（F19 首半）**24/24** 仍通过；`ruff`/`pyright` 在 `server/` 仅剩 1 处既有类型错误。
   **未完成**：磁盘满注入、真实只读挂载（本轮用"父路径是文件"等价复现）、compose 未接 `service_healthy`
   healthcheck、旧版镜像回退演练只写在文档而未实测。
+- 2026-10-01：**剩余三项注入在 WSL/容器完成，并发现且修复一处探针缺陷**（批次
+  [e1-wsl-batch-registry.json](../audit/e1-wsl-batch-registry.json)）：
+  ① **真实只读挂载**（`frontier-agent-web:f19` + `-v vol:/data/runs:ro`）：非 debug 启动 →
+  `StorageNotReadyError: data_root_unwritable`、exit 3、uvicorn 未起；debug 下 `/healthz` 200 而
+  `/readyz` 503 `data_root_unwritable`。② **磁盘满注入**（tmpfs size=64k 填满）：**发现真缺陷**——
+  `probe_data_root` 写 **0 字节**探针文件，满 tmpfs 上 0 字节创建仍成功（数据页耗尽而非 inode），
+  `/readyz` 误报 200 ready；修复为写真实字节 `b"readyz-probe"`（`server/readiness.py`），复测翻转
+  为 503 `data_root_unwritable`、`/healthz` 仍 200；新增回归
+  `test_data_root_probe_writes_real_bytes`（文件 16/16）。③ **compose `/readyz` healthcheck + 消费方接线**（2026-10-01 用户确认后）：
+  `deploy/docker-compose.yml` api 增加 `/readyz` healthcheck（为何不用 /healthz 已注释），并让 `caddy`
+  增加 `depends_on: api: {condition: service_healthy}`——存储未就绪时不接流量；`docker compose config`
+  解析确认该依赖，同款 healthcheck 命令在镜像内实测 `health=healthy`。另：真部署门禁
+  （业务库 0002 → `/readyz` 503 `schema_behind`）已在 WSL 原样复现。**仍未完成**：旧版镜像
+  回退演练实测（文档规则已就绪）；修复后镜像未重建（复测用 bind-mount 补丁文件，发布前需
+  按常规构建一次）。

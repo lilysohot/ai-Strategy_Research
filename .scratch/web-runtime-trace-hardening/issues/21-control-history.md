@@ -78,4 +78,15 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   浏览器/清存储后停在审批门的运行仍无恢复入口，若产品需要应另立服务端驱动的
   「活跃运行/待决事项」发现任务。`Status → ready-for-human`（剩余：业务库迁移、
   POSIX 复验、真实重启后观测）。
+- 2026-10-01：**真链路（uvicorn + PG 业务库 + 真实 worker）审批证据补齐，POSIX 用例复验通过**（E1-WSL 批次，
+  见[批次登记](../audit/e1-wsl-batch-registry.json)）。① **adopted/once**：mock 模型触发 `create_file` 审批 →
+  `POST /approve decision=once` 批准 → 文件真实落盘 /outputs（34B，sha256 与产物索引一致），
+  `control_records` 落 `adopted`（source=user）。② **expired**：另一 Run 审批无人处理，300s（`DEFAULT_TIMEOUT_S`）
+  超时 fail-closed 拒绝、轨迹记「[user rejected this create_file call — task stopped]」，`control_records` 落
+  `expired`（source=timeout）——超时未被写成用户拒绝，与契约口径一致。③ **POSIX 用例**：
+  `test_approval_end_to_end`/`test_upload_t210`/`test_stop_t28::sigkill` 等 9/9 通过
+  （Windows 既有限制在 WSL 解除）。**遗留观察（deferred，未修）**：`control_to_dict` 投影不含
+  `external_id`（worker 生成的 approval_id）——真链路批准时经直查业务库 `control_records` 才取得该 ID，
+  刷新页从 `GET /controls` 重建待审批弹窗后同样拿不到 approve 所需 ID，前端须从 live 帧或审批响应体取，
+  或投影补字段。`Status` 维持 `ready-for-human`（deferred 项与浏览器 DOM 层复核未闭环）。
 

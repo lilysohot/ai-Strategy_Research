@@ -17,3 +17,8 @@ Requirements: PR-RUN-06、PR-GOV-01
 ## Comments
 
 - 2026-09-29：全面存储复核新增，详见报告证据等级；运行代码尚未修改。
+- 2026-10-01：**产物索引/下载/diff/回滚真链路复验通过（WSL，E1 结转项）**（批次
+  [e1-wsl-batch-registry.json](../audit/e1-wsl-batch-registry.json)）：真实 worker `create_file`
+  经审批落盘 → 索引 rel_path/size/sha256 正确；下载 sha256 与索引一致；diff `added +3`；
+  `POST /revert` → 文件移除且索引**同步重算清空**（F18 修复的行为在真链路成立）。
+  Windows 上不可验收的根因（shell/文件工具不可用）随 POSIX 复验消除。
