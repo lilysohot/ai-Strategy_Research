@@ -295,5 +295,15 @@
       "recovery_story": "轮换 master_key → KEY-1 门禁 503 → PATCH 重置 api_key → cred_state ok → 提交恢复（全程 HTTP，无需 DB 手术）",
       "tests": "tests/test_web_f07_key_reset.py 4/4；web 套件 188 passed；ruff/pyright 全过"
     }
+  },
+  "f07_item5_values_20261002": {
+    "executed_at": "2026-10-02T08:30+08:00",
+    "task": "F07 ⑤ 定值采纳并落地 deploy/README.md",
+    "result": {
+      "values": "业务库备份 每日1次/保留30天；runs 文件 90 天（manifest→plan→apply 三步）；备份位置仓库外+异地待挂载",
+      "doc_changes": "deploy/README.md 新增定值节 + 密钥轮换表补恢复路径列（KEY-1 门禁 + KEY-2 PATCH 重置）",
+      "verified": "定值命令真实备份 192,933 B 校验通过（临时目录已清理）",
+      "item_status": "F07 ①②③④⑤ 全部闭环，待人工复核"
+    }
   }
 }

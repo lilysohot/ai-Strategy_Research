@@ -176,10 +176,10 @@ schema 比构建**超前**时同样拒绝服务——先确认数据库版本与
 python3 -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-| 操作 | 后果 |
-| --- | --- |
-| 轮换 `SERVER_JWT_SECRET` | 所有人被强制重新登录（旧 token 立即失效） |
-| 轮换 `SERVER_MASTER_KEY` | 已保存的 LLM `api_key` **全部无法解密**，用户必须重新录入 |
+| 操作 | 后果 | 恢复路径 |
+| --- | --- | --- |
+| 轮换 `SERVER_JWT_SECRET` | 所有人被强制重新登录（旧 token 立即失效） | 无需操作，重新登录即可 |
+| 轮换 `SERVER_MASTER_KEY` | 已保存的 LLM `api_key` **全部无法解密**：提交被 503 拒绝（`tests/test_web_f07_key_gate.py`），不会静默改道服务器默认供应商 | 每位用户 `PATCH /api/llm-configs/{id}` 重置 `api_key`（以新密钥重加密）；旧密钥找回后同样一次 PATCH 恢复 |
 
 本地开发可用 `SERVER_DEBUG=true` 把该校验降级为警告（允许使用默认 `SERVER_MASTER_KEY`）。
 **部署时务必删除 `SERVER_DEBUG`**，否则服务会以仓库里的公开占位密钥运行。
@@ -191,6 +191,26 @@ python3 -c "import secrets; print(secrets.token_urlsafe(48))"
 - **备份须覆盖三处**：① 业务库在**宿主 PostgreSQL**（如容器 `pg` 的 `apodex` 库，见上节）；
   ② 运行数据（轨迹 / 输入 / 产物 / spill）在命名卷 `agent_data`（挂 `/var/lib/frontier-agent/web`）；
   ③ `../data`（挂 `/app/data`）是**研究语料**数据。三者互不重叠，不能只备其一。
+
+### 备份与保留定值（F07 ⑤，2026-10-02 采纳）
+
+| 项 | 定值 | 落地方式 |
+| --- | --- | --- |
+| 业务库备份频率 | **每日 1 次** | cron/systemd timer 调 `scripts/web_backup.py`（timer 由部署方按宿主惯例配置） |
+| 业务库备份保留 | **30 天** | `web_backup.py --keep-days` 默认即 30 |
+| 运行文件（runs）保留 | **90 天** | `scripts/run_retention.py plan/apply --keep-days 90`（脚本默认 30，运维调用显式传 90） |
+| 备份位置 | 宿主仓库外目录；**异地**：待第二台机器或对象存储挂载后，把 `--out-dir` 指向挂载点（脚本已支持，无需改动） |
+
+```bash
+# 每日业务库备份（保留 30 天，落仓库外目录；异地时把 OUT 指向挂载点）
+OUT=/var/backups/frontier-agent
+uv run python scripts/web_backup.py --out-dir "$OUT" --keep-days 30
+
+# runs 文件保留 90 天：先出清单与 dry-run 计划人工过目，再实际删除
+uv run python scripts/run_retention.py manifest --runs-root /var/lib/frontier-agent/web
+uv run python scripts/run_retention.py plan --manifest <manifest.json> --keep-days 90
+uv run python scripts/run_retention.py plan --manifest <manifest.json> --keep-days 90 --apply --yes
+```
 
 ## 离线/无 Docker 环境
 

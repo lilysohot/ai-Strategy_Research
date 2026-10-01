@@ -150,3 +150,11 @@ Requirements: PR-GOV-05, PR-BIZ-06
   list/create/delete 管理面仍刻意不暴露（KEY-2 范围是恢复路径，store 层函数已备、后续按需接线）。
   回归 `tests/test_web_f07_key_reset.py` **4/4**（masked/防 IDOR/重置恢复 cred_state/密钥恢复后重封）；
   web 套件 188 passed；ruff、pyright 全过。
+- 2026-10-02（续 2）：**第 ⑤ 项定值采纳并落地（用户执行指示视为采纳推荐表）**——
+  [deploy/README.md](../../../deploy/README.md) 新增「备份与保留定值（F07 ⑤）」节：
+  业务库备份每日 1 次 / 保留 30 天（`web_backup.py` 默认值）；runs 文件 90 天
+  （`run_retention.py manifest → plan --keep-days 90` dry-run → `--apply --yes` 三步流程）；
+  备份位置仓库外目录、异地待第二台机器/对象存储挂载后 `--out-dir` 指向挂载点（脚本零改动）。
+  同时更新密钥轮换表：补「恢复路径」列（F07-KEY-1 门禁 503 + KEY-2 PATCH 重置）。
+  定值命令已实测（`--out-dir /tmp` 真实备份 192,933 B 校验通过后清理）。
+  **F07 ①②③④⑤ 全部闭环**，工单转 ready-for-human 待复核；唯一环境依赖遗留：异地备份挂载点。

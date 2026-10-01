@@ -672,7 +672,9 @@ sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可�
 `PATCH/GET /api/llm-configs/{id}`（重置密文 + masked 读回，所有权校验防 IDOR）——master_key 轮换的
 恢复路径全程 HTTP 化，回归 `tests/test_web_f07_key_reset.py` 4/4、web 套件 188 passed。
 仍余 ⑤ 定值（推荐：备份 30 天/每日 1 次、
-runs 文件 90 天、`SERVER_MASTER_KEY` 进部署清单——当前 live 以默认密钥 debug 运行、异地待挂载），F01
+runs 文件 90 天、`SERVER_MASTER_KEY` 进部署清单——当前 live 以默认密钥 debug 运行、异地待挂载）
+**——⑤ 已于 2026-10-02 采纳并落地 [deploy/README.md](../../deploy/README.md)**（定值节 + 密钥轮换表
+补恢复路径列，定值命令实测通过）。F07 ①②③④⑤ 全部闭环，F01
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
