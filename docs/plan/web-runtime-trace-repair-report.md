@@ -668,7 +668,10 @@ sha256 清单 + `--keep-days` 保留期 + fail-closed 目标 + `--out-dir` 可�
 与观察项 F07-KEY-2（密文重置无 HTTP 路由）；正确密钥/重置密文路径均恢复生效。**F07-KEY-1 已于 2026-10-02 修复**
 （用户批准）：`user_llm_cred_state` 提交门禁（error → 503 零副作用）+ `resolve_user_llm_env` 解密失败抛
 `LLMCredentialError`（"无配置"与"密钥丢失"分家，仅前者可回落）+ `_resolve_llm_env` 第二道防线传播；
-回归 `tests/test_web_f07_key_gate.py` 6/6、web 套件 184 passed。仍余 ⑤ 定值（推荐：备份 30 天/每日 1 次、
+回归 `tests/test_web_f07_key_gate.py` 6/6、web 套件 184 passed。**F07-KEY-2 亦已闭合**：新增
+`PATCH/GET /api/llm-configs/{id}`（重置密文 + masked 读回，所有权校验防 IDOR）——master_key 轮换的
+恢复路径全程 HTTP 化，回归 `tests/test_web_f07_key_reset.py` 4/4、web 套件 188 passed。
+仍余 ⑤ 定值（推荐：备份 30 天/每日 1 次、
 runs 文件 90 天、`SERVER_MASTER_KEY` 进部署清单——当前 live 以默认密钥 debug 运行、异地待挂载），F01
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加

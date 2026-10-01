@@ -283,5 +283,17 @@
       ],
       "tests": "tests/test_web_f07_key_gate.py 6/6；web 套件 184 passed（p2_files 6 errors 既有）；ruff 过；pyright 仅既有项"
     }
+  },
+  "f07_key2_fix_20261002": {
+    "executed_at": "2026-10-02T01:10-01:30+08:00",
+    "task": "F07-KEY-2 闭合：LLM 密文重置的 HTTP 恢复路径",
+    "result": {
+      "changes": [
+        "server/routes/llm_configs.py 新增：PATCH（重置密文，所有权校验，masked 响应）+ GET（masked 读回）",
+        "server/app.py 注册 llm_configs 路由"
+      ],
+      "recovery_story": "轮换 master_key → KEY-1 门禁 503 → PATCH 重置 api_key → cred_state ok → 提交恢复（全程 HTTP，无需 DB 手术）",
+      "tests": "tests/test_web_f07_key_reset.py 4/4；web 套件 188 passed；ruff/pyright 全过"
+    }
   }
 }

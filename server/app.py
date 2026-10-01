@@ -25,6 +25,7 @@ from server.orchestrator import get_orchestrator
 from server.readiness import enforce_startup_readiness, storage_readiness
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
+from server.routes import llm_configs as llm_configs_routes
 from server.routes import models as models_routes
 from server.routes import runs as runs_routes
 from server.routes import sessions as sessions_routes
@@ -63,6 +64,9 @@ app = FastAPI(title="FrontierAgent 投研平台", version="0.1.0", lifespan=life
 app.include_router(auth_routes.router)
 app.include_router(models_routes.router)
 app.include_router(sessions_routes.router)
+# F07-KEY-2: masked read-back + key reset for the caller's own LLM configs —
+# the HTTP recovery path when SERVER_MASTER_KEY is rotated or lost.
+app.include_router(llm_configs_routes.router)
 # Artifact listing/download (T2.9) — both routes are authenticated and resolve the
 # caller-supplied rel_path through a single containment check.
 app.include_router(artifacts_routes.router)

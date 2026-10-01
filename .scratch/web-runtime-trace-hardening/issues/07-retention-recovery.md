@@ -140,3 +140,13 @@ Requirements: PR-GOV-05, PR-BIZ-06
   回归 `tests/test_web_f07_key_gate.py` **6/6**（503 零副作用、无配置仍 202、密钥正常 202、探针三态、
   resolve 抛出、orchestrator 第二道防线传播）；web 套件 184 passed（p2_files 6 errors 为既有 FK 环境问题）；
   ruff 全过；pyright 仅既有 Queue 不变型一项。复演证据 `audit/f07-key-ondelete-drill.json` 场景 a 即修复前行为。
+- 2026-10-02（续）：**观察项 F07-KEY-2 已闭合（用户批准）**。新增最小路由面
+  `server/routes/llm_configs.py` 并注册进 app：
+  - `PATCH /api/llm-configs/{id}`：重置 api_key（以**当前** master_key 重加密，所有权校验 + 404 防 IDOR，
+    响应为 masked 视图，明文不回显）；同端点可改 name/base_url/model/is_default；
+  - `GET /api/llm-configs/{id}`：masked 读回（供客户端验证重置结果）。
+  至此 master_key 丢失/轮换的恢复路径全部走 HTTP：轮换 → 提交被 F07-KEY-1 门禁 503 → 重置 api_key →
+  `user_llm_cred_state` 恢复 ok → 提交恢复，**不再需要数据库手术**。
+  list/create/delete 管理面仍刻意不暴露（KEY-2 范围是恢复路径，store 层函数已备、后续按需接线）。
+  回归 `tests/test_web_f07_key_reset.py` **4/4**（masked/防 IDOR/重置恢复 cred_state/密钥恢复后重封）；
+  web 套件 188 passed；ruff、pyright 全过。
