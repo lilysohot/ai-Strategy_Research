@@ -87,6 +87,49 @@ Isolation: 全部流量指向隔离栈；未触碰 8000 真实 API / PG 业务�
 
 备注：测试八的运行最终由审批门 300s 超时 fail-closed 收口（未人工干预）。
 
+## F21 刷新恢复缺口的修复与复验（2026-10-01 下午，同栈）
+
+**修复实现**：
+
+1. `web/src/stores/runs.ts`：新增会话级「最近运行」记忆 `rememberRun(sessionId, id)`
+   （提交成功时记录，键 `frontier-agent.lastRun:<sessionId>`）与
+   `resumeForSession(sessionId, isCurrent)` —— 读记忆 → `GET /api/runs/{id}` →
+   仅当状态仍为 `queued/running` 且 `isCurrent()`（会话未被切走、无已挂流）时
+   `watch(id)` 重订阅；`watch` 内已有的 `loadPendingApproval` 随之重建弹窗。
+2. `web/src/views/ChatView.vue`：提交路径调用 `rememberRun`；
+   `restoreSession` 成功后调用 `resumeForSession`。
+
+**复验中发现的第二个缺陷（后端契约）**：刷新后弹窗能恢复，但批准后 gate 仍
+`pending`、运行停在门上直到 300s 超时。根因：`GET /controls` 的投影
+`control_to_dict` 不含 worker 侧 `external_id`，前端 `approvalRequestFromRecord`
+只能拿 DB 行 id 当 `approvalId` —— 而 worker 的 gate 按帧里的 `approval_id`
+（= `external_id`，实测与行 id 不同）匹配决议，行 id 被静默丢弃。
+修复：`control_to_dict` 增加 `external_id` 字段；`approvalRequestFromRecord`
+优先使用 `record.external_id`（`types.ts` 同步加字段）。
+
+**回归**：前端审计 14/14（新增 4 条 resume 用例 + external_id 断言；负向对照：
+移除状态检查后 `F21_resume_ignores_a_finished_run` 失败 'R' !== null，已恢复）；
+`vue-tsc` 0 错误；前端单测 70/70；`tests/test_web_f21_control_history.py` 14/14。
+
+**浏览器闭环复验（Run 0c65cbf3）**：
+
+| 步骤 | 结果 |
+|---|---|
+| 提交 → 弹窗出现 | ✅ |
+| F5 刷新 → 会话恢复 + 流重订阅（执行中计时可见）+ 弹窗重建 | ✅ |
+| 在重建的弹窗上点「允许一次」 | ✅ |
+| 弹窗消失、create_file 执行、最终回答出现、运行终态 | ✅ |
+| `GET /controls` → `adopted / decision=once / external_id=2365ae34…`（与行 id 不同，证实机理） | ✅ |
+
+附带验证：上一轮停在审批门的运行（0f42d0e6）在 300s 超时后由 gate 自动
+fail-closed 收口（刷新后 resume 正确跳过——状态已非 running）。
+
+**已知边界（如实记录，非本次范围）**：`resumeForSession` 依赖浏览器
+localStorage 的会话级记忆（与 `lastSession` 同一信任级别）；换浏览器/清存储后
+「停在审批门的运行」仍无法恢复弹窗（数据可用，入口缺失）——与「刷新后重开
+历史 Run 轨迹」同属恢复入口问题，若产品需要应另立任务做服务端驱动的
+「活跃运行/待决事项」发现（如 `GET /sessions/{id}/active-run`）。
+
 ## Console
 
 全程页面 console 无被测功能错误（出现的 error 均为验收脚本自身注入的

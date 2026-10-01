@@ -1,6 +1,6 @@
 # 21：用户纠正与审批决定缺少持久追溯契约
 
-Status: ready-for-agent
+Status: ready-for-human
 Priority: P1
 Type: task
 Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
@@ -61,4 +61,21 @@ Requirements: PR-RUN-04/05、PR-GOV-02、PR-BIZ-02/06
   活跃 Run 并 `watch(run_id)` 或就地重建弹窗。该缺口与工单 05 记录的
   「刷新后无法重开历史 Run」同源。`Status → ready-for-agent`（仅剩此前端缺口 +
   业务库迁移 + POSIX 复验项）。
+- 2026-10-01（下午）：**刷新恢复缺口已修复并浏览器闭环复验通过**（记录见
+  [e2e/f05e2e/e2e-record.md](../e2e/f05e2e/e2e-record.md) F21 修复段落）。
+  **实现**：`runs.ts` 新增会话级最近运行记忆（`rememberRun`，提交时记录）与
+  `resumeForSession(sessionId, isCurrent)`（状态仍 queued/running 且会话未切走才重订阅，
+  随 `watch` 的 `loadPendingApproval` 重建弹窗）；`ChatView.restoreSession` 接线。
+  **复验揪出第二个缺陷**：`control_to_dict` 不暴露 worker 侧 `external_id`，重建弹窗
+  只能以 DB 行 id 当 `approvalId` 批准 —— worker gate 按帧 id 匹配不上，决议被静默
+  丢弃，运行停在门上直到超时。修复：投影增加 `external_id`，前端优先使用之。
+  **回归**：前端审计 14/14（新增 4 条 resume 用例；负向对照移除状态检查 →
+  `F21_resume_ignores_a_finished_run` 失败后恢复）、`vue-tsc` 0 错误、前端单测 70/70、
+  `test_web_f21_control_history.py` 14/14。**浏览器闭环**（Run 0c65cbf3）：提交→弹窗→
+  F5 刷新→弹窗重建+流重订阅→在重建弹窗上「允许一次」→弹窗消失、文件执行、终态、
+  记录 `adopted/once/external_id`（实测与行 id 不同）——全部通过。
+  **边界如实记录**：恢复依赖 localStorage 的会话级记忆（与 lastSession 同级）；换
+  浏览器/清存储后停在审批门的运行仍无恢复入口，若产品需要应另立服务端驱动的
+  「活跃运行/待决事项」发现任务。`Status → ready-for-human`（剩余：业务库迁移、
+  POSIX 复验、真实重启后观测）。
 
