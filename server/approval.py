@@ -42,10 +42,18 @@ class ApprovalDecision:
     ``replacement_command`` is the redirect instruction: when set together with
     ``reject`` it becomes the declined call's result so the model adapts on the
     next turn instead of retrying blindly (CLI ``[e] redirect`` semantics).
+
+    ``source`` records **who produced the verdict** (F21): the fail-closed paths
+    below all return ``decision="reject"``, and without this an operator could
+    not tell "the user declined" from "the gate timed out" or "the run was
+    stopped while this was pending" — the durable record would misattribute a
+    decision the user never made. Values: ``user`` | ``timeout`` | ``stopped`` |
+    ``unknown``.
     """
 
     decision: str  # once | reject | session_bash | session_all | persist
     replacement_command: str | None = None
+    source: str = "user"
 
 
 class ApprovalGate:
@@ -96,11 +104,15 @@ class ApprovalGate:
         """Await the decision; on timeout fail closed to ``reject``."""
         fut = self._pending.get(approval_id)
         if fut is None:
-            return ApprovalDecision(decision="reject")
+            # No future to await: this id was never opened here, or it was
+            # already spent. Never the user's verdict (F21).
+            return ApprovalDecision(decision="reject", source="unknown")
         try:
             return await asyncio.wait_for(fut, timeout=timeout)
         except TimeoutError:
-            return ApprovalDecision(decision="reject")
+            # Fail-closed is not the user rejecting: the durable record must
+            # keep the two apart (F21).
+            return ApprovalDecision(decision="reject", source="timeout")
         finally:
             self._pending.pop(approval_id, None)
 
@@ -134,7 +146,7 @@ class ApprovalGate:
         of suspending on the gate until its 300s timeout.
         """
         for aid in list(self._pending):
-            self.resolve(aid, ApprovalDecision(decision="reject"))
+            self.resolve(aid, ApprovalDecision(decision="reject", source="stopped"))
 
 
 class ApprovalObserver:
@@ -199,10 +211,15 @@ class ApprovalObserver:
             risk="high" if risk.danger else "normal",
         )
         decision = await self.gate.wait(approval_id, timeout=self.timeout)
+        # F21: ``source`` and the redirect text ride on the event so the parent
+        # can persist what actually happened (user decline vs timeout vs stop,
+        # and the instruction the user asked for instead).
         self._publish(
             "approval_resolved",
             approval_id=approval_id,
             decision=decision.decision,
+            source=decision.source,
+            replacement_command=decision.replacement_command,
         )
 
         if decision.decision == "reject":

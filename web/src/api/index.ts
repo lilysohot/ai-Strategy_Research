@@ -16,6 +16,7 @@ import type {
   Artifact,
   ArtifactPreview,
   LlmConfig,
+  RunControlsResponse,
   RunDiff,
   RunRevertResponse,
   RunSummary,
@@ -156,7 +157,7 @@ export const runs = {
    * applied at the next tool boundary; 409 when the run already finished.
    */
   steer: (runId: string, message: string) =>
-    request<{ run_id: string; queued: boolean; seq: number }>(
+    request<{ run_id: string; queued: boolean; seq: number; control_id?: string | null }>(
       `/runs/${encodeURIComponent(runId)}/steer`,
       { method: 'POST', body: { message } },
     ),
@@ -173,7 +174,7 @@ export const runs = {
     decision: ApprovalDecisionValue,
     replacementCommand?: string,
   ) =>
-    request<{ run_id: string; approved: boolean }>(
+    request<{ run_id: string; approved: boolean; control_id?: string | null }>(
       `/runs/${encodeURIComponent(runId)}/approve`,
       {
         method: 'POST',
@@ -204,6 +205,16 @@ export const runs = {
    * the row does (§6.4 P2 + §5.7 traceable failure).
    */
   get: (runId: string) => request<RunSummary>(`/runs/${encodeURIComponent(runId)}`),
+
+  /**
+   * Durable control history of one run (F21). Read after a refresh/reconnect to
+   * rebuild what only a live SSE frame used to carry — notably an approval that
+   * is still pending. ``status=pending`` narrows it to the actionable ones.
+   */
+  controls: (runId: string, params?: { kind?: string; status?: string }) =>
+    request<RunControlsResponse>(`/runs/${encodeURIComponent(runId)}/controls`, {
+      query: params,
+    }),
 }
 
 // ── Artifacts (server/routes/artifacts.py) ──────────────────────

@@ -23,6 +23,7 @@ from sqlalchemy import (
     LargeBinary,
     String,
     Text,
+    UniqueConstraint,
     event,
     func,
     select,
@@ -174,6 +175,60 @@ class AuditLog(Base):
     detail_json: Mapped[dict | None] = mapped_column(JSON)
     ip: Mapped[str | None] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class ControlRecord(Base):
+    """A persisted user control action for one run (F21).
+
+    Two kinds share one table because they share the same skeleton — who acted,
+    on which run, when, and whether the action actually took effect — and differ
+    only in the request payload and the decision columns:
+
+    * ``kind="steer"`` — a mid-run direction (``steer_queued`` used to be an
+      in-memory event only, so "queued but never injected" was indistinguishable
+      from "adopted").
+    * ``kind="approval"`` — a tool-call approval request/decision (the gate lives
+      in the worker's memory, so a page refresh had no way to reconstruct what
+      was still pending).
+
+    ``request_json`` holds the **redacted** request (same ``redact_deep`` boundary
+    as every SSE egress). The user's own raw steer text is deliberately NOT kept
+    here: it reaches the transcript through ``turns`` when the steer is adopted,
+    so this table adds no second raw-content store.
+    """
+
+    __tablename__ = "control_records"
+    __table_args__ = (
+        # An approval decision is keyed by the worker's ``approval_id``: a
+        # retried POST must update that one row instead of duplicating the
+        # decision (F15's "a terminal frame can arrive twice" lesson). Steers
+        # carry no client-supplied id, so their NULLs stay distinct.
+        UniqueConstraint("kind", "external_id", name="uq_control_records_kind_external"),
+        Index("ix_control_records_run_id", "run_id"),
+        Index("ix_control_records_session_status", "session_id", "status"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    # Derived server-side from the run row (never from a request body): the
+    # history renderer reads adopted steers per session, so this denormalisation
+    # saves a join on the run-spawn hot path.
+    session_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    # The actor, bound from the JWT — never accepted from the client (PR-BIZ-04).
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    kind: Mapped[str] = mapped_column(String, nullable=False)
+    external_id: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, nullable=False)
+    request_json: Mapped[dict | None] = mapped_column(JSON)
+    decision: Mapped[str | None] = mapped_column(String)
+    replacement_command: Mapped[str | None] = mapped_column(Text)
+    adopted_turn_seq: Mapped[int | None] = mapped_column(Integer)
+    detail_json: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 _engine: AsyncEngine | None = None
@@ -1106,3 +1161,234 @@ async def get_artifact(*, run_id: uuid.UUID, rel_path: str, user_id: uuid.UUID) 
         if row is None or row.user_id != user_id:
             return None
         return await session.get(Artifact, (run_id, rel_path))
+
+
+# ── Control records (F21) ───────────────────────────────────────────
+#
+# See :class:`ControlRecord` for the two kinds. Status values are per kind; the
+# single ``status`` column keeps the table small and the state machine explicit.
+
+CONTROL_KIND_STEER = "steer"
+CONTROL_KIND_APPROVAL = "approval"
+
+# steer: accepted → (delivered | never delivered) → (adopted | dropped)
+STEER_UNDELIVERED = "undelivered"  # the POST arrived with no live worker (409)
+STEER_QUEUED = "queued"  # handed to the worker's stdin, waiting for a boundary
+STEER_ADOPTED = "adopted"  # injected into the conversation at a turn boundary
+STEER_DROPPED = "dropped"  # the run ended before the steer could be injected
+
+# approval: requested → (adopted | rejected | expired | abandoned)
+APPROVAL_PENDING = "pending"
+APPROVAL_ADOPTED = "adopted"  # user approved and the call ran under that decision
+APPROVAL_REJECTED = "rejected"  # the user declined
+APPROVAL_EXPIRED = "expired"  # the gate timed out and failed closed
+APPROVAL_ABANDONED = "abandoned"  # run stopped / worker died while still pending
+
+#: Steer statuses that can still move (everything else is terminal).
+STEER_OPEN_STATUSES: frozenset[str] = frozenset({STEER_QUEUED})
+#: Approval statuses that can still move.
+APPROVAL_OPEN_STATUSES: frozenset[str] = frozenset({APPROVAL_PENDING})
+
+
+def control_is_open(record: ControlRecord) -> bool:
+    """True while the action can still change state (used for run-end closure)."""
+    if record.kind == CONTROL_KIND_STEER:
+        return record.status in STEER_OPEN_STATUSES
+    return record.status in APPROVAL_OPEN_STATUSES
+
+
+def control_to_dict(record: ControlRecord) -> dict:
+    """Project a record for the HTTP surface (``request_json`` already redacted)."""
+    return {
+        "control_id": record.id.hex,
+        "run_id": record.run_id.hex,
+        "kind": record.kind,
+        "status": record.status,
+        "request": dict(record.request_json or {}),
+        "decision": record.decision,
+        "replacement_command": record.replacement_command,
+        "adopted_turn_seq": record.adopted_turn_seq,
+        "detail": dict(record.detail_json or {}),
+        "created_at": record.created_at.isoformat() if record.created_at else None,
+        "resolved_at": record.resolved_at.isoformat() if record.resolved_at else None,
+    }
+
+
+async def create_control(
+    *,
+    run_id: uuid.UUID,
+    session_id: uuid.UUID,
+    user_id: uuid.UUID,
+    kind: str,
+    status: str,
+    request_payload: dict | None = None,
+    external_id: str | None = None,
+    detail: dict | None = None,
+) -> ControlRecord:
+    """Persist a control action's first known state.
+
+    Idempotent for approval requests: the row is keyed by
+    ``(kind, external_id)``, so a re-delivered ``approval_requested`` frame
+    returns the existing record instead of duplicating the request.
+    """
+    async with get_sessionmaker()() as session:
+        if external_id:
+            existing = (
+                await session.execute(
+                    select(ControlRecord).where(
+                        ControlRecord.kind == kind,
+                        ControlRecord.external_id == external_id,
+                    )
+                )
+            ).scalars().first()
+            if existing is not None:
+                return existing
+        row = ControlRecord(
+            run_id=run_id,
+            session_id=session_id,
+            user_id=user_id,
+            kind=kind,
+            status=status,
+            external_id=external_id,
+            request_json=request_payload,
+            detail_json=detail,
+        )
+        session.add(row)
+        await session.commit()
+        await session.refresh(row)
+        return row
+
+
+async def get_control(*, control_id: uuid.UUID) -> ControlRecord | None:
+    """Fetch one control record by its id."""
+    async with get_sessionmaker()() as session:
+        return await session.get(ControlRecord, control_id)
+
+
+async def get_control_by_external_id(*, kind: str, external_id: str) -> ControlRecord | None:
+    """Fetch the record a worker-side id maps to (approval_id → record)."""
+    async with get_sessionmaker()() as session:
+        return (
+            await session.execute(
+                select(ControlRecord).where(
+                    ControlRecord.kind == kind,
+                    ControlRecord.external_id == external_id,
+                )
+            )
+        ).scalars().first()
+
+
+async def list_controls(
+    *,
+    run_id: uuid.UUID | None = None,
+    session_id: uuid.UUID | None = None,
+    kind: str | None = None,
+    statuses: list[str] | None = None,
+) -> list[ControlRecord]:
+    """List control records oldest-first, optionally filtered.
+
+    ``session_id`` is what the history renderer uses to find the steers a
+    conversation has already adopted; the route uses ``run_id``/``statuses``.
+    """
+    async with get_sessionmaker()() as session:
+        conditions = []
+        if run_id is not None:
+            conditions.append(ControlRecord.run_id == run_id)
+        if session_id is not None:
+            conditions.append(ControlRecord.session_id == session_id)
+        if kind is not None:
+            conditions.append(ControlRecord.kind == kind)
+        if statuses:
+            conditions.append(ControlRecord.status.in_(statuses))
+        stmt = select(ControlRecord).where(*conditions).order_by(ControlRecord.created_at.asc())
+        return list((await session.execute(stmt)).scalars().all())
+
+
+async def resolve_control(
+    *,
+    control_id: uuid.UUID | None = None,
+    kind: str | None = None,
+    external_id: str | None = None,
+    status: str,
+    decision: str | None = None,
+    replacement_command: str | None = None,
+    adopted_turn_seq: int | None = None,
+    request_payload: dict | None = None,
+    detail: dict | None = None,
+) -> ControlRecord | None:
+    """Move a control record to ``status`` (a terminal state, in practice).
+
+    Terminal states are not overwritten: a duplicate ``approval_resolved`` frame
+    (or a retried decision POST) must not rewrite a decision that already
+    landed — the same idempotence rule the run's terminal frame follows (F15).
+    ``None`` means no such record; callers decide whether to create one late.
+    """
+    async with get_sessionmaker()() as session:
+        if control_id is not None:
+            row = await session.get(ControlRecord, control_id)
+        elif kind is not None and external_id is not None:
+            row = (
+                await session.execute(
+                    select(ControlRecord).where(
+                        ControlRecord.kind == kind,
+                        ControlRecord.external_id == external_id,
+                    )
+                )
+            ).scalars().first()
+        else:
+            raise ValueError("resolve_control needs a control_id or (kind, external_id)")
+        if row is None:
+            return None
+        if not control_is_open(row):
+            return row
+        row.status = status
+        if decision is not None:
+            row.decision = decision
+        if replacement_command is not None:
+            row.replacement_command = replacement_command
+        if adopted_turn_seq is not None:
+            row.adopted_turn_seq = adopted_turn_seq
+        if request_payload is not None and row.request_json is None:
+            row.request_json = request_payload
+        if detail:
+            row.detail_json = {**(row.detail_json or {}), **detail}
+        row.resolved_at = datetime.now(UTC)
+        await session.commit()
+        await session.refresh(row)
+        return row
+
+
+async def close_open_controls(
+    *,
+    run_id: uuid.UUID,
+    closed_by: str,
+) -> int:
+    """Close every still-open control record of a finished run (F21).
+
+    A run that ends while a steer sits in the worker's inbox, or while an
+    approval is parked on the gate, would otherwise leave a record that reads
+    "still pending" forever — the exact "收到/排队/采用无法长期区分" failure this
+    task exists to fix. Steers become ``dropped`` (delivered but never injected),
+    approvals become ``abandoned`` (nobody can decide once the worker is gone).
+
+    Returns how many rows were closed.
+    """
+    async with get_sessionmaker()() as session:
+        rows = (
+            await session.execute(
+                select(ControlRecord).where(ControlRecord.run_id == run_id)
+            )
+        ).scalars().all()
+        closed = 0
+        for row in rows:
+            if not control_is_open(row):
+                continue
+            row.status = (
+                STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
+            )
+            row.detail_json = {**(row.detail_json or {}), "closed_by": closed_by}
+            row.resolved_at = datetime.now(UTC)
+            closed += 1
+        if closed:
+            await session.commit()
+        return closed

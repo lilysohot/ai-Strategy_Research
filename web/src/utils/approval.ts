@@ -7,7 +7,7 @@
  * timeout; this layer only decides what the UI enables.
  */
 
-import type { SseEvent } from '../types.ts'
+import type { RunControlRecord, SseEvent } from '../types.ts'
 
 /** One pending ``approval_requested`` in the shape the dialog renders. */
 export interface ApprovalRequest {
@@ -31,6 +31,28 @@ export function buildApprovalRequest(event: SseEvent): ApprovalRequest | null {
     reason: typeof event.reason === 'string' ? event.reason : '',
     preview: typeof event.preview === 'string' ? event.preview : '',
     risk: event.risk === 'high' ? 'high' : 'normal',
+  }
+}
+
+/**
+ * Rebuild the dialog's request from a durable control record (F21).
+ *
+ * ``approval_requested`` is a live-only frame, so a refreshed page used to show
+ * a run parked on the gate with no dialog at all. The server keeps a ``pending``
+ * record for every open gate; this maps that record onto the same shape the live
+ * frame produces, so the dialog is identical either way. ``null`` for anything
+ * that is not an open approval (a decided one must not raise a dialog).
+ */
+export function approvalRequestFromRecord(record: RunControlRecord): ApprovalRequest | null {
+  if (record.kind !== 'approval' || record.status !== 'pending') return null
+  const request = (record.request ?? {}) as Record<string, unknown>
+  return {
+    approvalId: record.control_id,
+    toolName: typeof request.tool_name === 'string' ? request.tool_name : 'tool',
+    target: typeof request.target === 'string' ? request.target : '',
+    reason: typeof request.reason === 'string' ? request.reason : '',
+    preview: typeof request.preview === 'string' ? request.preview : '',
+    risk: request.risk === 'high' ? 'high' : 'normal',
   }
 }
 

@@ -602,6 +602,7 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 | F06 | 新增 [server/trajectory_status.py](../../server/trajectory_status.py) 定义并判定 `complete/partial/unavailable`（终端 `{"t":"end"}` 是否存在；半行不掩盖有效行）；`/trace` 返回 `completeness`，历史页在记录旁告警；写入屏障：`TrajectoryFileObserver._close_jsonl` 关闭前 `fsync`（framework 最小范围例外）；[tech-stack.md](../../docs/tech-stack.md) 收窄「完整轨迹 / SIGKILL 安全」四处表述 | `tests/test_web_f06_trace_completeness.py` 10/10（负向对照：判据恒为 complete → 2 条失败）；共享 observer 回归 21/21 |
 | F05 | 展示逻辑抽到 [web/src/utils/traceView.ts](../../web/src/utils/traceView.ts)：推理按轮折叠且只展示散文型（缺失/空/加密签名块各有明确文案，不伪造），工具结果 300 字符预览 + 「继续读取」按 2000 字符有界解锁并显式剩余/总数，切片按 code point；`RunDetailView.vue` 消费之，F03 脱敏边界未移动 | 前端审计 `frontend-f05-audit.mjs` 10/10（负向对照 3 条失败）；`tests/test_web_f05_trace_projection.py` 4/4；`vite build` 通过 |
 | F02 | 根 [.dockerignore](../../.dockerignore) 排除 `server/runs/`、`uploads/`、`data/`、`server/*.db(+wal/shm)` 及前端产物与本地大目录；附带修 `**/__pycache__/`（原规则只匹配根级）与惰性 `web/.dockerignore`（规则镜像到根） | `tests/test_build_context_ignore.py`（40 项，含负向对照）；真实仓库 `COPY . /ctx` 探针：33.18 MB / 1110 文件，运行数据全 absent、构建输入全 present |
+| F21 | 新增 `control_records` 表（`server/store.py` + Alembic `0004_control_records`）与状态机：steer `undelivered/queued/adopted/dropped`、approval `pending/adopted/rejected/expired/abandoned`；父进程落库（worker 仍不 import `server.store`，只发 `control_applied` 帧）；`ApprovalDecision.source` 区分用户拒绝/超时/停止；终态收口接在 `_spawn` 收尾与 `reconcile_orphan_runs`；生效 steer 写成带 `[运行中补充方向] ` 前缀的 `turns` 行（复用 F14 截止点）；`server/routes/runs.py` 新增 `GET /controls`；前端 `steer_applied` 登记进 `CONTROL_EVENT_TYPES`、刷新时用 `GET /controls?status=pending` 重建待审批弹窗；D1 文案修正（「保存为永久规则」→「本次运行内始终允许」）| `tests/test_web_f21_control_history.py` 14/14（负向对照 4 条失败）；`tests/test_web_p3_steer.py` 12/12（含真实 worker e2e：`adopted` + turn 落库）；隔离审计契约 24/24；前端审计新增 F21 ×5（10/10，负向对照 2 条失败）|
 
 **framework 最小范围例外（F04）**：仅改动 `TrajectoryFileObserver.on_llm_response` 的 JSONL
 记录字段（新增 `tool_calls[].id`），不动调用协议、不动工具执行、不改其他观察器。
@@ -651,9 +652,17 @@ F14 衔接业务上下文快照。上述任务不意味着业务快照、价格�
 **容器实测与 `SERVER_DATABASE_URL` 容器覆盖修复已于 2026-10-01 完成**（真实镜像构建 + 卷落点 + 重建后历史 Run 可读；
 并暴露并修复缺口：容器内曾解析为 `localhost:5432/apodex`、`/healthz` 503，现比照 `CORPUS_DSN` 增加
 `SERVER_DATABASE_URL_DOCKER` 覆盖并实测 200；工单
-[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界、F21 控制历史持久化、
+[01](../../.scratch/web-runtime-trace-hardening/issues/01-storage-roots.md) 已 closed）、F13 容量边界、
 F19 的 schema 版本门禁；以及 E1 结转项（POSIX 环境的产物/回滚复验、浏览器 DOM 层、F08 越权动态复验、
 真实供应商格式差异）。
+
+**F21 已于 2026-10-01 实现**（契约与验收见
+[f21-control-history-contract.md](../../.scratch/web-runtime-trace-hardening/f21-control-history-contract.md) §12，
+工单 [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) 转 `ready-for-human`）：
+`control_records` 表 + 状态机 + 终态收口 + 生效 steer 写成 `turns` + `GET /controls` + 前端刷新恢复；
+**未完成**：业务库 `apodex` 尚未执行 `alembic upgrade head`（`0003`/`0004` 均未应用，本轮验证全在隔离
+SQLite/ASGI 内，业务库未触碰）、浏览器 DOM 层复核、真实重启后观测。另修两处既有缺陷：隔离审计夹具随 F01
+失效的 `uploads_root` 一行（曾使 24 个检查全部 setup ERROR）、`server/trajectory_status.py` 一处 SIM105 lint。
 
 **F09 的已知覆盖盲区（已按权威状态修复）**：此前的修复把「已结束的运行流」记在**进程内**的
 `_closed_stream_ids`（有界 512 条），因此只覆盖「运行在本进程结束」这一条路径。对**结束于其它进程**

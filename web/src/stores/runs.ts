@@ -23,6 +23,7 @@ import { runs as runsApi } from '../api'
 import { openRunStream, type SseError, type SseStreamHandle } from '../sse'
 import type { ApprovalDecisionValue, RunStatus, SseEvent } from '../types'
 import {
+  approvalRequestFromRecord,
   buildApprovalRequest,
   isApprovalResolvedFor,
   type ApprovalRequest,
@@ -102,6 +103,12 @@ export const useRunStreamStore = defineStore('runStream', () => {
   const usage = ref<UsageTotals>({ prompt: 0, completion: 0, total: 0, cacheRead: 0, cacheWrite: 0 })
   /** Count of steer_queued frames (§6.2) — shown in the status bar. */
   const steerQueued = ref(0)
+  /**
+   * Count of ``steer_applied`` frames (F21): the worker confirmed those
+   * directions reached a turn boundary. PR-RUN-04 asks the UI to distinguish
+   * "已排队" from "下一边界生效"; queued minus applied is the difference.
+   */
+  const steerApplied = ref(0)
   /**
    * The approval the dialog must show (P3.2, §6.1), or null when none is
    * pending. Set by ``approval_requested`` and cleared by the matching
@@ -288,6 +295,11 @@ export const useRunStreamStore = defineStore('runStream', () => {
         // only shows the count.
         steerQueued.value += 1
         break
+      case 'steer_applied':
+        // F21: the worker injected this direction at a turn boundary — the
+        // "已生效" half of the status message (the record keeps the durable copy).
+        steerApplied.value += 1
+        break
       case 'approval_requested':
         // §6.1: park the request for the dialog; the run stays "running".
         pendingApproval.value = buildApprovalRequest(event)
@@ -358,6 +370,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
       meta.value = {}
       usage.value = { prompt: 0, completion: 0, total: 0, cacheRead: 0, cacheWrite: 0 }
       steerQueued.value = 0
+      steerApplied.value = 0
       pendingApproval.value = null
       errorMessage.value = null
       finalAnswer.value = null
@@ -406,11 +419,46 @@ export const useRunStreamStore = defineStore('runStream', () => {
         void reconcile()
       },
     })
+    // F21: whatever the live stream cannot replay (an approval still parked on
+    // the gate) is rebuilt from the durable control records — on a fresh
+    // subscribe and on a reconnect alike, since the frame may have been missed
+    // while disconnected.
+    void loadPendingApproval(id, generation)
   }
 
   /** Re-open the current stream from the saved cursor (manual "retry"). */
   function retry(): void {
     if (runId.value) watch(runId.value, cursor.value)
+  }
+
+  /**
+   * Rebuild the pending approval from the durable control records (F21).
+   *
+   * ``approval_requested`` exists only as a live frame, so a refreshed page (or
+   * a reconnect that missed it) showed a run parked on the gate with no dialog —
+   * the run simply looked stuck. The server now persists a ``pending`` record per
+   * open gate, so the state is recoverable; a live frame that already arrived
+   * wins, and the generation check keeps a late reply from raising a dialog for
+   * a run the user has since left (F11).
+   */
+  async function loadPendingApproval(
+    requestedRunId: string,
+    requestedGeneration: number,
+  ): Promise<void> {
+    try {
+      const response = await runsApi.controls(requestedRunId, {
+        kind: 'approval',
+        status: 'pending',
+      })
+      if (runId.value !== requestedRunId || generation !== requestedGeneration) return
+      if (pendingApproval.value) return
+      const request = approvalRequestFromRecord(response.controls[0])
+      if (request) pendingApproval.value = request
+    } catch {
+      // Best-effort recovery: the live stream still delivers new approvals, and
+      // a bookkeeping read must never break watching a run.
+      return
+    }
   }
 
   /**
@@ -491,6 +539,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     meta.value = {}
     usage.value = { prompt: 0, completion: 0, total: 0, cacheRead: 0, cacheWrite: 0 }
     steerQueued.value = 0
+    steerApplied.value = 0
     pendingApproval.value = null
     errorMessage.value = null
     runDir.value = null
@@ -516,6 +565,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     meta,
     usage,
     steerQueued,
+    steerApplied,
     pendingApproval,
     errorMessage,
     runDir,

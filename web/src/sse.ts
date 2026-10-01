@@ -113,6 +113,10 @@ const FATAL_STATUSES: ReadonlySet<number> = new Set([400, 401, 403, 404, 422])
  */
 const CONTROL_EVENT_TYPES: ReadonlySet<string> = new Set([
   'steer_queued',
+  // F21: the adoption report. It is emitted from memory by the orchestrator when
+  // the worker confirms the direction reached a turn boundary, so it must not
+  // advance the replay cursor either.
+  'steer_applied',
   'approval_requested',
   'approval_resolved',
 ])

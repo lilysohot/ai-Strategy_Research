@@ -21,7 +21,7 @@ import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -32,25 +32,35 @@ from pydantic import BaseModel
 from starlette.datastructures import UploadFile
 
 from server.artifacts import scan_outputs
+from server.bridge import redact_deep
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
 from server.deps import get_current_user
 from server.diff import revert_paths
 from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.relay import sse_for_run, trajectory_records_for_egress
-from server.trajectory_status import inspect_trajectory
 from server.store import (
     ACTIVE_RUN_STATUSES,
+    CONTROL_KIND_APPROVAL,
+    CONTROL_KIND_STEER,
+    STEER_QUEUED,
+    STEER_UNDELIVERED,
     build_llm_snapshot,
+    control_to_dict,
+    create_control,
     create_run,
     ensure_session,
+    get_control_by_external_id,
     get_default_llm_config,
     get_run,
     get_session,
+    list_controls,
+    resolve_control,
     session_exists,
     sync_run_artifacts,
 )
 from server.store import Run as RunModel
 from server.store import User as UserModel
+from server.trajectory_status import inspect_trajectory
 
 logger = logging.getLogger(__name__)
 
@@ -374,15 +384,49 @@ async def run_steer(
     user: UserModel = Depends(get_current_user),
 ) -> dict[str, Any]:
     # A steer on a run you don't own must fail closed (404), like stop.
-    if not await _run_visible(run_id, user.id):
+    row = await _visible_run(run_id, user.id)
+    if row is None:
         raise HTTPException(status_code=404, detail="run not found")
-    run_id = canonical_run_id(run_id)  # live handle key form (F01)
     if not body.message.strip():
         raise HTTPException(status_code=422, detail="message is required")
-    seq = await get_orchestrator().steer(run_id, body.message)
+    run_id = canonical_run_id(run_id)  # live handle key form (F01)
+    # F21: the record is written BEFORE delivery. The worker's adoption report
+    # names a control id, so there has to be a row for it to name — otherwise a
+    # steer that takes effect in the very next turn would race its own record.
+    # Delivery failure downgrades it immediately, so "received but never
+    # delivered" (409) stays distinguishable from "delivered but never adopted".
+    # Bookkeeping must never block the user's action, so a store failure only
+    # costs the traceability of this one steer (the id stays None).
+    control_id: str | None = None
+    try:
+        control = await create_control(
+            run_id=row.id,
+            session_id=row.session_id,
+            user_id=user.id,
+            kind=CONTROL_KIND_STEER,
+            status=STEER_QUEUED,
+            # Same redaction boundary as the SSE egress (§7): the row must never
+            # hold more than what the browser was allowed to see.
+            request_payload={"message": redact_deep(body.message)},
+        )
+        control_id = control.id.hex
+    except Exception:
+        logger.exception("steer control record failed for run_id=%s", row.id.hex)
+    seq = await get_orchestrator().steer(run_id, body.message, control_id=control_id)
     if seq is None:
-        raise HTTPException(status_code=409, detail="run not running")
-    return {"run_id": run_id, "queued": True, "seq": seq}
+        if control_id is not None:
+            # The direction never reached a worker: record that it was received
+            # but not delivered, instead of leaving no trace of the 409.
+            await resolve_control(
+                control_id=uuid.UUID(control_id),
+                status=STEER_UNDELIVERED,
+                detail={"http": 409},
+            )
+        raise HTTPException(
+            status_code=409,
+            detail={"message": "run not running", "control_id": control_id},
+        )
+    return {"run_id": run_id, "queued": True, "seq": seq, "control_id": control_id}
 
 
 class ApproveRequest(BaseModel):
@@ -411,7 +455,48 @@ async def run_approve(
     )
     if not ok:
         raise HTTPException(status_code=409, detail="run not running")
-    return {"run_id": run_id, "approved": True}
+    # F21: the durable record is written from the worker's own frames, never from
+    # this body — a client-supplied verdict is a request, not a fact. The id is
+    # echoed back only when the request frame has already been persisted.
+    try:
+        record = await get_control_by_external_id(
+            kind=CONTROL_KIND_APPROVAL, external_id=body.approval_id
+        )
+    except Exception:
+        logger.exception("approval control lookup failed for run_id=%s", run_id)
+        record = None
+    return {
+        "run_id": run_id,
+        "approved": True,
+        "control_id": record.id.hex if record is not None else None,
+    }
+
+
+@router.get("/{run_id}/controls")
+async def run_controls(
+    run_id: str,
+    kind: str | None = Query(default=None),
+    status: str | None = Query(default=None),
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """Durable control history for one run (F21).
+
+    This is what a refreshed or reconnected page reads to rebuild state that
+    used to exist only in a live SSE frame — most importantly an approval that
+    is still pending. Ownership is checked like every other route here, so a
+    guessed run id is a 404 rather than someone else's control history.
+    """
+    row = await _visible_run(run_id, user.id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    if kind is not None and kind not in (CONTROL_KIND_STEER, CONTROL_KIND_APPROVAL):
+        raise HTTPException(status_code=422, detail="unknown kind")
+    records = await list_controls(
+        run_id=row.id,
+        kind=kind,
+        statuses=[status] if status else None,
+    )
+    return {"run_id": row.id.hex, "controls": [control_to_dict(r) for r in records]}
 
 
 class RevertRequest(BaseModel):

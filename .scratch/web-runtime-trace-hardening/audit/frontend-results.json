@@ -20,6 +20,26 @@
     {
       "test": "F09_steer_sequence_is_not_trajectory_cursor",
       "outcome": "passed"
+    },
+    {
+      "test": "F21_steer_applied_is_not_a_trajectory_cursor",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_pending_approval_is_rebuilt_after_a_refresh",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_stale_control_recovery_cannot_overwrite_another_run",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_a_decided_approval_does_not_reopen_after_a_refresh",
+      "outcome": "passed"
+    },
+    {
+      "test": "F21_steer_applied_is_counted_apart_from_queued",
+      "outcome": "passed"
     }
   ]
 }

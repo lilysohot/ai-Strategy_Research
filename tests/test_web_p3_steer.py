@@ -227,14 +227,20 @@ def _spawn_approver(orch, run_id: str, client, headers):
 
 async def _create_owned_run(auth_headers, *, status: str = "running") -> str:
     from server.security import decode_access_token
-    from server.store import create_run
+    from server.store import create_run, ensure_session
 
     token = auth_headers["Authorization"].removeprefix("Bearer ").strip()
     user_id = decode_access_token(token)
     run_id = uuid.uuid4()
+    session_id = uuid.uuid4()
+    # The session row must exist first: ``runs.session_id`` is a foreign key,
+    # which SQLite only started enforcing with F16 — these fixtures used to pass
+    # a random session id and every route test died on the insert instead of
+    # exercising the route.
+    await ensure_session(session_id=session_id, user_id=user_id, title="p3-steer")
     await create_run(
         run_id=run_id,
-        session_id=uuid.uuid4(),
+        session_id=session_id,
         user_id=user_id,
         prompt="p",
         pipeline_id="stateful-react-agent",
@@ -291,13 +297,20 @@ async def test_steer_route_queues_into_worker(
     body = resp.json()
     assert body["queued"] is True
     assert body["seq"] == 1
-    # stdin got the worker-side action line.
+    # F21: the response names the durable control record, and that id rides to
+    # the worker so its adoption report can name the same row.
+    assert body["control_id"]
     line = json.loads(handle.proc.stdin.data.decode().strip())
-    assert line == {"action": "steer", "message": "check the edge cases"}
+    assert line == {
+        "action": "steer",
+        "message": "check the edge cases",
+        "control_id": body["control_id"],
+    }
     # SSE subscribers see the steer_queued fan-out.
     event = await asyncio.wait_for(q.get(), timeout=1)
     assert event["type"] == "steer_queued"
     assert event["message"] == "check the edge cases"
+    assert event["control_id"] == body["control_id"]
 
 
 # — slice 3: end-to-end — the steer text reaches a follow-up LLM request ———
@@ -399,3 +412,22 @@ async def test_steer_reaches_next_llm_request(
         if marker in json.dumps(r.get("messages", []))
     ]
     assert carried, "steer text never reached a follow-up LLM request"
+
+    # F21: the adoption the worker reported is durable, and the direction is part
+    # of the transcript — that is what makes the next run see the correction.
+    from server.history import STEER_TURN_PREFIX
+    from server.orchestrator import _session_uuid
+    from server.store import list_controls, list_turns
+
+    records = await list_controls(run_id=uuid.UUID(run_id))
+    steer_records = [r for r in records if r.kind == "steer"]
+    assert steer_records, "no control record was written for the steer"
+    assert steer_records[0].status == "adopted", steer_records[0].status
+    assert steer_records[0].adopted_turn_seq is not None
+
+    session_uuid = _session_uuid("p3-steer-e2e", user_id)
+    turns = await list_turns(session_id=session_uuid)
+    adopted = [
+        t for t in turns if t.content.startswith(STEER_TURN_PREFIX) and marker in t.content
+    ]
+    assert len(adopted) == 1, [t.content for t in turns]

@@ -170,6 +170,35 @@ export interface RunSummary {
 }
 
 /**
+ * One durable control action of a run (F21, ``GET /api/runs/{id}/controls``).
+ *
+ * A mid-run direction (``kind: 'steer'``) or a tool-call approval
+ * (``kind: 'approval'``) with the state it reached. This is what a refreshed or
+ * reconnected page reads to rebuild state that used to exist only in a live SSE
+ * frame — most importantly a still-``pending`` approval.
+ */
+export interface RunControlRecord {
+  control_id: string
+  run_id: string
+  kind: 'steer' | 'approval'
+  /** steer: queued | adopted | dropped | undelivered; approval: pending | adopted | rejected | expired | abandoned. */
+  status: string
+  /** Already redacted server-side: the same projection the SSE egress uses. */
+  request: Record<string, unknown>
+  decision?: string | null
+  replacement_command?: string | null
+  adopted_turn_seq?: number | null
+  detail?: Record<string, unknown>
+  created_at?: string | null
+  resolved_at?: string | null
+}
+
+export interface RunControlsResponse {
+  run_id: string
+  controls: RunControlRecord[]
+}
+
+/**
  * One SSE frame from ``GET /api/runs/{id}/events``.
  *
  * ``seq`` is the trajectory line number the event was replayed from. It is the
@@ -216,6 +245,11 @@ export interface SseEvent {
   // made a steer jump the cursor past unread lines (F09).
   steer_seq?: number
   message?: string
+  // Control records (F21): ``control_id`` names the durable record of a steer or
+  // approval, ``turn_index`` is the transcript position an adopted steer landed
+  // at. Both are additive — older frames simply omit them.
+  control_id?: string
+  turn_index?: number
   // approval_requested / approval_resolved (P3.2, §6.1). ``risk`` mirrors the
   // worker's risk assessment; ``decision`` is the POSTed verdict echoed back.
   approval_id?: string

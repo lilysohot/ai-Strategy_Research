@@ -21,7 +21,9 @@ async def env(tmp_path, monkeypatch):
     cfg = get_config()
     monkeypatch.setattr(cfg, "database_url", f"sqlite+aiosqlite:///{tmp_path}/audit.db")
     monkeypatch.setattr(cfg, "runs_root", tmp_path / "runs")
-    monkeypatch.setattr(cfg, "uploads_root", tmp_path / "uploads")
+    # ``uploads_root`` was removed by F01 (uploads actually land under
+    # ``<runs_root>/<run_id>/inputs``); setting it here made every case in this
+    # file error out at setup once the migration dropped the field.
     cfg.ensure_dirs()
     await store.reset_engine()
     await store.init_db()

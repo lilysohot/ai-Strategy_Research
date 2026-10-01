@@ -29,6 +29,19 @@ _ROLE_LABELS = {
     _ASSISTANT_ROLE: "Assistant",
 }
 
+#: Prefix marking a transcript row that was not a submitted question but a
+#: mid-run direction the user injected through ``POST /api/runs/{id}/steer``
+#: (F21). It is written only when the steer was actually adopted, and it is the
+#: reason a later run sees the user's correction at all: history is rendered
+#: from ``turns``, so an adopted steer that never became a turn would be
+#: invisible to every subsequent run.
+#:
+#: Deliberately a plain content prefix rather than a new column: the transcript
+#: schema stays as it is, the text is still literally what the user wrote, and
+#: the structured facts (who, when, adopted at which turn) live in
+#: ``control_records``.
+STEER_TURN_PREFIX = "[运行中补充方向] "
+
 
 def turns_to_dicts(turns: list[Any]) -> list[dict[str, str]]:
     """Project ``Turn`` rows (or dicts) to ``[{"role", "content"}]`` in seq order."""

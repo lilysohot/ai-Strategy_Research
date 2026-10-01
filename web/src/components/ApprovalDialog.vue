@@ -151,7 +151,7 @@ async function decide(decision: ApprovalDecisionValue) {
           data-testid="approval-session"
           @click="decide('session_all')"
         >
-          本次会话内允许
+          本次运行内允许
         </el-button>
         <el-button
           type="primary"
@@ -159,7 +159,7 @@ async function decide(decision: ApprovalDecisionValue) {
           data-testid="approval-persist"
           @click="decide('persist')"
         >
-          保存为永久规则
+          本次运行内始终允许
         </el-button>
       </div>
     </div>

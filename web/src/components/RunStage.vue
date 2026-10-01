@@ -61,6 +61,10 @@ const facts = computed(() =>
     props.contextLabel ? `ctx ${props.contextLabel}` : '',
     props.toolCount ? `tools ${props.toolCount}` : '',
     runStream.steerQueued ? `插话 ${runStream.steerQueued}` : '',
+    // F21 / PR-RUN-04: distinguish "queued" from "took effect at the next
+    // boundary" — the count alone could not tell a user whether their mid-run
+    // direction had been read yet.
+    runStream.steerApplied ? `插话已生效 ${runStream.steerApplied}` : '',
     props.diffLabel,
   ].filter(Boolean),
 )

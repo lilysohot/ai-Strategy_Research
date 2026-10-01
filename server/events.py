@@ -6,15 +6,24 @@ reads the runtime's ``react_agent.jsonl`` trajectory (tech-stack.md §5.2/§6.2)
 and the bridge never writes to disk itself.
 
 Event types (subset of requirements-user-layer.md §5):
-    run_started       lifecycle, not persisted
-    assistant_delta   streamed token delta (only realtime; safe to drop on backpressure)
-    tool_started      tool invocation began
-    tool_finished     tool returned (ok / error + detail)
-    run_completed     run finished with a final answer
-    run_failed        run raised
-    run_stopped       cooperative stop fired
-    artifact_created  a deliverable was written to ws/outputs
-    warning           non-fatal notice (e.g. partial injection)
+    run_started         lifecycle, not persisted
+    assistant_delta     streamed token delta (only realtime; safe to drop on backpressure)
+    tool_started        tool invocation began
+    tool_finished       tool returned (ok / error + detail)
+    run_completed       run finished with a final answer
+    run_failed          run raised
+    run_stopped         cooperative stop fired
+    artifact_created    a deliverable was written to ws/outputs
+    steer_queued        user direction accepted and handed to the worker (F21)
+    steer_applied       that direction was injected at a turn boundary (F21)
+    approval_requested  a confirm-level tool call is waiting on the user (F21)
+    approval_resolved   the user's verdict for one approval id (F21)
+    warning             non-fatal notice (e.g. partial injection)
+
+The four control events were emitted as bare strings before F21; they are listed
+here so the vocabulary has one home. They are *control* frames: the web client's
+SSE cursor deliberately does not advance on them (``web/src/sse.ts``), and their
+durable record is ``control_records`` — not a second event log.
 """
 
 from __future__ import annotations
@@ -33,6 +42,10 @@ EVENT_TYPES = (
     "run_failed",
     "run_stopped",
     "artifact_created",
+    "steer_queued",
+    "steer_applied",
+    "approval_requested",
+    "approval_resolved",
     "warning",
 )
 
@@ -46,6 +59,10 @@ class EventType(StrEnum):
     RUN_FAILED = "run_failed"
     RUN_STOPPED = "run_stopped"
     ARTIFACT_CREATED = "artifact_created"
+    STEER_QUEUED = "steer_queued"
+    STEER_APPLIED = "steer_applied"
+    APPROVAL_REQUESTED = "approval_requested"
+    APPROVAL_RESOLVED = "approval_resolved"
     WARNING = "warning"
 
 

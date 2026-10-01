@@ -2,11 +2,12 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
 import {
+  approvalRequestFromRecord,
   buildApprovalRequest,
   canSubmitApproval,
   isApprovalResolvedFor,
 } from './approval.ts'
-import type { SseEvent } from '../types.ts'
+import type { RunControlRecord, SseEvent } from '../types.ts'
 
 function approvalEvent(partial: Partial<SseEvent> = {}): SseEvent {
   return {
@@ -18,6 +19,23 @@ function approvalEvent(partial: Partial<SseEvent> = {}): SseEvent {
     reason: '需要确认的命令',
     preview: 'rm -rf build/',
     risk: 'normal',
+    ...partial,
+  }
+}
+
+function pendingRecord(partial: Partial<RunControlRecord> = {}): RunControlRecord {
+  return {
+    control_id: 'a-1',
+    run_id: 'r-1',
+    kind: 'approval',
+    status: 'pending',
+    request: {
+      tool_name: 'bash',
+      target: 'rm -rf build/',
+      reason: '需要确认的命令',
+      preview: 'rm -rf build/',
+      risk: 'normal',
+    },
     ...partial,
   }
 }
@@ -46,6 +64,40 @@ test('buildApprovalRequest tolerates a missing risk as normal', () => {
 
 test('buildApprovalRequest ignores unrelated events', () => {
   assert.equal(buildApprovalRequest({ type: 'tool_started', ts: 1 }), null)
+})
+
+test('approvalRequestFromRecord rebuilds the same dialog shape from a record', () => {
+  // F21: the recovery path must not invent a second rendering contract.
+  assert.deepEqual(approvalRequestFromRecord(pendingRecord()), {
+    approvalId: 'a-1',
+    toolName: 'bash',
+    target: 'rm -rf build/',
+    reason: '需要确认的命令',
+    preview: 'rm -rf build/',
+    risk: 'normal',
+  })
+})
+
+test('approvalRequestFromRecord keeps a high-risk record high', () => {
+  const record = pendingRecord({ request: { risk: 'high', tool_name: 'bash' } })
+  assert.equal(approvalRequestFromRecord(record)?.risk, 'high')
+})
+
+test('approvalRequestFromRecord refuses anything that is not an open approval', () => {
+  // A decided approval must never raise a dialog again after a refresh.
+  for (const record of [
+    pendingRecord({ status: 'adopted' }),
+    pendingRecord({ status: 'rejected' }),
+    pendingRecord({ kind: 'steer', status: 'pending' }),
+  ]) {
+    assert.equal(approvalRequestFromRecord(record), null)
+  }
+})
+
+test('approvalRequestFromRecord tolerates a record without a request body', () => {
+  const request = approvalRequestFromRecord(pendingRecord({ request: {} }))
+  assert.equal(request?.toolName, 'tool')
+  assert.equal(request?.risk, 'normal')
 })
 
 test('buildApprovalRequest rejects a frame without an approval_id', () => {

@@ -36,14 +36,25 @@ from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import REPO_ROOT, get_config, run_dir_for
 from server.events import EventType, make_event
-from server.history import extract_final_answer, render_session_history
+from server.history import STEER_TURN_PREFIX, extract_final_answer, render_session_history
 from server.store import (
+    APPROVAL_ABANDONED,
+    APPROVAL_ADOPTED,
+    APPROVAL_EXPIRED,
+    APPROVAL_PENDING,
+    APPROVAL_REJECTED,
+    CONTROL_KIND_APPROVAL,
+    STEER_ADOPTED,
     append_turn,
+    close_open_controls,
+    create_control,
     ensure_session,
+    get_control,
     list_active_runs,
     list_turns,
     mark_run_started,
     record_artifacts,
+    resolve_control,
     resolve_user_llm_env,
     update_run_result,
     update_run_usage,
@@ -196,6 +207,13 @@ class RunHandle:
     # Monotonic per-run counter for steered messages (§7: every event carries
     # a client-orderable seq).
     steer_seq: int = 0
+    # F21 bookkeeping for live steers: control id → the steer_seq the client was
+    # told about, and control id → the raw text. The raw text never goes into the
+    # control record (that stores the redacted payload), so the adopted turn is
+    # written from here — a run whose worker died has nothing to adopt, which is
+    # exactly why an in-process map is sufficient.
+    steer_controls: dict[str, int] = field(default_factory=dict)
+    steer_texts: dict[str, str] = field(default_factory=dict)
 
 
 class Orchestrator:
@@ -312,13 +330,19 @@ class Orchestrator:
         handle._stopped_by = "user_stop"
         return True
 
-    async def steer(self, run_id: str, message: str) -> int | None:
+    async def steer(self, run_id: str, message: str, *, control_id: str | None = None) -> int | None:
         """Queue a live-steering line into a running worker via stdin.
 
         Returns the new per-run seq for the queued message, or ``None`` when
         the run has no live worker. The SSE ``steer_queued`` event is fanned
         out here (not by the bridge) with the message redacted at the egress
         boundary (§7 出口统一脱敏).
+
+        ``control_id`` is the id of the ``control_records`` row the caller
+        persisted (F21). It is forwarded to the worker so the adoption report can
+        name it, and kept here so an adopted steer can be turned into a transcript
+        row when the worker confirms it. The payload keeps its historical shape
+        when no control row exists (internal callers, tests).
         """
         handle = self._handles.get(run_id)
         if handle is None or handle.proc.returncode is not None:
@@ -326,14 +350,18 @@ class Orchestrator:
         stdin = handle.proc.stdin
         if stdin is None:
             return None
+        payload: dict[str, Any] = {"action": "steer", "message": message}
+        if control_id:
+            payload["control_id"] = control_id
         try:
-            stdin.write(
-                (json.dumps({"action": "steer", "message": message}) + "\n").encode()
-            )
+            stdin.write((json.dumps(payload) + "\n").encode())
             await stdin.drain()
         except (BrokenPipeError, ValueError):
             return None
         handle.steer_seq += 1
+        if control_id:
+            handle.steer_controls[control_id] = handle.steer_seq
+            handle.steer_texts[control_id] = message
         self._publish(
             run_id,
             # ``steer_seq``, not ``seq``: ``seq`` is reserved for the trajectory
@@ -344,6 +372,7 @@ class Orchestrator:
                 "steer_queued",
                 steer_seq=handle.steer_seq,
                 message=redact_deep(message),
+                **({"control_id": control_id} if control_id else {}),
             ),
         )
         return handle.steer_seq
@@ -513,6 +542,9 @@ class Orchestrator:
                 # One unrecoverable run must not abort the sweep — the remaining
                 # rows still need closing out.
                 logger.exception("orphan recovery failed for run_id=%s", run_id)
+            # F21: a control action that was pending when the process died can
+            # never take effect now — the worker that owned the gate is gone.
+            await self._close_control_records(run_id, closed_by="server_restart")
             closed += 1
             logger.warning("orphan run reconciled: run_id=%s status=%s", run_id, status)
 
@@ -597,6 +629,10 @@ class Orchestrator:
                 # billed for those tokens whether or not the run produced an answer.
                 with contextlib.suppress(Exception):
                     await asyncio.wait_for(self._record_usage(handle), timeout=15)
+                # F21: whatever control action never reached the conversation
+                # ends here — a steer left in the inbox and an approval left on
+                # the gate are both answered by "the run is over".
+                await self._close_control_records(run_id, closed_by="run_finished")
                 self._handles.pop(run_id, None)
             # Release the slot acquired in _launch exactly once, on every path:
             # a normally-finished worker exits on its own, so _kill_handle
@@ -616,6 +652,177 @@ class Orchestrator:
             await mark_run_started(run_id=uuid.UUID(handle.run_id))
         except Exception:
             logger.exception("run_started persist failed for %s", handle.run_id)
+
+    # — control records (F21) —————————————————————————————————————————
+    def _control_owner(self, handle: RunHandle) -> tuple[uuid.UUID, uuid.UUID, uuid.UUID] | None:
+        """``(run_id, session_id, user_id)`` for a control record, or ``None``.
+
+        A control action is user content, so it is recorded only when all three
+        identities are known: a real UUID run row, a session, and the
+        authenticated user carried on the spawn params. A run with no user (an
+        internal or legacy caller) records nothing rather than inventing an owner.
+        """
+        if not _looks_like_uuid(handle.run_id):
+            return None
+        params = getattr(handle, "_params", None) or {}
+        session_uuid = params.get("session_uuid")
+        user_id = params.get("user_id")
+        if session_uuid is None or user_id is None:
+            return None
+        return uuid.UUID(handle.run_id), session_uuid, user_id
+
+    @staticmethod
+    def _approval_status(decision: str, source: str) -> str:
+        """Map a worker verdict onto the durable approval states (F21).
+
+        The gate fails closed with ``decision="reject"`` for three different
+        reasons (a real decline, the 300s timeout, a stop that force-rejected the
+        pending item) and for an unknown id. Collapsing them would record a
+        decision the user never made, so ``source`` decides which state it is.
+        """
+        if source in ("timeout", "unknown"):
+            return APPROVAL_EXPIRED
+        if source == "stopped":
+            return APPROVAL_ABANDONED
+        return APPROVAL_REJECTED if decision == "reject" else APPROVAL_ADOPTED
+
+    async def _persist_control_event(self, handle: RunHandle, payload: Any) -> None:
+        """Persist an approval request or verdict as it streams by (F21).
+
+        Best-effort like the other lifecycle sinks: a bookkeeping failure must
+        not abort the frame pump and leave the run's stream unread. Both events
+        already crossed the worker's redaction boundary
+        (``ApprovalObserver._publish``), so what is stored has the same shape the
+        browser received.
+        """
+        if not isinstance(payload, dict):
+            return
+        type_ = payload.get("type")
+        if type_ not in ("approval_requested", "approval_resolved"):
+            return
+        owner = self._control_owner(handle)
+        if owner is None:
+            return
+        run_id, session_id, user_id = owner
+        approval_id = str(payload.get("approval_id") or "")
+        if not approval_id:
+            return
+        try:
+            if type_ == "approval_requested":
+                await create_control(
+                    run_id=run_id,
+                    session_id=session_id,
+                    user_id=user_id,
+                    kind=CONTROL_KIND_APPROVAL,
+                    status=APPROVAL_PENDING,
+                    external_id=approval_id,
+                    request_payload={
+                        key: payload.get(key)
+                        for key in ("tool_name", "target", "reason", "preview", "risk")
+                        if payload.get(key) is not None
+                    },
+                )
+                return
+            decision = str(payload.get("decision") or "")
+            source = str(payload.get("source") or "user")
+            status = self._approval_status(decision, source)
+            row = await resolve_control(
+                kind=CONTROL_KIND_APPROVAL,
+                external_id=approval_id,
+                status=status,
+                decision=decision or None,
+                replacement_command=payload.get("replacement_command"),
+                detail={"source": source},
+            )
+            if row is None:
+                # The request frame never arrived (a decision for an id opened
+                # before this process existed). Record the verdict rather than
+                # dropping the fact; the mark says it was reconstructed late.
+                await create_control(
+                    run_id=run_id,
+                    session_id=session_id,
+                    user_id=user_id,
+                    kind=CONTROL_KIND_APPROVAL,
+                    status=status,
+                    external_id=approval_id,
+                    request_payload={"tool_name": payload.get("tool_name")}
+                    if payload.get("tool_name")
+                    else None,
+                    detail={"source": source, "recorded_late": True},
+                )
+        except Exception:
+            logger.exception("control event persist failed for run_id=%s", handle.run_id)
+
+    async def _record_steer_adopted(self, handle: RunHandle, frame: dict[str, Any]) -> None:
+        """Mark a steer as adopted and write it into the transcript (F21).
+
+        Both halves are written together, because either alone is a half-truth:
+        the record says the direction took effect, and the turn is what makes the
+        *next* run see it (``server/history.py`` renders history from ``turns``).
+        The turn goes first — its ``seq`` is the adoption position stored on the
+        record. A re-delivered frame is a no-op: a record that already has an
+        ``adopted_turn_seq`` must not produce a second message (the F15 duplicate
+        terminal-frame lesson, one layer down).
+        """
+        control_id = str(frame.get("control_id") or "")
+        if not control_id or not _looks_like_uuid(control_id):
+            return
+        owner = self._control_owner(handle)
+        if owner is None:
+            return
+        run_id = owner[0]
+        try:
+            record = await get_control(control_id=uuid.UUID(control_id))
+            if record is None or record.run_id != run_id:
+                return
+            if record.adopted_turn_seq is not None:
+                return
+            text = handle.steer_texts.pop(control_id, None)
+            turn_seq = record.adopted_turn_seq
+            if text:
+                turn = await append_turn(
+                    session_id=record.session_id,
+                    role="user",
+                    content=f"{STEER_TURN_PREFIX}{text}",
+                    run_id=record.run_id,
+                )
+                turn_seq = turn.seq
+            await resolve_control(
+                control_id=uuid.UUID(control_id),
+                status=STEER_ADOPTED,
+                adopted_turn_seq=turn_seq,
+                detail={"reported_by": "worker"},
+            )
+        except Exception:
+            logger.exception("steer adoption persist failed for run_id=%s", handle.run_id)
+            return
+        self._publish(
+            handle.run_id,
+            make_event(
+                EventType.STEER_APPLIED.value,
+                control_id=control_id,
+                steer_seq=handle.steer_controls.pop(control_id, None),
+                turn_index=turn_seq,
+            ),
+        )
+
+    async def _close_control_records(self, run_id: str, *, closed_by: str) -> None:
+        """Close out a finished run's still-open control records (F21).
+
+        A steer sitting in the worker's inbox, or an approval parked on its gate,
+        dies with the worker. Without this they would read "queued"/"pending"
+        forever — indistinguishable from an action about to take effect, which is
+        exactly the failure this task removes.
+        """
+        if not _looks_like_uuid(run_id):
+            return
+        try:
+            closed = await close_open_controls(run_id=uuid.UUID(run_id), closed_by=closed_by)
+        except Exception:
+            logger.exception("control record closure failed for run_id=%s", run_id)
+            return
+        if closed:
+            logger.info("closed %d open control record(s) for run_id=%s", closed, run_id)
 
     async def _record_usage(self, handle: RunHandle) -> None:
         """Aggregate the run's per-turn usage from its trajectory and persist it.
@@ -756,7 +963,16 @@ class Orchestrator:
                     # subprocess — its observer queue cannot cross the boundary.
                     # Rehydrate and fan them out to any SSE subscribers.
                     if frame.get("type") == "event":
-                        self._publish(handle.run_id, frame.get("payload"))
+                        payload = frame.get("payload")
+                        self._publish(handle.run_id, payload)
+                        # F21: the approval events are the only place a request
+                        # or a verdict is ever stated — persist them while they
+                        # are live, or a refresh has nothing to rebuild from.
+                        await self._persist_control_event(handle, payload)
+                    # F21: the worker reports which steers actually reached the
+                    # conversation; only it can know that.
+                    if frame.get("type") == "control_applied":
+                        await self._record_steer_adopted(handle, frame)
                     # F20: the worker's own start frame is the only proof it
                     # launched — persist it, or the row reads "queued" forever.
                     if frame.get("type") == "run_started":

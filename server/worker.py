@@ -180,7 +180,13 @@ async def _stdin_watch(stop: _StopFlag, steer_inbox: Any, gate: Any = None) -> N
                     if gate is not None:
                         gate.reject_pending()
                 if action == "steer" and steer_inbox is not None:
-                    steer_inbox.enqueue(str(msg.get("message") or ""))
+                    # F21: the control id rides along so the adoption report can
+                    # name the record the parent persisted for this line.
+                    control_id = msg.get("control_id")
+                    steer_inbox.enqueue(
+                        str(msg.get("message") or ""),
+                        control_id=str(control_id) if control_id else None,
+                    )
                 if action == "approve" and gate is not None:
                     from server.approval import ApprovalDecision
 
@@ -276,7 +282,18 @@ async def run_once(args: argparse.Namespace) -> int:
     from server.steer import SteerInbox, SteerObserver
 
     steer_inbox = SteerInbox()
-    steer_observer = SteerObserver(steer_inbox)
+
+    def _report_steer_adopted(control_ids: list[str]) -> None:
+        """Tell the parent which steer records actually reached the loop (F21).
+
+        Only the worker can know this: a steer still sitting in the inbox when
+        the run ends was never injected, so the parent must not infer adoption
+        from the fact that the line was accepted and written to stdin.
+        """
+        for control_id in control_ids:
+            _frame("control_applied", kind="steer", control_id=control_id)
+
+    steer_observer = SteerObserver(steer_inbox, on_adopted=_report_steer_adopted)
     # P3.2 (§6.1): confirm-level tool calls emit approval_requested into
     # live_events and suspend on the gate until stdin delivers the decision.
     from server.approval import ApprovalGate, ApprovalObserver

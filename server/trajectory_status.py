@@ -29,6 +29,7 @@ Guarantees this module does NOT make:
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 from dataclasses import dataclass
@@ -165,12 +166,7 @@ def fsync_directory(path: Path) -> None:
         fd = os.open(str(path), os.O_RDONLY)
     except OSError:
         return
-    try:
+    with contextlib.suppress(OSError):
         os.fsync(fd)
-    except OSError:
-        pass
-    finally:
-        try:
-            os.close(fd)
-        except OSError:
-            pass
+    with contextlib.suppress(OSError):
+        os.close(fd)
