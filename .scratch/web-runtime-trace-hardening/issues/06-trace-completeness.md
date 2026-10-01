@@ -109,3 +109,18 @@ Requirements: PR-RUN-02, PR-GOV-02, PR-BIZ-05
   既有 completeness 套件 10/10 回归全过。**已知边界登记**：断电后 artifacts 可能索引在而文件缺，
   下载 404 fail-closed 属可接受降级（不扩 scope）；真实掉电的整机验证仍需硬件级环境，本项以文件层
   等价注入收口。
+- 2026-10-02（续）：**请求尝试身份项处理完成——契约级别冻结为 summary-only（用户指示执行）**。
+  现状审计：运行时 `LLMAttemptContext` 体系早已完备（`agent_loop._on_attempt` 每次尝试逐 phase
+  notify observers），缺的只是 trajectory observer 未落盘。实现三件：
+  **① 落盘**：[trajectory.py](../../../frontier_agent/components/observers/trajectory.py) 新增
+  `on_llm_attempt` → JSONL 追加 `t:"attempt"` 身份行（turn/call_id/attempt_id/attempt_index/phase/
+  outcome/reason 截断 500/recovery_action/error_type/duration_ms/ttft_ms/usage/finish_reason），
+  不落请求/响应体、不进 JSON envelope——审计行非回放轮次；**② 出口过滤**：relay 的
+  `_traj_record_to_events` 与 `trajectory_page` 均跳过 attempt（对外 SSE/trace 契约与既有验证面
+  完全不变），物理行号仍计入游标（T3.1 数学不受扰）；**③ 契约确认**：completeness 只认 `end`
+  （attempt 不影响判定）、usage 聚合只认 `t=="llm"`（attempt usage 不重复计数，但审计面有
+  per-attempt 用量）。RAW 读者 `trajectory_records` 保持不过滤（内部消费者可见全量）。
+  回归 `tests/test_web_f06_attempt_identity.py` **4/4**（身份行落盘且 summary-only、completeness
+  不受扰、egress 过滤+游标含 attempt 行、真实轮次不受扰）；m1 端到端测试的对账口径同步修正
+  （RAW vs egress 差异即为 attempt 行）；web 全量 **200 passed**（+4）；ruff/pyright 全过。
+  **F06 执行侧至此全部闭环**（F06-RUN-1/2/3 + completeness + 断电耐久 + 请求尝试身份）。

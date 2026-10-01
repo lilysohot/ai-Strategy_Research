@@ -661,7 +661,14 @@ API 存活、Run 立即收口 `stopped/killed`、`/trace` `completeness=partial`
 （已修：`summary.json` 原子写 + 清理 `.tmp`/0 字节 spool），回归
 `tests/test_web_f22_disk_full.py` 6/6，见
 [工单 22](../../.scratch/web-runtime-trace-hardening/issues/22-disk-full-queue-wedge.md)）；
-尚余**断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；F07 的
+尚余**断电耐久**与**请求尝试身份**（失败·重试是否入契约）——契约已定义并有合成文件证据；
+**→ F06 两项均已收口（2026-10-02）**：断电耐久以"持久化链路审计 + `worker.persist_summary`
+（tmp fsync → rename → 目录 fsync + 轨迹终态 fsync）+ 断电后果文件层等价注入"完成
+（`tests/test_web_f06_power_durability.py` 8/8）；请求尝试身份冻结契约级别为 **summary-only**——
+trajectory observer 新增 `on_llm_attempt` 落盘 `t:"attempt"` 身份行（每次 provider 尝试含失败/重试，
+不落请求响应体、不进 JSON envelope），relay 出口（SSE + /trace）过滤但物理行号计入游标，
+completeness/usage 聚合语义不受扰（`tests/test_web_f06_attempt_identity.py` 4/4，web 全量 200 passed）。
+F07 的
 **运维备份脚本与异地存放、密钥/缺文件/过期清理的组合恢复、T6 第 2–3 步（`ON DELETE` 与会话删除语义）、保留期定值**
 （联合恢复演练与孤儿处置已于 2026-09-30 完成，见
 [工单 07](../../.scratch/web-runtime-trace-hardening/issues/07-retention-recovery.md)；**运维备份脚本已于

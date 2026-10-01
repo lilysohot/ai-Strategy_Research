@@ -156,7 +156,11 @@ async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers
     trace = await app_client.get(f"/api/runs/{run_id}/trace", headers=auth_headers)
     assert trace.status_code == 200
     body = trace.json()
-    assert len(body["records"]) == len(records)
+    # F06 attempt lines are audit-only: they occupy physical line numbers (the
+    # cursor arithmetic counts them) but are not part of the egress contract,
+    # so the visible record set excludes them on BOTH sides of the comparison.
+    visible = [r for r in records if r.get("t") != "attempt"]
+    assert len(body["records"]) == len(visible)
     # A cursor past the end yields nothing (dense line-number semantics).
     tail = await app_client.get(
         f"/api/runs/{run_id}/trace?after={len(records)}", headers=auth_headers

@@ -315,5 +315,19 @@
       "tests": "test_web_f06_power_durability.py 8/8（截断/零字节/残缺 summary/无轨迹/无 fsync 平台/ENOSPC）；web 全量 196 passed",
       "known_edges": "artifacts 断电后索引在文件缺 → 下载 404 fail-closed；整机掉电验证需硬件环境，以文件层等价注入收口"
     }
+  },
+  "f06_attempt_identity_20261002": {
+    "executed_at": "2026-10-02T10:00-10:40+08:00",
+    "task": "F06 请求尝试身份：契约冻结 summary-only + 落盘 + egress 过滤",
+    "result": {
+      "decision": "summary-only：每次 provider 尝试（含失败/重试）留 1 条 t:attempt 身份行；不落请求响应体、不进 JSON envelope、不出 egress",
+      "changes": [
+        "trajectory.py on_llm_attempt 落盘",
+        "relay _traj_record_to_events/trajectory_page 过滤（游标含物理行号）",
+        "m1 测试对账口径修正"
+      ],
+      "safety": "completeness 只认 end；usage 聚合只认 t=llm（无重复计数）；RAW 读者不变",
+      "tests": "test_web_f06_attempt_identity.py 4/4；web 全量 200 passed；ruff/pyright 全过"
+    }
   }
 }

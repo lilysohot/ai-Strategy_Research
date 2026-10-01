@@ -19,6 +19,7 @@ from frontier_agent.core.loop_types import (
     BaseObserver,
     CompactionEvent,
     Intervention,
+    LLMAttemptContext,
     LoopConfig,
     ToolResult,
     TurnContext,
@@ -490,6 +491,43 @@ class TrajectoryFileObserver(BaseObserver):
             start_record["tool_names"] = self._tool_names
         self._write_jsonl(start_record)
         self._flush_json()
+
+    async def on_llm_attempt(
+        self, ctx: LLMAttemptContext,
+    ) -> Intervention | None:
+        # F06 request-attempt identity (contract level: summary-only). Every
+        # provider attempt — including the ones that fail and get retried —
+        # leaves ONE identity line in the JSONL, so "all successful turns are
+        # saved" stops being the only story an auditor can read: a turn that
+        # took unusually long or burned extra tokens now shows the retries
+        # behind it. Deliberately NOT the request/response bodies (they can be
+        # huge and have no UI), and deliberately not in the JSON envelope —
+        # this is an audit line, not a replay-able turn.
+        record: dict = {
+            "t": "attempt",
+            "turn": ctx.turn,
+            "call_id": ctx.call_id,
+            "attempt_id": ctx.attempt_id,
+            "attempt_index": ctx.attempt_index,
+            "phase": ctx.phase,
+            "outcome": ctx.outcome,
+        }
+        if ctx.reason:
+            record["reason"] = ctx.reason[:500]
+        if ctx.recovery_action:
+            record["recovery_action"] = ctx.recovery_action
+        if ctx.error_type:
+            record["error_type"] = ctx.error_type
+        if ctx.duration_ms:
+            record["duration_ms"] = ctx.duration_ms
+        if ctx.ttft_ms is not None:
+            record["ttft_ms"] = ctx.ttft_ms
+        if ctx.usage:
+            record["usage"] = ctx.usage
+        if ctx.finish_reason:
+            record["finish_reason"] = ctx.finish_reason
+        self._write_jsonl(record)
+        return None
 
     async def on_llm_response(
         self, ctx: TurnContext,

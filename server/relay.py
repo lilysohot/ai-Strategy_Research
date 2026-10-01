@@ -208,6 +208,12 @@ def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[l
                 rec = json.loads(line)
             except json.JSONDecodeError:
                 continue
+            # F06 attempt lines are audit-only (see _traj_record_to_events):
+            # they occupy a physical line number — the cursor arithmetic stays
+            # exact — but are not part of the egress contract, so /trace does
+            # not return them either.
+            if isinstance(rec, dict) and rec.get("t") == "attempt":
+                continue
             out.append(rec)
             consumed_last = i
     return out, consumed_last, False
@@ -420,6 +426,15 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
         # by the summary.json watcher in trajectory_tail, so there is nothing
         # user-visible to emit — and falling through to the generic warning
         # would surface a bogus "unknown traj record: end" on every run.
+        return []
+    elif t == "attempt":
+        # F06 request-attempt identity: summary-only audit lines persisted by
+        # the runtime for every provider attempt incl. failures/retries. They
+        # are deliberately NOT part of the egress contract (the replay event
+        # vocabulary and the clients were verified without them, and a failure
+        # attempt has no user-visible content to render) — audit reads the
+        # trajectory file itself. Returning [] keeps them out of the stream
+        # without emitting a bogus "unknown traj record" warning.
         return []
     else:
         events.append(make_event("warning", detail=f"unknown traj record: {t}"))
