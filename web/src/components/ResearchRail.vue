@@ -4,10 +4,17 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 import { ApiError } from '@/api/client'
+import { WORKSPACE_NAV_ITEMS, type WorkspaceArea } from '@/business-ui'
 import { useAuthStore } from '@/stores/auth'
 import { useSessionsStore } from '@/stores/sessions'
 
-const emit = defineEmits<{ selected: []; created: [] }>()
+withDefaults(defineProps<{ activeArea?: WorkspaceArea }>(), { activeArea: 'research' })
+
+const emit = defineEmits<{
+  selected: []
+  created: []
+  navigate: [area: WorkspaceArea]
+}>()
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -117,6 +124,23 @@ onMounted(async () => {
         新建研究
       </el-button>
     </header>
+
+    <nav class="workspace-nav" aria-label="工作台功能">
+      <button
+        v-for="item in WORKSPACE_NAV_ITEMS"
+        :key="item.id"
+        type="button"
+        class="workspace-nav__item"
+        :class="{ active: activeArea === item.id }"
+        @click="emit('navigate', item.id)"
+      >
+        <span class="workspace-nav__copy">
+          <strong>{{ item.label }}</strong>
+          <small>{{ item.caption }}</small>
+        </span>
+        <span v-if="item.count" class="workspace-nav__count">{{ item.count }}</span>
+      </button>
+    </nav>
 
     <div class="rail-search">
       <el-input
@@ -231,6 +255,71 @@ onMounted(async () => {
 
 .rail-search {
   padding: 12px 14px 8px;
+}
+
+.workspace-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.workspace-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.workspace-nav__item:hover {
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+}
+
+.workspace-nav__item.active {
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--text);
+}
+
+.workspace-nav__copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.workspace-nav__copy strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.workspace-nav__copy small {
+  overflow: hidden;
+  color: var(--quiet);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-nav__count {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .rail-error {

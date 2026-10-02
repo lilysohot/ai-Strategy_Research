@@ -4,8 +4,11 @@ import { ElMessage } from 'element-plus'
 
 import { artifacts as artifactsApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
+import type { SessionPlanInput, SessionPlanPreview, WorkspaceArea } from '@/business-ui'
 import ActivityPanel from '@/components/ActivityPanel.vue'
 import ApprovalCard from '@/components/ApprovalCard.vue'
+import BusinessWorkspace from '@/components/business/BusinessWorkspace.vue'
+import SessionPlanManager from '@/components/business/SessionPlanManager.vue'
 import DiffPanel from '@/components/DiffPanel.vue'
 import PlanPanel from '@/components/PlanPanel.vue'
 import ResearchCanvas from '@/components/ResearchCanvas.vue'
@@ -39,6 +42,9 @@ const railOpen = ref(false)
 const detailsOpen = ref(false)
 const canvasFocus = ref(false)
 const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace'>('activity')
+const workspaceArea = ref<WorkspaceArea>('research')
+const sessionPlanOpen = ref(false)
+const sessionPlans = ref<SessionPlanPreview[]>([])
 
 const clock = ref(Date.now())
 let clockTimer: ReturnType<typeof setInterval> | null = null
@@ -148,6 +154,9 @@ const canvasAnswer = computed(() =>
 )
 
 const canvasTitle = computed(() => sessions.activeSession?.title || '本次研究')
+const activeSessionPlanCount = computed(
+  () => sessionPlans.value.filter((plan) => plan.sessionId === sessions.activeId).length,
+)
 
 const diffFiles = ref<DiffFile[]>([])
 const diffSummary = computed(() => summarizeDiff(diffFiles.value))
@@ -308,6 +317,8 @@ watch(
 )
 
 function onSelectSession(): void {
+  workspaceArea.value = 'research'
+  sessionPlanOpen.value = false
   runStream.reset()
   railOpen.value = false
   detailsOpen.value = false
@@ -315,9 +326,39 @@ function onSelectSession(): void {
 }
 
 async function onCreatedSession(): Promise<void> {
+  workspaceArea.value = 'research'
   railOpen.value = false
   runStream.reset()
   await composerRef.value?.focus()
+}
+
+function onNavigate(area: WorkspaceArea): void {
+  workspaceArea.value = area
+  railOpen.value = false
+  canvasFocus.value = false
+  detailsOpen.value = false
+  if (area === 'research') void composerRef.value?.focus()
+}
+
+function saveSessionPlan(input: SessionPlanInput): void {
+  const sessionId = sessions.activeId
+  if (!sessionId) {
+    ElMessage.warning('请先选择研究会话')
+    return
+  }
+  if (input.isPrimary) {
+    sessionPlans.value = sessionPlans.value.map((plan) =>
+      plan.sessionId === sessionId ? { ...plan, isPrimary: false } : plan,
+    )
+  }
+  sessionPlans.value.push({
+    ...input,
+    id: crypto.randomUUID(),
+    sessionId,
+    sessionTitle: sessions.activeSession?.title || '未命名研究',
+    status: 'draft',
+  })
+  ElMessage.success('计划已添加到当前会话（前端预览）')
 }
 
 const lastSessionKey = computed(
@@ -385,20 +426,34 @@ watch(
     <ResearchRail
       class="workbench-rail"
       :class="{ open: railOpen }"
+      :active-area="workspaceArea"
       @selected="onSelectSession"
       @created="onCreatedSession"
+      @navigate="onNavigate"
     />
 
-    <main class="thread" aria-label="对话编排">
+    <template v-if="workspaceArea === 'research'">
+      <main class="thread" aria-label="对话编排">
       <header class="thread-head">
         <el-button class="rail-toggle" text @click="railOpen = !railOpen">研究</el-button>
         <div class="thread-title">
           <span>{{ sessions.activeSession?.title || '未命名研究' }}</span>
           <small>{{ runStream.runId ? `Run ${runStream.runId.slice(0, 8)}` : '选择或新建研究后开始' }}</small>
         </div>
-        <el-button class="canvas-toggle" plain size="small" @click="canvasFocus = !canvasFocus">
-          {{ canvasFocus ? '回到对话' : '打开画布' }}
-        </el-button>
+        <div class="thread-actions">
+          <el-button
+            plain
+            size="small"
+            :disabled="!sessions.activeId"
+            @click="sessionPlanOpen = true"
+          >
+            会话计划
+            <span v-if="activeSessionPlanCount" class="plan-count">{{ activeSessionPlanCount }}</span>
+          </el-button>
+          <el-button class="canvas-toggle" plain size="small" @click="canvasFocus = !canvasFocus">
+            {{ canvasFocus ? '回到对话' : '打开画布' }}
+          </el-button>
+        </div>
       </header>
 
       <RunStage
@@ -478,16 +533,33 @@ watch(
         @stop="onStop"
         @steer="onSteer"
       />
-    </main>
+      </main>
 
-    <ResearchCanvas
-      ref="canvasRef"
-      :run-id="canvasRunId"
-      :title="canvasTitle"
-      :answer="canvasAnswer"
-      :status="runStream.status"
-      :full-screen="canvasFocus"
-      @toggle-full-screen="canvasFocus = !canvasFocus"
+      <SessionPlanManager
+        v-model="sessionPlanOpen"
+        :session-id="sessions.activeId"
+        :session-title="sessions.activeSession?.title || '未命名研究'"
+        :plans="sessionPlans"
+        @save="saveSessionPlan"
+      />
+
+      <ResearchCanvas
+        ref="canvasRef"
+        :run-id="canvasRunId"
+        :title="canvasTitle"
+        :answer="canvasAnswer"
+        :status="runStream.status"
+        :full-screen="canvasFocus"
+        @toggle-full-screen="canvasFocus = !canvasFocus"
+      />
+    </template>
+
+    <BusinessWorkspace
+      v-else
+      :area="workspaceArea"
+      :plans="sessionPlans"
+      @navigate="onNavigate"
+      @toggle-rail="railOpen = !railOpen"
     />
   </div>
 </template>
@@ -548,8 +620,11 @@ watch(
 
 .canvas-toggle {
   display: none;
-  margin-left: auto;
 }
+
+.thread-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.thread-actions :deep(.el-button + .el-button) { margin-left: 0; }
+.plan-count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 5px; border-radius: 9px; background: var(--accent); color: var(--accent-text); font-size: 10px; }
 
 .run-error-banner {
   border-radius: 0;
