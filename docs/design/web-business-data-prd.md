@@ -9,6 +9,7 @@
 | 流程依据 | [业务流程](../business-process.md) §3.4–3.5 |
 | 既有交互与架构 | [研究工作台](investment-research-workbench-prd.md) · [技术架构](../tech-stack.md) |
 | 本文职责 | 细化页面、用户行为、数据归属、持久化契约、异常处理和验收；不另设产品状态或实施进度台账 |
+| 任务拆分 | [Web 页面交互任务清单](../plan/web-business-ui-tasks.md) · [数据持久化任务清单](../plan/web-business-persistence-tasks.md)；2026-10-02 完成设计拆分，尚未实施 |
 
 本文交付的是可讨论、可拆分实施的需求，不代表功能已上线。标为“建议”的默认值和物理实现
 仍可调整；未明确的部署容量、行情时效及保留期限不作现成能力承诺。本轮仅规划 Web 专项，
