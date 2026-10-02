@@ -1,0 +1,115 @@
+{
+  "schema_version": "corpus-structured-snapshot-source-v1",
+  "synthetic_only": true,
+  "head": {
+    "source_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "build_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "publication_generation": 3
+  },
+  "parser_versions": {
+    "parse": "parse-synthetic-1",
+    "clean": "clean-synthetic-1",
+    "chunk": "chunk-synthetic-1",
+    "index": "index-synthetic-1"
+  },
+  "document": {
+    "title": "虚构星河公司合成报告",
+    "subject": "虚构星河公司",
+    "published": "2026-10-02"
+  },
+  "units": [
+    {
+      "source_unit_id": "heading-u",
+      "chunk_id": "heading-chunk",
+      "kind": "heading",
+      "text": "虚构经营预测",
+      "locator": "page:1/heading:1",
+      "ordinal": 0
+    },
+    {
+      "source_unit_id": "forecast-u",
+      "chunk_id": "forecast-chunk",
+      "kind": "prose",
+      "text": "预计虚构星河公司2027年收入达到20亿元。",
+      "locator": "page:1/paragraph:1",
+      "ordinal": 1,
+      "dependencies": [
+        {
+          "kind": "condition",
+          "target_unit_id": "condition-u",
+          "target_chunk_id": "condition-chunk",
+          "required_for": ["cite", "compare", "calculate"]
+        }
+      ]
+    },
+    {
+      "source_unit_id": "condition-u",
+      "chunk_id": "condition-chunk",
+      "kind": "prose",
+      "text": "仅在合成并购于2026年完成时，上述预测成立。",
+      "locator": "page:1/paragraph:2",
+      "ordinal": 2
+    },
+    {
+      "source_unit_id": "table-u",
+      "chunk_id": "table-chunk",
+      "kind": "table_row",
+      "text": "营业收入\n100",
+      "locator": "page:2/table:1/row:1",
+      "page": 2,
+      "ordinal": 3,
+      "cells": [
+        {
+          "row": "营业收入",
+          "column": "2025A",
+          "value": "100",
+          "unit": "亿元",
+          "start": 5,
+          "end": 8,
+          "source_row": 1,
+          "source_column": 1
+        }
+      ],
+      "dependencies": [
+        {
+          "kind": "footnote",
+          "target_unit_id": "note-u",
+          "target_chunk_id": "table-chunk",
+          "required_for": ["cite", "compare", "calculate"]
+        }
+      ]
+    },
+    {
+      "source_unit_id": "note-u",
+      "chunk_id": "table-chunk",
+      "kind": "table_note",
+      "text": "脚注：2025A 为虚构实际值，单位为亿元。",
+      "locator": "page:2/table:1/note:1",
+      "page": 2,
+      "ordinal": 4
+    },
+    {
+      "source_unit_id": "duplicate-a",
+      "chunk_id": "duplicate-a-chunk",
+      "kind": "prose",
+      "text": "风险可控。",
+      "locator": "page:3/paragraph:1",
+      "ordinal": 5
+    },
+    {
+      "source_unit_id": "duplicate-b",
+      "chunk_id": "duplicate-b-chunk",
+      "kind": "prose",
+      "text": "风险可控。",
+      "locator": "page:4/paragraph:1",
+      "ordinal": 6
+    }
+  ],
+  "gaps": [
+    {
+      "code": "image_region_unreadable",
+      "locator": "page:5/image:1",
+      "context_status": "partial"
+    }
+  ]
+}

@@ -62,6 +62,7 @@ if TYPE_CHECKING:
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence, ChunkStructure
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
+    from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 from plugins.corpus.claims import (
     CLAIMS_COMMENTS,
@@ -2131,6 +2132,66 @@ class CorpusService:
         if persist:
             self.save_evidence_run(run)
         return run
+
+    def extract_claims_from_snapshot(
+        self,
+        snapshot: EvidenceSnapshot,
+        *,
+        llm: Callable[[str], str] | None = None,
+        model: str | None = None,
+        max_prose_calls: int = 0,
+    ) -> EvidenceRun:
+        """Consume one already-frozen source/build snapshot without reparsing a file."""
+        from plugins.corpus.evidence_pipeline import build_evidence_run_from_snapshot
+
+        if max_prose_calls < 0:
+            raise ValueError("max_prose_calls must be non-negative")
+        if max_prose_calls and llm is None:
+            raise ValueError("snapshot extraction requires an explicit extraction adapter")
+        return build_evidence_run_from_snapshot(
+            snapshot,
+            llm=llm,
+            model=model,
+            max_prose_calls=max_prose_calls,
+        )
+
+    def understand_material_from_snapshot(
+        self,
+        snapshot: EvidenceSnapshot,
+        *,
+        llm: Callable[[str], str] | None = None,
+        model: str | None = None,
+        max_calls: int = 0,
+        material_type: MaterialType | None = None,
+        staged_jsonl: bool = False,
+        max_items_per_packet: int = 30,
+        slot_protocol: bool = False,
+        max_slots_per_batch: int = 8,
+        extract_relations: bool = True,
+        candidate_slot_ids: tuple[str, ...] | None = None,
+    ) -> MaterialRun:
+        """Consume the same snapshot as Claims; no file parser or saved run is required."""
+        from plugins.corpus.material_semantics import (
+            extract_material_understanding_from_snapshot,
+        )
+
+        if max_calls < 0:
+            raise ValueError("max_calls must be non-negative")
+        if max_calls and llm is None:
+            raise ValueError("snapshot extraction requires an explicit extraction adapter")
+        del model  # request identity is recorded by the later role execution layer
+        return extract_material_understanding_from_snapshot(
+            snapshot,
+            llm=llm,
+            max_calls=max_calls,
+            material_type=material_type,
+            staged_jsonl=staged_jsonl,
+            max_items_per_packet=max_items_per_packet,
+            slot_protocol=slot_protocol,
+            max_slots_per_batch=max_slots_per_batch,
+            extract_relations=extract_relations,
+            candidate_slot_ids=candidate_slot_ids,
+        )
 
     def understand_material(
         self,

@@ -22,6 +22,7 @@ from plugins.corpus.evidence import EvidenceDocument, EvidencePacket, fingerprin
 
 if TYPE_CHECKING:
     from plugins.corpus.evidence_pipeline import EvidenceRun
+    from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
 MATERIAL_EXTRACTOR_VERSION = "material-semantics-13"
@@ -745,7 +746,7 @@ def _parse_jsonl_response(
 
 
 def _short_context(packet: EvidencePacket | None) -> str:
-    if packet is None:
+    if packet is None or packet.status != "available":
         return ""
     text = packet.text.strip()
     return text[:300] if len(text) <= 300 else text[:150] + "…" + text[-150:]
@@ -2461,3 +2462,34 @@ def extract_material_understanding(
     payload = result.model_dump(mode="json")
     payload.pop("run_id")
     return result.model_copy(update={"run_id": fingerprint(payload)})
+
+
+def extract_material_understanding_from_snapshot(
+    snapshot: EvidenceSnapshot,
+    *,
+    llm: Callable[[str], str] | None,
+    max_calls: int,
+    material_type: MaterialType | None = None,
+    staged_jsonl: bool = False,
+    max_items_per_packet: int = 30,
+    slot_protocol: bool = False,
+    max_slots_per_batch: int = 8,
+    extract_relations: bool = True,
+    candidate_slot_ids: tuple[str, ...] | None = None,
+) -> MaterialRun:
+    """Build R2 semantics from the same immutable snapshot used by Claims."""
+    from plugins.corpus.evidence_pipeline import build_evidence_run_from_snapshot
+
+    evidence_run = build_evidence_run_from_snapshot(snapshot, role="material_items")
+    return extract_material_understanding(
+        evidence_run,
+        llm=llm,
+        max_calls=max_calls,
+        material_type=material_type,
+        staged_jsonl=staged_jsonl,
+        max_items_per_packet=max_items_per_packet,
+        slot_protocol=slot_protocol,
+        max_slots_per_batch=max_slots_per_batch,
+        extract_relations=extract_relations,
+        candidate_slot_ids=candidate_slot_ids,
+    )

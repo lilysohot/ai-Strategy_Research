@@ -1,10 +1,10 @@
 # 04 · Claims、R2 items 与 relations 的独立角色入口
 
-Status: needs-triage
+Status: ready-for-agent
 Execution: 未开始
 Type: task
 Plan: W2；R2-S2
-Blocked by: 02、03
+Blocked by: 无本地任务依赖（02、03 已验收）
 Real model calls: 0
 Production database access: 0
 
@@ -58,3 +58,5 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_roles.py
 ## Comments
 
 - 2026-10-02：仅编制任务，尚未执行。真实模型与生产库额度均为 0。
+- 2026-10-02：用户授权核查达标后闭环 02/03；两票本地验收通过，依赖解除。本票转为
+  ready-for-agent，Execution 仍为未开始；下一步按既定范围实现独立角色入口和 fake/replay 测试。
