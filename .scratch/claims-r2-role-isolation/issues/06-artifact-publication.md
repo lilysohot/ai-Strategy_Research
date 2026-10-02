@@ -58,3 +58,9 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_store.py tests/tes
 ## Comments
 
 - 2026-10-02：仅编制任务，尚未执行。真实模型与生产库额度均为 0。
+- 2026-10-03：用户要求开启执行。前置核查确认 05 仍为 `ready-for-agent` / 未开始，且仓库中
+  不存在本票依赖的 `plugins/corpus/structured/ledger.py`、structured CLI、执行账测试或
+  `index/structured.sqlite3` Schema。06 的发布事务需与 05 共用该索引并引用稳定的
+  batch/task/attempt，无法在不猜测账本接口的情况下满足父 generation、并发写入和执行账引用
+  验收。因此本票保持 `needs-triage` / 未开始 / `Blocked by: 05`，未创建 store/发布代码，
+  未调用真实模型，未访问生产数据库。需先执行并验收 05，或由用户明确调整任务顺序和接口边界。

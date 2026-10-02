@@ -10,7 +10,6 @@ from __future__ import annotations
 import re
 import time
 from collections.abc import Callable
-from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -40,6 +39,15 @@ class RequestIntent:
 
 AuthorizeAttempt = Callable[[RequestIntent], str]
 TransportFactory = Callable[[], httpx.BaseTransport]
+
+_AUTHORIZATION_ERROR_CODES = {
+    "CS_BUDGET_EXHAUSTED",
+    "CS_CONFIG_MISSING",
+    "CS_DEPENDENCY_NOT_READY",
+    "CS_INPUT_INVALID",
+    "CS_OUTCOME_UNKNOWN",
+}
+_AUTHORIZATION_STATUSES = {"blocked", "cancelled", "deferred", "failed", "outcome_unknown"}
 
 
 def _token_count(value: object) -> int | None:
@@ -103,8 +111,21 @@ class ExtractionAdapter:
         if self.authorize is None:
             raise ValueError("CS_BUDGET_EXHAUSTED: explicit attempt authorizer required")
         attempt_id: str | None = None
-        with suppress(Exception):
+        authorization_error: dict[str, str] | None = None
+        try:
             attempt_id = self.authorize(intent)
+        except LlmCallError as exc:
+            status = exc.diagnostics.get("execution_status")
+            error_code = exc.diagnostics.get("error_code")
+            if status in _AUTHORIZATION_STATUSES and error_code in _AUTHORIZATION_ERROR_CODES:
+                authorization_error = {
+                    "execution_status": status,
+                    "error_code": error_code,
+                }
+        except Exception:
+            pass
+        if authorization_error is not None:
+            raise LlmCallError(authorization_error)
         if (
             not isinstance(attempt_id, str)
             or secret in attempt_id

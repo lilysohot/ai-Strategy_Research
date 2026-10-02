@@ -346,6 +346,27 @@ def test_authorizer_failure_has_no_secret_exception_context_or_transport():
     assert error.value.__context__ is None
 
 
+def test_authorizer_preserves_only_bounded_ledger_rejection():
+    def denied(_intent):
+        raise LlmCallError(
+            {
+                "execution_status": "blocked",
+                "error_code": "CS_BUDGET_EXHAUSTED",
+                "error_type": KEY,
+            }
+        )
+
+    binding = bind_roles(load_extraction_config(environ=config_env()))[0]
+    with pytest.raises(LlmCallError) as error:
+        ExtractionAdapter(binding, denied)("input")
+    assert error.value.diagnostics == {
+        "execution_status": "blocked",
+        "error_code": "CS_BUDGET_EXHAUSTED",
+    }
+    assert KEY not in "".join(traceback.format_exception(error.value))
+    assert error.value.__context__ is None
+
+
 def test_transport_setup_failure_does_not_claim_an_actual_request():
     def broken_factory():
         raise RuntimeError(KEY)

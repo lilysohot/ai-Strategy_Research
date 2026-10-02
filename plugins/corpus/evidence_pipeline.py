@@ -6,6 +6,7 @@ but the same deterministic evidence and dimensional checks govern its output.
 
 from __future__ import annotations
 
+import json
 import re
 from collections import Counter, defaultdict
 from collections.abc import Callable
@@ -41,6 +42,8 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit
 
 PIPELINE_VERSION = "evidence-pipeline-7"
+CLAIMS_TABLE_PROTOCOL = "claims-deterministic-v1"
+CLAIMS_PROSE_PROTOCOL = "claims-json-v2"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
 METRICS: dict[str, tuple[str, str]] = {
     "营业收入": ("revenue", "元"),
@@ -510,6 +513,7 @@ def extract_evidence(
     model: str | None = None,
     max_prose_calls: int = 0,
     on_packet: Callable[[PacketRun], None] | None = None,
+    strict_prose: bool = False,
 ) -> EvidenceRun:
     """Extract all table rows; prose budget/unsupported pages are explicitly deferred."""
     facts: list[EvidenceFact] = []
@@ -524,7 +528,7 @@ def extract_evidence(
             status, method, reasons = "unknown", "none", packet.reasons
         elif packet.kind == "table":
             records = _table_records(packet, document)
-        elif not triage_block_detail(packet.text).candidate:
+        elif not strict_prose and not triage_block_detail(packet.text).candidate:
             status, method = "not_candidate", "triage"
         elif llm is None or calls >= max_prose_calls:
             status, method, reasons = "deferred", "none", ("prose_not_processed",)
@@ -544,6 +548,14 @@ def extract_evidence(
                 )
                 raw = llm(prompt)
                 diagnostics = dict(raw.diagnostics) if isinstance(raw, LlmResponse) else {}
+                if strict_prose:
+                    strict_payload = json.loads(raw)
+                    if not isinstance(strict_payload, list) or any(
+                        not isinstance(item, dict)
+                        or {"items", "relations", "speakers", "record_type"}.intersection(item)
+                        for item in strict_payload
+                    ):
+                        raise ValueError("Claims role requires only a JSON ClaimRecord array")
                 parsed = parse_claims_json_detail(raw)
                 diagnostics.update(
                     parse_failed=parsed.failed,
@@ -579,7 +591,8 @@ def extract_evidence(
                 status, reasons = "failed", (f"extraction_error:{type(exc).__name__}",)
                 if isinstance(exc, LlmCallError):
                     diagnostics = dict(exc.diagnostics)
-                    reasons = (f"extraction_error:{diagnostics['error_type']}",)
+                    error_type = diagnostics.get("error_type", type(exc).__name__)
+                    reasons = (f"extraction_error:{error_type}",)
         facts.extend(_fact(record, packet, document) for record in records)
         run = PacketRun(
             packet_id=packet.packet_id,
@@ -897,7 +910,12 @@ def evidence_document_from_snapshot(
     )
 
 
-def _bind_snapshot_facts(snapshot: EvidenceSnapshot, run: EvidenceRun) -> EvidenceRun:
+def _bind_snapshot_facts(
+    snapshot: EvidenceSnapshot,
+    run: EvidenceRun,
+    *,
+    preserve_context: bool = False,
+) -> EvidenceRun:
     """Keep exact evidence and source qualifications through the existing Claims payload."""
     from plugins.corpus.structured.mapping import resolve_packet_span, resolve_unit_span
     from plugins.corpus.structured.snapshot import dependency_closure
@@ -951,9 +969,42 @@ def _bind_snapshot_facts(snapshot: EvidenceSnapshot, run: EvidenceRun) -> Eviden
             usable = tuple(purpose for purpose in usable if purpose == "cite")
         if not source_spans:
             usable = ()
+        claim = fact.claim
+        fact_id = fact.fact_id
+        context_spans = []
+        if preserve_context:
+            context_text = "\n".join(unit.text for unit in context_units.values())
+            context_spans = [
+                asdict(resolve_unit_span(snapshot, unit.unit_id, 0, len(unit.text)))
+                for unit in context_units.values()
+            ]
+            qualified = qualifications or re.search(
+                r"如果|仅在|除非|若|并未|没有|否认|不承诺|认为|表示|称|预计|预测|"
+                r"\b(?:if|unless|not|according|forecast|expects?)\b",
+                context_text,
+                re.I,
+            )
+            if qualified:
+                reasons.append("source_qualified_context_requires_review")
+                usable = tuple(purpose for purpose in usable if purpose == "cite")
+                claim = replace(
+                    claim,
+                    qualifiers={**claim.qualifiers, "source_context": context_text},
+                    quality_status="review"
+                    if claim.quality_status == "ok"
+                    else claim.quality_status,
+                    reason_codes=tuple(
+                        dict.fromkeys(
+                            (*claim.reason_codes, "source_qualified_context_requires_review")
+                        )
+                    ),
+                )
+                fact_id = fingerprint([fact.fact_id, claim.qualifiers, "claims-role-context-v1"])
         facts.append(
             fact.model_copy(
                 update={
+                    "fact_id": fact_id,
+                    "claim": claim,
                     "usable_for": usable,
                     "reasons": tuple(dict.fromkeys(reasons)),
                     "evidence_alignment": {
@@ -961,6 +1012,7 @@ def _bind_snapshot_facts(snapshot: EvidenceSnapshot, run: EvidenceRun) -> Eviden
                         "source_spans": source_spans,
                         "dependency_spans": dependency_spans,
                         "dependency_details": details,
+                        **({"role_context_spans": context_spans} if preserve_context else {}),
                     },
                 }
             )
@@ -996,3 +1048,68 @@ def build_evidence_run_from_snapshot(
             max_prose_calls=max_prose_calls,
         ),
     )
+
+
+def extract_claims_role_from_snapshot(
+    snapshot: EvidenceSnapshot,
+    *,
+    protocol: str,
+    llm: LlmFn | None = None,
+    model: str | None = None,
+    max_calls: int = 0,
+    scoped_unit_ids: tuple[str, ...] | None = None,
+) -> EvidenceRun:
+    """Execute one frozen Claims protocol over an explicit snapshot scope.
+
+    The deterministic table protocol can never call ``llm``.  The prose protocol
+    cannot see table packets and is the only role entry allowed to spend Claims
+    model attempts.  Unsupported protocols and invalid scopes fail before either
+    extraction path is entered.
+    """
+    if protocol not in {CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL}:
+        raise ValueError(f"CS_PROTOCOL_UNSUPPORTED: claims protocol {protocol!r}")
+    if max_calls < 0:
+        raise ValueError("max_calls must be non-negative")
+    if protocol == CLAIMS_TABLE_PROTOCOL and max_calls:
+        raise ValueError("CS_INPUT_INVALID: deterministic Claims cannot reserve model calls")
+
+    snapshot.verify_identity()
+    document = evidence_document_from_snapshot(snapshot, role="claims")
+    known_ids = {unit.unit_id for unit in snapshot.units}
+    requested = known_ids if scoped_unit_ids is None else set(scoped_unit_ids)
+    if requested - known_ids or (
+        scoped_unit_ids is not None and len(requested) != len(scoped_unit_ids)
+    ):
+        raise ValueError("CS_INPUT_INVALID: Claims scope does not match the snapshot")
+
+    allowed_kinds = {"table"} if protocol == CLAIMS_TABLE_PROTOCOL else {"prose", "image_text"}
+    if scoped_unit_ids is not None and any(
+        unit.unit_id in requested and unit.kind not in allowed_kinds for unit in snapshot.units
+    ):
+        raise ValueError("CS_INPUT_INVALID: Claims scope kind does not match protocol")
+
+    packets: list[EvidencePacket] = []
+    for packet in document.packets:
+        source_ids = {span.locator for span in packet.spans}
+        if protocol == CLAIMS_TABLE_PROTOCOL:
+            core_ids = {
+                unit.unit_id
+                for unit in snapshot.units
+                if unit.unit_id in source_ids and unit.kind == "table"
+            }
+            include = packet.kind == "table" and bool(core_ids & requested)
+            if include and core_ids - requested:
+                raise ValueError("CS_INPUT_INVALID: table scope must contain the whole packet")
+        else:
+            include = packet.kind == "prose" and bool(source_ids & requested)
+        if include:
+            packets.append(packet)
+    scoped_document = document.model_copy(update={"packets": tuple(packets)})
+    run = extract_evidence(
+        scoped_document,
+        llm=None if protocol == CLAIMS_TABLE_PROTOCOL else llm,
+        model="deterministic-table" if protocol == CLAIMS_TABLE_PROTOCOL else model,
+        max_prose_calls=0 if protocol == CLAIMS_TABLE_PROTOCOL else max_calls,
+        strict_prose=True,
+    )
+    return _bind_snapshot_facts(snapshot, run, preserve_context=True)

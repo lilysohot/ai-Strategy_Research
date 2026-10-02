@@ -62,6 +62,7 @@ if TYPE_CHECKING:
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence, ChunkStructure
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
+    from plugins.corpus.structured.roles import RoleDispatch, RoleExecution
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 from plugins.corpus.claims import (
@@ -433,9 +434,7 @@ def context_scope_id(build_id: str, chunk_ids: Sequence[str]) -> str:
 
 def _region_id(build_id: str, start_chunk: str, end_chunk: str) -> str:
     """一个「实际选择区间」的内容寻址身份（连续位置的首尾块决定，非首尾包络猜测）。"""
-    digest = hashlib.sha256(
-        f"{build_id}\n{start_chunk}\n{end_chunk}".encode()
-    ).hexdigest()
+    digest = hashlib.sha256(f"{build_id}\n{start_chunk}\n{end_chunk}".encode()).hexdigest()
     return f"region:{digest[:16]}"
 
 
@@ -628,9 +627,7 @@ def emit_cells_from_units(units: Iterable[Any]) -> tuple[EmittedCell, ...]:
                 break
         if row_label is None or col_label is None:
             continue
-        out.append(
-            EmittedCell(unit_id=unit_id, page=page, row=row_label, col=col_label, text=text)
-        )
+        out.append(EmittedCell(unit_id=unit_id, page=page, row=row_label, col=col_label, text=text))
     return tuple(out)
 
 
@@ -1334,9 +1331,7 @@ class CorpusService:
             structures = structures_by_source.get(hit.source_id, {})
             position = {chunk_id: index for index, chunk_id in enumerate(ordered)}
             row_labels = {
-                str(label).split()[-1].casefold()
-                for label in hit.label_path
-                if str(label).split()
+                str(label).split()[-1].casefold() for label in hit.label_path if str(label).split()
             }
             candidates: list[tuple[int, int, str]] = []
             for chunk_id, structure in structures.items():
@@ -1419,15 +1414,11 @@ class CorpusService:
             )
             for source_id, (build_id, chunk_ids) in table_sources.items()
         }
-        raw_hits = self._attach_table_header_context(
-            raw_hits, chunk_order, structures_by_source
-        )
+        raw_hits = self._attach_table_header_context(raw_hits, chunk_order, structures_by_source)
         # A1：内联 scope 摘要——成员范围身份 + 按 kind 计数（只读块种类，不读几何）。
         pairs = [(hit.build_id, cid) for hit in raw_hits for cid in hit.context_chunk_ids]
         kinds = (
-            read_pg.fetch_chunk_kinds(self._dsn, pairs, sandbox_db=self._target_db)
-            if pairs
-            else {}
+            read_pg.fetch_chunk_kinds(self._dsn, pairs, sandbox_db=self._target_db) if pairs else {}
         )
         hits_out: list[SearchHit] = []
         for hit in raw_hits:
@@ -1526,9 +1517,7 @@ class CorpusService:
         """
         return self._emit_cells(chunk)
 
-    def context_inventory(
-        self, doc_id: str, locators: Sequence[str]
-    ) -> dict[str, object]:
+    def context_inventory(self, doc_id: str, locators: Sequence[str]) -> dict[str, object]:
         """A1 有依据的上下文结构清单（不触写、不改选择）。
 
         - 绑定不可变 ``scope_id``（build + 有序成员的内容寻址）与 ``build_id``；
@@ -2153,6 +2142,88 @@ class CorpusService:
             llm=llm,
             model=model,
             max_prose_calls=max_prose_calls,
+        )
+
+    def execute_claims_role(
+        self,
+        snapshot: EvidenceSnapshot,
+        *,
+        task_id: str,
+        protocol: str,
+        llm: Callable[[str], str] | None = None,
+        model: str | None = None,
+        max_calls: int = 0,
+        scoped_unit_ids: tuple[str, ...] | None = None,
+        dispatch: RoleDispatch | None = None,
+    ) -> RoleExecution:
+        """Strict Claims role entry; persistence and attempt approval stay external."""
+        from plugins.corpus.structured.roles import execute_claims_role
+
+        return execute_claims_role(
+            snapshot,
+            task_id=task_id,
+            protocol=protocol,
+            llm=llm,
+            model=model,
+            max_calls=max_calls,
+            scoped_unit_ids=scoped_unit_ids,
+            dispatch=dispatch,
+        )
+
+    def execute_material_items_role(
+        self,
+        snapshot: EvidenceSnapshot,
+        *,
+        task_id: str,
+        protocol: str,
+        llm: Callable[[str], str] | None = None,
+        max_calls: int,
+        material_type: MaterialType | None = None,
+        candidate_slot_ids: tuple[str, ...] | None = None,
+        dispatch: RoleDispatch | None = None,
+    ) -> RoleExecution:
+        """Strict items-only role entry; never issues a relations request."""
+        from plugins.corpus.structured.roles import execute_material_items_role
+
+        return execute_material_items_role(
+            snapshot,
+            task_id=task_id,
+            protocol=protocol,
+            llm=llm,
+            max_calls=max_calls,
+            material_type=material_type,
+            candidate_slot_ids=candidate_slot_ids,
+            dispatch=dispatch,
+        )
+
+    def execute_material_relations_role(
+        self,
+        snapshot: EvidenceSnapshot,
+        *,
+        task_id: str,
+        protocol: str,
+        items_execution: RoleExecution,
+        endpoint_item_ids: tuple[str, ...],
+        llm: Callable[[str], str] | None = None,
+        max_calls: int,
+        items_validation_version: str,
+        candidate_rule_version: str,
+        dispatch: RoleDispatch | None = None,
+    ) -> RoleExecution:
+        """Strict relations entry bound to one exact items artifact and endpoint set."""
+        from plugins.corpus.structured.roles import execute_material_relations_role
+
+        return execute_material_relations_role(
+            snapshot,
+            task_id=task_id,
+            protocol=protocol,
+            items_execution=items_execution,
+            endpoint_item_ids=endpoint_item_ids,
+            items_validation_version=items_validation_version,
+            candidate_rule_version=candidate_rule_version,
+            llm=llm,
+            max_calls=max_calls,
+            dispatch=dispatch,
         )
 
     def understand_material_from_snapshot(
