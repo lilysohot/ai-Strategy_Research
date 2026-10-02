@@ -19,3 +19,12 @@ Requirements: PR-RUN-01/02、PR-GOV-01/03
 
 - 2026-09-29：全面存储复核新增，详见报告证据等级；运行代码尚未修改。
 - 2026-09-29 环境补查：源码确认恢复仅排除当前进程 handles，第二 API 共用业务库可能误标活跃 Run；未做真实双进程故障测试。修复前测试须独立库，详见[环境方案](../../../docs/plan/web-storage-validation-environment.md)。
+- 2026-10-02（复核补正）：登记此前漏记的**部分实现**（报告 §8 F15 行）——终态帧幂等；
+  `_drain_session` 单次启动失败不中断队列且任务结束可自愈（`test_queue_continues_after_launch_failure`）；
+  `reconcile_orphan_runs` 孤儿收口同时恢复消息、产物索引与用量；`server/usage.py` 区分
+  `complete/partial/unavailable`——以上契约检查位于 `audit/test_storage_chain.py` 与 `tests/`。
+  **剩余验收缺口（未实现，故维持 ready-for-human）**：**跨进程任务所有权**——
+  `server/orchestrator.py::reconcile_orphan_runs` 仅跳过本进程 `self._handles` 的 Run，
+  同一业务库上第二个 API 进程仍可能把其他进程的活跃 Run 误标 `failed`/`stopped`；
+  工单验收明确要求的"多 worker/副本与滚动发布任务所有权"未实现、未验收。
+  更正口径：批次提交信息"剩余3项工单待决策是否实施"表述不准——本项主体已实现，剩余为该跨进程项。

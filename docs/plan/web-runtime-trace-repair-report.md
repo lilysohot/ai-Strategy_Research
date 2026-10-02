@@ -92,6 +92,7 @@ Web relay 当前固定读取 ReAct 文件名，不代表所有工作流/子 Agen
 | F19 | P1 | 存储与迁移故障缺少就绪门禁 | 源码及替身检查确认信号缺口；真实故障未注入 | [19](../../.scratch/web-runtime-trace-hardening/issues/19-storage-readiness.md) |
 | F20 | P1 | Run 模型快照与启动状态未接入持久化 | 隔离子场景已复现，完整验收待执行 | [20](../../.scratch/web-runtime-trace-hardening/issues/20-run-metadata-snapshot.md) |
 | F21 | P1 | 用户纠正与审批决定缺少持久追溯契约 | 源码确认；动态恢复待验 | [21](../../.scratch/web-runtime-trace-hardening/issues/21-control-history.md) |
+| F22 | P1 | 运行级磁盘写满致新 Run 永久卡 queued、轨迹/用量丢失静默 | 已修复并动态验证（2026-10-01：tmpfs 真实 ENOSPC 注入，回归 `tests/test_web_f22_disk_full.py` 6/6）；工单已 closed | [22](../../.scratch/web-runtime-trace-hardening/issues/22-disk-full-queue-wedge.md) |
 
 ### F01：持久卷、数据根目录及历史路径迁移
 

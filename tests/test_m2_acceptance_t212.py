@@ -400,6 +400,7 @@ async def test_historical_run_replays_after_restart(
         before = await client.get(f"/api/runs/{run_id}/trace", headers=alice)
         assert before.status_code == 200
         records_before = before.json()["records"]
+        next_line_before = before.json()["next_line"]
         assert records_before, "no trajectory was recorded"
 
     # ── restart: drop every piece of in-process state ────────────
@@ -419,9 +420,12 @@ async def test_historical_run_replays_after_restart(
         assert len(records_after) == len(records_before)
         assert records_after == records_before
 
-        # Cursor-based resume still works against the replayed file.
+        # Cursor-based resume still works against the replayed file. Resume from
+        # the server-issued cursor (a physical line number): it diverges from
+        # ``len(records)`` once audit-only ``attempt`` lines are present, so the
+        # record count must not be used as a cursor (F06/F13).
         cursor = await client.get(
-            f"/api/runs/{run_id}/trace?after={len(records_before)}", headers=alice
+            f"/api/runs/{run_id}/trace?after={next_line_before}", headers=alice
         )
         assert cursor.status_code == 200
         assert cursor.json()["records"] == []

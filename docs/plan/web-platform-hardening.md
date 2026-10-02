@@ -44,10 +44,10 @@
 | T3 | 密钥加固与启动校验 | P0 | T1 | 已完成 |
 | T3b | 测试数据库隔离 | P0 | — | 已完成 |
 | T4 | 列表接口分页 | P0 | T1 | 已完成 |
-| T5 | 业务库备份与恢复预案 | P1 | — | **恢复演练已通过**（2026-09-30：行数逐一一致 + 外键 9/9 全部建成）；运维备份脚本与异地存放仍缺 |
-| T6 | 孤儿数据清理与外键策略 | P1 | T5 | **第 1 步已完成**（2026-09-30：592 条孤儿按人工口径处置，恢复演练转 clean）；第 2/3 步未做 |
+| T5 | 业务库备份与恢复预案 | P1 | — | **恢复演练已通过**（2026-09-30：行数逐一一致 + 外键 9/9 全部建成）；**运维备份脚本已交付**（2026-10-01：`scripts/web_backup.py`，`pg_dump -Fc` + `pg_restore --list` 校验 + sha256 清单 + `--keep-days` + fail-closed 目标，见 `audit/f07-backup-script.json`）；**异地存放仍缺**（待挂载点） |
+| T6 | 孤儿数据清理与外键策略 | P1 | T5 | **第 1 步已完成**（2026-09-30：592 条孤儿按人工口径处置，恢复演练转 clean）；**第 2/3 步已完成**（2026-10-02：12 外键全 `NO ACTION` 三路硬删全拒 + 会话软删（列表隐藏/run 存档可达），建议维持现状无需迁移，见 `audit/f07-key-ondelete-drill.json`）；保留期定值已入 `deploy/README.md`（备份 30 天/每日 1 次、runs 90 天） |
 | T7 | request id 与结构化日志 | P1 | T1 | 待开始 |
-| T8 | `/healthz` 真实探活 | P1 | T7 | **已完成（2026-10-01）**：连通探活 + 就绪分离 + compose `/readyz` healthcheck + `caddy` 依赖 `api` 的 `service_healthy` 均已落地并容器实测；仅真实 PG 重启时序未测 |
+| T8 | `/healthz` 真实探活 | P1 | T7 | **已完成（2026-10-01）**：连通探活 + 就绪分离 + compose `/readyz` healthcheck + `caddy` 依赖 `api` 的 `service_healthy` 均已落地并容器实测；**真实 PG 重启时序已实测**（2026-10-01：`docker stop` → `/healthz`/`/readyz` 双双 503 fail-closed，`start`/`restart` → ~2s 翻 200，见 `audit/t8-pg-restart.json`）|
 | T9 | `/api/runs` 限流与配额 | P1 | T7 | 待开始 |
 | T10 | run 指标与成本观测 | P1 | T7 | 待开始 |
 | T11 | 前端测试接入与 CI 覆盖 | P2 | — | 已完成 |

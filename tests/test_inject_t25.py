@@ -94,14 +94,30 @@ async def test_resolve_none_when_no_default_config(tmp_path):
 async def test_resolve_none_when_partial_config(user_with_config):
     from server.store import resolve_user_llm_env
 
-    # A decryption failure (e.g. key rotation, corrupted ciphertext) must surface
-    # as "no usable config" so the run falls back to the server .env rather than
-    # injecting a broken partial set.
+    # A config whose key comes back empty is a *partial* set -> None, so the run
+    # falls back to the server .env rather than injecting half a set.
     with patch(
         "server.store.get_decrypted_api_key",
-        new=AsyncMock(side_effect=Exception("decrypt failed")),
+        new=AsyncMock(return_value=""),
     ):
         assert await resolve_user_llm_env(user_id=user_with_config.id) is None
+
+
+@pytest.mark.asyncio
+async def test_resolve_raises_when_key_undecryptable(user_with_config):
+    from server.store import LLMCredentialError, resolve_user_llm_env
+
+    # F07-KEY-1: an *undecryptable* key (key rotation / corrupted ciphertext) is
+    # NOT "no config" — it must raise so submit fails closed (503) instead of
+    # silently rerouting the run to the server default with a stale snapshot.
+    with (
+        patch(
+            "server.store.get_decrypted_api_key",
+            new=AsyncMock(side_effect=Exception("decrypt failed")),
+        ),
+        pytest.raises(LLMCredentialError),
+    ):
+        await resolve_user_llm_env(user_id=user_with_config.id)
 
 
 @pytest.mark.asyncio

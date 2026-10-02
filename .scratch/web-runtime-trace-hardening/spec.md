@@ -1,6 +1,6 @@
 # Web 运行存储与轨迹追溯修复
 
-Status: partial — F01 closed（2026-10-01）；其余 20 项进度见 issues/ 与报告 §8
+Status: partial — 19 closed / 3 ready-for-human（12/15/20，剩余验收缺口见各自 Comments）；进度见 issues/ 与报告 §8
 Type: repair-spec
 Date: 2026-09-29
 
@@ -158,3 +158,15 @@ Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 c
   API（新代码）保留运行。issue [19](issues/19-storage-readiness.md)/[06](issues/06-trace-completeness.md)/
   [08](issues/08-session-ownership.md)/[17](issues/17-storage-trust-boundary.md)/[18](issues/18-artifact-index-consistency.md)/
   [21](issues/21-control-history.md) 已追加 dated 记录；报告 §8「仍未完成」已同步。
+- 2026-10-02：**F06 断电耐久 + 请求尝试身份收口**（报告 §8「仍未完成」结转项）——`worker.persist_summary`
+  tmp fsync → rename → 目录 fsync + 轨迹终态 fsync（`tests/test_web_f06_power_durability.py` 8/8）；
+  trajectory observer 新增 `on_llm_attempt` 落盘 `t:"attempt"` 身份行，relay 出口（SSE + `/trace`）过滤
+  但物理行号计入游标（`tests/test_web_f06_attempt_identity.py` 4/4）。**F07 ①②③④⑤ 全部闭环**
+  （备份脚本 `scripts/web_backup.py`、KEY-1/KEY-2 修复与 HTTP 恢复路径、保留期定值入 `deploy/README.md`）。
+  **批量复核关闭 16 项工单**（提交 `1b41d58`）；余 12/15/20 维持 `ready-for-human`，已补记各自剩余缺口。
+- 2026-10-02（复核补正）：全量 `pytest tests` 暴露两处由本轮引入、此前未同步的测试回归，已修复：
+  ① `tests/test_inject_t25.py::test_resolve_none_when_partial_config` 仍断言"解密失败→None"，与
+  F07-KEY-1（`6339ff2` 改为抛 `LLMCredentialError`）冲突 → 改为断言抛错，另补 genuine partial（空 key）→None；
+  ② `tests/test_m2_acceptance_t212.py::test_historical_run_replays_after_restart` 用 `after=len(records)` 作游标，
+  F06 attempt 行过滤后"记录数 ≠ 物理行号" → 改用服务端返回的 `next_line`。复跑 25 passed。
+  另更正 T5/T6/T8 与报告总览的状态行（见 `docs/plan/web-platform-hardening.md` 与报告 §4 F22）。
