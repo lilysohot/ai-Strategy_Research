@@ -146,6 +146,10 @@ _PLAN_VALUE_COLUMNS = (
 )
 _TRADE_COLUMNS = ("symbol", "market", "side", "quantity", "price", "currency", "fees", "traded_at")
 
+#: 供快照/解析器复用的版本值列名（见 :mod:`server.investment_snapshot`）。
+ACCOUNT_VALUE_COLUMNS = _ACCOUNT_VALUE_COLUMNS
+PLAN_VALUE_COLUMNS = _PLAN_VALUE_COLUMNS
+
 
 # ——— 错误模型 ——————————————————————————————————————————————————————————
 
@@ -245,6 +249,14 @@ class NotFoundOrForbiddenError(BusinessError):
     """不存在与无权一律同一结果，不泄漏差异（契约 §1.4）。"""
 
     code = "not_found"
+    http_status = 404
+    remedy = "contact_support"
+
+
+class SnapshotAbsentError(BusinessError):
+    """Run 没有业务快照（旧的非业务 Run）：明确报缺，不用当前资料回填。"""
+
+    code = "snapshot_absent"
     http_status = 404
     remedy = "contact_support"
 

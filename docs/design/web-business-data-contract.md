@@ -161,6 +161,13 @@
 | 旧客户端 | 不含 `investment_input` 的请求保持原行为（非业务研究），不做业务校验 |
 | 未知字段 | 业务子结构内未知字段一律 `400 unknown_field_rejected` |
 | 假设覆盖 | 出现 `assume`/`scenario_override` 或候选值 → `400 assumption_rejected`；本产品不支持“仅本次假设覆盖” |
+| 对象引用 | `account`/`plan`/`trade`/`position` 均为 `{id, expected_revision?}`；`expected_revision` 与当前版本不符 → `409 revision_conflict` |
+| 一致性 | 计划必须属于提交的那个研究；成交/持仓必须与账户一致；跨研究与混用账户一律 `404 not_found` |
+| 幂等 | `investment_input.idempotency_key` 为建 Run 必填；同键重放返回原 Run 与原 `snapshot_id`，不产生第二个分析 |
+
+实现落点：`server/investment_snapshot.py`（解析、校验、冻结）与
+`server/routes/runs.py`（`POST /api/runs` 同事务冻结、`GET /api/runs/{id}/investment-snapshot`、
+`POST /api/runs/{id}/rerun`）。
 
 ## 7. Run 快照、状态与重算
 

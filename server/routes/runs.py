@@ -21,7 +21,7 @@ import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -31,6 +31,8 @@ from pydantic import BaseModel
 # False and would silently drop every uploaded file. The base class matches both.
 from starlette.datastructures import UploadFile
 
+from server import business_service as biz
+from server import investment_snapshot, store
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
@@ -86,7 +88,9 @@ class RunRequest(BaseModel):
     user_id: str | None = None
 
 
-async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
+async def _parse_submit(
+    request: Request,
+) -> tuple[str, str, list[UploadFile], Any]:
     """Accept either JSON or multipart for run submission (T2.10).
 
     JSON keeps the M1/M2 ``{"message": ...}`` contract intact (so existing clients
@@ -107,7 +111,10 @@ async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
             message=str(form.get("message", "")),
             session_id=str(form.get("session_id", "default")),
         )
-        return req.message, req.session_id, files
+        # DATA-05: the business structure rides along as a JSON TEXT form field.
+        # It must be parsed, not silently dropped by the legacy form parser —
+        # otherwise a multipart submit would bypass every business check.
+        return req.message, req.session_id, files, form.get("investment_input")
     # Fall back to the legacy JSON body.
     body = await request.json()
     # A missing/None session_id is valid (the orchestrator synthesises a stable
@@ -115,7 +122,8 @@ async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
     if isinstance(body, dict) and body.get("session_id") is None:
         body["session_id"] = "default"
     req = RunRequest.model_validate(body)
-    return req.message, req.session_id, []
+    investment_input = body.get("investment_input") if isinstance(body, dict) else None
+    return req.message, req.session_id, [], investment_input
 
 
 @router.post("", status_code=202)
@@ -136,9 +144,14 @@ async def submit_run(
             detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行",
         )
 
-    message, session_id, files = await _parse_submit(request)
+    message, session_id, files, raw_investment_input = await _parse_submit(request)
     if not message:
         raise HTTPException(status_code=422, detail="message is required")
+
+    # DATA-05: parse (and structurally validate) the business structure *before*
+    # any side effect — an invalid investment_input must not leave uploaded files
+    # or a run row behind. ``None`` means a legacy client: no business checks.
+    spec = investment_snapshot.parse_investment_input(raw_investment_input)
 
     # Identity is ALWAYS the authenticated user (T2.7). The client-supplied
     # user_id, if any, is ignored — credentials are resolved from this user's own
@@ -169,9 +182,8 @@ async def submit_run(
     # server needs to tell them apart, to decide whether to create the session
     # lazily below. Short-circuits, so the existence probe only runs when the
     # caller is not already the owner.
-    if (
-        await get_session(session_id=session_uuid, user_id=user_id) is None
-        and await session_exists(session_uuid)
+    if await get_session(session_id=session_uuid, user_id=user_id) is None and await session_exists(
+        session_uuid
     ):
         raise HTTPException(status_code=404, detail="会话不存在")
 
@@ -245,29 +257,234 @@ async def submit_run(
     default_llm = await get_default_llm_config(user_id=user_id)
     snapshot = await build_llm_snapshot(user_id=user_id)
 
-    # Persist the Run row up-front (status="queued"); the orchestrator flips it to
-    # "running" when the worker reports run_started and to its terminal state when
-    # the worker emits run_finished.
-    await create_run(
-        run_id=run_id,
-        session_id=session_uuid,
-        user_id=user_id,
-        prompt=message,
-        pipeline_id=cfg.pipeline_id,
-        run_dir=str(run_dir_for(run_id_hex)),
-        status="queued",
-        llm_config_id=default_llm.id if default_llm is not None else None,
-        llm_snapshot_json=snapshot,
-    )
+    snapshot_id: str | None = None
+    replayed = False
+    if spec is None:
+        # Legacy client: no business structure, no snapshot, no business checks.
+        await create_run(
+            run_id=run_id,
+            session_id=session_uuid,
+            user_id=user_id,
+            prompt=message,
+            pipeline_id=cfg.pipeline_id,
+            run_dir=str(run_dir_for(run_id_hex)),
+            status="queued",
+            llm_config_id=default_llm.id if default_llm is not None else None,
+            llm_snapshot_json=snapshot,
+        )
+    else:
+        if not spec.idempotency_key:
+            # 建 Run 也要可重放：超时后重试必须回到同一个 Run，而不是第二个分析。
+            raise biz.ValidationError(
+                "缺少幂等键",
+                fields={"investment_input.idempotency_key": "保存并分析必须携带幂等键"},
+            )
+        submitted_run_id_hex = run_id_hex
+        payload = {
+            "session_id": str(session_uuid),
+            "message": message,
+            "investment_input": raw_investment_input,
+        }
 
-    await orch.submit(
-        run_id=run_id_hex,
-        session_id=session_id,
-        prompt=message,
-        user_id=user_id,
-        prompt_addendum=prompt_addendum,
-    )
-    return {"run_id": run_id_hex, "status": "queued"}
+        async def _execute() -> dict[str, Any]:
+            resolution = await investment_snapshot.resolve_for_run(
+                session, user_id=user_id, research_id=session_uuid, spec=spec
+            )
+            store.add_run(
+                session,
+                run_id=run_id,
+                session_id=session_uuid,
+                user_id=user_id,
+                prompt=message,
+                pipeline_id=cfg.pipeline_id,
+                run_dir=str(run_dir_for(run_id_hex)),
+                status="queued",
+                llm_config_id=default_llm.id if default_llm is not None else None,
+                llm_snapshot_json=snapshot,
+            )
+            row = investment_snapshot.build_snapshot(
+                run_id=run_id,
+                user_id=user_id,
+                research_id=session_uuid,
+                spec=spec,
+                resolution=resolution,
+                source="manual",
+            )
+            session.add(row)
+            await session.flush()
+            return {"run_id": run_id_hex, "snapshot_id": str(row.id)}
+
+        async with biz.business_transaction() as session:
+            outcome = await biz.run_write(
+                session,
+                user_id=user_id,
+                scope="run.submit",
+                idempotency_key=spec.idempotency_key,
+                payload=payload,
+                execute=_execute,
+            )
+        replayed = outcome.replayed
+        snapshot_id = outcome.result.get("snapshot_id")
+        if replayed:
+            # 原提交已经建过 Run 并派发过；本次只回原结果，不能再造一个分析。
+            run_id_hex = outcome.result["run_id"]
+            run_id = uuid.UUID(run_id_hex)
+            # 上传文件属于被重放的提交：新 run id 的目录没有运行行指向，删掉。
+            if files:
+                shutil.rmtree(build_run_paths(submitted_run_id_hex)["root"], ignore_errors=True)
+                uploaded_names = []
+
+    if not replayed:
+        await orch.submit(
+            run_id=run_id_hex,
+            session_id=session_id,
+            prompt=message,
+            user_id=user_id,
+            prompt_addendum=prompt_addendum,
+        )
+    status = "queued"
+    if replayed:
+        existing = await get_run(run_id=run_id, user_id=user_id)
+        status = existing.status if existing is not None else "queued"
+    return {
+        "run_id": run_id_hex,
+        "status": status,
+        "snapshot_id": snapshot_id,
+        "replayed": replayed,
+    }
+
+
+def _run_uuid(run_id: str) -> uuid.UUID:
+    try:
+        return uuid.UUID(str(run_id))
+    except (ValueError, AttributeError):
+        # 与“不存在/无权”同结果，不泄漏 ID 是否合法之外的信息。
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问") from None
+
+
+@router.get("/{run_id}/investment-snapshot")
+async def run_investment_snapshot(
+    run_id: str,
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """读取 Run 冻结的业务输入快照（DATA-05）。
+
+    没有快照的旧运行明确报 ``404 snapshot_absent``：用当前资料回填会让历史报告
+    读到用户后来才填的数字，这正是 AC-06/07 要防的事。
+    """
+    run_uuid = _run_uuid(run_id)
+    run = await get_run(run_id=run_uuid, user_id=user.id)
+    if run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    async with biz.business_transaction() as session:
+        row = await investment_snapshot.get_snapshot(session, user_id=user.id, run_id=run_uuid)
+    if row is None:
+        raise biz.SnapshotAbsentError("该运行没有业务输入快照（非业务运行）")
+    return investment_snapshot.snapshot_view(row)
+
+
+@router.post("/{run_id}/rerun", status_code=202)
+async def rerun_run(
+    run_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    """重算：停止旧执行，用**当前**资料冻结新快照，建一个新 Run（DATA-05）。
+
+    旧 Run 的轨迹与快照原样保留，新 Run 通过 ``rerun_of_run_id`` 指回它；
+    旧快照不被修改、也不被复用 —— 重算的意义就是采用新资料。
+    """
+    orch = get_orchestrator()
+    if probe_data_root() is not None:
+        raise HTTPException(
+            status_code=503, detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行"
+        )
+
+    old_run_uuid = _run_uuid(run_id)
+    old_run = await get_run(run_id=old_run_uuid, user_id=user.id)
+    if old_run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+
+    async with biz.business_transaction() as session:
+        old_snapshot = await investment_snapshot.get_snapshot(
+            session, user_id=user.id, run_id=old_run_uuid
+        )
+        if old_snapshot is None:
+            raise biz.SnapshotAbsentError("该运行没有业务输入快照，无法重算")
+        spec = investment_snapshot.spec_from_snapshot(old_snapshot)
+
+    if not idempotency_key or not idempotency_key.strip():
+        raise biz.ValidationError(
+            "缺少幂等键", fields={"Idempotency-Key": "重算必须携带幂等键，避免重复建 Run"}
+        )
+
+    # 先请求停止旧执行，再建新 Run：同研究串行由编排保证（DATA-06 起按研究串行）。
+    stop_requested = orch.stop(old_run_uuid.hex)
+
+    new_run_id = uuid.uuid4()
+    new_run_id_hex = new_run_id.hex
+    session_id_str = str(body.get("session_id") or old_run.session_id)
+    prompt = str(body.get("message") or old_run.prompt)
+
+    cfg = get_config()
+    default_llm = await get_default_llm_config(user_id=user.id)
+    llm_snapshot = await build_llm_snapshot(user_id=user.id)
+
+    async def _execute() -> dict[str, Any]:
+        resolution = await investment_snapshot.resolve_for_run(
+            session, user_id=user.id, research_id=old_run.session_id, spec=spec
+        )
+        store.add_run(
+            session,
+            run_id=new_run_id,
+            session_id=old_run.session_id,
+            user_id=user.id,
+            prompt=prompt,
+            pipeline_id=cfg.pipeline_id,
+            run_dir=str(run_dir_for(new_run_id_hex)),
+            status="queued",
+            llm_config_id=default_llm.id if default_llm is not None else None,
+            llm_snapshot_json=llm_snapshot,
+        )
+        row = investment_snapshot.build_snapshot(
+            run_id=new_run_id,
+            user_id=user.id,
+            research_id=old_run.session_id,
+            spec=spec,
+            resolution=resolution,
+            source="manual",
+            rerun_of_run_id=old_run_uuid,
+        )
+        session.add(row)
+        await session.flush()
+        return {"run_id": new_run_id_hex, "snapshot_id": str(row.id)}
+
+    async with biz.business_transaction() as session:
+        outcome = await biz.run_write(
+            session,
+            user_id=user.id,
+            scope="run.rerun",
+            idempotency_key=idempotency_key.strip(),
+            payload={"rerun_of_run_id": str(old_run_uuid), "message": prompt},
+            execute=_execute,
+        )
+
+    if not outcome.replayed:
+        await orch.submit(
+            run_id=outcome.result["run_id"],
+            session_id=session_id_str,
+            prompt=prompt,
+            user_id=user.id,
+        )
+    return {
+        "run_id": outcome.result["run_id"],
+        "status": "queued",
+        "snapshot_id": outcome.result.get("snapshot_id"),
+        "rerun_of_run_id": old_run_uuid.hex,
+        "old_run_stop_requested": stop_requested,
+        "replayed": outcome.replayed,
+    }
 
 
 def _flatten_filename(name: str) -> str:
@@ -372,9 +589,7 @@ async def run_trace(
     # event loop, and the whole trajectory was materialised regardless of size.
     # The read now happens in a worker thread and is paged when ``limit`` is
     # given; ``limit=0`` keeps the historical "return everything" contract.
-    records, next_line, has_more = await asyncio.to_thread(
-        trajectory_page, run_id, after, limit
-    )
+    records, next_line, has_more = await asyncio.to_thread(trajectory_page, run_id, after, limit)
     return {
         "run_id": run_id,
         "records": [redact_deep(rec) for rec in records],
@@ -485,7 +700,10 @@ async def run_approve(
         raise HTTPException(status_code=404, detail="run not found")
     run_id = canonical_run_id(run_id)  # live handle key form (F01)
     ok = await get_orchestrator().approve(
-        run_id, body.approval_id, body.decision, body.replacement_command,
+        run_id,
+        body.approval_id,
+        body.decision,
+        body.replacement_command,
     )
     if not ok:
         raise HTTPException(status_code=409, detail="run not running")
@@ -581,9 +799,7 @@ async def run_revert(
     # already happened and must still be reported.
     if outcome.get("reverted"):
         try:
-            await sync_run_artifacts(
-                run_id=rid, artifacts=scan_outputs(run_id)
-            )
+            await sync_run_artifacts(run_id=rid, artifacts=scan_outputs(run_id))
         except Exception:
             logger.exception("artifact index refresh after revert failed for %s", run_id)
     return {"run_id": run_id, **outcome}

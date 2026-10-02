@@ -494,6 +494,55 @@ class BusinessOperation(Base):
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class RunInvestmentSnapshot(Base):
+    """一个 Run 采用的业务输入快照（DATA-05 / AC-06、07、26、27）。
+
+    快照是**提交那一刻**的事实：把账户/计划/持仓/成交的对象版本与解析后的完整有效值
+    一起冻结，Run 之后无论资料怎么改、无论是压缩还是换模型，读到的都是这一份。
+    只存 ID 不算快照 —— 那样等执行时再读，读到的是那时的数据。
+
+    行只 INSERT 不 UPDATE：创建后不可变是快照的全部意义，重算用**新 Run + 新快照**，
+    旧轨迹与旧快照原样保留。
+    """
+
+    __tablename__ = "run_investment_snapshots"
+    __table_args__ = (
+        # 一个 Run 至多一份快照；重复冻结会在库层失败而不是悄悄覆盖。
+        UniqueConstraint("run_id", name="uq_run_investment_snapshots_run"),
+        Index("ix_run_snapshots_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 研究（sessions）；快照永远属于一个研究，计划也必须属于同一研究。
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    #: 快照结构版本：读取方据此判断是否还能解释这份快照。
+    schema_version: Mapped[str] = mapped_column(String, nullable=False)
+    use_case: Mapped[str] = mapped_column(String, nullable=False, default="general_reading")
+    #: manual=用户手动提交；watch_event=监控触发（DATA-11 使用）。
+    source: Mapped[str] = mapped_column(String, nullable=False, default="manual")
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    account_revision: Mapped[int | None] = mapped_column(Integer)
+    plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    plan_revision: Mapped[int | None] = mapped_column(Integer)
+    position_snapshot_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("position_snapshots.id")
+    )
+    trade_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("trade_records.id"))
+    #: 重算关联：新 Run 指向被重算的旧 Run，旧快照不被修改。
+    rerun_of_run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    #: 解析后的完整有效值：字段 → {value, currency, unit, as_of, status, source}。
+    resolved_json: Mapped[dict] = mapped_column(JSON, nullable=False)
+    #: 用途必需但缺失的字段：只记录，不在此处用当前值回填。
+    missing_json: Mapped[dict | None] = mapped_column(JSON)
+    #: 本次提交显式声明的值，原样保存便于审计（值为十进制文本）。
+    declared_json: Mapped[dict | None] = mapped_column(JSON)
+    #: 冻结时点：与 created_at（记录时间）分开，重算时两个 Run 各不相同。
+    frozen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 _engine: AsyncEngine | None = None
 _SessionMaker: async_sessionmaker[AsyncSession] | None = None
 
@@ -1270,6 +1319,41 @@ async def create_run(
         await session.commit()
         await session.refresh(row)
         return row
+
+
+def add_run(
+    session: AsyncSession,
+    *,
+    run_id: uuid.UUID,
+    session_id: uuid.UUID,
+    user_id: uuid.UUID,
+    prompt: str,
+    pipeline_id: str,
+    run_dir: str,
+    status: str = "queued",
+    llm_config_id: uuid.UUID | None = None,
+    llm_snapshot_json: dict | None = None,
+) -> Run:
+    """Insert a run row **without committing** (DATA-05/06).
+
+    :func:`create_run` commits on its own, which makes it impossible to put the
+    Run row and its business snapshot in one transaction: a snapshot that failed
+    to freeze would leave a queued Run behind. This variant lets the caller own
+    the transaction boundary so "Run + 快照"要么一起生效，要么一起消失。
+    """
+    row = Run(
+        id=run_id,
+        session_id=session_id,
+        user_id=user_id,
+        prompt=prompt,
+        pipeline_id=pipeline_id,
+        run_dir=run_dir,
+        status=status,
+        llm_config_id=llm_config_id,
+        llm_snapshot_json=llm_snapshot_json,
+    )
+    session.add(row)
+    return row
 
 
 async def get_run(*, run_id: uuid.UUID, user_id: uuid.UUID) -> Run | None:

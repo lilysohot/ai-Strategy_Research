@@ -32,6 +32,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 import pytest
@@ -121,6 +122,44 @@ async def _isolated_database():
         yield
     finally:
         await reset_engine()
+
+
+class StubOrchestrator:
+    """A recorder that never spawns a worker subprocess.
+
+    Run submission (DATA-05) is verified here for its *persistence* — snapshot,
+    run row, idempotency — not for execution. A real ``Orchestrator.submit``
+    forks a worker that needs an LLM config and a writable run root, which would
+    make these tests slow, flaky and dependent on credentials. The stub keeps the
+    submission path honest: the route still has to build the run and freeze the
+    snapshot before it can "submit" anything.
+    """
+
+    def __init__(self) -> None:
+        self.submitted: list[dict[str, Any]] = []
+        self.stopped: list[str] = []
+
+    async def submit(self, **kwargs: Any) -> None:
+        self.submitted.append(kwargs)
+
+    def stop(self, run_id: str) -> bool:
+        self.stopped.append(run_id)
+        return False
+
+    def has_worker(self, run_id: str) -> bool:
+        return False
+
+    def subscribe(self, run_id: str) -> None:
+        return None
+
+
+@pytest.fixture(autouse=True)
+def stub_orchestrator(monkeypatch):
+    """Replace the orchestrator for every PG test (no worker subprocess)."""
+    stub = StubOrchestrator()
+    monkeypatch.setattr("server.orchestrator.get_orchestrator", lambda: stub)
+    monkeypatch.setattr("server.routes.runs.get_orchestrator", lambda: stub)
+    return stub
 
 
 @pytest.fixture(scope="session")

@@ -169,6 +169,17 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 **验收**：A/B 不同时点输入固定；JSON/multipart 同规则；跨 worker 仍使用同一快照。
 覆盖 AC-05—07、09、10、26、27。
 
+**当前产物（2026-10-03）**：快照模型 `server/store.py::RunInvestmentSnapshot`
+（INSERT-only）与迁移 `server/alembic/versions/0007_run_snapshot.py`；解析/冻结/读取见
+`server/investment_snapshot.py`（`schema_version=business-snapshot/1`，保存对象版本、解析后的
+完整有效值、来源与缺失项）。提交侧见 `server/routes/runs.py`：`POST /api/runs` 解析
+`investment_input`（JSON 与 multipart 同一契约），与 Run 行**同一事务**冻结快照并复用
+`run.submit` 幂等键；新增 `GET /api/runs/{id}/investment-snapshot`（缺快照报
+`404 snapshot_absent`，不用当前资料回填）与 `POST /api/runs/{id}/rerun`（停止旧执行 +
+新 Run + 新快照 + `rerun_of_run_id` 关联）。真 PG 验收见 `tests/pg/test_run_snapshot.py`
+（13 项，累计 46 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：快照注入 worker/workflow（DATA-08）、outbox 持久派发与按研究串行（DATA-06）。
+
 ### DATA-06 原子提交与持久派发
 
 **需求**：PR-BIZ-04；PRD §5.3—5.4。
