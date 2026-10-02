@@ -82,6 +82,10 @@
 
 **验收**：提供有效/缺失/歧义/冲突/超时重试/无权的协议样例；未定默认值有明确冻结门槛。
 
+**当前产物（2026-10-02）**：冻结草案见[共用数据与操作契约](../design/web-business-data-contract.md)
+v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseline.md)（DATA-00）。
+两者均为设计与核定成果，不代表服务端已实现。
+
 ## 3. 业务数据与分析链路
 
 ### DATA-02 业务模型与迁移
@@ -98,6 +102,12 @@
 
 **验收**：真实 PG 验证精度往返、约束、版本不可变与迁移；当前生产库不用于试跑迁移。
 覆盖 AC-01、03、04、09、22、26。
+
+**当前产物（2026-10-02）**：模型见 `server/store.py`（`InvestmentAccount(+Revision)`、
+`InvestmentPlan(+Revision)`、`PositionSnapshot`、`TradeRecord`、`ResearchInvestmentLink`、
+`StrategyVersion`），迁移见 `server/alembic/versions/0005_business_objects.py`；
+真 PG 验收见 `tests/pg/test_business_models.py`（11 项通过，证据与批次见
+[环境基线](web-business-data-env-baseline.md) §4.1）。写入服务、准入与幂等仍属 DATA-03。
 
 ### DATA-03 统一写入与真实资料准入
 
@@ -116,6 +126,16 @@
 
 **验收**：表单、聊天、JSON/multipart 均无法绕过；语义不以问号/关键词替代。
 覆盖 AC-02、04、05、22、25—28。
+
+**当前产物（2026-10-02）**：写入服务见 `server/business_service.py`（错误码信封、真实输入准入
+`admit_group`、用途裁决 `evaluate_purpose`、版本只追加、`expected_revision` 冲突、幂等键与
+操作查询），幂等台账见 `server/store.py::BusinessOperation` 与迁移
+`server/alembic/versions/0006_business_operations.py`；真 PG 验收见
+`tests/pg/test_business_write.py`（13 项）；HTTP 路由见 `server/routes/business.py`
+（错误信封处理器注册在 `server/app.py`），路由契约验收见 `tests/pg/test_business_routes.py`
+（9 项，随同 DATA-02/03 共 33 项通过，证据与回归对比见
+[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：`POST /api/runs` 的 `investment_input` 扩展（DATA-05）与聊天工具接同一服务。
 
 ### DATA-04 查询、关联与历史
 

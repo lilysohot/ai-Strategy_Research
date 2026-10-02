@@ -12,15 +12,18 @@ from __future__ import annotations
 
 import uuid
 from datetime import UTC, datetime
+from decimal import Decimal
 
 from sqlalchemy import (
     JSON,
     Boolean,
     DateTime,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     LargeBinary,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -230,6 +233,265 @@ class ControlRecord(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+# ——— 业务资料对象（DATA-02 / PR-DATA-13 / PR-BIZ-01） ——————————————————————
+#
+# 这一组表是“用户业务事实”的真源：账户、研究所属计划、手工持仓/成交、策略版本
+# 和研究绑定。契约见 docs/design/web-business-data-contract.md，约束要点：
+#   * 金额/价格/数量用精确数值；缺失是 NULL，绝不用 0 冒充（AC-03/26）；
+#   * 版本行只追加、不修改：每次变更写一个新的 ``revision`` 行，当前表只做指针；
+#   * 计划必须且只能属于一个研究；主计划只能从该研究自己的计划集合中选（AC-01）；
+#   * 账户归用户、可被多个研究引用；计划不跨研究共享（AC-17）。
+
+#: 金额 / 价格 / 数量：30 位总精度、10 位小数，覆盖资产范围且不经过浮点。
+MONEY = Numeric(precision=30, scale=10, asdecimal=True)
+#: 比例 / 盈亏比：20 位总精度、10 位小数，且必须配合 ``unit`` 才有意义。
+RATIO = Numeric(precision=20, scale=10, asdecimal=True)
+
+
+class InvestmentAccount(Base):
+    """交易账户资料的当前指针行（与平台登录账号无关）。"""
+
+    __tablename__ = "investment_accounts"
+    __table_args__ = (
+        # 聊天里说“当前账户”时，账户名必须能唯一定位到一个对象（AC-02）。
+        UniqueConstraint("user_id", "name", name="uq_investment_accounts_user_name"),
+        # 让研究绑定可以声明“账户属于同一用户”的复合外键（AC-09）。
+        UniqueConstraint("user_id", "id", name="uq_investment_accounts_user_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    base_currency: Mapped[str] = mapped_column(String, nullable=False)
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    #: 已落库的最大版本号；读取版本明细时用 revisions 表，不在此行复制正文。
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InvestmentAccountRevision(Base):
+    """账户资料的不可变版本行：只 INSERT，不 UPDATE、不 DELETE。"""
+
+    __tablename__ = "investment_account_revisions"
+    __table_args__ = (
+        UniqueConstraint("account_id", "revision", name="uq_account_revisions_version"),
+        Index("ix_account_revisions_account", "account_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    #: 总资金 / 可用资金分开保存；没有数据就是 NULL，不是 0（AC-03）。
+    total_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    available_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    capital_basis: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    #: 业务时点（用户资料“截至何时”），与 created_at（记录时间）分开。
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: submitted=用户主动提交的完整资料；incomplete=主动保存但仍待补充，不可用于依赖计算。
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    changed_fields: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class InvestmentPlan(Base):
+    """投资计划的当前指针行。**必须且只能属于一个研究**（AC-01）。"""
+
+    __tablename__ = "investment_plans"
+    __table_args__ = (
+        # 让研究绑定可以声明“主计划属于本研究计划集合”的复合外键（AC-01）。
+        UniqueConstraint("research_id", "id", name="uq_investment_plans_research_id"),
+        Index("ix_investment_plans_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    #: 研究（sessions）。非空是“计划不能脱离研究存在”的库级保证。
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InvestmentPlanRevision(Base):
+    """计划资料的不可变版本行。计划价与实际成交价分属不同对象（AC-26）。"""
+
+    __tablename__ = "investment_plan_revisions"
+    __table_args__ = (
+        UniqueConstraint("plan_id", "revision", name="uq_plan_revisions_version"),
+        Index("ix_plan_revisions_plan", "plan_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    plan_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("investment_plans.id"), nullable=False)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    symbol: Mapped[str | None] = mapped_column(String)
+    market: Mapped[str | None] = mapped_column(String)
+    asset_type: Mapped[str | None] = mapped_column(String)
+    direction: Mapped[str | None] = mapped_column(String)
+    plan_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    plan_price_low: Mapped[Decimal | None] = mapped_column(MONEY)
+    plan_price_high: Mapped[Decimal | None] = mapped_column(MONEY)
+    target_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    #: 风险预算可能是金额也可能是百分比：数值与单位分开保存，不靠字段名猜。
+    risk_budget_value: Mapped[Decimal | None] = mapped_column(MONEY)
+    risk_budget_unit: Mapped[str | None] = mapped_column(String)
+    position_limit_value: Mapped[Decimal | None] = mapped_column(MONEY)
+    position_limit_unit: Mapped[str | None] = mapped_column(String)
+    time_window: Mapped[str | None] = mapped_column(String)
+    invalidation: Mapped[str | None] = mapped_column(Text)
+    profit_loss_ratio: Mapped[Decimal | None] = mapped_column(RATIO)
+    profit_loss_ratio_definition: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str | None] = mapped_column(String)
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    changed_fields: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class PositionSnapshot(Base):
+    """用户手工录入的持仓快照；不与其他记录叠加重算资金（PRD §3.2）。"""
+
+    __tablename__ = "position_snapshots"
+    __table_args__ = (Index("ix_position_snapshots_account", "account_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str | None] = mapped_column(String)
+    quantity: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    cost_basis: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    #: 更正链：新行指向被更正的旧行，旧行保留原值。
+    corrects_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("position_snapshots.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class TradeRecord(Base):
+    """用户提供的成交记录。更正保留前值，不因更正而抹掉历史（AC-22）。"""
+
+    __tablename__ = "trade_records"
+    __table_args__ = (Index("ix_trade_records_account_symbol", "account_id", "symbol"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str | None] = mapped_column(String)
+    side: Mapped[str] = mapped_column(String, nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    fees: Mapped[Decimal | None] = mapped_column(MONEY)
+    traded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    corrects_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("trade_records.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class ResearchInvestmentLink(Base):
+    """研究 → 账户引用 + 当前主计划（第一版一个研究至多一个账户）。
+
+    两个复合外键把“归属一致性”下沉到数据库：账户必须属于同一用户，
+    主计划必须属于本研究自己的计划集合 —— 这正是 AC-01 与 AC-09 的库级保证。
+    """
+
+    __tablename__ = "research_investment_links"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "account_id"],
+            ["investment_accounts.user_id", "investment_accounts.id"],
+            name="fk_research_links_account_owner",
+        ),
+        ForeignKeyConstraint(
+            ["research_id", "primary_plan_id"],
+            ["investment_plans.research_id", "investment_plans.id"],
+            name="fk_research_links_plan_research",
+        ),
+    )
+
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), primary_key=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    primary_plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class StrategyVersion(Base):
+    """系统策略产物版本；用户采纳后在所属研究创建计划，不变成已成交事实。"""
+
+    __tablename__ = "strategy_versions"
+    __table_args__ = (Index("ix_strategy_versions_research", "research_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    title: Mapped[str | None] = mapped_column(String)
+    artifact_rel_path: Mapped[str | None] = mapped_column(String)
+    payload_ref: Mapped[str | None] = mapped_column(Text)
+    adopted_plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BusinessOperation(Base):
+    """一次业务写操作的幂等记录与结果快照（DATA-03）。
+
+    保存动作必须是可重放的：网络超时后客户端不知道服务端是否已写入，盲目重试会
+    产生第二个版本甚至第二个 Run。这里以 ``(user_id, idempotency_key)`` 唯一约束
+    承接“同键同内容返回原结果、同键不同内容拒绝”，并把结果保存下来，使刷新后的
+    页面能用不含业务正文的 ``operation_id`` 找回提交结果。
+    """
+
+    __tablename__ = "business_operations"
+    __table_args__ = (
+        UniqueConstraint("user_id", "idempotency_key", name="uq_business_operations_key"),
+        Index("ix_business_operations_user_recent", "user_id", "created_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 操作类型（``account.create`` / ``plan.update`` / …），与幂等键共同限定作用域。
+    scope: Mapped[str] = mapped_column(String, nullable=False)
+    idempotency_key: Mapped[str] = mapped_column(String, nullable=False)
+    #: 规范化请求摘要：同键不同内容据此拒绝，避免把摘要比较交给调用方。
+    request_digest: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="in_progress")
+    result_json: Mapped[dict | None] = mapped_column(JSON)
+    error_json: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    #: 保留期边界；清理不得让原动作再次执行，只影响“还能查多久”。
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 _engine: AsyncEngine | None = None

@@ -19,12 +19,14 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response, status
 
+from server import business_service as biz
 from server import store
 from server.config import get_config
 from server.orchestrator import get_orchestrator
 from server.readiness import enforce_startup_readiness, storage_readiness
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
+from server.routes import business as business_routes
 from server.routes import llm_configs as llm_configs_routes
 from server.routes import models as models_routes
 from server.routes import runs as runs_routes
@@ -74,6 +76,10 @@ app.include_router(artifacts_routes.router)
 # a user, and ownership is enforced at the DB layer (store.get_run filters by
 # user_id). The run_id remains an unguessable UUID on top of that.
 app.include_router(runs_routes.router)
+# 业务资料（DATA-03）：路由只做身份绑定与契约翻译，准入/版本/幂等在 business_service。
+app.include_router(business_routes.router)
+# 业务错误统一渲染为契约信封（字段定位、冲突、幂等、无权）；注册后才能覆盖默认 500。
+app.add_exception_handler(biz.BusinessError, business_routes.business_error_handler)
 
 
 async def _storage_probe(response: Response) -> dict[str, str]:

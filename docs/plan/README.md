@@ -21,6 +21,7 @@
 | [Web 业务数据持久化任务清单](web-business-persistence-tasks.md) | v1.3 有效任务设计；明确计划、补数请求和会话业务回执的单研究归属；16 项任务、28 条 PRD 验收及 10 条补充工程验收；§8—9 记录遗漏复核、源码依据与分阶段可行性；尚未实施 |
 | [Web 运行存储与轨迹追溯缺陷修复报告](web-runtime-trace-repair-report.md) | 2026-10-02 v1.5 批次收口；22 项中 19 项 closed，F12/F15/F20 主体已有实现、剩余项转后续；具体状态/证据以逐项工单为准，不等于新业务功能验收 |
 | [Web 存储验证环境准备](web-storage-validation-environment.md) | 优先复用现有服务；第二 API 用独立测试库，实例故障才另建实例/卷；配置、浏览器、真实 worker、清理及迁移门槛，尚未完成真实链路验收 |
+| [Web 业务资料环境基线](web-business-data-env-baseline.md) | DATA-00 台账（2026-10-02 只读核定：WSL API/前端、PG 18.6 `apodex`、运行根、后台进程缺口）、隔离规则、`tests/pg` 显式 PG 集成入口与后台 dispatcher/monitor 登记要求；独立测试库与后台进程尚未建立 |
 | [Web 存储链路全面复核](web-storage-chain-audit.md) | 17 层覆盖矩阵、源码证据、隔离复现与验收缺口；新增 29 个契约检查 26 失败/3 通过，已有相关回归 57 通过；不是生产验收 |
 
 ## 已实施的设计与决策记录
