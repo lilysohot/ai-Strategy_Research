@@ -163,7 +163,7 @@ Status 行遵循仓库 triage labels；各工单已分诊（F01 于 2026-10-01 c
   trajectory observer 新增 `on_llm_attempt` 落盘 `t:"attempt"` 身份行，relay 出口（SSE + `/trace`）过滤
   但物理行号计入游标（`tests/test_web_f06_attempt_identity.py` 4/4）。**F07 ①②③④⑤ 全部闭环**
   （备份脚本 `scripts/web_backup.py`、KEY-1/KEY-2 修复与 HTTP 恢复路径、保留期定值入 `deploy/README.md`）。
-  **批量复核关闭 16 项工单**（提交 `1b41d58`）；余 12/15/20 维持 `ready-for-human`，已补记各自剩余缺口。
+  **批量复核关闭 16 项工单**（提交 `1b41d58`）；余 12/15/20 维持 `ready-for-human`，已补记各自剩余缺口，并在报告 v1.5 §9 登记为后续 backlog（不阻断收口）。
 - 2026-10-02（复核补正）：全量 `pytest tests` 暴露两处由本轮引入、此前未同步的测试回归，已修复：
   ① `tests/test_inject_t25.py::test_resolve_none_when_partial_config` 仍断言"解密失败→None"，与
   F07-KEY-1（`6339ff2` 改为抛 `LLMCredentialError`）冲突 → 改为断言抛错，另补 genuine partial（空 key）→None；
