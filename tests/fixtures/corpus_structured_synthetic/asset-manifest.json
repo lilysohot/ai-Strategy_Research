@@ -1,0 +1,25 @@
+{
+  "schema_version": "corpus-structured-synthetic-assets-v1",
+  "synthetic_only": true,
+  "real_source_ids": [],
+  "assets": [
+    {
+      "path": "cases.json",
+      "sha256": "df2f1c9e4005a13702df798df0141b397c99a90e68ff9a8f1b4179692a23b179",
+      "media_type": "application/json"
+    }
+  ],
+  "required_coverage_tags": [
+    "ordinary_number",
+    "pure_opinion",
+    "mixed_condition",
+    "negation",
+    "prediction",
+    "actual",
+    "table_header",
+    "footnote",
+    "cross_packet_qualifier",
+    "duplicate_quote",
+    "parse_gap"
+  ]
+}

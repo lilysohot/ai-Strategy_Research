@@ -1,0 +1,13 @@
+{
+  "schema_version": "corpus-semantic-query-page-v1",
+  "query_id": "query-synthetic-001",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "query_sha256": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+  "sort_version": "semantic-lexical-sort-v1",
+  "purpose": "quote-without-purpose",
+  "records": [],
+  "next_cursor": null,
+  "page_status": "complete",
+  "error_codes": []
+}
+

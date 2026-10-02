@@ -1,0 +1,75 @@
+{
+  "schema_version": "corpus-structured-state-codes-v1",
+  "states": {
+    "execution": ["planned", "ready", "reserved", "running", "succeeded", "failed", "cancelled", "deferred", "outcome_unknown", "blocked"],
+    "protocol": ["not_checked", "valid", "invalid", "unsupported"],
+    "publication": ["unpublished", "candidate", "published", "withdrawn", "superseded"],
+    "context": ["complete", "partial", "missing", "ambiguous", "budget_exceeded"],
+    "mapping": ["confirmed", "suspected", "unlinked", "conflict"],
+    "quality": ["unassessed", "accepted", "review_required", "rejected"]
+  },
+  "transitions": {
+    "execution": {
+      "planned": ["ready", "deferred", "cancelled", "blocked"],
+      "ready": ["reserved", "deferred", "cancelled", "blocked"],
+      "reserved": ["running", "failed", "cancelled", "outcome_unknown"],
+      "running": ["succeeded", "failed", "cancelled", "outcome_unknown"],
+      "succeeded": [],
+      "failed": [],
+      "cancelled": [],
+      "deferred": ["ready", "cancelled", "blocked"],
+      "outcome_unknown": [],
+      "blocked": ["ready", "cancelled"]
+    },
+    "protocol": {
+      "not_checked": ["valid", "invalid", "unsupported"],
+      "valid": [],
+      "invalid": [],
+      "unsupported": []
+    },
+    "publication": {
+      "unpublished": ["candidate"],
+      "candidate": ["published", "withdrawn"],
+      "published": ["withdrawn", "superseded"],
+      "withdrawn": [],
+      "superseded": []
+    },
+    "context": {
+      "complete": [],
+      "partial": [],
+      "missing": [],
+      "ambiguous": [],
+      "budget_exceeded": []
+    },
+    "mapping": {
+      "confirmed": ["conflict"],
+      "suspected": ["confirmed", "unlinked", "conflict"],
+      "unlinked": ["suspected", "confirmed"],
+      "conflict": []
+    },
+    "quality": {
+      "unassessed": ["accepted", "review_required", "rejected"],
+      "accepted": ["review_required", "rejected"],
+      "review_required": ["accepted", "rejected"],
+      "rejected": []
+    }
+  },
+  "error_codes": {
+    "CS_INPUT_INVALID": {"exit_code": 2, "retryable": false},
+    "CS_SCHEMA_UNSUPPORTED": {"exit_code": 2, "retryable": false},
+    "CS_PROTOCOL_UNSUPPORTED": {"exit_code": 2, "retryable": false},
+    "CS_CONFIG_MISSING": {"exit_code": 3, "retryable": false},
+    "CS_STORE_ROOT_REQUIRED": {"exit_code": 3, "retryable": false},
+    "CS_PATH_OUTSIDE_ROOT": {"exit_code": 3, "retryable": false},
+    "CS_BUDGET_EXHAUSTED": {"exit_code": 4, "retryable": false},
+    "CS_DEPENDENCY_NOT_READY": {"exit_code": 4, "retryable": true},
+    "CS_PUBLICATION_CONFLICT": {"exit_code": 4, "retryable": true},
+    "CS_CONTEXT_INCOMPLETE": {"exit_code": 4, "retryable": false},
+    "CS_NOT_FOUND": {"exit_code": 5, "retryable": false},
+    "CS_NOT_PUBLISHED": {"exit_code": 5, "retryable": false},
+    "CS_CURSOR_STALE": {"exit_code": 5, "retryable": false},
+    "CS_ARTIFACT_CORRUPT": {"exit_code": 5, "retryable": false},
+    "CS_OUTCOME_UNKNOWN": {"exit_code": 6, "retryable": false}
+  }
+}
+

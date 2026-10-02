@@ -1,0 +1,28 @@
+{
+  "schema_version": "corpus-semantic-query-page-v1",
+  "query_id": "query-synthetic-001",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "query_sha256": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+  "sort_version": "semantic-lexical-sort-v1",
+  "purpose": "cite",
+  "records": [
+    {
+      "record_id": "fact-1",
+      "role": "claims",
+      "usable_for": ["cite"],
+      "evidence": [
+        {"handle": "cv2:synthetic-build-001#chunk:synthetic-001", "unit_id": "u1", "locator": "unit:1", "quote": "合成甲公司2026年收入100亿元。", "coordinate_system": "unicode_code_points", "start": 0, "end": 18, "text_sha256": "sha256:abbdf38952ced47bac291107217a7fca8a6687748d79e809a0a2e4acd389c7d1"}
+      ],
+      "dependencies": [
+        {"kind": "period", "evidence_index": 0, "required_for": ["cite", "compare"], "status": "present"}
+      ],
+      "context_status": "complete",
+      "mapping_status": "unlinked",
+      "quality_status": "accepted"
+    }
+  ],
+  "next_cursor": null,
+  "page_status": "complete",
+  "error_codes": []
+}
+

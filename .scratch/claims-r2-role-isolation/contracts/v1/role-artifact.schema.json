@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-agent.local/contracts/corpus-structured/v1/role-artifact.schema.json",
+  "title": "Role artifact envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_id", "role", "snapshot_id", "task_id", "protocol", "business_contract", "payload_sha256", "payload_media_type", "coverage", "execution_status", "protocol_status", "context_status", "quality_status"],
+  "properties": {
+    "schema_version": {"const": "corpus-role-artifact-v1"},
+    "artifact_id": {"$ref": "#/$defs/hash"},
+    "role": {"enum": ["claims", "material_items", "material_relations"]},
+    "snapshot_id": {"$ref": "#/$defs/hash"}, "task_id": {"type": "string", "minLength": 1},
+    "protocol": {"enum": ["claims-deterministic-v1", "claims-json-v2", "material-atomic-jsonl-v4", "material-relations-jsonl-v1"]},
+    "business_contract": {"enum": ["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]},
+    "payload_sha256": {"$ref": "#/$defs/hash"}, "payload_media_type": {"enum": ["application/json", "application/x-ndjson"]},
+    "upstream_artifact_ids": {"type": "array", "items": {"$ref": "#/$defs/hash"}, "uniqueItems": true},
+    "coverage": {"type": "object", "additionalProperties": false, "required": ["scoped_unit_ids", "omitted_unit_ids", "reason_codes"], "properties": {"scoped_unit_ids": {"type": "array", "items": {"type": "string"}}, "omitted_unit_ids": {"type": "array", "items": {"type": "string"}}, "reason_codes": {"type": "array", "items": {"type": "string"}}}},
+    "execution_status": {"enum": ["succeeded", "failed", "cancelled", "deferred", "outcome_unknown", "blocked"]},
+    "protocol_status": {"enum": ["not_checked", "valid", "invalid", "unsupported"]},
+    "context_status": {"enum": ["complete", "partial", "missing", "ambiguous", "budget_exceeded"]},
+    "quality_status": {"enum": ["unassessed", "accepted", "review_required", "rejected"]},
+    "error_codes": {"type": "array", "items": {"type": "string", "pattern": "^CS_[A-Z0-9_]+$"}}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}
+}
+

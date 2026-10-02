@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-agent.local/contracts/corpus-structured/v1/report-semantic-reference.schema.json",
+  "title": "Report semantic evidence reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report_anchor", "report_quote", "publication_id", "record_id", "purpose", "evidence_ranges", "dependency_assertions", "delivery_status", "publication_status", "quality_status", "verification_status", "error_codes"],
+  "properties": {
+    "schema_version": {"const": "corpus-report-semantic-reference-v1"},
+    "report_anchor": {"type": "string", "minLength": 1}, "report_quote": {"type": "string", "minLength": 1},
+    "publication_id": {"$ref": "#/$defs/hash"}, "record_id": {"type": "string", "minLength": 1},
+    "purpose": {"enum": ["cite", "compare", "calculate"]},
+    "evidence_ranges": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/range"}},
+    "dependency_assertions": {"type": "array", "items": {"$ref": "#/$defs/dependency"}},
+    "delivery_status": {"enum": ["pending", "delivered", "trimmed", "not_delivered"]},
+    "publication_status": {"enum": ["published", "withdrawn", "superseded"]},
+    "quality_status": {"enum": ["accepted", "review_required", "rejected"]},
+    "verification_status": {"enum": ["pending", "verified", "degraded", "failed"]},
+    "error_codes": {"type": "array", "items": {"type": "string", "pattern": "^CS_[A-Z0-9_]+$"}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "range": {
+      "type": "object", "additionalProperties": false,
+      "required": ["handle", "unit_id", "coordinate_system", "start", "end", "quote_sha256"],
+      "properties": {
+        "handle": {"type": "string", "pattern": "^cv2:[A-Za-z0-9._:-]+#chunk:[A-Za-z0-9._:-]+$"},
+        "unit_id": {"type": "string"}, "coordinate_system": {"const": "unicode_code_points"},
+        "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}, "quote_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "dependency": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "range_index", "required_for", "status"],
+      "properties": {
+        "kind": {"enum": ["value", "period", "unit", "header", "footnote", "condition", "negation", "attribution"]},
+        "range_index": {"type": "integer", "minimum": 0},
+        "required_for": {"type": "array", "items": {"enum": ["cite", "compare", "calculate"]}, "minItems": 1, "uniqueItems": true},
+        "status": {"enum": ["present", "missing", "ambiguous"]}
+      }
+    }
+  }
+}

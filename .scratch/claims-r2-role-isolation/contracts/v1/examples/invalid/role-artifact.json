@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-role-artifact-v1",
+  "artifact_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+  "role": "claims",
+  "snapshot_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "task_id": "task-claims-u1",
+  "protocol": "legacy-joint-json",
+  "business_contract": "ThirdClaimSchema",
+  "payload_sha256": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+  "payload_media_type": "application/json",
+  "coverage": {"scoped_unit_ids": [], "omitted_unit_ids": [], "reason_codes": []},
+  "execution_status": "succeeded",
+  "protocol_status": "valid",
+  "context_status": "complete",
+  "quality_status": "accepted"
+}
+

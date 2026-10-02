@@ -1,0 +1,89 @@
+{
+  "schema_version": "corpus-structured-synthetic-cases-v1",
+  "synthetic_only": true,
+  "cases": [
+    {
+      "case_id": "ordinary-number",
+      "coverage_tags": ["ordinary_number", "actual"],
+      "units": [{"unit_id": "ordinary-number-u1", "kind": "prose", "text": "虚构星河公司2025年实际收入为12亿元。", "dependencies": []}],
+      "expected_roles": ["claims", "material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "pure-opinion",
+      "coverage_tags": ["pure_opinion"],
+      "units": [{"unit_id": "pure-opinion-u1", "kind": "prose", "text": "合成分析师认为虚构产品的竞争力可能改善。", "dependencies": []}],
+      "expected_roles": ["material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "mixed-condition",
+      "coverage_tags": ["mixed_condition", "prediction"],
+      "units": [
+        {"unit_id": "mixed-condition-u1", "kind": "prose", "text": "预计虚构星河公司2027年收入达到20亿元。", "dependencies": ["mixed-condition-u2"]},
+        {"unit_id": "mixed-condition-u2", "kind": "prose", "text": "仅在合成并购于2026年完成时，上述预测成立。", "dependencies": []}
+      ],
+      "expected_roles": ["claims", "material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "negation",
+      "coverage_tags": ["negation"],
+      "units": [{"unit_id": "negation-u1", "kind": "prose", "text": "虚构管理层并未承诺2027年实现盈利。", "dependencies": []}],
+      "expected_roles": ["material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "forecast-versus-actual",
+      "coverage_tags": ["prediction", "actual"],
+      "units": [{"unit_id": "forecast-actual-u1", "kind": "prose", "text": "虚构星河公司2025年实际收入12亿元，预计2026年收入15亿元。", "dependencies": []}],
+      "expected_roles": ["claims", "material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "table-header-footnote",
+      "coverage_tags": ["table_header", "footnote"],
+      "units": [
+        {"unit_id": "table-u1", "kind": "table", "text": "指标|2025A|2026E\n收入|12|15", "dependencies": ["table-u2", "table-u3"]},
+        {"unit_id": "table-u2", "kind": "heading", "text": "单位：亿元", "dependencies": []},
+        {"unit_id": "table-u3", "kind": "table_note", "text": "脚注：2026E 为完全虚构预测。", "dependencies": []}
+      ],
+      "expected_roles": ["claims", "material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "cross-packet-qualifier",
+      "coverage_tags": ["cross_packet_qualifier", "mixed_condition"],
+      "units": [
+        {"unit_id": "cross-packet-u1", "kind": "prose", "text": "预计虚构产线可贡献8亿元收入。", "dependencies": ["cross-packet-u2"]},
+        {"unit_id": "cross-packet-u2", "kind": "prose", "text": "前述判断仅适用于合成许可获批之后。", "dependencies": []}
+      ],
+      "expected_roles": ["claims", "material_items"],
+      "expected_context_status": "complete"
+    },
+    {
+      "case_id": "duplicate-quote",
+      "coverage_tags": ["duplicate_quote"],
+      "units": [
+        {"unit_id": "duplicate-u1", "kind": "prose", "text": "风险可控。", "dependencies": []},
+        {"unit_id": "duplicate-u2", "kind": "prose", "text": "风险可控。", "dependencies": []}
+      ],
+      "expected_roles": ["material_items"],
+      "expected_context_status": "ambiguous"
+    },
+    {
+      "case_id": "parse-gap",
+      "coverage_tags": ["parse_gap"],
+      "units": [{"unit_id": "parse-gap-u1", "kind": "gap", "text": "", "dependencies": []}],
+      "expected_roles": [],
+      "expected_context_status": "missing"
+    },
+    {
+      "case_id": "attribution-risk",
+      "coverage_tags": ["attribution", "risk"],
+      "units": [{"unit_id": "attribution-u1", "kind": "prose", "text": "虚构研究员称，合成供应商认为交付可能延迟。", "dependencies": []}],
+      "expected_roles": ["material_items"],
+      "expected_context_status": "complete"
+    }
+  ]
+}

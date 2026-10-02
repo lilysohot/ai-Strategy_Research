@@ -1,0 +1,20 @@
+{
+  "schema_version": "corpus-report-semantic-reference-v1",
+  "report_anchor": "report:paragraph:2",
+  "report_quote": "合成甲公司2026年收入为100亿元。",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "record_id": "fact-1",
+  "purpose": "cite",
+  "evidence_ranges": [
+    {"handle": "cv2:synthetic-build-001#chunk:synthetic-001", "unit_id": "u1", "coordinate_system": "unicode_code_points", "start": 0, "end": 18, "quote_sha256": "sha256:abbdf38952ced47bac291107217a7fca8a6687748d79e809a0a2e4acd389c7d1"}
+  ],
+  "dependency_assertions": [
+    {"kind": "period", "range_index": 0, "required_for": ["cite", "compare"], "status": "present"}
+  ],
+  "delivery_status": "delivered",
+  "publication_status": "published",
+  "quality_status": "accepted",
+  "verification_status": "verified",
+  "error_codes": []
+}
+

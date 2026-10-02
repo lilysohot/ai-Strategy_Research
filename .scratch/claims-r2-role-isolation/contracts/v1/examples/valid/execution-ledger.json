@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-execution-ledger-v1",
+  "batch_id": "batch-synthetic-001",
+  "plan_sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "snapshot_id": "sha256:6a6962986826316951ebca194e7fc78bf448efd51e63fe04425713627a162f78",
+  "budget": {"max_attempts": 2, "reserved_attempts": 1, "actual_attempts": 1, "currency": null},
+  "tasks": [
+    {
+      "task_id": "task-claims-u1",
+      "role": "claims",
+      "method": "model",
+      "input_sha256": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "profile_sha256": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "execution_status": "succeeded",
+      "protocol_status": "valid",
+      "quality_status": "accepted",
+      "publication_status": "candidate",
+      "context_status": "complete",
+      "dependency_task_ids": [],
+      "artifact_sha256": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "error_codes": []
+    }
+  ],
+  "attempts": [
+    {
+      "attempt_id": "attempt-task-claims-u1-1",
+      "task_id": "task-claims-u1",
+      "attempt_number": 1,
+      "execution_status": "succeeded",
+      "request_sha256": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "response_sha256": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "provider": "fake",
+      "request_model": "fake-structured-v1",
+      "response_model": null,
+      "usage": null,
+      "cost": null
+    }
+  ]
+}
+

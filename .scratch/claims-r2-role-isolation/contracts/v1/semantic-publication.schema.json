@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-agent.local/contracts/corpus-structured/v1/semantic-publication.schema.json",
+  "title": "Semantic publication manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "publication_id", "source_id", "build_id", "snapshot_id", "generation", "parent_publication_id", "artifacts", "mappings", "coverage", "publication_status", "quality_status"],
+  "properties": {
+    "schema_version": {"const": "corpus-semantic-publication-v1"},
+    "publication_id": {"$ref": "#/$defs/hash"}, "source_id": {"type": "string", "minLength": 1},
+    "build_id": {"type": "string", "minLength": 1}, "snapshot_id": {"$ref": "#/$defs/hash"},
+    "generation": {"type": "integer", "minimum": 1}, "parent_publication_id": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/hash"}, "uniqueItems": true},
+    "mappings": {"type": "array", "items": {"$ref": "#/$defs/mapping"}},
+    "coverage": {"type": "object", "additionalProperties": false, "required": ["claims", "material_items", "material_relations"], "properties": {"claims": {"$ref": "#/$defs/context"}, "material_items": {"$ref": "#/$defs/context"}, "material_relations": {"$ref": "#/$defs/context"}}},
+    "publication_status": {"enum": ["candidate", "published", "withdrawn", "superseded"]},
+    "quality_status": {"enum": ["unassessed", "accepted", "review_required", "rejected"]},
+    "reason_codes": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "context": {"enum": ["complete", "partial", "missing", "ambiguous", "budget_exceeded"]},
+    "mapping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claim_fact_id", "material_item_id", "mapping_status", "rule_version", "evidence_unit_ids", "conflict_fields"],
+      "properties": {
+        "claim_fact_id": {"type": ["string", "null"]}, "material_item_id": {"type": ["string", "null"]},
+        "mapping_status": {"enum": ["confirmed", "suspected", "unlinked", "conflict"]},
+        "rule_version": {"type": "string", "minLength": 1}, "evidence_unit_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "conflict_fields": {"type": "array", "items": {"enum": ["subject", "metric", "period", "value", "unit", "factuality", "polarity", "condition", "attribution"]}, "uniqueItems": true}
+      }
+    }
+  }
+}
+

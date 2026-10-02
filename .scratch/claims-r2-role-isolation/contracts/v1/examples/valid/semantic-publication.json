@@ -1,0 +1,18 @@
+{
+  "schema_version": "corpus-semantic-publication-v1",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "source_id": "synthetic-source-001",
+  "build_id": "synthetic-build-001",
+  "snapshot_id": "sha256:6a6962986826316951ebca194e7fc78bf448efd51e63fe04425713627a162f78",
+  "generation": 1,
+  "parent_publication_id": null,
+  "artifacts": ["sha256:4444444444444444444444444444444444444444444444444444444444444444"],
+  "mappings": [
+    {"claim_fact_id": "fact-1", "material_item_id": null, "mapping_status": "unlinked", "rule_version": "cross-role-map-v1", "evidence_unit_ids": ["u1"], "conflict_fields": []}
+  ],
+  "coverage": {"claims": "complete", "material_items": "partial", "material_relations": "missing"},
+  "publication_status": "published",
+  "quality_status": "accepted",
+  "reason_codes": ["RELATIONS_NOT_REQUESTED"]
+}
+

@@ -1,0 +1,10 @@
+{
+  "schema_version": "corpus-execution-ledger-v1",
+  "batch_id": "batch-synthetic-001",
+  "plan_sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "snapshot_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "budget": {"max_attempts": -1, "reserved_attempts": 0, "actual_attempts": 0, "currency": null},
+  "tasks": [],
+  "attempts": []
+}
+

@@ -1,0 +1,34 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:6a6962986826316951ebca194e7fc78bf448efd51e63fe04425713627a162f78",
+  "source_id": "synthetic-source-001",
+  "build_id": "synthetic-build-001",
+  "publication_generation": 1,
+  "parser_versions": {"clean": "synthetic-clean-v1", "parse": "synthetic-parse-v1", "chunk": "synthetic-chunk-v1"},
+  "units": [
+    {
+      "unit_id": "u1",
+      "chunk_id": "chunk:synthetic-001",
+      "kind": "prose",
+      "locator": "unit:1",
+      "text": "合成甲公司2026年收入100亿元。",
+      "text_sha256": "sha256:abbdf38952ced47bac291107217a7fca8a6687748d79e809a0a2e4acd389c7d1",
+      "span": {"coordinate_system": "unicode_code_points", "text_sha256": "sha256:abbdf38952ced47bac291107217a7fca8a6687748d79e809a0a2e4acd389c7d1", "start": 0, "end": 18},
+      "metadata": {"synthetic": true},
+      "metadata_sha256": "sha256:a8198524f58e72b56283ab71ebddada22840f108b46ef7165bb3fca9919c5558",
+      "dependencies": []
+    }
+  ],
+  "gaps": [],
+  "identity_input": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "source_id": "synthetic-source-001",
+    "build_id": "synthetic-build-001",
+    "publication_generation": 1,
+    "parser_versions": {"chunk": "synthetic-chunk-v1", "clean": "synthetic-clean-v1", "parse": "synthetic-parse-v1"},
+    "unit_identities": [
+      {"unit_id": "u1", "chunk_id": "chunk:synthetic-001", "kind": "prose", "locator": "unit:1", "coordinate_system": "unicode_code_points", "start": 0, "end": 18, "text_sha256": "sha256:abbdf38952ced47bac291107217a7fca8a6687748d79e809a0a2e4acd389c7d1", "metadata_sha256": "sha256:a8198524f58e72b56283ab71ebddada22840f108b46ef7165bb3fca9919c5558"}
+    ]
+  }
+}
+

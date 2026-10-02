@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frontier-agent.local/contracts/corpus-structured/v1/execution-ledger.schema.json",
+  "title": "Batch, task and attempt ledger envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "batch_id", "plan_sha256", "snapshot_id", "budget", "tasks", "attempts"],
+  "properties": {
+    "schema_version": {"const": "corpus-execution-ledger-v1"},
+    "batch_id": {"type": "string", "minLength": 1},
+    "plan_sha256": {"$ref": "#/$defs/hash"},
+    "snapshot_id": {"$ref": "#/$defs/hash"},
+    "budget": {"$ref": "#/$defs/budget"},
+    "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}},
+    "attempts": {"type": "array", "items": {"$ref": "#/$defs/attempt"}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "execution": {"enum": ["planned", "ready", "reserved", "running", "succeeded", "failed", "cancelled", "deferred", "outcome_unknown", "blocked"]},
+    "protocol": {"enum": ["not_checked", "valid", "invalid", "unsupported"]},
+    "quality": {"enum": ["unassessed", "accepted", "review_required", "rejected"]},
+    "budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_attempts", "reserved_attempts", "actual_attempts", "currency"],
+      "properties": {
+        "max_attempts": {"type": "integer", "minimum": 0}, "reserved_attempts": {"type": "integer", "minimum": 0},
+        "actual_attempts": {"type": "integer", "minimum": 0}, "currency": {"type": ["string", "null"]}
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "role", "method", "input_sha256", "profile_sha256", "execution_status", "protocol_status", "quality_status", "publication_status", "context_status", "dependency_task_ids", "error_codes"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 1},
+        "role": {"enum": ["claims", "material_items", "material_relations"]},
+        "method": {"enum": ["deterministic", "model"]},
+        "input_sha256": {"$ref": "#/$defs/hash"}, "profile_sha256": {"$ref": "#/$defs/hash"},
+        "execution_status": {"$ref": "#/$defs/execution"}, "protocol_status": {"$ref": "#/$defs/protocol"},
+        "quality_status": {"$ref": "#/$defs/quality"},
+        "publication_status": {"enum": ["unpublished", "candidate", "published", "withdrawn", "superseded"]},
+        "context_status": {"enum": ["complete", "partial", "missing", "ambiguous", "budget_exceeded"]},
+        "dependency_task_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "artifact_sha256": {"$ref": "#/$defs/hash"},
+        "error_codes": {"type": "array", "items": {"type": "string", "pattern": "^CS_[A-Z0-9_]+$"}, "uniqueItems": true}
+      }
+    },
+    "attempt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["attempt_id", "task_id", "attempt_number", "execution_status", "request_sha256", "provider", "request_model", "response_model", "usage", "cost"],
+      "properties": {
+        "attempt_id": {"type": "string", "minLength": 1}, "task_id": {"type": "string", "minLength": 1},
+        "attempt_number": {"type": "integer", "minimum": 1}, "execution_status": {"$ref": "#/$defs/execution"},
+        "request_sha256": {"$ref": "#/$defs/hash"}, "response_sha256": {"$ref": "#/$defs/hash"},
+        "provider": {"type": "string", "minLength": 1}, "request_model": {"type": "string", "minLength": 1},
+        "response_model": {"type": ["string", "null"]},
+        "usage": {"type": ["object", "null"]},
+        "cost": {"type": ["object", "null"]}
+      }
+    }
+  }
+}
+

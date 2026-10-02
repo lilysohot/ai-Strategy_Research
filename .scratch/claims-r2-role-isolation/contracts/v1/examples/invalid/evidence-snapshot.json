@@ -1,0 +1,12 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:not-a-hash",
+  "source_id": "synthetic-source-001",
+  "build_id": "synthetic-build-001",
+  "publication_generation": 1,
+  "parser_versions": {"parse": "v1"},
+  "units": [],
+  "gaps": [],
+  "identity_input": {}
+}
+

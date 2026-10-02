@@ -1,0 +1,15 @@
+{
+  "schema_version": "corpus-semantic-publication-v1",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "source_id": "synthetic-source-001",
+  "build_id": "synthetic-build-001",
+  "snapshot_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "generation": 0,
+  "parent_publication_id": null,
+  "artifacts": [],
+  "mappings": [],
+  "coverage": {"claims": "complete", "material_items": "partial", "material_relations": "missing"},
+  "publication_status": "published",
+  "quality_status": "accepted"
+}
+

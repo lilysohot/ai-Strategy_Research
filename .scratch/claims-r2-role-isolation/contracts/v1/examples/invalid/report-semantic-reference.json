@@ -1,0 +1,16 @@
+{
+  "schema_version": "corpus-report-semantic-reference-v1",
+  "report_anchor": "report:paragraph:2",
+  "report_quote": "缺少证据范围。",
+  "publication_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "record_id": "fact-1",
+  "purpose": "cite",
+  "evidence_ranges": [],
+  "dependency_assertions": [],
+  "delivery_status": "delivered",
+  "publication_status": "published",
+  "quality_status": "accepted",
+  "verification_status": "verified",
+  "error_codes": []
+}
+

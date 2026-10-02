@@ -1,0 +1,60 @@
+{
+  "schema_version": "corpus-structured-contract-manifest-v1",
+  "contract_version": "v1",
+  "created_on": "2026-10-02",
+  "business_schema_reuse": {
+    "claims": "plugins.corpus.evidence_pipeline.EvidenceRun/EvidenceFact",
+    "material": "plugins.corpus.material_semantics.MaterialRun/MaterialUnderstanding"
+  },
+  "public_interfaces": {
+    "python_package": "plugins.corpus.structured",
+    "research_tool": "corpus_semantic_query",
+    "cli_module": "plugins.corpus.structured.cli",
+    "commands": ["plan", "execute", "replay", "check", "query"]
+  },
+  "configuration": {
+    "store_root": "CORPUS_STRUCTURED_ROOT",
+    "provider": "STRUCTURED_EXTRACTION_PROVIDER",
+    "model": "STRUCTURED_EXTRACTION_MODEL",
+    "base_url": "STRUCTURED_EXTRACTION_BASE_URL",
+    "api_key": "STRUCTURED_EXTRACTION_API_KEY",
+    "missing_store_root": "CS_STORE_ROOT_REQUIRED",
+    "missing_model_configuration": "CS_CONFIG_MISSING"
+  },
+  "supported_protocols": {
+    "claims_deterministic": "claims-deterministic-v1",
+    "claims_model": "claims-json-v2",
+    "material_items": "material-atomic-jsonl-v4",
+    "material_relations": "material-relations-jsonl-v1"
+  },
+  "real_sample_scope": {
+    "status": "not_approved_for_this_effort",
+    "entries": [],
+    "delegated_to_issue": "10-quality-gates"
+  },
+  "assets": [
+    {"path": "v1/README.md", "sha256": "de4f6cf2f1c1cfbc86b9cebfaafbf22173afd80aed86edef9d8cd19a62aeb755"},
+    {"path": "v1/state-codes.json", "sha256": "a43bf821e4c659c4e71eff3a92f5e36cbce56b1cfeb81bc50a68aa5701a7a0c3"},
+    {"path": "v1/evidence-snapshot.schema.json", "sha256": "9f29dca28f9156987131b91605efc801a20a0450683d96db6cb26f1e82540afb"},
+    {"path": "v1/execution-ledger.schema.json", "sha256": "2e87f09280b9a7ffc99227e4c9f4442dba90a7372954bb48526b393e62150065"},
+    {"path": "v1/role-artifact.schema.json", "sha256": "61e89bdd0073907cf77a31510dc08dcc9b872a4a099913262a6cb2e22102981f"},
+    {"path": "v1/semantic-publication.schema.json", "sha256": "636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa"},
+    {"path": "v1/semantic-query-page.schema.json", "sha256": "5494bf1aaa33e8b126934afff1dbba308c15ef90025cdd6665f2e4ec48d82605"},
+    {"path": "v1/report-semantic-reference.schema.json", "sha256": "18cec7608bf9d6f895915f8564fbcf8e50a13b2f6075a6aaa7e22b1adfb4f61e"},
+    {"path": "v1/examples/valid/evidence-snapshot.json", "sha256": "a79a1ebf2af2f80578638c03eababdcf81f2e26f240cf68649270e83d5c62f55"},
+    {"path": "v1/examples/invalid/evidence-snapshot.json", "sha256": "984080e344e89942372dbb1687e32a2d3c596e45be876a0d2591283ed6296f62"},
+    {"path": "v1/examples/valid/execution-ledger.json", "sha256": "275d56353cf0e5664d29da6585fbb965d23b5155e4b602800b9d075e0a096fd4"},
+    {"path": "v1/examples/invalid/execution-ledger.json", "sha256": "c2aa2a38b25470cc03c227c5378bc3d84bbf0aca860fd2039d8950e8594391ce"},
+    {"path": "v1/examples/valid/role-artifact.json", "sha256": "e93e5b88829f21ba73d16216f62995cff599419db3334eb25598f8d265b87c70"},
+    {"path": "v1/examples/invalid/role-artifact.json", "sha256": "284e11b69bdf3e1070502aec72a18f0b79b4bec3b7b7306001c0e2c2314f9d82"},
+    {"path": "v1/examples/valid/semantic-publication.json", "sha256": "b944391f0bc501bb686ece0e6f489787cb976d1a0319413ecdcff2b03d0e727a"},
+    {"path": "v1/examples/invalid/semantic-publication.json", "sha256": "ec09bff8dbe76eedb73c566047214d9733f40dce842760b56484d275572b512f"},
+    {"path": "v1/examples/valid/semantic-query-page.json", "sha256": "933d9f6f2bca2d1e57b983e7acd8e35bcfeb37737818720b5987cab8a990f9e4"},
+    {"path": "v1/examples/invalid/semantic-query-page.json", "sha256": "0c84dd0e695467fe8625b364f520a1616625a84ab92334528ba41cee29f26c04"},
+    {"path": "v1/examples/valid/report-semantic-reference.json", "sha256": "44fcf4072a7089a6ca7fc707a01ed33b6bac6f160935c2812e2f931318ff3c27"},
+    {"path": "v1/examples/invalid/report-semantic-reference.json", "sha256": "29075ca9cc3ae4b962b29b5e688cf080a854416b4ca9e0aaf2b60a4a23b9ea40"}
+  ],
+  "fixture_manifests": [
+    {"path": "../../../tests/fixtures/corpus_structured_synthetic/asset-manifest.json", "sha256": "6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073"}
+  ]
+}
