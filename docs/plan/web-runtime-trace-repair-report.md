@@ -804,7 +804,7 @@ worker handle；`server/routes/runs.py` 的 `_live_queue_for` 仅在「本进程
 | 工单 | 类别 | 已实现部分 | 剩余缺口（backlog） | 触发时机 |
 |---|---|---|---|---|
 | [12](../../.scratch/web-runtime-trace-hardening/issues/12-upload-atomicity.md) 同名上传覆盖 | 存储健壮性 | 上传批次全或无：失败即回收整个 per-run 目录，不再遗留孤儿 | 同名/扁平化冲突无处理（`_flatten_filename` 只取 basename，后者覆盖前者）；分块限额暂存与入队失败补偿未端到端验收 | 出现同名上传或多文件大批量上传需求时 |
-| [15](../../.scratch/web-runtime-trace-hardening/issues/15-finalization-recovery.md) 跨进程任务所有权 | 多实例一致性 | 终态帧幂等、`_drain_session` 单次启动失败自愈、孤儿收口恢复消息/产物/用量、`usage` 三态 | `reconcile_orphan_runs` 仅跳过本进程 handle，多 worker/副本或滚动发布下可能把其他进程的活跃 Run 误标 `failed`/`stopped` | 部署多 API 实例/副本或滚动发布前 |
+| [15](../../.scratch/web-runtime-trace-hardening/issues/15-finalization-recovery.md) 跨进程任务所有权 | 多实例一致性 | 终态帧幂等、`_drain_session` 单次启动失败自愈、孤儿收口恢复消息/产物/用量、`usage` 三态 | `reconcile_orphan_runs` 仅跳过本进程 handle，多 worker/副本或滚动发布下可能把其他进程的活跃 Run 误标 `failed`/`stopped` | 部署多 API 实例/副本或滚动发布前（与 [web-platform-hardening.md](web-platform-hardening.md) 的 **T17 多实例改造**为同一议题，届时一并立项）|
 | [20](../../.scratch/web-runtime-trace-hardening/issues/20-run-metadata-snapshot.md) 运行快照语义 | 可观测性 | 提交时落非密钥模型快照 + `run_started` 持久化 `running`/`started_at` | 排队期修改模型配置的语义（快照取提交时还是执行时配置）、默认连接失效/启动失败/重试下归属准确性 | 需精确定义"排队期改配置"或做成本归因时 |
 
 **已知边界（非缺陷，正文已标注）**：F03 错误响应脱敏无专项断言；F04 同轮同名+乱序结果无并发专项用例；
