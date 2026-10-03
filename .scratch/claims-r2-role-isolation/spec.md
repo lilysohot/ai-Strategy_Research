@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02
-- 状态：01 契约/合成资产已验收；02—11 尚未开始，须按各自依赖与外部门重新分诊。
+- 状态：01 已验收；02 通用修订已通过目标回归、待人工验收，eval 环境门未过（详见票据）；03—11 须按各自依赖与外部门重新分诊。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -117,6 +117,11 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
   UTF-8 byte、UTF-16、PDF glyph、页内或拼接全文坐标。对外句柄为
   `cv2:<build_id>#chunk:<chunk_id>`，另带 unit、locator、text hash 和区间。重复引文必须靠句柄与
   区间区分，不按首次字符串命中。
+
+02 的追加实现修订 `structured-snapshot-2` 不修改已冻结 v1 Schema：完整 gaps 摘要通过
+已参与身份的 metadata 绑定，dependencies 必须与已哈希的明细一致。旧 builder-1 快照缺少这些
+保证，消费端拒绝并要求重建。packet 内部拼接坐标必须经 `structured/mapping.py` 转换为上述
+原文句柄；cell 标签缺少显式原文区间时降级，不推测表头。修订证据与限制以 02 文末记录为准。
 
 ### 4.4 状态、转换与跨角色映射
 

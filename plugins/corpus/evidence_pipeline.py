@@ -6,11 +6,13 @@ but the same deterministic evidence and dimensional checks govern its output.
 
 from __future__ import annotations
 
+import json
 import re
 from collections import Counter, defaultdict
 from collections.abc import Callable
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
+from typing import TYPE_CHECKING, Literal, cast
 
 from pydantic import BaseModel, ConfigDict
 
@@ -28,6 +30,7 @@ from plugins.corpus.claims_detail import (
     triage_block_detail,
 )
 from plugins.corpus.evidence import (
+    Cell,
     EvidenceDocument,
     EvidencePacket,
     Span,
@@ -35,7 +38,12 @@ from plugins.corpus.evidence import (
     parse_evidence,
 )
 
+if TYPE_CHECKING:
+    from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit
+
 PIPELINE_VERSION = "evidence-pipeline-7"
+CLAIMS_TABLE_PROTOCOL = "claims-deterministic-v1"
+CLAIMS_PROSE_PROTOCOL = "claims-json-v2"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
 METRICS: dict[str, tuple[str, str]] = {
     "营业收入": ("revenue", "元"),
@@ -424,12 +432,20 @@ def _table_records(packet: EvidencePacket, document: EvidenceDocument) -> list[C
         payload,
         doc_id=document.doc_id,
         source_rev=document.parse_rev,
-        seq=int(packet.locator),
+        seq=_locator_sequence(packet.locator),
         locator=packet.locator,
         doc_kind="company",
         model="deterministic-table",
         known_at_fallback=document.published,
     )
+
+
+def _locator_sequence(locator: str) -> int:
+    """Retain historical numeric locators and deterministically map versioned handles."""
+    try:
+        return int(locator)
+    except ValueError:
+        return int(fingerprint(locator)[:8], 16)
 
 
 def _mark_conflicts(facts: list[EvidenceFact]) -> list[EvidenceFact]:
@@ -497,6 +513,7 @@ def extract_evidence(
     model: str | None = None,
     max_prose_calls: int = 0,
     on_packet: Callable[[PacketRun], None] | None = None,
+    strict_prose: bool = False,
 ) -> EvidenceRun:
     """Extract all table rows; prose budget/unsupported pages are explicitly deferred."""
     facts: list[EvidenceFact] = []
@@ -511,7 +528,7 @@ def extract_evidence(
             status, method, reasons = "unknown", "none", packet.reasons
         elif packet.kind == "table":
             records = _table_records(packet, document)
-        elif not triage_block_detail(packet.text).candidate:
+        elif not strict_prose and not triage_block_detail(packet.text).candidate:
             status, method = "not_candidate", "triage"
         elif llm is None or calls >= max_prose_calls:
             status, method, reasons = "deferred", "none", ("prose_not_processed",)
@@ -531,6 +548,14 @@ def extract_evidence(
                 )
                 raw = llm(prompt)
                 diagnostics = dict(raw.diagnostics) if isinstance(raw, LlmResponse) else {}
+                if strict_prose:
+                    strict_payload = json.loads(raw)
+                    if not isinstance(strict_payload, list) or any(
+                        not isinstance(item, dict)
+                        or {"items", "relations", "speakers", "record_type"}.intersection(item)
+                        for item in strict_payload
+                    ):
+                        raise ValueError("Claims role requires only a JSON ClaimRecord array")
                 parsed = parse_claims_json_detail(raw)
                 diagnostics.update(
                     parse_failed=parsed.failed,
@@ -566,7 +591,8 @@ def extract_evidence(
                 status, reasons = "failed", (f"extraction_error:{type(exc).__name__}",)
                 if isinstance(exc, LlmCallError):
                     diagnostics = dict(exc.diagnostics)
-                    reasons = (f"extraction_error:{diagnostics['error_type']}",)
+                    error_type = diagnostics.get("error_type", type(exc).__name__)
+                    reasons = (f"extraction_error:{error_type}",)
         facts.extend(_fact(record, packet, document) for record in records)
         run = PacketRun(
             packet_id=packet.packet_id,
@@ -650,8 +676,7 @@ def build_evidence_run_from_units(
     texts = [str(unit["text"]) for unit in units]
     parse_rev = fingerprint([source_id, UNITS_PROJECTION_VERSION, texts])
     packets = tuple(
-        _packet_from_unit(parse_rev, str(unit["locator"]), str(unit["text"]))
-        for unit in units
+        _packet_from_unit(parse_rev, str(unit["locator"]), str(unit["text"])) for unit in units
     )
     document = EvidenceDocument(
         doc_id=f"cv2:{source_id}",
@@ -671,3 +696,420 @@ def build_evidence_run_from_units(
         model=model,
         max_prose_calls=max_prose_calls,
     )
+
+
+def _snapshot_document_metadata(snapshot: EvidenceSnapshot) -> dict[str, object]:
+    documents = [unit.metadata.get("document") for unit in snapshot.units]
+    if not documents or not isinstance(documents[0], dict):
+        raise ValueError("snapshot lacks document metadata")
+    first = documents[0]
+    if any(document != first for document in documents):
+        raise ValueError("snapshot document metadata is inconsistent across units")
+    return first
+
+
+def _snapshot_context(unit: SnapshotUnit, snapshot: EvidenceSnapshot) -> tuple[str, ...]:
+    from plugins.corpus.structured.snapshot import dependency_closure
+
+    return tuple(item.text for item in dependency_closure(snapshot, unit))
+
+
+def _snapshot_packet_status(units: list[SnapshotUnit]) -> tuple[str, tuple[str, ...]]:
+    statuses = {str(unit.metadata.get("context_status") or "complete") for unit in units}
+    if statuses == {"complete"}:
+        return "available", ()
+    reasons = tuple(sorted(f"context_{status}" for status in statuses if status != "complete"))
+    return "partial", reasons or ("context_partial",)
+
+
+def _snapshot_label_span(
+    snapshot: EvidenceSnapshot, unit: SnapshotUnit, raw: dict[str, object], name: str
+) -> Span:
+    from plugins.corpus.structured.snapshot import source_unit_id
+
+    text = str(raw.get(name) or "")
+    reference = raw.get(f"{name}_ref")
+    if isinstance(reference, dict):
+        chunk = str(reference["target_chunk_id"]).removeprefix("chunk:")
+        for target in snapshot.units:
+            if (
+                target.chunk_id == f"chunk:{chunk}"
+                and source_unit_id(target) == reference["target_unit_id"]
+            ):
+                return Span(
+                    locator=target.unit_id,
+                    text=text,
+                    start=reference["start"],
+                    end=reference["end"],
+                )
+    # Unproven labels are retained for audit only; the packet is partial.
+    return Span(locator=unit.unit_id, text=text)
+
+
+def _snapshot_cells(units: list[SnapshotUnit], snapshot: EvidenceSnapshot) -> tuple[Cell, ...]:
+    cells: list[Cell] = []
+    for unit in units:
+        raw_cells = unit.metadata.get("cells")
+        if not isinstance(raw_cells, list):
+            continue
+        for raw in raw_cells:
+            if not isinstance(raw, dict):
+                continue
+            value = str(raw.get("value") or "")
+            start = raw.get("start")
+            end = raw.get("end")
+            if not isinstance(start, int) or not isinstance(end, int):
+                raise ValueError(f"snapshot cell lacks code-point interval: {unit.unit_id}")
+            value_span = Span(
+                locator=unit.unit_id,
+                text=value,
+                start=start,
+                end=end,
+            )
+            cells.append(
+                Cell(
+                    table_id=unit.chunk_id,
+                    row=str(raw.get("row") or ""),
+                    column=str(raw.get("column") or ""),
+                    value=value,
+                    unit=str(raw.get("unit") or ""),
+                    span=value_span,
+                    row_span=_snapshot_label_span(snapshot, unit, raw, "row"),
+                    column_span=_snapshot_label_span(snapshot, unit, raw, "column"),
+                    unit_span=_snapshot_label_span(snapshot, unit, raw, "unit")
+                    if raw.get("unit")
+                    else None,
+                )
+            )
+    return tuple(cells)
+
+
+def evidence_document_from_snapshot(
+    snapshot: EvidenceSnapshot,
+    *,
+    role: Literal["claims", "material_items"],
+) -> EvidenceDocument:
+    """Project one immutable snapshot into the existing business document schema."""
+    from plugins.corpus.structured.snapshot import dependency_closure, select_snapshot
+
+    snapshot.verify_identity()
+    selection = select_snapshot(snapshot, role)
+    selected_ids = {unit.unit_id for unit in selection.units}
+    packets: list[EvidencePacket] = []
+    table_chunks = tuple(
+        dict.fromkeys(unit.chunk_id for unit in selection.units if unit.kind == "table")
+    )
+    for chunk_id in table_chunks:
+        table_units = [
+            unit for unit in selection.units if unit.chunk_id == chunk_id and unit.kind == "table"
+        ]
+        included = {unit.unit_id for unit in table_units}
+        for unit in table_units:
+            included.update(item.unit_id for item in dependency_closure(snapshot, unit))
+        evidence_units = [unit for unit in snapshot.units if unit.unit_id in included]
+        parts: list[str] = []
+        spans: list[Span] = []
+        cursor = 0
+        for index, unit in enumerate(evidence_units):
+            if index:
+                cursor += 1
+            parts.append(unit.text)
+            spans.append(
+                Span(
+                    locator=unit.unit_id,
+                    text=unit.text,
+                    start=cursor,
+                    end=cursor + len(unit.text),
+                )
+            )
+            cursor += len(unit.text)
+        text = "\n".join(parts)
+        context = tuple(
+            dict.fromkeys(
+                dependency_text
+                for unit in table_units
+                for dependency_text in _snapshot_context(unit, snapshot)
+            )
+        )
+        status, reasons = _snapshot_packet_status(table_units)
+        packet = EvidencePacket(
+            packet_id="",
+            locator=chunk_id,
+            kind="table",
+            text=text,
+            spans=tuple(spans),
+            cells=_snapshot_cells(table_units, snapshot),
+            context=context,
+            status=status,
+            reasons=reasons,
+        )
+        packet_id = fingerprint([snapshot.snapshot_id, role, packet.model_dump(mode="json")])
+        packets.append(packet.model_copy(update={"packet_id": packet_id}))
+
+    prose_kinds = (
+        {"prose", "image_text"}
+        if role == "claims"
+        else {"prose", "image_text", "table_note", "heading"}
+    )
+    for unit in selection.units:
+        if unit.unit_id not in selected_ids or unit.kind not in prose_kinds:
+            continue
+        context = _snapshot_context(unit, snapshot)
+        status, reasons = _snapshot_packet_status([unit])
+        packet = EvidencePacket(
+            packet_id="",
+            locator=unit.chunk_id,
+            kind="prose",
+            text=unit.text,
+            spans=(
+                Span(
+                    locator=unit.unit_id,
+                    text=unit.text,
+                    start=0,
+                    end=len(unit.text),
+                ),
+            ),
+            context=context,
+            status=status,
+            reasons=reasons,
+        )
+        packet_id = fingerprint(
+            [snapshot.snapshot_id, role, unit.unit_id, packet.model_dump(mode="json")]
+        )
+        packets.append(packet.model_copy(update={"packet_id": packet_id}))
+
+    # Preserve source order for the R2 previous/following context windows.
+    order = {unit.unit_id: index for index, unit in enumerate(snapshot.units)}
+    chunks = {unit.unit_id: unit.chunk_id for unit in snapshot.units}
+    packets.sort(
+        key=lambda packet: min(
+            order[span.locator] for span in packet.spans if chunks[span.locator] == packet.locator
+        )
+    )
+    document = _snapshot_document_metadata(snapshot)
+    pages = tuple(
+        Span(
+            locator=unit.unit_id,
+            text=unit.text,
+            start=0,
+            end=len(unit.text),
+        )
+        for unit in snapshot.units
+    )
+    return EvidenceDocument(
+        doc_id=f"cv2:{snapshot.build_id}",
+        title=str(document.get("title") or ""),
+        source_path=f"cv2:{snapshot.build_id}",
+        source_rev=snapshot.snapshot_id,
+        parse_rev=snapshot.snapshot_id,
+        parser_version=snapshot.parser_versions["snapshot"],
+        subject=str(document["subject"]) if document.get("subject") is not None else None,
+        published=str(document["published"]) if document.get("published") is not None else None,
+        pages=pages,
+        packets=tuple(packets),
+    )
+
+
+def _bind_snapshot_facts(
+    snapshot: EvidenceSnapshot,
+    run: EvidenceRun,
+    *,
+    preserve_context: bool = False,
+) -> EvidenceRun:
+    """Keep exact evidence and source qualifications through the existing Claims payload."""
+    from plugins.corpus.structured.mapping import resolve_packet_span, resolve_unit_span
+    from plugins.corpus.structured.snapshot import dependency_closure
+
+    by_id = {unit.unit_id: unit for unit in snapshot.units}
+    facts = []
+    for fact in run.facts:
+        packet = run.document.fetch(fact.packet_id)
+        source_units = [by_id[span.locator] for span in packet.spans]
+        dependency_ids = {
+            dependency.unit_id
+            for unit in source_units
+            for dependency in dependency_closure(snapshot, unit)
+        }
+        dependencies = [unit for unit in snapshot.units if unit.unit_id in dependency_ids]
+        context_units = {unit.unit_id: unit for unit in (*source_units, *dependencies)}
+        details = [
+            detail
+            for unit in context_units.values()
+            for detail in cast(list[dict[str, object]], unit.metadata["dependency_details"])
+        ]
+        qualifications = sorted(
+            {
+                str(detail["kind"])
+                for detail in details
+                if detail["kind"] in {"condition", "negation", "attribution"}
+            }
+        )
+        reasons = list(fact.reasons)
+        reasons.extend(f"source_{kind}_dependency" for kind in qualifications)
+        alignment = align_quote(fact.claim.evidence_quote or "", packet.text)
+        if alignment is None:
+            reasons.append("source_evidence_mapping_missing")
+            source_spans = []
+        else:
+            source_spans = [
+                asdict(ref)
+                for ref in resolve_packet_span(
+                    snapshot,
+                    packet,
+                    int(str(alignment["start"])),
+                    int(str(alignment["end"])),
+                )
+            ]
+        dependency_spans = [
+            asdict(resolve_unit_span(snapshot, unit.unit_id, 0, len(unit.text)))
+            for unit in dependencies
+        ]
+        usable = fact.usable_for
+        if qualifications:
+            usable = tuple(purpose for purpose in usable if purpose == "cite")
+        if not source_spans:
+            usable = ()
+        claim = fact.claim
+        fact_id = fact.fact_id
+        context_spans = []
+        if preserve_context:
+            context_text = "\n".join(unit.text for unit in context_units.values())
+            context_spans = [
+                asdict(resolve_unit_span(snapshot, unit.unit_id, 0, len(unit.text)))
+                for unit in context_units.values()
+            ]
+            qualified = qualifications or re.search(
+                r"如果|仅在|除非|若|并未|没有|否认|不承诺|认为|表示|称|预计|预测|"
+                r"\b(?:if|unless|not|according|forecast|expects?)\b",
+                context_text,
+                re.I,
+            )
+            if qualified:
+                reasons.append("source_qualified_context_requires_review")
+                usable = tuple(purpose for purpose in usable if purpose == "cite")
+                claim = replace(
+                    claim,
+                    qualifiers={**claim.qualifiers, "source_context": context_text},
+                    quality_status="review"
+                    if claim.quality_status == "ok"
+                    else claim.quality_status,
+                    reason_codes=tuple(
+                        dict.fromkeys(
+                            (*claim.reason_codes, "source_qualified_context_requires_review")
+                        )
+                    ),
+                )
+                fact_id = fingerprint([fact.fact_id, claim.qualifiers, "claims-role-context-v1"])
+        facts.append(
+            fact.model_copy(
+                update={
+                    "fact_id": fact_id,
+                    "claim": claim,
+                    "usable_for": usable,
+                    "reasons": tuple(dict.fromkeys(reasons)),
+                    "evidence_alignment": {
+                        **(fact.evidence_alignment or {}),
+                        "source_spans": source_spans,
+                        "dependency_spans": dependency_spans,
+                        "dependency_details": details,
+                        **({"role_context_spans": context_spans} if preserve_context else {}),
+                    },
+                }
+            )
+        )
+    result = run.model_copy(update={"facts": tuple(facts)})
+    payload = result.model_dump(mode="json")
+    payload.pop("run_id")
+    return result.model_copy(update={"run_id": fingerprint(payload)})
+
+
+def build_evidence_run_from_snapshot(
+    snapshot: EvidenceSnapshot,
+    *,
+    role: Literal["claims", "material_items"] = "claims",
+    llm: LlmFn | None = None,
+    model: str | None = None,
+    max_prose_calls: int = 0,
+) -> EvidenceRun:
+    """Run existing Claims extraction against one frozen source/build snapshot."""
+    document = evidence_document_from_snapshot(snapshot, role=role)
+    if role == "material_items":
+        # EvidenceRun remains the historical document envelope, not a Claims prerequisite.
+        result = EvidenceRun(run_id="", document=document, facts=(), packet_runs=())
+        payload = result.model_dump(mode="json")
+        payload.pop("run_id")
+        return result.model_copy(update={"run_id": fingerprint(payload)})
+    return _bind_snapshot_facts(
+        snapshot,
+        extract_evidence(
+            document,
+            llm=llm,
+            model=model,
+            max_prose_calls=max_prose_calls,
+        ),
+    )
+
+
+def extract_claims_role_from_snapshot(
+    snapshot: EvidenceSnapshot,
+    *,
+    protocol: str,
+    llm: LlmFn | None = None,
+    model: str | None = None,
+    max_calls: int = 0,
+    scoped_unit_ids: tuple[str, ...] | None = None,
+) -> EvidenceRun:
+    """Execute one frozen Claims protocol over an explicit snapshot scope.
+
+    The deterministic table protocol can never call ``llm``.  The prose protocol
+    cannot see table packets and is the only role entry allowed to spend Claims
+    model attempts.  Unsupported protocols and invalid scopes fail before either
+    extraction path is entered.
+    """
+    if protocol not in {CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL}:
+        raise ValueError(f"CS_PROTOCOL_UNSUPPORTED: claims protocol {protocol!r}")
+    if max_calls < 0:
+        raise ValueError("max_calls must be non-negative")
+    if protocol == CLAIMS_TABLE_PROTOCOL and max_calls:
+        raise ValueError("CS_INPUT_INVALID: deterministic Claims cannot reserve model calls")
+
+    snapshot.verify_identity()
+    document = evidence_document_from_snapshot(snapshot, role="claims")
+    known_ids = {unit.unit_id for unit in snapshot.units}
+    requested = known_ids if scoped_unit_ids is None else set(scoped_unit_ids)
+    if requested - known_ids or (
+        scoped_unit_ids is not None and len(requested) != len(scoped_unit_ids)
+    ):
+        raise ValueError("CS_INPUT_INVALID: Claims scope does not match the snapshot")
+
+    allowed_kinds = {"table"} if protocol == CLAIMS_TABLE_PROTOCOL else {"prose", "image_text"}
+    if scoped_unit_ids is not None and any(
+        unit.unit_id in requested and unit.kind not in allowed_kinds for unit in snapshot.units
+    ):
+        raise ValueError("CS_INPUT_INVALID: Claims scope kind does not match protocol")
+
+    packets: list[EvidencePacket] = []
+    for packet in document.packets:
+        source_ids = {span.locator for span in packet.spans}
+        if protocol == CLAIMS_TABLE_PROTOCOL:
+            core_ids = {
+                unit.unit_id
+                for unit in snapshot.units
+                if unit.unit_id in source_ids and unit.kind == "table"
+            }
+            include = packet.kind == "table" and bool(core_ids & requested)
+            if include and core_ids - requested:
+                raise ValueError("CS_INPUT_INVALID: table scope must contain the whole packet")
+        else:
+            include = packet.kind == "prose" and bool(source_ids & requested)
+        if include:
+            packets.append(packet)
+    scoped_document = document.model_copy(update={"packets": tuple(packets)})
+    run = extract_evidence(
+        scoped_document,
+        llm=None if protocol == CLAIMS_TABLE_PROTOCOL else llm,
+        model="deterministic-table" if protocol == CLAIMS_TABLE_PROTOCOL else model,
+        max_prose_calls=0 if protocol == CLAIMS_TABLE_PROTOCOL else max_calls,
+        strict_prose=True,
+    )
+    return _bind_snapshot_facts(snapshot, run, preserve_context=True)

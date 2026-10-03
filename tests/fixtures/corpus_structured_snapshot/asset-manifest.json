@@ -1,0 +1,20 @@
+{
+  "schema_version": "corpus-structured-snapshot-assets-v1",
+  "synthetic_only": true,
+  "real_source_ids": [],
+  "assets": [
+    {
+      "path": "source.json",
+      "sha256": "cfadeececa49d855e194165e8b10d98a77a849ba70ffc22fe1d31b6f36398e78",
+      "media_type": "application/json"
+    }
+  ],
+  "coverage": [
+    "same_snapshot_role_views",
+    "cross_packet_condition",
+    "table_cell",
+    "table_footnote",
+    "duplicate_quote",
+    "parse_gap"
+  ]
+}
