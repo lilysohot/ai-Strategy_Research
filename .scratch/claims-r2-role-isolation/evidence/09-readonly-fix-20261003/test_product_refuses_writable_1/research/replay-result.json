@@ -1,0 +1,17 @@
+{
+  "startup_error": "tui-semantic requires a read-only publication-store mount. Prepare WAL sidecars on the writer side with prepare_readonly_access, then launch the research process with the store mounted read-only and no writable aliases. Native file modes alone are not a read-only boundary.",
+  "model_calls": 0,
+  "pid": 2,
+  "cwd": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-readonly-fix-20261003/test_product_refuses_writable_1/research",
+  "guard_probes": [
+    "network",
+    "dotenv",
+    "production_db",
+    "model"
+  ],
+  "unexpected_access": [],
+  "dotenv_loads_refused": 2,
+  "tokenizer_downloads_refused": 0,
+  "real_model_calls": 0,
+  "production_database_access": 0
+}

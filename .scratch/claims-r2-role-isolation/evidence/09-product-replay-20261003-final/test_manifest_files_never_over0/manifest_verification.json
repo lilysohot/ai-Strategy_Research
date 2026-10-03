@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-03T10:38:16.380410+00:00",
+  "status": "unsupported",
+  "counts": {
+    "supported": 0,
+    "partial": 0,
+    "unsupported": 2
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "lit_search/C1",
+      "text_location": "",
+      "report_quote": "",
+      "status": "unsupported",
+      "evidence_count": 0,
+      "covered_purposes": [],
+      "missing_dependencies": [],
+      "delivery": [],
+      "semantic_references": [],
+      "problems": [
+        {
+          "code": "no_evidence",
+          "message": "结论未附任何证据"
+        }
+      ],
+      "model_claimed_complete": null
+    },
+    {
+      "id": "final_verify/C1",
+      "text_location": "",
+      "report_quote": "",
+      "status": "unsupported",
+      "evidence_count": 0,
+      "covered_purposes": [],
+      "missing_dependencies": [],
+      "delivery": [],
+      "semantic_references": [],
+      "problems": [
+        {
+          "code": "no_evidence",
+          "message": "结论未附任何证据"
+        }
+      ],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_manifest_files_never_over0/manifests/manifest-000.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_manifest_files_never_over0/manifests/manifest-001.json"
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+  "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+  "snapshot_id": "sha256:38bbd8e3a50e21b49bf21cffaadaf351ae4d1dbcfdefb536e7dcb7ef142aa3a7",
+  "plan_sha256": "sha256:70020bc035f4f4b1b1b9ada7364ab0f9c969dd6dbd8f57de5f78ac51805a09fc",
+  "publication_id": null,
+  "store": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_missing_footnote_0/write/store",
+  "roles": [],
+  "execution": {
+    "ledger": {
+      "schema_version": "corpus-execution-ledger-v1",
+      "batch_id": "batch:70020bc035f4f4b1b1b9ada7364ab0f9c969dd6dbd8f57de5f78ac51805a09fc",
+      "plan_sha256": "sha256:70020bc035f4f4b1b1b9ada7364ab0f9c969dd6dbd8f57de5f78ac51805a09fc",
+      "snapshot_id": "sha256:38bbd8e3a50e21b49bf21cffaadaf351ae4d1dbcfdefb536e7dcb7ef142aa3a7",
+      "budget": {
+        "max_attempts": 2,
+        "reserved_attempts": 0,
+        "actual_attempts": 0,
+        "currency": null
+      },
+      "tasks": [
+        {
+          "task_id": "task:a73ea581676a8904986b7f3638f853f256f00d2040cbb059ee0548b19d708b02",
+          "role": "claims",
+          "method": "model",
+          "input_sha256": "sha256:a73ea581676a8904986b7f3638f853f256f00d2040cbb059ee0548b19d708b02",
+          "profile_sha256": "sha256:25d80c2aaba41e09a4f566b819e21f75098c5a865eb0c390e5ebdb79f8c094e1",
+          "execution_status": "deferred",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "missing",
+          "dependency_task_ids": [],
+          "artifact_sha256": "sha256:8932248fb6962799b9613d89512ff69f79b63e51deebde5932fe213315b874f5",
+          "error_codes": []
+        },
+        {
+          "task_id": "task:d756a2ec8f0491cc37a85f59f9b16bb37c1eb9ef4af2edbe75815f0531e78ba0",
+          "role": "material_items",
+          "method": "model",
+          "input_sha256": "sha256:d756a2ec8f0491cc37a85f59f9b16bb37c1eb9ef4af2edbe75815f0531e78ba0",
+          "profile_sha256": "sha256:077781e36080b4ae8926e1435c5d68bd9e13b35859d7c3eec52704e2b1f9db20",
+          "execution_status": "deferred",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "missing",
+          "dependency_task_ids": [],
+          "artifact_sha256": "sha256:2f695c80d70e43ddc1999b26f0c03c09676d646f2e9dce72c8f7a002b5620a2f",
+          "error_codes": []
+        }
+      ],
+      "attempts": []
+    },
+    "plan_consistent": true,
+    "findings": [
+      "task_not_terminal:task:a73ea581676a8904986b7f3638f853f256f00d2040cbb059ee0548b19d708b02:deferred",
+      "task_not_terminal:task:d756a2ec8f0491cc37a85f59f9b16bb37c1eb9ef4af2edbe75815f0531e78ba0:deferred"
+    ],
+    "derivations": {
+      "task:d756a2ec8f0491cc37a85f59f9b16bb37c1eb9ef4af2edbe75815f0531e78ba0": "disabled"
+    },
+    "role_budgets": {
+      "claims": {
+        "max_attempts": 2,
+        "reserved_attempts": 0
+      },
+      "material_items": {
+        "max_attempts": 2,
+        "reserved_attempts": 0
+      },
+      "material_relations": {
+        "max_attempts": 2,
+        "reserved_attempts": 0
+      }
+    },
+    "cost_summary": []
+  },
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:38bbd8e3a50e21b49bf21cffaadaf351ae4d1dbcfdefb536e7dcb7ef142aa3a7",
+    "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+    "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "p1",
+      "clean": "c1",
+      "chunk": "k1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:67ae91f757a25426ea22620f9f7d43c62cbcd6ca799cd58ab7347e7b09fa2fd2",
+        "chunk_id": "chunk:forecast-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:1",
+        "text": "999999.SZ 2026年营业收入15亿元。",
+        "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+          "start": 0,
+          "end": 24
+        },
+        "metadata": {
+          "source_unit_id": "forecast-u",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 1,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "缺脚注合成材料",
+            "subject": "999999.SZ",
+            "published": null
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "footnote",
+              "status": "missing",
+              "target_unit_id": null,
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": null,
+              "source_target_chunk_id": null,
+              "reason": "synthetic missing footnote"
+            }
+          ],
+          "context_status": "missing",
+          "snapshot_gaps_sha256": "sha256:75ed95e187bb6e3d60399554149869edb048251d4acd5522e0971c27833b7722"
+        },
+        "metadata_sha256": "sha256:dd841441412eadf5fbdb0d4e5d24faabce57558f33287709a14d0d624dafcd90",
+        "dependencies": []
+      }
+    ],
+    "gaps": [
+      {
+        "gap_id": "gap:937eae132f3a801c1ce8bcd303b42dd15f95d34c67f0a03ce638f6090f80a1a9",
+        "code": "dependency_footnote_missing",
+        "locator": "page:1/paragraph:1",
+        "context_status": "missing"
+      }
+    ],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+      "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "p1",
+        "clean": "c1",
+        "chunk": "k1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:67ae91f757a25426ea22620f9f7d43c62cbcd6ca799cd58ab7347e7b09fa2fd2",
+          "chunk_id": "chunk:forecast-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:1",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 24,
+          "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+          "metadata_sha256": "sha256:dd841441412eadf5fbdb0d4e5d24faabce57558f33287709a14d0d624dafcd90"
+        }
+      ]
+    }
+  },
+  "pid": 96999,
+  "cwd": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_missing_footnote_0/write",
+  "guard_probes": [
+    "network",
+    "dotenv",
+    "production_db",
+    "model"
+  ],
+  "unexpected_access": [],
+  "dotenv_loads_refused": 1,
+  "real_model_calls": 0,
+  "production_database_access": 0
+}

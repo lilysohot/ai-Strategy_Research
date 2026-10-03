@@ -32,6 +32,16 @@ async def corpus_semantic_query(
     whether the build is unpublished, not extracted for the requested purpose,
     checked with no supported records, or simply has no lexical match.
 
+    Recovery: CS_CURSOR_STALE means restart without cursor; never continue across
+    publication versions. budget_limited is not completion: a no-progress page
+    requires more delivery capacity, a smaller query/limit, or source fallback.
+    A withdrawn publication, missing dependency or inaccessible store cannot
+    support a report. Requery a valid version, use corpus_fetch for the specific
+    missing original evidence, or revise/remove the unsupported conclusion.
+    Complete evidence actually delivered by this tool is already a legal source;
+    do not routinely corpus_fetch it again. Submit semantic_references through
+    corpus_submit_manifest and follow its per-conclusion feedback.
+
     Args:
         source_id: Exact immutable source identifier.
         build_id: Exact immutable parsed build identifier.

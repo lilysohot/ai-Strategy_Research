@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "conclusions": [
+    {
+      "id": "C1",
+      "evidence": [
+        {
+          "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "locator": "chunk:c1",
+          "quote": "营业收入 1,234 万元。",
+          "purpose": "value"
+        }
+      ]
+    }
+  ]
+}

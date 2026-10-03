@@ -75,13 +75,13 @@ def load_react_profile(
     resolved = _resolve_env_vars(raw)
     if inline is None and (alias_overrides := _ALIAS_OVERRIDES.get(name)):
         resolved = _deep_merge(resolved, alias_overrides)
-    if overrides:
-        resolved = _deep_merge(resolved, overrides)
     if inline is None and name == "tui-semantic":
         agent = resolved.setdefault("agent", {})
         agent["agent_tools"] = list(
             dict.fromkeys([*(agent.get("agent_tools") or []), "corpus_semantic_query"])
         )
+    if overrides:
+        resolved = _deep_merge(resolved, overrides)
     return resolved
 
 

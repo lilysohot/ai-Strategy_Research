@@ -1,0 +1,6 @@
+{"t": "start"}
+{"t": "result", "turn": 2, "tool_call_id": "call_2_0", "result": "PREVIOUS RUN"}
+{"t": "end"}
+{"t": "start"}
+{"t": "result", "turn": 2, "tool_call_id": "call_2_0", "result": "FIRST ATTEMPT"}
+{"t": "result", "turn": 2, "tool_call_id": "call_2_0", "result": "RETRY"}

@@ -1,0 +1,3 @@
+{"t": "start"}
+{"t": "result", "turn": 1, "tool_call_id": "a", "result": "trunc
+{"t": "result", "turn": 1, "tool_call_id": "call_x", "result": "GOOD"}

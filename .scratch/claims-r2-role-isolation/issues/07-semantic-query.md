@@ -1,7 +1,7 @@
 # 07 · 只读语义查询、快照分页与完整证据交付
 
 Status: ready-for-human
-Execution: 审核问题修复完成，待复验
+Execution: 已验收
 Type: task
 Plan: W5 前置接线；R2-S2/S3
 Blocked by: 无本地任务依赖（06 已验收）
@@ -167,3 +167,29 @@ cursor，未证明真实分页链路。用户随后要求“开始修复”。�
 - `plugins/tools/corpus_semantic_query.py`: `d1ec7d4b432d570a28847c979e407ab086e1522f19be8a8897b447963a10cba1`
 - `tests/test_corpus_structured_query.py`: `c5c04073478ff2795cd4d320e9999f6bc994342104081250231bb2031f6d2c44`
 - `tests/test_corpus_structured_delivery.py`: `cae37d9432155dc10d247a0f6cb5182b496ce2d0837e334772aa0fd45ae592f6`
+
+### 2026-10-03 最终复验与闭环
+
+用户要求执行下一个任务时，06 已验收，07 是依赖顺序中唯一仍处于“审核修复完成、待复验”的票据；
+08 已验收，09 存在独立在途改动。本轮没有重做已完成实现，也没有覆盖 09 文件，仅按 07 的冻结契约
+复验当前调用面和共享工具接缝。
+
+- 原样验收命令通过：`48 passed`；指定 Ruff `All checks passed`；query/tool 定向 Pyright
+  `0 errors / 0 warnings`。
+- structured 全量、工具注册与正文分页回归为 `357 passed`；framework/eval import smoke 分别为
+  `384/384`、`433/433`；symbol closure 为 `0 missing / 483 files`；`git diff --check` 通过。
+- 四个交付文件 format check 通过。复验确认中间页 cursor 回退、末页显式重启、指定角色无支持、
+  relations 原文/端点检索、mapping 冲突保守聚合及多页真实 tool-message 交付均有通过用例；没有发现
+  新的 07 阻断项。查询仍只读、零抽取、零自动修复，真实模型调用和生产数据库访问均为 0。
+- 当前复验指纹：`query.py`
+  `2de2ef3ec5c3958753f41f96c5be1127e3c3ad4d726c1f65680fa0d3bff0f97a`；
+  `corpus_semantic_query.py`
+  `65361a3e6c0259cc4ae8dcbc38dd9b1172e237d1a096493485180c33d8bdbdda`；
+  `test_corpus_structured_query.py`
+  `c5c04073478ff2795cd4d320e9999f6bc994342104081250231bb2031f6d2c44`；
+  `test_corpus_structured_delivery.py`
+  `cae37d9432155dc10d247a0f6cb5182b496ce2d0837e334772aa0fd45ae592f6`。
+  共享 tool 文件当前含 09 的恢复说明增量，该增量已随本轮 07 门禁通过，但其 09 验收归 09 票据。
+
+07 达到全部验收条件并闭环；这只表示确定性查询、分页和证据交付接缝验收通过，不替代 10 的语义
+召回质量门、11 的真实模型试验或主计划阶段签认。

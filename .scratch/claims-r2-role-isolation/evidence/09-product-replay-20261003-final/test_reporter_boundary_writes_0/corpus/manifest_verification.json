@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "status": "draft",
+  "reason": "缺少结论证据清单：产物只能作为草稿，不得标记为已通过证据完整性校验",
+  "conclusions": [],
+  "report_sha256": "32ebec0ea109bdc761ca9533662fb60bad4fa51504c6af7158ecf94d6ecb87eb",
+  "report_chars": 20,
+  "boundary_answer_status": "complete"
+}

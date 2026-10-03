@@ -907,7 +907,14 @@ def _with_recovery_handle(
         # The handle is (turn, call_id); without an id it resolves to nothing,
         # and recover_result refuses empty ids rather than guessing.
         return body
-    from plugins.tools._overflow import body_names_a_spill_file
+    from plugins.tools._overflow import body_names_a_spill_file, structured_result_fit
+
+    # Protocol-aware processors carry their own continuation/restart state.
+    # Appending prose after their JSON breaks that protocol at the final message
+    # boundary. Ask the existing tool-side dispatcher, not domain fields here;
+    # ordinary text previews still receive the trajectory recovery handle below.
+    if structured_result_fit(result.name, body, max(1, len(body))) is not None:
+        return body
 
     if body_names_a_spill_file(body):
         # Redundant, and measurably harmful as an alternative. Gate ① already

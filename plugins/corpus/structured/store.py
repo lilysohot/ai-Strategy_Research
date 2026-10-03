@@ -1163,6 +1163,21 @@ def retire_semantic(
         connection.close()
 
 
+def prepare_readonly_access(*, store_root: str | Path | None = None) -> None:
+    """Prepare WAL sidecars on the writer side before mounting a store read-only.
+
+    SQLite needs existing WAL/SHM files to read a WAL database on a read-only
+    filesystem. The last writable connection can remove them on close, so run
+    this after publication/retirement has closed its connection. A read-only
+    connection creates missing sidecars on the writable writer mount but leaves
+    them behind on close. It never modifies application rows or declares the
+    index immutable: fresh readers must still observe later withdrawals.
+    """
+    root = _store_root(store_root, write=False)
+    connection = _reader(root)
+    connection.close()
+
+
 def read_semantic(
     source_id: str,
     build_id: str,

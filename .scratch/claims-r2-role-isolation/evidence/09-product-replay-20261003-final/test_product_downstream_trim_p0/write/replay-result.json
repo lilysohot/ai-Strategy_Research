@@ -1,0 +1,667 @@
+{
+  "source_id": "3333333333333333333333333333333333333333333333333333333333333333",
+  "build_id": "4444444444444444444444444444444444444444444444444444444444444444",
+  "snapshot_id": "sha256:4122c469484f0b50ff13e67548a9ea1f4aba7347ed9f13e93fd92efbc71af2aa",
+  "publication_id": "sha256:02d3a5dc97d34fc16bb1429082d46ef67fa6a537c498442ee76b1b1743c16326",
+  "store": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_downstream_trim_p0/write/store",
+  "roles": [
+    "material_items"
+  ],
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:4122c469484f0b50ff13e67548a9ea1f4aba7347ed9f13e93fd92efbc71af2aa",
+    "source_id": "3333333333333333333333333333333333333333333333333333333333333333",
+    "build_id": "4444444444444444444444444444444444444444444444444444444444444444",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "p1",
+      "clean": "c1",
+      "chunk": "k1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:08619a12c4f9c4ebd0512d117117bfdd28bf564726f3ca23014589454abce854",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:1",
+        "text": "虚构公司2026年收入15亿元。",
+        "text_sha256": "sha256:0c51f659870e9369dbfae6db944579558f0d293d91bb7090a717d7706f4c2902",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:0c51f659870e9369dbfae6db944579558f0d293d91bb7090a717d7706f4c2902",
+          "start": 0,
+          "end": 16
+        },
+        "metadata": {
+          "source_unit_id": "main-u",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 1,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:7134e2de71c3d678027d8c8dc90cda8af1b8b20244e9e96e92d625477748c646",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:2",
+        "text": "仅在合成许可获批时成立。",
+        "text_sha256": "sha256:edc37b17ac0cca00371dad21f8ea4bad0e9fae5b3926d55e1c79eec48bac0efa",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:edc37b17ac0cca00371dad21f8ea4bad0e9fae5b3926d55e1c79eec48bac0efa",
+          "start": 0,
+          "end": 12
+        },
+        "metadata": {
+          "source_unit_id": "condition-u",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 2,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:8d04c1756dcc2a63d9e6dde744b34463c67cdf54ad3bc64cea28832e63de9533",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:4535eac672e32d5b2f23ec469085fbcc35b71456c4afb7ebb5a688c515bbdeab",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:3",
+        "text": "虚构公司项目0的2026年收入15亿元。",
+        "text_sha256": "sha256:53a27c88a4d52c00c82ae5ca3a6dda3d43ebf36a2ab1c39140509b6acc1fa4a4",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:53a27c88a4d52c00c82ae5ca3a6dda3d43ebf36a2ab1c39140509b6acc1fa4a4",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-0",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 3,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:f76054e76469462a2c97eb3c031f34f1f6e6ee182f2bc6fc8a0aa9acd1dccd62",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:f9188f5fa38e7ebb83cc456203a2e6d8493a675cef576fc9d70dcc59b78ba55c",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:4",
+        "text": "虚构公司项目1的2026年收入15亿元。",
+        "text_sha256": "sha256:6dad902c97e616192be8ee07bbfacc776477eeb06cba02854b33ed68119b22f0",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:6dad902c97e616192be8ee07bbfacc776477eeb06cba02854b33ed68119b22f0",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-1",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 4,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:f87fd5e0bd46df5224f5c6b8d2c3e505f62d67c7f08b1cf780561ee9e9bb6fc6",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:743f298d59be33f05420eb5e4f7df90d2d3e067a1443ff4c13c9a2ac60b045e9",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:5",
+        "text": "虚构公司项目2的2026年收入15亿元。",
+        "text_sha256": "sha256:e3a27fba646e07c82e1a360da26ccdc6820a99b64ba749aba408809c399d1bd5",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:e3a27fba646e07c82e1a360da26ccdc6820a99b64ba749aba408809c399d1bd5",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-2",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 5,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:cd1d8e46287465fc22a3ea71fb1c04e08dd983ce4cc069c4ac4b5e793ca139ef",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:fcde8ca3d7be4ac82684e756b72935661253f88a1322a6c983a6800e0f9f9a96",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:6",
+        "text": "虚构公司项目3的2026年收入15亿元。",
+        "text_sha256": "sha256:a527e973dcbcc29b20d72f51530480d9ae609385d7c77435de868bcd85b7cbdc",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:a527e973dcbcc29b20d72f51530480d9ae609385d7c77435de868bcd85b7cbdc",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-3",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 6,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:9ea4e3a7d1eb6c94999af22b3c0845d2a12c07f9123dea5ef1074cd778d1dc13",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:6210e375bc30cce8dfd1d80a8d99c04926dcfcdfda634c16c839e46b700984d2",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:7",
+        "text": "虚构公司项目4的2026年收入15亿元。",
+        "text_sha256": "sha256:3561876e55316a5b7cb11a962e12eb6e8f846ac435ffb23f069286743f292f6a",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:3561876e55316a5b7cb11a962e12eb6e8f846ac435ffb23f069286743f292f6a",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-4",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 7,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:197102f40e66bd4976e70c3d995cec85f4af5ec4eefd359bffa1ba874456e321",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:11d72264371872514f40d401957b85c555ac714ddacb536bb890c247bcc2d3d7",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:8",
+        "text": "虚构公司项目5的2026年收入15亿元。",
+        "text_sha256": "sha256:f0fd7cf2d9f6de08c2be21e58f63e5b8c8cc01875ca8fae61382f84f8f126b3f",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:f0fd7cf2d9f6de08c2be21e58f63e5b8c8cc01875ca8fae61382f84f8f126b3f",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-5",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 8,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:96db455ec81e060431e18dd55f39d6a5be4beb1e6404367e38642ce63e0c2431",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:8c851e942bbdd9ad9801b75c263ed4e3cab43420e59a00cc7195c4c73bff39bd",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:9",
+        "text": "虚构公司项目6的2026年收入15亿元。",
+        "text_sha256": "sha256:f6ca486ce349c50fc234ff9bd00307c0adc6d7c03b5d2eed9f47c7eca03b6adc",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:f6ca486ce349c50fc234ff9bd00307c0adc6d7c03b5d2eed9f47c7eca03b6adc",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-6",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 9,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:7b7f7fcdffa6773ed5ded43ad715f283dd65dabebfb991ab2977e6bb5c312f5f",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      },
+      {
+        "unit_id": "snapshot-unit:8f3f778c49fa9b1f36aea3397dca129ffbb0c743e20abdce89d97f6370808349",
+        "chunk_id": "chunk:query-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:10",
+        "text": "虚构公司项目7的2026年收入15亿元。",
+        "text_sha256": "sha256:ed95b173fff7e31328dceada150c05488a11b5f373b1255ce3c5e67f2b0313ec",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:ed95b173fff7e31328dceada150c05488a11b5f373b1255ce3c5e67f2b0313ec",
+          "start": 0,
+          "end": 20
+        },
+        "metadata": {
+          "source_unit_id": "extra-7",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 10,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成条件材料",
+            "subject": "虚构公司",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [
+            {
+              "kind": "condition",
+              "status": "present",
+              "target_unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+              "required_for": [
+                "cite",
+                "compare",
+                "calculate"
+              ],
+              "source_target_unit_id": "condition-u",
+              "source_target_chunk_id": "query-c"
+            }
+          ],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:e7932ea1d43c2c07276dd604001189e35da23c6000fc8de43b7ae909906c5a1a",
+        "dependencies": [
+          "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7"
+        ]
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "3333333333333333333333333333333333333333333333333333333333333333",
+      "build_id": "4444444444444444444444444444444444444444444444444444444444444444",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "p1",
+        "clean": "c1",
+        "chunk": "k1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:08619a12c4f9c4ebd0512d117117bfdd28bf564726f3ca23014589454abce854",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:1",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 16,
+          "text_sha256": "sha256:0c51f659870e9369dbfae6db944579558f0d293d91bb7090a717d7706f4c2902",
+          "metadata_sha256": "sha256:7134e2de71c3d678027d8c8dc90cda8af1b8b20244e9e96e92d625477748c646"
+        },
+        {
+          "unit_id": "snapshot-unit:a1248ee0cf577235c4c65ccb79e73d6ed007ba2f2718139eb2902323f566a5a7",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:2",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 12,
+          "text_sha256": "sha256:edc37b17ac0cca00371dad21f8ea4bad0e9fae5b3926d55e1c79eec48bac0efa",
+          "metadata_sha256": "sha256:8d04c1756dcc2a63d9e6dde744b34463c67cdf54ad3bc64cea28832e63de9533"
+        },
+        {
+          "unit_id": "snapshot-unit:4535eac672e32d5b2f23ec469085fbcc35b71456c4afb7ebb5a688c515bbdeab",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:3",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:53a27c88a4d52c00c82ae5ca3a6dda3d43ebf36a2ab1c39140509b6acc1fa4a4",
+          "metadata_sha256": "sha256:f76054e76469462a2c97eb3c031f34f1f6e6ee182f2bc6fc8a0aa9acd1dccd62"
+        },
+        {
+          "unit_id": "snapshot-unit:f9188f5fa38e7ebb83cc456203a2e6d8493a675cef576fc9d70dcc59b78ba55c",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:4",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:6dad902c97e616192be8ee07bbfacc776477eeb06cba02854b33ed68119b22f0",
+          "metadata_sha256": "sha256:f87fd5e0bd46df5224f5c6b8d2c3e505f62d67c7f08b1cf780561ee9e9bb6fc6"
+        },
+        {
+          "unit_id": "snapshot-unit:743f298d59be33f05420eb5e4f7df90d2d3e067a1443ff4c13c9a2ac60b045e9",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:5",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:e3a27fba646e07c82e1a360da26ccdc6820a99b64ba749aba408809c399d1bd5",
+          "metadata_sha256": "sha256:cd1d8e46287465fc22a3ea71fb1c04e08dd983ce4cc069c4ac4b5e793ca139ef"
+        },
+        {
+          "unit_id": "snapshot-unit:fcde8ca3d7be4ac82684e756b72935661253f88a1322a6c983a6800e0f9f9a96",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:6",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:a527e973dcbcc29b20d72f51530480d9ae609385d7c77435de868bcd85b7cbdc",
+          "metadata_sha256": "sha256:9ea4e3a7d1eb6c94999af22b3c0845d2a12c07f9123dea5ef1074cd778d1dc13"
+        },
+        {
+          "unit_id": "snapshot-unit:6210e375bc30cce8dfd1d80a8d99c04926dcfcdfda634c16c839e46b700984d2",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:7",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:3561876e55316a5b7cb11a962e12eb6e8f846ac435ffb23f069286743f292f6a",
+          "metadata_sha256": "sha256:197102f40e66bd4976e70c3d995cec85f4af5ec4eefd359bffa1ba874456e321"
+        },
+        {
+          "unit_id": "snapshot-unit:11d72264371872514f40d401957b85c555ac714ddacb536bb890c247bcc2d3d7",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:8",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:f0fd7cf2d9f6de08c2be21e58f63e5b8c8cc01875ca8fae61382f84f8f126b3f",
+          "metadata_sha256": "sha256:96db455ec81e060431e18dd55f39d6a5be4beb1e6404367e38642ce63e0c2431"
+        },
+        {
+          "unit_id": "snapshot-unit:8c851e942bbdd9ad9801b75c263ed4e3cab43420e59a00cc7195c4c73bff39bd",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:9",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:f6ca486ce349c50fc234ff9bd00307c0adc6d7c03b5d2eed9f47c7eca03b6adc",
+          "metadata_sha256": "sha256:7b7f7fcdffa6773ed5ded43ad715f283dd65dabebfb991ab2977e6bb5c312f5f"
+        },
+        {
+          "unit_id": "snapshot-unit:8f3f778c49fa9b1f36aea3397dca129ffbb0c743e20abdce89d97f6370808349",
+          "chunk_id": "chunk:query-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:10",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 20,
+          "text_sha256": "sha256:ed95b173fff7e31328dceada150c05488a11b5f373b1255ce3c5e67f2b0313ec",
+          "metadata_sha256": "sha256:e7932ea1d43c2c07276dd604001189e35da23c6000fc8de43b7ae909906c5a1a"
+        }
+      ]
+    }
+  },
+  "pid": 97020,
+  "cwd": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_downstream_trim_p0/write",
+  "guard_probes": [
+    "network",
+    "dotenv",
+    "production_db",
+    "model"
+  ],
+  "unexpected_access": [],
+  "dotenv_loads_refused": 1,
+  "real_model_calls": 0,
+  "production_database_access": 0
+}

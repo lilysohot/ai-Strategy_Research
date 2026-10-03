@@ -22,6 +22,64 @@ The workflow uses the shared `run_agent_loop` kernel with stateful observers for
 wall-clock enforcement, context compaction, repeated-text detection, stuck-target
 handling, and final-answer recovery. A no-tool assistant response is terminal.
 
+## Experimental terminal semantic queries
+
+The terminal `react` mode defaults to the unchanged `tui` workflow profile.
+Explicitly selecting `REACT_WORKFLOW_PROFILE=tui-semantic` in a new process derives
+its tools from `tui` and adds the read-only `corpus_semantic_query`; terminal
+profiles do not maintain a second tool list. The workflow also binds the
+`corpus_submit_manifest` companion, retaining `corpus_fetch` for source fallback.
+Set `CORPUS_STRUCTURED_ROOT` to an explicitly approved, published store visible
+from the research process. Querying never performs extraction or repairs.
+Explicit caller `agent_tools` overrides are applied last, including a narrowed
+allowlist; choosing the experiment must not silently re-add a removed tool.
+
+The experiment refuses an existing writable store **before the first model
+request**. A `0600`/`0444` file mode is not sufficient for a same-user researcher:
+the owner could change permissions or replace files. Run the entire research
+process with a read-only store mount and no writable aliases, not merely its
+shell tools. Writable nested mounts are rejected as well. Missing root
+configuration or an unavailable path retains the existing source-fallback path.
+
+Before handing off the store, the writer must call
+`plugins.corpus.structured.store.prepare_readonly_access(store_root=...)` after
+its publication/retirement connections have closed. This prepares SQLite WAL/SHM
+sidecars; it neither changes business rows nor freezes the index with
+`immutable=1`, so subsequent withdrawals remain visible. Repeat preparation after
+later writer mutations before resuming readers. Missing sidecars fail closed;
+the reader does not create them on the writer's behalf.
+
+A Linux launcher can use bubblewrap with `/` bound read-only, only the separate
+research workspace bound writable, a fresh PID namespace and `/proc`, and the
+approved store explicitly bound read-only after all writable bindings. Then run
+the installed `frontier-agent --native --mode react --cwd <research-workspace>`
+inside that outer boundary. The inner `native` mode is not itself the boundary.
+Container read-only volumes with equivalent alias restrictions also work. The
+launcher must never expose another writable path to the same store.
+
+Complete semantic evidence confirmed in the actual model request can support the
+report without another fetch. Missing dependencies, inaccessible stores and stale
+publications must produce a gap, a fresh query, source fallback or a revised
+conclusion; final A4 verification still applies. `A4_ENFORCE=1` adds the existing
+user-visible downgrade for unverified reports; observe mode records verification
+without changing the answer. Neither mode makes an unverified report verified.
+
+`tests/test_corpus_structured_react_replay.py` exercises formal publication in a
+writer process and a fresh `TerminalSession` research process with synthetic
+provider responses and network/model/production-database denial guards. The
+research child runs under bubblewrap with a read-only host tree, writable research
+cwd, and separate PID/network namespaces. Tests fail if bubblewrap is unavailable
+(no native fallback or silent skip). Actual `bash` tool probes verify that index,
+sidecars, manifests and objects cannot be opened for writing, directories cannot
+receive new files, and permissions cannot be changed. A separate external writer
+performs the controlled withdrawal; the researcher cannot become a writer.
+Optional tokenizer downloads are disabled at their external transport boundary;
+the real token estimator uses its existing offline fallback on a cache miss.
+These tests establish **replay wiring and this store's read-only boundary**, not
+live-model quality or a general security certification of native mode.
+Starting the normal terminal still calls the configured main model: live trials
+require their own approved model, source scope and budget.
+
 ## Loop guardrails
 
 Three profile keys arm the reasoning-runaway watchdog; absent or `0` leaves each

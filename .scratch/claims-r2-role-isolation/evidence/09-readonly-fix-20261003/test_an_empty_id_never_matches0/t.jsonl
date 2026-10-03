@@ -1,0 +1,3 @@
+{"t": "start"}
+{"t": "result", "turn": 8, "name": "web_fetch", "result": "WRONG"}
+{"t": "result", "turn": 8, "name": "bash", "result": "ALSO WRONG"}

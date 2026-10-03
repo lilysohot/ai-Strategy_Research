@@ -232,6 +232,10 @@ class TaskRunnerMixin:
 
     async def run_task(self, task: str) -> None:
         profile = get_profile(self.mode)
+        if profile.workflow_profile == "tui-semantic":
+            from apodex.semantic_access import require_readonly_semantic_store
+
+            require_readonly_semantic_store()
         if profile.workflow:
             await self._run_native_workflow(task, profile)
             return

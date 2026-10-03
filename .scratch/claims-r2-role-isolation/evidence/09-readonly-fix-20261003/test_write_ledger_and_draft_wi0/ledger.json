@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "task_id": "t1",
+  "role_id": "",
+  "pipeline_id": "",
+  "created_at": "2026-10-03T11:32:26.109418+00:00",
+  "last_finalized_turn": -1,
+  "offered": [
+    {
+      "scope_id": "scope-1",
+      "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "build_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "locators": [
+        "chunk:c1",
+        "chunk:c2"
+      ],
+      "total_chunks": 2,
+      "by_kind": {
+        "table": 1,
+        "text": 1
+      },
+      "turn": 0
+    }
+  ],
+  "requested": [],
+  "semantic": {
+    "calls": [],
+    "receipts": []
+  },
+  "fetched": [
+    {
+      "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "build_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "locator": "chunk:c1",
+      "kind": "table",
+      "start": 0,
+      "end": 14,
+      "chars": 14,
+      "content_sha256": "53142c26663403e9dfa5b06e51426a3a7059f7ce60893a1f42becc1b6bd1a2d4",
+      "fragment_sha256": "53142c26663403e9dfa5b06e51426a3a7059f7ce60893a1f42becc1b6bd1a2d4",
+      "turn": 0
+    }
+  ],
+  "delivered": [
+    {
+      "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "locator": "chunk:c1",
+      "start": 0,
+      "end": 14,
+      "status": "delivered"
+    }
+  ],
+  "errors": [],
+  "skipped": [],
+  "notes": [],
+  "range_completeness": [
+    {
+      "scope_id": "scope-1",
+      "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "total": 2,
+      "fetched": 1,
+      "delivered": 1,
+      "missing": [
+        "chunk:c2"
+      ],
+      "undelivered": [
+        "chunk:c2"
+      ],
+      "skipped": [],
+      "complete": false
+    }
+  ],
+  "all_offered_fetched": false
+}

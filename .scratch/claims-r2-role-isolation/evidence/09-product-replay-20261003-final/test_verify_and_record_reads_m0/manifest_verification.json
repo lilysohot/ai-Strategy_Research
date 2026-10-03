@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-03T10:38:16.348502+00:00",
+  "status": "verified",
+  "counts": {
+    "supported": 1,
+    "partial": 0,
+    "unsupported": 0
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "C1",
+      "text_location": "",
+      "report_quote": "",
+      "status": "supported",
+      "evidence_count": 1,
+      "covered_purposes": [
+        "value"
+      ],
+      "missing_dependencies": [],
+      "delivery": [
+        "delivered"
+      ],
+      "semantic_references": [],
+      "problems": [],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_verify_and_record_reads_m0/manifest.json"
+  ]
+}

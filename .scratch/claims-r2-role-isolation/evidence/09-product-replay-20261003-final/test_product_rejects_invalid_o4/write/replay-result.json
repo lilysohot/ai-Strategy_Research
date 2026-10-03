@@ -1,0 +1,207 @@
+{
+  "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+  "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+  "snapshot_id": "sha256:017a5a6850a3c5ba0d32ba5f67778a9eb2cfcfbe40cdf7029aca44ffaa961354",
+  "plan_sha256": "sha256:a30a34425279396a172a3328f6418afab5823574d74fd867a035eb816a1e6b1d",
+  "publication_id": "sha256:a860512c6dba01435cfa195e044afae21da5fcebfa15102ca7b4769799496ce0",
+  "store": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_rejects_invalid_o4/write/store",
+  "roles": [
+    "claims",
+    "material_items"
+  ],
+  "execution": {
+    "ledger": {
+      "schema_version": "corpus-execution-ledger-v1",
+      "batch_id": "batch:a30a34425279396a172a3328f6418afab5823574d74fd867a035eb816a1e6b1d",
+      "plan_sha256": "sha256:a30a34425279396a172a3328f6418afab5823574d74fd867a035eb816a1e6b1d",
+      "snapshot_id": "sha256:017a5a6850a3c5ba0d32ba5f67778a9eb2cfcfbe40cdf7029aca44ffaa961354",
+      "budget": {
+        "max_attempts": 2,
+        "reserved_attempts": 2,
+        "actual_attempts": 2,
+        "currency": null
+      },
+      "tasks": [
+        {
+          "task_id": "task:7d26d693589c3065e24987d6905580c5adafe8ada7fa2d9ec8bdfebc5a47aa34",
+          "role": "claims",
+          "method": "model",
+          "input_sha256": "sha256:7d26d693589c3065e24987d6905580c5adafe8ada7fa2d9ec8bdfebc5a47aa34",
+          "profile_sha256": "sha256:25d80c2aaba41e09a4f566b819e21f75098c5a865eb0c390e5ebdb79f8c094e1",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "context_status": "complete",
+          "dependency_task_ids": [],
+          "artifact_sha256": "sha256:73f91553b341bcc9f62f2b09dbbf633519d7d32074998c451ccb280a359f4ecc",
+          "error_codes": []
+        },
+        {
+          "task_id": "task:3e7abeef3316efb81f8ac3cb6a6f044b4f5d851963f972499172674fb5cbf4ef",
+          "role": "material_items",
+          "method": "model",
+          "input_sha256": "sha256:3e7abeef3316efb81f8ac3cb6a6f044b4f5d851963f972499172674fb5cbf4ef",
+          "profile_sha256": "sha256:077781e36080b4ae8926e1435c5d68bd9e13b35859d7c3eec52704e2b1f9db20",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "context_status": "complete",
+          "dependency_task_ids": [],
+          "artifact_sha256": "sha256:f6d1a877345b45f3ea36cfb71725f5b89e248e340f82cb11caa4985fde93a3fb",
+          "error_codes": []
+        }
+      ],
+      "attempts": [
+        {
+          "attempt_id": "attempt:a682dfbc91d02ed9404906e1bed36526a773faf8b2f04175c806ceea8efe70e1",
+          "task_id": "task:7d26d693589c3065e24987d6905580c5adafe8ada7fa2d9ec8bdfebc5a47aa34",
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_sha256": "sha256:4ca9b3c5ea3ec3a5e6d57630bfa00b7f64cb97208bc42b68ac697181965a65dc",
+          "response_sha256": "sha256:12d6f9eb4eeee9c8d8e10bd5e2c8b96bd7869ddeaf20aaf394544a9b817af3ea",
+          "provider": "replay",
+          "request_model": "replay-fixture",
+          "response_model": null,
+          "usage": null,
+          "cost": null
+        },
+        {
+          "attempt_id": "attempt:fc62f5ee6a8227fb3249df28cdcdb290ec8d4f436c523d54783c06b254336fcd",
+          "task_id": "task:3e7abeef3316efb81f8ac3cb6a6f044b4f5d851963f972499172674fb5cbf4ef",
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_sha256": "sha256:d2d5650e58ee4790bfbbe95b9a08bbe9546c4d5de5c875695a610ba5de2654f5",
+          "response_sha256": "sha256:716b2dbc0e141d03b1bdec16042f60d18aac5ba711365c5f9e83203ab0339aaf",
+          "provider": "replay",
+          "request_model": "replay-fixture",
+          "response_model": null,
+          "usage": null,
+          "cost": null
+        }
+      ]
+    },
+    "plan_consistent": true,
+    "findings": [],
+    "derivations": {
+      "task:3e7abeef3316efb81f8ac3cb6a6f044b4f5d851963f972499172674fb5cbf4ef": "disabled"
+    },
+    "role_budgets": {
+      "claims": {
+        "max_attempts": 1,
+        "reserved_attempts": 1
+      },
+      "material_items": {
+        "max_attempts": 1,
+        "reserved_attempts": 1
+      },
+      "material_relations": {
+        "max_attempts": 0,
+        "reserved_attempts": 0
+      }
+    },
+    "cost_summary": [
+      {
+        "provider": "replay",
+        "model": "replay-fixture",
+        "currency": null,
+        "kind": null,
+        "price_version": null,
+        "known_amount": 0.0,
+        "known_calls": 0,
+        "unknown_calls": 2
+      }
+    ]
+  },
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:017a5a6850a3c5ba0d32ba5f67778a9eb2cfcfbe40cdf7029aca44ffaa961354",
+    "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+    "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "p1",
+      "clean": "c1",
+      "chunk": "k1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:67ae91f757a25426ea22620f9f7d43c62cbcd6ca799cd58ab7347e7b09fa2fd2",
+        "chunk_id": "chunk:forecast-c",
+        "kind": "prose",
+        "locator": "page:1/paragraph:1",
+        "text": "999999.SZ 2026年营业收入15亿元。",
+        "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+          "start": 0,
+          "end": 24
+        },
+        "metadata": {
+          "source_unit_id": "forecast-u",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 1,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "合成预测",
+            "subject": "999999.SZ",
+            "published": "2026-01-01"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:3c309493f5601014ddd91eb69a31609842197b1c523a28743b54c4d1924b433f",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "7777777777777777777777777777777777777777777777777777777777777777",
+      "build_id": "8888888888888888888888888888888888888888888888888888888888888888",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "p1",
+        "clean": "c1",
+        "chunk": "k1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:67ae91f757a25426ea22620f9f7d43c62cbcd6ca799cd58ab7347e7b09fa2fd2",
+          "chunk_id": "chunk:forecast-c",
+          "kind": "prose",
+          "locator": "page:1/paragraph:1",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 24,
+          "text_sha256": "sha256:9532e69ae6f2d1c297f2dd9105766f7dc70535f1676bf29fe76bac892e3416a5",
+          "metadata_sha256": "sha256:3c309493f5601014ddd91eb69a31609842197b1c523a28743b54c4d1924b433f"
+        }
+      ]
+    }
+  },
+  "pid": 96884,
+  "cwd": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-product-replay-20261003-final/test_product_rejects_invalid_o4/write",
+  "guard_probes": [
+    "network",
+    "dotenv",
+    "production_db",
+    "model"
+  ],
+  "unexpected_access": [],
+  "dotenv_loads_refused": 1,
+  "real_model_calls": 0,
+  "production_database_access": 0
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-03T11:32:26.155994+00:00",
+  "status": "unsupported",
+  "counts": {
+    "supported": 0,
+    "partial": 0,
+    "unsupported": 1
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "C1",
+      "text_location": "",
+      "report_quote": "",
+      "status": "unsupported",
+      "evidence_count": 0,
+      "covered_purposes": [],
+      "missing_dependencies": [],
+      "delivery": [],
+      "semantic_references": [],
+      "problems": [
+        {
+          "code": "no_evidence",
+          "message": "结论未附任何证据"
+        }
+      ],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-readonly-fix-20261003/test_same_owner_resubmission_s0/manifests/manifest-000.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-readonly-fix-20261003/test_same_owner_resubmission_s0/manifests/manifest-001.json"
+  ]
+}

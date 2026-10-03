@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "owner_role": "agent:b",
+  "conclusions": [
+    {
+      "id": "C1"
+    }
+  ]
+}

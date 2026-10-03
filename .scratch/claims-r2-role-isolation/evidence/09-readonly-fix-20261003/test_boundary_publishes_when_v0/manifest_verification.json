@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-03T11:32:26.171182+00:00",
+  "status": "verified",
+  "counts": {
+    "supported": 1,
+    "partial": 0,
+    "unsupported": 0
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "C1",
+      "text_location": "",
+      "report_quote": "营业收入 1,234 万元。",
+      "status": "supported",
+      "evidence_count": 1,
+      "covered_purposes": [
+        "value"
+      ],
+      "missing_dependencies": [],
+      "delivery": [
+        "delivered"
+      ],
+      "semantic_references": [],
+      "problems": [],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/09-readonly-fix-20261003/test_boundary_publishes_when_v0/manifests/manifest-000.json"
+  ],
+  "report_sha256": "4f9b5081f35f9d59562565e1decc90651f21490a4dac022b12fbf85dad57b894",
+  "report_chars": 17,
+  "boundary_answer_status": "complete"
+}
