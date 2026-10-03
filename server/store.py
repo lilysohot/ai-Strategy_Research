@@ -12,15 +12,18 @@ from __future__ import annotations
 
 import uuid
 from datetime import UTC, datetime
+from decimal import Decimal
 
 from sqlalchemy import (
     JSON,
     Boolean,
     DateTime,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     LargeBinary,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -152,9 +155,7 @@ class Turn(Base):
     # SQLite and PostgreSQL can add to an existing table, so the same object is
     # declared here and created by migration 0003 — see ``append_turn`` for how
     # a lost race is detected and retried.
-    __table_args__ = (
-        Index("uq_turns_session_seq", "session_id", "seq", unique=True),
-    )
+    __table_args__ = (Index("uq_turns_session_seq", "session_id", "seq", unique=True),)
 
 
 class Artifact(Base):
@@ -230,6 +231,394 @@ class ControlRecord(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+# ——— 业务资料对象（DATA-02 / PR-DATA-13 / PR-BIZ-01） ——————————————————————
+#
+# 这一组表是“用户业务事实”的真源：账户、研究所属计划、手工持仓/成交、策略版本
+# 和研究绑定。契约见 docs/design/web-business-data-contract.md，约束要点：
+#   * 金额/价格/数量用精确数值；缺失是 NULL，绝不用 0 冒充（AC-03/26）；
+#   * 版本行只追加、不修改：每次变更写一个新的 ``revision`` 行，当前表只做指针；
+#   * 计划必须且只能属于一个研究；主计划只能从该研究自己的计划集合中选（AC-01）；
+#   * 账户归用户、可被多个研究引用；计划不跨研究共享（AC-17）。
+
+#: 金额 / 价格 / 数量：30 位总精度、10 位小数，覆盖资产范围且不经过浮点。
+MONEY = Numeric(precision=30, scale=10, asdecimal=True)
+#: 比例 / 盈亏比：20 位总精度、10 位小数，且必须配合 ``unit`` 才有意义。
+RATIO = Numeric(precision=20, scale=10, asdecimal=True)
+
+
+class InvestmentAccount(Base):
+    """交易账户资料的当前指针行（与平台登录账号无关）。"""
+
+    __tablename__ = "investment_accounts"
+    __table_args__ = (
+        # 聊天里说“当前账户”时，账户名必须能唯一定位到一个对象（AC-02）。
+        UniqueConstraint("user_id", "name", name="uq_investment_accounts_user_name"),
+        # 让研究绑定可以声明“账户属于同一用户”的复合外键（AC-09）。
+        UniqueConstraint("user_id", "id", name="uq_investment_accounts_user_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    base_currency: Mapped[str] = mapped_column(String, nullable=False)
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    #: 已落库的最大版本号；读取版本明细时用 revisions 表，不在此行复制正文。
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InvestmentAccountRevision(Base):
+    """账户资料的不可变版本行：只 INSERT，不 UPDATE、不 DELETE。"""
+
+    __tablename__ = "investment_account_revisions"
+    __table_args__ = (
+        UniqueConstraint("account_id", "revision", name="uq_account_revisions_version"),
+        Index("ix_account_revisions_account", "account_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    #: 总资金 / 可用资金分开保存；没有数据就是 NULL，不是 0（AC-03）。
+    total_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    available_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    capital_basis: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    #: 业务时点（用户资料“截至何时”），与 created_at（记录时间）分开。
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: submitted=用户主动提交的完整资料；incomplete=主动保存但仍待补充，不可用于依赖计算。
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    changed_fields: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class InvestmentPlan(Base):
+    """投资计划的当前指针行。**必须且只能属于一个研究**（AC-01）。"""
+
+    __tablename__ = "investment_plans"
+    __table_args__ = (
+        # 让研究绑定可以声明“主计划属于本研究计划集合”的复合外键（AC-01）。
+        UniqueConstraint("research_id", "id", name="uq_investment_plans_research_id"),
+        Index("ix_investment_plans_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    #: 研究（sessions）。非空是“计划不能脱离研究存在”的库级保证。
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InvestmentPlanRevision(Base):
+    """计划资料的不可变版本行。计划价与实际成交价分属不同对象（AC-26）。"""
+
+    __tablename__ = "investment_plan_revisions"
+    __table_args__ = (
+        UniqueConstraint("plan_id", "revision", name="uq_plan_revisions_version"),
+        Index("ix_plan_revisions_plan", "plan_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    plan_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("investment_plans.id"), nullable=False)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    symbol: Mapped[str | None] = mapped_column(String)
+    market: Mapped[str | None] = mapped_column(String)
+    asset_type: Mapped[str | None] = mapped_column(String)
+    direction: Mapped[str | None] = mapped_column(String)
+    plan_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    plan_price_low: Mapped[Decimal | None] = mapped_column(MONEY)
+    plan_price_high: Mapped[Decimal | None] = mapped_column(MONEY)
+    target_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    #: 风险预算可能是金额也可能是百分比：数值与单位分开保存，不靠字段名猜。
+    risk_budget_value: Mapped[Decimal | None] = mapped_column(MONEY)
+    risk_budget_unit: Mapped[str | None] = mapped_column(String)
+    position_limit_value: Mapped[Decimal | None] = mapped_column(MONEY)
+    position_limit_unit: Mapped[str | None] = mapped_column(String)
+    time_window: Mapped[str | None] = mapped_column(String)
+    invalidation: Mapped[str | None] = mapped_column(Text)
+    profit_loss_ratio: Mapped[Decimal | None] = mapped_column(RATIO)
+    profit_loss_ratio_definition: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str | None] = mapped_column(String)
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    changed_fields: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class PositionSnapshot(Base):
+    """用户手工录入的持仓快照；不与其他记录叠加重算资金（PRD §3.2）。"""
+
+    __tablename__ = "position_snapshots"
+    __table_args__ = (Index("ix_position_snapshots_account", "account_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str | None] = mapped_column(String)
+    quantity: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    cost_basis: Mapped[str | None] = mapped_column(String)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    #: 更正链：新行指向被更正的旧行，旧行保留原值。
+    corrects_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("position_snapshots.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class TradeRecord(Base):
+    """用户提供的成交记录。更正保留前值，不因更正而抹掉历史（AC-22）。"""
+
+    __tablename__ = "trade_records"
+    __table_args__ = (Index("ix_trade_records_account_symbol", "account_id", "symbol"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("investment_accounts.id"), nullable=False
+    )
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str | None] = mapped_column(String)
+    side: Mapped[str] = mapped_column(String, nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    fees: Mapped[Decimal | None] = mapped_column(MONEY)
+    traded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    corrects_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("trade_records.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class ResearchInvestmentLink(Base):
+    """研究 → 账户引用 + 当前主计划（第一版一个研究至多一个账户）。
+
+    两个复合外键把“归属一致性”下沉到数据库：账户必须属于同一用户，
+    主计划必须属于本研究自己的计划集合 —— 这正是 AC-01 与 AC-09 的库级保证。
+    """
+
+    __tablename__ = "research_investment_links"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "account_id"],
+            ["investment_accounts.user_id", "investment_accounts.id"],
+            name="fk_research_links_account_owner",
+        ),
+        ForeignKeyConstraint(
+            ["research_id", "primary_plan_id"],
+            ["investment_plans.research_id", "investment_plans.id"],
+            name="fk_research_links_plan_research",
+        ),
+    )
+
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), primary_key=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    primary_plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class StrategyVersion(Base):
+    """系统策略产物版本；用户采纳后在所属研究创建计划，不变成已成交事实。"""
+
+    __tablename__ = "strategy_versions"
+    __table_args__ = (Index("ix_strategy_versions_research", "research_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    title: Mapped[str | None] = mapped_column(String)
+    artifact_rel_path: Mapped[str | None] = mapped_column(String)
+    payload_ref: Mapped[str | None] = mapped_column(Text)
+    adopted_plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BusinessOperation(Base):
+    """一次业务写操作的幂等记录与结果快照（DATA-03）。
+
+    保存动作必须是可重放的：网络超时后客户端不知道服务端是否已写入，盲目重试会
+    产生第二个版本甚至第二个 Run。这里以 ``(user_id, idempotency_key)`` 唯一约束
+    承接“同键同内容返回原结果、同键不同内容拒绝”，并把结果保存下来，使刷新后的
+    页面能用不含业务正文的 ``operation_id`` 找回提交结果。
+    """
+
+    __tablename__ = "business_operations"
+    __table_args__ = (
+        UniqueConstraint("user_id", "idempotency_key", name="uq_business_operations_key"),
+        Index("ix_business_operations_user_recent", "user_id", "created_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 操作类型（``account.create`` / ``plan.update`` / …），与幂等键共同限定作用域。
+    scope: Mapped[str] = mapped_column(String, nullable=False)
+    idempotency_key: Mapped[str] = mapped_column(String, nullable=False)
+    #: 规范化请求摘要：同键不同内容据此拒绝，避免把摘要比较交给调用方。
+    request_digest: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="in_progress")
+    result_json: Mapped[dict | None] = mapped_column(JSON)
+    error_json: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    #: 保留期边界；清理不得让原动作再次执行，只影响“还能查多久”。
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class RunInvestmentSnapshot(Base):
+    """一个 Run 采用的业务输入快照（DATA-05 / AC-06、07、26、27）。
+
+    快照是**提交那一刻**的事实：把账户/计划/持仓/成交的对象版本与解析后的完整有效值
+    一起冻结，Run 之后无论资料怎么改、无论是压缩还是换模型，读到的都是这一份。
+    只存 ID 不算快照 —— 那样等执行时再读，读到的是那时的数据。
+
+    行只 INSERT 不 UPDATE：创建后不可变是快照的全部意义，重算用**新 Run + 新快照**，
+    旧轨迹与旧快照原样保留。
+    """
+
+    __tablename__ = "run_investment_snapshots"
+    __table_args__ = (
+        # 一个 Run 至多一份快照；重复冻结会在库层失败而不是悄悄覆盖。
+        UniqueConstraint("run_id", name="uq_run_investment_snapshots_run"),
+        Index("ix_run_snapshots_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 研究（sessions）；快照永远属于一个研究，计划也必须属于同一研究。
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    #: 快照结构版本：读取方据此判断是否还能解释这份快照。
+    schema_version: Mapped[str] = mapped_column(String, nullable=False)
+    use_case: Mapped[str] = mapped_column(String, nullable=False, default="general_reading")
+    #: manual=用户手动提交；watch_event=监控触发（DATA-11 使用）。
+    source: Mapped[str] = mapped_column(String, nullable=False, default="manual")
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    account_revision: Mapped[int | None] = mapped_column(Integer)
+    plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    plan_revision: Mapped[int | None] = mapped_column(Integer)
+    position_snapshot_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("position_snapshots.id")
+    )
+    trade_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("trade_records.id"))
+    #: 重算关联：新 Run 指向被重算的旧 Run，旧快照不被修改。
+    rerun_of_run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    #: 解析后的完整有效值：字段 → {value, currency, unit, as_of, status, source}。
+    resolved_json: Mapped[dict] = mapped_column(JSON, nullable=False)
+    #: 用途必需但缺失的字段：只记录，不在此处用当前值回填。
+    missing_json: Mapped[dict | None] = mapped_column(JSON)
+    #: 本次提交显式声明的值，原样保存便于审计（值为十进制文本）。
+    declared_json: Mapped[dict | None] = mapped_column(JSON)
+    #: 冻结时点：与 created_at（记录时间）分开，重算时两个 Run 各不相同。
+    frozen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class RunDispatch(Base):
+    """Run 的持久派发记录（outbox，DATA-06 / AC-05、15、23）。
+
+    业务 Run 的创建（资料、快照、Run 行、用户消息）与它的"待派发"意图落在**同一个
+    事务**里：提交成功但进程崩溃，重启后这条记录还在，派发可以恢复；提交失败则
+    什么都不存在，不会出现"资料已保存但分析永远不来"。
+
+    状态与 Run 状态**分离**（契约 §7）：
+    pending → claimed → dispatched；失败回 retryable_failed（到期再领）；
+    重试耗尽或被取消 → abandoned。租约 + 领取版本让多进程安全领取：
+    过期租约只有核定了旧 worker 状态（Run 是否真的启动过）才允许重投。
+    """
+
+    __tablename__ = "run_dispatch_outbox"
+    __table_args__ = (
+        UniqueConstraint("run_id", name="uq_run_dispatch_outbox_run"),
+        Index("ix_run_dispatch_due", "status", "next_attempt_at"),
+        Index("ix_run_dispatch_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    #: 编排器的会话键（客户端 session_id 字符串）。派发必须用**同一个键**排队，
+    #: 同研究的串行才不会被不同的字符串拆散。
+    session_key: Mapped[str] = mapped_column(String, nullable=False)
+    prompt: Mapped[str] = mapped_column(Text, nullable=False)
+    prompt_addendum: Mapped[str | None] = mapped_column(Text)
+    agent_tools: Mapped[str] = mapped_column(String, nullable=False, default="")
+    status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
+    attempt: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    max_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=5)
+    #: 下次允许领取的时间；重试退避与研究忙延迟都靠它。
+    next_attempt_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    lease_owner: Mapped[str | None] = mapped_column(String)
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: 领取版本：续投/完成回报必须带上领取时的版本，过期领取者的回报不被接受。
+    claim_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    last_error: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class RunUpload(Base):
+    """一次提交里上传附件的持久清单（DATA-06 / AC-05、23）。
+
+    文件字节不属于数据库事务，但"有哪些附件、内容摘要是什么、是否已发布到
+    ``inputs``"必须是持久事实，否则会出现"数据库成功但启动缺文件的分析"：
+
+    * 提交时先把字节写进受控**暂存区**（``<run_root>/staging``），算出 ``sha256``，
+      并在与 Run/outbox **同一事务**里写下清单行（``status=staged``）——即"发布意图"；
+    * worker 领取前，派发侧先按清单做**发布校验**：暂存文件存在且摘要一致才移入
+      ``inputs`` 并置 ``published``；校验不过就不派发（退避重试，最终 abandoned）；
+    * ``(run_id, stored_name)`` 唯一：同一 Run 的存储名不重复，附件不会互相覆盖。
+    """
+
+    __tablename__ = "run_uploads"
+    __table_args__ = (
+        UniqueConstraint("run_id", "stored_name", name="uq_run_uploads_run_name"),
+        Index("ix_run_uploads_run", "run_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 客户端原始名（已扁平化为安全 basename，仅用于展示/审计）。
+    display_name: Mapped[str] = mapped_column(String, nullable=False)
+    #: 落盘名；同名在提交时即被拒，故它在同一 Run 内唯一。
+    stored_name: Mapped[str] = mapped_column(String, nullable=False)
+    size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    sha256: Mapped[str] = mapped_column(String, nullable=False)
+    #: staged=已入暂存区且清单已记；published=已校验并移入 inputs。
+    status: Mapped[str] = mapped_column(String, nullable=False, default="staged")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 _engine: AsyncEngine | None = None
@@ -557,9 +946,7 @@ async def set_default_llm_config(*, user_id: uuid.UUID, config_id: uuid.UUID) ->
         if cfg is None or cfg.user_id != user_id:
             raise ConfigNotFoundError(str(config_id))
         await session.execute(
-            update(UserLLMConfig)
-            .where(UserLLMConfig.user_id == user_id)
-            .values(is_default=False)
+            update(UserLLMConfig).where(UserLLMConfig.user_id == user_id).values(is_default=False)
         )
         cfg.is_default = True
         await session.commit()
@@ -773,6 +1160,63 @@ async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: st
         if row.user_id != user_id:
             raise SessionOwnershipError(str(session_id))
         return row
+
+
+async def ensure_session_in(
+    session: AsyncSession, *, session_id: uuid.UUID, user_id: uuid.UUID, title: str
+) -> Session:
+    """Non-committing :func:`ensure_session` for the atomic submit path (DATA-06).
+
+    Same ownership rule, same lazy creation — the caller's transaction decides
+    when it becomes durable, so "session row + run + turn + snapshot + outbox"
+    is one all-or-nothing commit instead of four.
+    """
+    row = await session.get(Session, session_id)
+    if row is None:
+        row = Session(id=session_id, user_id=user_id, title=title)
+        session.add(row)
+        await session.flush()
+        return row
+    if row.user_id != user_id:
+        raise SessionOwnershipError(str(session_id))
+    return row
+
+
+async def append_turn_in(
+    session: AsyncSession,
+    *,
+    session_id: uuid.UUID,
+    role: str,
+    content: str,
+    run_id: uuid.UUID | None = None,
+) -> Turn:
+    """Non-committing :func:`append_turn` with the same ``max(seq)+1`` retry."""
+    for attempt in range(_APPEND_TURN_ATTEMPTS):
+        try:
+            # A savepoint keeps a lost seq race from aborting the caller's whole
+            # transaction: only this insert rolls back, then the retry re-reads
+            # the maximum inside a fresh savepoint.
+            async with session.begin_nested():
+                result = await session.execute(
+                    select(func.coalesce(func.max(Turn.seq), 0)).where(
+                        Turn.session_id == session_id
+                    )
+                )
+                next_seq = (result.scalar_one() or 0) + 1
+                turn = Turn(
+                    session_id=session_id,
+                    seq=next_seq,
+                    role=role,
+                    content=content,
+                    run_id=run_id,
+                )
+                session.add(turn)
+                await session.flush()
+            return turn
+        except IntegrityError:
+            if attempt == _APPEND_TURN_ATTEMPTS - 1:
+                raise
+    raise AssertionError("unreachable")  # pragma: no cover - loop always returns or raises
 
 
 #: How many times ``append_turn`` re-reads ``MAX(seq)`` after losing the unique
@@ -1010,6 +1454,41 @@ async def create_run(
         return row
 
 
+def add_run(
+    session: AsyncSession,
+    *,
+    run_id: uuid.UUID,
+    session_id: uuid.UUID,
+    user_id: uuid.UUID,
+    prompt: str,
+    pipeline_id: str,
+    run_dir: str,
+    status: str = "queued",
+    llm_config_id: uuid.UUID | None = None,
+    llm_snapshot_json: dict | None = None,
+) -> Run:
+    """Insert a run row **without committing** (DATA-05/06).
+
+    :func:`create_run` commits on its own, which makes it impossible to put the
+    Run row and its business snapshot in one transaction: a snapshot that failed
+    to freeze would leave a queued Run behind. This variant lets the caller own
+    the transaction boundary so "Run + 快照"要么一起生效，要么一起消失。
+    """
+    row = Run(
+        id=run_id,
+        session_id=session_id,
+        user_id=user_id,
+        prompt=prompt,
+        pipeline_id=pipeline_id,
+        run_dir=run_dir,
+        status=status,
+        llm_config_id=llm_config_id,
+        llm_snapshot_json=llm_snapshot_json,
+    )
+    session.add(row)
+    return row
+
+
 async def get_run(*, run_id: uuid.UUID, user_id: uuid.UUID) -> Run | None:
     """Return a run only if it belongs to ``user_id`` (anti-IDOR)."""
     async with get_sessionmaker()() as session:
@@ -1033,9 +1512,7 @@ async def list_active_runs() -> list[Run]:
     run abandoned by a crash belongs to whoever submitted it.
     """
     async with get_sessionmaker()() as session:
-        result = await session.execute(
-            select(Run).where(Run.status.in_(ACTIVE_RUN_STATUSES))
-        )
+        result = await session.execute(select(Run).where(Run.status.in_(ACTIVE_RUN_STATUSES)))
         return list(result.scalars().all())
 
 
@@ -1195,8 +1672,10 @@ async def sync_run_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> lis
     present = {item.get("rel_path") for item in artifacts if item.get("rel_path")}
     async with get_sessionmaker()() as session:
         existing = (
-            await session.execute(select(Artifact).where(Artifact.run_id == run_id))
-        ).scalars().all()
+            (await session.execute(select(Artifact).where(Artifact.run_id == run_id)))
+            .scalars()
+            .all()
+        )
         for row in existing:
             if row.rel_path not in present:
                 await session.delete(row)
@@ -1308,13 +1787,17 @@ async def create_control(
     async with get_sessionmaker()() as session:
         if external_id:
             existing = (
-                await session.execute(
-                    select(ControlRecord).where(
-                        ControlRecord.kind == kind,
-                        ControlRecord.external_id == external_id,
+                (
+                    await session.execute(
+                        select(ControlRecord).where(
+                            ControlRecord.kind == kind,
+                            ControlRecord.external_id == external_id,
+                        )
                     )
                 )
-            ).scalars().first()
+                .scalars()
+                .first()
+            )
             if existing is not None:
                 return existing
         row = ControlRecord(
@@ -1343,13 +1826,17 @@ async def get_control_by_external_id(*, kind: str, external_id: str) -> ControlR
     """Fetch the record a worker-side id maps to (approval_id → record)."""
     async with get_sessionmaker()() as session:
         return (
-            await session.execute(
-                select(ControlRecord).where(
-                    ControlRecord.kind == kind,
-                    ControlRecord.external_id == external_id,
+            (
+                await session.execute(
+                    select(ControlRecord).where(
+                        ControlRecord.kind == kind,
+                        ControlRecord.external_id == external_id,
+                    )
                 )
             )
-        ).scalars().first()
+            .scalars()
+            .first()
+        )
 
 
 async def list_controls(
@@ -1402,13 +1889,17 @@ async def resolve_control(
             row = await session.get(ControlRecord, control_id)
         elif kind is not None and external_id is not None:
             row = (
-                await session.execute(
-                    select(ControlRecord).where(
-                        ControlRecord.kind == kind,
-                        ControlRecord.external_id == external_id,
+                (
+                    await session.execute(
+                        select(ControlRecord).where(
+                            ControlRecord.kind == kind,
+                            ControlRecord.external_id == external_id,
+                        )
                     )
                 )
-            ).scalars().first()
+                .scalars()
+                .first()
+            )
         else:
             raise ValueError("resolve_control needs a control_id or (kind, external_id)")
         if row is None:
@@ -1449,17 +1940,15 @@ async def close_open_controls(
     """
     async with get_sessionmaker()() as session:
         rows = (
-            await session.execute(
-                select(ControlRecord).where(ControlRecord.run_id == run_id)
-            )
-        ).scalars().all()
+            (await session.execute(select(ControlRecord).where(ControlRecord.run_id == run_id)))
+            .scalars()
+            .all()
+        )
         closed = 0
         for row in rows:
             if not control_is_open(row):
                 continue
-            row.status = (
-                STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
-            )
+            row.status = STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
             row.detail_json = {**(row.detail_json or {}), "closed_by": closed_by}
             row.resolved_at = datetime.now(UTC)
             closed += 1

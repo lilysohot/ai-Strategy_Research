@@ -103,9 +103,7 @@ def _signal_worker(proc: asyncio.subprocess.Process, sig: int) -> None:
         killpg(getpgid(proc.pid), sig)
 
 
-def _turns_as_of_submission(
-    turns: list[Any], *, current_run_id: uuid.UUID | None
-) -> list[Any]:
+def _turns_as_of_submission(turns: list[Any], *, current_run_id: uuid.UUID | None) -> list[Any]:
     """The conversation as it stood when ``current_run_id`` was submitted (F14.
 
     Subtraction — "every turn except mine" — was not the same thing: a run is
@@ -120,16 +118,10 @@ def _turns_as_of_submission(
     record (a resumed or externally driven run) falls back to excluding only its
     own turns, which is the previous behaviour.
     """
-    my_index = next(
-        (i for i, turn in enumerate(turns) if turn.run_id == current_run_id), None
-    )
+    my_index = next((i for i, turn in enumerate(turns) if turn.run_id == current_run_id), None)
     if my_index is None:
         return [turn for turn in turns if turn.run_id != current_run_id]
-    return [
-        turn
-        for i, turn in enumerate(turns)
-        if i < my_index and turn.run_id != current_run_id
-    ]
+    return [turn for i, turn in enumerate(turns) if i < my_index and turn.run_id != current_run_id]
 
 
 def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
@@ -258,6 +250,7 @@ class Orchestrator:
         agent_tools: str = "",
         prompt_addendum: str = "",
         turn_index: int = 1,
+        backfill_turn: bool = True,
     ) -> None:
         """Enqueue a run. Same-session runs execute serially.
 
@@ -283,13 +276,16 @@ class Orchestrator:
                 session_id=session_uuid, user_id=user_id, title=prompt[:80] or "New chat"
             )
         # Write the user turn up-front so the assistant reply can be appended in
-        # the correct order regardless of run latency.
-        await append_turn(
-            session_id=session_uuid,
-            role="user",
-            content=prompt,
-            run_id=uuid.UUID(run_id) if _looks_like_uuid(run_id) else None,
-        )
+        # the correct order regardless of run latency. Outbox-dispatched runs
+        # (DATA-06) wrote it inside the submit transaction — appending again
+        # here would duplicate the message in the transcript.
+        if backfill_turn:
+            await append_turn(
+                session_id=session_uuid,
+                role="user",
+                content=prompt,
+                run_id=uuid.UUID(run_id) if _looks_like_uuid(run_id) else None,
+            )
 
         async with self._lock:
             q = self._session_queues.setdefault(session_id, asyncio.Queue())
@@ -338,7 +334,29 @@ class Orchestrator:
         handle._stopped_by = "user_stop"
         return True
 
-    async def steer(self, run_id: str, message: str, *, control_id: str | None = None) -> int | None:
+    async def wait_stopped(self, run_id: str, *, timeout: float) -> bool:
+        """Wait for **this process's** worker for ``run_id`` to exit (DATA-06).
+
+        Returns True when the worker is confirmed gone: it was never spawned here,
+        already exited, or exited within ``timeout``. Returns False only when a
+        live worker of this process ignored the stop past the deadline. An absent
+        handle is not ours to observe (another API process may own that worker), so
+        it counts as confirmed rather than blocking the caller forever — the
+        database-level research mutex still guarantees no two runs of the same
+        research execute concurrently.
+        """
+        handle = self._handles.get(run_id)
+        if handle is None or handle.proc.returncode is not None:
+            return True
+        try:
+            await asyncio.wait_for(handle.proc.wait(), timeout=max(0.0, timeout))
+            return True
+        except TimeoutError:
+            return False
+
+    async def steer(
+        self, run_id: str, message: str, *, control_id: str | None = None
+    ) -> int | None:
         """Queue a live-steering line into a running worker via stdin.
 
         Returns the new per-run seq for the queued message, or ``None`` when
@@ -465,7 +483,9 @@ class Orchestrator:
             self._subscribers.pop(run_id, None)
 
     @staticmethod
-    def _q_put_bounded(q: asyncio.Queue[dict[str, Any] | None], payload: dict[str, Any] | None) -> None:
+    def _q_put_bounded(
+        q: asyncio.Queue[dict[str, Any] | None], payload: dict[str, Any] | None
+    ) -> None:
         """Put into a bounded subscriber queue; under pressure drop deltas only.
 
         F13: a slow SSE consumer must not make the in-memory fan-out grow
@@ -528,14 +548,34 @@ class Orchestrator:
         Returns how many runs were closed. Never raises: a failed sweep must not
         take the API down, it only means the next start-up will try again.
         """
+        from server import dispatch_outbox, store
+
         try:
             stale = await list_active_runs()
         except Exception:
             logger.exception("orphan-run reconcile: query failed, skipping sweep")
             return 0
 
+        # DATA-06: a run that was committed but whose worker never started is NOT an
+        # orphan — it still has a live dispatch intent, and the dispatch loop will
+        # pick it up after this sweep. Reaping it (and abandoning its outbox) would
+        # break the "a committed submit survives a crash" promise (AC-05).
+        try:
+            async with store.get_sessionmaker()() as session:
+                recoverable = await dispatch_outbox.recoverable_run_ids(
+                    session, {row.id for row in stale}
+                )
+        except Exception:
+            logger.exception("orphan-run reconcile: dispatch intent lookup failed")
+            recoverable = set()
+
         closed = 0
         for row in stale:
+            if row.id in recoverable:
+                logger.info(
+                    "orphan run kept for dispatch: run_id=%s (live outbox intent)", row.id.hex
+                )
+                continue
             run_id = row.id.hex
             if run_id in self._handles:
                 continue
@@ -574,6 +614,17 @@ class Orchestrator:
             # F21: a control action that was pending when the process died can
             # never take effect now — the worker that owned the gate is gone.
             await self._close_control_records(run_id, closed_by="server_restart")
+            # DATA-06: the dispatch intent must follow the run — an orphaned run
+            # must not be re-dispatched by the outbox on the next start-up.
+            try:
+                async with store.get_sessionmaker()() as session, session.begin():
+                    await dispatch_outbox.abandon_for_run(
+                        session,
+                        run_id=row.id,
+                        reason="服务重启判定运行中断，派发作废",
+                    )
+            except Exception:
+                logger.exception("outbox abandon failed for run_id=%s", run_id)
             closed += 1
             logger.warning("orphan run reconciled: run_id=%s status=%s", run_id, status)
 
@@ -596,7 +647,9 @@ class Orchestrator:
                 await task
 
     # — internals —————————————————————————————————————————————
-    async def _drain_session(self, session_id: str, q: asyncio.Queue[dict[str, Any] | None]) -> None:
+    async def _drain_session(
+        self, session_id: str, q: asyncio.Queue[dict[str, Any] | None]
+    ) -> None:
         while not self._shutting_down:
             params = await q.get()
             # ``None`` is the end-of-queue sentinel: drain what is already queued
@@ -613,7 +666,8 @@ class Orchestrator:
                 # that session stayed "queued" forever with no worker coming.
                 logger.exception(
                     "run launch failed for session=%s run_id=%s; continuing queue",
-                    session_id, params.get("run_id"),
+                    session_id,
+                    params.get("run_id"),
                 )
                 # F22 / F06-RUN-1: a launch failure used to leave the run row
                 # "queued" with no worker and no terminal state — a full
@@ -655,9 +709,7 @@ class Orchestrator:
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
             turns = await list_turns(session_id=session_uuid)
-            history = render_session_history(
-                _turns_as_of_submission(turns, current_run_id=current)
-            )
+            history = render_session_history(_turns_as_of_submission(turns, current_run_id=current))
         handle: RunHandle | None = None
         try:
             handle = await self._launch(run_id, params, history=history)

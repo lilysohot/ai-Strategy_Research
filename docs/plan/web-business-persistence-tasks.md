@@ -82,6 +82,10 @@
 
 **验收**：提供有效/缺失/歧义/冲突/超时重试/无权的协议样例；未定默认值有明确冻结门槛。
 
+**当前产物（2026-10-02）**：冻结草案见[共用数据与操作契约](../design/web-business-data-contract.md)
+v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseline.md)（DATA-00）。
+两者均为设计与核定成果，不代表服务端已实现。
+
 ## 3. 业务数据与分析链路
 
 ### DATA-02 业务模型与迁移
@@ -98,6 +102,12 @@
 
 **验收**：真实 PG 验证精度往返、约束、版本不可变与迁移；当前生产库不用于试跑迁移。
 覆盖 AC-01、03、04、09、22、26。
+
+**当前产物（2026-10-02）**：模型见 `server/store.py`（`InvestmentAccount(+Revision)`、
+`InvestmentPlan(+Revision)`、`PositionSnapshot`、`TradeRecord`、`ResearchInvestmentLink`、
+`StrategyVersion`），迁移见 `server/alembic/versions/0005_business_objects.py`；
+真 PG 验收见 `tests/pg/test_business_models.py`（11 项通过，证据与批次见
+[环境基线](web-business-data-env-baseline.md) §4.1）。写入服务、准入与幂等仍属 DATA-03。
 
 ### DATA-03 统一写入与真实资料准入
 
@@ -116,6 +126,16 @@
 
 **验收**：表单、聊天、JSON/multipart 均无法绕过；语义不以问号/关键词替代。
 覆盖 AC-02、04、05、22、25—28。
+
+**当前产物（2026-10-02）**：写入服务见 `server/business_service.py`（错误码信封、真实输入准入
+`admit_group`、用途裁决 `evaluate_purpose`、版本只追加、`expected_revision` 冲突、幂等键与
+操作查询），幂等台账见 `server/store.py::BusinessOperation` 与迁移
+`server/alembic/versions/0006_business_operations.py`；真 PG 验收见
+`tests/pg/test_business_write.py`（13 项）；HTTP 路由见 `server/routes/business.py`
+（错误信封处理器注册在 `server/app.py`），路由契约验收见 `tests/pg/test_business_routes.py`
+（9 项，随同 DATA-02/03 共 33 项通过，证据与回归对比见
+[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：`POST /api/runs` 的 `investment_input` 扩展（DATA-05）与聊天工具接同一服务。
 
 ### DATA-04 查询、关联与历史
 
@@ -149,6 +169,17 @@
 **验收**：A/B 不同时点输入固定；JSON/multipart 同规则；跨 worker 仍使用同一快照。
 覆盖 AC-05—07、09、10、26、27。
 
+**当前产物（2026-10-03）**：快照模型 `server/store.py::RunInvestmentSnapshot`
+（INSERT-only）与迁移 `server/alembic/versions/0007_run_snapshot.py`；解析/冻结/读取见
+`server/investment_snapshot.py`（`schema_version=business-snapshot/1`，保存对象版本、解析后的
+完整有效值、来源与缺失项）。提交侧见 `server/routes/runs.py`：`POST /api/runs` 解析
+`investment_input`（JSON 与 multipart 同一契约），与 Run 行**同一事务**冻结快照并复用
+`run.submit` 幂等键；新增 `GET /api/runs/{id}/investment-snapshot`（缺快照报
+`404 snapshot_absent`，不用当前资料回填）与 `POST /api/runs/{id}/rerun`（停止旧执行 +
+新 Run + 新快照 + `rerun_of_run_id` 关联）。真 PG 验收见 `tests/pg/test_run_snapshot.py`
+（13 项，累计 46 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：快照注入 worker/workflow（DATA-08）。
+
 ### DATA-06 原子提交与持久派发
 
 **需求**：PR-BIZ-04；PRD §5.3—5.4。
@@ -169,6 +200,31 @@
 
 **验收**：事务各边界故障、启动失败、崩溃领取、重复投递及并发派发不丢任务、不重复创建 Run。
 覆盖 AC-05、15、23；同研究不并发执行。
+
+**当前产物（2026-10-03）**：outbox 模型 `server/store.py::RunDispatch`（与 Run 状态分离的
+`pending/claimed/dispatched/retryable_failed/abandoned`）与迁移
+`server/alembic/versions/0008_run_dispatch.py`；领取/租约/回收/取消见
+`server/dispatch_outbox.py`（`SKIP LOCKED` 领取、租约 + 领取版本、过期先核定旧 worker
+状态再决定重投、失败退避、研究级互斥基于库判定）。提交侧 `server/routes/runs.py`：
+业务 Run 的 session/run/turn/快照/附件清单/outbox **同一事务**（不自行提交的
+`store.append_turn_in`，`orchestrator.submit(backfill_turn=False)` 保证派发不重复追加
+用户消息）；新增 `GET /api/runs/{id}/dispatch`；重算对排队任务执行"取消重提"（outbox
+作废 + Run 置 `stopped/superseded_by_rerun`），运行中的旧 Run **真正发出停止请求**
+（`await orch.stop`，异步漏 await 曾使停止变空操作）并在超时内确认退出
+（`Orchestrator.wait_stopped` + `dispatch_stop_timeout_seconds`）。派发循环随 API
+lifespan 启停（`SERVER_DISPATCH_*` 配置）；孤儿恢复只收尾真孤儿 —— 有存活派发意图
+（`dispatch_outbox.recoverable_run_ids`：`pending`/`retryable_failed`，或 `claimed` 且
+Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍会派发（AC-05）。
+**附件**：`server/store.py::RunUpload`（迁移 `0009_run_uploads`）+ `server/uploads.py` ——
+上传先过受控暂存区（`<run_root>/staging`），算 `sha256`，并先做完文件数/单文件大小/
+**重名**校验（重名 409）；清单行与提交同事务记录发布意图（`staged`）；worker 领取前
+`publish_for_run` 逐个校验**文件存在且摘要一致**，通过才移入 `inputs` 并置 `published`，
+否则不投递（退避重试）；提交失败回滚即删除本次暂存，启动时清扫无 Run 行的暂存目录。
+**队列与停止**：逐研究队列上限 `dispatch_research_queue_limit`，超限拒绝新建/重算
+（`429 quota_exceeded`，重算取代的旧 Run 不计入）。
+真 PG 验收见 `tests/pg/test_run_dispatch.py`（19 项，累计 65 项通过，
+证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：DATA-08 快照注入 worker 与业务工具接线。
 
 ### DATA-07 持久补数与续接
 

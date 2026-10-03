@@ -221,6 +221,7 @@ UI-01—03 可在 DATA-01 接口契约确定后并行开发；各阶段发布必
 ## 5. 接口交接与环境
 
 共享接口语义只在 [DATA-01](web-business-persistence-tasks.md)对应任务冻结，本文不复制第二份字段协议。
+DATA-01 冻结草案见[共用数据与操作契约](../design/web-business-data-contract.md) v0.1（2026-10-02）。
 页面消费结构化错误、版本、幂等结果和状态，不解析自然语言回复推断业务提交成功。
 
 验证沿用[环境准备方案](web-storage-validation-environment.md)：先核实现有服务，正常流程优先复用；

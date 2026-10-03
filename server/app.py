@@ -13,18 +13,22 @@ serve when it fails — except in ``SERVER_DEBUG`` mode.
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response, status
 
-from server import store
+from server import business_service as biz
+from server import store, uploads
 from server.config import get_config
+from server.dispatch_outbox import dispatch_loop
 from server.orchestrator import get_orchestrator
 from server.readiness import enforce_startup_readiness, storage_readiness
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
+from server.routes import business as business_routes
 from server.routes import llm_configs as llm_configs_routes
 from server.routes import models as models_routes
 from server.routes import runs as runs_routes
@@ -56,7 +60,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     if readiness.ok:
         with contextlib.suppress(Exception):
             await get_orchestrator().reconcile_orphan_runs()
+        # DATA-06: drop staging dirs a failed submit left behind (no run row owns
+        # them). Only old dirs are touched, so an in-flight submit is never raced.
+        with contextlib.suppress(Exception):
+            await uploads.sweep_orphan_staging()
+    # DATA-06: the dispatch loop turns committed outbox intents into workers.
+    # It lives with the API process (start/stop with lifespan); multi-process
+    # deployments share dispatching safely via SKIP LOCKED claims + leases.
+    dispatch_task: asyncio.Task[None] | None = None
+    if readiness.ok and get_config().dispatch_enabled:
+        dispatch_task = asyncio.create_task(dispatch_loop(get_orchestrator()))
     yield
+    if dispatch_task is not None:
+        dispatch_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await dispatch_task
     await get_orchestrator().shutdown()
 
 
@@ -74,6 +92,10 @@ app.include_router(artifacts_routes.router)
 # a user, and ownership is enforced at the DB layer (store.get_run filters by
 # user_id). The run_id remains an unguessable UUID on top of that.
 app.include_router(runs_routes.router)
+# 业务资料（DATA-03）：路由只做身份绑定与契约翻译，准入/版本/幂等在 business_service。
+app.include_router(business_routes.router)
+# 业务错误统一渲染为契约信封（字段定位、冲突、幂等、无权）；注册后才能覆盖默认 500。
+app.add_exception_handler(biz.BusinessError, business_routes.business_error_handler)
 
 
 async def _storage_probe(response: Response) -> dict[str, str]:

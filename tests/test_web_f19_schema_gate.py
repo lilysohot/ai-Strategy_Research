@@ -27,9 +27,19 @@ from sqlalchemy import text
 from server import readiness, store
 from server.config import get_config
 
-#: The migration this checkout expects a deployed database to be at.
-HEAD = "0004_control_records"
-BEHIND = "0003_turn_seq_unique"
+#: The migration this checkout expects a deployed database to be at. Update both
+#: whenever a new revision lands: the gate is only meaningful while these point at
+#: the real head and the revision just below it.
+HEAD = "0006_business_operations"
+BEHIND = "0005_business_objects"
+#: Everything in the chain below HEAD, asserted explicitly so a new revision cannot
+#: silently land outside the graph this test reasons about.
+ANCESTORS = (
+    "0001_initial",
+    "0002_run_usage",
+    "0003_turn_seq_unique",
+    "0004_control_records",
+)
 
 
 @pytest.fixture
@@ -91,7 +101,7 @@ async def _migrate(cfg, target: str = "head") -> None:
 
 async def test_migration_graph_has_a_single_head():
     graph = readiness.migration_graph()
-    assert set(graph) == {"0001_initial", "0002_run_usage", BEHIND, HEAD}
+    assert set(graph) == set(ANCESTORS) | {BEHIND, HEAD}
     assert readiness.expected_heads() == (HEAD,)
     assert readiness._is_ancestor("0001_initial", HEAD)
     assert readiness._is_ancestor(BEHIND, HEAD)

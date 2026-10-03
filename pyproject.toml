@@ -86,6 +86,12 @@ hf-space = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests", "apodex/tests"]
+markers = [
+    # tests/pg: opt-in PostgreSQL integration entry. Default runs skip it; a
+    # misconfigured (or SQLite) target fails instead of falling back. See
+    # docs/plan/web-business-data-env-baseline.md §4.
+    "pg: 真实 PostgreSQL 集成用例（需 PG_INTEGRATION=1 与登记测试库）",
+]
 
 [project.scripts]
 # ``apodex`` remains as a compatibility alias for existing users.

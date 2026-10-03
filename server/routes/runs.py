@@ -16,12 +16,11 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import shutil
 import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -31,6 +30,8 @@ from pydantic import BaseModel
 # False and would silently drop every uploaded file. The base class matches both.
 from starlette.datastructures import UploadFile
 
+from server import business_service as biz
+from server import dispatch_outbox, investment_snapshot, store, uploads
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
@@ -86,7 +87,9 @@ class RunRequest(BaseModel):
     user_id: str | None = None
 
 
-async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
+async def _parse_submit(
+    request: Request,
+) -> tuple[str, str, list[UploadFile], Any]:
     """Accept either JSON or multipart for run submission (T2.10).
 
     JSON keeps the M1/M2 ``{"message": ...}`` contract intact (so existing clients
@@ -107,7 +110,10 @@ async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
             message=str(form.get("message", "")),
             session_id=str(form.get("session_id", "default")),
         )
-        return req.message, req.session_id, files
+        # DATA-05: the business structure rides along as a JSON TEXT form field.
+        # It must be parsed, not silently dropped by the legacy form parser —
+        # otherwise a multipart submit would bypass every business check.
+        return req.message, req.session_id, files, form.get("investment_input")
     # Fall back to the legacy JSON body.
     body = await request.json()
     # A missing/None session_id is valid (the orchestrator synthesises a stable
@@ -115,7 +121,8 @@ async def _parse_submit(request: Request) -> tuple[str, str, list[UploadFile]]:
     if isinstance(body, dict) and body.get("session_id") is None:
         body["session_id"] = "default"
     req = RunRequest.model_validate(body)
-    return req.message, req.session_id, []
+    investment_input = body.get("investment_input") if isinstance(body, dict) else None
+    return req.message, req.session_id, [], investment_input
 
 
 @router.post("", status_code=202)
@@ -136,9 +143,14 @@ async def submit_run(
             detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行",
         )
 
-    message, session_id, files = await _parse_submit(request)
+    message, session_id, files, raw_investment_input = await _parse_submit(request)
     if not message:
         raise HTTPException(status_code=422, detail="message is required")
+
+    # DATA-05: parse (and structurally validate) the business structure *before*
+    # any side effect — an invalid investment_input must not leave uploaded files
+    # or a run row behind. ``None`` means a legacy client: no business checks.
+    spec = investment_snapshot.parse_investment_input(raw_investment_input)
 
     # Identity is ALWAYS the authenticated user (T2.7). The client-supplied
     # user_id, if any, is ignored — credentials are resolved from this user's own
@@ -169,75 +181,50 @@ async def submit_run(
     # server needs to tell them apart, to decide whether to create the session
     # lazily below. Short-circuits, so the existence probe only runs when the
     # caller is not already the owner.
-    if (
-        await get_session(session_id=session_uuid, user_id=user_id) is None
-        and await session_exists(session_uuid)
+    if await get_session(session_id=session_uuid, user_id=user_id) is None and await session_exists(
+        session_uuid
     ):
         raise HTTPException(status_code=404, detail="会话不存在")
 
-    # T2.10: write uploaded files into the run's inputs dir (read-only to the
-    # agent). Bounds are enforced here so a single request can't exhaust disk:
-    # per-file byte cap and a per-request file-count cap. Both paths write to the
-    # same private per-run tree, never anywhere user-supplied paths could escape.
-    uploaded_names: list[str] = []
+    # DATA-06: uploaded bytes go through a controlled staging area first, so a
+    # partially written attachment never appears in the read-only ``inputs`` a
+    # worker may already be reading. plan() finishes every check (file count /
+    # per-file size / duplicate name) BEFORE a single byte is written; a rejected
+    # request therefore leaves no bytes and no run tree behind.
+    uploaded: list[uploads.StagedUpload] = []
     if files:
-        if len(files) > cfg.max_upload_files:
-            raise HTTPException(
-                status_code=413,
-                detail=f"too many files: {len(files)} > {cfg.max_upload_files}",
-            )
-        paths = build_run_paths(run_id_hex)
-        inputs_dir = paths["inputs"]
-        # F12: the batch is all-or-nothing. A cap breach (or an I/O failure) on
-        # the LAST file used to leave the earlier ones on disk, orphaned — the
-        # run row is never created, so nothing would ever reference them and no
-        # cleanup path would ever find them. Any failure after the first write
-        # removes the whole per-run tree: this request created it, and no run row
-        # points at it yet.
         try:
-            for part in files:
-                # Reject empty / unnamed parts and any path-like filename — we flatten
-                # every upload to a single basename inside inputs_dir.
-                raw_name = (part.filename or "").strip()
-                if not raw_name:
-                    continue
-                safe_name = _flatten_filename(raw_name)
-                if not safe_name:
-                    continue
-                data = await part.read()
-                if len(data) > cfg.max_upload_bytes:
-                    raise HTTPException(
-                        status_code=413,
-                        detail=(
-                            f"file {safe_name} too large: {len(data)} > {cfg.max_upload_bytes} bytes"
-                        ),
-                    )
-                dest = inputs_dir / safe_name
-                dest.write_bytes(data)
-                uploaded_names.append(safe_name)
-        except BaseException:
-            shutil.rmtree(paths["root"], ignore_errors=True)
-            raise
+            planned = await uploads.plan(
+                files, max_files=cfg.max_upload_files, max_bytes=cfg.max_upload_bytes
+            )
+        except uploads.UploadError as exc:
+            raise HTTPException(status_code=exc.status_code, detail=str(exc)) from None
+        uploaded = await uploads.stage(run_id_hex, planned)
 
     # Surface the uploaded input files to the agent via the system-prompt addendum
     # (worker.py forwards this into metadata["_sys_prompt_addendum"], which the
-    # react node appends to the system prompt — see main_agent.py:817). In container
-    # / serve mode the inputs dir is bind-mounted at /inputs; in native mode the
-    # physical path is FRONTIER_AGENT_INPUTS_DIR, so we hand the agent both the
-    # /inputs convention name and the real path it can read_file directly.
+    # react node appends to the system prompt — see main_agent.py:817). Files are
+    # published into inputs before any worker is spawned (see server/uploads.py
+    # and dispatch_outbox), so the agent sees them at /inputs in container/serve
+    # mode and at the physical path in native mode.
     prompt_addendum = ""
-    if uploaded_names:
-        file_list = "\n".join(f"  - /inputs/{n}" for n in uploaded_names)
+    if uploaded:
+        file_list = "\n".join(f"  - /inputs/{u.stored_name}" for u in uploaded)
         inputs_path = str(build_run_paths(run_id_hex)["inputs"])
         prompt_addendum = (
-            f"The user attached {len(uploaded_names)} input file(s) for this task. "
+            f"The user attached {len(uploaded)} input file(s) for this task. "
             f"Read them from these read-only paths:\n{file_list}\n"
             f"(native: read directly from {inputs_path})"
         )
 
     # The session was admitted (or is about to be created) above; make sure the
-    # row exists so the turns table and the Run FK stay consistent.
-    await ensure_session(session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话")
+    # row exists so the turns table and the Run FK stay consistent. The business
+    # path (DATA-06) creates it inside the atomic submit transaction instead —
+    # legacy clients keep the original behaviour unchanged.
+    if spec is None:
+        await ensure_session(
+            session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话"
+        )
 
     # F20: record WHICH model drove this run — never the secret. The column has
     # existed since T2.5 but nothing ever filled it, so a finished run could not
@@ -245,42 +232,357 @@ async def submit_run(
     default_llm = await get_default_llm_config(user_id=user_id)
     snapshot = await build_llm_snapshot(user_id=user_id)
 
-    # Persist the Run row up-front (status="queued"); the orchestrator flips it to
-    # "running" when the worker reports run_started and to its terminal state when
-    # the worker emits run_finished.
-    await create_run(
-        run_id=run_id,
-        session_id=session_uuid,
-        user_id=user_id,
-        prompt=message,
-        pipeline_id=cfg.pipeline_id,
-        run_dir=str(run_dir_for(run_id_hex)),
-        status="queued",
-        llm_config_id=default_llm.id if default_llm is not None else None,
-        llm_snapshot_json=snapshot,
-    )
+    snapshot_id: str | None = None
+    outcome: Any = None
+    replayed = False
+    if spec is None:
+        # Legacy client: no business structure, no snapshot, no business checks.
+        await create_run(
+            run_id=run_id,
+            session_id=session_uuid,
+            user_id=user_id,
+            prompt=message,
+            pipeline_id=cfg.pipeline_id,
+            run_dir=str(run_dir_for(run_id_hex)),
+            status="queued",
+            llm_config_id=default_llm.id if default_llm is not None else None,
+            llm_snapshot_json=snapshot,
+        )
+    else:
+        if not spec.idempotency_key:
+            # 建 Run 也要可重放：超时后重试必须回到同一个 Run，而不是第二个分析。
+            raise biz.ValidationError(
+                "缺少幂等键",
+                fields={"investment_input.idempotency_key": "保存并分析必须携带幂等键"},
+            )
+        submitted_run_id_hex = run_id_hex
+        payload = {
+            "session_id": str(session_uuid),
+            "message": message,
+            "investment_input": raw_investment_input,
+        }
 
-    await orch.submit(
-        run_id=run_id_hex,
-        session_id=session_id,
-        prompt=message,
-        user_id=user_id,
-        prompt_addendum=prompt_addendum,
-    )
-    return {"run_id": run_id_hex, "status": "queued"}
+        async def _execute() -> dict[str, Any]:
+            # 逐研究队列上限：提交前先看深度，超限直接拒绝，不建任何东西（DATA-06）。
+            depth = await dispatch_outbox.research_queue_depth(session, session_uuid)
+            if depth >= cfg.dispatch_research_queue_limit:
+                raise biz.QueueFullError(
+                    "该研究的待执行任务已达上限，请先等待或取消已有任务",
+                    current={
+                        "queue_depth": depth,
+                        "queue_limit": cfg.dispatch_research_queue_limit,
+                        "research_id": str(session_uuid),
+                    },
+                )
+            resolution = await investment_snapshot.resolve_for_run(
+                session, user_id=user_id, research_id=session_uuid, spec=spec
+            )
+            store.add_run(
+                session,
+                run_id=run_id,
+                session_id=session_uuid,
+                user_id=user_id,
+                prompt=message,
+                pipeline_id=cfg.pipeline_id,
+                run_dir=str(run_dir_for(run_id_hex)),
+                status="queued",
+                llm_config_id=default_llm.id if default_llm is not None else None,
+                llm_snapshot_json=snapshot,
+            )
+            row = investment_snapshot.build_snapshot(
+                run_id=run_id,
+                user_id=user_id,
+                research_id=session_uuid,
+                spec=spec,
+                resolution=resolution,
+                source="manual",
+            )
+            session.add(row)
+            # DATA-06: 附件清单（发布意图）随 Run/outbox 同事务落库；派发前按清单
+            # 校验并发布到 inputs，校验不过就不投递（见 server/uploads.py）。
+            uploads.record(session, run_id=run_id, user_id=user_id, staged=uploaded)
+            # DATA-06: 用户消息与派发意图进入同一事务 —— 提交成功即同时存在，
+            # 派发不得再次追加相同消息；提交失败则什么都不留下。
+            await store.append_turn_in(
+                session, session_id=session_uuid, role="user", content=message, run_id=run_id
+            )
+            dispatch = await dispatch_outbox.enqueue(
+                session,
+                run_id=run_id,
+                user_id=user_id,
+                research_id=session_uuid,
+                session_key=session_id,
+                prompt=message,
+                prompt_addendum=prompt_addendum,
+            )
+            await session.flush()
+            return {
+                "run_id": run_id_hex,
+                "snapshot_id": str(row.id),
+                "dispatch": dispatch_outbox.dispatch_view(dispatch),
+            }
+
+        try:
+            async with biz.business_transaction() as session:
+                outcome = await biz.run_write(
+                    session,
+                    user_id=user_id,
+                    scope="run.submit",
+                    idempotency_key=spec.idempotency_key,
+                    payload=payload,
+                    execute=_execute,
+                )
+        except BaseException:
+            # 提交失败：本次暂存的附件随 Run 目录一起作废 —— 回滚了数据库就绝不能
+            # 在盘上留下无人认领的文件（可重入补偿）。
+            if uploaded:
+                uploads.discard(run_id_hex)
+            raise
+        replayed = outcome.replayed
+        snapshot_id = outcome.result.get("snapshot_id")
+        if replayed:
+            # 原提交已经建过 Run 并派发过；本次只回原结果，不能再造一个分析。
+            run_id_hex = outcome.result["run_id"]
+            run_id = uuid.UUID(run_id_hex)
+            # 上传文件属于被重放的提交：新 run id 的目录没有运行行指向，删掉。
+            if uploaded:
+                uploads.discard(submitted_run_id_hex)
+                uploaded = []
+
+    # Legacy path dispatches in-process exactly as before. Business runs are
+    # dispatched by the outbox worker (DATA-06): the dispatch intent was already
+    # committed with the run, so a crash here can no longer orphan a queued run.
+    if spec is None and not replayed:
+        # 旧客户端直投：先把附件清单落库、做发布校验（暂存文件可读且摘要一致），
+        # 再把 worker 放出去。业务 Run 的等价动作由 dispatch_outbox 在投递前执行。
+        if uploaded:
+            await uploads.record_for_run(run_id, user_id, uploaded)
+            await uploads.publish_for_run(run_id)
+        await orch.submit(
+            run_id=run_id_hex,
+            session_id=session_id,
+            prompt=message,
+            user_id=user_id,
+            prompt_addendum=prompt_addendum,
+        )
+    dispatch_info = outcome.result.get("dispatch") if outcome is not None else None
+    status = "queued"
+    if replayed:
+        existing = await get_run(run_id=run_id, user_id=user_id)
+        status = existing.status if existing is not None else "queued"
+    return {
+        "run_id": run_id_hex,
+        "status": status,
+        "snapshot_id": snapshot_id,
+        "dispatch": dispatch_info,
+        "replayed": replayed,
+    }
 
 
-def _flatten_filename(name: str) -> str:
-    """Reduce an uploaded filename to a safe single-path basename.
+def _run_uuid(run_id: str) -> uuid.UUID:
+    try:
+        return uuid.UUID(str(run_id))
+    except (ValueError, AttributeError):
+        # 与“不存在/无权”同结果，不泄漏 ID 是否合法之外的信息。
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问") from None
 
-    Directory separators, drive letters and parent-dir markers are stripped so the
-    file can only ever land inside the run's inputs dir — never a sibling path the
-    client hinted at.
+
+@router.get("/{run_id}/investment-snapshot")
+async def run_investment_snapshot(
+    run_id: str,
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """读取 Run 冻结的业务输入快照（DATA-05）。
+
+    没有快照的旧运行明确报 ``404 snapshot_absent``：用当前资料回填会让历史报告
+    读到用户后来才填的数字，这正是 AC-06/07 要防的事。
     """
-    for sep in ("/", "\\"):
-        name = name.replace(sep, "_")
-    name = name.replace("..", "_").replace(":", "_")
-    return name.strip() or ""
+    run_uuid = _run_uuid(run_id)
+    run = await get_run(run_id=run_uuid, user_id=user.id)
+    if run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    async with biz.business_transaction() as session:
+        row = await investment_snapshot.get_snapshot(session, user_id=user.id, run_id=run_uuid)
+    if row is None:
+        raise biz.SnapshotAbsentError("该运行没有业务输入快照（非业务运行）")
+    return investment_snapshot.snapshot_view(row)
+
+
+@router.get("/{run_id}/dispatch")
+async def run_dispatch_status(
+    run_id: str,
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """读取 Run 的持久派发状态（DATA-06，契约 §7）。
+
+    派发状态与 Run 状态分离：``not_required`` 表示旧客户端直投路径（无 outbox 行），
+    其余为 ``pending``/``claimed``/``dispatched``/``retryable_failed``/``abandoned``。
+    派发延迟不得显示为资料丢失 —— UI 用这个端点区分"排队待派发"与"运行中"。
+    """
+    run_uuid = _run_uuid(run_id)
+    run = await get_run(run_id=run_uuid, user_id=user.id)
+    if run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    async with biz.business_transaction() as session:
+        row = await dispatch_outbox.get_for_run(session, run_id=run_uuid)
+    if row is None:
+        return {"run_id": run_uuid.hex, "status": "not_required"}
+    return dispatch_outbox.dispatch_view(row)
+
+
+@router.post("/{run_id}/rerun", status_code=202)
+async def rerun_run(
+    run_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    """重算：停止旧执行，用**当前**资料冻结新快照，建一个新 Run（DATA-05）。
+
+    旧 Run 的轨迹与快照原样保留，新 Run 通过 ``rerun_of_run_id`` 指回它；
+    旧快照不被修改、也不被复用 —— 重算的意义就是采用新资料。
+    """
+    orch = get_orchestrator()
+    if probe_data_root() is not None:
+        raise HTTPException(
+            status_code=503, detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行"
+        )
+
+    old_run_uuid = _run_uuid(run_id)
+    old_run = await get_run(run_id=old_run_uuid, user_id=user.id)
+    if old_run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+
+    async with biz.business_transaction() as session:
+        old_snapshot = await investment_snapshot.get_snapshot(
+            session, user_id=user.id, run_id=old_run_uuid
+        )
+        if old_snapshot is None:
+            raise biz.SnapshotAbsentError("该运行没有业务输入快照，无法重算")
+        spec = investment_snapshot.spec_from_snapshot(old_snapshot)
+
+    if not idempotency_key or not idempotency_key.strip():
+        raise biz.ValidationError(
+            "缺少幂等键", fields={"Idempotency-Key": "重算必须携带幂等键，避免重复建 Run"}
+        )
+
+    cfg = get_config()
+
+    # 旧执行的处置：排队中且派发未投出 → 取消重提（DATA-06）；运行中 → 请求停止，
+    # 并在停止超时内等它确认退出。``Orchestrator.stop`` is async: without the await
+    # this returns a coroutine (always truthy), reports a stop that was never sent,
+    # and leaves the old worker running until it finishes on its own.
+    stop_requested = False
+    old_run_stopped = False
+    old_cancelled = False
+    if old_run.status == "running":
+        stop_requested = await orch.stop(old_run_uuid.hex)
+        # 存在 native 文件副作用时，未确认旧进程停止不得并发重启（DATA-06）。这里等
+        # 本进程的 worker 退出；即便超时，新 Run 也会被库级研究互斥挡住，不会并发执行。
+        old_run_stopped = await orch.wait_stopped(
+            old_run_uuid.hex, timeout=cfg.dispatch_stop_timeout_seconds
+        )
+
+    new_run_id = uuid.uuid4()
+    new_run_id_hex = new_run_id.hex
+    session_id_str = str(body.get("session_id") or old_run.session_id)
+    prompt = str(body.get("message") or old_run.prompt)
+
+    default_llm = await get_default_llm_config(user_id=user.id)
+    llm_snapshot = await build_llm_snapshot(user_id=user.id)
+
+    async def _execute() -> dict[str, Any]:
+        nonlocal old_cancelled
+        # 排队中且派发未投出的旧 Run：取消重提 —— 派发意图作废 + Run 置 stopped，
+        # 与新 Run 的建立在同一事务，不会出现"旧的没取消、新的已派发"。
+        if old_run.status == "queued" and await dispatch_outbox.cancel_pending(
+            session, run_id=old_run_uuid, reason="被重算取代（取消重提）"
+        ):
+            fresh_old = await session.get(store.Run, old_run_uuid, with_for_update=True)
+            if fresh_old is not None and fresh_old.status == "queued":
+                fresh_old.status = "stopped"
+                fresh_old.stopped_by = "superseded_by_rerun"
+                old_cancelled = True
+        # 逐研究队列上限：被取代的旧 Run 即将作废，不计入，避免它把新 Run 顶到上限外。
+        depth = await dispatch_outbox.research_queue_depth(
+            session, old_run.session_id, exclude_run=old_run_uuid
+        )
+        if depth >= cfg.dispatch_research_queue_limit:
+            raise biz.QueueFullError(
+                "该研究的待执行任务已达上限，请先等待或取消已有任务",
+                current={
+                    "queue_depth": depth,
+                    "queue_limit": cfg.dispatch_research_queue_limit,
+                    "research_id": str(old_run.session_id),
+                },
+            )
+        resolution = await investment_snapshot.resolve_for_run(
+            session, user_id=user.id, research_id=old_run.session_id, spec=spec
+        )
+        store.add_run(
+            session,
+            run_id=new_run_id,
+            session_id=old_run.session_id,
+            user_id=user.id,
+            prompt=prompt,
+            pipeline_id=cfg.pipeline_id,
+            run_dir=str(run_dir_for(new_run_id_hex)),
+            status="queued",
+            llm_config_id=default_llm.id if default_llm is not None else None,
+            llm_snapshot_json=llm_snapshot,
+        )
+        row = investment_snapshot.build_snapshot(
+            run_id=new_run_id,
+            user_id=user.id,
+            research_id=old_run.session_id,
+            spec=spec,
+            resolution=resolution,
+            source="manual",
+            rerun_of_run_id=old_run_uuid,
+        )
+        session.add(row)
+        # 用户消息随重算事务落库；派发经 outbox，不再重复追加。
+        await store.append_turn_in(
+            session, session_id=old_run.session_id, role="user", content=prompt, run_id=new_run_id
+        )
+        dispatch = await dispatch_outbox.enqueue(
+            session,
+            run_id=new_run_id,
+            user_id=user.id,
+            research_id=old_run.session_id,
+            session_key=session_id_str,
+            prompt=prompt,
+        )
+        await session.flush()
+        return {
+            "run_id": new_run_id_hex,
+            "snapshot_id": str(row.id),
+            "dispatch": dispatch_outbox.dispatch_view(dispatch),
+        }
+
+    async with biz.business_transaction() as session:
+        outcome = await biz.run_write(
+            session,
+            user_id=user.id,
+            scope="run.rerun",
+            idempotency_key=idempotency_key.strip(),
+            payload={"rerun_of_run_id": str(old_run_uuid), "message": prompt},
+            execute=_execute,
+        )
+
+    # 新 Run 由 outbox 派发；研究忙时派发自动延后，串行由库级判定保证（DATA-06）。
+    return {
+        "run_id": outcome.result["run_id"],
+        "status": "queued",
+        "snapshot_id": outcome.result.get("snapshot_id"),
+        "dispatch": outcome.result.get("dispatch"),
+        "rerun_of_run_id": old_run_uuid.hex,
+        "old_run_stop_requested": stop_requested,
+        "old_run_stopped": old_run_stopped,
+        "old_run_stop_timed_out": stop_requested and not old_run_stopped,
+        "old_run_cancelled": old_cancelled,
+        "replayed": outcome.replayed,
+    }
 
 
 def _live_queue_for(
@@ -372,9 +674,7 @@ async def run_trace(
     # event loop, and the whole trajectory was materialised regardless of size.
     # The read now happens in a worker thread and is paged when ``limit`` is
     # given; ``limit=0`` keeps the historical "return everything" contract.
-    records, next_line, has_more = await asyncio.to_thread(
-        trajectory_page, run_id, after, limit
-    )
+    records, next_line, has_more = await asyncio.to_thread(trajectory_page, run_id, after, limit)
     return {
         "run_id": run_id,
         "records": [redact_deep(rec) for rec in records],
@@ -485,7 +785,10 @@ async def run_approve(
         raise HTTPException(status_code=404, detail="run not found")
     run_id = canonical_run_id(run_id)  # live handle key form (F01)
     ok = await get_orchestrator().approve(
-        run_id, body.approval_id, body.decision, body.replacement_command,
+        run_id,
+        body.approval_id,
+        body.decision,
+        body.replacement_command,
     )
     if not ok:
         raise HTTPException(status_code=409, detail="run not running")
@@ -581,9 +884,7 @@ async def run_revert(
     # already happened and must still be reported.
     if outcome.get("reverted"):
         try:
-            await sync_run_artifacts(
-                run_id=rid, artifacts=scan_outputs(run_id)
-            )
+            await sync_run_artifacts(run_id=rid, artifacts=scan_outputs(run_id))
         except Exception:
             logger.exception("artifact index refresh after revert failed for %s", run_id)
     return {"run_id": run_id, **outcome}
