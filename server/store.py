@@ -587,6 +587,40 @@ class RunDispatch(Base):
     )
 
 
+class RunUpload(Base):
+    """一次提交里上传附件的持久清单（DATA-06 / AC-05、23）。
+
+    文件字节不属于数据库事务，但"有哪些附件、内容摘要是什么、是否已发布到
+    ``inputs``"必须是持久事实，否则会出现"数据库成功但启动缺文件的分析"：
+
+    * 提交时先把字节写进受控**暂存区**（``<run_root>/staging``），算出 ``sha256``，
+      并在与 Run/outbox **同一事务**里写下清单行（``status=staged``）——即"发布意图"；
+    * worker 领取前，派发侧先按清单做**发布校验**：暂存文件存在且摘要一致才移入
+      ``inputs`` 并置 ``published``；校验不过就不派发（退避重试，最终 abandoned）；
+    * ``(run_id, stored_name)`` 唯一：同一 Run 的存储名不重复，附件不会互相覆盖。
+    """
+
+    __tablename__ = "run_uploads"
+    __table_args__ = (
+        UniqueConstraint("run_id", "stored_name", name="uq_run_uploads_run_name"),
+        Index("ix_run_uploads_run", "run_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    #: 客户端原始名（已扁平化为安全 basename，仅用于展示/审计）。
+    display_name: Mapped[str] = mapped_column(String, nullable=False)
+    #: 落盘名；同名在提交时即被拒，故它在同一 Run 内唯一。
+    stored_name: Mapped[str] = mapped_column(String, nullable=False)
+    size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    sha256: Mapped[str] = mapped_column(String, nullable=False)
+    #: staged=已入暂存区且清单已记；published=已校验并移入 inputs。
+    status: Mapped[str] = mapped_column(String, nullable=False, default="staged")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 _engine: AsyncEngine | None = None
 _SessionMaker: async_sessionmaker[AsyncSession] | None = None
 

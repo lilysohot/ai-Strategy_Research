@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import json
 import uuid
 from datetime import UTC, datetime, timedelta
 
@@ -23,7 +24,7 @@ from sqlalchemy import text
 from server import business_service as biz
 from server import dispatch_outbox, store
 from server.app import app
-from server.config import run_dir_for
+from server.config import build_run_paths, get_config, run_dir_for
 from server.orchestrator import Orchestrator
 from server.security import create_access_token
 
@@ -66,7 +67,8 @@ async def _new_user(name: str) -> tuple[str, uuid.UUID]:
     return f"Bearer {create_access_token(user_id)}", user_id
 
 
-async def _submit_business_run(client, token, research_id, key=None):
+async def _business_payload(client, token, research_id, key=None) -> dict:
+    """建会话 + 账户 + 计划，返回可直接提交的 investment_input。"""
     from server.security import decode_access_token
 
     # 计划端点要求研究（sessions）存在且属于该用户；这里按需要补建会话行。
@@ -104,7 +106,11 @@ async def _submit_business_run(client, token, research_id, key=None):
 
     payload["account"] = {"id": account["account_id"]}
     payload["plan"] = {"id": plan["plan_id"]}
-    response = await client.post(
+    return payload
+
+
+async def _submit_json_run(client, token, research_id, payload):
+    return await client.post(
         "/api/runs",
         json={
             "message": "按计划分析",
@@ -113,6 +119,24 @@ async def _submit_business_run(client, token, research_id, key=None):
         },
         headers={"Authorization": token},
     )
+
+
+async def _submit_multipart_run(client, token, research_id, files, payload):
+    return await client.post(
+        "/api/runs",
+        data={
+            "message": "按计划分析",
+            "session_id": str(research_id),
+            "investment_input": json.dumps(payload),
+        },
+        files=files,
+        headers={"Authorization": token},
+    )
+
+
+async def _submit_business_run(client, token, research_id, key=None):
+    payload = await _business_payload(client, token, research_id, key=key)
+    response = await _submit_json_run(client, token, research_id, payload)
     assert response.status_code == 202, response.text
     return response.json()
 
@@ -493,3 +517,186 @@ async def test_orphan_reconcile_keeps_committed_but_undispatched_run(
     # 重启后派发循环仍能把它投出去：恢复承诺成立。
     assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 1
     assert stub_orchestrator.submitted[0]["run_id"] == body["run_id"]
+
+
+async def _upload_rows(run_uuid: uuid.UUID) -> list:
+    async with biz.business_transaction() as session:
+        return (
+            await session.execute(
+                text(
+                    "SELECT stored_name, display_name, status, sha256, size_bytes "
+                    "FROM run_uploads WHERE run_id = :rid ORDER BY stored_name"
+                ),
+                {"rid": run_uuid},
+            )
+        ).all()
+
+
+# ── DATA-06 附件：受控暂存区 + 持久清单 + 发布门禁 ─────────────────────
+
+
+async def test_submit_stages_upload_and_dispatch_publishes_it(client, stub_orchestrator) -> None:
+    """附件先进暂存区并记清单；worker 领取前才校验并发布到 inputs（AC-05/23）。"""
+    token, _ = await _new_user("pg-up-staged")
+    research_id = uuid.uuid4()
+    payload = await _business_payload(client, token, research_id)
+
+    response = await _submit_multipart_run(
+        client,
+        token,
+        research_id,
+        {"files": ("brief.md", b"# Brief\nread me\n", "text/markdown")},
+        payload,
+    )
+    assert response.status_code == 202, response.text
+    body = response.json()
+    run_uuid = uuid.UUID(body["run_id"])
+
+    rows = await _upload_rows(run_uuid)
+    assert len(rows) == 1
+    assert rows[0].status == "staged", "清单行（发布意图）未与提交同事务落库"
+    paths = build_run_paths(body["run_id"])
+    assert (paths["staging"] / "brief.md").exists(), "附件没有进受控暂存区"
+    assert not (paths["inputs"] / "brief.md").exists(), "未校验就发布到了 inputs"
+
+    # 派发：先做发布校验（移入 inputs 并置 published），再投 worker。
+    assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 1
+    assert (paths["inputs"] / "brief.md").read_bytes() == b"# Brief\nread me\n"
+    assert (await _upload_rows(run_uuid))[0].status == "published"
+    assert "/inputs/brief.md" in stub_orchestrator.submitted[0]["prompt_addendum"]
+
+
+async def test_tampered_staged_file_blocks_dispatch(client, stub_orchestrator) -> None:
+    """暂存文件被篡改（摘要不符）：不发布、不投递，避免带着错文件启动（AC-23）。"""
+    token, _ = await _new_user("pg-up-tamper")
+    research_id = uuid.uuid4()
+    payload = await _business_payload(client, token, research_id)
+    response = await _submit_multipart_run(
+        client, token, research_id, {"files": ("note.txt", b"original", "text/plain")}, payload
+    )
+    assert response.status_code == 202, response.text
+    body = response.json()
+    run_uuid = uuid.UUID(body["run_id"])
+    paths = build_run_paths(body["run_id"])
+
+    (paths["staging"] / "note.txt").write_bytes(b"tampered")
+    assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 0
+    assert stub_orchestrator.submitted == []
+    assert not (paths["inputs"] / "note.txt").exists()
+    # 清单停在 staged（未发布）；派发意图退避重试。
+    assert (await _upload_rows(run_uuid))[0].status == "staged"
+    assert (await _outbox_rows(research_id))[0].status == "retryable_failed"
+
+
+async def test_missing_staged_file_blocks_dispatch(client, stub_orchestrator) -> None:
+    """暂存文件缺失：不投递（退避重试），"数据库成功但启动缺文件"不发生。"""
+    token, _ = await _new_user("pg-up-missing")
+    research_id = uuid.uuid4()
+    payload = await _business_payload(client, token, research_id)
+    response = await _submit_multipart_run(
+        client, token, research_id, {"files": ("gone.txt", b"x", "text/plain")}, payload
+    )
+    assert response.status_code == 202, response.text
+    body = response.json()
+    run_uuid = uuid.UUID(body["run_id"])
+    paths = build_run_paths(body["run_id"])
+
+    (paths["staging"] / "gone.txt").unlink()
+    assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 0
+    assert stub_orchestrator.submitted == []
+    assert (await _upload_rows(run_uuid))[0].status == "staged"
+    assert (await _outbox_rows(research_id))[0].status == "retryable_failed"
+
+
+async def test_duplicate_upload_name_rejected_before_writing(client) -> None:
+    """重名在写盘前就拒绝（409），不留任何字节。"""
+    token, _ = await _new_user("pg-up-dup")
+    research_id = uuid.uuid4()
+    payload = await _business_payload(client, token, research_id)
+
+    response = await _submit_multipart_run(
+        client,
+        token,
+        research_id,
+        [
+            ("files", ("dup.txt", b"a", "text/plain")),
+            ("files", ("dup.txt", b"b", "text/plain")),
+        ],
+        payload,
+    )
+    assert response.status_code == 409, response.text
+    assert "duplicate" in response.json()["detail"].lower()
+
+
+# ── DATA-06 队列上限与停止超时 ─────────────────────────────────────────
+
+
+async def test_research_queue_limit_rejects_submit(client, monkeypatch) -> None:
+    """逐研究队列上限：到顶后拒绝新建（429 quota_exceeded），不产生第二个 Run。"""
+    monkeypatch.setattr(get_config(), "dispatch_research_queue_limit", 1)
+    token, _ = await _new_user("pg-q-limit")
+    research_id = uuid.uuid4()
+    first = await _submit_business_run(client, token, research_id)
+
+    payload = await _business_payload(client, token, research_id)
+    response = await _submit_json_run(client, token, research_id, payload)
+    assert response.status_code == 429, response.text
+    error = response.json()["error"]
+    assert error["code"] == "quota_exceeded"
+    assert error["remedy"] == "wait"
+
+    async with biz.business_transaction() as session:
+        count = (
+            await session.execute(
+                text("SELECT count(*) FROM runs WHERE session_id = :rid"), {"rid": research_id}
+            )
+        ).scalar_one()
+    assert count == 1, "超限提交仍创建了 Run"
+    assert first["run_id"]
+
+
+async def test_rerun_not_blocked_by_queue_limit_for_superseded_run(client, monkeypatch) -> None:
+    """重算取代排队中的旧 Run：旧 Run 不计入深度，不被上限误拒。"""
+    monkeypatch.setattr(get_config(), "dispatch_research_queue_limit", 1)
+    token, _ = await _new_user("pg-q-rerun")
+    research_id = uuid.uuid4()
+    first = await _submit_business_run(client, token, research_id)
+
+    response = await client.post(
+        f"/api/runs/{first['run_id']}/rerun",
+        json={},
+        headers={"Authorization": token, "Idempotency-Key": f"rerun:{uuid.uuid4()}"},
+    )
+    assert response.status_code == 202, response.text
+    assert response.json()["old_run_cancelled"] is True
+
+
+async def test_rerun_reports_stop_timeout_and_still_serializes(client, stub_orchestrator) -> None:
+    """停止超时：报告超时，且新 Run 仍被研究互斥挡住，绝不并发执行（DATA-06）。"""
+    token, _ = await _new_user("pg-stop-timeout")
+    research_id = uuid.uuid4()
+    body = await _submit_business_run(client, token, research_id)
+    async with biz.business_transaction() as session:
+        await session.execute(
+            text("UPDATE runs SET status='running' WHERE id=:rid"),
+            {"rid": uuid.UUID(body["run_id"])},
+        )
+
+    async def _never_stopped(run_id: str, *, timeout: float) -> bool:
+        return False
+
+    stub_orchestrator.wait_stopped = _never_stopped  # type: ignore[method-assign]
+    response = await client.post(
+        f"/api/runs/{body['run_id']}/rerun",
+        json={},
+        headers={"Authorization": token, "Idempotency-Key": f"rerun:{uuid.uuid4()}"},
+    )
+    assert response.status_code == 202, response.text
+    data = response.json()
+    assert data["old_run_stop_requested"] is True
+    assert data["old_run_stopped"] is False
+    assert data["old_run_stop_timed_out"] is True
+
+    # 旧 Run 仍在 running：研究互斥必须挡住新 Run，一个都不投。
+    assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 0
+    assert stub_orchestrator.submitted == []

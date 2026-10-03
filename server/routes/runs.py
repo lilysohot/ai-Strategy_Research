@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import shutil
 import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
@@ -32,7 +31,7 @@ from pydantic import BaseModel
 from starlette.datastructures import UploadFile
 
 from server import business_service as biz
-from server import dispatch_outbox, investment_snapshot, store
+from server import dispatch_outbox, investment_snapshot, store, uploads
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
@@ -187,62 +186,33 @@ async def submit_run(
     ):
         raise HTTPException(status_code=404, detail="会话不存在")
 
-    # T2.10: write uploaded files into the run's inputs dir (read-only to the
-    # agent). Bounds are enforced here so a single request can't exhaust disk:
-    # per-file byte cap and a per-request file-count cap. Both paths write to the
-    # same private per-run tree, never anywhere user-supplied paths could escape.
-    uploaded_names: list[str] = []
+    # DATA-06: uploaded bytes go through a controlled staging area first, so a
+    # partially written attachment never appears in the read-only ``inputs`` a
+    # worker may already be reading. plan() finishes every check (file count /
+    # per-file size / duplicate name) BEFORE a single byte is written; a rejected
+    # request therefore leaves no bytes and no run tree behind.
+    uploaded: list[uploads.StagedUpload] = []
     if files:
-        if len(files) > cfg.max_upload_files:
-            raise HTTPException(
-                status_code=413,
-                detail=f"too many files: {len(files)} > {cfg.max_upload_files}",
-            )
-        paths = build_run_paths(run_id_hex)
-        inputs_dir = paths["inputs"]
-        # F12: the batch is all-or-nothing. A cap breach (or an I/O failure) on
-        # the LAST file used to leave the earlier ones on disk, orphaned — the
-        # run row is never created, so nothing would ever reference them and no
-        # cleanup path would ever find them. Any failure after the first write
-        # removes the whole per-run tree: this request created it, and no run row
-        # points at it yet.
         try:
-            for part in files:
-                # Reject empty / unnamed parts and any path-like filename — we flatten
-                # every upload to a single basename inside inputs_dir.
-                raw_name = (part.filename or "").strip()
-                if not raw_name:
-                    continue
-                safe_name = _flatten_filename(raw_name)
-                if not safe_name:
-                    continue
-                data = await part.read()
-                if len(data) > cfg.max_upload_bytes:
-                    raise HTTPException(
-                        status_code=413,
-                        detail=(
-                            f"file {safe_name} too large: {len(data)} > {cfg.max_upload_bytes} bytes"
-                        ),
-                    )
-                dest = inputs_dir / safe_name
-                dest.write_bytes(data)
-                uploaded_names.append(safe_name)
-        except BaseException:
-            shutil.rmtree(paths["root"], ignore_errors=True)
-            raise
+            planned = await uploads.plan(
+                files, max_files=cfg.max_upload_files, max_bytes=cfg.max_upload_bytes
+            )
+        except uploads.UploadError as exc:
+            raise HTTPException(status_code=exc.status_code, detail=str(exc)) from None
+        uploaded = await uploads.stage(run_id_hex, planned)
 
     # Surface the uploaded input files to the agent via the system-prompt addendum
     # (worker.py forwards this into metadata["_sys_prompt_addendum"], which the
-    # react node appends to the system prompt — see main_agent.py:817). In container
-    # / serve mode the inputs dir is bind-mounted at /inputs; in native mode the
-    # physical path is FRONTIER_AGENT_INPUTS_DIR, so we hand the agent both the
-    # /inputs convention name and the real path it can read_file directly.
+    # react node appends to the system prompt — see main_agent.py:817). Files are
+    # published into inputs before any worker is spawned (see server/uploads.py
+    # and dispatch_outbox), so the agent sees them at /inputs in container/serve
+    # mode and at the physical path in native mode.
     prompt_addendum = ""
-    if uploaded_names:
-        file_list = "\n".join(f"  - /inputs/{n}" for n in uploaded_names)
+    if uploaded:
+        file_list = "\n".join(f"  - /inputs/{u.stored_name}" for u in uploaded)
         inputs_path = str(build_run_paths(run_id_hex)["inputs"])
         prompt_addendum = (
-            f"The user attached {len(uploaded_names)} input file(s) for this task. "
+            f"The user attached {len(uploaded)} input file(s) for this task. "
             f"Read them from these read-only paths:\n{file_list}\n"
             f"(native: read directly from {inputs_path})"
         )
@@ -293,6 +263,17 @@ async def submit_run(
         }
 
         async def _execute() -> dict[str, Any]:
+            # 逐研究队列上限：提交前先看深度，超限直接拒绝，不建任何东西（DATA-06）。
+            depth = await dispatch_outbox.research_queue_depth(session, session_uuid)
+            if depth >= cfg.dispatch_research_queue_limit:
+                raise biz.QueueFullError(
+                    "该研究的待执行任务已达上限，请先等待或取消已有任务",
+                    current={
+                        "queue_depth": depth,
+                        "queue_limit": cfg.dispatch_research_queue_limit,
+                        "research_id": str(session_uuid),
+                    },
+                )
             resolution = await investment_snapshot.resolve_for_run(
                 session, user_id=user_id, research_id=session_uuid, spec=spec
             )
@@ -317,6 +298,9 @@ async def submit_run(
                 source="manual",
             )
             session.add(row)
+            # DATA-06: 附件清单（发布意图）随 Run/outbox 同事务落库；派发前按清单
+            # 校验并发布到 inputs，校验不过就不投递（见 server/uploads.py）。
+            uploads.record(session, run_id=run_id, user_id=user_id, staged=uploaded)
             # DATA-06: 用户消息与派发意图进入同一事务 —— 提交成功即同时存在，
             # 派发不得再次追加相同消息；提交失败则什么都不留下。
             await store.append_turn_in(
@@ -338,15 +322,22 @@ async def submit_run(
                 "dispatch": dispatch_outbox.dispatch_view(dispatch),
             }
 
-        async with biz.business_transaction() as session:
-            outcome = await biz.run_write(
-                session,
-                user_id=user_id,
-                scope="run.submit",
-                idempotency_key=spec.idempotency_key,
-                payload=payload,
-                execute=_execute,
-            )
+        try:
+            async with biz.business_transaction() as session:
+                outcome = await biz.run_write(
+                    session,
+                    user_id=user_id,
+                    scope="run.submit",
+                    idempotency_key=spec.idempotency_key,
+                    payload=payload,
+                    execute=_execute,
+                )
+        except BaseException:
+            # 提交失败：本次暂存的附件随 Run 目录一起作废 —— 回滚了数据库就绝不能
+            # 在盘上留下无人认领的文件（可重入补偿）。
+            if uploaded:
+                uploads.discard(run_id_hex)
+            raise
         replayed = outcome.replayed
         snapshot_id = outcome.result.get("snapshot_id")
         if replayed:
@@ -354,14 +345,19 @@ async def submit_run(
             run_id_hex = outcome.result["run_id"]
             run_id = uuid.UUID(run_id_hex)
             # 上传文件属于被重放的提交：新 run id 的目录没有运行行指向，删掉。
-            if files:
-                shutil.rmtree(build_run_paths(submitted_run_id_hex)["root"], ignore_errors=True)
-                uploaded_names = []
+            if uploaded:
+                uploads.discard(submitted_run_id_hex)
+                uploaded = []
 
     # Legacy path dispatches in-process exactly as before. Business runs are
     # dispatched by the outbox worker (DATA-06): the dispatch intent was already
     # committed with the run, so a crash here can no longer orphan a queued run.
     if spec is None and not replayed:
+        # 旧客户端直投：先把附件清单落库、做发布校验（暂存文件可读且摘要一致），
+        # 再把 worker 放出去。业务 Run 的等价动作由 dispatch_outbox 在投递前执行。
+        if uploaded:
+            await uploads.record_for_run(run_id, user_id, uploaded)
+            await uploads.publish_for_run(run_id)
         await orch.submit(
             run_id=run_id_hex,
             session_id=session_id,
@@ -470,21 +466,28 @@ async def rerun_run(
             "缺少幂等键", fields={"Idempotency-Key": "重算必须携带幂等键，避免重复建 Run"}
         )
 
-    # 旧执行的处置：排队中且派发未投出 → 取消重提（DATA-06）；运行中 → 请求停止。
+    cfg = get_config()
+
+    # 旧执行的处置：排队中且派发未投出 → 取消重提（DATA-06）；运行中 → 请求停止，
+    # 并在停止超时内等它确认退出。``Orchestrator.stop`` is async: without the await
+    # this returns a coroutine (always truthy), reports a stop that was never sent,
+    # and leaves the old worker running until it finishes on its own.
     stop_requested = False
+    old_run_stopped = False
     old_cancelled = False
     if old_run.status == "running":
-        # ``Orchestrator.stop`` is async: without the await this returns a coroutine
-        # (always truthy), reports a stop that was never sent, and leaves the old
-        # worker running until it finishes on its own.
         stop_requested = await orch.stop(old_run_uuid.hex)
+        # 存在 native 文件副作用时，未确认旧进程停止不得并发重启（DATA-06）。这里等
+        # 本进程的 worker 退出；即便超时，新 Run 也会被库级研究互斥挡住，不会并发执行。
+        old_run_stopped = await orch.wait_stopped(
+            old_run_uuid.hex, timeout=cfg.dispatch_stop_timeout_seconds
+        )
 
     new_run_id = uuid.uuid4()
     new_run_id_hex = new_run_id.hex
     session_id_str = str(body.get("session_id") or old_run.session_id)
     prompt = str(body.get("message") or old_run.prompt)
 
-    cfg = get_config()
     default_llm = await get_default_llm_config(user_id=user.id)
     llm_snapshot = await build_llm_snapshot(user_id=user.id)
 
@@ -500,6 +503,19 @@ async def rerun_run(
                 fresh_old.status = "stopped"
                 fresh_old.stopped_by = "superseded_by_rerun"
                 old_cancelled = True
+        # 逐研究队列上限：被取代的旧 Run 即将作废，不计入，避免它把新 Run 顶到上限外。
+        depth = await dispatch_outbox.research_queue_depth(
+            session, old_run.session_id, exclude_run=old_run_uuid
+        )
+        if depth >= cfg.dispatch_research_queue_limit:
+            raise biz.QueueFullError(
+                "该研究的待执行任务已达上限，请先等待或取消已有任务",
+                current={
+                    "queue_depth": depth,
+                    "queue_limit": cfg.dispatch_research_queue_limit,
+                    "research_id": str(old_run.session_id),
+                },
+            )
         resolution = await investment_snapshot.resolve_for_run(
             session, user_id=user.id, research_id=old_run.session_id, spec=spec
         )
@@ -562,22 +578,11 @@ async def rerun_run(
         "dispatch": outcome.result.get("dispatch"),
         "rerun_of_run_id": old_run_uuid.hex,
         "old_run_stop_requested": stop_requested,
+        "old_run_stopped": old_run_stopped,
+        "old_run_stop_timed_out": stop_requested and not old_run_stopped,
         "old_run_cancelled": old_cancelled,
         "replayed": outcome.replayed,
     }
-
-
-def _flatten_filename(name: str) -> str:
-    """Reduce an uploaded filename to a safe single-path basename.
-
-    Directory separators, drive letters and parent-dir markers are stripped so the
-    file can only ever land inside the run's inputs dir — never a sibling path the
-    client hinted at.
-    """
-    for sep in ("/", "\\"):
-        name = name.replace(sep, "_")
-    name = name.replace("..", "_").replace(":", "_")
-    return name.strip() or ""
 
 
 def _live_queue_for(

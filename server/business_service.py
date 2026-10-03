@@ -261,6 +261,15 @@ class SnapshotAbsentError(BusinessError):
     remedy = "contact_support"
 
 
+class QueueFullError(BusinessError):
+    """同一研究的待执行队列已达上限：拒绝新建，先消化已有任务（DATA-06）。"""
+
+    code = "quota_exceeded"
+    http_status = 429
+    retryable = True
+    remedy = "wait"
+
+
 # ——— 输入准入 ——————————————————————————————————————————————————————————
 
 

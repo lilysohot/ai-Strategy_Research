@@ -21,7 +21,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Response, status
 
 from server import business_service as biz
-from server import store
+from server import store, uploads
 from server.config import get_config
 from server.dispatch_outbox import dispatch_loop
 from server.orchestrator import get_orchestrator
@@ -60,6 +60,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     if readiness.ok:
         with contextlib.suppress(Exception):
             await get_orchestrator().reconcile_orphan_runs()
+        # DATA-06: drop staging dirs a failed submit left behind (no run row owns
+        # them). Only old dirs are touched, so an in-flight submit is never raced.
+        with contextlib.suppress(Exception):
+            await uploads.sweep_orphan_staging()
     # DATA-06: the dispatch loop turns committed outbox intents into workers.
     # It lives with the API process (start/stop with lifespan); multi-process
     # deployments share dispatching safely via SKIP LOCKED claims + leases.

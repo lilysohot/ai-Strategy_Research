@@ -148,6 +148,10 @@ class StubOrchestrator:
         self.stopped.append(run_id)
         return True
 
+    async def wait_stopped(self, run_id: str, *, timeout: float) -> bool:
+        # No live worker in this stub, so the stop is always "confirmed".
+        return True
+
     def has_worker(self, run_id: str) -> bool:
         return False
 

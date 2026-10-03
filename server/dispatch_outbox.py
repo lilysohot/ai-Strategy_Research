@@ -15,6 +15,8 @@ Run 行、用户消息与**待派发意图**在同一个事务里提交；之后
   就不再重投；仍是 queued 才允许回到 pending。领取版本让过期领取者的回报失效。
 * **失败**：submit 抛错记为 ``retryable_failed`` 并退避；重试耗尽 → ``abandoned``。
   重试复用**原 Run**，不重复业务写入。
+* **附件门禁**：投递前先按上传清单校验暂存附件并发布到 ``inputs``（见
+  :mod:`server.uploads`）；文件缺失或摘要不符就不投递，避免"数据库成功但启动缺文件"。
 """
 
 from __future__ import annotations
@@ -25,10 +27,10 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import store
+from server import store, uploads
 from server.config import get_config
 
 logger = logging.getLogger(__name__)
@@ -39,6 +41,9 @@ CLAIMED = "claimed"
 DISPATCHED = "dispatched"
 RETRYABLE_FAILED = "retryable_failed"
 ABANDONED = "abandoned"
+
+#: 计入"研究队列深度"的状态：还在等着被执行（或被取消）的派发意图。
+QUEUE_STATUSES = (PENDING, RETRYABLE_FAILED, CLAIMED, DISPATCHED)
 
 #: 实例身份：租约 owner。领取互斥靠行锁与租约到期，不靠 owner 全局唯一。
 _OWNER = f"api-{uuid.uuid4().hex[:12]}"
@@ -116,6 +121,27 @@ async def recoverable_run_ids(session: AsyncSession, run_ids: set[uuid.UUID]) ->
         for run_id, dispatch_status, run_status in result
         if _is_recoverable(dispatch_status, run_status)
     }
+
+
+async def research_queue_depth(
+    session: AsyncSession, research_id: uuid.UUID, *, exclude_run: uuid.UUID | None = None
+) -> int:
+    """同研究"会执行"的派发意图数量 —— 逐研究队列上限的判据（DATA-06）。
+
+    ``abandoned`` 不算：它不会被投递，也不占队列。``exclude_run`` 用于重算：被取代的
+    旧 Run 即将在同一事务里作废，不该把它计入、把新 Run 顶到上限之外。
+    """
+    statement = (
+        select(func.count())
+        .select_from(store.RunDispatch)
+        .where(
+            store.RunDispatch.research_id == research_id,
+            store.RunDispatch.status.in_(QUEUE_STATUSES),
+        )
+    )
+    if exclude_run is not None:
+        statement = statement.where(store.RunDispatch.run_id != exclude_run)
+    return int((await session.execute(statement)).scalar_one())
 
 
 def dispatch_view(row: store.RunDispatch) -> dict[str, Any]:
@@ -340,6 +366,9 @@ async def dispatch_once(orch: Any) -> int:
 
     for row_id, run_id, session_key, prompt, addendum, user_id, claim_version in batch:
         try:
+            # 附件门禁：worker 只能看到已校验并发布的 inputs。暂存文件缺失或摘要不符
+            # 时这里抛错，于是投递失败退避重试，绝不会"数据库成功但启动缺文件"。
+            await uploads.publish_for_run(run_id)
             await orch.submit(
                 run_id=run_id.hex,
                 session_id=session_key,

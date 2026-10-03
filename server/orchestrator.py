@@ -334,6 +334,26 @@ class Orchestrator:
         handle._stopped_by = "user_stop"
         return True
 
+    async def wait_stopped(self, run_id: str, *, timeout: float) -> bool:
+        """Wait for **this process's** worker for ``run_id`` to exit (DATA-06).
+
+        Returns True when the worker is confirmed gone: it was never spawned here,
+        already exited, or exited within ``timeout``. Returns False only when a
+        live worker of this process ignored the stop past the deadline. An absent
+        handle is not ours to observe (another API process may own that worker), so
+        it counts as confirmed rather than blocking the caller forever — the
+        database-level research mutex still guarantees no two runs of the same
+        research execute concurrently.
+        """
+        handle = self._handles.get(run_id)
+        if handle is None or handle.proc.returncode is not None:
+            return True
+        try:
+            await asyncio.wait_for(handle.proc.wait(), timeout=max(0.0, timeout))
+            return True
+        except TimeoutError:
+            return False
+
     async def steer(
         self, run_id: str, message: str, *, control_id: str | None = None
     ) -> int | None:

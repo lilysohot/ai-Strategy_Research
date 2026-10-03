@@ -180,12 +180,16 @@
 | 派发状态 | 与 Run 状态分离：`not_required \| pending \| dispatched \| claimed \| retryable_failed \| abandoned` |
 | 重算 | 提交“停止 + 关联新 Run”操作，新 Run 用新快照；旧轨迹、旧快照与来源关系保留；同研究串行 |
 | 排队中 | 已排队手动 Run 保持原快照；用户通过取消重提采用新资料，不暗中替换 |
+| 附件 | 上传先入受控暂存区并记持久清单（`run_uploads`，`staged`）；worker 领取前校验文件存在且 `sha256` 一致才发布到 `inputs`（`published`），否则不投递 |
+| 队列上限 | 逐研究未完成派发意图数达上限 → 新建/重算返回 `429 quota_exceeded`（`remedy=wait`）；重算取代的旧 Run 不计入 |
+| 停止超时 | 重算等待旧 worker 确认退出（`dispatch_stop_timeout_seconds`）；超时只报告，新 Run 仍由研究互斥串行，绝不并发执行 |
 
 实现落点（DATA-06）：`server/store.py::RunDispatch` + `server/dispatch_outbox.py`
-（领取/租约/回收/取消，研究级互斥基于库判定）；业务 Run 的提交事务同时落
-session/run/turn/快照/outbox；派发经 `GET /api/runs/{id}/dispatch` 可查，
-旧客户端直投路径返回 `not_required`；派发循环随 API 进程启停，
-多进程共享派发由 `SKIP LOCKED` 领取 + 租约保证，不重复投递。
+（领取/租约/回收/取消、逐研究队列上限，研究级互斥基于库判定）；附件见
+`server/store.py::RunUpload` + `server/uploads.py`（暂存、清单、发布校验）；业务 Run 的
+提交事务同时落 session/run/turn/快照/附件清单/outbox；派发经
+`GET /api/runs/{id}/dispatch` 可查，旧客户端直投路径返回 `not_required`；派发循环随
+API 进程启停，多进程共享派发由 `SKIP LOCKED` 领取 + 租约保证，不重复投递。
 
 ## 8. 补数请求与回答
 

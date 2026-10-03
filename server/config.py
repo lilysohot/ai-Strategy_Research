@@ -91,6 +91,14 @@ class ServerConfig(BaseSettings):
     dispatch_max_attempts: int = 5
     # When the research already has an active run, back off instead of failing.
     dispatch_busy_delay_seconds: int = 5
+    # Per-research cap on un-finished dispatch intents (pending/claimed/dispatched).
+    # Without it a client can pile up unbounded queued runs behind a slow worker;
+    # submission past the cap is rejected with 429 quota_exceeded instead.
+    dispatch_research_queue_limit: int = 20
+    # How long a rerun waits for the superseded worker to be confirmed stopped
+    # before giving up. Native runs write into the run tree directly, so a new
+    # execution must not overlap an old one that is still alive.
+    dispatch_stop_timeout_seconds: float = 30.0
 
     # — Uploads (T2.10) ——————————————————————————————
     # Per-file and per-run caps for multipart uploads. These bound what one
@@ -200,6 +208,9 @@ def build_run_paths(run_id: str) -> dict[str, Path]:
         "root": root,
         "workspace": root / "ws",
         "outputs": root / "ws" / "outputs",
+        # Uploads land here first (DATA-06 受控暂存区) so a partially written
+        # attachment never appears in the read-only ``inputs`` a worker may read.
+        "staging": root / "staging",
         "inputs": root / "inputs",
         "spill": root / "spill",
         "run": root / "run",

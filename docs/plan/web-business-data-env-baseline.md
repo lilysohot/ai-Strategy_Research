@@ -111,9 +111,9 @@ uv run pytest tests/pg -q -m pg
 | 测试库 | `apodex_biz_test`（同一 PG 实例，宿主 5432，容器 `pg`） |
 | 角色 | `biz_test`（LOGIN，本批口令不在文档中登记；拥有 `apodex_biz_test`） |
 | 权限边界 | 已执行 `REVOKE ALL ON DATABASE apodex FROM biz_test`；入口额外拒绝 `apodex`/`postgres`/`template*` |
-| 迁移 | `0001 → 0008_run_dispatch`（入口自动执行 `alembic upgrade head`） |
+| 迁移 | `0001 → 0009_run_uploads`（入口自动执行 `alembic upgrade head`） |
 | 执行 | `PG_INTEGRATION=1 PG_BUSINESS_TEST_DB=apodex_biz_test SERVER_DATABASE_URL=postgresql+asyncpg://biz_test:***@localhost:5432/apodex_biz_test uv run --extra dev --group web pytest tests/pg -q -m pg` |
-| 结果 | **58 passed**（DATA-00 基线 4 项 + DATA-02 业务对象 7 项 + DATA-03 写入服务 13 项 + HTTP 路由 9 项 + DATA-05 快照 13 项 + DATA-06 派发 12 项） |
+| 结果 | **65 passed**（DATA-00 基线 4 项 + DATA-02 业务对象 7 项 + DATA-03 写入服务 13 项 + HTTP 路由 9 项 + DATA-05 快照 13 项 + DATA-06 派发/附件/队列 19 项） |
 | 编排器 | PG 用例把 `get_orchestrator` 换成记录桩（`tests/pg/conftest.py::StubOrchestrator`）：验收的是持久化与快照，不派生真实 worker 子进程 |
 | 回归对比 | 在 HEAD 干净副本（临时 worktree）上跑 `tests/test_web_p2_files.py` + `test_web_p3_revert.py` 得 9 failed/13 passed/6 errors，与当前工作区**完全一致** → 这批失败是 Windows 原生环境的既有现象（worker 进程组、符号链接），非本次改动引入；相关用例仍需按 §2.2 在 WSL 复验 |
 | 清理 | 本批结束按 §3 清理；测试库与角色保留至 DATA-03 复用，口令只在本批有效 |
