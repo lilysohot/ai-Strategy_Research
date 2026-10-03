@@ -116,7 +116,9 @@ _EXIT_CODES = {
     "CS_BUDGET_EXHAUSTED": 4,
     "CS_DEPENDENCY_NOT_READY": 4,
     "CS_CONTEXT_INCOMPLETE": 4,
+    "CS_PUBLICATION_CONFLICT": 4,
     "CS_NOT_FOUND": 5,
+    "CS_NOT_PUBLISHED": 5,
     "CS_ARTIFACT_CORRUPT": 5,
     "CS_OUTCOME_UNKNOWN": 6,
 }
@@ -823,6 +825,43 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             FOREIGN KEY(batch_id, derived_task_id)
                 REFERENCES tasks(batch_id, task_id)
         );
+        CREATE TABLE IF NOT EXISTS semantic_publications (
+            publication_id TEXT PRIMARY KEY,
+            source_id TEXT NOT NULL,
+            build_id TEXT NOT NULL,
+            snapshot_id TEXT NOT NULL,
+            generation INTEGER NOT NULL CHECK(generation >= 1),
+            parent_publication_id TEXT REFERENCES semantic_publications(publication_id),
+            manifest_sha256 TEXT NOT NULL,
+            manifest_relpath TEXT NOT NULL,
+            publication_status TEXT NOT NULL,
+            quality_status TEXT NOT NULL,
+            lifecycle TEXT NOT NULL,
+            UNIQUE(source_id, build_id, generation)
+        );
+        CREATE TABLE IF NOT EXISTS semantic_publication_artifacts (
+            publication_id TEXT NOT NULL
+                REFERENCES semantic_publications(publication_id) ON DELETE CASCADE,
+            artifact_sha256 TEXT NOT NULL,
+            batch_id TEXT NOT NULL,
+            task_id TEXT NOT NULL,
+            role TEXT NOT NULL,
+            artifact_id TEXT NOT NULL,
+            payload_object_sha256 TEXT NOT NULL,
+            PRIMARY KEY(publication_id, artifact_sha256),
+            FOREIGN KEY(batch_id, task_id)
+                REFERENCES tasks(batch_id, task_id)
+        );
+        CREATE TABLE IF NOT EXISTS semantic_publication_heads (
+            source_id TEXT NOT NULL,
+            build_id TEXT NOT NULL,
+            generation INTEGER NOT NULL CHECK(generation >= 1),
+            publication_id TEXT NOT NULL
+                REFERENCES semantic_publications(publication_id),
+            manifest_sha256 TEXT NOT NULL,
+            lifecycle TEXT NOT NULL,
+            PRIMARY KEY(source_id, build_id)
+        );
         """
     )
     row = connection.execute(
@@ -835,6 +874,10 @@ def _create_schema(connection: sqlite3.Connection) -> None:
         )
     elif row[0] != str(DB_SCHEMA_VERSION):
         raise StructuredExecutionError("CS_SCHEMA_UNSUPPORTED", "ledger_schema_version")
+    connection.execute(
+        "INSERT OR IGNORE INTO ledger_metadata(key, value) "
+        "VALUES ('semantic_publication_schema_version', '1')"
+    )
 
 
 def _json(value: object) -> str:
@@ -853,10 +896,21 @@ def _write_object(root: Path, value: object) -> str:
     directory.mkdir(parents=True, exist_ok=True, mode=0o700)
     path = _safe_path(root, directory / f"{digest}.json", "object_path_escape")
     if path.exists():
-        if path.read_bytes() != raw:
+        try:
+            existing = path.read_bytes()
+        except PermissionError as exc:
+            raise StructuredExecutionError(
+                "CS_STORE_ROOT_REQUIRED", "structured_store_permission_denied"
+            ) from exc
+        if existing != raw:
             raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "immutable_object_collision")
         return object_sha
-    descriptor, temporary = tempfile.mkstemp(prefix=".pending-", suffix=".json", dir=directory)
+    try:
+        descriptor, temporary = tempfile.mkstemp(prefix=".pending-", suffix=".json", dir=directory)
+    except PermissionError as exc:
+        raise StructuredExecutionError(
+            "CS_STORE_ROOT_REQUIRED", "structured_store_permission_denied"
+        ) from exc
     try:
         with os.fdopen(descriptor, "wb") as stream:
             stream.write(raw)
@@ -886,6 +940,10 @@ def _read_object(root: Path, object_sha: str) -> Any:
     )
     try:
         raw = path.read_bytes()
+    except PermissionError as exc:
+        raise StructuredExecutionError(
+            "CS_STORE_ROOT_REQUIRED", "structured_store_permission_denied"
+        ) from exc
     except OSError as exc:
         raise StructuredExecutionError("CS_NOT_FOUND", "object_not_found") from exc
     if _hash_bytes(raw) != object_sha:
