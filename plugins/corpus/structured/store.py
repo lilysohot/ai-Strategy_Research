@@ -10,17 +10,21 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sqlite3
 import tempfile
 from collections.abc import Callable, Sequence
 from contextlib import suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from decimal import Decimal
 from pathlib import Path
 from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from plugins.corpus.evidence_pipeline import EvidenceRun, evidence_document_from_snapshot
+from plugins.corpus._semantic_validation import prose_binding_reasons
+from plugins.corpus.claims import parse_value
+from plugins.corpus.evidence_pipeline import METRICS, EvidenceRun, evidence_document_from_snapshot
 from plugins.corpus.material_semantics import MaterialRun
 from plugins.corpus.structured.config import canonical_hash
 from plugins.corpus.structured.ledger import (
@@ -39,7 +43,17 @@ from plugins.corpus.structured.snapshot import EvidenceSnapshot, source_unit_id
 
 PUBLICATION_SCHEMA_VERSION = "corpus-semantic-publication-v1"
 PUBLICATION_INDEX_SCHEMA_VERSION = "1"
-CROSS_ROLE_RULE_VERSION = "cross-role-map-v1"
+CROSS_ROLE_RULE_VERSION = "cross-role-map-v2"
+SUPPORTED_MAPPING_RULES = frozenset({"cross-role-map-v1", "cross-role-map-v2"})
+# Frozen v2 conversions: never silently inherit changes to extraction rules.
+_QUANTITY_UNITS = {
+    "元": (Decimal(1), "元"),
+    "万元": (Decimal("1e4"), "元"),
+    "百万元": (Decimal("1e6"), "元"),
+    "亿元": (Decimal("1e8"), "元"),
+    "%": (Decimal(1), "%"),
+    "倍": (Decimal(1), "倍"),
+}
 
 MappingStatus = Literal["confirmed", "suspected", "unlinked", "conflict"]
 ConflictField = Literal[
@@ -163,6 +177,12 @@ class _RecordEvidence:
     text: str
     value: str | None = None
     factuality: str | None = None
+    unit: str | None = None
+    polarity: str | None = None
+    condition: str | None = None
+    attribution: str | None = None
+    binding: tuple[str, ...] = ()
+    unknown_fields: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True)
@@ -190,7 +210,9 @@ def _publication_schema(connection: sqlite3.Connection) -> None:
         raise StructuredExecutionError("CS_SCHEMA_UNSUPPORTED", "publication_index_schema_version")
 
 
-def _write_json_file(root: Path, path: Path, value: object) -> str:
+def _write_json_file(
+    root: Path, path: Path, value: object, *, replace_existing: bool = False
+) -> str:
     path = _safe_path(root, path, "publication_path_escape")
     directory = _safe_path(root, path.parent, "publication_path_escape")
     directory.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -198,7 +220,7 @@ def _write_json_file(root: Path, path: Path, value: object) -> str:
         "utf-8"
     )
     digest = _hash_bytes(raw)
-    if path.exists():
+    if path.exists() and not replace_existing:
         try:
             existing = path.read_bytes()
         except PermissionError as exc:
@@ -350,7 +372,26 @@ def _claim_records(run: EvidenceRun, snapshot: EvidenceSnapshot) -> dict[str, _R
             fact.claim.claim_text,
             fact.claim.value_text,
             fact.claim.kind,
+            unit=fact.claim.unit_raw,
         )
+        # Claims has no universal polarity/attribution fields. Only project the
+        # small, verified affirmative numeric grammar; other language is unknown.
+        binding = (fact.claim.subject, fact.claim.metric_raw, fact.claim.period_raw)
+        atomic = (
+            not prose_binding_reasons(fact.claim, METRICS)
+            and all(token and _normalized(token) in _normalized(quote) for token in binding)
+            and not re.search(r"否认|不是|并非|未|不|如果|只要|除非|称|表示|认为|[：:‘’“”]", quote)
+            and not dependency_details
+            and not re.search(r"[。；;！？!?].+", quote.rstrip("。；;！？!?"))
+        )
+        if atomic:
+            result[fact.fact_id] = replace(
+                result[fact.fact_id],
+                polarity="affirmed",
+                condition="unconditional",
+                attribution="document_voice",
+                binding=tuple(cast(str, token) for token in binding),
+            )
     return result
 
 
@@ -422,6 +463,40 @@ def _material_records(
             item.value,
             item.semantic_type,
             item.evidence,
+        )
+        speaker = next(
+            (
+                speaker
+                for speaker in run.understanding.speakers
+                if speaker.speaker_id == item.speaker_ref
+            ),
+            None,
+        )
+        items[item.item_id] = replace(
+            items[item.item_id],
+            unknown_fields=frozenset(
+                {
+                    "semantic_type": "factuality",
+                    "speaker_identity": "attribution",
+                    "speaker_reference": "attribution",
+                }.get(field, field)
+                for field in item.unknown_fields
+            ),
+            polarity=item.polarity if item.polarity != "unknown" else None,
+            condition=(
+                "conditional"
+                if item.statement_role == "condition"
+                else None
+                if re.search(r"如果|只要|除非|前提|取决于", item.text)
+                else "unconditional"
+            ),
+            attribution=(
+                "document_voice"
+                if speaker and speaker.role == "document_voice"
+                else speaker.display_name
+                if speaker and speaker.identity_status == "explicit"
+                else None
+            ),
         )
     relation_ids: set[str] = set()
     for relation in run.understanding.relations:
@@ -514,7 +589,8 @@ def _normalized(value: str | None) -> str:
     return "".join((value or "").lower().split())
 
 
-def _conflicts(claim: _RecordEvidence, item: _RecordEvidence) -> tuple[ConflictField, ...]:
+def _conflicts_v1(claim: _RecordEvidence, item: _RecordEvidence) -> tuple[ConflictField, ...]:
+    """Frozen legacy rule, retained solely for reproducing v1 publications."""
     result: list[ConflictField] = []
     if claim.value and item.value and _normalized(claim.value) != _normalized(item.value):
         result.append("value")
@@ -525,6 +601,75 @@ def _conflicts(claim: _RecordEvidence, item: _RecordEvidence) -> tuple[ConflictF
     ):
         result.append("factuality")
     return tuple(result)
+
+
+def _quantity(record: _RecordEvidence) -> tuple[Decimal, str] | None:
+    if record.unknown_fields & {"value", "unit"}:
+        return None
+    number, suffix = parse_value(record.value)
+    unit = suffix or record.unit
+    if number is None or unit not in _QUANTITY_UNITS:
+        return None
+    scale, dimension = _QUANTITY_UNITS[unit]
+    return number * scale, dimension
+
+
+def _conflicts(
+    claim: _RecordEvidence, item: _RecordEvidence, rule_version: str
+) -> tuple[ConflictField, ...]:
+    if rule_version == "cross-role-map-v1":
+        return _conflicts_v1(claim, item)
+    result: list[ConflictField] = []
+    left, right = _quantity(claim), _quantity(item)
+    if left is not None and right is not None:
+        if left[1] != right[1]:
+            result.append("unit")
+        elif left[0] != right[0]:
+            result.append("value")
+    for field in ("factuality", "polarity", "condition", "attribution"):
+        a, b = getattr(claim, field), getattr(item, field)
+        if (
+            a is not None
+            and b is not None
+            and a != b
+            and field not in claim.unknown_fields | item.unknown_fields
+        ):
+            result.append(cast(ConflictField, field))
+    return tuple(result)
+
+
+def _same_proposition(claim: _RecordEvidence, item: _RecordEvidence, rule: str) -> bool:
+    if rule == "cross-role-map-v1":
+        return _normalized(claim.text) in _normalized(item.text) or _normalized(
+            item.text
+        ) in _normalized(claim.text)
+    # Exact atomic evidence plus source-bound subject/metric/period. No broad
+    # item containing several propositions, or caller-supplied mapping, can
+    # promote a mere overlapping locator to a confirmed association.
+    return bool(
+        claim.binding
+        and "text" not in item.unknown_fields
+        and claim.spans == item.spans
+        and len(claim.spans) == 1
+        and all(_normalized(item.text).count(_normalized(token)) == 1 for token in claim.binding)
+        and not re.search(r"[。；;！？!?].+", item.text.rstrip("。；;！？!?"))
+    )
+
+
+def _comparison_complete(claim: _RecordEvidence, item: _RecordEvidence, rule: str) -> bool:
+    return rule == "cross-role-map-v1" or (
+        not (
+            (claim.unknown_fields | item.unknown_fields)
+            & {"text", "value", "unit", "factuality", "polarity", "condition", "attribution"}
+        )
+        and _quantity(claim) is not None
+        and _quantity(item) is not None
+        and all(
+            getattr(record, field) is not None
+            for record in (claim, item)
+            for field in ("factuality", "polarity", "condition", "attribution")
+        )
+    )
 
 
 def _auto_mappings(
@@ -541,17 +686,23 @@ def _auto_mappings(
         semantic = [
             (item_id, item)
             for item_id, item in candidates
-            if _normalized(claim.text) in _normalized(item.text)
-            or _normalized(item.text) in _normalized(claim.text)
+            if _same_proposition(claim, item, CROSS_ROLE_RULE_VERSION)
         ]
         if len(semantic) == 1:
             item_id, item = semantic[0]
-            fields = _conflicts(claim, item)
+            fields = _conflicts(claim, item, CROSS_ROLE_RULE_VERSION)
             mappings.append(
                 CrossRoleMapping(
                     claim_fact_id=fact_id,
                     material_item_id=item_id,
-                    mapping_status="conflict" if fields else "confirmed",
+                    mapping_status=(
+                        "conflict"
+                        if fields
+                        else "confirmed"
+                        if _comparison_complete(claim, item, CROSS_ROLE_RULE_VERSION)
+                        else "suspected"
+                    ),
+                    rule_version=CROSS_ROLE_RULE_VERSION,
                     evidence_unit_ids=tuple(sorted(claim.unit_ids & item.unit_ids)),
                     conflict_fields=fields,
                 )
@@ -564,6 +715,7 @@ def _auto_mappings(
                     claim_fact_id=fact_id,
                     material_item_id=item_id,
                     mapping_status="suspected",
+                    rule_version=CROSS_ROLE_RULE_VERSION,
                     evidence_unit_ids=tuple(sorted(claim.unit_ids & item.unit_ids)),
                 )
             )
@@ -574,6 +726,7 @@ def _auto_mappings(
                     claim_fact_id=fact_id,
                     material_item_id=None,
                     mapping_status="unlinked",
+                    rule_version=CROSS_ROLE_RULE_VERSION,
                     evidence_unit_ids=tuple(sorted(claim.unit_ids)),
                 )
             )
@@ -584,6 +737,7 @@ def _auto_mappings(
                     claim_fact_id=None,
                     material_item_id=item_id,
                     mapping_status="unlinked",
+                    rule_version=CROSS_ROLE_RULE_VERSION,
                     evidence_unit_ids=tuple(sorted(item.unit_ids)),
                 )
             )
@@ -602,7 +756,7 @@ def _validate_mappings(
     seen_items: set[str] = set()
     for mapping in result:
         if (
-            mapping.rule_version != CROSS_ROLE_RULE_VERSION
+            mapping.rule_version not in SUPPORTED_MAPPING_RULES
             or not set(mapping.evidence_unit_ids) <= known_units
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_rule_or_evidence")
@@ -622,11 +776,20 @@ def _validate_mappings(
         if claim is not None and item is not None:
             if not _overlap(claim, item):
                 raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_span_mismatch")
-            actual = _conflicts(claim, item)
+            bound = mapping.rule_version == "cross-role-map-v1" or _same_proposition(
+                claim, item, mapping.rule_version
+            )
+            if mapping.mapping_status in {"confirmed", "conflict"} and not bound:
+                raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_proposition_unproven")
+            actual = _conflicts(claim, item, mapping.rule_version) if bound else ()
             if mapping.mapping_status != "conflict" and actual:
                 raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_hides_conflict")
             if mapping.mapping_status == "conflict" and set(mapping.conflict_fields) != set(actual):
                 raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_conflict_unproven")
+            if mapping.mapping_status == "confirmed" and not _comparison_complete(
+                claim, item, mapping.rule_version
+            ):
+                raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_comparison_incomplete")
     if seen_claims != set(claims) or seen_items != set(items):
         raise StructuredExecutionError("CS_INPUT_INVALID", "mapping_coverage_incomplete")
     return result
@@ -671,6 +834,28 @@ def _cache_path(root: Path, source_id: str, build_id: str) -> Path:
     return _safe_path(root, root / "cache" / "heads" / f"{key}.json", "cache_path_escape")
 
 
+def _refresh_head_cache(
+    connection: sqlite3.Connection, root: Path, source_id: str, build_id: str
+) -> None:
+    # Re-read the authoritative head under the writer lock: a delayed P1
+    # callback must not overwrite P2's cache with its stale local manifest.
+    connection.execute("BEGIN IMMEDIATE")
+    try:
+        row = connection.execute(
+            "SELECT source_id, build_id, generation, publication_id, manifest_sha256 "
+            "FROM semantic_publication_heads WHERE source_id=? AND build_id=?",
+            (source_id, build_id),
+        ).fetchone()
+        if row is not None:
+            _write_json_file(
+                root, _cache_path(root, source_id, build_id), dict(row), replace_existing=True
+            )
+        connection.execute("COMMIT")
+    except BaseException:
+        connection.execute("ROLLBACK")
+        raise
+
+
 def publish_semantic(
     *,
     source_id: str,
@@ -713,6 +898,8 @@ def publish_semantic(
             items,
             candidates[0].snapshot,
         )
+        if any(mapping.rule_version != CROSS_ROLE_RULE_VERSION for mapping in final_mappings):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "publication_requires_current_rules")
         detected_conflicts = {
             (mapping.claim_fact_id, mapping.material_item_id, mapping.conflict_fields)
             for mapping in detected_mappings
@@ -765,7 +952,21 @@ def publish_semantic(
                 coverage=_coverage(candidates),
                 publication_status="published",
                 quality_status="accepted",
-                reason_codes=tuple(dict.fromkeys(reason_codes)),
+                reason_codes=tuple(
+                    dict.fromkeys(
+                        (
+                            *reason_codes,
+                            *(
+                                ("CROSS_ROLE_COMPARISON_UNPROVEN",)
+                                if any(
+                                    mapping.mapping_status == "suspected"
+                                    for mapping in final_mappings
+                                )
+                                else ()
+                            ),
+                        )
+                    )
+                ),
             )
             publication_id = canonical_hash(
                 base.model_dump(mode="json", exclude={"publication_id"})
@@ -836,15 +1037,8 @@ def publish_semantic(
                 connection.execute("ROLLBACK")
             raise
         checkpoint("after_db_commit")
-        cache = {
-            "source_id": source_id,
-            "build_id": build_id,
-            "generation": manifest.generation,
-            "publication_id": manifest.publication_id,
-            "manifest_sha256": manifest_sha,
-        }
-        with suppress(OSError, StructuredExecutionError):
-            _write_json_file(root, _cache_path(root, source_id, build_id), cache)
+        with suppress(OSError, StructuredExecutionError, sqlite3.DatabaseError):
+            _refresh_head_cache(connection, root, source_id, build_id)
         return manifest
     finally:
         connection.close()
@@ -961,18 +1155,8 @@ def retire_semantic(
                 connection.execute("ROLLBACK")
             raise
         checkpoint("after_db_commit")
-        with suppress(OSError, StructuredExecutionError):
-            _write_json_file(
-                root,
-                _cache_path(root, source_id, build_id),
-                {
-                    "source_id": source_id,
-                    "build_id": build_id,
-                    "generation": manifest.generation,
-                    "publication_id": manifest.publication_id,
-                    "manifest_sha256": manifest_sha,
-                },
-            )
+        with suppress(OSError, StructuredExecutionError, sqlite3.DatabaseError):
+            _refresh_head_cache(connection, root, source_id, build_id)
         return manifest
     finally:
         connection.close()
@@ -1038,6 +1222,10 @@ def read_semantic(
             else:
                 reason = "publication_not_usable"
             raise StructuredExecutionError("CS_NOT_PUBLISHED", reason)
+        if not allow_historical and any(
+            mapping.rule_version != CROSS_ROLE_RULE_VERSION for mapping in manifest.mappings
+        ):
+            raise StructuredExecutionError("CS_NOT_PUBLISHED", "publication_rule_upgrade_required")
         artifact_rows = connection.execute(
             "SELECT * FROM semantic_publication_artifacts "
             "WHERE publication_id=? ORDER BY artifact_sha256",

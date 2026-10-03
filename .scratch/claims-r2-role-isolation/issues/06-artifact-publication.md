@@ -95,3 +95,83 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_store.py tests/tes
   `test_corpus_structured_publication.py`
   `1343e2fb0e707d276f0564c9653a7f122e668a97c78a522e5e9dc4a6e4a881b7`。真实模型调用 0、
   生产数据库访问 0；未执行真实模型 preflight，也未启动 07。
+- 2026-10-03：用户要求按回溯审核结果修复。以下修订记录替代上文的完成性判断与旧文件指纹，
+  不删除历史记录；本轮基线为 `522358c4345d2b94cb86f7bba3c1d50cfaab6edf`，开始时工作区干净。
+  继续保持 `ready-for-human / 待验收`，没有代替人工验收或解除 07 的依赖。
+- 2026-10-03：已修复跨角色比较。新发布使用 `cross-role-map-v2`：先验证原子命题的精确跨度和
+  原文支持的主体/指标/期间，再比较有确定性依据的 quantity/unit、factuality、polarity、condition、
+  attribution；金额用 Decimal 和冻结单位表比较，`15 + 亿元`、`15亿元`、`150000万元` 不再误冲突。
+  否定冲突撤去 compare/calculate；值缺失、自由文本无法解析、明确 unknown 字段和多命题/主体歧义
+  保持 suspected，并在 manifest 留 `CROSS_ROLE_COMPARISON_UNPROVEN`。调用方不能手动把疑似提升为
+  confirmed。没有改写任何 EvidenceRun/MaterialRun 原始 payload，没有增加模型调用。
+- 2026-10-03：规则历史与缓存已修复。保留 v1 校验分支供 `allow_historical=True` 诊断复现；旧规则
+  head 的普通消费明确返回 `publication_rule_upgrade_required`，必须通过 `rule_upgrade` 产生 v2
+  新版本。测试实际切换 v1→v2，核对 P1 历史视图不变及 P2 用途恢复。缓存采用原子替换，刷新时在
+  writer lock 下重读权威 head，验证 P2/撤回以及 P1 延迟回调不能写回旧缓存；manifest 仍不可变。
+- 2026-10-03：补齐测试证据。新增隔离子进程 helper，不继承父进程凭据；子进程在业务导入前阻断
+  socket/DNS、HTTP、dotenv 加载，并阻断 CorpusService 数据库连接，另有 blocker 自测。真实写进程
+  退出后由两个不同 cwd/研究运行的进程回读；双进程父版本竞争仅一个提交成功；真实 `os._exit(73)`
+  覆盖 manifest 落盘后和 DB 提交后两个崩溃窗口。关系夹具现在有实际 present 关系：发布 P1 后替换
+  items，旧关系不能挂接新 artifact，拒绝的发布不动旧 head，P2 不再提供旧关系，历史 P1 可诊断；
+  撤回后普通读取拒绝。权限测试新增非 root POSIX 子进程读取 chmod(0) manifest，验证权限专属错误。
+- 2026-10-03：环境修复复核。上轮“环境已恢复”不准确，实际发现 45 个已安装包的 console_scripts
+  缺失。本轮用 Linux uv 按锁文件重装对应 35 个依赖包，随后重建本地项目入口；未改锁文件、未使用
+  pip、未删除虚拟环境。修复后 Python `3.12.14`，54 个已登记 console_scripts 均存在且可执行。
+  首次离线 sync 因构建依赖 hatchling 缓存缺失退出 1（未安装）；添加 `--no-install-project` 后
+  离线恢复依赖退出 0；最后正常 sync 构建项目退出 0。只允许 uv 环境准备联网，业务测试保持零外部调用。
+
+### 2026-10-03 修复验收命令与结果
+
+所有命令从 WSL `/home/administrator/FrontierAgent` 执行，`uv` 为
+`/home/administrator/.local/bin/uv`。表中为完整 Linux 命令（Windows 外层仅 `wsl -d Ubuntu --exec`）。
+
+| 命令 | 退出码 | 结果 / 范围 |
+| --- | --- | --- |
+| `uv run pytest tests/test_corpus_structured_store.py tests/test_corpus_structured_publication.py -q` | 0 | 41 passed，06 专项，无跳过 |
+| `uv run pytest tests/test_corpus_structured_*.py -q` | 0 | 249 passed，全部 structured 回归 |
+| `uv run ruff check plugins/corpus tests/test_corpus_structured_store.py tests/test_corpus_structured_publication.py tests/_corpus_structured_subprocess.py` | 0 | All checks passed；包括新增 helper |
+| `uv run pyright plugins/corpus/structured/store.py` | 0 | 0 errors / 0 warnings |
+| `uv run python tools/import_smoke.py --stage 1` | 0 | framework 379/379 |
+| `uv run python tools/import_smoke.py --stage 2` | 0 | eval 428/428 |
+| `uv run python tools/check_symbols.py` | 0 | 0 missing / 478 files |
+| `git diff --check` | 0 | 无空白错误 |
+| `uv run pyright` | 1 | 5 个既有非 06 错误：gradio 缺失、run_retention 三项、orchestrator Queue 一项；本轮未修改这些文件 |
+
+最初新增数量/否定回归命令 `.venv/bin/python -m pytest tests/test_corpus_structured_publication.py -q -k comparison_preserves`
+退出 1（5 failed），修复后原反例通过；后续扩为 13 组并纳入上述 41 项。缓存刷新测试也先捕获
+generation 2/缓存 1 的失败，再验证修复。
+
+环境恢复完整命令（退出 0）：
+
+```bash
+uv sync --offline --frozen --inexact --no-install-project \
+  --extra sandbox --extra document-readers --extra eval --extra dev --group web \
+  --reinstall-package Pygments --reinstall-package babel --reinstall-package cffi \
+  --reinstall-package charset-normalizer --reinstall-package courlan --reinstall-package datasets \
+  --reinstall-package dateparser --reinstall-package debugpy --reinstall-package dirhash \
+  --reinstall-package distro --reinstall-package fastapi --reinstall-package harbor \
+  --reinstall-package htmldate --reinstall-package httpx --reinstall-package httpx2 \
+  --reinstall-package huggingface_hub --reinstall-package idna --reinstall-package jsonschema \
+  --reinstall-package litellm --reinstall-package markdown-it-py --reinstall-package nodeenv \
+  --reinstall-package numpy --reinstall-package pdfplumber --reinstall-package pymupdf \
+  --reinstall-package pypdfium2 --reinstall-package pyright --reinstall-package pytest \
+  --reinstall-package python-dotenv --reinstall-package shortuuid --reinstall-package tld \
+  --reinstall-package tqdm --reinstall-package trafilatura --reinstall-package typer \
+  --reinstall-package uvicorn --reinstall-package websockets
+uv sync --frozen --inexact --extra sandbox --extra document-readers --extra eval --extra dev --group web
+```
+
+当前 SHA-256（命令 `sha256sum plugins/corpus/structured/store.py tests/test_corpus_structured_store.py tests/test_corpus_structured_publication.py tests/_corpus_structured_subprocess.py`，退出 0）：
+
+- `store.py`: `1877171544745ba939bcb873bf69f2bd70edab4859096d9e36287892f001c004`
+- `test_corpus_structured_store.py`: `e1b10faa675f1abbe2b07a28033bd3ce194025ea94ab55eede58e37a8db51ced`
+- `test_corpus_structured_publication.py`: `dacc9b93a73d058bb2acbd207cf5d56944a6e2eaa190163dbbb1686bb779ab65`
+- `_corpus_structured_subprocess.py`: `cf11ab2af8bd17ac98b752e70a7833592a6583fe364e76fb594d9b0374d44c66`
+
+限制与外部门：v2 只确认受支持的、原文绑定的原子数值语法，不把任意自然语言或表格多命题强行
+归一；超出确定性规则的记录保持 suspected/unlinked，不代表一致性已通过。复杂条件/归属没有可比
+字段时不猜测；这不是模型语义准确率验收。历史诊断显式使用旧规则，不能将旧诊断用途当新发布许可。
+POSIX 权限用例在 root/非 POSIX 环境会跳过，本次 WSL 非 root 实跑通过。实际物理断电未模拟，验证的是
+无 Python finally 的进程退出与 SQLite 恢复。共享 ledger 私有基础设施提取仍属设计建议，本轮不扩大为
+05 存储 API 重构。真实模型调用 0、生产库访问 0；按 spec §5 未运行真实模型 preflight，未执行 07，
+不得以本地回归替代主计划阶段签认。

@@ -6,12 +6,13 @@ import json
 import os
 import socket
 import sqlite3
-import subprocess
-import sys
 from pathlib import Path
 
+import dotenv
+import dotenv.main
 import httpx
 import pytest
+from _corpus_structured_subprocess import run_isolated
 from test_corpus_structured_execution import BUILD_ID, SOURCE_ID, replay_fixture, snapshot
 
 from plugins.corpus.service import CorpusService
@@ -35,6 +36,8 @@ def deny_external_io(monkeypatch: pytest.MonkeyPatch) -> None:
         raise AssertionError("store tests must not access network, models, or production DB")
 
     monkeypatch.setattr(socket.socket, "connect", denied)
+    monkeypatch.setattr(dotenv, "load_dotenv", denied)
+    monkeypatch.setattr(dotenv.main, "load_dotenv", denied)
     monkeypatch.setattr(httpx.HTTPTransport, "handle_request", denied)
     monkeypatch.setattr(CorpusService, "_connect", denied)
 
@@ -110,34 +113,52 @@ def test_manifest_matches_v1_schema_and_object_layout(tmp_path: Path) -> None:
 
 
 def test_real_subprocess_reader_survives_writer_exit_and_different_cwd(tmp_path: Path) -> None:
-    value, _plan, root, _references, manifest = publish_primary(tmp_path)
+    root = tmp_path / "store"
+    writer = run_isolated(
+        "import json\nfrom pathlib import Path\n"
+        "from test_corpus_structured_store import publish_primary\n"
+        f"v, _, _, _, m = publish_primary(Path({str(tmp_path)!r}))\n"
+        "print(json.dumps({'source': v.source_id, 'build': v.build_id, 'id': m.publication_id}))",
+        cwd=tmp_path,
+        root=root,
+    )
+    written = json.loads(writer)
     other = tmp_path / "research-run" / "cwd"
     other.mkdir(parents=True)
     script = (
         "import json; from plugins.corpus.structured.store import read_semantic; "
-        f"v=read_semantic({value.source_id!r},{value.build_id!r}); "
+        f"v=read_semantic({written['source']!r},{written['build']!r}); "
         "print(json.dumps({'id':v.manifest.publication_id,'roles':[a.artifact.role for a in v.artifacts]}))"
     )
-    for index, cwd in enumerate((other, tmp_path / "second-research-run")):
+    for cwd in (other, tmp_path / "second-research-run"):
         cwd.mkdir(parents=True, exist_ok=True)
-        completed = subprocess.run(
-            [sys.executable, "-c", script],
-            cwd=cwd,
-            text=True,
-            capture_output=True,
-            check=False,
-            env={
-                **os.environ,
-                "PYTHONPATH": str(Path(__file__).resolve().parents[1]),
-                "CORPUS_STRUCTURED_ROOT": str(root),
-                "RESEARCH_RUN_ID": f"synthetic-{index}",
-            },
-        )
-        assert completed.returncode == 0, completed.stderr
-        assert json.loads(completed.stdout) == {
-            "id": manifest.publication_id,
+        completed = run_isolated(script, cwd=cwd, root=root)
+        assert json.loads(completed) == {
+            "id": written["id"],
             "roles": ["material_items"],
         }
+
+
+def test_subprocess_blocks_network_database_dotenv_and_inherited_secrets(tmp_path, monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "synthetic-parent-secret")
+    script = """
+import os
+assert 'OPENAI_API_KEY' not in os.environ
+for action in (
+    lambda: socket.create_connection(('synthetic.invalid', 443)),
+    lambda: httpx.get('https://synthetic.invalid'),
+    lambda: CorpusService._connect(None),
+    lambda: dotenv.load_dotenv(),
+):
+    try:
+        action()
+    except AssertionError:
+        pass
+    else:
+        raise RuntimeError('external I/O blocker missing')
+print('blocked')
+"""
+    assert run_isolated(script, cwd=tmp_path, root=tmp_path / "store").strip() == "blocked"
 
 
 def test_authoritative_db_head_ignores_missing_or_corrupt_cache(tmp_path: Path) -> None:
@@ -197,6 +218,31 @@ def test_permission_failure_is_not_reported_as_no_publication(
     monkeypatch.setattr(Path, "read_bytes", denied)
     with pytest.raises(StructuredExecutionError, match="structured_store_permission_denied"):
         read_semantic(value.source_id, value.build_id, store_root=root)
+
+
+@pytest.mark.skipif(
+    not hasattr(os, "geteuid") or os.geteuid() == 0, reason="requires non-root POSIX"
+)
+def test_real_filesystem_permission_denial_in_reader_process(tmp_path):
+    value, _plan, root, _refs, manifest = publish_primary(tmp_path)
+    path = root / "manifests" / f"{manifest.publication_id}.json"
+    original_mode = path.stat().st_mode
+    try:
+        path.chmod(0)
+        output = run_isolated(
+            "from plugins.corpus.structured.store import read_semantic\n"
+            "from plugins.corpus.structured.ledger import StructuredExecutionError\n"
+            "try:\n"
+            f"    read_semantic({value.source_id!r}, {value.build_id!r})\n"
+            "except StructuredExecutionError as exc:\n"
+            "    print(str(exc))\n",
+            cwd=tmp_path,
+            root=root,
+        )
+        assert "structured_store_permission_denied" in output
+        assert "CS_NOT_PUBLISHED" not in output
+    finally:
+        path.chmod(original_mode)
 
 
 def test_reader_projection_excludes_attempt_diagnostics_and_credentials(tmp_path: Path) -> None:

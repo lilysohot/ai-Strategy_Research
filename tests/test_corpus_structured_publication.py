@@ -8,8 +8,11 @@ import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import dotenv
+import dotenv.main
 import httpx
 import pytest
+from _corpus_structured_subprocess import finish_process, isolated_process, run_isolated
 from test_corpus_structured_execution import (
     BUILD_ID,
     SOURCE_ID,
@@ -46,6 +49,7 @@ from plugins.corpus.structured.snapshot import (
 )
 from plugins.corpus.structured.store import (
     ArtifactReference,
+    CrossRoleMapping,
     _auto_mappings,
     _RecordEvidence,
     publish_semantic,
@@ -60,6 +64,8 @@ def deny_external_io(monkeypatch: pytest.MonkeyPatch) -> None:
         raise AssertionError("publication tests must not access network, models, or production DB")
 
     monkeypatch.setattr(socket.socket, "connect", denied)
+    monkeypatch.setattr(dotenv, "load_dotenv", denied)
+    monkeypatch.setattr(dotenv.main, "load_dotenv", denied)
     monkeypatch.setattr(httpx.HTTPTransport, "handle_request", denied)
     monkeypatch.setattr(CorpusService, "_connect", denied)
 
@@ -90,7 +96,9 @@ def forecast_snapshot(*, build_id: str = BUILD_ID):
     )
 
 
-def forecast_artifacts(tmp_path: Path, *, build_id: str = BUILD_ID):
+def forecast_artifacts(
+    tmp_path: Path, *, build_id: str = BUILD_ID, item_overrides: dict | None = None
+):
     value = forecast_snapshot(build_id=build_id)
     plan = plan_batch(
         value,
@@ -141,6 +149,7 @@ def forecast_artifacts(tmp_path: Path, *, build_id: str = BUILD_ID):
                     "temporal_frame": "contemporaneous",
                     "evidence_quote": slot.text,
                     "unknown_fields": [],
+                    **(item_overrides or {}),
                 },
                 ensure_ascii=False,
             )
@@ -167,6 +176,63 @@ def forecast_artifacts(tmp_path: Path, *, build_id: str = BUILD_ID):
         if task.artifact_sha256 is not None
     }
     return value, plan, root, references, checked
+
+
+@pytest.mark.parametrize(
+    ("overrides", "status", "fields"),
+    [
+        ({"value": None, "polarity": "negated"}, "conflict", ("polarity",)),
+        ({"value": "15亿元"}, "confirmed", ()),
+        ({"value": "150000万元"}, "confirmed", ()),
+        ({"value": "15%"}, "conflict", ("unit",)),
+        ({"value": "大约15亿元"}, "suspected", ()),
+        ({"value": "15亿元", "semantic_type": "forecast"}, "conflict", ("factuality",)),
+        ({"value": "15亿元", "statement_role": "condition"}, "conflict", ("condition",)),
+        ({"value": None}, "suspected", ()),
+        ({"value": "15"}, "suspected", ()),
+        ({"value": "15亿元", "unknown_fields": ["value"]}, "suspected", ()),
+        ({"text": "999999.SZ 2026年营业收入16亿元。"}, "conflict", ("value",)),
+        ({"text": "888888.SZ 2026年营业收入15亿元。", "value": "15亿元"}, "suspected", ()),
+        (
+            {"text": "999999.SZ 2026年营业收入15亿元。另一家公司利润下降。", "value": "15亿元"},
+            "suspected",
+            (),
+        ),
+    ],
+)
+def test_cross_role_comparison_preserves_semantics(tmp_path, overrides, status, fields):
+    value, _plan, root, references, _checked = forecast_artifacts(
+        tmp_path, item_overrides=overrides
+    )
+    manifest = publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=(references["claims"], references["material_items"]),
+        expected_parent_publication_id=None,
+        store_root=root,
+    )
+    assert [(m.mapping_status, m.conflict_fields) for m in manifest.mappings] == [(status, fields)]
+    view = read_semantic(value.source_id, value.build_id, store_root=root)
+    purposes = next(iter(view.effective_claim_purposes.values()))
+    assert ("calculate" in purposes) == (status != "conflict")
+    if status == "suspected":
+        assert "CROSS_ROLE_COMPARISON_UNPROVEN" in manifest.reason_codes
+        forced = CrossRoleMapping.model_validate(
+            {**manifest.mappings[0].model_dump(), "mapping_status": "confirmed"}
+        )
+        with pytest.raises(
+            StructuredExecutionError, match=r"mapping_.*unproven|mapping_comparison_incomplete"
+        ):
+            publish_semantic(
+                source_id=value.source_id,
+                build_id=value.build_id,
+                snapshot_id=value.snapshot_id,
+                artifacts=(references["claims"], references["material_items"]),
+                expected_parent_publication_id=manifest.publication_id,
+                mappings=(forced,),
+                store_root=root,
+            )
 
 
 def test_claims_p1_then_late_r2_conflict_p2_tightens_purposes(tmp_path: Path) -> None:
@@ -230,7 +296,115 @@ def test_cross_role_mapping_does_not_merge_same_locator_distinct_propositions() 
     mappings = _auto_mappings({"fact-a": first, "fact-b": second}, {"item-b": item})
     by_fact = {mapping.claim_fact_id: mapping for mapping in mappings if mapping.claim_fact_id}
     assert by_fact["fact-a"].mapping_status == "unlinked"
-    assert by_fact["fact-b"].mapping_status == "confirmed"
+    # These records have no subject/metric/period binding: equal text is not enough.
+    assert by_fact["fact-b"].mapping_status == "suspected"
+
+
+def test_actual_rule_upgrade_preserves_legacy_history(tmp_path, monkeypatch):
+    import plugins.corpus.structured.store as store
+
+    value, _plan, root, references, _checked = forecast_artifacts(
+        tmp_path, item_overrides={"value": "15亿元"}
+    )
+    with monkeypatch.context() as legacy:
+        legacy.setattr(store, "CROSS_ROLE_RULE_VERSION", "cross-role-map-v1")
+        p1 = publish_semantic(
+            source_id=value.source_id,
+            build_id=value.build_id,
+            snapshot_id=value.snapshot_id,
+            artifacts=tuple(references.values()),
+            expected_parent_publication_id=None,
+            store_root=root,
+        )
+        old_view = read_semantic(value.source_id, value.build_id, store_root=root)
+    assert p1.mappings[0].conflict_fields == ("value",)
+    assert p1.mappings[0].rule_version == "cross-role-map-v1"
+    with pytest.raises(StructuredExecutionError, match="publication_rule_upgrade_required"):
+        read_semantic(value.source_id, value.build_id, store_root=root)
+    p2 = publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=tuple(references.values()),
+        expected_parent_publication_id=p1.publication_id,
+        lifecycle="rule_upgrade",
+        store_root=root,
+    )
+    assert p2.mappings[0].rule_version == "cross-role-map-v2"
+    assert p2.mappings[0].mapping_status == "confirmed"
+    history = read_semantic(
+        value.source_id,
+        value.build_id,
+        publication_id=p1.publication_id,
+        allow_historical=True,
+        store_root=root,
+    )
+    assert history == old_view
+    assert "calculate" in next(
+        iter(
+            read_semantic(
+                value.source_id, value.build_id, store_root=root
+            ).effective_claim_purposes.values()
+        )
+    )
+
+
+def test_head_cache_refreshes_on_publish_and_retirement(tmp_path):
+    value, _plan, root, references = prepared(tmp_path)
+    parent = None
+    for generation in (1, 2):
+        manifest = publish_semantic(
+            source_id=value.source_id,
+            build_id=value.build_id,
+            snapshot_id=value.snapshot_id,
+            artifacts=(references["material_items"],),
+            expected_parent_publication_id=parent,
+            store_root=root,
+        )
+        cache = json.loads(next((root / "cache" / "heads").glob("*.json")).read_text())
+        assert cache["generation"] == generation
+        assert cache["publication_id"] == manifest.publication_id
+        parent = manifest.publication_id
+    retired = retire_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        expected_parent_publication_id=parent,
+        store_root=root,
+    )
+    cache = json.loads(next((root / "cache" / "heads").glob("*.json")).read_text())
+    assert cache["generation"] == 3
+    assert cache["publication_id"] == retired.publication_id
+
+
+def test_delayed_cache_refresh_uses_latest_committed_head(tmp_path):
+    value, _plan, root, references = prepared(tmp_path)
+
+    def publish_next(checkpoint):
+        if checkpoint != "after_db_commit":
+            return
+        p1 = read_semantic(value.source_id, value.build_id, store_root=root).manifest
+        publish_semantic(
+            source_id=value.source_id,
+            build_id=value.build_id,
+            snapshot_id=value.snapshot_id,
+            artifacts=(references["material_items"],),
+            expected_parent_publication_id=p1.publication_id,
+            store_root=root,
+        )
+
+    publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=(references["material_items"],),
+        expected_parent_publication_id=None,
+        store_root=root,
+        checkpoint=publish_next,
+    )
+    current = read_semantic(value.source_id, value.build_id, store_root=root).manifest
+    cache = json.loads(next((root / "cache" / "heads").glob("*.json")).read_text())
+    assert current.generation == cache["generation"] == 2
+    assert current.publication_id == cache["publication_id"]
 
 
 def test_two_writers_with_same_frozen_parent_have_one_winner(tmp_path: Path) -> None:
@@ -257,6 +431,55 @@ def test_two_writers_with_same_frozen_parent_have_one_winner(tmp_path: Path) -> 
     connection = sqlite3.connect(root / "index" / "structured.sqlite3")
     assert connection.execute("SELECT COUNT(*) FROM semantic_publications").fetchone() == (1,)
     connection.close()
+
+
+def publication_script(value, reference, checkpoint=""):
+    return (
+        "import os\nfrom plugins.corpus.structured.store import ArtifactReference, publish_semantic\n"
+        "from plugins.corpus.structured.ledger import StructuredExecutionError\n"
+        "def checkpoint(name):\n"
+        f"    if name == {checkpoint!r}: os._exit(73)\n"
+        "try:\n"
+        f"    m = publish_semantic(source_id={value.source_id!r}, build_id={value.build_id!r}, "
+        f"snapshot_id={value.snapshot_id!r}, artifacts=(ArtifactReference.model_validate_json("
+        f"{reference.model_dump_json()!r}),), expected_parent_publication_id=None, "
+        "checkpoint=checkpoint)\n"
+        "    print(m.publication_id)\n"
+        "except StructuredExecutionError as exc:\n"
+        "    print(exc.code)\n"
+    )
+
+
+def test_real_process_writers_compare_frozen_parent(tmp_path):
+    value, _plan, root, references = prepared(tmp_path)
+    script = publication_script(value, references["material_items"])
+    processes = [isolated_process(script, cwd=tmp_path, root=root) for _ in range(2)]
+    outputs = [finish_process(process).strip() for process in processes]
+    assert outputs.count("CS_PUBLICATION_CONFLICT") == 1
+    assert sum(output.startswith("sha256:") for output in outputs) == 1
+    assert read_semantic(value.source_id, value.build_id, store_root=root).manifest.generation == 1
+
+
+@pytest.mark.parametrize("checkpoint", ["after_manifest_write", "after_db_commit"])
+def test_process_hard_exit_never_exposes_half_publication(tmp_path, checkpoint):
+    value, _plan, root, references = prepared(tmp_path)
+    run_isolated(
+        publication_script(value, references["material_items"], checkpoint),
+        cwd=tmp_path,
+        root=root,
+        expected_code=73,
+    )
+    if checkpoint == "after_manifest_write":
+        with pytest.raises(StructuredExecutionError, match="CS_NOT_PUBLISHED"):
+            read_semantic(value.source_id, value.build_id, store_root=root)
+        # Orphan manifests are reusable; no head or generation was committed.
+        result = run_isolated(
+            publication_script(value, references["material_items"]), cwd=tmp_path, root=root
+        )
+        assert result.startswith("sha256:")
+    view = read_semantic(value.source_id, value.build_id, store_root=root)
+    assert view.manifest.generation == 1
+    assert len(view.artifacts) == 1
 
 
 def test_crash_before_commit_leaves_orphan_not_head_and_after_commit_head_is_readable(
@@ -460,7 +683,7 @@ def test_same_input_different_model_profiles_keep_distinct_artifact_identity(
     assert p1.artifacts != p2.artifacts
 
 
-def test_relation_artifact_cannot_publish_without_its_items_artifact(tmp_path: Path) -> None:
+def relation_artifacts(tmp_path: Path):
     value = dialogue_snapshot()
     plan = plan_batch(
         value,
@@ -501,8 +724,12 @@ def test_relation_artifact_cannot_publish_without_its_items_artifact(tmp_path: P
             {
                 "record_type": "relation_decision",
                 "candidate_pair_id": candidate.candidate_pair_id,
-                "status": "absent",
-                "evidence_quote": None,
+                "status": "present",
+                "evidence_quote": next(
+                    item.evidence[0].quote
+                    for item in items_execution.payload.understanding.items
+                    if item.item_id == candidate.from_item
+                ),
             },
             ensure_ascii=False,
         )
@@ -528,6 +755,17 @@ def test_relation_artifact_cannot_publish_without_its_items_artifact(tmp_path: P
         task_id=relation_task.task_id,
         artifact_sha256=relation_task.artifact_sha256,
     )
+    items_task = next(task for task in first.ledger.tasks if task.role == "material_items")
+    items_reference = ArtifactReference(
+        batch_id=plan.batch_id,
+        task_id=items_task.task_id,
+        artifact_sha256=items_task.artifact_sha256,
+    )
+    return value, root, items_reference, reference
+
+
+def test_relation_artifact_cannot_publish_without_its_items_artifact(tmp_path: Path) -> None:
+    value, root, _items_reference, reference = relation_artifacts(tmp_path)
     with pytest.raises(StructuredExecutionError, match="relation_upstream_invalid"):
         publish_semantic(
             source_id=value.source_id,
@@ -537,3 +775,79 @@ def test_relation_artifact_cannot_publish_without_its_items_artifact(tmp_path: P
             expected_parent_publication_id=None,
             store_root=root,
         )
+
+
+def test_replaced_items_do_not_reactivate_old_relations(tmp_path):
+    value, root, items_reference, reference = relation_artifacts(tmp_path)
+    p1 = publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=(items_reference, reference),
+        expected_parent_publication_id=None,
+        store_root=root,
+    )
+    old = read_semantic(value.source_id, value.build_id, store_root=root)
+    assert old.active_relation_ids
+    plan = plan_batch(
+        value,
+        config=extraction_config("replacement-model"),
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+    )
+    task = next(task for task in plan.tasks if task.role == "material_items")
+    responses = tmp_path / "replacement-responses"
+    write_response(
+        responses,
+        ReplayResponse(
+            task_id=task.task_id,
+            sequence=1,
+            role=task.role,
+            protocol=task.protocol,
+            content=dialogue_item_content(value),
+        ),
+        "items",
+    )
+    replayed = replay_batch(plan, responses=responses, store_root=root)
+    task = next(task for task in replayed.ledger.tasks if task.role == "material_items")
+    replacement = ArtifactReference(
+        batch_id=plan.batch_id, task_id=task.task_id, artifact_sha256=task.artifact_sha256
+    )
+    with pytest.raises(StructuredExecutionError, match="relation_upstream_invalid"):
+        publish_semantic(
+            source_id=value.source_id,
+            build_id=value.build_id,
+            snapshot_id=value.snapshot_id,
+            artifacts=(replacement, reference),
+            expected_parent_publication_id=p1.publication_id,
+            store_root=root,
+        )
+    assert read_semantic(value.source_id, value.build_id, store_root=root) == old
+    p2 = publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=(replacement,),
+        expected_parent_publication_id=p1.publication_id,
+        store_root=root,
+    )
+    assert read_semantic(value.source_id, value.build_id, store_root=root).active_relation_ids == ()
+    assert (
+        read_semantic(
+            value.source_id,
+            value.build_id,
+            publication_id=p1.publication_id,
+            allow_historical=True,
+            store_root=root,
+        )
+        == old
+    )
+    retire_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        expected_parent_publication_id=p2.publication_id,
+        store_root=root,
+    )
+    with pytest.raises(StructuredExecutionError, match="publication_withdrawn"):
+        read_semantic(value.source_id, value.build_id, store_root=root)
