@@ -22,6 +22,9 @@ EXPECTED_TOOLS = {
     "finish_planning",
     "glob_search",
     "grep_search",
+    "investment_context",
+    "investment_position_sizing",
+    "investment_strategy_lint",
     "market_financials",
     "market_history",
     "market_quote",
@@ -77,7 +80,13 @@ def test_semantic_query_is_resolvable_and_read_only_without_profile_enablement()
 # 漏掉 apodex 的 registry 会让 TUI 加载即 hard error（unknown tool name）；
 # 漏掉 _READ_ONLY 会让每一次仓位计算都弹确认框。
 
-FINANCE_TOOLS = ("position_sizing", "strategy_lint")
+FINANCE_TOOLS = (
+    "position_sizing",
+    "strategy_lint",
+    "investment_context",
+    "investment_position_sizing",
+    "investment_strategy_lint",
+)
 
 
 def test_finance_tools_are_in_the_terminal_registry() -> None:

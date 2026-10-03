@@ -178,7 +178,7 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 `404 snapshot_absent`，不用当前资料回填）与 `POST /api/runs/{id}/rerun`（停止旧执行 +
 新 Run + 新快照 + `rerun_of_run_id` 关联）。真 PG 验收见 `tests/pg/test_run_snapshot.py`
 （13 项，累计 46 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
-尚未实现：快照注入 worker/workflow（DATA-08）。
+快照注入 worker/workflow 已由 DATA-08 完成。
 
 ### DATA-06 原子提交与持久派发
 
@@ -224,7 +224,7 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 （`429 quota_exceeded`，重算取代的旧 Run 不计入）。
 真 PG 验收见 `tests/pg/test_run_dispatch.py`（19 项，累计 65 项通过，
 证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
-尚未实现：DATA-08 快照注入 worker 与业务工具接线。
+快照注入 worker 与业务工具接线已由 DATA-08 完成。
 
 ### DATA-07 持久补数与续接
 
@@ -258,6 +258,18 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 
 **验收**：真实 worker 请求可验证使用冻结值；长对话压缩和模型切换不靠历史摘要猜数。
 覆盖 AC-10、20、24、27、28。
+
+**当前产物（2026-10-03）**：`server/investment_context.py` 按认证用户与 Run 读取
+`RunInvestmentSnapshot`，按用途裁剪并可在缓存丢失后从不可变快照重建；编排器只向 worker
+物化该 Run 的最小上下文，并隔离平台数据库 DSN。`server/worker.py` 将动态资料作为用户数据块
+注入，把固定规则留在 system addendum，同一启动只追加一次；上下文工具在压缩后仍从 Run 绑定
+读取。`plugins/tools/investment_context.py` 提供只读上下文、快照绑定仓位计算及策略校验，模型参数
+不能替换资金、计划价、风险预算或仓位上限；缺失/待澄清字段只阻止依赖计算。Web profile 已显式
+开放 corpus、coverage、market；普通 Run 提供确定性 sizing/lint，业务 Run 将其替换为受保护包装
+工具，并排除可传入任意资金的原始工具。
+真 PG **113 passed**，worker/工具定向 **78 passed**，市场/语料/计算回归 **231 passed**；
+真实 worker → mock OpenAI HTTP 验证首次模型请求中的冻结值只出现一次。证据见
+[环境基线](web-business-data-env-baseline.md) §4.4。
 
 ## 4. 监控事件与自动分析
 

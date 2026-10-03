@@ -47,6 +47,12 @@ from frontier_agent.core.loop_types import (
     TurnContext,
 )
 from frontier_agent.core.messages import Message, text_of
+from plugins.corpus.structured.consumption import (
+    SEMANTIC_TOOL,
+    ReportSemanticReference,
+    SemanticConsumption,
+    verify_reference,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -83,11 +89,11 @@ _EVIDENCE_RANK = {UNKNOWN: 0, "partial": 1, DELIVERED: 2}
 TOOL_SEARCH = "corpus_search"
 TOOL_FETCH = "corpus_fetch"
 TOOL_INVENTORY = "corpus_inventory"
-CORPUS_TOOLS = frozenset({TOOL_SEARCH, TOOL_FETCH, TOOL_INVENTORY})
+CORPUS_TOOLS = frozenset({TOOL_SEARCH, TOOL_FETCH, TOOL_INVENTORY, SEMANTIC_TOOL})
 
 #: 声明依赖的用途词表（结论证据充分性按用途核对）。
 DEPENDENCY_PURPOSES: tuple[str, ...] = (
-    "value", "period", "unit", "header", "footnote",
+    "value", "period", "unit", "header", "footnote", "condition", "negation", "attribution",
 )
 
 #: 判定「截断」所需的最短可辨前缀；片段太短则只记 unknown，不猜截断。
@@ -270,6 +276,7 @@ class ConsumptionLedger:
         default_factory=dict, repr=False,
     )
     _offered_scopes: set[str] = field(default_factory=set, repr=False)
+    semantic: SemanticConsumption = field(default_factory=SemanticConsumption)
 
     # ── 采集：offered ──────────────────────────────────────────────────
     def record_search(self, result_text: str, *, turn: int = 0) -> None:
@@ -483,6 +490,7 @@ class ConsumptionLedger:
             "last_finalized_turn": self.last_finalized_turn,
             "offered": self.offered,
             "requested": self.requested,
+            "semantic": self.semantic.to_dict(),
             "fetched": [ref.to_dict() for ref in self.fetched],
             "delivered": [
                 {
@@ -948,6 +956,7 @@ def verify_manifest(
         status = PUBLISH_VERIFIED
     return {
         "schema_version": VERIFICATION_SCHEMA_VERSION,
+        "checked_at": datetime.now(UTC).isoformat(),
         "status": status,
         "counts": counts,
         "verification_errors": verification_errors,
@@ -978,6 +987,7 @@ def _verify_conclusion(
     problems: list[dict[str, str]] = []
     covered_purposes: set[str] = set()
     deliveries: list[str] = []
+    semantic_out: list[dict[str, Any]] = []
 
     # 评审 C4：报告绑定——结论必须能在最终报告中定位；清单与报告脱节即降级。
     report_quote = str(conclusion.get("report_quote") or "").strip()
@@ -993,9 +1003,36 @@ def _verify_conclusion(
                 "message": "report_quote 未出现在最终报告中（清单相对报告已过期）",
             })
 
-    if not isinstance(evidence, list) or not evidence:
+    semantic_refs = conclusion.get("semantic_references")
+    if semantic_refs is not None:
+        if not isinstance(semantic_refs, list) or not semantic_refs:
+            problems.append({"code": "invalid_evidence", "message": "semantic_references 必须为非空数组"})
+        else:
+            for raw in semantic_refs:
+                try:
+                    ref = ReportSemanticReference.model_validate(raw)
+                except ValueError as exc:
+                    problems.append({"code": "invalid_evidence", "message": str(exc)})
+                    continue
+                if ref.report_quote != report_quote:
+                    problems.append({"code": "not_in_report", "message": "语义引用与结论 report_quote 不一致"})
+                checked, issues = verify_reference(
+                    ref, ledger.semantic, final_text=final_text, pending_aware=pending_aware,
+                )
+                semantic_out.append(checked.model_dump(mode="json"))
+                problems.extend(issues)
+                deliveries.append(checked.delivery_status)
+                if checked.verification_status == "verified":
+                    covered_purposes.update(
+                        d.kind for d in checked.dependency_assertions
+                        if d.status == "present" and checked.purpose in d.required_for
+                    )
+
+    if (not isinstance(evidence, list) or not evidence) and semantic_refs is None:
         problems.append({"code": "no_evidence", "message": "结论未附任何证据"})
-    else:
+    if evidence is not None and not isinstance(evidence, list):
+        problems.append({"code": "invalid_evidence", "message": "evidence 必须为数组"})
+    if isinstance(evidence, list):
         for ev_index, item in enumerate(evidence):
             label = f"evidence[{ev_index}]"
             if not isinstance(item, dict):
@@ -1097,6 +1134,7 @@ def _verify_conclusion(
         "covered_purposes": sorted(covered_purposes),
         "missing_dependencies": missing_deps,
         "delivery": sorted(set(deliveries)),
+        "semantic_references": semantic_out,
         "problems": problems,
         # 明确忽略模型自报：字段仅记录，不参与判定。
         "model_claimed_complete": conclusion.get("complete"),
@@ -1193,7 +1231,8 @@ def publish_boundary(
         "verification": None,
     }
     try:
-        if not ledger.offered and not ledger.fetched:
+        if (not ledger.offered and not ledger.fetched
+                and not ledger.semantic.calls and not ledger.semantic.receipts):
             outcome["boundary_action"] = "skip"
             return outcome
         verification = verify_and_record(
@@ -1284,11 +1323,16 @@ class ConsumptionLedgerObserver(BaseObserver):
     ) -> None:
         try:
             name = str(tool_call.get("name") or "")
-            if name != TOOL_FETCH:
+            if name not in {TOOL_FETCH, SEMANTIC_TOOL}:
                 return
             args = tool_call.get("args")
             if isinstance(args, dict):
-                self._get_ledger().record_fetch_call(args, turn=ctx.turn)
+                if name == SEMANTIC_TOOL:
+                    self._get_ledger().semantic.record_call(
+                        args, str(tool_call.get("id") or ""), ctx.turn,
+                    )
+                else:
+                    self._get_ledger().record_fetch_call(args, turn=ctx.turn)
         except Exception as exc:
             logger.debug("ConsumptionLedgerObserver.on_tool_call: %s", exc)
 
@@ -1302,6 +1346,10 @@ class ConsumptionLedgerObserver(BaseObserver):
             elif name == TOOL_FETCH:
                 self._get_ledger().record_fetch_result(
                     result.result, is_error=result.is_error, turn=ctx.turn,
+                )
+            elif name == SEMANTIC_TOOL:
+                self._get_ledger().semantic.record_result(
+                    result.args, result.result, result.tool_call_id, ctx.turn,
                 )
         except Exception as exc:
             logger.debug("ConsumptionLedgerObserver.on_tool_result: %s", exc)

@@ -664,6 +664,8 @@ async def create_input_request(
             expires_at=_optional_time(body.get("expires_at"), "expires_at"),
         )
     stop_requested = False
+    # Queued sources are already durably abandoned by create_request. Running
+    # sources additionally need this process to signal and observe the worker.
     stop_confirmed = True
     if source_uuid is not None and not outcome.replayed:
         async with biz.business_transaction() as session:
@@ -677,9 +679,12 @@ async def create_input_request(
         if needs_stop:
             orchestrator = get_orchestrator()
             stop_requested = await orchestrator.stop(source_uuid.hex, stopped_by="input_required")
-            stop_confirmed = await orchestrator.wait_stopped(
-                source_uuid.hex, timeout=get_config().dispatch_stop_timeout_seconds
-            )
+            if stop_requested:
+                stop_confirmed = await orchestrator.wait_stopped(
+                    source_uuid.hex, timeout=get_config().dispatch_stop_timeout_seconds
+                )
+            else:
+                stop_confirmed = False
     return {
         "replayed": outcome.replayed,
         "operation_id": outcome.operation_id,

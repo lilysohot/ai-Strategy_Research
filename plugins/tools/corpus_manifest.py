@@ -42,17 +42,22 @@ from plugins.corpus.ledger import (
     write_manifest_file,
 )
 from plugins.corpus.service import get_service
+from plugins.corpus.structured.consumption import (
+    ReportSemanticReference,
+    reference_for_record,
+)
 
 logger = logging.getLogger(__name__)
 
 _SUBMIT_HINT = (
-    "对非 supported 的结论：补取原文（corpus_fetch）、修改报告表述或从报告中移除，"
+    "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；"
+    "已完整送达的语义证据不必例行 corpus_fetch。"
     "然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。"
     "本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"
 )
 
 #: 触发伴随绑定的语料检索工具（任一出现即注入清单生产者）。
-CORPUS_RETRIEVAL_TOOLS = frozenset({"corpus_search", "corpus_fetch"})
+CORPUS_RETRIEVAL_TOOLS = frozenset({"corpus_search", "corpus_fetch", "corpus_semantic_query"})
 MANIFEST_TOOL_NAME = "corpus_submit_manifest"
 
 
@@ -83,6 +88,11 @@ MANIFEST_PROMPT_NOTE = (
     "然后重新提交完整清单；\n"
     "3. 新取片段下一轮才能确认送达（pending），届时重新提交确认；\n"
     "4. 最终报告不得主张清单标记为 unsupported 的结论。\n"
+    "5. 若使用 corpus_semantic_query 已送达的完整原文，可用 semantic_references："
+    "每项给 publication_id、record_id、purpose（cite/compare/calculate）；系统从本运行"
+    "查询记录补齐精确原文范围及依赖，生成正式语义报告引用，无需例行 fetch。"
+    "仍须填写结论 report_quote 与 text_location；用途许可不同于 value/condition 等依赖作用。"
+    "pending 等待下一轮实际请求确认；裁剪缺口重查，版本失效须重查，不能把发布成功当送达。\n"
     "发布边界会对照最终报告与消费账本重算校验；缺清单或未通过都会被记录并"
     "（在启用阻断时）降级发布状态。"
 )
@@ -99,7 +109,21 @@ def _validate_conclusions(conclusions: Any) -> list[str]:
             errors.append(f"{label} 不是 JSON 对象")
             continue
         evidence = row.get("evidence")
-        if not isinstance(evidence, list) or not evidence:
+        semantic = row.get("semantic_references")
+        if semantic is not None:
+            if not isinstance(semantic, list) or not semantic:
+                errors.append(f"{label}.semantic_references 必须为非空数组")
+            else:
+                for item in semantic:
+                    try:
+                        ref = ReportSemanticReference.model_validate(item)
+                        if ref.report_quote != row.get("report_quote"):
+                            errors.append(f"{label} 语义引用 report_quote 不一致")
+                    except ValueError as exc:
+                        errors.append(f"{label} 语义引用无效: {exc}")
+        if evidence is None and semantic is not None:
+            evidence = []
+        if not isinstance(evidence, list) or (not evidence and semantic is None):
             errors.append(f"{label} 缺少非空 evidence 数组")
             continue
         for ev_index, item in enumerate(evidence):
@@ -123,6 +147,36 @@ def _validate_conclusions(conclusions: Any) -> list[str]:
                     f"（词表：{list(DEPENDENCY_PURPOSES)}）",
                 )
     return errors
+
+
+def _expand_semantic_references(conclusions: Any) -> Any:
+    """Resolve short record selections to frozen references, never to delivered flags."""
+    if not isinstance(conclusions, list):
+        return conclusions
+    rows = []
+    for row in conclusions:
+        if not isinstance(row, dict) or not isinstance(row.get("semantic_references"), list):
+            rows.append(row)
+            continue
+        references = []
+        for item in row["semantic_references"]:
+            if not isinstance(item, dict) or set(item) != {"publication_id", "record_id", "purpose"}:
+                references.append(item)
+                continue
+            observations = get_run_ledger().semantic.observations(
+                item["publication_id"], item["record_id"],
+            )
+            if not observations:
+                raise ValueError("所选语义记录未由本运行的真实查询返回")
+            record = next(r for r in observations[0].page.records if r.record_id == item["record_id"])
+            ref = reference_for_record(
+                item["publication_id"], record, item["purpose"],
+                str(row.get("text_location") or row.get("id") or ""),
+                str(row.get("report_quote") or ""),
+            )
+            references.append(ref.model_dump(mode="json"))
+        rows.append({**row, "semantic_references": references})
+    return rows
 
 
 def _current_owner() -> str:
@@ -156,9 +210,13 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             ``report_quote``（该结论在**最终报告**中的逐字锚点；报告未成文时可先
             缺省，边界校验时必须能定位）、``evidence``（非空数组，每项含
             ``doc_id``／``locator``／``quote``（权威原文逐字片段）及可选
-            ``purpose``：value|period|unit|header|footnote）、
+            ``purpose``：value|period|unit|header|footnote|condition|negation|attribution）、
             ``required_dependencies``（可选，结论成立必需的用途列表，须与某条
-            证据的 purpose 对应）。
+            证据的 purpose 对应）。语义查询证据可改用 ``semantic_references``
+            数组（可与 evidence 并存），每项含 ``publication_id/record_id/purpose``；
+            purpose 为 cite|compare|calculate，非依赖作用。必须同时给 report_quote
+            和 text_location（或 id）。也可提交完整 corpus-report-semantic-reference-v1
+            引用，但状态字段不被信任，精确范围/依赖/送达/版本均由后台重算。
 
     Returns:
         JSON：``ok``、``manifest_file``（落盘路径，无 run 目录为 null）、
@@ -166,7 +224,11 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         ``conclusions``（逐条状态与问题，pending=新取片段待下一轮边界核验）、
         ``hint``（修正指引）；schema 不合法时 ``ok=false`` 且 ``errors`` 逐条列出。
     """
-    errors = _validate_conclusions(conclusions)
+    try:
+        conclusions = _expand_semantic_references(conclusions)
+        errors = _validate_conclusions(conclusions)
+    except (ValueError, TypeError) as exc:
+        errors = [str(exc)]
     if errors:
         return json.dumps(
             {
@@ -220,6 +282,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             "id": row.get("id"),
             "status": row.get("status"),
             "delivery": row.get("delivery"),
+            "semantic_references": row.get("semantic_references", []),
             "problems": problems,
         })
     return json.dumps(
@@ -238,10 +301,8 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
 
 def _resolver() -> SourceResolver:
     """权威原文 resolver：延迟构造，异常交给 verify_manifest 逐条分类。"""
-    service = get_service()
-
     def resolve(doc_id: str, locator: str) -> str | None:
-        return service.fetch_verbatim(doc_id, locator).text
+        return get_service().fetch_verbatim(doc_id, locator).text
 
     return resolve
 

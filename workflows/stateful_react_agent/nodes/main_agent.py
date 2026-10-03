@@ -1085,11 +1085,14 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
     try:
         import sys
+
+        from plugins.corpus.semantic_delivery import with_semantic_delivery
+
         loop_fn = getattr(sys.modules.get("apodex.session"), "run_agent_loop", run_agent_loop)
         result = await loop_fn(
             system_prompt=system_prompt,
             user_message=question,
-            llm=llm,
+            llm=with_semantic_delivery(llm) if "corpus_semantic_query" in tool_names else llm,
             tools=tools,
             config=LoopConfig(
                 max_turns=max_turns,

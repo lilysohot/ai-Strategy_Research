@@ -149,19 +149,47 @@ worker 消费业务快照/工具接线、真实浏览器 + API + worker 联合�
 
 执行记录见 [DATA-07 issue](../../.scratch/web-business-repairs/issues/02-data07-input-requests.md)。
 
-**验收复核：暂不通过。** 下表为上一轮测试记录；后续审计发现 8 项未覆盖的问题，含真实 PG 并发漏读/终态覆盖，见[复核报告](../../.scratch/web-business-repairs/data07-acceptance-review.md)。需修复后重新验收。
+**修复复验：通过。** 后续审计发现的 8 项遗漏已全部关闭，见[复核报告](../../.scratch/web-business-repairs/data07-acceptance-review.md)。
 
 | 项 | 本批证据 |
 |---|---|
 | 隔离环境 | 临时容器 `frontier-business-data07-20261003`；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1` 随机端口及 `/tmp/frontier-business-data07-runs`；现有 `pg`/`corpus-db` 未改 |
 | 迁移 | 测试库升级至 `0012_business_events`；新增 `0011_input_requests` 和 `0012_business_events`；既有迁移降级/升级往返继续通过 |
-| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**108 passed**；DATA-07/通知新增 13 项 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**112 passed**；DATA-07 定向 **17 passed**，含停止、终态竞争、字段撤回和事件游标并发回归 |
 | 前端 | Node 22：74 项单测、vue-tsc、Vite production build 通过；构建仅保留既有大 chunk 提示 |
-| 浏览器 | Playwright + 真实 FastAPI + 隔离 PG；375×812 回答、唯一续接、原快照不变、刷新恢复、通知已读持久化通过 |
+| 浏览器 | Playwright + 真实 FastAPI + 隔离 PG；覆盖 100 条以上分页、详情迟到响应、跨研究指定请求定位、部分回答、唯一续接、原快照不变和通知已读持久化 |
 | 通知范围 | B 阶段仅接入补数创建/回答生产者；无事件清理时游标不会过期，`cursor_expired=false`；监控事件及保留策略留待 DATA-12 C |
 | 部署 | 未部署 API，未迁移生产库；测试结束停止临时 API/PG 并移除临时口令文件 |
 
-脱敏日志保存在 `.scratch/web-business-repairs/evidence/data07-pg.log`。
+历史 PG 日志保存在 `.scratch/web-business-repairs/evidence/data07-pg.log`；修复后独立并发审计保存在 `.scratch/web-business-repairs/evidence/data07-post-fix-audit.log`。
+
+### 4.4 DATA-08 业务上下文与工具接线批次（2026-10-03）
+
+执行记录见 [DATA-08 issue](../../.scratch/web-business-repairs/issues/03-data08-business-context-tools.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data08-validation.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 15 容器 `frontier-business-data08-test`；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1` 随机端口及 `/tmp/frontier-business-data08-test-runs`；未连接或迁移现有业务库 |
+| 认证与冻结 | resolver 查询同时约束 Run、快照与认证用户；当前账户/计划修改后旧 Run 仍返回原快照，清空进程缓存后从 PG 重建的摘要和值完全一致 |
+| 最小权限 | 父进程物化用途所需字段；worker 环境将 `SERVER_DATABASE_URL` 固定为私有内存库并移除 Docker DSN，不继承平台数据库凭据 |
+| 模型边界 | 固定规则进入 system addendum，动态快照作为转义后的用户数据块；真实 worker → loopback mock OpenAI HTTP 验证首次请求中冻结资金值及上下文结束标记均只出现一次 |
+| 工具边界 | Web profile 显式开放 corpus、coverage、market；普通 Run 可达确定性 sizing/lint，业务 Run 替换为 Run 绑定的 context/sizing/lint 并排除原始工具；包装 schema 无资金、风险预算、计划价和仓位上限覆盖参数 |
+| 可观测性 | resolver sidecar 记录调用、缓存读/写、摘要和本次命中；工具 sidecar 记录上下文读取、仓位计算及策略校验次数；通用 trajectory/usage 继续记录工具输入输出与 LLM token/cache/call 用量 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**113 passed**；新增 owner 隔离、冻结值、缓存丢失重建与指标断言 |
+| worker/工具 | DATA-08 + 编排器相关定向：**78 passed**；市场、语料覆盖、仓位、策略与注册表回归：**231 passed** |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors；import smoke stage 1：384/384，stage 2：433/433；symbol closure：483 文件无缺失；preflight 真实模型单次调用通过 |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。模型切换不改变 worker 内的 Run 绑定上下文；长对话压缩后
+可再次调用 `investment_context` 取得同一快照，不依赖被压缩的聊天摘要。
+
+**验收回溯（2026-10-03）**：初审发现并修复四项遗漏：仓位与策略校验现按冻结
+`capital_basis` 选择总资金或可用资金；合法非对象 JSON 返回结构化 lint 失败；指标写盘失败不再
+中断 ContextVar 清理及 Run summary；worker 使用空 tombstone 防止 `.env` 恢复业务库 Docker DSN、
+master key 或 JWT key，认证解析失败时清除旧物化上下文。新增压缩移除旧消息后从 Run 绑定工具
+恢复精确快照的测试。规范与规格两条独立复审均无剩余阻断项，详见
+[验收回溯](../../.scratch/web-business-repairs/data08-acceptance-review.md)。
 
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 

@@ -103,6 +103,27 @@ def test_schema_rejects_fabricated_purpose(run_env) -> None:
     assert any("vibes" in e for e in out["errors"])
 
 
+def test_semantic_query_alone_binds_manifest_companion() -> None:
+    from plugins.tools.corpus_semantic_query import corpus_semantic_query
+
+    tools = with_manifest_tool([corpus_semantic_query], role_id="stateful_react")
+    assert [tool.name for tool in tools] == ["corpus_semantic_query", "corpus_submit_manifest"]
+    assert with_manifest_tool(tools, role_id="stateful_react") == tools
+
+
+def test_dependency_roles_are_not_semantic_use_permissions(run_env) -> None:
+    from plugins.tools.corpus_manifest import _validate_conclusions
+
+    for role in ("condition", "negation", "attribution"):
+        assert _validate_conclusions([{"evidence": [{
+            "doc_id": DOC, "locator": "chunk:c1", "quote": TEXT, "purpose": role,
+        }], "required_dependencies": [role]}]) == []
+    for use in ("cite", "compare", "calculate"):
+        assert _validate_conclusions([{"evidence": [{
+            "doc_id": DOC, "locator": "chunk:c1", "quote": TEXT, "purpose": use,
+        }]}])
+
+
 # ── 提交即回验（评审 C3）─────────────────────────────────────────────────
 
 

@@ -108,9 +108,17 @@ def terminal_tool_registry() -> dict[str, Any]:
     # 不需要 apodex.local_tools 那样的「宿主 cwd」变体。
     # 这里刻意不做 try/except：它们与 plugins/tools 同仓同包，
     # 起不来说明安装坏了，静默降级只会让 Agent 退回心算——那正是硬闸②要挡的事。
+    from plugins.tools.investment_context import (
+        investment_context,
+        investment_position_sizing,
+        investment_strategy_lint,
+    )
     from plugins.tools.position_sizing import position_sizing
     from plugins.tools.strategy_lint import strategy_lint
     reg.setdefault("position_sizing", position_sizing)
+    reg.setdefault("investment_context", investment_context)
+    reg.setdefault("investment_position_sizing", investment_position_sizing)
+    reg.setdefault("investment_strategy_lint", investment_strategy_lint)
     reg.setdefault("strategy_lint", strategy_lint)
     # 语料检索 / 取证（P0b）。同样是只读、无副作用，两个入口共用一份实现。
     from plugins.tools.corpus_fetch import corpus_fetch
@@ -148,7 +156,8 @@ _READ_ONLY = frozenset({
     "submit_report", "finalize_answer",
     # 投研内核（P0a）：纯计算 + 纯校验，不碰文件系统、不碰网络、无副作用。
     # 不加进来的话，不带 -y 时每一次仓位计算都要人工点确认。
-    "position_sizing", "strategy_lint",
+    "position_sizing", "investment_context", "investment_position_sizing",
+    "investment_strategy_lint", "strategy_lint",
     # 语料检索 / 取证（P0b）：只读本地 SQLite。不加进来的话，
     # 不带 -y 时每一次检索与取证都要人工点确认。
     "corpus_search", "corpus_fetch", "corpus_inventory", "corpus_semantic_query",

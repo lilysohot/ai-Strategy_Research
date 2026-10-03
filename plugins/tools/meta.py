@@ -136,6 +136,9 @@ TOOL_META: dict[str, ToolMeta] = {
     # max_result_chars 保持 0（不限）：两者输出都是小 JSON，
     # 截断只会把 computed_by 这类硬闸字段切掉，有害无益。
     "position_sizing": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+    "investment_context": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+    "investment_position_sizing": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
+    "investment_strategy_lint": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
     "strategy_lint": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=5, category="finance"),
     # 语料检索 / 取证（P0b）——只读本地 SQLite，无网络、无写入，故并发安全。
     # timeout=10 而不是 5：首次调用要加载 jieba 词典（约 1s），

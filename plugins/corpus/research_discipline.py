@@ -66,8 +66,11 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
   `url` / `title` 至少一项）。`evidence[].source_ref` 必须能在其中找到——
   指向未声明来源的引用视为悬空，同样被拦下。
 - `corpus_search` 返回的 **snippet 是截断的，仅用于定位，禁止直接引用**。
-  写 `evidence.quote` 前必须先用 `corpus_fetch(doc_id, locator)` 取回逐字
-  原文；`locator` 要原样填进 `evidence.page`。
+  写 `evidence.quote` 前须取得逐字原文：可用 `corpus_fetch(doc_id, locator)`，
+  或使用 `corpus_semantic_query` 返回且已实际送达的完整原文证据单元。
+  后者须连同 publication_id、record_id、用途、精确区间及必要依赖提交报告清单，
+  充分证据不要求例行重复 fetch；后台 resolver 核验不等于 Agent 已读。
+  原文路径的 `locator` 要原样填进 `evidence.page`。
 - 分析研报内容时**优先用 `corpus_search` 查本地语料库**。网页检索只用于
   语料库之外的最新信息，且同样必须给出可定位来源（URL 或锚点），
   不能只写「据网络资料」。

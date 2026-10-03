@@ -1,0 +1,4 @@
+{"case": "withdrawn_fact", "collected": {"plan": {"target_price": "28"}}, "would_continue": false}
+{"case": "event_allocation_serialized", "second_blocked_before_first_commit": true, "allocated": [1, 2], "all_committed": [1, 2], "resume_after": 2}
+{"case": "expiry_preserves_committed_answer", "expiry_blocked_on_answer": true, "final_status": "answered"}
+isolated audit container removed

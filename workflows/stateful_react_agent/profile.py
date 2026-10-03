@@ -23,6 +23,8 @@ _PROFILE_ALIASES = {
     "default": "simple",
     "keep5": "benchmark",
     "Apodex1.1-solve": "tui",
+    # Experimental derivative, not a second tool list or a default activation.
+    "tui-semantic": "tui",
 }
 
 # An alias must not silently change what a pinned name DOES. The retired
@@ -75,6 +77,11 @@ def load_react_profile(
         resolved = _deep_merge(resolved, alias_overrides)
     if overrides:
         resolved = _deep_merge(resolved, overrides)
+    if inline is None and name == "tui-semantic":
+        agent = resolved.setdefault("agent", {})
+        agent["agent_tools"] = list(
+            dict.fromkeys([*(agent.get("agent_tools") or []), "corpus_semantic_query"])
+        )
     return resolved
 
 

@@ -666,6 +666,17 @@ def test_boundary_skips_runs_without_corpus_activity(tmp_path: Path) -> None:
     assert not (tmp_path / "manifest_verification.json").exists()
 
 
+def test_semantic_attempt_without_fetch_no_longer_skips_a4(tmp_path: Path) -> None:
+    ledger = ConsumptionLedger()
+    ledger.semantic.record_call({"source_id": "a" * 64, "build_id": "b" * 64}, "q1", 1)
+    out = publish_boundary(ledger, final_text="报告", answer_status="complete", directory=tmp_path)
+    assert out["boundary_action"] != "skip"
+    assert out["publish_status"] == "draft"
+    assert ledger.to_dict()["fetched"] == []
+    assert ledger.to_dict()["requested"] == []
+    assert ledger.to_dict()["semantic"]["calls"][0]["tool"] == "corpus_semantic_query"
+
+
 def test_boundary_observe_by_default_records_without_blocking(tmp_path: Path, monkeypatch) -> None:
     """默认（A4_ENFORCE 关闭）：缺清单 → draft 记录工件，但发布文本原样放行。"""
     monkeypatch.delenv("A4_ENFORCE", raising=False)

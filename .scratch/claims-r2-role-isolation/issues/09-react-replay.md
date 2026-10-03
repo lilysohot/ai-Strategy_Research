@@ -1,10 +1,10 @@
 # 09 · react/tui 产品接线与零模型端到端验收
 
-Status: needs-triage
-Execution: 未开始
+Status: ready-for-agent
+Execution: 实现中；真实模型验收另待模型/范围/预算确认
 Type: task
 Plan: W5 回放；R2-S3
-Blocked by: 08
+Blocked by: 无本地实现依赖；真实模型验收待明确试验清单
 Real model calls: 0
 Production database access: 0
 
@@ -59,3 +59,17 @@ uv run python tools/check_symbols.py
 ## Comments
 
 - 2026-10-02：仅编制任务，尚未执行。真实模型与生产库额度均为 0。
+- 2026-10-03：用户再次明确“执行09任务”，按本票正式入口与发布/消费接口推进接线及
+  安全回归。用户另要求真实模型测试：该验收要求保留，但具体模型、来源、请求/金额/时限
+  尚未明确，本轮不发送真实请求、不将回放成功当真实模型验收通过。
+- 2026-10-03：用户要求继续下一任务，启动 09 前置核查。08 的 P3 docstring 遗漏已补齐，
+  87 项专项测试及 Ruff/定向类型检查通过，解除本地依赖；07 的复验通过证据在本对话中，
+  其历史票据仍待单独回填。未修改主计划阶段状态。
+- 已确认实际入口为终端 react profile → stateful-react-agent/tui，工具绑定由 workflow
+  profile 负责；新工具须显式实验配置启用，不在终端 profile 复制 tools 列表。
+- 按 tdd 技能先请求用户确认测试边界：正式快照/回放/发布接口，以及 react/tui 实际工具
+  绑定、消息送达、最终 A4 结果。确认前未新增测试、未修改 09 产品代码。
+- 外部门按主计划公开台账核对：历史 I3-1 未完成描述已被后续记录取代，主计划已记录
+  M6/M7 放行；但 R2-S3 仍为待执行，本票回放不能代替阶段签认。未读取任何真实样本。
+- 票据列出的 `tests/test_corpus_cli_isolation.py` 依赖隔离 PG 的 `CORPUS_I2_DSN`，
+  未配置时会模块级 skip；该 skip 不能当作零模型文件回放或 PG 验收通过。

@@ -72,6 +72,9 @@ agent:
   # Expose add_task/update_task and maintain their state during the run.
   task_board: true
   # Explicit tool allowlist; aligned web tools use the current normalized schema.
+  # The explicitly selected tui-semantic derivative adds corpus_semantic_query
+  # in load_react_profile; this default list remains unchanged. Its store must
+  # be configured separately with CORPUS_STRUCTURED_ROOT (no implicit discovery).
   # position_sizing / strategy_lint (P0a 投研内核): 纯函数，确定性计算 + 校验。
   # 注意：本文件才是 `--mode react` 实际绑定工具的地方（apodex 的 react.yaml
   # 只选了 workflow + workflow_profile，工具可见性由 agent.agent_tools 决定），

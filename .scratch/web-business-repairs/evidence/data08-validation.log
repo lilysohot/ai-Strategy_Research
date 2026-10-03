@@ -1,0 +1,33 @@
+DATA-08 validation — 2026-10-03
+
+Scope
+- Authenticated immutable InvestmentContext resolver
+- Parent materialization and worker credential isolation
+- User-data context injection and business tool profile
+- Snapshot-bound position sizing and strategy lint
+
+Results
+- PostgreSQL integration after acceptance fixes: 113 passed in 64.84s
+- Worker/tool/orchestrator focused suite after acceptance fixes: 78 passed in 10.81s
+- Market/corpus/coverage/sizing/lint/registry regression: 231 passed in 1.62s
+- Ruff: all checks passed
+- Pyright: 0 errors, 0 warnings
+- import_smoke stage 1: 384/384 modules imported
+- import_smoke stage 2: 433/433 modules imported
+- check_symbols: 0 missing-symbol imports across 483 files
+- preflight: kernel LLM ok; stateful-react-agent real call ok
+- git diff --check: passed
+
+Isolation
+- Disposable PostgreSQL container and test-only database/user
+- Loopback mock HTTP endpoint for the real worker request assertion
+- No production database migration or API deployment
+- Secrets and full investment payloads omitted from this log
+
+Acceptance review fixes
+- Respect frozen capital_basis when selecting total or available capital
+- Return structured lint errors for valid non-object JSON
+- Keep telemetry persistence best-effort and always reset the Run ContextVar
+- Prevent worker-side .env loading from restoring platform database/signing secrets
+- Remove stale materialized context when authenticated resolution returns no snapshot
+- Verify exact bound context remains available after old history is compacted away

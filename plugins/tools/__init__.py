@@ -24,6 +24,11 @@ from plugins.tools.file_editor import (
 )
 from plugins.tools.glob_search import glob_search
 from plugins.tools.grep_search import grep_search
+from plugins.tools.investment_context import (
+    investment_context,
+    investment_position_sizing,
+    investment_strategy_lint,
+)
 from plugins.tools.market_financials import market_financials
 from plugins.tools.market_history import market_history
 from plugins.tools.market_quote import market_quote
@@ -63,6 +68,9 @@ _BUILTIN_TOOLS: list[Tool] = [
     # 是否对某个 Agent 可见另由各 profile 的 tools 列表决定。
     position_sizing,
     strategy_lint,
+    investment_context,
+    investment_position_sizing,
+    investment_strategy_lint,
     # 语料检索 / 取证（P0b）。只读本地 SQLite，无网络、无写入。
     # 加入本 allowlist 只让它们「可解析」，是否可见另由各 profile 决定。
     corpus_search,

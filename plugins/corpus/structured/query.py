@@ -394,6 +394,14 @@ def _query_identity(
     return f"query:{digest[7:23]}", digest
 
 
+def publication_records(view: PublicationView, purpose: Purpose) -> list[SemanticQueryRecord]:
+    """Project verified records for read-only report checks without query side effects."""
+    return [
+        _purpose_context(record, purpose)
+        for _, record in (*_claim_records(view), *_material_records(view))
+    ]
+
+
 def _empty_page(
     *,
     query_id: str,
@@ -764,5 +772,6 @@ __all__ = [
     "QueryEvidence",
     "SemanticQueryPage",
     "SemanticQueryRecord",
+    "publication_records",
     "query_semantic",
 ]

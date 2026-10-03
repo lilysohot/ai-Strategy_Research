@@ -33,6 +33,7 @@ import logging
 import os
 import sys
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -114,6 +115,47 @@ def _assert_llm_env(model: str, base_url: str, api_key: str) -> None:
             if not ok
         ]
         raise SystemExit(f"partial LLM injection rejected; missing: {missing}")
+
+
+def _load_investment_context(run_root: Path, run_id: str) -> dict[str, Any] | None:
+    """Load the parent-materialized context and reject cross-Run substitution."""
+    path = run_root / "investment-context.json"
+    if not path.exists():
+        return None
+    try:
+        context = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("investment context is unreadable") from exc
+    try:
+        expected_run_id = uuid.UUID(run_id).hex
+    except ValueError as exc:
+        raise RuntimeError("worker Run id is invalid") from exc
+    if not isinstance(context, dict) or context.get("run_id") != expected_run_id:
+        raise RuntimeError("investment context does not belong to this Run")
+    return context
+
+
+def _finalize_investment_context(
+    run_root: Path, context_tokens: tuple[Any, Any] | None
+) -> None:
+    """Persist best-effort tool metrics and always release the Run binding."""
+    if context_tokens is None:
+        return
+    from plugins.tools.investment_context import (
+        investment_context_metrics,
+        reset_investment_context,
+    )
+
+    try:
+        (run_root / "investment-context-tools.json").write_text(
+            json.dumps(investment_context_metrics(), sort_keys=True), encoding="utf-8"
+        )
+    except OSError:
+        logging.getLogger("worker").warning(
+            "investment context metrics persist failed", exc_info=True
+        )
+    finally:
+        reset_investment_context(context_tokens)
 
 
 def apply_env(
@@ -282,7 +324,7 @@ async def run_once(args: argparse.Namespace) -> int:
     from server.bridge import BridgeObserver
     from server.config import build_run_paths, run_dir_for
     from server.diff import DiffRecorder
-    from server.profile import PROFILE_NAME, build_profile_overrides
+    from server.profile import BUSINESS_CONTEXT_POLICY, PROFILE_NAME, build_profile_overrides
 
     paths = build_run_paths(args.run_id)
     run_root = run_dir_for(args.run_id)
@@ -380,11 +422,22 @@ async def run_once(args: argparse.Namespace) -> int:
     )
     recorder.snapshot_outputs_baseline()
 
-    overrides = build_profile_overrides()
+    investment_context = _load_investment_context(run_root, args.run_id)
+    context_tokens = None
+    if investment_context is not None:
+        from plugins.tools.investment_context import bind_investment_context
+
+        context_tokens = bind_investment_context(investment_context)
+
+    overrides = build_profile_overrides(has_investment_context=investment_context is not None)
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
     # once registered in T4.2).
     if args.agent_tools:
         extra = [t.strip() for t in args.agent_tools.split(",") if t.strip()]
+        if investment_context is not None:
+            # Raw position_sizing accepts model-supplied capital. A business Run
+            # may only expose the snapshot-bound wrapper.
+            extra = [name for name in extra if name not in {"position_sizing", "strategy_lint"}]
         overrides["agent"]["agent_tools"] = [*overrides["agent"]["agent_tools"], *extra]
 
     metadata: dict[str, Any] = {
@@ -412,6 +465,8 @@ async def run_once(args: argparse.Namespace) -> int:
     }
     if args.prompt_addendum:
         metadata["_sys_prompt_addendum"] += "\n" + args.prompt_addendum
+    if investment_context is not None:
+        metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
 
     started = time.time()
     _frame("run_started", run_dir=str(run_root))
@@ -427,11 +482,17 @@ async def run_once(args: argparse.Namespace) -> int:
     if history_path.exists():
         history_text = history_path.read_text(encoding="utf-8").strip()
 
+    instruction = args.prompt
+    if investment_context is not None:
+        from server.investment_context import render_context_data
+
+        instruction = f"{instruction}\n\n{render_context_data(investment_context)}"
+
     try:
         async with BenchmarkSession() as session:
             state = await asyncio.wait_for(
                 session.run(
-                    args.prompt,
+                    instruction,
                     meta=metadata,
                     pipeline_id=args.pipeline_id,
                     extra_input={
@@ -493,6 +554,7 @@ async def run_once(args: argparse.Namespace) -> int:
             recorder.write_diff()
         except Exception:
             logging.getLogger("worker").warning("diff generation failed", exc_info=True)
+        _finalize_investment_context(run_root, context_tokens)
 
     # Persist a small summary the orchestrator/relay can read for the runs table.
     # stopped_by precedence mirrors the run_finished frame above. ``bridge`` is

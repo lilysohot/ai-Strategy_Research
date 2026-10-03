@@ -37,6 +37,7 @@ from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
 from server.events import EventType, is_droppable, make_event
 from server.history import STEER_TURN_PREFIX, extract_final_answer, render_session_history
+from server.investment_context import InvestmentContextResolver, materialize_context
 from server.store import (
     APPROVAL_ABANDONED,
     APPROVAL_ADOPTED,
@@ -223,7 +224,7 @@ class Orchestrator:
         self._cfg = get_config()
         self._on_frame = on_frame
         self._handles: dict[str, RunHandle] = {}
-        self._session_queues: dict[str, asyncio.Queue[dict[str, Any]]] = {}
+        self._session_queues: dict[str, asyncio.Queue[dict[str, Any] | None]] = {}
         self._session_tasks: dict[str, asyncio.Task[None]] = {}
         self._lock = asyncio.Lock()
         self._shutting_down = False
@@ -238,6 +239,7 @@ class Orchestrator:
         # have an in-flight reconnect.
         self._closed_streams: deque[str] = deque(maxlen=_CLOSED_STREAM_MEMORY)
         self._closed_stream_ids: set[str] = set()
+        self._investment_context_resolver = InvestmentContextResolver()
 
     # — public API ————————————————————————————————————————————
     async def submit(
@@ -328,9 +330,8 @@ class Orchestrator:
         except (BrokenPipeError, ValueError):
             return False
         handle.stopped = True
-        # Record that *we* initiated the stop, so the resulting run lands as a
-        # user-stopped run (status="stopped", stopped_by="user_stop") even if the
-        # worker's own observer reports a different reason.
+        # Record why *we* initiated the stop, so the resulting run preserves the
+        # caller's durable reason even if the worker observer reports another one.
         handle._stopped_by = stopped_by
         return True
 
@@ -969,6 +970,26 @@ class Orchestrator:
             return
 
     async def _launch(self, run_id: str, params: dict[str, Any], *, history: str = "") -> RunHandle:
+        # Resolve the immutable business snapshot in the authenticated parent.
+        # The worker receives only this Run's minimal materialized context, not
+        # database credentials or access to another user's ledger.
+        user_id = params.get("user_id")
+        run_uuid = uuid.UUID(run_id)
+        run_dir = run_dir_for(run_id)
+        context = None
+        if user_id is not None:
+            context = await self._investment_context_resolver.resolve(
+                run_id=run_uuid, user_id=user_id
+            )
+            if context is not None:
+                materialize_context(
+                    run_dir, context, resolver=self._investment_context_resolver
+                )
+        if context is None:
+            # Never let a prior launch's materialized data bypass a failed or
+            # absent authenticated resolution on a later launch attempt.
+            for name in ("investment-context.json", "investment-context-resolver.json"):
+                (run_dir / name).unlink(missing_ok=True)
         # Resolve credentials here, in the parent, then hand them to the worker via
         # its environment only — never as argv (argv is world-readable via ps). The
         # api_key is decrypted in-process and lives solely in the child's env.
@@ -977,9 +998,6 @@ class Orchestrator:
         await self._acquire_slot()
         # Persist the rendered history next to the run so the worker can read it
         # back (keeps long transcripts out of argv). Empty file == no history.
-        from server.config import run_dir_for
-
-        run_dir = run_dir_for(run_id)
         run_dir.mkdir(parents=True, exist_ok=True)
         history_path = run_dir / "history.txt"
         history_path.write_text(history, encoding="utf-8")
@@ -1010,6 +1028,14 @@ class Orchestrator:
             cmd += ["--prompt-addendum", params["prompt_addendum"]]
 
         child_env = {**os.environ}
+        # The worker has no database responsibility. Give accidental store use a
+        # private in-memory database instead of inheriting the platform DSN.
+        # Empty tombstones also prevent worker-side ``load_dotenv(override=False)``
+        # from restoring platform secrets from the repository .env file.
+        child_env["SERVER_DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
+        child_env["SERVER_DATABASE_URL_DOCKER"] = ""
+        child_env["SERVER_MASTER_KEY"] = ""
+        child_env["SERVER_JWT_SECRET"] = ""
         if llm_env:
             child_env.update(llm_env)
 

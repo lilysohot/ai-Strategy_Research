@@ -3,7 +3,9 @@ description: Native Stateful ReAct workflow with web research and local tools.
 
 # This is deliberately a workflow profile, not the terminal's generic loop.
 workflow: stateful-react-agent
-workflow_profile: tui
+# Explicit opt-in: REACT_WORKFLOW_PROFILE=tui-semantic adds the read-only
+# semantic query experiment. Unset keeps the normal tui entry unchanged.
+workflow_profile: ${REACT_WORKFLOW_PROFILE:-tui}
 
 llm:
   provider: ${OPENAI_PROVIDER:-openai}

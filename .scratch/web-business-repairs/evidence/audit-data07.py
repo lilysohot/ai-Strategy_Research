@@ -1,4 +1,4 @@
-"""Read-only product audit reproductions; writes only an ephemeral PostgreSQL container."""
+"""Post-fix DATA-07 verification; writes only an ephemeral PostgreSQL container."""
 
 import asyncio
 import json
@@ -9,17 +9,17 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from server import business_events, input_requests, store
 from server.input_requests import _merge_collected
 
 
-def command(*args):
+def command(*args: str) -> str:
     return subprocess.check_output(args, text=True).strip()
 
 
-async def check_cursor(url):
+async def check_cursor(url: str) -> None:
     engine = create_async_engine(url)
     try:
         async with engine.begin() as connection:
@@ -35,7 +35,7 @@ async def check_cursor(url):
                     store.Session(id=second_research, user_id=uid, title="second"),
                 ]
             )
-        async with sessions() as earlier, sessions() as later:
+        async with sessions() as earlier:
             first = await business_events.add_event(
                 earlier,
                 user_id=uid,
@@ -45,47 +45,43 @@ async def check_cursor(url):
                 summary="audit",
             )
             await earlier.flush()
-            second = await business_events.add_event(
-                later,
-                user_id=uid,
-                research_id=second_research,
-                kind="input_required",
-                title="first committed",
-                summary="audit",
-            )
-            await later.commit()
-            async with sessions() as reader:
-                initial, cursor = await business_events.list_events(
-                    reader,
-                    user_id=uid,
-                    after=0,
-                    limit=100,
-                )
+
+            async def add_second() -> store.BusinessEvent:
+                async with sessions.begin() as later:
+                    return await business_events.add_event(
+                        later,
+                        user_id=uid,
+                        research_id=second_research,
+                        kind="input_required",
+                        title="second allocated",
+                        summary="audit",
+                    )
+
+            second_task = asyncio.create_task(add_second())
+            await asyncio.sleep(0.1)
+            serialized_while_first_uncommitted = not second_task.done()
             await earlier.commit()
+            second = await asyncio.wait_for(second_task, timeout=5)
             async with sessions() as reader:
-                resumed, _ = await business_events.list_events(
-                    reader,
-                    user_id=uid,
-                    after=cursor,
-                    limit=100,
-                )
-                all_rows, _ = await business_events.list_events(
+                all_rows, cursor = await business_events.list_events(
                     reader,
                     user_id=uid,
                     after=0,
                     limit=100,
                 )
+            allocated = [first.cursor, second.cursor]
+            committed = [row.cursor for row in all_rows]
+            assert serialized_while_first_uncommitted
+            assert allocated == [1, 2]
+            assert committed == [1, 2]
             print(
                 json.dumps(
                     {
-                        "case": "event_commit_order",
-                        "allocated": [first.cursor, second.cursor],
-                        "first_read": [row.cursor for row in initial],
+                        "case": "event_allocation_serialized",
+                        "second_blocked_before_first_commit": serialized_while_first_uncommitted,
+                        "allocated": allocated,
+                        "all_committed": committed,
                         "resume_after": cursor,
-                        "resumed": [row.cursor for row in resumed],
-                        "all_committed": [row.cursor for row in all_rows],
-                        "missed_committed_event": first.cursor
-                        not in {row.cursor for row in initial + resumed},
                     }
                 )
             )
@@ -102,15 +98,6 @@ async def check_cursor(url):
                     expires_at=datetime.now(UTC) - timedelta(seconds=1),
                 )
             )
-        selected_pending = asyncio.Event()
-
-        class ObservedExpirySession(AsyncSession):
-            async def execute(self, statement, *args, **kwargs):
-                result = await super().execute(statement, *args, **kwargs)
-                if str(statement).startswith("SELECT input_requests."):
-                    selected_pending.set()
-                return result
-
         async with sessions() as answering:
             request = (
                 await answering.execute(
@@ -125,23 +112,26 @@ async def check_cursor(url):
             request.revision += 1
             await answering.flush()
 
-            async def expire():
-                async with ObservedExpirySession(engine) as expiry:
+            async def expire() -> None:
+                async with sessions() as expiry:
                     await input_requests.expire_due(expiry, user_id=uid)
                     await expiry.commit()
 
             expiring = asyncio.create_task(expire())
-            await asyncio.wait_for(selected_pending.wait(), timeout=5)
+            await asyncio.sleep(0.1)
+            expiry_waited_for_answer = not expiring.done()
             await answering.commit()
             await asyncio.wait_for(expiring, timeout=5)
         async with sessions() as reader:
             request = await reader.get(store.InputRequest, request_id)
+            assert expiry_waited_for_answer
+            assert request.status == "answered"
             print(
                 json.dumps(
                     {
-                        "case": "expiry_overwrites_committed_answer",
-                        "answer_committed_status": "answered",
-                        "status_after_expiry_flush": request.status,
+                        "case": "expiry_preserves_committed_answer",
+                        "expiry_blocked_on_answer": expiry_waited_for_answer,
+                        "final_status": request.status,
                     }
                 )
             )
@@ -160,6 +150,8 @@ third, _, ambiguous = _merge_collected(second, {"plan": {"target_price": "28"}})
 complete = {"account.total_capital", "plan.target_price"} <= {
     f"{group}.{name}" for group, fields in third.items() for name in fields
 } and not ambiguous
+assert not complete
+assert "account" not in third
 print(json.dumps({"case": "withdrawn_fact", "collected": third, "would_continue": complete}))
 
 name = "frontier-data07-audit-" + uuid.uuid4().hex[:10]
@@ -182,7 +174,7 @@ try:
         "127.0.0.1::5432",
         "postgres:15-alpine",
     )
-    for attempt in range(60):
+    for _attempt in range(60):
         if (
             subprocess.run(
                 ["docker", "exec", name, "pg_isready", "-h", "127.0.0.1", "-U", "audit"],
