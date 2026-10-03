@@ -271,6 +271,24 @@ class QueueFullError(BusinessError):
     remedy = "wait"
 
 
+class RequestAlreadyAnsweredError(BusinessError):
+    code = "request_already_answered"
+    http_status = 409
+    remedy = "reload_and_resubmit"
+
+
+class RequestCancelledError(BusinessError):
+    code = "request_cancelled"
+    http_status = 409
+    remedy = "reload_and_resubmit"
+
+
+class RequestExpiredError(BusinessError):
+    code = "request_expired"
+    http_status = 409
+    remedy = "reload_and_resubmit"
+
+
 # ——— 输入准入 ——————————————————————————————————————————————————————————
 
 

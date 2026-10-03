@@ -10,6 +10,7 @@ EXPECTED_TOOLS = {
     "corpus_fetch",
     "corpus_inventory",
     "corpus_search",
+    "corpus_semantic_query",
     "corpus_submit_manifest",
     "create_file",
     "create_subagent",
@@ -55,6 +56,21 @@ def test_registry_round_trip() -> None:
     assert registry.names() == sorted(EXPECTED_TOOLS)
     assert len(registry) == len(EXPECTED_TOOLS)
     assert registry.get("web_search") is get_builtin_tools()["web_search"]
+
+
+def test_semantic_query_is_resolvable_and_read_only_without_profile_enablement() -> None:
+    from apodex.agent_tools import _READ_ONLY, assess_tool_risk, terminal_tool_registry
+    from plugins.tools.meta import get_tool_meta
+
+    name = "corpus_semantic_query"
+    assert name in get_builtin_tools()
+    assert name in terminal_tool_registry()
+    assert name in _READ_ONLY
+    assert assess_tool_risk(name, {}, "/tmp").level == "safe"
+    meta = get_tool_meta(name)
+    assert meta.is_read_only is True
+    assert meta.concurrency_safe is True
+    assert meta.max_result_chars == 0
 
 
 # ── 投研内核（P0a）：TUI 下要真正可用，必须同时命中 4 处注册点 ──────────

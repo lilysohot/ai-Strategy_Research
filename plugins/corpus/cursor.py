@@ -9,7 +9,8 @@
 
 - 校验和不符（被篡改或损坏）、版本不符、类型不符一律 :class:`CursorError` 拒绝，
   不静默降级、不猜一个「看起来能用」的位置；
-- 类型区分 ``content``（正文取回）与 ``inventory``（结构清单），禁止混用
+- 类型区分 ``content``（正文取回）、``inventory``（结构清单）与
+  ``semantic_query``（已发布语义记录），禁止混用
   （A1.1「游标类型必须区分 inventory 和 content」）；
 - 校验和只证明完整性与一致性，不冒充签名——它能发现损坏/改写，不声称抗伪造。
 """
@@ -24,10 +25,11 @@ from typing import Any
 #: 游标 schema 版本；变更绑定语义时递增，旧游标随即显式失效。
 CURSOR_SCHEMA_VERSION = 1
 
-#: 允许的游标类型：``content`` 正文分页、``inventory`` 结构清单分页。
+#: 允许的游标类型：正文、结构清单和已发布语义查询分页。
 CONTENT = "content"
 INVENTORY = "inventory"
-CURSOR_TYPES = (CONTENT, INVENTORY)
+SEMANTIC_QUERY = "semantic_query"
+CURSOR_TYPES = (CONTENT, INVENTORY, SEMANTIC_QUERY)
 
 _CHECKSUM_CHARS = 16
 
@@ -87,6 +89,7 @@ __all__ = [
     "CURSOR_SCHEMA_VERSION",
     "CURSOR_TYPES",
     "INVENTORY",
+    "SEMANTIC_QUERY",
     "CursorError",
     "decode_cursor",
     "encode_cursor",

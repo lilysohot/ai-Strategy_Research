@@ -554,6 +554,10 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
         # ``corpus_search.fit_search_payload``, which degrades by dropping whole
         # tail hits (marked ``hits_elided``) rather than cutting characters.
         "corpus_search": 20_000,
+        # Versioned semantic pages self-fit to 5.5K by default. Keep 500 chars of
+        # envelope headroom and route any larger caller-selected page through its
+        # whole-record fitter; never fall through to the generic character cut.
+        "corpus_semantic_query": 6_000,
     }
     _CONFIGURED_EXEC_TOOLS = frozenset({"bash", "run_python_code"})
     _EXEC_FOOTER_HEADROOM = 2_000
@@ -588,9 +592,9 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
             budget = self._BUDGETS.get(name, self._BUDGET_DEFAULT)
         if name == "bash":
             return self._compact_bash(content, budget)
-        # A0.3：结构化取证结果（corpus_fetch）先按协议压缩，绝不按字符硬切 JSON——
-        # 硬切会同时破坏 JSON 与逐字正文。超预算时先去诊断元数据，仍装不下则返回
-        # 可识别的预算错误（均为合法 JSON）。其他工具不受影响（返回 None）。
+        # A0.3：结构化取证结果先按各自协议压缩，绝不按字符硬切 JSON——正文工具
+        # 保住逐字范围，语义查询保住整条 record/evidence/dependency/cursor；装不下时
+        # 返回可识别的预算错误（仍为合法 JSON）。其他工具不受影响（返回 None）。
         from plugins.tools._overflow import structured_result_fit
 
         structured = structured_result_fit(name, content, budget)

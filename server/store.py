@@ -17,6 +17,7 @@ from decimal import Decimal
 from sqlalchemy import (
     DDL,
     JSON,
+    BigInteger,
     Boolean,
     DateTime,
     ForeignKey,
@@ -556,6 +557,83 @@ for _history_model in (InvestmentAccountRevision, InvestmentPlanRevision, RunInv
                 "SELECT RAISE(ABORT, 'business history is immutable'); END"
             ).execute_if(dialect="sqlite"),
         )
+
+
+class InputRequest(Base):
+    """Durable request for facts required before analysis can continue (DATA-07)."""
+
+    __tablename__ = "input_requests"
+    __table_args__ = (
+        Index("ix_input_requests_user_status", "user_id", "status", "created_at"),
+        Index("ix_input_requests_research", "research_id", "created_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    source_run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    # DATA-11 owns the watch-event table. Keep this opaque until that table exists.
+    watch_event_id: Mapped[uuid.UUID | None] = mapped_column()
+    follow_up_run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"), unique=True)
+    use_case: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    fields_json: Mapped[list] = mapped_column(JSON, nullable=False)
+    known_versions_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    continuation_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    collected_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    answered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class InputRequestAnswer(Base):
+    """Append-only answer history; partial and ambiguous replies remain auditable."""
+
+    __tablename__ = "input_request_answers"
+    __table_args__ = (
+        UniqueConstraint("request_id", "revision", name="uq_input_request_answer_revision"),
+        Index("ix_input_request_answers_request", "request_id", "created_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    request_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("input_requests.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    answer_text: Mapped[str] = mapped_column(Text, nullable=False)
+    declared_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    outcome: Mapped[str] = mapped_column(String, nullable=False)
+    operation_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("business_operations.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BusinessEvent(Base):
+    """Durable user notification outside per-Run trajectory events (DATA-12 B slice)."""
+
+    __tablename__ = "business_events"
+    __table_args__ = (
+        UniqueConstraint("id", name="uq_business_events_id"),
+        Index("ix_business_events_user_cursor", "user_id", "cursor"),
+    )
+
+    cursor: Mapped[int] = mapped_column(
+        BigInteger().with_variant(Integer, "sqlite"), primary_key=True, autoincrement=True
+    )
+    id: Mapped[uuid.UUID] = mapped_column(default=_uuid, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    request_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("input_requests.id"))
+    run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    kind: Mapped[str] = mapped_column(String, nullable=False)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    detail_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class RunDispatch(Base):
@@ -1553,6 +1631,16 @@ async def update_run_result(
     async with get_sessionmaker()() as session:
         row = await session.get(Run, run_id)
         if row is None:
+            return
+        # DATA-07 closes the source Run before asking its worker to stop. A
+        # delayed/foreign-process completion must not resurrect that Run as
+        # completed or failed after the input request is already visible.
+        if row.status == "stopped" and row.stopped_by == "input_required":
+            if final_answer is not None and row.final_answer is None:
+                row.final_answer = final_answer
+            if row.finished_at is None:
+                row.finished_at = datetime.now(UTC)
+            await session.commit()
             return
         row.status = status
         if final_answer is not None:

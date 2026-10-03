@@ -144,6 +144,8 @@ export interface RequestOptions {
   anonymous?: boolean
   /** Expected for 204 No Content endpoints. */
   parseJson?: boolean
+  /** Extra non-secret headers such as Idempotency-Key. */
+  headers?: Record<string, string>
 }
 
 function buildUrl(path: string, query?: RequestOptions['query']): string {
@@ -173,9 +175,10 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     signal,
     anonymous = false,
     parseJson = true,
+    headers: extraHeaders,
   } = options
 
-  const headers: Record<string, string> = {}
+  const headers: Record<string, string> = { ...extraHeaders }
   const isFormData = typeof FormData !== 'undefined' && body instanceof FormData
   // FormData must keep its browser-generated boundary, so Content-Type is
   // deliberately not set in that case.

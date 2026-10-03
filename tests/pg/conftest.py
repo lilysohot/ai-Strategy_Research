@@ -141,14 +141,16 @@ class StubOrchestrator:
     def __init__(self) -> None:
         self.submitted: list[dict[str, Any]] = []
         self.stopped: list[str] = []
+        self.stop_reasons: list[str] = []
 
     async def submit(self, **kwargs: Any) -> None:
         self.submitted.append(kwargs)
 
-    async def stop(self, run_id: str) -> bool:
+    async def stop(self, run_id: str, *, stopped_by: str = "user_stop") -> bool:
         # Async on purpose: the real ``Orchestrator.stop`` is a coroutine, so a
         # missing ``await`` at a call site must not look like a successful stop.
         self.stopped.append(run_id)
+        self.stop_reasons.append(stopped_by)
         return True
 
     async def wait_stopped(self, run_id: str, *, timeout: float) -> bool:
@@ -168,6 +170,7 @@ def stub_orchestrator(monkeypatch):
     stub = StubOrchestrator()
     monkeypatch.setattr("server.orchestrator.get_orchestrator", lambda: stub)
     monkeypatch.setattr("server.routes.runs.get_orchestrator", lambda: stub)
+    monkeypatch.setattr("server.routes.business.get_orchestrator", lambda: stub)
     return stub
 
 

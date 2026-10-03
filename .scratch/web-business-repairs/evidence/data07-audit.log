@@ -1,0 +1,5 @@
+Audit 2026-10-03; actual service functions; isolated PostgreSQL 15; no production DB access.
+{"case": "withdrawn_fact", "collected": {"account": {"total_capital": "80000"}, "plan": {"target_price": "28"}}, "would_continue": true}
+{"case": "event_commit_order", "allocated": [1, 2], "first_read": [2], "resume_after": 2, "resumed": [], "all_committed": [1, 2], "missed_committed_event": true}
+{"case": "expiry_overwrites_committed_answer", "answer_committed_status": "answered", "status_after_expiry_flush": "expired"}
+isolated audit container removed

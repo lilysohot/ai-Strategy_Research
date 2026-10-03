@@ -145,6 +145,24 @@ uv run pytest tests/pg -q -m pg
 本批没有部署 API，也未对业务库执行迁移。前端账户与计划仍属交互预览；持久补数、
 worker 消费业务快照/工具接线、真实浏览器 + API + worker 联合验收仍按 DATA-07/08/15 跟进。
 
+### 4.3 DATA-07 持久补数批次（2026-10-03）
+
+执行记录见 [DATA-07 issue](../../.scratch/web-business-repairs/issues/02-data07-input-requests.md)。
+
+**验收复核：暂不通过。** 下表为上一轮测试记录；后续审计发现 8 项未覆盖的问题，含真实 PG 并发漏读/终态覆盖，见[复核报告](../../.scratch/web-business-repairs/data07-acceptance-review.md)。需修复后重新验收。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时容器 `frontier-business-data07-20261003`；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1` 随机端口及 `/tmp/frontier-business-data07-runs`；现有 `pg`/`corpus-db` 未改 |
+| 迁移 | 测试库升级至 `0012_business_events`；新增 `0011_input_requests` 和 `0012_business_events`；既有迁移降级/升级往返继续通过 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**108 passed**；DATA-07/通知新增 13 项 |
+| 前端 | Node 22：74 项单测、vue-tsc、Vite production build 通过；构建仅保留既有大 chunk 提示 |
+| 浏览器 | Playwright + 真实 FastAPI + 隔离 PG；375×812 回答、唯一续接、原快照不变、刷新恢复、通知已读持久化通过 |
+| 通知范围 | B 阶段仅接入补数创建/回答生产者；无事件清理时游标不会过期，`cursor_expired=false`；监控事件及保留策略留待 DATA-12 C |
+| 部署 | 未部署 API，未迁移生产库；测试结束停止临时 API/PG 并移除临时口令文件 |
+
+脱敏日志保存在 `.scratch/web-business-repairs/evidence/data07-pg.log`。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：

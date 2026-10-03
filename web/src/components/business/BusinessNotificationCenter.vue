@@ -1,76 +1,124 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+import { businessEvents as eventsApi } from '@/api'
+import type { WorkspaceTarget } from '@/business-ui'
+import { openRunStream, type SseStreamHandle } from '@/sse'
+import { useAuthStore } from '@/stores/auth'
+import type { BusinessEvent } from '@/types'
 
 type NoticeKind = 'receipt' | 'input' | 'market' | 'failure'
 
-interface NoticeItem {
-  id: string
+interface NoticeItem extends BusinessEvent {
   kind: NoticeKind
-  title: string
-  summary: string
   context: string
   time: string
   unread: boolean
-  action: 'open_request' | 'open_research' | 'retry' | null
+  action: 'open_request' | 'open_research' | null
 }
 
 const scope = ref<'all' | 'unread'>('all')
-const notices = ref<NoticeItem[]>([
-  {
-    id: 'notice-operation',
-    kind: 'receipt',
-    title: '最近一次提交结果待核定',
-    summary: '页面重新连接后正在查询服务端最近操作，不会自动重发。',
-    context: '业务资料 · 操作恢复',
-    time: '状态时间待服务端返回',
-    unread: true,
-    action: null,
-  },
-  {
-    id: 'notice-input',
-    kind: 'input',
-    title: '有 2 项资料需要补充',
-    summary: '一项来自研究 Run，一项来自尚未创建 Run 的行情事件。',
-    context: '补数请求 · 待回答',
-    time: '持久请求',
-    unread: true,
-    action: 'open_request',
-  },
-  {
-    id: 'notice-failure',
-    kind: 'failure',
-    title: '分析任务的派发与执行需要分开恢复',
-    summary: '重试派发沿用原任务；重新分析会保留失败 Run，并创建关联的新分析。',
-    context: '分析状态 · 前端预览',
-    time: '等待 DATA-11/12',
-    unread: true,
-    action: 'retry',
-  },
-])
+const auth = useAuthStore()
+const events = ref<BusinessEvent[]>([])
+const cursor = ref(0)
+const loading = ref(false)
+let stream: SseStreamHandle | null = null
+
+const notices = computed<NoticeItem[]>(() => events.value.map((item) => ({
+  ...item,
+  kind: item.kind.startsWith('input_') ? 'input' : 'receipt',
+  context: item.request_id ? '补数请求' : '业务事件',
+  time: item.created_at ? new Date(item.created_at).toLocaleString() : '时间未知',
+  unread: !item.read,
+  action: item.request_id && item.kind === 'input_required' ? 'open_request' : 'open_research',
+})))
 
 const visibleNotices = computed(() =>
   scope.value === 'unread' ? notices.value.filter((notice) => notice.unread) : notices.value,
 )
 const unreadCount = computed(() => notices.value.filter((notice) => notice.unread).length)
 
-function markRead(id: string): void {
-  const item = notices.value.find((notice) => notice.id === id)
-  if (item) item.unread = false
+async function loadEvents(): Promise<void> {
+  loading.value = true
+  try {
+    const recovered: BusinessEvent[] = []
+    let after = 0
+    for (;;) {
+      const result = await eventsApi.list(after, 100)
+      recovered.push(...result.items)
+      after = result.cursor
+      if (result.items.length < 100) break
+    }
+    mergeEvents(recovered)
+    cursor.value = after
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : '加载通知失败')
+  } finally {
+    loading.value = false
+  }
 }
 
-function markAllRead(): void {
-  for (const item of notices.value) item.unread = false
+function mergeEvents(incoming: BusinessEvent[]): void {
+  const byId = new Map(events.value.map((item) => [item.id, item]))
+  for (const item of incoming) byId.set(item.id, item)
+  events.value = [...byId.values()].sort((left, right) => left.cursor - right.cursor)
+}
+
+function startStream(): void {
+  stream?.stop()
+  stream = openRunStream({
+    url: eventsApi.streamUrl(),
+    token: () => auth.token,
+    after: cursor.value,
+    terminalTypes: [],
+    onCursor: (value) => { cursor.value = value },
+    onEvent: (frame) => {
+      if (frame.type !== 'business_event') return
+      const item = (frame as typeof frame & { event?: BusinessEvent }).event
+      if (item) mergeEvents([item])
+    },
+    onError: (error) => ElMessage.error(`通知连接失败：${error.message}`),
+  })
+}
+
+async function markRead(id: string): Promise<void> {
+  await eventsApi.markRead(id)
+  const item = events.value.find((event) => event.id === id)
+  if (item) item.read = true
+}
+
+async function markAllRead(): Promise<void> {
+  await eventsApi.markAllRead(cursor.value)
+  for (const item of events.value) item.read = true
 }
 
 function kindLabel(kind: NoticeKind): string {
   return { receipt: '回执', input: '补数', market: '行情', failure: '失败' }[kind]
 }
 
-const emit = defineEmits<{ navigate: [area: 'requests' | 'research'] }>()
+async function openNotice(item: NoticeItem): Promise<void> {
+  if (item.unread) await markRead(item.id)
+  const target: WorkspaceTarget = {
+    researchId: item.research_id,
+    requestId: item.request_id ?? undefined,
+    runId: item.run_id ?? undefined,
+  }
+  emit('navigate', item.action === 'open_request' ? 'requests' : 'research', target)
+}
+
+const emit = defineEmits<{
+  navigate: [area: 'requests' | 'research', target?: WorkspaceTarget]
+}>()
+onMounted(async () => {
+  await loadEvents()
+  startStream()
+})
+onBeforeUnmount(() => stream?.stop())
 </script>
 
 <template>
-  <div class="notice-layout">
+  <div class="notice-layout" v-loading="loading">
     <main class="notice-main">
       <header class="notice-head">
         <div>
@@ -85,8 +133,8 @@ const emit = defineEmits<{ navigate: [area: 'requests' | 'research'] }>()
       </header>
 
       <div class="sync-banner">
-        <span class="sync-state">游标未连接</span>
-        <div><strong>通知服务等待 DATA-12</strong><small>游标过期时重新同步，不以当前页面是否打开判断后台在线。</small></div>
+        <span class="sync-state">游标 {{ cursor }}</span>
+        <div><strong>通知已从持久事件恢复</strong><small>刷新后按用户游标补读；单个 Run 的进度仍使用原有事件流。</small></div>
       </div>
 
       <section class="notice-list" aria-label="通知列表">
@@ -101,11 +149,8 @@ const emit = defineEmits<{ navigate: [area: 'requests' | 'research'] }>()
             <div class="notice-meta"><span>{{ item.context }}</span><span>{{ item.time }}</span></div>
           </div>
           <div class="notice-actions">
-            <el-button v-if="item.action === 'open_request'" size="small" @click="emit('navigate', 'requests'); markRead(item.id)">去补充</el-button>
-            <template v-else-if="item.action === 'retry'">
-              <el-tooltip content="等待原任务派发恢复接口" placement="top"><span><el-button size="small" disabled>重试派发</el-button></span></el-tooltip>
-              <el-tooltip content="等待关联新 Run 接口" placement="top"><span><el-button size="small" disabled>重新分析</el-button></span></el-tooltip>
-            </template>
+            <el-button v-if="item.action === 'open_request'" size="small" @click="openNotice(item)">去补充</el-button>
+            <el-button v-else-if="item.action === 'open_research'" size="small" @click="openNotice(item)">打开研究</el-button>
             <el-button v-if="item.unread" text size="small" @click="markRead(item.id)">标为已读</el-button>
           </div>
         </article>

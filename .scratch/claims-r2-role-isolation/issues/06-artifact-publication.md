@@ -1,7 +1,7 @@
 # 06 · 工件保存、语义发布与跨运行回读
 
 Status: ready-for-human
-Execution: 待验收
+Execution: 已验收
 Type: task
 Plan: W3；R2-S2/S3（文件试点，不代表生产 S5）
 Blocked by: 无本地任务依赖（05 已验收）
@@ -175,3 +175,9 @@ POSIX 权限用例在 root/非 POSIX 环境会跳过，本次 WSL 非 root 实�
 无 Python finally 的进程退出与 SQLite 恢复。共享 ledger 私有基础设施提取仍属设计建议，本轮不扩大为
 05 存储 API 重构。真实模型调用 0、生产库访问 0；按 spec §5 未运行真实模型 preflight，未执行 07，
 不得以本地回归替代主计划阶段签认。
+
+- 2026-10-03：用户确认修复后验收通过。06 的 8 项验收条件、专项 `41 passed`、structured
+  扩展回归 `249 passed`、指定 Ruff、定向 Pyright、两阶段 import smoke、symbol closure 与
+  `git diff --check` 证据均已核对；当前交付指纹与上文修复验收记录一致。全仓 Pyright 的 5 个
+  既有非 06 错误继续作为外部门保留，不影响本票闭环。票据 Execution 更新为 `已验收`；
+  真实模型调用 0、生产数据库访问 0，未执行 07，也未代替主计划阶段签认。

@@ -312,7 +312,7 @@ class Orchestrator:
         }
         await q.put(params)
 
-    async def stop(self, run_id: str) -> bool:
+    async def stop(self, run_id: str, *, stopped_by: str = "user_stop") -> bool:
         """Cooperatively stop a running worker via its stdin channel."""
         handle = self._handles.get(run_id)
         if handle is None or handle.proc.returncode is not None:
@@ -331,7 +331,7 @@ class Orchestrator:
         # Record that *we* initiated the stop, so the resulting run lands as a
         # user-stopped run (status="stopped", stopped_by="user_stop") even if the
         # worker's own observer reports a different reason.
-        handle._stopped_by = "user_stop"
+        handle._stopped_by = stopped_by
         return True
 
     async def wait_stopped(self, run_id: str, *, timeout: float) -> bool:

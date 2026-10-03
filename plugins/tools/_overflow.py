@@ -259,22 +259,25 @@ def truncate_preview(text: str, budget: int, *, tool_name: str = "") -> str:
     return text[:head_end] + _elision(tail_start - head_end) + text[tail_start:]
 
 
-# ``(module, function)`` per tool whose result is protocol-shaped JSON. Both tools
-# are retrieval handles: char-cutting either one destroys the JSON *and* the
-# locators it carries, so the cut is not "less content" but "no content".
+# ``(module, function)`` per tool whose result is protocol-shaped JSON. These
+# retrieval/delivery results carry locators, evidence units, or opaque cursors;
+# character cutting destroys the protocol rather than merely returning less.
 _STRUCTURED_FITTERS: dict[str, tuple[str, str]] = {
     "corpus_fetch": ("plugins.tools.corpus_fetch", "fit_structured_payload"),
     "corpus_search": ("plugins.tools.corpus_search", "fit_search_payload"),
+    "corpus_semantic_query": (
+        "plugins.tools.corpus_semantic_query",
+        "fit_structured_payload",
+    ),
 }
 
 
 def structured_result_fit(tool_name: str, body: str, cap: int) -> str | None:
     """A0.3：结构化结果在截断前先按协议压缩，保证交付仍是合法 JSON。
 
-    ``corpus_fetch`` 把逐字正文、引用映射与续取控制字段包在一段 JSON 里，
-    ``corpus_search`` 把定位句柄与证据区范围包在另一段 JSON 里；两者按字符硬切都会
-    同时破坏 JSON 与句柄。具体压缩策略由工具模块提供（超预算时先去诊断字段、仍装不下
-    则返回可识别预算错误），本函数只做按名分派，避免通用截断层认识语料字段。
+    ``corpus_fetch``、``corpus_search`` 与 ``corpus_semantic_query`` 分别交付逐字正文、
+    定位句柄和完整语义证据单元；按字符硬切都会破坏 JSON 以及其中的范围或游标。具体压缩
+    策略由工具模块提供，本函数只做按名分派，避免通用截断层认识语料业务字段。
     返回 ``None`` 表示不适用原策略。
     """
     target = _STRUCTURED_FITTERS.get(tool_name)

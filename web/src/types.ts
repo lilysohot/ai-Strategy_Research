@@ -94,6 +94,81 @@ export interface RunSubmitResponse {
   status: string
 }
 
+export type InputRequestStatus = 'pending' | 'answered' | 'cancelled' | 'expired'
+
+export interface InputRequestField {
+  name: string
+  unit?: string | null
+  currency?: string | null
+  known_value?: unknown
+  reason?: string | null
+}
+
+export interface InputRequestAnswer {
+  revision: number
+  answer: string
+  declared: Record<string, unknown>
+  outcome: 'pending_clarification' | 'answered'
+  created_at: string | null
+}
+
+export interface InputRequest {
+  id: string
+  research_id: string
+  source_run_id: string | null
+  watch_event_id: string | null
+  follow_up_run_id: string | null
+  use_case: string
+  status: InputRequestStatus
+  revision: number
+  fields: InputRequestField[]
+  known_versions: Record<string, number>
+  current_versions: Record<string, number>
+  collected: Record<string, Record<string, unknown>>
+  remaining_fields: string[]
+  expires_at: string | null
+  created_at: string | null
+  updated_at: string | null
+  answers?: InputRequestAnswer[]
+}
+
+export interface InputRequestListResponse {
+  requests: InputRequest[]
+  total: number
+  has_more: boolean
+}
+
+export interface InputRequestAnswerResponse {
+  request_id: string
+  status: InputRequestStatus
+  revision: number
+  follow_up_run_id: string | null
+  operation_id: string
+  replayed: boolean
+  remaining_fields?: string[]
+}
+
+export interface BusinessEvent {
+  id: string
+  cursor: number
+  research_id: string
+  request_id: string | null
+  run_id: string | null
+  kind: string
+  title: string
+  summary: string
+  detail: Record<string, unknown>
+  read: boolean
+  read_at: string | null
+  created_at: string | null
+}
+
+export interface BusinessEventListResponse {
+  items: BusinessEvent[]
+  cursor: number
+  cursor_expired: boolean
+}
+
 export interface Artifact {
   rel_path: string
   size: number

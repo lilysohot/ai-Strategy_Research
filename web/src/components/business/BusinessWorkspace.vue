@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
-import type { SessionPlanPreview, WorkspaceArea } from '@/business-ui'
+import type { SessionPlanPreview, WorkspaceArea, WorkspaceTarget } from '@/business-ui'
 import BusinessMonitorCenter from './BusinessMonitorCenter.vue'
 import BusinessNotificationCenter from './BusinessNotificationCenter.vue'
 import BusinessProfileView from './BusinessProfileView.vue'
@@ -10,9 +10,10 @@ import BusinessRequestCenter from './BusinessRequestCenter.vue'
 const props = defineProps<{
   area: Exclude<WorkspaceArea, 'research'>
   plans: readonly SessionPlanPreview[]
+  targetRequestId?: string | null
 }>()
 const emit = defineEmits<{
-  navigate: [area: WorkspaceArea]
+  navigate: [area: WorkspaceArea, target?: WorkspaceTarget]
   toggleRail: []
   dirtyChange: [dirty: boolean]
 }>()
@@ -25,10 +26,10 @@ onBeforeUnmount(() => emit('dirtyChange', false))
 
 const meta = computed(() => {
   const entries = {
-    profiles: { title: '交易账户资料', caption: '账户、计划关系与实际记录' },
-    requests: { title: '待补资料与处理结果', caption: '按会话汇总的待办、冲突与业务回执' },
-    monitoring: { title: '监控中心', caption: '创建、管理与观察后台规则' },
-    notifications: { title: '通知', caption: '业务事件与可行动结果' },
+    profiles: { title: '交易账户资料', caption: '账户、计划关系与实际记录', live: false },
+    requests: { title: '待补资料与处理结果', caption: '按会话汇总的待办、冲突与业务回执', live: true },
+    monitoring: { title: '监控中心', caption: '创建、管理与观察后台规则', live: false },
+    notifications: { title: '通知', caption: '业务事件与可行动结果', live: true },
   }
   return entries[props.area]
 })
@@ -44,7 +45,9 @@ const meta = computed(() => {
       </div>
       <div class="business-status">
         <span v-if="dirty" class="dirty-mark">本页有未保存草稿</span>
-        <span class="preview-mark">前端预览</span>
+        <span class="preview-mark" :class="{ live: meta.live }">
+          {{ meta.live ? '服务端持久化' : '前端预览' }}
+        </span>
         <el-button size="small" plain @click="emit('navigate', 'research')">返回研究</el-button>
       </div>
     </header>
@@ -56,9 +59,16 @@ const meta = computed(() => {
         :plans="plans"
         @dirty-change="dirty = $event"
       />
-      <BusinessRequestCenter v-else-if="area === 'requests'" />
+      <BusinessRequestCenter
+        v-else-if="area === 'requests'"
+        :target-request-id="targetRequestId"
+        @navigate="(nextArea) => emit('navigate', nextArea)"
+      />
       <BusinessMonitorCenter v-else-if="area === 'monitoring'" />
-      <BusinessNotificationCenter v-else @navigate="emit('navigate', $event)" />
+      <BusinessNotificationCenter
+        v-else
+        @navigate="(nextArea, target) => emit('navigate', nextArea, target)"
+      />
     </div>
   </section>
 </template>
@@ -72,6 +82,7 @@ const meta = computed(() => {
 .business-status { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .preview-mark, .dirty-mark { padding: 3px 7px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; }
 .preview-mark { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); color: var(--accent); }
+.preview-mark.live { border-color: color-mix(in srgb, var(--success) 60%, var(--line)); color: var(--success); }
 .dirty-mark { border-color: color-mix(in srgb, var(--warning) 60%, var(--line)); color: var(--warning); }
 .business-body { flex: 1; min-height: 0; overflow: auto; }
 .rail-toggle { display: none; }

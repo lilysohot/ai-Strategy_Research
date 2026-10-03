@@ -147,7 +147,7 @@ def parse_investment_input(raw: Any) -> InvestmentInputSpec | None:
     if not isinstance(declared, dict):
         raise biz.ValidationError("declared 格式不正确", fields={"declared": "需要对象"})
     # 声明值里的未知字段在这里就要被拒：否则它会以“本次声明”的名义绕过字段契约。
-    _split_declared(declared)
+    split_declared(declared)
 
     rerun_raw = raw.get("rerun_of_run_id")
     rerun_id = None
@@ -169,14 +169,13 @@ def parse_investment_input(raw: Any) -> InvestmentInputSpec | None:
     )
 
 
-def _split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    """按字段所属对象拆分声明值；未知字段在此拒绝。"""
+def group_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """按字段所属对象拆分声明值，不提前执行整组真实性准入。"""
     groups: dict[str, dict[str, Any]] = {}
     for name, spec in declared.items():
         if name in biz.GROUP_FIELDS:
             if not isinstance(spec, dict):
                 raise biz.ValidationError("分组声明必须是对象", fields={name: "需要字段对象"})
-            biz.admit_group(name, spec)
             groups.setdefault(name, {}).update(spec)
             continue
         if name in biz.FORBIDDEN_OWNER_KEYS:
@@ -194,6 +193,14 @@ def _split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 "业务输入包含未知字段", fields={name: "该字段不属于账户/计划/成交契约"}
             )
         groups.setdefault(group, {})[name] = spec
+    return groups
+
+
+def split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """拆分并校验完整声明；任一组不能通过时拒绝本次业务写入。"""
+    groups = group_declared(declared)
+    for group, values in groups.items():
+        biz.admit_group(group, values)
     return groups
 
 
@@ -377,7 +384,7 @@ async def resolve_for_run(
             },
         )
 
-    for group, declared in _split_declared(spec.declared).items():
+    for group, declared in split_declared(spec.declared).items():
         admitted = biz.admit_group(group, declared)
         prior = groups.get(group, biz.AdmissionResult(values={}, incomplete={}))
         values = dict(entries.get(group, {}))
@@ -435,7 +442,7 @@ async def persist_declared(
     """Save explicit edits in the caller's Run transaction, then freeze saved revisions."""
     saved: dict[str, Any] = {}
     result = spec
-    for group, declared in _split_declared(spec.declared).items():
+    for group, declared in split_declared(spec.declared).items():
         ref = getattr(spec, group)
         if ref is None:
             raise biz.ValidationError(

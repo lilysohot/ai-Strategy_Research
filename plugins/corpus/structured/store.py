@@ -164,6 +164,7 @@ class PublicationView(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     manifest: SemanticPublication
+    snapshot: EvidenceSnapshot
     lifecycle: Lifecycle
     artifacts: tuple[PublishedArtifact, ...]
     effective_claim_purposes: dict[str, tuple[str, ...]]
@@ -1281,6 +1282,7 @@ def read_semantic(
                 )
         return PublicationView(
             manifest=manifest,
+            snapshot=candidates[0].snapshot,
             lifecycle=lifecycle,
             artifacts=tuple(published),
             effective_claim_purposes=purposes,

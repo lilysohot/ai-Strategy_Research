@@ -5,6 +5,12 @@ export type WorkspaceArea =
   | 'monitoring'
   | 'notifications'
 
+export interface WorkspaceTarget {
+  researchId?: string
+  requestId?: string
+  runId?: string
+}
+
 export interface WorkspaceNavItem {
   id: WorkspaceArea
   label: string

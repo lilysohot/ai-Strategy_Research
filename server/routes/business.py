@@ -27,18 +27,24 @@
 
 from __future__ import annotations
 
+import asyncio
+import json
 import uuid
+from collections.abc import AsyncIterator
+from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
 
 from fastapi import APIRouter, Depends, Header, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from server import business_events, input_requests, store
 from server import business_service as biz
-from server import store
+from server.config import get_config
 from server.deps import get_current_user
+from server.orchestrator import get_orchestrator
 from server.store import User as UserModel
 
 router = APIRouter(prefix="/api/business", tags=["business"])
@@ -169,6 +175,16 @@ def _as_uuid(value: str, field: str) -> uuid.UUID:
         raise biz.NotFoundOrForbiddenError("对象不存在或无权访问") from None
 
 
+def _optional_time(value: Any, field: str) -> datetime | None:
+    if value in (None, ""):
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        raise biz.ValidationError("时间格式不正确", fields={field: "需要 ISO 8601 时间"}) from None
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
+
+
 # ——— 账户 ————————————————————————————————————————————————————————————
 
 
@@ -212,14 +228,18 @@ async def list_accounts(
             )
         ).scalar_one()
         rows = (
-            await session.execute(
-                select(store.InvestmentAccount)
-                .where(store.InvestmentAccount.user_id == user.id)
-                .order_by(store.InvestmentAccount.created_at.desc())
-                .limit(limit)
-                .offset(offset)
+            (
+                await session.execute(
+                    select(store.InvestmentAccount)
+                    .where(store.InvestmentAccount.user_id == user.id)
+                    .order_by(store.InvestmentAccount.created_at.desc())
+                    .limit(limit)
+                    .offset(offset)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
         accounts = []
         for account in rows:
             revision = await _latest_revision(
@@ -319,14 +339,18 @@ async def list_account_revisions(
         if account is None:
             raise biz.NotFoundOrForbiddenError("账户不存在或无权访问")
         rows = (
-            await session.execute(
-                select(store.InvestmentAccountRevision)
-                .where(store.InvestmentAccountRevision.account_id == account.id)
-                .order_by(store.InvestmentAccountRevision.revision.desc())
-                .limit(limit)
-                .offset(offset)
+            (
+                await session.execute(
+                    select(store.InvestmentAccountRevision)
+                    .where(store.InvestmentAccountRevision.account_id == account.id)
+                    .order_by(store.InvestmentAccountRevision.revision.desc())
+                    .limit(limit)
+                    .offset(offset)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
     return {
         "revisions": [
             {
@@ -386,14 +410,18 @@ async def list_plans(
         if research is None:
             raise biz.NotFoundOrForbiddenError("研究不存在或无权访问")
         rows = (
-            await session.execute(
-                select(store.InvestmentPlan)
-                .where(store.InvestmentPlan.research_id == research.id)
-                .order_by(store.InvestmentPlan.created_at.desc())
-                .limit(limit)
-                .offset(offset)
+            (
+                await session.execute(
+                    select(store.InvestmentPlan)
+                    .where(store.InvestmentPlan.research_id == research.id)
+                    .order_by(store.InvestmentPlan.created_at.desc())
+                    .limit(limit)
+                    .offset(offset)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
         plans = []
         for plan in rows:
             revision = await _latest_revision(
@@ -460,14 +488,18 @@ async def list_plan_revisions(
         if plan is None:
             raise biz.NotFoundOrForbiddenError("计划不存在或无权访问")
         rows = (
-            await session.execute(
-                select(store.InvestmentPlanRevision)
-                .where(store.InvestmentPlanRevision.plan_id == plan.id)
-                .order_by(store.InvestmentPlanRevision.revision.desc())
-                .limit(limit)
-                .offset(offset)
+            (
+                await session.execute(
+                    select(store.InvestmentPlanRevision)
+                    .where(store.InvestmentPlanRevision.plan_id == plan.id)
+                    .order_by(store.InvestmentPlanRevision.revision.desc())
+                    .limit(limit)
+                    .offset(offset)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
     return {
         "revisions": [
             {
@@ -508,9 +540,7 @@ async def set_link(
 
 
 @router.get("/sessions/{research_id}/link")
-async def get_link(
-    research_id: str, user: UserModel = Depends(get_current_user)
-) -> dict[str, Any]:
+async def get_link(research_id: str, user: UserModel = Depends(get_current_user)) -> dict[str, Any]:
     async with biz.business_transaction() as session:
         link = (
             await session.execute(
@@ -571,10 +601,14 @@ async def list_trades(
         if account_id:
             stmt = stmt.where(store.TradeRecord.account_id == _as_uuid(account_id, "account_id"))
         rows = (
-            await session.execute(
-                stmt.order_by(store.TradeRecord.created_at.desc()).limit(limit).offset(offset)
+            (
+                await session.execute(
+                    stmt.order_by(store.TradeRecord.created_at.desc()).limit(limit).offset(offset)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
     return {"trades": [_trade_view(row) for row in rows]}
 
 
@@ -597,6 +631,259 @@ async def correct_trade(
             source_ref=body.get("source_ref"),
         )
     return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+# ——— 持久补数请求与逻辑续接（DATA-07） ———————————————————————————————
+
+
+@router.post("/sessions/{research_id}/input-requests", status_code=201)
+async def create_input_request(
+    research_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    source = body.get("source_run_id")
+    source_uuid = _as_uuid(source, "source_run_id") if source else None
+    event = body.get("watch_event_id")
+    continuation = body.get("continuation")
+    if continuation is not None and not isinstance(continuation, dict):
+        raise biz.ValidationError("续接信息格式不正确", fields={"continuation": "需要对象"})
+    async with biz.business_transaction() as session:
+        outcome = await input_requests.create_request(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id"),
+            use_case=str(body.get("use_case") or "general_reading"),
+            fields=body.get("fields"),
+            idempotency_key=key,
+            source_run_id=source_uuid,
+            watch_event_id=_as_uuid(event, "watch_event_id") if event else None,
+            continuation=continuation,
+            expires_at=_optional_time(body.get("expires_at"), "expires_at"),
+        )
+    stop_requested = False
+    stop_confirmed = True
+    if source_uuid is not None and not outcome.replayed:
+        async with biz.business_transaction() as session:
+            source_row = await session.get(store.Run, source_uuid)
+            needs_stop = bool(
+                source_row is not None
+                and source_row.user_id == user.id
+                and source_row.stopped_by == "input_required"
+                and source_row.started_at is not None
+            )
+        if needs_stop:
+            orchestrator = get_orchestrator()
+            stop_requested = await orchestrator.stop(source_uuid.hex, stopped_by="input_required")
+            stop_confirmed = await orchestrator.wait_stopped(
+                source_uuid.hex, timeout=get_config().dispatch_stop_timeout_seconds
+            )
+    return {
+        "replayed": outcome.replayed,
+        "operation_id": outcome.operation_id,
+        "source_stop_requested": stop_requested,
+        "source_stop_confirmed": stop_confirmed,
+        **outcome.result,
+    }
+
+
+@router.get("/input-requests")
+async def list_input_requests(
+    user: UserModel = Depends(get_current_user),
+    research_id: str | None = Query(default=None),
+    status: str | None = Query(default=None),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    if status is not None and status not in {
+        input_requests.PENDING,
+        input_requests.ANSWERED,
+        input_requests.CANCELLED,
+        input_requests.EXPIRED,
+    }:
+        raise biz.ValidationError("补数状态不正确", fields={"status": "不支持该状态"})
+    async with biz.business_transaction() as session:
+        rows, total = await input_requests.list_requests(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id") if research_id else None,
+            status=status,
+            limit=limit,
+            offset=offset,
+        )
+        items = [input_requests.request_view(row) for row in rows]
+    return {"requests": items, "total": total, "has_more": offset + len(items) < total}
+
+
+@router.get("/input-requests/{request_id}")
+async def get_input_request(
+    request_id: str, user: UserModel = Depends(get_current_user)
+) -> dict[str, Any]:
+    request_uuid = _as_uuid(request_id, "request_id")
+    async with biz.business_transaction() as session:
+        await input_requests.expire_due(session, user_id=user.id)
+        row = (
+            await session.execute(
+                select(store.InputRequest).where(
+                    store.InputRequest.id == request_uuid,
+                    store.InputRequest.user_id == user.id,
+                )
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            raise biz.NotFoundOrForbiddenError("补数请求不存在或无权访问")
+        answers = (
+            (
+                await session.execute(
+                    select(store.InputRequestAnswer)
+                    .where(store.InputRequestAnswer.request_id == row.id)
+                    .order_by(store.InputRequestAnswer.revision)
+                )
+            )
+            .scalars()
+            .all()
+        )
+        current_versions = await input_requests.load_current_versions(session, row=row)
+        return input_requests.request_view(
+            row, answers=list(answers), current_versions=current_versions
+        )
+
+
+@router.post("/input-requests/{request_id}/answers")
+async def answer_input_request(
+    request_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_versions") or {}
+    if not isinstance(expected, dict):
+        raise biz.ValidationError("资料版本格式不正确", fields={"expected_versions": "需要对象"})
+    # Materialize expiry before the write transaction. An expired answer must
+    # return 409 while the request stays durably expired after that transaction rolls back.
+    async with biz.business_transaction() as session:
+        await input_requests.expire_due(session, user_id=user.id)
+    async with biz.business_transaction() as session:
+        outcome = await input_requests.answer_request(
+            session,
+            user_id=user.id,
+            request_id=_as_uuid(request_id, "request_id"),
+            answer_text=str(body.get("answer") or ""),
+            declared=_body_declared(body, "declared"),
+            expected_versions=expected,
+            idempotency_key=key,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/input-requests/{request_id}/cancel")
+async def cancel_input_request(
+    request_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        await input_requests.expire_due(session, user_id=user.id)
+    async with biz.business_transaction() as session:
+        outcome = await input_requests.cancel_request(
+            session,
+            user_id=user.id,
+            request_id=_as_uuid(request_id, "request_id"),
+            idempotency_key=key,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+# ——— B 阶段业务通知（DATA-12 基础） ———————————————————————————————————
+
+
+@router.get("/events")
+async def list_business_events(
+    user: UserModel = Depends(get_current_user),
+    after: int = Query(0, ge=0),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        rows, cursor = await business_events.list_events(
+            session, user_id=user.id, after=after, limit=limit
+        )
+    return {
+        "items": [business_events.event_view(row) for row in rows],
+        "cursor": cursor,
+        # No retention cleanup exists in the B slice, therefore every historical
+        # cursor remains replayable. DATA-12 C will set this when retention lands.
+        "cursor_expired": False,
+    }
+
+
+@router.post("/events/{event_id}/read", status_code=204)
+async def mark_business_event_read(
+    event_id: str, user: UserModel = Depends(get_current_user)
+) -> None:
+    async with biz.business_transaction() as session:
+        found = await business_events.mark_read(
+            session, user_id=user.id, event_id=_as_uuid(event_id, "event_id")
+        )
+    if not found:
+        raise biz.NotFoundOrForbiddenError("通知不存在或无权访问")
+
+
+@router.post("/events/read-all", status_code=204)
+async def mark_all_business_events_read(
+    body: dict[str, Any], user: UserModel = Depends(get_current_user)
+) -> None:
+    through = body.get("through")
+    if type(through) is not int or through < 0:
+        raise biz.ValidationError("通知游标不正确", fields={"through": "需要非负整数"})
+    async with biz.business_transaction() as session:
+        await business_events.mark_all_read(session, user_id=user.id, through=through)
+
+
+@router.get("/events/stream")
+async def stream_business_events(
+    request: Request,
+    user: UserModel = Depends(get_current_user),
+    after: int = Query(0, ge=0),
+) -> StreamingResponse:
+    """Replay committed events then wait for more; HTTP remains the recovery source."""
+    user_id = user.id
+
+    async def generate() -> AsyncIterator[str]:
+        cursor = after
+        idle = 0
+        while not await request.is_disconnected():
+            async with biz.business_transaction() as session:
+                rows, cursor = await business_events.list_events(
+                    session, user_id=user_id, after=cursor, limit=MAX_LIMIT
+                )
+            if rows:
+                idle = 0
+                for row in rows:
+                    payload = json.dumps(
+                        {
+                            "type": "business_event",
+                            "ts": datetime.now(UTC).timestamp(),
+                            "seq": row.cursor,
+                            "event": business_events.event_view(row),
+                        },
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                    )
+                    yield f"id: {row.cursor}\nevent: business_event\ndata: {payload}\n\n"
+            else:
+                idle += 1
+                if idle >= 15:
+                    yield ": heartbeat\n\n"
+                    idle = 0
+            await asyncio.sleep(1)
+
+    return StreamingResponse(
+        generate(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"}
+    )
 
 
 # ——— 操作结果（幂等恢复） ——————————————————————————————————————————————

@@ -5,7 +5,12 @@ import { onBeforeRouteLeave } from 'vue-router'
 
 import { artifacts as artifactsApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
-import type { SessionPlanInput, SessionPlanPreview, WorkspaceArea } from '@/business-ui'
+import type {
+  SessionPlanInput,
+  SessionPlanPreview,
+  WorkspaceArea,
+  WorkspaceTarget,
+} from '@/business-ui'
 import ActivityPanel from '@/components/ActivityPanel.vue'
 import ApprovalCard from '@/components/ApprovalCard.vue'
 import BusinessWorkspace from '@/components/business/BusinessWorkspace.vue'
@@ -44,6 +49,7 @@ const detailsOpen = ref(false)
 const canvasFocus = ref(false)
 const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace'>('activity')
 const workspaceArea = ref<WorkspaceArea>('research')
+const workspaceRequestId = ref<string | null>(null)
 const sessionPlanOpen = ref(false)
 const sessionPlans = ref<SessionPlanPreview[]>([])
 const businessDirty = ref(false)
@@ -349,8 +355,15 @@ async function onCreatedSession(): Promise<void> {
   await composerRef.value?.focus()
 }
 
-function onNavigate(area: WorkspaceArea): void {
-  if (area === workspaceArea.value || !confirmDiscardDraft()) return
+async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promise<void> {
+  const sameDestination = area === workspaceArea.value
+    && (!target?.requestId || target.requestId === workspaceRequestId.value)
+    && (!target?.researchId || target.researchId === sessions.activeId)
+  if (sameDestination || !confirmDiscardDraft()) return
+  if (target?.researchId && target.researchId !== sessions.activeId) {
+    await sessions.select(target.researchId)
+  }
+  workspaceRequestId.value = area === 'requests' ? target?.requestId ?? null : null
   workspaceArea.value = area
   railOpen.value = false
   canvasFocus.value = false
@@ -580,6 +593,7 @@ watch(
       v-else
       :area="workspaceArea"
       :plans="sessionPlans"
+      :target-request-id="workspaceRequestId"
       @navigate="onNavigate"
       @toggle-rail="railOpen = !railOpen"
       @dirty-change="businessDirty = $event"

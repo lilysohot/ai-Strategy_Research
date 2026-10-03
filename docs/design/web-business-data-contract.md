@@ -244,6 +244,12 @@ Run。此处验证覆盖并发领取与租约交接，不等于已经完成真�
 | 终态冲突 | 已回答/已取消/已过期/研究已删除 → 对应 409 |
 | 通道 | 走补数端点，**不复用工具审批 `/approve`** |
 
+实现端点登记（2026-10-03）：`POST /api/business/sessions/{research_id}/input-requests`、
+`GET /api/business/input-requests`、`GET /api/business/input-requests/{request_id}`、
+`POST .../{request_id}/answers`、`POST .../{request_id}/cancel`。详情同时返回
+`known_versions` 与 `current_versions`；沿用并发改版后的当前值时，回答必须明确携带对应
+`expected_versions`，服务端仍执行版本比较。
+
 ## 9. 监控、事件与通知
 
 ```json

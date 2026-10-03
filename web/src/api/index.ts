@@ -15,6 +15,10 @@ import type {
   ApprovalDecisionValue,
   Artifact,
   ArtifactPreview,
+  BusinessEventListResponse,
+  InputRequest,
+  InputRequestAnswerResponse,
+  InputRequestListResponse,
   LlmConfig,
   RunControlsResponse,
   RunDiff,
@@ -215,6 +219,47 @@ export const runs = {
     request<RunControlsResponse>(`/runs/${encodeURIComponent(runId)}/controls`, {
       query: params,
     }),
+}
+
+// ── Durable business input requests (DATA-07) ──────────────────
+export const inputRequests = {
+  list: (params?: { research_id?: string; status?: string; limit?: number; offset?: number }) =>
+    request<InputRequestListResponse>('/business/input-requests', { query: params }),
+
+  get: (id: string) =>
+    request<InputRequest>(`/business/input-requests/${encodeURIComponent(id)}`),
+
+  answer: (
+    id: string,
+    body: {
+      answer: string
+      declared: Record<string, Record<string, unknown>>
+      expected_versions: Record<string, number>
+    },
+    idempotencyKey: string,
+  ) => request<InputRequestAnswerResponse>(
+    `/business/input-requests/${encodeURIComponent(id)}/answers`,
+    { method: 'POST', body, headers: { 'Idempotency-Key': idempotencyKey } },
+  ),
+
+  cancel: (id: string, idempotencyKey: string) =>
+    request<InputRequestAnswerResponse>(
+      `/business/input-requests/${encodeURIComponent(id)}/cancel`,
+      { method: 'POST', headers: { 'Idempotency-Key': idempotencyKey } },
+    ),
+}
+
+export const businessEvents = {
+  list: (after = 0, limit = 100) =>
+    request<BusinessEventListResponse>('/business/events', { query: { after, limit } }),
+
+  markRead: (id: string) =>
+    request<void>(`/business/events/${encodeURIComponent(id)}/read`, { method: 'POST' }),
+
+  markAllRead: (through: number) =>
+    request<void>('/business/events/read-all', { method: 'POST', body: { through } }),
+
+  streamUrl: () => '/api/business/events/stream',
 }
 
 // ── Artifacts (server/routes/artifacts.py) ──────────────────────

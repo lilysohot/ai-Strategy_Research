@@ -147,6 +147,9 @@ TOOL_META: dict[str, ToolMeta] = {
     # corpus_inventory 返回按 max_chars 自限的清单页信封（结构化 JSON）；与 corpus_fetch
     # 同理，工具级不截断——按字符硬切会把信封切坏，清单一页就不再可解析。
     "corpus_inventory": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
+    # 语义页按自身响应预算只丢整条记录；通用工具闸不得再次按字符切断 evidence、
+    # dependency 或 cursor。运行时的更小上下文预算由协议 fitter 处理。
+    "corpus_semantic_query": ToolMeta(is_read_only=True, concurrency_safe=True, timeout=10, category="finance", max_result_chars=0),
     # 市场数据（同花顺 fuyao）：只读网络调用。
     # timeout=15 而不是 10：一次 quote 内部是「消歧 + 行情 + 估值」多次请求串联，
     # 且要留时间给 transport 的退避重试（§5.2）。
