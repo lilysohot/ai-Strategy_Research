@@ -77,11 +77,26 @@ class ServerConfig(BaseSettings):
     # Grace period the orchestrator waits for a worker to exit before SIGKILL.
     stop_grace_period_s: int = 30
 
+    # — Dispatch outbox (DATA-06) ————————————————————————————
+    # Business runs are dispatched through a persistent outbox with leases, so a
+    # committed submit survives an API crash. The dispatcher runs as a task
+    # inside the API process; multi-process deployments share the work via
+    # SKIP LOCKED claiming, not via a separate singleton.
+    dispatch_enabled: bool = True
+    dispatch_poll_seconds: float = 1.0
+    # Lease length: how long a claim may go unreported before another process
+    # may re-examine the run. Generous on purpose — re-claim first verifies the
+    # run never started, so a slow (but alive) claimer is not raced.
+    dispatch_lease_seconds: int = 120
+    dispatch_max_attempts: int = 5
+    # When the research already has an active run, back off instead of failing.
+    dispatch_busy_delay_seconds: int = 5
+
     # — Uploads (T2.10) ——————————————————————————————
     # Per-file and per-run caps for multipart uploads. These bound what one
     # request can write into a run's inputs dir; the agent only ever reads them.
     max_upload_bytes: int = 50 * 1024 * 1024  # 50 MiB per file
-    max_upload_files: int = 20                # files per run submission
+    max_upload_files: int = 20  # files per run submission
 
     # — Paths ————————————————————————————————————————————————
     # Root for all per-run artifacts + trajectory. Source-tree-external by

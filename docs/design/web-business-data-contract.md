@@ -181,6 +181,12 @@
 | 重算 | 提交“停止 + 关联新 Run”操作，新 Run 用新快照；旧轨迹、旧快照与来源关系保留；同研究串行 |
 | 排队中 | 已排队手动 Run 保持原快照；用户通过取消重提采用新资料，不暗中替换 |
 
+实现落点（DATA-06）：`server/store.py::RunDispatch` + `server/dispatch_outbox.py`
+（领取/租约/回收/取消，研究级互斥基于库判定）；业务 Run 的提交事务同时落
+session/run/turn/快照/outbox；派发经 `GET /api/runs/{id}/dispatch` 可查，
+旧客户端直投路径返回 `not_required`；派发循环随 API 进程启停，
+多进程共享派发由 `SKIP LOCKED` 领取 + 租约保证，不重复投递。
+
 ## 8. 补数请求与回答
 
 ```json

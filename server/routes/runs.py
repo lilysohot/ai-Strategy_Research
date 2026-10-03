@@ -32,7 +32,7 @@ from pydantic import BaseModel
 from starlette.datastructures import UploadFile
 
 from server import business_service as biz
-from server import investment_snapshot, store
+from server import dispatch_outbox, investment_snapshot, store
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import build_run_paths, canonical_run_id, get_config, run_dir_for
@@ -248,8 +248,13 @@ async def submit_run(
         )
 
     # The session was admitted (or is about to be created) above; make sure the
-    # row exists so the turns table and the Run FK stay consistent.
-    await ensure_session(session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话")
+    # row exists so the turns table and the Run FK stay consistent. The business
+    # path (DATA-06) creates it inside the atomic submit transaction instead —
+    # legacy clients keep the original behaviour unchanged.
+    if spec is None:
+        await ensure_session(
+            session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话"
+        )
 
     # F20: record WHICH model drove this run — never the secret. The column has
     # existed since T2.5 but nothing ever filled it, so a finished run could not
@@ -258,6 +263,7 @@ async def submit_run(
     snapshot = await build_llm_snapshot(user_id=user_id)
 
     snapshot_id: str | None = None
+    outcome: Any = None
     replayed = False
     if spec is None:
         # Legacy client: no business structure, no snapshot, no business checks.
@@ -311,8 +317,26 @@ async def submit_run(
                 source="manual",
             )
             session.add(row)
+            # DATA-06: 用户消息与派发意图进入同一事务 —— 提交成功即同时存在，
+            # 派发不得再次追加相同消息；提交失败则什么都不留下。
+            await store.append_turn_in(
+                session, session_id=session_uuid, role="user", content=message, run_id=run_id
+            )
+            dispatch = await dispatch_outbox.enqueue(
+                session,
+                run_id=run_id,
+                user_id=user_id,
+                research_id=session_uuid,
+                session_key=session_id,
+                prompt=message,
+                prompt_addendum=prompt_addendum,
+            )
             await session.flush()
-            return {"run_id": run_id_hex, "snapshot_id": str(row.id)}
+            return {
+                "run_id": run_id_hex,
+                "snapshot_id": str(row.id),
+                "dispatch": dispatch_outbox.dispatch_view(dispatch),
+            }
 
         async with biz.business_transaction() as session:
             outcome = await biz.run_write(
@@ -334,7 +358,10 @@ async def submit_run(
                 shutil.rmtree(build_run_paths(submitted_run_id_hex)["root"], ignore_errors=True)
                 uploaded_names = []
 
-    if not replayed:
+    # Legacy path dispatches in-process exactly as before. Business runs are
+    # dispatched by the outbox worker (DATA-06): the dispatch intent was already
+    # committed with the run, so a crash here can no longer orphan a queued run.
+    if spec is None and not replayed:
         await orch.submit(
             run_id=run_id_hex,
             session_id=session_id,
@@ -342,6 +369,7 @@ async def submit_run(
             user_id=user_id,
             prompt_addendum=prompt_addendum,
         )
+    dispatch_info = outcome.result.get("dispatch") if outcome is not None else None
     status = "queued"
     if replayed:
         existing = await get_run(run_id=run_id, user_id=user_id)
@@ -350,6 +378,7 @@ async def submit_run(
         "run_id": run_id_hex,
         "status": status,
         "snapshot_id": snapshot_id,
+        "dispatch": dispatch_info,
         "replayed": replayed,
     }
 
@@ -381,6 +410,28 @@ async def run_investment_snapshot(
     if row is None:
         raise biz.SnapshotAbsentError("该运行没有业务输入快照（非业务运行）")
     return investment_snapshot.snapshot_view(row)
+
+
+@router.get("/{run_id}/dispatch")
+async def run_dispatch_status(
+    run_id: str,
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """读取 Run 的持久派发状态（DATA-06，契约 §7）。
+
+    派发状态与 Run 状态分离：``not_required`` 表示旧客户端直投路径（无 outbox 行），
+    其余为 ``pending``/``claimed``/``dispatched``/``retryable_failed``/``abandoned``。
+    派发延迟不得显示为资料丢失 —— UI 用这个端点区分"排队待派发"与"运行中"。
+    """
+    run_uuid = _run_uuid(run_id)
+    run = await get_run(run_id=run_uuid, user_id=user.id)
+    if run is None:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    async with biz.business_transaction() as session:
+        row = await dispatch_outbox.get_for_run(session, run_id=run_uuid)
+    if row is None:
+        return {"run_id": run_uuid.hex, "status": "not_required"}
+    return dispatch_outbox.dispatch_view(row)
 
 
 @router.post("/{run_id}/rerun", status_code=202)
@@ -419,8 +470,13 @@ async def rerun_run(
             "缺少幂等键", fields={"Idempotency-Key": "重算必须携带幂等键，避免重复建 Run"}
         )
 
-    # 先请求停止旧执行，再建新 Run：同研究串行由编排保证（DATA-06 起按研究串行）。
-    stop_requested = orch.stop(old_run_uuid.hex)
+    # 旧执行的处置：排队中且派发未投出 → 取消重提（DATA-06）；运行中 → 请求停止。
+    stop_requested = False
+    old_cancelled = False
+    if old_run.status == "running":
+        stop_requested = orch.stop(old_run_uuid.hex)
+
+    new_run_id = uuid.uuid4()
 
     new_run_id = uuid.uuid4()
     new_run_id_hex = new_run_id.hex
@@ -432,6 +488,17 @@ async def rerun_run(
     llm_snapshot = await build_llm_snapshot(user_id=user.id)
 
     async def _execute() -> dict[str, Any]:
+        nonlocal old_cancelled
+        # 排队中且派发未投出的旧 Run：取消重提 —— 派发意图作废 + Run 置 stopped，
+        # 与新 Run 的建立在同一事务，不会出现"旧的没取消、新的已派发"。
+        if old_run.status == "queued" and await dispatch_outbox.cancel_pending(
+            session, run_id=old_run_uuid, reason="被重算取代（取消重提）"
+        ):
+            fresh_old = await session.get(store.Run, old_run_uuid, with_for_update=True)
+            if fresh_old is not None and fresh_old.status == "queued":
+                fresh_old.status = "stopped"
+                fresh_old.stopped_by = "superseded_by_rerun"
+                old_cancelled = True
         resolution = await investment_snapshot.resolve_for_run(
             session, user_id=user.id, research_id=old_run.session_id, spec=spec
         )
@@ -457,8 +524,24 @@ async def rerun_run(
             rerun_of_run_id=old_run_uuid,
         )
         session.add(row)
+        # 用户消息随重算事务落库；派发经 outbox，不再重复追加。
+        await store.append_turn_in(
+            session, session_id=old_run.session_id, role="user", content=prompt, run_id=new_run_id
+        )
+        dispatch = await dispatch_outbox.enqueue(
+            session,
+            run_id=new_run_id,
+            user_id=user.id,
+            research_id=old_run.session_id,
+            session_key=session_id_str,
+            prompt=prompt,
+        )
         await session.flush()
-        return {"run_id": new_run_id_hex, "snapshot_id": str(row.id)}
+        return {
+            "run_id": new_run_id_hex,
+            "snapshot_id": str(row.id),
+            "dispatch": dispatch_outbox.dispatch_view(dispatch),
+        }
 
     async with biz.business_transaction() as session:
         outcome = await biz.run_write(
@@ -470,19 +553,15 @@ async def rerun_run(
             execute=_execute,
         )
 
-    if not outcome.replayed:
-        await orch.submit(
-            run_id=outcome.result["run_id"],
-            session_id=session_id_str,
-            prompt=prompt,
-            user_id=user.id,
-        )
+    # 新 Run 由 outbox 派发；研究忙时派发自动延后，串行由库级判定保证（DATA-06）。
     return {
         "run_id": outcome.result["run_id"],
         "status": "queued",
         "snapshot_id": outcome.result.get("snapshot_id"),
+        "dispatch": outcome.result.get("dispatch"),
         "rerun_of_run_id": old_run_uuid.hex,
         "old_run_stop_requested": stop_requested,
+        "old_run_cancelled": old_cancelled,
         "replayed": outcome.replayed,
     }
 

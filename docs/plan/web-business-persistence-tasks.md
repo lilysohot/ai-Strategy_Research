@@ -178,7 +178,7 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 `404 snapshot_absent`，不用当前资料回填）与 `POST /api/runs/{id}/rerun`（停止旧执行 +
 新 Run + 新快照 + `rerun_of_run_id` 关联）。真 PG 验收见 `tests/pg/test_run_snapshot.py`
 （13 项，累计 46 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
-尚未实现：快照注入 worker/workflow（DATA-08）、outbox 持久派发与按研究串行（DATA-06）。
+尚未实现：快照注入 worker/workflow（DATA-08）。
 
 ### DATA-06 原子提交与持久派发
 
@@ -200,6 +200,21 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 
 **验收**：事务各边界故障、启动失败、崩溃领取、重复投递及并发派发不丢任务、不重复创建 Run。
 覆盖 AC-05、15、23；同研究不并发执行。
+
+**当前产物（2026-10-03）**：outbox 模型 `server/store.py::RunDispatch`（与 Run 状态分离的
+`pending/claimed/dispatched/retryable_failed/abandoned`）与迁移
+`server/alembic/versions/0008_run_dispatch.py`；领取/租约/回收/取消见
+`server/dispatch_outbox.py`（`SKIP LOCKED` 领取、租约 + 领取版本、过期先核定旧 worker
+状态再决定重投、失败退避、研究级互斥基于库判定）。提交侧 `server/routes/runs.py`：
+业务 Run 的 session/run/turn/快照/outbox **同一事务**（新增不自行提交的
+`store.ensure_session_in`/`append_turn_in`，`orchestrator.submit(backfill_turn=False)`
+保证派发不重复追加用户消息）；新增 `GET /api/runs/{id}/dispatch`；重算对排队任务执行
+"取消重提"（outbox 作废 + Run 置 `stopped/superseded_by_rerun`）。派发循环随 API
+lifespan 启停（`SERVER_DISPATCH_*` 配置），孤儿恢复联动作废派发意图
+（`reconcile_orphan_runs`）。真 PG 验收见 `tests/pg/test_run_dispatch.py`（10 项，累计
+56 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：受控暂存区/持久上传清单（文件上传仍在 F12 批次语义内直写 inputs 目录），
+归 DATA-06 后续补齐；快照注入 worker（DATA-08）。
 
 ### DATA-07 持久补数与续接
 

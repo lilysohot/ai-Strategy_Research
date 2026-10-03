@@ -155,9 +155,7 @@ class Turn(Base):
     # SQLite and PostgreSQL can add to an existing table, so the same object is
     # declared here and created by migration 0003 — see ``append_turn`` for how
     # a lost race is detected and retried.
-    __table_args__ = (
-        Index("uq_turns_session_seq", "session_id", "seq", unique=True),
-    )
+    __table_args__ = (Index("uq_turns_session_seq", "session_id", "seq", unique=True),)
 
 
 class Artifact(Base):
@@ -543,6 +541,52 @@ class RunInvestmentSnapshot(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
+class RunDispatch(Base):
+    """Run 的持久派发记录（outbox，DATA-06 / AC-05、15、23）。
+
+    业务 Run 的创建（资料、快照、Run 行、用户消息）与它的"待派发"意图落在**同一个
+    事务**里：提交成功但进程崩溃，重启后这条记录还在，派发可以恢复；提交失败则
+    什么都不存在，不会出现"资料已保存但分析永远不来"。
+
+    状态与 Run 状态**分离**（契约 §7）：
+    pending → claimed → dispatched；失败回 retryable_failed（到期再领）；
+    重试耗尽或被取消 → abandoned。租约 + 领取版本让多进程安全领取：
+    过期租约只有核定了旧 worker 状态（Run 是否真的启动过）才允许重投。
+    """
+
+    __tablename__ = "run_dispatch_outbox"
+    __table_args__ = (
+        UniqueConstraint("run_id", name="uq_run_dispatch_outbox_run"),
+        Index("ix_run_dispatch_due", "status", "next_attempt_at"),
+        Index("ix_run_dispatch_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    #: 编排器的会话键（客户端 session_id 字符串）。派发必须用**同一个键**排队，
+    #: 同研究的串行才不会被不同的字符串拆散。
+    session_key: Mapped[str] = mapped_column(String, nullable=False)
+    prompt: Mapped[str] = mapped_column(Text, nullable=False)
+    prompt_addendum: Mapped[str | None] = mapped_column(Text)
+    agent_tools: Mapped[str] = mapped_column(String, nullable=False, default="")
+    status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
+    attempt: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    max_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=5)
+    #: 下次允许领取的时间；重试退避与研究忙延迟都靠它。
+    next_attempt_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    lease_owner: Mapped[str | None] = mapped_column(String)
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: 领取版本：续投/完成回报必须带上领取时的版本，过期领取者的回报不被接受。
+    claim_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    last_error: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 _engine: AsyncEngine | None = None
 _SessionMaker: async_sessionmaker[AsyncSession] | None = None
 
@@ -868,9 +912,7 @@ async def set_default_llm_config(*, user_id: uuid.UUID, config_id: uuid.UUID) ->
         if cfg is None or cfg.user_id != user_id:
             raise ConfigNotFoundError(str(config_id))
         await session.execute(
-            update(UserLLMConfig)
-            .where(UserLLMConfig.user_id == user_id)
-            .values(is_default=False)
+            update(UserLLMConfig).where(UserLLMConfig.user_id == user_id).values(is_default=False)
         )
         cfg.is_default = True
         await session.commit()
@@ -1084,6 +1126,63 @@ async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: st
         if row.user_id != user_id:
             raise SessionOwnershipError(str(session_id))
         return row
+
+
+async def ensure_session_in(
+    session: AsyncSession, *, session_id: uuid.UUID, user_id: uuid.UUID, title: str
+) -> Session:
+    """Non-committing :func:`ensure_session` for the atomic submit path (DATA-06).
+
+    Same ownership rule, same lazy creation — the caller's transaction decides
+    when it becomes durable, so "session row + run + turn + snapshot + outbox"
+    is one all-or-nothing commit instead of four.
+    """
+    row = await session.get(Session, session_id)
+    if row is None:
+        row = Session(id=session_id, user_id=user_id, title=title)
+        session.add(row)
+        await session.flush()
+        return row
+    if row.user_id != user_id:
+        raise SessionOwnershipError(str(session_id))
+    return row
+
+
+async def append_turn_in(
+    session: AsyncSession,
+    *,
+    session_id: uuid.UUID,
+    role: str,
+    content: str,
+    run_id: uuid.UUID | None = None,
+) -> Turn:
+    """Non-committing :func:`append_turn` with the same ``max(seq)+1`` retry."""
+    for attempt in range(_APPEND_TURN_ATTEMPTS):
+        try:
+            # A savepoint keeps a lost seq race from aborting the caller's whole
+            # transaction: only this insert rolls back, then the retry re-reads
+            # the maximum inside a fresh savepoint.
+            async with session.begin_nested():
+                result = await session.execute(
+                    select(func.coalesce(func.max(Turn.seq), 0)).where(
+                        Turn.session_id == session_id
+                    )
+                )
+                next_seq = (result.scalar_one() or 0) + 1
+                turn = Turn(
+                    session_id=session_id,
+                    seq=next_seq,
+                    role=role,
+                    content=content,
+                    run_id=run_id,
+                )
+                session.add(turn)
+                await session.flush()
+            return turn
+        except IntegrityError:
+            if attempt == _APPEND_TURN_ATTEMPTS - 1:
+                raise
+    raise AssertionError("unreachable")  # pragma: no cover - loop always returns or raises
 
 
 #: How many times ``append_turn`` re-reads ``MAX(seq)`` after losing the unique
@@ -1379,9 +1478,7 @@ async def list_active_runs() -> list[Run]:
     run abandoned by a crash belongs to whoever submitted it.
     """
     async with get_sessionmaker()() as session:
-        result = await session.execute(
-            select(Run).where(Run.status.in_(ACTIVE_RUN_STATUSES))
-        )
+        result = await session.execute(select(Run).where(Run.status.in_(ACTIVE_RUN_STATUSES)))
         return list(result.scalars().all())
 
 
@@ -1541,8 +1638,10 @@ async def sync_run_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> lis
     present = {item.get("rel_path") for item in artifacts if item.get("rel_path")}
     async with get_sessionmaker()() as session:
         existing = (
-            await session.execute(select(Artifact).where(Artifact.run_id == run_id))
-        ).scalars().all()
+            (await session.execute(select(Artifact).where(Artifact.run_id == run_id)))
+            .scalars()
+            .all()
+        )
         for row in existing:
             if row.rel_path not in present:
                 await session.delete(row)
@@ -1654,13 +1753,17 @@ async def create_control(
     async with get_sessionmaker()() as session:
         if external_id:
             existing = (
-                await session.execute(
-                    select(ControlRecord).where(
-                        ControlRecord.kind == kind,
-                        ControlRecord.external_id == external_id,
+                (
+                    await session.execute(
+                        select(ControlRecord).where(
+                            ControlRecord.kind == kind,
+                            ControlRecord.external_id == external_id,
+                        )
                     )
                 )
-            ).scalars().first()
+                .scalars()
+                .first()
+            )
             if existing is not None:
                 return existing
         row = ControlRecord(
@@ -1689,13 +1792,17 @@ async def get_control_by_external_id(*, kind: str, external_id: str) -> ControlR
     """Fetch the record a worker-side id maps to (approval_id → record)."""
     async with get_sessionmaker()() as session:
         return (
-            await session.execute(
-                select(ControlRecord).where(
-                    ControlRecord.kind == kind,
-                    ControlRecord.external_id == external_id,
+            (
+                await session.execute(
+                    select(ControlRecord).where(
+                        ControlRecord.kind == kind,
+                        ControlRecord.external_id == external_id,
+                    )
                 )
             )
-        ).scalars().first()
+            .scalars()
+            .first()
+        )
 
 
 async def list_controls(
@@ -1748,13 +1855,17 @@ async def resolve_control(
             row = await session.get(ControlRecord, control_id)
         elif kind is not None and external_id is not None:
             row = (
-                await session.execute(
-                    select(ControlRecord).where(
-                        ControlRecord.kind == kind,
-                        ControlRecord.external_id == external_id,
+                (
+                    await session.execute(
+                        select(ControlRecord).where(
+                            ControlRecord.kind == kind,
+                            ControlRecord.external_id == external_id,
+                        )
                     )
                 )
-            ).scalars().first()
+                .scalars()
+                .first()
+            )
         else:
             raise ValueError("resolve_control needs a control_id or (kind, external_id)")
         if row is None:
@@ -1795,17 +1906,15 @@ async def close_open_controls(
     """
     async with get_sessionmaker()() as session:
         rows = (
-            await session.execute(
-                select(ControlRecord).where(ControlRecord.run_id == run_id)
-            )
-        ).scalars().all()
+            (await session.execute(select(ControlRecord).where(ControlRecord.run_id == run_id)))
+            .scalars()
+            .all()
+        )
         closed = 0
         for row in rows:
             if not control_is_open(row):
                 continue
-            row.status = (
-                STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
-            )
+            row.status = STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
             row.detail_json = {**(row.detail_json or {}), "closed_by": closed_by}
             row.resolved_at = datetime.now(UTC)
             closed += 1
