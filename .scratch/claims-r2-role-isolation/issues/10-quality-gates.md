@@ -1,10 +1,10 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
-Status: needs-triage
-Execution: 未开始
+Status: needs-info
+Execution: 合成评分程序已实现并通过自验；真实开发标注、阈值签认和真实质量门待授权
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
-Blocked by: 01
+Blocked by: 无本地实现依赖；真实开发样本/问题范围、人工标注与阈值签认待授权
 Real model calls: 0
 Production database access: 0
 
@@ -29,14 +29,14 @@ Production database access: 0
 
 ## 验收条件
 
-- [ ] Claims、items、relations 各有独立 TP/FP/FN 定义，重复输出计 FP，路由漏选计 FN，拒绝后未补齐仍计遗漏。
-- [ ] 原始候选与校验后结果分开，确定性表格与 LLM 正文分开；双角色同源记录不算双份独立来源。
-- [ ] 覆盖解析/切包、抽取、查询交付、原文到上下文的分母与失败归因；空/非法输出及缺观测不从统计删除。
-- [ ] 关键条件/风险必须作为完整证据单元交付；实际模型消息的遗漏不能因后台已抽出被抵扣。
-- [ ] 合成错年份、单位、事实/预测、归属、否定、包外条件、重复引文与分页遗漏均有评分反例。
+- [x] Claims、items、relations 各有独立 TP/FP/FN 定义，重复输出计 FP，路由漏选计 FN，拒绝后未补齐仍计遗漏。
+- [x] 原始候选与校验后结果分开，确定性表格与 LLM 正文分开；双角色同源记录不算双份独立来源。
+- [x] 覆盖解析/切包、抽取、查询交付、原文到上下文的分母与失败归因；空/非法输出及缺观测不从统计删除。
+- [x] 关键条件/风险必须作为完整证据单元交付；实际模型消息的遗漏不能因后台已抽出被抵扣。
+- [x] 合成错年份、单位、事实/预测、归属、否定、包外条件、重复引文与分页遗漏均有评分反例。
 - [ ] 真实样本/金标在看到候选模型输出前冻结；有争议的人工裁定单列，不能事后改分母提高通过率。
-- [ ] 阈值、报告支持率、关键错误否决项、零分母与小样本口径明确；回放通过不当作真实质量达标。
-- [ ] 样本或人工标注不足则保持真实试验质量门未满足；可以记录评分代码已验收，但本票不得以部分交付解除 11 的依赖。
+- [x] 阈值、报告支持率、关键错误否决项、零分母与小样本口径明确；回放通过不当作真实质量达标。
+- [x] 样本或人工标注不足则保持真实试验质量门未满足；可以记录评分代码已验收，但本票不得以部分交付解除 11 的依赖。
 
 ## 验收命令
 
@@ -58,3 +58,48 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_scoring.py
 ## Comments
 
 - 2026-10-02：仅编制任务，尚未执行。真实模型与生产库额度均为 0。
+- 2026-10-03：用户明确要求开始执行 10。测试边界采用票据冻结的公开评分接口、
+  合成评测资产清单与质量门报告；先按 TDD 完成零模型实现，不读取真实业务材料、
+  受保护留出或候选模型结果。真实开发样本/人工标注不足将显式保留为未满足门，
+  不以评分代码通过解除 11 依赖。
+
+### 2026-10-03 · 合成评分程序交付与自验
+
+按 TDD 交付 `plugins/corpus/structured_scoring.py`、专项测试及
+`tests/fixtures/corpus_structured_scoring/`。评分器独立计算 Claims、R2 items、R2
+relations 的 raw/validated TP/FP/FN 和确定性表格/LLM 正文切片；重复候选计 FP，
+相同来源跨角色只计一个支持来源，严格语义身份要求一对一金标。覆盖账包含 parse、packet、
+routing、extraction、query、delivery、context_use；缺观测、empty、invalid、failed 保留在
+分母，并同时报告总体微平均、按来源宏平均及调用方预冻结的 family/channel/risk 分组。
+报告支持率必须有 delivery 与实际 context_use，后台抽取成功不能抵扣消息遗漏。
+
+质量门将候选百分比、风险/条件召回、报告支持率与关键错误绝对否决放在 rate gate，
+把每角色最小样本、真实开发金标冻结顺序、争议裁定和阈值签认放在独立 readiness gate；
+两者均过才允许 `live_trial_ready`。合成资产覆盖 8 类指定反例并用 SHA256 清单锁定；
+人工裁定记录与评分定义单列。当前 development scope 明确为 `not_authorized`，没有真实
+source/question，readiness 四项均未签认，holdout 未访问，因此只记录评分代码自验通过，
+不宣称真实语义质量达标，也不解除 11 的依赖。
+
+验收命令均退出 0：
+
+```bash
+uv run pytest tests/test_corpus_structured_scoring.py tests/test_corpus_scoring.py -q
+# 69 passed
+uv run ruff check plugins/corpus tests/test_corpus_structured_scoring.py
+# All checks passed
+uv run pyright plugins/corpus/structured_scoring.py
+# 0 errors, 0 warnings, 0 informations
+git diff --check
+# clean
+```
+
+本轮 HEAD 为 `dc6572d`；真实模型调用和生产数据库访问仍均为 0。交付指纹：
+
+| 文件 | SHA256 |
+|---|---|
+| `plugins/corpus/structured_scoring.py` | `4d14db7badc8f349ba5bd467702c203dddd12e8be70503bcf1b694f932683550` |
+| `tests/test_corpus_structured_scoring.py` | `2d865f614e83ec8f8e8dbc76d93961e81dec43b460401c6d48e16461c4682eb6` |
+| `tests/fixtures/corpus_structured_scoring/asset-manifest.json` | `bc6743d6e1fb5d1ed4f2c13c4ea1935b8ac545d08c4cbba150b7dee1d6f4715f` |
+| `tests/fixtures/corpus_structured_scoring/gold-and-counterexamples.json` | `b01433674fab7bb89bece4c80809c5263b3a72bb5333e35695d0138a953c1b11` |
+| `tests/fixtures/corpus_structured_scoring/scoring-definition.json` | `f0c583188976d95a990bbd026c02319544d5587a4d6270e3b0f3f494262c992b` |
+| `tests/fixtures/corpus_structured_scoring/adjudications.json` | `dcdc2f4d53a9d256a28a3ed778bd82a66fb8c11fe46478b532f35ef6dae35c8b` |

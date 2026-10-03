@@ -1,0 +1,25 @@
+{
+  "schema_version": "corpus-structured-scoring-assets-v1",
+  "synthetic_only": true,
+  "real_source_ids": [],
+  "candidate_outputs_observed_before_freeze": false,
+  "source_fixture_manifest": {
+    "path": "../corpus_structured_synthetic/asset-manifest.json",
+    "sha256": "6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073"
+  },
+  "assets": [
+    {
+      "path": "gold-and-counterexamples.json",
+      "sha256": "b01433674fab7bb89bece4c80809c5263b3a72bb5333e35695d0138a953c1b11"
+    },
+    {
+      "path": "scoring-definition.json",
+      "sha256": "f0c583188976d95a990bbd026c02319544d5587a4d6270e3b0f3f494262c992b"
+    },
+    {
+      "path": "adjudications.json",
+      "sha256": "dcdc2f4d53a9d256a28a3ed778bd82a66fb8c11fe46478b532f35ef6dae35c8b"
+    }
+  ],
+  "required_counterexample_tags": ["wrong_year","wrong_unit","wrong_factuality","wrong_attribution","negation_inversion","cross_packet_condition","duplicate_quote","pagination_omission"]
+}

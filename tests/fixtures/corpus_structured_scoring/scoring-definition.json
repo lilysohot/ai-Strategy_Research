@@ -1,0 +1,32 @@
+{
+  "schema_version": "corpus-structured-scoring-definition-v1",
+  "status": "candidate_pending_signoff",
+  "formulas": {
+    "precision": "TP/(TP+FP); zero candidate denominator is N/A",
+    "recall": "TP/(TP+FN); zero gold denominator is N/A",
+    "omission_rate": "FN/(TP+FN)",
+    "matching": "one-to-one exact role+source+origin+semantic_fields",
+    "duplicates": "every candidate after the first matched identity is FP",
+    "validated": "validated candidates are an unchanged subset of raw candidates",
+    "unique_sources": "same source across role views counts once",
+    "coverage_micro": "sum passed targets / sum eligible targets",
+    "coverage_macro": "unweighted mean of per-source coverage rates"
+  },
+  "coverage_stages": ["parse","packet","routing","extraction","query","delivery","context_use"],
+  "coverage_groups": "caller-frozen family/channel/risk tags; each reports micro and per-source macro rates",
+  "thresholds": {
+    "claims": {"precision":"49/50","recall":"19/20"},
+    "material_items": {"precision":"19/20","recall":"9/10"},
+    "material_relations": {"precision":"19/20","recall":"17/20"},
+    "risk_or_condition_recall": "19/20",
+    "report_support": "19/20",
+    "minimum_gold_per_role": 20
+  },
+  "absolute_vetoes": ["wrong_subject","wrong_year","wrong_unit_scale","actual_forecast_confusion","negation_inversion","condition_inversion","wrong_attribution","fabricated_quote","critical_report_failure"],
+  "interpretation": {
+    "replay_wiring_is_quality_pass": false,
+    "small_sample_can_claim_production_quality": false,
+    "missing_observation_removed_from_denominator": false,
+    "candidate_model_is_sole_judge": false
+  }
+}

@@ -91,6 +91,8 @@ class SemanticQueryRecord(BaseModel):
 
     @model_validator(mode="after")
     def validate_references(self) -> SemanticQueryRecord:
+        """Reject duplicate purposes and dependency indexes outside the evidence unit."""
+
         if len(set(self.usable_for)) != len(self.usable_for):
             raise ValueError("usable_for must be unique")
         if any(
@@ -297,6 +299,13 @@ def _material_records(view: PublicationView) -> list[tuple[str, SemanticQueryRec
     output: list[tuple[str, SemanticQueryRecord]] = []
     document = evidence_document_from_snapshot(view.snapshot, role="material_items")
     packets = {packet.packet_id: packet for packet in document.packets}
+    published_items = {
+        item.item_id: item
+        for published in view.artifacts
+        if published.artifact.role == "material_items"
+        and isinstance(published.payload, MaterialRun)
+        for item in published.payload.understanding.items
+    }
     for published in view.artifacts:
         run = published.payload
         if not isinstance(run, MaterialRun):
@@ -321,7 +330,6 @@ def _material_records(view: PublicationView) -> list[tuple[str, SemanticQueryRec
             )
             records.append((item.item_id, item.text, searchable, item.evidence))
         if published.artifact.role == "material_relations":
-            items = {item.item_id: item for item in run.understanding.items}
             records = [
                 (
                     relation.relation_id,
@@ -330,12 +338,20 @@ def _material_records(view: PublicationView) -> list[tuple[str, SemanticQueryRec
                         [relation.type]
                         + [proof.quote for proof in relation.evidence]
                         + [
-                            items[endpoint].text
+                            published_items[endpoint].text
                             for endpoint in (relation.from_item, relation.to_item)
-                            if endpoint in items
+                            if endpoint in published_items
                         ]
                     ),
-                    relation.evidence,
+                    (
+                        *relation.evidence,
+                        *(
+                            proof
+                            for endpoint in (relation.from_item, relation.to_item)
+                            if endpoint in published_items
+                            for proof in published_items[endpoint].evidence
+                        ),
+                    ),
                 )
                 for relation in run.understanding.relations
                 if relation.relation_id in view.active_relation_ids

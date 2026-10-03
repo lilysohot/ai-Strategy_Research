@@ -193,3 +193,49 @@ cursor，未证明真实分页链路。用户随后要求“开始修复”。�
 
 07 达到全部验收条件并闭环；这只表示确定性查询、分页和证据交付接缝验收通过，不替代 10 的语义
 召回质量门、11 的真实模型试验或主计划阶段签认。
+
+### 2026-10-03 最新对话问题修复与复验
+
+用户要求修复最新审核发现。本轮重新打开 07 后修复三个遗漏，并以新增回归先复现、后通过：
+
+- `material_relations` 发布工件按角色隔离，不再错误地从关系工件自身的空 `items` 取端点；查询现在从
+  同一 accepted publication 的已发布 `material_items` 建立端点索引。关系可按完整端点文本命中，交付
+  证据同时包含关系证明和两个端点证明，不能在缺少端点上下文时标成完整证据。
+- 补齐冻结调用面的 `python -m plugins.corpus.structured.cli query` 子命令，支持 source/build、purpose、
+  query text、limit、cursor、响应预算、重复字段过滤和显式 store root；成功、未发布、游标不可用及输入
+  非法映射到冻结退出码。跨进程、跨 cwd 测试同时核对 SQLite mtime/size，证明查询只读。
+- 为公开的 `SemanticQueryRecord.validate_references` 补充文档字符串；新增关系端点全文与 CLI 进程级
+  正/负路径回归。没有改变 v1 页面 Schema、排序版本、发布事务或产品 profile。
+
+复验结果（WSL 仓库根目录）：
+
+| 命令 / 范围 | 退出码 | 结果 |
+| --- | --- | --- |
+| 两条新增回归 | 0 | 2 passed |
+| query/delivery/fetch/CLI 专项 | 0 | 54 passed |
+| 07 原样测试验收命令 | 0 | 48 passed |
+| Git 已跟踪 `test_corpus_structured_*.py` | 0 | 327 passed |
+| 工具注册与正文分页回归 | 0 | 36 passed |
+| 本轮 5 个修改文件 Ruff + format check | 0 | All checks passed；5 files already formatted |
+| 验收范围内全部 Git 已跟踪 Python 文件 Ruff | 0 | All checks passed |
+| query/CLI/ledger/tool 定向 Pyright | 0 | 0 errors / 0 warnings |
+| import smoke stage 1 / stage 2 | 0 / 0 | 386/386；435/435 |
+| symbol closure | 0 | 0 missing / 484 files |
+| `git diff --check` | 0 | 无空白错误 |
+
+原样目录级 Ruff 和未限定的 structured 通配测试在复验期间会纳入任务 10 正在并行创建、尚未被 Git
+跟踪的 `plugins/corpus/structured_scoring.py` / `tests/test_corpus_structured_scoring.py`；前者当时报告该
+在途文件的 Ruff 项，后者当时因该文件尚未导出 `EvaluationReadiness` 在收集期停止。本轮没有改写、
+删除或掩盖这些任务 10 文件；改用等价的 Git 已跟踪范围复验 07，结果如上。这一并行状态不构成 07
+回归通过的虚假证据，也不阻断已隔离的 07 验收。
+
+本轮交付指纹：
+
+- `plugins/corpus/structured/query.py`: `ac19677e146adbecb53413faad88cfcf7c1e317e3c135878dffbb22a8b280558`
+- `plugins/corpus/structured/cli.py`: `388687ed1ebb8283cb176b36c00281b1d79fce3498426e4d81f45f65432042bc`
+- `plugins/corpus/structured/ledger.py`: `0c8b46f5715bc1a6c9998e979e14845b811854248def6b34882da24d4416898e`
+- `tests/test_corpus_structured_query.py`: `24741b0324b13a52b7cccb2677cfc501dc0631ded2171c9b1d07e220bcfa991f`
+- `tests/test_corpus_structured_cli.py`: `7f79880d4473017d6f63dff98a1452f3ff4b6edef6d199da023fdc9a360da30a`
+
+真实模型调用 0、生产数据库访问 0，未运行真实 preflight。上述三个最新审核问题均已修复并有失败
+前/通过后的回归覆盖；07 再次达到验收条件并闭环，不替代任务 10/11 的独立门禁。

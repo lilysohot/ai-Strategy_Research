@@ -34,6 +34,7 @@ from plugins.corpus.structured.store import (
     ArtifactReference,
     CrossRoleMapping,
     publish_semantic,
+    read_semantic,
     retire_semantic,
 )
 
@@ -538,9 +539,20 @@ def test_relation_search_matches_source_and_endpoint_text(tmp_path: Path) -> Non
     all_relations = query_semantic(snapshot.source_id, snapshot.build_id, **args)
     assert all_relations.records
     record = all_relations.records[0]
-    for text in (record.evidence[0].quote, "订单", "需求"):
+    view = read_semantic(snapshot.source_id, snapshot.build_id, store_root=root)
+    endpoint_texts = {
+        item.text
+        for artifact in view.artifacts
+        if artifact.artifact.role == "material_items"
+        for item in artifact.payload.understanding.items
+    }
+    assert endpoint_texts == {"主持人：需求是否改善？", "专家：因为订单增加，需求已经改善。"}
+    for text in (record.evidence[0].quote, *endpoint_texts):
         found = query_semantic(snapshot.source_id, snapshot.build_id, query_text=text, **args)
-        assert record.record_id in {item.record_id for item in found.records}
+        matched = next(item for item in found.records if item.record_id == record.record_id)
+        assert all(
+            any(text in evidence.quote for evidence in matched.evidence) for text in endpoint_texts
+        )
 
 
 @pytest.mark.parametrize("reverse", [False, True])

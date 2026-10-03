@@ -1,4 +1,4 @@
-"""Explicit process entry points for structured plan, execution, replay, and audit."""
+"""Explicit process entry points for structured execution and read-only query."""
 
 from __future__ import annotations
 
@@ -24,6 +24,7 @@ from plugins.corpus.structured.ledger import (
     plan_batch,
     replay_batch,
 )
+from plugins.corpus.structured.query import SemanticQueryPage, query_semantic
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotIntegrityError
 
 Role = Literal["claims", "material_items", "material_relations"]
@@ -63,6 +64,22 @@ def _parser() -> argparse.ArgumentParser:
     check = commands.add_parser("check", help="read one batch without mutations or requests")
     check.add_argument("--batch-id", required=True)
     check.add_argument("--store-root")
+
+    query = commands.add_parser("query", help="read one accepted semantic publication")
+    query.add_argument("--source-id", required=True)
+    query.add_argument("--build-id", required=True)
+    query.add_argument("--purpose", choices=("cite", "compare", "calculate"), required=True)
+    query.add_argument("--query-text", default="")
+    query.add_argument("--limit", type=int, default=20)
+    query.add_argument("--cursor")
+    query.add_argument("--max-chars", type=int, default=5_500)
+    query.add_argument(
+        "--field-filter",
+        action="append",
+        default=[],
+        metavar="FIELD=VALUE",
+    )
+    query.add_argument("--store-root")
     return parser
 
 
@@ -119,6 +136,19 @@ def _role_budgets(values: list[str]) -> dict[Role, int]:
     return result
 
 
+def _field_filters(values: list[str]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for value in values:
+        try:
+            field, expected = value.split("=", 1)
+        except (ValueError, TypeError) as exc:
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_field_filter") from exc
+        if not field or not expected or field in result:
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_field_filter")
+        result[field] = expected
+    return result
+
+
 def _output(value: object) -> None:
     if hasattr(value, "model_dump"):
         value = value.model_dump(mode="json")  # type: ignore[union-attr]
@@ -148,6 +178,13 @@ def _result_exit(check: BatchCheck) -> int:
     if task_statuses & {"failed"}:
         return 2
     return 0
+
+
+def _query_exit(page: SemanticQueryPage) -> int:
+    return max(
+        (StructuredExecutionError(code, "query_status").exit_code for code in page.error_codes),
+        default=0,
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -195,8 +232,25 @@ def main(argv: Sequence[str] | None = None) -> int:
                 responses=Path(args.responses).resolve(),
                 store_root=args.store_root,
             )
-        else:
+        elif args.command == "check":
             result = check_batch(args.batch_id, store_root=args.store_root)
+        else:
+            try:
+                page = query_semantic(
+                    args.source_id,
+                    args.build_id,
+                    purpose=args.purpose,
+                    query_text=args.query_text,
+                    limit=args.limit,
+                    cursor=args.cursor,
+                    max_chars=args.max_chars,
+                    field_filters=_field_filters(args.field_filter),
+                    store_root=args.store_root,
+                )
+            except ValueError as exc:
+                raise StructuredExecutionError("CS_INPUT_INVALID", "query_invalid") from exc
+            _output(page)
+            return _query_exit(page)
         _output(result)
         return _result_exit(result)
     except StructuredExecutionError as exc:

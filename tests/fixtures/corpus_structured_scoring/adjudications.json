@@ -1,0 +1,16 @@
+{
+  "schema_version": "corpus-structured-scoring-adjudications-v1",
+  "synthetic_decisions": [
+    {"decision_id":"synthetic-duplicate-locator","status":"resolved","decision":"identical text at different unit locators is distinct gold; duplicate output for one locator is FP","reviewer":"fixture-author"},
+    {"decision_id":"synthetic-condition-completeness","status":"resolved","decision":"a cross-packet condition is part of the item identity and actual delivery unit","reviewer":"fixture-author"}
+  ],
+  "development_scope": {
+    "status": "not_authorized",
+    "real_source_ids": [],
+    "research_questions": [],
+    "gold_frozen_before_candidates": false,
+    "adjudications_resolved": false,
+    "thresholds_signed_off": false
+  },
+  "holdout_accessed": false
+}

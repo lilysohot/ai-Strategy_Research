@@ -10,8 +10,10 @@ from pathlib import Path
 
 import pytest
 from test_corpus_structured_execution import item_content, snapshot
+from test_corpus_structured_publication import forecast_artifacts
 
 from plugins.corpus.structured.ledger import BatchPlan
+from plugins.corpus.structured.store import publish_semantic
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -124,6 +126,83 @@ def test_plan_replay_and_read_only_check_cross_process_and_cwd(tmp_path: Path) -
     assert checked.returncode == 0, checked.stderr
     assert json.loads(checked.stdout) == replay_payload
     assert before == after
+
+
+def test_query_reads_published_records_cross_process_and_cwd_without_writes(
+    tmp_path: Path,
+) -> None:
+    value, _plan, store, references, _checked = forecast_artifacts(tmp_path)
+    publication = publish_semantic(
+        source_id=value.source_id,
+        build_id=value.build_id,
+        snapshot_id=value.snapshot_id,
+        artifacts=(references["claims"],),
+        expected_parent_publication_id=None,
+        store_root=store,
+    )
+    cwd = tmp_path / "query-cwd"
+    cwd.mkdir()
+    database = store / "index" / "structured.sqlite3"
+    before = (database.stat().st_mtime_ns, database.stat().st_size)
+
+    queried = run_cli(
+        "query",
+        "--source-id",
+        value.source_id,
+        "--build-id",
+        value.build_id,
+        "--purpose",
+        "calculate",
+        "--query-text",
+        "营业收入",
+        "--limit",
+        "20",
+        "--field-filter",
+        "role=claims",
+        "--store-root",
+        str(store),
+        cwd=cwd,
+    )
+
+    assert queried.returncode == 0, queried.stderr
+    payload = json.loads(queried.stdout)
+    assert payload["schema_version"] == "corpus-semantic-query-page-v1"
+    assert payload["publication_id"] == publication.publication_id
+    assert payload["page_status"] == "complete"
+    assert [record["role"] for record in payload["records"]] == ["claims"]
+
+    unpublished = run_cli(
+        "query",
+        "--source-id",
+        value.source_id,
+        "--build-id",
+        "9" * 64,
+        "--purpose",
+        "cite",
+        "--store-root",
+        str(store),
+        cwd=cwd,
+    )
+    assert unpublished.returncode == 5
+    assert json.loads(unpublished.stdout)["page_status"] == "not_published"
+
+    invalid = run_cli(
+        "query",
+        "--source-id",
+        value.source_id,
+        "--build-id",
+        value.build_id,
+        "--purpose",
+        "cite",
+        "--field-filter",
+        "role=unsupported",
+        "--store-root",
+        str(store),
+        cwd=cwd,
+    )
+    assert invalid.returncode == 2
+    assert invalid.stderr.strip() == "CS_INPUT_INVALID: query_invalid"
+    assert before == (database.stat().st_mtime_ns, database.stat().st_size)
 
 
 def test_execute_without_allow_model_is_config_error_but_runs_deterministic_work(
