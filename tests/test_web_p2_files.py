@@ -18,7 +18,7 @@ import uuid
 import pytest
 
 from server.config import build_run_paths, get_config
-from server.store import create_run, init_db
+from server.store import create_run, ensure_session, init_db
 
 
 @pytest.fixture
@@ -74,9 +74,11 @@ async def owned_run(auth_headers, tmp_path, monkeypatch):
     token = auth_headers["Authorization"].removeprefix("Bearer ").strip()
     uid = decode_access_token(token)
     run_id = uuid.uuid4()
+    session_id = _session_uuid("p23-preview", uid)
+    await ensure_session(session_id=session_id, user_id=uid, title="Preview fixture")
     await create_run(
         run_id=run_id,
-        session_id=_session_uuid("p23-preview"),
+        session_id=session_id,
         user_id=uid,
         prompt="p",
         pipeline_id="stateful-react-agent",

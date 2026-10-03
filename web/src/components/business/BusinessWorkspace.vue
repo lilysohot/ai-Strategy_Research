@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import type { SessionPlanPreview, WorkspaceArea } from '@/business-ui'
 import BusinessMonitorCenter from './BusinessMonitorCenter.vue'
@@ -14,9 +14,14 @@ const props = defineProps<{
 const emit = defineEmits<{
   navigate: [area: WorkspaceArea]
   toggleRail: []
+  dirtyChange: [dirty: boolean]
 }>()
 
 const dirty = ref(false)
+const profileRef = ref<{ clearDraft: () => void } | null>(null)
+defineExpose({ clearDraft: () => profileRef.value?.clearDraft() })
+watch(dirty, (value) => emit('dirtyChange', value), { flush: 'sync' })
+onBeforeUnmount(() => emit('dirtyChange', false))
 
 const meta = computed(() => {
   const entries = {
@@ -46,6 +51,7 @@ const meta = computed(() => {
 
     <div class="business-body">
       <BusinessProfileView
+        ref="profileRef"
         v-if="area === 'profiles'"
         :plans="plans"
         @dirty-change="dirty = $event"

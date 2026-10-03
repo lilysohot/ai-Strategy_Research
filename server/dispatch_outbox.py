@@ -134,9 +134,11 @@ async def research_queue_depth(
     statement = (
         select(func.count())
         .select_from(store.RunDispatch)
+        .join(store.Run, store.Run.id == store.RunDispatch.run_id)
         .where(
             store.RunDispatch.research_id == research_id,
             store.RunDispatch.status.in_(QUEUE_STATUSES),
+            store.Run.status.in_(["queued", "running"]),
         )
     )
     if exclude_run is not None:
@@ -229,6 +231,23 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
             row.status = ABANDONED
             row.last_error = "run 已不在排队状态，取消派发"
             continue
+        # Lock the research, not only this outbox row: another dispatcher may
+        # have selected a different row belonging to the same research.
+        research = (
+            await session.execute(
+                select(store.Session)
+                .where(
+                    store.Session.id == row.research_id,
+                )
+                .with_for_update(skip_locked=True)
+            )
+        ).scalar_one_or_none()
+        if research is None:
+            continue
+        if research.deleted_at is not None:
+            row.status = ABANDONED
+            row.last_error = "研究已删除"
+            continue
         if await _research_has_active_run(session, row.research_id, row.run_id):
             row.next_attempt_at = now + timedelta(seconds=cfg.dispatch_busy_delay_seconds)
             continue
@@ -245,7 +264,7 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
 async def mark_dispatched(session: AsyncSession, row_id: uuid.UUID, *, claim_version: int) -> bool:
     """投递成功回报；领取版本不符（租约已被他人接管）时忽略本次回报。"""
     current = await session.get(store.RunDispatch, row_id, with_for_update=True)
-    if current is None or current.claim_version != claim_version:
+    if current is None or current.claim_version != claim_version or current.status != CLAIMED:
         return False
     current.status = DISPATCHED
     current.lease_owner = None
@@ -260,7 +279,7 @@ async def mark_submit_failed(
 ) -> None:
     """投递失败：退避重试；重试耗尽置 abandoned（Run 保持 queued 可被取消重提）。"""
     current = await session.get(store.RunDispatch, row_id, with_for_update=True)
-    if current is None or current.claim_version != claim_version:
+    if current is None or current.claim_version != claim_version or current.status != CLAIMED:
         return
     current.last_error = error[:2000]
     if current.attempt >= current.max_attempts:
@@ -297,6 +316,7 @@ async def reclaim_expired(session: AsyncSession) -> int:
             released += 1
         elif run.status == "queued":
             row.status = PENDING
+            row.claim_version += 1
             row.next_attempt_at = now
             row.lease_owner = None
             row.lease_expires_at = None
@@ -369,16 +389,39 @@ async def dispatch_once(orch: Any) -> int:
             # 附件门禁：worker 只能看到已校验并发布的 inputs。暂存文件缺失或摘要不符
             # 时这里抛错，于是投递失败退避重试，绝不会"数据库成功但启动缺文件"。
             await uploads.publish_for_run(run_id)
-            await orch.submit(
-                run_id=run_id.hex,
-                session_id=session_key,
-                prompt=prompt,
-                user_id=user_id,
-                agent_tools="",
-                prompt_addendum=addendum,
-                # 用户消息随提交事务落库；派发不得再次追加相同消息。
-                backfill_turn=False,
-            )
+            # Fence the side effect itself. Keep the claim locked through the
+            # enqueue and receipt commit so reclamation cannot interleave here.
+            async with store.get_sessionmaker()() as session, session.begin():
+                row = await session.get(store.RunDispatch, row_id, with_for_update=True)
+                if (
+                    row is None
+                    or row.status != CLAIMED
+                    or row.claim_version != claim_version
+                    or row.lease_expires_at is None
+                    or row.lease_expires_at.replace(tzinfo=UTC) <= _now()
+                ):
+                    continue
+                run = await session.get(store.Run, run_id)
+                research = await session.get(store.Session, row.research_id)
+                if (
+                    run is None
+                    or run.status != "queued"
+                    or research is None
+                    or research.deleted_at is not None
+                ):
+                    row.status = ABANDONED
+                    continue
+                await orch.submit(
+                    run_id=run_id.hex,
+                    session_id=session_key,
+                    prompt=prompt,
+                    user_id=user_id,
+                    agent_tools="",
+                    prompt_addendum=addendum,
+                    backfill_turn=False,
+                )
+                await mark_dispatched(session, row_id, claim_version=claim_version)
+                dispatched += 1
         except Exception as exc:
             logger.warning("outbox dispatch submit failed for %s: %s", run_id.hex, exc)
             async with store.get_sessionmaker()() as session, session.begin():
@@ -386,9 +429,6 @@ async def dispatch_once(orch: Any) -> int:
                     session, row_id, claim_version=claim_version, error=str(exc)
                 )
             continue
-        async with store.get_sessionmaker()() as session, session.begin():
-            await mark_dispatched(session, row_id, claim_version=claim_version)
-        dispatched += 1
     return dispatched
 
 

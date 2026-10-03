@@ -123,6 +123,28 @@ uv run pytest tests/pg -q -m pg
 重复 `(account_id, revision)` 被唯一约束拒绝；跨研究主计划与跨用户账户被复合外键拒绝；
 成交更正保留原行与前值。
 
+### 4.2 核查修复批次（2026-10-03）
+
+本批仅核查和修复已执行范围，不把 DATA-07/08 或前端预览计为已交付。
+执行记录见 [修复 issue](../../.scratch/web-business-repairs/issues/01-audit-fixes.md)。
+
+| 项 | 本批证据 |
+|---|---|
+| 源码 | WSL `/home/administrator/FrontierAgent`；不是 Windows 中的另一 checkout |
+| 隔离 PG | 临时容器 `frontier-business-repair-20261003`，复用本机 `pg18-zhvector` 镜像；独立库 `frontier_business_test`、角色 `business_test`，不改现有 `pg`/语料库实例；仅发布 127.0.0.1 随机端口 |
+| 迁移 | 空库升级至 `0010_business_history`；带账户/计划版本与 Run 快照执行 `0010 → 0009 → 0010`，逐表内容摘要保持一致，升级后 UPDATE/DELETE 拒绝 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**95 passed**（原 65 项 + 本批 30 项）；仍使用记录型 orchestrator |
+| 失败复现 | 首批新增用例在修复前为 15 failed / 3 passed；补齐状态与成交更正的 3 项补充用例亦先失败后通过 |
+| 既有 Web 回归 | WSL 运行 `test_web_m1.py`、`test_web_p2_files.py`、`test_web_p3_revert.py`、`test_upload_t210.py`、`test_stop_t28.py`：**37 passed**；修正预览夹具漏建 Session 的 6 项 setup error |
+| 前端 | Node 22：vue-tsc、Vite build 通过；现有单测 **74 passed**。Playwright + Edge 独立上下文验证账户离开取消/确认、切研究前拦截、计划关闭取消/确认及研究间草稿隔离、375px 草稿保护 |
+| 浏览器范围 | `web/tests/business-drafts.cjs` 使用隔离 API fixtures，验证真实 Vue 交互；不能代替真实业务 API/worker 联合验收 |
+| 仓库门禁 | Ruff 通过；import_smoke stage 1：379/379，stage 2：428/428；check_symbols：478 文件无缺失；preflight 真实模型单次调用通过 |
+| 文件隔离修复 | PG fixture 现在为每项用例设置独立 runs_root 并导出给子进程。早期两批遗留的 22 个已核实测试目录，在只读查询确认无业务 Run 关联后，移至 `/tmp/frontier-business-repair-orphans`；未删除用户运行资料 |
+| 清理 | 本批临时 PG 容器已停止并自动删除，临时口令文件已移除；原有业务/语料库容器保持原状。脱敏 PG 结果保存在修复 issue 的 `evidence/` 目录 |
+
+本批没有部署 API，也未对业务库执行迁移。前端账户与计划仍属交互预览；持久补数、
+worker 消费业务快照/工具接线、真实浏览器 + API + worker 联合验收仍按 DATA-07/08/15 跟进。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：

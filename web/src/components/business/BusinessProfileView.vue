@@ -132,6 +132,7 @@ function beforeUnload(event: BeforeUnloadEvent): void {
 
 onMounted(() => window.addEventListener('beforeunload', beforeUnload))
 onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeUnload))
+defineExpose({ clearDraft })
 </script>
 
 <template>

@@ -1,0 +1,204 @@
+FFFFFFFF.FFFFFFF..                                                       [100%]
+=================================== FAILURES ===================================
+__________ test_pending_values_never_become_effective[draft_pending] ___________
+tests/pg/test_business_repairs.py:90: in test_pending_values_never_become_effective
+    assert response.json()["record_state"] == "incomplete"
+E   AssertionError: assert 'submitted' == 'incomplete'
+E     
+E     - incomplete
+E     + submitted
+______ test_pending_values_never_become_effective[pending_clarification] _______
+tests/pg/test_business_repairs.py:90: in test_pending_values_never_become_effective
+    assert response.json()["record_state"] == "incomplete"
+E   AssertionError: assert 'submitted' == 'incomplete'
+E     
+E     - incomplete
+E     + submitted
+______________ test_pending_values_never_become_effective[absent] ______________
+tests/pg/test_business_repairs.py:90: in test_pending_values_never_become_effective
+    assert response.json()["record_state"] == "incomplete"
+E   AssertionError: assert 'submitted' == 'incomplete'
+E     
+E     - incomplete
+E     + submitted
+___________ test_cleared_capital_stays_missing_after_unrelated_edit ____________
+tests/pg/test_business_repairs.py:103: in test_cleared_capital_stays_missing_after_unrelated_edit
+    assert row.total_capital is None
+E   AssertionError: assert Decimal('100000.0000000000') is None
+E    +  where Decimal('100000.0000000000') = <server.store.InvestmentAccountRevision object at 0x75da69e69e50>.total_capital
+_____________ test_snapshot_rejects_mismatched_trade[symbol-OTHER] _____________
+tests/pg/test_business_repairs.py:118: in test_snapshot_rejects_mismatched_trade
+    assert result.status_code == 400, result.text
+E   AssertionError: {"run_id":"c1cb09c4bd46455e8df5691ed8ca6248","status":"queued","snapshot_id":"2794a236-0fe9-43b4-b283-7516254181a6","dispatch":{"dispatch_id":"1d3da3b0-e748-40e4-8597-81be1b0aadbe","run_id":"c1cb09c4bd46455e8df5691ed8ca6248","status":"pending","attempt":0,"max_attempts":5,"lease_owner":null,"lease_expires_at":null,"next_attempt_at":null,"last_error":null,"updated_at":"2026-10-03T03:11:26.311444+00:00"},"replayed":false}
+E   assert 202 == 400
+E    +  where 202 = <Response [202 Accepted]>.status_code
+_____________ test_snapshot_rejects_mismatched_trade[currency-USD] _____________
+tests/pg/test_business_repairs.py:118: in test_snapshot_rejects_mismatched_trade
+    assert result.status_code == 400, result.text
+E   AssertionError: {"run_id":"5b9878e4ddba4b5696dbc957513deb49","status":"queued","snapshot_id":"c05aba5c-f792-45db-af46-8b1052874c6a","dispatch":{"dispatch_id":"a540e4cb-b709-4c1e-98b2-4316835ebc2b","run_id":"5b9878e4ddba4b5696dbc957513deb49","status":"pending","attempt":0,"max_attempts":5,"lease_owner":null,"lease_expires_at":null,"next_attempt_at":null,"last_error":null,"updated_at":"2026-10-03T03:11:26.425400+00:00"},"replayed":false}
+E   assert 202 == 400
+E    +  where 202 = <Response [202 Accepted]>.status_code
+__________________ test_partial_declaration_uses_saved_fields __________________
+tests/pg/test_business_repairs.py:124: in test_partial_declaration_uses_saved_fields
+    resolved = await snap.resolve_for_run(session, user_id=case.uid, research_id=case.rid,
+server/investment_snapshot.py:454: in resolve_for_run
+    raise biz.PurposeRequirementError("分析所需资料未满足", fields=missing)
+E   server.business_service.PurposeRequirementError: 分析所需资料未满足
+________________ test_save_and_analyze_is_atomic_and_replayable ________________
+tests/pg/test_business_repairs.py:134: in test_save_and_analyze_is_atomic_and_replayable
+    assert first.status_code == 202, first.text
+E   AssertionError: {"error":{"code":"purpose_requirement_unmet","message":"分析所需资料未满足","fields":{"account.currency":"请选择账户币种","account.capital_basis":"请说明资金口径（总资金 / 可用资金）","account.as_of":"请选择资金数据时点"},"current":{},"retryable":false,"remedy":"clarify_value"}}
+E   assert 400 == 202
+E    +  where 400 = <Response [400 Bad Request]>.status_code
+_________________ test_new_research_created_with_business_run __________________
+tests/pg/test_business_repairs.py:163: in test_new_research_created_with_business_run
+    result = await submit(case, {"use_case": "general_reading",
+tests/pg/test_business_repairs.py:66: in submit
+    return await case.client.post("/api/runs", json=body, headers=case.headers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/httpx/_client.py:1859: in post
+    return await self.request(
+.venv/lib/python3.12/site-packages/httpx/_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/httpx/_client.py:1629: in send
+    response = await self._send_handling_auth(
+.venv/lib/python3.12/site-packages/httpx/_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv/lib/python3.12/site-packages/httpx/_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/httpx/_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2734: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:1780: in handle
+    await self.original_router.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:2789: in handle
+    await included_router._handle_selected(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:1800: in _handle_selected
+    await original_route.handle(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:1279: in handle
+    await app(scope, receive, send)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:158: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.12/site-packages/fastapi/routing.py:144: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/fastapi/routing.py:706: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.12/site-packages/fastapi/routing.py:352: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+server/routes/runs.py:327: in submit_run
+    outcome = await biz.run_write(
+server/business_service.py:549: in run_write
+    result = await execute()
+             ^^^^^^^^^^^^^^^
+server/routes/runs.py:306: in _execute
+    await store.append_turn_in(
+server/store.py:1199: in append_turn_in
+    async with session.begin_nested():
+               ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/base.py:121: in __aenter__
+    return await self.start(is_ctxmanager=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py:1875: in start
+    await greenlet_spawn(
+.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py:190: in greenlet_spawn
+    result = context.switch(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:1976: in begin_nested
+    return self.begin(nested=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:1942: in begin
+    trans = trans._begin(nested=nested)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:2: in _begin
+    ???
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py:101: in _go
+    self._raise_for_prerequisite_state(fn.__name__, current_state)
+.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:975: in _raise_for_prerequisite_state
+    raise sa_exc.PendingRollbackError(
+E   sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.ForeignKeyViolationError'>: insert or update on table "runs" violates foreign key constraint "runs_session_id_fkey"
+E   DETAIL:  Key (session_id)=(f99f897b-f37f-44df-ae01-24d2e4c2775c) is not present in table "sessions".
+E   [SQL: INSERT INTO runs (id, session_id, user_id, status, pipeline_id, prompt, final_answer, stopped_by, error, llm_config_id, llm_snapshot_json, prompt_tokens, completion_tokens, total_tokens, cache_read_tokens, cache_write_tokens, reasoning_tokens, llm_calls, run_dir, started_at, finished_at) VALUES ($1::UUID, $2::UUID, $3::UUID, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::VARCHAR, $8::VARCHAR, $9::VARCHAR, $10::UUID, $11::JSON, $12::INTEGER, $13::INTEGER, $14::INTEGER, $15::INTEGER, $16::INTEGER, $17::INTEGER, $18::INTEGER, $19::VARCHAR, $20::TIMESTAMP WITH TIME ZONE, $21::TIMESTAMP WITH TIME ZONE) RETURNING runs.created_at]
+E   [parameters: (UUID('38b0216b-0c06-4022-8ad9-eb8fde9995fc'), UUID('f99f897b-f37f-44df-ae01-24d2e4c2775c'), UUID('f76dfa1d-dfb5-4273-9f86-ecd68feacd1a'), 'queued', 'stateful-react-agent', 'analyze', None, None, None, None, '{"source": "server-default"}', None, None, None, None, None, None, None, '/tmp/pytest-of-administrator/pytest-37/test_new_research_created_with0/runs/38b0216b0c0640228ad9eb8fde9995fc', None, None)]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+__________________ test_completed_runs_release_queue_capacity __________________
+tests/pg/test_business_repairs.py:178: in test_completed_runs_release_queue_capacity
+    assert second.status_code == 202, second.text
+E   AssertionError: {"error":{"code":"quota_exceeded","message":"该研究的待执行任务已达上限，请先等待或取消已有任务","fields":{},"current":{"queue_depth":1,"queue_limit":1,"research_id":"6c5074a2-a511-45a1-87e5-055e485dd05e"},"retryable":true,"remedy":"wait"}}
+E   assert 429 == 202
+E    +  where 429 = <Response [429 Too Many Requests]>.status_code
+_____________ test_changed_attachment_is_not_an_idempotent_replay ______________
+tests/pg/test_business_repairs.py:185: in test_changed_attachment_is_not_an_idempotent_replay
+    assert second.status_code == 409, second.text
+E   AssertionError: {"run_id":"5d77d76a07cf415eab27dab2a8ba8fa6","status":"queued","snapshot_id":"fc72665d-5265-4f85-8793-b7006832edf8","dispatch":{"dispatch_id":"dfd4cb20-6aac-4942-87ca-a4081e6ee2a3","run_id":"5d77d76a07cf415eab27dab2a8ba8fa6","status":"pending","attempt":0,"max_attempts":5,"lease_owner":null,"lease_expires_at":null,"next_attempt_at":null,"last_error":null,"updated_at":"2026-10-03T03:11:27.421077+00:00"},"replayed":true}
+E   assert 202 == 409
+E    +  where 202 = <Response [202 Accepted]>.status_code
+_____________ test_expired_dispatcher_cannot_submit_after_takeover _____________
+tests/pg/test_business_repairs.py:214: in test_expired_dispatcher_cannot_submit_after_takeover
+    assert len(stub_orchestrator.submitted) == 1
+E   AssertionError: assert 2 == 1
+E    +  where 2 = len([{'run_id': 'c5b196e24b144ee099695811bc77fd09', 'session_id': '49f031ec-a89c-4745-98cf-46424aa711a5', 'prompt': 'analy...031ec-a89c-4745-98cf-46424aa711a5', 'prompt': 'analyze', 'user_id': UUID('e946b303-d661-4b12-ab40-7849587b6398'), ...}])
+E    +    where [{'run_id': 'c5b196e24b144ee099695811bc77fd09', 'session_id': '49f031ec-a89c-4745-98cf-46424aa711a5', 'prompt': 'analy...031ec-a89c-4745-98cf-46424aa711a5', 'prompt': 'analyze', 'user_id': UUID('e946b303-d661-4b12-ab40-7849587b6398'), ...}] = <conftest.StubOrchestrator object at 0x75da69d05910>.submitted
+_____________________ test_rerun_uses_latest_saved_capital _____________________
+tests/pg/test_business_repairs.py:220: in test_rerun_uses_latest_saved_capital
+    assert first.status_code == 202, first.text
+E   AssertionError: {"error":{"code":"purpose_requirement_unmet","message":"分析所需资料未满足","fields":{"account.currency":"请选择账户币种","account.capital_basis":"请说明资金口径（总资金 / 可用资金）","account.as_of":"请选择资金数据时点"},"current":{},"retryable":false,"remedy":"clarify_value"}}
+E   assert 400 == 202
+E    +  where 400 = <Response [400 Bad Request]>.status_code
+______________________ test_rerun_cannot_change_research _______________________
+tests/pg/test_business_repairs.py:238: in test_rerun_cannot_change_research
+    assert result.status_code == 400, result.text
+E   AssertionError: {"run_id":"709c7abe97c3429ba0886e02dfc7c3ad","status":"queued","snapshot_id":"56d00090-f582-4ad3-86d8-c250a2a2498c","dispatch":{"dispatch_id":"4251879a-a84a-44c4-90d9-44ad8f8a550c","run_id":"709c7abe97c3429ba0886e02dfc7c3ad","status":"pending","attempt":0,"max_attempts":5,"lease_owner":null,"lease_expires_at":null,"next_attempt_at":null,"last_error":null,"updated_at":"2026-10-03T03:11:27.821345+00:00"},"rerun_of_run_id":"a0340d91e0114f78bd7faad0038e88ca","old_run_stop_requested":false,"old_run_stopped":false,"old_run_stop_timed_out":false,"old_run_cancelled":true,"replayed":false}
+E   assert 202 == 400
+E    +  where 202 = <Response [202 Accepted]>.status_code
+____________ test_invalid_plan_cannot_be_used_for_analysis[patch0] _____________
+tests/pg/test_business_repairs.py:251: in test_invalid_plan_cannot_be_used_for_analysis
+    assert (await submit(case)).status_code == 400
+E   assert 202 == 400
+E    +  where 202 = <Response [202 Accepted]>.status_code
+=========================== short test summary info ============================
+FAILED tests/pg/test_business_repairs.py::test_pending_values_never_become_effective[draft_pending]
+FAILED tests/pg/test_business_repairs.py::test_pending_values_never_become_effective[pending_clarification]
+FAILED tests/pg/test_business_repairs.py::test_pending_values_never_become_effective[absent]
+FAILED tests/pg/test_business_repairs.py::test_cleared_capital_stays_missing_after_unrelated_edit
+FAILED tests/pg/test_business_repairs.py::test_snapshot_rejects_mismatched_trade[symbol-OTHER]
+FAILED tests/pg/test_business_repairs.py::test_snapshot_rejects_mismatched_trade[currency-USD]
+FAILED tests/pg/test_business_repairs.py::test_partial_declaration_uses_saved_fields
+FAILED tests/pg/test_business_repairs.py::test_save_and_analyze_is_atomic_and_replayable
+FAILED tests/pg/test_business_repairs.py::test_new_research_created_with_business_run
+FAILED tests/pg/test_business_repairs.py::test_completed_runs_release_queue_capacity
+FAILED tests/pg/test_business_repairs.py::test_changed_attachment_is_not_an_idempotent_replay
+FAILED tests/pg/test_business_repairs.py::test_expired_dispatcher_cannot_submit_after_takeover
+FAILED tests/pg/test_business_repairs.py::test_rerun_uses_latest_saved_capital
+FAILED tests/pg/test_business_repairs.py::test_rerun_cannot_change_research
+FAILED tests/pg/test_business_repairs.py::test_invalid_plan_cannot_be_used_for_analysis[patch0]
+15 failed, 3 passed in 3.88s

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { onBeforeRouteLeave } from 'vue-router'
 
 import { artifacts as artifactsApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
@@ -45,6 +46,22 @@ const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace'>('activity')
 const workspaceArea = ref<WorkspaceArea>('research')
 const sessionPlanOpen = ref(false)
 const sessionPlans = ref<SessionPlanPreview[]>([])
+const businessDirty = ref(false)
+const planDirty = ref(false)
+const businessWorkspaceRef = ref<{ clearDraft: () => void } | null>(null)
+const sessionPlanRef = ref<{ resetDraft: () => void } | null>(null)
+
+function confirmDiscardDraft(): boolean {
+  if (!businessDirty.value && !planDirty.value) return true
+  if (!window.confirm('本页有未保存的资料，离开将丢弃草稿。是否继续？')) return false
+  businessWorkspaceRef.value?.clearDraft()
+  sessionPlanRef.value?.resetDraft()
+  businessDirty.value = false
+  planDirty.value = false
+  return true
+}
+
+onBeforeRouteLeave(() => confirmDiscardDraft())
 
 const clock = ref(Date.now())
 let clockTimer: ReturnType<typeof setInterval> | null = null
@@ -333,6 +350,7 @@ async function onCreatedSession(): Promise<void> {
 }
 
 function onNavigate(area: WorkspaceArea): void {
+  if (area === workspaceArea.value || !confirmDiscardDraft()) return
   workspaceArea.value = area
   railOpen.value = false
   canvasFocus.value = false
@@ -427,6 +445,7 @@ watch(
       class="workbench-rail"
       :class="{ open: railOpen }"
       :active-area="workspaceArea"
+      :before-leave="confirmDiscardDraft"
       @selected="onSelectSession"
       @created="onCreatedSession"
       @navigate="onNavigate"
@@ -536,11 +555,13 @@ watch(
       </main>
 
       <SessionPlanManager
+        ref="sessionPlanRef"
         v-model="sessionPlanOpen"
         :session-id="sessions.activeId"
         :session-title="sessions.activeSession?.title || '未命名研究'"
         :plans="sessionPlans"
         @save="saveSessionPlan"
+        @dirty-change="planDirty = $event"
       />
 
       <ResearchCanvas
@@ -555,11 +576,13 @@ watch(
     </template>
 
     <BusinessWorkspace
+      ref="businessWorkspaceRef"
       v-else
       :area="workspaceArea"
       :plans="sessionPlans"
       @navigate="onNavigate"
       @toggle-rail="railOpen = !railOpen"
+      @dirty-change="businessDirty = $event"
     />
   </div>
 </template>

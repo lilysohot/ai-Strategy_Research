@@ -169,6 +169,22 @@
 `server/routes/runs.py`（`POST /api/runs` 同事务冻结、`GET /api/runs/{id}/investment-snapshot`、
 `POST /api/runs/{id}/rerun`）。
 
+2026-10-03 核查修复补充（现有手动提交接口）：
+
+- `declared` 是对所选持久对象的明确修改，须先通过统一写入服务保存，再冻结保存后的版本；
+  不再作为仅本次生效的覆盖值。修改账户/计划须带 `expected_revision`，无目标对象拒绝。
+  部分字段与该对象当前有效字段合并校验，其他对象的同名字段不能补足本对象缺项。
+- 除兼容的平铺字段外，可用 `declared.account`、`declared.plan`、`declared.trade` 明确所属对象；
+  币种等同名字段建议采用分组形式。响应保留现有平铺 `run_id/status/snapshot_id`，
+  增加 `saved`（分组保存回执）和 `operation_id`。
+- `draft_pending/pending_clarification/absent` 不产生有效事实；主动清空或待澄清字段持久记录阻断，
+  无关修改不能恢复旧值。补齐后重新按完整合并结果裁决，缺失项不固定成永久阻断。
+  成交更正不支持带待澄清字段提交；返回缺数错误，原记录保持不变。零与缺失分别处理。
+- 账户、计划、成交、持仓所带标的/市场/币种必须一致，不隐式换汇。
+  计划价区间必须上下限齐备且顺序正确；方向仅接受 `buy/sell`。
+- 幂等摘要包含规范化业务结构及附件的保存名称、大小、SHA-256；更换附件不能重放旧 Run。
+  新研究的 Session 在提交事务内建立；保存、快照或派发登记任一步失败整体回滚。
+
 ## 7. Run 快照、状态与重算
 
 | 规则 | 约定 |
@@ -190,6 +206,14 @@
 提交事务同时落 session/run/turn/快照/附件清单/outbox；派发经
 `GET /api/runs/{id}/dispatch` 可查，旧客户端直投路径返回 `not_required`；派发循环随
 API 进程启停，多进程共享派发由 `SKIP LOCKED` 领取 + 租约保证，不重复投递。
+
+2026-10-03 修复边界：领取额外锁定研究，派发前再次校验领取版本和租约，并在 enqueue
+与回执提交期间持有派发行锁，阻止已失效领取者继续提交；队列深度只计入 queued/running
+Run。此处验证覆盖并发领取与租约交接，不等于已经完成真实 worker 的进程故障联合验收。
+重算拒绝更换研究，重新解析当前资料，不重用旧快照的 `declared` 覆盖最新值。
+快照保留分组字段（例如 `account.currency`）和兼容平铺字段；历史版本及快照经
+`0010_business_history` 在数据库层拒绝 UPDATE/DELETE。该迁移仅在隔离测试库验证，
+生产部署仍需按发布流程执行。
 
 ## 8. 补数请求与回答
 

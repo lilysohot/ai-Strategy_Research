@@ -45,8 +45,9 @@ IDEMPOTENCY_TTL = timedelta(hours=24)
 #: 请求体中出现的这些键一律拒绝：所有者只能来自认证上下文。
 FORBIDDEN_OWNER_KEYS = frozenset({"user_id", "owner_id", "owner"})
 
-#: 只接受“用户明确提供”与“外部观测”作为可计算输入。
-EFFECTIVE_STATUSES = frozenset({"user_provided", "external_observed"})
+#: 用户资料写入只接受“用户明确提供”；外部观测不得冒充用户事实。
+EFFECTIVE_STATUSES = frozenset({"user_provided"})
+PENDING_STATUSES = frozenset({"draft_pending", "pending_clarification", "absent"})
 
 #: 假设 / 估计 / 疑问候选：一律拒绝写入有效字段（AC-02、AC-25、AC-28）。
 REJECTED_STATUSES: dict[str, str] = {
@@ -350,6 +351,14 @@ def admit_group(group: str, declared: dict[str, Any] | None) -> AdmissionResult:
             raise AssumptionRejectedError(
                 REJECTED_STATUSES[status], fields={name: REJECTED_STATUSES[status]}
             )
+        if status in PENDING_STATUSES:
+            incomplete[name] = "该字段仍待补充或澄清"
+            continue
+        if status not in EFFECTIVE_STATUSES:
+            raise ValidationError(
+                "用户资料必须由用户明确提供",
+                fields={name: "不接受未知状态、外部观测或系统计算冒充用户资料"},
+            )
         raw = spec.get("value")
         if raw is None or (isinstance(raw, str) and not raw.strip()):
             incomplete[name] = "该字段尚未填写"
@@ -369,10 +378,19 @@ def admit_group(group: str, declared: dict[str, Any] | None) -> AdmissionResult:
             if text.startswith("-"):
                 raise ValidationError("金额/价格/数量不接受负数", fields={name: "请填写非负数值"})
             value: Decimal | str | datetime = Decimal(text)
+            integer_digits = max(value.adjusted() + 1, 0)
+            if -value.as_tuple().exponent > 10 or integer_digits > (
+                10 if name == "profit_loss_ratio" else 20
+            ):
+                raise ValidationError(
+                    "数值超出可精确保存的范围", fields={name: "最多保留 10 位小数"}
+                )
         elif name in DATETIME_FIELDS:
             value = _parse_datetime(name, text)
         else:
             value = text
+        if name in {"side", "direction"} and value not in {"buy", "sell"}:
+            raise ValidationError("方向不正确", fields={name: "请选择 buy 或 sell"})
         if name in UNIT_REQUIRED_FIELDS:
             unit_key = UNIT_BY_FIELD[name]
             if not str(declared.get(unit_key) or "").strip():
@@ -414,6 +432,8 @@ def evaluate_purpose(
 
     if use_case == "general_reading":
         return missing
+    if use_case not in {"plan_analysis", "holding_cost"}:
+        return missing
 
     need("account", "currency", "请选择账户币种")
     need("account", "capital_basis", "请说明资金口径（总资金 / 可用资金）")
@@ -428,11 +448,18 @@ def evaluate_purpose(
         need("plan", "symbol", "请填写标的")
         need("plan", "market", "请选择市场")
         need("plan", "direction", "请选择方向")
-        need_any(
-            "plan",
-            ("plan_price", "plan_price_low", "plan_price_high"),
-            "请填写计划买入价或价格区间",
-        )
+        plan = groups.get("plan")
+        prices = plan.values if plan else {}
+        if "plan_price" not in prices:
+            need("plan", "plan_price_low", "请填写计划买入价或完整价格区间")
+            need("plan", "plan_price_high", "请填写计划买入价或完整价格区间")
+        if (
+            "plan_price_low" in prices
+            and "plan_price_high" in prices
+            and Decimal(str(prices["plan_price_low"].value))
+            > Decimal(str(prices["plan_price_high"].value))
+        ):
+            missing["plan.plan_price_high"] = "区间上限不能小于下限"
         need("plan", "target_price", "计划分析需要目标价")
 
     if use_case == "holding_cost":
@@ -507,7 +534,7 @@ async def _claim_operation(
         ).scalar_one_or_none()
         if existing is None:
             raise
-        if existing.request_digest != digest:
+        if existing.scope != scope or existing.request_digest != digest:
             raise IdempotencyReuseError(
                 "同一幂等键携带了不同内容",
                 current={"operation_id": str(existing.id), "scope": existing.scope},
@@ -671,6 +698,44 @@ def _require_complete(
     return ("incomplete" if pending else "submitted"), sorted(pending)
 
 
+def _merge_revision(
+    group: str, prev: dict[str, Any], admission: AdmissionResult, *, allow_incomplete: bool
+) -> tuple[dict[str, Any], str, list[str]]:
+    """Apply a patch without forgetting unresolved fields from earlier versions."""
+    columns = ACCOUNT_VALUE_COLUMNS if group == "account" else PLAN_VALUE_COLUMNS
+    merged = {name: prev.get(name) for name in columns}
+    merged.update(_column_values(admission, columns))
+    # A submitted empty/pending value clears the effective field, never falls back.
+    for name in admission.incomplete:
+        if name in columns and name != "currency":
+            merged[name] = None
+    metadata = prev.get("changed_fields") or {}
+    pending = set(metadata.get("pending_fields", []))
+    pending.difference_update(admission.values)
+    pending.update(admission.incomplete)
+    # Old incomplete rows did not persist field-level blockers. Do not silently
+    # promote their old numbers on an unrelated patch; require an explicit resubmit.
+    if prev.get("record_state") == "incomplete" and "pending_fields" not in metadata:
+        pending.update(
+            name
+            for name, value in merged.items()
+            if value is not None and name not in admission.values
+        )
+    effective = AdmissionResult(
+        values={
+            name: AdmittedValue(value=value)
+            for name, value in merged.items()
+            if value is not None and name not in pending
+        },
+        incomplete={name: "该字段仍待补充或澄清" for name in pending},
+    )
+    missing = evaluate_purpose("plan_analysis", {group: effective}, only_groups=(group,))
+    state, _ = _require_complete(effective, allow_incomplete=allow_incomplete, missing=missing)
+    # Missing requirements are recalculated from the next merged revision. Only
+    # explicit uncertain/cleared fields remain blockers until explicitly answered.
+    return merged, state, sorted(pending)
+
+
 # ——— 写入入口 ————————————————————————————————————————————————————————
 
 
@@ -722,7 +787,10 @@ async def create_account(
                 record_state=record_state,
                 source_kind=source_kind,
                 source_ref=source_ref,
-                changed_fields={"fields": sorted(admission.values)},
+                changed_fields={
+                    "fields": sorted(admission.values),
+                    "pending_fields": sorted(admission.incomplete),
+                },
                 **values,
             )
         )
@@ -774,10 +842,12 @@ async def update_account(
     async def _execute() -> dict[str, Any]:
         account = (
             await session.execute(
-                select(store.InvestmentAccount).where(
+                select(store.InvestmentAccount)
+                .where(
                     store.InvestmentAccount.id == account_id,
                     store.InvestmentAccount.user_id == user_id,
                 )
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if account is None:
@@ -794,7 +864,6 @@ async def update_account(
                 current={"revision": account.current_revision},
                 fields={"expected_revision": f"当前版本为 {account.current_revision}"},
             )
-        record_state, pending = _require_complete(admission, allow_incomplete=allow_incomplete)
         prev = await _load_revision_values(
             session,
             store.InvestmentAccountRevision,
@@ -802,8 +871,9 @@ async def update_account(
             account.id,
             account.current_revision,
         )
-        merged = {k: v for k, v in prev.items() if k in _ACCOUNT_VALUE_COLUMNS}
-        merged.update(_column_values(admission, _ACCOUNT_VALUE_COLUMNS))
+        merged, record_state, pending = _merge_revision(
+            "account", prev, admission, allow_incomplete=allow_incomplete
+        )
         changed = _changed_fields(
             {k: v for k, v in prev.items() if k in _ACCOUNT_VALUE_COLUMNS}, merged
         )
@@ -815,7 +885,7 @@ async def update_account(
                 record_state=record_state,
                 source_kind=source_kind,
                 source_ref=source_ref,
-                changed_fields={"fields": changed},
+                changed_fields={"fields": changed, "pending_fields": pending},
                 **merged,
             )
         )
@@ -895,7 +965,10 @@ async def create_plan(
                 record_state=record_state,
                 source_kind=source_kind,
                 source_ref=source_ref,
-                changed_fields={"fields": sorted(admission.values)},
+                changed_fields={
+                    "fields": sorted(admission.values),
+                    "pending_fields": sorted(admission.incomplete),
+                },
                 **_column_values(admission, _PLAN_VALUE_COLUMNS),
             )
         )
@@ -953,10 +1026,12 @@ async def update_plan(
     async def _execute() -> dict[str, Any]:
         plan = (
             await session.execute(
-                select(store.InvestmentPlan).where(
+                select(store.InvestmentPlan)
+                .where(
                     store.InvestmentPlan.id == plan_id,
                     store.InvestmentPlan.user_id == user_id,
                 )
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if plan is None:
@@ -973,12 +1048,12 @@ async def update_plan(
                 current={"revision": plan.current_revision},
                 fields={"expected_revision": f"当前版本为 {plan.current_revision}"},
             )
-        record_state, pending = _require_complete(admission, allow_incomplete=allow_incomplete)
         prev = await _load_revision_values(
             session, store.InvestmentPlanRevision, "plan_id", plan.id, plan.current_revision
         )
-        merged = {k: v for k, v in prev.items() if k in _PLAN_VALUE_COLUMNS}
-        merged.update(_column_values(admission, _PLAN_VALUE_COLUMNS))
+        merged, record_state, pending = _merge_revision(
+            "plan", prev, admission, allow_incomplete=allow_incomplete
+        )
         changed = _changed_fields(
             {k: v for k, v in prev.items() if k in _PLAN_VALUE_COLUMNS}, merged
         )
@@ -990,7 +1065,7 @@ async def update_plan(
                 record_state=record_state,
                 source_kind=source_kind,
                 source_ref=source_ref,
-                changed_fields={"fields": changed},
+                changed_fields={"fields": changed, "pending_fields": pending},
                 **merged,
             )
         )
@@ -1050,10 +1125,12 @@ async def register_trade(
     async def _execute() -> dict[str, Any]:
         account = (
             await session.execute(
-                select(store.InvestmentAccount).where(
+                select(store.InvestmentAccount)
+                .where(
                     store.InvestmentAccount.id == account_id,
                     store.InvestmentAccount.user_id == user_id,
                 )
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if account is None:
@@ -1106,6 +1183,7 @@ async def correct_trade(
 ) -> WriteOutcome:
     """更正成交：新建一行并保留原值，旧行标记为 corrected（AC-22）。"""
     admission = admit_group("trade", declared)
+    _require_complete(admission, allow_incomplete=False)
     if not admission.values:
         raise PurposeRequirementError("更正内容为空", fields={"declared": "请填写更正后的字段"})
     payload = {"trade_id": str(trade_id), "declared": declared}
@@ -1113,10 +1191,12 @@ async def correct_trade(
     async def _execute() -> dict[str, Any]:
         original = (
             await session.execute(
-                select(store.TradeRecord).where(
+                select(store.TradeRecord)
+                .where(
                     store.TradeRecord.id == trade_id,
                     store.TradeRecord.user_id == user_id,
                 )
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if original is None:
@@ -1132,8 +1212,8 @@ async def correct_trade(
             symbol=values.get("symbol") or original.symbol,
             market=values.get("market") or original.market,
             side=str(values.get("side") or original.side),
-            quantity=values.get("quantity") or original.quantity,
-            price=values.get("price") or original.price,
+            quantity=values.get("quantity", original.quantity),
+            price=values.get("price", original.price),
             currency=str(values.get("currency") or original.currency),
             fees=values.get("fees") if "fees" in values else original.fees,
             traded_at=values.get("traded_at") if "traded_at" in values else original.traded_at,

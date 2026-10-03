@@ -101,7 +101,7 @@ def _pg_entry_gate() -> str:
 
 
 @pytest.fixture(autouse=True)
-async def _isolated_database():
+async def _isolated_database(tmp_path, monkeypatch):
     """Override ``tests/conftest.py``'s SQLite redirect with a dialect assertion.
 
     Same name as the parent fixture, so pytest uses this one for tests under
@@ -113,6 +113,9 @@ async def _isolated_database():
     from server.store import reset_engine
 
     cfg = get_config()
+    # The PG override must retain the root fixture's file isolation too.
+    monkeypatch.setattr(cfg, "runs_root", tmp_path / "runs")
+    monkeypatch.setenv("SERVER_RUNS_ROOT", str(cfg.runs_root))
     if not cfg.database_url.startswith("postgresql"):
         pytest.fail(
             f"PG 集成入口检测到配置已回落为 {cfg.database_url!r}；拒绝以非 PostgreSQL 执行业务验收"

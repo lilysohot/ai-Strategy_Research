@@ -8,7 +8,10 @@ import { WORKSPACE_NAV_ITEMS, type WorkspaceArea } from '@/business-ui'
 import { useAuthStore } from '@/stores/auth'
 import { useSessionsStore } from '@/stores/sessions'
 
-withDefaults(defineProps<{ activeArea?: WorkspaceArea }>(), { activeArea: 'research' })
+const props = withDefaults(defineProps<{
+  activeArea?: WorkspaceArea
+  beforeLeave?: () => boolean
+}>(), { activeArea: 'research' })
 
 const emit = defineEmits<{
   selected: []
@@ -36,6 +39,7 @@ function formatDate(value: string | null): string {
 
 async function onNew(): Promise<void> {
   if (creating.value) return
+  if (props.beforeLeave && !props.beforeLeave()) return
   creating.value = true
   try {
     const created = await sessions.create()
@@ -50,6 +54,8 @@ async function onNew(): Promise<void> {
 }
 
 async function onSelect(id: string): Promise<void> {
+  // Selecting the active research also navigates away from the business page.
+  if (props.beforeLeave && !props.beforeLeave()) return
   try {
     await sessions.select(id)
     emit('selected')
@@ -75,6 +81,7 @@ async function onDelete(id: string, title: string | null): Promise<void> {
     return
   }
 
+  if (id === sessions.activeId && props.beforeLeave && !props.beforeLeave()) return
   try {
     await sessions.remove(id)
     ElMessage.success('已移除研究')
@@ -94,6 +101,7 @@ async function goModels(): Promise<void> {
 }
 
 async function onLogout(): Promise<void> {
+  if (props.beforeLeave && !props.beforeLeave()) return
   await auth.logout()
   await router.push({ name: 'login' })
 }

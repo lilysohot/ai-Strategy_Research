@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import json
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
@@ -109,9 +109,9 @@ def _object_ref(raw: Any, name: str) -> ObjectRef | None:
     except (ValueError, AttributeError):
         raise biz.NotFoundOrForbiddenError("对象不存在或无权访问") from None
     expected = raw.get("expected_revision")
-    return ObjectRef(
-        id=object_id, expected_revision=int(expected) if expected is not None else None
-    )
+    if expected is not None and (type(expected) is not int or expected < 1):
+        raise biz.ValidationError("版本号不正确", fields={name: "expected_revision 必须是正整数"})
+    return ObjectRef(id=object_id, expected_revision=expected)
 
 
 def parse_investment_input(raw: Any) -> InvestmentInputSpec | None:
@@ -173,6 +173,12 @@ def _split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """按字段所属对象拆分声明值；未知字段在此拒绝。"""
     groups: dict[str, dict[str, Any]] = {}
     for name, spec in declared.items():
+        if name in biz.GROUP_FIELDS:
+            if not isinstance(spec, dict):
+                raise biz.ValidationError("分组声明必须是对象", fields={name: "需要字段对象"})
+            biz.admit_group(name, spec)
+            groups.setdefault(name, {}).update(spec)
+            continue
         if name in biz.FORBIDDEN_OWNER_KEYS:
             raise biz.OwnerNotSettableError(
                 "所有者由服务端绑定，不接受请求体指定", fields={name: "该字段不可由客户端设置"}
@@ -247,174 +253,141 @@ async def resolve_for_run(
     research_id: uuid.UUID,
     spec: InvestmentInputSpec,
 ) -> Resolution:
-    """在同一事务内读取对象、校验一致性，并解析出本次分析要用的有效值。"""
+    """Resolve each object independently; only combine compatible effective facts."""
     resolution = Resolution()
     groups: dict[str, biz.AdmissionResult] = {}
-    incomplete: list[str] = []
+    entries: dict[str, dict[str, dict[str, Any]]] = {}
 
-    if spec.account is not None:
-        account = (
-            await session.execute(
-                select(store.InvestmentAccount).where(
-                    store.InvestmentAccount.id == spec.account.id,
-                    store.InvestmentAccount.user_id == user_id,
-                )
-            )
-        ).scalar_one_or_none()
-        if account is None:
-            raise biz.NotFoundOrForbiddenError("账户不存在或无权访问")
-        if account.archived:
-            raise biz.ObjectArchivedError(
-                "账户已归档，不能被新的分析采用", current={"archived": True}
-            )
-        _require_revision(account, spec.account.expected_revision, "账户")
-        revision = await _latest(
-            session,
+    def add(
+        group: str, values: dict[str, dict[str, Any]], pending: list[str] | None = None
+    ) -> None:
+        entries[group] = values
+        groups[group] = biz.AdmissionResult(
+            values={
+                name: biz.AdmittedValue(value=item["value"], status=item["status"])
+                for name, item in values.items()
+                if name not in (pending or [])
+            },
+            incomplete={name: "该字段仍待补充" for name in (pending or [])},
+        )
+
+    for group, ref, model, rev_model, fk, columns in (
+        (
+            "account",
+            spec.account,
+            store.InvestmentAccount,
             store.InvestmentAccountRevision,
             "account_id",
-            account.id,
-            account.current_revision,
-        )
-        resolution.account_id = account.id
-        resolution.account_revision = account.current_revision
-        account_entries: dict[str, dict[str, Any]] = {}
-        if revision is not None:
-            if revision.record_state == "incomplete":
-                incomplete.append("account")
-            for name in biz.ACCOUNT_VALUE_COLUMNS:
-                value = getattr(revision, name, None)
-                if value is None:
-                    continue
-                account_entries[name] = _entry(
-                    value,
-                    status="user_provided",
-                    source={"kind": "account_revision", "revision": account.current_revision},
-                    currency=getattr(revision, "currency", None),
-                    as_of=getattr(revision, "as_of", None),
-                )
-        resolution.values.update(account_entries)
-
-    if spec.plan is not None:
-        plan = (
-            await session.execute(
-                select(store.InvestmentPlan).where(
-                    store.InvestmentPlan.id == spec.plan.id,
-                    store.InvestmentPlan.user_id == user_id,
-                )
-            )
-        ).scalar_one_or_none()
-        if plan is None:
-            raise biz.NotFoundOrForbiddenError("计划不存在或无权访问")
-        # 计划必须属于本次分析所属研究：借别的研究的计划来跑等于把研究结果写到别人的上下文。
-        if plan.research_id != research_id:
-            raise biz.NotFoundOrForbiddenError("计划不属于该研究")
-        if plan.archived:
-            raise biz.ObjectArchivedError("计划已归档", current={"archived": True})
-        _require_revision(plan, spec.plan.expected_revision, "计划")
-        revision = await _latest(
-            session,
+            biz.ACCOUNT_VALUE_COLUMNS,
+        ),
+        (
+            "plan",
+            spec.plan,
+            store.InvestmentPlan,
             store.InvestmentPlanRevision,
             "plan_id",
-            plan.id,
-            plan.current_revision,
-        )
-        resolution.plan_id = plan.id
-        resolution.plan_revision = plan.current_revision
-        if revision is not None:
-            if revision.record_state == "incomplete":
-                incomplete.append("plan")
-            for name in biz.PLAN_VALUE_COLUMNS:
-                value = getattr(revision, name, None)
-                if value is None:
-                    continue
-                resolution.values[name] = _entry(
-                    value,
-                    status="user_provided",
-                    source={"kind": "plan_revision", "revision": plan.current_revision},
-                    unit=getattr(revision, f"{name}_unit", None)
-                    if name.endswith("_value")
-                    else None,
-                )
-
-    if spec.trade is not None:
-        trade = (
+            biz.PLAN_VALUE_COLUMNS,
+        ),
+    ):
+        if ref is None:
+            continue
+        obj = (
             await session.execute(
-                select(store.TradeRecord).where(
-                    store.TradeRecord.id == spec.trade.id,
-                    store.TradeRecord.user_id == user_id,
-                )
+                select(model).where(model.id == ref.id, model.user_id == user_id).with_for_update()
             )
         ).scalar_one_or_none()
-        if trade is None:
-            raise biz.NotFoundOrForbiddenError("成交记录不存在或无权访问")
-        if resolution.account_id is not None and trade.account_id != resolution.account_id:
-            # 混用不同账户的资料会让资金口径与成交事实互不相干。
-            raise biz.ValidationError(
-                "成交记录与账户不属于同一账户",
-                fields={"trade": "请选择该账户自己的成交记录"},
+        if obj is None or (group == "plan" and obj.research_id != research_id):
+            raise biz.NotFoundOrForbiddenError("资料不存在或不属于该研究")
+        if obj.archived:
+            raise biz.ObjectArchivedError("资料已归档，不能用于新的分析")
+        _require_revision(obj, ref.expected_revision, group)
+        revision = await _latest(session, rev_model, fk, obj.id, obj.current_revision)
+        if revision is None:
+            raise biz.NotFoundOrForbiddenError("资料版本不存在")
+        setattr(resolution, f"{group}_id", obj.id)
+        setattr(resolution, f"{group}_revision", obj.current_revision)
+        metadata = revision.changed_fields or {}
+        pending = metadata.get("pending_fields", [])
+        if revision.record_state == "incomplete" and "pending_fields" not in metadata:
+            pending = ["record_state"]
+        values = {
+            name: _entry(
+                getattr(revision, name),
+                status="user_provided",
+                source={
+                    "kind": f"{group}_revision",
+                    "id": str(obj.id),
+                    "revision": obj.current_revision,
+                },
+                currency=getattr(revision, "currency", None),
+                unit=getattr(revision, biz.UNIT_BY_FIELD.get(name, ""), None),
+                as_of=getattr(revision, "as_of", None),
             )
-        if trade.status != "active":
+            for name in columns
+            if getattr(revision, name, None) is not None
+        }
+        add(group, values, pending)
+
+    for group, ref, model, columns in (
+        (
+            "trade",
+            spec.trade,
+            store.TradeRecord,
+            ("symbol", "market", "side", "quantity", "price", "currency", "fees", "traded_at"),
+        ),
+        (
+            "position",
+            spec.position,
+            store.PositionSnapshot,
+            ("symbol", "market", "quantity", "cost_basis", "currency", "as_of"),
+        ),
+    ):
+        if ref is None:
+            continue
+        obj = (
+            await session.execute(
+                select(model).where(model.id == ref.id, model.user_id == user_id).with_for_update()
+            )
+        ).scalar_one_or_none()
+        if obj is None:
+            raise biz.NotFoundOrForbiddenError("实际记录不存在或无权访问")
+        if obj.status != "active":
             raise biz.RevisionConflictError(
-                "该成交记录已被更正或取消", current={"status": trade.status}
+                "实际记录已被更正或取消", current={"status": obj.status}
             )
-        resolution.trade_record_id = trade.id
-        for name in ("side", "quantity", "price", "currency", "fees", "traded_at"):
-            value = getattr(trade, name, None)
-            if value is None:
-                continue
-            resolution.values[name] = _entry(
-                value,
-                status="user_provided",
-                source={"kind": "trade_record", "id": str(trade.id)},
-                currency=trade.currency,
-            )
-        resolution.values.setdefault(
-            "symbol",
-            _entry(
-                trade.symbol,
-                status="user_provided",
-                source={"kind": "trade_record", "id": str(trade.id)},
-            ),
-        )
-
-    if spec.position is not None:
-        position = (
-            await session.execute(
-                select(store.PositionSnapshot).where(
-                    store.PositionSnapshot.id == spec.position.id,
-                    store.PositionSnapshot.user_id == user_id,
-                )
-            )
-        ).scalar_one_or_none()
-        if position is None:
-            raise biz.NotFoundOrForbiddenError("持仓快照不存在或无权访问")
-        if resolution.account_id is not None and position.account_id != resolution.account_id:
+        if resolution.account_id is not None and obj.account_id != resolution.account_id:
             raise biz.ValidationError(
-                "持仓快照与账户不属于同一账户",
-                fields={"position": "请选择该账户自己的持仓快照"},
+                "实际记录与账户不一致", fields={group: "请选择同一账户的记录"}
             )
-        resolution.position_snapshot_id = position.id
-        source = {"kind": "position_snapshot", "id": str(position.id)}
-        resolution.values["quantity"] = _entry(
-            position.quantity, status="user_provided", source=source
+        setattr(
+            resolution, "trade_record_id" if group == "trade" else "position_snapshot_id", obj.id
         )
-        resolution.values["cost_basis"] = _entry(
-            position.cost_basis, status="user_provided", source=source
-        )
-        resolution.values["currency"] = _entry(
-            position.currency, status="user_provided", source=source
-        )
-        resolution.values["as_of"] = _entry(position.as_of, status="user_provided", source=source)
-        resolution.values.setdefault(
-            "symbol", _entry(position.symbol, status="user_provided", source=source)
+        add(
+            group,
+            {
+                name: _entry(
+                    getattr(obj, name),
+                    status="user_provided",
+                    source={"kind": group, "id": str(obj.id)},
+                    currency=obj.currency,
+                    as_of=getattr(obj, "as_of", None) or getattr(obj, "traded_at", None),
+                )
+                for name in columns
+                if getattr(obj, name, None) is not None
+            },
         )
 
-    # 本次显式声明的值：与已保存资料走同一套准入（假设值同样进不来），并覆盖旧值。
-    declared_groups = _split_declared(spec.declared)
-    for group, declared in declared_groups.items():
+    for group, declared in _split_declared(spec.declared).items():
         admitted = biz.admit_group(group, declared)
+        prior = groups.get(group, biz.AdmissionResult(values={}, incomplete={}))
+        values = dict(entries.get(group, {}))
+        pending = dict(prior.incomplete)
+        pending.update(admitted.incomplete)
+        for name in admitted.incomplete:
+            values.pop(name, None)
         for name, value in admitted.values.items():
-            resolution.values[name] = _entry(
+            pending.pop(name, None)
+            values[name] = _entry(
                 value.value,
                 status=value.status,
                 source={"kind": "declared"},
@@ -422,45 +395,91 @@ async def resolve_for_run(
                 unit=value.unit,
                 as_of=value.as_of,
             )
-        groups[group] = admitted
+        add(group, values, list(pending))
 
-    # 已解析出的账户/计划值也要参与用途裁决，否则“资料已保存但字段缺失”会被当成齐了。
-    account_values = {
-        name: biz.AdmittedValue(value=_as_raw(entry["value"]))
-        for name, entry in resolution.values.items()
-        if name in biz.ACCOUNT_FIELDS and entry["value"] is not None
-    }
-    plan_values = {
-        name: biz.AdmittedValue(value=_as_raw(entry["value"]))
-        for name, entry in resolution.values.items()
-        if name in biz.PLAN_FIELDS and entry["value"] is not None
-    }
-    trade_values = {
-        name: biz.AdmittedValue(value=_as_raw(entry["value"]))
-        for name, entry in resolution.values.items()
-        if name in biz.TRADE_FIELDS and entry["value"] is not None
-    }
-    groups.setdefault("account", biz.AdmissionResult(values=account_values, incomplete={}))
-    groups.setdefault("plan", biz.AdmissionResult(values=plan_values, incomplete={}))
-    groups.setdefault("trade", biz.AdmissionResult(values=trade_values, incomplete={}))
+    # Shared names never manufacture another object's fields. No implicit FX or
+    # borrowing a different security's trade price to satisfy plan requirements.
+    for name in ("symbol", "market", "currency"):
+        known = {str(group.values[name].value) for group in groups.values() if name in group.values}
+        if len(known) > 1:
+            raise biz.ValidationError(
+                "业务资料的标的、市场或币种不一致",
+                fields={name: "请采用同一标的和币种的资料；不进行隐式换汇"},
+            )
 
     missing = biz.evaluate_purpose(spec.use_case, groups)
-    if incomplete and spec.use_case != "general_reading":
-        # 用户主动保存的不完整资料不是可用于依赖计算的有效资料（契约 §4）。
-        for name in incomplete:
-            missing[f"{name}.record_state"] = "该资料仍待补充，不能用于依赖它的分析"
+    for group, admission in groups.items():
+        for name, reason in admission.incomplete.items():
+            missing[f"{group}.{name}"] = reason
     resolution.missing = missing
     if missing and spec.use_case != "general_reading":
         raise biz.PurposeRequirementError("分析所需资料未满足", fields=missing)
+    for group, values in entries.items():
+        for name, item in values.items():
+            if name in groups[group].incomplete:
+                continue
+            # Preserve object-specific times/units alongside the compatible flat
+            # projection consumed by older snapshot readers.
+            resolution.values[f"{group}.{name}"] = item
+            resolution.values.setdefault(name, item)
     return resolution
 
 
-def _as_raw(value: Any) -> Any:
-    if value is None:
-        return None
-    if isinstance(value, str):
-        return value
-    return value
+async def persist_declared(
+    session: AsyncSession,
+    *,
+    user_id: uuid.UUID,
+    research_id: uuid.UUID,
+    spec: InvestmentInputSpec,
+) -> tuple[InvestmentInputSpec, dict[str, Any]]:
+    """Save explicit edits in the caller's Run transaction, then freeze saved revisions."""
+    saved: dict[str, Any] = {}
+    result = spec
+    for group, declared in _split_declared(spec.declared).items():
+        ref = getattr(spec, group)
+        if ref is None:
+            raise biz.ValidationError(
+                "保存资料需要明确的目标对象", fields={group: "请先选择或创建资料对象"}
+            )
+        child_key = str(
+            uuid.uuid5(uuid.NAMESPACE_URL, f"run.submit:{user_id}:{spec.idempotency_key}:{group}")
+        )
+        if group == "account":
+            outcome = await biz.update_account(
+                session,
+                user_id=user_id,
+                account_id=ref.id,
+                expected_revision=ref.expected_revision,
+                declared=declared,
+                idempotency_key=child_key,
+                allow_incomplete=False,
+            )
+            result = replace(result, account=ObjectRef(ref.id, outcome.result["revision"]))
+        elif group == "plan":
+            plan = await session.get(store.InvestmentPlan, ref.id)
+            if plan is None or plan.user_id != user_id or plan.research_id != research_id:
+                raise biz.NotFoundOrForbiddenError("计划不属于该研究")
+            outcome = await biz.update_plan(
+                session,
+                user_id=user_id,
+                plan_id=ref.id,
+                expected_revision=ref.expected_revision,
+                declared=declared,
+                idempotency_key=child_key,
+                allow_incomplete=False,
+            )
+            result = replace(result, plan=ObjectRef(ref.id, outcome.result["revision"]))
+        else:
+            outcome = await biz.correct_trade(
+                session,
+                user_id=user_id,
+                trade_id=ref.id,
+                declared=declared,
+                idempotency_key=child_key,
+            )
+            result = replace(result, trade=ObjectRef(uuid.UUID(outcome.result["trade_id"])))
+        saved[group] = outcome.result
+    return replace(result, declared={}), saved
 
 
 # ——— 冻结与读取 ————————————————————————————————————————————————————————
@@ -545,13 +564,12 @@ def spec_from_snapshot(row: Any) -> InvestmentInputSpec:
 
     重算要用当前最新有效资料生成新快照；把旧版本号带过去只会制造冲突。
     """
-    declared = dict(row.declared_json or {})
     return InvestmentInputSpec(
         use_case=row.use_case,
         account=ObjectRef(id=row.account_id) if row.account_id else None,
         plan=ObjectRef(id=row.plan_id) if row.plan_id else None,
         trade=ObjectRef(id=row.trade_record_id) if row.trade_record_id else None,
         position=ObjectRef(id=row.position_snapshot_id) if row.position_snapshot_id else None,
-        declared=declared,
+        declared={},
         rerun_of_run_id=row.run_id,
     )

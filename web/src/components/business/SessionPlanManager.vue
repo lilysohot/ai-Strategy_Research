@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
 
 import type { SessionPlanInput, SessionPlanPreview } from '@/business-ui'
 
@@ -13,6 +13,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   save: [plan: SessionPlanInput]
+  dirtyChange: [dirty: boolean]
 }>()
 
 const draft = reactive<SessionPlanInput>({
@@ -28,13 +29,27 @@ const draft = reactive<SessionPlanInput>({
 const currentPlans = computed(() => props.plans.filter((plan) => plan.sessionId === props.sessionId))
 const canSave = computed(() => !!props.sessionId && !!draft.name.trim() && !!draft.symbol.trim())
 
-watch(
-  () => [props.modelValue, props.sessionId],
-  ([open]) => {
-    if (!open) return
-    draft.isPrimary = currentPlans.value.length === 0
-  },
-)
+watch(() => props.sessionId, () => resetDraft(), { flush: 'sync' })
+watch(() => props.modelValue, (open) => {
+  if (!open) resetDraft()
+  else draft.isPrimary = currentPlans.value.length === 0
+})
+watch(draft, () => emit('dirtyChange', isDirty()), { deep: true, flush: 'sync' })
+function beforeUnload(event: BeforeUnloadEvent): void {
+  if (!isDirty()) return
+  event.preventDefault()
+  event.returnValue = ''
+}
+onMounted(() => window.addEventListener('beforeunload', beforeUnload))
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', beforeUnload)
+  emit('dirtyChange', false)
+})
+
+function isDirty(): boolean {
+  return !!(draft.name || draft.symbol || draft.planPrice || draft.targetPrice
+    || draft.market !== 'CN' || draft.direction !== 'buy')
+}
 
 function resetDraft(): void {
   Object.assign(draft, {
@@ -48,7 +63,18 @@ function resetDraft(): void {
   } satisfies SessionPlanInput)
 }
 
+function discardDraft(): boolean {
+  if (isDirty() && !window.confirm('计划尚未保存，关闭将丢弃草稿。是否继续？')) return false
+  resetDraft()
+  return true
+}
+
+function beforeClose(done: () => void): void {
+  if (discardDraft()) done()
+}
+
 function close(): void {
+  if (!discardDraft()) return
   emit('update:modelValue', false)
 }
 
@@ -67,6 +93,7 @@ function save(): void {
 function marketLabel(market: SessionPlanPreview['market']): string {
   return { CN: '中国内地', HK: '香港', US: '美国' }[market]
 }
+defineExpose({ resetDraft })
 </script>
 
 <template>
@@ -75,6 +102,7 @@ function marketLabel(market: SessionPlanPreview['market']): string {
     width="min(720px, calc(100vw - 28px))"
     class="session-plan-dialog"
     :close-on-click-modal="false"
+    :before-close="beforeClose"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #header>

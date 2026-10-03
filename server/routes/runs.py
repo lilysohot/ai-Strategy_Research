@@ -15,6 +15,7 @@ client — credentials are resolved server-side from the user's default LLM conf
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import uuid
 from collections.abc import AsyncIterator
@@ -151,6 +152,12 @@ async def submit_run(
     # any side effect — an invalid investment_input must not leave uploaded files
     # or a run row behind. ``None`` means a legacy client: no business checks.
     spec = investment_snapshot.parse_investment_input(raw_investment_input)
+    if spec is not None and (
+        not isinstance(spec.idempotency_key, str) or not spec.idempotency_key.strip()
+    ):
+        raise biz.ValidationError(
+            "缺少幂等键", fields={"investment_input.idempotency_key": "必须提供非空字符串"}
+        )
 
     # Identity is ALWAYS the authenticated user (T2.7). The client-supplied
     # user_id, if any, is ignored — credentials are resolved from this user's own
@@ -259,10 +266,22 @@ async def submit_run(
         payload = {
             "session_id": str(session_uuid),
             "message": message,
-            "investment_input": raw_investment_input,
+            "investment_input": json.loads(raw_investment_input)
+            if isinstance(raw_investment_input, str)
+            else raw_investment_input,
+            "attachments": sorted(
+                (
+                    {"name": item.stored_name, "size": item.size_bytes, "sha256": item.sha256}
+                    for item in uploaded
+                ),
+                key=lambda item: item["name"],
+            ),
         }
 
         async def _execute() -> dict[str, Any]:
+            await store.ensure_session_in(
+                session, session_id=session_uuid, user_id=user_id, title=message[:80] or "新对话"
+            )
             # 逐研究队列上限：提交前先看深度，超限直接拒绝，不建任何东西（DATA-06）。
             depth = await dispatch_outbox.research_queue_depth(session, session_uuid)
             if depth >= cfg.dispatch_research_queue_limit:
@@ -274,8 +293,11 @@ async def submit_run(
                         "research_id": str(session_uuid),
                     },
                 )
-            resolution = await investment_snapshot.resolve_for_run(
+            saved_spec, saved = await investment_snapshot.persist_declared(
                 session, user_id=user_id, research_id=session_uuid, spec=spec
+            )
+            resolution = await investment_snapshot.resolve_for_run(
+                session, user_id=user_id, research_id=session_uuid, spec=saved_spec
             )
             store.add_run(
                 session,
@@ -320,6 +342,7 @@ async def submit_run(
                 "run_id": run_id_hex,
                 "snapshot_id": str(row.id),
                 "dispatch": dispatch_outbox.dispatch_view(dispatch),
+                "saved": saved,
             }
 
         try:
@@ -372,6 +395,8 @@ async def submit_run(
         status = existing.status if existing is not None else "queued"
     return {
         "run_id": run_id_hex,
+        "operation_id": outcome.operation_id if outcome is not None else None,
+        "saved": outcome.result.get("saved", {}) if outcome is not None else {},
         "status": status,
         "snapshot_id": snapshot_id,
         "dispatch": dispatch_info,
@@ -452,6 +477,11 @@ async def rerun_run(
     old_run = await get_run(run_id=old_run_uuid, user_id=user.id)
     if old_run is None:
         raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    if (
+        body.get("session_id") is not None
+        and _session_uuid(str(body["session_id"]), user.id) != old_run.session_id
+    ):
+        raise biz.ValidationError("重算不能改变所属研究", fields={"session_id": "必须与原研究一致"})
 
     async with biz.business_transaction() as session:
         old_snapshot = await investment_snapshot.get_snapshot(
@@ -485,7 +515,7 @@ async def rerun_run(
 
     new_run_id = uuid.uuid4()
     new_run_id_hex = new_run_id.hex
-    session_id_str = str(body.get("session_id") or old_run.session_id)
+    session_id_str = str(old_run.session_id)
     prompt = str(body.get("message") or old_run.prompt)
 
     default_llm = await get_default_llm_config(user_id=user.id)
@@ -493,6 +523,9 @@ async def rerun_run(
 
     async def _execute() -> dict[str, Any]:
         nonlocal old_cancelled
+        await store.ensure_session_in(
+            session, session_id=old_run.session_id, user_id=user.id, title=prompt[:80]
+        )
         # 排队中且派发未投出的旧 Run：取消重提 —— 派发意图作废 + Run 置 stopped，
         # 与新 Run 的建立在同一事务，不会出现"旧的没取消、新的已派发"。
         if old_run.status == "queued" and await dispatch_outbox.cancel_pending(
@@ -573,6 +606,7 @@ async def rerun_run(
     # 新 Run 由 outbox 派发；研究忙时派发自动延后，串行由库级判定保证（DATA-06）。
     return {
         "run_id": outcome.result["run_id"],
+        "operation_id": outcome.operation_id,
         "status": "queued",
         "snapshot_id": outcome.result.get("snapshot_id"),
         "dispatch": outcome.result.get("dispatch"),

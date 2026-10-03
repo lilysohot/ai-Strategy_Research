@@ -15,6 +15,7 @@ from datetime import UTC, datetime
 from decimal import Decimal
 
 from sqlalchemy import (
+    DDL,
     JSON,
     Boolean,
     DateTime,
@@ -539,6 +540,22 @@ class RunInvestmentSnapshot(Base):
     #: 冻结时点：与 created_at（记录时间）分开，重算时两个 Run 各不相同。
     frozen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+# create_all is still used by local SQLite installations. Give it the same
+# protection as Alembic; PostgreSQL production installs it through migration 0010.
+for _history_model in (InvestmentAccountRevision, InvestmentPlanRevision, RunInvestmentSnapshot):
+    for _history_action in ("UPDATE", "DELETE"):
+        _history_table = _history_model.__tablename__
+        event.listen(
+            _history_model.__table__,
+            "after_create",
+            DDL(
+                f"CREATE TRIGGER IF NOT EXISTS immutable_{_history_table}_{_history_action.lower()} "
+                f"BEFORE {_history_action} ON {_history_table} BEGIN "
+                "SELECT RAISE(ABORT, 'business history is immutable'); END"
+            ).execute_if(dialect="sqlite"),
+        )
 
 
 class RunDispatch(Base):
@@ -1171,13 +1188,16 @@ async def ensure_session_in(
     when it becomes durable, so "session row + run + turn + snapshot + outbox"
     is one all-or-nothing commit instead of four.
     """
-    row = await session.get(Session, session_id)
+    row = await session.get(Session, session_id, with_for_update=True)
     if row is None:
-        row = Session(id=session_id, user_id=user_id, title=title)
-        session.add(row)
-        await session.flush()
-        return row
-    if row.user_id != user_id:
+        try:
+            async with session.begin_nested():
+                row = Session(id=session_id, user_id=user_id, title=title)
+                session.add(row)
+                await session.flush()
+        except IntegrityError:
+            row = await session.get(Session, session_id, with_for_update=True)
+    if row is None or row.user_id != user_id or row.deleted_at is not None:
         raise SessionOwnershipError(str(session_id))
     return row
 
