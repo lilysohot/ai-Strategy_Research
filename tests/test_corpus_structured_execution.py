@@ -28,13 +28,15 @@ from plugins.corpus.structured.ledger import (
     ReplayDirectory,
     ReplayResponse,
     StructuredExecutionError,
+    _read_object,
+    _write_object,
     cancel_batch,
     check_batch,
     execute_batch,
     plan_batch,
     replay_batch,
 )
-from plugins.corpus.structured.roles import RoleRequest, execute_material_items_role
+from plugins.corpus.structured.roles import RoleArtifact, RoleRequest, execute_material_items_role
 from plugins.corpus.structured.snapshot import (
     EvidenceSnapshot,
     SnapshotBuildSource,
@@ -407,7 +409,7 @@ def test_batch_and_role_budget_reservation_is_atomic_across_connections(tmp_path
                         request,
                         request_sha256=request.request_sha256,
                         provider="replay",
-                        request_model="synthetic",
+                        request_model=profile.model or "replay-fixture",
                         profile_sha256=profile.profile_sha256,
                         role_profile_sha256=profile.role_profile_sha256,
                     ),
@@ -455,7 +457,7 @@ def test_atomic_budget_loser_is_explicit(monkeypatch: pytest.MonkeyPatch, tmp_pa
         request(first),
         request_sha256=request(first).request_sha256,
         provider="replay",
-        request_model="synthetic",
+        request_model=first_profile.model or "replay-fixture",
         profile_sha256=first_profile.profile_sha256,
         role_profile_sha256=first_profile.role_profile_sha256,
     )
@@ -465,7 +467,7 @@ def test_atomic_budget_loser_is_explicit(monkeypatch: pytest.MonkeyPatch, tmp_pa
             request(second),
             request_sha256=request(second).request_sha256,
             provider="replay",
-            request_model="synthetic",
+            request_model=second_profile.model or "replay-fixture",
             profile_sha256=second_profile.profile_sha256,
             role_profile_sha256=second_profile.role_profile_sha256,
         )
@@ -473,6 +475,76 @@ def test_atomic_budget_loser_is_explicit(monkeypatch: pytest.MonkeyPatch, tmp_pa
     checked = check_batch(plan.batch_id, store_root=root)
     assert checked.ledger.budget.reserved_attempts == 1
     assert checked.ledger.budget.actual_attempts == 1
+
+
+def test_batches_with_same_logical_tasks_are_isolated_in_one_store(tmp_path: Path) -> None:
+    value = snapshot()
+    first_plan = plan_batch(
+        value,
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+    )
+    second_plan = plan_batch(
+        value,
+        max_attempts=2,
+        role_max_attempts={"claims": 0, "material_items": 2, "material_relations": 0},
+        relations_enabled=False,
+    )
+    assert first_plan.batch_id != second_plan.batch_id
+    first_task = next(task for task in first_plan.tasks if task.role == "material_items")
+    second_task = next(task for task in second_plan.tasks if task.role == "material_items")
+    assert first_task.task_id == second_task.task_id
+    root = tmp_path / "store"
+
+    journal = ExecutionJournal.open(first_plan, root)
+    profile = next(item for item in first_plan.profiles if item.role == "material_items")
+    request = RoleRequest(
+        task_id=first_task.task_id,
+        role="material_items",
+        protocol=first_task.protocol,
+        snapshot_id=value.snapshot_id,
+        input_sha256=first_task.input_sha256,
+        request_sha256=canonical_hash("first-batch-reserved-request"),
+        prompt="synthetic",
+        sequence=1,
+    )
+    attempt_id = journal.reserve_attempt(
+        request,
+        request_sha256=request.request_sha256,
+        provider="replay",
+        request_model="replay-fixture",
+        profile_sha256=profile.profile_sha256,
+        role_profile_sha256=profile.role_profile_sha256,
+    )
+    journal.connection.execute(
+        "UPDATE attempts SET response_object_sha256=? WHERE batch_id=? AND attempt_id=?",
+        ("sha256:" + "0" * 64, first_plan.batch_id, attempt_id),
+    )
+    journal.close()
+
+    responses = tmp_path / "responses"
+    replay_fixture(value, second_plan, responses)
+    second = replay_batch(second_plan, responses=responses, store_root=root)
+    assert second.plan_consistent
+    assert len(second.ledger.attempts) == 1
+    connection = sqlite3.connect(root / "index" / "structured.sqlite3")
+    first_status = connection.execute(
+        "SELECT execution_status FROM attempts WHERE batch_id=? AND attempt_id=?",
+        (first_plan.batch_id, attempt_id),
+    ).fetchone()
+    connection.close()
+    assert first_status == ("running",)
+
+
+def test_batch_execution_mode_cannot_switch_between_replay_and_live(tmp_path: Path) -> None:
+    plan = plan_batch(snapshot(), max_attempts=0, relations_enabled=False)
+    root = tmp_path / "store"
+    journal = ExecutionJournal.open(plan, root, "replay")
+    journal.close()
+
+    with pytest.raises(StructuredExecutionError, match="batch_execution_mode_mismatch"):
+        ExecutionJournal.open(plan, root, "live")
 
 
 def test_interrupted_reserved_attempt_becomes_unknown_and_is_never_replayed(tmp_path: Path) -> None:
@@ -501,6 +573,17 @@ def test_interrupted_reserved_attempt_becomes_unknown_and_is_never_replayed(tmp_
     assert resumed.ledger.attempts[0].execution_status == "outcome_unknown"
     assert resumed.ledger.tasks[1].execution_status == "outcome_unknown"
     assert "attempt_outcome_unknown" in " ".join(resumed.findings)
+    serialized = resumed.ledger.model_dump(mode="json")
+    assert "response_sha256" not in serialized["attempts"][0]
+    unknown_task = next(
+        task for task in serialized["tasks"] if task["execution_status"] == "outcome_unknown"
+    )
+    assert "artifact_sha256" not in unknown_task
+
+    from test_corpus_structured_contracts import V1, _load, _validation_errors
+
+    schema = _load(V1 / "execution-ledger.schema.json")
+    assert _validation_errors(serialized, schema, schema) == []
 
 
 def test_saved_response_is_reparsed_after_artifact_crash_without_new_attempt(
@@ -672,9 +755,10 @@ def test_live_adapter_sends_once_and_every_request_has_one_attempt(tmp_path: Pat
             },
         )
 
+    root = tmp_path / "store"
     checked = execute_batch(
         plan,
-        store_root=tmp_path / "store",
+        store_root=root,
         allow_model=True,
         config=config,
         transport_factories={"material_items": lambda: httpx.MockTransport(handler)},
@@ -692,6 +776,27 @@ def test_live_adapter_sends_once_and_every_request_has_one_attempt(tmp_path: Pat
         "reasoning_tokens": None,
         "total_tokens": 18,
     }
+    assert checked.plan_consistent
+
+    connection = sqlite3.connect(root / "index" / "structured.sqlite3")
+    diagnostics = json.loads(
+        connection.execute(
+            "SELECT diagnostics FROM attempts WHERE batch_id=? AND attempt_id=?",
+            (plan.batch_id, attempt.attempt_id),
+        ).fetchone()[0]
+    )
+    diagnostics["provider"] = "replay"
+    connection.execute(
+        "UPDATE attempts SET provider=?, diagnostics=? WHERE batch_id=? AND attempt_id=?",
+        ("replay", json.dumps(diagnostics), plan.batch_id, attempt.attempt_id),
+    )
+    connection.commit()
+    connection.close()
+
+    tampered = check_batch(plan.batch_id, store_root=root)
+    assert not tampered.plan_consistent
+    assert f"attempt_provider_model_mismatch:{attempt.attempt_id}" in tampered.findings
+    assert f"response_binding_mismatch:{attempt.attempt_id}" in tampered.findings
 
 
 def test_transport_unknown_outcome_is_not_automatically_resent(tmp_path: Path) -> None:
@@ -951,7 +1056,8 @@ def test_check_reconciles_frozen_task_attempt_artifact_and_role_budget_bindings(
         (material_task.task_id,),
     )
     connection.execute(
-        "UPDATE attempts SET attempt_id='attempt:tampered' WHERE attempt_id=?",
+        "UPDATE attempts SET attempt_id='attempt:tampered', request_model='tampered-model' "
+        "WHERE attempt_id=?",
         (attempt.attempt_id,),
     )
     connection.execute(
@@ -965,8 +1071,61 @@ def test_check_reconciles_frozen_task_attempt_artifact_and_role_budget_bindings(
     assert not checked.plan_consistent
     assert f"planned_task_binding_mismatch:{material_task.task_id}" in checked.findings
     assert "attempt_identity_mismatch:attempt:tampered" in checked.findings
+    assert "attempt_provider_model_mismatch:attempt:tampered" in checked.findings
     assert f"artifact_binding_mismatch:{material_task.task_id}" in checked.findings
     assert "role_budget_plan_mismatch:material_items" in checked.findings
+
+
+def test_check_rejects_hash_consistent_wrong_business_payload(tmp_path: Path) -> None:
+    value = snapshot()
+    plan = plan_batch(
+        value,
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+    )
+    responses = tmp_path / "responses"
+    replay_fixture(value, plan, responses)
+    root = tmp_path / "store"
+    clean = replay_batch(plan, responses=responses, store_root=root)
+    task = next(task for task in clean.ledger.tasks if task.role == "material_items")
+
+    connection = sqlite3.connect(root / "index" / "structured.sqlite3")
+    row = connection.execute(
+        "SELECT artifact_sha256 FROM tasks WHERE batch_id=? AND task_id=?",
+        (plan.batch_id, task.task_id),
+    ).fetchone()
+    assert row is not None
+    artifact = RoleArtifact.model_validate(_read_object(root, row[0]))
+    invalid_payload = {"run_id": "hash-consistent-but-not-a-material-run"}
+    payload_sha = canonical_hash(invalid_payload)
+    forged = artifact.model_copy(update={"artifact_id": "pending", "payload_sha256": payload_sha})
+    forged = forged.model_copy(
+        update={
+            "artifact_id": canonical_hash(forged.model_dump(mode="json", exclude={"artifact_id"}))
+        }
+    )
+    forged.verify_identity()
+    payload_object = _write_object(root, invalid_payload)
+    artifact_object = _write_object(root, forged.model_dump(mode="json"))
+    connection.execute(
+        "UPDATE tasks SET artifact_sha256=?, artifact_id=?, payload_sha256=?, "
+        "payload_object_sha256=? WHERE batch_id=? AND task_id=?",
+        (
+            artifact_object,
+            forged.artifact_id,
+            payload_sha,
+            payload_object,
+            plan.batch_id,
+            task.task_id,
+        ),
+    )
+    connection.commit()
+    connection.close()
+
+    checked = check_batch(plan.batch_id, store_root=root)
+    assert not checked.plan_consistent
+    assert f"artifact_binding_mismatch:{task.task_id}" in checked.findings
 
 
 def test_relation_task_is_registered_before_request_and_resume_deduplicates(

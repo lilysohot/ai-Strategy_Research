@@ -1,7 +1,7 @@
 # 05 · 调度、持久执行账、原子预算与只读核查
 
 Status: ready-for-human
-Execution: 待验收
+Execution: 已验收
 Type: task
 Plan: W2/W3；R2-S2/S3
 Blocked by: 无本地任务依赖（04 已验收）
@@ -94,3 +94,22 @@ uv run python -m plugins.corpus.structured.cli check --batch-id BATCH_ID --store
   已为 v11 而测试仍断言 v10、React profile 工具集合为空、Web preview fixture 创建 run 时用户
   外键缺失。它们不影响本票精确验收，但作为仓库既有外部门保留，不在本票越界修复。05 未经
   人工验收前不解除 06 依赖。
+- 2026-10-03：按用户要求重新回塑并执行 Standards/Spec 双轴核查。核查补齐了同一 store 中
+  batch 复合键隔离、修订计划复用稳定 task ID、unknown outcome 的 v1 可选哈希省略、业务
+  payload 类型/identity/contract 校验、attempt 的 live/replay 模式与冻结 provider/model 绑定，
+  并将 DB diagnostics、attempt 行和不可变响应对象交叉闭合；batch 首次执行后冻结 mode，禁止
+  replay/live 混用。另补公开模型/CLI docstring，并修正取消/截止的状态映射。相应并发、跨批、
+  mode 切换、联合篡改、崩溃恢复和伪造 payload 负例均已加入。
+- 2026-10-03：最终精确验收为 `31 passed`；扩展结构化/证据/语义回归 `264 passed`；指定
+  `plugins/corpus` Ruff、6 文件 format check、定向 Pyright 均通过；import smoke 仍为 framework
+  `378/378`、eval `427/427`，symbol closure 为 `0 missing` / 477 文件，`git diff --check` 通过。
+  独立规格复核确认全部阻断关闭；独立规范复核无 hard finding，仅保留重复事务模板这一非阻断
+  维护性异味。此前全仓既有外部门不变，本轮未越界修复或重跑全仓。
+- 2026-10-03：最终交付指纹：`ledger.py`
+  `743be9171a5fd5ef895ad12352cfd479cf494fb8012c91a9661e3eb8af7ff4fc`；`cli.py`
+  `a070759d47f07818adc4e11f2a840750999c616047be70c8380429337c4ef613`；
+  `test_corpus_structured_execution.py`
+  `ef772269ec1740c8bc9d2a379975b8194fb81dab0cdf030bb08c24126325af8b`；
+  `test_corpus_structured_cli.py`
+  `43de65ba8d349e3bc67987319ba463b67a864f09c18c3ab98d71991b655391c1`。真实模型调用 0、
+  生产数据库访问 0。05 达到验收标准并闭环，解除 06 的本地依赖。

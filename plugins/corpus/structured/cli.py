@@ -151,6 +151,8 @@ def _result_exit(check: BatchCheck) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Run one structured ledger command and return its frozen process exit code."""
+
     args = _parser().parse_args(argv)
     try:
         if args.command == "plan":

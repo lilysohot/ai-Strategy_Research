@@ -24,7 +24,11 @@ from typing import Any, Literal, Never, cast
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from plugins.corpus.claims import LlmCallError, LlmResponse
-from plugins.corpus.evidence_pipeline import CLAIMS_PROSE_PROTOCOL, CLAIMS_TABLE_PROTOCOL
+from plugins.corpus.evidence_pipeline import (
+    CLAIMS_PROSE_PROTOCOL,
+    CLAIMS_TABLE_PROTOCOL,
+    EvidenceRun,
+)
 from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
@@ -55,10 +59,11 @@ from plugins.corpus.structured.snapshot import EvidenceSnapshot
 PLAN_SCHEMA_VERSION = "corpus-batch-plan-v1"
 LEDGER_SCHEMA_VERSION = "corpus-execution-ledger-v1"
 REPLAY_SCHEMA_VERSION = "corpus-replay-response-v1"
-DB_SCHEMA_VERSION = 1
+DB_SCHEMA_VERSION = 2
 STORE_ROOT_ENV = "CORPUS_STRUCTURED_ROOT"
 
 Role = Literal["claims", "material_items", "material_relations"]
+ExecutionMode = Literal["live", "replay"]
 ExecutionStatus = Literal[
     "planned",
     "ready",
@@ -307,6 +312,8 @@ class ReplayResponse(BaseModel):
 
 
 class LedgerBudget(BaseModel):
+    """Batch-level reserved and actual attempt counters exported by v1."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     max_attempts: int
@@ -316,6 +323,8 @@ class LedgerBudget(BaseModel):
 
 
 class LedgerTask(BaseModel):
+    """Read-only task projection included in the public execution ledger."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     task_id: str
@@ -329,11 +338,13 @@ class LedgerTask(BaseModel):
     publication_status: Literal["unpublished", "candidate", "published", "withdrawn", "superseded"]
     context_status: Literal["complete", "partial", "missing", "ambiguous", "budget_exceeded"]
     dependency_task_ids: tuple[str, ...]
-    artifact_sha256: str | None = None
+    artifact_sha256: str | None = Field(default=None, exclude_if=lambda value: value is None)
     error_codes: tuple[str, ...]
 
 
 class LedgerAttempt(BaseModel):
+    """Read-only attempt projection with request, response, usage, and cost identity."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     attempt_id: str
@@ -341,7 +352,7 @@ class LedgerAttempt(BaseModel):
     attempt_number: int
     execution_status: ExecutionStatus
     request_sha256: str
-    response_sha256: str | None = None
+    response_sha256: str | None = Field(default=None, exclude_if=lambda value: value is None)
     provider: str
     request_model: str
     response_model: str | None
@@ -364,6 +375,8 @@ class ExecutionLedger(BaseModel):
 
 
 class CostSummary(BaseModel):
+    """Known and unknown call costs grouped without merging price dimensions."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     provider: str
@@ -377,6 +390,8 @@ class CostSummary(BaseModel):
 
 
 class RoleBudgetSummary(BaseModel):
+    """Role-specific ceiling and reservation counter returned by read-only audit."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     max_attempts: int
@@ -728,6 +743,7 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             plan_sha256 TEXT NOT NULL,
             snapshot_id TEXT NOT NULL,
             plan_json TEXT NOT NULL,
+            execution_mode TEXT NOT NULL CHECK(execution_mode IN ('live', 'replay')),
             max_attempts INTEGER NOT NULL CHECK(max_attempts >= 0),
             reserved_attempts INTEGER NOT NULL DEFAULT 0 CHECK(reserved_attempts >= 0),
             actual_attempts INTEGER NOT NULL DEFAULT 0 CHECK(actual_attempts >= 0),
@@ -742,7 +758,7 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             PRIMARY KEY(batch_id, role)
         );
         CREATE TABLE IF NOT EXISTS tasks (
-            task_id TEXT PRIMARY KEY,
+            task_id TEXT NOT NULL,
             batch_id TEXT NOT NULL REFERENCES batches(batch_id) ON DELETE CASCADE,
             logical_key TEXT NOT NULL,
             role TEXT NOT NULL,
@@ -768,11 +784,13 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             payload_object_sha256 TEXT,
             error_codes TEXT NOT NULL,
             reason_codes TEXT NOT NULL,
+            PRIMARY KEY(batch_id, task_id),
             UNIQUE(batch_id, logical_key)
         );
         CREATE TABLE IF NOT EXISTS attempts (
-            attempt_id TEXT PRIMARY KEY,
-            task_id TEXT NOT NULL REFERENCES tasks(task_id) ON DELETE CASCADE,
+            attempt_id TEXT NOT NULL,
+            batch_id TEXT NOT NULL,
+            task_id TEXT NOT NULL,
             attempt_number INTEGER NOT NULL CHECK(attempt_number >= 1),
             execution_status TEXT NOT NULL,
             role_request_sha256 TEXT NOT NULL,
@@ -788,14 +806,22 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             cost TEXT,
             diagnostics TEXT NOT NULL,
             error_code TEXT,
-            UNIQUE(task_id, attempt_number),
-            UNIQUE(task_id, role_request_sha256)
+            PRIMARY KEY(batch_id, attempt_id),
+            FOREIGN KEY(batch_id, task_id) REFERENCES tasks(batch_id, task_id) ON DELETE CASCADE,
+            UNIQUE(batch_id, task_id, attempt_number),
+            UNIQUE(batch_id, task_id, role_request_sha256)
         );
         CREATE TABLE IF NOT EXISTS derivations (
-            parent_task_id TEXT PRIMARY KEY REFERENCES tasks(task_id) ON DELETE CASCADE,
+            batch_id TEXT NOT NULL,
+            parent_task_id TEXT NOT NULL,
             status TEXT NOT NULL,
-            derived_task_id TEXT REFERENCES tasks(task_id),
-            reason_code TEXT
+            derived_task_id TEXT,
+            reason_code TEXT,
+            PRIMARY KEY(batch_id, parent_task_id),
+            FOREIGN KEY(batch_id, parent_task_id)
+                REFERENCES tasks(batch_id, task_id) ON DELETE CASCADE,
+            FOREIGN KEY(batch_id, derived_task_id)
+                REFERENCES tasks(batch_id, task_id)
         );
         """
     )
@@ -873,17 +899,33 @@ def _read_object(root: Path, object_sha: str) -> Any:
 class ExecutionJournal:
     """SQLite owner for one writer process; transactions are safe across processes."""
 
-    def __init__(self, root: Path, connection: sqlite3.Connection, plan: BatchPlan) -> None:
+    def __init__(
+        self,
+        root: Path,
+        connection: sqlite3.Connection,
+        plan: BatchPlan,
+        execution_mode: ExecutionMode,
+    ) -> None:
         self.root = root
         self.connection = connection
         self.plan = plan
+        self.execution_mode = execution_mode
 
     @classmethod
-    def open(cls, plan: BatchPlan, store_root: str | Path | None) -> ExecutionJournal:
+    def open(
+        cls,
+        plan: BatchPlan,
+        store_root: str | Path | None,
+        execution_mode: ExecutionMode = "replay",
+    ) -> ExecutionJournal:
         plan.verify_identity()
         root = _store_root(store_root, write=True)
-        journal = cls(root, _writer(root), plan)
-        journal._initialize()
+        journal = cls(root, _writer(root), plan, execution_mode)
+        try:
+            journal._initialize()
+        except BaseException:
+            journal.close()
+            raise
         return journal
 
     def close(self) -> None:
@@ -893,18 +935,19 @@ class ExecutionJournal:
         self.connection.execute("BEGIN IMMEDIATE")
         try:
             row = self.connection.execute(
-                "SELECT plan_sha256, snapshot_id FROM batches WHERE batch_id=?",
+                "SELECT plan_sha256, snapshot_id, execution_mode FROM batches WHERE batch_id=?",
                 (self.plan.batch_id,),
             ).fetchone()
             if row is None:
                 self.connection.execute(
                     "INSERT INTO batches(batch_id, plan_sha256, snapshot_id, plan_json, "
-                    "max_attempts, currency) VALUES (?, ?, ?, ?, ?, ?)",
+                    "execution_mode, max_attempts, currency) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     (
                         self.plan.batch_id,
                         self.plan.plan_sha256,
                         self.plan.snapshot.snapshot_id,
                         self.plan.model_dump_json(),
+                        self.execution_mode,
                         self.plan.max_attempts,
                         self.plan.currency,
                     ),
@@ -918,8 +961,10 @@ class ExecutionJournal:
                     self._insert_task(task)
                     if task.role == "material_items":
                         self.connection.execute(
-                            "INSERT INTO derivations(parent_task_id, status) VALUES (?, ?)",
+                            "INSERT INTO derivations(batch_id, parent_task_id, status) "
+                            "VALUES (?, ?, ?)",
                             (
+                                self.plan.batch_id,
                                 task.task_id,
                                 "waiting" if self.plan.relations.enabled else "disabled",
                             ),
@@ -929,6 +974,8 @@ class ExecutionJournal:
                 self.plan.snapshot.snapshot_id,
             ):
                 raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "batch_plan_mismatch")
+            elif row["execution_mode"] != self.execution_mode:
+                raise StructuredExecutionError("CS_INPUT_INVALID", "batch_execution_mode_mismatch")
             self.connection.execute("COMMIT")
         except BaseException:
             self.connection.execute("ROLLBACK")
@@ -969,18 +1016,20 @@ class ExecutionJournal:
         self.connection.execute("BEGIN IMMEDIATE")
         try:
             rows = self.connection.execute(
-                "SELECT attempt_id, task_id FROM attempts WHERE execution_status IN ('reserved','running')"
+                "SELECT attempt_id, task_id FROM attempts WHERE batch_id=? "
+                "AND execution_status IN ('reserved','running')",
+                (self.plan.batch_id,),
             ).fetchall()
             for row in rows:
                 self.connection.execute(
                     "UPDATE attempts SET execution_status='outcome_unknown', "
-                    "error_code='CS_OUTCOME_UNKNOWN' WHERE attempt_id=?",
-                    (row["attempt_id"],),
+                    "error_code='CS_OUTCOME_UNKNOWN' WHERE batch_id=? AND attempt_id=?",
+                    (self.plan.batch_id, row["attempt_id"]),
                 )
                 self.connection.execute(
                     "UPDATE tasks SET execution_status='outcome_unknown', "
-                    "error_codes='[\"CS_OUTCOME_UNKNOWN\"]' WHERE task_id=?",
-                    (row["task_id"],),
+                    "error_codes='[\"CS_OUTCOME_UNKNOWN\"]' WHERE batch_id=? AND task_id=?",
+                    (self.plan.batch_id, row["task_id"]),
                 )
             self.connection.execute("COMMIT")
             return len(rows)
@@ -991,20 +1040,26 @@ class ExecutionJournal:
     def verify_references(self) -> None:
         """Fail closed on any referenced immutable object before resuming work."""
         rows = self.connection.execute(
-            "SELECT response_object_sha256 FROM attempts WHERE response_object_sha256 IS NOT NULL"
+            "SELECT response_object_sha256 FROM attempts WHERE batch_id=? "
+            "AND response_object_sha256 IS NOT NULL",
+            (self.plan.batch_id,),
         ).fetchall()
         rows += self.connection.execute(
-            "SELECT artifact_sha256 FROM tasks WHERE artifact_sha256 IS NOT NULL"
+            "SELECT artifact_sha256 FROM tasks WHERE batch_id=? AND artifact_sha256 IS NOT NULL",
+            (self.plan.batch_id,),
         ).fetchall()
         rows += self.connection.execute(
-            "SELECT payload_object_sha256 FROM tasks WHERE payload_object_sha256 IS NOT NULL"
+            "SELECT payload_object_sha256 FROM tasks WHERE batch_id=? "
+            "AND payload_object_sha256 IS NOT NULL",
+            (self.plan.batch_id,),
         ).fetchall()
         for row in rows:
             _read_object(self.root, row[0])
 
     def task_status(self, task_id: str) -> str:
         row = self.connection.execute(
-            "SELECT execution_status FROM tasks WHERE task_id=?", (task_id,)
+            "SELECT execution_status FROM tasks WHERE batch_id=? AND task_id=?",
+            (self.plan.batch_id, task_id),
         ).fetchone()
         if row is None:
             raise StructuredExecutionError("CS_NOT_FOUND", "task_not_found")
@@ -1012,7 +1067,8 @@ class ExecutionJournal:
 
     def parent_task_id(self, task_id: str) -> str | None:
         row = self.connection.execute(
-            "SELECT dependency_task_ids, derived FROM tasks WHERE task_id=?", (task_id,)
+            "SELECT dependency_task_ids, derived FROM tasks WHERE batch_id=? AND task_id=?",
+            (self.plan.batch_id, task_id),
         ).fetchone()
         if row is None:
             raise StructuredExecutionError("CS_NOT_FOUND", "task_not_found")
@@ -1038,8 +1094,9 @@ class ExecutionJournal:
             ).fetchone()
             task = self.connection.execute(
                 "SELECT role, max_attempts, execution_status, profile_sha256, "
-                "role_profile_sha256, deadline_epoch FROM tasks WHERE task_id=?",
-                (request.task_id,),
+                "role_profile_sha256, deadline_epoch FROM tasks "
+                "WHERE batch_id=? AND task_id=?",
+                (self.plan.batch_id, request.task_id),
             ).fetchone()
             role_budget = self.connection.execute(
                 "SELECT max_attempts, reserved_attempts FROM role_budgets "
@@ -1054,25 +1111,38 @@ class ExecutionJournal:
                 or task["role_profile_sha256"] != role_profile_sha256
             ):
                 raise StructuredExecutionError("CS_INPUT_INVALID", "request_profile_binding")
+            profile = _profile(self.plan, request.role)
+            expected_provider = "replay" if self.execution_mode == "replay" else profile.provider
+            expected_model = (
+                (profile.model or "replay-fixture")
+                if self.execution_mode == "replay"
+                else profile.model
+            )
+            if provider != expected_provider or request_model != expected_model:
+                raise StructuredExecutionError(
+                    "CS_INPUT_INVALID", "attempt_provider_model_mismatch"
+                )
             if batch["cancelled"]:
                 raise StructuredExecutionError("CS_DEPENDENCY_NOT_READY", "batch_cancelled")
             if task["deadline_epoch"] is not None and time.time() >= task["deadline_epoch"]:
                 self.connection.execute(
                     "UPDATE tasks SET execution_status='cancelled', "
-                    "reason_codes='[\"deadline_exceeded\"]' WHERE task_id=?",
-                    (request.task_id,),
+                    "reason_codes='[\"deadline_exceeded\"]' WHERE batch_id=? AND task_id=?",
+                    (self.plan.batch_id, request.task_id),
                 )
                 raise StructuredExecutionError("CS_DEPENDENCY_NOT_READY", "deadline_exceeded")
             if task["execution_status"] in _TERMINAL:
                 raise StructuredExecutionError("CS_DEPENDENCY_NOT_READY", "task_terminal")
             duplicate = self.connection.execute(
-                "SELECT attempt_id FROM attempts WHERE task_id=? AND role_request_sha256=?",
-                (request.task_id, request.request_sha256),
+                "SELECT attempt_id FROM attempts WHERE batch_id=? AND task_id=? "
+                "AND role_request_sha256=?",
+                (self.plan.batch_id, request.task_id, request.request_sha256),
             ).fetchone()
             if duplicate is not None:
                 raise StructuredExecutionError("CS_INPUT_INVALID", "duplicate_request_attempt")
             task_count = self.connection.execute(
-                "SELECT count(*) FROM attempts WHERE task_id=?", (request.task_id,)
+                "SELECT count(*) FROM attempts WHERE batch_id=? AND task_id=?",
+                (self.plan.batch_id, request.task_id),
             ).fetchone()[0]
             if (
                 batch["reserved_attempts"] >= batch["max_attempts"]
@@ -1092,11 +1162,13 @@ class ExecutionJournal:
                 )[7:]
             )
             self.connection.execute(
-                "INSERT INTO attempts(attempt_id, task_id, attempt_number, execution_status, "
+                "INSERT INTO attempts(attempt_id, batch_id, task_id, attempt_number, execution_status, "
                 "role_request_sha256, request_sha256, provider, request_model, profile_sha256, "
-                "role_profile_sha256, diagnostics) VALUES (?, ?, ?, 'running', ?, ?, ?, ?, ?, ?, '{}')",
+                "role_profile_sha256, diagnostics) "
+                "VALUES (?, ?, ?, ?, 'running', ?, ?, ?, ?, ?, ?, '{}')",
                 (
                     attempt_id,
+                    self.plan.batch_id,
                     request.task_id,
                     attempt_number,
                     request.request_sha256,
@@ -1118,8 +1190,8 @@ class ExecutionJournal:
                 (self.plan.batch_id, request.role),
             )
             self.connection.execute(
-                "UPDATE tasks SET execution_status='running' WHERE task_id=?",
-                (request.task_id,),
+                "UPDATE tasks SET execution_status='running' WHERE batch_id=? AND task_id=?",
+                (self.plan.batch_id, request.task_id),
             )
             self.connection.execute("COMMIT")
             return attempt_id
@@ -1129,8 +1201,8 @@ class ExecutionJournal:
 
     def existing_attempt(self, request: RoleRequest) -> sqlite3.Row | None:
         return self.connection.execute(
-            "SELECT * FROM attempts WHERE task_id=? AND role_request_sha256=?",
-            (request.task_id, request.request_sha256),
+            "SELECT * FROM attempts WHERE batch_id=? AND task_id=? AND role_request_sha256=?",
+            (self.plan.batch_id, request.task_id, request.request_sha256),
         ).fetchone()
 
     def complete_attempt(
@@ -1156,7 +1228,7 @@ class ExecutionJournal:
             cursor = self.connection.execute(
                 "UPDATE attempts SET execution_status='succeeded', response_sha256=?, "
                 "response_object_sha256=?, response_model=?, usage=?, cost=?, diagnostics=? "
-                "WHERE attempt_id=? AND execution_status='running'",
+                "WHERE batch_id=? AND attempt_id=? AND execution_status='running'",
                 (
                     raw_sha,
                     object_sha,
@@ -1168,6 +1240,7 @@ class ExecutionJournal:
                     if isinstance(diagnostics.get("cost"), dict)
                     else None,
                     _json(diagnostics),
+                    self.plan.batch_id,
                     attempt_id,
                 ),
             )
@@ -1191,7 +1264,8 @@ class ExecutionJournal:
         try:
             self.connection.execute(
                 "UPDATE attempts SET execution_status=?, response_model=?, usage=?, cost=?, "
-                "diagnostics=?, error_code=? WHERE attempt_id=? AND execution_status='running'",
+                "diagnostics=?, error_code=? WHERE batch_id=? AND attempt_id=? "
+                "AND execution_status='running'",
                 (
                     status,
                     safe.get("response_model"),
@@ -1199,6 +1273,7 @@ class ExecutionJournal:
                     _json(safe["cost"]) if isinstance(safe.get("cost"), dict) else None,
                     _json(safe),
                     error_code,
+                    self.plan.batch_id,
                     attempt_id,
                 ),
             )
@@ -1243,7 +1318,7 @@ class ExecutionJournal:
                 "UPDATE tasks SET execution_status=?, protocol_status=?, quality_status=?, "
                 "publication_status=?, context_status=?, artifact_sha256=?, artifact_id=?, "
                 "payload_sha256=?, payload_object_sha256=?, error_codes=?, reason_codes=? "
-                "WHERE task_id=?",
+                "WHERE batch_id=? AND task_id=?",
                 (
                     execution.artifact.execution_status,
                     execution.artifact.protocol_status,
@@ -1256,6 +1331,7 @@ class ExecutionJournal:
                     payload_object,
                     _json(execution.artifact.error_codes),
                     _json(execution.artifact.coverage.reason_codes),
+                    self.plan.batch_id,
                     task.task_id,
                 ),
             )
@@ -1273,14 +1349,16 @@ class ExecutionJournal:
         reasons: tuple[str, ...] = (),
     ) -> None:
         self.connection.execute(
-            "UPDATE tasks SET execution_status=?, error_codes=?, reason_codes=? WHERE task_id=?",
-            (status, _json(error_codes), _json(reasons), task_id),
+            "UPDATE tasks SET execution_status=?, error_codes=?, reason_codes=? "
+            "WHERE batch_id=? AND task_id=?",
+            (status, _json(error_codes), _json(reasons), self.plan.batch_id, task_id),
         )
 
     def load_items_execution(self, task_id: str) -> RoleExecution:
         row = self.connection.execute(
-            "SELECT artifact_sha256, payload_object_sha256 FROM tasks WHERE task_id=?",
-            (task_id,),
+            "SELECT artifact_sha256, payload_object_sha256 FROM tasks "
+            "WHERE batch_id=? AND task_id=?",
+            (self.plan.batch_id, task_id),
         ).fetchone()
         if row is None or not row["artifact_sha256"] or not row["payload_object_sha256"]:
             raise StructuredExecutionError("CS_DEPENDENCY_NOT_READY", "items_artifact_missing")
@@ -1292,8 +1370,8 @@ class ExecutionJournal:
 
     def derive_relation_task(self, parent: PlannedTask) -> PlannedTask | None:
         derivation = self.connection.execute(
-            "SELECT status, derived_task_id FROM derivations WHERE parent_task_id=?",
-            (parent.task_id,),
+            "SELECT status, derived_task_id FROM derivations WHERE batch_id=? AND parent_task_id=?",
+            (self.plan.batch_id, parent.task_id),
         ).fetchone()
         if derivation is None or derivation["status"] == "disabled":
             return None
@@ -1301,8 +1379,8 @@ class ExecutionJournal:
             return self._task_from_row(derivation["derived_task_id"])
         row = self.connection.execute(
             "SELECT execution_status, protocol_status, quality_status, artifact_id, "
-            "payload_object_sha256 FROM tasks WHERE task_id=?",
-            (parent.task_id,),
+            "payload_object_sha256 FROM tasks WHERE batch_id=? AND task_id=?",
+            (self.plan.batch_id, parent.task_id),
         ).fetchone()
         if row is None or (
             row["execution_status"],
@@ -1311,8 +1389,8 @@ class ExecutionJournal:
         ) != ("succeeded", "valid", "accepted"):
             self.connection.execute(
                 "UPDATE derivations SET status='dependency_not_ready', "
-                "reason_code='CS_DEPENDENCY_NOT_READY' WHERE parent_task_id=?",
-                (parent.task_id,),
+                "reason_code='CS_DEPENDENCY_NOT_READY' WHERE batch_id=? AND parent_task_id=?",
+                (self.plan.batch_id, parent.task_id),
             )
             return None
         items_run = MaterialRun.model_validate(
@@ -1352,8 +1430,8 @@ class ExecutionJournal:
         self.connection.execute("BEGIN IMMEDIATE")
         try:
             current = self.connection.execute(
-                "SELECT derived_task_id FROM derivations WHERE parent_task_id=?",
-                (parent.task_id,),
+                "SELECT derived_task_id FROM derivations WHERE batch_id=? AND parent_task_id=?",
+                (self.plan.batch_id, parent.task_id),
             ).fetchone()
             if current is not None and current["derived_task_id"]:
                 existing_id = str(current["derived_task_id"])
@@ -1366,16 +1444,17 @@ class ExecutionJournal:
             if count >= self.plan.relations.max_tasks:
                 self.connection.execute(
                     "UPDATE derivations SET status='budget_exhausted', "
-                    "reason_code='CS_BUDGET_EXHAUSTED' WHERE parent_task_id=?",
-                    (parent.task_id,),
+                    "reason_code='CS_BUDGET_EXHAUSTED' "
+                    "WHERE batch_id=? AND parent_task_id=?",
+                    (self.plan.batch_id, parent.task_id),
                 )
                 self.connection.execute("COMMIT")
                 return None
             self._insert_task(task)
             self.connection.execute(
                 "UPDATE derivations SET status='registered', derived_task_id=?, reason_code=NULL "
-                "WHERE parent_task_id=?",
-                (task.task_id, parent.task_id),
+                "WHERE batch_id=? AND parent_task_id=?",
+                (task.task_id, self.plan.batch_id, parent.task_id),
             )
             self.connection.execute("COMMIT")
         except sqlite3.IntegrityError:
@@ -1388,8 +1467,8 @@ class ExecutionJournal:
                 raise
             self.connection.execute(
                 "UPDATE derivations SET status='registered', derived_task_id=? "
-                "WHERE parent_task_id=?",
-                (existing[0], parent.task_id),
+                "WHERE batch_id=? AND parent_task_id=?",
+                (existing[0], self.plan.batch_id, parent.task_id),
             )
             return self._task_from_row(existing[0])
         except BaseException:
@@ -1407,12 +1486,15 @@ class ExecutionJournal:
             else execution.artifact.execution_status
         )
         self.connection.execute(
-            "UPDATE derivations SET status=? WHERE parent_task_id=?",
-            (status, parent_task_id),
+            "UPDATE derivations SET status=? WHERE batch_id=? AND parent_task_id=?",
+            (status, self.plan.batch_id, parent_task_id),
         )
 
     def _task_from_row(self, task_id: str) -> PlannedTask:
-        row = self.connection.execute("SELECT * FROM tasks WHERE task_id=?", (task_id,)).fetchone()
+        row = self.connection.execute(
+            "SELECT * FROM tasks WHERE batch_id=? AND task_id=?",
+            (self.plan.batch_id, task_id),
+        ).fetchone()
         if row is None:
             raise StructuredExecutionError("CS_NOT_FOUND", "derived_task_not_found")
         return PlannedTask(
@@ -1509,9 +1591,12 @@ def _profile(plan: BatchPlan, role: Role) -> FrozenRoleProfile:
 
 
 def _raise_dispatch(error: StructuredExecutionError) -> Never:
-    status = (
-        "blocked" if error.code in {"CS_BUDGET_EXHAUSTED", "CS_DEPENDENCY_NOT_READY"} else "failed"
-    )
+    if error.reason in {"batch_cancelled", "deadline_exceeded"}:
+        status = "cancelled"
+    elif error.code in {"CS_BUDGET_EXHAUSTED", "CS_DEPENDENCY_NOT_READY"}:
+        status = "blocked"
+    else:
+        status = "failed"
     raise LlmCallError(
         {"execution_status": status, "error_code": error.code, "error_type": error.reason}
     )
@@ -1547,7 +1632,10 @@ def _replay_dispatch(
                 "attempt_id": attempt_id,
                 "attempts": 1,
                 "execution_status": "succeeded",
+                "role": request.role,
+                "protocol": request.protocol,
                 "provider": "replay",
+                "model": profile.model or "replay-fixture",
                 "request_model": profile.model or "replay-fixture",
                 "response_model": diagnostics.get("response_model"),
                 "profile_sha256": profile.profile_sha256,
@@ -1682,13 +1770,14 @@ def _run_task(
 def _run_plan(
     plan: BatchPlan,
     store_root: str | Path | None,
+    execution_mode: ExecutionMode,
     dispatch_factory: Callable[[ExecutionJournal], Callable[[RoleRequest], str]],
 ) -> BatchCheck:
     root = _store_root(store_root, write=True)
     lease = _BatchLease.acquire(root, plan.batch_id)
     journal: ExecutionJournal | None = None
     try:
-        journal = ExecutionJournal.open(plan, root)
+        journal = ExecutionJournal.open(plan, root, execution_mode)
         journal.recover_pending()
         journal.verify_references()
         dispatch = dispatch_factory(journal)
@@ -1719,6 +1808,7 @@ def replay_batch(
     return _run_plan(
         plan,
         store_root,
+        "replay",
         lambda journal: _replay_dispatch(journal, source, checkpoint),
     )
 
@@ -1768,7 +1858,7 @@ def execute_batch(
         lease = _BatchLease.acquire(root, plan.batch_id)
         journal: ExecutionJournal | None = None
         try:
-            journal = ExecutionJournal.open(plan, root)
+            journal = ExecutionJournal.open(plan, root, "live")
             journal.recover_pending()
             journal.verify_references()
             for task in plan.tasks:
@@ -1788,8 +1878,9 @@ def execute_batch(
                     if task.role == "material_items":
                         journal.connection.execute(
                             "UPDATE derivations SET status='dependency_not_ready', "
-                            "reason_code='CS_CONFIG_MISSING' WHERE parent_task_id=?",
-                            (task.task_id,),
+                            "reason_code='CS_CONFIG_MISSING' "
+                            "WHERE batch_id=? AND parent_task_id=?",
+                            (plan.batch_id, task.task_id),
                         )
         finally:
             if journal is not None:
@@ -1799,6 +1890,7 @@ def execute_batch(
     return _run_plan(
         plan,
         store_root,
+        "live",
         lambda journal: _live_dispatch(journal, bindings, transport_factories, checkpoint),
     )
 
@@ -1888,8 +1980,7 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
             "SELECT * FROM tasks WHERE batch_id=? ORDER BY rowid", (batch_id,)
         ).fetchall()
         attempt_rows = connection.execute(
-            "SELECT attempts.* FROM attempts JOIN tasks USING(task_id) "
-            "WHERE tasks.batch_id=? ORDER BY attempts.rowid",
+            "SELECT * FROM attempts WHERE batch_id=? ORDER BY rowid",
             (batch_id,),
         ).fetchall()
         referenced_objects = [
@@ -1942,6 +2033,7 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
         if not consistent:
             findings.append("plan_identity_mismatch")
         task_row_by_id = {row["task_id"]: row for row in task_rows}
+        profile_by_role: dict[Role, FrozenRoleProfile] = {}
         if plan is not None:
             initial_ids = {task.task_id for task in plan.tasks}
             planned_by_id = {task.task_id: task for task in plan.tasks}
@@ -2045,6 +2137,55 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
         attempts_by_task: dict[str, list[sqlite3.Row]] = {}
         for row in attempt_rows:
             attempts_by_task.setdefault(row["task_id"], []).append(row)
+            try:
+                diagnostics = json.loads(row["diagnostics"])
+                diagnostics_valid = isinstance(diagnostics, dict)
+            except (TypeError, json.JSONDecodeError):
+                diagnostics = {}
+                diagnostics_valid = False
+            if plan is not None:
+                task_row = task_row_by_id.get(row["task_id"])
+                profile = profile_by_role.get(task_row["role"]) if task_row is not None else None
+                expected_model = (
+                    (profile.model or "replay-fixture")
+                    if profile is not None and batch["execution_mode"] == "replay"
+                    else (profile.model if profile is not None else None)
+                )
+                expected_provider = (
+                    "replay"
+                    if batch["execution_mode"] == "replay"
+                    else (profile.provider if profile is not None else None)
+                )
+                if row["provider"] != expected_provider or row["request_model"] != expected_model:
+                    findings.append(f"attempt_provider_model_mismatch:{row['attempt_id']}")
+                    consistent = False
+                if diagnostics_valid and diagnostics:
+                    expected_diagnostics = {
+                        "attempt_id": row["attempt_id"],
+                        "execution_status": row["execution_status"],
+                        "model": row["request_model"],
+                        "profile_sha256": row["profile_sha256"],
+                        "protocol": task_row["protocol"] if task_row is not None else None,
+                        "provider": row["provider"],
+                        "request_model": row["request_model"],
+                        "request_sha256": row["request_sha256"],
+                        "response_model": row["response_model"],
+                        "role": task_row["role"] if task_row is not None else None,
+                        "role_profile_sha256": row["role_profile_sha256"],
+                    }
+                    if any(
+                        diagnostics.get(key) != value for key, value in expected_diagnostics.items()
+                    ):
+                        diagnostics_valid = False
+                elif diagnostics_valid and row["execution_status"] not in {
+                    "reserved",
+                    "running",
+                    "outcome_unknown",
+                }:
+                    diagnostics_valid = False
+            if not diagnostics_valid:
+                findings.append(f"attempt_diagnostics_mismatch:{row['attempt_id']}")
+                consistent = False
             expected_attempt_id = (
                 "attempt:"
                 + canonical_hash(
@@ -2066,6 +2207,7 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
                     or value.get("schema_version") != "corpus-model-response-v1"
                     or not isinstance(value.get("content"), str)
                     or not isinstance(value.get("diagnostics"), dict)
+                    or value.get("diagnostics") != diagnostics
                     or row["response_sha256"] != canonical_hash(value.get("content"))
                 ):
                     findings.append(f"response_binding_mismatch:{row['attempt_id']}")
@@ -2118,7 +2260,7 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
                 consistent = False
         derivation_rows = connection.execute(
             "SELECT parent_task_id, status, derived_task_id, reason_code FROM derivations "
-            "WHERE parent_task_id IN (SELECT task_id FROM tasks WHERE batch_id=?)",
+            "WHERE batch_id=?",
             (batch_id,),
         ).fetchall()
         derivations = {
@@ -2165,10 +2307,22 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
                 artifact = RoleArtifact.model_validate(object_values[artifact_reference])
                 artifact.verify_identity()
                 payload = object_values[payload_reference]
+                business_payload = (
+                    EvidenceRun.model_validate(payload)
+                    if row["role"] == "claims"
+                    else MaterialRun.model_validate(payload)
+                )
+                business_payload.verify_identity()
+                expected_contract = (
+                    "EvidenceRun/EvidenceFact"
+                    if row["role"] == "claims"
+                    else "MaterialRun/MaterialUnderstanding"
+                )
                 artifact_matches = (
                     artifact.task_id == row["task_id"]
                     and artifact.role == row["role"]
                     and artifact.protocol == row["protocol"]
+                    and artifact.business_contract == expected_contract
                     and artifact.snapshot_id == batch["snapshot_id"]
                     and artifact.artifact_id == row["artifact_id"]
                     and artifact.payload_sha256 == row["payload_sha256"]

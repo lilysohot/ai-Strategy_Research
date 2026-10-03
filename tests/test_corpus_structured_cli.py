@@ -237,6 +237,11 @@ def test_process_crash_after_reservation_resumes_as_unknown_without_resend(tmp_p
     payload = json.loads(resumed.stdout)
     assert len(payload["ledger"]["attempts"]) == 1
     assert payload["ledger"]["attempts"][0]["execution_status"] == "outcome_unknown"
+    assert "response_sha256" not in payload["ledger"]["attempts"][0]
+    unknown_task = next(
+        task for task in payload["ledger"]["tasks"] if task["execution_status"] == "outcome_unknown"
+    )
+    assert "artifact_sha256" not in unknown_task
     assert payload["ledger"]["budget"] == {
         "actual_attempts": 1,
         "currency": None,

@@ -1,10 +1,10 @@
 # 06 · 工件保存、语义发布与跨运行回读
 
-Status: needs-triage
+Status: ready-for-agent
 Execution: 未开始
 Type: task
 Plan: W3；R2-S2/S3（文件试点，不代表生产 S5）
-Blocked by: 05
+Blocked by: 无本地任务依赖（05 已验收）
 Real model calls: 0
 Production database access: 0
 
@@ -64,3 +64,6 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_store.py tests/tes
   batch/task/attempt，无法在不猜测账本接口的情况下满足父 generation、并发写入和执行账引用
   验收。因此本票保持 `needs-triage` / 未开始 / `Blocked by: 05`，未创建 store/发布代码，
   未调用真实模型，未访问生产数据库。需先执行并验收 05，或由用户明确调整任务顺序和接口边界。
+- 2026-10-03：05 经回塑、双轴复核和最终门禁后已验收闭环，稳定执行账、复合 batch/task/attempt
+  作用域及只读核查入口现已具备；本票解除本地依赖并转 `ready-for-agent`。Execution 仍为未开始，
+  本次没有执行 06、没有创建发布/store 实现，真实模型调用和生产数据库访问仍为 0。
