@@ -528,14 +528,34 @@ class Orchestrator:
         Returns how many runs were closed. Never raises: a failed sweep must not
         take the API down, it only means the next start-up will try again.
         """
+        from server import dispatch_outbox, store
+
         try:
             stale = await list_active_runs()
         except Exception:
             logger.exception("orphan-run reconcile: query failed, skipping sweep")
             return 0
 
+        # DATA-06: a run that was committed but whose worker never started is NOT an
+        # orphan — it still has a live dispatch intent, and the dispatch loop will
+        # pick it up after this sweep. Reaping it (and abandoning its outbox) would
+        # break the "a committed submit survives a crash" promise (AC-05).
+        try:
+            async with store.get_sessionmaker()() as session:
+                recoverable = await dispatch_outbox.recoverable_run_ids(
+                    session, {row.id for row in stale}
+                )
+        except Exception:
+            logger.exception("orphan-run reconcile: dispatch intent lookup failed")
+            recoverable = set()
+
         closed = 0
         for row in stale:
+            if row.id in recoverable:
+                logger.info(
+                    "orphan run kept for dispatch: run_id=%s (live outbox intent)", row.id.hex
+                )
+                continue
             run_id = row.id.hex
             if run_id in self._handles:
                 continue
@@ -577,8 +597,6 @@ class Orchestrator:
             # DATA-06: the dispatch intent must follow the run — an orphaned run
             # must not be re-dispatched by the outbox on the next start-up.
             try:
-                from server import dispatch_outbox, store
-
                 async with store.get_sessionmaker()() as session, session.begin():
                     await dispatch_outbox.abandon_for_run(
                         session,

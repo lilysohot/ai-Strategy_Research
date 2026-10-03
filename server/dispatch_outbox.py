@@ -83,6 +83,41 @@ async def get_for_run(session: AsyncSession, *, run_id: uuid.UUID) -> store.RunD
     ).scalar_one_or_none()
 
 
+def _is_recoverable(dispatch_status: str, run_status: str) -> bool:
+    """这条派发意图是否"提交成功但还没产生 worker"—— 重启后由派发循环接手。
+
+    * ``pending`` / ``retryable_failed``：还没投出去，会被领取；
+    * ``claimed`` 且 Run 仍是 ``queued``：旧领取从未把 worker 跑起来，租约回收会重投。
+    ``dispatched``/``abandoned`` 以及「``claimed`` 且 Run 已 ``running``」都不算 ——
+    前者 worker 已随进程消失，后者是真正的孤儿。
+    """
+    if dispatch_status in (PENDING, RETRYABLE_FAILED):
+        return True
+    return dispatch_status == CLAIMED and run_status == "queued"
+
+
+async def recoverable_run_ids(session: AsyncSession, run_ids: set[uuid.UUID]) -> set[uuid.UUID]:
+    """返回有存活派发意图的 Run —— 孤儿扫描必须跳过它们。
+
+    一个已提交、只在等派发的 Run 崩溃后仍是 ``queued`` 且没有本进程的内存 handle；
+    若 :meth:`Orchestrator.reconcile_orphan_runs` 只看 handles 就把它判死并作废
+    outbox，"提交成功但进程崩溃，重启后派发可以继续" 的承诺就落空了（AC-05）。
+    判定基于库里的派发状态，跨进程成立。
+    """
+    if not run_ids:
+        return set()
+    result = await session.execute(
+        select(store.RunDispatch.run_id, store.RunDispatch.status, store.Run.status)
+        .join(store.Run, store.Run.id == store.RunDispatch.run_id)
+        .where(store.RunDispatch.run_id.in_(run_ids))
+    )
+    return {
+        run_id
+        for run_id, dispatch_status, run_status in result
+        if _is_recoverable(dispatch_status, run_status)
+    }
+
+
 def dispatch_view(row: store.RunDispatch) -> dict[str, Any]:
     return {
         "dispatch_id": str(row.id),

@@ -142,9 +142,11 @@ class StubOrchestrator:
     async def submit(self, **kwargs: Any) -> None:
         self.submitted.append(kwargs)
 
-    def stop(self, run_id: str) -> bool:
+    async def stop(self, run_id: str) -> bool:
+        # Async on purpose: the real ``Orchestrator.stop`` is a coroutine, so a
+        # missing ``await`` at a call site must not look like a successful stop.
         self.stopped.append(run_id)
-        return False
+        return True
 
     def has_worker(self, run_id: str) -> bool:
         return False

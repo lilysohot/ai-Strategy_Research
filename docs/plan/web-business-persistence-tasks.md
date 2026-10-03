@@ -209,12 +209,15 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 业务 Run 的 session/run/turn/快照/outbox **同一事务**（新增不自行提交的
 `store.ensure_session_in`/`append_turn_in`，`orchestrator.submit(backfill_turn=False)`
 保证派发不重复追加用户消息）；新增 `GET /api/runs/{id}/dispatch`；重算对排队任务执行
-"取消重提"（outbox 作废 + Run 置 `stopped/superseded_by_rerun`）。派发循环随 API
-lifespan 启停（`SERVER_DISPATCH_*` 配置），孤儿恢复联动作废派发意图
-（`reconcile_orphan_runs`）。真 PG 验收见 `tests/pg/test_run_dispatch.py`（10 项，累计
-56 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
-尚未实现：受控暂存区/持久上传清单（文件上传仍在 F12 批次语义内直写 inputs 目录），
-归 DATA-06 后续补齐；快照注入 worker（DATA-08）。
+"取消重提"（outbox 作废 + Run 置 `stopped/superseded_by_rerun`），运行中的旧 Run
+**真正发出停止请求**（`await orch.stop`，异步漏 await 曾使停止变空操作）。派发循环随
+API lifespan 启停（`SERVER_DISPATCH_*` 配置）；孤儿恢复只收尾真孤儿 —— 有存活派发意图
+（`dispatch_outbox.recoverable_run_ids`：`pending`/`retryable_failed`，或 `claimed` 且
+Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍会派发（AC-05）。
+真 PG 验收见 `tests/pg/test_run_dispatch.py`（12 项，累计 58 项通过，
+证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+尚未实现：受控暂存区/持久上传清单（文件上传仍在 F12 批次语义内直写 inputs 目录）、
+逐研究队列上限与停止超时阈值，归 DATA-06 后续补齐；快照注入 worker（DATA-08）。
 
 ### DATA-07 持久补数与续接
 

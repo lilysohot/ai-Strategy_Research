@@ -474,9 +474,10 @@ async def rerun_run(
     stop_requested = False
     old_cancelled = False
     if old_run.status == "running":
-        stop_requested = orch.stop(old_run_uuid.hex)
-
-    new_run_id = uuid.uuid4()
+        # ``Orchestrator.stop`` is async: without the await this returns a coroutine
+        # (always truthy), reports a stop that was never sent, and leaves the old
+        # worker running until it finishes on its own.
+        stop_requested = await orch.stop(old_run_uuid.hex)
 
     new_run_id = uuid.uuid4()
     new_run_id_hex = new_run_id.hex

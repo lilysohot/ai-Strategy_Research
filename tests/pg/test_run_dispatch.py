@@ -23,6 +23,8 @@ from sqlalchemy import text
 from server import business_service as biz
 from server import dispatch_outbox, store
 from server.app import app
+from server.config import run_dir_for
+from server.orchestrator import Orchestrator
 from server.security import create_access_token
 
 pytestmark = pytest.mark.pg
@@ -424,3 +426,70 @@ async def test_dispatch_status_endpoint(client) -> None:
         f"/api/runs/{legacy.json()['run_id']}/dispatch", headers={"Authorization": token}
     )
     assert legacy_status.json()["status"] == "not_required"
+
+
+async def test_rerun_stops_a_running_old_run(client, stub_orchestrator) -> None:
+    """重算运行中的旧 Run：停止请求必须真正发出（async stop 必须被 await）。"""
+    token, _ = await _new_user("pg-disp-rerun-stop")
+    research_id = uuid.uuid4()
+    body = await _submit_business_run(client, token, research_id)
+
+    async with biz.business_transaction() as session:
+        await session.execute(
+            text("UPDATE runs SET status='running' WHERE id=:rid"),
+            {"rid": uuid.UUID(body["run_id"])},
+        )
+
+    rerun = await client.post(
+        f"/api/runs/{body['run_id']}/rerun",
+        json={},
+        headers={"Authorization": token, "Idempotency-Key": f"rerun:{uuid.uuid4()}"},
+    )
+    assert rerun.status_code == 202, rerun.text
+    payload = rerun.json()
+    assert payload["old_run_stop_requested"] is True
+    assert stub_orchestrator.stopped == [body["run_id"]], "旧执行的停止请求没有真正发出"
+
+
+async def test_orphan_reconcile_keeps_committed_but_undispatched_run(
+    client, stub_orchestrator
+) -> None:
+    """重启恢复（AC-05）：已提交待派发的 Run 有存活 outbox，不得被孤儿扫描判死。"""
+    token, user_id = await _new_user("pg-disp-reconcile")
+    research_id = uuid.uuid4()
+    body = await _submit_business_run(client, token, research_id)
+
+    # 对照组：无 outbox 的旧式排队 Run，是真正的孤儿（worker 已随进程消失）。
+    legacy_session = uuid.uuid4()
+    legacy_run = uuid.uuid4()
+    async with biz.business_transaction() as session:
+        await session.execute(
+            text("INSERT INTO sessions (id, user_id, title) VALUES (:id, :uid, '旧研究')"),
+            {"id": legacy_session, "uid": user_id},
+        )
+    await store.create_run(
+        run_id=legacy_run,
+        session_id=legacy_session,
+        user_id=user_id,
+        prompt="旧式排队",
+        pipeline_id="stateful-react-agent",
+        run_dir=str(run_dir_for(legacy_run.hex)),
+        status="queued",
+    )
+
+    # 模拟重启：真实 Orchestrator 启动时做孤儿扫描。
+    closed = await Orchestrator().reconcile_orphan_runs()
+
+    assert closed == 1, "只有无派发意图的真孤儿应被收尾"
+    async with biz.business_transaction() as session:
+        reaped = await session.get(store.Run, legacy_run)
+        kept = await session.get(store.Run, uuid.UUID(body["run_id"]))
+    assert reaped.status in ("failed", "stopped")
+    assert kept.status == "queued", "已提交待派发的 Run 被误判为孤儿"
+
+    rows = await _outbox_rows(research_id)
+    assert rows[0].status == "pending", "派发意图被孤儿恢复作废"
+
+    # 重启后派发循环仍能把它投出去：恢复承诺成立。
+    assert await dispatch_outbox.dispatch_once(stub_orchestrator) == 1
+    assert stub_orchestrator.submitted[0]["run_id"] == body["run_id"]
