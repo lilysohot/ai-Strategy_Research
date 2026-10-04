@@ -1,7 +1,7 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
 Status: needs-info
-Execution: 合成评分程序已实现并通过自验；真实开发标注、阈值签认和真实质量门待授权
+Execution: 合成评分程序已复验并修复重复误报分类；真实开发标注、阈值签认和真实质量门待授权
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
 Blocked by: 无本地实现依赖；真实开发样本/问题范围、人工标注与阈值签认待授权
@@ -103,3 +103,36 @@ git diff --check
 | `tests/fixtures/corpus_structured_scoring/gold-and-counterexamples.json` | `b01433674fab7bb89bece4c80809c5263b3a72bb5333e35695d0138a953c1b11` |
 | `tests/fixtures/corpus_structured_scoring/scoring-definition.json` | `f0c583188976d95a990bbd026c02319544d5587a4d6270e3b0f3f494262c992b` |
 | `tests/fixtures/corpus_structured_scoring/adjudications.json` | `dcdc2f4d53a9d256a28a3ed778bd82a66fb8c11fe46478b532f35ef6dae35c8b` |
+
+### 2026-10-03 · 再次启动后的独立复验
+
+用户再次要求开始执行 10 时，合成评分交付已位于提交 `8bfba73` 且工作树干净。本轮没有把既有
+自验记录直接当作通过结论，而是重新读取冻结规格、评分实现、测试和四份资产，并原样复跑验收。
+审查发现一个诊断遗漏：两个语义相同且都不命中金标的错误候选虽然总计为两个 FP，但第二条没有
+进入 `duplicate_fp`。先新增失败回归（原实现得到 `duplicate_fp=0`），再改为对所有候选身份记录首次
+出现；修复后仍保留两个 FP，同时把第二条分类为一个重复 FP。金标、阈值、资产清单和总分母均未
+改变。
+
+复验结果：
+
+| 命令 / 范围 | 退出码 | 结果 |
+| --- | --- | --- |
+| 新增重复幻觉回归（修复前） | 1 | 预期失败：`duplicate_fp` 为 0 |
+| 新增重复幻觉回归（修复后） | 0 | 1 passed |
+| `uv run pytest tests/test_corpus_structured_scoring.py tests/test_corpus_scoring.py -q` | 0 | 70 passed |
+| `uv run ruff check plugins/corpus tests/test_corpus_structured_scoring.py` | 0 | All checks passed |
+| 两个修改文件 Ruff format check | 0 | 2 files already formatted |
+| `uv run pyright plugins/corpus/structured_scoring.py` | 0 | 0 errors / 0 warnings |
+| import smoke stage 1 / stage 2 | 0 / 0 | 386/386；435/435 |
+| symbol closure | 0 | 0 missing / 484 files |
+| `git diff --check` | 0 | 无空白错误 |
+
+复验后指纹：`plugins/corpus/structured_scoring.py`
+`172ce465492cf26cb7249599d9f53ac40d266c1883a49cea51b0b178894874f1`；
+`tests/test_corpus_structured_scoring.py`
+`1facf67a51fbd63ec63ed0c7a15e3cffa5af7ad1733b16a2a5f82ad8ff776794`。
+
+本地可完成的评分实现、合成反例与门控逻辑已复验通过。真实开发门仍不能启动：当前没有获准的
+`real_source_ids`、研究问题清单、候选输出前冻结的人工金标、争议裁定人或阈值签认；因此保持
+`Status: needs-info`，不勾选真实样本验收项，也不解除 11 的依赖。真实模型调用 0、生产数据库访问 0、
+受保护留出访问 0。

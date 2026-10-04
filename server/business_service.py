@@ -289,6 +289,14 @@ class RequestExpiredError(BusinessError):
     remedy = "reload_and_resubmit"
 
 
+class RuleCancelledError(BusinessError):
+    """监控规则已取消（终态）：不可再编辑、暂停或恢复（DATA-09）。"""
+
+    code = "rule_cancelled"
+    http_status = 409
+    remedy = "reload_and_resubmit"
+
+
 # ——— 输入准入 ——————————————————————————————————————————————————————————
 
 

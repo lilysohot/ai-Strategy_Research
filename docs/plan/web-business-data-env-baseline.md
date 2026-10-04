@@ -191,6 +191,26 @@ master key 或 JWT key，认证解析失败时清除旧物化上下文。新增�
 恢复精确快照的测试。规范与规格两条独立复审均无剩余阻断项，详见
 [验收回溯](../../.scratch/web-business-repairs/data08-acceptance-review.md)。
 
+### 4.5 DATA-09 监控规则持久化与管理批次（2026-10-03）
+
+执行记录见 [DATA-09 issue](../../.scratch/web-business-repairs/issues/04-data09-watch-rules.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data09-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `frontier-business-data09-20261003`（复用 `pg18-zhvector` 镜像）；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1:55432` 及 `/tmp/frontier-business-data09-runs`；未连接或迁移现有业务库 |
+| 模型与迁移 | `store.py::WatchRule(+WatchRuleRevision)`：规则指针行（研究归属、计划绑定、status、current_version、最近检查/有效行情时间）+ 不可变配置版本行（symbol/market/currency/quote_basis/direction/阈值/有效期/trigger_mode/action/task/budget/创建时已达标与断线恢复策略）。迁移 `0013_watch_rules` + `0014_watch_rule_history`（版本行 UPDATE/DELETE 拒绝，沿用 0010 触发器）；0014→0013→0012 降级再升回 head 通过 |
+| 生命周期 | `server/watch_rules.py`：创建/编辑（新版本）/暂停/恢复/取消，全部 expected_version + 幂等键 + 归属校验；改版不静默改阈值（无关编辑沿用旧版本冻结值）；计划重绑校验同研究归属；取消为终态（409 rule_cancelled）；`record_check` 供 DATA-10 记录最近检查与有效行情时间 |
+| C 阶段边界 | 仅 `trigger_mode=single`；`repeat` 与冷却/重新布防等 D 阶段字段明确拒绝（validation_error / unknown_field_rejected），不静默接受 |
+| HTTP | `/api/business/sessions/{rid}/watch-rules` 创建；`/watch-rules` 列表（按研究/状态）；`/{id}` 详情；`/{id}` 编辑；`/{id}/versions` 历史；`/{id}/pause|resume|cancel` |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**136 passed**（原 113 项 + DATA-09 定向 23 项）；幂等重放、版本冲突、双用户隔离、重启后状态存在、版本行不可变均通过 |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors（存量 7 项为未改动文件既有）；import smoke stage 1：386/386；symbol closure：484 文件无缺失 |
+| SQLite 路径 | `init_db()` create_all 建出 `watch_rules`/`watch_rule_revisions`，不可变触发器随建（`immutable_watch_rule_revisions_*`） |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。行情判定（穿越/去重/重新布防）、事件创建与自动分析调度
+属 DATA-10/11，规则模型与生命周期只保证"重启后规则及状态存在、操作可追溯、C 只开放单次模式"。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：

@@ -288,6 +288,18 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 **验收**：重启后规则及状态存在，生命周期操作可追溯；C 只开放单次模式，D 才开放验收通过的重复模式。
 覆盖 AC-11、12、21。
 
+**当前产物（2026-10-03）**：规则模型 `server/store.py::WatchRule(+WatchRuleRevision)`
+（指针行：研究归属、计划绑定、status、current_version、最近检查/有效行情时间；版本行：标的/
+市场/币种/行情口径/方向/阈值/有效期/trigger_mode/action/task/budget/创建时已达标与断线恢复
+策略），迁移 `server/alembic/versions/0013_watch_rules.py` 与 `0014_watch_rule_history.py`
+（版本行 UPDATE/DELETE 拒绝，沿用 0010 触发器）。写入与生命周期见 `server/watch_rules.py`
+（创建/编辑新版本/暂停/恢复/取消，全部 expected_version + 幂等键 + 归属校验；`record_check`
+供 DATA-10 记录最近检查与有效行情时间），HTTP 路由见 `server/routes/business.py`
+（`/api/business/.../watch-rules` 8 个端点）。C 阶段仅开放 `trigger_mode=single`，`repeat`
+及冷却/重新布防字段明确拒绝。真 PG 验收见 `tests/pg/test_watch_rules.py`（23 项，全套 136
+通过，证据见[环境基线](web-business-data-env-baseline.md) §4.5）。
+行情判定、事件与自动分析调度仍属 DATA-10/11。
+
 ### DATA-10 行情判定与防重复唤醒
 
 **需求**：PR-WATCH-01/04；PRD §7.2；补充阈值附近反复波动讨论。

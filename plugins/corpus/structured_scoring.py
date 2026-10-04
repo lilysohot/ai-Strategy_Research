@@ -447,18 +447,19 @@ def _score_candidates(
     matched: list[str] = []
     duplicate_ids: set[str] = set()
     false_positive_roles: list[Role] = []
-    matched_identities: set[tuple[object, ...]] = set()
+    seen_candidate_identities: set[tuple[object, ...]] = set()
     for candidate in candidates:
+        if candidate.identity in seen_candidate_identities:
+            duplicate_ids.add(candidate.candidate_id)
+        else:
+            seen_candidate_identities.add(candidate.identity)
         match = next(
             (item for item in remaining.values() if item.identity == candidate.identity), None
         )
         if match is None:
             false_positive_roles.append(candidate.role)
-            if candidate.identity in matched_identities:
-                duplicate_ids.add(candidate.candidate_id)
             continue
         matched.append(match.record_id)
-        matched_identities.add(candidate.identity)
         remaining.pop(match.record_id)
     metrics: list[RoleMetrics] = []
     origin_metrics: list[OriginMetrics] = []

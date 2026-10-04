@@ -543,22 +543,6 @@ class RunInvestmentSnapshot(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
-# create_all is still used by local SQLite installations. Give it the same
-# protection as Alembic; PostgreSQL production installs it through migration 0010.
-for _history_model in (InvestmentAccountRevision, InvestmentPlanRevision, RunInvestmentSnapshot):
-    for _history_action in ("UPDATE", "DELETE"):
-        _history_table = _history_model.__tablename__
-        event.listen(
-            _history_model.__table__,
-            "after_create",
-            DDL(
-                f"CREATE TRIGGER IF NOT EXISTS immutable_{_history_table}_{_history_action.lower()} "
-                f"BEFORE {_history_action} ON {_history_table} BEGIN "
-                "SELECT RAISE(ABORT, 'business history is immutable'); END"
-            ).execute_if(dialect="sqlite"),
-        )
-
-
 class InputRequest(Base):
     """Durable request for facts required before analysis can continue (DATA-07)."""
 
@@ -633,6 +617,88 @@ class BusinessEvent(Base):
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     detail_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WatchRule(Base):
+    """监控规则的当前指针行（DATA-09 / PR-WATCH-01）。
+
+    规则**必须且只能属于一个研究**，可选绑定该研究所属计划；计划改版不静默修改已保存的
+    阈值（阈值只存在于版本行）。生命周期状态（active/paused/cancelled）在指针行维护，
+    配置每次编辑落一条不可变 ``WatchRuleRevision``，改版不复用旧版报价基线与触发资格
+    （判定语义由 DATA-10 消费）。
+    """
+
+    __tablename__ = "watch_rules"
+    __table_args__ = (
+        # 让"规则必须属于同用户/同研究"可声明为复合外键的归属依据（AC-09）。
+        UniqueConstraint("user_id", "id", name="uq_watch_rules_user_id"),
+        Index("ix_watch_rules_research_status", "research_id", "status"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    #: 该研究所属计划（可为空：提醒/纯标的规则不强制绑定计划）。
+    plan_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_plans.id"))
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    #: active=生效；paused=暂停（恢复按新观测重新校验，不补发积压旧触发）；cancelled=终态。
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    #: 已落库的最大配置版本号；配置明细读取版本行，不在指针行复制正文。
+    current_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    #: 最近一次检查时间与"有效行情"观测（DATA-10 判定侧写入；无可靠观测不得用 now 冒充）。
+    last_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_valid_quote_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_valid_quote_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class WatchRuleRevision(Base):
+    """监控规则的不可变配置版本行：只 INSERT，不 UPDATE、不 DELETE。
+
+    版本行是规则触发语义的唯一真源：阈值、方向、有效期、触发资格策略在创建/编辑时冻结，
+    计划改版、暂停/恢复都不改写既有版本（契约 §9）。
+    """
+
+    __tablename__ = "watch_rule_revisions"
+    __table_args__ = (
+        UniqueConstraint("rule_id", "version", name="uq_watch_rule_revisions_version"),
+        Index("ix_watch_rule_revisions_rule", "rule_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    rule_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_rules.id"), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False)
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str] = mapped_column(String, nullable=False)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    #: 行情口径（如 last）；实际是否可达由 DATA-10 按供应商核验，本行只冻结用户选择。
+    quote_basis: Mapped[str] = mapped_column(String, nullable=False, default="last")
+    #: up=上穿、down=下穿、range=进入区间。up/down 用 threshold_low；range 用 low/high。
+    direction: Mapped[str] = mapped_column(String, nullable=False)
+    threshold_low: Mapped[Decimal | None] = mapped_column(MONEY)
+    threshold_high: Mapped[Decimal | None] = mapped_column(MONEY)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: C 阶段只开放 single；repeat（含冷却/重新布防参数）在 D 阶段。
+    trigger_mode: Mapped[str] = mapped_column(String, nullable=False, default="single")
+    #: notify=仅提醒（不调用模型）；auto_analyze=按已保存指令创建分析 Run（DATA-11）。
+    action: Mapped[str] = mapped_column(String, nullable=False)
+    #: auto_analyze 时的分析任务指令；notify 时为空。
+    task: Mapped[str | None] = mapped_column(Text)
+    budget_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    #: 创建时已满足条件：trigger_now=立即触发一次；wait_requalify=等待重新穿越。
+    on_create_already_met: Mapped[str] = mapped_column(
+        String, nullable=False, default="trigger_now"
+    )
+    #: 断线恢复后首个报价已满足条件：trigger_once=触发一次并标注观测缺口；
+    #: wait_requalify=不补发，等待新的有效穿越。
+    disconnect_recovery: Mapped[str] = mapped_column(String, nullable=False, default="trigger_once")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    changed_fields: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -718,6 +784,28 @@ class RunUpload(Base):
 
 _engine: AsyncEngine | None = None
 _SessionMaker: async_sessionmaker[AsyncSession] | None = None
+
+
+# create_all is still used by local SQLite installations. Give it the same
+# protection as Alembic; PostgreSQL production installs it through migrations
+# 0010 / 0014. 版本行只 INSERT，任何 UPDATE/DELETE 都意味着改写已冻结事实。
+for _history_model in (
+    InvestmentAccountRevision,
+    InvestmentPlanRevision,
+    RunInvestmentSnapshot,
+    WatchRuleRevision,
+):
+    for _history_action in ("UPDATE", "DELETE"):
+        _history_table = _history_model.__tablename__
+        event.listen(
+            _history_model.__table__,
+            "after_create",
+            DDL(
+                f"CREATE TRIGGER IF NOT EXISTS immutable_{_history_table}_{_history_action.lower()} "
+                f"BEFORE {_history_action} ON {_history_table} BEGIN "
+                "SELECT RAISE(ABORT, 'business history is immutable'); END"
+            ).execute_if(dialect="sqlite"),
+        )
 
 
 def _apply_sqlite_pragmas(engine: AsyncEngine) -> None:

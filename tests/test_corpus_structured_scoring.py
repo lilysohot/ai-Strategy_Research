@@ -157,6 +157,24 @@ def test_role_matching_counts_duplicates_as_fp_and_routing_omissions_as_fn() -> 
     assert report.unique_supported_sources == ("synthetic-source",)
 
 
+def test_repeated_false_positive_is_classified_as_duplicate_without_hiding_either_fp() -> None:
+    gold = (_gold("claim-1", Role.CLAIMS, "revenue-2026"),)
+    repeated_hallucination = (
+        _candidate("wrong-1", Role.CLAIMS, "revenue-2027"),
+        _candidate("wrong-2", Role.CLAIMS, "revenue-2027"),
+    )
+
+    report = score_structured_quality(
+        gold,
+        raw_candidates=repeated_hallucination,
+        validated_candidates=repeated_hallucination,
+    )
+
+    claims = report.raw.role(Role.CLAIMS)
+    assert (claims.tp, claims.fp, claims.fn) == (0, 2, 1)
+    assert claims.duplicate_fp == 1
+
+
 def test_raw_and_validated_scores_keep_table_and_llm_claims_separate() -> None:
     table_gold = GoldRecord(
         "claim-table",

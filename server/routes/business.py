@@ -21,6 +21,14 @@
   POST   /api/business/accounts/{aid}/trades         登记成交（写）
   GET    /api/business/trades                        成交列表（按账户）
   POST   /api/business/trades/{id}/correct           更正成交（写）
+  POST   /api/business/sessions/{rid}/watch-rules    在研究中创建监控规则（写）
+  GET    /api/business/watch-rules                   规则列表（按研究/状态）
+  GET    /api/business/watch-rules/{id}              规则详情与当前版本
+  PATCH  /api/business/watch-rules/{id}              编辑规则（新版本，写）
+  GET    /api/business/watch-rules/{id}/versions     规则版本历史
+  POST   /api/business/watch-rules/{id}/pause        暂停（写）
+  POST   /api/business/watch-rules/{id}/resume       恢复（写）
+  POST   /api/business/watch-rules/{id}/cancel       取消（终态，写）
   GET    /api/business/operations/{id}               按 operation_id 找回提交结果
   GET    /api/business/operations                    最近操作（刷新后恢复用）
 """
@@ -40,7 +48,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import business_events, input_requests, store
+from server import business_events, input_requests, store, watch_rules
 from server import business_service as biz
 from server.config import get_config
 from server.deps import get_current_user
@@ -801,6 +809,186 @@ async def cancel_input_request(
             idempotency_key=key,
         )
     return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+# ——— 监控规则（DATA-09 / PR-WATCH-01） ———————————————————————————————
+#
+# 规则是用户预先保存的监控指令：创建/编辑/暂停/恢复/取消全部走幂等键 + 版本校验；
+# 阈值、方向等配置每次编辑产生新版本，计划改版不静默修改已保存阈值（契约 §9）。
+# C 阶段只开放单次触发；重复模式在 D 阶段开放，本阶段明确拒绝。
+
+
+@router.post("/sessions/{research_id}/watch-rules", status_code=201)
+async def create_watch_rule(
+    research_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    spec = body.get("spec")
+    if spec is None or not isinstance(spec, dict):
+        raise biz.ValidationError("规则配置格式不正确", fields={"spec": "需要对象"})
+    plan_raw = body.get("plan_id")
+    async with biz.business_transaction() as session:
+        outcome = await watch_rules.create_rule(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id"),
+            plan_id=_as_uuid(plan_raw, "plan_id") if plan_raw else None,
+            name=str(body.get("name") or ""),
+            spec=spec,
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.get("/watch-rules")
+async def list_watch_rules(
+    user: UserModel = Depends(get_current_user),
+    research_id: str | None = Query(default=None),
+    status: str | None = Query(default=None),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    if status is not None and status not in {
+        watch_rules.ACTIVE,
+        watch_rules.PAUSED,
+        watch_rules.CANCELLED,
+    }:
+        raise biz.ValidationError("规则状态不正确", fields={"status": "不支持该状态"})
+    async with biz.business_transaction() as session:
+        items, total = await watch_rules.list_rules(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id") if research_id else None,
+            status=status,
+            limit=limit,
+            offset=offset,
+        )
+    return {"rules": items, "total": total, "has_more": offset + len(items) < total}
+
+
+@router.get("/watch-rules/{rule_id}")
+async def get_watch_rule(
+    rule_id: str, user: UserModel = Depends(get_current_user)
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        result = await watch_rules.get_rule(
+            session, user_id=user.id, rule_id=_as_uuid(rule_id, "rule_id")
+        )
+    if result is None:
+        raise biz.NotFoundOrForbiddenError("监控规则不存在或无权访问")
+    return result
+
+
+@router.get("/watch-rules/{rule_id}/versions")
+async def list_watch_rule_versions(
+    rule_id: str,
+    user: UserModel = Depends(get_current_user),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        rows = await watch_rules.list_rule_revisions(
+            session,
+            user_id=user.id,
+            rule_id=_as_uuid(rule_id, "rule_id"),
+            limit=limit,
+            offset=offset,
+        )
+    if rows is None:
+        raise biz.NotFoundOrForbiddenError("监控规则不存在或无权访问")
+    return {"versions": rows}
+
+
+@router.patch("/watch-rules/{rule_id}")
+async def update_watch_rule(
+    rule_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_version")
+    patch = {
+        k: v for k, v in body.items() if k not in {"expected_version", "source_kind", "source_ref"}
+    }
+    async with biz.business_transaction() as session:
+        outcome = await watch_rules.update_rule(
+            session,
+            user_id=user.id,
+            rule_id=_as_uuid(rule_id, "rule_id"),
+            expected_version=int(expected) if expected is not None else None,
+            patch=patch,
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+async def _watch_rule_status_op(
+    rule_id: str,
+    body: dict[str, Any],
+    user: UserModel,
+    idempotency_key: str | None,
+    target: str,
+    scope: str,
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_version")
+    async with biz.business_transaction() as session:
+        outcome = await watch_rules.set_rule_status(
+            session,
+            user_id=user.id,
+            rule_id=_as_uuid(rule_id, "rule_id"),
+            expected_version=int(expected) if expected is not None else None,
+            target=target,
+            idempotency_key=key,
+            scope=scope,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/watch-rules/{rule_id}/pause")
+async def pause_watch_rule(
+    rule_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    return await _watch_rule_status_op(
+        rule_id, body, user, idempotency_key, watch_rules.PAUSED, "watch_rule.pause"
+    )
+
+
+@router.post("/watch-rules/{rule_id}/resume")
+async def resume_watch_rule(
+    rule_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    return await _watch_rule_status_op(
+        rule_id, body, user, idempotency_key, watch_rules.ACTIVE, "watch_rule.resume"
+    )
+
+
+@router.post("/watch-rules/{rule_id}/cancel")
+async def cancel_watch_rule(
+    rule_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    return await _watch_rule_status_op(
+        rule_id, body, user, idempotency_key, watch_rules.CANCELLED, "watch_rule.cancel"
+    )
 
 
 # ——— B 阶段业务通知（DATA-12 基础） ———————————————————————————————————
