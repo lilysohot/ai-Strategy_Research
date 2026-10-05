@@ -1,0 +1,100 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:ab81e81187c34a8e2157db5c09359f385288fe93beec98783071a4fcb1a947ad",
+    "plan_sha256": "sha256:ab81e81187c34a8e2157db5c09359f385288fe93beec98783071a4fcb1a947ad",
+    "snapshot_id": "sha256:f6fde52d19d8d9544d751dd8cce10612a37a55f680b870091476820142652df1",
+    "budget": {
+      "max_attempts": 1,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:f11b7af99574dbd032fbecca9bd870aaf153f14ed3b2067f63c8537e9a93e967",
+        "role": "claims",
+        "method": "model",
+        "input_sha256": "sha256:f11b7af99574dbd032fbecca9bd870aaf153f14ed3b2067f63c8537e9a93e967",
+        "profile_sha256": "sha256:4f0e537e2fb9bec8320c6724d8aaa16a31be70607a531745353b4988f1283164",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "review_required",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "artifact_sha256": "sha256:ec51a97539947d53dab63bbcbb6ce9c074c307ad27d758f682fc9cfe2ccf1b5d",
+        "error_codes": []
+      },
+      {
+        "task_id": "task:c63d59db8ddc33602ba3e5b20b56f0d5f575c9db033ad393eb768c799022b40a",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:c63d59db8ddc33602ba3e5b20b56f0d5f575c9db033ad393eb768c799022b40a",
+        "profile_sha256": "sha256:4f0e537e2fb9bec8320c6724d8aaa16a31be70607a531745353b4988f1283164",
+        "execution_status": "blocked",
+        "protocol_status": "not_checked",
+        "quality_status": "unassessed",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "error_codes": [
+          "CS_BUDGET_EXHAUSTED"
+        ]
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:6bc9e33baf6f9f05a8e7427993036e985a1c222db8f368967c95d61420bc130c",
+        "task_id": "task:f11b7af99574dbd032fbecca9bd870aaf153f14ed3b2067f63c8537e9a93e967",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:fbefabce8059517d3514a645ffdbc900bfa9d37711421621aca24051a14b9e25",
+        "response_sha256": "sha256:5a63196383a52cb24537700aabfe88e20a8c3b59c8270121c540448ec3c1d82f",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.0-mini",
+        "response_model": "doubao-seed-2-0-mini-260428",
+        "usage": {
+          "completion_tokens": 3109,
+          "prompt_tokens": 914,
+          "reasoning_tokens": 2105,
+          "total_tokens": 4023
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:c63d59db8ddc33602ba3e5b20b56f0d5f575c9db033ad393eb768c799022b40a:blocked"
+  ],
+  "derivations": {
+    "task:c63d59db8ddc33602ba3e5b20b56f0d5f575c9db033ad393eb768c799022b40a": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 1,
+      "reserved_attempts": 1
+    },
+    "material_items": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_relations": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

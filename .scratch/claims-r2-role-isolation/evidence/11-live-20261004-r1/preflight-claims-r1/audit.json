@@ -1,0 +1,91 @@
+{
+  "audit": "read_only_no_model_calls",
+  "batch_id": "batch:ab81e81187c34a8e2157db5c09359f385288fe93beec98783071a4fcb1a947ad",
+  "plan_consistent": true,
+  "freeze_bindings_valid": true,
+  "source_span_bindings_checked": 24,
+  "response_object_sha256": "sha256:8d0115e21687c0acb744bbde445a98c08a9306c976b7ea2d1bc69f7a33d15f8c",
+  "raw_response_binding_valid": true,
+  "publication_gate": "CS_DEPENDENCY_NOT_READY: artifact_not_publishable",
+  "facts": [
+    {
+      "text": "2026年上半年（26H1）实现总收入922.8亿元，同比增长1.3%",
+      "quality": "review",
+      "usable_for": [
+        "cite"
+      ],
+      "reasons": [
+        "period_ambiguous",
+        "subject_ambiguous",
+        "metric_not_registered",
+        "subject_not_anchored",
+        "subject_missing",
+        "source_attribution_dependency",
+        "source_qualified_context_requires_review"
+      ]
+    },
+    {
+      "text": "2026年上半年（26H1）实现归母净利润445.2亿元，同比下降2.0%",
+      "quality": "review",
+      "usable_for": [
+        "cite"
+      ],
+      "reasons": [
+        "period_ambiguous",
+        "subject_ambiguous",
+        "subject_not_anchored",
+        "subject_missing",
+        "qualifier_definition_unverified",
+        "source_attribution_dependency",
+        "source_qualified_context_requires_review"
+      ]
+    },
+    {
+      "text": "2026年第二季度（单Q2）实现总收入375.8亿元，同比下降5.2%",
+      "quality": "review",
+      "usable_for": [
+        "cite"
+      ],
+      "reasons": [
+        "period_ambiguous",
+        "subject_ambiguous",
+        "metric_not_registered",
+        "subject_not_anchored",
+        "subject_missing",
+        "source_attribution_dependency",
+        "source_qualified_context_requires_review"
+      ]
+    },
+    {
+      "text": "2026年第二季度（单Q2）实现归母净利润172.7亿元，同比下降6.9%",
+      "quality": "review",
+      "usable_for": [
+        "cite"
+      ],
+      "reasons": [
+        "period_ambiguous",
+        "subject_ambiguous",
+        "subject_not_anchored",
+        "subject_missing",
+        "qualifier_definition_unverified",
+        "source_attribution_dependency",
+        "source_qualified_context_requires_review"
+      ]
+    }
+  ],
+  "findings": [
+    "task_not_terminal:task:c63d59db8ddc33602ba3e5b20b56f0d5f575c9db033ad393eb768c799022b40a:blocked"
+  ],
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}
