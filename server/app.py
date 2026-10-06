@@ -17,11 +17,12 @@ import asyncio
 import contextlib
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from datetime import timedelta
 
 from fastapi import FastAPI, Response, status
 
 from server import business_service as biz
-from server import store, uploads
+from server import monitor, store, uploads
 from server.config import get_config
 from server.dispatch_outbox import dispatch_loop
 from server.orchestrator import get_orchestrator
@@ -70,7 +71,26 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     dispatch_task: asyncio.Task[None] | None = None
     if readiness.ok and get_config().dispatch_enabled:
         dispatch_task = asyncio.create_task(dispatch_loop(get_orchestrator()))
+    # DATA-10: 监控常驻轮询（独立于 API 请求协程与浏览器）。默认关闭，部署时显式开启；
+    # 行情源不可用（缺凭据等）时保持"未启用/待核定"，不伪装实时。
+    monitor_task: asyncio.Task[None] | None = None
+    if readiness.ok and get_config().monitor_enabled:
+        source = monitor.build_quote_source()
+        if source is not None:
+            monitor_task = asyncio.create_task(
+                monitor.monitor_loop(
+                    source,
+                    poll_seconds=get_config().monitor_poll_seconds,
+                    max_rules=get_config().monitor_batch_rules,
+                    max_symbols=get_config().monitor_max_symbols,
+                    max_gap=timedelta(seconds=get_config().monitor_max_gap_seconds),
+                )
+            )
     yield
+    if monitor_task is not None:
+        monitor_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await monitor_task
     if dispatch_task is not None:
         dispatch_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):

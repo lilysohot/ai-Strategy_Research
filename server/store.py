@@ -650,6 +650,13 @@ class WatchRule(Base):
     last_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_valid_quote_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_valid_quote_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    #: 单次触发资格：True=本版本仍可触发一次；触发后置 False，分析失败不恢复（DATA-10）。
+    armed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    #: 最近一次用于穿越判定的已核验价格（基线）。编辑（新版本）时复位，不复用旧版基线。
+    baseline_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    last_triggered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    #: 最近一次未触发原因（单次资格已消耗 / 冷却中穿越等），供 UI 展示，不反复建分析。
+    last_suppressed_reason: Mapped[str | None] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -699,6 +706,80 @@ class WatchRuleRevision(Base):
     source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
     source_ref: Mapped[str | None] = mapped_column(String)
     changed_fields: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WatchObservation(Base):
+    """监控判定的观测真源（DATA-10）。
+
+    与 ``plugins.market.Quote``（float + 适配器可回退本地时间）分开：本表保存判定用到的
+    **精确价格**、供应商观测时间/本地接收时间、时间来源与可信度。``observed_at_ms`` 为
+    ``None`` 表示供应商未提供可靠观测时间（``time_source=unknown``），不得以本地 now 冒充。
+    """
+
+    __tablename__ = "watch_observations"
+    __table_args__ = (
+        # 去重身份：同规则、同时点、同价格的重复投递只记一次，不重复判定。
+        UniqueConstraint("dedup_hash", name="uq_watch_observations_dedup"),
+        Index("ix_watch_observations_rule_time", "rule_id", "received_at_ms"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    rule_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_rules.id"), nullable=False)
+    rule_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str] = mapped_column(String, nullable=False)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    quote_basis: Mapped[str] = mapped_column(String, nullable=False, default="last")
+    #: 判定用精确价格（观测归一到最小报价单位或保留原值，不用 float 参与比较）。
+    price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    observed_at_ms: Mapped[int | None] = mapped_column(BigInteger)
+    received_at_ms: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    time_source: Mapped[str] = mapped_column(String, nullable=False, default="vendor")
+    #: 真实适配器只能给 float 时置 True：值已经过 float 往返，精度受限但判定仍可用。
+    precision_limited: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    source_ref: Mapped[str | None] = mapped_column(String)
+    dedup_hash: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WatchEvent(Base):
+    """监控触发事实（DATA-10 创建；DATA-11 消费为自动分析 Run）。
+
+    事件唯一身份 = 规则版本 + 一次触发资格：C 阶段单次模式一个规则版本至多一个事件，
+    重复投递与并发判定不重复消耗资格。``pending`` 表示等待 DATA-11 调度。
+    """
+
+    __tablename__ = "watch_events"
+    __table_args__ = (
+        UniqueConstraint("rule_id", "rule_version", name="uq_watch_events_rule_version"),
+        Index("ix_watch_events_research_status", "research_id", "status"),
+        Index("ix_watch_events_user_created", "user_id", "created_at"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    rule_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_rules.id"), nullable=False)
+    rule_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str] = mapped_column(String, nullable=False)
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    quote_basis: Mapped[str] = mapped_column(String, nullable=False, default="last")
+    direction: Mapped[str] = mapped_column(String, nullable=False)
+    threshold_low: Mapped[Decimal | None] = mapped_column(MONEY)
+    threshold_high: Mapped[Decimal | None] = mapped_column(MONEY)
+    prev_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    observed_at_ms: Mapped[int | None] = mapped_column(BigInteger)
+    received_at_ms: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    time_source: Mapped[str] = mapped_column(String, nullable=False, default="vendor")
+    trigger_reason: Mapped[str] = mapped_column(String, nullable=False)
+    #: pending=待 DATA-11 调度；终态由 DATA-11 维护（dispatching/running/completed/failed...）。
+    status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
+    detail_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 

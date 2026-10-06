@@ -203,13 +203,33 @@ master key 或 JWT key，认证解析失败时清除旧物化上下文。新增�
 | 生命周期 | `server/watch_rules.py`：创建/编辑（新版本）/暂停/恢复/取消，全部 expected_version + 幂等键 + 归属校验；改版不静默改阈值（无关编辑沿用旧版本冻结值）；计划重绑校验同研究归属；取消为终态（409 rule_cancelled）；`record_check` 供 DATA-10 记录最近检查与有效行情时间 |
 | C 阶段边界 | 仅 `trigger_mode=single`；`repeat` 与冷却/重新布防等 D 阶段字段明确拒绝（validation_error / unknown_field_rejected），不静默接受 |
 | HTTP | `/api/business/sessions/{rid}/watch-rules` 创建；`/watch-rules` 列表（按研究/状态）；`/{id}` 详情；`/{id}` 编辑；`/{id}/versions` 历史；`/{id}/pause|resume|cancel` |
-| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**136 passed**（原 113 项 + DATA-09 定向 23 项）；幂等重放、版本冲突、双用户隔离、重启后状态存在、版本行不可变均通过 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**138 passed**（原 113 项 + DATA-09 定向 25 项）；幂等重放、版本冲突、双用户隔离、重启后状态存在、版本行不可变均通过 |
 | 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors（存量 7 项为未改动文件既有）；import smoke stage 1：386/386；symbol closure：484 文件无缺失 |
 | SQLite 路径 | `init_db()` create_all 建出 `watch_rules`/`watch_rule_revisions`，不可变触发器随建（`immutable_watch_rule_revisions_*`） |
 | 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
 
 本批没有部署 API，也没有迁移生产库。行情判定（穿越/去重/重新布防）、事件创建与自动分析调度
 属 DATA-10/11，规则模型与生命周期只保证"重启后规则及状态存在、操作可追溯、C 只开放单次模式"。
+
+### 4.6 DATA-10 行情判定与防重复唤醒批次（2026-10-03）
+
+执行记录见 [DATA-10 issue](../../.scratch/web-business-repairs/issues/05-data10-watch-evaluation.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data10-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `frontier-business-data10-20261003`（复用 `pg18-zhvector`）；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1:55434` 及 `/tmp/frontier-business-data10-runs`；未连接或迁移现有业务库 |
+| 观测契约 | `server/watch_eval.py::MonitoringObservation`：精确 Decimal 价格 + `observed_at_ms`/`received_at_ms` 分开 + `time_source(vendor\|unknown)` + `precision_limited`；`QuoteSource` 端口与 `FuyaoQuoteSource` 保守包装（float 源统一标 unknown + precision_limited，不把 now 冒充实时新行情） |
+| 判定引擎 | `condition_met`/`classify_cross`：上穿 `prev<thr<=cur`、下穿、进入区间；精确比较不用浮点相等；`_decide_trigger` 单次模式状态机（创建时已达标 `trigger_now/wait_requalify`、断线恢复 `trigger_once/wait_requalify`、常规穿越） |
+| 模型与迁移 | `0015_watch_monitoring`：`watch_rules` 追加 `armed/baseline_price/last_triggered_at/last_suppressed_reason`；新增 `watch_observations`（`dedup_hash` 唯一）与 `watch_events`（`(rule_id, rule_version)` 唯一 = 事件身份，status=pending 待 DATA-11）；0015→0014 降级再升回 head 通过；编辑（新版本）复位 armed/baseline，改版不复用旧版基线与触发资格 |
+| 原子与防重 | `watch_eval.evaluate`：观测/资格消耗/事件同一事务；重复投递去重、乱序/陈旧忽略、暂停/取消不判定、标的/币种不符不判定；并发判定经 `FOR UPDATE` + 事件唯一约束只消耗一次资格 |
+| 常驻轮询 | `server/monitor.py::monitor_tick/monitor_loop` + 配置 `monitor_*`（默认 `monitor_enabled=false`，部署显式开启；DATA-00 §5 后台进程登记），lifespan 接入；监控链不调用 LLM（模块级无框架/LLM import 断言） |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**156 passed**（原 138 项 + DATA-10 定向 18 项）；上穿/下穿/区间、阈值附近往返一次、一直越线不反复、重启不重复、乱序/重复忽略、暂停/取消不判定、过期不触发、并发单次消耗、断线恢复、改版重新布防均通过 |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors（存量项未改动）；import smoke stage 1：386/386；symbol closure：484 文件无缺失；SQLite create_all 含新表与 armed 列 |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。真实供应商的盘中时效/权限/报价口径核验与轮询容量验证
+仍属 DATA-10 供应商项（未核验前保持待核定）；事件→自动分析 Run 的调度属 DATA-11。
 
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 

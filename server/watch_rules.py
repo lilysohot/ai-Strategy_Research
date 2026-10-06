@@ -307,6 +307,11 @@ def rule_view(rule: store.WatchRule, rev: store.WatchRuleRevision | None) -> dic
         "last_check_at": _iso(rule.last_check_at),
         "last_valid_quote_at": _iso(rule.last_valid_quote_at),
         "last_valid_quote_price": _decimal_text(rule.last_valid_quote_price),
+        # DATA-10 触发状态：资格是否可用、最近基线价、最近触发/抑制原因。
+        "armed": rule.armed,
+        "baseline_price": _decimal_text(rule.baseline_price),
+        "last_triggered_at": _iso(rule.last_triggered_at),
+        "last_suppressed_reason": rule.last_suppressed_reason,
         "created_at": _iso(rule.created_at),
         "updated_at": _iso(rule.updated_at),
     }
@@ -486,19 +491,29 @@ async def update_rule(
                     raise biz.NotFoundOrForbiddenError("计划不存在或不属于该研究")
         # 阈值依赖合并后的方向：只有本次提交触碰 threshold 才重新换算，
         # 否则沿用旧版本的已冻结阈值（计划改版等无关修改不静默改变阈值）。
+        direction = merged["direction"]
         if threshold_raw is _UNSET:
             low, high = (prev.threshold_low, prev.threshold_high) if prev else (None, None)
+            if direction == "range":
+                # 切换为区间方向但未同时提交 low/high：旧值可能是 up/down 遗留，
+                # 不得静默复用出非法区间（low 缺失或 low >= high）。
+                if low is None or high is None or not low < high:
+                    raise biz.ValidationError(
+                        "区间阈值不完整",
+                        fields={
+                            "threshold": "切换为区间方向后需同时提供 {low, high} 且 low < high"
+                        },
+                    )
+            else:
+                # up/down 只保留单阈值；range 遗留的 high 不进入 up/down 版本。
+                high = None
         else:
-            low, high = _finalize_threshold(merged["direction"], threshold_raw)
+            low, high = _finalize_threshold(direction, threshold_raw)
         # 版本行的阈值列由显式参数给出，不再从 merged 展开，避免重复关键字。
         merged.pop("threshold_low", None)
         merged.pop("threshold_high", None)
 
-        changed = sorted(
-            key
-            for key in ("symbol", "market", "currency", "quote_basis", "direction", "action")
-            if key in columns
-        )
+        changed = sorted(set(patch) & SPEC_KEYS)
         new_version = rule.current_version + 1
         session.add(
             store.WatchRuleRevision(
@@ -518,6 +533,10 @@ async def update_rule(
         rule.current_version = new_version
         if rule.plan_id != plan_id:
             rule.plan_id = plan_id
+        # 改版不复用旧版报价基线与触发资格：新版本重新布防（DATA-10 消费）。
+        rule.armed = True
+        rule.baseline_price = None
+        rule.last_suppressed_reason = None
         await session.flush()
         _append_audit(
             session,

@@ -295,6 +295,59 @@ async def test_update_rule_missing_expected_version(case) -> None:
     assert "expected_version" in response.json()["error"]["fields"]
 
 
+async def test_update_rule_direction_change_requires_threshold(case) -> None:
+    # 创建区间规则，编辑改为 up，再改回 range：不能静默复用旧 high/low 出非法区间。
+    rule_id = (
+        await create_rule(
+            case, spec={**RULE, "direction": "range", "threshold": {"low": "18", "high": "20"}}
+        )
+    ).json()["rule_id"]
+
+    to_up = await case.client.patch(
+        f"/api/business/watch-rules/{rule_id}",
+        json={"expected_version": 1, "direction": "up", "threshold": "25"},
+        headers=headers(case),
+    )
+    assert to_up.status_code == 200, to_up.text
+    detail = await case.client.get(f"/api/business/watch-rules/{rule_id}", headers=case.headers)
+    # up 版本只保留单阈值；range 遗留的 high 不得进入。
+    assert detail.json()["direction"] == "up"
+    assert detail.json()["threshold"] == "25"
+
+    back_to_range = await case.client.patch(
+        f"/api/business/watch-rules/{rule_id}",
+        json={"expected_version": 2, "direction": "range"},
+        headers=headers(case),
+    )
+    assert back_to_range.status_code == 400, back_to_range.text
+    assert "threshold" in back_to_range.json()["error"]["fields"]
+
+    # up → range 同样必须显式给出 low/high，不能复用 up 的单值。
+    rule2 = (await create_rule(case, name="上穿规则")).json()["rule_id"]
+    response = await case.client.patch(
+        f"/api/business/watch-rules/{rule2}",
+        json={"expected_version": 1, "direction": "range"},
+        headers=headers(case),
+    )
+    assert response.status_code == 400, response.text
+    assert "threshold" in response.json()["error"]["fields"]
+
+
+async def test_update_rule_records_all_changed_fields(case) -> None:
+    rule_id = (await create_rule(case)).json()["rule_id"]
+    response = await case.client.patch(
+        f"/api/business/watch-rules/{rule_id}",
+        json={"expected_version": 1, "threshold": "22.00", "task": "新分析任务"},
+        headers=headers(case),
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["changed_fields"] == ["task", "threshold"]
+    versions = await case.client.get(
+        f"/api/business/watch-rules/{rule_id}/versions", headers=case.headers
+    )
+    assert versions.json()["versions"][0]["changed_fields"] == ["task", "threshold"]
+
+
 async def test_update_rule_rebinds_plan(case) -> None:
     rule_id = (await create_rule(case)).json()["rule_id"]
     response = await case.client.patch(

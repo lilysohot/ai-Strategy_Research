@@ -296,8 +296,9 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 （创建/编辑新版本/暂停/恢复/取消，全部 expected_version + 幂等键 + 归属校验；`record_check`
 供 DATA-10 记录最近检查与有效行情时间），HTTP 路由见 `server/routes/business.py`
 （`/api/business/.../watch-rules` 8 个端点）。C 阶段仅开放 `trigger_mode=single`，`repeat`
-及冷却/重新布防字段明确拒绝。真 PG 验收见 `tests/pg/test_watch_rules.py`（23 项，全套 136
-通过，证据见[环境基线](web-business-data-env-baseline.md) §4.5）。
+及冷却/重新布防字段明确拒绝。真 PG 验收见 `tests/pg/test_watch_rules.py`（25 项，全套 138
+通过，证据见[环境基线](web-business-data-env-baseline.md) §4.5；回溯复核修复方向切换残留
+旧阈值与 changed_fields 不完整两项）。
 行情判定、事件与自动分析调度仍属 DATA-10/11。
 
 ### DATA-10 行情判定与防重复唤醒
@@ -324,6 +325,21 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 **验收**：固定时钟和行情序列覆盖 19.99→20.02 上穿、10 分钟阈值附近往返、一直越线、
 冷却结束未布防、回落再穿越、暂停/恢复、乱序重放与重启。示例价格/时间只用于测试，不是默认参数。
 覆盖 AC-11、12、15、16、21；监控链模型调用数为零。
+
+**当前产物（2026-10-03）**：观测契约 `server/watch_eval.py::MonitoringObservation`
+（精确 Decimal 价格 + observed/received 毫秒时间 + `time_source(vendor|unknown)` +
+`precision_limited`）与 `QuoteSource`/`FuyaoQuoteSource` 保守包装（float 源不宣称实时）；
+判定引擎 `condition_met`/`classify_cross`（上穿 `prev<thr<=cur`、下穿、进入区间，精确比较
+不用浮点相等）与 `_decide_trigger` 单次模式状态机（创建时已达标/断线恢复/常规穿越）。
+模型与迁移 `server/alembic/versions/0015_watch_monitoring.py`：`watch_rules` 追加
+`armed/baseline_price/last_triggered_at/last_suppressed_reason`，新增 `watch_observations`
+（去重唯一）与 `watch_events`（`(rule_id, rule_version)` 唯一 = 事件身份，pending 待
+DATA-11）；编辑（新版本）复位 armed/baseline。`watch_eval.evaluate` 原子保存观测/资格消耗/
+事件；重复投递去重、乱序忽略、暂停/取消不判定、并发只消耗一次资格。常驻轮询
+`server/monitor.py` + `monitor_*` 配置（默认关闭，部署显式开启）。真 PG 验收见
+`tests/pg/test_watch_eval.py`（18 项，全套 156 通过，证据见[环境基线](web-business-data-env-baseline.md)
+§4.6；回溯复核补有效期强制检查与规则视图触发状态）。真实供应商时效/权限/报价口径核验与
+容量验证仍待核定；事件→Run 调度属 DATA-11。
 
 ### DATA-11 自动分析、合并与预算
 

@@ -55,3 +55,13 @@ Blocked by: 03
 迁移降级/升级往返通过；Ruff、Pyright、import_smoke stage 1（386/386）、symbol closure
 （484 文件）通过；SQLite create_all 路径含不可变触发器正常。证据见
 `../evidence/data09-pg.log` 与环境基线 §4.5。
+
+2026-10-03 回溯复核：发现并修复两项遗漏后 **25 passed**（全套 138 passed）：
+1. **方向切换残留旧阈值**：编辑只改 `direction` 时，`range→up/down` 会把旧 `threshold_high`
+   带入新版本；`up/down→range` 会复用旧 low/high 形成未校验的非法区间。现改为：切到
+   `range` 但未同时提交 low/high 时明确 `400 validation_error`（需显式给出区间）；
+   up/down 版本强制 `high=None`。补充 `test_update_rule_direction_change_requires_threshold`。
+2. **changed_fields 不完整**：编辑回执只列 6 个核心键，漏掉 `threshold/task/budget/expires_at`
+   等。现改为 `sorted(set(patch) & SPEC_KEYS)`，版本历史同样记录全部变更键。
+   补充 `test_update_rule_records_all_changed_fields`。
+其余复核项（幂等/归属/版本冲突/重启持久/终态 409/record_check/迁移往返）无剩余阻断项。

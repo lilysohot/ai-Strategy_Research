@@ -100,6 +100,16 @@ class ServerConfig(BaseSettings):
     # execution must not overlap an old one that is still alive.
     dispatch_stop_timeout_seconds: float = 30.0
 
+    # — Monitor (DATA-10) ————————————————————————————————
+    # 监控常驻轮询默认关闭：部署时显式开启（DATA-00 §5 后台进程登记）。监控链不调用 LLM。
+    monitor_enabled: bool = False
+    monitor_poll_seconds: float = 60.0
+    # 相邻观测间隔超过该值视为断线缺口：恢复后首个报价按 disconnect_recovery 处理。
+    monitor_max_gap_seconds: float = 300.0
+    # 每轮最多判定的规则数与去重后标的数（轮询容量上限，防止拖垮行情额度）。
+    monitor_batch_rules: int = 50
+    monitor_max_symbols: int = 20
+
     # — Uploads (T2.10) ——————————————————————————————
     # Per-file and per-run caps for multipart uploads. These bound what one
     # request can write into a run's inputs dir; the agent only ever reads them.
