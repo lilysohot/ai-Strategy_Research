@@ -118,6 +118,12 @@ class ServerConfig(BaseSettings):
     # 最大排队延迟（秒）；0 = 发布前未冻结，不强制（UI 展示"待定"，不静默填示例值）。
     auto_max_delay_seconds: float = 0.0
 
+    # — Restore / migration mode (DATA-14) ————————————————
+    # 恢复/迁移模式：默认禁止派发与行情消费（dispatch/monitor/auto 后台循环与手动提交 Run
+    # 都拒绝）；核对数据库备份水位、文件清单与外部调用尝试后，**显式关闭**才恢复后台任务，
+    # 避免回滚后重复付费分析。恢复后待处理监控事件由调度器按有效期/取消状态重新裁决。
+    restore_mode: bool = False
+
     # — Uploads (T2.10) ——————————————————————————————
     # Per-file and per-run caps for multipart uploads. These bound what one
     # request can write into a run's inputs dir; the agent only ever reads them.

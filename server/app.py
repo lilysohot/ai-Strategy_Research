@@ -69,12 +69,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # It lives with the API process (start/stop with lifespan); multi-process
     # deployments share dispatching safely via SKIP LOCKED claims + leases.
     dispatch_task: asyncio.Task[None] | None = None
-    if readiness.ok and get_config().dispatch_enabled:
+    if readiness.ok and not get_config().restore_mode and get_config().dispatch_enabled:
         dispatch_task = asyncio.create_task(dispatch_loop(get_orchestrator()))
     # DATA-10: 监控常驻轮询（独立于 API 请求协程与浏览器）。默认关闭，部署时显式开启；
     # 行情源不可用（缺凭据等）时保持"未启用/待核定"，不伪装实时。
     monitor_task: asyncio.Task[None] | None = None
-    if readiness.ok and get_config().monitor_enabled:
+    if readiness.ok and not get_config().restore_mode and get_config().monitor_enabled:
         source = monitor.build_quote_source()
         if source is not None:
             monitor_task = asyncio.create_task(
@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
     # DATA-11: 事件→自动 Run 的调度循环（默认关闭，部署显式开启；DATA-00 §5 登记）。
     scheduler_task: asyncio.Task[None] | None = None
-    if readiness.ok and get_config().auto_enabled:
+    if readiness.ok and not get_config().restore_mode and get_config().auto_enabled:
         scheduler_task = asyncio.create_task(
             watch_scheduler.scheduler_loop(
                 poll_seconds=get_config().auto_poll_seconds,

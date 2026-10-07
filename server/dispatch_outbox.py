@@ -30,7 +30,7 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import store, uploads
+from server import restore_check, store, uploads
 from server.config import get_config
 
 logger = logging.getLogger(__name__)
@@ -436,6 +436,10 @@ async def dispatch_loop(orch: Any) -> None:
     """常驻派发循环；随 API 进程生命周期启停（见 ``app.lifespan``）。"""
     cfg = get_config()
     while True:
+        # 恢复/迁移模式：禁止派发（DATA-14）。配置按 mtime 热加载，切换即停。
+        if not restore_check.background_tasks_allowed():
+            await asyncio.sleep(cfg.dispatch_poll_seconds)
+            continue
         try:
             await dispatch_once(orch)
         except asyncio.CancelledError:

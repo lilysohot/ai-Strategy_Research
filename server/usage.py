@@ -24,6 +24,7 @@ what makes a cost board under-attribute write spend, so we keep them apart.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 from server.relay import trajectory_records
@@ -140,3 +141,67 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     if not aggregate["llm_calls"]:
         return {**aggregate, "status": "partial"}
     return {**aggregate, "status": "complete"}
+
+
+def usage_summary_for_runs(runs: Iterable[Any]) -> dict[str, Any]:
+    """Aggregate metering across a set of runs (DATA-15 / AC-20).
+
+    The cost comparison contract compares the *same* task set across variants,
+    so this reports — per run and in totals — the model call count, input /
+    output / total tokens, **cache read and cache write separately** (the AC-20
+    rule: never collapse them into one "cached" number), reasoning tokens, and
+    the wall-clock duration when the Run row carries both endpoints. Rows with
+    no usage at all still appear: an unmetered run contributes zero but must be
+    visible in the comparison instead of silently dropping out of it.
+
+    Pure read-side helper over Run rows (or rows already carrying the metered
+    columns); it never re-reads trajectories and never writes.
+    """
+    per_run: list[dict[str, Any]] = []
+    totals: dict[str, int] = {name: 0 for name in _TOKEN_FIELDS}
+    total_calls = 0
+    total_duration = 0.0
+    for run in runs:
+        prompt = int(getattr(run, "prompt_tokens", 0) or 0)
+        completion = int(getattr(run, "completion_tokens", 0) or 0)
+        total = int(getattr(run, "total_tokens", 0) or 0)
+        cache_read = int(getattr(run, "cache_read_tokens", 0) or 0)
+        cache_write = int(getattr(run, "cache_write_tokens", 0) or 0)
+        reasoning = int(getattr(run, "reasoning_tokens", 0) or 0)
+        calls = int(getattr(run, "llm_calls", 0) or 0)
+
+        duration: float | None = None
+        started = getattr(run, "started_at", None)
+        finished = getattr(run, "finished_at", None)
+        if started is not None and finished is not None:
+            duration = max(0.0, (finished - started).total_seconds())
+            total_duration += duration
+
+        per_run.append(
+            {
+                "run_id": str(getattr(run, "id", "")),
+                "status": getattr(run, "status", None),
+                "llm_calls": calls,
+                "prompt_tokens": prompt,
+                "completion_tokens": completion,
+                "total_tokens": total,
+                "cache_read_tokens": cache_read,
+                "cache_write_tokens": cache_write,
+                "reasoning_tokens": reasoning,
+                "duration_s": duration,
+                "usage_status": (getattr(run, "usage_json", None) or {}).get("status"),
+            }
+        )
+        totals["prompt_tokens"] += prompt
+        totals["completion_tokens"] += completion
+        totals["total_tokens"] += total
+        totals["cache_read_tokens"] += cache_read
+        totals["cache_write_tokens"] += cache_write
+        totals["reasoning_tokens"] += reasoning
+        total_calls += calls
+
+    return {
+        "run_count": len(per_run),
+        "runs": per_run,
+        "totals": {**totals, "llm_calls": total_calls, "total_duration_s": total_duration},
+    }

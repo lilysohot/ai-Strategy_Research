@@ -18,7 +18,7 @@ from typing import Any
 from sqlalchemy import select
 
 from server import business_service as biz
-from server import store, watch_eval, watch_rules
+from server import restore_check, store, watch_eval, watch_rules
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +119,10 @@ async def monitor_loop(
 ) -> None:
     """常驻轮询主循环；异常不退出，记录后等待下一轮。"""
     while True:
+        # 恢复/迁移模式：禁止行情消费（DATA-14）。配置按 mtime 热加载，切换即停。
+        if not restore_check.background_tasks_allowed():
+            await asyncio.sleep(poll_seconds)
+            continue
         try:
             await monitor_tick(
                 quote_source,

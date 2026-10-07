@@ -270,6 +270,69 @@ master key 或 JWT key，认证解析失败时清除旧物化上下文。新增�
 本批没有部署 API，也没有迁移生产库。通知设置按"存储偏好 + 显式过滤"落地（写入不静默丢弃，
 UI 按 settings/过滤条件展示）；安全类通知不因设置缺失而漏存。
 
+### 4.9 DATA-13 归档、删除与取消联动批次（2026-10-03）
+
+执行记录见 [DATA-13 issue](../../.scratch/web-business-repairs/issues/08-data13-archive-delete.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data13-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `frontier-business-data13-20261003`（复用 `pg18-zhvector`）；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1:55439` 及 `/tmp/frontier-business-data13-runs`；未连接或迁移现有业务库 |
+| 归档服务 | `server/business_archive.py`：`archive_account`/`archive_plan`（幂等 + 审计；暂停引用它们的监控规则，`last_suppressed_reason=object_archived`）、`delete_research`（单一事务级联：取消活动规则、过期待派发事件 research_deleted、取消待补数、作废待派发 outbox PENDING/RETRYABLE_FAILED→ABANDONED、归档该研究所属计划、软删除会话；共享账户/成交不随研究删除 AC-17）。全部 `run_write` 幂等键 + 归属校验，重复删除/归档返回幂等回执 |
+| 调度兜底 | `watch_scheduler.schedule_event` 增补 `ObjectArchivedError` → 事件过期 object_archived，不无限重试 |
+| 端点 | `POST /api/business/accounts/{id}/archive`、`POST /api/business/plans/{id}/archive`、`DELETE /api/business/sessions/{rid}`（业务级联；通用 `/api/sessions/{id}` 删除保持原样） |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**187 passed**（原 179 项 + DATA-13 定向 8 项）；归档幂等+暂停规则、归档停止新采用、删除级联（规则/事件/补数/outbox/计划/会话）、重复删除幂等、共享账户保留、通知引用已删对象可定位、已建 Run/快照保留、所有者隔离均通过 |
+| 迁移 | 本批无新增迁移（复用 accounts/plans.archived、sessions.deleted_at、规则/事件/outbox 状态列） |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors；import smoke stage 1：386/386；symbol closure：484 文件无缺失 |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。软删除 ≠ 擦除：业务事实/快照/审计/事件引用一律保留；
+运行中 worker 让其完成当前 Run（不再启动新任务）。物理删除范围、保留策略与联合备份恢复属
+DATA-14/15。
+
+测试时代码基线：HEAD `d419521ab7220a61b44223d0eef9e9e472313f32`（DATA-12 提交）＋未提交
+工作区改动（DATA-13—15 及早期修复均未提交，回溯时以工作区文件为准）。
+
+### 4.10 DATA-14 备份、安全与文件引用批次（2026-10-07）
+
+执行记录见 [DATA-14 issue](../../.scratch/web-business-repairs/issues/09-data14-restore.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data14-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `pg-data14-test`（复用 `pg18-zhvector`）；独立库 `data14_test`、角色 `biz_test14`、`localhost:55440`；逻辑恢复形态（原实例独立库 + 临时 Run 根），未连接或迁移现有业务库 |
+| 恢复核对 | `server/restore_check.py`：`check_restore()` 一次核对数据库备份水位（alembic head）、Run 目录清单（inputs/ws/ws-outputs/spill/run/diff/staging + 非 queued Run 轨迹）、8 组跨表孤立引用（含无外键的 `InputRequest.watch_event_id`）、外部调用水位（watch_event_runs/budget_runs_created/run_dispatch_rows/pending_watch_events，防回滚后重复付费）、用户 LLM 密钥解密状态。AC-18：报告不可读时 schema 水位先返、分节失败记入 `errors` 不崩溃；CLI `python -m server.restore_check [runs_root]` exit 0/1 |
+| 恢复模式 | `restore_mode`（默认 False，SERVER_ 前缀）：dispatch/monitor/scheduler 三循环见模式即停、lifespan 不启动、`POST /api/runs` 503；显式关闭后循环恢复、提交恢复 202；待处理监控事件不重播，按有效期/取消状态重新裁决 |
+| 敏感数据 | 归档/规则变更审计 detail 仅含对象标识与字段名，无资金/持仓正文（测试锁定）；服务端日志 grep 核对无资金正文输出 |
+| PG 回归 | `pytest tests/pg -q`：**199 passed**（原 187 项 + DATA-14 定向 12 项，含 AC-18 旧备份缺表报告场景）；证据 `evidence/data14-pg.log` |
+| 迁移 | 本批无新增迁移 |
+| 仓库门禁 | Ruff check/format 通过；Pyright 本批文件 0 错误（全量 7 个预存错误在未改动的已提交文件，非本批引入）；import smoke stage 1：386/386；symbol closure：484 文件无缺失；`git diff --check` 通过 |
+| 清理 | 临时容器 `pg-data14-test` 与测试库在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+测试时代码基线：HEAD `d419521ab7220a61b44223d0eef9e9e472313f32`（DATA-12 提交）＋未提交
+工作区改动（DATA-13—15 及早期修复均未提交）。开放缺口：业务数据（快照/审计/事件/版本）
+保留期限与物理删除流程未定义（见 [DATA-14 issue](../../.scratch/web-business-repairs/issues/09-data14-restore.md) 补记）。
+
+### 4.11 DATA-15 分阶段联合验收与成本批次（2026-10-07）
+
+执行记录见 [DATA-15 issue](../../.scratch/web-business-repairs/issues/10-data15-joint-acceptance.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data15-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `pg-data15-test`（复用 `pg18-zhvector`）；独立库 `data15_test`、角色 `biz_test15`、`localhost:55441`；未连接或迁移现有业务库 |
+| 端到端联合链路 | `tests/pg/test_data15_joint.py`：路由提交（PG 快照冻结）→ outbox 领取 → 真实 Orchestrator 派发真实 worker 子进程（用户 LLM 配置真实解密注入 MockLLMServer，mock 同时兜底 OPENAI_* 环境变量防真实外呼）→ 轨迹/diff/目录树落盘 → 终态（`stopped_by=no_tool`→stopped，T2.8 映射）→ 用量计量 → 快照不变（AC-06）→ 活体生成物通过 DATA-14 恢复核对（AC-18） |
+| 成本计量（AC-20） | `server/usage.py::usage_summary_for_runs`：多 Run 汇总模型调用/输入/输出/**缓存读写分列**/墙钟延迟，零用量 Run 可见不丢弃；缓存读写分列测试覆盖新旧 usage 别名 |
+| 既有证据映射 | 领取后崩溃及恢复 = test_run_dispatch 租约回收/不重投已启动；幂等重放/原子提交 = test_run_dispatch + test_business_repairs；越权/绕过 = 各业务测试所有者隔离用例；监控零模型/预算/防重复唤醒 = DATA-10/11 |
+| PG 回归 | `pytest tests/pg -q`：**202 passed**（原 199 项 + DATA-15 定向 3 项）；证据 `evidence/data15-pg.log` |
+| 迁移 | 本批无新增迁移 |
+| 仓库门禁 | Ruff check/format 通过；Pyright 本批文件 0 错误；import smoke stage 1：386/386；symbol closure：484 文件无缺失；`git diff --check` 通过 |
+| 登记缺口 | UI-11 浏览器完整流程（UI 任务侧）；AC-20 输入正确率与真实费用、供应商协议/行情时效实测（需真实凭据的受控试运行）；重复规则/冷却/重新布防（D 阶段）；业务数据保留期限与物理删除流程未定义（DATA-13 转出，发布前冻结归属 DATA-14） |
+| 清理 | 临时容器 `pg-data15-test` 与测试库在验收结束后移除 |
+
+测试时代码基线：HEAD `d419521ab7220a61b44223d0eef9e9e472313f32`（DATA-12 提交）＋未提交
+工作区改动（DATA-13—15 及早期修复均未提交）。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：

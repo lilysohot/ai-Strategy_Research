@@ -36,6 +36,9 @@
   GET    /api/business/notifications/settings         通知设置
   PUT    /api/business/notifications/settings         更新通知设置
   GET    /api/business/events/read-progress           阅读进度（最近读取游标）
+  POST   /api/business/accounts/{id}/archive          归档账户（停止新采用+暂停相关监控）
+  POST   /api/business/plans/{id}/archive             归档计划（停止新采用+暂停相关监控）
+  DELETE /api/business/sessions/{rid}                 删除研究（级联取消/过期/软删除）
   GET    /api/business/operations/{id}               按 operation_id 找回提交结果
   GET    /api/business/operations                    最近操作（刷新后恢复用）
 """
@@ -53,7 +56,15 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import business_events, input_requests, store, watch_eval, watch_rules, watch_scheduler
+from server import (
+    business_archive,
+    business_events,
+    input_requests,
+    store,
+    watch_eval,
+    watch_rules,
+    watch_scheduler,
+)
 from server import business_service as biz
 from server.config import get_config
 from server.deps import get_current_user
@@ -1178,6 +1189,70 @@ async def business_event_read_progress(
         "read_progress": read_progress,
         "last_read_at": last_read_at.isoformat() if last_read_at else None,
     }
+
+
+# ——— 归档、删除与取消联动（DATA-13 / PR-BIZ-06） ————————————————————————
+#
+# 账户/计划归档停止新采用并暂停引用它们的监控规则；删除研究在同一事务内取消规则、
+# 过期待派发事件、取消待补数、作废待派发 outbox、归档该研究所属计划并软删除会话。
+# 共享账户与成交不随单一研究删除（AC-17）。全部带幂等键与归属校验，重试不复活已取消任务。
+
+
+@router.post("/accounts/{account_id}/archive")
+async def archive_business_account(
+    account_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await business_archive.archive_account(
+            session,
+            user_id=user.id,
+            account_id=_as_uuid(account_id, "account_id"),
+            idempotency_key=key,
+            source_kind="form",
+            source_ref=None,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/plans/{plan_id}/archive")
+async def archive_business_plan(
+    plan_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await business_archive.archive_plan(
+            session,
+            user_id=user.id,
+            plan_id=_as_uuid(plan_id, "plan_id"),
+            idempotency_key=key,
+            source_kind="form",
+            source_ref=None,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.delete("/sessions/{research_id}")
+async def delete_business_research(
+    research_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await business_archive.delete_research(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id"),
+            idempotency_key=key,
+            source_kind="form",
+            source_ref=None,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
 
 
 # ——— 操作结果（幂等恢复） ——————————————————————————————————————————————

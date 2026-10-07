@@ -143,6 +143,12 @@ async def submit_run(
             status_code=503,
             detail="运行数据根不可写（磁盘满或只读），无法持久化新的运行",
         )
+    # DATA-14: 恢复/迁移模式默认禁止派发，拒绝手动提交新的分析（避免恢复期重复付费）。
+    if get_config().restore_mode:
+        raise HTTPException(
+            status_code=503,
+            detail="恢复/迁移模式：禁止派发新的分析；核对恢复清单后显式关闭该模式",
+        )
 
     message, session_id, files, raw_investment_input = await _parse_submit(request)
     if not message:

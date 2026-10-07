@@ -1,0 +1,15 @@
+........................................................................ [ 36%]
+........................................................................ [ 72%]
+.......................................................                  [100%]
+=============================== warnings summary ===============================
+tests/pg/test_restore_check.py::test_clean_database_with_complete_run_dirs_passes
+tests/pg/test_restore_check.py::test_started_run_requires_trajectory
+tests/pg/test_restore_check.py::test_missing_run_dir_is_reported
+tests/pg/test_restore_check.py::test_orphan_watch_event_reference_is_reported
+tests/pg/test_restore_check.py::test_undecryptable_llm_key_is_reported
+tests/pg/test_restore_check.py::test_unreadable_report_is_flagged_not_crashed
+  /home/administrator/FrontierAgent/.venv/lib/python3.12/site-packages/alembic/config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+199 passed, 6 warnings in 33.70s

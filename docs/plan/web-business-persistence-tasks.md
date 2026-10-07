@@ -426,6 +426,19 @@ live tail + 可取消；路由仅做断连薄包装——httpx ASGITransport 会
 **验收**：账户跨研究复用、计划单研究归属、归档历史、取消与领取竞争及重复删除通过。
 覆盖 AC-17、18、21。
 
+**当前产物（2026-10-03）**：服务 `server/business_archive.py`：`archive_account`/`archive_plan`
+（幂等 + 审计，暂停引用它们的监控规则）、`delete_research`（单一事务级联：取消活动规则、
+过期待派发事件、取消待补数、作废待派发 outbox、归档该研究所属计划、软删除会话；共享账户/
+成交不随研究删除 AC-17）；全部 `run_write` 幂等键 + 归属校验，重复删除/归档返回幂等回执。
+`watch_scheduler.schedule_event` 增补 `ObjectArchivedError` 兜底（归档对象不能成为新分析
+有效选择，事件过期不再无限重试）。端点：`POST /api/business/accounts/{id}/archive`、
+`POST /api/business/plans/{id}/archive`、`DELETE /api/business/sessions/{rid}`（业务级联；
+通用 `/api/sessions/{id}` 删除保持原样，UI-10 研究删除应走业务端点）。真 PG 验收见
+`tests/pg/test_business_archive.py`（8 项，全套 187 通过，证据见
+[环境基线](web-business-data-env-baseline.md) §4.9；本批无新增迁移）。软删除 ≠ 擦除：业务
+事实/快照/审计/事件引用一律保留；运行中 worker 让其完成当前 Run。物理删除范围与保留策略属
+DATA-14/15。
+
 ### DATA-14 备份、安全与文件引用
 
 **需求**：PR-BIZ-06/04；PRD §5.4、§8。
@@ -441,6 +454,22 @@ live tail + 可取消；路由仅做断连薄包装——httpx ASGITransport 会
 **验收**：恢复后对象/版本/快照/事件/Run/产物关系可核对，缺文件/密钥明确报错；
 达到该阶段恢复要求后才能交付，不拖到 D 阶段。覆盖 AC-18。
 
+**当前产物（2026-10-07）**：恢复核对 `server/restore_check.py`：`check_restore()` 一次核对
+数据库备份水位（`alembic_version` vs 迁移链 head）、Run 目录清单（inputs/ws/ws-outputs/
+spill/run/diff/staging 齐备，非 queued Run 还需轨迹文件）、8 组跨表孤立引用（含刻意无外键的
+`InputRequest.watch_event_id`）、外部调用水位（watch_event_runs / budget_runs_created /
+run_dispatch_rows / pending_watch_events，供对照备份防回滚后重复付费）、用户 LLM 密钥解密
+状态；AC-18「报告不可读时明确标识」——schema 水位先核，分节失败记入 `errors` 返回部分报告
+不崩溃；CLI `python -m server.restore_check [runs_root]` 输出 JSON，exit 0/1。恢复/迁移模式
+`restore_mode`（默认 False）：`background_tasks_allowed()` 统一闸门使 dispatch/monitor/
+scheduler 三循环见模式即停、lifespan 不启动，`POST /api/runs` 手动提交 503，显式关闭后恢复；
+待处理监控事件不重播，由调度器按有效期/取消状态重新裁决（既有 DATA-10/11 语义）。审计
+detail 仅含对象标识与字段名（资金/持仓正文不进日志与审计，测试锁定）。目录清单与
+`config.build_run_paths`/`diff.DiffRecorder` 对齐，不另建平行文件迁移任务；无新增表，
+前批 0013–0017 由既有整库备份策略覆盖。真 PG 验收见 `tests/pg/test_restore_check.py`
+（12 项，含旧备份缺表的 AC-18 场景；全套 199 通过，证据见
+[环境基线](web-business-data-env-baseline.md) §4.10）。
+
 ### DATA-15 分阶段联合验收与成本
 
 **需求**：全部关联 PR-*；PRD §10。
@@ -455,6 +484,22 @@ live tail + 可取消；路由仅做断连薄包装——httpx ASGITransport 会
 **验收**：本阶段必需 AC 全通过才可交付；未通过项记录为缺口，相关功能不放行。
 不因建表/页面可见就完成，不承诺尚未实测的节省比例。
 部署验证方式以[环境准备](web-storage-validation-environment.md)为准。
+
+**当前产物（2026-10-07，server-side DATA 部分）**：成本计量汇总
+`server/usage.py::usage_summary_for_runs`（AC-20）：对一组 Run 汇总模型调用、输入/输出/
+总量、**缓存读写分列**（不塌缩为单一 "cached"，新旧 usage 别名均识别）、reasoning 与
+墙钟延迟；零用量 Run 以 0 值可见不丢弃；聚合真源仍是轨迹文件，`usage_json.status`
+区分 complete/partial/unavailable，不确定的 LLM 尝试如实计量（F06 attempt 身份行可对账）。
+端到端联合验收 `tests/pg/test_data15_joint.py`：路由提交（PG 快照冻结）→ outbox 领取 →
+真实 Orchestrator 派发真实 worker 子进程（用户 LLM 配置真实解密注入 MockLLMServer）→
+轨迹/产物/diff 文件链路 → 终态与用量计量 → 快照不变（AC-06）→ 活体生成物通过 DATA-14
+恢复核对（AC-18）；另锁定缓存读写分列与零用量可见两项。既有证据映射（领取后崩溃及恢复、
+幂等重放、越权/绕过、监控零模型与预算）与登记缺口见
+[环境基线](web-business-data-env-baseline.md) §4.11 与
+[DATA-15 issue](../../.scratch/web-business-repairs/issues/10-data15-joint-acceptance.md)：
+UI-11 浏览器完整流程属 UI 任务侧；AC-20 输入正确率比较、真实供应商协议/行情时效实测
+需真实凭据的受控试运行；重复规则/冷却/重新布防属 D 阶段。真 PG 全套 **202 passed**
+（证据同 §4.11）。
 
 ## 6. PRD 验收覆盖与交接
 

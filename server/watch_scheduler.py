@@ -30,6 +30,7 @@ from server import (
     dispatch_outbox,
     input_requests,
     investment_snapshot,
+    restore_check,
     store,
     watch_rules,
 )
@@ -293,6 +294,10 @@ async def schedule_event(
         await _needs_input(session, event, now, fields=exc.fields, spec=spec, prompt=prompt)
         await session.flush()
         return {"status": NEEDS_INPUT, "fields": exc.fields}
+    except biz.ObjectArchivedError:
+        # 归档对象不能成为新分析有效选择（DATA-13）：不再重试，直接过期并说明。
+        await _expire(session, event, now, "object_archived")
+        return {"status": EXPIRED, "reason": "object_archived"}
 
     # 队列上限：同研究待执行任务达限时本次不建 Run，留 pending 下轮再试。
     depth = await dispatch_outbox.research_queue_depth(session, event.research_id)
@@ -510,6 +515,11 @@ async def schedule_cycle(
 async def scheduler_loop(*, poll_seconds: float, batch: int) -> None:
     """常驻调度主循环；异常不退出，记录后等待下一轮。"""
     while True:
+        # 恢复/迁移模式：禁止自动分析派发（DATA-14）。配置按 mtime 热加载，切换即停；
+        # 关闭后待处理事件按有效期/取消状态重新裁决（不盲目重播付费分析）。
+        if not restore_check.background_tasks_allowed():
+            await asyncio.sleep(poll_seconds)
+            continue
         try:
             async with biz.business_transaction() as session:
                 counters = await schedule_cycle(session, limit=batch)
