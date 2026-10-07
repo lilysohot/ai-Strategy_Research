@@ -596,11 +596,13 @@ class InputRequestAnswer(Base):
 
 
 class BusinessEvent(Base):
-    """Durable user notification outside per-Run trajectory events (DATA-12 B slice)."""
+    """Durable user notification outside per-Run trajectory events (DATA-12)."""
 
     __tablename__ = "business_events"
     __table_args__ = (
         UniqueConstraint("id", name="uq_business_events_id"),
+        # 去重：同一对象同一次触发不重复通知；dedup_key 为空的行不受约束。
+        UniqueConstraint("user_id", "dedup_key", name="uq_business_events_dedup"),
         Index("ix_business_events_user_cursor", "user_id", "cursor"),
     )
 
@@ -616,8 +618,29 @@ class BusinessEvent(Base):
     title: Mapped[str] = mapped_column(String, nullable=False)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     detail_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    #: 通知等级：low / medium / high / urgent。
+    level: Mapped[str] = mapped_column(String, nullable=False, default="medium")
+    #: 同一对象同一次触发的去重身份（可空；空行不参与去重）。
+    dedup_key: Mapped[str | None] = mapped_column(String)
+    #: 隐藏只是视图动作，不改变业务事实（触发/分析记录仍保留）。
+    hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class NotificationSettings(Base):
+    """每用户通知设置（DATA-12 C）：按类型/等级开关，默认全开。"""
+
+    __tablename__ = "notification_settings"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    #: 关闭的类型集合（kind）；空 = 全开。
+    muted_kinds_json: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    #: 允许的最高展示等级之上的被关闭等级集合；空 = 全开。
+    muted_levels_json: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
 
 class WatchRule(Base):

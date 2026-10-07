@@ -250,6 +250,26 @@ master key 或 JWT key，认证解析失败时清除旧物化上下文。新增�
 本批没有部署 API，也没有迁移生产库。token 级预算记账与"重新分析 +1 代次"入口、事件通知与
 已读展示属 DATA-12 C / DATA-15 联合验收。
 
+### 4.8 DATA-12 业务事件与通知批次（2026-10-03）
+
+执行记录见 [DATA-12 issue](../../.scratch/web-business-repairs/issues/07-data12-notifications.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data12-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `frontier-business-data12-20261003`（复用 `pg18-zhvector`）；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1:55438` 及 `/tmp/frontier-business-data12-runs`；未连接或迁移现有业务库 |
+| 模型与迁移 | `0017_business_notifications`：`business_events` 追加 `level`/`dedup_key`（per-user 唯一，可空不去重）/`hidden`；新增 `notification_settings`（muted_kinds/muted_levels，默认全开）；0017→0016 降级再升回 head 通过 |
+| 事件产生器 | 挂接监控链：`watch_eval.evaluate` 触发 → `watch_triggered`（dedup=事件身份）；`schedule_event` → `auto_analysis_queued`/`watch_budget_blocked`/`watch_rule_inactive`；`reconcile_event_runs` → `watch_analysis_completed/failed`（完成/失败共用终态去重键）；补数沿用 DATA-07 `input_required` |
+| 通知服务 | `add_event` 支持 level/dedup_key（保存点兜底并发去重）；`list_notifications` 最近未读优先 `(read_at IS NULL) DESC, cursor DESC` + kinds/levels/read 过滤 + total/unread_count/read_progress；`hide_event` 隐藏不改业务事实（游标重放仍可见）；`get_read_progress`；`get_settings`/`set_settings`；`stream_events` SSE 生成器（游标重放+live tail+可取消，路由薄包装） |
+| 端点 | `GET /notifications`、`POST /notifications/{id}/hide`、`GET/PUT /notifications/settings`、`GET /events/read-progress` |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**179 passed**（原 166 项 + DATA-12 定向 13 项）；触发/排队/结果/错误/预算/规则失效事件、去重、未读优先、等级/类型/已读过滤、已读/隐藏幂等、阅读进度、设置读写、所有者隔离、SSE 游标重放+live tail 均通过 |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors；import smoke stage 1：386/386；symbol closure：484 文件无缺失 |
+| 测试性修正 | httpx ASGITransport 缓冲完整响应、无法端到端断言无限 SSE 流；将流生成逻辑提取为 `business_events.stream_events`（路由仅做断连薄包装），测试直接消费生成器验证重放/live tail/可取消 |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。通知设置按"存储偏好 + 显式过滤"落地（写入不静默丢弃，
+UI 按 settings/过滤条件展示）；安全类通知不因设置缺失而漏存。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：

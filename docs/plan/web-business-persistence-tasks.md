@@ -393,6 +393,24 @@ DATA-12 C / DATA-15。
 **验收**：关闭浏览器再打开能恢复事件/已读，断线补读无业务事件丢失；用户之间无法读取。
 覆盖 AC-09、15、16、21。
 
+**当前产物（2026-10-03）**：B 阶段（游标重放/已读/SSE 基础）已存在并经 `test_input_requests.py`
+验收；本批补 C 阶段。模型与迁移 `server/alembic/versions/0017_business_notifications.py`：
+`business_events` 追加 `level`/`dedup_key`（per-user 唯一）/`hidden`；新增
+`notification_settings`（muted_kinds/muted_levels，默认全开）。事件产生器挂接监控链：
+`watch_eval.evaluate` 触发 → `watch_triggered`（dedup=事件身份）；`watch_scheduler.schedule_event`
+→ `auto_analysis_queued`/`watch_budget_blocked`/`watch_rule_inactive`；`reconcile_event_runs`
+→ `watch_analysis_completed/failed`（完成/失败共用终态去重键）；补数沿用 `input_required`。
+通知服务 `server/business_events.py`：`add_event`（level/dedup_key，保存点兜底并发去重）、
+`list_notifications`（最近未读优先 `(read_at IS NULL) DESC, cursor DESC` + kinds/levels/read
+过滤 + unread_count/read_progress）、`hide_event`（隐藏不改业务事实，游标重放仍可见）、
+`get_read_progress`、`get_settings`/`set_settings`、`stream_events`（SSE 生成器：游标重放 +
+live tail + 可取消；路由仅做断连薄包装——httpx ASGITransport 会缓冲完整响应，无法对无限流
+做 HTTP 端到端断言，故测试直接消费生成器）。端点：`GET /notifications`、
+`POST /notifications/{id}/hide`、`GET/PUT /notifications/settings`、`GET /events/read-progress`。
+真 PG 验收见 `tests/pg/test_business_notifications.py`（13 项，全套 179 通过，证据见
+[环境基线](web-business-data-env-baseline.md) §4.8）。通知设置按"存储偏好 + 显式过滤"落地，
+写入不静默丢弃业务事实。
+
 ## 5. 生命周期、恢复和工程验收
 
 ### DATA-13 归档、删除与取消

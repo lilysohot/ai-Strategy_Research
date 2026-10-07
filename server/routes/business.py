@@ -30,14 +30,18 @@
   POST   /api/business/watch-rules/{id}/resume       恢复（写）
   POST   /api/business/watch-rules/{id}/cancel       取消（终态，写）
   GET    /api/business/watch-events                   监控事件列表（DATA-11 追溯）
+  GET    /api/business/events                         业务通知游标重放（B 阶段）
+  GET    /api/business/notifications                  通知视图（最近未读优先/过滤）
+  POST   /api/business/notifications/{id}/hide        隐藏通知（不改业务事实）
+  GET    /api/business/notifications/settings         通知设置
+  PUT    /api/business/notifications/settings         更新通知设置
+  GET    /api/business/events/read-progress           阅读进度（最近读取游标）
   GET    /api/business/operations/{id}               按 operation_id 找回提交结果
   GET    /api/business/operations                    最近操作（刷新后恢复用）
 """
 
 from __future__ import annotations
 
-import asyncio
-import json
 import uuid
 from collections.abc import AsyncIterator
 from datetime import UTC, datetime
@@ -1079,37 +1083,101 @@ async def stream_business_events(
     user_id = user.id
 
     async def generate() -> AsyncIterator[str]:
-        cursor = after
-        idle = 0
-        while not await request.is_disconnected():
-            async with biz.business_transaction() as session:
-                rows, cursor = await business_events.list_events(
-                    session, user_id=user_id, after=cursor, limit=MAX_LIMIT
-                )
-            if rows:
-                idle = 0
-                for row in rows:
-                    payload = json.dumps(
-                        {
-                            "type": "business_event",
-                            "ts": datetime.now(UTC).timestamp(),
-                            "seq": row.cursor,
-                            "event": business_events.event_view(row),
-                        },
-                        ensure_ascii=False,
-                        separators=(",", ":"),
-                    )
-                    yield f"id: {row.cursor}\nevent: business_event\ndata: {payload}\n\n"
-            else:
-                idle += 1
-                if idle >= 15:
-                    yield ": heartbeat\n\n"
-                    idle = 0
-            await asyncio.sleep(1)
+        async for chunk in business_events.stream_events(user_id, after):
+            if await request.is_disconnected():
+                break
+            yield chunk
 
     return StreamingResponse(
         generate(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"}
     )
+
+
+@router.get("/notifications/settings")
+async def get_notification_settings(
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        settings = await business_events.get_settings(session, user_id=user.id)
+    return settings
+
+
+@router.put("/notifications/settings")
+async def put_notification_settings(
+    body: dict[str, Any], user: UserModel = Depends(get_current_user)
+) -> dict[str, Any]:
+    muted_kinds = body.get("muted_kinds") or []
+    muted_levels = body.get("muted_levels") or []
+    if not isinstance(muted_kinds, list) or not isinstance(muted_levels, list):
+        raise biz.ValidationError(
+            "通知设置格式不正确", fields={"muted_kinds/muted_levels": "需要字符串数组"}
+        )
+    try:
+        async with biz.business_transaction() as session:
+            settings = await business_events.set_settings(
+                session, user_id=user.id, muted_kinds=muted_kinds, muted_levels=muted_levels
+            )
+    except ValueError as exc:
+        raise biz.ValidationError(str(exc), fields={"muted_levels": "不支持的通知等级"}) from None
+    return settings
+
+
+@router.get("/notifications")
+async def list_notifications(
+    user: UserModel = Depends(get_current_user),
+    kind: list[str] = Query(default=[]),
+    level: list[str] = Query(default=[]),
+    read: bool | None = Query(default=None),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    invalid_levels = sorted(set(level) - business_events.LEVELS)
+    if invalid_levels:
+        raise biz.ValidationError("通知等级不正确", fields={"level": f"不支持：{invalid_levels}"})
+    async with biz.business_transaction() as session:
+        rows, total, unread, read_progress = await business_events.list_notifications(
+            session,
+            user_id=user.id,
+            kinds=kind or None,
+            levels=level or None,
+            read=read,
+            limit=limit,
+            offset=offset,
+        )
+        items = [business_events.event_view(row) for row in rows]
+    return {
+        "items": items,
+        "total": total,
+        "unread_count": unread,
+        "read_progress": read_progress,
+        "has_more": offset + len(items) < total,
+    }
+
+
+@router.post("/notifications/{notification_id}/hide", status_code=204)
+async def hide_notification(
+    notification_id: str, user: UserModel = Depends(get_current_user)
+) -> None:
+    async with biz.business_transaction() as session:
+        found = await business_events.hide_event(
+            session, user_id=user.id, event_id=_as_uuid(notification_id, "notification_id")
+        )
+    if not found:
+        raise biz.NotFoundOrForbiddenError("通知不存在或无权访问")
+
+
+@router.get("/events/read-progress")
+async def business_event_read_progress(
+    user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        read_progress, last_read_at = await business_events.get_read_progress(
+            session, user_id=user.id
+        )
+    return {
+        "read_progress": read_progress,
+        "last_read_at": last_read_at.isoformat() if last_read_at else None,
+    }
 
 
 # ——— 操作结果（幂等恢复） ——————————————————————————————————————————————

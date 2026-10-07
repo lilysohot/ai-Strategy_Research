@@ -26,7 +26,7 @@ from typing import Any, Protocol
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import store
+from server import business_events, store
 from server.config import get_config
 
 ACTIVE = "active"
@@ -186,6 +186,12 @@ def _decimal_text(value: Decimal | None) -> str | None:
     if "." in text:
         text = text.rstrip("0").rstrip(".")
     return text or "0"
+
+
+def _threshold_text(rev: store.WatchRuleRevision) -> str:
+    if rev.direction == "range":
+        return f"[{_decimal_text(rev.threshold_low)}, {_decimal_text(rev.threshold_high)}]"
+    return _decimal_text(rev.threshold_low) or ""
 
 
 def _threshold_view(row: store.WatchEvent) -> Any:
@@ -423,6 +429,24 @@ async def evaluate(
         session.add(event)
         await session.flush()
         event_id = str(event.id)
+        # 触发通知（DATA-12）：同一事件只通知一次（dedup_key=事件身份）。
+        await business_events.add_event(
+            session,
+            user_id=rule.user_id,
+            research_id=rule.research_id,
+            kind="watch_triggered",
+            level="medium",
+            title=f"监控触发：{obs.thscode}",
+            summary=(f"{direction} {_threshold_text(rev)}，观测价 {_decimal_text(price)}"),
+            detail={
+                "rule_id": str(rule.id),
+                "rule_version": rule.current_version,
+                "event_id": event_id,
+                "trigger_reason": trigger[0],
+                "price": _decimal_text(price),
+            },
+            dedup_key=f"watch_trigger:{event_id}",
+        )
         rule.armed = False
         rule.last_triggered_at = now
         rule.last_suppressed_reason = None

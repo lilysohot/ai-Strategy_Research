@@ -25,8 +25,15 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from server import (
+    business_events,
+    dispatch_outbox,
+    input_requests,
+    investment_snapshot,
+    store,
+    watch_rules,
+)
 from server import business_service as biz
-from server import dispatch_outbox, input_requests, investment_snapshot, store, watch_rules
 from server.config import get_config, run_dir_for
 from server.store import build_llm_snapshot, get_default_llm_config
 
@@ -62,12 +69,26 @@ async def _latest_revision(
     ).scalar_one_or_none()
 
 
-async def _expire(event: store.WatchEvent, now: datetime, reason: str) -> None:
+async def _expire(
+    session: AsyncSession, event: store.WatchEvent, now: datetime, reason: str
+) -> None:
     event.status = EXPIRED
     event.completed_at = now
     detail = dict(event.detail_json or {})
     detail["expire_reason"] = reason
     event.detail_json = detail
+    # 状态事件（DATA-12）：规则失效等可追溯、可提示用户；同事件不重复通知。
+    await business_events.add_event(
+        session,
+        user_id=event.user_id,
+        research_id=event.research_id,
+        kind="watch_rule_inactive",
+        level="low",
+        title="监控规则未启动自动分析",
+        summary=f"原因：{reason}",
+        detail={"event_id": str(event.id), "expire_reason": reason},
+        dedup_key=f"watch_rule_inactive:{event.id}",
+    )
 
 
 async def _budget_usage(
@@ -169,24 +190,24 @@ async def schedule_event(
         )
     ).scalar_one_or_none()
     if rule is None:
-        await _expire(event, now, "rule_missing")
+        await _expire(session, event, now, "rule_missing")
         return {"status": EXPIRED, "reason": "rule_missing"}
     if rule.status != watch_rules.ACTIVE:
-        await _expire(event, now, "rule_inactive")
+        await _expire(session, event, now, "rule_inactive")
         return {"status": EXPIRED, "reason": "rule_inactive"}
     if rule.current_version != event.rule_version:
         # 改版/暂停/取消使旧版未启动的派发失效（契约 §9），不补发积压旧触发。
-        await _expire(event, now, "rule_obsoleted")
+        await _expire(session, event, now, "rule_obsoleted")
         return {"status": EXPIRED, "reason": "rule_obsoleted"}
     rev = await _latest_revision(session, rule.id, rule.current_version)
     if rev is None:
-        await _expire(event, now, "rule_missing")
+        await _expire(session, event, now, "rule_missing")
         return {"status": EXPIRED, "reason": "rule_missing"}
     if rev.expires_at is not None and now > rev.expires_at:
-        await _expire(event, now, "rule_expired")
+        await _expire(session, event, now, "rule_expired")
         return {"status": EXPIRED, "reason": "rule_expired"}
     if event.analysis_expires_at is not None and now > event.analysis_expires_at:
-        await _expire(event, now, "max_delay")
+        await _expire(session, event, now, "max_delay")
         return {"status": EXPIRED, "reason": "max_delay"}
     if rev.action != "auto_analyze":
         # 仅要求提醒（notify）：不擅自开启模型分析（契约 §9 / PRD §7.1）。
@@ -214,6 +235,23 @@ async def schedule_event(
         event.budget_reason = "max_runs_exceeded"
         event.attempted_at = now
         await session.flush()
+        # 预算达限通知（DATA-12）：保留事件并说明原因，不建 Run；同事件只通知一次。
+        await business_events.add_event(
+            session,
+            user_id=event.user_id,
+            research_id=event.research_id,
+            kind="watch_budget_blocked",
+            level="high",
+            title=f"自动分析未启动：预算达限（{event.symbol}）",
+            summary=f"该规则版本已达自动分析次数上限（{max_runs}）",
+            detail={
+                "event_id": str(event.id),
+                "rule_id": str(event.rule_id),
+                "rule_version": event.rule_version,
+                "max_runs": max_runs,
+            },
+            dedup_key=f"watch_budget:{event.id}",
+        )
         return {
             "status": BLOCKED_BUDGET,
             "reason": "max_runs_exceeded",
@@ -309,6 +347,24 @@ async def schedule_event(
     usage.runs_created += 1
     usage.runs_attempted += 1
     await session.flush()
+    # 排队通知（DATA-12）：同一事件同代次只通知一次。
+    await business_events.add_event(
+        session,
+        user_id=event.user_id,
+        research_id=event.research_id,
+        kind="auto_analysis_queued",
+        level="medium",
+        title=f"自动分析已排队：{event.symbol}",
+        summary=prompt[:120],
+        run_id=run_id,
+        detail={
+            "rule_id": str(event.rule_id),
+            "rule_version": event.rule_version,
+            "event_id": str(event.id),
+            "generation": event.generation,
+        },
+        dedup_key=f"watch_analysis:{event.id}:{event.generation}",
+    )
     return {
         "status": DISPATCHING,
         "run_id": str(run_id),
@@ -371,6 +427,25 @@ async def reconcile_event_runs(session: AsyncSession, *, limit: int, now: dateti
             event.status = COMPLETED
             event.completed_at = now
             changed += 1
+            # 结果通知（DATA-12）：完成/失败共用同一终态去重键，同代次只通知一次。
+            await business_events.add_event(
+                session,
+                user_id=event.user_id,
+                research_id=event.research_id,
+                kind="watch_analysis_completed",
+                level="low",
+                title=f"自动分析完成：{event.symbol}",
+                summary=f"触发原因：{event.trigger_reason}",
+                run_id=run.id,
+                detail={
+                    "event_id": str(event.id),
+                    "rule_id": str(event.rule_id),
+                    "rule_version": event.rule_version,
+                    "generation": event.generation,
+                    "run_id": str(run.id),
+                },
+                dedup_key=f"watch_analysis:{event.id}:{event.generation}:done",
+            )
         elif run.status in ("failed", "stopped"):
             event.status = FAILED
             event.completed_at = now
@@ -379,6 +454,26 @@ async def reconcile_event_runs(session: AsyncSession, *, limit: int, now: dateti
             detail["run_status"] = run.status
             event.detail_json = detail
             changed += 1
+            # 错误通知（DATA-12）：同一事件同代次的终态只通知一次，不因重试重复。
+            await business_events.add_event(
+                session,
+                user_id=event.user_id,
+                research_id=event.research_id,
+                kind="watch_analysis_failed",
+                level="high",
+                title=f"自动分析失败：{event.symbol}",
+                summary=f"原因：run_{run.status}",
+                run_id=run.id,
+                detail={
+                    "event_id": str(event.id),
+                    "rule_id": str(event.rule_id),
+                    "rule_version": event.rule_version,
+                    "generation": event.generation,
+                    "run_id": str(run.id),
+                    "failure_reason": f"run_{run.status}",
+                },
+                dedup_key=f"watch_analysis:{event.id}:{event.generation}:done",
+            )
     if changed:
         await session.flush()
     return changed
