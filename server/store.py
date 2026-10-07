@@ -777,10 +777,68 @@ class WatchEvent(Base):
     received_at_ms: Mapped[int] = mapped_column(BigInteger, nullable=False)
     time_source: Mapped[str] = mapped_column(String, nullable=False, default="vendor")
     trigger_reason: Mapped[str] = mapped_column(String, nullable=False)
-    #: pending=待 DATA-11 调度；终态由 DATA-11 维护（dispatching/running/completed/failed...）。
+    #: pending=待 DATA-11 调度；dispatching=已建 Run 待执行；completed/failed 由 Run 终态
+    #: 对账写入；expired/merged/blocked_budget/needs_input 由调度侧写入。
     status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
+    #: 本次分析关联的 Run（最近一次生成；完整代次历史见 watch_event_runs）。
+    run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("runs.id"))
+    #: 分析代次：每事件每代次唯一（重试沿用，重新分析 +1 且保留旧终态）。
+    generation: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    #: 合并去向：同研究同标的同意图的待派发事件只保留最早一条，其余置 merged。
+    merged_into_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("watch_events.id"))
+    budget_reason: Mapped[str | None] = mapped_column(String)
+    #: 分析截止（received_at + 最大排队延迟）；超过仍未调度 → expired。
+    analysis_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    attempted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     detail_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WatchEventRun(Base):
+    """事件 → Run 的分析代次链路（DATA-11）。
+
+    每事件每代次唯一（``(event_id, generation)``）：派发重试沿用原 Run/快照；终态后的
+    重新分析创建新代次并保留旧终态，不因"同一事件"覆盖旧分析。
+    """
+
+    __tablename__ = "watch_event_runs"
+    __table_args__ = (
+        UniqueConstraint("event_id", "generation", name="uq_watch_event_runs_generation"),
+        Index("ix_watch_event_runs_event", "event_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    event_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_events.id"), nullable=False)
+    generation: Mapped[int] = mapped_column(Integer, nullable=False)
+    run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WatchBudgetUsage(Base):
+    """每规则版本的自动分析预算台账（DATA-11）。
+
+    调度时**原子预留并记账**：``runs_created`` 供 max_runs 次数上限裁决；``runs_attempted``
+    记录实际调用尝试。释放/结算保持幂等（同一规则版本同一行累加，不重复计数）。
+    """
+
+    __tablename__ = "watch_budget_usage"
+    __table_args__ = (
+        UniqueConstraint("rule_id", "rule_version", name="uq_watch_budget_usage_rule_version"),
+        Index("ix_watch_budget_usage_rule", "rule_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    rule_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_rules.id"), nullable=False)
+    rule_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    runs_created: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    runs_attempted: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
 
 class RunDispatch(Base):

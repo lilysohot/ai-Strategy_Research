@@ -360,6 +360,21 @@ DATA-11）；编辑（新版本）复位 armed/baseline。`watch_eval.evaluate` 
 **验收**：触发到同研究自动 Run 无需再点确认；取消/归档与领取竞争时不启动失效任务；
 延迟、改版、缺资料、预算竞争、重试及合并均可追溯。覆盖 AC-13—16、21、24。
 
+**当前产物（2026-10-03）**：模型与迁移 `server/alembic/versions/0016_watch_auto_analysis.py`
+（`watch_events` 追加 run_id/generation/merged_into_id/budget_reason/analysis_expires_at/
+scheduled_at/attempted_at/completed_at；新增 `watch_event_runs`（(event_id, generation) 唯一）
+与 `watch_budget_usage`（(rule_id, rule_version) 唯一，runs_created/runs_attempted））。
+调度服务 `server/watch_scheduler.py`：`schedule_event`（校验规则状态/版本/有效期/最大延迟 →
+预算原子预留记账（max_runs 达限 blocked_budget）→ 研究绑定解析 → 执行时最新版本冻结快照
+（source=watch_event）→ Run + outbox 同一事务 → 事件 dispatching；缺字段经 `_needs_input`
+建带续接信息的 DATA-07 请求 needs_input）、`merge_pending`（按（研究, 标的, action）合并到
+最早一条）、`reconcile_event_runs`（Run 终态对账 completed/failed）、`schedule_cycle`、
+`scheduler_loop`（`auto_*` 配置默认关闭，lifespan 接入）。事件创建时写 `analysis_expires_at`；
+`GET /api/business/watch-events` 列表（所有者隔离）。真 PG 验收见 `tests/pg/test_watch_scheduler.py`
+（10 项，全套 166 通过，证据见[环境基线](web-business-data-env-baseline.md) §4.7；回溯复核补
+notify 规则不建自动 Run）。token 级预算记账、"重新分析 +1 代次"入口、事件通知展示属
+DATA-12 C / DATA-15。
+
 ### DATA-12 业务事件与通知
 
 **需求**：PR-WATCH-03、PR-BIZ-03/04；PRD §5.1、§7.4。

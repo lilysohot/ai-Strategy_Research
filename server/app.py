@@ -22,7 +22,7 @@ from datetime import timedelta
 from fastapi import FastAPI, Response, status
 
 from server import business_service as biz
-from server import monitor, store, uploads
+from server import monitor, store, uploads, watch_scheduler
 from server.config import get_config
 from server.dispatch_outbox import dispatch_loop
 from server.orchestrator import get_orchestrator
@@ -86,7 +86,20 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                     max_gap=timedelta(seconds=get_config().monitor_max_gap_seconds),
                 )
             )
+    # DATA-11: 事件→自动 Run 的调度循环（默认关闭，部署显式开启；DATA-00 §5 登记）。
+    scheduler_task: asyncio.Task[None] | None = None
+    if readiness.ok and get_config().auto_enabled:
+        scheduler_task = asyncio.create_task(
+            watch_scheduler.scheduler_loop(
+                poll_seconds=get_config().auto_poll_seconds,
+                batch=get_config().auto_batch_events,
+            )
+        )
     yield
+    if scheduler_task is not None:
+        scheduler_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await scheduler_task
     if monitor_task is not None:
         monitor_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):

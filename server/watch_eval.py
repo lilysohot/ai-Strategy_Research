@@ -27,6 +27,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import store
+from server.config import get_config
 
 ACTIVE = "active"
 
@@ -139,6 +140,14 @@ def _iso(value: Any) -> str | None:
     return value.isoformat() if value is not None else None
 
 
+def _analysis_deadline(obs: MonitoringObservation) -> datetime | None:
+    """事件的分析截止 = 接收时间 + 最大排队延迟；配置为 0 表示发布前未冻结（不强制）。"""
+    max_delay = get_config().auto_max_delay_seconds
+    if max_delay and max_delay > 0:
+        return datetime.fromtimestamp(obs.received_at_ms / 1000, UTC) + timedelta(seconds=max_delay)
+    return None
+
+
 def event_view(row: store.WatchEvent) -> dict[str, Any]:
     return {
         "id": str(row.id),
@@ -157,6 +166,14 @@ def event_view(row: store.WatchEvent) -> dict[str, Any]:
         "time_source": row.time_source,
         "trigger_reason": row.trigger_reason,
         "status": row.status,
+        "run_id": str(row.run_id) if row.run_id else None,
+        "generation": row.generation,
+        "merged_into_id": str(row.merged_into_id) if row.merged_into_id else None,
+        "budget_reason": row.budget_reason,
+        "analysis_expires_at": _iso(row.analysis_expires_at),
+        "scheduled_at": _iso(row.scheduled_at),
+        "attempted_at": _iso(row.attempted_at),
+        "completed_at": _iso(row.completed_at),
         "detail": dict(row.detail_json or {}),
         "created_at": _iso(row.created_at),
     }
@@ -216,6 +233,34 @@ async def _last_observed_ms(session: AsyncSession, *, rule_id: Any) -> int | Non
             )
         )
     ).scalar_one_or_none()
+
+
+async def list_events(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    research_id: Any | None = None,
+    status: str | None = None,
+    limit: int,
+    offset: int,
+) -> tuple[list[store.WatchEvent], int]:
+    """按所有者列出监控事件（DATA-11 追溯 / UI-09）。"""
+    stmt = select(store.WatchEvent).where(store.WatchEvent.user_id == user_id)
+    if research_id is not None:
+        stmt = stmt.where(store.WatchEvent.research_id == research_id)
+    if status is not None:
+        stmt = stmt.where(store.WatchEvent.status == status)
+    total = (await session.execute(select(func.count()).select_from(stmt.subquery()))).scalar_one()
+    rows = (
+        (
+            await session.execute(
+                stmt.order_by(store.WatchEvent.received_at_ms.desc()).limit(limit).offset(offset)
+            )
+        )
+        .scalars()
+        .all()
+    )
+    return list(rows), total
 
 
 def _decide_trigger(
@@ -368,6 +413,7 @@ async def evaluate(
             time_source=obs.time_source,
             trigger_reason=trigger[0],
             status="pending",
+            analysis_expires_at=_analysis_deadline(obs),
             detail_json={
                 "gap": gap,
                 "first_observation": first_ever,

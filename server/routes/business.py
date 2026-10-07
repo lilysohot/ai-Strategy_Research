@@ -29,6 +29,7 @@
   POST   /api/business/watch-rules/{id}/pause        暂停（写）
   POST   /api/business/watch-rules/{id}/resume       恢复（写）
   POST   /api/business/watch-rules/{id}/cancel       取消（终态，写）
+  GET    /api/business/watch-events                   监控事件列表（DATA-11 追溯）
   GET    /api/business/operations/{id}               按 operation_id 找回提交结果
   GET    /api/business/operations                    最近操作（刷新后恢复用）
 """
@@ -48,7 +49,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from server import business_events, input_requests, store, watch_rules
+from server import business_events, input_requests, store, watch_eval, watch_rules, watch_scheduler
 from server import business_service as biz
 from server.config import get_config
 from server.deps import get_current_user
@@ -989,6 +990,38 @@ async def cancel_watch_rule(
     return await _watch_rule_status_op(
         rule_id, body, user, idempotency_key, watch_rules.CANCELLED, "watch_rule.cancel"
     )
+
+
+@router.get("/watch-events")
+async def list_watch_events(
+    user: UserModel = Depends(get_current_user),
+    research_id: str | None = Query(default=None),
+    status: str | None = Query(default=None),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    if status is not None and status not in {
+        watch_scheduler.PENDING,
+        watch_scheduler.DISPATCHING,
+        watch_scheduler.COMPLETED,
+        watch_scheduler.FAILED,
+        watch_scheduler.EXPIRED,
+        watch_scheduler.MERGED,
+        watch_scheduler.BLOCKED_BUDGET,
+        watch_scheduler.NEEDS_INPUT,
+    }:
+        raise biz.ValidationError("事件状态不正确", fields={"status": "不支持该状态"})
+    async with biz.business_transaction() as session:
+        rows, total = await watch_eval.list_events(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id") if research_id else None,
+            status=status,
+            limit=limit,
+            offset=offset,
+        )
+        items = [watch_eval.event_view(row) for row in rows]
+    return {"events": items, "total": total, "has_more": offset + len(items) < total}
 
 
 # ——— B 阶段业务通知（DATA-12 基础） ———————————————————————————————————

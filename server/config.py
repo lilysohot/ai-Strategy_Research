@@ -110,6 +110,14 @@ class ServerConfig(BaseSettings):
     monitor_batch_rules: int = 50
     monitor_max_symbols: int = 20
 
+    # — Auto-analysis scheduler (DATA-11) ————————————————
+    # 事件→自动 Run 的调度循环默认关闭，部署时显式开启（DATA-00 §5 后台进程登记）。
+    auto_enabled: bool = False
+    auto_poll_seconds: float = 2.0
+    auto_batch_events: int = 20
+    # 最大排队延迟（秒）；0 = 发布前未冻结，不强制（UI 展示"待定"，不静默填示例值）。
+    auto_max_delay_seconds: float = 0.0
+
     # — Uploads (T2.10) ——————————————————————————————
     # Per-file and per-run caps for multipart uploads. These bound what one
     # request can write into a run's inputs dir; the agent only ever reads them.

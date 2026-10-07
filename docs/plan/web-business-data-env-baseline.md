@@ -231,6 +231,25 @@ master key 或 JWT key，认证解析失败时清除旧物化上下文。新增�
 本批没有部署 API，也没有迁移生产库。真实供应商的盘中时效/权限/报价口径核验与轮询容量验证
 仍属 DATA-10 供应商项（未核验前保持待核定）；事件→自动分析 Run 的调度属 DATA-11。
 
+### 4.7 DATA-11 自动分析、合并与预算批次（2026-10-03）
+
+执行记录见 [DATA-11 issue](../../.scratch/web-business-repairs/issues/06-data11-auto-analysis.md)，
+脱敏结果见 `.scratch/web-business-repairs/evidence/data11-pg.log`。
+
+| 项 | 本批证据 |
+|---|---|
+| 隔离环境 | 临时 PostgreSQL 容器 `frontier-business-data11-20261003`（复用 `pg18-zhvector`）；独立库 `frontier_business_test`、角色 `business_test`、`127.0.0.1:55436` 及 `/tmp/frontier-business-data11-runs`；未连接或迁移现有业务库 |
+| 模型与迁移 | `0016_watch_auto_analysis`：`watch_events` 追加 run_id/generation/merged_into_id/budget_reason/analysis_expires_at/scheduled_at/attempted_at/completed_at；新增 `watch_event_runs`（`(event_id, generation)` 唯一 = 每事件每代次）与 `watch_budget_usage`（`(rule_id, rule_version)` 唯一，runs_created/runs_attempted）；0016→0015 降级再升回 head 通过 |
+| 调度服务 | `server/watch_scheduler.py::schedule_event`：校验规则状态/版本/有效期/最大延迟 → 预算原子预留记账（max_runs 达限 blocked_budget）→ 研究绑定解析 → 按执行时最新版本冻结快照（source=watch_event）→ Run + outbox 同一事务 → 事件 dispatching；缺字段经 `_needs_input` 建带续接信息的 DATA-07 请求（needs_input）；`merge_pending` 按（研究, 标的, action）合并到最早一条（merged+merged_into）；`reconcile_event_runs` 按 Run 终态对账 completed/failed；`schedule_cycle` + `scheduler_loop`（`auto_*` 配置，默认关闭，lifespan 接入） |
+| 失效与幂等 | 改版/暂停使旧版未启动事件 expired（rule_obsoleted/rule_inactive）；重复调度返回原 Run（每事件每代次唯一）；自动 Run 与手动 Run 共用 dispatch_outbox 研究级串行 |
+| 事件查询 | `GET /api/business/watch-events`（所有者隔离、按研究/状态过滤）；`event_view` 暴露 run_id/generation/merged_into/budget_reason/截止与调度时间 |
+| PG 回归 | `uv run --no-sync pytest tests/pg -q --tb=short`：**166 passed**（原 156 项 + DATA-11 定向 10 项）；触发→自动 Run、快照 watch_event 冻结、幂等重放、缺字段转补数、预算达限、改版/暂停失效、合并去向、终态对账、notify 不建 Run、事件所有者隔离均通过 |
+| 仓库门禁 | Ruff 与 `git diff --check` 通过；Pyright：0 errors；import smoke stage 1：386/386；symbol closure：484 文件无缺失 |
+| 清理 | 临时容器与登记的测试 Run 根在验收结束后移除；未删除其他环境的容器、卷或 Run 资料 |
+
+本批没有部署 API，也没有迁移生产库。token 级预算记账与"重新分析 +1 代次"入口、事件通知与
+已读展示属 DATA-12 C / DATA-15 联合验收。
+
 ## 5. 后台 dispatcher / monitor 登记要求（B/C 启用前必须满足）
 
 当前 `server/` 无受管理后台进程，监控与持久派发所需常驻能力待建。启用前需登记并验证：
