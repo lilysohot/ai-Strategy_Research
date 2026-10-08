@@ -1,0 +1,194 @@
+{
+  "schema_version": "corpus-structured-non-table-source-inventory-v1",
+  "created_on": "2026-10-08",
+  "purpose": "human_review_candidates_only_not_frozen_gold",
+  "authority": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260920-i31-dev-lane/dev-scope-manifest.json",
+  "exclusions": {
+    "seen_development_source_sha256": [
+      "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"
+    ],
+    "table_kinds": [
+      "table",
+      "table_row"
+    ],
+    "holdout_accessed": false
+  },
+  "sources": [
+    {
+      "source_sha256": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "path": "data/corpus/2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf",
+      "domain_hint": "company",
+      "approval_provenance": "approved_set",
+      "review_decision_ids": [
+        "i3e1-approved-dd259586a3"
+      ],
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-11+pymupdf-1.28.2",
+      "page_count": 22,
+      "unit_counts": {
+        "heading": 63,
+        "paragraph": 396,
+        "table_row": 154
+      },
+      "prose_units": 459,
+      "prose_chars": 14908,
+      "table_units_excluded": 154,
+      "issue_codes": [
+        "image_region_small",
+        "image_region_unreadable",
+        "multi_column_order_unreliable",
+        "table_text_overlap"
+      ],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "path": "data/corpus/2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf",
+      "domain_hint": "industry",
+      "approval_provenance": "approved_set",
+      "review_decision_ids": [
+        "i3e1-approved-2cd3cadcf9"
+      ],
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-11+pymupdf-1.28.2",
+      "page_count": 25,
+      "unit_counts": {
+        "heading": 173,
+        "paragraph": 1024,
+        "table_row": 132
+      },
+      "prose_units": 1197,
+      "prose_chars": 25194,
+      "table_units_excluded": 132,
+      "issue_codes": [
+        "image_region_small",
+        "multi_column_order_unreliable",
+        "table_text_overlap"
+      ],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "path": "data/corpus/2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf",
+      "domain_hint": "industry",
+      "approval_provenance": "approved_set",
+      "review_decision_ids": [
+        "i3e1-approved-f269774bb4"
+      ],
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-11+pymupdf-1.28.2",
+      "page_count": 11,
+      "unit_counts": {
+        "heading": 36,
+        "paragraph": 163,
+        "table_row": 31
+      },
+      "prose_units": 199,
+      "prose_chars": 8394,
+      "table_units_excluded": 31,
+      "issue_codes": [
+        "image_region_small",
+        "multi_column_order_unreliable",
+        "table_text_overlap"
+      ],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "path": "data/corpus/2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf",
+      "domain_hint": "macro",
+      "approval_provenance": "approved_set",
+      "review_decision_ids": [
+        "i3e1-approved-43300146a2"
+      ],
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-11+pymupdf-1.28.2",
+      "page_count": 16,
+      "unit_counts": {
+        "heading": 11,
+        "paragraph": 192,
+        "table_row": 66
+      },
+      "prose_units": 203,
+      "prose_chars": 11897,
+      "table_units_excluded": 66,
+      "issue_codes": [
+        "image_region_small",
+        "multi_column_order_unreliable",
+        "table_text_overlap"
+      ],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "path": "data/corpus/2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf",
+      "domain_hint": "macro",
+      "approval_provenance": "approved_set",
+      "review_decision_ids": [
+        "i3e1-approved-9cdca024d2"
+      ],
+      "format": "pdf",
+      "extractor_rev": "reader-pdf-11+pymupdf-1.28.2",
+      "page_count": 8,
+      "unit_counts": {
+        "heading": 62,
+        "paragraph": 347,
+        "table_row": 65
+      },
+      "prose_units": 409,
+      "prose_chars": 10941,
+      "table_units_excluded": 65,
+      "issue_codes": [
+        "image_region_small",
+        "multi_column_order_unreliable",
+        "table_text_overlap"
+      ],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "domain_hint": "company",
+      "approval_provenance": "dev_lane",
+      "review_decision_ids": [
+        "i0a2-c-f8fa2208",
+        "devlane-md-f8fa2208"
+      ],
+      "format": "markdown",
+      "extractor_rev": "reader-md-2",
+      "page_count": null,
+      "unit_counts": {
+        "heading": 17,
+        "list_item": 17,
+        "paragraph": 31,
+        "table_row": 26
+      },
+      "prose_units": 65,
+      "prose_chars": 7263,
+      "table_units_excluded": 26,
+      "issue_codes": [],
+      "eligible_for_review": true
+    },
+    {
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "domain_hint": "industry",
+      "approval_provenance": "dev_lane",
+      "review_decision_ids": [
+        "i0a2-d-48c05895",
+        "devlane-docx-48c05895"
+      ],
+      "format": "docx",
+      "extractor_rev": "reader-docx-2+python-docx-1.2.0",
+      "page_count": null,
+      "unit_counts": {
+        "paragraph": 44
+      },
+      "prose_units": 44,
+      "prose_chars": 6996,
+      "table_units_excluded": 0,
+      "issue_codes": [],
+      "eligible_for_review": true
+    }
+  ]
+}

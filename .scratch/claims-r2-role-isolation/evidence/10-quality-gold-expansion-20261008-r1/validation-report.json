@@ -1,0 +1,22 @@
+{
+  "schema_version": "corpus-structured-non-table-gold-review-validation-v1",
+  "status": "valid_draft",
+  "errors": [],
+  "counts": {
+    "claims": 20,
+    "material_items": 40,
+    "material_relations": 20
+  },
+  "source_record_counts": {
+    "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": 40,
+    "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": 40
+  },
+  "risk_or_condition_records": 51,
+  "minimum_20_per_role_satisfied": true,
+  "human_signoff_complete": false,
+  "formal_gold_frozen": false,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/gold-review-candidates.json": "sha256:3fb6e50a2ef20c049488b4ab69e0c19ef3330e723a5c48a7b09476b0e86b2f87",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436"
+  }
+}

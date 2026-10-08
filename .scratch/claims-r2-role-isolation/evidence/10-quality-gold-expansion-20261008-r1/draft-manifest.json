@@ -1,0 +1,29 @@
+{
+  "schema_version": "corpus-structured-non-table-gold-draft-manifest-v1",
+  "created_on": "2026-10-08",
+  "status": "draft_pending_human_review",
+  "formal_gold_frozen": false,
+  "candidate_execution_authorized": false,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/inventory_non_table_sources.py": "sha256:42bca6014c178b710e05b819c13206da83e9de3fb08df67f9003e47d540010f5",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-inventory.json": "sha256:9b53a893740b3249f3ac01bbf7a693c0c5ea588239dc51f8fe28b03480e6db54",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/export_non_table_units.py": "sha256:b304cca24f2cda1f0424a3e5c41b1db9254ec103d54bb400610f07c9a5c5d311",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/gold-review-candidates.json": "sha256:3fb6e50a2ef20c049488b4ab69e0c19ef3330e723a5c48a7b09476b0e86b2f87",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/validate_and_render_review.py": "sha256:9b18dbfcdc9a2710cfed402e89c9268a54656f12e8942a21aaa99ac465e419a0",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/validation-report.json": "sha256:9854a2b3e3501ecaca80fabba589a1d645eea0bd9a9a375b33a74391bf925d5a",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/gold-review.md": "sha256:7566822845b246e59e3ec4a22fa82c2a9b13b886347bfc47144b37ce95b47227"
+  },
+  "approved_source_bytes": {
+    "data/corpus/工业富联_投委会决策报告_20260829.md": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+  },
+  "counts": {
+    "claims": 20,
+    "material_items": 40,
+    "material_relations": 20
+  },
+  "risk_or_condition_records": 51,
+  "holdout_accessed": false,
+  "table_content_included": false
+}

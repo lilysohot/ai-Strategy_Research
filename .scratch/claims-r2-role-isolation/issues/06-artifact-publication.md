@@ -185,3 +185,9 @@ POSIX 权限用例在 root/非 POSIX 环境会跳过，本次 WSL 非 root 实�
   工件可以原样保存以供审计，但其 packet 为 `partial / table_untrusted_or_incomplete`，不能产生
   可发布 Claims/items/relations，也不能以“文件已保存”提升为 accepted publication。后续若完成
   人工或独立程序核验，须生成带新快照身份的新工件再走发布门，不得原地修改旧工件或追溯放行。
+- 2026-10-08：修复扩展回归中的过期 condition 期望。最小红灯证明输入原文没有任何条件标记；
+  raw replay 虽声称 `statement_role=condition`，`material-semantics-19` 的 accepted artifact 已规范化为
+  `claim`，故与同源 Claims 记录应为 `confirmed`。测试现断言最终工件语义；真实显式条件与冲突逻辑
+  未放宽，生产 publication 代码无需修改。原最小回路由 1 failed 转为 1 passed；跨角色参数组
+  **13 passed**、本票 publication 专项 **28 passed**、全部 structured 回归 **352 passed**；Ruff 与
+  format check 通过。

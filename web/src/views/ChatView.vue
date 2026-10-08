@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { onBeforeRouteLeave } from 'vue-router'
 
@@ -26,6 +26,7 @@ import RunStage from '@/components/RunStage.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useBusinessStore } from '@/stores/business'
 import { useRunStreamStore } from '@/stores/runs'
+import { openRunStream, type SseEvent } from '@/sse'
 import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
@@ -123,14 +124,77 @@ function escapeText(s: string): string {
   return div.innerHTML.replace(/\n/g, '<br>')
 }
 
-/** Split a run's thinking steps into per-turn reasoning text. */
-function thinkingForTurn(runId: string | null, turn: number | null): string {
+/**
+ * Per-run cached reasoning rehydrated from the run's trajectory after a
+ * refresh. The turns API does not carry thinking, so a refreshed page would
+ * otherwise lose every 「深度思考」 block; replaying each saved run rebuilds the
+ * cache (see rehydrateThinking).
+ *
+ * An assistant turn maps to exactly one run, so thinking is keyed by run_id
+ * alone — the trajectory's internal per-turn counter does NOT align with the
+ * session's per-message ``seq``, so only run_id is a stable join key across the
+ * two surfaces.
+ */
+const thinkingByRun = reactive(new Map<string, string>())
+const thinkingRefreshing = new Set<string>()
+
+/** The reasoning text for one run: rehydrated cache first, live stream second. */
+function thinkingForRun(runId: string | null): string {
   if (!runId) return ''
+  const cached = thinkingByRun.get(runId)
+  if (cached) return cached
   const text = runStream.steps
-    .filter((s) => s.kind === 'thinking' && (turn == null || s.turn === turn))
+    .filter((s) => s.kind === 'thinking')
     .map((s) => s.content ?? '')
     .join('\n')
   return text.trim()
+}
+
+/**
+ * Replay a finished run's trajectory once to rebuild its reasoning text after
+ * a refresh. Best-effort and fire-and-forget: a missing or 404 run just leaves
+ * the cache empty (the answer itself still renders). The cache is reactive, so
+ * populating it re-renders the message that reads it.
+ */
+function rehydrateThinking(runId: string): void {
+  if (thinkingRefreshing.has(runId) || thinkingByRun.has(runId)) return
+  // The live stream already carries this run's thinking; replaying it would
+  // duplicate the text and hold a second tail connection for a run in flight.
+  if (runStream.isStreaming && sameRunId(runStream.runId, runId)) return
+  thinkingRefreshing.add(runId)
+  let acc = ''
+  const handle = openRunStream({
+    url: runsApi.eventsUrl(runId),
+    token: () => authStore.token,
+    after: 0,
+    onEvent: (event: SseEvent) => {
+      if (event.type !== 'assistant_delta') return
+      const thinking = (event as { thinking?: string }).thinking ?? ''
+      const delta = (event as { thinking_text?: string }).thinking_text ?? ''
+      const text = thinking !== '' ? thinking : delta
+      if (!text) return
+      acc += text
+    },
+    onDone: (reason) => {
+      if (reason === 'completed' && acc.trim()) {
+        thinkingByRun.set(runId, acc.trim())
+      }
+      thinkingRefreshing.delete(runId)
+      handle.stop()
+    },
+    maxRetries: 0,
+  })
+}
+
+/** (Re)fill the thinking cache for every saved assistant run in a turn list. */
+function rehydrateAllThinking(turns: readonly { run_id: string | null }[]): void {
+  const seen = new Set<string>()
+  for (const t of turns) {
+    if (t.run_id && !seen.has(t.run_id)) {
+      seen.add(t.run_id)
+      rehydrateThinking(t.run_id)
+    }
+  }
 }
 
 const messages = computed<ChatMessage[]>(() => {
@@ -144,7 +208,7 @@ const messages = computed<ChatMessage[]>(() => {
         : escapeText(redactSecrets(t.content ?? '')),
     thinking:
       t.role === 'assistant'
-        ? thinkingForTurn(t.run_id ?? null, t.seq)
+        ? thinkingForRun(t.run_id ?? null)
         : '',
     created_at: t.created_at,
     run_id: t.run_id,
@@ -160,14 +224,14 @@ const messages = computed<ChatMessage[]>(() => {
     if (existing) {
       existing.html = streamingHtml || existing.html
       existing.raw = streamText || existing.raw
-      existing.thinking = thinkingForTurn(runStream.runId, null)
+      existing.thinking = thinkingForRun(runStream.runId)
     } else {
       out.push({
         id: `run-${runStream.runId}`,
         role: 'assistant',
         raw: streamText,
         html: streamingHtml || '<span class="typing">生成中...</span>',
-        thinking: thinkingForTurn(runStream.runId, null),
+        thinking: thinkingForRun(runStream.runId),
         created_at: null,
         run_id: runStream.runId,
       })
@@ -235,6 +299,17 @@ async function onMessagesScroll(): Promise<void> {
 watch(
   () => [messages.value.length, runStream.answer, runStream.timeline.length],
   () => scrollToBottom(),
+)
+
+// After a refresh (or a session switch) the turns are rebuilt from the history
+// API, which carries no reasoning text. Replay each saved run's trajectory to
+// rehydrate the 「深度思考」 blocks that would otherwise disappear. Keyed off the
+// turns array reference + its length so it fires once per load, not per turn.
+watch(
+  () => [sessions.activeId, sessions.activeTurns, sessions.activeTurns.length],
+  () => {
+    if (sessions.activeTurns.length) rehydrateAllThinking(sessions.activeTurns)
+  },
 )
 
 async function reloadTurns(): Promise<void> {

@@ -1,10 +1,10 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
 Status: needs-info
-Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；完整三角色金标与 M_main 交付评分仍未完成
+Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；非表格真实开发金标已形成 Claims/items/relations=20/40/20 的待审草案，尚未人工签核或正式冻结，M_main 交付评分仍未完成
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
-Blocked by: 需新增未见候选的开发材料，补齐 Claims/items/relations 各至少 20 条完整人工金标，并取得真实 query/delivery/context_use 观察
+Blocked by: 需人工逐条审核并签认非表格真实开发金标草案、以追加式新版本正式冻结，再取得真实 query/delivery/context_use 观察
 Real model calls: 0
 Production database access: 0
 
@@ -186,3 +186,24 @@ Claims 缺失；准备度仍有 Claims 10/20、items 2/20、relations 1/20 三�
 检查点要求该表内容，仍在 parse/routing/extraction 覆盖分母中计缺口，并按适用角色计 FN，不能因
 当前禁止消费而删除 E09、E11、E12 或其他表格目标。完成独立完整性核验时应新建快照/候选/评分
 修订，不覆盖本轮 freeze manifest、金标或质量报告。本次仅登记未来口径，历史实际得分保持不变。
+
+### 2026-10-08 · 非表格真实开发金标待审草案
+
+在已批准的 development scope 内，排除已经被贵州茅台候选覆盖的来源、受保护留出和全部表格单元，
+从两份尚未执行本专项候选抽取的真实开发材料中建立追加式待审包：工业富联 Markdown 投委会报告和
+光模块 DOCX 材料。确定性 reader 共导出 109 个非表格正文单元（14,259 字符），两份来源均无 reader
+issue；标注草案包含 Claims 20 条、material_items 40 条、material_relations 20 条，其中 51 条标记为
+风险或条件相关。所有记录均绑定来源 SHA256、精确 locator 和原文逐字引文，关系端点、允许关系类型、
+语义身份唯一性和每角色最小数量均通过确定性校验。
+
+该包状态仍是 `draft_pending_human_review`：80 条记录的 `review_status` 全部为 `pending`，reviewer 与
+adjudicator 均未填写，`human_signoff_complete=false`、`formal_gold_frozen=false`，也未授权运行候选。
+人工确认入口为
+[gold-review.md](../evidence/10-quality-gold-expansion-20261008-r1/gold-review.md)，机读草案为
+[gold-review-candidates.json](../evidence/10-quality-gold-expansion-20261008-r1/gold-review-candidates.json)，
+校验结果见
+[validation-report.json](../evidence/10-quality-gold-expansion-20261008-r1/validation-report.json)，完整输入与
+脚本哈希见
+[draft-manifest.json](../evidence/10-quality-gold-expansion-20261008-r1/draft-manifest.json)。这一步补齐了数量
+候选，但不把 AI 辅助起草冒充人工金标，不改写既有冻结包，也不解除质量门；正式冻结必须发生在
+这些来源的本专项候选执行之前。本轮模型调用、生产数据库访问和留出访问均为 0。

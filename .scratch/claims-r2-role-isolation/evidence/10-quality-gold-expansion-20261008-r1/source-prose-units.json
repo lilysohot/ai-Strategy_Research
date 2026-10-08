@@ -1,0 +1,1043 @@
+{
+  "schema_version": "corpus-structured-non-table-review-source-v1",
+  "created_on": "2026-10-08",
+  "status": "source_export_for_human_gold_review",
+  "candidate_outputs_observed_before_export": false,
+  "holdout_accessed": false,
+  "table_units_excluded": true,
+  "sources": [
+    {
+      "source_sha256": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "format": "markdown",
+      "extractor_rev": "reader-md-2",
+      "issues": [],
+      "units": [
+        {
+          "ordinal": 1,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:0-23",
+          "text_sha256": "bc27cbb8b8f59a9156e4008757de223a32bae941e382eaa59d28590ef4616a1d",
+          "text": "# 工业富联 投委会决策报告_20260829"
+        },
+        {
+          "ordinal": 2,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:25-134",
+          "text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45",
+          "text": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。"
+        },
+        {
+          "ordinal": 3,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:136-144",
+          "text_sha256": "21aaabf02f2334965e27d307467872552383970c04a099fdb5309a4252969f6b",
+          "text": "## 一句话结论"
+        },
+        {
+          "ordinal": 4,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:146-469",
+          "text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0",
+          "text": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。"
+        },
+        {
+          "ordinal": 5,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:471-481",
+          "text_sha256": "5348f641113815da0aa21d0f707498e2e7ce6ca3be40647239e9c629369af390",
+          "text": "## 一句话身份穿透"
+        },
+        {
+          "ordinal": 6,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:483-607",
+          "text_sha256": "0fd2cf23cbf50af4dd6341fa51f71e39589df6e8ee419095758a1a9c8f2b952b",
+          "text": "鸿海体系里的 A 股服务器 / 整机柜 EMS：左边吃英伟达 GB200/GB300/Rubin 和 CSP 自研 ASIC 的量，右边吃 800G 交换机和 CPO 样机；利润率仍是 7% 出头的代工加工费，账上垫着近两千亿存货和一千二百亿应收。"
+        },
+        {
+          "ordinal": 7,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:609-619",
+          "text_sha256": "41974cd3a520c28368d66c93316d43fbd7f0235923763bc8b1df3651ea8e2142",
+          "text": "## 第零步数据验证"
+        },
+        {
+          "ordinal": 8,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:621-855",
+          "text_sha256": "c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479",
+          "text": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；涨跌 +0.28%；成交额 103.15 亿元；换手 0.80%；量比 1.66。52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。融资余额 79.81 亿。近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。"
+        },
+        {
+          "ordinal": 9,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:857-1132",
+          "text_sha256": "5a31ba201d79df151bd941649c141e17a84e6924dda0cec7e09f27e6f0ef7802",
+          "text": "【研报共识层】mx-search 60 日内，长江 8/20 买入、山西 8/18 买入、国信 8/17 优于大市、国海 8/16 买入、华泰 7/12 买入、中金 7/10 跑赢行业、申万 6/29 买入。可解析目标价 n=3：中金 77.68、华泰 93、申万约 100.8（2 万亿 / 198.44 亿股），简单平均 **90.49 元**。国投 73.50、国泰海通 72.57、中金旧 77.68（5/4）过期或重复，不进样本。IMA 标题另有高盛 8/14 目标价 121，未拆 PDF 正文，不并入 n=3。60 日内未见中性或减持。"
+        },
+        {
+          "ordinal": 10,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:1134-1391",
+          "text_sha256": "92f523183310c7e6b81c36b8d1ac646b58bade5f34c1d178d9af5801ff32881d",
+          "text": "【预期差】有效目标价样本 n=3 且未过期，现价 64.04 相对 90.49 约低 29%，**不触发「价格远高于过时目标价」的黑天鹅公式**。方向上价格与研报（多数买入）名义不矛盾，差距来自「市场按 H1 线性定价、卖方按 H2 Rubin 加速定价」。xuangu 动 PE 26.76 反推市场定价的 26E 净利约 475 亿（12,700/26.76），几乎等于 H1 归母 237.40 × 2，**明显低于** 华泰 560、申万 590、长江 601、国海 649、山西约 649 这批 26E。"
+        },
+        {
+          "ordinal": 11,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:1393-1655",
+          "text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "text": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。"
+        },
+        {
+          "ordinal": 12,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:1657-1664",
+          "text_sha256": "c9b097e8f757f1bd19183626cfc578018dedcb2860451d5447b90fc73f99f7d1",
+          "text": "## 五脑辩论"
+        },
+        {
+          "ordinal": 13,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:1666-1679",
+          "text_sha256": "8fe5b52dd7566240f824d9d2eb1255065b607af4e87e0aab2ad28513bfaebff3",
+          "text": "### 大脑一 财务审计师"
+        },
+        {
+          "ordinal": 14,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:1681-1742",
+          "text_sha256": "0dbff8f0e50e7987f48a67fce18d4fae3fad6c0bd11a00b159366760f77448ba",
+          "text": "关键发现：这不是「投资收益把归母顶起来」的中报，主业扣非几乎等于标题；审计要盯的是「利润已经确认、现金还在存货和应收里」。"
+        },
+        {
+          "ordinal": 15,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:1744-2180",
+          "text_sha256": "a3effb4cfc95ed9ce00f4c01f0358e146a180165ab48adad2e5b9399dc5cab09",
+          "text": "扣非 229.84 亿，归母 237.40 亿，差额 7.56 亿，与非经常性损益合计一致。里面最大一块是金融资产公允价值 5.95 亿、政府补助 2.06 亿，利润表公允价值变动只有 1.82 亿（衍生工具对冲）。投资收益是 −2.69 亿，不是正贡献。所以质量矛盾不在「炒股」，在营运资本：存货 1921 亿较年初 +27.3%，应收账款 1275 亿 +15.2%，两者合计超过 3100 亿，相当于 H1 收入的 57%。经营性应收增加 303 亿、存货增加 424 亿，经营性应付增加 492 亿，三者轧差后再加上折旧，才挤出 73.91 亿 OCF。OCF / 扣非 ≈ 0.32，不及格；OCF / 归母 ≈ 0.31，同样不及格。公司解释是「销售回款增加」——同比确实从 14.07 亿跳到 73.91 亿（+425%），但分母利润跳得更快。已终止确认的保理应收 485.64 亿、保理损失 6.67 亿，说明现金有一部分是贴现买来的，不是客户把货款结清。"
+        },
+        {
+          "ordinal": 16,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:2182-2403",
+          "text_sha256": "1e50a144298639e0e0c407a1cd3e5c4a7cbc39c8c69ff3b21dbe4679cbd21de9",
+          "text": "毛利率 7.15% 与成本增速略慢于收入一致，审计不否定「结构略有改善」；但 Q2 6.99% 环比回落，改善没有在更高收入的季度里加厚。资产减值 12.93 亿（存货跌价）是经常性，不能当一次性。财务费用 19.12 亿（+750%），利息 20.02 亿、汇兑 5.23 亿，美元短贷 约 140 亿美元账面，Q3 若汇率再摆，经常性还会再打一刀。预告交叉：扣非 229.84 落在 227–237 的中上沿，主业是打满预告，不是卡下沿。"
+        },
+        {
+          "ordinal": 17,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:2405-2625",
+          "text_sha256": "55e20eaf8afe20368d1d2335cba1a67cbb3e9bb253539b2972f839b146048296",
+          "text": "少数股东 0.086 亿，几乎可忽略，所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。中期不分红、应付股利 130.52 亿是上年股利落账；筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。审计结论：「利润质量相对扣非是干净的，现金质量相对扣非是差的；AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。」"
+        },
+        {
+          "ordinal": 18,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:2627-2640",
+          "text_sha256": "729e677d95127594823e4d6dda4a69ed8a55d0463e4ef8cb971c7c8a4619b8d1",
+          "text": "### 大脑二 产业研究员"
+        },
+        {
+          "ordinal": 19,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:2642-2882",
+          "text_sha256": "f7ec5702a68d58faf494c81e0f38246422e850dc556c54438168ed47a7006ef4",
+          "text": "商业模式是高端 EMS 加工费叠加系统边界外扩：整机柜、液冷、电源、800G/CPO 跟英伟达和 CSP 的资本开支走，手机机构件跟大客户高端机走。H1 收入 +55%、云计算 +75.7%，量的故事是真的。公司口头「前瞻卡位 Rubin」「第一梯队」，但没有给出 AI / 服务器收入的人民币切分，也没有给 NVIDIA 份额——「占 10% 以上产品」这类定量在本次镜像里没出现。所以产业故事目前停在「出货倍数 + 管理层形容词 + 卖方单柜价值量」，还没有停在报表 mix。"
+        },
+        {
+          "ordinal": 20,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:2884-3194",
+          "text_sha256": "f23b8714873ff94b90d4a04f2b4b6f39c3782411e57d70a767a01f9daf0ed3ac",
+          "text": "护城河是认证周期、NVL72 级液冷整柜的良率和已经铺开的墨西哥 / 越南 / 美国近岸产能，不是品牌。真对标是广达、英业达、纬颖、纬创，不是浪潮、紫光、曙光——后三家是 A 股能买到的服务器硬件，商业模式（分销 + 国内招标 + 自有品牌）与 FII 的出口 EMS 不是同一张利润表。浪潮 H1 毛利率 8.75% 只比 FII 厚 1.6 个百分点，OCF 还是 −75 亿，说明「做服务器硬件」这一层全球都薄；曙光 27% 毛利率是另一条曲线，不能拿来给 FII 做估值锚。台系报价本次缺失，不能编 TWD 价；经济观察网只定性「广达是最主要竞争对手、7 月月营收同比高增」。双供是机制，不是已经发生的份额数字。"
+        },
+        {
+          "ordinal": 21,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:3196-3477",
+          "text_sha256": "c5bc8df8076258d4686abcbabe3949c368ec4f2ce0cacccf8e6412e4bd37ab70",
+          "text": "Q2 毛利率环比掉 0.36 个百分点，是本轮产业最重要的一张表。如果 AI 机柜真的比传统服务器厚，收入环比 +22% 时毛利率至少不该掉。可能的解释有三个，都还没有被公司证伪：一是 GB300 爬坡良率和物料损耗；二是 Buy&Sell 模式把 GPU 成本做进收入、加工费被稀释；三是传统板 / 机构件拖后腿。申万 6/29 提到交易模式从 Buy&Sell 转向 Consignment 会抬云计算利润率——那是卖方假设，H1 的 7.15% 还没把它做出来。CPO 样机交货是 2026 年的期权，不是 H1 利润。HBM / CoWoS 不是这张票。"
+        },
+        {
+          "ordinal": 22,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:3479-3629",
+          "text_sha256": "30bbd539f7905c578a559e686bb4227632cfcc763a1bf57a6379f818e6d92d25",
+          "text": "墨西哥 2025 年已是最大境外制造地（3070 亿收入，年报），北美客户要本地化，这是 FII 相对纯大陆厂的壁垒；2026H1 分地区没有新数，不能把「墨西哥」写成今年的增量主引擎。美国接单法人 Ingrasys USA 收入 1787 亿、净利润 0.48 亿，提醒你：海外收入不等于海外利润。"
+        },
+        {
+          "ordinal": 23,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:3631-3644",
+          "text_sha256": "64a46710c1573aa17823ef32f62a640a0f0020c6c35bcc3ad8e6ef1089ac338d",
+          "text": "### 大脑三 多空交易员"
+        },
+        {
+          "ordinal": 24,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:3646-3923",
+          "text_sha256": "c7389e28e09ef85a4753500b4546f721e15e3ee42ee42e5fb74e517fb45540e6",
+          "text": "看多：扣非 +97% 配动 PE 26.76，在 A 股 AI 硬件里是「便宜的那一档」——浪潮 TTM 44.5、紫光 48.3、曙光 51.9，光模块 49–124。市场按 475 亿 26E 在标，卖方 560–667 还没进报价。Q2 环比 +22% / +24% 不是库存回吐能解释的斜率。华泰 93、中金 77.68、申万约 101 都在 60 天内。融资只有 80 亿、换手 0.80%，从 84.95 回了 25%，拥挤比 6 月轻。8/27 英伟达财报只给了一天 +5%，8/28 没追，说明交易盘没有再把 β 一次性打满。回购还在买。"
+        },
+        {
+          "ordinal": 25,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:3925-4239",
+          "text_sha256": "ab67242228b6d8cc9211586c99ea26205a0bd6437a106b1a2a8905e87e75b139",
+          "text": "看空：TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」；贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。OCF/扣非 0.32 是已经发生的证伪，不是担心。Q2 毛利率环比已经为负。动 PE 隐含的 475 亿看起来「没给卖方 600」，但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。北向 H1 减持 8180 万股。目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，不是 8 月能兑现的地板。高盛 121 是 IMA 标题，更不能当明天的价格。"
+        },
+        {
+          "ordinal": 26,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:4241-4368",
+          "text_sha256": "256e6983e9782e84c4dc0e147d889a794aed8b6e5d18e9cceb7d9e3311c1e48c",
+          "text": "预期差不在「现价 vs 过时 72 元国泰海通」，而在卖方把 H2 Rubin 一次性贴现、交易盘在 64 元把「线性年化 + 现金转换差」一次性折现。现价隐含的赌注：承认出货还在，不承认 26E 已经是 600 亿，也不承认 7% 毛利率已经见底向上。"
+        },
+        {
+          "ordinal": 27,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:4370-4383",
+          "text_sha256": "d729bb0a43cf5054307b0821effa2be94638e03632e3cc4a0a7fa79955b167d6",
+          "text": "### 大脑四 战略风控师"
+        },
+        {
+          "ordinal": 28,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:4385-4657",
+          "text_sha256": "d0bd1c4839df37edffdbd36ee3cfef6a6b50be5fbe70e35d1d41804f57e8cc84",
+          "text": "最坏情景：Rubin / GB300 爬坡再延，CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，毛利率从 7% 回到 6% 以下，存货继续堆，OCF 转负。次坏：云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。再坏：美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。实体清单本次没有 sourced 命中，但不能把「没搜到」当成「不会发生」；墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。"
+        },
+        {
+          "ordinal": 29,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:4659-4907",
+          "text_sha256": "5f3b83b277939c8c051ebbf2a6b8bf7bbd054cc4dfd365601a655b5a865f1040",
+          "text": "客户集中是结构风险：2025 年前五大 62%，H1 应收前五 68.52%。GPU 线绑英伟达节奏，ASIC 线绑少数 CSP。双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，不是研发变现。中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。"
+        },
+        {
+          "ordinal": 30,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:4909-5038",
+          "text_sha256": "0e11d5a7da4f6529e5dd6b6b86a3fb569ba8b81bfe97d436426bacaf8c8094f8",
+          "text": "证伪第一枪看 Q3 毛利率和经营现金流，不看股价还涨不涨。第二枪看公司是否改口「Rubin 后移」或不再用「第一梯队」。第三枪看存货 / 应收是否继续快于收入——H1 已经是这个形状，Q3 若再加速，就是营运资本陷阱从「可解释的备料」变成「货物卖不出现金」。"
+        },
+        {
+          "ordinal": 31,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:5040-5053",
+          "text_sha256": "15052dc32fd7d7720f056febae0cf7a42f5325030bec5c31fb739aff34b973b9",
+          "text": "### 大脑五 投资决策者"
+        },
+        {
+          "ordinal": 32,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5055-5071",
+          "text_sha256": "77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "text": "四选一：**持有 + 观望。**"
+        },
+        {
+          "ordinal": 33,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5073-5244",
+          "text_sha256": "c34f7c2e7ce8df3fdbff7f4efbbd2f97b26a90d7e545be3c6b01b308d3cd422d",
+          "text": "独立于任何账户：中报没有证伪 AI 整柜的需求，现价也没有给出「必须马上按 90 元去买」的赔率。不在英伟达财报次日用卖方目标价追高，也不因为扣非干净、PE 低于浪潮就把 27 倍 TTM / 7 倍 PB 说成便宜——便宜的是相对 52 周高 84.95 和相对卖方 2026 年 600 亿，不是相对已经只有 0.32 倍现金转换的利润。"
+        },
+        {
+          "ordinal": 34,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5246-5537",
+          "text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+          "text": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。"
+        },
+        {
+          "ordinal": 35,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5539-5804",
+          "text_sha256": "2395ee4a4d4385c0f71f56da503b3bf2cf04209c27a126fdd51c87b80a547f2d",
+          "text": "本判断与 60 日内可见卖方「买入/优于大市/跑赢行业」超过八成不一致，理由至少三条：（1）OCF/扣非 0.32 已经是工作资本陷阱，卖方仍在用归母 +96% 和 26E 600 亿定价，近端赚的是出货不是自由现金；（2）Q2 毛利率环比 −0.36pct，7.15% 的 H1 并表没有证明 AI mix 能改写 EMS 利润率，用 24–35 倍追等于为未被报价承认的上修付全款；（3）动 PE 26.76 已经在定价约 475 亿 26E（H1 线性），64 元不是「没给成长」的折扣票，只是没给卖方的 Rubin 加速。"
+        },
+        {
+          "ordinal": 36,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:5806-5813",
+          "text_sha256": "1d144a8c82974f1f676601fd6755f2074f811435e12ceff43f34e18243a21a17",
+          "text": "## 估值拆解"
+        },
+        {
+          "ordinal": 37,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5815-5876",
+          "text_sha256": "12fcb5bc39833b8bc1f67943202a1938ee6ab846628c977b3625bf1de3942e06",
+          "text": "股份 = 中报期末 19,844,092,284 股；交叉 12,700 亿 / 64.04 ≈ 198.3 亿股，一致。"
+        },
+        {
+          "ordinal": 38,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:5878-5960",
+          "text_sha256": "eea49ab680e2dfc38a3128e6202ebc2938da64b952a03464f6ad296cb990ae58",
+          "text": "动 PE 26.76 隐含 26E 净利 ≈ 12,700 / 26.76 ≈ 475 亿，约等于 H1 归母 237.40 × 2，不是卖方 560–667 亿。"
+        },
+        {
+          "ordinal": 44,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6440-6618",
+          "text_sha256": "a1a6ba733e926827c1dbbacac330006fd9ce134515a65823c5224422a824e9f1",
+          "text": "线性 1.6 倍年化扣非是情景，不是预测。乐观档直接借用华泰 93 的 2026 年框架，不另造倍数；申万 100.8 / 高盛 121 是同一方向更贵的版本，不并入中枢，避免把 35× 和未拆 PDF 的标题再加一层。现价隐含的赌注：承认 H1 出货和扣非为真，但不承认 2026 年 33 倍已经值当立刻支付，也不承认毛利率已经见底、现金转换已经修复。"
+        },
+        {
+          "ordinal": 45,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:6620-6629",
+          "text_sha256": "e5a1514e9eb0dd539a018aae85e88851788bd89cfb7e1084f69f11f32c39e9fd",
+          "text": "## 催化剂与证伪"
+        },
+        {
+          "ordinal": 46,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6631-6700",
+          "text_sha256": "76f0fd7fac01a516ee980cea015eccc10c9e25f14bf815ce07db877c5989fbdd",
+          "text": "1. 近端：GB300 / Vera Rubin 是否按中报「H2 逐步量产」落地。证伪：公司或 ODM 公开延期，或不再用「第一梯队」。"
+        },
+        {
+          "ordinal": 47,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6701-6767",
+          "text_sha256": "e5502bd75c47386284c46b140060dbc49db1fc4ec85d61626fe18d5f1ed9e7a4",
+          "text": "2. Q3 毛利率能否离开 6.99% 的环比下滑。证伪：Q3 较 Q2 再掉超过 1 个百分点，或公司改口 mix / 传导受阻。"
+        },
+        {
+          "ordinal": 48,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6768-6805",
+          "text_sha256": "6e88d9f4f1de22b2f0405af967476934567a8f500478ec3f6050bb0463741033",
+          "text": "3. 经营现金流能否追上扣非。证伪：下次季报 OCF/扣非仍 < 0.5。"
+        },
+        {
+          "ordinal": 49,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6806-6870",
+          "text_sha256": "be7ab71d198c38f20060441ef7dcbb76ad71ad3038c35d9a6448e8ee1907c41e",
+          "text": "4. 客户双供。证伪：广达 / 纬颖 / 浪潮在同一 NVIDIA 料号上被点名为增量主力，而 FII 不再用「份额稳步提升」。"
+        },
+        {
+          "ordinal": 50,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6871-6921",
+          "text_sha256": "8cde8705b54fd9926194b71b342476c2787ee8569c8e75ce05901b738d621def",
+          "text": "5. CPO 从样机变成出货。证伪：指引从「今年上万台」（华泰 5 月转述，超 60 天）改口推迟。"
+        },
+        {
+          "ordinal": 51,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:6922-6963",
+          "text_sha256": "c7f844ae32b4931db69817eaac874186c992c428f9f557f62b740fcd8ba12eaf",
+          "text": "6. 管制 / 近岸。证伪：实体清单或 GPU 系统出口新规点名本票或关键子公司。"
+        },
+        {
+          "ordinal": 52,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:6965-6972",
+          "text_sha256": "901f602e4215cbe0f589db0d6120bc5d382f831953d7ebf807b8e7bdbc69ea4f",
+          "text": "## 五维评分"
+        },
+        {
+          "ordinal": 60,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:7294-7348",
+          "text_sha256": "c0a8a570e640e0964e94bc417fa5903176947e3c24e567e8f0974c79b55633f0",
+          "text": "综合偏「量是真的、利润率还是 EMS、现金没跟上、价格已经从高潮回了一截，但没便宜到必须按 90 元去买」。"
+        },
+        {
+          "ordinal": 61,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:7350-7359",
+          "text_sha256": "40ab0e528ddab27c5194e5690976337234e5c4e640828100de0d194fe508c510",
+          "text": "## 关键跟踪指标"
+        },
+        {
+          "ordinal": 76,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:7991-8000",
+          "text_sha256": "1223f251e2bc52e11a10cee057f2fb8797bd17e52247df0fb681170db57f5a49",
+          "text": "## 数据来源声明"
+        },
+        {
+          "ordinal": 77,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8002-8043",
+          "text_sha256": "5d36584d35e5ac3a5600003d7e5aed4ca2ec130051648af0e95d02c99a6e9d06",
+          "text": "- 行情、同业、52 周、融资、链条报价：mx-xuangu 2026-08-28"
+        },
+        {
+          "ordinal": 78,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8044-8117",
+          "text_sha256": "792ea8cea8bf832eec443aa13e384a284f575cc638e7d79c2a1a1c2d956f22e2",
+          "text": "- 中报质量：公司 2026-08-11 半年度报告全文及 8/12 摘要（上交所 / 新浪指定披露镜像）；mx-search NOTICE 同日"
+        },
+        {
+          "ordinal": 79,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8118-8160",
+          "text_sha256": "60c074cad236ffcacb9af5ab0d343cfe82c0dd57f47c47ad6581f800b6a78831",
+          "text": "- 预告：中金 2026-07-10、华泰 2026-07-12 转述 7/9 预增"
+        },
+        {
+          "ordinal": 80,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8161-8229",
+          "text_sha256": "db5d5535ef185c24f5f053a007dfe9c070819bc33f59fa774322e1a9fcd4ffe8",
+          "text": "- 研报：mx-search「最新研报 机构评级 目标价」；国海三年盈利来自慧博 8/16 摘要；申万目标市值来自 MX 6/29 原文"
+        },
+        {
+          "ordinal": 81,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8230-8276",
+          "text_sha256": "50dd852cbc756bc14b09d71fedd43184e3188e42f17065f873fc4abed0a4b5fd",
+          "text": "- Q2 毛利率：国信 2026-08-17；Q1 毛利率：经济观察网 2026-08-12"
+        },
+        {
+          "ordinal": 82,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8277-8311",
+          "text_sha256": "94805c58a4385ae1e5645f6e5c85d86dae321dca5c33dd4e1793c6cba7ef3f4e",
+          "text": "- 回购：8/19 媒体（首次约 1.49 亿 / 61.35 元）"
+        },
+        {
+          "ordinal": 83,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8312-8346",
+          "text_sha256": "8eb69c955c5237786f636a5691351d4efce2aee2c8f3d90c3f2d4d9dfe0c88dd",
+          "text": "- 墨西哥 2025 制造地：财联社 2026-03-11 转述年报"
+        },
+        {
+          "ordinal": 84,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8347-8385",
+          "text_sha256": "005ede2caacc58f4a0a036b468c9295f16aa587ac0199392be4db28709dde0a8",
+          "text": "- 汇率：外汇交易中心中间价 2026-08-28（中新网 / 中国经济网）"
+        },
+        {
+          "ordinal": 85,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8386-8411",
+          "text_sha256": "0ed1144cbcde3fec59c078486c399c1a9aa76c1c5ff8ff98d76a63a7975614d9",
+          "text": "- 8/27 涨幅：xuangu 收盘交叉新浪资讯"
+        },
+        {
+          "ordinal": 86,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8412-8455",
+          "text_sha256": "112b06107d14979a590ee9f74a1d2402605642e7181cf9da10eef41566bca8af",
+          "text": "- IMA：发财街知识库，工业富联 3 条标题、浪潮信息 0 条；高盛 121 仅标题"
+        },
+        {
+          "ordinal": 87,
+          "kind": "list_item",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8456-8498",
+          "text_sha256": "0884e270bdf60f49fb6c31b1089314f55ce664912512f93f1c9a7365002425e1",
+          "text": "- 台系 EMS：xuangu 无报价；经济日报仅有 8/27 涨跌幅，无完整收盘价"
+        },
+        {
+          "ordinal": 88,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:8500-8510",
+          "text_sha256": "23975cbc381bd5870a306b34fa06a3cced128c09ae1fca8f73ae99bb9423501f",
+          "text": "## 数据完整性检查"
+        },
+        {
+          "ordinal": 89,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8512-8677",
+          "text_sha256": "e9b5fba9af882a07da4e7131f7603bdd10e92a8c27475831c3e548c8fa1606c2",
+          "text": "收盘价、市值、PE/PB、52 周、融资、H1 营收/归母/扣非/OCF/非经常/存货/应收均有来源。缺失：分部绝对额与分部毛利率、NVIDIA 份额、月度营收、2026H1 分地区、台系报价、同业 52 周、北向当日流向、实体清单命中、IMA PDF 正文。未把高盛 121、国投 73.50 当共识目标价，未把线性扣非当预测。"
+        },
+        {
+          "ordinal": 90,
+          "kind": "heading",
+          "status": "kept",
+          "reasons": [
+            "atx_heading"
+          ],
+          "locator": "char:8679-8686",
+          "text_sha256": "084eb860ce7ced444c3ddfa33ed5f17f2e7c963d748032d7eaf55c6c2ea464c9",
+          "text": "## 免责声明"
+        },
+        {
+          "ordinal": 91,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "char:8688-8804",
+          "text_sha256": "8b442f8c592b84850bb653c9a60790b31abba7116e06c7334f20320c1b72a974",
+          "text": "本报告是独立标的研究，不是针对特定账户的操作指令，也不构成投资顾问意见。Rubin/GB300 排产、毛利率能否在更高收入上加厚、经营现金流能否追上扣非，都不能外推。8/27 的涨幅把英伟达财报叠进 AI 链，事后归因容易过度自信。"
+        }
+      ]
+    },
+    {
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "format": "docx",
+      "extractor_rev": "reader-docx-2+python-docx-1.2.0",
+      "issues": [],
+      "units": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[1]",
+          "text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972",
+          "text": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。"
+        },
+        {
+          "ordinal": 2,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[3]",
+          "text_sha256": "e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+          "text": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。"
+        },
+        {
+          "ordinal": 3,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[5]",
+          "text_sha256": "c39c0249a245b297adf2e9cff8e4ddeef181792a9ab6e85cf0f351cd0f792a4e",
+          "text": "然后价格之前这段之前给大家说过的，价格是一个正常的年降的比正常的年降还要少的一个区间。但是下降肯定是要下降的，下降没什么问题，下降是个好事。长期来说对产业来说降价肯定是好事，这个都明白。"
+        },
+        {
+          "ordinal": 4,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[7]",
+          "text_sha256": "b598a760080381cadd47c2584a4452e10b40c3bfb6053f91d557c3a48de2a0b7",
+          "text": "然后生命周期五年，五年更换，但是你不要去重新去记这个，先把这个说完，26年到30年是1.6T的五年周期，预计到28年出货量达到峰值之后，趋近平缓的增长。但你不要去额外去新增计算，是不是上一代的完了，我这一代还要算个增量。没有的，所有的更换替代，它坏了的替代，全部在我们平时所说的这些需求也好，消费也好，都包含在里面，不要去重复计价。"
+        },
+        {
+          "ordinal": 5,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[9]",
+          "text_sha256": "da9ccba191e9147d4dd8b15e8646ed127b63cbda7ed0f09869f49fbe01fe0757",
+          "text": "你的AI刚爆发，你还没信心，或者你要充分的证据，那你还要保守一点。但是24年也是这样，25年也是这样，就很奇怪。"
+        },
+        {
+          "ordinal": 6,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[12]",
+          "text_sha256": "389133277dfc32bfba54e4e2573a62aa8df7bbe4638ffb7b0e4aafd98789b975",
+          "text": "学术机构，对，就lightcounting这种就别看了。这个也不对，我都怀疑这不是他的数字，这个数字也不对。如果是旭创的话也不对，不知道是不是旭创的采访。"
+        },
+        {
+          "ordinal": 7,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[15]",
+          "text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb",
+          "text": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。"
+        },
+        {
+          "ordinal": 8,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[18]",
+          "text_sha256": "6946e1a972895b368a454f59cb45fb0e9cee45ed00d7914ed3ac38f2760dcc64",
+          "text": "1.6T里面，全行业的占比到70%。海外的需求量26年的需求量，26年其实意义已经不大了，买800G 200万只，1.6T 100万只。谷歌800G 250万只，1.6T 180万只，不用拆这么细。国内客户阿里、腾讯、H企业、字节26年客户的合计需求量800G 30万只，公司在其中份额15%，对于1.6T国内市场的总需求在100万只。如果是这个数字我不知道，如果是100万只的话，我觉得是个不错的水平，挺好的。但感觉也没有这么多，没有这么多需求量，我不确定。"
+        },
+        {
+          "ordinal": 9,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[21]",
+          "text_sha256": "399b8c2faad3da0c61a6886e233810d2499f6e1169a894be81dd9d0eec11e080",
+          "text": "关心的少，NPO在国内国外是否存在差异？事实是国内的进展比国外要快，可以认为是同步启动，这个是公允的。国外本身也想要在互联这一块取得一些战略要地。国内因为芯片比不过，你只能从这些方面去比，这是事实。预计27年全球NPO出货量在800万到1200万之间，其中中国市场将三四百万只，这个数字现在都是各说各的，会相差很大。这个现在也完全没有办法去预测究竟出的是多少万只，你可以相差特别大，这里面的误差会特别大，800万也有可能，2000万也有可能，可以相差好几倍。国内市场主要包括H企业、阿里，然后供应侧旭创、新易盛、华工等。"
+        },
+        {
+          "ordinal": 10,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[24]",
+          "text_sha256": "f518f2f0504d3b14350b038642f5dc7cb4e70aad2e46ae58b0d933a35eab01fb",
+          "text": "3.2T的分布，28年总需求可能是500万，其中Meta 150，谷歌120，亚马逊70，微软50。当前光模块供应链是否存在紧张的环节，还是DSP，27年下半年，28年缓解。"
+        },
+        {
+          "ordinal": 11,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[26]",
+          "text_sha256": "1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566",
+          "text": "长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大。这句话是不对的，是电话会还是什么忘了。这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？这个事情当时已经说过了，以后都是要算的，所以这部分是在强掰。然后这里面税率加上去，你转嫁给客户不一定能够很好地转嫁的。这个是你公司自己的供应商自己的问题，你不可能全部转嫁给客户的，只是要谈，没有说得这么容易。你如果转嫁了，对你的竞争力就会有影响，对不对？这是二者取其一的事情。"
+        },
+        {
+          "ordinal": 12,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[29]",
+          "text_sha256": "ec69974c631468a02df81fa8316ef964c3437837509053dd9307947e0416de8a",
+          "text": "面对潜在的政策变动，是否准备了涨价预案？有相应的预案，因为政策原因导致成本的上升，会与客户协商，提价幅度在10%到20%之间。为保障供应链的稳定和产能持续供应对客户而言至关重要，因此他们愿意承担部分增加的成本，对吧？部分肯定是可能的，大家谈一谈做生意都是这样。公司预计到27年市占率达到什么水平？这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。好的，27年公司的市占率将有显著提升。"
+        },
+        {
+          "ordinal": 13,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[32]",
+          "text_sha256": "0f7ebcf48d57b217db5ad82c96692cb3541b8f233cce6d090a8478b210c8aa42",
+          "text": "然后网络架构中scale out、scale up分别有哪些产品？200G scale up领域主要用NPO，NPO可以理解为一种没有外壳的可插拔光模块。2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。CPO目前可以理解为还没有实际的出货，这个是真实情况。在CPO里面90%以上的价值由交换机芯片厂商，就是NVIDIA、台积电来主导。"
+        },
+        {
+          "ordinal": 14,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[35]",
+          "text_sha256": "a24113360cdd5b8f2113ea097a9d07ec19ccdd9af062ea0002bcdec4df78945c",
+          "text": "光模块提供的价值量相对有限，大约20%左右。这个数字加起来好像不是100%，但是意思就是这个意思，大量的价值不在光模块厂商手中。光模块厂商可以提供半导体级别的能力，但整体的方案主导权不在手中。你不要管这个，不要看这9%的数字，反正你就理解是大部分。大部分你也不能完全去看这个大部分的数字，因为怎么说呢？这里面它是个交换机，对不对？你原来交换机就有这个部件这个功能，它包括了光模块的功能，也包括了交换机的功能，对不对？那你交换机这么大一个机器里面有这么多东西，你原来也不是光模块厂商做的，对不对？所以这部分要给它刨掉，就是大部分再稍微减一点，那肯定是主要的价值肯定不在，这个掰不了。"
+        },
+        {
+          "ordinal": 15,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[37]",
+          "text_sha256": "75a1083d9de8ac5c383729ea29998849b3fe6c1eed0efa832691b55b8d8b21ee",
+          "text": "在CPO领域，探索目前尚未形成明确的结论方向，可插拔并没有成为主流，就是提出了可插拔CPO没有成为主流。长远的来看，可插拔仍有生命周期，预计到29年30年在材料取得重大突破前，可插拔仍然是主流，并且速度还有提升空间。主要群体北美的这些电力短缺的确会影响到公司出货节奏，所有的出货节奏都是环环相扣的。不可忽视的是，对数据中心客户来说，通过网络的提升远比服务器芯片、存储这些提升要来得大，对吧？这个是从去年开始就跟大家反复说了，网络这个点提升的性价比是最高的。资本开支受限的情况下，网络提升需求依然存在。这一定程度上可以对冲数据中心如果是放缓假设放缓的情况下带来的负面影响。这个观点我觉得是认可的。"
+        },
+        {
+          "ordinal": 16,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[40]",
+          "text_sha256": "54e3e22b7d5336e41a37eb1df621a97772f423c0340fdf9e84cb2b5efbfdeeed",
+          "text": "除了CPO还有哪些光学完整性，这个是当时给你们举的一个例子，光学完整性，算了，今天没时间就不展开了。光学完整性说的应该是一些温漂等等的一些东西。他这么说是什么意思？意思就是说我们是光学企业，我们很牛逼，对吧？你们是新进的什么台积电、NVIDIA，你们这些都是外来户，对吧？外来暴发户，你们野蛮人进来了。但是实际上里面是有很多的光学里面的技术，你们是搞不定的，但是我们能搞定，意思是这个意思，给你们大白话解读一下。所以说虽然CPO被你们搞了去了，但是里面还是专业度，有些地方还是离不开我们的。"
+        },
+        {
+          "ordinal": 17,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[43]",
+          "text_sha256": "79d9507f1045be3b571c97e2089b399f159a914b4fd14f8305cea2155b9290fe",
+          "text": "剑桥呢在送样方面，他们通常会经历一个为期六个月的实验室认证，之后再小批量。整个流程下来最终拿到订单可能需要1年到1年半时间。"
+        },
+        {
+          "ordinal": 18,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[46]",
+          "text_sha256": "482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700",
+          "text": "北美客户今年定位非常明确，就服务于顶级客户。今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。你们莫名其妙，说的就是这些新客户。他那个采访反正他是有立场的，对吧？"
+        },
+        {
+          "ordinal": 19,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[49]",
+          "text_sha256": "374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14",
+          "text": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。目前反正是有新客户了，这些新的云不知道是什么原因。目前公司与这些新客户开展顺利，进入了小批量测试。到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。加上现有核心客户的业务，预计北美市场收入占比将达到85%左右。今年85%左右，还有15%是国内。"
+        },
+        {
+          "ordinal": 20,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[51]",
+          "text_sha256": "e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+          "text": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，就是因为1.6T拉胯了，不是DSP拉胯了，然后800G就明显比那个800G肯定不止。他说什么半年这个肯定数字不对，二季度就有超过300万个了。"
+        },
+        {
+          "ordinal": 21,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[54]",
+          "text_sha256": "59e49bdcdc8e43574aad0e4308884313a5dcdf06ddae593ce5e19f13d5f19dad",
+          "text": "大家有个框架就完形填空呗，有个模型没有太大的意义。不要他吹什么两千多，三千多又怎么了呢？他又不是第一天吹，对吧？然后拍一千多又怎么了呢？没有意义。不用看，你要看他们在行的是哪些东西，对吧？比如说整体服务器，那肯定比光模块这种产业要可参考性要更强一点，对吧？说到技术的可能要强一点，说到芯片的那就更强了，说到AI本身的AI模型的那可能就非常强了，对不对？不同的东西不同的看。"
+        },
+        {
+          "ordinal": 22,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[57]",
+          "text_sha256": "23307aa2515ec8b8c701daf0fb4975e36c412e83847ba7e2211f3392bff84800",
+          "text": "首先以前说过的DSP，不是所有的DSP都不行了，只是里面的FR长距离的这些有问题。然后有问题怎么解决？要重新流片解决，所以这个流片是有时间的。你不是说我发现问题我改正，改个PPT就行了。不是的。我要流片，我要台积电生产出来的，这里肯定是要有时间的，没有那么快，没有那么快，所以不用一个礼拜问一下。"
+        },
+        {
+          "ordinal": 23,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[60]",
+          "text_sha256": "b08861cb82b747fff22ccc8ee7fbf8e73995c5e9422b839f99a972c3c09956f9",
+          "text": "德科立OCS具体规格是否正在用谷歌？不用看德科立，我们看OCS，这里虽然是德科立的采访，但是我们还是看行业，看产品为主，看技术路线等等，看这些东西，不用管德科立。他目前没有300乘300的，然后现在有128的。300预计要到26年年底推出。"
+        },
+        {
+          "ordinal": 24,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[63]",
+          "text_sha256": "dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672",
+          "text": "128是刚刚推出的，正在中心进行验证，对吧？中心是它的客户，尚无固定的客户，德科立将其视为一个过渡型的产品。因为mems主要是要用300，对吧？为什么用300？为什么要多？以前给你们讲特氟龙的时候都说过这个问题，对吧？就是要多。虽然NVIDIA可能对128有需求，但谷歌已经明确表示，如果要mems的话就要300以上。"
+        },
+        {
+          "ordinal": 25,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[66]",
+          "text_sha256": "3d4986d607ab5044c7f5d0a1c9ffe8dbba8497012d8cf18d21583b0cc2032fea",
+          "text": "何时开始的？26年开始正式立项光波导，对吧？它一开始不是搞了波导，然后去买了个十几台的样品。最初在三月份，64口的版本经过了客户的验证，对吧？就那时候，但因为端口数太少，市场需求有限，因此目前128是一样的，都属于过渡产品，但是都是要一点点从小到大研发开的。"
+        },
+        {
+          "ordinal": 26,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[69]",
+          "text_sha256": "6b7dcb4062aff2f3516716ee22650f2a33b94797c4f85ed4dd90bf7e39982871",
+          "text": "Mems主要战略目标是300，三百推出后争取进入谷歌供应链，然后通过光波导已经建立了合作关系。公司具备mems芯片的技术，技术解决相关技术瓶颈难度不大，因此决定同步推进该产品的研发，最大的最终客户是谷歌。现阶段出货是32的、64的，预计从11月后开始出货。这个出货不一定是样品还是怎么样。"
+        },
+        {
+          "ordinal": 27,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[72]",
+          "text_sha256": "f605149be266472604ef87d4f1f265fed4879997eaf69181c0b7b48c60e4b897",
+          "text": "Mems相比光波导优势，这个以前都解释过，就稍微看看时延、功耗等等这些。既然光波导的方案优势明显，为何300还是要用mems？因为光波导还没做出来。他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，尚未达到可以量产的阈值，说明设计上仍然存在缺陷，需要进一步调整，就是没进展。希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。所以就要看你跑不跑得过，你自己如果跑不过，但是芯片是不能等你的，因为这里面不光有芯片，有博通，有台积电，你还有PCB，还有7788的所有的供应链，没法等你这一个。如果你这个出来就出来了，出不来只能用替代方案了。"
+        },
+        {
+          "ordinal": 28,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[75]",
+          "text_sha256": "ee9a8cad9bd707e27d4652d535e3df938380500ec9ece1541c084580047bba08",
+          "text": "谷歌最新的T和I，训练和推理，训练侧大概率会以mems为主，而推理等端侧应用其机柜集训规模相对较小，对端口数量的需求不大，差别在这里。所以他比如说还可以接受端口数量更小的，也就是接受更先进的，也就有这个空间去接受更先进的技术路线。因为先进技术路线它这个端口比较小，现在是这个原因，所以推理的里面给他一个机会窗口。理论上64口能满足需求，但没有扩充余量，没有冗余。因此谷歌希望用128的。UBI应用场景更靠近客户，对响应速度要求较高，光波导可以满足提升用户体验。"
+        },
+        {
+          "ordinal": 29,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[78]",
+          "text_sha256": "a6af512a9690eba48ea0c42f1b67fd51445b407a432f8bdb682d61b6fa3b586c",
+          "text": "然后mems方案是端口线性增长。因为每多一个端口它都要多一套系统。机械开关就是mems这个系统和光路系统等等这些镜子、棱镜、透镜这些都要多一套。相比之下波导的成本不是这样线性增加的，不是随端口线性增加的。因为它在共享一个波导片，随着端口数量增加越多，那么被摊薄的比例就越大。这是两个的差别。然后SOA之前给大家讲过，它自己搞出了一个集成来补偿这个差损的。"
+        },
+        {
+          "ordinal": 30,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[81]",
+          "text_sha256": "7a413d4da209b1febfe7884499deac935f0c4a58a31390482963de7d3c612ca8",
+          "text": "然后是否必须要使用相干？不是的，两者是不同层面的。相干是在scale up里面用，是因为距离过远，解决距离过远的痛点，OCS是解决变形的痛点。目前OCS具体需求如何？谷歌12月左右曾给出预期，26年采购超过2000台OCS，截止目前已下单300台，32端口的OCS场景较少，采购量不大，主要是催促128的，64被认为是过渡方案。"
+        },
+        {
+          "ordinal": 31,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[84]",
+          "text_sha256": "1aa580478850bf1bb4d7bbb3a2d9b492bc640cbd7e180bddd0c41da21587f93b",
+          "text": "由于谷歌V8I的推出，导致其方案进行了较大调整，64端口的下单进度慢于预期。目前64的订单情况如何？原先是计划采用15台作为样品，但现在跳过样品阶段，直接下批量订单了。因为是挺急的。这个不能理解为一个好事，你听起来像个好事，但实际是一个中性的。就是谷歌的时间表是固定的，但你这个OCS的研发进度太黑盒了，谷歌也吃不准，没办法而为之的。"
+        },
+        {
+          "ordinal": 32,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[87]",
+          "text_sha256": "85b295469ed58be2af823b6a20e56d589b2b0eed1afc4591f5c228dc106fdbc4",
+          "text": "V8I要300口的，超过80%选择了mems，只有10%多一点是液晶。液晶大概率被用于备份冗余或者时效性要求很低的场景。液晶主要缺点在于性能切换速度毫秒级，远低于mems和波导的纳秒级，显著降低大模型的效率。"
+        },
+        {
+          "ordinal": 33,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[90]",
+          "text_sha256": "e2f84c6b489dfeb17983b99cf7f2f39074bf27564165e53c3979a8b88f896ca2",
+          "text": "300端口-Mems的市场份额，lumentum 70%，谷歌自己30%，这是现状。外部代工还没起量，份额不是一成不变的，谷歌自己肯定要越来越少。初期由于整体量少，谷歌依赖自身，它也是希望把这个东西给分出去，不要自己做。现在大部分向lumentum倾斜了。"
+        },
+        {
+          "ordinal": 34,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[92]",
+          "text_sha256": "f790bf63be12f76382abab2cadd5c545477c60b96b0e58b6eab72326c223db11",
+          "text": "初期采用mems原因是现在能用的就是mems为主，目前。这也是。国内格局光迅是领先者，领先的，没问题的，光迅都在做的，而且是各种口300口，我之前还看到在测试的。并且通过了中心验证，新易盛也有相关方案，但目前可能处在样品阶段，想问出货肯定都没出货。国内其他的大都停留在128口。为何V8I显著拉动了对光波导OCS的需求？因为对这个响应速度要求高。"
+        },
+        {
+          "ordinal": 35,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[95]",
+          "text_sha256": "086d50edd20c9e2f48ea50501eb7e86707f733a7bce0b8d80c30e63cacea252f",
+          "text": "DCI招标近期未采用正式招标，招好几个月前了。最大增量是什么？第三业务取决于诺基亚在北美订单的开始外放。这还是讲德科立自己目前。"
+        },
+        {
+          "ordinal": 36,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[98]",
+          "text_sha256": "a06dc1adef2a32eb456e245270b174f000dd748cfee9d0d6c81b605408e3d515",
+          "text": "相干光模块的芯片比普通要贵一倍，接近两倍。个人的份额较多，lumentum也是主要供应商之一，这里面有采购我们的Coherent，有采购我们公司的，是采购了源芯，是源芯还是新易盛？旭创也采购了这里面的调制器、激光器。关于国产化，泵浦激光器没有我们的事。"
+        },
+        {
+          "ordinal": 37,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[101]",
+          "text_sha256": "0188a07869805e9682dd9937b0be9ef41987f818210772df97978b57deb712b1",
+          "text": "那旭创不也被谷歌委以重任了，对吧？具体进度怎么样我也不知道，聊聊看，去问问看吧，反正这个时间肯定还没有到需要了解的时间。"
+        },
+        {
+          "ordinal": 38,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[103]",
+          "text_sha256": "78c9a9d135ed6a863e9ef0b85e68cfb269cfdea0623b4b74e97d572fc040967a",
+          "text": "边际变化没啥边际变化，你说这篇里面，这篇里面是没有，刚刚那篇里面是没有，边际变化哪有每天都有边际变化，不至于。边际变化更多的是在模型层面。"
+        },
+        {
+          "ordinal": 39,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[105]",
+          "text_sha256": "d78b8a4067e1c45c8fde07c26a68cc7bcc9d23e8a67212e4880e83d620899322",
+          "text": "反正讲个大道理，就是我们去盘供应链，盘供应链，比如光模块，你是不是有这么多的零件组成的？你假设需求是无限大的一个情况下，不用看那一半，看工具。那么这里面重要的DSP、EML、硅光芯片，对吧？或者那些零零散散的东西，是不是你们大概也有个数，能出多少？比如说是DSP，大家关心的，对不对？那供应商不就这几家，博通、marvell、三菱等等，就这几家你盘得出来的，每家有多少，明年有多少，不也都有个大概的，对吧？我们都几个月前甚至去年都盘过这些东西，对吧？这今年也盘过，这都有个大概。"
+        },
+        {
+          "ordinal": 40,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[109]",
+          "text_sha256": "a20b9b7fed90913bbedf580a14100b71a05f23868882b8cb5ed6e97f80608324",
+          "text": "那么大概这里面这个东西瓶颈是什么？这个台积电的产能是不是这种东西是不是也是固定的，它不太容易变。你看也就是不会说是50%、100%这样变，对不对？"
+        },
+        {
+          "ordinal": 41,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[112]",
+          "text_sha256": "1043d916084528c04c60d84ac5579daf20bd65dffd6a3c55ea86dbaf1f636ad0",
+          "text": "也就是说你几个月前得到这些信息，对于明年的DSP的预期其实是相对来说固定，不会有特别大的变化的。那无非就是分给谁的。越来越难了么？我只是跟你们讲道理，反正你们自己看呗。数量就这么多数量，对不对？那么A要这么多，B要这么多，C要这么多。"
+        },
+        {
+          "ordinal": 42,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[115]",
+          "text_sha256": "c0a1348c1b763f1d9ca54a92d3e6de16c951d4038d193fcebdfc906d85659a84",
+          "text": "如果你所有的都选择相信，公司所有说的话每个公司你都选择相信。那最后加起来是不是会出现一个状态？什么状态？像当年机器人份额加起来超过100%，会不会出现这个状态？是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？你说的加起来总不能超过100%。"
+        },
+        {
+          "ordinal": 43,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[118]",
+          "text_sha256": "7169eb9c656c8962d114b62a15347b4644d7636c9f7e31c38883d502f352c1ca",
+          "text": "PCB就是mSAP是光模块这一段的对吧？然后包括以后的机柜，最新的大家讨论的就是PTFE，对吧？PTFE反正在甲方为主的一些需求，也是更换的必然性。以前给你们讲这些技术的时候，就讲过的多少难点，对不对？这都是吻合的。就看你工程这一端，一半一个是需求端甲方的，一个是乙方的供给，你的加工难度能不能跟上，良率能不能跟上，就是这些花头呗。FCC没有新的变化与进展，意思是什么意思？就是不变"
+        },
+        {
+          "ordinal": 44,
+          "kind": "paragraph",
+          "status": "kept",
+          "reasons": [],
+          "locator": "body[120]",
+          "text_sha256": "2f235b032fa9afb83cbacc1b0196ea47d0613c621071a85236bc431e15608268",
+          "text": "铜箔缺吗？缺，缺的。"
+        }
+      ]
+    }
+  ]
+}

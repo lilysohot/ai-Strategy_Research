@@ -187,7 +187,10 @@ def forecast_artifacts(
         ({"value": "15%"}, "conflict", ("unit",)),
         ({"value": "大约15亿元"}, "suspected", ()),
         ({"value": "15亿元", "semantic_type": "forecast"}, "conflict", ("factuality",)),
-        ({"value": "15亿元", "statement_role": "condition"}, "conflict", ("condition",)),
+        # The source has no explicit condition marker. Material semantics v19
+        # normalizes this unsupported model label back to a claim before the
+        # publication layer compares the accepted records.
+        ({"value": "15亿元", "statement_role": "condition"}, "confirmed", ()),
         ({"value": None}, "suspected", ()),
         ({"value": "15"}, "suspected", ()),
         ({"value": "15亿元", "unknown_fields": ["value"]}, "suspected", ()),

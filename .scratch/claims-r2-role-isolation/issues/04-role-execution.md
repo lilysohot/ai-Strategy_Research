@@ -116,3 +116,6 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_roles.py tests/tes
   确定性分支和 R2 items 均为零记录、零模型调用；依赖表格的 prose 也不得通过 context 绕过该门。
   共享角色验收命令重跑 **279 passed**；扩展套件的唯一 publication condition 映射失败与本门无关，
   详情记于 02，不将范围外失败伪装成全绿。
+- 2026-10-08：该范围外红项已继续诊断并闭合：无条件词来源上的伪 `condition` 会在角色校验阶段
+  规范化为 `claim`，不是合法的跨角色 condition 冲突；publication 应比较规范化后的最终记录。
+  未放宽显式条件识别，也未修改冲突比较实现。修复后全部 structured 回归 **352 passed**。

@@ -127,6 +127,12 @@ git diff --check -- <02 changed paths>
   **484 files / 0 missing**。扩展 `test_corpus_structured_*.py` 为 **351 passed / 1 failed**；唯一失败
   是 publication 的 condition 跨角色映射期望 conflict、实际 confirmed，使用非 PDF 合成输入，
   不经过本次 PDF table 消费门，作为范围外问题保留，未通过改断言掩盖。
+- 2026-10-08：后续独立诊断确认上述唯一失败不是 publication 丢失 condition，而是测试仍按模型
+  原始 `statement_role=condition` 断言；`material-semantics-19` 会对没有显式条件词的来源将该伪条件
+  正确规范化为 `claim`，发布层比较的是已校验后的 accepted record，因此 `confirmed` 才是正确终态。
+  集成期望已按最终工件修正；显式条件词继续由材料语义专项测试保留为 `condition`。
+  修复后跨角色映射 **13 passed**、publication 专项 **28 passed**、全部 structured 回归
+  **352 passed**；相关 Ruff 与 format check 通过。
 
 ## 根因核查与通用修复（revision 2）
 
