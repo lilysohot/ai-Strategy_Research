@@ -1,0 +1,139 @@
+{
+  "schema_version": "material-live-round-audit-v2",
+  "run": "11-live-20261007-final",
+  "selection_sha256": "sha256:d3efd3e774c76f72e832c2e754df4c3f487b51b4147b151f8575e8368672d167",
+  "segments": [
+    {
+      "segment": "01_results",
+      "source_run": "11-live-20261007-r7",
+      "batch_id": "batch:3b74666c2ee86272a847e2432292a17ce22a4964e9b7b168e9254d53b6da9d6a",
+      "material_semantics_sha256": "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+      "candidate_slots": 2,
+      "terminal_slots": 2,
+      "items": 2,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "02_channels",
+      "source_run": "11-live-20261007-r7",
+      "batch_id": "batch:0d749938bdd8b0e8e89dd44a0a39a5d2e2786c3837fc1ea0a82ab18c41dbd4e6",
+      "material_semantics_sha256": "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+      "candidate_slots": 8,
+      "terminal_slots": 8,
+      "items": 8,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "03_quality_cashflow",
+      "source_run": "11-live-20261007-r11",
+      "batch_id": "batch:92eddf27468db5c33d3da1a19e49fdb013bbce3a500c051a441a0634a61750ec",
+      "material_semantics_sha256": "04ed01a394ef06cb60d37f84675c838868cd4534b8257e204bc3eee7a440d8f1",
+      "candidate_slots": 7,
+      "terminal_slots": 7,
+      "items": 7,
+      "relations": 2,
+      "attempts": 2
+    },
+    {
+      "segment": "04_reform_actions",
+      "source_run": "11-live-20261007-r7",
+      "batch_id": "batch:1a0831ac6f60ae13ede937387f34deb4f1d832214f41e28d461999773e73072e",
+      "material_semantics_sha256": "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+      "candidate_slots": 7,
+      "terminal_slots": 7,
+      "items": 7,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "05_reform_outlook",
+      "source_run": "11-live-20261007-r7",
+      "batch_id": "batch:f8d96a2aa8bb372103ecf929204557b6fd983ac5cf51791a60064af7b45902cc",
+      "material_semantics_sha256": "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+      "candidate_slots": 3,
+      "terminal_slots": 3,
+      "items": 3,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "06_recommendation_basis",
+      "source_run": "11-live-20261007-r7",
+      "batch_id": "batch:4ec9c444c9252cbb29b64f15d31f4d94bb4f5ae547eed77e2fb6ec1ab5a49eb1",
+      "material_semantics_sha256": "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+      "candidate_slots": 7,
+      "terminal_slots": 7,
+      "items": 7,
+      "relations": 0,
+      "attempts": 2
+    },
+    {
+      "segment": "07_recommendation_conclusion",
+      "source_run": "11-live-20261007-r9",
+      "batch_id": "batch:929d9eb7964e2298940db9e47415e6b28fb6fcb023da36b59e16641eb9e3a547",
+      "material_semantics_sha256": "dfa7b8a451f7ee295818da9cbcbeeb3cf6f2ded56ecbcc65b63602f053eec8ad",
+      "candidate_slots": 4,
+      "terminal_slots": 4,
+      "items": 4,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "08_risks",
+      "source_run": "11-live-20261007-r9",
+      "batch_id": "batch:32d7f799726659cb20e5612d66c5c677be0dcf45e2ae8fb768749a81b8ebee32",
+      "material_semantics_sha256": "dfa7b8a451f7ee295818da9cbcbeeb3cf6f2ded56ecbcc65b63602f053eec8ad",
+      "candidate_slots": 3,
+      "terminal_slots": 3,
+      "items": 3,
+      "relations": 0,
+      "attempts": 1
+    }
+  ],
+  "segment_count": 8,
+  "candidate_slots": 41,
+  "terminal_slots": 41,
+  "items": 41,
+  "relations": 2,
+  "semantic_types": {
+    "behavior": 1,
+    "fact": 28,
+    "forecast": 10,
+    "opinion": 2
+  },
+  "statement_roles": {
+    "claim": 31,
+    "condition": 2,
+    "evidence": 5,
+    "risk": 3
+  },
+  "relation_types": {
+    "supports": 2
+  },
+  "semantic_target_coverage": {
+    "fact": true,
+    "forecast": true,
+    "opinion": true,
+    "argument": true,
+    "risk": true,
+    "condition": true,
+    "explicit_relation": true
+  },
+  "source_spans_checked": 49,
+  "attempts": 10,
+  "total_tokens": 51364,
+  "unknown_cost_calls": 10,
+  "known_cost_amount": 0.0,
+  "known_cost_amount_is_not_zero_cost": true,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256_versions": [
+    "04ed01a394ef06cb60d37f84675c838868cd4534b8257e204bc3eee7a440d8f1",
+    "848707fe249a5174d9587d95a991329da4530729c545455e61f385f6b3f79906",
+    "dfa7b8a451f7ee295818da9cbcbeeb3cf6f2ded56ecbcc65b63602f053eec8ad"
+  ],
+  "all_items_accepted_candidates": true,
+  "all_relation_tasks_accepted_candidates": true,
+  "published": false
+}

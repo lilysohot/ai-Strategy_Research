@@ -1,0 +1,12 @@
+{
+  "segment": "01_results",
+  "batch_id": "batch:dfa0e21ca7625367b9728e6060592229122cb824bf65b83ce3e30dfe9d945a71",
+  "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016",
+  "candidate_slot_count": 2,
+  "runner_sha256": "47fb207d81d99d8800f494c2c50a93e03415a9f4a552c8f6087f0591456e5564",
+  "material_semantics_sha256": "5f3ce6c953bb899d9c1f284763fa2bc278cedc04ed58ea86023f41fa6be8ceff",
+  "material_items_call_ceiling": 1,
+  "material_relations_call_ceiling": 1,
+  "automatic_retries": 0,
+  "supersedes_failed_r2_batch": "batch:faacde778475b490ba7f69381cc9a3c85bcd60aab06d0007c3019347d561c760"
+}

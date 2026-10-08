@@ -1,0 +1,99 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:32d7f799726659cb20e5612d66c5c677be0dcf45e2ae8fb768749a81b8ebee32",
+    "plan_sha256": "sha256:32d7f799726659cb20e5612d66c5c677be0dcf45e2ae8fb768749a81b8ebee32",
+    "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:347f955c711c2b48f183cc8070a3185a7b3a414b6162a5f3c082ec1263b258e7",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:347f955c711c2b48f183cc8070a3185a7b3a414b6162a5f3c082ec1263b258e7",
+        "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "artifact_sha256": "sha256:cae36ae7ed0e0370fcb6d456cb07f86f2b8d5eb78cee89e3cb2a82daca8c92db",
+        "error_codes": []
+      },
+      {
+        "task_id": "task:6af0e0a7269e60ecee60977910526e1e9a9e2f2420749c86cf7ba60f7883aef6",
+        "role": "material_relations",
+        "method": "model",
+        "input_sha256": "sha256:6af0e0a7269e60ecee60977910526e1e9a9e2f2420749c86cf7ba60f7883aef6",
+        "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [
+          "task:347f955c711c2b48f183cc8070a3185a7b3a414b6162a5f3c082ec1263b258e7"
+        ],
+        "artifact_sha256": "sha256:0718a5f39f2c8914c560f6c4be45ae5edf69831a09e457e22c902429fdc6a136",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:b01a5909edc458bd4519273c43713a669fb245215a2bd5638caeb440a5c7b1ca",
+        "task_id": "task:347f955c711c2b48f183cc8070a3185a7b3a414b6162a5f3c082ec1263b258e7",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:05042a8f73fd832eb916f4f0fa31afaf62dd42b990a7087667781375aa5b5fb5",
+        "response_sha256": "sha256:0e62c6e4858dad99c18ff609d5bdd74aaea368b076711b7a678fea2099c8fc30",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.0-mini",
+        "response_model": "doubao-seed-2-0-mini-260428",
+        "usage": {
+          "completion_tokens": 2789,
+          "prompt_tokens": 1588,
+          "reasoning_tokens": 2329,
+          "total_tokens": 4377
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [],
+  "derivations": {
+    "task:347f955c711c2b48f183cc8070a3185a7b3a414b6162a5f3c082ec1263b258e7": "no_candidates"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 1,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 1,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

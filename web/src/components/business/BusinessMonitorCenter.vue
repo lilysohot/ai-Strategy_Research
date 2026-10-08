@@ -1,7 +1,21 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+import { watchEvents as watchEventsApi, watchRules as watchRulesApi } from '@/api'
+import { ApiError } from '@/api/client'
+import { useSessionsStore } from '@/stores/sessions'
+import type { WatchEvent, WatchRule } from '@/types'
+
+const sessions = useSessionsStore()
 
 const view = ref<'rules' | 'create'>('create')
+
+const rules = ref<WatchRule[]>([])
+const events = ref<WatchEvent[]>([])
+const loadingRules = ref(false)
+const saving = ref(false)
+let actionCounter = 0
 
 const form = reactive({
   symbol: '',
@@ -11,7 +25,7 @@ const form = reactive({
   direction: 'above',
   threshold: '',
   expiresAt: '',
-  triggerMode: 'once',
+  triggerMode: 'single',
   action: 'notify',
   task: '',
   budget: '',
@@ -25,9 +39,113 @@ const readiness = computed(() => {
   if (!form.quoteBasis) missing.push('行情口径')
   if (!form.threshold.trim()) missing.push('阈值')
   if (!form.expiresAt) missing.push('有效期')
-  if (form.action === 'auto_analysis' && !form.task.trim()) missing.push('分析任务')
+  if (form.action === 'auto_analyze' && !form.task.trim()) missing.push('分析任务')
   return missing
 })
+
+const canCreate = computed(() =>
+  !!sessions.activeId && readiness.value.length === 0,
+)
+
+async function loadRules(): Promise<void> {
+  loadingRules.value = true
+  try {
+    const res = await watchRulesApi.list({
+      status: undefined,
+      limit: 100,
+    })
+    rules.value = res.rules
+    const ev = await watchEventsApi.list({ limit: 20 })
+    events.value = ev.events
+  } catch (err) {
+    ElMessage.error(err instanceof Error ? err.message : '加载监控规则失败')
+  } finally {
+    loadingRules.value = false
+  }
+}
+
+/** Map the page form to the DATA-09 spec shape. */
+function buildSpec(): Record<string, unknown> {
+  const spec: Record<string, unknown> = {
+    symbol: form.symbol.trim(),
+    market: form.market,
+    currency: form.currency,
+    quote_basis: form.quoteBasis,
+    direction: form.direction === 'below' ? 'down' : 'up',
+    threshold: form.threshold.trim(),
+    trigger_mode: 'single',
+    action: form.action,
+    on_create_already_met: form.alreadyMet === 'evaluate_now' ? 'trigger_now' : 'wait_requalify',
+  }
+  if (form.expiresAt) {
+    const d = new Date(form.expiresAt)
+    spec.expires_at = d.toISOString()
+  }
+  if (form.action === 'auto_analyze' && form.task.trim()) spec.task = form.task.trim()
+  if (form.budget.trim()) spec.budget = { max_runs: Number(form.budget.trim()) }
+  return spec
+}
+
+async function createRule(): Promise<void> {
+  if (saving.value || !sessions.activeId) return
+  if (readiness.value.length) {
+    ElMessage.warning(`请先填写：${readiness.value.join('、')}`)
+    return
+  }
+  saving.value = true
+  const key = `watch-rule.create:${sessions.activeId}:${form.symbol}:${Date.now()}:${actionCounter++}`
+  try {
+    await watchRulesApi.create(
+      sessions.activeId,
+      { name: `${form.symbol} 监控`, spec: buildSpec() },
+      key,
+    )
+    ElMessage.success('监控规则已创建并立即生效')
+    form.symbol = ''
+    form.threshold = ''
+    form.task = ''
+    await loadRules()
+  } catch (err) {
+    ElMessage.error(err instanceof Error ? err.message : '创建监控规则失败')
+  } finally {
+    saving.value = false
+  }
+}
+
+function ruleTitle(rule: WatchRule): string {
+  return rule.name || rule.id.slice(0, 8)
+}
+
+function statusLabel(status: string): string {
+  return { active: '生效中', paused: '已暂停', cancelled: '已取消' }[status] ?? status
+}
+
+async function statusOp(rule: WatchRule, action: 'pause' | 'resume' | 'cancel'): Promise<void> {
+  const confirmText = action === 'cancel'
+    ? '取消后规则进入终态，不可再恢复。是否继续？'
+    : action === 'pause'
+      ? '暂停将停止新触发，未启动事件按服务端回执处理。是否继续？'
+      : '恢复该规则并继续监听。是否继续？'
+  if (!window.confirm(confirmText)) return
+  const key = `watch-rule.${action}:${rule.id}:${Date.now()}:${actionCounter++}`
+  try {
+    await watchRulesApi.statusOp(rule.id, action, rule.current_version, key)
+    ElMessage.success('规则状态已更新')
+    await loadRules()
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 409) {
+      ElMessage.warning('规则状态已变更，请刷新后重试')
+    } else {
+      ElMessage.error(err instanceof Error ? err.message : '操作失败')
+    }
+  }
+}
+
+const specOf = (rule: WatchRule): Record<string, unknown> =>
+  (rule.spec as Record<string, unknown> | undefined) ?? {}
+
+defineExpose({ loadRules })
+onMounted(loadRules)
 </script>
 
 <template>
@@ -47,11 +165,57 @@ const readiness = computed(() => {
         <button type="button" :class="{ active: view === 'create' }" @click="view = 'create'">新建规则</button>
       </nav>
 
-      <section v-if="view === 'rules'" class="empty-rules">
-        <span class="empty-index">00</span>
-        <h3>尚无已连接的监控规则</h3>
-        <p>接入 DATA-09 后，这里按规则版本展示启用、暂停、冷却、行情质量和最近检查时间。</p>
-        <el-button type="primary" @click="view = 'create'">查看创建表单</el-button>
+      <section v-if="view === 'rules'" class="rule-list">
+        <header class="rule-list-head">
+          <h3>监控规则</h3>
+          <span>{{ rules.length }} 条</span>
+        </header>
+        <div v-if="loadingRules" class="empty-rules">
+          <span class="empty-index">··</span>
+          <h3>正在加载监控规则…</h3>
+        </div>
+        <div v-else-if="rules.length === 0" class="empty-rules">
+          <span class="empty-index">00</span>
+          <h3>尚无监控规则</h3>
+          <p>创建一条单次规则后，后台持续按行情口径监听；关闭页面不影响已生效规则。</p>
+          <el-button type="primary" @click="view = 'create'">新建规则</el-button>
+        </div>
+        <div v-else class="rule-stack">
+          <article v-for="rule in rules" :key="rule.id" class="rule-row">
+            <div class="rule-main">
+              <div class="rule-identity">
+                <strong>{{ ruleTitle(rule) }}</strong>
+                <span :class="'status status--' + rule.status">{{ statusLabel(rule.status) }}</span>
+              </div>
+              <div class="rule-spec">
+                <span>标的 {{ String(specOf(rule).symbol ?? '—') }}</span>
+                <span>{{ String(specOf(rule).direction ?? '') === 'down' ? '低于' : '高于' }} {{ String(specOf(rule).threshold ?? '—') }}</span>
+                <span>版本 v{{ rule.current_version }}</span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <template v-if="rule.status === 'active'">
+                <el-button size="small" @click="statusOp(rule, 'pause')">暂停</el-button>
+                <el-button size="small" type="danger" plain @click="statusOp(rule, 'cancel')">取消</el-button>
+              </template>
+              <el-button v-else-if="rule.status === 'paused'" size="small" type="primary" @click="statusOp(rule, 'resume')">恢复</el-button>
+              <span v-else class="terminal-label">终态，不可操作</span>
+            </div>
+          </article>
+        </div>
+
+        <header class="rule-list-head rule-list-head--events">
+          <h3>最近行情事件</h3>
+          <span>{{ events.length }} 条</span>
+        </header>
+        <div v-if="events.length" class="event-stack">
+          <div v-for="event in events" :key="event.id" class="event-row">
+            <span :class="'status status--' + event.status">{{ statusLabel(event.status) }}</span>
+            <span>规则 {{ event.rule_id.slice(0, 8) }}</span>
+            <small>{{ event.triggered_at || '待触发' }}</small>
+          </div>
+        </div>
+        <p v-else class="event-empty">暂无行情事件。</p>
       </section>
 
       <section v-else class="monitor-form">
@@ -113,12 +277,12 @@ const readiness = computed(() => {
             <strong>仅提醒</strong>
             <small>记录触发并发送站内通知，不创建分析 Run</small>
           </button>
-          <button type="button" :class="{ active: form.action === 'auto_analysis' }" @click="form.action = 'auto_analysis'">
+          <button type="button" :class="{ active: form.action === 'auto_analyze' }" @click="form.action = 'auto_analyze'">
             <strong>自动分析</strong>
             <small>明确保存自动执行意图，并受任务和预算约束</small>
           </button>
         </div>
-        <div v-if="form.action === 'auto_analysis'" class="form-grid action-fields">
+        <div v-if="form.action === 'auto_analyze'" class="form-grid action-fields">
           <label class="field field--wide">
             <span>分析任务 <em>必填</em></span>
             <el-input v-model="form.task" type="textarea" :rows="3" placeholder="说明触发后需要分析什么" />
@@ -137,7 +301,7 @@ const readiness = computed(() => {
           <label class="field">
             <span>触发次数模式</span>
             <el-select v-model="form.triggerMode">
-              <el-option label="单次触发（C 阶段）" value="once" />
+              <el-option label="单次触发（C 阶段）" value="single" />
               <el-option label="重复触发（D 阶段，暂不可用）" value="repeat" disabled />
             </el-select>
           </label>
@@ -179,8 +343,13 @@ const readiness = computed(() => {
         <p>编辑阈值会创建新规则版本；未启动事件按服务端回执处理，既有 Run 的输入不会被改写。</p>
       </div>
 
-      <el-tooltip content="等待 DATA-09/10 规则接口" placement="top">
-        <span class="full-action"><el-button type="primary" disabled>创建监控规则</el-button></span>
+      <el-tooltip
+        :content="sessions.activeId ? (readiness.length ? '请先填写必填项' : '创建后台监控规则并立即生效') : '请先选择研究会话'"
+        placement="top"
+      >
+        <span class="full-action">
+          <el-button type="primary" :disabled="!canCreate" :loading="saving" @click="createRule">创建监控规则</el-button>
+        </span>
       </el-tooltip>
     </aside>
   </div>
@@ -230,11 +399,34 @@ const readiness = computed(() => {
 .rule-preview h3 { margin: 7px 0; }
 .rule-preview ul { margin: 8px 0 0; padding-left: 18px; color: var(--text-soft); }
 .full-action, .full-action :deep(.el-button) { width: 100%; margin-top: 20px; }
+.rule-list { padding-bottom: 20px; }
+.rule-list-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.rule-list-head h3 { margin: 0; font-size: 16px; }
+.rule-list-head > span { color: var(--muted); font-size: 12px; }
+.rule-list-head--events { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }
+.rule-stack { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.rule-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.rule-main { min-width: 0; }
+.rule-identity, .rule-spec { display: flex; align-items: center; gap: 10px; }
+.rule-identity strong { font-size: 15px; }
+.rule-spec { margin-top: 6px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+.rule-spec > span { display: inline-flex; }
+.rule-actions { flex-shrink: 0; }
+.status { padding: 2px 8px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line-strong); white-space: nowrap; }
+.status--active { color: #5fd08a; border-color: color-mix(in srgb, #5fd08a 50%, var(--line)); }
+.status--paused { color: var(--warning); }
+.status--cancelled { color: var(--muted); }
+.terminal-label { color: var(--muted); font-size: 12px; }
+.event-stack { display: flex; flex-direction: column; }
+.event-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; color: var(--text-soft); font-size: 13px; border-bottom: 1px solid var(--line); }
+.event-row small, .event-empty { color: var(--muted); }
+.event-row :first-child { margin-right: auto; }
 @media (max-width: 980px) { .monitor-layout { grid-template-columns: 1fr; } .monitor-aside { border-top: 1px solid var(--line); border-left: 0; } }
 @media (max-width: 640px) {
   .monitor-main { padding: 20px 14px 36px; }
   .monitor-head { flex-direction: column; gap: 10px; }
   .form-grid, .choice-grid { grid-template-columns: 1fr; }
   .field--wide { grid-column: auto; }
+  .rule-row { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
 </style>

@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
+import { accounts as accountsApi, runs as runsApi } from '@/api'
+import { ApiError } from '@/api/client'
 import type { SessionPlanPreview } from '@/business-ui'
+import { useBusinessStore } from '@/stores/business'
+import { useSessionsStore } from '@/stores/sessions'
+import type { Account } from '@/types'
 import {
   countDraftErrors,
   type BusinessDraft,
   type BusinessDraftErrors,
   validateBusinessDraft,
 } from '@/utils/business'
-import { useSessionsStore } from '@/stores/sessions'
 
 const props = defineProps<{ plans: readonly SessionPlanPreview[] }>()
 const emit = defineEmits<{ dirtyChange: [dirty: boolean] }>()
@@ -19,7 +24,33 @@ const checked = ref(false)
 const dirty = ref(false)
 let trackingEnabled = true
 const sessions = useSessionsStore()
+const business = useBusinessStore()
+
 const accountSessionIds = ref<string[]>(sessions.activeId ? [sessions.activeId] : [])
+
+const accounts = computed(() => business.accounts)
+const accountId = ref<string | null>(null)
+const serverRevision = ref<number | null>(null)
+const saving = ref(false)
+const conflict = ref<{
+  expected: number
+  current: number
+  fieldDiff: Array<{ field: string; theirs: string; mine: string }>
+} | null>(null)
+
+let accountKeys = new Map<string, string>()
+
+function idempotencyKey(scope: string): string {
+  const existing = accountKeys.get(scope)
+  if (existing) return existing
+  const key = crypto.randomUUID()
+  accountKeys.set(scope, key)
+  return key
+}
+
+function clearActionKey(scope: string): void {
+  accountKeys.delete(scope)
+}
 
 const draft = reactive<BusinessDraft>({
   accountName: '',
@@ -47,6 +78,7 @@ const draft = reactive<BusinessDraft>({
 
 const errorCount = computed(() => countDraftErrors(errors.value))
 const canSubmit = computed(() => checked.value && errorCount.value === 0)
+const canSaveAccount = computed(() => section.value === 'account' || section.value === 'records')
 
 const accountLinkedSessions = computed(() =>
   accountSessionIds.value.map((id) => ({
@@ -55,15 +87,24 @@ const accountLinkedSessions = computed(() =>
   })),
 )
 
-function markDirty(): void {
-  if (!trackingEnabled) return
-  dirty.value = true
+function hydrateFromAccount(account: Account): void {
+  trackingEnabled = false
+  const values = account.values
+  draft.accountName = account.name
+  draft.currency = account.base_currency || values.currency || ''
+  draft.capitalBasis = values.capital_basis ?? ''
+  draft.totalCapital = values.total_capital ?? ''
+  draft.availableCapital = values.available_capital ?? ''
+  draft.asOf = values.as_of ?? ''
+  accountId.value = account.id
+  serverRevision.value = account.revision
+  errors.value = {}
   checked.value = false
-  emit('dirtyChange', true)
-}
-
-function syncAccountSessions(_ids: string[]): void {
-  markDirty()
+  void nextTick(() => {
+    trackingEnabled = true
+    dirty.value = false
+    emit('dirtyChange', false)
+  })
 }
 
 watch(
@@ -77,6 +118,16 @@ watch(
   },
   { deep: true },
 )
+
+watch(accountId, () => {
+  if (!accountId.value) return
+  const account = accounts.value.find((item) => item.id === accountId.value)
+  if (account) hydrateFromAccount(account)
+})
+
+function loadAccount(id: string): void {
+  accountId.value = id
+}
 
 function checkDraft(): void {
   errors.value = validateBusinessDraft(draft)
@@ -110,6 +161,8 @@ function clearDraft(): void {
     actualPrice: '',
     useCase: 'general_reading',
   } satisfies BusinessDraft)
+  accountId.value = null
+  serverRevision.value = null
   accountSessionIds.value = sessions.activeId ? [sessions.activeId] : []
   errors.value = {}
   checked.value = false
@@ -118,6 +171,153 @@ function clearDraft(): void {
     dirty.value = false
     emit('dirtyChange', false)
   })
+}
+
+/** Build the account ``declared`` map — decimal strings, never JS Number. */
+function buildAccountDeclared(capitalBasis: string, total: string, available: string, asOf: string): Record<string, string> {
+  const declared: Record<string, string> = {}
+  // Blank values are simply omitted: the server treats a missing/provided-empty
+  // field as incomplete (pending), not as a fabricated user value.
+  if (total.trim()) declared.total_capital = total.trim()
+  if (available.trim()) declared.available_capital = available.trim()
+  if (asOf.trim()) declared.as_of = asOf.trim()
+  if (capitalBasis.trim()) declared.capital_basis = capitalBasis.trim()
+  return declared
+}
+
+async function loadConflictDiff(): Promise<void> {
+  if (!accountId.value) return
+  try {
+    const res = await accountsApi.revisions(accountId.value, { limit: 3 })
+    const latest = res.revisions[0]
+    if (!latest) return
+    const fields = ['total_capital', 'available_capital', 'capital_basis', 'as_of'] as const
+    const fieldDiff = fields
+      .filter((field) => (latest.values[field] ?? '') !== draft[fieldMap[field]] && (draft[fieldMap[field]] ?? '').trim())
+      .map((field) => ({ field, theirs: latest.values[field] ?? '', mine: draft[fieldMap[field]] }))
+    conflict.value = {
+      expected: serverRevision.value ?? 0,
+      current: latest.revision,
+      fieldDiff,
+    }
+  } catch {
+    conflict.value = { expected: serverRevision.value ?? 0, current: serverRevision.value ?? 0, fieldDiff: [] }
+  }
+}
+
+const fieldMap = {
+  total_capital: 'totalCapital',
+  available_capital: 'availableCapital',
+  capital_basis: 'capitalBasis',
+  as_of: 'asOf',
+} as const
+
+async function saveAccount(analyze = false): Promise<string | null> {
+  if (saving.value || !canSaveAccount.value) return null
+  if (!canSubmit.value) {
+    checkDraft()
+    ElMessage.warning('请先通过提交检查')
+    return null
+  }
+  saving.value = true
+  try {
+    const declared = buildAccountDeclared(draft.capitalBasis, draft.totalCapital, draft.availableCapital, draft.asOf)
+    let result: { replayed: boolean; operation_id: string; [k: string]: unknown }
+    if (accountId.value && serverRevision.value !== null) {
+      result = (await accountsApi.update(accountId.value, {
+        declared,
+        expected_revision: serverRevision.value,
+        allow_incomplete: true,
+      }, idempotencyKey('account.update'))) as unknown as { replayed: boolean; operation_id: string }
+      clearActionKey('account.update')
+    } else {
+      result = await accountsApi.create({
+        name: draft.accountName.trim(),
+        base_currency: draft.currency,
+        declared,
+        use_case: draft.useCase,
+        allow_incomplete: false,
+      }, idempotencyKey('account.create'))
+      clearActionKey('account.create')
+      accountId.value = String(result.account_id ?? '')
+    }
+    const nextRevision = Number(result.revision ?? serverRevision.value ?? 1)
+    serverRevision.value = nextRevision
+    business.prependOperation({
+      operation_id: result.operation_id,
+      scope: accountId.value ? 'account.create/update' : 'account.create',
+      replayed: result.replayed,
+      status: 'succeeded',
+      created_at: new Date().toISOString(),
+      result: { account_id: accountId.value, revision: nextRevision },
+    })
+    // Refresh the server-backed list so the account card reflects saved state.
+    await business.loadAccounts()
+    ElMessage.success(accountId.value ? '资料已保存' : '账户已创建')
+    if (!analyze) return String(accountId.value ?? '')
+    return String(result.account_id ?? accountId.value ?? '')
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 409) {
+      await loadConflictDiff()
+    } else {
+      ElMessage.error(error instanceof Error ? error.message : '保存资料失败')
+    }
+    accountKeys.clear()
+    return null
+  } finally {
+    saving.value = false
+  }
+}
+
+async function saveAndAnalyze(): Promise<void> {
+  const savedAccountId = await saveAccount(true)
+  if (!savedAccountId || !sessions.activeId) return
+  try {
+    const res = await runsApi.submit({
+      message: `请基于已保存的账户资料（${draft.accountName.trim() || savedAccountId}）进行投资分析。`,
+      session_id: sessions.activeId,
+      investment_input: {
+        use_case: draft.useCase,
+        account: { id: savedAccountId, expected_revision: serverRevision.value },
+        idempotency_key: idempotencyKey('run.analyze'),
+      },
+    })
+    clearActionKey('run.analyze')
+    ElMessage.success(`分析已派发（Run ${res.run_id.slice(0, 8)}）`)
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : '分析派发失败')
+    accountKeys.delete('run.analyze')
+  }
+}
+
+async function archiveAccount(): Promise<void> {
+  if (!accountId.value) return
+  try {
+    await ElMessageBox.confirm('归档后账户不再被新的分析采用，关联监控会暂停。', '归档账户', {
+      type: 'warning', confirmButtonText: '确认归档', cancelButtonText: '保留',
+    })
+  } catch {
+    return
+  }
+  saving.value = true
+  try {
+    await accountsApi.archive(accountId.value, idempotencyKey('account.archive'))
+    clearActionKey('account.archive')
+    ElMessage.success('账户已归档')
+    await business.loadAccounts()
+    clearDraft()
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : '归档失败')
+  } finally {
+    saving.value = false
+  }
+}
+
+function acceptNewRevision(): void {
+  if (!conflict.value) return
+  serverRevision.value = conflict.value.current
+  conflict.value = null
+  ElMessage.info('已沿用服务端当前版本，可重新提交')
 }
 
 function marketLabel(market: SessionPlanPreview['market']): string {
@@ -130,7 +330,26 @@ function beforeUnload(event: BeforeUnloadEvent): void {
   event.returnValue = ''
 }
 
-onMounted(() => window.addEventListener('beforeunload', beforeUnload))
+async function loadInitialData(): Promise<void> {
+  try {
+    await business.loadAccounts()
+  } catch (err) {
+    ElMessage.error(err instanceof Error ? err.message : '加载账户资料失败')
+  }
+  if (sessions.activeId) {
+    try {
+      await business.loadResearch(sessions.activeId)
+    } catch {
+      // Plans load is optional for the account card view.
+    }
+  }
+}
+
+onMounted(async () => {
+  window.addEventListener('beforeunload', beforeUnload)
+  await loadInitialData()
+  if (accounts.value.length) hydrateFromAccount(accounts.value[0])
+})
 onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeUnload))
 defineExpose({ clearDraft })
 </script>
@@ -148,7 +367,7 @@ defineExpose({ clearDraft })
         </div>
         <div class="summary-state" aria-label="当前资料状态">
           <span class="state-dot" />
-          <span>尚未绑定服务端资料</span>
+          <span>{{ accountId ? `服务端 v${serverRevision}` : '尚未绑定服务端资料' }}</span>
         </div>
       </section>
 
@@ -164,7 +383,13 @@ defineExpose({ clearDraft })
         </button>
       </nav>
 
-      <section v-show="section === 'account'" class="form-section">
+      <section v-if="section === 'account'" class="form-section" v-loading="business.loadingAccounts">
+        <label class="field field--wide">
+          <span>读取已有账户</span>
+          <el-select v-model="accountId" placeholder="选择要查看的账户" clearable @change="loadAccount">
+            <el-option v-for="account in accounts" :key="account.id" :label="`${account.name} · v${account.revision}${account.archived ? '（已归档）' : ''}`" :value="account.id" />
+          </el-select>
+        </label>
         <header class="section-heading">
           <div>
             <span>账户资料</span>
@@ -227,57 +452,9 @@ defineExpose({ clearDraft })
             <small v-if="errors.asOf" data-business-error="true" tabindex="-1">{{ errors.asOf }}</small>
           </label>
         </div>
-
-        <section class="research-linker" aria-labelledby="account-research-link-title">
-          <header>
-            <div>
-              <span>引用关系</span>
-              <h4 id="account-research-link-title">引用账户的研究会话</h4>
-            </div>
-            <small>账户独立存在，可供多个研究引用</small>
-          </header>
-
-          <label class="field research-select">
-            <span>选择研究会话 <i>可多选</i></span>
-            <el-select
-              v-model="accountSessionIds"
-              multiple
-              filterable
-              collapse-tags
-              collapse-tags-tooltip
-              placeholder="搜索引用该账户的研究"
-              @change="syncAccountSessions"
-            >
-              <el-option
-                v-for="session in sessions.list"
-                :key="session.id"
-                :label="session.title || '未命名研究'"
-                :value="session.id"
-              />
-            </el-select>
-          </label>
-
-          <div v-if="accountLinkedSessions.length" class="linked-research-list">
-            <div
-              v-for="session in accountLinkedSessions"
-              :key="session.id"
-              class="linked-research-row linked-research-row--reference"
-            >
-              <span class="research-monogram">研</span>
-              <span class="linked-research-copy">
-                <strong>{{ session.title }}</strong>
-                <small>{{ session.id === sessions.activeId ? '当前研究正在引用' : '该研究可使用此账户' }}</small>
-              </span>
-              <span class="relationship-badge">引用</span>
-            </div>
-          </div>
-          <div v-else class="research-empty">
-            账户可先独立保存，之后再由一个或多个研究会话引用。
-          </div>
-        </section>
       </section>
 
-      <section v-show="section === 'plan'" class="form-section">
+      <section v-else-if="section === 'plan'" class="form-section">
         <header class="section-heading">
           <div>
             <span>计划总览</span>
@@ -305,7 +482,7 @@ defineExpose({ clearDraft })
             <div class="plan-session-cell">
               <span class="research-monogram">研</span>
               <span>
-                <strong>{{ plan.sessionTitle }}</strong>
+                <strong>{{ plan.sessionTitle || '服务端计划' }}</strong>
                 <small>唯一所属会话</small>
               </span>
             </div>
@@ -321,40 +498,22 @@ defineExpose({ clearDraft })
         </div>
       </section>
 
-      <section v-show="section === 'records'" class="form-section">
+      <section v-else class="form-section">
         <header class="section-heading">
           <div>
             <span>实际记录</span>
             <h3>计划、成交与持仓互不冒充</h3>
           </div>
         </header>
-        <div class="execution-status">
-          <button type="button" :class="{ active: !draft.purchased }" @click="draft.purchased = false">
-            <strong>未成交</strong><small>实际成交价保持为空</small>
-          </button>
-          <button type="button" :class="{ active: draft.purchased }" @click="draft.purchased = true">
-            <strong>已买入</strong><small>需要真实成交信息</small>
-          </button>
-        </div>
-        <div v-if="draft.purchased" class="form-grid record-grid">
-          <label class="field">
-            <span>实际成交价 <em>必填</em></span>
-            <el-input v-model="draft.actualPrice" inputmode="decimal" placeholder="用户明确提供的价格" />
-            <small v-if="errors.actualPrice" data-business-error="true" tabindex="-1">{{ errors.actualPrice }}</small>
-          </label>
-          <div class="record-placeholder">
-            数量、费用与成交时间将在成交登记页按同一版本提交；本页不根据持仓反推成交。
-          </div>
-        </div>
-        <p v-if="errors.purchased" class="record-error" data-business-error="true" tabindex="-1">{{ errors.purchased }}</p>
+        <p class="record-placeholder">成交登记与更正将在后续按同一版本契约接入；本页不根据持仓反推成交。</p>
       </section>
     </main>
 
     <aside class="profile-aside" aria-label="资料提交状态">
       <div class="aside-block aside-block--accent">
-        <span class="aside-kicker">交互预览</span>
-        <h3>服务端契约尚未接入</h3>
-        <p>这里不会把业务正文写入 localStorage，也不会把“前端已校验”显示为“资料已保存”。</p>
+        <span class="aside-kicker">服务端契约</span>
+        <h3>{{ accountId ? `已绑定资料 v${serverRevision}` : '尚未绑定资料' }}</h3>
+        <p>业务正文不写入 localStorage；“前端已校验”不会显示为“资料已保存”，以服务端回执为准。</p>
       </div>
 
       <div class="aside-block">
@@ -365,33 +524,40 @@ defineExpose({ clearDraft })
           <div><dt>计划数量</dt><dd>{{ props.plans.length }} 项</dd></div>
           <div><dt>草稿</dt><dd>{{ dirty ? '仅本页内存' : '尚未填写' }}</dd></div>
           <div><dt>校验</dt><dd>{{ checked ? (errorCount ? `${errorCount} 项待处理` : '前端检查通过') : '尚未检查' }}</dd></div>
-          <div><dt>服务端版本</dt><dd>待 DATA-01</dd></div>
+          <div><dt>服务端版本</dt><dd>{{ serverRevision ?? '—' }}</dd></div>
         </dl>
       </div>
 
-      <div v-if="section === 'plan'" class="aside-block">
-        <span class="aside-kicker">入口规则</span>
-        <h3>计划从会话进入</h3>
-        <p>返回具体研究会话，点击标题栏“会话计划”。资料中心不提供跨会话创建或重新绑定。</p>
-      </div>
-
-      <div v-else-if="checked" class="aside-block" :class="{ 'aside-block--ok': canSubmit }" aria-live="polite">
+      <div v-if="checked" class="aside-block" :class="{ 'aside-block--ok': canSubmit }" aria-live="polite">
         <span class="aside-kicker">检查结果</span>
         <h3>{{ canSubmit ? '可以进入服务端校验' : '请先处理定位到的字段' }}</h3>
         <p v-if="canSubmit">前端只检查格式与用途必填项；真实性、归属和版本仍由服务端强制校验。</p>
-        <p v-else>页面已在字段下方标出问题。一般阅读不会因资金为空而被阻断。</p>
+        <p v-else>页面已在字段下方标出问题。</p>
       </div>
 
-      <div v-if="section !== 'plan'" class="aside-actions">
-        <el-button type="primary" @click="checkDraft">检查可提交性</el-button>
-        <el-tooltip content="等待 DATA-01/03 接口与幂等契约" placement="top">
-          <span><el-button disabled>保存资料</el-button></span>
-        </el-tooltip>
-        <el-tooltip content="等待 DATA-05/06 分析快照接口" placement="top">
-          <span><el-button disabled>保存并分析</el-button></span>
-        </el-tooltip>
-        <el-button text :disabled="!dirty" @click="clearDraft">清除本页草稿</el-button>
-      </div>
+      <template v-if="section !== 'plan'">
+        <div v-if="conflict" class="aside-block version-conflict">
+          <span class="aside-kicker">版本冲突</span>
+          <h3>服务端资料已更新</h3>
+          <p>你的版本 v{{ conflict.expected }}，服务端当前 v{{ conflict.current }}。</p>
+          <ul v-if="conflict.fieldDiff.length">
+            <li v-for="item in conflict.fieldDiff" :key="item.field">{{ item.field }}：服务端={{ item.theirs }}，你={{ item.mine }}</li>
+          </ul>
+          <el-button type="primary" size="small" @click="acceptNewRevision">沿用服务端当前版本</el-button>
+          <el-button size="small" @click="conflict = null">返回修改</el-button>
+        </div>
+
+        <div class="aside-actions">
+          <el-button type="primary" @click="checkDraft">检查可提交性</el-button>
+          <el-button type="primary" :disabled="!canSaveAccount || !canSubmit" :loading="saving" @click="saveAccount(false)">保存资料</el-button>
+          <el-tooltip content="先保存业务资料，再派发分析 Run" placement="top">
+            <span><el-button type="primary" :disabled="!canSaveAccount || !canSubmit" :loading="saving" @click="saveAndAnalyze">保存并分析</el-button></span>
+          </el-tooltip>
+          <el-button v-if="accountId" text type="danger" :disabled="saving" @click="archiveAccount">归档本账户</el-button>
+          <el-button text :disabled="!dirty" @click="clearDraft">清除本页草稿</el-button>
+        </div>
+      </template>
+      <p v-else class="aside-note">计划通过研究会话的“会话计划”入口创建。</p>
     </aside>
   </div>
 </template>
@@ -408,34 +574,22 @@ defineExpose({ clearDraft })
 .section-switch { display: flex; gap: 0; margin: 28px 0 6px; border-bottom: 1px solid var(--line); }
 .section-switch button { padding: 11px 16px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); cursor: pointer; }
 .section-switch button.active { border-bottom-color: var(--accent); color: var(--text); }
-.form-section { padding: 26px 0 10px; }
-.section-heading { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
-.section-heading h3 { margin: 3px 0 0; font-size: 20px; }
-.section-note { color: var(--muted); letter-spacing: .03em; }
-.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 22px; }
+.field :deep(.el-select), .field :deep(.el-date-editor) { width: 100%; }
+.field select { border: 0; background: transparent; color: var(--text-soft); }
 .field { display: flex; min-width: 0; flex-direction: column; gap: 7px; color: var(--text-soft); }
 .field--wide { grid-column: 1 / -1; }
 .field > span { font-size: 13px; font-weight: 600; }
 .field em { color: var(--warning); font-style: normal; }
 .field i { color: var(--muted); font-size: 11px; font-style: normal; font-weight: 400; }
-.field small, .record-error { color: var(--danger); font-size: 12px; }
-.field :deep(.el-select), .field :deep(.el-date-editor) { width: 100%; }
-.field select { border: 0; background: transparent; color: var(--text-soft); }
+.field small { color: var(--danger); font-size: 12px; }
+.form-section { padding: 26px 0 10px; }
+.section-heading { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+.section-heading h3 { margin: 3px 0 0; font-size: 20px; }
+.section-note { color: var(--muted); letter-spacing: .03em; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 22px; }
 .research-linker { margin: 0 0 26px; padding: 18px; border: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 3%, var(--bg-input)); }
-.form-grid + .research-linker { margin-top: 26px; }
 .research-linker > header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .research-linker > header span { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
-.research-linker h4 { margin: 2px 0 0; font-size: 17px; }
-.research-linker > header small { color: var(--muted); }
-.research-select { margin-bottom: 14px; }
-.linked-research-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
-.linked-research-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.research-monogram { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--accent); font-family: 'Songti SC', serif; font-size: 12px; }
-.linked-research-copy { display: flex; min-width: 0; flex-direction: column; }
-.linked-research-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.linked-research-copy small, .research-empty { color: var(--muted); font-size: 12px; }
-.relationship-badge { padding: 3px 7px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--muted); font-size: 11px; }
-.research-empty { padding: 14px 0 2px; border-top: 1px solid var(--line); }
 .plan-list-guidance { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; align-items: baseline; padding: 14px 0 22px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); }
 .plan-list-guidance p, .plan-overview-empty p { margin: 0; color: var(--muted); font-size: 13px; }
 .plan-list-head, .plan-overview-row { display: grid; grid-template-columns: minmax(220px, 1.15fr) minmax(220px, 1fr) 110px; gap: 20px; align-items: center; }
@@ -446,24 +600,22 @@ defineExpose({ clearDraft })
 .plan-overview-identity strong, .plan-session-cell strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .plan-overview-identity span, .plan-session-cell small { color: var(--muted); font-size: 12px; }
 .plan-session-cell { display: flex; min-width: 0; align-items: center; gap: 10px; }
+.research-monogram { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--accent); font-family: 'Songti SC', serif; font-size: 12px; }
 .plan-primary-label, .plan-draft-label { display: inline-flex; padding: 3px 7px; border: 1px solid var(--line-strong); border-radius: 999px; font-size: 11px; white-space: nowrap; }
 .plan-primary-label { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); color: var(--accent); }
 .plan-draft-label { color: var(--muted); }
 .plan-overview-empty { padding: 36px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .plan-overview-empty strong { display: block; margin-bottom: 5px; }
-.execution-status { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.execution-status button { display: flex; flex-direction: column; gap: 4px; padding: 16px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg-input); color: var(--text); text-align: left; cursor: pointer; }
-.execution-status button.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg-input)); }
-.execution-status small, .record-placeholder { color: var(--muted); }
-.record-grid { margin-top: 18px; }
-.record-placeholder { align-self: end; padding: 11px 12px; border-top: 1px solid var(--line); font-size: 12px; }
+.record-placeholder, .aside-note { color: var(--muted); font-size: 13px; }
 .profile-aside { padding: 28px 22px; border-left: 1px solid var(--line); background: #141711; overflow: auto; }
 .aside-block { padding: 18px 0; border-bottom: 1px solid var(--line); }
 .aside-block:first-child { padding-top: 0; }
 .aside-block h3 { margin: 6px 0 8px; font-size: 16px; }
 .aside-block p { margin: 0; color: var(--muted); font-size: 13px; }
+.aside-block ul { margin: 8px 0 12px; padding-left: 18px; color: var(--text-soft); font-size: 12px; }
 .aside-block--accent { border-top: 2px solid var(--accent); padding-top: 14px !important; }
 .aside-block--ok { border-bottom-color: color-mix(in srgb, var(--ok) 60%, var(--line)); }
+.version-conflict { border-bottom-color: var(--warning); }
 .readiness-list { margin: 8px 0 0; }
 .readiness-list div { display: grid; grid-template-columns: 92px 1fr; gap: 8px; padding: 7px 0; }
 .readiness-list dt { color: var(--muted); }
@@ -481,12 +633,6 @@ defineExpose({ clearDraft })
   .profile-summary { flex-direction: column; gap: 10px; }
   .form-grid, .execution-status { grid-template-columns: 1fr; }
   .field--wide { grid-column: auto; }
-  .section-switch { overflow-x: auto; }
-  .section-switch button { flex: none; padding-inline: 12px; }
-  .research-linker { padding: 14px; }
-  .research-linker > header { flex-direction: column; gap: 4px; }
-  .linked-research-row { grid-template-columns: 30px minmax(0, 1fr); }
-  .relationship-badge { grid-column: 2; justify-self: start; }
   .plan-list-guidance { grid-template-columns: 1fr; gap: 5px; }
   .plan-list-head { display: none; }
   .plan-overview-row { grid-template-columns: 1fr auto; gap: 10px; }

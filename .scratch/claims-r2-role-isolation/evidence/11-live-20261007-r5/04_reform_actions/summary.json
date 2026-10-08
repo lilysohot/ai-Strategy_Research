@@ -1,0 +1,57 @@
+{
+  "segment": "04_reform_actions",
+  "batch_id": "batch:07270f2d85f15c0be5f062bf49eab804a1c285fd09a8376e9630c78c8c547bea",
+  "candidate_slot_count": 7,
+  "material_items": {
+    "task_id": "task:d0c52a307cd4cb115ebba6b8bcd2b23c51fa64ae93e2fe4a4402ed7cf5948b05",
+    "role": "material_items",
+    "method": "model",
+    "input_sha256": "sha256:d0c52a307cd4cb115ebba6b8bcd2b23c51fa64ae93e2fe4a4402ed7cf5948b05",
+    "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+    "execution_status": "failed",
+    "protocol_status": "not_checked",
+    "quality_status": "review_required",
+    "publication_status": "unpublished",
+    "context_status": "complete",
+    "dependency_task_ids": [],
+    "artifact_sha256": "sha256:904fd22d3bcc5de24ded8e2f958ef81cd1e5c6b0a52a3608f9c8c4d58f469bdc",
+    "error_codes": []
+  },
+  "material_relations": [],
+  "attempts": [
+    {
+      "attempt_id": "attempt:ce53e74b0100ea23f0942b1720d17d3b232ffd6cc282b2331c2eb97a3aa46b33",
+      "task_id": "task:d0c52a307cd4cb115ebba6b8bcd2b23c51fa64ae93e2fe4a4402ed7cf5948b05",
+      "attempt_number": 1,
+      "execution_status": "succeeded",
+      "request_sha256": "sha256:decde6242648cf502c8317bf8f4f1430d6d34617ab5100b92d6f8aceb11f30c2",
+      "response_sha256": "sha256:a21681554d75156f393dcc480188690c48ba364524809e88179df2eef80ebc28",
+      "provider": "openai_compat",
+      "request_model": "doubao-seed-2.0-mini",
+      "response_model": "doubao-seed-2-0-mini-260428",
+      "usage": {
+        "completion_tokens": 3960,
+        "prompt_tokens": 2016,
+        "reasoning_tokens": 2845,
+        "total_tokens": 5976
+      },
+      "cost": null
+    }
+  ],
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:de6d6a164e2796db6a6cce7751b3d65f324c3db8a7b23a39d1c4fe3041740d6e:blocked"
+  ],
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

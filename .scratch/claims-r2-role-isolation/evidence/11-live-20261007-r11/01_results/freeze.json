@@ -1,0 +1,11 @@
+{
+  "segment": "01_results",
+  "batch_id": "batch:5a2c9e822a574f192842c1d8b890f4070fea49293f889bba08a324d14fc93b21",
+  "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016",
+  "candidate_slot_count": 2,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "04ed01a394ef06cb60d37f84675c838868cd4534b8257e204bc3eee7a440d8f1",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { onBeforeRouteLeave } from 'vue-router'
 
-import { artifacts as artifactsApi, runs as runsApi } from '@/api'
+import { artifacts as artifactsApi, link as linkApi, plans as plansApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type {
   SessionPlanInput,
@@ -13,6 +13,8 @@ import type {
 } from '@/business-ui'
 import ActivityPanel from '@/components/ActivityPanel.vue'
 import ApprovalCard from '@/components/ApprovalCard.vue'
+import AnalysisEvidence from '@/components/business/AnalysisEvidence.vue'
+import AnalysisRerunPanel from '@/components/business/AnalysisRerunPanel.vue'
 import BusinessWorkspace from '@/components/business/BusinessWorkspace.vue'
 import SessionPlanManager from '@/components/business/SessionPlanManager.vue'
 import DiffPanel from '@/components/DiffPanel.vue'
@@ -22,6 +24,7 @@ import ResearchComposer from '@/components/ResearchComposer.vue'
 import ResearchRail from '@/components/ResearchRail.vue'
 import RunStage from '@/components/RunStage.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useBusinessStore } from '@/stores/business'
 import { useRunStreamStore } from '@/stores/runs'
 import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile } from '@/types'
@@ -47,11 +50,14 @@ const steering = ref(false)
 const railOpen = ref(false)
 const detailsOpen = ref(false)
 const canvasFocus = ref(false)
-const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace'>('activity')
+const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace' | 'evidence'>('activity')
 const workspaceArea = ref<WorkspaceArea>('research')
 const workspaceRequestId = ref<string | null>(null)
 const sessionPlanOpen = ref(false)
-const sessionPlans = ref<SessionPlanPreview[]>([])
+const business = useBusinessStore()
+// The dialog + profile overview read plans from the server-backed store;
+// every create/link change is a real write that lands back here.
+const sessionPlans = computed<SessionPlanPreview[]>(() => business.planPreviews)
 const businessDirty = ref(false)
 const planDirty = ref(false)
 const businessWorkspaceRef = ref<{ clearDraft: () => void } | null>(null)
@@ -339,13 +345,15 @@ watch(
   },
 )
 
-function onSelectSession(): void {
+async function onSelectSession(): Promise<void> {
   workspaceArea.value = 'research'
   sessionPlanOpen.value = false
   runStream.reset()
   railOpen.value = false
   detailsOpen.value = false
   diffFiles.value = []
+  const activeId = sessions.activeId
+  if (activeId) await business.loadResearch(activeId)
 }
 
 async function onCreatedSession(): Promise<void> {
@@ -353,6 +361,13 @@ async function onCreatedSession(): Promise<void> {
   railOpen.value = false
   runStream.reset()
   await composerRef.value?.focus()
+}
+
+function onRerunStarted(runId: string): void {
+  // A rerun creates a NEW run in the same session; switch the live view to it.
+  if (sessions.activeId) runStream.rememberRun(sessions.activeId, runId)
+  detailsOpen.value = false
+  runStream.watch(runId)
 }
 
 async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promise<void> {
@@ -371,25 +386,50 @@ async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promis
   if (area === 'research') void composerRef.value?.focus()
 }
 
-function saveSessionPlan(input: SessionPlanInput): void {
+async function saveSessionPlan(input: SessionPlanInput): Promise<void> {
   const sessionId = sessions.activeId
   if (!sessionId) {
     ElMessage.warning('请先选择研究会话')
     return
   }
-  if (input.isPrimary) {
-    sessionPlans.value = sessionPlans.value.map((plan) =>
-      plan.sessionId === sessionId ? { ...plan, isPrimary: false } : plan,
-    )
+
+  // Build the server-side declared dict — every provided value is a pure string
+  // so it survives DTO serialization; empty optional fields are simply omitted
+  // and the server treats them as pending.
+  const marketOf = (v: SessionPlanInput['market']) =>
+    ({ CN: 'CN', HK: 'HK', US: 'US' } as const)[v]
+  const declared: Record<string, unknown> = {
+    symbol: { value: input.symbol },
+    market: { value: marketOf(input.market) },
+    direction: { value: input.direction },
   }
-  sessionPlans.value.push({
-    ...input,
-    id: crypto.randomUUID(),
-    sessionId,
-    sessionTitle: sessions.activeSession?.title || '未命名研究',
-    status: 'draft',
-  })
-  ElMessage.success('计划已添加到当前会话（前端预览）')
+  const planPrice = input.planPrice.trim()
+  const targetPrice = input.targetPrice.trim()
+  if (planPrice) declared.plan_price = { value: planPrice }
+  if (targetPrice) declared.target_price = { value: targetPrice }
+
+  try {
+    const res = await plansApi.create(
+      sessionId,
+      { name: input.name, declared, allow_incomplete: true },
+      `plan.create:${sessionId}:${input.name}:${input.symbol}`,
+    )
+    const planId = String(res.plan_id)
+
+    if (input.isPrimary) {
+      await linkApi.set(
+        sessionId,
+        { account_id: null, primary_plan_id: planId },
+        `link.set:${sessionId}:${planId}`,
+      )
+    }
+
+    // Re-read authoritative plans so the preview reflects the real persisted value.
+    await Promise.all([business.loadPlans(sessionId), business.loadLink(sessionId)])
+    ElMessage.success(input.isPrimary ? '计划已创建并设为本会话主计划' : '计划已添加到当前会话')
+  } catch (err) {
+    ElMessage.error(err instanceof Error ? err.message : '创建计划失败')
+  }
 }
 
 const lastSessionKey = computed(
@@ -523,11 +563,21 @@ watch(
           <el-tab-pane v-if="diffFiles.length" label="变更" name="diff">
             <DiffPanel :files="diffFiles" :run-id="runStream.runId" @reverted="onReverted" />
           </el-tab-pane>
+          <el-tab-pane label="依据" name="evidence">
+            <AnalysisEvidence :run-id="runStream.runId" />
+          </el-tab-pane>
           <el-tab-pane label="轨迹" name="trace">
             <RunDetailView ref="runDetailRef" :run-id="runStream.runId" />
           </el-tab-pane>
         </el-tabs>
       </section>
+
+      <AnalysisRerunPanel
+        v-if="runStream.runId && (runStream.status === 'completed' || runStream.status === 'failed' || runStream.status === 'stopped')"
+        :run-id="runStream.runId"
+        :disabled="runStream.isStreaming"
+        @rerun-started="onRerunStarted"
+      />
 
       <div ref="scrollEl" class="messages" data-testid="messages" @scroll.passive="onMessagesScroll">
         <div v-if="messages.length" class="older-turns" data-testid="older-turns">

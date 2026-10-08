@@ -1,0 +1,130 @@
+{
+  "stage": "material_items_and_explicit_relations_segmented_r2",
+  "source_sha256": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+  "scope": "page 1 narrative reader units 12,15,17,19,21,23",
+  "semantic_targets": [
+    "fact",
+    "forecast",
+    "opinion",
+    "argument",
+    "risk",
+    "condition",
+    "explicit_relation"
+  ],
+  "model": "doubao-seed-2.0-mini",
+  "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+  "max_output_tokens_per_call": 8192,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "failure_policy": "execute one segment, audit it, stop before the next on failure",
+  "runner_sha256": {
+    "prepare_material_round.py": "83a4e4e402437443452c7e21221ad42430a241c856674ec33860014161cfa554",
+    "execute_material_segment.py": "e619f0b189e27c60572070283eb79dafa8e491fbef5ca2689ae64603571c9910"
+  },
+  "segments": [
+    {
+      "name": "01_results",
+      "source_spans": [
+        [
+          12,
+          0,
+          null
+        ]
+      ],
+      "candidate_slot_count": 2,
+      "batch_id": "batch:faacde778475b490ba7f69381cc9a3c85bcd60aab06d0007c3019347d561c760",
+      "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016"
+    },
+    {
+      "name": "02_channels",
+      "source_spans": [
+        [
+          15,
+          0,
+          null
+        ]
+      ],
+      "candidate_slot_count": 6,
+      "batch_id": "batch:a0055b20d1e37cc581d59245d8d28c8d8b3241f9142d6752d3974d2b2031aa34",
+      "snapshot_id": "sha256:cb66eefabda1b63afa0276f6923af830df149b6d4f2d84ba16ae835e7af63c79"
+    },
+    {
+      "name": "03_quality_cashflow",
+      "source_spans": [
+        [
+          17,
+          0,
+          null
+        ]
+      ],
+      "candidate_slot_count": 5,
+      "batch_id": "batch:d6a282e0c7cec7ef52291b7d357e564d73da96be137ed064c65c4296f4bfca06",
+      "snapshot_id": "sha256:e3b6f83ac8b8a4a980db2b644628088c9057d1f669185aebe04b6489cdbb5890"
+    },
+    {
+      "name": "04_reform_actions",
+      "source_spans": [
+        [
+          19,
+          0,
+          218
+        ]
+      ],
+      "candidate_slot_count": 7,
+      "batch_id": "batch:6decdccaa5ce4204e8899e626907d95ebe9744739fa6f60f60b16a1255dc1d0b",
+      "snapshot_id": "sha256:8470cfd25575c77404774bbe79bb52d9ea20a5bd3546aa2ca240dac04976fdf4"
+    },
+    {
+      "name": "05_reform_outlook",
+      "source_spans": [
+        [
+          19,
+          218,
+          null
+        ]
+      ],
+      "candidate_slot_count": 3,
+      "batch_id": "batch:40d9a4cef7f33fadc8778b69413ccc3902d1cdcc4fcd5ae85f7c70a6c94fb991",
+      "snapshot_id": "sha256:3a3fe23543d25c68d498bf97ae1437da735ab91732f34e7e9973b308e7e8a972"
+    },
+    {
+      "name": "06_recommendation_basis",
+      "source_spans": [
+        [
+          21,
+          0,
+          180
+        ]
+      ],
+      "candidate_slot_count": 7,
+      "batch_id": "batch:d2f8449bfb3f9b88be85085c791eda15a0a6111f8526eb3ac5ee8755a5d33962",
+      "snapshot_id": "sha256:eee5b8b9b0fa3b5e1b999d5534fdbb4a4bc56333956cf6262b4a9bb25f8fb6bf"
+    },
+    {
+      "name": "07_recommendation_conclusion",
+      "source_spans": [
+        [
+          21,
+          180,
+          null
+        ]
+      ],
+      "candidate_slot_count": 4,
+      "batch_id": "batch:66560c398f446cbc41d3c01665561438017e79ef788cc32f0eccde364ad4d992",
+      "snapshot_id": "sha256:a3ea58ee45aed618cb205a737b22ed041c7f5ac35084481475a598abe8b2b216"
+    },
+    {
+      "name": "08_risks",
+      "source_spans": [
+        [
+          23,
+          0,
+          null
+        ]
+      ],
+      "candidate_slot_count": 3,
+      "batch_id": "batch:ad07d48265a392301d366a44be93af56ef52b05cef2fdb84b413c48d6c7a6433",
+      "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40"
+    }
+  ]
+}

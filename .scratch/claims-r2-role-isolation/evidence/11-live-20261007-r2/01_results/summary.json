@@ -1,0 +1,57 @@
+{
+  "segment": "01_results",
+  "batch_id": "batch:faacde778475b490ba7f69381cc9a3c85bcd60aab06d0007c3019347d561c760",
+  "candidate_slot_count": 2,
+  "material_items": {
+    "task_id": "task:53482edcd9fb9adfafc191d4ec4dabd7722d219dfcc3a0023e6b307bb939fa13",
+    "role": "material_items",
+    "method": "model",
+    "input_sha256": "sha256:53482edcd9fb9adfafc191d4ec4dabd7722d219dfcc3a0023e6b307bb939fa13",
+    "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+    "execution_status": "failed",
+    "protocol_status": "not_checked",
+    "quality_status": "review_required",
+    "publication_status": "unpublished",
+    "context_status": "complete",
+    "dependency_task_ids": [],
+    "artifact_sha256": "sha256:59808985a51b6f2608ee20ba9eb1bbbb71b8d1333774b7e21ca941217e13203b",
+    "error_codes": []
+  },
+  "material_relations": [],
+  "attempts": [
+    {
+      "attempt_id": "attempt:eaae90c0480af24f6cde4185df56a75c91ddcad8f7556a8f8e0eeb5d2e7a4abd",
+      "task_id": "task:53482edcd9fb9adfafc191d4ec4dabd7722d219dfcc3a0023e6b307bb939fa13",
+      "attempt_number": 1,
+      "execution_status": "succeeded",
+      "request_sha256": "sha256:53c7de3d95183823c444b2f64b2ff856510672bf5c6447a944e31a2317429307",
+      "response_sha256": "sha256:d4ee3bc69d8c7a04810fedf41dbaf7ab0cab88d81709c6f8d8020b07b487980c",
+      "provider": "openai_compat",
+      "request_model": "doubao-seed-2.0-mini",
+      "response_model": "doubao-seed-2-0-mini-260428",
+      "usage": {
+        "completion_tokens": 3301,
+        "prompt_tokens": 1372,
+        "reasoning_tokens": 2835,
+        "total_tokens": 4673
+      },
+      "cost": null
+    }
+  ],
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:73d5f0a14e6ff62277090e9fcf3afd2ddf715c4fdc40603b1f41ee65d33dd77c:blocked"
+  ],
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

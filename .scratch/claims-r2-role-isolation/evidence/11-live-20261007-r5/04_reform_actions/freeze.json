@@ -1,0 +1,11 @@
+{
+  "segment": "04_reform_actions",
+  "batch_id": "batch:07270f2d85f15c0be5f062bf49eab804a1c285fd09a8376e9630c78c8c547bea",
+  "snapshot_id": "sha256:8470cfd25575c77404774bbe79bb52d9ea20a5bd3546aa2ca240dac04976fdf4",
+  "candidate_slot_count": 7,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "4aee6552d84be666d6985f0083d921abda7d89e79fe40a44be9c2d227dafe197",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

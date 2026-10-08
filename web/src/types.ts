@@ -148,6 +148,208 @@ export interface InputRequestAnswerResponse {
   remaining_fields?: string[]
 }
 
+// ——— 业务资料（DATA-01…04 / accounts.plans.trades） ——————————————————————
+
+/** 可写的业务对象响应信封：幂等回放标记 + 会话内操作标识。 */
+export interface BusinessOperationResponse {
+  replayed: boolean
+  operation_id: string
+  [field: string]: unknown
+}
+
+/** 一次业务写操作的持久回执（幂等恢复用，GET /api/business/operations）。 */
+export interface OperationRecord {
+  operation_id: string
+  scope: string
+  replayed: boolean
+  status: string
+  created_at: string | null
+  request?: Record<string, unknown>
+  result?: Record<string, unknown>
+  [field: string]: unknown
+}
+
+export interface OperationsListResponse {
+  operations: OperationRecord[]
+}
+
+export interface AccountValues {
+  total_capital: string | null
+  available_capital: string | null
+  capital_basis: string | null
+  currency: string | null
+  as_of: string | null
+  record_state: string | null
+}
+
+export interface Account {
+  id: string
+  name: string
+  base_currency: string
+  archived: boolean
+  revision: number
+  updated_at: string | null
+  values: AccountValues
+}
+
+export interface AccountListResponse {
+  accounts: Account[]
+  total: number
+  has_more: boolean
+}
+
+export interface AccountRevision {
+  revision: number
+  created_at: string | null
+  source_kind: string | null
+  changed_fields: string[]
+  values: AccountValues
+}
+
+export interface AccountRevisionsResponse {
+  revisions: AccountRevision[]
+}
+
+export interface PlanValues {
+  symbol: string | null
+  market: string | null
+  asset_type: string | null
+  direction: string | null
+  plan_price: string | null
+  plan_price_low: string | null
+  plan_price_high: string | null
+  target_price: string | null
+  risk_budget: { value: string | null; unit: string | null }
+  position_limit: { value: string | null; unit: string | null }
+  time_window: string | null
+  invalidation: string | null
+  profit_loss_ratio: { value: string | null; definition: string | null }
+  currency: string | null
+  as_of: string | null
+  record_state: string | null
+}
+
+export interface Plan {
+  id: string
+  research_id: string
+  name: string
+  status: string
+  archived: boolean
+  revision: number
+  values: PlanValues
+}
+
+export interface PlanListResponse {
+  plans: Plan[]
+}
+
+export interface PlanRevision {
+  revision: number
+  created_at: string | null
+  source_kind: string | null
+  changed_fields: string[]
+  values: PlanValues
+}
+
+export interface PlanRevisionsResponse {
+  revisions: PlanRevision[]
+}
+
+export interface ResearchLink {
+  research_id: string
+  account_id: string | null
+  primary_plan_id: string | null
+  updated_at?: string | null
+}
+
+export type TradeSide = 'buy' | 'sell'
+export type TradeStatus = 'active' | 'superseded' | string
+
+export interface Trade {
+  id: string
+  account_id: string
+  symbol: string
+  market: string
+  side: TradeSide
+  quantity: string | null
+  price: string | null
+  currency: string
+  fees: string | null
+  traded_at: string | null
+  status: TradeStatus
+  corrects_id: string | null
+  source_kind: string | null
+  created_at: string | null
+}
+
+export interface TradesListResponse {
+  trades: Trade[]
+}
+
+// ——— 监控规则（DATA-09…11 / watch-rules + events） ——————————————————————
+
+export interface WatchRule {
+  id: string
+  research_id: string
+  plan_id: string | null
+  name: string
+  status: string
+  current_version: number
+  archived?: boolean
+  spec?: Record<string, unknown>
+  created_at?: string | null
+  [field: string]: unknown
+}
+
+export interface WatchRuleListResponse {
+  rules: WatchRule[]
+  total: number
+  has_more: boolean
+}
+
+export interface WatchRuleVersionsResponse {
+  versions: Array<Record<string, unknown>>
+}
+
+export interface WatchEvent {
+  id: string
+  research_id: string
+  rule_id: string
+  run_id: string | null
+  status: string
+  triggered_at: string | null
+  created_at: string | null
+  [field: string]: unknown
+}
+
+export interface WatchEventsListResponse {
+  events: WatchEvent[]
+  total: number
+  has_more: boolean
+}
+
+// ——— 分析依据 / 重算（UI-06，DATA-05/06） ——————————————————————————————
+
+export interface SnapshotView {
+  run_id: string
+  schema_version: string
+  created_at: string | null
+  use_case?: string | null
+  account?: Record<string, unknown> | null
+  plan?: Record<string, unknown> | null
+  values?: Record<string, unknown>
+  [field: string]: unknown
+}
+
+export interface RunRerunResponse {
+  run_id: string
+  snapshot_id: string
+  rerun_of_run_id: string
+  old_run_stop_requested: boolean
+  old_run_stop_confirmed: boolean
+  [field: string]: unknown
+}
+
 export interface BusinessEvent {
   id: string
   cursor: number

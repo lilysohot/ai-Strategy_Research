@@ -7,20 +7,37 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from plugins.corpus.claims_detail import triage_block_detail
-from plugins.corpus.evidence import split_spans
+from plugins.corpus.evidence import EvidencePacket, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
     MaterialEvidence,
     MaterialItem,
+    _align_quote,
     _relation_candidate_pairs,
     _relations_from_decisions,
+    _strict_relation_candidate_pairs,
     build_candidate_slot_batches,
     build_candidate_slots,
     build_material_structure,
+    build_relation_jsonl_prompt,
     classify_material_type,
     extract_material_understanding,
 )
 from plugins.corpus.service import CorpusService
+
+
+def test_align_quote_accepts_typographic_quote_equivalence_but_preserves_source() -> None:
+    packet = EvidencePacket(
+        packet_id="packet-1",
+        locator="page:1",
+        kind="prose",
+        text="维持一年目标价2030元和“强推”评级。",
+    )
+
+    evidence = _align_quote('"强推"评级', packet, "source-rev")
+
+    assert evidence.quote == "“强推”评级"
+    assert packet.text[evidence.start : evidence.end] == evidence.quote
 
 
 def _source(tmp_path: Path) -> Path:
@@ -1171,10 +1188,139 @@ def test_slot_protocol_calls_model_once_per_finite_atomic_batch(tmp_path: Path) 
     )
 
     assert len(prompts) == 3
+    assert all('record_type="item", candidate_slot_id, item_id' in prompt for prompt in prompts)
+    assert all("candidate_slot_id 必须逐字复制" in prompt for prompt in prompts)
+    assert all("item_id 必须非空" in prompt for prompt in prompts)
+    assert all("直接使用同一个 candidate_slot_id" in prompt for prompt in prompts)
+    assert all("每个 ID 恰好在一行 item 或 coverage" in prompt for prompt in prompts)
+    assert all("不得输出 neutral/positive/negative" in prompt for prompt in prompts)
+    assert all("没有未知字段时输出 []" in prompt for prompt in prompts)
+    assert all("其他语义类型必须为 null" in prompt for prompt in prompts)
     assert result.packet_runs[0].model_calls == 3
     assert result.packet_runs[0].status == "completed"
     assert len(result.understanding.coverage.slot_ledger) == 17
     assert result.summary()["complete"] is True
+
+
+def test_market_expectation_comparison_is_not_a_forecast_obligation(tmp_path: Path) -> None:
+    source = tmp_path / "market-expectation.md"
+    source.write_text(
+        "公司上半年收入同比增长1.3%，单季收入同比下降5.2%，略低于市场预期。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    assert len(slots) == 1
+    assert "forecast" not in slots[0].signal_types
+    assert "claim" in slots[0].signal_types
+
+
+def test_explicit_cause_is_split_into_a_relation_candidate(tmp_path: Path) -> None:
+    source = tmp_path / "explicit-cause.md"
+    source.write_text(
+        "经营性现金流净额同比增长915.8%，主要系财务公司存款增加所致。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    packet = evidence_run.document.packets[0]
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    assert len(slots) == 2
+    assert "evidence" in slots[1].signal_types
+
+    def item(slot_index: int, role: str) -> MaterialItem:
+        slot = slots[slot_index]
+        quote = packet.text[slot.start : slot.end]
+        return MaterialItem(
+            item_id=f"item-{slot_index}",
+            text=quote,
+            semantic_type="fact",
+            statement_role=role,  # type: ignore[arg-type]
+            speech_role="statement",
+            perspective="source_explicit",
+            speaker_ref="source",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=slot.start,
+                    end=slot.end,
+                ),
+            ),
+        )
+
+    pairs = _relation_candidate_pairs([item(0, "claim"), item(1, "evidence")], slots)
+    assert len(pairs) == 1
+    assert pairs[0]["from_item"] == "item-1"
+    assert pairs[0]["to_item"] == "item-0"
+    assert pairs[0]["allowed_type"] == "supports"
+    assert _strict_relation_candidate_pairs(
+        packet, [item(0, "claim"), item(1, "evidence")], slots
+    ) == pairs
+    prompt = build_relation_jsonl_prompt(
+        packet,
+        [item(0, "claim"), item(1, "evidence")],
+        restrict_pairs=True,
+        candidate_pairs=pairs,
+    )
+    assert "A，主要系/由于 B 所致" in prompt
+    assert "B supports A" in prompt
+
+
+def test_leading_conclusion_marker_points_support_from_prior_fact(tmp_path: Path) -> None:
+    source = tmp_path / "explicit-conclusion.md"
+    source.write_text(
+        "销售回款同比增长7.9%，表明渠道回款配合度较高。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    packet = evidence_run.document.packets[0]
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    assert len(slots) == 2
+
+    def item(slot_index: int, role: str) -> MaterialItem:
+        slot = slots[slot_index]
+        quote = packet.text[slot.start : slot.end]
+        return MaterialItem(
+            item_id=f"item-{slot_index}",
+            text=quote,
+            semantic_type="fact",
+            statement_role=role,  # type: ignore[arg-type]
+            speech_role="statement",
+            perspective="source_explicit",
+            speaker_ref="source",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=slot.start,
+                    end=slot.end,
+                ),
+            ),
+        )
+
+    pairs = _relation_candidate_pairs([item(0, "claim"), item(1, "evidence")], slots)
+    assert len(pairs) == 1
+    assert pairs[0]["from_item"] == "item-0"
+    assert pairs[0]["to_item"] == "item-1"
+    assert pairs[0]["allowed_type"] == "supports"
+    assert _strict_relation_candidate_pairs(
+        packet, [item(0, "claim"), item(1, "evidence")], slots
+    ) == pairs
 
 
 def test_detected_question_cannot_be_rejected_as_no_supported_item(tmp_path: Path) -> None:

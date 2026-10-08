@@ -12,26 +12,41 @@
 
 import { request, requestBlob } from './client'
 import type {
+  Account,
+  AccountListResponse,
+  AccountRevisionsResponse,
   ApprovalDecisionValue,
   Artifact,
   ArtifactPreview,
   BusinessEventListResponse,
+  BusinessOperationResponse,
   InputRequest,
   InputRequestAnswerResponse,
   InputRequestListResponse,
   LlmConfig,
+  OperationsListResponse,
+  PlanListResponse,
+  PlanRevisionsResponse,
+  ResearchLink,
   RunControlsResponse,
   RunDiff,
+  RunRerunResponse,
   RunRevertResponse,
   RunSummary,
   RunSubmitResponse,
   RunTraceResponse,
   Session,
   SessionListResponse,
+  SnapshotView,
   TestResult,
   TokenResponse,
+  TradesListResponse,
   TurnListResponse,
   User,
+  WatchEventsListResponse,
+  WatchRule,
+  WatchRuleListResponse,
+  WatchRuleVersionsResponse,
 } from '../types'
 
 // ── Auth (server/routes/auth.py) ────────────────────────────────
@@ -136,7 +151,11 @@ export const runs = {
    * read-only inputs dir. Credentials are never sent here — they are resolved
    * from the user's default config server-side.
    */
-  submit: (body: { message: string; session_id?: string } | FormData) =>
+  submit: (body: {
+    message: string
+    session_id?: string
+    investment_input?: Record<string, unknown> | null
+  } | FormData) =>
     request<RunSubmitResponse>('/runs', { method: 'POST', body }),
 
   /** One-shot replay of the trajectory timeline (no streaming). */
@@ -145,6 +164,26 @@ export const runs = {
       `/runs/${encodeURIComponent(runId)}/trace`,
       { query: { after } },
     ),
+
+  /**
+   * The business input frozen at this run's submission (UI-06 / DATA-05).
+   * A non-business (legacy) run returns 404 with ``snapshot_absent`` — callers
+   * must show the empty state instead of back-filling current values.
+   */
+  investmentSnapshot: (runId: string) =>
+    request<SnapshotView>(`/runs/${encodeURIComponent(runId)}/investment-snapshot`),
+
+  /**
+   * "用新资料重算": stops the old run, freezes current data, queues a NEW run
+   * that points back at the old one via ``rerun_of_run_id``. Idempotency-keyed
+   * so a timeout retry must not create two runs.
+   */
+  rerun: (runId: string, body: { message?: string; session_id?: string }, idempotencyKey: string) =>
+    request<RunRerunResponse>(`/runs/${encodeURIComponent(runId)}/rerun`, {
+      method: 'POST',
+      body,
+      headers: { 'Idempotency-Key': idempotencyKey },
+    }),
 
   /** SSE endpoint — consumed by {@link openRunStream}, not by this client. */
   eventsUrl: (runId: string) =>
@@ -260,6 +299,229 @@ export const businessEvents = {
     request<void>('/business/events/read-all', { method: 'POST', body: { through } }),
 
   streamUrl: () => '/api/business/events/stream',
+}
+
+// ── Accounts / Plans / Trades (DATA-01…04 / PR-BIZ-01—04) ───────────
+//
+// Every write carries an Idempotency-Key and returns {replayed, operation_id, ...}.
+// Amounts travel as decimal strings end-to-end (never through JS Number). Updates
+// require the current ``expected_revision``; a 409 means concurrent edit.
+
+const IDEMPOTENCY_HEADER = (key: string): Record<string, string> => ({
+  'Idempotency-Key': key,
+})
+
+export const accounts = {
+  create(body: {
+    name: string
+    base_currency: string
+    declared: Record<string, Array<unknown> | string | Record<string, unknown>>
+    use_case: string
+    allow_incomplete: boolean
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>('/business/accounts', {
+      method: 'POST',
+      body: { ...body, source_kind: 'form' },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  list(params?: { limit?: number; offset?: number }) {
+    return request<AccountListResponse>('/business/accounts', { query: params })
+  },
+
+  get(id: string) {
+    return request<Account>(`/business/accounts/${encodeURIComponent(id)}`)
+  },
+
+  update(id: string, body: {
+    declared: Record<string, unknown>
+    expected_revision: number
+    allow_incomplete: boolean
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/accounts/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body,
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  revisions(id: string, params?: { limit?: number; offset?: number }) {
+    return request<AccountRevisionsResponse>(
+      `/business/accounts/${encodeURIComponent(id)}/revisions`,
+      { query: params },
+    )
+  },
+
+  archive(id: string, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/accounts/${encodeURIComponent(id)}/archive`, {
+      method: 'POST',
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+}
+
+export const plans = {
+  create(researchId: string, body: {
+    name: string
+    declared: Record<string, unknown>
+    allow_incomplete: boolean
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/sessions/${encodeURIComponent(researchId)}/plans`, {
+      method: 'POST',
+      body: { ...body, source_kind: 'form' },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  list(researchId: string, params?: { limit?: number; offset?: number }) {
+    return request<PlanListResponse>(
+      `/business/sessions/${encodeURIComponent(researchId)}/plans`,
+      { query: params },
+    )
+  },
+
+  update(id: string, body: {
+    declared: Record<string, unknown>
+    expected_revision: number
+    allow_incomplete: boolean
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/plans/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body,
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  revisions(id: string, params?: { limit?: number; offset?: number }) {
+    return request<PlanRevisionsResponse>(
+      `/business/plans/${encodeURIComponent(id)}/revisions`,
+      { query: params },
+    )
+  },
+
+  archive(id: string, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/plans/${encodeURIComponent(id)}/archive`, {
+      method: 'POST',
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+}
+
+export const link = {
+  get(researchId: string) {
+    return request<ResearchLink>(`/business/sessions/${encodeURIComponent(researchId)}/link`)
+  },
+
+  set(researchId: string, body: {
+    account_id: string | null
+    primary_plan_id: string | null
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/sessions/${encodeURIComponent(researchId)}/link`, {
+      method: 'PUT',
+      body,
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+}
+
+export const trades = {
+  register(accountId: string, body: {
+    declared: Record<string, unknown>
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/accounts/${encodeURIComponent(accountId)}/trades`, {
+      method: 'POST',
+      body: { ...body, source_kind: 'form' },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  list(params?: { account_id?: string; limit?: number; offset?: number }) {
+    return request<TradesListResponse>('/business/trades', { query: params })
+  },
+
+  correct(tradeId: string, body: { declared: Record<string, unknown> }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/trades/${encodeURIComponent(tradeId)}/correct`, {
+      method: 'POST',
+      body: { ...body, source_kind: 'form' },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+}
+
+export const operations = {
+  /** Recent writes, refreshed after a page reload (UI-04 幂等恢复). */
+  list(params?: { scope?: string; limit?: number }) {
+    return request<OperationsListResponse>('/business/operations', { query: params })
+  },
+
+  get(id: string) {
+    return request<BusinessOperationResponse>(`/business/operations/${encodeURIComponent(id)}`)
+  },
+}
+
+// ── Watch rules + events (DATA-09…11 / PR-WATCH-01…04) ─────────────
+
+export const watchRules = {
+  create(researchId: string, body: {
+    name: string
+    spec: Record<string, unknown>
+    plan_id?: string | null
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/sessions/${encodeURIComponent(researchId)}/watch-rules`, {
+      method: 'POST',
+      body: { ...body, source_kind: 'form' },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  list(params?: { research_id?: string; status?: string; limit?: number; offset?: number }) {
+    return request<WatchRuleListResponse>('/business/watch-rules', { query: params })
+  },
+
+  get(id: string) {
+    return request<WatchRule>(`/business/watch-rules/${encodeURIComponent(id)}`)
+  },
+
+  update(id: string, patch: Record<string, unknown>, expectedVersion: number, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/watch-rules/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: { ...patch, expected_version: expectedVersion },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  versions(id: string, params?: { limit?: number; offset?: number }) {
+    return request<WatchRuleVersionsResponse>(
+      `/business/watch-rules/${encodeURIComponent(id)}/versions`,
+      { query: params },
+    )
+  },
+
+  statusOp(id: string, action: 'pause' | 'resume' | 'cancel', expectedVersion: number, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/watch-rules/${encodeURIComponent(id)}/${action}`, {
+      method: 'POST',
+      body: { expected_version: expectedVersion },
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+}
+
+export const watchEvents = {
+  list(params?: { research_id?: string; status?: string; limit?: number; offset?: number }) {
+    return request<WatchEventsListResponse>('/business/watch-events', { query: params })
+  },
+}
+
+// ── Research delete (DATA-13 / PR-BIZ-06) ──────────────────────────
+
+export const researchDelete = {
+  remove(researchId: string, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/sessions/${encodeURIComponent(researchId)}`, {
+      method: 'DELETE',
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
 }
 
 // ── Artifacts (server/routes/artifacts.py) ──────────────────────

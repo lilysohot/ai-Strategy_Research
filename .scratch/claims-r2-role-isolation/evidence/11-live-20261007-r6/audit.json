@@ -1,0 +1,86 @@
+{
+  "run": "11-live-20261007-r6",
+  "segments": [
+    {
+      "segment": "01_results",
+      "candidate_slots": 2,
+      "items": 2,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "02_channels",
+      "candidate_slots": 6,
+      "items": 6,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "03_quality_cashflow",
+      "candidate_slots": 5,
+      "items": 5,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "04_reform_actions",
+      "candidate_slots": 7,
+      "items": 7,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "05_reform_outlook",
+      "candidate_slots": 3,
+      "items": 3,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "06_recommendation_basis",
+      "candidate_slots": 7,
+      "items": 7,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "07_recommendation_conclusion",
+      "candidate_slots": 4,
+      "items": 4,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "08_risks",
+      "candidate_slots": 3,
+      "items": 3,
+      "relations": 0,
+      "attempts": 1
+    }
+  ],
+  "segment_count": 8,
+  "candidate_slots": 37,
+  "terminal_slots": 37,
+  "items": 37,
+  "relations": 0,
+  "semantic_types": {
+    "fact": 24,
+    "forecast": 8,
+    "opinion": 5
+  },
+  "statement_roles": {
+    "claim": 30,
+    "condition": 1,
+    "evidence": 3,
+    "risk": 3
+  },
+  "source_spans_checked": 42,
+  "attempts": 8,
+  "total_tokens": 42298,
+  "unknown_cost_calls": 8,
+  "known_cost_amount": 0.0,
+  "known_cost_amount_is_not_zero_cost": true,
+  "all_items_accepted_candidates": true,
+  "all_relation_tasks_accepted_candidates": true,
+  "published": false
+}

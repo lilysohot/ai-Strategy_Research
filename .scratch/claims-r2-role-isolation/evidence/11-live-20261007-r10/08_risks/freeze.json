@@ -1,0 +1,11 @@
+{
+  "segment": "08_risks",
+  "batch_id": "batch:1a277160421e4ba9a50108aa34a5fb63ad334555e2c649165501a355ff63caae",
+  "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40",
+  "candidate_slot_count": 3,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "5340b8d9e71b8827d29b335aa099b4d30f76b70302da3f9a98146020c53a7c4a",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

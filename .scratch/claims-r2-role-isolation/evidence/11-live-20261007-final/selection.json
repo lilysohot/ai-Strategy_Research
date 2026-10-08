@@ -1,0 +1,32 @@
+{
+  "schema_version": "material-segment-selection-v1",
+  "selection_policy": "accepted immutable segment; do not rerun accepted work",
+  "source_scope": "page 1 narrative reader units 12,15,17,19,21,23",
+  "segments": [
+    {"segment": "01_results", "run": "11-live-20261007-r7"},
+    {"segment": "02_channels", "run": "11-live-20261007-r7"},
+    {"segment": "03_quality_cashflow", "run": "11-live-20261007-r11"},
+    {"segment": "04_reform_actions", "run": "11-live-20261007-r7"},
+    {"segment": "05_reform_outlook", "run": "11-live-20261007-r7"},
+    {"segment": "06_recommendation_basis", "run": "11-live-20261007-r7"},
+    {"segment": "07_recommendation_conclusion", "run": "11-live-20261007-r9"},
+    {"segment": "08_risks", "run": "11-live-20261007-r9"}
+  ],
+  "rejected_attempts": [
+    {
+      "run": "11-live-20261007-r7",
+      "segment": "07_recommendation_conclusion",
+      "reason": "typographic quote normalization caused exact-alignment rejection"
+    },
+    {
+      "run": "11-live-20261007-r8",
+      "segment": "03_quality_cashflow",
+      "reason": "model inserted an unsupported character into the evidence quote"
+    },
+    {
+      "run": "11-live-20261007-r10",
+      "segment": "03_quality_cashflow",
+      "reason": "strict relation filter rejected valid causal candidates before model execution"
+    }
+  ]
+}

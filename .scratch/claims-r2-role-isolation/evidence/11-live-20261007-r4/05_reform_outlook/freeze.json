@@ -1,0 +1,11 @@
+{
+  "segment": "05_reform_outlook",
+  "batch_id": "batch:9202918a20b2fcaa76236f8f0970c3669d1dbae01bcb9db6f4154a83fd31d0e5",
+  "snapshot_id": "sha256:3a3fe23543d25c68d498bf97ae1437da735ab91732f34e7e9973b308e7e8a972",
+  "candidate_slot_count": 3,
+  "runner_sha256": "202400f87c42f0ba0a2cdb69d3d15e6ab65918fddfe506551cedb821fdb82105",
+  "material_semantics_sha256": "f8db12e09cf248707b5b085c774dca8dd18529bcb105563f6a41ab2223156acf",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

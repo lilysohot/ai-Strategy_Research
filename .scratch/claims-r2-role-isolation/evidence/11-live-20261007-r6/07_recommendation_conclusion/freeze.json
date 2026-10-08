@@ -1,0 +1,11 @@
+{
+  "segment": "07_recommendation_conclusion",
+  "batch_id": "batch:7b8698ec27df2d860462dd2c6aa01bef8b61ac70527abc976ea99502ad4aa838",
+  "snapshot_id": "sha256:a3ea58ee45aed618cb205a737b22ed041c7f5ac35084481475a598abe8b2b216",
+  "candidate_slot_count": 4,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "552dc1fbc9d3c381f9e5c98b1268b60c49b9b9ed3e031c68e4ef1a87cf2a10ee",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

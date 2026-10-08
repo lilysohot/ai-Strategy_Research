@@ -1,0 +1,69 @@
+{
+  "stage": "material_items_prompt_contract_v2",
+  "source_scope": "page 1 narrative reader units 12,15,17,19,21,23",
+  "semantic_targets": [
+    "fact",
+    "forecast",
+    "opinion",
+    "argument",
+    "risk",
+    "condition",
+    "explicit_relation"
+  ],
+  "model": "doubao-seed-2.0-mini",
+  "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+  "runner_sha256": "47fb207d81d99d8800f494c2c50a93e03415a9f4a552c8f6087f0591456e5564",
+  "material_semantics_sha256": "5f3ce6c953bb899d9c1f284763fa2bc278cedc04ed58ea86023f41fa6be8ceff",
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "segments": [
+    {
+      "name": "01_results",
+      "batch_id": "batch:dfa0e21ca7625367b9728e6060592229122cb824bf65b83ce3e30dfe9d945a71",
+      "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016",
+      "candidate_slot_count": 2
+    },
+    {
+      "name": "02_channels",
+      "batch_id": "batch:a5586fb54581fcc59f7e229943fc32557879956810df13d605463cc202090bc9",
+      "snapshot_id": "sha256:cb66eefabda1b63afa0276f6923af830df149b6d4f2d84ba16ae835e7af63c79",
+      "candidate_slot_count": 6
+    },
+    {
+      "name": "03_quality_cashflow",
+      "batch_id": "batch:789a7cb41d9ba44e4b6daf3ccdc922d6f66c2c844eb7a39383334a586d735f5b",
+      "snapshot_id": "sha256:e3b6f83ac8b8a4a980db2b644628088c9057d1f669185aebe04b6489cdbb5890",
+      "candidate_slot_count": 5
+    },
+    {
+      "name": "04_reform_actions",
+      "batch_id": "batch:da5a34ce7be63bc80b85384b49c287f4f53ecaf59d34b0d09fd92177444154fd",
+      "snapshot_id": "sha256:8470cfd25575c77404774bbe79bb52d9ea20a5bd3546aa2ca240dac04976fdf4",
+      "candidate_slot_count": 7
+    },
+    {
+      "name": "05_reform_outlook",
+      "batch_id": "batch:93b6a16a543d5e1539765af437ea8d0fc9313c62bb433101cc0c88f16237b1a5",
+      "snapshot_id": "sha256:3a3fe23543d25c68d498bf97ae1437da735ab91732f34e7e9973b308e7e8a972",
+      "candidate_slot_count": 3
+    },
+    {
+      "name": "06_recommendation_basis",
+      "batch_id": "batch:4e0af5ae9aac93a3227ee47ccfc9c3e6ae97223ba70c9619a9c6823da3b50285",
+      "snapshot_id": "sha256:eee5b8b9b0fa3b5e1b999d5534fdbb4a4bc56333956cf6262b4a9bb25f8fb6bf",
+      "candidate_slot_count": 7
+    },
+    {
+      "name": "07_recommendation_conclusion",
+      "batch_id": "batch:2b68214f200b830bbc97b1dc864eabf6076dade3e235aeaaff9c97142c5c6828",
+      "snapshot_id": "sha256:a3ea58ee45aed618cb205a737b22ed041c7f5ac35084481475a598abe8b2b216",
+      "candidate_slot_count": 4
+    },
+    {
+      "name": "08_risks",
+      "batch_id": "batch:05cf7c770ec79e7eb8d0914a3f4ff342753a40fed1a8501d84a2de24c48d6811",
+      "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40",
+      "candidate_slot_count": 3
+    }
+  ]
+}

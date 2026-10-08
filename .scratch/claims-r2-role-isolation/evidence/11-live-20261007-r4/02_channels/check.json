@@ -1,0 +1,100 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:2b1e0fd07e8706cd7763ace1e4d21e09b83f184d9eeebec8509fc71c375dd4d7",
+    "plan_sha256": "sha256:2b1e0fd07e8706cd7763ace1e4d21e09b83f184d9eeebec8509fc71c375dd4d7",
+    "snapshot_id": "sha256:cb66eefabda1b63afa0276f6923af830df149b6d4f2d84ba16ae835e7af63c79",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:9309de310c3940242cf22143e85b18a03cf09f36bdcfdc1a9bf5e125df4af54e",
+        "role": "claims",
+        "method": "model",
+        "input_sha256": "sha256:9309de310c3940242cf22143e85b18a03cf09f36bdcfdc1a9bf5e125df4af54e",
+        "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+        "execution_status": "blocked",
+        "protocol_status": "not_checked",
+        "quality_status": "unassessed",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "error_codes": [
+          "CS_BUDGET_EXHAUSTED"
+        ]
+      },
+      {
+        "task_id": "task:4b532e574af724abfd4ed8a2db8a46e62aa7f95b483e07c99fb38ff5e3214a2a",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:4b532e574af724abfd4ed8a2db8a46e62aa7f95b483e07c99fb38ff5e3214a2a",
+        "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+        "execution_status": "succeeded",
+        "protocol_status": "invalid",
+        "quality_status": "review_required",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "artifact_sha256": "sha256:7c4324b7ae88153b3f3abfcfdb6321d72abdfa0a943843900afbe7feb83c51aa",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:89e6c0639e93af751c24a4e01ee53eb434a86be9f79705d9f78150254b87901a",
+        "task_id": "task:4b532e574af724abfd4ed8a2db8a46e62aa7f95b483e07c99fb38ff5e3214a2a",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:60ec8c64028c00fdb06603132ed772e4707af569a1401cd8325f90b5ea3ad4ca",
+        "response_sha256": "sha256:3e03f1338f510dc6a1489b6b893b5e5b4a7c2b55e962c14c34873ecc3ef33629",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.0-mini",
+        "response_model": "doubao-seed-2-0-mini-260428",
+        "usage": {
+          "completion_tokens": 5726,
+          "prompt_tokens": 2157,
+          "reasoning_tokens": 4401,
+          "total_tokens": 7883
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:9309de310c3940242cf22143e85b18a03cf09f36bdcfdc1a9bf5e125df4af54e:blocked"
+  ],
+  "derivations": {
+    "task:4b532e574af724abfd4ed8a2db8a46e62aa7f95b483e07c99fb38ff5e3214a2a": "dependency_not_ready:CS_DEPENDENCY_NOT_READY"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 1,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 1,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

@@ -146,6 +146,11 @@ unknown_fields。先输出 speaker，再输出引用它的 item；最多输出 {
 - semantic_type 仅 fact/forecast/opinion/behavior/unknown；statement_role 仅
   claim/evidence/condition/risk/question/answer/other；speech_role 仅
   statement/question/answer/unknown；perspective 仅 source_explicit/quoted_other/unknown。
+- polarity 仅 affirmed/negated/mixed/unknown，不得输出 neutral/positive/negative；
+  temporal_frame 仅 contemporaneous/retrospective/unknown，不得把年份、季度或日期填入该字段。
+- behavior_status 仅对 semantic_type=behavior 使用 intent/claimed_executed/
+  claimed_not_executed/unknown；其他语义类型必须为 null。
+- unknown_fields 必须是 JSON 字符串数组；没有未知字段时输出 []，不得输出 null、对象或字符串。
 - statement_role 优先级 risk > condition > evidence > question/answer > claim/other。条件答句是
   condition + speech_role=answer，被引述论据答句是 evidence + speech_role=answer。
 - 匿名主持人/专家/投资者的 role 分别为 moderator/industry_expert/investor_participant，
@@ -155,7 +160,8 @@ unknown_fields。先输出 speaker，再输出引用它的 item；最多输出 {
 - 保留否定、条件、风险、编号问答、文首总结、价值量而非利润的澄清、混合听音话轮、电话尾号提问；
   混合话轮不能可靠切分时 perspective=unknown，并列 unknown_fields。
 - 每个 item 只表达一个原子命题。先述历史事实再说“所以未来可能”时拆成 fact 与 forecast。
-- evidence_quote 必须是当前证据包内可唯一回取的最短逐字原文；相邻语境不能作为引文。
+- evidence_quote 必须直接复制当前证据包内可唯一回取的最短逐字原文；相邻语境不能作为引文。
+  保留原文的中英文引号、标点和字符形式，不得把 “ ” 改成 \" \"、把 ‘ ’ 改成 ' '。
 - 无法支持的字段使用 unknown/null 并列入 unknown_fields；不要重复同一命题或复制整段原文。
 """
 
@@ -176,16 +182,24 @@ MATERIAL_RELATION_OBLIGATION_PROMPT = """你是研究材料关系核验器。系
 字段：record_type="relation_decision", candidate_pair_id, status="present" 或 "absent",
 evidence_quote。present 仅用于原文明示该关系，evidence_quote 必须是当前证据内可唯一回取并能证明
 连接关系的逐字引文；absent 时 evidence_quote=null。共现、邻近、常识推断都必须填 absent。
+中文显式因果按以下方向核验：原文“A，主要系/由于 B 所致”表示 B supports A；原文“A，表明/说明
+B”表示 A supports B。候选对的 from_item 是论据/原因，to_item 是结论/被解释项。上述连接词在当前
+证据包中明确连接两个候选端点时必须判 present，不能仅因两个端点拆成独立 item 而判 absent。
 """
 
 MATERIAL_SLOT_PROTOCOL = """
 结构能力和原子义务由系统确定，模型不得合并义务、补造说话人或对话轮次：
-- 每个 item 增加 candidate_slot_id，必须引用下方一个候选槽位。
+- 本协议覆盖上方通用 item 字段清单。每个 item 必须增加 candidate_slot_id，完整字段为：
+  record_type="item", candidate_slot_id, item_id, text, semantic_type, statement_role,
+  speech_role, perspective, speaker_ref, polarity, value, behavior_status, temporal_frame,
+  evidence_quote, unknown_fields。candidate_slot_id 必须逐字复制下方一个候选槽位 ID，不得省略、
+  改写或自行生成；item_id 必须非空，并直接使用同一个 candidate_slot_id，不得留空或另造 ID。
 - 每个候选槽位最多输出一个 item；item 引文必须完全位于该槽位原文内，不能跨槽位合并。
 - 每个候选槽位恰好输出一行终态记录：能抽取时直接输出一行 item；确无合法项目时输出一行
   coverage，字段为 record_type="coverage", candidate_slot_id, status="no_supported_item",
   reason_code。不要为已输出 item 的槽位再输出 coverage。
 - 文档只有统一作者声音时使用系统给出的来源声音 speaker；不得因没有“专家”标签而拒绝。
+- 输出前逐一核对候选槽位：每个 ID 恰好在一行 item 或 coverage 的 candidate_slot_id 中出现一次。
 """
 
 
@@ -453,12 +467,18 @@ _NUMBERED_QUESTION_RE = re.compile(
 _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("summary", re.compile(r"总结|摘要|总体而言|核心观点|投资建议")),
     ("question", re.compile(r"[？?]|(?:^|\n)\s*(?:问|问题)\s*[：:]")),
-    ("forecast", re.compile(r"预计|预期|有望|未来|后续|将会|可能|展望|趋势")),
+    ("forecast", re.compile(r"预计|(?<!市场)预期|有望|未来|后续|将会|可能|展望|趋势")),
     ("condition", re.compile(r"如果|只要|除非|前提|取决于|验证成功")),
     ("risk", re.compile(r"风险|不及预期|下行|恶化|失败|不确定|持续疲软|竞争加剧")),
     ("negation", re.compile(r"并不|不是|不会|不能|没有|尚未|未能|不一定|不必然")),
     ("behavior", re.compile(r"买入|卖出|加仓|减仓|平仓|bought|sold|added", re.I)),
-    ("evidence", re.compile(r"因为|依据|数据显示|公告|公布|说过|表明|原因|所以")),
+    (
+        "evidence",
+        re.compile(
+            r"因为|依据|数据显示|公告|公布|说过|表明|原因|所以|主要系|主要由于|"
+            r"原因在于|所致|受[^，。；]{1,40}影响"
+        ),
+    ),
     (
         "qualitative",
         re.compile(
@@ -475,7 +495,8 @@ _ATOMIC_BOUNDARY_RE = re.compile(
     r"(?:\d+|[一二三四五六七八九十百]+)[.．](?=\s)|"
     r"(?:风险提示|总结|摘要|事项|评论|投资建议|目标价|当前价|主持人|专家|投资者|问|答)\s*[：:]))|"
     r"，(?=\s*(?:并不|不一定|不必然|关键|那么|只是|只要|我们维持|维持一年目标价|"
-    r"预计|且|同时|为了|因为|由于|年内|下半年|中长期|利好|但|工艺占|设备(?:只|仅)))|"
+    r"预计|且|同时|为了|因为|由于|主要系|主要由于|原因在于|表明|受|年内|下半年|"
+    r"中长期|利好|但|工艺占|设备(?:只|仅)))|"
     r"、(?=[^。；\n]{0,24}(?:不及预期|加剧|恶化|下行|失败|疲软|风险))|"
     r",\s*(?=this\s+is\b)|\s+(?=the\s+CEO\s+bought\b)|"
     r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)|"
@@ -926,12 +947,22 @@ def _relation_candidate_pairs(
                     )
             prior = prior_items + group[:item_index]
             explicit_support = re.search(
-                r"因为|所以|表明|依据|数据显示|说明|证明|由此|(?:说|表示|公告)(?:过|称)?|"
+                r"因为|所以|表明|依据|数据显示|说明|证明|由此|主要系|主要由于|原因在于|"
+                r"所致|受[^，。；]{1,40}影响|(?:说|表示|公告)(?:过|称)?|"
                 r"because|therefore|according|shows?",
                 item.evidence[0].quote,
                 re.I,
             )
-            if (
+            leading_conclusion = re.match(r"\s*(?:表明|说明|证明)", item.evidence[0].quote)
+            if leading_conclusion and previous_in_group is not None:
+                pairs.append(
+                    {
+                        "from_item": previous_in_group.item_id,
+                        "to_item": item.item_id,
+                        "allowed_type": "supports",
+                    }
+                )
+            elif (
                 item.statement_role == "evidence" or item.perspective == "quoted_other"
             ) and explicit_support:
                 support_target = next(
@@ -950,7 +981,7 @@ def _relation_candidate_pairs(
                             "allowed_type": "supports",
                         }
                     )
-            elif support_target is not None and previous_in_group is not None:
+            elif previous_in_group is not None:
                 gap_start = previous_in_group.evidence[0].end
                 gap_end = item.evidence[0].start
                 adjacent_chain = gap_end - gap_start <= 16 and not re.search(
@@ -964,7 +995,7 @@ def _relation_candidate_pairs(
                             "allowed_type": "challenges",
                         }
                     )
-                elif adjacent_chain:
+                elif support_target is not None and adjacent_chain:
                     pairs.append(
                         {
                             "from_item": item.item_id,
@@ -972,7 +1003,7 @@ def _relation_candidate_pairs(
                             "allowed_type": "supports",
                         }
                     )
-                else:
+                elif support_target is not None:
                     support_target = None
             if item.semantic_type != "behavior":
                 behavior = next(
@@ -1144,9 +1175,27 @@ def build_relation_jsonl_prompt(
 
 
 def _align_quote(quote: str, packet: EvidencePacket, source_rev: str) -> MaterialEvidence:
-    needle = re.sub(r"\s+", "", quote)
+    # Model transports commonly normalize whitespace and typographic quotes even when asked
+    # to copy verbatim.  Fold only those presentation-equivalent characters for locating the
+    # span, then persist the exact source slice below.  The one-to-one translation preserves
+    # source offsets and the uniqueness check remains fail closed.
+    quote_equivalents = str.maketrans(
+        {
+            "“": '"',
+            "”": '"',
+            "„": '"',
+            "‟": '"',
+            "＂": '"',
+            "‘": "'",
+            "’": "'",
+            "‚": "'",
+            "‛": "'",
+            "＇": "'",
+        }
+    )
+    needle = re.sub(r"\s+", "", quote).translate(quote_equivalents)
     positions = [index for index, char in enumerate(packet.text) if not char.isspace()]
-    compact = "".join(packet.text[index] for index in positions)
+    compact = "".join(packet.text[index] for index in positions).translate(quote_equivalents)
     first = compact.find(needle)
     if not needle or first < 0 or compact.find(needle, first + 1) >= 0:
         raise ValueError("evidence quote is not uniquely aligned")
@@ -2829,23 +2878,31 @@ def _strict_relation_candidate_pairs(
             ):
                 continue
         else:
-            if index[source.item_id] != index[target.item_id] + 1:
+            source_index = index[source.item_id]
+            target_index = index[target.item_id]
+            if abs(source_index - target_index) != 1:
                 continue
             if source_slot.segment_id != target_slot.segment_id:
                 continue
             if (
-                slot_order[source_slot.candidate_slot_id]
-                != slot_order[target_slot.candidate_slot_id] + 1
+                abs(
+                    slot_order[source_slot.candidate_slot_id]
+                    - slot_order[target_slot.candidate_slot_id]
+                )
+                != 1
             ):
                 continue
+            link_item = source if source_index > target_index else target
             if not re.search(
                 r"因为|所以|表明|依据|数据显示|说明|证明|由此|背景|不了解|但|"
+                r"主要系|主要由于|原因在于|所致|"
                 r"(?:说|表示|公告)(?:过|称)?|because|therefore|according|shows?",
-                source.evidence[0].quote,
+                link_item.evidence[0].quote,
                 re.I,
             ):
                 continue
-            between = packet.text[target.evidence[0].end : source.evidence[0].start]
+            first, second = sorted((source, target), key=lambda value: index[value.item_id])
+            between = packet.text[first.evidence[0].end : second.evidence[0].start]
             if re.search(r"[。！？；.!?;]", between):
                 continue
         pairs.append(pair)
