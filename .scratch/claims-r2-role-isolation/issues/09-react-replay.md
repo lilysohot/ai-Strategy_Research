@@ -1,10 +1,10 @@
 # 09 · react/tui 产品接线与零模型端到端验收
 
 Status: ready-for-human
-Execution: 两项 P2 已修复并通过本地回归；待复验签认，真实模型要求尚未完成
+Execution: 两项 P2 已修复并通过本地回归；待复验签认；真实 M_extract 候选已在 11 运行，但发布后经 react/tui 进入 M_main 的真实消费仍未完成
 Type: task
 Plan: W5 回放；R2-S3
-Blocked by: 无本地实现依赖；真实模型验收待明确试验清单
+Blocked by: 无本地实现依赖；待独立复验签认，以及通过质量门并发布的真实候选供 M_main 消费验收
 Real model calls: 0
 Production database access: 0
 
@@ -221,3 +221,10 @@ git diff --check
 | `tests/corpus_structured_replay_runner.py` | `c3bcf857b0f380e03fc2ef013d18bbcae8785f2b633b1c5e2a2667b9bc4923f1` |
 | 本轮专项 JUnit | `23ac506e0a6acb2235c2ded2bfee4aaa0ba8df8d052c2dd2ff6586e847282a7c` |
 | 本轮扩展 JUnit | `0ead356d69dfa3af3e28f3fc80be2b23583a00c3db51f96b9b95deaf5549ef3d` |
+
+### 2026-10-08 · 状态回填
+
+11 已在独立授权下完成真实 M_extract 的 Claims preflight 和第 1 页 R2 候选抽取，因此此前
+“模型/来源/调用预算尚未明确”的阻断已解除。该执行没有发布候选，也没有启动 M_main，不能替代
+本票要求的真实产品消费验收。09 仍保持 `ready-for-human`：本地零模型回放和 P2 修复证据齐全，
+待独立复验签认；真实端到端部分等待 10 的质量门、正式发布及新研究运行。

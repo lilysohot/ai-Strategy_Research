@@ -27,7 +27,7 @@ import signal
 import sys
 import uuid
 from collections import deque
-from collections.abc import Callable
+from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -1076,6 +1076,38 @@ class Orchestrator:
             # a broken partial set.
             return None
 
+    @staticmethod
+    async def _iter_worker_frames(stream: asyncio.StreamReader) -> AsyncIterator[bytes]:
+        """Yield worker stdout frames by chunk instead of by line.
+
+        ``async for line in proc.stdout`` uses asyncio's line reader, whose
+        buffered size is bounded: a single frame larger than ``_DEFAULT_LIMIT``
+        (64 KiB) raises ``LimitOverrunError``/``ValueError`` right in the pump,
+        which killed the whole run's frame stream and left the UI stuck on
+        "executing" with no terminal frame. Reading raw chunks and splitting on
+        ``\n`` ourselves is immune to that. Over-long frames are dropped with a
+        warning instead of crashing the pump.
+        """
+        max_frame = 1 << 20  # 1 MiB; a legit worker frame is far below this
+        buffer = b""
+        while True:
+            chunk = await stream.read(65536)
+            if not chunk:
+                break
+            buffer += chunk
+            while b"\n" in buffer:
+                line, _, buffer = buffer.partition(b"\n")
+                if len(line) > max_frame:
+                    logger.warning(
+                        "dropping worker frame of %d bytes (> %d) for run (overlong)",
+                        len(line),
+                        max_frame,
+                    )
+                    continue
+                yield line
+        if buffer:
+            yield buffer
+
     async def _pump_frames(self, handle: RunHandle) -> None:
         """Read worker JSONL frames and forward them to the callback.
 
@@ -1089,8 +1121,8 @@ class Orchestrator:
         wall = self._cfg.wall_timeout_s
         try:
             async with asyncio.timeout(wall + self._cfg.stop_grace_period_s):
-                async for line in handle.proc.stdout:
-                    line = line.decode("utf-8", "replace").strip()
+                async for raw in self._iter_worker_frames(handle.proc.stdout):
+                    line = raw.decode("utf-8", "replace").strip()
                     if not line:
                         continue
                     try:

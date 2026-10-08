@@ -632,6 +632,7 @@ def _proven_table(unit_id: str = "row", chunk_id: str = "table") -> SnapshotUnit
         kind="table_row",
         text="营业收入 2025A 100 亿元",
         locator="page:1/table:1/row:1",
+        metadata={"table_consumption_status": "verified_complete"},
         cells=(
             SnapshotCellSource(
                 row="营业收入",
@@ -646,6 +647,74 @@ def _proven_table(unit_id: str = "row", chunk_id: str = "table") -> SnapshotUnit
             ),
         ),
     )
+
+
+def test_unverified_table_is_auditable_but_blocked_from_downstream() -> None:
+    source = replace(_proven_table(), metadata={})
+    payload = _payload(units=(source,))
+    snapshot = _snapshot(
+        replace(
+            payload,
+            parser_versions={**payload.parser_versions, "parse": "reader-pdf-11+pymupdf-test"},
+            document=replace(payload.document, subject="999999.SZ"),
+        )
+    )
+
+    for role in ("claims", "material_items"):
+        packet = evidence_document_from_snapshot(snapshot, role=role).packets[0]
+        assert packet.kind == "table"
+        assert packet.text == source.text
+        assert packet.status == "partial"
+        assert packet.reasons == ("table_untrusted_or_incomplete",)
+
+    run = build_evidence_run_from_snapshot(snapshot)
+    assert run.facts == ()
+    assert run.packet_runs[0].status == "unknown"
+    assert run.packet_runs[0].reasons == ("table_untrusted_or_incomplete",)
+
+    material_run = extract_material_understanding_from_snapshot(
+        snapshot,
+        llm=None,
+        max_calls=0,
+        extract_relations=False,
+    )
+    assert material_run.understanding.items == ()
+    assert material_run.packet_runs[0].status == "unknown"
+    assert material_run.packet_runs[0].reasons == ("table_untrusted_or_incomplete",)
+
+
+def test_unverified_table_dependency_does_not_leak_into_prose_context() -> None:
+    table = replace(_proven_table(), metadata={})
+    prose = SnapshotUnitSource(
+        source_unit_id="prose",
+        chunk_id="prose",
+        kind="paragraph",
+        text="正文结论。",
+        locator="page:1/prose:1",
+        dependencies=(
+            SnapshotDependencySource(
+                kind="condition",
+                target_unit_id=table.source_unit_id,
+                target_chunk_id=table.chunk_id,
+            ),
+        ),
+    )
+    payload = _payload(units=(table, prose))
+    snapshot = _snapshot(
+        replace(
+            payload,
+            parser_versions={**payload.parser_versions, "parse": "reader-pdf-11+pymupdf-test"},
+        )
+    )
+    packet = next(
+        item
+        for item in evidence_document_from_snapshot(snapshot, role="material_items").packets
+        if item.kind == "prose"
+    )
+
+    assert table.text not in packet.context
+    assert packet.status == "partial"
+    assert packet.reasons == ("table_untrusted_or_incomplete",)
 
 
 def test_proven_table_remains_deterministic_and_every_cell_maps() -> None:

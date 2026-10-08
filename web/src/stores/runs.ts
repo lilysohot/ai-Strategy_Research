@@ -382,10 +382,19 @@ export const useRunStreamStore = defineStore('runStream', () => {
     }
   }
 
-  /** Reconcile the status when the stream ends without a terminal frame. */
+  /** Reconcile the status when the stream ends without a terminal frame.
+ *
+ * The live stream is best-effort and cannot be trusted to have delivered a
+ * terminal frame (a worker-frame overflow / crash shuts the pump with no
+ * ``run_finished``, so the UI otherwise hangs on "executing" forever). We do
+ * NOT guess ``completed`` here — that would hide a real ``stopped``/``failed``
+ * outcome as a clean success. Instead we hand the still-active status to
+ * ``reconcile()``, called immediately after from ``onDone``, which reads the
+ * authoritative ``GET /runs/{id}`` status and settles it correctly.
+ */
   function settleStatus(): void {
     if (status.value === 'running' || status.value === 'queued') {
-      status.value = 'completed'
+      status.value = 'idle'
     }
   }
 

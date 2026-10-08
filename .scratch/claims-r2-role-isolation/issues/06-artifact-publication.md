@@ -181,3 +181,7 @@ POSIX 权限用例在 root/非 POSIX 环境会跳过，本次 WSL 非 root 实�
   `git diff --check` 证据均已核对；当前交付指纹与上文修复验收记录一致。全仓 Pyright 的 5 个
   既有非 06 错误继续作为外部门保留，不影响本票闭环。票据 Execution 更新为 `已验收`；
   真实模型调用 0、生产数据库访问 0，未执行 07，也未代替主计划阶段签认。
+- 2026-10-08：登记 PDF 表格发布限制。未经显式 `verified_complete` 核验的 `reader-pdf-*` 表格
+  工件可以原样保存以供审计，但其 packet 为 `partial / table_untrusted_or_incomplete`，不能产生
+  可发布 Claims/items/relations，也不能以“文件已保存”提升为 accepted publication。后续若完成
+  人工或独立程序核验，须生成带新快照身份的新工件再走发布门，不得原地修改旧工件或追溯放行。

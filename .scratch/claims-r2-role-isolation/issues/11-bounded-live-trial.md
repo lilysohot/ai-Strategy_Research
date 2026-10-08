@@ -1,11 +1,11 @@
 # 11 · 获准后的真实模型有界试验与单文档消费
 
-Status: needs-triage
-Execution: 范围已由许永立确认；Claims preflight 保留；第 1 页叙事材料语义轮已验收为候选（41 items / 2 relations），尚未发布或进入主线消费，任务整体未闭环
+Status: needs-info
+Execution: 范围已由许永立确认；Claims preflight 保留；第 1 页叙事内容优化已验收为候选（48 items / 5 relations），尚未发布或进入主线消费，任务整体未闭环
 Type: task
 Plan: W4/W5 真实消费；R2-S4/S5 的部分验证
-Blocked by: 完整第 1—3 页及表格范围、三角色人工金标、发布与 M_main 消费尚未完成；09/10/阶段证据仍需闭合；范围和调用额度不再待确认
-Real model calls: 36（Claims preflight 1、材料语义研发与最终选择 35、M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
+Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标绑定、三角色人工金标与阈值签认、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
+Real model calls: 68（Claims preflight 1、材料语义研发/拒收/最终选择 67、M_main 0；累计 382,762 tokens；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
 Production database access: 0
 
 依据：[实施规格](../spec.md)、[设计报告](../report.md)、[唯一主计划](../../../docs/plan/claims-market-closed-loop-plan.md)。本票遵守 spec 第 5 节全局约束；新增文件/测试是待交付项，不表示当前已存在。
@@ -344,3 +344,22 @@ H2 预测误标执行定向替换，最终第 04 段选用 r17，其余复用 r1
 回归测试 `135 passed`，相关 Ruff 检查和格式检查通过。本节闭环“第 1 页叙事内容提取优化”子任务；
 仍不等于任务 11 全部验收：候选未发布，缺人工金标及精确率/召回率，第 2—3 页图像表格与主线
 研究消费仍不在本次范围内。
+
+#### 状态总账
+
+截至 2026-10-08，任务 11 累计 68 次真实提取 attempt、382,762 tokens：Claims preflight 1 次，
+材料语义开发、拒收和最终选择 67 次；自动重试 0，M_main 调用 0，生产数据库访问 0。最新最终选择
+复用 7 个 `material-semantics-17` 已验收段，并以 `material-semantics-19` 定向替换 H2 预测所在段；
+两个版本及逐段 provenance 已在 aggregate/audit 中显式记录。正式发布前须由质量门决定接受兼容
+选择还是统一版本重跑，不能把当前候选直接视为已发布语义代。
+
+### 2026-10-08 · PDF 表格消费边界收敛
+
+依据本轮上游核查与人工取舍，不继续增加 OCR 或 reader 特例：后续真实运行对 `reader-pdf-*`
+快照中的 table unit 默认 fail closed。表格原文、定位和缺口仍保留供审计，但 Claims、
+`material_items`、relations 及 M_main 均不得消费；统一原因码为
+`table_untrusted_or_incomplete`。只有另行完成完整性核验并显式标记 `verified_complete` 后才可进入
+确定性表格分支。依赖未放行表格的正文不得把表文作为 context 间接送入模型，并同步降级为 partial。
+
+该策略适用于未来运行，不追溯改写既有冻结金标、质量报告或本任务历史实际得分。第 2—3 页表格
+继续记为明确范围缺口，而不是“无内容”；第 1 页已验收叙事抽取结果不受影响。

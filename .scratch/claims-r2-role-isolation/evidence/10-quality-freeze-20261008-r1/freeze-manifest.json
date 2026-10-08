@@ -1,0 +1,18 @@
+{
+  "schema_version": "corpus-structured-quality-freeze-manifest-v1",
+  "created_on": "2026-10-08",
+  "exclusive": "x",
+  "classification": "seen-development_partial_critical_checks",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-freeze-20261008-r1/critical-check-gold.json": "sha256:6249e2e84b27359d7d563d771ef4242407dfe55bf888607dc4e53cf578d144ac",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-freeze-20261008-r1/freeze-state.json": "sha256:15c60ba756a66df7ee6d695bf2912cde5c7b468bcbf5f644616069c603ca64da",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-optimized/aggregate.json": "sha256:a170687db26cd509f5d8871075a3ac6ad6186b2c06b0acc785b075804ad277a2",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/reader-capture.json": "sha256:69a54000e9e591cb1bda1f84eb1e0ba9429dbeba1b088ef16c32a955c4a5e0ba",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-freeze-20261008-r1/run_quality_score.py": "sha256:d844a5421b73998f1298b6bde575a0cc9b67a030b497dea582306690b01697a5",
+    "plugins/corpus/structured_scoring.py": "sha256:172ce465492cf26cb7249599d9f53ac40d266c1883a49cea51b0b178894874f1"
+  },
+  "output": {
+    "quality-report.json": "sha256:0ac918c79f88c48a43c0d2f912ef22d3d7c34902ad15aee7630949f871f726ec"
+  },
+  "formal_quality_release_eligible": false
+}

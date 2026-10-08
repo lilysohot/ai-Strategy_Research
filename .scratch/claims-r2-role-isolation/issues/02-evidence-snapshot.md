@@ -30,7 +30,9 @@ Production database access: 0
 
 - [x] 活动 build/publication 切换期间，只产生一致快照或调用前失败；同文字但位置/类型变化会改变指纹。
 - [x] 两路可取不同候选子集但共用快照；R2 启动不要求 Claims facts 成功，旧文件独立解析不被当作新默认输入。
-- [x] 完整表格进入 Claims table 分支；R2 所需脚注/说明不因 table 类型被静默跳过。
+- [x] 仅经独立核验并显式标记 `table_consumption_status=verified_complete` 的完整表格进入 Claims
+  table 分支；PDF reader 表格默认仅审计留存、禁止下游消费，R2 所需脚注/说明仍不因 table 类型
+  被静默跳过。
 - [x] 包外“仅在并购完成情况下”能关联原文依赖；歧义、缺失、超预算时给出明确降级与定位，不能发布为无条件可计算预测。
 - [x] 每段发布候选可映射为 cv2:<build_id>、chunk:<chunk_id> 和准确 unit/cell/quote 区间；拒绝将 source_id 当 build_id。
 - [x] 重复引文、复合证据和续表不靠首次字符串命中/最近文本猜测；不同片段保留各自句柄。
@@ -115,6 +117,16 @@ git diff --check -- <02 changed paths>
   继续保持真实模型调用、业务网络和生产数据库访问为 0。
 - 2026-10-02：snapshot facade、Claims/R2 输入接缝、合成 fixture 与回归已交付；70 项目标/回归测试、
   Ruff、Pyright、import smoke、symbol check 均通过，转 `ready-for-human / 待验收`。
+- 2026-10-08：按最新人工决策增加 PDF 表格 fail-closed 消费门。`reader-pdf-*` 快照中的 table unit
+  默认保留原文和定位，但 packet 标为 `partial / table_untrusted_or_incomplete`，Claims 与
+  `material_items` 均不提取；依赖该表的正文不得把表文混入 context，并显式降级。只有单独核验完整
+  后写入 `table_consumption_status=verified_complete` 才可放行。非 PDF 的既有结构化表格默认兼容，
+  也可用 `untrusted|incomplete|blocked` 显式阻断。本修订不增加 OCR/reader 复杂度，不改写历史评分。
+- 2026-10-08：本修订验证：任务卡 pytest **127 passed**；跨角色任务卡 pytest **279 passed**；
+  改动文件 Ruff/format 与 Pyright 均通过；stage-1 import smoke **386/386**，symbol check
+  **484 files / 0 missing**。扩展 `test_corpus_structured_*.py` 为 **351 passed / 1 failed**；唯一失败
+  是 publication 的 condition 跨角色映射期望 conflict、实际 confirmed，使用非 PDF 合成输入，
+  不经过本次 PDF table 消费门，作为范围外问题保留，未通过改断言掩盖。
 
 ## 根因核查与通用修复（revision 2）
 

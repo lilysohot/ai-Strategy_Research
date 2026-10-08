@@ -637,6 +637,8 @@ def build_evidence_run(
 
 #: units 投影的解析器版本（R1：不再走 evidence.py 的 PDF/DOCX/MD 二次解析）。
 UNITS_PROJECTION_VERSION = "evidence-units-projection-1"
+_TABLE_CONSUMPTION_STATUS = "verified_complete"
+_TABLE_BLOCK_REASON = "table_untrusted_or_incomplete"
 
 
 def _packet_from_unit(parse_rev: str, locator: str, text: str) -> EvidencePacket:
@@ -711,7 +713,41 @@ def _snapshot_document_metadata(snapshot: EvidenceSnapshot) -> dict[str, object]
 def _snapshot_context(unit: SnapshotUnit, snapshot: EvidenceSnapshot) -> tuple[str, ...]:
     from plugins.corpus.structured.snapshot import dependency_closure
 
-    return tuple(item.text for item in dependency_closure(snapshot, unit))
+    return tuple(
+        item.text
+        for item in dependency_closure(snapshot, unit)
+        if item.kind != "table" or _table_is_consumable(item, snapshot)
+    )
+
+
+def _table_is_consumable(unit: SnapshotUnit, snapshot: EvidenceSnapshot) -> bool:
+    """Block PDF-reader tables unless a separate completeness decision opted them in."""
+    decision = unit.metadata.get("table_consumption_status")
+    if decision == _TABLE_CONSUMPTION_STATUS:
+        return True
+    if decision in {"untrusted", "incomplete", "blocked"}:
+        return False
+    return not snapshot.parser_versions["parse"].startswith("reader-pdf-")
+
+
+def _blocked_table_dependency(unit: SnapshotUnit, snapshot: EvidenceSnapshot) -> bool:
+    from plugins.corpus.structured.snapshot import dependency_closure
+
+    return any(
+        item.kind == "table" and not _table_is_consumable(item, snapshot)
+        for item in dependency_closure(snapshot, unit)
+    )
+
+
+def _with_table_policy(
+    units: list[SnapshotUnit],
+    snapshot: EvidenceSnapshot,
+    status: str,
+    reasons: tuple[str, ...],
+) -> tuple[str, tuple[str, ...]]:
+    if any(unit.kind == "table" and not _table_is_consumable(unit, snapshot) for unit in units):
+        return "partial", tuple(dict.fromkeys((*reasons, _TABLE_BLOCK_REASON)))
+    return status, reasons
 
 
 def _snapshot_packet_status(units: list[SnapshotUnit]) -> tuple[str, tuple[str, ...]]:
@@ -831,7 +867,11 @@ def evidence_document_from_snapshot(
                 for dependency_text in _snapshot_context(unit, snapshot)
             )
         )
-        status, reasons = _snapshot_packet_status(table_units)
+        status, reasons = _with_table_policy(
+            table_units,
+            snapshot,
+            *_snapshot_packet_status(table_units),
+        )
         packet = EvidencePacket(
             packet_id="",
             locator=chunk_id,
@@ -856,6 +896,9 @@ def evidence_document_from_snapshot(
             continue
         context = _snapshot_context(unit, snapshot)
         status, reasons = _snapshot_packet_status([unit])
+        if _blocked_table_dependency(unit, snapshot):
+            status = "partial"
+            reasons = tuple(dict.fromkeys((*reasons, _TABLE_BLOCK_REASON)))
         packet = EvidencePacket(
             packet_id="",
             locator=unit.chunk_id,

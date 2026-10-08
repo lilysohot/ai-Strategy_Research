@@ -111,3 +111,8 @@ uv run ruff check plugins/corpus tests/test_corpus_structured_roles.py tests/tes
   `ready-for-human` 归档惯例（不新增 triage 标签）。本票验收条件无未通过项；解除 05 的
   本地前置依赖，但不执行 05，不将角色入口视为持久预算账已实现，不推进主计划外部门。
   全仓 Pyright 上次发现的 5 项范围外错误仍单列保留，本次仅声称改动模块检查通过。
+- 2026-10-08：角色入口沿用 02 的共享 fail-closed 表格门：未经显式完整性核验的 PDF reader
+  表格仍可在角色工件中审计，但以 `partial / table_untrusted_or_incomplete` 进入，Claims table
+  确定性分支和 R2 items 均为零记录、零模型调用；依赖表格的 prose 也不得通过 context 绕过该门。
+  共享角色验收命令重跑 **279 passed**；扩展套件的唯一 publication condition 映射失败与本门无关，
+  详情记于 02，不将范围外失败伪装成全绿。

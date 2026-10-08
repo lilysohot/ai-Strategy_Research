@@ -1,0 +1,766 @@
+{
+  "schema_version": "corpus-structured-partial-quality-report-v1",
+  "evaluation_classification": "seen-development_partial-critical-check_diagnostic",
+  "formal_quality_release_eligible": false,
+  "precision_limitation": "Unmapped aggregate outputs are not false-positive adjudications; reported precision is not full-extraction precision.",
+  "checkpoint_results": {
+    "E01-valuation-anchor": false,
+    "E02-h1-revenue": true,
+    "E03-h1-profit": true,
+    "E04-q2-revenue-profit": true,
+    "E05-direct-channel": true,
+    "E06-imoutai-and-series": true,
+    "E07-cashflow-facts": true,
+    "E08-eps-forecast": false,
+    "E09-forecast-table": false,
+    "E10-balanced-opinion": true,
+    "E10-three-risks": true,
+    "E12-dividend-interest-composite": false,
+    "E07-cashflow-cause-relation": true
+  },
+  "gold_record_count": 13,
+  "aggregate_item_count": 48,
+  "aggregate_relation_count": 5,
+  "metric_summary": {
+    "roles": {
+      "claims": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 4,
+        "precision": {
+          "fraction": "1/1",
+          "decimal": 1.0
+        },
+        "recall": {
+          "fraction": "3/5",
+          "decimal": 0.6
+        }
+      },
+      "material_items": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": {
+          "fraction": "1/1",
+          "decimal": 1.0
+        },
+        "recall": {
+          "fraction": "1/1",
+          "decimal": 1.0
+        }
+      },
+      "material_relations": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": {
+          "fraction": "1/1",
+          "decimal": 1.0
+        },
+        "recall": {
+          "fraction": "1/1",
+          "decimal": 1.0
+        }
+      }
+    },
+    "risk_condition_recall": {
+      "fraction": "5/8",
+      "decimal": 0.625
+    },
+    "report_support": {
+      "fraction": "0/1",
+      "decimal": 0.0
+    },
+    "coverage": {
+      "parse": {
+        "passed": 13,
+        "total": 14,
+        "rate": {
+          "fraction": "13/14",
+          "decimal": 0.928571
+        }
+      },
+      "packet": {
+        "passed": 10,
+        "total": 14,
+        "rate": {
+          "fraction": "5/7",
+          "decimal": 0.714286
+        }
+      },
+      "routing": {
+        "passed": 10,
+        "total": 14,
+        "rate": {
+          "fraction": "5/7",
+          "decimal": 0.714286
+        }
+      },
+      "extraction": {
+        "passed": 9,
+        "total": 14,
+        "rate": {
+          "fraction": "9/14",
+          "decimal": 0.642857
+        }
+      },
+      "query": {
+        "passed": 0,
+        "total": 14,
+        "rate": {
+          "fraction": "0/1",
+          "decimal": 0.0
+        }
+      },
+      "delivery": {
+        "passed": 0,
+        "total": 14,
+        "rate": {
+          "fraction": "0/1",
+          "decimal": 0.0
+        }
+      },
+      "context_use": {
+        "passed": 0,
+        "total": 14,
+        "rate": {
+          "fraction": "0/1",
+          "decimal": 0.0
+        }
+      }
+    },
+    "rate_gate_passed": false,
+    "live_trial_ready": false
+  },
+  "scorer_report": {
+    "raw": {
+      "roles": [
+        {
+          "role": "claims",
+          "tp": 6,
+          "fp": 0,
+          "fn": 4,
+          "duplicate_fp": 0
+        },
+        {
+          "role": "material_items",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "duplicate_fp": 0
+        },
+        {
+          "role": "material_relations",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "duplicate_fp": 0
+        }
+      ],
+      "origins": [
+        {
+          "role": "claims",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 3
+        },
+        {
+          "role": "claims",
+          "origin": "llm_prose",
+          "tp": 6,
+          "fp": 0,
+          "fn": 1
+        },
+        {
+          "role": "material_items",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_items",
+          "origin": "llm_prose",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_relations",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_relations",
+          "origin": "llm_prose",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      ],
+      "matched_gold_ids": [
+        "E02-h1-revenue",
+        "E03-h1-profit",
+        "E04-q2-revenue-profit",
+        "E05-direct-channel",
+        "E06-imoutai-and-series",
+        "E07-cashflow-facts",
+        "E10-balanced-opinion",
+        "E10-three-risks",
+        "E07-cashflow-cause-relation"
+      ],
+      "missing_gold_ids": [
+        "E01-valuation-anchor",
+        "E08-eps-forecast",
+        "E09-forecast-table",
+        "E12-dividend-interest-composite"
+      ]
+    },
+    "validated": {
+      "roles": [
+        {
+          "role": "claims",
+          "tp": 6,
+          "fp": 0,
+          "fn": 4,
+          "duplicate_fp": 0
+        },
+        {
+          "role": "material_items",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "duplicate_fp": 0
+        },
+        {
+          "role": "material_relations",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "duplicate_fp": 0
+        }
+      ],
+      "origins": [
+        {
+          "role": "claims",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 3
+        },
+        {
+          "role": "claims",
+          "origin": "llm_prose",
+          "tp": 6,
+          "fp": 0,
+          "fn": 1
+        },
+        {
+          "role": "material_items",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_items",
+          "origin": "llm_prose",
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_relations",
+          "origin": "deterministic_table",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        {
+          "role": "material_relations",
+          "origin": "llm_prose",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      ],
+      "matched_gold_ids": [
+        "E02-h1-revenue",
+        "E03-h1-profit",
+        "E04-q2-revenue-profit",
+        "E05-direct-channel",
+        "E06-imoutai-and-series",
+        "E07-cashflow-facts",
+        "E10-balanced-opinion",
+        "E10-three-risks",
+        "E07-cashflow-cause-relation"
+      ],
+      "missing_gold_ids": [
+        "E01-valuation-anchor",
+        "E08-eps-forecast",
+        "E09-forecast-table",
+        "E12-dividend-interest-composite"
+      ]
+    },
+    "unique_supported_sources": [
+      "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11"
+    ],
+    "coverage": {
+      "stages": [
+        {
+          "stage": "parse",
+          "passed": 13,
+          "total": 14,
+          "failures": [
+            "E11-image-table-gap:failed:image_table_values_not_parsed"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 13,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 13,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 13,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 13,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 13,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "packet",
+          "passed": 10,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missed:excluded_from_candidate_scope",
+            "E09-forecast-table:missed:excluded_from_candidate_scope",
+            "E12-dividend-interest-composite:missed:excluded_from_candidate_scope",
+            "E11-image-table-gap:missed:upstream_parse_gap"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 10,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 10,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 10,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 10,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 10,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "routing",
+          "passed": 10,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missed:excluded_from_candidate_scope",
+            "E09-forecast-table:missed:excluded_from_candidate_scope",
+            "E12-dividend-interest-composite:missed:excluded_from_candidate_scope",
+            "E11-image-table-gap:missed:upstream_parse_gap"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 10,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 10,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 10,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 10,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 10,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "extraction",
+          "passed": 9,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missed:excluded_from_candidate_scope",
+            "E08-eps-forecast:invalid:required_attribution_missing",
+            "E09-forecast-table:missed:excluded_from_candidate_scope",
+            "E12-dividend-interest-composite:missed:excluded_from_candidate_scope",
+            "E11-image-table-gap:missed:upstream_parse_gap"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 9,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 9,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 9,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 9,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 9,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "query",
+          "passed": 0,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missing_observation",
+            "E02-h1-revenue:missing_observation",
+            "E03-h1-profit:missing_observation",
+            "E04-q2-revenue-profit:missing_observation",
+            "E05-direct-channel:missing_observation",
+            "E06-imoutai-and-series:missing_observation",
+            "E07-cashflow-facts:missing_observation",
+            "E08-eps-forecast:missing_observation",
+            "E09-forecast-table:missing_observation",
+            "E10-balanced-opinion:missing_observation",
+            "E10-three-risks:missing_observation",
+            "E12-dividend-interest-composite:missing_observation",
+            "E07-cashflow-cause-relation:missing_observation",
+            "E11-image-table-gap:missing_observation"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 0,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "delivery",
+          "passed": 0,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missing_observation",
+            "E02-h1-revenue:missing_observation",
+            "E03-h1-profit:missing_observation",
+            "E04-q2-revenue-profit:missing_observation",
+            "E05-direct-channel:missing_observation",
+            "E06-imoutai-and-series:missing_observation",
+            "E07-cashflow-facts:missing_observation",
+            "E08-eps-forecast:missing_observation",
+            "E09-forecast-table:missing_observation",
+            "E10-balanced-opinion:missing_observation",
+            "E10-three-risks:missing_observation",
+            "E12-dividend-interest-composite:missing_observation",
+            "E07-cashflow-cause-relation:missing_observation",
+            "E11-image-table-gap:missing_observation"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 0,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "stage": "context_use",
+          "passed": 0,
+          "total": 14,
+          "failures": [
+            "E01-valuation-anchor:missing_observation",
+            "E02-h1-revenue:missing_observation",
+            "E03-h1-profit:missing_observation",
+            "E04-q2-revenue-profit:missing_observation",
+            "E05-direct-channel:missing_observation",
+            "E06-imoutai-and-series:missing_observation",
+            "E07-cashflow-facts:missing_observation",
+            "E08-eps-forecast:missing_observation",
+            "E09-forecast-table:missing_observation",
+            "E10-balanced-opinion:missing_observation",
+            "E10-three-risks:missing_observation",
+            "E12-dividend-interest-composite:missing_observation",
+            "E07-cashflow-cause-relation:missing_observation",
+            "E11-image-table-gap:missing_observation"
+          ],
+          "sources": [
+            {
+              "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+              "passed": 0,
+              "total": 14
+            }
+          ],
+          "groups": [
+            {
+              "group": "moutai_pdf",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "partial_critical_checks",
+              "passed": 0,
+              "total": 14,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 14
+                }
+              ]
+            },
+            {
+              "group": "reader_gap",
+              "passed": 0,
+              "total": 1,
+              "sources": [
+                {
+                  "source_id": "sha256:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+                  "passed": 0,
+                  "total": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "report_support": {
+      "passed": 0,
+      "total": 1,
+      "failures": [
+        "moutai_investment_assessment:uncited:E01-valuation-anchor,uncited:E02-h1-revenue,uncited:E03-h1-profit,uncited:E04-q2-revenue-profit,uncited:E05-direct-channel,uncited:E06-imoutai-and-series,uncited:E07-cashflow-facts,uncited:E08-eps-forecast,uncited:E09-forecast-table,uncited:E10-balanced-opinion,uncited:E10-three-risks,uncited:E12-dividend-interest-composite,uncited:E07-cashflow-cause-relation"
+      ],
+      "critical_failures": [
+        "moutai_investment_assessment"
+      ]
+    },
+    "gate": {
+      "rate_gate_passed": false,
+      "live_trial_ready": false,
+      "risk_condition_recall": "5/8",
+      "rate_blockers": [
+        "below_threshold:claims:recall:3/5<19/20",
+        "below_threshold:risk_or_condition:recall:5/8<19/20",
+        "below_threshold:report_support:0<19/20",
+        "critical_report_failure:moutai_investment_assessment",
+        "critical_gold_missing:E01-valuation-anchor",
+        "critical_gold_missing:E08-eps-forecast",
+        "critical_gold_missing:E09-forecast-table",
+        "critical_gold_missing:E12-dividend-interest-composite"
+      ],
+      "readiness_blockers": [
+        "insufficient_sample:claims:10/20",
+        "insufficient_sample:material_items:2/20",
+        "insufficient_sample:material_relations:1/20"
+      ]
+    }
+  }
+}

@@ -1,10 +1,10 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
 Status: needs-info
-Execution: 合成评分程序已复验并修复重复误报分类；真实开发标注、阈值签认和真实质量门待授权
+Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；完整三角色金标与 M_main 交付评分仍未完成
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
-Blocked by: 无本地实现依赖；真实开发样本/问题范围、人工标注与阈值签认待授权
+Blocked by: 需新增未见候选的开发材料，补齐 Claims/items/relations 各至少 20 条完整人工金标，并取得真实 query/delivery/context_use 观察
 Real model calls: 0
 Production database access: 0
 
@@ -136,3 +136,53 @@ git diff --check
 `real_source_ids`、研究问题清单、候选输出前冻结的人工金标、争议裁定人或阈值签认；因此保持
 `Status: needs-info`，不勾选真实样本验收项，也不解除 11 的依赖。真实模型调用 0、生产数据库访问 0、
 受保护留出访问 0。
+
+### 2026-10-08 · 状态回填
+
+贵州茅台研报范围和研究问题随后已获确认，11 也已产生真实候选；因此“没有真实来源/问题范围”
+不再是当前阻断。由于候选已经可见，不能把事后标注当前候选直接冒充“候选输出前冻结”的独立
+开发金标。当前仍缺：未被现有候选污染的真实开发分母（或明确标为 seen-development 的标注方案）、
+人工标注与争议裁定、阈值签认，以及据此生成的真实质量门报告。状态保持 `needs-info`，评分代码
+通过不解除发布与 M_main 消费前置门。
+
+### 2026-10-08 · 真实冻结包准备
+
+用户要求执行人工金标与阈值冻结并运行质量评分。核查确认：2026-10-05 人工确认的 E01—E12
+发生在真实候选之前，可作为预候选关键检查点，但原审阅稿明确声明不是完整三角色金标；当前候选
+已经可见，不能事后改写为盲金标。已创建
+[真实质量门冻结审阅](../evidence/10-quality-freeze-20261008-r1/quality-freeze-review.md) 和机读
+[冻结状态](../evidence/10-quality-freeze-20261008-r1/freeze-state.json)，列出候选阈值、绝对否决项、
+每角色 20 条最低样本及人工签认位置。正式冻结和评分等待该文件人工确认；在此之前不生成
+`gold_frozen_before_candidates=true`，也不运行会被误解为正式质量放行的评分。
+
+### 2026-10-08 · 人工签认、部分冻结与实际诊断评分
+
+用户在对话中确认阈值、E01—E12 部分冻结、seen-development 诊断范围，并指定许永立同时担任
+审核人与争议裁定人。已将状态写入
+[冻结审阅](../evidence/10-quality-freeze-20261008-r1/quality-freeze-review.md) 与
+[冻结状态](../evidence/10-quality-freeze-20261008-r1/freeze-state.json)，生成 13 条机读
+[部分关键检查点金标](../evidence/10-quality-freeze-20261008-r1/critical-check-gold.json)，并使用正式
+`structured_scoring.py` 对 48 items / 5 relations 候选的检查点投影执行确定性评分。E11 单列为
+覆盖缺口，不伪装为语义金标；候选其余输出未获逐条人工 FP 裁定，因此 precision 明确不是完整
+抽取 precision。
+
+实际结果：Claims TP/FP/FN=6/0/4，检查点投影 precision 100%、recall 60%；items=2/0/0，
+relations=1/0/0；风险/条件 recall 5/8（62.5%）；报告支持 0/1。覆盖率为 parse 13/14、
+packet 10/14、routing 10/14、extraction 9/14，query/delivery/context_use 均 0/14。缺失关键项为
+E01 现价/日期/归属、E08 EPS 预测归属、E09 预测表、E12 股利及利息支付复合表；E11 图像表格
+解析继续失败。`rate_gate_passed=false`，`live_trial_ready=false`。
+
+质量门阻断包括 Claims recall、风险/条件 recall、报告支持率低于阈值，关键报告失败及四条关键
+Claims 缺失；准备度仍有 Claims 10/20、items 2/20、relations 1/20 三项最小样本不足。结果见
+[评分摘要](../evidence/10-quality-freeze-20261008-r1/quality-score-summary.md) 与机读
+[质量报告](../evidence/10-quality-freeze-20261008-r1/quality-report.json)；冻结输入、执行程序和输出
+指纹见 [冻结清单](../evidence/10-quality-freeze-20261008-r1/freeze-manifest.json)。本轮无新增模型调用、
+生产数据库访问或留出访问。任务仍保持 `needs-info`，不得据此发布候选或解除 M_main 质量前置门。
+
+### 2026-10-08 · PDF 表格限制的评分口径
+
+后续评分对未经显式 `verified_complete` 核验的 `reader-pdf-*` 表格采用 fail-closed 口径：运行结果
+不得产生表格语义 TP/FP，packet 记 `partial / table_untrusted_or_incomplete`；但若冻结金标或关键
+检查点要求该表内容，仍在 parse/routing/extraction 覆盖分母中计缺口，并按适用角色计 FN，不能因
+当前禁止消费而删除 E09、E11、E12 或其他表格目标。完成独立完整性核验时应新建快照/候选/评分
+修订，不覆盖本轮 freeze manifest、金标或质量报告。本次仅登记未来口径，历史实际得分保持不变。
