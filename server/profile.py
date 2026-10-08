@@ -49,6 +49,16 @@ CALCULATION_TOOL_NAMES = [
     "strategy_lint",
 ]
 
+# Task board (external checklist) alongside the prompt that mandates it. The
+# stateful-react-agent prompt unconditionally requires the first action to be
+# ``add_task``; exposing the board here keeps the tool set and the prompt
+# consistent. ``task_board: true`` in the overrides enables the observer that
+# maintains the board during the run.
+TASK_BOARD_TOOL_NAMES = [
+    "add_task",
+    "update_task",
+]
+
 BUSINESS_TOOL_NAMES = [
     "investment_context",
     "investment_position_sizing",
@@ -76,9 +86,11 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
         agent_tools.extend(BUSINESS_TOOL_NAMES)
     else:
         agent_tools.extend(CALCULATION_TOOL_NAMES)
+    agent_tools.extend(TASK_BOARD_TOOL_NAMES)
     return {
         "agent": {
             "agent_tools": agent_tools,
+            "task_board": True,
             "fs_mode": True,
             "thinking_format": "tag",
         },

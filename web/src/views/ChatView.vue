@@ -775,6 +775,16 @@ watch(
   align-self: flex-start;
 }
 
+.turn-role {
+  grid-column: 1;
+  grid-row: 1 / -1;
+}
+
+.turn-thinking,
+.turn-body {
+  grid-column: 2;
+}
+
 .turn-card.user {
   align-self: flex-end;
 }
