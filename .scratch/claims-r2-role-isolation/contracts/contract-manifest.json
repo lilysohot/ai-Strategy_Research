@@ -24,7 +24,7 @@
   "supported_protocols": {
     "claims_deterministic": "claims-deterministic-v1",
     "claims_model": "claims-json-v2",
-    "material_items": "material-atomic-jsonl-v4",
+    "material_items": "material-atomic-jsonl-v5",
     "material_relations": "material-relations-jsonl-v1"
   },
   "real_sample_scope": {
@@ -37,7 +37,7 @@
     {"path": "v1/state-codes.json", "sha256": "a43bf821e4c659c4e71eff3a92f5e36cbce56b1cfeb81bc50a68aa5701a7a0c3"},
     {"path": "v1/evidence-snapshot.schema.json", "sha256": "9f29dca28f9156987131b91605efc801a20a0450683d96db6cb26f1e82540afb"},
     {"path": "v1/execution-ledger.schema.json", "sha256": "2e87f09280b9a7ffc99227e4c9f4442dba90a7372954bb48526b393e62150065"},
-    {"path": "v1/role-artifact.schema.json", "sha256": "61e89bdd0073907cf77a31510dc08dcc9b872a4a099913262a6cb2e22102981f"},
+    {"path": "v1/role-artifact.schema.json", "sha256": "2e7a2163bb2d0c27841ed0af64f32e69f273856350fdd81574bdf28d707dc39b"},
     {"path": "v1/semantic-publication.schema.json", "sha256": "636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa"},
     {"path": "v1/semantic-query-page.schema.json", "sha256": "5494bf1aaa33e8b126934afff1dbba308c15ef90025cdd6665f2e4ec48d82605"},
     {"path": "v1/report-semantic-reference.schema.json", "sha256": "18cec7608bf9d6f895915f8564fbcf8e50a13b2f6075a6aaa7e22b1adfb4f61e"},

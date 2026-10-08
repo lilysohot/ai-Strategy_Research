@@ -141,6 +141,7 @@ class RoleArtifact(BaseModel):
         "claims-deterministic-v1",
         "claims-json-v2",
         "material-atomic-jsonl-v4",
+        "material-atomic-jsonl-v5",
         "material-relations-jsonl-v1",
     ]
     business_contract: Literal["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]

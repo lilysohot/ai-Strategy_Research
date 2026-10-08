@@ -17,8 +17,8 @@
 | [排除纪要后的测试结论](../../.scratch/corpus-evidence-pipeline/r2-nonminutes-report-v1.md) | 非纪要范围仍未通过：v13重评分24/25；当前P4为24义务、4合法/4非法/16未评估；55项基础工程测试通过，1项PG跳过，新增模型调用0 |
 | [R2 P1 Interface 与验收契约](r2-p1-interface-contract.md) | P1 前瞻设计冻结：有限候选不冒充已验证原子命题；终态、容量、运行时/开发评分分离；不是生产验收 |
 | [Web 平台加固计划](web-platform-hardening.md) | 历史实施与后续加固范围保留；2026-09-14 用户决定 Web 后续工作暂缓，先打通 CLI 数据链路 |
-| [Web 业务页面交互任务清单](web-business-ui-tasks.md) | v1.5 有效任务设计；2026-10-08 回填执行情况（§7）：UI-01—02、04、06—10 已落地并接真实 API，UI-03 未落地、UI-05 部分、UI-11 浏览器验收未做，UI 侧 issue 台账未建 |
-| [Web 业务数据持久化任务清单](web-business-persistence-tasks.md) | v1.4 有效任务设计；2026-10-08 回填执行情况（§10）：DATA-00—15 服务端已实施并提交、`tests/pg` 202 passed，未部署/未迁移生产库；D 阶段、供应商实测、保留策略待办 |
+| [Web 业务页面交互任务清单](web-business-ui-tasks.md) | v1.6 有效任务设计；2026-10-08 回填执行情况（§7）＋会话计划口径变更（计划不含价格、补数弹窗、成交价回填触发重算，待实施）：UI-01—02、04、06—10 已落地接真实 API，UI-03 未落地、UI-05 部分、UI-11 未验收 |
+| [Web 业务数据持久化任务清单](web-business-persistence-tasks.md) | v1.5 有效任务设计；2026-10-08 回填执行情况（§10）＋DATA-01 口径变更（`allocated_capital`/`target_profit`、计划不含价格、Agent 主动补数）：DATA-00—15 服务端已实施并提交、`tests/pg` 202 passed；变更待实施，未部署/未迁移生产库 |
 | [Web 运行存储与轨迹追溯缺陷修复报告](web-runtime-trace-repair-report.md) | 2026-10-02 v1.5 批次收口；22 项中 19 项 closed，F12/F15/F20 主体已有实现、剩余项转后续；具体状态/证据以逐项工单为准，不等于新业务功能验收 |
 | [Web 存储验证环境准备](web-storage-validation-environment.md) | 优先复用现有服务；第二 API 用独立测试库，实例故障才另建实例/卷；配置、浏览器、真实 worker、清理及迁移门槛，尚未完成真实链路验收 |
 | [Web 业务资料环境基线](web-business-data-env-baseline.md) | DATA-00 台账（2026-10-02 只读核定：WSL API/前端、PG 18.6 `apodex`、运行根）、隔离规则、`tests/pg` 显式 PG 集成入口与后台 dispatcher/monitor 登记要求；独立测试库与受限角色已建立并逐批复用（§4.1—4.11），**后台受管进程仍未建立** |

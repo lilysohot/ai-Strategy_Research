@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v0.1 · 2026-10-02 · 首次冻结草案 |
+| 版本 / 日期 | v0.2 · 2026-10-08；落实会话计划口径变更（计划不含价格、`allocated_capital`、`target_profit`、Agent 主动补数触发） |
 | 状态 | **契约冻结中**：本文确定的语义即实现口径；§11 的待定项在冻结前不得被客户端或实现静默填值 |
 | 需求依据 | [产品需求](../product-requirements.md) §4.7、PR-BIZ-01—06、PR-WATCH-01—04、PR-DATA-13 |
 | 上级设计 | [Web 业务资料需求规格](web-business-data-prd.md) v0.6（§8 的“拟议”接口由本文收口） |
@@ -118,19 +118,19 @@
 | use_case | 必需（`user_provided`） | 允许值约束 | 可调用计算 | 缺失时行为 |
 |---|---|---|---|---|
 | `general_reading` | 无 | — | 材料阅读、检索、非个性化分析 | 不阻断 |
-| `plan_analysis` | 账户：`currency`、`capital_basis`、`as_of`、总资金/可用资金（按口径至少一项）；计划：`symbol`、`market`、`direction`、`plan_price` 或 `plan_price_low/high`、`target_price` | 未成交时 `actual_price` 必须为 `null` | `position_sizing`（按计划价）、`strategy_lint` | `400 purpose_requirement_unmet` + 字段定位；**不调用**依赖资金/成本的工具 |
-| `holding_cost` | 上者 + 成交记录（side/qty/price/currency/fees/traded_at）或持仓快照（qty、cost_basis、as_of），且 `purchased=true` | 必须 `user_provided` 的实际成交价 | `position_sizing`、成本/收益计算 | 缺实际价 → `pending_clarification`，阻断该计算 |
+| `plan_analysis` | 账户：`currency`、`capital_basis`、`as_of`、总资金/可用资金（按口径至少一项）；计划：`symbol`、`market`、`direction`、`allocated_capital`（本标的规划资金，金额+币种） | `allocated_capital` 不得超过所属账户可用资金；**计划不含价格字段**（`plan_price`/`plan_price_low/high` 已于 2026-10-08 取消）；未成交时成交价必须为空 | `position_sizing`（按 `allocated_capital`）、`strategy_lint` | `400 purpose_requirement_unmet` + 字段定位；**不调用**依赖资金/成本的工具 |
+| `holding_cost` | 上者 + 成交记录（side/qty/price/currency/fees/traded_at）或持仓快照（qty、cost_basis、as_of），且 `purchased=true` | 必须 `user_provided` 的实际成交价；价格真源只能是成交记录/持仓，**不接受计划价或建议价** | `position_sizing`、成本/收益计算 | 缺实际价 → `pending_clarification`，阻断该计算 |
 
 ## 5. 对象读写契约
 
 | 对象 | 归属与约束 |
 |---|---|
 | 账户 `accounts` | 归用户；可被多个研究引用；第一版一个研究至多引用一个账户 |
-| 计划 `plans` | **必须且只能属于一个研究**；从研究会话内创建，自动归属，页面不提供会话选择器；跨研究复用意图须新建计划并保留来源 |
+| 计划 `plans` | **必须且只能属于一个研究**；从研究会话内创建，自动归属，页面不提供会话选择器；跨研究复用意图须新建计划并保留来源；持有 `allocated_capital`（本标的规划资金，≤ 所属账户可用资金）与承受风险/期望盈利；**不保存价格** |
 | 当前主计划 | 研究的属性，只能从该研究所属计划集合中选择 |
 | 持仓快照 `position_snapshots` | 账户 + 标的 + 数量 + 成本口径 + `as_of` + 来源；手工录入不自动叠加重算资金 |
-| 成交 `trade_records` | 更正保留前值并创建新版本；不触发任何交易执行 |
-| 策略版本 `strategy_versions` | 保存生成 Run 与产物引用；采纳后在**当前研究**创建/修改计划，不变成用户已成交事实 |
+| 成交 `trade_records` | **价格的唯一真源**：每次买入/卖出各记一条，可多条；更正保留前值并创建新版本；不触发任何交易执行 |
+| 策略版本 `strategy_versions` | 保存生成 Run 与产物引用（含 Agent 建议买/卖价，`system_computed`）；采纳后在**当前研究**更新计划，不变成用户已成交事实，也不替代成交价 |
 
 修改回执：`{object_id, revision, prev_values, next_values, changed_fields[], saved_at, operation_id}`。
 
@@ -181,7 +181,8 @@
   无关修改不能恢复旧值。补齐后重新按完整合并结果裁决，缺失项不固定成永久阻断。
   成交更正不支持带待澄清字段提交；返回缺数错误，原记录保持不变。零与缺失分别处理。
 - 账户、计划、成交、持仓所带标的/市场/币种必须一致，不隐式换汇。
-  计划价区间必须上下限齐备且顺序正确；方向仅接受 `buy/sell`。
+  计划只接受 `allocated_capital`（不得超过所属账户可用资金）；计划子结构出现 `plan_price`/
+  `plan_price_low`/`plan_price_high` 一律 `400 unknown_field_rejected`；方向仅接受 `buy/sell`。
 - 幂等摘要包含规范化业务结构及附件的保存名称、大小、SHA-256；更换附件不能重放旧 Run。
   新研究的 Session 在提交事务内建立；保存、快照或派发登记任一步失败整体回滚。
 
@@ -195,6 +196,7 @@
 | 结束原因 | 补数结束原因 `input_required`：`status=stopped`、`stopped_by=input_required`（不是 `failed`） |
 | 派发状态 | 与 Run 状态分离：`not_required \| pending \| dispatched \| claimed \| retryable_failed \| abandoned` |
 | 重算 | 提交“停止 + 关联新 Run”操作，新 Run 用新快照；旧轨迹、旧快照与来源关系保留；同研究串行 |
+| 成交回填 | 用户回填实际成交价 → 成交记录 + 计划/账户新版本 + 新 Run 在同一事务；不复活原 Run，旧轨迹与旧快照保留 |
 | 排队中 | 已排队手动 Run 保持原快照；用户通过取消重提采用新资料，不暗中替换 |
 | 附件 | 上传先入受控暂存区并记持久清单（`run_uploads`，`staged`）；worker 领取前校验文件存在且 `sha256` 一致才发布到 `inputs`（`published`），否则不投递 |
 | 队列上限 | 逐研究未完成派发意图数达上限 → 新建/重算返回 `429 quota_exceeded`（`remedy=wait`）；重算取代的旧 Run 不计入 |
@@ -236,6 +238,7 @@ Run。此处验证覆盖并发领取与租约交接，不等于已经完成真�
 | 规则 | 约定 |
 |---|---|
 | 归属 | 每条请求**必须且只能属于一个研究**（`research_id` 非空）；`source_run_id` 与 `watch_event_id` 可为空（自动事件在创建 Run 前缺数时为空） |
+| 触发场景 | 运行中缺数（原 Run 以 `input_required` 结束）；或 Agent 识别研究标的后、准备给出价位/仓位结论时主动创建。两者同一机制，不新增等待态 |
 | 状态 | `pending \| answered \| cancelled \| expired` |
 | 保存顺序 | 请求先持久保存再通知；不依赖活 worker 等待；原 Run 以 `input_required` 结束 |
 | 明确回答 | 保存业务变更 + 新快照 + 后续 Run，**同一请求只生成一次续接**（幂等）；返回 `follow_up_run_id` |

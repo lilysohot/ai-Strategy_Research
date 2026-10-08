@@ -8,6 +8,10 @@ Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标�
 Real model calls: 116（既有 68 + 本轮 r2 48；M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
 Production database access: 0
 
+> 2026-10-08 后续：针对本轮质量阻断的实现修复与零模型冻结已在
+> [12-r3-quality-remediation](12-r3-quality-remediation.md) 完成。r2 候选、签认裁定和运行工件均未
+> 覆盖；本票仍保持 `needs-info`/未发布，等待同一 24 单元的有界 r3 真实复验及重新裁定。
+
 依据：[实施规格](../spec.md)、[设计报告](../report.md)、[唯一主计划](../../../docs/plan/claims-market-closed-loop-plan.md)。本票遵守 spec 第 5 节全局约束；新增文件/测试是待交付项，不表示当前已存在。
 
 ## 目标

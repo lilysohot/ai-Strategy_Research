@@ -246,7 +246,7 @@ def test_manifest_freezes_interfaces_and_role_protocols() -> None:
     assert manifest["supported_protocols"] == {
         "claims_deterministic": "claims-deterministic-v1",
         "claims_model": "claims-json-v2",
-        "material_items": "material-atomic-jsonl-v4",
+        "material_items": "material-atomic-jsonl-v5",
         "material_relations": "material-relations-jsonl-v1",
     }
     assert manifest["business_schema_reuse"] == {

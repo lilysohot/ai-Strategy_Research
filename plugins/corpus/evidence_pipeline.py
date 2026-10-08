@@ -41,7 +41,7 @@ from plugins.corpus.evidence import (
 if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit
 
-PIPELINE_VERSION = "evidence-pipeline-7"
+PIPELINE_VERSION = "evidence-pipeline-8"
 CLAIMS_TABLE_PROTOCOL = "claims-deterministic-v1"
 CLAIMS_PROSE_PROTOCOL = "claims-json-v2"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
@@ -53,9 +53,16 @@ METRICS: dict[str, tuple[str, str]] = {
     "归属母公司净利润": ("parent_net_profit", "元"),
     "归母净利润": ("parent_net_profit", "元"),
     "归属于母公司净利润": ("parent_net_profit", "元"),
+    "扣非净利润": ("adjusted_net_profit", "元"),
+    "扣非归母净利润": ("adjusted_net_profit", "元"),
+    "扣非": ("adjusted_net_profit", "元"),
     "净利润": ("net_profit", "元"),
     "经营活动现金流": ("operating_cash_flow", "元"),
     "经营活动产生的现金流量净额": ("operating_cash_flow", "元"),
+    "经营现金流": ("operating_cash_flow", "元"),
+    "存货": ("inventory", "元"),
+    "应收": ("accounts_receivable", "元"),
+    "应收账款": ("accounts_receivable", "元"),
     "研发费用": ("research_expense", "元"),
     "财务费用": ("finance_expense", "元"),
     "应收票据": ("notes_receivable", "元"),
@@ -73,6 +80,8 @@ METRICS: dict[str, tuple[str, str]] = {
     "市盈率（PE）": ("pe", "倍"),
     "市净率（PB）": ("pb", "倍"),
     "EV/EBITDA": ("ev_ebitda", "倍"),
+    "收盘价": ("close_price", "元"),
+    "当日价格": ("close_price", "元"),
 }
 
 
@@ -287,6 +296,16 @@ def _fact(
     document: EvidenceDocument,
 ) -> EvidenceFact:
     record = replace(record, extracted_at=None)
+    if record.scope == "company" and not record.subject and document.subject:
+        # Source admission metadata is trusted context for an omitted grammatical
+        # subject.  Preserve the provenance and never override an explicit, possibly
+        # conflicting model subject.
+        record = replace(
+            record,
+            subject_raw=document.subject,
+            subject=document.subject,
+            qualifiers={**record.qualifiers, "subject_basis": "document_metadata"},
+        )
     time_reasons = []
     model_known_at = record.known_at
     if record.known_at != document.published:

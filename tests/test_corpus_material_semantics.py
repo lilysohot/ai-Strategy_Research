@@ -505,6 +505,9 @@ def test_slot_protocol_recovers_null_speaker_without_cascade(tmp_path: Path) -> 
         }
     ]
     item = payload["items"][1]
+    item["text"] = "专家判断明年需求会明显起来"
+    item["statement_role"] = "claim"
+    item["evidence_quote"] = "我判断明年需求会明显起来。"
     slot = next(slot for slot in slots if item["evidence_quote"] in slot.text)
     item["speaker_ref"] = "summary_author"
     records = [
@@ -580,6 +583,52 @@ def test_slot_protocol_binds_omitted_slot_id_by_unique_exact_quote(tmp_path: Pat
     )
     assert extracted_entry.status == "extracted"
     assert extracted_entry.item_refs == (result.understanding.items[0].item_id,)
+
+
+def test_slot_protocol_allows_multiple_atomic_items_in_one_coarse_slot(tmp_path: Path) -> None:
+    source = tmp_path / "multi-atom-slot.md"
+    source.write_text("毛利率下降同时现金流转负。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slot = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )[0]
+
+    def item(local_id: str, text: str) -> dict[str, object]:
+        return {
+            "record_type": "item",
+            "candidate_slot_id": slot.candidate_slot_id,
+            "item_id": local_id,
+            "text": text,
+            "semantic_type": "fact",
+            "statement_role": "claim",
+            "speech_role": "statement",
+            "perspective": "source_explicit",
+            "speaker_ref": "undeclared",
+            "polarity": "affirmed",
+            "value": None,
+            "behavior_status": None,
+            "temporal_frame": "unknown",
+            "evidence_quote": text,
+            "unknown_fields": [],
+        }
+
+    response = "\n".join(
+        json.dumps(record, ensure_ascii=False)
+        for record in (item("margin", "毛利率下降"), item("cash", "现金流转负"))
+    )
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: response,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+    )
+
+    assert len(result.understanding.items) == 2
+    entry = result.understanding.coverage.slot_ledger[0]
+    assert entry.status == "extracted"
+    assert len(entry.item_refs) == 2
+    assert result.packet_runs[0].status == "completed"
 
 
 def test_slot_protocol_marks_missing_terminal_record_partial(tmp_path: Path) -> None:
@@ -1172,8 +1221,8 @@ def test_atomic_obligation_batches_never_exceed_item_capacity(tmp_path: Path) ->
     )
 
     assert len(slots) == 35
-    assert len(batches) == 5
-    assert all(1 <= len(batch) <= 8 for batch in batches)
+    assert len(batches) == 18
+    assert all(1 <= len(batch) <= 2 for batch in batches)
     assert all(len({slot.packet_id for slot in batch}) == 1 for batch in batches)
 
 
@@ -1217,8 +1266,9 @@ def test_slot_protocol_calls_model_once_per_finite_atomic_batch(tmp_path: Path) 
     assert all('record_type="item", candidate_slot_id, item_id' in prompt for prompt in prompts)
     assert all("candidate_slot_id 必须逐字复制" in prompt for prompt in prompts)
     assert all("item_id 必须非空" in prompt for prompt in prompts)
-    assert all("直接使用同一个 candidate_slot_id" in prompt for prompt in prompts)
-    assert all("每个 ID 恰好在一行 item 或 coverage" in prompt for prompt in prompts)
+    assert all("在本批次唯一" in prompt for prompt in prompts)
+    assert all("同一候选槽位可以输出多个原子 item" in prompt for prompt in prompts)
+    assert all("每个 ID 至少出现在一行 item" in prompt for prompt in prompts)
     assert all("不得输出 neutral/positive/negative" in prompt for prompt in prompts)
     assert all("没有未知字段时输出 []" in prompt for prompt in prompts)
     assert all("其他语义类型必须为 null" in prompt for prompt in prompts)

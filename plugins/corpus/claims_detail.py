@@ -37,7 +37,7 @@ CLAIM_KINDS_V2 = ("fact", "forecast", "opinion")
 QUALITY_STATUSES = ("ok", "review", "rejected")
 EVIDENCE_KINDS = ("prose", "table")
 
-LINT_VERSION = "claims-v2-lint-4"
+LINT_VERSION = "claims-v2-lint-5"
 UNIT_RULE_VERSION = "unit-rules-1"
 PERIOD_RULE_VERSION = "period-rules-2"
 
@@ -53,6 +53,12 @@ V2_OUTPUT_CONTRACT = """
 - 输出字段：claim_text, evidence_quote, evidence_kind, table_ref, scope, subject_raw,
   subject, metric_raw, metric, qualifiers, kind, value_text, unit_raw, period_raw,
   observed_at, known_at, confidence。
+- 每条只能绑定一个 subject × metric × period × value/unit 坐标；并列主体、指标或数值必须拆成
+  多条，不能用一个 value 承载 “3.2/3” 等多个值，也不能把原因、条件和结果合成一条 Claim。
+- 公司范围可使用“来源上下文”中明确给出的 subject 补足正文省略的主语，但仅限当前断言确实描述
+  该主体；不得把客户、行业、竞争对手或被转述者的数据归给文档主体。
+- 纯条件、风险情景、因果连接、话语评价和没有可绑定指标的定性片段留给 material_items；Claims
+  只保留能够独立说明主体、指标以及适用期间/时点的事实、预测或明确评级观点。
 - value_num、unit、period_end、period_grain、quality_status、reason_codes 不由模型裁决；
   它们由 Python 规则重算。缺失或不确定的原始字段填 null，不要猜。
 - 数值与单位分别保留，如 value_text="16.2", unit_raw="万人"。保留零值和负号。
@@ -68,7 +74,7 @@ _SLOT_BY_KIND: dict[str, str] = {
     "macro": "领域：宏观。保留国家与指标，非农就业规范为 subject=US, metric=NFP；不合并实际、预期、前值。",
 }
 
-_EXTRACTOR_REV_V2 = 3
+_EXTRACTOR_REV_V2 = 4
 _PROMPT_PARTS_V2: tuple[str, ...] = (
     V2_OUTPUT_CONTRACT,
     *_SLOT_BY_KIND.values(),

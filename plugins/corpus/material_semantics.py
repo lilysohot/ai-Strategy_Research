@@ -25,12 +25,13 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-19"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-20"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
-MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v4"
+MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v2"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v3"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v2"
+MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
 MaterialType = Literal[
     "research_report",
@@ -197,13 +198,18 @@ MATERIAL_SLOT_PROTOCOL = """
   record_type="item", candidate_slot_id, item_id, text, semantic_type, statement_role,
   speech_role, perspective, speaker_ref, polarity, value, behavior_status, temporal_frame,
   evidence_quote, unknown_fields。candidate_slot_id 必须逐字复制下方一个候选槽位 ID，不得省略、
-  改写或自行生成；item_id 必须非空，并直接使用同一个 candidate_slot_id，不得留空或另造 ID。
-- 每个候选槽位最多输出一个 item；item 引文必须完全位于该槽位原文内，不能跨槽位合并。
-- 每个候选槽位恰好输出一行终态记录：能抽取时直接输出一行 item；确无合法项目时输出一行
+  改写或自行生成；item_id 必须非空且在本批次唯一，建议使用“candidate_slot_id#序号”。
+- 同一候选槽位可以输出多个原子 item，但每个 item 只能表达一个独立的事实、条件、否定、风险、
+  论据或结论；item 引文必须完全位于该槽位原文内，不能跨槽位合并。
+- 每个候选槽位必须有一种终态：能抽取时输出一行或多行 item；确无合法项目时只输出一行
   coverage，字段为 record_type="coverage", candidate_slot_id, status="no_supported_item",
   reason_code。不要为已输出 item 的槽位再输出 coverage。
 - 文档只有统一作者声音时使用系统给出的来源声音 speaker；不得因没有“专家”标签而拒绝。
-- 输出前逐一核对候选槽位：每个 ID 恰好在一行 item 或 coverage 的 candidate_slot_id 中出现一次。
+- 输出前逐一核对候选槽位：每个 ID 至少出现在一行 item 中，或恰好出现在一行 coverage 中；
+  同一 ID 不得同时出现在 item 与 coverage 中。
+- 冒号前的判断/标签与冒号后的事实、并列数值、原因、条件和结果由系统拆成独立槽位；不要把相邻
+  槽位重新合并。句号后的“但/不过/然而/可是”若属于对前句的自我修正，系统会保留为同一槽位，
+  此时 polarity 应保留 mixed/negated 等原文立场。
 """
 
 
@@ -424,7 +430,9 @@ class RelationCandidateSet(BaseModel):
     snapshot_id: str
     items_run_id: str
     items_validation_version: Literal[
-        "material-items-validation-v1", "material-items-validation-v2"
+        "material-items-validation-v1",
+        "material-items-validation-v2",
+        "material-items-validation-v3",
     ] = MATERIAL_ITEMS_VALIDATION_VERSION
     endpoint_item_ids: tuple[str, ...]
     candidates: tuple[RelationCandidate, ...]
@@ -502,15 +510,16 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 _ATOMIC_BOUNDARY_RE = re.compile(
-    r"[。！？；]\s*|\n{2,}|"
+    r"[。！？；：:]\s*|\n{2,}|"
     r"\.(?=\s+[A-Z0-9])\s*|"
     r"\n(?=\s*(?:(?:\d+|[一二三四五六七八九十百]+)[、]|"
     r"(?:\d+|[一二三四五六七八九十百]+)[.．](?=\s)|"
     r"(?:风险提示|总结|摘要|事项|评论|投资建议|目标价|当前价|主持人|专家|投资者|问|答)\s*[：:]))|"
-    r"，(?=\s*(?:并不|不一定|不必然|关键|那么|只是|只要|我们维持|维持一年目标价|"
+    r"，(?=\s*(?:并不|不是|不会|不能|没有|尚无|尚未|未能|不一定|不必然|关键|那么|只是|只要|我们维持|维持一年目标价|"
     r"(?:Q[1-4]|H[12])?预计|经营最困难阶段已过|且|同时|为了|因为|由于|主要是|主要系|主要由于|原因在于|表明|受|年内|下半年|"
-    r"中长期|利好|但|归母净利润|当前批价|投放量可由|重申|工艺占|"
-    r"设备(?:只|仅)))|"
+    r"中长期|利好|但|不过|然而|可是|所以|因此|说明|需要|就是|会|将|你|我|公司|"
+    r"归母净利润|扣非|经营现金流|存货|应收|毛利率|营收|云计算|CSP|GPU|ASIC|NPO|CPO|可插拔|"
+    r"当前批价|投放量可由|重申|工艺占|设备(?:只|仅)|(?:Q[1-4]|H[12])\b))|"
     r"、(?=[^。；\n]{0,24}(?:不及预期|加剧|恶化|下行|失败|疲软|风险))|"
     r",\s*(?=this\s+is\b)|\s+(?=the\s+CEO\s+bought\b)|"
     r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)|"
@@ -639,14 +648,23 @@ def _atomic_ranges(segment: MaterialSegment) -> tuple[tuple[int, int, bool], ...
         return ((segment.start, segment.end, True),)
     ranges: list[tuple[int, int, bool]] = []
     relative_start = 0
-    condition_pending = bool(
-        re.match(r"\s*(?:[^：:\n]{1,12}[：:])?\s*(?:如果|只要|除非|若)", segment.text)
-    )
     for match in _ATOMIC_BOUNDARY_RE.finditer(segment.text):
-        if condition_pending and match.group(0).lstrip().startswith("，"):
-            condition_pending = False
+        token = match.group(0).lstrip()
+        if token.startswith(("：", ":")) and re.fullmatch(
+            r"\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾|问|答)\s*[：:]\s*",
+            segment.text[: match.end()],
+        ):
+            # A dialogue label is attribution metadata, not a proposition boundary.
+            # Keeping it in the slot also permits exact quotes that include the label.
             continue
-        if match.group(0).lstrip().startswith("，"):
+        if token.startswith(("。", ".")) and re.match(
+            r"\s*(?:但|不过|然而|可是)", segment.text[match.end() :]
+        ):
+            # A following contrastive clause often retracts or narrows the first
+            # sentence.  Keep the pair together so polarity is not inverted by
+            # independently extracting only the first sentence.
+            continue
+        if token.startswith("，"):
             terminal = re.search(r"[。！？；?!]", segment.text[relative_start:])
             if terminal is not None and terminal.group(0) in {"？", "?"}:
                 # A finite obligation may be a compound question.  Connector commas inside
@@ -714,7 +732,10 @@ def build_candidate_slot_batches(
     """Create finite packet-local batches whose obligations fit the item capacity."""
     if max_slots_per_batch < 1 or max_items_per_batch < 1:
         raise ValueError("slot and item batch capacities must be positive")
-    capacity = min(max_slots_per_batch, max_items_per_batch)
+    capacity = min(
+        max_slots_per_batch,
+        max(1, max_items_per_batch // MAX_ATOMIC_ITEMS_PER_SLOT),
+    )
     batches: list[tuple[CandidateSlot, ...]] = []
     current: list[CandidateSlot] = []
     current_packet: str | None = None
@@ -1660,12 +1681,14 @@ def _packet_records(
 
     items: list[MaterialItem] = []
     item_map: dict[str, str] = {}
-    consumed_slot_ids: set[str] = set()
+    consumed_local_item_ids: set[str] = set()
     for raw in payload["items"]:
         try:
             if not isinstance(raw, dict):
                 raise ValueError("item must be an object")
             local_id = _required_text(raw.get("item_id"), "item_id")
+            if local_id in consumed_local_item_ids:
+                raise ValueError("item_id must be unique within a batch")
             text = _required_text(raw.get("text"), "item text")
             speaker_ref = _required_text(raw.get("speaker_ref"), "speaker_ref")
             perspective = _required_text(raw.get("perspective"), "perspective")
@@ -1689,8 +1712,6 @@ def _packet_records(
                     slot_id = slot.candidate_slot_id
             if candidate_slots and slot is None:
                 raise ValueError("item does not reference a candidate obligation")
-            if slot is not None and slot_id in consumed_slot_ids:
-                raise ValueError("candidate obligation already has an item")
             if slot is not None and not (slot.start <= evidence.start and evidence.end <= slot.end):
                 raise ValueError("item evidence is outside its candidate obligation")
             statement_role = _normalize_statement_role(
@@ -1851,9 +1872,8 @@ def _packet_records(
             discarded += 1
             continue
         item_map[local_id] = item_id
+        consumed_local_item_ids.add(local_id)
         items.append(item)
-        if slot is not None:
-            consumed_slot_ids.add(slot.candidate_slot_id)
 
     relations, relation_discarded = _packet_relations(
         payload["relations"], packet, source_rev, item_map
@@ -1955,17 +1975,13 @@ def _validate_atomic_coverage(
         slot_items = [item_by_id[item_id] for item_id in slot_item_refs]
         reasons: list[str] = []
         raw_attempts = raw_item_attempts_by_slot[slot.candidate_slot_id]
-        if raw_attempts > 1:
-            incomplete = True
-            declared_status = "partial"
-            reasons.append("multiple_items_for_atomic_obligation")
-        elif len(slot_item_refs) == 1 and not records:
+        if slot_item_refs and not records and raw_attempts == len(slot_item_refs):
             declared_status = "extracted"
         elif slot_item_refs and records:
             incomplete = True
             declared_status = "partial"
             reasons.append("duplicate_terminal_records")
-        elif raw_attempts and not slot_item_refs:
+        elif raw_attempts > len(slot_item_refs):
             incomplete = True
             declared_status = "partial"
             reasons.append("item_failed_validation")
@@ -2123,6 +2139,10 @@ def extract_material_understanding(
             batch_diagnostics: list[dict[str, object]] = []
             packet_incomplete = False
             for batch_index, batch_slots in enumerate(batches):
+                item_capacity = min(
+                    max_items_per_packet,
+                    len(batch_slots) * MAX_ATOMIC_ITEMS_PER_SLOT,
+                )
                 item_diagnostics: dict[str, object] = {
                     "batch_index": batch_index,
                     "candidate_slots": len(batch_slots),
@@ -2149,7 +2169,7 @@ def extract_material_understanding(
                             packet,
                             previous=packets[index - 1] if index else None,
                             following=packets[index + 1] if index + 1 < len(packets) else None,
-                            max_items=len(batch_slots),
+                            max_items=item_capacity,
                             candidate_slots=batch_slots,
                             speaker_registry=speaker_registry,
                         )
@@ -2160,8 +2180,8 @@ def extract_material_understanding(
                         raw_items,
                         allowed=frozenset({"speaker", "item", "coverage"}),
                     )
-                    item_limit_exceeded = len(parsed["items"]) > len(batch_slots)
-                    parsed["items"] = parsed["items"][: len(batch_slots)]
+                    item_limit_exceeded = len(parsed["items"]) > item_capacity
+                    parsed["items"] = parsed["items"][:item_capacity]
                     (
                         batch_speakers,
                         batch_items,
@@ -3095,7 +3115,7 @@ def build_relation_candidate_set(
         if (
             len(entries) != 1
             or entries[0].status != "extracted"
-            or entries[0].item_refs != (item.item_id,)
+            or item.item_id not in entries[0].item_refs
             or entries[0].candidate_slot_id not in slots
             or sum(
                 entry.candidate_slot_id == entries[0].candidate_slot_id

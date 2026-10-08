@@ -444,4 +444,4 @@ def test_real_claims_and_material_consumers_accept_adapter_without_default_clien
     )
     assert len(items_wire.requests) == 1
     assert not result.understanding.relations
-    assert items_wire.intents[0].protocol == "material-atomic-jsonl-v4"
+    assert items_wire.intents[0].protocol == "material-atomic-jsonl-v5"

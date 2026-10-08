@@ -1,0 +1,42 @@
+{
+  "schema_version": "claims-r3-structural-replay-v1",
+  "created_on": "2026-10-08",
+  "model_calls": 0,
+  "scope": {
+    "frozen_non_table_units": 24,
+    "gold_material_items": 48,
+    "source_quotes_exactly_present": 48,
+    "context_complete_units": 24,
+    "snapshot_gaps": 0
+  },
+  "old_protocol": {
+    "one_item_per_slot": true,
+    "assignable_gold_items": 30,
+    "unique_slots": 30,
+    "strict_quote_upper_bound": 0.625
+  },
+  "split_only_intermediate": {
+    "one_item_per_slot": true,
+    "assignable_gold_items": 42,
+    "unique_slots": 36,
+    "strict_quote_upper_bound": 0.75
+  },
+  "frozen_r3_protocol": {
+    "protocol": "material-atomic-jsonl-v5",
+    "max_atomic_items_per_slot": 4,
+    "assignable_gold_items": 42,
+    "unique_slots": 36,
+    "multi_target_slots": 6,
+    "cross_boundary_gold_quotes": 6,
+    "strict_quote_upper_bound": 0.875
+  },
+  "cross_boundary_gold_ids": [
+    "NT-I14",
+    "NT-I15",
+    "NT-I34",
+    "NT-I35",
+    "NT-I42",
+    "NT-I48"
+  ],
+  "interpretation": "The remaining six signed gold evidence spans cross new atomic boundaries. They remain eligible for semantic human matching; the extractor boundaries must not be widened merely to optimize exact-quote overlap."
+}
