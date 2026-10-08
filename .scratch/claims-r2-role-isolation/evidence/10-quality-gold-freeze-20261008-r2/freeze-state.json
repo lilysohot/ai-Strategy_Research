@@ -1,0 +1,339 @@
+{
+  "schema_version": "corpus-structured-non-table-gold-freeze-state-v2",
+  "status": "frozen_ready_for_candidate_evaluation",
+  "formal_gold_frozen": true,
+  "quality_gate_passed": false,
+  "candidate_execution_authorized": true,
+  "authorization_provenance": [
+    "user_chat_2026-10-08_model_calls_unlimited_no_infinite_loop",
+    "user_chat_2026-10-08_r2_documents_signed"
+  ],
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "counts": {
+    "claims": 20,
+    "material_items": 48,
+    "material_relations": 24
+  },
+  "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+  "candidate_outputs_observed_before_freeze": false,
+  "table_content_included": false,
+  "holdout_accessed": false,
+  "model_calls_during_freeze": 0,
+  "production_database_access": 0,
+  "next_gate": "run bounded candidates on frozen input scope; adjudicate every output; then score",
+  "scoring_contract": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+  "contract_snapshot": {
+    "schema_version": "non-table-selected-target-scoring-contract-v2",
+    "status": "draft_pending_human_review",
+    "source_export": "../10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+    "candidate_input_scope": [
+      {
+        "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "locators": [
+          "char:1393-1655",
+          "char:146-469",
+          "char:2405-2625",
+          "char:25-134",
+          "char:3925-4239",
+          "char:4385-4657",
+          "char:4659-4907",
+          "char:5055-5071",
+          "char:5246-5537",
+          "char:621-855"
+        ]
+      },
+      {
+        "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "locators": [
+          "body[115]",
+          "body[15]",
+          "body[1]",
+          "body[26]",
+          "body[29]",
+          "body[32]",
+          "body[37]",
+          "body[3]",
+          "body[43]",
+          "body[46]",
+          "body[49]",
+          "body[51]",
+          "body[63]",
+          "body[72]"
+        ]
+      }
+    ],
+    "scope_rules": [
+      "候选只接收 candidate_input_scope 指定的非表格原文单元、来源元信息和既有角色提示；不得输入本包金标、目标ID或标注结果。",
+      "目标召回分母仅为人工接受的本包记录；并不宣称覆盖两份材料的所有命题。",
+      "声明范围外的输出独立登记 out_of_scope；范围内未命中金标的输出必须裁定，不能自动当 FP。",
+      "额外正确输出标为 correct_extra，用于候选正确率；不添加到已冻结目标金标，不追溯增加召回分母。",
+      "raw 与 validated 候选逐条分别裁定；漏抽、空输出、拒绝、失败保持在目标召回分母。"
+    ],
+    "matching": {
+      "mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+      "claims": "独立从候选字段及原文核对主体、指标、期间、数值/区间、单位、实际/预测、约数、归属与来源态度。原文质疑和早期预计等限定必须一并交付。",
+      "items": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。",
+      "conditions": "condition_logic 与 condition_groups 约束值、比较符、单位、基期及 AND/OR。I17 子项内部逻辑不明；保留原文或显式未知均可，擅自填 AND/OR 或去掉门槛不匹配。",
+      "relations": "先独立判定两端 item 并一对一建立 candidate_item_id -> gold_record_id，随后比较有向端点、type、source_explicit 和关系原文。允许多条关系共享一个动作端点。",
+      "unknowns": "未明确来源保留 unknown；不得猜具体公司、人物或把同源转述当独立证据。",
+      "normalization": "数值仅做十进制单位缩放和闭区间规范化；日期和期间保留基准语境；约数不能升级成精确承诺。记录所用规则，不从金标反填候选缺字段。",
+      "projection": "现有 strict scorer 只接受裁定完成的语义映射；映射须保存原始候选字段、裁定人、理由和依据。不得将目标字符串直接赋给候选并宣称自动语义评分。"
+    },
+    "metrics": {
+      "target_recall": "accepted_gold_matched_once / accepted_gold_total；分角色，并保留原始/校验后切片。",
+      "candidate_precision": "(matched + correct_extra) / (matched + correct_extra + incorrect + duplicate)；unresolved 非零则 N/A，不能排除后报告通过。",
+      "duplicates": "同义重复仅第一条可匹配；后续记录 duplicate 计 FP。I16 为唯一止损动作，可供 R08/R09 共用。",
+      "selected_projection_precision": "不报告为完整抽取 precision；只看选中目标的候选投影会遗漏 FP。",
+      "risk_condition": "按角色分别报告标记记录数；总体仍可按既有 scorer 计算，但 items 与关系相关，不称独立风险场景。",
+      "quality_gate": "当前包和新增裁定口径均待人工签认；未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+    },
+    "candidate_adjudication_fields": [
+      "candidate_id",
+      "stage",
+      "role",
+      "source_id",
+      "original_candidate",
+      "judgement",
+      "matched_gold_id",
+      "canonical_observed_fields",
+      "reviewer",
+      "reason",
+      "evidence"
+    ],
+    "candidate_judgements": [
+      "matched",
+      "correct_extra",
+      "incorrect",
+      "duplicate",
+      "unresolved",
+      "out_of_scope"
+    ],
+    "record_states": [
+      "pending",
+      "accepted",
+      "edited",
+      "rejected"
+    ],
+    "role_required_fields": {
+      "claims": [
+        "subject",
+        "metric",
+        "period",
+        "unit",
+        "value",
+        "factuality",
+        "attribution",
+        "perspective",
+        "source_stance",
+        "estimate_status",
+        "qualifier"
+      ],
+      "material_items": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "material_relations": [
+        "from_gold_record_id",
+        "to_gold_record_id",
+        "relation",
+        "provenance"
+      ]
+    },
+    "metric_units": {
+      "close_price": "元",
+      "adjusted_net_profit": "亿元",
+      "parent_net_profit": "亿元",
+      "operating_cash_flow": "亿元",
+      "inventory": "亿元",
+      "accounts_receivable": "亿元",
+      "gross_margin": "%",
+      "cloud_computing_revenue_yoy": "%",
+      "revenue": "亿元",
+      "NPO_penetration": "%",
+      "CPO_penetration": "%",
+      "pluggable_share": "%",
+      "CPO_shipments": "个",
+      "3.2T_batch_supply": "status",
+      "3.2T_shipments": "只",
+      "3.2T_unit_price": "美元",
+      "2.4T_shipments": "只",
+      "new_revenue_contributing_customers": "个"
+    },
+    "relation_types": [
+      "supports",
+      "challenges",
+      "conditions",
+      "invalidates",
+      "answers",
+      "motivates",
+      "attributes",
+      "elaborates"
+    ],
+    "semantic_types": [
+      "fact",
+      "forecast",
+      "opinion",
+      "behavior",
+      "unknown"
+    ],
+    "statement_roles": [
+      "claim",
+      "evidence",
+      "condition",
+      "risk",
+      "question",
+      "answer",
+      "other"
+    ],
+    "perspectives": [
+      "source_explicit",
+      "quoted_other",
+      "unknown"
+    ],
+    "minimum_accepted_records_per_role": 20,
+    "human_gates": [
+      "逐条语义裁定",
+      "争议及 unknown 处理口径",
+      "目标范围、匹配规则和完整候选正确率口径签认",
+      "新增冻结版本及其签名"
+    ],
+    "review_assertions": {
+      "NT-I13": {
+        "condition": "Q3 OCF/扣非净利润 >= 0.6",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "OCF_to_adjusted_profit",
+          "period": "Q3",
+          "comparator": ">=",
+          "value": "0.6",
+          "unit": "ratio"
+        }
+      },
+      "NT-I15": {
+        "condition": "下季 OCF/扣非净利润 < 0.5",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "OCF_to_adjusted_profit",
+          "period": "next_quarter",
+          "comparator": "<",
+          "value": "0.5",
+          "unit": "ratio"
+        }
+      },
+      "NT-I17": {
+        "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+        "condition_logic": {
+          "op": "all",
+          "args": [
+            {
+              "op": "compare",
+              "metric": "gross_margin_change_from_baseline",
+              "baseline": "6.99",
+              "comparator": "<",
+              "value": "-1",
+              "unit": "percentage_points"
+            },
+            {
+              "op": "source_clause",
+              "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+              "inner_operator": "unknown"
+            }
+          ]
+        },
+        "unknown_fields": [
+          "condition_inner_boolean"
+        ]
+      },
+      "NT-I42": {
+        "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+        "condition_logic": {
+          "op": "all",
+          "args": [
+            {
+              "op": "range",
+              "metric": "share_price",
+              "lower": "52",
+              "upper": "58",
+              "bounds": "inclusive",
+              "unit": "CNY"
+            },
+            {
+              "op": "source_clause",
+              "text": "无新的大额负面管制公告"
+            }
+          ]
+        }
+      },
+      "NT-I43": {
+        "condition": "毛利率 >= 6.99%",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "gross_margin",
+          "comparator": ">=",
+          "value": "6.99",
+          "unit": "percent"
+        }
+      },
+      "NT-C11": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-C12": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-C13": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I45": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I46": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I47": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I48": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I38": {
+        "semantic_type": "opinion",
+        "polarity": "mixed"
+      },
+      "NT-I37": {
+        "semantic_type": "opinion"
+      },
+      "NT-R09": {
+        "to_gold_record_id": "NT-I16"
+      },
+      "NT-R10": {
+        "relation": "conditions"
+      },
+      "NT-R20": {
+        "relation": "conditions"
+      },
+      "NT-R12": {
+        "from_gold_record_id": "NT-I49"
+      },
+      "NT-R19": {
+        "relation": "elaborates"
+      }
+    },
+    "review_assertion_note": "这些断言固定本轮高风险裁定建议，供回归防退化；不自动证明语义正确。人工修改这些裁定时须同时审阅对应约束，冻结前保留变更记录。"
+  }
+}

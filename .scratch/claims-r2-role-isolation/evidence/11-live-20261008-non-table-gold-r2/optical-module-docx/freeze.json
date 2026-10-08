@@ -1,0 +1,43 @@
+{
+  "stage": "signed_non_table_gold_candidate_evaluation",
+  "source_slug": "optical-module-docx",
+  "batch_id": "batch:d0cb14ed64d9e2a5ceca9453561bb90526d6dca09b785b78c621dadfbe4d2374",
+  "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+  "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+  "unit_locators": [
+    "body[115]",
+    "body[15]",
+    "body[1]",
+    "body[26]",
+    "body[29]",
+    "body[32]",
+    "body[37]",
+    "body[3]",
+    "body[43]",
+    "body[46]",
+    "body[49]",
+    "body[51]",
+    "body[63]",
+    "body[72]"
+  ],
+  "task_counts": {
+    "claims": 1,
+    "material_items": 1,
+    "material_relations": 0
+  },
+  "candidate_slot_count": 92,
+  "role_attempt_ceiling": {
+    "claims": 14,
+    "material_items": 19,
+    "material_relations": 14
+  },
+  "attempt_ceiling": 47,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "runner_sha256": "cd8d447f66c3a12cf1bbb564da5b120d8dabb7a5bee0c4f41892cde7a3405702",
+  "gold_freeze_manifest_sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+  "material_semantics_sha256": "2786cba853ab97f689e0bdd195c1971a287959de91f3d2ddec1762b9c9b31def",
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "holdout_accessed": false
+}

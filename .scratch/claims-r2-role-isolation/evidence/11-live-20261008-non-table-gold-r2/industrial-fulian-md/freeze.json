@@ -1,0 +1,39 @@
+{
+  "stage": "signed_non_table_gold_candidate_evaluation",
+  "source_slug": "industrial-fulian-md",
+  "batch_id": "batch:9cd97d0a8cf2d17dd5b184141fa748d99e34f2e8ea3bff22a6d0de756e6a4d3a",
+  "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+  "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+  "unit_locators": [
+    "char:1393-1655",
+    "char:146-469",
+    "char:2405-2625",
+    "char:25-134",
+    "char:3925-4239",
+    "char:4385-4657",
+    "char:4659-4907",
+    "char:5055-5071",
+    "char:5246-5537",
+    "char:621-855"
+  ],
+  "task_counts": {
+    "claims": 1,
+    "material_items": 1,
+    "material_relations": 0
+  },
+  "candidate_slot_count": 56,
+  "role_attempt_ceiling": {
+    "claims": 10,
+    "material_items": 12,
+    "material_relations": 10
+  },
+  "attempt_ceiling": 32,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "runner_sha256": "cd8d447f66c3a12cf1bbb564da5b120d8dabb7a5bee0c4f41892cde7a3405702",
+  "gold_freeze_manifest_sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+  "material_semantics_sha256": "2786cba853ab97f689e0bdd195c1971a287959de91f3d2ddec1762b9c9b31def",
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "holdout_accessed": false
+}

@@ -197,6 +197,25 @@ function rehydrateAllThinking(turns: readonly { run_id: string | null }[]): void
   }
 }
 
+/**
+ * True once the run has settled: the SSE stream is closed and the run reached a
+ * terminal status.
+ *
+ * From then on the *persisted* answer is authoritative. The stream's accumulated
+ * ``answer`` is only the per-turn agent text of the live/replay records, which is
+ * not the run's final report — a stopped run (e.g. ``wall_deadline``) is persisted
+ * with an explicit ``[partial: ...]`` tag, and a completed run's report is only
+ * ever the summary's ``final_answer``. Rendering the streamed fragments after the
+ * run ended was why the bubble differed from what a refresh showed.
+ */
+const runFinished = computed(
+  () =>
+    !runStream.isStreaming &&
+    (runStream.status === 'completed' ||
+      runStream.status === 'failed' ||
+      runStream.status === 'stopped'),
+)
+
 const messages = computed<ChatMessage[]>(() => {
   const out: ChatMessage[] = dedupeAssistantTurns(sessions.activeTurns).map((t) => ({
     id: `turn-${t.seq}`,
@@ -215,15 +234,24 @@ const messages = computed<ChatMessage[]>(() => {
   }))
 
   if (runStream.runId) {
-    const streamText = runStream.answer || runStream.finalAnswer || ''
+    // While the stream is live the accumulated deltas are the best view of the
+    // answer; once it settles, the authoritative text wins.
+    const streamText = runFinished.value
+      ? runStream.finalAnswer || runStream.answer || ''
+      : runStream.answer || runStream.finalAnswer || ''
     const streamingHtml = renderMarkdown(streamText)
     const existing = out.find(
       (message) =>
         message.role === 'assistant' && sameRunId(message.run_id, runStream.runId),
     )
     if (existing) {
-      existing.html = streamingHtml || existing.html
-      existing.raw = streamText || existing.raw
+      // Only the live stream may overwrite its own bubble. After the run ends the
+      // persisted turn stays on screen: it is the final report (``[partial: ...]``
+      // tag included), whereas the streamed fragments are just the raw turns.
+      if (!runFinished.value) {
+        existing.html = streamingHtml || existing.html
+        existing.raw = streamText || existing.raw
+      }
       existing.thinking = thinkingForRun(runStream.runId)
     } else {
       out.push({
@@ -259,8 +287,13 @@ const latestAssistantRunId = computed(() => {
 
 const canvasRunId = computed(() => runStream.runId || latestAssistantRunId.value)
 
+// The canvas mirrors the thread: while a run is live it follows the streamed
+// deltas, and once the run settles it shows the authoritative final answer rather
+// than the last fragments of the stream.
 const canvasAnswer = computed(() =>
-  runStream.answer || runStream.finalAnswer || latestAssistant.value,
+  runFinished.value
+    ? runStream.finalAnswer || latestAssistant.value || runStream.answer
+    : runStream.answer || runStream.finalAnswer || latestAssistant.value,
 )
 
 const canvasTitle = computed(() => sessions.activeSession?.title || '本次研究')

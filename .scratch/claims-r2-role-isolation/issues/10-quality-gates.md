@@ -1,11 +1,11 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
 Status: needs-info
-Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；非表格开发金标已修订为 r2 的 Claims/items/relations=20/48/24 有限目标待审包，条件/归属/关系/重复项已修正，尚未人工签核或正式冻结，M_main 交付评分仍未完成
+Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结；r2 非表格有限金标已由 xyl 签认并正式冻结，已按冻结预算完成两来源候选诊断抽取，但 material_items 原子覆盖未通过，关系依赖被 fail-closed 阻断，质量门未通过，M_main 交付评分仍未完成
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
-Blocked by: 需人工逐条签认 r2 金标及有限目标范围/完整候选裁定规则，追加式冻结后执行候选并逐条裁定全部输出，再取得真实 query/delivery/context_use 观察
-Real model calls: 0
+Blocked by: 需对有限目标的候选输出完成逐条人工/争议裁定，并补齐 query/delivery/context_use 观察；不得把本次抽取成功或未通过的原子覆盖当作质量放行
+Real model calls: 48
 Production database access: 0
 
 依据：[实施规格](../spec.md)、[设计报告](../report.md)、[唯一主计划](../../../docs/plan/claims-market-closed-loop-plan.md)。本票遵守 spec 第 5 节全局约束；新增文件/测试是待交付项，不表示当前已存在。
@@ -236,3 +236,24 @@ adjudicator 均未填写，`human_signoff_complete=false`、`formal_gold_frozen=
 closure 0 missing/484 files。原始两份材料经确定性 reader 重读，与旧正文导出完全一致。
 真实模型 preflight 未运行，本轮模型调用、数据库访问和留出访问均为 0。任务仍为 needs-info：
 本次修复完成，逐条人工签认及新增冻结、真实候选评分和交付观察仍待后续，不提前解除质量门。
+
+### 2026-10-08 · r2 金标签认、正式冻结与候选诊断执行
+
+用户确认两份 r2 文档已签认；签认人/争议裁定人记录为 `xyl`。已通过冻结脚本生成并校验
+[正式冻结金标](../evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json) 及其状态、清单；
+冻结目标为 Claims/items/relations=20/48/24，共 92 条，候选执行授权为真，金标未暴露给模型。
+冻结校验命令退出 0，计数为 20/48/24。
+
+随后按有限、无自动重试、单并发预算执行两份来源。详细账本见
+[候选执行摘要](../evidence/11-live-20261008-non-table-gold-r2/candidate-evaluation-summary.md)。
+工业富联 Markdown 使用 21/32 次调用，光模块 DOCX 使用 27/47 次调用，合计 48/79 次；两份
+`plan_consistent=true`。Claims 均为 execution succeeded / protocol valid / quality review_required，
+分别产生 91 和 41 条候选事实。两份 `material_items` 均 execution succeeded 但 protocol invalid、
+quality review_required：Markdown 为 53 条 item（46 extracted、9 partial、1 no_supported），DOCX 为
+82 条 item（71 extracted、20 partial、1 no_supported）。失败原因是原子槽的否定/论据等必需信号未
+完整覆盖及部分 item 校验失败，不是网络或预算失败。故 material_relations 均未调用，并按依赖门禁
+记录 `CS_DEPENDENCY_NOT_READY`；没有自动重试、生产数据库访问或 holdout 访问。
+
+本轮完成的是“签认 → 正式冻结 → 有界真实候选诊断”闭环，不是质量放行。有限目标的候选逐条裁定、
+precision 仍为 N/A 的额外候选处理，以及 query/delivery/context_use 观察尚未完成；
+`quality_gate_passed=false`，不得发布或解除 M_main 质量前置门。

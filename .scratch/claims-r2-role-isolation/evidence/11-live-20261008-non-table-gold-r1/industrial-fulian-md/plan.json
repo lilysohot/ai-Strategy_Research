@@ -1,0 +1,786 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:24c9f993d34045f573f0aa9b837c009cfc144ddae03eec94c77024d4a2a02211",
+  "plan_sha256": "sha256:24c9f993d34045f573f0aa9b837c009cfc144ddae03eec94c77024d4a2a02211",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:1393-1655",
+        "text": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+        "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "start": 0,
+          "end": 262
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-11",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 11,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:1bb31d1bfba643eeb04b8e13f19f39868972ff1bf30af837b48bdb6ac2c8da6b",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:146-469",
+        "text": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+        "text_sha256": "sha256:3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0",
+          "start": 0,
+          "end": 323
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-4",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 4,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:326c4b7de15b33309b6085feaa40c41965a6e36b0cb1f9c2e7e227a29b8a8484",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:c2e71c3c100a10dbae7833109bd7d9c34345a852c732accb701848292f35be89",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:2405-2625",
+        "text": "少数股东 0.086 亿，几乎可忽略，所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。中期不分红、应付股利 130.52 亿是上年股利落账；筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。审计结论：「利润质量相对扣非是干净的，现金质量相对扣非是差的；AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。」",
+        "text_sha256": "sha256:55e20eaf8afe20368d1d2335cba1a67cbb3e9bb253539b2972f839b146048296",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:55e20eaf8afe20368d1d2335cba1a67cbb3e9bb253539b2972f839b146048296",
+          "start": 0,
+          "end": 220
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "55e20eaf8afe20368d1d2335cba1a67cbb3e9bb253539b2972f839b146048296",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-17",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 17,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:359c15f470610f0f3dc85b5feff3225539291675413d09f97949ad05f568a776",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:8b37b06a1cf66b7cf3680f2ec589970fea957b489c0c2ec3294fa7113e58b026",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:25-134",
+        "text": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+        "text_sha256": "sha256:e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45",
+          "start": 0,
+          "end": 109
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-2",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 2,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:e2b3806abc8d9961e3325e9e8bc3a520b0d624ecf2e442aeff8b1bece685875c",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:eebd036c468e523f8d7312e7fd03a4b41a1e619912f8b75d61713fc514b6daad",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:3925-4239",
+        "text": "看空：TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」；贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。OCF/扣非 0.32 是已经发生的证伪，不是担心。Q2 毛利率环比已经为负。动 PE 隐含的 475 亿看起来「没给卖方 600」，但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。北向 H1 减持 8180 万股。目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，不是 8 月能兑现的地板。高盛 121 是 IMA 标题，更不能当明天的价格。",
+        "text_sha256": "sha256:ab67242228b6d8cc9211586c99ea26205a0bd6437a106b1a2a8905e87e75b139",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:ab67242228b6d8cc9211586c99ea26205a0bd6437a106b1a2a8905e87e75b139",
+          "start": 0,
+          "end": 314
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "ab67242228b6d8cc9211586c99ea26205a0bd6437a106b1a2a8905e87e75b139",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-25",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 25,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:b539e0901d03f8303f219e2cd31dfe8cf8dd727766990e0940f60ec7e76e4fcb",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:112fce00677a17775ae163efe2a9b9e9784c957ecf45c01ae57d2b82c9ad805f",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:4385-4657",
+        "text": "最坏情景：Rubin / GB300 爬坡再延，CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，毛利率从 7% 回到 6% 以下，存货继续堆，OCF 转负。次坏：云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。再坏：美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。实体清单本次没有 sourced 命中，但不能把「没搜到」当成「不会发生」；墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。",
+        "text_sha256": "sha256:d0bd1c4839df37edffdbd36ee3cfef6a6b50be5fbe70e35d1d41804f57e8cc84",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:d0bd1c4839df37edffdbd36ee3cfef6a6b50be5fbe70e35d1d41804f57e8cc84",
+          "start": 0,
+          "end": 272
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "d0bd1c4839df37edffdbd36ee3cfef6a6b50be5fbe70e35d1d41804f57e8cc84",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-28",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 28,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:bfb6686295f225637a228a8fb45f77dcf26ae35af7f19b2d0bdd0d3f180c4b3c",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:e27ac51be28ef6c744ae683a0efd22785921373c7be6e9c717689b5955650ca7",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:4659-4907",
+        "text": "客户集中是结构风险：2025 年前五大 62%，H1 应收前五 68.52%。GPU 线绑英伟达节奏，ASIC 线绑少数 CSP。双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，不是研发变现。中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+        "text_sha256": "sha256:5f3b83b277939c8c051ebbf2a6b8bf7bbd054cc4dfd365601a655b5a865f1040",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:5f3b83b277939c8c051ebbf2a6b8bf7bbd054cc4dfd365601a655b5a865f1040",
+          "start": 0,
+          "end": 248
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "5f3b83b277939c8c051ebbf2a6b8bf7bbd054cc4dfd365601a655b5a865f1040",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-29",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 29,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:9c4f2958fe34808fd586ec2f1a478a9e112c60c53ebf69640f5f798f639517da",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:5055-5071",
+        "text": "四选一：**持有 + 观望。**",
+        "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "start": 0,
+          "end": 16
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-32",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 32,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:5246-5537",
+        "text": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+        "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+          "start": 0,
+          "end": 291
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-34",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 34,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:80a6df324bcaea2d8be6d5ddae3be1c4c9febb9cdd7a34c871f71bf5b97f2b82",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:b4c37d0bdebb37faae45248ec2fad7ffc2f22eae4b340a078d20d5ac9dbf39c6",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:621-855",
+        "text": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；涨跌 +0.28%；成交额 103.15 亿元；换手 0.80%；量比 1.66。52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。融资余额 79.81 亿。近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+        "text_sha256": "sha256:c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479",
+          "start": 0,
+          "end": 234
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-8",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 8,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:807162228e2f04b7f35ed016194d3bf38b09dbdebe5644a01d287cf028c273f6",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-md-2",
+        "clean": "signed-non-table-exact-text-1",
+        "chunk": "signed-non-table-scope-1",
+        "adapter": "signed-gold-evaluation-adapter-1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:1393-1655",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 262,
+          "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673"
+        },
+        {
+          "unit_id": "snapshot-unit:1bb31d1bfba643eeb04b8e13f19f39868972ff1bf30af837b48bdb6ac2c8da6b",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:146-469",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 323,
+          "text_sha256": "sha256:3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0",
+          "metadata_sha256": "sha256:326c4b7de15b33309b6085feaa40c41965a6e36b0cb1f9c2e7e227a29b8a8484"
+        },
+        {
+          "unit_id": "snapshot-unit:c2e71c3c100a10dbae7833109bd7d9c34345a852c732accb701848292f35be89",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:2405-2625",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 220,
+          "text_sha256": "sha256:55e20eaf8afe20368d1d2335cba1a67cbb3e9bb253539b2972f839b146048296",
+          "metadata_sha256": "sha256:359c15f470610f0f3dc85b5feff3225539291675413d09f97949ad05f568a776"
+        },
+        {
+          "unit_id": "snapshot-unit:8b37b06a1cf66b7cf3680f2ec589970fea957b489c0c2ec3294fa7113e58b026",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:25-134",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 109,
+          "text_sha256": "sha256:e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45",
+          "metadata_sha256": "sha256:e2b3806abc8d9961e3325e9e8bc3a520b0d624ecf2e442aeff8b1bece685875c"
+        },
+        {
+          "unit_id": "snapshot-unit:eebd036c468e523f8d7312e7fd03a4b41a1e619912f8b75d61713fc514b6daad",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:3925-4239",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 314,
+          "text_sha256": "sha256:ab67242228b6d8cc9211586c99ea26205a0bd6437a106b1a2a8905e87e75b139",
+          "metadata_sha256": "sha256:b539e0901d03f8303f219e2cd31dfe8cf8dd727766990e0940f60ec7e76e4fcb"
+        },
+        {
+          "unit_id": "snapshot-unit:112fce00677a17775ae163efe2a9b9e9784c957ecf45c01ae57d2b82c9ad805f",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:4385-4657",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 272,
+          "text_sha256": "sha256:d0bd1c4839df37edffdbd36ee3cfef6a6b50be5fbe70e35d1d41804f57e8cc84",
+          "metadata_sha256": "sha256:bfb6686295f225637a228a8fb45f77dcf26ae35af7f19b2d0bdd0d3f180c4b3c"
+        },
+        {
+          "unit_id": "snapshot-unit:e27ac51be28ef6c744ae683a0efd22785921373c7be6e9c717689b5955650ca7",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:4659-4907",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 248,
+          "text_sha256": "sha256:5f3b83b277939c8c051ebbf2a6b8bf7bbd054cc4dfd365601a655b5a865f1040",
+          "metadata_sha256": "sha256:9c4f2958fe34808fd586ec2f1a478a9e112c60c53ebf69640f5f798f639517da"
+        },
+        {
+          "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:5055-5071",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 16,
+          "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b"
+        },
+        {
+          "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:5246-5537",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 291,
+          "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+          "metadata_sha256": "sha256:80a6df324bcaea2d8be6d5ddae3be1c4c9febb9cdd7a34c871f71bf5b97f2b82"
+        },
+        {
+          "unit_id": "snapshot-unit:b4c37d0bdebb37faae45248ec2fad7ffc2f22eae4b340a078d20d5ac9dbf39c6",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:621-855",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 234,
+          "text_sha256": "sha256:c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479",
+          "metadata_sha256": "sha256:807162228e2f04b7f35ed016194d3bf38b09dbdebe5644a01d287cf028c273f6"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:1bb31d1bfba643eeb04b8e13f19f39868972ff1bf30af837b48bdb6ac2c8da6b",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:c2e71c3c100a10dbae7833109bd7d9c34345a852c732accb701848292f35be89",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:8b37b06a1cf66b7cf3680f2ec589970fea957b489c0c2ec3294fa7113e58b026",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "quantitative_statement_also_preserves_material_semantics"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:eebd036c468e523f8d7312e7fd03a4b41a1e619912f8b75d61713fc514b6daad",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:112fce00677a17775ae163efe2a9b9e9784c957ecf45c01ae57d2b82c9ad805f",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:e27ac51be28ef6c744ae683a0efd22785921373c7be6e9c717689b5955650ca7",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "unclassified_prose_conservatively_retained"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:b4c37d0bdebb37faae45248ec2fad7ffc2f22eae4b340a078d20d5ac9dbf39c6",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "quantitative_statement_also_preserves_material_semantics"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:6c59334369a58e007602b1d30a0095a3e2e6afb7923d667cd6814aea6ec98e6e",
+  "tasks": [
+    {
+      "task_id": "task:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+      "logical_key": "sha256:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "snapshot-unit:1bb31d1bfba643eeb04b8e13f19f39868972ff1bf30af837b48bdb6ac2c8da6b",
+        "snapshot-unit:c2e71c3c100a10dbae7833109bd7d9c34345a852c732accb701848292f35be89",
+        "snapshot-unit:8b37b06a1cf66b7cf3680f2ec589970fea957b489c0c2ec3294fa7113e58b026",
+        "snapshot-unit:eebd036c468e523f8d7312e7fd03a4b41a1e619912f8b75d61713fc514b6daad",
+        "snapshot-unit:112fce00677a17775ae163efe2a9b9e9784c957ecf45c01ae57d2b82c9ad805f",
+        "snapshot-unit:e27ac51be28ef6c744ae683a0efd22785921373c7be6e9c717689b5955650ca7",
+        "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+        "snapshot-unit:b4c37d0bdebb37faae45248ec2fad7ffc2f22eae4b340a078d20d5ac9dbf39c6"
+      ],
+      "input_sha256": "sha256:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:b7df94e8058abdecf0db91572f1beb4ea3c5cee51c460b545891b20496ff20e0",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791446116.4380727,
+      "derived": false,
+      "endpoint_item_ids": []
+    },
+    {
+      "task_id": "task:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+      "logical_key": "sha256:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "snapshot-unit:1bb31d1bfba643eeb04b8e13f19f39868972ff1bf30af837b48bdb6ac2c8da6b",
+        "snapshot-unit:c2e71c3c100a10dbae7833109bd7d9c34345a852c732accb701848292f35be89",
+        "snapshot-unit:8b37b06a1cf66b7cf3680f2ec589970fea957b489c0c2ec3294fa7113e58b026",
+        "snapshot-unit:eebd036c468e523f8d7312e7fd03a4b41a1e619912f8b75d61713fc514b6daad",
+        "snapshot-unit:112fce00677a17775ae163efe2a9b9e9784c957ecf45c01ae57d2b82c9ad805f",
+        "snapshot-unit:e27ac51be28ef6c744ae683a0efd22785921373c7be6e9c717689b5955650ca7",
+        "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+        "snapshot-unit:b4c37d0bdebb37faae45248ec2fad7ffc2f22eae4b340a078d20d5ac9dbf39c6"
+      ],
+      "input_sha256": "sha256:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:7fe9e2c8da688d5e8f5e1bf1c07746008b0b13bf6e67ce36004b7074c2fa7161",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791446116.4380727,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:b7df94e8058abdecf0db91572f1beb4ea3c5cee51c460b545891b20496ff20e0"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:7fe9e2c8da688d5e8f5e1bf1c07746008b0b13bf6e67ce36004b7074c2fa7161"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:5e877b27223fed101f66901a1b2904f0506986ef65154b69c086289e45335b9f"
+    }
+  ],
+  "max_attempts": 3,
+  "role_max_attempts": {
+    "claims": 1,
+    "material_items": 1,
+    "material_relations": 1
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 1
+  }
+}

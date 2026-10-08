@@ -1,11 +1,11 @@
 # 11 · 获准后的真实模型有界试验与单文档消费
 
 Status: needs-info
-Execution: 范围已由许永立确认；Claims preflight 保留；第 1 页叙事内容优化已验收为候选（48 items / 5 relations），尚未发布或进入主线消费，任务整体未闭环
+Execution: 范围已由许永立确认；r2 非表格金标已由 xyl 签认并正式冻结；两份来源的有界候选诊断已执行（本轮 48 次调用）；267 条持久化候选已形成代理逐条预裁定草案、待具名人工签认；只读 query 均返回 CS_NOT_PUBLISHED，delivery/context_use 未发生；material_items 原子覆盖未通过、关系依赖被阻断，尚未发布或进入主线消费，任务整体未闭环
 Type: task
 Plan: W4/W5 真实消费；R2-S4/S5 的部分验证
-Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标绑定、三角色人工金标与阈值签认、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
-Real model calls: 68（Claims preflight 1、材料语义研发/拒收/最终选择 67、M_main 0；累计 382,762 tokens；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
+Blocked by: 第 2—3 页及图像表格未覆盖；逐候选预裁定仍待具名人工签认，Claims 主体/期间/指标绑定和 material_items 原子覆盖未通过，relations 无候选；质量门、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
+Real model calls: 116（既有 68 + 本轮 r2 48；M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
 Production database access: 0
 
 依据：[实施规格](../spec.md)、[设计报告](../report.md)、[唯一主计划](../../../docs/plan/claims-market-closed-loop-plan.md)。本票遵守 spec 第 5 节全局约束；新增文件/测试是待交付项，不表示当前已存在。
@@ -347,8 +347,8 @@ H2 预测误标执行定向替换，最终第 04 段选用 r17，其余复用 r1
 
 #### 状态总账
 
-截至 2026-10-08，任务 11 累计 68 次真实提取 attempt、382,762 tokens：Claims preflight 1 次，
-材料语义开发、拒收和最终选择 67 次；自动重试 0，M_main 调用 0，生产数据库访问 0。最新最终选择
+截至 2026-10-08，任务 11 累计 116 次真实提取 attempt（本轮 r2 新增 48 次；本段历史统计保留），
+自动重试 0，M_main 调用 0，生产数据库访问 0。最新最终选择
 复用 7 个 `material-semantics-17` 已验收段，并以 `material-semantics-19` 定向替换 H2 预测所在段；
 两个版本及逐段 provenance 已在 aggregate/audit 中显式记录。正式发布前须由质量门决定接受兼容
 选择还是统一版本重跑，不能把当前候选直接视为已发布语义代。
@@ -363,3 +363,50 @@ H2 预测误标执行定向替换，最终第 04 段选用 r17，其余复用 r1
 
 该策略适用于未来运行，不追溯改写既有冻结金标、质量报告或本任务历史实际得分。第 2—3 页表格
 继续记为明确范围缺口，而不是“无内容”；第 1 页已验收叙事抽取结果不受影响。
+
+### 2026-10-08 · r2 签认后的有界候选诊断
+
+两份 r2 审阅文档已签认，签认人/争议裁定人记录为 `xyl`；正式冻结产物见
+[frozen-gold.json](../evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json)。冻结目标为
+Claims/items/relations=20/48/24，金标未暴露给模型。按新增 r2 运行计划，工业富联 Markdown 使用
+21/32 次调用，光模块 DOCX 使用 27/47 次调用，合计 48/79 次，单并发、自动重试 0；生产数据库和
+holdout 访问为 0。
+
+两份 Claims 均执行成功且协议有效，但为 `review_required`（分别产生 91、41 条候选事实）。两份
+`material_items` 均执行成功但协议无效：Markdown 53 条 item（46 extracted、9 partial、1
+no_supported），DOCX 82 条 item（71 extracted、20 partial、1 no_supported）。原子槽的否定/论据等
+必需信号未完整覆盖及部分 item 校验失败，触发 `CS_DEPENDENCY_NOT_READY`；因此关系角色没有发起调用。
+完整账本和诊断摘要见 [candidate-evaluation-summary.md](../evidence/11-live-20261008-non-table-gold-r2/candidate-evaluation-summary.md)。
+
+本轮只闭合了“签认—冻结—有界候选执行”链路，未通过真实质量门。候选逐条裁定、额外候选 precision
+判定、query/delivery/context_use 观察和发布/M_main 消费仍未完成，不能据此放行下游。
+
+### 2026-10-08 · 候选逐条预裁定与发布前阶段观察
+
+在不新增模型调用、不修改执行 store、不发布候选的前提下，已对两份来源持久化的全部 267 条候选
+建立逐条代理预裁定草案：Claims 132 条，material_items 135 条，relations 0 条；每条保留原始候选、
+证据、建议终态、建议匹配金标、规范化观测字段和理由，草案内部 unresolved 为 0。该草案明确记录为
+`agent_pre_adjudicated_pending_named_human_signoff`，审核人字段没有冒充 xyl；只有具名人工逐条签认或
+修订并追加冻结后，才可满足 scoring contract 的人工门。
+
+当前代理建议的严格口径结果为：Claims matched/correct-extra/incorrect/duplicate = 15/22/94/1，
+候选 precision 37/132（28.03%）、目标 recall 15/20（75%）；items = 4/65/65/1，候选 precision
+69/135（51.11%）、目标 recall 4/48（8.33%）；relations 无候选，precision 为 N/A、目标 recall
+0/24。以上是待人工签认的诊断建议，不是正式质量分数；即使全部照签，也明显不满足既定门槛。
+
+对两个精确 source/build/store 分别实际执行一次只读 `purpose=cite`、`query_text=风险` 查询，均返回
+`page_status=not_published`、`CS_NOT_PUBLISHED`、0 records。故本轮 query 记 missed；没有完整语义
+证据单元可送达，delivery 记 not_delivered；没有语义证据进入成功的 M_main 请求且 M_main 调用仍为
+0，context_use 记 not_used。该负向观察闭合了“发布前为何不能送达/消费”的实际证据，不可当作发布
+后交付验收。
+
+证据文件：
+
+- [逐条代理预裁定](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.agent-draft.json)
+- [query/delivery/context_use 观察](../evidence/11-live-20261008-non-table-gold-r2/coverage-observations.agent-draft.json)
+- [摘要](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-summary.agent-draft.md)
+- [输入输出指纹](../evidence/11-live-20261008-non-table-gold-r2/adjudication-manifest.agent-draft.json)
+
+本步新增真实提取调用 0、M_main 调用 0、生产数据库访问 0、holdout 访问 0。任务继续保持
+`needs-info`，下一门是具名人工逐条签认/争议修改；在此之前不得把草案改称人工裁定完成，也不得
+发布或为观察 delivery/context_use 而绕过质量门。

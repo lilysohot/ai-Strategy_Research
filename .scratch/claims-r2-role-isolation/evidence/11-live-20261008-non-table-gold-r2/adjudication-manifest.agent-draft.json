@@ -1,0 +1,19 @@
+{
+  "schema_version": "corpus-adjudication-agent-draft-manifest-v1",
+  "inputs": {
+    "10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "11-live-20261008-non-table-gold-r2/industrial-fulian-md/store/objects/sha256/93/9333dce5601beff301436f6116319226679324e497ec7eb77ea94a7c40ff2c5e.json": "sha256:9333dce5601beff301436f6116319226679324e497ec7eb77ea94a7c40ff2c5e",
+    "11-live-20261008-non-table-gold-r2/industrial-fulian-md/store/objects/sha256/46/46be8e9e4607a79b699ce572f84b88b8c1de929c80775410b736a04fc81f7008.json": "sha256:46be8e9e4607a79b699ce572f84b88b8c1de929c80775410b736a04fc81f7008",
+    "11-live-20261008-non-table-gold-r2/optical-module-docx/store/objects/sha256/b4/b4f923669cf9603e737bfaac2af15933dda97540c984aca73ba48efd161001d0.json": "sha256:b4f923669cf9603e737bfaac2af15933dda97540c984aca73ba48efd161001d0",
+    "11-live-20261008-non-table-gold-r2/optical-module-docx/store/objects/sha256/9a/9a25e2a40a5cd25d2717cfd39a3ebd689edb1813441b2148f7ed37c5d3866f5d.json": "sha256:9a25e2a40a5cd25d2717cfd39a3ebd689edb1813441b2148f7ed37c5d3866f5d",
+    "adjudicate_candidates.py": "sha256:803c13346b16040611cf784899573d596bc8ae816e546d0fcd8bce71b47aef5d"
+  },
+  "outputs": {
+    "candidate-adjudications.agent-draft.json": "sha256:d42df997f872c07dc7c2472ac99675fe4a2bd8ba939062b6805fec8d860b2268",
+    "coverage-observations.agent-draft.json": "sha256:4b6150be9228191f746dc8d32c7bb6333ffbc79202595d90710f35828e9cb671",
+    "candidate-adjudication-summary.agent-draft.md": "sha256:705bdb827e5a4e0ecf9b33fd10e7bc05f0a908e9d99f0d1bea24986c0d9a4973"
+  },
+  "model_calls": 0,
+  "production_database_access": 0,
+  "human_gate_satisfied": false
+}

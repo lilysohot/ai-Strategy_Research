@@ -6,8 +6,8 @@
   "candidate_outputs_observed_before_draft": false,
   "table_content_included": false,
   "holdout_accessed": false,
-  "reviewer": null,
-  "adjudicator": null,
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
   "review_instructions": "逐条审核原文、上下文、限定、来源归属和关系。修改须记录 before/after/reason；accepted/edited/rejected 不会自动冻结。签名和冻结由独立后续步骤完成。r1 保持原样。",
   "sources": [
     {

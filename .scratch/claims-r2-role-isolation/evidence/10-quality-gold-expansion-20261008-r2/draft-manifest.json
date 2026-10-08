@@ -11,10 +11,10 @@
   "inputs": {
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/review_pack.py": "fe5c84587873b1032c3c3b2a6b5acf4b16f4c53090b37c924c9915374b06eb81",
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/test_review_pack.py": "5bf4ae7e35478fac42930e97c199880636ad7517cb6ed31b0bf5aac85377b5c6",
-    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/README.md": "9a91f8ae2c68a293e117a5e318c47f9a229d7c4f3505b9674f58e7a19bda3fac",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/README.md": "6edf189ab755d005df29bfd72c7821eb7f439c0d12b4a3140cb0f9ab5a8d474c",
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
-    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json": "7b6d80ecd3cbf555f0fc9a2382db163705db4085926e34928ac32a46601fd3a8",
-    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md": "9778369e67778645d92d99b305b9ac05084443b63bc61133e5635556c9a011d2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json": "f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md": "71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/README.md": "9a83a12c4241fc74cd966c09576296a46a7bc3855ba5fbcfb2ac72c42888e58c",
     ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/build_draft_manifest.py": "d902f9f1724541df1340ab5916a07ce5fc83c808bb70bf88991e2e4ba387d732",

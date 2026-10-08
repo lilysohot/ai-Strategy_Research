@@ -1,0 +1,3649 @@
+{
+  "schema_version": "corpus-non-table-r2-stage-observation-agent-draft-v1",
+  "status": "observed_prepublication_block",
+  "human_gate_satisfied": false,
+  "query_observations": [
+    {
+      "source_slug": "industrial-fulian-md",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "query_text": "风险",
+      "purpose": "cite",
+      "result": {
+        "schema_version": "corpus-semantic-query-page-v1",
+        "query_id": "query:ff7a4e637b0187b9",
+        "publication_id": "sha256:047a8207186696c2326be37daba46de94ea18c25a8eaff4c9bd20ae543f8b39f",
+        "query_sha256": "sha256:ff7a4e637b0187b9a5976b70dd4f1ae73a6bf586e990d54c582dc5be75acbb3d",
+        "sort_version": "semantic-lexical-sort-v1",
+        "purpose": "cite",
+        "records": [],
+        "next_cursor": null,
+        "page_status": "not_published",
+        "error_codes": [
+          "CS_NOT_PUBLISHED"
+        ]
+      },
+      "model_calls": 0
+    },
+    {
+      "source_slug": "optical-module-docx",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "query_text": "风险",
+      "purpose": "cite",
+      "result": {
+        "schema_version": "corpus-semantic-query-page-v1",
+        "query_id": "query:8f2260f1f7a5b5e0",
+        "publication_id": "sha256:b8b3cbbfd5730ac7b8c9874edd94d698ebabd65ea6931482cb9a8cda3b02c4ff",
+        "query_sha256": "sha256:8f2260f1f7a5b5e08ce080774caa5fe14d62b2b2eedd88e47241eb84aae01188",
+        "sort_version": "semantic-lexical-sort-v1",
+        "purpose": "cite",
+        "records": [],
+        "next_cursor": null,
+        "page_status": "not_published",
+        "error_codes": [
+          "CS_NOT_PUBLISHED"
+        ]
+      },
+      "model_calls": 0
+    }
+  ],
+  "delivery_observation": {
+    "status": "not_delivered",
+    "reason": "both read-only queries returned CS_NOT_PUBLISHED with zero records"
+  },
+  "context_use_observation": {
+    "status": "not_used",
+    "reason": "no evidence record entered a successful M_main request; M_main calls remain zero"
+  },
+  "observations": [
+    {
+      "target_id": "NT-C01",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C01",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C02",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C03",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C04",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C05",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C06",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C07",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C08",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C09",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C10",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C11",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C12",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C13",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C14",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C15",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C16",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C17",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C18",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C19",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-C20",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I01",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I02",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I03",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I04",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I05",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I06",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I07",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I08",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I09",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I10",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I11",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I12",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I13",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I14",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I15",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I16",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I17",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I19",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I20",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I21",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I22",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I23",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I24",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I25",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I26",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I27",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I28",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I29",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I30",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I31",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I32",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I33",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I34",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I35",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I36",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I37",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I38",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I39",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I40",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I41",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I42",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I43",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "extraction",
+      "outcome": "pass",
+      "reason": "agent_draft_semantic_match"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I44",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I45",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I46",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I47",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I48",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "no_acceptable_one_to_one_candidate"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-I49",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R01",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R03",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R04",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R05",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R06",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R07",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R08",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R09",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R10",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R11",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R12",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R13",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R14",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R15",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R16",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R18",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R19",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R20",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R21",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R22",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R23",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R24",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R25",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "parse",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "packet",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "routing",
+      "outcome": "pass"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "extraction",
+      "outcome": "missed",
+      "reason": "relation_dependency_blocked_no_call"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "query",
+      "outcome": "missed",
+      "reason": "CS_NOT_PUBLISHED"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "delivery",
+      "outcome": "missed",
+      "reason": "query_not_published_zero_records"
+    },
+    {
+      "target_id": "NT-R26",
+      "stage": "context_use",
+      "outcome": "missed",
+      "reason": "no_delivered_semantic_evidence_and_no_M_main_call"
+    }
+  ]
+}

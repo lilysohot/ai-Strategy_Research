@@ -1,0 +1,104 @@
+{
+  "source_slug": "industrial-fulian-md",
+  "batch_id": "batch:24c9f993d34045f573f0aa9b837c009cfc144ddae03eec94c77024d4a2a02211",
+  "attempt_ceiling": 3,
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:24c9f993d34045f573f0aa9b837c009cfc144ddae03eec94c77024d4a2a02211",
+    "plan_sha256": "sha256:24c9f993d34045f573f0aa9b837c009cfc144ddae03eec94c77024d4a2a02211",
+    "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+    "budget": {
+      "max_attempts": 3,
+      "reserved_attempts": 2,
+      "actual_attempts": 2,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+        "role": "claims",
+        "method": "model",
+        "input_sha256": "sha256:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+        "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+        "execution_status": "deferred",
+        "protocol_status": "not_checked",
+        "quality_status": "review_required",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "artifact_sha256": "sha256:8694c7eeb338c82b0c80ac681942c9cfcc40075354ac62fdc25059cb9472cce8",
+        "error_codes": []
+      },
+      {
+        "task_id": "task:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+        "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+        "execution_status": "deferred",
+        "protocol_status": "not_checked",
+        "quality_status": "review_required",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "artifact_sha256": "sha256:e2f85869fc35a42e530b2ad80c6b1d5648cb8b6229f20678eb79759a4c86fc10",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:4b95730fc7fb76bd3ebeec01508775134cf864718c4fb55bf4766a12706a4c06",
+        "task_id": "task:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:b17a7da3ff8f67fd92b02968f52bd71f2e2100eacc94852ae2afdab518b5819a",
+        "response_sha256": "sha256:45c8c2a1ce0bee9f770b83c1c6694b641e21c66b92df38120a51f6dac316d717",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.0-mini",
+        "response_model": "doubao-seed-2-0-mini-260428",
+        "usage": {
+          "completion_tokens": 5206,
+          "prompt_tokens": 958,
+          "reasoning_tokens": 3251,
+          "total_tokens": 6164
+        },
+        "cost": null
+      },
+      {
+        "attempt_id": "attempt:0e6d3572f559fa61bf2bb80ced00e994fce9d5f9b6e836e5d884930e17ef510b",
+        "task_id": "task:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:abc57cfc8e7be09c478287920110f5c0ffef42f6ba6a5c7caa760f5d00c78851",
+        "response_sha256": "sha256:096b7e0b7c51016b3dc6052a9ef7d36134deb616b1bf9889bc250062b2a23afe",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.0-mini",
+        "response_model": "doubao-seed-2-0-mini-260428",
+        "usage": {
+          "completion_tokens": 3160,
+          "prompt_tokens": 2444,
+          "reasoning_tokens": 1971,
+          "total_tokens": 5604
+        },
+        "cost": null
+      }
+    ]
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 2
+    }
+  ],
+  "findings": [
+    "task_not_terminal:task:10a9877e41e045e7b6820d858cb9fc84a6adb95ae90df10582d34c89f8cef4d6:deferred",
+    "task_not_terminal:task:4cd029e1394c69c378a8342ea918cdf9835991e7d000a37042b474b8a449f5e8:deferred"
+  ],
+  "plan_consistent": true
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "corpus-structured-non-table-gold-freeze-manifest-v2",
+  "status": "frozen",
+  "created_on": "2026-10-08",
+  "parent_review": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2",
+  "formal_gold_frozen": true,
+  "quality_gate_passed": false,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json": "f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md": "71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json": "e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json": "58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    "data/corpus/工业富联_投委会决策报告_20260829.md": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+  },
+  "outputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/README.md": "4cb7f91be4e723f54628f243c510e8d11fac65a38296c29d5943f42c0e36a632",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze_signed_gold.py": "80e6453018edfb23b9fe9444ad4df40461f02d785134ebb1271a27201469c6b6",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": "08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85"
+  }
+}

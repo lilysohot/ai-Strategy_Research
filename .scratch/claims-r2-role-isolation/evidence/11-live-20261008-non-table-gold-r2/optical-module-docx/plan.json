@@ -1,0 +1,1032 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:d0cb14ed64d9e2a5ceca9453561bb90526d6dca09b785b78c621dadfbe4d2374",
+  "plan_sha256": "sha256:d0cb14ed64d9e2a5ceca9453561bb90526d6dca09b785b78c621dadfbe4d2374",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+    "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+    "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-docx-2+python-docx-1.2.0",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:8d394c698e0418108d8303d2efeef59c63283bec92e75abe0235a5f1bd73a023",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[115]",
+        "text": "如果你所有的都选择相信，公司所有说的话每个公司你都选择相信。那最后加起来是不是会出现一个状态？什么状态？像当年机器人份额加起来超过100%，会不会出现这个状态？是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？你说的加起来总不能超过100%。",
+        "text_sha256": "sha256:c0a1348c1b763f1d9ca54a92d3e6de16c951d4038d193fcebdfc906d85659a84",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:c0a1348c1b763f1d9ca54a92d3e6de16c951d4038d193fcebdfc906d85659a84",
+          "start": 0,
+          "end": 133
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "c0a1348c1b763f1d9ca54a92d3e6de16c951d4038d193fcebdfc906d85659a84",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-42",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[115]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 42,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:f3e6452f9184e518c6d51e44da205e72f2938e81b079de053c5b345548484c7a",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:6dbca47cc707989787535208e9b347c0b1bbc3ccb2d0940ad7cac645c4a30e26",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[15]",
+        "text": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+        "text_sha256": "sha256:7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb",
+          "start": 0,
+          "end": 293
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-7",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[15]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 7,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:82bc5616b50527a3e2e57c3711ed35e46c77083ec8bdd2a85104bb70662aeb98",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:533db57d78cb2d1335159a30423fb6addfdd072c62f5cdab4702a3d9b6715da8",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[1]",
+        "text": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。",
+        "text_sha256": "sha256:18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972",
+          "start": 0,
+          "end": 57
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-1",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[1]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 1,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:95b159ad5dda395bac9e540a5739eef4fe44ef3f055f0f7916e472ceb5a46a56",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:e108813cd02da111d2a08085611e5377d9c4a3f07965cebf70504ffc0e1f8f44",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[26]",
+        "text": "长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大。这句话是不对的，是电话会还是什么忘了。这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？这个事情当时已经说过了，以后都是要算的，所以这部分是在强掰。然后这里面税率加上去，你转嫁给客户不一定能够很好地转嫁的。这个是你公司自己的供应商自己的问题，你不可能全部转嫁给客户的，只是要谈，没有说得这么容易。你如果转嫁了，对你的竞争力就会有影响，对不对？这是二者取其一的事情。",
+        "text_sha256": "sha256:1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566",
+          "start": 0,
+          "end": 325
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-11",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[26]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 11,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:d0c44015e7c6ff11878fdeba52c35f96a58d16011e973df660bd13c63163d48d",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:a505dd3e65df68b5dbb08fbefc245ce17c78ebd25d537642e9736059189ab411",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[29]",
+        "text": "面对潜在的政策变动，是否准备了涨价预案？有相应的预案，因为政策原因导致成本的上升，会与客户协商，提价幅度在10%到20%之间。为保障供应链的稳定和产能持续供应对客户而言至关重要，因此他们愿意承担部分增加的成本，对吧？部分肯定是可能的，大家谈一谈做生意都是这样。公司预计到27年市占率达到什么水平？这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。好的，27年公司的市占率将有显著提升。",
+        "text_sha256": "sha256:ec69974c631468a02df81fa8316ef964c3437837509053dd9307947e0416de8a",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:ec69974c631468a02df81fa8316ef964c3437837509053dd9307947e0416de8a",
+          "start": 0,
+          "end": 216
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "ec69974c631468a02df81fa8316ef964c3437837509053dd9307947e0416de8a",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-12",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[29]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 12,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:102db6cf891bc6f6aec92d13746849c3874de2b0ca58a731774ee9dfcce3cdca",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:3cf9bb286069a761ac8207565008d250f238b38a17017ed6146ab2d42b4fecd0",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[32]",
+        "text": "然后网络架构中scale out、scale up分别有哪些产品？200G scale up领域主要用NPO，NPO可以理解为一种没有外壳的可插拔光模块。2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。CPO目前可以理解为还没有实际的出货，这个是真实情况。在CPO里面90%以上的价值由交换机芯片厂商，就是NVIDIA、台积电来主导。",
+        "text_sha256": "sha256:0f7ebcf48d57b217db5ad82c96692cb3541b8f233cce6d090a8478b210c8aa42",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:0f7ebcf48d57b217db5ad82c96692cb3541b8f233cce6d090a8478b210c8aa42",
+          "start": 0,
+          "end": 188
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "0f7ebcf48d57b217db5ad82c96692cb3541b8f233cce6d090a8478b210c8aa42",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-13",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[32]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 13,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:2b1243db3a3acf2cd7f3c809f6c659866c418f87faac4cb1e958e7e89066e858",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:82c1b6268678257d3af336da71879ebaff2d62e7e265ad9f50da6877183a5bec",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[37]",
+        "text": "在CPO领域，探索目前尚未形成明确的结论方向，可插拔并没有成为主流，就是提出了可插拔CPO没有成为主流。长远的来看，可插拔仍有生命周期，预计到29年30年在材料取得重大突破前，可插拔仍然是主流，并且速度还有提升空间。主要群体北美的这些电力短缺的确会影响到公司出货节奏，所有的出货节奏都是环环相扣的。不可忽视的是，对数据中心客户来说，通过网络的提升远比服务器芯片、存储这些提升要来得大，对吧？这个是从去年开始就跟大家反复说了，网络这个点提升的性价比是最高的。资本开支受限的情况下，网络提升需求依然存在。这一定程度上可以对冲数据中心如果是放缓假设放缓的情况下带来的负面影响。这个观点我觉得是认可的。",
+        "text_sha256": "sha256:75a1083d9de8ac5c383729ea29998849b3fe6c1eed0efa832691b55b8d8b21ee",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:75a1083d9de8ac5c383729ea29998849b3fe6c1eed0efa832691b55b8d8b21ee",
+          "start": 0,
+          "end": 297
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "75a1083d9de8ac5c383729ea29998849b3fe6c1eed0efa832691b55b8d8b21ee",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-15",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[37]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 15,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:3e87616d5cc5599008bfefecb4ce42ee96b46f796472671a1e9fa0218c3b49d0",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[3]",
+        "text": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。",
+        "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+          "start": 0,
+          "end": 126
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-2",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[3]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 2,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:8542b2cf37114b2321b6ed6b72b14007f12b443da32c4a8a5c494ccf37915176",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:1a4bd4ce5b264c454e63bcc01e3edd2a8ecabb125218302ad8ea5b509876ccb2",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[43]",
+        "text": "剑桥呢在送样方面，他们通常会经历一个为期六个月的实验室认证，之后再小批量。整个流程下来最终拿到订单可能需要1年到1年半时间。",
+        "text_sha256": "sha256:79d9507f1045be3b571c97e2089b399f159a914b4fd14f8305cea2155b9290fe",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:79d9507f1045be3b571c97e2089b399f159a914b4fd14f8305cea2155b9290fe",
+          "start": 0,
+          "end": 62
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "79d9507f1045be3b571c97e2089b399f159a914b4fd14f8305cea2155b9290fe",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-17",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[43]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 17,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:70f75cf28cc601a64270ea46402be89db6978cd58189e451dba78053eb1b3aca",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:ead7aa83518e1ef0982328ae166e7261ac3035eb7f0344df6eff7e0def8ca92c",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[46]",
+        "text": "北美客户今年定位非常明确，就服务于顶级客户。今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。你们莫名其妙，说的就是这些新客户。他那个采访反正他是有立场的，对吧？",
+        "text_sha256": "sha256:482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700",
+          "start": 0,
+          "end": 189
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-18",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[46]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 18,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:aeec53df6e303aa9cd8c55854ea8431a3a7af1076dfc58000ffef18a7290c418",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:6bed4788df694b3eb1ff7feba6b58ce473796fdaef83f4f0e047dd4a60f41e11",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[49]",
+        "text": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。目前反正是有新客户了，这些新的云不知道是什么原因。目前公司与这些新客户开展顺利，进入了小批量测试。到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。加上现有核心客户的业务，预计北美市场收入占比将达到85%左右。今年85%左右，还有15%是国内。",
+        "text_sha256": "sha256:374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14",
+          "start": 0,
+          "end": 202
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-19",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[49]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 19,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:8c4b9a6f2170441f755720392a7f33e14a61c3a3ef9fcb0a83de83e1e3e8cb03",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[51]",
+        "text": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，就是因为1.6T拉胯了，不是DSP拉胯了，然后800G就明显比那个800G肯定不止。他说什么半年这个肯定数字不对，二季度就有超过300万个了。",
+        "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+          "start": 0,
+          "end": 103
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-20",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[51]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 20,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:289fa2a46be577f57f5ea55bb1f3899f4efee3c75c88798f3bfa98778f498b25",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:f8bcbea14ab1536eedbdd74aa38b87080afdf5bd05c32e2823933ae63657c3f8",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[63]",
+        "text": "128是刚刚推出的，正在中心进行验证，对吧？中心是它的客户，尚无固定的客户，德科立将其视为一个过渡型的产品。因为mems主要是要用300，对吧？为什么用300？为什么要多？以前给你们讲特氟龙的时候都说过这个问题，对吧？就是要多。虽然NVIDIA可能对128有需求，但谷歌已经明确表示，如果要mems的话就要300以上。",
+        "text_sha256": "sha256:dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672",
+          "start": 0,
+          "end": 159
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-24",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[63]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 24,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:bc7ed21996a6137053694d7d9c81fe3f74bbaa8ab2ca20b3dc1d3967db1f98e3",
+        "dependencies": []
+      },
+      {
+        "unit_id": "snapshot-unit:72ed768a76150028415adea6d4140f3c304a82f053fe0c595f6ba25a7ab9f992",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[72]",
+        "text": "Mems相比光波导优势，这个以前都解释过，就稍微看看时延、功耗等等这些。既然光波导的方案优势明显，为何300还是要用mems？因为光波导还没做出来。他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，尚未达到可以量产的阈值，说明设计上仍然存在缺陷，需要进一步调整，就是没进展。希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。所以就要看你跑不跑得过，你自己如果跑不过，但是芯片是不能等你的，因为这里面不光有芯片，有博通，有台积电，你还有PCB，还有7788的所有的供应链，没法等你这一个。如果你这个出来就出来了，出不来只能用替代方案了。",
+        "text_sha256": "sha256:f605149be266472604ef87d4f1f265fed4879997eaf69181c0b7b48c60e4b897",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:f605149be266472604ef87d4f1f265fed4879997eaf69181c0b7b48c60e4b897",
+          "start": 0,
+          "end": 323
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "f605149be266472604ef87d4f1f265fed4879997eaf69181c0b7b48c60e4b897",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-27",
+          "source_kind": "prose",
+          "page": null,
+          "element": "body[72]",
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 27,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+            "subject": "光模块行业",
+            "published": "2026-09-08"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:a8160642b64011b5e0e733a5d396a542b326ec592e2f7f3cd1feae016b644738",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-docx-2+python-docx-1.2.0",
+        "clean": "signed-non-table-exact-text-1",
+        "chunk": "signed-non-table-scope-1",
+        "adapter": "signed-gold-evaluation-adapter-1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:8d394c698e0418108d8303d2efeef59c63283bec92e75abe0235a5f1bd73a023",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[115]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 133,
+          "text_sha256": "sha256:c0a1348c1b763f1d9ca54a92d3e6de16c951d4038d193fcebdfc906d85659a84",
+          "metadata_sha256": "sha256:f3e6452f9184e518c6d51e44da205e72f2938e81b079de053c5b345548484c7a"
+        },
+        {
+          "unit_id": "snapshot-unit:6dbca47cc707989787535208e9b347c0b1bbc3ccb2d0940ad7cac645c4a30e26",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[15]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 293,
+          "text_sha256": "sha256:7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb",
+          "metadata_sha256": "sha256:82bc5616b50527a3e2e57c3711ed35e46c77083ec8bdd2a85104bb70662aeb98"
+        },
+        {
+          "unit_id": "snapshot-unit:533db57d78cb2d1335159a30423fb6addfdd072c62f5cdab4702a3d9b6715da8",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[1]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 57,
+          "text_sha256": "sha256:18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972",
+          "metadata_sha256": "sha256:95b159ad5dda395bac9e540a5739eef4fe44ef3f055f0f7916e472ceb5a46a56"
+        },
+        {
+          "unit_id": "snapshot-unit:e108813cd02da111d2a08085611e5377d9c4a3f07965cebf70504ffc0e1f8f44",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[26]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 325,
+          "text_sha256": "sha256:1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566",
+          "metadata_sha256": "sha256:d0c44015e7c6ff11878fdeba52c35f96a58d16011e973df660bd13c63163d48d"
+        },
+        {
+          "unit_id": "snapshot-unit:a505dd3e65df68b5dbb08fbefc245ce17c78ebd25d537642e9736059189ab411",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[29]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 216,
+          "text_sha256": "sha256:ec69974c631468a02df81fa8316ef964c3437837509053dd9307947e0416de8a",
+          "metadata_sha256": "sha256:102db6cf891bc6f6aec92d13746849c3874de2b0ca58a731774ee9dfcce3cdca"
+        },
+        {
+          "unit_id": "snapshot-unit:3cf9bb286069a761ac8207565008d250f238b38a17017ed6146ab2d42b4fecd0",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[32]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 188,
+          "text_sha256": "sha256:0f7ebcf48d57b217db5ad82c96692cb3541b8f233cce6d090a8478b210c8aa42",
+          "metadata_sha256": "sha256:2b1243db3a3acf2cd7f3c809f6c659866c418f87faac4cb1e958e7e89066e858"
+        },
+        {
+          "unit_id": "snapshot-unit:82c1b6268678257d3af336da71879ebaff2d62e7e265ad9f50da6877183a5bec",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[37]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 297,
+          "text_sha256": "sha256:75a1083d9de8ac5c383729ea29998849b3fe6c1eed0efa832691b55b8d8b21ee",
+          "metadata_sha256": "sha256:3e87616d5cc5599008bfefecb4ce42ee96b46f796472671a1e9fa0218c3b49d0"
+        },
+        {
+          "unit_id": "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[3]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 126,
+          "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+          "metadata_sha256": "sha256:8542b2cf37114b2321b6ed6b72b14007f12b443da32c4a8a5c494ccf37915176"
+        },
+        {
+          "unit_id": "snapshot-unit:1a4bd4ce5b264c454e63bcc01e3edd2a8ecabb125218302ad8ea5b509876ccb2",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[43]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 62,
+          "text_sha256": "sha256:79d9507f1045be3b571c97e2089b399f159a914b4fd14f8305cea2155b9290fe",
+          "metadata_sha256": "sha256:70f75cf28cc601a64270ea46402be89db6978cd58189e451dba78053eb1b3aca"
+        },
+        {
+          "unit_id": "snapshot-unit:ead7aa83518e1ef0982328ae166e7261ac3035eb7f0344df6eff7e0def8ca92c",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[46]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 189,
+          "text_sha256": "sha256:482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700",
+          "metadata_sha256": "sha256:aeec53df6e303aa9cd8c55854ea8431a3a7af1076dfc58000ffef18a7290c418"
+        },
+        {
+          "unit_id": "snapshot-unit:6bed4788df694b3eb1ff7feba6b58ce473796fdaef83f4f0e047dd4a60f41e11",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[49]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 202,
+          "text_sha256": "sha256:374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14",
+          "metadata_sha256": "sha256:8c4b9a6f2170441f755720392a7f33e14a61c3a3ef9fcb0a83de83e1e3e8cb03"
+        },
+        {
+          "unit_id": "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[51]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 103,
+          "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+          "metadata_sha256": "sha256:289fa2a46be577f57f5ea55bb1f3899f4efee3c75c88798f3bfa98778f498b25"
+        },
+        {
+          "unit_id": "snapshot-unit:f8bcbea14ab1536eedbdd74aa38b87080afdf5bd05c32e2823933ae63657c3f8",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[63]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 159,
+          "text_sha256": "sha256:dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672",
+          "metadata_sha256": "sha256:bc7ed21996a6137053694d7d9c81fe3f74bbaa8ab2ca20b3dc1d3967db1f98e3"
+        },
+        {
+          "unit_id": "snapshot-unit:72ed768a76150028415adea6d4140f3c304a82f053fe0c595f6ba25a7ab9f992",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "body[72]",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 323,
+          "text_sha256": "sha256:f605149be266472604ef87d4f1f265fed4879997eaf69181c0b7b48c60e4b897",
+          "metadata_sha256": "sha256:a8160642b64011b5e0e733a5d396a542b326ec592e2f7f3cd1feae016b644738"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:8d394c698e0418108d8303d2efeef59c63283bec92e75abe0235a5f1bd73a023",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:6dbca47cc707989787535208e9b347c0b1bbc3ccb2d0940ad7cac645c4a30e26",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:533db57d78cb2d1335159a30423fb6addfdd072c62f5cdab4702a3d9b6715da8",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "quantitative_statement_also_preserves_material_semantics"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:e108813cd02da111d2a08085611e5377d9c4a3f07965cebf70504ffc0e1f8f44",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:a505dd3e65df68b5dbb08fbefc245ce17c78ebd25d537642e9736059189ab411",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:3cf9bb286069a761ac8207565008d250f238b38a17017ed6146ab2d42b4fecd0",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:82c1b6268678257d3af336da71879ebaff2d62e7e265ad9f50da6877183a5bec",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:1a4bd4ce5b264c454e63bcc01e3edd2a8ecabb125218302ad8ea5b509876ccb2",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:ead7aa83518e1ef0982328ae166e7261ac3035eb7f0344df6eff7e0def8ca92c",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:6bed4788df694b3eb1ff7feba6b58ce473796fdaef83f4f0e047dd4a60f41e11",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:f8bcbea14ab1536eedbdd74aa38b87080afdf5bd05c32e2823933ae63657c3f8",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      },
+      {
+        "unit_id": "snapshot-unit:72ed768a76150028415adea6d4140f3c304a82f053fe0c595f6ba25a7ab9f992",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:92735544f795d6e080b3259c53c2b048819341b1104e99f061b1e2c89411e3e6",
+  "tasks": [
+    {
+      "task_id": "task:740c2beb6650d4986c18b6bde0e9669edbdd157d510153f1ec93b03632a3d7d7",
+      "logical_key": "sha256:740c2beb6650d4986c18b6bde0e9669edbdd157d510153f1ec93b03632a3d7d7",
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:8d394c698e0418108d8303d2efeef59c63283bec92e75abe0235a5f1bd73a023",
+        "snapshot-unit:6dbca47cc707989787535208e9b347c0b1bbc3ccb2d0940ad7cac645c4a30e26",
+        "snapshot-unit:533db57d78cb2d1335159a30423fb6addfdd072c62f5cdab4702a3d9b6715da8",
+        "snapshot-unit:e108813cd02da111d2a08085611e5377d9c4a3f07965cebf70504ffc0e1f8f44",
+        "snapshot-unit:a505dd3e65df68b5dbb08fbefc245ce17c78ebd25d537642e9736059189ab411",
+        "snapshot-unit:3cf9bb286069a761ac8207565008d250f238b38a17017ed6146ab2d42b4fecd0",
+        "snapshot-unit:ead7aa83518e1ef0982328ae166e7261ac3035eb7f0344df6eff7e0def8ca92c",
+        "snapshot-unit:6bed4788df694b3eb1ff7feba6b58ce473796fdaef83f4f0e047dd4a60f41e11"
+      ],
+      "input_sha256": "sha256:740c2beb6650d4986c18b6bde0e9669edbdd157d510153f1ec93b03632a3d7d7",
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:b7df94e8058abdecf0db91572f1beb4ea3c5cee51c460b545891b20496ff20e0",
+      "max_attempts": 14,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791449989.1562521,
+      "derived": false,
+      "endpoint_item_ids": []
+    },
+    {
+      "task_id": "task:c3a8636aa5cce062557647e32142f68a79781793bba725a1fcfad6d46f64c542",
+      "logical_key": "sha256:c3a8636aa5cce062557647e32142f68a79781793bba725a1fcfad6d46f64c542",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:8d394c698e0418108d8303d2efeef59c63283bec92e75abe0235a5f1bd73a023",
+        "snapshot-unit:6dbca47cc707989787535208e9b347c0b1bbc3ccb2d0940ad7cac645c4a30e26",
+        "snapshot-unit:533db57d78cb2d1335159a30423fb6addfdd072c62f5cdab4702a3d9b6715da8",
+        "snapshot-unit:e108813cd02da111d2a08085611e5377d9c4a3f07965cebf70504ffc0e1f8f44",
+        "snapshot-unit:a505dd3e65df68b5dbb08fbefc245ce17c78ebd25d537642e9736059189ab411",
+        "snapshot-unit:3cf9bb286069a761ac8207565008d250f238b38a17017ed6146ab2d42b4fecd0",
+        "snapshot-unit:82c1b6268678257d3af336da71879ebaff2d62e7e265ad9f50da6877183a5bec",
+        "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+        "snapshot-unit:1a4bd4ce5b264c454e63bcc01e3edd2a8ecabb125218302ad8ea5b509876ccb2",
+        "snapshot-unit:ead7aa83518e1ef0982328ae166e7261ac3035eb7f0344df6eff7e0def8ca92c",
+        "snapshot-unit:6bed4788df694b3eb1ff7feba6b58ce473796fdaef83f4f0e047dd4a60f41e11",
+        "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+        "snapshot-unit:f8bcbea14ab1536eedbdd74aa38b87080afdf5bd05c32e2823933ae63657c3f8",
+        "snapshot-unit:72ed768a76150028415adea6d4140f3c304a82f053fe0c595f6ba25a7ab9f992"
+      ],
+      "input_sha256": "sha256:c3a8636aa5cce062557647e32142f68a79781793bba725a1fcfad6d46f64c542",
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:7fe9e2c8da688d5e8f5e1bf1c07746008b0b13bf6e67ce36004b7074c2fa7161",
+      "max_attempts": 19,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791449989.1562521,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:b7df94e8058abdecf0db91572f1beb4ea3c5cee51c460b545891b20496ff20e0"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:7fe9e2c8da688d5e8f5e1bf1c07746008b0b13bf6e67ce36004b7074c2fa7161"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 16384,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+      "role_profile_sha256": "sha256:5e877b27223fed101f66901a1b2904f0506986ef65154b69c086289e45335b9f"
+    }
+  ],
+  "max_attempts": 47,
+  "role_max_attempts": {
+    "claims": 14,
+    "material_items": 19,
+    "material_relations": 14
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 14
+  }
+}
