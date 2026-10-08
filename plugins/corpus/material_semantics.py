@@ -25,12 +25,12 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-21"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-22"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v4"
-RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v2"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v5"
+RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
 MaterialType = Literal[
@@ -424,7 +424,11 @@ class RelationCandidateSet(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     candidate_set_id: str
-    rule_version: Literal["material-relation-candidates-v1", "material-relation-candidates-v2"] = (
+    rule_version: Literal[
+        "material-relation-candidates-v1",
+        "material-relation-candidates-v2",
+        "material-relation-candidates-v3",
+    ] = (
         RELATION_CANDIDATE_RULE_VERSION
     )
     snapshot_id: str
@@ -434,6 +438,7 @@ class RelationCandidateSet(BaseModel):
         "material-items-validation-v2",
         "material-items-validation-v3",
         "material-items-validation-v4",
+        "material-items-validation-v5",
     ] = MATERIAL_ITEMS_VALIDATION_VERSION
     endpoint_item_ids: tuple[str, ...]
     candidates: tuple[RelationCandidate, ...]
@@ -479,6 +484,7 @@ _ANONYMOUS_TURN_RE = re.compile(r"(?m)^\s*(问|答)\s*[：:]")
 _NUMBERED_QUESTION_RE = re.compile(
     r"(?m)^(?=\s*(?:[一二三四五六七八九十百]+|\d+)[、.．]\s*[^\n]{0,100}[？?])"
 )
+_EXPLICIT_NEGATION_RE = re.compile(r"并不|不是|不会|不能|没有|尚未|未能|不一定|不必然")
 _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("summary", re.compile(r"总结|摘要|总体而言|核心观点|投资建议")),
     ("question", re.compile(r"[？?]|(?:^|\n)\s*(?:问|问题)\s*[：:]")),
@@ -492,7 +498,7 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
     ("condition", re.compile(r"如果|只要|除非|前提|取决于|验证成功")),
     ("risk", re.compile(r"风险|不及预期|下行|恶化|失败|不确定|持续疲软|竞争加剧")),
-    ("negation", re.compile(r"并不|不是|不会|不能|没有|尚未|未能|不一定|不必然")),
+    ("negation", _EXPLICIT_NEGATION_RE),
     ("behavior", re.compile(r"买入|卖出|加仓|减仓|平仓|bought|sold|added", re.I)),
     (
         "evidence",
@@ -1163,7 +1169,9 @@ def _item_satisfies_signal(item: MaterialItem, signal: str) -> bool:
     if signal == "risk":
         return item.statement_role == "risk"
     if signal == "negation":
-        return item.polarity in {"negated", "mixed"}
+        return item.polarity in {"negated", "mixed"} or any(
+            _EXPLICIT_NEGATION_RE.search(evidence.quote) for evidence in item.evidence
+        )
     if signal == "behavior":
         # A source's own trade is behavior; a report that another person traded is
         # often a fact.  Both satisfy the finite obligation created by the action cue.
@@ -1258,6 +1266,30 @@ def _align_quote(quote: str, packet: EvidencePacket, source_rev: str) -> Materia
     )
 
 
+def _resolve_candidate_slot(
+    requested_slot_id: str,
+    candidate_slots: tuple[CandidateSlot, ...],
+    evidence: MaterialEvidence,
+) -> tuple[str, CandidateSlot | None]:
+    slot_by_id = {slot.candidate_slot_id: slot for slot in candidate_slots}
+    slot = slot_by_id.get(requested_slot_id)
+    if slot is not None or not candidate_slots:
+        return requested_slot_id, slot
+    matching_slots = tuple(
+        candidate
+        for candidate in candidate_slots
+        if candidate.packet_id == evidence.packet_id
+        and candidate.start <= evidence.start
+        and evidence.end <= candidate.end
+    )
+    if len(matching_slots) != 1:
+        return requested_slot_id, None
+    # Slot IDs are opaque transport data. A missing, truncated, or otherwise unknown ID
+    # may be repaired only when the already-validated exact quote identifies one slot.
+    rebound = matching_slots[0]
+    return rebound.candidate_slot_id, rebound
+
+
 def _required_text(value: object, field: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"missing {field}")
@@ -1345,13 +1377,17 @@ def _normalize_semantic_type(value: object, statement_role: str, *, text: str, q
     return normalized
 
 
-def _normalize_polarity(value: object, _quote: str, *, statement_role: str) -> str:
+def _normalize_polarity(value: object, quote: str, *, statement_role: str) -> str:
     normalized = str(value or "unknown").strip().lower()
     if statement_role == "question":
         return "unknown"
     if statement_role == "risk":
         return "affirmed"
-    if normalized in {"affirmed", "negated", "mixed"}:
+    if normalized == "mixed":
+        return normalized
+    if _EXPLICIT_NEGATION_RE.search(quote):
+        return "negated"
+    if normalized in {"affirmed", "negated"}:
         return normalized
     if normalized == "negative":
         return "negated"
@@ -1659,7 +1695,6 @@ def _packet_records(
         ),
         None,
     )
-    slot_by_id = {slot.candidate_slot_id: slot for slot in candidate_slots}
     discarded = 0
     for raw in payload["speakers"]:
         try:
@@ -1709,20 +1744,9 @@ def _packet_records(
                 raise ValueError("source extraction cannot emit system_synthesis")
             quote = _required_text(raw.get("evidence_quote"), "evidence_quote")
             evidence = _align_quote(quote, packet, source_rev)
-            slot_id = str(raw.get("candidate_slot_id") or "")
-            slot = slot_by_id.get(slot_id)
-            if candidate_slots and not slot_id:
-                matching_slots = tuple(
-                    candidate
-                    for candidate in candidate_slots
-                    if candidate.start <= evidence.start and evidence.end <= candidate.end
-                )
-                if len(matching_slots) == 1:
-                    # The system owns slot boundaries.  When a model omits only the opaque
-                    # slot identifier, bind the item by its already-validated exact quote.
-                    # Ambiguous or out-of-range quotes remain fail closed.
-                    slot = matching_slots[0]
-                    slot_id = slot.candidate_slot_id
+            _, slot = _resolve_candidate_slot(
+                str(raw.get("candidate_slot_id") or ""), candidate_slots, evidence
+            )
             if candidate_slots and slot is None:
                 raise ValueError("item does not reference a candidate obligation")
             if slot is not None and not (slot.start <= evidence.start and evidence.end <= slot.end):
@@ -1955,17 +1979,8 @@ def _validate_atomic_coverage(
         item_id = item_id_map.get(local_id)
         slot_id = str(raw_item.get("candidate_slot_id") or "")
         item = item_by_id.get(item_id or "")
-        if not slot_id and item is not None and item.evidence:
-            evidence = item.evidence[0]
-            matching_slots = tuple(
-                slot
-                for slot in slots
-                if slot.packet_id == evidence.packet_id
-                and slot.start <= evidence.start
-                and evidence.end <= slot.end
-            )
-            if len(matching_slots) == 1:
-                slot_id = matching_slots[0].candidate_slot_id
+        if item is not None and item.evidence:
+            slot_id, _ = _resolve_candidate_slot(slot_id, slots, item.evidence[0])
         if slot_id in slot_by_id:
             raw_item_attempts_by_slot[slot_id] += 1
         slot = slot_by_id.get(slot_id)

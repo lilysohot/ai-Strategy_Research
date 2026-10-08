@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+  "parent_task_id": null,
+  "sequence": 12,
+  "role": "material_items",
+  "protocol": "material-atomic-jsonl-v5",
+  "request_sha256": null,
+  "content": "{\"record_type\":\"speaker\",\"speaker_id\":\"spk_544d7167e8a5\",\"display_name\":null,\"role\":\"document_voice\",\"identity_status\":\"unknown\"}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_40803d68acea01c6\",\"item_id\":\"slot_40803d68acea01c6#1\",\"text\":\"不是研发变现。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"negated\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"不是研发变现。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_14d2e2087ab604fa\",\"item_id\":\"slot_14d2e2087ab604fa#1\",\"text\":\"中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"quoted_other\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"mixed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。\",\"unknown_fields\":[]}",
+  "diagnostics": {
+    "adapter_version": "structured-chat-http-1",
+    "attempt_id": "attempt:1ecabf1f3dfbe2fd66fa675d5ac3e9bffb6bbfec7d1b14284053eb82fe2297c9",
+    "attempts": 1,
+    "completion_tokens": 2033,
+    "content_chars": 1042,
+    "cost": null,
+    "duration_ms": 14675,
+    "execution_status": "succeeded",
+    "finish_reason": "stop",
+    "http_status": 200,
+    "model": "doubao-seed-2.0-mini",
+    "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+    "prompt_tokens": 1996,
+    "protocol": "material-atomic-jsonl-v5",
+    "provider": "openai_compat",
+    "reasoning_tokens": 1634,
+    "request_model": "doubao-seed-2.0-mini",
+    "request_sha256": "sha256:5cd48de1acb6604f0c53e378dbb44bbb0af5ad8e86433089a519be7db774854c",
+    "response_model": "doubao-seed-2-0-mini-260428",
+    "role": "material_items",
+    "role_profile_sha256": "sha256:dbef80759fe0e9fe41ed8c058a5b6744093153860ddd96e7888577aab7fa314c",
+    "total_tokens": 4029,
+    "usage": {
+      "completion_tokens": 2033,
+      "prompt_tokens": 1996,
+      "reasoning_tokens": 1634,
+      "total_tokens": 4029
+    }
+  }
+}

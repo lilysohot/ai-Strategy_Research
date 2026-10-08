@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+  "parent_task_id": null,
+  "sequence": 13,
+  "role": "material_items",
+  "protocol": "material-atomic-jsonl-v5",
+  "request_sha256": null,
+  "content": "{\"record_type\":\"speaker\",\"speaker_id\":\"spk_544d7167e8a5\",\"display_name\":null,\"role\":\"document_voice\",\"identity_status\":\"unknown\"}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_5e0a114ed8b5\",\"item_id\":\"slot_5e0a114ed8b5#1\",\"text\":\"持有 + 观望\",\"semantic_type\":\"opinion\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"**持有 + 观望。**\",\"unknown_fields\":[]}",
+  "diagnostics": {
+    "adapter_version": "structured-chat-http-1",
+    "attempt_id": "attempt:bdd83d68b699ef48ffba328b3ca58594715561151cd9524573a0696b7ad4c99e",
+    "attempts": 1,
+    "completion_tokens": 1219,
+    "content_chars": 528,
+    "cost": null,
+    "duration_ms": 9705,
+    "execution_status": "succeeded",
+    "finish_reason": "stop",
+    "http_status": 200,
+    "model": "doubao-seed-2.0-mini",
+    "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+    "prompt_tokens": 2063,
+    "protocol": "material-atomic-jsonl-v5",
+    "provider": "openai_compat",
+    "reasoning_tokens": 1042,
+    "request_model": "doubao-seed-2.0-mini",
+    "request_sha256": "sha256:c71709b53a724be7cab10bf501d3ddc04ab17a0d662ae7f4892e2ad1ea5f1dcf",
+    "response_model": "doubao-seed-2-0-mini-260428",
+    "role": "material_items",
+    "role_profile_sha256": "sha256:dbef80759fe0e9fe41ed8c058a5b6744093153860ddd96e7888577aab7fa314c",
+    "total_tokens": 3282,
+    "usage": {
+      "completion_tokens": 1219,
+      "prompt_tokens": 2063,
+      "reasoning_tokens": 1042,
+      "total_tokens": 3282
+    }
+  }
+}

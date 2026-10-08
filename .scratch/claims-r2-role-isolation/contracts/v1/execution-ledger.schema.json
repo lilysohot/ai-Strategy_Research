@@ -40,6 +40,7 @@
         "publication_status": {"enum": ["unpublished", "candidate", "published", "withdrawn", "superseded"]},
         "context_status": {"enum": ["complete", "partial", "missing", "ambiguous", "budget_exceeded"]},
         "dependency_task_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "endpoint_item_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "artifact_sha256": {"$ref": "#/$defs/hash"},
         "error_codes": {"type": "array", "items": {"type": "string", "pattern": "^CS_[A-Z0-9_]+$"}, "uniqueItems": true}
       }
@@ -59,4 +60,3 @@
     }
   }
 }
-

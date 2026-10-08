@@ -46,3 +46,11 @@ r3 与 r4 原始响应、执行账和部分候选均完整保留，可作为失�
 或 context_use。后续若继续，需要一个新版本同时解决：错误但可由唯一逐字引文无歧义回绑的槽位
 ID、partial items 的合格端点子集 relations 派生，以及 provider outcome_unknown 的幂等恢复策略。
 在这些规则冻结前，不再进行第三次真实重跑。
+
+## 后继：r5 零模型重放
+
+r4 的 17 份 items 响应随后在不调用模型的条件下由 r5 校验器重放。唯一引文回绑、显式否定、
+风险对比 negation 覆盖以及 extracted 端点子集派生均已通过真实响应验证：92 items、78/78
+extracted、92 个合格端点、4 个关系候选。详见
+[16 · r5 零模型重放与局部依赖修复](16-r5-offline-replay-remediation.md)。本票仍保留 blocked
+历史终态；后继证据不追溯改写 r4 原账。

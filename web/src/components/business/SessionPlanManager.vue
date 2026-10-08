@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 
+import { runs as runsApi } from '@/api'
 import type { SessionPlanInput, SessionPlanPreview } from '@/business-ui'
+import { useBusinessStore } from '@/stores/business'
 
 const props = defineProps<{
   modelValue: boolean
@@ -91,6 +94,75 @@ function save(): void {
 function marketLabel(market: SessionPlanPreview['market']): string {
   return { CN: '中国内地', HK: '香港', US: '美国' }[market]
 }
+
+// ——— 回填实际成交价（2026-10-08 口径）———
+// 计划不保存价格：用户按 Agent 建议价成交后，把**实际成交价**回填到这里并提交为
+// holding_cost 用途的新 Run；后端在同一事务内新登记一条成交再重新分析。
+const trade = reactive({
+  side: 'buy' as 'buy' | 'sell',
+  quantity: '',
+  price: '',
+  tradedAt: '',
+  fees: '',
+})
+const tradeError = ref('')
+const submittingTrade = ref(false)
+const canSubmitTrade = computed(
+  () => !!trade.quantity.trim() && !!trade.price.trim() && !!trade.tradedAt.trim(),
+)
+
+function resetTrade(): void {
+  Object.assign(trade, { side: 'buy', quantity: '', price: '', tradedAt: '', fees: '' })
+  tradeError.value = ''
+}
+
+async function submitTrade(): Promise<void> {
+  tradeError.value = ''
+  if (!canSubmitTrade.value) {
+    tradeError.value = '请填写成交量、实际成交价与成交时间'
+    return
+  }
+  const store = useBusinessStore()
+  const accountId = store.link?.account_id ?? null
+  const planId = store.link?.primary_plan_id ?? null
+  if (!props.sessionId || !accountId || !planId) {
+    tradeError.value = '请先把主账户与当前主计划绑定到本会话'
+    return
+  }
+  const plan = store.plans.find((item) => item.id === planId)
+  const symbol = plan?.values?.symbol ?? ''
+  const currency = plan?.values?.currency ?? 'CNY'
+  submittingTrade.value = true
+  try {
+    const res = await runsApi.submit({
+      session_id: props.sessionId,
+      message: `已按 ${trade.price.trim()} ${trade.side === 'buy' ? '买入' : '卖出'} ${trade.quantity.trim()}，请按实际成交成本重新分析。`,
+      investment_input: {
+        use_case: 'holding_cost',
+        account: { id: accountId },
+        plan: { id: planId },
+        declared: {
+          trade: {
+            symbol,
+            side: trade.side,
+            quantity: trade.quantity.trim(),
+            price: trade.price.trim(),
+            currency,
+            traded_at: trade.tradedAt.trim(),
+            ...(trade.fees.trim() ? { fees: trade.fees.trim() } : {}),
+          },
+        },
+        idempotency_key: `fill-trade:${crypto.randomUUID()}`,
+      },
+    })
+    resetTrade()
+    ElMessage.success(`成交已保存，分析已排队（Run ${res.run_id ?? ''}）`)
+  } catch (err) {
+    tradeError.value = err instanceof Error ? err.message : '保存失败，请重试'
+  } finally {
+    submittingTrade.value = false
+  }
+}
 defineExpose({ resetDraft })
 </script>
 
@@ -179,6 +251,46 @@ defineExpose({ resetDraft })
           </span>
         </label>
       </div>
+    </section>
+
+    <section class="trade-fill" aria-labelledby="session-trade-fill-title">
+      <header>
+        <h3 id="session-trade-fill-title">回填实际成交价</h3>
+        <span>计划不保存价格，价格以成交记录为准</span>
+      </header>
+      <div class="field-grid">
+        <label class="field">
+          <span>方向</span>
+          <el-segmented
+            v-model="trade.side"
+            :options="[{ label: '买入', value: 'buy' }, { label: '卖出', value: 'sell' }]"
+          />
+        </label>
+        <label class="field">
+          <span>成交量</span>
+          <el-input v-model="trade.quantity" inputmode="decimal" placeholder="股数/份数" />
+        </label>
+        <label class="field">
+          <span>实际成交价</span>
+          <el-input
+            v-model="trade.price"
+            inputmode="decimal"
+            placeholder="不得用现价或建议价代替"
+          />
+        </label>
+        <label class="field">
+          <span>成交时间</span>
+          <el-input v-model="trade.tradedAt" placeholder="2026-10-08T10:30:00Z" />
+        </label>
+        <label class="field">
+          <span>费用（可选）</span>
+          <el-input v-model="trade.fees" inputmode="decimal" placeholder="可留空" />
+        </label>
+      </div>
+      <p v-if="tradeError" class="trade-error" role="alert">{{ tradeError }}</p>
+      <el-button type="primary" :loading="submittingTrade" @click="submitTrade">
+        保存成交并重新分析
+      </el-button>
     </section>
 
     <template #footer>

@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+  "parent_task_id": null,
+  "sequence": 4,
+  "role": "material_items",
+  "protocol": "material-atomic-jsonl-v5",
+  "request_sha256": null,
+  "content": "{\"record_type\":\"speaker\",\"speaker_id\":\"spk_544d7167e8a5\",\"display_name\":null,\"role\":\"document_voice\",\"identity_status\":\"unknown\"}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_fcd2151e320ca2f9\",\"item_id\":\"slot_fcd2151e320ca2f9#1\",\"text\":\"现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"affirmed\",\"value\":\"现价64.04，6月84.95，回落约25%，动PE26.76，定价约475亿26E\",\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_2504373c638833da\",\"item_id\":\"slot_2504373c638833da#1\",\"text\":\"没有把卖方 560–667 亿吃进去。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"negated\",\"value\":\"卖方560–667亿\",\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"没有把卖方 560–667 亿吃进去。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_32645f062c3a40e5\",\"item_id\":\"slot_32645f062c3a40e5#1\",\"text\":\"不按 93–101 去追\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"negated\",\"value\":\"93–101\",\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"不按 93–101 去追\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_32645f062c3a40e5\",\"item_id\":\"slot_32645f062c3a40e5#2\",\"text\":\"不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a5\",\"polarity\":\"negated\",\"value\":\"AI机柜出货+3倍\",\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪\",\"unknown_fields\":[]}",
+  "diagnostics": {
+    "adapter_version": "structured-chat-http-1",
+    "attempt_id": "attempt:0468c826051c6e169fe4e641534f439b2f14df094ebef97d6ea5da1fbcf254de",
+    "attempts": 1,
+    "completion_tokens": 4672,
+    "content_chars": 1977,
+    "cost": null,
+    "duration_ms": 27931,
+    "execution_status": "succeeded",
+    "finish_reason": "stop",
+    "http_status": 200,
+    "model": "doubao-seed-2.0-mini",
+    "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+    "prompt_tokens": 2354,
+    "protocol": "material-atomic-jsonl-v5",
+    "provider": "openai_compat",
+    "reasoning_tokens": 3838,
+    "request_model": "doubao-seed-2.0-mini",
+    "request_sha256": "sha256:4fde20aaba57734c9a38d9dcdb72a6feb8c79a5bc0644b414cd15368c49c4af5",
+    "response_model": "doubao-seed-2-0-mini-260428",
+    "role": "material_items",
+    "role_profile_sha256": "sha256:dbef80759fe0e9fe41ed8c058a5b6744093153860ddd96e7888577aab7fa314c",
+    "total_tokens": 7026,
+    "usage": {
+      "completion_tokens": 4672,
+      "prompt_tokens": 2354,
+      "reasoning_tokens": 3838,
+      "total_tokens": 7026
+    }
+  }
+}

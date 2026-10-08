@@ -1,0 +1,39 @@
+{
+  "mode": "offline_replay_only",
+  "model_calls": 0,
+  "source_run": "15-live-20261008-non-table-gold-r4/industrial-fulian-md",
+  "source_response_count": 17,
+  "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+  "items_task": {
+    "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+    "role": "material_items",
+    "method": "model",
+    "input_sha256": "sha256:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+    "profile_sha256": "sha256:077781e36080b4ae8926e1435c5d68bd9e13b35859d7c3eec52704e2b1f9db20",
+    "execution_status": "succeeded",
+    "protocol_status": "valid",
+    "quality_status": "accepted",
+    "publication_status": "candidate",
+    "context_status": "complete",
+    "dependency_task_ids": [],
+    "endpoint_item_ids": [],
+    "artifact_sha256": "sha256:ba7b6fda9cbc306fca878424c64fff227f9250cb8d77d5ddff92c35419c8f4c3",
+    "error_codes": []
+  },
+  "items_run_id": "004ed570cb67310d6cf75b1034137e1a68f88945df231a39620c8fd9d128f800",
+  "item_count": 92,
+  "slot_count": 78,
+  "slot_statuses": {
+    "extracted": 78
+  },
+  "packet_statuses": {
+    "completed": 10
+  },
+  "qualified_relation_endpoint_count": 92,
+  "relation_candidate_count": 4,
+  "relation_model_calls": 0,
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:740ec1799b2d0ab227020573c6760a80f7a333077a293bdf4d697469ec8822b1:blocked"
+  ]
+}

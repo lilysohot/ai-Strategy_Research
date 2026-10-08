@@ -440,3 +440,16 @@ context_use=`not_used`、M_main 调用 0。
 
 本次冻结新增真实模型调用 0、生产数据库访问 0，也没有执行发布。任务仍保持 `needs-info`：人工签认
 不再是阻断项，后续须另行修复抽取质量并重新冻结/验证，不能用本次签认绕过质量门。
+
+### 2026-10-08 · r5 校验/派生修复与零模型真实响应重放
+
+复用 r4 工业富联的 17 份已保存 items 响应完成离线重放，不增加模型调用、不修改 r3/r4 历史账、
+不重做金标。r5 结果为 92 items、78/78 extracted、10/10 packets completed，items 工件
+`succeeded/valid/accepted`；92 个合格端点确定性生成 4 个 relation 候选。此前错误槽位 ID、三个
+否定信号缺口和“整批不完美即阻断所有 relations”均已通过真实响应验证修复。
+
+同时，真实 HTTP adapter 增加稳定 `Idempotency-Key=attempt_id`，但 provider 没有统一结果查询
+接口，历史 Claims `outcome_unknown` 仍未被伪造为成功，也没有自动重发。光模块和 relations 模型
+仍为 0 次调用；完整三角色候选名册、发布、query/delivery/context_use 与最终人工裁定仍待后续有界
+任务。详见 [16 · r5 零模型重放与局部依赖修复](16-r5-offline-replay-remediation.md)及
+`evidence/17-r5-remediation-freeze-20261008/freeze-manifest.json`。

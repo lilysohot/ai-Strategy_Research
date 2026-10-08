@@ -585,6 +585,87 @@ def test_slot_protocol_binds_omitted_slot_id_by_unique_exact_quote(tmp_path: Pat
     assert extracted_entry.item_refs == (result.understanding.items[0].item_id,)
 
 
+def test_slot_protocol_rebinds_unknown_slot_id_by_unique_exact_quote(tmp_path: Path) -> None:
+    evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
+    structure = build_material_structure(evidence_run.document)
+    slots = build_candidate_slots(evidence_run.document, structure)
+    payload = json.loads(_response(""))
+    item = payload["items"][0]
+    slot = next(slot for slot in slots if item["evidence_quote"] in slot.text)
+    item["candidate_slot_id"] = "slot_nonexistent"
+    records = [
+        *({"record_type": "speaker", **speaker} for speaker in payload["speakers"]),
+        {"record_type": "item", **item},
+        *(
+            {
+                "record_type": "coverage",
+                "candidate_slot_id": other.candidate_slot_id,
+                "status": "no_supported_item",
+                "reason_code": "checked",
+            }
+            for other in slots
+            if other.candidate_slot_id != slot.candidate_slot_id
+        ),
+    ]
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: "\n".join(
+            json.dumps(record, ensure_ascii=False) for record in records
+        ),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+    )
+
+    assert len(result.understanding.items) == 1
+    extracted_entry = next(
+        entry
+        for entry in result.understanding.coverage.slot_ledger
+        if entry.candidate_slot_id == slot.candidate_slot_id
+    )
+    assert extracted_entry.status == "extracted"
+    assert extracted_entry.item_refs == (result.understanding.items[0].item_id,)
+
+
+def test_slot_protocol_does_not_rebind_unknown_slot_id_outside_candidate_scope(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "out-of-scope.md"
+    source.write_text("好的。\n需求已经改善。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    assert len(slots) == 1
+    record = {
+        "record_type": "item",
+        "candidate_slot_id": "slot_nonexistent",
+        "item_id": "out-of-scope",
+        "text": "好的",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "undeclared",
+        "polarity": "affirmed",
+        "value": None,
+        "behavior_status": None,
+        "temporal_frame": "contemporaneous",
+        "evidence_quote": "好的。",
+        "unknown_fields": [],
+    }
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: json.dumps(record, ensure_ascii=False),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+    )
+
+    assert result.understanding.items == ()
+    assert result.understanding.coverage.slot_ledger[0].status == "failed"
+
+
 def test_slot_protocol_allows_multiple_atomic_items_in_one_coarse_slot(tmp_path: Path) -> None:
     source = tmp_path / "multi-atom-slot.md"
     source.write_text("毛利率下降同时现金流转负。", encoding="utf-8")
@@ -1111,6 +1192,92 @@ def test_system_preserves_claim_polarity_when_text_contains_lexical_negation(
     )
 
     assert result.understanding.items[0].polarity == "affirmed"
+
+
+def test_system_owns_explicit_proposition_negation(tmp_path: Path) -> None:
+    phrases = (
+        "不是 8 月能兑现的地板。",
+        "高盛 121 是 IMA 标题，更不能当明天的价格。",
+        "双供一旦发生，伤口不是短期能愈合的。",
+    )
+    for index, phrase in enumerate(phrases):
+        source = tmp_path / f"negated-{index}.md"
+        source.write_text(phrase, encoding="utf-8")
+        evidence_run = build_evidence_run(source, packet_chars=1000)
+        slot = build_candidate_slots(
+            evidence_run.document, build_material_structure(evidence_run.document)
+        )[0]
+        record = {
+            "record_type": "item",
+            "candidate_slot_id": slot.candidate_slot_id,
+            "item_id": f"negated-{index}",
+            "text": phrase,
+            "semantic_type": "opinion",
+            "statement_role": "claim",
+            "speech_role": "statement",
+            "perspective": "source_explicit",
+            "speaker_ref": "undeclared",
+            "polarity": "affirmed",
+            "value": None,
+            "behavior_status": None,
+            "temporal_frame": "contemporaneous",
+            "evidence_quote": phrase,
+            "unknown_fields": [],
+        }
+        result = extract_material_understanding(
+            evidence_run,
+            llm=lambda _prompt, record=record: json.dumps(record, ensure_ascii=False),
+            max_calls=1,
+            material_type="research_report",
+            staged_jsonl=True,
+            slot_protocol=True,
+            candidate_slot_ids=(slot.candidate_slot_id,),
+        )
+
+        assert result.understanding.items[0].polarity == "negated"
+        assert result.understanding.coverage.slot_ledger[0].status == "extracted"
+
+
+def test_affirmed_risk_contrast_covers_explicit_negation_signal(tmp_path: Path) -> None:
+    phrase = (
+        "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，"
+        "而是整柜良率认证被别人拿走、自己变成备援。"
+    )
+    source = tmp_path / "risk-contrast.md"
+    source.write_text(phrase, encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slot = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )[0]
+    record = {
+        "record_type": "item",
+        "candidate_slot_id": slot.candidate_slot_id,
+        "item_id": "risk-contrast",
+        "text": phrase,
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "undeclared",
+        "polarity": "affirmed",
+        "value": None,
+        "behavior_status": None,
+        "temporal_frame": "unknown",
+        "evidence_quote": phrase,
+        "unknown_fields": [],
+    }
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: json.dumps(record, ensure_ascii=False),
+        max_calls=1,
+        material_type="research_report",
+        staged_jsonl=True,
+        slot_protocol=True,
+        candidate_slot_ids=(slot.candidate_slot_id,),
+    )
+
+    assert result.understanding.items[0].polarity == "affirmed"
+    assert result.understanding.coverage.slot_ledger[0].status == "extracted"
 
 
 def test_system_adds_controlled_unknown_axes_for_unattributed_summary(tmp_path: Path) -> None:

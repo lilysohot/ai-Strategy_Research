@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+  "parent_task_id": null,
+  "sequence": 9,
+  "role": "material_items",
+  "protocol": "material-atomic-jsonl-v5",
+  "request_sha256": null,
+  "content": "{\"record_type\":\"speaker\",\"speaker_id\":\"spk_544d7167e8a\",\"display_name\":null,\"role\":\"document_voice\",\"identity_status\":\"unknown\"}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_2a3f19c09e30112e\",\"item_id\":\"slot_2a3f19c09e30112e#1\",\"text\":\"Rubin / GB300 爬坡再延，\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"Rubin / GB300 爬坡再延，\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_d7e8feef7808cf61\",\"item_id\":\"slot_d7e8feef7808cf61#1\",\"text\":\"CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_e786d10909fb106d\",\"item_id\":\"slot_e786d10909fb106d#1\",\"text\":\"毛利率从 7% 回到 6% 以下，\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"毛利率从 7% 回到 6% 以下，\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_f09a3a0fbe66feb7\",\"item_id\":\"slot_f09a3a0fbe66feb7#1\",\"text\":\"存货继续堆，OCF 转负。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"存货继续堆，OCF 转负。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_d27d22600e82d6f5\",\"item_id\":\"slot_d27d22600e82d6f5#1\",\"text\":\"云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_71f5d245323013c4\",\"item_id\":\"slot_71f5d245323013c4#1\",\"text\":\"美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_f429b9cd71e5d734\",\"item_id\":\"slot_f429b9cd71e5d734#1\",\"text\":\"实体清单本次没有 sourced 命中，\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"negated\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"retrospective\",\"evidence_quote\":\"实体清单本次没有 sourced 命中，\",\"unknown_fields\":[]}",
+  "diagnostics": {
+    "adapter_version": "structured-chat-http-1",
+    "attempt_id": "attempt:9a50f551a0d06fd6f2c17d9a290f962a1b162298e658c1f321d97fc5a7c8a3ef",
+    "attempts": 1,
+    "completion_tokens": 4616,
+    "content_chars": 3215,
+    "cost": null,
+    "duration_ms": 29268,
+    "execution_status": "succeeded",
+    "finish_reason": "stop",
+    "http_status": 200,
+    "model": "doubao-seed-2.0-mini",
+    "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+    "prompt_tokens": 2669,
+    "protocol": "material-atomic-jsonl-v5",
+    "provider": "openai_compat",
+    "reasoning_tokens": 3403,
+    "request_model": "doubao-seed-2.0-mini",
+    "request_sha256": "sha256:5bb583b32f3b09edc1232d2d360e48aeb4b4a34b9d195910e312dd26a815eafa",
+    "response_model": "doubao-seed-2-0-mini-260428",
+    "role": "material_items",
+    "role_profile_sha256": "sha256:dbef80759fe0e9fe41ed8c058a5b6744093153860ddd96e7888577aab7fa314c",
+    "total_tokens": 7285,
+    "usage": {
+      "completion_tokens": 4616,
+      "prompt_tokens": 2669,
+      "reasoning_tokens": 3403,
+      "total_tokens": 7285
+    }
+  }
+}

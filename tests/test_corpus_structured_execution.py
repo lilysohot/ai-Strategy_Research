@@ -297,7 +297,7 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
     first.verify_identity()
     assert {task.method for task in first.tasks} == {"deterministic", "model"}
     assert all(task.role != "material_relations" for task in first.tasks)
-    assert first.relations.rule_version == "material-relation-candidates-v2"
+    assert first.relations.rule_version == "material-relation-candidates-v3"
     assert first.routing.decisions
     assert all(decision.reason_codes for decision in first.routing.decisions)
 
@@ -770,6 +770,7 @@ def test_live_adapter_sends_once_and_every_request_has_one_attempt(tmp_path: Pat
     assert attempt.provider == "openai_compat"
     assert attempt.request_model == "synthetic-model"
     assert attempt.response_model == "synthetic-provider-model"
+    assert calls[0].headers["idempotency-key"] == attempt.attempt_id
     assert attempt.usage == {
         "completion_tokens": 7,
         "prompt_tokens": 11,
@@ -1223,6 +1224,94 @@ def test_relation_task_is_registered_before_request_and_resume_deduplicates(
     assert relation_task.task_id.startswith("task:")
     assert relation_task.execution_status == "succeeded"
     assert set(second.derivations.values()) == {"succeeded"}
+
+
+def test_relation_task_uses_extracted_endpoints_from_partial_items_run(tmp_path: Path) -> None:
+    value = dialogue_snapshot()
+    plan = plan_batch(
+        value,
+        max_attempts=2,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 1},
+        max_relation_tasks=1,
+        max_relation_attempts=1,
+    )
+    items_task = next(task for task in plan.tasks if task.role == "material_items")
+    content = dialogue_item_content(value) + "\n" + json.dumps(
+        {
+            "record_type": "item",
+            "candidate_slot_id": "slot_nonexistent",
+            "item_id": "discarded-malformed-item",
+            "text": "无法验证的额外输出",
+        },
+        ensure_ascii=False,
+    )
+    items_execution = execute_material_items_role(
+        value,
+        task_id=items_task.task_id,
+        protocol=items_task.protocol,
+        llm=lambda _prompt: content,
+        max_calls=1,
+    )
+    assert items_execution.artifact.execution_status == "succeeded"
+    assert items_execution.artifact.protocol_status == "invalid"
+    assert items_execution.artifact.quality_status == "review_required"
+    qualified_endpoints = tuple(
+        item_ref
+        for entry in items_execution.payload.understanding.coverage.slot_ledger
+        if entry.status == "extracted"
+        for item_ref in entry.item_refs
+    )
+    assert len(qualified_endpoints) == 2
+    candidates = build_relation_candidate_set(
+        value,
+        items_execution.payload,
+        endpoint_item_ids=qualified_endpoints,
+        items_validation_version=plan.relations.items_validation_version,
+        rule_version=plan.relations.rule_version,
+    )
+    assert candidates.candidates
+
+    responses = tmp_path / "responses"
+    write_response(
+        responses,
+        ReplayResponse(
+            task_id=items_task.task_id,
+            sequence=1,
+            role="material_items",
+            protocol=items_task.protocol,
+            content=content,
+        ),
+        "items",
+    )
+    relation_content = "\n".join(
+        json.dumps(
+            {
+                "record_type": "relation_decision",
+                "candidate_pair_id": candidate.candidate_pair_id,
+                "status": "absent",
+                "evidence_quote": None,
+            },
+            ensure_ascii=False,
+        )
+        for candidate in candidates.candidates
+    )
+    write_response(
+        responses,
+        ReplayResponse(
+            parent_task_id=items_task.task_id,
+            sequence=1,
+            role="material_relations",
+            protocol="material-relations-jsonl-v1",
+            content=relation_content,
+        ),
+        "relations",
+    )
+
+    result = replay_batch(plan, responses=responses, store_root=tmp_path / "store")
+    relation_task = next(task for task in result.ledger.tasks if task.role == "material_relations")
+    assert relation_task.endpoint_item_ids == qualified_endpoints
+    assert relation_task.execution_status == "succeeded"
+    assert set(result.derivations.values()) == {"succeeded"}
 
 
 def test_concurrent_relation_derivation_registers_one_logical_task(tmp_path: Path) -> None:

@@ -1,0 +1,45 @@
+{
+  "status": "frozen_ready_for_bounded_r5",
+  "created_on": "2026-10-08",
+  "model_calls": 0,
+  "versions": {
+    "material_extractor": "material-semantics-22",
+    "material_items_protocol": "material-atomic-jsonl-v5",
+    "material_items_validation": "material-items-validation-v5",
+    "relation_candidate_rule": "material-relation-candidates-v3",
+    "http_adapter": "structured-chat-http-2"
+  },
+  "parent_evidence": {
+    ".scratch/claims-r2-role-isolation/evidence/15-live-20261008-non-table-gold-r4/industrial-fulian-md/plan.json": "8fe75d9020cb4de0fbd290147a6155c7fe849d0d74ca776f2cbaf427ea01bd1a",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.signed.json": "31e75f9bd7e10f12197ab99907857f2b649dcbf830811f6916e6bba57954b2a5",
+    ".scratch/claims-r2-role-isolation/evidence/16-r5-zero-model-replay-20261008-r4/manifest.json": "3f196e345ef3088f3538bce88ec8ab9793d2a70ce8b0c7a34ed82eb3e1b24620",
+    ".scratch/claims-r2-role-isolation/evidence/16-r5-zero-model-replay-20261008-r4/industrial-fulian-md/summary.json": "ffc72682a49630481396b9d6395ecfa6aeafb0ef53e785aff10dcf7744c7caad"
+  },
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "7201ac3a63bbe56dcfab5d10467ea5f689883f0a79e6e09cd70b48da20eac69a",
+    "plugins/corpus/structured/ledger.py": "5bfa6171fac26dbc98394ee6c29ac37ba30987ff294cc4235cb461b9cbd48b3c",
+    "plugins/corpus/structured/adapter.py": "8ecc796e33a539d72dc43a18601055dd2229943e55c4c0bc7156f81ea1d53ac4",
+    "plugins/corpus/structured/config.py": "5b16ac33d6de5ff568e343c0b1d451b187acc225b7ffb3c3d0607a8cbdaabeb6",
+    "tests/test_corpus_material_semantics.py": "fd50c6f7c585d107b5663f436995122bff9d6a8524d8b394e8705bbc2cbde583",
+    "tests/test_corpus_structured_execution.py": "92a7e638ff7bd706c38dbb5a0cb97733aa45eb92f8e61949ac93279a8ef6e718",
+    ".scratch/claims-r2-role-isolation/contracts/v1/execution-ledger.schema.json": "e30b2c9b6fc5686462584d0bf2f97a15d705cd08dae23f990ba30444789c693d",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "26657d88cbe31f1de7d2a58840bf23a7d3a29b44f14e78903fbcf938d0924ad0",
+    ".scratch/claims-r2-role-isolation/evidence/replay_r4_items_under_r5.py": "40886449050a5314abf41c24cefb9ee93cb4042c623acb9c4d819a5029764a5d"
+  },
+  "verification": {
+    "focused_tests": "135 passed",
+    "corpus_tests": "1318 passed, 17 skipped, 2 pre-existing baseline/environment failures",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "offline_replay": "92 items; 78/78 extracted; 92 qualified endpoints; 4 relation candidates; 0 model calls"
+  },
+  "constraints": {
+    "reuse_signed_gold": true,
+    "gold_not_exposed_to_model": true,
+    "automatic_retries": 0,
+    "unknown_outcome_auto_resend": false,
+    "production_database_access": 0,
+    "publication_authorized": false
+  }
+}

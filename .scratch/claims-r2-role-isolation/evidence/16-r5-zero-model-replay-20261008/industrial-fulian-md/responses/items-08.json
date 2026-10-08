@@ -1,0 +1,40 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:9337990b57634feb7478de3d47db1f8feab60310cf132fc7b30e37fd3f22ddb6",
+  "parent_task_id": null,
+  "sequence": 8,
+  "role": "material_items",
+  "protocol": "material-atomic-jsonl-v5",
+  "request_sha256": null,
+  "content": "{\"record_type\":\"speaker\",\"speaker_id\":\"spk_544d7167e8a\",\"display_name\":null,\"role\":\"document_voice\",\"identity_status\":\"unknown\"}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_29ab4859fdf4372a\",\"item_id\":\"slot_29ab4859fdf4372a#1\",\"text\":\"北向 H1 减持 8180 万股。\",\"semantic_type\":\"fact\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":\"8180万股\",\"behavior_status\":null,\"temporal_frame\":\"contemporaneous\",\"evidence_quote\":\"北向 H1 减持 8180 万股。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_de9cc51c9c6b9b35\",\"item_id\":\"slot_de9cc51c9c6b9b35#1\",\"text\":\"目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，\",\"semantic_type\":\"forecast\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":\"93–101\",\"behavior_status\":null,\"temporal_frame\":\"unknown\",\"evidence_quote\":\"目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_92689adf6cbb4468\",\"item_id\":\"slot_92689adf6cbb4468#1\",\"text\":\"不是 8 月能兑现的地板。\",\"semantic_type\":\"opinion\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"unknown\",\"evidence_quote\":\"不是 8 月能兑现的地板。\",\"unknown_fields\":[]}\n{\"record_type\":\"item\",\"candidate_slot_id\":\"slot_adf90a1aa6f1b715\",\"item_id\":\"slot_adf90a1aa6f1b715#1\",\"text\":\"高盛 121 是 IMA 标题，更不能当明天的价格。\",\"semantic_type\":\"opinion\",\"statement_role\":\"claim\",\"speech_role\":\"statement\",\"perspective\":\"source_explicit\",\"speaker_ref\":\"spk_544d7167e8a\",\"polarity\":\"affirmed\",\"value\":null,\"behavior_status\":null,\"temporal_frame\":\"unknown\",\"evidence_quote\":\"高盛 121 是 IMA 标题，更不能当明天的价格。\",\"unknown_fields\":[]}",
+  "diagnostics": {
+    "adapter_version": "structured-chat-http-1",
+    "attempt_id": "attempt:bbfc2dac3e0b8130a7ce175e9975e280246272ef954da452bc0039f24b46e23f",
+    "attempts": 1,
+    "completion_tokens": 3101,
+    "content_chars": 1850,
+    "cost": null,
+    "duration_ms": 20011,
+    "execution_status": "succeeded",
+    "finish_reason": "stop",
+    "http_status": 200,
+    "model": "doubao-seed-2.0-mini",
+    "profile_sha256": "sha256:526a0d5ee5ce33504fd474b04b0ee4726e5ca80f9b6d0a93b2951c2b5510a338",
+    "prompt_tokens": 2247,
+    "protocol": "material-atomic-jsonl-v5",
+    "provider": "openai_compat",
+    "reasoning_tokens": 2381,
+    "request_model": "doubao-seed-2.0-mini",
+    "request_sha256": "sha256:92534033bfa5080342bc4edc8a5824aba1bc834ff75c7930d92b2f36c90bdaed",
+    "response_model": "doubao-seed-2-0-mini-260428",
+    "role": "material_items",
+    "role_profile_sha256": "sha256:dbef80759fe0e9fe41ed8c058a5b6744093153860ddd96e7888577aab7fa314c",
+    "total_tokens": 5348,
+    "usage": {
+      "completion_tokens": 3101,
+      "prompt_tokens": 2247,
+      "reasoning_tokens": 2381,
+      "total_tokens": 5348
+    }
+  }
+}

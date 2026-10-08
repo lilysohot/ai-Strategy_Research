@@ -180,7 +180,11 @@ class RelationPlan(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     enabled: bool = True
-    rule_version: Literal["material-relation-candidates-v1", "material-relation-candidates-v2"] = (
+    rule_version: Literal[
+        "material-relation-candidates-v1",
+        "material-relation-candidates-v2",
+        "material-relation-candidates-v3",
+    ] = (
         RELATION_CANDIDATE_RULE_VERSION
     )
     items_validation_version: Literal[
@@ -188,6 +192,7 @@ class RelationPlan(BaseModel):
         "material-items-validation-v2",
         "material-items-validation-v3",
         "material-items-validation-v4",
+        "material-items-validation-v5",
     ] = MATERIAL_ITEMS_VALIDATION_VERSION
     max_tasks: int = Field(default=1, ge=0)
     max_attempts: int = Field(default=0, ge=0)
@@ -346,6 +351,7 @@ class LedgerTask(BaseModel):
     publication_status: Literal["unpublished", "candidate", "published", "withdrawn", "superseded"]
     context_status: Literal["complete", "partial", "missing", "ambiguous", "budget_exceeded"]
     dependency_task_ids: tuple[str, ...]
+    endpoint_item_ids: tuple[str, ...] = ()
     artifact_sha256: str | None = Field(default=None, exclude_if=lambda value: value is None)
     error_codes: tuple[str, ...]
 
@@ -1447,10 +1453,10 @@ class ExecutionJournal:
             (self.plan.batch_id, parent.task_id),
         ).fetchone()
         if row is None or (
-            row["execution_status"],
-            row["protocol_status"],
-            row["quality_status"],
-        ) != ("succeeded", "valid", "accepted"):
+            row["execution_status"] != "succeeded"
+            or row["quality_status"] == "rejected"
+            or not row["payload_object_sha256"]
+        ):
             self.connection.execute(
                 "UPDATE derivations SET status='dependency_not_ready', "
                 "reason_code='CS_DEPENDENCY_NOT_READY' WHERE batch_id=? AND parent_task_id=?",
@@ -1460,7 +1466,24 @@ class ExecutionJournal:
         items_run = MaterialRun.model_validate(
             _read_object(self.root, row["payload_object_sha256"])
         )
-        endpoints = tuple(item.item_id for item in items_run.understanding.items)
+        qualified_item_ids = {
+            item_ref
+            for entry in items_run.understanding.coverage.slot_ledger
+            if entry.status == "extracted"
+            for item_ref in entry.item_refs
+        }
+        endpoints = tuple(
+            item.item_id
+            for item in items_run.understanding.items
+            if item.item_id in qualified_item_ids
+        )
+        if not endpoints:
+            self.connection.execute(
+                "UPDATE derivations SET status='dependency_not_ready', "
+                "reason_code='CS_DEPENDENCY_NOT_READY' WHERE batch_id=? AND parent_task_id=?",
+                (self.plan.batch_id, parent.task_id),
+            )
+            return None
         profile = next(
             profile for profile in self.plan.profiles if profile.role == "material_relations"
         )
@@ -2072,6 +2095,7 @@ def check_batch(batch_id: str, *, store_root: str | Path | None = None) -> Batch
                 publication_status=row["publication_status"],
                 context_status=row["context_status"],
                 dependency_task_ids=tuple(json.loads(row["dependency_task_ids"])),
+                endpoint_item_ids=tuple(json.loads(row["endpoint_item_ids"])),
                 artifact_sha256=row["artifact_sha256"],
                 error_codes=tuple(json.loads(row["error_codes"])),
             )

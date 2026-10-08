@@ -145,6 +145,7 @@ class ExtractionAdapter:
             "role_profile_sha256": intent.role_profile_sha256,
             "request_sha256": intent.request_sha256,
             "attempt_id": attempt_id,
+            "idempotency_key": attempt_id,
             "attempts": 0,
             "usage": None,
             "cost": None,
@@ -172,7 +173,10 @@ class ExtractionAdapter:
                 diagnostics["attempts"] = 1
                 response = client.post(
                     profile.base_url + "/chat/completions",
-                    headers={"Authorization": f"Bearer {secret}"},
+                    headers={
+                        "Authorization": f"Bearer {secret}",
+                        "Idempotency-Key": attempt_id,
+                    },
                     json=body,
                 )
                 phase = "parse"

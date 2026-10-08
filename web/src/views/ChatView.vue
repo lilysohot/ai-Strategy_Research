@@ -16,6 +16,7 @@ import ApprovalCard from '@/components/ApprovalCard.vue'
 import AnalysisEvidence from '@/components/business/AnalysisEvidence.vue'
 import AnalysisRerunPanel from '@/components/business/AnalysisRerunPanel.vue'
 import BusinessWorkspace from '@/components/business/BusinessWorkspace.vue'
+import BusinessInputRequestDialog from '@/components/business/BusinessInputRequestDialog.vue'
 import SessionPlanManager from '@/components/business/SessionPlanManager.vue'
 import DiffPanel from '@/components/DiffPanel.vue'
 import PlanPanel from '@/components/PlanPanel.vue'
@@ -345,6 +346,31 @@ watch(
   },
 )
 
+// ——— Agent 缺数据 → 结构化补数弹窗（2026-10-08）———
+// 信号来自服务端：worker 声明意图后由 API 落库为 pending 的 input_request（issue 04）。
+// 前端不解析自然语言，只按“该研究是否存在未提示过的 pending 请求”决定是否自动弹出。
+import { inputRequests as inputRequestsApi } from '@/api'
+import type { InputRequest } from '@/types'
+
+const inputDialogOpen = ref(false)
+const inputDialogRequest = ref<InputRequest | null>(null)
+const promptedRequestIds = new Set<string>()
+
+async function maybeOpenInputRequest(): Promise<void> {
+  const id = sessions.activeId
+  if (!id || inputDialogOpen.value) return
+  try {
+    const res = await inputRequestsApi.list({ research_id: id, status: 'pending', limit: 20 })
+    const next = res.requests.find((item) => !promptedRequestIds.has(item.id))
+    if (!next) return
+    promptedRequestIds.add(next.id)
+    inputDialogRequest.value = next
+    inputDialogOpen.value = true
+  } catch {
+    // 补数查询失败不影响对话；HTTP 查询是恢复真源，下一次刷新会再试。
+  }
+}
+
 async function reloadTurns(): Promise<void> {
   const id = sessions.activeId
   if (!id) return
@@ -353,6 +379,7 @@ async function reloadTurns(): Promise<void> {
   } catch {
     // Keep the live stream visible if the authoritative refresh races.
   }
+  await maybeOpenInputRequest()
 }
 
 function buildRunPayload(text: string, files: File[]): { message: string; session_id?: string } | FormData {
@@ -752,6 +779,12 @@ watch(
         :plans="sessionPlans"
         @save="saveSessionPlan"
         @dirty-change="planDirty = $event"
+      />
+
+      <BusinessInputRequestDialog
+        v-model="inputDialogOpen"
+        :request="inputDialogRequest"
+        @answered="reloadTurns"
       />
 
       <ResearchCanvas

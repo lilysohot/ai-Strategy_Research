@@ -31,7 +31,7 @@ CONFIG_KEYS = tuple(
         "API_KEY",
     )
 )
-ADAPTER_VERSION = "structured-chat-http-1"
+ADAPTER_VERSION = "structured-chat-http-2"
 Role = Literal["claims", "material_items", "material_relations"]
 PROTOCOLS: dict[str, str] = {
     "claims": "claims-json-v2",
@@ -81,7 +81,7 @@ class ExtractionProfile(BaseModel):
     credential_ref: Literal["env:STRUCTURED_EXTRACTION_API_KEY"] = (
         "env:STRUCTURED_EXTRACTION_API_KEY"
     )
-    adapter_version: Literal["structured-chat-http-1"] = ADAPTER_VERSION
+    adapter_version: Literal["structured-chat-http-2"] = ADAPTER_VERSION
     options: RequestOptions = Field(default_factory=RequestOptions)
 
     @property
