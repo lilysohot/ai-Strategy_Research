@@ -615,7 +615,7 @@ watch(
         <article v-for="m in messages" :key="m.id" class="turn-card" :class="m.role">
           <div class="turn-role">{{ m.role === 'user' ? '你' : 'Agent' }}</div>
           <details v-if="m.role === 'assistant' && m.thinking" class="turn-thinking">
-            <summary class="turn-thinking__summary">模型推理 / 思路</summary>
+            <summary class="turn-thinking__summary">深度思考<span class="turn-thinking__summary-caret">▾</span></summary>
             <pre class="turn-thinking__body">{{ m.thinking }}</pre>
           </details>
           <div class="turn-body" v-html="m.html" />
@@ -785,32 +785,50 @@ watch(
 }
 
 .turn-thinking {
-  margin-bottom: 8px;
-  border: 1px solid var(--line-strong);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--muted) 6%, var(--bg));
-  padding: 4px 14px;
+  margin: 0 0 8px;
 }
 
 .turn-thinking__summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
   letter-spacing: 0.03em;
   user-select: none;
+  padding: 0;
+  border: none;
+  background: none;
 }
 
 .turn-thinking__summary::before {
-  content: '▸ ';
-  opacity: 0.7;
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
 }
-.turn-thinking[open] .turn-thinking__summary::before {
-  content: '▾ ';
+
+.turn-thinking__summary-caret {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: transform 120ms;
+}
+
+.turn-thinking[open] .turn-thinking__summary-caret {
+  transform: rotate(180deg);
 }
 
 .turn-thinking__body {
   margin: 8px 0 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--muted) 6%, var(--bg));
+  padding: 12px 14px;
   max-height: 320px;
   overflow: auto;
   white-space: pre-wrap;
