@@ -48,7 +48,9 @@ worker 只表达**最小意图**，落库由持库凭据的 API 侧完成；work
 1. **真实 worker 子进程端到端未验**：没有用真实 worker + mock 模型"真的调用该工具"跑完整链路；
    当前只验证了工具/意图文件的纯逻辑与 API 侧落库，`request_investment_input → 文件 → 落库`
    尚未在子进程内贯通验证。
-2. **收尾路径只接了正常帧路径**：`_materialize_input_intent` 仅在 `_persist_run_result` 调用；
-   兜底 `_synthesize_terminal_frame`（读 `summary.json`）与启动孤儿恢复 `reconcile_orphan_runs`
-   未单独接线或复验（幂等键保证重复安全，但"API 崩溃后由孤儿恢复补建请求"未验证）。
+2. **收尾路径接线**（2026-10-08 补做，已收口）：三条路径统一到 `_materialize_input_intent`
+   —— 正常帧与兜底 `summary.json` 都走 `_persist_run_result`（后者由 `_synthesize_terminal_frame`
+   复用），`_recover_finished_run` 已补调用。全套 `tests/pg` **214 passed**（含既有孤儿恢复回归），
+   Ruff 本批 0 错误，import smoke 387/387。
+   **仍缺**：专门覆盖"恢复时存在意图 → 补建请求"的用例（当前只验证了函数幂等与正常路径）。
 3. 无主账户时"引导创建账户"的提示语未实现（当前仅按用途推导字段）。

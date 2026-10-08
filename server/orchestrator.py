@@ -1231,20 +1231,19 @@ class Orchestrator:
             run_id=uuid.UUID(handle.run_id) if _looks_like_uuid(handle.run_id) else None,
         )
 
-    async def _materialize_input_intent(self, handle: RunHandle) -> None:
+    async def _materialize_input_intent(self, run_id: str) -> None:
         """Best-effort：把 worker 的缺料意图落库（方案 A）。
 
         失败只记日志，绝不能影响 Run 终态写入；幂等由 ``worker-intent:<run_id>`` 保证，
-        因此兜底 summary 路径与孤儿恢复重复调用是安全的。
+        因此正常帧收尾、兜底 ``summary.json``（经 ``_synthesize_terminal_frame``）与
+        孤儿恢复（``_recover_finished_run``）三条路径重复调用是安全的。
         """
         try:
             from server import business_service as _biz
             from server import input_requests as _input_requests
 
             async with _biz.business_transaction() as session:
-                await _input_requests.materialize_worker_intent(
-                    session, run_id=uuid.UUID(handle.run_id)
-                )
+                await _input_requests.materialize_worker_intent(session, run_id=uuid.UUID(run_id))
         except Exception:
             logging.getLogger("orchestrator").warning(
                 "worker input intent materialize failed", exc_info=True
@@ -1263,7 +1262,7 @@ class Orchestrator:
             return
         # 方案 A：先按 worker 留下的意图建补数请求（此时 Run 仍活跃，会被置
         # stopped/input_required），再落终态；update_run_result 对该原因有防复活保护。
-        await self._materialize_input_intent(handle)
+        await self._materialize_input_intent(handle.run_id)
         ok = frame.get("ok")
         stopped_by = frame.get("stopped_by") or ""
         error = frame.get("error") or ""
@@ -1356,6 +1355,8 @@ class Orchestrator:
         artifact scan upserts on ``(run_id, rel_path)`` and usage is a pure sum
         over the trajectory.
         """
+        # 方案 A：API 崩溃后由本进程重启收尾时，同样要把 worker 留下的缺料意图落库。
+        await self._materialize_input_intent(str(run_id))
         if final_answer:
             existing = await list_turns(session_id=session_id)
             already_recorded = any(
