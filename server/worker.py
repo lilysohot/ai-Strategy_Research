@@ -158,6 +158,32 @@ def _finalize_investment_context(
         reset_investment_context(context_tokens)
 
 
+def _finalize_input_intent(run_root: Path, token: Any | None) -> None:
+    """Persist the model-declared input intent for the API to materialize (方案 A).
+
+    worker 不写库、不指定 owner 与字段：只留下用途与原因，字段由 API 按用途裁决。
+    """
+    if token is None:
+        return
+    from plugins.tools.investment_input_request import pending_input_intent, reset_input_intent
+
+    try:
+        intent = pending_input_intent()
+        if intent:
+            payload = {
+                "schema_version": "input-request/1",
+                "use_case": intent.get("use_case"),
+                "reason": intent.get("reason"),
+            }
+            tmp = run_root / "input-request.json.tmp"
+            tmp.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            os.replace(tmp, run_root / "input-request.json")
+    except OSError:
+        logging.getLogger("worker").warning("input intent persist failed", exc_info=True)
+    finally:
+        reset_input_intent(token)
+
+
 def apply_env(
     paths: dict[str, Path],
     *,
@@ -424,10 +450,14 @@ async def run_once(args: argparse.Namespace) -> int:
 
     investment_context = _load_investment_context(run_root, args.run_id)
     context_tokens = None
+    intent_token = None
     if investment_context is not None:
         from plugins.tools.investment_context import bind_investment_context
+        from plugins.tools.investment_input_request import bind_input_intent
 
         context_tokens = bind_investment_context(investment_context)
+        # 方案 A：worker 只记录“缺料意图”，落库由 API 侧在 Run 终态完成。
+        intent_token = bind_input_intent()
 
     overrides = build_profile_overrides(has_investment_context=investment_context is not None)
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
@@ -555,6 +585,7 @@ async def run_once(args: argparse.Namespace) -> int:
         except Exception:
             logging.getLogger("worker").warning("diff generation failed", exc_info=True)
         _finalize_investment_context(run_root, context_tokens)
+        _finalize_input_intent(run_root, intent_token)
 
     # Persist a small summary the orchestrator/relay can read for the runs table.
     # stopped_by precedence mirrors the run_finished frame above. ``bridge`` is

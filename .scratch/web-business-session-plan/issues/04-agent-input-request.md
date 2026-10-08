@@ -1,43 +1,54 @@
 # 04 Agent 主动补数触发与字段集合
 
 Type: task
-Status: open
+Status: resolved
 Blocked by: 02
-Labels: needs-info
+Labels: ready-for-human
 
 ## 目标
 
-- Agent 识别研究标的后、准备给出价位/仓位结论且必填项缺失时，创建补数请求，复用
-  `input_requests.create_request`；模型不能指定 owner 或研究以外的对象。
-- 材料阅读不触发。
-- 字段集合：规划资金（必需）+ 承受风险 + 期望盈利（可后补），单位与币种按契约。
-- 无主账户时请求带账户创建引导；无来源 Run 沿用 continuation。
-- 触发幂等：同一 Run 内不重复建同用途请求。
+- Agent 识别研究标的后、准备给出价位/仓位结论且必填项缺失时创建补数请求；材料阅读不触发。
+- 字段由服务端按用途推导；无主账户时带账户创建引导；同一 Run 不重复建请求。
 
-## 落点（初判）
+## 结论：按方案 A 实施（2026-10-08 用户裁决）
 
-`server/input_requests.py`、`plugins/tools/`、`server/worker.py`、`tests/pg/test_input_requests.py`
+worker 只表达**最小意图**，落库由持库凭据的 API 侧完成；worker 不写库、不指定 owner 与字段。
 
-## Comments
+## 实现（2026-10-08）
 
-2026-10-08 核查发现（阻塞原因，需决策）：
+- **worker 侧**
+  - 新增 `plugins/tools/investment_input_request.py`：`request_investment_input(use_case, reason)`
+    只把意图写入进程内可变槽（ContextVar 持 dict，与 `_METRICS` 同模式，跨子任务可见）；
+    用途限 `plan_analysis`/`holding_cost`，非业务 Run 未绑定槽时不产生请求。
+  - `server/worker.py`：业务 Run 启动时 `bind_input_intent()`；收尾 `_finalize_input_intent()`
+    把意图原子写到 Run 目录 `input-request.json`（`schema_version=input-request/1`）。
+  - 白名单与 profile：`plugins/tools/__init__.py`、`server/profile.py`（业务 Run 可见 + 策略文案
+    要求"缺料时调一次、不要编数值、纯阅读不要请求"）。
+- **API 侧**
+  - `server/input_requests.py::materialize_worker_intent(session, run_id)`：读意图 → 取该 Run
+    冻结快照 → 按**意图用途**（覆盖快照用途）用 `snapshots.resolve_for_run` 裁决 →
+    `PurposeRequirementError.fields` 归一化后 `create_request`（幂等键 `worker-intent:<run_id>`）→
+    来源 Run 置 `stopped/input_required`；无意图/无快照/字段齐全时返回 None。
+  - `create_request` 新增 `enforce_snapshot_use_case: bool = True`；续接 Run 的 `use_case` 取
+    **本次请求的用途**（Agent 识别出按新用途给结论时，快照用途可能更早）。
+  - `server/orchestrator.py`：`_persist_run_result` 落终态前调用 `_materialize_input_intent`
+    （best-effort，失败不影响终态；先建请求 → Run 被置 input_required → `update_run_result`
+    防复活分支保留该原因）。
 
-1. **worker 无法直接写库**。业务工具跑在 worker 子进程；DATA-08 明确 worker 只拿该 Run 的最小
-   上下文并隔离平台数据库 DSN（`server/worker.py` 将 `SERVER_DATABASE_URL` 置为私有内存库、
-   移除 Docker DSN）。因此“Agent 工具直接调用 `create_request`”在当前架构下不成立。
-2. **上下文缺 `user_id`**。绑定给工具的 Run 上下文（`server/investment_context.py`）含
-   `run_id`/`research_id`/`use_case`/`values`，**不含 owner**；而 `create_request` 需要
-   `user_id` 与数据库会话。owner 也不允许由模型或请求体决定（契约 §1.4）。
-3. 结论：需要一条 **worker → API 的补数意图通道**，由持库凭据的 API 侧落库，而不是在 worker 内写库。
+## 验收
 
-## 候选取向（待用户裁决后实施）
+- 新增 `tests/pg/test_worker_input_intent.py`（2 项）：意图落库一次且幂等（重复调用不产生第二条）、
+  用途取自意图、字段由服务端推导（含 `plan.allocated_capital`）、`source_run_id` 关联、
+  来源 Run 终态为 `stopped/input_required`；无意图时零请求。
+- 全套 `tests/pg`：**214 passed**；Ruff 本批文件 0 错误；import smoke 387/387；
+  symbol closure 485 文件 0 缺失。证据：`evidence/04-pg.log`。
 
-| 取向 | 做法 | 代价 |
-|---|---|---|
-| A（推荐） | worker 在 Run 目录写结构化意图 sidecar（`use_case`/`fields`/`reason`/`account_missing`），Run 以 `input_required` 结束时由 API 侧终态收尾逻辑读取并创建 `input_request`（复用 DATA-12 事件）；旧 Run 语义不变 | 需定义意图文件契约与「领取/幂等」边界；不新增网络通道 |
-| B | worker 经 loopback HTTP + 服务令牌回调 API 创建请求 | 引入 worker→API 鉴权与失败重试；与最小权限原则冲突面更大 |
+## 未覆盖（登记缺口，不放行）
 
-## 未完成
-
-- 工具/通道均未实施；字段集合与幂等规则未落到代码。
-- 05 前端弹窗依赖本项确定的接口形态，故一并顺延。
+1. **真实 worker 子进程端到端未验**：没有用真实 worker + mock 模型"真的调用该工具"跑完整链路；
+   当前只验证了工具/意图文件的纯逻辑与 API 侧落库，`request_investment_input → 文件 → 落库`
+   尚未在子进程内贯通验证。
+2. **收尾路径只接了正常帧路径**：`_materialize_input_intent` 仅在 `_persist_run_result` 调用；
+   兜底 `_synthesize_terminal_frame`（读 `summary.json`）与启动孤儿恢复 `reconcile_orphan_runs`
+   未单独接线或复验（幂等键保证重复安全，但"API 崩溃后由孤儿恢复补建请求"未验证）。
+3. 无主账户时"引导创建账户"的提示语未实现（当前仅按用途推导字段）。

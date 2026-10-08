@@ -132,6 +132,78 @@ def _spec_json(spec: snapshots.InvestmentInputSpec) -> dict[str, Any]:
     }
 
 
+async def materialize_worker_intent(
+    session: AsyncSession, *, run_id: uuid.UUID
+) -> dict[str, Any] | None:
+    """把 worker 声明的“缺料意图”落库成补数请求（方案 A，2026-10-08）。
+
+    worker 不写库、不指定 owner 与字段：它只在 Run 目录留下 ``input-request.json``
+    （``use_case`` + ``reason``）。这里按该用途对该 Run 的**冻结快照**裁决缺失字段后建请求，
+    并把来源 Run 置 ``stopped/input_required``（由 ``create_request`` 完成）。
+
+    幂等：同一 Run 只生成一条请求（幂等键 ``worker-intent:<run_id>``）。正常收尾、兜底
+    ``summary.json`` 与孤儿恢复三条路径重复调用是安全的；无意图、无快照、字段齐全时不建请求。
+    """
+    import json
+    from pathlib import Path
+
+    run = await session.get(store.Run, run_id, with_for_update=True)
+    if run is None:
+        return None
+    run_root = Path(run.run_dir or run_dir_for(run_id.hex))
+    path = run_root / "input-request.json"
+    if not path.exists():
+        return None
+    try:
+        intent = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        import logging
+
+        logging.getLogger("input_requests").warning("worker intent is unreadable", exc_info=True)
+        return None
+    if not isinstance(intent, dict) or intent.get("schema_version") != "input-request/1":
+        return None
+    use_case = str(intent.get("use_case") or "")
+    if use_case not in {"plan_analysis", "holding_cost"}:
+        return None
+    snapshot = await snapshots.get_snapshot(session, user_id=run.user_id, run_id=run_id)
+    if snapshot is None:
+        # 老的非业务 Run 没有快照：不伪造输入，也不建请求。
+        return None
+    spec = replace(snapshots.spec_from_snapshot(snapshot), use_case=use_case)
+    try:
+        await snapshots.resolve_for_run(
+            session, user_id=run.user_id, research_id=run.session_id, spec=spec
+        )
+    except biz.PurposeRequirementError as exc:
+        requested = _normalize_missing_fields(exc.fields)
+        if not requested:
+            return None
+        outcome = await create_request(
+            session,
+            user_id=run.user_id,
+            research_id=run.session_id,
+            use_case=use_case,
+            fields=requested,
+            idempotency_key=f"worker-intent:{run_id}",
+            source_run_id=run_id,
+            enforce_snapshot_use_case=False,
+        )
+        return outcome.result
+    return None
+
+
+def _normalize_missing_fields(fields: dict[str, str]) -> list[dict[str, Any]]:
+    """把 ``{"group.name|alt.name": reason}`` 归一化成请求字段（与自动分析同形）。"""
+    items: list[dict[str, Any]] = []
+    for key, reason in sorted(fields.items()):
+        first = str(key).split("|", 1)[0]
+        if "." not in first:
+            continue
+        items.append({"name": first, "reason": reason})
+    return items
+
+
 async def create_request(
     session: AsyncSession,
     *,
@@ -144,6 +216,7 @@ async def create_request(
     watch_event_id: uuid.UUID | None = None,
     continuation: dict[str, Any] | None = None,
     expires_at: datetime | None = None,
+    enforce_snapshot_use_case: bool = True,
 ) -> biz.WriteOutcome:
     requested = validate_fields(fields)
     payload = {
@@ -178,13 +251,18 @@ async def create_request(
             if snapshot is None:
                 raise biz.SnapshotAbsentError("来源运行没有业务快照，无法建立补数续接")
             spec = snapshots.spec_from_snapshot(snapshot)
-            if use_case != snapshot.use_case:
+            if use_case != snapshot.use_case and enforce_snapshot_use_case:
                 raise biz.ValidationError(
                     "补数用途与来源快照不一致", fields={"use_case": snapshot.use_case}
                 )
+            # 续接 Run 的用途必须是**本次请求的用途**：Agent 识别出要按新用途给结论时，
+            # 来源快照的用途可能更早（方案 A，2026-10-08）。
+            spec_json = _spec_json(spec)
+            if isinstance(spec_json, dict):
+                spec_json["use_case"] = use_case
             continuation_data = {
                 "message": source_run.prompt,
-                "investment_input": _spec_json(spec),
+                "investment_input": spec_json,
                 "pipeline_id": source_run.pipeline_id,
             }
             if snapshot.account_revision is not None:

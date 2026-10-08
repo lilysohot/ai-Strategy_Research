@@ -1,0 +1,38 @@
+# evidence：04 Agent 主动补数（方案 A，2026-10-08）
+
+环境同前（隔离库 `apodex_sp_test`、角色 `sp_test`、运行根 `/tmp/frontier-sp-test-runs`）。
+
+定向
+
+    uv run --no-sync pytest tests/pg/test_worker_input_intent.py -q
+    → 2 passed
+
+全套
+
+    uv run --no-sync pytest tests/pg -q
+    → 214 passed（03 收口后 212 + 本项 2）
+
+门禁
+
+    ruff check server plugins tests/pg            → All checks passed
+    python tools/import_smoke.py --stage 1        → [framework] 387/387 modules imported
+    python tools/check_symbols.py                 → OK: 0 missing-symbol import(s) across 485 file(s)
+
+实现要点
+- worker：`plugins/tools/investment_input_request.py`（意图槽）+ `worker._finalize_input_intent`
+  写 `<run_dir>/input-request.json`；白名单与业务 profile 已登记该工具。
+- API：`input_requests.materialize_worker_intent` 按意图用途裁决冻结快照缺失字段后建请求，
+  幂等键 `worker-intent:<run_id>`；`create_request` 增 `enforce_snapshot_use_case`，
+  续接 Run 用途取本次请求用途；`orchestrator._persist_run_result` 前置调用（best-effort）。
+
+断言覆盖
+- 意图存在且字段不全 → 请求恰一条：`use_case=plan_analysis`、字段含 `plan.allocated_capital`、
+  `source_run_id` 等于该 Run、来源 Run 为 `stopped/input_required`；
+- 重复调用（三条收尾路径场景）不产生第二条；
+- 无意图 → 零请求。
+
+未覆盖
+- 真实 worker 子进程 e2e（模型调用工具 → 文件 → 落库）未跑；
+- 孤儿恢复/兜底 summary 路径未接线、未复验；
+- 无主账户的引导提示未实现。
+- 未部署 API、未迁移生产库。

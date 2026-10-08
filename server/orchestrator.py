@@ -1231,6 +1231,25 @@ class Orchestrator:
             run_id=uuid.UUID(handle.run_id) if _looks_like_uuid(handle.run_id) else None,
         )
 
+    async def _materialize_input_intent(self, handle: RunHandle) -> None:
+        """Best-effort：把 worker 的缺料意图落库（方案 A）。
+
+        失败只记日志，绝不能影响 Run 终态写入；幂等由 ``worker-intent:<run_id>`` 保证，
+        因此兜底 summary 路径与孤儿恢复重复调用是安全的。
+        """
+        try:
+            from server import business_service as _biz
+            from server import input_requests as _input_requests
+
+            async with _biz.business_transaction() as session:
+                await _input_requests.materialize_worker_intent(
+                    session, run_id=uuid.UUID(handle.run_id)
+                )
+        except Exception:
+            logging.getLogger("orchestrator").warning(
+                "worker input intent materialize failed", exc_info=True
+            )
+
     async def _persist_run_result(self, handle: RunHandle, frame: dict[str, Any]) -> None:
         """Persist the run's terminal state (T2.7 / T2.8).
 
@@ -1242,6 +1261,9 @@ class Orchestrator:
         """
         if not _looks_like_uuid(handle.run_id):
             return
+        # 方案 A：先按 worker 留下的意图建补数请求（此时 Run 仍活跃，会被置
+        # stopped/input_required），再落终态；update_run_result 对该原因有防复活保护。
+        await self._materialize_input_intent(handle)
         ok = frame.get("ok")
         stopped_by = frame.get("stopped_by") or ""
         error = frame.get("error") or ""

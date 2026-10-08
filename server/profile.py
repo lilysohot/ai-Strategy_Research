@@ -61,6 +61,7 @@ TASK_BOARD_TOOL_NAMES = [
 
 BUSINESS_TOOL_NAMES = [
     "investment_context",
+    "investment_input_request",
     "investment_position_sizing",
     "investment_strategy_lint",
 ]
@@ -70,6 +71,9 @@ BUSINESS_CONTEXT_POLICY = """BUSINESS CONTEXT POLICY:
 - Business numbers must come from that frozen context or investment_context; do not infer them from history.
 - Use investment_position_sizing for personalised sizing. Its capital, plan prices and limits are server-bound.
 - Validate strategy cards with investment_strategy_lint; the raw strategy_lint is not a business-Run gate.
+- When you are about to give a price/position conclusion but required user facts are missing, call
+  investment_input_request(use_case, reason) once; the system asks the user and the server derives the
+  missing fields. Do not invent those fields, and do not request facts for pure material reading.
 - If a required field is missing or pending, explain what is missing and do not invent a numeric result."""
 
 

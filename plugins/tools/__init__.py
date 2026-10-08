@@ -29,6 +29,7 @@ from plugins.tools.investment_context import (
     investment_position_sizing,
     investment_strategy_lint,
 )
+from plugins.tools.investment_input_request import request_investment_input
 from plugins.tools.market_financials import market_financials
 from plugins.tools.market_history import market_history
 from plugins.tools.market_quote import market_quote
@@ -71,6 +72,7 @@ _BUILTIN_TOOLS: list[Tool] = [
     investment_context,
     investment_position_sizing,
     investment_strategy_lint,
+    request_investment_input,
     # 语料检索 / 取证（P0b）。只读本地 SQLite，无网络、无写入。
     # 加入本 allowlist 只让它们「可解析」，是否可见另由各 profile 决定。
     corpus_search,
