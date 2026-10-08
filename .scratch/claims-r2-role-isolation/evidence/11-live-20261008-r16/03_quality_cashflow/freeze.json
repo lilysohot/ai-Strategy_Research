@@ -1,0 +1,11 @@
+{
+  "segment": "03_quality_cashflow",
+  "batch_id": "batch:435568704002bcaea6a5b8708b1a17a9bdde477495ad0408de6ad9e9a61f8a4b",
+  "snapshot_id": "sha256:e3b6f83ac8b8a4a980db2b644628088c9057d1f669185aebe04b6489cdbb5890",
+  "candidate_slot_count": 8,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "337278d349ace73d61c1ae899c3f84e7298106e8fb49efb8892dc11a7246d8ac",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

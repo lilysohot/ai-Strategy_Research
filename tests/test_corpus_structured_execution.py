@@ -297,7 +297,7 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
     first.verify_identity()
     assert {task.method for task in first.tasks} == {"deterministic", "model"}
     assert all(task.role != "material_relations" for task in first.tasks)
-    assert first.relations.rule_version == "material-relation-candidates-v1"
+    assert first.relations.rule_version == "material-relation-candidates-v2"
     assert first.routing.decisions
     assert all(decision.reason_codes for decision in first.routing.decisions)
 

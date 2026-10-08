@@ -25,12 +25,12 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-14"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-19"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v4"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v1"
-RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v1"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v2"
+RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v2"
 
 MaterialType = Literal[
     "research_report",
@@ -153,6 +153,10 @@ unknown_fields。先输出 speaker，再输出引用它的 item；最多输出 {
 - unknown_fields 必须是 JSON 字符串数组；没有未知字段时输出 []，不得输出 null、对象或字符串。
 - statement_role 优先级 risk > condition > evidence > question/answer > claim/other。条件答句是
   condition + speech_role=answer，被引述论据答句是 evidence + speech_role=answer。
+- fact 仅用于原文直接报告的事件、动作、数值或可核事实；“经营向上明确、底层逻辑未变、改革成效、
+  利好、质量仍高、增长路径清晰”等分析判断是 opinion。含下半年、H2、明年、未来、预计等尚未发生
+  时点的判断是 forecast。“尽管/虽然……但……”是让步结构，不是 condition；只有如果、若、只要、
+  除非、前提、取决于等明确前提才标 condition。
 - 匿名主持人/专家/投资者的 role 分别为 moderator/industry_expert/investor_participant，
   identity_status=unknown；标题作者或实名才 explicit。摘要无署名则 summary_author + unknown。
 - “公司公布/公告/某人说”必须另建 quoted_source，perspective=quoted_other；目标价、EPS 预测和
@@ -414,12 +418,14 @@ class RelationCandidateSet(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     candidate_set_id: str
-    rule_version: Literal["material-relation-candidates-v1"] = RELATION_CANDIDATE_RULE_VERSION
+    rule_version: Literal["material-relation-candidates-v1", "material-relation-candidates-v2"] = (
+        RELATION_CANDIDATE_RULE_VERSION
+    )
     snapshot_id: str
     items_run_id: str
-    items_validation_version: Literal["material-items-validation-v1"] = (
-        MATERIAL_ITEMS_VALIDATION_VERSION
-    )
+    items_validation_version: Literal[
+        "material-items-validation-v1", "material-items-validation-v2"
+    ] = MATERIAL_ITEMS_VALIDATION_VERSION
     endpoint_item_ids: tuple[str, ...]
     candidates: tuple[RelationCandidate, ...]
 
@@ -467,7 +473,14 @@ _NUMBERED_QUESTION_RE = re.compile(
 _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("summary", re.compile(r"总结|摘要|总体而言|核心观点|投资建议")),
     ("question", re.compile(r"[？?]|(?:^|\n)\s*(?:问|问题)\s*[：:]")),
-    ("forecast", re.compile(r"预计|(?<!市场)预期|有望|未来|后续|将会|可能|展望|趋势")),
+    (
+        "forecast",
+        re.compile(
+            r"预计|(?<!市场)预期|有望|未来|后续|将会|可能|展望|趋势|下半年|明年|年内|中长期|"
+            r"(?<![A-Za-z0-9])H2(?![A-Za-z0-9])",
+            re.I,
+        ),
+    ),
     ("condition", re.compile(r"如果|只要|除非|前提|取决于|验证成功")),
     ("risk", re.compile(r"风险|不及预期|下行|恶化|失败|不确定|持续疲软|竞争加剧")),
     ("negation", re.compile(r"并不|不是|不会|不能|没有|尚未|未能|不一定|不必然")),
@@ -475,7 +488,7 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "evidence",
         re.compile(
-            r"因为|依据|数据显示|公告|公布|说过|表明|原因|所以|主要系|主要由于|"
+            r"因为|依据|数据显示|公告|公布|说过|表明|原因|所以|主要是|主要系|主要由于|"
             r"原因在于|所致|受[^，。；]{1,40}影响"
         ),
     ),
@@ -495,8 +508,9 @@ _ATOMIC_BOUNDARY_RE = re.compile(
     r"(?:\d+|[一二三四五六七八九十百]+)[.．](?=\s)|"
     r"(?:风险提示|总结|摘要|事项|评论|投资建议|目标价|当前价|主持人|专家|投资者|问|答)\s*[：:]))|"
     r"，(?=\s*(?:并不|不一定|不必然|关键|那么|只是|只要|我们维持|维持一年目标价|"
-    r"预计|且|同时|为了|因为|由于|主要系|主要由于|原因在于|表明|受|年内|下半年|"
-    r"中长期|利好|但|工艺占|设备(?:只|仅)))|"
+    r"(?:Q[1-4]|H[12])?预计|经营最困难阶段已过|且|同时|为了|因为|由于|主要是|主要系|主要由于|原因在于|表明|受|年内|下半年|"
+    r"中长期|利好|但|归母净利润|当前批价|投放量可由|重申|工艺占|"
+    r"设备(?:只|仅)))|"
     r"、(?=[^。；\n]{0,24}(?:不及预期|加剧|恶化|下行|失败|疲软|风险))|"
     r",\s*(?=this\s+is\b)|\s+(?=the\s+CEO\s+bought\b)|"
     r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)|"
@@ -602,6 +616,9 @@ def _slot_signals(text: str) -> tuple[str, ...]:
     decision = triage_block_detail(text)
     qualitative = "qualitative" in signals
     signals = [signal for signal in signals if signal != "qualitative"]
+    if "evidence" in signals and re.match(r"\s*(?:表明|说明|证明)", text):
+        signals = [signal for signal in signals if signal != "evidence"]
+        signals.append("claim")
     negation = ("negation",) if "negation" in signals else ()
     if "question" in signals:
         return ("question", *negation)
@@ -947,13 +964,15 @@ def _relation_candidate_pairs(
                     )
             prior = prior_items + group[:item_index]
             explicit_support = re.search(
-                r"因为|所以|表明|依据|数据显示|说明|证明|由此|主要系|主要由于|原因在于|"
+                r"因为|所以|表明|依据|数据显示|说明|证明|由此|主要是|主要系|主要由于|原因在于|"
                 r"所致|受[^，。；]{1,40}影响|(?:说|表示|公告)(?:过|称)?|"
                 r"because|therefore|according|shows?",
                 item.evidence[0].quote,
                 re.I,
             )
-            leading_conclusion = re.match(r"\s*(?:表明|说明|证明)", item.evidence[0].quote)
+            leading_conclusion = re.match(
+                r"\s*(?:表明|说明|证明|重申[^，。；]{0,12}评级)", item.evidence[0].quote
+            )
             if leading_conclusion and previous_in_group is not None:
                 pairs.append(
                     {
@@ -1239,10 +1258,62 @@ def _canonical_speaker(
     return role, identity_status
 
 
-def _normalize_semantic_type(value: object, statement_role: str) -> str:
+def _normalize_statement_role(value: object, *, text: str, quote: str) -> str:
+    normalized = str(value or "other").strip().lower()
+    source_text = re.sub(r"\s+", "", f"{text}{quote}")
+    explicit_condition = re.search(
+        r"如果|若(?=[^，。；]{1,40}(?:则|就|才|方|可|会|将|仍))|只要|除非|前提|仅在|取决于|"
+        r"验证成功(?:后)?|\bif\b|\bunless\b",
+        source_text,
+        re.I,
+    )
+    if normalized == "condition" and explicit_condition is None:
+        return "claim"
+    if normalized == "other" and re.match(r"^(?:尽管|虽然|即使|纵然)", source_text):
+        return "claim"
+    if re.match(
+        r"^(?:因为|由于|主要是|主要系|主要由于|原因在于|受[^，。；]{1,40}影响)", source_text
+    ):
+        return "evidence"
+    if normalized == "evidence" and re.match(r"^(?:表明|说明|证明)", source_text):
+        return "claim"
+    if normalized == "other" and re.search(
+        r"经营向上明确|底层逻辑(?:未变|重构)|利好|最困难阶段已过|破局之道|稳中向好|"
+        r"增长确定性|增长路径清晰|性价比逐步凸显|经营质量仍高|改革成效|"
+        r"市场化改革有序推进|平衡器与稳定器",
+        source_text,
+    ):
+        return "claim"
+    return normalized
+
+
+def _normalize_semantic_type(value: object, statement_role: str, *, text: str, quote: str) -> str:
     normalized = str(value or "unknown").strip().lower()
+    if normalized not in {"fact", "forecast", "opinion", "behavior", "unknown", "risk"}:
+        return normalized
+    if statement_role == "question":
+        return "unknown"
     if normalized == "risk" and statement_role == "risk":
         return "forecast"
+    source_text = re.sub(r"\s+", "", f"{text}{quote}")
+    if statement_role == "risk":
+        return "forecast"
+    if "目标价" in source_text or re.search(r"EPS(?:预测)?", source_text, re.I):
+        return "forecast"
+    if normalized in {"fact", "opinion", "unknown"} and re.search(
+        r"预计|有望|未来|后续|将会|可能|展望|下半年|明年|年内|中长期|"
+        r"(?<![A-Za-z0-9])H2(?![A-Za-z0-9])",
+        source_text,
+        re.I,
+    ):
+        return "forecast"
+    if normalized in {"fact", "unknown"} and re.search(
+        r"经营向上明确|底层逻辑(?:未变|重构)|利好|最困难阶段已过|破局之道|稳中向好|"
+        r"增长确定性|增长路径清晰|性价比逐步凸显|经营质量仍高|改革成效|"
+        r"市场化改革有序推进|平衡器与稳定器",
+        source_text,
+    ):
+        return "opinion"
     return normalized
 
 
@@ -1622,8 +1693,14 @@ def _packet_records(
                 raise ValueError("candidate obligation already has an item")
             if slot is not None and not (slot.start <= evidence.start and evidence.end <= slot.end):
                 raise ValueError("item evidence is outside its candidate obligation")
-            statement_role = _required_text(raw.get("statement_role"), "statement_role")
-            semantic_type = _normalize_semantic_type(raw.get("semantic_type"), statement_role)
+            statement_role = _normalize_statement_role(
+                _required_text(raw.get("statement_role"), "statement_role"),
+                text=text,
+                quote=quote,
+            )
+            semantic_type = _normalize_semantic_type(
+                raw.get("semantic_type"), statement_role, text=text, quote=quote
+            )
             speech_role = _deterministic_speech_role(
                 packet,
                 slot,
@@ -2895,7 +2972,7 @@ def _strict_relation_candidate_pairs(
             link_item = source if source_index > target_index else target
             if not re.search(
                 r"因为|所以|表明|依据|数据显示|说明|证明|由此|背景|不了解|但|"
-                r"主要系|主要由于|原因在于|所致|"
+                r"主要是|主要系|主要由于|原因在于|所致|重申[^，。；]{0,12}评级|"
                 r"(?:说|表示|公告)(?:过|称)?|because|therefore|according|shows?",
                 link_item.evidence[0].quote,
                 re.I,

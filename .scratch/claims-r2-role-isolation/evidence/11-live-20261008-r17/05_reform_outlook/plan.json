@@ -1,0 +1,203 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:dc752584476bf4978b319ad2e7f6c3b42a567c5ae133200ada5a68f3bd1f8fc5",
+  "plan_sha256": "sha256:dc752584476bf4978b319ad2e7f6c3b42a567c5ae133200ada5a68f3bd1f8fc5",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:3a3fe23543d25c68d498bf97ae1437da735ab91732f34e7e9973b308e7e8a972",
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "build_id": "7b51bf67367994aee69e47e9fc4cac8401c429f18962766c6e9f6abc2d4d642c",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-pdf-11+pymupdf-1.28.2",
+      "clean": "clean-5",
+      "chunk": "chunk-5",
+      "adapter": "approved-page1-material-segments-v2",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:b3f72c68399a83bd4b938bdb8d90e96911fe411a2462adc15d6b92248b207f21",
+        "chunk_id": "chunk:material-segment:05_reform_outlook",
+        "kind": "prose",
+        "locator": "page:1/unit:19/span:218-310",
+        "text": "我们\n认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过，Q3预计将\n抓住中秋旺季窗口放量，且下半年飞天供应偏紧、供需改善，生肖精品等高附\n加值产品性价比逐步凸显，利好结构升级。",
+        "text_sha256": "sha256:f40e4bee8624ffaaeee079643de9dc8fda9cb0178a1f73db3e7db9f69ace8e22",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:f40e4bee8624ffaaeee079643de9dc8fda9cb0178a1f73db3e7db9f69ace8e22",
+          "start": 0,
+          "end": 92
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "bbox": [
+            41.040000915527344,
+            447.6556091308594,
+            376.437744140625,
+            546.0343627929688
+          ],
+          "reader_source_span": [
+            218,
+            310
+          ],
+          "semantic_scope": "05_reform_outlook",
+          "document_voice": "华创证券研究报告",
+          "source_unit_id": "pdf-unit-19-span-218-310",
+          "source_kind": "prose",
+          "page": 1,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 19,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "华创证券：贵州茅台（600519）2026年中报点评",
+            "subject": "600519.SH",
+            "published": "2026-08-16"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:a586df8faa9131d22ab9f70bd4d311093c2ffc973a8d9a3ec1ba34af3ebe5f92",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "7b51bf67367994aee69e47e9fc4cac8401c429f18962766c6e9f6abc2d4d642c",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-pdf-11+pymupdf-1.28.2",
+        "clean": "clean-5",
+        "chunk": "chunk-5",
+        "adapter": "approved-page1-material-segments-v2",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:b3f72c68399a83bd4b938bdb8d90e96911fe411a2462adc15d6b92248b207f21",
+          "chunk_id": "chunk:material-segment:05_reform_outlook",
+          "kind": "prose",
+          "locator": "page:1/unit:19/span:218-310",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 92,
+          "text_sha256": "sha256:f40e4bee8624ffaaeee079643de9dc8fda9cb0178a1f73db3e7db9f69ace8e22",
+          "metadata_sha256": "sha256:a586df8faa9131d22ab9f70bd4d311093c2ffc973a8d9a3ec1ba34af3ebe5f92"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:3a3fe23543d25c68d498bf97ae1437da735ab91732f34e7e9973b308e7e8a972",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:b3f72c68399a83bd4b938bdb8d90e96911fe411a2462adc15d6b92248b207f21",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:b09fcfb172ce4151f093a269539bcdc7ffd73483da274a55544c50b8306cefba",
+  "tasks": [
+    {
+      "task_id": "task:e3095f9a5bda13c3c09d317531574bbdcfbb85c674ca7660a17e631cbeb48998",
+      "logical_key": "sha256:e3095f9a5bda13c3c09d317531574bbdcfbb85c674ca7660a17e631cbeb48998",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:b3f72c68399a83bd4b938bdb8d90e96911fe411a2462adc15d6b92248b207f21"
+      ],
+      "input_sha256": "sha256:e3095f9a5bda13c3c09d317531574bbdcfbb85c674ca7660a17e631cbeb48998",
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791431235.5688443,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:4c9db93be794fa3857563523620fb5b52fb07907b0855a232165abdbe935c5c5"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:b025cb021736099d9d6d65ce6c052534fadf8f33da4a369600310556b7c1c2bf"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 1,
+    "material_relations": 1
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 1
+  }
+}

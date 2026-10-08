@@ -1,0 +1,203 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:2e192ff94fa49fb10535b78be282c469e6099c44a8bcd93b7cc9e5c0adf116d9",
+  "plan_sha256": "sha256:2e192ff94fa49fb10535b78be282c469e6099c44a8bcd93b7cc9e5c0adf116d9",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40",
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "build_id": "865cd7a7b094c8899a4404c838a76136682bdf2b8b1ebdfb7ad0663e3ed94f4e",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-pdf-11+pymupdf-1.28.2",
+      "clean": "clean-5",
+      "chunk": "chunk-5",
+      "adapter": "approved-page1-material-segments-v2",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:28abb64c785d941c08c41e1612f9a0118e5ee1fb4f2ba6f19945d71c61e7c5bf",
+        "chunk_id": "chunk:material-segment:08_risks",
+        "kind": "prose",
+        "locator": "page:1/unit:23/span:0-31",
+        "text": "风险提示：宏观需求持续疲软、消费复苏不及预期、行业竞争加剧等。",
+        "text_sha256": "sha256:5d33c917bfd36329fb4ac01aed038d4efa6aacb865e01e65f7d29d188f02b0b8",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:5d33c917bfd36329fb4ac01aed038d4efa6aacb865e01e65f7d29d188f02b0b8",
+          "start": 0,
+          "end": 31
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "bbox": [
+            41.040000915527344,
+            630.2742919921875,
+            351.30999755859375,
+            640.2343139648438
+          ],
+          "reader_source_span": [
+            0,
+            31
+          ],
+          "semantic_scope": "08_risks",
+          "document_voice": "华创证券研究报告",
+          "source_unit_id": "pdf-unit-23-span-0-31",
+          "source_kind": "prose",
+          "page": 1,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 23,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "华创证券：贵州茅台（600519）2026年中报点评",
+            "subject": "600519.SH",
+            "published": "2026-08-16"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:44452c9c26d8d003aeec4d4933a97c5e00f9154dfe1ba7b5162c93a6d4ca8996",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "865cd7a7b094c8899a4404c838a76136682bdf2b8b1ebdfb7ad0663e3ed94f4e",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-pdf-11+pymupdf-1.28.2",
+        "clean": "clean-5",
+        "chunk": "chunk-5",
+        "adapter": "approved-page1-material-segments-v2",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:28abb64c785d941c08c41e1612f9a0118e5ee1fb4f2ba6f19945d71c61e7c5bf",
+          "chunk_id": "chunk:material-segment:08_risks",
+          "kind": "prose",
+          "locator": "page:1/unit:23/span:0-31",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 31,
+          "text_sha256": "sha256:5d33c917bfd36329fb4ac01aed038d4efa6aacb865e01e65f7d29d188f02b0b8",
+          "metadata_sha256": "sha256:44452c9c26d8d003aeec4d4933a97c5e00f9154dfe1ba7b5162c93a6d4ca8996"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:658612712f3e63fe9ac5eec7952ef6e6bd57112f211bfafd42dee550b42cac40",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:28abb64c785d941c08c41e1612f9a0118e5ee1fb4f2ba6f19945d71c61e7c5bf",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:8823e4ab10f6afcc4b0063b928412a3788ea74696934b053413f2677475af877",
+  "tasks": [
+    {
+      "task_id": "task:0d647e3e98210e87d634d3ff82ac52339265196978f0b562c7e2cf80b92ed9ef",
+      "logical_key": "sha256:0d647e3e98210e87d634d3ff82ac52339265196978f0b562c7e2cf80b92ed9ef",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:28abb64c785d941c08c41e1612f9a0118e5ee1fb4f2ba6f19945d71c61e7c5bf"
+      ],
+      "input_sha256": "sha256:0d647e3e98210e87d634d3ff82ac52339265196978f0b562c7e2cf80b92ed9ef",
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791431176.474472,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:4c9db93be794fa3857563523620fb5b52fb07907b0855a232165abdbe935c5c5"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:b025cb021736099d9d6d65ce6c052534fadf8f33da4a369600310556b7c1c2bf"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 1,
+    "material_relations": 1
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 1
+  }
+}

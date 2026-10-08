@@ -1,0 +1,61 @@
+{
+  "stage": "segmented_material_items_and_explicit_relations",
+  "source_scope": "page 1 narrative reader units 12,15,17,19,21,23",
+  "semantic_targets": [
+    "fact",
+    "forecast",
+    "opinion",
+    "argument",
+    "risk",
+    "condition",
+    "explicit_relation"
+  ],
+  "model": "doubao-seed-2.0-mini",
+  "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "segments": [
+    {
+      "name": "01_results",
+      "batch_id": "batch:68ccea06d4d0e35082e752e303fc15312649f096262a533d7e2445f04d85fbff",
+      "slots": 4
+    },
+    {
+      "name": "02_channels",
+      "batch_id": "batch:149b3bfe6581a3eb15f0233bb846a3ff544f852c935765f5d81f73fffd60520b",
+      "slots": 8
+    },
+    {
+      "name": "03_quality_cashflow",
+      "batch_id": "batch:369ab55d9bad7b71ef17a1fc56fac7d71c8fdd2c768ad679933eda0ef5a7bfcd",
+      "slots": 8
+    },
+    {
+      "name": "04_reform_actions",
+      "batch_id": "batch:b23c9e4730599dfc140ff23c07e11cd3f9e49054362e8304d14148ba32e01797",
+      "slots": 8
+    },
+    {
+      "name": "05_reform_outlook",
+      "batch_id": "batch:6b1fb5b087da78c1516f1e53659e33c311002947f4fe99709652ba8e01f9da42",
+      "slots": 5
+    },
+    {
+      "name": "06_recommendation_basis",
+      "batch_id": "batch:05d3ce2f01a659e1fb0d38e6990bddafe6300bfd07464c52fc51dd7f68620553",
+      "slots": 8
+    },
+    {
+      "name": "07_recommendation_conclusion",
+      "batch_id": "batch:4df6a8042d837c8ee1f9ddef1a4b9a225dcc24f73452a4d73e3b75358ccaf35b",
+      "slots": 4
+    },
+    {
+      "name": "08_risks",
+      "batch_id": "batch:68c4d995e9a04961c283167530dcda8fc06213a1ddc08054fa6cab59a5141762",
+      "slots": 3
+    }
+  ]
+}

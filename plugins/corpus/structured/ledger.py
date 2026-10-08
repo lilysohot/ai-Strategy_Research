@@ -180,10 +180,12 @@ class RelationPlan(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     enabled: bool = True
-    rule_version: Literal["material-relation-candidates-v1"] = RELATION_CANDIDATE_RULE_VERSION
-    items_validation_version: Literal["material-items-validation-v1"] = (
-        MATERIAL_ITEMS_VALIDATION_VERSION
+    rule_version: Literal["material-relation-candidates-v1", "material-relation-candidates-v2"] = (
+        RELATION_CANDIDATE_RULE_VERSION
     )
+    items_validation_version: Literal[
+        "material-items-validation-v1", "material-items-validation-v2"
+    ] = MATERIAL_ITEMS_VALIDATION_VERSION
     max_tasks: int = Field(default=1, ge=0)
     max_attempts: int = Field(default=0, ge=0)
 

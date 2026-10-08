@@ -112,6 +112,7 @@ interface ChatMessage {
   role: 'user' | 'assistant'
   html: string
   raw: string
+  thinking: string
   created_at: string | null
   run_id: string | null
 }
@@ -120,6 +121,16 @@ function escapeText(s: string): string {
   const div = document.createElement('div')
   div.textContent = s
   return div.innerHTML.replace(/\n/g, '<br>')
+}
+
+/** Split a run's thinking steps into per-turn reasoning text. */
+function thinkingForTurn(runId: string | null, turn: number | null): string {
+  if (!runId) return ''
+  const text = runStream.steps
+    .filter((s) => s.kind === 'thinking' && (turn == null || s.turn === turn))
+    .map((s) => s.content ?? '')
+    .join('\n')
+  return text.trim()
 }
 
 const messages = computed<ChatMessage[]>(() => {
@@ -131,6 +142,10 @@ const messages = computed<ChatMessage[]>(() => {
       t.role === 'assistant'
         ? renderMarkdown(t.content ?? '')
         : escapeText(redactSecrets(t.content ?? '')),
+    thinking:
+      t.role === 'assistant'
+        ? thinkingForTurn(t.run_id ?? null, t.seq)
+        : '',
     created_at: t.created_at,
     run_id: t.run_id,
   }))
@@ -145,12 +160,14 @@ const messages = computed<ChatMessage[]>(() => {
     if (existing) {
       existing.html = streamingHtml || existing.html
       existing.raw = streamText || existing.raw
+      existing.thinking = thinkingForTurn(runStream.runId, null)
     } else {
       out.push({
         id: `run-${runStream.runId}`,
         role: 'assistant',
         raw: streamText,
         html: streamingHtml || '<span class="typing">生成中...</span>',
+        thinking: thinkingForTurn(runStream.runId, null),
         created_at: null,
         run_id: runStream.runId,
       })
@@ -597,6 +614,10 @@ watch(
 
         <article v-for="m in messages" :key="m.id" class="turn-card" :class="m.role">
           <div class="turn-role">{{ m.role === 'user' ? '你' : 'Agent' }}</div>
+          <details v-if="m.role === 'assistant' && m.thinking" class="turn-thinking">
+            <summary class="turn-thinking__summary">模型推理 / 思路</summary>
+            <pre class="turn-thinking__body">{{ m.thinking }}</pre>
+          </details>
           <div class="turn-body" v-html="m.html" />
           <div v-if="m.role === 'assistant' && runStream.runId === m.run_id && runStream.isStreaming" class="generating">
             生成中
@@ -761,6 +782,42 @@ watch(
 .turn-card.user .turn-body {
   border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
   background: color-mix(in srgb, var(--accent) 10%, var(--bg-raised));
+}
+
+.turn-thinking {
+  margin-bottom: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--muted) 6%, var(--bg));
+  padding: 4px 14px;
+}
+
+.turn-thinking__summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+.turn-thinking__summary::before {
+  content: '▸ ';
+  opacity: 0.7;
+}
+.turn-thinking[open] .turn-thinking__summary::before {
+  content: '▾ ';
+}
+
+.turn-thinking__body {
+  margin: 8px 0 6px;
+  max-height: 320px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text-soft);
 }
 
 .turn-body {

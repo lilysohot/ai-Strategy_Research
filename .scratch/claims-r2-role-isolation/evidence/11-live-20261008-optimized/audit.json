@@ -1,0 +1,147 @@
+{
+  "schema_version": "material-live-round-audit-v3",
+  "run": "11-live-20261008-optimized",
+  "selection_sha256": "sha256:08fda19bef09de4f7d09ac81dcd4bbe7810e15edef93bc039089d4ed8b1f3fe2",
+  "segments": [
+    {
+      "segment": "01_results",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:68ccea06d4d0e35082e752e303fc15312649f096262a533d7e2445f04d85fbff",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 4,
+      "terminal_slots": 4,
+      "items": 4,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "02_channels",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:149b3bfe6581a3eb15f0233bb846a3ff544f852c935765f5d81f73fffd60520b",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 8,
+      "terminal_slots": 8,
+      "items": 8,
+      "relations": 1,
+      "attempts": 2
+    },
+    {
+      "segment": "03_quality_cashflow",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:369ab55d9bad7b71ef17a1fc56fac7d71c8fdd2c768ad679933eda0ef5a7bfcd",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 8,
+      "terminal_slots": 8,
+      "items": 8,
+      "relations": 3,
+      "attempts": 2
+    },
+    {
+      "segment": "04_reform_actions",
+      "source_run": "11-live-20261008-r17",
+      "batch_id": "batch:4e031dbd3942a370d2d4250ee6d1a11434d99d92ebdd1070c246d10ed7392530",
+      "material_semantics_sha256": "2786cba853ab97f689e0bdd195c1971a287959de91f3d2ddec1762b9c9b31def",
+      "candidate_slots": 8,
+      "terminal_slots": 8,
+      "items": 8,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "05_reform_outlook",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:6b1fb5b087da78c1516f1e53659e33c311002947f4fe99709652ba8e01f9da42",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 5,
+      "terminal_slots": 5,
+      "items": 5,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "06_recommendation_basis",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:05d3ce2f01a659e1fb0d38e6990bddafe6300bfd07464c52fc51dd7f68620553",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 8,
+      "terminal_slots": 8,
+      "items": 8,
+      "relations": 1,
+      "attempts": 2
+    },
+    {
+      "segment": "07_recommendation_conclusion",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:4df6a8042d837c8ee1f9ddef1a4b9a225dcc24f73452a4d73e3b75358ccaf35b",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 4,
+      "terminal_slots": 4,
+      "items": 4,
+      "relations": 0,
+      "attempts": 1
+    },
+    {
+      "segment": "08_risks",
+      "source_run": "11-live-20261008-r15",
+      "batch_id": "batch:68c4d995e9a04961c283167530dcda8fc06213a1ddc08054fa6cab59a5141762",
+      "material_semantics_sha256": "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6",
+      "candidate_slots": 3,
+      "terminal_slots": 3,
+      "items": 3,
+      "relations": 0,
+      "attempts": 1
+    }
+  ],
+  "segment_count": 8,
+  "candidate_slots": 48,
+  "terminal_slots": 48,
+  "items": 48,
+  "relations": 5,
+  "semantic_types": {
+    "fact": 23,
+    "forecast": 13,
+    "opinion": 12
+  },
+  "statement_roles": {
+    "claim": 37,
+    "evidence": 8,
+    "risk": 3
+  },
+  "relation_types": {
+    "supports": 5
+  },
+  "semantic_target_status": {
+    "fact": "observed",
+    "forecast": "observed",
+    "opinion": "observed",
+    "argument": "observed",
+    "risk": "observed",
+    "condition": "absent_in_source_scope",
+    "explicit_relation": "observed"
+  },
+  "semantic_review": {
+    "invalid_condition_items": [],
+    "future_mislabeled_as_fact": [],
+    "future_mislabeled_as_opinion": [],
+    "judgment_mislabeled_as_fact": [],
+    "passed": true
+  },
+  "source_spans_checked": 62,
+  "attempts": 11,
+  "total_tokens": 58809,
+  "unknown_cost_calls": 11,
+  "known_cost_amount": 0.0,
+  "known_cost_amount_is_not_zero_cost": true,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256_versions": [
+    "2786cba853ab97f689e0bdd195c1971a287959de91f3d2ddec1762b9c9b31def",
+    "7101eefd69d024fb53fa4a5a06acd211fac39d687118e108ea86238a00e887c6"
+  ],
+  "extractor_versions": [
+    "material-semantics-17",
+    "material-semantics-19"
+  ],
+  "all_items_accepted_candidates": true,
+  "all_relation_tasks_accepted_candidates": true,
+  "published": false
+}

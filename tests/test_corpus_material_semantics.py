@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -13,6 +14,8 @@ from plugins.corpus.material_semantics import (
     MaterialEvidence,
     MaterialItem,
     _align_quote,
+    _normalize_semantic_type,
+    _normalize_statement_role,
     _relation_candidate_pairs,
     _relations_from_decisions,
     _strict_relation_candidate_pairs,
@@ -563,9 +566,7 @@ def test_slot_protocol_binds_omitted_slot_id_by_unique_exact_quote(tmp_path: Pat
     ]
     result = extract_material_understanding(
         evidence_run,
-        llm=lambda _prompt: "\n".join(
-            json.dumps(record, ensure_ascii=False) for record in records
-        ),
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
         max_calls=1,
         staged_jsonl=True,
         slot_protocol=True,
@@ -775,9 +776,7 @@ def test_system_owns_numbered_answers_and_quoted_continuation(tmp_path: Path) ->
     ]
     result = extract_material_understanding(
         evidence_run,
-        llm=lambda _prompt: "\n".join(
-            json.dumps(record, ensure_ascii=False) for record in records
-        ),
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
         max_calls=1,
         material_type="research_report",
         staged_jsonl=True,
@@ -840,8 +839,7 @@ def test_system_owns_trade_time_and_explicit_value(tmp_path: Path) -> None:
 def test_system_owns_risk_polarity_and_report_values(tmp_path: Path) -> None:
     source = tmp_path / "report.md"
     source.write_text(
-        "维持26-28年EPS预测值67.74/70.77/73.84元。\n"
-        "风险提示：消费复苏不及预期。\n",
+        "维持26-28年EPS预测值67.74/70.77/73.84元。\n风险提示：消费复苏不及预期。\n",
         encoding="utf-8",
     )
     evidence_run = build_evidence_run(source, packet_chars=1000)
@@ -888,9 +886,7 @@ def test_system_owns_risk_polarity_and_report_values(tmp_path: Path) -> None:
     ]
     result = extract_material_understanding(
         evidence_run,
-        llm=lambda _prompt: "\n".join(
-            json.dumps(record, ensure_ascii=False) for record in records
-        ),
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
         max_calls=1,
         material_type="research_report",
         staged_jsonl=True,
@@ -1054,8 +1050,7 @@ def test_system_does_not_create_obligations_for_bare_acknowledgements(tmp_path: 
 def test_lexical_signals_allow_supported_semantic_disambiguation(tmp_path: Path) -> None:
     source = tmp_path / "signals.md"
     source.write_text(
-        "关键仍是对未来景气趋势的判断。\n"
-        "the CEO bought $150m worth\n",
+        "关键仍是对未来景气趋势的判断。\nthe CEO bought $150m worth\n",
         encoding="utf-8",
     )
     evidence_run = build_evidence_run(source, packet_chars=1000)
@@ -1102,9 +1097,7 @@ def test_lexical_signals_allow_supported_semantic_disambiguation(tmp_path: Path)
     ]
     result = extract_material_understanding(
         evidence_run,
-        llm=lambda _prompt: "\n".join(
-            json.dumps(record, ensure_ascii=False) for record in records
-        ),
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
         max_calls=1,
         staged_jsonl=True,
         slot_protocol=True,
@@ -1218,6 +1211,134 @@ def test_market_expectation_comparison_is_not_a_forecast_obligation(tmp_path: Pa
     assert "claim" in slots[0].signal_types
 
 
+def test_research_judgment_future_and_concession_are_normalized_by_meaning() -> None:
+    assert (
+        _normalize_semantic_type(
+            "fact",
+            "claim",
+            text="茅台经营向上明确，底层逻辑未变",
+            quote="茅台经营向上明确，底层逻辑未变",
+        )
+        == "opinion"
+    )
+    assert (
+        _normalize_semantic_type(
+            "fact",
+            "claim",
+            text="下半年飞天供应偏紧、供需改善",
+            quote="下半年飞天供应偏紧、供需改善",
+        )
+        == "forecast"
+    )
+    assert (
+        _normalize_semantic_type(
+            "opinion",
+            "claim",
+            text="且H2供需关系进一步改善",
+            quote="且H2供需关系进一步改善",
+        )
+        == "forecast"
+    )
+    assert (
+        _normalize_semantic_type(
+            "fact",
+            "claim",
+            text="26H1实现总收入922.8亿元",
+            quote="26H1实现总收入922.8亿元",
+        )
+        == "fact"
+    )
+    assert (
+        _normalize_statement_role(
+            "condition",
+            text="尽管宏观消费环境未见明显好转",
+            quote="尽管宏观消费环境未见明显好转",
+        )
+        == "claim"
+    )
+    assert (
+        _normalize_statement_role(
+            "other",
+            text="尽管宏观消费环境未见明显好转",
+            quote="尽管宏观消费环境未见明显好转",
+        )
+        == "claim"
+    )
+    assert (
+        _normalize_statement_role(
+            "condition",
+            text="如果需求恢复，公司增长将提速",
+            quote="如果需求恢复，公司增长将提速",
+        )
+        == "condition"
+    )
+    assert (
+        _normalize_statement_role(
+            "claim",
+            text="主要系财务公司吸收存款增加所致",
+            quote="主要系财务公司吸收存款增加所致",
+        )
+        == "evidence"
+    )
+    assert (
+        _normalize_statement_role(
+            "other",
+            text="利好结构升级",
+            quote="利好结构升级",
+        )
+        == "claim"
+    )
+
+
+def test_research_outlook_splits_current_judgments_from_forecasts(tmp_path: Path) -> None:
+    source = tmp_path / "research-outlook.md"
+    source.write_text(
+        "我们认为公司已于改革中完成底层逻辑的重构，经营最困难阶段已过，"
+        "Q3预计将抓住中秋旺季窗口放量，且下半年飞天供应偏紧、供需改善，"
+        "利好结构升级。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    slot_texts = [re.sub(r"\s+", "", slot.text) for slot in slots]
+
+    assert len(slots) == 5
+    assert slot_texts == [
+        "我们认为公司已于改革中完成底层逻辑的重构，",
+        "经营最困难阶段已过，",
+        "Q3预计将抓住中秋旺季窗口放量，",
+        "且下半年飞天供应偏紧、供需改善，",
+        "利好结构升级。",
+    ]
+    assert "forecast" not in slots[0].signal_types
+    assert "forecast" not in slots[1].signal_types
+    assert "forecast" in slots[2].signal_types
+    assert "forecast" in slots[3].signal_types
+    assert "claim" in slots[4].signal_types
+
+
+def test_financial_results_split_revenue_and_profit_into_atomic_slots(tmp_path: Path) -> None:
+    source = tmp_path / "financial-results.md"
+    source.write_text(
+        "26H1实现总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%。"
+        "单Q2总收入375.8亿元，同降5.2%，归母净利润172.7亿元，同降6.9%。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    slot_texts = [re.sub(r"\s+", "", slot.text) for slot in slots]
+
+    assert len(slots) == 4
+    assert sum("总收入922.8亿元" in text for text in slot_texts) == 1
+    assert sum("归母净利润445.2亿元" in text for text in slot_texts) == 1
+    assert sum("总收入375.8亿元" in text for text in slot_texts) == 1
+    assert sum("归母净利润172.7亿元" in text for text in slot_texts) == 1
+
+
 def test_explicit_cause_is_split_into_a_relation_candidate(tmp_path: Path) -> None:
     source = tmp_path / "explicit-cause.md"
     source.write_text(
@@ -1262,9 +1383,10 @@ def test_explicit_cause_is_split_into_a_relation_candidate(tmp_path: Path) -> No
     assert pairs[0]["from_item"] == "item-1"
     assert pairs[0]["to_item"] == "item-0"
     assert pairs[0]["allowed_type"] == "supports"
-    assert _strict_relation_candidate_pairs(
-        packet, [item(0, "claim"), item(1, "evidence")], slots
-    ) == pairs
+    assert (
+        _strict_relation_candidate_pairs(packet, [item(0, "claim"), item(1, "evidence")], slots)
+        == pairs
+    )
     prompt = build_relation_jsonl_prompt(
         packet,
         [item(0, "claim"), item(1, "evidence")],
@@ -1318,9 +1440,10 @@ def test_leading_conclusion_marker_points_support_from_prior_fact(tmp_path: Path
     assert pairs[0]["from_item"] == "item-0"
     assert pairs[0]["to_item"] == "item-1"
     assert pairs[0]["allowed_type"] == "supports"
-    assert _strict_relation_candidate_pairs(
-        packet, [item(0, "claim"), item(1, "evidence")], slots
-    ) == pairs
+    assert (
+        _strict_relation_candidate_pairs(packet, [item(0, "claim"), item(1, "evidence")], slots)
+        == pairs
+    )
 
 
 def test_detected_question_cannot_be_rejected_as_no_supported_item(tmp_path: Path) -> None:

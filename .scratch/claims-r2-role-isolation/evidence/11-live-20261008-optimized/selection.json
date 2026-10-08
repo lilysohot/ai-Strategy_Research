@@ -1,0 +1,44 @@
+{
+  "schema_version": "material-segment-selection-v1",
+  "selection_policy": "accepted immutable segments with one targeted semantic supersession; no automatic retries",
+  "source_scope": "page 1 narrative reader units 12,15,17,19,21,23",
+  "segments": [
+    {"segment": "01_results", "run": "11-live-20261008-r15"},
+    {"segment": "02_channels", "run": "11-live-20261008-r15"},
+    {"segment": "03_quality_cashflow", "run": "11-live-20261008-r15"},
+    {"segment": "04_reform_actions", "run": "11-live-20261008-r17"},
+    {"segment": "05_reform_outlook", "run": "11-live-20261008-r15"},
+    {"segment": "06_recommendation_basis", "run": "11-live-20261008-r15"},
+    {"segment": "07_recommendation_conclusion", "run": "11-live-20261008-r15"},
+    {"segment": "08_risks", "run": "11-live-20261008-r15"}
+  ],
+  "rejected_attempts": [
+    {
+      "run": "11-live-20261008-r12",
+      "segment": "03_quality_cashflow",
+      "reason": "causal rationale was not normalized to the evidence role"
+    },
+    {
+      "run": "11-live-20261008-r13",
+      "segment": "05_reform_outlook",
+      "reason": "judgment and forecast were compound; concluding judgment was labelled other"
+    },
+    {
+      "run": "11-live-20261008-r14",
+      "segment": "06_recommendation_basis",
+      "reason": "concession was labelled other instead of a claim"
+    }
+  ],
+  "superseded_segments": [
+    {
+      "run": "11-live-20261008-r15",
+      "segment": "04_reform_actions",
+      "reason": "H2 outlook was accepted as opinion before future-opinion normalization"
+    },
+    {
+      "run": "11-live-20261008-r16",
+      "segment": "04_reform_actions",
+      "reason": "intermediate H1/H2 rule was replaced before final selection"
+    }
+  ]
+}

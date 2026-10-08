@@ -1,0 +1,222 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:1a39951d9d3bc5c0f36120c8c56e2d16d3e6e61fee4e9408d2fb0c4a759d8cae",
+  "plan_sha256": "sha256:1a39951d9d3bc5c0f36120c8c56e2d16d3e6e61fee4e9408d2fb0c4a759d8cae",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016",
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "build_id": "871873445845001e03bc9096c8da6faa0e6fba047f543f469c9b214de8e3b7e6",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-pdf-11+pymupdf-1.28.2",
+      "clean": "clean-5",
+      "chunk": "chunk-5",
+      "adapter": "approved-page1-material-segments-v2",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:5a89925485629a1f6a034dd08cc20d9170157cf5d48dba6fb28ddd85e52b6764",
+        "chunk_id": "chunk:material-segment:01_results",
+        "kind": "prose",
+        "locator": "page:1/unit:12/span:0-103",
+        "text": "公司公布2026 年中报，26H1 实现总收入922.8 亿元，同增1.3%，归母净利润\n445.2亿元，同降2.0%。单Q2总收入375.8亿元，同降5.2%，归母净利润\n172.7 亿元，同降6.9%。",
+        "text_sha256": "sha256:e70a728bb8eb113bacb0b5018ca0a109b2aca908e067d46eaa7fa43960d59257",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:e70a728bb8eb113bacb0b5018ca0a109b2aca908e067d46eaa7fa43960d59257",
+          "start": 0,
+          "end": 103
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "bbox": [
+            41.040000915527344,
+            188.54562377929688,
+            376.4862976074219,
+            221.5313720703125
+          ],
+          "reader_source_span": [
+            0,
+            103
+          ],
+          "semantic_scope": "01_results",
+          "document_voice": "华创证券研究报告",
+          "source_unit_id": "pdf-unit-12-span-0-103",
+          "source_kind": "prose",
+          "page": 1,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 12,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "华创证券：贵州茅台（600519）2026年中报点评",
+            "subject": "600519.SH",
+            "published": "2026-08-16"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:d9c895367ee079b202c737388da39e0f2006d24f1ab2b749f969c40e08a88514",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "871873445845001e03bc9096c8da6faa0e6fba047f543f469c9b214de8e3b7e6",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-pdf-11+pymupdf-1.28.2",
+        "clean": "clean-5",
+        "chunk": "chunk-5",
+        "adapter": "approved-page1-material-segments-v2",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:5a89925485629a1f6a034dd08cc20d9170157cf5d48dba6fb28ddd85e52b6764",
+          "chunk_id": "chunk:material-segment:01_results",
+          "kind": "prose",
+          "locator": "page:1/unit:12/span:0-103",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 103,
+          "text_sha256": "sha256:e70a728bb8eb113bacb0b5018ca0a109b2aca908e067d46eaa7fa43960d59257",
+          "metadata_sha256": "sha256:d9c895367ee079b202c737388da39e0f2006d24f1ab2b749f969c40e08a88514"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:6ac2e58aff2d0b272bba832e419aaadbff410a8fdbf6a82d6c13a365f94f1016",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:5a89925485629a1f6a034dd08cc20d9170157cf5d48dba6fb28ddd85e52b6764",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "quantitative_statement_also_preserves_material_semantics"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:5c83710556e0edd494bd94e5766bb603e66efdd029d1afe6841be590eaab6ce4",
+  "tasks": [
+    {
+      "task_id": "task:7cc0b9ac67a0bb569eee4975f4c47ae967689ee774ddd40fce5f51a5ad5bdba3",
+      "logical_key": "sha256:7cc0b9ac67a0bb569eee4975f4c47ae967689ee774ddd40fce5f51a5ad5bdba3",
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:5a89925485629a1f6a034dd08cc20d9170157cf5d48dba6fb28ddd85e52b6764"
+      ],
+      "input_sha256": "sha256:7cc0b9ac67a0bb569eee4975f4c47ae967689ee774ddd40fce5f51a5ad5bdba3",
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:4c9db93be794fa3857563523620fb5b52fb07907b0855a232165abdbe935c5c5",
+      "max_attempts": 0,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791431176.4651525,
+      "derived": false,
+      "endpoint_item_ids": []
+    },
+    {
+      "task_id": "task:eda97ecf4863da6ff962af0cdab315f35f37bc389f164d038a704101f2570b98",
+      "logical_key": "sha256:eda97ecf4863da6ff962af0cdab315f35f37bc389f164d038a704101f2570b98",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:5a89925485629a1f6a034dd08cc20d9170157cf5d48dba6fb28ddd85e52b6764"
+      ],
+      "input_sha256": "sha256:eda97ecf4863da6ff962af0cdab315f35f37bc389f164d038a704101f2570b98",
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791431176.4651525,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:4c9db93be794fa3857563523620fb5b52fb07907b0855a232165abdbe935c5c5"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:b025cb021736099d9d6d65ce6c052534fadf8f33da4a369600310556b7c1c2bf"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 1,
+    "material_relations": 1
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "segment": "02_channels",
+  "batch_id": "batch:cfcfc066300224aa002d0a66f68e52201bb55b31a64a557f40df814440d7c6b2",
+  "snapshot_id": "sha256:cb66eefabda1b63afa0276f6923af830df149b6d4f2d84ba16ae835e7af63c79",
+  "candidate_slot_count": 8,
+  "runner_sha256": "15896a18e30242501ff6d4c8021eb6ecee086b97e4750d6a8a7c38710a406cf7",
+  "material_semantics_sha256": "337278d349ace73d61c1ae899c3f84e7298106e8fb49efb8892dc11a7246d8ac",
+  "items_calls": 1,
+  "relation_calls": 1,
+  "automatic_retries": 0
+}

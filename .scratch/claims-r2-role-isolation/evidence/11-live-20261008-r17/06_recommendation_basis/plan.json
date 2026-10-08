@@ -1,0 +1,203 @@
+{
+  "schema_version": "corpus-batch-plan-v1",
+  "batch_id": "batch:f36afa66d9f4526960e7994e70119f4a493669952e04b974828936f970cc32cc",
+  "plan_sha256": "sha256:f36afa66d9f4526960e7994e70119f4a493669952e04b974828936f970cc32cc",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:eee5b8b9b0fa3b5e1b999d5534fdbb4a4bc56333956cf6262b4a9bb25f8fb6bf",
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "build_id": "3484deb9981e7b7b3bbe0bc7c88e175cd53cb3cba9b93e627643ca6432c4bf96",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-pdf-11+pymupdf-1.28.2",
+      "clean": "clean-5",
+      "chunk": "chunk-5",
+      "adapter": "approved-page1-material-segments-v2",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:c526e1d952e4054260747d9ad81b9635339e4be8145f781abc160f4ddcc6f4b1",
+        "chunk_id": "chunk:material-segment:06_recommendation_basis",
+        "kind": "prose",
+        "locator": "page:1/unit:21/span:0-180",
+        "text": "投资建议：报表实质扎实，经营向上明确，重申“强推”评级。尽管宏观消费环\n境未见明显好转，但茅台通过市场化改革已明确找到破局之道，上半年初步验\n证公司市场化改革成效，尽管Q2 报表有所下滑，年内看兼顾报表和稳价稳中\n向好，下半年基数降低后增长确定性提高，且明年通过提价效应和产品结构增\n长路径清晰，中长期正构建“以需求为导向、消费者为中心”To C 营销体系。\n",
+        "text_sha256": "sha256:98846b85d2d6ed5c5fb3b4f44f9e0835eeb0d92076c09e5c86cbb0da7bfb0d5f",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:98846b85d2d6ed5c5fb3b4f44f9e0835eeb0d92076c09e5c86cbb0da7bfb0d5f",
+          "start": 0,
+          "end": 180
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "bbox": [
+            41.040000915527344,
+            549.7955932617188,
+            381.4195251464844,
+            626.8213500976562
+          ],
+          "reader_source_span": [
+            0,
+            180
+          ],
+          "semantic_scope": "06_recommendation_basis",
+          "document_voice": "华创证券研究报告",
+          "source_unit_id": "pdf-unit-21-span-0-180",
+          "source_kind": "prose",
+          "page": 1,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 21,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "华创证券：贵州茅台（600519）2026年中报点评",
+            "subject": "600519.SH",
+            "published": "2026-08-16"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:28f359c76025568fb91c44e0a8b687fb83aac3dddea77d309760c776c6bfb598",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "3484deb9981e7b7b3bbe0bc7c88e175cd53cb3cba9b93e627643ca6432c4bf96",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-pdf-11+pymupdf-1.28.2",
+        "clean": "clean-5",
+        "chunk": "chunk-5",
+        "adapter": "approved-page1-material-segments-v2",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:c526e1d952e4054260747d9ad81b9635339e4be8145f781abc160f4ddcc6f4b1",
+          "chunk_id": "chunk:material-segment:06_recommendation_basis",
+          "kind": "prose",
+          "locator": "page:1/unit:21/span:0-180",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 180,
+          "text_sha256": "sha256:98846b85d2d6ed5c5fb3b4f44f9e0835eeb0d92076c09e5c86cbb0da7bfb0d5f",
+          "metadata_sha256": "sha256:28f359c76025568fb91c44e0a8b687fb83aac3dddea77d309760c776c6bfb598"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v1",
+    "snapshot_id": "sha256:eee5b8b9b0fa3b5e1b999d5534fdbb4a4bc56333956cf6262b4a9bb25f8fb6bf",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:c526e1d952e4054260747d9ad81b9635339e4be8145f781abc160f4ddcc6f4b1",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "unclassified_prose_conservatively_retained"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:0a25b2c218b341ebaee5a23b513c3634ed8e963b7bc8b49f690b6d7629a03f73",
+  "tasks": [
+    {
+      "task_id": "task:d6bba7376713821baab66c43fb33c6d322ce100b1459de4bb7837eb2480c68b4",
+      "logical_key": "sha256:d6bba7376713821baab66c43fb33c6d322ce100b1459de4bb7837eb2480c68b4",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:c526e1d952e4054260747d9ad81b9635339e4be8145f781abc160f4ddcc6f4b1"
+      ],
+      "input_sha256": "sha256:d6bba7376713821baab66c43fb33c6d322ce100b1459de4bb7837eb2480c68b4",
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968",
+      "max_attempts": 1,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791431235.5698154,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:4c9db93be794fa3857563523620fb5b52fb07907b0855a232165abdbe935c5c5"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v4",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:2e07b691e64f2d1caaf706d43913dbe49534420797ac665971e70d0aa7afb968"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-1",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 8192,
+        "token_parameter": "max_tokens"
+      },
+      "profile_sha256": "sha256:8b6c3ad817c4ffa1b81b1bb7703f6427696e1dd726ec712c3216e2f03f608377",
+      "role_profile_sha256": "sha256:b025cb021736099d9d6d65ce6c052534fadf8f33da4a369600310556b7c1c2bf"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 1,
+    "material_relations": 1
+  },
+  "currency": null,
+  "relations": {
+    "enabled": true,
+    "rule_version": "material-relation-candidates-v2",
+    "items_validation_version": "material-items-validation-v2",
+    "max_tasks": 1,
+    "max_attempts": 1
+  }
+}
