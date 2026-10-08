@@ -26,8 +26,8 @@ export interface SessionPlanPreview {
   symbol: string
   market: 'CN' | 'HK' | 'US'
   direction: 'buy' | 'sell'
-  planPrice: string
-  targetPrice: string
+  /** 本标的规划资金（金额，十进制字符串）；计划不保存价格（2026-10-08 口径）。 */
+  allocatedCapital: string
   isPrimary: boolean
   status: 'draft'
 }

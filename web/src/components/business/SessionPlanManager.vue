@@ -16,13 +16,13 @@ const emit = defineEmits<{
   dirtyChange: [dirty: boolean]
 }>()
 
+// 计划不保存价格（2026-10-08 口径）：只登记本标的规划资金；成交价由成交记录回填。
 const draft = reactive<SessionPlanInput>({
   name: '',
   symbol: '',
   market: 'CN',
   direction: 'buy',
-  planPrice: '',
-  targetPrice: '',
+  allocatedCapital: '',
   isPrimary: false,
 })
 
@@ -47,7 +47,7 @@ onBeforeUnmount(() => {
 })
 
 function isDirty(): boolean {
-  return !!(draft.name || draft.symbol || draft.planPrice || draft.targetPrice
+  return !!(draft.name || draft.symbol || draft.allocatedCapital
     || draft.market !== 'CN' || draft.direction !== 'buy')
 }
 
@@ -57,8 +57,7 @@ function resetDraft(): void {
     symbol: '',
     market: 'CN',
     direction: 'buy',
-    planPrice: '',
-    targetPrice: '',
+    allocatedCapital: '',
     isPrimary: currentPlans.value.length === 0,
   } satisfies SessionPlanInput)
 }
@@ -84,8 +83,7 @@ function save(): void {
     ...draft,
     name: draft.name.trim(),
     symbol: draft.symbol.trim().toUpperCase(),
-    planPrice: draft.planPrice.trim(),
-    targetPrice: draft.targetPrice.trim(),
+    allocatedCapital: draft.allocatedCapital.trim(),
   })
   resetDraft()
 }
@@ -126,8 +124,7 @@ defineExpose({ resetDraft })
             <span>{{ plan.symbol }} · {{ marketLabel(plan.market) }} · {{ plan.direction === 'buy' ? '买入' : '卖出' }}</span>
           </div>
           <div class="plan-prices">
-            <span>计划价 {{ plan.planPrice || '待补充' }}</span>
-            <span>目标价 {{ plan.targetPrice || '待补充' }}</span>
+            <span>规划资金 {{ plan.allocatedCapital || '待补充' }}</span>
           </div>
           <span v-if="plan.isPrimary" class="primary-label">当前主计划</span>
           <span v-else class="draft-label">草稿</span>
@@ -167,12 +164,12 @@ defineExpose({ resetDraft })
           />
         </label>
         <label class="field">
-          <span>计划价</span>
-          <el-input v-model="draft.planPrice" inputmode="decimal" placeholder="可稍后补充" />
-        </label>
-        <label class="field">
-          <span>目标价</span>
-          <el-input v-model="draft.targetPrice" inputmode="decimal" placeholder="可稍后补充" />
+          <span>本标的规划资金</span>
+          <el-input
+            v-model="draft.allocatedCapital"
+            inputmode="decimal"
+            placeholder="从主账户可用资金中划出，不得超过可用资金"
+          />
         </label>
         <label class="primary-choice field--wide">
           <el-switch v-model="draft.isPrimary" />

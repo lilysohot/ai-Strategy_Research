@@ -12,9 +12,8 @@ export interface BusinessDraft {
   symbol: string
   market: string
   direction: TradeDirection
-  planPrice: string
-  planPriceLow: string
-  planPriceHigh: string
+  /** 本标的规划资金（计划不保存价格，2026-10-08 口径）。 */
+  allocatedCapital: string
   targetPrice: string
   riskBudget: string
   riskBudgetUnit: 'amount' | 'percent'
@@ -48,9 +47,7 @@ function validateDecimalFields(draft: BusinessDraft, errors: BusinessDraftErrors
   const fields: Array<keyof BusinessDraft> = [
     'totalCapital',
     'availableCapital',
-    'planPrice',
-    'planPriceLow',
-    'planPriceHigh',
+    'allocatedCapital',
     'targetPrice',
     'riskBudget',
     'positionLimit',
@@ -84,11 +81,8 @@ export function validateBusinessDraft(draft: BusinessDraft): BusinessDraftErrors
   }
 
   if (draft.useCase === 'plan_analysis') {
-    const hasSinglePrice = !!draft.planPrice.trim()
-    const hasRange = !!draft.planPriceLow.trim() && !!draft.planPriceHigh.trim()
-    if (!hasSinglePrice && !hasRange) {
-      errors.planPrice = '请填写计划价，或同时填写价格区间上下限'
-    }
+    // 计划不保存价格（2026-10-08 口径）：只要求本标的规划资金，上限由服务端校验。
+    requireDecimal(draft, errors, 'allocatedCapital', '请填写本标的规划资金')
     requireDecimal(draft, errors, 'targetPrice', '计划分析需要目标价')
   }
 

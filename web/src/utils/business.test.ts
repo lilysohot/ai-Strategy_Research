@@ -19,9 +19,7 @@ function draft(overrides: Partial<BusinessDraft> = {}): BusinessDraft {
     symbol: '',
     market: '',
     direction: '',
-    planPrice: '',
-    planPriceLow: '',
-    planPriceHigh: '',
+    allocatedCapital: '',
     targetPrice: '',
     riskBudget: '',
     riskBudgetUnit: 'amount',
@@ -47,7 +45,7 @@ test('general reading does not require funds or a trade plan', () => {
   assert.deepEqual(validateBusinessDraft(draft()), {})
 })
 
-test('plan analysis accepts either a single price or a complete range', () => {
+test('plan analysis requires allocated capital and a target price', () => {
   const common = {
     useCase: 'plan_analysis' as const,
     symbol: '600000',
@@ -55,14 +53,11 @@ test('plan analysis accepts either a single price or a complete range', () => {
     direction: 'buy' as const,
     targetPrice: '12.50',
   }
-  assert.deepEqual(validateBusinessDraft(draft({ ...common, planPrice: '10.20' })), {})
-  assert.deepEqual(
-    validateBusinessDraft(draft({ ...common, planPriceLow: '9.80', planPriceHigh: '10.20' })),
-    {},
-  )
+  // 计划不保存价格（2026-10-08 口径）：改为要求本标的规划资金。
+  assert.deepEqual(validateBusinessDraft(draft({ ...common, allocatedCapital: '50000' })), {})
   assert.equal(
-    validateBusinessDraft(draft({ ...common, planPriceLow: '9.80' })).planPrice,
-    '请填写计划价，或同时填写价格区间上下限',
+    validateBusinessDraft(draft(common)).allocatedCapital,
+    '请填写本标的规划资金',
   )
 })
 

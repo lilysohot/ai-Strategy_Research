@@ -215,10 +215,10 @@ export interface PlanValues {
   market: string | null
   asset_type: string | null
   direction: string | null
-  plan_price: string | null
-  plan_price_low: string | null
-  plan_price_high: string | null
+  /** 计划不含价格（2026-10-08 口径）：读接口不再返回计划价列。 */
+  allocated_capital: string | null
   target_price: string | null
+  target_profit: { value: string | null; unit: string | null } | null
   risk_budget: { value: string | null; unit: string | null }
   position_limit: { value: string | null; unit: string | null }
   time_window: string | null

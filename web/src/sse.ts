@@ -35,6 +35,9 @@
 
 import { TERMINAL_EVENT_TYPES, type SseEvent } from './types'
 
+//: 既有缺陷修复：本模块对外暴露 SseEvent，ChatView 等消费方从 '@/sse' 导入该类型。
+export type { SseEvent }
+
 /** How a stream ended, so callers can decide between "retry" and "show error". */
 export type SseEndReason =
   /** A terminal frame arrived, or the server closed a fully replayed stream. */

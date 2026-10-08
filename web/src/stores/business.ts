@@ -41,8 +41,7 @@ function planToPreview(plan: Plan, researchId: string | null, primaryPlanId: str
     symbol: text(plan.values?.symbol),
     market: marketOf(plan),
     direction: plan.values?.direction === 'sell' ? 'sell' : 'buy',
-    planPrice: text(plan.values?.plan_price),
-    targetPrice: text(plan.values?.target_price),
+    allocatedCapital: text(plan.values?.allocated_capital),
     isPrimary: plan.research_id === researchId && plan.id === primaryPlanId,
     status: plan.archived ? 'draft' : 'draft',
   }

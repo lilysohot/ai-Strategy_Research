@@ -528,10 +528,8 @@ async function saveSessionPlan(input: SessionPlanInput): Promise<void> {
     market: { value: marketOf(input.market) },
     direction: { value: input.direction },
   }
-  const planPrice = input.planPrice.trim()
-  const targetPrice = input.targetPrice.trim()
-  if (planPrice) declared.plan_price = { value: planPrice }
-  if (targetPrice) declared.target_price = { value: targetPrice }
+  const allocatedCapital = input.allocatedCapital.trim()
+  if (allocatedCapital) declared.allocated_capital = { value: allocatedCapital }
 
   try {
     const res = await plansApi.create(
