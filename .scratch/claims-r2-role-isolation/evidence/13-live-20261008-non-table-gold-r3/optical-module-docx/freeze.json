@@ -1,0 +1,69 @@
+{
+  "stage": "signed_non_table_gold_r3_remediation_evaluation",
+  "source_slug": "optical-module-docx",
+  "batch_id": "batch:7c07829e3d6ef51cba20413607df36501282d970b05c30af5ec3a4abc9be1004",
+  "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+  "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+  "unit_locators": [
+    "body[115]",
+    "body[15]",
+    "body[1]",
+    "body[26]",
+    "body[29]",
+    "body[32]",
+    "body[37]",
+    "body[3]",
+    "body[43]",
+    "body[46]",
+    "body[49]",
+    "body[51]",
+    "body[63]",
+    "body[72]"
+  ],
+  "task_counts": {
+    "claims": 1,
+    "material_items": 1,
+    "material_relations": 0
+  },
+  "candidate_slot_count": 114,
+  "role_attempt_ceiling": {
+    "claims": 14,
+    "material_items": 21,
+    "material_relations": 14
+  },
+  "attempt_ceiling": 49,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "runner_sha256": "fe102f56bfcf511301feaeb202040009808db59d6d0bcf408fdedfeb5fb1fada",
+  "gold_freeze_manifest_sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+  "material_semantics_sha256": "11a4feb71dffaa356fb305422d66e138c8be01cb4ee1865c993e05684652cd11",
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "holdout_accessed": false,
+  "remediation_freeze_sha256": "35bfc09f93ed4b129b34de9281fa88434220bde21b08945d5be552721aabbf3a",
+  "frozen_versions": {
+    "claims_protocol": "claims-json-v2",
+    "claims_extractor": "af59c933380b",
+    "claims_lint": "claims-v2-lint-5",
+    "evidence_pipeline": "evidence-pipeline-8",
+    "material_extractor": "material-semantics-20",
+    "material_items_protocol": "material-atomic-jsonl-v5",
+    "material_items_validation": "material-items-validation-v3",
+    "material_relations_protocol": "material-relations-jsonl-v1",
+    "max_atomic_items_per_slot": 4
+  },
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "11a4feb71dffaa356fb305422d66e138c8be01cb4ee1865c993e05684652cd11",
+    "plugins/corpus/claims_detail.py": "18435d2f41183bb157f37a49cf101273a36a7b5522f97172660534ef0eb88986",
+    "plugins/corpus/evidence_pipeline.py": "bb8c778ed2890ac4e14f334ac255029e2479c39b626a0a3ae02f1d16874b242a",
+    "plugins/corpus/structured/config.py": "376a43bd8fef5e2ef6c58a9920ade6cfbd5e45b8d800167956bcf5e6b684e8f6",
+    "plugins/corpus/structured/roles.py": "589e74f60a96d05516bc947f2bdebf98cf8a9eec536b5d508a3297d2801bf4ff",
+    "plugins/corpus/structured/ledger.py": "cc2ea2f121876c603208dff66fa2663b0a6fae75c1cbcaa80822f47201c2170a",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "2e7a2163bb2d0c27841ed0af64f32e69f273856350fdd81574bdf28d707dc39b",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "956b25599c521728e7be999a1334fb5ceb987c1f78bd451df4c0daf2153ea9e7",
+    "tests/test_corpus_material_semantics.py": "4989d23c1e1e3440e1a97f46a6cc0cb28606220d1b76ac250ccf19f7819e8906",
+    "tests/test_corpus_evidence_pipeline.py": "a4b92de0fcdab7ae490a1a31fcd0f2722c4faf722110991e1443a02c87eae0dd",
+    "tests/test_corpus_structured_config.py": "38b8a84091a792272fc5ae195316750cfc098e878b883ae82e31d3bc99012285",
+    "tests/test_corpus_structured_contracts.py": "cde1bb74da1bced663814bcde2c85cdbae7f6ff3717bb49b5c16c2462cfd199a"
+  }
+}
