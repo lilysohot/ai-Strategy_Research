@@ -1,0 +1,33 @@
+# evidence：门禁与回归（2026-10-08，01—03 收口）
+
+真 PG 回归（隔离库 `apodex_sp_test`）
+
+    PG_INTEGRATION=1 PG_BUSINESS_TEST_DB=apodex_sp_test \
+    SERVER_DATABASE_URL='postgresql+asyncpg://sp_test:***@localhost:5432/apodex_sp_test' \
+    SERVER_RUNS_ROOT=/tmp/frontier-sp-test-runs uv run --no-sync pytest tests/pg -q
+    → 212 passed（改动前基线 202；本批新增 10 项）
+
+Ruff（按 AGENTS 的 CI 范围；`ruff check .` 会扫到 `.scratch` 冻结资产，不适用）
+
+    uv run --no-sync ruff check server plugins tests apodex frontier_agent workflows benchmarks
+    → 13 errors，全部位于本批**未改动**的既有文件
+      （tests/test_agent_bus_waiting.py、tests/test_auth_t22.py、tests/test_hf_space_*.py、
+       tests/test_corpus_gap_dispositions.py、tests/test_shared_fan_in_and_trajectory.py、
+       tests/test_gpu_entrypoint.py、tests/test_sglang_native_compatibility.py），SIM105 等既有告警
+    uv run --no-sync ruff check server tests/pg
+    → All checks passed（本批改动文件 0 错误）
+
+import smoke
+
+    uv run --no-sync python tools/import_smoke.py --stage 1
+    → [framework] 386/386 modules imported
+
+symbol closure
+
+    uv run --no-sync python tools/check_symbols.py
+    → OK: 0 missing-symbol import(s) across 484 file(s)
+
+说明
+- `import_smoke.py` / `check_symbols.py` 位于 `tools/`（不是 `scripts/`）。
+- 本批未部署 API、未迁移生产库；临时测试库/角色 `apodex_sp_test` / `sp_test` 保留待本专项后续批次复用，
+  结束时应按登记清理。

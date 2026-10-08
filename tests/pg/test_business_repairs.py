@@ -34,13 +34,29 @@ async def test_history_migration_round_trip_preserves_existing_rows(case, pg_dsn
         "investment_plan_revisions",
         "run_investment_snapshots",
     )
+    #: 0018 新增的计划列（allocated_capital/target_profit_*）在 0009 时点并不存在，降级往返会
+    #: 丢掉这些列的值；指纹只比较 0005 建立的列，避免把“降级固有丢列”误判为既有历史行被改写。
+    fingerprint_columns = {
+        "investment_account_revisions": "*",
+        "investment_plan_revisions": (
+            "id, plan_id, revision, symbol, market, asset_type, direction, plan_price, "
+            "plan_price_low, plan_price_high, target_price, risk_budget_value, "
+            "risk_budget_unit, position_limit_value, position_limit_unit, time_window, "
+            "invalidation, profit_loss_ratio, profit_loss_ratio_definition, currency, as_of, "
+            "record_state, source_kind, source_ref, changed_fields, created_at"
+        ),
+        "run_investment_snapshots": "*",
+    }
 
     async def fingerprints():
         async with biz.business_transaction() as session:
             return [
                 (
                     await session.execute(
-                        text(f"SELECT md5(json_agg(t ORDER BY id)::text) FROM {table} t")
+                        text(
+                            "SELECT md5(json_agg(t ORDER BY id)::text) FROM "
+                            f"(SELECT {fingerprint_columns[table]} FROM {table}) t"
+                        )
                     )
                 ).scalar_one()
                 for table in tables
@@ -148,7 +164,7 @@ async def case(pg_clean, tmp_path, monkeypatch):
                 "symbol": "600519.SH",
                 "market": "CN",
                 "direction": "buy",
-                "plan_price": "20",
+                "allocated_capital": "10000",
                 "target_price": "25",
                 "currency": "CNY",
             },
@@ -489,8 +505,10 @@ async def test_rerun_cannot_change_research(case):
     "patch",
     [
         {"direction": "nonsense"},
-        {"plan_price": None, "plan_price_low": "10"},
-        {"plan_price": None, "plan_price_low": "30", "plan_price_high": "20"},
+        #: 计划价字段已取消（2026-10-08 口径）：提交即 unknown_field_rejected。
+        {"plan_price": "10"},
+        #: 期望盈利是比例/金额口径，缺单位无法区分（契约 §1.1）。
+        {"target_profit_value": "20"},
     ],
 )
 async def test_invalid_plan_cannot_be_used_for_analysis(case, patch):

@@ -50,7 +50,7 @@ PLAN_DECLARED = {
     "symbol": "600519.SH",
     "market": "CN",
     "direction": "buy",
-    "plan_price": "19.90",
+    "allocated_capital": "10000",
     "target_price": "24.00",
     "currency": "CNY",
 }

@@ -78,7 +78,7 @@ async def case(pg_clean, monkeypatch):
                 "symbol": "600519.SH",
                 "market": "CN",
                 "direction": "buy",
-                "plan_price": "20",
+                "allocated_capital": "10000",
                 "target_price": "25",
                 "currency": "CNY",
             },

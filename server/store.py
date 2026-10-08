@@ -328,7 +328,11 @@ class InvestmentPlan(Base):
 
 
 class InvestmentPlanRevision(Base):
-    """计划资料的不可变版本行。计划价与实际成交价分属不同对象（AC-26）。"""
+    """计划资料的不可变版本行。价格真源是成交记录（AC-26，2026-10-08 口径）。
+
+    计划不保存价格：``plan_price``/``plan_price_low``/``plan_price_high`` 为 deprecated 列
+    （不再写入，保留以免破坏不可变历史版本）；计划持有本标的规划资金与期望盈利。
+    """
 
     __tablename__ = "investment_plan_revisions"
     __table_args__ = (
@@ -343,10 +347,13 @@ class InvestmentPlanRevision(Base):
     market: Mapped[str | None] = mapped_column(String)
     asset_type: Mapped[str | None] = mapped_column(String)
     direction: Mapped[str | None] = mapped_column(String)
+    #: deprecated（PRD v0.7 §3.2）：计划价已取消，不再写入；保留列以维持历史版本不可变。
     plan_price: Mapped[Decimal | None] = mapped_column(MONEY)
     plan_price_low: Mapped[Decimal | None] = mapped_column(MONEY)
     plan_price_high: Mapped[Decimal | None] = mapped_column(MONEY)
     target_price: Mapped[Decimal | None] = mapped_column(MONEY)
+    #: 本标的规划资金（从主账户可用资金中划出）；币种取 ``currency``。
+    allocated_capital: Mapped[Decimal | None] = mapped_column(MONEY)
     #: 风险预算可能是金额也可能是百分比：数值与单位分开保存，不靠字段名猜。
     risk_budget_value: Mapped[Decimal | None] = mapped_column(MONEY)
     risk_budget_unit: Mapped[str | None] = mapped_column(String)
@@ -356,6 +363,9 @@ class InvestmentPlanRevision(Base):
     invalidation: Mapped[str | None] = mapped_column(Text)
     profit_loss_ratio: Mapped[Decimal | None] = mapped_column(RATIO)
     profit_loss_ratio_definition: Mapped[str | None] = mapped_column(String)
+    #: 期望盈利：数值与单位分开保存（规则同 risk_budget，2026-10-08 新增）。
+    target_profit_value: Mapped[Decimal | None] = mapped_column(MONEY)
+    target_profit_unit: Mapped[str | None] = mapped_column(String)
     currency: Mapped[str | None] = mapped_column(String)
     as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")

@@ -1,0 +1,47 @@
+# evidence：01 计划字段与迁移 / 02 准入与写入校验（2026-10-08）
+
+隔离环境
+- PG 容器 `pg`（PostgreSQL 18.6），本批独立库 `apodex_sp_test`、角色 `sp_test`（LOGIN，口令仅本批有效），
+  未连接或迁移现有业务库 `apodex`；运行根 `/tmp/frontier-sp-test-runs`。
+- 迁移链：`0001 → 0018_plan_capital_terms`（入口自动 alembic upgrade head）。
+
+命令
+
+    PG_INTEGRATION=1 PG_BUSINESS_TEST_DB=apodex_sp_test \
+    SERVER_DATABASE_URL='postgresql+asyncpg://sp_test:***@localhost:5432/apodex_sp_test' \
+    SERVER_RUNS_ROOT=/tmp/frontier-sp-test-runs \
+    uv run --no-sync pytest tests/pg -q
+
+结果
+- 首轮：`10 failed, 144 passed, 48 errors`。根因：迁移往返用例
+  `test_history_migration_round_trip_preserves_existing_rows` 在 downgrade 后断言失败即中断，
+  未执行 upgrade，schema 停在 `0009_run_uploads`，后续用例集体 ERROR。
+  100% 由 0018 给 `investment_plan_revisions` 加列导致「降级丢新列值 → 整行指纹变化」触发。
+- 修正：该用例指纹只比较 0005 建立的列（排除 0018 新增列），符合「降级丢列」是迁移固有行为。
+- 终轮：**211 passed**（原 202 + 本批新增 9），35s。
+
+覆盖（新增 `tests/pg/test_plan_capital_terms.py`，9 项）
+- `allocated_capital` 超出账户可用资金 → `validation_error` 且 `fields.allocated_capital`，无半个写入；
+- 恰等于可用资金 → 通过并逐位保存（NUMERIC(30,10)）；
+- 账户只有总资金 → 上限退化为总资金（登记于 spec）；
+- 研究未绑定账户 → 写入侧不阻断；
+- `update_plan` 同样校验上限；
+- `plan_price` 提交 → `unknown_field_rejected`；
+- `target_profit_value` 缺 `target_profit_unit` → 拒绝，带 unit 通过；
+- 读接口 `_plan_values` 不输出废弃价格列、输出 `allocated_capital` 与 `target_profit` 分组；
+- 准入改为要求 `plan.allocated_capital`，不再要求计划价/目标价。
+
+改动落点
+- `server/store.py`（`InvestmentPlanRevision`：+`allocated_capital`/`target_profit_value`/`target_profit_unit`，
+  `plan_price*` 标 deprecated）
+- `server/alembic/versions/0018_plan_capital_terms.py`
+- `server/business_service.py`（`PLAN_FIELDS`/`NUMERIC_FIELDS`/`UNIT_*`/`_PLAN_VALUE_COLUMNS`、
+  `evaluate_purpose`、新增 `_assert_allocation_within_available`、`create_plan`/`update_plan` 调用）
+- `server/routes/business.py`（`_plan_values`）
+- `server/investment_context.py`（`_PLAN_FIELDS`）
+- 测试夹具批量更新 `plan_price` → `allocated_capital`（11 个文件）
+
+未覆盖 / 待办
+- 提交侧（不带 `declared` 的纯分析提交）未单独复验上限；上限目前依赖写入服务与已有值，
+  见 03 的范围说明。
+- 未部署 API、未迁移生产库。

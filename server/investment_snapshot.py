@@ -444,7 +444,8 @@ async def persist_declared(
     result = spec
     for group, declared in split_declared(spec.declared).items():
         ref = getattr(spec, group)
-        if ref is None:
+        #: trade 允许没有既有引用：2026-10-08 口径下“回填实际成交价”就是新登记一条成交。
+        if ref is None and group != "trade":
             raise biz.ValidationError(
                 "保存资料需要明确的目标对象", fields={group: "请先选择或创建资料对象"}
             )
@@ -476,6 +477,20 @@ async def persist_declared(
                 allow_incomplete=False,
             )
             result = replace(result, plan=ObjectRef(ref.id, outcome.result["revision"]))
+        elif ref is None:
+            #: 回填实际成交价：在提交事务内新登记一条成交（每次买卖各一条，可多条）。
+            if spec.account is None:
+                raise biz.ValidationError(
+                    "登记成交需要所属账户", fields={"account": "请先选择账户"}
+                )
+            outcome = await biz.register_trade(
+                session,
+                user_id=user_id,
+                account_id=spec.account.id,
+                declared=declared,
+                idempotency_key=child_key,
+            )
+            result = replace(result, trade=ObjectRef(uuid.UUID(outcome.result["trade_id"])))
         else:
             outcome = await biz.correct_trade(
                 session,

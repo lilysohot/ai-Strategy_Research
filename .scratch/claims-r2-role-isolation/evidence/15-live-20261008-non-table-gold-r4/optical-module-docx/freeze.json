@@ -1,0 +1,66 @@
+{
+  "stage": "signed_non_table_gold_r4_validator_evaluation",
+  "source_slug": "optical-module-docx",
+  "batch_id": "batch:1137c1160d29e6fb80c33418a84dc5c40fbc803191f3fe1176b9e67d8eac620f",
+  "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+  "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+  "unit_locators": [
+    "body[115]",
+    "body[15]",
+    "body[1]",
+    "body[26]",
+    "body[29]",
+    "body[32]",
+    "body[37]",
+    "body[3]",
+    "body[43]",
+    "body[46]",
+    "body[49]",
+    "body[51]",
+    "body[63]",
+    "body[72]"
+  ],
+  "task_counts": {
+    "claims": 1,
+    "material_items": 1,
+    "material_relations": 0
+  },
+  "candidate_slot_count": 114,
+  "role_attempt_ceiling": {
+    "claims": 14,
+    "material_items": 21,
+    "material_relations": 14
+  },
+  "attempt_ceiling": 49,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "runner_sha256": "a3ab03d4c796fada314894eaaff908a00b83668b73fa372054814a85a294c935",
+  "gold_freeze_manifest_sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+  "material_semantics_sha256": "bb6e67cf280d5459b21a817f63e25a7234e067681a603a732dac79cb2e875cca",
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "holdout_accessed": false,
+  "remediation_freeze_sha256": "eaf7c1002cdb73131d9667d442ce7e0218d5c55a2aa4c3cd08c35e8b1e0fef00",
+  "frozen_versions": {
+    "claims_protocol": "claims-json-v2",
+    "claims_extractor": "af59c933380b",
+    "claims_lint": "claims-v2-lint-5",
+    "evidence_pipeline": "evidence-pipeline-8",
+    "material_extractor": "material-semantics-21",
+    "material_items_protocol": "material-atomic-jsonl-v5",
+    "material_items_validation": "material-items-validation-v4",
+    "material_relations_protocol": "material-relations-jsonl-v1",
+    "max_atomic_items_per_slot": 4
+  },
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "bb6e67cf280d5459b21a817f63e25a7234e067681a603a732dac79cb2e875cca",
+    "plugins/corpus/structured/ledger.py": "fd3ae6370cb287ec15b838861f59ec4c74513c30ffb372bff9b2f9a8acff7ead",
+    "plugins/corpus/claims_detail.py": "18435d2f41183bb157f37a49cf101273a36a7b5522f97172660534ef0eb88986",
+    "plugins/corpus/evidence_pipeline.py": "bb8c778ed2890ac4e14f334ac255029e2479c39b626a0a3ae02f1d16874b242a",
+    "plugins/corpus/structured/config.py": "376a43bd8fef5e2ef6c58a9920ade6cfbd5e45b8d800167956bcf5e6b684e8f6",
+    "plugins/corpus/structured/roles.py": "589e74f60a96d05516bc947f2bdebf98cf8a9eec536b5d508a3297d2801bf4ff",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "2e7a2163bb2d0c27841ed0af64f32e69f273856350fdd81574bdf28d707dc39b",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "956b25599c521728e7be999a1334fb5ceb987c1f78bd451df4c0daf2153ea9e7",
+    "tests/test_corpus_material_semantics.py": "3dccf1f82d8ab657df29df0ac9b64ea915b594bccfe2ce0eb037566708775c28"
+  }
+}

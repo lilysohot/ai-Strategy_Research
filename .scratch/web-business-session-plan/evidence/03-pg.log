@@ -1,0 +1,32 @@
+# evidence：03 成交价回填触发重新分析（2026-10-08）
+
+环境同 `01-02-pg.log`（隔离库 `apodex_sp_test`、角色 `sp_test`、运行根 `/tmp/frontier-sp-test-runs`）。
+
+定向
+
+    uv run --no-sync pytest tests/pg/test_fill_price_rerun.py -q
+    → 1 passed
+
+全套
+
+    uv run --no-sync pytest tests/pg -q
+    → 212 passed（01/02 的 211 + 本项 1）
+
+过程记录
+- 首轮失败：`{"error":{"code":"validation_error","message":"保存资料需要明确的目标对象",
+  "fields":{"trade":"请先选择或创建资料对象"}}}` —— 既有提交侧只支持更正已有成交。
+- 修正：`persist_declared` 在 `declared.trade` 无引用时调用 `biz.register_trade`（提交事务内新登记）；
+  有引用时保持 `biz.correct_trade`。
+
+断言覆盖
+- 首次 `plan_analysis` 快照不含 `trade.price`；
+- 回填后 `trade_records` 恰一条、`side=buy`、`price=Decimal("20.10")`；
+- 新 Run 快照 `values["trade.price"]["value"] == "20.10"`；
+- 旧 Run 快照仍不含 `trade.price`（AC-06）；
+- 同键重放返回同一 Run，该研究 Run 总数为 2（AC-05）。
+
+改动落点
+- `server/investment_snapshot.py::persist_declared`
+- `tests/pg/test_fill_price_rerun.py`（新增）
+
+未部署 API、未迁移生产库。

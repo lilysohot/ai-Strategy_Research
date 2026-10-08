@@ -65,10 +65,10 @@ PLAN_FIELDS = frozenset(
         "market",
         "asset_type",
         "direction",
-        "plan_price",
-        "plan_price_low",
-        "plan_price_high",
+        #: plan_price/plan_price_low/plan_price_high 于 2026-10-08 取消：提交即 unknown_field_rejected。
         "target_price",
+        #: 本标的规划资金（≤ 所属账户可用资金）。
+        "allocated_capital",
         "risk_budget_value",
         "risk_budget_unit",
         "position_limit_value",
@@ -77,6 +77,9 @@ PLAN_FIELDS = frozenset(
         "invalidation",
         "profit_loss_ratio",
         "profit_loss_ratio_definition",
+        #: 期望盈利：数值与单位必须成对。
+        "target_profit_value",
+        "target_profit_unit",
         "currency",
         "as_of",
     }
@@ -90,13 +93,12 @@ NUMERIC_FIELDS = frozenset(
     {
         "total_capital",
         "available_capital",
-        "plan_price",
-        "plan_price_low",
-        "plan_price_high",
         "target_price",
+        "allocated_capital",
         "risk_budget_value",
         "position_limit_value",
         "profit_loss_ratio",
+        "target_profit_value",
         "quantity",
         "price",
         "fees",
@@ -106,10 +108,13 @@ NUMERIC_FIELDS = frozenset(
 DATETIME_FIELDS = frozenset({"as_of", "traded_at"})
 
 #: 数值必须带单位，否则 2% 与 2 无法区分（契约 §1.1）。
-UNIT_REQUIRED_FIELDS = frozenset({"risk_budget_value", "position_limit_value"})
+UNIT_REQUIRED_FIELDS = frozenset(
+    {"risk_budget_value", "position_limit_value", "target_profit_value"}
+)
 UNIT_BY_FIELD = {
     "risk_budget_value": "risk_budget_unit",
     "position_limit_value": "position_limit_unit",
+    "target_profit_value": "target_profit_unit",
 }
 
 GROUP_FIELDS: dict[str, frozenset[str]] = {
@@ -130,10 +135,8 @@ _PLAN_VALUE_COLUMNS = (
     "market",
     "asset_type",
     "direction",
-    "plan_price",
-    "plan_price_low",
-    "plan_price_high",
     "target_price",
+    "allocated_capital",
     "risk_budget_value",
     "risk_budget_unit",
     "position_limit_value",
@@ -142,6 +145,8 @@ _PLAN_VALUE_COLUMNS = (
     "invalidation",
     "profit_loss_ratio",
     "profit_loss_ratio_definition",
+    "target_profit_value",
+    "target_profit_unit",
     "currency",
     "as_of",
 )
@@ -474,19 +479,8 @@ def evaluate_purpose(
         need("plan", "symbol", "请填写标的")
         need("plan", "market", "请选择市场")
         need("plan", "direction", "请选择方向")
-        plan = groups.get("plan")
-        prices = plan.values if plan else {}
-        if "plan_price" not in prices:
-            need("plan", "plan_price_low", "请填写计划买入价或完整价格区间")
-            need("plan", "plan_price_high", "请填写计划买入价或完整价格区间")
-        if (
-            "plan_price_low" in prices
-            and "plan_price_high" in prices
-            and Decimal(str(prices["plan_price_low"].value))
-            > Decimal(str(prices["plan_price_high"].value))
-        ):
-            missing["plan.plan_price_high"] = "区间上限不能小于下限"
-        need("plan", "target_price", "计划分析需要目标价")
+        #: 2026-10-08：计划价取消，改为要求本标的规划资金；上限在写入/提交时读账户版本校验。
+        need("plan", "allocated_capital", "请填写本标的规划资金（从主账户可用资金中划出）")
 
     if use_case == "holding_cost":
         # 依赖实际成本的计算必须拿到用户明确提供的成交事实（AC-25、AC-26）。
@@ -762,6 +756,48 @@ def _merge_revision(
     return merged, state, sorted(pending)
 
 
+async def _assert_allocation_within_available(
+    session: AsyncSession, *, research_id: Any, allocated: Any
+) -> None:
+    """规划资金不得超过所属账户可用资金（2026-10-08 口径，PRD v0.7 §4.2）。
+
+    边界（登记于本专项 spec）：研究未绑定账户、账户版本缺失、或既无可用资金也无总资金时，
+    **写入侧不阻断**（依赖该项的分析按用途缺数阻断）；上限优先取可用资金，仅有总资金时退化为
+    总资金。跨研究累计占用明确不做。
+    """
+    if allocated is None:
+        return
+    link = (
+        await session.execute(
+            select(store.ResearchInvestmentLink).where(
+                store.ResearchInvestmentLink.research_id == research_id
+            )
+        )
+    ).scalar_one_or_none()
+    if link is None or link.account_id is None:
+        return
+    account = await session.get(store.InvestmentAccount, link.account_id)
+    if account is None or account.current_revision <= 0:
+        return
+    revision = await _load_revision_values(
+        session,
+        store.InvestmentAccountRevision,
+        "account_id",
+        account.id,
+        account.current_revision,
+    )
+    ceiling = revision.get("available_capital")
+    if ceiling is None:
+        ceiling = revision.get("total_capital")
+    if ceiling is None:
+        return
+    if Decimal(str(allocated)) > Decimal(str(ceiling)):
+        raise ValidationError(
+            "规划资金不得超过账户可用资金",
+            fields={"allocated_capital": f"不得超过账户可用资金 {ceiling}"},
+        )
+
+
 # ——— 写入入口 ————————————————————————————————————————————————————————
 
 
@@ -978,6 +1014,12 @@ async def create_plan(
         ).scalar_one_or_none()
         if research is None:
             raise NotFoundOrForbiddenError("研究不存在或无权访问")
+        allocated = admission.values.get("allocated_capital")
+        await _assert_allocation_within_available(
+            session,
+            research_id=research.id,
+            allocated=allocated.value if allocated is not None else None,
+        )
         record_state, pending = _require_complete(
             admission, allow_incomplete=allow_incomplete, missing=missing
         )
@@ -1079,6 +1121,9 @@ async def update_plan(
         )
         merged, record_state, pending = _merge_revision(
             "plan", prev, admission, allow_incomplete=allow_incomplete
+        )
+        await _assert_allocation_within_available(
+            session, research_id=plan.research_id, allocated=merged.get("allocated_capital")
         )
         changed = _changed_fields(
             {k: v for k, v in prev.items() if k in _PLAN_VALUE_COLUMNS}, merged

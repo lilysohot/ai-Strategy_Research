@@ -80,14 +80,18 @@ async def test_money_columns_are_exact_numerics(pg_session) -> None:
                 "WHERE table_name IN ('investment_account_revisions',"
                 " 'investment_plan_revisions') "
                 "AND column_name IN ('total_capital', 'available_capital',"
-                " 'plan_price', 'profit_loss_ratio')"
+                " 'plan_price', 'profit_loss_ratio', 'allocated_capital',"
+                " 'target_profit_value')"
             )
         )
     ).all()
 
     shape = {(r[0], r[1]): (r[2], r[3]) for r in rows}
     assert shape[("investment_account_revisions", "total_capital")] == (30, 10)
+    #: plan_price 为 deprecated 列（2026-10-08 口径），仍保留以免破坏不可变历史版本。
     assert shape[("investment_plan_revisions", "plan_price")] == (30, 10)
+    assert shape[("investment_plan_revisions", "allocated_capital")] == (30, 10)
+    assert shape[("investment_plan_revisions", "target_profit_value")] == (30, 10)
     assert shape[("investment_plan_revisions", "profit_loss_ratio")] == (20, 10)
 
 

@@ -121,10 +121,9 @@ def _plan_values(row: Any) -> dict[str, Any]:
         "market": row.market,
         "asset_type": row.asset_type,
         "direction": row.direction,
-        "plan_price": _decimal_text(row.plan_price),
-        "plan_price_low": _decimal_text(row.plan_price_low),
-        "plan_price_high": _decimal_text(row.plan_price_high),
+        #: plan_price*/target_price 中的计划价已取消（2026-10-08），读接口不再输出废弃价格字段。
         "target_price": _decimal_text(row.target_price),
+        "allocated_capital": _decimal_text(row.allocated_capital),
         "risk_budget": {
             "value": _decimal_text(row.risk_budget_value),
             "unit": row.risk_budget_unit,
@@ -138,6 +137,10 @@ def _plan_values(row: Any) -> dict[str, Any]:
         "profit_loss_ratio": {
             "value": _decimal_text(row.profit_loss_ratio),
             "definition": row.profit_loss_ratio_definition,
+        },
+        "target_profit": {
+            "value": _decimal_text(row.target_profit_value),
+            "unit": row.target_profit_unit,
         },
         "currency": row.currency,
         "as_of": _iso(row.as_of),

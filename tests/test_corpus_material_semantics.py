@@ -622,6 +622,8 @@ def test_slot_protocol_allows_multiple_atomic_items_in_one_coarse_slot(tmp_path:
         max_calls=1,
         staged_jsonl=True,
         slot_protocol=True,
+        extract_relations=False,
+        relations_required=False,
     )
 
     assert len(result.understanding.items) == 2
@@ -629,6 +631,128 @@ def test_slot_protocol_allows_multiple_atomic_items_in_one_coarse_slot(tmp_path:
     assert entry.status == "extracted"
     assert len(entry.item_refs) == 2
     assert result.packet_runs[0].status == "completed"
+
+
+def test_quoted_other_item_may_omit_speaker_ref(tmp_path: Path) -> None:
+    source = tmp_path / "quoted-other.md"
+    source.write_text("卖方认为需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slot = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )[0]
+    response = json.dumps(
+        {
+            "record_type": "item",
+            "candidate_slot_id": slot.candidate_slot_id,
+            "item_id": "quoted",
+            "text": "卖方认为需求增长",
+            "semantic_type": "opinion",
+            "statement_role": "claim",
+            "speech_role": "statement",
+            "perspective": "quoted_other",
+            "speaker_ref": None,
+            "polarity": "affirmed",
+            "value": None,
+            "behavior_status": None,
+            "temporal_frame": "unknown",
+            "evidence_quote": "卖方认为需求增长。",
+            "unknown_fields": [],
+        },
+        ensure_ascii=False,
+    )
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: response,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+    )
+
+    assert len(result.understanding.items) == 1
+    speaker = next(
+        speaker
+        for speaker in result.understanding.speakers
+        if speaker.speaker_id == result.understanding.items[0].speaker_ref
+    )
+    assert speaker.role == "quoted_source"
+
+
+def test_markdown_closing_marker_stays_with_atomic_slot(tmp_path: Path) -> None:
+    source = tmp_path / "markdown.md"
+    source.write_text("**持有 + 观望。** 后续再议。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    assert any(slot.text == "**持有 + 观望。**" for slot in slots)
+
+
+def test_valid_items_survive_a_discarded_sibling_attempt(tmp_path: Path) -> None:
+    source = tmp_path / "discarded-sibling.md"
+    source.write_text("中期不分红、回购上限很低，治理上要接受现金调度优先。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slot = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )[0]
+
+    def item(local_id: str, quote: str) -> dict[str, object]:
+        return {
+            "record_type": "item",
+            "candidate_slot_id": slot.candidate_slot_id,
+            "item_id": local_id,
+            "text": quote,
+            "semantic_type": "fact",
+            "statement_role": "claim",
+            "speech_role": "statement",
+            "perspective": "source_explicit",
+            "speaker_ref": "undeclared",
+            "polarity": "affirmed",
+            "value": None,
+            "behavior_status": None,
+            "temporal_frame": "unknown",
+            "evidence_quote": quote,
+            "unknown_fields": [],
+        }
+
+    response = "\n".join(
+        json.dumps(record, ensure_ascii=False)
+        for record in (
+            item("invalid", "中期不分红。"),
+            item("buyback", "回购上限很低"),
+            item("governance", "治理上要接受现金调度优先"),
+        )
+    )
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: response,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert len(result.understanding.items) == 2
+    assert result.understanding.coverage.slot_ledger[0].status == "extracted"
+    assert result.packet_runs[0].status == "completed"
+
+
+def test_negated_cause_and_leading_conclusion_are_claim_signals(tmp_path: Path) -> None:
+    source = tmp_path / "causal-signals.md"
+    source.write_text(
+        "不因为一天没涨就把出货增长写成证伪。\n所以净利润不必拆分。",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    assert slots
+    assert all("claim" in slot.signal_types for slot in slots)
+    assert all("evidence" not in slot.signal_types for slot in slots)
 
 
 def test_slot_protocol_marks_missing_terminal_record_partial(tmp_path: Path) -> None:

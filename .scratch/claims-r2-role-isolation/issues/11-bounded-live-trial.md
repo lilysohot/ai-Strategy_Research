@@ -12,6 +12,12 @@ Production database access: 0
 > [12-r3-quality-remediation](12-r3-quality-remediation.md) 完成。r2 候选、签认裁定和运行工件均未
 > 覆盖；本票仍保持 `needs-info`/未发布，等待同一 24 单元的有界 r3 真实复验及重新裁定。
 
+> 2026-10-08 复验结果：r3 在工业富联 items 协议无效后停止；针对确定性校验缺陷修复并冻结的
+> r4 又遇到 Claims `outcome_unknown` 与模型错误槽位 ID，仍按停止条件结束。详见
+> [13-bounded-r3-trial](13-bounded-r3-trial.md) 与
+> [15-bounded-r4-trial](15-bounded-r4-trial.md)。完整 24 单元三角色候选尚未形成，因此逐条裁定、
+> query/delivery/context_use 与发布均未执行。
+
 依据：[实施规格](../spec.md)、[设计报告](../report.md)、[唯一主计划](../../../docs/plan/claims-market-closed-loop-plan.md)。本票遵守 spec 第 5 节全局约束；新增文件/测试是待交付项，不表示当前已存在。
 
 ## 目标

@@ -25,11 +25,11 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-20"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-21"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v3"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v4"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v2"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
@@ -433,6 +433,7 @@ class RelationCandidateSet(BaseModel):
         "material-items-validation-v1",
         "material-items-validation-v2",
         "material-items-validation-v3",
+        "material-items-validation-v4",
     ] = MATERIAL_ITEMS_VALIDATION_VERSION
     endpoint_item_ids: tuple[str, ...]
     candidates: tuple[RelationCandidate, ...]
@@ -625,7 +626,10 @@ def _slot_signals(text: str) -> tuple[str, ...]:
     decision = triage_block_detail(text)
     qualitative = "qualitative" in signals
     signals = [signal for signal in signals if signal != "qualitative"]
-    if "evidence" in signals and re.match(r"\s*(?:表明|说明|证明)", text):
+    if "evidence" in signals and (
+        re.match(r"\s*(?:表明|说明|证明|所以|因此)", text)
+        or re.search(r"(?:不|并不)(?:是)?因(?:为)?", text)
+    ):
         signals = [signal for signal in signals if signal != "evidence"]
         signals.append("claim")
     negation = ("negation",) if "negation" in signals else ()
@@ -673,6 +677,9 @@ def _atomic_ranges(segment: MaterialSegment) -> tuple[tuple[int, int, bool], ...
                 continue
         boundary_start = match.start()
         boundary_end = match.end()
+        closing_markup = re.match(r"(?:\*\*|__)(?=\s|$)", segment.text[boundary_end:])
+        if closing_markup is not None:
+            boundary_end += closing_markup.end()
         # Connector boundaries belong to the following proposition; punctuation belongs left.
         if match.group(0).strip().lower().startswith(("and", "和")):
             end = boundary_start
@@ -1690,8 +1697,14 @@ def _packet_records(
             if local_id in consumed_local_item_ids:
                 raise ValueError("item_id must be unique within a batch")
             text = _required_text(raw.get("text"), "item text")
-            speaker_ref = _required_text(raw.get("speaker_ref"), "speaker_ref")
             perspective = _required_text(raw.get("perspective"), "perspective")
+            implicit_quoted_speaker = perspective == "quoted_other" and not raw.get(
+                "speaker_ref"
+            )
+            if implicit_quoted_speaker:
+                speaker_ref = "quoted_other"
+            else:
+                speaker_ref = _required_text(raw.get("speaker_ref"), "speaker_ref")
             if perspective == "system_synthesis":
                 raise ValueError("source extraction cannot emit system_synthesis")
             quote = _required_text(raw.get("evidence_quote"), "evidence_quote")
@@ -1779,7 +1792,7 @@ def _packet_records(
                     perspective = "unknown"
             if quoted_frame:
                 perspective = "quoted_other"
-            elif perspective == "quoted_other":
+            elif perspective == "quoted_other" and not implicit_quoted_speaker:
                 perspective = "source_explicit" if deterministic is not None else "unknown"
             fallback_used = speaker_ref not in speaker_map
             if perspective == "quoted_other":
@@ -1956,8 +1969,10 @@ def _validate_atomic_coverage(
         if slot_id in slot_by_id:
             raw_item_attempts_by_slot[slot_id] += 1
         slot = slot_by_id.get(slot_id)
-        if slot is None or item is None:
+        if slot is None:
             incomplete = True
+            continue
+        if item is None:
             continue
         item_refs_by_slot.setdefault(slot_id, []).append(item.item_id)
 
@@ -1975,13 +1990,15 @@ def _validate_atomic_coverage(
         slot_items = [item_by_id[item_id] for item_id in slot_item_refs]
         reasons: list[str] = []
         raw_attempts = raw_item_attempts_by_slot[slot.candidate_slot_id]
-        if slot_item_refs and not records and raw_attempts == len(slot_item_refs):
+        if slot_item_refs and not records:
             declared_status = "extracted"
+            if raw_attempts > len(slot_item_refs):
+                reasons.append("discarded_item_attempt")
         elif slot_item_refs and records:
             incomplete = True
             declared_status = "partial"
             reasons.append("duplicate_terminal_records")
-        elif raw_attempts > len(slot_item_refs):
+        elif raw_attempts:
             incomplete = True
             declared_status = "partial"
             reasons.append("item_failed_validation")

@@ -1,0 +1,56 @@
+{
+  "schema_version": "claims-r4-validator-remediation-freeze-v1",
+  "created_on": "2026-10-08",
+  "status": "frozen_ready_for_bounded_r4",
+  "publication_authorized": false,
+  "model_calls_for_fix": 0,
+  "production_database_access": 0,
+  "base_commit": "b66cefef53d6dec6d35a36c8525d147de3bd3086",
+  "versions": {
+    "claims_protocol": "claims-json-v2",
+    "claims_extractor": "af59c933380b",
+    "claims_lint": "claims-v2-lint-5",
+    "evidence_pipeline": "evidence-pipeline-8",
+    "material_extractor": "material-semantics-21",
+    "material_items_protocol": "material-atomic-jsonl-v5",
+    "material_items_validation": "material-items-validation-v4",
+    "material_relations_protocol": "material-relations-jsonl-v1",
+    "max_atomic_items_per_slot": 4
+  },
+  "failed_parent_run": {
+    "run_name": "13-live-20261008-non-table-gold-r3",
+    "source": "industrial-fulian-md",
+    "check_sha256": "a78da86f5d25c930e2733d1c3814edfbb9b5d706c6bf7172a73cc6812a82413d",
+    "summary_sha256": "e31581313a1d74ca2bb1b3d4cd6917957c4e87608745fbf23d51dcf95ea72a08",
+    "actual_attempts": 26,
+    "automatic_retries": 0,
+    "stop_reason": "material_items_protocol_invalid"
+  },
+  "parent_evidence": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.signed.json": "31e75f9bd7e10f12197ab99907857f2b649dcbf830811f6916e6bba57954b2a5"
+  },
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "bb6e67cf280d5459b21a817f63e25a7234e067681a603a732dac79cb2e875cca",
+    "plugins/corpus/structured/ledger.py": "fd3ae6370cb287ec15b838861f59ec4c74513c30ffb372bff9b2f9a8acff7ead",
+    "plugins/corpus/claims_detail.py": "18435d2f41183bb157f37a49cf101273a36a7b5522f97172660534ef0eb88986",
+    "plugins/corpus/evidence_pipeline.py": "bb8c778ed2890ac4e14f334ac255029e2479c39b626a0a3ae02f1d16874b242a",
+    "plugins/corpus/structured/config.py": "376a43bd8fef5e2ef6c58a9920ade6cfbd5e45b8d800167956bcf5e6b684e8f6",
+    "plugins/corpus/structured/roles.py": "589e74f60a96d05516bc947f2bdebf98cf8a9eec536b5d508a3297d2801bf4ff",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "2e7a2163bb2d0c27841ed0af64f32e69f273856350fdd81574bdf28d707dc39b",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "956b25599c521728e7be999a1334fb5ceb987c1f78bd451df4c0daf2153ea9e7",
+    "tests/test_corpus_material_semantics.py": "3dccf1f82d8ab657df29df0ac9b64ea915b594bccfe2ce0eb037566708775c28"
+  },
+  "verification": {
+    "focused_tests": "122 passed",
+    "ruff_changed_files": "passed",
+    "pyright_changed_modules": "0 errors, 0 warnings"
+  },
+  "next_gate": {
+    "action": "bounded_r4_live_retest_same_24_units",
+    "concurrency": 1,
+    "automatic_retries": 0,
+    "requires_new_candidate_adjudication": true,
+    "preserve_failed_r3": true
+  }
+}

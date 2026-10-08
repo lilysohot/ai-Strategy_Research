@@ -37,7 +37,7 @@ PLAN = {
     "symbol": "600519.SH",
     "market": "CN",
     "direction": "buy",
-    "plan_price": "19.90",
+    "allocated_capital": "10000",
     "target_price": "24.00",
     "currency": "CNY",
 }
@@ -135,7 +135,7 @@ async def test_submit_freezes_snapshot_and_it_does_not_move(client) -> None:
     body = submitted.json()
     assert body["snapshot_id"], "提交没有冻结快照"
 
-    # 提交之后把资金从 100000 改成 80000，并给计划改价。
+    # 提交之后把资金从 100000 改成 80000，并改计划的规划资金。
     async with biz.business_transaction() as session:
         await biz.update_account(
             session,
@@ -151,7 +151,7 @@ async def test_submit_freezes_snapshot_and_it_does_not_move(client) -> None:
             user_id=user_id,
             plan_id=uuid.UUID(plan["plan_id"]),
             expected_revision=1,
-            declared={"plan_price": "18.50"},
+            declared={"allocated_capital": "20000"},
             idempotency_key="snap-edit-2",
         )
 
@@ -161,7 +161,7 @@ async def test_submit_freezes_snapshot_and_it_does_not_move(client) -> None:
     assert snapshot.status_code == 200
     values = snapshot.json()["values"]
     assert Decimal(values["total_capital"]["value"]) == Decimal("100000"), values
-    assert Decimal(values["plan_price"]["value"]) == Decimal("19.90"), values
+    assert Decimal(values["allocated_capital"]["value"]) == Decimal("10000"), values
     assert snapshot.json()["account"]["revision"] == 1
     assert snapshot.json()["plan"]["revision"] == 1
 
@@ -192,7 +192,7 @@ async def test_snapshot_carries_resolved_values_and_sources(client) -> None:
         "currency",
         "capital_basis",
         "symbol",
-        "plan_price",
+        "allocated_capital",
         "target_price",
     ):
         assert field in snapshot["values"], f"快照缺少字段 {field}"

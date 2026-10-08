@@ -187,6 +187,7 @@ class RelationPlan(BaseModel):
         "material-items-validation-v1",
         "material-items-validation-v2",
         "material-items-validation-v3",
+        "material-items-validation-v4",
     ] = MATERIAL_ITEMS_VALIDATION_VERSION
     max_tasks: int = Field(default=1, ge=0)
     max_attempts: int = Field(default=0, ge=0)
