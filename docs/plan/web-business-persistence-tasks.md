@@ -2,8 +2,8 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v1.3 · 2026-10-02；明确补数请求与会话业务回执的单会话归属 |
-| 状态 | 有效任务设计 · 尚未实施，不表示数据库结构或接口已经存在 |
+| 版本 / 日期 | v1.4 · 2026-10-08；回填执行情况（§10），不改变任务设计与验收 |
+| 状态 | 有效任务设计；DATA-00—15 服务端已实施并提交（证据见[环境基线](web-business-data-env-baseline.md) §4.1—4.11，`tests/pg` 202 passed），**未部署 API、未迁移生产库**；D 阶段、供应商实测、保留策略与 UI 侧联合验收待办 |
 | 需求依据 | [Web 业务资料 PRD v0.6](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-DATA-13、PR-BIZ-01—06、PR-WB-07、PR-WATCH-01—04；工具接线依赖 PR-DATA-04 |
 | 配套清单 | [Web 页面交互任务](web-business-ui-tasks.md) |
 | 范围 | PostgreSQL 业务真源、统一写入、版本/快照、补数、上下文、监控事件、持久调度、恢复与验收 |
@@ -14,6 +14,10 @@
 本文任务编号用于拆分设计。进入实施时按[任务规范](../agents/issue-tracker.md)为每项分别建立 issue，
 仅 issue 维护执行状态；本文不增设产品进度真源，不实施迁移，不修改既有排期。
 页面任务负责展示与操作，所有者、真实性状态、版本、幂等和预算必须由服务端强制执行。
+
+2026-10-08 回填：DATA-01 起的实施批次已在 `.scratch/web-business-repairs/issues/` 逐项建 issue
+（01 核查修复、02—10 对应 DATA-07—15）；各任务条目的“当前产物”即该批次的代码落点与证据摘要，
+汇总见 §10。本文仍不新增产品状态真源，§10 为回填记录，不构成放行声明。
 
 ## 1. 任务总览
 
@@ -152,6 +156,14 @@ v0.1；环境台账与验证入口见[环境基线](web-business-data-env-baseli
 **验收**：跨刷新、登录、研究绑定一致；双用户直接请求任意对象/版本 ID 均受控。
 覆盖 AC-01、03、09。
 
+**当前产物（2026-10-03）**：读接口见 `server/routes/business.py`——账户列表/详情/版本历史
+（`GET /api/business/accounts`、`/{id}`、`/{id}/revisions`）、按研究归属的计划列表
+（`GET .../sessions/{rid}/plans`）与计划版本历史、研究资料关联读写（`GET/PUT .../sessions/{rid}/link`）、
+成交列表（`GET /api/business/trades`）与更正（`/{id}/correct`）；归属过滤与“无权/不存在统一 404”
+由 `server/business_service.py` 收口。真 PG 路由契约验收见 `tests/pg/test_business_routes.py`
+（9 项，随 DATA-02/03 共 33 项通过，证据见[环境基线](web-business-data-env-baseline.md) §4.1）。
+**未开放**：持仓快照读取端点（`PositionSnapshot` 模型已在 DATA-02 建立，但无 `positions` 路由）。
+
 ### DATA-05 Run 快照与重算
 
 **需求**：PR-DATA-13、PR-BIZ-02/04/05；PRD §4.4、§6。
@@ -242,6 +254,15 @@ Run 仍 `queued`）的 Run 被跳过，确保"提交成功即崩溃"重启后仍
 
 **验收**：服务/页面重启后可续接，原快照不改；不走工具 approve 接口。
 覆盖 AC-08、24、25、28。
+
+**当前产物（2026-10-03）**：模型与迁移 `server/alembic/versions/0011_input_requests.py`；服务
+`server/input_requests.py`（创建/查询/回答/取消，追加式回答历史、部分回答保持 `pending`、
+`expected_versions` 版本冲突、同一请求只续接一次、终态竞争 409）；端点见 `server/routes/business.py`
+（`POST /api/business/sessions/{rid}/input-requests`、`GET /api/business/input-requests`、
+`GET /api/business/input-requests/{id}`、`POST .../{id}/answers`、`POST .../{id}/cancel`）；
+通知生产者挂接 DATA-12（`input_required`）。真 PG 验收见 `tests/pg/test_input_requests.py`
+（定向 17 项，全套 112 通过，证据见[环境基线](web-business-data-env-baseline.md) §4.3）；
+通道为补数端点，不复用工具审批 `/approve`。前端消费见[页面任务 §7](web-business-ui-tasks.md)（UI-07）。
 
 ### DATA-08 业务上下文与工具接线
 
@@ -634,7 +655,50 @@ AC-01—28 的映射保留，但已映射不代表完整验收。增加下列工
 若行情只能提供日频或延迟且不满足规则时效，应限制可选监控能力并说明原因，不能仍标成实时到价分析；
 这不会阻塞 A/B，也不能在未经用户决定时自动换供应商。
 
-下一步最小可执行批次是 DATA-00/01 → DATA-02—04 与 UI-01—04，配套操作查询、归档和备份。
-随后用一个完整 B 场景验证“真实资料 → 快照 → queued Run/outbox → worker → 依据回看”，
-通过后再开放一个标的的单次监控。每项进入实现前拆为独立 issue，并给出精确接口/DDL与验证命令；
-本清单属于任务设计，不冒充已完成上述实施产物或提供未经验证的工期承诺。
+2026-10-08 更正：上述“下一步最小可执行批次”已在 2026-10-03 至 10-07 按批执行——DATA-00/01
+核定与契约冻结、DATA-02—04 资料闭环、DATA-05—08 分析闭环、DATA-09—12 单次监控、DATA-13—15
+归档/恢复/联合验收均已实施并提交（逐项落点与证据见各任务“当前产物”与 §10），
+“真实资料 → 快照 → queued Run/outbox → worker → 依据回看”的完整 B 场景已由
+`tests/pg/test_data15_joint.py` 覆盖。未完成的不是服务端实施，而是 UI-11 浏览器联合验收、
+供应商实测、D 阶段与保留策略（见 §10）。
+
+## 10. 执行情况回填（2026-10-08）
+
+本节回填各任务实际落地状态，供后续核对；**不构成放行声明**。依据为各批次在
+[环境基线](web-business-data-env-baseline.md) §4.1—4.11 登记的代码落点与真 PG 用例数，
+以及工作区提交历史。本轮只读核对，未重跑 PG/worker/浏览器或供应商测试。
+
+| 任务 | 状态 | 证据摘要 |
+|---|---|---|
+| DATA-00 | 已实施 | 环境台账与 `tests/pg` 隔离入口（§4.1）；**后台受管进程登记仍未建立**（§5） |
+| DATA-01 | 已实施 | 契约 v0.1 冻结（[共用数据与操作契约](../design/web-business-data-contract.md)） |
+| DATA-02 | 已实施 | `server/store.py` 业务模型 + 迁移 `0005`/`0006`；定向 7 项 |
+| DATA-03 | 已实施（聊天写入除外） | `server/business_service.py`、`BusinessOperation` 幂等台账、`routes/business.py`；定向 13+9 项。**聊天命令绑定的写入路径未实现** |
+| DATA-04 | 已实施（缺持仓读端点） | `routes/business.py` 账户/计划/关联/成交/版本历史读接口；**无 `positions` 路由** |
+| DATA-05 | 已实施 | `server/investment_snapshot.py` + `0007`；快照/重算 13 项 |
+| DATA-06 | 已实施 | `server/dispatch_outbox.py`、`server/uploads.py` + `0008`/`0009`；派发/附件/队列 19 项 |
+| DATA-07 | 已实施 | `server/input_requests.py` + `0011`；定向 17 项（§4.3） |
+| DATA-08 | 已实施 | `server/investment_context.py`、`plugins/tools/investment_context.py`；PG 113、worker/工具 78 |
+| DATA-09 | 已实施 | `server/watch_rules.py` + `0013`/`0014`；定向 25 项；仅 `trigger_mode=single` |
+| DATA-10 | 已实施（供应商项待核） | `server/watch_eval.py`、`server/monitor.py` + `0015`；定向 18 项；真实行情时效/权限/容量未核 |
+| DATA-11 | 已实施 | `server/watch_scheduler.py` + `0016`；定向 10 项；token 级预算与“重新分析 +1 代次”未做 |
+| DATA-12 | 已实施 | `server/business_events.py` + `0017`；定向 13 项 |
+| DATA-13 | 已实施 | `server/business_archive.py`；定向 8 项；保留期限/物理删除未定义 |
+| DATA-14 | 已实施 | `server/restore_check.py`、`restore_mode`；定向 12 项 |
+| DATA-15 | 已实施（server 侧） | `server/usage.py::usage_summary_for_runs`、`tests/pg/test_data15_joint.py`；全套 202 passed |
+
+累计 `tests/pg` **202 passed**（§4.11），覆盖 DATA-00 基线至 DATA-15 联合验收；服务端实施最新
+提交为 `3e22a77`（DATA-13—15）。所有批次**均未部署 API、未迁移生产库**。
+
+仍未完成 / 未放行：
+
+1. UI 侧：UI-03 持仓/成交登记、UI-05 聊天写入、UI-11 浏览器联合验收（见[页面任务 §7](web-business-ui-tasks.md)）。
+2. AC-20 输入正确率与真实费用比较：需真实任务集与真实供应商凭据的受控试运行。
+3. 供应商协议/行情时效/盘中权限/轮询容量实测（DATA-10 供应商项）。
+4. D 阶段重复规则、冷却与重新布防（C 阶段仅 `trigger_mode=single`）。
+5. 业务数据（快照/审计/事件/版本）保留期限与物理删除流程（DATA-14，发布前冻结）。
+6. 后台受管 dispatcher/monitor 进程的启动/退出/心跳/健康登记（DATA-00 §5）。
+7. 附件分阶段回执与 UI-03/UI-05 对应的前端缺口（见[页面任务 §7](web-business-ui-tasks.md)）。
+
+口径：服务端实施进度按“代码已提交 + 真 PG 用例通过 + 证据入环境基线”记；`complete` 或阶段
+放行仍须独立复核与用户具名签认，实施方不自宣完成。

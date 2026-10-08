@@ -1,0 +1,28 @@
+{
+  "schema_version": "corpus-candidate-adjudication-freeze-manifest-v1",
+  "status": "frozen",
+  "created_on": "2026-10-08",
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signoff_evidence": [
+    "user_file_edit_2026-10-08_human_gate_satisfied_xyl",
+    "user_chat_2026-10-08_candidate-adjudications.agent-draft.json_signed"
+  ],
+  "human_gate_satisfied": true,
+  "quality_gate_passed": false,
+  "publication_authorized": false,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.agent-draft.json": "0f880b98c707f4f020bf03615e75219d3005e4f55d3980901718f7c85e9ce0ac",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/coverage-observations.agent-draft.json": "4b6150be9228191f746dc8d32c7bb6333ffbc79202595d90710f35828e9cb671",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/adjudication-manifest.agent-draft.json": "29726094806f0b2cbb4bcd0c2f1c53f06619dbcfe04e6b1168e01d4c4eee69dc"
+  },
+  "outputs": {
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/freeze_signed_candidate_adjudications.py": "323987608acaa0364c5d71d89fd824604b5a781e84ddb5fe7461e6a4f7a8107e",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.signed.json": "31e75f9bd7e10f12197ab99907857f2b649dcbf830811f6916e6bba57954b2a5",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-freeze-state.json": "e89103f0d3ecdce107b2f61de71233783b644c87bd8679fe87f7ca5ad6cc2410",
+    ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-summary.signed.md": "97d1a86101210a1df142533c078c9142b60ad4a0785dc2335c291f7ecb0888ec"
+  },
+  "model_calls": 0,
+  "m_main_calls": 0,
+  "production_database_access": 0
+}

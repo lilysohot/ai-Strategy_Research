@@ -1022,6 +1022,39 @@ def test_system_splits_known_compound_statements_into_atomic_obligations(
     assert len(slots) == len(expected_atoms)
 
 
+def test_system_splits_financial_clause_obligations_without_breaking_self_correction(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "atomic-financial.md"
+    source.write_text(
+        "中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，Q2 营收 3067.83 亿。\n"
+        "客户集中是结构风险：2025 年前五大 62%，H1 应收前五 68.52%。\n"
+        "因为政策原因导致成本上升，会与客户协商提价。\n"
+        "Q2 800G其实是超预期的。但这也不叫超预期，因为1.6T拉胯了。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=2000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    def owning_slot(fragment: str) -> str:
+        owners = [slot.candidate_slot_id for slot in slots if fragment in slot.text]
+        assert len(owners) == 1
+        return owners[0]
+
+    groups = (
+        ("中报验证了量", "云计算 +75.7%", "CSP AI 服务器 +2.3 倍", "Q2 营收 3067.83 亿"),
+        ("客户集中是结构风险", "2025 年前五大 62%", "H1 应收前五 68.52%"),
+        ("因为政策原因导致成本上升", "会与客户协商提价"),
+    )
+    for fragments in groups:
+        assert len({owning_slot(fragment) for fragment in fragments}) == len(fragments)
+
+    correction = next(slot for slot in slots if "Q2 800G其实是超预期的" in slot.text)
+    assert "但这也不叫超预期" in correction.text
+
+
 def test_system_preserves_connector_commas_inside_one_question(tmp_path: Path) -> None:
     source = tmp_path / "question.md"
     question = "未来行业两年供需很好，但更长期可能扩产，是否值得投资？"

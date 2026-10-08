@@ -1,0 +1,94 @@
+{
+  "schema_version": "corpus-candidate-adjudication-freeze-state-v1",
+  "status": "frozen_quality_gate_failed",
+  "formal_candidate_adjudications_frozen": true,
+  "human_gate_satisfied": true,
+  "quality_gate_passed": false,
+  "publication_authorized": false,
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signoff_evidence": [
+    "user_file_edit_2026-10-08_human_gate_satisfied_xyl",
+    "user_chat_2026-10-08_candidate-adjudications.agent-draft.json_signed"
+  ],
+  "candidate_count": 267,
+  "unresolved_count": 0,
+  "metrics": {
+    "claims": {
+      "raw_candidate_count": 132,
+      "judgements": {
+        "correct_extra": 22,
+        "duplicate": 1,
+        "incorrect": 94,
+        "matched": 15
+      },
+      "candidate_precision": {
+        "numerator": 37,
+        "denominator": 132,
+        "decimal": 0.280303
+      },
+      "target_recall": {
+        "numerator": 15,
+        "denominator": 20,
+        "decimal": 0.75
+      }
+    },
+    "material_items": {
+      "raw_candidate_count": 135,
+      "judgements": {
+        "correct_extra": 65,
+        "duplicate": 1,
+        "incorrect": 65,
+        "matched": 4
+      },
+      "candidate_precision": {
+        "numerator": 69,
+        "denominator": 135,
+        "decimal": 0.511111
+      },
+      "target_recall": {
+        "numerator": 4,
+        "denominator": 48,
+        "decimal": 0.083333
+      }
+    },
+    "material_relations": {
+      "raw_candidate_count": 0,
+      "judgements": {},
+      "candidate_precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "decimal": null
+      },
+      "target_recall": {
+        "numerator": 0,
+        "denominator": 24,
+        "decimal": 0.0
+      }
+    }
+  },
+  "query_status": [
+    {
+      "source_slug": "industrial-fulian-md",
+      "page_status": "not_published",
+      "error_codes": [
+        "CS_NOT_PUBLISHED"
+      ],
+      "record_count": 0
+    },
+    {
+      "source_slug": "optical-module-docx",
+      "page_status": "not_published",
+      "error_codes": [
+        "CS_NOT_PUBLISHED"
+      ],
+      "record_count": 0
+    }
+  ],
+  "delivery_status": "not_delivered",
+  "context_use_status": "not_used",
+  "model_calls_during_freeze": 0,
+  "m_main_calls": 0,
+  "production_database_access": 0,
+  "next_gate": "quality gate remains failed; do not publish or run M_main; fix and refreeze a new candidate version before any successor trial"
+}

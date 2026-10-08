@@ -1,10 +1,10 @@
 # 11 · 获准后的真实模型有界试验与单文档消费
 
 Status: needs-info
-Execution: 范围已由许永立确认；r2 非表格金标已由 xyl 签认并正式冻结；两份来源的有界候选诊断已执行（本轮 48 次调用）；267 条持久化候选已形成代理逐条预裁定草案、待具名人工签认；只读 query 均返回 CS_NOT_PUBLISHED，delivery/context_use 未发生；material_items 原子覆盖未通过、关系依赖被阻断，尚未发布或进入主线消费，任务整体未闭环
+Execution: 范围已由许永立确认；r2 非表格金标及 267 条候选逐条裁定均已由 xyl 签认并正式冻结；两份来源的有界候选诊断已执行（本轮 48 次调用）；只读 query 均返回 CS_NOT_PUBLISHED，delivery/context_use 未发生；人工门已解除但质量门未通过，material_items 原子覆盖不足、relations 无候选，尚未发布或进入主线消费，任务整体未闭环
 Type: task
 Plan: W4/W5 真实消费；R2-S4/S5 的部分验证
-Blocked by: 第 2—3 页及图像表格未覆盖；逐候选预裁定仍待具名人工签认，Claims 主体/期间/指标绑定和 material_items 原子覆盖未通过，relations 无候选；质量门、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
+Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标绑定和 material_items 原子覆盖未通过，relations 无候选；质量门、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
 Real model calls: 116（既有 68 + 本轮 r2 48；M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
 Production database access: 0
 
@@ -410,3 +410,23 @@ no_supported），DOCX 82 条 item（71 extracted、20 partial、1 no_supported�
 本步新增真实提取调用 0、M_main 调用 0、生产数据库访问 0、holdout 访问 0。任务继续保持
 `needs-info`，下一门是具名人工逐条签认/争议修改；在此之前不得把草案改称人工裁定完成，也不得
 发布或为观察 delivery/context_use 而绕过质量门。
+
+### 2026-10-08 · 候选逐条裁定签认与正式冻结
+
+用户随后明确确认 `candidate-adjudications.agent-draft.json` 已签认；签认人/审核人/争议裁定人记为
+`xyl`。签认文件中的 267 条终态决定未发生改动，现已生成不可覆盖的正式冻结后继文件，并保留
+代理理由与人工接受记录：
+
+- [正式逐条裁定](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.signed.json)
+- [冻结状态](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-freeze-state.json)
+- [签认摘要](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-summary.signed.md)
+- [冻结清单与指纹](../evidence/11-live-20261008-non-table-gold-r2/candidate-adjudication-freeze-manifest.json)
+
+正式结果与草案建议一致：Claims precision 28.03%、目标 recall 75.00%；material_items precision
+51.11%、目标 recall 8.33%；relations 无候选、目标 recall 0%。因此 `human_gate_satisfied=true`，但
+`quality_gate_passed=false`、`publication_authorized=false`。此前两个精确 source/build/store 的
+只读查询结果继续有效：均为 `CS_NOT_PUBLISHED`、0 records，delivery=`not_delivered`、
+context_use=`not_used`、M_main 调用 0。
+
+本次冻结新增真实模型调用 0、生产数据库访问 0，也没有执行发布。任务仍保持 `needs-info`：人工签认
+不再是阻断项，后续须另行修复抽取质量并重新冻结/验证，不能用本次签认绕过质量门。

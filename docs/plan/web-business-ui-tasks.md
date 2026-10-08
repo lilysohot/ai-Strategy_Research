@@ -2,8 +2,8 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v1.4 · 2026-10-02；补数请求与会话业务回执按所属会话汇总 |
-| 状态 | 有效任务设计 · 尚未实施，不代表接口或页面已可用 |
+| 版本 / 日期 | v1.5 · 2026-10-08；回填执行情况（§7），不改变任务设计与验收 |
+| 状态 | 有效任务设计；UI-01—02、04、06—10 页面代码已落地并接入真实业务 API，**UI-03 未落地、UI-05 部分、UI-11 浏览器验收未做**；未部署上线，不代表已交付 |
 | 需求依据 | [Web 业务资料 PRD v0.6](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-BIZ-01—06、PR-WB-07、PR-DATA-13、PR-WATCH-01—04 |
 | 配套清单 | [数据持久化与服务端任务](web-business-persistence-tasks.md)；本文任务编号 UI-*，配套任务编号 DATA-* |
 | 范围 | 三栏工作台、资料录入与回执、分析依据、补数、监控、站内通知及浏览器验收 |
@@ -11,9 +11,13 @@
 本清单回答“用户在哪里操作、看到什么、异常后如何继续”。服务端保存、真实性状态校验、
 事务、监控判定和调度由 DATA 清单负责；页面不能代替服务端强制校验。
 
-任务编号用于设计和依赖引用，本次不建立实施进度台账。进入实施时按
+任务编号用于设计和依赖引用。进入实施时按
 [本地任务规范](../agents/issue-tracker.md)将每项分别建为 issue，状态只在对应 issue 维护。
 产品状态仍以产品需求为准；本次拆分不调整其他专项优先级，不启动部署或迁移。
+
+2026-10-08 回填：配套 DATA 任务已在 `.scratch/web-business-repairs/issues/` 逐项建 issue（10 项）；
+UI 侧**尚未建立 issue 台账**，本文 §7 仅为代码落点核对记录，不是验收结论，不能替代 issue 状态
+与 UI-11 浏览器验收。页面实现方不得据此自宣完成。
 
 ## 1. 交互约束
 
@@ -235,5 +239,44 @@ DATA-01 冻结草案见[共用数据与操作契约](../design/web-business-data
 自动事件无 Run 时的补数、规则编辑对排队事件的影响及失败分析重试展示。
 技术可行性、当前源码依据及剩余门槛统一见[持久化清单 §8—9](web-business-persistence-tasks.md)。
 
-页面可基于已有 Vue/Pinia 工作台逐步实现。A 阶段可先开发资料表单和查询；B/C 的交付必须等待
-真实快照/持久调度/行情契约接通，不能以 mock 原型或既有存储修复 closed 状态代替专项验收。
+2026-10-08 更正：原“B/C 的交付必须等待真实快照/持久调度/行情契约接通”的前提已满足——配套
+DATA-05—12 已实施并提交，前端业务组件也已接入真实端点（见 §7）。但组件存在不等于交付：
+UI-03 持仓/成交登记未落地，UI-05 缺少聊天写入路径，UI-11 浏览器与真实 worker 联合验收尚未执行，
+因此仍不能以页面可见或 mock 原型代替专项验收。
+
+## 7. 执行情况（2026-10-08 回填）
+
+本节是代码落点核对记录，**不是验收结论**：UI 侧尚未按任务规范建立 issue 台账，UI-11 浏览器端到端
+验收未执行，未部署上线。核对方式为只读检视工作区源码与提交历史，未运行浏览器或真实 API 联合验收。
+
+| 编号 | 代码落点 | 状态 |
+|---|---|---|
+| UI-01 | `web/src/components/business/BusinessWorkspace.vue`（三区块切换、`服务端持久化/前端预览` 标记）、`SessionPlanManager.vue`、`web/src/business-ui.ts` 导航注册 | 已落地 |
+| UI-02 | `BusinessProfileView.vue`（总资金/可用资金/币种/口径/时点、十进制字符串 `inputmode`、用途选择、保存与保存并分析）、`SessionPlanManager.vue`（会话内建计划、主计划） | 已落地 |
+| UI-03 | 仅 `web/src/api/index.ts` 封装 `trades.register/list/correct` 与 `web/src/types.ts` 类型；**无组件的持仓/成交登记与更正入口** | 未落地 |
+| UI-04 | `BusinessProfileView.vue`（`expected_revision` 冲突对比与重提、`idempotencyKey()`、`clearActionKey`）、`web/src/stores/business.ts`（最近操作回执恢复）、`ChatView.vue`（离开拦截、切研究草稿隔离） | 已落地 |
+| UI-05 | `ChatView.vue` + `stores/business.ts` 渲染服务端操作回执；**聊天自然语言→业务写入无入口**（服务端亦无该写路径） | 部分 |
+| UI-06 | `AnalysisEvidence.vue`（读取该 Run 冻结快照）、`AnalysisRerunPanel.vue`（停止并重算） | 已落地 |
+| UI-07 | `BusinessRequestCenter.vue`（补数列表/详情/回答/取消，走 `input-requests` 端点） | 已落地 |
+| UI-08 | `BusinessMonitorCenter.vue`（规则创建/编辑/暂停/恢复/取消、行情口径与观测时间展示；C 阶段单次模式） | 已落地 |
+| UI-09 | `BusinessNotificationCenter.vue` + `stores/business.ts`（通知列表、已读、游标补读、设置） | 已落地 |
+| UI-10 | `BusinessProfileView.vue::archiveAccount`、`api/index.ts` 的账户/计划归档与研究删除封装 | 部分（归档已接；删除/清除草稿/清聊天的联动反馈未逐项核对） |
+| UI-11 | `web/tests/business-drafts.cjs`、`web/tests/input-requests-real.cjs`（Playwright，隔离 fixtures） | 未完成（无完整用户路径、窄屏/键盘、双身份隔离与网络回执证据） |
+
+补充核对：
+
+- 组件统一经 `web/src/api/index.ts` 调用真实端点，不解析自然语言判断提交结果；
+- `BusinessWorkspace.vue` 以 `meta.live` 区分“服务端持久化/前端预览”，预览态不代表已接后端；
+- `web/src/types.ts` 已含业务 wire 类型（含 `trades`），但 UI-03 登记入口缺失——类型存在不等于页面可用；
+- 关键提交：`5b5a1f8`（预览+导航）、`90e1a6e`/`ec24664`（部分接线+草稿保护）、`06af238`（UI 主接线）。
+
+缺口清单（不放行）：
+
+1. UI-03 持仓/成交登记与更正入口未实现（服务端 DATA-02/03 已支持）。
+2. UI-05 聊天自然语言业务修改未实现（服务端无该写入路径，现有业务工具为只读+计算）。
+3. UI-11 浏览器端到端验收未执行，无窄屏/键盘/双身份隔离/迟到响应证据。
+4. 附件分阶段回执（上传/校验/提交/派发）与同名冲突提示未核对到组件级实现。
+5. UI 侧 issue 台账未建立，逐项状态无独立真源。
+
+收口时按[本地任务规范](../agents/issue-tracker.md)为上述缺口建 issue，并完成 UI-11 的浏览器 +
+真实 API + 真实 worker 联合验收；未通过项不向用户开放。

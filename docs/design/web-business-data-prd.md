@@ -9,7 +9,7 @@
 | 流程依据 | [业务流程](../business-process.md) §3.4–3.5 |
 | 既有交互与架构 | [研究工作台](investment-research-workbench-prd.md) · [技术架构](../tech-stack.md) |
 | 本文职责 | 细化页面、用户行为、数据归属、持久化契约、异常处理和验收；不另设产品状态或实施进度台账 |
-| 任务拆分 | [Web 页面交互任务清单](../plan/web-business-ui-tasks.md) · [数据持久化任务清单](../plan/web-business-persistence-tasks.md)；页面清单 v1.4、数据清单 v1.3，尚未实施 |
+| 任务拆分 | [Web 页面交互任务清单](../plan/web-business-ui-tasks.md)（v1.5 §7）· [数据持久化任务清单](../plan/web-business-persistence-tasks.md)（v1.4 §10）；实施状态与缺口以清单回填节为准，本文只定义需求 |
 
 本文交付的是可讨论、可拆分实施的需求，不代表功能已上线。标为“建议”的默认值和物理实现
 仍可调整；未明确的部署容量、行情时效及保留期限不作现成能力承诺。本轮仅规划 Web 专项，
@@ -38,8 +38,13 @@
 以下为代码检查基线，不代表本轮运行过端到端测试。
 
 2026-10-02 补查：存储修复报告已到 v1.5，F01/F08/F19 等已登记关闭，不能把旧缺陷说明当作
-当前全部未实现。投资业务模型、快照 resolver、补数和监控仍属本专项待建设；当前源码依据及
-剩余 F12/F15/F20 接口依赖见[持久化任务清单 §8—9](../plan/web-business-persistence-tasks.md)。
+当前全部未实现。F12/F15/F20 接口依赖见[持久化任务清单 §8—9](../plan/web-business-persistence-tasks.md)。
+
+2026-10-08 回填：本节原判“投资业务模型、快照 resolver、补数和监控仍属本专项待建设”已被后续
+实施覆盖——服务端 DATA-00—15 分批完成并提交，前端业务组件接入真实 API。当前缺口为
+UI-03/UI-05/UI-11、供应商时效实测、D 阶段、保留策略与后台受管进程，详见
+[持久化清单 §10](../plan/web-business-persistence-tasks.md)与
+[页面清单 §7](../plan/web-business-ui-tasks.md)。本文仍只定义需求，不声明放行。
 
 | 能力 | 当前依据 | 本专项需要补齐 |
 |---|---|---|

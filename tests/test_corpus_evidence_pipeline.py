@@ -9,7 +9,11 @@ from docx import Document
 
 from plugins.corpus.derivation import derive
 from plugins.corpus.evidence import fingerprint, parse_evidence, split_spans
-from plugins.corpus.evidence_pipeline import EvidenceRun, build_evidence_run
+from plugins.corpus.evidence_pipeline import (
+    EvidenceRun,
+    build_evidence_run,
+    build_evidence_run_from_units,
+)
 
 
 def make_report(tmp_path):
@@ -244,3 +248,35 @@ def test_wrong_unit_or_metric_cannot_borrow_a_real_number(tmp_path):
         )
         assert reason in run.facts[0].reasons
         assert "calculate" not in run.facts[0].usable_for
+
+
+def test_company_subject_is_inherited_from_trusted_source_metadata() -> None:
+    payload = [
+        {
+            "claim_text": "工业富联2026H1扣非净利润229.84亿元",
+            "evidence_quote": "2026H1扣非净利润229.84亿元",
+            "scope": "company",
+            "subject": None,
+            "metric": "扣非净利润",
+            "value_text": "229.84亿元",
+            "period_raw": "2026H1",
+            "kind": "fact",
+        }
+    ]
+    run = build_evidence_run_from_units(
+        "source-company",
+        [{"locator": "body[1]", "text": "2026H1扣非净利润229.84亿元"}],
+        title="工业富联中报",
+        subject="工业富联",
+        published="2026-08-29",
+        llm=lambda _prompt: __import__("json").dumps(payload, ensure_ascii=False),
+        model="test",
+        max_prose_calls=1,
+    )
+
+    fact = run.facts[0]
+    assert fact.claim.subject == "工业富联"
+    assert fact.claim.qualifiers["subject_basis"] == "document_metadata"
+    assert "subject_missing" not in fact.reasons
+    assert "subject_not_anchored" not in fact.reasons
+    assert fact.metric_id == "adjusted_net_profit"
