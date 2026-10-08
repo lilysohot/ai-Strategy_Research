@@ -1,0 +1,35 @@
+{
+  "schema_version": "non-table-gold-review-draft-manifest-v2",
+  "parent": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1",
+  "formal_gold_frozen": false,
+  "status": "draft_pending_human_review",
+  "counts": {
+    "claims": 20,
+    "material_items": 48,
+    "material_relations": 24
+  },
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/review_pack.py": "fe5c84587873b1032c3c3b2a6b5acf4b16f4c53090b37c924c9915374b06eb81",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/test_review_pack.py": "5bf4ae7e35478fac42930e97c199880636ad7517cb6ed31b0bf5aac85377b5c6",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/README.md": "9a91f8ae2c68a293e117a5e318c47f9a229d7c4f3505b9674f58e7a19bda3fac",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json": "7b6d80ecd3cbf555f0fc9a2382db163705db4085926e34928ac32a46601fd3a8",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md": "9778369e67778645d92d99b305b9ac05084443b63bc61133e5635556c9a011d2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/README.md": "9a83a12c4241fc74cd966c09576296a46a7bc3855ba5fbcfb2ac72c42888e58c",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/build_draft_manifest.py": "d902f9f1724541df1340ab5916a07ce5fc83c808bb70bf88991e2e4ba387d732",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/draft-manifest.json": "4bfe703c1ad273401ee0ecdec866f15ac27d984a77aaf6219749cf0b0b6750be",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/export_non_table_units.py": "b304cca24f2cda1f0424a3e5c41b1db9254ec103d54bb400610f07c9a5c5d311",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/gold-review-candidates.json": "3fb6e50a2ef20c049488b4ab69e0c19ef3330e723a5c48a7b09476b0e86b2f87",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/gold-review.md": "7566822845b246e59e3ec4a22fa82c2a9b13b886347bfc47144b37ce95b47227",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/inventory_non_table_sources.py": "42bca6014c178b710e05b819c13206da83e9de3fb08df67f9003e47d540010f5",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/source-inventory.json": "9b53a893740b3249f3ac01bbf7a693c0c5ea588239dc51f8fe28b03480e6db54",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/source-prose-units.json": "58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/validate_and_render_review.py": "9b18dbfcdc9a2710cfed402e89c9268a54656f12e8942a21aaa99ac465e419a0",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/../10-quality-gold-expansion-20261008-r1/validation-report.json": "9854a2b3e3501ecaca80fabba589a1d645eea0bd9a9a375b33a74391bf925d5a"
+  },
+  "approved_source_bytes": {
+    "data/corpus/工业富联_投委会决策报告_20260829.md": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+  }
+}

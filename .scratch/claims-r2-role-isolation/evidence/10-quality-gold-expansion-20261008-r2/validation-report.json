@@ -1,0 +1,28 @@
+{
+  "status": "valid_review_draft",
+  "errors": [],
+  "draft_counts": {
+    "claims": 20,
+    "material_items": 48,
+    "material_relations": 24
+  },
+  "human_accepted_counts": {},
+  "risk_record_counts_by_role": {
+    "claims": 0,
+    "material_items": 21,
+    "material_relations": 12
+  },
+  "independent_risk_scenario_count": null,
+  "mechanical_checks_prove_semantic_correctness": false,
+  "formal_gold_frozen": false,
+  "quality_gate_passed": false,
+  "scope": "selected_target_recall_not_exhaustive_document_gold",
+  "unresolved_semantic_ambiguities": [
+    {
+      "record_id": "NT-I17",
+      "fields": [
+        "condition_inner_boolean"
+      ]
+    }
+  ]
+}

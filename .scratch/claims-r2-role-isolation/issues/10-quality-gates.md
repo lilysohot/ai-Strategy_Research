@@ -1,10 +1,10 @@
 # 10 · 评分器、开发标注范围与质量门冻结
 
 Status: needs-info
-Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；非表格真实开发金标已形成 Claims/items/relations=20/40/20 的待审草案，尚未人工签核或正式冻结，M_main 交付评分仍未完成
+Execution: 阈值与 E01—E12 部分关键检查点已人工签认并冻结，seen-development 真实候选诊断评分已执行且未通过；非表格开发金标已修订为 r2 的 Claims/items/relations=20/48/24 有限目标待审包，条件/归属/关系/重复项已修正，尚未人工签核或正式冻结，M_main 交付评分仍未完成
 Type: task
 Plan: W0/W6 准备；R2-S0/S3
-Blocked by: 需人工逐条审核并签认非表格真实开发金标草案、以追加式新版本正式冻结，再取得真实 query/delivery/context_use 观察
+Blocked by: 需人工逐条签认 r2 金标及有限目标范围/完整候选裁定规则，追加式冻结后执行候选并逐条裁定全部输出，再取得真实 query/delivery/context_use 观察
 Real model calls: 0
 Production database access: 0
 
@@ -207,3 +207,32 @@ adjudicator 均未填写，`human_signoff_complete=false`、`formal_gold_frozen=
 [draft-manifest.json](../evidence/10-quality-gold-expansion-20261008-r1/draft-manifest.json)。这一步补齐了数量
 候选，但不把 AI 辅助起草冒充人工金标，不改写既有冻结包，也不解除质量门；正式冻结必须发生在
 这些来源的本专项候选执行之前。本轮模型调用、生产数据库访问和留出访问均为 0。
+
+### 2026-10-08 · 金标审阅问题修复（r2，当前版本）
+
+按用户要求修复 r1 审核发现的条件缺失、质疑立场丢失、动作重复、关系契约不符以及评分范围问题，
+新增 [r2 审阅包](../evidence/10-quality-gold-expansion-20261008-r2/README.md)，r1 的所有输入哈希和来源
+哈希复核一致，历史冻结资产未改写。当前共 Claims 20 / items 48 / relations 24（92 条 pending）：
+
+- R02/R17 系统推断关系退出必答分母；I18 合并至 I16，两个止损条件共用同一动作端点。
+- 观察仓条件恢复价格 52—58 元及负面管制公告限定、OCF/扣非 >=0.6、毛利率 >=6.99% 的可选结构；
+  止损恢复相对 6.99% 下降超过 1 个百分点和公司改口的合取条件。I17 的公司改口子项内部逻辑不明，
+  明示 unknown，不擅自补 AND/OR。
+- C11—C13 与新增 items 明示被转述预测受到质疑；新增 challenges 保存讲者立场。补“持有＋观望”
+  和税负转嫁反驳，保留 800G“超预期”的自我限定。R10/R20 改条件关系；R12 换为原文明确的理由。
+- 候选输入范围限定 24 个非表格正文单元；金标为有限目标集，不宣称整篇穷尽。目标召回与完整候选
+  正确率分开，额外正确输出单列 correct_extra、不能自动算 FP；未裁定候选存在时 precision 为 N/A，
+  全部候选清单不能因未命中金标被筛掉。自由文本同义和关系端点采用保留原始候选的具名裁定。
+- 风险/条件记录按角色计数为 0/21/12，不能称 33 个独立风险场景。关键项均附原因。
+
+审核入口：[gold-review.md](../evidence/10-quality-gold-expansion-20261008-r2/gold-review.md)；机读编辑入口：
+[gold-review-candidates.json](../evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json)；
+范围与匹配规则：[scoring-contract.json](../evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json)。
+生成器支持显示人工终态和拒绝后的数量变化，数值/期间归一化、精确引文偏移、关系端点及高风险
+约束均检查；`valid_review_draft` 不代表任意语义已被自动证明，也不代表人工签认。
+
+验证：本包 27 项回归通过（包括错年份/数值、丢条件、推断关系、重复动作、额外正确项、未裁定项及
+遗漏候选清单反例）；Ruff check/format 和 Pyright 通过；import smoke 386/386、435/435，symbol
+closure 0 missing/484 files。原始两份材料经确定性 reader 重读，与旧正文导出完全一致。
+真实模型 preflight 未运行，本轮模型调用、数据库访问和留出访问均为 0。任务仍为 needs-info：
+本次修复完成，逐条人工签认及新增冻结、真实候选评分和交付观察仍待后续，不提前解除质量门。

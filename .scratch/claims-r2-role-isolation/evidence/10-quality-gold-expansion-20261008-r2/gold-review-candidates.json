@@ -198,7 +198,7 @@
         "period": "2026H1",
         "subject": "工业富联",
         "unit": "亿元",
-        "value": "237.40",
+        "value": "237.4",
         "attribution": "报告作者引述的行情或中报数据",
         "perspective": "quoted_other",
         "source_stance": "reported",
@@ -2215,7 +2215,7 @@
       "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
       "semantic_fields": {
         "attribution": "报告作者",
-        "condition": "下季OCF除以扣非净利润低于0.5",
+        "condition": "下季 OCF/扣非净利润 < 0.5",
         "polarity": "affirmed",
         "proposition": "止损触发条件之一",
         "semantic_type": "forecast",
@@ -3983,7 +3983,7 @@
       "semantic_fields": {
         "attribution": "讲者转述的未明确来源",
         "polarity": "affirmed",
-        "proposition": "被转述观点认为税负可转嫁、对竞争力和毛利影响不大；讲者明确反对该观点",
+        "proposition": "被转述观点认为税负可转嫁，对竞争力和毛利影响不大",
         "semantic_type": "opinion",
         "statement_role": "claim",
         "perspective": "quoted_other",
@@ -4014,6 +4014,59 @@
           "end": 325,
           "offset_basis": "unit_codepoints",
           "unit_text_sha256": "1fd18f03c856d0d3094cd72c7c16402b2b86bb3c72a5644c181d388ab699c566"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": null,
+        "decision": null,
+        "reason": null,
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null
+    },
+    {
+      "record_id": "NT-I49",
+      "role": "material_items",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[63]",
+      "quote": "因为mems主要是要用300",
+      "semantic_fields": {
+        "attribution": "未署名讲者",
+        "polarity": "affirmed",
+        "proposition": "讲者认为MEMS主要需要300端口",
+        "semantic_type": "opinion",
+        "statement_role": "evidence",
+        "perspective": "unknown",
+        "speaker_ref": "doc_narrator",
+        "speech_role": "statement",
+        "source_stance": "reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "pending",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[63]",
+          "quote": "因为mems主要是要用300",
+          "start": 54,
+          "end": 68,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[63]",
+          "quote": "128是刚刚推出的，正在中心进行验证，对吧？中心是它的客户，尚无固定的客户，德科立将其视为一个过渡型的产品。因为mems主要是要用300，对吧？为什么用300？为什么要多？以前给你们讲特氟龙的时候都说过这个问题，对吧？就是要多。虽然NVIDIA可能对128有需求，但谷歌已经明确表示，如果要mems的话就要300以上。",
+          "start": 0,
+          "end": 159,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672"
         }
       ],
       "unknown_fields": [],
@@ -4512,9 +4565,9 @@
       "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
       "origin": "llm_prose",
       "locator": "body[63]",
-      "quote": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+      "quote": "德科立将其视为一个过渡型的产品。因为mems主要是要用300",
       "semantic_fields": {
-        "from_gold_record_id": "NT-I23",
+        "from_gold_record_id": "NT-I49",
         "provenance": "source_explicit",
         "relation": "supports",
         "to_gold_record_id": "NT-I24"
@@ -4526,9 +4579,9 @@
         {
           "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
           "locator": "body[63]",
-          "quote": "尚无固定的客户，德科立将其视为一个过渡型的产品",
-          "start": 30,
-          "end": 53,
+          "quote": "德科立将其视为一个过渡型的产品。因为mems主要是要用300",
+          "start": 38,
+          "end": 68,
           "offset_basis": "unit_codepoints",
           "unit_text_sha256": "dde713ba10ad1303484f756c62f62c0fbe5c42a3c051534705bad54c35cf6672"
         }
@@ -4552,7 +4605,8 @@
         "changes": []
       },
       "critical_reason": null,
-      "risk_reason": null
+      "risk_reason": null,
+      "review_notes": "原 R12 由相邻“尚无固定客户”推断支持关系不够明确；改用原文“因为MEMS主要要用300”的显式理由。"
     },
     {
       "record_id": "NT-R13",
