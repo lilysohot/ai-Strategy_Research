@@ -1,0 +1,8 @@
+{"record_type":"speaker","speaker_id":"spk_71f8be010143","display_name":null,"role":"analyst_author","identity_status":"unknown"}
+{"record_type":"item","candidate_slot_id":"slot_c49ae28a76f90a35","item_id":"slot_c49ae28a76f90a35#1","text":"技术风险。","semantic_type":"risk","statement_role":"risk","speech_role":"statement","perspective":"source_explicit","speaker_ref":"spk_71f8be010143","polarity":"affirmed","value":null,"behavior_status":null,"temporal_frame":"unknown","evidence_quote":"技术风险。","unknown_fields":[]}
+{"record_type":"coverage","candidate_slot_id":"slot_a60cdb5fa04a6f8b","status":"no_supported_item","reason_code":"no_extractable_proposition"}
+{"record_type":"coverage","candidate_slot_id":"slot_90ec71bd44be3228","status":"no_supported_item","reason_code":"no_extractable_proposition"}
+{"record_type":"coverage","candidate_slot_id":"slot_486c7a7c3d9cb1ee","status":"no_supported_item","reason_code":"no_extractable_proposition"}
+{"record_type":"coverage","candidate_slot_id":"slot_5e583ecc7d63eec6","status":"no_supported_item","reason_code":"no_extractable_proposition"}
+{"record_type":"coverage","candidate_slot_id":"slot_a8f2cb0e374f1c23","status":"no_supported_item","reason_code":"no_extractable_proposition"}
+{"record_type":"coverage","candidate_slot_id":"slot_0d98915442e908d3","status":"no_supported_item","reason_code":"no_extractable_proposition"}

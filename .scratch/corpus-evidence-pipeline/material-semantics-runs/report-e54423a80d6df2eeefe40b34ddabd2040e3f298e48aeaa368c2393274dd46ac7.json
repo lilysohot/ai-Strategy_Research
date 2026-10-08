@@ -1,0 +1,1040 @@
+{
+  "scorer_version": "material-development-scorer-2",
+  "contract_version": "material-understanding-v1",
+  "gold_sha256": "6fbbcdeeac51b3553b2b3d6793325f06f519f70e406d31c3c2004380035fb64c",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "budget_version": "r2-lexicon-retirement-v8",
+  "budget_sha256": "57b3883e252af9452cb0d19dd92b19263b825cc266d4d2a22d040178ba25de73",
+  "round_id": "lexicon-retirement-baseline",
+  "split": "development",
+  "model": "glm-5.3-flash",
+  "model_calls": 43,
+  "usage": {
+    "prompt_tokens": 120825,
+    "completion_tokens": 102935
+  },
+  "raw_audits": [
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "ebe4dc69248b0099ce950ce6221283f3feba83c4711b98347cccd0f49a90f022",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-ebe4dc69248b.txt"
+    },
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "945a4d7895b9ece199772a2f07c55018a9d7758c436c27f0b9fdb375921885e0",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-945a4d7895b9.txt"
+    },
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "2f88a2d3a4e34a6cd65e91034a77734e179ba7f37bb923dcc47c05fc9cf014c6",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-2f88a2d3a4e3.txt"
+    },
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "5d9748e5151a4fe7ffe8db27b89d17ebed70d0737208bd9dfb0b4c829053d915",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-5d9748e5151a.txt"
+    },
+    {
+      "sample_id": "dev-company-report",
+      "packet_id": "516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "9ed62d901274e86c35327a63117e99bf14a16dceca5820f5dea494091eee4407",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-company-report/516513b6eb36060993e12b754e33bfa768c0221fc5eb60a74adeca4c8f25191b-atomic_item_terminal-9ed62d901274.txt"
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "00828162c450905c844c827f44ce970d510639f2c31fcf8491230d97686c1738",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-00828162c450.txt"
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "d9630f9413ae7940e7e9157669615ce231e5836f75ca116ef670dc50f2d651ee",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-d9630f9413ae.txt"
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "4f92d0530ccbb8f3c10d12c70495657fafb24335cf6f2ef21da9c58a8b7e762d",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-4f92d0530ccb.txt"
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "f5f5183b3cb9813978204d6f8c13c0834df1d7c35499236df560a8c9a4b461e1",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-industry-qa-report/0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7-atomic_item_terminal-f5f5183b3cb9.txt"
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "c13c925cee92eb281c75f1428b222ebf9c9705ecb91a3f7d1a0643b7cb972950",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-personal-trade-review/65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8-atomic_item_terminal-c13c925cee92.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "249004daa50aeade2564a162287f323732226d05b798b080fd23b365582bf3be",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-249004daa50a.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "0c1bc8f65605eb3d88d82908013035386d326d3b8445742bf16e5c6959884598",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-0c1bc8f65605.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "4d1c4bbacd4745d05bc5247631a767eda5c3bba4d26356d69c728828b558c6b9",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-4d1c4bbacd47.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "8076a776263b2f17bf19eb33b8b3d22c768f031d3bbfa9380dcd273b5a6255b3",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-8076a776263b.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "58337597fd32361173008d61902a9c4d6bbd918395a806656ad695e99e6bbe23",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-58337597fd32.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "af133956056a7d2e3a563834137df24bb205dc2faa4a7a7d8554bd666a22a48b",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-af133956056a.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "e5fa0eeaae3f8c808423ad92132f61b8706b887415990f0c84832bb8dce721d5",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-e5fa0eeaae3f.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "5fefe809460b2bd78e7e7feade83fe063329f4ed5001786908ebd60b1841dd70",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/30288472d374c5b92a3e86afc6e8bba958d768e50a3abc47de2a809dea94f14a-atomic_item_terminal-5fefe809460b.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "e33a03f5bb4994ab576f33ebfb5d4edcb945a6447bc1f666675fa3709145f831",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-e33a03f5bb49.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "77c0410dbc193fc0ba980ea31cd59d129ee02262d2644c68176c03db8959cd3e",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-77c0410dbc19.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "ea4c1c574c0d0184b4528bf1adf317cdb86d5405507b93d3a0c80db1d39d18b5",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-ea4c1c574c0d.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "0fe1c1a1ad482330bf1abbedd34eb8db194dd52df94e45ab18e83ad3c5f183c0",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-0fe1c1a1ad48.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "a13b3fdd24d8d8458c5a80b31dea434b579de21e493f734a8b32e523f903cebf",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-a13b3fdd24d8.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "3549a30faca9f63fdead5ae968ac364d8e28e4aef77edcf59fe6d6e03bd2f2a2",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-3549a30faca9.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "08ca153b7452dfc98dbbaed627d82e514e8c31f326765591e06d387a0de0dc39",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-08ca153b7452.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "e98d069fe335d80b4e73da481f359725581152ac56fb3fc5656238a1ef26328c",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/227f98c81e879fa253bfd7aa1d7032373152ab715268ee1ca4d3989d36c5274c-atomic_item_terminal-e98d069fe335.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "408344b4f405d3a31e38f92e8cdb5122eb6477f63be6db57b4405ebb9ceccb33",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-408344b4f405.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "5d44c651d0c9e7ae22d6dd8386862aa86a09ac10a0d04e06bed61bfb50f74b81",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-5d44c651d0c9.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "75afa06c35481126f67e3954c39a6138ee4932649eb6a8513ce9780b523de97a",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-75afa06c3548.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "ddc3e66dae3def92295eb4bca89845ea4acf65852c7b4ffc3dab0182480eef55",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-ddc3e66dae3d.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "2ee684d5e72bd524bce0635f665691a844c6194e06c977871c10ed7005bccdaf",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-2ee684d5e72b.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "7d5330ad58139ff194f456ccea0e5947dab5d5f0b00222d03d1b2ea4bc058b79",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-7d5330ad5813.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "9e03f1b9ad893e49e78a6dc485b9f079f60bccfa5c1b3e5927d6fa62664217be",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-9e03f1b9ad89.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "edc78727032b8073ae80860073d5e20d9b5c1f4e30b61215c3d10ceb63c395bd",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-edc78727032b.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "2c3e8138f076f2c461a540f89133159b71b053d4343f8ccde12df1785de735ba",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/0375775264118efa1bb670e5926bebd87fdccb9d6478e71f6f4cbb227a7267de-atomic_item_terminal-2c3e8138f076.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "9ce0f86388634c5aac0b9c3079e19c5d1d3084f7f4888dbc75ce8431fe941357",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-9ce0f8638863.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "bdd31bd722bea20ef0438320c1496dbbcea68e5aafbe1312203e24b87df4f57f",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-bdd31bd722be.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "c70d01c179fefe54af01bb513664f5dd391e85cf9d439771f5b1c53f8c81afab",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-c70d01c179fe.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "ea69bdaf3718fb2cc246099f6dad1491179354b6869be7f9cd43c04e6007bdd2",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-ea69bdaf3718.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "94d1238cfd4a40b44dd919a60d3e645ca436891ad8cc098e3cb941f4bdc61b72",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-94d1238cfd4a.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "2501899bd6dbcc24f1e292e5a00296bc8119ac55069b43246e27acfbb28a1a30",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-2501899bd6db.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "fca1482b41502045f0b86a456ddaefb71e78e96b62bfb847f5d3ce80089f16c5",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-fca1482b4150.txt"
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "packet_id": "16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288",
+      "stage": "atomic_item_terminal",
+      "response_sha256": "05b55013ef9f02a7b81dffb2614ba10ed1d10fba71b86082f90d3bc6b62feb0a",
+      "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/material-semantics-runs/raw-audit/r2-lexicon-retirement-v8/lexicon-retirement-baseline/dev-expert-call-copper-foil/16da0617930566831385460bb6ee44a099b58743a260fe2c48c37fc1b0cb7288-atomic_item_terminal-05b55013ef9f.txt"
+    }
+  ],
+  "deterministic_stress": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_rev": "48c05895798ba009",
+      "packets": 44,
+      "segments": 44,
+      "candidate_slots": 301,
+      "atomic_batches": 44,
+      "dialogue_structure": "document_voice",
+      "attribution_capability": "document_only",
+      "processing_mode": "degraded",
+      "signal_types": [
+        "claim",
+        "condition",
+        "evidence",
+        "forecast",
+        "negation",
+        "question",
+        "risk"
+      ],
+      "model_calls": 0
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": "dev-company-report",
+      "source_rev": "6f14cc145b798b37",
+      "material_run_id": "b0680b585cbbc780e749bba30c55365578046a4c8689750d9ae6997b769bccbd",
+      "summary": {
+        "run_id": "b0680b585cbbc780e749bba30c55365578046a4c8689750d9ae6997b769bccbd",
+        "evidence_run_id": "fa83a947bd1e97ffbe7b0b5e14a191c141ed45968a2e0e2dd2ee5e5911a4bc02",
+        "items": 81,
+        "relations": 0,
+        "speakers": 3,
+        "semantic_types": {
+          "opinion": 18,
+          "forecast": 16,
+          "fact": 45,
+          "behavior": 1,
+          "unknown": 1
+        },
+        "packet_status": {
+          "not_candidate": 7,
+          "partial": 1
+        },
+        "slot_status": {
+          "no_supported_item": 4,
+          "extracted": 62,
+          "partial": 9
+        },
+        "complete": false
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy": 1.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 5,
+        "matched_items": 5,
+        "predicted_items": 81,
+        "unmatched_predicted_items": 76,
+        "critical_items": 4,
+        "matched_critical_items": 4,
+        "semantic_correct": 5,
+        "attribution_correct": 5,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dcr-fact-results",
+          "matched": true,
+          "predicted_item": "itm_31e98911e4236646",
+          "quote_similarity": 0.6032,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "26H1归母净利润445.2亿元，同降2.0%"
+        },
+        {
+          "gold_item": "dcr-opinion-bottom",
+          "matched": true,
+          "predicted_item": "itm_926e132d3dbfce40",
+          "quote_similarity": 0.8,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "我们认为公司已于改革中完成底层逻辑的重构"
+        },
+        {
+          "gold_item": "dcr-forecast-qualitative",
+          "matched": true,
+          "predicted_item": "itm_9f3b049d170bfbcf",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "Q3预计将抓住中秋旺季窗口放量"
+        },
+        {
+          "gold_item": "dcr-forecast-target",
+          "matched": true,
+          "predicted_item": "itm_05706952be5d466f",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "维持一年目标价2030元和“强推”评级"
+        },
+        {
+          "gold_item": "dcr-risk-demand",
+          "matched": true,
+          "predicted_item": "itm_afb57517a00f1582",
+          "quote_similarity": 0.4324,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "风险提示：消费复苏不及预期"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-industry-qa-report",
+      "source_rev": "174b64628f35aca6",
+      "material_run_id": "b8b90bd4f44a30fc9d99f319bbfdcce608b2207b8ac85b62e62119cd5fa135d4",
+      "summary": {
+        "run_id": "b8b90bd4f44a30fc9d99f319bbfdcce608b2207b8ac85b62e62119cd5fa135d4",
+        "evidence_run_id": "f38c93353a93672716e9595a0a98c8e57864b1b936fda78746445954a8e4ef22",
+        "items": 44,
+        "relations": 0,
+        "speakers": 2,
+        "semantic_types": {
+          "opinion": 23,
+          "unknown": 8,
+          "forecast": 11,
+          "fact": 2
+        },
+        "packet_status": {
+          "partial": 1
+        },
+        "slot_status": {
+          "no_supported_item": 6,
+          "extracted": 41,
+          "partial": 8
+        },
+        "complete": false
+      },
+      "item_recall": 0.75,
+      "critical_item_recall": 0.75,
+      "semantic_target_accuracy": 0.75,
+      "attribution_target_accuracy": 0.75,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 3,
+        "predicted_items": 44,
+        "unmatched_predicted_items": 41,
+        "critical_items": 4,
+        "matched_critical_items": 3,
+        "semantic_correct": 3,
+        "attribution_correct": 3,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 1,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "diq-question-bottom",
+          "matched": false
+        },
+        {
+          "gold_item": "diq-answer-bottom",
+          "matched": true,
+          "predicted_item": "itm_dada5a88557f8599",
+          "quote_similarity": 0.6667,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": false,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "价格底部主要改善长期赔率。"
+        },
+        {
+          "gold_item": "diq-forecast-supply-demand",
+          "matched": true,
+          "predicted_item": "itm_bb5fb47f226eec46",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "只要未来一至两年供需持续改善，行业仍具备周期投资价值。"
+        },
+        {
+          "gold_item": "diq-risk-policy",
+          "matched": true,
+          "predicted_item": "itm_3e6ef879fa54799a",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": false,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "供给端政策执行力度不及预期"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-personal-trade-review",
+      "source_rev": "810ef870625e7856",
+      "material_run_id": "2e1216286a8b8e7903296a2b9e55e017a2a00cdcccb324a352e89375a170c37e",
+      "summary": {
+        "run_id": "2e1216286a8b8e7903296a2b9e55e017a2a00cdcccb324a352e89375a170c37e",
+        "evidence_run_id": "3a5906f4a6234cd31cf41b2b65077d7c8d440b76a754771137a8397f3113fd34",
+        "items": 9,
+        "relations": 0,
+        "speakers": 2,
+        "semantic_types": {
+          "behavior": 6,
+          "fact": 3
+        },
+        "packet_status": {
+          "partial": 1
+        },
+        "slot_status": {
+          "no_supported_item": 5,
+          "extracted": 6
+        },
+        "complete": false
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy": 0.75,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 1.0,
+      "source_relation_precision": 1.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 4,
+        "matched_items": 4,
+        "predicted_items": 9,
+        "unmatched_predicted_items": 5,
+        "critical_items": 4,
+        "matched_critical_items": 4,
+        "semantic_correct": 4,
+        "attribution_correct": 3,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 0,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dpt-ttd-executed",
+          "matched": true,
+          "predicted_item": "itm_0862cfa73d70726c",
+          "quote_similarity": 0.9655,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": true,
+            "perspective": false,
+            "speaker": false,
+            "identity_status": false,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding to my position"
+        },
+        {
+          "gold_item": "dpt-frvo-executed",
+          "matched": true,
+          "predicted_item": "itm_4fb27801e54af464",
+          "quote_similarity": 0.9558,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding to my position"
+        },
+        {
+          "gold_item": "dpt-mdt-executed",
+          "matched": true,
+          "predicted_item": "itm_e508f60616bb24cd",
+          "quote_similarity": 0.9429,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "MDT - I sold 50 puts at $90 for next week for .47"
+        },
+        {
+          "gold_item": "dpt-agx-retrospective",
+          "matched": true,
+          "predicted_item": "itm_12a80982d894c03c",
+          "quote_similarity": 0.971,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "AGX - I sold this position yesterday afterhours and posted it in the discord when I did"
+        }
+      ]
+    },
+    {
+      "sample_id": "dev-expert-call-copper-foil",
+      "source_rev": "80b5a290df3d2ade",
+      "material_run_id": "49784bc8d8b9e46525038bc08f3940a66c076f435f4fc70a714072704777bd4c",
+      "summary": {
+        "run_id": "49784bc8d8b9e46525038bc08f3940a66c076f435f4fc70a714072704777bd4c",
+        "evidence_run_id": "81018bae127c7f0c4c55d88faff7538b6674a8838b4636a3c7381241d190d2c0",
+        "items": 521,
+        "relations": 0,
+        "speakers": 6,
+        "semantic_types": {
+          "opinion": 110,
+          "fact": 215,
+          "forecast": 57,
+          "unknown": 114,
+          "behavior": 25
+        },
+        "packet_status": {
+          "partial": 4
+        },
+        "slot_status": {
+          "no_supported_item": 18,
+          "extracted": 430,
+          "partial": 48
+        },
+        "complete": false
+      },
+      "item_recall": 1.0,
+      "critical_item_recall": 1.0,
+      "semantic_target_accuracy": 0.7272727272727273,
+      "attribution_target_accuracy": 1.0,
+      "critical_all_fields_accuracy": 0.0,
+      "source_relation_recall": 0.0,
+      "source_relation_precision": 0.0,
+      "source_relation_precision_scope": "selected_target_endpoints_only",
+      "counts": {
+        "gold_items": 11,
+        "matched_items": 11,
+        "predicted_items": 521,
+        "unmatched_predicted_items": 510,
+        "critical_items": 11,
+        "matched_critical_items": 11,
+        "semantic_correct": 8,
+        "attribution_correct": 11,
+        "critical_all_fields_correct": 0,
+        "gold_relations": 4,
+        "predicted_relations": 0,
+        "matched_relations": 0,
+        "false_positive_relations": 0,
+        "unscored_source_relations": 0
+      },
+      "detail": [
+        {
+          "gold_item": "dec-summary-outlook",
+          "matched": true,
+          "predicted_item": "itm_96dd84f0555648d9",
+          "quote_similarity": 0.7442,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "泰金凭借性价比、交期和技术能力，在锂电和标箔领域均有显著增长潜力，尤其表处理设备将成为重要增量"
+        },
+        {
+          "gold_item": "dec-question-capex",
+          "matched": true,
+          "predicted_item": "itm_a41ebc74ae9e2f46",
+          "quote_similarity": 1.0,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "能不能先帮我们简单地梳理一下，每1万吨的铜箔，整个设备的资本开支大概是怎么样的？"
+        },
+        {
+          "gold_item": "dec-answer-capex",
+          "matched": true,
+          "predicted_item": "itm_5e9785acf67effd7",
+          "quote_similarity": 0.7059,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "锂电箔单万吨主设备投资大概在2.5到3个亿。"
+        },
+        {
+          "gold_item": "dec-host-clarification",
+          "matched": true,
+          "predicted_item": "itm_6d7b01eb45ffd575",
+          "quote_similarity": 0.7442,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": false,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "主持人澄清：不是利润的概念，是你们的收入概念。"
+        },
+        {
+          "gold_item": "dec-forecast-validation",
+          "matched": true,
+          "predicted_item": "itm_8a65d96c1ce72021",
+          "quote_similarity": 0.7333,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": false,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "我们很快就能占据国内市场，甚至一部分国外市场"
+        },
+        {
+          "gold_item": "dec-ambiguous-audio-check",
+          "matched": true,
+          "predicted_item": "itm_2249aa037bdc677d",
+          "quote_similarity": 0.7097,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "投资者：大家好，请问能听到吗？"
+        },
+        {
+          "gold_item": "dec-question-yield",
+          "matched": true,
+          "predicted_item": "itm_3656da04627878de",
+          "quote_similarity": 0.8085,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "良品率低是设备问题还是工艺问题？"
+        },
+        {
+          "gold_item": "dec-answer-yield",
+          "matched": true,
+          "predicted_item": "itm_2ab42b34d4ae4026",
+          "quote_similarity": 0.8136,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "设备目前加工精度和控制精度已经做到行业领先"
+        },
+        {
+          "gold_item": "dec-quoted-yield-split",
+          "matched": true,
+          "predicted_item": "itm_267a520f9c6c31ca",
+          "quote_similarity": 0.7719,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": false,
+            "unknown_fields": false
+          },
+          "predicted_text": "铜冠总工说工艺和设备是64开"
+        },
+        {
+          "gold_item": "dec-question-mitsui",
+          "matched": true,
+          "predicted_item": "itm_acd94f7b9e0d7fae",
+          "quote_similarity": 0.8736,
+          "field_checks": {
+            "semantic_type": true,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": false,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": true,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "投资者问：我们好像给三井前面供过一台设备，海外客户那边，对这个背景和后面的展望是怎样的？"
+        },
+        {
+          "gold_item": "dec-answer-mitsui",
+          "matched": true,
+          "predicted_item": "itm_63150cc73f39a0fe",
+          "quote_similarity": 0.8312,
+          "field_checks": {
+            "semantic_type": false,
+            "statement_role": true,
+            "speech_role": true,
+            "perspective": true,
+            "speaker": true,
+            "identity_status": true,
+            "polarity": true,
+            "behavior_status": false,
+            "temporal_frame": true,
+            "value": true,
+            "unknown_fields": false
+          },
+          "predicted_text": "生箔机和阴极辊我们给三井做过，价格远低于日本本土厂商，交期也更快"
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "item_recall": 0.9583333333333334,
+    "critical_item_recall": 0.9565217391304348,
+    "semantic_target_accuracy": 0.8333333333333334,
+    "attribution_target_accuracy": 0.9166666666666666,
+    "critical_all_fields_accuracy": 0.0,
+    "source_relation_recall": 0.0,
+    "source_relation_precision": 1.0,
+    "source_relation_precision_scope": "selected_target_endpoints_only",
+    "unmatched_predicted_items": 632,
+    "unscored_source_relations": 0
+  },
+  "business_acceptance": false,
+  "replay_of": null,
+  "limitations": [
+    "Development targets are a selected joint gold, not exhaustive whole-document claims.",
+    "Extra items and relations are counted but cannot be scored as false positives without exhaustive negative gold.",
+    "Source relation precision covers only predictions whose endpoints map to selected gold items.",
+    "No corpus ingestion or database write is performed."
+  ]
+}

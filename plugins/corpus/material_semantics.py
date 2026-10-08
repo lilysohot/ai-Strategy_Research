@@ -11,6 +11,7 @@ import json
 import re
 from collections import Counter
 from collections.abc import Callable
+from dataclasses import dataclass
 from itertools import pairwise
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -32,6 +33,23 @@ MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
 MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v5"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
+
+# Read-compatibility vocabularies.  Every member is a version this codebase can
+# still read back from an already-persisted artifact; retire a member only once
+# no artifact written under it needs to be opened.  Declared once here and reused
+# by the structured ledger so the two schemas cannot drift apart.
+MaterialItemsValidationVersion = Literal[
+    "material-items-validation-v1",
+    "material-items-validation-v2",
+    "material-items-validation-v3",
+    "material-items-validation-v4",
+    "material-items-validation-v5",
+]
+RelationCandidateRuleVersion = Literal[
+    "material-relation-candidates-v1",
+    "material-relation-candidates-v2",
+    "material-relation-candidates-v3",
+]
 
 MaterialType = Literal[
     "research_report",
@@ -349,6 +367,40 @@ class MaterialPacketRun(BaseModel):
     diagnostics: dict[str, object] | None = None
 
 
+@dataclass(frozen=True)
+class _RunPayloadShape:
+    """Fields an extractor version never persisted, stripped before hashing.
+
+    Identity verification reproduces the payload the *writing* extractor hashed:
+    fields added later must be removed again for older runs, otherwise their
+    stored ``run_id`` would no longer verify.  Keeping the differences in a
+    table instead of a growing ``if``/``elif`` chain makes the compatibility
+    surface explicit and lets an entry be deleted in one place once no artifact
+    written under that version is still read (see ``docs/run-artifacts.md``).
+    """
+
+    dropped_top_level: tuple[str, ...] = ()
+    dropped_slot_fields: tuple[str, ...] = ()
+    dropped_coverage_fields: tuple[str, ...] = ()
+
+
+# Shapes we still have to read back.  ``material-semantics-8``/``9`` wrote slots
+# without ``explicit_role``/``segment_id``; ``10``-``13`` match the current shape.
+_HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
+    "material-semantics-8": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
+    "material-semantics-9": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
+    "material-semantics-10": _RunPayloadShape(),
+    "material-semantics-11": _RunPayloadShape(),
+    "material-semantics-12": _RunPayloadShape(),
+    "material-semantics-13": _RunPayloadShape(),
+}
+# Anything not listed (and not the current version) predates structured slots.
+_PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
+    dropped_top_level=("structure", "candidate_slots"),
+    dropped_coverage_fields=("slot_ledger",),
+)
+
+
 class MaterialRun(BaseModel):
     model_config = ConfigDict(frozen=True)
     run_id: str
@@ -364,25 +416,21 @@ class MaterialRun(BaseModel):
     def verify_identity(self) -> None:
         payload = self.model_dump(mode="json")
         claimed = payload.pop("run_id")
-        if (
-            self.extractor_version != MATERIAL_EXTRACTOR_VERSION
-            and self.relation_candidate_set_id is None
-        ):
-            payload.pop("relation_candidate_set_id", None)
-        if self.extractor_version in {"material-semantics-8", "material-semantics-9"}:
+        if self.extractor_version != MATERIAL_EXTRACTOR_VERSION:
+            # ``relation_candidate_set_id`` post-dates the versions below, so an
+            # absent value has to disappear the same way it was never written.
+            if self.relation_candidate_set_id is None:
+                payload.pop("relation_candidate_set_id", None)
+            shape = _HISTORICAL_RUN_PAYLOAD_SHAPES.get(
+                self.extractor_version, _PRE_STRUCTURE_RUN_SHAPE
+            )
+            for field in shape.dropped_top_level:
+                payload.pop(field, None)
+            for field in shape.dropped_coverage_fields:
+                payload["understanding"]["coverage"].pop(field, None)
             for slot in payload.get("candidate_slots", []):
-                slot.pop("explicit_role", None)
-                slot.pop("segment_id", None)
-        elif self.extractor_version not in {
-            "material-semantics-10",
-            "material-semantics-11",
-            "material-semantics-12",
-            "material-semantics-13",
-            MATERIAL_EXTRACTOR_VERSION,
-        }:
-            payload.pop("structure", None)
-            payload.pop("candidate_slots", None)
-            payload["understanding"]["coverage"].pop("slot_ledger", None)
+                for field in shape.dropped_slot_fields:
+                    slot.pop(field, None)
         if fingerprint(payload) != claimed:
             raise ValueError("material run content hash mismatch")
 
@@ -424,22 +472,10 @@ class RelationCandidateSet(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     candidate_set_id: str
-    rule_version: Literal[
-        "material-relation-candidates-v1",
-        "material-relation-candidates-v2",
-        "material-relation-candidates-v3",
-    ] = (
-        RELATION_CANDIDATE_RULE_VERSION
-    )
+    rule_version: RelationCandidateRuleVersion = RELATION_CANDIDATE_RULE_VERSION
     snapshot_id: str
     items_run_id: str
-    items_validation_version: Literal[
-        "material-items-validation-v1",
-        "material-items-validation-v2",
-        "material-items-validation-v3",
-        "material-items-validation-v4",
-        "material-items-validation-v5",
-    ] = MATERIAL_ITEMS_VALIDATION_VERSION
+    items_validation_version: MaterialItemsValidationVersion = MATERIAL_ITEMS_VALIDATION_VERSION
     endpoint_item_ids: tuple[str, ...]
     candidates: tuple[RelationCandidate, ...]
 
@@ -484,7 +520,104 @@ _ANONYMOUS_TURN_RE = re.compile(r"(?m)^\s*(问|答)\s*[：:]")
 _NUMBERED_QUESTION_RE = re.compile(
     r"(?m)^(?=\s*(?:[一二三四五六七八九十百]+|\d+)[、.．]\s*[^\n]{0,100}[？?])"
 )
-_EXPLICIT_NEGATION_RE = re.compile(r"并不|不是|不会|不能|没有|尚未|未能|不一定|不必然")
+# --- Atomic-boundary vocabulary ---------------------------------------------
+# Single source of truth for the cue words shared by the boundary and negation
+# grammars.  The groups are kept apart on purpose: ``_GENERAL_*`` are
+# source-agnostic cues that appear in any Chinese research material, while
+# ``_DOMAIN_*``/``_SAMPLE_*`` were selected to reproduce the four frozen R2
+# development materials and their regression tests -- i.e. they are overfit to
+# that sample.  They live here so the overfit surface is auditable in one place
+# and can be re-validated or retired as a unit through a freshly frozen
+# development budget (docs/corpus-material-understanding-contract.md, §5-§6);
+# do not grow them outside that discipline.
+#
+# The cue alternation is consumed by a lookahead, so the order of the cues only
+# decides whether the lookahead succeeds, never the reported match offsets.
+# Regrouping them is therefore behaviour-preserving.  The top-level alternatives
+# that use it *are* order-sensitive and must not be reordered.
+_NEGATION_TOKENS = ("并不", "不是", "不会", "不能", "没有", "尚未", "未能", "不一定", "不必然")
+# ``尚无`` only ever appears as a boundary cue, never as a standalone negation signal.
+_BOUNDARY_NEGATION_TOKENS = (*_NEGATION_TOKENS, "尚无")
+_GENERAL_BOUNDARY_CUES = (
+    "关键",
+    "那么",
+    "只是",
+    "只要",
+    "且",
+    "同时",
+    "为了",
+    "因为",
+    "由于",
+    "主要是",
+    "主要系",
+    "主要由于",
+    "原因在于",
+    "表明",
+    "受",
+    "年内",
+    "下半年",
+    "中长期",
+    "利好",
+    "但",
+    "不过",
+    "然而",
+    "可是",
+    "所以",
+    "因此",
+    "说明",
+    "需要",
+    "就是",
+    "会",
+    "将",
+    "你",
+    "我",
+    "公司",
+)
+_DOMAIN_BOUNDARY_CUES = (
+    "我们维持",
+    "维持一年目标价",
+    "经营最困难阶段已过",
+    "归母净利润",
+    "扣非",
+    "经营现金流",
+    "存货",
+    "应收",
+    "毛利率",
+    "营收",
+    "云计算",
+    "CSP",
+    "GPU",
+    "ASIC",
+    "NPO",
+    "CPO",
+    "可插拔",
+    "当前批价",
+    "投放量可由",
+    "重申",
+    "工艺占",
+    "设备(?:只|仅)",
+)
+# Sample-specific boundary patterns (English trade log, copper 强推).  Budget
+# ``r2-lexicon-retirement-v8`` retired these but its stage-1 gate could not be
+# adjudicated (the run's failures were caused by that budget's deferred
+# relations and oversized batches, not by the retirement), so they are restored
+# pending a re-scoped experiment with a same-code control arm.
+_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS = (
+    r",\s*(?=this\s+is\b)",
+    r"\s+(?=the\s+CEO\s+bought\b)",
+    r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)",
+    r"和(?=(?:[“\"']?强推|\s*价差扩张))",
+)
+_BOUNDARY_CUE_ALTERNATION = "|".join(
+    (
+        *_BOUNDARY_NEGATION_TOKENS,
+        *_GENERAL_BOUNDARY_CUES,
+        r"(?:Q[1-4]|H[12])?预计",
+        *_DOMAIN_BOUNDARY_CUES,
+        r"(?:Q[1-4]|H[12])\b",
+    )
+)
+_EXPLICIT_NEGATION_RE = re.compile("|".join(_NEGATION_TOKENS))
 _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("summary", re.compile(r"总结|摘要|总体而言|核心观点|投资建议")),
     ("question", re.compile(r"[？?]|(?:^|\n)\s*(?:问|问题)\s*[：:]")),
@@ -516,23 +649,25 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
 )
 
-_ATOMIC_BOUNDARY_RE = re.compile(
-    r"[。！？；：:]\s*|\n{2,}|"
-    r"\.(?=\s+[A-Z0-9])\s*|"
-    r"\n(?=\s*(?:(?:\d+|[一二三四五六七八九十百]+)[、]|"
-    r"(?:\d+|[一二三四五六七八九十百]+)[.．](?=\s)|"
-    r"(?:风险提示|总结|摘要|事项|评论|投资建议|目标价|当前价|主持人|专家|投资者|问|答)\s*[：:]))|"
-    r"，(?=\s*(?:并不|不是|不会|不能|没有|尚无|尚未|未能|不一定|不必然|关键|那么|只是|只要|我们维持|维持一年目标价|"
-    r"(?:Q[1-4]|H[12])?预计|经营最困难阶段已过|且|同时|为了|因为|由于|主要是|主要系|主要由于|原因在于|表明|受|年内|下半年|"
-    r"中长期|利好|但|不过|然而|可是|所以|因此|说明|需要|就是|会|将|你|我|公司|"
-    r"归母净利润|扣非|经营现金流|存货|应收|毛利率|营收|云计算|CSP|GPU|ASIC|NPO|CPO|可插拔|"
-    r"当前批价|投放量可由|重申|工艺占|设备(?:只|仅)|(?:Q[1-4]|H[12])\b))|"
-    r"、(?=[^。；\n]{0,24}(?:不及预期|加剧|恶化|下行|失败|疲软|风险))|"
-    r",\s*(?=this\s+is\b)|\s+(?=the\s+CEO\s+bought\b)|"
-    r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)|"
-    r"和(?=(?:[“\"']?强推|\s*价差扩张))",
-    re.I,
+# Top-level alternatives are order-sensitive: ``finditer`` takes the leftmost
+# match, so the first alternative that matches at an offset wins.  Joining with
+# ``|`` instead of embedding separators in the literals keeps the retired-cue
+# variant safe -- an empty sample-pattern tuple must not leave a trailing ``|``,
+# which would add an empty alternative and match at every offset.
+_ATOMIC_BOUNDARY_PATTERN = "|".join(
+    (
+        r"[。！？；：:]\s*",
+        r"\n{2,}",
+        r"\.(?=\s+[A-Z0-9])\s*",
+        r"\n(?=\s*(?:(?:\d+|[一二三四五六七八九十百]+)[、]|"
+        r"(?:\d+|[一二三四五六七八九十百]+)[.．](?=\s)|"
+        r"(?:风险提示|总结|摘要|事项|评论|投资建议|目标价|当前价|主持人|专家|投资者|问|答)\s*[：:]))",
+        r"，(?=\s*(?:" + _BOUNDARY_CUE_ALTERNATION + "))",
+        r"、(?=[^。；\n]{0,24}(?:不及预期|加剧|恶化|下行|失败|疲软|风险))",
+        *_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS,
+    )
 )
+_ATOMIC_BOUNDARY_RE = re.compile(_ATOMIC_BOUNDARY_PATTERN, re.I)
 _MIXED_TURN_RE = re.compile(r"(?:能听到吗|听得到吗).{0,16}(?:可以|能听到|您讲)")
 
 

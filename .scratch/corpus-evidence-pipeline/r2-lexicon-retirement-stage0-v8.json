@@ -1,0 +1,435 @@
+{
+  "batch_capacity_options": [
+    [
+      8,
+      30
+    ],
+    [
+      8,
+      32
+    ],
+    [
+      16,
+      64
+    ]
+  ],
+  "coverage_definition": "gold evidence quote whitespace-stripped, case-folded, fully contained in one candidate slot text (strict diagnostic, not the scorer)",
+  "cue_hit_rates": {
+    "dev-company-report": {
+      "chars": 3054,
+      "domain_boundary_hits": 7,
+      "domain_hits_per_1k_chars": 2.292,
+      "sample_boundary_hits": 1,
+      "sample_hits_per_1k_chars": 0.327
+    },
+    "dev-expert-call-copper-foil": {
+      "chars": 11818,
+      "domain_boundary_hits": 4,
+      "domain_hits_per_1k_chars": 0.338,
+      "sample_boundary_hits": 0,
+      "sample_hits_per_1k_chars": 0.0
+    },
+    "dev-industry-qa-report": {
+      "chars": 1508,
+      "domain_boundary_hits": 0,
+      "domain_hits_per_1k_chars": 0.0,
+      "sample_boundary_hits": 1,
+      "sample_hits_per_1k_chars": 0.663
+    },
+    "dev-personal-trade-review": {
+      "chars": 674,
+      "domain_boundary_hits": 0,
+      "domain_hits_per_1k_chars": 0.0,
+      "sample_boundary_hits": 4,
+      "sample_hits_per_1k_chars": 5.935
+    },
+    "stress:optical-unlabelled": {
+      "chars": 7039,
+      "domain_boundary_hits": 7,
+      "domain_hits_per_1k_chars": 0.994,
+      "model_calls_allowed": 0,
+      "sample_boundary_hits": 0,
+      "sample_hits_per_1k_chars": 0.0,
+      "source": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+    }
+  },
+  "gold": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+  "packet_chars": 3000,
+  "probe": "lexicon-retirement",
+  "retire_all_overfit_coverage_lost_total": [],
+  "retire_all_overfit_planned_calls_slots16_items64": 43,
+  "retire_chinese_domain_coverage_lost_total": [],
+  "retire_chinese_domain_planned_calls_slots16_items64": 43,
+  "retire_sample_specific_only_coverage_lost_total": [],
+  "retire_sample_specific_only_planned_calls_slots16_items64": 43,
+  "retired_cues": {
+    "chinese_domain": [
+      "我们维持",
+      "维持一年目标价",
+      "经营最困难阶段已过",
+      "归母净利润",
+      "扣非",
+      "经营现金流",
+      "存货",
+      "应收",
+      "毛利率",
+      "营收",
+      "云计算",
+      "CSP",
+      "GPU",
+      "ASIC",
+      "NPO",
+      "CPO",
+      "可插拔",
+      "当前批价",
+      "投放量可由",
+      "重申",
+      "工艺占",
+      "设备(?:只|仅)"
+    ],
+    "sample_specific": [
+      ",\\s*(?=this\\s+is\\b)",
+      "\\s+(?=the\\s+CEO\\s+bought\\b)",
+      "\\s+and\\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\\b)",
+      "和(?=(?:[“\\\"']?强推|\\s*价差扩张))"
+    ]
+  },
+  "samples": [
+    {
+      "gold_critical_items": 4,
+      "gold_items": 5,
+      "material_type": "research_report",
+      "sample_id": "dev-company-report",
+      "scopes": {
+        "current": {
+          "batch_plans": {
+            "slots16_items64": 5,
+            "slots8_items30": 11,
+            "slots8_items32": 10
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 1,
+          "covered_critical": 1,
+          "packets": 1,
+          "slots": 76,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "dcr-fact-results",
+            "dcr-opinion-bottom",
+            "dcr-risk-demand"
+          ]
+        },
+        "retire_all_overfit": {
+          "batch_plans": {
+            "slots16_items64": 5,
+            "slots8_items30": 10,
+            "slots8_items32": 9
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 4,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 69,
+          "slots_added_vs_current": 6,
+          "slots_removed_vs_current": 13,
+          "uncovered_critical": [
+            "dcr-risk-demand"
+          ]
+        },
+        "retire_chinese_domain": {
+          "batch_plans": {
+            "slots16_items64": 5,
+            "slots8_items30": 10,
+            "slots8_items32": 9
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 3,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 70,
+          "slots_added_vs_current": 6,
+          "slots_removed_vs_current": 12,
+          "uncovered_critical": [
+            "dcr-risk-demand"
+          ]
+        },
+        "retire_sample_specific_only": {
+          "batch_plans": {
+            "slots16_items64": 5,
+            "slots8_items30": 11,
+            "slots8_items32": 10
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 2,
+          "covered_critical": 1,
+          "packets": 1,
+          "slots": 75,
+          "slots_added_vs_current": 1,
+          "slots_removed_vs_current": 2,
+          "uncovered_critical": [
+            "dcr-fact-results",
+            "dcr-opinion-bottom",
+            "dcr-risk-demand"
+          ]
+        }
+      },
+      "source_rev": "6f14cc145b798b37",
+      "split": "development"
+    },
+    {
+      "gold_critical_items": 4,
+      "gold_items": 4,
+      "material_type": "research_report",
+      "sample_id": "dev-industry-qa-report",
+      "scopes": {
+        "current": {
+          "batch_plans": {
+            "slots16_items64": 4,
+            "slots8_items30": 8,
+            "slots8_items32": 7
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 3,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 56,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "diq-answer-bottom"
+          ]
+        },
+        "retire_all_overfit": {
+          "batch_plans": {
+            "slots16_items64": 4,
+            "slots8_items30": 8,
+            "slots8_items32": 7
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 3,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 55,
+          "slots_added_vs_current": 1,
+          "slots_removed_vs_current": 2,
+          "uncovered_critical": [
+            "diq-answer-bottom"
+          ]
+        },
+        "retire_chinese_domain": {
+          "batch_plans": {
+            "slots16_items64": 4,
+            "slots8_items30": 8,
+            "slots8_items32": 7
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 3,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 56,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "diq-answer-bottom"
+          ]
+        },
+        "retire_sample_specific_only": {
+          "batch_plans": {
+            "slots16_items64": 4,
+            "slots8_items30": 8,
+            "slots8_items32": 7
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 3,
+          "covered_critical": 3,
+          "packets": 1,
+          "slots": 55,
+          "slots_added_vs_current": 1,
+          "slots_removed_vs_current": 2,
+          "uncovered_critical": [
+            "diq-answer-bottom"
+          ]
+        }
+      },
+      "source_rev": "174b64628f35aca6",
+      "split": "development"
+    },
+    {
+      "gold_critical_items": 4,
+      "gold_items": 4,
+      "material_type": "post_trade_review",
+      "sample_id": "dev-personal-trade-review",
+      "scopes": {
+        "current": {
+          "batch_plans": {
+            "slots16_items64": 1,
+            "slots8_items30": 3,
+            "slots8_items32": 2
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 2,
+          "covered_critical": 2,
+          "packets": 1,
+          "slots": 15,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "dpt-ttd-executed",
+            "dpt-frvo-executed"
+          ]
+        },
+        "retire_all_overfit": {
+          "batch_plans": {
+            "slots16_items64": 1,
+            "slots8_items30": 2,
+            "slots8_items32": 2
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 4,
+          "covered_critical": 4,
+          "packets": 1,
+          "slots": 11,
+          "slots_added_vs_current": 2,
+          "slots_removed_vs_current": 6,
+          "uncovered_critical": []
+        },
+        "retire_chinese_domain": {
+          "batch_plans": {
+            "slots16_items64": 1,
+            "slots8_items30": 3,
+            "slots8_items32": 2
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 2,
+          "covered_critical": 2,
+          "packets": 1,
+          "slots": 15,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "dpt-ttd-executed",
+            "dpt-frvo-executed"
+          ]
+        },
+        "retire_sample_specific_only": {
+          "batch_plans": {
+            "slots16_items64": 1,
+            "slots8_items30": 2,
+            "slots8_items32": 2
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 4,
+          "covered_critical": 4,
+          "packets": 1,
+          "slots": 11,
+          "slots_added_vs_current": 2,
+          "slots_removed_vs_current": 6,
+          "uncovered_critical": []
+        }
+      },
+      "source_rev": "810ef870625e7856",
+      "split": "development"
+    },
+    {
+      "gold_critical_items": 11,
+      "gold_items": 11,
+      "material_type": "conference_minutes",
+      "sample_id": "dev-expert-call-copper-foil",
+      "scopes": {
+        "current": {
+          "batch_plans": {
+            "slots16_items64": 33,
+            "slots8_items30": 72,
+            "slots8_items32": 64
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 4,
+          "covered_critical": 4,
+          "packets": 4,
+          "slots": 496,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "dec-answer-capex",
+            "dec-host-clarification",
+            "dec-forecast-validation",
+            "dec-question-yield",
+            "dec-answer-yield",
+            "dec-quoted-yield-split",
+            "dec-answer-mitsui"
+          ]
+        },
+        "retire_all_overfit": {
+          "batch_plans": {
+            "slots16_items64": 33,
+            "slots8_items30": 72,
+            "slots8_items32": 64
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 5,
+          "covered_critical": 5,
+          "packets": 4,
+          "slots": 493,
+          "slots_added_vs_current": 2,
+          "slots_removed_vs_current": 5,
+          "uncovered_critical": [
+            "dec-answer-capex",
+            "dec-host-clarification",
+            "dec-forecast-validation",
+            "dec-question-yield",
+            "dec-answer-yield",
+            "dec-answer-mitsui"
+          ]
+        },
+        "retire_chinese_domain": {
+          "batch_plans": {
+            "slots16_items64": 33,
+            "slots8_items30": 72,
+            "slots8_items32": 64
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 5,
+          "covered_critical": 5,
+          "packets": 4,
+          "slots": 493,
+          "slots_added_vs_current": 2,
+          "slots_removed_vs_current": 5,
+          "uncovered_critical": [
+            "dec-answer-capex",
+            "dec-host-clarification",
+            "dec-forecast-validation",
+            "dec-question-yield",
+            "dec-answer-yield",
+            "dec-answer-mitsui"
+          ]
+        },
+        "retire_sample_specific_only": {
+          "batch_plans": {
+            "slots16_items64": 33,
+            "slots8_items30": 72,
+            "slots8_items32": 64
+          },
+          "coverage_lost_vs_current": [],
+          "covered": 4,
+          "covered_critical": 4,
+          "packets": 4,
+          "slots": 496,
+          "slots_added_vs_current": 0,
+          "slots_removed_vs_current": 0,
+          "uncovered_critical": [
+            "dec-answer-capex",
+            "dec-host-clarification",
+            "dec-forecast-validation",
+            "dec-question-yield",
+            "dec-answer-yield",
+            "dec-quoted-yield-split",
+            "dec-answer-mitsui"
+          ]
+        }
+      },
+      "source_rev": "80b5a290df3d2ade",
+      "split": "development"
+    }
+  ]
+}

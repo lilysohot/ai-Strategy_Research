@@ -1,0 +1,111 @@
+{
+  "budget_version": "r2-lexicon-retirement-v8",
+  "status": "draft-unsigned",
+  "frozen_at": null,
+  "reason": "在冻结的四个 development 材料上，quantify「清退过拟合边界词表」是否使 item/关系门相对 r2-non-regression-policy-v1 逐类下限退化。词表已被证实（零调用探针 probe_lexicon_retirement.py）部分为样本级过拟合：_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS 只在 dev-personal-trade-review 命中、在其它全部材料为 0；_DOMAIN_BOUNDARY_CUES 在非 dev 的光模块材料上仍有 0.994/千字命中，属行业通用而非样本答案。本预算只测「不退化」，不测泛化。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "micro_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "non_regression_policy": {
+    "path": ".scratch/corpus-evidence-pipeline/r2-non-regression-policy-v1.json",
+    "sha256": "TO_BE_COMPUTED_AT_FREEZE"
+  },
+  "probe": {
+    "path": ".scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py",
+    "sha256": "TO_BE_COMPUTED_AT_FREEZE",
+    "runs_before_any_model_call": true
+  },
+  "retirement_scope": {
+    "variant": "retire_all_overfit",
+    "constants": [
+      "_DOMAIN_BOUNDARY_CUES",
+      "_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS"
+    ],
+    "variant_alternatives": [
+      "retire_sample_specific_only",
+      "retire_chinese_domain"
+    ],
+    "note": "实现方式必须是把两个常量置空后由既有拼接式重建正则；不得改写通用词表或顶层分支顺序。"
+  },
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "deterministic_stress_samples": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "model_calls_allowed": 0,
+      "role": "非 dev、非金标材料；仅用于域词命中率对比与确定性计划校验，不产生分数"
+    }
+  ],
+  "model": "glm-5.3-flash",
+  "model_binding": "must equal configured_model() at plan time",
+  "round_ids": [
+    "lexicon-retirement-baseline"
+  ],
+  "development_rounds_max": 1,
+  "calls_per_round_max": 43,
+  "calls_total_max": 43,
+  "calls_per_document_per_round_max": 33,
+  "planned_calls_upper_bound": 43,
+  "planned_calls_upper_bound_status": "provisional_pending_plan_only",
+  "planned_calls_basis": "probe batch_plans.slots16_items64 over the full obligation set, per sample 5/4/1/33",
+  "seconds_per_call": 60,
+  "packet_chars": 3000,
+  "max_slots_per_batch": 16,
+  "max_items_per_packet": 64,
+  "max_output_tokens": 8192,
+  "response_format": "material-atomic-jsonl-v5",
+  "stages": [
+    "atomic_item_terminal"
+  ],
+  "relation_mode": "deferred",
+  "candidate_slot_ids_by_sample": {},
+  "candidate_slot_scope_note": "刻意不 pin 槽位子集：清退会改变槽位 ID，pin 旧集合必然触发 'frozen candidate slot scope drifted'。使用全量义务集。",
+  "stage0_deterministic_gate": {
+    "cost": "0 model calls",
+    "command": "uv run python .scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py --no-write",
+    "metrics": [
+      "coverage_lost_vs_current (strict single-slot containment of frozen gold evidence quotes)",
+      "uncovered_critical per scope",
+      "batch_plans under the frozen capacity",
+      "cue hit rate per 1000 chars, dev materials vs stress material"
+    ],
+    "pass": "loss of strict obligation coverage for any frozen gold item == 0",
+    "fail_action": "stop; no model call is made; report and backlog",
+    "note": "该口径是阻断性诊断，不是评分器；通过它只解除阻断，不构成任何通过结论。"
+  },
+  "stop_conditions": [
+    "stage0_deterministic_gate_fail",
+    "source_or_gold_identity_drift",
+    "holdout_access_or_leakage",
+    "planned_calls_differ_from_frozen_upper_bound_at_plan_only",
+    "any_protected_category_metric_floor_decrease",
+    "any_protected_micro_scope_floor_decrease",
+    "failed_or_partial_packet_increase_per_sample",
+    "negative_relation_hit_increase",
+    "round_or_call_budget_exhausted"
+  ],
+  "out_of_scope": [
+    "generalisation / overfit falsification on unseen material (holdout_calls_allowed = 0; dev is the overfit target, so this budget cannot decide it)",
+    "retiring the general boundary cues or the negation vocabulary",
+    "slot-protocol, relation, or contract changes",
+    "gold, micro-gold, threshold, or scorer changes",
+    "corpus ingestion or database writes",
+    "third or later development round",
+    "promoting any result to R2 acceptance"
+  ],
+  "holdout_calls_allowed": 0,
+  "sign_off": {
+    "status": "unsigned",
+    "required_roles": [
+      "U (owner, named)",
+      "independent reviewer"
+    ],
+    "must_not_be_self_declared": true
+  }
+}

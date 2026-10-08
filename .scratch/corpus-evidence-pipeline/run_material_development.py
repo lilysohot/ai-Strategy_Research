@@ -14,7 +14,7 @@ from typing import Any
 from dotenv import load_dotenv
 
 from plugins.corpus.claims import build_default_llm, configured_model
-from plugins.corpus.claims_v2 import triage_block_detail
+from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (

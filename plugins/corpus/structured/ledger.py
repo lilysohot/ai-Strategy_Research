@@ -34,7 +34,9 @@ from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
+    MaterialItemsValidationVersion,
     MaterialRun,
+    RelationCandidateRuleVersion,
 )
 from plugins.corpus.structured.adapter import ExtractionAdapter, TransportFactory
 from plugins.corpus.structured.config import (
@@ -180,20 +182,8 @@ class RelationPlan(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     enabled: bool = True
-    rule_version: Literal[
-        "material-relation-candidates-v1",
-        "material-relation-candidates-v2",
-        "material-relation-candidates-v3",
-    ] = (
-        RELATION_CANDIDATE_RULE_VERSION
-    )
-    items_validation_version: Literal[
-        "material-items-validation-v1",
-        "material-items-validation-v2",
-        "material-items-validation-v3",
-        "material-items-validation-v4",
-        "material-items-validation-v5",
-    ] = MATERIAL_ITEMS_VALIDATION_VERSION
+    rule_version: RelationCandidateRuleVersion = RELATION_CANDIDATE_RULE_VERSION
+    items_validation_version: MaterialItemsValidationVersion = MATERIAL_ITEMS_VALIDATION_VERSION
     max_tasks: int = Field(default=1, ge=0)
     max_attempts: int = Field(default=0, ge=0)
 
