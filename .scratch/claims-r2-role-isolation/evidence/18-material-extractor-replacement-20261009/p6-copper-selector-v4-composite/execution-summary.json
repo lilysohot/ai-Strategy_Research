@@ -1,0 +1,18 @@
+{
+  "schema_version": "copper-selector-v4-composite-replay-1",
+  "replayed_on": "2026-10-09",
+  "status": "items_protocol_complete_semantic_adjudication_required",
+  "batch_id": "batch:c593004a53c955a4be21a5c6baf0636b4d4223ed211f8cc705c985dd6b9ee62b",
+  "plan_file_sha256": "d7090fd2ea49120b7615adda034607b695c32c44f47da0c035ad1e7393eb5599",
+  "composition_manifest_sha256": "741b749325b73227ae1bcb53a897f0d4a576934388167d8f8248e7fd813a57d7",
+  "model_calls": 0,
+  "replay_attempts": 23,
+  "items": 469,
+  "slot_status": {"extracted": 420, "no_supported_item": 67, "failed": 0},
+  "packet_status": {"completed": 4},
+  "task_status": {"execution": "succeeded", "protocol": "valid", "quality": "accepted", "publication": "candidate"},
+  "artifact_sha256": "31377ce0bbc4f854c2f6c0c4dcb6d535e5cbe66db0aef99e2c7a59b9d4f0665b",
+  "payload_sha256": "3d7415752cca1973334f5b9b43acbcf1baccac38315fbcb0fd006b40d09bd50a",
+  "database_sha256": "98215f6e7782541362e6c55c3b4a359aab4e8cf4562ae8eeb6450f49bb2b652f",
+  "publication_query_delivery_context_use": 0
+}

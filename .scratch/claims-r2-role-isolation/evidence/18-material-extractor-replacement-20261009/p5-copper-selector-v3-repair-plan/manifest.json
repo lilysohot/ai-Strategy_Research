@@ -1,0 +1,16 @@
+{
+  "schema_version": "copper-selector-v3-repair-execution-1",
+  "executed_on": "2026-10-09",
+  "status": "executed_semantic_gate_failed_relations_not_requested",
+  "batch_id": "batch:19f3a19632149c40344cac9733ebe14c6ec9898366dc3ccc619f3fcfba208c59",
+  "plan_file_sha256": "afe6a594efcb16b2588348b74aacd350ad6b26f52b5afcbc451c413d9ccc3e3a",
+  "candidate_slots": 35,
+  "batch_slots": [3, 24, 6, 2],
+  "attempts": {"material_items": 4, "material_relations": 0, "succeeded": 4},
+  "usage": {"prompt_tokens": 10754, "completion_tokens": 14167, "reasoning_tokens": 11210, "total_tokens": 24921},
+  "items": 26,
+  "slot_status": {"extracted": 23, "no_supported_item": 2, "failed": 10},
+  "items_payload_sha256": "98b0854cd2632bf4d6843cf928ad6585441ee0e44186133e6e7aedb814efd01b",
+  "database_sha256": "5f51c821a6cd19fd691a719f9f89426dfe0fab678c2e9bd44ec3ca66855b4406",
+  "publication_query_delivery_context_use": 0
+}

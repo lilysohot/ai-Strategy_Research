@@ -16,5 +16,8 @@ v2 的确定性修复：
 58→214，item Schema failures 10→0。剩余 100 是旧响应的语义拒绝，controller 没有替模型改判。
 
 新 plan `batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f`
-已冻结但未执行，仍为 items 23 / relations 4 / total 27、strict complete-parent。执行需作为新的显式
-预算决定；P3 不可重放为新结果。
+随后完成执行：22 次 items 成功，1 次在 300 秒边界成为 `outcome_unknown`，其 24 槽没有响应对象；
+其余响应形成 414 items、364 extracted、60 no-supported、63 failed。28 个 terminal invalid 只由
+缺失 `evidence_selector`（16）或 `perspective`（12）造成，另有 11 个 hard-signal 语义失败。
+strict complete-parent 将 relations 保持为 0 calls。详见 `execution-summary.json` 和
+`failure-analysis.json`；该结果未发布或消费。

@@ -443,9 +443,11 @@ def test_plan_cli_can_opt_into_controller_selector_protocol(tmp_path: Path) -> N
         "material_items",
         "--disable-relations",
         "--material-items-protocol",
-        "material-atomic-selector-jsonl-v2",
+        "material-atomic-selector-jsonl-v5",
         "--max-estimated-tokens-per-batch",
         "8192",
+        "--candidate-slot-id",
+        "slot:scope-a",
         cwd=cwd,
     )
 
@@ -453,10 +455,11 @@ def test_plan_cli_can_opt_into_controller_selector_protocol(tmp_path: Path) -> N
     plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
     plan.verify_identity()
     task = next(task for task in plan.tasks if task.role == "material_items")
-    assert task.protocol == "material-atomic-selector-jsonl-v2"
+    assert task.protocol == "material-atomic-selector-jsonl-v5"
     assert plan.material_items_options is not None
     assert plan.material_items_options.max_slots_per_batch == 24
     assert plan.material_items_options.max_estimated_tokens_per_batch == 8192
+    assert plan.material_items_options.candidate_slot_ids == ("slot:scope-a",)
 
 
 def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
@@ -474,7 +477,7 @@ def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
         "--out",
         str(target),
         "--material-items-protocol",
-        "material-atomic-selector-jsonl-v2",
+        "material-atomic-selector-jsonl-v5",
         "--material-relations-protocol",
         "material-relations-selector-jsonl-v1",
         "--relation-dependency-policy",

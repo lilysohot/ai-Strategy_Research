@@ -1,10 +1,10 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: live-v1-items-gate-failed-v2-fix-frozen-not-executed
-Execution: selector v1 batch 的 23/23 items attempts 传输成功并返回 487/487 顶层终态，但严格字段/语义门留下 252 failed 槽；complete-parent 正确阻断 relations（0 calls）。零调用修复 replay 将 extracted 57→209、failed 252→100、Schema failures→0；selector v2 新计划已冻结但未执行
+Status: selector-v5-zero-call-items-complete-semantic-adjudication-open-relations-budget-gated
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。relations 尚未生成，发布与消费仍为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model calls: 0
+Model attempts: 50（P3 23 + P4 23 + P5 4；P6/P7 为 0）
 Production database access: 0
 
 ## 目标
@@ -72,6 +72,12 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P3 execution summary](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/execution-summary.json)
 - [P3 failure analysis](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/failure-analysis.json)
 - [P4 selector v2 zero-call fix and plan](../evidence/18-material-extractor-replacement-20261009/p4-copper-selector-v2-plan/manifest.json)
+- [P4 execution summary](../evidence/18-material-extractor-replacement-20261009/p4-copper-selector-v2-plan/execution-summary.json)
+- [P5 targeted repair](../evidence/18-material-extractor-replacement-20261009/p5-copper-selector-v3-repair-plan/manifest.json)
+- [P6 v4 composite replay](../evidence/18-material-extractor-replacement-20261009/p6-copper-selector-v4-composite/execution-summary.json)
+- [P6 frozen-gold evaluation](../evidence/18-material-extractor-replacement-20261009/p6-copper-selector-v4-composite/evaluation-summary.json)
+- [P7 v5 zero-call replay](../evidence/18-material-extractor-replacement-20261009/p7-copper-selector-v5-zero-call/manifest.json)
+- [P7 item adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p7-copper-selector-v5-zero-call/candidate-adjudications.agent-draft.json)
 
 ## Comments
 
@@ -113,3 +119,23 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   134 passed，全量 corpus 1376 passed、17 skipped、仍仅 2 个既有环境失败；Ruff、Pyright 通过，
   16 份历史计划及 v1 live plan identity 均可验证。v2 batch
   `batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f` 已冻结，尚未执行。
+- 2026-10-09：P4 实跑 23 次 items：22 次成功，attempt 8 在 300 秒边界为 `outcome_unknown`，影响
+  24 槽；其余结果为 364 extracted、60 no-supported、63 failed。28 个 invalid terminal 仅由缺失
+  `evidence_selector`（16）或 `perspective`（12）构成，另有 11 个语义拒绝。strict parent gate 继续
+  阻断 relations。已记录 22 次已知 usage 239,290 tokens，未把未知调用伪记为 0。
+- 2026-10-09：P5 只重试上述 35 个可恢复槽，4/4 transport succeeded，24,921 tokens；v3 留下
+  10 个 failed。根因被收敛为 condition 误放 semantic_type、两条过宽 evidence 启发式及结构残片
+  negative terminal。v4 将语义轴与话语轴分开、收窄硬 evidence 信号，并将结构性 negative terminal
+  视为协议完成但保留 missing-signal 诊断。
+- 2026-10-09：P6 将 P4 成功响应与 P5 修复响应按冻结坐标零调用合成，487 个坐标无缺失无重复；
+  v4 replay 得到 469 items、420 extracted、67 no-supported、0 failed，四包 completed，items formal
+  task 为 succeeded/valid/accepted。原 11-item 金标 target recall 和 attribution 都是 100%，但 strict
+  semantic 仅 6/11，证明 formal protocol gate 不等于语义金标 gate。
+- 2026-10-09：P7/v5 只加入可由原文决定的通用规范（显式数值区间、明确对话 perspective、判断性
+  modality），同一 immutable response set 的 strict semantic 提升到 9/11，target recall 与 attribution
+  保持 100%。两条剩余自动差异中，一条是真实 host clarification 分类分歧；另一条是事实+预测被原子
+  拆分而历史 scorer 只选一个 item。逐条裁定已形成 agent draft，未冒充用户签认。P4+P5 已消费后续
+  授权的 27 次尝试，因此下一次 relation-only 4-call trial 必须单独授权；此前继续禁止 publish/query/
+  delivery/context_use。核心/合约 137 passed，publication 回归并入后 150 passed；全量 corpus 为
+  1379 passed、17 skipped，仅保留既有的本地检索金标 0/20 与 reader-pdf-10/11 两项环境失败；Ruff、
+  Pyright 通过。

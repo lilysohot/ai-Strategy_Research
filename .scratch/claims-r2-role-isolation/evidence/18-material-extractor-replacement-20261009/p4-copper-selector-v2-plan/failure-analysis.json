@@ -1,0 +1,22 @@
+{
+  "schema_version": "copper-selector-v2-failure-analysis-1",
+  "analyzed_on": "2026-10-09",
+  "status": "repairable_interface_and_transport_failures",
+  "terminal_invalid": {
+    "total": 28,
+    "missing_only_evidence_selector": 16,
+    "missing_only_perspective": 12
+  },
+  "semantic_validation": {
+    "total": 11,
+    "classification": "hard-signal fragments and two ambiguous evidence heuristics"
+  },
+  "transport": {
+    "attempt": 8,
+    "execution_status": "outcome_unknown",
+    "elapsed_ms": 300202,
+    "affected_slots": 24,
+    "response_recorded": false
+  },
+  "decision": "repair only the explicit controller/model interface and replay immutable successful responses; do not relax hard-signal coverage or dispatch relations"
+}

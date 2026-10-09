@@ -1,0 +1,23 @@
+{
+  "schema_version": "copper-item-adjudications-agent-draft-1",
+  "created_on": "2026-10-09",
+  "status": "agent_draft_not_human_signed",
+  "gold_changed": false,
+  "thresholds_changed": false,
+  "claims_adjudication": "reuse_existing_xyl_signed_claims_gate",
+  "items": [
+    {"gold_item": "dec-summary-outlook", "decision": "target_recalled_field_review", "reason": "v5 corrects opinion; extra conservative unknown fields remain"},
+    {"gold_item": "dec-question-capex", "decision": "target_recalled_field_review", "reason": "question and explicit host attribution are correct; unknown-field vocabulary differs"},
+    {"gold_item": "dec-answer-capex", "decision": "target_recalled_field_review", "reason": "v5 deterministically restores 2.5到3个亿; unknown-field vocabulary differs"},
+    {"gold_item": "dec-host-clarification", "decision": "candidate_reject", "reason": "candidate is fact/claim/negated while gold is opinion/answer/mixed"},
+    {"gold_item": "dec-forecast-validation", "decision": "atomic_group_pending_relation", "candidate_items": ["itm_40879eb9ef18870a", "itm_dc9e35f35c2bd5ff"], "reason": "condition and forecast outcome are both present but split across atomic items"},
+    {"gold_item": "dec-ambiguous-audio-check", "decision": "target_recalled_field_review", "reason": "mixed-turn unknown attribution is preserved; unknown-field vocabulary differs"},
+    {"gold_item": "dec-question-yield", "decision": "target_recalled_field_review", "reason": "both question clauses exist as atomic questions"},
+    {"gold_item": "dec-answer-yield", "decision": "target_recalled_field_review", "reason": "v5 corrects epistemic statement to opinion"},
+    {"gold_item": "dec-quoted-yield-split", "decision": "target_recalled_field_review", "reason": "v5 corrects quoted six-four allocation to opinion and preserves ratio value"},
+    {"gold_item": "dec-question-mitsui", "decision": "candidate_reject_attribution", "reason": "candidate asserts source_explicit generic investor while frozen gold preserves phone-turn ambiguity"},
+    {"gold_item": "dec-answer-mitsui", "decision": "atomic_group_pending_relation", "candidate_items": ["itm_20315c03b3120632", "itm_02531d4c6d673b87"], "reason": "historical supply fact and future cooperation forecast are separately present"}
+  ],
+  "relations": {"status": "not_adjudicable_not_generated", "gold_relations": 4, "candidate_relations": 0},
+  "signoff": {"required": true, "name": null, "signed_at": null}
+}

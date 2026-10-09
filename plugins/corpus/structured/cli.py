@@ -66,11 +66,20 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--max-slots-per-batch", type=int)
     plan.add_argument("--max-estimated-tokens-per-batch", type=int)
     plan.add_argument(
+        "--candidate-slot-id",
+        action="append",
+        dest="candidate_slot_ids",
+        help="limit material_items to an explicit frozen candidate slot (repeatable)",
+    )
+    plan.add_argument(
         "--material-items-protocol",
         choices=(
             "material-atomic-jsonl-v5",
             "material-atomic-selector-jsonl-v1",
             "material-atomic-selector-jsonl-v2",
+            "material-atomic-selector-jsonl-v3",
+            "material-atomic-selector-jsonl-v4",
+            "material-atomic-selector-jsonl-v5",
         ),
         default="material-atomic-jsonl-v5",
     )
@@ -254,6 +263,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 max_slots_per_batch=args.max_slots_per_batch,
                 max_estimated_tokens_per_batch=args.max_estimated_tokens_per_batch,
                 material_type=args.material_type,
+                candidate_slot_ids=args.candidate_slot_ids,
                 material_items_protocol=args.material_items_protocol,
                 material_relations_protocol=args.material_relations_protocol,
             )

@@ -19,6 +19,7 @@ from plugins.corpus.material_semantics import (
     MaterialRun,
     _align_quote,
     _canonical_value,
+    _normalize_selector_item,
     _normalize_semantic_type,
     _normalize_statement_role,
     _packet_records,
@@ -221,7 +222,7 @@ def test_selector_protocol_controller_materializes_exact_slot_evidence(tmp_path:
         relations_required=False,
     )
 
-    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v2"
+    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v5"
     assert result.packet_runs[0].status == "completed"
     assert result.summary()["complete"] is True
     item = result.understanding.items[0]
@@ -285,7 +286,14 @@ def test_selector_protocol_controller_canonicalizes_absence_valued_fields(
     evidence_run = build_evidence_run(source, packet_chars=1000)
     response = json.loads(_selector_item_response())
     item = response["items"][0]
-    for field in ("value", "behavior_status", "temporal_frame", "unknown_fields"):
+    for field in (
+        "value",
+        "behavior_status",
+        "temporal_frame",
+        "unknown_fields",
+        "perspective",
+        "evidence_selector",
+    ):
         item.pop(field)
 
     result = extract_material_understanding(
@@ -304,7 +312,49 @@ def test_selector_protocol_controller_canonicalizes_absence_valued_fields(
     assert normalized.value is None
     assert normalized.behavior_status is None
     assert normalized.temporal_frame == "unknown"
+    assert normalized.perspective == "source_explicit"
     assert normalized.unknown_fields == ("value", "temporal_frame")
+
+
+def test_selector_protocol_treats_condition_as_a_statement_role_not_semantic_type() -> None:
+    response = json.loads(_selector_item_response())
+    item = response["items"][0]
+    item["semantic_type"] = "condition"
+    item["statement_role"] = "condition"
+
+    normalized = _normalize_selector_item(item)
+
+    assert normalized is not None
+    assert normalized["semantic_type"] == "unknown"
+    assert normalized["statement_role"] == "condition"
+    assert normalized["unknown_fields"] == ["semantic_type"]
+
+
+def test_selector_protocol_accepts_structural_negative_terminal_but_keeps_signal_diagnostic(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "selector-fragment.md"
+    source.write_text("专家：只要验证成功。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    response = json.loads(_selector_item_response(status="no_supported_item"))
+    response["reason_code"] = "incomplete_fragment"
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: json.dumps(response, ensure_ascii=False),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    entry = result.understanding.coverage.slot_ledger[0]
+    assert entry.status == "no_supported_item"
+    assert "missing_signal:condition" in entry.reason_codes
+    assert "controller_semantic_validation_failed" not in entry.reason_codes
+    assert result.packet_runs[0].status == "completed"
 
 
 def test_selector_protocol_distinguishes_semantic_rejection_from_invalid_terminal(
@@ -581,11 +631,11 @@ def test_material_semantics_preserve_attribution_conditions_and_quotes(tmp_path:
         assert item.evidence[0].quote in evidence_run.document.packets[0].text
 
 
-def test_structured_v14_through_v27_runs_preserve_historical_identity(tmp_path: Path) -> None:
+def test_structured_v14_through_v30_runs_preserve_historical_identity(tmp_path: Path) -> None:
     evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
     current = extract_material_understanding(evidence_run, llm=_response, max_calls=1)
 
-    for version_number in range(14, 29):
+    for version_number in range(14, 31):
         payload = current.model_dump(mode="json")
         payload["extractor_version"] = f"material-semantics-{version_number}"
         identity_payload = {key: value for key, value in payload.items() if key != "run_id"}
@@ -1618,6 +1668,7 @@ def test_trade_value_preserves_each_leg_of_compound_action() -> None:
     assert _canonical_value(None, "I sold 50 puts at $90 for next week for .47") == (
         "50 $90 puts at .47"
     )
+    assert _canonical_value(None, "主设备投资大概在2.5到3个亿") == "2.5到3个亿"
 
 
 def test_system_owns_risk_polarity_and_report_values(tmp_path: Path) -> None:
@@ -1946,6 +1997,20 @@ def test_system_preserves_connector_commas_inside_one_question(tmp_path: Path) -
     assert slots[0].signal_types[0] == "question"
 
 
+def test_system_treats_polite_research_request_as_question_without_question_mark(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "polite-request.md"
+    source.write_text("先请您帮我们更新一下行业的价值量分配，谢谢。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    assert len(slots) == 1
+    assert slots[0].signal_types == ("question",)
+
+
 def test_system_does_not_create_obligations_for_bare_acknowledgements(tmp_path: Path) -> None:
     source = tmp_path / "acknowledgements.md"
     source.write_text("投资者：明白。\n专家：好的！\n", encoding="utf-8")
@@ -2198,6 +2263,24 @@ def test_research_judgment_future_and_concession_are_normalized_by_meaning() -> 
             "claim",
             text="茅台经营向上明确，底层逻辑未变",
             quote="茅台经营向上明确，底层逻辑未变",
+        )
+        == "opinion"
+    )
+    assert (
+        _normalize_semantic_type(
+            "fact",
+            "answer",
+            text="我认为设备精度已经领先，那么大概率跟工艺挂钩",
+            quote="我认为设备精度已经领先，那么大概率跟工艺挂钩",
+        )
+        == "opinion"
+    )
+    assert (
+        _normalize_semantic_type(
+            "fact",
+            "evidence",
+            text="他说工艺和设备是64开，工艺占大头",
+            quote="他说工艺和设备是64开，工艺占大头",
         )
         == "opinion"
     )

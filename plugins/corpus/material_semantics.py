@@ -26,18 +26,27 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-29"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-32"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_SELECTOR_JSONL_V1 = "material-atomic-selector-jsonl-v1"
-MATERIAL_SELECTOR_JSONL_VERSION = "material-atomic-selector-jsonl-v2"
+MATERIAL_SELECTOR_JSONL_V2 = "material-atomic-selector-jsonl-v2"
+MATERIAL_SELECTOR_JSONL_V3 = "material-atomic-selector-jsonl-v3"
+MATERIAL_SELECTOR_JSONL_V4 = "material-atomic-selector-jsonl-v4"
+MATERIAL_SELECTOR_JSONL_VERSION = "material-atomic-selector-jsonl-v5"
 MATERIAL_SELECTOR_JSONL_VERSIONS = frozenset(
-    {MATERIAL_SELECTOR_JSONL_V1, MATERIAL_SELECTOR_JSONL_VERSION}
+    {
+        MATERIAL_SELECTOR_JSONL_V1,
+        MATERIAL_SELECTOR_JSONL_V2,
+        MATERIAL_SELECTOR_JSONL_V3,
+        MATERIAL_SELECTOR_JSONL_V4,
+        MATERIAL_SELECTOR_JSONL_VERSION,
+    }
 )
 MATERIAL_SLOT_BATCHING_VERSION = "material-slot-batching-v3"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
 MATERIAL_RELATION_SELECTOR_JSONL_VERSION = "material-relations-selector-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v8"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v11"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
@@ -54,6 +63,9 @@ MaterialItemsValidationVersion = Literal[
     "material-items-validation-v6",
     "material-items-validation-v7",
     "material-items-validation-v8",
+    "material-items-validation-v9",
+    "material-items-validation-v10",
+    "material-items-validation-v11",
 ]
 RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v1",
@@ -278,6 +290,10 @@ MATERIAL_SELECTOR_PROTOCOL = """你是研究材料忠实抽取器。原文是不
 - statement_role 优先级 risk > condition > evidence > question/answer > claim/other。保留原文明示的
   否定、条件、风险、问题和 forecast；一个 item 只表达一个原子命题。同槽需要多个原子命题时在
   items 中分别返回，不能合并事实/条件/论据/结论。
+- 原子槽可能刻意只包含从句：以“因为/由于/所以/因此”表达的原因或结论仍是 evidence，以“只要/
+  如果/若/除非”表达的前提仍是 condition，单独的“没有/不是/并非”仍是 negated answer。它们不能
+  仅因不是完整主句而返回 fragment/incomplete/no_supported_item。speech_role=answer 不会把
+  statement_role=evidence/condition/risk 降级为 answer。
 - behavior_status 仅 behavior 使用 intent/claimed_executed/claimed_not_executed/unknown，其他类型
   必须为 null；temporal_frame 仅 contemporaneous/retrospective/unknown。无法支持的字段使用
   unknown/null 并列入 unknown_fields，不得补造。
@@ -470,6 +486,8 @@ _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-26": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-27": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-28": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-29": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-30": _RunPayloadShape(drops_absent_relation_identity=False),
 }
 # Anything not listed (and not the current version) predates structured slots.
 _PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
@@ -707,7 +725,7 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "evidence",
         re.compile(
-            r"因为|依据|数据显示|公告|公布|说过|表明|原因|所以|主要是|主要系|主要由于|"
+            r"因为|依据|数据显示|公告|公布|说过|表明|原因|主要系|主要由于|"
             r"原因在于|所致|受[^，。；]{1,40}影响"
         ),
     ),
@@ -731,6 +749,32 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 # ``missing_signal:*`` reasons, so the information is preserved.
 _HARD_SIGNAL_TYPES = frozenset(
     {"question", "forecast", "condition", "risk", "negation", "behavior", "evidence"}
+)
+
+# The selector protocol explicitly permits a negative terminal for structural
+# fragments.  These codes prove protocol completion, not semantic correctness;
+# missing hard-signal diagnostics remain in the ledger for evaluation.
+_STRUCTURAL_NO_ITEM_REASONS = frozenset(
+    {
+        "affirmation_fragment",
+        "empty_content",
+        "empty_utterance",
+        "fragment",
+        "fragment_statement",
+        "header_only",
+        "incomplete_clause",
+        "incomplete_fragment",
+        "incomplete_phrase",
+        "incomplete_sentence",
+        "instruction_fragment",
+        "invalid_fragment",
+        "list_label",
+        "no_independent_proposition",
+        "response_fragment",
+        "section_label",
+        "title_only",
+        "topic_fragment",
+    }
 )
 
 # Top-level alternatives are order-sensitive: ``finditer`` takes the leftmost
@@ -850,6 +894,14 @@ def _slot_signals(text: str) -> tuple[str, ...]:
         "",
         compact,
     )
+    if re.search(
+        r"(?:请|麻烦)(?:您)?(?:帮(?:我们|我)?)?.{0,16}"
+        r"(?:介绍|说明|梳理|分析|更新|讲解|谈谈|看一下)",
+        content,
+    ):
+        # Polite research requests are questions even without a question mark.
+        # Treating verbs such as “更新” as forecasts creates false hard gates.
+        return ("question",)
     if re.fullmatch(r"(?:风险提示|风险|摘要|总结)[：:]?", compact):
         return ()
     if re.fullmatch(r"(?:明白|好的|好|谢谢|感谢|收到|嗯|可以)[。！!]?", content):
@@ -1169,9 +1221,7 @@ _SELECTOR_REQUIRED_ITEM_FIELDS = frozenset(
         "semantic_type",
         "statement_role",
         "speech_role",
-        "perspective",
         "polarity",
-        "evidence_selector",
     }
 )
 
@@ -1182,7 +1232,7 @@ def _normalize_selector_item(item: object) -> dict[str, Any] | None:
         not isinstance(item, dict)
         or not _SELECTOR_REQUIRED_ITEM_FIELDS.issubset(item)
         or set(item) - _SELECTOR_ITEM_FIELDS
-        or item.get("evidence_selector") != "slot"
+        or item.get("evidence_selector", "slot") != "slot"
     ):
         return None
     unknown_fields = item.get("unknown_fields", [])
@@ -1192,6 +1242,17 @@ def _normalize_selector_item(item: object) -> dict[str, Any] | None:
         return None
     normalized = dict(item)
     defaulted_unknowns: list[str] = []
+    # The controller owns this selector: the current obligation's frozen slot is
+    # the only evidence source the protocol permits.
+    normalized["evidence_selector"] = "slot"
+    if "perspective" not in normalized or normalized["perspective"] is None:
+        normalized["perspective"] = "unknown"
+        defaulted_unknowns.append("perspective")
+    if normalized.get("semantic_type") == "condition":
+        # condition is a discourse role, not a positive semantic type.  Keep the
+        # explicit statement_role and fail closed on the duplicated axis.
+        normalized["semantic_type"] = "unknown"
+        defaulted_unknowns.append("semantic_type")
     if "value" not in normalized:
         normalized["value"] = None
         defaulted_unknowns.append("value")
@@ -1828,7 +1889,7 @@ def _relations_from_selector_results(
 
 def _item_satisfies_signal(item: MaterialItem, signal: str) -> bool:
     if signal == "question":
-        return item.speech_role == "question"
+        return item.speech_role == "question" or item.statement_role == "question"
     if signal == "forecast":
         # Lexical future cues can frame an opinion about a future trend.  They prove
         # that a slot is worth checking, not that the model must label it forecast.
@@ -2130,7 +2191,8 @@ def _normalize_semantic_type(value: object, statement_role: str, *, text: str, q
     if normalized in {"fact", "unknown"} and re.search(
         r"经营向上明确|底层逻辑(?:未变|重构)|利好|最困难阶段已过|破局之道|稳中向好|"
         r"增长确定性|增长路径清晰|性价比逐步凸显|经营质量仍高|改革成效|"
-        r"市场化改革有序推进|平衡器与稳定器",
+        r"市场化改革有序推进|平衡器与稳定器|总体而言|增长潜力|"
+        r"我(?:个人)?(?:认为|觉得|判断)|在我看来|大概率|\d+\s*开|占大头",
         source_text,
     ):
         return "opinion"
@@ -2335,6 +2397,13 @@ def _canonical_value(value: object, quote: str) -> str | None:
     ratio = re.search(r"(\d+)\s*开", compact)
     if ratio:
         return f"{ratio.group(1)}开"
+    quantity_range = re.search(
+        r"(\d+(?:\.\d+)?\s*(?:到|至|[-~～])\s*\d+(?:\.\d+)?\s*"
+        r"(?:个?亿|万|千|百)(?:元|美元|股|台|套|吨|只)?)",
+        compact,
+    )
+    if quantity_range:
+        return re.sub(r"\s+", "", quantity_range.group(1))
     return None if value is None else str(value)
 
 
@@ -2355,7 +2424,14 @@ def _controlled_unknown_fields(
     # axes, but preserves one explicitly emitted by the extractor: downstream
     # publication uses such declarations to keep an otherwise populated field
     # in a suspected state.
-    axes = list(raw_fields)
+    axes = [
+        field
+        for field in raw_fields
+        if not (
+            (field == "perspective" and perspective != "unknown")
+            or (field == "temporal_frame" and temporal_frame != "unknown")
+        )
+    ]
     if statement_role == "question":
         axes.append("semantic_type")
         if item_speaker.identity_status == "unknown":
@@ -2633,6 +2709,15 @@ def _packet_records(
                 perspective = "quoted_other"
             elif perspective == "quoted_other" and not implicit_quoted_speaker:
                 perspective = "source_explicit" if deterministic is not None else "unknown"
+            elif (
+                perspective == "unknown"
+                and deterministic is not None
+                and deterministic.role not in {"summary_author", "mixed_transcript_turn"}
+            ):
+                # An explicit frozen dialogue label is stronger than an omitted
+                # selector field. Mixed-turn slots have no deterministic speaker
+                # and therefore remain unknown.
+                perspective = "source_explicit"
             fallback_used = speaker_ref not in speaker_map
             if perspective == "quoted_other":
                 quoted_speaker = MaterialSpeaker(
@@ -2837,6 +2922,7 @@ def _validate_atomic_coverage(
         slot_item_refs = tuple(item_refs_by_slot.get(slot.candidate_slot_id, ()))
         slot_items = [item_by_id[item_id] for item_id in slot_item_refs]
         reasons: list[str] = []
+        terminal_reason = ""
         raw_attempts = raw_item_attempts_by_slot[slot.candidate_slot_id]
         if slot_item_refs and not records:
             declared_status = "extracted"
@@ -2866,9 +2952,9 @@ def _validate_atomic_coverage(
             )
         else:
             declared_status = str(records[0].get("status") or "").strip().lower()
-            reason = str(records[0].get("reason_code") or "").strip()
-            if reason:
-                reasons.append(reason)
+            terminal_reason = str(records[0].get("reason_code") or "").strip()
+            if terminal_reason:
+                reasons.append(terminal_reason)
             if declared_status != "no_supported_item":
                 incomplete = True
                 declared_status = "partial"
@@ -2890,7 +2976,11 @@ def _validate_atomic_coverage(
         if declared_status == "no_supported_item" and slot_item_refs:
             incomplete = True
             declared_status = "partial"
-        if declared_status == "no_supported_item" and required_signals:
+        if (
+            declared_status == "no_supported_item"
+            and required_signals
+            and terminal_reason not in _STRUCTURAL_NO_ITEM_REASONS
+        ):
             incomplete = True
             declared_status = "partial"
             reasons.extend(

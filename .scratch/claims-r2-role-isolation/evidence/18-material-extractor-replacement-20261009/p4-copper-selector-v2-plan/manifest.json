@@ -1,7 +1,7 @@
 {
   "schema_version": "copper-selector-v2-zero-call-freeze-1",
   "frozen_on": "2026-10-09",
-  "status": "zero_call_fix_complete_plan_not_executed",
+  "status": "executed_outcome_unknown_items_incomplete_relations_blocked",
   "batch_id": "batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
   "plan_sha256": "sha256:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
   "plan_file_sha256": "7a3a528682bb7438fd260c09bfd0b83c6413bdf0496ccd6a6f2beb37eab0c07b",
@@ -54,5 +54,15 @@
     ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "ba9dff96a9540a519c609491d85e3721d57cc2de5e3ffad6103a0541fec93f72",
     ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "f7702fe6d106adb693752c634a396b83a827bcaac622a784c7655a6bca5e71f1"
   },
-  "next_gate": "explicit decision whether to spend a new 23+4 call budget on selector v2"
+  "actual_execution": {
+    "material_items_attempts": 23,
+    "material_relations_attempts": 0,
+    "succeeded_attempts": 22,
+    "outcome_unknown_attempts": 1,
+    "extracted_slots": 364,
+    "no_supported_item_slots": 60,
+    "failed_slots": 63,
+    "publication_query_delivery_context_use": 0
+  },
+  "next_gate": "targeted zero-call interface repair plus bounded retry scope; relations remain blocked"
 }

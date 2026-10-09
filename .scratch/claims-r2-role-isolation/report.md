@@ -558,7 +558,9 @@ C/D 使用相同的按需补读规则，记录是否触发及原因，不额外�
 
 已按 [本地 issue 规范](../../docs/agents/issue-tracker.md) 编制 [实施规格与任务索引](spec.md)，工作包细化为 `issues/01—11` 的独立任务文件。每票包含分诊状态、执行状态、R2-S0—S5 映射、依赖与外部门、范围/非目标、预期文件、交付/验收条件、命令及调用额度。具体状态和证据留在各票，阶段放行仍以唯一主计划为准；本报告不复制任务进度。
 
-本次只完成任务编制，没有执行实现任务或创建其约定的测试/Schema/CLI。下一步入口是 [01：冻结范围、公共契约与开工资产](issues/01-scope-contracts.md)；后续任务按依赖验收后重新分诊。01—10 限零真实模型与零生产库访问；[11：真实模型有界试验](issues/11-bounded-live-trial.md) 单独保持未授权门。新增测试命令是各任务交付后的验收要求，不代表对应文件当前已存在或测试已通过。
+本段最初编制时只完成了任务拆分；当前执行状态以各 issue 的追加 Comments、证据 manifest 和第 13 节
+为准。01—10 的零模型基础契约已实现，11 及后续有界开发试验曾在独立授权下执行；这不转授生产库、
+发布或 M_main 消费权限。不能再把下表中的“交付物”文字当成未执行，也不能仅凭文件存在判定验收。
 
 | 工作包 | 内容与主要代码落点 | 交付物 | 通过条件与依赖 |
 |---|---|---|---|
@@ -671,6 +673,37 @@ C/D 使用相同的按需补读规则，记录是否触发及原因，不额外�
 4. 加上后台抽取、失败和更新成本之后，复用是否带来实际收益？
 
 达到这些条件后，才将合格范围内的语义抽取接入常规后台处理。基础原文链始终保留独立可用性，主线研究不依赖某次抽取必然成功。
+
+## 13. 2026-10-09 执行增补：material extractor 收敛状态
+
+Issue 18 已不再停留在方案阶段。selector v1/v2 的真实执行证明：确定性微批和顶层终态账可以覆盖
+487/487 槽，主要失败从“漏终态”收敛到模型/控制器字段轴不一致、结构残片和一个 transport
+`outcome_unknown`。后续只对 35 个未闭合槽做了 4 次有界重试，没有再次重跑全部 487 槽；P4 与 P5
+合计正好用完该轮 27 次授权尝试，relations 始终为 0 calls。
+
+P6 将 P4 成功响应与 P5 修复响应按冻结坐标做零调用合成，得到 469 items、420 extracted、67
+no-supported、0 failed，四包 completed。P7 将通用规范升到 `material-atomic-selector-jsonl-v5` /
+`material-semantics-32` / `material-items-validation-v11`，并用同一 23 份 immutable responses 建立正式
+plan/replay ledger：items parent 为 `succeeded / valid / accepted / candidate`，模型调用、生产库、发布、
+query、delivery、context_use 均为 0。
+
+原冻结 copper 目标金标未改：11 items / 4 relations。P7 的 items target recall、critical recall 与
+attribution 都是 100%，历史严格 scorer 的 semantic target accuracy 为 9/11（81.82%），所以尚不能宣告
+R2 命题质量过门。剩余差异不是继续扩大 prompt 词典的理由：一条是主持人 clarification 的真实
+fact/opinion 与 claim/answer 分歧；另一条是“历史供货事实 + 未来合作预测”被新原子接口拆成两个 item，
+而历史 compound-gold scorer 只选择一个 item。旧金标不是整篇负例全集，因此其余 458 个非目标候选
+不能自动记作 FP，也不能据此声称整篇 precision。
+
+逐条 items 裁定已写入
+`evidence/18-material-extractor-replacement-20261009/p7-copper-selector-v5-zero-call/candidate-adjudications.agent-draft.json`，
+状态明确为 agent draft，未冒充 xyl 签认。下一步顺序固定为：先签认或修订这 11 条裁定并决定原子组
+评分口径；再单独授权最多 4 次 relation-only live trial；关系过门前继续禁止发布和主线消费。Claims
+继续复用既有 xyl 签认，不重做金标。
+
+本轮回归为核心/合约 137 passed，publication 回归并入后 150 passed；全量 corpus 1379 passed、17
+skipped，仅保留两个既有环境失败（本地检索金标库 Recall@5=0/20；测试期待 reader-pdf-10 而当前为
+reader-pdf-11）。Ruff 与 Pyright 均通过。完整执行证据位于
+`evidence/18-material-extractor-replacement-20261009/p4-*` 至 `p7-*`。
 
 ## 附录：依据与源码入口
 

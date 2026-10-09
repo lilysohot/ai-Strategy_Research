@@ -1,0 +1,182 @@
+{
+  "schema_version": "selector-composite-replay-v1",
+  "model_calls": 0,
+  "protocol": "material-atomic-selector-jsonl-v4",
+  "batch_id": "batch:c593004a53c955a4be21a5c6baf0636b4d4223ed211f8cc705c985dd6b9ee62b",
+  "plan_sha256": "sha256:c593004a53c955a4be21a5c6baf0636b4d4223ed211f8cc705c985dd6b9ee62b",
+  "sources": {
+    "p4_batch_id": "batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
+    "p4_successful_responses": 22,
+    "p5_batch_id": "batch:19f3a19632149c40344cac9733ebe14c6ec9898366dc3ccc619f3fcfba208c59",
+    "p5_successful_responses": 4
+  },
+  "overlay_key": [
+    "packet_id",
+    "start",
+    "end"
+  ],
+  "candidate_slots": 487,
+  "sequences": [
+    {
+      "sequence": 1,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "7dfe7f6d69854c2d43a940e3c26178d69b038bfb08c2c55a673fe304b1a7b977"
+    },
+    {
+      "sequence": 2,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "aab41b405bf0e36704aa5fb6ec38aecafd6a644cc9a874f3712bbd5072ebc5d1"
+    },
+    {
+      "sequence": 3,
+      "slots": 24,
+      "p4_terminals": 23,
+      "p5_terminals": 1,
+      "response_file_sha256": "2e50a303823b8e46b8c209a28fb5b9ad9246a4d62e52258377e6236717f9ace7"
+    },
+    {
+      "sequence": 4,
+      "slots": 24,
+      "p4_terminals": 23,
+      "p5_terminals": 1,
+      "response_file_sha256": "a1e8ddf69942388923585e65bcc5301df1ae1948bb8004897f6e21f0540a2b7e"
+    },
+    {
+      "sequence": 5,
+      "slots": 23,
+      "p4_terminals": 22,
+      "p5_terminals": 1,
+      "response_file_sha256": "61b9b4301391beb53e25c0957149a10d39706281a42767c46d8f8fa0821ff049"
+    },
+    {
+      "sequence": 6,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "fd7b9ff266ecf0f621d139a2f5ae15b12b04242a9a687bec3514a0288881fe81"
+    },
+    {
+      "sequence": 7,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "9b88ecdf9856a9c32a5887b2d3c509de463fa84cf76de17fc1e32688d4270343"
+    },
+    {
+      "sequence": 8,
+      "slots": 24,
+      "p4_terminals": 0,
+      "p5_terminals": 24,
+      "response_file_sha256": "3a22390d4f5349b28a8355fd8ef51b9a957dae344fbe0bec6884bde491df47dc"
+    },
+    {
+      "sequence": 9,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "7f8763027ea3f0224fd0204786ab546db13ec6bba4915aba676f90bf18f09d53"
+    },
+    {
+      "sequence": 10,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "4aa2f0f12747966b9978a676e49f83190fe81b00faf969ae68b8fbeefeabcb1b"
+    },
+    {
+      "sequence": 11,
+      "slots": 1,
+      "p4_terminals": 1,
+      "p5_terminals": 0,
+      "response_file_sha256": "2a534e16bbad559e159a48ddb2cc2f43526fa668ac00aa01ce6c2555286ce77e"
+    },
+    {
+      "sequence": 12,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "20004af91332f3aaf626d1a89444d0dbce2663f229a948e1d33bf7d965d1ebad"
+    },
+    {
+      "sequence": 13,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "75bae76684940199a46ddf3b7e5b1de51fd7e9df18cc14b430017be73bc1b4a2"
+    },
+    {
+      "sequence": 14,
+      "slots": 24,
+      "p4_terminals": 22,
+      "p5_terminals": 2,
+      "response_file_sha256": "e31668d3e9c31fe35a6d55ad1ce556caf880f36e8782e62c8416fb448181e959"
+    },
+    {
+      "sequence": 15,
+      "slots": 24,
+      "p4_terminals": 21,
+      "p5_terminals": 3,
+      "response_file_sha256": "afc8231e74c500fa739587d9d89ebb7ddc4e65c8da04c1e8fc906ab44bb53dc2"
+    },
+    {
+      "sequence": 16,
+      "slots": 24,
+      "p4_terminals": 23,
+      "p5_terminals": 1,
+      "response_file_sha256": "74029b6824175b5ed05b01e55c6b9560e0110dff53816ff4fa410f27f99fb263"
+    },
+    {
+      "sequence": 17,
+      "slots": 4,
+      "p4_terminals": 4,
+      "p5_terminals": 0,
+      "response_file_sha256": "9cab5afc61e015aaf6e7bab0e328c489b7fde6b3f18c86838aff89c8a047e496"
+    },
+    {
+      "sequence": 18,
+      "slots": 24,
+      "p4_terminals": 23,
+      "p5_terminals": 1,
+      "response_file_sha256": "c7d8c167b3d4f64d40eeef26ecf4dd13d8daa7d2734fa5fafc58a2bdd5846aee"
+    },
+    {
+      "sequence": 19,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "6b943a5f1d2ab32f4cf17d10cea1d51610ef8d03038cc62e68718252153eea62"
+    },
+    {
+      "sequence": 20,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "1f39516d4ac34e169f5d94dce597eb598b12486a820a2fb316c72cdc55c39003"
+    },
+    {
+      "sequence": 21,
+      "slots": 24,
+      "p4_terminals": 24,
+      "p5_terminals": 0,
+      "response_file_sha256": "78c7187d025a5d6b1b247aa4dbe4a02a517aa3e167ead4a56590fee53351eb3a"
+    },
+    {
+      "sequence": 22,
+      "slots": 24,
+      "p4_terminals": 23,
+      "p5_terminals": 1,
+      "response_file_sha256": "04fbcaefc02477419a31b131cf44f343f3f5bf31df26d3c6a8c7e5fab50bcf34"
+    },
+    {
+      "sequence": 23,
+      "slots": 3,
+      "p4_terminals": 3,
+      "p5_terminals": 0,
+      "response_file_sha256": "6235683a71d22deb7a4948c83ae247d0b959068adb62a2eef73cdd3b76915b57"
+    }
+  ]
+}

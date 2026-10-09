@@ -158,6 +158,9 @@ class RoleArtifact(BaseModel):
         "material-atomic-jsonl-v5",
         "material-atomic-selector-jsonl-v1",
         "material-atomic-selector-jsonl-v2",
+        "material-atomic-selector-jsonl-v3",
+        "material-atomic-selector-jsonl-v4",
+        "material-atomic-selector-jsonl-v5",
         "material-relations-jsonl-v1",
         "material-relations-selector-jsonl-v1",
     ]

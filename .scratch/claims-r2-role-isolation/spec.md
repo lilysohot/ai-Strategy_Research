@@ -155,7 +155,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 |---|---|---|
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
-| R2 items | `material-atomic-selector-jsonl-v2`（新计划显式选择）；selector v1 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；缺失的 absence-valued 字段由 controller 规范为 null/unknown 并记入 unknown_fields；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v8` |
+| R2 items | `material-atomic-selector-jsonl-v5`（新计划显式选择）；selector v1-v4 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
 | R2 relations | `material-relations-selector-jsonl-v1`（新计划显式选择）；`material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态 |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持
@@ -180,7 +180,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 ### 4.7 合成资产与指纹
 
 - Schema 清单：`contracts/contract-manifest.json`，SHA-256
-  `8cbe94827de6764feda994da4c33c9fcaf57e3ee77d3beec32da177c0cbce154`。
+  `9b2116de3e9b03da6c0e76c7e84073f870004a769e291ee545eb1dce63ee21a4`。
 - 合成资产清单：`tests/fixtures/corpus_structured_synthetic/asset-manifest.json`，SHA-256
   `6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073`；cases SHA-256
   `df2f1c9e4005a13702df798df0141b397c99a90e68ff9a8f1b4179692a23b179`。覆盖普通数字、纯观点、
@@ -199,9 +199,9 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 用户已于 2026-10-04—05 明确批准贵州茅台研报范围并授权有界真实提取调用；11 已执行 Claims
   preflight 和第 1 页 R2 语义抽取。该授权只覆盖开发试验，不转授生产 PG、受保护留出、正式发布或
   M_main 消费，也不能补足 10 的金标与质量分母。
-- 本票未修改主计划、report 或既有 freeze/guard/gold 文件，只新增 v1 契约和合成资产并更新本专项的
-  spec/issues。未来若改既有冻结资产，必须按其 manifest 的追加式 parent/revision 流程另立修订，禁止
-  原地覆盖历史。
+- 01 初始冻结没有修改主计划、report 或既有 freeze/guard/gold；后续 Issue 18 已在不修改既有金标和
+  阈值的前提下追加执行证据，并同步本专项 spec/report。历史 plan、response object 和签认文件仍按
+  manifest 保持不可变；修订均另立 P4—P7 目录或追加 Comments，不把旧失败原地改写成通过。
 
 ## 5. 全局执行约束与验收纪律
 
@@ -215,6 +215,8 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
+- Issue 18 另有独立授权的 50 次 selector model attempts（P3 23、P4 23、P5 4）；P6/P7 replay 为 0
+  模型调用。P4+P5 已用完该轮 27 次后续预算，relations 仍为 0 calls；任何 relation-only 实跑须新授权。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件

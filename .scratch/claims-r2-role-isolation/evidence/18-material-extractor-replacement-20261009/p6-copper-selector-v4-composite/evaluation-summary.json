@@ -1,0 +1,16 @@
+{
+  "schema_version": "copper-selector-v4-gold-evaluation-1",
+  "evaluated_on": "2026-10-09",
+  "gold_file": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "gold_scope": {"items": 11, "relations": 4, "whole_document_negative_gold": false},
+  "metrics": {"item_recall": 1.0, "critical_item_recall": 1.0, "semantic_target_accuracy": 0.5454545454545454, "attribution_target_accuracy": 1.0, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 0.0},
+  "interpretation": {
+    "protocol_complete": true,
+    "item_gate_passed": false,
+    "precision_measurable": false,
+    "reason": "selected target gold is not exhaustive negative gold; 458 non-target candidates cannot be labeled false positives automatically",
+    "atomic_adapter_gap": "two compound gold targets are represented by multiple valid atomic items but the historical scorer selects one item only",
+    "relations": "not generated"
+  }
+}

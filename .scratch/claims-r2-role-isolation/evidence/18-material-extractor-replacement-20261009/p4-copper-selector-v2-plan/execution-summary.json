@@ -1,0 +1,15 @@
+{
+  "schema_version": "copper-selector-v2-execution-1",
+  "executed_on": "2026-10-09",
+  "status": "outcome_unknown_items_incomplete_relations_blocked",
+  "batch_id": "batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
+  "attempts": {"material_items": 23, "material_relations": 0, "succeeded": 22, "outcome_unknown": 1},
+  "known_usage": {"prompt_tokens": 97447, "completion_tokens": 141843, "reasoning_tokens": 101722, "total_tokens": 239290},
+  "unknown_usage_attempts": 1,
+  "items": 414,
+  "slot_status": {"extracted": 364, "no_supported_item": 60, "failed": 63},
+  "failure_partition": {"transport_outcome_unknown_slots": 24, "terminal_invalid": 28, "semantic_validation": 11},
+  "items_payload_sha256": "8f0aea499739d8fd6a388fec5f97d552d1942099faa49da05be346a16a49fe27",
+  "database_sha256": "2c2a0805ee4ee640bf5aef08e7e296fe80c1d5da9cc0521cbfc9d9885d497250",
+  "publication_query_delivery_context_use": 0
+}

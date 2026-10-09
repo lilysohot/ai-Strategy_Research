@@ -35,8 +35,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
-    MATERIAL_SELECTOR_JSONL_V1,
-    MATERIAL_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSIONS,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
     MaterialItemsValidationVersion,
@@ -212,6 +211,10 @@ class MaterialItemsPlanOptions(BaseModel):
         exclude_if=lambda value: value is None,
     )
     material_type: MaterialType | None = None
+    candidate_slot_ids: tuple[str, ...] | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
 
 class BatchPlan(BaseModel):
@@ -286,8 +289,7 @@ class BatchPlan(BaseModel):
             },
             "material_items": {
                 MATERIAL_SLOT_JSONL_VERSION,
-                MATERIAL_SELECTOR_JSONL_V1,
-                MATERIAL_SELECTOR_JSONL_VERSION,
+                *MATERIAL_SELECTOR_JSONL_VERSIONS,
             },
             "material_relations": {
                 MATERIAL_RELATION_JSONL_VERSION,
@@ -625,6 +627,7 @@ def plan_batch(
     max_slots_per_batch: int | None = None,
     max_estimated_tokens_per_batch: int | None = None,
     material_type: MaterialType | None = None,
+    candidate_slot_ids: Sequence[str] | None = None,
     material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
     material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
 ) -> BatchPlan:
@@ -636,8 +639,7 @@ def plan_batch(
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_relation_task_limit")
     if material_items_protocol not in {
         MATERIAL_SLOT_JSONL_VERSION,
-        MATERIAL_SELECTOR_JSONL_V1,
-        MATERIAL_SELECTOR_JSONL_VERSION,
+        *MATERIAL_SELECTOR_JSONL_VERSIONS,
     }:
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_items_protocol")
     if material_relations_protocol not in {
@@ -646,8 +648,7 @@ def plan_batch(
     }:
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_relations_protocol")
     selector_protocol = material_items_protocol in {
-        MATERIAL_SELECTOR_JSONL_V1,
-        MATERIAL_SELECTOR_JSONL_VERSION,
+        *MATERIAL_SELECTOR_JSONL_VERSIONS,
     }
     try:
         item_options = (
@@ -674,17 +675,25 @@ def plan_batch(
                     else None
                 ),
                 material_type=material_type,
+                candidate_slot_ids=(
+                    tuple(candidate_slot_ids) if candidate_slot_ids is not None else None
+                ),
             )
             if max_items_per_packet is not None
             or max_slots_per_batch is not None
             or max_estimated_tokens_per_batch is not None
             or material_type is not None
+            or candidate_slot_ids is not None
             else None
         )
     except ValueError as exc:
         raise StructuredExecutionError(
             "CS_INPUT_INVALID", "invalid_material_items_options"
         ) from exc
+    if candidate_slot_ids is not None and (
+        not candidate_slot_ids or len(set(candidate_slot_ids)) != len(tuple(candidate_slot_ids))
+    ):
+        raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_candidate_slot_scope")
     selected = set(ALL_ROLES if enabled_roles is None else enabled_roles)
     ordered_roles: tuple[Role, ...] = tuple(role for role in ALL_ROLES if role in selected)
     if (
@@ -1984,6 +1993,7 @@ def _run_task(
                 max_slots_per_batch=options.max_slots_per_batch,
                 max_estimated_tokens_per_batch=options.max_estimated_tokens_per_batch,
                 material_type=options.material_type,
+                candidate_slot_ids=options.candidate_slot_ids,
                 dispatch=dispatch,
             )
         else:

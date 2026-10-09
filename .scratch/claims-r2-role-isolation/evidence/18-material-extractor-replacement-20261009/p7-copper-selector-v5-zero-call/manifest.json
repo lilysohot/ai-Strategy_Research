@@ -1,0 +1,47 @@
+{
+  "schema_version": "copper-selector-v5-zero-call-replay-1",
+  "replayed_on": "2026-10-09",
+  "status": "items_complete_target_recall_full_semantic_adjudication_open_relations_not_run",
+  "batch_id": "batch:8976e382e8e0dfb1bd8c780fddd02ddc71ddf9f610d7ea08a7911987e922eee9",
+  "plan_sha256": "sha256:8976e382e8e0dfb1bd8c780fddd02ddc71ddf9f610d7ea08a7911987e922eee9",
+  "plan_file_sha256": "5adec7b1068f811109b9fe1a45cf19fc56f9eaf5bc5f1043126c949ebfe2ce47",
+  "protocol": "material-atomic-selector-jsonl-v5",
+  "extractor": "material-semantics-32",
+  "items_validation": "material-items-validation-v11",
+  "source_response_set": "../p6-copper-selector-v4-composite/responses",
+  "model_calls": 0,
+  "replay_attempts": 23,
+  "run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+  "task_id": "task:65cd7a660c7e4c22d6534a27e0b5de236d60899b4b091101eb7595ab1a9f0d03",
+  "task_status": {"execution": "succeeded", "protocol": "valid", "quality": "accepted", "publication": "candidate"},
+  "artifact_sha256": "80e4c3a25150f10729185c97184ae849c2688d828e0544f3da0df1ab79a507a8",
+  "payload_sha256": "592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "database_sha256": "651e21e182a2610e8bb4cdbce6a1c4275df731dd1febc01f8c74386ea8190758",
+  "items": 469,
+  "slot_status": {"extracted": 420, "no_supported_item": 67, "failed": 0},
+  "packet_status": {"completed": 4},
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "metrics": {"item_recall": 1.0, "critical_item_recall": 1.0, "semantic_target_accuracy": 0.8181818181818182, "attribution_target_accuracy": 1.0, "critical_all_fields_accuracy": 0.0, "source_relation_recall": 0.0},
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "561386ec7419176551b2c7b389385d6b34719459e8fce7cf6527a00fd2011149",
+    "plugins/corpus/structured/ledger.py": "df6c0e00e26616d1af852c5db76cc9ff79f61587d4c459ae011800d7dbfbb842",
+    "plugins/corpus/structured/roles.py": "2f8fde56ccf959ffca7676bedf6a89e954f56765ca683873a529fd155f38d1c8",
+    "plugins/corpus/structured/cli.py": "7b240b9766f114d889c42b21d8a87cbb6bcba4363f0a5468d71c598442ecb90e",
+    "tests/test_corpus_material_semantics.py": "c2829476c4d0a925b550a080e1cea6642d3f8ab015a264943afd7b44922fb0ac",
+    "tests/test_corpus_structured_cli.py": "b8ca4d6a764bf667c64186a1e60518843bcd7bc6bddf46d0d46ce351748f6f49",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "59172cdbb59f313799455aedc9e4b3d82b4e2b0c05f987480ba951d6c9955184",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "9b2116de3e9b03da6c0e76c7e84073f870004a769e291ee545eb1dce63ee21a4"
+  },
+  "validation": {
+    "core_and_contract": "137 passed",
+    "publication_regression_with_core": "150 passed",
+    "full_corpus": "1379 passed, 17 skipped, 2 pre-existing environment failures",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings"
+  },
+  "known_environment_failures": [
+    "tests/test_corpus_golden.py: local golden corpus Recall@5 is 0/20",
+    "tests/test_corpus_preparation_readers.py: test expects reader-pdf-10 while environment is reader-pdf-11"
+  ],
+  "next_gate": "resolve one true semantic dispute and the atomic-group scoring adapter, then authorize a separate four-call relation-only trial"
+}
