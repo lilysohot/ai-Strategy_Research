@@ -1511,8 +1511,10 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
         artifact=items_execution.artifact,
         payload=items_execution.payload,
     )
+    relation_config = extraction_config("relation-only-model")
     plan = plan_batch(
         value,
+        role_configs={"material_relations": relation_config},
         max_attempts=1,
         role_max_attempts={"claims": 0, "material_items": 0, "material_relations": 1},
         enabled_roles=("material_items", "material_relations"),
@@ -1536,6 +1538,18 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
     relation_protocol = next(
         profile.protocol for profile in plan.profiles if profile.role == "material_relations"
     )
+    relation_content = "\n".join(
+        json.dumps(
+            {
+                "record_type": "relation_decision",
+                "candidate_pair_id": candidate.candidate_pair_id,
+                "status": "absent",
+                "evidence_quote": None,
+            },
+            ensure_ascii=False,
+        )
+        for candidate in candidates.candidates
+    )
     write_response(
         responses,
         ReplayResponse(
@@ -1543,18 +1557,7 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
             sequence=1,
             role="material_relations",
             protocol=relation_protocol,
-            content="\n".join(
-                json.dumps(
-                    {
-                        "record_type": "relation_decision",
-                        "candidate_pair_id": candidate.candidate_pair_id,
-                        "status": "absent",
-                        "evidence_quote": None,
-                    },
-                    ensure_ascii=False,
-                )
-                for candidate in candidates.candidates
-            ),
+            content=relation_content,
         ),
         "relations",
     )
@@ -1572,6 +1575,37 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
     assert imported_task.execution_status == "succeeded"
     assert relation_task.execution_status == "succeeded"
     assert checked.ledger.attempts[0].task_id == relation_task.task_id
+
+    sends: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sends.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "model": "synthetic-provider-model",
+                "choices": [
+                    {"message": {"content": relation_content}, "finish_reason": "stop"}
+                ],
+                "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+            },
+        )
+
+    live = execute_batch(
+        plan,
+        store_root=tmp_path / "live-store",
+        allow_model=True,
+        role_configs={"material_relations": relation_config},
+        transport_factories={
+            "material_relations": lambda: httpx.MockTransport(handler)
+        },
+    )
+    assert len(sends) == 1
+    assert len(live.ledger.attempts) == 1
+    assert all(
+        profile.configured == (profile.role == "material_relations")
+        for profile in plan.profiles
+    )
 
 
 def test_relation_task_uses_extracted_endpoints_from_partial_items_run(tmp_path: Path) -> None:

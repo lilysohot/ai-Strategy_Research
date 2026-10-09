@@ -345,6 +345,39 @@ def test_plan_default_budget_is_zero_and_does_not_infer_live_authority(tmp_path:
     assert json.loads(result.stdout)["model_requests"] == 0
 
 
+def test_plan_cli_reads_only_an_explicit_config_env_file(tmp_path: Path) -> None:
+    value = snapshot()
+    source = tmp_path / "snapshot.json"
+    target = tmp_path / "plan.json"
+    config_env = tmp_path / "structured.env"
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    source.write_text(value.model_dump_json(), encoding="utf-8")
+    config_env.write_text(
+        "STRUCTURED_EXTRACTION_PROVIDER=openai_compat\n"
+        "STRUCTURED_EXTRACTION_MODEL=synthetic-model\n"
+        "STRUCTURED_EXTRACTION_BASE_URL=https://synthetic.invalid/v1\n"
+        "STRUCTURED_EXTRACTION_API_KEY=synthetic-not-a-secret\n",
+        encoding="utf-8",
+    )
+
+    result = run_cli(
+        "plan",
+        "--snapshot",
+        str(source),
+        "--out",
+        str(target),
+        "--config-env-file",
+        str(config_env),
+        cwd=cwd,
+    )
+
+    assert result.returncode == 0, result.stderr
+    plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
+    assert all(profile.configured for profile in plan.profiles)
+    assert {profile.model for profile in plan.profiles} == {"synthetic-model"}
+
+
 def test_plan_cli_can_freeze_claims_only(tmp_path: Path) -> None:
     value = snapshot(dual_model_roles=True)
     source = tmp_path / "snapshot.json"

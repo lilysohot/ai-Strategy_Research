@@ -221,10 +221,10 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
-- Issue 18 另有独立授权的 54 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4）；
-  P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9 formal-ledger plan freeze 均为 0 模型
-  调用。P8 的 relation-only 授权已经用完，4/4 succeeded、0 retry；P9 只冻结了 relations≤4 的新计划，
-  尚未 execute，不从本次签认推导其调用已经发生或扩大为新的 items/Claims 预算。
+- Issue 18 另有独立授权的 58 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
+  P10 relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9 preflight 均为 0 模型
+  调用。P9 在配置检查时 0 attempt 阻断并由新 plan 取代；P10 恰好执行 4 次、4/4 succeeded、0 retry，
+  items/Claims attempts 仍为 0。该执行不转授 publication、query、delivery、context_use 或额外 live budget。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件

@@ -1,0 +1,100 @@
+{
+  "counts": {
+    "attribution_correct": 11,
+    "critical_all_fields_correct": 0,
+    "critical_items": 11,
+    "false_positive_relations": 2,
+    "gold_items": 11,
+    "gold_relations": 4,
+    "matched_critical_items": 11,
+    "matched_items": 11,
+    "matched_relations": 4,
+    "predicted_items": 469,
+    "predicted_relations": 217,
+    "semantic_correct": 9,
+    "true_positive_relations": 8,
+    "unmatched_predicted_items": 458,
+    "unscored_source_relations": 207
+  },
+  "gold_relation_matches": [
+    {
+      "accepted_relation_ids": [
+        "rel_fade871b59db5b99"
+      ],
+      "from_endpoint_items": [
+        "itm_f0f1413e119df47c"
+      ],
+      "gold_relation": "dec-answer-capex-relation",
+      "matched": true,
+      "to_endpoint_items": [
+        "itm_d12470eca334fd16",
+        "itm_ad212e8991b5916a"
+      ]
+    },
+    {
+      "accepted_relation_ids": [
+        "rel_94ca95d328d6733e",
+        "rel_31801a8755e9cf28",
+        "rel_95c6b8bd3b367c1c",
+        "rel_e40f893dfd78cac1"
+      ],
+      "from_endpoint_items": [
+        "itm_c3c12e04657cec79",
+        "itm_b89393d4936d3d24"
+      ],
+      "gold_relation": "dec-answer-yield-relation",
+      "matched": true,
+      "to_endpoint_items": [
+        "itm_26d677f6ff5a832e",
+        "itm_b7359094c20201f2"
+      ]
+    },
+    {
+      "accepted_relation_ids": [
+        "rel_741755d990ec7cba"
+      ],
+      "from_endpoint_items": [
+        "itm_c0721fd9c5c22faa"
+      ],
+      "gold_relation": "dec-quoted-yield-support",
+      "matched": true,
+      "to_endpoint_items": [
+        "itm_c3c12e04657cec79",
+        "itm_b89393d4936d3d24"
+      ]
+    },
+    {
+      "accepted_relation_ids": [
+        "rel_ae6220fe1114bbed",
+        "rel_574accdb6a122015"
+      ],
+      "from_endpoint_items": [
+        "itm_20315c03b3120632",
+        "itm_02531d4c6d673b87"
+      ],
+      "gold_relation": "dec-answer-mitsui-relation",
+      "matched": true,
+      "to_endpoint_items": [
+        "itm_2519affdac798906"
+      ]
+    }
+  ],
+  "gold_scope": {
+    "items": 11,
+    "relations": 4,
+    "whole_document_negative_gold": false
+  },
+  "metrics": {
+    "attribution_target_accuracy": 1.0,
+    "critical_all_fields_accuracy": 0.0,
+    "critical_item_recall": 1.0,
+    "item_recall": 1.0,
+    "semantic_target_accuracy": 0.8181818181818182,
+    "source_relation_recall": 1.0
+  },
+  "precision_reason": "the frozen copper gold contains selected targets, not exhaustive negatives; two unmatched selected-endpoint edges are semantically plausible answers and must not be counted as whole-document false positives",
+  "schema_version": "accepted-items-import-live-target-evaluation-1",
+  "scorer_version": "material-development-scorer-4",
+  "selected_endpoint_precision_diagnostic": 0.8,
+  "whole_document_precision_measurable": false
+}

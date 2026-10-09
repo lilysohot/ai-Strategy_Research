@@ -40,6 +40,10 @@ def _parser() -> argparse.ArgumentParser:
     plan = commands.add_parser("plan", help="freeze a zero-call execution plan")
     plan.add_argument("--snapshot", required=True)
     plan.add_argument("--out", required=True)
+    plan.add_argument(
+        "--config-env-file",
+        help="explicit dotenv file containing only STRUCTURED_EXTRACTION_* settings",
+    )
     plan.add_argument("--max-attempts", type=int, default=0)
     plan.add_argument(
         "--role-budget",
@@ -117,6 +121,10 @@ def _parser() -> argparse.ArgumentParser:
     execute.add_argument("--plan", required=True)
     execute.add_argument("--store-root")
     execute.add_argument("--allow-model", action="store_true")
+    execute.add_argument(
+        "--config-env-file",
+        help="explicit dotenv file containing only STRUCTURED_EXTRACTION_* settings",
+    )
 
     replay = commands.add_parser("replay", help="consume an explicit local response directory")
     replay.add_argument("--plan", required=True)
@@ -276,7 +284,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "plan":
             snapshot = _read_snapshot(args.snapshot)
-            config = load_extraction_config()
+            config = load_extraction_config(dotenv_path=args.config_env_file)
             role_budgets = _role_budgets(args.role_budget)
             imported_items = _read_accepted_material_items(
                 args.import_items_artifact, args.import_items_payload
@@ -321,7 +329,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 plan,
                 store_root=args.store_root,
                 allow_model=args.allow_model,
-                config=load_extraction_config(),
+                config=load_extraction_config(dotenv_path=args.config_env_file),
             )
         elif args.command == "replay":
             plan = _read_plan(args.plan)

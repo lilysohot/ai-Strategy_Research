@@ -761,6 +761,36 @@ claims=0、items=0、relations≤4，strict `complete_parent`，候选规则 v5�
 相关回归 231 passed；全量 corpus 文件测试为 1353 passed、48 skipped，仅保留 reader-pdf-10/11 的既有
 环境版本断言失败。Ruff 与 Pyright 均通过。
 
+## 16. 2026-10-10 执行增补：formal-ledger v5 relation live gate
+
+P9 第一次 execute 验证了 imported items task：P7 payload 在同一 formal ledger 内成为
+`succeeded / valid / accepted` 父工件，items attempt 为 0。但 P9 计划冻结时 CLI 没有显式 dotenv 参数，
+三个公开 profile 都是 unconfigured，relation 因而在 attempt 预留前以 `CS_CONFIG_MISSING` 阻断；
+reserved/actual attempts 均为 0。该计划保留为失败证据，没有在原地改写或重试。
+
+为关闭这一接口缺口，CLI 增加 `--config-env-file`，只读取调用方显式给出的
+`STRUCTURED_EXTRACTION_*` 文件；执行器改为仅验证实际会发模型请求的角色，不再要求未启用 Claims 或
+`method=imported` 的 Items 恢复凭据。回归同时覆盖“只有 relation profile 配置、其它 profile 未配置”的
+正式导入执行，证明角色隔离不是依赖全局配置偶然通过。
+
+新冻结 P10 batch `batch:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78`
+随后完成：items 仍为 0 attempt；relations 恰好 4 次，4/4 succeeded、0 retry、无 ledger finding。
+usage 为 prompt 91,087、completion 30,924、reasoning 22,616、total 122,011 tokens；provider 未返回
+可核成本，故成本记 unavailable 而非 0。
+
+v5 冻结 333 个候选，selector 判 present 217 条，四包分别为 14/31、79/84、3/91、121/127。Mitsui
+历史供货事实与未来合作预测两个答案原子都连接到真实 caller question，4 条冻结 target relation 均被
+召回，`material-development-scorer-4` 报告 target relation recall 4/4。P8 已签认的前三条直接复用，
+Mitsui 增量决定已形成 agent draft。
+
+该结果关闭的是 selected-target recall 和“重跑 items 才能跑 relations”的架构问题，不关闭整篇
+precision。217 条 present 中有 207 条落在选定 gold 端点范围外；即使 selected-endpoint 诊断为 0.8，
+其中两条未匹配边也具有合理的 answer 语义，不能按非穷尽 gold 自动判 FP。包间接受率约 45.2%、
+94.0%、3.3%、95.3% 仍显示明显校准差异。下一门是签认/修订 P10 增量裁定并建立可复用 relation
+precision 抽样，而不是再次重跑抽取。publication/query/delivery/context_use 保持 0。
+相关回归为 140 passed；全量 corpus 为 1354 passed、48 skipped，只剩 reader-pdf-10/11 的既有环境
+版本断言失败。Ruff、Pyright 与 diff check 通过。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

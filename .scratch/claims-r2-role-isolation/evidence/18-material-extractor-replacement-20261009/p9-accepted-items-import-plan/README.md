@@ -16,7 +16,11 @@ while relation endpoints may use a bounded same-speaker/same-role/same-packet at
 Correct predicted edges are deduplicated by gold relation. Re-evaluating the immutable P8
 payload therefore reports 3/4 relation recall, matching the signed adjudication.
 
-The plan was frozen with zero model requests. It authorizes at most four future relation
-attempts and zero claims/items attempts, but it has not been executed. Publication, query,
-delivery and context use remain zero.
+The plan was frozen with zero model requests. It authorized at most four relation attempts
+and zero claims/items attempts. Publication, query, delivery and context use remain zero.
 
+2026-10-10 preflight update: execution imported items successfully but blocked the relation
+task before reservation with `CS_CONFIG_MISSING`. The plan had frozen an unconfigured public
+profile because the CLI did not yet expose the config loader's explicit dotenv path. No attempt
+or budget was consumed. P9 is retained as failure evidence and must not be retried; P10 freezes
+the configured profile after adding `--config-env-file`.

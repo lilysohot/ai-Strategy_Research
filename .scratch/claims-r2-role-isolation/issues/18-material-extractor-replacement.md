@@ -1,10 +1,10 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: zero-call-v5-scorer-import-plan-frozen
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 在新签认下执行 4 次 relation-only 调用，4/4 succeeded、4 包 completed；scorer-4 将历史低估的 relation recall 从 1/4 校正为 3/4。候选 v5 为 333 条，P9 formal-ledger import plan 已冻结但未执行，发布与消费仍为 0
+Status: p10-relation-target-recall-passed-precision-signoff-open
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4，整篇 precision 与增量签认仍开放，发布与消费为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model attempts: 54（P3 23 + P4 23 + P5 4 + P8 relations 4；P6/P7 与 P8-v4 反事实为 0）
+Model attempts: 58（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
 Production database access: 0
 
 ## 目标
@@ -84,6 +84,9 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P8 candidate v4 zero-call counterfactual](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-v4-counterfactual.json)
 - [P8 candidate v5 zero-call pruning](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-v5-counterfactual.json)
 - [P9 accepted-items import plan](../evidence/18-material-extractor-replacement-20261009/p9-accepted-items-import-plan/manifest.json)
+- [P10 formal-ledger live execution](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/manifest.json)
+- [P10 target evaluation](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/evaluation-summary.json)
+- [P10 incremental adjudication draft](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/candidate-adjudications.agent-draft.json)
 
 ## Comments
 
@@ -173,3 +176,14 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - P9 相关执行/CLI/角色/关系/发布回归为 231 passed；全量 `tests/test_corpus*.py` 为 1353 passed、
   48 skipped，仅 1 个既有环境失败（测试期待 reader-pdf-10，当前环境为 reader-pdf-11）。Ruff 与
   Pyright 通过。
+- 2026-10-10：P9 首次 execute 成功导入 items，但因 CLI 未显式加载专用 dotenv，冻结 profile 为
+  unconfigured，relation 在预留前以 `CS_CONFIG_MISSING` 阻断；attempt/reserved 均为 0。CLI 新增
+  `--config-env-file`，执行器只校验实际会发请求的角色，合成回归证明未启用 Claims/导入 Items 不再
+  错误阻断 relation。P9 保留为失败证据，不原地改 plan。
+- P10 新 batch `batch:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78`
+  以同一签认 P7 items 进行 formal import，items attempts=0；v5 relations 恰好 4 次，4/4 succeeded、
+  0 retry，合计 122,011 tokens，成本元数据不可用且未记 0。333 候选中 present 217，包间为
+  14/31、79/84、3/91、121/127。Mitsui 两个答案原子均判 present，4 条 target relation 全部召回。
+  这只通过 selected-target recall，不建立整篇 precision；增量裁定仍是 agent draft，发布/消费继续为 0。
+- P10 相关回归 140 passed；全量 corpus 为 1354 passed、48 skipped，仅保留测试期待
+  reader-pdf-10/当前 reader-pdf-11 的既有环境失败。Ruff、Pyright 与 diff check 通过。

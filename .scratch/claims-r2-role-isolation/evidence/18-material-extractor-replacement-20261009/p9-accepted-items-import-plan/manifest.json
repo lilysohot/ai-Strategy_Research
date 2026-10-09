@@ -1,7 +1,7 @@
 {
   "schema_version": "accepted-items-import-plan-1",
   "created_on": "2026-10-09",
-  "status": "zero_call_plan_frozen_not_executed",
+  "status": "preflight_blocked_zero_attempts_superseded_by_p10",
   "plan_schema_version": "corpus-batch-plan-v2",
   "batch_id": "batch:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e",
   "plan_sha256": "sha256:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e",
@@ -33,6 +33,14 @@
     "matched_gold_relations": 3
   },
   "model_calls": 0,
+  "execution_preflight": {
+    "executed_on": "2026-10-10",
+    "items_import": "succeeded_valid_accepted",
+    "relation_status": "blocked_CS_CONFIG_MISSING",
+    "reserved_attempts": 0,
+    "actual_attempts": 0,
+    "reason": "the plan froze an unconfigured public extraction profile because the CLI lacked an explicit dotenv option"
+  },
   "publication_query_delivery_context_use": 0,
   "validation": {
     "structured_execution_and_cli": "46 passed",
@@ -50,5 +58,5 @@
     "plugins/corpus/structured/cli.py": "8e6067bed9debd0b0499916366a4911faefd511a3ebe2bf5104cb4dc463e488b",
     ".scratch/corpus-evidence-pipeline/run_material_development.py": "713c7ead9c8f14f2443351cabfd02d7dd6aa34766c2ab05aa5e74333a93edf17"
   },
-  "next_gate": "decide whether to execute the frozen relation-only P9 plan; no further items extraction or gold rebuild is required"
+  "next_gate": "superseded by the configured P10 plan; do not retry this profile-mismatched batch"
 }

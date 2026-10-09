@@ -2205,12 +2205,18 @@ def execute_batch(
 ) -> BatchCheck:
     """Execute live adapters only after explicit authority and frozen config matching."""
     plan.verify_identity()
-    roles: tuple[Role, ...] = ("claims", "material_items", "material_relations")
+    required_roles: set[Role] = {
+        task.role for task in plan.tasks if task.method == "model"
+    }
+    if plan.relations.enabled:
+        required_roles.add("material_relations")
+    roles: tuple[Role, ...] = tuple(role for role in ALL_ROLES if role in required_roles)
     selected: dict[Role, ExtractionConfig | None] = {
         role: (role_configs or {}).get(role, config) for role in roles
     }
-    config_error = not allow_model or any(
-        item is None or not item.configured for item in selected.values()
+    config_error = bool(roles) and (
+        not allow_model
+        or any(item is None or not item.configured for item in selected.values())
     )
     bindings: dict[Role, RoleBinding] = {}
     if not config_error:
@@ -2222,7 +2228,7 @@ def execute_batch(
             )
             for role in selected
         }
-    for profile in plan.profiles:
+    for profile in (profile for profile in plan.profiles if profile.role in required_roles):
         binding = bindings.get(profile.role)
         if (
             binding is None

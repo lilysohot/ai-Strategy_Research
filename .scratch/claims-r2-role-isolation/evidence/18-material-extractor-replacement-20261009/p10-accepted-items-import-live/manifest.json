@@ -1,0 +1,68 @@
+{
+  "schema_version": "accepted-items-import-live-manifest-1",
+  "executed_on": "2026-10-10",
+  "status": "relation_target_recall_passed_incremental_signoff_required_precision_open",
+  "batch_id": "batch:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78",
+  "plan_sha256": "sha256:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78",
+  "plan_file_sha256": "1475894d823fd2f763166060b7d90308598eee86798923bd88de24a72cf36bb0",
+  "plan_schema_version": "corpus-batch-plan-v2",
+  "items_task": {
+    "task_id": "task:3a0ff8c33e90b0b89bc9f4af99d2ce024179bc3c5f7f463b0a4627b42fd7923a",
+    "method": "imported",
+    "model_attempts": 0,
+    "artifact_id": "sha256:b28c274c2228b69b5d1ae90f4eefa1274bdab728df9371c31e370820568e576f",
+    "payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+    "status": "succeeded_valid_accepted"
+  },
+  "relations_task": {
+    "task_id": "task:6cdd358aeb31516ea022261e07e14de572e7658ac08de4d26766803a7a69f59a",
+    "model": "doubao-seed-2.0-mini",
+    "model_attempts": 4,
+    "attempt_status": {"succeeded": 4},
+    "retries": 0,
+    "artifact_id": "sha256:b30e6d1163e0f80972d0c3f27373231182f43eb76f0a0a76dd5deb0b4cba6df3",
+    "payload_sha256": "sha256:5336b091f19462ee999f148bedbfeba7e0df2a9b2bc17368d37ae2080c9cb137",
+    "status": "succeeded_valid_accepted"
+  },
+  "usage": {
+    "prompt_tokens": 91087,
+    "completion_tokens": 30924,
+    "reasoning_tokens": 22616,
+    "total_tokens": 122011,
+    "cost": null,
+    "cost_status": "unavailable_not_zero"
+  },
+  "relations": {
+    "candidate_rule_version": "material-relation-candidates-v5",
+    "candidates": 333,
+    "present": 217,
+    "packet_present_over_candidates": ["14/31", "79/84", "3/91", "121/127"],
+    "gold_relations": 4,
+    "matched_gold_relations": 4,
+    "target_recall": 1.0,
+    "whole_document_precision_measurable": false
+  },
+  "publication_query_delivery_context_use": 0,
+  "files_sha256": {
+    "execution-summary.json": "acab665377942c0a34edd60f66434d5d62f8f8c3235666a8f6c912b782dd982d",
+    "evaluation-summary.json": "cd9e8a7b80c961ccd0f78811a16b565690afb7e311ddae44d555322d37884cc2",
+    "relation-artifact.json": "48cfc717a34a9aed7840d0218ff3a5e04cf680e493d6460d77b65b85f5ce5c26",
+    "relation-payload.json": "02839a6c25a5769695bcb5c1a8907c8e3a8aaad0d957a56e2c797d4e1e3fcdf8",
+    "candidate-adjudications.agent-draft.json": "df39dd694b4051bbe37da9f135a7b43e1bf743171cbfba4f2aec060f0952c08e",
+    "live-store/index/structured.sqlite3": "4921db328b2ef1ca3be9d912fc8a99c0ed7dacd192bb96b1475b17ae86b6a2bc"
+  },
+  "validation": {
+    "relevant_tests": "140 passed",
+    "full_corpus": "1354 passed, 48 skipped, 1 known environment failure",
+    "known_environment_failure": "reader test expects reader-pdf-10 while environment is reader-pdf-11",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings"
+  },
+  "validated_implementation_sha256": {
+    "plugins/corpus/structured/ledger.py": "da1cbb7a6067da9747781d0b1e2b3f4a66ad5c93191ada718f1ba89f43cd7fca",
+    "plugins/corpus/structured/cli.py": "1d8448f22a01f72746dc2b05fda55283b31490d8d7b2bb923ed7d65b89ca0f0b",
+    "tests/test_corpus_structured_execution.py": "f70e7fa612857d3c02cb0d04049b53932125382754f218bd810bcfb094901d5d",
+    "tests/test_corpus_structured_cli.py": "cc8b074b22dbaa1536cf8b0a29816d9066cc698a06d7c25eab580dd9a0b9d96c"
+  },
+  "next_gate": "sign or revise the incremental P10 adjudication, then define a reusable relation precision sample before publication"
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "copper-relation-v5-adjudications-agent-draft-1",
+  "created_on": "2026-10-10",
+  "status": "agent_draft",
+  "gold_changed": false,
+  "thresholds_changed": false,
+  "reused_signoff": "P8 xyl-signed capex/yield/quoted-yield adjudication",
+  "scope": {
+    "gold_relations": 4,
+    "candidate_relations": 333,
+    "present_relations": 217,
+    "whole_document_negative_gold": false,
+    "precision_adjudicable": false
+  },
+  "metrics": {
+    "atomic_endpoint_relation_recall": 1.0,
+    "matched_gold_relations": 4,
+    "selector_recall_given_gold_candidate": 1.0
+  },
+  "relations": [
+    {
+      "gold_relation": "dec-answer-capex-relation",
+      "decision": "reuse_p8_accept_atomic_endpoint_equivalent",
+      "accepted_relation_ids": ["rel_fade871b59db5b99"]
+    },
+    {
+      "gold_relation": "dec-answer-yield-relation",
+      "decision": "reuse_p8_accept_with_additional_atomic_edges",
+      "accepted_relation_ids": [
+        "rel_94ca95d328d6733e",
+        "rel_31801a8755e9cf28",
+        "rel_95c6b8bd3b367c1c",
+        "rel_e40f893dfd78cac1"
+      ]
+    },
+    {
+      "gold_relation": "dec-quoted-yield-support",
+      "decision": "reuse_p8_accept_atomic_endpoint_equivalent",
+      "accepted_relation_ids": ["rel_741755d990ec7cba"]
+    },
+    {
+      "gold_relation": "dec-answer-mitsui-relation",
+      "decision": "accept_incremental_v5_fix",
+      "accepted_relation_ids": [
+        "rel_ae6220fe1114bbed",
+        "rel_574accdb6a122015"
+      ],
+      "from_items": [
+        "itm_20315c03b3120632",
+        "itm_02531d4c6d673b87"
+      ],
+      "to_items": ["itm_2519affdac798906"],
+      "reason": "v5 preserves the caller's actual Mitsui question before the trailing answer-turn question; both the historical-supply fact and future-cooperation forecast were selected present."
+    }
+  ],
+  "calibration_observation": {
+    "accepted_candidate_rate": 0.6516516516516516,
+    "packet_present_over_candidates": ["14/31", "79/84", "3/91", "121/127"],
+    "interpretation": "Target recall passes, but packet-level acceptance remains highly non-uniform. Selected-target gold cannot label the other present relations as false positives, so whole-document precision remains unknown."
+  },
+  "publication_query_delivery_context_use": 0,
+  "signoff": {
+    "required": true,
+    "name": null,
+    "signed_at": null,
+    "authorization": null
+  }
+}
