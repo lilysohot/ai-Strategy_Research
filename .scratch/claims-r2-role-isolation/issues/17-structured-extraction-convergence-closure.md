@@ -1,10 +1,10 @@
 # 17 · 结构化提取收敛闭环与最终去留门
 
-Status: p1r5-claims-metrics-pass-awaiting-delta-signoff
-Execution: 替换 Claims 实现已完成 19 个不可变响应的最终零调用重放；增量裁定预览 precision 50.91%、recall 100%，数值门通过但 36 条新增/变更裁定仍待 xyl 签认。copper、生产库与发布均未启动
+Status: stopped-p1-copper-failed-replace-extractor
+Execution: P1R5 Claims 的 110 条裁定已由 xyl 签认并过门；随后 copper 按冻结预算完成 12 次 items + 4 次 relations、0 重试。items 为 385/487 槽完整、102 partial，relations 有 5 个无效决定，两个角色均协议无效；P1 失败，P2 发布/消费未启动
 Type: task
 Parent: [11 · 获准后的真实模型有界试验与单文档消费](11-bounded-live-trial.md)
-Model calls: 36（P1 17；P1R1 9；P1R2 8；P1R3 路由增量 2；其余重放 0）
+Model calls: 52（Claims 链 36；copper items 12；copper relations 4；其余重放/裁定/诊断 0）
 Production database access: 0
 
 ## 目标
@@ -122,3 +122,21 @@ relations。items 不重复 company/industry/trade 三个已执行样本，不�
   [门禁预览](../evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/gate-preview.json)。
 - 最新全量 corpus 回归：1360 passed、17 skipped；仅两项既有环境基线失败（本地 golden 语料
   Recall 0/20；测试仍断言 reader-pdf-10 而当前环境为 reader-pdf-11）。
+- 2026-10-09：用户在 P1R5 v2 草案顶层写入 reviewer/adjudicator=`xyl` 并在聊天中明确签认；110 条
+  Claims 正式冻结，precision 56/110（50.91%）、recall 20/20（100%），Claims 门通过且仅开放
+  conditional copper，未开放发布。
+- copper 使用全部冻结 16 次调用，自动重试 0，16 次均有 response object 与 terminal attempt。
+  items 产出 398 条有效候选，但 487 槽仅 385 extracted、102 partial：60 条漏终态，35 条 item
+  校验失败。29 条 `quote_not_found` 中 26 条来自模型擅自给引文添加 `专家：/主持人：`，仅 3 条涉及
+  上游 HTML span/style；四个 packet 全部 partial。relations 的 180 个 pair 均有决定，但 5 个 present
+  决定因同类伪 speaker prefix 失败，两个 packet partial。两个角色均为
+  `succeeded / invalid / review_required / unpublished`。
+- formal ledger 的通用语义允许 partial items 的 extracted endpoint 子集派生 relations，这与本 P1
+  Markdown 中的严格早停条件不一致，导致已执行 4 次 relations；该偏差不追溯改账。候选名册不完整，
+  因此不启动 398 items / 108 relations 的全量人工裁定，不重制金标，不发布。失败证据：
+  [failure-analysis.json](../evidence/17-structured-extraction-convergence-closure-20261009/p1-plan-freeze/copper-items-relations/failure-analysis.json)。
+- 按本票预先冻结的失败分支，停止 prompt/lexicon 版本循环，保留上层架构并转入
+  [18 · material extractor 替换实现与严格依赖门](18-material-extractor-replacement.md)。
+- P0 strict dependency policy 落地后的全量 corpus 回归为 1361 passed、17 skipped、2 个既有环境
+  基线失败（golden 本地语料 Recall 0/20；reader-pdf-10 断言与当前 reader-pdf-11 不一致）；Ruff、
+  Pyright、历史 plan 身份复验均通过。

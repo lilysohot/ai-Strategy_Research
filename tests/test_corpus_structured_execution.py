@@ -298,8 +298,25 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
     assert {task.method for task in first.tasks} == {"deterministic", "model"}
     assert all(task.role != "material_relations" for task in first.tasks)
     assert first.relations.rule_version == "material-relation-candidates-v3"
+    assert first.relations.dependency_policy == "qualified_subset"
+    assert "dependency_policy" not in first.model_dump(mode="json")["relations"]
     assert first.routing.decisions
     assert all(decision.reason_codes for decision in first.routing.decisions)
+
+    strict = plan_batch(
+        value,
+        max_attempts=2,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 1},
+        max_relation_tasks=1,
+        max_relation_attempts=1,
+        relation_dependency_policy="complete_parent",
+    )
+    assert strict.relations.dependency_policy == "complete_parent"
+    assert strict.model_dump(mode="json")["relations"]["dependency_policy"] == (
+        "complete_parent"
+    )
+    assert strict.plan_sha256 != first.plan_sha256
+    strict.verify_identity()
 
     tampered_payload = first.model_dump(mode="json")
     tampered_payload["tasks"][0]["protocol"] = "claims-json-v2"
@@ -1352,6 +1369,52 @@ def test_relation_task_uses_extracted_endpoints_from_partial_items_run(tmp_path:
     assert relation_task.endpoint_item_ids == qualified_endpoints
     assert relation_task.execution_status == "succeeded"
     assert set(result.derivations.values()) == {"succeeded"}
+
+
+def test_complete_parent_relation_policy_blocks_partial_items_run(tmp_path: Path) -> None:
+    value = dialogue_snapshot()
+    plan = plan_batch(
+        value,
+        max_attempts=2,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 1},
+        max_relation_tasks=1,
+        max_relation_attempts=1,
+        relation_dependency_policy="complete_parent",
+    )
+    items_task = next(task for task in plan.tasks if task.role == "material_items")
+    content = dialogue_item_content(value) + "\n" + json.dumps(
+        {
+            "record_type": "item",
+            "candidate_slot_id": "slot_nonexistent",
+            "item_id": "discarded-malformed-item",
+            "text": "无法验证的额外输出",
+        },
+        ensure_ascii=False,
+    )
+    responses = tmp_path / "responses"
+    write_response(
+        responses,
+        ReplayResponse(
+            task_id=items_task.task_id,
+            sequence=1,
+            role="material_items",
+            protocol=items_task.protocol,
+            content=content,
+        ),
+        "items",
+    )
+
+    result = replay_batch(plan, responses=responses, store_root=tmp_path / "store")
+
+    items = next(task for task in result.ledger.tasks if task.role == "material_items")
+    assert items.execution_status == "succeeded"
+    assert items.protocol_status == "invalid"
+    assert items.quality_status == "review_required"
+    assert all(task.role != "material_relations" for task in result.ledger.tasks)
+    assert len(result.ledger.attempts) == 1
+    assert set(result.derivations.values()) == {
+        "dependency_not_ready:CS_DEPENDENCY_NOT_READY"
+    }
 
 
 def test_concurrent_relation_derivation_registers_one_logical_task(tmp_path: Path) -> None:

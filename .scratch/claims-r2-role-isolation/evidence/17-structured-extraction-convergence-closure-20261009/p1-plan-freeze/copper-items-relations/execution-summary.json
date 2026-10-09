@@ -1,0 +1,97 @@
+{
+  "schema_version": "structured-extraction-p1-copper-execution-1",
+  "executed_on": "2026-10-09",
+  "status": "failed_or_partial_stop_replace_extractor",
+  "claims_signed_gate_sha256": "8ede7d9a25d24314d3e9a6ac344e96f37a43f7fca412b052ebc3c67c35ac6f30",
+  "claims_freeze_manifest_sha256": "e27710a4924af7f846fec05a1e97fa9ac13ed98d20331109b5b93461c1856884",
+  "plan_manifest_sha256": "17c451193dee2a6957133b2bda97f35cc77469503a9369d08a358ffc707515ba",
+  "plan_file_sha256": "7f3409325f9521034c62cb277c7d07aa0940d5ff63777cbc2dc24115b9252fa3",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "batch_id": "batch:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+  "plan_sha256": "sha256:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+  "attempt_ceiling": 16,
+  "role_attempt_ceiling": {
+    "claims": 0,
+    "material_items": 12,
+    "material_relations": 4
+  },
+  "actual_attempts": 16,
+  "reserved_attempts": 16,
+  "attempts_by_role": {
+    "material_items": 12,
+    "material_relations": 4
+  },
+  "attempt_status_by_role": {
+    "material_items": {
+      "succeeded": 12
+    },
+    "material_relations": {
+      "succeeded": 4
+    }
+  },
+  "task_summary": {
+    "material_items": {
+      "count": 1,
+      "execution_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "invalid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "artifact_sha256": [
+        "sha256:43ae884b1caabba8a68a9844bcbf5162b8197366b5df5ae893eb3114228c9c5e"
+      ],
+      "error_codes": []
+    },
+    "material_relations": {
+      "count": 1,
+      "execution_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "invalid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "artifact_sha256": [
+        "sha256:60d2ab8d9bbcf0158c3149731ab866ad0b578d542097c8f13e12a770d8eb2281"
+      ],
+      "error_codes": []
+    }
+  },
+  "items_protocol_gate_passed": false,
+  "relations_protocol_gate_passed": false,
+  "plan_consistent": true,
+  "findings": [],
+  "derivations": {
+    "task:c8b91cf5ebeb6e830659611f5dfbd68610765ef567f4f2669e5b95a05689d5aa": "succeeded"
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.0-mini",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 16
+    }
+  ],
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "publication_authorized": false,
+  "next_action": "stop prompt and lexicon patching; preserve architecture and replace extractor implementation"
+}

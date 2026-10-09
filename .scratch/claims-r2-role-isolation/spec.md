@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
-- 日期：2026-10-02；状态复核：2026-10-08
-- 状态：01—08 已完成本地功能验收；09 的 react/tui 零模型回放及两项 P2 修复已通过，待复验签认；10 已签认阈值，r2 非表格真实开发金标和 267 条候选裁定均已由 xyl 正式冻结；11 的 v10 item-only 复验在 10 个完整响应后早停，v25/v26 已完成零调用修复，但第四样本、Claims 重新达门、relations、发布及 M_main 正向消费均未完成，任务整体未闭环。
+- 日期：2026-10-02；状态复核：2026-10-09
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。第四开发样本 copper 随后完成 12 次 items + 4 次 relations、0 重试，但 items 仅 385/487 槽完整，relations 有 5 个无效决定，两个角色均协议无效。P1 已按预设失败分支停止，P2 发布/M_main 消费未启动；18 正在替换 material extractor，严格 parent 依赖门已完成。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -48,12 +48,14 @@
 | 09 | [react/tui 接线及零模型端到端门](issues/09-react-replay.md) | 08 | W5 回放；R2-S3 |
 | 10 | [评分、标注范围与质量门冻结](issues/10-quality-gates.md) | 01 | W0/W6 准备；R2-S0/S3 |
 | 11 | [获准后的真实模型有界试验](issues/11-bounded-live-trial.md) | 09、10、独立授权 | W4/W5 真实消费；R2-S4/S5 部分 |
+| 12—16 | [r3 修复](issues/12-r3-quality-remediation.md)、[r3 复验](issues/13-bounded-r3-trial.md)、[r4 复验](issues/15-bounded-r4-trial.md)、[r5 重放](issues/16-r5-offline-replay-remediation.md) | 11 | 历史失败诊断与零调用校验器修复 |
+| 17 | [结构化提取收敛闭环与最终去留门](issues/17-structured-extraction-convergence-closure.md) | 11—16 | Claims 替换证明与 copper 最终 P1 去留门 |
+| 18 | [material extractor 替换实现与严格依赖门](issues/18-material-extractor-replacement.md) | 17 的 P1 失败终态 | 保留上层架构，替换 items/relations extractor |
 
-01—08 已交付并完成本地功能验收；09 已完成零模型产品回放及遗漏修复，但仍待复验签认；10 的
-评分实现、阈值、非表格真实开发金标及 267 条候选人工裁定均已签认并追加冻结。11 已执行多轮有界
-真实开发试验，当前仍只有未发布候选：Claims 绑定尚未重新达门，R2 第四开发样本和 relations 未完成，
-query 只有 `CS_NOT_PUBLISHED` 负向观察，delivery/context_use 未发生，M_main 调用为 0。W6 的独立
-留出/多模型比较、W7 的生产化仍须另行立项，不能通过候选抽取成功自动宣布完成。
+01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门，但 copper items/relations
+协议失败；所有结果仍为未发布候选，query/delivery/context_use 与 M_main 正向消费未启动。18 先做
+零调用实现替换，未完成前不再冻结真实预算。W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
+不能通过单角色或单样本候选抽取成功自动宣布完成。
 
 ## 4. 01 已冻结的实现决议
 
@@ -141,6 +143,10 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - Claims/items 可独立合格和发布；relations 只依赖固定且合格的 material item IDs。关系失败不撤销
   items；端点撤回后旧关系不能自动挂接新 item。未执行、无候选、未就绪、预算不足必须使用不同状态/
   原因，不能都写成“无关系”。
+- relation plan 必须冻结 `dependency_policy`：`qualified_subset` 允许从 partial items 中仅取已验证
+  extracted 端点，适合局部独立发布；`complete_parent` 要求 parent items 为
+  `succeeded / valid / accepted`，适合完整样本质量门。两种策略不得由运行器临时口头切换，且必须进入
+  plan hash。17 的 copper 证明 Markdown stop policy 不足以替代机读依赖策略；18 已补上该硬门。
 
 ### 4.5 首轮协议与关系候选范围
 
@@ -155,7 +161,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 矩阵，真实请求前返回 `CS_PROTOCOL_UNSUPPORTED`，不静默降级。关系候选只从同一 snapshot、同一或
 显式复合证据包中已合格 items 的原文明示连接词、问答配对、归属结构及已版本化确定性规则生成；不以
 共现生成因果，不跨文档，不使用 Claims fact_id 作端点。每父 items task 最多一个派生候选清单；批次
-计划分别冻结候选规则版本、最大关系 tasks 和最大 attempts，超出须新计划。
+计划分别冻结候选规则版本、dependency policy、最大关系 tasks 和最大 attempts，超出须新计划。
 
 ### 4.6 查询、分页与报告引用
 

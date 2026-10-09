@@ -1,0 +1,136 @@
+{
+  "schema_version": "structured-extraction-p1-copper-failure-analysis-1",
+  "analyzed_on": "2026-10-09",
+  "status": "p1_failed_stop_branch",
+  "execution": {
+    "model_calls": 16,
+    "material_items_calls": 12,
+    "material_relations_calls": 4,
+    "automatic_retries": 0,
+    "concurrency": 1,
+    "all_attempts_have_terminal_records": true,
+    "production_database_access": 0,
+    "publication_writes": 0
+  },
+  "claims_gate": {
+    "status": "passed_and_xyl_signed",
+    "candidate_precision": 0.509090909090909,
+    "candidate_precision_floor": 0.2803030303030303,
+    "target_recall": 1.0,
+    "target_recall_floor": 0.75
+  },
+  "material_items": {
+    "execution_status": "succeeded",
+    "protocol_status": "invalid",
+    "quality_status": "review_required",
+    "publication_status": "unpublished",
+    "candidate_slots": 487,
+    "extracted_slots": 385,
+    "partial_slots": 102,
+    "accepted_item_candidates": 398,
+    "reason_counts": {
+      "terminal_record_missing": 60,
+      "item_failed_validation": 35,
+      "item_validation:quote_not_found": 29,
+      "item_validation:schema": 5,
+      "item_validation:invalid_field": 1,
+      "missing_signal:claim": 56,
+      "missing_signal:question": 18,
+      "missing_signal:evidence": 9,
+      "missing_signal:forecast": 8,
+      "missing_signal:negation": 8,
+      "missing_signal:condition": 5,
+      "missing_signal:risk": 1
+    },
+    "packet_status": {
+      "completed": 0,
+      "partial": 4
+    },
+    "batch_observations": [
+      {
+        "packet": 1,
+        "batch_slots": [48, 48, 23],
+        "partial_slots": [2, 4, 0]
+      },
+      {
+        "packet": 2,
+        "batch_slots": [48, 48, 25],
+        "partial_slots": [30, 29, 0],
+        "terminal_record_missing": [29, 28, 0]
+      },
+      {
+        "packet": 3,
+        "batch_slots": [48, 48, 28],
+        "partial_slots": [3, 4, 0]
+      },
+      {
+        "packet": 4,
+        "batch_slots": [48, 48, 27],
+        "partial_slots": [28, 0, 2],
+        "quote_not_found": [26, 0, 0]
+      }
+    ],
+    "root_cause_attribution": {
+      "large_batch_terminal_adherence": {
+        "classification": "primary",
+        "evidence": "60 slots lacked a terminal record; 57 occurred in packet 2's two 48-slot batches, while that packet's final 25-slot batch was complete. All responses ended with finish_reason=stop, so this was not transport truncation."
+      },
+      "model_mutated_evidence_quote": {
+        "classification": "primary",
+        "evidence": "29 item attempts failed exact quote alignment; 26 become exact slot quotes only after removing an inferred speaker prefix such as 专家： or 主持人：."
+      },
+      "upstream_markup_cleaning": {
+        "classification": "real_but_local",
+        "evidence": "3 of the 29 quote-alignment failures involved span/style markup stripped by the model. This is not the dominant cause of the P1 failure."
+      },
+      "gold_or_threshold_defect": {
+        "classification": "not_observed",
+        "evidence": "No frozen gold or threshold was changed, and protocol failure occurred before semantic scoring could authorize a candidate roster."
+      }
+    }
+  },
+  "material_relations": {
+    "execution_status": "succeeded",
+    "protocol_status": "invalid",
+    "quality_status": "review_required",
+    "publication_status": "unpublished",
+    "candidate_pairs": 180,
+    "terminal_decisions": 180,
+    "invalid_decisions": 5,
+    "accepted_relation_candidates": 108,
+    "packet_status": {
+      "completed": 2,
+      "partial": 2
+    },
+    "root_cause": "All five invalid present decisions used evidence quotes with an inferred speaker prefix that does not occur in the exact packet text.",
+    "orchestration_observation": "The formal ledger currently permits relations over the extracted endpoint subset of a partial items run. That generic behavior conflicted with this P1 plan's stricter local stop policy, so four relation calls were made after the items task was already semantically partial. Future strict trials must freeze and enforce a complete-parent dependency policy before dispatch."
+  },
+  "adjudication": {
+    "claims": "completed_and_xyl_signed",
+    "material_items": "not_started_protocol_invalid",
+    "material_relations": "not_started_protocol_invalid",
+    "reason": "A partial/invalid candidate roster cannot be presented as a complete semantic precision/recall adjudication. The 398 items and 108 relations remain immutable diagnostic candidates, not publishable candidates.",
+    "new_gold_required": false,
+    "gold_changes": 0,
+    "threshold_changes": 0
+  },
+  "decision": {
+    "p1_quality_gate_passed": false,
+    "p2_publication_authorized": false,
+    "continue_prompt_or_lexicon_patching": false,
+    "preserve": [
+      "snapshot identity",
+      "role isolation",
+      "formal execution ledger",
+      "immutable response objects",
+      "publication and consumption gates",
+      "frozen gold and thresholds"
+    ],
+    "replace": "material item/relation extractor implementation and strict dependency policy"
+  },
+  "evidence": {
+    "execution_summary_sha256": "4d1c0863484d22901b894b0a370ff610bebc58d36d9320fb687c781723e4b6b8",
+    "items_payload_sha256": "62882c4c2f8b708880889eb101ab2d77852ba4e1d03aa1d6442f383decc19910",
+    "relations_payload_sha256": "11d622cc6632e6937a9ec366e35be264ce2c935bb082b5ecef51103b4a2fb6f9"
+  }
+}

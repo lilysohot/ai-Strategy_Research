@@ -1,0 +1,19 @@
+{
+  "schema_version": "claims-p1r5-candidate-adjudication-freeze-state-1",
+  "status": "frozen_quality_gate_passed_copper_authorized",
+  "formal_candidate_adjudications_frozen": true,
+  "human_gate_satisfied": true,
+  "quality_gate_passed": true,
+  "copper_execution_authorized": true,
+  "publication_authorized": false,
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signoff_evidence": [
+    "user_chat_2026-10-09_p1r5_candidate_adjudications_agent_draft_signed"
+  ],
+  "candidate_count": 110,
+  "unresolved_count": 0,
+  "model_calls_during_freeze": 0,
+  "production_database_access": 0,
+  "next_gate": "execute frozen copper material_items, then material_relations only if items are valid"
+}

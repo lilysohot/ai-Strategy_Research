@@ -1,0 +1,27 @@
+{
+  "schema_version": "claims-p1r5-candidate-adjudication-freeze-manifest-1",
+  "status": "frozen",
+  "created_on": "2026-10-09",
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signoff_evidence": [
+    "user_chat_2026-10-09_p1r5_candidate_adjudications_agent_draft_signed"
+  ],
+  "human_gate_satisfied": true,
+  "quality_gate_passed": true,
+  "copper_execution_authorized": true,
+  "publication_authorized": false,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.agent-draft.json": "c370c5c5b724199d821437113bd7a1e511d398cb6c084fe8842946ed499529c7",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/gate-preview.json": "093a241d8027f467a9b4f92f83ee109d516156e69c0cdc2b54c1188be885ac8a"
+  },
+  "outputs": {
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/freeze_signed_p1r5_claims.py": "cc961ea78ad270d14f915f5c0139080fcd84dd6e93ad7d4c50a7bd2cfc288893",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.signed.json": "d12f3d276dc17d2ff5bb5455b78bc4da75b43c191d498af59d2aea61238b38a8",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudication-freeze-state.json": "0028d690d58d1abe4270726145623ab2fbfcafe203af8c5e60890977c7f9185f",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/claims-gate-result.signed.json": "8ede7d9a25d24314d3e9a6ac344e96f37a43f7fca412b052ebc3c67c35ac6f30",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudication-summary.signed.md": "80bd92363bd4993155b70b7c19b929e3e8b17064fd4c2c6a14682539e60069a0"
+  },
+  "model_calls": 0,
+  "production_database_access": 0
+}

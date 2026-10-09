@@ -190,6 +190,10 @@ class RelationPlan(BaseModel):
     items_validation_version: MaterialItemsValidationVersion = MATERIAL_ITEMS_VALIDATION_VERSION
     max_tasks: int = Field(default=1, ge=0)
     max_attempts: int = Field(default=0, ge=0)
+    dependency_policy: Literal["qualified_subset", "complete_parent"] = Field(
+        default="qualified_subset",
+        exclude_if=lambda value: value == "qualified_subset",
+    )
 
 
 class MaterialItemsPlanOptions(BaseModel):
@@ -593,6 +597,9 @@ def plan_batch(
     relations_enabled: bool = True,
     max_relation_tasks: int = 1,
     max_relation_attempts: int | None = None,
+    relation_dependency_policy: Literal["qualified_subset", "complete_parent"] = (
+        "qualified_subset"
+    ),
     deadline_epoch: float | None = None,
     enabled_roles: Sequence[Role] | None = None,
     max_items_per_packet: int | None = None,
@@ -709,6 +716,7 @@ def plan_batch(
             enabled=relations_enabled and "material_relations" in selected,
             max_tasks=max_relation_tasks,
             max_attempts=relation_attempts,
+            dependency_policy=relation_dependency_policy,
         ),
     )
     identity = base.model_dump(mode="json", exclude={"batch_id", "plan_sha256"})
@@ -1523,6 +1531,13 @@ class ExecutionJournal:
             row["execution_status"] != "succeeded"
             or row["quality_status"] == "rejected"
             or not row["payload_object_sha256"]
+            or (
+                self.plan.relations.dependency_policy == "complete_parent"
+                and (
+                    row["protocol_status"] != "valid"
+                    or row["quality_status"] != "accepted"
+                )
+            )
         ):
             self.connection.execute(
                 "UPDATE derivations SET status='dependency_not_ready', "
