@@ -1,6 +1,6 @@
 {
   "budget_version": "r2-extraction-convergence-v10",
-  "status": "draft-unsigned",
+  "status": "executed-early-stopped-failed",
   "supersedes": "r2-lexicon-retirement-v9",
   "frozen_at": null,
   "reason": "用一次封顶的 item-only development round 验证 material-semantics-24 的通用切分、槽内引文消歧、语义/话语角色归一化和稳定失败原因。该轮用于结束抽取节点，不用于把变化归因于任一单独改动。",
@@ -127,12 +127,45 @@
     "a second development round"
   ],
   "holdout_calls_allowed": 0,
+  "execution": {
+    "started_at": "2026-10-09",
+    "stopped_at": "2026-10-09",
+    "outcome": "failed_stage1_completeness_gate",
+    "stop_condition": "any_failed_or_partial_packet",
+    "completed_model_calls": 10,
+    "interrupted_in_flight_requests": 1,
+    "planned_model_calls": 42,
+    "completed_samples": [
+      "dev-company-report",
+      "dev-industry-qa-report",
+      "dev-personal-trade-review"
+    ],
+    "not_completed_samples": [
+      "dev-expert-call-copper-foil"
+    ],
+    "relations": "not_measured",
+    "holdout_calls": 0,
+    "production_writes": 0,
+    "result_path": ".scratch/corpus-evidence-pipeline/v24-convergence/v10-early-stop-result.json"
+  },
   "sign_off": {
-    "status": "unsigned",
+    "status": "owner-authorized-review-exception",
     "required_roles": [
       "U (owner, named)",
       "independent reviewer"
     ],
-    "must_not_be_self_declared": true
+    "must_not_be_self_declared": true,
+    "owner": {
+      "name": "xyl",
+      "signed_at": "2026-10-09",
+      "authorization": "用户在获知独立复核仍缺失后再次明确回复：xyl，开始执行"
+    },
+    "independent_reviewer": null,
+    "exception": {
+      "scope": "仅限 extraction-convergence-v10 的一次 item-only development round；不构成独立复核已完成",
+      "authorized_by": "xyl",
+      "authorized_at": "2026-10-09",
+      "reason": "owner 在缺少独立复核人已被明确提示后仍明确要求开始执行"
+    }
   }
 }
