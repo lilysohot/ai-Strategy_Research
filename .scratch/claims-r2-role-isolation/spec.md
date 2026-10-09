@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
-- 日期：2026-10-02；状态复核：2026-10-09
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。第四开发样本 copper 随后完成 12 次 items + 4 次 relations、0 重试，但 items 仅 385/487 槽完整，relations 有 5 个无效决定，两个角色均协议无效。P1 已按预设失败分支停止，P2 发布/M_main 消费未启动；18 已完成严格 parent 依赖门和 items selector 零调用替换，relations selector 尚未完成，未开放新真实预算。
+- 日期：2026-10-02；状态复核：2026-10-10
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行：items 0 次、relations 4/4 succeeded，冻结 target relation recall 4/4。P11 已零调用冻结可复用的 32 条 present precision 样本与 12 条 absent 哨兵；agent draft 的分层 precision 点估计为 54.38%，并发现 4 条具体漏边，但尚未签认且区间不足以形成发布门。P2 发布/M_main 消费仍未启动。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -52,9 +52,10 @@
 | 17 | [结构化提取收敛闭环与最终去留门](issues/17-structured-extraction-convergence-closure.md) | 11—16 | Claims 替换证明与 copper 最终 P1 去留门 |
 | 18 | [material extractor 替换实现与严格依赖门](issues/18-material-extractor-replacement.md) | 17 的 P1 失败终态 | 保留上层架构，替换 items/relations extractor |
 
-01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门，但 copper items/relations
-协议失败；所有结果仍为未发布候选，query/delivery/context_use 与 M_main 正向消费未启动。18 的
-items selector 已完成零调用冻结，relations selector 与旧响应差分门未完成前不再冻结真实预算。W6 的
+01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
+parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过签认质量门。所有结果仍为未发布
+候选，query/delivery/context_use 与 M_main 正向消费未启动。P11 的可复用抽样已定位通用 selector
+误接/漏接模式；零调用规则和回归修复完成前不再冻结真实预算。W6 的
 独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 

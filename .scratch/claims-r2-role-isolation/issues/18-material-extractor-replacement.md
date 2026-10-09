@@ -1,7 +1,7 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: p10-relation-target-recall-passed-precision-signoff-open
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4，整篇 precision 与增量签认仍开放，发布与消费为 0
+Status: p11-relation-precision-agent-draft-signoff-and-zero-call-remediation-open
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4。P11 零调用冻结 32 条 present precision 样本与 12 条 absent 哨兵；agent draft 的分层 precision 点估计为 54.38%，哨兵发现 4 条具体漏边，但尚未签认且区间不足以构成质量门。发布与消费为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
 Model attempts: 58（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
@@ -87,6 +87,9 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P10 formal-ledger live execution](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/manifest.json)
 - [P10 target evaluation](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/evaluation-summary.json)
 - [P10 incremental adjudication draft](../evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/candidate-adjudications.agent-draft.json)
+- [P11 reusable precision sample](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/sample-plan.json)
+- [P11 adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/candidate-adjudications.agent-draft.json)
+- [P11 agent-draft evaluation](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/evaluation-summary.agent-draft.json)
 
 ## Comments
 
@@ -187,3 +190,10 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   这只通过 selected-target recall，不建立整篇 precision；增量裁定仍是 agent draft，发布/消费继续为 0。
 - P10 相关回归 140 passed；全量 corpus 为 1354 passed、48 skipped，仅保留测试期待
   reader-pdf-10/当前 reader-pdf-11 的既有环境失败。Ruff、Pyright 与 diff check 通过。
+- 2026-10-10：P11 对 P10 不可变 333 候选/217 present 做零调用分层抽样：19 条非 answers
+  present 全量纳入，三包 answers 以稳定 hash 固定 3/5/5 条，另固定 12 条 absent recall 哨兵。
+  32 条 precision 草案中 27 条成立；因稀有类型过采样，不能用 84.38% 原始比例，按纳入概率分层
+  展开为 118/217、54.38%，诊断区间 24.78%—83.98%，不足以形成发布门。12 条哨兵中 4 条明确
+  应翻为 present，但该哨兵不是概率 recall 样本。失败集中在回答主题漂移/部分回答误接，以及直接
+  列举、纠正问题前提、原子数值答案和自我修正漏判。裁定仍为 agent draft，下一步先补零调用规则与
+  回归，不追加 live budget；publication/query/delivery/context_use 仍为 0。

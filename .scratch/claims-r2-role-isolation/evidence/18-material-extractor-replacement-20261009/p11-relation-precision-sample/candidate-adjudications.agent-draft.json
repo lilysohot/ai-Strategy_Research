@@ -1,0 +1,285 @@
+{
+  "adjudication_rule": {
+    "absent": "accept when no typed relation is explicit; absent rows are recall sentinels only",
+    "endpoint_rule": "judge the atomic endpoint texts, not topical co-occurrence alone",
+    "present": "accept only when the typed relation is explicit in the frozen pair window"
+  },
+  "human_signoff_required": true,
+  "precision_decisions": [
+    {
+      "agent_decision": "reject_false_positive",
+      "candidate_pair_id": "pair_c8a2e609d0bf69ac",
+      "human_decision": null,
+      "reason": "The pricing-ambition atom does not answer which foil thickness will be expanded."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_656be2399f54e209",
+      "human_decision": null,
+      "reason": "The reply explicitly confirms that carrier copper foil is different."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_75e57fa1a91444d1",
+      "human_decision": null,
+      "reason": "The reply directly begins the requested explanation of carrier foil."
+    },
+    {
+      "agent_decision": "reject_false_positive",
+      "candidate_pair_id": "pair_5956d4ff0f239792",
+      "human_decision": null,
+      "reason": "The atom compares technical requirements but does not answer the 3 versus 4.5 hundred-million value question."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_948115917d484326",
+      "human_decision": null,
+      "reason": "The reply explicitly says expansion will target ultra-thin foil."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_accf55e14399b995",
+      "human_decision": null,
+      "reason": "The because-clause explicitly supports the whole-solution and external-procurement statement."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_867bb55010d3409f",
+      "human_decision": null,
+      "reason": "The because-clause explicitly justifies using lower-cost, lower-precision control for thicker foil."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_0fe2596533c9062c",
+      "human_decision": null,
+      "reason": "Existing supply and thinner new demand explicitly support not expanding 6–8 micrometre output."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_7ebcec23ea283bfd",
+      "human_decision": null,
+      "reason": "The stated process difficulty explicitly supports the higher equipment price."
+    },
+    {
+      "agent_decision": "reject_false_positive",
+      "candidate_pair_id": "pair_1a9d24af1bf7107f",
+      "human_decision": null,
+      "reason": "Replacement frequency alone does not answer the requested next-year revenue scale."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_e30e95a14e98a666",
+      "human_decision": null,
+      "reason": "The affirmative reply explicitly answers the caller's confirmation question."
+    },
+    {
+      "agent_decision": "reject_false_positive",
+      "candidate_pair_id": "pair_99ad745a830b3057",
+      "human_decision": null,
+      "reason": "Accompanying the customer during testing explains payment uncertainty but does not itself answer delivery timing."
+    },
+    {
+      "agent_decision": "reject_false_positive",
+      "candidate_pair_id": "pair_dc4f0640ec6b4b11",
+      "human_decision": null,
+      "reason": "Low Japanese expansion intent supports low external sourcing probability but is not itself an answer to make-versus-buy."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_b017f3137cc2221f",
+      "human_decision": null,
+      "reason": "The signed volume and annual capacity directly evidence the requested industry recovery."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_cd8df0324de3133f",
+      "human_decision": null,
+      "reason": "The HVLP customer condition explicitly supports why full acceptance payment may not arrive."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_1d89be203265a027",
+      "human_decision": null,
+      "reason": "In-house development explicitly supports the claim that Mitsui will not buy the machine externally."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_05ccd9efcd925fec",
+      "human_decision": null,
+      "reason": "Low expansion intent explicitly supports low external procurement probability."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_98a33a34ca0f5047",
+      "human_decision": null,
+      "reason": "The availability of larger sizes explicitly supports a higher possible price."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_ef91d55f1e0d8c3b",
+      "human_decision": null,
+      "reason": "Customer uncertainty explicitly supports uniform pricing."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_e0122f78caaf1a43",
+      "human_decision": null,
+      "reason": "The quoted 60/40 process-equipment split explicitly supports the process-driven conclusion."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_681736d2478dab48",
+      "human_decision": null,
+      "reason": "The but-clause explicitly counters the lack-of-validation qualification."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_17b50dc36d3bd69e",
+      "human_decision": null,
+      "reason": "The if-clause is an explicit condition for gaining the advantage."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_3e579daa7d92e267",
+      "human_decision": null,
+      "reason": "Successful validation is an explicit condition for market capture."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_b95e823f9f6d51d9",
+      "human_decision": null,
+      "reason": "The immediately following reply explicitly answers what the stated standard means in capacity terms."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_82e38a002735f044",
+      "human_decision": null,
+      "reason": "The reply directly gives lithium-foil equipment capex per ten thousand tonnes."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_741c3dce009fa24b",
+      "human_decision": null,
+      "reason": "The range elaboration directly answers the capex question."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_a93079679e270f02",
+      "human_decision": null,
+      "reason": "The but-clause explicitly contrasts the good-margin price with the current-market price."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_20e579667066bca6",
+      "human_decision": null,
+      "reason": "The but-clause explicitly contrasts similar front-end equipment with the additional back-end machine."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_f88743227fb48b8b",
+      "human_decision": null,
+      "reason": "Delayed acceptance payments explicitly qualify the forecast of sharply higher annual revenue."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_421fb2d822b8dc15",
+      "human_decision": null,
+      "reason": "The but-clause explicitly qualifies leading equipment precision with process-driven yield."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_907f2c22d4ddec7a",
+      "human_decision": null,
+      "reason": "Different equipment requirements explicitly support splitting capex by foil type."
+    },
+    {
+      "agent_decision": "accept_present",
+      "candidate_pair_id": "pair_71d4c1fe205c3723",
+      "human_decision": null,
+      "reason": "The need to produce electrolyte explicitly supports the need for front-end dissolution equipment."
+    }
+  ],
+  "recall_sentinel_decisions": [
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_af4a1d9299403d27",
+      "human_decision": null,
+      "reason": "Capacity and product mix are compatible facts; no challenge is expressed."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_4adac65ac8099417",
+      "human_decision": null,
+      "reason": "Being above 6–8 and below sub-3.5 requirements is compatible, not a challenge."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_0cc897a5c1f55daf",
+      "human_decision": null,
+      "reason": "Delivery completion and receipt of all acceptance payments are distinct claims."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_1f74637d78897251",
+      "human_decision": null,
+      "reason": "A good historical period and a better future period are compatible."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_535c3958c2f89841",
+      "human_decision": null,
+      "reason": "Domestic procurement preference does not answer whether the named foreign suppliers stopped HTE."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_d7b6eabfa488078d",
+      "human_decision": null,
+      "reason": "The target atom is an underspecified fragment, so the criticism cannot bind to it as an atomic answer."
+    },
+    {
+      "agent_decision": "overturn_false_negative",
+      "candidate_pair_id": "pair_4f11ea4b329aa628",
+      "human_decision": null,
+      "reason": "The reply explicitly lists global suppliers in direct answer to the global-landscape question."
+    },
+    {
+      "agent_decision": "overturn_false_negative",
+      "candidate_pair_id": "pair_c47aa4dc2cd74bc3",
+      "human_decision": null,
+      "reason": "The speaker explicitly challenges their own preceding machining-versus-control assumption."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_f483497489fe4b6e",
+      "human_decision": null,
+      "reason": "The foreign firms' non-expansion does not support the separate claim about Chinese labour and assembly."
+    },
+    {
+      "agent_decision": "overturn_false_negative",
+      "candidate_pair_id": "pair_603d2b449da00930",
+      "human_decision": null,
+      "reason": "The reply directly corrects the question's false premise about an anode-plated cathode roller."
+    },
+    {
+      "agent_decision": "overturn_false_negative",
+      "candidate_pair_id": "pair_1b5d94210a126af9",
+      "human_decision": null,
+      "reason": "The amount explicitly supplies the value component of the question about the remaining capex."
+    },
+    {
+      "agent_decision": "accept_absent",
+      "candidate_pair_id": "pair_c513a3e6c490fa9a",
+      "human_decision": null,
+      "reason": "Low processing fees explain acceleration, not the composition of one machine set."
+    }
+  ],
+  "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "schema_version": "relation-adjudication-draft-1",
+  "signoff": {
+    "authorization": null,
+    "name": null,
+    "required": true,
+    "signed_at": null
+  },
+  "status": "agent_draft_unsigned"
+}

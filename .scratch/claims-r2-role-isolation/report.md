@@ -791,6 +791,28 @@ precision 抽样，而不是再次重跑抽取。publication/query/delivery/cont
 相关回归为 140 passed；全量 corpus 为 1354 passed、48 skipped，只剩 reader-pdf-10/11 的既有环境
 版本断言失败。Ruff、Pyright 与 diff check 通过。
 
+## 17. 2026-10-10 执行增补：可复用 relation precision 抽样
+
+P11 未增加模型调用，而是从 P10 冻结的 333 个候选与 217 个 `present` 决定建立可重复分母。precision
+只对预测为 present 的边抽样：19 条非 `answers` 稀有关系全部纳入，三个含 answers 的 packet 分别按
+`sha256(sample_version | candidate_pair_id)` 固定抽取 3、5、5 条；另按 packet/type 固定 12 条
+`absent` 决定作为漏召回哨兵。每条样本同时冻结候选 pair、原子端点字段和 controller 生成的逐字
+`pair_window`，因此在 snapshot、items artifact、candidate rule 和 selector 决定不变时可跨修复轮复用，
+不需要每次重造全量人工金标。
+
+agent draft 在 32 条 precision 样本中接受 27 条。由于抽样有意过采稀有类型，27/32=84.38% 不能作为
+整体 precision；按各层纳入概率展开后，点估计为 118/217=54.38%，诊断标准误 15.10 个百分点，normal
+95% 区间为 24.78%—83.98%。该区间过宽，且裁定尚未签认，所以不能作为发布门。它的价值是以 32 条
+而非 217 条人工判断确定主要误差集中在高频 `answers` 层：同一回答 turn 的后续主题被错接到旧问题，
+以及只解释付款/提供邻近信息的 atom 被当成完整回答。
+
+12 条 `absent` 哨兵中有 4 条明确漏边：直接列举全球厂商、对问题错误前提的纠正、回答剩余资本开支
+的数值 atom，以及说话人对自己假设的显式修正。这 4 条是可复现的 false-negative 实例，但哨兵抽样不
+是 recall 概率样本，不能写成 4/12 recall error rate。下一步不重跑模型：先为上述三类误差添加候选/
+selector 回归并收紧判断口径；修复后先在不可变 P10 工件上做零调用差分。只有仍需作发布判断时，才
+顺序扩展高方差 answers 层的人审样本。P11 全程 model attempts=0，publication/query/delivery/
+context_use=0，签名字段保持空值。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

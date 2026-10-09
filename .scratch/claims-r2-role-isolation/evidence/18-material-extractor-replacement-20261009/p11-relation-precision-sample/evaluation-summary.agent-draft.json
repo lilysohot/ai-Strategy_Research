@@ -1,0 +1,139 @@
+{
+  "observed_failure_modes": [
+    {
+      "code": "answer_topic_drift",
+      "example_pair_ids": [
+        "pair_c8a2e609d0bf69ac",
+        "pair_dc4f0640ec6b4b11"
+      ],
+      "implication": "turn-level adjacency is insufficient; the answer atom must resolve the question predicate"
+    },
+    {
+      "code": "partial_answer_bound_as_full_answer",
+      "example_pair_ids": [
+        "pair_5956d4ff0f239792",
+        "pair_1a9d24af1bf7107f",
+        "pair_99ad745a830b3057"
+      ],
+      "implication": "the selector needs an explicit complete-or-directly-responsive answer test"
+    },
+    {
+      "code": "selector_false_negative_on_direct_reply_or_self_correction",
+      "example_pair_ids": [
+        "pair_4f11ea4b329aa628",
+        "pair_c47aa4dc2cd74bc3",
+        "pair_603d2b449da00930",
+        "pair_1b5d94210a126af9"
+      ],
+      "implication": "prompt examples should cover list answers, premise correction, and atomic value answers"
+    }
+  ],
+  "precision": {
+    "estimated_standard_error": 0.15102276136565845,
+    "interpretation": "Directional estimate only: the interval is too wide for a release gate, and all labels remain an unsigned agent draft.",
+    "normal_95_interval_diagnostic": [
+      0.2477741895666274,
+      0.8397834141200085
+    ],
+    "present_population": 217,
+    "sample_correct": 27,
+    "sample_size": 32,
+    "strata": [
+      {
+        "accepted": 3,
+        "allowed_type": "answers",
+        "expanded_correct": 45.0,
+        "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+        "population": 75,
+        "sample": 5,
+        "sample_acceptance": 0.6
+      },
+      {
+        "accepted": 4,
+        "allowed_type": "supports",
+        "expanded_correct": 4.0,
+        "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+        "population": 4,
+        "sample": 4,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 2,
+        "allowed_type": "answers",
+        "expanded_correct": 46.0,
+        "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+        "population": 115,
+        "sample": 5,
+        "sample_acceptance": 0.4
+      },
+      {
+        "accepted": 6,
+        "allowed_type": "supports",
+        "expanded_correct": 6.0,
+        "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+        "population": 6,
+        "sample": 6,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 1,
+        "allowed_type": "challenges",
+        "expanded_correct": 1.0,
+        "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+        "population": 1,
+        "sample": 1,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 2,
+        "allowed_type": "conditions",
+        "expanded_correct": 2.0,
+        "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+        "population": 2,
+        "sample": 2,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 3,
+        "allowed_type": "answers",
+        "expanded_correct": 8.0,
+        "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+        "population": 8,
+        "sample": 3,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 4,
+        "allowed_type": "challenges",
+        "expanded_correct": 4.0,
+        "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+        "population": 4,
+        "sample": 4,
+        "sample_acceptance": 1.0
+      },
+      {
+        "accepted": 2,
+        "allowed_type": "supports",
+        "expanded_correct": 2.0,
+        "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+        "population": 2,
+        "sample": 2,
+        "sample_acceptance": 1.0
+      }
+    ],
+    "stratified_estimated_correct": 118.0,
+    "stratified_precision_estimate": 0.543778801843318,
+    "unweighted_sample_acceptance": 0.84375
+  },
+  "publication_query_delivery_context_use": 0,
+  "recall_sentinels": {
+    "false_negatives": 4,
+    "interpretation": "The sentinel sample is not probability-weighted for recall. Any overturned row is a concrete missed edge, but the count must not be reported as document recall.",
+    "rate_is_not_recall": true,
+    "sample_size": 12
+  },
+  "recommended_next_step": "Do not spend another live call. First add zero-call candidate/selector rules and regression fixtures for these failure modes, then replay the immutable P10 decisions where possible.",
+  "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "schema_version": "relation-precision-agent-estimate-1",
+  "status": "agent_draft_not_a_quality_gate"
+}

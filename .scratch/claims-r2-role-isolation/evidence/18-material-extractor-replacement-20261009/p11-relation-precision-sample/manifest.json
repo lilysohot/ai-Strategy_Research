@@ -1,0 +1,47 @@
+{
+  "schema_version": "relation-precision-sample-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "agent_draft_signoff_required_zero_call_remediation_next",
+  "source_batch_id": "batch:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78",
+  "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "counts": {
+    "candidate_universe": 333,
+    "present_universe": 217,
+    "absent_universe": 116,
+    "precision_sample": 32,
+    "recall_sentinel_sample": 12,
+    "agent_accepted_present": 27,
+    "agent_rejected_present": 5,
+    "agent_overturned_absent": 4
+  },
+  "agent_draft_metrics": {
+    "unweighted_sample_acceptance": 0.84375,
+    "stratified_precision_estimate": 0.543778801843318,
+    "estimated_standard_error": 0.15102276136565845,
+    "normal_95_interval_diagnostic": [
+      0.2477741895666274,
+      0.8397834141200085
+    ],
+    "quality_gate": "not_evaluable_until_signoff_and_precision_expansion_if_needed"
+  },
+  "model_calls": 0,
+  "gold_changed": false,
+  "thresholds_changed": false,
+  "publication_query_delivery_context_use": 0,
+  "determinism": {
+    "runs_compared": 2,
+    "result": "identical",
+    "sample_plan_sha256": "sha256:235555e5db5a5142933f1d91e7bc754df53ebe4bb099907b46901862eae5ba0f",
+    "adjudications_sha256": "sha256:9285abaa1c266dd34396906e45703b29b00d52f7f96fcbff199e59c1f29954b7",
+    "evaluation_sha256": "sha256:4c0e8ceda6384f37da74c3084c86ca9db8351758dca932798fb7c6a64dd86322"
+  },
+  "files_sha256": {
+    "README.md": "sha256:48fdc1ca5fb62c5ea91b1e8f2f0958c3d3256cac679eead9fd9223beb931c27f",
+    "build_sample.py": "sha256:2dcaae8e7674dd9d0684aff48154e5c06b5e5e6fa76d39244f82420e9b1d4614",
+    "adjudicate_sample.py": "sha256:9c2de98806630cd783884c0b96fffe534b645a08d25fae32ecf3804a9977023b",
+    "sample-plan.json": "sha256:235555e5db5a5142933f1d91e7bc754df53ebe4bb099907b46901862eae5ba0f",
+    "candidate-adjudications.agent-draft.json": "sha256:9285abaa1c266dd34396906e45703b29b00d52f7f96fcbff199e59c1f29954b7",
+    "evaluation-summary.agent-draft.json": "sha256:4c0e8ceda6384f37da74c3084c86ca9db8351758dca932798fb7c6a64dd86322"
+  },
+  "next_gate": "human review/signoff of P11 draft, then zero-call answer binding and selector false-negative remediation; no new live budget"
+}
