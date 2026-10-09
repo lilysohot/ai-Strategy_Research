@@ -439,6 +439,7 @@ def main() -> int:
             if evidence_run.document.source_rev != sample["source_rev"]:
                 raise ValueError(f"runtime source_rev mismatch: {sample['sample_id']}")
             captured: list[str | None] = []
+            relation_stage_enabled = budget.get("relation_mode", "atomic_decisions") != "deferred"
             material_run = extract_material_understanding(
                 evidence_run,
                 llm=capture_responses(llm, captured),
@@ -449,7 +450,11 @@ def main() -> int:
                 slot_protocol=budget.get("response_format") == MATERIAL_SLOT_JSONL_VERSION,
                 max_items_per_packet=budget.get("max_items_per_packet", 30),
                 max_slots_per_batch=budget.get("max_slots_per_batch", 8),
-                extract_relations=budget.get("relation_mode", "atomic_decisions") != "deferred",
+                extract_relations=relation_stage_enabled,
+                # An intentionally deferred stage is not an omission: leaving
+                # relations_required at its default records every packet as
+                # incomplete and hides whatever the item stage actually did.
+                relations_required=relation_stage_enabled,
                 candidate_slot_ids=tuple(
                     budget.get("candidate_slot_ids_by_sample", {}).get(sample["sample_id"], ())
                 )

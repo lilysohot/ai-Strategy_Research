@@ -79,10 +79,32 @@ export type ConnectionState =
   | 'error'
   | 'closed'
 
+/**
+ * Outcome of a ``resumeForSession`` attempt.
+ *
+ * ``attached`` re-subscribed the remembered run; ``finished`` means the run is
+ * over, so the persisted turn is the only copy of its answer and the caller may
+ * need to read the transcript again; ``none`` means there was nothing to resume
+ * (no remembered run, a run already watched, or a lost race with a switch).
+ */
+export interface ResumeResult {
+  outcome: 'attached' | 'finished' | 'none'
+  /** The remembered run this outcome is about, when the research had one. */
+  runId: string | null
+}
+
 export const useRunStreamStore = defineStore('runStream', () => {
   const authStore = useAuthStore()
 
   const runId = ref<string | null>(null)
+  /**
+   * The research the watched run belongs to.
+   *
+   * A run is submitted from one research, so this is what lets a session switch
+   * keep the stream of the research being re-opened and drop only a stream that
+   * belongs to a research the user has left.
+   */
+  const sessionId = ref<string | null>(null)
   const status = ref<RunStatus | 'idle'>('idle')
   const timeline = ref<TimelineEntry[]>([])
   /** Last trajectory line consumed — the reconnect cursor. */
@@ -169,34 +191,50 @@ export const useRunStreamStore = defineStore('runStream', () => {
   }
 
   /**
-   * Re-subscribe the remembered run of a restored session while it is active
-   * (F21). A run parked on the approval gate keeps its dialog only through the
-   * live stream, which a refresh destroys; the server-side status (and the
+   * Re-subscribe the remembered run of a research while it is active.
+   *
+   * Called both on restore after a refresh and on every session switch: a
+   * research whose run is still going must re-attach its stream, otherwise the
+   * thread shows only the persisted turns — and while a run is in flight there
+   * is no assistant turn yet, so the conversation looks empty until the run
+   * ends. A run parked on the approval gate also keeps its dialog only through
+   * the live stream, which a switch destroys; the server-side status (and the
    * durable pending control record `loadPendingApproval` reads) decide whether
-   * a resume is warranted — a finished run is left to the history alone.
+   * a resume is warranted.
    *
    * ``isCurrent`` guards the async window: if the user has meanwhile switched
-   * to another session (or something else started watching a run), the reply
+   * to another research (or something else started watching a run), the reply
    * must not attach the stream to a view that is no longer on screen.
+   *
+   * Returns what it found so the caller can decide whether the transcript has to
+   * be read again — a run that ended while it was off screen has no stream to
+   * re-attach, and its persisted answer may have landed after the turns were
+   * last fetched.
    */
-  async function resumeForSession(sessionId: string, isCurrent: () => boolean): Promise<void> {
-    if (runId.value || !isCurrent()) return
+  async function resumeForSession(
+    researchId: string,
+    isCurrent: () => boolean,
+  ): Promise<ResumeResult> {
+    if (runId.value || !isCurrent()) return { outcome: 'none', runId: null }
     let remembered: string | null = null
     try {
-      remembered = localStorage.getItem(lastRunKey(sessionId))
+      remembered = localStorage.getItem(lastRunKey(researchId))
     } catch {
       remembered = null
     }
-    if (!remembered) return
+    if (!remembered) return { outcome: 'none', runId: null }
     try {
       const summary = await runsApi.get(remembered)
-      if (!isCurrent() || runId.value) return
-      if (summary.status !== 'queued' && summary.status !== 'running') return
-      watch(remembered)
+      if (!isCurrent() || runId.value) return { outcome: 'none', runId: null }
+      if (summary.status !== 'queued' && summary.status !== 'running') {
+        return { outcome: 'finished', runId: remembered }
+      }
+      watch(remembered, undefined, researchId)
+      return { outcome: 'attached', runId: remembered }
     } catch {
       // Best-effort resume: an unreadable summary must never break restoring
       // the conversation itself.
-      return
+      return { outcome: 'none', runId: null }
     }
   }
 
@@ -412,10 +450,15 @@ export const useRunStreamStore = defineStore('runStream', () => {
    * Calling this while another stream is open replaces it — one run watched at a
    * time is the product shape, and leaking the old stream would keep a dead
    * fetch alive for the whole session.
+   *
+   * ``ownerSessionId`` records which research the run belongs to, so a later
+   * session switch can tell "this stream is the one being re-opened" from "the
+   * user left this research behind" (see ``sessionId``).
    */
-  function watch(id: string, after?: number): void {
+  function watch(id: string, after?: number, ownerSessionId: string | null = null): void {
     close()
     runId.value = id
+    sessionId.value = ownerSessionId
     // F11: a fresh generation invalidates any async reply still in flight for
     // the run we were watching a moment ago.
     generation += 1
@@ -490,7 +533,8 @@ export const useRunStreamStore = defineStore('runStream', () => {
 
   /** Re-open the current stream from the saved cursor (manual "retry"). */
   function retry(): void {
-    if (runId.value) watch(runId.value, cursor.value)
+    // The re-opened stream still belongs to the research it came from.
+    if (runId.value) watch(runId.value, cursor.value, sessionId.value)
   }
 
   /**
@@ -589,6 +633,8 @@ export const useRunStreamStore = defineStore('runStream', () => {
   function reset(): void {
     close()
     runId.value = null
+    // Nothing is watched any more, so no research owns the (dead) stream.
+    sessionId.value = null
     // F11: as with a run switch, invalidate anything in flight (logout, drawer
     // close) so a late summary cannot repopulate a cleared view.
     generation += 1
@@ -616,6 +662,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
 
   return {
     runId,
+    sessionId,
     status,
     timeline,
     steps,

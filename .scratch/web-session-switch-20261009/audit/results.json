@@ -1,0 +1,33 @@
+{
+  "mode": "actual source; reactive/HTTP doubles; no browser",
+  "records": [
+    {
+      "test": "switch_drops_only_a_foreign_stream",
+      "outcome": "passed"
+    },
+    {
+      "test": "resume_attaches_and_binds_the_stream_to_its_research",
+      "outcome": "passed"
+    },
+    {
+      "test": "a_reconnect_keeps_the_research_binding",
+      "outcome": "passed"
+    },
+    {
+      "test": "reset_releases_the_binding_with_the_stream",
+      "outcome": "passed"
+    },
+    {
+      "test": "a_run_that_ended_off_screen_reports_finished",
+      "outcome": "passed"
+    },
+    {
+      "test": "a_switch_before_the_reply_lands_stays_unattached",
+      "outcome": "passed"
+    },
+    {
+      "test": "negative_control_unbound_stream_looks_foreign_to_its_own_research",
+      "outcome": "passed"
+    }
+  ]
+}

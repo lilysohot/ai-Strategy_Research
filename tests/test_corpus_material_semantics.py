@@ -11,6 +11,7 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import EvidencePacket, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    CandidateSlot,
     MaterialEvidence,
     MaterialItem,
     _align_quote,
@@ -19,6 +20,7 @@ from plugins.corpus.material_semantics import (
     _relation_candidate_pairs,
     _relations_from_decisions,
     _strict_relation_candidate_pairs,
+    _validate_atomic_coverage,
     build_candidate_slot_batches,
     build_candidate_slots,
     build_material_structure,
@@ -1979,4 +1981,105 @@ def test_candidate_slot_scope_runs_only_frozen_obligations(tmp_path: Path) -> No
     assert len(result.understanding.coverage.slot_ledger) == 1
     assert (
         result.understanding.coverage.slot_ledger[0].candidate_slot_id == selected.candidate_slot_id
+    )
+
+
+def test_soft_signal_labels_do_not_fail_a_slot_the_model_declines() -> None:
+    """``claim``/``summary`` are catch-all labels, not hard obligations.
+
+    A slot whose only labels are soft must not be forced to ``partial`` when the
+    model judges the range non-propositional (a byline, an email) and labels the
+    item ``other``; otherwise emitting an honest ``other`` item scores worse than
+    declaring ``no_supported_item``, which inverts the incentive.  Hard labels
+    keep failing the slot.
+    """
+    evidence = (
+        MaterialEvidence(
+            source_rev="0" * 16,
+            packet_id="packet",
+            locator="paragraph:1",
+            quote="证券分析师：欧阳予",
+            start=0,
+            end=9,
+        ),
+    )
+
+    def _slot(signals: tuple[str, ...], text: str) -> CandidateSlot:
+        return CandidateSlot(
+            candidate_slot_id="slot_test",
+            packet_id="packet",
+            locator="paragraph:1",
+            start=0,
+            end=len(text),
+            signal_types=signals,
+            attribution_capability="document_only",
+            text=text,
+        )
+
+    def _item(statement_role: str, speech_role: str = "statement") -> MaterialItem:
+        return MaterialItem(
+            item_id="item",
+            text="证券分析师：欧阳予",
+            semantic_type="unknown",
+            statement_role=statement_role,
+            speech_role=speech_role,
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="unknown",
+            evidence=evidence,
+        )
+
+    def _parsed() -> dict[str, list[object]]:
+        return {"items": [{"item_id": "item", "candidate_slot_id": "slot_test"}], "coverage": []}
+
+    ledger, incomplete = _validate_atomic_coverage(
+        _parsed(), [_item("other")], {"item": "item"}, (_slot(("claim",), "证券分析师：欧阳予"),)
+    )
+    assert [entry.status for entry in ledger] == ["extracted"]
+    assert "missing_signal:claim" in ledger[0].reason_codes
+    assert incomplete is False
+
+    ledger_hard, incomplete_hard = _validate_atomic_coverage(
+        _parsed(), [_item("claim")], {"item": "item"}, (_slot(("question",), "谁的产能？"),)
+    )
+    assert [entry.status for entry in ledger_hard] == ["partial"]
+    assert incomplete_hard is True
+
+
+def test_deferred_relation_stage_is_not_recorded_as_an_omission(tmp_path: Path) -> None:
+    """A stage that was intentionally not requested must not hide the item result.
+
+    ``run_material_development`` derives ``extract_relations`` from the budget's
+    ``relation_mode``; if it leaves ``relations_required`` at its default, every
+    packet is recorded as carrying an unprocessed relation stage and the item
+    stage's real outcome is masked by a blanket ``partial``.
+    """
+    evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
+
+    def _run(relations_required: bool):
+        return extract_material_understanding(
+            evidence_run,
+            llm=lambda _prompt: "",
+            max_calls=2,
+            staged_jsonl=True,
+            slot_protocol=True,
+            extract_relations=False,
+            relations_required=relations_required,
+        )
+
+    deferred = _run(relations_required=False)
+    assert not any(
+        "relations_not_processed" in area for area in deferred.understanding.coverage.omitted_areas
+    )
+    assert all(
+        packet.diagnostics is None
+        or packet.diagnostics.get("stages", {}).get("relations", {}).get("status")
+        == "not_requested_for_items_role"
+        for packet in deferred.packet_runs
+    )
+
+    required = _run(relations_required=True)
+    assert any(
+        "relations_not_processed" in area for area in required.understanding.coverage.omitted_areas
     )

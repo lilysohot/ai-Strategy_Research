@@ -1,0 +1,125 @@
+{
+  "budget_version": "r2-lexicon-retirement-v9",
+  "status": "draft-unsigned",
+  "supersedes": "r2-lexicon-retirement-v8",
+  "frozen_at": null,
+  "reason": "v8 的退出判据与执行臂不一致（判据含关系类 floor，却把关系阶段 defer），且归档运行器把「有意 defer 的关系阶段」记为遗漏，使每个包必然 partial、item 阶段真实结果被遮蔽。v9 修正判据口径与运行器映射；实验范围、样本、清退范围与调用计划不变。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "micro_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "non_regression_policy": {
+    "path": ".scratch/corpus-evidence-pipeline/r2-non-regression-policy-v1.json",
+    "sha256": "TO_BE_COMPUTED_AT_FREEZE"
+  },
+  "probe": {
+    "path": ".scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py",
+    "sha256": "TO_BE_COMPUTED_AT_FREEZE",
+    "runs_before_any_model_call": true
+  },
+  "extractor_version_at_plan_time": "material-semantics-23",
+  "retirement_scope": {
+    "variant": "retire_sample_specific_only",
+    "constants": [
+      "_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS"
+    ],
+    "note": "只清退样本级过拟合的 4 条 pattern；_DOMAIN_BOUNDARY_CUES（行业通用词）与 _GENERAL_BOUNDARY_CUES / 否定词表不动。"
+  },
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "deterministic_stress_samples": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "model_calls_allowed": 0,
+      "role": "非 dev、非金标材料；仅用于域词命中率对比与确定性计划校验，不产生分数"
+    }
+  ],
+  "model": "glm-5.3-flash",
+  "model_binding": "must equal configured_model() at plan time",
+  "round_ids": [
+    "lexicon-retirement-v9"
+  ],
+  "development_rounds_max": 1,
+  "calls_per_round_max": 43,
+  "calls_total_max": 43,
+  "calls_per_document_per_round_max": 33,
+  "planned_calls_upper_bound": 43,
+  "planned_calls_upper_bound_status": "verify_with_plan_only_before_any_call",
+  "seconds_per_call": 60,
+  "packet_chars": 3000,
+  "max_slots_per_batch": 16,
+  "max_items_per_packet": 64,
+  "max_output_tokens": 8192,
+  "response_format": "material-atomic-jsonl-v5",
+  "stages": [
+    "atomic_item_terminal"
+  ],
+  "relation_mode": "deferred",
+  "candidate_slot_ids_by_sample": {},
+  "candidate_slot_scope_note": "刻意不 pin 槽位子集：清退会改变槽位 ID，pin 旧集合必然触发 'frozen candidate slot scope drifted'。使用全量义务集。",
+  "stage1_gate": {
+    "rule": "A metric class is in the gate only if the executed stages produced its data. A deferred stage's metric class is reported as not_measured and is excluded from pass/fail; it must not be reported as a violation.",
+    "in_scope": {
+      "item": [
+        "item_recall",
+        "critical_item_recall",
+        "semantic_target_accuracy",
+        "attribution_target_accuracy",
+        "critical_all_fields_accuracy",
+        "unsupported_statement_precision"
+      ]
+    },
+    "excluded": {
+      "relation": "not_measured: relation_mode=deferred produced no relation predictions"
+    },
+    "completeness": {
+      "max_failed_or_partial_packets": "applies",
+      "require_complete": "applies",
+      "relations_not_processed_counts_as_incomplete": false
+    }
+  },
+  "stage0_deterministic_gate": {
+    "cost": "0 model calls",
+    "command": "uv run python .scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py --no-write",
+    "pass": "loss of strict obligation coverage for any frozen gold item == 0",
+    "fail_action": "stop; no model call is made"
+  },
+  "harness_fixes_required_before_this_round": [
+    "run_material_development.py must pass relations_required = (relation_mode != 'deferred'); otherwise every packet carries relations_not_processed and the item stage is masked by a blanket partial (guarded by tests/test_corpus_material_semantics.py::test_deferred_relation_stage_is_not_recorded_as_an_omission)",
+    "run_material_development.py imports plugins.corpus.claims_detail (claims_v2 no longer exists)"
+  ],
+  "known_gap": "本预算仍为单臂（无同代码 control）；因此它只能判断「是否低于冻结 floor」，不能把任何变化归因于清退。归因需另立含 control 臂的预算。",
+  "stop_conditions": [
+    "stage0_deterministic_gate_fail",
+    "source_or_gold_identity_drift",
+    "holdout_access_or_leakage",
+    "planned_calls_differ_from_frozen_upper_bound_at_plan_only",
+    "any_in_scope_metric_floor_decrease",
+    "failed_or_partial_packet_increase_per_sample",
+    "round_or_call_budget_exhausted"
+  ],
+  "out_of_scope": [
+    "generalisation / overfit falsification on unseen material (holdout_calls_allowed = 0)",
+    "attribution to the retirement (no same-code control arm in this budget)",
+    "retiring the domain/general boundary cues or the negation vocabulary",
+    "slot-protocol, relation, or contract changes beyond the soft/hard signal split",
+    "gold, micro-gold, threshold, or scorer changes",
+    "corpus ingestion or database writes",
+    "second or later development round",
+    "promoting any result to R2 acceptance"
+  ],
+  "holdout_calls_allowed": 0,
+  "sign_off": {
+    "status": "unsigned",
+    "required_roles": [
+      "U (owner, named)",
+      "independent reviewer"
+    ],
+    "must_not_be_self_declared": true
+  }
+}

@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import type { Turn } from '@/types'
-import { dedupeAssistantTurns, sameRunId } from './chat.ts'
+import { dedupeAssistantTurns, hasRunAnswer, sameRunId, streamBelongsToSession } from './chat.ts'
 
 function turn(partial: Partial<Turn> & Pick<Turn, 'seq' | 'role'>): Turn {
   return {
@@ -40,4 +40,30 @@ test('dedupeAssistantTurns keeps distinct assistant runs and legacy turns', () =
   ]
 
   assert.deepEqual(dedupeAssistantTurns(turns), turns)
+})
+
+test('streamBelongsToSession keeps the stream of the research being re-opened', () => {
+  assert.equal(streamBelongsToSession('research-a', 'research-a'), true)
+  // Switching research, and having no stream at all, both drop it.
+  assert.equal(streamBelongsToSession('research-a', 'research-b'), false)
+  assert.equal(streamBelongsToSession(null, 'research-a'), false)
+  assert.equal(streamBelongsToSession('research-a', null), false)
+})
+
+test('hasRunAnswer finds the persisted answer of the run, not just any reply', () => {
+  const turns = [
+    turn({ seq: 1, role: 'user', content: '值得买吗', run_id: 'run-1' }),
+    turn({ seq: 2, role: 'assistant', content: '早先的答复', run_id: 'run-0' }),
+  ]
+
+  // The run's own turn is still missing: the thread has to be read again.
+  assert.equal(hasRunAnswer(turns, 'run-1'), false)
+  assert.equal(hasRunAnswer(turns, null), false)
+  assert.equal(
+    hasRunAnswer(
+      [...turns, turn({ seq: 3, role: 'assistant', content: '本次答复', run_id: 'run1' })],
+      'run-1',
+    ),
+    true,
+  )
 })

@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-22"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-23"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
@@ -379,13 +379,20 @@ class _RunPayloadShape:
     written under that version is still read (see ``docs/run-artifacts.md``).
     """
 
+    # ``relation_candidate_set_id`` was introduced at ``material-semantics-22``;
+    # versions older than that never wrote it, so an absent (``None``) value must
+    # be removed before hashing.  A version that *did* write the key keeps it even
+    # when ``None``, so the flag has to be per version rather than global.
+    drops_absent_relation_identity: bool = True
     dropped_top_level: tuple[str, ...] = ()
     dropped_slot_fields: tuple[str, ...] = ()
     dropped_coverage_fields: tuple[str, ...] = ()
 
 
 # Shapes we still have to read back.  ``material-semantics-8``/``9`` wrote slots
-# without ``explicit_role``/``segment_id``; ``10``-``13`` match the current shape.
+# without ``explicit_role``/``segment_id``; ``10``-``13`` and ``22`` match the
+# current field shape, but ``22`` is the first version to always write
+# ``relation_candidate_set_id`` (so its absent value must be preserved).
 _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-8": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
     "material-semantics-9": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
@@ -393,6 +400,7 @@ _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-11": _RunPayloadShape(),
     "material-semantics-12": _RunPayloadShape(),
     "material-semantics-13": _RunPayloadShape(),
+    "material-semantics-22": _RunPayloadShape(drops_absent_relation_identity=False),
 }
 # Anything not listed (and not the current version) predates structured slots.
 _PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
@@ -417,13 +425,13 @@ class MaterialRun(BaseModel):
         payload = self.model_dump(mode="json")
         claimed = payload.pop("run_id")
         if self.extractor_version != MATERIAL_EXTRACTOR_VERSION:
-            # ``relation_candidate_set_id`` post-dates the versions below, so an
-            # absent value has to disappear the same way it was never written.
-            if self.relation_candidate_set_id is None:
-                payload.pop("relation_candidate_set_id", None)
             shape = _HISTORICAL_RUN_PAYLOAD_SHAPES.get(
                 self.extractor_version, _PRE_STRUCTURE_RUN_SHAPE
             )
+            # An absent value has to disappear exactly when the writing version
+            # never persisted the key.
+            if shape.drops_absent_relation_identity and self.relation_candidate_set_id is None:
+                payload.pop("relation_candidate_set_id", None)
             for field in shape.dropped_top_level:
                 payload.pop(field, None)
             for field in shape.dropped_coverage_fields:
@@ -647,6 +655,19 @@ _SEMANTIC_SIGNAL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"工艺|设备|良品率|评级|目标价|增量|疲软|周期|景气|逻辑|向上"
         ),
     ),
+)
+
+# Signals that are a *hard* obligation on a slot.  ``claim`` (the catch-all label
+# ``_slot_signals`` falls back to) and ``summary`` are deliberately absent: they
+# say "this range is worth reading", not "this exact proposition must appear".
+# A slot whose only labels are soft must not be forced to ``partial`` just
+# because the model judged the content to be non-propositional (a byline, an
+# email, a list marker) and labelled it ``statement_role=other`` -- otherwise
+# emitting an honest ``other`` item is punished while ``no_supported_item`` is
+# accepted, which inverts the incentive.  Soft labels are still reported as
+# ``missing_signal:*`` reasons, so the information is preserved.
+_HARD_SIGNAL_TYPES = frozenset(
+    {"question", "forecast", "condition", "risk", "negation", "behavior", "evidence"}
 )
 
 # Top-level alternatives are order-sensitive: ``finditer`` takes the leftmost
@@ -2172,21 +2193,18 @@ def _validate_atomic_coverage(
             for signal in slot.signal_types
             if not any(_item_satisfies_signal(item, signal) for item in slot_items)
         )
-        if declared_status == "extracted" and (not slot_item_refs or missing_signals):
+        required_signals = _HARD_SIGNAL_TYPES & set(slot.signal_types)
+        # Only a *hard* signal left uncovered makes the obligation incomplete; a
+        # missing soft label (``claim``/``summary``) is reported, not fatal.
+        missing_required = tuple(
+            signal for signal in missing_signals if signal in _HARD_SIGNAL_TYPES
+        )
+        if declared_status == "extracted" and (not slot_item_refs or missing_required):
             incomplete = True
             declared_status = "partial"
         if declared_status == "no_supported_item" and slot_item_refs:
             incomplete = True
             declared_status = "partial"
-        required_signals = {
-            "question",
-            "forecast",
-            "condition",
-            "risk",
-            "negation",
-            "behavior",
-            "evidence",
-        } & set(slot.signal_types)
         if declared_status == "no_supported_item" and required_signals:
             incomplete = True
             declared_status = "partial"

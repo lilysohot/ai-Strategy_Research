@@ -32,7 +32,7 @@ import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
-import { dedupeAssistantTurns, sameRunId } from '@/utils/chat'
+import { dedupeAssistantTurns, hasRunAnswer, sameRunId, streamBelongsToSession } from '@/utils/chat'
 import { summarizeDiff } from '@/utils/diff'
 import { formatElapsed } from '@/utils/statusbar'
 import RunDetailView from '@/views/RunDetailView.vue'
@@ -418,7 +418,7 @@ async function onSend(text: string, files: File[]): Promise<void> {
     // gate has no assistant turn yet — turns alone cannot point at it).
     if (sessions.activeId) runStream.rememberRun(sessions.activeId, res.run_id)
     detailsOpen.value = false
-    runStream.watch(res.run_id)
+    runStream.watch(res.run_id, undefined, sessions.activeId)
   } catch (err) {
     ElMessage.error(err instanceof Error ? err.message : '发送失败')
   } finally {
@@ -500,12 +500,19 @@ watch(
 async function onSelectSession(): Promise<void> {
   workspaceArea.value = 'research'
   sessionPlanOpen.value = false
-  runStream.reset()
   railOpen.value = false
   detailsOpen.value = false
   diffFiles.value = []
   const activeId = sessions.activeId
-  if (activeId) await business.loadResearch(activeId)
+  // Only a stream bound to a DIFFERENT research may be dropped here. Clicking
+  // back into the research whose run is still streaming used to reset the
+  // stream outright, and since the assistant turn is only written when the run
+  // ends, the thread came back with nothing but the persisted user message —
+  // the conversation looked wiped while the run kept going server-side.
+  if (!streamBelongsToSession(runStream.sessionId, activeId)) runStream.reset()
+  if (!activeId) return
+  await business.loadResearch(activeId)
+  await attachSessionRun(activeId)
 }
 
 async function onCreatedSession(): Promise<void> {
@@ -519,7 +526,7 @@ function onRerunStarted(runId: string): void {
   // A rerun creates a NEW run in the same session; switch the live view to it.
   if (sessions.activeId) runStream.rememberRun(sessions.activeId, runId)
   detailsOpen.value = false
-  runStream.watch(runId)
+  runStream.watch(runId, undefined, sessions.activeId)
 }
 
 async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promise<void> {
@@ -595,6 +602,29 @@ function rememberSession(id: string | null): void {
   }
 }
 
+/**
+ * Re-attach a research's live run, if it still has one.
+ *
+ * A run still queued/running (e.g. parked on the approval gate) has to re-attach
+ * after a refresh *or a session switch* — its dialog and its streamed answer
+ * exist only in the live stream, so the run otherwise looked stuck, and the
+ * thread empty, with no way to answer it.
+ *
+ * A run that ended while the research was off screen has no stream left to
+ * re-attach, and its persisted answer may have landed after the turns were read
+ * a moment ago; re-read the transcript then, so the answer shows up without a
+ * manual refresh.
+ */
+async function attachSessionRun(researchId: string): Promise<void> {
+  const result = await runStream.resumeForSession(
+    researchId,
+    () => sessions.activeId === researchId,
+  )
+  if (result.outcome === 'finished' && !hasRunAnswer(sessions.activeTurns, result.runId)) {
+    await reloadTurns()
+  }
+}
+
 async function restoreSession(): Promise<void> {
   if (sessions.activeId || !sessions.list.length) return
   let remembered: string | null = null
@@ -611,10 +641,7 @@ async function restoreSession(): Promise<void> {
     ElMessage.error(sessions.error ?? '打开研究失败')
     return
   }
-  // F21: a run still queued/running (e.g. parked on the approval gate) must
-  // re-attach after the refresh — otherwise the dialog was live-only and the
-  // run looked stuck with no way to answer it.
-  await runStream.resumeForSession(target.id, () => sessions.activeId === target.id)
+  await attachSessionRun(target.id)
 }
 
 onMounted(async () => {

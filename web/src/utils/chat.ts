@@ -21,3 +21,32 @@ export function dedupeAssistantTurns(turns: readonly Turn[]): Turn[] {
     return true
   })
 }
+
+/**
+ * Whether the live run stream is still attached to the research on screen.
+ *
+ * A run belongs to exactly one research, so a switch that leaves that research
+ * must drop the stream. The reverse has to hold too: selecting the research we
+ * are already streaming into — which the rail does on every click, including on
+ * the active item — must NOT drop it, or the thread is left with the persisted
+ * turns alone and a running research looks empty.
+ */
+export function streamBelongsToSession(
+  streamSessionId: string | null,
+  sessionId: string | null,
+): boolean {
+  return streamSessionId !== null && streamSessionId === sessionId
+}
+
+/**
+ * Whether the transcript already carries the persisted answer of ``runId``.
+ *
+ * The assistant turn is written when the run ends, so a run that finished while
+ * its research was off screen has no live stream left to render it: the answer
+ * is only visible after the turns are read again. Callers use this to tell "the
+ * answer is already on screen" from "re-read is still required".
+ */
+export function hasRunAnswer(turns: readonly Turn[], runId: string | null): boolean {
+  if (!runId) return false
+  return turns.some((turn) => turn.role === 'assistant' && sameRunId(turn.run_id, runId))
+}

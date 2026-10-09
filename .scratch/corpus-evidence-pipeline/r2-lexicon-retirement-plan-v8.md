@@ -84,6 +84,11 @@ uv run python .scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py --no
 
 ## 3. 预注册退出判据
 
+> **口径规则（v9 修订，2026-10-09）**：**只有被实际执行的阶段所产生的指标类才进判据**。
+> 某阶段按预算 `deferred`，该类指标必须记为 `not_measured` 并从通过/失败中排除，
+> **不得**记为"违反"。同理，"有意不请求的阶段"不得计入 `failed_or_partial` / `omitted_areas`。
+> v8 违反了这条，导致关系类被判"违反"、每个包被判 `partial`（见 §8.6）。
+
 **Stage 0（0 次模型调用，先跑）**
 
 - 通过条件：冻结金标 item 的严格义务覆盖丢失数 `== 0`。
@@ -209,7 +214,41 @@ Stage 1：`--round lexicon-retirement-baseline`，唯一轮次，上限 43 次�
 2. 批次容量与 `partial` 的关系需要单独立项量化（1/4/8/16 槽每批的终态完整率）。
 3. `_SEMANTIC_SIGNAL_PATTERNS["qualitative"]` 的通用/领域两分（选项 B）。
 
-## 9. 签认栏
+### 8.6 v8 判定更正（按 §3 口径规则）
+
+v8 的 `business_acceptance = false` 依然成立（在 v8 自己的判据下确实未通过），但两项"违反"必须更正归类：
+
+| v8 记为 | 实际归类 | 依据 |
+|---|---|---|
+| 铜箔 `source_relation_recall 0.0 < 0.25`、`source_relation_precision 0.0 < 1.0` | **`not_measured`，不计入判据** | `relation_mode=deferred` 未产生任何关系预测；floor 是按"抽了关系"的基线标的 |
+| 四样本 `partial` / `complete=false`（含 `relations_not_processed`） | **运行器缺陷**，非实验结论 | 运行器只设 `extract_relations=False` 而未设 `relations_required=False`；管线本就有 `not_requested_for_items_role` 路径 |
+
+更正后 v8 唯一可用结论：**item 类指标上四个样本均不低于冻结 floor**（aggregate `item_recall` 0.958、
+`attribution` 0.917，相对旧基线 0.833/0.333 上升）。对清退本身：**既未证明有害、也未证明无害**
+（单臂无对照，不可归因）。
+
+## 9. 后续（v9，2026-10-09）
+
+本次修复的两处确定性改动：
+
+1. **判据一致性**：§3 新增口径规则；`r2-lexicon-retirement-development-budget-v9.json` 的
+   `stage1_gate` 明确 `in_scope = item`、`excluded = relation: not_measured`，
+   并声明 `relations_not_processed_counts_as_incomplete = false`。
+2. **"有意 defer 不算失败"**：运行器补 `relations_required = (relation_mode != "deferred")`；
+   常驻回归 `tests/test_corpus_material_semantics.py::test_deferred_relation_stage_is_not_recorded_as_an_omission`。
+3. **`claim`/`summary` 软信号化**（根因修复）：完成判定只用 `_HARD_SIGNAL_TYPES`；`claim`
+   （`_slot_signals` 的兜底标签）与 `summary` 缺失只记录 `missing_signal:*`，不再把槽位打成 `partial`，
+   从而不再惩罚模型对署名/邮箱/清单等非命题内容给出的合法 `other`。
+   `MATERIAL_EXTRACTOR_VERSION` 推进为 `material-semantics-23`，并把 `-22` 登记进兼容表
+   （`drops_absent_relation_identity=False`），保证既有产物仍可读回。
+   常驻回归 `...::test_soft_signal_labels_do_not_fail_a_slot_the_model_declines`。
+
+v9 计划核对：`--plan-only` → `planned_calls_upper_bound = 43`（与冻结值一致）。
+
+**v9 仍未纳入同代码 control 臂**（`known_gap` 已写进预算）：在 v9 上仍只能判"是否低于 floor"，
+不能把结果归因于清退。
+
+## 10. 签认栏
 
 | 角色 | 姓名 | 结论（同意/驳回/附条件） | 日期 | 备注 |
 |---|---|---|---|---|

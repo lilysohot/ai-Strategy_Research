@@ -35,6 +35,8 @@ export const useSessionsStore = defineStore('sessions', () => {
   const hasMoreTurns = ref(false)
   const loadingOlder = ref(false)
   const error = ref<string | null>(null)
+  /** Reads of the thread currently in flight — see ``loadTurns``. */
+  let turnsRequests = 0
 
   const activeSession = computed(() =>
     list.value.find((s) => s.id === activeId.value) ?? null,
@@ -69,19 +71,30 @@ export const useSessionsStore = defineStore('sessions', () => {
    * ``limit`` defaults to one page. Callers refreshing a conversation the user
    * has already paged through pass the current length instead, so a refresh
    * cannot quietly drop the older turns they scrolled up to read.
+   *
+   * A reply is only applied while ``id`` is still the active session: switching
+   * research twice in quick succession can resolve the two turn requests out of
+   * order, and the slower one would otherwise paint the research the user has
+   * already left (or blank the one on screen) over the current thread.
    */
   async function loadTurns(id: string, limit: number = TURN_PAGE_SIZE): Promise<void> {
+    turnsRequests += 1
     loadingTurns.value = true
     error.value = null
     try {
       const res = await sessionsApi.turns(id, { limit })
+      if (activeId.value !== id) return
       activeTurns.value = res.turns
       hasMoreTurns.value = res.has_more
     } catch (err) {
+      if (activeId.value !== id) return
       error.value = err instanceof ApiError ? err.message : '加载对话记录失败'
       throw err
     } finally {
-      loadingTurns.value = false
+      // Counted rather than cleared per call: a switch can leave two reads in
+      // flight, and the flag must stay up until the last of them settles.
+      turnsRequests -= 1
+      if (turnsRequests === 0) loadingTurns.value = false
     }
   }
 
@@ -102,12 +115,19 @@ export const useSessionsStore = defineStore('sessions', () => {
         limit: TURN_PAGE_SIZE,
         before_seq: oldest,
       })
+      // Same guard as ``loadTurns``: an older page for a session the user has
+      // left must not be prepended to the thread now on screen.
+      if (activeId.value !== id) return
       activeTurns.value = [...res.turns, ...activeTurns.value]
       hasMoreTurns.value = res.has_more
     } catch (err) {
+      if (activeId.value !== id) return
       error.value = err instanceof ApiError ? err.message : '加载更早消息失败'
       throw err
     } finally {
+      // Cleared unconditionally: this call is single-flight (a second one returns
+      // early while ``loadingOlder`` is set), so a stale reply that skipped the
+      // prepend must still release the flag or paging would wedge.
       loadingOlder.value = false
     }
   }
