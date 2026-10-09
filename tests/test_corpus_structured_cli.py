@@ -423,3 +423,68 @@ def test_plan_cli_freezes_material_batching_options(tmp_path: Path) -> None:
         "max_slots_per_batch": 48,
         "material_type": "conference_minutes",
     }
+
+
+def test_plan_cli_can_opt_into_controller_selector_protocol(tmp_path: Path) -> None:
+    value = snapshot()
+    source = tmp_path / "snapshot.json"
+    target = tmp_path / "selector-plan.json"
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    source.write_text(value.model_dump_json(), encoding="utf-8")
+
+    result = run_cli(
+        "plan",
+        "--snapshot",
+        str(source),
+        "--out",
+        str(target),
+        "--role",
+        "material_items",
+        "--disable-relations",
+        "--material-items-protocol",
+        "material-atomic-selector-jsonl-v1",
+        "--max-estimated-tokens-per-batch",
+        "8192",
+        cwd=cwd,
+    )
+
+    assert result.returncode == 0, result.stderr
+    plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
+    plan.verify_identity()
+    task = next(task for task in plan.tasks if task.role == "material_items")
+    assert task.protocol == "material-atomic-selector-jsonl-v1"
+    assert plan.material_items_options is not None
+    assert plan.material_items_options.max_slots_per_batch == 24
+    assert plan.material_items_options.max_estimated_tokens_per_batch == 8192
+
+
+def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
+    value = snapshot()
+    source = tmp_path / "snapshot.json"
+    target = tmp_path / "relation-selector-plan.json"
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    source.write_text(value.model_dump_json(), encoding="utf-8")
+
+    result = run_cli(
+        "plan",
+        "--snapshot",
+        str(source),
+        "--out",
+        str(target),
+        "--material-items-protocol",
+        "material-atomic-selector-jsonl-v1",
+        "--material-relations-protocol",
+        "material-relations-selector-jsonl-v1",
+        "--relation-dependency-policy",
+        "complete_parent",
+        cwd=cwd,
+    )
+
+    assert result.returncode == 0, result.stderr
+    plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
+    plan.verify_identity()
+    profile = next(profile for profile in plan.profiles if profile.role == "material_relations")
+    assert profile.protocol == "material-relations-selector-jsonl-v1"
+    assert plan.relations.dependency_policy == "complete_parent"

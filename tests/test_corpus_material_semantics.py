@@ -11,6 +11,8 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSION,
     CandidateSlot,
     MaterialEvidence,
     MaterialItem,
@@ -22,12 +24,14 @@ from plugins.corpus.material_semantics import (
     _packet_records,
     _relation_candidate_pairs,
     _relations_from_decisions,
+    _relations_from_selector_results,
     _strict_relation_candidate_pairs,
     _validate_atomic_coverage,
     build_candidate_slot_batches,
     build_candidate_slots,
     build_material_structure,
     build_relation_jsonl_prompt,
+    build_relation_selector_prompt,
     classify_material_type,
     extract_material_understanding,
 )
@@ -168,6 +172,136 @@ def test_report_title_question_mark_accepts_metadata_terminal(tmp_path: Path) ->
     assert all("question" not in slot.signal_types for slot in slots)
     assert result.packet_runs[0].status == "completed"
     assert result.summary()["complete"] is True
+
+
+def _selector_item_response(*, status: str = "items", obligation_index: int = 0) -> str:
+    items = []
+    reason_code = "not_supported" if status == "no_supported_item" else None
+    if status == "items":
+        items.append(
+            {
+                "text": "公司预计明年需求增长",
+                "semantic_type": "forecast",
+                "statement_role": "claim",
+                "speech_role": "statement",
+                "perspective": "source_explicit",
+                "polarity": "affirmed",
+                "value": None,
+                "behavior_status": None,
+                "temporal_frame": "contemporaneous",
+                "evidence_selector": "slot",
+                "unknown_fields": [],
+            }
+        )
+    return json.dumps(
+        {
+            "record_type": "obligation_result",
+            "obligation_index": obligation_index,
+            "status": status,
+            "reason_code": reason_code,
+            "items": items,
+        },
+        ensure_ascii=False,
+    )
+
+
+def test_selector_protocol_controller_materializes_exact_slot_evidence(tmp_path: Path) -> None:
+    source = tmp_path / "selector-source.md"
+    source.write_text("专家：公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: _selector_item_response(),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v1"
+    assert result.packet_runs[0].status == "completed"
+    assert result.summary()["complete"] is True
+    item = result.understanding.items[0]
+    slot = result.candidate_slots[0]
+    evidence = item.evidence[0]
+    assert evidence.quote == slot.text
+    assert (evidence.start, evidence.end) == (slot.start, slot.end)
+    assert evidence_run.document.packets[0].text[evidence.start : evidence.end] == evidence.quote
+
+
+def test_selector_protocol_controller_records_missing_terminal_as_failure(tmp_path: Path) -> None:
+    source = tmp_path / "selector-missing.md"
+    source.write_text("公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: "",
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    entry = result.understanding.coverage.slot_ledger[0]
+    assert entry.status == "failed"
+    assert "controller_terminal_missing" in entry.reason_codes
+    assert "terminal_record_missing" not in entry.reason_codes
+    assert result.packet_runs[0].status == "partial"
+
+
+def test_selector_protocol_rejects_duplicate_terminal_explicitly(tmp_path: Path) -> None:
+    source = tmp_path / "selector-duplicate.md"
+    source.write_text("公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    response = _selector_item_response()
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: f"{response}\n{response}",
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    entry = result.understanding.coverage.slot_ledger[0]
+    assert entry.status == "failed"
+    assert entry.reason_codes == ("controller_terminal_duplicate",)
+
+
+def test_selector_protocol_preserves_markup_and_repeated_source_coordinates(tmp_path: Path) -> None:
+    source = tmp_path / "selector-markup-repeat.md"
+    statement = '专家：<span style="color:red">公司预计明年需求增长</span>。'
+    source.write_text(f"{statement}\n{statement}", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    response = "\n".join(_selector_item_response(obligation_index=index) for index in range(2))
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: response,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert result.summary()["complete"] is True
+    evidence = [item.evidence[0] for item in result.understanding.items]
+    assert len(evidence) == 2
+    assert evidence[0].quote == evidence[1].quote == statement
+    assert evidence[0].start != evidence[1].start
+    packet_text = evidence_run.document.packets[0].text
+    assert all(packet_text[item.start : item.end] == item.quote for item in evidence)
 
 
 def test_discarded_item_attempt_exposes_stable_quote_failure_reason() -> None:
@@ -393,11 +527,11 @@ def test_material_semantics_preserve_attribution_conditions_and_quotes(tmp_path:
         assert item.evidence[0].quote in evidence_run.document.packets[0].text
 
 
-def test_structured_v14_through_v26_runs_preserve_historical_identity(tmp_path: Path) -> None:
+def test_structured_v14_through_v27_runs_preserve_historical_identity(tmp_path: Path) -> None:
     evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
     current = extract_material_understanding(evidence_run, llm=_response, max_calls=1)
 
-    for version_number in range(14, 27):
+    for version_number in range(14, 28):
         payload = current.model_dump(mode="json")
         payload["extractor_version"] = f"material-semantics-{version_number}"
         identity_payload = {key: value for key, value in payload.items() if key != "run_id"}
@@ -1899,6 +2033,33 @@ def test_atomic_batch_budget_keeps_conservative_capacity_for_summary_slots() -> 
     ]
 
 
+def test_atomic_batch_budget_also_limits_estimated_input_and_output_tokens() -> None:
+    common = {
+        "packet_id": "packet",
+        "locator": "paragraph:1",
+        "start": 0,
+        "end": 10,
+        "text": "研究材料内容",
+        "explicit_role": None,
+        "segment_id": "segment",
+        "attribution_capability": "document_only",
+    }
+    first = CandidateSlot(candidate_slot_id="first", signal_types=("summary",), **common)
+    second = CandidateSlot(candidate_slot_id="second", signal_types=("claim",), **common)
+
+    batches = build_candidate_slot_batches(
+        (first, second),
+        max_slots_per_batch=24,
+        max_items_per_batch=64,
+        max_estimated_tokens_per_batch=800,
+    )
+
+    assert [[slot.candidate_slot_id for slot in batch] for batch in batches] == [
+        ["first"],
+        ["second"],
+    ]
+
+
 def test_slot_protocol_calls_model_once_per_finite_atomic_batch(tmp_path: Path) -> None:
     source = tmp_path / "many-claims.md"
     source.write_text(
@@ -2327,6 +2488,138 @@ def test_relation_obligations_require_one_explicit_decision_per_pair(tmp_path: P
     relations, incomplete, counts = _relations_from_decisions([], packet, "source", [pair])
     assert relations == []
     assert incomplete is True
+    assert counts["missing_decisions"] == 1
+
+
+def test_relation_selector_owns_pair_identity_and_exact_source_window() -> None:
+    packet = EvidencePacket(
+        packet_id="packet",
+        locator="page:1",
+        kind="prose",
+        text="专家：结论成立，因为数据改善。",
+    )
+    claim_quote = "结论成立"
+    evidence_quote = "数据改善"
+
+    def endpoint(item_id: str, quote: str, role: str) -> MaterialItem:
+        start = packet.text.index(quote)
+        return MaterialItem(
+            item_id=item_id,
+            text=quote,
+            semantic_type="fact",
+            statement_role=role,  # type: ignore[arg-type]
+            speech_role="statement",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=start,
+                    end=start + len(quote),
+                ),
+            ),
+        )
+
+    items = [
+        endpoint("evidence", evidence_quote, "evidence"),
+        endpoint("claim", claim_quote, "claim"),
+    ]
+    pair = {
+        "candidate_pair_id": "pair_controller_owned",
+        "from_item": "evidence",
+        "to_item": "claim",
+        "allowed_type": "supports",
+    }
+    prompt = build_relation_selector_prompt(packet, items, [pair])
+    assert MATERIAL_RELATION_SELECTOR_JSONL_VERSION == "material-relations-selector-jsonl-v1"
+    assert '"relation_index":0' in prompt
+    assert '"selector":"pair_window"' in prompt
+
+    raw = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "status": "present",
+            "evidence_selector": "pair_window",
+        },
+        ensure_ascii=False,
+    )
+    relations, incomplete, counts = _relations_from_selector_results(
+        raw, packet, "source", [pair], {item.item_id: item for item in items}
+    )
+
+    assert incomplete is False
+    assert counts == {
+        "candidate_pairs": 1,
+        "decisions": 1,
+        "missing_decisions": 0,
+        "duplicate_decisions": 0,
+        "invalid_decisions": 0,
+    }
+    evidence = relations[0].evidence[0]
+    assert evidence.quote == "结论成立，因为数据改善"
+    assert packet.text[evidence.start : evidence.end] == evidence.quote
+
+
+def test_relation_selector_marks_missing_and_duplicate_terminals_incomplete() -> None:
+    packet = EvidencePacket(packet_id="packet", locator="page:1", kind="prose", text="甲因乙。")
+    evidence = MaterialEvidence(
+        source_rev="source",
+        packet_id="packet",
+        locator="page:1",
+        quote="甲",
+        start=0,
+        end=1,
+    )
+    item = MaterialItem(
+        item_id="one",
+        text="甲",
+        semantic_type="fact",
+        statement_role="claim",
+        speech_role="statement",
+        perspective="source_explicit",
+        speaker_ref="speaker",
+        polarity="affirmed",
+        temporal_frame="contemporaneous",
+        evidence=(evidence,),
+    )
+    pairs = [
+        {
+            "candidate_pair_id": "pair_one",
+            "from_item": "one",
+            "to_item": "one",
+            "allowed_type": "supports",
+        },
+        {
+            "candidate_pair_id": "pair_two",
+            "from_item": "one",
+            "to_item": "one",
+            "allowed_type": "supports",
+        },
+    ]
+    duplicate = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "status": "absent",
+            "evidence_selector": None,
+        }
+    )
+    relations, incomplete, counts = _relations_from_selector_results(
+        duplicate + "\n" + duplicate,
+        packet,
+        "source",
+        pairs,
+        {"one": item},
+    )
+    assert relations == []
+    assert incomplete is True
+    assert counts["duplicate_decisions"] == 1
     assert counts["missing_decisions"] == 1
 
 

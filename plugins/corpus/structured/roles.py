@@ -29,6 +29,8 @@ from plugins.corpus.evidence_pipeline import (
 from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
     MaterialRun,
@@ -93,9 +95,7 @@ class RoleRoutingPlan(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    rule_version: Literal["corpus-role-routing-v1", "corpus-role-routing-v2"] = (
-        ROUTING_RULE_VERSION
-    )
+    rule_version: Literal["corpus-role-routing-v1", "corpus-role-routing-v2"] = ROUTING_RULE_VERSION
     snapshot_id: str
     decisions: tuple[RoleRoute, ...]
     unrouted_gap_ids: tuple[str, ...] = ()
@@ -155,7 +155,9 @@ class RoleArtifact(BaseModel):
         "claims-atomic-json-v2",
         "material-atomic-jsonl-v4",
         "material-atomic-jsonl-v5",
+        "material-atomic-selector-jsonl-v1",
         "material-relations-jsonl-v1",
+        "material-relations-selector-jsonl-v1",
     ]
     business_contract: Literal["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]
     payload_sha256: str
@@ -223,8 +225,14 @@ class _RoleCalls:
                 CLAIMS_ATOMIC_PROTOCOL_V1,
                 CLAIMS_ATOMIC_PROTOCOL,
             },
-            "material_items": {MATERIAL_SLOT_JSONL_VERSION},
-            "material_relations": {MATERIAL_RELATION_JSONL_VERSION},
+            "material_items": {
+                MATERIAL_SLOT_JSONL_VERSION,
+                MATERIAL_SELECTOR_JSONL_VERSION,
+            },
+            "material_relations": {
+                MATERIAL_RELATION_JSONL_VERSION,
+                MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+            },
         }
         if protocol not in supported[role]:
             raise ValueError("CS_PROTOCOL_UNSUPPORTED: role/protocol mismatch")
@@ -574,6 +582,7 @@ def execute_material_items_role(
     material_type: MaterialType | None = None,
     max_items_per_packet: int = 30,
     max_slots_per_batch: int = 8,
+    max_estimated_tokens_per_batch: int | None = None,
     candidate_slot_ids: tuple[str, ...] | None = None,
     dispatch: RoleDispatch | None = None,
 ) -> RoleExecution:
@@ -589,6 +598,7 @@ def execute_material_items_role(
             "candidate_slot_ids": candidate_slot_ids,
             "max_items_per_packet": max_items_per_packet,
             "max_slots_per_batch": max_slots_per_batch,
+            "max_estimated_tokens_per_batch": max_estimated_tokens_per_batch,
             "material_type": material_type,
             "routing_rule": ROUTING_RULE_VERSION,
         },
@@ -603,6 +613,7 @@ def execute_material_items_role(
         material_type=material_type,
         max_items_per_packet=max_items_per_packet,
         max_slots_per_batch=max_slots_per_batch,
+        max_estimated_tokens_per_batch=max_estimated_tokens_per_batch,
         candidate_slot_ids=candidate_slot_ids,
     )
     omitted_units: tuple[str, ...] = ()
@@ -685,7 +696,10 @@ def execute_material_relations_role(
         items_execution.payload.model_dump(mode="json")
     ):
         raise ValueError("CS_INPUT_INVALID: upstream items payload hash mismatch")
-    if items_execution.artifact.protocol != MATERIAL_SLOT_JSONL_VERSION:
+    if items_execution.artifact.protocol not in {
+        MATERIAL_SLOT_JSONL_VERSION,
+        MATERIAL_SELECTOR_JSONL_VERSION,
+    }:
         raise ValueError("CS_INPUT_INVALID: upstream items protocol is unsupported")
     if (
         items_execution.artifact.quality_status == "rejected"
@@ -743,6 +757,7 @@ def execute_material_relations_role(
 __all__ = [
     "MATERIAL_ITEMS_VALIDATION_VERSION",
     "MATERIAL_RELATION_JSONL_VERSION",
+    "MATERIAL_RELATION_SELECTOR_JSONL_VERSION",
     "MATERIAL_SLOT_JSONL_VERSION",
     "RELATION_CANDIDATE_RULE_VERSION",
     "ROLE_ARTIFACT_SCHEMA_VERSION",

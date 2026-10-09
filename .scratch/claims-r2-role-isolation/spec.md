@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-09
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。第四开发样本 copper 随后完成 12 次 items + 4 次 relations、0 重试，但 items 仅 385/487 槽完整，relations 有 5 个无效决定，两个角色均协议无效。P1 已按预设失败分支停止，P2 发布/M_main 消费未启动；18 正在替换 material extractor，严格 parent 依赖门已完成。
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。第四开发样本 copper 随后完成 12 次 items + 4 次 relations、0 重试，但 items 仅 385/487 槽完整，relations 有 5 个无效决定，两个角色均协议无效。P1 已按预设失败分支停止，P2 发布/M_main 消费未启动；18 已完成严格 parent 依赖门和 items selector 零调用替换，relations selector 尚未完成，未开放新真实预算。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -53,8 +53,9 @@
 | 18 | [material extractor 替换实现与严格依赖门](issues/18-material-extractor-replacement.md) | 17 的 P1 失败终态 | 保留上层架构，替换 items/relations extractor |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门，但 copper items/relations
-协议失败；所有结果仍为未发布候选，query/delivery/context_use 与 M_main 正向消费未启动。18 先做
-零调用实现替换，未完成前不再冻结真实预算。W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
+协议失败；所有结果仍为未发布候选，query/delivery/context_use 与 M_main 正向消费未启动。18 的
+items selector 已完成零调用冻结，relations selector 与旧响应差分门未完成前不再冻结真实预算。W6 的
+独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 
 ## 4. 01 已冻结的实现决议
@@ -154,8 +155,8 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 |---|---|---|
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
-| R2 items | `material-atomic-jsonl-v5` | speakers/items only；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v6` |
-| R2 relations | `material-relations-jsonl-v1` | 只接收固定 items validation 版本和端点集合 |
+| R2 items | `material-atomic-selector-jsonl-v1`（新计划显式选择）；`material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v7` |
+| R2 relations | `material-relations-selector-jsonl-v1`（新计划显式选择）；`material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态 |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持
 矩阵，真实请求前返回 `CS_PROTOCOL_UNSUPPORTED`，不静默降级。关系候选只从同一 snapshot、同一或

@@ -47,6 +47,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     plan.add_argument("--max-relation-tasks", type=int, default=1)
     plan.add_argument("--max-relation-attempts", type=int)
+    plan.add_argument(
+        "--relation-dependency-policy",
+        choices=("qualified_subset", "complete_parent"),
+        default="qualified_subset",
+    )
     plan.add_argument("--disable-relations", action="store_true")
     plan.add_argument(
         "--role",
@@ -59,6 +64,17 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--currency")
     plan.add_argument("--max-items-per-packet", type=int)
     plan.add_argument("--max-slots-per-batch", type=int)
+    plan.add_argument("--max-estimated-tokens-per-batch", type=int)
+    plan.add_argument(
+        "--material-items-protocol",
+        choices=("material-atomic-jsonl-v5", "material-atomic-selector-jsonl-v1"),
+        default="material-atomic-jsonl-v5",
+    )
+    plan.add_argument(
+        "--material-relations-protocol",
+        choices=("material-relations-jsonl-v1", "material-relations-selector-jsonl-v1"),
+        default="material-relations-jsonl-v1",
+    )
     plan.add_argument(
         "--material-type",
         choices=(
@@ -227,11 +243,15 @@ def main(argv: Sequence[str] | None = None) -> int:
                 relations_enabled=not args.disable_relations,
                 max_relation_tasks=args.max_relation_tasks,
                 max_relation_attempts=args.max_relation_attempts,
+                relation_dependency_policy=args.relation_dependency_policy,
                 deadline_epoch=args.deadline_epoch,
                 enabled_roles=args.enabled_roles,
                 max_items_per_packet=args.max_items_per_packet,
                 max_slots_per_batch=args.max_slots_per_batch,
+                max_estimated_tokens_per_batch=args.max_estimated_tokens_per_batch,
                 material_type=args.material_type,
+                material_items_protocol=args.material_items_protocol,
+                material_relations_protocol=args.material_relations_protocol,
             )
             _write_plan(args.out, plan)
             _output(

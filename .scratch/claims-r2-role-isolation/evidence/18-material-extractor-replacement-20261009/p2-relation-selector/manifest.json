@@ -1,0 +1,83 @@
+{
+  "schema_version": "material-relation-selector-protocol-freeze-1",
+  "frozen_on": "2026-10-09",
+  "status": "p2_relation_selector_zero_call_complete",
+  "model_calls": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "query_delivery_context_use": 0,
+  "protocol": {
+    "items": "material-atomic-selector-jsonl-v1",
+    "relations": "material-relations-selector-jsonl-v1",
+    "extractor": "material-semantics-28",
+    "items_validation": "material-items-validation-v7",
+    "candidate_rule": "material-relation-candidates-v3",
+    "dependency_policy": "complete_parent",
+    "legacy_relation_read_protocol": "material-relations-jsonl-v1"
+  },
+  "controller_owned": [
+    "candidate_pair_id",
+    "relation_id",
+    "from_item",
+    "to_item",
+    "relation_type",
+    "evidence_source_span",
+    "evidence_quote"
+  ],
+  "model_interface": {
+    "pair_selector": "packet-local integer relation_index",
+    "terminal": "present_or_absent",
+    "evidence_selector": "pair_window",
+    "forbidden_output_fields": [
+      "candidate_pair_id",
+      "relation_id",
+      "from_item",
+      "to_item",
+      "type",
+      "evidence_quote",
+      "start",
+      "end"
+    ],
+    "missing_duplicate_or_invalid_terminal": "packet is explicitly partial"
+  },
+  "copper_zero_call_counterfactual": {
+    "source": "../17-structured-extraction-convergence-closure-20261009/p1-plan-freeze/copper-items-relations",
+    "qualified_endpoints": 391,
+    "candidate_pairs": 180,
+    "exact_controller_pair_windows": 180,
+    "legacy_invalid_present_quotes": 5,
+    "legacy_failure_class": "model-added speaker prefix",
+    "interpretation": "the transport failure is structurally removed; legacy semantic decisions were not rewritten",
+    "live_calls_authorized": 0
+  },
+  "validation": {
+    "material_structured_cli_files": "121 passed",
+    "selector_delta": "4 passed",
+    "full_corpus": "1374 passed, 17 skipped, 2 pre-existing environment failures",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "historical_plan_identity": "16/16 verified",
+    "contract_manifest": "verified"
+  },
+  "known_environment_failures": [
+    "tests/test_corpus_golden.py: local golden corpus Recall@5 is 0/20",
+    "tests/test_corpus_preparation_readers.py: test expects reader-pdf-10 while environment is reader-pdf-11"
+  ],
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "4641fb9f6e11cbc0c32d6fc9d01598f65fc3ab3656b1433c47c6031327acfaa1",
+    "plugins/corpus/structured/ledger.py": "c86fca12d03ea6842b58ab481c8d262727d913fe9158d4b797373e4004940be2",
+    "plugins/corpus/structured/roles.py": "9a4bc4ad04b35c299de9904712975c5f8452ff30558dcb54580b3987b66e7ace",
+    "plugins/corpus/structured/cli.py": "0a09f23d0c0b2a06db187bda77ef573e0b8fbaf2d5ab01b99ffb3376eeaf8ed5",
+    "tests/test_corpus_material_semantics.py": "771a2b42d9e182e7827fc8f82eccdd5663f81d8fcc57587a93a2228fc71b12c6",
+    "tests/test_corpus_structured_execution.py": "f84792dc170c5d04a546b933993c2d7c432b4fddd5da3d1665fe8b2c23d0a6d9",
+    "tests/test_corpus_structured_cli.py": "f84e18e45e98143a6de56a760b5c0256806eebd5505eedca8f3d9c4584c45137",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "e59d6b6cdf36aea505053631dfdca0b199d9d4837da490f816480cfa68dcc7e5",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "e794bc59068f6600164c3ccaf4d42815091fce34ac5efff84fd44b6a59ddbb33"
+  },
+  "gold_reference": {
+    "path": "evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+    "sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    "changed": false
+  },
+  "next_gate": "freeze and execute one separately authorized copper-only selector live plan"
+}

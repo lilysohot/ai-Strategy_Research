@@ -740,10 +740,12 @@ watch(
           <el-tab-pane v-if="diffFiles.length" label="变更" name="diff">
             <DiffPanel :files="diffFiles" :run-id="runStream.runId" @reverted="onReverted" />
           </el-tab-pane>
-          <el-tab-pane label="依据" name="evidence">
+          <!-- lazy：非业务运行没有业务输入快照，提前挂载只会白白发出一次
+               404 snapshot_absent 请求（每次运行都发生）。切到该标签页才加载。 -->
+          <el-tab-pane label="依据" name="evidence" lazy>
             <AnalysisEvidence :run-id="runStream.runId" />
           </el-tab-pane>
-          <el-tab-pane label="轨迹" name="trace">
+          <el-tab-pane label="轨迹" name="trace" lazy>
             <RunDetailView ref="runDetailRef" :run-id="runStream.runId" />
           </el-tab-pane>
         </el-tabs>

@@ -1,0 +1,50 @@
+{
+  "schema_version": "copper-selector-live-plan-freeze-1",
+  "frozen_on": "2026-10-09",
+  "status": "planned_not_executed",
+  "batch_id": "batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c",
+  "plan_sha256": "sha256:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c",
+  "plan_file_sha256": "f63fedcf7c7114a1df8d56a1dc48da7e0270b9bf71dc2a3f9231477effa5d19f",
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "model_calls_during_freeze": 0,
+  "execution": {
+    "max_attempts": 27,
+    "claims_max_attempts": 0,
+    "material_items_max_attempts": 23,
+    "material_relations_max_attempts": 4,
+    "max_relation_tasks": 1,
+    "dependency_policy": "complete_parent"
+  },
+  "protocols": {
+    "material_items": "material-atomic-selector-jsonl-v1",
+    "material_relations": "material-relations-selector-jsonl-v1",
+    "items_validation": "material-items-validation-v7",
+    "relation_candidates": "material-relation-candidates-v3"
+  },
+  "item_batch_limits": {
+    "max_slots_per_batch": 24,
+    "max_items_per_packet": 64,
+    "max_estimated_tokens_per_batch": 8192,
+    "zero_call_expected_batches": 23,
+    "candidate_slots": 487
+  },
+  "profile": {
+    "configured": true,
+    "provider": "openai_compat",
+    "model": "doubao-seed-2.0-mini",
+    "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+    "inline_credentials": false
+  },
+  "gold": {
+    "items": 11,
+    "relations": 4,
+    "thresholds_changed": false,
+    "gold_changed": false
+  },
+  "stop_policy": {
+    "items_required_terminals": "487/487",
+    "items_partial_allowed": 0,
+    "relations_dispatch": "only_after_complete_parent_acceptance",
+    "publication_query_delivery_context_use": "forbidden_until_quality_gate"
+  }
+}

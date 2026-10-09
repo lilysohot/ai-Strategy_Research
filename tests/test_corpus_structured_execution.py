@@ -16,6 +16,8 @@ import pytest
 from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import evidence_document_from_snapshot
 from plugins.corpus.material_semantics import (
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSION,
     build_candidate_slots,
     build_material_structure,
     build_relation_candidate_set,
@@ -36,7 +38,12 @@ from plugins.corpus.structured.ledger import (
     plan_batch,
     replay_batch,
 )
-from plugins.corpus.structured.roles import RoleArtifact, RoleRequest, execute_material_items_role
+from plugins.corpus.structured.roles import (
+    RoleArtifact,
+    RoleRequest,
+    execute_material_items_role,
+    execute_material_relations_role,
+)
 from plugins.corpus.structured.snapshot import (
     EvidenceSnapshot,
     SnapshotBuildSource,
@@ -227,6 +234,32 @@ def item_content(value: EvidenceSnapshot, *, extracted: bool = True) -> str:
     )
 
 
+def selector_item_content(*, extracted: bool = True) -> str:
+    item = {
+        "text": "合成分析师认为竞争力可能改善",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "value": None,
+        "behavior_status": None,
+        "temporal_frame": "contemporaneous",
+        "evidence_selector": "slot",
+        "unknown_fields": [],
+    }
+    return json.dumps(
+        {
+            "record_type": "obligation_result",
+            "obligation_index": 0,
+            "status": "items" if extracted else "no_supported_item",
+            "reason_code": None if extracted else "synthetic_no_item",
+            "items": [item] if extracted else [],
+        },
+        ensure_ascii=False,
+    )
+
+
 def dialogue_item_content(value: EvidenceSnapshot) -> str:
     document = evidence_document_from_snapshot(value, role="material_items")
     slots = build_candidate_slots(document, build_material_structure(document))
@@ -256,6 +289,35 @@ def dialogue_item_content(value: EvidenceSnapshot) -> str:
             }
         )
     return "\n".join(json.dumps(record, ensure_ascii=False) for record in records)
+
+
+def dialogue_selector_item_content() -> str:
+    rows = []
+    for index, question in enumerate((True, False)):
+        rows.append(
+            {
+                "record_type": "obligation_result",
+                "obligation_index": index,
+                "status": "items",
+                "reason_code": None,
+                "items": [
+                    {
+                        "text": "需求是否改善" if question else "因为订单增加，需求已经改善",
+                        "semantic_type": "fact",
+                        "statement_role": "question" if question else "evidence",
+                        "speech_role": "question" if question else "answer",
+                        "perspective": "source_explicit",
+                        "polarity": "affirmed",
+                        "value": None,
+                        "behavior_status": None,
+                        "temporal_frame": "contemporaneous",
+                        "evidence_selector": "slot",
+                        "unknown_fields": [],
+                    }
+                ],
+            }
+        )
+    return "\n".join(json.dumps(row, ensure_ascii=False) for row in rows)
 
 
 def replay_fixture(
@@ -312,9 +374,7 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
         relation_dependency_policy="complete_parent",
     )
     assert strict.relations.dependency_policy == "complete_parent"
-    assert strict.model_dump(mode="json")["relations"]["dependency_policy"] == (
-        "complete_parent"
-    )
+    assert strict.model_dump(mode="json")["relations"]["dependency_policy"] == ("complete_parent")
     assert strict.plan_sha256 != first.plan_sha256
     strict.verify_identity()
 
@@ -370,6 +430,149 @@ def test_plan_freezes_material_item_batching_options() -> None:
     assert plan.material_items_options.max_items_per_packet == 64
     assert plan.material_items_options.max_slots_per_batch == 48
     assert plan.material_items_options.material_type == "conference_minutes"
+
+
+def test_selector_plan_freezes_protocol_and_weighted_safety_budget() -> None:
+    plan = plan_batch(
+        snapshot(),
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+        enabled_roles=("material_items",),
+        material_items_protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+    )
+
+    plan.verify_identity()
+    task = next(task for task in plan.tasks if task.role == "material_items")
+    profile = next(profile for profile in plan.profiles if profile.role == "material_items")
+    assert task.protocol == MATERIAL_SELECTOR_JSONL_VERSION
+    assert profile.protocol == MATERIAL_SELECTOR_JSONL_VERSION
+    assert plan.material_items_options is not None
+    assert plan.material_items_options.max_slots_per_batch == 24
+    assert plan.material_items_options.max_items_per_packet == 64
+    assert plan.material_items_options.max_estimated_tokens_per_batch == 8192
+
+    with pytest.raises(
+        StructuredExecutionError,
+        match="selector_protocol_slot_safety_limit_exceeded",
+    ):
+        plan_batch(
+            snapshot(),
+            enabled_roles=("material_items",),
+            material_items_protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+            max_slots_per_batch=25,
+        )
+
+
+def test_selector_role_uses_controller_owned_evidence_and_terminals() -> None:
+    value = snapshot()
+    execution = execute_material_items_role(
+        value,
+        task_id="task:selector",
+        protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+        llm=lambda _prompt: selector_item_content(),
+        max_calls=1,
+        max_items_per_packet=64,
+        max_slots_per_batch=24,
+        max_estimated_tokens_per_batch=8192,
+    )
+
+    assert execution.artifact.protocol == MATERIAL_SELECTOR_JSONL_VERSION
+    assert execution.artifact.protocol_status == "valid", (
+        execution.payload.packet_runs,
+        execution.payload.understanding.coverage.slot_ledger,
+        tuple(packet.diagnostics for packet in execution.payload.packet_runs),
+    )
+    item = execution.payload.understanding.items[0]
+    slot = execution.payload.candidate_slots[0]
+    assert item.item_id.startswith("itm_")
+    assert item.evidence[0].quote == slot.text
+    ledger_entry = execution.payload.understanding.coverage.slot_ledger[0]
+    assert ledger_entry.status == "extracted"
+    assert ledger_entry.item_refs == (item.item_id,)
+
+
+def test_relation_selector_role_uses_controller_owned_pair_window() -> None:
+    value = dialogue_snapshot()
+    items = execute_material_items_role(
+        value,
+        task_id="task:selector-items",
+        protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+        llm=lambda _prompt: dialogue_selector_item_content(),
+        max_calls=1,
+        max_items_per_packet=64,
+        max_slots_per_batch=24,
+        max_estimated_tokens_per_batch=8192,
+    )
+    endpoints = tuple(item.item_id for item in items.payload.understanding.items)
+    response = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "status": "present",
+            "evidence_selector": "pair_window",
+        },
+        ensure_ascii=False,
+    )
+
+    relation_execution = execute_material_relations_role(
+        value,
+        task_id="task:selector-relations",
+        protocol=MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+        items_execution=items,
+        endpoint_item_ids=endpoints,
+        llm=lambda _prompt: response,
+        max_calls=1,
+    )
+
+    assert relation_execution.artifact.protocol_status == "valid"
+    relation = relation_execution.payload.understanding.relations[0]
+    evidence = relation.evidence[0]
+    document = evidence_document_from_snapshot(value, role="material_items")
+    packet = document.packets[0]
+    assert packet.text[evidence.start : evidence.end] == evidence.quote
+    assert "主持人：" in evidence.quote
+    assert "专家：" in evidence.quote
+
+
+def test_selector_plan_freezes_relation_protocol_and_complete_parent_policy(
+    tmp_path: Path,
+) -> None:
+    plan = plan_batch(
+        dialogue_snapshot(),
+        max_attempts=2,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 1},
+        material_items_protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+        material_relations_protocol=MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+        relation_dependency_policy="complete_parent",
+    )
+
+    plan.verify_identity()
+    relation_profile = next(
+        profile for profile in plan.profiles if profile.role == "material_relations"
+    )
+    assert relation_profile.protocol == MATERIAL_RELATION_SELECTOR_JSONL_VERSION
+    assert plan.relations.dependency_policy == "complete_parent"
+
+    parent = next(task for task in plan.tasks if task.role == "material_items")
+    items = execute_material_items_role(
+        plan.snapshot,
+        task_id=parent.task_id,
+        protocol=parent.protocol,
+        llm=lambda _prompt: dialogue_selector_item_content(),
+        max_calls=1,
+        max_items_per_packet=64,
+        max_slots_per_batch=24,
+        max_estimated_tokens_per_batch=8192,
+    )
+    journal = ExecutionJournal.open(plan, tmp_path / "store")
+    try:
+        journal.save_execution(parent, items)
+        derived = journal.derive_relation_task(parent)
+    finally:
+        journal.close()
+    assert derived is not None
+    assert derived.protocol == MATERIAL_RELATION_SELECTOR_JSONL_VERSION
 
 
 def test_replay_persists_contract_ledger_and_no_candidate_derivation(tmp_path: Path) -> None:
@@ -1293,14 +1496,18 @@ def test_relation_task_uses_extracted_endpoints_from_partial_items_run(tmp_path:
         max_relation_attempts=1,
     )
     items_task = next(task for task in plan.tasks if task.role == "material_items")
-    content = dialogue_item_content(value) + "\n" + json.dumps(
-        {
-            "record_type": "item",
-            "candidate_slot_id": "slot_nonexistent",
-            "item_id": "discarded-malformed-item",
-            "text": "无法验证的额外输出",
-        },
-        ensure_ascii=False,
+    content = (
+        dialogue_item_content(value)
+        + "\n"
+        + json.dumps(
+            {
+                "record_type": "item",
+                "candidate_slot_id": "slot_nonexistent",
+                "item_id": "discarded-malformed-item",
+                "text": "无法验证的额外输出",
+            },
+            ensure_ascii=False,
+        )
     )
     items_execution = execute_material_items_role(
         value,
@@ -1382,14 +1589,18 @@ def test_complete_parent_relation_policy_blocks_partial_items_run(tmp_path: Path
         relation_dependency_policy="complete_parent",
     )
     items_task = next(task for task in plan.tasks if task.role == "material_items")
-    content = dialogue_item_content(value) + "\n" + json.dumps(
-        {
-            "record_type": "item",
-            "candidate_slot_id": "slot_nonexistent",
-            "item_id": "discarded-malformed-item",
-            "text": "无法验证的额外输出",
-        },
-        ensure_ascii=False,
+    content = (
+        dialogue_item_content(value)
+        + "\n"
+        + json.dumps(
+            {
+                "record_type": "item",
+                "candidate_slot_id": "slot_nonexistent",
+                "item_id": "discarded-malformed-item",
+                "text": "无法验证的额外输出",
+            },
+            ensure_ascii=False,
+        )
     )
     responses = tmp_path / "responses"
     write_response(
@@ -1412,9 +1623,7 @@ def test_complete_parent_relation_policy_blocks_partial_items_run(tmp_path: Path
     assert items.quality_status == "review_required"
     assert all(task.role != "material_relations" for task in result.ledger.tasks)
     assert len(result.ledger.attempts) == 1
-    assert set(result.derivations.values()) == {
-        "dependency_not_ready:CS_DEPENDENCY_NOT_READY"
-    }
+    assert set(result.derivations.values()) == {"dependency_not_ready:CS_DEPENDENCY_NOT_READY"}
 
 
 def test_concurrent_relation_derivation_registers_one_logical_task(tmp_path: Path) -> None:

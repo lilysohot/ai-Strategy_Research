@@ -34,6 +34,8 @@ from plugins.corpus.evidence_pipeline import (
 from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
     MaterialItemsValidationVersion,
@@ -203,6 +205,11 @@ class MaterialItemsPlanOptions(BaseModel):
 
     max_items_per_packet: int = Field(default=30, ge=1)
     max_slots_per_batch: int = Field(default=8, ge=1)
+    max_estimated_tokens_per_batch: int | None = Field(
+        default=None,
+        ge=1,
+        exclude_if=lambda value: value is None,
+    )
     material_type: MaterialType | None = None
 
 
@@ -276,16 +283,23 @@ class BatchPlan(BaseModel):
                 CLAIMS_ATOMIC_PROTOCOL_V1,
                 CLAIMS_ATOMIC_PROTOCOL,
             },
-            "material_items": MATERIAL_SLOT_JSONL_VERSION,
-            "material_relations": MATERIAL_RELATION_JSONL_VERSION,
+            "material_items": {
+                MATERIAL_SLOT_JSONL_VERSION,
+                MATERIAL_SELECTOR_JSONL_VERSION,
+            },
+            "material_relations": {
+                MATERIAL_RELATION_JSONL_VERSION,
+                MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+            },
         }
         profiles = {profile.role: profile for profile in self.profiles}
         if len(profiles) != len(self.profiles) or set(profiles) != set(expected_protocols):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_role_profiles")
         if (
             profiles["claims"].protocol not in expected_protocols["claims"]
-            or profiles["material_items"].protocol != expected_protocols["material_items"]
-            or profiles["material_relations"].protocol != expected_protocols["material_relations"]
+            or profiles["material_items"].protocol not in expected_protocols["material_items"]
+            or profiles["material_relations"].protocol
+            not in expected_protocols["material_relations"]
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_role_profile_protocol")
         expected_routes: set[tuple[str, str, str, tuple[str, ...]]] = set()
@@ -305,7 +319,7 @@ class BatchPlan(BaseModel):
             expected_routes.add(
                 (
                     "material_items",
-                    MATERIAL_SLOT_JSONL_VERSION,
+                    profiles["material_items"].protocol,
                     "model",
                     self.routing.material_items_scope,
                 )
@@ -501,12 +515,15 @@ def _context_for_units(snapshot: EvidenceSnapshot, unit_ids: tuple[str, ...]) ->
 def _frozen_profiles(
     config: ExtractionConfig | None,
     role_configs: Mapping[Role, ExtractionConfig] | None = None,
+    *,
+    material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
+    material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
 ) -> tuple[FrozenRoleProfile, ...]:
     result: list[FrozenRoleProfile] = []
     for role, protocol in (
         ("claims", CLAIMS_ATOMIC_PROTOCOL),
-        ("material_items", MATERIAL_SLOT_JSONL_VERSION),
-        ("material_relations", MATERIAL_RELATION_JSONL_VERSION),
+        ("material_items", material_items_protocol),
+        ("material_relations", material_relations_protocol),
     ):
         selected = (role_configs or {}).get(cast(Role, role), config)
         if selected is not None and selected.configured:
@@ -604,7 +621,10 @@ def plan_batch(
     enabled_roles: Sequence[Role] | None = None,
     max_items_per_packet: int | None = None,
     max_slots_per_batch: int | None = None,
+    max_estimated_tokens_per_batch: int | None = None,
     material_type: MaterialType | None = None,
+    material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
+    material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
 ) -> BatchPlan:
     """Freeze deterministic routing, profiles, budgets, and relation derivation; no I/O."""
     snapshot.verify_identity()
@@ -612,20 +632,53 @@ def plan_batch(
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_batch_budget")
     if type(max_relation_tasks) is not int or max_relation_tasks < 0:
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_relation_task_limit")
+    if material_items_protocol not in {
+        MATERIAL_SLOT_JSONL_VERSION,
+        MATERIAL_SELECTOR_JSONL_VERSION,
+    }:
+        raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_items_protocol")
+    if material_relations_protocol not in {
+        MATERIAL_RELATION_JSONL_VERSION,
+        MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    }:
+        raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_relations_protocol")
+    selector_protocol = material_items_protocol == MATERIAL_SELECTOR_JSONL_VERSION
     try:
         item_options = (
             MaterialItemsPlanOptions(
-                max_items_per_packet=max_items_per_packet or 30,
-                max_slots_per_batch=max_slots_per_batch or 8,
+                max_items_per_packet=(
+                    max_items_per_packet
+                    if max_items_per_packet is not None
+                    else 64
+                    if selector_protocol
+                    else 30
+                ),
+                max_slots_per_batch=(
+                    max_slots_per_batch
+                    if max_slots_per_batch is not None
+                    else 24
+                    if selector_protocol
+                    else 8
+                ),
+                max_estimated_tokens_per_batch=(
+                    max_estimated_tokens_per_batch
+                    if max_estimated_tokens_per_batch is not None
+                    else 8192
+                    if selector_protocol
+                    else None
+                ),
                 material_type=material_type,
             )
             if max_items_per_packet is not None
             or max_slots_per_batch is not None
+            or max_estimated_tokens_per_batch is not None
             or material_type is not None
             else None
         )
     except ValueError as exc:
-        raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_material_items_options") from exc
+        raise StructuredExecutionError(
+            "CS_INPUT_INVALID", "invalid_material_items_options"
+        ) from exc
     selected = set(ALL_ROLES if enabled_roles is None else enabled_roles)
     ordered_roles: tuple[Role, ...] = tuple(role for role in ALL_ROLES if role in selected)
     if (
@@ -635,6 +688,21 @@ def plan_batch(
         or ("material_relations" in selected and "material_items" not in selected)
     ):
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
+    if "material_items" in selected and selector_protocol:
+        try:
+            item_options = item_options or MaterialItemsPlanOptions(
+                max_items_per_packet=64,
+                max_slots_per_batch=24,
+                max_estimated_tokens_per_batch=8192,
+            )
+        except ValueError as exc:
+            raise StructuredExecutionError(
+                "CS_INPUT_INVALID", "invalid_material_items_options"
+            ) from exc
+        if item_options.max_slots_per_batch > 24:
+            raise StructuredExecutionError(
+                "CS_INPUT_INVALID", "selector_protocol_slot_safety_limit_exceeded"
+            )
     if deadline_epoch is not None:
         if (
             isinstance(deadline_epoch, bool)
@@ -667,7 +735,12 @@ def plan_batch(
         "material_relations",
     }:
         raise StructuredExecutionError("CS_INPUT_INVALID", "unknown_role_config")
-    profiles = _frozen_profiles(config, role_configs)
+    profiles = _frozen_profiles(
+        config,
+        role_configs,
+        material_items_protocol=material_items_protocol,
+        material_relations_protocol=material_relations_protocol,
+    )
     by_role = {profile.role: profile for profile in profiles}
     tasks: list[PlannedTask] = []
     if "claims" in selected:
@@ -691,7 +764,7 @@ def plan_batch(
             _planned_task(
                 snapshot=snapshot,
                 role="material_items",
-                protocol=MATERIAL_SLOT_JSONL_VERSION,
+                protocol=material_items_protocol,
                 method="model",
                 scope=routing.material_items_scope,
                 profile=by_role["material_items"],
@@ -1533,10 +1606,7 @@ class ExecutionJournal:
             or not row["payload_object_sha256"]
             or (
                 self.plan.relations.dependency_policy == "complete_parent"
-                and (
-                    row["protocol_status"] != "valid"
-                    or row["quality_status"] != "accepted"
-                )
+                and (row["protocol_status"] != "valid" or row["quality_status"] != "accepted")
             )
         ):
             self.connection.execute(
@@ -1584,7 +1654,7 @@ class ExecutionJournal:
             task_id=f"task:{logical[7:]}",
             logical_key=logical,
             role="material_relations",
-            protocol=MATERIAL_RELATION_JSONL_VERSION,
+            protocol=profile.protocol,
             method="model",
             scoped_unit_ids=parent.scoped_unit_ids,
             input_sha256=canonical_hash(identity),
@@ -1906,6 +1976,7 @@ def _run_task(
                 max_calls=task.max_attempts,
                 max_items_per_packet=options.max_items_per_packet,
                 max_slots_per_batch=options.max_slots_per_batch,
+                max_estimated_tokens_per_batch=options.max_estimated_tokens_per_batch,
                 material_type=options.material_type,
                 dispatch=dispatch,
             )

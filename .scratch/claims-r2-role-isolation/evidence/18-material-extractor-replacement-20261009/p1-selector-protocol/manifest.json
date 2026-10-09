@@ -1,0 +1,82 @@
+{
+  "schema_version": "material-selector-protocol-freeze-1",
+  "frozen_on": "2026-10-09",
+  "status": "p1_items_selector_zero_call_complete",
+  "model_calls": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "protocol": {
+    "items": "material-atomic-selector-jsonl-v1",
+    "extractor": "material-semantics-28",
+    "batching": "material-slot-batching-v3",
+    "validation": "material-items-validation-v7",
+    "legacy_read_protocol": "material-atomic-jsonl-v5"
+  },
+  "controller_owned": [
+    "candidate_slot_id",
+    "item_id",
+    "slot_terminal",
+    "evidence_source_span",
+    "evidence_quote",
+    "speaker_attribution_binding"
+  ],
+  "model_interface": {
+    "obligation_selector": "batch-local integer obligation_index",
+    "evidence_selector": "slot",
+    "forbidden_output_fields": [
+      "candidate_slot_id",
+      "item_id",
+      "speaker_ref",
+      "evidence_quote",
+      "start",
+      "end"
+    ],
+    "missing_duplicate_or_invalid_terminal": "controller emits an explicit failed ledger terminal"
+  },
+  "selector_plan_defaults": {
+    "max_slots_per_batch": 24,
+    "max_items_per_batch": 64,
+    "max_estimated_tokens_per_batch": 8192,
+    "interpretation": "initial safety bounds frozen only for the selector protocol, not universal quality constants"
+  },
+  "copper_zero_call_counterfactual": {
+    "candidate_slots": 487,
+    "planned_item_batches": 23,
+    "covered_slots": 487,
+    "max_batch_slots": 24,
+    "batch_sizes": [24, 24, 24, 24, 23, 24, 24, 24, 24, 24, 1, 24, 24, 24, 24, 24, 4, 24, 24, 24, 24, 24, 3],
+    "live_calls_authorized": 0
+  },
+  "validation": {
+    "selector_and_main_chain": "107 passed",
+    "structured_roles_relations_store_cli": "85 passed",
+    "selector_cli_delta": "2 passed",
+    "full_corpus": "1369 passed, 17 skipped, 2 pre-existing environment failures",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "historical_plan_identity": "16/16 verified"
+  },
+  "known_environment_failures": [
+    "tests/test_corpus_golden.py: local golden corpus Recall@5 is 0/20",
+    "tests/test_corpus_preparation_readers.py: test expects reader-pdf-10 while environment is reader-pdf-11"
+  ],
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "da62e3c6db012e1d43298cb2ede793f86dd7e4ecb48211be4f3027f76acf6ad7",
+    "plugins/corpus/structured/ledger.py": "0aad81d4b4ecb431dcb07ba373ea1746485c19063b9f84397ad30d48f7bd03c6",
+    "plugins/corpus/structured/roles.py": "7b08a4572f401c9742d7435c04ef3c69ecf81a2912b911fe5aea6c813b5b07f9",
+    "plugins/corpus/structured/cli.py": "686e02f2f018211b22a46d61edd82c2ff0c1210889412dbb5f75a6cf91fa8cc1",
+    "tests/test_corpus_material_semantics.py": "6ab4d5e22f681996b2aadd9a189ea740a72b33ccb79c936b5d94ed0d8bc21d76",
+    "tests/test_corpus_structured_execution.py": "f9c71d5f747762765fb86a889fbd9990e2546c16d3a56b99311ce63e5c08b3eb",
+    "tests/test_corpus_structured_cli.py": "3e7934c663f7c6a1802cb8e077672d7644e767698adb9c264ca3230027cd404f"
+  },
+  "gold_reference": {
+    "path": "evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+    "sha256": "da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    "changed": false
+  },
+  "remaining": [
+    "replace the material_relations free-text evidence protocol",
+    "run the existing immutable-response differential diagnosis without rewriting old responses",
+    "freeze a separately authorized copper-only live plan after all zero-call gates"
+  ]
+}

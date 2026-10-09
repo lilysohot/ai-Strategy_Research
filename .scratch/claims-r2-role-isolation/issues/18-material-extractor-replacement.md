@@ -1,7 +1,7 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: in-progress-p0-complete
-Execution: P1 copper 已用冻结 16 次调用证明现 extractor 在 487 槽规模下无法满足终态与逐字证据契约；严格 relation parent policy 已实现并通过回归，items/relations extractor 替换尚未完成，未冻结新真实预算
+Status: zero-call-gates-complete-live-plan-not-executed
+Execution: items / relations selector 与严格 parent gate 均已完成零调用实现和冻结；控制器拥有 slot/item/pair ID、终态和逐字 evidence span。copper 487 槽反事实为 23 批，180/180 relation pair 可生成精确原文 window；未执行新真实预算
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
 Model calls: 0
@@ -24,32 +24,33 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 
 ## P1 · 替换 items extractor（零调用开发）
 
-1. 确定性 controller 逐槽创建 obligation，并负责终态账；模型只返回受约束的语义字段和 source-span
+1. [x] 确定性 controller 逐槽创建 obligation，并负责终态账；模型只返回受约束的语义字段和 source-span
    selector。缺失/重复/无效模型记录由 controller 记为显式失败，不能成为“漏终态”。
-2. evidence quote 只能由 controller 从冻结 packet 的 `[start,end)` 切片生成；模型不得自由复制或添加
+2. [x] evidence quote 只能由 controller 从冻结 packet 的 `[start,end)` 切片生成；模型不得自由复制或添加
    `专家：`、`主持人：`。speaker attribution 与 evidence span 分离。
-3. 在 reader/clean 层去除或结构化保留 Markdown 内嵌 HTML span/style；原文 offset 映射必须可逆，
-   不能以删除标记换取不可追溯文本。
-4. 批次改为基于输入/输出 token 预算的微批，硬上限不超过 24 槽；批次大小只影响成本，不影响终态
-   完整性。487 槽铜箔范围必须在 plan 阶段给出确定性调用上限。
-5. 否定、条件、风险、问题、forecast、evidence 等硬信号保持 fail closed；不降低 Schema 必需字段，
+3. [x] Markdown 内嵌 HTML span/style 在 selector path 中按冻结原文结构化保留；模型不再承担清洗后
+   quote 回写，controller 始终按原始 `[start,end)` 切片，重复文本也由坐标区分，不删除标记或丢失 offset。
+4. [x] 批次改为输入文本与每槽输出义务的确定性 token 估算微批；新 selector 协议首次安全上限为
+   24 槽、64 items、8192 estimated tokens。`24` 不是全局质量常数；487 槽 copper 零调用反事实为
+   23 批并覆盖 487/487 槽。
+5. [x] 否定、条件、风险、问题、forecast、evidence 等硬信号保持 fail closed；不降低 Schema 必需字段，
    不把缺失记录自动解释为 `no_supported_item`。
 
 ## P2 · 替换 relations extractor（零调用开发）
 
-1. 继续由确定性规则冻结 candidate pairs；模型只返回 pair ID 与 `present/absent`，以及固定 evidence
-   selector，不再生成自由文本引文。
-2. relation evidence 由 controller 从允许的 item/source spans 组装；越界、重复或无候选的 selector
-   显式失败。
-3. 对本次 180 pair / 5 个伪 speaker-prefix 失败建立固定回归；新实现必须在不放宽逐字证据门的前提下
-   消除这类失败。
+1. [x] 继续由确定性规则冻结 candidate pairs；模型只返回批内 `relation_index`、`present/absent` 和
+   固定 `pair_window` selector，不再复制 pair ID、端点或自由文本引文。
+2. [x] relation evidence 由 controller 从允许的 item/source spans 组装；缺失、重复、越界或非法 selector
+   显式计为 incomplete/partial。
+3. [x] 对本次 180 pair / 5 个伪 speaker-prefix 失败建立固定回归；旧 copper 只读反事实验证
+   180/180 candidate pair 均可生成逐字 source window，不放宽证据门，也不改写旧决定。
 
 ## P3 · 零调用证明与下一次唯一真实门
 
-1. 先用现有 16 份不可变响应做差分诊断，再用合成受约束响应覆盖 controller 的完整/缺失/重复/越界
+1. [x] 先用现有 16 份不可变响应做差分诊断，再用合成受约束响应覆盖 controller 的完整/缺失/重复/越界
    分支；不得把旧响应离线改写成通过。
-2. 运行相关测试、全量 corpus、Ruff、Pyright；冻结实现、Schema、配置、批次上限与 gold hash。
-3. 只有零调用门全部通过后，才另行冻结一次 copper-only 新 batch。仍使用原 11 items / 4 relations
+2. [x] 运行相关测试、全量 corpus、Ruff、Pyright；冻结实现、Schema、配置、批次上限与 gold hash。
+3. [x] 只有零调用门全部通过后，才另行冻结一次 copper-only 新 batch。仍使用原 11 items / 4 relations
    金标和原阈值，不重做金标。
 4. 新实跑必须先达到 487/487 槽终态完整、0 partial、严格 parent gate 生效，再开展增量候选裁定；
    只审新增或有争议的决定，精确复用既有具名签认，不做全量人工重标。
@@ -65,6 +66,9 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 
 - [P1 execution summary](../evidence/17-structured-extraction-convergence-closure-20261009/p1-plan-freeze/copper-items-relations/execution-summary.json)
 - [P1 failure analysis](../evidence/17-structured-extraction-convergence-closure-20261009/p1-plan-freeze/copper-items-relations/failure-analysis.json)
+- [P1 items selector zero-call freeze](../evidence/18-material-extractor-replacement-20261009/p1-selector-protocol/manifest.json)
+- [P2 relations selector zero-call freeze](../evidence/18-material-extractor-replacement-20261009/p2-relation-selector/manifest.json)
+- [P3 copper selector live plan freeze](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/manifest.json)
 
 ## Comments
 
@@ -74,3 +78,21 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   roles/relation guards/publication 92 passed；issue 17 下全部历史 plan 身份复验通过。
 - 全量 corpus：1361 passed、17 skipped；仅两项既有环境基线失败（本地 golden 语料 0/20、
   reader-pdf-10 测试断言与当前 reader-pdf-11 环境不一致）。Ruff 与 Pyright 通过。
+- 2026-10-09：P1 items extractor 新增 `material-atomic-selector-jsonl-v1`、`material-semantics-28`、
+  `material-slot-batching-v3`、`material-items-validation-v7`。模型只选择批内义务和 `slot` evidence，
+  controller 生成业务 ID、逐字引文及显式失败终态；speaker prefix、HTML markup、重复文本、漏终态和
+  重复终态均有零调用回归。新协议必须在 plan/CLI 显式选择，v5 保持可读；16/16 历史 plan identity
+  通过。全量 corpus 为 1369 passed、17 skipped、2 个上述既有环境失败；Ruff、Pyright 通过。copper
+  487 槽按 24/64/8192 三维安全预算确定性规划为 23 批，未授权模型调用。冻结证据见 P1 selector
+  manifest；P2 relations selector 仍是下一依赖。
+- 2026-10-09：P2 relations extractor 新增 `material-relations-selector-jsonl-v1`。模型只返回批内
+  `relation_index`、`present/absent` 和固定 `pair_window` selector；controller 绑定 pair ID、端点、类型、
+  relation ID 及 `[start,end)` 原文。旧 copper 只读反事实保留 180 个候选对，并为 180/180 生成精确
+  source window，因此原 5 个伪 speaker-prefix 失败不再进入引文复制路径；这不是对旧语义决定的离线
+  改判。121 项主回归、合约回归、16/16 历史 plan identity、Ruff、Pyright 均通过；全量 corpus 为
+  1374 passed、17 skipped、2 个既有环境失败。下一步只剩冻结并执行一次 copper-only selector live plan，
+  在执行前仍保持 0 新模型调用、0 publication/query/delivery/context_use。
+- 2026-10-09：补齐 CLI 的 `--relation-dependency-policy`，防止命令行计划静默回到
+  `qualified_subset`。随后冻结 batch `batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c`：
+  items selector 上限 23 calls、relations selector 上限 4 calls、总上限 27，strict `complete_parent`；
+  provider profile 已配置且计划只保存 credential ref，没有内联密钥。冻结过程 0 model calls，尚未 execute。
