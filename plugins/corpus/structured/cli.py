@@ -67,7 +67,11 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--max-estimated-tokens-per-batch", type=int)
     plan.add_argument(
         "--material-items-protocol",
-        choices=("material-atomic-jsonl-v5", "material-atomic-selector-jsonl-v1"),
+        choices=(
+            "material-atomic-jsonl-v5",
+            "material-atomic-selector-jsonl-v1",
+            "material-atomic-selector-jsonl-v2",
+        ),
         default="material-atomic-jsonl-v5",
     )
     plan.add_argument(

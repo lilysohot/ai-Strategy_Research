@@ -221,7 +221,7 @@ def test_selector_protocol_controller_materializes_exact_slot_evidence(tmp_path:
         relations_required=False,
     )
 
-    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v1"
+    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v2"
     assert result.packet_runs[0].status == "completed"
     assert result.summary()["complete"] is True
     item = result.understanding.items[0]
@@ -275,6 +275,60 @@ def test_selector_protocol_rejects_duplicate_terminal_explicitly(tmp_path: Path)
     entry = result.understanding.coverage.slot_ledger[0]
     assert entry.status == "failed"
     assert entry.reason_codes == ("controller_terminal_duplicate",)
+
+
+def test_selector_protocol_controller_canonicalizes_absence_valued_fields(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "selector-defaults.md"
+    source.write_text("公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    response = json.loads(_selector_item_response())
+    item = response["items"][0]
+    for field in ("value", "behavior_status", "temporal_frame", "unknown_fields"):
+        item.pop(field)
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: json.dumps(response, ensure_ascii=False),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert result.summary()["complete"] is True
+    normalized = result.understanding.items[0]
+    assert normalized.value is None
+    assert normalized.behavior_status is None
+    assert normalized.temporal_frame == "unknown"
+    assert normalized.unknown_fields == ("value", "temporal_frame")
+
+
+def test_selector_protocol_distinguishes_semantic_rejection_from_invalid_terminal(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "selector-semantic-rejection.md"
+    source.write_text("公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: _selector_item_response(status="no_supported_item"),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    entry = result.understanding.coverage.slot_ledger[0]
+    assert entry.status == "failed"
+    assert "controller_semantic_validation_failed" in entry.reason_codes
+    assert "controller_terminal_invalid" not in entry.reason_codes
 
 
 def test_selector_protocol_preserves_markup_and_repeated_source_coordinates(tmp_path: Path) -> None:
@@ -531,7 +585,7 @@ def test_structured_v14_through_v27_runs_preserve_historical_identity(tmp_path: 
     evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
     current = extract_material_understanding(evidence_run, llm=_response, max_calls=1)
 
-    for version_number in range(14, 28):
+    for version_number in range(14, 29):
         payload = current.model_dump(mode="json")
         payload["extractor_version"] = f"material-semantics-{version_number}"
         identity_payload = {key: value for key, value in payload.items() if key != "run_id"}
@@ -2129,6 +2183,15 @@ def test_market_expectation_comparison_is_not_a_forecast_obligation(tmp_path: Pa
 
 
 def test_research_judgment_future_and_concession_are_normalized_by_meaning() -> None:
+    assert _normalize_semantic_type("other", "claim", text="好的", quote="好的") == "unknown"
+    assert (
+        _normalize_semantic_type("negation", "claim", text="不一定能保证", quote="不一定能保证")
+        == "unknown"
+    )
+    assert (
+        _normalize_statement_role("forecast", text="明年需求可能增长", quote="明年需求可能增长")
+        == "claim"
+    )
     assert (
         _normalize_semantic_type(
             "fact",

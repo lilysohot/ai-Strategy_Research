@@ -1,0 +1,67 @@
+{
+  "schema_version": "copper-selector-failure-analysis-1",
+  "analyzed_on": "2026-10-09",
+  "status": "items_interface_failed_before_semantic_adjudication",
+  "raw_response_protocol": {
+    "expected_obligations": 487,
+    "returned_top_level_rows": 487,
+    "exact_top_level_row_shape": 487,
+    "missing_top_level_rows": 0,
+    "duplicate_top_level_rows": 0,
+    "malformed_json_rows": 0,
+    "items_terminals": 210,
+    "no_supported_item_terminals": 277
+  },
+  "item_shape": {
+    "exact_items": 58,
+    "invalid_items": 156,
+    "invalid_item_terminals": 153,
+    "missing_field_counts": {
+      "value": 107,
+      "unknown_fields": 105,
+      "behavior_status": 33,
+      "temporal_frame": 33
+    },
+    "extra_field_count": 0,
+    "classification": "model omitted nullable/defaultable fields even though the strict controller interface required an exact full item shape"
+  },
+  "unsupported_rejection": {
+    "raw_no_supported_item": 277,
+    "accepted_no_supported_item": 178,
+    "whole_batch_rejection_reasons": {
+      "evidence_not_in_provided_source": 24,
+      "evidence_not_found": 54,
+      "content_not_in_provided_context": 24,
+      "evidence_not_in_context": 48,
+      "evidence_text_not_found": 24,
+      "missing_evidence_text": 4,
+      "evidence_absent": 24,
+      "content_not_found": 24,
+      "evidence_not_in_source": 24,
+      "evidence_missing": 3
+    },
+    "classification": "the prompt exposed each frozen slot as evidence_selectors.slot.text but did not state strongly enough that this field is the complete source for the obligation; the model rejected entire batches as if source text were absent"
+  },
+  "packet_results": [
+    {"slots": 119, "calls": 5, "extracted": 32, "no_supported_item": 37, "failed": 50},
+    {"slots": 121, "calls": 6, "extracted": 25, "no_supported_item": 16, "failed": 80},
+    {"slots": 124, "calls": 6, "extracted": 0, "no_supported_item": 66, "failed": 58},
+    {"slots": 123, "calls": 6, "extracted": 0, "no_supported_item": 59, "failed": 64}
+  ],
+  "attribution": {
+    "batch_capacity_or_terminal_completeness": "not_observed: 487/487 exact top-level terminals were returned at the frozen 24-slot limit",
+    "transport_truncation": "not_observed: all 23 attempts ended succeeded; no top-level JSON row was missing",
+    "controller_evidence_coordinates": "not_reached_for 156 invalid item shapes; accepted items retained controller-owned exact spans",
+    "strict_dependency_gate": "worked: relations remained at zero calls",
+    "primary": "model/controller interface mismatch for defaultable fields plus ambiguous definition of slot.text as the complete source"
+  },
+  "next_zero_call_fix": [
+    "controller canonicalizes omitted defaultable fields to null/unknown and records unknown_fields without inventing positive semantics",
+    "prompt explicitly defines evidence_selectors.slot.text as the complete frozen source and forbids missing-source rejection codes",
+    "separate terminal-shape failure from downstream semantic-validation failure in coverage reasons",
+    "replay all 23 immutable responses before freezing any additional live budget"
+  ],
+  "gold_changes": 0,
+  "threshold_changes": 0,
+  "adjudication_started": false
+}

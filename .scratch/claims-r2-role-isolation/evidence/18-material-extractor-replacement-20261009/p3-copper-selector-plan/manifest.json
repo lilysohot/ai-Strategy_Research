@@ -1,12 +1,24 @@
 {
   "schema_version": "copper-selector-live-plan-freeze-1",
   "frozen_on": "2026-10-09",
-  "status": "planned_not_executed",
+  "status": "executed_items_gate_failed_relations_blocked",
   "batch_id": "batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c",
   "plan_sha256": "sha256:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c",
   "plan_file_sha256": "f63fedcf7c7114a1df8d56a1dc48da7e0270b9bf71dc2a3f9231477effa5d19f",
   "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
   "model_calls_during_freeze": 0,
+  "actual_execution": {
+    "material_items_calls": 23,
+    "material_relations_calls": 0,
+    "all_attempts_terminal": true,
+    "items_execution_status": "failed",
+    "items_quality_status": "review_required",
+    "relation_derivation": "dependency_not_ready:CS_DEPENDENCY_NOT_READY",
+    "publication_query_delivery_context_use": 0,
+    "execution_ledger_sha256": "51e77782d1d3ef177386a6bb62cf9d07c56c41061b199264b2cfda44ad304018",
+    "items_payload_sha256": "35622d223368ff93680fc21dd41226e26321d1019a7613a1bb3313e190cfa192",
+    "items_artifact_object_sha256": "3207812ae6d01d17cac2a84e031a3c408ce5b121b501f86d33d8ba51fdad091d"
+  },
   "execution": {
     "max_attempts": 27,
     "claims_max_attempts": 0,

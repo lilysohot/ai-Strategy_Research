@@ -1,7 +1,8 @@
 # Copper selector live-plan freeze
 
-这是 Issue 18 在所有零调用门通过后冻结的唯一 copper-only selector 计划。计划阶段没有发出模型请求，
-也没有写生产数据库、发布或消费语义数据。
+这是 Issue 18 在所有零调用门通过后冻结并执行的 copper-only selector 计划。计划阶段没有发出模型
+请求；实际执行在 strict items gate 失败后停止，没有调用 relations，也没有写生产数据库、发布或消费
+语义数据。
 
 - batch: `batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c`
 - items: `material-atomic-selector-jsonl-v1`，最多 23 calls，24 slots / 64 items / 8192 estimated tokens
@@ -10,6 +11,6 @@
 - total ceiling: 27 calls；Claims 为 0
 - gold: 复用既有 11 items / 4 relations 金标与阈值，不重标
 
-`plan.json` 只冻结 `env:STRUCTURED_EXTRACTION_API_KEY` 引用，不包含内联 credential。下一动作是显式执行
-该计划；在 items 达到 487/487 终态完整、0 partial 前，不裁定 relations、不发布、不 query、不 delivery、
-不 context use。
+`plan.json` 只冻结 `env:STRUCTURED_EXTRACTION_API_KEY` 引用，不包含内联 credential。执行完成 23 次
+items 调用，顶层终态为 487/487，但 252 槽在严格语义/字段门失败，因此四个 packet 均 partial，relations
+按 `complete_parent` 正确阻断为 0 calls。详见 `execution-summary.json` 和 `failure-analysis.json`。

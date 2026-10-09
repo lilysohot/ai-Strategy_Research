@@ -1,0 +1,58 @@
+{
+  "schema_version": "copper-selector-v2-zero-call-freeze-1",
+  "frozen_on": "2026-10-09",
+  "status": "zero_call_fix_complete_plan_not_executed",
+  "batch_id": "batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
+  "plan_sha256": "sha256:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f",
+  "plan_file_sha256": "7a3a528682bb7438fd260c09bfd0b83c6413bdf0496ccd6a6f2beb37eab0c07b",
+  "model_calls_for_fix_and_freeze": 0,
+  "protocol": {
+    "items": "material-atomic-selector-jsonl-v2",
+    "relations": "material-relations-selector-jsonl-v1",
+    "extractor": "material-semantics-29",
+    "items_validation": "material-items-validation-v8",
+    "candidate_rule": "material-relation-candidates-v3",
+    "dependency_policy": "complete_parent",
+    "historical_items_protocol": "material-atomic-selector-jsonl-v1"
+  },
+  "immutable_response_counterfactual": {
+    "responses": 23,
+    "model_calls": 0,
+    "before": {"items": 58, "extracted": 57, "no_supported_item": 178, "failed": 252, "item_schema_failures": 10},
+    "after": {"items": 214, "extracted": 209, "no_supported_item": 178, "failed": 100, "item_schema_failures": 0},
+    "remaining_failures": "100 downstream semantic rejections in legacy responses; not rewritten offline"
+  },
+  "execution_budget": {
+    "claims": 0,
+    "material_items": 23,
+    "material_relations": 4,
+    "total": 27,
+    "candidate_slots": 487,
+    "max_slots_per_batch": 24,
+    "max_items_per_packet": 64,
+    "max_estimated_tokens_per_batch": 8192
+  },
+  "validation": {
+    "core_and_contract": "134 passed",
+    "full_corpus": "1376 passed, 17 skipped, 2 pre-existing environment failures",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "historical_plan_identity": "16/16 plus selector-v1 live plan verified"
+  },
+  "known_environment_failures": [
+    "tests/test_corpus_golden.py: local golden corpus Recall@5 is 0/20",
+    "tests/test_corpus_preparation_readers.py: test expects reader-pdf-10 while environment is reader-pdf-11"
+  ],
+  "frozen_files": {
+    "plugins/corpus/material_semantics.py": "a7377ee5c411bf658a8f1a6fbb4c43a7a0d3fef0cf07d24f159e66eb10a7f1e1",
+    "plugins/corpus/structured/ledger.py": "600d506c52ebe0c9fa73450997a1b79fbca344e6f735845888f45f3ea714e8c6",
+    "plugins/corpus/structured/roles.py": "0b90563e66a62b90e398acc68d7094c3a480beb58d939d7cc6376c6ea3822acd",
+    "plugins/corpus/structured/cli.py": "4962a41bd84a5823763ebd22b9905ab57cfff1eb9d1d3c0d1404fab579c85dd5",
+    "tests/test_corpus_material_semantics.py": "df047ae848cfea5aad1605f73851ca1a53954ce544682c7e3ca7a7d7004ca540",
+    "tests/test_corpus_structured_execution.py": "f84792dc170c5d04a546b933993c2d7c432b4fddd5da3d1665fe8b2c23d0a6d9",
+    "tests/test_corpus_structured_cli.py": "d03d00e2f2fd994a00bb7001243cf831c8518b26f5ac7295ac00f5c9e333da4d",
+    ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json": "ba9dff96a9540a519c609491d85e3721d57cc2de5e3ffad6103a0541fec93f72",
+    ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json": "f7702fe6d106adb693752c634a396b83a827bcaac622a784c7655a6bca5e71f1"
+  },
+  "next_gate": "explicit decision whether to spend a new 23+4 call budget on selector v2"
+}

@@ -155,7 +155,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 |---|---|---|
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
-| R2 items | `material-atomic-selector-jsonl-v1`（新计划显式选择）；`material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v7` |
+| R2 items | `material-atomic-selector-jsonl-v2`（新计划显式选择）；selector v1 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；缺失的 absence-valued 字段由 controller 规范为 null/unknown 并记入 unknown_fields；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v8` |
 | R2 relations | `material-relations-selector-jsonl-v1`（新计划显式选择）；`material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态 |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持

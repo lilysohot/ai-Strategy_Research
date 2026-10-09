@@ -1,7 +1,7 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: zero-call-gates-complete-live-plan-not-executed
-Execution: items / relations selector 与严格 parent gate 均已完成零调用实现和冻结；控制器拥有 slot/item/pair ID、终态和逐字 evidence span。copper 487 槽反事实为 23 批，180/180 relation pair 可生成精确原文 window；未执行新真实预算
+Status: live-v1-items-gate-failed-v2-fix-frozen-not-executed
+Execution: selector v1 batch 的 23/23 items attempts 传输成功并返回 487/487 顶层终态，但严格字段/语义门留下 252 failed 槽；complete-parent 正确阻断 relations（0 calls）。零调用修复 replay 将 extracted 57→209、failed 252→100、Schema failures→0；selector v2 新计划已冻结但未执行
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
 Model calls: 0
@@ -69,6 +69,9 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P1 items selector zero-call freeze](../evidence/18-material-extractor-replacement-20261009/p1-selector-protocol/manifest.json)
 - [P2 relations selector zero-call freeze](../evidence/18-material-extractor-replacement-20261009/p2-relation-selector/manifest.json)
 - [P3 copper selector live plan freeze](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/manifest.json)
+- [P3 execution summary](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/execution-summary.json)
+- [P3 failure analysis](../evidence/18-material-extractor-replacement-20261009/p3-copper-selector-plan/failure-analysis.json)
+- [P4 selector v2 zero-call fix and plan](../evidence/18-material-extractor-replacement-20261009/p4-copper-selector-v2-plan/manifest.json)
 
 ## Comments
 
@@ -96,3 +99,17 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   `qualified_subset`。随后冻结 batch `batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c`：
   items selector 上限 23 calls、relations selector 上限 4 calls、总上限 27，strict `complete_parent`；
   provider profile 已配置且计划只保存 credential ref，没有内联密钥。冻结过程 0 model calls，尚未 execute。
+- 2026-10-09：执行上述 batch。23/23 items attempts 均为 transport succeeded，共 201,366 tokens；模型返回
+  487/487 个 exact 顶层 obligation terminal，缺失/重复/畸形均为 0，证明 24-slot 微批与终态控制不是本次
+  主因。严格门最终为 57 extracted、178 no-supported、252 failed；156 个 item 缺少可默认字段，另外多批
+  把已经位于 `evidence_selectors.slot.text` 的原文误判为 source/context 缺失。四包均 partial，strict gate
+  将 relations 阻断为 0 calls。未开展裁定或消费。下一步是零调用接口修复与 23 份 immutable response replay，
+  通过前不得追加 live budget。
+- 2026-10-09：完成零调用接口修复并升版为 `material-atomic-selector-jsonl-v2`、
+  `material-semantics-29`、`material-items-validation-v8`。controller 仅规范缺失的 absence-valued 字段，
+  不补造肯定语义；跨维度常见漂移（semantic other/negation、statement forecast）映射到 unknown/claim，
+  硬信号拒绝与 terminal invalid 分开记账。23 份 immutable response replay 把 extracted 57→209、
+  failed 252→100、item Schema failures 10→0；剩余 100 是旧响应语义拒绝，未离线改判。核心/合约
+  134 passed，全量 corpus 1376 passed、17 skipped、仍仅 2 个既有环境失败；Ruff、Pyright 通过，
+  16 份历史计划及 v1 live plan identity 均可验证。v2 batch
+  `batch:c8c98ed42fb25d3fce9ea8e75b4d864c9fefe1ce0ed3ee28448d0d8c96b9d05f` 已冻结，尚未执行。

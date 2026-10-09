@@ -26,14 +26,18 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-28"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-29"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
-MATERIAL_SELECTOR_JSONL_VERSION = "material-atomic-selector-jsonl-v1"
+MATERIAL_SELECTOR_JSONL_V1 = "material-atomic-selector-jsonl-v1"
+MATERIAL_SELECTOR_JSONL_VERSION = "material-atomic-selector-jsonl-v2"
+MATERIAL_SELECTOR_JSONL_VERSIONS = frozenset(
+    {MATERIAL_SELECTOR_JSONL_V1, MATERIAL_SELECTOR_JSONL_VERSION}
+)
 MATERIAL_SLOT_BATCHING_VERSION = "material-slot-batching-v3"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
 MATERIAL_RELATION_SELECTOR_JSONL_VERSION = "material-relations-selector-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v7"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v8"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
@@ -49,6 +53,7 @@ MaterialItemsValidationVersion = Literal[
     "material-items-validation-v5",
     "material-items-validation-v6",
     "material-items-validation-v7",
+    "material-items-validation-v8",
 ]
 RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v1",
@@ -262,6 +267,9 @@ MATERIAL_SELECTOR_PROTOCOL = """你是研究材料忠实抽取器。原文是不
 - item 字段只能是 text、semantic_type、statement_role、speech_role、perspective、polarity、value、
   behavior_status、temporal_frame、evidence_selector、unknown_fields；不得输出 item_id、speaker_ref、
   candidate_slot_id、evidence_quote 或字符 offset。
+- `evidence_selectors.slot.text` 就是当前义务完整且可用的冻结原文，不存在另一个待提供的 source、
+  context 或 evidence。不得使用 evidence_missing/evidence_not_found/content_not_found 等理由拒绝它；
+  no_supported_item 只用于标题、列表标签或确实没有独立命题的残片。
 - evidence_selector 当前只能填 "slot"。控制器会从冻结原文区间生成逐字证据，并按该区间确定归属；
   speaker attribution 不是 evidence 文本的一部分，不得给证据添加“专家：/主持人：”等前缀。
 - semantic_type 仅 fact/forecast/opinion/behavior/unknown；statement_role 仅 claim/evidence/condition/
@@ -461,6 +469,7 @@ _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-25": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-26": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-27": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-28": _RunPayloadShape(drops_absent_relation_identity=False),
 }
 # Anything not listed (and not the current version) predates structured slots.
 _PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
@@ -1154,15 +1163,49 @@ _SELECTOR_ITEM_FIELDS = frozenset(
 )
 
 
-def _valid_selector_item(item: object) -> bool:
-    if not isinstance(item, dict) or set(item) != _SELECTOR_ITEM_FIELDS:
-        return False
-    unknown_fields = item.get("unknown_fields")
-    return (
-        item.get("evidence_selector") == "slot"
-        and isinstance(unknown_fields, list)
-        and all(isinstance(field, str) for field in unknown_fields)
-    )
+_SELECTOR_REQUIRED_ITEM_FIELDS = frozenset(
+    {
+        "text",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "polarity",
+        "evidence_selector",
+    }
+)
+
+
+def _normalize_selector_item(item: object) -> dict[str, Any] | None:
+    """Canonicalize only absence-valued fields; never invent positive semantics."""
+    if (
+        not isinstance(item, dict)
+        or not _SELECTOR_REQUIRED_ITEM_FIELDS.issubset(item)
+        or set(item) - _SELECTOR_ITEM_FIELDS
+        or item.get("evidence_selector") != "slot"
+    ):
+        return None
+    unknown_fields = item.get("unknown_fields", [])
+    if not isinstance(unknown_fields, list) or not all(
+        isinstance(field, str) for field in unknown_fields
+    ):
+        return None
+    normalized = dict(item)
+    defaulted_unknowns: list[str] = []
+    if "value" not in normalized:
+        normalized["value"] = None
+        defaulted_unknowns.append("value")
+    if "behavior_status" not in normalized:
+        if normalized.get("semantic_type") == "behavior":
+            normalized["behavior_status"] = "unknown"
+            defaulted_unknowns.append("behavior_status")
+        else:
+            normalized["behavior_status"] = None
+    if "temporal_frame" not in normalized or normalized["temporal_frame"] is None:
+        normalized["temporal_frame"] = "unknown"
+        defaulted_unknowns.append("temporal_frame")
+    normalized["unknown_fields"] = list(dict.fromkeys((*unknown_fields, *defaulted_unknowns)))
+    return normalized
 
 
 def _parse_selector_response(
@@ -1236,8 +1279,14 @@ def _parse_selector_response(
             valid = (
                 valid and items == [] and isinstance(reason_code, str) and bool(reason_code.strip())
             )
+        normalized_items: list[dict[str, Any]] = []
         if valid and status == "items":
-            valid = all(_valid_selector_item(item) for item in items)
+            normalized_items = [
+                normalized
+                for item in items
+                if (normalized := _normalize_selector_item(item)) is not None
+            ]
+            valid = len(normalized_items) == len(items)
         if not valid:
             overrides[slot.candidate_slot_id] = CoverageLedgerEntry(
                 candidate_slot_id=slot.candidate_slot_id,
@@ -1255,7 +1304,7 @@ def _parse_selector_response(
                 }
             )
             continue
-        for item_index, item in enumerate(items, start=1):
+        for item_index, item in enumerate(normalized_items, start=1):
             translated = dict(item)
             translated.pop("evidence_selector")
             translated.update(
@@ -1287,7 +1336,9 @@ def _controller_selector_ledger(
                     update={
                         "status": "failed",
                         "reason_codes": tuple(
-                            dict.fromkeys(("controller_terminal_invalid", *entry.reason_codes))
+                            dict.fromkeys(
+                                ("controller_semantic_validation_failed", *entry.reason_codes)
+                            )
                         ),
                     }
                 )
@@ -2016,6 +2067,10 @@ def _canonical_speaker(
 
 def _normalize_statement_role(value: object, *, text: str, quote: str) -> str:
     normalized = str(value or "other").strip().lower()
+    if normalized == "forecast":
+        # Forecast is a semantic type, not a discourse role.  When copied across
+        # dimensions, retain the future semantics and use the neutral claim role.
+        normalized = "claim"
     source_text = re.sub(r"\s+", "", f"{text}{quote}")
     explicit_condition = re.search(
         r"如果|若(?=[^，。；]{1,40}(?:则|就|才|方|可|会|将|仍))|只要|除非|前提|仅在|取决于|"
@@ -2045,6 +2100,10 @@ def _normalize_statement_role(value: object, *, text: str, quote: str) -> str:
 
 def _normalize_semantic_type(value: object, statement_role: str, *, text: str, quote: str) -> str:
     normalized = str(value or "unknown").strip().lower()
+    if normalized in {"other", "negation"}:
+        # These values carry no positive semantic class: ``other`` belongs to
+        # statement_role and negation is preserved independently in polarity.
+        normalized = "unknown"
     if (normalized, statement_role) in {("question", "question"), ("evidence", "evidence")}:
         # These discourse roles are repeatedly copied into semantic_type even though
         # statement_role already carries them.  Preserve the role and fail closed to
@@ -3568,9 +3627,9 @@ def extract_material_items_role_from_snapshot(
     candidate_slot_ids: tuple[str, ...] | None = None,
 ) -> MaterialRun:
     """Run a supported R2 items protocol without any relations request."""
-    if protocol not in {MATERIAL_SLOT_JSONL_VERSION, MATERIAL_SELECTOR_JSONL_VERSION}:
+    if protocol not in {MATERIAL_SLOT_JSONL_VERSION, *MATERIAL_SELECTOR_JSONL_VERSIONS}:
         raise ValueError(f"CS_PROTOCOL_UNSUPPORTED: material items protocol {protocol!r}")
-    selector_protocol = protocol == MATERIAL_SELECTOR_JSONL_VERSION
+    selector_protocol = protocol in MATERIAL_SELECTOR_JSONL_VERSIONS
     result = extract_material_understanding_from_snapshot(
         snapshot,
         llm=_item_role_llm(snapshot, llm, protocol=protocol),
@@ -3601,7 +3660,7 @@ def _item_role_llm(
 
     allowed = (
         frozenset({"obligation_result"})
-        if protocol == MATERIAL_SELECTOR_JSONL_VERSION
+        if protocol in MATERIAL_SELECTOR_JSONL_VERSIONS
         else frozenset({"speaker", "item", "coverage"})
     )
     strict_llm = _strict_role_llm(llm, allowed)

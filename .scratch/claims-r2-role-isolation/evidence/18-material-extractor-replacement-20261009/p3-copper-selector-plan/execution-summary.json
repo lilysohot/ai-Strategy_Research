@@ -1,0 +1,56 @@
+{
+  "schema_version": "copper-selector-execution-summary-1",
+  "executed_on": "2026-10-09",
+  "batch_id": "batch:98f02adad93998b0d87a7c5d21d3d8dd10631c09fca64974bcb4c43d3754af4c",
+  "status": "items_gate_failed_relations_blocked",
+  "plan_consistent": true,
+  "attempts": {
+    "material_items": 23,
+    "material_relations": 0,
+    "succeeded_transport": 23,
+    "failed_transport": 0,
+    "running_or_unknown": 0,
+    "automatic_retries": 0
+  },
+  "usage": {
+    "prompt_tokens": 100873,
+    "completion_tokens": 100493,
+    "reasoning_tokens": 69266,
+    "total_tokens": 201366,
+    "provider_reported_cost": null
+  },
+  "material_items": {
+    "candidate_slots": 487,
+    "raw_top_level_terminals": 487,
+    "missing_or_duplicate_top_level_terminals": 0,
+    "accepted_items": 58,
+    "slot_status": {
+      "extracted": 57,
+      "no_supported_item": 178,
+      "failed": 252
+    },
+    "packet_status": {
+      "completed": 0,
+      "partial": 4
+    },
+    "execution_status": "failed",
+    "quality_status": "review_required",
+    "publication_status": "unpublished"
+  },
+  "material_relations": {
+    "calls": 0,
+    "derivation": "dependency_not_ready:CS_DEPENDENCY_NOT_READY",
+    "strict_complete_parent_gate": "passed_by_blocking_dispatch"
+  },
+  "consumption": {
+    "publication_writes": 0,
+    "query": 0,
+    "delivery": 0,
+    "context_use": 0
+  },
+  "immutable_objects": {
+    "execution_ledger_sha256": "51e77782d1d3ef177386a6bb62cf9d07c56c41061b199264b2cfda44ad304018",
+    "items_payload_sha256": "35622d223368ff93680fc21dd41226e26321d1019a7613a1bb3313e190cfa192",
+    "items_artifact_object_sha256": "3207812ae6d01d17cac2a84e031a3c408ce5b121b501f86d33d8ba51fdad091d"
+  }
+}

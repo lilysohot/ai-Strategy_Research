@@ -10,7 +10,7 @@
     "artifact_id": {"$ref": "#/$defs/hash"},
     "role": {"enum": ["claims", "material_items", "material_relations"]},
     "snapshot_id": {"$ref": "#/$defs/hash"}, "task_id": {"type": "string", "minLength": 1},
-    "protocol": {"enum": ["claims-deterministic-v1", "claims-json-v2", "claims-atomic-json-v1", "claims-atomic-json-v2", "material-atomic-jsonl-v4", "material-atomic-jsonl-v5", "material-atomic-selector-jsonl-v1", "material-relations-jsonl-v1", "material-relations-selector-jsonl-v1"]},
+    "protocol": {"enum": ["claims-deterministic-v1", "claims-json-v2", "claims-atomic-json-v1", "claims-atomic-json-v2", "material-atomic-jsonl-v4", "material-atomic-jsonl-v5", "material-atomic-selector-jsonl-v1", "material-atomic-selector-jsonl-v2", "material-relations-jsonl-v1", "material-relations-selector-jsonl-v1"]},
     "business_contract": {"enum": ["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]},
     "payload_sha256": {"$ref": "#/$defs/hash"}, "payload_media_type": {"enum": ["application/json", "application/x-ndjson"]},
     "upstream_artifact_ids": {"type": "array", "items": {"$ref": "#/$defs/hash"}, "uniqueItems": true},

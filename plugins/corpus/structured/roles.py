@@ -30,6 +30,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_V1,
     MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
@@ -156,6 +157,7 @@ class RoleArtifact(BaseModel):
         "material-atomic-jsonl-v4",
         "material-atomic-jsonl-v5",
         "material-atomic-selector-jsonl-v1",
+        "material-atomic-selector-jsonl-v2",
         "material-relations-jsonl-v1",
         "material-relations-selector-jsonl-v1",
     ]
@@ -227,6 +229,7 @@ class _RoleCalls:
             },
             "material_items": {
                 MATERIAL_SLOT_JSONL_VERSION,
+                MATERIAL_SELECTOR_JSONL_V1,
                 MATERIAL_SELECTOR_JSONL_VERSION,
             },
             "material_relations": {
@@ -698,6 +701,7 @@ def execute_material_relations_role(
         raise ValueError("CS_INPUT_INVALID: upstream items payload hash mismatch")
     if items_execution.artifact.protocol not in {
         MATERIAL_SLOT_JSONL_VERSION,
+        MATERIAL_SELECTOR_JSONL_V1,
         MATERIAL_SELECTOR_JSONL_VERSION,
     }:
         raise ValueError("CS_INPUT_INVALID: upstream items protocol is unsupported")

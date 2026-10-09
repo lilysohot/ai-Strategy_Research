@@ -37,7 +37,7 @@
     {"path": "v1/state-codes.json", "sha256": "a43bf821e4c659c4e71eff3a92f5e36cbce56b1cfeb81bc50a68aa5701a7a0c3"},
     {"path": "v1/evidence-snapshot.schema.json", "sha256": "9f29dca28f9156987131b91605efc801a20a0450683d96db6cb26f1e82540afb"},
     {"path": "v1/execution-ledger.schema.json", "sha256": "e30b2c9b6fc5686462584d0bf2f97a15d705cd08dae23f990ba30444789c693d"},
-    {"path": "v1/role-artifact.schema.json", "sha256": "e59d6b6cdf36aea505053631dfdca0b199d9d4837da490f816480cfa68dcc7e5"},
+    {"path": "v1/role-artifact.schema.json", "sha256": "ba9dff96a9540a519c609491d85e3721d57cc2de5e3ffad6103a0541fec93f72"},
     {"path": "v1/semantic-publication.schema.json", "sha256": "636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa"},
     {"path": "v1/semantic-query-page.schema.json", "sha256": "5494bf1aaa33e8b126934afff1dbba308c15ef90025cdd6665f2e4ec48d82605"},
     {"path": "v1/report-semantic-reference.schema.json", "sha256": "18cec7608bf9d6f895915f8564fbcf8e50a13b2f6075a6aaa7e22b1adfb4f61e"},

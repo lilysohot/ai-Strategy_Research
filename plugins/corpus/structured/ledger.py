@@ -35,6 +35,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_V1,
     MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
@@ -285,6 +286,7 @@ class BatchPlan(BaseModel):
             },
             "material_items": {
                 MATERIAL_SLOT_JSONL_VERSION,
+                MATERIAL_SELECTOR_JSONL_V1,
                 MATERIAL_SELECTOR_JSONL_VERSION,
             },
             "material_relations": {
@@ -634,6 +636,7 @@ def plan_batch(
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_relation_task_limit")
     if material_items_protocol not in {
         MATERIAL_SLOT_JSONL_VERSION,
+        MATERIAL_SELECTOR_JSONL_V1,
         MATERIAL_SELECTOR_JSONL_VERSION,
     }:
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_items_protocol")
@@ -642,7 +645,10 @@ def plan_batch(
         MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     }:
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_relations_protocol")
-    selector_protocol = material_items_protocol == MATERIAL_SELECTOR_JSONL_VERSION
+    selector_protocol = material_items_protocol in {
+        MATERIAL_SELECTOR_JSONL_V1,
+        MATERIAL_SELECTOR_JSONL_VERSION,
+    }
     try:
         item_options = (
             MaterialItemsPlanOptions(
