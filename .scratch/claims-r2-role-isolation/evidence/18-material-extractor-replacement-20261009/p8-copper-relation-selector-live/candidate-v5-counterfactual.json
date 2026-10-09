@@ -1,0 +1,85 @@
+{
+  "schema_version": "relation-candidate-v5-counterfactual-1",
+  "model_calls": 0,
+  "v4_candidates": 340,
+  "v5_candidates": 333,
+  "preserved_v4_candidates": 333,
+  "added_candidates": 0,
+  "removed_candidates": 7,
+  "added": [],
+  "removed": [
+    {
+      "candidate_pair_id": "pair_ab7f6171ac9a0c43",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_8f3f3e2d84d5f69d",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_bdc239868f4de000",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_67193fc873c76ef8",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_cbe9ae025980503d",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_20315c03b3120632",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_6bfa54e3dbf6b146",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_02531d4c6d673b87",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_6a805f675a5ed70b",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_734b1b174e72e047",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_fc9e68ec87a0f52f",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_e23dedce2324bacf",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    },
+    {
+      "candidate_pair_id": "pair_1fff17bf70bc3b14",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_6692a3fce30c76ab",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers",
+      "target_text": "下面有请电话尾号6161的参会人提问，请发言，谢谢。"
+    }
+  ],
+  "mitsui_candidates": [
+    {
+      "candidate_pair_id": "pair_ad507c2bfb7a7872",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_20315c03b3120632",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_9ac292fbb05063a7",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_02531d4c6d673b87",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    }
+  ],
+  "interpretation": "v5 removes only answer edges aimed at a facilitator turn-management invitation; the other v4 source-ordered question candidates, including both Mitsui answer atoms, remain frozen"
+}

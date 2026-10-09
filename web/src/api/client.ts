@@ -8,19 +8,26 @@
  *   - attach the bearer token, read through a provider so a token refreshed
  *     mid-session is picked up without re-importing anything;
  *   - turn a non-2xx into a single {@link ApiError} shape, because FastAPI
- *     reports ``detail`` as either a string or (for 422) a list of field errors,
- *     and every view would otherwise re-implement that unwrapping;
+ *     reports ``detail`` as either a string or (for 422) a list of field errors
+ *     while the business layer reports ``{"error": {code, ...}}``, and every
+ *     view would otherwise re-implement that unwrapping;
  *   - route 401 to one handler so "log out and go to /login" lives in one place.
  *
  * The api_key is never part of any request body or response type here — LLM
  * credentials are entered once and stored encrypted server-side (FR-2.2).
  */
 
+import { errorDetailFromBody, messageFromDetail } from '@/utils/apiError'
+
 const API_PREFIX = '/api'
 
 export class ApiError extends Error {
   readonly status: number
-  /** Raw ``detail`` as returned by FastAPI (string or validation-error list). */
+  /**
+   * Unwrapped error payload: FastAPI's ``detail`` (string or 422 list) or the
+   * business envelope's inner ``error`` object (contract §2, ``code``/``fields``).
+   * See {@link errorDetailFromBody}.
+   */
   readonly detail: unknown
 
   constructor(status: number, message: string, detail: unknown) {
@@ -47,53 +54,6 @@ export function setTokenProvider(provider: () => string | null): void {
 /** Register what to do on a 401/403 (wired once by the router guard). */
 export function setUnauthorizedHandler(handler: () => void): void {
   unauthorizedHandler = handler
-}
-
-/**
- * Render FastAPI's ``detail`` into one display string.
- *
- * 422 bodies are ``[{loc: [...], msg, type}]``; joining every field error is
- * what makes a form usable, and falling back to a generic message keeps a
- * surprising body from rendering as ``[object Object]``.
- */
-function messageFromDetail(status: number, detail: unknown): string {
-  if (typeof detail === 'string' && detail.trim()) return detail
-  if (Array.isArray(detail)) {
-    const parts = detail
-      .map((item) => {
-        if (item && typeof item === 'object' && 'msg' in item) {
-          const loc = (item as { loc?: unknown[] }).loc
-          const field = Array.isArray(loc) ? loc.filter((p) => p !== 'body').join('.') : ''
-          return field ? `${field}: ${String((item as { msg: unknown }).msg)}` : String((item as { msg: unknown }).msg)
-        }
-        return String(item)
-      })
-      .filter(Boolean)
-    if (parts.length) return parts.join('；')
-  }
-  if (detail && typeof detail === 'object') {
-    const maybeMsg = (detail as { message?: unknown; msg?: unknown }).message
-      ?? (detail as { message?: unknown; msg?: unknown }).msg
-    if (typeof maybeMsg === 'string') return maybeMsg
-  }
-  switch (status) {
-    case 401:
-      return '登录状态已失效，请重新登录'
-    case 403:
-      return '没有权限执行该操作'
-    case 404:
-      return '资源不存在或无权访问'
-    case 409:
-      return '操作冲突，请重试'
-    case 413:
-      return '上传内容过大'
-    case 423:
-      return '操作被暂时锁定，请稍后重试'
-    case 0:
-      return '网络异常，请检查连接'
-    default:
-      return `请求失败（HTTP ${status}）`
-  }
 }
 
 /**
@@ -214,14 +174,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   if (!response.ok) {
     let detail: unknown = null
     try {
-      const text = await response.text()
-      if (text) {
-        try {
-          detail = (JSON.parse(text) as { detail?: unknown }).detail ?? text
-        } catch {
-          detail = text
-        }
-      }
+      detail = errorDetailFromBody(await response.text())
     } catch {
       detail = null
     }

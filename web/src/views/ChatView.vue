@@ -351,6 +351,7 @@ watch(
 // 前端不解析自然语言，只按“该研究是否存在未提示过的 pending 请求”决定是否自动弹出。
 import { inputRequests as inputRequestsApi } from '@/api'
 import type { InputRequest } from '@/types'
+import { dialogCoversRequest } from '@/utils/inputRequest'
 
 const inputDialogOpen = ref(false)
 const inputDialogRequest = ref<InputRequest | null>(null)
@@ -361,7 +362,15 @@ async function maybeOpenInputRequest(): Promise<void> {
   if (!id || inputDialogOpen.value) return
   try {
     const res = await inputRequestsApi.list({ research_id: id, status: 'pending', limit: 20 })
-    const next = res.requests.find((item) => !promptedRequestIds.has(item.id))
+    // 只对弹窗能采集并申报的字段集自动弹窗；字段集不匹配的请求留在补数中心逐项填写，
+    // 否则用户会在"仍有待澄清项"里无限重试（见 utils/inputRequest.ts）。
+    const next = res.requests.find(
+      (item) =>
+        !promptedRequestIds.has(item.id) &&
+        dialogCoversRequest(item.remaining_fields ?? [], {
+          accountBound: Boolean(business.link?.account_id),
+        }),
+    )
     if (!next) return
     promptedRequestIds.add(next.id)
     inputDialogRequest.value = next

@@ -1,5 +1,6 @@
 {
   "schema_version": "copper-selector-v5-relation-target-evaluation-1",
+  "scorer_version": "material-development-scorer-4",
   "gold_file": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
   "gold_scope": {
     "items": 11,
@@ -13,7 +14,7 @@
     "semantic_target_accuracy": 0.8181818181818182,
     "attribution_target_accuracy": 1.0,
     "critical_all_fields_accuracy": 0.0,
-    "source_relation_recall": 0.25
+    "source_relation_recall": 0.75
   },
   "detail": [
     {
@@ -22,6 +23,12 @@
       "predicted_item": "itm_bf49b59f8140755c",
       "predicted_items": [
         "itm_bf49b59f8140755c"
+      ],
+      "relation_endpoint_items": [
+        "itm_bf49b59f8140755c",
+        "itm_1b647f3e851e22ae",
+        "itm_228461dbeed91afd",
+        "itm_c85e2fae7dbfe588"
       ],
       "quote_similarity": 1.0,
       "field_checks": {
@@ -48,6 +55,10 @@
       "predicted_items": [
         "itm_d12470eca334fd16"
       ],
+      "relation_endpoint_items": [
+        "itm_d12470eca334fd16",
+        "itm_ad212e8991b5916a"
+      ],
       "quote_similarity": 1.0,
       "field_checks": {
         "semantic_type": true,
@@ -71,6 +82,9 @@
       "matched": true,
       "predicted_item": "itm_f0f1413e119df47c",
       "predicted_items": [
+        "itm_f0f1413e119df47c"
+      ],
+      "relation_endpoint_items": [
         "itm_f0f1413e119df47c"
       ],
       "quote_similarity": 0.7059,
@@ -98,6 +112,9 @@
       "predicted_items": [
         "itm_b8338f5c5760e1d5"
       ],
+      "relation_endpoint_items": [
+        "itm_b8338f5c5760e1d5"
+      ],
       "quote_similarity": 0.7442,
       "field_checks": {
         "semantic_type": false,
@@ -121,6 +138,9 @@
       "matched": true,
       "predicted_item": "itm_dc9e35f35c2bd5ff",
       "predicted_items": [
+        "itm_dc9e35f35c2bd5ff"
+      ],
+      "relation_endpoint_items": [
         "itm_dc9e35f35c2bd5ff"
       ],
       "quote_similarity": 0.7213,
@@ -148,6 +168,10 @@
       "predicted_items": [
         "itm_a682b7079bb4d19b"
       ],
+      "relation_endpoint_items": [
+        "itm_a682b7079bb4d19b",
+        "itm_c5b41691247cbe34"
+      ],
       "quote_similarity": 1.0,
       "field_checks": {
         "semantic_type": true,
@@ -172,6 +196,10 @@
       "predicted_item": "itm_26d677f6ff5a832e",
       "predicted_items": [
         "itm_26d677f6ff5a832e"
+      ],
+      "relation_endpoint_items": [
+        "itm_26d677f6ff5a832e",
+        "itm_b7359094c20201f2"
       ],
       "quote_similarity": 0.8085,
       "field_checks": {
@@ -198,6 +226,10 @@
       "predicted_items": [
         "itm_c3c12e04657cec79"
       ],
+      "relation_endpoint_items": [
+        "itm_c3c12e04657cec79",
+        "itm_b89393d4936d3d24"
+      ],
       "quote_similarity": 0.7937,
       "field_checks": {
         "semantic_type": true,
@@ -221,6 +253,9 @@
       "matched": true,
       "predicted_item": "itm_c0721fd9c5c22faa",
       "predicted_items": [
+        "itm_c0721fd9c5c22faa"
+      ],
+      "relation_endpoint_items": [
         "itm_c0721fd9c5c22faa"
       ],
       "quote_similarity": 0.7931,
@@ -248,6 +283,9 @@
       "predicted_items": [
         "itm_2519affdac798906"
       ],
+      "relation_endpoint_items": [
+        "itm_2519affdac798906"
+      ],
       "quote_similarity": 1.0,
       "field_checks": {
         "semantic_type": true,
@@ -272,6 +310,10 @@
       "predicted_item": "itm_20315c03b3120632",
       "predicted_items": [
         "itm_20315c03b3120632"
+      ],
+      "relation_endpoint_items": [
+        "itm_20315c03b3120632",
+        "itm_02531d4c6d673b87"
       ],
       "quote_similarity": 0.8462,
       "field_checks": {

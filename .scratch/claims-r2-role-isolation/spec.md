@@ -116,6 +116,8 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - v1 分别冻结 snapshot、batch/task/attempt、角色工件、semantic publication、query/page、report
   semantic reference 六类封装。所有封装必有 `schema_version`；合法/非法样例与字节指纹由
   `contracts/contract-manifest.json` 绑定。
+- batch plan 的 accepted-items 导入使用 `corpus-batch-plan-v2`；v1 继续按原身份只读兼容，但不得携带
+  import payload。v2 的新增字段是自包含且参与 plan hash 的源 artifact/payload，不从执行机路径解析。
 - 角色工件只记录业务 payload 的媒体类型和 SHA-256：Claims payload 必须验证为现有
   `EvidenceRun/EvidenceFact`，R2 payload 必须验证为现有 `MaterialRun/MaterialUnderstanding`；不创建
   第三套 Claim/Item Schema。
@@ -148,6 +150,10 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
   extracted 端点，适合局部独立发布；`complete_parent` 要求 parent items 为
   `succeeded / valid / accepted`，适合完整样本质量门。两种策略不得由运行器临时口头切换，且必须进入
   plan hash。17 的 copper 证明 Markdown stop policy 不足以替代机读依赖策略；18 已补上该硬门。
+- 已验收 items 的跨批复用必须通过 plan 内自包含的 `AcceptedMaterialItems` 导入：同时绑定源
+  `RoleArtifact`、`MaterialRun` payload hash、snapshot 和 items-only 状态。导入 task 的 method 固定为
+  `imported`、`max_attempts=0`，在当前 formal ledger 生成带 upstream artifact ID 的新父工件；不得以
+  文件路径旁路、独立 attempt ledger 或重跑 items 代替。
 
 ### 4.5 首轮协议与关系候选范围
 
@@ -216,9 +222,9 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
 - Issue 18 另有独立授权的 54 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4）；
-  P6/P7 replay 与 P8 candidate-v4 反事实为 0 模型调用。P8 的新 relation-only 授权已经用完，4/4
-  succeeded、0 retry；后续 v4 候选剪枝、原子端点评分与 formal ledger import seam 先做零调用验证，
-  不从本次签认推导新的 live budget。
+  P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9 formal-ledger plan freeze 均为 0 模型
+  调用。P8 的 relation-only 授权已经用完，4/4 succeeded、0 retry；P9 只冻结了 relations≤4 的新计划，
+  尚未 execute，不从本次签认推导其调用已经发生或扩大为新的 items/Claims 预算。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件

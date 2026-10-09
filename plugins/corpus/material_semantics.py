@@ -48,9 +48,14 @@ MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
 MATERIAL_RELATION_SELECTOR_JSONL_VERSION = "material-relations-selector-jsonl-v1"
 MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v11"
 RELATION_CANDIDATE_RULE_V3 = "material-relation-candidates-v3"
-RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v4"
+RELATION_CANDIDATE_RULE_V4 = "material-relation-candidates-v4"
+RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v5"
 RELATION_CANDIDATE_RULE_VERSIONS = frozenset(
-    {RELATION_CANDIDATE_RULE_V3, RELATION_CANDIDATE_RULE_VERSION}
+    {
+        RELATION_CANDIDATE_RULE_V3,
+        RELATION_CANDIDATE_RULE_V4,
+        RELATION_CANDIDATE_RULE_VERSION,
+    }
 )
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
@@ -76,6 +81,7 @@ RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v2",
     "material-relation-candidates-v3",
     "material-relation-candidates-v4",
+    "material-relation-candidates-v5",
 ]
 
 MaterialType = Literal[
@@ -1556,6 +1562,7 @@ def _relation_candidate_pairs(
     candidate_slots: tuple[CandidateSlot, ...] = (),
     *,
     ordered_questions: bool = False,
+    exclude_facilitator_questions: bool = False,
 ) -> list[dict[str, str]]:
     pairs: list[dict[str, str]] = []
     slot_for_item = {
@@ -1601,7 +1608,14 @@ def _relation_candidate_pairs(
         support_target: MaterialItem | None = None
         previous_in_group: MaterialItem | None = None
         for item_index, item in enumerate(group):
-            if ordered_questions and item.speech_role == "question":
+            if (
+                ordered_questions
+                and item.speech_role == "question"
+                and (
+                    not exclude_facilitator_questions
+                    or _is_actionable_relation_question(item)
+                )
+            ):
                 group_questions.append((item_index, item))
                 pending_questions = [*pending_questions, item][-2:]
             if item.speech_role == "answer" and pending_questions:
@@ -4032,7 +4046,8 @@ def _strict_relation_candidate_pairs(
     for pair in _relation_candidate_pairs(
         items,
         candidate_slots,
-        ordered_questions=rule_version == RELATION_CANDIDATE_RULE_VERSION,
+        ordered_questions=rule_version != RELATION_CANDIDATE_RULE_V3,
+        exclude_facilitator_questions=rule_version == RELATION_CANDIDATE_RULE_VERSION,
     ):
         source, target = by_id[pair["from_item"]], by_id[pair["to_item"]]
         source_slot, target_slot = slot_by_id[source.item_id], slot_by_id[target.item_id]
@@ -4100,6 +4115,17 @@ def _strict_relation_candidate_pairs(
             }
         )
     return pairs
+
+
+def _is_actionable_relation_question(item: MaterialItem) -> bool:
+    """Reject turn-management invitations that cannot be answered semantically."""
+    text = item.text.strip()
+    return not bool(
+        re.search(
+            r"(?:下面|接下来)?有请.{0,40}(?:提问|发言)|请(?:提问|发言)(?:[，,。！!谢谢]*)$",
+            text,
+        )
+    )
 
 
 def build_relation_candidate_set(

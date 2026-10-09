@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[2]
 GOLD = ROOT / "data/corpus/.audit/r1_material_gold_v1_20260913.json"
 DEFAULT_BUDGET = ROOT / ".scratch/corpus-evidence-pipeline/r2-redesign-development-budget-v1.json"
 OUT = ROOT / ".scratch/corpus-evidence-pipeline/material-semantics-runs"
-MATERIAL_DEVELOPMENT_SCORER_VERSION = "material-development-scorer-3"
+MATERIAL_DEVELOPMENT_SCORER_VERSION = "material-development-scorer-4"
 DIRECT_LIVE_DISABLED_MESSAGE = (
     "direct live execution is disabled; freeze and execute the request through "
     "python -m plugins.corpus.structured.cli so the formal ledger owns authorization, "
@@ -229,6 +229,42 @@ def _same_atomic_group(primary: dict[str, Any], candidate: dict[str, Any]) -> bo
             "temporal_frame",
         )
     )
+
+
+def relation_endpoint_indices(
+    gold_item: dict[str, Any],
+    scored_indices: list[int],
+    predicted_items: list[dict[str, Any]],
+) -> list[int]:
+    """Map one gold proposition to all nearby atomic endpoints without changing item scoring."""
+    if not scored_indices:
+        return []
+    primary = predicted_items[scored_indices[0]]
+    primary_evidence = primary["evidence"][0]
+    selected = set(scored_indices)
+    alternatives: list[tuple[int, float, int]] = []
+    for index, candidate in enumerate(predicted_items):
+        if index in selected:
+            continue
+        if any(
+            primary.get(field) != candidate.get(field)
+            for field in ("speaker_ref", "speech_role", "statement_role")
+        ):
+            continue
+        candidate_evidence = candidate["evidence"][0]
+        if any(
+            primary_evidence.get(field)
+            and candidate_evidence.get(field)
+            and primary_evidence[field] != candidate_evidence[field]
+            for field in ("packet_id", "locator")
+        ):
+            continue
+        similarity = quote_score(gold_item, candidate)
+        if similarity < 0.35:
+            continue
+        alternatives.append((candidate_evidence.get("start", index), -similarity, index))
+    alternatives.sort()
+    return [*scored_indices, *(entry[2] for entry in alternatives[: 4 - len(scored_indices)])]
 
 
 def _group_polarity_matches(gold_polarity: object, predictions: list[dict[str, Any]]) -> bool:
@@ -462,8 +498,11 @@ def score_sample(sample: dict[str, Any], material_run: Any) -> dict[str, Any]:
             continue
         predicted_group = [predicted_items[index] for index in match["predicted_indices"]]
         predicted_item = predicted_group[0]
+        endpoint_indices = relation_endpoint_indices(
+            gold_item, match["predicted_indices"], predicted_items
+        )
         endpoint_map[gold_item["item_id"]] = tuple(
-            predicted["item_id"] for predicted in predicted_group
+            predicted_items[index]["item_id"] for index in endpoint_indices
         )
         semantic_ok = all(
             gold_item["semantic_type"] == predicted["semantic_type"]
@@ -537,29 +576,36 @@ def score_sample(sample: dict[str, Any], material_run: Any) -> dict[str, Any]:
                 "matched": True,
                 "predicted_item": predicted_item["item_id"],
                 "predicted_items": [predicted["item_id"] for predicted in predicted_group],
+                "relation_endpoint_items": [
+                    predicted_items[index]["item_id"] for index in endpoint_indices
+                ],
                 "quote_similarity": match["quote_similarity"],
                 "field_checks": field_checks,
                 "predicted_text": [predicted["text"] for predicted in predicted_group],
             }
         )
 
-    relation_matches = 0
+    matched_gold_relations: set[int] = set()
+    relation_true_positive = 0
     relation_false_positive = 0
     predicted_relations = predicted_payload["relations"]
-    expected_relations = {
-        (relation["type"], from_item, to_item)
-        for relation in sample["relations"]
-        if relation["from_item"] in endpoint_map and relation["to_item"] in endpoint_map
-        for from_item in endpoint_map[relation["from_item"]]
-        for to_item in endpoint_map[relation["to_item"]]
-    }
+    expected_relations: dict[tuple[str, str, str], set[int]] = {}
+    for relation_index, relation in enumerate(sample["relations"]):
+        if relation["from_item"] not in endpoint_map or relation["to_item"] not in endpoint_map:
+            continue
+        for from_item in endpoint_map[relation["from_item"]]:
+            for to_item in endpoint_map[relation["to_item"]]:
+                expected_relations.setdefault(
+                    (relation["type"], from_item, to_item), set()
+                ).add(relation_index)
     mapped_endpoint_ids = {
         endpoint_id for endpoint_ids in endpoint_map.values() for endpoint_id in endpoint_ids
     }
     for relation in predicted_relations:
         key = (relation["type"], relation["from_item"], relation["to_item"])
         if key in expected_relations and relation["provenance"] == "source_explicit":
-            relation_matches += 1
+            relation_true_positive += 1
+            matched_gold_relations.update(expected_relations[key])
         elif (
             relation["provenance"] == "source_explicit"
             and relation["from_item"] in mapped_endpoint_ids
@@ -571,8 +617,9 @@ def score_sample(sample: dict[str, Any], material_run: Any) -> dict[str, Any]:
     critical_count = sum(item["critical"] for item in gold_items)
     relation_count = len(sample["relations"])
     matched_predicted_indices = {index for match in matches for index in match["predicted_indices"]}
+    relation_matches = len(matched_gold_relations)
     unscored_source_relations = max(
-        0, len(predicted_relations) - relation_matches - relation_false_positive
+        0, len(predicted_relations) - relation_true_positive - relation_false_positive
     )
     return {
         "sample_id": sample["sample_id"],
@@ -588,8 +635,8 @@ def score_sample(sample: dict[str, Any], material_run: Any) -> dict[str, Any]:
         ),
         "source_relation_recall": relation_matches / relation_count if relation_count else 1.0,
         "source_relation_precision": (
-            relation_matches / (relation_matches + relation_false_positive)
-            if relation_matches + relation_false_positive
+            relation_true_positive / (relation_true_positive + relation_false_positive)
+            if relation_true_positive + relation_false_positive
             else (1.0 if relation_count == 0 else 0.0)
         ),
         "source_relation_precision_scope": "selected_target_endpoints_only",
@@ -606,6 +653,7 @@ def score_sample(sample: dict[str, Any], material_run: Any) -> dict[str, Any]:
             "gold_relations": relation_count,
             "predicted_relations": len(predicted_relations),
             "matched_relations": relation_matches,
+            "true_positive_relations": relation_true_positive,
             "false_positive_relations": relation_false_positive,
             "unscored_source_relations": unscored_source_relations,
         },

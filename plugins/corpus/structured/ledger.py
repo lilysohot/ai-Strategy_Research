@@ -53,6 +53,7 @@ from plugins.corpus.structured.config import (
 from plugins.corpus.structured.roles import (
     ROUTING_RULE_VERSION,
     RoleArtifact,
+    RoleCoverage,
     RoleExecution,
     RoleRequest,
     RoleRoutingPlan,
@@ -63,7 +64,8 @@ from plugins.corpus.structured.roles import (
 )
 from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
-PLAN_SCHEMA_VERSION = "corpus-batch-plan-v1"
+PLAN_SCHEMA_VERSION_V1 = "corpus-batch-plan-v1"
+PLAN_SCHEMA_VERSION = "corpus-batch-plan-v2"
 LEDGER_SCHEMA_VERSION = "corpus-execution-ledger-v1"
 REPLAY_SCHEMA_VERSION = "corpus-replay-response-v1"
 DB_SCHEMA_VERSION = 2
@@ -170,7 +172,7 @@ class PlannedTask(BaseModel):
     logical_key: str
     role: Role
     protocol: str
-    method: Literal["deterministic", "model"]
+    method: Literal["deterministic", "imported", "model"]
     scoped_unit_ids: tuple[str, ...]
     input_sha256: str
     profile_sha256: str
@@ -217,12 +219,44 @@ class MaterialItemsPlanOptions(BaseModel):
     )
 
 
+class AcceptedMaterialItems(BaseModel):
+    """A self-contained, immutable items dependency accepted before this batch."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    artifact: RoleArtifact
+    payload: MaterialRun
+
+    @model_validator(mode="after")
+    def validate_accepted_items(self) -> AcceptedMaterialItems:
+        try:
+            self.artifact.verify_identity()
+            self.payload.verify_identity()
+        except ValueError as exc:
+            raise ValueError("accepted items identity mismatch") from exc
+        if (
+            self.artifact.role != "material_items"
+            or self.artifact.business_contract != "MaterialRun/MaterialUnderstanding"
+            or self.artifact.execution_status != "succeeded"
+            or self.artifact.protocol_status != "valid"
+            or self.artifact.context_status != "complete"
+            or self.artifact.quality_status != "accepted"
+            or self.artifact.payload_sha256
+            != canonical_hash(self.payload.model_dump(mode="json"))
+            or self.payload.understanding.relations
+        ):
+            raise ValueError("material items artifact is not accepted and items-only")
+        return self
+
+
 class BatchPlan(BaseModel):
     """Self-contained immutable plan used by execute and replay in another process."""
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    schema_version: Literal["corpus-batch-plan-v1"] = PLAN_SCHEMA_VERSION
+    schema_version: Literal["corpus-batch-plan-v1", "corpus-batch-plan-v2"] = (
+        PLAN_SCHEMA_VERSION
+    )
     batch_id: str
     plan_sha256: str
     snapshot: EvidenceSnapshot
@@ -237,6 +271,10 @@ class BatchPlan(BaseModel):
         exclude_if=lambda value: value == ALL_ROLES,
     )
     material_items_options: MaterialItemsPlanOptions | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    imported_material_items: AcceptedMaterialItems | None = Field(
         default=None,
         exclude_if=lambda value: value is None,
     )
@@ -261,6 +299,16 @@ class BatchPlan(BaseModel):
             )
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
+        imported = self.imported_material_items
+        if imported is not None and self.schema_version != PLAN_SCHEMA_VERSION:
+            raise StructuredExecutionError("CS_SCHEMA_UNSUPPORTED", "items_import_requires_v2")
+        if imported is not None and (
+            "material_items" not in self.enabled_roles
+            or self.material_items_options is not None
+            or imported.artifact.snapshot_id != self.snapshot.snapshot_id
+            or imported.payload.understanding.source.source_rev != self.snapshot.snapshot_id
+        ):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_imported_material_items")
         if set(self.role_max_attempts) != {
             "claims",
             "material_items",
@@ -324,7 +372,7 @@ class BatchPlan(BaseModel):
                 (
                     "material_items",
                     profiles["material_items"].protocol,
-                    "model",
+                    "imported" if imported is not None else "model",
                     self.routing.material_items_scope,
                 )
             )
@@ -336,6 +384,16 @@ class BatchPlan(BaseModel):
             for task in self.tasks
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "initial_tasks_do_not_match_routing")
+        imported_tasks = [task for task in self.tasks if task.method == "imported"]
+        if (imported is None and imported_tasks) or (
+            imported is not None
+            and (
+                len(imported_tasks) != 1
+                or imported_tasks[0].role != "material_items"
+                or imported_tasks[0].protocol != imported.artifact.protocol
+            )
+        ):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_imported_task")
         for task in self.tasks:
             profile = profiles[task.role]
             identity = {
@@ -401,7 +459,7 @@ class LedgerTask(BaseModel):
 
     task_id: str
     role: Role
-    method: Literal["deterministic", "model"]
+    method: Literal["deterministic", "imported", "model"]
     input_sha256: str
     profile_sha256: str
     execution_status: ExecutionStatus
@@ -575,7 +633,7 @@ def _planned_task(
     snapshot: EvidenceSnapshot,
     role: Role,
     protocol: str,
-    method: Literal["deterministic", "model"],
+    method: Literal["deterministic", "imported", "model"],
     scope: tuple[str, ...],
     profile: FrozenRoleProfile,
     max_attempts: int,
@@ -630,6 +688,7 @@ def plan_batch(
     candidate_slot_ids: Sequence[str] | None = None,
     material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
     material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
+    imported_material_items: AcceptedMaterialItems | None = None,
 ) -> BatchPlan:
     """Freeze deterministic routing, profiles, budgets, and relation derivation; no I/O."""
     snapshot.verify_identity()
@@ -637,6 +696,21 @@ def plan_batch(
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_batch_budget")
     if type(max_relation_tasks) is not int or max_relation_tasks < 0:
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_relation_task_limit")
+    if imported_material_items is not None:
+        if any(
+            value is not None
+            for value in (
+                max_items_per_packet,
+                max_slots_per_batch,
+                max_estimated_tokens_per_batch,
+                material_type,
+                candidate_slot_ids,
+            )
+        ):
+            raise StructuredExecutionError(
+                "CS_INPUT_INVALID", "imported_items_disallow_extraction_options"
+            )
+        material_items_protocol = imported_material_items.artifact.protocol
     if material_items_protocol not in {
         MATERIAL_SLOT_JSONL_VERSION,
         *MATERIAL_SELECTOR_JSONL_VERSIONS,
@@ -703,7 +777,11 @@ def plan_batch(
         or ("material_relations" in selected and "material_items" not in selected)
     ):
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
-    if "material_items" in selected and selector_protocol:
+    if (
+        "material_items" in selected
+        and selector_protocol
+        and imported_material_items is None
+    ):
         try:
             item_options = item_options or MaterialItemsPlanOptions(
                 max_items_per_packet=64,
@@ -780,7 +858,7 @@ def plan_batch(
                 snapshot=snapshot,
                 role="material_items",
                 protocol=material_items_protocol,
-                method="model",
+                method="imported" if imported_material_items is not None else "model",
                 scope=routing.material_items_scope,
                 profile=by_role["material_items"],
                 max_attempts=budgets["material_items"],
@@ -799,6 +877,7 @@ def plan_batch(
         role_max_attempts=budgets,
         enabled_roles=ordered_roles,
         material_items_options=item_options,
+        imported_material_items=imported_material_items,
         currency=currency,
         relations=RelationPlan(
             enabled=relations_enabled and "material_relations" in selected,
@@ -1953,6 +2032,45 @@ def _live_dispatch(
     return dispatch
 
 
+def _import_material_items_execution(
+    plan: BatchPlan, task: PlannedTask
+) -> RoleExecution:
+    """Bridge one accepted upstream artifact into this batch without a model attempt."""
+    imported = plan.imported_material_items
+    if imported is None or task.role != "material_items" or task.method != "imported":
+        raise StructuredExecutionError("CS_INPUT_INVALID", "imported_items_binding_missing")
+    source = imported.artifact
+    coverage = RoleCoverage(
+        scoped_unit_ids=task.scoped_unit_ids,
+        omitted_unit_ids=source.coverage.omitted_unit_ids,
+        reason_codes=tuple(
+            dict.fromkeys((*source.coverage.reason_codes, "accepted_items_artifact_imported"))
+        ),
+    )
+    base = RoleArtifact(
+        artifact_id="sha256:" + "0" * 64,
+        role="material_items",
+        snapshot_id=plan.snapshot.snapshot_id,
+        task_id=task.task_id,
+        protocol=task.protocol,  # type: ignore[arg-type]
+        business_contract="MaterialRun/MaterialUnderstanding",
+        payload_sha256=canonical_hash(imported.payload.model_dump(mode="json")),
+        upstream_artifact_ids=(source.artifact_id,),
+        coverage=coverage,
+        execution_status="succeeded",
+        protocol_status="valid",
+        context_status="complete",
+        quality_status="accepted",
+    )
+    artifact = base.model_copy(
+        update={
+            "artifact_id": canonical_hash(base.model_dump(mode="json", exclude={"artifact_id"}))
+        }
+    )
+    artifact.verify_identity()
+    return RoleExecution(artifact=artifact, payload=imported.payload)
+
+
 def _run_task(
     journal: ExecutionJournal,
     task: PlannedTask,
@@ -1973,7 +2091,9 @@ def _run_task(
         )
         return None
     try:
-        if task.role == "claims":
+        if task.method == "imported":
+            result = _import_material_items_execution(journal.plan, task)
+        elif task.role == "claims":
             result = execute_claims_role(
                 journal.plan.snapshot,
                 task_id=task.task_id,
@@ -2122,7 +2242,7 @@ def execute_batch(
             journal.recover_pending()
             journal.verify_references()
             for task in plan.tasks:
-                if task.method == "deterministic":
+                if task.method in {"deterministic", "imported"}:
                     _run_task(journal, task, None)
                 elif journal.task_status(task.task_id) not in _TERMINAL:
                     journal.set_task_state(
@@ -2142,6 +2262,23 @@ def execute_batch(
                             "WHERE batch_id=? AND parent_task_id=?",
                             (plan.batch_id, task.task_id),
                         )
+            for parent in (
+                task
+                for task in plan.tasks
+                if task.role == "material_items" and task.method == "imported"
+            ):
+                derived = journal.derive_relation_task(parent)
+                if derived is not None:
+                    journal.set_task_state(
+                        derived.task_id,
+                        "blocked",
+                        error_codes=("CS_CONFIG_MISSING",),
+                        reasons=(
+                            "allow_model_required"
+                            if not allow_model
+                            else "dedicated_extraction_config_required",
+                        ),
+                    )
         finally:
             if journal is not None:
                 journal.close()

@@ -5,6 +5,10 @@
  *
  * 触发方负责查询 pending 请求并把它传进来；本组件只负责填写与提交（answer 接口），
  * 提交成功后服务端按 DATA-07 创建后续 Run。
+ *
+ * 字段集适配由 `ChatView.maybeOpenInputRequest` 用 `dialogCoversRequest` 判定：
+ * 请求里还有弹窗采集不到的字段（例如 `plan.symbol`/`plan.market`/`plan.direction`）时
+ * 不该自动弹这个窗，用户会永远停在"仍有待澄清项"。
  */
 import { computed, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -79,28 +83,34 @@ function close(): void {
  * 为什么必须在这里做完：弹窗由 `ChatView.maybeOpenInputRequest` 的
  * `promptedRequestIds` 去重，同一请求关闭后不会再弹。若只提示"请先到交易账户资料
  * 创建"，用户跳走建完再回来仍然卡在同一处。
+ *
+ * 返回**同一批**账户事实（成功时），由 `submit` 随回答一起申报：请求的待补字段里
+ * 常常就包含这些账户字段（服务端按用途裁决），只在账户接口里写一遍不算"回答了本次
+ * 待补字段"，请求会一直停在 pending。失败返回 null。
  */
-async function createAndBindAccount(): Promise<boolean> {
+async function createAndBindAccount(): Promise<Record<string, unknown> | null> {
   const total = accountDraft.totalCapital.trim()
   if (!total) {
     error.value = '请先填写主账户总资金（用于校验本标的规划资金上限）'
-    return false
+    return null
   }
   if (!props.researchId) {
     error.value = '缺少当前研究标识，无法绑定主账户；请刷新后重试'
-    return false
+    return null
   }
   const suffix = `${props.request?.id ?? 'request'}:${crypto.randomUUID()}`
+  // 可用资金留空时按总资金处理：规划资金上限校验依赖它，不能缺。
+  const available = accountDraft.availableCapital.trim() || total
+  const asOf = new Date().toISOString()
   const created = await accountsApi.create(
     {
       name: '主账户',
       base_currency: accountDraft.currency,
       declared: {
         total_capital: total,
-        // 可用资金留空时按总资金处理：规划资金上限校验依赖它，不能缺。
-        available_capital: accountDraft.availableCapital.trim() || total,
+        available_capital: available,
         capital_basis: accountDraft.capitalBasis,
-        as_of: new Date().toISOString(),
+        as_of: asOf,
       },
       use_case: 'general_reading',
       allow_incomplete: false,
@@ -110,7 +120,7 @@ async function createAndBindAccount(): Promise<boolean> {
   const accountId = String((created as { account_id?: string }).account_id ?? '')
   if (!accountId) {
     error.value = '主账户创建失败：服务端未返回账户 ID'
-    return false
+    return null
   }
   await linkApi.set(
     props.researchId,
@@ -119,7 +129,13 @@ async function createAndBindAccount(): Promise<boolean> {
   )
   await store.loadAccounts()
   await store.loadLink(props.researchId)
-  return true
+  return {
+    total_capital: total,
+    available_capital: available,
+    currency: accountDraft.currency,
+    capital_basis: accountDraft.capitalBasis,
+    as_of: asOf,
+  }
 }
 
 async function submit(): Promise<void> {
@@ -133,13 +149,19 @@ async function submit(): Promise<void> {
 
   submitting.value = true
   try {
+    let accountFacts: Record<string, unknown> | null = null
     if (!boundAccount.value) {
-      const ready = await createAndBindAccount()
-      if (!ready) return
+      accountFacts = await createAndBindAccount()
+      if (!accountFacts) return
     }
 
     const declared: Record<string, Record<string, unknown>> = {
       plan: { allocated_capital: { value: form.allocatedCapital.trim() } },
+    }
+    // 只在本次请求真的索要账户事实时才申报：否则会白写一个账户版本
+    // （账户接口那次已经写过了）。
+    if (accountFacts && (request.remaining_fields ?? []).some((name) => name.startsWith('account.'))) {
+      declared.account = accountFacts
     }
     if (form.riskValue.trim()) {
       declared.plan.risk_budget_value = { value: form.riskValue.trim() }
@@ -167,7 +189,11 @@ async function submit(): Promise<void> {
       emit('answered')
       close()
     } else {
-      error.value = '仍有待澄清项：请补齐后用同一条请求重试'
+      // 列出服务端仍然缺的字段：只说"请补齐"用户不知道该补什么。
+      const remaining = result.remaining_fields ?? []
+      error.value = remaining.length
+        ? `仍有待澄清项：${remaining.join('、')}；请补齐后用同一条请求重试（可在补数中心逐项填写）`
+        : '仍有待澄清项：请补齐后用同一条请求重试'
     }
   } catch (err) {
     // 服务端字段级错误（例如规划资金超过账户可用资金）直接展示。

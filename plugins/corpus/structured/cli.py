@@ -14,8 +14,10 @@ from typing import Literal, cast
 
 from pydantic import ValidationError
 
+from plugins.corpus.material_semantics import MaterialRun
 from plugins.corpus.structured.config import load_extraction_config
 from plugins.corpus.structured.ledger import (
+    AcceptedMaterialItems,
     BatchCheck,
     BatchPlan,
     StructuredExecutionError,
@@ -25,6 +27,7 @@ from plugins.corpus.structured.ledger import (
     replay_batch,
 )
 from plugins.corpus.structured.query import SemanticQueryPage, query_semantic
+from plugins.corpus.structured.roles import RoleArtifact
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotIntegrityError
 
 Role = Literal["claims", "material_items", "material_relations"]
@@ -47,6 +50,14 @@ def _parser() -> argparse.ArgumentParser:
     )
     plan.add_argument("--max-relation-tasks", type=int, default=1)
     plan.add_argument("--max-relation-attempts", type=int)
+    plan.add_argument(
+        "--import-items-artifact",
+        help="accepted material_items RoleArtifact JSON to bridge into this plan",
+    )
+    plan.add_argument(
+        "--import-items-payload",
+        help="MaterialRun JSON bound to --import-items-artifact",
+    )
     plan.add_argument(
         "--relation-dependency-policy",
         choices=("qualified_subset", "complete_parent"),
@@ -152,6 +163,26 @@ def _read_plan(path: str) -> BatchPlan:
         raise StructuredExecutionError("CS_INPUT_INVALID", "plan_invalid") from exc
 
 
+def _read_accepted_material_items(
+    artifact_path: str | None, payload_path: str | None
+) -> AcceptedMaterialItems | None:
+    if bool(artifact_path) != bool(payload_path):
+        raise StructuredExecutionError("CS_INPUT_INVALID", "incomplete_items_import")
+    if artifact_path is None or payload_path is None:
+        return None
+    try:
+        return AcceptedMaterialItems(
+            artifact=RoleArtifact.model_validate_json(
+                Path(artifact_path).read_text(encoding="utf-8")
+            ),
+            payload=MaterialRun.model_validate_json(
+                Path(payload_path).read_text(encoding="utf-8")
+            ),
+        )
+    except (OSError, UnicodeError, ValidationError, ValueError) as exc:
+        raise StructuredExecutionError("CS_INPUT_INVALID", "items_import_invalid") from exc
+
+
 def _write_plan(path: str, plan: BatchPlan) -> None:
     target = Path(path)
     try:
@@ -247,6 +278,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             snapshot = _read_snapshot(args.snapshot)
             config = load_extraction_config()
             role_budgets = _role_budgets(args.role_budget)
+            imported_items = _read_accepted_material_items(
+                args.import_items_artifact, args.import_items_payload
+            )
+            enabled_roles = cast(Sequence[Role] | None, args.enabled_roles)
+            if imported_items is not None and enabled_roles is None:
+                enabled_roles = ("material_items", "material_relations")
             plan = plan_batch(
                 snapshot,
                 config=config,
@@ -258,7 +295,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 max_relation_attempts=args.max_relation_attempts,
                 relation_dependency_policy=args.relation_dependency_policy,
                 deadline_epoch=args.deadline_epoch,
-                enabled_roles=args.enabled_roles,
+                enabled_roles=enabled_roles,
                 max_items_per_packet=args.max_items_per_packet,
                 max_slots_per_batch=args.max_slots_per_batch,
                 max_estimated_tokens_per_batch=args.max_estimated_tokens_per_batch,
@@ -266,6 +303,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 candidate_slot_ids=args.candidate_slot_ids,
                 material_items_protocol=args.material_items_protocol,
                 material_relations_protocol=args.material_relations_protocol,
+                imported_material_items=imported_items,
             )
             _write_plan(args.out, plan)
             _output(

@@ -18,3 +18,11 @@ The normal batch ledger cannot import an accepted replay-mode items artifact as 
 a live-mode relations task. `run_relation_gate.py` therefore uses the production relation role
 executor and adapter with a separate atomic attempt ledger. This is an explicitly recorded
 architecture gap; the evidence runner must not be treated as a general publication path.
+
+Post-run zero-call correction: `material-development-scorer-4` now expands only relation
+endpoints across bounded atomic groups and deduplicates matches by gold relation. Re-evaluating
+this same immutable payload reports 3/4, matching the signed adjudication; the earlier 1/4 is
+retained above as the historical scorer result. Candidate rule v5 also removes seven edges
+aimed only at a facilitator invitation while preserving 333 candidates and both Mitsui answer
+atoms. No v5 selector call was made here. The formal import gap is closed by the separately
+frozen P9 plan.

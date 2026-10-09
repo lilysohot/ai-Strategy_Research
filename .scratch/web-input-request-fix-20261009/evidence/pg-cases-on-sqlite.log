@@ -1,0 +1,6 @@
+# 环境：本机无 PostgreSQL（tests/pg 需 PG_INTEGRATION=1 + 登记测试库）
+# 命令：uv run --no-sync pytest tests/tmp_field_scope_sqlite_check.py -q --tb=short
+# 说明：把 tests/pg 的 4 个定向用例在隔离 SQLite（store.init_db/create_all）上跑一遍，
+#       只为验证用例与修复逻辑；正式的 PG 版本必须在本机外的登记测试库上跑。
+....                                                                     [100%]
+4 passed in 1.31s

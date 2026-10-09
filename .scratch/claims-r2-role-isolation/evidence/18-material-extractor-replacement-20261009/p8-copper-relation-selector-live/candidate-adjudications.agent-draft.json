@@ -1,7 +1,7 @@
 {
   "schema_version": "copper-relation-adjudications-agent-draft-1",
   "created_on": "2026-10-09",
-  "status": "agent_draft",
+  "status": "human_signed",
   "gold_changed": false,
   "thresholds_changed": false,
   "scope": {
@@ -97,9 +97,9 @@
   },
   "publication_query_delivery_context_use": 0,
   "signoff": {
-    "required": true,
-    "name": null,
-    "signed_at": null,
-    "authorization": null
+    "required": false,
+    "name": "xyl",
+    "signed_at": "2026-10-09",
+    "authorization": "签认草案，开始执行"
   }
 }

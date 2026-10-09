@@ -732,6 +732,35 @@ completed，得到 190 条 present relation。整个阶段仍为 0 production da
 完整 corpus 回归为 1388 passed、18 skipped；仅保留此前两项环境失败：本地 golden Recall@5=0/20，
 以及测试固定期待 reader-pdf-10 而当前环境为 reader-pdf-11。v4 未引入新的回归失败。
 
+## 15. 2026-10-09 执行增补：v5 剪枝、原子端点评分与正式导入计划
+
+xyl 已以“签认草案，开始执行”签认 P8 relation 裁定。随后所有工作均为零模型调用。v5 对 v4 新增的
+71 条边做逐类反事实检查，没有用词频或目标金标做过拟合删除：仅删除 7 条指向同一个会务邀请
+“下面有请电话尾号6161的参会人提问，请发言，谢谢”的 answers 边；其余 333 条候选全部保留。三井
+真实业务问题仍与“历史供货事实”和“未来合作预测”两个答案原子分别形成候选，因此 v3 的漏边已在
+确定性候选层修复。
+
+历史 scorer 同时存在两个口径错误。第一，它把 compound gold endpoint 只映射到单个最高相似 item，
+导致正确连接到同一问答 turn 内另一原子项的边被漏记；第二，一条 gold relation 被多个正确原子边实现时，
+它按预测边累加 recall，可能超过 100%。`material-development-scorer-4` 保持 item 字段的一对一评分不变，
+仅为 relation 建立同 speaker、speech role、statement role、packet/locator 和引文相似度约束下最多四项的
+端点组，并按 gold relation 去重。重新读取 P8 不可变 payload 后，自动 relation recall 为 3/4（75%），
+与签认人工裁定一致；缺失的第 4 条仍是 v3 没有候选的 Mitsui 边，不能把 v5 的反事实候选冒充已执行
+selector 决定。
+
+formal batch ledger 现已补上 accepted-artifact import seam。`AcceptedMaterialItems` 在 plan 内自包含
+P7 的源 `RoleArtifact` 与 hash-bound `MaterialRun`，验证 snapshot、items-only、执行/协议/语境/质量均
+通过；`method=imported` 的父任务预算恒为 0，执行时只生成带源 artifact ID 的新 ledger artifact，不会
+调用 items 模型。合成 formal-ledger 回归证明一次完整流程只有 relation attempt，没有 items attempt。
+
+P9 已冻结为 batch `batch:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e`：
+claims=0、items=0、relations≤4，strict `complete_parent`，候选规则 v5。计划冻结产生 0 model requests，
+尚未 execute。由此已消除“为了继续 relations 必须重跑 23 个 items batch”的架构负担；下一门只需决定
+是否执行这一个有界 relation-only 计划。即使执行通过，整篇 relation precision 仍须另建可复用抽样分母，
+不能从 selected-target gold 或 333 个未全量裁定候选反推。publication/query/delivery/context_use 仍为 0。
+相关回归 231 passed；全量 corpus 文件测试为 1353 passed、48 skipped，仅保留 reader-pdf-10/11 的既有
+环境版本断言失败。Ruff 与 Pyright 均通过。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

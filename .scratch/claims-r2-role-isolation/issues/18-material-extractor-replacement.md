@@ -1,7 +1,7 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: relation-live-complete-semantic-gate-failed-v4-zero-call-repair
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 在新签认下执行 4 次 relation-only 调用，4/4 succeeded、4 包 completed；历史 scorer relation recall 1/4，原子端点裁定为 3/4，发布与消费仍为 0
+Status: zero-call-v5-scorer-import-plan-frozen
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 在新签认下执行 4 次 relation-only 调用，4/4 succeeded、4 包 completed；scorer-4 将历史低估的 relation recall 从 1/4 校正为 3/4。候选 v5 为 333 条，P9 formal-ledger import plan 已冻结但未执行，发布与消费仍为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
 Model attempts: 54（P3 23 + P4 23 + P5 4 + P8 relations 4；P6/P7 与 P8-v4 反事实为 0）
@@ -82,6 +82,8 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P8 relation target evaluation](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/evaluation-summary.json)
 - [P8 relation adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-adjudications.agent-draft.json)
 - [P8 candidate v4 zero-call counterfactual](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-v4-counterfactual.json)
+- [P8 candidate v5 zero-call pruning](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-v5-counterfactual.json)
+- [P9 accepted-items import plan](../evidence/18-material-extractor-replacement-20261009/p9-accepted-items-import-plan/manifest.json)
 
 ## Comments
 
@@ -159,3 +161,15 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - 现有 formal batch ledger 不能将 replay-mode 的已签认 items artifact 作为 live-mode relation task 的
   父产物。P8 使用同一生产 role executor/adapter，并以发送前原子落盘的独立四次 attempt ledger 执行；
   该缺口已显式记录，P8 evidence runner 不得作为常规发布路径。
+- 2026-10-09：xyl 以“签认草案，开始执行”签认 P8 relation 裁定。零调用候选 v5 仅删除 7 条指向
+  会务邀请“有请…提问，请发言”的 answers 边，v4 的其余 333 条全部保留；其中三井真实问题仍有两个
+  答案原子候选。`material-development-scorer-4` 将 item 字段计分与 relation 原子端点组分开，并按
+  gold relation 去重，P8 不可变 payload 的自动 relation recall 因而与签认裁定一致为 3/4。
+- 同日 formal ledger 新增自包含的 accepted-items import：计划内的 imported task 验证源 artifact、
+  payload hash、snapshot、items-only 与 accepted 状态，执行时生成绑定源 artifact 的新账本工件且不
+  预留 model attempt。合成执行证明 items attempts=0、relations attempts=1；CLI 已冻结 P9 batch
+  `batch:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e`，预算为 claims/items=0、
+  relations≤4，strict `complete_parent`，冻结过程 0 calls，尚未 execute。
+- P9 相关执行/CLI/角色/关系/发布回归为 231 passed；全量 `tests/test_corpus*.py` 为 1353 passed、
+  48 skipped，仅 1 个既有环境失败（测试期待 reader-pdf-10，当前环境为 reader-pdf-11）。Ruff 与
+  Pyright 通过。

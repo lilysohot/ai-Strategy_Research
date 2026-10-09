@@ -182,6 +182,109 @@ def test_score_sample_aggregates_atomic_fields_and_relation_endpoints() -> None:
     assert result["detail"][0]["predicted_items"] == ["pred-affirmed", "pred-negated"]
 
 
+def test_score_sample_expands_relation_endpoints_across_different_atomic_semantics() -> None:
+    scorer = _scorer()
+    gold_answer = _scoring_item(polarity="affirmed", value=None)
+    gold_answer.update(
+        {
+            "item_id": "gold-answer",
+            "critical": False,
+            "semantic_type": "fact",
+            "evidence": [{"quote": "今年良率约80%，明年预计提升到90%"}],
+        }
+    )
+    gold_question = _scoring_item(
+        polarity="unknown", value=None, speaker_ref="questioner"
+    )
+    gold_question.update(
+        {
+            "item_id": "gold-question",
+            "critical": False,
+            "semantic_type": "unknown",
+            "statement_role": "question",
+            "speech_role": "question",
+            "evidence": [{"quote": "良率现状和明年展望如何？"}],
+        }
+    )
+    current = _scoring_item(polarity="affirmed", value=None)
+    current.update(
+        {
+            "item_id": "pred-current",
+            "semantic_type": "fact",
+            "evidence": [{"quote": "今年良率约80%"}],
+        }
+    )
+    forecast = _scoring_item(polarity="affirmed", value=None)
+    forecast.update(
+        {
+            "item_id": "pred-forecast",
+            "semantic_type": "forecast",
+            "evidence": [{"quote": "明年预计提升到90%"}],
+        }
+    )
+    question = dict(gold_question)
+    question["item_id"] = "pred-question"
+    speakers = [
+        {
+            "speaker_id": "author",
+            "display_name": "专家",
+            "role": "expert",
+            "identity_status": "explicit",
+        },
+        {
+            "speaker_id": "questioner",
+            "display_name": "投资者",
+            "role": "investor_participant",
+            "identity_status": "unknown",
+        },
+    ]
+    payload = {
+        "speakers": speakers,
+        "items": [current, forecast, question],
+        "relations": [
+            {
+                "relation_id": "pred-relation",
+                "type": "answers",
+                "from_item": "pred-forecast",
+                "to_item": "pred-question",
+                "provenance": "source_explicit",
+            }
+        ],
+    }
+    sample = {
+        "sample_id": "sample",
+        "speakers": speakers,
+        "items": [gold_answer, gold_question],
+        "relations": [
+            {
+                "relation_id": "gold-relation",
+                "type": "answers",
+                "from_item": "gold-answer",
+                "to_item": "gold-question",
+                "provenance": "source_explicit",
+            }
+        ],
+    }
+    material_run = SimpleNamespace(
+        understanding=SimpleNamespace(
+            model_dump=lambda **_kwargs: payload,
+            source=SimpleNamespace(source_rev="source-rev"),
+        ),
+        run_id="run-id",
+        summary=lambda: {"complete": True, "packet_status": {"completed": 1}},
+    )
+
+    result = scorer.score_sample(sample, material_run)
+
+    assert result["source_relation_recall"] == 1.0
+    answer_detail = result["detail"][0]
+    assert len(answer_detail["predicted_items"]) == 1
+    assert set(answer_detail["relation_endpoint_items"]) == {
+        "pred-current",
+        "pred-forecast",
+    }
+
+
 def test_attempt_recorder_persists_success_before_packet_scoring(tmp_path: Path) -> None:
     scorer = _scorer()
     recorder = scorer.AttemptRecorder(

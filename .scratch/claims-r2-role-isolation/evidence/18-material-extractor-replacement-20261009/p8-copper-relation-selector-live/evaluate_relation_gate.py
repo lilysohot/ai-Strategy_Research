@@ -57,6 +57,7 @@ def main() -> None:
     result = scorer.score_sample(sample, material_run)
     output = {
         "schema_version": "copper-selector-v5-relation-target-evaluation-1",
+        "scorer_version": scorer.MATERIAL_DEVELOPMENT_SCORER_VERSION,
         "gold_file": str(GOLD.relative_to(ROOT)),
         "gold_scope": {
             "items": len(sample["items"]),

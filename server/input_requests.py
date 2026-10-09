@@ -119,9 +119,20 @@ async def load_current_versions(
     return versions
 
 
-def _spec_json(spec: snapshots.InvestmentInputSpec) -> dict[str, Any]:
+def _spec_json(
+    spec: snapshots.InvestmentInputSpec, *, keep_versions: bool = False
+) -> dict[str, Any]:
     def ref(value: snapshots.ObjectRef | None) -> dict[str, Any] | None:
-        return {"id": str(value.id)} if value else None
+        if value is None:
+            return None
+        data: dict[str, Any] = {"id": str(value.id)}
+        if keep_versions and value.expected_revision is not None:
+            # 无快照的续接没有来源快照可抄版本：不把当时的版本写进续接，回答就会被
+            # "回答缺少资料版本"挡死（``_with_expected_versions``）。有快照的续接仍由
+            # 快照记录版本（``known_versions_json``），因此默认不写，避免多出一条和
+            # 用户可见版本无关的冻结比较。
+            data["expected_revision"] = value.expected_revision
+        return data
 
     return {
         "use_case": spec.use_case,
@@ -190,7 +201,7 @@ async def materialize_worker_intent(
         if snapshot is None:
             continuation = {
                 "message": run.prompt or "按补充后的资料继续分析",
-                "investment_input": _spec_json(spec),
+                "investment_input": _spec_json(spec, keep_versions=True),
                 "pipeline_id": run.pipeline_id,
             }
             source_run_id = None
@@ -223,22 +234,35 @@ async def _spec_from_research_link(
     """无业务快照的研究 Run：按该研究当前绑定的账户/计划构造 spec。
 
     未绑定账户或主计划时引用为空——裁决会因此报缺字段，正好驱动“先创建主账户”的引导。
+    引用带上**当时版本**：续接要记录 ``known_versions``，否则回答时没有任何可比版本，
+    用户填好的资料会被“回答缺少资料版本”挡在门外。
     """
-    link = (
-        await session.execute(
-            select(store.ResearchInvestmentLink).where(
-                store.ResearchInvestmentLink.research_id == research_id,
-                store.ResearchInvestmentLink.user_id == user_id,
-            )
-        )
-    ).scalar_one_or_none()
-    account_id = link.account_id if link is not None else None
-    plan_id = link.primary_plan_id if link is not None else None
+    link = await _research_link(session, user_id=user_id, research_id=research_id)
+    if link is None:
+        return snapshots.InvestmentInputSpec(use_case=use_case)
     return snapshots.InvestmentInputSpec(
         use_case=use_case,
-        account=snapshots.ObjectRef(account_id) if account_id is not None else None,
-        plan=snapshots.ObjectRef(plan_id) if plan_id is not None else None,
+        account=await _live_ref(session, store.InvestmentAccount, link.account_id),
+        plan=await _live_ref(session, store.InvestmentPlan, link.primary_plan_id),
     )
+
+
+async def _live_ref(
+    session: AsyncSession, model: Any, object_id: uuid.UUID | None
+) -> snapshots.ObjectRef | None:
+    """把研究当前绑定的对象读成 ``{id, 当前版本}``；对象已不存在时视为未绑定。
+
+    读的是**锁下**的当前版本：调用方随后要在同一事务里按这个版本写入，读到旧版本就会
+    得到 409 而不是覆盖别人（业务写入本身也要求携带预期版本）。
+    """
+    if object_id is None:
+        return None
+    row = (
+        await session.execute(select(model).where(model.id == object_id).with_for_update())
+    ).scalar_one_or_none()
+    if row is None:
+        return None
+    return snapshots.ObjectRef(object_id, row.current_revision)
 
 
 def _normalize_missing_fields(fields: dict[str, str]) -> list[dict[str, Any]]:
@@ -428,11 +452,19 @@ def _with_expected_versions(
     spec: snapshots.InvestmentInputSpec,
     known: dict[str, Any],
     supplied: dict[str, Any],
+    *,
+    adopted: frozenset[str] = frozenset(),
 ) -> snapshots.InvestmentInputSpec:
     updates: dict[str, Any] = {}
     for group in ("account", "plan"):
         ref = getattr(spec, group)
         if ref is None:
+            continue
+        if group in adopted:
+            # 首次绑定（见 ``_adopt_research_bindings``）：请求建立时该对象还不存在，
+            # 问答双方都没有可比版本；``_adopt_research_bindings`` 已在锁下读到当前版本，
+            # 直接沿用（业务写入仍要求携带预期版本，读到旧版本会得到 409 而非覆盖）。
+            updates[group] = snapshots.ObjectRef(ref.id, ref.expected_revision)
             continue
         raw = supplied.get(group, known.get(group))
         if type(raw) is not int or raw < 1:
@@ -441,6 +473,55 @@ def _with_expected_versions(
             )
         updates[group] = snapshots.ObjectRef(ref.id, raw)
     return replace(spec, **updates)
+
+
+async def _research_link(
+    session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID
+) -> store.ResearchInvestmentLink | None:
+    return (
+        await session.execute(
+            select(store.ResearchInvestmentLink).where(
+                store.ResearchInvestmentLink.research_id == research_id,
+                store.ResearchInvestmentLink.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+
+
+async def _adopt_research_bindings(
+    session: AsyncSession,
+    *,
+    user_id: uuid.UUID,
+    research_id: uuid.UUID,
+    spec: snapshots.InvestmentInputSpec,
+) -> tuple[snapshots.InvestmentInputSpec, frozenset[str]]:
+    """用研究**当前绑定**补全续接里缺失的对象引用（方案 A 无快照路径）。
+
+    无快照的补数请求建立时该研究可能还没有账户/主计划，冻结的 ``investment_input``
+    因而把引用写成 ``null``；用户随后在弹窗里"先创建主账户"、或按字段级错误补齐主计划，
+    研究绑定就变了——但冻结的续接不会自己跟上，回答会永远卡在
+    ``persist_declared`` 的"保存资料需要明确的目标对象"。这里在回答时按当前绑定补齐：
+    只补 ``null``，已有引用一律以冻结值为准（版本比较语义不变）。
+    """
+    link = await _research_link(session, user_id=user_id, research_id=research_id)
+    if link is None:
+        return spec, frozenset()
+    updates: dict[str, Any] = {}
+    adopted: set[str] = set()
+    for group, bound, model in (
+        ("account", link.account_id, store.InvestmentAccount),
+        ("plan", link.primary_plan_id, store.InvestmentPlan),
+    ):
+        if getattr(spec, group) is not None:
+            continue
+        live = await _live_ref(session, model, bound)
+        if live is None:
+            continue
+        updates[group] = live
+        adopted.add(group)
+    if not updates:
+        return spec, frozenset()
+    return replace(spec, **updates), frozenset(adopted)
 
 
 async def answer_request(
@@ -472,7 +553,8 @@ async def answer_request(
             raise biz.NotFoundOrForbiddenError("补数请求不存在或无权访问")
         if row.status != PENDING:
             raise _state_error(row)
-        if _aware(row.expires_at) is not None and _aware(row.expires_at) <= _now():
+        expires_at = _aware(row.expires_at)
+        if expires_at is not None and expires_at <= _now():
             raise biz.RequestExpiredError("补数请求已过期")
         research = await session.get(store.Session, row.research_id, with_for_update=True)
         if research is None or research.user_id != user_id or research.deleted_at is not None:
@@ -487,11 +569,12 @@ async def answer_request(
         submitted_fields = {
             f"{group}.{name}" for group, values in collected.items() for name in values
         }
-        extra = submitted_fields - requested
-        if extra:
-            raise biz.UnknownFieldError(
-                "回答包含未请求的字段", fields={name: "请只回答本次待补字段" for name in extra}
-            )
+        # 回答允许携带**契约内**的其它字段：PRD §4.2/AC-30 要求补数弹窗把"本标的规划
+        # 资金（必需）+ 承受风险/期望盈利（可后补）"一次收集并保存，而后两项依用途裁决
+        # 并不是本请求的必需字段。用"是否被本次请求列举"再设限会把它们连同整条回答一起
+        # 拒掉（2026-10-09 实测：400 unknown_field_rejected，弹窗永远保存不了）。
+        # 契约外字段仍由 ``_merge_collected`` 内的 ``admit_group`` 拒绝；写权限也仍然只有
+        # 用户自己的回答端点（模型侧没有回答工具，只能声明缺料意图）。
         row.collected_json = collected
         row.revision += 1
         complete = bool(requested) and requested <= submitted_fields and not ambiguous
@@ -520,10 +603,14 @@ async def answer_request(
         spec = snapshots.parse_investment_input(continuation.get("investment_input"))
         if spec is None:
             raise biz.ValidationError("补数请求缺少有效续接输入")
+        spec, adopted_groups = await _adopt_research_bindings(
+            session, user_id=user_id, research_id=row.research_id, spec=spec
+        )
         spec = _with_expected_versions(
             replace(spec, declared=collected, idempotency_key=idempotency_key),
             row.known_versions_json or {},
             expected_versions,
+            adopted=adopted_groups,
         )
         saved_spec, saved = await snapshots.persist_declared(
             session, user_id=user_id, research_id=row.research_id, spec=spec

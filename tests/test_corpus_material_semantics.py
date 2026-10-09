@@ -14,6 +14,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_SELECTOR_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_V3,
+    RELATION_CANDIDATE_RULE_V4,
     RELATION_CANDIDATE_RULE_VERSION,
     CandidateSlot,
     MaterialEvidence,
@@ -2539,6 +2540,63 @@ def test_relation_candidates_preserve_prior_question_before_trailing_answer_ques
         and pair["to_item"] == answers[-1].item_id
         for pair in new_pairs
     )
+
+
+def test_relation_candidates_exclude_facilitator_invitation_but_keep_information_request(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "facilitator-invitation.md"
+    source.write_text(
+        "投资者：下面有请电话尾号6161的参会人提问，请发言，谢谢。请介绍供货背景和原因。\n\n"
+        "专家：我们已经供过设备，因为产品通过了认证。\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    packet = evidence_run.document.packets[0]
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    question_slots = [slot for slot in slots if slot.explicit_role == "投资者"]
+    answer_slot = next(slot for slot in slots if slot.explicit_role == "专家")
+
+    def item(slot: CandidateSlot, *, speech_role: str) -> MaterialItem:
+        return MaterialItem(
+            item_id=f"item-{slot.start}",
+            text=slot.text,
+            semantic_type="unknown" if speech_role == "question" else "fact",
+            statement_role="question" if speech_role == "question" else "answer",
+            speech_role=speech_role,  # type: ignore[arg-type]
+            perspective="source_explicit",
+            speaker_ref=slot.explicit_role,
+            polarity="unknown" if speech_role == "question" else "affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=slot.text,
+                    start=slot.start,
+                    end=slot.end,
+                ),
+            ),
+        )
+
+    questions = [item(slot, speech_role="question") for slot in question_slots]
+    answer = item(answer_slot, speech_role="answer")
+    ordered = [*questions, answer]
+    v4_pairs = _strict_relation_candidate_pairs(
+        packet, ordered, slots, rule_version=RELATION_CANDIDATE_RULE_V4
+    )
+    v5_pairs = _strict_relation_candidate_pairs(
+        packet, ordered, slots, rule_version=RELATION_CANDIDATE_RULE_VERSION
+    )
+
+    invitation = next(question for question in questions if "有请" in question.text)
+    request = next(question for question in questions if "介绍" in question.text)
+    assert any(pair["to_item"] == invitation.item_id for pair in v4_pairs)
+    assert not any(pair["to_item"] == invitation.item_id for pair in v5_pairs)
+    assert any(pair["to_item"] == request.item_id for pair in v5_pairs)
 
 
 def test_leading_conclusion_marker_points_support_from_prior_fact(tmp_path: Path) -> None:

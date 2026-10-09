@@ -1,0 +1,54 @@
+{
+  "schema_version": "accepted-items-import-plan-1",
+  "created_on": "2026-10-09",
+  "status": "zero_call_plan_frozen_not_executed",
+  "plan_schema_version": "corpus-batch-plan-v2",
+  "batch_id": "batch:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e",
+  "plan_sha256": "sha256:bf9f350d72d0d430be0eb8ede8c53a3ff07b1d40f6794bf4d223575929a5001e",
+  "plan_file_sha256": "636dbb4738197a376fea4344035d6938b4c97ec35fcbdad9920e8f4cae2ca977",
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "source_items_artifact_id": "sha256:a3eb947138d210effba095cdedc5ff887bb454b05a563c557daaae30384ac94e",
+  "source_items_payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "tasks": {
+    "claims_attempts": 0,
+    "material_items_method": "imported",
+    "material_items_attempts": 0,
+    "material_relations_attempts": 4,
+    "relation_dependency_policy": "complete_parent"
+  },
+  "relation_candidate_rule": {
+    "version": "material-relation-candidates-v5",
+    "v4_candidates": 340,
+    "v5_candidates": 333,
+    "removed_facilitator_edges": 7,
+    "other_removed_edges": 0,
+    "mitsui_answer_candidates": 2,
+    "counterfactual_sha256": "6bee6d776665208eecc2b8bf228b7d828d7e67ad6c89e7ebae9cfaeb88a60605"
+  },
+  "scoring": {
+    "version": "material-development-scorer-4",
+    "p8_relation_recall": 0.75,
+    "evaluation_sha256": "08230cab6d59104d8b461e19c4f06e15f78a884fc1112716f99e43221663c0a4",
+    "gold_relations": 4,
+    "matched_gold_relations": 3
+  },
+  "model_calls": 0,
+  "publication_query_delivery_context_use": 0,
+  "validation": {
+    "structured_execution_and_cli": "46 passed",
+    "material_development": "10 passed",
+    "candidate_v5_targeted": "2 passed",
+    "combined_relevant": "231 passed",
+    "full_corpus": "1353 passed, 48 skipped, 1 known environment failure",
+    "known_environment_failure": "reader test expects reader-pdf-10 while environment is reader-pdf-11",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings"
+  },
+  "implementation_sha256": {
+    "plugins/corpus/material_semantics.py": "616649fefd205da1a3413d1bb77ad9126586a67a1033bf3a590e221e10c60675",
+    "plugins/corpus/structured/ledger.py": "c019a3b2f6889034a3a2530ac67f55243b7e817467a1012d5926056f0b3bcdf3",
+    "plugins/corpus/structured/cli.py": "8e6067bed9debd0b0499916366a4911faefd511a3ebe2bf5104cb4dc463e488b",
+    ".scratch/corpus-evidence-pipeline/run_material_development.py": "713c7ead9c8f14f2443351cabfd02d7dd6aa34766c2ab05aa5e74333a93edf17"
+  },
+  "next_gate": "decide whether to execute the frozen relation-only P9 plan; no further items extraction or gold rebuild is required"
+}

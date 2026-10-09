@@ -25,6 +25,7 @@ from plugins.corpus.material_semantics import (
 from plugins.corpus.service import CorpusService
 from plugins.corpus.structured.config import canonical_hash, load_extraction_config
 from plugins.corpus.structured.ledger import (
+    AcceptedMaterialItems,
     BatchPlan,
     ExecutionJournal,
     ReplayDirectory,
@@ -359,7 +360,7 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
     first.verify_identity()
     assert {task.method for task in first.tasks} == {"deterministic", "model"}
     assert all(task.role != "material_relations" for task in first.tasks)
-    assert first.relations.rule_version == "material-relation-candidates-v4"
+    assert first.relations.rule_version == "material-relation-candidates-v5"
     assert first.relations.dependency_policy == "qualified_subset"
     assert "dependency_policy" not in first.model_dump(mode="json")["relations"]
     assert first.routing.decisions
@@ -1484,6 +1485,93 @@ def test_relation_task_is_registered_before_request_and_resume_deduplicates(
     assert relation_task.task_id.startswith("task:")
     assert relation_task.execution_status == "succeeded"
     assert set(second.derivations.values()) == {"succeeded"}
+
+
+def test_accepted_items_import_runs_only_relation_model_attempt(
+    tmp_path: Path,
+) -> None:
+    value = dialogue_snapshot()
+    source_plan = plan_batch(
+        value,
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+        enabled_roles=("material_items",),
+    )
+    source_task = source_plan.tasks[0]
+    items_execution = execute_material_items_role(
+        value,
+        task_id=source_task.task_id,
+        protocol=source_task.protocol,
+        llm=lambda _prompt: dialogue_item_content(value),
+        max_calls=1,
+    )
+    assert items_execution.artifact.quality_status == "accepted"
+    imported = AcceptedMaterialItems(
+        artifact=items_execution.artifact,
+        payload=items_execution.payload,
+    )
+    plan = plan_batch(
+        value,
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 0, "material_relations": 1},
+        enabled_roles=("material_items", "material_relations"),
+        max_relation_attempts=1,
+        imported_material_items=imported,
+    )
+    items_task = plan.tasks[0]
+    assert items_task.method == "imported"
+    assert items_task.max_attempts == 0
+    assert plan.material_items_options is None
+
+    endpoints = tuple(item.item_id for item in items_execution.payload.understanding.items)
+    candidates = build_relation_candidate_set(
+        value,
+        items_execution.payload,
+        endpoint_item_ids=endpoints,
+        items_validation_version=plan.relations.items_validation_version,
+        rule_version=plan.relations.rule_version,
+    )
+    responses = tmp_path / "responses"
+    relation_protocol = next(
+        profile.protocol for profile in plan.profiles if profile.role == "material_relations"
+    )
+    write_response(
+        responses,
+        ReplayResponse(
+            parent_task_id=items_task.task_id,
+            sequence=1,
+            role="material_relations",
+            protocol=relation_protocol,
+            content="\n".join(
+                json.dumps(
+                    {
+                        "record_type": "relation_decision",
+                        "candidate_pair_id": candidate.candidate_pair_id,
+                        "status": "absent",
+                        "evidence_quote": None,
+                    },
+                    ensure_ascii=False,
+                )
+                for candidate in candidates.candidates
+            ),
+        ),
+        "relations",
+    )
+
+    checked = replay_batch(plan, responses=responses, store_root=tmp_path / "store")
+
+    assert len(checked.ledger.attempts) == 1
+    imported_task = next(
+        task for task in checked.ledger.tasks if task.role == "material_items"
+    )
+    relation_task = next(
+        task for task in checked.ledger.tasks if task.role == "material_relations"
+    )
+    assert imported_task.method == "imported"
+    assert imported_task.execution_status == "succeeded"
+    assert relation_task.execution_status == "succeeded"
+    assert checked.ledger.attempts[0].task_id == relation_task.task_id
 
 
 def test_relation_task_uses_extracted_endpoints_from_partial_items_run(tmp_path: Path) -> None:

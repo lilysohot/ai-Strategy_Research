@@ -1,0 +1,18 @@
+harness root: /tmp/input-answer-fix-mp0kqlcu
+A 请求字段：['account.as_of', 'account.capital_basis', 'account.currency', 'account.total_capital', 'plan.allocated_capital', 'plan.direction', 'plan.market', 'plan.symbol']
+[PASS] A1 无账户/无计划时，请求含账户事实与标的字段 
+[PASS] A2 未被请求但属契约的字段不再 400 pending
+[PASS] A3 风险/盈利被记入 collected（可后补项能保存） {'plan': {'allocated_capital': {'value': '20000'}, 'risk_budget_unit': {'value': 'percent'}, 'risk_budget_value': {'value': '10'}, 'target_profit_unit': {'value': 'percent'}, 'target_profit_value': {'value': '10'}}}
+[PASS] A4 仍缺的字段如实返回 ['account.as_of', 'account.capital_basis', 'account.currency', 'account.total_capital', 'plan.direction', 'plan.market', 'plan.symbol']
+[PASS] A5 契约外字段仍是 unknown_field_rejected {'plan_price': '该字段不属于本对象的契约'}
+B 续接冻结：{"message": "按当前资料给个仓位结论", "investment_input": {"use_case": "plan_analysis", "account": null, "plan": null, "trade": null, "position": null}, "pipeline_id": "stateful-react-agent"}
+[PASS] B1 无快照续接的引用冻结为 null（用户要靠引导先建对象） {'use_case': 'plan_analysis', 'account': None, 'plan': None, 'trade': None, 'position': None}
+[PASS] B2 冻结引用为 null 时仍能落库并生成后续 Run {'status': 'answered', 'follow_up_run_id': '45cf9ffb772d497282073fccfd6a2998', 'saved': {'account': {'account_id': '0d58b37b-b7fb-4f3e-8b51-83cb98fd68ea', 'revision': 2, 'changed_fields': ['as_of'], 'record_state': 'submitted', 'incomplete': [], 'operation_id': '87cae5de-0601-4628-9453-fda1d16a68bc'}, 'plan': {'plan_id': '8ffc1df1-91b3-41b6-bc11-b10cffb1496a', 'revision': 2, 'changed_fields': [], 'record_state': 'submitted', 'incomplete': [], 'operation_id': '18aacee7-84fa-40f5-9236-cbcac9875556'}}}
+C 请求字段：['account.as_of', 'account.capital_basis', 'plan.allocated_capital', 'plan.direction', 'plan.market', 'plan.symbol']
+C known_versions={'account': 1} frozen={"use_case": "plan_analysis", "account": {"id": "d07c1123-3a62-4887-b4d6-461c1cd08314", "expected_revision": 1}, "plan": null, "trade": null, "position": null}
+[PASS] C1 已有对象的续接记下当时版本（否则回答撞『回答缺少资料版本』） {'account': 1}
+[PASS] C2 已填过的账户事实不再重复索要 ['account.as_of', 'account.capital_basis', 'plan.allocated_capital', 'plan.direction', 'plan.market', 'plan.symbol']
+[PASS] C3 记录版本可用（账户字段的版本来自续接而不是问答双方都空） {'status': 'answered', 'follow_up_run_id': '00a2f4a010364353aa65c8bda76122a8'}
+
+全部通过：10 项
+证据目录： /tmp/input-answer-fix-mp0kqlcu
