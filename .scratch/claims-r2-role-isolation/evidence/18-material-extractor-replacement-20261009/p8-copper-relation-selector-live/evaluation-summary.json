@@ -1,0 +1,297 @@
+{
+  "schema_version": "copper-selector-v5-relation-target-evaluation-1",
+  "gold_file": "data/corpus/.audit/r1_material_gold_v1_20260913.json",
+  "gold_scope": {
+    "items": 11,
+    "relations": 4,
+    "whole_document_negative_gold": false
+  },
+  "candidate_relations": 190,
+  "metrics": {
+    "item_recall": 1.0,
+    "critical_item_recall": 1.0,
+    "semantic_target_accuracy": 0.8181818181818182,
+    "attribution_target_accuracy": 1.0,
+    "critical_all_fields_accuracy": 0.0,
+    "source_relation_recall": 0.25
+  },
+  "detail": [
+    {
+      "gold_item": "dec-summary-outlook",
+      "matched": true,
+      "predicted_item": "itm_bf49b59f8140755c",
+      "predicted_items": [
+        "itm_bf49b59f8140755c"
+      ],
+      "quote_similarity": 1.0,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "铜箔设备行业正处于国产替代加速期"
+      ]
+    },
+    {
+      "gold_item": "dec-question-capex",
+      "matched": true,
+      "predicted_item": "itm_d12470eca334fd16",
+      "predicted_items": [
+        "itm_d12470eca334fd16"
+      ],
+      "quote_similarity": 1.0,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "能否简单梳理每1万吨铜箔的设备资本开支情况"
+      ]
+    },
+    {
+      "gold_item": "dec-answer-capex",
+      "matched": true,
+      "predicted_item": "itm_f0f1413e119df47c",
+      "predicted_items": [
+        "itm_f0f1413e119df47c"
+      ],
+      "quote_similarity": 0.7059,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "我说的是主设备，大概在2.5到3个亿。"
+      ]
+    },
+    {
+      "gold_item": "dec-host-clarification",
+      "matched": true,
+      "predicted_item": "itm_b8338f5c5760e1d5",
+      "predicted_items": [
+        "itm_b8338f5c5760e1d5"
+      ],
+      "quote_similarity": 0.7442,
+      "field_checks": {
+        "semantic_type": false,
+        "statement_role": false,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": false,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "不是利润的概念，是你们的收入概念。"
+      ]
+    },
+    {
+      "gold_item": "dec-forecast-validation",
+      "matched": true,
+      "predicted_item": "itm_dc9e35f35c2bd5ff",
+      "predicted_items": [
+        "itm_dc9e35f35c2bd5ff"
+      ],
+      "quote_similarity": 0.7213,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": false,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "我们很快就能占据国内市场，甚至一部分国外市场。"
+      ]
+    },
+    {
+      "gold_item": "dec-ambiguous-audio-check",
+      "matched": true,
+      "predicted_item": "itm_a682b7079bb4d19b",
+      "predicted_items": [
+        "itm_a682b7079bb4d19b"
+      ],
+      "quote_similarity": 1.0,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "请问能听到吗？"
+      ]
+    },
+    {
+      "gold_item": "dec-question-yield",
+      "matched": true,
+      "predicted_item": "itm_26d677f6ff5a832e",
+      "predicted_items": [
+        "itm_26d677f6ff5a832e"
+      ],
+      "quote_similarity": 0.8085,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "您觉得良品率低是设备问题还是工艺问题？"
+      ]
+    },
+    {
+      "gold_item": "dec-answer-yield",
+      "matched": true,
+      "predicted_item": "itm_c3c12e04657cec79",
+      "predicted_items": [
+        "itm_c3c12e04657cec79"
+      ],
+      "quote_similarity": 0.7937,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "我认为设备目前加工精度和控制精度已经做到行业领先，"
+      ]
+    },
+    {
+      "gold_item": "dec-quoted-yield-split",
+      "matched": true,
+      "predicted_item": "itm_c0721fd9c5c22faa",
+      "predicted_items": [
+        "itm_c0721fd9c5c22faa"
+      ],
+      "quote_similarity": 0.7931,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "之前跟铜冠总工探讨过，他说工艺和设备是64开，"
+      ]
+    },
+    {
+      "gold_item": "dec-question-mitsui",
+      "matched": true,
+      "predicted_item": "itm_2519affdac798906",
+      "predicted_items": [
+        "itm_2519affdac798906"
+      ],
+      "quote_similarity": 1.0,
+      "field_checks": {
+        "semantic_type": true,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": false,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "专家，我想请教一下，我们好像给三井前面供过一台设备，海外客户那边，对这个背景和后面的展望是怎样的？"
+      ]
+    },
+    {
+      "gold_item": "dec-answer-mitsui",
+      "matched": true,
+      "predicted_item": "itm_20315c03b3120632",
+      "predicted_items": [
+        "itm_20315c03b3120632"
+      ],
+      "quote_similarity": 0.8462,
+      "field_checks": {
+        "semantic_type": false,
+        "statement_role": true,
+        "speech_role": true,
+        "perspective": true,
+        "speaker": true,
+        "identity_status": true,
+        "polarity": true,
+        "behavior_status": true,
+        "temporal_frame": true,
+        "value": true,
+        "unknown_fields": false
+      },
+      "predicted_text": [
+        "生箔机和阴极辊我们给他们做过，价格远低于日本本土厂商，交期也更快"
+      ]
+    }
+  ],
+  "precision_measurable": false,
+  "precision_reason": "the frozen copper gold is selected target gold, not exhaustive negative gold"
+}

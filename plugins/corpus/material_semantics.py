@@ -47,7 +47,11 @@ MATERIAL_SLOT_BATCHING_VERSION = "material-slot-batching-v3"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
 MATERIAL_RELATION_SELECTOR_JSONL_VERSION = "material-relations-selector-jsonl-v1"
 MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v11"
-RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
+RELATION_CANDIDATE_RULE_V3 = "material-relation-candidates-v3"
+RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v4"
+RELATION_CANDIDATE_RULE_VERSIONS = frozenset(
+    {RELATION_CANDIDATE_RULE_V3, RELATION_CANDIDATE_RULE_VERSION}
+)
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
 # Read-compatibility vocabularies.  Every member is a version this codebase can
@@ -71,6 +75,7 @@ RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v1",
     "material-relation-candidates-v2",
     "material-relation-candidates-v3",
+    "material-relation-candidates-v4",
 ]
 
 MaterialType = Literal[
@@ -1547,7 +1552,10 @@ def build_item_selector_prompt(
 
 
 def _relation_candidate_pairs(
-    items: list[MaterialItem], candidate_slots: tuple[CandidateSlot, ...] = ()
+    items: list[MaterialItem],
+    candidate_slots: tuple[CandidateSlot, ...] = (),
+    *,
+    ordered_questions: bool = False,
 ) -> list[dict[str, str]]:
     pairs: list[dict[str, str]] = []
     slot_for_item = {
@@ -1579,15 +1587,26 @@ def _relation_candidate_pairs(
     pending_questions: list[MaterialItem] = []
     prior_items: list[MaterialItem] = []
     for group in groups:
-        group_questions = [item for item in group if item.speech_role == "question"]
-        if group_questions:
-            pending_questions = group_questions[-2:]
+        group_questions: list[tuple[int, MaterialItem]] = []
+        if not ordered_questions:
+            group_questions = [
+                (index, item)
+                for index, item in enumerate(group)
+                if item.speech_role == "question"
+            ]
+            if group_questions:
+                pending_questions = [item for _, item in group_questions[-2:]]
         answered = False
+        last_answer_index = -1
         support_target: MaterialItem | None = None
         previous_in_group: MaterialItem | None = None
         for item_index, item in enumerate(group):
+            if ordered_questions and item.speech_role == "question":
+                group_questions.append((item_index, item))
+                pending_questions = [*pending_questions, item][-2:]
             if item.speech_role == "answer" and pending_questions:
                 answered = True
+                last_answer_index = item_index
                 for question in pending_questions:
                     pairs.append(
                         {
@@ -1675,7 +1694,14 @@ def _relation_candidate_pairs(
                     )
             previous_in_group = item
         prior_items.extend(group)
-        if answered and not group_questions:
+        if ordered_questions:
+            if answered:
+                pending_questions = [
+                    question
+                    for index, question in group_questions
+                    if index > last_answer_index
+                ][-2:]
+        elif answered and not group_questions:
             pending_questions = []
     unique = list({json.dumps(pair, sort_keys=True): pair for pair in pairs}.values())
     for pair in unique:
@@ -3981,6 +4007,8 @@ def _strict_relation_candidate_pairs(
     packet: EvidencePacket,
     items: list[MaterialItem],
     candidate_slots: tuple[CandidateSlot, ...],
+    *,
+    rule_version: str = RELATION_CANDIDATE_RULE_VERSION,
 ) -> list[dict[str, str]]:
     """Limit first-round obligations to explicit links in neighboring source propositions."""
     index = {item.item_id: position for position, item in enumerate(items)}
@@ -4001,7 +4029,11 @@ def _strict_relation_candidate_pairs(
         for item in items
     }
     pairs: list[dict[str, str]] = []
-    for pair in _relation_candidate_pairs(items, candidate_slots):
+    for pair in _relation_candidate_pairs(
+        items,
+        candidate_slots,
+        ordered_questions=rule_version == RELATION_CANDIDATE_RULE_VERSION,
+    ):
         source, target = by_id[pair["from_item"]], by_id[pair["to_item"]]
         source_slot, target_slot = slot_by_id[source.item_id], slot_by_id[target.item_id]
         if pair["allowed_type"] == "answers":
@@ -4083,7 +4115,7 @@ def build_relation_candidate_set(
 
     if items_validation_version != MATERIAL_ITEMS_VALIDATION_VERSION:
         raise ValueError("CS_INPUT_INVALID: unsupported items validation version")
-    if rule_version != RELATION_CANDIDATE_RULE_VERSION:
+    if rule_version not in RELATION_CANDIDATE_RULE_VERSIONS:
         raise ValueError("CS_INPUT_INVALID: unsupported relation candidate rule version")
     snapshot.verify_identity()
     items_run.verify_identity()
@@ -4219,7 +4251,12 @@ def build_relation_candidate_set(
         packet_slots = tuple(
             slot for slot in expected_slots.values() if slot.packet_id == packet_id
         )
-        for pair in _strict_relation_candidate_pairs(packet, packet_items, packet_slots):
+        for pair in _strict_relation_candidate_pairs(
+            packet,
+            packet_items,
+            packet_slots,
+            rule_version=rule_version,
+        ):
             candidates.append(
                 RelationCandidate(
                     packet_id=packet.packet_id,

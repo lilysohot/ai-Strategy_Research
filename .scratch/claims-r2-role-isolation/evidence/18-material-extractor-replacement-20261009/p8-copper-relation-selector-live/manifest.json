@@ -1,0 +1,59 @@
+{
+  "schema_version": "copper-relation-selector-live-gate-1",
+  "executed_on": "2026-10-09",
+  "status": "executed_protocol_complete_semantic_gate_failed_adjudication_open",
+  "authorization": {
+    "name": "xyl",
+    "signed_at": "2026-10-09",
+    "text": "签认草案，开始执行"
+  },
+  "task_id": "task:02608d32fad4aa37ca4891d52ee61afdea3577134f3203723f27859a1c6649a9",
+  "upstream_items": {
+    "artifact_id": "sha256:a3eb947138d210effba095cdedc5ff887bb454b05a563c557daaae30384ac94e",
+    "artifact_object_sha256": "80e4c3a25150f10729185c97184ae849c2688d828e0544f3da0df1ab79a507a8",
+    "payload_object_sha256": "592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+    "model_calls": 0
+  },
+  "protocol": "material-relations-selector-jsonl-v1",
+  "candidate_rule": "material-relation-candidates-v3",
+  "items_validation": "material-items-validation-v11",
+  "execution": {
+    "candidate_pairs": 269,
+    "relations": 190,
+    "accepted_candidate_rate": 0.7063197026022305,
+    "attempts": 4,
+    "succeeded": 4,
+    "failed": 0,
+    "outcome_unknown": 0,
+    "packet_status": {
+      "completed": 4,
+      "partial": 0,
+      "failed": 0,
+      "deferred": 0
+    },
+    "usage": {
+      "prompt_tokens": 72047,
+      "completion_tokens": 23999,
+      "reasoning_tokens": 17298,
+      "total_tokens": 96046
+    },
+    "cost": {
+      "status": "unavailable",
+      "not_assumed_zero": true
+    }
+  },
+  "artifact": {
+    "artifact_id": "sha256:7706aed464014ed05a54807855a018e6fe8d44a67ed37d4a500d56a9a0ce7758",
+    "payload_sha256": "sha256:457c99f8359b9e4b87dabd98ac1fc2fe063871d0c2e9bccf2514a9e0774611c2"
+  },
+  "evaluation": {
+    "historical_scorer_relation_recall": 0.25,
+    "atomic_endpoint_adjudicated_relation_recall": 0.75,
+    "candidate_coverage_of_gold_relations": 0.75,
+    "selector_recall_given_candidate": 1.0,
+    "precision_measurable": false
+  },
+  "architecture_gap": "formal batch ledger cannot import a signed replay items artifact into a live relation-only task",
+  "publication_query_delivery_context_use": 0,
+  "next_gate": "sign relation adjudication draft, then zero-call repair of Q/A turn-group candidate generation and atomic endpoint scoring"
+}

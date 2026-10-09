@@ -13,6 +13,8 @@ from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_SELECTOR_JSONL_VERSION,
+    RELATION_CANDIDATE_RULE_V3,
+    RELATION_CANDIDATE_RULE_VERSION,
     CandidateSlot,
     MaterialEvidence,
     MaterialItem,
@@ -2458,6 +2460,85 @@ def test_explicit_cause_is_split_into_a_relation_candidate(tmp_path: Path) -> No
     )
     assert "A，主要系/由于 B 所致" in prompt
     assert "B supports A" in prompt
+
+
+def test_relation_candidates_preserve_prior_question_before_trailing_answer_question(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "trailing-answer-question.md"
+    source.write_text(
+        "主持人：请介绍给三井供货的背景和后续展望？\n\n"
+        "专家：我们给三井供过设备，未来可能合作更紧密。不知道这样讲您能理解吗？\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=10_000)
+    packet = evidence_run.document.packets[0]
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    question_slot = next(
+        slot for slot in slots if slot.explicit_role == "主持人" and "question" in slot.signal_types
+    )
+    answer_slots = [slot for slot in slots if slot.explicit_role == "专家"]
+    assert "question" in answer_slots[-1].signal_types
+
+    def item(slot: CandidateSlot, *, speech_role: str) -> MaterialItem:
+        return MaterialItem(
+            item_id=f"item-{slot.start}",
+            text=slot.text,
+            semantic_type="unknown" if speech_role == "question" else "opinion",
+            statement_role="question" if speech_role == "question" else "answer",
+            speech_role=speech_role,  # type: ignore[arg-type]
+            perspective="source_explicit",
+            speaker_ref=slot.explicit_role,
+            polarity="unknown" if speech_role == "question" else "affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=slot.text,
+                    start=slot.start,
+                    end=slot.end,
+                ),
+            ),
+        )
+
+    question = item(question_slot, speech_role="question")
+    answers = [
+        item(slot, speech_role="question" if "question" in slot.signal_types else "answer")
+        for slot in answer_slots
+    ]
+    ordered = [question, *answers]
+    old_pairs = _strict_relation_candidate_pairs(
+        packet,
+        ordered,
+        slots,
+        rule_version=RELATION_CANDIDATE_RULE_V3,
+    )
+    new_pairs = _strict_relation_candidate_pairs(
+        packet,
+        ordered,
+        slots,
+        rule_version=RELATION_CANDIDATE_RULE_VERSION,
+    )
+
+    assert not any(
+        pair["to_item"] == question.item_id and pair["allowed_type"] == "answers"
+        for pair in old_pairs
+    )
+    assert any(
+        pair["from_item"] == answers[0].item_id
+        and pair["to_item"] == question.item_id
+        and pair["allowed_type"] == "answers"
+        for pair in new_pairs
+    )
+    assert not any(
+        pair["from_item"] == answers[0].item_id
+        and pair["to_item"] == answers[-1].item_id
+        for pair in new_pairs
+    )
 
 
 def test_leading_conclusion_marker_points_support_from_prior_fact(tmp_path: Path) -> None:

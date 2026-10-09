@@ -1,10 +1,10 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: selector-v5-zero-call-items-complete-semantic-adjudication-open-relations-budget-gated
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。relations 尚未生成，发布与消费仍为 0
+Status: relation-live-complete-semantic-gate-failed-v4-zero-call-repair
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 在新签认下执行 4 次 relation-only 调用，4/4 succeeded、4 包 completed；历史 scorer relation recall 1/4，原子端点裁定为 3/4，发布与消费仍为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model attempts: 50（P3 23 + P4 23 + P5 4；P6/P7 为 0）
+Model attempts: 54（P3 23 + P4 23 + P5 4 + P8 relations 4；P6/P7 与 P8-v4 反事实为 0）
 Production database access: 0
 
 ## 目标
@@ -78,6 +78,10 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P6 frozen-gold evaluation](../evidence/18-material-extractor-replacement-20261009/p6-copper-selector-v4-composite/evaluation-summary.json)
 - [P7 v5 zero-call replay](../evidence/18-material-extractor-replacement-20261009/p7-copper-selector-v5-zero-call/manifest.json)
 - [P7 item adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p7-copper-selector-v5-zero-call/candidate-adjudications.agent-draft.json)
+- [P8 relation live execution](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/execution-summary.json)
+- [P8 relation target evaluation](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/evaluation-summary.json)
+- [P8 relation adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-adjudications.agent-draft.json)
+- [P8 candidate v4 zero-call counterfactual](../evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/candidate-v4-counterfactual.json)
 
 ## Comments
 
@@ -139,3 +143,19 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   delivery/context_use。核心/合约 137 passed，publication 回归并入后 150 passed；全量 corpus 为
   1379 passed、17 skipped，仅保留既有的本地检索金标 0/20 与 reader-pdf-10/11 两项环境失败；Ruff、
   Pyright 通过。
+- 2026-10-09：xyl 以“签认草案，开始执行”签认 P7 items 裁定后，P8 复用该 items artifact，未重跑
+  items；4 个 relation packet 各调用一次，4/4 succeeded、96,046 tokens、0 retry，269 个固定候选中
+  selector 判 present 190 条，四包均 completed。历史 scorer 只命中 1/4 gold relation；逐条回原文与
+  原子端点后，capex Q/A、yield Q/A、quoted-yield support 三条成立，Mitsui Q/A 未进入候选，因此人工
+  裁定口径为 3/4，且 candidate-conditional selector recall 为 3/3。gold 是 selected targets 而非整篇负例，
+  不能把其余 187 条自动计为 FP；70.63% 接受率及包间 10/31、58/58、3/60、119/120 的差异仍阻断发布。
+- 同日零调用定位到 `material-relation-candidates-v3` 的通用顺序 bug：回答 turn 末尾的“听懂了吗”式
+  反问会在处理该 turn 前覆盖上一 turn 的真实问题。v4 改为按 source order 更新 pending questions；旧
+  269 个候选全部保留，新增 71 个候选，Mitsui 两个原子答案均获得 answers 边。该修复有回归，相关
+  211 tests passed，Ruff 与 Pyright 通过。新增 71 边尚未做 selector 判断；下一门是零调用剪枝和原子
+  endpoint-group scorer 修复，而不是立即再开 live budget。
+- 完整 corpus 回归为 1388 passed、18 skipped；失败仍仅是既有的本地 golden Recall@5=0/20 与
+  reader-pdf-10 断言/当前 reader-pdf-11 环境不一致，没有新增失败。
+- 现有 formal batch ledger 不能将 replay-mode 的已签认 items artifact 作为 live-mode relation task 的
+  父产物。P8 使用同一生产 role executor/adapter，并以发送前原子落盘的独立四次 attempt ledger 执行；
+  该缺口已显式记录，P8 evidence runner 不得作为常规发布路径。

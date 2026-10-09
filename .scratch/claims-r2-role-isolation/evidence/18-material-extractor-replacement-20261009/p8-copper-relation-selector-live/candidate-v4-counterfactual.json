@@ -1,0 +1,526 @@
+{
+  "schema_version": "relation-candidate-v4-counterfactual-1",
+  "model_calls": 0,
+  "v3_candidates": 269,
+  "v4_candidates": 340,
+  "preserved_v3_candidates": 269,
+  "added_candidates": 71,
+  "removed_candidates": 0,
+  "added": [
+    {
+      "candidate_pair_id": "pair_4071f476ee11ca64",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_dd7e5f9c6afab053",
+      "to_item": "itm_2ed1f0d464841852",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_8f81d8c134c24c2b",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_52656a581c77f3db",
+      "to_item": "itm_2ed1f0d464841852",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_976ece1ae9ac72dc",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_14e6ce6b4f290e80",
+      "to_item": "itm_2ed1f0d464841852",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_5956d4ff0f239792",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_bedb7ad9945a1cdb",
+      "to_item": "itm_2ed1f0d464841852",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_d042aa8c968ff35f",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_1961757383bfa8f6",
+      "to_item": "itm_2ed1f0d464841852",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_e22739e0f61c322c",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_853fec9f97df2d91",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_53775dfd406dc8ca",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_f42f5717c70ae220",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_25c79c1928b85873",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_43301809bfd3dd7e",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_948115917d484326",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_ff406a7048e756ed",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_0e3f7e33a12bb722",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_58324a1ac7ae1c17",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_00d9ae78d10c1579",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_07fbf83907831326",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_c8a2e609d0bf69ac",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_5852ae6f596d7a71",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_d8bb5bed1181f7a5",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_bd9fea172c3664a3",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_d1acd98a786dfa79",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_06b7367da96c3e42",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_04d441f8c2d28d5d",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_698d74f20e5d57c2",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_ec372417fe60fbc6",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_66e20b6febc5bfc6",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_56141ad7a5c47bbd",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_1ba8ac6678e43d48",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_175f0592a060d2be",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_b3f541b29a0778c0",
+      "to_item": "itm_899097af9346317f",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_d6cff0e1c15e7c22",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_9782e44424239cbf",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_8adab98f43c8376a",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_f380a1226acc5243",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6f9dbb31dbec5744",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_1ceb08bc12819375",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_3e23f64d1eb2bdc3",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_81d3ab5e94b6acf5",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_631bea552927771e",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_5e58e127fe77b07c",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_f735c14878ebb996",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_dc94c1bacc28cd45",
+      "to_item": "itm_c5d607dc76ba2a37",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_2f864348c3c7bd35",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_2f51c7996fbbc0fd",
+      "to_item": "itm_17f9ecf7fb4b07b2",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_f34b67e6769d9cf0",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "from_item": "itm_cd40739db2b63e2d",
+      "to_item": "itm_879c96cf0ac2959b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6e3ca4b452ee48cb",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_219ab4260f77ef04",
+      "to_item": "itm_14189c71d1d72617",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_4b0d42783b47505a",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_219ab4260f77ef04",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_c7e89f1609cf210d",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_640f6ba94f523a45",
+      "to_item": "itm_14189c71d1d72617",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_1c441918242e5766",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_640f6ba94f523a45",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6d0d3b53774399ac",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_88968a8c0069399e",
+      "to_item": "itm_14189c71d1d72617",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_22b658f2c01d6a60",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_88968a8c0069399e",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_e6bfbc5afab15668",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_3b3434dac4f05555",
+      "to_item": "itm_14189c71d1d72617",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_b4214b2d41b135f2",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_3b3434dac4f05555",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_338e25cee715e602",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_76acc37b6858b266",
+      "to_item": "itm_14189c71d1d72617",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_d7b6eabfa488078d",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_76acc37b6858b266",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_32853fe27b9bb5a4",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_4b80e9d357d146b0",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_7d69a79b541f37cc",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_d2d421d242a651ed",
+      "to_item": "itm_2a3b8adfdf429b9a",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_eb137ac4259ddac3",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_8ae61b9b6e162988",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_f81520429d92605c",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_e3ceb0a3dceb2b41",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_5337010f42cfdc8d",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_5c9b7e19995044de",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_3ba45ff4f259ba51",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_61297aa33169b985",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_45e1f0524ef69a86",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_d20209fba2059d0b",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_7c0b17346d6aca91",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_0f609536c53d383d",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_85a0b4b5d9f2953b",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_ab25c2e96d6c4b88",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_2d6246539975d37f",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_c4ff26b7e291c92f",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_f230cf73eca26aa0",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_f759a8fe3ccf0d86",
+      "to_item": "itm_585cba6eea656374",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6b380bc9ddd7eb69",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_87c56fe9ca1d3f9c",
+      "to_item": "itm_2bd4442e70bd91c5",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_be2f3ddffa0c6d96",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_87c56fe9ca1d3f9c",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_cbb678e10ab89639",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_133686eff57df44b",
+      "to_item": "itm_2bd4442e70bd91c5",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_b473274b93d35207",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_133686eff57df44b",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_90804d5b86d28fe2",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_6a355d83c1481553",
+      "to_item": "itm_2bd4442e70bd91c5",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_7aaa8bfb40607778",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_6a355d83c1481553",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_61382650ebd8d6f7",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_81f7c59e92595aa1",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_51b067b49827372e",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_38628d572b3ecb8d",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_87f2c12dece4eaf3",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_46ac7f3950bbcfb7",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_87c7295f665505de",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "from_item": "itm_651c69eb6b49fa3f",
+      "to_item": "itm_729683e2dbb22a8b",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_ab7f6171ac9a0c43",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_8f3f3e2d84d5f69d",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_c11704588cd30b8a",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_8f3f3e2d84d5f69d",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_bdc239868f4de000",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_67193fc873c76ef8",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_357c17eb1d26e9b1",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_67193fc873c76ef8",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_cbe9ae025980503d",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_20315c03b3120632",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_ad507c2bfb7a7872",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_20315c03b3120632",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6bfa54e3dbf6b146",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_02531d4c6d673b87",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_9ac292fbb05063a7",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_02531d4c6d673b87",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_6a805f675a5ed70b",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_734b1b174e72e047",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_148cbf3f9c9deea9",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_734b1b174e72e047",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_fc9e68ec87a0f52f",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_e23dedce2324bacf",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_e098723fe094459b",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_e23dedce2324bacf",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_1fff17bf70bc3b14",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_6692a3fce30c76ab",
+      "to_item": "itm_bc32c691af15c25d",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_8997159785cbbe19",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_6692a3fce30c76ab",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    }
+  ],
+  "removed": [],
+  "mitsui_candidates": [
+    {
+      "candidate_pair_id": "pair_ad507c2bfb7a7872",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_20315c03b3120632",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    },
+    {
+      "candidate_pair_id": "pair_9ac292fbb05063a7",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "from_item": "itm_02531d4c6d673b87",
+      "to_item": "itm_2519affdac798906",
+      "allowed_type": "answers"
+    }
+  ],
+  "interpretation": "v4 processes questions in source order, so a trailing question inside an answer turn no longer erases the preceding caller question before candidate generation"
+}

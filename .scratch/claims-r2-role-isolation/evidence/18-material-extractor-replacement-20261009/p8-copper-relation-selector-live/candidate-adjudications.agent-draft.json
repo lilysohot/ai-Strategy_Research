@@ -1,0 +1,105 @@
+{
+  "schema_version": "copper-relation-adjudications-agent-draft-1",
+  "created_on": "2026-10-09",
+  "status": "agent_draft",
+  "gold_changed": false,
+  "thresholds_changed": false,
+  "scope": {
+    "gold_relations": 4,
+    "candidate_relations": 190,
+    "candidate_pairs": 269,
+    "whole_document_negative_gold": false,
+    "precision_adjudicable": false
+  },
+  "metrics": {
+    "historical_scorer_relation_recall": 0.25,
+    "atomic_endpoint_adjudicated_relation_recall": 0.75,
+    "candidate_coverage_of_gold_relations": 0.75,
+    "selector_recall_given_candidate": 1.0
+  },
+  "relations": [
+    {
+      "gold_relation": "dec-answer-capex-relation",
+      "decision": "accept_atomic_endpoint_equivalent",
+      "gold_type": "answers",
+      "candidate_relations": [
+        "rel_fade871b59db5b99"
+      ],
+      "from_items": [
+        "itm_f0f1413e119df47c"
+      ],
+      "to_items": [
+        "itm_ad212e8991b5916a"
+      ],
+      "reason": "The answer is linked to the repeated atomic capex question in the same host turn. The historical scorer selected the earlier paraphrased question atom itm_d12470eca334fd16 and therefore missed an endpoint-equivalent relation."
+    },
+    {
+      "gold_relation": "dec-answer-yield-relation",
+      "decision": "accept",
+      "gold_type": "answers",
+      "candidate_relations": [
+        "rel_94ca95d328d6733e",
+        "rel_95c6b8bd3b367c1c"
+      ],
+      "from_items": [
+        "itm_c3c12e04657cec79",
+        "itm_b89393d4936d3d24"
+      ],
+      "to_items": [
+        "itm_26d677f6ff5a832e"
+      ],
+      "reason": "The atomic equipment-precision premise and process-cause conclusion both answer the frozen yield question."
+    },
+    {
+      "gold_relation": "dec-quoted-yield-support",
+      "decision": "accept_atomic_endpoint_equivalent",
+      "gold_type": "supports",
+      "candidate_relations": [
+        "rel_741755d990ec7cba"
+      ],
+      "from_items": [
+        "itm_c0721fd9c5c22faa"
+      ],
+      "to_items": [
+        "itm_b89393d4936d3d24"
+      ],
+      "reason": "The quoted six-four split supports the atomic conclusion that the low yield is probably process-related. The historical scorer mapped the compound gold answer only to the preceding equipment-precision atom."
+    },
+    {
+      "gold_relation": "dec-answer-mitsui-relation",
+      "decision": "reject_missing_candidate",
+      "gold_type": "answers",
+      "candidate_relations": [],
+      "from_items": [
+        "itm_20315c03b3120632",
+        "itm_02531d4c6d673b87"
+      ],
+      "to_items": [
+        "itm_2519affdac798906"
+      ],
+      "reason": "Both answer atoms and the question exist, but material-relation-candidates-v3 emitted no answers candidate for the phone-tail turn. This is a deterministic candidate-generation miss, not a selector decision error."
+    }
+  ],
+  "overgeneration_observation": {
+    "accepted_candidate_rate": 0.7063197026022305,
+    "packet_present_over_candidates": [
+      "10/31",
+      "58/58",
+      "3/60",
+      "119/120"
+    ],
+    "interpretation": "The selected-target gold cannot label the other 187 accepted relations as false positives. The extreme packet-level variance is nevertheless a calibration warning and blocks publication until candidate granularity and a reusable relation precision sample are defined."
+  },
+  "next_fix": {
+    "primary": "Make answers candidates operate on controller-owned Q/A turn groups and atomic endpoint groups, not only individual adjacent segment atoms.",
+    "secondary": "Score a gold endpoint group as recalled when any accepted atomic edge realizes the frozen compound relation.",
+    "validation": "Use this immutable four-response set for zero-call counterfactual evaluation before any further live call."
+  },
+  "publication_query_delivery_context_use": 0,
+  "signoff": {
+    "required": true,
+    "name": null,
+    "signed_at": null,
+    "authorization": null
+  }
+}

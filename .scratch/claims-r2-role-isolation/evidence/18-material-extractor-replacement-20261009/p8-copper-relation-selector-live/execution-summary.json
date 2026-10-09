@@ -1,0 +1,59 @@
+{
+  "accepted_candidate_rate": 0.7063197026022305,
+  "artifact_id": "sha256:7706aed464014ed05a54807855a018e6fe8d44a67ed37d4a500d56a9a0ce7758",
+  "attempt_status": {
+    "blocked": 0,
+    "failed": 0,
+    "outcome_unknown": 0,
+    "succeeded": 4
+  },
+  "attempts": 4,
+  "candidate_count": 269,
+  "cost": {
+    "known_attempts": 0,
+    "not_assumed_zero": true,
+    "status": "unavailable"
+  },
+  "execution_status": "succeeded",
+  "packet_candidate_decisions": [
+    {
+      "candidates": 31,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "present": 10
+    },
+    {
+      "candidates": 58,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "present": 58
+    },
+    {
+      "candidates": 60,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "present": 3
+    },
+    {
+      "candidates": 120,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "present": 119
+    }
+  ],
+  "packet_status": {
+    "completed": 4,
+    "deferred": 0,
+    "failed": 0,
+    "partial": 0
+  },
+  "payload_sha256": "sha256:457c99f8359b9e4b87dabd98ac1fc2fe063871d0c2e9bccf2514a9e0774611c2",
+  "protocol_status": "valid",
+  "publication_query_delivery_context_use": 0,
+  "quality_status": "accepted",
+  "relations": 190,
+  "schema_version": "bounded-relation-gate-execution-1",
+  "task_id": "task:02608d32fad4aa37ca4891d52ee61afdea3577134f3203723f27859a1c6649a9",
+  "usage": {
+    "completion_tokens": 23999,
+    "prompt_tokens": 72047,
+    "reasoning_tokens": 17298,
+    "total_tokens": 96046
+  }
+}

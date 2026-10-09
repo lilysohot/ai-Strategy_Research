@@ -705,6 +705,33 @@ skipped，仅保留两个既有环境失败（本地检索金标库 Recall@5=0/2
 reader-pdf-11）。Ruff 与 Pyright 均通过。完整执行证据位于
 `evidence/18-material-extractor-replacement-20261009/p4-*` 至 `p7-*`。
 
+## 14. 2026-10-09 执行增补：relation-only 门与 v4 零调用修复
+
+P7 items 裁定经 xyl 签认后，P8 复用同一 accepted items artifact，没有重跑 23 个 items batch。关系
+阶段冻结 269 个候选对，按 4 个 packet 各发送一次：4/4 succeeded、0 retry、96,046 tokens，四包均
+completed，得到 190 条 present relation。整个阶段仍为 0 production database、0 publish、0 query、
+0 delivery、0 context_use。
+
+冻结的 4 条 copper relation target 中，历史 scorer 只报 1/4。逐条按原子端点核对后，capex answer
+连接到同一主持人 turn 的重复 capex question atom；yield answer 由设备精度与工艺归因两个 atom 共同
+实现；quoted yield 证据连接到工艺归因 atom。因此前三条都成立，人工草案口径为 3/4。Mitsui 的问题、
+历史供货事实和未来合作预测三个 item 都存在，但 v3 未生成任何 answers candidate，属于确定性候选漏边，
+不是 selector 把候选判错。候选存在条件下 selector 为 3/3。
+
+这仍未达到关系召回 floor，也不能报告 precision。原 gold 是 selected target gold，不是整篇负例全集；
+190 条 present 中的非目标边不能自动当假阳性。与此同时 70.63% 总接受率和 10/31、58/58、3/60、
+119/120 的包间差异是明确校准警报，故继续阻断发布。
+
+零调用回溯发现通用 bug：v3 在进入一个 answer turn 时预先收集该 turn 的所有 question item，导致末尾
+“不知道这样讲您能理解吗”覆盖上一 turn 的真实业务问题。`material-relation-candidates-v4` 改为按原文
+顺序更新 pending question。对相同 items artifact 的反事实结果是旧 269 边全部保留，新增 71 边，Mitsui
+两个答案 atom 均获得正确 answers candidate。相关 211 tests passed，Ruff、Pyright 通过。下一步先在
+零调用下剪枝新增边、修复 endpoint-group scorer，并补 formal ledger 的 accepted-artifact import seam；
+不得把本次签认扩张成新的模型调用额度。
+
+完整 corpus 回归为 1388 passed、18 skipped；仅保留此前两项环境失败：本地 golden Recall@5=0/20，
+以及测试固定期待 reader-pdf-10 而当前环境为 reader-pdf-11。v4 未引入新的回归失败。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

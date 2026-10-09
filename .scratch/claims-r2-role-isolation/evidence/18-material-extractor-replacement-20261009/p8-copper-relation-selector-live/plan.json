@@ -1,0 +1,47 @@
+{
+  "authorization": {
+    "authorization": "签认草案，开始执行",
+    "name": "xyl",
+    "required": false,
+    "signed_at": "2026-10-09"
+  },
+  "candidate_count": 269,
+  "candidate_rule_version": "material-relation-candidates-v3",
+  "candidate_set_id": "sha256:77a214b33ced870cdd61ba031a791222754fe378b4aded584e0e1848ede18b18",
+  "endpoint_count": 469,
+  "endpoint_item_ids_sha256": "sha256:7303245e5b8d717f6300dcce59a05cd589979948b3b6465d13d14b4f1a3bc1c6",
+  "expected_calls": 4,
+  "items_artifact_id": "sha256:a3eb947138d210effba095cdedc5ff887bb454b05a563c557daaae30384ac94e",
+  "items_artifact_sha256": "sha256:80e4c3a25150f10729185c97184ae849c2688d828e0544f3da0df1ab79a507a8",
+  "items_payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "items_run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+  "items_validation_version": "material-items-validation-v11",
+  "max_calls": 4,
+  "packet_ids": [
+    "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+    "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+    "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+    "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19"
+  ],
+  "profile": {
+    "adapter_version": "structured-chat-http-2",
+    "base_url_sha256": "sha256:008155303f71f5227c2ba640b8dd5c08e523949ee41870e614d62015f554dabb",
+    "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+    "model": "doubao-seed-2.0-mini",
+    "options": {
+      "max_output_tokens": 16384,
+      "timeout_seconds": 300.0,
+      "token_parameter": "max_tokens"
+    },
+    "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+    "provider": "openai_compat",
+    "role_profile_sha256": "sha256:7ff5bc3ea87f161396f3012a1c3860711a676369bb7e901c91ef0c9d55809eec"
+  },
+  "protocol": "material-relations-selector-jsonl-v1",
+  "publication_query_delivery_context_use": 0,
+  "retry_limit": 0,
+  "schema_version": "bounded-relation-gate-plan-1",
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "stop_after_outcome_unknown": true,
+  "task_id": "task:02608d32fad4aa37ca4891d52ee61afdea3577134f3203723f27859a1c6649a9"
+}

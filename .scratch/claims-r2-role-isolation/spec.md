@@ -201,7 +201,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
   M_main 消费，也不能补足 10 的金标与质量分母。
 - 01 初始冻结没有修改主计划、report 或既有 freeze/guard/gold；后续 Issue 18 已在不修改既有金标和
   阈值的前提下追加执行证据，并同步本专项 spec/report。历史 plan、response object 和签认文件仍按
-  manifest 保持不可变；修订均另立 P4—P7 目录或追加 Comments，不把旧失败原地改写成通过。
+  manifest 保持不可变；修订均另立 P4—P8 目录或追加 Comments，不把旧失败原地改写成通过。
 
 ## 5. 全局执行约束与验收纪律
 
@@ -215,8 +215,10 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
-- Issue 18 另有独立授权的 50 次 selector model attempts（P3 23、P4 23、P5 4）；P6/P7 replay 为 0
-  模型调用。P4+P5 已用完该轮 27 次后续预算，relations 仍为 0 calls；任何 relation-only 实跑须新授权。
+- Issue 18 另有独立授权的 54 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4）；
+  P6/P7 replay 与 P8 candidate-v4 反事实为 0 模型调用。P8 的新 relation-only 授权已经用完，4/4
+  succeeded、0 retry；后续 v4 候选剪枝、原子端点评分与 formal ledger import seam 先做零调用验证，
+  不从本次签认推导新的 live budget。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件
