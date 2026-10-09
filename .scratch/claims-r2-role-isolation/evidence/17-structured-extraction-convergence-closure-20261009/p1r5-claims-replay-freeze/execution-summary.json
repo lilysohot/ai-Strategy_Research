@@ -1,0 +1,65 @@
+{
+  "schema_version": "structured-extraction-p1r5-claims-replay-execution-1",
+  "executed_on": "2026-10-09",
+  "manifest_sha256": "db1d51f4bc41fa9a7d2f8bb11ce4c6e90330ef6966f48ce41e9790acc187217e",
+  "new_model_calls": 0,
+  "replayed_attempts": 19,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "copper_executed": false,
+  "results": [
+    {
+      "name": "replay-claims-industrial-fulian",
+      "attempts": 9,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "replay-claims-optical-module",
+      "attempts": 8,
+      "attempt_status": {
+        "succeeded": 8
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "live-claims-optical-routing-delta",
+      "attempts": 2,
+      "attempt_status": {
+        "succeeded": 2
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "findings": []
+    }
+  ],
+  "next_action": "Claims gate evaluation"
+}

@@ -1,0 +1,22 @@
+{
+  "stage": "replacement_claims_only_gate",
+  "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+  "batch_id": "batch:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+  "plan_sha256": "sha256:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+  "protocol": "claims-atomic-json-v1",
+  "slot_protocol": "claims-slot-obligations-v1",
+  "unit_count": 10,
+  "candidate_slot_count": 49,
+  "candidate_packet_count": 9,
+  "attempt_ceiling": 10,
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "model_calls_during_planning": 0,
+  "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+  "model": "doubao-seed-2.0-mini",
+  "adapter_version": "structured-chat-http-2",
+  "max_output_tokens": 16384,
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "publication_writes": 0
+}

@@ -18,6 +18,8 @@ from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse
 from plugins.corpus.evidence_pipeline import (
+    CLAIMS_ATOMIC_PROTOCOL,
+    CLAIMS_ATOMIC_PROTOCOL_V1,
     CLAIMS_PROSE_PROTOCOL,
     CLAIMS_TABLE_PROTOCOL,
     EvidenceRun,
@@ -42,7 +44,7 @@ from plugins.corpus.structured.config import canonical_hash
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit, dependency_closure
 
 ROLE_ARTIFACT_SCHEMA_VERSION = "corpus-role-artifact-v1"
-ROUTING_RULE_VERSION = "corpus-role-routing-v1"
+ROUTING_RULE_VERSION = "corpus-role-routing-v2"
 
 Role = Literal["claims", "material_items", "material_relations"]
 ExecutionStatus = Literal[
@@ -53,7 +55,7 @@ ContextStatus = Literal["complete", "partial", "missing", "ambiguous", "budget_e
 QualityStatus = Literal["unassessed", "accepted", "review_required", "rejected"]
 
 _QUANTITATIVE_UNIT = re.compile(
-    r"\d+(?:\.\d+)?\s*(?:人民币|美元|亿元|万元|百万元|元|%|％|倍|人|天|吨|股)"
+    r"\d+(?:\.\d+)?\s*(?:万|亿)?\s*(?:人民币|美元|元|%|％|百分点|倍|个|只|台|人|天|吨|股)"
 )
 _QUANTITATIVE_METRIC = re.compile(
     r"(?:收入|营收|利润|现金流|费用|资产|负债|权益|毛利率|净利率|估值|PE|PB)", re.I
@@ -91,15 +93,24 @@ class RoleRoutingPlan(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    rule_version: Literal["corpus-role-routing-v1"] = ROUTING_RULE_VERSION
+    rule_version: Literal["corpus-role-routing-v1", "corpus-role-routing-v2"] = (
+        ROUTING_RULE_VERSION
+    )
     snapshot_id: str
     decisions: tuple[RoleRoute, ...]
     unrouted_gap_ids: tuple[str, ...] = ()
 
     def claims_scope(self, protocol: str) -> tuple[str, ...]:
         """Return exact root units routed to the chosen Claims protocol."""
+        routed_protocol = (
+            CLAIMS_PROSE_PROTOCOL
+            if protocol in {CLAIMS_ATOMIC_PROTOCOL_V1, CLAIMS_ATOMIC_PROTOCOL}
+            else protocol
+        )
         return tuple(
-            decision.unit_id for decision in self.decisions if decision.claims_protocol == protocol
+            decision.unit_id
+            for decision in self.decisions
+            if decision.claims_protocol == routed_protocol
         )
 
     @property
@@ -140,6 +151,8 @@ class RoleArtifact(BaseModel):
     protocol: Literal[
         "claims-deterministic-v1",
         "claims-json-v2",
+        "claims-atomic-json-v1",
+        "claims-atomic-json-v2",
         "material-atomic-jsonl-v4",
         "material-atomic-jsonl-v5",
         "material-relations-jsonl-v1",
@@ -204,7 +217,12 @@ class _RoleCalls:
         if not task_id.strip():
             raise ValueError("CS_INPUT_INVALID: empty role task_id")
         supported = {
-            "claims": {CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL},
+            "claims": {
+                CLAIMS_TABLE_PROTOCOL,
+                CLAIMS_PROSE_PROTOCOL,
+                CLAIMS_ATOMIC_PROTOCOL_V1,
+                CLAIMS_ATOMIC_PROTOCOL,
+            },
             "material_items": {MATERIAL_SLOT_JSONL_VERSION},
             "material_relations": {MATERIAL_RELATION_JSONL_VERSION},
         }
@@ -554,6 +572,8 @@ def execute_material_items_role(
     llm: LlmFn | None = None,
     max_calls: int,
     material_type: MaterialType | None = None,
+    max_items_per_packet: int = 30,
+    max_slots_per_batch: int = 8,
     candidate_slot_ids: tuple[str, ...] | None = None,
     dispatch: RoleDispatch | None = None,
 ) -> RoleExecution:
@@ -567,6 +587,9 @@ def execute_material_items_role(
         {
             "scope": scope,
             "candidate_slot_ids": candidate_slot_ids,
+            "max_items_per_packet": max_items_per_packet,
+            "max_slots_per_batch": max_slots_per_batch,
+            "material_type": material_type,
             "routing_rule": ROUTING_RULE_VERSION,
         },
         llm,
@@ -578,6 +601,8 @@ def execute_material_items_role(
         llm=calls.callback,
         max_calls=max_calls,
         material_type=material_type,
+        max_items_per_packet=max_items_per_packet,
+        max_slots_per_batch=max_slots_per_batch,
         candidate_slot_ids=candidate_slot_ids,
     )
     omitted_units: tuple[str, ...] = ()

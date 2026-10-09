@@ -46,6 +46,7 @@ from plugins.corpus.claims import (
     parse_as_of,
     parse_claims_json,
     parse_value,
+    parse_value_range,
     triage_blocks,
     unit_scale,
     with_retry,
@@ -748,6 +749,22 @@ def test_parse_value_never_guesses() -> None:
     assert parse_value("") == (None, None)
     assert parse_value("增持") == (None, None)
     assert parse_value("约翻倍") == (None, None)
+    assert parse_value("2到3") == (None, None)
+    assert parse_value("5万到10万个") == (None, None)
+
+
+def test_parse_value_range_preserves_both_bounds() -> None:
+    assert parse_value_range("2到3", "个") == (Decimal("2"), Decimal("3"), "个")
+    assert parse_value_range("5万到10万个") == (
+        Decimal("50000"),
+        Decimal("100000"),
+        "个",
+    )
+    assert parse_value_range("300至500万只") == (
+        Decimal("3000000"),
+        Decimal("5000000"),
+        "只",
+    )
 
 
 def test_parse_as_of_accepts_iso_and_chinese_dates() -> None:

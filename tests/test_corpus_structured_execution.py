@@ -315,6 +315,46 @@ def test_plan_is_stable_zero_call_and_freezes_limits() -> None:
         tampered.verify_identity()
 
 
+def test_plan_can_freeze_claims_only_without_blocked_material_tasks() -> None:
+    value = snapshot(dual_model_roles=True)
+    plan = plan_batch(
+        value,
+        max_attempts=2,
+        role_max_attempts={"claims": 2, "material_items": 0, "material_relations": 0},
+        relations_enabled=False,
+        enabled_roles=("claims",),
+    )
+
+    plan.verify_identity()
+    assert plan.enabled_roles == ("claims",)
+    assert {task.role for task in plan.tasks} == {"claims"}
+    assert not plan.relations.enabled
+
+
+def test_relation_role_selection_requires_material_items() -> None:
+    with pytest.raises(StructuredExecutionError, match="invalid_enabled_roles"):
+        plan_batch(snapshot(), enabled_roles=("material_relations",))
+
+
+def test_plan_freezes_material_item_batching_options() -> None:
+    plan = plan_batch(
+        snapshot(),
+        max_attempts=1,
+        role_max_attempts={"claims": 0, "material_items": 1, "material_relations": 0},
+        relations_enabled=False,
+        enabled_roles=("material_items",),
+        max_items_per_packet=64,
+        max_slots_per_batch=48,
+        material_type="conference_minutes",
+    )
+
+    plan.verify_identity()
+    assert plan.material_items_options is not None
+    assert plan.material_items_options.max_items_per_packet == 64
+    assert plan.material_items_options.max_slots_per_batch == 48
+    assert plan.material_items_options.material_type == "conference_minutes"
+
+
 def test_replay_persists_contract_ledger_and_no_candidate_derivation(tmp_path: Path) -> None:
     value = snapshot()
     plan = plan_batch(

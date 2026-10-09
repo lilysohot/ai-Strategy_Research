@@ -1,10 +1,10 @@
 # 17 · 结构化提取收敛闭环与最终去留门
 
-Status: ready-for-p1-plan-freeze
-Execution: P0-A/P0-B 零调用工程闭环已完成；Claims 旧基线质量门仍未过，未发起新模型请求，未改金标、阈值、生产库或发布状态
+Status: p1r5-claims-metrics-pass-awaiting-delta-signoff
+Execution: 替换 Claims 实现已完成 19 个不可变响应的最终零调用重放；增量裁定预览 precision 50.91%、recall 100%，数值门通过但 36 条新增/变更裁定仍待 xyl 签认。copper、生产库与发布均未启动
 Type: task
 Parent: [11 · 获准后的真实模型有界试验与单文档消费](11-bounded-live-trial.md)
-Model calls: 0
+Model calls: 36（P1 17；P1R1 9；P1R2 8；P1R3 路由增量 2；其余重放 0）
 Production database access: 0
 
 ## 目标
@@ -92,3 +92,33 @@ relations。items 不重复 company/industry/trade 三个已执行样本，不�
   [repair-validation.json](../evidence/17-structured-extraction-convergence-closure-20261009/repair-validation.json)。
 - Claims 零调用绑定审计：
   [claims-binding-audit.json](../evidence/17-structured-extraction-convergence-closure-20261009/claims-binding-audit.json)。
+- 2026-10-09：P1 两份 Claims 正式计划共执行 17 次、自动重试 0；125 个候选中至少 7 个冻结
+  目标被必需字段/漏召回硬阻断，理论召回上限 13/20（65%），因此没有继续做 125 条全量人工裁定，
+  也没有启动 copper。门禁结果：
+  [p1-claims-gate-result.json](../evidence/17-structured-extraction-convergence-closure-20261009/p1-claims-gate-result.json)。
+- 2026-10-09：按失败分支保留 snapshot/ledger/role/store 接口，替换 Claims 绑定实现：新增
+  `claims-atomic-json-v1` + `claims-slot-obligations-v1`，每个确定性原子候选槽必须返回 Claim 或带原因的
+  `no_supported_claim` 终态；漏终态/跨槽引文直接把包标为 partial。绑定层新增短年份/相对期间、范围值、
+  `亿` 与计数单位、industry 子主体误放 metric 的确定性修复；旧 `claims-json-v2` 继续兼容。
+- P1R 零调用冻结：
+  [manifest.json](../evidence/17-structured-extraction-convergence-closure-20261009/p1r-claims-plan-freeze/manifest.json)。
+  两来源仍为同一签认 24 单元，预算上限 24 次、并发 1、自动重试 0；工业富联 49 个候选槽/9 个候选包，
+  光模块 27 个候选槽/8 个候选包。P1R 未过冻结门前继续禁止 copper 与发布。
+- 回归验证：相关测试 305 passed；全量 corpus 1354 passed、17 skipped，仅保留两项已知环境基线失败
+  （本地 golden 检索语料 0/20；reader-pdf-10 断言与当前 reader-pdf-11 环境不一致）；ruff 与 pyright 通过。
+- 2026-10-09：P1R1 工业臂 9 次响应语义可用，但两包未复制槽位 ID，协议 fail-closed，光模块未启动；
+  `claims-atomic-json-v2` 仅允许“唯一精确引文所有者”确定性回绑。P1R2 随后零调用重放工业臂、8 次执行
+  光模块臂，17 包全部协议有效。
+- 2026-10-09：门禁复核发现 `body[3]` 含 1.5 亿只及 5—10 万个仍被 v1 路由排除。路由升级为
+  `corpus-role-routing-v2` 后只新增 `body[3]`、`body[51]` 两包；P1R3 复用前 17 份响应，仅新增 2 次调用，
+  19 包全部协议有效。随后用 P1R4/P1R5 零调用重放验证共享倍率、计数单位、近似季度、分类状态、隐式
+  公司/产品主体及早期估计的同句边界，未再次调用模型。
+- 2026-10-09：P1R5 共产生 110 条 Claims 候选；74 条复用既有 xyl 签认，36 条为新增或坐标变化的
+  增量裁定草案。代理预览为 matched/correct-extra/incorrect/duplicate = 20/36/51/3，precision
+  56/110（50.91%）高于 37/132（28.03%）floor，recall 20/20（100%）高于 15/20（75%）floor。
+  在 36 条增量裁定获具名签认前，`human_gate_satisfied=false`，继续禁止 copper 与发布。证据：
+  [P1R5 执行摘要](../evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-replay-freeze/execution-summary.json)、
+  [增量裁定草案](../evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.agent-draft.json)、
+  [门禁预览](../evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/gate-preview.json)。
+- 最新全量 corpus 回归：1360 passed、17 skipped；仅两项既有环境基线失败（本地 golden 语料
+  Recall 0/20；测试仍断言 reader-pdf-10 而当前环境为 reader-pdf-11）。

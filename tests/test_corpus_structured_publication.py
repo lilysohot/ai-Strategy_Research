@@ -25,6 +25,7 @@ from test_corpus_structured_execution import (
 )
 from test_corpus_structured_store import prepared
 
+from plugins.corpus.claims_binding import build_claim_candidate_slots
 from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import evidence_document_from_snapshot
 from plugins.corpus.material_semantics import (
@@ -111,12 +112,18 @@ def forecast_artifacts(
     slots = build_candidate_slots(document, build_material_structure(document))
     assert len(slots) == 1
     slot = slots[0]
+    claims_document = evidence_document_from_snapshot(value, role="claims")
+    claim_slots = build_claim_candidate_slots(claims_document)
+    assert len(claim_slots) == 1
+    claim_slot = claim_slots[0]
     speaker = "spk_" + fingerprint([None, "document_voice", "unknown"])[:12]
     for task in plan.tasks:
         if task.role == "claims":
             content = json.dumps(
                 [
                     {
+                        "candidate_slot_id": claim_slot.candidate_slot_id,
+                        "coverage_status": "claim",
                         "claim_text": slot.text,
                         "evidence_quote": slot.text,
                         "evidence_kind": "prose",

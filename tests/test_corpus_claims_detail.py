@@ -17,6 +17,7 @@ from plugins.corpus.claims_detail import (
     extract_from_block_v2,
     lint_claim,
     normalize_period,
+    normalize_period_in_context,
     parse_claims_json_detail,
     records_from_payload,
     triage_block_detail,
@@ -197,6 +198,22 @@ def test_period_normalization_covers_core_grains_and_refuses_unanchored_month() 
     assert normalize_period("8月").reason_code == "period_unanchored"
 
 
+def test_period_context_binding_uses_only_trusted_reference_year() -> None:
+    assert normalize_period_in_context("29年", reference_date="2026-09-08").period_end == (
+        "2029-12-31"
+    )
+    assert normalize_period_in_context(
+        "27年三季度", reference_date="2026-09-08"
+    ).period_end == "2027-09-30"
+    assert normalize_period_in_context(
+        "今年下半年", reference_date="2026-09-08"
+    ).period_end == "2026-12-31"
+    assert normalize_period_in_context("Q2", reference_date="2026-08-29").period_end == (
+        "2026-06-30"
+    )
+    assert normalize_period_in_context("29年", reference_date=None).period_end is None
+
+
 def test_records_from_payload_splits_coordinates_and_preserves_raw_fields() -> None:
     records = records_from_payload(
         [
@@ -234,6 +251,35 @@ def test_records_from_payload_splits_coordinates_and_preserves_raw_fields() -> N
     assert records[1].metric == "NFP"
     assert records[1].qualifiers["state"] == "consensus"
     assert records[1].known_at == "2026-09-06"
+
+
+def test_records_preserve_range_bounds_without_false_scalar_projection() -> None:
+    record = records_from_payload(
+        [
+            {
+                "candidate_slot_id": "claim-slot-1",
+                "claim_text": "27年CPO出货量为5万到10万个",
+                "evidence_quote": "27年5万到10万个水平",
+                "scope": "industry",
+                "subject": "光模块行业",
+                "metric": "CPO出货量",
+                "value_text": "5万到10万个",
+                "period_raw": "27年",
+                "kind": "forecast",
+            }
+        ],
+        doc_id="d",
+        source_rev="rev",
+        seq=1,
+        locator="p1",
+        doc_kind="industry",
+        model="fake",
+    )[0]
+    assert record.value_num is None
+    assert record.unit == "个"
+    assert record.qualifiers["value_shape"] == "range"
+    assert record.qualifiers["value_lower"] == "50000"
+    assert record.qualifiers["value_upper"] == "100000"
 
 
 def test_lint_claim_applies_quality_gate_without_llm() -> None:

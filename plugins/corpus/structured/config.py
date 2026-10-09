@@ -34,7 +34,7 @@ CONFIG_KEYS = tuple(
 ADAPTER_VERSION = "structured-chat-http-2"
 Role = Literal["claims", "material_items", "material_relations"]
 PROTOCOLS: dict[str, str] = {
-    "claims": "claims-json-v2",
+    "claims": "claims-atomic-json-v2",
     "material_items": "material-atomic-jsonl-v5",
     "material_relations": "material-relations-jsonl-v1",
 }

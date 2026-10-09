@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:374e39cc3b6855cd6ac3b0f3464309cdbfd75e4e9eb0ad1642f61ebb03440341",
+  "parent_task_id": null,
+  "sequence": 4,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"candidate_slot_id\":\"slot_38846626679cc30c\",\"coverage_status\":\"claim\",\"claim_text\":\"工业富联2026年8月28日收盘价格为64.04元\",\"evidence_quote\":\"2026-08-28 收盘 64.04 元（mx-xuangu）\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"company\",\"subject_raw\":\"工业富联\",\"subject\":\"工业富联\",\"metric_raw\":\"收盘价格\",\"metric\":\"收盘价格\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"64.04\",\"unit_raw\":\"元\",\"period_raw\":\"2026-08-28\",\"observed_at\":null,\"known_at\":\"2026-08-29\",\"confidence\":null},{\"candidate_slot_id\":\"slot_80bb6d3567a64c96\",\"coverage_status\":\"no_supported_claim\",\"reason_code\":\"候选槽内容未明确对应具体金融指标，不满足claim需包含主体、指标、期间/时点的要求\"}]",
+  "diagnostics": {
+    "source": "p1r2_immutable_response_object",
+    "source_response_object_sha256": "sha256:2346cecffe67bb723666fbcc6ca5f79cf17daf28e090c77e460d6459cd4342d9",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r2-response-replay"
+  }
+}

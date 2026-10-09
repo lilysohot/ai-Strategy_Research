@@ -95,9 +95,14 @@ async function load(): Promise<void> {
       notFound.value = true
     }
     const detail = err instanceof ApiError ? err.detail : null
-    if (detail && typeof detail === 'object' && 'code' in detail
-      && (detail as { code?: string }).code === 'snapshot_absent') {
+    const code = detail && typeof detail === 'object' && 'code' in detail
+      ? (detail as { code?: string }).code
+      : null
+    if (code === 'snapshot_absent') {
+      // 非业务 Run（普通对话/材料阅读）本来就没有业务输入快照：这是正常态，
+      // 只展示“无业务依据”，不再显示为错误（2026-10-08）。
       absent.value = true
+      return
     }
     errorMessage.value = err instanceof Error ? err.message : '读取分析依据失败'
   } finally {

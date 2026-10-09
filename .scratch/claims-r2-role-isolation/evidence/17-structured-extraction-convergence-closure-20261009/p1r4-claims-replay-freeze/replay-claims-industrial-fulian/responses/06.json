@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:374e39cc3b6855cd6ac3b0f3464309cdbfd75e4e9eb0ad1642f61ebb03440341",
+  "parent_task_id": null,
+  "sequence": 6,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[\n    {\n        \"candidate_slot_id\": \"slot_b5fab4e10d77af92\",\n        \"coverage_status\": \"claim\",\n        \"claim_text\": \"工业富联的Rubin / GB300爬坡再延\",\n        \"evidence_quote\": \"Rubin / GB300 爬坡再延，\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"company\",\n        \"subject_raw\": \"工业富联\",\n        \"subject\": \"工业富联\",\n        \"metric_raw\": null,\n        \"metric\": null,\n        \"qualifiers\": null,\n        \"kind\": \"forecast\",\n        \"value_text\": null,\n        \"unit_raw\": null,\n        \"period_raw\": null,\n        \"observed_at\": null,\n        \"known_at\": null,\n        \"confidence\": null\n    },\n    {\n        \"candidate_slot_id\": \"slot_74ae0c1ab4fc6f52\",\n        \"coverage_status\": \"claim\",\n        \"claim_text\": \"工业富联的毛利率从7%回到6%以下\",\n        \"evidence_quote\": \"毛利率从 7% 回到 6% 以下，\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"company\",\n        \"subject_raw\": \"工业富联\",\n        \"subject\": \"工业富联\",\n        \"metric_raw\": \"毛利率\",\n        \"metric\": \"毛利率\",\n        \"qualifiers\": null,\n        \"kind\": \"forecast\",\n        \"value_text\": \"6%以下\",\n        \"unit_raw\": \"%\",\n        \"period_raw\": null,\n        \"observed_at\": null,\n        \"known_at\": null,\n        \"confidence\": null\n    }\n]",
+  "diagnostics": {
+    "source": "p1r3_immutable_response_object",
+    "source_response_object_sha256": "sha256:f2a63c71757e0d2ab09b628af286f64cef47602426afd3d72f061669df12f5bc",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r3-response-replay"
+  }
+}

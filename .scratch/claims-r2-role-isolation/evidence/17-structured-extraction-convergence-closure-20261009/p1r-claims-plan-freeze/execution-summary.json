@@ -1,0 +1,41 @@
+{
+  "schema_version": "structured-extraction-p1r-claims-execution-1",
+  "executed_on": "2026-10-09",
+  "plan_manifest_sha256": "c013eada3ba3fcb89708ea92d4bfbc9c1557501a7ffcaba7ce4c8eb5a9ee13e0",
+  "model_calls": 9,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "copper_executed": false,
+  "stopped_early": true,
+  "blocked_plans": [
+    "claims-optical-module"
+  ],
+  "results": [
+    {
+      "name": "claims-industrial-fulian",
+      "batch_id": "batch:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+      "plan_sha256": "sha256:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+      "attempt_ceiling": 10,
+      "actual_attempts": 9,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "invalid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": [],
+      "store": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/p1r-claims-plan-freeze/claims-industrial-fulian/live-store"
+    }
+  ],
+  "next_action": "diagnose the atomic slot protocol failure without further model calls"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:8186e1c74f7c0aec5574c914274ce68f9995d94e890f751c89b350573f8bea63",
+  "parent_task_id": null,
+  "sequence": 7,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[\n    {\n        \"candidate_slot_id\": \"slot_c26035a9c4448ccd\",\n        \"coverage_status\": \"claim\",\n        \"claim_text\": \"今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队\",\n        \"evidence_quote\": \"今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。\",\n        \"evidence_kind\": \"prose\",\n        \"kind\": \"forecast\",\n        \"table_ref\": null,\n        \"scope\": \"macro\",\n        \"subject_raw\": \"光模块行业\",\n        \"subject\": \"光模块行业\",\n        \"metric_raw\": \"新客户贡献收入\",\n        \"metric\": null,\n        \"qualifiers\": null,\n        \"value_text\": \"2到3\",\n        \"unit_raw\": null,\n        \"period_raw\": \"今年下半年\",\n        \"observed_at\": null,\n        \"known_at\": null,\n        \"confidence\": null\n    }\n]",
+  "diagnostics": {
+    "source": "p1r4_immutable_response_object",
+    "source_response_object_sha256": "sha256:280a341ece9f6b0ede4bb7505ec212a6591b8feb2291ffd152e268f8d5311aa9",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r4-response-replay"
+  }
+}

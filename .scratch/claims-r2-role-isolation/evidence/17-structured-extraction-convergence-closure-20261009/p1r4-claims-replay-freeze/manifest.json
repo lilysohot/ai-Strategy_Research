@@ -1,0 +1,56 @@
+{
+  "schema_version": "structured-extraction-p1r4-claims-replay-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-09",
+  "purpose": "zero-call deterministic rebinding of the nineteen P1R3 responses",
+  "execution_order": [
+    "replay-claims-industrial-fulian",
+    "replay-claims-optical-module",
+    "live-claims-optical-routing-delta",
+    "claims_gate_evaluation"
+  ],
+  "new_model_calls": 0,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "versions": {
+    "claims_protocol": "claims-atomic-json-v2",
+    "slot_protocol": "claims-slot-obligations-v2",
+    "routing": "corpus-role-routing-v2",
+    "pipeline": "evidence-pipeline-12",
+    "lint": "claims-v2-lint-8",
+    "period_rules": "period-rules-4",
+    "unit_rules": "unit-rules-4"
+  },
+  "entries": [
+    {
+      "name": "replay-claims-industrial-fulian",
+      "batch_id": "batch:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "plan_sha256": "sha256:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "attempts": 9,
+      "new_model_calls": 0,
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "72a29b0a1e070a5011ba8ee3e85f6f8b00c641e2a6646cb6e1acf5f862bffdbb"
+    },
+    {
+      "name": "replay-claims-optical-module",
+      "batch_id": "batch:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "plan_sha256": "sha256:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "attempts": 8,
+      "new_model_calls": 0,
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "9a8321af2ddfb4998b92517bec756d0b8487566341101b505ae72041b58c9578"
+    },
+    {
+      "name": "live-claims-optical-routing-delta",
+      "batch_id": "batch:5528254b5444f6ff97395b27c7fc76a38c57ea4210fccffe6d504649126c36ba",
+      "plan_sha256": "sha256:5528254b5444f6ff97395b27c7fc76a38c57ea4210fccffe6d504649126c36ba",
+      "attempts": 2,
+      "new_model_calls": 0,
+      "snapshot_file_sha256": "2f8aa10eab97a1ee1d4b6ca0de3ab7ffd3ef2315a4be15caafea3203110308bf",
+      "plan_file_sha256": "9449b59342dc5dae91ff8531148b8593678ea72bae3d8728f0f954f7952c0eb1"
+    }
+  ],
+  "p1r3_execution_sha256": "edad4b8f63e9707481718ff6b6ab0a8462e77680bdb5d10c39f451af36775296",
+  "prepare_script_sha256": "5b99a506efb250d8bdd1d81c3a673f1f11bfc676546f8294d3a4e0561552944c"
+}

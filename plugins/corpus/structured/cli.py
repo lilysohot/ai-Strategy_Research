@@ -48,8 +48,30 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--max-relation-tasks", type=int, default=1)
     plan.add_argument("--max-relation-attempts", type=int)
     plan.add_argument("--disable-relations", action="store_true")
+    plan.add_argument(
+        "--role",
+        action="append",
+        choices=("claims", "material_items", "material_relations"),
+        dest="enabled_roles",
+        help="include only the selected role(s); material_relations also requires material_items",
+    )
     plan.add_argument("--deadline-epoch", type=float)
     plan.add_argument("--currency")
+    plan.add_argument("--max-items-per-packet", type=int)
+    plan.add_argument("--max-slots-per-batch", type=int)
+    plan.add_argument(
+        "--material-type",
+        choices=(
+            "research_report",
+            "conference_minutes",
+            "company_announcement",
+            "social_media_post",
+            "post_trade_review",
+            "news_article",
+            "data_release",
+            "unknown",
+        ),
+    )
 
     execute = commands.add_parser("execute", help="run explicitly authorized model adapters")
     execute.add_argument("--plan", required=True)
@@ -206,6 +228,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 max_relation_tasks=args.max_relation_tasks,
                 max_relation_attempts=args.max_relation_attempts,
                 deadline_epoch=args.deadline_epoch,
+                enabled_roles=args.enabled_roles,
+                max_items_per_packet=args.max_items_per_packet,
+                max_slots_per_batch=args.max_slots_per_batch,
+                material_type=args.material_type,
             )
             _write_plan(args.out, plan)
             _output(

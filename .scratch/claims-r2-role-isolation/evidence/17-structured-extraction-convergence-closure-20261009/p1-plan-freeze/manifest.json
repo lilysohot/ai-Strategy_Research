@@ -1,0 +1,145 @@
+{
+  "schema_version": "structured-extraction-p1-plan-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-09",
+  "execution_order": [
+    "claims-industrial-fulian",
+    "claims-optical-module",
+    "claims_gate_evaluation",
+    "copper-items-relations_if_and_only_if_claims_gate_passes"
+  ],
+  "stop_policy": "Claims failure blocks the copper plan; item failure blocks derived relations.",
+  "total_claims_attempt_ceiling": 24,
+  "conditional_copper_attempt_ceiling": 16,
+  "maximum_total_attempt_ceiling": 40,
+  "model_calls_during_planning": 0,
+  "versions": {
+    "material_extractor": "material-semantics-27",
+    "slot_batching": "material-slot-batching-v2",
+    "item_protocol": "material-atomic-jsonl-v5",
+    "item_validation": "material-items-validation-v6",
+    "relation_candidates": "material-relation-candidates-v3"
+  },
+  "profile": {
+    "model": "doubao-seed-2.0-mini",
+    "adapter_version": "structured-chat-http-2",
+    "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+    "request_options": {
+      "timeout_seconds": 300.0,
+      "max_output_tokens": 16384,
+      "token_parameter": "max_tokens"
+    }
+  },
+  "entries": [
+    {
+      "name": "claims-industrial-fulian",
+      "stage": "claims_only_gate",
+      "source_snapshot_path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/industrial-fulian-md/snapshot.json",
+      "source_snapshot_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "unit_count": 10,
+      "attempt_ceiling": 10,
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "batch_id": "batch:d17c1286e56ff1d3a6a49f7c44c3c66e720d2f0d10fc09b508ac4343516ba910",
+      "plan_sha256": "sha256:d17c1286e56ff1d3a6a49f7c44c3c66e720d2f0d10fc09b508ac4343516ba910",
+      "enabled_roles": [
+        "claims"
+      ],
+      "role_attempt_ceiling": {
+        "claims": 10,
+        "material_items": 0,
+        "material_relations": 0
+      },
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "3436aa7dcb88878b880cbf65c9428bdc52cfbdf6d9380518a5312e3aa6d03195",
+      "freeze_file_sha256": "86a8a4d56c6c01e032fb1c44d978c894056fc408103b5a171c3dbb7e94b7be78"
+    },
+    {
+      "name": "claims-optical-module",
+      "stage": "claims_only_gate",
+      "source_snapshot_path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/optical-module-docx/snapshot.json",
+      "source_snapshot_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "unit_count": 14,
+      "attempt_ceiling": 14,
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "batch_id": "batch:075de8fa89a58ee6b5e77f202d3863526c837a76892954a043eb4a161af8e875",
+      "plan_sha256": "sha256:075de8fa89a58ee6b5e77f202d3863526c837a76892954a043eb4a161af8e875",
+      "enabled_roles": [
+        "claims"
+      ],
+      "role_attempt_ceiling": {
+        "claims": 14,
+        "material_items": 0,
+        "material_relations": 0
+      },
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "e20037ea3eb72be0892b4fb73032ca45a2e7ab60413fdbfe0457317e42e8e2ea",
+      "freeze_file_sha256": "02f59016817db243d79835ae8dbacada1acedb29792a5b26b95bc04f5c68b3ec"
+    },
+    {
+      "name": "copper-items-relations",
+      "stage": "copper_items_then_relations",
+      "source_path": "data/corpus/5月：锂电铜箔和电子铜箔.md",
+      "source_sha256": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+      "snapshot_units": 4,
+      "candidate_slots": 487,
+      "item_batches": 12,
+      "candidate_packets": 4,
+      "item_attempt_ceiling": 12,
+      "relation_attempt_ceiling": 4,
+      "attempt_ceiling": 16,
+      "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+      "batch_id": "batch:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+      "plan_sha256": "sha256:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+      "enabled_roles": [
+        "material_items",
+        "material_relations"
+      ],
+      "role_attempt_ceiling": {
+        "claims": 0,
+        "material_items": 12,
+        "material_relations": 4
+      },
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "4f90791acd7265bb05c3fbe6345ef574acd7c4cdd24f92adf0d85fbc32cee60f",
+      "plan_file_sha256": "7f3409325f9521034c62cb277c7d07aa0940d5ff63777cbc2dc24115b9252fa3",
+      "freeze_file_sha256": "362785f8038cb9ad428cb282cedddf73c40e58524f7e078f6d107003d4a646c9"
+    }
+  ],
+  "pre_execution_requirements": [
+    "restore the dedicated structured extraction credential without changing the public profile",
+    "verify every snapshot, plan and freeze file hash",
+    "use the formal structured ledger with concurrency 1 and automatic retries 0",
+    "do not start copper until the signed Claims gate report passes"
+  ],
+  "prepare_script_sha256": "3fc1c95a291f70a08419072308b7ecb538d52734b6f0088461e655f551dfafd1",
+  "gold_file_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b"
+}

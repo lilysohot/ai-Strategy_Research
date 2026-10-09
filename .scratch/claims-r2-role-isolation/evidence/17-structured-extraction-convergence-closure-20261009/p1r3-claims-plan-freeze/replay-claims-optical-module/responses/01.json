@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:8186e1c74f7c0aec5574c914274ce68f9995d94e890f751c89b350573f8bea63",
+  "parent_task_id": null,
+  "sequence": 1,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"candidate_slot_id\":\"slot_7ed08431a6720534\",\"coverage_status\":\"claim\",\"claim_text\":\"会不会出现当年机器人份额加起来超过100%的状态？\",\"evidence_quote\":\"像当年机器人份额加起来超过100%，会不会出现这个状态？\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":null,\"subject_raw\":null,\"subject\":null,\"metric_raw\":null,\"metric\":null,\"qualifiers\":null,\"kind\":\"opinion\",\"value_text\":null,\"unit_raw\":null,\"period_raw\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null},{\"candidate_slot_id\":\"slot_e872b6474ccbe6fd\",\"coverage_status\":\"claim\",\"claim_text\":\"份额加起来总不能超过100%\",\"evidence_quote\":\"你说的加起来总不能超过100%。\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":null,\"subject_raw\":null,\"subject\":null,\"metric_raw\":null,\"metric\":null,\"qualifiers\":null,\"kind\":\"opinion\",\"value_text\":null,\"unit_raw\":null,\"period_raw\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null}]",
+  "diagnostics": {
+    "source": "p1r2_immutable_response_object",
+    "source_response_object_sha256": "sha256:e9a14c6f380730d274036f610338f315c1278ddabc6cb9229ff99c793292e310",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r2-response-replay"
+  }
+}

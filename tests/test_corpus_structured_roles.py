@@ -260,6 +260,29 @@ def test_routing_is_explicit_for_table_quantitative_qualitative_and_gap() -> Non
     assert len(plan.decisions) == len(snapshot.units)
 
 
+def test_routing_recognizes_chinese_scaled_count_units() -> None:
+    payload = SnapshotBuildSource(
+        head=SnapshotHead(source_id=SOURCE_ID, build_id=BUILD_ID, publication_generation=9),
+        parser_versions={"parse": "p1", "clean": "c1", "chunk": "k1"},
+        document=SnapshotDocumentSource(
+            title="合成行业材料", subject="光模块行业", published="2026-01-01"
+        ),
+        units=(
+            SnapshotUnitSource(
+                source_unit_id="scaled-count-u",
+                chunk_id="scaled-count-c",
+                kind="prose",
+                text="预计27年CPO达到5万到10万个，行业需求约1.5亿只。",
+                locator="body[1]",
+                ordinal=1,
+            ),
+        ),
+    )
+    decision = route_snapshot(build_snapshot(MemoryReader(payload), SOURCE_ID)).decisions[0]
+    assert decision.claims_protocol == "claims-json-v2"
+    assert "source_anchored_quantitative_statement" in decision.reason_codes
+
+
 def test_claims_table_is_zero_model_and_prose_only_calls_claims() -> None:
     snapshot = _snapshot()
     calls: list[str] = []
@@ -833,7 +856,7 @@ def test_mock_wire_reservation_and_receipt_are_one_per_role_request():
     result = execute_claims_role(
         _snapshot(),
         task_id="wire",
-        protocol="claims-json-v2",
+        protocol="claims-atomic-json-v2",
         llm=adapter,
         max_calls=1,
     )

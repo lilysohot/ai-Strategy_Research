@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:8186e1c74f7c0aec5574c914274ce68f9995d94e890f751c89b350573f8bea63",
+  "parent_task_id": null,
+  "sequence": 3,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"candidate_slot_id\":\"slot_9d6e7e83bba6f864\",\"coverage_status\":\"claim\",\"claim_text\":\"光模块行业29年NPO到10%\",\"evidence_quote\":\"29年NPO到10%\",\"evidence_kind\":\"prose\",\"kind\":\"forecast\",\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"NPO\",\"metric\":\"NPO\",\"value_text\":\"10%\",\"unit_raw\":\"%\",\"period_raw\":\"29年\",\"table_ref\":null,\"qualifiers\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"value_num\":null,\"period_end\":null,\"period_grain\":null,\"quality_status\":null,\"reason_codes\":null},{\"candidate_slot_id\":\"slot_54f5e6f1f3b270ba\",\"coverage_status\":\"claim\",\"claim_text\":\"光模块行业CPO到30%\",\"evidence_quote\":\"CPO到30%\",\"evidence_kind\":\"prose\",\"kind\":\"forecast\",\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"CPO\",\"metric\":\"CPO\",\"value_text\":\"30%\",\"unit_raw\":\"%\",\"period_raw\":\"29年\",\"table_ref\":null,\"qualifiers\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"value_num\":null,\"period_end\":null,\"period_grain\":null,\"quality_status\":null,\"reason_codes\":null},{\"candidate_slot_id\":\"slot_9e7480cff531e99c\",\"coverage_status\":\"claim\",\"claim_text\":\"光模块行业可插拔29年主导70%\",\"evidence_quote\":\"可插拔主导70%\",\"evidence_kind\":\"prose\",\"kind\":\"forecast\",\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"主导占比\",\"metric\":\"主导占比\",\"value_text\":\"70%\",\"unit_raw\":\"%\",\"period_raw\":\"29年\",\"table_ref\":null,\"qualifiers\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"value_num\":null,\"period_end\":null,\"period_grain\":null,\"quality_status\":null,\"reason_codes\":null}]",
+  "diagnostics": {
+    "source": "p1r2_immutable_response_object",
+    "source_response_object_sha256": "sha256:90b9cd05e702200924ead5c01c3c4e9d609e1e7f95463357c0f5e01171f0a969",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r2-response-replay"
+  }
+}

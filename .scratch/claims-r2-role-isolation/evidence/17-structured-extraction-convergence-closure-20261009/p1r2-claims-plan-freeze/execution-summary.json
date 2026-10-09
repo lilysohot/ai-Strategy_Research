@@ -1,0 +1,64 @@
+{
+  "schema_version": "structured-extraction-p1r2-claims-execution-1",
+  "executed_on": "2026-10-09",
+  "plan_manifest_sha256": "10061c34c3a770b0fda9a84c0e43ce85e77aa94cec3aeedb388a387c3aeda740",
+  "new_model_calls": 8,
+  "replayed_attempts": 9,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "copper_executed": false,
+  "results": [
+    {
+      "name": "claims-industrial-fulian",
+      "execution_mode": "replay_p1r1_responses",
+      "batch_id": "batch:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "plan_sha256": "sha256:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "attempt_ceiling": 10,
+      "ledger_attempts": 9,
+      "new_model_calls": 0,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "claims-optical-module",
+      "execution_mode": "live_model",
+      "batch_id": "batch:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "plan_sha256": "sha256:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "attempt_ceiling": 14,
+      "ledger_attempts": 8,
+      "new_model_calls": 8,
+      "attempt_status": {
+        "succeeded": 8
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    }
+  ],
+  "next_action": "evaluate the frozen Claims gate before any copper or publication work"
+}

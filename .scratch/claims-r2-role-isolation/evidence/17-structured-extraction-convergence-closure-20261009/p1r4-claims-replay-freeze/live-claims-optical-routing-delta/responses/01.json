@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:cc58d8be6d4fd1e6dd13e8fca6f70a5239c004a0e9cb707b4ce4899a28da6e79",
+  "parent_task_id": null,
+  "sequence": 1,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[\n    {\n        \"claim_text\": \"27年高速光模块的需求量为1.5亿只\",\n        \"evidence_quote\": \"27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"macro\",\n        \"subject_raw\": \"高速光模块\",\n        \"subject\": \"光模块行业\",\n        \"metric_raw\": \"需求量\",\n        \"metric\": \"需求量\",\n        \"qualifiers\": null,\n        \"kind\": \"forecast\",\n        \"value_text\": \"1.5亿\",\n        \"unit_raw\": \"只\",\n        \"period_raw\": \"27年\",\n        \"observed_at\": null,\n        \"known_at\": \"2026-09-08\",\n        \"confidence\": null\n    },\n    {\n        \"claim_text\": \"需求量没有用，交付量才有用\",\n        \"evidence_quote\": \"需求量没用，要交付量才有用\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"macro\",\n        \"subject_raw\": \"需求量、交付量\",\n        \"subject\": \"光模块行业\",\n        \"metric_raw\": null,\n        \"metric\": null,\n        \"qualifiers\": null,\n        \"kind\": \"opinion\",\n        \"value_text\": null,\n        \"unit_raw\": null,\n        \"period_raw\": null,\n        \"observed_at\": null,\n        \"known_at\": \"2026-09-08\",\n        \"confidence\": null\n    },\n    {\n        \"claim_text\": \"预计26年CPO相关的量很少\",\n        \"evidence_quote\": \"预计26年很少，26年就忽略不计\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"macro\",\n        \"subject_raw\": \"CPO\",\n        \"subject\": \"光模块行业\",\n        \"metric_raw\": \"量\",\n        \"metric\": \"量\",\n        \"qualifiers\": null,\n        \"kind\": \"forecast\",\n        \"value_text\": \"很少\",\n        \"unit_raw\": null,\n        \"period_raw\": \"26年\",\n        \"observed_at\": null,\n        \"known_at\": \"2026-09-08\",\n        \"confidence\": null\n    },\n    {\n        \"claim_text\": \"预计27年CPO相关的量为5万到10万个水平\",\n        \"evidence_quote\": \"27年5万到10万个水平\",\n        \"evidence_kind\": \"prose\",\n        \"table_ref\": null,\n        \"scope\": \"macro\",\n        \"subject_raw\": \"CPO\",\n        \"subject\": \"光模块行业\",\n        \"metric_raw\": \"量\",\n        \"metric\": \"量\",\n        \"qualifiers\": null,\n        \"kind\": \"forecast\",\n        \"value_text\": \"5万到10万\",\n        \"unit_raw\": \"个\",\n        \"period_raw\": \"27年\",\n        \"observed_at\": null,\n        \"known_at\": \"2026-09-08\",\n        \"confidence\": null\n    }\n]",
+  "diagnostics": {
+    "source": "p1r3_immutable_response_object",
+    "source_response_object_sha256": "sha256:d38f7901306b3bfcee6f030521f4051d12dbfd20834345699e994e4428578e8c",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r3-response-replay"
+  }
+}

@@ -18,6 +18,13 @@ from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus._semantic_validation import prose_binding_reasons
 from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse, parse_value
+from plugins.corpus.claims_binding import (
+    CLAIMS_SLOT_PROTOCOL_VERSION,
+    bind_claim_coordinates,
+    build_claim_candidate_slots,
+    slot_prompt_payload,
+    validate_slot_outcomes,
+)
 from plugins.corpus.claims_detail import (
     EXTRACTOR_VERSION_V2,
     LINT_VERSION,
@@ -41,9 +48,11 @@ from plugins.corpus.evidence import (
 if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit
 
-PIPELINE_VERSION = "evidence-pipeline-8"
+PIPELINE_VERSION = "evidence-pipeline-13"
 CLAIMS_TABLE_PROTOCOL = "claims-deterministic-v1"
 CLAIMS_PROSE_PROTOCOL = "claims-json-v2"
+CLAIMS_ATOMIC_PROTOCOL_V1 = "claims-atomic-json-v1"
+CLAIMS_ATOMIC_PROTOCOL = "claims-atomic-json-v2"
 # Only controlled metrics enter generic numeric computations. Unmapped facts remain readable.
 METRICS: dict[str, tuple[str, str]] = {
     "营业收入": ("revenue", "元"),
@@ -118,6 +127,12 @@ class EvidenceRun(BaseModel):
     packet_runs: tuple[PacketRun, ...]
 
     def summary(self) -> dict[str, object]:
+        coverage_verified = bool(self.packet_runs) and all(
+            r.diagnostics is not None
+            and r.diagnostics.get("claim_slot_protocol") == CLAIMS_SLOT_PROTOCOL_VERSION
+            and not r.diagnostics.get("claim_slot_errors")
+            for r in self.packet_runs
+        )
         return {
             "doc_id": self.document.doc_id,
             "run_id": self.run_id,
@@ -127,10 +142,15 @@ class EvidenceRun(BaseModel):
             "calculation_ready": sum("calculate" in f.usable_for for f in self.facts),
             "packet_status": dict(Counter(r.status for r in self.packet_runs)),
             "complete": all(
-                r.status not in {"failed", "unknown", "deferred"} for r in self.packet_runs
+                r.status not in {"failed", "unknown", "deferred", "partial"}
+                for r in self.packet_runs
             ),
-            "coverage_verified": False,
-            "completeness_meaning": "packet_execution_only_not_target_recall",
+            "coverage_verified": coverage_verified,
+            "completeness_meaning": (
+                "atomic_candidate_slot_terminal_coverage"
+                if coverage_verified
+                else "packet_execution_only_not_target_recall"
+            ),
         }
 
     def verify_identity(self) -> None:
@@ -296,6 +316,7 @@ def _fact(
     document: EvidenceDocument,
 ) -> EvidenceFact:
     record = replace(record, extracted_at=None)
+    record = bind_claim_coordinates(record, packet=packet, document=document)
     if record.scope == "company" and not record.subject and document.subject:
         # Source admission metadata is trusted context for an omitted grammatical
         # subject.  Preserve the provenance and never override an explicit, possibly
@@ -345,7 +366,12 @@ def _fact(
     if not record.known_at:
         reasons.append("known_at_missing")
     # A document ticker is only a permissible source context, never a free model assertion.
-    if record.scope == "company" and record.subject != document.subject:
+    trusted_subject_basis = record.qualifiers.get("subject_basis") in {
+        "source_first_person_unnamed_company",
+        "implicit_company_coordinate",
+        "product_coordinate_in_claim",
+    }
+    if record.scope == "company" and record.subject != document.subject and not trusted_subject_basis:
         reasons.append("subject_not_anchored")
     if record.period_raw and re.sub(r"\s+", "", record.period_raw) not in re.sub(
         r"\s+", "", packet.text
@@ -533,11 +559,13 @@ def extract_evidence(
     max_prose_calls: int = 0,
     on_packet: Callable[[PacketRun], None] | None = None,
     strict_prose: bool = False,
+    claim_slot_coverage: bool = False,
 ) -> EvidenceRun:
     """Extract all table rows; prose budget/unsupported pages are explicitly deferred."""
     facts: list[EvidenceFact] = []
     runs: list[PacketRun] = []
     calls = 0
+    claim_slots = build_claim_candidate_slots(document) if claim_slot_coverage else ()
     for packet in document.packets:
         records: list[ClaimRecord] = []
         reasons: tuple[str, ...] = ()
@@ -556,7 +584,14 @@ def extract_evidence(
             method = "llm"
             try:
                 kind = classify_doc_kind_detail(document.title, (packet.text,)).kind
-                prompt = build_prompt_v2(packet.text, doc_kind=kind)
+                packet_slots = tuple(
+                    slot for slot in claim_slots if slot.packet_id == packet.packet_id
+                )
+                prompt = build_prompt_v2(
+                    packet.text,
+                    doc_kind=kind,
+                    slot_obligations=slot_prompt_payload(packet_slots),
+                )
                 prompt += "\n来源上下文（不可当作正文引文）：" + str(
                     {
                         "title": document.title,
@@ -592,8 +627,21 @@ def extract_evidence(
                 elif parsed.failed:
                     status, reasons = "failed", ("response_incomplete", "invalid_json")
                 else:
+                    claim_items = parsed.items
+                    if claim_slot_coverage:
+                        claim_items, slot_ledger, slot_errors = validate_slot_outcomes(
+                            parsed.items, packet_slots
+                        )
+                        diagnostics.update(
+                            claim_slot_protocol=CLAIMS_SLOT_PROTOCOL_VERSION,
+                            claim_slots=len(packet_slots),
+                            claim_slot_ledger=slot_ledger,
+                            claim_slot_errors=list(slot_errors),
+                        )
+                        if slot_errors:
+                            status, reasons = "partial", slot_errors
                     records = records_from_payload(
-                        parsed.items,
+                        claim_items,
                         doc_id=document.doc_id,
                         source_rev=document.parse_rev,
                         seq=len(runs),
@@ -602,8 +650,8 @@ def extract_evidence(
                         model=model,
                         known_at_fallback=document.published,
                     )
-                    if len(records) != len(parsed.items):
-                        diagnostics["discarded_records"] = len(parsed.items) - len(records)
+                    if len(records) != len(claim_items):
+                        diagnostics["discarded_records"] = len(claim_items) - len(records)
                         status, reasons, records = "failed", ("invalid_record_schema",), []
             except Exception as exc:
                 # Credential-bearing provider messages must not be persisted or printed.
@@ -1128,7 +1176,12 @@ def extract_claims_role_from_snapshot(
     model attempts.  Unsupported protocols and invalid scopes fail before either
     extraction path is entered.
     """
-    if protocol not in {CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL}:
+    if protocol not in {
+        CLAIMS_TABLE_PROTOCOL,
+        CLAIMS_PROSE_PROTOCOL,
+        CLAIMS_ATOMIC_PROTOCOL_V1,
+        CLAIMS_ATOMIC_PROTOCOL,
+    }:
         raise ValueError(f"CS_PROTOCOL_UNSUPPORTED: claims protocol {protocol!r}")
     if max_calls < 0:
         raise ValueError("max_calls must be non-negative")
@@ -1173,5 +1226,6 @@ def extract_claims_role_from_snapshot(
         model="deterministic-table" if protocol == CLAIMS_TABLE_PROTOCOL else model,
         max_prose_calls=0 if protocol == CLAIMS_TABLE_PROTOCOL else max_calls,
         strict_prose=True,
+        claim_slot_coverage=protocol in {CLAIMS_ATOMIC_PROTOCOL_V1, CLAIMS_ATOMIC_PROTOCOL},
     )
     return _bind_snapshot_facts(snapshot, run, preserve_context=True)

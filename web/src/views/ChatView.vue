@@ -811,6 +811,7 @@ watch(
       <BusinessInputRequestDialog
         v-model="inputDialogOpen"
         :request="inputDialogRequest"
+        :research-id="sessions.activeId ?? ''"
         @answered="reloadTurns"
       />
 

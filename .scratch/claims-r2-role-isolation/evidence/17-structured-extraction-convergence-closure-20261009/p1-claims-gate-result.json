@@ -1,0 +1,320 @@
+{
+  "schema_version": "structured-extraction-p1-claims-gate-result-1",
+  "status": "failed_recall_upper_bound",
+  "evaluated_on": "2026-10-09",
+  "model_calls": 17,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "executions": [
+    {
+      "name": "claims-industrial-fulian",
+      "batch_id": "batch:d17c1286e56ff1d3a6a49f7c44c3c66e720d2f0d10fc09b508ac4343516ba910",
+      "plan_sha256": "sha256:d17c1286e56ff1d3a6a49f7c44c3c66e720d2f0d10fc09b508ac4343516ba910",
+      "attempt_ceiling": 10,
+      "actual_attempts": 9,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "plan_consistent": true,
+      "findings": [],
+      "task_status": "succeeded",
+      "protocol_status": "valid",
+      "quality_status": "review_required",
+      "context_status": "complete",
+      "payload_object_sha256": "sha256:25ea6678728535c963de6025af75fb992e3fa7ca1ae095fdd164f66d221c3a23",
+      "candidate_count": 91,
+      "packet_status": {
+        "completed": 9
+      }
+    },
+    {
+      "name": "claims-optical-module",
+      "batch_id": "batch:075de8fa89a58ee6b5e77f202d3863526c837a76892954a043eb4a161af8e875",
+      "plan_sha256": "sha256:075de8fa89a58ee6b5e77f202d3863526c837a76892954a043eb4a161af8e875",
+      "attempt_ceiling": 14,
+      "actual_attempts": 8,
+      "attempt_status": {
+        "succeeded": 8
+      },
+      "plan_consistent": true,
+      "findings": [],
+      "task_status": "succeeded",
+      "protocol_status": "valid",
+      "quality_status": "review_required",
+      "context_status": "complete",
+      "payload_object_sha256": "sha256:6bfd5b1a3a08651919605952079a2afcf12849bca9df610c053f50a4cd98436c",
+      "candidate_count": 34,
+      "packet_status": {
+        "completed": 8
+      }
+    }
+  ],
+  "candidate_count": 125,
+  "gate": {
+    "baseline_recall_floor": 0.75,
+    "gold_target_count": 20,
+    "mandatory_field_or_missing_blockers": 7,
+    "maximum_possible_matched_targets": 13,
+    "target_recall_upper_bound": 0.65,
+    "candidate_precision": null,
+    "candidate_precision_reason": "not adjudicated because the recall upper bound already fails the frozen floor",
+    "passed": false
+  },
+  "blockers": [
+    {
+      "record_id": "NT-C11",
+      "reason": "metric_missing_and_period_unresolved",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "NPO_penetration",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "10",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "observed_candidate": {
+        "candidate_id": "26ab75fba272914ba235d2ee235bec142d6e8c0b85f011786826ba8689b4a011",
+        "quote": "29年NPO到10%",
+        "subject": "NPO",
+        "metric": null,
+        "metric_id": null,
+        "period_raw": "29年",
+        "period_end": null,
+        "value_num": "10",
+        "value_text": "10%",
+        "unit": "%",
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_ambiguous",
+          "metric_missing",
+          "period_missing",
+          "metric_not_registered"
+        ]
+      }
+    },
+    {
+      "record_id": "NT-C12",
+      "reason": "metric_missing_and_period_unresolved",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "CPO_penetration",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "30",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "observed_candidate": {
+        "candidate_id": "309629bacd521e382903d3bf95502c7e9bfd454ef69bf48dacb0d08c75cf5974",
+        "quote": "CPO到30%",
+        "subject": "CPO",
+        "metric": null,
+        "metric_id": null,
+        "period_raw": "29年",
+        "period_end": null,
+        "value_num": "30",
+        "value_text": "30%",
+        "unit": "%",
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_ambiguous",
+          "metric_missing",
+          "period_missing",
+          "metric_not_registered"
+        ]
+      }
+    },
+    {
+      "record_id": "NT-C13",
+      "reason": "metric_missing_and_period_unresolved",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "pluggable_share",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "70",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "observed_candidate": {
+        "candidate_id": "ed0e35a9e77d79053ab37bc539e852d6577ba506197ae45e9cde989574e9dfa1",
+        "quote": "可插拔主导70%",
+        "subject": "可插拔",
+        "metric": null,
+        "metric_id": null,
+        "period_raw": "29年",
+        "period_end": null,
+        "value_num": "70",
+        "value_text": "70%",
+        "unit": "%",
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_ambiguous",
+          "metric_missing",
+          "period_missing",
+          "metric_not_registered"
+        ]
+      }
+    },
+    {
+      "record_id": "NT-C14",
+      "reason": "target_not_recalled",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "CPO_shipments",
+        "period": "2027",
+        "subject": "光模块行业",
+        "unit": "个",
+        "value": "50000-100000",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "observed_candidate": null
+    },
+    {
+      "record_id": "NT-C15",
+      "reason": "metric_value_and_unit_missing",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "3.2T_batch_supply",
+        "period": "2027Q3",
+        "subject": "材料所述公司",
+        "unit": "status",
+        "value": "batch_supply",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "approximately"
+      },
+      "observed_candidate": {
+        "candidate_id": "f17e0b49c6cfdb750552693df9565148e1dd60d69f312bdc2a30424460d6087f",
+        "quote": "我们3.2T预计将在27年三季度左右实现批量供应",
+        "subject": "3.2T光模块产品",
+        "metric": null,
+        "metric_id": null,
+        "period_raw": "27年三季度",
+        "period_end": null,
+        "value_num": null,
+        "value_text": null,
+        "unit": null,
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_ambiguous",
+          "metric_missing",
+          "value_missing",
+          "unit_missing",
+          "period_missing",
+          "metric_not_registered",
+          "source_qualified_context_requires_review"
+        ]
+      }
+    },
+    {
+      "record_id": "NT-C17",
+      "reason": "period_missing",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "3.2T_unit_price",
+        "period": "early_stage",
+        "subject": "光模块行业",
+        "unit": "美元",
+        "value": "1800",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "early_estimate",
+        "qualifier": "approximately"
+      },
+      "observed_candidate": {
+        "candidate_id": "9d7d6624934b3dff20d9a8c390d1e363466a5c8e63898cdcb4d1f6709721fe47",
+        "quote": "价格方面预计3.2T单价在1800美元左右",
+        "subject": "3.2T光模块产品",
+        "metric": "单价",
+        "metric_id": null,
+        "period_raw": null,
+        "period_end": null,
+        "value_num": "1800",
+        "value_text": "1800",
+        "unit": "美元",
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_missing",
+          "metric_not_registered",
+          "source_qualified_context_requires_review"
+        ]
+      }
+    },
+    {
+      "record_id": "NT-C20",
+      "reason": "unit_and_period_invalid",
+      "required_fields": {
+        "factuality": "forecast",
+        "metric": "new_revenue_contributing_customers",
+        "period": "2026H2",
+        "subject": "材料所述公司",
+        "unit": "个",
+        "value": "2-3",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "observed_candidate": {
+        "candidate_id": "bfe08bf9603f477d92bf444bc6b709a6a9a13507fbc68ec83b08af6f5323b552",
+        "quote": "今年下半年预计将有2到3个新客户开始贡献收入",
+        "subject": "相关业务客户",
+        "metric": "贡献收入",
+        "metric_id": null,
+        "period_raw": "今年下半年",
+        "period_end": null,
+        "value_num": "2",
+        "value_text": "2到3",
+        "unit": "到3",
+        "kind": "forecast",
+        "quality_status": "review",
+        "reason_codes": [
+          "period_ambiguous",
+          "period_missing",
+          "unit_unknown",
+          "metric_not_registered",
+          "source_qualified_context_requires_review"
+        ]
+      }
+    }
+  ],
+  "decision": {
+    "authorize_copper_execution": false,
+    "authorize_publication": false,
+    "next_action": "preserve the structured snapshot/ledger/role interfaces and replace the current Claims extractor binding implementation; do not start another prompt/lexicon round"
+  },
+  "evidence": {
+    "plan_freeze_manifest_sha256": "17c451193dee2a6957133b2bda97f35cc77469503a9369d08a358ffc707515ba",
+    "frozen_gold_sha256": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "signed_baseline_sha256": "31e75f9bd7e10f12197ab99907857f2b649dcbf830811f6916e6bba57954b2a5",
+    "evaluator_sha256": "60428997edd56c8e1d84ec2b9ab3cbbdeae7ca568e9d0a7e3ebff020ee620a6b"
+  }
+}

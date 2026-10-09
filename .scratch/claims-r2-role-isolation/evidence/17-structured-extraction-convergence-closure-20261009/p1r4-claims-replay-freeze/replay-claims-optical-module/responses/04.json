@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:8186e1c74f7c0aec5574c914274ce68f9995d94e890f751c89b350573f8bea63",
+  "parent_task_id": null,
+  "sequence": 4,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"claim_text\":\"光模块行业为规避风险布局产能，未来60%以上的产能将通过泰国或台湾生产\",\"evidence_quote\":\"长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"产能占比\",\"metric\":\"产能占比\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"60%以上\",\"unit_raw\":\"百分比\",\"period_raw\":\"长期\",\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"candidate_slot_id\":\"slot_deeadb9a5747e3db\",\"coverage_status\":\"claim\"},{\"claim_text\":\"光模块行业台湾海鸥基地的免税政策处于最后阶段，后续将不再免税\",\"evidence_quote\":\"这个已经是免税，应该是最后的事情了，以后再往下就不免税了，\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"macro\",\"subject_raw\":\"台湾海鸥基地\",\"subject\":\"光模块行业台湾海鸥基地\",\"metric_raw\":\"免税政策阶段\",\"metric\":\"免税政策阶段\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"最后的阶段\",\"unit_raw\":null,\"period_raw\":\"后续\",\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"candidate_slot_id\":\"slot_9632da709de9c097\",\"coverage_status\":\"claim\"},{\"claim_text\":\"光模块行业台湾海鸥基地若免税，需按15%税率补缴\",\"evidence_quote\":\"你免了税还要按15%税率给你补上，\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"macro\",\"subject_raw\":\"台湾海鸥基地\",\"subject\":\"光模块行业台湾海鸥基地\",\"metric_raw\":\"补缴税率\",\"metric\":\"补缴税率\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"15%\",\"unit_raw\":\"百分比\",\"period_raw\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"candidate_slot_id\":\"slot_9632da709de9c097\",\"coverage_status\":\"claim\"},{\"claim_text\":\"光模块行业台湾海鸥基地免税政策之前的税率为零，前几年可能持续三年\",\"evidence_quote\":\"以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"macro\",\"subject_raw\":\"台湾海鸥基地\",\"subject\":\"光模块行业台湾海鸥基地\",\"metric_raw\":\"免税税率\",\"metric\":\"免税税率\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"0\",\"unit_raw\":\"百分比\",\"period_raw\":\"之前几年，前几年\",\"observed_at\":null,\"known_at\":null,\"confidence\":null,\"candidate_slot_id\":\"slot_9632da709de9c097\",\"coverage_status\":\"claim\"}]",
+  "diagnostics": {
+    "source": "p1r3_immutable_response_object",
+    "source_response_object_sha256": "sha256:bd1039e76f55d9b64d21ba5a6b7c562322e6cd6df0dd33c6f9edb7e3eadd45fb",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r3-response-replay"
+  }
+}

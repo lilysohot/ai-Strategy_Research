@@ -29,6 +29,7 @@ from plugins.corpus.claims import (
     normalize_metric,
     parse_as_of,
     parse_value,
+    parse_value_range,
     unit_scale,
 )
 
@@ -37,9 +38,9 @@ CLAIM_KINDS_V2 = ("fact", "forecast", "opinion")
 QUALITY_STATUSES = ("ok", "review", "rejected")
 EVIDENCE_KINDS = ("prose", "table")
 
-LINT_VERSION = "claims-v2-lint-5"
-UNIT_RULE_VERSION = "unit-rules-1"
-PERIOD_RULE_VERSION = "period-rules-2"
+LINT_VERSION = "claims-v2-lint-8"
+UNIT_RULE_VERSION = "unit-rules-4"
+PERIOD_RULE_VERSION = "period-rules-4"
 
 V2_OUTPUT_CONTRACT = """
 从本块抽取原子金融事实、预测和观点，只输出 JSON 数组；确无断言输出 []。
@@ -74,7 +75,7 @@ _SLOT_BY_KIND: dict[str, str] = {
     "macro": "领域：宏观。保留国家与指标，非农就业规范为 subject=US, metric=NFP；不合并实际、预期、前值。",
 }
 
-_EXTRACTOR_REV_V2 = 4
+_EXTRACTOR_REV_V2 = 5
 _PROMPT_PARTS_V2: tuple[str, ...] = (
     V2_OUTPUT_CONTRACT,
     *_SLOT_BY_KIND.values(),
@@ -237,6 +238,9 @@ _HALF_RE = re.compile(r"^(20\d{2})\s*(?:H([12])|年\s*(上半年|下半年))$")
 _QUARTER_RE = re.compile(r"^(20\d{2})\s*(?:Q([1-4])|年\s*(?:第?([一二三四1234])季度))$")
 _MONTH_RE = re.compile(r"^(20\d{2})[-/年]\s*(\d{1,2})月?$")
 _UNANCHORED_MONTH_RE = re.compile(r"^\d{1,2}\s*月$")
+_SHORT_YEAR_RE = re.compile(r"^(\d{2})年?$")
+_SHORT_YEAR_HALF_RE = re.compile(r"^(\d{2})年?(?:H([12])|(上半年|下半年))$")
+_SHORT_YEAR_QUARTER_RE = re.compile(r"^(\d{2})年?(?:Q([1-4])|第?([一二三四1234])季度)$")
 _KNOWN_UNITS = {
     "",
     "%",
@@ -262,6 +266,11 @@ _KNOWN_UNITS = {
     "亿美元",
     "元/股",
     "天",
+    "个",
+    "万个",
+    "只",
+    "万只",
+    "status",
 }
 
 
@@ -493,6 +502,7 @@ def build_prompt_v2(
     *,
     doc_kind: str = "company",
     max_chars: int = PROMPT_MAX_CHARS,
+    slot_obligations: Sequence[dict[str, object]] = (),
 ) -> str:
     """单一 v2 输出契约，避免旧字段示例与新契约相互冲突。"""
     try:
@@ -503,7 +513,17 @@ def build_prompt_v2(
         raise ValueError(
             "evidence_too_large: split into complete evidence packets before extraction"
         )
-    return V2_OUTPUT_CONTRACT + slot + "\n\n原文：\n" + text
+    obligation_contract = ""
+    if slot_obligations:
+        obligation_contract = (
+            "\n候选槽位是系统从原文确定性切出的完整性义务。每个 candidate_slot_id 必须至少"
+            "返回一个终态：若存在支持的 Claim，返回一条或多条普通 Claim 并逐条带同一 "
+            "candidate_slot_id 与 coverage_status=claim；若该槽没有可支持的 Claim，仅返回 "
+            "{candidate_slot_id, coverage_status=\"no_supported_claim\", reason_code}。不得省略槽位，"
+            "不得跨槽引用 evidence_quote。\n候选槽位：\n"
+            + json.dumps(slot_obligations, ensure_ascii=False, separators=(",", ":"))
+        )
+    return V2_OUTPUT_CONTRACT + slot + obligation_contract + "\n\n原文：\n" + text
 
 
 def parse_claims_json_detail(raw: str) -> ParseDiagnostics:
@@ -581,7 +601,16 @@ def records_from_payload(
         value_text = _as_str(item.get("value_text")) or _as_str(item.get("value"))
         value_num, parsed_unit = parse_value(value_text)
         unit_raw = _as_str(item.get("unit_raw")) or _as_str(item.get("unit")) or parsed_unit
-        if value_num is not None:
+        value_range = parse_value_range(value_text, unit_raw)
+        if value_range is not None:
+            lower, upper, range_unit = value_range
+            qualifiers.update(
+                value_shape="range",
+                value_lower=format(lower, "f"),
+                value_upper=format(upper, "f"),
+            )
+            unit_raw = range_unit or unit_raw
+        elif value_num is not None:
             value_num *= unit_scale(unit_raw)[0]
         period_raw = _as_str(item.get("period_raw")) or _as_str(item.get("period"))
         period = normalize_period(period_raw)
@@ -638,6 +667,9 @@ def normalize_period(raw: str | None) -> PeriodNormalization:
     if not raw:
         return PeriodNormalization(None, None)
     text = re.sub(r"\s+", "", str(raw))
+    # Approximation words qualify the boundary; they do not make an otherwise
+    # explicit year/quarter unknowable.  The raw expression remains preserved.
+    text = re.sub(r"(?:左右|前后|附近|约)$", "", text)
     if not text:
         return PeriodNormalization(None, None)
     if parsed := parse_as_of(text):
@@ -673,6 +705,64 @@ def normalize_period(raw: str | None) -> PeriodNormalization:
     return PeriodNormalization(None, None, "period_ambiguous")
 
 
+def normalize_period_in_context(
+    raw: str | None, *, reference_date: str | None
+) -> PeriodNormalization:
+    """Resolve explicitly relative periods against trusted publication metadata.
+
+    This is a binding operation, not a guess: the raw expression must remain on
+    the claim and the reference year must come from the admitted document.  A
+    missing or invalid reference date leaves the original ambiguous result intact.
+    """
+    direct = normalize_period(raw)
+    if not raw or direct.period_end is not None:
+        return direct
+    parsed_reference = parse_as_of(reference_date)
+    if parsed_reference is None:
+        return direct
+    reference_year = int(parsed_reference[:4])
+    text = re.sub(r"\s+", "", str(raw))
+    text = re.sub(r"(?:左右|前后|附近|约)$", "", text)
+
+    if text in {"今年", "本年", "当年"}:
+        return PeriodNormalization(f"{reference_year}-12-31", "annual")
+    if text in {"今年上半年", "本年上半年", "当年上半年", "中报"}:
+        return PeriodNormalization(f"{reference_year}-06-30", "half")
+    if text in {"今年下半年", "本年下半年", "当年下半年", "年底", "到年底"}:
+        return PeriodNormalization(f"{reference_year}-12-31", "half")
+    quarter_only = re.fullmatch(r"Q([1-4])|第?([一二三四1234])季度", text, re.I)
+    if quarter_only:
+        quarter = _quarter_num(quarter_only.group(1) or quarter_only.group(2) or "")
+        assert quarter is not None
+        month = quarter * 3
+        day = calendar.monthrange(reference_year, month)[1]
+        return PeriodNormalization(f"{reference_year}-{month:02d}-{day:02d}", "quarter")
+
+    def anchored_year(two_digits: str) -> int | None:
+        candidate = (reference_year // 100) * 100 + int(two_digits)
+        alternatives = (candidate - 100, candidate, candidate + 100)
+        nearest = min(alternatives, key=lambda year: abs(year - reference_year))
+        return nearest if abs(nearest - reference_year) <= 20 else None
+
+    if match := _SHORT_YEAR_RE.match(text):
+        year = anchored_year(match.group(1))
+        if year is not None:
+            return PeriodNormalization(f"{year}-12-31", "annual")
+    if match := _SHORT_YEAR_HALF_RE.match(text):
+        year = anchored_year(match.group(1))
+        if year is not None:
+            half = match.group(2) or ("1" if match.group(3) == "上半年" else "2")
+            return PeriodNormalization(f"{year}-{'06-30' if half == '1' else '12-31'}", "half")
+    if match := _SHORT_YEAR_QUARTER_RE.match(text):
+        year = anchored_year(match.group(1))
+        quarter = _quarter_num(match.group(2) or match.group(3) or "")
+        if year is not None and quarter is not None:
+            month = quarter * 3
+            day = calendar.monthrange(year, month)[1]
+            return PeriodNormalization(f"{year}-{month:02d}-{day:02d}", "quarter")
+    return direct
+
+
 def normalize_unit(unit_raw: str | None) -> str | None:
     """单位规范化；未知单位保留原样，不默认为任何基准。"""
     if not unit_raw:
@@ -705,7 +795,13 @@ def lint_claim(
     if record.kind == "opinion" and record.value_num is not None:
         reasons.append("opinion_value_projection")
     if record.kind != "opinion":
-        if record.value_num is None:
+        has_range = (
+            record.qualifiers.get("value_shape") == "range"
+            and record.qualifiers.get("value_lower") is not None
+            and record.qualifiers.get("value_upper") is not None
+        )
+        has_categorical_value = record.unit == "status" and bool(record.value_text)
+        if record.value_num is None and not has_range and not has_categorical_value:
             reasons.append("value_missing")
         if not record.unit:
             reasons.append("unit_missing")
@@ -738,9 +834,16 @@ def lint_claim(
             reasons.append("evidence_not_found")
         elif not record.value_text or not _value_in_evidence(record.value_text, cell):
             reasons.append("value_not_in_evidence")
+    categorical_basis = str(record.qualifiers.get("value_basis") or "")
+    categorical_phrase = (
+        categorical_basis.removeprefix("categorical_status:")
+        if categorical_basis.startswith("categorical_status:")
+        else ""
+    )
     if (
         record.value_text
         and record.evidence_quote
+        and not (categorical_phrase and categorical_phrase in record.evidence_quote)
         and not _value_in_evidence(
             record.value_text,
             record.evidence_quote,

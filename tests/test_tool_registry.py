@@ -32,6 +32,7 @@ EXPECTED_TOOLS = {
     "position_sizing",
     "read_file",
     "recover_result",
+    "request_investment_input",
     "run_python_code",
     "stop_subagent",
     "strategy_lint",

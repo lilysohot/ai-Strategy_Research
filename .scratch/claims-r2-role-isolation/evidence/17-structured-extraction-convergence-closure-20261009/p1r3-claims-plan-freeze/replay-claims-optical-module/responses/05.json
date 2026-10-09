@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:8186e1c74f7c0aec5574c914274ce68f9995d94e890f751c89b350573f8bea63",
+  "parent_task_id": null,
+  "sequence": 5,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"candidate_slot_id\":\"slot_21c1cdd0da0ed368\",\"coverage_status\":\"claim\",\"claim_text\":\"当因政策原因导致成本上升时，光模块行业相关主体会与客户协商，提价幅度在10%到20%之间\",\"evidence_quote\":\"会与客户协商，提价幅度在10%到20%之间\",\"evidence_kind\":\"prose\",\"kind\":\"opinion\",\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"提价幅度\",\"metric\":\"提价幅度\",\"value_text\":\"10%到20%\",\"unit_raw\":null,\"period_raw\":null,\"table_ref\":null,\"qualifiers\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null},{\"candidate_slot_id\":\"slot_426ce79bdc943c64\",\"coverage_status\":\"no_supported_claim\",\"reason_code\":\"候选槽内容为疑问句，未包含明确的断言内容\"},{\"candidate_slot_id\":\"slot_b2701abd3aca830e\",\"coverage_status\":\"claim\",\"claim_text\":\"27年，光模块行业的市占率将有显著提升\",\"evidence_quote\":\"好的，27年公司的市占率将有显著提升\",\"evidence_kind\":\"prose\",\"kind\":\"forecast\",\"scope\":\"macro\",\"subject_raw\":\"光模块行业\",\"subject\":\"光模块行业\",\"metric_raw\":\"市占率\",\"metric\":\"市占率\",\"value_text\":\"显著提升\",\"unit_raw\":null,\"period_raw\":\"27年\",\"table_ref\":null,\"qualifiers\":null,\"observed_at\":null,\"known_at\":null,\"confidence\":null}]",
+  "diagnostics": {
+    "source": "p1r2_immutable_response_object",
+    "source_response_object_sha256": "sha256:fbebdb9c4d2d4c60614159d7997aca2ac2aca034bf1843f4fa866b872a1fc9f2",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r2-response-replay"
+  }
+}

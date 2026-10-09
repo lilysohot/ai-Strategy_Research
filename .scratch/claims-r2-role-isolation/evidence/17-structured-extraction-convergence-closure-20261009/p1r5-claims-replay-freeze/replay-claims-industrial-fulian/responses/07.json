@@ -1,0 +1,17 @@
+{
+  "schema_version": "corpus-replay-response-v1",
+  "task_id": "task:374e39cc3b6855cd6ac3b0f3464309cdbfd75e4e9eb0ad1642f61ebb03440341",
+  "parent_task_id": null,
+  "sequence": 7,
+  "role": "claims",
+  "protocol": "claims-atomic-json-v2",
+  "request_sha256": null,
+  "content": "[{\"claim_text\":\"工业富联2025年前五大客户占比62%\",\"evidence_quote\":\"2025 年前五大 62%，\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"company\",\"subject_raw\":\"工业富联\",\"subject\":\"工业富联\",\"metric_raw\":\"前五大客户占比\",\"metric\":\"客户占比\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"62%\",\"unit_raw\":\"%\",\"period_raw\":\"2025\",\"observed_at\":null,\"known_at\":\"2026-08-29\",\"confidence\":null,\"candidate_slot_id\":\"slot_4214d95b6c95644e\",\"coverage_status\":\"claim\"},{\"claim_text\":\"工业富联2025年上半年应收前五客户占比68.52%\",\"evidence_quote\":\"H1 应收前五 68.52%\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"company\",\"subject_raw\":\"工业富联\",\"subject\":\"工业富联\",\"metric_raw\":\"应收账款前五客户占比\",\"metric\":\"客户占比\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"68.52%\",\"unit_raw\":\"%\",\"period_raw\":\"H1\",\"observed_at\":null,\"known_at\":\"2026-08-29\",\"confidence\":null,\"candidate_slot_id\":\"slot_7cc16047833f8c8f\",\"coverage_status\":\"claim\"},{\"candidate_slot_id\":\"slot_01998fe411bd5ff6\",\"coverage_status\":\"no_supported_claim\",\"reason_code\":\"该文本为定性风险情景描述，无具体数值指标，无法生成符合要求的金融事实/预测/观点claim\"},{\"claim_text\":\"工业富联研发费用变动率为-1.91%\",\"evidence_quote\":\"研发费用 −1.91%\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"company\",\"subject_raw\":\"工业富联\",\"subject\":\"工业富联\",\"metric_raw\":\"研发费用变动率\",\"metric\":\"研发费用变动率\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"-1.91%\",\"unit_raw\":\"%\",\"period_raw\":null,\"observed_at\":null,\"known_at\":\"2026-08-29\",\"confidence\":null,\"candidate_slot_id\":\"slot_ffd1e2360121acae\",\"coverage_status\":\"claim\"},{\"claim_text\":\"工业富联研发费用率从约1.41%降至0.90%\",\"evidence_quote\":\"费用率从约 1.41% 降到 0.90%\",\"evidence_kind\":\"prose\",\"table_ref\":null,\"scope\":\"company\",\"subject_raw\":\"工业富联\",\"subject\":\"工业富联\",\"metric_raw\":\"研发费用率\",\"metric\":\"研发费用率\",\"qualifiers\":null,\"kind\":\"fact\",\"value_text\":\"约1.41% 到 0.90%\",\"unit_raw\":\"%\",\"period_raw\":null,\"observed_at\":null,\"known_at\":\"2026-08-29\",\"confidence\":null,\"candidate_slot_id\":\"slot_ffd1e2360121acae\",\"coverage_status\":\"claim\"}]",
+  "diagnostics": {
+    "source": "p1r4_immutable_response_object",
+    "source_response_object_sha256": "sha256:967a3bbb140d16a91883330b7e8b54057e3c55863afca1a0a28d2660e870909b",
+    "execution_status": "succeeded",
+    "provider": "replay",
+    "model": "p1r4-response-replay"
+  }
+}

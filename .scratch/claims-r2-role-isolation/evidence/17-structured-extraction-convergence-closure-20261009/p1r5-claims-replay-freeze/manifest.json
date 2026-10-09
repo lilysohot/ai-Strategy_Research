@@ -1,0 +1,41 @@
+{
+  "schema_version": "structured-extraction-p1r5-claims-replay-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-09",
+  "new_model_calls": 0,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "versions": {
+    "routing": "corpus-role-routing-v2",
+    "pipeline": "evidence-pipeline-13",
+    "lint": "claims-v2-lint-8",
+    "period_rules": "period-rules-4",
+    "unit_rules": "unit-rules-4"
+  },
+  "entries": [
+    {
+      "name": "replay-claims-industrial-fulian",
+      "batch_id": "batch:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "plan_sha256": "sha256:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "attempts": 9,
+      "plan_file_sha256": "72a29b0a1e070a5011ba8ee3e85f6f8b00c641e2a6646cb6e1acf5f862bffdbb"
+    },
+    {
+      "name": "replay-claims-optical-module",
+      "batch_id": "batch:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "plan_sha256": "sha256:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "attempts": 8,
+      "plan_file_sha256": "9a8321af2ddfb4998b92517bec756d0b8487566341101b505ae72041b58c9578"
+    },
+    {
+      "name": "live-claims-optical-routing-delta",
+      "batch_id": "batch:5528254b5444f6ff97395b27c7fc76a38c57ea4210fccffe6d504649126c36ba",
+      "plan_sha256": "sha256:5528254b5444f6ff97395b27c7fc76a38c57ea4210fccffe6d504649126c36ba",
+      "attempts": 2,
+      "plan_file_sha256": "9449b59342dc5dae91ff8531148b8593678ea72bae3d8728f0f954f7952c0eb1"
+    }
+  ],
+  "p1r4_execution_sha256": "897d9fe14b0941b14bc8a863e449a1b54228eb806c3c1157b5fe0b3d52b3e1f4",
+  "runner_sha256": "e923419989246ed55b67809c12e7419c8dd7e58914623f1b8649c88ff4c83dd5"
+}

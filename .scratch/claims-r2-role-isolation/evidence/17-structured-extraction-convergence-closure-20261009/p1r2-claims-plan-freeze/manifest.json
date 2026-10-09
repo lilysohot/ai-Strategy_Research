@@ -1,0 +1,89 @@
+{
+  "schema_version": "structured-extraction-p1r2-claims-plan-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-09",
+  "cause": "P1R1 produced semantically usable records in two packets without copying slot IDs; v2 permits deterministic rebinding only for a unique exact quote owner",
+  "execution_order": [
+    "claims-industrial-fulian",
+    "claims-optical-module",
+    "claims_gate_evaluation"
+  ],
+  "stop_policy": "Industrial replay failure blocks optical; any Claims gate failure blocks copper.",
+  "maximum_new_model_calls": 14,
+  "model_calls_during_planning": 0,
+  "versions": {
+    "claims_protocol": "claims-atomic-json-v2",
+    "slot_protocol": "claims-slot-obligations-v2",
+    "extractor": "1f699d25c7e4",
+    "pipeline": "evidence-pipeline-10",
+    "lint": "claims-v2-lint-6",
+    "period_rules": "period-rules-3",
+    "unit_rules": "unit-rules-2"
+  },
+  "profile": {
+    "model": "doubao-seed-2.0-mini",
+    "adapter_version": "structured-chat-http-2",
+    "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+    "request_options": {
+      "timeout_seconds": 300.0,
+      "max_output_tokens": 16384,
+      "token_parameter": "max_tokens"
+    }
+  },
+  "entries": [
+    {
+      "name": "claims-industrial-fulian",
+      "stage": "replacement_claims_unique_quote_rebind_gate",
+      "execution_mode": "replay_p1r1_responses",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "batch_id": "batch:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "plan_sha256": "sha256:c49ebac844a50891dbab013d9d0245c9d54656714d43aaf7a7be24386ccd6d80",
+      "protocol": "claims-atomic-json-v2",
+      "slot_protocol": "claims-slot-obligations-v2",
+      "candidate_slot_count": 49,
+      "candidate_packet_count": 9,
+      "attempt_ceiling": 10,
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "72a29b0a1e070a5011ba8ee3e85f6f8b00c641e2a6646cb6e1acf5f862bffdbb",
+      "freeze_file_sha256": "b86a2656e6e56bf87adff886ea4135d5357310eca77ca7310b14b768b37d16bf"
+    },
+    {
+      "name": "claims-optical-module",
+      "stage": "replacement_claims_unique_quote_rebind_gate",
+      "execution_mode": "live_model",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "batch_id": "batch:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "plan_sha256": "sha256:bef6474cffe8154c3c3d29c930c786b494e5005b725aed494bef2d82b5ddd823",
+      "protocol": "claims-atomic-json-v2",
+      "slot_protocol": "claims-slot-obligations-v2",
+      "candidate_slot_count": 27,
+      "candidate_packet_count": 8,
+      "attempt_ceiling": 14,
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "9a8321af2ddfb4998b92517bec756d0b8487566341101b505ae72041b58c9578",
+      "freeze_file_sha256": "47223fca166003ed480bcea32d7cc54eab3d83c637800be724cc5e73ec72dd4f"
+    }
+  ],
+  "p1r1_execution_sha256": "1ba9207ab0c0ed8482e16df9de092cebcb3a6b5a48f8bb072988b75355f45764",
+  "prepare_script_sha256": "7ede074ed447c83f8614e823f495b50bb63213423f562d880b71f648e4f4523e"
+}

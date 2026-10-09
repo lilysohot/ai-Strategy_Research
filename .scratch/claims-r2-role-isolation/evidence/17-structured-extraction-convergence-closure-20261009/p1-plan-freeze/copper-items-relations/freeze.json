@@ -1,0 +1,34 @@
+{
+  "stage": "copper_items_then_relations",
+  "source_path": "data/corpus/5月：锂电铜箔和电子铜箔.md",
+  "source_sha256": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+  "snapshot_units": 4,
+  "candidate_slots": 487,
+  "item_batches": 12,
+  "candidate_packets": 4,
+  "item_attempt_ceiling": 12,
+  "relation_attempt_ceiling": 4,
+  "attempt_ceiling": 16,
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "batch_id": "batch:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+  "plan_sha256": "sha256:2472fa2a354bfec48c92d1f24cd67ac1818454290177e6e850fdb4c7951655c6",
+  "enabled_roles": [
+    "material_items",
+    "material_relations"
+  ],
+  "role_attempt_ceiling": {
+    "claims": 0,
+    "material_items": 12,
+    "material_relations": 4
+  },
+  "automatic_retries": 0,
+  "concurrency": 1,
+  "model_calls_during_planning": 0,
+  "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+  "model": "doubao-seed-2.0-mini",
+  "adapter_version": "structured-chat-http-2",
+  "max_output_tokens": 16384,
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "publication_writes": 0
+}

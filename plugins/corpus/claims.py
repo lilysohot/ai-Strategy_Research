@@ -681,6 +681,18 @@ def _as_confidence(value: Any) -> float | None:
 _PLAIN_VALUE_RE = re.compile(r"^([+-]?\d[\d,]*(?:\.\d+)?)\s*(.*)$")
 #: 会计负号形态：``(325)`` = -325（研报财务表惯用括号表负数）
 _PAREN_VALUE_RE = re.compile(r"^\(([\d,]+(?:\.\d+)?)\)\s*(.*)$")
+# A range is not a scalar.  Treating ``2到3`` as the scalar 2 with unit ``到3``
+# silently corrupts the value/unit coordinate, so ranges are preserved in
+# ``value_text`` and handled by the higher-level binding layer.
+_VALUE_RANGE_RE = re.compile(
+    r"^[+-]?\d[\d,]*(?:\.\d+)?\s*[万亿]?\s*(?:-|~|～|—|–|至|到)\s*"
+    r"[+-]?\d[\d,]*(?:\.\d+)?(?:\s*[万亿]?[^\d\s]*)?$"
+)
+_VALUE_RANGE_CAPTURE_RE = re.compile(
+    r"^([+-]?\d[\d,]*(?:\.\d+)?)\s*([万亿]?)\s*"
+    r"(?:-|~|～|—|–|至|到)\s*"
+    r"([+-]?\d[\d,]*(?:\.\d+)?)\s*([万亿]?)([^\d\s]*)$"
+)
 
 
 def parse_value(value_text: str | None) -> tuple[Decimal | None, str | None]:
@@ -697,6 +709,8 @@ def parse_value(value_text: str | None) -> tuple[Decimal | None, str | None]:
     if not value_text:
         return None, None
     text = str(value_text).strip()
+    if _VALUE_RANGE_RE.match(text):
+        return None, None
     negative = False
     if text.startswith("(") and text.endswith(")"):
         # 整体括号：会计负号。``(325) 百万元`` 这类"括号+单位"走下面正则的第二分支。
@@ -716,6 +730,43 @@ def parse_value(value_text: str | None) -> tuple[Decimal | None, str | None]:
         number = -number
     unit = match.group(2).strip() or None
     return number, unit
+
+
+def parse_value_range(
+    value_text: str | None, unit_raw: str | None = None
+) -> tuple[Decimal, Decimal, str | None] | None:
+    """Parse an explicit closed range without projecting it to a false scalar.
+
+    Chinese shared multipliers are applied to both bounds: ``5万到10万个``
+    becomes ``50000..100000 个`` and ``300至500万只`` becomes
+    ``3000000..5000000 只``.  The caller stores the bounds as qualifiers while
+    keeping ``value_num`` null, so scalar consumers cannot accidentally compute
+    with only the lower endpoint.
+    """
+    if not value_text:
+        return None
+    match = _VALUE_RANGE_CAPTURE_RE.match(str(value_text).strip())
+    if match is None:
+        return None
+    try:
+        lower = Decimal(match.group(1).replace(",", ""))
+        upper = Decimal(match.group(3).replace(",", ""))
+    except InvalidOperation:
+        return None
+    lower_multiplier, upper_multiplier = match.group(2), match.group(4)
+    shared_multiplier = upper_multiplier or lower_multiplier
+    lower_multiplier = lower_multiplier or shared_multiplier
+    upper_multiplier = upper_multiplier or shared_multiplier
+    scale = {"": Decimal(1), "万": Decimal("1e4"), "亿": Decimal("1e8")}
+    lower *= scale[lower_multiplier]
+    upper *= scale[upper_multiplier]
+    if lower > upper:
+        return None
+    suffix = match.group(5) or None
+    unit = str(unit_raw).strip() if unit_raw and str(unit_raw).strip() else suffix
+    if unit and unit[:1] in {"万", "亿"}:
+        unit = unit[1:] or None
+    return lower, upper, unit
 
 
 _AS_OF_RE = re.compile(r"^(?P<y>\d{4})[-/年](?P<m>\d{1,2})[-/月](?P<d>\d{1,2})日?$")
@@ -780,9 +831,13 @@ def normalize_metric(metric: str | None) -> str | None:
 #: 跨单位算术由聚合方（D4）乘倍数换算 —— 解析层改写数值会丢掉"原文写了什么"。
 UNIT_SCALES: dict[str, tuple[str, Decimal]] = {
     "元": ("元", Decimal(1)),
+    "亿": ("元", Decimal("1e8")),
     "万元": ("元", Decimal("1e4")),
     "百万元": ("元", Decimal("1e6")),
     "亿元": ("元", Decimal("1e8")),
+    "万个": ("个", Decimal("1e4")),
+    "万只": ("只", Decimal("1e4")),
+    "万台": ("台", Decimal("1e4")),
 }
 
 

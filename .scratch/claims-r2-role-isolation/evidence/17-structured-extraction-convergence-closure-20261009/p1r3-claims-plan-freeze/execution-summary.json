@@ -1,0 +1,80 @@
+{
+  "schema_version": "structured-extraction-p1r3-claims-execution-1",
+  "executed_on": "2026-10-09",
+  "plan_manifest_sha256": "d2caf77aa457bed88e7f6de8cefe0779b1fc7a00e7ed34a8272fc795e8334421",
+  "new_model_calls": 2,
+  "replayed_attempts": 17,
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "copper_executed": false,
+  "results": [
+    {
+      "name": "replay-claims-industrial-fulian",
+      "execution_mode": "offline_replay",
+      "ledger_attempts": 9,
+      "new_model_calls": 0,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "replay-claims-optical-module",
+      "execution_mode": "offline_replay",
+      "ledger_attempts": 8,
+      "new_model_calls": 0,
+      "attempt_status": {
+        "succeeded": 8
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "live-claims-optical-routing-delta",
+      "execution_mode": "live_model",
+      "ledger_attempts": 2,
+      "new_model_calls": 2,
+      "attempt_status": {
+        "succeeded": 2
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    }
+  ],
+  "next_action": "evaluate the P1R3 Claims gate before copper or publication"
+}

@@ -16,7 +16,7 @@ import os
 import sqlite3
 import tempfile
 import time
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import suppress
 from pathlib import Path
 from typing import Any, Literal, Never, cast
@@ -25,6 +25,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from plugins.corpus.claims import LlmCallError, LlmResponse
 from plugins.corpus.evidence_pipeline import (
+    CLAIMS_ATOMIC_PROTOCOL,
+    CLAIMS_ATOMIC_PROTOCOL_V1,
     CLAIMS_PROSE_PROTOCOL,
     CLAIMS_TABLE_PROTOCOL,
     EvidenceRun,
@@ -36,6 +38,7 @@ from plugins.corpus.material_semantics import (
     RELATION_CANDIDATE_RULE_VERSION,
     MaterialItemsValidationVersion,
     MaterialRun,
+    MaterialType,
     RelationCandidateRuleVersion,
 )
 from plugins.corpus.structured.adapter import ExtractionAdapter, TransportFactory
@@ -65,6 +68,7 @@ DB_SCHEMA_VERSION = 2
 STORE_ROOT_ENV = "CORPUS_STRUCTURED_ROOT"
 
 Role = Literal["claims", "material_items", "material_relations"]
+ALL_ROLES: tuple[Role, ...] = ("claims", "material_items", "material_relations")
 ExecutionMode = Literal["live", "replay"]
 ExecutionStatus = Literal[
     "planned",
@@ -188,6 +192,16 @@ class RelationPlan(BaseModel):
     max_attempts: int = Field(default=0, ge=0)
 
 
+class MaterialItemsPlanOptions(BaseModel):
+    """Frozen batching inputs for the material-items role."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    max_items_per_packet: int = Field(default=30, ge=1)
+    max_slots_per_batch: int = Field(default=8, ge=1)
+    material_type: MaterialType | None = None
+
+
 class BatchPlan(BaseModel):
     """Self-contained immutable plan used by execute and replay in another process."""
 
@@ -203,11 +217,35 @@ class BatchPlan(BaseModel):
     profiles: tuple[FrozenRoleProfile, ...]
     max_attempts: int = Field(ge=0)
     role_max_attempts: dict[Role, int]
+    enabled_roles: tuple[Role, ...] = Field(
+        default=ALL_ROLES,
+        exclude_if=lambda value: value == ALL_ROLES,
+    )
+    material_items_options: MaterialItemsPlanOptions | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
     currency: str | None = None
     relations: RelationPlan
 
     def verify_identity(self) -> None:
         self.snapshot.verify_identity()
+        if (
+            not self.enabled_roles
+            or len(set(self.enabled_roles)) != len(self.enabled_roles)
+            or self.enabled_roles
+            != tuple(role for role in ALL_ROLES if role in set(self.enabled_roles))
+            or (
+                "material_relations" in self.enabled_roles
+                and "material_items" not in self.enabled_roles
+            )
+            or (self.relations.enabled and "material_relations" not in self.enabled_roles)
+            or (
+                self.material_items_options is not None
+                and "material_items" not in self.enabled_roles
+            )
+        ):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
         if set(self.role_max_attempts) != {
             "claims",
             "material_items",
@@ -229,28 +267,37 @@ class BatchPlan(BaseModel):
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_initial_task_graph")
         expected_protocols = {
-            "claims": CLAIMS_PROSE_PROTOCOL,
+            "claims": {
+                CLAIMS_PROSE_PROTOCOL,
+                CLAIMS_ATOMIC_PROTOCOL_V1,
+                CLAIMS_ATOMIC_PROTOCOL,
+            },
             "material_items": MATERIAL_SLOT_JSONL_VERSION,
             "material_relations": MATERIAL_RELATION_JSONL_VERSION,
         }
         profiles = {profile.role: profile for profile in self.profiles}
         if len(profiles) != len(self.profiles) or set(profiles) != set(expected_protocols):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_role_profiles")
-        if any(profile.protocol != expected_protocols[role] for role, profile in profiles.items()):
+        if (
+            profiles["claims"].protocol not in expected_protocols["claims"]
+            or profiles["material_items"].protocol != expected_protocols["material_items"]
+            or profiles["material_relations"].protocol != expected_protocols["material_relations"]
+        ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_role_profile_protocol")
         expected_routes: set[tuple[str, str, str, tuple[str, ...]]] = set()
-        for protocol in (CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL):
-            scope = self.routing.claims_scope(protocol)
-            if scope:
-                expected_routes.add(
-                    (
-                        "claims",
-                        protocol,
-                        "deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
-                        scope,
+        if "claims" in self.enabled_roles:
+            for protocol in (CLAIMS_TABLE_PROTOCOL, profiles["claims"].protocol):
+                scope = self.routing.claims_scope(protocol)
+                if scope:
+                    expected_routes.add(
+                        (
+                            "claims",
+                            protocol,
+                            "deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
+                            scope,
+                        )
                     )
-                )
-        if self.routing.material_items_scope:
+        if "material_items" in self.enabled_roles and self.routing.material_items_scope:
             expected_routes.add(
                 (
                     "material_items",
@@ -276,7 +323,7 @@ class BatchPlan(BaseModel):
                 "method": task.method,
                 "scope": task.scoped_unit_ids,
                 "profile": profile.role_profile_sha256,
-                "routing_rule_version": ROUTING_RULE_VERSION,
+                "routing_rule_version": self.routing.rule_version,
                 "deadline_epoch": task.deadline_epoch,
             }
             logical_key = canonical_hash(identity)
@@ -453,7 +500,7 @@ def _frozen_profiles(
 ) -> tuple[FrozenRoleProfile, ...]:
     result: list[FrozenRoleProfile] = []
     for role, protocol in (
-        ("claims", CLAIMS_PROSE_PROTOCOL),
+        ("claims", CLAIMS_ATOMIC_PROTOCOL),
         ("material_items", MATERIAL_SLOT_JSONL_VERSION),
         ("material_relations", MATERIAL_RELATION_JSONL_VERSION),
     ):
@@ -547,6 +594,10 @@ def plan_batch(
     max_relation_tasks: int = 1,
     max_relation_attempts: int | None = None,
     deadline_epoch: float | None = None,
+    enabled_roles: Sequence[Role] | None = None,
+    max_items_per_packet: int | None = None,
+    max_slots_per_batch: int | None = None,
+    material_type: MaterialType | None = None,
 ) -> BatchPlan:
     """Freeze deterministic routing, profiles, budgets, and relation derivation; no I/O."""
     snapshot.verify_identity()
@@ -554,6 +605,29 @@ def plan_batch(
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_batch_budget")
     if type(max_relation_tasks) is not int or max_relation_tasks < 0:
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_relation_task_limit")
+    try:
+        item_options = (
+            MaterialItemsPlanOptions(
+                max_items_per_packet=max_items_per_packet or 30,
+                max_slots_per_batch=max_slots_per_batch or 8,
+                material_type=material_type,
+            )
+            if max_items_per_packet is not None
+            or max_slots_per_batch is not None
+            or material_type is not None
+            else None
+        )
+    except ValueError as exc:
+        raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_material_items_options") from exc
+    selected = set(ALL_ROLES if enabled_roles is None else enabled_roles)
+    ordered_roles: tuple[Role, ...] = tuple(role for role in ALL_ROLES if role in selected)
+    if (
+        not selected
+        or selected - set(ALL_ROLES)
+        or len(ordered_roles) != len(tuple(enabled_roles or ALL_ROLES))
+        or ("material_relations" in selected and "material_items" not in selected)
+    ):
+        raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
     if deadline_epoch is not None:
         if (
             isinstance(deadline_epoch, bool)
@@ -589,22 +663,23 @@ def plan_batch(
     profiles = _frozen_profiles(config, role_configs)
     by_role = {profile.role: profile for profile in profiles}
     tasks: list[PlannedTask] = []
-    for protocol in (CLAIMS_TABLE_PROTOCOL, CLAIMS_PROSE_PROTOCOL):
-        scope = routing.claims_scope(protocol)
-        if scope:
-            tasks.append(
-                _planned_task(
-                    snapshot=snapshot,
-                    role="claims",
-                    protocol=protocol,
-                    method="deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
-                    scope=scope,
-                    profile=by_role["claims"],
-                    max_attempts=budgets["claims"],
-                    deadline_epoch=deadline_epoch,
+    if "claims" in selected:
+        for protocol in (CLAIMS_TABLE_PROTOCOL, CLAIMS_ATOMIC_PROTOCOL):
+            scope = routing.claims_scope(protocol)
+            if scope:
+                tasks.append(
+                    _planned_task(
+                        snapshot=snapshot,
+                        role="claims",
+                        protocol=protocol,
+                        method="deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
+                        scope=scope,
+                        profile=by_role["claims"],
+                        max_attempts=budgets["claims"],
+                        deadline_epoch=deadline_epoch,
+                    )
                 )
-            )
-    if routing.material_items_scope:
+    if "material_items" in selected and routing.material_items_scope:
         tasks.append(
             _planned_task(
                 snapshot=snapshot,
@@ -627,9 +702,11 @@ def plan_batch(
         profiles=profiles,
         max_attempts=max_attempts,
         role_max_attempts=budgets,
+        enabled_roles=ordered_roles,
+        material_items_options=item_options,
         currency=currency,
         relations=RelationPlan(
-            enabled=relations_enabled,
+            enabled=relations_enabled and "material_relations" in selected,
             max_tasks=max_relation_tasks,
             max_attempts=relation_attempts,
         ),
@@ -1806,11 +1883,15 @@ def _run_task(
                 dispatch=dispatch if task.method == "model" else None,
             )
         elif task.role == "material_items":
+            options = journal.plan.material_items_options or MaterialItemsPlanOptions()
             result = execute_material_items_role(
                 journal.plan.snapshot,
                 task_id=task.task_id,
                 protocol=task.protocol,
                 max_calls=task.max_attempts,
+                max_items_per_packet=options.max_items_per_packet,
+                max_slots_per_batch=options.max_slots_per_batch,
+                material_type=options.material_type,
                 dispatch=dispatch,
             )
         else:

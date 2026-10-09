@@ -1,0 +1,94 @@
+{
+  "schema_version": "structured-extraction-p1r-claims-plan-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-09",
+  "cause": "P1 Claims recall upper bound 65% was below the frozen 75% floor",
+  "execution_order": [
+    "claims-industrial-fulian",
+    "claims-optical-module",
+    "claims_gate_evaluation"
+  ],
+  "stop_policy": "Any missing/conflicting claim-slot terminal or frozen quality-floor failure blocks publication and copper.",
+  "total_attempt_ceiling": 24,
+  "model_calls_during_planning": 0,
+  "versions": {
+    "claims_protocol": "claims-atomic-json-v1",
+    "slot_protocol": "claims-slot-obligations-v1",
+    "extractor": "1f699d25c7e4",
+    "pipeline": "evidence-pipeline-9",
+    "lint": "claims-v2-lint-6",
+    "period_rules": "period-rules-3",
+    "unit_rules": "unit-rules-2"
+  },
+  "profile": {
+    "model": "doubao-seed-2.0-mini",
+    "adapter_version": "structured-chat-http-2",
+    "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+    "request_options": {
+      "timeout_seconds": 300.0,
+      "max_output_tokens": 16384,
+      "token_parameter": "max_tokens"
+    }
+  },
+  "entries": [
+    {
+      "name": "claims-industrial-fulian",
+      "stage": "replacement_claims_only_gate",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "batch_id": "batch:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+      "plan_sha256": "sha256:09abbd9fe534eace1b1297d55812d35c519e5a1bbea7120a35a360a8716af16a",
+      "protocol": "claims-atomic-json-v1",
+      "slot_protocol": "claims-slot-obligations-v1",
+      "unit_count": 10,
+      "candidate_slot_count": 49,
+      "candidate_packet_count": 9,
+      "attempt_ceiling": 10,
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "7fcfbfde53c2ae6da2a883e4105f4bdd3071a92ecdcb1f5d656416f3b0f24ec4",
+      "freeze_file_sha256": "46a3a9fe9d1b3a54af17eb0ebb305727d4e8e8bba0e5a755fef02c5c08eb8cb0"
+    },
+    {
+      "name": "claims-optical-module",
+      "stage": "replacement_claims_only_gate",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "batch_id": "batch:a69c0f7a381e64b5df859181925b3c93abf069f9e2dd5ce3227ab7a6fae2e27b",
+      "plan_sha256": "sha256:a69c0f7a381e64b5df859181925b3c93abf069f9e2dd5ce3227ab7a6fae2e27b",
+      "protocol": "claims-atomic-json-v1",
+      "slot_protocol": "claims-slot-obligations-v1",
+      "unit_count": 14,
+      "candidate_slot_count": 27,
+      "candidate_packet_count": 8,
+      "attempt_ceiling": 14,
+      "automatic_retries": 0,
+      "concurrency": 1,
+      "model_calls_during_planning": 0,
+      "profile_sha256": "sha256:c2c0871a79a1de39d7ca31dc23e702c7da87ff974a4d533489dc2eb32cc5912b",
+      "model": "doubao-seed-2.0-mini",
+      "adapter_version": "structured-chat-http-2",
+      "max_output_tokens": 16384,
+      "gold_not_exposed_to_model": true,
+      "production_database_access": 0,
+      "publication_writes": 0,
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "1c36644155d954bae60ab7d28d528fc7f3645a26fac57721f8431fe8345c3aad",
+      "freeze_file_sha256": "15045cf6feabc124ed25a4e3c247214d91164e6df517ae479be58578d93f80b6"
+    }
+  ],
+  "pre_execution_requirements": [
+    "verify snapshot, plan and freeze hashes",
+    "use the formal structured ledger with concurrency 1 and automatic retries 0",
+    "require one terminal outcome for every frozen candidate_slot_id",
+    "do not start copper or publication unless the signed replacement Claims gate passes"
+  ],
+  "prepare_script_sha256": "7c1e1f008be891aafceebc93184962aabce2e18dcd931af07dc7752543ef9484"
+}

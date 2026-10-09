@@ -1,0 +1,132 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:100ace654a6ea2419a18d25cb56367727a72faad16bbf6b0c4480e84386e9ce0",
+  "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+  "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+  "publication_generation": 1,
+  "parser_versions": {
+    "parse": "reader-docx-2+python-docx-1.2.0",
+    "clean": "signed-non-table-exact-text-1",
+    "chunk": "signed-non-table-scope-1",
+    "adapter": "signed-gold-evaluation-adapter-1",
+    "snapshot": "structured-snapshot-2"
+  },
+  "units": [
+    {
+      "unit_id": "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+      "chunk_id": "chunk:signed-non-table-target-scope",
+      "kind": "prose",
+      "locator": "body[3]",
+      "text": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。",
+      "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+      "span": {
+        "coordinate_system": "unicode_code_points",
+        "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+        "start": 0,
+        "end": 126
+      },
+      "metadata": {
+        "gold_not_exposed_to_model": true,
+        "delta_from_snapshot": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+        "source_unit_id": "signed-unit-2",
+        "source_kind": "prose",
+        "page": null,
+        "element": "body[3]",
+        "label_path": [],
+        "parent_id": null,
+        "ordinal": 2,
+        "status": "kept",
+        "reasons": [],
+        "document": {
+          "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+          "subject": "光模块行业",
+          "published": "2026-09-08"
+        },
+        "cells": [],
+        "cell_reasons": [],
+        "dependency_details": [],
+        "context_status": "complete",
+        "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "metadata_sha256": "sha256:1c781cbc5493934f481b2fc442ee4c43cf4e2cb6f617c0f812a08b9d39915a5b",
+      "dependencies": []
+    },
+    {
+      "unit_id": "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+      "chunk_id": "chunk:signed-non-table-target-scope",
+      "kind": "prose",
+      "locator": "body[51]",
+      "text": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，就是因为1.6T拉胯了，不是DSP拉胯了，然后800G就明显比那个800G肯定不止。他说什么半年这个肯定数字不对，二季度就有超过300万个了。",
+      "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+      "span": {
+        "coordinate_system": "unicode_code_points",
+        "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+        "start": 0,
+        "end": 103
+      },
+      "metadata": {
+        "gold_not_exposed_to_model": true,
+        "delta_from_snapshot": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+        "source_unit_id": "signed-unit-20",
+        "source_kind": "prose",
+        "page": null,
+        "element": "body[51]",
+        "label_path": [],
+        "parent_id": null,
+        "ordinal": 20,
+        "status": "kept",
+        "reasons": [],
+        "document": {
+          "title": "光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局",
+          "subject": "光模块行业",
+          "published": "2026-09-08"
+        },
+        "cells": [],
+        "cell_reasons": [],
+        "dependency_details": [],
+        "context_status": "complete",
+        "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "metadata_sha256": "sha256:1bde1a0214d64256ab7026681fd6a59c3d3cedd7ea72b0b8fa80ff225757cb13",
+      "dependencies": []
+    }
+  ],
+  "gaps": [],
+  "identity_input": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+    "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-docx-2+python-docx-1.2.0",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "unit_identities": [
+      {
+        "unit_id": "snapshot-unit:e796ce489777df81aa8a67238a84532e4750ec48610e27915411e7e66f2bdda2",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[3]",
+        "coordinate_system": "unicode_code_points",
+        "start": 0,
+        "end": 126,
+        "text_sha256": "sha256:e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807",
+        "metadata_sha256": "sha256:1c781cbc5493934f481b2fc442ee4c43cf4e2cb6f617c0f812a08b9d39915a5b"
+      },
+      {
+        "unit_id": "snapshot-unit:db928dbf31b63c25973bede798f111400492b69c87746ee28686ff67bd5e0a5b",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "body[51]",
+        "coordinate_system": "unicode_code_points",
+        "start": 0,
+        "end": 103,
+        "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2",
+        "metadata_sha256": "sha256:1bde1a0214d64256ab7026681fd6a59c3d3cedd7ea72b0b8fa80ff225757cb13"
+      }
+    ]
+  }
+}

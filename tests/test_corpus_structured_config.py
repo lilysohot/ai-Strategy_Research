@@ -208,7 +208,7 @@ def test_existing_role_binding_does_not_drift_when_new_protocol_defaults_change(
     binding = bind_roles(load_extraction_config(environ=config_env()))[0]
     identity = binding.fingerprint
     monkeypatch.setitem(PROTOCOLS, "claims", "future-protocol")
-    assert binding.protocol == "claims-json-v2"
+    assert binding.protocol == "claims-atomic-json-v2"
     assert binding.fingerprint == identity
 
 
