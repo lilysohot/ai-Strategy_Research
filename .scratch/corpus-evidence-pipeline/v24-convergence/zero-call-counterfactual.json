@@ -1,0 +1,72 @@
+{
+  "audit_version": "material-v24-zero-call-counterfactual-1",
+  "created_at": "2026-10-09",
+  "model_calls": 0,
+  "source_model_responses_reused": 43,
+  "source_report": {
+    "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/report-e54423a80d6df2eeefe40b34ddabd2040e3f298e48aeaa368c2393274dd46ac7.json",
+    "sha256": "d3651f339a84cfced6c134033ade36229ce67bd51a782e3cc994d53ea332a433",
+    "extractor_version": "material-semantics-22"
+  },
+  "counterfactual_report": {
+    "path": ".scratch/corpus-evidence-pipeline/material-semantics-runs/raw-replay-eda771486850cfdbeff9d8d7be362ba6673156a8d73ba716ce80e65108146c70.json",
+    "sha256": "f39cd9e635df872fa1c0d70e7fefa57bc73631563e59391e5d1d9e7d90b146bd",
+    "extractor_version": "material-semantics-24",
+    "source_shape_frozen": true
+  },
+  "v8_observed": {
+    "partial_slots": 65,
+    "partial_packets": 7,
+    "item_failed_validation_slots": 22,
+    "terminal_record_missing_slots": 1,
+    "finish_reason_length_batches": 0,
+    "maximum_completion_tokens": 3510,
+    "configured_max_output_tokens": 8192
+  },
+  "frozen_shape_transition": {
+    "slot_status": {
+      "partial_to_extracted": 51,
+      "partial_to_partial": 14,
+      "extracted_to_extracted": 539,
+      "no_supported_item_to_no_supported_item": 33
+    },
+    "packet_status": {
+      "partial_to_completed": 1,
+      "partial_to_partial": 6,
+      "not_candidate_to_not_candidate": 7
+    },
+    "partial_slots_by_sample": {
+      "dev-company-report": {"before": 9, "after": 3},
+      "dev-industry-qa-report": {"before": 8, "after": 2},
+      "dev-personal-trade-review": {"before": 0, "after": 0},
+      "dev-expert-call-copper-foil": {"before": 48, "after": 9}
+    },
+    "remaining_partial_slots": {
+      "item_failed_validation": 8,
+      "terminal_record_missing": 1,
+      "hard_signal_or_terminal_semantics": 5
+    },
+    "remaining_invalid_item_attempts": {
+      "quote_not_found_within_declared_slot": 9,
+      "affected_slots": 8,
+      "schema": 0,
+      "quote_not_unique_within_declared_slot": 0
+    }
+  },
+  "current_v24_plan": {
+    "candidate_slots_by_sample": {
+      "dev-company-report": 65,
+      "dev-industry-qa-report": 52,
+      "dev-personal-trade-review": 11,
+      "dev-expert-call-copper-foil": 487
+    },
+    "planned_model_calls": 42,
+    "strict_gold_coverage_loss": 0,
+    "batch_capacity": {"max_slots": 16, "max_items": 64}
+  },
+  "conclusion": {
+    "capacity_is_primary_cause": false,
+    "basis": "No length finish, token saturation, or tail-only failure pattern was observed. Most flips came from soft/hard signal semantics, role normalization, and slot-scoped quote alignment.",
+    "next_gate": "one signed 42-call item-only development round; no v11 patch round"
+  }
+}

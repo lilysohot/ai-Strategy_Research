@@ -1,0 +1,583 @@
+{
+  "run_id": "377854022a636a0c6a5aeb492e1c485786e4ec7cbf68b77e0d1f9e7602d91677",
+  "evidence_run_id": "3a5906f4a6234cd31cf41b2b65077d7c8d440b76a754771137a8397f3113fd34",
+  "extractor_version": "material-semantics-24",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "2026-09-03_810ef870",
+      "source_rev": "810ef870625e7856",
+      "title": "James-Bulltard_9326 复盘",
+      "material_type": "post_trade_review",
+      "research_domain": "macro",
+      "material_date": "2026-09-03",
+      "published_at": "2026-09-03",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_1c54a975d0b5",
+        "display_name": "James-Bulltard",
+        "role": "source_author",
+        "identity_status": "explicit"
+      },
+      {
+        "speaker_id": "spk_6c0e0ffe1a8f",
+        "display_name": null,
+        "role": "quoted_source",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_0862cfa73d70726c",
+        "text": "TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding to my position",
+        "semantic_type": "behavior",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": "10,000 at 14.76",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16",
+            "start": 42,
+            "end": 112
+          }
+        ],
+        "unknown_fields": [
+          "identity",
+          "external_verification",
+          "calendar_date"
+        ]
+      },
+      {
+        "item_id": "itm_9f07abbb00e5ecae",
+        "text": "this is still well below the $25 level the CEO bought $150m worth",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "quoted_other",
+        "speaker_ref": "spk_6c0e0ffe1a8f",
+        "polarity": "affirmed",
+        "value": "$25 level",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "this is still well below the $25 level the CEO bought $150m worth",
+            "start": 136,
+            "end": 201
+          }
+        ],
+        "unknown_fields": [
+          "quoted_source_identity",
+          "identity",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_4fb27801e54af464",
+        "text": "FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding to my position",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": "3000 more at 17.30; 30 $20 September calls for .50",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I bought 3000 more at 17.30 and sold 30 $20 September calls for .50",
+            "start": 212,
+            "end": 279
+          }
+        ],
+        "unknown_fields": [
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_73e3b5cd0c0cb51d",
+        "text": "adding to my position after their deal with Google this week",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "after their deal with Google this week",
+            "start": 302,
+            "end": 340
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_e508f60616bb24cd",
+        "text": "MDT - I sold 50 puts at $90 for next week for .47",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": "50 puts at $90 for .47",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I sold 50 puts at $90 for next week for .47",
+            "start": 350,
+            "end": 393
+          }
+        ],
+        "unknown_fields": [
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_12a80982d894c03c",
+        "text": "AGX - I sold this position yesterday afterhours and posted it in the discord when I did",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I sold this position yesterday afterhours and posted it in the discord when I\ndid",
+            "start": 403,
+            "end": 484
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_0947b63305402435",
+        "text": "I knew nothing about this name and just followed the flows from the day before",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": null,
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "I knew nothing about this name and just followed the flows from the day\nbefore",
+            "start": 486,
+            "end": 564
+          }
+        ],
+        "unknown_fields": [
+          "value",
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_43f76618dbf6222e",
+        "text": "It caught a $50+ pop on earnings and gave some back initially",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": "$50+ pop",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "It caught a $50+ pop on earnings and gave some back initially",
+            "start": 566,
+            "end": 627
+          }
+        ],
+        "unknown_fields": [
+          "external_verification"
+        ]
+      },
+      {
+        "item_id": "itm_286a2147adfe10ce",
+        "text": "so I liquidated my stake at 447",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_1c54a975d0b5",
+        "polarity": "affirmed",
+        "value": "447",
+        "behavior_status": "claimed_executed",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "810ef870625e7856",
+            "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+            "locator": "5",
+            "quote": "so I\nliquidated my stake at 447",
+            "start": 628,
+            "end": 659
+          }
+        ],
+        "unknown_fields": [
+          "external_verification"
+        ]
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "5"
+      ],
+      "omitted_areas": [],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_e244e1ab6d593af7",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "title_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_fae5dbe0cc15f74d",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "list_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_b529e4faac1062ba",
+          "status": "extracted",
+          "item_refs": [
+            "itm_0862cfa73d70726c",
+            "itm_9f07abbb00e5ecae"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1f74506a2e5d1f7c",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "list_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_f793905713e9ccb2",
+          "status": "extracted",
+          "item_refs": [
+            "itm_4fb27801e54af464",
+            "itm_73e3b5cd0c0cb51d"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_2ad58710d36b716a",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "list_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_74a85e5d068d7915",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e508f60616bb24cd"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_22b692bbd549ea4a",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "list_marker_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_3f29cb35ffd689cb",
+          "status": "extracted",
+          "item_refs": [
+            "itm_12a80982d894c03c"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_6c339417df70658c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_0947b63305402435"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_add246813fa0a367",
+          "status": "extracted",
+          "item_refs": [
+            "itm_43f76618dbf6222e",
+            "itm_286a2147adfe10ce"
+          ],
+          "reason_codes": []
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "status": "completed",
+      "records": 9,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-jsonl-v5",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 11
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_1016932864bc4e42",
+        "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+        "locator": "5",
+        "start": 0,
+        "end": 674,
+        "text": "My Open Book\nTrades I Made Today\n1. TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n2. FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n3. MDT - I sold 50 puts at $90 for next week for .47\n4. AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. I knew nothing about this name and just followed the flows from the day\nbefore. It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_e244e1ab6d593af7",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 0,
+      "end": 33,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "My Open Book\nTrades I Made Today\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_fae5dbe0cc15f74d",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 33,
+      "end": 36,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "1. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_b529e4faac1062ba",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 36,
+      "end": 202,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "TTD - I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16 adding\nto my position, this is still well below the $25 level the CEO bought $150m worth\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_1f74506a2e5d1f7c",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 202,
+      "end": 205,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_f793905713e9ccb2",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 205,
+      "end": 341,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "FRVO - I bought 3000 more at 17.30 and sold 30 $20 September calls for .50 adding\nto my position after their deal with Google this week\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_2ad58710d36b716a",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 341,
+      "end": 344,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "3. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_74a85e5d068d7915",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 344,
+      "end": 394,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "MDT - I sold 50 puts at $90 for next week for .47\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_22b692bbd549ea4a",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 394,
+      "end": 397,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "4. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_3f29cb35ffd689cb",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 397,
+      "end": 486,
+      "signal_types": [
+        "behavior"
+      ],
+      "attribution_capability": "document_only",
+      "text": "AGX - I sold this position yesterday afterhours and posted it in the discord when I\ndid. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_6c339417df70658c",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 486,
+      "end": 566,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "I knew nothing about this name and just followed the flows from the day\nbefore. ",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    },
+    {
+      "candidate_slot_id": "slot_add246813fa0a367",
+      "packet_id": "65cca914c30b0f3f98e1e416dd536c8e1f480831ad21c86c9db46acf87df94f8",
+      "locator": "5",
+      "start": 566,
+      "end": 674,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "It caught a $50+ pop on earnings and gave some back initially so I\nliquidated my stake at 447\n我的公开账本\n今日交易记录\n",
+      "explicit_role": null,
+      "segment_id": "seg_1016932864bc4e42"
+    }
+  ],
+  "relation_candidate_set_id": null
+}

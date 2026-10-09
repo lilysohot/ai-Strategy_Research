@@ -1,0 +1,138 @@
+{
+  "budget_version": "r2-extraction-convergence-v10",
+  "status": "draft-unsigned",
+  "supersedes": "r2-lexicon-retirement-v9",
+  "frozen_at": null,
+  "reason": "用一次封顶的 item-only development round 验证 material-semantics-24 的通用切分、槽内引文消歧、语义/话语角色归一化和稳定失败原因。该轮用于结束抽取节点，不用于把变化归因于任一单独改动。",
+  "gold_sha256": "e8b541a6557189898bd8b86beab66af4b294cec19bc89c7d81e069f70ff0ac1b",
+  "micro_gold_sha256": "214b1f49f82e36c7c2b59496ada20228730439d0bc4b6f17fc51ff87122077c5",
+  "non_regression_policy": {
+    "path": ".scratch/corpus-evidence-pipeline/r2-non-regression-policy-v1.json",
+    "sha256": "c81773044710b16fab93b6a061d2bd9d8581f6614541e49271559240b724aaa4"
+  },
+  "probe": {
+    "path": ".scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py",
+    "sha256": "0f4beadc146c084b83239c790bdbde729f688b0ac2bf73359643a4417534fb9d",
+    "runs_before_any_model_call": true
+  },
+  "extractor_version_at_plan_time": "material-semantics-24",
+  "implementation_snapshot": {
+    "plugins/corpus/material_semantics.py": "914891789a19bc63963d8803f45c9aaf53d6cc289516378d7dcc68885c592b94",
+    "tests/test_corpus_material_semantics.py": "7f07be3abc03cf7ea4dcbb47b543d738de8ae18c257016d269f0628805c739dc",
+    ".scratch/corpus-evidence-pipeline/run_material_development.py": "55fccebf7ca4e6f091e6f5632464cba6dc5826236dd3f0b21305fc42fcc23081",
+    ".scratch/corpus-evidence-pipeline/replay_material_raw_audit.py": "c5089966c43e10d24119dfc7cb013062e607c9e80dd2f27daab8e0e75ed36c1b"
+  },
+  "change_scope": [
+    "soft claim/summary signals remain diagnostic rather than completeness-blocking",
+    "valid candidate_slot_id scopes quote uniqueness to that slot; unknown ids remain packet-wide fail closed",
+    "question/evidence copied into semantic_type normalize to unknown only when statement_role agrees",
+    "item_failed_validation retains stable quote/schema/scope reason codes",
+    "generic boundary grammar preserves report-title/HTML/metadata colon context and short discourse lead-ins",
+    "four sample-specific boundary patterns remain retired"
+  ],
+  "split": "development",
+  "sample_ids": [
+    "dev-company-report",
+    "dev-industry-qa-report",
+    "dev-personal-trade-review",
+    "dev-expert-call-copper-foil"
+  ],
+  "deterministic_stress_samples": [
+    {
+      "sample_id": "dev-stress-optical-unlabelled",
+      "source_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "source_sha256": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "model_calls_allowed": 0,
+      "role": "非 dev、非金标材料；仅用于确定性计划和边界覆盖检查"
+    }
+  ],
+  "model": "glm-5.3-flash",
+  "model_binding": "must equal configured_model() at execution time",
+  "round_ids": [
+    "extraction-convergence-v10"
+  ],
+  "development_rounds_max": 1,
+  "calls_per_round_max": 42,
+  "calls_total_max": 42,
+  "calls_per_document_per_round_max": 32,
+  "planned_calls_upper_bound": 42,
+  "planned_calls_upper_bound_status": "verified_by_plan_only_before_signoff",
+  "seconds_per_call": 60,
+  "packet_chars": 3000,
+  "max_slots_per_batch": 16,
+  "max_items_per_packet": 64,
+  "max_output_tokens": 8192,
+  "response_format": "material-atomic-jsonl-v5",
+  "stages": [
+    "atomic_item_terminal"
+  ],
+  "relation_mode": "deferred",
+  "candidate_slot_ids_by_sample": {},
+  "candidate_slot_scope_note": "使用全量义务集；通用切分会改变槽位 ID，不 pin 历史 ID。",
+  "stage0_deterministic_gate": {
+    "cost": "0 model calls",
+    "command": "uv run python .scratch/corpus-evidence-pipeline/probe_lexicon_retirement.py --no-write",
+    "pass": "strict frozen-gold obligation coverage loss == 0 and planned calls == 42",
+    "observed": {
+      "strict_coverage_loss": 0,
+      "planned_calls": 42,
+      "candidate_slots_by_sample": {
+        "dev-company-report": 65,
+        "dev-industry-qa-report": 52,
+        "dev-personal-trade-review": 11,
+        "dev-expert-call-copper-foil": 487
+      }
+    },
+    "fail_action": "stop before any model call"
+  },
+  "stage1_gate": {
+    "rule": "Only item metrics produced by this round are eligible. Relations are explicitly not_measured. This is a convergence gate, not a full business acceptance decision.",
+    "in_scope": {
+      "item": [
+        "item_recall",
+        "critical_item_recall",
+        "semantic_target_accuracy",
+        "attribution_target_accuracy",
+        "critical_all_fields_accuracy"
+      ]
+    },
+    "excluded": {
+      "relation": "not_measured: relation_mode=deferred"
+    },
+    "completeness": {
+      "max_failed_or_partial_packets": 0,
+      "require_complete": true,
+      "relations_not_processed_counts_as_incomplete": false
+    }
+  },
+  "stop_conditions": [
+    "stage0_deterministic_gate_fail",
+    "source_gold_policy_or_extractor_identity_drift",
+    "holdout_access_or_leakage",
+    "planned_calls_differ_from_42",
+    "any_in_scope_metric_floor_decrease",
+    "any_failed_or_partial_packet",
+    "round_or_call_budget_exhausted"
+  ],
+  "decision_after_round": {
+    "pass": "freeze v24 item extraction baseline and leave the extraction node",
+    "fail": "do not create v11 prompt/lexicon patches; redesign the extraction interface or stage model"
+  },
+  "out_of_scope": [
+    "causal attribution to one bundled change",
+    "unseen-material generalisation claims",
+    "relation quality because relation_mode is deferred",
+    "gold/threshold/scorer changes",
+    "corpus ingestion, publication, production database writes or M_main calls",
+    "a second development round"
+  ],
+  "holdout_calls_allowed": 0,
+  "sign_off": {
+    "status": "unsigned",
+    "required_roles": [
+      "U (owner, named)",
+      "independent reviewer"
+    ],
+    "must_not_be_self_declared": true
+  }
+}

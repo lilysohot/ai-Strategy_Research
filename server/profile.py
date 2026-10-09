@@ -91,6 +91,10 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
     else:
         agent_tools.extend(CALCULATION_TOOL_NAMES)
     agent_tools.extend(TASK_BOARD_TOOL_NAMES)
+    # 缺料表达对所有研究 Run 可见（2026-10-08 裁决）：模型只表达意图，
+    # 是否真的缺料由服务端按用途裁决；纯材料阅读会被服务端判为不缺料。
+    if "investment_input_request" not in agent_tools:
+        agent_tools.append("investment_input_request")
     return {
         "agent": {
             "agent_tools": agent_tools,

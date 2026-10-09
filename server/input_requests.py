@@ -168,9 +168,13 @@ async def materialize_worker_intent(
         return None
     snapshot = await snapshots.get_snapshot(session, user_id=run.user_id, run_id=run_id)
     if snapshot is None:
-        # 老的非业务 Run 没有快照：不伪造输入，也不建请求。
-        return None
-    spec = replace(snapshots.spec_from_snapshot(snapshot), use_case=use_case)
+        # 普通研究 Run（用户只是问“研究某只股票”）没有业务快照。仍要能补数：
+        # 按该研究**当前绑定**的账户/计划构造 spec，裁决仍由服务端做，不伪造该 Run 的快照。
+        spec = await _spec_from_research_link(
+            session, user_id=run.user_id, research_id=run.session_id, use_case=use_case
+        )
+    else:
+        spec = replace(snapshots.spec_from_snapshot(snapshot), use_case=use_case)
     try:
         await snapshots.resolve_for_run(
             session, user_id=run.user_id, research_id=run.session_id, spec=spec
@@ -179,6 +183,17 @@ async def materialize_worker_intent(
         requested = _normalize_missing_fields(exc.fields)
         if not requested:
             return None
+        # 无快照的 Run 走“无来源快照”的续接形态：显式给出 message 与 investment_input；
+        # 该形态下 create_request 不会自动关联/关闭来源 Run，故下面手工收尾。
+        continuation = None
+        source_run_id: uuid.UUID | None = run_id
+        if snapshot is None:
+            continuation = {
+                "message": run.prompt or "按补充后的资料继续分析",
+                "investment_input": _spec_json(spec),
+                "pipeline_id": run.pipeline_id,
+            }
+            source_run_id = None
         outcome = await create_request(
             session,
             user_id=run.user_id,
@@ -186,11 +201,44 @@ async def materialize_worker_intent(
             use_case=use_case,
             fields=requested,
             idempotency_key=f"worker-intent:{run_id}",
-            source_run_id=run_id,
+            source_run_id=source_run_id,
+            continuation=continuation,
             enforce_snapshot_use_case=False,
         )
+        if snapshot is None and run.status in store.ACTIVE_RUN_STATUSES:
+            # 与 DATA-07 一致：原 Run 以 input_required 结束（不伪装成 completed）。
+            await dispatch_outbox.abandon_for_run(
+                session, run_id=run.id, reason="等待补充业务资料"
+            )
+            run.status = "stopped"
+            run.stopped_by = "input_required"
+            run.finished_at = _now()
         return outcome.result
     return None
+
+
+async def _spec_from_research_link(
+    session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID, use_case: str
+) -> snapshots.InvestmentInputSpec:
+    """无业务快照的研究 Run：按该研究当前绑定的账户/计划构造 spec。
+
+    未绑定账户或主计划时引用为空——裁决会因此报缺字段，正好驱动“先创建主账户”的引导。
+    """
+    link = (
+        await session.execute(
+            select(store.ResearchInvestmentLink).where(
+                store.ResearchInvestmentLink.research_id == research_id,
+                store.ResearchInvestmentLink.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+    account_id = link.account_id if link is not None else None
+    plan_id = link.primary_plan_id if link is not None else None
+    return snapshots.InvestmentInputSpec(
+        use_case=use_case,
+        account=snapshots.ObjectRef(account_id) if account_id is not None else None,
+        plan=snapshots.ObjectRef(plan_id) if plan_id is not None else None,
+    )
 
 
 def _normalize_missing_fields(fields: dict[str, str]) -> list[dict[str, Any]]:

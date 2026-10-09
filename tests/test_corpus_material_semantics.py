@@ -17,6 +17,7 @@ from plugins.corpus.material_semantics import (
     _align_quote,
     _normalize_semantic_type,
     _normalize_statement_role,
+    _packet_records,
     _relation_candidate_pairs,
     _relations_from_decisions,
     _strict_relation_candidate_pairs,
@@ -43,6 +44,135 @@ def test_align_quote_accepts_typographic_quote_equivalence_but_preserves_source(
 
     assert evidence.quote == "“强推”评级"
     assert packet.text[evidence.start : evidence.end] == evidence.quote
+
+
+def test_align_quote_can_disambiguate_within_a_validated_slot_scope() -> None:
+    packet = EvidencePacket(
+        packet_id="packet-1",
+        locator="page:1",
+        kind="prose",
+        text="风险仍然存在。风险仍然存在。",
+    )
+
+    evidence = _align_quote(
+        "风险仍然存在。",
+        packet,
+        "source-rev",
+        scope=(7, len(packet.text)),
+    )
+
+    assert evidence.start == 7
+    assert evidence.quote == "风险仍然存在。"
+
+
+def test_discourse_role_in_semantic_type_fails_closed_to_unknown() -> None:
+    assert (
+        _normalize_semantic_type(
+            "question",
+            "question",
+            text="未来需求会改善吗？",
+            quote="未来需求会改善吗？",
+        )
+        == "unknown"
+    )
+
+
+def test_atomic_slots_keep_colon_context_and_short_lead_ins(tmp_path: Path) -> None:
+    source = tmp_path / "boundary-context.md"
+    source.write_text(
+        "《行业报告：增长逻辑》 2026-07-19。\n"
+        "专家：分析完之后，我讲一下设备交期和单价。\n"
+        '专家：<span style="background-color: yellow">像德福科技和铜冠都做得比较好</span>。',
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document,
+        build_material_structure(evidence_run.document),
+    )
+    slot_texts = tuple(slot.text for slot in slots)
+
+    assert any("《行业报告：增长逻辑》 2026-07-19" in text for text in slot_texts)
+    assert any("分析完之后，我讲一下设备交期和单价" in text for text in slot_texts)
+    assert any("background-color: yellow" in text and "德福科技" in text for text in slot_texts)
+    assert (
+        _normalize_semantic_type(
+            "evidence",
+            "evidence",
+            text="因为尺寸比较多。",
+            quote="因为尺寸比较多。",
+        )
+        == "unknown"
+    )
+
+
+def test_discarded_item_attempt_exposes_stable_quote_failure_reason() -> None:
+    packet = EvidencePacket(
+        packet_id="packet-1",
+        locator="page:1",
+        kind="prose",
+        text="风险仍然存在。风险仍然存在。",
+    )
+    slot = CandidateSlot(
+        candidate_slot_id="slot_test",
+        packet_id=packet.packet_id,
+        segment_id="segment-1",
+        locator=packet.locator,
+        start=0,
+        end=len(packet.text),
+        text=packet.text,
+        signal_types=("risk",),
+        explicit_role=None,
+        attribution_capability="document_only",
+    )
+
+    def discarded_reason(quote: str) -> tuple[str, ...]:
+        parsed = {
+            "speakers": [],
+            "items": [
+                {
+                    "record_type": "item",
+                    "candidate_slot_id": slot.candidate_slot_id,
+                    "item_id": "item-1",
+                    "text": "风险仍然存在",
+                    "semantic_type": "fact",
+                    "statement_role": "risk",
+                    "speech_role": "statement",
+                    "perspective": "source_explicit",
+                    "speaker_ref": "unknown",
+                    "polarity": "affirmed",
+                    "value": None,
+                    "behavior_status": None,
+                    "temporal_frame": "contemporaneous",
+                    "evidence_quote": quote,
+                    "unknown_fields": [],
+                }
+            ],
+            "relations": [],
+            "coverage": [],
+        }
+        _, items, _, discarded, item_map, failures = _packet_records(
+            parsed,
+            packet,
+            "source-rev",
+            candidate_slots=(slot,),
+        )
+        assert items == []
+        assert discarded == 1
+        ledger, incomplete = _validate_atomic_coverage(
+            parsed,
+            items,
+            item_map,
+            (slot,),
+            failures,
+        )
+        assert incomplete is True
+        assert ledger[0].status == "partial"
+        assert "item_failed_validation" in ledger[0].reason_codes
+        return ledger[0].reason_codes
+
+    assert "item_validation:quote_not_unique" in discarded_reason("风险仍然存在。")
+    assert "item_validation:quote_not_found" in discarded_reason("不存在的引文")
 
 
 def _source(tmp_path: Path) -> Path:
@@ -611,9 +741,7 @@ def test_slot_protocol_rebinds_unknown_slot_id_by_unique_exact_quote(tmp_path: P
     ]
     result = extract_material_understanding(
         evidence_run,
-        llm=lambda _prompt: "\n".join(
-            json.dumps(record, ensure_ascii=False) for record in records
-        ),
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
         max_calls=1,
         staged_jsonl=True,
         slot_protocol=True,
@@ -1327,7 +1455,7 @@ def test_system_adds_controlled_unknown_axes_for_unattributed_summary(tmp_path: 
     } <= set(item.unknown_fields)
 
 
-def test_system_splits_known_compound_statements_into_atomic_obligations(
+def test_system_splits_general_compounds_without_sample_specific_boundaries(
     tmp_path: Path,
 ) -> None:
     source = tmp_path / "atomic.md"
@@ -1361,7 +1489,15 @@ def test_system_splits_known_compound_statements_into_atomic_obligations(
     )
     for atom in expected_atoms:
         assert sum(atom in text for text in slot_texts) == 1
-    assert len(slots) == len(expected_atoms)
+    # The retired sample-only patterns no longer force the target/rating and the
+    # English trade legs into separate slots.  One coarse slot may still yield
+    # multiple atomic items under the bounded per-slot item contract.
+    assert len(slots) == len(expected_atoms) - 2
+    assert any("维持一年目标价2030元" in text and "和“强推”评级" in text for text in slot_texts)
+    assert any(
+        "TTD-Iadded10,000moreat14.76" in text and "andsold100$15callsfor.16" in text
+        for text in slot_texts
+    )
 
 
 def test_system_splits_financial_clause_obligations_without_breaking_self_correction(

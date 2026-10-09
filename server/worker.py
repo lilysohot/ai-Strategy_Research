@@ -450,14 +450,15 @@ async def run_once(args: argparse.Namespace) -> int:
 
     investment_context = _load_investment_context(run_root, args.run_id)
     context_tokens = None
-    intent_token = None
+    # 方案 A：缺料意图对**所有**研究 Run 启用（2026-10-08）——它不依赖业务快照，
+    # 只把“要给结论但缺用户真实资料”的意图交给服务端裁决。
+    from plugins.tools.investment_input_request import bind_input_intent
+
+    intent_token = bind_input_intent()
     if investment_context is not None:
         from plugins.tools.investment_context import bind_investment_context
-        from plugins.tools.investment_input_request import bind_input_intent
 
         context_tokens = bind_investment_context(investment_context)
-        # 方案 A：worker 只记录“缺料意图”，落库由 API 侧在 Run 终态完成。
-        intent_token = bind_input_intent()
 
     overrides = build_profile_overrides(has_investment_context=investment_context is not None)
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools

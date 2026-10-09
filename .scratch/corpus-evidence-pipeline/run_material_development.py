@@ -18,6 +18,7 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    MATERIAL_EXTRACTOR_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     MaterialRun,
     build_candidate_slot_batches,
@@ -31,6 +32,90 @@ GOLD = ROOT / "data/corpus/.audit/r1_material_gold_v1_20260913.json"
 DEFAULT_BUDGET = ROOT / ".scratch/corpus-evidence-pipeline/r2-redesign-development-budget-v1.json"
 OUT = ROOT / ".scratch/corpus-evidence-pipeline/material-semantics-runs"
 MATERIAL_DEVELOPMENT_SCORER_VERSION = "material-development-scorer-2"
+
+
+def evaluate_item_stage_gate(
+    budget: dict[str, Any], results: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Evaluate only metrics produced by an item-only development round."""
+    policy_ref = budget["non_regression_policy"]
+    policy_path = ROOT / policy_ref["path"]
+    policy_bytes = policy_path.read_bytes()
+    actual_sha256 = hashlib.sha256(policy_bytes).hexdigest()
+    if actual_sha256 != policy_ref["sha256"]:
+        raise ValueError("non-regression policy identity drifted")
+    policy = json.loads(policy_bytes)
+    in_scope = tuple(budget["stage1_gate"]["in_scope"]["item"])
+    completeness = budget["stage1_gate"]["completeness"]
+    violations: list[dict[str, Any]] = []
+    samples: list[dict[str, Any]] = []
+    for result in results:
+        sample_id = result["sample_id"]
+        protected = policy["protected_samples"][sample_id]
+        metric_results: dict[str, dict[str, Any]] = {}
+        for metric in in_scope:
+            if metric not in result:
+                violations.append(
+                    {"sample_id": sample_id, "metric": metric, "reason": "not_measured"}
+                )
+                continue
+            floor = protected["metric_floors"][metric]
+            value = result[metric]
+            passed = value >= floor
+            metric_results[metric] = {"value": value, "floor": floor, "passed": passed}
+            if not passed:
+                violations.append(
+                    {
+                        "sample_id": sample_id,
+                        "metric": metric,
+                        "value": value,
+                        "floor": floor,
+                    }
+                )
+        packet_status = result["summary"]["packet_status"]
+        failed_or_partial = packet_status.get("failed", 0) + packet_status.get("partial", 0)
+        max_failed_or_partial = completeness.get(
+            "max_failed_or_partial_packets",
+            protected["max_failed_or_partial_packets"],
+        )
+        if not isinstance(max_failed_or_partial, int):
+            max_failed_or_partial = protected["max_failed_or_partial_packets"]
+        require_complete = completeness.get("require_complete", protected["require_complete"])
+        if not isinstance(require_complete, bool):
+            require_complete = protected["require_complete"]
+        complete = bool(result["summary"]["complete"])
+        completeness_passed = failed_or_partial <= max_failed_or_partial and (
+            complete or not require_complete
+        )
+        if not completeness_passed:
+            violations.append(
+                {
+                    "sample_id": sample_id,
+                    "reason": "completeness",
+                    "failed_or_partial_packets": failed_or_partial,
+                    "max_failed_or_partial_packets": max_failed_or_partial,
+                    "complete": complete,
+                    "require_complete": require_complete,
+                }
+            )
+        samples.append(
+            {
+                "sample_id": sample_id,
+                "metrics": metric_results,
+                "failed_or_partial_packets": failed_or_partial,
+                "max_failed_or_partial_packets": max_failed_or_partial,
+                "complete": complete,
+                "require_complete": require_complete,
+                "passed": all(violation.get("sample_id") != sample_id for violation in violations),
+            }
+        )
+    return {
+        "scope": "item_stage_only",
+        "relations": "not_measured",
+        "samples": samples,
+        "violations": violations,
+        "passed": not violations,
+    }
 
 
 def normalized(value: object) -> str:
@@ -264,6 +349,11 @@ def main() -> int:
     gold = json.loads(GOLD.read_text(encoding="utf-8"))
     budget_path = args.budget.resolve()
     budget = json.loads(budget_path.read_text(encoding="utf-8"))
+    expected_extractor = budget.get("extractor_version_at_plan_time")
+    if expected_extractor and expected_extractor != MATERIAL_EXTRACTOR_VERSION:
+        raise ValueError(
+            f"extractor version drifted: {MATERIAL_EXTRACTOR_VERSION} != {expected_extractor}"
+        )
     gold_file_sha256 = hashlib.sha256(GOLD.read_bytes()).hexdigest()
     if gold_file_sha256 != budget["gold_sha256"]:
         raise ValueError("redesign budget is not bound to the current frozen gold")
@@ -520,7 +610,7 @@ def main() -> int:
         "unmatched_predicted_items": totals["unmatched_predicted_items"],
         "unscored_source_relations": totals["unscored_source_relations"],
     }
-    acceptance = (
+    full_acceptance = (
         aggregate["item_recall"] >= thresholds["item_recall_min"]
         and aggregate["critical_item_recall"] >= thresholds["critical_item_recall"]
         and aggregate["semantic_target_accuracy"] >= thresholds["semantic_recall_min"]
@@ -530,6 +620,12 @@ def main() -> int:
         and aggregate["source_relation_precision"] >= thresholds["source_relation_precision"]
         and all(result["summary"]["complete"] for result in results)
     )
+    stage1_gate = (
+        evaluate_item_stage_gate(budget, results)
+        if not args.replay_report and budget.get("relation_mode") == "deferred"
+        else None
+    )
+    round_gate_passed = stage1_gate["passed"] if stage1_gate is not None else full_acceptance
     report = {
         "scorer_version": MATERIAL_DEVELOPMENT_SCORER_VERSION,
         "contract_version": gold["contract_version"],
@@ -548,7 +644,9 @@ def main() -> int:
         "deterministic_stress": deterministic_stress,
         "samples": results,
         "aggregate": aggregate,
-        "business_acceptance": acceptance,
+        "business_acceptance": full_acceptance,
+        "stage1_gate": stage1_gate,
+        "round_gate_passed": round_gate_passed,
         "replay_of": str(args.replay_report) if args.replay_report else None,
         "limitations": [
             "Development targets are a selected joint gold, not exhaustive whole-document claims.",
@@ -559,8 +657,10 @@ def main() -> int:
     }
     target = OUT / f"report-{fingerprint(report)}.json"
     target.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({"report": str(target), "aggregate": aggregate, "accepted": acceptance}))
-    return int(not acceptance)
+    print(
+        json.dumps({"report": str(target), "aggregate": aggregate, "accepted": round_gate_passed})
+    )
+    return int(not round_gate_passed)
 
 
 if __name__ == "__main__":

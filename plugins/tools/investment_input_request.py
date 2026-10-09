@@ -41,7 +41,13 @@ def reset_input_intent(token: contextvars.Token[dict[str, Any] | None]) -> None:
 
 @tool
 async def request_investment_input(use_case: str, reason: str) -> str:
-    """声明本 Run 缺少继续分析所必需的用户真实资料，由系统向用户索取。
+    """当你要给出价位或仓位结论、但缺少用户自己的真实资料时，调用本工具请求补充。
+
+    何时调用：用户在研究/询问某只股票，你准备给出买入卖出价、仓位或成本收益结论，而缺少
+    本标的规划资金、可承受风险、期望盈利或实际成交价时——调用一次并说明原因；系统会让
+    用户填写结构化窗口，填完后再继续分析。
+    何时不要调用：纯材料阅读、看研报、一般问答；也不要为了“顺便问一下”而调用。
+    不要把缺失的值编出来，也不要用假设值、现价或建议价替代用户的真实资料。
 
     Args:
         use_case: 打算给出的结论类型，只支持 plan_analysis（价位/仓位）或 holding_cost（成本收益）。

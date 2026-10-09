@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-23"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-24"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
@@ -401,6 +401,7 @@ _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-12": _RunPayloadShape(),
     "material-semantics-13": _RunPayloadShape(),
     "material-semantics-22": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-23": _RunPayloadShape(drops_absent_relation_identity=False),
 }
 # Anything not listed (and not the current version) predates structured slots.
 _PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
@@ -605,17 +606,11 @@ _DOMAIN_BOUNDARY_CUES = (
     "工艺占",
     "设备(?:只|仅)",
 )
-# Sample-specific boundary patterns (English trade log, copper 强推).  Budget
-# ``r2-lexicon-retirement-v8`` retired these but its stage-1 gate could not be
-# adjudicated (the run's failures were caused by that budget's deferred
-# relations and oversized batches, not by the retirement), so they are restored
-# pending a re-scoped experiment with a same-code control arm.
-_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS = (
-    r",\s*(?=this\s+is\b)",
-    r"\s+(?=the\s+CEO\s+bought\b)",
-    r"\s+and\s+(?=(?:sold|bought|added|closed|reduced|trimmed)\b)",
-    r"和(?=(?:[“\"']?强推|\s*价差扩张))",
-)
+# These four patterns were selected from individual development examples rather
+# than from a source-independent grammar.  The zero-call retirement probe shows
+# that removing them loses no frozen obligation and restores full strict quote
+# containment for the affected trade-log targets, so v24 leaves them retired.
+_SAMPLE_SPECIFIC_BOUNDARY_PATTERNS: tuple[str, ...] = ()
 _BOUNDARY_CUE_ALTERNATION = "|".join(
     (
         *_BOUNDARY_NEGATION_TOKENS,
@@ -816,6 +811,15 @@ def _atomic_ranges(segment: MaterialSegment) -> tuple[tuple[int, int, bool], ...
     relative_start = 0
     for match in _ATOMIC_BOUNDARY_RE.finditer(segment.text):
         token = match.group(0).lstrip()
+        prefix = segment.text[: match.start()]
+        if prefix.rfind("<") > prefix.rfind(">") or prefix.rfind("《") > prefix.rfind("》"):
+            # Punctuation in an HTML tag (for example CSS declarations) is markup,
+            # never a semantic boundary.  The same applies inside a report title.
+            continue
+        if token.startswith(("：", ":")) and re.search(
+            r"(?:执业编号|证券代码|邮箱|电子邮箱|电话|传真)\s*$", prefix, re.I
+        ):
+            continue
         if token.startswith(("：", ":")) and re.fullmatch(
             r"\s*(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾|问|答)\s*[：:]\s*",
             segment.text[: match.end()],
@@ -831,6 +835,19 @@ def _atomic_ranges(segment: MaterialSegment) -> tuple[tuple[int, int, bool], ...
             # independently extracting only the first sentence.
             continue
         if token.startswith("，"):
+            left = re.sub(r"\s+", "", segment.text[relative_start : match.start()])
+            left = re.sub(
+                r"^(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾|问|答)[：:]",
+                "",
+                left,
+            )
+            if re.fullmatch(
+                r"(?:第[一二三四五六七八九十百\d]+个?问题|"
+                r"(?:分析|了解|说明|介绍|梳理|讨论|看|说)(?:完|一下)?(?:之后|以后|后))",
+                left,
+            ):
+                # A short discourse lead-in belongs to the proposition after it.
+                continue
             terminal = re.search(r"[。！？；?!]", segment.text[relative_start:])
             if terminal is not None and terminal.group(0) in {"？", "?"}:
                 # A finite obligation may be a compound question.  Connector commas inside
@@ -1385,7 +1402,13 @@ def build_relation_jsonl_prompt(
     )
 
 
-def _align_quote(quote: str, packet: EvidencePacket, source_rev: str) -> MaterialEvidence:
+def _align_quote(
+    quote: str,
+    packet: EvidencePacket,
+    source_rev: str,
+    *,
+    scope: tuple[int, int] | None = None,
+) -> MaterialEvidence:
     # Model transports commonly normalize whitespace and typographic quotes even when asked
     # to copy verbatim.  Fold only those presentation-equivalent characters for locating the
     # span, then persist the exact source slice below.  The one-to-one translation preserves
@@ -1405,11 +1428,18 @@ def _align_quote(quote: str, packet: EvidencePacket, source_rev: str) -> Materia
         }
     )
     needle = re.sub(r"\s+", "", quote).translate(quote_equivalents)
-    positions = [index for index, char in enumerate(packet.text) if not char.isspace()]
+    scope_start, scope_end = scope or (0, len(packet.text))
+    if not (0 <= scope_start <= scope_end <= len(packet.text)):
+        raise ValueError("invalid evidence alignment scope")
+    positions = [
+        index for index in range(scope_start, scope_end) if not packet.text[index].isspace()
+    ]
     compact = "".join(packet.text[index] for index in positions).translate(quote_equivalents)
     first = compact.find(needle)
-    if not needle or first < 0 or compact.find(needle, first + 1) >= 0:
-        raise ValueError("evidence quote is not uniquely aligned")
+    if not needle or first < 0:
+        raise ValueError("evidence quote was not found")
+    if compact.find(needle, first + 1) >= 0:
+        raise ValueError("evidence quote is not unique")
     start = positions[first]
     end = positions[first + len(needle) - 1] + 1
     return MaterialEvidence(
@@ -1420,6 +1450,30 @@ def _align_quote(quote: str, packet: EvidencePacket, source_rev: str) -> Materia
         start=start,
         end=end,
     )
+
+
+def _item_validation_reason(exc: TypeError | ValueError | ValidationError) -> str:
+    """Return a stable, non-sensitive reason for a discarded item attempt."""
+    if isinstance(exc, ValidationError):
+        return "schema"
+    if isinstance(exc, TypeError):
+        return "type_error"
+    message = str(exc)
+    known = {
+        "evidence quote was not found": "quote_not_found",
+        "evidence quote is not unique": "quote_not_unique",
+        "item evidence is outside its candidate obligation": "evidence_outside_slot",
+        "item does not reference a candidate obligation": "unknown_candidate_slot",
+        "item_id must be unique within a batch": "duplicate_item_id",
+        "item references an undeclared speaker": "undeclared_speaker",
+        "source extraction cannot emit system_synthesis": "invalid_perspective",
+        "item must be an object": "item_not_object",
+    }
+    if message in known:
+        return known[message]
+    if message.startswith("missing or empty "):
+        return "missing_required_field"
+    return "invalid_field"
 
 
 def _resolve_candidate_slot(
@@ -1505,7 +1559,12 @@ def _normalize_statement_role(value: object, *, text: str, quote: str) -> str:
 
 def _normalize_semantic_type(value: object, statement_role: str, *, text: str, quote: str) -> str:
     normalized = str(value or "unknown").strip().lower()
-    if normalized not in {"fact", "forecast", "opinion", "behavior", "unknown", "risk"}:
+    if (normalized, statement_role) in {("question", "question"), ("evidence", "evidence")}:
+        # These discourse roles are repeatedly copied into semantic_type even though
+        # statement_role already carries them.  Preserve the role and fail closed to
+        # an unknown semantic class instead of discarding the item.
+        normalized = "unknown"
+    elif normalized not in {"fact", "forecast", "opinion", "behavior", "unknown", "risk"}:
         return normalized
     if statement_role == "question":
         return "unknown"
@@ -1836,6 +1895,7 @@ def _packet_records(
     list[MaterialRelation],
     int,
     dict[str, str],
+    dict[str, tuple[str, ...]],
 ]:
     speakers: list[MaterialSpeaker] = list(speaker_registry)
     speaker_map: dict[str, str] = {speaker.speaker_id: speaker.speaker_id for speaker in speakers}
@@ -1879,8 +1939,11 @@ def _packet_records(
 
     items: list[MaterialItem] = []
     item_map: dict[str, str] = {}
+    item_failures_by_slot: dict[str, list[str]] = {}
     consumed_local_item_ids: set[str] = set()
     for raw in payload["items"]:
+        requested_slot_id = str(raw.get("candidate_slot_id") or "") if isinstance(raw, dict) else ""
+        resolved_slot_id = requested_slot_id
         try:
             if not isinstance(raw, dict):
                 raise ValueError("item must be an object")
@@ -1889,9 +1952,7 @@ def _packet_records(
                 raise ValueError("item_id must be unique within a batch")
             text = _required_text(raw.get("text"), "item text")
             perspective = _required_text(raw.get("perspective"), "perspective")
-            implicit_quoted_speaker = perspective == "quoted_other" and not raw.get(
-                "speaker_ref"
-            )
+            implicit_quoted_speaker = perspective == "quoted_other" and not raw.get("speaker_ref")
             if implicit_quoted_speaker:
                 speaker_ref = "quoted_other"
             else:
@@ -1899,8 +1960,23 @@ def _packet_records(
             if perspective == "system_synthesis":
                 raise ValueError("source extraction cannot emit system_synthesis")
             quote = _required_text(raw.get("evidence_quote"), "evidence_quote")
-            evidence = _align_quote(quote, packet, source_rev)
-            _, slot = _resolve_candidate_slot(
+            requested_slot = next(
+                (
+                    candidate
+                    for candidate in candidate_slots
+                    if candidate.candidate_slot_id == requested_slot_id
+                ),
+                None,
+            )
+            evidence = _align_quote(
+                quote,
+                packet,
+                source_rev,
+                scope=(requested_slot.start, requested_slot.end)
+                if requested_slot is not None
+                else None,
+            )
+            resolved_slot_id, slot = _resolve_candidate_slot(
                 str(raw.get("candidate_slot_id") or ""), candidate_slots, evidence
             )
             if candidate_slots and slot is None:
@@ -2061,8 +2137,13 @@ def _packet_records(
                 evidence=(evidence,),
                 unknown_fields=unknown_fields,
             )
-        except (TypeError, ValueError, ValidationError):
+        except (TypeError, ValueError, ValidationError) as exc:
             discarded += 1
+            failure_slot_id = resolved_slot_id or requested_slot_id
+            if failure_slot_id:
+                item_failures_by_slot.setdefault(failure_slot_id, []).append(
+                    _item_validation_reason(exc)
+                )
             continue
         item_map[local_id] = item_id
         consumed_local_item_ids.add(local_id)
@@ -2071,7 +2152,17 @@ def _packet_records(
     relations, relation_discarded = _packet_relations(
         payload["relations"], packet, source_rev, item_map
     )
-    return speakers, items, relations, discarded + relation_discarded, item_map
+    return (
+        speakers,
+        items,
+        relations,
+        discarded + relation_discarded,
+        item_map,
+        {
+            slot_id: tuple(dict.fromkeys(reasons))
+            for slot_id, reasons in item_failures_by_slot.items()
+        },
+    )
 
 
 def _packet_relations(
@@ -2121,7 +2212,9 @@ def _validate_atomic_coverage(
     packet_items: list[MaterialItem],
     item_id_map: dict[str, str],
     slots: tuple[CandidateSlot, ...],
+    item_failures_by_slot: dict[str, tuple[str, ...]] | None = None,
 ) -> tuple[list[CoverageLedgerEntry], bool]:
+    item_failures_by_slot = item_failures_by_slot or {}
     slot_by_id = {slot.candidate_slot_id: slot for slot in slots}
     item_by_id = {item.item_id: item for item in packet_items}
     item_refs_by_slot: dict[str, list[str]] = {}
@@ -2165,6 +2258,10 @@ def _validate_atomic_coverage(
             declared_status = "extracted"
             if raw_attempts > len(slot_item_refs):
                 reasons.append("discarded_item_attempt")
+                reasons.extend(
+                    f"item_validation:{reason}"
+                    for reason in item_failures_by_slot.get(slot.candidate_slot_id, ())
+                )
         elif slot_item_refs and records:
             incomplete = True
             declared_status = "partial"
@@ -2173,6 +2270,10 @@ def _validate_atomic_coverage(
             incomplete = True
             declared_status = "partial"
             reasons.append("item_failed_validation")
+            reasons.extend(
+                f"item_validation:{reason}"
+                for reason in item_failures_by_slot.get(slot.candidate_slot_id, ())
+            )
         elif len(records) != 1:
             incomplete = True
             declared_status = "partial"
@@ -2373,6 +2474,7 @@ def extract_material_understanding(
                         _,
                         discarded,
                         item_id_map,
+                        item_failures_by_slot,
                     ) = _packet_records(
                         parsed,
                         packet,
@@ -2386,7 +2488,11 @@ def extract_material_understanding(
                     if parsed["items"] and not batch_items:
                         raise ValueError("all atomic items failed evidence validation")
                     batch_ledger, coverage_incomplete = _validate_atomic_coverage(
-                        parsed, batch_items, item_id_map, batch_slots
+                        parsed,
+                        batch_items,
+                        item_id_map,
+                        batch_slots,
+                        item_failures_by_slot,
                     )
                     slot_ledger.extend(batch_ledger)
                     if salvaged:
@@ -2543,6 +2649,7 @@ def extract_material_understanding(
                     _,
                     discarded,
                     item_id_map,
+                    _,
                 ) = _packet_records(
                     parsed,
                     packet,
@@ -2764,9 +2871,14 @@ def extract_material_understanding(
             if isinstance(raw, LlmResponse):
                 diagnostics.update(raw.diagnostics)
             parsed, salvaged = _parse_response(raw)
-            packet_speakers, packet_items, packet_relations, discarded, _ = _packet_records(
-                parsed, packet, document.source_rev, material_type=chosen_type
-            )
+            (
+                packet_speakers,
+                packet_items,
+                packet_relations,
+                discarded,
+                _,
+                _,
+            ) = _packet_records(parsed, packet, document.source_rev, material_type=chosen_type)
             if discarded:
                 diagnostics["discarded_records"] = discarded
             if parsed["items"] and not packet_items:
