@@ -1,11 +1,11 @@
 # 11 · 获准后的真实模型有界试验与单文档消费
 
 Status: needs-info
-Execution: 范围已由许永立确认；r2 非表格金标及 267 条候选逐条裁定均已由 xyl 签认并正式冻结；两份来源的有界候选诊断已执行（本轮 48 次调用）；只读 query 均返回 CS_NOT_PUBLISHED，delivery/context_use 未发生；人工门已解除但质量门未通过，material_items 原子覆盖不足、relations 无候选，尚未发布或进入主线消费，任务整体未闭环
+Execution: 范围已由许永立确认；r2 非表格金标及 267 条候选逐条裁定均已由 xyl 签认并正式冻结；v10 item-only 复验在 10 个完整响应后因 1 个 partial packet 早停，另有 1 个请求在途被中止；该 partial 的相关研究标题硬 question 误报已在 v25 修复，v26 继续修复跨命题归属、风险话语角色、复合交易值、unknown_fields 及 value 评分类型错误；原始行业响应零调用回放为 completed、严格全字段由 0 升至 50%；只读 query 仍为 CS_NOT_PUBLISHED，delivery/context_use 未发生，第四样本、relations、发布和主线消费仍未执行，任务整体未闭环
 Type: task
 Plan: W4/W5 真实消费；R2-S4/S5 的部分验证
-Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标绑定和 material_items 原子覆盖未通过，relations 无候选；质量门、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
-Real model calls: 116（既有 68 + 本轮 r2 48；M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
+Blocked by: 第 2—3 页及图像表格未覆盖；Claims 主体/期间/指标绑定尚未重新达门；material_items 的已观测 partial 已修复但第四样本未完成真实复验，relations 未测；质量门、候选发布、M_main 消费及报告验证尚未完成；09/10/阶段证据仍需闭合
+Real model calls: 127 个请求已启动（既有 116 + v10 完整响应 10 + 中止时在途 1；在途请求是否计费未知；M_main 0；自动重试 0；2026-10-04 已授权不设调用总额上限；禁止死循环）
 Production database access: 0
 
 > 2026-10-08 后续：针对本轮质量阻断的实现修复与零模型冻结已在
@@ -453,3 +453,97 @@ context_use=`not_used`、M_main 调用 0。
 仍为 0 次调用；完整三角色候选名册、发布、query/delivery/context_use 与最终人工裁定仍待后续有界
 任务。详见 [16 · r5 零模型重放与局部依赖修复](16-r5-offline-replay-remediation.md)及
 `evidence/17-r5-remediation-freeze-20261008/freeze-manifest.json`。
+
+### 2026-10-09 · v10 早停、根因更正与 material-semantics-25 零调用修复
+
+经 owner `xyl` 明确授权，v10 item-only development round 按 42 次上限启动。前三个样本完成
+10 次调用后，`dev-industry-qa-report` 出现 1 个 partial packet，命中冻结的
+`any_failed_or_partial_packet` 早停条件；剩余铜箔样本未继续执行。中止时另有 1 个请求在途，未取得
+响应且 provider 是否计费未知。relations、holdout、生产库和 M_main 均未触碰。
+
+初步检查曾将问题归因于 `semantic_type=risk`，但随后使用同一解析函数、同一 4 槽和同一 speaker
+registry 重放原始响应，证明该字段已被确定性归一化为 `forecast`，item 本身校验成功。真实失败槽为
+`slot_2aefa293ca3951f8`：相关研究元数据中的研报标题
+`《化工Q3 复盘：历史表现几何？》` 含问号，旧信号分类把它误作硬 `question`；模型正确返回
+`metadata_only` 后，覆盖校验因虚假的硬信号未满足而将槽标为 partial。v10 审计记录已追加更正，
+没有覆写原始响应。
+
+`material-semantics-25` 在推导硬语义信号时屏蔽 `《……》` 内的书名/研报标题文本，但候选槽仍保留
+完整原文用于 provenance；真实正文问句仍产生硬 question。该规则不包含样本词典，并把 v24 加入
+历史产物兼容表。两条回归测试分别锁定“标题问号不产生硬义务”和“metadata_only 可完整终结槽位”。
+
+用 v10 保存的 4 份行业问答原始响应做零模型反事实时，只对来源 packet/locator/start/end/text
+完全相同的槽位重绑定新 ID：槽位总数保持 52，仅一个槽 ID 因信号变化而改变；结果由
+`48 extracted + 3 no_supported_item + 1 partial` 变为 `48 extracted + 4 no_supported_item`，packet
+由 partial 变为 completed，问题槽为 0。四份开发样本的确定性槽数仍为 65/52/11/487，16 槽批次
+计划仍为 42 次，冻结金标严格覆盖损失为 0。
+
+验证结果：material/relations 联合测试 106 passed；全部 corpus 测试 1326 passed、17 skipped、
+2 个既有外部状态失败（黄金库 Recall 0/20；reader-pdf-11 与测试期待 reader-pdf-10 不一致）；Ruff、
+目标 Pyright、stage-1 import smoke、symbol closure 和 v24 历史身份校验通过。stage-2 import smoke
+仍仅缺可选 `harbor`/`pandas`。为保持零新增调用，本步未运行会发起真实请求的 preflight。
+
+冻结验证见
+[v25 fix validation](../../corpus-evidence-pipeline/v25-convergence/fix-validation.json)。本步证明已观测
+partial 的上游信号误报已修复，但不把未执行的第四样本或未测 relations 写成通过，也不授权发布。
+
+### 2026-10-09 · material-semantics-26 归属、字段与评分契约修复
+
+在不新增模型调用的前提下，继续拆解 v10 前三份已落盘结果的字段失败。确认并修复四个通用问题：
+
+- 粗槽后部出现 “CEO bought” 时，旧 quoted-frame 检测会把槽前部的第一人称交易误归为
+  `quoted_other`；v26 将检测限制到当前证据及其后 24 个字符的紧邻归属尾句。
+- 编号问答结束后没有下一个编号时，文末独立风险提示会继承为 `speech_role=answer`；v26 保留模型
+  明确给出的 standalone risk `statement`。
+- 复合交易只保留第一条股票腿，或遗漏 call/put 的数量、执行价和权利金；确定性 value 解析现保留
+  share/call/put 各腿。
+- `material-items-validation-v5` 会对几乎所有无数值命题自动追加 `time/value/external_verification`，
+  即使这些字段不适用。v6 不再合成这些泛化轴，改为按 question、behavior、risk、quoted fact、
+  summary 和 mixed turn 生成可行动的细粒度 unknown；模型明确声明的 unknown 仍原样保留，因此
+  publication 的 suspected 语义不丢失。
+
+开发评分器另有独立类型错误：金标 value 为 `{raw, normalized}`，预测 value 为标量，旧实现直接把
+整个字典字符串化，导致所有有值项必失败。修复后预测值可匹配冻结的 raw 或 normalized 任一表示；
+缺一条腿的复合值仍失败，金标、阈值均未修改。
+
+唯一保留原始响应的行业样本严格零调用回放结果：packet complete、attribution 100%、
+critical_all_fields 由 0 提升到 50%。公司与交易因为 completed packet 当时未保存 raw，只能做明确
+标注的工件反事实，不能冒充原始响应；其 attribution 均为 100%，critical_all_fields 分别估算为
+50% 和 75%。剩余差异已收敛到复合金标与原子多 item 的匹配、定性预测的 numeric value 适用性、
+期权到期月份的 value 表示，继续修改抽取词典不能解决这些契约问题。
+
+验证结果：material/relations 相关测试 111 passed；全部 corpus 测试 1331 passed、17 skipped、
+仅保留两项既有外部状态失败；Ruff、目标 Pyright、stage-1 import smoke、symbol closure 和 diff check
+通过。冻结槽数仍为 65/52/11/487，计划调用仍为 42，严格金标覆盖损失为 0。
+
+证据见 [v26 fix validation](../../corpus-evidence-pipeline/v26-convergence/fix-validation.json)。在下一次
+真实调用前，应先冻结“一个复合金标如何由多个原子 item 共同满足”的确定性评分规则；随后只验证
+未完成的铜箔样本及 relations，不重复前三个样本。
+
+### 2026-10-09 · 架构回溯后的 P0-A 零调用闭环
+
+继续修复前对历史工件和真实开发 runner 做了只读审计，发现并关闭三个工程缺口：
+
+- v14—v21 已经写入 `relation_candidate_set_id` 及结构化槽位，但 v26 兼容表未登记，导致现存 139 份
+  工件副本（109 个唯一 run_id）全部身份校验失败；现已补齐版本 shape，并用现存工件复核为 139/139
+  通过。
+- development runner 过去只为 failed/partial packet 保存 raw response，导致 v10 completed 的公司和
+  交易响应无法严格重放；现改为请求前持久化 running attempt，响应返回后立即保存全部 raw 和 terminal
+  记录，未分类异常/中止记为 outcome_unknown，同一 round/sample 有既存审计时请求前拒绝复跑。
+- 冻结 stop condition 过去只在整轮结束后评分，不能阻止下一样本已经在途；现改为每个样本完成后立即
+  检查 partial/failed 和 metric floor，命中即不启动下一样本。
+
+同时将 spec 的 item 协议从过期 v4 校正为 v5 + validation v6，并把 report 标记为历史方案基线。本步
+模型调用 0、M_main 0、生产/holdout 访问 0，没有修改金标、阈值或发布状态。后续任务和 extractor
+最终去留门统一记录在 [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)。
+
+随后完成 `material-development-scorer-3` 的复合金标到原子 item 评分规则：最多四个同一语义/话语/
+归属坐标的原子 item 可共同满足一个复合目标；mixed polarity、复合 value、unknown_fields 并集和 relation
+endpoint 映射均有确定性规则及反例测试。该变更不修改冻结金标或阈值，仍不授权真实调用；期权到期月
+等 value 表示差异继续作为失败，不用宽松包含匹配掩盖。
+
+容量侧新增 `material-semantics-27 / material-slot-batching-v2`：候选槽及其原文范围不变，普通原子槽按
+确定性硬信号数预留输出容量，summary/混合话轮仍保守预留四条。相同 16 槽配置仍复现 42 次计划；
+显式使用 `max_slots=48/max_items=64` 时，四样本 item 计划为 17 次，未完成铜箔由 32 次降为 12 次，
+严格金标覆盖不变。该结果只是零调用容量计划，尚未证明 48 槽批次的真实模型完整性，必须由下一门的
+单次有界 copper 复验验证，不能据此宣称成本收益已经实现。

@@ -1,0 +1,104 @@
+{
+  "result_version": "material-semantics-26-fix-validation-1",
+  "validated_at": "2026-10-09",
+  "extractor_version": "material-semantics-26",
+  "items_validation_version": "material-items-validation-v6",
+  "model_calls": 0,
+  "gold_changes": 0,
+  "threshold_changes": 0,
+  "production_fixes": [
+    {
+      "problem": "a later CEO quotation inside the same coarse slot changed an earlier first-person trade from source_explicit to quoted_other",
+      "fix": "quoted-frame detection is bounded to the evidence and a 24-character trailing attribution window"
+    },
+    {
+      "problem": "a document-level risk section after a numbered Q&A inherited speech_role=answer",
+      "fix": "an explicitly emitted standalone risk statement is not overwritten by earlier numbered-question context"
+    },
+    {
+      "problem": "compound trade actions retained only the first share leg or omitted option values",
+      "fix": "canonical value extraction retains share, call and put legs"
+    },
+    {
+      "problem": "generic unknown axes were synthesized for inapplicable fields on nearly every item",
+      "fix": "validation v6 preserves extractor-declared unknowns but only derives specific question, behavior, risk, quoted-fact, summary and mixed-turn unknowns"
+    }
+  ],
+  "scorer_fix": {
+    "problem": "frozen gold values are objects with raw and normalized representations, while predictions are scalars; the scorer stringified the whole object",
+    "fix": "a prediction may match either the frozen raw or normalized representation",
+    "guard": "an incomplete compound value still fails"
+  },
+  "strict_saved_response_replay": {
+    "sample_id": "dev-industry-qa-report",
+    "source": "four original v10 raw responses",
+    "run_id": "e2167ac47e87faf990f3eb35c056e3050f6b869fd48843d3fc34ff512cc83ad3",
+    "complete": true,
+    "attribution_target_accuracy": 1.0,
+    "critical_all_fields_accuracy_before": 0.0,
+    "critical_all_fields_accuracy_after": 0.5,
+    "remaining_differences": [
+      "compound gold answer expects mixed polarity while atomic output contains separate affirmed and negated items",
+      "gold marks numeric_value unknown for a qualitative forecast while the current contract treats a numeric value as inapplicable"
+    ]
+  },
+  "artifact_counterfactual": {
+    "scope": "company and trade raw responses were not retained because their packets completed; these figures revalidate saved accepted items and apply protocol-mandated source attribution to behavior items",
+    "not_claimed_as_raw_response_replay": true,
+    "company": {
+      "item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy": 1.0,
+      "critical_all_fields_accuracy_before": 0.0,
+      "critical_all_fields_accuracy_after": 0.5
+    },
+    "trade": {
+      "item_recall": 1.0,
+      "semantic_target_accuracy": 1.0,
+      "attribution_target_accuracy_before": 0.75,
+      "attribution_target_accuracy_after": 1.0,
+      "critical_all_fields_accuracy_before": 0.0,
+      "critical_all_fields_accuracy_after": 0.75
+    }
+  },
+  "remaining_contract_differences": [
+    "compound frozen gold items versus multiple atomic predicted items",
+    "qualitative forecast numeric_value applicability",
+    "option expiry representation inside a compound value"
+  ],
+  "deterministic_probe": {
+    "strict_frozen_gold_coverage_loss": 0,
+    "planned_calls_slots16_items64": 42,
+    "candidate_slots_by_sample": {
+      "dev-company-report": 65,
+      "dev-industry-qa-report": 52,
+      "dev-personal-trade-review": 11,
+      "dev-expert-call-copper-foil": 487
+    }
+  },
+  "verification": {
+    "material_and_relations": "111 passed",
+    "corpus_suite": "1331 passed, 17 skipped, 2 known baseline failures",
+    "known_baseline_failures": [
+      "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full: corpus state has 0/20 recall",
+      "tests/test_corpus_preparation_readers.py::test_dev_materials_smoke_units_and_pages: environment has reader-pdf-11 while test expects reader-pdf-10"
+    ],
+    "ruff": "passed",
+    "targeted_pyright": "0 errors",
+    "import_smoke_stage1": "387/387",
+    "symbol_closure": "0 missing across 485 files",
+    "diff_check": "passed"
+  },
+  "files": {
+    "plugins/corpus/material_semantics.py": "a775b50e737bf187efe32bac5baaeded6b3201c2b42e9c244ff0137e9042db72",
+    "tests/test_corpus_material_semantics.py": "3731b72d0c02c4995b607f18f4b4f9e4605589ed77e5fcb89a137fd81152ab08",
+    "tests/test_corpus_material_development.py": "1cd9f6d7ba627856d1119a25d7d580dff82b46a69dd33e0a00554d2169d3520e",
+    ".scratch/corpus-evidence-pipeline/run_material_development.py": "639bd0744a01d2a3ce8f18330c802030a0a6562c8a6878a866d397aef60704c5"
+  },
+  "decision": {
+    "fix_validated": true,
+    "authorize_new_model_calls": false,
+    "freeze_as_business_accepted": false,
+    "next_step": "define a deterministic compound-gold-to-atomic-item evaluation rule before spending another model call; then validate only the unfinished copper sample and relations"
+  }
+}

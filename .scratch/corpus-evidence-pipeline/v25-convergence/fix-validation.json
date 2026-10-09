@@ -1,0 +1,76 @@
+{
+  "result_version": "material-semantics-25-fix-validation-1",
+  "validated_at": "2026-10-09",
+  "extractor_version": "material-semantics-25",
+  "model_calls": 0,
+  "gold_changes": 0,
+  "threshold_changes": 0,
+  "problem": {
+    "sample_id": "dev-industry-qa-report",
+    "old_candidate_slot_id": "slot_2aefa293ca3951f8",
+    "cause": "a question mark inside a cited report title was treated as a hard question obligation in a related-research metadata block",
+    "rejected_hypothesis": "semantic_type=risk caused item validation failure; same-stack replay proved it normalized to forecast and validated"
+  },
+  "change": {
+    "rule": "mask text inside Chinese book-title brackets while deriving semantic signals, while retaining the original title in the candidate slot for provenance",
+    "scope": "generic bibliographic titles; no sample-specific lexicon",
+    "historical_compatibility": "material-semantics-24 added to readable historical payload shapes"
+  },
+  "zero_call_replay": {
+    "source": "four saved v10 raw responses for dev-industry-qa-report",
+    "rebinding": "candidate_slot_id rebound only when packet, locator, start, end and text were identical",
+    "old_slot_count": 52,
+    "new_slot_count": 52,
+    "changed_slot_ids": [
+      {
+        "old": "slot_2aefa293ca3951f8",
+        "new": "slot_c06aa5754b84db65"
+      }
+    ],
+    "old_packet_status": "partial",
+    "new_packet_status": "completed",
+    "new_slot_status": {
+      "extracted": 48,
+      "no_supported_item": 4
+    },
+    "problem_slots": 0,
+    "new_material_run_id": "d027ef9e8162817d0716f99ad5b64201648370a8d233815fe2c0fcc41c740d84"
+  },
+  "deterministic_probe": {
+    "strict_frozen_gold_coverage_loss": 0,
+    "planned_calls_slots16_items64": 42,
+    "candidate_slots_by_sample": {
+      "dev-company-report": 65,
+      "dev-industry-qa-report": 52,
+      "dev-personal-trade-review": 11,
+      "dev-expert-call-copper-foil": 487
+    }
+  },
+  "verification": {
+    "targeted_regressions": "2 passed",
+    "material_relations": "106 passed",
+    "corpus_suite": "1326 passed, 17 skipped, 2 known baseline failures",
+    "known_baseline_failures": [
+      "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full: corpus state has 0/20 recall",
+      "tests/test_corpus_preparation_readers.py::test_dev_materials_smoke_units_and_pages: environment has reader-pdf-11 while test expects reader-pdf-10"
+    ],
+    "ruff": "passed",
+    "targeted_pyright": "0 errors",
+    "import_smoke_stage1": "387/387",
+    "import_smoke_stage2": "433/435; missing optional harbor and pandas",
+    "symbol_closure": "0 missing across 485 files",
+    "historical_v24_identity": "verified",
+    "diff_check": "passed",
+    "preflight": "not run because it makes a new model call"
+  },
+  "files": {
+    "plugins/corpus/material_semantics.py": "7a2320d489400294c9d4cf636a93e8451a26809003877b0752135e7873058800",
+    "tests/test_corpus_material_semantics.py": "b819d544574db1649889368f5ad2ae0fb93d558e1ac4415c39be3f4397125b4b",
+    ".scratch/corpus-evidence-pipeline/v24-convergence/v10-early-stop-result.json": "a281ec589a3a4d84f09be64a7eb0386845095cbe35cc9b9f91d1273900252f3e"
+  },
+  "decision": {
+    "fix_validated": true,
+    "freeze_as_business_accepted": false,
+    "reason": "the stopped v10 round did not execute the fourth sample and did not measure relations; this validation proves the observed partial cause is fixed without a new call, not full business acceptance"
+  }
+}

@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-08
-- 状态：01—08 已完成本地功能验收；09 的 react/tui 零模型回放及两项 P2 修复已通过，待复验签认；10 已签认阈值、冻结 E01—E12 部分关键检查点，r2 非表格真实开发金标已由 xyl 签认并正式冻结（20/48/24），两份来源已按有限预算完成候选诊断抽取但 material_items 原子覆盖未通过，质量门未通过；11 已完成本轮有界候选执行，关系依赖被 fail-closed 阻断，尚未发布或进入 M_main，任务整体未闭环。
+- 状态：01—08 已完成本地功能验收；09 的 react/tui 零模型回放及两项 P2 修复已通过，待复验签认；10 已签认阈值，r2 非表格真实开发金标和 267 条候选裁定均已由 xyl 正式冻结；11 的 v10 item-only 复验在 10 个完整响应后早停，v25/v26 已完成零调用修复，但第四样本、Claims 重新达门、relations、发布及 M_main 正向消费均未完成，任务整体未闭环。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -50,10 +50,10 @@
 | 11 | [获准后的真实模型有界试验](issues/11-bounded-live-trial.md) | 09、10、独立授权 | W4/W5 真实消费；R2-S4/S5 部分 |
 
 01—08 已交付并完成本地功能验收；09 已完成零模型产品回放及遗漏修复，但仍待复验签认；10 的
-评分实现与阈值签认已验收；非表格真实开发金标已形成满足最低数量的待审草案，但逐条人工签核、
-争议裁定与追加式正式冻结仍缺。11 的来源范围和真实模型调用已获用户授权并实际
-执行，当前只形成未发布候选：Claims 仅完成 preflight，R2 仅覆盖第 1 页叙事，M_main 调用为 0。
-W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，不能通过候选抽取成功自动宣布完成。
+评分实现、阈值、非表格真实开发金标及 267 条候选人工裁定均已签认并追加冻结。11 已执行多轮有界
+真实开发试验，当前仍只有未发布候选：Claims 绑定尚未重新达门，R2 第四开发样本和 relations 未完成，
+query 只有 `CS_NOT_PUBLISHED` 负向观察，delivery/context_use 未发生，M_main 调用为 0。W6 的独立
+留出/多模型比较、W7 的生产化仍须另行立项，不能通过候选抽取成功自动宣布完成。
 
 ## 4. 01 已冻结的实现决议
 
@@ -148,7 +148,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 |---|---|---|
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
-| R2 items | `material-atomic-jsonl-v4` | speakers/items only，禁止隐式 relations |
+| R2 items | `material-atomic-jsonl-v5` | speakers/items only；一个候选槽最多四个原子 item，禁止隐式 relations；校验版本 `material-items-validation-v6` |
 | R2 relations | `material-relations-jsonl-v1` | 只接收固定 items validation 版本和端点集合 |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持

@@ -1,0 +1,143 @@
+{
+  "schema_version": "claims-binding-zero-call-audit-1",
+  "status": "completed_gate_not_passed",
+  "audited_at": "2026-10-09",
+  "scope": "signed r2 Claims candidates against the frozen 20-target Claims gold set",
+  "model_calls": 0,
+  "gold_changes": 0,
+  "threshold_changes": 0,
+  "sources": {
+    "signed_candidate_adjudications": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/candidate-adjudications.signed.json",
+      "sha256": "31e75f9bd7e10f12197ab99907857f2b649dcbf830811f6916e6bba57954b2a5"
+    },
+    "frozen_gold": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+      "sha256": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2"
+    }
+  },
+  "signed_baseline": {
+    "candidate_count": 132,
+    "judgements": {
+      "matched": 15,
+      "correct_extra": 22,
+      "incorrect": 94,
+      "duplicate": 1
+    },
+    "candidate_precision": {
+      "numerator": 37,
+      "denominator": 132,
+      "decimal": 0.280303
+    },
+    "target_recall": {
+      "numerator": 15,
+      "denominator": 20,
+      "decimal": 0.75
+    }
+  },
+  "incorrect_candidate_failure_families": {
+    "note": "Family counts overlap because one candidate may violate several coordinates.",
+    "subject_binding": 67,
+    "metric_binding": 94,
+    "period_binding": 57,
+    "value_or_unit_binding": 63,
+    "role_or_overgeneration": 81
+  },
+  "reason_code_counts": {
+    "metric_not_registered": 90,
+    "source_qualified_context_requires_review": 71,
+    "subject_ambiguous": 67,
+    "subject_not_anchored": 67,
+    "subject_missing": 67,
+    "period_missing": 51,
+    "metric_missing": 48,
+    "unit_missing": 44,
+    "value_missing": 42,
+    "conflicting_fact_kinds": 36,
+    "period_ambiguous": 21,
+    "unit_unknown": 16,
+    "opinion_value_projection": 9,
+    "value_not_in_evidence": 6,
+    "period_unanchored": 4,
+    "metric_unit_mismatch": 4,
+    "value_unit_pair_not_in_quote": 3,
+    "atomic_evidence_mismatch": 2,
+    "period_not_in_packet": 2,
+    "qualifier_definition_unverified": 1
+  },
+  "coordinate_observations": {
+    "document_subject_inheritance": {
+      "affected_incorrect_candidates": 67,
+      "counterfactual": "Current evidence-pipeline-8 can fill the omitted company subject from trusted document metadata and records subject_basis=document_metadata.",
+      "limitation": "All 67 also carry at least one non-subject blocking reason; subject inheritance alone cannot turn any of them into a demonstrated passing candidate."
+    },
+    "parallel_or_non_atomic_values": {
+      "value_unit_pair_not_in_quote": 3,
+      "atomic_evidence_mismatch": 2,
+      "counterfactual": "The current Claims contract requires one subject × metric × period × value/unit coordinate and instructs parallel values to split.",
+      "limitation": "A prompt/schema repair changes future extraction behavior and cannot manufacture the missing split records in this signed baseline."
+    },
+    "period_binding": {
+      "affected_incorrect_candidates": 57,
+      "missing": 51,
+      "ambiguous": 21,
+      "unanchored": 4,
+      "not_in_packet": 2,
+      "limitation": "Counts overlap; no current deterministic rule may guess an absent or unanchored year."
+    }
+  },
+  "unmatched_gold_targets": [
+    {
+      "record_id": "NT-C03",
+      "quote": "归母 237.40 亿",
+      "subject": "工业富联",
+      "metric": "parent_net_profit",
+      "period": "2026H1",
+      "value": "237.4",
+      "unit": "亿元"
+    },
+    {
+      "record_id": "NT-C14",
+      "quote": "27年5万到10万个水平",
+      "subject": "光模块行业",
+      "metric": "CPO_shipments",
+      "period": "2027",
+      "value": "50000-100000",
+      "unit": "个"
+    },
+    {
+      "record_id": "NT-C15",
+      "quote": "我们3.2T预计将在27年三季度左右实现批量供应",
+      "subject": "材料所述公司",
+      "metric": "3.2T_batch_supply",
+      "period": "2027Q3",
+      "value": "batch_supply",
+      "unit": "status"
+    },
+    {
+      "record_id": "NT-C19",
+      "quote": "到28年预计增长至300至500万只",
+      "subject": "2.4T产品（厂商口径不明）",
+      "metric": "2.4T_shipments",
+      "period": "2028",
+      "value": "3000000-5000000",
+      "unit": "只"
+    },
+    {
+      "record_id": "NT-C20",
+      "quote": "今年下半年预计将有2到3个新客户开始贡献收入",
+      "subject": "材料所述公司",
+      "metric": "new_revenue_contributing_customers",
+      "period": "2026H2",
+      "value": "2-3",
+      "unit": "个"
+    }
+  ],
+  "decision": {
+    "zero_call_audit_complete": true,
+    "claims_quality_gate_passed": false,
+    "current_repairs_live_validated": false,
+    "authorize_publication": false,
+    "required_next_evidence": "After the unified attempt ledger is complete, run one minimal Claims-only proof over the frozen two-source/24-unit scope, adjudicating only changed, unmatched or sampled disputed records; do not rebuild the gold set."
+  }
+}

@@ -61,7 +61,7 @@ TASK_BOARD_TOOL_NAMES = [
 
 BUSINESS_TOOL_NAMES = [
     "investment_context",
-    "investment_input_request",
+    "request_investment_input",
     "investment_position_sizing",
     "investment_strategy_lint",
 ]
@@ -72,7 +72,7 @@ BUSINESS_CONTEXT_POLICY = """BUSINESS CONTEXT POLICY:
 - Use investment_position_sizing for personalised sizing. Its capital, plan prices and limits are server-bound.
 - Validate strategy cards with investment_strategy_lint; the raw strategy_lint is not a business-Run gate.
 - When you are about to give a price/position conclusion but required user facts are missing, call
-  investment_input_request(use_case, reason) once; the system asks the user and the server derives the
+  request_investment_input(use_case, reason) once; the system asks the user and the server derives the
   missing fields. Do not invent those fields, and do not request facts for pure material reading.
 - If a required field is missing or pending, explain what is missing and do not invent a numeric result."""
 
@@ -93,8 +93,8 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
     agent_tools.extend(TASK_BOARD_TOOL_NAMES)
     # 缺料表达对所有研究 Run 可见（2026-10-08 裁决）：模型只表达意图，
     # 是否真的缺料由服务端按用途裁决；纯材料阅读会被服务端判为不缺料。
-    if "investment_input_request" not in agent_tools:
-        agent_tools.append("investment_input_request")
+    if "request_investment_input" not in agent_tools:
+        agent_tools.append("request_investment_input")
     return {
         "agent": {
             "agent_tools": agent_tools,

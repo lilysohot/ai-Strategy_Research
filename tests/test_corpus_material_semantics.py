@@ -8,13 +8,15 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from plugins.corpus.claims_detail import triage_block_detail
-from plugins.corpus.evidence import EvidencePacket, split_spans
+from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
     CandidateSlot,
     MaterialEvidence,
     MaterialItem,
+    MaterialRun,
     _align_quote,
+    _canonical_value,
     _normalize_semantic_type,
     _normalize_statement_role,
     _packet_records,
@@ -104,6 +106,68 @@ def test_atomic_slots_keep_colon_context_and_short_lead_ins(tmp_path: Path) -> N
         )
         == "unknown"
     )
+
+
+def test_report_titles_do_not_create_hard_question_obligations(tmp_path: Path) -> None:
+    source = tmp_path / "related-research.md"
+    source.write_text(
+        "产品价格跌至底部，是否意味着买点出现？\n"
+        "相关研究\n"
+        "•《化工Q3复盘：历史表现几何？》2026-07-28\n"
+        "•《景气投资：十问十答》2026-08-10\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document,
+        build_material_structure(evidence_run.document),
+    )
+
+    source_question = next(slot for slot in slots if "买点出现" in slot.text)
+    related_research = next(slot for slot in slots if "相关研究" in slot.text)
+
+    assert "question" in source_question.signal_types
+    assert "question" not in related_research.signal_types
+
+
+def test_report_title_question_mark_accepts_metadata_terminal(tmp_path: Path) -> None:
+    source = tmp_path / "related-research-only.md"
+    source.write_text(
+        "相关研究\n"
+        "•《化工Q3复盘：历史表现几何？》2026-07-28\n"
+        "•《价值凸显，拥抱景气》2026-07-16\n"
+        "research.example.com\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document,
+        build_material_structure(evidence_run.document),
+    )
+    records = [
+        {
+            "record_type": "coverage",
+            "candidate_slot_id": slot.candidate_slot_id,
+            "status": "no_supported_item",
+            "reason_code": "metadata_only",
+        }
+        for slot in slots
+    ]
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert slots
+    assert all("question" not in slot.signal_types for slot in slots)
+    assert result.packet_runs[0].status == "completed"
+    assert result.summary()["complete"] is True
 
 
 def test_discarded_item_attempt_exposes_stable_quote_failure_reason() -> None:
@@ -327,6 +391,20 @@ def test_material_semantics_preserve_attribution_conditions_and_quotes(tmp_path:
     for item in result.items:
         assert item.evidence[0].source_rev == evidence_run.document.source_rev
         assert item.evidence[0].quote in evidence_run.document.packets[0].text
+
+
+def test_structured_v14_through_v26_runs_preserve_historical_identity(tmp_path: Path) -> None:
+    evidence_run = build_evidence_run(_source(tmp_path), packet_chars=1000)
+    current = extract_material_understanding(evidence_run, llm=_response, max_calls=1)
+
+    for version_number in range(14, 27):
+        payload = current.model_dump(mode="json")
+        payload["extractor_version"] = f"material-semantics-{version_number}"
+        identity_payload = {key: value for key, value in payload.items() if key != "run_id"}
+        payload["run_id"] = fingerprint(identity_payload)
+
+        historical = MaterialRun.model_validate(payload)
+        historical.verify_identity()
 
 
 def test_bad_speaker_reference_discards_only_dependent_records(tmp_path: Path) -> None:
@@ -1217,7 +1295,141 @@ def test_system_owns_trade_time_and_explicit_value(tmp_path: Path) -> None:
     assert item.behavior_status == "claimed_executed"
     assert item.temporal_frame == "contemporaneous"
     assert item.value == "10,000 at 14.76"
-    assert "external_verification" in item.unknown_fields
+    assert item.unknown_fields == ("execution_verified",)
+
+
+def test_later_quoted_trade_does_not_steal_source_authorship(tmp_path: Path) -> None:
+    source = tmp_path / "James-Bulltard_9326 复盘.md"
+    quote = "I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16"
+    source.write_text(
+        "TTD - "
+        + quote
+        + " adding to my position, this is still well below the $25 level the CEO bought $150m worth",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slot = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )[0]
+    record = {
+        "record_type": "item",
+        "candidate_slot_id": slot.candidate_slot_id,
+        "item_id": "trade",
+        "text": "Added TTD shares and sold covered calls",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "undeclared",
+        "polarity": "affirmed",
+        "value": None,
+        "behavior_status": "executed",
+        "temporal_frame": "contemporaneous",
+        "evidence_quote": quote,
+        "unknown_fields": [],
+    }
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: json.dumps(record, ensure_ascii=False),
+        max_calls=1,
+        material_type="post_trade_review",
+        staged_jsonl=True,
+        slot_protocol=True,
+        candidate_slot_ids=(slot.candidate_slot_id,),
+    )
+    item = result.understanding.items[0]
+    speaker = next(
+        speaker
+        for speaker in result.understanding.speakers
+        if speaker.speaker_id == item.speaker_ref
+    )
+
+    assert item.perspective == "source_explicit"
+    assert item.statement_role == "claim"
+    assert speaker.role == "source_author"
+    assert speaker.identity_status == "explicit"
+    assert item.unknown_fields == ("execution_verified",)
+
+
+def test_numbered_answer_context_does_not_capture_later_risk_section(tmp_path: Path) -> None:
+    source = tmp_path / "industry-report.md"
+    source.write_text(
+        "七、产品价格跌至底部，是否意味着买点出现？\n"
+        "价格底部主要改善长期赔率。\n"
+        "风险提示：\n"
+        "供给端政策执行力度不及预期；\n",
+        encoding="utf-8",
+    )
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    risk_slot = next(slot for slot in slots if "供给端政策" in slot.text)
+    records = [
+        {
+            "record_type": "item",
+            "candidate_slot_id": risk_slot.candidate_slot_id,
+            "item_id": "risk",
+            "text": "供给端政策执行力度不及预期",
+            "semantic_type": "forecast",
+            "statement_role": "risk",
+            "speech_role": "statement",
+            "perspective": "source_explicit",
+            "speaker_ref": "undeclared",
+            "polarity": "affirmed",
+            "value": None,
+            "behavior_status": None,
+            "temporal_frame": "unknown",
+            "evidence_quote": "供给端政策执行力度不及预期；",
+            "unknown_fields": [],
+        },
+        *(
+            {
+                "record_type": "coverage",
+                "candidate_slot_id": slot.candidate_slot_id,
+                "status": "no_supported_item",
+                "reason_code": "outside_test_target",
+            }
+            for slot in slots
+            if slot.candidate_slot_id != risk_slot.candidate_slot_id
+        ),
+    ]
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=lambda _prompt: "\n".join(json.dumps(record, ensure_ascii=False) for record in records),
+        max_calls=1,
+        material_type="research_report",
+        staged_jsonl=True,
+        slot_protocol=True,
+        candidate_slot_ids=tuple(slot.candidate_slot_id for slot in slots),
+        extract_relations=False,
+        relations_required=False,
+    )
+    risk = next(item for item in result.understanding.items if item.statement_role == "risk")
+
+    assert risk.speech_role == "statement"
+
+
+def test_trade_value_preserves_each_leg_of_compound_action() -> None:
+    assert (
+        _canonical_value(
+            None,
+            "I added 10,000 more at 14.76 and sold 100 $15 calls for friday for .16",
+        )
+        == "10,000 at 14.76; 100 $15 calls at .16"
+    )
+    assert (
+        _canonical_value(
+            None,
+            "I bought 3000 more at 17.30 and sold 30 $20 September calls for .50",
+        )
+        == "3000 at 17.30; 30 $20 calls at .50"
+    )
+    assert _canonical_value(None, "I sold 50 puts at $90 for next week for .47") == (
+        "50 $90 puts at .47"
+    )
 
 
 def test_system_owns_risk_polarity_and_report_values(tmp_path: Path) -> None:
@@ -1282,6 +1494,8 @@ def test_system_owns_risk_polarity_and_report_values(tmp_path: Path) -> None:
     assert eps_item.value == "26-28年 67.74/70.77/73.84元"
     assert eps_item.polarity == "affirmed"
     assert risk_item.polarity == "affirmed"
+    assert eps_item.unknown_fields == ()
+    assert risk_item.unknown_fields == ("probability",)
 
 
 def test_system_preserves_claim_polarity_when_text_contains_lexical_negation(
@@ -1447,9 +1661,6 @@ def test_system_adds_controlled_unknown_axes_for_unattributed_summary(tmp_path: 
 
     assert item.perspective == "unknown"
     assert {
-        "identity",
-        "time",
-        "value",
         "summary_authorship",
         "summary_generation_method",
     } <= set(item.unknown_fields)
@@ -1650,9 +1861,42 @@ def test_atomic_obligation_batches_never_exceed_item_capacity(tmp_path: Path) ->
     )
 
     assert len(slots) == 35
-    assert len(batches) == 18
-    assert all(1 <= len(batch) <= 2 for batch in batches)
+    assert len(batches) == 5
+    assert all(1 <= len(batch) <= 8 for batch in batches)
     assert all(len({slot.packet_id for slot in batch}) == 1 for batch in batches)
+
+
+def test_atomic_batch_budget_keeps_conservative_capacity_for_summary_slots() -> None:
+    common = {
+        "packet_id": "packet",
+        "locator": "paragraph:1",
+        "start": 0,
+        "end": 10,
+        "text": "研究材料内容",
+        "explicit_role": None,
+        "segment_id": "segment",
+    }
+    summary = CandidateSlot(
+        candidate_slot_id="summary",
+        signal_types=("summary",),
+        attribution_capability="document_only",
+        **common,
+    )
+    question = CandidateSlot(
+        candidate_slot_id="question",
+        signal_types=("question",),
+        attribution_capability="full",
+        **common,
+    )
+
+    batches = build_candidate_slot_batches(
+        (summary, question), max_slots_per_batch=8, max_items_per_batch=4
+    )
+
+    assert [[slot.candidate_slot_id for slot in batch] for batch in batches] == [
+        ["summary"],
+        ["question"],
+    ]
 
 
 def test_slot_protocol_calls_model_once_per_finite_atomic_batch(tmp_path: Path) -> None:

@@ -26,11 +26,12 @@ if TYPE_CHECKING:
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
 MATERIAL_CONTRACT_VERSION = "material-understanding-v1"
-MATERIAL_EXTRACTOR_VERSION = "material-semantics-24"
+MATERIAL_EXTRACTOR_VERSION = "material-semantics-27"
 MATERIAL_JSONL_VERSION = "material-jsonl-v1"
 MATERIAL_SLOT_JSONL_VERSION = "material-atomic-jsonl-v5"
+MATERIAL_SLOT_BATCHING_VERSION = "material-slot-batching-v2"
 MATERIAL_RELATION_JSONL_VERSION = "material-relations-jsonl-v1"
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v5"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v6"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v3"
 MAX_ATOMIC_ITEMS_PER_SLOT = 4
 
@@ -44,6 +45,7 @@ MaterialItemsValidationVersion = Literal[
     "material-items-validation-v3",
     "material-items-validation-v4",
     "material-items-validation-v5",
+    "material-items-validation-v6",
 ]
 RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v1",
@@ -390,9 +392,10 @@ class _RunPayloadShape:
 
 
 # Shapes we still have to read back.  ``material-semantics-8``/``9`` wrote slots
-# without ``explicit_role``/``segment_id``; ``10``-``13`` and ``22`` match the
-# current field shape, but ``22`` is the first version to always write
-# ``relation_candidate_set_id`` (so its absent value must be preserved).
+# without ``explicit_role``/``segment_id``; ``10``-``13`` match the current slot
+# shape but predate ``relation_candidate_set_id``.  Versions ``14`` onward wrote
+# that top-level key, including when its value was absent, so its ``None`` value
+# must be preserved when reconstructing their content identity.
 _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-8": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
     "material-semantics-9": _RunPayloadShape(dropped_slot_fields=("explicit_role", "segment_id")),
@@ -400,8 +403,19 @@ _HISTORICAL_RUN_PAYLOAD_SHAPES: dict[str, _RunPayloadShape] = {
     "material-semantics-11": _RunPayloadShape(),
     "material-semantics-12": _RunPayloadShape(),
     "material-semantics-13": _RunPayloadShape(),
+    "material-semantics-14": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-15": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-16": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-17": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-18": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-19": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-20": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-21": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-22": _RunPayloadShape(drops_absent_relation_identity=False),
     "material-semantics-23": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-24": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-25": _RunPayloadShape(drops_absent_relation_identity=False),
+    "material-semantics-26": _RunPayloadShape(drops_absent_relation_identity=False),
 }
 # Anything not listed (and not the current version) predates structured slots.
 _PRE_STRUCTURE_RUN_SHAPE = _RunPayloadShape(
@@ -769,7 +783,13 @@ def build_material_structure(document: EvidenceDocument) -> MaterialStructure:
 
 
 def _slot_signals(text: str) -> tuple[str, ...]:
-    signals = [name for name, pattern in _SEMANTIC_SIGNAL_PATTERNS if pattern.search(text)]
+    # Chinese book-title brackets identify cited titles in bibliographies and
+    # "related research" blocks.  A question mark or words such as "风险" inside
+    # such a title describe the cited document; they are not a proposition made
+    # by the current source.  Keep the title in the slot for provenance, but mask
+    # it while deriving hard extraction obligations.
+    signal_text = re.sub(r"《[^》]*》", "", text)
+    signals = [name for name, pattern in _SEMANTIC_SIGNAL_PATTERNS if pattern.search(signal_text)]
     compact = re.sub(r"\s+", "", text)
     content = re.sub(
         r"^(?:主持人|专家|投资者|提问者|回答者|管理层|分析师|嘉宾)[：:]",
@@ -915,22 +935,39 @@ def build_candidate_slot_batches(
     max_slots_per_batch: int,
     max_items_per_batch: int,
 ) -> tuple[tuple[CandidateSlot, ...], ...]:
-    """Create finite packet-local batches whose obligations fit the item capacity."""
+    """Create finite packet-local batches whose obligations fit the item capacity.
+
+    Atomic slots no longer reserve the global four-item maximum indiscriminately.
+    A regular slot reserves one item per distinct required signal; summaries and
+    attribution-unavailable mixed turns retain the conservative four-item bound.
+    The protocol still permits up to four outputs for one slot, but the planner's
+    aggregate reservation now reflects the deterministic obligation count.
+    """
     if max_slots_per_batch < 1 or max_items_per_batch < 1:
         raise ValueError("slot and item batch capacities must be positive")
-    capacity = min(
-        max_slots_per_batch,
-        max(1, max_items_per_batch // MAX_ATOMIC_ITEMS_PER_SLOT),
-    )
     batches: list[tuple[CandidateSlot, ...]] = []
     current: list[CandidateSlot] = []
+    current_item_budget = 0
     current_packet: str | None = None
     for slot in candidate_slots:
-        if current and (slot.packet_id != current_packet or len(current) >= capacity):
+        slot_item_budget = (
+            MAX_ATOMIC_ITEMS_PER_SLOT
+            if "summary" in slot.signal_types or slot.attribution_capability == "unavailable"
+            else min(MAX_ATOMIC_ITEMS_PER_SLOT, max(1, len(slot.signal_types)))
+        )
+        if slot_item_budget > max_items_per_batch:
+            raise ValueError("item batch capacity is smaller than one slot obligation")
+        if current and (
+            slot.packet_id != current_packet
+            or len(current) >= max_slots_per_batch
+            or current_item_budget + slot_item_budget > max_items_per_batch
+        ):
             batches.append(tuple(current))
             current = []
+            current_item_budget = 0
         current_packet = slot.packet_id
         current.append(slot)
+        current_item_budget += slot_item_budget
     if current:
         batches.append(tuple(current))
     return tuple(batches)
@@ -1690,6 +1727,11 @@ def _deterministic_speech_role(
         return "question"
     if label in {"答", "回答者", "专家", "管理层", "嘉宾"}:
         return "answer"
+    if slot is not None and "risk" in slot.signal_types and raw_role == "statement":
+        # A numbered Q&A section may be followed by a document-level risk block
+        # without another numbered question.  Do not let the earlier question
+        # turn an explicitly classified standalone risk into an answer.
+        return "statement"
     numbered = [match.start() for match in _NUMBERED_QUESTION_RE.finditer(packet.text)]
     preceding = [start for start in numbered if start <= evidence_start]
     if preceding:
@@ -1717,7 +1759,11 @@ def _has_quoted_frame(
         (packet.text.rfind(marker, 0, start) + 1 for marker in ("。", "！", "？", ";", "；", "\n")),
         default=0,
     )
-    context_end = slot.end if slot is not None else evidence.end
+    # Attribution cues elsewhere in a coarse multi-proposition slot must not
+    # capture the current quote.  Retain a short suffix for forms such as
+    # '"...", the CEO said', while excluding later independent propositions.
+    slot_end = slot.end if slot is not None else evidence.end
+    context_end = min(slot_end, evidence.end + 24)
     context = packet.text[clause_start:context_end]
     return bool(
         re.search(
@@ -1746,12 +1792,32 @@ def _canonical_value(value: object, quote: str) -> str | None:
         return f"{target.group(1)}元"
     if "强推" in compact:
         return "强推"
-    added = re.search(r"\badded\s+([\d,]+).*?\bat\s+([\d.]+)", compact, re.I)
-    if added:
-        return f"{added.group(1)} at {added.group(2).rstrip('.')}"
-    calls = re.search(r"\bsold\s+([\d,]+)\s+(\$[\d.]+)\s+calls.*?\bfor\s+([\d.]+)", compact, re.I)
+    trade_values: list[str] = []
+    shares = re.search(
+        r"\b(?:added|bought)\s+([\d,]+)(?:\s+more)?.*?\bat\s+(\$?[\d.]+)",
+        compact,
+        re.I,
+    )
+    if shares:
+        trade_values.append(f"{shares.group(1)} at {shares.group(2).rstrip('.')}")
+    calls = re.search(
+        r"\bsold\s+([\d,]+)\s+(\$[\d.]+)\s+(?:[A-Za-z]+\s+){0,3}calls.*?\bfor\s+([\d.]+)",
+        compact,
+        re.I,
+    )
     if calls:
-        return f"{calls.group(1)} {calls.group(2)} calls at {calls.group(3).rstrip('.')}"
+        trade_values.append(
+            f"{calls.group(1)} {calls.group(2)} calls at {calls.group(3).rstrip('.')}"
+        )
+    puts = re.search(
+        r"\bsold\s+([\d,]+)\s+puts\s+at\s+(\$[\d.]+).*?\bfor\s+([\d.]+)",
+        compact,
+        re.I,
+    )
+    if puts:
+        trade_values.append(f"{puts.group(1)} {puts.group(2)} puts at {puts.group(3).rstrip('.')}")
+    if trade_values:
+        return "; ".join(trade_values)
     level = re.search(r"(\$[\d.]+)\s+level", compact, re.I)
     if level:
         return f"{level.group(1)} level"
@@ -1769,29 +1835,38 @@ def _controlled_unknown_fields(
     *,
     item_speaker: MaterialSpeaker,
     semantic_type: str,
+    statement_role: str,
     perspective: str,
     temporal_frame: str,
     value: str | None,
     quote: str,
 ) -> tuple[str, ...]:
-    axes: list[str] = []
-    if item_speaker.identity_status == "unknown":
-        axes.append("identity")
-    if temporal_frame == "unknown":
-        axes.append("time")
-    if value is None:
-        axes.append("value")
-    if semantic_type != "unknown" or perspective == "quoted_other":
-        axes.append("external_verification")
+    # v1-v5 appended generic axes to almost every item, even when a field was
+    # inapplicable (for example ``value`` on a qualitative opinion).  That made
+    # completeness impossible to interpret.  v6 stops synthesizing those broad
+    # axes, but preserves one explicitly emitted by the extractor: downstream
+    # publication uses such declarations to keep an otherwise populated field
+    # in a suspected state.
+    axes = list(raw_fields)
+    if statement_role == "question":
+        axes.append("semantic_type")
+        if item_speaker.identity_status == "unknown":
+            axes.append("questioner_identity")
+    elif semantic_type == "behavior":
+        axes.append("execution_verified")
+        if re.search(r"\bdiscord\b", quote, re.I):
+            axes.append("discord_post_verified")
+    elif statement_role == "risk":
+        axes.append("probability")
+    elif semantic_type == "fact" and perspective == "quoted_other":
+        axes.append("external_truth_verification")
     if item_speaker.role == "summary_author":
         axes.extend(("summary_authorship", "summary_generation_method"))
     elif item_speaker.role == "mixed_transcript_turn":
         axes.extend(("response_speaker", "turn_segmentation"))
-    if re.search(r"\b(?:mon|tue|wed|thu|fri|sat|sun)(?:day)?\b", quote, re.I):
-        axes.append("calendar_date")
     if re.search(r"\d+\s*开", quote):
         axes.append("ratio_definition")
-    return tuple(dict.fromkeys((*raw_fields, *axes)))
+    return tuple(dict.fromkeys(axes))
 
 
 def _nearest_dialogue_label(packet: EvidencePacket, start: int) -> str | None:
@@ -2114,6 +2189,7 @@ def _packet_records(
                 raw_unknown_fields,
                 item_speaker=item_speaker,
                 semantic_type=semantic_type,
+                statement_role=statement_role,
                 perspective=perspective,
                 temporal_frame=temporal_frame,
                 value=value,

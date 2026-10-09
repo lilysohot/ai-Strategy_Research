@@ -84,10 +84,19 @@
     "sample_id": "dev-industry-qa-report",
     "packet_id": "0532240369551a59ae62740e0ca4e4795f2030dbe01d8583da53e2ca943780a7",
     "batch_index": 3,
-    "candidate_slot_id": "slot_c49ae28a76f90a35",
-    "slot_text": "技术风险。",
+    "candidate_slot_id": "slot_2aefa293ca3951f8",
+    "slot_text": "Wind；相关研究；含研报标题《化工Q3 复盘：历史表现几何？》及日期、行情图和页码元数据",
     "packet_reason": "atomic_obligations_incomplete",
-    "deterministic_cause": "model emitted semantic_type=risk even though semantic_type only accepts fact|forecast|opinion|behavior|unknown; the rejected item therefore did not count as a terminal record for its slot",
+    "deterministic_cause": "question mark inside a cited report title was classified as a hard question obligation; the model correctly emitted metadata_only, which the validator rejected because the false hard signal remained uncovered",
+    "corrected_after_same_stack_replay": {
+      "previous_hypothesis": "semantic_type=risk caused item rejection",
+      "disposition": "rejected: _normalize_semantic_type converted risk to forecast and the item validated successfully",
+      "confirmed_problem_slot_reason_codes": [
+        "metadata_only",
+        "detected_signal_rejected:question",
+        "missing_signal:question"
+      ]
+    },
     "not_capacity_related": {
       "candidate_slots_in_batch": 4,
       "finish_reason": "stop",
@@ -101,6 +110,6 @@
     "freeze_v24": false,
     "run_remaining_calls": false,
     "create_v11_prompt_or_lexicon_patch": false,
-    "next_step": "redesign terminal coverage as a minimal envelope independent of optional item classification, then validate the redesign by replay before authorizing another model round"
+    "next_step": "mask bibliographic titles while deriving hard semantic obligations, preserve their text for provenance, and validate the change by zero-call replay before authorizing another model round"
   }
 }

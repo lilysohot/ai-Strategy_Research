@@ -1,0 +1,121 @@
+{
+  "result_version": "structured-extraction-convergence-p0a-p0b-scorer-capacity-1",
+  "validated_at": "2026-10-09",
+  "scope": "zero-call engineering closure before any further extraction trial",
+  "model_calls": 0,
+  "gold_changes": 0,
+  "threshold_changes": 0,
+  "publication_writes": 0,
+  "production_database_access": 0,
+  "holdout_access": 0,
+  "fixes": [
+    {
+      "problem": "material-semantics-14 through 21 were treated as pre-structure during identity reconstruction",
+      "fix": "register their persisted relation_candidate_set_id shape without dropping structure, candidate_slots or slot_ledger"
+    },
+    {
+      "problem": "the development live runner retained raw responses only for failed or partial packets",
+      "fix": "persist an append-only running record before each call and every successful raw response plus terminal record immediately after return"
+    },
+    {
+      "problem": "an interrupted call had no durable attempt state",
+      "fix": "unclassified exceptions and interruptions terminate as outcome_unknown; a started record left without terminal remains auditable and the same round/sample is refused before another request"
+    },
+    {
+      "problem": "stage-1 stop conditions were evaluated only after all samples",
+      "fix": "evaluate the frozen item gate after every completed sample and do not start the next sample after partial/failed or an in-scope metric floor decrease"
+    },
+    {
+      "problem": "spec and report retained obsolete execution and item protocol descriptions",
+      "fix": "record item protocol v5 plus validation v6 and point the historical design report to the current execution sources"
+    },
+    {
+      "problem": "one compound gold target could only match one atomic predicted item",
+      "fix": "scorer v3 selects the smallest compatible atomic group and aggregates mixed polarity, compound values, unknown fields and relation endpoints without changing gold or thresholds"
+    },
+    {
+      "problem": "every slot reserved four possible output items, forcing 487 copper slots into 32 calls",
+      "fix": "slot batching v2 reserves ordinary atomic slots by deterministic signal count while retaining four-item bounds for summaries and attribution-unavailable mixed turns"
+    },
+    {
+      "problem": "the Claims binding gate had not been separated from prompt/schema repair claims",
+      "fix": "zero-call audit freezes the signed 28.03% precision and 75% recall baseline, the five unmatched targets and overlapping coordinate failures; current repairs remain unpassed until one minimal Claims-only proof"
+    },
+    {
+      "problem": "the scratch development runner remained an alternate live authorization path beside the formal structured ledger",
+      "fix": "direct live mode now fails before budget reading or provider setup; the scratch runner retains plan-only and replay scoring while every future real request must use the structured CLI and ledger"
+    }
+  ],
+  "historical_artifact_verification": {
+    "versions": "material-semantics-14..21",
+    "artifact_copies": 139,
+    "unique_run_ids": 109,
+    "verified_copies": 139,
+    "failed_copies": 0,
+    "by_version": {
+      "material-semantics-14": {"copies": 89, "unique_run_ids": 59, "verified": 89},
+      "material-semantics-15": {"copies": 14, "unique_run_ids": 14, "verified": 14},
+      "material-semantics-16": {"copies": 11, "unique_run_ids": 11, "verified": 11},
+      "material-semantics-17": {"copies": 16, "unique_run_ids": 16, "verified": 16},
+      "material-semantics-18": {"copies": 2, "unique_run_ids": 2, "verified": 2},
+      "material-semantics-19": {"copies": 5, "unique_run_ids": 5, "verified": 5},
+      "material-semantics-20": {"copies": 1, "unique_run_ids": 1, "verified": 1},
+      "material-semantics-21": {"copies": 1, "unique_run_ids": 1, "verified": 1}
+    }
+  },
+  "verification": {
+    "focused_material_and_structured_tests": "430 passed",
+    "corpus_suite": "1340 passed, 17 skipped, 2 known baseline failures",
+    "known_baseline_failures": [
+      "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full: local corpus state has 0/20 recall",
+      "tests/test_corpus_preparation_readers.py::test_dev_materials_smoke_units_and_pages: environment has reader-pdf-11 while test expects reader-pdf-10"
+    ],
+    "ruff": "passed",
+    "targeted_pyright": "0 errors, 0 warnings",
+    "runner_py_compile": "passed"
+  },
+  "versions": {
+    "material_extractor": "material-semantics-27",
+    "item_protocol": "material-atomic-jsonl-v5",
+    "slot_batching": "material-slot-batching-v2",
+    "item_validation": "material-items-validation-v6",
+    "relation_protocol": "material-relations-jsonl-v1",
+    "relation_candidate_rule": "material-relation-candidates-v3",
+    "development_scorer": "material-development-scorer-3"
+  },
+  "deterministic_capacity_plan": {
+    "candidate_slots_by_sample": {
+      "dev-company-report": 65,
+      "dev-industry-qa-report": 52,
+      "dev-personal-trade-review": 11,
+      "dev-expert-call-copper-foil": 487
+    },
+    "baseline_slots16_items64_calls_by_sample": [5, 4, 1, 32],
+    "baseline_total_calls": 42,
+    "planned_slots48_items64_calls_by_sample": [2, 2, 1, 12],
+    "planned_total_calls": 17,
+    "candidate_slots_changed": false,
+    "strict_gold_coverage_changed": false,
+    "live_capacity_validated": false
+  },
+  "files": {
+    "plugins/corpus/material_semantics.py": "62053358b411f46142a7ac9469afbc1df1c84d8bab43718d1b129277fcd66ed6",
+    "tests/test_corpus_material_semantics.py": "dc266f2a5858e90b6040737f1dd913a4d4545430f2b7e67eb125beb3ca72c91c",
+    ".scratch/corpus-evidence-pipeline/run_material_development.py": "b96b5cc25f2ecb30f34b024638d16ca7e892d3901049b26858307e46264f2c08",
+    "tests/test_corpus_material_development.py": "529b6a1221d3cf950324e61ab34ca2a2025d12409f9a8ce8941dae90d3cecd81",
+    ".scratch/claims-r2-role-isolation/spec.md": "c93a70993e5950ee64aa45c6a8cedd7e62d4ba6ec79594e18c9301641a41ca0b",
+    ".scratch/claims-r2-role-isolation/report.md": "38ed77fe7be678f9b74a2c8efc2e1200f522bd487db0937f96c54d55d32bd1a2",
+    ".scratch/claims-r2-role-isolation/issues/11-bounded-live-trial.md": "7a7c4fd13e6cc03619c9b85319be0f4bf9c563eebda43b305ce5bfb79fd45381",
+    ".scratch/claims-r2-role-isolation/issues/17-structured-extraction-convergence-closure.md": "33d310bf3fc34850d76bd5d1e39385e8c9f1049aa914164c8b9fabf6c262e59c",
+    ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/claims-binding-audit.json": "24fcf82381e11753bc914017d1ba0f88a9e7a896812bf702960b4a3b4e174463"
+  },
+  "decision": {
+    "p0a_complete": true,
+    "authorize_new_model_calls": false,
+    "publication_authorized": false,
+    "claims_zero_call_audit_complete": true,
+    "claims_quality_gate_passed": false,
+    "p0b_engineering_complete": true,
+    "next_gate": "freeze P1 Claims and copper/relations as separate formal structured plans with exact attempt budgets and hashes; P1 begins with the minimal Claims-only proof and stops before copper if that gate fails"
+  }
+}
