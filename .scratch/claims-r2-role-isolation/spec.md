@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-10
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 的 32 条 present precision 样本与 12 条 absent 哨兵已由 xyl 签认，分层 precision 点估计为 54.38%，确认 5 个 FP、4 个 FN。P12 已按授权执行同源 relation-only 计划：items 0 次、relations 4/4 succeeded，但签认样本由 P10 的 35/44 降至 34/44，已知错误仅修复 4/9，target relation recall 由 4/4 降至 3/4，故 v2 质量门失败且不发布。下一步为零调用 question-group answer selector 设计；P2 发布/M_main 消费仍未启动。
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行：4 次传输成功，但仅 2/4 packet 通过严格协议，另两包因 15 条非法 `status` 失败，故最终门失败并关闭当前模型+extractor 修复线；P15 禁止。P2 发布/M_main 消费仍未启动。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -56,7 +56,11 @@
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
 候选，query/delivery/context_use 与 M_main 正向消费未启动。P11 已签认通用 selector 误接/漏接模式；
 P12 已完成 v2 的 4-call 实跑，但签认样本与 target recall 均退化，故该版本只保留审计、不进入发布。
-下一步先零调用设计 question-group answer selector，不追加 prompt-only live trial。W6 的
+P13 已完成 question-group answer selector 的零调用实现与 oracle replay；P14 最终有界 relation-only
+plan 已使用完整 4 次预算执行。四次模型请求均完成，但两包把关系类型写入仅允许 `present/absent` 的
+`status`，实际仅 2/4 packet completed，故在协议完整性门即失败；签认 44 例与 target 质量门不再作
+有效计分。按冻结终止规则，当前模型+extractor 路线已关闭，不再允许 P15、prompt/schema 放宽或追加
+调用；任何模型或算法替换都是新任务。W6 的
 独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 

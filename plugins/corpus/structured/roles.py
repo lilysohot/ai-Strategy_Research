@@ -165,6 +165,7 @@ class RoleArtifact(BaseModel):
         "material-relations-jsonl-v1",
         "material-relations-selector-jsonl-v1",
         "material-relations-selector-jsonl-v2",
+        "material-relations-question-group-jsonl-v1",
     ]
     business_contract: Literal["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]
     payload_sha256: str

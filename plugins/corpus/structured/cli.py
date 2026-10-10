@@ -104,6 +104,7 @@ def _parser() -> argparse.ArgumentParser:
             "material-relations-jsonl-v1",
             "material-relations-selector-jsonl-v1",
             "material-relations-selector-jsonl-v2",
+            "material-relations-question-group-jsonl-v1",
         ),
         default="material-relations-jsonl-v1",
     )

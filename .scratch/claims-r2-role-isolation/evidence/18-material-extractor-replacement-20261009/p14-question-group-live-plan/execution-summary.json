@@ -1,0 +1,46 @@
+{
+  "attempt_status": {
+    "succeeded": 4
+  },
+  "automatic_retries": 0,
+  "batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "claims_attempts": 0,
+  "cost": null,
+  "cost_status": "unavailable_not_zero",
+  "executed_on": "2026-10-10",
+  "invalid_terminal_records": 15,
+  "items_attempts": 0,
+  "model_calls": 4,
+  "packet_status": {
+    "completed": 2,
+    "deferred": 0,
+    "failed": 2,
+    "partial": 0
+  },
+  "plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "publication_query_delivery_context_use": 0,
+  "relation_attempts": 4,
+  "relation_task": {
+    "artifact_sha256": "sha256:703d689bee46596199f1f6ccef720756b9c9a22f3fabc6ba4f5a0c77bd6ec137",
+    "execution_status": "failed",
+    "payload_sha256": "sha256:9450d0b827232dfc882f8241705667e9c238674f1291e7ff71f6e77565bbb801",
+    "protocol_status": "not_checked",
+    "publication_status": "unpublished",
+    "quality_status": "review_required",
+    "reason_codes": [
+      "relations_error:ValueError",
+      "role_scope_not_fully_covered"
+    ],
+    "task_id": "task:1fb121933d980d8362eb2ea98de4f583a40ff70ebefa257b337e0208ce22c849"
+  },
+  "retained_relations_from_completed_packets": 92,
+  "schema_version": "p14-question-group-live-execution-1",
+  "status": "failed_final_gate_current_route_closed",
+  "usage": {
+    "completion_tokens": 14189,
+    "prompt_tokens": 53370,
+    "reasoning_tokens": 11657,
+    "total_tokens": 67559
+  }
+}

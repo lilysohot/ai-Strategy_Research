@@ -11,6 +11,7 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
@@ -30,6 +31,7 @@ from plugins.corpus.material_semantics import (
     _packet_records,
     _relation_candidate_pairs,
     _relations_from_decisions,
+    _relations_from_question_group_results,
     _relations_from_selector_results,
     _strict_relation_candidate_pairs,
     _validate_atomic_coverage,
@@ -37,9 +39,11 @@ from plugins.corpus.material_semantics import (
     build_candidate_slots,
     build_material_structure,
     build_relation_jsonl_prompt,
+    build_relation_question_group_prompt,
     build_relation_selector_prompt,
     classify_material_type,
     extract_material_understanding,
+    group_relation_answer_candidates,
 )
 from plugins.corpus.service import CorpusService
 
@@ -2925,6 +2929,213 @@ def test_relation_selector_marks_missing_and_duplicate_terminals_incomplete() ->
     assert relations == []
     assert incomplete is True
     assert counts["duplicate_decisions"] == 1
+    assert counts["missing_decisions"] == 1
+
+
+def test_question_group_selector_expands_local_answer_indexes_to_frozen_pairs() -> None:
+    packet = EvidencePacket(
+        packet_id="packet",
+        locator="page:1",
+        kind="prose",
+        text="主持人：收入多少？专家：设备收入一亿元，服务收入两千万元，因为需求增加。",
+    )
+
+    def endpoint(item_id: str, quote: str, statement_role: str, speech_role: str) -> MaterialItem:
+        start = packet.text.index(quote)
+        return MaterialItem(
+            item_id=item_id,
+            text=quote,
+            semantic_type="fact",
+            statement_role=statement_role,  # type: ignore[arg-type]
+            speech_role=speech_role,  # type: ignore[arg-type]
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=start,
+                    end=start + len(quote),
+                ),
+            ),
+        )
+
+    items = [
+        endpoint("question", "收入多少？", "question", "question"),
+        endpoint("equipment", "设备收入一亿元", "answer", "answer"),
+        endpoint("service", "服务收入两千万元", "answer", "answer"),
+        endpoint("demand", "因为需求增加", "evidence", "answer"),
+    ]
+    pairs = [
+        {
+            "candidate_pair_id": "pair-equipment",
+            "from_item": "equipment",
+            "to_item": "question",
+            "allowed_type": "answers",
+        },
+        {
+            "candidate_pair_id": "pair-demand",
+            "from_item": "demand",
+            "to_item": "equipment",
+            "allowed_type": "supports",
+        },
+        {
+            "candidate_pair_id": "pair-service",
+            "from_item": "service",
+            "to_item": "question",
+            "allowed_type": "answers",
+        },
+    ]
+
+    groups = group_relation_answer_candidates(pairs)
+    assert MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1 == (
+        "material-relations-question-group-jsonl-v1"
+    )
+    assert len(groups) == 1
+    assert groups[0].to_item == "question"
+    assert [(option.answer_index, option.relation_index) for option in groups[0].options] == [
+        (0, 0),
+        (1, 2),
+    ]
+    prompt = build_relation_question_group_prompt(packet, items, pairs)
+    assert '"question_index":0' in prompt
+    assert '"answer_index":0' in prompt
+    assert '"answer_index":1' in prompt
+    assert '"relation_index":1' in prompt
+    assert "pair-equipment" not in prompt
+    assert "pair-service" not in prompt
+
+    raw = "\n".join(
+        [
+            json.dumps(
+                {
+                    "record_type": "answer_group_result",
+                    "question_index": 0,
+                    "selected_answer_indices": [0, 1],
+                },
+                ensure_ascii=False,
+            ),
+            json.dumps(
+                {
+                    "record_type": "relation_result",
+                    "relation_index": 1,
+                    "status": "absent",
+                    "evidence_selector": None,
+                },
+                ensure_ascii=False,
+            ),
+        ]
+    )
+    relations, incomplete, counts = _relations_from_question_group_results(
+        raw,
+        packet,
+        "source",
+        pairs,
+        {item.item_id: item for item in items},
+    )
+    assert incomplete is False
+    assert {(relation.from_item, relation.to_item) for relation in relations} == {
+        ("equipment", "question"),
+        ("service", "question"),
+    }
+    assert counts == {
+        "candidate_pairs": 3,
+        "answer_groups": 1,
+        "non_answer_pairs": 1,
+        "expected_terminals": 2,
+        "decisions": 2,
+        "selected_answers": 2,
+        "missing_decisions": 0,
+        "duplicate_decisions": 0,
+        "invalid_decisions": 0,
+    }
+
+
+def test_question_group_selector_fails_closed_on_duplicate_and_missing_terminals() -> None:
+    packet = EvidencePacket(packet_id="packet", locator="page:1", kind="prose", text="问？答。")
+    items = {
+        "question": MaterialItem(
+            item_id="question",
+            text="问？",
+            semantic_type="fact",
+            statement_role="question",
+            speech_role="question",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id="packet",
+                    locator="page:1",
+                    quote="问？",
+                    start=0,
+                    end=2,
+                ),
+            ),
+        ),
+        "answer": MaterialItem(
+            item_id="answer",
+            text="答。",
+            semantic_type="fact",
+            statement_role="answer",
+            speech_role="answer",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id="packet",
+                    locator="page:1",
+                    quote="答。",
+                    start=2,
+                    end=4,
+                ),
+            ),
+        ),
+    }
+    pairs = [
+        {
+            "candidate_pair_id": "pair-answer",
+            "from_item": "answer",
+            "to_item": "question",
+            "allowed_type": "answers",
+        }
+    ]
+    duplicate = json.dumps(
+        {
+            "record_type": "answer_group_result",
+            "question_index": 0,
+            "selected_answer_indices": [0],
+        }
+    )
+    relations, incomplete, counts = _relations_from_question_group_results(
+        duplicate + "\n" + duplicate,
+        packet,
+        "source",
+        pairs,
+        items,
+    )
+    assert relations == []
+    assert incomplete is True
+    assert counts["duplicate_decisions"] == 1
+
+    relations, incomplete, counts = _relations_from_question_group_results(
+        "",
+        packet,
+        "source",
+        pairs,
+        items,
+    )
+    assert relations == []
+    assert incomplete is True
     assert counts["missing_decisions"] == 1
 
 

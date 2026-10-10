@@ -497,7 +497,11 @@ def test_plan_cli_can_opt_into_controller_selector_protocol(tmp_path: Path) -> N
 
 @pytest.mark.parametrize(
     "protocol",
-    ["material-relations-selector-jsonl-v1", "material-relations-selector-jsonl-v2"],
+    [
+        "material-relations-selector-jsonl-v1",
+        "material-relations-selector-jsonl-v2",
+        "material-relations-question-group-jsonl-v1",
+    ],
 )
 def test_plan_cli_can_freeze_relation_selector_protocol(
     tmp_path: Path, protocol: str

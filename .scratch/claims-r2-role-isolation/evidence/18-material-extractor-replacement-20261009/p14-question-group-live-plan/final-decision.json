@@ -1,0 +1,45 @@
+{
+  "batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "decided_on": "2026-10-10",
+  "gate": {
+    "failed_packets": {
+      "actual": 2,
+      "maximum": 0,
+      "passed": false
+    },
+    "known_error_9": "not_scored_because_protocol_completeness_failed",
+    "partial_packets": {
+      "actual": 0,
+      "maximum": 0,
+      "passed": true
+    },
+    "previously_correct_35": "not_scored_because_protocol_completeness_failed",
+    "relation_packets_completed": {
+      "actual": 2,
+      "passed": false,
+      "required": 4
+    },
+    "signed_44": "not_scored_because_protocol_completeness_failed",
+    "target_relations_4": "not_scored_because_protocol_completeness_failed"
+  },
+  "root_cause": {
+    "class": "model_response_contract_violation",
+    "controller_index_or_transport_failure": false,
+    "invalid_terminal_records": 15,
+    "returned_relation_types_as_status": {
+      "challenges": 8,
+      "conditions": 2,
+      "supports": 5
+    }
+  },
+  "schema_version": "p14-final-gate-decision-1",
+  "status": "failed_current_model_plus_extractor_route_rejected",
+  "terminal_policy": {
+    "additional_model_calls_allowed": false,
+    "next_state": "close current model plus extractor route; any replacement is a new task",
+    "p15_allowed": false,
+    "prompt_revision_or_schema_relaxation_in_current_task_allowed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  }
+}

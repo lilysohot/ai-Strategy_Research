@@ -872,6 +872,78 @@ question 聚合相邻回答原子，让模型一次返回该 question 对应的 
 P12 工件的读取、审计与 replay。相关语义、执行和合约回归 130 passed，Ruff、Pyright 通过，且 P10/P12
 冻结 plan identity 均未改变。
 
+## 20. 2026-10-10 执行增补：question-group answer selector 零调用实现
+
+P13 没有继续修改 pair-level prompt，而是在 relation 执行 seam 新增实验协议
+`material-relations-question-group-jsonl-v1`。candidate-v5、items validation、冻结端点及 pair identity
+均不变。controller 按问题端点聚合现有 `answers` 候选；模型接口对每个问题只返回一次本地
+`selected_answer_indices`。一个问题允许选择多个互补原子，也允许空列表。非 `answers` 关系继续使用
+既有 pair-level terminal。模型不返回 pair ID、item ID、证据或 relation ID；controller 将索引展开回
+原冻结 pair，并生成相同的逐字 `pair_window` 与 relation identity。缺失、重复、越界、重复 answer index
+或非法字段均使 packet partial，不能静默解释成 absent。
+
+在 P10/P12 相同的 333 个 candidate-v5 pair 上，299 个 `answers` pair 被完整且无重叠地映射到 66 个
+question group；另外 34 个非 answer pair 保持原义务。需要模型返回的终态记录从 333 降到 100，减少
+233 条（69.97%）。四包 prompt 总字符数从 P12 pairwise-v2 的 195,046 降到 127,133，减少 34.82%；
+如果未来获准实跑，packet/call 数仍为 4，不通过拆小包扩大调用预算。
+
+零调用 oracle 使用 P10 决定，并以 P11 已签认 44 例覆盖对应 pair truth。新 controller 从每个 question
+group 的局部索引精确展开为预期的 216 个 present pair，44/44 签认例、9/9 已知错误修正和 4/4 target
+relation 均保留；两次独立生成得到相同 summary hash。该结果只证明分组接口、终态账、pair 映射和证据
+所有权正确，不证明真实模型会作出 oracle 选择，也不形成 precision 发布门。
+
+新协议不是默认协议；v1 仍是默认/`latest`，P12 v2 只读兼容，P13 只标记为 experimental。P13 未冻结
+live plan、未读取凭据、未调用模型，publication/query/delivery/context_use 均为 0。聚焦语义、执行、
+CLI 与合约文件回归为 146 passed；全量 corpus 为 1389 passed、17 skipped，只保留既有的本地 golden
+Recall@5=0/20 与 reader-pdf-10/11 环境版本失败。Ruff 与 Pyright 通过。下一门是复核 P13 证据后，
+再决定是否冻结独立的有界 relation-only plan；现有授权不自动延续。
+
+## 21. 2026-10-10 执行增补：P14 最终 relation-only 计划冻结
+
+P14 已冻结为独立、不可变且尚未执行的最终有界计划。冻结 batch 为
+`batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58`，计划阶段模型调用为
+0。它继续使用 P12 的相同 snapshot、已接受 items artifact/payload、candidate-v5、validation-v11、
+`complete_parent` 依赖策略以及 provider/model；Claims 与 material_items 的预算均为 0，只有
+material_relations 允许最多 1 个 task、4 个 attempts。相对被否决的 P12，唯一有意变化是 relation
+协议切换为 P13 验证过的 `material-relations-question-group-jsonl-v1`；Claims/items 配置、输入和范围
+均保持不变。冻结计划只保存 `env:STRUCTURED_EXTRACTION_API_KEY` 引用，不内嵌凭据。
+
+最终门槛在执行前一并冻结：四包必须 4/4 成功且不得 partial/failed；44 条签认例至少 40 条正确；
+9 条已知错误至少 7 条正确；35 条此前正确样本最多回归 2 条；4 条 target relation 必须 4/4；不得出现
+supports/conditions 系统性退化。执行后不得修改 prompt、gold、candidate/items 或 schema 来适配结果。
+通过则关闭当前修复项，并另行申请最小正向消费接线；失败则关闭当前 model+extractor 路线，后续替换视为
+新任务。P15 不存在，也不得用更多 prompt-only trial 延长本修复。
+
+P14 当前没有 live store、响应或执行记录；publication、query、delivery、context_use 均未授权且为 0。
+冻结核验确认 P12→P14 的差异仅落在 relation protocol/role-profile hash；计划 identity、工件哈希、门槛
+哈希和两次差异摘要均稳定。`verify_plan.py` 的 Ruff 与 Pyright 检查通过。本节只记录计划冻结，不把它
+写成真实模型质量通过；下一步必须由用户另行明确授权最多 4 次 relation 调用。
+
+## 22. 2026-10-10 执行增补：P14 最终执行与路线关闭
+
+按 xyl 对“开始执行下一步任务”的授权，P14 使用冻结 batch
+`batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58` 执行。Claims 与
+items 调用仍为 0，relations 恰好 4 次，未自动重试或扩张预算；四次 HTTP/model attempt 均成功完成。
+usage 为 prompt 53,370、completion 14,189、reasoning 11,657、total 67,559 tokens。provider 未返回
+可核价格，成本记为 unavailable，而不是 0。
+
+协议终态没有过门。第 1、4 包完整，第 2、3 包分别有 9、6 条 non-answer `relation_result` 把关系类型
+写进 `status`：合计 8 条 `challenges`、5 条 `supports`、2 条 `conditions`。冻结 Schema 只允许
+`present` 或 `absent`，因此严格 parser 正确拒绝这两包；这不是网络丢包，也不是 question/pair index
+展开错误。controller 没有把类型值自动归一为 `present`，也没有放宽 Schema 或用修改后的规则 replay。
+最终 packet 状态为 2 completed、0 partial、2 failed；两个完整包残留 92 条关系，但该 payload 不完整，
+不能发布或当作质量结果。
+
+P14 的第一道门要求 4/4 completed、0 failed，因此已经失败；44 条签认例、9 条已知错误、35 条既有正确
+项和 4 条 target relation 不再作有效质量计分。按照执行前已经冻结的终止政策，当前 model+extractor
+路线到此拒绝并关闭，P15 不允许，也不能在本任务中通过 prompt/schema 修补或追加调用继续试验。任何
+模型替换、确定性 relation 算法或协议放宽都属于新任务，必须重新授权范围和预算。publication、query、
+delivery、context_use 与 M_main 正向消费仍为 0。
+
+执行现场、四份 response object、失败 payload 和账本保持不可变；新增零调用审计只读复核对象哈希，
+输出 execution summary、protocol audit 与 final decision。审计脚本 Ruff、Pyright 均通过。原冻结
+README、plan、final gate 与 plan manifest 保持逐字节不变。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

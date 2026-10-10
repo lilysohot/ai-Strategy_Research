@@ -1,0 +1,54 @@
+{
+  "schema_version": "relation-question-group-zero-call-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "zero_call_implementation_complete_live_plan_not_frozen",
+  "protocol": "material-relations-question-group-jsonl-v1",
+  "default_protocol_changed": false,
+  "candidate_rule_changed": false,
+  "source_candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "result": {
+    "candidate_pairs": 333,
+    "answer_pairs": 299,
+    "question_groups": 66,
+    "non_answer_pairs": 34,
+    "pairwise_terminals": 333,
+    "question_group_terminals": 100,
+    "terminal_reduction_rate": 0.6996996996996997,
+    "pairwise_prompt_chars": 195046,
+    "question_group_prompt_chars": 127133,
+    "prompt_char_reduction_rate": 0.3481896578243081,
+    "oracle_expanded_present": 216,
+    "signed_cases_correct": "44/44",
+    "known_errors_corrected": "9/9",
+    "target_relations_preserved": "4/4",
+    "result_is_oracle_not_model_accuracy": true
+  },
+  "controller_ownership": {
+    "pair_identity": true,
+    "endpoint_identity": true,
+    "evidence_window": true,
+    "relation_identity": true,
+    "missing_duplicate_invalid_fail_closed": true
+  },
+  "validation": {
+    "focused_files": "146 passed",
+    "full_corpus": "1389 passed, 17 skipped, 2 known environment failures",
+    "known_environment_failures": [
+      "local golden corpus Recall@5 is 0/20",
+      "test expects reader-pdf-10 while environment provides reader-pdf-11"
+    ],
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "determinism_runs": 2,
+    "determinism": "identical"
+  },
+  "model_calls": 0,
+  "live_plan_frozen": false,
+  "publication_query_delivery_context_use": 0,
+  "files_sha256": {
+    "README.md": "sha256:ad2225f61e47651abf5c6d269b42a6b88b1c3fa06f313209365a46f2c00af5e0",
+    "build_zero_call.py": "sha256:c852a1cce04de726baefe5cd0b40d4c63564c31556ac1f041431ebb276eda0ba",
+    "zero-call-summary.json": "sha256:a18729c17e75c4b40bebe6a3c1abe7e92c14a834df4477e261018476bf22ee37"
+  },
+  "next_gate": "review P13 evidence; freeze a separate bounded relation-only plan only after explicit authorization"
+}

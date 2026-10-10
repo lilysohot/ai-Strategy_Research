@@ -1,0 +1,206 @@
+{
+  "audited_on": "2026-10-10",
+  "batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "diagnosis": "attempts 2 and 3 returned relation types in the status field; the frozen contract permits only present or absent, so strict rejection is correct",
+  "invalid_record_count": 15,
+  "invalid_records": [
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 17,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 0,
+      "returned_status": "supports"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 18,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 1,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 19,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 2,
+      "returned_status": "supports"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 20,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 9,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 21,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 16,
+      "returned_status": "supports"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 22,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 26,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 23,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 40,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 24,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 61,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 2,
+      "error": "invalid_status",
+      "line_number": 25,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "record_type": "relation_result",
+      "relation_index": 76,
+      "returned_status": "supports"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 17,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 8,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 18,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 31,
+      "returned_status": "supports"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 19,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 66,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 20,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 73,
+      "returned_status": "challenges"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 21,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 89,
+      "returned_status": "conditions"
+    },
+    {
+      "attempt_number": 3,
+      "error": "invalid_status",
+      "line_number": 22,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "record_type": "relation_result",
+      "relation_index": 90,
+      "returned_status": "conditions"
+    }
+  ],
+  "invalid_status_counts": {
+    "challenges": 8,
+    "conditions": 2,
+    "supports": 5
+  },
+  "model_requests_during_audit": 0,
+  "normalization_or_replay_applied": false,
+  "plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "responses": [
+    {
+      "attempt_id": "attempt:63ca0754414d673bcfccfc012835a86717f3813996ffb2d091aa6110c55b8cd5",
+      "attempt_number": 1,
+      "execution_status": "succeeded",
+      "invalid_records": 0,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "packet_reasons": [],
+      "packet_status": "completed",
+      "records": 15,
+      "response_object_sha256": "sha256:e8dc3136ad4fa8e4bd8a80d0f361fded90607e1535cfa7e04c176e2e2d56676d",
+      "response_sha256": "sha256:4edbb96a5883d7b04f7e430a10485fe315795206f6b2166b0eae7b5bcb8c4f6e"
+    },
+    {
+      "attempt_id": "attempt:00393ce7e5d01efc9cdc6805ef898937a4ff144abc8fcfe53858386c6edb7e35",
+      "attempt_number": 2,
+      "execution_status": "succeeded",
+      "invalid_records": 9,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "records": 25,
+      "response_object_sha256": "sha256:8d20a190aa2ace1e1d048920ca691f77e36412a3bde8cb74ff1401dd63f29b72",
+      "response_sha256": "sha256:217627c5cdcd3e9b9b76e579cc58e62b114596e51c59460e6e12dfdb3379fa64"
+    },
+    {
+      "attempt_id": "attempt:5f5bc7782baac919336aa164d450180b14a0e550ffc63526abf4f67611fe0217",
+      "attempt_number": 3,
+      "execution_status": "succeeded",
+      "invalid_records": 6,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "records": 22,
+      "response_object_sha256": "sha256:1bbdfe96a9e9d28dd237329a86f8b872bb64c460e86454f896ac5cfd3f7c202b",
+      "response_sha256": "sha256:90c2f3aad5c64ff601a6ec8f0830a51aaa66aaf59eb76150e77edfb9cd2b4e8e"
+    },
+    {
+      "attempt_id": "attempt:af3cc38a964a195ca5558ceed9e1631aae47ee1e48cf7bc10cedfb85445ed6ca",
+      "attempt_number": 4,
+      "execution_status": "succeeded",
+      "invalid_records": 0,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "packet_reasons": [],
+      "packet_status": "completed",
+      "records": 38,
+      "response_object_sha256": "sha256:1b2059da58339bc29d8c9b6998cd866442f6d7ce3cb8d1457b53c12f7bedce3c",
+      "response_sha256": "sha256:7a6967016e115f06681cfecaa5fcce08ef875c7a4ed174d21751653da420f21e"
+    }
+  ],
+  "schema_version": "p14-question-group-protocol-audit-1"
+}

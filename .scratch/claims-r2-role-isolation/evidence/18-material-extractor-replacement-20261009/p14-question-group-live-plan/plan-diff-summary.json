@@ -1,0 +1,39 @@
+{
+  "changed": {
+    "material_relations_protocol": {
+      "from": "material-relations-selector-jsonl-v2",
+      "to": "material-relations-question-group-jsonl-v1"
+    }
+  },
+  "execution_authorized": false,
+  "final_gate_sha256": "sha256:71e4e0a94399f39bd4c614cf461be2af454dd027b608a3ef711d74d4b3b47de2",
+  "model_requests_during_freeze": 0,
+  "next_gate": "explicit authorization for at most four final question-group relation calls",
+  "p12_batch_id": "batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+  "p14_batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "p14_plan_file_sha256": "sha256:2c2026aa432953621372054ff0f403635e89438b18c662d4c3b887890734540d",
+  "p14_plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "publication_authorized": false,
+  "schema_version": "relation-question-group-final-plan-diff-1",
+  "status": "frozen_not_executed",
+  "unchanged": {
+    "credential_reference_only": true,
+    "dependency_policy": "complete_parent",
+    "enabled_roles": [
+      "material_items",
+      "material_relations"
+    ],
+    "imported_items": true,
+    "items_validation_version": "material-items-validation-v11",
+    "max_attempts": 4,
+    "model": "doubao-seed-2.0-mini",
+    "provider": "openai_compat",
+    "relation_candidate_rule": "material-relation-candidates-v5",
+    "role_max_attempts": {
+      "claims": 0,
+      "material_items": 0,
+      "material_relations": 4
+    },
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+  }
+}

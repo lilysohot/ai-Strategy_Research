@@ -16,6 +16,7 @@ import pytest
 from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import evidence_document_from_snapshot
 from plugins.corpus.material_semantics import (
+    MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_SELECTOR_JSONL_VERSION,
     build_candidate_slots,
@@ -534,6 +535,47 @@ def test_relation_selector_role_uses_controller_owned_pair_window() -> None:
     assert packet.text[evidence.start : evidence.end] == evidence.quote
     assert "主持人：" in evidence.quote
     assert "专家：" in evidence.quote
+
+
+def test_question_group_relation_role_uses_one_terminal_per_question() -> None:
+    value = dialogue_snapshot()
+    items = execute_material_items_role(
+        value,
+        task_id="task:question-group-items",
+        protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+        llm=lambda _prompt: dialogue_selector_item_content(),
+        max_calls=1,
+        max_items_per_packet=64,
+        max_slots_per_batch=24,
+        max_estimated_tokens_per_batch=8192,
+    )
+    endpoints = tuple(item.item_id for item in items.payload.understanding.items)
+    response = json.dumps(
+        {
+            "record_type": "answer_group_result",
+            "question_index": 0,
+            "selected_answer_indices": [0],
+        },
+        ensure_ascii=False,
+    )
+
+    execution = execute_material_relations_role(
+        value,
+        task_id="task:question-group-relations",
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
+        items_execution=items,
+        endpoint_item_ids=endpoints,
+        llm=lambda prompt: response if "question_groups" in prompt else "",
+        max_calls=1,
+    )
+
+    assert execution.artifact.protocol_status == "valid"
+    assert execution.artifact.protocol == MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1
+    assert len(execution.payload.understanding.relations) == 1
+    packet_run = execution.payload.packet_runs[0]
+    assert packet_run.status == "completed"
+    assert packet_run.diagnostics["answer_groups"] == 1
+    assert packet_run.diagnostics["expected_terminals"] == 1
 
 
 def test_selector_plan_freezes_relation_protocol_and_complete_parent_policy(

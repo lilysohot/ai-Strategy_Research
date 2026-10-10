@@ -1,0 +1,138 @@
+{
+  "controller_invariants": {
+    "candidate_partition_exact": true,
+    "candidate_rule_changed": false,
+    "evidence_controller_owned": true,
+    "missing_duplicate_invalid_fail_closed": true,
+    "pair_identity_unchanged": true
+  },
+  "created_on": "2026-10-10",
+  "live_plan_frozen": false,
+  "model_calls": 0,
+  "next_gate": "review zero-call evidence and freeze a separate bounded plan only after explicit authorization",
+  "oracle_replay": {
+    "baseline_p10_present": 217,
+    "expanded_present": 216,
+    "known_signed_errors_corrected": "9/9",
+    "result_is_oracle_not_model_accuracy": true,
+    "signed_cases": 44,
+    "signed_cases_correct": 44,
+    "signed_oracle_present": 216,
+    "target_relations_matched": 4,
+    "target_relations_total": 4,
+    "target_results": [
+      {
+        "accepted_relation_ids": [
+          "rel_fade871b59db5b99"
+        ],
+        "gold_relation": "dec-answer-capex-relation",
+        "matched": true
+      },
+      {
+        "accepted_relation_ids": [
+          "rel_31801a8755e9cf28",
+          "rel_94ca95d328d6733e",
+          "rel_95c6b8bd3b367c1c",
+          "rel_e40f893dfd78cac1"
+        ],
+        "gold_relation": "dec-answer-yield-relation",
+        "matched": true
+      },
+      {
+        "accepted_relation_ids": [
+          "rel_741755d990ec7cba"
+        ],
+        "gold_relation": "dec-quoted-yield-support",
+        "matched": true
+      },
+      {
+        "accepted_relation_ids": [
+          "rel_574accdb6a122015",
+          "rel_ae6220fe1114bbed"
+        ],
+        "gold_relation": "dec-answer-mitsui-relation",
+        "matched": true
+      }
+    ]
+  },
+  "population": {
+    "answer_pairs": 299,
+    "candidate_pairs": 333,
+    "distinct_question_groups": 66,
+    "non_answer_pairs": 34,
+    "packet_calls_if_live": 4,
+    "pairwise_terminals": 333,
+    "question_group_terminals": 100,
+    "terminal_reduction": 233,
+    "terminal_reduction_rate": 0.6996996996996997
+  },
+  "prompts": {
+    "char_reduction": 67913,
+    "char_reduction_rate": 0.3481896578243081,
+    "deterministic": true,
+    "pairwise_v2_total_chars": 195046,
+    "question_group_total_chars": 127133,
+    "records": [
+      {
+        "answer_pairs": 24,
+        "candidate_pairs": 31,
+        "expected_terminals": 15,
+        "non_answer_pairs": 7,
+        "oracle_present": 16,
+        "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+        "prompt_chars": 12069,
+        "prompt_sha256": "sha256:d768553dff8740ec76781c85de14c98948f6c0746d208900e2a9dde99b275483",
+        "question_groups": 8,
+        "response_sha256": "sha256:9c9aef78b0b8d4455ef14e7dae090c7bbe3bf5f13584622a1b193592db0d49bf"
+      },
+      {
+        "answer_pairs": 75,
+        "candidate_pairs": 84,
+        "expected_terminals": 25,
+        "non_answer_pairs": 9,
+        "oracle_present": 77,
+        "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+        "prompt_chars": 34892,
+        "prompt_sha256": "sha256:4ff42efa06a8eac183a9e1e8c32a7b632abf3c2d8131c235024337992c21f49f",
+        "question_groups": 16,
+        "response_sha256": "sha256:ef94b4878ac98b89bc6b4ec57164859d8bb76bbbd64070d989a4d3aaaddaf5c9"
+      },
+      {
+        "answer_pairs": 85,
+        "candidate_pairs": 91,
+        "expected_terminals": 22,
+        "non_answer_pairs": 6,
+        "oracle_present": 5,
+        "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+        "prompt_chars": 33681,
+        "prompt_sha256": "sha256:3ab6950ac17f2c97dfef2be3b9e6571335714dffb1bd0eaa4e1990216f8c8846",
+        "question_groups": 16,
+        "response_sha256": "sha256:866834133ed42f66057f8b58a5bb5ccf7f8aa23a257d74132e8599063040bd23"
+      },
+      {
+        "answer_pairs": 115,
+        "candidate_pairs": 127,
+        "expected_terminals": 38,
+        "non_answer_pairs": 12,
+        "oracle_present": 118,
+        "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+        "prompt_chars": 46491,
+        "prompt_sha256": "sha256:1069e484b7596bc25ea7ec35a45785ef2b8897e4132a79d765762783a359f673",
+        "question_groups": 26,
+        "response_sha256": "sha256:ecc87bbf47b7bca2201a0d63a675d2234e2ab11e8047775effe8444cd966acf7"
+      }
+    ]
+  },
+  "protocol": "material-relations-question-group-jsonl-v1",
+  "publication_query_delivery_context_use": 0,
+  "schema_version": "relation-question-group-zero-call-summary-1",
+  "source": {
+    "candidate_rule_version": "material-relation-candidates-v5",
+    "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+    "items_payload_sha256": "sha256:3be73cf547b51c491f7f6cf0df7bab213c1247e49205a5e7938d95d0ba0098ba",
+    "p10_relation_payload_sha256": "sha256:02839a6c25a5769695bcb5c1a8907c8e3a8aaad0d957a56e2c797d4e1e3fcdf8",
+    "signed_sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+  },
+  "status": "zero_call_implementation_complete_live_validation_not_authorized"
+}

@@ -1,10 +1,10 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: p12-selector-v2-live-quality-failed-question-group-remediation-open
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4。P11 的 32 条 present precision 样本与 12 条 absent 哨兵已由 xyl 签认，分层 precision 点估计为 54.38%，并确认 5 个 FP、4 个 FN。P12 已按授权执行 4 次 relation 调用，4/4 transport/协议成功但质量门失败：签认样本 34/44，低于 P10 的 35/44；9 个已知错误仅修复 4 个；target relation recall 降为 3/4。v2 不发布，下一步改为零调用 question-group answer selector 设计。发布与消费为 0
+Status: closed-p14-final-gate-failed-current-model-extractor-route-rejected
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4。P11 relation 样本已由 xyl 签认；P12 v2 的 4 次调用在质量门失败并被拒绝。P13 完成零调用 question-group selector。P14 已用完最终 4 次 relation 预算：4 次传输成功、0 retry，但仅 2/4 packet completed，另两包因 15 条非法 `status` 严格失败。最终门失败；P15、追加调用及当前任务内 prompt/schema 放宽均禁止。发布与消费为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model attempts: 62（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4 + P12 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
+Model attempts: 66（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4 + P12 relations 4 + P14 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
 Production database access: 0
 
 ## 目标
@@ -97,6 +97,14 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P12 live execution summary](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/execution-summary.json)
 - [P12 signed-sample regression](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/signed-sample-regression.json)
 - [P12 failure analysis](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/failure-analysis.json)
+- [P13 question-group manifest](../evidence/18-material-extractor-replacement-20261009/p13-question-group-answer-selector-zero-call/manifest.json)
+- [P13 zero-call summary](../evidence/18-material-extractor-replacement-20261009/p13-question-group-answer-selector-zero-call/zero-call-summary.json)
+- [P14 final plan manifest](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/manifest.json)
+- [P14 final gate](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/final-gate.json)
+- [P14 frozen plan diff](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/plan-diff-summary.json)
+- [P14 execution manifest](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/execution-manifest.json)
+- [P14 protocol audit](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/protocol-audit.json)
+- [P14 final decision](../evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/final-decision.json)
 
 ## Comments
 
@@ -225,3 +233,30 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   context_use 仍为 0。为避免被否决版本被新直接调用方误用，selector 默认/`latest` 已退回 v1；v2
   只保留 read-compatible 审计与 replay。相关语义、执行和合约回归 130 passed，Ruff、Pyright 通过，
   P10/P12 两份冻结 plan identity 均保持有效。
+- 2026-10-10：P13 新增实验协议 `material-relations-question-group-jsonl-v1`，默认协议仍为 v1，未冻结
+  live plan。controller 按 question target 对既有 candidate-v5 `answers` pair 分组，模型接口每个问题
+  只返回一次本地 answer indexes；非 answers 继续使用 pair terminal。controller 再把索引展开为原 pair、
+  精确证据窗口和 relation ID；缺失、重复、越界与非法终态均 fail closed。P10 的 333 个冻结候选中，
+  299 个 answer pair 形成 66 个 question group，另有 34 个非 answer pair，所需终态由 333 降到 100
+  （-69.97%），prompt 字符数 195,046→127,133（-34.82%）。用 P10 决定加 P11 已签认 44 例构造的
+  oracle replay 精确展开 216 个预期 pair，44/44 签认例和 4/4 target 均保留；这是接口/映射证明，不是
+  live 模型准确率。聚焦文件回归 146 passed；全量 corpus 1389 passed、17 skipped，只保留本地 golden
+  0/20 与 reader-pdf-10/11 两项既有环境失败；Ruff、Pyright 通过。model calls、publication、query、
+  delivery、context_use 均为 0。
+- 2026-10-10：P14 最终 batch
+  `batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58` 已以 0 model requests
+  冻结。P12→P14 仅 relation protocol 从被拒绝的 v2 变为
+  `material-relations-question-group-jsonl-v1`，其余 snapshot、签认 items import、candidate-v5、
+  validation-v11、strict `complete_parent`、provider/model 与预算均不变；计划只含 env credential ref。
+  Claims/items attempts=0，relations≤4，0 retry expansion。最终门固定为：4 包 completed、0 partial/
+  failed、签认样本≥40/44、9 个已知错误至少修复 7 个、35 个既有正确项最多回退 2 个、target 4/4。
+  无论通过或失败都结束当前 extractor 修复线，P15 不允许；通过后仅可另行授权最小正向消费，失败后
+  模型/算法替换必须新立任务。当前 execute、publication、query、delivery、context_use 均未授权。
+- 2026-10-10：按 xyl 的下一步执行授权运行 P14，Claims/items attempts=0，relations 恰好 4 次且无
+  retry；四次 HTTP/model attempt 均 succeeded。usage 为 prompt 53,370、completion 14,189、reasoning
+  11,657、total 67,559 tokens，成本元数据不可用且不记为 0。第 2、3 包共 15 条 non-answer terminal
+  把关系类型填入 `status`（8 challenges、5 supports、2 conditions），违反仅允许 `present/absent` 的
+  冻结 Schema；controller 未归一化或放宽，结果为 2 completed、2 failed。故 P14 在协议完整性门即失败，
+  44/9/35/4 质量指标不作有效计分；两包残留的 92 条关系只是 incomplete candidate payload，不发布、
+  不消费。按已签认终止规则关闭当前模型+extractor 路线；P15、追加调用、当前任务内 prompt/schema
+  修补均不允许，任何替换另立新任务。publication/query/delivery/context_use 仍为 0。
