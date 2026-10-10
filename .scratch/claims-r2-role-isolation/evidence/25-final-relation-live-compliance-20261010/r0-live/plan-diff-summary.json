@@ -1,0 +1,32 @@
+{
+  "baseline_batch_id": "batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "changed": {
+    "protocol": {
+      "from": "material-relations-question-group-jsonl-v1",
+      "to": "material-relations-question-group-jsonl-v2"
+    }
+  },
+  "execution_authorized": true,
+  "model_requests_during_verification": 0,
+  "new_batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "new_plan_sha256": "sha256:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "publication_authorized": false,
+  "schema_version": "issue25-final-live-plan-diff-1",
+  "status": "verified_authorized_not_executed",
+  "unchanged": {
+    "accepted_items": true,
+    "candidate_rule": "material-relation-candidates-v5",
+    "dependency_policy": "complete_parent",
+    "items_validation": "material-items-validation-v11",
+    "model": "doubao-seed-2.1-lite",
+    "provider": "openai_compat",
+    "relation_attempts_max": 4,
+    "request_options": {
+      "max_output_tokens": 262144,
+      "reasoning_effort": "minimal",
+      "timeout_seconds": 300.0,
+      "token_parameter": "max_tokens"
+    },
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+  }
+}

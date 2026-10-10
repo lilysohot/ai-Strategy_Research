@@ -1,0 +1,34 @@
+{
+  "schema_version": "issue22-doubao-lite-final-decision-1",
+  "decided_on": "2026-10-10",
+  "status": "failed_protocol_and_signed_semantic_gate_route_closed",
+  "batch_id": "batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "strict_gate": {
+    "relation_packets_completed": {"required": 4, "actual": 2, "passed": false},
+    "partial_packets": {"maximum": 0, "actual": 0, "passed": true},
+    "failed_packets": {"maximum": 0, "actual": 2, "passed": false}
+  },
+  "zero_call_diagnostic_gate": {
+    "candidate_decisions_reconstructed": {"required": 333, "actual": 333, "passed": true},
+    "signed_cases": {"minimum": 40, "actual": 37, "passed": false},
+    "known_errors": {"minimum": 7, "actual": 7, "passed": true},
+    "previously_correct_regressions": {"maximum": 2, "actual": 5, "passed": false},
+    "target_relations": {"minimum": 4, "actual": 4, "passed": true},
+    "supports_conditions_regressions": {"maximum": 0, "actual": 1, "passed": false}
+  },
+  "root_cause": {
+    "output_budget_exhausted": false,
+    "reasoning_budget_consumed": false,
+    "visible_output_obtained": true,
+    "protocol_defect": "five challenge terminals used relation type as status",
+    "semantic_quality_determined": true,
+    "semantic_quality_passed": false
+  },
+  "terminal_policy": {
+    "additional_model_calls_allowed": false,
+    "diagnostic_normalization_authorized_for_publication": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false,
+    "next_state": "close this model capability trial; do not spend more calls on token tuning"
+  }
+}

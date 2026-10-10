@@ -54,6 +54,10 @@
 | 19 | [relation selection 后继路线零调用去留门](issues/19-relation-selection-successor.md) | 18 的 P14 失败终态 | 零调用区分格式与语义失败；R0 no-go 后关闭同模型后继 |
 | 20 | [GLM-5.3-Flash relation-only 单变量有界复验](issues/20-relation-model-replacement.md) | 19 no-go、独立授权 | 仅换模型的 4-call 复验；输出 token 耗尽后关闭 |
 | 21 | [GLM-5.3-Flash 16K 输出兼容性有界复验](issues/21-glm-token-compatibility.md) | 20 输出耗尽、独立授权 | 仅放宽 output tokens；仍无可见输出并出现 outcome_unknown |
+| 22 | [Doubao Seed 2.1 Lite 供应商上限能力复验](issues/22-doubao-lite-provider-ceiling.md) | 21 兼容性失败、独立授权 | 256K + minimal 的 4-call 能力试验；有可见输出但协议/语义门失败 |
+| 23 | [Relation 语义边界更正与零调用敏感性复评](issues/23-relation-adjudication-correction.md) | 22 的 7 条签认误差 | 保留 signed-v1；44/44 统一审计并由 xyl 签认 gold-v2 |
+| 24 | [Relation question-group 布尔终态协议与零调用回放](issues/24-relation-boolean-protocol.md) | 23 signed gold-v2 | non-answer 改为局部索引 + boolean；4/4 packet、333/333 决定零调用闭环 |
+| 25 | [Relation boolean v2 最终有界真实服从性复验](issues/25-final-relation-live-compliance.md) | 24 零调用通过、独立授权 | 4/4 协议完整；gold-v2 仅 30/38，按终止规则关闭路线 |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
@@ -75,6 +79,29 @@ present，完整恢复 333 个决定，但签认样本仅
 4.4—4.6 分钟，全部以 `finish_reason=length` 结束且为空；49,152 completion tokens 中
 49,121 为 reasoning。第四次在 300 秒处 outcome_unknown，不得重发。因此单纯增加 token 已被
 反事实否决；未来只能控制/禁用 reasoning，或使用能保证可见结构化输出的模型。
+22 使用用户切换后的 `doubao-seed-2.1-lite`，明确设置供应商最大回答 262,144 tokens 和
+`reasoning_effort=minimal`。四次请求均成功且 reasoning 为 0，返回 100 行可见终态；5 行
+`challenges` 被写入 status，严格门为 2/4 packet completed。零调用窄化归一可恢复 333/333 决定，
+但质量门为 37/44、7/9、旧正确回退 5、target 4/4、supports/conditions 回退 1，仍不发布。
+23 先对上述 7 条误差复核，再按相同规则覆盖全部 44 条，避免只审失败项的选择偏差。全量审计新增
+发现 `不一定全部` 缺少宾语、`还是什么？` 缺少问题谓词和指代对象两条不可评分端点；连同泛化问题、
+复合 supports target、产能/产品结构绑定、交付/回款绑定，共排除 6 条。完整 `pair_window` 证明
+“扩产意愿不大”和“半年就得换”是互补 answer atoms，两条 truth 从 absent 建议更正为 present。
+gold-v2 草案因此为 38 条；对 Issue 22 已有响应零调用重算得到 37/38，等比例最低门 35/38，已知
+错误 9/9、旧正确回退 1、target 4/4、supports/conditions 回退 0。唯一保留错误是把兼容厚度排序判成
+challenge。该草案仍须独立签认；签认前不替换 P11 signed-v1，也不把 Issue 22 事后改写为通过。
+用户随后以 xyl 身份签认 gold-v2。24 新增显式协议 `material-relations-question-group-jsonl-v2`：answers
+继续返回 question-local selected indices，non-answer 仅返回 `relation_index` 与 JSON boolean
+`is_present`，relation type、pair identity、证据窗口和 relation ID 均由 controller 回填。Issue 22 的
+冻结决定经新协议零调用重放后为 4/4 packet complete、333/333 candidate decisions、100 terminals、
+212 relations，missing/duplicate/invalid 全为 0；gold-v2 分数维持 37/38。该结果只证明 Interface 和
+parser 闭环，不证明模型会服从新 shape，最终 live compliance 仍须独立计划与明确授权。
+用户随后明确授权 25 的最终最多 4 次真实复验。新计划与 Issue 22 相比只把 question-group v1 换成
+boolean v2；4/4 请求成功并形成 4 completed、333/333 决定、0 missing/duplicate/invalid，证明协议
+修复在真实模型上生效。但签认 gold-v2 只有 30/38（最低 35），known errors 6/9（最低 7），29 条
+非 known-error 案例回退 5（最多 2）；只有 target 4/4 和 supports/conditions 回退 0 通过。因此失败
+根因已经从协议收敛为模型语义不稳定。按冻结终止规则关闭当前模型 + extractor 路线，不追加调用、
+不改 prompt、不降门槛、不依据结果重整金标。
 W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 
@@ -182,7 +209,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
 | R2 items | `material-atomic-selector-jsonl-v5`（新计划显式选择）；selector v1-v4 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
-| R2 relations | `material-relations-selector-jsonl-v2`（新计划显式选择）；selector v1 / `material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态；v2 明确直接回答与同 turn 主题漂移、部分回答、前提纠正和自我修正的原子判定 |
+| R2 relations | `material-relations-question-group-jsonl-v2`（新最终计划显式选择）；question-group v1、selector v1-v2 / `material-relations-jsonl-v1`（历史可读） | answers 返回 question-local selected indices；non-answer 只返回 relation index 与 JSON boolean；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window` 并回填关系；字符串布尔、旧 status shape 和 type-as-status fail closed |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持
 矩阵，真实请求前返回 `CS_PROTOCOL_UNSUPPORTED`，不静默降级。关系候选只从同一 snapshot、同一或
@@ -206,7 +233,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 ### 4.7 合成资产与指纹
 
 - Schema 清单：`contracts/contract-manifest.json`，SHA-256
-  `9b2116de3e9b03da6c0e76c7e84073f870004a769e291ee545eb1dce63ee21a4`。
+  `039d56e5261ddf4847da7457d0972afebc628cb8fb35ccde40669ce83230befa`。
 - 合成资产清单：`tests/fixtures/corpus_structured_synthetic/asset-manifest.json`，SHA-256
   `6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073`；cases SHA-256
   `df2f1c9e4005a13702df798df0141b397c99a90e68ff9a8f1b4179692a23b179`。覆盖普通数字、纯观点、
@@ -241,11 +268,13 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
-- Issue 18—21 共有独立授权的 74 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
-  P10 relations 4、P12 relations 4、P14 relations 4、Issue 20 GLM relations 4、Issue 21 GLM-16K relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9
+- Issue 18—25 共有独立授权的 82 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
+  P10 relations 4、P12 relations 4、P14 relations 4、Issue 20 GLM relations 4、Issue 21 GLM-16K relations 4、Issue 22 Doubao Lite relations 4、Issue 25 boolean-v2 relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9
   preflight 均为 0 模型调用。P9 在配置检查时 0 attempt 阻断并由新 plan 取代；P10 与 P12 各恰好执行
   4 次 relation 调用、4/4 succeeded、0 retry，items/Claims attempts 仍为 0。P12 协议成功但质量门失败；
-  P14 在协议门失败；Issue 20 四次均耗尽 4K 上限且为空；Issue 21 放宽到 16K 后三次仍为空、一次 outcome_unknown。
+  P14 在协议门失败；Issue 20 四次均耗尽 4K 上限且为空；Issue 21 放宽到 16K 后三次仍为空、一次 outcome_unknown；
+  Issue 22 的 4 次 Doubao Lite 请求均成功并产生可见输出，但严格协议与签认语义门仍失败；Issue 23/24
+  均为 0 调用审计/实现，Issue 25 最终 4 次通过 boolean v2 协议门但未通过 signed gold-v2 质量门。
   这些执行均不转授 publication、query、delivery、context_use 或额外 live budget。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 

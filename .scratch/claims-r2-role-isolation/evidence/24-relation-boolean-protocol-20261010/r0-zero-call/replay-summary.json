@@ -1,0 +1,96 @@
+{
+  "constraints": {
+    "historical_issue22_changed": false,
+    "model_calls": 0,
+    "model_protocol_compliance_claimed": false,
+    "production_database_access": 0,
+    "publication_query_delivery_context_use": 0
+  },
+  "created_on": "2026-10-10",
+  "decision": "the boolean protocol and controller expansion close offline; one bounded live trial is still required to establish model compliance",
+  "gold_v2": {
+    "eligible_cases": 38,
+    "signer": "xyl",
+    "status": "human_signed"
+  },
+  "packets": [
+    {
+      "candidate_pairs": 31,
+      "complete": true,
+      "duplicate_decisions": 0,
+      "expected_terminals": 15,
+      "invalid_decisions": 0,
+      "missing_decisions": 0,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "prompt_sha256": "sha256:bfc596881726f07bba17d2d202aca3abc05369179b7cbaab06def5d619e465ab",
+      "protocol": "material-relations-question-group-jsonl-v2",
+      "relations": 23,
+      "response_sha256": "sha256:f92f6417484b8098a3fe2f4fa032e93cc76e8016b9c0693a6f5b0bd29f2ac43a",
+      "terminals": 15
+    },
+    {
+      "candidate_pairs": 84,
+      "complete": true,
+      "duplicate_decisions": 0,
+      "expected_terminals": 25,
+      "invalid_decisions": 0,
+      "missing_decisions": 0,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "prompt_sha256": "sha256:149e954c927b377829a8d218160a793cee28b14eb2f1eafbe918223a02e7c0f6",
+      "protocol": "material-relations-question-group-jsonl-v2",
+      "relations": 61,
+      "response_sha256": "sha256:9b5b7dff6dd5f3ba350cdeb8d2c52992d650673e51bd429ca0350831a2c3f37c",
+      "terminals": 25
+    },
+    {
+      "candidate_pairs": 91,
+      "complete": true,
+      "duplicate_decisions": 0,
+      "expected_terminals": 22,
+      "invalid_decisions": 0,
+      "missing_decisions": 0,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "prompt_sha256": "sha256:c5c7d5c122df051f9d175cc3d95f289c90f708adc89f24053ec25643ad9b4770",
+      "protocol": "material-relations-question-group-jsonl-v2",
+      "relations": 41,
+      "response_sha256": "sha256:622e9b9a82af107ff9e6755b1297edec0bb5571480d77d007d0be95639b27ec4",
+      "terminals": 22
+    },
+    {
+      "candidate_pairs": 127,
+      "complete": true,
+      "duplicate_decisions": 0,
+      "expected_terminals": 38,
+      "invalid_decisions": 0,
+      "missing_decisions": 0,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "prompt_sha256": "sha256:dea1a0de576145e7b01df0a0d6272711656fc3e86e371b56c5d02f3040ac5e2a",
+      "protocol": "material-relations-question-group-jsonl-v2",
+      "relations": 87,
+      "response_sha256": "sha256:f5d1d36a09a57a356b2eea12f8656c61004a63f62cdda0fecc86a18d054b6192",
+      "terminals": 38
+    }
+  ],
+  "protocol": "material-relations-question-group-jsonl-v2",
+  "protocol_replay": {
+    "candidate_pairs": 333,
+    "duplicate_decisions": 0,
+    "invalid_decisions": 0,
+    "missing_decisions": 0,
+    "packets_complete": 4,
+    "packets_total": 4,
+    "relations": 212,
+    "terminals": 100
+  },
+  "schema_version": "relation-question-group-boolean-zero-call-replay-1",
+  "signed_gold_sensitivity": {
+    "accuracy": 0.9736842105263158,
+    "correct": 37,
+    "eligible_cases": 38,
+    "remaining_errors": [
+      "pair_4adac65ac8099417"
+    ]
+  },
+  "source_batch_id": "batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "status": "zero_call_protocol_replay_passed"
+}

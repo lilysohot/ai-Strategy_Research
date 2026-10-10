@@ -1,0 +1,13 @@
+{
+  "schema_version": "issue25-final-live-freeze-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "frozen_not_executed",
+  "batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "plan_sha256": "sha256:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "files_sha256": {
+    "plan.json": "sha256:f5290acbee9b134e1c0f3c80daca9f4f85b18a8adef67a990ee8e57823a62e45",
+    "final-gate.json": "sha256:0dc9907d2f7c2ad42cb160063432747771f47f7c605d8b4254c4b83e9e4fbca0"
+  },
+  "model_requests_during_freeze": 0,
+  "authorized_relation_attempts_max": 4
+}

@@ -11,6 +11,8 @@ See ``.scratch/web-business-context/issues/01-context-inheritance.md`` §9.
 from __future__ import annotations
 
 import json
+import uuid
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
@@ -30,7 +32,7 @@ from frontier_agent.core.llm import LLMResponse
 from frontier_agent.core.loop_types import AgentLoopResult, LoopConfig, LoopPolicy
 from frontier_agent.core.messages import assistant_msg, system_msg, user_msg
 from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
-from server.history import resolve_prior_conversation
+from server.history import CONVERSATION_DUMP_RELPATH, resolve_prior_conversation
 from server.orchestrator import _stage_prior_conversation
 
 _SYSTEM = "SYSTEM PROMPT"
@@ -41,6 +43,27 @@ _TOOLS = [
 _TOOL_NAMES = ["alpha", "beta"]
 _PIPELINE = "stateful-react-agent"
 _NODE = "react_agent"
+
+
+@pytest.fixture
+async def db(tmp_path):
+    """Throwaway SQLite database — the web tests' per-file fixture, mirrored.
+
+    ``run_once`` builds its run tree through ``server.config`` and may touch the
+    store, so it needs the same isolated database the sibling tests use.
+    """
+    from server.config import get_config
+    from server.store import init_db, reset_engine
+
+    cfg = get_config()
+    orig_url, orig_key = cfg.database_url, cfg.master_key
+    cfg.database_url = f"sqlite+aiosqlite:///{tmp_path / 'test.db'}"
+    cfg.master_key = f"test-master-{uuid.uuid4().hex}"
+    await reset_engine()
+    await init_db()
+    yield cfg
+    cfg.database_url, cfg.master_key = orig_url, orig_key
+    await reset_engine()
 
 
 def _tool_call(call_id: str, *, name: str = "alpha") -> dict:
@@ -437,3 +460,224 @@ def test_staging_copies_the_dump_and_removes_a_stale_one(tmp_path) -> None:
     dest.write_text("stale", encoding="utf-8")
     _stage_prior_conversation(run_dir, str(run_dir / "gone.json"))
     assert not dest.exists()
+
+
+def test_writer_and_reader_agree_on_where_the_dump_lives() -> None:
+    """The node writes into ``metadata["_trial_dir"]`` (worker: ``paths["run"]``);
+    the server reads a fixed run-relative path. If those two ever drift, replay
+    silently stops happening — with no error anywhere — so the equivalence is
+    pinned here."""
+    import shutil
+
+    from server.config import build_run_paths, run_dir_for
+
+    run_hex = uuid.uuid4().hex
+    root = Path(run_dir_for(run_hex))
+    assert not root.exists()
+    try:
+        written = build_run_paths(run_hex)["run"] / "conversation.json"
+        read = root.joinpath(*CONVERSATION_DUMP_RELPATH)
+        assert written == read
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+# ── the phase-1 precondition, pinned at its real chokepoint ──────────
+
+
+def test_the_native_filesystem_note_embeds_a_per_run_path(monkeypatch) -> None:
+    """Native mode puts the *physical* workspace path into the system prompt.
+
+    Those paths carry the run id, so the request prefix differs on every turn of
+    one conversation — the acceptance run refused the replay with exactly
+    ``system prompt mismatch`` because of this single line. Container mode renders
+    the logical ``/workspace`` convention and is byte-stable, which is why phase 1
+    is cache-effective there. Pinned so the defect (or its fix) cannot slip by
+    unnoticed.
+    """
+    from workflows.stateful_react_agent._runtime import render_system_prompt_notes
+
+    monkeypatch.delenv("FRONTIER_AGENT_PROJECT_DIR", raising=False)
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/aaaa/ws")
+    monkeypatch.setenv("FRONTIER_AGENT_INPUTS_DIR", "/runs/aaaa/inputs")
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", "/runs/aaaa/ws/outputs")
+    first = render_system_prompt_notes(sandbox_mode="native", tool_names=["read_file"])
+
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/bbbb/ws")
+    monkeypatch.setenv("FRONTIER_AGENT_INPUTS_DIR", "/runs/bbbb/inputs")
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", "/runs/bbbb/ws/outputs")
+    second = render_system_prompt_notes(sandbox_mode="native", tool_names=["read_file"])
+
+    assert "/runs/aaaa/ws" in first
+    assert "/runs/bbbb/ws" in second and "/runs/aaaa/ws" not in second
+
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/cccc/ws")
+    third = render_system_prompt_notes(sandbox_mode="container", tool_names=["read_file"])
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/dddd/ws")
+    fourth = render_system_prompt_notes(sandbox_mode="container", tool_names=["read_file"])
+
+    assert third == fourth
+    assert "/runs/" not in third
+
+
+# ── the state channel (extra_input → the node's filtered state) ──────
+
+
+def test_the_react_spec_lets_the_replay_payload_reach_the_node() -> None:
+    from frontier_agent.core.runtime.dag.graph_builder import apply_context_filter
+    from workflows.stateful_react_agent.spec import REACT_SPEC
+
+    policy = REACT_SPEC.nodes[0].context_policy
+
+    filtered = apply_context_filter(
+        policy,
+        {"original_question": "q", "replay_payload": '{"schema": "x"}', "unrelated": 1},
+    )
+
+    assert filtered["replay_payload"] == '{"schema": "x"}'
+    assert "unrelated" not in filtered
+
+
+# ── the worker's half of the transport chain ─────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_worker_hands_the_dump_to_the_workflow_verbatim(db, tmp_path, monkeypatch):
+    """The worker must not parse the dump — it passes the bytes through, and the
+    session-level business flag (not this run's snapshot) picks the prefix
+    config."""
+    import os
+    import uuid
+    from argparse import Namespace
+
+    from server import worker as worker_mod
+    from server.config import run_dir_for
+
+    run_id = uuid.uuid4().hex
+    run_root = run_dir_for(run_id)
+    run_root.mkdir(parents=True, exist_ok=True)
+    payload = '{"schema": "conversation-dump/1", "messages": []}'
+    (run_root / "prior_conversation.json").write_text(payload, encoding="utf-8")
+
+    captured: dict[str, Any] = {}
+
+    class FakeBenchmarkSession:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
+            captured["extra_input"] = extra_input or {}
+            captured["meta"] = meta or {}
+            return {"final_answer": "ok", "replay_decision": {"decision": "used"}}
+
+    monkeypatch.setattr(
+        "benchmarks.public.core.kernel_adapter.BenchmarkSession",
+        FakeBenchmarkSession,
+    )
+    monkeypatch.setattr(
+        "server.config.run_dir_for",
+        lambda rid: run_root if rid == run_id else run_dir_for(rid),
+    )
+
+    args = Namespace(
+        run_id=run_id,
+        session_id="s",
+        turn_index=2,
+        prompt="q",
+        prompt_addendum="",
+        pipeline_id="stateful-react-agent",
+        backend="native",
+        wall_time=10,
+        max_turns=5,
+        model="",
+        base_url="",
+        api_key="",
+        agent_tools="",
+        business_prefix=1,
+    )
+    # run_once installs the per-run environment into os.environ by contract;
+    # restore it so later tests do not inherit workspace/sandbox vars.
+    env_snapshot = dict(os.environ)
+    try:
+        assert await worker_mod.run_once(args) == 0
+    finally:
+        os.environ.clear()
+        os.environ.update(env_snapshot)
+
+    assert captured["extra_input"]["replay_payload"] == payload
+    tools = captured["meta"]["profile_overrides"]["agent"]["agent_tools"]
+    assert "investment_position_sizing" in tools
+    assert "position_sizing" not in tools
+    assert "BUSINESS CONTEXT POLICY" in captured["meta"]["_sys_prompt_addendum"]
+    summary = json.loads((run_root / "summary.json").read_text(encoding="utf-8"))
+    assert summary["replay"] == {"decision": "used"}
+
+
+@pytest.mark.asyncio
+async def test_worker_non_business_prefix_keeps_the_calculation_tools(db, monkeypatch):
+    import os
+    import uuid
+    from argparse import Namespace
+
+    from server import worker as worker_mod
+    from server.config import run_dir_for
+
+    run_id = uuid.uuid4().hex
+    run_root = run_dir_for(run_id)
+    run_root.mkdir(parents=True, exist_ok=True)
+
+    captured: dict[str, Any] = {}
+
+    class FakeBenchmarkSession:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
+            captured["extra_input"] = extra_input or {}
+            captured["meta"] = meta or {}
+            return {"final_answer": "ok"}
+
+    monkeypatch.setattr(
+        "benchmarks.public.core.kernel_adapter.BenchmarkSession",
+        FakeBenchmarkSession,
+    )
+    monkeypatch.setattr(
+        "server.config.run_dir_for",
+        lambda rid: run_root if rid == run_id else run_dir_for(rid),
+    )
+
+    args = Namespace(
+        run_id=run_id,
+        session_id="s",
+        turn_index=1,
+        prompt="q",
+        prompt_addendum="",
+        pipeline_id="stateful-react-agent",
+        backend="native",
+        wall_time=10,
+        max_turns=5,
+        model="",
+        base_url="",
+        api_key="",
+        agent_tools="",
+        business_prefix=0,
+    )
+    env_snapshot = dict(os.environ)
+    try:
+        await worker_mod.run_once(args)
+    finally:
+        os.environ.clear()
+        os.environ.update(env_snapshot)
+
+    # No dump staged: the payload key must be absent, not empty.
+    assert "replay_payload" not in captured["extra_input"]
+    tools = captured["meta"]["profile_overrides"]["agent"]["agent_tools"]
+    assert "position_sizing" in tools
+    assert "investment_position_sizing" not in tools
+    assert "BUSINESS CONTEXT POLICY" not in captured["meta"]["_sys_prompt_addendum"]

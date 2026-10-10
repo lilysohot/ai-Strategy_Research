@@ -1,0 +1,310 @@
+{
+  "attempt_status": {
+    "succeeded": 4
+  },
+  "audited_on": "2026-10-10",
+  "batch_id": "batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "max_output_tokens": 262144,
+  "model": "doubao-seed-2.1-lite",
+  "model_requests_during_audit": 0,
+  "packet_status": {
+    "completed": 2,
+    "deferred": 0,
+    "failed": 2,
+    "partial": 0
+  },
+  "plan_sha256": "sha256:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "publication_query_delivery_context_use": 0,
+  "reasoning_effort": "minimal",
+  "relation_task": {
+    "error_codes": [],
+    "execution_status": "failed",
+    "protocol_status": "not_checked",
+    "publication_status": "unpublished",
+    "quality_status": "review_required",
+    "reason_codes": [
+      "relations_error:ValueError",
+      "role_scope_not_fully_covered"
+    ]
+  },
+  "responses": [
+    {
+      "attempt_id": "attempt:eafb8687b3b89b5f6577a8a596de0e6e6e827d3b48ea515cd0509de7f3579ceb",
+      "attempt_number": 1,
+      "completion_tokens": 359,
+      "content_chars": 1452,
+      "duration_ms": 5705,
+      "execution_status": "succeeded",
+      "finish_reason": "stop",
+      "nonempty_lines": 15,
+      "packet_diagnostics": {
+        "candidate_rule_version": "material-relation-candidates-v5",
+        "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+        "error_type": "ValueError",
+        "items_run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+        "items_validation_version": "material-items-validation-v11",
+        "response_format": "material-relations-question-group-jsonl-v1"
+      },
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_records": 0,
+      "packet_status": "failed",
+      "prompt_tokens": 5012,
+      "reasoning_effort": null,
+      "reasoning_tokens": 0,
+      "response_model": "doubao-seed-2-1-lite-260915",
+      "response_object_sha256": "sha256:443cf773adcf435adf4ebf9df38635e34a935d0a909d0e08bd5e66b5e618738b",
+      "response_sha256": "sha256:c918b13e5298f394b18b4a65814820a0c74e4e399d75c3cb80e43b8244ffc5a2",
+      "strict_line_violations": [
+        {
+          "keys": [
+            "evidence_selector",
+            "record_type",
+            "relation_index",
+            "status"
+          ],
+          "line_number": 12,
+          "line_prefix": "{\"record_type\":\"relation_result\",\"relation_index\":9,\"status\":\"challenges\",\"evidence_selector\":\"pair_window\"}",
+          "reasons": [
+            "invalid_status"
+          ],
+          "record_type": "relation_result"
+        }
+      ]
+    },
+    {
+      "attempt_id": "attempt:77afa730876bc75c70a43f6e3082d94f88517f9be1f9d7f6e68e660db164ed2d",
+      "attempt_number": 2,
+      "completion_tokens": 824,
+      "content_chars": 2609,
+      "duration_ms": 10950,
+      "execution_status": "succeeded",
+      "finish_reason": "stop",
+      "nonempty_lines": 25,
+      "packet_diagnostics": {
+        "adapter_version": "structured-chat-http-3",
+        "answer_groups": 16,
+        "attempt_id": "attempt:77afa730876bc75c70a43f6e3082d94f88517f9be1f9d7f6e68e660db164ed2d",
+        "attempts": 1,
+        "candidate_pairs": 84,
+        "candidate_rule_version": "material-relation-candidates-v5",
+        "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+        "completion_tokens": 824,
+        "content_chars": 2609,
+        "cost": null,
+        "decisions": 25,
+        "duplicate_decisions": 0,
+        "duration_ms": 10950,
+        "execution_status": "succeeded",
+        "expected_terminals": 25,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "idempotency_key": "attempt:77afa730876bc75c70a43f6e3082d94f88517f9be1f9d7f6e68e660db164ed2d",
+        "invalid_decisions": 0,
+        "items_run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+        "items_validation_version": "material-items-validation-v11",
+        "missing_decisions": 0,
+        "model": "doubao-seed-2.1-lite",
+        "non_answer_pairs": 9,
+        "profile_sha256": "sha256:33127e6739a2bf6522026fa770c46f5bc219c9ba3907ba3684035389648105f5",
+        "prompt_tokens": 16078,
+        "protocol": "material-relations-question-group-jsonl-v1",
+        "provider": "openai_compat",
+        "reasoning_effort": "minimal",
+        "reasoning_tokens": 0,
+        "request_model": "doubao-seed-2.1-lite",
+        "request_sha256": "sha256:9f202b975615f3e0ea98bc1dcc85529e5095cc594590e4e22577044b9e62c9af",
+        "response_format": "material-relations-question-group-jsonl-v1",
+        "response_model": "doubao-seed-2-1-lite-260915",
+        "role": "material_relations",
+        "role_profile_sha256": "sha256:a45a495762bed713d553c1131a3200d217ebaaf117c37b5248b140ad31b53df2",
+        "selected_answers": 53,
+        "total_tokens": 16902,
+        "usage": {
+          "completion_tokens": 824,
+          "prompt_tokens": 16078,
+          "reasoning_tokens": 0,
+          "total_tokens": 16902
+        }
+      },
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "packet_reasons": [],
+      "packet_records": 61,
+      "packet_status": "completed",
+      "prompt_tokens": 16078,
+      "reasoning_effort": null,
+      "reasoning_tokens": 0,
+      "response_model": "doubao-seed-2-1-lite-260915",
+      "response_object_sha256": "sha256:6a4c558264bacb8840cb1d58fad51248070ff5daaa7abdf81160de9d0d44549c",
+      "response_sha256": "sha256:809107f6fdcd9a60ef688eb7c2155c38fe473cc053683653854d20e3858edcc7",
+      "strict_line_violations": []
+    },
+    {
+      "attempt_id": "attempt:1f28c0cef55cf6c5a7948042a34709bdd41057996a2b9ed6eea37b93d9d8caf1",
+      "attempt_number": 3,
+      "completion_tokens": 677,
+      "content_chars": 2216,
+      "duration_ms": 14132,
+      "execution_status": "succeeded",
+      "finish_reason": "stop",
+      "nonempty_lines": 22,
+      "packet_diagnostics": {
+        "adapter_version": "structured-chat-http-3",
+        "answer_groups": 16,
+        "attempt_id": "attempt:1f28c0cef55cf6c5a7948042a34709bdd41057996a2b9ed6eea37b93d9d8caf1",
+        "attempts": 1,
+        "candidate_pairs": 91,
+        "candidate_rule_version": "material-relation-candidates-v5",
+        "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+        "completion_tokens": 677,
+        "content_chars": 2216,
+        "cost": null,
+        "decisions": 22,
+        "duplicate_decisions": 0,
+        "duration_ms": 14132,
+        "execution_status": "succeeded",
+        "expected_terminals": 22,
+        "finish_reason": "stop",
+        "http_status": 200,
+        "idempotency_key": "attempt:1f28c0cef55cf6c5a7948042a34709bdd41057996a2b9ed6eea37b93d9d8caf1",
+        "invalid_decisions": 0,
+        "items_run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+        "items_validation_version": "material-items-validation-v11",
+        "missing_decisions": 0,
+        "model": "doubao-seed-2.1-lite",
+        "non_answer_pairs": 6,
+        "profile_sha256": "sha256:33127e6739a2bf6522026fa770c46f5bc219c9ba3907ba3684035389648105f5",
+        "prompt_tokens": 14165,
+        "protocol": "material-relations-question-group-jsonl-v1",
+        "provider": "openai_compat",
+        "reasoning_effort": "minimal",
+        "reasoning_tokens": 0,
+        "request_model": "doubao-seed-2.1-lite",
+        "request_sha256": "sha256:561572b26628d9d85e5008ef5d1cf387f057b6b48fd7046835027e2824cf03d0",
+        "response_format": "material-relations-question-group-jsonl-v1",
+        "response_model": "doubao-seed-2-1-lite-260915",
+        "role": "material_relations",
+        "role_profile_sha256": "sha256:a45a495762bed713d553c1131a3200d217ebaaf117c37b5248b140ad31b53df2",
+        "selected_answers": 36,
+        "total_tokens": 14842,
+        "usage": {
+          "completion_tokens": 677,
+          "prompt_tokens": 14165,
+          "reasoning_tokens": 0,
+          "total_tokens": 14842
+        }
+      },
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "packet_reasons": [],
+      "packet_records": 41,
+      "packet_status": "completed",
+      "prompt_tokens": 14165,
+      "reasoning_effort": null,
+      "reasoning_tokens": 0,
+      "response_model": "doubao-seed-2-1-lite-260915",
+      "response_object_sha256": "sha256:6948a13462200e74ffbce30d8778474e86747ed91de7b0f55759b1097084e3a0",
+      "response_sha256": "sha256:9c4483d9fc0387c28da2b17f64731d2ea76fc21d869495f2d83a49e121bd10d0",
+      "strict_line_violations": []
+    },
+    {
+      "attempt_id": "attempt:4209e6376b72c3a78bd99a50a916025226a4bf6839276f995b1afbc8da9f74b0",
+      "attempt_number": 4,
+      "completion_tokens": 1240,
+      "content_chars": 3930,
+      "duration_ms": 16007,
+      "execution_status": "succeeded",
+      "finish_reason": "stop",
+      "nonempty_lines": 38,
+      "packet_diagnostics": {
+        "candidate_rule_version": "material-relation-candidates-v5",
+        "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+        "error_type": "ValueError",
+        "items_run_id": "7cf53078c6791cbc19ccfa919494f8175bef820040bcc8123799a3b8342783ee",
+        "items_validation_version": "material-items-validation-v11",
+        "response_format": "material-relations-question-group-jsonl-v1"
+      },
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_records": 0,
+      "packet_status": "failed",
+      "prompt_tokens": 18163,
+      "reasoning_effort": null,
+      "reasoning_tokens": 0,
+      "response_model": "doubao-seed-2-1-lite-260915",
+      "response_object_sha256": "sha256:c885f8fe8a75363bd7c708ac592ed1bdf65c8ddcef0db7d35631574b8f2f714c",
+      "response_sha256": "sha256:78393b74af48b195940d448bc80a383f43487fed17dcd6b7b5c49b38bfd0b25d",
+      "strict_line_violations": [
+        {
+          "keys": [
+            "evidence_selector",
+            "record_type",
+            "relation_index",
+            "status"
+          ],
+          "line_number": 30,
+          "line_prefix": "{\"record_type\": \"relation_result\", \"relation_index\": 36, \"status\": \"challenges\", \"evidence_selector\": \"pair_window\"}",
+          "reasons": [
+            "invalid_status"
+          ],
+          "record_type": "relation_result"
+        },
+        {
+          "keys": [
+            "evidence_selector",
+            "record_type",
+            "relation_index",
+            "status"
+          ],
+          "line_number": 32,
+          "line_prefix": "{\"record_type\": \"relation_result\", \"relation_index\": 52, \"status\": \"challenges\", \"evidence_selector\": \"pair_window\"}",
+          "reasons": [
+            "invalid_status"
+          ],
+          "record_type": "relation_result"
+        },
+        {
+          "keys": [
+            "evidence_selector",
+            "record_type",
+            "relation_index",
+            "status"
+          ],
+          "line_number": 34,
+          "line_prefix": "{\"record_type\": \"relation_result\", \"relation_index\": 77, \"status\": \"challenges\", \"evidence_selector\": \"pair_window\"}",
+          "reasons": [
+            "invalid_status"
+          ],
+          "record_type": "relation_result"
+        },
+        {
+          "keys": [
+            "evidence_selector",
+            "record_type",
+            "relation_index",
+            "status"
+          ],
+          "line_number": 37,
+          "line_prefix": "{\"record_type\": \"relation_result\", \"relation_index\": 92, \"status\": \"challenges\", \"evidence_selector\": \"pair_window\"}",
+          "reasons": [
+            "invalid_status"
+          ],
+          "record_type": "relation_result"
+        }
+      ]
+    }
+  ],
+  "retained_relations": 102,
+  "schema_version": "issue22-doubao-lite-protocol-audit-1",
+  "usage": {
+    "completion_tokens": 3100,
+    "prompt_tokens": 53418,
+    "reasoning_tokens": 0,
+    "total_tokens": 56518
+  },
+  "visible_content_chars": 10207,
+  "visible_nonempty_lines": 100
+}

@@ -251,19 +251,24 @@ def test_manifest_freezes_interfaces_and_role_protocols() -> None:
         "material_relations_selector_latest": "material-relations-selector-jsonl-v1",
         "material_relations_selector_experimental_rejected": "material-relations-selector-jsonl-v2",
         "material_relations_question_group_experimental": "material-relations-question-group-jsonl-v1",
+        "material_relations_question_group_boolean": "material-relations-question-group-jsonl-v2",
         "material_relations_selector_read_compatible": [
             "material-relations-selector-jsonl-v1",
             "material-relations-selector-jsonl-v2",
             "material-relations-question-group-jsonl-v1",
+            "material-relations-question-group-jsonl-v2",
         ],
     }
     role_artifact = _load(CONTRACT_ROOT / "v1/role-artifact.schema.json")
-    assert "material-relations-selector-jsonl-v2" in role_artifact["properties"][
-        "protocol"
-    ]["enum"]
-    assert "material-relations-question-group-jsonl-v1" in role_artifact["properties"][
-        "protocol"
-    ]["enum"]
+    assert "material-relations-selector-jsonl-v2" in role_artifact["properties"]["protocol"]["enum"]
+    assert (
+        "material-relations-question-group-jsonl-v1"
+        in role_artifact["properties"]["protocol"]["enum"]
+    )
+    assert (
+        "material-relations-question-group-jsonl-v2"
+        in role_artifact["properties"]["protocol"]["enum"]
+    )
     assert manifest["business_schema_reuse"] == {
         "claims": "plugins.corpus.evidence_pipeline.EvidenceRun/EvidenceFact",
         "material": "plugins.corpus.material_semantics.MaterialRun/MaterialUnderstanding",

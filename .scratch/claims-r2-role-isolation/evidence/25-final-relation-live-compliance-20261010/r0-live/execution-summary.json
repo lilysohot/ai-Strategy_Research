@@ -1,0 +1,26 @@
+{
+  "attempt_status": {
+    "succeeded": 4
+  },
+  "automatic_retries": 0,
+  "batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "claims_calls": 0,
+  "created_on": "2026-10-10",
+  "items_calls": 0,
+  "model": "doubao-seed-2.1-lite",
+  "model_calls": 4,
+  "protocol_passed": true,
+  "publication_query_delivery_context_use": 0,
+  "quality_passed": false,
+  "relation_calls": 4,
+  "response_models": [
+    "doubao-seed-2-1-lite-260915"
+  ],
+  "schema_version": "issue25-final-live-execution-summary-1",
+  "usage": {
+    "completion_tokens": 2930,
+    "prompt_tokens": 53642,
+    "reasoning_tokens": 0,
+    "total_tokens": 56572
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "additional_extraction_calls_allowed": false,
+  "created_on": "2026-10-10",
+  "decision": "close current model plus extractor route; no prompt or threshold relaxation",
+  "protocol_passed": true,
+  "publication_authorized": false,
+  "quality_passed": false,
+  "schema_version": "issue25-final-live-decision-1",
+  "status": "failed_close_route"
+}

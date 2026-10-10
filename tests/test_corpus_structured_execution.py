@@ -17,6 +17,7 @@ from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import evidence_document_from_snapshot
 from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
+    MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_SELECTOR_JSONL_VERSION,
     build_candidate_slots,
@@ -576,6 +577,43 @@ def test_question_group_relation_role_uses_one_terminal_per_question() -> None:
     assert packet_run.status == "completed"
     assert packet_run.diagnostics["answer_groups"] == 1
     assert packet_run.diagnostics["expected_terminals"] == 1
+
+
+def test_question_group_v2_role_accepts_boolean_protocol_identity() -> None:
+    value = dialogue_snapshot()
+    items = execute_material_items_role(
+        value,
+        task_id="task:question-group-v2-items",
+        protocol=MATERIAL_SELECTOR_JSONL_VERSION,
+        llm=lambda _prompt: dialogue_selector_item_content(),
+        max_calls=1,
+        max_items_per_packet=64,
+        max_slots_per_batch=24,
+        max_estimated_tokens_per_batch=8192,
+    )
+    endpoints = tuple(item.item_id for item in items.payload.understanding.items)
+    response = json.dumps(
+        {
+            "record_type": "answer_group_result",
+            "question_index": 0,
+            "selected_answer_indices": [0],
+        },
+        ensure_ascii=False,
+    )
+
+    execution = execute_material_relations_role(
+        value,
+        task_id="task:question-group-v2-relations",
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+        items_execution=items,
+        endpoint_item_ids=endpoints,
+        llm=lambda prompt: response if "question_groups" in prompt else "",
+        max_calls=1,
+    )
+
+    assert execution.artifact.protocol_status == "valid"
+    assert execution.artifact.protocol == MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2
+    assert len(execution.payload.understanding.relations) == 1
 
 
 def test_selector_plan_freezes_relation_protocol_and_complete_parent_policy(
@@ -1607,12 +1645,8 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
     checked = replay_batch(plan, responses=responses, store_root=tmp_path / "store")
 
     assert len(checked.ledger.attempts) == 1
-    imported_task = next(
-        task for task in checked.ledger.tasks if task.role == "material_items"
-    )
-    relation_task = next(
-        task for task in checked.ledger.tasks if task.role == "material_relations"
-    )
+    imported_task = next(task for task in checked.ledger.tasks if task.role == "material_items")
+    relation_task = next(task for task in checked.ledger.tasks if task.role == "material_relations")
     assert imported_task.method == "imported"
     assert imported_task.execution_status == "succeeded"
     assert relation_task.execution_status == "succeeded"
@@ -1626,9 +1660,7 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
             200,
             json={
                 "model": "synthetic-provider-model",
-                "choices": [
-                    {"message": {"content": relation_content}, "finish_reason": "stop"}
-                ],
+                "choices": [{"message": {"content": relation_content}, "finish_reason": "stop"}],
                 "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
             },
         )
@@ -1638,15 +1670,12 @@ def test_accepted_items_import_runs_only_relation_model_attempt(
         store_root=tmp_path / "live-store",
         allow_model=True,
         role_configs={"material_relations": relation_config},
-        transport_factories={
-            "material_relations": lambda: httpx.MockTransport(handler)
-        },
+        transport_factories={"material_relations": lambda: httpx.MockTransport(handler)},
     )
     assert len(sends) == 1
     assert len(live.ledger.attempts) == 1
     assert all(
-        profile.configured == (profile.role == "material_relations")
-        for profile in plan.profiles
+        profile.configured == (profile.role == "material_relations") for profile in plan.profiles
     )
 
 

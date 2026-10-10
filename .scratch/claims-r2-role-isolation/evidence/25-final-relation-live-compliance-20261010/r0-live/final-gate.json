@@ -1,0 +1,73 @@
+{
+  "schema_version": "relation-question-group-boolean-final-gate-1",
+  "created_on": "2026-10-10",
+  "status": "frozen_before_execution",
+  "protocol": "material-relations-question-group-jsonl-v2",
+  "source_sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "gold_v2_sha256": "sha256:4e93449fd550ec940ba49d306f6acdfe0ee24cafc50bfecbc2ffcba0dd113f91",
+  "execution_requirements": {
+    "claims_attempts": 0,
+    "items_attempts": 0,
+    "relation_attempts_max": 4,
+    "automatic_retries": 0,
+    "expected_relation_packets": 4,
+    "completed_packets_min": 4,
+    "partial_packets_max": 0,
+    "failed_packets_max": 0,
+    "missing_duplicate_invalid_max": 0
+  },
+  "quality_requirements": {
+    "signed_cases_total": 38,
+    "signed_cases_correct_min": 35,
+    "known_error_cases_total": 9,
+    "known_error_cases_correct_min": 7,
+    "previously_correct_cases_total": 29,
+    "previously_correct_regressions_max": 2,
+    "target_relations_total": 4,
+    "target_relations_matched_min": 4,
+    "supports_conditions_regressions_max": 0
+  },
+  "target_groups": [
+    {
+      "gold_relation": "dec-answer-capex-relation",
+      "candidate_pair_ids": [
+        "pair_82e38a002735f044"
+      ]
+    },
+    {
+      "gold_relation": "dec-answer-yield-relation",
+      "candidate_pair_ids": [
+        "pair_1d4865edce7c70e5",
+        "pair_2c4fe7749a0e9dbb",
+        "pair_bb4f5d074a054e75",
+        "pair_bfa03df7eea2a12a"
+      ]
+    },
+    {
+      "gold_relation": "dec-quoted-yield-support",
+      "candidate_pair_ids": [
+        "pair_e0122f78caaf1a43"
+      ]
+    },
+    {
+      "gold_relation": "dec-answer-mitsui-relation",
+      "candidate_pair_ids": [
+        "pair_9ac292fbb05063a7",
+        "pair_ad507c2bfb7a7872"
+      ]
+    }
+  ],
+  "scope_constraints": {
+    "new_gold_allowed": false,
+    "candidate_rule_change_allowed": false,
+    "items_change_allowed": false,
+    "prompt_revision_after_execution_allowed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  },
+  "terminal_decision": {
+    "on_pass": "close relation extractor repair; no additional extraction calls",
+    "on_fail": "close current model plus extractor route; no prompt or threshold relaxation"
+  }
+}

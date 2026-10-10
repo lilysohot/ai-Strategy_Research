@@ -1,0 +1,158 @@
+{
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "created_on": "2026-10-10",
+  "gold_v2_sha256": "sha256:4e93449fd550ec940ba49d306f6acdfe0ee24cafc50bfecbc2ffcba0dd113f91",
+  "known_error_cases": {
+    "correct": 6,
+    "minimum": 7,
+    "total": 9
+  },
+  "misclassified_cases": [
+    {
+      "candidate_pair_id": "pair_1f74637d78897251",
+      "from_text": "但今年到明年肯定更好。",
+      "gold_v2_truth": "absent",
+      "known_error_case": false,
+      "model_decision": "present",
+      "relation_type": "challenges",
+      "to_text": "22年到23年看报表是近几年比较好的业绩，"
+    },
+    {
+      "candidate_pair_id": "pair_20e579667066bca6",
+      "from_text": "但标箔后端要配表面处理机，",
+      "gold_v2_truth": "present",
+      "known_error_case": false,
+      "model_decision": "absent",
+      "relation_type": "challenges",
+      "to_text": "因为它前段的生箔设备基本跟锂电相似，"
+    },
+    {
+      "candidate_pair_id": "pair_421fb2d822b8dc15",
+      "from_text": "良品率更多取决于工艺，工艺占大头，设备为配套",
+      "gold_v2_truth": "present",
+      "known_error_case": false,
+      "model_decision": "absent",
+      "relation_type": "challenges",
+      "to_text": "设备精度已达领先水平"
+    },
+    {
+      "candidate_pair_id": "pair_603d2b449da00930",
+      "from_text": "阳极板需要装在阳极槽上",
+      "gold_v2_truth": "present",
+      "known_error_case": true,
+      "model_decision": "absent",
+      "relation_type": "answers",
+      "to_text": "带阳极板的阴极辊大概是200万一套，每1万吨正常要用多少套？"
+    },
+    {
+      "candidate_pair_id": "pair_656be2399f54e209",
+      "from_text": "载体铜箔从名字就能听出来，完全不一样。",
+      "gold_v2_truth": "present",
+      "known_error_case": false,
+      "model_decision": "absent",
+      "relation_type": "answers",
+      "to_text": "还是不太一样？"
+    },
+    {
+      "candidate_pair_id": "pair_99ad745a830b3057",
+      "from_text": "我们得陪跑做测试",
+      "gold_v2_truth": "absent",
+      "known_error_case": true,
+      "model_decision": "present",
+      "relation_type": "answers",
+      "to_text": "表处理签的15到20台正常什么时候交付？"
+    },
+    {
+      "candidate_pair_id": "pair_c8a2e609d0bf69ac",
+      "from_text": "海亮想成为铜箔行业的定价人",
+      "gold_v2_truth": "absent",
+      "known_error_case": true,
+      "model_decision": "present",
+      "relation_type": "answers",
+      "to_text": "海亮等厂商目前扩产是做3.5微米、4.5微米还是其他？"
+    },
+    {
+      "candidate_pair_id": "pair_f88743227fb48b8b",
+      "from_text": "验收款可能滞后",
+      "gold_v2_truth": "present",
+      "known_error_case": false,
+      "model_decision": "absent",
+      "relation_type": "challenges",
+      "to_text": "预计年内收入将大幅增长"
+    }
+  ],
+  "previously_correct_cases": {
+    "maximum": 2,
+    "regression_ids": [
+      "pair_1f74637d78897251",
+      "pair_20e579667066bca6",
+      "pair_421fb2d822b8dc15",
+      "pair_656be2399f54e209",
+      "pair_f88743227fb48b8b"
+    ],
+    "regressions": 5,
+    "total": 29
+  },
+  "quality_passed": false,
+  "schema_version": "issue25-signed-gold-v2-score-1",
+  "signed_cases": {
+    "correct": 30,
+    "errors": [
+      "pair_1f74637d78897251",
+      "pair_20e579667066bca6",
+      "pair_421fb2d822b8dc15",
+      "pair_603d2b449da00930",
+      "pair_656be2399f54e209",
+      "pair_99ad745a830b3057",
+      "pair_c8a2e609d0bf69ac",
+      "pair_f88743227fb48b8b"
+    ],
+    "minimum": 35,
+    "total": 38
+  },
+  "supports_conditions_regressions": {
+    "candidate_pair_ids": [],
+    "count": 0,
+    "maximum": 0
+  },
+  "target_relations": {
+    "matched": 4,
+    "minimum": 4,
+    "results": [
+      {
+        "candidate_pair_ids": [
+          "pair_82e38a002735f044"
+        ],
+        "gold_relation": "dec-answer-capex-relation",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_1d4865edce7c70e5",
+          "pair_2c4fe7749a0e9dbb",
+          "pair_bb4f5d074a054e75",
+          "pair_bfa03df7eea2a12a"
+        ],
+        "gold_relation": "dec-answer-yield-relation",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_e0122f78caaf1a43"
+        ],
+        "gold_relation": "dec-quoted-yield-support",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_9ac292fbb05063a7",
+          "pair_ad507c2bfb7a7872"
+        ],
+        "gold_relation": "dec-answer-mitsui-relation",
+        "matched": true
+      }
+    ],
+    "total": 4
+  },
+  "whole_document_precision_measured": false
+}

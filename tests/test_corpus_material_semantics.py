@@ -12,6 +12,7 @@ from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
+    MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
@@ -2542,8 +2543,7 @@ def test_relation_candidates_preserve_prior_question_before_trailing_answer_ques
         for pair in new_pairs
     )
     assert not any(
-        pair["from_item"] == answers[0].item_id
-        and pair["to_item"] == answers[-1].item_id
+        pair["from_item"] == answers[0].item_id and pair["to_item"] == answers[-1].item_id
         for pair in new_pairs
     )
 
@@ -3053,6 +3053,122 @@ def test_question_group_selector_expands_local_answer_indexes_to_frozen_pairs() 
         "duplicate_decisions": 0,
         "invalid_decisions": 0,
     }
+
+
+def test_question_group_v2_uses_boolean_non_answer_terminals() -> None:
+    packet = EvidencePacket(
+        packet_id="packet",
+        locator="page:1",
+        kind="prose",
+        text="结论成立，因为数据改善。",
+    )
+
+    def endpoint(item_id: str, quote: str, role: str) -> MaterialItem:
+        start = packet.text.index(quote)
+        return MaterialItem(
+            item_id=item_id,
+            text=quote,
+            semantic_type="fact",
+            statement_role=role,  # type: ignore[arg-type]
+            speech_role="statement",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=start,
+                    end=start + len(quote),
+                ),
+            ),
+        )
+
+    items = [endpoint("claim", "结论成立", "claim"), endpoint("reason", "数据改善", "evidence")]
+    pairs = [
+        {
+            "candidate_pair_id": "pair-support",
+            "from_item": "reason",
+            "to_item": "claim",
+            "allowed_type": "supports",
+        }
+    ]
+    prompt = build_relation_question_group_prompt(
+        packet,
+        items,
+        pairs,
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+    assert MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2 == (
+        "material-relations-question-group-jsonl-v2"
+    )
+    assert "relation_index, is_present" in prompt
+    assert "不得输出字符串或关系类型" in prompt
+    assert '"allowed_type":"supports"' in prompt
+
+    raw = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "is_present": True,
+        },
+        ensure_ascii=False,
+    )
+    relations, incomplete, counts = _relations_from_question_group_results(
+        raw,
+        packet,
+        "source",
+        pairs,
+        {item.item_id: item for item in items},
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+    assert incomplete is False
+    assert len(relations) == 1
+    assert relations[0].type == "supports"
+    assert relations[0].evidence[0].quote == "结论成立，因为数据改善"
+    assert counts["invalid_decisions"] == 0
+
+    legacy_type_as_status = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "status": "supports",
+            "evidence_selector": "pair_window",
+        }
+    )
+    relations, incomplete, counts = _relations_from_question_group_results(
+        legacy_type_as_status,
+        packet,
+        "source",
+        pairs,
+        {item.item_id: item for item in items},
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+    assert relations == []
+    assert incomplete is True
+    assert counts["invalid_decisions"] == 1
+
+    string_boolean = json.dumps(
+        {
+            "record_type": "relation_result",
+            "relation_index": 0,
+            "is_present": "true",
+        }
+    )
+    relations, incomplete, counts = _relations_from_question_group_results(
+        string_boolean,
+        packet,
+        "source",
+        pairs,
+        {item.item_id: item for item in items},
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+    assert relations == []
+    assert incomplete is True
+    assert counts["invalid_decisions"] == 1
 
 
 def test_question_group_selector_fails_closed_on_duplicate_and_missing_terminals() -> None:

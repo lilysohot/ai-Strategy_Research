@@ -1022,6 +1022,120 @@ reasoning，或换用能保证可见结构化输出的模型。这将是新任�
 publication、query、delivery、context_use 和 M_main 消费仍为 0。只读审计脚本的 Ruff/Pyright
 均通过。
 
+## 26. 2026-10-10 执行增补：Doubao Seed 2.1 Lite 供应商上限复验
+
+用户将专用抽取模型切换为 `doubao-seed-2.1-lite` 并要求放宽 token。Issue 22 因此冻结新 batch
+`batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7`。本轮使用供应商公布的
+最大回答额度 `max_tokens=262144`，同时显式设置 `reasoning_effort=minimal` 关闭思考；这是能力验证，
+模型、token 上限与思考模式同时变化，不作单变量因果归因。snapshot、accepted items、333 个
+candidate-v5 pair、question-group prompt/Schema 和 44/9/35/4 门均保持冻结。
+
+Claims/items 调用为 0，relations 恰好 4 次，四次 HTTP/model request 全部 succeeded、retry 0；实际
+response model 为 `doubao-seed-2-1-lite-260915`。usage 为 prompt 53,418、completion 3,100、
+reasoning 0、total 56,518；四次均 `finish_reason=stop`，共得到 10,207 个可见字符和 100 行终态。
+这证明 GLM 两轮的“reasoning 吃光预算”已被消除，256K 上限本身没有被触及，也不再是瓶颈。
+
+严格协议仍未过门。第 1 包有 1 行、第 4 包有 4 行把关系类型 `challenges` 写入只允许
+`present|absent` 的 `status`；其他 95 行结构合法。parser 按冻结协议拒绝两包，结果为
+2 completed、0 partial、2 failed，并从两个完整包保留 102 条 relations。该不完整 payload 不发布，
+也未进入 query、delivery、context_use 或 M_main。
+
+随后进行零调用、只读诊断：仅当非法 status 恰好等于该 candidate 的冻结 relation type 且 selector
+为 `pair_window` 时，才 what-if 解释为 `present`。5 行均可无歧义恢复，四包 333/333 决策完整重建，
+present 为 212。但签认门为 37/44（要求 40）、已知错误 7/9（通过）、35 个此前正确案例回退 5
+（最多 2）、target relations 4/4（通过），且 supports/conditions 回退 1（要求 0）。因此格式缺陷窄而
+可修，语义质量仍低于发布线；继续增加 token 没有价值。本任务关闭且不追加模型调用。
+
+为支持本轮显式冻结，structured adapter 增加了可选、参与 profile hash 的 `reasoning_effort` 请求字段，
+默认仍不发送；adapter version 升为 v3，并保留 v2 历史计划只读校验。相关配置/执行测试 78 passed，
+Ruff 与 Pyright 通过。
+
+## 27. 2026-10-10 执行增补：relation 语义边界更正
+
+Issue 23 对 Issue 22 在 44 条签认样本中的 7 个错误做了零调用逐条复核，未原地修改 P11
+`human_signed` 文件，也没有把事后更正写回冻结门。复核最终识别 4 条 endpoint-incomplete 候选：
+question item 只有“请您介绍一下”、supports target 混合设备外采与泰金份额、产能/产品结构端点缺少
+主体范围、交付/验收款端点缺少主体与对象。它们标记为不可评分，而不是翻转关系标签。
+
+完整 `pair_window` 还纠正了两条 answers：三井“扩产意愿不大”紧接并解释“外采概率不大”，属于
+make-versus-buy 回答的互补原因；“半年就得换”位于专家给出设备数、阳极板数量并要求投资者据此
+换算收入的回答链中，是计算型回答的必要原子。question-group v1 明确允许多个互补原子共同回答，
+因此两条 gold-v2 建议从 absent 改为 present。唯一保留的错误是把
+`6–8 微米 < 4.5 微米 < 3.5 微米以内` 的兼容排序判成 challenge。
+
+reviewed-error sensitivity 为 39/40（97.5%），等比例最低门为 37/40；已知错误 9/9、旧正确回退 1、
+target 4/4、supports/conditions 回退 0，均达到门槛。这说明 Lite 在更正后的七个错误范围内可以过门。
+但该复核是在看到模型错误后进行，可能存在选择偏差；在全部 44 条统一完成主体、对象、期间和端点
+原子性审计并独立签认前，不能替换原 P11，也不能把 Issue 22 正式改写为通过。本轮模型调用、生产
+数据库、publication、query、delivery 与 context_use 均为 0。
+
+## 28. 2026-10-10 执行增补：44 条 relation 金标全量统一审计
+
+Issue 23 随后按同一端点完整性规则审计 P11 全部 44 条，而不是继续只看 Issue 22 的 7 条误差。
+审计逐条检查问题谓词、主语/对象/期间绑定、原子性，以及冻结 `pair_window` 是否能唯一恢复表面省略；
+允许同一窗口内唯一局部绑定，但不允许依赖窗口外主题猜测。原 P11 `human_signed` 文件保持逐字节不变。
+
+全量审计新增发现两条此前因模型碰巧判断正确而没有暴露的不可评分端点：`不一定全部` 未保留“不一定
+全部拿到验收款”的宾语，`还是什么？` 未保留任何可裁定的问题谓词或指代对象。连同 Issue 23 先前
+识别的四条，gold-v2 草案共排除 6 条 endpoint-incomplete 候选，保留 38 条；两条 answers 仍建议从
+absent 更正为 present。44 条逐项依据保存在 `full-cohort-audit.agent-draft.json`，可签认的新标签集合
+保存在 `gold-v2.agent-draft.json`，二者当前状态均为待独立签认。
+
+使用 Issue 22 已保存的四份响应作零调用重算，结果为 37/38（97.37%），等比例最低门为 35/38；
+已知错误 9/9、此前正确案例回退 1、target relations 4/4、supports/conditions 回退 0。唯一剩余语义
+错误仍是把 `6–8 微米 < 4.5 微米 < 3.5 微米以内` 的兼容排序判为 challenge。敏感性门通过不改变
+Issue 22 的历史协议失败和终态；只有 gold-v2 独立签认后，才能将它用作后续协议修复的冻结评分基准。
+
+本轮模型调用、生产数据库、publication、query、delivery 和 context_use 均为 0，也未授权下一轮真实
+复验。gold-v2 签认后禁止根据模型结果调整标签；原文、候选身份或证据绑定错误只能通过另立、独立
+签认的 addendum 更正。
+
+## 29. 2026-10-10 执行增补：Relation 布尔终态协议修复与零调用回放
+
+用户以 xyl 身份签认 44 条全量审计形成的 gold-v2 后，Issue 24 将 P14/Issue 22 的协议故障面收窄为
+独立的新协议 `material-relations-question-group-jsonl-v2`。answers 仍按 question group 返回局部
+`selected_answer_indices`；non-answer 不再要求模型同时操作 relation type、`status` 和
+`evidence_selector`，只允许 `record_type="relation_result"`、本包 `relation_index` 与 JSON boolean
+`is_present`。relation type、candidate pair、逐字 `pair_window` 和 relation ID 全由 controller 回填。
+
+旧 question-group v1 保持只读兼容，没有放宽历史解析器。v2 严格拒绝字符串形式布尔、旧 status shape
+以及 `status="challenges"` 一类 type-as-status 输出。prompt、parser、严格 role wrapper、RoleArtifact、
+CLI 和 contract enum 已完整接线；契约清单与 role-artifact Schema 指纹同步更新。
+
+零调用回放先按 Issue 19 已冻结的窄化规则恢复 Issue 22 的 333 个候选决定，再把它们编码成 v2 输出并
+通过新的严格传输校验与 controller 展开路径。结果为 4/4 packet completed、333/333 candidate
+decisions、100 个压缩终态、212 条 present relations，missing、duplicate、invalid 全部为 0。按 xyl
+签认 gold-v2 重算仍为 37/38，唯一错误仍是兼容厚度排序被选为 challenge。
+
+相关 149 项测试通过，Ruff 和 Pyright 无错误；回放两次的 stdout 与三份产物哈希均一致。本轮模型
+调用、生产数据库、publication、query、delivery 和 context_use 为 0。该回放只证明新 Interface、
+严格校验和 controller expansion 闭环，不能证明 Doubao Lite 会在真实请求中服从新 shape；最多 4 次
+的最终 live compliance 复验必须另行冻结计划并获得明确授权。
+
+## 30. 2026-10-10 执行增补：Boolean v2 最终真实复验与路线关闭
+
+用户明确授权冻结并执行最多 4 次最终 relation 调用。Issue 25 冻结 batch
+`batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920`；差异验证证明相对
+Issue 22 仅将 `material-relations-question-group-jsonl-v1` 替换为 boolean v2，snapshot、accepted
+items、333 个 candidate-v5、validation-v11、complete-parent、模型、262,144 token 上限、minimal
+reasoning 和调用上限均保持不变。
+
+四次请求全部 succeeded，retry 0，实际 response model 为 `doubao-seed-2-1-lite-260915`，四次均
+`finish_reason=stop`。usage 为 prompt 53,642、completion 2,930、reasoning 0、total 56,572；返回
+9,097 个可见字符和恰好 100 行终态。严格协议审计得到 4 completed、0 partial、0 failed，333/333
+candidate decisions，missing/duplicate/invalid 均为 0，controller 保留 213 条 relations。因此本次
+修复已经在真实模型输出上消除了 type-as-status，协议层正式通过。
+
+签认 gold-v2 质量门仍失败：30/38，低于 35；known errors 6/9，低于 7；29 条非 known-error 案例
+回退 5，超过上限 2。target relations 4/4 和 supports/conditions 回退 0 单项通过。八条错误由三条
+known-error answers 与五条此前正确的 answers/challenges 组成，显示同一模型在相同冻结样本上的语义
+判断存在明显轮次波动；这不是 token、transport、缺终态或 Schema 解析问题。
+
+按执行前冻结的 terminal decision，当前 Doubao Lite + question-group extractor 路线关闭：不追加模型
+调用、不修改 prompt、不降低质量门、不根据本轮结果调整 gold-v2。若业务仍需 relation 自动抽取，后续
+应作为新的模型/确定性混合算法路线立项，而不是继续修补本节点。publication、query、delivery、
+context_use、M_main 和生产数据库均为 0。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

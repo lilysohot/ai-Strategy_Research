@@ -362,6 +362,84 @@ _TERMINAL_WORKFLOW_MODES = ("react", "agent_team")
 - §9.9.4 的**端到端 3 轮真实运行**（同一会话连跑 3 轮业务提问，取 `runs.usage_json` 的 `cache_read_tokens` / `prompt_tokens`，并核 `summary.json.replay.decision == used` ×3）**未执行**：它会真实消耗模型额度，按纪律需先定"预注册退出判据"再放行，不由实施方自跑自宣。
 - 已知边界：`--business-prefix` 未传时（spike / 手工起 worker）回退 run 级判定；`agent_team` 不在本次范围（§9.11 第 4 项）。
 
+### 9.14 缺口自查（2026-10-10，签认后、开跑前）
+
+**一、已补的覆盖（此前只有"按构造成立"）**
+
+| # | 缺口 | 处置 |
+|---|---|---|
+| 1 | 写方路径（worker 的 `_trial_dir`）与读方路径（`run_dir_for(id)/run/…`）等价只有构造保证；一旦漂移，replay 会**静默不发生**且无任何报错 | 新增 `test_writer_and_reader_agree_on_where_the_dump_lives` |
+| 2 | `replay_payload` 能否穿过 `include_fields` 白名单没有测试 | 新增 `test_the_react_spec_lets_the_replay_payload_reach_the_node`（真 spec + `apply_context_filter`） |
+| 3 | worker 侧"不解析、原样透传 + 前缀配置由会话标志决定"没有测试 | 新增两条：`test_worker_hands_the_dump_to_the_workflow_verbatim`（`business_prefix=1`）、`test_worker_non_business_prefix_keeps_the_calculation_tools`（`=0`，且无 dump 时 `replay_payload` 键**缺席**而非空串） |
+
+补齐后 `tests/test_context_inheritance.py` = **28 条**；目标测试集 **100 passed**。
+
+**二、仍存在的边界（不改，记录在案）**
+
+| # | 边界 | 影响 |
+|---|---|---|
+| 1 | 硬取消/超时（wall deadline → SIGKILL）不会触发 `on_loop_end` ⇒ **无 dump** | 下一轮退化为新会话、缓存 miss 一次；用户主动 stop 是优雅停（`pause_check`）仍会写 dump |
+| 2 | `agent_team` 不写 dump | 范围外（§9.11 第 4 项） |
+| 3 | `--business-prefix` 未传时（`server/spike.py`、手工起 worker）回退 run 级判定 | 只影响非 web 入口 |
+| 4 | `replay_payload` 以原始 JSON 文本进 state（与真实上下文同量级，可达数百 KB） | state 不进 DB、单节点运行，可接受；记为观察项 |
+| 5 | 无 `_trial_dir` 的纯 benchmark/CLI 运行写到 `logs/…/conversation.json` | 无消费方，无害 |
+
+**三、开跑前的前置核查（实跑）**
+
+- `_spawn` 的 params **恒含** `session_uuid`（`orchestrator.py:331-340`）⇒ `manual` / `input_answer` / `watch_event` / `rerun` 四条创建路径都会走定位 + 重放，不存在"某条路径漏了"。
+- 后端在跑（`/healthz` 200、`/readyz` ok）、PG 5432 可达、`.env` 有可用 key。
+- **§1.2 基线复核通过**：`c3ec40b4…` 实测 `prompt=1,198,611 / cache_read=1,027,072 / calls=28`，模型 `deepseek-v4-flash-ga-260731` —— 与文档数字一致。
+- `research_investment_links` 存在真实绑定研究（含文档所述 `c3646e12…` / 账户 `c2bf8670…`）⇒ 业务臂前置数据现成。
+
+**四、预注册修订（需签认后方可开跑）**
+
+| # | 原判据 | 修订 | 理由 |
+|---|---|---|---|
+| R1 | "连跑 3 轮业务提问" | 首轮 prompt 必须**足够长**（≈2–4k token 量级） | 低于 provider 的最短可缓存前缀时 `cache_read` 恒为 0，判据不可达（非"不达标"）。官方口径 1024–2048 token；本库另有一 Run `23d3030f`：26,286 prompt / `cache_read=0`，符合"短前缀不命中" |
+| R2 | 未指定验收模型 | 需指定：`deepseek-v4-flash-ga-260731`（历史运行**已证实**上报 `cached_tokens`）vs `.env` 现值 `glm-5.3-flash`（**未证实**） | 选错模型会让判据**不可判定**，而非判负 |
+| R3 | 控制臂"关掉 replay" | 用"每轮结束后把 `run/conversation.json` 移走"实现，不改代码 | 避免为验收在主链路引入开关变量 |
+
+### 9.15 端到端验收实测：FAIL，根因定位到一行（2026-10-10）
+
+**执行**：`--model deepseek-v4-flash-ga-260731`，两臂各 3 轮（同一绑定研究，业务会话），证据落在
+`evidence/20261010-phase1-e2e/run-20261010/`（`results.json` / `report.md` / 各 run 目录）。
+
+| 臂 | 轮 | prompt_tokens | cache_read_tokens | replay.decision |
+|---|---|---|---|---|
+| treatment | 1 | 16,406 | 0 | skipped: no_payload |
+| treatment | 2 | 12,725 | 0 | **skipped: system prompt mismatch** |
+| treatment | 3 | 12,740 | 0 | **skipped: system prompt mismatch** |
+| control | 1/2/3 | 16,418 / 12,734 / 12,728 | 0 / 0 / 0 | skipped: no_payload ×3 |
+
+判定 **FAIL**（`t2_covers_t1_prompt` / `t3_covers_most_of_t1_t2` / `treatment_replayed_all_turns` / `treatment_prefix_matches_previous_dump` 全 false；control 两条 PASS）。
+
+**安全性质已实证**：校验按设计 fail-open —— 拒绝重放、运行照常完成（`stopped_by=no_tool`、答案"收到"），没有把模型没见过的历史喂回去。
+
+**根因（逐字节定位）**：两轮 system prompt 长度同为 8597，首个差异在第 6197 字符：
+
+```
+FILESYSTEM CONVENTION (native mode): Your current working directory
+/home/administrator/.local/share/frontier-agent/web/runs/<run_id>/ws is the workspace. …
+```
+
+来源：`workflows/stateful_react_agent/_runtime.py:83-97`（`sandbox_mode == "native"` 分支把 `FRONTIER_AGENT_WORKSPACE_DIR/INPUTS_DIR/OUTPUTS_DIR` 打印进 system prompt），而这三个变量由 `server/worker.py:198-211 apply_env` 设成**每 Run 一份**的路径（含 run_id，等长十六进制 ⇒ 总长度不变、只换字节）。⇒ 同一会话每轮的请求前缀都不同，**跨轮缓存必然为 0**。此缺陷与本改动无关（此前无人比较过两轮的 system prompt，所以从未被发现）。
+
+**旁证（机制确认）**：treatment 轮 1/2 实测 `cache_read_tokens=10240` —— 恰是"到那行为止"的可缓存前缀（system 前 6197 字符 + 25 个工具 schema）。即：现在可复用的只有到那一行为止的部分，那行之后的整段对话历史永远不缓存；修掉它，可复用长度直接变成"上一轮整段请求"。
+
+**不能靠换 backend 绕过**：`server/config.py:7-11` 明写本部署把 backend **钉在 native**（容器即隔离边界，native 才不需要 CAP_SYS_ADMIN）。"只在 container 模式生效"在本部署不成立。
+
+**验收脚本自身的一个 bug（已修，记录诚实性）**：`ServerConfig` 用 `env_prefix="SERVER_"`，我第一次尝试 `--backend container` 时设的是 `SANDBOX_BACKEND`，因此那次实际仍是 native（`meta.sandbox_backend=native`）；第二次运行的结论与第一次同因，**未获得有效的 container 臂**（按上一条也不必要）。
+
+**处置选项（待裁决）**
+
+| 选项 | 做法 | 代价/风险 |
+|---|---|---|
+| **A（推荐）** | 把 native 分支那段"含绝对路径"的文本**整段搬到尾部**（拼进本轮 instruction，与业务数据同一位置），system prompt 只留静态部分 | 模型看到的字节**完全不变**（只是位置不同）⇒ 行为风险最低；落点 `workflows/stateful_react_agent/_runtime.py`（拆静态/动态）+ `server/worker.py`（动态段进 instruction） |
+| B | native 分支把绝对路径换成稳定占位（如 `<workspace>`） | 改动最小；已核 `plugins/tools/_path_auth.py::_candidate_paths:107-109`：相对路径会先按 `workspace_root` 解析 ⇒ 文件工具仍可用；但模型失去绝对路径，行为可能变化 |
+| C | 不改 prompt，承认阶段 1 在本部署（native）无缓存收益，仅留机制预备 | 零风险，但本 spec 的核心收益（跨轮缓存）在 web 上拿不到 |
+
+**推荐 A**：同样字节、换个位置，把 §9.10 那条不变量（"易变内容一律放尾部"）真正落实到位 —— 现在漏的正是 system prompt 这一处。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。

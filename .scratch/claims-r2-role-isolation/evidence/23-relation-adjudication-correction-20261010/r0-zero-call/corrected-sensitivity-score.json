@@ -1,0 +1,59 @@
+{
+  "boundary_review": {
+    "changed_truth": {
+      "pair_1a9d24af1bf7107f": "present",
+      "pair_dc4f0640ec6b4b11": "present"
+    },
+    "excluded_unscorable": [
+      "pair_0cc897a5c1f55daf",
+      "pair_75e57fa1a91444d1",
+      "pair_accf55e14399b995",
+      "pair_af4a1d9299403d27"
+    ],
+    "retained_truth_cases": [
+      "pair_4adac65ac8099417"
+    ],
+    "reviewed_cases": 7
+  },
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "constraints": {
+    "issue22_terminal_decision_changed": false,
+    "model_calls": 0,
+    "original_signed_file_modified": false,
+    "post_hoc_official_gate_claimed": false,
+    "whole_document_precision_measured": false
+  },
+  "corrected_sensitivity_score": {
+    "accuracy": 0.975,
+    "correct": 39,
+    "eligible_cases": 40,
+    "equivalent_ratio_minimum": 37,
+    "passed_equivalent_ratio": true,
+    "remaining_errors": [
+      "pair_4adac65ac8099417"
+    ]
+  },
+  "created_on": "2026-10-10",
+  "decision": "the reviewed-error sensitivity passes, but it is post-hoc and cannot relabel Issue 22; audit all 44 cases and obtain an independent signature before freezing gold-v2",
+  "known_error_sensitivity": {
+    "correct": 9,
+    "eligible_cases": 9
+  },
+  "original_frozen_score": {
+    "cases": 44,
+    "correct": 37,
+    "minimum": 40,
+    "passed": false
+  },
+  "other_frozen_gate_sensitivity": {
+    "previously_correct_regressions": 1,
+    "previously_correct_regressions_maximum": 2,
+    "supports_conditions_regressions": 0,
+    "target_relations_matched": 4,
+    "target_relations_required": 4
+  },
+  "schema_version": "issue23-boundary-corrected-sensitivity-score-1",
+  "sensitivity_passed": true,
+  "source_sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "status": "sensitivity_passed_pending_full_cohort_audit_and_signature"
+}

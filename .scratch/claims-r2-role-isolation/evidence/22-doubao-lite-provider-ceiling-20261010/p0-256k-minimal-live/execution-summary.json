@@ -1,0 +1,41 @@
+{
+  "schema_version": "issue22-doubao-lite-provider-ceiling-execution-1",
+  "executed_on": "2026-10-10",
+  "status": "protocol_and_semantic_gate_failed_route_closed",
+  "batch_id": "batch:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "plan_sha256": "sha256:60e684c035b5006cfbe1b68b6fd18ca88a70c41dfc9defd8d93ee2e61ab7e9d7",
+  "request_model": "doubao-seed-2.1-lite",
+  "response_model": "doubao-seed-2-1-lite-260915",
+  "max_output_tokens": 262144,
+  "reasoning_effort": "minimal",
+  "claims_attempts": 0,
+  "items_attempts": 0,
+  "relation_attempts": 4,
+  "automatic_retries": 0,
+  "attempt_status": {"succeeded": 4},
+  "usage": {
+    "prompt_tokens": 53418,
+    "completion_tokens": 3100,
+    "reasoning_tokens": 0,
+    "total_tokens": 56518
+  },
+  "visible_content_chars": 10207,
+  "visible_nonempty_lines": 100,
+  "strict_packet_status": {
+    "completed": 2,
+    "partial": 0,
+    "failed": 2,
+    "deferred": 0
+  },
+  "strict_retained_relations": 102,
+  "diagnostic_reconstruction": {
+    "model_calls": 0,
+    "candidate_decisions": 333,
+    "type_as_present_normalizations": 5,
+    "reconstructable": true,
+    "present_decisions": 212
+  },
+  "cost": null,
+  "cost_status": "unavailable_not_zero",
+  "publication_query_delivery_context_use": 0
+}

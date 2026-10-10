@@ -1,0 +1,37 @@
+{
+  "constraints": {
+    "issue22_terminal_decision_changed": false,
+    "model_calls": 0,
+    "post_hoc_official_gate_claimed": false
+  },
+  "created_on": "2026-10-10",
+  "decision": "gold-v2 is frozen by xyl signoff; do not relabel the historical Issue 22 run",
+  "known_error_cases": {
+    "correct": 9,
+    "eligible_cases": 9,
+    "required": 7
+  },
+  "other_frozen_gate_sensitivity": {
+    "maximum": 2,
+    "previously_correct_regression_ids": [
+      "pair_4adac65ac8099417"
+    ],
+    "previously_correct_regressions": 1,
+    "supports_conditions_regressions": 0,
+    "target_relations_matched": 4,
+    "target_relations_required": 4
+  },
+  "schema_version": "relation-gold-v2-full-cohort-score-1",
+  "score": {
+    "accuracy": 0.9736842105263158,
+    "correct": 37,
+    "eligible_cases": 38,
+    "equivalent_ratio_minimum": 35,
+    "passed_equivalent_ratio": true,
+    "remaining_errors": [
+      "pair_4adac65ac8099417"
+    ]
+  },
+  "sensitivity_passed": true,
+  "status": "sensitivity_passed_gold_v2_signed"
+}
