@@ -1,10 +1,10 @@
 # 18 · material extractor 替换实现与严格依赖门
 
-Status: p11-relation-precision-agent-draft-signoff-and-zero-call-remediation-open
-Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4。P11 零调用冻结 32 条 present precision 样本与 12 条 absent 哨兵；agent draft 的分层 precision 点估计为 54.38%，哨兵发现 4 条具体漏边，但尚未签认且区间不足以构成质量门。发布与消费为 0
+Status: p12-selector-v2-live-quality-failed-question-group-remediation-open
+Execution: P4 selector v2 为 22 success + 1 outcome_unknown；P5 仅重试 35 个失败槽并用完剩余 4 次授权。P6/v4 以不可变响应做零调用复合 replay，达到 487/487 终态、0 failed；P7/v5 零调用金标复评为 11/11 target recall、11/11 attribution、9/11 strict semantic。P8 关系实跑为 4/4 succeeded，scorer-4 校正后为 3/4。P9 配置 preflight 在 0 attempt 阻断；P10 formal-ledger import + v5 relations 为 4/4 succeeded、target relation recall 4/4。P11 的 32 条 present precision 样本与 12 条 absent 哨兵已由 xyl 签认，分层 precision 点估计为 54.38%，并确认 5 个 FP、4 个 FN。P12 已按授权执行 4 次 relation 调用，4/4 transport/协议成功但质量门失败：签认样本 34/44，低于 P10 的 35/44；9 个已知错误仅修复 4 个；target relation recall 降为 3/4。v2 不发布，下一步改为零调用 question-group answer selector 设计。发布与消费为 0
 Type: task
 Parent: [17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model attempts: 58（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
+Model attempts: 62（P3 23 + P4 23 + P5 4 + P8 relations 4 + P10 relations 4 + P12 relations 4；P6/P7、P8-v4/v5 反事实与 P9 preflight 为 0）
 Production database access: 0
 
 ## 目标
@@ -90,6 +90,13 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
 - [P11 reusable precision sample](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/sample-plan.json)
 - [P11 adjudication agent draft](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/candidate-adjudications.agent-draft.json)
 - [P11 agent-draft evaluation](../evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/evaluation-summary.agent-draft.json)
+- [P12 selector-v2 remediation manifest](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/manifest.json)
+- [P12 signed calibration cases](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/signed-calibration-cases.json)
+- [P12 zero-call counterfactual](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/counterfactual-summary.json)
+- [P12 frozen plan diff](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/plan-diff-summary.json)
+- [P12 live execution summary](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/execution-summary.json)
+- [P12 signed-sample regression](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/signed-sample-regression.json)
+- [P12 failure analysis](../evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/failure-analysis.json)
 
 ## Comments
 
@@ -197,3 +204,24 @@ opaque slot ID、逐字引文或补齐批次终态。本票不再增加样本词
   应翻为 present，但该哨兵不是概率 recall 样本。失败集中在回答主题漂移/部分回答误接，以及直接
   列举、纠正问题前提、原子数值答案和自我修正漏判。裁定仍为 agent draft，下一步先补零调用规则与
   回归，不追加 live budget；publication/query/delivery/context_use 仍为 0。
+- 2026-10-10：xyl 以“签认P11 草案，开始执行”签认 P11。9 个错误 pair 全部已存在于 candidate v5，
+  因此 P12 不做词面候选剪枝；`material-relations-selector-jsonl-v2` 保持 v1 输出 Schema、pair identity
+  与 controller evidence 不变，仅补充直接回答、数值/名单/前提纠正、同 turn 主题漂移、部分回答和
+  自我修正等原子判定规则，v1 保持历史可读/可执行。签认 delta 的零调用 oracle 为 5 present→absent、
+  4 absent→present，结果 216 present，且未移除 4 条 target relation；这不冒充 v2 已实跑。
+  batch `batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23`
+  已按同一 snapshot/items/candidate v5/model 冻结，items=0、relations≤4、strict complete_parent；冻结
+  0 calls，execute 尚未授权。聚焦回归 206 passed；全量 corpus 1385 passed、17 skipped，仅两项既有
+  环境失败（本地 golden 0/20、reader-pdf-10/11）。Ruff、Pyright 通过，发布/消费仍为 0。
+- 2026-10-10：按 xyl 对 P12 最多 4 次 relation 调用的明确授权执行冻结 batch。相对 store-root 的首次
+  preflight 在 attempt 前以 `CS_PATH_OUTSIDE_ROOT` 拒绝，因此不计模型调用；改用已核验的绝对根目录后，
+  relations 恰好 4 次、4/4 succeeded、0 retry，items/Claims attempts=0。usage 为 prompt 92,095、
+  completion 28,303、reasoning 19,995、total 120,398 tokens；provider 未返回可核成本，记为 unavailable。
+  333 个候选中 present 从 P10 的 217 降到 141，但签认 44 例只从 35/44 退化为 34/44：TP/FN/TN/FP
+  为 24/7/10/3，9 个已知错误只修复 4 个。四条 target relation 中 Mitsui 被删，recall 从 4/4 降到
+  3/4。故 v2 仅作为可审计实验版本保留，不进入发布计划；下一步先零调用设计按 question 分组的 answer
+  selector，由模型选择每个问题对应的原子 answer index，再由 controller 展开不可变 relation pair。
+  supports/conditions 维持稳定路径，不再追加 prompt-only live trial。publication/query/delivery/
+  context_use 仍为 0。为避免被否决版本被新直接调用方误用，selector 默认/`latest` 已退回 v1；v2
+  只保留 read-compatible 审计与 replay。相关语义、执行和合约回归 130 passed，Ruff、Pyright 通过，
+  P10/P12 两份冻结 plan identity 均保持有效。

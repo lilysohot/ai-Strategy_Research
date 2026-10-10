@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-10
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行：items 0 次、relations 4/4 succeeded，冻结 target relation recall 4/4。P11 已零调用冻结可复用的 32 条 present precision 样本与 12 条 absent 哨兵；agent draft 的分层 precision 点估计为 54.38%，并发现 4 条具体漏边，但尚未签认且区间不足以形成发布门。P2 发布/M_main 消费仍未启动。
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 的 32 条 present precision 样本与 12 条 absent 哨兵已由 xyl 签认，分层 precision 点估计为 54.38%，确认 5 个 FP、4 个 FN。P12 已按授权执行同源 relation-only 计划：items 0 次、relations 4/4 succeeded，但签认样本由 P10 的 35/44 降至 34/44，已知错误仅修复 4/9，target relation recall 由 4/4 降至 3/4，故 v2 质量门失败且不发布。下一步为零调用 question-group answer selector 设计；P2 发布/M_main 消费仍未启动。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -53,9 +53,10 @@
 | 18 | [material extractor 替换实现与严格依赖门](issues/18-material-extractor-replacement.md) | 17 的 P1 失败终态 | 保留上层架构，替换 items/relations extractor |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
-parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过签认质量门。所有结果仍为未发布
-候选，query/delivery/context_use 与 M_main 正向消费未启动。P11 的可复用抽样已定位通用 selector
-误接/漏接模式；零调用规则和回归修复完成前不再冻结真实预算。W6 的
+parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
+候选，query/delivery/context_use 与 M_main 正向消费未启动。P11 已签认通用 selector 误接/漏接模式；
+P12 已完成 v2 的 4-call 实跑，但签认样本与 target recall 均退化，故该版本只保留审计、不进入发布。
+下一步先零调用设计 question-group answer selector，不追加 prompt-only live trial。W6 的
 独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 
@@ -163,7 +164,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
 | R2 items | `material-atomic-selector-jsonl-v5`（新计划显式选择）；selector v1-v4 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
-| R2 relations | `material-relations-selector-jsonl-v1`（新计划显式选择）；`material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态 |
+| R2 relations | `material-relations-selector-jsonl-v2`（新计划显式选择）；selector v1 / `material-relations-jsonl-v1`（历史可读） | 只接收固定 items validation 版本和端点集合；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window`，模型只返回批内 selector 终态；v2 明确直接回答与同 turn 主题漂移、部分回答、前提纠正和自我修正的原子判定 |
 
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持
 矩阵，真实请求前返回 `CS_PROTOCOL_UNSUPPORTED`，不静默降级。关系候选只从同一 snapshot、同一或
@@ -222,10 +223,11 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
-- Issue 18 另有独立授权的 58 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
-  P10 relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9 preflight 均为 0 模型
-  调用。P9 在配置检查时 0 attempt 阻断并由新 plan 取代；P10 恰好执行 4 次、4/4 succeeded、0 retry，
-  items/Claims attempts 仍为 0。该执行不转授 publication、query、delivery、context_use 或额外 live budget。
+- Issue 18 另有独立授权的 62 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
+  P10 relations 4、P12 relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9
+  preflight 均为 0 模型调用。P9 在配置检查时 0 attempt 阻断并由新 plan 取代；P10 与 P12 各恰好执行
+  4 次 relation 调用、4/4 succeeded、0 retry，items/Claims attempts 仍为 0。P12 协议成功但质量门失败。
+  这些执行均不转授 publication、query、delivery、context_use 或额外 live budget。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件

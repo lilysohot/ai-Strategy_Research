@@ -1,0 +1,71 @@
+{
+  "attempt_status": {
+    "succeeded": 4
+  },
+  "batch_id": "batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+  "candidate_relations": 333,
+  "candidate_rule_version": "material-relation-candidates-v5",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "cost": null,
+  "cost_status": "unavailable_not_zero",
+  "executed_on": "2026-10-10",
+  "items_attempts": 0,
+  "model_calls": 4,
+  "packet_results": [
+    {
+      "accepted_rate": 0.3548387096774194,
+      "candidates": 31,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "present": 11
+    },
+    {
+      "accepted_rate": 0.6666666666666666,
+      "candidates": 84,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "present": 56
+    },
+    {
+      "accepted_rate": 0.08791208791208792,
+      "candidates": 91,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "present": 8
+    },
+    {
+      "accepted_rate": 0.5196850393700787,
+      "candidates": 127,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "present": 66
+    }
+  ],
+  "plan_sha256": "sha256:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+  "present_relations": 141,
+  "publication_query_delivery_context_use": 0,
+  "relation_attempts": 4,
+  "schema_version": "accepted-items-import-live-execution-1",
+  "tasks": {
+    "material_items": {
+      "artifact_id": "sha256:b28c274c2228b69b5d1ae90f4eefa1274bdab728df9371c31e370820568e576f",
+      "execution_status": "succeeded",
+      "method": "imported",
+      "payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+      "protocol_status": "valid",
+      "quality_status": "accepted",
+      "task_id": "task:3a0ff8c33e90b0b89bc9f4af99d2ce024179bc3c5f7f463b0a4627b42fd7923a"
+    },
+    "material_relations": {
+      "artifact_id": "sha256:5f2c15d8dc77d54168e05a4d5b05dbadb427f05ecb0a3da1a78337be24c93043",
+      "execution_status": "succeeded",
+      "method": "model",
+      "payload_sha256": "sha256:3a52dfdcd7bd002e0b1802699664b2ec119f3972e1fc7a15e543627e22a17c03",
+      "protocol_status": "valid",
+      "quality_status": "accepted",
+      "task_id": "task:2b179d29ea962467d8744d877a3b3e29a934df4b998027fdefc7aa2dbf9cd53c"
+    }
+  },
+  "usage": {
+    "completion_tokens": 28303,
+    "prompt_tokens": 92095,
+    "reasoning_tokens": 19995,
+    "total_tokens": 120398
+  }
+}

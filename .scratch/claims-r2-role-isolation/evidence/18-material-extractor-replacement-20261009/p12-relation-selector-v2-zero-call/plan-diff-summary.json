@@ -1,0 +1,36 @@
+{
+  "changed": {
+    "material_relations_protocol": {
+      "from": "material-relations-selector-jsonl-v1",
+      "to": "material-relations-selector-jsonl-v2"
+    }
+  },
+  "execution_authorized": false,
+  "model_requests_during_freeze": 0,
+  "next_gate": "explicit authorization for at most four selector-v2 relation calls",
+  "p10_batch_id": "batch:da6a70bbc4152430bf01a75201e198a1846146d51e0a99f1c2639b82559e3b78",
+  "p12_batch_id": "batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+  "p12_plan_sha256": "sha256:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+  "schema_version": "relation-selector-v2-plan-diff-1",
+  "status": "frozen_not_executed",
+  "unchanged": {
+    "credential_reference_only": true,
+    "dependency_policy": "complete_parent",
+    "enabled_roles": [
+      "material_items",
+      "material_relations"
+    ],
+    "imported_items": true,
+    "items_validation_version": "material-items-validation-v11",
+    "max_attempts": 4,
+    "model": "doubao-seed-2.0-mini",
+    "provider": "openai_compat",
+    "relation_candidate_rule": "material-relation-candidates-v5",
+    "role_max_attempts": {
+      "claims": 0,
+      "material_items": 0,
+      "material_relations": 4
+    },
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+  }
+}

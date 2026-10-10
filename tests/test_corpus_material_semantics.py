@@ -11,6 +11,8 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    MATERIAL_RELATION_SELECTOR_JSONL_V1,
+    MATERIAL_RELATION_SELECTOR_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_SELECTOR_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_V3,
@@ -2820,10 +2822,28 @@ def test_relation_selector_owns_pair_identity_and_exact_source_window() -> None:
         "to_item": "claim",
         "allowed_type": "supports",
     }
-    prompt = build_relation_selector_prompt(packet, items, [pair])
-    assert MATERIAL_RELATION_SELECTOR_JSONL_VERSION == "material-relations-selector-jsonl-v1"
+    prompt = build_relation_selector_prompt(
+        packet,
+        items,
+        [pair],
+        protocol=MATERIAL_RELATION_SELECTOR_JSONL_V2,
+    )
+    legacy_prompt = build_relation_selector_prompt(
+        packet,
+        items,
+        [pair],
+        protocol=MATERIAL_RELATION_SELECTOR_JSONL_V1,
+    )
+    assert MATERIAL_RELATION_SELECTOR_JSONL_V1 == "material-relations-selector-jsonl-v1"
+    assert MATERIAL_RELATION_SELECTOR_JSONL_V2 == "material-relations-selector-jsonl-v2"
+    assert MATERIAL_RELATION_SELECTOR_JSONL_VERSION == MATERIAL_RELATION_SELECTOR_JSONL_V1
     assert '"relation_index":0' in prompt
     assert '"selector":"pair_window"' in prompt
+    assert "直接给出所问数值、名单" in prompt
+    assert "纠正问题中的错误前提" in prompt
+    assert "只回答了同一轮中的另一个问题" in prompt
+    assert "说话人对自己刚提出假设的显式修正" in prompt
+    assert "直接给出所问数值、名单" not in legacy_prompt
 
     raw = json.dumps(
         {

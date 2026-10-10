@@ -34,7 +34,7 @@ from plugins.corpus.evidence_pipeline import (
 from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
-    MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
     MATERIAL_SELECTOR_JSONL_VERSIONS,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
@@ -341,7 +341,7 @@ class BatchPlan(BaseModel):
             },
             "material_relations": {
                 MATERIAL_RELATION_JSONL_VERSION,
-                MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+                *MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
             },
         }
         profiles = {profile.role: profile for profile in self.profiles}
@@ -718,7 +718,7 @@ def plan_batch(
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_items_protocol")
     if material_relations_protocol not in {
         MATERIAL_RELATION_JSONL_VERSION,
-        MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+        *MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
     }:
         raise StructuredExecutionError("CS_PROTOCOL_UNSUPPORTED", "material_relations_protocol")
     selector_protocol = material_items_protocol in {

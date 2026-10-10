@@ -1,0 +1,29 @@
+{
+  "artifact_id": "sha256:a3eb947138d210effba095cdedc5ff887bb454b05a563c557daaae30384ac94e",
+  "business_contract": "MaterialRun/MaterialUnderstanding",
+  "context_status": "complete",
+  "coverage": {
+    "omitted_unit_ids": [],
+    "reason_codes": [
+      "relations_not_requested"
+    ],
+    "scoped_unit_ids": [
+      "snapshot-unit:543ce6d74a7089b93a60bde4e371c7c32167ae01c5ffba0f6a1f5b17ad77c29a",
+      "snapshot-unit:9174b8e2e682339f1936074045598b93a58244ea11fefb063f3020515983c553",
+      "snapshot-unit:c55748260515e6f2f6a4863b6b738aa3f878e158d74ba50b8a65099f79f27951",
+      "snapshot-unit:3ee9085fab2b520da5e4023936e97c3b861f45498c5287b89779e6978acab74a"
+    ]
+  },
+  "error_codes": [],
+  "execution_status": "succeeded",
+  "payload_media_type": "application/json",
+  "payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "protocol": "material-atomic-selector-jsonl-v5",
+  "protocol_status": "valid",
+  "quality_status": "accepted",
+  "role": "material_items",
+  "schema_version": "corpus-role-artifact-v1",
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "task_id": "task:65cd7a660c7e4c22d6534a27e0b5de236d60899b4b091101eb7595ab1a9f0d03",
+  "upstream_artifact_ids": []
+}

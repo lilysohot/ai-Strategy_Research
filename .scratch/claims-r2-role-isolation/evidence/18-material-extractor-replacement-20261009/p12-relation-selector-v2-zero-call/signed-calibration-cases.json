@@ -1,0 +1,124 @@
+{
+  "candidate_rule_version": "material-relation-candidates-v5",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "cases": [
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_1a9d24af1bf7107f",
+      "from_item": "itm_c5b6c8cd6b06733b",
+      "from_text": "半年就得换",
+      "p10_decision": "present",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "reason": "Replacement frequency alone does not answer the requested next-year revenue scale.",
+      "signed_expected_decision": "absent",
+      "to_item": "itm_7d94720780b22f58",
+      "to_text": "像这个明年能到多大的收入体量？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_1b5d94210a126af9",
+      "from_item": "itm_cd2f0055b112ed94",
+      "from_text": "但数量多，加起来也有一个多亿。",
+      "p10_decision": "absent",
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "reason": "The amount explicitly supplies the value component of the question about the remaining capex.",
+      "signed_expected_decision": "present",
+      "to_item": "itm_eea0f287e8d3a224",
+      "to_text": "那锂电铜箔剩下的那1.5个亿左右是什么设备？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_4f11ea4b329aa628",
+      "from_item": "itm_9bd9974f1399f160",
+      "from_text": "您说到了三船，日本还有一家叫西工业，还有TEX公司，韩国的PNT。",
+      "p10_decision": "absent",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "reason": "The reply explicitly lists global suppliers in direct answer to the global-landscape question.",
+      "signed_expected_decision": "present",
+      "to_item": "itm_b6bc2fe5191c980f",
+      "to_text": "全球格局能不能帮我们梳理一下？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_5956d4ff0f239792",
+      "from_item": "itm_bedb7ad9945a1cdb",
+      "from_text": "4.5微米的设备要求比3.5微米以内的低",
+      "p10_decision": "present",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "reason": "The atom compares technical requirements but does not answer the 3 versus 4.5 hundred-million value question.",
+      "signed_expected_decision": "absent",
+      "to_item": "itm_2ed1f0d464841852",
+      "to_text": "4.5微米的设备价值是三个亿左右还是4.5个亿？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_603d2b449da00930",
+      "from_item": "itm_098191a84f535987",
+      "from_text": "阳极板需要装在阳极槽上",
+      "p10_decision": "absent",
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "reason": "The reply directly corrects the question's false premise about an anode-plated cathode roller.",
+      "signed_expected_decision": "present",
+      "to_item": "itm_57f00ff055dd6020",
+      "to_text": "带阳极板的阴极辊大概是200万一套，每1万吨正常要用多少套？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_99ad745a830b3057",
+      "from_item": "itm_9b2f5d12f2f6fa8a",
+      "from_text": "我们得陪跑做测试",
+      "p10_decision": "present",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "reason": "Accompanying the customer during testing explains payment uncertainty but does not itself answer delivery timing.",
+      "signed_expected_decision": "absent",
+      "to_item": "itm_a95760dac3d8b5dc",
+      "to_text": "表处理签的15到20台正常什么时候交付？"
+    },
+    {
+      "allowed_type": "challenges",
+      "candidate_pair_id": "pair_c47aa4dc2cd74bc3",
+      "from_item": "itm_d7e587819e87740f",
+      "from_text": "可能是我理解的误区",
+      "p10_decision": "absent",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "reason": "The speaker explicitly challenges their own preceding machining-versus-control assumption.",
+      "signed_expected_decision": "present",
+      "to_item": "itm_2bd4442e70bd91c5",
+      "to_text": "我想请您介绍，比如这类公司应该是机加能力特别强，"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_c8a2e609d0bf69ac",
+      "from_item": "itm_5852ae6f596d7a71",
+      "from_text": "海亮想成为铜箔行业的定价人",
+      "p10_decision": "present",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "reason": "The pricing-ambition atom does not answer which foil thickness will be expanded.",
+      "signed_expected_decision": "absent",
+      "to_item": "itm_8c8feaa17d18ea45",
+      "to_text": "海亮等厂商目前扩产是做3.5微米、4.5微米还是其他？"
+    },
+    {
+      "allowed_type": "answers",
+      "candidate_pair_id": "pair_dc4f0640ec6b4b11",
+      "from_item": "itm_a0ccf937f9834dae",
+      "from_text": "因为日本企业扩产意愿不大",
+      "p10_decision": "present",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "reason": "Low Japanese expansion intent supports low external sourcing probability but is not itself an answer to make-versus-buy.",
+      "signed_expected_decision": "absent",
+      "to_item": "itm_20180f4bc5c443ce",
+      "to_text": "我想跟您确认，三井是自做表面处理设备，还是买标品改造"
+    }
+  ],
+  "created_on": "2026-10-10",
+  "schema_version": "relation-selector-v2-signed-calibration-1",
+  "selector_protocol": "material-relations-selector-jsonl-v2",
+  "signoff": {
+    "authorization": "签认P11 草案，开始执行",
+    "name": "xyl",
+    "required": false,
+    "signed_at": "2026-10-10"
+  },
+  "source_sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64"
+}

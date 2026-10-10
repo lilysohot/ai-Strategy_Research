@@ -1,0 +1,65 @@
+{
+  "schema_version": "relation-selector-v2-live-failure-analysis-1",
+  "created_on": "2026-10-10",
+  "status": "quality_gate_failed_no_publication",
+  "execution": {
+    "model_calls": 4,
+    "successful_calls": 4,
+    "retries": 0,
+    "ledger_findings": 0,
+    "prompt_tokens": 92095,
+    "completion_tokens": 28303,
+    "reasoning_tokens": 19995,
+    "total_tokens": 120398,
+    "cost_status": "unavailable_not_zero"
+  },
+  "quality": {
+    "p10_present": 217,
+    "p12_present": 141,
+    "present_to_absent": 87,
+    "absent_to_present": 11,
+    "p10_signed_44_accuracy": 0.7954545454545454,
+    "p12_signed_44_accuracy": 0.7727272727272727,
+    "signed_accuracy_delta": -0.022727272727272728,
+    "known_p11_errors_corrected": "4/9",
+    "target_relation_recall": "3/4",
+    "failed_target": "dec-answer-mitsui-relation"
+  },
+  "relation_type_diagnosis": {
+    "answers": {
+      "p10_present_to_p12_absent": 84,
+      "p10_absent_to_p12_present": 6,
+      "interpretation": "v2 over-tightened direct-answer selection and removed both signed Mitsui answer atoms while still retaining two known false answers"
+    },
+    "challenges": {
+      "p10_present_to_p12_absent": 3,
+      "p10_absent_to_p12_present": 5,
+      "interpretation": "the added contrast/self-correction prose shifted decisions in both directions and reduced signed calibration stability"
+    },
+    "supports_and_conditions": {
+      "changed_decisions": 0,
+      "interpretation": "the explicit-link rules were stable in this execution and are not the active regression source"
+    }
+  },
+  "capacity_observation": {
+    "answer_candidate_pairs": 299,
+    "distinct_question_targets": 66,
+    "per_packet_answer_pairs": [24, 75, 85, 115],
+    "per_packet_question_targets": [8, 16, 16, 26],
+    "interpretation": "one independent terminal per pair forces the model to make 299 repeated answer judgments; prompt-only wording did not provide stable question-level assignment"
+  },
+  "decision": {
+    "selector_v2_release_status": "rejected",
+    "candidate_v5_status": "retain",
+    "additional_prompt_only_live_trial": "not_recommended",
+    "recommended_next_design": "question-group answer selector",
+    "design_constraints": [
+      "group each question with only its controller-owned adjacent answer atoms",
+      "return selected answer-atom indexes once per question instead of one present/absent terminal per pair",
+      "controller expands selected indexes back to immutable pair/relation identities",
+      "keep supports and conditions on the existing stable path",
+      "freeze P11 signed cases as regression fixtures and do zero-call fake/replay before any new live budget"
+    ]
+  },
+  "publication_query_delivery_context_use": 0
+}

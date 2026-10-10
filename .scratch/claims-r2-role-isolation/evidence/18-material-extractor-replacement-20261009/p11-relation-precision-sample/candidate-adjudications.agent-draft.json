@@ -4,7 +4,7 @@
     "endpoint_rule": "judge the atomic endpoint texts, not topical co-occurrence alone",
     "present": "accept only when the typed relation is explicit in the frozen pair window"
   },
-  "human_signoff_required": true,
+  "human_signoff_required": false,
   "precision_decisions": [
     {
       "agent_decision": "reject_false_positive",
@@ -276,10 +276,10 @@
   "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
   "schema_version": "relation-adjudication-draft-1",
   "signoff": {
-    "authorization": null,
-    "name": null,
-    "required": true,
-    "signed_at": null
+    "authorization": "签认P11 草案，开始执行",
+    "name": "xyl",
+    "required": false,
+    "signed_at": "2026-10-10"
   },
-  "status": "agent_draft_unsigned"
+  "status": "human_signed"
 }

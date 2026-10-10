@@ -30,7 +30,7 @@
   ],
   "precision": {
     "estimated_standard_error": 0.15102276136565845,
-    "interpretation": "Directional estimate only: the interval is too wide for a release gate, and all labels remain an unsigned agent draft.",
+    "interpretation": "Directional estimate only: the labels are signed, but the interval is too wide for a release gate.",
     "normal_95_interval_diagnostic": [
       0.2477741895666274,
       0.8397834141200085
@@ -135,5 +135,5 @@
   "recommended_next_step": "Do not spend another live call. First add zero-call candidate/selector rules and regression fixtures for these failure modes, then replay the immutable P10 decisions where possible.",
   "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
   "schema_version": "relation-precision-agent-estimate-1",
-  "status": "agent_draft_not_a_quality_gate"
+  "status": "human_signed_not_a_quality_gate"
 }

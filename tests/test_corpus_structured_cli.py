@@ -495,7 +495,13 @@ def test_plan_cli_can_opt_into_controller_selector_protocol(tmp_path: Path) -> N
     assert plan.material_items_options.candidate_slot_ids == ("slot:scope-a",)
 
 
-def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "protocol",
+    ["material-relations-selector-jsonl-v1", "material-relations-selector-jsonl-v2"],
+)
+def test_plan_cli_can_freeze_relation_selector_protocol(
+    tmp_path: Path, protocol: str
+) -> None:
     value = snapshot()
     source = tmp_path / "snapshot.json"
     target = tmp_path / "relation-selector-plan.json"
@@ -512,7 +518,7 @@ def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
         "--material-items-protocol",
         "material-atomic-selector-jsonl-v5",
         "--material-relations-protocol",
-        "material-relations-selector-jsonl-v1",
+        protocol,
         "--relation-dependency-policy",
         "complete_parent",
         cwd=cwd,
@@ -522,5 +528,5 @@ def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path) -> None:
     plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
     plan.verify_identity()
     profile = next(profile for profile in plan.profiles if profile.role == "material_relations")
-    assert profile.protocol == "material-relations-selector-jsonl-v1"
+    assert profile.protocol == protocol
     assert plan.relations.dependency_policy == "complete_parent"

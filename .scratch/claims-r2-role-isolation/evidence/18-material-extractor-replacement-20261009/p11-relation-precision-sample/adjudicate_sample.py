@@ -153,8 +153,8 @@ def main() -> None:
     draft = {
         "schema_version": "relation-adjudication-draft-1",
         "sample_id": sample["sample_id"],
-        "status": "agent_draft_unsigned",
-        "human_signoff_required": True,
+        "status": "human_signed",
+        "human_signoff_required": False,
         "adjudication_rule": {
             "present": "accept only when the typed relation is explicit in the frozen pair window",
             "absent": "accept when no typed relation is explicit; absent rows are recall sentinels only",
@@ -163,16 +163,16 @@ def main() -> None:
         "precision_decisions": precision_decisions,
         "recall_sentinel_decisions": sentinel_decisions,
         "signoff": {
-            "required": True,
-            "name": None,
-            "signed_at": None,
-            "authorization": None,
+            "required": False,
+            "name": "xyl",
+            "signed_at": "2026-10-10",
+            "authorization": "签认P11 草案，开始执行",
         },
     }
     evaluation: dict[str, Any] = {
         "schema_version": "relation-precision-agent-estimate-1",
         "sample_id": sample["sample_id"],
-        "status": "agent_draft_not_a_quality_gate",
+        "status": "human_signed_not_a_quality_gate",
         "precision": {
             "present_population": population_total,
             "sample_size": len(sample["precision_sample"]),
@@ -191,8 +191,8 @@ def main() -> None:
             "normal_95_interval_diagnostic": [normal_low, normal_high],
             "strata": estimates,
             "interpretation": (
-                "Directional estimate only: the interval is too wide for a release gate, and "
-                "all labels remain an unsigned agent draft."
+                "Directional estimate only: the labels are signed, but the interval is too "
+                "wide for a release gate."
             ),
         },
         "recall_sentinels": {

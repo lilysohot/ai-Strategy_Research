@@ -30,6 +30,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_ITEMS_VALIDATION_VERSION,
     MATERIAL_RELATION_JSONL_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
     MATERIAL_SELECTOR_JSONL_V1,
     MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
@@ -163,6 +164,7 @@ class RoleArtifact(BaseModel):
         "material-atomic-selector-jsonl-v5",
         "material-relations-jsonl-v1",
         "material-relations-selector-jsonl-v1",
+        "material-relations-selector-jsonl-v2",
     ]
     business_contract: Literal["EvidenceRun/EvidenceFact", "MaterialRun/MaterialUnderstanding"]
     payload_sha256: str
@@ -237,7 +239,7 @@ class _RoleCalls:
             },
             "material_relations": {
                 MATERIAL_RELATION_JSONL_VERSION,
-                MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+                *MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
             },
         }
         if protocol not in supported[role]:
@@ -765,6 +767,7 @@ __all__ = [
     "MATERIAL_ITEMS_VALIDATION_VERSION",
     "MATERIAL_RELATION_JSONL_VERSION",
     "MATERIAL_RELATION_SELECTOR_JSONL_VERSION",
+    "MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS",
     "MATERIAL_SLOT_JSONL_VERSION",
     "RELATION_CANDIDATE_RULE_VERSION",
     "ROLE_ARTIFACT_SCHEMA_VERSION",

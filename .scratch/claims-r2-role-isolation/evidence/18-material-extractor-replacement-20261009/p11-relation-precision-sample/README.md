@@ -1,6 +1,6 @@
 # P11 · relation precision sample and recall sentinels
 
-Status: **agent draft; human signoff required; not a release gate**
+Status: **human signed by xyl on 2026-10-10; not a release gate**
 
 This is a zero-model-call audit over the immutable P10 relation candidate set and
 selector decisions. It does not alter P10 artifacts, gold, thresholds, publication,
@@ -56,8 +56,8 @@ live execution. A later signed quality gate should expand only the high-variance
   and inclusion probabilities.
 - `adjudicate_sample.py`: applies the explicit agent decisions and calculates the
   stratified draft estimate.
-- `candidate-adjudications.agent-draft.json`: per-pair judgments; signature fields
-  intentionally remain empty.
+- `candidate-adjudications.agent-draft.json`: per-pair judgments and xyl's signed
+  authorization; the historical filename is retained for stable references.
 - `evaluation-summary.agent-draft.json`: metric calculation and failure taxonomy.
 
 Reproduce from the repository root:

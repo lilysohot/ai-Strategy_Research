@@ -813,6 +813,65 @@ selector 回归并收紧判断口径；修复后先在不可变 P10 工件上做
 顺序扩展高方差 answers 层的人审样本。P11 全程 model attempts=0，publication/query/delivery/
 context_use=0，签名字段保持空值。
 
+## 18. 2026-10-10 执行增补：relation selector v2 零调用修复与计划冻结
+
+xyl 以“签认P11 草案，开始执行”签认 P11。回查 5 个 false-positive `present` 与 4 个
+false-negative `absent` 后，九个 pair 均已存在于同一个 candidate v5 集合；因此根因不是候选召回，
+也不适合增加词面重叠剪枝。P12 保持 `material-relation-candidates-v5` 不变，把修复限制在 selector
+语义接缝。
+
+新协议 `material-relations-selector-jsonl-v2` 不改变任何输出字段、relation index、端点、类型、证据
+selector 或 controller 生成规则。它明确要求 `answers` 的源 atom 自身解决目标问题谓词，同时承认数值、
+名单、是/否和错误前提纠正都是直接回答；同一回答轮、主题相似、邻接和仅解释邻近结论不再足以判
+answer。`challenges` 增加显式自我修正口径，并区分可以同时成立的不同维度事实；supports/conditions
+继续要求明示连接。v1 提示词与协议仍保留读写兼容，新计划才选择 v2。
+
+零调用重建继续得到同一 333-candidate identity。只应用已签认九条 oracle delta 时，5 条 present 改
+absent、4 条 absent 改 present，整体从 217/116 变成 216/117；被删除关系与四条 target relation ID
+交集为空，因此签认差分保持 target recall 4/4。该数值只证明修复规范覆盖已知错误，不代表 v2 模型
+已经做到，也不构成新 precision 质量门。
+
+随后冻结 batch `batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23`。
+与 P10 相比，snapshot、签认 items import、角色、模型、candidate v5、items validation v11、strict
+`complete_parent` 和 attempts 上限均相同；唯一业务配置变化是 relation selector v1→v2，其余变化均为
+派生身份 hash。items 上限为 0，relations 上限为 4，冻结过程 model requests=0，plan 只保留 credential
+reference。该计划没有 execute，必须另获最多四次真实 relation 调用授权。
+
+聚焦语义/角色/账本/CLI/合约回归为 206 passed。全量 `tests/test_corpus*.py` 为 1385 passed、17
+skipped；失败仍是既有环境状态：本地 golden 语料存在但 Recall@5=0/20，以及测试固定期待
+reader-pdf-10 而当前为 reader-pdf-11。Ruff 与 Pyright 通过。截至本节计划冻结阶段，P12 model calls=0，publication/
+query/delivery/context_use=0。
+
+## 19. 2026-10-10 执行增补：P12 relation selector v2 有界实跑与否决
+
+按 xyl 对“P12 最多 4 次 relation 调用”的明确授权执行冻结 batch
+`batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23`。第一次使用相对
+store root 的 preflight 在 attempt 创建前以 `CS_PATH_OUTSIDE_ROOT` 拒绝，模型调用仍为 0；随后使用
+已核验的绝对根目录执行同一冻结计划。最终 items/Claims attempts=0，relations 恰好 4 次、4/4
+succeeded、0 retry、无 ledger finding。usage 为 prompt 92,095、completion 28,303、reasoning
+19,995、total 120,398 tokens；provider 没有返回可核成本，因此成本为 unavailable，不记成 0。
+
+协议成功没有转化成质量提升。v2 在同一 333 个候选上把 present 从 P10 的 217 降到 141；与 P10
+相比有 87 条 present→absent、11 条 absent→present。P11 已签认的 44 条复用样本上，P10 为
+35/44（TP=27、FN=4、TN=8、FP=5），P12 为 34/44（TP=24、FN=7、TN=10、FP=3），净退化
+1/44。九个已知错误只修复四个：它减少了三条已知 FP 并恢复一条已知 FN，但同时删除四条原本成立的
+关系，并新增一条错误 present。整篇 precision 仍不可由该条件抽样估计，不能把 141 条 present 的下降
+解释为 precision 改善。
+
+四条冻结 target relation 从 4/4 降为 3/4。Mitsui 的“历史供货事实”和“未来合作预测”两个答案原子
+均不再连接到真实业务问题；因此 v2 同时未达到签认回归门和 target recall 门。按关系类型回看，
+supports/conditions 决定稳定，主要振荡集中在 299 个 `answers` 候选及少量 `challenges`。这说明继续在
+逐 pair 提示词上增加通用语义条款，仍会让同一问题的多个原子答案相互独立竞争，无法可靠控制过删与漏接。
+
+P12 因此记为协议/结构有效但质量失败：v2 保留为可审计实验协议，不进入新发布计划，也不触发 query、
+delivery、context_use 或 M_main。下一步不再追加 prompt-only live trial，而是先做零调用架构修复：按每个
+question 聚合相邻回答原子，让模型一次返回该 question 对应的 answer atom indices，再由 controller 展开
+为现有不可变 relation pairs；supports/conditions 继续走稳定路径。该设计可在相同 P10/P12 工件和 44 条
+签认样本上离线验证，只有通过既有回归与 target 门后才有资格另行申请新的有界调用预算。为防止新直接
+调用方误用被否决的版本，selector 默认/`latest` 指针已退回 v1；v2 仍在协议白名单中，只用于不可变
+P12 工件的读取、审计与 replay。相关语义、执行和合约回归 130 passed，Ruff、Pyright 通过，且 P10/P12
+冻结 plan identity 均未改变。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

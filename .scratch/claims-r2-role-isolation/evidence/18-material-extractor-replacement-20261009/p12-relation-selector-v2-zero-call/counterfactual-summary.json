@@ -1,0 +1,63 @@
+{
+  "baseline": {
+    "absent": 116,
+    "candidates": 333,
+    "present": 217
+  },
+  "created_on": "2026-10-10",
+  "model_calls": 0,
+  "next_gate": "freeze a separate selector-v2 relation-only plan; execution requires an explicit new live-call authorization",
+  "prompt_records": [
+    {
+      "candidate_pairs": 31,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "prompt_chars": 17564,
+      "prompt_sha256": "sha256:5e8d58d4df8e493265002b0e040892bd950df8335e4e8b614dc13a0e7736fcf6"
+    },
+    {
+      "candidate_pairs": 84,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "prompt_chars": 51775,
+      "prompt_sha256": "sha256:7e64d4e3859d2410fd416bd931bcc629cbbdb9690c021ffd4eac9f9a575b1418"
+    },
+    {
+      "candidate_pairs": 91,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "prompt_chars": 53084,
+      "prompt_sha256": "sha256:fd888412776b39a53715231609f2d0c7ced30609fc2c2bf0dcadaee5423c8176"
+    },
+    {
+      "candidate_pairs": 127,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "prompt_chars": 72623,
+      "prompt_sha256": "sha256:7b4b8676b0eb18de4ed7d1fe472a5aa711da545bbbc1f58571d1de2859e89a96"
+    }
+  ],
+  "protocol": {
+    "candidate_rule_changed": false,
+    "legacy_read_compatible": "material-relations-selector-jsonl-v1",
+    "new_write_version": "material-relations-selector-jsonl-v2",
+    "schema_shape_changed": false,
+    "semantic_contract_changed": true
+  },
+  "publication_query_delivery_context_use": 0,
+  "schema_version": "relation-selector-v2-zero-call-counterfactual-1",
+  "signed_delta_counterfactual": {
+    "absent_to_present": 4,
+    "interpretation": "This applies only the nine signed P11 corrections. It is an oracle counterfactual, not a claim that selector v2 has already produced them.",
+    "overrides": 9,
+    "present_to_absent": 5,
+    "resulting_absent": 117,
+    "resulting_present": 216,
+    "target_recall_preserved_by_signed_delta": true,
+    "target_relation_ids_removed": []
+  },
+  "source": {
+    "candidate_rule_version": "material-relation-candidates-v5",
+    "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+    "item_payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+    "relation_payload_sha256": "sha256:5336b091f19462ee999f148bedbfeba7e0df2a9b2bc17368d37ae2080c9cb137",
+    "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64"
+  },
+  "status": "zero_call_contract_remediation_complete_live_validation_not_started"
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": "relation-selector-v2-remediation-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "live_execution_complete_quality_gate_failed_no_publication",
+  "source_sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "source_candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "protocol": {
+    "legacy": "material-relations-selector-jsonl-v1",
+    "new": "material-relations-selector-jsonl-v2",
+    "response_schema_changed": false,
+    "candidate_rule_changed": false,
+    "semantic_contract_changed": true
+  },
+  "signed_delta": {
+    "present_to_absent": 5,
+    "absent_to_present": 4,
+    "counterfactual_present": 216,
+    "counterfactual_absent": 117,
+    "target_recall_preserved": true,
+    "result_is_oracle_not_live_selector_output": true
+  },
+  "plan": {
+    "batch_id": "batch:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+    "plan_sha256": "sha256:3728b5fb95633c916e70706827709ef3f80572a71aa41f733d7e46cbc01d5b23",
+    "model_requests_during_freeze": 0,
+    "items_attempt_limit": 0,
+    "relation_attempt_limit": 4,
+    "executed": true,
+    "execution_authorized": true
+  },
+  "execution": {
+    "items_attempts": 0,
+    "relation_attempts": 4,
+    "successful_relation_attempts": 4,
+    "retries": 0,
+    "ledger_findings": 0,
+    "prompt_tokens": 92095,
+    "completion_tokens": 28303,
+    "reasoning_tokens": 19995,
+    "total_tokens": 120398,
+    "cost": null,
+    "cost_status": "unavailable_not_zero",
+    "relation_artifact_id": "sha256:5f2c15d8dc77d54168e05a4d5b05dbadb427f05ecb0a3da1a78337be24c93043",
+    "relation_payload_sha256": "sha256:3a52dfdcd7bd002e0b1802699664b2ec119f3972e1fc7a15e543627e22a17c03",
+    "ledger_database_sha256": "sha256:2a786ca082a11901d48c68e1a13ac758dc87cc2639f7e7487c61070b34dd6bdf"
+  },
+  "live_quality": {
+    "present_relations": 141,
+    "present_to_absent_vs_p10": 87,
+    "absent_to_present_vs_p10": 11,
+    "signed_44_correct": 34,
+    "signed_44_accuracy": 0.7727272727272727,
+    "p10_signed_44_correct": 35,
+    "p10_signed_44_accuracy": 0.7954545454545454,
+    "signed_accuracy_delta": -0.022727272727272728,
+    "known_errors_corrected": 4,
+    "known_errors_total": 9,
+    "target_relation_recall": 0.75,
+    "failed_target": "dec-answer-mitsui-relation",
+    "quality_gate": "failed"
+  },
+  "validation": {
+    "focused_tests": "206 passed",
+    "post_rejection_default_demotion_tests": "130 passed",
+    "full_corpus_tests": "1385 passed, 17 skipped, 2 known environment failures",
+    "known_failures": [
+      "local golden corpus present but Recall@5 is 0/20",
+      "test expects reader-pdf-10 while environment provides reader-pdf-11"
+    ],
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "counterfactual_determinism_runs": 2,
+    "counterfactual_determinism": "identical",
+    "historical_p10_plan_identity": "verified"
+  },
+  "model_calls": 4,
+  "publication_query_delivery_context_use": 0,
+  "files_sha256": {
+    "README.md": "sha256:1c915ee8af9549b26b96a2f41eb5688c9d1dfbfeaedc81cc1ee70d7ced7273dc",
+    "build_counterfactual.py": "sha256:1f82e409fd0aee9f52b27815f1795154eaab9187a6dcd31c08cd5b257754db29",
+    "verify_plan.py": "sha256:2a78c16d60ccec1203a18a78b9d9e77dd18cdbb6af9b3656cdf05365bb731127",
+    "evaluate_live.py": "sha256:5657e760d70b7a55bd85eda101136d0032c0300ad23cddcd310029ab5b04af1f",
+    "signed-calibration-cases.json": "sha256:9e61803e7432e9820fdd7873692f75738bb92bd88db78dcfb6d92c09112dbaa7",
+    "counterfactual-summary.json": "sha256:3eb4e7aae26052162653fcfbe0315c49894617f4ad4a9b58ca178e3bdc1de640",
+    "accepted-items-artifact.json": "sha256:fe17a68f950b74862131a7f2baec878758d18bab9dcac2dee8a77c917d113cb3",
+    "accepted-items-payload.json": "sha256:3be73cf547b51c491f7f6cf0df7bab213c1247e49205a5e7938d95d0ba0098ba",
+    "plan.json": "sha256:6b1ad0cc223144379c848a9ee0db8be9fab01d74660aef5e379af78ed23422c3",
+    "plan-diff-summary.json": "sha256:55c46b650611286f89b883ce034d51d69ec2e0f53868fc995b579c1e9a1fb7b1",
+    "execution-summary.json": "sha256:319e3f9b2d023819a765ab954cfd1aa2c72b86770e6f598d9367938199c9529e",
+    "evaluation-summary.json": "sha256:49476f7ee61c3fc5d8c383f3b7f3cf2dbd8ebb2b0a0a39fbb1dbd6fa6f8c9f63",
+    "relation-artifact.json": "sha256:21d382f4a9002911016370e4929f75ac3bb09640efc836535bc8b40b21f09f3a",
+    "relation-payload.json": "sha256:bd7ee8e44115a02af3881773bcda222ce340a885ca8f51a94f10ddd92145488d",
+    "signed-sample-regression.json": "sha256:f9aa50f6a367c22e61ace98bfbb734013cf6651fd46c9951d09cb178c6c5ea59",
+    "failure-analysis.json": "sha256:bede45c47cd3024c7246da1b71b8db520b5b85756110cbfc97294afb006a9b82"
+  },
+  "next_gate": "zero-call question-group answer-selector design and replay tests; do not run another prompt-only live trial"
+}

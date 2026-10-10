@@ -100,7 +100,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     plan.add_argument(
         "--material-relations-protocol",
-        choices=("material-relations-jsonl-v1", "material-relations-selector-jsonl-v1"),
+        choices=(
+            "material-relations-jsonl-v1",
+            "material-relations-selector-jsonl-v1",
+            "material-relations-selector-jsonl-v2",
+        ),
         default="material-relations-jsonl-v1",
     )
     plan.add_argument(
