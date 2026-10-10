@@ -1,17 +1,20 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-10
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。P2 发布/M_main 消费仍未启动。
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
   items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
   提升 0/4、回退 2/4、持平 2/4，输入 token 中位数增加 24.33%，因此默认 relation 富化关闭。
   R2 默认交付和当前验收范围固定为 `material_items`；relations 只保留为非阻断、按需实验能力。
+- 范围裁决：当前 R2 不再为 relations 安排修复、模型调用或质量验收；这不是未完成债务，也不影响
+  Claims/items 的验收与发布。未来只有新的明确业务问题、独立预注册价值门和单独授权同时成立时，
+  才能另立版本重评 relations；不得从当前 items 收尾预算中恢复该路线。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
 ## 1. 首轮目标与边界
 
-首轮打通 `react → stateful-react-agent/tui` 的单文档路径：固定来源快照 → Claims 与 R2 items 独立执行 → 按需 R2 relations → 校验/文件发布 → 新研究运行查询 → 完整证据进入实际模型消息 → ConsumptionLedger → corpus_submit_manifest → A4 报告检查。
+首轮打通 `react → stateful-react-agent/tui` 的单文档路径：固定来源快照 → Claims 与 R2 items 独立执行 → 校验/文件发布 → 新研究运行查询 → 完整证据进入实际模型消息 → ConsumptionLedger → corpus_submit_manifest → A4 报告检查。R2 relations 默认关闭；只有新的独立价值门通过并获授权时，才作为按需实验分支接入。
 
 先在合成夹具与 fake/replay 下零模型验证，再经独立授权试验真实提取模型和主线模型。文件工件试点不是恢复旧数据库写链，也不是完成 R2-S5 的生产 PG 验收。
 
@@ -62,6 +65,8 @@
 | 23 | [Relation 语义边界更正与零调用敏感性复评](issues/23-relation-adjudication-correction.md) | 22 的 7 条签认误差 | 保留 signed-v1；44/44 统一审计并由 xyl 签认 gold-v2 |
 | 24 | [Relation question-group 布尔终态协议与零调用回放](issues/24-relation-boolean-protocol.md) | 23 signed gold-v2 | non-answer 改为局部索引 + boolean；4/4 packet、333/333 决定零调用闭环 |
 | 25 | [Relation boolean v2 最终有界真实服从性复验](issues/25-final-relation-live-compliance.md) | 24 零调用通过、独立授权 | 4/4 协议完整；gold-v2 仅 30/38，按终止规则关闭路线 |
+| 26 | [relation 层对研报抽取价值的有界配对验证](issues/26-relation-layer-value-validation.md) | 25、签认价值金标、独立授权 | 5 题 × A/B；提升 0/4、回退 2/4、持平 2/4且触发成本止损；关闭默认 relation 富化 |
+| 27 | [challenges 显式命题冲突规则](issues/27-challenges-rule-propositional-conflict.md) | 24；不依赖或复活 25 | 零调用高精度防护和回归测试；仅供未来按需路径，不构成当前 relation 验收重启 |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
@@ -106,6 +111,11 @@ boolean v2；4/4 请求成功并形成 4 completed、333/333 决定、0 missing/
 非 known-error 案例回退 5（最多 2）；只有 target 4/4 和 supports/conditions 回退 0 通过。因此失败
 根因已经从协议收敛为模型语义不稳定。按冻结终止规则关闭当前模型 + extractor 路线，不追加调用、
 不改 prompt、不降门槛、不依据结果重整金标。
+26 随后用冻结 items 与 Issue 25 relation 产物完成 5 题 × A/B 下游价值验证；relations 在关系题中
+提升 0/4、回退 2/4、持平 2/4，并使中位输入 token 增加 24.33%，故触发预注册成本止损。27 的
+`challenges` 显式命题冲突防护已通过零调用回放和 88 项回归，但只保留作未来按需实验的安全资产。
+由此，当前 R2 的 relation 修复和验收工作流已关闭；下一阶段只处理 material_items 质量门及其
+items-only 正向消费闭环。
 W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 

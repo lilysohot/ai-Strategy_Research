@@ -9,7 +9,7 @@ Production database access: 0
 ## 授权与当前边界
 
 用户已签认价值金标并授权执行 Issue 26。2026-10-10 已冻结 r1 执行身份并完成 10 次主线 A/B；
-当前等待盲化配对人工裁定，尚未解盲或作最终 relation 去留结论。
+盲化配对人工裁定已由 xyl 签认，随后完成零调用解盲和最终 relation 去留裁决。
 
 - 不修改或取代已签认 gold-v2。
 - 不追加 relation 抽取调用，不复活 Issue 25 已关闭路线。
@@ -98,6 +98,14 @@ condition C 从本任务删除；不得根据 A/B 结果临时追加。若 A/B �
 - 预注册保留门未通过。关闭默认 relation 富化，R2 默认交付 `material_items`；relations 仅保留为
   非阻断、按需实验能力，R2 验收重心回到 items 证据完整性。
 - Issue 27 的 challenges 收紧保留，但不据此复活默认 relation 路线；gold-v2 未修改。
+
+## 收口后的执行边界
+
+- 当前 R2 不再继续修复、调参、换模或验收 relations；其质量门不再是 Claims/items 发布前置条件。
+- 该结论是已经完成的负向业务价值裁决，不登记为待修复缺陷或未完成验收债务。
+- 现有 relation 工件、协议和 Issue 27 防护仅保留作审计与未来实验资产，不进入默认查询上下文。
+- 未来若有明确业务用例，必须新建版本，预注册独立价值门并取得单独预算授权；不得复用本票授权，
+  不得通过修改 gold-v2、降低旧门槛或占用 material_items 收尾预算来重启。
 
 ## Evidence
 

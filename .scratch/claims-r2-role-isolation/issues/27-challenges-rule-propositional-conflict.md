@@ -58,6 +58,8 @@ Production database access: 0
   未改写 Issue 25 存储或 gold-v2。
 - `tests/test_corpus_material_semantics.py` 全量 88 项通过，包括固定反例与显式自我纠正正例。
 - relation 抽取调用 0；publication/生产库访问 0。
+- Issue 26 已判定默认 relation 富化无正向价值，因此本票是未来按需路径的防误连保护，不是当前 R2
+  的 relation 修复或验收重启信号，也不产生后续 relation 调用义务。
 
 ## 关联
 
