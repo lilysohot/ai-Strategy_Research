@@ -172,6 +172,200 @@ _TERMINAL_WORKFLOW_MODES = ("react", "agent_team")
 2. **压缩放在阶段 1 还是阶段 2**？建议阶段 2——阶段 1 先用一个"最近 N 轮"的硬上限顶住，避免压缩逻辑污染缓存收益的测量。
 3. **`history.txt` 是保留还是废弃**？缓存友好形态下不再需要"渲染成文本"这条路径，但它目前是补数续接等链路的既有产物，需要确认没有别的消费方后再退场。
 
+## 9. 阶段 1 实现方案（设计稿，2026-10-10）
+
+### 9.1 结论先行
+
+形态 B 落地成四条链：**轮末落"最终消息列表"产物 → server 只做字节搬运 → 下一轮 worker 读入 → 节点校验后作为 `initial_messages` 交给 kernel**。前缀恒定（§5.2/§5.3）不靠"改 prompt 组装"，而是**把判定源从 run 级换成会话级**——因为现状的三处分支全挂在 run 级 `has_investment_context` 上。
+
+### 9.2 权威来源修正：用轮末 dump，不用轨迹事件重放
+
+§5.1 的"轨迹足以重建完整消息序列"要修正为**不够**，两条硬证据：
+
+| # | 事实 | 依据 |
+|---|---|---|
+| 1 | kernel 手里的 `messages` 是**已归一化**的 wire 形状（reasoning 的内联/保留在 append 之前就定死了），最终列表由 `AgentLoopResult.messages` 直接给出 | `model_profile.py:602-605`、`agent_loop.py:654-655`、`loop_types.py:205-211` |
+| 2 | 轨迹信封的 tool 体被裁（`_BODY_MAX_CHARS` 默认 16384），且 jsonl 记的是**工具结果后处理器之前**的原文（注释明说后处理器在 `notify_tool_result` 之后且不落盘） | `trajectory.py:64`、`:650-655`、`:424-427` |
+
+⇒ 事件流重建最多做到"到第一个超长 tool 结果为止"的字节一致；dump 的 `result.messages` 天然字节精确（它就是 kernel 手里那份）。
+
+**对 §8.1 的回答**：建议选 dump；轨迹继续做诊断/时间线（`server/relay.py:139`）。
+
+### 9.3 产物契约：`<run_root>/run/conversation.json`（v1）
+
+```json
+{
+  "schema": "conversation-dump/1",
+  "run_id": "...", "session_id": "...",
+  "pipeline_id": "stateful-react-agent", "node_id": "react_agent", "role_id": "stateful_react",
+  "model_name": "…", "thinking_format": "tag",
+  "system_prompt": "<本轮实际拼出的全文>",
+  "tool_names": ["…ordered…"],
+  "tool_schema_sha256": "<sha256(canonical json of tools= 数组)>",
+  "messages": [ {"role": "...", "content": "...", "...": "..."} ],
+  "turns_used": 7, "stopped_by": "final",
+  "trim": null
+}
+```
+
+- 写者：新 observer `frontier_agent/components/observers/conversation_snapshot.py`，在 `on_loop_end(result)` 写 `result.messages`（非 critical，写失败不阻断运行，隔离机制同现有 observer）。
+- 写前：过 `for_wire()`（`messages.py:81`）+ 结构自检（role 合法 / 每个 `tool_calls[].id` 都有配对 tool 消息 / 无孤儿）+ 原子替换（`.tmp` + `os.replace`，best-effort fsync）。
+- 落点 = `run/conversation.json`（= `_trial_dir`，`worker.py:478`）：**不放** `run/agent/trajectories/`，避免被轨迹读取方（固定路径 `react_agent.jsonl`，`relay.py:32`、`trajectory_status.py:42`）误认。
+- 注册：`stateful_react_agent/nodes/main_agent.py:907-926` 的 observers 列表加一行（`system_prompt=system_prompt`、`tools=tools`，与 `TrajectoryFileObserver` 同参）。
+
+### 9.4 传递链（server 只搬字节）
+
+1. `orchestrator._spawn`：与写 `history.txt` 同点，定位上一轮 Run 的 dump 并**字节拷贝**到新 run 的 `run_root/prior_conversation.json`。
+   - 定位：沿 `_turns_as_of_submission(...)`（`orchestrator.py:107-125`）逆序找首个「`run_dir_for(turn.run_id)/run/conversation.json` 存在且 `pipeline_id` 一致」的 run；找不到 = 无重放。
+   - 只拷不解析 ⇒ 不动 `server/history.py:10-15` 的"server 不读 workflow 内部消息"边界。
+2. `worker.run_once`：读 `run_root/prior_conversation.json` → `extra_input["replay_messages"]=dump["messages"]`、`extra_input["replay_meta"]={其余头字段}`；`history.txt` / `conversation_history` 原样保留（并行，§8.3 另议退役）。
+3. `kernel_adapter.BenchmarkSession.run`：**无需改动** —— `input_data.update(extra_input)`（`kernel_adapter.py:155-156`）已把 state 铺好。
+4. `stateful_react_agent/spec.py:29-34` 的 `include_fields` 增 `"replay_messages","replay_meta"`（白名单过滤在 `graph_builder.py:186-194`，漏加节点就看不到）。
+
+### 9.5 节点侧校验与使用
+
+`react_agent_node` 在算出 `system_prompt`（`main_agent.py:817-903`）与 `tools/tool_names`（`:807-815`）之后、调 loop（`:1091-1140`）之前：
+
+1. 无 `replay_messages` → `initial_messages=None`（今日行为，零风险）。
+2. 逐项比对 `replay_meta`：`thinking_format`、`tool_names`（含顺序）、`tool_schema_sha256`、`system_prompt`（按 `system_msg()` 的键序逐字节比，`messages.py:126-127`）。任一不等 ⇒ 放弃重放并记原因。
+3. 全等 ⇒ `initial_messages=replay_messages`，`user_message=question` 照旧。**注意**：`initial_messages is not None` 时 kernel 不会另插 system（`agent_loop.py:184-193`），所以 dump 必须自带 system，且与本次逐字节一致。
+4. 决策写回 state（`replay_decision` / `replay_skipped_reason`）→ `output_fields` → `summary.json`，作为验收证据。
+
+### 9.6 前缀恒定化的判定源：会话级业务标志
+
+要消除的三条 run 级变量：
+- `worker.py:499-500` 条件追加 `BUSINESS_CONTEXT_POLICY`；
+- `server/profile.py:88-97` 工具集二选一（`CALCULATION_TOOL_NAMES` / `BUSINESS_TOOL_NAMES`）；
+- `worker.py:466-472` 条件剔除 `position_sizing/strategy_lint`。
+
+改为**会话级**判定是可行的，因为业务 Run 的 `session_id` 就是 `research_id`：`ResearchInvestmentLink.research_id` 外键指向 `sessions.id`（`store.py:450`），补数续接也显式 `session_id=row.research_id`（`input_requests.py:638`）。于是 spec §3.1 的判据可直接查：`research_investment_links` 存在且 `account_id`/`primary_plan_id` 非空。
+
+- `_launch`（`orchestrator.py:972`）增 `--business-prefix`（或 metadata 字段）；
+- `build_profile_overrides(has_investment_context=…)` 由该标志驱动；
+- 好处：瞬时解析失败（spec §6 的降级路径）只让**尾部数据**缺席，不再翻转前缀。
+
+仍属"每轮可变、阶段 1 只检测不消除"的项（由 §9.5 的 sha 比对兜住，skip 会记原因）：`--prompt-addendum`（上传文件说明，`routes/runs.py:217-231`）、`language_instruction`、`BOARD_PROMPT_ADDENDUM`、`MANIFEST_PROMPT_NOTE`、profile/模型切换、`direct` 模式。
+
+### 9.7 截断：写时裁剪（阶段 1 的硬上限）
+
+- 触发：`len(messages)` 超 `max_replay_turns`（默认 10，可配）。
+- 规则：**只在下标 >0 的 `role=="user"` 边界整轮丢最旧**，保留下标 0 的 system；永不产生孤儿 tool 消息。
+- 为什么必须**写时**裁而不是读时滑窗：读时滑窗每轮前移窗口 ⇒ 请求从第 0 条起就不同 ⇒ 每轮全量 prefill（正是 §7 那条"压缩策略与缓存打架"）。写时裁 = dump 即下一轮基线，裁剪只在**发生的那一轮**付一次全量 prefill。
+- 压缩（§8.2 第二个问题）按建议放阶段 2；阶段 1 只此硬上限。
+
+### 9.8 改动清单
+
+| # | 文件 | 改动 |
+|---|---|---|
+| 1 | `frontier_agent/components/observers/conversation_snapshot.py`（新） | dump observer（写 + 裁剪 + 自检） |
+| 2 | `workflows/stateful_react_agent/nodes/main_agent.py` | 注册 observer；读 `replay_*`、校验、传 `initial_messages`；返回 `replay_decision` |
+| 3 | `workflows/stateful_react_agent/spec.py` | `include_fields` 加两字段；`output_fields` 加 `replay_decision` |
+| 4 | `server/orchestrator.py` | 定位并拷贝上一轮 dump；`--business-prefix` |
+| 5 | `server/history.py`（或新模块） | 定位上一轮 dump 的纯函数（可单测） |
+| 6 | `server/worker.py` | 读 `prior_conversation.json` → `extra_input`；前缀判定改用会话标志；`summary.json` 记 `replay` |
+| 7 | `server/profile.py` | `build_profile_overrides` 由会话标志驱动 |
+| 8 | `server/store.py` | 会话级"研究已绑定"查询（若采纳 §9.6） |
+
+### 9.9 验收（可核验）
+
+1. 单测（新 `tests/test_context_inheritance.py`）：假 LLM 连跑两轮，断言**轮 2 请求 messages 的前 len(轮1) 项与轮 1 请求逐字节一致**（这是"缓存命中"的可证形式）；断言 system/tools/工具顺序恒定；断言校验失败 → 不重放。
+2. 单测：dump 契约（字段、tool_call_id 配对、写时裁剪不留孤儿、原子替换、schema 版本拒绝）。
+3. 单测：上一轮 dump 定位（多轮、缺失、pipeline 不一致、跨 session 不串）。
+4. 集成（实跑，出 `runs.usage_json` 原始数字）：同一会话连跑 3 轮业务提问，轮 2 `cache_read_tokens` ≥ 轮 1 `prompt_tokens`，轮 3 ≥ 轮 1+2 的多数；口径 = `server/usage.py:119-143`；基线取 §1.2 的 Run（可复核）。
+5. 反向证据：3 轮 `summary.json.replay.decision` 全 `used`；人为改 `--prompt-addendum` 或工具集后那一轮为 `skipped` 且原因正确。
+6. 不回归：`tests/test_history_t26.py`（钉住 history.txt / conversation_history）、`tests/test_session_history.py` 全绿；两条旧路径行为不变。
+
+### 9.10 不变量与风险
+
+- 不变量：**前缀区只放跨轮不变内容**；本轮问题与业务数据一律在尾部（现状 `worker.py:526-530` 把业务数据追加在 instruction 尾部，符合）。
+- 校验 fail-open：**宁可放弃缓存，不可错给历史**；`initial_messages=None` 永远是安全出口。
+- `turn_index` 只进 metadata、不进 prompt（`workflows/` 全仓无引用，已核）——不变量成立。
+- dump 体积 ≈ 真实上下文体积；写时裁剪是唯一上限手段，默认值需与 `max_input_tokens` / 上下文窗口对齐后再定。
+
+### 9.11 裁决记录（2026-10-10）
+
+| # | 议题 | 裁决 |
+|---|---|---|
+| 1 | 权威来源：轮末 dump vs 轨迹事件重放 | **甲：轮末 dump** |
+| 2 | 会话级业务标志：新增 `research_investment_links` 查询 vs 接受降级轮一次性失效 | **甲：新增查询** |
+| 3 | 搬运方式：server 拷贝 `prior_conversation.json` vs worker 跨目录读 | **甲：server 字节拷贝** |
+| 4 | 范围：只做 `stateful-react-agent` vs 连 `agent_team` | **甲：只做 stateful**（agent_team 另立 issue） |
+| 5 | `server/history.py:10-15` 边界修订签认 | **认可（口径 A）**：阶段 1 server 只搬字节不解析；阶段 2 把完整消息序列升格为服务端存储（2026-10-10） |
+
+约束：第 3 项 = 甲 ⇒ server 经手 `prior_conversation.json`；第 5 项按口径 A 落地（注释已改写为"presentation / continuity 双载体 + 只搬运不解析"）。
+
+### 9.12 主流做法参考（第 5 项依据，2026-10-10 检索）
+
+"会话状态归谁、谁持有完整消息序列"，主流分三类：
+
+| 形态 | 代表 | 会话状态 owner | 证据 |
+|---|---|---|---|
+| 无状态 API + 调用方自持历史 | Chat Completions / Messages API | **应用/服务端**（工程上落 DB 的 session/thread 表） | OpenAI 会话状态文档：每个请求本无状态，"多轮上下文必须由开发者显式携带"，并要求**重放完整 output 数组**（含加密推理项） |
+| 服务端会话对象 | Responses `store=true` / `previous_response_id` / Conversations API | **平台服务端**；conversation 存 items（消息、工具调用、工具输出） | 同上：官方"首选 Responses API（有状态）"；Conversations 可跨设备续接、不受 30 天 TTL |
+| 工作流/图框架 | LangGraph checkpointer | **编排层**（≈ 本仓库 server 的位置）；**消息列表即一等状态** | LangGraph 官方 Persistence：checkpointer 把 thread 的**整个 graph state**（含 `messages` 通道）快照持久化到 Postgres/SQLite，按 `thread_id` 恢复对话 |
+
+⇒ **"完整消息序列锁在 agent 内部、编排层只能拿到渲染文本"不是主流做法**；主流是消息序列作为会话状态一等公民、由编排层/服务端持久化。
+
+缓存侧纪律（与本方案互证；来源为第三方镜像页，措辞与官方一致但**非官方域名**，按低一档证据看）：
+- 命中要求**整个渲染前缀整体匹配**（含 system、工具定义与顺序、相关设置）⇒ 改 tools 集合/顺序/描述即前缀变；
+- 原文级建议："**保留对话历史；追加新消息，而不是重写先前的轮次**"；"摘要、压缩或上下文截断会改变前缀并重置缓存"；
+- 要禁用工具时建议**不删工具定义**（用 `tool_choice`/`allowed_tools` 限制）⇒ 支持第 2 项裁决；
+- 命中可在 usage 的 `cached_tokens` 观测 ⇒ 与 §9.9 口径一致；
+- Anthropic 走**显式断点**（`cache_control` 在 content block 级，标记"从开头到此处"）；本次因地区限制未取到官方页，**未作为依据**。
+
+两点交叉验证：①LangGraph 官方同样承认 checkpoint **无界增长**需保留/裁剪，且裁剪/压缩损失缓存复用 —— 与 §9.7"写时裁剪、一次裁剪一次失效"同构；②官方提到**子图状态父图不一定可见**（各自 namespace）—— 正是第 4 项把 `agent_team` 多 loop 另立的理由。
+
+**建议（第 5 项）**：裁"认可"，但分三层写死口径，避免变成永久破例：
+
+1. **阶段 1**：server **不解析**消息内容（不按 role/content 取值做任何业务判断），只搬运 run 目录里的 opaque 产物 ⇒ 原注释的**动机**（解耦 pipeline 实现）不破。
+2. **注释措辞改写**（`server/history.py:10-15`）：
+   > 跨轮连续性由两类载体承载：(a) 服务端从 `turns` 渲染的文本稿（presentation）；(b) 上一 Run 落下的 opaque 完整消息产物（continuity）。服务端**只搬运 (b)、不解析其内容**，也不依赖 pipeline 内部结构；完整消息序列的归属将在阶段 2 升格为服务端存储。
+3. **阶段 2 收敛目标**：按主流把完整消息序列落到服务端（新表/会话侧存储，等价 LangGraph checkpointer / Conversations items），`run/conversation.json` 降级为派生产物/调试副本 ⇒ 第 5 项变成"分两步把边界搬到主流位置"。
+
+**备选口径（一步到位）**：阶段 1 直接落表、跳过 run 目录 dump。更贴主流、跨轮定位不依赖扫描 run 目录；代价是本次含 alembic 迁移 + 表设计（新增表不破坏既有结构，但验收面变大）。**不推荐**在阶段 1 做：会同时放大"新链路"与"新存储"两类风险，违反一次只动一个变量。
+
+红线（两种口径都不改）：**server 不解析消息内容**。
+
+### 9.13 实施记录（2026-10-10，阶段 1 代码已落地）
+
+**新增**
+
+| 文件 | 作用 |
+|---|---|
+| `frontier_agent/components/observers/conversation_snapshot.py` | dump 契约 v1：`build_dump` / `validate_messages` / `trim_to_turns` / `tool_schema_sha256` / `select_replay` + `ConversationSnapshotObserver`（`on_loop_end` 原子写） |
+| `tests/test_context_inheritance.py` | 24 条：dump 契约、拒绝矩阵、写时裁剪、observer、**两轮请求前缀逐字节一致**、server 侧定位与搬运 |
+
+**改动**
+
+| 文件 | 改动 |
+|---|---|
+| `frontier_agent/components/observers/trajectory.py` | `_serialize_tools` 实现提升为模块级公开 `serialize_tool_schemas`，类内保留薄委托（工具指纹与轨迹记录同一份字节） |
+| `server/history.py` | 设计注释改写为 presentation / continuity 双载体；新增 `resolve_prior_conversation`（**仅按文件存在性**定位） |
+| `server/orchestrator.py` | `_spawn` 复用同一份 turns 定位上一轮 dump；`_launch` 字节搬运（`_stage_prior_conversation`）+ 会话级 `--business-prefix` |
+| `server/store.py` | `session_has_research_binding`（spec §3.1 的会话级形态） |
+| `server/worker.py` | 读 `prior_conversation.json` → `replay_payload`（opaque，不解析）；前缀配置改由会话标志驱动；`summary.json` 记 `replay` |
+| `workflows/stateful_react_agent/spec.py` | `include_fields += replay_payload`；`output_fields += replay_decision` |
+| `workflows/stateful_react_agent/nodes/main_agent.py` | 注册 dump observer；`select_replay` 校验后传 `initial_messages`；`replay_max_turns`（默认 10） |
+
+**门禁证据（实跑）**
+
+| 项 | 命令 | 结果 |
+|---|---|---|
+| 新增单测 | `uv run pytest tests/test_context_inheritance.py -q` | 24 passed |
+| 波及面回归 | `uv run pytest tests/test_context_inheritance.py tests/test_history_t26.py tests/test_session_history.py tests/test_investment_context_tools.py tests/test_investment_context_worker.py tests/test_web_p3_approval.py -q` | 96 passed |
+| 全量 | `uv run pytest tests -q --deselect tests/test_corpus_cli_isolation.py::test_subprocess_model_client_import_refused` | **2949 passed / 12 failed**；12 条在 `git worktree add /tmp/fa-base HEAD`（`8d3fadd`）上**逐条同失败** ⇒ 全部为既有环境/数据依赖（corpus 数据、market 数据、dev lane、alembic 多 head、PG 状态），非本次引入 |
+| 类型 | `uv run pyright <改动文件>` | **0 errors**（仓库既有 29 条错误在未触碰文件） |
+| Lint/格式 | `uv run ruff check …` / `ruff format --check`（两个新文件） | 通过 |
+
+**尚未完成（阶段 1 的最后一格）**
+
+- §9.9.4 的**端到端 3 轮真实运行**（同一会话连跑 3 轮业务提问，取 `runs.usage_json` 的 `cache_read_tokens` / `prompt_tokens`，并核 `summary.json.replay.decision == used` ×3）**未执行**：它会真实消耗模型额度，按纪律需先定"预注册退出判据"再放行，不由实施方自跑自宣。
+- 已知边界：`--business-prefix` 未传时（spike / 手工起 worker）回退 run 级判定；`agent_team` 不在本次范围（§9.11 第 4 项）。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
+
+2026-10-10：§9 阶段 1 设计稿。两处修正：①§5.1 的"轨迹足以重建"不成立（tool 体被裁 + 后处理器在落盘之后），改以 `AgentLoopResult.messages` 落 dump；②prefix 恒定化的判定源改为会话级（业务 Run 的 `session_id == research_id`），避免瞬时降级翻转前缀。
+
+2026-10-10 裁决：第 1–4 项按**甲案**落定（轮末 dump／会话级查询／server 字节拷贝／只做 `stateful-react-agent`）；第 5 项补 §9.12 主流做法参考后待裁，与第 3 项绑定——未裁前不动代码。

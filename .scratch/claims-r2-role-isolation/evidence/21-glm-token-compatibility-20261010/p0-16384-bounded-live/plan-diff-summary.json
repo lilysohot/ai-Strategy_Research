@@ -1,0 +1,46 @@
+{
+  "changed": {
+    "derived_identities": [
+      "profile_sha256",
+      "role_profile_sha256",
+      "task_id",
+      "routing_sha256",
+      "plan_sha256",
+      "batch_id"
+    ],
+    "max_output_tokens": {
+      "from": 4096,
+      "to": 16384
+    }
+  },
+  "execution_authorized": true,
+  "final_gate_sha256": "sha256:1d037bd1fce000993b43722d82bf6ffec8c501add8f03b4b9cbd2c96ae39e49a",
+  "model_requests_during_freeze": 0,
+  "new_batch_id": "batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "new_plan_file_sha256": "sha256:9b5dc928da3ae8311920879e706f40f7a0a8127b0cf25c7b7410f524621def12",
+  "new_plan_sha256": "sha256:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "publication_authorized": false,
+  "relation_attempts_max": 4,
+  "schema_version": "glm-token-compatibility-plan-diff-1",
+  "source_batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "status": "verified_output_limit_only_not_executed",
+  "unchanged": {
+    "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+    "candidate_rule": "material-relation-candidates-v5",
+    "credential_reference_only": true,
+    "dependency_policy": "complete_parent",
+    "imported_items": true,
+    "items_validation": "material-items-validation-v11",
+    "model": "glm-5.3-flash",
+    "protocol": "material-relations-question-group-jsonl-v1",
+    "provider": "openai_compat",
+    "role_max_attempts": {
+      "claims": 0,
+      "material_items": 0,
+      "material_relations": 4
+    },
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+    "timeout_seconds": 300.0,
+    "token_parameter": "max_tokens"
+  }
+}

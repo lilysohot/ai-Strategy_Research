@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
 - 日期：2026-10-02；状态复核：2026-10-10
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行：4 次传输成功，但仅 2/4 packet 通过严格协议，另两包因 15 条非法 `status` 失败，故最终门失败并关闭当前模型+extractor 修复线；P15 禁止。P2 发布/M_main 消费仍未启动。
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。P2 发布/M_main 消费仍未启动。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -51,6 +51,9 @@
 | 12—16 | [r3 修复](issues/12-r3-quality-remediation.md)、[r3 复验](issues/13-bounded-r3-trial.md)、[r4 复验](issues/15-bounded-r4-trial.md)、[r5 重放](issues/16-r5-offline-replay-remediation.md) | 11 | 历史失败诊断与零调用校验器修复 |
 | 17 | [结构化提取收敛闭环与最终去留门](issues/17-structured-extraction-convergence-closure.md) | 11—16 | Claims 替换证明与 copper 最终 P1 去留门 |
 | 18 | [material extractor 替换实现与严格依赖门](issues/18-material-extractor-replacement.md) | 17 的 P1 失败终态 | 保留上层架构，替换 items/relations extractor |
+| 19 | [relation selection 后继路线零调用去留门](issues/19-relation-selection-successor.md) | 18 的 P14 失败终态 | 零调用区分格式与语义失败；R0 no-go 后关闭同模型后继 |
+| 20 | [GLM-5.3-Flash relation-only 单变量有界复验](issues/20-relation-model-replacement.md) | 19 no-go、独立授权 | 仅换模型的 4-call 复验；输出 token 耗尽后关闭 |
+| 21 | [GLM-5.3-Flash 16K 输出兼容性有界复验](issues/21-glm-token-compatibility.md) | 20 输出耗尽、独立授权 | 仅放宽 output tokens；仍无可见输出并出现 outcome_unknown |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
@@ -60,8 +63,19 @@ P13 已完成 question-group answer selector 的零调用实现与 oracle replay
 plan 已使用完整 4 次预算执行。四次模型请求均完成，但两包把关系类型写入仅允许 `present/absent` 的
 `status`，实际仅 2/4 packet completed，故在协议完整性门即失败；签认 44 例与 target 质量门不再作
 有效计分。按冻结终止规则，当前模型+extractor 路线已关闭，不再允许 P15、prompt/schema 放宽或追加
-调用；任何模型或算法替换都是新任务。W6 的
-独立留出/多模型比较、W7 的生产化仍须另行立项，
+调用；任何模型或算法替换都是新任务。19 又以只读 what-if 将 15 条 type-as-status 窄化解释为
+present，完整恢复 333 个决定，但签认样本仅
+32/44、已知错误 5/9、既有正确项回退 8，只有 target 4/4 通过；因此 selected-indices 只能修格式，
+不能修复该模型的语义质量，后继路线在实现前关闭。
+20 在新授权下保持 P14 输入、候选、prompt、Schema、请求参数和 44/9/35/4 门不变，
+只把模型换为 `glm-5.3-flash`。四次运输都成功，但均以 `finish_reason=length` 结束，
+16,384 completion tokens 中 16,377 为 reasoning，可见协议内容为空；因此 0/4 packet completed，
+语义门不可评分。本结论只拒绝 GLM 与冻结 4096-token profile 的组合，不得写成 GLM 语义质量已证伪。
+21 又在其余条件不变时将 `max_output_tokens` 提到 16,384。三个确定响应分别用时约
+4.4—4.6 分钟，全部以 `finish_reason=length` 结束且为空；49,152 completion tokens 中
+49,121 为 reasoning。第四次在 300 秒处 outcome_unknown，不得重发。因此单纯增加 token 已被
+反事实否决；未来只能控制/禁用 reasoning，或使用能保证可见结构化输出的模型。
+W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 
 ## 4. 01 已冻结的实现决议
@@ -227,10 +241,11 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 - 每票使用调用方相同 Interface 测试。保存测试命令、退出码、结果、适用范围、基线/工件指纹及已知限制；仅把 fixture 手工填成预期状态不能证明接通。
 - Python 环境按仓库使用 uv；命令从仓库根目录执行，不通过 pip 安装。新增开发测试须明确阻断真实网络/模型/生产数据库，尤其防止 uv 环境准备之外的测试业务路径触外部资源。
 - 代码任务按影响执行 Ruff、类型检查、符号闭包及 import smoke；真实模型 preflight 只能在 11 获准预算内运行。零模型阶段明确记录其未执行，不宣称所有提交前门已通过。
-- Issue 18 另有独立授权的 62 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
-  P10 relations 4、P12 relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9
+- Issue 18—21 共有独立授权的 74 次 selector model attempts（P3 23、P4 23、P5 4、P8 relations 4、
+  P10 relations 4、P12 relations 4、P14 relations 4、Issue 20 GLM relations 4、Issue 21 GLM-16K relations 4）；P6/P7 replay、P8 candidate-v4/v5 反事实、scorer-4 重评与 P9
   preflight 均为 0 模型调用。P9 在配置检查时 0 attempt 阻断并由新 plan 取代；P10 与 P12 各恰好执行
-  4 次 relation 调用、4/4 succeeded、0 retry，items/Claims attempts 仍为 0。P12 协议成功但质量门失败。
+  4 次 relation 调用、4/4 succeeded、0 retry，items/Claims attempts 仍为 0。P12 协议成功但质量门失败；
+  P14 在协议门失败；Issue 20 四次均耗尽 4K 上限且为空；Issue 21 放宽到 16K 后三次仍为空、一次 outcome_unknown。
   这些执行均不转授 publication、query、delivery、context_use 或额外 live budget。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 

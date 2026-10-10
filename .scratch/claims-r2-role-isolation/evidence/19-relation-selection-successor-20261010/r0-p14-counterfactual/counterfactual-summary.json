@@ -1,0 +1,169 @@
+{
+  "constraints": {
+    "model_calls": 0,
+    "new_gold": 0,
+    "p14_final_decision_changed": false,
+    "revive_p14": false,
+    "whole_document_precision_measured": false,
+    "writes_to_p14_store": 0
+  },
+  "decision": "format_recoverable_semantics_failed_stop_same_model_successor",
+  "packet_comparison": [
+    {
+      "attempt_number": 1,
+      "candidate_pairs": 31,
+      "causal_inference_allowed": false,
+      "diagnostic_normalizations": 0,
+      "non_answer_pairs": 7,
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "present": 14,
+      "question_groups": 8,
+      "reconstructable": true,
+      "reconstructed_decisions": 31,
+      "signed_cases": 12,
+      "signed_correct": 9
+    },
+    {
+      "attempt_number": 2,
+      "candidate_pairs": 84,
+      "causal_inference_allowed": false,
+      "diagnostic_normalizations": 9,
+      "non_answer_pairs": 9,
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "present": 60,
+      "question_groups": 16,
+      "reconstructable": true,
+      "reconstructed_decisions": 84,
+      "signed_cases": 11,
+      "signed_correct": 9
+    },
+    {
+      "attempt_number": 3,
+      "candidate_pairs": 91,
+      "causal_inference_allowed": false,
+      "diagnostic_normalizations": 6,
+      "non_answer_pairs": 6,
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "present": 70,
+      "question_groups": 16,
+      "reconstructable": true,
+      "reconstructed_decisions": 91,
+      "signed_cases": 8,
+      "signed_correct": 6
+    },
+    {
+      "attempt_number": 4,
+      "candidate_pairs": 127,
+      "causal_inference_allowed": false,
+      "diagnostic_normalizations": 0,
+      "non_answer_pairs": 12,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "present": 78,
+      "question_groups": 26,
+      "reconstructable": true,
+      "reconstructed_decisions": 127,
+      "signed_cases": 13,
+      "signed_correct": 8
+    }
+  ],
+  "reconstruction": {
+    "candidate_decisions": 333,
+    "errors": [],
+    "present": 222,
+    "provenance_counts": {
+      "diagnostic_type_as_present": 15,
+      "implicit_absent_from_answer_selection": 111,
+      "observed_answer_selection": 188,
+      "observed_valid": 19
+    },
+    "reconstructable": true
+  },
+  "schema_version": "p14-read-only-counterfactual-1",
+  "score": {
+    "gates": {
+      "known_errors": {
+        "actual": 5,
+        "minimum": 7,
+        "passed": false
+      },
+      "previously_correct_regressions": {
+        "actual": 8,
+        "maximum": 2,
+        "passed": false
+      },
+      "signed_cases": {
+        "actual": 32,
+        "minimum": 40,
+        "passed": false
+      },
+      "supports_conditions_previously_correct_regressions": {
+        "actual": 2,
+        "maximum": 0,
+        "passed": false
+      },
+      "target_relations": {
+        "actual": 4,
+        "minimum": 4,
+        "passed": true
+      }
+    },
+    "known_errors_correct": 5,
+    "passed": false,
+    "previously_correct_regressions": [
+      "pair_0cc897a5c1f55daf",
+      "pair_1f74637d78897251",
+      "pair_4adac65ac8099417",
+      "pair_af4a1d9299403d27",
+      "pair_b017f3137cc2221f",
+      "pair_c513a3e6c490fa9a",
+      "pair_d7b6eabfa488078d",
+      "pair_f483497489fe4b6e"
+    ],
+    "signed_cases_correct": 32,
+    "supports_conditions_regressions": [
+      "pair_c513a3e6c490fa9a",
+      "pair_f483497489fe4b6e"
+    ],
+    "target_results": [
+      {
+        "candidate_pair_ids": [
+          "pair_82e38a002735f044"
+        ],
+        "gold_relation": "dec-answer-capex-relation",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_1d4865edce7c70e5",
+          "pair_2c4fe7749a0e9dbb",
+          "pair_bb4f5d074a054e75",
+          "pair_bfa03df7eea2a12a"
+        ],
+        "gold_relation": "dec-answer-yield-relation",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_e0122f78caaf1a43"
+        ],
+        "gold_relation": "dec-quoted-yield-support",
+        "matched": true
+      },
+      {
+        "candidate_pair_ids": [
+          "pair_9ac292fbb05063a7",
+          "pair_ad507c2bfb7a7872"
+        ],
+        "gold_relation": "dec-answer-mitsui-relation",
+        "matched": true
+      }
+    ],
+    "whole_document_precision_measured": false
+  },
+  "source": {
+    "batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+    "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+    "plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+    "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64"
+  }
+}

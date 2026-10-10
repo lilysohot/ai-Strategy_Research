@@ -1,0 +1,70 @@
+{
+  "schema_version": "issue20-glm-bounded-live-manifest-1",
+  "executed_on": "2026-10-10",
+  "status": "failed_output_completeness_model_route_closed",
+  "batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "plan_sha256": "sha256:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "experimental_change": {
+    "from_model": "doubao-seed-2.0-mini",
+    "to_model": "glm-5.3-flash",
+    "response_model": "glm-5-3-flash-260828",
+    "model_only_change_verified": true
+  },
+  "budget": {
+    "claims_attempts": 0,
+    "items_attempts": 0,
+    "relation_attempts": 4,
+    "relation_attempts_max": 4,
+    "automatic_retries": 0
+  },
+  "transport": {
+    "succeeded_attempts": 4,
+    "failed_attempts": 0,
+    "unknown_attempts": 0
+  },
+  "output_result": {
+    "completed_packets": 0,
+    "partial_packets": 0,
+    "failed_packets": 4,
+    "empty_visible_responses": 4,
+    "length_terminated_responses": 4,
+    "visible_protocol_records": 0,
+    "retained_relations": 0
+  },
+  "usage": {
+    "prompt_tokens": 49683,
+    "completion_tokens": 16384,
+    "reasoning_tokens": 16377,
+    "total_tokens": 66067,
+    "cost": null,
+    "cost_status": "unavailable_not_zero"
+  },
+  "final_gate": {
+    "passed": false,
+    "failed_at": "visible_output_completeness",
+    "semantic_quality_scored": false,
+    "additional_calls_allowed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  },
+  "root_cause": "model_output_budget_exhausted_before_visible_protocol_content",
+  "files_sha256": {
+    "plan.json": "sha256:048f7b3fb3e199d969588b724a7ac1bdc2cf97b56f9d1a4a55a9b8123c9830d4",
+    "final-gate.json": "sha256:55dace31d29a908ee6c7c410640575af9cf119cbd5eb7482949fbbd9892b38f6",
+    "plan-diff-summary.json": "sha256:c0c6afa874d995b38f24ca08c6dd9a117e8db0614fd2c8b700653061a6720389",
+    "protocol-audit.json": "sha256:a12a366465191a97b9f981119ac723efed4e85e1e504bcd4206d1794664ed1ab",
+    "execution-summary.json": "sha256:9e89f0b36b97bf060e9476b718a04f76575b81662cf7a7a7e77466ffd866a3f9",
+    "final-decision.json": "sha256:80b6119c56f1440bc925483cda176ace0f71c258fb93e3263e5f7a3e4832f54d",
+    "audit_live.py": "sha256:3841ba64b543bda4e78db64d7b125cc43226c21c0506ac0869eb317fbab01c44",
+    "verify_plan.py": "sha256:517d01c5511e892edcd23bfad831e73ef15935eb8bd0046627b0f40479c5397c",
+    "live-store/index/structured.sqlite3": "sha256:bcb4bf3d8b55c7da99347d972682de348c6a4a370c03e733d38feba532891d23"
+  },
+  "validation": {
+    "plan_diff": "model and derived identities only",
+    "audit_model_requests": 0,
+    "audit_deterministic": true,
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "credential_scan": "reference_only_no_inline_secret"
+  }
+}

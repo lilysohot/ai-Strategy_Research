@@ -1,0 +1,45 @@
+{
+  "batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "decided_on": "2026-10-10",
+  "gate": {
+    "failed_packets": {
+      "actual": 4,
+      "maximum": 0,
+      "passed": false
+    },
+    "known_error_9": "not_scored_because_output_completeness_failed",
+    "partial_packets": {
+      "actual": 0,
+      "maximum": 0,
+      "passed": true
+    },
+    "previously_correct_35": "not_scored_because_output_completeness_failed",
+    "relation_packets_completed": {
+      "actual": 0,
+      "passed": false,
+      "required": 4
+    },
+    "signed_44": "not_scored_because_output_completeness_failed",
+    "target_relations_4": "not_scored_because_output_completeness_failed"
+  },
+  "root_cause": {
+    "class": "model_output_budget_exhausted_before_visible_protocol_content",
+    "completion_token_limit_each": 4096,
+    "controller_index_failure": false,
+    "empty_visible_responses": 4,
+    "finish_reason_length": 4,
+    "http_or_transport_failure": false,
+    "reasoning_tokens_total": 16377,
+    "semantic_quality_determined": false,
+    "successful_attempts": 4
+  },
+  "schema_version": "issue20-glm-final-gate-decision-1",
+  "status": "failed_glm_5_3_flash_plus_frozen_extractor_rejected",
+  "terminal_policy": {
+    "additional_model_calls_allowed": false,
+    "next_state": "close glm-5.3-flash plus frozen extractor; any compatibility experiment requires a separately frozen task",
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false,
+    "request_option_or_prompt_change_in_current_task_allowed": false
+  }
+}

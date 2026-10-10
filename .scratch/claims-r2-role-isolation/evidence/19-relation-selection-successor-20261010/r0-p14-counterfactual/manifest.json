@@ -1,0 +1,47 @@
+{
+  "schema_version": "relation-successor-r0-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "closed_at_r0_same_model_semantic_no_go",
+  "source_batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "source_plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "execution": {
+    "model_calls": 0,
+    "writes_to_p14_store": 0,
+    "new_gold": 0,
+    "publication_query_delivery_context_use": 0,
+    "p14_revived": false
+  },
+  "reconstruction": {
+    "candidate_decisions": 333,
+    "diagnostic_type_as_present": 15,
+    "unrecoverable_records": 0,
+    "present": 222,
+    "complete": true
+  },
+  "gate": {
+    "signed_cases_correct": "32/44",
+    "signed_cases_required": "40/44",
+    "known_errors_correct": "5/9",
+    "known_errors_required": "7/9",
+    "previously_correct_regressions": 8,
+    "previously_correct_regressions_max": 2,
+    "target_relations_matched": "4/4",
+    "supports_conditions_regressions": 2,
+    "supports_conditions_regressions_max": 0,
+    "passed": false
+  },
+  "decision": "format_recoverable_semantics_failed_stop_same_model_successor",
+  "next_state": "no selected-indices implementation and no new call for this model; any model or algorithm replacement is a new task",
+  "validation": {
+    "stdout_determinism_runs": 2,
+    "stdout_sha256": "sha256:c65f99889bbcd64a4dba6812b60ee5a6072bdc1272770e89d3838a2efc7fbe71",
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings"
+  },
+  "files_sha256": {
+    "README.md": "sha256:b622019d4b32c932edce25bfaf67d03f1064c253852321c99324f392c4f8a214",
+    "design-freeze.json": "sha256:b107127049287838643f4ec5fb1aff1a6c73c79acf2947ad143607c102c5137c",
+    "audit_counterfactual.py": "sha256:7a7e15072a4fbff9b749fa373d7b89faf2c2b338160c30c868238be6f85bc95d",
+    "counterfactual-summary.json": "sha256:2f3e02ceb092263edfdda6cdecded463cb2a6b296bee4ba2fc6b3b1d07b3b323"
+  }
+}

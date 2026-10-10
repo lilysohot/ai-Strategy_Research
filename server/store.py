@@ -2323,3 +2323,25 @@ async def close_open_controls(
         if closed:
             await session.commit()
         return closed
+
+
+async def session_has_research_binding(*, research_id: uuid.UUID) -> bool:
+    """Is this session (== research) bound to an account or a plan?
+
+    The session-level form of spec §3.1's trigger (``account_id`` or
+    ``primary_plan_id`` non-null in ``research_investment_links``). The worker keys
+    its request *prefix* — the business policy text and the tool set — on this, so
+    the prefix no longer flips between turns of one conversation when a single
+    run's snapshot resolution degrades (issue 01 §9.6).
+    """
+    async with get_sessionmaker()() as session:
+        row = (
+            await session.execute(
+                select(ResearchInvestmentLink).where(
+                    ResearchInvestmentLink.research_id == research_id
+                )
+            )
+        ).scalar_one_or_none()
+    if row is None:
+        return False
+    return row.account_id is not None or row.primary_plan_id is not None

@@ -1,0 +1,49 @@
+{
+  "attempt_status": {
+    "outcome_unknown": 1,
+    "succeeded": 3
+  },
+  "automatic_retries": 0,
+  "batch_id": "batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "claims_attempts": 0,
+  "cost": null,
+  "cost_status": "unavailable_not_zero_and_unknown_attempt_may_have_consumed",
+  "executed_on": "2026-10-10",
+  "items_attempts": 0,
+  "known_usage_excludes_unknown_attempt": {
+    "completion_tokens": 49152,
+    "prompt_tokens": 32812,
+    "reasoning_tokens": 49121,
+    "total_tokens": 81964
+  },
+  "max_output_tokens": 16384,
+  "model": "glm-5.3-flash",
+  "model_attempts": 4,
+  "packet_status": {
+    "completed": 0,
+    "deferred": 0,
+    "failed": 4,
+    "partial": 0
+  },
+  "plan_sha256": "sha256:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "publication_query_delivery_context_use": 0,
+  "relation_attempts": 4,
+  "relation_task": {
+    "artifact_sha256": "sha256:94cd14b14ff82510c67054d8ef9eb0b77f525e96521dc6b7fc7e26dff1f484db",
+    "error_codes": [
+      "CS_OUTCOME_UNKNOWN"
+    ],
+    "execution_status": "outcome_unknown",
+    "payload_sha256": "sha256:33bcf24631202fef91e82b9261928288f73906d582ad024692e114e3539b1cff",
+    "protocol_status": "not_checked",
+    "publication_status": "unpublished",
+    "quality_status": "review_required",
+    "task_id": "task:6b3bb6bc9b0ba829aa3273c21fe3048b25f6232e20651b1752bc50afc364f901"
+  },
+  "response_model": "glm-5-3-flash-260828",
+  "retained_relations": 0,
+  "schema_version": "issue21-glm-16k-bounded-live-execution-1",
+  "status": "outcome_unknown_and_output_completeness_failed_route_closed",
+  "visible_protocol_records": 0
+}

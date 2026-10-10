@@ -1,0 +1,40 @@
+{
+  "batch_id": "batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "decided_on": "2026-10-10",
+  "gate": {
+    "failed_packets": {
+      "actual": 4,
+      "maximum": 0,
+      "passed": false
+    },
+    "known_error_9": "not_scored_because_output_completeness_failed",
+    "previously_correct_35": "not_scored_because_output_completeness_failed",
+    "relation_packets_completed": {
+      "actual": 0,
+      "passed": false,
+      "required": 4
+    },
+    "signed_44": "not_scored_because_output_completeness_failed",
+    "target_relations_4": "not_scored_because_output_completeness_failed"
+  },
+  "root_cause": {
+    "class": "reasoning_consumed_expanded_output_budget",
+    "completed_empty_responses": 3,
+    "completion_token_limit_each": 16384,
+    "finish_reason_length": 3,
+    "known_reasoning_tokens": 49121,
+    "outcome_unknown_attempts": 1,
+    "secondary_class": "final_attempt_outcome_unknown_at_timeout",
+    "semantic_quality_determined": false,
+    "successful_transport_attempts": 3
+  },
+  "schema_version": "issue21-glm-16k-final-gate-decision-1",
+  "status": "failed_glm_16k_compatibility_route_closed",
+  "terminal_policy": {
+    "additional_model_calls_allowed": false,
+    "automatic_or_manual_retry_allowed": false,
+    "next_state": "close 16K route; do not increase token budget again. A future route must control or disable reasoning, or use a model with visible-output guarantees",
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  }
+}

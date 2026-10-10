@@ -30,6 +30,9 @@ REACT_SPEC = PipelineSpec(
                 include_fields=[
                     "original_question", "current_query", "language",
                     "task_id", "metadata",
+                    # Opaque previous-run dump transported by the server; the
+                    # node validates it before replaying (issue 01 §9.4).
+                    "replay_payload",
                 ],
             ),
             compression=CompressionConfig(enabled=False),
@@ -39,6 +42,8 @@ REACT_SPEC = PipelineSpec(
                 "answer_status", "answer_sentinel",
                 "final_answer_rescued", "final_answer_rescue_mode",
                 "final_answer_source", "stopped_by",
+                # Whether the cross-turn dump was replayed, and why not.
+                "replay_decision",
             ],
         ),
     ],

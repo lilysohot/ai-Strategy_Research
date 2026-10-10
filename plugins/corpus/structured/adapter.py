@@ -93,6 +93,8 @@ class ExtractionAdapter:
             "stream": False,
             profile.options.token_parameter: profile.options.max_output_tokens,
         }
+        if profile.options.reasoning_effort is not None:
+            body["reasoning_effort"] = profile.options.reasoning_effort
         intent = RequestIntent(
             role=self.binding.role,
             protocol=self.binding.protocol,
@@ -152,6 +154,7 @@ class ExtractionAdapter:
             "prompt_tokens": None,
             "completion_tokens": None,
             "reasoning_tokens": None,
+            "reasoning_effort": profile.options.reasoning_effort,
         }
         started = time.monotonic()
         failed = False

@@ -23,6 +23,7 @@ import contextlib
 import json
 import logging
 import os
+import shutil
 import signal
 import sys
 import uuid
@@ -36,7 +37,12 @@ from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
 from server.events import EventType, is_droppable, make_event
-from server.history import STEER_TURN_PREFIX, extract_final_answer, render_session_history
+from server.history import (
+    STEER_TURN_PREFIX,
+    extract_final_answer,
+    render_session_history,
+    resolve_prior_conversation,
+)
 from server.investment_context import InvestmentContextResolver, materialize_context
 from server.store import (
     APPROVAL_ABANDONED,
@@ -59,6 +65,7 @@ from server.store import (
     record_artifacts,
     resolve_control,
     resolve_user_llm_env,
+    session_has_research_binding,
     update_run_result,
     update_run_usage,
 )
@@ -123,6 +130,25 @@ def _turns_as_of_submission(turns: list[Any], *, current_run_id: uuid.UUID | Non
     if my_index is None:
         return [turn for turn in turns if turn.run_id != current_run_id]
     return [turn for i, turn in enumerate(turns) if i < my_index and turn.run_id != current_run_id]
+
+
+def _stage_prior_conversation(run_dir: Path, source: str | None) -> None:
+    """Byte-copy the previous run's conversation dump into *run_dir*.
+
+    Transport only. ``server.history`` explains the boundary: the server never
+    parses the file, and the next run's workflow validates it. A stale copy is
+    always removed first, so a lookup that fails (or that found nothing) can never
+    resurrect an earlier launch's conversation.
+    """
+    dest = run_dir / "prior_conversation.json"
+    dest.unlink(missing_ok=True)
+    if not source:
+        return
+    try:
+        shutil.copyfile(source, dest)
+    except OSError:
+        logger.warning("could not stage prior conversation from %s", source, exc_info=True)
+        dest.unlink(missing_ok=True)
 
 
 def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
@@ -707,10 +733,19 @@ class Orchestrator:
         # so the worker's prompt carries the live question and history holds only
         # the prior conversation — no duplication.
         history = ""
+        prior_conversation: str | None = None
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
             turns = await list_turns(session_id=session_uuid)
-            history = render_session_history(_turns_as_of_submission(turns, current_run_id=current))
+            prior_turns = _turns_as_of_submission(turns, current_run_id=current)
+            history = render_session_history(prior_turns)
+            # Cross-turn continuity (issue 01 §9.4): find the previous run's
+            # conversation dump. Existence check only — the file stays opaque here
+            # and is staged into the new run directory by ``_launch``.
+            found = resolve_prior_conversation(prior_turns, current_run_id=current)
+            if found is not None:
+                prior_conversation = str(found)
+        params["_prior_conversation"] = prior_conversation
         handle: RunHandle | None = None
         try:
             handle = await self._launch(run_id, params, history=history)
@@ -990,6 +1025,24 @@ class Orchestrator:
             # absent authenticated resolution on a later launch attempt.
             for name in ("investment-context.json", "investment-context-resolver.json"):
                 (run_dir / name).unlink(missing_ok=True)
+        # The request *prefix* configuration (business policy text + tool set) is
+        # session-scoped, not run-scoped (issue 01 §9.6). A Run in a research that
+        # is bound to an account/plan must present the same prefix as its siblings
+        # even when this run's own snapshot resolution degraded — otherwise one
+        # degraded turn would invalidate the provider's prefix cache for the rest
+        # of the conversation. Data is unaffected: a missing snapshot simply
+        # leaves the instruction tail without business values.
+        business_prefix = context is not None
+        if not business_prefix and params.get("session_uuid") is not None:
+            try:
+                business_prefix = await session_has_research_binding(
+                    research_id=params["session_uuid"],
+                )
+            except Exception:
+                logger.warning(
+                    "research binding lookup failed for run %s; falling back to "
+                    "run-level prefix config", run_id, exc_info=True,
+                )
         # Resolve credentials here, in the parent, then hand them to the worker via
         # its environment only — never as argv (argv is world-readable via ps). The
         # api_key is decrypted in-process and lives solely in the child's env.
@@ -1001,6 +1054,7 @@ class Orchestrator:
         run_dir.mkdir(parents=True, exist_ok=True)
         history_path = run_dir / "history.txt"
         history_path.write_text(history, encoding="utf-8")
+        _stage_prior_conversation(run_dir, params.get("_prior_conversation"))
         cmd = [
             sys.executable,
             "-m",
@@ -1022,6 +1076,7 @@ class Orchestrator:
             "--pipeline-id",
             self._cfg.pipeline_id,
         ]
+        cmd += ["--business-prefix", "1" if business_prefix else "0"]
         if params.get("agent_tools"):
             cmd += ["--agent-tools", params["agent_tools"]]
         if params.get("prompt_addendum"):

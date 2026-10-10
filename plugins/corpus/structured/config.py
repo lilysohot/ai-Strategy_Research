@@ -31,7 +31,7 @@ CONFIG_KEYS = tuple(
         "API_KEY",
     )
 )
-ADAPTER_VERSION = "structured-chat-http-2"
+ADAPTER_VERSION = "structured-chat-http-3"
 Role = Literal["claims", "material_items", "material_relations"]
 PROTOCOLS: dict[str, str] = {
     "claims": "claims-atomic-json-v2",
@@ -65,6 +65,9 @@ class RequestOptions(BaseModel):
     timeout_seconds: float = Field(default=300.0, gt=0, allow_inf_nan=False)
     max_output_tokens: int = Field(default=4096, gt=0, strict=True)
     token_parameter: Literal["max_tokens", "max_completion_tokens"] = "max_tokens"
+    reasoning_effort: Literal[
+        "none", "minimal", "low", "medium", "high", "xhigh", "max"
+    ] | None = None
     # No implicit temperature/thinking/reasoning options or compatibility retries.
 
 
@@ -81,7 +84,8 @@ class ExtractionProfile(BaseModel):
     credential_ref: Literal["env:STRUCTURED_EXTRACTION_API_KEY"] = (
         "env:STRUCTURED_EXTRACTION_API_KEY"
     )
-    adapter_version: Literal["structured-chat-http-2"] = ADAPTER_VERSION
+    # Retain v2 for read-only validation of historical plans; newly loaded profiles use v3.
+    adapter_version: Literal["structured-chat-http-2", "structured-chat-http-3"] = ADAPTER_VERSION
     options: RequestOptions = Field(default_factory=RequestOptions)
 
     @property

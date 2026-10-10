@@ -1,0 +1,87 @@
+{
+  "audited_on": "2026-10-10",
+  "batch_id": "batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "completed_empty_responses": 3,
+  "diagnosis": "raising max_output_tokens from 4096 to 16384 did not produce visible protocol content: three responses exhausted 16K in reasoning and the fourth crossed the 300-second boundary with unknown outcome",
+  "length_terminated_responses": 3,
+  "model_requests_during_audit": 0,
+  "normalization_or_replay_applied": false,
+  "outcome_unknown_responses": 1,
+  "plan_sha256": "sha256:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "responses": [
+    {
+      "attempt_id": "attempt:3fd84ac1af06e710e344010a63f05979dc0f70570d1d9a8b09a24bc98704b607",
+      "attempt_number": 1,
+      "completion_tokens": 16384,
+      "content_chars": 0,
+      "duration_ms": 270562,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "reasoning_tokens": 16375,
+      "response_object_sha256": "sha256:31a46094584f1106a8e37ba51f508ea921db6bd796c354ede811c9d09fd4c84d",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "attempt_id": "attempt:cc8df930c41e3dffea5e9674bb057c4fa0113f0357cd65ca28575bb873dfd920",
+      "attempt_number": 2,
+      "completion_tokens": 16384,
+      "content_chars": 0,
+      "duration_ms": 261561,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "reasoning_tokens": 16367,
+      "response_object_sha256": "sha256:953817add94fcda2970063cf78a4e0c825ea0d6d5d26a05d6a09c8a772ffa1ad",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "attempt_id": "attempt:d691f299c2e0ceadb437962ac5c9bac6548db394403fd151ee0174cd7c27a3b4",
+      "attempt_number": 3,
+      "completion_tokens": 16384,
+      "content_chars": 0,
+      "duration_ms": 273167,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "reasoning_tokens": 16379,
+      "response_object_sha256": "sha256:5043d7072b607b0671fc81a41a67918f4b5409c3cb1b480fb9dae67bf5f1d0da",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "attempt_id": "attempt:1f011cf455dc181c3801812af9d646ae5fdf9cfb844acb5914b2011811b31ce3",
+      "attempt_number": 4,
+      "completion_tokens": null,
+      "content_chars": null,
+      "duration_ms": 300116,
+      "execution_status": "outcome_unknown",
+      "finish_reason": null,
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "packet_reasons": [
+        "relations_error:LlmCallError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": null,
+      "reasoning_tokens": null,
+      "response_object_sha256": null,
+      "response_sha256": null
+    }
+  ],
+  "schema_version": "issue21-glm-16k-protocol-audit-1"
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "glm-token-compatibility-final-gate-1",
+  "created_on": "2026-10-10",
+  "status": "frozen_before_plan_execution",
+  "source_gate": "Issue20/final-gate.json",
+  "sample_id": "sha256:e9e74d4de153d7d949214048dc1dbf1f929fa747dadd153da35683de8bd1bb64",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "protocol": "material-relations-question-group-jsonl-v1",
+  "experimental_variable": {
+    "model": "glm-5.3-flash",
+    "from_max_output_tokens": 4096,
+    "to_max_output_tokens": 16384,
+    "all_other_extractor_inputs_frozen": true
+  },
+  "execution_requirements": {
+    "claims_attempts": 0,
+    "items_attempts": 0,
+    "relation_attempts_max": 4,
+    "automatic_retries": 0,
+    "expected_relation_packets": 4,
+    "partial_packets_max": 0,
+    "failed_packets_max": 0
+  },
+  "quality_requirements": {
+    "signed_cases_total": 44,
+    "signed_cases_correct_min": 40,
+    "known_error_cases_total": 9,
+    "known_error_cases_correct_min": 7,
+    "previously_correct_cases_total": 35,
+    "previously_correct_regressions_max": 2,
+    "target_relations_total": 4,
+    "target_relations_matched_min": 4,
+    "supports_conditions_systematic_regression_allowed": false
+  },
+  "scope_constraints": {
+    "new_gold_allowed": false,
+    "candidate_rule_change_allowed": false,
+    "items_change_allowed": false,
+    "schema_change_allowed": false,
+    "prompt_change_allowed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  },
+  "terminal_decision": {
+    "on_pass": "close extractor repair and request separate authorization for one minimal positive consumption closure",
+    "on_fail": "close glm 16K compatibility route; any further parameter or model change is a new task",
+    "additional_trial_allowed": false
+  }
+}
+

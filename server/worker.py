@@ -460,12 +460,25 @@ async def run_once(args: argparse.Namespace) -> int:
 
         context_tokens = bind_investment_context(investment_context)
 
-    overrides = build_profile_overrides(has_investment_context=investment_context is not None)
+    # The request *prefix* configuration — business policy text and tool set — is
+    # keyed on the SESSION's business binding rather than on whether this run
+    # resolved a snapshot (issue 01 §9.6). Both are part of the LLM request
+    # prefix, so letting them flip between turns of one conversation would
+    # invalidate the provider's prefix cache. Run-specific business *data* still
+    # lands in the instruction tail (below), where it cannot break the prefix.
+    business_prefix = getattr(args, "business_prefix", None)
+    if business_prefix is None:
+        # Callers that do not send the flag (spike runs, manual worker
+        # invocations) keep the previous per-run behaviour.
+        business_prefix = investment_context is not None
+    business_prefix = bool(business_prefix)
+
+    overrides = build_profile_overrides(has_investment_context=business_prefix)
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
     # once registered in T4.2).
     if args.agent_tools:
         extra = [t.strip() for t in args.agent_tools.split(",") if t.strip()]
-        if investment_context is not None:
+        if business_prefix:
             # Raw position_sizing accepts model-supplied capital. A business Run
             # may only expose the snapshot-bound wrapper.
             extra = [name for name in extra if name not in {"position_sizing", "strategy_lint"}]
@@ -496,7 +509,7 @@ async def run_once(args: argparse.Namespace) -> int:
     }
     if args.prompt_addendum:
         metadata["_sys_prompt_addendum"] += "\n" + args.prompt_addendum
-    if investment_context is not None:
+    if business_prefix:
         metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
     # 缺料表达对**所有**研究 Run 生效（2026-10-08 实测补充）：只有工具描述不够，
     # 必须有 prompt 级指令，否则模型会把“缺资料”写成一段说明而不调用工具。
@@ -513,6 +526,9 @@ async def run_once(args: argparse.Namespace) -> int:
     _frame("run_started", run_dir=str(run_root))
     final_answer = ""
     error = ""
+    # Cross-turn replay outcome, surfaced in summary.json so the acceptance run
+    # can show "used"/"skipped + reason" per turn without reading engine.log.
+    replay_decision: dict[str, Any] = {}
 
     # Multi-turn backfill (T2.6): the orchestrator rendered the prior turns of
     # this session into history.txt. We feed it back as the conversation context
@@ -522,6 +538,15 @@ async def run_once(args: argparse.Namespace) -> int:
     history_text = ""
     if history_path.exists():
         history_text = history_path.read_text(encoding="utf-8").strip()
+
+    # Cross-turn continuity (issue 01 §9.4): the orchestrator copied the previous
+    # run's conversation dump next to history.txt. The worker never parses it —
+    # it is handed to the workflow as an opaque payload, and the workflow
+    # validates it before replaying anything.
+    replay_payload = ""
+    replay_path = run_root / "prior_conversation.json"
+    if replay_path.exists():
+        replay_payload = replay_path.read_text(encoding="utf-8")
 
     instruction = args.prompt
     if investment_context is not None:
@@ -539,10 +564,12 @@ async def run_once(args: argparse.Namespace) -> int:
                     extra_input={
                         "conversation_history": history_text,
                         "is_multi_turn": bool(history_text),
+                        **({"replay_payload": replay_payload} if replay_payload else {}),
                     },
                 ),
                 timeout=args.wall_time + 30,
             )
+        replay_decision = state.get("replay_decision") or {}
         for key in ("final_answer", "final_content", "report", "answer", "output"):
             value = state.get(key)
             if isinstance(value, dict):
@@ -608,6 +635,8 @@ async def run_once(args: argparse.Namespace) -> int:
         "error": error,
         "stopped_by": _stopped_by,
         "duration_s": round(time.time() - started, 2),
+        # Cross-turn replay outcome (issue 01 §9.8): "used" / "skipped" + reason.
+        "replay": replay_decision,
     }
     # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
     # persist_summary). A write failure is logged but must never mask the outcome.
@@ -631,6 +660,10 @@ def main() -> int:
     parser.add_argument("--base-url", default="")
     parser.add_argument("--api-key", default="")
     parser.add_argument("--agent-tools", default="")
+    # Session-level business flag (issue 01 §9.6): ``1``/``0`` pins the request
+    # prefix config; omitted (``None``) keeps the legacy per-run behaviour for
+    # callers that do not send it.
+    parser.add_argument("--business-prefix", type=int, default=None, choices=(0, 1))
     args = parser.parse_args()
 
     # CWD = repo root is mandatory for workflow discovery.

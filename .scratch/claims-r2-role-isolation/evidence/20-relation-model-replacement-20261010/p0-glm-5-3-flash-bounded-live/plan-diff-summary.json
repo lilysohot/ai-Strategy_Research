@@ -1,0 +1,53 @@
+{
+  "changed": {
+    "derived_identities": [
+      "profile_sha256",
+      "role_profile_sha256",
+      "task_id",
+      "routing_sha256",
+      "plan_sha256",
+      "batch_id"
+    ],
+    "model": {
+      "from": "doubao-seed-2.0-mini",
+      "to": "glm-5.3-flash"
+    }
+  },
+  "execution_authorized": true,
+  "final_gate_sha256": "sha256:55dace31d29a908ee6c7c410640575af9cf119cbd5eb7482949fbbd9892b38f6",
+  "model_requests_during_freeze": 0,
+  "new_batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "new_plan_file_sha256": "sha256:048f7b3fb3e199d969588b724a7ac1bdc2cf97b56f9d1a4a55a9b8123c9830d4",
+  "new_plan_sha256": "sha256:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "publication_authorized": false,
+  "relation_attempts_max": 4,
+  "schema_version": "relation-model-replacement-plan-diff-1",
+  "source_batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "status": "verified_model_only_not_executed",
+  "unchanged": {
+    "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+    "credential_reference_only": true,
+    "dependency_policy": "complete_parent",
+    "enabled_roles": [
+      "material_items",
+      "material_relations"
+    ],
+    "imported_items": true,
+    "items_validation_version": "material-items-validation-v11",
+    "max_attempts": 4,
+    "protocol": "material-relations-question-group-jsonl-v1",
+    "provider": "openai_compat",
+    "relation_candidate_rule": "material-relation-candidates-v5",
+    "request_options": {
+      "max_output_tokens": 4096,
+      "timeout_seconds": 300.0,
+      "token_parameter": "max_tokens"
+    },
+    "role_max_attempts": {
+      "claims": 0,
+      "material_items": 0,
+      "material_relations": 4
+    },
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+  }
+}

@@ -93,6 +93,60 @@ def _resolve_formats(
     return set(_DEFAULT_FORMATS)
 
 
+def serialize_tool_schemas(
+    tools: Iterable[Any], *, detail: Literal["full", "minimal"] = "full",
+) -> list[dict]:
+    """Convert native :class:`Tool` instances / dicts to OpenAI schema.
+
+    Accepts a heterogeneous list (``Tool`` / already-serialized dict)
+    and returns OpenAI
+    ``{"type": "function", "function": {"name", "description",
+    "parameters"}}`` entries. A wire-critical byte-exact schema pinned
+    on ``Tool.metadata["openai_schema"]`` is preferred over recomputing
+    via ``to_openai_schema()``. Best effort: tools that can't be
+    introspected fall through to a name + description stub.
+
+    Public because the tool set is part of the request prefix: the conversation
+    snapshot fingerprints it through this function so the writer and the reader
+    hash exactly the same bytes.
+    """
+    out: list[dict] = []
+    for t in tools:
+        if isinstance(t, dict):
+            if "function" in t and "type" in t:
+                out.append(t)
+            elif "name" in t:
+                out.append({"type": "function", "function": t})
+            continue
+        if detail == "full":
+            pinned = (getattr(t, "metadata", None) or {}).get("openai_schema")
+            if isinstance(pinned, dict):
+                out.append(pinned)
+                continue
+            schema_fn: Callable[[], dict[str, Any]] | None = getattr(
+                t, "to_openai_schema", None,
+            )
+            if callable(schema_fn):
+                try:
+                    out.append(schema_fn())
+                    continue
+                except Exception:
+                    pass
+        out.append({
+            "type": "function",
+            "function": {
+                "name": getattr(t, "name", None) or t.__class__.__name__,
+                "description": getattr(t, "description", "") or "",
+                "parameters": (
+                    getattr(t, "parameters", {}) or {}
+                    if detail == "full"
+                    else {}
+                ),
+            },
+        })
+    return out
+
+
 class TrajectoryFileObserver(BaseObserver):
     """Saves an agent's main / sub-agent traces in one or more formats."""
 
@@ -190,51 +244,8 @@ class TrajectoryFileObserver(BaseObserver):
     def _serialize_tools(
         tools: list[Any], *, detail: Literal["full", "minimal"] = "full",
     ) -> list[dict]:
-        """Convert native :class:`Tool` instances / dicts to OpenAI schema.
-
-        Accepts a heterogeneous list (``Tool`` / already-serialized dict)
-        and returns OpenAI
-        ``{"type": "function", "function": {"name", "description",
-        "parameters"}}`` entries. A wire-critical byte-exact schema pinned
-        on ``Tool.metadata["openai_schema"]`` is preferred over recomputing
-        via ``to_openai_schema()``. Best effort: tools that can't be
-        introspected fall through to a name + description stub.
-        """
-        out: list[dict] = []
-        for t in tools:
-            if isinstance(t, dict):
-                if "function" in t and "type" in t:
-                    out.append(t)
-                elif "name" in t:
-                    out.append({"type": "function", "function": t})
-                continue
-            if detail == "full":
-                pinned = (getattr(t, "metadata", None) or {}).get("openai_schema")
-                if isinstance(pinned, dict):
-                    out.append(pinned)
-                    continue
-                schema_fn: Callable[[], dict[str, Any]] | None = getattr(
-                    t, "to_openai_schema", None,
-                )
-                if callable(schema_fn):
-                    try:
-                        out.append(schema_fn())
-                        continue
-                    except Exception:
-                        pass
-            out.append({
-                "type": "function",
-                "function": {
-                    "name": getattr(t, "name", None) or t.__class__.__name__,
-                    "description": getattr(t, "description", "") or "",
-                    "parameters": (
-                        getattr(t, "parameters", {}) or {}
-                        if detail == "full"
-                        else {}
-                    ),
-                },
-            })
-        return out
+        """Internal entry point; see :func:`serialize_tool_schemas`."""
+        return serialize_tool_schemas(tools, detail=detail)
 
     def _path(self, ext: str) -> Path:
         self._dir.mkdir(parents=True, exist_ok=True)

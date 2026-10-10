@@ -1,0 +1,95 @@
+{
+  "audited_on": "2026-10-10",
+  "batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "diagnosis": "all four successful HTTP/model attempts exhausted the frozen 4096-token completion budget in reasoning and returned zero visible protocol content",
+  "distinct_visible_response_hashes": 1,
+  "empty_responses": 4,
+  "length_terminated_responses": 4,
+  "model_requests_during_audit": 0,
+  "normalization_or_replay_applied": false,
+  "plan_sha256": "sha256:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "responses": [
+    {
+      "attempt_id": "attempt:b887608c97a02e61ded8256f46bbaada1e2ccae22863dadf88bf022ed9ff4185",
+      "attempt_number": 1,
+      "completion_tokens": 4096,
+      "content_chars": 0,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "e108c939f724308f632c568300f357f52ac23179e62b056cb947a0549ff77eb5",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "prompt_tokens": 4699,
+      "reasoning_tokens": 4096,
+      "response_model": "glm-5-3-flash-260828",
+      "response_object_sha256": "sha256:e54d5286c38833e543f5c8d676bd9efac429f40d104006fe98fc24323cdba281",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "total_tokens": 8795
+    },
+    {
+      "attempt_id": "attempt:56024419fb142cad5e9df18e9d47ccf161dd41941209e02f8b6f775aa504c3a6",
+      "attempt_number": 2,
+      "completion_tokens": 4096,
+      "content_chars": 0,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "2b35e7331ea30bfe3b93b314be9fec8c5719c53ecbbb9c4b5944178d7c057f24",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "prompt_tokens": 15158,
+      "reasoning_tokens": 4091,
+      "response_model": "glm-5-3-flash-260828",
+      "response_object_sha256": "sha256:a527be6cd0c40e9d8b99bdf3630209941f719de9f9054557e18f4e136bec4215",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "total_tokens": 19254
+    },
+    {
+      "attempt_id": "attempt:23f3c34425469909a6fb4b74cc4d9994d4957a0ff8fd4dbb3e5aebf9620fe4bf",
+      "attempt_number": 3,
+      "completion_tokens": 4096,
+      "content_chars": 0,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "b4f469a04092ab4cf3f8f60bf74a3e5401806b0a3d0cb74e66cf7550b637b9c1",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "prompt_tokens": 12970,
+      "reasoning_tokens": 4096,
+      "response_model": "glm-5-3-flash-260828",
+      "response_object_sha256": "sha256:0ba1adf1b8a552266e46babd7e35d7496b035d8142e01ab28f20db0a48ea1111",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "total_tokens": 17066
+    },
+    {
+      "attempt_id": "attempt:cdff6dcd34e932a0268d6414fa488ee1555bdac315eed4187228830c7df44615",
+      "attempt_number": 4,
+      "completion_tokens": 4096,
+      "content_chars": 0,
+      "execution_status": "succeeded",
+      "finish_reason": "length",
+      "packet_id": "57f2c897c0d8215402f65bb9aa382069153df56dd5ffd2e844576c3a47685f19",
+      "packet_reasons": [
+        "relations_error:ValueError"
+      ],
+      "packet_status": "failed",
+      "parsed_records": 0,
+      "prompt_tokens": 16856,
+      "reasoning_tokens": 4094,
+      "response_model": "glm-5-3-flash-260828",
+      "response_object_sha256": "sha256:d70159b0ff7bcc9bc12f9f5a97a653a3963d950eb1c7fe68b72a277bc5d245e6",
+      "response_sha256": "sha256:12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "total_tokens": 20952
+    }
+  ],
+  "schema_version": "issue20-glm-question-group-protocol-audit-1"
+}

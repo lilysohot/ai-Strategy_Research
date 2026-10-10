@@ -944,6 +944,84 @@ delivery、context_use 与 M_main 正向消费仍为 0。
 输出 execution summary、protocol audit 与 final decision。审计脚本 Ruff、Pyright 均通过。原冻结
 README、plan、final gate 与 plan manifest 保持逐字节不变。
 
+## 23. 2026-10-10 执行增补：P14 反事实证明语义 no-go
+
+Issue 19 的 R0 没有修改或复活 P14，而是以只读 SQLite、对象哈希和冻结 identity 重建四份原始响应。
+诊断规则在运行前冻结：只有 non-answer `status` 恰好等于该 candidate 自身的 relation type，字段完整且
+`evidence_selector="pair_window"` 时，才在 what-if 中解释为 `present`；其他非法记录不得救回。
+
+结果表明 15 条 type-as-status 都可窄化解释，四包 333/333 候选决定完整恢复，没有不可恢复记录；反事实
+present 为 222，四条 target relation 保持 4/4。然而签认样本只有 32/44，低于 40/44；九个已知错误
+只正确 5 个，低于 7 个；35 个此前正确案例回退 8 个，高于上限 2；supports/conditions 也新增 2 个
+回退。该样本不是概率抽样，结果仍不能估计整篇 precision，但足以执行已经冻结的 signed regression
+去留门。
+
+因此 P14 同时存在输出合约缺陷和语义不稳。把输出改为 selected indices 可以消除非法 `status`，却不能
+使当前四份模型判断达到质量门。按预注册 decision tree，Issue 19 在 R0 即关闭，不实施同模型
+selected-indices Interface、不冻结新计划、不追加调用。若未来替换模型或采用确定性/混合 relation
+算法，必须另立任务，不属于 P14/P15/Issue 19。
+
+审计模型调用、人工金标、P14 store 写入、publication、query、delivery、context_use 均为 0；两次运行
+得到相同 canonical stdout hash，Ruff 与 Pyright 通过。codebase-design 的影响是把未来可行的选择集合
+封装识别为正确深模块方向，但本次去留门证明没有必要为当前模型实现该 Module。
+
+## 24. 2026-10-10 执行增补：GLM-5.3-Flash 单变量 relation 复验
+
+Issue 20 在新任务和新授权下执行，没有改写或复活 P14/Issue 19。新计划冻结了相同
+snapshot、已签认 accepted-items import、333 个 candidate-v5 pair、validation-v11、strict
+`complete_parent`、`material-relations-question-group-jsonl-v1` prompt/Schema、请求参数与
+44/9/35/4 门。唯一实验变量是模型从 `doubao-seed-2.0-mini` 变为 `glm-5.3-flash`；
+profile/task/batch hash 的变化是模型身份派生结果。冻结 batch 为
+`batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9`，冻结阶段模型调用 0。
+
+第一次 execute 命令因相对 store root 在请求前被 `CS_PATH_OUTSIDE_ROOT` 拒绝，调用仍为 0；
+换用已核验绝对路径执行同一冻结计划。Claims/items 仍为 0 调用，relations 恰好 4 次，
+4/4 HTTP/model attempt succeeded，自动重试为 0。provider 返回模型为
+`glm-5-3-flash-260828`。usage 为 prompt 49,683、completion 16,384、reasoning 16,377、
+total 66,067 tokens；cost 未返回，因此记为 unavailable 而非 0。
+
+四个响应都恰好达到 `completion_tokens=4096`，`finish_reason=length`，且可见 `content`
+全部为 0 字符。因此 parser 没有获得任何 question-group 或 non-answer terminal，四包都以
+0 records 失败：0 completed、0 partial、4 failed，输出 relation 为 0。这不是网络、授权账、
+controller index 或原 P14 的非法 `status` 问题；根因是该模型在冻结 4096-token 请求 profile 下
+把几乎全部 completion 预算用于 reasoning，未留下可见协议内容。
+
+由于输出完整性先于语义门失败，44/9/35/4 指标全部不可评分；本轮不能支持
+“GLM 语义好或不好”的结论，只能拒绝 `glm-5.3-flash + 当前冻结请求 profile + extractor`
+这个组合。按预注册停止规则，本票不增加 token 上限、不关闭 reasoning、不改 prompt/Schema、
+不重跑。若要验证 GLM 语义，必须另立“兼容性参数”任务，明确承认它不再是本次模型单变量试验。
+publication、query、delivery、context_use 与 M_main 正向消费仍为 0。只读审计重新验证了四份空响应、
+packet 终态、token 合计和对象哈希；审计脚本与计划验证器的 Ruff/Pyright 均通过。
+
+## 25. 2026-10-10 执行增补：GLM-5.3-Flash 16K 兼容性反事实
+
+用户明确指出高级模型需要更宽 token 预算并授权重新执行。Issue 21 因此另立任务，
+保持 `glm-5.3-flash`、snapshot、accepted items、333 个 candidate-v5 pair、prompt/Schema、
+timeout、token parameter 和 44/9/35/4 门不变，唯一有意配置变化是把
+`max_output_tokens` 从 4,096 提到 16,384。冻结 batch 为
+`batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2`，冻结过程调用为 0；
+差异验证器证明除 token 上限与派生身份外无其他变化。
+
+首次通用 CLI execute 在请求前被 `CS_CONFIG_MISSING` 拒绝：CLI 用默认 4K RequestOptions
+恢复凭据，与计划冻结的 16K profile fingerprint 不匹配。该 preflight 调用为 0 并保留为
+独立审计 store。随后用显式 `RequestOptions(max_output_tokens=16384)` 恢复同一计划，并在新
+live store 执行。Claims/items 调用仍为 0，relation attempts 恰好 4，retry 0。
+
+第 1—3 次请求分别用时 270,562、261,561 和 273,167 ms，HTTP/model 返回均为 succeeded，
+但每次都恰好耗尽 16,384 completion tokens，`finish_reason=length`，可见 content 仍为
+0 字符。已知三次合计 prompt 32,812、completion 49,152、reasoning 49,121、total 81,964
+tokens；即扩容后的几乎全部输出预算仍被 reasoning 消耗。第 4 次在 300,116 ms 后进入
+`outcome_unknown`，无 response object；该请求可能在服务端已执行或产生费用，因此不能记成
+0，也不能重发。
+
+四个 packet 均以 0 records 失败，最终为 0 completed、0 partial、4 failed，可见 relation 为 0。
+因此 44/9/35/4 语义门仍然不可评分。本轮是对“只要放宽 token 就能得到输出”的直接
+反事实否决：4K 到 16K 只放大了 reasoning 消耗和延迟，没有产生可见 JSONL。因此不应再通过
+继续增加 token 尝试修复。如果仍要验证 GLM 语义，下一个方案必须能在 API 层明确关闭/限制
+reasoning，或换用能保证可见结构化输出的模型。这将是新任务，不得重发 outcome_unknown attempt。
+publication、query、delivery、context_use 和 M_main 消费仍为 0。只读审计脚本的 Ruff/Pyright
+均通过。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。

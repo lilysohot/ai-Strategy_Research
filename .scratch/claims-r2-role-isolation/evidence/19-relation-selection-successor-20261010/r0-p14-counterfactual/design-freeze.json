@@ -1,0 +1,47 @@
+{
+  "schema_version": "p14-counterfactual-design-freeze-1",
+  "created_on": "2026-10-10",
+  "purpose": "decide whether P14 exposed only a response-contract defect or also failed the frozen semantic gate",
+  "source_batch_id": "batch:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "source_plan_sha256": "sha256:391150525103650ff49af17a251091c0908e00bd299553d7108643c174f27a58",
+  "constraints": {
+    "model_calls": 0,
+    "store_open_mode": "read_only",
+    "write_to_p14_store": false,
+    "new_gold": false,
+    "candidate_rule_change": false,
+    "items_change": false,
+    "revive_p14": false,
+    "change_p14_final_decision": false,
+    "whole_document_precision_claim_allowed": false
+  },
+  "diagnostic_normalization": {
+    "record_type": "relation_result",
+    "required_status": "exact candidate allowed_type",
+    "required_evidence_selector": "pair_window",
+    "required_fields_exact": true,
+    "diagnostic_interpretation": "present",
+    "other_invalid_records_recoverable": false
+  },
+  "identity_sources": {
+    "final_gate": "../../18-material-extractor-replacement-20261009/p14-question-group-live-plan/final-gate.json",
+    "signed_sample": "../../18-material-extractor-replacement-20261009/p11-relation-precision-sample/candidate-adjudications.agent-draft.json",
+    "known_errors": "../../18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/signed-calibration-cases.json",
+    "baseline_relations": "../../18-material-extractor-replacement-20261009/p10-accepted-items-import-live/relation-payload.json",
+    "target_matches": "../../18-material-extractor-replacement-20261009/p10-accepted-items-import-live/evaluation-summary.json"
+  },
+  "gate": {
+    "packet_decisions_reconstructable": "4/4",
+    "signed_cases_correct_min": "read from P14 final gate",
+    "known_errors_correct_min": "read from P14 final gate",
+    "previously_correct_regressions_max": "read from P14 final gate",
+    "target_relations_matched_min": "read from P14 final gate",
+    "supports_conditions_previously_correct_regressions_max": 0
+  },
+  "decision_tree": {
+    "identity_or_hash_drift": "abort",
+    "unrecoverable_protocol_record": "diagnostic_not_reconstructable",
+    "semantic_gate_failed": "format_recoverable_semantics_failed_stop_same_model_successor",
+    "semantic_gate_passed": "format_recoverable_semantics_passed_allow_issue_19_implementation"
+  }
+}

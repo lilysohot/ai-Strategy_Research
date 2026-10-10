@@ -16,6 +16,11 @@ from frontier_agent.components.finalization import (
     resolve_research_wall,
 )
 from frontier_agent.components.observers.context_size_guard import ContextSizeGuard
+from frontier_agent.components.observers.conversation_snapshot import (
+    ConversationSnapshotObserver,
+    select_replay,
+    tool_schema_sha256,
+)
 from frontier_agent.components.observers.duplicate_query_rollback import (
     DuplicateQueryRollbackObserver,
 )
@@ -387,6 +392,17 @@ def _resolve_trajectory_dir(state: dict[str, Any], task_id: str) -> Path:
     return Path("logs") / "stateful_react" / task_id / "trajectories"
 
 
+def _resolve_conversation_path(state: dict[str, Any], task_id: str) -> Path:
+    """Where this run's conversation dump goes.
+
+    A sibling of the per-agent ``trajectories`` directory, deliberately *not*
+    inside it: the trajectory readers glob and parse that namespace, and the dump
+    is a different contract (see
+    ``frontier_agent.components.observers.conversation_snapshot``).
+    """
+    return _resolve_trajectory_dir(state, task_id).parent.parent / "conversation.json"
+
+
 def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     md = state.get("metadata") or {}
     trial_dir = md.get("_trial_dir")
@@ -660,6 +676,11 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     context_compaction = str(agent_cfg.get("context_compaction", "off")).lower()
     compaction_spill = _flag(agent_cfg.get("compaction_spill"), default=False)
     max_len = int(agent_cfg.get("max_len", 0) or 0)
+    # Cross-turn continuity: how many prior user turns the conversation dump
+    # carries (0 = no cap, the repo's "0 disables the bound" convention). The cut
+    # is turn-aligned and applied when the dump is written, so the next run
+    # replays a byte-stable prefix until the next cut (issue 01 §9.7).
+    replay_max_turns = int(agent_cfg.get("replay_max_turns", 10) or 0)
     # See the sibling call in agent_team: the sglang doctor covers the compose
     # path only, and nothing checked the values the loop is actually built from.
     check_context_budget(
@@ -904,6 +925,10 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
     event_store = registry.get_optional(EventStore)
     model_name = extract_model_name(llm)
+    # What the kernel's history normaliser will use when it appends assistant
+    # turns. A profile change between runs makes a replayed assistant shape wrong
+    # even when the prefix is byte-stable, so the dump records it (issue 01 §9.5).
+    thinking_format = str(getattr(model_profile, "thinking_format", "") or "none")
     observers: list[Any] = [
         LeakedToolCallRetryObserver(tool_names=tool_names),
         RichConsoleObserver(),
@@ -914,6 +939,22 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             model_name=model_name,
             system_prompt=system_prompt,
             user_message=question,
+        ),
+        # Cross-turn continuity (issue 01 §9.3): the exact message list this loop
+        # ends with, for the next turn to replay. Written beside the run's other
+        # artifacts; the server layer only transports it.
+        ConversationSnapshotObserver(
+            _resolve_conversation_path(state, ctx.task_id),
+            system_prompt=system_prompt,
+            tools=tools,
+            tool_names=tool_names,
+            thinking_format=thinking_format,
+            pipeline_id="stateful-react-agent",
+            node_id="react_agent",
+            role_id="stateful_react",
+            session_id=str(metadata.get("session_id") or ""),
+            model_name=model_name,
+            max_replay_turns=replay_max_turns,
         ),
         ReactStepTracker(),
         # A4 消费账本（观测模式）：记录 offered/requested/fetched，并在 loop 结束
@@ -1083,6 +1124,28 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     else:
         compactor = KeepLastNToolResultsCompactor(keep_tool_result=keep_last_k)
 
+    # Cross-turn replay (issue 01 §9.5). Fail-open: whatever we cannot byte-match
+    # against the previous request means we start fresh, rather than replay a
+    # prefix that would miss the provider's prefix cache — or hand the model a
+    # history it never saw.
+    replay_payload = str(state.get("replay_payload") or "")
+    replay_messages, replay_decision = select_replay(
+        replay_payload,
+        system_prompt=system_prompt,
+        tool_names=tool_names,
+        tools_hash=tool_schema_sha256(tools),
+        thinking_format=thinking_format,
+        pipeline_id="stateful-react-agent",
+        node_id="react_agent",
+    )
+    if replay_payload:
+        logger.info(
+            "stateful_react replay %s%s",
+            replay_decision.get("decision"),
+            "" if replay_decision.get("decision") == "used"
+            else f": {replay_decision.get('reason')}",
+        )
+
     try:
         import sys
 
@@ -1092,6 +1155,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         result = await loop_fn(
             system_prompt=system_prompt,
             user_message=question,
+            initial_messages=replay_messages,
             llm=with_semantic_delivery(llm) if "corpus_semantic_query" in tool_names else llm,
             tools=tools,
             config=LoopConfig(
@@ -1192,6 +1256,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     return {
         "final_answer": final_text,
         "final_content": final_text,
+        "replay_decision": replay_decision,
         "session_turn": build_session_turn(
             _language_probe(state, question),
             result.messages,

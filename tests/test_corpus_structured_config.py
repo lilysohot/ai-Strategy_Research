@@ -196,7 +196,12 @@ def test_three_roles_share_model_but_not_role_identity():
         body = json.loads(request.content)
         assert body["model"] == "synthetic-extract-a"
         assert body["max_tokens"] == 4096
-        assert "tools" not in body and "thinking" not in body and "temperature" not in body
+        assert (
+            "tools" not in body
+            and "thinking" not in body
+            and "temperature" not in body
+            and "reasoning_effort" not in body
+        )
     assert result.diagnostics["response_model"] == "synthetic-served-a"
     assert result.diagnostics["usage"]["prompt_tokens"] == 8
     assert result.diagnostics["cost"] is None
@@ -238,7 +243,11 @@ def test_explicit_multi_model_overrides_change_actual_endpoint_credentials_and_i
             STRUCTURED_EXTRACTION_BASE_URL="https://second.invalid/api",
             STRUCTURED_EXTRACTION_API_KEY="sk-synthetic-second-not-real",
         ),
-        options=RequestOptions(max_output_tokens=123, token_parameter="max_completion_tokens"),
+        options=RequestOptions(
+            max_output_tokens=123,
+            token_parameter="max_completion_tokens",
+            reasoning_effort="low",
+        ),
     )
     bindings = bind_roles(a, overrides={"material_items": b})
     wire = RecordingWire()
@@ -250,6 +259,7 @@ def test_explicit_multi_model_overrides_change_actual_endpoint_credentials_and_i
     assert wire.requests[1].headers["authorization"] == "Bearer sk-synthetic-second-not-real"
     body = json.loads(wire.requests[1].content)
     assert body["model"] == "synthetic-extract-b" and body["max_completion_tokens"] == 123
+    assert body["reasoning_effort"] == "low"
     assert "max_tokens" not in body
     assert wire.intents[0].profile_sha256 != wire.intents[1].profile_sha256
     assert len(wire.requests) == len(wire.intents) == 3
@@ -331,6 +341,10 @@ def test_wire_options_participate_in_frozen_identity():
         environ=config_env(), options=RequestOptions(max_output_tokens=10)
     ).require_profile()
     assert a.fingerprint != b.fingerprint
+    c = load_extraction_config(
+        environ=config_env(), options=RequestOptions(reasoning_effort="low")
+    ).require_profile()
+    assert a.fingerprint != c.fingerprint
     with pytest.raises(ValueError):
         a.model = "mutated"
 

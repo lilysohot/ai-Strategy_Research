@@ -1,0 +1,48 @@
+{
+  "attempt_status": {
+    "succeeded": 4
+  },
+  "automatic_retries": 0,
+  "batch_id": "batch:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "claims_attempts": 0,
+  "cost": null,
+  "cost_status": "unavailable_not_zero",
+  "executed_on": "2026-10-10",
+  "items_attempts": 0,
+  "model": "glm-5.3-flash",
+  "model_calls": 4,
+  "packet_status": {
+    "completed": 0,
+    "deferred": 0,
+    "failed": 4,
+    "partial": 0
+  },
+  "plan_sha256": "sha256:5c0a6386599b91e18bcfc62ea5a5d45a23e367eff62d99e2649f6fa7485efeb9",
+  "publication_query_delivery_context_use": 0,
+  "relation_attempts": 4,
+  "relation_task": {
+    "artifact_sha256": "sha256:554c05a51c344ce64b82afac1faa3b8b9fcde07579ff13a99d0a719c1193e7fb",
+    "execution_status": "failed",
+    "payload_sha256": "sha256:51567ee08ffbee055b7789f9b3b3096dcd5660027185675d1a63b9a887f86bb9",
+    "protocol_status": "not_checked",
+    "publication_status": "unpublished",
+    "quality_status": "review_required",
+    "reason_codes": [
+      "relations_error:ValueError",
+      "role_scope_not_fully_covered"
+    ],
+    "task_id": "task:98fb57b3395e95af675c567d6064f6df734179fc0c787c3fcb356fb081ea5fd6"
+  },
+  "response_model": "glm-5-3-flash-260828",
+  "retained_relations": 0,
+  "schema_version": "issue20-glm-bounded-live-execution-1",
+  "status": "failed_output_completeness_model_route_closed",
+  "usage": {
+    "completion_tokens": 16384,
+    "prompt_tokens": 49683,
+    "reasoning_tokens": 16377,
+    "total_tokens": 66067
+  },
+  "visible_protocol_records": 0
+}

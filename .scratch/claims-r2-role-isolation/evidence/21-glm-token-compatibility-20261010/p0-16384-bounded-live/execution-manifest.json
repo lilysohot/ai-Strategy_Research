@@ -1,0 +1,84 @@
+{
+  "schema_version": "issue21-glm-16k-bounded-live-manifest-1",
+  "executed_on": "2026-10-10",
+  "status": "outcome_unknown_and_output_completeness_failed_route_closed",
+  "batch_id": "batch:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "plan_sha256": "sha256:c1cbc89331a8866beb28d62b33bff5ef1e5a2fb3c0bf6261a3c8f858f5d7f2e2",
+  "experimental_change": {
+    "model": "glm-5.3-flash",
+    "response_model": "glm-5-3-flash-260828",
+    "from_max_output_tokens": 4096,
+    "to_max_output_tokens": 16384,
+    "output_limit_only_change_verified": true
+  },
+  "preflight": {
+    "default_profile_restore_blocked_before_request": true,
+    "error_code": "CS_CONFIG_MISSING",
+    "model_attempts": 0,
+    "store_preserved": "live-store"
+  },
+  "budget": {
+    "claims_attempts": 0,
+    "items_attempts": 0,
+    "relation_attempts": 4,
+    "relation_attempts_max": 4,
+    "automatic_retries": 0
+  },
+  "attempt_result": {
+    "succeeded": 3,
+    "outcome_unknown": 1,
+    "failed": 0,
+    "completed_empty_responses": 3,
+    "length_terminated_responses": 3,
+    "unknown_attempt_duration_ms": 300116
+  },
+  "output_result": {
+    "completed_packets": 0,
+    "partial_packets": 0,
+    "failed_packets": 4,
+    "visible_protocol_records": 0,
+    "retained_relations": 0
+  },
+  "known_usage_excludes_unknown_attempt": {
+    "prompt_tokens": 32812,
+    "completion_tokens": 49152,
+    "reasoning_tokens": 49121,
+    "total_tokens": 81964,
+    "cost": null,
+    "cost_status": "unavailable_not_zero_and_unknown_attempt_may_have_consumed"
+  },
+  "final_gate": {
+    "passed": false,
+    "failed_at": "visible_output_completeness_and_outcome_unknown",
+    "semantic_quality_scored": false,
+    "retry_allowed": false,
+    "additional_calls_allowed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false
+  },
+  "root_cause": {
+    "primary": "reasoning_consumed_expanded_output_budget",
+    "secondary": "final_attempt_outcome_unknown_at_timeout"
+  },
+  "files_sha256": {
+    "plan.json": "sha256:9b5dc928da3ae8311920879e706f40f7a0a8127b0cf25c7b7410f524621def12",
+    "final-gate.json": "sha256:1d037bd1fce000993b43722d82bf6ffec8c501add8f03b4b9cbd2c96ae39e49a",
+    "plan-diff-summary.json": "sha256:93ac629088d2c1350d3f67eaf3f5b7bc8b34e676690473683858ffd63cb79d4e",
+    "protocol-audit.json": "sha256:cabcb819f2a065eba7f5f2259fd709c90d1dc678152141fd4155fb682ab4e060",
+    "execution-summary.json": "sha256:f9aa982782f35f6e718166e13ea781b21d02009ecf505dacc792b6cd345de12e",
+    "final-decision.json": "sha256:5c8561625291d959c971b58565c8970df2e4f2279a507df94ab8de1d9303ecf2",
+    "freeze_plan.py": "sha256:81557ff5544ea88e6589cf869db17b53d10a1327cd4522b921bd8f4da1fe2130",
+    "execute_plan.py": "sha256:e6ccce69d056d06ca6806aed929608d075eb21b68f2c6811546435d1c0ac458f",
+    "audit_live.py": "sha256:387f57be061f2f4ba059dc37a12892c2705b5d3751c4184975f82196c9655a03",
+    "verify_plan.py": "sha256:9128263274ee4408cf9119f021cbe5a713396c6ea4553b3607b96740588052e8",
+    "live-store/index/structured.sqlite3": "sha256:c163e2a3f6367626378c33dc59f342dab8e8bba1fdb6f047770334fce3b7508f",
+    "live-store-16k/index/structured.sqlite3": "sha256:8eace410e8f253ae9c52b860e6cd10b0c9af1a12fd4702936c9cc33569693622"
+  },
+  "validation": {
+    "plan_diff": "max_output_tokens and derived identities only",
+    "audit_model_requests": 0,
+    "ruff": "passed",
+    "pyright": "0 errors, 0 warnings",
+    "credential_scan": "reference_only_no_inline_secret"
+  }
+}
