@@ -180,10 +180,15 @@ server/runs/<run_id>/
 │   └── outputs/         FRONTIER_AGENT_OUTPUTS_DIR   ← 产物，run 结束扫描入 artifacts 表
 ├── inputs/              FRONTIER_AGENT_INPUTS_DIR    ← 上传文件，只读，在 ws 之外
 ├── spill/               APODEX_SPILL_DIR
+├── history.txt          服务端渲染的历史稿（presentation；模型不读）
+├── prior_conversation.json  上一轮 conversation.json 的字节拷贝（server 只搬运、不解析）
 └── run/                 _trial_dir
     ├── agent/trajectories/react_agent.{json,jsonl}   ← 运行时自写，含参数/用量
+    ├── conversation.json  ← 本轮最终消息列表（跨轮重放的 continuity 载体，observer 写）
     └── engine.log
 ```
+
+**跨轮上下文（2026-10-10，issue 01 阶段 1）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format；下一轮由服务端**只做字节拷贝**到 `prior_conversation.json`，由下一轮的 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与**（既不读也不写，见 `server/store.py::is_watch_run`）。
 
 7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，再用 `metadata['_sys_prompt_addendum']` 告知路径（该 addendum 两个分支都生效，`:817`）。
 
@@ -347,7 +352,8 @@ CREATE TABLE runs (
   prompt_tokens INT, completion_tokens INT, total_tokens INT,
   cache_read_tokens INT, cache_write_tokens INT, reasoning_tokens INT,
   llm_calls INT, usage_json JSONB,                    -- PR-GOV-03，聚合自 trajectory
-  run_dir TEXT NOT NULL,                              -- run/agent/trajectories/、run/engine.log、ws/outputs/
+  run_dir TEXT NOT NULL,                              -- run/agent/trajectories/、run/engine.log、ws/outputs/、
+                                                      -- history.txt、prior_conversation.json（跨轮重放输入）
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ);
 CREATE INDEX idx_runs_session ON runs(session_id, created_at);
@@ -474,7 +480,8 @@ server/        app.py config.py orchestrator.py worker.py
                bridge.py relay.py history.py store.py security.py profile.py
                approval.py steer.py diff.py artifacts.py usage.py
                routes/{auth,models,sessions,runs,artifacts}.py  alembic/
-               runs/<run_id>/{ws/{outputs/}, inputs/, spill/, run/{agent/trajectories/,engine.log}}
+               runs/<run_id>/{ws/{outputs/}, inputs/, spill/, history.txt, prior_conversation.json,
+                            run/{agent/trajectories/,engine.log,conversation.json}}
 plugins/corpus/ PostgreSQL 语料、Claims、审计与服务层
 plugins/market/ ports.py service.py factory.py sink.py trace_store.py adapters/ transport/
 web/           Vite+Vue3: views/ components/ stores/ api/ sse.ts

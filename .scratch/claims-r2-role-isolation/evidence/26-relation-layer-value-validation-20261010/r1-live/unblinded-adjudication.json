@@ -1,0 +1,83 @@
+{
+  "blind_key_sha256": "sha256:bf1858b4ab2676538d6781d5ee5a8433f4df11878ab84a92a3760cdad199c421",
+  "counts": {
+    "baseline_better": 2,
+    "control_outcome": "same",
+    "relation_questions": 4,
+    "same": 2,
+    "treatment_better": 0
+  },
+  "created_on": "2026-10-10",
+  "judge_calls": 0,
+  "model_calls": 0,
+  "review_sha256": "sha256:1e13d1793be5a56f58ab42adda49728376c35a112cb9d7e3dd0574eae14dda99",
+  "rows": [
+    {
+      "blind_mapping": {
+        "右": "B",
+        "左": "A"
+      },
+      "forbidden_or_untraceable": {
+        "A": false,
+        "B": true
+      },
+      "human_pair_judgment": "left_better",
+      "question_id": "Q1",
+      "unblinded_outcome": "baseline_better"
+    },
+    {
+      "blind_mapping": {
+        "右": "A",
+        "左": "B"
+      },
+      "forbidden_or_untraceable": {
+        "A": false,
+        "B": false
+      },
+      "human_pair_judgment": "same",
+      "question_id": "Q2",
+      "unblinded_outcome": "same"
+    },
+    {
+      "blind_mapping": {
+        "右": "A",
+        "左": "B"
+      },
+      "forbidden_or_untraceable": {
+        "A": false,
+        "B": false
+      },
+      "human_pair_judgment": "same",
+      "question_id": "Q3",
+      "unblinded_outcome": "same"
+    },
+    {
+      "blind_mapping": {
+        "右": "A",
+        "左": "B"
+      },
+      "forbidden_or_untraceable": {
+        "A": false,
+        "B": false
+      },
+      "human_pair_judgment": "right_better",
+      "question_id": "Q4",
+      "unblinded_outcome": "baseline_better"
+    },
+    {
+      "blind_mapping": {
+        "右": "A",
+        "左": "B"
+      },
+      "forbidden_or_untraceable": {
+        "A": false,
+        "B": false
+      },
+      "human_pair_judgment": "same",
+      "question_id": "Q5",
+      "unblinded_outcome": "same"
+    }
+  ],
+  "schema_version": "relation-utility-unblinded-adjudication-1",
+  "status": "complete"
+}

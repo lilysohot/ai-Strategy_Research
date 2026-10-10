@@ -1,0 +1,27 @@
+{
+  "created_on": "2026-10-10",
+  "do_not_open_before_human_review": true,
+  "mapping": {
+    "Q1": {
+      "右": "B",
+      "左": "A"
+    },
+    "Q2": {
+      "右": "A",
+      "左": "B"
+    },
+    "Q3": {
+      "右": "A",
+      "左": "B"
+    },
+    "Q4": {
+      "右": "A",
+      "左": "B"
+    },
+    "Q5": {
+      "右": "A",
+      "左": "B"
+    }
+  },
+  "schema_version": "relation-utility-blind-key-1"
+}

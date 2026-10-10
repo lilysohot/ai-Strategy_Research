@@ -1,0 +1,38 @@
+{
+  "calls": {
+    "judge": 0,
+    "main": 10,
+    "relation_extraction": 0,
+    "unblinding": 0
+  },
+  "cost": {
+    "median_prompt_tokens_B_vs_A_percent": 24.33,
+    "median_total_tokens_B_vs_A_percent": 40.74
+  },
+  "cost_stop_triggered": true,
+  "created_on": "2026-10-10",
+  "decision": "reject_default_relation_enrichment_return_r2_focus_to_items",
+  "operating_policy": {
+    "default_delivery": "material_items_only",
+    "gold_v2_modified": false,
+    "issue27_hardening_retained": true,
+    "r2_acceptance_focus": "material_items_evidence_completeness",
+    "relations": "non_blocking_on_demand_experiment_only"
+  },
+  "production": {
+    "database_access": 0,
+    "publication": 0,
+    "queries": 0
+  },
+  "quality": {
+    "baseline_better": 2,
+    "control_outcome": "same",
+    "relation_questions": 4,
+    "same": 2,
+    "treatment_better": 0
+  },
+  "retain_rule_passed": false,
+  "schema_version": "relation-utility-final-decision-1",
+  "status": "closed",
+  "treatment_introduced_forbidden_or_untraceable_claim": true
+}

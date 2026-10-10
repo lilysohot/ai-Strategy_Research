@@ -1,0 +1,26 @@
+{
+  "delivery_contract": "material_items_only",
+  "material_items": [
+    {
+      "evidence": [
+        {
+          "end": 750,
+          "locator": "chunk:copper-p1",
+          "quote": "全球表处理设备主要厂商包括日本三船、西工业、TEX，韩国PNT等，价格约2000万元，交期6-12个月。",
+          "start": 698
+        }
+      ],
+      "item_id": "itm_ba3a8f228e6ab791",
+      "polarity": "affirmed",
+      "semantic_type": "fact",
+      "speech_role": "statement",
+      "statement_role": "claim",
+      "temporal_frame": "unknown",
+      "text": "全球表处理设备主要厂商包括日本三船、西工业、TEX、韩国PNT等"
+    }
+  ],
+  "question": "根据材料，全球表面处理设备的主要厂商包括哪些？仅列出材料明确点名的厂商。",
+  "question_id": "Q5",
+  "schema_version": "relation-utility-delivery-pack-1",
+  "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+}

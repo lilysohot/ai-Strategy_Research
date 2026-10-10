@@ -1,0 +1,43 @@
+{
+  "delivery_contract": "material_items_only",
+  "material_items": [
+    {
+      "evidence": [
+        {
+          "end": 541,
+          "locator": "chunk:copper-p1",
+          "quote": "但今年到明年肯定更好。",
+          "start": 530
+        }
+      ],
+      "item_id": "itm_7787083577af2e35",
+      "polarity": "affirmed",
+      "semantic_type": "forecast",
+      "speech_role": "answer",
+      "statement_role": "answer",
+      "temporal_frame": "contemporaneous",
+      "text": "但今年到明年肯定更好。"
+    },
+    {
+      "evidence": [
+        {
+          "end": 530,
+          "locator": "chunk:copper-p1",
+          "quote": "22年到23年看报表是近几年比较好的业绩，",
+          "start": 509
+        }
+      ],
+      "item_id": "itm_951065d8d93a97f0",
+      "polarity": "affirmed",
+      "semantic_type": "fact",
+      "speech_role": "answer",
+      "statement_role": "answer",
+      "temporal_frame": "retrospective",
+      "text": "22年到23年看报表是近几年比较好的业绩，"
+    }
+  ],
+  "question": "请根据材料分别说明它对22年至23年历史业绩的评价，以及对今年至明年趋势的判断，并说明这两项判断之间的关系。",
+  "question_id": "Q4",
+  "schema_version": "relation-utility-delivery-pack-1",
+  "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+}

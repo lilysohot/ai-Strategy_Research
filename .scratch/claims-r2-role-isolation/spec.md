@@ -2,6 +2,10 @@
 
 - 日期：2026-10-02；状态复核：2026-10-10
 - 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。P2 发布/M_main 消费仍未启动。
+- 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
+  items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
+  提升 0/4、回退 2/4、持平 2/4，输入 token 中位数增加 24.33%，因此默认 relation 富化关闭。
+  R2 默认交付和当前验收范围固定为 `material_items`；relations 只保留为非阻断、按需实验能力。
 - 设计依据：[report.md](report.md)；阶段放行真源：[R2 主计划](../../docs/plan/claims-market-closed-loop-plan.md)。
 - 本文件保存实施范围、依赖和任务索引；逐任务状态与验收证据保存在各 issue，主计划保留阶段状态。不得在三处各维护一份独立完成率。
 
@@ -211,6 +215,11 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 | R2 items | `material-atomic-selector-jsonl-v5`（新计划显式选择）；selector v1-v4 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
 | R2 relations | `material-relations-question-group-jsonl-v2`（新最终计划显式选择）；question-group v1、selector v1-v2 / `material-relations-jsonl-v1`（历史可读） | answers 返回 question-local selected indices；non-answer 只返回 relation index 与 JSON boolean；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window` 并回填关系；字符串布尔、旧 status shape 和 type-as-status fail closed |
 
+该表保留 relations 的历史可读与按需实验契约，不表示默认启用。Issue 26 之后，首轮产品和 R2 验收
+默认只交付 items；除非新的业务问题另立价值门并获授权，调度不得把 relations 加回默认上下文、发布
+前置条件或验收阻断项。Issue 27 的 `material-relation-rules-v2` 继续对按需路径生效：普通转折不构成
+challenges，缺少显式纠正/否定线索的 positive terminal 归一为 absent。
+
 历史联合 JSON、旧 `material-jsonl-v1`、slot 模式中的隐式关系和其他 provider 特有格式不在首轮支持
 矩阵，真实请求前返回 `CS_PROTOCOL_UNSUPPORTED`，不静默降级。关系候选只从同一 snapshot、同一或
 显式复合证据包中已合格 items 的原文明示连接词、问答配对、归属结构及已版本化确定性规则生成；不以
@@ -276,6 +285,9 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
   Issue 22 的 4 次 Doubao Lite 请求均成功并产生可见输出，但严格协议与签认语义门仍失败；Issue 23/24
   均为 0 调用审计/实现，Issue 25 最终 4 次通过 boolean v2 协议门但未通过 signed gold-v2 质量门。
   这些执行均不转授 publication、query、delivery、context_use 或额外 live budget。
+- Issue 26 另经授权执行 10 次 M_main 配对研究运行，relation 抽取和 judge 均为 0；盲评、解盲与最终
+  裁决证明默认 relation 富化无正向价值并触发成本止损。该预算不计入上述 82 次 selector attempts，
+  也未产生生产 query、publication 或数据库访问。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 
 ## 6. 第一阶段完成条件

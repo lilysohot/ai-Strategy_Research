@@ -1,0 +1,159 @@
+{
+  "cost_stop_exceeded_on_prompt_tokens": true,
+  "cost_stop_threshold_percent": 20,
+  "created_on": "2026-10-10",
+  "judge_calls": 0,
+  "model_calls": 0,
+  "paired_cost": {
+    "A": {
+      "prompt_tokens": 563,
+      "total_tokens": 1237
+    },
+    "B": {
+      "prompt_tokens": 700,
+      "total_tokens": 1741
+    },
+    "B_vs_A_percent": {
+      "prompt_tokens": 24.33,
+      "total_tokens": 40.74
+    }
+  },
+  "production_queries": 0,
+  "publication_calls": 0,
+  "relation_extraction_calls": 0,
+  "runs": [
+    {
+      "cell": "Q2-A",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 6,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q1-B",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 1,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q1-A",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q3-A",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q4-B",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 1,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q2-B",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 6,
+      "delivered_relation_count": 5,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q4-A",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q5-B",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 1,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q3-B",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 2,
+      "delivered_relation_count": 1,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    },
+    {
+      "cell": "Q5-A",
+      "claim_ids_subset_of_delivery": true,
+      "claim_shape_valid": true,
+      "delivered_item_count": 1,
+      "delivered_relation_count": 0,
+      "json_contract_valid": true,
+      "protocol_pass": true,
+      "relation_id_leaked_to_answer": false,
+      "text_citations_subset_of_delivery": true,
+      "tool_calls": 0,
+      "uncited_claim_objects": 0
+    }
+  ],
+  "schema_version": "relation-utility-protocol-audit-1",
+  "semantic_utility_requires_human_review": true,
+  "status": "passed"
+}

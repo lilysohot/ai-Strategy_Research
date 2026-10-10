@@ -49,6 +49,7 @@ MATERIAL_RELATION_SELECTOR_JSONL_V1 = "material-relations-selector-jsonl-v1"
 MATERIAL_RELATION_SELECTOR_JSONL_V2 = "material-relations-selector-jsonl-v2"
 MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1 = "material-relations-question-group-jsonl-v1"
 MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2 = "material-relations-question-group-jsonl-v2"
+MATERIAL_RELATION_RULE_VERSION = "material-relation-rules-v2"
 # P12 rejected v2 on the signed quality and target-recall gates. Keep it readable for
 # immutable run replay, but leave new direct callers on the last non-rejected default.
 MATERIAL_RELATION_SELECTOR_JSONL_VERSION = MATERIAL_RELATION_SELECTOR_JSONL_V1
@@ -281,8 +282,10 @@ MATERIAL_RELATION_SELECTOR_PROMPT = (
   是/否确认，或纠正问题中的错误前提，都属于回答；回答不要求复述问题原词。
 - 同一回答轮次、主题相近、前后邻接都不足以证明 answers。若 from_item 只回答了同一轮中的另一个问题，
   只解释付款/工艺等邻近结论，或只提供不能解决所问谓词的背景，必须判 absent。
-- challenges 包括原文明示的反驳、限制、转折以及说话人对自己刚提出假设的显式修正；两个可同时成立的
-  不同维度事实不是 challenges。
+- challenges 必须是两个端点之间的显式命题冲突：主体、谓词、范围和期间可比，且原文明示否定、反义
+  或纠正。说话人明确更正自己刚提出的命题可判 present；“但/然而/不过”等转折词本身不是成立条件。
+- 不同期间、不同主体、不同指标或其他可同时成立的事实必须判 absent，即使二者由转折词连接；此规则
+  优先于任何转折连接词。
 - supports 需要 from_item 是 to_item 的明示原因、依据或论据；仅仅随后出现或属于相同主题必须判 absent。
 - conditions 需要 from_item 明示 to_item 成立的条件；时间先后或普通共现不是条件。
 先分别读取两个原子端点，再用 pair_window 核验连接词和对话方向；不得用整段大意替代端点关系。
@@ -302,8 +305,9 @@ record_type="answer_group_result", question_index, selected_answer_indices。sel
 
 每个 non_answer_obligation 必须恰好输出一行紧凑 JSON，字段只能是：
 record_type="relation_result", relation_index, status, evidence_selector。present 时
-evidence_selector="pair_window"，absent 时为 null。supports/conditions/challenges 等仍按原文明示连接判定，
-共现、邻近和常识推断必须 absent。
+evidence_selector="pair_window"，absent 时为 null。supports/conditions 仍按原文明示连接判定；challenges
+必须是同主体、同谓词、同范围和同期间下的显式否定、反义或纠正，单有“但/然而/不过”不成立。不同
+期间、主体、指标或其他可同时成立的事实必须 absent。共现、邻近和常识推断必须 absent。
 
 输出 newline-delimited JSON，不要数组、外层对象、Markdown 或解释。不得复制或生成 controller_*、
 candidate_pair_id、item ID、关系类型、引文或坐标。
@@ -323,8 +327,10 @@ record_type="answer_group_result", question_index, selected_answer_indices。sel
 每个 non_answer_obligation 必须恰好输出一行紧凑 JSON，字段只能是：
 record_type="relation_result", relation_index, is_present。is_present 必须是 JSON 布尔值 true 或 false，
 不得输出字符串或关系类型。true 仅表示输入中已经给定的 allowed_type 在 fixed_pair_window 内明示成立；
-false 表示不成立。supports/conditions/challenges 等仍按原文明示连接判定，共现、邻近和常识推断必须为
-false。关系类型和 present 时使用的 pair_window 证据均由 controller 回填，模型不得复制。
+false 表示不成立。supports/conditions 仍按原文明示连接判定；challenges 必须是同主体、同谓词、同范围
+和同期间下的显式否定、反义或纠正，单有“但/然而/不过”不成立。不同期间、主体、指标或其他可同时
+成立的事实必须为 false。共现、邻近和常识推断必须为 false。关系类型和 present 时使用的 pair_window
+证据均由 controller 回填，模型不得复制。
 
 输出 newline-delimited JSON，不要数组、外层对象、Markdown 或解释。不得复制或生成 controller_*、
 candidate_pair_id、item ID、关系类型、引文或坐标。
@@ -1966,6 +1972,33 @@ def _relation_from_controller_pair(
     )
 
 
+_EXPLICIT_PROPOSITIONAL_CONFLICT_RE = re.compile(
+    r"并非|不是|不对|错误|有误|相反|更正|纠正|改口|应改为|而非|不能说|"
+    r"不意味着|否认|推翻|说错|不准确|误区|理解有偏差|我收回"
+)
+
+
+def _challenge_has_explicit_propositional_conflict(
+    packet: EvidencePacket,
+    pair: dict[str, str],
+    items_by_id: dict[str, MaterialItem],
+) -> bool:
+    """Fail closed when a challenge is supported only by a discourse turn.
+
+    Candidate generation intentionally keeps broad adjacent ``但`` pairs for recall.
+    A positive model terminal is therefore narrowed here: controller evidence must
+    contain a literal correction/negation cue.  Plain contrast and facts about
+    different periods or metrics remain candidates but normalize to absent.
+    """
+    if pair.get("allowed_type") != "challenges":
+        return True
+    try:
+        evidence = _relation_pair_window(packet, "guard", pair, items_by_id)
+    except (KeyError, ValueError):
+        return False
+    return _EXPLICIT_PROPOSITIONAL_CONFLICT_RE.search(evidence.quote) is not None
+
+
 def _relations_from_selector_results(
     raw: str,
     packet: EvidencePacket,
@@ -2034,6 +2067,8 @@ def _relations_from_selector_results(
             invalid += 1
             continue
         if status == "absent":
+            continue
+        if not _challenge_has_explicit_propositional_conflict(packet, pair, items_by_id):
             continue
         try:
             relations.append(_relation_from_controller_pair(packet, source_rev, pair, items_by_id))
@@ -2180,12 +2215,15 @@ def _relations_from_question_group_results(
             continue
         if not is_present:
             continue
+        pair = candidate_pairs[relation_index]
+        if not _challenge_has_explicit_propositional_conflict(packet, pair, items_by_id):
+            continue
         try:
             relations.append(
                 _relation_from_controller_pair(
                     packet,
                     source_rev,
-                    candidate_pairs[relation_index],
+                    pair,
                     items_by_id,
                 )
             )

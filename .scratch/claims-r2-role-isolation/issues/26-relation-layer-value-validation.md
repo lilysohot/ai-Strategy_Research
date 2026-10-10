@@ -1,6 +1,6 @@
 # 26 · relation 层对研报抽取价值的有界配对验证
 
-Status: awaiting-human-gold-signoff
+Status: completed
 Type: task
 Parent: [25 · Relation boolean v2 最终有界真实服从性复验](25-final-relation-live-compliance.md)
 Model attempts: 预检 0；签认后主线最多 10 次（5 题 × A/B）；relation 抽取 0；judge 0
@@ -8,12 +8,13 @@ Production database access: 0
 
 ## 授权与当前边界
 
-用户授权开始执行 Issue 26，并要求新建的价值金标草案由用户人工核实。当前仅授权零调用预检、
-问题与评分草案生成；10 次主线 A/B 尚未执行，须等待人工签认。
+用户已签认价值金标并授权执行 Issue 26。2026-10-10 已冻结 r1 执行身份并完成 10 次主线 A/B；
+当前等待盲化配对人工裁定，尚未解盲或作最终 relation 去留结论。
 
 - 不修改或取代已签认 gold-v2。
 - 不追加 relation 抽取调用，不复活 Issue 25 已关闭路线。
-- 不发布，不写生产库；当前 publication/query/delivery/context_use/M_main 均为 0。
+- 不发布，不写生产库；publication/生产 query/生产库访问均为 0。M_main 已按冻结顺序执行 10/10，
+  每格一次且无补跑；交付采用离线冻结包，不经过生产索引。
 - 本任务只判断冻结铜箔访谈快照上的方向性业务增益，不声称统计显著性或跨材料普遍性。
 
 ## 目标
@@ -86,15 +87,19 @@ condition C 从本任务删除；不得根据 A/B 结果临时追加。若 A/B �
   判定不保留默认 relation 富化。
 - 规则与五题金标在执行前冻结，不得按结果修改。
 
-## 当前停止点
+## 最终裁决
 
-零调用预检完成后停止，等待用户人工核实并签认 `utility-gold.agent-draft.json`。签认前：
-
-- M_main 运行 0/10；
-- relation/Claims/items 抽取调用 0；
-- publication/query/delivery/context_use 0；
-- 不生成 A/B 结论。
+- r1 真实主线运行 10/10 全部成功；模型为冻结配置 `glm-5.3-flash`，temperature=0，并发 1，
+  自动补跑 0，工具调用 0。
+- relation/Claims/items 抽取调用 0；judge 0；publication/生产 query/生产库访问 0。
+- 盲评解盲：Q1、Q4 为 A（items-only）更好；Q2、Q3 相同；Q5 控制题相同。B 在关系题提升
+  0/4、回退 2/4、持平 2/4，并在 Q1 引入不可追溯表述，在 Q4 留下错误 challenges 的语义痕迹。
+- B 相对 A 的中位输入 token 增加 24.33%，总 token 增加 40.74%；质量无提升，成本止损触发。
+- 预注册保留门未通过。关闭默认 relation 富化，R2 默认交付 `material_items`；relations 仅保留为
+  非阻断、按需实验能力，R2 验收重心回到 items 证据完整性。
+- Issue 27 的 challenges 收紧保留，但不据此复活默认 relation 路线；gold-v2 未修改。
 
 ## Evidence
 
 - `../evidence/26-relation-layer-value-validation-20261010/r0-preflight/`
+- `../evidence/26-relation-layer-value-validation-20261010/r1-live/`

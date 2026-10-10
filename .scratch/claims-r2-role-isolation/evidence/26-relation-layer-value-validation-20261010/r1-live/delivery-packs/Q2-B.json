@@ -1,0 +1,194 @@
+{
+  "delivery_contract": "material_items_plus_frozen_relations",
+  "material_items": [
+    {
+      "evidence": [
+        {
+          "end": 1493,
+          "locator": "chunk:copper-p1",
+          "quote": "您觉得良品率低是设备问题还是工艺问题？",
+          "start": 1474
+        }
+      ],
+      "item_id": "itm_26d677f6ff5a832e",
+      "polarity": "unknown",
+      "semantic_type": "unknown",
+      "speech_role": "question",
+      "statement_role": "question",
+      "temporal_frame": "unknown",
+      "text": "您觉得良品率低是设备问题还是工艺问题？"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1085,
+          "locator": "chunk:copper-p1",
+          "quote": "当前HVLP铜箔良品率预估仅40%左右，设备精度已达领先水平，",
+          "start": 1054
+        }
+      ],
+      "item_id": "itm_51caf339b641f592",
+      "polarity": "affirmed",
+      "semantic_type": "fact",
+      "speech_role": "statement",
+      "statement_role": "claim",
+      "temporal_frame": "unknown",
+      "text": "当前HVLP铜箔良品率预估仅40%左右"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1503,
+          "locator": "chunk:copper-p1",
+          "quote": "设备端能配套改进吗？",
+          "start": 1493
+        },
+        {
+          "end": 1505,
+          "locator": "chunk:copper-p1",
+          "quote": "设备端能配套改进吗？\n\n",
+          "start": 1493
+        }
+      ],
+      "item_id": "itm_b7359094c20201f2",
+      "polarity": "unknown",
+      "semantic_type": "unknown",
+      "speech_role": "question",
+      "statement_role": "question",
+      "temporal_frame": "unknown",
+      "text": "设备端能配套改进吗？"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1544,
+          "locator": "chunk:copper-p1",
+          "quote": "那么大概率跟工艺挂钩。",
+          "start": 1533
+        }
+      ],
+      "item_id": "itm_b89393d4936d3d24",
+      "polarity": "affirmed",
+      "semantic_type": "opinion",
+      "speech_role": "answer",
+      "statement_role": "answer",
+      "temporal_frame": "unknown",
+      "text": "那么大概率跟工艺挂钩。"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1567,
+          "locator": "chunk:copper-p1",
+          "quote": "之前跟铜冠总工探讨过，他说工艺和设备是64开，",
+          "start": 1544
+        }
+      ],
+      "item_id": "itm_c0721fd9c5c22faa",
+      "polarity": "affirmed",
+      "semantic_type": "opinion",
+      "speech_role": "answer",
+      "statement_role": "evidence",
+      "temporal_frame": "unknown",
+      "text": "之前跟铜冠总工探讨过，他说工艺和设备是64开，"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1533,
+          "locator": "chunk:copper-p1",
+          "quote": "专家：我认为设备目前加工精度和控制精度已经做到行业领先，",
+          "start": 1505
+        }
+      ],
+      "item_id": "itm_c3c12e04657cec79",
+      "polarity": "affirmed",
+      "semantic_type": "opinion",
+      "speech_role": "answer",
+      "statement_role": "answer",
+      "temporal_frame": "unknown",
+      "text": "我认为设备目前加工精度和控制精度已经做到行业领先，"
+    }
+  ],
+  "material_relations": [
+    {
+      "evidence": [
+        {
+          "end": 1544,
+          "locator": "chunk:copper-p1",
+          "quote": "设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。",
+          "start": 1493
+        }
+      ],
+      "from_item": "itm_b89393d4936d3d24",
+      "provenance": "source_explicit",
+      "relation_id": "rel_e40f893dfd78cac1",
+      "to_item": "itm_b7359094c20201f2",
+      "type": "answers"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1533,
+          "locator": "chunk:copper-p1",
+          "quote": "您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，",
+          "start": 1474
+        }
+      ],
+      "from_item": "itm_c3c12e04657cec79",
+      "provenance": "source_explicit",
+      "relation_id": "rel_94ca95d328d6733e",
+      "to_item": "itm_26d677f6ff5a832e",
+      "type": "answers"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1533,
+          "locator": "chunk:copper-p1",
+          "quote": "设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，",
+          "start": 1493
+        }
+      ],
+      "from_item": "itm_c3c12e04657cec79",
+      "provenance": "source_explicit",
+      "relation_id": "rel_31801a8755e9cf28",
+      "to_item": "itm_b7359094c20201f2",
+      "type": "answers"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1544,
+          "locator": "chunk:copper-p1",
+          "quote": "您觉得良品率低是设备问题还是工艺问题？设备端能配套改进吗？\n\n专家：我认为设备目前加工精度和控制精度已经做到行业领先，那么大概率跟工艺挂钩。",
+          "start": 1474
+        }
+      ],
+      "from_item": "itm_b89393d4936d3d24",
+      "provenance": "source_explicit",
+      "relation_id": "rel_95c6b8bd3b367c1c",
+      "to_item": "itm_26d677f6ff5a832e",
+      "type": "answers"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1567,
+          "locator": "chunk:copper-p1",
+          "quote": "那么大概率跟工艺挂钩。之前跟铜冠总工探讨过，他说工艺和设备是64开，",
+          "start": 1533
+        }
+      ],
+      "from_item": "itm_c0721fd9c5c22faa",
+      "provenance": "source_explicit",
+      "relation_id": "rel_741755d990ec7cba",
+      "to_item": "itm_b89393d4936d3d24",
+      "type": "supports"
+    }
+  ],
+  "question": "根据材料，HVLP铜箔良品率偏低主要与设备还是工艺有关？设备端当前处于什么水平，材料给出了什么依据？",
+  "question_id": "Q2",
+  "schema_version": "relation-utility-delivery-pack-1",
+  "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+}

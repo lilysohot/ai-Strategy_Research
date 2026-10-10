@@ -1,0 +1,97 @@
+{
+  "counts": {
+    "challenges_after_narrow_guard": 2,
+    "challenges_before": 12,
+    "challenges_downgraded_to_absent": 10,
+    "retained_relations_before": 213
+  },
+  "created_on": "2026-10-10",
+  "decisions": [
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "利润好一点可能会超过150万，但现在的市场行情不太好，一般就150万左右。",
+      "relation_id": "rel_fbdea962334b8dcb"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "这两种铜箔对应的设备基本不一样——大体的结构一样，但使用的配件不同。",
+      "relation_id": "rel_1af0572a72862ad3"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "专家：载体铜箔的设备我们已经研发出来了，但市场的增量没有想象的那么明显，大家都在炒这个概念。",
+      "relation_id": "rel_00a926bb6618be3a"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "尽管后端跟表面处理机同步长铜的过程一样，但前端必须有载体形成的过程。",
+      "relation_id": "rel_5f626fc7f53a14c4"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "我们做HVLP铜箔的设备，虽然还没得到完全验证，但从设备原理上完全可以跟他们匹配。",
+      "relation_id": "rel_f2df347039fd0c22"
+    },
+    {
+      "after": "present",
+      "before": "present",
+      "evidence_quote": "我想请您介绍，比如这类公司应该是机加能力特别强，但传感器控制能力可能不强。但可能是我理解的误区。",
+      "relation_id": "rel_a5cffcd14226b8e8"
+    },
+    {
+      "after": "present",
+      "before": "present",
+      "evidence_quote": "我们是西北有色金属研究院，但它不是主做装备的。",
+      "relation_id": "rel_277fe1083202270f"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "22年到23年看报表是近几年比较好的业绩，但今年到明年肯定更好。",
+      "relation_id": "rel_851e403cdfae400b"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "专家：今年年内肯定全部交完，但不一定能全部拿到验收款，可能部分拿到，",
+      "relation_id": "rel_f021d247d7fbc275"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "专家：现在HVLP1或2很多厂家也能做，但良品率确实不高。",
+      "relation_id": "rel_c7275223adf0a499"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "设备只是配套，但没设备也不行。",
+      "relation_id": "rel_f913cbd799a4f1d3"
+    },
+    {
+      "after": "absent",
+      "before": "present",
+      "evidence_quote": "卢森堡一直有用我们的设备，但没听说要扩产。",
+      "relation_id": "rel_00fcfe8985009ea0"
+    }
+  ],
+  "fixed_counterexample": {
+    "after": "absent",
+    "before": "present",
+    "evidence_quote": "22年到23年看报表是近几年比较好的业绩，但今年到明年肯定更好。",
+    "relation_id": "rel_851e403cdfae400b"
+  },
+  "immutable_relation_payload_sha256": "sha256:a4af367954dc9a6214d3b1f87f71c6eedb85a78225d6ead9bfe5a5db18deacfb",
+  "model_calls": 0,
+  "production_database_access": 0,
+  "publication_calls": 0,
+  "schema_version": "challenge-rule-zero-call-replay-1",
+  "status": "passed",
+  "test_command": "uv run pytest -q tests/test_corpus_material_semantics.py",
+  "test_result": "88 passed"
+}

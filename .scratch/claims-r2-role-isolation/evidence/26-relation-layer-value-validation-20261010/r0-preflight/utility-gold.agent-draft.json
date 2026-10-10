@@ -1,7 +1,7 @@
 {
   "schema_version": "relation-utility-gold-draft-1",
   "created_on": "2026-10-10",
-  "status": "agent_draft_pending_human_signoff",
+  "status": "human_signed_off",
   "purpose": "downstream_relation_value_ablation",
   "not_a_revision_of_gold_v2": true,
   "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
@@ -56,7 +56,7 @@
       ],
       "traceability_required": true,
       "human_review": {
-        "decision": null,
+        "decision": "approved",
         "notes": null
       }
     },
@@ -123,7 +123,7 @@
       ],
       "traceability_required": true,
       "human_review": {
-        "decision": null,
+        "decision": "approved",
         "notes": null
       }
     },
@@ -168,13 +168,13 @@
       ],
       "traceability_required": true,
       "human_review": {
-        "decision": null,
+        "decision": "approved",
         "notes": null
       }
     },
     {
       "question_id": "Q4",
-      "prompt": "材料如何评价22年至23年的历史业绩，以及今年至明年的趋势？这两项判断是否构成矛盾？",
+      "prompt": "请根据材料分别说明它对22年至23年历史业绩的评价，以及对今年至明年趋势的判断，并说明这两项判断之间的关系。",
       "purpose": "measure_harm_from_a_retained_false_challenge_edge",
       "expected_relation_types": [
         "challenges"
@@ -216,7 +216,7 @@
       ],
       "traceability_required": true,
       "human_review": {
-        "decision": null,
+        "decision": "approved",
         "notes": null
       }
     },
@@ -236,7 +236,7 @@
       ],
       "required_facts": [
         "日本三船",
-        "日本西工业",
+        "西工业",
         "TEX",
         "韩国PNT"
       ],
@@ -250,7 +250,7 @@
       ],
       "traceability_required": true,
       "human_review": {
-        "decision": null,
+        "decision": "approved",
         "notes": null
       }
     }

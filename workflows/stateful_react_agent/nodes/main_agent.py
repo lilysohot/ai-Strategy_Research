@@ -682,6 +682,15 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # is turn-aligned and applied when the dump is written, so the next run
     # replays a byte-stable prefix until the next cut (issue 01 §9.7).
     replay_max_turns = int(agent_cfg.get("replay_max_turns", 10) or 0)
+    # Size bound for the replay (issue 01 §9.20): a turn count is not a size, and a
+    # dump written just under the provider's ceiling must not become an
+    # un-runnable next request. Unset → half the profile's input budget; an
+    # explicit 0 disables the bound.
+    raw_replay_tokens = agent_cfg.get("replay_max_tokens")
+    if raw_replay_tokens is None:
+        replay_max_tokens = max_input_tokens // 2 if max_input_tokens > 0 else 0
+    else:
+        replay_max_tokens = int(raw_replay_tokens or 0)
     # See the sibling call in agent_team: the sglang doctor covers the compose
     # path only, and nothing checked the values the loop is actually built from.
     check_context_budget(
@@ -984,6 +993,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 session_id=str(metadata.get("session_id") or ""),
                 model_name=model_name,
                 max_replay_turns=replay_max_turns,
+                max_replay_tokens=replay_max_tokens,
             )
         )
     if not direct:
@@ -1159,6 +1169,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             thinking_format=thinking_format,
             pipeline_id="stateful-react-agent",
             node_id="react_agent",
+            session_id=str(metadata.get("session_id") or ""),
         )
     else:
         replay_messages = None

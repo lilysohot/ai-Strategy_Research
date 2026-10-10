@@ -13,6 +13,7 @@ from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    MATERIAL_RELATION_RULE_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
@@ -2846,7 +2847,11 @@ def test_relation_selector_owns_pair_identity_and_exact_source_window() -> None:
     assert "直接给出所问数值、名单" in prompt
     assert "纠正问题中的错误前提" in prompt
     assert "只回答了同一轮中的另一个问题" in prompt
-    assert "说话人对自己刚提出假设的显式修正" in prompt
+    assert "说话人明确更正自己刚提出的命题" in prompt
+    assert MATERIAL_RELATION_RULE_VERSION == "material-relation-rules-v2"
+    assert "单有“但/然而/不过”不成立" not in prompt
+    assert "“但/然而/不过”等转折词本身不是成立条件" in prompt
+    assert "反驳、限制、转折" not in prompt
     assert "直接给出所问数值、名单" not in legacy_prompt
 
     raw = json.dumps(
@@ -3169,6 +3174,129 @@ def test_question_group_v2_uses_boolean_non_answer_terminals() -> None:
     assert relations == []
     assert incomplete is True
     assert counts["invalid_decisions"] == 1
+
+
+def test_question_group_v2_downgrades_plain_but_across_periods_to_absent() -> None:
+    packet = EvidencePacket(
+        packet_id="packet",
+        locator="page:1",
+        kind="prose",
+        text="22年到23年看报表是近几年比较好的业绩，但今年到明年肯定更好。",
+    )
+
+    def endpoint(
+        item_id: str,
+        quote: str,
+        semantic_type: str,
+        temporal_frame: str,
+    ) -> MaterialItem:
+        start = packet.text.index(quote)
+        return MaterialItem(
+            item_id=item_id,
+            text=quote,
+            semantic_type=semantic_type,  # type: ignore[arg-type]
+            statement_role="answer",
+            speech_role="answer",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame=temporal_frame,  # type: ignore[arg-type]
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=start,
+                    end=start + len(quote),
+                ),
+            ),
+        )
+
+    items = [
+        endpoint("history", "22年到23年看报表是近几年比较好的业绩，", "fact", "retrospective"),
+        endpoint("outlook", "但今年到明年肯定更好。", "forecast", "contemporaneous"),
+    ]
+    pair = {
+        "candidate_pair_id": "pair_1f74637d78897251",
+        "from_item": "outlook",
+        "to_item": "history",
+        "allowed_type": "challenges",
+    }
+    raw = json.dumps(
+        {"record_type": "relation_result", "relation_index": 0, "is_present": True}
+    )
+
+    relations, incomplete, counts = _relations_from_question_group_results(
+        raw,
+        packet,
+        "source",
+        [pair],
+        {item.item_id: item for item in items},
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+
+    assert relations == []
+    assert incomplete is False
+    assert counts["invalid_decisions"] == 0
+
+
+def test_question_group_v2_keeps_explicit_self_correction_challenge() -> None:
+    packet = EvidencePacket(
+        packet_id="packet",
+        locator="page:1",
+        kind="prose",
+        text="前面说今年增长不准确，应更正为今年下降。",
+    )
+
+    def endpoint(item_id: str, quote: str) -> MaterialItem:
+        start = packet.text.index(quote)
+        return MaterialItem(
+            item_id=item_id,
+            text=quote,
+            semantic_type="opinion",
+            statement_role="claim",
+            speech_role="statement",
+            perspective="source_explicit",
+            speaker_ref="speaker",
+            polarity="affirmed",
+            temporal_frame="contemporaneous",
+            evidence=(
+                MaterialEvidence(
+                    source_rev="source",
+                    packet_id=packet.packet_id,
+                    locator=packet.locator,
+                    quote=quote,
+                    start=start,
+                    end=start + len(quote),
+                ),
+            ),
+        )
+
+    items = [endpoint("old", "今年增长"), endpoint("correction", "应更正为今年下降")]
+    pair = {
+        "candidate_pair_id": "pair-explicit-correction",
+        "from_item": "correction",
+        "to_item": "old",
+        "allowed_type": "challenges",
+    }
+    raw = json.dumps(
+        {"record_type": "relation_result", "relation_index": 0, "is_present": True}
+    )
+
+    relations, incomplete, counts = _relations_from_question_group_results(
+        raw,
+        packet,
+        "source",
+        [pair],
+        {item.item_id: item for item in items},
+        protocol=MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    )
+
+    assert incomplete is False
+    assert counts["invalid_decisions"] == 0
+    assert len(relations) == 1
+    assert relations[0].type == "challenges"
 
 
 def test_question_group_selector_fails_closed_on_duplicate_and_missing_terminals() -> None:

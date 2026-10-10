@@ -1,0 +1,75 @@
+{
+  "authorization": {
+    "reviewer": "xyl",
+    "signed_at": "2026-10-10",
+    "utility_gold_status": "human_signed_off"
+  },
+  "created_on": "2026-10-10",
+  "delivery_pack_hashes": {
+    "Q1": {
+      "A": "sha256:5114ccb5e9e4e467518c812c9110067c1a55b536047ea01565eb8cecd433beab",
+      "B": "sha256:93f184e56c92042829a4b2d23b3a22689de63da27531bd5174a32e8d8ba99053"
+    },
+    "Q2": {
+      "A": "sha256:70f1570d60c323cffb3b280591c8f6937404b7fd5539b15f550637d03af30294",
+      "B": "sha256:0b79e1670baae07bb74089e7310d942f5055f598bdbe7d5191912d5d4c8283f6"
+    },
+    "Q3": {
+      "A": "sha256:6942ce2f514f57965dfd24cd27788bc2beb2d2c35f160d25326265a7cbf28f40",
+      "B": "sha256:c496472de4f009d353d01d957a8408a45724a65106baddae661c29e5d8c96d1a"
+    },
+    "Q4": {
+      "A": "sha256:1608065dbef926e9496f5ac1fd8494698d8203cf15b5bdc94f729622aadea8b9",
+      "B": "sha256:cd045c83bafe900aa1e77dc7483bd5a1349f0938bdc57d4a2befa5dbbbc5b351"
+    },
+    "Q5": {
+      "A": "sha256:a00088678c1eddc453503c0dc02bddf93b280e8ce43c1b4f9bc08f51aa2875af",
+      "B": "sha256:21f1f6c75189750bfe3644222cbedce0234e967544c84d219a2c991f29e2cc70"
+    }
+  },
+  "experiment": {
+    "automatic_retries_per_cell": 0,
+    "concurrency": 1,
+    "independent_single_turn_contexts": true,
+    "judge_calls": 0,
+    "main_runs_max": 10,
+    "max_output_tokens": 2048,
+    "order_derivation": "sha256(signed_gold_hash|issue26-order-v1|cell), ascending",
+    "production_database_access": 0,
+    "publication_calls": 0,
+    "relation_extraction_calls": 0,
+    "run_order": [
+      "Q2-A",
+      "Q1-B",
+      "Q1-A",
+      "Q3-A",
+      "Q4-B",
+      "Q2-B",
+      "Q4-A",
+      "Q5-B",
+      "Q3-B",
+      "Q5-A"
+    ],
+    "temperature": 0.0,
+    "tools": []
+  },
+  "immutable_inputs": {
+    "batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+    "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+    "human_review_sha256": "sha256:972df9b08bb09f377bdd6981b8d94bb01630ec2a218026f66531d07a395ab275",
+    "issue26_sha256": "sha256:2611efa194ca5013c332e194fa4360faba1d0590de33653892c73dbcc91aee3f",
+    "issue27_sha256": "sha256:0aa585f6ee8bf00f76ea1e21b7323674dcc5d4b7833280c75721fb9bf8eaa983",
+    "items_payload": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+    "relations_payload": "sha256:a4af367954dc9a6214d3b1f87f71c6eedb85a78225d6ead9bfe5a5db18deacfb",
+    "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+    "utility_gold_sha256": "sha256:7d65f60d29bf6517e346ba7cfe6b8bb4abed837f5f56a49771a070de5750eef1"
+  },
+  "model": {
+    "api_key_present": true,
+    "base_host": "ark.cn-beijing.volces.com",
+    "provider": "openai",
+    "request_model": "glm-5.3-flash"
+  },
+  "schema_version": "relation-utility-freeze-manifest-1",
+  "status": "frozen_ready_to_execute"
+}

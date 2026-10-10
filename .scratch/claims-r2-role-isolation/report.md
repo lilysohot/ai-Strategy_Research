@@ -5,6 +5,9 @@
   [实施规格](spec.md)和[任务 11](issues/11-bounded-live-trial.md)。截至 2026-10-09，质量门、relations、
   正向发布/query/delivery/context_use 与 M_main 消费仍未闭环，不得按本文旧时点描述为“尚未实施”，
   也不得据局部修复宣布生产可用。
+- 2026-10-10 最终价值裁决：Issue 26 的 5 题、10 次主线配对消融已经关闭默认 relation 富化；R2
+  默认交付回到 items-only，relations 只保留为非阻断、按需实验能力。该裁决不撤销下文作为历史设计
+  和执行记录的 relation Interface，但覆盖任何“relations 仍是当前 R2 验收前置项”的旧表述。
 - 依据：当前仓库实现、既有语料执行计划，以及 20260925-182401+0800-react-75c6 运行审计。
 
 > **2026-10-08 当前执行约束**：本报告中“完整表格”“可验证表格”均须解释为已经独立核验完整、
@@ -1135,6 +1138,29 @@ known-error answers 与五条此前正确的 answers/challenges 组成，显示�
 调用、不修改 prompt、不降低质量门、不根据本轮结果调整 gold-v2。若业务仍需 relation 自动抽取，后续
 应作为新的模型/确定性混合算法路线立项，而不是继续修补本节点。publication、query、delivery、
 context_use、M_main 和生产数据库均为 0。
+
+## 31. 2026-10-10 执行增补：relation 下游价值裁决与 R2 收口
+
+Issue 26 在用户签认 utility gold 后，使用同一冻结 snapshot、相同 items、相同主线模型和独立单轮上下文
+完成 5 题 × A/B 共 10 次真实运行。A 只交付 items；B 交付完全相同的 items，并增加 Issue 25 冻结
+relations。执行模型为冻结时配置实际解析出的 `glm-5.3-flash`，temperature=0，并发 1；10/10 成功，
+每格恰好一次，无自动补跑和工具调用。relation/Claims/items 抽取、judge、生产 query、publication 与
+生产数据库访问均为 0。
+
+协议审计确认 10 个输出均为合法 JSON，claim item ID 和正文引用均属于实际消费账。用户在不知道 A/B
+身份的情况下逐题裁定并签认后，零调用解盲结果为：Q1、Q4 的 items-only baseline 更好，Q2、Q3
+相同，Q5 控制题相同；relation treatment 在四个关系题中提升 0、回退 2、持平 2。Q1 treatment 出现
+不可追溯表述，Q4 treatment 留下错误 challenges 边诱发的“挑战/刷新”语义痕迹。
+
+B 相对 A 的中位输入 token 增加 24.33%，中位总 token 增加 40.74%。因此 treatment 既没有达到
+“Q1—Q4 至少提升 3 题且其余不回退”的保留门，也满足“成本增加超过 20% 而主质量不提升”的止损条件。
+最终政策是：默认只交付 `material_items`，relations 不再阻断 R2 验收或发布，只允许在新的明确业务
+问题和独立价值门下按需重评；R2 当前验收重心回到 items 的原子性、限定/否定/条件和证据完整性。
+
+Issue 27 同时把 `challenges` 收紧为显式命题冲突：单有“但/然而/不过”不能成立，controller 对缺少
+显式纠正/否定线索的 positive terminal 归一为 absent。固定假边在零调用回放中移除；Issue 25 的 12 条
+旧 challenges 反事实保留 2、降级 10，未改写冻结产物或 gold-v2。该防护和 88 项通过的回归测试继续
+保留，但不因此复活已经关闭的默认 relation 路线。
 
 ## 附录：依据与源码入口
 

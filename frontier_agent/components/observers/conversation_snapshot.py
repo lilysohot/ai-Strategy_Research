@@ -40,6 +40,7 @@ from frontier_agent.core.messages import (
     for_wire,
     system_msg,
 )
+from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -117,31 +118,70 @@ def validate_messages(messages: Any) -> str | None:
     return None
 
 
-def trim_to_turns(
-    messages: list[Message], max_turns: int
-) -> tuple[list[Message], dict[str, Any] | None]:
-    """Drop the oldest whole turns so at most *max_turns* user turns survive.
+def _keep_from(messages: list[Message], cut: int) -> list[Message]:
+    """The kept head: the system prompt plus everything from *cut* on."""
+    return [messages[0], *messages[cut:]] if messages else []
 
-    Cutting on a ``user`` boundary (never mid-turn) is what keeps tool pairing
-    intact, and index 0 — the system prompt — is never dropped. ``max_turns <= 0``
-    disables the bound, mirroring the repo's "0 disables the bound" convention.
+
+def trim_to_turns(
+    messages: list[Message], max_turns: int, *, max_tokens: int = 0
+) -> tuple[list[Message], dict[str, Any] | None]:
+    """Drop the oldest whole turns until both bounds are satisfied.
+
+    Cutting on a ``user`` boundary (never mid-turn) keeps tool pairing intact, and
+    index 0 — the system prompt — is never dropped. ``<= 0`` disables a bound,
+    mirroring the repo's "0 disables the bound" convention.
+
+    Two bounds, because a turn count is not a size. A run may legally end just
+    under the provider's input-token ceiling — the web profile's tiered compaction
+    triggers at 80% of the context window — and *replaying* that dump plus a new
+    turn is what would push the next run's first request over the ceiling, where
+    no in-run compaction can help. The token bound is therefore the guard that
+    keeps a replay from becoming an un-runnable request.
 
     Trimming happens when the dump is *written*, not when it is read: the dump is
     the next run's baseline, so the prefix stays byte-stable until the next cut. A
     read-time sliding window would shift every turn and lose the whole cache.
     """
-    if max_turns <= 0:
+    if max_turns <= 0 and max_tokens <= 0:
         return messages, None
     starts = [idx for idx, message in enumerate(messages) if message.get("role") == "user"]
-    if len(starts) <= max_turns:
+    cut = 1
+    cut_for_turns = False
+    if max_turns > 0 and len(starts) > max_turns:
+        cut = starts[len(starts) - max_turns]
+        cut_for_turns = True
+    dropped_for_tokens = 0
+    if max_tokens > 0:
+        while True:
+            if estimate_tokens(canonical_json(_keep_from(messages, cut))) <= max_tokens:
+                break
+            following = next((idx for idx in starts if idx > cut), None)
+            if following is None:
+                break
+            cut = following
+            dropped_for_tokens += 1
+    if cut == 1 and dropped_for_tokens == 0:
         return messages, None
-    cut = starts[len(starts) - max_turns]
-    return [messages[0], *messages[cut:]], {
-        "dropped_turns": len(starts) - max_turns,
-        "kept_turns": max_turns,
+
+    kept = _keep_from(messages, cut)
+    kept_turns = sum(1 for message in kept if message.get("role") == "user")
+    reasons = []
+    if cut_for_turns:
+        reasons.append(f"max_replay_turns={max_turns}")
+    if dropped_for_tokens:
+        reasons.append(f"replay_max_tokens={max_tokens}")
+    trim: dict[str, Any] = {
+        "dropped_turns": len(starts) - kept_turns,
+        "kept_turns": kept_turns,
         "cut_at": cut,
-        "reason": f"over max_replay_turns={max_turns}",
+        "reason": "over " + " and ".join(reasons),
     }
+    if max_tokens > 0:
+        trim["token_budget"] = max_tokens
+        trim["est_tokens"] = estimate_tokens(canonical_json(kept))
+        trim["dropped_for_tokens"] = dropped_for_tokens
+    return kept, trim
 
 
 def build_dump(
@@ -160,10 +200,11 @@ def build_dump(
     turns_used: int = 0,
     stopped_by: str = "",
     max_replay_turns: int = 0,
+    max_replay_tokens: int = 0,
 ) -> dict[str, Any]:
     """Render the dump document (header + trimmed message list)."""
     wire = for_wire(_wire_copy(messages))
-    trimmed, trim = trim_to_turns(wire, max_replay_turns)
+    trimmed, trim = trim_to_turns(wire, max_replay_turns, max_tokens=max_replay_tokens)
     return {
         "schema": SCHEMA,
         "run_id": run_id,
@@ -192,6 +233,7 @@ def select_replay(
     thinking_format: str,
     pipeline_id: str = "",
     node_id: str = "",
+    session_id: str = "",
 ) -> tuple[list[Message] | None, dict[str, Any]]:
     """Validate a transported dump; return ``(messages, decision)``.
 
@@ -225,6 +267,11 @@ def select_replay(
         if expected and str(doc.get(field) or "") != expected:
             decision["reason"] = f"{field} mismatch"
             return None, decision
+    if session_id and str(doc.get("session_id") or "") != session_id:
+        # Defence in depth: the server already scopes its lookup to this session,
+        # but the dump carries its own id — check it rather than trust the caller.
+        decision["reason"] = "session_id mismatch"
+        return None, decision
     if str(doc.get("thinking_format") or "") != thinking_format:
         decision["reason"] = "thinking_format mismatch"
         return None, decision
@@ -290,6 +337,7 @@ class ConversationSnapshotObserver(BaseObserver):
         session_id: str = "",
         model_name: str = "",
         max_replay_turns: int = 0,
+        max_replay_tokens: int = 0,
     ) -> None:
         """Args:
         output_path: Where the dump is written (atomic replace).
@@ -303,6 +351,11 @@ class ConversationSnapshotObserver(BaseObserver):
             ``reasoning_content`` / ``none``); a profile change between runs
             makes the replayed assistant shape wrong even if it is stable.
         max_replay_turns: Keep at most this many user turns (``0`` = no cap).
+        max_replay_tokens: Keep the message list under this estimated token
+            budget by dropping older turns (``0`` = no cap). Guards the next
+            run's *first* request: a dump written just under the provider's
+            ceiling would otherwise replay past it, where nothing in the run
+            can compact it back.
         """
         self._path = Path(output_path)
         self._system_prompt = system_prompt
@@ -316,6 +369,7 @@ class ConversationSnapshotObserver(BaseObserver):
         self._session_id = session_id
         self._model_name = model_name
         self._max_replay_turns = max_replay_turns
+        self._max_replay_tokens = max_replay_tokens
 
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         try:
@@ -354,6 +408,7 @@ class ConversationSnapshotObserver(BaseObserver):
             turns_used=int(getattr(result, "turns_used", 0) or 0),
             stopped_by=str(getattr(result, "stopped_by", "") or ""),
             max_replay_turns=self._max_replay_turns,
+            max_replay_tokens=self._max_replay_tokens,
         )
         self._atomic_write(document)
 

@@ -1,0 +1,43 @@
+{
+  "delivery_contract": "material_items_only",
+  "material_items": [
+    {
+      "evidence": [
+        {
+          "end": 1433,
+          "locator": "chunk:copper-p1",
+          "quote": "每万吨的资本开支有多大？",
+          "start": 1421
+        }
+      ],
+      "item_id": "itm_ad212e8991b5916a",
+      "polarity": "unknown",
+      "semantic_type": "unknown",
+      "speech_role": "question",
+      "statement_role": "question",
+      "temporal_frame": "unknown",
+      "text": "每万吨铜箔的设备资本开支有多大"
+    },
+    {
+      "evidence": [
+        {
+          "end": 1524,
+          "locator": "chunk:copper-p1",
+          "quote": "我说的是主设备，大概在2.5到3个亿。",
+          "start": 1505
+        }
+      ],
+      "item_id": "itm_f0f1413e119df47c",
+      "polarity": "affirmed",
+      "semantic_type": "fact",
+      "speech_role": "answer",
+      "statement_role": "answer",
+      "temporal_frame": "unknown",
+      "text": "我说的是主设备，大概在2.5到3个亿。"
+    }
+  ],
+  "question": "根据材料，每万吨铜箔主设备的资本开支大约是多少？请明确金额口径，并引用材料依据。",
+  "question_id": "Q1",
+  "schema_version": "relation-utility-delivery-pack-1",
+  "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080"
+}

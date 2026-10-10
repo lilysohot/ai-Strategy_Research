@@ -43,6 +43,7 @@ _TOOLS = [
 _TOOL_NAMES = ["alpha", "beta"]
 _PIPELINE = "stateful-react-agent"
 _NODE = "react_agent"
+_SESSION = "sess-1"
 
 
 @pytest.fixture
@@ -102,6 +103,7 @@ def _dump(messages: list[dict] | None = None, **overrides: Any) -> dict:
         "thinking_format": "none",
         "pipeline_id": _PIPELINE,
         "node_id": _NODE,
+        "session_id": _SESSION,
     }
     kwargs.update(overrides)
     return build_dump(**kwargs)
@@ -115,6 +117,7 @@ def _select(document: dict, **overrides: Any) -> tuple[list[dict] | None, dict]:
         "thinking_format": "none",
         "pipeline_id": _PIPELINE,
         "node_id": _NODE,
+        "session_id": _SESSION,
     }
     kwargs.update(overrides)
     return select_replay(json.dumps(document, ensure_ascii=False), **kwargs)
@@ -164,6 +167,7 @@ def test_non_wire_keys_never_reach_the_dump() -> None:
         ({"thinking_format": "tag"}, "thinking_format mismatch"),
         ({"pipeline_id": "agent_team"}, "pipeline_id mismatch"),
         ({"node_id": "other"}, "node_id mismatch"),
+        ({"session_id": "sess-2"}, "session_id mismatch"),
     ],
 )
 def test_replay_is_refused_when_the_prefix_config_moved(
@@ -295,6 +299,41 @@ def test_zero_disables_the_cap() -> None:
 
     assert trim is None
     assert len(trimmed) == 9
+
+
+def test_the_token_budget_drops_older_turns_when_a_turn_count_is_not_a_size() -> None:
+    """Token count, not turn count, is what the provider's ceiling answers to.
+
+    A run may legally end just under its input ceiling; replaying that dump plus
+    the new turn is what would push the next run's first request over it — and no
+    in-run compaction can help there, because it never gets to run.
+    """
+    from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
+
+    messages = [system_msg(_SYSTEM)]
+    for index in range(1, 4):
+        messages.append(user_msg(f"Q{index} " + "填" * 400))
+        messages.append(assistant_msg(f"A{index} " + "答" * 400))
+    messages.append(user_msg("Q4 short"))
+    messages.append(assistant_msg("A4 short"))
+
+    full = estimate_tokens(canonical_json(messages))
+    document = _dump(
+        messages=messages,
+        max_replay_turns=10,
+        max_replay_tokens=full // 2,
+    )
+
+    kept = document["messages"]
+    user_contents = [m["content"] for m in kept if m["role"] == "user"]
+    assert user_contents[-1] == "Q4 short"
+    assert f"Q1 {'填' * 400}" not in user_contents  # the oldest turn is gone
+    assert len(user_contents) < 4
+    assert kept[0] == system_msg(_SYSTEM)
+    assert document["trim"]["token_budget"] == full // 2
+    assert document["trim"]["dropped_for_tokens"] >= 1
+    assert document["trim"]["est_tokens"] <= full // 2
+    assert validate_messages(kept) is None
 
 
 # ── the observer ─────────────────────────────────────────────────────
@@ -567,7 +606,8 @@ async def _new_user_id() -> uuid.UUID:
     from server.store import create_user
 
     user = await create_user(
-        username=f"ctx-{uuid.uuid4().hex[:10]}", password_hash="synthetic",
+        username=f"ctx-{uuid.uuid4().hex[:10]}",
+        password_hash="synthetic",
     )
     return user.id
 
@@ -601,7 +641,9 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
     monkeypatch.setattr(orch, "_acquire_slot", AsyncMock())
     monkeypatch.setattr(orch, "_release_slot", AsyncMock())
     monkeypatch.setattr(
-        orch_mod.Orchestrator, "_pump_frames", AsyncMock(return_value=None),
+        orch_mod.Orchestrator,
+        "_pump_frames",
+        AsyncMock(return_value=None),
     )
 
     captured: dict[str, dict] = {}
@@ -610,7 +652,9 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
         captured[run_id] = dict(params)
         proc = SimpleNamespace(returncode=0, stdout=None, pid=0)
         return orch_mod.RunHandle(
-            run_id=run_id, session_id=params["session_id"], proc=proc,
+            run_id=run_id,
+            session_id=params["session_id"],
+            proc=proc,
         )
 
     monkeypatch.setattr(orch_mod.Orchestrator, "_launch", fake_launch)
@@ -659,8 +703,11 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
     monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=False))
     chat_run = await _seed("chat q2")
     await orch._spawn(
-        run_id=chat_run, session_id=session_id, session_uuid=session_uuid,
-        prompt="chat q2", user_id=user_id,
+        run_id=chat_run,
+        session_id=session_id,
+        session_uuid=session_uuid,
+        prompt="chat q2",
+        user_id=user_id,
     )
     assert captured[chat_run]["_continuity"] == "on"
     assert captured[chat_run]["_prior_conversation"] == str(dump)
@@ -668,8 +715,11 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
     monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=True))
     watch_run = await _seed("监控触发：x")
     await orch._spawn(
-        run_id=watch_run, session_id=session_id, session_uuid=session_uuid,
-        prompt="监控触发：x", user_id=user_id,
+        run_id=watch_run,
+        session_id=session_id,
+        session_uuid=session_uuid,
+        prompt="监控触发：x",
+        user_id=user_id,
     )
     assert captured[watch_run]["_continuity"] == "off"
     assert captured[watch_run]["_prior_conversation"] is None
@@ -704,7 +754,8 @@ async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, 
             return {"final_answer": "ok"}
 
     monkeypatch.setattr(
-        "benchmarks.public.core.kernel_adapter.BenchmarkSession", FakeBenchmarkSession,
+        "benchmarks.public.core.kernel_adapter.BenchmarkSession",
+        FakeBenchmarkSession,
     )
     monkeypatch.setattr(
         "server.config.run_dir_for",
@@ -712,10 +763,21 @@ async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, 
     )
 
     args = Namespace(
-        run_id=run_id, session_id="s", turn_index=1, prompt="监控触发：x",
-        prompt_addendum="", pipeline_id="stateful-react-agent", backend="native",
-        wall_time=10, max_turns=5, model="", base_url="", api_key="",
-        agent_tools="", business_prefix=1, continuity="off",
+        run_id=run_id,
+        session_id="s",
+        turn_index=1,
+        prompt="监控触发：x",
+        prompt_addendum="",
+        pipeline_id="stateful-react-agent",
+        backend="native",
+        wall_time=10,
+        max_turns=5,
+        model="",
+        base_url="",
+        api_key="",
+        agent_tools="",
+        business_prefix=1,
+        continuity="off",
     )
     env_snapshot = dict(os.environ)
     try:

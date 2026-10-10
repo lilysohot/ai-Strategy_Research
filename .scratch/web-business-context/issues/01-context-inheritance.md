@@ -528,6 +528,31 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 **覆盖缺口（如实记）**：watch 路径的**节点内分支**（不注册 observer、`continuity_disabled` 决策）目前只有接线级单测 + 代码阅读，**没有端到端实跑** —— 真跑需要 `watch_rule → watch_event → watch_event_run` 的夹具链，本机没有廉价的构造办法。
 
+### 9.20 O1/O3 落地（2026-10-10，缺口自查后的处置）
+
+**O1 重放加 token 上限（可用性守卫）**
+- 落点：`conversation_snapshot.py::trim_to_turns(messages, max_turns, *, max_tokens=0)` —— 在轮数上限之外再叠一层 token 预算；超预算继续按 `user` 边界丢最旧轮（**永不产生孤儿 tool 消息**，system 永不丢）。`trim` 增加 `token_budget / est_tokens / dropped_for_tokens`，**仅在预算生效时出现**（纯轮数上限时的字段形状与值不变）。
+- 预算取值（节点）：`agent_cfg["replay_max_tokens"]`；**未设** → `max_input_tokens // 2`（web ≈ 114k，给本轮新增与模型输出留余量）；**显式 0** → 关闭。
+- 为什么必须有：web profile `max_len=262144`、`max_input_tokens=229376`，tiered 压缩触发点 ≈ `0.8 × max_len ≈ 209k` ⇒ **一轮可以合法地结束在 209k–229k**；重放它 + 本轮新增 = **首个请求就越界**，而那时 run 内的压缩还没机会介入 ⇒ provider 硬失败（不是缓存问题，是跑不起来）。
+- 过渡期观察项：旧 dump（无预算）不受追溯影响——读侧不设上限，越界风险随"下一轮写新 dump"自然消化。
+
+**O3 `select_replay` 增加 session 校验（防御纵深）**
+- dump 头里的 `session_id` 此前只记不校；现在读侧比对（**只有调用方给了期望值才比**，空值不阻断），不一致 → `skipped: session_id mismatch`。
+
+**门禁**
+- 单测 **34 条全绿**（新增：token 预算丢轮且配对完好、session 不匹配进入拒绝矩阵）。
+- 目标测试集 **106 passed**；`ruff check` 干净；两个新文件 `ruff format --check` 干净；`pyright` 0 错。
+- 复跑（3 轮两臂）**全部判据 PASS**：treatment 轮 2/3 复用 16,384（占上一轮 16,415 / 16,817 的 0.998 / 0.974），control 恒 12,288，差值 4,096；`replay=used` ×2、前缀逐字节为上一轮 dump 前缀 ✓。证据 `evidence/…/run-20261010-O1O3/`。
+
+**只记录、不改代码（本轮明示的两条已知边界）**
+
+| # | 边界 | 影响 |
+|---|---|---|
+| O4 | 带附件那一轮把 `--prompt-addendum` 拼进 `_sys_prompt_addendum` ⇒ 该轮 system prompt 与前后都不同 | **一次跳过、下一轮自动恢复**（被跳过的那轮也写 dump，于是下一轮重新对齐）；不影响正确性 |
+| O8 | 会话中途绑定账户让 `business_prefix` 由 False 翻 True ⇒ 工具集与策略文本变一次 | 同上，一次跳过再恢复 |
+
+**仍待裁决**：O5 保留期（`run_retention.py` 默认 `keep_days=30` 会连 dump 一起 `rmtree`，连续性静默退回新会话）——"做/记录"待示下。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
@@ -541,3 +566,5 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 2026-10-10：R4/R5 修订获签认后跑 4 轮确认（§9.17）：**全部判据 PASS**（轮 3/4 复用 96.1%/94.6%；控制臂作为对照只复用共享块 12,288，差值 4,096 达标；`t2=0` 未复现）。同时如实留档：我第一版 R5 的阈值（上一轮 prompt 的 50%）**不可达**，已改为 R5'（方向性 + 非共享部分的 50%），原判据保留在 `superseded_criteria`。另按"注意 web 端架构设计"做了影响面核查（§9.18）：4 条需记录/1 条待裁决（watch_event 自动分析是否继承聊天历史）。
 
 2026-10-10 裁决并落地：**watch 类 Run 不继承上下文**（研报投资策略要上下文干净、成本可控）。落地为"两个方向都关"：watch Run 不读旧 dump、也不写新 dump（`is_watch_run` → `--continuity off` → 节点既不重放也不注册 dump observer），见 §9.19。门禁：单测 32 条、目标集 104 passed、ruff/pyright 干净；聊天路径用新的 3 轮两臂复跑确认**全部判据 PASS**（`run-20261010-watch-ruling/`）。覆盖缺口如实记：watch 的节点内分支没有端到端实跑（缺 watch_rule→event→run 夹具链）。
+
+2026-10-10 缺口自查后执行 O1/O3（§9.20）：重放补 **token 上限**（`trim_to_turns(max_tokens=…)`，节点默认取 `max_input_tokens // 2`，显式 0 关闭）——防的是"上一轮合法结束在 209k–229k ⇒ 下一轮首请求越界"这类跑不起来的失败；`select_replay` 补 **session 校验**。门禁：单测 34 条、目标集 106 passed、ruff/pyright 干净、3 轮两臂复跑全 PASS（`run-20261010-O1O3/`）。同轮把 **O4（带附件轮）与 O8（中途绑定账户）** 记为"一次跳过再恢复"的已知边界；**O5 保留期**仍待裁决。`docs/tech-stack.md` 已同步新增的两个 run 产物（O2）。
