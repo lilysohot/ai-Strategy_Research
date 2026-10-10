@@ -67,6 +67,9 @@
 | 25 | [Relation boolean v2 最终有界真实服从性复验](issues/25-final-relation-live-compliance.md) | 24 零调用通过、独立授权 | 4/4 协议完整；gold-v2 仅 30/38，按终止规则关闭路线 |
 | 26 | [relation 层对研报抽取价值的有界配对验证](issues/26-relation-layer-value-validation.md) | 25、签认价值金标、独立授权 | 5 题 × A/B；提升 0/4、回退 2/4、持平 2/4且触发成本止损；关闭默认 relation 富化 |
 | 27 | [challenges 显式命题冲突规则](issues/27-challenges-rule-propositional-conflict.md) | 24；不依赖或复活 25 | 零调用高精度防护和回归测试；仅供未来按需路径，不构成当前 relation 验收重启 |
+| 28 | [items-only 质量门零调用预注册](issues/28-items-only-quality-gate-preregistration.md) | 27 关闭 relation 后；10 冻结 48-item 金标 | 零调用冻结 items-only 质量门与 5 阶段消费闭环；真实复验须独立授权 |
+| 29 | [items 金标全量语义审计](issues/29-items-gold-semantic-audit.md) | 28 预注册后；10 冻结 48-item 金标 | 零调用只读复核 48 条 items 原子性/可评分性/字段裁定并澄清契约签认缺口；发现缺陷须另立修正票 |
+| 30 | [items 评分契约补签与 condition 读路径定义](issues/30-items-scoring-contract-condition-readpath.md) | 29 审计 F1/F2/F3；用户裁定路线 A | 不改金标，补签契约并定义 condition 读路径；签认后同步再绑定 Issue 28 门 |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
@@ -115,7 +118,20 @@ boolean v2；4/4 请求成功并形成 4 completed、333/333 决定、0 missing/
 提升 0/4、回退 2/4、持平 2/4，并使中位输入 token 增加 24.33%，故触发预注册成本止损。27 的
 `challenges` 显式命题冲突防护已通过零调用回放和 88 项回归，但只保留作未来按需实验的安全资产。
 由此，当前 R2 的 relation 修复和验收工作流已关闭；下一阶段只处理 material_items 质量门及其
-items-only 正向消费闭环。
+items-only 正向消费闭环。28 已按此零调用冻结 items-only 质量门（以 Issue 10 的 48-item 冻结金标为
+分母）与 5 阶段消费闭环口径；该冻结不授权任何执行，真实复验须经人工单独授权。
+29 在授权真实复验前对该 48-item 金标做了零调用只读全量语义审计：金标**含义**健全，但发现 condition
+角色 6 条（NT-I09/I15/I19/I29/I35/I39）把原子内容仅存于 `condition` 而 `proposition` 只是标签，与契约
+「只要求 `proposition`、不列 `condition`」冲突；同时评分契约自身 `status=draft_pending_human_review`
+却被 Issue 28 门钉为度量基准，且 `condition_logic` 未进入任何 schema。故 items-only 质量门**执行受阻**，
+冻结金标与 Issue 28 门均不得就地修改，须以 Issue 23 模式另立修正票后再申请复验授权。
+30 已经用户裁定走**路线 A**（不改金标，仅补签契约并定义 condition 读路径），并已落地：评分契约升级并
+签认为 `non-table-selected-target-scoring-contract-v3`（新增 `condition_role_read_path`，规定 condition
+角色 items 的原子命题由非空 `condition` 字段承载、`proposition` 可为标签，并补齐 `compound_condition`
+析取读法与 `condition_logic` 定位），`review_assertions` 与 Issue 28 门高风险断言清单补入 5 条 label-only
+condition 项（NT-I09/I19/I29/I35/I39）；门同步再绑定 v3、`quality_requirements_status` 转 `signed`。
+冻结金标与 freeze-state 字节未变，旧 v2 契约与旧门哈希留存于各自 `revision_history`/`supersedes`。
+Issue 29 的两项门就绪阻塞据此解除；门仍处 `frozen_before_execution`，真实复验须经人工单独授权。
 W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 

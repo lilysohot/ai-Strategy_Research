@@ -1,0 +1,56 @@
+{
+  "schema_version": "items-only-quality-gate-freeze-manifest-1",
+  "created_on": "2026-10-10",
+  "status": "frozen_not_executed",
+  "issue": "28-items-only-quality-gate-preregistration",
+  "role_scope": [
+    "material_items"
+  ],
+  "protocol": "material-atomic-selector-jsonl-v5",
+  "model": "doubao-seed-2.1-lite",
+  "profile_sha256": "sha256:33127e6739a2bf6522026fa770c46f5bc219c9ba3907ba3684035389648105f5",
+  "request_options": {
+    "timeout_seconds": 300.0,
+    "max_output_tokens": 262144,
+    "token_parameter": "max_tokens",
+    "reasoning_effort": "minimal"
+  },
+  "sources": [
+    {
+      "slug": "industrial-fulian-md",
+      "batch_id": "batch:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6",
+      "plan_sha256": "sha256:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "candidate_slot_count": 76,
+      "material_items_attempts_max": 10
+    },
+    {
+      "slug": "optical-module-docx",
+      "batch_id": "batch:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d",
+      "plan_sha256": "sha256:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "candidate_slot_count": 114,
+      "material_items_attempts_max": 14
+    }
+  ],
+  "inputs_sha256": {
+    "frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    "freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    "scoring-contract.json": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "source-prose-units.json": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    "material_semantics.py": "sha256:fd603dca3e95fb23bd67912949144fe0a8e21153424290e6d18f64624653b9ae",
+    "ledger.py": "sha256:f9f4b86c984a331616dca2e65bc39c9ebbe447d7d105d0ecd5bc4887c1406798"
+  },
+  "files_sha256": {
+    "plan-industrial-fulian-md.json": "sha256:74143f76a8e1a9dee4ca19b27d3c0732b4ab9879670b502bddb19a2eb0edf7bd",
+    "plan-optical-module-docx.json": "sha256:aaa50ab48e97175c232ebff43c7f9ca6f27f8ca4cd0c5fdad2e1a934c9757f25",
+    "preregistered-gate.json": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47"
+  },
+  "model_requests_during_freeze": 0,
+  "production_database_access": 0,
+  "holdout_accessed": false,
+  "publication_authorized": false
+}

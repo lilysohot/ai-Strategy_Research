@@ -1,0 +1,380 @@
+{
+  "schema_version": "items-only-quality-gate-preregistration-1",
+  "created_on": "2026-10-10",
+  "status": "frozen_before_execution",
+  "issue": "28-items-only-quality-gate-preregistration",
+  "revision_history": [
+    {
+      "revision": 1,
+      "created_on": "2026-10-10",
+      "scoring_contract_sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "quality_requirements_status": "proposed_pending_human_signoff",
+      "gate_sha256": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47"
+    },
+    {
+      "revision": 2,
+      "rebound_on": "2026-10-11",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "用户于 2026-10-11 指令「按 Issue 30 的提案执行」；依据 Issue 29 审计 F1/F3 与 Issue 30 路线 A。",
+      "changes": [
+        "gold.scoring_contract_sha256 由 v2 哈希 2eb24be7 再绑定至已签认 v3 哈希。",
+        "quality_requirements.metric_basis 由 -v2 改为 -v3。",
+        "quality_requirements_status 由 proposed_pending_human_signoff 转为 signed。",
+        "high_risk_item_assertions_required 增补 label-only condition 项 NT-I09/I19/I29/I35/I39（原清单不变）。",
+        "high_risk_item_annotations 增补上述 5 条注释。",
+        "未改动门阈值、执行要求、授权四项与终态判定；冻结金标与 freeze-state 字节不变。"
+      ]
+    }
+  ],
+  "role_scope": [
+    "material_items"
+  ],
+  "protocol": {
+    "material_items": "material-atomic-selector-jsonl-v5",
+    "extractor_version": "material-semantics-32",
+    "items_validation_version": "material-items-validation-v11",
+    "slot_batching_version": "material-slot-batching-v3",
+    "relations_default_off": true
+  },
+  "gold": {
+    "source": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2",
+    "freeze_manifest_sha256": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    "freeze_state_sha256": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    "frozen_gold_sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "scoring_contract_sha256": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "gold_counts": {
+      "claims": 20,
+      "material_items": 48,
+      "material_relations": 24
+    },
+    "material_items_target_total": 48,
+    "per_source": [
+      {
+        "slug": "industrial-fulian-md",
+        "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "locators": [
+          "char:1393-1655",
+          "char:146-469",
+          "char:2405-2625",
+          "char:25-134",
+          "char:3925-4239",
+          "char:4385-4657",
+          "char:4659-4907",
+          "char:5055-5071",
+          "char:5246-5537",
+          "char:621-855"
+        ]
+      },
+      {
+        "slug": "optical-module-docx",
+        "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "locators": [
+          "body[115]",
+          "body[15]",
+          "body[1]",
+          "body[26]",
+          "body[29]",
+          "body[32]",
+          "body[37]",
+          "body[3]",
+          "body[43]",
+          "body[46]",
+          "body[49]",
+          "body[51]",
+          "body[63]",
+          "body[72]"
+        ]
+      }
+    ]
+  },
+  "execution_requirements": {
+    "claims_attempts": 0,
+    "material_relations_attempts": 0,
+    "automatic_retries": 0,
+    "concurrency": 1,
+    "gold_not_exposed_to_model": true,
+    "production_database_access": 0,
+    "protocol_status_required": "valid",
+    "execution_status_required": "succeeded",
+    "context_status_required": "complete",
+    "failed_batches_max": 0,
+    "partial_batches_max": 0,
+    "missing_duplicate_invalid_max": 0,
+    "material_items_attempts_max": {
+      "industrial-fulian-md": 10,
+      "optical-module-docx": 14
+    },
+    "completed_batches_min": {
+      "industrial-fulian-md": 10,
+      "optical-module-docx": 14
+    }
+  },
+  "quality_requirements_status": "signed",
+  "quality_requirements": {
+    "metric_basis": "non-table-selected-target-scoring-contract-v3",
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+    "material_items_target_total": 48,
+    "target_recall_overall_min": 0.85,
+    "target_recall_per_source_min": 0.8,
+    "candidate_precision_min": 0.8,
+    "unresolved_candidates_max": 0,
+    "accepted_records_total_min": 40,
+    "accepted_records_per_source_min": 20,
+    "role_required_fields": [
+      "proposition",
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "speaker_ref",
+      "polarity",
+      "attribution",
+      "source_stance"
+    ],
+    "semantic_types": [
+      "fact",
+      "forecast",
+      "opinion",
+      "behavior",
+      "unknown"
+    ],
+    "statement_roles": [
+      "claim",
+      "evidence",
+      "condition",
+      "risk",
+      "question",
+      "answer",
+      "other"
+    ],
+    "perspectives": [
+      "source_explicit",
+      "quoted_other",
+      "unknown"
+    ],
+    "high_risk_item_assertions_required": [
+      "NT-I09",
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I19",
+      "NT-I29",
+      "NT-I35",
+      "NT-I37",
+      "NT-I38",
+      "NT-I39",
+      "NT-I42",
+      "NT-I43",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48"
+    ],
+    "high_risk_item_annotations": {
+      "NT-I13": {
+        "condition": "Q3 OCF/扣非净利润 >= 0.6",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "OCF_to_adjusted_profit",
+          "period": "Q3",
+          "comparator": ">=",
+          "value": "0.6",
+          "unit": "ratio"
+        }
+      },
+      "NT-I15": {
+        "condition": "下季 OCF/扣非净利润 < 0.5",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "OCF_to_adjusted_profit",
+          "period": "next_quarter",
+          "comparator": "<",
+          "value": "0.5",
+          "unit": "ratio"
+        }
+      },
+      "NT-I17": {
+        "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+        "condition_logic": {
+          "op": "all",
+          "args": [
+            {
+              "op": "compare",
+              "metric": "gross_margin_change_from_baseline",
+              "baseline": "6.99",
+              "comparator": "<",
+              "value": "-1",
+              "unit": "percentage_points"
+            },
+            {
+              "op": "source_clause",
+              "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+              "inner_operator": "unknown"
+            }
+          ]
+        },
+        "unknown_fields": [
+          "condition_inner_boolean"
+        ]
+      },
+      "NT-I09": {
+        "condition": "毛利率继续下降或Rubin延期",
+        "atomic_proposition_source": "condition",
+        "compound": true,
+        "sub_conditions": [
+          "毛利率继续下降",
+          "Rubin延期"
+        ],
+        "compound_rule": "二元析取（「或」），无 condition_logic；按 condition_role_read_path.compound_condition 计分，命中任一子条件计为部分命中，不得整体匹配。"
+      },
+      "NT-I19": {
+        "condition": "出口管制影响GPU系统集成",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      },
+      "NT-I29": {
+        "condition": "政策变化导致成本上升",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      },
+      "NT-I35": {
+        "condition": "无差别相信所有公司的份额陈述",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      },
+      "NT-I39": {
+        "condition": "海外产能税率增加",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      },
+      "NT-I37": {
+        "semantic_type": "opinion"
+      },
+      "NT-I38": {
+        "semantic_type": "opinion",
+        "polarity": "mixed"
+      },
+      "NT-I42": {
+        "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+        "condition_logic": {
+          "op": "all",
+          "args": [
+            {
+              "op": "range",
+              "metric": "share_price",
+              "lower": "52",
+              "upper": "58",
+              "bounds": "inclusive",
+              "unit": "CNY"
+            },
+            {
+              "op": "source_clause",
+              "text": "无新的大额负面管制公告"
+            }
+          ]
+        }
+      },
+      "NT-I43": {
+        "condition": "毛利率 >= 6.99%",
+        "condition_logic": {
+          "op": "compare",
+          "metric": "gross_margin",
+          "comparator": ">=",
+          "value": "6.99",
+          "unit": "percent"
+        }
+      },
+      "NT-I45": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I46": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I47": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      },
+      "NT-I48": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    }
+  },
+  "consumption_closure": {
+    "chain": [
+      "publish",
+      "positive_query",
+      "delivery",
+      "context_use",
+      "report_reference"
+    ],
+    "zero_call_stages": [
+      "publish",
+      "positive_query"
+    ],
+    "model_call_stages": [
+      "delivery",
+      "context_use",
+      "report_reference"
+    ],
+    "stage_pass_conditions": {
+      "publish": "accepted items artifact is published with stable item ids and verbatim evidence spans; verifiable without any model call",
+      "positive_query": "a positive query with a known-true predicate returns at least one published item whose evidence pointer is correct; zero model calls",
+      "delivery": "published items are delivered into the consuming report context with provenance preserved; requires an authorized live path",
+      "context_use": "delivered items are actually referenced by the report reasoning; requires an authorized live path",
+      "report_reference": "the final report cites the item with traceable evidence back to the signed snapshot; requires an authorized live path"
+    },
+    "claim_boundary": "proves the tested scope is connected only, not full coverage"
+  },
+  "scope_constraints": {
+    "new_gold_allowed": false,
+    "threshold_relaxation_after_execution_allowed": false,
+    "prompt_revision_after_execution_allowed": false,
+    "protocol_or_extractor_change_after_execution_allowed": false,
+    "holdout_accessed": false,
+    "publication_authorized": false,
+    "query_delivery_context_use_authorized": false,
+    "production_database_access_authorized": false
+  },
+  "authorization": {
+    "note": "Every entry must be filled by an explicit human decision; this gate authorizes nothing on its own.",
+    "items_live_extraction": {
+      "authorized": false,
+      "authorized_by": null,
+      "authorized_on": null,
+      "attempts_max": null,
+      "model": null
+    },
+    "publication": {
+      "authorized": false,
+      "authorized_by": null,
+      "authorized_on": null
+    },
+    "positive_query_delivery_context_use": {
+      "authorized": false,
+      "authorized_by": null,
+      "authorized_on": null
+    },
+    "production_database_access": {
+      "authorized": false,
+      "authorized_by": null,
+      "authorized_on": null
+    }
+  },
+  "countersignature": {
+    "required": true,
+    "status": "pending_human_signoff",
+    "reviewer": null,
+    "signed_on": null
+  },
+  "terminal_decision": {
+    "on_pass": "items-only quality gate satisfied; proceed to authorized positive consumption closure",
+    "on_fail": "close current model plus extractor route; no prompt or threshold relaxation; no new gold"
+  }
+}

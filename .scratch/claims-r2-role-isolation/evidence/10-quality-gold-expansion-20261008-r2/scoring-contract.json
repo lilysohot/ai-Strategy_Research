@@ -1,6 +1,40 @@
 {
-  "schema_version": "non-table-selected-target-scoring-contract-v2",
-  "status": "draft_pending_human_review",
+  "schema_version": "non-table-selected-target-scoring-contract-v3",
+  "status": "frozen_signed",
+  "supersedes": {
+    "schema_version": "non-table-selected-target-scoring-contract-v2",
+    "status_at_supersede": "draft_pending_human_review",
+    "sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "note": "v2 未签认即被钉为 Issue 28 门度量基准；本 v3 为其签认后继版本，v2 内容与哈希留存可追溯，不就地覆盖历史。"
+  },
+  "revision_history": [
+    {
+      "revision": "v2",
+      "status": "draft_pending_human_review",
+      "sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+    },
+    {
+      "revision": "v3",
+      "revised_on": "2026-10-11",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "用户于 2026-10-11 指令「按 Issue 30 的提案执行」；依据 Issue 29 语义审计 F1/F2/F3 与 Issue 30 路线 A 提案。",
+      "changes": [
+        "status 由 draft_pending_human_review 转为已签认终态 frozen_signed。",
+        "新增 condition_role_read_path：定义 statement_role == 'condition' 的原子命题读路径。",
+        "condition_role_read_path 含 compound_condition 子规则（复合 condition 按子条件计分）与 required_fields_override（condition 角色追加 condition 为必需字段）。",
+        "matching.items / matching.conditions 引用 condition_role_read_path。",
+        "review_assertions 增补 label-only condition 项 NT-I09/I19/I29/I35/I39。",
+        "未改动 frozen-gold.json 与 freeze-state.json；未改动任何已冻结金标记录。"
+      ]
+    }
+  ],
+  "signoff": {
+    "signed_by": "xyl",
+    "signed_on": "2026-10-11",
+    "statement": "核准本契约 v3 作为 items-only 质量门的已签认度量基准。",
+    "scope_note": "本次签认只定评分契约读路径与度量口径；不代表 items-only 真实复验通过、不代表发布或语境完整。"
+  },
   "source_export": "../10-quality-gold-expansion-20261008-r1/source-prose-units.json",
   "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
   "candidate_input_scope": [
@@ -46,11 +80,20 @@
     "额外正确输出标为 correct_extra，用于候选正确率；不添加到已冻结目标金标，不追溯增加召回分母。",
     "raw 与 validated 候选逐条分别裁定；漏抽、空输出、拒绝、失败保持在目标召回分母。"
   ],
+  "condition_role_read_path": {
+    "applies_to": "statement_role == 'condition'",
+    "atomic_proposition_source": "condition 优先，proposition 兜底",
+    "rule": "condition 角色 items 的原子命题由非空 `condition` 字段承载；`proposition` 可为命名该条件的短标签。scorer 必须把非空 `condition` 值作为可匹配的原子命题；仅当 `condition` 缺失时才以 `proposition` 为准。",
+    "condition_logic": "存在时为规范化/机读形式，仅作辅助，不得作为命题文本参与匹配。",
+    "compound_condition": "当 `condition` 为复合（含 AND/OR 连接多个子条件）时，scorer 必须按子条件计分：各子条件均可匹配，命中任一子条件计为部分命中；复合项不得作为单一原子命题整体匹配。NT-I09（`condition=\"毛利率继续下降或Rubin延期\"`，二元析取、无 `condition_logic`）落此项；NT-I17/NT-I42 已有 `condition_logic` 显式承载复合结构。",
+    "required_fields_override": "statement_role == 'condition' 时，`condition` 追加为必需字段（其余角色不变，避免误伤 NT-I34 等非 condition 角色携带 condition 的情况）。",
+    "audit_reference": "Issue 29 items 金标语义审计 F1；Issue 30 路线 A 提案。"
+  },
   "matching": {
     "mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
     "claims": "独立从候选字段及原文核对主体、指标、期间、数值/区间、单位、实际/预测、约数、归属与来源态度。原文质疑和早期预计等限定必须一并交付。",
-    "items": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。",
-    "conditions": "condition_logic 与 condition_groups 约束值、比较符、单位、基期及 AND/OR。I17 子项内部逻辑不明；保留原文或显式未知均可，擅自填 AND/OR 或去掉门槛不匹配。",
+    "items": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。",
+    "conditions": "condition_logic 与 condition_groups 约束值、比较符、单位、基期及 AND/OR。I17 子项内部逻辑不明；保留原文或显式未知均可，擅自填 AND/OR 或去掉门槛不匹配。condition 角色 items 的原子命题文本按 condition_role_read_path 读取；复合 condition 按该路径的 compound_condition 子规则计分。",
     "relations": "先独立判定两端 item 并一对一建立 candidate_item_id -> gold_record_id，随后比较有向端点、type、source_explicit 和关系原文。允许多条关系共享一个动作端点。",
     "unknowns": "未明确来源保留 unknown；不得猜具体公司、人物或把同源转述当独立证据。",
     "normalization": "数值仅做十进制单位缩放和闭区间规范化；日期和期间保留基准语境；约数不能升级成精确承诺。记录所用规则，不从金标反填候选缺字段。",
@@ -62,7 +105,7 @@
     "duplicates": "同义重复仅第一条可匹配；后续记录 duplicate 计 FP。I16 为唯一止损动作，可供 R08/R09 共用。",
     "selected_projection_precision": "不报告为完整抽取 precision；只看选中目标的候选投影会遗漏 FP。",
     "risk_condition": "按角色分别报告标记记录数；总体仍可按既有 scorer 计算，但 items 与关系相关，不称独立风险场景。",
-    "quality_gate": "当前包和新增裁定口径均待人工签认；未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+    "quality_gate": "本契约 v3（含 condition_role_read_path）已于 2026-10-11 签认，作为度量基准；但 Issue 28 items-only 质量门本身及其计数器签认仍单独进行。未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
   },
   "candidate_adjudication_fields": [
     "candidate_id",
@@ -257,6 +300,36 @@
         "value": "6.99",
         "unit": "percent"
       }
+    },
+    "NT-I09": {
+      "condition": "毛利率继续下降或Rubin延期",
+      "atomic_proposition_source": "condition",
+      "compound": true,
+      "sub_conditions": [
+        "毛利率继续下降",
+        "Rubin延期"
+      ],
+      "compound_rule": "二元析取（「或」），无 condition_logic；按 condition_role_read_path.compound_condition 计分，命中任一子条件计为部分命中，不得整体匹配。"
+    },
+    "NT-I19": {
+      "condition": "出口管制影响GPU系统集成",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-I29": {
+      "condition": "政策变化导致成本上升",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-I35": {
+      "condition": "无差别相信所有公司的份额陈述",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-I39": {
+      "condition": "海外产能税率增加",
+      "atomic_proposition_source": "condition",
+      "compound": false
     },
     "NT-C11": {
       "perspective": "quoted_other",

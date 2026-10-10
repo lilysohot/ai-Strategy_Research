@@ -1,0 +1,210 @@
+{
+  "condition_role_analysis": {
+    "all_condition_items_have_condition_field": true,
+    "condition_items_outside_gate_high_risk_assertions": [
+      "NT-I09",
+      "NT-I19",
+      "NT-I29",
+      "NT-I35",
+      "NT-I39"
+    ],
+    "condition_items_with_condition_logic": [
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "condition_items_with_review_assertion": [
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "condition_items_without_review_assertion": [
+      "NT-I09",
+      "NT-I19",
+      "NT-I29",
+      "NT-I35",
+      "NT-I39"
+    ],
+    "label_only_proposition": [
+      "NT-I09",
+      "NT-I15",
+      "NT-I19",
+      "NT-I29",
+      "NT-I35",
+      "NT-I39"
+    ],
+    "self_contained_proposition": [
+      "NT-I13",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ]
+  },
+  "contract_snapshot": {
+    "condition_required": false,
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+    "material_items_required_fields": [
+      "proposition",
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "speaker_ref",
+      "polarity",
+      "attribution",
+      "source_stance"
+    ],
+    "proposition_required": true,
+    "schema_version": "non-table-selected-target-scoring-contract-v2",
+    "status": "draft_pending_human_review"
+  },
+  "counts": {
+    "condition_role_items": 10,
+    "frozen_counts": {
+      "claims": 20,
+      "material_items": 48,
+      "material_relations": 24
+    },
+    "items_with_condition_field": 11,
+    "material_items_total": 48
+  },
+  "findings": [
+    {
+      "evidence": {
+        "condition_role_items": [
+          "NT-I09",
+          "NT-I13",
+          "NT-I15",
+          "NT-I17",
+          "NT-I19",
+          "NT-I29",
+          "NT-I35",
+          "NT-I39",
+          "NT-I42",
+          "NT-I43"
+        ],
+        "label_only_proposition": [
+          "NT-I09",
+          "NT-I15",
+          "NT-I19",
+          "NT-I29",
+          "NT-I35",
+          "NT-I39"
+        ],
+        "self_contained_proposition": [
+          "NT-I13",
+          "NT-I17",
+          "NT-I42",
+          "NT-I43"
+        ]
+      },
+      "id": "F1",
+      "kind": "gold_serialization_inconsistency",
+      "severity": "high",
+      "statement": "All 10 material_items with statement_role=condition carry a `condition` field, but their `proposition` field is split: 4 items hold a full atomic proposition while 6 hold a non-propositional label whose atomic content lives only in `condition`. The scoring contract requires `proposition` and does not list `condition` in role_required_fields, and matching.items demands '一个原子命题'; a scorer reading the required fields therefore receives a label for the 6 items.",
+      "title": "condition-role items store the atomic proposition inconsistently"
+    },
+    {
+      "evidence": {
+        "contract_status": "draft_pending_human_review",
+        "frozen_gold_sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+        "gate_high_risk_item_assertions_required": [
+          "NT-I13",
+          "NT-I15",
+          "NT-I17",
+          "NT-I37",
+          "NT-I38",
+          "NT-I42",
+          "NT-I43",
+          "NT-I45",
+          "NT-I46",
+          "NT-I47",
+          "NT-I48"
+        ],
+        "gate_quality_requirements_status": "proposed_pending_human_signoff",
+        "preregistered_gate_sha256": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47",
+        "scoring_contract_sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+      },
+      "id": "F2",
+      "kind": "contract_unsigned_gate_basis",
+      "severity": "high",
+      "statement": "The scoring contract's own `status` is 'draft_pending_human_review' and metrics.quality_gate states the package-level and newly-adjudicated thresholds still await human sign-off, yet the freeze README and Issue 28 bind this contract hash as the frozen scoring basis. The gate's measurement basis is therefore not actually signed.",
+      "title": "scoring contract is unsigned but is used as the frozen measurement basis"
+    },
+    {
+      "evidence": {
+        "condition_items_outside_gate_high_risk_assertions": [
+          "NT-I09",
+          "NT-I19",
+          "NT-I29",
+          "NT-I35",
+          "NT-I39"
+        ],
+        "condition_items_with_condition_logic": [
+          "NT-I13",
+          "NT-I15",
+          "NT-I17",
+          "NT-I42",
+          "NT-I43"
+        ],
+        "condition_items_with_review_assertion": [
+          "NT-I13",
+          "NT-I15",
+          "NT-I17",
+          "NT-I42",
+          "NT-I43"
+        ],
+        "condition_items_without_review_assertion": [
+          "NT-I09",
+          "NT-I19",
+          "NT-I29",
+          "NT-I35",
+          "NT-I39"
+        ],
+        "condition_required": false,
+        "proposition_required": true
+      },
+      "id": "F3",
+      "kind": "contract_modeling_gap",
+      "severity": "medium",
+      "statement": "`condition_logic` appears only inside review_assertions for 5 of 10 condition items and is absent from role_required_fields and from any item schema, so the contract defines no read-path for condition-role items; of the 6 label-only items, 5 (NT-I09, NT-I19, NT-I29, NT-I35, NT-I39) are also outside the gate's high_risk_item_assertions_required, so they are neither self-contained nor regression-guarded.",
+      "title": "condition-role item semantics are under-specified in the contract"
+    },
+    {
+      "evidence": {
+        "condition_field_other_role": [
+          "NT-I34"
+        ]
+      },
+      "id": "F4",
+      "kind": "adjudication_note",
+      "severity": "low",
+      "statement": "Near-overlap pair NT-I22 (2026 CPO shipments negligible) vs NT-I33 (CPO has no actual shipments yet) may collide under the duplicates metric; NT-I25 labels the evaluative '良率仍不理想' as semantic_type=fact; NT-I34 carries a `condition` field under statement_role=claim. These are recorded for adjudication and are not themselves treated as defects.",
+      "title": "non-blocking notes for human adjudication"
+    }
+  ],
+  "inputs": {
+    "freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    "frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "preregistered-gate.json": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47",
+    "scoring-contract.json": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+  },
+  "model_calls": 0,
+  "production_database_access": 0,
+  "schema_version": "items-gold-semantic-audit-1",
+  "scope": "read_only_zero_call",
+  "verdict": {
+    "correction_pattern": "Issue 23 (successor freeze + preserve signed original)",
+    "correction_ticket_required": true,
+    "gate_execution_blocked_pending": [
+      "condition-role proposition read-path defined in a signed contract",
+      "scoring contract signed (status no longer draft_pending_human_review)"
+    ],
+    "gold_meaning_sound": true,
+    "in_place_mutation_allowed": false
+  }
+}

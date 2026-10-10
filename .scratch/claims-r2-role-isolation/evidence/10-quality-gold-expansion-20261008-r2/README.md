@@ -23,6 +23,15 @@
 - [scoring-contract.json](scoring-contract.json)：24 个非表格正文单元的候选输入范围、目标集合口径和匹配规则。
 - 正文权威导出继续引用 r1 的 `source-prose-units.json`，来源字节哈希现场复核；不重写历史。
 
+> **契约版本（2026-10-11）**：`scoring-contract.json` 原为
+> `non-table-selected-target-scoring-contract-v2`（`status=draft_pending_human_review`）。
+> 依 Issue 29 语义审计 F1—F3 与 Issue 30 路线 A，本契约升级并签认为
+> `…-v3`（`status=frozen_signed`），新增 `condition_role_read_path`（condition 角色原子命题读路径，
+> 含 `compound_condition` 与 `required_fields_override`）、`supersedes`/`revision_history`/`signoff`，
+> 并为 label-only condition 项补 `review_assertions`。旧 v2 内容与哈希 `sha256:2eb24be7…` 留存于
+> `supersedes`，未就地覆盖。冻结金标与 freeze-state 字节不变。本 README 其余内容描述 r2 修订当时的
+> 契约形态，历史保留。
+
 本包是 **selected-target recall**，并非整篇穷尽标注。所有范围内候选都须逐条裁定，额外正确项
 记 correct_extra，不记 FP、不事后加入已冻结召回分母；未裁定项非零时 precision 为 N/A。
 不同角色及 raw/validated 分开计数。目标投影 precision 不作完整抽取 precision。

@@ -1,0 +1,35 @@
+{
+  "schema_version": "items-only-quality-gate-verification-1",
+  "status": "verified_zero_call",
+  "issue": "28-items-only-quality-gate-preregistration",
+  "protocol": "material-atomic-selector-jsonl-v5",
+  "model": "doubao-seed-2.1-lite",
+  "sources": [
+    {
+      "slug": "industrial-fulian-md",
+      "batch_id": "batch:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "unit_count": 10,
+      "material_items_attempts_max": 10,
+      "reproducible": true
+    },
+    {
+      "slug": "optical-module-docx",
+      "batch_id": "batch:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "unit_count": 14,
+      "material_items_attempts_max": 14,
+      "reproducible": true
+    }
+  ],
+  "gate_status": "frozen_before_execution",
+  "quality_requirements_status": "proposed_pending_human_signoff",
+  "countersignature_status": "pending_human_signoff",
+  "authorization_all_false": true,
+  "publication_authorized": false,
+  "query_delivery_context_use_authorized": false,
+  "model_requests_during_verification": 0,
+  "production_database_access": 0
+}
