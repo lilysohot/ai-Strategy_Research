@@ -1,0 +1,398 @@
+{
+  "meta": {
+    "model_arg": "deepseek-v4-flash-ga-260731",
+    "pipeline_id": "stateful-react-agent",
+    "sandbox_backend": "native",
+    "wall_timeout_s": 900,
+    "runs_root": "/home/administrator/.local/share/frontier-agent/web/runs"
+  },
+  "treatment": {
+    "label": "treatment",
+    "research_id": "6235df9444384f07aa7f834c2599ba14",
+    "model": "deepseek-v4-flash-ga-260731",
+    "runs": [
+      {
+        "turn": 1,
+        "run_id": "de8b4a0282264b7a9065e17412622ae9",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 16409,
+        "cache_read_tokens": 10240,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 16409,
+          "cache_read_tokens": 10240,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "skipped",
+          "reason": "no_payload"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 3,
+          "user_turns": 1,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": null,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/de8b4a0282264b7a9065e17412622ae9"
+      },
+      {
+        "turn": 2,
+        "run_id": "7be8d66116fb479aadac5114dbe96774",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 16705,
+        "cache_read_tokens": 0,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 16705,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "used",
+          "reason": "",
+          "messages": 3,
+          "prior_turns": 1,
+          "trim": null,
+          "stopped_by": "no_tool"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 5,
+          "user_turns": 2,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": true,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/7be8d66116fb479aadac5114dbe96774"
+      },
+      {
+        "turn": 3,
+        "run_id": "ec11ab5022d84940868428e4f0ffcba8",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 16944,
+        "cache_read_tokens": 16384,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 16944,
+          "cache_read_tokens": 16384,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "used",
+          "reason": "",
+          "messages": 5,
+          "prior_turns": 2,
+          "trim": null,
+          "stopped_by": "no_tool"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 7,
+          "user_turns": 3,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": true,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/ec11ab5022d84940868428e4f0ffcba8"
+      }
+    ]
+  },
+  "control": {
+    "label": "control",
+    "research_id": "e482f9515552419a874196ab5e2c46ff",
+    "model": "deepseek-v4-flash-ga-260731",
+    "runs": [
+      {
+        "turn": 1,
+        "run_id": "5cd3fc7424284f3fbee9b5d8cecd7ae5",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 16418,
+        "cache_read_tokens": 16128,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 16418,
+          "cache_read_tokens": 16128,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "skipped",
+          "reason": "no_payload"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 3,
+          "user_turns": 1,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": null,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/5cd3fc7424284f3fbee9b5d8cecd7ae5",
+        "dump_moved_to": "/home/administrator/.local/share/frontier-agent/web/runs/5cd3fc7424284f3fbee9b5d8cecd7ae5/run/conversation.moved-by-control.json"
+      },
+      {
+        "turn": 2,
+        "run_id": "98236fc2a33e44ea99139fed269ea6cd",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 12722,
+        "cache_read_tokens": 10240,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 12722,
+          "cache_read_tokens": 10240,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "skipped",
+          "reason": "no_payload"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 3,
+          "user_turns": 1,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": false,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/98236fc2a33e44ea99139fed269ea6cd",
+        "dump_moved_to": "/home/administrator/.local/share/frontier-agent/web/runs/98236fc2a33e44ea99139fed269ea6cd/run/conversation.moved-by-control.json"
+      },
+      {
+        "turn": 3,
+        "run_id": "4073ac07dabe4f09a7cc784e3e8d07b3",
+        "status": "stopped",
+        "stopped_by": "no_tool",
+        "prompt_tokens": 12737,
+        "cache_read_tokens": 12288,
+        "llm_calls": 1,
+        "usage": {
+          "prompt_tokens": 12737,
+          "cache_read_tokens": 12288,
+          "cache_write_tokens": 0
+        },
+        "usage_status": "complete",
+        "replay": {
+          "decision": "skipped",
+          "reason": "no_payload"
+        },
+        "final_answer_head": "收到",
+        "error": null,
+        "dump": {
+          "exists": true,
+          "readable": true,
+          "messages": 3,
+          "user_turns": 1,
+          "trim": null,
+          "system_prompt_len": 7749,
+          "tool_names": [
+            "web_search",
+            "web_fetch",
+            "download_file",
+            "bash",
+            "grep_search",
+            "glob_search",
+            "read_file",
+            "create_file",
+            "recover_result",
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_semantic_query",
+            "corpus_inventory",
+            "data_coverage",
+            "market_resolve",
+            "market_quote",
+            "market_history",
+            "market_financials",
+            "investment_context",
+            "request_investment_input",
+            "investment_position_sizing",
+            "investment_strategy_lint",
+            "add_task",
+            "update_task",
+            "corpus_submit_manifest"
+          ]
+        },
+        "prefix_matches_previous_dump": false,
+        "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/4073ac07dabe4f09a7cc784e3e8d07b3",
+        "dump_moved_to": "/home/administrator/.local/share/frontier-agent/web/runs/4073ac07dabe4f09a7cc784e3e8d07b3/run/conversation.moved-by-control.json"
+      }
+    ]
+  },
+  "verdict": {
+    "checks": {
+      "t2_covers_t1_prompt": false,
+      "t3_covers_most_of_t1_t2": false,
+      "treatment_replayed_all_turns": false,
+      "control_did_not_replay": true,
+      "control_cache_cold": false,
+      "treatment_prefix_matches_previous_dump": true
+    },
+    "thresholds": {
+      "t2_needs": 16409,
+      "t3_needs_half_of": 16557.0,
+      "control_must_stay_below": 8209.0
+    },
+    "pass": false
+  }
+}

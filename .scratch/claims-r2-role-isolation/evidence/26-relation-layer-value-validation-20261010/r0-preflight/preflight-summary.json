@@ -1,0 +1,87 @@
+{
+  "batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "counts": {
+    "items": 469,
+    "main_runs_executed": 0,
+    "questions": 5,
+    "relation_candidates": 333,
+    "retained_relations": 213
+  },
+  "created_on": "2026-10-10",
+  "human_signoff_required": true,
+  "items_payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "model_calls": 0,
+  "publication_query_delivery_context_use": 0,
+  "q4_design_correction": {
+    "reason": "The removed pair cannot create A/B exposure because Issue 25 did not retain it.",
+    "removed_pair": "pair_f88743227fb48b8b",
+    "removed_pair_retained": false,
+    "replacement_pair": "pair_1f74637d78897251",
+    "replacement_pair_retained": true
+  },
+  "q5_control_item": {
+    "item_id": "itm_ba3a8f228e6ab791",
+    "participates_in_candidate_relations": false
+  },
+  "relations_payload_sha256": "sha256:a4af367954dc9a6214d3b1f87f71c6eedb85a78225d6ead9bfe5a5db18deacfb",
+  "schema_version": "relation-utility-preflight-summary-1",
+  "snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "status": "passed_waiting_human_signoff",
+  "target_exposure": [
+    {
+      "candidate_pair_ids": [
+        "pair_82e38a002735f044"
+      ],
+      "question_id": "Q1",
+      "relation_ids": [
+        "rel_fade871b59db5b99"
+      ],
+      "treatment_edge_exposure": true
+    },
+    {
+      "candidate_pair_ids": [
+        "pair_1d4865edce7c70e5",
+        "pair_2c4fe7749a0e9dbb",
+        "pair_bb4f5d074a054e75",
+        "pair_bfa03df7eea2a12a",
+        "pair_e0122f78caaf1a43"
+      ],
+      "question_id": "Q2",
+      "relation_ids": [
+        "rel_e40f893dfd78cac1",
+        "rel_94ca95d328d6733e",
+        "rel_31801a8755e9cf28",
+        "rel_95c6b8bd3b367c1c",
+        "rel_741755d990ec7cba"
+      ],
+      "treatment_edge_exposure": true
+    },
+    {
+      "candidate_pair_ids": [
+        "pair_3e579daa7d92e267"
+      ],
+      "question_id": "Q3",
+      "relation_ids": [
+        "rel_9705a6cbf7a49feb"
+      ],
+      "treatment_edge_exposure": true
+    },
+    {
+      "candidate_pair_ids": [
+        "pair_1f74637d78897251"
+      ],
+      "question_id": "Q4",
+      "relation_ids": [
+        "rel_851e403cdfae400b"
+      ],
+      "treatment_edge_exposure": true
+    },
+    {
+      "candidate_pair_ids": [],
+      "question_id": "Q5",
+      "relation_ids": [],
+      "treatment_edge_exposure": false
+    }
+  ],
+  "utility_gold_sha256": "sha256:625c0569a065a0ad627d4b9a6407439bbad5baf90e1bd825df405cf77da21478"
+}

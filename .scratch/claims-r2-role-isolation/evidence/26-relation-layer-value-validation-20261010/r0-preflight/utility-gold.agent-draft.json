@@ -1,0 +1,278 @@
+{
+  "schema_version": "relation-utility-gold-draft-1",
+  "created_on": "2026-10-10",
+  "status": "agent_draft_pending_human_signoff",
+  "purpose": "downstream_relation_value_ablation",
+  "not_a_revision_of_gold_v2": true,
+  "source_snapshot_id": "sha256:561401b409e329fba8306c392bfc203da23ff1cc666faf9b7e919d88c2a9f080",
+  "source_batch_id": "batch:3269051ddc97ebc979132d5110bdf923c22f28b9f87dd579717b27acb120f920",
+  "candidate_set_id": "sha256:0e93746e5edf13547b7d149c90ebfa586ed48910707db5aceefac2379f100613",
+  "items_payload_sha256": "sha256:592065e674a8a0c1b2ff6764014781b029f8e22f616f0460dc921426b8a2c896",
+  "relations_payload_sha256": "sha256:a4af367954dc9a6214d3b1f87f71c6eedb85a78225d6ead9bfe5a5db18deacfb",
+  "constraints": {
+    "model_calls_before_signoff": 0,
+    "relation_extraction_calls": 0,
+    "gold_v2_modified": false,
+    "condition_c_allowed": false,
+    "statistical_significance_claimed": false,
+    "traceability_is_hard_gate": true
+  },
+  "questions": [
+    {
+      "question_id": "Q1",
+      "prompt": "根据材料，每万吨铜箔主设备的资本开支大约是多少？请明确金额口径，并引用材料依据。",
+      "purpose": "measure_answer_link_value_and_scope_retention",
+      "expected_relation_types": [
+        "answers"
+      ],
+      "target_candidate_pair_ids": [
+        "pair_82e38a002735f044"
+      ],
+      "target_relation_ids": [
+        "rel_fade871b59db5b99"
+      ],
+      "evidence_anchors": [
+        {
+          "item_id": "itm_ad212e8991b5916a",
+          "quote": "每万吨的资本开支有多大？",
+          "role": "question"
+        },
+        {
+          "item_id": "itm_f0f1413e119df47c",
+          "quote": "我说的是主设备，大概在2.5到3个亿。",
+          "role": "answer"
+        }
+      ],
+      "required_facts": [
+        "每万吨铜箔主设备资本开支约为2.5亿至3亿元"
+      ],
+      "required_qualifiers": [
+        "2.5亿至3亿元是主设备口径，不得表述为包含全部辅助设备和表面处理设备的总投资"
+      ],
+      "adverse_or_counter_evidence": [],
+      "forbidden_inferences": [
+        "把2.5亿至3亿元写成每万吨项目全部设备的完整资本开支",
+        "把其他厚度或表面处理设备的报价混入该主设备口径"
+      ],
+      "traceability_required": true,
+      "human_review": {
+        "decision": null,
+        "notes": null
+      }
+    },
+    {
+      "question_id": "Q2",
+      "prompt": "根据材料，HVLP铜箔良品率偏低主要与设备还是工艺有关？设备端当前处于什么水平，材料给出了什么依据？",
+      "purpose": "measure_complementary_answers_and_support_chain_value",
+      "expected_relation_types": [
+        "answers",
+        "supports"
+      ],
+      "target_candidate_pair_ids": [
+        "pair_1d4865edce7c70e5",
+        "pair_2c4fe7749a0e9dbb",
+        "pair_bb4f5d074a054e75",
+        "pair_bfa03df7eea2a12a",
+        "pair_e0122f78caaf1a43"
+      ],
+      "target_relation_ids": [
+        "rel_e40f893dfd78cac1",
+        "rel_94ca95d328d6733e",
+        "rel_31801a8755e9cf28",
+        "rel_95c6b8bd3b367c1c",
+        "rel_741755d990ec7cba"
+      ],
+      "evidence_anchors": [
+        {
+          "item_id": "itm_51caf339b641f592",
+          "quote": "当前HVLP铜箔良品率预估仅40%左右，设备精度已达领先水平，",
+          "role": "problem_context"
+        },
+        {
+          "item_id": "itm_c3c12e04657cec79",
+          "quote": "专家：我认为设备目前加工精度和控制精度已经做到行业领先，",
+          "role": "equipment_assessment"
+        },
+        {
+          "item_id": "itm_b89393d4936d3d24",
+          "quote": "那么大概率跟工艺挂钩。",
+          "role": "main_answer"
+        },
+        {
+          "item_id": "itm_c0721fd9c5c22faa",
+          "quote": "之前跟铜冠总工探讨过，他说工艺和设备是64开，",
+          "role": "supporting_evidence"
+        }
+      ],
+      "required_facts": [
+        "材料将当前HVLP良品率偏低主要归因于工艺",
+        "材料称设备加工精度和控制精度已达到行业领先水平",
+        "材料引用工艺与设备六四开的说法作为归因依据"
+      ],
+      "required_qualifiers": [
+        "六四开是来源中的转述性判断，不得升级为外部核验结论",
+        "设备达到领先水平与当前良品率约40%需要同时保留"
+      ],
+      "adverse_or_counter_evidence": [
+        "设备精度已领先，但良品率仍低；这限制了把低良率简单归因于设备的结论"
+      ],
+      "forbidden_inferences": [
+        "设备对良品率完全无关",
+        "设备领先必然保证高良品率",
+        "把六四开写成已经外部审计确认的精确因果比例"
+      ],
+      "traceability_required": true,
+      "human_review": {
+        "decision": null,
+        "notes": null
+      }
+    },
+    {
+      "question_id": "Q3",
+      "prompt": "根据材料，公司迅速占据国内市场、甚至部分国外市场的关键前提是什么？这是已实现事实还是条件性展望？",
+      "purpose": "measure_condition_edge_value",
+      "expected_relation_types": [
+        "conditions"
+      ],
+      "target_candidate_pair_ids": [
+        "pair_3e579daa7d92e267"
+      ],
+      "target_relation_ids": [
+        "rel_9705a6cbf7a49feb"
+      ],
+      "evidence_anchors": [
+        {
+          "item_id": "itm_40879eb9ef18870a",
+          "quote": "只要验证成功，",
+          "role": "condition"
+        },
+        {
+          "item_id": "itm_dc9e35f35c2bd5ff",
+          "quote": "我们很快就能占据国内市场，甚至一部分国外市场。",
+          "role": "conditional_outcome"
+        }
+      ],
+      "required_facts": [
+        "材料表达的关键前提是验证成功",
+        "占据国内及部分国外市场是验证成功后的展望"
+      ],
+      "required_qualifiers": [
+        "必须保留只要验证成功这一条件",
+        "不得把条件性展望改写为已经实现的市场占有事实"
+      ],
+      "adverse_or_counter_evidence": [],
+      "forbidden_inferences": [
+        "公司已经占据国内市场",
+        "公司已经占据部分国外市场",
+        "验证成功无需进一步证据即可视为确定事实"
+      ],
+      "traceability_required": true,
+      "human_review": {
+        "decision": null,
+        "notes": null
+      }
+    },
+    {
+      "question_id": "Q4",
+      "prompt": "材料如何评价22年至23年的历史业绩，以及今年至明年的趋势？这两项判断是否构成矛盾？",
+      "purpose": "measure_harm_from_a_retained_false_challenge_edge",
+      "expected_relation_types": [
+        "challenges"
+      ],
+      "target_candidate_pair_ids": [
+        "pair_1f74637d78897251"
+      ],
+      "target_relation_ids": [
+        "rel_851e403cdfae400b"
+      ],
+      "evidence_anchors": [
+        {
+          "item_id": "itm_951065d8d93a97f0",
+          "quote": "22年到23年看报表是近几年比较好的业绩，",
+          "role": "historical_assessment"
+        },
+        {
+          "item_id": "itm_7787083577af2e35",
+          "quote": "但今年到明年肯定更好。",
+          "role": "forward_outlook"
+        }
+      ],
+      "required_facts": [
+        "材料称22年至23年是近几年较好的业绩期",
+        "材料同时预计今年至明年会更好",
+        "两个判断针对不同期间，可以同时成立"
+      ],
+      "required_qualifiers": [
+        "未来更好属于展望，历史较好属于回顾性判断",
+        "原文中的但不能单独证明两个命题互相否定"
+      ],
+      "adverse_or_counter_evidence": [
+        "treatment 中存在一条把这两个兼容命题连接为 challenges 的冻结错误边"
+      ],
+      "forbidden_inferences": [
+        "22年至23年业绩较好与今年至明年更好互相矛盾",
+        "因为未来更好，所以历史业绩较好的陈述不成立",
+        "把关系边本身当作高于原文的事实依据"
+      ],
+      "traceability_required": true,
+      "human_review": {
+        "decision": null,
+        "notes": null
+      }
+    },
+    {
+      "question_id": "Q5",
+      "prompt": "根据材料，全球表面处理设备的主要厂商包括哪些？仅列出材料明确点名的厂商。",
+      "purpose": "relation_independent_control",
+      "expected_relation_types": [],
+      "target_candidate_pair_ids": [],
+      "target_relation_ids": [],
+      "evidence_anchors": [
+        {
+          "item_id": "itm_ba3a8f228e6ab791",
+          "quote": "全球表处理设备主要厂商包括日本三船、西工业、TEX，韩国PNT等，价格约2000万元，交期6-12个月。",
+          "role": "direct_fact"
+        }
+      ],
+      "required_facts": [
+        "日本三船",
+        "日本西工业",
+        "TEX",
+        "韩国PNT"
+      ],
+      "required_qualifiers": [
+        "只列材料明确点名的厂商，不补充外部名单"
+      ],
+      "adverse_or_counter_evidence": [],
+      "forbidden_inferences": [
+        "补造材料没有点名的厂商",
+        "把厂商名单扩写为未经材料支持的市场份额或排名"
+      ],
+      "traceability_required": true,
+      "human_review": {
+        "decision": null,
+        "notes": null
+      }
+    }
+  ],
+  "scoring_contract": {
+    "relation_relevant_questions": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4"
+    ],
+    "control_questions": [
+      "Q5"
+    ],
+    "retain_relation_layer_if": "B improves the preregistered primary quality score on at least 3 of Q1-Q4, does not regress on the remainder or Q5, and introduces no forbidden inference or untraceable material claim.",
+    "reject_default_relation_layer_if": "The retain rule is not met, or any relation-induced forbidden inference could change a report conclusion.",
+    "cost_stop": "If paired median input tokens or tool calls increase by more than 20 percent while primary quality is flat, reject default relation enrichment."
+  },
+  "signoff": {
+    "required": true,
+    "reviewer": "xyl",
+    "authorization": "已签认",
+    "signed_at": "2026-10-10"
+  }
+}

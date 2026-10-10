@@ -92,7 +92,8 @@ from workflows.stateful_react_agent._runtime import (
     _minimal_best_effort_answer,
     _strip_leaked_tool_calls,
     _strip_thinking,
-    render_system_prompt_notes,
+    render_per_run_tail_notes,
+    render_stable_system_prompt_notes,
 )
 from workflows.stateful_react_agent.observers import (
     FinalAnswerSalvageObserver,
@@ -898,14 +899,20 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # Filesystem tools are usable in container mode OR when bwrap is present;
     # add the /workspace, /outputs, /inputs convention note accordingly.
     fs_enabled = sandbox_mode in ("container", "native") or bwrap_available()
+    # Per-run guidance (native mode names this run's own directories) is appended
+    # to the user message instead of the system prompt: a per-run byte in the
+    # prefix resets the provider's cache for the whole conversation (issue 01
+    # §9.15). Filled in below only when the filesystem tools are live.
+    run_tail_notes = ""
     if fs_enabled and not direct:
         # Charts are written through the same filesystem tools, so the
         # clipping rule rides along with the /workspace-vs-/outputs note.
-        runtime_notes = render_system_prompt_notes(
+        runtime_notes = render_stable_system_prompt_notes(
             sandbox_mode=sandbox_mode,
             tool_names=tool_names,
         )
         system_prompt = f"{system_prompt}{runtime_notes}"
+        run_tail_notes = render_per_run_tail_notes(sandbox_mode=sandbox_mode)
     elif not direct:
         # auto/bwrap mode without bwrap must fail closed. CurrentSandbox only
         # changes cwd; it does not isolate the host filesystem or network.
@@ -923,6 +930,17 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
         system_prompt = f"{system_prompt}{MANIFEST_PROMPT_NOTE}"
 
+    # The request tail: this run's own directories, appended where per-run content
+    # belongs. Everything above it is byte-identical to the previous turn, which is
+    # what lets the provider reuse the conversation prefix (issue 01 §9.4/§9.15).
+    loop_user_message = f"{question}{run_tail_notes}" if run_tail_notes else question
+
+    # Watch-triggered runs switch the continuity carrier off in BOTH directions
+    # (issue 01 §9.18 #1): a rules-driven investment analysis keeps a clean,
+    # bounded context, and leaving no dump behind keeps a later chat turn from
+    # replaying the monitoring run instead of the conversation.
+    continuity_enabled = state.get("continuity_enabled", True) is not False
+
     event_store = registry.get_optional(EventStore)
     model_name = extract_model_name(llm)
     # What the kernel's history normaliser will use when it appends assistant
@@ -938,23 +956,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             tools=tools,
             model_name=model_name,
             system_prompt=system_prompt,
-            user_message=question,
-        ),
-        # Cross-turn continuity (issue 01 §9.3): the exact message list this loop
-        # ends with, for the next turn to replay. Written beside the run's other
-        # artifacts; the server layer only transports it.
-        ConversationSnapshotObserver(
-            _resolve_conversation_path(state, ctx.task_id),
-            system_prompt=system_prompt,
-            tools=tools,
-            tool_names=tool_names,
-            thinking_format=thinking_format,
-            pipeline_id="stateful-react-agent",
-            node_id="react_agent",
-            role_id="stateful_react",
-            session_id=str(metadata.get("session_id") or ""),
-            model_name=model_name,
-            max_replay_turns=replay_max_turns,
+            user_message=loop_user_message,
         ),
         ReactStepTracker(),
         # A4 消费账本（观测模式）：记录 offered/requested/fetched，并在 loop 结束
@@ -965,6 +967,25 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             pipeline_id="stateful-react-agent",
         ),
     ]
+    if continuity_enabled:
+        # Cross-turn continuity (issue 01 §9.3): the exact message list this loop
+        # ends with, for the next turn to replay. Written beside the run's other
+        # artifacts; the server layer only transports it.
+        observers.append(
+            ConversationSnapshotObserver(
+                _resolve_conversation_path(state, ctx.task_id),
+                system_prompt=system_prompt,
+                tools=tools,
+                tool_names=tool_names,
+                thinking_format=thinking_format,
+                pipeline_id="stateful-react-agent",
+                node_id="react_agent",
+                role_id="stateful_react",
+                session_id=str(metadata.get("session_id") or ""),
+                model_name=model_name,
+                max_replay_turns=replay_max_turns,
+            )
+        )
     if not direct:
         # Repetition stop-loss. Both of these stay hint-only: this agent IS
         # the run, so a false positive must cost one message, never the answer.
@@ -1129,15 +1150,19 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # prefix that would miss the provider's prefix cache — or hand the model a
     # history it never saw.
     replay_payload = str(state.get("replay_payload") or "")
-    replay_messages, replay_decision = select_replay(
-        replay_payload,
-        system_prompt=system_prompt,
-        tool_names=tool_names,
-        tools_hash=tool_schema_sha256(tools),
-        thinking_format=thinking_format,
-        pipeline_id="stateful-react-agent",
-        node_id="react_agent",
-    )
+    if continuity_enabled:
+        replay_messages, replay_decision = select_replay(
+            replay_payload,
+            system_prompt=system_prompt,
+            tool_names=tool_names,
+            tools_hash=tool_schema_sha256(tools),
+            thinking_format=thinking_format,
+            pipeline_id="stateful-react-agent",
+            node_id="react_agent",
+        )
+    else:
+        replay_messages = None
+        replay_decision = {"decision": "skipped", "reason": "continuity_disabled"}
     if replay_payload:
         logger.info(
             "stateful_react replay %s%s",
@@ -1154,7 +1179,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         loop_fn = getattr(sys.modules.get("apodex.session"), "run_agent_loop", run_agent_loop)
         result = await loop_fn(
             system_prompt=system_prompt,
-            user_message=question,
+            user_message=loop_user_message,
             initial_messages=replay_messages,
             llm=with_semantic_delivery(llm) if "corpus_semantic_query" in tool_names else llm,
             tools=tools,

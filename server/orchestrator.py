@@ -58,6 +58,7 @@ from server.store import (
     create_control,
     ensure_session,
     get_control,
+    is_watch_run,
     list_active_runs,
     list_turns,
     mark_run_failed_if_active,
@@ -734,18 +735,28 @@ class Orchestrator:
         # the prior conversation — no duplication.
         history = ""
         prior_conversation: str | None = None
+        continuity = "on"
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
             turns = await list_turns(session_id=session_uuid)
             prior_turns = _turns_as_of_submission(turns, current_run_id=current)
             history = render_session_history(prior_turns)
-            # Cross-turn continuity (issue 01 §9.4): find the previous run's
-            # conversation dump. Existence check only — the file stays opaque here
-            # and is staged into the new run directory by ``_launch``.
-            found = resolve_prior_conversation(prior_turns, current_run_id=current)
-            if found is not None:
-                prior_conversation = str(found)
+            # Watch-triggered runs neither read nor write the continuity carrier
+            # (issue 01 §9.18 #1): the auto-analysis is rules-driven, so it keeps a
+            # clean, bounded context — and because it writes no dump, a later chat
+            # turn still resolves the last *chat* dump instead of replaying the
+            # monitoring run.
+            if current is not None and await is_watch_run(run_id=current):
+                continuity = "off"
+            else:
+                # Cross-turn continuity (issue 01 §9.4): find the previous run's
+                # conversation dump. Existence check only — the file stays opaque
+                # here and is staged into the new run directory by ``_launch``.
+                found = resolve_prior_conversation(prior_turns, current_run_id=current)
+                if found is not None:
+                    prior_conversation = str(found)
         params["_prior_conversation"] = prior_conversation
+        params["_continuity"] = continuity
         handle: RunHandle | None = None
         try:
             handle = await self._launch(run_id, params, history=history)
@@ -1077,6 +1088,7 @@ class Orchestrator:
             self._cfg.pipeline_id,
         ]
         cmd += ["--business-prefix", "1" if business_prefix else "0"]
+        cmd += ["--continuity", str(params.get("_continuity") or "on")]
         if params.get("agent_tools"):
             cmd += ["--agent-tools", params["agent_tools"]]
         if params.get("prompt_addendum"):

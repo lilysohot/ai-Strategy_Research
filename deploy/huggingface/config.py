@@ -191,7 +191,9 @@ class DemoConfig:
     runtime_root: Path = Path("/tmp/frontier-agent-demo")
     #: Selects the runtime's filesystem convention (``plugins/tools/_sandbox``).
     #: ``native`` is what the demo wants: it makes the react prompt name this
-    #: session's *real* directories (``_runtime.render_system_prompt_notes``),
+    #: session's *real* directories (``_runtime.render_per_run_tail_notes`` —
+    #: those paths ride in the request tail rather than the system prompt, so a
+    #: per-session path cannot reset the provider's prefix cache across turns),
     #: so each visitor's workspace and outputs are genuinely separate paths.
     #: ``container`` instead hard-codes ``/workspace`` and ``/outputs`` in the
     #: prompt, which cannot be per-session. Neither mode weakens the demo,

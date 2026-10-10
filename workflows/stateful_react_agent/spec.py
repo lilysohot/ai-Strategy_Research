@@ -33,6 +33,9 @@ REACT_SPEC = PipelineSpec(
                     # Opaque previous-run dump transported by the server; the
                     # node validates it before replaying (issue 01 §9.4).
                     "replay_payload",
+                    # False for watch-triggered runs: they neither replay nor
+                    # write the continuity carrier (issue 01 §9.18 #1).
+                    "continuity_enabled",
                 ],
             ),
             compression=CompressionConfig(enabled=False),

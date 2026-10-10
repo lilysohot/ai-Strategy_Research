@@ -485,39 +485,54 @@ def test_writer_and_reader_agree_on_where_the_dump_lives() -> None:
 # ── the phase-1 precondition, pinned at its real chokepoint ──────────
 
 
-def test_the_native_filesystem_note_embeds_a_per_run_path(monkeypatch) -> None:
-    """Native mode puts the *physical* workspace path into the system prompt.
+def test_the_native_filesystem_note_is_kept_out_of_the_stable_prefix(monkeypatch) -> None:
+    """A per-run byte must never reach the system prompt.
 
-    Those paths carry the run id, so the request prefix differs on every turn of
-    one conversation — the acceptance run refused the replay with exactly
-    ``system prompt mismatch`` because of this single line. Container mode renders
-    the logical ``/workspace`` convention and is byte-stable, which is why phase 1
-    is cache-effective there. Pinned so the defect (or its fix) cannot slip by
-    unnoticed.
+    Native mode names the run's physical directories, and a web run gets a fresh
+    run id every turn — the acceptance run refused the replay with exactly
+    ``system prompt mismatch`` because of that one sentence (issue 01 §9.15). The
+    fix splits the text: the prefix half is byte-identical across runs, the
+    per-run half rides in the request tail.
     """
-    from workflows.stateful_react_agent._runtime import render_system_prompt_notes
+    from workflows.stateful_react_agent._runtime import (
+        render_per_run_tail_notes,
+        render_stable_system_prompt_notes,
+    )
 
     monkeypatch.delenv("FRONTIER_AGENT_PROJECT_DIR", raising=False)
     monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/aaaa/ws")
     monkeypatch.setenv("FRONTIER_AGENT_INPUTS_DIR", "/runs/aaaa/inputs")
     monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", "/runs/aaaa/ws/outputs")
-    first = render_system_prompt_notes(sandbox_mode="native", tool_names=["read_file"])
+    stable_first = render_stable_system_prompt_notes(
+        sandbox_mode="native",
+        tool_names=["bash", "read_file"],
+    )
+    tail_first = render_per_run_tail_notes(sandbox_mode="native")
 
     monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/bbbb/ws")
     monkeypatch.setenv("FRONTIER_AGENT_INPUTS_DIR", "/runs/bbbb/inputs")
     monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", "/runs/bbbb/ws/outputs")
-    second = render_system_prompt_notes(sandbox_mode="native", tool_names=["read_file"])
+    stable_second = render_stable_system_prompt_notes(
+        sandbox_mode="native",
+        tool_names=["bash", "read_file"],
+    )
+    tail_second = render_per_run_tail_notes(sandbox_mode="native")
 
-    assert "/runs/aaaa/ws" in first
-    assert "/runs/bbbb/ws" in second and "/runs/aaaa/ws" not in second
-
-    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/cccc/ws")
-    third = render_system_prompt_notes(sandbox_mode="container", tool_names=["read_file"])
-    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", "/runs/dddd/ws")
-    fourth = render_system_prompt_notes(sandbox_mode="container", tool_names=["read_file"])
-
-    assert third == fourth
-    assert "/runs/" not in third
+    # The cached prefix: identical for both turns, and free of run-specific paths.
+    assert (
+        stable_first
+        == stable_second
+        == render_stable_system_prompt_notes(
+            sandbox_mode="native",
+            tool_names=["bash", "read_file"],
+        )
+    )
+    assert "/runs/" not in stable_first
+    # The tail: carries the paths, so the model still learns where it is.
+    assert "/runs/aaaa/ws" in tail_first
+    assert "/runs/bbbb/ws" in tail_second
+    # Container mode's directories are fixed, so nothing needs the tail.
+    assert render_per_run_tail_notes(sandbox_mode="container") == ""
 
 
 # ── the state channel (extra_input → the node's filtered state) ──────
@@ -531,11 +546,185 @@ def test_the_react_spec_lets_the_replay_payload_reach_the_node() -> None:
 
     filtered = apply_context_filter(
         policy,
-        {"original_question": "q", "replay_payload": '{"schema": "x"}', "unrelated": 1},
+        {
+            "original_question": "q",
+            "replay_payload": '{"schema": "x"}',
+            "continuity_enabled": False,
+            "unrelated": 1,
+        },
     )
 
     assert filtered["replay_payload"] == '{"schema": "x"}'
+    assert filtered["continuity_enabled"] is False
     assert "unrelated" not in filtered
+
+
+# ── watch-triggered runs keep the carrier out of both directions ─────
+
+
+async def _new_user_id() -> uuid.UUID:
+    """A real user row: ``sessions.user_id`` is a foreign key."""
+    from server.store import create_user
+
+    user = await create_user(
+        username=f"ctx-{uuid.uuid4().hex[:10]}", password_hash="synthetic",
+    )
+    return user.id
+
+
+@pytest.mark.asyncio
+async def test_is_watch_run_is_false_for_an_ordinary_run(db) -> None:
+    """Negative case only: the positive one needs a watch_rule → watch_event →
+    watch_event_run fixture chain, which no cheap helper builds today. The
+    orchestrator-side wiring is covered by the next test with the query stubbed."""
+    from server.store import is_watch_run
+
+    assert await is_watch_run(run_id=uuid.uuid4()) is False
+
+
+@pytest.mark.asyncio
+async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatch):
+    """Watch-triggered runs are excluded in BOTH directions (issue 01 §9.18 #1).
+
+    They must not replay the chat — a rules-driven investment analysis keeps a
+    clean, bounded context — and they must leave no dump behind either, or the
+    next chat turn would resolve the monitoring run's dump and lose the
+    conversation. The wiring that enforces both halves is what this pins.
+    """
+    from unittest.mock import AsyncMock
+
+    from server import orchestrator as orch_mod
+    from server.config import run_dir_for
+    from server.store import append_turn, create_run, ensure_session
+
+    orch = orch_mod.Orchestrator()
+    monkeypatch.setattr(orch, "_acquire_slot", AsyncMock())
+    monkeypatch.setattr(orch, "_release_slot", AsyncMock())
+    monkeypatch.setattr(
+        orch_mod.Orchestrator, "_pump_frames", AsyncMock(return_value=None),
+    )
+
+    captured: dict[str, dict] = {}
+
+    async def fake_launch(self, run_id, params, *, history=""):
+        captured[run_id] = dict(params)
+        proc = SimpleNamespace(returncode=0, stdout=None, pid=0)
+        return orch_mod.RunHandle(
+            run_id=run_id, session_id=params["session_id"], proc=proc,
+        )
+
+    monkeypatch.setattr(orch_mod.Orchestrator, "_launch", fake_launch)
+
+    prior_run = uuid.uuid4()
+    prior_root = tmp_path / prior_run.hex
+    dump = prior_root / "run" / "conversation.json"
+    dump.parent.mkdir(parents=True)
+    dump.write_text('{"schema": "conversation-dump/1"}', encoding="utf-8")
+    real_run_dir_for = run_dir_for
+    monkeypatch.setattr(
+        "server.config.run_dir_for",
+        lambda rid: prior_root if rid == prior_run.hex else real_run_dir_for(rid),
+    )
+
+    user_id = await _new_user_id()
+    session_id = f"sess-{uuid.uuid4().hex[:10]}"
+    session_uuid = orch_mod._session_uuid(session_id)
+    await ensure_session(session_id=session_uuid, user_id=user_id, title="t")
+    # turns.run_id is a foreign key, so the prior run needs a real row.
+    await create_run(
+        run_id=prior_run,
+        session_id=session_uuid,
+        user_id=user_id,
+        prompt="chat q",
+        pipeline_id="stateful-react-agent",
+        run_dir=str(prior_root),
+        status="stopped",
+    )
+    await append_turn(session_id=session_uuid, role="user", content="chat q", run_id=prior_run)
+    await append_turn(session_id=session_uuid, role="assistant", content="chat a", run_id=prior_run)
+
+    async def _seed(label: str) -> str:
+        run_hex = uuid.uuid4().hex
+        await create_run(
+            run_id=uuid.UUID(run_hex),
+            session_id=session_uuid,
+            user_id=user_id,
+            prompt=label,
+            pipeline_id="stateful-react-agent",
+            run_dir=str(tmp_path / run_hex),
+            status="queued",
+        )
+        return run_hex
+
+    monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=False))
+    chat_run = await _seed("chat q2")
+    await orch._spawn(
+        run_id=chat_run, session_id=session_id, session_uuid=session_uuid,
+        prompt="chat q2", user_id=user_id,
+    )
+    assert captured[chat_run]["_continuity"] == "on"
+    assert captured[chat_run]["_prior_conversation"] == str(dump)
+
+    monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=True))
+    watch_run = await _seed("监控触发：x")
+    await orch._spawn(
+        run_id=watch_run, session_id=session_id, session_uuid=session_uuid,
+        prompt="监控触发：x", user_id=user_id,
+    )
+    assert captured[watch_run]["_continuity"] == "off"
+    assert captured[watch_run]["_prior_conversation"] is None
+
+
+@pytest.mark.asyncio
+async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, monkeypatch):
+    """``--continuity off`` (watch-triggered runs) must arrive as state, because
+    the node — not the worker — decides both halves (issue 01 §9.18 #1)."""
+    import os
+    import uuid as _uuid
+    from argparse import Namespace
+
+    from server import worker as worker_mod
+    from server.config import run_dir_for
+
+    run_id = _uuid.uuid4().hex
+    run_root = run_dir_for(run_id)
+    run_root.mkdir(parents=True, exist_ok=True)
+
+    captured: dict[str, Any] = {}
+
+    class FakeBenchmarkSession:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
+            captured["extra_input"] = extra_input or {}
+            return {"final_answer": "ok"}
+
+    monkeypatch.setattr(
+        "benchmarks.public.core.kernel_adapter.BenchmarkSession", FakeBenchmarkSession,
+    )
+    monkeypatch.setattr(
+        "server.config.run_dir_for",
+        lambda rid: run_root if rid == run_id else run_dir_for(rid),
+    )
+
+    args = Namespace(
+        run_id=run_id, session_id="s", turn_index=1, prompt="监控触发：x",
+        prompt_addendum="", pipeline_id="stateful-react-agent", backend="native",
+        wall_time=10, max_turns=5, model="", base_url="", api_key="",
+        agent_tools="", business_prefix=1, continuity="off",
+    )
+    env_snapshot = dict(os.environ)
+    try:
+        assert await worker_mod.run_once(args) == 0
+    finally:
+        os.environ.clear()
+        os.environ.update(env_snapshot)
+
+    assert captured["extra_input"]["continuity_enabled"] is False
 
 
 # ── the worker's half of the transport chain ─────────────────────────

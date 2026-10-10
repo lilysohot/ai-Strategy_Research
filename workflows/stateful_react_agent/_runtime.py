@@ -72,29 +72,21 @@ CHART_NOTE = (
 SYSTEM_PROMPT_NOTES = SANDBOX_FS_NOTE + CHART_NOTE
 
 
-def render_system_prompt_notes(
+def render_stable_system_prompt_notes(
     *,
     sandbox_mode: str,
     tool_names: list[str] | tuple[str, ...],
 ) -> str:
-    """Return static filesystem/chart guidance plus discovered toolchains."""
+    """Return the filesystem/chart guidance that goes into the system prompt.
+
+    Only text that is identical for every run of one conversation belongs here:
+    the system prompt is the request *prefix*, the provider's prefix cache is
+    byte-exact, and one per-run byte in it resets reuse for the whole
+    conversation (measured — issue 01 §9.15). Guidance that names this run's own
+    directories lives in :func:`render_per_run_tail_notes` instead.
+    """
     filesystem_note = SANDBOX_FS_NOTE
     project = os.environ.get("FRONTIER_AGENT_PROJECT_DIR", "").strip()
-    if sandbox_mode == "native":
-        workspace = os.environ.get("FRONTIER_AGENT_WORKSPACE_DIR", os.getcwd())
-        inputs = os.environ.get("FRONTIER_AGENT_INPUTS_DIR", "inputs")
-        outputs = os.environ.get("FRONTIER_AGENT_OUTPUTS_DIR", "outputs")
-        filesystem_note = (
-            "\n\nFILESYSTEM CONVENTION (native mode): Your current working "
-            f"directory {workspace} is the workspace. Read task inputs from "
-            f"{inputs}. Write final deliverables to {outputs}. Keep scratch "
-            "and intermediate files in the workspace, not the outputs directory. "
-            "Scientific and plotting packages are optional in native mode. "
-            "Office writer packages used by create_file are already installed. "
-            "Do not pre-install optional packages; if the task needs a missing package, "
-            "install only that package with `python -m pip install <package>`. "
-            "It will be placed in the workspace-local native dependency overlay."
-        )
     if project:
         workspace = os.environ.get("FRONTIER_AGENT_WORKSPACE_DIR", "/workspace")
         if os.path.realpath(project) != os.path.realpath(workspace):
@@ -104,9 +96,40 @@ def render_system_prompt_notes(
                 "for clones, downloads, drafts, generated probes, and other "
                 "run-private intermediate files."
             )
+    if sandbox_mode == "native":
+        # The native note spells out the run's *physical* directory tree, which a
+        # web run re-creates under a fresh run id every turn — so it cannot sit in
+        # the stable prefix. It is handed to the model as the request tail.
+        filesystem_note = ""
     return filesystem_note + CHART_NOTE + render_document_node_toolchain_note(
         sandbox_mode=sandbox_mode,
         tool_names=tool_names,
+    )
+
+
+def render_per_run_tail_notes(*, sandbox_mode: str) -> str:
+    """Return the guidance that names *this run's* own directories.
+
+    Appended to the run's user message — the request's tail — instead of the
+    system prompt. Same bytes reach the model; they just stop being part of the
+    cached prefix. Native mode is the reason this exists: it prints the run's
+    absolute workspace/inputs/outputs paths, and those change every turn.
+    """
+    if sandbox_mode != "native":
+        return ""
+    workspace = os.environ.get("FRONTIER_AGENT_WORKSPACE_DIR", os.getcwd())
+    inputs = os.environ.get("FRONTIER_AGENT_INPUTS_DIR", "inputs")
+    outputs = os.environ.get("FRONTIER_AGENT_OUTPUTS_DIR", "outputs")
+    return (
+        "\n\nFILESYSTEM CONVENTION (native mode): Your current working "
+        f"directory {workspace} is the workspace. Read task inputs from "
+        f"{inputs}. Write final deliverables to {outputs}. Keep scratch "
+        "and intermediate files in the workspace, not the outputs directory. "
+        "Scientific and plotting packages are optional in native mode. "
+        "Office writer packages used by create_file are already installed. "
+        "Do not pre-install optional packages; if the task needs a missing package, "
+        "install only that package with `python -m pip install <package>`. "
+        "It will be placed in the workspace-local native dependency overlay."
     )
 
 # Graceful terminations — the loop ran out of its turn / context budget with

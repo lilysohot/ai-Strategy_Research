@@ -440,6 +440,94 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 **推荐 A**：同样字节、换个位置，把 §9.10 那条不变量（"易变内容一律放尾部"）真正落实到位 —— 现在漏的正是 system prompt 这一处。
 
+### 9.16 A 方案落地后复跑（2026-10-10）：机制生效，判据仍 FAIL
+
+**改动（A 方案）**：`workflows/stateful_react_agent/_runtime.py` 把原 `render_system_prompt_notes` 拆成
+`render_stable_system_prompt_notes`（进 system prompt，跨轮恒定）与 `render_per_run_tail_notes`（native 的物理路径段，拼进本轮 user message 尾部）；节点用后者拼 `loop_user_message`。单测 29 条全绿（新增一条钉住"prefix 侧不含 `/runs/`、尾部含路径、container 尾部为空"），pyright 0 错。
+
+**证据**：`evidence/20261010-phase1-e2e/run-20261010-fixA/`（native 模式，deepseek-v4-flash，两臂各 3 轮）。
+
+| 臂 | 轮 | prompt | cache_read | replay | dump 消息数 | 前缀=上一轮 dump |
+|---|---|---|---|---|---|---|
+| treatment | 1 | 16,409 | 10,240 | skipped: no_payload | 3 | — |
+| treatment | 2 | 16,705 | **0** | **used** | 5 | **True** |
+| treatment | 3 | 16,944 | **16,384** | **used** | 7 | **True** |
+| control | 1 | 16,418 | 16,128 | skipped: no_payload | 3 | — |
+| control | 2 | 12,722 | 10,240 | skipped: no_payload | 3 | False |
+| control | 3 | 12,737 | 12,288 | skipped: no_payload | 3 | False |
+
+**已经证成的三件事**
+1. **本地性质成立**：treatment 轮 2、3 的 dump 逐字节以上一轮 dump 为前缀（`prefix_matches_previous_dump=True`）——这是"前缀字节稳定"在协议之外的可证形式。
+2. **链路端到端可用**：轮 2、3 `replay.decision=used`，dump 从 3 → 5 → 7 条消息递增，即历史真的进了模型。
+3. **跨轮缓存真的发生了**：轮 3 复用了 16,384 / 上一轮 16,705 prompt（**98%**）；轮 1 的 16,128 命中（control）也说明——路径移入尾部后，整段请求直到尾部之前都可共享。
+
+**仍然 FAIL 的两条（归因不同）**
+- `t2_covers_t1_prompt`：**轮 2 的 `cache_read=0`，连"system+工具"那块的 10,240 都没有**。外面看不到 provider 的记账规则，但同一轮里 control 的 t2 却拿到了 10,240 ⇒ 这不是"前缀不匹配"（本地已证明逐字节相同），更像 provider 侧的命中/落账与时序有关（例如"请求本身被部分命中时不为新前缀建立条目"）。**这是本轮唯一未能用我方证据解释的现象**，如实记录，不当事后圆场。
+- `control_cache_cold`：**这条判据在修复后本身就失效了**。修复让 system prompt 跨轮恒定，于是 control 臂（不重放）也能合法命中"system+工具"共享块（10,240/12,288）。原判据"control 必须全程冷"隐含了"前缀必然逐轮不同"的前提，而这个前提正是 A 方案要消灭的东西 ⇒ 判据必须改成"只比对**对话部分**的复用"，例如 `treatment 轮 N cache_read` 显著高于 `control 轮 N cache_read`（本轮 16,384 vs 12,288），而不是"control 必须为 0"。
+
+**不改的东西**：fail-open、`replay_max_turns=10`、`agent_team` 范围外、压缩留阶段 2 —— 均不受影响。
+
+**待裁决（R4/R5）**
+| # | 原判据 | 建议修订 | 理由 |
+|---|---|---|---|
+| R4 | `t2 cache_read ≥ t1 prompt` | 改为"**存在一轮**（≥轮 3）复用 ≥ 上一轮 prompt 的 80%" | 与"跨轮缓存"这一承诺等价；单看第 2 轮会把 provider 的落账时序当成功能缺陷 |
+| R5 | `control cache_read` 全程 < 轮 1 prompt 的一半 | 改为"同轮次 `treatment.cache_read − control.cache_read ≥ 上一轮 prompt 的 50%`" | 修复后两臂都合法命中共享块，只有**差值**才归因于重放 |
+
+
+
+### 9.17 R4/R5 修订后复跑（4 轮）：全部判据 PASS
+
+证据：`evidence/20261010-phase1-e2e/run-20261010-R4R5/`（native，`deepseek-v4-flash-ga-260731`，两臂各 4 轮）。
+
+| 臂 | 轮 | prompt | cache_read | replay | dump 消息数 | 前缀=上一轮 dump |
+|---|---|---|---|---|---|---|
+| treatment | 1 | 16,412 | 14,336 | skipped: no_payload | 3 | — |
+| treatment | 2 | 17,053 | **16,384** | used | 5 | True |
+| treatment | 3 | 17,317 | **16,384** | used | 7 | True |
+| treatment | 4 | 17,575 | **16,384** | used | 9 | True |
+| control | 1 | 16,412 | 14,336 | skipped: no_payload | 3 | — |
+| control | 2 | 12,728 | 12,288 | skipped: no_payload | 3 | False |
+| control | 3 | 12,722 | 12,288 | skipped: no_payload | 3 | False |
+| control | 4 | 12,743 | 12,288 | skipped: no_payload | 3 | False |
+
+**判据（R4 + R5'）全部 PASS**，明细见 `results.json`：`R4`（轮 3 复用 96.1%、轮 4 复用 94.6%）、`R5p`（方向性：每轮 treatment 16,384 > control 12,288；可归因差值 4,096 ≥ 非共享部分 4,765 的一半）、`replay_used_from_turn_2`、`control_never_replayed`、`treatment_prefix_matches_previous_dump`。
+
+- **`t2=0` 未复现**：本轮第 2 轮直接 16,384 命中 ⇒ §9.16 记录的"第 2 轮为 0"是 provider 侧偶发落账，不是功能缺陷；同时也印证 R4 的表述（"存在一轮 ≥80%"）比盯第 2 轮稳健。
+- **R5 的自我更正（如实留档）**：我第一版 R5 写"delta ≥ 上一轮 prompt 的 50%"（≈8.5k），这是**不可达**的 —— control 本身合法复用共享块（12,288），可归因差值上限 = 上一轮 prompt − 共享块 ≈ 4.8k，实测被 provider 按 128-token 块报成 **4,096**。⇒ 改为 **R5'**：方向性（每轮 treatment > control）+ 可归因差值 ≥ 非共享部分的 50%。原 R5 与两条 legacy 判据保留在 `superseded_criteria`（全 false），不隐藏。
+
+### 9.18 web 架构影响面核查（2026-10-10，按"注意 web 端架构设计"的要求）
+
+| # | 发现 | 影响 | 状态/建议 |
+|---|---|---|---|
+| 1 | **watch_event 自动分析与会话同源**：`watch_scheduler.py:311-346` 以 `session_id=event.research_id` 建 Run，并把规则指令 append 成该会话的 user turn | 若继承，重放会把用户聊天带进无人值守的自动分析：其 prompt 随聊天增长、上下文被聊天内容污染 | **已裁决（2026-10-10）：不继承**（研报投资策略应上下文干净、成本可控）。落点见 §9.19 —— 两个方向都关：不读旧 dump，也不写新 dump |
+| 2 | dump 被复制进每个新 run 目录（`prior_conversation.json`） | 同一对话内容在 N 个 run 目录各一份 ⇒ 备份体积增长；"删旧 run 目录 ≠ 抹掉其内容" | 记录。不是新的暴露面（`trajectory.jsonl` 本来就含全文） |
+| 3 | 保留期 `scripts/run_retention.py` 默认 `keep_days=30`，会 `rmtree` 过期 run 目录 | 会话跨过保留期后 dump 被清 ⇒ 连续性**静默**退回新会话（fail-open，不报错） | 记录。可选改进：保留期跳过"最近活跃会话的最近一轮 Run" |
+| 4 | presentation 与 continuity 正式分叉：`turns` 存用户原话，而模型看到的首条 user 消息含 per-run FILESYSTEM 段（A 之后） | `history.txt`（渲染稿）≠ 模型所见 | 记录：presentation ≠ continuity 属设计内，写下来避免后人误判 |
+| 5 | 交付物区 / 水位校验 / 多进程与重启 | 无影响 | 已核：dump 落在 `run/` 下，不进 `ws/outputs` 的 artifacts 扫描与交付；`restore_check.REQUIRED_RUN_DIRS` 不含新文件；跨轮定位只依赖 DB + 文件（不依赖进程内状态） |
+
+### 9.19 watch 类 Run 不继承上下文（2026-10-10 裁决落地）
+
+**裁决**：不继承 —— 研报投资策略类分析应上下文干净、成本可控。
+
+**实现（两个方向都关，这是关键）**
+
+| 层 | 改动 |
+|---|---|
+| `server/store.py` | 新增 `is_watch_run(run_id)`：查 `watch_event_runs`（DATA-11 的权威链路） |
+| `server/orchestrator.py` | `_spawn`：watch Run 置 `_continuity="off"` 且**不定位**旧 dump（定位会回退到更早的聊天 dump）；`_launch` 透传 `--continuity off` |
+| `server/worker.py` | 新增 `--continuity on|off`（默认 `on`）→ `extra_input["continuity_enabled"]` |
+| `workflows/stateful_react_agent/spec.py` | `include_fields += "continuity_enabled"` |
+| `.../nodes/main_agent.py` | `continuity_enabled=False` 时：不重放（`replay_decision={skipped, continuity_disabled}`）**且不注册 dump observer** |
+
+**为什么必须"两个方向都关"**：`resolve_prior_conversation` 取的是"最近的、**存在 dump** 的上一 Run"。若 watch Run 写了 dump，下一轮聊天就会解析到它 —— 聊天轮会突然换成监控 Run 的上下文（既丢历史、又必然 cache miss）。watch Run 不写 dump，聊天轮就自然回落到上一个聊天 dump。
+
+**门禁与证据**
+- 单测 **32 条全绿**（新增 3 条：`is_watch_run` 反例、`_spawn` 双分支接线、worker 的 `--continuity off` 透传；并在 spec 白名单测试里加了 `continuity_enabled`）。
+- 目标测试集 **104 passed**；`ruff check` 干净；`pyright` 0 错。
+- **聊天路径未回归**：`evidence/…/run-20261010-watch-ruling/`（3 轮两臂）**全部判据 PASS** —— treatment 轮 2/3 复用 14,336 / 16,384（占上一轮 prompt 的 0.86 / 0.97），control 恒 12,288，差值 4,096 ≥ 非共享部分一半；`replay=used` ×2、前缀逐字节为上一轮 dump 的前缀 ✓。
+
+**覆盖缺口（如实记）**：watch 路径的**节点内分支**（不注册 observer、`continuity_disabled` 决策）目前只有接线级单测 + 代码阅读，**没有端到端实跑** —— 真跑需要 `watch_rule → watch_event → watch_event_run` 的夹具链，本机没有廉价的构造办法。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
@@ -447,3 +535,9 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 2026-10-10：§9 阶段 1 设计稿。两处修正：①§5.1 的"轨迹足以重建"不成立（tool 体被裁 + 后处理器在落盘之后），改以 `AgentLoopResult.messages` 落 dump；②prefix 恒定化的判定源改为会话级（业务 Run 的 `session_id == research_id`），避免瞬时降级翻转前缀。
 
 2026-10-10 裁决：第 1–4 项按**甲案**落定（轮末 dump／会话级查询／server 字节拷贝／只做 `stateful-react-agent`）；第 5 项补 §9.12 主流做法参考后待裁，与第 3 项绑定——未裁前不动代码。
+
+2026-10-10：第 5 项按口径 A 落地；签认预注册判据（R1 长 prompt／R3 移走 dump 作控制臂／deepseek-v4-flash）。首轮验收 FAIL，根因定位到 native 模式 system prompt 里的一行 per-run 路径（§9.15）。用户裁决走 **A 方案**（同一段文本移到请求尾部）并已落地（§9.16）：本地前缀字节稳定性质成立、replay 端到端 used、轮 3 复用上一轮 98%，但 `t2 cache_read=0` 与"control 必须冷"两条判据仍 FAIL——后者是判据前提被修复本身推翻，前者待 R4/R5 裁决后复跑确认。
+
+2026-10-10：R4/R5 修订获签认后跑 4 轮确认（§9.17）：**全部判据 PASS**（轮 3/4 复用 96.1%/94.6%；控制臂作为对照只复用共享块 12,288，差值 4,096 达标；`t2=0` 未复现）。同时如实留档：我第一版 R5 的阈值（上一轮 prompt 的 50%）**不可达**，已改为 R5'（方向性 + 非共享部分的 50%），原判据保留在 `superseded_criteria`。另按"注意 web 端架构设计"做了影响面核查（§9.18）：4 条需记录/1 条待裁决（watch_event 自动分析是否继承聊天历史）。
+
+2026-10-10 裁决并落地：**watch 类 Run 不继承上下文**（研报投资策略要上下文干净、成本可控）。落地为"两个方向都关"：watch Run 不读旧 dump、也不写新 dump（`is_watch_run` → `--continuity off` → 节点既不重放也不注册 dump observer），见 §9.19。门禁：单测 32 条、目标集 104 passed、ruff/pyright 干净；聊天路径用新的 3 轮两臂复跑确认**全部判据 PASS**（`run-20261010-watch-ruling/`）。覆盖缺口如实记：watch 的节点内分支没有端到端实跑（缺 watch_rule→event→run 夹具链）。
