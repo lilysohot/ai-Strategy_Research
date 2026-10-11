@@ -533,3 +533,80 @@ def test_plan_cli_can_freeze_relation_selector_protocol(tmp_path: Path, protocol
     profile = next(profile for profile in plan.profiles if profile.role == "material_relations")
     assert profile.protocol == protocol
     assert plan.relations.dependency_policy == "complete_parent"
+
+
+def test_plan_cli_freezes_explicit_transport_options(tmp_path: Path) -> None:
+    value = snapshot()
+    source = tmp_path / "snapshot.json"
+    target = tmp_path / "transport-options-plan.json"
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    config_env = tmp_path / "structured.env"
+    config_env.write_text(
+        "STRUCTURED_EXTRACTION_PROVIDER=openai_compat\n"
+        "STRUCTURED_EXTRACTION_MODEL=synthetic-model\n"
+        "STRUCTURED_EXTRACTION_BASE_URL=https://synthetic.invalid/v1\n"
+        "STRUCTURED_EXTRACTION_API_KEY=synthetic-not-a-secret\n",
+        encoding="utf-8",
+    )
+    source.write_text(value.model_dump_json(), encoding="utf-8")
+
+    result = run_cli(
+        "plan",
+        "--snapshot",
+        str(source),
+        "--out",
+        str(target),
+        "--config-env-file",
+        str(config_env),
+        "--role",
+        "material_items",
+        "--disable-relations",
+        "--material-items-protocol",
+        "material-atomic-selector-jsonl-v6",
+        "--max-estimated-tokens-per-batch",
+        "8192",
+        "--candidate-slot-id",
+        "slot:scope-a",
+        "--thinking",
+        "disabled",
+        "--max-output-tokens",
+        "16384",
+        cwd=cwd,
+    )
+
+    assert result.returncode == 0, result.stderr
+    plan = BatchPlan.model_validate_json(target.read_text(encoding="utf-8"))
+    plan.verify_identity()
+    task = next(task for task in plan.tasks if task.role == "material_items")
+    profile = next(profile for profile in plan.profiles if profile.role == "material_items")
+    assert task.protocol == "material-atomic-selector-jsonl-v6"
+    assert profile.protocol == "material-atomic-selector-jsonl-v6"
+    assert profile.request_options is not None
+    assert profile.request_options["thinking"] == "disabled"
+    assert profile.request_options["max_output_tokens"] == 16384
+    assert profile.request_options["reasoning_effort"] is None
+
+
+def test_plan_cli_rejects_two_reasoning_switches_at_once(tmp_path: Path) -> None:
+    value = snapshot()
+    source = tmp_path / "snapshot.json"
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    source.write_text(value.model_dump_json(), encoding="utf-8")
+
+    result = run_cli(
+        "plan",
+        "--snapshot",
+        str(source),
+        "--out",
+        str(tmp_path / "unused-plan.json"),
+        "--reasoning-effort",
+        "none",
+        "--thinking",
+        "disabled",
+        cwd=cwd,
+    )
+
+    assert result.returncode != 0
+    assert "CS_INPUT_INVALID" in result.stderr

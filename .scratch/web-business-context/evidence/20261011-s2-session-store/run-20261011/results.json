@@ -1,0 +1,59 @@
+{
+  "checks": {
+    "P1_treatment_replays_from_turn_2": true,
+    "P2_dump_gone_and_row_stored_every_turn": true,
+    "P3_control_has_no_carrier": true,
+    "P4_turn3_reuses_80pct_of_turn2_prompt": true,
+    "P5_stored_prefix_matches_previous_turn": true,
+    "P6_three_separate_processes": true
+  },
+  "detail": {
+    "treatment": {
+      "1": {
+        "prompt_tokens": 16346,
+        "cache_read_tokens": 16000,
+        "replay": "skipped",
+        "stored_messages": 3
+      },
+      "2": {
+        "prompt_tokens": 16608,
+        "cache_read_tokens": 16256,
+        "replay": "used",
+        "stored_messages": 5
+      },
+      "3": {
+        "prompt_tokens": 16870,
+        "cache_read_tokens": 16512,
+        "replay": "used",
+        "stored_messages": 7
+      }
+    },
+    "control": {
+      "1": {
+        "prompt_tokens": 16343,
+        "cache_read_tokens": 16000,
+        "replay": "skipped",
+        "reason": "no_payload"
+      },
+      "2": {
+        "prompt_tokens": 12659,
+        "cache_read_tokens": 12288,
+        "replay": "skipped",
+        "reason": "no_payload"
+      },
+      "3": {
+        "prompt_tokens": 12668,
+        "cache_read_tokens": 12288,
+        "replay": "skipped",
+        "reason": "no_payload"
+      }
+    },
+    "turn3_reuse_of_turn2": 0.9942196531791907,
+    "pids": [
+      53826,
+      53872,
+      53948
+    ]
+  },
+  "pass": true
+}

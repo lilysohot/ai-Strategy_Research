@@ -95,6 +95,8 @@ class ExtractionAdapter:
         }
         if profile.options.reasoning_effort is not None:
             body["reasoning_effort"] = profile.options.reasoning_effort
+        if profile.options.thinking is not None:
+            body["thinking"] = {"type": profile.options.thinking}
         intent = RequestIntent(
             role=self.binding.role,
             protocol=self.binding.protocol,
@@ -155,6 +157,7 @@ class ExtractionAdapter:
             "completion_tokens": None,
             "reasoning_tokens": None,
             "reasoning_effort": profile.options.reasoning_effort,
+            "thinking": profile.options.thinking,
         }
         started = time.monotonic()
         failed = False

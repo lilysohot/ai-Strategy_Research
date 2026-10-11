@@ -928,11 +928,36 @@ prior_payload = row.payload if row else None
 | 迁移执行 | `alembic upgrade head` → `0019_session_conversations (head)`；`readiness.expected_heads() == ("0019_session_conversations",)`（单 head）；`downgrade -1` → `stamp` 往返后表存在、`select count(*) from session_conversations` = 0 |
 | 漂移差分 | `evidence/20261011-s2-session-store/`：`alembic-check-before.txt`（19 项，含 `add_table session_conversations`）vs `after.txt`（18 项）⇒ `removed == {('add_table','session_conversations')}`、`added == ∅`（`compare_drift.py` 判定 OK）。**口径修正记**：`alembic check` 在"库不在 head"时会短路（只报 `Target database is not up to date`），基线因此用 `stamp` 造出"版本号在 head 但表不存在"的反事实态来取 |
 
-**未做（待批或待裁）**
+**实跑验收（2026-10-11，用户批准，模型取服务器 `.env`）**
 
-1. **实跑验收（§11.7 集成 7/8）未执行**：3 轮两臂（treatment / control=每轮后删库中行）+ **跨进程**（turn 1/2/3 各起一个进程，这是"重启后续接"的可构造形式）。要花额度，按 §9.13/§9.14 的纪律需先签认判据再放行：**待批**。
-2. **D5** 未动：`tests/test_web_f19_schema_gate.py` 仍硬编码 `HEAD="0006_business_operations"`，它的 7 条失败仍是既有（本次全量未增不减）。**待裁**。
-3. S1 遗留的 **B1（无附件两臂复跑，8 run）/ B2（附件臂对照，2 run）/ B3（路由级位置断言，零额度）** 仍未做。
+跑前探针（判据前置）：`.env` 现为 `deepseek-flash` @ `api.deepseek.com`，两次同前缀请求实测上报 `prompt_tokens_details.cached_tokens` = 3196 / 3200 —— 正是 `frontier_agent/infra/openai_client.py::_usage_dict` 读取的字段。
+
+方法：两臂各 3 轮，**每轮一个独立进程**（`--turn N` 分次调用，pid 各异即"重启后续接"的可构造形式）；treatment 正常，control 每轮后删掉库中的会话行（两臂唯一差别）。驱动 `run_acceptance_s2.py`，证据 `evidence/20261011-s2-session-store/run-20261011/`。
+
+| 臂 | 轮 | prompt | cache_read | replay | 库中消息数 | run 目录还有 dump？ |
+|---|---|---|---|---|---|---|
+| treatment | 1 | 16,346 | 16,000 | skipped: no_payload | 3 | 否（已 ingest 并删除） |
+| treatment | 2 | 16,608 | **16,256** | **used** | 5 | 否 |
+| treatment | 3 | 16,870 | **16,512** | **used** | 7 | 否 |
+| control | 1/2/3 | 16,343 / 12,659 / 12,668 | 16,000 / 12,288 / 12,288 | skipped: no_payload ×3 | — | 否 |
+
+**判据（预注册）全 PASS**（`results.json` / `report.md`）：
+
+| 判据 | 结果 |
+|---|---|
+| P1 treatment 轮 2/3 `replay=used` | PASS |
+| P2 每轮跑完 dump 已删、库中有行 | PASS |
+| P3 control 轮 2/3 `skipped`（无载体） | PASS |
+| P4 轮 3 复用 ≥ 轮 2 prompt 的 80% | PASS（**99.4%**，16,512 / 16,608） |
+| P5 逐轮存储 messages 以上一轮为前缀 | PASS |
+| P6 三轮三个不同进程 | PASS（pid 53826 / 53872 / 53948） |
+
+**归因**（这里比 S1 的附件验收强）：两臂唯一差别是有无载体，control 轮 3 的 12,288 就是共享块（system+工具），treatment 的 16,512 比它多 **4,224** —— 这段差值只能来自被重放的对话（S1 附件验收缺对照臂，本轮补上了这个缺口）。
+
+**未做（待裁）**
+
+- **D5**：`tests/test_web_f19_schema_gate.py` 仍硬编码 `HEAD="0006_business_operations"`，其 7 条失败为既有（本次全量未增不减）。
+- S1 遗留的 **B1（无附件两臂复跑，8 run）/ B2（附件臂对照，2 run）/ B3（路由级位置断言，零额度）** 仍未做。
 
 **观察项**
 
@@ -963,6 +988,8 @@ prior_payload = row.payload if row else None
 2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 属**部署侧配置与文档滞后**，本 issue 不改配置、不推荐具体模型，只保留"选定模型必须实测会上报缓存命中"这条判据。交付后按要求做了**回溯自查（§10.8）**：当场补齐 5 处遗漏（统计脚本库源与未计量三态测试、两处落后文档、agent_team 描述不准、`usage.py` 模块文档），并如实记录 7 条边界——其中**唯一硬缺口是"无附件路径的两臂复跑（R4/R5'）未执行"**（预期不变但未实测，补跑需 8 次 run，待裁决）。
 
 2026-10-11：写出 **§11 S2 设计稿（会话状态归位）**。设计前实查补上两个**此前没被写下来、且会改变验收口径**的事实：① 本机 `alembic check` **本来就是脏的**（40+ 项历史漂移）⇒ §10.2 的"无新增漂移"必须改成**差分**（新表之外不得多出任何操作）；② `readiness.expected_heads()` 是从迁移文件**动态解析**的 ⇒ 新增 `0019` 后不升级库就 `/readyz` not_ready，故"执行迁移"是落地步骤而非可选项。设计上对 §10.1 有一处**实质修订**：行形态改为 **opaque `payload TEXT` + 记账列**（而非把 dump 头字段分列）——分列等于让 server 开始建模 pipeline 内部结构，与 §9.12 口径 A 的动机相反。另列出**退役清单**（含 4 条既有测试的处置）与 **7 项待裁决**（D1 行形态、D2 删除时机、D3 乱序守卫、D4 迁移执行、D5 F19 门测试硬编码 head、D6 头部探针、D7 命名）。
+
+2026-10-11：**S2 实跑验收全部 PASS**（用户批准；模型取 `.env` 的 `deepseek-flash`，跑前探针确认其上报 `cached_tokens`）。方法：两臂各 3 轮、**每轮独立进程**（pid 53826/53872/53948），control 每轮后删库中会话行作唯一差别。结果：treatment 轮 2/3 `replay=used`、轮 3 复用轮 2 prompt 的 **99.4%**；每轮跑完 run 目录里的 dump 已删、库中有行；control 轮 2/3 全部 `skipped`；逐轮存储 messages 以上一轮为前缀。**归因补强**：control 轮 3 的 12,288 即共享块，treatment 多出的 4,224 只能来自重放（S1 附件验收缺的对照臂在这里补上）。证据 `evidence/20261011-s2-session-store/run-20261011/`；明细见 §11.10。
 
 2026-10-11：按要求**分层回填主文档**（父 `../spec.md`）：只回填三条**契约级**结论——① §5 非目标条目补立项指向与状态（原文停在"不在本次主线内"）；② §2.3 增第三条形态约束**前缀恒定** + §6 增"请求前缀"一行；③ §3.1 补"同一判据的第二用途"（绑定判据同时决定前缀配置）。**设计稿本身不回填**（按交付物口径方案不算交付）；证据/判据过程留在本 issue 与 `evidence/`。S2 实现落地后已同步 `docs/tech-stack.md`（目录树两个文件的角色、跨轮上下文段落、`session_conversations` DDL、`/readyz` 的 head 要求）；spec §6 的"终局形态"一句待 S2 实跑验收后再回填。
 

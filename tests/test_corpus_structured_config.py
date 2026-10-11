@@ -10,6 +10,7 @@ from pathlib import Path
 
 import httpx
 import pytest
+from pydantic import ValidationError
 
 from plugins.corpus.claims import LlmCallError, LlmResponse
 from plugins.corpus.structured.adapter import ExtractionAdapter
@@ -459,3 +460,38 @@ def test_real_claims_and_material_consumers_accept_adapter_without_default_clien
     assert len(items_wire.requests) == 1
     assert not result.understanding.relations
     assert items_wire.intents[0].protocol == "material-atomic-jsonl-v5"
+
+
+def test_request_options_send_the_official_thinking_switch() -> None:
+    wire = RecordingWire()
+    adapter = wire.adapter(
+        load_extraction_config(environ=config_env(), options=RequestOptions(thinking="disabled"))
+    )
+
+    adapter("input")
+
+    body = json.loads(wire.requests[0].content)
+    assert body["thinking"] == {"type": "disabled"}
+    assert "reasoning_effort" not in body
+
+
+def test_request_options_send_reasoning_effort_none_without_thinking() -> None:
+    wire = RecordingWire()
+    adapter = wire.adapter(
+        load_extraction_config(
+            environ=config_env(), options=RequestOptions(reasoning_effort="none")
+        )
+    )
+
+    adapter("input")
+
+    body = json.loads(wire.requests[0].content)
+    assert body["reasoning_effort"] == "none"
+    assert "thinking" not in body
+    default = load_extraction_config(environ=config_env()).require_profile()
+    assert wire.intents[0].profile_sha256 != default.fingerprint
+
+
+def test_request_options_reject_two_reasoning_switches_at_once() -> None:
+    with pytest.raises(ValidationError):
+        RequestOptions(reasoning_effort="none", thinking="disabled")

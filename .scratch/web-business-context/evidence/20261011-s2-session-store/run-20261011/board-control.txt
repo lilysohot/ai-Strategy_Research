@@ -1,0 +1,10 @@
+turn  session     run              prompt  cache_read   reuse  replay                      window
+   1  2156ba811b  de62a472ba39      16343       16000       -  skipped: no_payload         -
+   2  2156ba811b  6a6eb535c897      12659       12288   75.2%  skipped: no_payload         -
+   3  2156ba811b  a6f1bd152b6e      12668       12288   97.1%  skipped: no_payload         -
+
+3 run(s) in 1 session(s); replayed 0, skipped 3, no decision 0
+mean reuse of the previous prompt: 86.1%
+prompt 41670 / cache_read 40576
+skip reasons:
+     3  no_payload

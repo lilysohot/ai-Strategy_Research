@@ -20,7 +20,7 @@ from typing import Literal
 from urllib.parse import unquote, urlsplit
 
 from dotenv import dotenv_values
-from pydantic import BaseModel, ConfigDict, Field, SecretStr
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, model_validator
 
 CONFIG_KEYS = tuple(
     f"STRUCTURED_EXTRACTION_{suffix}"
@@ -68,7 +68,15 @@ class RequestOptions(BaseModel):
     reasoning_effort: Literal[
         "none", "minimal", "low", "medium", "high", "xhigh", "max"
     ] | None = None
-    # No implicit temperature/thinking/reasoning options or compatibility retries.
+    # Official DeepSeek chat-completions switch, sent as {"type": thinking}. Exactly one of
+    # reasoning_effort / thinking may be set; None keeps the provider default either way.
+    thinking: Literal["enabled", "disabled"] | None = None
+
+    @model_validator(mode="after")
+    def _exclusive_reasoning_switch(self) -> RequestOptions:
+        if self.reasoning_effort is not None and self.thinking is not None:
+            raise ValueError("reasoning_effort and thinking are mutually exclusive")
+        return self
 
 
 class ExtractionProfile(BaseModel):

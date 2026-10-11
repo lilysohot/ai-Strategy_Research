@@ -15,7 +15,7 @@ from typing import Literal, cast
 from pydantic import ValidationError
 
 from plugins.corpus.material_semantics import MaterialRun
-from plugins.corpus.structured.config import load_extraction_config
+from plugins.corpus.structured.config import RequestOptions, load_extraction_config
 from plugins.corpus.structured.ledger import (
     AcceptedMaterialItems,
     BatchCheck,
@@ -31,6 +31,38 @@ from plugins.corpus.structured.roles import RoleArtifact
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotIntegrityError
 
 Role = Literal["claims", "material_items", "material_relations"]
+
+
+def _add_request_option_arguments(command: argparse.ArgumentParser) -> None:
+    """Bind the transport options a plan freezes and execution must match exactly."""
+    command.add_argument(
+        "--reasoning-effort",
+        choices=("none", "minimal", "low", "medium", "high", "xhigh", "max"),
+        help="provider reasoning switch; 'none' turns thinking off where the provider supports it",
+    )
+    command.add_argument(
+        "--thinking",
+        choices=("enabled", "disabled"),
+        help='official switch sent as {"type": ...}; mutually exclusive with --reasoning-effort',
+    )
+    command.add_argument("--max-output-tokens", type=int)
+
+
+def _request_options(args: argparse.Namespace) -> RequestOptions | None:
+    """Build frozen options only from explicitly supplied flags; None keeps the defaults."""
+    values: dict[str, object] = {}
+    if args.max_output_tokens is not None:
+        values["max_output_tokens"] = args.max_output_tokens
+    if args.reasoning_effort is not None:
+        values["reasoning_effort"] = args.reasoning_effort
+    if args.thinking is not None:
+        values["thinking"] = args.thinking
+    if not values:
+        return None
+    try:
+        return RequestOptions.model_validate(values)
+    except ValidationError as exc:
+        raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_request_options") from exc
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -132,6 +164,10 @@ def _parser() -> argparse.ArgumentParser:
         "--config-env-file",
         help="explicit dotenv file containing only STRUCTURED_EXTRACTION_* settings",
     )
+    # Both commands accept the same frozen transport options so a plan and its execution
+    # can only agree on the profile fingerprint.
+    _add_request_option_arguments(plan)
+    _add_request_option_arguments(execute)
 
     replay = commands.add_parser("replay", help="consume an explicit local response directory")
     replay.add_argument("--plan", required=True)
@@ -291,7 +327,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "plan":
             snapshot = _read_snapshot(args.snapshot)
-            config = load_extraction_config(dotenv_path=args.config_env_file)
+            config = load_extraction_config(
+                dotenv_path=args.config_env_file, options=_request_options(args)
+            )
             role_budgets = _role_budgets(args.role_budget)
             imported_items = _read_accepted_material_items(
                 args.import_items_artifact, args.import_items_payload
@@ -336,7 +374,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 plan,
                 store_root=args.store_root,
                 allow_model=args.allow_model,
-                config=load_extraction_config(dotenv_path=args.config_env_file),
+                config=load_extraction_config(
+                    dotenv_path=args.config_env_file, options=_request_options(args)
+                ),
             )
         elif args.command == "replay":
             plan = _read_plan(args.plan)
