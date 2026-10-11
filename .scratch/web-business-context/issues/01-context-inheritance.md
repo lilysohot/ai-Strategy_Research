@@ -665,7 +665,9 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 | `server/routes/runs.py` | 注释改写：说明 upload 说明走**尾部**而非系统提示，避免带附件那一轮翻转前缀 |
 | `tests/test_context_inheritance.py` | 新增 `test_worker_puts_per_run_guidance_in_the_request_tail`（尾部含、前缀不含） |
 
-效果：带附件会话不再"抖一次"（§9.20 O4 变成已消除）；与 §9.16 的 A 方案同一模式——**同样的字节，换个位置**。§9.11 第 4 项范围外说明仍然成立：`agent_team` 也随 worker 变化把说明落在 user message 里（位置变化，无新风险）。
+效果：带附件会话不再"抖一次"（§9.20 O4 变成已消除）；与 §9.16 的 A 方案同一模式——**同样的字节，换个位置**。
+
+`agent_team` 要写准（§9.11 第 4 项范围外说明不变）：它把 `metadata["_sys_prompt_addendum"]` 拼在**每个 phase 的 system prompt** 上（`workflows/agent_team/nodes/main_agent.py:1506/1526/1544` 均为 `system_prompt=_decorate(...)`）。所以本次改动对 agent_team 是"说明从 phase system prompt 移到本轮 instruction"的一次**行为变化**：意图上更合理（含本 run 路径的文本本就不该进前缀），但 **agent_team 路径未实跑验证**（web 默认走 stateful-react-agent）。基准路径不受影响：`benchmarks/public/sandbox_profiles.py` 直接写 metadata，不经 `--prompt-addendum`。
 
 **a：replay 决策与窗口统计落 `usage_json` + 只读统计脚本（已落地）**
 
@@ -703,9 +705,9 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 现场工具输出：`run-20261011b/board.txt`（`scripts/replay_stats.py --session 95754ee0…`）显示 `used (1 turns)`、`reuse 99.8%`、窗口 `3 msg / 9184 tok`。
 
-**另行发现（不在本 issue 范围，需部署侧处置）**
+**关于模型/端点的定性（归部署侧，本 issue 不改）**
 
-`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` **也不在该端点的支持列表内**（只认 `deepseek-flash` / `deepseek-v4-pro`）⇒ 按当前 `.env` 起的 web run，首个 LLM 调用即 400 `llm_error`。本次**未改 `.env`**：属部署配置，不属本 issue。
+本次暴露的是**配置与文档滞后**，不是代码缺陷：§9.14 R2 预注册的 `deepseek-v4-flash-ga-260731` 与 `.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 都不在当前端点（`https://api.deepseek.com`）的支持列表内（该端点只认 `deepseek-flash` / `deepseek-v4-pro`）。**模型选择随部署环境变，由部署侧决定**：本 issue 不改 `.env`、不改默认模型、也不把任何具体模型名写成推荐（§9.14 R2 的"指定模型"应理解为一次性验收参数，不是长期默认）。对判据的影响只有一条、且是长期的：**选定模型必须实测会上报缓存命中字段**——本次探针给出的答案（该端点上报在 `prompt_tokens_details.cached_tokens`，正是 `frontier_agent/infra/openai_client.py::_usage_dict` 已在读的字段）比"历史运行记得它会报"更可靠，适配器无需改动。
 
 **O5 保留期（裁决：并入 S2）**
 
@@ -715,6 +717,32 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 - 旧 dump 无 `messages_est_tokens` ⇒ 板子窗口列显示 `N msg / 0 tok`；新 run 起正常。这是"字段后来才有"，不是读取失败。
 - 板子在真实 runs_root 上能把 §9.17 的四个验收 run 复现成同一会话的 98.6% 命中，说明"常驻统计"这一格已可用。
+
+### 10.8 S1 回溯（2026-10-11，交付后自查）
+
+**A. 当场补齐的遗漏**
+
+| # | 遗漏 | 处置 | 证据 |
+|---|---|---|---|
+| 1 | 统计脚本的**库源**（`load_from_db`）与目录源的**未计量三态**无测试——此前只测了纯函数与目录源 | 补 3 条：库源按会话取数 + 顺序 + 从 `usage_json` 读决策；无轨迹 ⇒ `unavailable`；有轨迹无计量 ⇒ `partial` | `tests/test_replay_stats.py` 12 → **15 passed** |
+| 2 | `tests/test_upload_t210.py` 文档字符串仍写"经 `_sys_prompt_addendum` 告知路径" | 改为"指令尾部"，并写明为何不能进前缀 | 该文件头注释 |
+| 3 | `docs/tech-stack.md` 三处落后：§5.1 上传指引（同 #2）、run 产物清单未含 dump 新字段、`runs.usage_json` 未提 replay 块 | 就地更新三处 | 同文件 |
+| 4 | §10.7 对 `agent_team` 的描述不准（写成"落在 user message"，实际是拼进 **phase system prompt**） | 依代码改写为"行为变化 + 未实跑验证" | `workflows/agent_team/nodes/main_agent.py:1506/1526/1544` |
+| 5 | `server/usage.py` 模块文档未提 `replay` 块（`usage_json` 的形状变了） | 补一段说明（并声明它不参与 token 计数） | `server/usage.py` 模块 docstring |
+
+**B. 仍在的遗漏与边界（不掩盖）**
+
+| # | 项 | 事实 | 建议 |
+|---|---|---|---|
+| 1 | **S1 验收第 2 项"3 轮两臂复跑（R4/R5'）"未执行** | §10.2 的 S1 验收写的是"单测 + 3 轮两臂复跑 + 带附件两轮"；本次做了单测与带附件两轮，**无附件路径的两臂复跑没做** | 预期不变（无附件时 `--prompt-addendum` 为空 ⇒ system prompt 与改动前逐字节相同；本次改动只新增 dump 字段与 `usage_json` 键），但"预期"≠"实测"。补跑需 8 次 run（两臂各 4 轮）——**待裁决是否花这次额度** |
+| 2 | 带附件验收**没有对照臂** | C6（轮 2 命中 ≥ 80% 轮 1 prompt）在"共享块已暖"时并非严格归因：本轮共享块（system + 工具）≈12.3k，阈值 13.1k，只差约 0.8k ⇒ **共享块再大一点，C6 可能因错的原因通过** | 判据签认时不含对照臂，故不改判据；要归因就加"控制臂 = 轮后移走 dump"再跑一次（§9.17 的两臂先例） |
+| 3 | 验收走 **`orchestrator.submit` 直连**，不经 HTTP 路由 + DATA-06 outbox | 路由/outbox 的连通性由 `tests/test_upload_t210.py`（HTTP + 真 worker + mock LLM）与 `tests/pg/test_run_dispatch.py` 覆盖，但它们**不校验说明的位置**；"位置"结论的证据在 worker 级单测 + 直连验收 | 记录为边界。若要端到端含路由，可在 `test_upload_t210` 里加一条"说明在 user message、不在 system prompt"的断言（mock 下即可，零额度） |
+| 4 | `server/input_requests.py:670` 的"Continue input request"说明也随本次改动进了尾部 | 属**顺带收益**（该文本含 per-request id，原先进前缀会翻转缓存）；无测试钉住 | 记录；断言可归 S4 的常驻回归 |
+| 5 | PG 侧用量契约测试本机**跳过** | `tests/pg/test_data15_joint.py` → 3 skipped（无 PG 连接）；全量跑也因此不含该文件 | 本次 `usage_json` 只新增键，该测试不校验键集合；记录 |
+| 6 | `usage_summary_for_runs`（AC-20 成本对比口径）不返回 replay 块 | 有意：那是成本口径，不是会话口径；replay 走 `usage_json` 与统计脚本 | 若成本板要看命中原因再评估加字段 |
+| 7 | 文档漂移（历史计划文档的行号） | `docs/p0-implementation-spec.md:235` 引 `worker.py:351` / `main_agent.py:817`，实际已漂移到 `506` / `852`；其结论（业务策略复用 `_sys_prompt_addendum`）**仍然成立**（上传说明才移走） | 记录；历史计划文档不做行号维护 |
+
+**C. 结论**：S1 可执行的验收格子已闭合（b / a / 统计脚本 / 带附件实测 / 观测），**唯一硬缺口是"无附件路径的两臂复跑"（B1）**；其余为如实记录的边界（B2 无对照臂、B3 路由路径未覆盖位置断言、B5 PG 跳过、B7 行号漂移）。
 
 ## Comments
 
@@ -736,4 +764,4 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 2026-10-11：补 **§10.3 主流 Web 形态对照**（会话状态 owner 的三类主流形态 + 九条通用共识 + 本仓库逐条对照 + 证据分级），用于回答"我们偏离主流多远、S2 站位在哪"。同日执行 **S1**（记录见 §10.7）：**b** upload 说明移入请求尾部（消除 §9.20 O4 的"抖一次"）；**a** replay 决策与窗口统计落 `runs.usage_json`，新增只读统计脚本 `scripts/replay_stats.py`（`--session` / `--runs-root`，按会话计算命中率，跨会话不算、未计量不算），真实 runs_root 冒烟复现同一会话 98.6% 命中。门禁：目标集 137 passed、全量 2980 passed / 12 failed（失败类别同 §9.13 基线，未重建 worktree 逐条对照）、ruff/格式/pyright 干净。**尚待**：① 带附件两轮实测需先签认预注册判据后放行（消耗额度，实施方不自宣）；② **O5 保留期建议并入 S2**（S2 让载体进 DB 后该问题自动消失），待裁决。
 
-2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 需部署侧处置，未在本次改动（不属本 issue）。
+2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 属**部署侧配置与文档滞后**，本 issue 不改配置、不推荐具体模型，只保留"选定模型必须实测会上报缓存命中"这条判据。交付后按要求做了**回溯自查（§10.8）**：当场补齐 5 处遗漏（统计脚本库源与未计量三态测试、两处落后文档、agent_team 描述不准、`usage.py` 模块文档），并如实记录 7 条边界——其中**唯一硬缺口是"无附件路径的两臂复跑（R4/R5'）未执行"**（预期不变但未实测，补跑需 8 次 run，待裁决）。

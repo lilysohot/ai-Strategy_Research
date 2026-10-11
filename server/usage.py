@@ -20,6 +20,12 @@ Why the cache split matters: ``cache_read_tokens`` (cache hit) bills at ~0.1x
 base input on Anthropic and is free on OpenAI, while ``cache_write_tokens``
 (cache creation) bills at 1.25x-2x. Summing them into one "cached" bucket is
 what makes a cost board under-attribute write spend, so we keep them apart.
+
+A stored aggregate may additionally carry a ``replay`` block (issue 01 §10.2
+S1-a): the cross-turn window/decision this run reported, merged in by the
+orchestrator from the worker's summary (see :func:`replay_block_from_summary`).
+It is a window statistic, not a token counter — the counters stay a pure sum
+over the trajectory — and it is absent on runs that reported no decision.
 """
 
 from __future__ import annotations

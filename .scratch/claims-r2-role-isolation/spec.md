@@ -67,9 +67,10 @@
 | 25 | [Relation boolean v2 最终有界真实服从性复验](issues/25-final-relation-live-compliance.md) | 24 零调用通过、独立授权 | 4/4 协议完整；gold-v2 仅 30/38，按终止规则关闭路线 |
 | 26 | [relation 层对研报抽取价值的有界配对验证](issues/26-relation-layer-value-validation.md) | 25、签认价值金标、独立授权 | 5 题 × A/B；提升 0/4、回退 2/4、持平 2/4且触发成本止损；关闭默认 relation 富化 |
 | 27 | [challenges 显式命题冲突规则](issues/27-challenges-rule-propositional-conflict.md) | 24；不依赖或复活 25 | 零调用高精度防护和回归测试；仅供未来按需路径，不构成当前 relation 验收重启 |
-| 28 | [items-only 质量门零调用预注册](issues/28-items-only-quality-gate-preregistration.md) | 27 关闭 relation 后；10 冻结 48-item 金标 | 零调用冻结 items-only 质量门与 5 阶段消费闭环；真实复验须独立授权 |
+| 28 | [items-only 质量门零调用预注册](issues/28-items-only-quality-gate-preregistration.md) | 27 关闭 relation 后；10 冻结 48-item 金标 | 零调用冻结 items-only 质量门与 5 阶段消费闭环；已执行终结（run-2 结构性未过门，路线按门终态关闭，见 31） |
 | 29 | [items 金标全量语义审计](issues/29-items-gold-semantic-audit.md) | 28 预注册后；10 冻结 48-item 金标 | 零调用只读复核 48 条 items 原子性/可评分性/字段裁定并澄清契约签认缺口；发现缺陷须另立修正票 |
 | 30 | [items 评分契约补签与 condition 读路径定义](issues/30-items-scoring-contract-condition-readpath.md) | 29 审计 F1/F2/F3；用户裁定路线 A | 不改金标，补签契约并定义 condition 读路径；签认后同步再绑定 Issue 28 门 |
+| 31 | [run-1 突增保护失效与模型替换重跑](issues/31-run1-429-invalidation-model-substitution.md) | 28 门执行受阻解除后；用户授权与模型指定 | 记录 run-1 429 失效、模型替换（deepseek-v4-flash）与 run-2 结构性未过门；按门终态关闭路线 |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布

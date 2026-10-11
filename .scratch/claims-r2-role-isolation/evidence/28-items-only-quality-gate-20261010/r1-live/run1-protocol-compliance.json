@@ -1,0 +1,237 @@
+{
+  "schema_version": "items-only-run1-protocol-compliance-1",
+  "created_on": "2026-10-11",
+  "purpose": "Zero-call re-scan of run-1 responses plus cross-model comparison; corrects the earlier un-refined \"8 successes\" statement.",
+  "rule": "every non-empty response line must parse as a JSON dict with record_type == \"obligation_result\" (strict selector validation)",
+  "run_1_summary": {
+    "attempts": 24,
+    "no_response": 16,
+    "responses": 8,
+    "compliant": 6,
+    "offending": 2,
+    "offenders": [
+      "attempt:84ff23a60cacd6053b658b60053adabf32175993ba88f49060657e57b34f7689",
+      "attempt:40ca27ecae31bce047886d9abf39dee1ff085c1a1260fb8463b6938db1bac179"
+    ],
+    "consequences": "the two offending responses correspond to partial packets eeff713f (3 slots) and 0f22fc72 (9 slots), previously counted only as md #01-#08 successes; the remaining partial packet dafad60e (1 slot) is a semantic-coverage partial without format error; packets 8e0d44fb/f81899c5 are the 429 rejections."
+  },
+  "cross_model_comparison": {
+    "doubao_seed_2_1_lite_run1": {
+      "responses": 8,
+      "compliant": 6,
+      "offending": 2,
+      "rate": 0.25,
+      "offender_keyset": [
+        "items",
+        "obligation_index",
+        "reason_code",
+        "status"
+      ]
+    },
+    "deepseek_v4_flash_run2": {
+      "responses": 23,
+      "compliant": 11,
+      "offending": 12,
+      "rate": 0.52,
+      "offender_keyset": [
+        "items",
+        "obligation_index",
+        "reason_code",
+        "status"
+      ]
+    },
+    "observation": "the same violation shape (missing record_type; kind carried as status=\"items\") appears in both models at different rates; the strict-format violation is not unique to one model. Whether prompt/schema phrasing contributes is NOT attributed by this gate; it is a candidate pre-registered variable for any future gate."
+  },
+  "responses": [
+    {
+      "attempt_id": "attempt:2a8e3fc168a8daa1bc36eea73cb5a21e5d0e203d847d8948f05e934b648fc1b3",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 11,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:16b710a7c598f4741bf67087663fc557de901fb7c7462c14f379441fc7822ba0",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:2eb025f37d1ba38117c782370bc81d752b8c27f3c30fd7692f9182a050947433",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 10,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:d7aca9b62068fec8f8b4d286082fae921a4651d937ca140f15d4b87824b6fbc1",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:d91913133f74272c3fb227e40ea57f779d65974b3c07695e197a80f03011535f",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 6,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:41e5c3a6403d5f6a332aece52396fce107962b9b51891db6e979043be3926f81",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:84ff23a60cacd6053b658b60053adabf32175993ba88f49060657e57b34f7689",
+      "execution_status": "succeeded",
+      "compliant": false,
+      "good_records": 0,
+      "offending_lines": 3,
+      "offender_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:8172736158d3bc822e75f5843968cc0e43b9326c8d7573872b9148e55d1c851a",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:39dff22ce213ce1bbb692b9725ae9b7a2bef11ee385f86833a80226debec54cf",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 11,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:a2ed054994774bcca48f4679af0fd0d961e5aeb978caba1e1746e02a11a2fd2e",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:cfff6c8fefad310056f609f86e6457f88e709348d229c84c5b8ef936c07dc984",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 9,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:90472663dd62f146a29150730163b9b34395d74e88a46350db3830c7be574291",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:40ca27ecae31bce047886d9abf39dee1ff085c1a1260fb8463b6938db1bac179",
+      "execution_status": "succeeded",
+      "compliant": false,
+      "good_records": 0,
+      "offending_lines": 9,
+      "offender_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:9cfd0eb9f7ae0a13f98d8f2ad04b5252eb53779b93a587a7a7cd4866ade1b373",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:0568bf82ed87d3d566b2bbaa6cb2cd14714c8fa83b951d50f346c9383c85e8c3",
+      "execution_status": "succeeded",
+      "compliant": true,
+      "good_records": 2,
+      "offending_lines": 0,
+      "offender_keysets": [],
+      "finish_reason": "stop",
+      "http_status": 200
+    },
+    {
+      "attempt_id": "attempt:d0eb74111c824447772e72992d7a93348883c0c9f137a5beb27143dc6ed09fdf",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:6f9f6cca00dd331f3af13597168cad657a86c3b04a048e2764ba56544c7da0a1",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:f9660046ee846105e174143293c93cabce7c0a3df7d91661f454c2d13059c8c8",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:92c17b47474e3202abef5e72508c8b34ba303894df7692b06515b9ad8d8ee8db",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:49b21ca4f9c213cb562ac3f3771ef31ed6a01834ea6edc0605347a6488738cc5",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:a189bf7ce500b147269bac713199d346f8801906b1166c171c8ade242da08990",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:c69f974bb550b54486f59d65c3cb0a72072d16ef798ecdb186ac1749cac422cf",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:bebe367d6e464f9f532dc01decb29ccc89da893bb0e709fced7017bb19aa56cd",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    },
+    {
+      "attempt_id": "attempt:2bf2a0677c35483d4dbf925b5056887aaa7540f309d2fb8b63df070c37b98f99",
+      "execution_status": "failed",
+      "http_status": 429,
+      "compliance": "no_response"
+    }
+  ]
+}

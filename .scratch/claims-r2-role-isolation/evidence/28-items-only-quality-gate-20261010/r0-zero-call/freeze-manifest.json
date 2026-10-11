@@ -1,7 +1,7 @@
 {
   "schema_version": "items-only-quality-gate-freeze-manifest-1",
   "created_on": "2026-10-10",
-  "status": "frozen_not_executed",
+  "status": "executed_route_closed",
   "issue": "28-items-only-quality-gate-preregistration",
   "revision_history": [
     {
@@ -29,8 +29,19 @@
       "revised_on": "2026-10-11",
       "preregistered_gate_sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
       "note": "run-1 触发方舟突增保护 429（16/24 次零 token 拒绝）判定为基础设施失效；用户指示更换模型为 deepseek-v4-flash 并重跑（节流 20s）。门 revision 4 记录该替换与 run-1 失效（详见门 revision_history 4）；本节计划文件仍为冻结原件，run-2 计划在 r2-live/ 零调用重冻结。"
+    },
+    {
+      "revision": 5,
+      "revised_on": "2026-10-11",
+      "note": "执行终结后的状态修正：status 由 frozen_not_executed 改为 executed_route_closed（上一条所列字节哈希保持冻结记录不变；此前本清单哈希为 sha256:004ca636b992e970a46fe66380bab73bbb8f13160a6f80a95ebf3350d20d21ae，现因本修订变更）。执行摘要见本清单 execution 块与 r2-live/run2-final-decision.json。"
     }
   ],
+  "execution": {
+    "run_1": "doubao-seed-2.1-lite：24 次尝试，16 次被方舟突增保护以 HTTP 429 瞬时拒绝（零 token）→ 基础设施失效；证据留存 r1-live/。其中 8 次成功响应经零调用复扫：6 次完全合规、2 次违反同一严格 JSONL 校验（记录缺 record_type）——r1-live/run1-protocol-compliance.json。",
+    "run_2": "deepseek-v4-flash（20s 节流）：24 次尝试全部发出（无 429、零重试）；12/23 响应违反严格 JSONL 校验、1 次传输结果不明；13/24 批次 partial、107/190 槽位失败 → 结构性未过门；r2-live/post-run-check.json。",
+    "terminal": "按门冻结 terminal_decision.on_fail 关闭本门所验「模型 + extractor」路线（用户确认，2026-10-11）；不放宽阈值、不改 prompt、不新增金标；未做质量评分（执行要求先行未过）。",
+    "note": "verification-summary.json 为 2026-10-10 冻结时点的输出（其『授权全 false / 签认 pending』断言已被门 revision 3/4 超越），保留原样作为当次记录。"
+  },
   "role_scope": [
     "material_items"
   ],

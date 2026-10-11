@@ -20,9 +20,18 @@ from __future__ import annotations
 
 import json
 import os
+import uuid
 from pathlib import Path
 
-from scripts.replay_stats import TurnStat, load_from_runs_root, main, summarise
+import pytest
+
+from scripts.replay_stats import (
+    TurnStat,
+    load_from_db,
+    load_from_runs_root,
+    main,
+    summarise,
+)
 
 _SESSION = "3f2a1c8e-0000-4000-8000-000000000001"
 
@@ -259,6 +268,31 @@ def test_a_run_without_a_summary_is_skipped_not_guessed(tmp_path) -> None:
     assert load_from_runs_root(tmp_path) == []
 
 
+def test_a_run_with_no_trajectory_is_flagged_unmetered(tmp_path) -> None:
+    """No trajectory at all is "unavailable", never a zero-token claim."""
+    run = tmp_path / "run-x" / "run"
+    run.mkdir(parents=True)
+    (tmp_path / "run-x" / "summary.json").write_text(
+        json.dumps({"replay": {"decision": "used", "prior_turns": 1}}), encoding="utf-8"
+    )
+    turns = load_from_runs_root(tmp_path)
+    assert turns[0].usage_status == "unavailable"
+    assert turns[0].prompt_tokens == 0
+    assert summarise(turns)["summary"]["unmetered"] == ["run-x"]
+
+
+def test_a_trajectory_without_metered_turns_is_partial(tmp_path) -> None:
+    """The file exists but no turn reported usage: partial, not complete."""
+    run = tmp_path / "run-y" / "run"
+    (run / "agent" / "trajectories").mkdir(parents=True)
+    (tmp_path / "run-y" / "summary.json").write_text("{}", encoding="utf-8")
+    (run / "agent" / "trajectories" / "react_agent.jsonl").write_text(
+        json.dumps({"t": "result", "name": "bash"}) + "\n", encoding="utf-8"
+    )
+    turns = load_from_runs_root(tmp_path)
+    assert turns[0].usage_status == "partial"
+
+
 def test_a_summary_under_run_is_still_found(tmp_path) -> None:
     # The fallback location: losing a whole board to a moved file would read as
     # "no conversation ever replayed anything", which is the wrong conclusion.
@@ -274,6 +308,117 @@ def test_a_summary_under_run_is_still_found(tmp_path) -> None:
     turns = load_from_runs_root(tmp_path)
     assert [t.run_id for t in turns] == ["run-one"]
     assert turns[0].cache_read_tokens == 250
+
+
+# ── the database source ──────────────────────────────────────────────
+
+
+@pytest.fixture
+async def db(tmp_path):
+    """Throwaway SQLite database — the sibling suites' per-file fixture."""
+    from server.config import get_config
+    from server.store import init_db, reset_engine
+
+    cfg = get_config()
+    orig_url, orig_key = cfg.database_url, cfg.master_key
+    cfg.database_url = f"sqlite+aiosqlite:///{tmp_path / 'test.db'}"
+    cfg.master_key = f"test-master-{uuid.uuid4().hex}"
+    await reset_engine()
+    await init_db()
+    yield cfg
+    cfg.database_url, cfg.master_key = orig_url, orig_key
+    await reset_engine()
+
+
+async def _new_user_id() -> uuid.UUID:
+    """A real user row: ``sessions.user_id`` is a foreign key."""
+    from server.store import create_user
+
+    user = await create_user(username=f"stats-{uuid.uuid4().hex[:10]}", password_hash="synthetic")
+    return user.id
+
+
+@pytest.mark.asyncio
+async def test_the_db_source_scopes_to_one_session_and_reads_usage_json(db):
+    """The Run row is the source: counters from columns, decision from usage_json."""
+    from datetime import UTC, datetime
+
+    from sqlalchemy import update
+
+    from server.store import (
+        Run,
+        create_run,
+        ensure_session,
+        get_sessionmaker,
+        update_run_usage,
+    )
+
+    user_id = await _new_user_id()
+    session_id = uuid.uuid4()
+    other_session = uuid.uuid4()
+    await ensure_session(session_id=session_id, user_id=user_id, title="t")
+    await ensure_session(session_id=other_session, user_id=user_id, title="other")
+
+    created: list[uuid.UUID] = []
+    for index in range(2):
+        run_id = uuid.uuid4()
+        await create_run(
+            run_id=run_id,
+            session_id=session_id,
+            user_id=user_id,
+            prompt="p",
+            pipeline_id="stateful-react-agent",
+            run_dir=f"/tmp/{run_id.hex}",
+            status="completed",
+        )
+        await update_run_usage(
+            run_id=run_id,
+            usage={
+                "prompt_tokens": 1000 + index,
+                "cache_read_tokens": 0 if index == 0 else 900,
+                "llm_calls": 1,
+                "status": "complete",
+                "replay": {
+                    "decision": "skipped" if index == 0 else "used",
+                    "reason": "no_payload" if index == 0 else "",
+                },
+            },
+        )
+        created.append(run_id)
+    leaked = uuid.uuid4()
+    await create_run(
+        run_id=leaked,
+        session_id=other_session,
+        user_id=user_id,
+        prompt="p",
+        pipeline_id="stateful-react-agent",
+        run_dir=f"/tmp/{leaked.hex}",
+        status="completed",
+    )
+    # ``created_at`` has second resolution, so two runs inserted in the same
+    # second would tie; pin distinct timestamps so the ORDER BY is really tested.
+    async with get_sessionmaker()() as session:
+        await session.execute(
+            update(Run)
+            .where(Run.id == created[0])
+            .values(created_at=datetime(2026, 1, 1, tzinfo=UTC))
+        )
+        await session.execute(
+            update(Run)
+            .where(Run.id == created[1])
+            .values(created_at=datetime(2026, 1, 2, tzinfo=UTC))
+        )
+        await session.commit()
+
+    turns = await load_from_db(session_id.hex)
+
+    assert [t.run_id for t in turns] == [run.hex for run in created]
+    assert turns[0].session_id == session_id.hex
+    assert turns[0].prompt_tokens == 1000 and turns[0].decision == "skipped"
+    assert turns[0].reason == "no_payload"
+    assert turns[1].prompt_tokens == 1001 and turns[1].cache_read_tokens == 900
+    assert turns[1].decision == "used"
+    assert summarise(turns)["turns"][1]["reuse"] == 0.9
 
 
 # ── the CLI ──────────────────────────────────────────────────────────

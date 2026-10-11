@@ -15,6 +15,10 @@ Production database access: 0
   耗时 4.3–22.7s、累计 30,407 tokens）；#09、#10 被 HTTP 429 瞬时拒绝（~180ms、零 token）。
 - `optical-module-docx`：14 次尝试**全部** HTTP 429 瞬时拒绝（176–250ms、零 token）。
 - 合计 24 次尝试中 16 次 429，均未触达模型（usage 为空）。
+- **补记（零调用复扫，2026-10-11）**：`#01–#08` 的 8 次成功响应中 **6 次完全合规、2 次违反同一严格
+  JSONL 校验**（记录缺 `record_type`，与 run-2 违规同形态），对应 partial 包 `eeff713f`（3 槽）与
+  `0f22fc72`（9 槽）；跨模型对照 doubao 2/8（25%）vs deepseek 12/23（52%），详见
+  `r1-live/run1-protocol-compliance.json`。此前「8 次成功」未细分格式合规性，本补记予以细化。
 
 依据方舟官方文档（突发流量处理/接入 FAQ）：seed-2.0 及之后模型的 429
 `RequestBurstTooFast` 为「请求量激增触发系统保护，请放缓流量提升速度，逐步增加请求量」，
@@ -88,6 +92,7 @@ Production database access: 0
 
 - `../evidence/28-items-only-quality-gate-20261010/r1-live/live-run-summary.json`（run-1 失效记录）
 - `../evidence/28-items-only-quality-gate-20261010/r1-live/live-store/`（run-1 全量尝试与诊断）
+- `../evidence/28-items-only-quality-gate-20261010/r1-live/run1-protocol-compliance.json`（run-1 响应合规复扫与跨模型对照）
 - `../evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json`（rev 3/4）
 - `../evidence/28-items-only-quality-gate-20261010/r2-live/replan-manifest.json`
 - `../evidence/28-items-only-quality-gate-20261010/r2-live/pre-execution-verification.json`

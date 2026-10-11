@@ -188,9 +188,9 @@ server/runs/<run_id>/
     └── engine.log
 ```
 
-**跨轮上下文（2026-10-10，issue 01 阶段 1）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format；下一轮由服务端**只做字节拷贝**到 `prior_conversation.json`，由下一轮的 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与**（既不读也不写，见 `server/store.py::is_watch_run`）。
+**跨轮上下文（2026-10-10，issue 01 阶段 1；2026-10-11 S1 补注）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format / messages_est_tokens（最后一项是写侧一次估算，供 `runs.usage_json` 报告重放窗口大小，**不参与任何判定**，旧 dump 读作 0）；下一轮由服务端**只做字节拷贝**到 `prior_conversation.json`，由下一轮的 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与**（既不读也不写，见 `server/store.py::is_watch_run`）。重放决策与窗口可经 `runs.usage_json.replay` 读取（`server/orchestrator.py::_usage_with_replay`），逐轮命中率由只读脚本 `scripts/replay_stats.py` 出板。
 
-7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，再用 `metadata['_sys_prompt_addendum']` 告知路径（该 addendum 两个分支都生效，`:817`）。
+7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，路径由 **worker 拼进本轮 instruction 的尾部**告知（issue 01 S1-b）：该说明每轮含本 run 自己的 inputs 路径，放进 system prompt 会翻转 KV cache 前缀，使带附件的那一轮整段重算；`metadata['_sys_prompt_addendum']` 只保留跨轮恒定的文本（常量说明、业务策略、缺料策略）。
 
 ### 5.2 事件与控制（v1.2 重写：持久化不自建）
 
@@ -351,7 +351,8 @@ CREATE TABLE runs (
   llm_snapshot_json JSONB,                            -- model/base_url/params 快照, 不含 key
   prompt_tokens INT, completion_tokens INT, total_tokens INT,
   cache_read_tokens INT, cache_write_tokens INT, reasoning_tokens INT,
-  llm_calls INT, usage_json JSONB,                    -- PR-GOV-03，聚合自 trajectory
+  llm_calls INT, usage_json JSONB,                    -- PR-GOV-03，聚合自 trajectory；可含 replay 块
+                                                      --（跨轮决策 + 窗口，issue 01 S1-a）
   run_dir TEXT NOT NULL,                              -- run/agent/trajectories/、run/engine.log、ws/outputs/、
                                                       -- history.txt、prior_conversation.json（跨轮重放输入）
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

@@ -8,8 +8,11 @@ Covers the contract in plan.md T2.10:
     ``max_upload_files`` are enforced (413 on violation).
   * Uploaded filenames are flattened so a client-supplied path never escapes the
     inputs dir.
-  * The agent is told where the files live via ``_sys_prompt_addendum`` (routed
-    through ``prompt_addendum`` → ``--prompt-addendum`` → worker metadata).
+  * The agent is told where the files live via the run's **instruction tail**
+    (routed through ``prompt_addendum`` → ``--prompt-addendum`` → the worker's
+    ``instruction``), never the system prompt: the note names this run's own
+    inputs path, so putting it in the prefix would invalidate the provider's
+    cached prefix on any turn carrying an attachment (issue 01 §10.7 S1-b).
 
 The end-to-end test drives a real worker (the mock LLM calls ``read_file`` on the
 uploaded input, proving the file is visible to the agent at its inputs dir).

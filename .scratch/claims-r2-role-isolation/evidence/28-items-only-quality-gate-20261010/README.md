@@ -108,7 +108,11 @@ Production database access: 0
   `prompt_revision_after_execution_allowed=false`、`protocol_or_extractor_change_after_execution_allowed=false`、
   `holdout_accessed=false`。
 
-## 10. 复验结果
+## 10. 复验结果（冻结时点记录；已被执行超越）
+
+> **注（2026-10-11）**：本节及 `verification-summary.json` 为冻结时点的零调用输出——其
+> 「授权全 false、签认 pending」断言已被门 revision 3/4 超越（授权已填写并签认、模型已替换，
+> 两轮执行与终态见 §12）。JSON 保留原样作为当次输出，不再代表当前状态。
 
 `verify_items_only_plan.py` 零调用通过：manifest 字节哈希与磁盘一致、plan `verify_identity()` 通过、
 `enabled_roles == ("material_items",)`、`relations.enabled == False`、`role_max_attempts` 三键、
@@ -127,7 +131,8 @@ scope locators 与评分契约一致、批次预算可确定性复算、gate 计
 ### run-1（`r1-live/`）— 基础设施失效
 
 - 门 rev 3 授权（xyl；doubao-seed-2.1-lite；attempts 10+14；零重试；并发 1；无节流）。
-- 24 次尝试：md #01–#08 成功（HTTP 200、`finish_reason=stop`、30,407 tokens）；
+- 24 次尝试：md #01–#08 返回响应（HTTP 200、`finish_reason=stop`、30,407 tokens；其中
+  **6 次格式完全合规、2 次违反严格 JSONL 校验**——见 `r1-live/run1-protocol-compliance.json`）；
   md #09–#10 与 docx #01–#14 共 **16 次被 HTTP 429 瞬时拒绝**（~180ms、零 token）——
   方舟「突增流量保护」（`RequestBurstTooFast`，seed-2.x 系列；配额未必耗尽）。
 - 判定：基础设施失效、不触发 on_fail；证据保留（`r1-live/live-store`、
