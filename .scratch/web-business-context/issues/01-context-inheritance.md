@@ -744,6 +744,202 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 **C. 结论**：S1 可执行的验收格子已闭合（b / a / 统计脚本 / 带附件实测 / 观测），**唯一硬缺口是"无附件路径的两臂复跑"（B1）**；其余为如实记录的边界（B2 无对照臂、B3 路由路径未覆盖位置断言、B5 PG 跳过、B7 行号漂移）。
 
+## 11. S2 设计稿：会话状态归位（2026-10-11）
+
+**定位**：把 §10.1 的目标态落成可实施方案。核心只有一句话：**连续性载体的权威源从「run 目录文件」搬到「服务端一行记录」**，其余契约（worker 读什么、节点怎么校验、`select_replay` 怎么拒）尽量不动——**动得越少，越能证明"搬家"本身没换行为**。
+
+**范围**：只做 `stateful-react-agent`（§9.11 第 4 项）。`agent_team` 不写 dump（§9.14），故 S2 对它是 no-op；跨 pipeline 的 payload 由 `select_replay` 的 `pipeline_id` 校验挡住。
+
+### 11.1 现状核准（设计前实查，2026-10-11）
+
+| # | 事实 | 依据 | 对设计的影响 |
+|---|---|---|---|
+| 1 | 迁移图**单 head** `0018_plan_capital_terms`，生产库 `alembic current` 也是它 | `uv run alembic -c server/alembic.ini heads/current` | 新迁移 `down_revision="0018_plan_capital_terms"`，不引入第二个 head |
+| 2 | **`alembic check` 现在是脏的**：报出 40+ 项历史漂移（`users.created_at` NOT NULL、`idx_runs_session`→`ix_runs_session_id`、`Integer`/`BIGINT`、`sessions` 索引等），与模型长期不一致 | 实跑 `alembic check` | ⇒ §10.2 的"`alembic check` 无新增漂移"**只能做成差分**：把新增表的 create 之外的操作集，与落地前基线逐项比对，**不得多出任何其他表的操作**。"check 干净"这个口径要撤回 |
+| 3 | `readiness.expected_heads()` 从**迁移文件源码解析**，不硬编码 | `server/readiness.py:83-116` | 新增 `0019` 后 `/readyz` 立刻期望 0019；**生产库不升级就 not_ready**（`SCHEMA_BEHIND`）。⇒ 迁移执行必须列入落地步骤（§11.5） |
+| 4 | 测试/dev 走 `init_db()` = `Base.metadata.create_all` | `server/store.py:1039-1047` | 新表加进 `Base` 即被 SQLite 测试自动建出，**单元测试不依赖迁移**；迁移只服务 PG |
+| 5 | 迁移文件是**手写**的（如 0018 直接 `op.add_column`），不是 autogenerate | `server/alembic/versions/0018_plan_capital_terms.py` | S2 的迁移也必须**手写** `op.create_table`：autogenerate 会把第 2 条那 40 项漂移一起写进新迁移，等于顺手重写全库 schema |
+| 6 | F19 门测试把 head **硬编码**成 `HEAD="0006_business_operations"` / `BEHIND="0005_business_objects"`，并自带注释"每次新迁移都要同步两者" | `tests/test_web_f19_schema_gate.py:30-42` | 该约定在 0007 起就断了（现真实 head 0018）⇒ 本机全量跑里那 7 条失败属**既有陈旧**，非本次引入；S2 需明确处置（§11.5） |
+| 7 | `_spawn` 已在同一函数内判定 watch 并算出 `prior_conversation`，run 收尾在同一 `finally` 里做 artifacts/usage | `server/orchestrator.py:736-759`、`:766-793` | 读侧改点与写侧挂点都在同一处，不需要新时序 |
+
+### 11.2 数据契约（表形态：opaque payload）
+
+```sql
+CREATE TABLE session_conversations (
+  session_id      UUID PRIMARY KEY REFERENCES sessions(id) ON DELETE CASCADE,
+  payload         TEXT NOT NULL,          -- 上一轮 dump 文档的**原字节**
+  revision        INTEGER NOT NULL DEFAULT 1,   -- 每次入库 +1（审计/乱序诊断）
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_by_run_id UUID NOT NULL               -- 幂等键：同一个 run 重复入库是 no-op
+);
+```
+
+**为什么是 `payload TEXT` 而不是 §10.1 原稿的 `messages / system_prompt / thinking_format / tool_schema_sha256` 分列**（这是本稿对 §10.1 的**实质修订**，需要裁决）：
+
+- 分列等于**服务端开始建模 pipeline 的内部结构**——一列一个含义，就得解释"system_prompt 是什么、thinking_format 取哪些值"。这与 §9.12 口径 A 的动机（pipeline 内部对 server 不透明）**正好相反**；而 §10.1 之所以写成分列，只是因为 dump 头里恰好有这些字段。
+- `TEXT` 存原字节还带着一个白拿的性质：**字节保真**。JSON 列会经 codec 往返（键序/空白可能变），虽然 `select_replay` 的比对都是 canonical 的、理论能容忍，但没必要引入这种"靠下游规范化兜住"的依赖。
+- 代价（明确接受）：无法用 SQL 按 `tool_schema_sha256` 之类聚合（我们从不需要）；排查时要 `json_extract`/`->>` 手工看（可接受，且有 `scripts/replay_stats.py` 读的是 `usage_json`，不依赖这张表）。
+
+**`ON DELETE CASCADE`**：会话硬删时会话记录随之消失（软删不动它，`deleted_at` 语义不变）。
+
+**不做**：不建历史表（不需要"每轮一行"的版本历史——`revision` 只作审计计数；要历史就该按轮次建表，那是另一张票）。
+
+### 11.3 写侧：父进程 ingest
+
+**挂点**：`_spawn` 的 `finally` 里，紧跟 `_record_usage`（`server/orchestrator.py:782-783`）之后；崩溃恢复路径 `_recover_finished_run`（同文件 `:1406+`）同样调用一次。
+
+```
+_ingest_conversation(handle):
+  if handle._params["_continuity"] == "off": return          # watch：两个方向都关
+  dump = run_dir_for(run_id) / "run" / "conversation.json"
+  if not dump.is_file(): return                              # 无 dump（agent_team/被杀/循环未结束）
+  payload = dump.read_bytes()                                # 原字节，不解析
+  if b"conversation-dump/" not in payload[: 200]: return      # 极轻自检：不是本契约的文档就不入库
+  upsert(session_id, payload, updated_by_run_id=run_id)      # 幂等：同 run 重复 → no-op
+  dump.unlink()                                              # 成功后才删
+```
+
+要点（每条都对应一个失败模式）：
+
+1. **不解析**：不 `json.loads`，不按 role/content 取值——与 §9.12 红线一致。唯一例外是那个 `b"conversation-dump/"` 头部探针：它只确认"这是本契约的文档"，避免把 `history.txt` 之类误入库（也可以省掉，见待裁决 D6）。
+2. **幂等**：`ON CONFLICT (session_id) DO UPDATE ... WHERE session_conversations.updated_by_run_id IS DISTINCT FROM excluded.updated_by_run_id`。崩溃恢复后重跑 ingest 不会把 `revision` 无意义地推高，也不会重复删文件（文件已不在）。
+3. **失败语义（fail-open + fail-loud）**：DB 不可用/写失败 ⇒ **保留文件** + `logger.warning(exc_info=True)`，run 的生命周期不受影响（和 `_record_usage` 同级的"记账失败不许压垮运行"纪律）。**不设"读文件兜底"**——权威源只有一个（§10.2 的"不留双路径"）。
+4. **watch**：`_continuity=="off"` 时既不读库也不写库（§9.18 #1 的两向关闭在新载体的延续）。
+5. **超时**：与相邻步骤一致地用 `asyncio.wait_for(..., timeout=15)` 包一层。
+
+### 11.4 读侧：消费与退役
+
+**改点**：`_spawn` 里把 `resolve_prior_conversation(prior_turns, ...)`（`server/history.py`）换成一次**主键读**：
+
+```
+row = await read_session_conversation(session_id=session_uuid)   # 可空，读失败→None
+prior_payload = row.payload if row else None
+```
+
+**落盘方式**：`_launch` 里的 `_stage_prior_conversation(run_dir, source_path)`（现在做的是"从上一 run 目录拷字节"）改成 `_stage_prior_payload(run_dir, payload_text)`：**原子写**（`.tmp` + `os.replace`）到 `run_dir/prior_conversation.json`，并在 `payload` 为空时**确保该文件不存在**（沿用现有"先删陈旧副本"的语义）。之所以仍落一个文件：**worker 与节点的契约一个字都不用改**（它们照旧读 `prior_conversation.json`），S2 的爆炸半径就只剩 server 侧读写两处。
+
+**退役清单（要删干净，不留双路径）**：
+
+| 目标 | 说明 |
+|---|---|
+| `server/history.py::resolve_prior_conversation` | 上一轮 dump 的"按文件存在性逆序扫 turns"逻辑整体删除；`CONVERSATION_DUMP_RELPATH` 保留（写侧路径常量仍被单测与文档引用） |
+| `_stage_prior_conversation` | 换成 `_stage_prior_payload`（源是 DB） |
+| `params["_prior_conversation"]`（路径字符串） | 换成 `params["_prior_payload"]`（文本）或直接把 payload 交给 `_launch`；**不留"路径"形态** |
+| `server/history.py` 的模块注释 | §9.12 口径 A 的三段式要改写：**权威源 = 服务端一行记录**；(b) 载体不再是"上一 Run 的产物"，而是"本会话的当前状态"；run 目录里的 `prior_conversation.json` 降为**本轮的 staging 副本** |
+
+**既有测试的处置（先列清楚，免得实施时才发现）** —— 全在 `tests/test_context_inheritance.py`：
+
+| 测试 | 现状 | S2 处置 |
+|---|---|---|
+| `test_the_prior_conversation_is_the_newest_run_that_has_one`（:484） | 直测文件扫描的定位语义 | **删除**，由"按主键读一行"的新单测取代（§11.7-2） |
+| `test_staging_copies_the_dump_and_removes_a_stale_one`（:515） | 断言从**源文件**拷字节 + 清陈旧副本 | **改写**为 `_stage_prior_payload` 版：写入字节等于 payload、`None` 时清掉陈旧文件、源不存在 → 不再有"源文件"这一说 |
+| `test_writer_and_reader_agree_on_where_the_dump_lives`（:536） | 保证写方路径 == 读方路径（§9.14 补的缺口） | **保留但改对象**：写方路径现在必须等于 **ingest 的读方**路径（这个不变量在 S2 里更重要——写偏了就是"静默不入库"） |
+| watch 测试里的两处 params 断言（:746/:758） | 断言 `captured[...]["_prior_conversation"] == str(dump)` / `is None` | 改为断言新键（`_prior_payload` 为 payload 文本 / `None`）；"watch 两个方向都关"的语义不变 |
+| 顶部 import（:35-36） | 从 `server.history` / `server.orchestrator` 取退役符号 | 同步替换（删掉的符号不许留在 import 里） |
+
+**跨进程/重启**：读路径只依赖"会话主键 + 一个 DB 连接"，不含任何进程内状态；同会话的派发仍由 `_session_queues` 串行化（`_drain_session` 里 `await self._spawn(...)` 逐个消费，已核），多进程部署下"同一会话并发两轮"不在契约内——记为**假设**（§11.8），并被 `revision` 与幂等 upsert 兜成"最坏=后写覆盖"。
+
+**过渡期一次性损失（必须写明）**：S2 落地后读路径不再扫文件，因此**此前遗留在旧 run 目录里的 dump 不再可达**——那些会话的下一轮会退化为新会话（一次 cache miss，不是数据丢失）。这是接受项，不是缺陷；写进验收的"反向证据"里。
+
+### 11.5 迁移与就绪门
+
+1. **迁移**：`server/alembic/versions/0019_session_conversations.py`，**手写** `op.create_table("session_conversations", ...)` + `downgrade` 里 `drop_table`；`revision="0019_session_conversations"`、`down_revision="0018_plan_capital_terms"`。模型加在 `server/store.py`（`Run` 附近），字段与迁移逐项对齐。
+2. **执行**（因为 §11.1 第 3 条，这是落地的一部分而非可选项）：生产/开发 PG 库需 `alembic upgrade head`。**本地开发库由我在落地时执行**（待裁决 D4）；只出迁移文件不升级 ⇒ 本机 `/readyz` 变 `schema_behind`、`enforce_startup_readiness` 在生产模式下拒绝启动（dev 模式只警告）。
+3. **漂移验收（差分）**：
+   - 落地前基线：把 `alembic check` 的输出归一化成 `{(op, table)}` 集合，存进证据目录（`evidence/…/alembic-check-before.txt`）。
+   - 落地后：同法取一次（`…/after.txt`），断言 `after − before == {('create_table','session_conversations')}`，且 `before − after == ∅`。
+   - **不写"check 干净"**（第 2 条已证伪）。
+4. **F19 门测试的硬编码（待裁决 D5）**：现状 `HEAD="0006_business_operations"` 自 0007 起就与真实 head 脱节，本机 7 条失败即由此而来（属既有）。三条路：① 顺手更新到 `0019/0018`（前提是 0007+ 迁移能在 SQLite 跑通——它现在只跑到 0006，故**需先验证**）；② 改成从 `readiness.expected_heads()` 动态取（更稳，但改了这条测试的语义）；③ 只记录不动。**我倾向 ②**，但它与 S2 主体无关，建议单独裁决。
+
+### 11.6 影响面
+
+| 层 | 变化 |
+|---|---|
+| producer（workflow） | **不变**：`ConversationSnapshotObserver` 照旧写 `run/conversation.json`（S3 的"固化摘要"将来就落在这份 payload 里，无需改表） |
+| transport（server） | 新增 ingest（写库 + 删文件）；读侧改为按主键读 + 原子 staging |
+| consumer（node） | **不变**：仍读 `prior_conversation.json`，仍由 `select_replay` 校验（system prompt / 工具指纹 / thinking_format / pipeline / node / session / 消息配对） |
+| 数据层 | 新表 1 张；`sessions` 硬删级联；无既有表改动 |
+| 保留期 | **O5 自动消失**：载体不在 run 目录里，`run_retention.py` 的 `rmtree` 再也删不到它；`run_dir` 里的 `prior_conversation.json` 是每轮自有的 staging 副本，被删只影响该轮自己 |
+| 观测 | 无需新增：`script/replay_stats.py` 读 `usage_json`，与本次搬家无关 |
+
+### 11.7 验收
+
+**单元（零额度，全部用 SQLite `db` fixture）**
+
+1. **ingest 契约**：① 原字节入库（与文件字节逐字节相等）；② 成功即删文件；③ 同一 run 重复 ingest ⇒ `revision` 不变、无异常；④ 无 dump ⇒ no-op（不建行）；⑤ `_continuity="off"` ⇒ no-op **且不删文件**；⑥ DB 抛错 ⇒ 文件保留 + 记 warning + 不抛给调用方。
+2. **读侧**：⑦ 有行 ⇒ staging 文件字节等于 payload；⑧ 无行 ⇒ 不产生文件，且**残留的旧 `prior_conversation.json` 被清掉**；⑨ 行存在但 payload 非法 ⇒ 节点照旧 fail-open（沿用既有拒绝矩阵）。
+3. **无文件兜底（关键反向断言）**：⑩ 在上一轮 run 目录里放一个合法 dump、但**库里没有行** ⇒ 本轮**不重放**。这一条才是"文件路径真的退役了"的证据，比删函数更能防回归。
+4. **跨进程/重启**：⑪ 用**新建的** `Orchestrator` 实例 + 重置 `store` 引擎后再跑一轮 ⇒ 仍重放（证明不依赖进程内状态；旧实现依赖"扫得到的文件"，这一条会红）。
+5. **fail-open 演练**：⑫ 表被删/连接失败 ⇒ `_spawn` 正常派发、`replay_decision = skipped`（原因是 DB 读取失败）。
+6. **迁移**：⑬ `upgrade head` 后表存在且 `readiness.expected_heads() == ("0019_session_conversations",)`；⑭ `downgrade -1` 再 `upgrade` 幂等；⑮ 保留期 `plan` 的处置集合中不再出现"会话载体"相关项。
+
+**集成（实跑，出 `runs.usage_json` 原始数字）**
+
+7. 同会话连跑 3 轮无附件业务提问，两臂（treatment / control=每轮后删库中行）：判据沿用 **R4 + R5'**（§9.17 口径，不重新发明）。
+8. **跨重启实跑**：同一会话第 1 轮跑完 → 重启 API 进程 → 第 2 轮仍 `replay.decision=used` 且 `cache_read` 达 R4 阈值。这就是 §10.2 S2 验收第 ② 条。
+9. 漂移差分（§11.5 第 3 条）。
+10. **模型由部署侧指定**（本次教训）：跑前必须用一次探针确认"该模型在该端点上会上报缓存命中字段"，否则判据不可判定。
+
+### 11.8 不变量、假设、风险、回滚
+
+- **不变量**：server 不解析 payload（唯一例外是那个头部探针，可裁掉）；权威源唯一（DB），不留文件兜底；失败一律 fail-open，`run` 不许因为库的问题跑不起来；`select_replay` 的校验集合不变。
+- **假设**（写下来，因为它是这套设计的地基）：① 同一会话的 run 在本进程内串行（`_session_queues`）⇒ ingest 顺序 = run 顺序；② 生产部署单进程处理同一会话（多进程时退化为"后写覆盖"，不崩、不脏读）。
+- **风险与缓解**：
+  - *ingest 有 bug 而文件已删* ⇒ 该会话下一轮从零开始（cache miss，可恢复）。缓解见 D2 备选（双写窗口）。
+  - *payload 变大*（单行数百 KB～<1MB）⇒ PG TOAST 处理，无需分块；列为观察项。
+  - *迁移未执行就上线* ⇒ `/readyz` 直接不 ready，**显式失败**而非静默（这点比现在更好）。
+- **回滚**：`alembic downgrade -1` + 回滚代码；期间的会话在下一次对话时从零重放。**没有数据丢失**（会话内容本身在 `turns`，模型看到的 payload 是可重建的派生品）。
+
+### 11.9 待裁决
+
+| # | 议题 | 选项 | 我的建议 |
+|---|---|---|---|
+| D1 | 行形态 | 甲：opaque `payload TEXT` + 记账列（本稿）／乙：§10.1 原稿分列 | **甲**（不解析是本 issue 的红线；分列会让 server 建模 pipeline 内部结构） |
+| D2 | dump 文件删除时机 | 甲：入库成功即删／乙：先双写保留一个版本再开删 | **甲**（载体不是数据；乙会把"谁是权威"重新搞含糊） |
+| D3 | 乱序守卫 | 甲：仅幂等（同 run no-op）／乙：加 `finished_at` 单调写守卫 | **甲 + 记录假设**（乙在多进程场景才有意义，属 S3/S4 加固） |
+| D4 | 迁移执行 | 甲：我落地时对本地开发库执行 `upgrade head`／乙：只出文件、由部署侧执行 | **甲**（否则本机 `/readyz` 立刻 not_ready，验收跑不起来）；生产库仍由部署侧 |
+| D5 | F19 门测试硬编码 head | ①更新到 0019/0018（需先验证 0007+ 能跑 SQLite）／②改为动态取 head／③只记录 | **②**，单独裁决 |
+| D6 | ingest 前的头部探针 | 保留（`b"conversation-dump/"`）／去掉（彻底不解析） | 保留（避免把别的文件误入库），但它**不是**解析 |
+| D7 | 命名确认 | `session_conversations` / 模型 `SessionConversation` | 确认即可 |
+
+### 11.10 S2 实施记录（2026-10-11）
+
+**裁决口径**：D1 opaque payload / D2 入库成功即删 / D3 只做幂等 / D4 本机执行升级 / D6 保留头部探针 / D7 命名确认，均按建议落地；**D5（F19 门测试硬编码 head）本次不动**（设计稿即标"单独裁决"）。
+
+**落地清单**
+
+| 层 | 文件 | 改动 |
+|---|---|---|
+| 数据 | `server/store.py` | 新增 `SessionConversation` 模型（opaque `payload TEXT` + 记账列，`updated_by_run_id` 刻意不做外键）；新增 `read_session_conversation`（主键读）与 `upsert_session_conversation`（读后写、同 run no-op、方言无关） |
+| 迁移 | `server/alembic/versions/0019_session_conversations.py`（新） | **手写** `op.create_table` + `drop_table`；`down_revision="0018_plan_capital_terms"`；`_uuid()` 用 `with_variant(String(36), "sqlite")` 沿用仓库惯例 |
+| 写侧 | `server/orchestrator.py` | 新增 `_ingest_conversation(run_id, *, session_uuid, continuity)`：`continuity=="off"` 直接返回（watch 两向都关）→ 读 dump **原字节** → 头部探针（`b"conversation-dump/"` 不在前 200 字节即拒收）→ UTF-8 解码 → upsert → **成功后删文件**；任何失败只 `warning`，文件保留。挂在 `_spawn` 的 `finally`（紧跟 `_record_usage`）与 `_recover_finished_run`（崩溃恢复，`is_watch_run` 先行排除） |
+| 读侧 | `server/orchestrator.py` | `_spawn` 把"逆序扫 turns 找文件"换成一次 `read_session_conversation`（失败即降级为无 payload + warning）；参数键 `_prior_conversation`（路径）→ `_prior_payload`（文本） |
+| staging | `server/orchestrator.py` | `_stage_prior_conversation` → `_stage_prior_payload`：`None`/空串先删陈旧副本，否则 `.tmp` + `os.replace` 原子写；`shutil` 依赖随之移除 |
+| 退役 | `server/history.py` | 删除 `resolve_prior_conversation` 与 `_run_id_hex`（连带 `uuid`/`Callable` 导入）；保留 `CONVERSATION_DUMP_REPLPATH` 作写侧/ingest 共用的路径常量；模块注释改写为"权威源 = 会话行，run 目录里的文件只是本轮 staging 副本" |
+| 文档 | `docs/tech-stack.md` | §5.1 目录树（两个文件的角色）、跨轮上下文段落、runs 表旁的 `session_conversations` DDL（含"刻意不做外键"的理由）、`/readyz` 要求库在 0019 |
+
+**门禁证据（实跑）**
+
+| 项 | 命令/结果 |
+|---|---|
+| 目标测试集 | `tests/test_context_inheritance.py` **43 passed**（新增 6 条 ingest、1 条 staging 改写、1 条"文件不是权威源"反向断言、1 条 revision 接线；删除 1 条定位语义测试）；波及面回归 **146 passed** |
+| 全量 | 2997 passed / 12 failed —— 与 S1 那轮**同名同数**（corpus/market/dev lane/alembic/PG 状态），无新增失败 |
+| 类型/风格 | `ruff check`（含迁移与差分脚本）干净；`pyright`（store/history/orchestrator/测试）0 error |
+| 迁移执行 | `alembic upgrade head` → `0019_session_conversations (head)`；`readiness.expected_heads() == ("0019_session_conversations",)`（单 head）；`downgrade -1` → `stamp` 往返后表存在、`select count(*) from session_conversations` = 0 |
+| 漂移差分 | `evidence/20261011-s2-session-store/`：`alembic-check-before.txt`（19 项，含 `add_table session_conversations`）vs `after.txt`（18 项）⇒ `removed == {('add_table','session_conversations')}`、`added == ∅`（`compare_drift.py` 判定 OK）。**口径修正记**：`alembic check` 在"库不在 head"时会短路（只报 `Target database is not up to date`），基线因此用 `stamp` 造出"版本号在 head 但表不存在"的反事实态来取 |
+
+**未做（待批或待裁）**
+
+1. **实跑验收（§11.7 集成 7/8）未执行**：3 轮两臂（treatment / control=每轮后删库中行）+ **跨进程**（turn 1/2/3 各起一个进程，这是"重启后续接"的可构造形式）。要花额度，按 §9.13/§9.14 的纪律需先签认判据再放行：**待批**。
+2. **D5** 未动：`tests/test_web_f19_schema_gate.py` 仍硬编码 `HEAD="0006_business_operations"`，它的 7 条失败仍是既有（本次全量未增不减）。**待裁**。
+3. S1 遗留的 **B1（无附件两臂复跑，8 run）/ B2（附件臂对照，2 run）/ B3（路由级位置断言，零额度）** 仍未做。
+
+**观察项**
+
+- `run/prior_conversation.json` 现在是**每轮 staging 副本**，不是权威源：删掉它只影响该轮自身，O5（保留期误删载体）由此**在结构上消失**（`test_ingest_stores_the_dump_and_drops_the_file` 断言 run 目录里不再留 `conversation.json`）。
+- 过渡期一次性损失照旧记在案：S2 落地前遗留在旧 run 目录的 dump 不再可达，那些会话下一轮退化为新会话（一次 cache miss）。
+- 旧的多进程假设未变（§11.8）：同会话串行化是进程内的；`revision` 与同 run 幂等把最坏情况兜成"后写覆盖"。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
@@ -765,3 +961,9 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 2026-10-11：补 **§10.3 主流 Web 形态对照**（会话状态 owner 的三类主流形态 + 九条通用共识 + 本仓库逐条对照 + 证据分级），用于回答"我们偏离主流多远、S2 站位在哪"。同日执行 **S1**（记录见 §10.7）：**b** upload 说明移入请求尾部（消除 §9.20 O4 的"抖一次"）；**a** replay 决策与窗口统计落 `runs.usage_json`，新增只读统计脚本 `scripts/replay_stats.py`（`--session` / `--runs-root`，按会话计算命中率，跨会话不算、未计量不算），真实 runs_root 冒烟复现同一会话 98.6% 命中。门禁：目标集 137 passed、全量 2980 passed / 12 failed（失败类别同 §9.13 基线，未重建 worktree 逐条对照）、ruff/格式/pyright 干净。**尚待**：① 带附件两轮实测需先签认预注册判据后放行（消耗额度，实施方不自宣）；② **O5 保留期建议并入 S2**（S2 让载体进 DB 后该问题自动消失），待裁决。
 
 2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 属**部署侧配置与文档滞后**，本 issue 不改配置、不推荐具体模型，只保留"选定模型必须实测会上报缓存命中"这条判据。交付后按要求做了**回溯自查（§10.8）**：当场补齐 5 处遗漏（统计脚本库源与未计量三态测试、两处落后文档、agent_team 描述不准、`usage.py` 模块文档），并如实记录 7 条边界——其中**唯一硬缺口是"无附件路径的两臂复跑（R4/R5'）未执行"**（预期不变但未实测，补跑需 8 次 run，待裁决）。
+
+2026-10-11：写出 **§11 S2 设计稿（会话状态归位）**。设计前实查补上两个**此前没被写下来、且会改变验收口径**的事实：① 本机 `alembic check` **本来就是脏的**（40+ 项历史漂移）⇒ §10.2 的"无新增漂移"必须改成**差分**（新表之外不得多出任何操作）；② `readiness.expected_heads()` 是从迁移文件**动态解析**的 ⇒ 新增 `0019` 后不升级库就 `/readyz` not_ready，故"执行迁移"是落地步骤而非可选项。设计上对 §10.1 有一处**实质修订**：行形态改为 **opaque `payload TEXT` + 记账列**（而非把 dump 头字段分列）——分列等于让 server 开始建模 pipeline 内部结构，与 §9.12 口径 A 的动机相反。另列出**退役清单**（含 4 条既有测试的处置）与 **7 项待裁决**（D1 行形态、D2 删除时机、D3 乱序守卫、D4 迁移执行、D5 F19 门测试硬编码 head、D6 头部探针、D7 命名）。
+
+2026-10-11：按要求**分层回填主文档**（父 `../spec.md`）：只回填三条**契约级**结论——① §5 非目标条目补立项指向与状态（原文停在"不在本次主线内"）；② §2.3 增第三条形态约束**前缀恒定** + §6 增"请求前缀"一行；③ §3.1 补"同一判据的第二用途"（绑定判据同时决定前缀配置）。**设计稿本身不回填**（按交付物口径方案不算交付）；证据/判据过程留在本 issue 与 `evidence/`。S2 实现落地后已同步 `docs/tech-stack.md`（目录树两个文件的角色、跨轮上下文段落、`session_conversations` DDL、`/readyz` 的 head 要求）；spec §6 的"终局形态"一句待 S2 实跑验收后再回填。
+
+2026-10-11：**S2 实现落地**（用户"开始实现 S2"，D1–D7 按建议执行、D5 除外）：会话连续性载体从"run 目录文件 + 每轮复制"搬到服务端 `session_conversations` 一行（opaque `payload` + 记账列，迁移 0019；父进程 ingest、成功即删文件、同 run 幂等、watch 两向都关；读侧改主键读 + 原子 staging；`resolve_prior_conversation` / `_stage_prior_conversation` / `_prior_conversation` 全部退役，不留双路径）。门禁：目标集 43 passed、波及面 146 passed、全量 2997 passed / 12 failed（与 S1 同名同数）、ruff/pyright 干净；本机库已升到 0019（单 head），漂移差分证明本次只退役掉 `add_table session_conversations` 一项、未动任何其它表。**未做**：§11.7 的 3 轮两臂 + 跨进程实跑（待批，消耗额度）、D5、B1/B2/B3。实施细节见 §11.10。

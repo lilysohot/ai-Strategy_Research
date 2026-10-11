@@ -32,6 +32,7 @@ from plugins.corpus.material_semantics import (
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS,
     MATERIAL_SELECTOR_JSONL_V1,
+    MATERIAL_SELECTOR_JSONL_V6,
     MATERIAL_SELECTOR_JSONL_VERSION,
     MATERIAL_SLOT_JSONL_VERSION,
     RELATION_CANDIDATE_RULE_VERSION,
@@ -162,6 +163,7 @@ class RoleArtifact(BaseModel):
         "material-atomic-selector-jsonl-v3",
         "material-atomic-selector-jsonl-v4",
         "material-atomic-selector-jsonl-v5",
+        "material-atomic-selector-jsonl-v6",
         "material-relations-jsonl-v1",
         "material-relations-selector-jsonl-v1",
         "material-relations-selector-jsonl-v2",
@@ -238,6 +240,7 @@ class _RoleCalls:
                 MATERIAL_SLOT_JSONL_VERSION,
                 MATERIAL_SELECTOR_JSONL_V1,
                 MATERIAL_SELECTOR_JSONL_VERSION,
+                MATERIAL_SELECTOR_JSONL_V6,
             },
             "material_relations": {
                 MATERIAL_RELATION_JSONL_VERSION,
@@ -710,6 +713,7 @@ def execute_material_relations_role(
         MATERIAL_SLOT_JSONL_VERSION,
         MATERIAL_SELECTOR_JSONL_V1,
         MATERIAL_SELECTOR_JSONL_VERSION,
+        MATERIAL_SELECTOR_JSONL_V6,
     }:
         raise ValueError("CS_INPUT_INVALID: upstream items protocol is unsupported")
     if (

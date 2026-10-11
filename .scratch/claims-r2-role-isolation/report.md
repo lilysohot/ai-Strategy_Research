@@ -1182,7 +1182,8 @@ Issue 28 零调用冻结 items-only 质量门（selector-v5 单角色计划、Is
 （`doubao-seed-2.1-lite`，门 rev 3）中 16/24 次被方舟突增流量保护以 HTTP 429 瞬时拒绝（零 token、
 未触达模型），判定为基础设施失效；8 次成功响应经零调用复扫为 6 次完全合规、2 次违反严格 JSONL
 校验。用户更换模型为 `deepseek-v4-flash`（节流 20s，门 rev 4）；run-2 中 24 次尝试全部发出
-（无 429），但 12/23 响应违反同一严格校验（记录缺 `record_type`、类型被写入 `status:"items"`），
+（无 429），但 12/23 响应违反同一严格校验（**仅缺 `record_type`、其余字段完全合规**；零调用归因
+根因位点为 prompt/规格层同句矛盾 + fail-closed 放大），
 13/24 批次 partial、107/190 槽位失败，execution/protocol 状态不达门；另 1 次传输结果不明。
 据门冻结 `terminal_decision.on_fail`，经用户确认关闭本门所验「模型 + extractor」路线：
 **不放宽阈值、不改 prompt、不新增金标**；质量评分因执行要求先行未过而未执行。两轮全部证据

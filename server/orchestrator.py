@@ -23,7 +23,6 @@ import contextlib
 import json
 import logging
 import os
-import shutil
 import signal
 import sys
 import uuid
@@ -38,10 +37,10 @@ from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
 from server.events import EventType, is_droppable, make_event
 from server.history import (
+    CONVERSATION_DUMP_RELPATH,
     STEER_TURN_PREFIX,
     extract_final_answer,
     render_session_history,
-    resolve_prior_conversation,
 )
 from server.investment_context import InvestmentContextResolver, materialize_context
 from server.store import (
@@ -63,12 +62,14 @@ from server.store import (
     list_turns,
     mark_run_failed_if_active,
     mark_run_started,
+    read_session_conversation,
     record_artifacts,
     resolve_control,
     resolve_user_llm_env,
     session_has_research_binding,
     update_run_result,
     update_run_usage,
+    upsert_session_conversation,
 )
 from server.usage import replay_block_from_summary, usage_for_run
 
@@ -133,22 +134,38 @@ def _turns_as_of_submission(turns: list[Any], *, current_run_id: uuid.UUID | Non
     return [turn for i, turn in enumerate(turns) if i < my_index and turn.run_id != current_run_id]
 
 
-def _stage_prior_conversation(run_dir: Path, source: str | None) -> None:
-    """Byte-copy the previous run's conversation dump into *run_dir*.
+def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
+    """Write the session's stored conversation into *run_dir* (issue 01 §11.4).
 
-    Transport only. ``server.history`` explains the boundary: the server never
-    parses the file, and the next run's workflow validates it. A stale copy is
-    always removed first, so a lookup that fails (or that found nothing) can never
-    resurrect an earlier launch's conversation.
+    The bytes come from the session store (``session_conversations``), not from
+    the previous run's directory, and land next to ``history.txt`` so the worker
+    and the workflow keep the contract they already have: they read
+    ``prior_conversation.json`` and validate it themselves. The server still only
+    transports bytes — ``server.history`` states the boundary.
+
+    Written atomically (``.tmp`` + ``os.replace``) because a half-written
+    payload would be worse than none: the reader would reject it as unparsable
+    and silently start a fresh conversation. A stale copy is always removed
+    first, so an absent payload can never resurrect an earlier launch's
+    conversation.
     """
     dest = run_dir / "prior_conversation.json"
     dest.unlink(missing_ok=True)
-    if not source:
+    if not payload:
         return
+    tmp = dest.with_suffix(dest.suffix + ".tmp")
     try:
-        shutil.copyfile(source, dest)
+        with open(tmp, "w", encoding="utf-8") as handle:
+            handle.write(payload)
+            handle.flush()
+            # Best effort: a platform without fsync still writes the file.
+            with contextlib.suppress(OSError):
+                os.fsync(handle.fileno())
+        os.replace(tmp, dest)
     except OSError:
-        logger.warning("could not stage prior conversation from %s", source, exc_info=True)
+        logger.warning("could not stage prior conversation in %s", run_dir, exc_info=True)
+        with contextlib.suppress(OSError):
+            tmp.unlink(missing_ok=True)
         dest.unlink(missing_ok=True)
 
 
@@ -734,7 +751,7 @@ class Orchestrator:
         # so the worker's prompt carries the live question and history holds only
         # the prior conversation — no duplication.
         history = ""
-        prior_conversation: str | None = None
+        prior_payload: str | None = None
         continuity = "on"
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
@@ -743,19 +760,28 @@ class Orchestrator:
             history = render_session_history(prior_turns)
             # Watch-triggered runs neither read nor write the continuity carrier
             # (issue 01 §9.18 #1): the auto-analysis is rules-driven, so it keeps a
-            # clean, bounded context — and because it writes no dump, a later chat
-            # turn still resolves the last *chat* dump instead of replaying the
+            # clean, bounded context — and because it stores nothing, a later chat
+            # turn still reads the last *chat* payload instead of replaying the
             # monitoring run.
             if current is not None and await is_watch_run(run_id=current):
                 continuity = "off"
             else:
-                # Cross-turn continuity (issue 01 §9.4): find the previous run's
-                # conversation dump. Existence check only — the file stays opaque
-                # here and is staged into the new run directory by ``_launch``.
-                found = resolve_prior_conversation(prior_turns, current_run_id=current)
-                if found is not None:
-                    prior_conversation = str(found)
-        params["_prior_conversation"] = prior_conversation
+                # Cross-turn continuity (issue 01 §11.4): one primary-key read of
+                # this session's stored conversation. No directory scanning, no
+                # in-process state — the payload is opaque here and is staged into
+                # this run's directory by ``_launch``. Best-effort: an unavailable
+                # store means this run starts a fresh conversation, never a failed
+                # launch.
+                try:
+                    prior_payload = await read_session_conversation(session_id=session_uuid)
+                except Exception:
+                    logger.warning(
+                        "could not read the stored conversation for session %s; "
+                        "starting without continuity",
+                        session_uuid,
+                        exc_info=True,
+                    )
+        params["_prior_payload"] = prior_payload
         params["_continuity"] = continuity
         handle: RunHandle | None = None
         try:
@@ -781,6 +807,20 @@ class Orchestrator:
                 # billed for those tokens whether or not the run produced an answer.
                 with contextlib.suppress(Exception):
                     await asyncio.wait_for(self._record_usage(handle), timeout=15)
+                # Issue 01 §11.3: move this run's conversation dump into the session
+                # store, then drop the file. Runs after the worker is gone so the
+                # dump is complete; best-effort, and it reports its own failures
+                # (``_ingest_conversation`` logs instead of raising) because a
+                # bookkeeping failure must never disturb the run lifecycle.
+                with contextlib.suppress(Exception):
+                    await asyncio.wait_for(
+                        self._ingest_conversation(
+                            handle.run_id,
+                            session_uuid=params.get("session_uuid"),
+                            continuity=params.get("_continuity", "on"),
+                        ),
+                        timeout=15,
+                    )
                 # F21: whatever control action never reached the conversation
                 # ends here — a steer left in the inbox and an approval left on
                 # the gate are both answered by "the run is over".
@@ -976,6 +1016,72 @@ class Orchestrator:
         if closed:
             logger.info("closed %d open control record(s) for run_id=%s", closed, run_id)
 
+    async def _ingest_conversation(
+        self,
+        run_id: str,
+        *,
+        session_uuid: uuid.UUID | None,
+        continuity: str = "on",
+    ) -> None:
+        """Store a run's conversation dump, then drop the file (issue 01 §11.3).
+
+        The move that makes the session store authoritative: the workflow still
+        writes ``run/conversation.json`` (its producer contract is unchanged), and
+        the parent process — the only side with database credentials — reads those
+        bytes and records them against the session. Success deletes the file so a
+        conversation is stored once instead of copied forward every turn.
+
+        Failures are logged and swallowed: keeping the file means the payload is
+        still recoverable, and a bookkeeping problem must never fail a run.
+        Nothing here parses the payload — the only inspection is a header probe so
+        a foreign file cannot be stored under the continuity key.
+        """
+        if continuity == "off":
+            # Watch-triggered runs also *write* nothing (issue 01 §9.18 #1): if
+            # they stored a payload, the next chat turn would replay the
+            # monitoring run's context instead of the conversation.
+            return
+        if not _looks_like_uuid(run_id) or session_uuid is None:
+            return
+
+        dump = run_dir_for(run_id).joinpath(*CONVERSATION_DUMP_RELPATH)
+        try:
+            if not dump.is_file():
+                return
+            raw = dump.read_bytes()
+        except OSError:
+            logger.warning("could not read the conversation dump %s", dump, exc_info=True)
+            return
+        if b"conversation-dump/" not in raw[:200]:
+            # Not this contract's document (a foreign file, or a half-written
+            # dump). Keep it and store nothing: the reader would refuse it anyway.
+            logger.warning("unrecognised conversation dump at %s; not stored", dump)
+            return
+        try:
+            payload = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            logger.warning("conversation dump at %s is not UTF-8 text; not stored", dump)
+            return
+
+        try:
+            await upsert_session_conversation(
+                session_id=session_uuid,
+                payload=payload,
+                run_id=uuid.UUID(run_id),
+            )
+        except Exception:
+            # Keep the file: the store may come back, and the old carrier still
+            # works as a fallback for a human reading the run directory.
+            logger.warning(
+                "could not store the conversation for session %s (run %s); dump kept",
+                session_uuid,
+                run_id,
+                exc_info=True,
+            )
+            return
+        with contextlib.suppress(OSError):
+            dump.unlink()
+
     def _usage_with_replay(self, run_id: str) -> dict[str, Any]:
         """A run's token aggregate plus its cross-turn replay window (S1-a).
 
@@ -1079,7 +1185,7 @@ class Orchestrator:
         run_dir.mkdir(parents=True, exist_ok=True)
         history_path = run_dir / "history.txt"
         history_path.write_text(history, encoding="utf-8")
-        _stage_prior_conversation(run_dir, params.get("_prior_conversation"))
+        _stage_prior_payload(run_dir, params.get("_prior_payload"))
         cmd = [
             sys.executable,
             "-m",
@@ -1453,6 +1559,13 @@ class Orchestrator:
         if found:
             await record_artifacts(run_id=run_id, artifacts=found)
         await update_run_usage(run_id=run_id, usage=self._usage_with_replay(run_id.hex))
+        # Issue 01 §11.3: a crash between the workflow writing the dump and the
+        # parent storing it leaves the payload on disk. Re-run the ingest here —
+        # it is idempotent per run, and for a watch run there is no dump to
+        # begin with (they write nothing), so the two-way rule still holds.
+        if await is_watch_run(run_id=run_id):
+            return
+        await self._ingest_conversation(run_id.hex, session_uuid=session_id)
 
     def _session_uuid_for(self, handle: RunHandle) -> uuid.UUID | None:
         """Resolve the session UUID for a handle from its enqueued params."""

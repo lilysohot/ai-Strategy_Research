@@ -136,7 +136,8 @@ Issue 29 的两项门就绪阻塞据此解除；门仍处 `frozen_before_executi
 31 记录并收口随后的有界真实复验（2026-10-11）：首次授权（doubao-seed-2.1-lite，24 次、零重试、无节流）
 中 16/24 次被方舟突增流量保护以 HTTP 429 瞬时拒绝（零 token、未触达模型），判定为基础设施失效、
 不触发 on_fail；用户随即更换模型为 deepseek-v4-flash（20s 节流）重跑。run-2 **结构性未过门**：
-12/23 响应违反冻结 selector JSONL 严格校验（记录缺 `record_type`，记录类型被写入 `status:"items"`），
+12/23 响应违反冻结 selector JSONL 严格校验（**仅缺 `record_type`，其余字段完全合规**；零调用归因定位
+根因位点为 prompt/规格层同句矛盾与 fail-closed 放大），
 13/24 批次 partial、107/190 槽位失败，execution/protocol 状态不达门；另 1 次传输结果不明。
 经用户确认，按门冻结 `terminal_decision.on_fail` 关闭本门所验「模型 + extractor」路线
 （run-2 deepseek-v4-flash 组合；run-1 doubao 组合因 429 失效未取得有效结果）：不放宽阈值、不改 prompt、

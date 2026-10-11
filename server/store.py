@@ -138,6 +138,36 @@ class Run(Base):
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class SessionConversation(Base):
+    """A session's current cross-turn conversation payload (issue 01 §11.2).
+
+    One row per session, holding the *bytes* of the previous run's conversation
+    dump. Deliberately opaque: every column here is bookkeeping *about* the
+    payload (which run wrote it, how many times it has changed), never a
+    breakdown of its contents — the server does not model the pipeline's message
+    shape (``server/history.py`` states the same boundary). The next run stages
+    the payload into its own directory and lets the workflow validate it.
+
+    ``updated_by_run_id`` is the idempotency key, so re-ingesting the same run (a
+    crash-recovery pass) is a no-op instead of bumping ``revision``. It is a bare
+    identifier rather than a foreign key on purpose: run rows can be cleaned up
+    while the session lives on, and a dangling reference must not block either
+    operation.
+    """
+
+    __tablename__ = "session_conversations"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("sessions.id", ondelete="CASCADE"), primary_key=True
+    )
+    payload: Mapped[str] = mapped_column(Text, nullable=False)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    updated_by_run_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
+
+
 class Turn(Base):
     __tablename__ = "turns"
 
@@ -2341,6 +2371,51 @@ async def is_watch_run(*, run_id: uuid.UUID) -> bool:
             )
         ).first()
     return row is not None
+
+
+async def read_session_conversation(*, session_id: uuid.UUID) -> str | None:
+    """The session's stored conversation payload, or ``None`` when there is none.
+
+    One primary-key read replaces the previous "scan the session's turns and stat
+    each prior run's directory" lookup (issue 01 §11.4). Callers treat any
+    failure as "no payload" — a missing conversation must degrade to a fresh
+    one, never to a failed launch.
+    """
+    async with get_sessionmaker()() as session:
+        row = await session.get(SessionConversation, session_id)
+    return row.payload if row is not None else None
+
+
+async def upsert_session_conversation(
+    *, session_id: uuid.UUID, payload: str, run_id: uuid.UUID
+) -> None:
+    """Store one session's conversation payload, idempotently (issue 01 §11.3).
+
+    A read-then-write inside one transaction rather than a dialect upsert:
+    same-session runs are already serialized by the orchestrator, and staying
+    dialect-neutral keeps this callable from SQLite tests and PostgreSQL alike.
+    Re-ingesting the run that is already recorded is a no-op, so the
+    crash-recovery pass cannot inflate ``revision``.
+    """
+    async with get_sessionmaker()() as session:
+        row = await session.get(SessionConversation, session_id)
+        if row is None:
+            session.add(
+                SessionConversation(
+                    session_id=session_id,
+                    payload=payload,
+                    revision=1,
+                    updated_by_run_id=run_id,
+                )
+            )
+        elif row.updated_by_run_id == run_id:
+            return
+        else:
+            row.payload = payload
+            row.revision = int(row.revision or 0) + 1
+            row.updated_by_run_id = run_id
+            row.updated_at = datetime.now(UTC)
+        await session.commit()
 
 
 async def session_has_research_binding(*, research_id: uuid.UUID) -> bool:

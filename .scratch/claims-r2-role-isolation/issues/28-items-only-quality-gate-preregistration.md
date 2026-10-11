@@ -61,7 +61,7 @@ R2 关闭 relation 修复与验收后，`spec.md` 明确「下一阶段只处理
 - **模型替换（门 revision 4，`sha256:987772e9…`）**：用户指示更换执行模型为 `deepseek-v4-flash`，
   r2 零调用重冻结（快照/槽位/预算不变，attempts 仍 10/14），78 项前置核验通过；节流标准 20s。
 - **run-2 结果**：24 次尝试全部发出（无 429、零重试、并发 1）；23 次收到响应，其中 **12/23 违反冻结
-  selector JSONL 严格校验**（记录缺 `record_type`，记录类型被写入 `status:"items"`），另 1 次
+  selector JSONL 严格校验**（仅缺 `record_type`，status/reason_code/items 语义完全合规），另 1 次
   `TransportOutcomeUnknown`。结构后果：md 3 completed/7 partial、docx 8/6；槽位
   md 18 extracted/2 nsi/56 failed、docx 61/2/51；execution=outcome_unknown/failed、
   protocol=not_checked。门执行要求 **11 项 unmet → 结构性未过门**。

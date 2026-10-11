@@ -144,9 +144,12 @@ scope locators 与评分契约一致、批次预算可确定性复算、gate 计
   零调用重冻结（快照/槽位/预算不变、attempts 仍 10/14、profile `033e5f19…`）；
   `r2-live/pre-execution-verification.json` 78 项零调用核验通过。
 - 24 次尝试全部发出（无 429、零重试、并发 1）：23 次响应、1 次 `TransportOutcomeUnknown`；
-  **12/23 响应违反冻结 selector JSONL 严格校验**（记录缺 `record_type`、类型被写入
-  `status:"items"`）；13/24 批次 partial、107/190 槽位失败；execution/protocol 不达门。
+  **12/23 响应违反冻结 selector JSONL 严格校验**（仅缺 `record_type`、其余字段完全合规）；13/24 批次 partial、107/190 槽位失败；execution/protocol 不达门。
 - 后置零调用核查：`r2-live/post-run-check.json`（门执行要求 11 项 unmet）；
   `r2-live/run2-protocol-violations.json`（违规逐条分类）；`r2-live/run2-candidates.json`（候选清单）。
+- **错误归因（零调用）**：根因位点为 **prompt/规格层**——`MATERIAL_SELECTOR_PROTOCOL` 同句要求
+  `record_type` 又将其排除在字段白名单外且无示例行；模型输出漂移为**整篇一致的另一种读法**（非能力
+  问题）；fail-closed 校验/解析把缺一个标签字段放大为整批丢失（run-2 丢弃 98 条记录 / 148 条 item）。
+  详见 `r2-live/run2-error-attribution.json`；修复方向须另立新门。
 - **终态**：`r2-live/run2-final-decision.json` — 按冻结 `terminal_decision.on_fail` 关闭本路线
   （用户确认登记关闭）；不做质量评分（执行要求先行未过）；全部证据保留。

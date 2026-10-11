@@ -1,0 +1,6 @@
+before: 19 operation(s)
+after:  18 operation(s)
+removed by the revision: [('add_table', 'session_conversations')]
+added by the revision:   []
+
+OK: the revision retired exactly the new table's create operation.

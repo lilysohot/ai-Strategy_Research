@@ -40,7 +40,7 @@
         "status"
       ]
     },
-    "observation": "the same violation shape (missing record_type; kind carried as status=\"items\") appears in both models at different rates; the strict-format violation is not unique to one model. Whether prompt/schema phrasing contributes is NOT attributed by this gate; it is a candidate pre-registered variable for any future gate."
+    "observation": "the same violation shape (missing record_type only; all other fields compliant) appears in both models at different rates; the strict-format violation is not unique to one model. Whether prompt/schema phrasing contributes is NOT attributed by this gate; it is a candidate pre-registered variable for any future gate."
   },
   "responses": [
     {

@@ -181,14 +181,14 @@ server/runs/<run_id>/
 ├── inputs/              FRONTIER_AGENT_INPUTS_DIR    ← 上传文件，只读，在 ws 之外
 ├── spill/               APODEX_SPILL_DIR
 ├── history.txt          服务端渲染的历史稿（presentation；模型不读）
-├── prior_conversation.json  上一轮 conversation.json 的字节拷贝（server 只搬运、不解析）
+├── prior_conversation.json  本会话存储的 payload 落下的**本轮 staging 副本**（server 只搬运、不解析）
 └── run/                 _trial_dir
     ├── agent/trajectories/react_agent.{json,jsonl}   ← 运行时自写，含参数/用量
-    ├── conversation.json  ← 本轮最终消息列表（跨轮重放的 continuity 载体，observer 写）
+    ├── conversation.json  ← 本轮最终消息列表（observer 写；父进程 ingest 进库后删除）
     └── engine.log
 ```
 
-**跨轮上下文（2026-10-10，issue 01 阶段 1；2026-10-11 S1 补注）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format / messages_est_tokens（最后一项是写侧一次估算，供 `runs.usage_json` 报告重放窗口大小，**不参与任何判定**，旧 dump 读作 0）；下一轮由服务端**只做字节拷贝**到 `prior_conversation.json`，由下一轮的 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与**（既不读也不写，见 `server/store.py::is_watch_run`）。重放决策与窗口可经 `runs.usage_json.replay` 读取（`server/orchestrator.py::_usage_with_replay`），逐轮命中率由只读脚本 `scripts/replay_stats.py` 出板。
+**跨轮上下文（2026-10-10 阶段 1；2026-10-11 S1 补注、S2 归位）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format / messages_est_tokens（最后一项是写侧一次估算，供 `runs.usage_json` 报告重放窗口大小，**不参与任何判定**，旧 dump 读作 0）。**权威源是会话行 `session_conversations`**（迁移 0019，issue 01 §11）：run 收尾时由**父进程**（唯一持库凭据的一侧）把 dump 的**原字节** ingest 入库、成功后删除该文件；下一轮 `_spawn` 按 `session_id` **一次主键读**，由 `_stage_prior_payload` 原子写成 `run/prior_conversation.json`（本轮的 staging 副本），再由该轮 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与，两个方向都关**（读侧不看库、写侧不入库，见 `server/store.py::is_watch_run` 与 `orchestrator._ingest_conversation`）。重放决策与窗口可经 `runs.usage_json.replay` 读取（`server/orchestrator.py::_usage_with_replay`），逐轮命中率由只读脚本 `scripts/replay_stats.py` 出板。`/readyz` 的 schema 门要求库停在迁移 head（现为 0019）。
 
 7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，路径由 **worker 拼进本轮 instruction 的尾部**告知（issue 01 S1-b）：该说明每轮含本 run 自己的 inputs 路径，放进 system prompt 会翻转 KV cache 前缀，使带附件的那一轮整段重算；`metadata['_sys_prompt_addendum']` 只保留跨轮恒定的文本（常量说明、业务策略、缺料策略）。
 
@@ -375,6 +375,13 @@ CREATE TABLE audit_log (
   id BIGSERIAL PRIMARY KEY, user_id UUID REFERENCES users(id), action TEXT NOT NULL,
   detail_json JSONB, ip TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now());     -- 登录/配置增删改/key 轮换
+
+CREATE TABLE session_conversations (                  -- 迁移 0019（issue 01 §11.2）
+  session_id UUID PRIMARY KEY REFERENCES sessions(id) ON DELETE CASCADE,
+  payload TEXT NOT NULL,                              -- 上一轮 conversation.json 的**原字节**，server 不解析
+  revision INT NOT NULL DEFAULT 1,                    -- 入库次数（审计）；同 run 重复入库是 no-op
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_by_run_id UUID NOT NULL);                   -- 幂等键，刻意不做外键（run 可被清理而会话仍在）
 ```
 
 多轮回填：run 成功后仅取 `state["final_answer"]`（含 final_content fallback、llm_error 时 partial 处理）写为 assistant turn；不读 workflow 内部 messages（task-scoped）。

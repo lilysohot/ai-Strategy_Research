@@ -95,6 +95,7 @@ def _parser() -> argparse.ArgumentParser:
             "material-atomic-selector-jsonl-v3",
             "material-atomic-selector-jsonl-v4",
             "material-atomic-selector-jsonl-v5",
+            "material-atomic-selector-jsonl-v6",
         ),
         default="material-atomic-jsonl-v5",
     )

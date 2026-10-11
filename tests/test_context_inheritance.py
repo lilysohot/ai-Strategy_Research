@@ -32,8 +32,8 @@ from frontier_agent.core.llm import LLMResponse
 from frontier_agent.core.loop_types import AgentLoopResult, LoopConfig, LoopPolicy
 from frontier_agent.core.messages import assistant_msg, system_msg, user_msg
 from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
-from server.history import CONVERSATION_DUMP_RELPATH, resolve_prior_conversation
-from server.orchestrator import _stage_prior_conversation
+from server.history import CONVERSATION_DUMP_RELPATH
+from server.orchestrator import _stage_prior_payload
 
 _SYSTEM = "SYSTEM PROMPT"
 _TOOLS = [
@@ -481,64 +481,196 @@ async def test_turn_two_request_starts_with_turn_one_request() -> None:
 # ── server-side transport ────────────────────────────────────────────
 
 
-def test_the_prior_conversation_is_the_newest_run_that_has_one(tmp_path) -> None:
-    older, newer, current = "aa" * 16, "bb" * 16, "cc" * 16
-    for name in (older, current):
-        dump = tmp_path / name / "run" / "conversation.json"
-        dump.parent.mkdir(parents=True)
-        dump.write_text("{}", encoding="utf-8")
-
-    turns = [
-        SimpleNamespace(run_id=None),  # steers carry no run id
-        SimpleNamespace(run_id=older),
-        SimpleNamespace(run_id=newer),  # newest, but it never wrote a dump
-        SimpleNamespace(run_id=current),
-    ]
-
-    found = resolve_prior_conversation(
-        turns,
-        current_run_id=current,
-        path_for=lambda run_hex: tmp_path / run_hex,
-    )
-
-    assert found == tmp_path / older / "run" / "conversation.json"
-    assert resolve_prior_conversation([], path_for=lambda _: tmp_path) is None
-    assert (
-        resolve_prior_conversation(
-            [SimpleNamespace(run_id=current)],
-            current_run_id=current,
-            path_for=lambda run_hex: tmp_path / run_hex,
-        )
-        is None
-    )
-
-
-def test_staging_copies_the_dump_and_removes_a_stale_one(tmp_path) -> None:
-    source = tmp_path / "src.json"
-    source.write_text('{"schema": "conversation-dump/1"}', encoding="utf-8")
+def test_staging_writes_the_stored_payload_and_removes_a_stale_one(tmp_path) -> None:
     run_dir = tmp_path / "run"
     run_dir.mkdir()
     dest = run_dir / "prior_conversation.json"
     dest.write_text("stale", encoding="utf-8")
+    payload = '{"schema": "conversation-dump/1", "messages": []}'
 
-    _stage_prior_conversation(run_dir, str(source))
-    assert dest.read_text(encoding="utf-8") == source.read_text(encoding="utf-8")
+    _stage_prior_payload(run_dir, payload)
+    assert dest.read_text(encoding="utf-8") == payload
 
-    # No source (or a vanished one) must leave nothing behind for the next run to
-    # pick up as if it were this conversation.
-    _stage_prior_conversation(run_dir, None)
-    assert not dest.exists()
-
+    # No payload must leave nothing behind for the next run to pick up as if it
+    # were this conversation.
     dest.write_text("stale", encoding="utf-8")
-    _stage_prior_conversation(run_dir, str(run_dir / "gone.json"))
+    _stage_prior_payload(run_dir, None)
     assert not dest.exists()
+    _stage_prior_payload(run_dir, "")
+    assert not dest.exists()
+
+
+# ── the carrier's revision (issue 01 §11.5) ──────────────────────────
+
+
+def test_the_session_store_revision_is_wired_into_the_graph() -> None:
+    """One head, chained onto the previous revision.
+
+    ``readiness.expected_heads()`` parses the migration files, so a fork (or a
+    revision that forgets its ``down_revision``) makes every deploy fail closed
+    with ``schema_ambiguous``. The model's table name is asserted against the
+    migration here as well, because the two are written by hand.
+    """
+    from server.readiness import expected_heads
+    from server.store import SessionConversation
+
+    repo_root = Path(__file__).resolve().parents[1]
+    migration = (repo_root / "server/alembic/versions/0019_session_conversations.py").read_text(
+        encoding="utf-8"
+    )
+
+    assert expected_heads() == ("0019_session_conversations",)
+    assert SessionConversation.__tablename__ == "session_conversations"
+    assert 'down_revision = "0018_plan_capital_terms"' in migration
+    assert f'"{SessionConversation.__tablename__}"' in migration
+
+
+# ── writing the carrier: the parent's ingest (issue 01 §11.3) ────────
+
+
+def _write_dump(run_dir: Path, payload: str = '{"schema": "conversation-dump/1"}') -> Path:
+    dump = run_dir / "run" / "conversation.json"
+    dump.parent.mkdir(parents=True, exist_ok=True)
+    dump.write_text(payload, encoding="utf-8")
+    return dump
+
+
+async def _session_for_ingest(db) -> uuid.UUID:
+    from server.store import ensure_session
+
+    session_uuid = uuid.uuid4()
+    await ensure_session(session_id=session_uuid, user_id=await _new_user_id(), title="t")
+    return session_uuid
+
+
+@pytest.mark.asyncio
+async def test_ingest_stores_the_dump_and_drops_the_file(db, tmp_path, monkeypatch) -> None:
+    """The carrier moves: bytes land in the session row, the file is removed."""
+    from server import orchestrator as orch_mod
+    from server.store import read_session_conversation
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    payload = '{"schema": "conversation-dump/1", "messages": [{"role": "system"}]}'
+    dump = _write_dump(run_root, payload)
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)
+
+    assert await read_session_conversation(session_id=session_uuid) == payload
+    assert not dump.exists(), "the dump must not survive its own ingest"
+    # Stored once, not copied forward: the run directory keeps no carrier.
+    assert list(run_root.rglob("conversation.json")) == []
+
+
+@pytest.mark.asyncio
+async def test_ingest_is_idempotent_for_the_same_run(db, tmp_path, monkeypatch) -> None:
+    """The crash-recovery pass re-runs ingest; it must not inflate the revision."""
+    from server import orchestrator as orch_mod
+    from server.store import SessionConversation, get_sessionmaker
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    _write_dump(run_root, '{"schema": "conversation-dump/1"}')
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)
+
+    async with get_sessionmaker()() as session:
+        row = await session.get(SessionConversation, session_uuid)
+    assert row is not None and row.revision == 1
+
+
+@pytest.mark.asyncio
+async def test_ingest_keeps_the_dump_when_the_store_fails(db, tmp_path, monkeypatch) -> None:
+    """Fail-open with a kept file: a store outage must not lose the payload."""
+    from server import orchestrator as orch_mod
+    from server.store import read_session_conversation
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    dump = _write_dump(run_root, '{"schema": "conversation-dump/1"}')
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    async def boom(**_kwargs):
+        raise RuntimeError("store down")
+
+    monkeypatch.setattr(orch_mod, "upsert_session_conversation", boom)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)  # must not raise
+
+    assert dump.exists(), "the only copy must be kept when storing failed"
+    assert await read_session_conversation(session_id=session_uuid) is None
+
+
+@pytest.mark.asyncio
+async def test_ingest_refuses_a_file_that_is_not_a_dump(db, tmp_path, monkeypatch) -> None:
+    """A foreign file must never be stored under the continuity key."""
+    from server import orchestrator as orch_mod
+    from server.store import read_session_conversation
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    dump = _write_dump(run_root, "not a dump at all")
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)
+
+    assert await read_session_conversation(session_id=session_uuid) is None
+    assert dump.exists()
+
+
+@pytest.mark.asyncio
+async def test_ingest_is_off_for_watch_runs(db, tmp_path, monkeypatch) -> None:
+    """Watch runs write nothing — not even to the new carrier (§9.18 #1)."""
+    from server import orchestrator as orch_mod
+    from server.store import read_session_conversation
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    dump = _write_dump(run_root, '{"schema": "conversation-dump/1"}')
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid, continuity="off")
+
+    assert await read_session_conversation(session_id=session_uuid) is None
+    assert dump.exists(), "a switched-off ingest must not touch the file either"
+
+
+@pytest.mark.asyncio
+async def test_ingest_without_a_dump_is_a_noop(db, tmp_path, monkeypatch) -> None:
+    """Runs that never wrote a dump (agent_team, killed mid-loop) store nothing."""
+    from server import orchestrator as orch_mod
+    from server.store import read_session_conversation
+
+    run_hex = uuid.uuid4().hex
+    run_root = tmp_path / run_hex
+    run_root.mkdir(parents=True)
+    monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
+    session_uuid = await _session_for_ingest(db)
+
+    orch = orch_mod.Orchestrator()
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid)
+
+    assert await read_session_conversation(session_id=session_uuid) is None
 
 
 def test_writer_and_reader_agree_on_where_the_dump_lives() -> None:
     """The node writes into ``metadata["_trial_dir"]`` (worker: ``paths["run"]``);
-    the server reads a fixed run-relative path. If those two ever drift, replay
-    silently stops happening — with no error anywhere — so the equivalence is
-    pinned here."""
+    the ingest step reads a fixed run-relative path. If those two ever drift, the
+    payload silently stops being stored — with no error anywhere — so the
+    equivalence is pinned here."""
     import shutil
 
     from server.config import build_run_paths, run_dir_for
@@ -660,9 +792,13 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
     """Watch-triggered runs are excluded in BOTH directions (issue 01 §9.18 #1).
 
     They must not replay the chat — a rules-driven investment analysis keeps a
-    clean, bounded context — and they must leave no dump behind either, or the
-    next chat turn would resolve the monitoring run's dump and lose the
-    conversation. The wiring that enforces both halves is what this pins.
+    clean, bounded context — and they must store nothing either, or the next chat
+    turn would replay the monitoring run's context and lose the conversation.
+
+    Since issue 01 §11 both directions run through the session store, and the chat
+    arm doubles as proof of *which* carrier is authoritative: the dump left on
+    disk here says one thing, the session row another, and the read side must
+    follow the row.
     """
     from unittest.mock import AsyncMock
 
@@ -696,7 +832,9 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
     prior_root = tmp_path / prior_run.hex
     dump = prior_root / "run" / "conversation.json"
     dump.parent.mkdir(parents=True)
-    dump.write_text('{"schema": "conversation-dump/1"}', encoding="utf-8")
+    # Deliberately *not* what the session row will hold: whichever the chat arm
+    # reads tells us which carrier is live.
+    dump.write_text('{"schema": "conversation-dump/1", "marker": "on-disk"}', encoding="utf-8")
     real_run_dir_for = run_dir_for
     monkeypatch.setattr(
         "server.config.run_dir_for",
@@ -733,6 +871,17 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
         )
         return run_hex
 
+    from server.store import reset_engine, upsert_session_conversation
+
+    stored = '{"schema": "conversation-dump/1", "marker": "from-store"}'
+    await upsert_session_conversation(
+        session_id=session_uuid, payload=stored, run_id=prior_run
+    )
+    # Drop every in-process handle on the store before the read: continuity must
+    # come from the row, so an engine nobody has touched yet proves the point
+    # (this is the cheap form of "survives a process restart", issue 01 §11.7-4).
+    await reset_engine()
+
     monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=False))
     chat_run = await _seed("chat q2")
     await orch._spawn(
@@ -743,7 +892,9 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
         user_id=user_id,
     )
     assert captured[chat_run]["_continuity"] == "on"
-    assert captured[chat_run]["_prior_conversation"] == str(dump)
+    # The session row wins over the dump that is sitting on disk (which says
+    # "on-disk") — that is the file carrier being retired, observable.
+    assert captured[chat_run]["_prior_payload"] == stored
 
     monkeypatch.setattr(orch_mod, "is_watch_run", AsyncMock(return_value=True))
     watch_run = await _seed("监控触发：x")
@@ -755,7 +906,8 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
         user_id=user_id,
     )
     assert captured[watch_run]["_continuity"] == "off"
-    assert captured[watch_run]["_prior_conversation"] is None
+    # ... even though a payload *is* stored: the watch branch must skip the read.
+    assert captured[watch_run]["_prior_payload"] is None
 
 
 @pytest.mark.asyncio

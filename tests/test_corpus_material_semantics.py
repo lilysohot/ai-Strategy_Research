@@ -11,13 +11,26 @@ from plugins.corpus.claims_detail import triage_block_detail
 from plugins.corpus.evidence import EvidencePacket, fingerprint, split_spans
 from plugins.corpus.evidence_pipeline import build_evidence_run
 from plugins.corpus.material_semantics import (
+    _ANSWER_GROUP_SELECTOR_FIELDS,
+    _RELATION_BOOLEAN_SELECTOR_FIELDS,
+    _RELATION_SELECTOR_FIELDS,
+    _SELECTOR_RESULT_FIELD_ORDER,
+    _SELECTOR_RESULT_FIELDS,
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V1,
     MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
+    MATERIAL_RELATION_QUESTION_GROUP_PROMPT_V2,
     MATERIAL_RELATION_RULE_VERSION,
     MATERIAL_RELATION_SELECTOR_JSONL_V1,
     MATERIAL_RELATION_SELECTOR_JSONL_V2,
     MATERIAL_RELATION_SELECTOR_JSONL_VERSION,
+    MATERIAL_RELATION_SELECTOR_PROMPT,
+    MATERIAL_SELECTOR_JSONL_V5,
+    MATERIAL_SELECTOR_JSONL_V6,
     MATERIAL_SELECTOR_JSONL_VERSION,
+    MATERIAL_SELECTOR_JSONL_VERSIONS,
+    MATERIAL_SELECTOR_PROTOCOL,
+    MATERIAL_SELECTOR_PROTOCOL_V5,
+    MATERIAL_SELECTOR_PROTOCOL_V6,
     RELATION_CANDIDATE_RULE_V3,
     RELATION_CANDIDATE_RULE_V4,
     RELATION_CANDIDATE_RULE_VERSION,
@@ -31,14 +44,17 @@ from plugins.corpus.material_semantics import (
     _normalize_semantic_type,
     _normalize_statement_role,
     _packet_records,
+    _parse_selector_response,
     _relation_candidate_pairs,
     _relations_from_decisions,
     _relations_from_question_group_results,
     _relations_from_selector_results,
     _strict_relation_candidate_pairs,
+    _strict_role_llm,
     _validate_atomic_coverage,
     build_candidate_slot_batches,
     build_candidate_slots,
+    build_item_selector_prompt,
     build_material_structure,
     build_relation_jsonl_prompt,
     build_relation_question_group_prompt,
@@ -46,6 +62,7 @@ from plugins.corpus.material_semantics import (
     classify_material_type,
     extract_material_understanding,
     group_relation_answer_candidates,
+    selector_protocol_prompt,
 )
 from plugins.corpus.service import CorpusService
 
@@ -3223,9 +3240,7 @@ def test_question_group_v2_downgrades_plain_but_across_periods_to_absent() -> No
         "to_item": "history",
         "allowed_type": "challenges",
     }
-    raw = json.dumps(
-        {"record_type": "relation_result", "relation_index": 0, "is_present": True}
-    )
+    raw = json.dumps({"record_type": "relation_result", "relation_index": 0, "is_present": True})
 
     relations, incomplete, counts = _relations_from_question_group_results(
         raw,
@@ -3280,9 +3295,7 @@ def test_question_group_v2_keeps_explicit_self_correction_challenge() -> None:
         "to_item": "old",
         "allowed_type": "challenges",
     }
-    raw = json.dumps(
-        {"record_type": "relation_result", "relation_index": 0, "is_present": True}
-    )
+    raw = json.dumps({"record_type": "relation_result", "relation_index": 0, "is_present": True})
 
     relations, incomplete, counts = _relations_from_question_group_results(
         raw,
@@ -3515,4 +3528,166 @@ def test_deferred_relation_stage_is_not_recorded_as_an_omission(tmp_path: Path) 
     required = _run(relations_required=True)
     assert any(
         "relations_not_processed" in area for area in required.understanding.coverage.omitted_areas
+    )
+
+
+def _selector_whitelist_clauses(prompt: str) -> list[set[str]]:
+    return [
+        set(re.findall(r"[A-Za-z_][A-Za-z0-9_]*", prompt[hit.start() : hit.start() + 160]))
+        for hit in re.finditer("字段只能是", prompt)
+    ]
+
+
+def test_selector_result_field_order_is_the_single_source() -> None:
+    assert frozenset(_SELECTOR_RESULT_FIELD_ORDER) == _SELECTOR_RESULT_FIELDS
+    rendered = "、".join(_SELECTOR_RESULT_FIELD_ORDER)
+    assert rendered in MATERIAL_SELECTOR_PROTOCOL_V6
+    assert rendered not in MATERIAL_SELECTOR_PROTOCOL_V5
+    assert MATERIAL_SELECTOR_PROTOCOL is MATERIAL_SELECTOR_PROTOCOL_V5
+    assert {MATERIAL_SELECTOR_JSONL_V5, MATERIAL_SELECTOR_JSONL_V6} <= (
+        MATERIAL_SELECTOR_JSONL_VERSIONS
+    )
+
+
+def test_selector_prompt_whitelists_cover_their_validators() -> None:
+    # v6 renders its whitelist from _SELECTOR_RESULT_FIELD_ORDER, so it covers exactly the
+    # set the strict validator and the parser enforce.
+    v6_clauses = _selector_whitelist_clauses(MATERIAL_SELECTOR_PROTOCOL_V6)
+    assert any(clause >= _SELECTOR_RESULT_FIELDS for clause in v6_clauses)
+    # v5 is the frozen historical wording that caused the whole-batch losses: record_type is
+    # required by the same sentence yet absent from every whitelist clause.
+    v5_declared = set().union(*_selector_whitelist_clauses(MATERIAL_SELECTOR_PROTOCOL_V5))
+    assert _SELECTOR_RESULT_FIELDS - v5_declared == {"record_type"}
+    # The relation selector protocols were already aligned and must stay aligned.
+    relation = _selector_whitelist_clauses(MATERIAL_RELATION_SELECTOR_PROMPT)
+    assert any(clause >= _RELATION_SELECTOR_FIELDS for clause in relation)
+    group = _selector_whitelist_clauses(MATERIAL_RELATION_QUESTION_GROUP_PROMPT_V2)
+    assert any(clause >= _ANSWER_GROUP_SELECTOR_FIELDS for clause in group)
+    assert any(clause >= _RELATION_BOOLEAN_SELECTOR_FIELDS for clause in group)
+
+
+def test_selector_protocol_prompt_selects_frozen_text_per_protocol() -> None:
+    assert selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_V6) == MATERIAL_SELECTOR_PROTOCOL_V6
+    assert selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_V5) == MATERIAL_SELECTOR_PROTOCOL_V5
+    assert (
+        selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_VERSION) == MATERIAL_SELECTOR_PROTOCOL_V5
+    )
+    assert '"record_type":"obligation_result"' in MATERIAL_SELECTOR_PROTOCOL_V6
+    assert '"record_type":"obligation_result"' not in MATERIAL_SELECTOR_PROTOCOL_V5
+
+
+def _label_free_selector_row() -> str:
+    row = json.loads(_selector_item_response(status="no_supported_item"))
+    row.pop("record_type")
+    return json.dumps(row, ensure_ascii=False)
+
+
+def test_selector_parser_still_fails_closed_without_record_type(tmp_path: Path) -> None:
+    source = tmp_path / "label-free-terminal.md"
+    source.write_text("公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+
+    payload, overrides, incomplete = _parse_selector_response(_label_free_selector_row(), slots)
+
+    assert incomplete is True
+    assert payload["items"] == []
+    entry = overrides[slots[0].candidate_slot_id]
+    assert entry.status == "failed"
+    assert entry.reason_codes == ("controller_terminal_invalid",)
+
+
+def test_strict_role_llm_still_rejects_label_free_selector_record() -> None:
+    import pytest
+
+    strict = _strict_role_llm(
+        lambda _prompt: _label_free_selector_row(), frozenset({"obligation_result"})
+    )
+    assert strict is not None
+    with pytest.raises(ValueError):
+        strict("prompt")
+
+
+def test_items_role_default_prompt_stays_on_frozen_v5(tmp_path: Path) -> None:
+    source = tmp_path / "v5-default.md"
+    source.write_text("专家：公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    prompts: list[str] = []
+
+    def llm(prompt: str) -> str:
+        prompts.append(prompt)
+        return _selector_item_response()
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=llm,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert prompts and prompts[0].startswith(MATERIAL_SELECTOR_PROTOCOL_V5)
+    assert not prompts[0].startswith(MATERIAL_SELECTOR_PROTOCOL_V6)
+    assert result.packet_runs[0].status == "completed"
+
+
+def test_items_role_v6_prompt_renders_whitelist_and_example(tmp_path: Path) -> None:
+    source = tmp_path / "v6-prompt.md"
+    source.write_text("专家：公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    prompts: list[str] = []
+
+    def llm(prompt: str) -> str:
+        prompts.append(prompt)
+        return _selector_item_response()
+
+    result = extract_material_understanding(
+        evidence_run,
+        llm=llm,
+        max_calls=1,
+        staged_jsonl=True,
+        slot_protocol=True,
+        selector_protocol=True,
+        items_protocol=MATERIAL_SELECTOR_JSONL_V6,
+        extract_relations=False,
+        relations_required=False,
+    )
+
+    assert prompts and prompts[0].startswith(MATERIAL_SELECTOR_PROTOCOL_V6)
+    assert "、".join(_SELECTOR_RESULT_FIELD_ORDER) in prompts[0]
+    assert result.packet_runs[0].status == "completed"
+    assert result.summary()["complete"] is True
+
+
+def test_build_item_selector_prompt_switches_only_the_protocol_header(tmp_path: Path) -> None:
+    source = tmp_path / "prompt-builder.md"
+    source.write_text("专家：公司预计明年需求增长。", encoding="utf-8")
+    evidence_run = build_evidence_run(source, packet_chars=1000)
+    slots = build_candidate_slots(
+        evidence_run.document, build_material_structure(evidence_run.document)
+    )
+    packet = evidence_run.document.packets[0]
+
+    v5_prompt = build_item_selector_prompt(
+        evidence_run.document, packet, previous=None, following=None, candidate_slots=slots
+    )
+    v6_prompt = build_item_selector_prompt(
+        evidence_run.document,
+        packet,
+        previous=None,
+        following=None,
+        candidate_slots=slots,
+        protocol=MATERIAL_SELECTOR_JSONL_V6,
+    )
+
+    assert v5_prompt.startswith(MATERIAL_SELECTOR_PROTOCOL_V5)
+    assert v6_prompt.startswith(MATERIAL_SELECTOR_PROTOCOL_V6)
+    assert (
+        v5_prompt[len(MATERIAL_SELECTOR_PROTOCOL_V5) :]
+        == v6_prompt[len(MATERIAL_SELECTOR_PROTOCOL_V6) :]
     )

@@ -17,7 +17,7 @@
     "offender_record_keyset": {
       "['items', 'obligation_index', 'reason_code', 'status']": 98
     },
-    "violation": "missing record_type field; record kind carried as status=\"items\""
+    "violation": "missing record_type field only; status (\"items\"/\"no_supported_item\"), reason_code and items semantics fully compliant with the prompt — the drift is one absent label field, not malformed content"
   },
   "offenders": [
     {

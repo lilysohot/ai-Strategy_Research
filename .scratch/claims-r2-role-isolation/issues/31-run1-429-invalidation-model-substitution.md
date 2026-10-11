@@ -68,9 +68,9 @@ Production database access: 0
 
 - 24 次尝试全部发出：无 429、零重试、并发 1；23 次收到响应（HTTP 200、`finish_reason=stop`），
   1 次传输结果不明（`TransportOutcomeUnknown`，15.0s，按契约不自动重发）。
-- **12/23 响应违反冻结 selector JSONL 严格校验**（`_strict_role_llm`）：记录缺 `record_type`、
-  记录类型被写入 `status:"items"`（键集 `{items, obligation_index, reason_code, status}`，共 98 行记录）
-  → 整批 ValueError、该批槽位全部 failed；合规响应仅 11/23。逐条分类见
+- **12/23 响应违反冻结 selector JSONL 严格校验**（`_strict_role_llm`）：**仅缺 `record_type`、其余
+  字段完全合规**（早前「类型被写入 status」的表征已按归因更正）→ 整批 ValueError、该批槽位全部
+  failed；合规响应仅 11/23。逐条分类见
   `r2-live/run2-protocol-violations.json`（原始响应对象保留于 live-store/objects）。
 - 结构后果：包级 md 3 completed / 7 partial、docx 8 / 6；槽位 md 18 extracted + 2 no_supported_item +
   56 failed（76 槽）、docx 61 + 2 + 51（114 槽）；任务 execution = outcome_unknown（md，因传输未知）/
@@ -88,6 +88,25 @@ Production database access: 0
 `r2-live/run2-final-decision.json`。run-1/run-2 全部证据（两个 live-store、原始响应对象、槽位台账）
 保留不删。后续任何新模型、新协议或归因实验路线须**另立新门**并经新的显式授权。
 
+## 错误归因（零调用，2026-10-11）
+
+此前记录只到「违规率」层面、未做层面归因；本补记完成归因（`r2-live/run2-error-attribution.json`）：
+
+- **根因位点 = prompt/规格层**：`MATERIAL_SELECTOR_PROTOCOL` 同句既要求
+  `record_type="obligation_result"`，又声明「字段只能是 obligation_index、status、reason_code、items」
+  （白名单排除 record_type），且 prompt 未附示例记录行；校验器/解析器则要求恰好五字段
+  （`_SELECTOR_RESULT_FIELDS` 含 record_type）。两种读法皆可辩护，仅一种被接受。
+- **模型输出层是表现、非能力问题**：受影响响应**整篇一致**地省略 record_type（其余完全合规：
+  status 枚举、reason_code 语义、11 个 item 字段齐全）；doubao 2/8、deepseek 12/23 只是读法分歧
+  的抽样比例。
+- **校验器/解析器为放大器（按设计的 fail-closed，非 bug）**：任一行缺 record_type → 整批拒绝；
+  解析器另有字段集合精确相等要求。仅因缺一个标签字段，run-2 有 98 条 obligation 记录 / 148 条
+  已完整成形的原子 item 被整批丢弃（run-1 另有 12/20）。
+- **独立基础设施事件**：run-1 的 429 突增保护、run-2 的 1 次传输结果不明，与上述规格问题无关。
+- **边界**：本归因不改变门的关闭结论（冻结协议不得在门内放宽）；修复方向（prompt 措辞补白名单/示例，
+  或解析器容忍无标签形态）均为协议变更 → 必须另立新门并经显式授权；仅换模型不能解决 L2
+  （两个已测模型在同句歧义上都会分裂）。
+
 ## Evidence
 
 - `../evidence/28-items-only-quality-gate-20261010/r1-live/live-run-summary.json`（run-1 失效记录）
@@ -100,6 +119,7 @@ Production database access: 0
 - `../evidence/28-items-only-quality-gate-20261010/r2-live/post-run-check.json`（后置核查）
 - `../evidence/28-items-only-quality-gate-20261010/r2-live/run2-protocol-violations.json`（违规分类）
 - `../evidence/28-items-only-quality-gate-20261010/r2-live/run2-final-decision.json`（终态与哈希）
+- `../evidence/28-items-only-quality-gate-20261010/r2-live/run2-error-attribution.json`（分层错误归因）
 
 ## 下一步
 

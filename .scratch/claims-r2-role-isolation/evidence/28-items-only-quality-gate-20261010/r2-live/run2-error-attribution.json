@@ -1,0 +1,74 @@
+{
+  "schema_version": "items-only-error-attribution-1",
+  "created_on": "2026-10-11",
+  "method": "zero-call: prompt template, raw response payloads, parser/validator source, quantitative scan",
+  "question": "unpassed: at which layer did the errors occur, and does the schema drift reflect model capability?",
+  "layers": {
+    "L0_input_snapshot": {
+      "status": "clean",
+      "evidence": "snapshot ids reproducible; scope locators match the signed contract"
+    },
+    "L1_slot_batching": {
+      "status": "clean",
+      "evidence": "76/114 candidate slots, 10/14 packets, deterministic rebuilds"
+    },
+    "L2_prompt_spec": {
+      "status": "defect_root_cause_locus",
+      "quote": "每个义务恰好输出一行紧凑 JSON，record_type=\"obligation_result\"，字段只能是 obligation_index、status、reason_code、items（material_semantics.py MATERIAL_SELECTOR_PROTOCOL）",
+      "problem": "the same sentence requires record_type but the field whitelist enumerates only the other four fields; the prompt contains no example record line that would disambiguate",
+      "counterpart": "validator and parser require the exact five-field set incl. record_type (_SELECTOR_RESULT_FIELDS)",
+      "consequence": "two defensible readings; only one is accepted"
+    },
+    "L3_transport_provider": {
+      "status": "separate_incidents",
+      "run_1": "16/24 attempts rejected by Ark burst protection (HTTP 429, zero tokens)",
+      "run_2": "1/24 TransportOutcomeUnknown (15.0s); remaining 23 returned HTTP 200"
+    },
+    "L4_model_output": {
+      "status": "symptom_of_L2",
+      "pattern": "each affected response drops record_type on ALL of its lines and keeps everything else perfectly compliant (status enum per prompt, reason_code semantics, all eleven item fields); uniform within response, not random corruption",
+      "rates": {
+        "doubao_seed_2_1_lite_run1": "2/8 responses",
+        "deepseek_v4_flash_run2": "12/23 responses"
+      },
+      "interpretation": "consistent alternative reading of the contradictory spec; not evidence of extraction-capability failure"
+    },
+    "L5_validator_parser": {
+      "status": "amplifier_by_design",
+      "detail": "the strict selector validator raises on any line lacking record_type == obligation_result (whole response rejected); the parser additionally requires exact field-set equality, so a label-free row would fail as controller_terminal_invalid even if the validator were bypassed",
+      "not_a_bug": "fail-closed behaviour of the frozen protocol; unchanged and must stay unchanged inside this gate"
+    },
+    "L6_coverage_semantics": {
+      "status": "minor_residual",
+      "detail": "run-1: isolated intro_fragment / missing_signal coverage verdicts and one controller_terminal_duplicate; small in volume"
+    },
+    "L7_ledger": {
+      "status": "correct",
+      "detail": "attempt accounting exact (10/14), outcome_unknown recorded without retry, budgets respected"
+    },
+    "L8_gate": {
+      "status": "failed_as_recorded",
+      "detail": "execution requirements unmet -> route closed per the frozen terminal rule (user-confirmed)"
+    }
+  },
+  "quant": {
+    "run_2_rejected_on_label_alone": {
+      "offending_responses": 12,
+      "obligation_records": 98,
+      "atomic_items": 148
+    },
+    "run_1_rejected_on_label_alone": {
+      "offending_responses": 2,
+      "obligation_records": 12,
+      "atomic_items": 20
+    },
+    "run_2_items_kept_from_compliant_batches": 111
+  },
+  "root_cause": "prompt/spec-layer contradiction (L2); the model-output drift (L4) is its expression; the fail-closed validator/parser (L5) amplifies a one-field label omission into whole-batch loss; the 429 burst protection and the single transport loss (L3) are independent infrastructure incidents",
+  "future_direction_options": [
+    "prompt wording fix: include record_type in the field whitelist and/or add an example record line (prompt revision -> requires a NEW pre-registered gate and explicit authorization)",
+    "parser/validator tolerance for the record_type-free shape (protocol change -> requires a NEW pre-registered gate and explicit authorization)",
+    "model substitution alone would not address the L2 contradiction (both tested models split on it)"
+  ],
+  "boundary": "nothing in the closed gate was modified; no prompt, protocol, parser, threshold or gold change was performed; all raw evidence retained"
+}
