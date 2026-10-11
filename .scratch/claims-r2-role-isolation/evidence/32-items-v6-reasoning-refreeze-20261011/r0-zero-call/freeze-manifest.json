@@ -1,0 +1,121 @@
+{
+  "schema_version": "items-v6-reasoning-freeze-manifest-1",
+  "created_on": "2026-10-11",
+  "issue": "32-items-v6-and-reasoning-refreeze-gate",
+  "extractor_version": "material-semantics-32",
+  "items_validation_version": "material-items-validation-v11",
+  "slot_batching_version": "material-slot-batching-v3",
+  "protocols": {
+    "control": "material-atomic-selector-jsonl-v5",
+    "treatment": "material-atomic-selector-jsonl-v6"
+  },
+  "selector_options_kept_verbatim": {
+    "max_slots_per_batch": 24,
+    "max_items_per_packet": 64,
+    "max_estimated_tokens_per_batch": 8192
+  },
+  "arms": {
+    "control": {
+      "protocol": "material-atomic-selector-jsonl-v5",
+      "model": "deepseek-flash",
+      "provider": "openai_compat",
+      "base_url": "https://api.deepseek.com",
+      "profile_sha256": "sha256:cf862bd38f2a3741db14c2457c5f4c2a3b33e1d9404e5bbc90df389bcc40498e",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": null
+      },
+      "sources": [
+        {
+          "slug": "industrial-fulian-md",
+          "batch_id": "batch:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+          "plan_sha256": "sha256:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+          "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "protocol": "material-atomic-selector-jsonl-v5",
+          "candidate_slot_count": 76,
+          "packet_count": 10,
+          "expected_attempts": 10,
+          "baseline_attempts": 10
+        },
+        {
+          "slug": "optical-module-docx",
+          "batch_id": "batch:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+          "plan_sha256": "sha256:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+          "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+          "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "protocol": "material-atomic-selector-jsonl-v5",
+          "candidate_slot_count": 114,
+          "packet_count": 14,
+          "expected_attempts": 14,
+          "baseline_attempts": 14
+        }
+      ]
+    },
+    "treatment": {
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "model": "deepseek-flash",
+      "provider": "openai_compat",
+      "base_url": "https://api.deepseek.com",
+      "profile_sha256": "sha256:a2de2bb704da4bfb9d6db647085c8537ff8f838f74754b3a2339567db34fc3e9",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": "disabled"
+      },
+      "sources": [
+        {
+          "slug": "industrial-fulian-md",
+          "batch_id": "batch:efc4b28488baeee2fae1f8a1ee27964d009045e9eaad631ef5cd95d3127bd138",
+          "plan_sha256": "sha256:efc4b28488baeee2fae1f8a1ee27964d009045e9eaad631ef5cd95d3127bd138",
+          "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "protocol": "material-atomic-selector-jsonl-v6",
+          "candidate_slot_count": 76,
+          "packet_count": 10,
+          "expected_attempts": 10,
+          "baseline_attempts": 10
+        },
+        {
+          "slug": "optical-module-docx",
+          "batch_id": "batch:13addce0122108317a555d8ae751c519acd6732568759805a61ed39944c8a232",
+          "plan_sha256": "sha256:13addce0122108317a555d8ae751c519acd6732568759805a61ed39944c8a232",
+          "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+          "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "protocol": "material-atomic-selector-jsonl-v6",
+          "candidate_slot_count": 114,
+          "packet_count": 14,
+          "expected_attempts": 14,
+          "baseline_attempts": 14
+        }
+      ]
+    }
+  },
+  "pacing": {
+    "mode": "checkpoint_after_reserve",
+    "seconds": 20.0
+  },
+  "inputs": {
+    "issue28_freeze_manifest": "sha256:8240c45c50b04c37f76ae82260a984a978c206c58050114c1611f2a02385b292",
+    "issue28_preregistered_gate": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    "material_semantics_module": "sha256:1305dba1f9fa074d0d5b0a662346d58168741bd27f78e96cb55bff2b46167a5e",
+    "structured_config_module": "sha256:3202c70cca56e11e45b758a5d5f9b4f70c9f9313532dcdb59cfb4d10ba65b73f",
+    "structured_adapter_module": "sha256:a534e2a3031bdc45fc8f463bed87015793189dd423dcef4d9e8ed47be9b598c2",
+    "source_prose_units": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    "scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+  },
+  "files_sha256": {
+    "plan-control-industrial-fulian-md.json": "sha256:c8aadb4e62bb59ae1c9e66b342a6a22dba9feabbe3d31f254228c19f2e1017a0",
+    "plan-control-optical-module-docx.json": "sha256:74f9e38e56f17a7b60767d641a61a4ae95850f36b9b989daafe4540f4d085c32",
+    "plan-treatment-industrial-fulian-md.json": "sha256:c2a085a32358b72b37eede509806c1dcde568dc8a95868f4e3b877ede2eecd3a",
+    "plan-treatment-optical-module-docx.json": "sha256:e7099a37679dd286bae3426c9350ed567a590548fff6e15a0d0853e0184f820c"
+  },
+  "model_requests_during_freeze": 0,
+  "production_database_access": 0,
+  "holdout_accessed": false
+}

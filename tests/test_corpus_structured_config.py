@@ -203,6 +203,8 @@ def test_three_roles_share_model_but_not_role_identity():
             and "temperature" not in body
             and "reasoning_effort" not in body
         )
+        # The adapter declares the tool-free state unconditionally.
+        assert body["tool_choice"] == "none"
     assert result.diagnostics["response_model"] == "synthetic-served-a"
     assert result.diagnostics["usage"]["prompt_tokens"] == 8
     assert result.diagnostics["cost"] is None
@@ -495,3 +497,15 @@ def test_request_options_send_reasoning_effort_none_without_thinking() -> None:
 def test_request_options_reject_two_reasoning_switches_at_once() -> None:
     with pytest.raises(ValidationError):
         RequestOptions(reasoning_effort="none", thinking="disabled")
+
+
+def test_request_options_always_declare_the_tool_free_state() -> None:
+    for options in (RequestOptions(), RequestOptions(thinking="disabled")):
+        wire = RecordingWire()
+        adapter = wire.adapter(load_extraction_config(environ=config_env(), options=options))
+
+        adapter("input")
+
+        body = json.loads(wire.requests[0].content)
+        assert body["tool_choice"] == "none"
+        assert "tools" not in body

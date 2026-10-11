@@ -1,0 +1,974 @@
+{
+  "schema_version": "items-v6-reasoning-post-run-check-1",
+  "checked_on": "2026-10-11",
+  "model": "deepseek-flash",
+  "gate_sha256": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+  "freeze_manifest_sha256": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+  "run_summaries": {
+    "control": "sha256:60bfdb4ecea591066f61cc1589e2c5c1572c19da52ff2269b3451fd0c5fd4e71",
+    "treatment": "sha256:c3c34e407e614f2befed1f2ccc393caeb5c10add88ebba3bb344b33d952c4039"
+  },
+  "arms": {
+    "control": {
+      "protocol": "material-atomic-selector-jsonl-v5",
+      "profile_sha256": "sha256:cf862bd38f2a3741db14c2457c5f4c2a3b33e1d9404e5bbc90df389bcc40498e",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": null
+      },
+      "reasoning_tokens_total": 352006,
+      "sources": {
+        "industrial-fulian-md": {
+          "batch_id": "batch:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+          "plan_sha256": "sha256:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+          "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+          "plan_consistent": true,
+          "findings": [],
+          "derivations": {
+            "task:d580e9e081a82364f093c5298234d43167d678db457f4ce9e61e620725118f15": "disabled"
+          },
+          "attempts": 10,
+          "expected_attempts": 10,
+          "attempt_status": {
+            "succeeded": 10
+          },
+          "attempt_roles": {
+            "material_items": 10
+          },
+          "usage": {
+            "prompt_tokens": 21673,
+            "completion_tokens": 138998,
+            "reasoning_tokens": 127640,
+            "total_tokens": 160671
+          },
+          "reasoning_tokens_field_present": true,
+          "tasks": [
+            {
+              "role": "material_items",
+              "method": "model",
+              "execution_status": "failed",
+              "protocol_status": "not_checked",
+              "quality_status": "review_required",
+              "context_status": "complete",
+              "error_codes": []
+            }
+          ],
+          "slot_statuses": {
+            "no_supported_item": 2,
+            "extracted": 52,
+            "failed": 22
+          },
+          "missing_slots": [],
+          "duplicate_slots": [],
+          "invalid_slots": [
+            "slot_06028a3f339dfe73",
+            "slot_067bb3e7f85fa37f",
+            "slot_1496a1c1b2a0bda1",
+            "slot_14d2e2087ab604fa",
+            "slot_35e2dca9dafaf387",
+            "slot_3e8965b10d203f0b",
+            "slot_40803d68acea01c6",
+            "slot_40bc19242ac6d859",
+            "slot_55a3f0ebb79c8967",
+            "slot_63053fdb0687d99e",
+            "slot_7b2c716720ace1aa",
+            "slot_8a33a8aadc6a6490",
+            "slot_99063943ec604797",
+            "slot_998e49ccab85bdb7",
+            "slot_9bf184abe4e57559",
+            "slot_a0285709c19e993e",
+            "slot_d81515e9bb046866",
+            "slot_e0e7ca1ce11ed610",
+            "slot_e1cc134434cdc458",
+            "slot_e8b4d08ba6737f95",
+            "slot_ecf006ec266ff39e",
+            "slot_ff5db383726f84c7"
+          ],
+          "omitted_areas": [
+            "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435:atomic_obligations_incomplete",
+            "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610:atomic_obligations_incomplete",
+            "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7:atomic_obligations_incomplete"
+          ],
+          "packet_statuses": {
+            "completed": 7,
+            "partial": 3
+          },
+          "batch_diagnostics": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 10,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 6,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 3,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 1,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            }
+          ],
+          "items": {
+            "total": 80,
+            "by_statement_role": {
+              "claim": 60,
+              "evidence": 4,
+              "answer": 1,
+              "condition": 1,
+              "risk": 14
+            },
+            "by_semantic_type": {
+              "fact": 37,
+              "opinion": 23,
+              "unknown": 1,
+              "forecast": 19
+            }
+          },
+          "gate_unmet": [
+            "industrial-fulian-md:execution=failed",
+            "industrial-fulian-md:protocol=not_checked",
+            "industrial-fulian-md:packet_statuses={'completed': 7, 'partial': 3}",
+            "industrial-fulian-md:failed_or_partial_slots=22",
+            "industrial-fulian-md:omitted_areas=3",
+            "industrial-fulian-md:reasoning_tokens=127640",
+            "industrial-fulian-md:clean_slots=54<76"
+          ]
+        },
+        "optical-module-docx": {
+          "batch_id": "batch:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+          "plan_sha256": "sha256:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+          "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+          "plan_consistent": true,
+          "findings": [],
+          "derivations": {
+            "task:2953ca1f378c4f827cbb9ef4f4c9eb314650491acc99045e6eb6331118f528cf": "disabled"
+          },
+          "attempts": 14,
+          "expected_attempts": 14,
+          "attempt_status": {
+            "succeeded": 14
+          },
+          "attempt_roles": {
+            "material_items": 14
+          },
+          "usage": {
+            "prompt_tokens": 30054,
+            "completion_tokens": 238295,
+            "reasoning_tokens": 224366,
+            "total_tokens": 268349
+          },
+          "reasoning_tokens_field_present": true,
+          "tasks": [
+            {
+              "role": "material_items",
+              "method": "model",
+              "execution_status": "failed",
+              "protocol_status": "not_checked",
+              "quality_status": "review_required",
+              "context_status": "complete",
+              "error_codes": []
+            }
+          ],
+          "slot_statuses": {
+            "extracted": 52,
+            "no_supported_item": 2,
+            "failed": 60
+          },
+          "missing_slots": [],
+          "duplicate_slots": [],
+          "invalid_slots": [
+            "slot_0208795740178680",
+            "slot_0528ef3b34e98b5f",
+            "slot_072c0a2c468a109b",
+            "slot_0a70fdb4d56e5c74",
+            "slot_0c09c8a736242cd5",
+            "slot_0d013b6aa424d46b",
+            "slot_0ee144f01ec0a3a4",
+            "slot_17c6edfc82252bb8",
+            "slot_2091f42de4ab38dd",
+            "slot_212c3e4437286d51",
+            "slot_24b72c4dd4de8247",
+            "slot_28bdc2732c6aa934",
+            "slot_366c4fcb47a634b6",
+            "slot_439ece2faece25ef",
+            "slot_4ca838699b5bed30",
+            "slot_5273dc2502048b2b",
+            "slot_5759f3d91c19055b",
+            "slot_583169a87972ade5",
+            "slot_58c72baa18c18f13",
+            "slot_5a0b1357f70ac191",
+            "slot_5ca6b29fa9f8cc4a",
+            "slot_5d5249e972ca10f3",
+            "slot_62e630415ec783f7",
+            "slot_63041fef22e45f39",
+            "slot_63a7efc13768bd58",
+            "slot_64bddfe9acf0ca0c",
+            "slot_65060d531b706201",
+            "slot_6cd1caa7b0832307",
+            "slot_6ce87f44427dd544",
+            "slot_6fc49380c6c3db3a",
+            "slot_76e76b155a099629",
+            "slot_776ac63e6ec4f893",
+            "slot_7a807ec94a33b129",
+            "slot_7b29b6d7ec89f54f",
+            "slot_80ac6c6023e312ad",
+            "slot_8148d03a05533f27",
+            "slot_87e8ba4e3241af9a",
+            "slot_89b483fa86b2d06f",
+            "slot_8ddf7726e4b71b24",
+            "slot_a6adcde0451323ff",
+            "slot_a8f8888f41383869",
+            "slot_aff85993f910660f",
+            "slot_b8b0def5302229d0",
+            "slot_b9a151e6fe078821",
+            "slot_c0b53f157efa3fc0",
+            "slot_c86346a0c45bfbf9",
+            "slot_cdce9776218c5fbb",
+            "slot_cfc23b06a16f1c9b",
+            "slot_d49a1779006632e7",
+            "slot_d50708895de68a36",
+            "slot_dcba8be813cb39b6",
+            "slot_df7f86f7cada8987",
+            "slot_e05d2ba8b3c9dac0",
+            "slot_e43a3df00a5c7885",
+            "slot_e89fba3eddb2bf18",
+            "slot_ecdf91e33b43f77b",
+            "slot_ed7d027a960c3697",
+            "slot_eeed077c5a89f840",
+            "slot_f4561978779da5fd",
+            "slot_f79f67b8b35662b1"
+          ],
+          "omitted_areas": [
+            "65301e444c69bd7518384b5f729a454fed67ee3cd0d878a83b7627f653f6b392:atomic_obligations_incomplete",
+            "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c:atomic_obligations_incomplete",
+            "93a86d758794efcc7854b55b07fcb08ae478d8017626bdb539a2c0ee2f36881f:atomic_obligations_incomplete",
+            "8abc9ab7880259eec995653362aae8c72a1210d00a8f35ab116ee1e45a360734:atomic_obligations_incomplete",
+            "f011b35327ba4485ad14b24ea3bfe59a8fb210a36143f2a8b59f52f1f1ca5f05:atomic_obligations_incomplete",
+            "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908:atomic_obligations_incomplete",
+            "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7:atomic_obligations_incomplete",
+            "55df234c63c63f686c1e88a8ea6a3629f3c8577d911ee50c1e006fb6bfefb6d7:atomic_obligations_incomplete"
+          ],
+          "packet_statuses": {
+            "completed": 6,
+            "partial": 8
+          },
+          "batch_diagnostics": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 14,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 13,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 2,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": null,
+              "finish_reason": null,
+              "error_type": "ValueError",
+              "validation_error": "role response contains an unsupported JSONL record",
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 16,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            }
+          ],
+          "items": {
+            "total": 66,
+            "by_statement_role": {
+              "condition": 4,
+              "claim": 37,
+              "question": 10,
+              "answer": 9,
+              "evidence": 6
+            },
+            "by_semantic_type": {
+              "unknown": 14,
+              "fact": 22,
+              "forecast": 19,
+              "opinion": 11
+            }
+          },
+          "gate_unmet": [
+            "optical-module-docx:execution=failed",
+            "optical-module-docx:protocol=not_checked",
+            "optical-module-docx:packet_statuses={'completed': 6, 'partial': 8}",
+            "optical-module-docx:failed_or_partial_slots=60",
+            "optical-module-docx:omitted_areas=8",
+            "optical-module-docx:reasoning_tokens=224366",
+            "optical-module-docx:clean_slots=54<114"
+          ]
+        }
+      },
+      "gate_unmet": [
+        "industrial-fulian-md:execution=failed",
+        "industrial-fulian-md:protocol=not_checked",
+        "industrial-fulian-md:packet_statuses={'completed': 7, 'partial': 3}",
+        "industrial-fulian-md:failed_or_partial_slots=22",
+        "industrial-fulian-md:omitted_areas=3",
+        "industrial-fulian-md:reasoning_tokens=127640",
+        "industrial-fulian-md:clean_slots=54<76",
+        "optical-module-docx:execution=failed",
+        "optical-module-docx:protocol=not_checked",
+        "optical-module-docx:packet_statuses={'completed': 6, 'partial': 8}",
+        "optical-module-docx:failed_or_partial_slots=60",
+        "optical-module-docx:omitted_areas=8",
+        "optical-module-docx:reasoning_tokens=224366",
+        "optical-module-docx:clean_slots=54<114"
+      ]
+    },
+    "treatment": {
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "profile_sha256": "sha256:a2de2bb704da4bfb9d6db647085c8537ff8f838f74754b3a2339567db34fc3e9",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": "disabled"
+      },
+      "reasoning_tokens_total": 0,
+      "sources": {
+        "industrial-fulian-md": {
+          "batch_id": "batch:efc4b28488baeee2fae1f8a1ee27964d009045e9eaad631ef5cd95d3127bd138",
+          "plan_sha256": "sha256:efc4b28488baeee2fae1f8a1ee27964d009045e9eaad631ef5cd95d3127bd138",
+          "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+          "plan_consistent": true,
+          "findings": [
+            "attempt_outcome_unknown:attempt:5fa41eb57e5078588e4376fc172bc924e5e36800d03520972a2f20733f327416"
+          ],
+          "derivations": {
+            "task:d46a1453b65a3397eecfa7fc656bc4a9f914809947c4f1a3e39d0b07442c7ffa": "disabled"
+          },
+          "attempts": 10,
+          "expected_attempts": 10,
+          "attempt_status": {
+            "succeeded": 9,
+            "outcome_unknown": 1
+          },
+          "attempt_roles": {
+            "material_items": 10
+          },
+          "usage": {
+            "prompt_tokens": 20121,
+            "completion_tokens": 8632,
+            "reasoning_tokens": 0,
+            "total_tokens": 28753
+          },
+          "reasoning_tokens_field_present": true,
+          "tasks": [
+            {
+              "role": "material_items",
+              "method": "model",
+              "execution_status": "outcome_unknown",
+              "protocol_status": "not_checked",
+              "quality_status": "review_required",
+              "context_status": "complete",
+              "error_codes": [
+                "CS_OUTCOME_UNKNOWN"
+              ]
+            }
+          ],
+          "slot_statuses": {
+            "no_supported_item": 3,
+            "extracted": 66,
+            "failed": 7
+          },
+          "missing_slots": [],
+          "duplicate_slots": [],
+          "invalid_slots": [
+            "slot_06028a3f339dfe73",
+            "slot_3e8965b10d203f0b",
+            "slot_7b2c716720ace1aa",
+            "slot_8a33a8aadc6a6490",
+            "slot_998e49ccab85bdb7",
+            "slot_a0285709c19e993e",
+            "slot_ff5db383726f84c7"
+          ],
+          "omitted_areas": [
+            "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7:atomic_obligations_incomplete"
+          ],
+          "packet_statuses": {
+            "completed": 9,
+            "partial": 1
+          },
+          "batch_diagnostics": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 10,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 6,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 3,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 1,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": null,
+              "error_type": "LlmCallError",
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            }
+          ],
+          "items": {
+            "total": 88,
+            "by_statement_role": {
+              "claim": 54,
+              "evidence": 21,
+              "condition": 1,
+              "risk": 11,
+              "other": 1
+            },
+            "by_semantic_type": {
+              "fact": 49,
+              "opinion": 18,
+              "forecast": 21
+            }
+          },
+          "gate_unmet": [
+            "industrial-fulian-md:transport_outcome_unknown=1",
+            "industrial-fulian-md:execution=outcome_unknown",
+            "industrial-fulian-md:protocol=not_checked",
+            "industrial-fulian-md:findings=['attempt_outcome_unknown:attempt:5fa41eb57e5078588e4376fc172bc924e5e36800d03520972a2f20733f327416']",
+            "industrial-fulian-md:packet_statuses={'completed': 9, 'partial': 1}",
+            "industrial-fulian-md:failed_or_partial_slots=7",
+            "industrial-fulian-md:omitted_areas=1",
+            "industrial-fulian-md:clean_slots=69<76"
+          ]
+        },
+        "optical-module-docx": {
+          "batch_id": "batch:13addce0122108317a555d8ae751c519acd6732568759805a61ed39944c8a232",
+          "plan_sha256": "sha256:13addce0122108317a555d8ae751c519acd6732568759805a61ed39944c8a232",
+          "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+          "plan_consistent": true,
+          "findings": [],
+          "derivations": {
+            "task:eccd8809dfa9fcf5e761e09ea6a6e50c104bad77a58650ad4512e2a0521866de": "disabled"
+          },
+          "attempts": 14,
+          "expected_attempts": 14,
+          "attempt_status": {
+            "succeeded": 14
+          },
+          "attempt_roles": {
+            "material_items": 14
+          },
+          "usage": {
+            "prompt_tokens": 30782,
+            "completion_tokens": 13273,
+            "reasoning_tokens": 0,
+            "total_tokens": 44055
+          },
+          "reasoning_tokens_field_present": true,
+          "tasks": [
+            {
+              "role": "material_items",
+              "method": "model",
+              "execution_status": "failed",
+              "protocol_status": "not_checked",
+              "quality_status": "review_required",
+              "context_status": "complete",
+              "error_codes": []
+            }
+          ],
+          "slot_statuses": {
+            "extracted": 108,
+            "no_supported_item": 4,
+            "failed": 2
+          },
+          "missing_slots": [],
+          "duplicate_slots": [],
+          "invalid_slots": [
+            "slot_1cf7098f1c258900",
+            "slot_c1712c2b5d649478"
+          ],
+          "omitted_areas": [
+            "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051:atomic_obligations_incomplete"
+          ],
+          "packet_statuses": {
+            "completed": 13,
+            "partial": 1
+          },
+          "batch_diagnostics": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 14,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 13,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 2,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 4,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            },
+            {
+              "batch_index": 0,
+              "candidate_slots": 16,
+              "attempts": 1,
+              "finish_reason": "stop",
+              "error_type": null,
+              "validation_error": null,
+              "discarded_records": null
+            }
+          ],
+          "items": {
+            "total": 134,
+            "by_statement_role": {
+              "condition": 5,
+              "claim": 83,
+              "question": 26,
+              "other": 2,
+              "evidence": 9,
+              "risk": 1,
+              "answer": 8
+            },
+            "by_semantic_type": {
+              "fact": 49,
+              "opinion": 30,
+              "unknown": 24,
+              "forecast": 31
+            }
+          },
+          "gate_unmet": [
+            "optical-module-docx:execution=failed",
+            "optical-module-docx:protocol=not_checked",
+            "optical-module-docx:packet_statuses={'completed': 13, 'partial': 1}",
+            "optical-module-docx:failed_or_partial_slots=2",
+            "optical-module-docx:omitted_areas=1",
+            "optical-module-docx:clean_slots=112<114"
+          ]
+        }
+      },
+      "gate_unmet": [
+        "industrial-fulian-md:transport_outcome_unknown=1",
+        "industrial-fulian-md:execution=outcome_unknown",
+        "industrial-fulian-md:protocol=not_checked",
+        "industrial-fulian-md:findings=['attempt_outcome_unknown:attempt:5fa41eb57e5078588e4376fc172bc924e5e36800d03520972a2f20733f327416']",
+        "industrial-fulian-md:packet_statuses={'completed': 9, 'partial': 1}",
+        "industrial-fulian-md:failed_or_partial_slots=7",
+        "industrial-fulian-md:omitted_areas=1",
+        "industrial-fulian-md:clean_slots=69<76",
+        "optical-module-docx:execution=failed",
+        "optical-module-docx:protocol=not_checked",
+        "optical-module-docx:packet_statuses={'completed': 13, 'partial': 1}",
+        "optical-module-docx:failed_or_partial_slots=2",
+        "optical-module-docx:omitted_areas=1",
+        "optical-module-docx:clean_slots=112<114"
+      ]
+    }
+  },
+  "reasoning_tokens": {
+    "control": 352006,
+    "treatment": 0
+  },
+  "control_arm_reproduced_failure": true,
+  "treatment_arm_passed": false,
+  "gate_execution": {
+    "status": "fail",
+    "treatment_unmet": [
+      "industrial-fulian-md:transport_outcome_unknown=1",
+      "industrial-fulian-md:execution=outcome_unknown",
+      "industrial-fulian-md:protocol=not_checked",
+      "industrial-fulian-md:findings=['attempt_outcome_unknown:attempt:5fa41eb57e5078588e4376fc172bc924e5e36800d03520972a2f20733f327416']",
+      "industrial-fulian-md:packet_statuses={'completed': 9, 'partial': 1}",
+      "industrial-fulian-md:failed_or_partial_slots=7",
+      "industrial-fulian-md:omitted_areas=1",
+      "industrial-fulian-md:clean_slots=69<76",
+      "optical-module-docx:execution=failed",
+      "optical-module-docx:protocol=not_checked",
+      "optical-module-docx:packet_statuses={'completed': 13, 'partial': 1}",
+      "optical-module-docx:failed_or_partial_slots=2",
+      "optical-module-docx:omitted_areas=1",
+      "optical-module-docx:clean_slots=112<114"
+    ],
+    "control_unmet": [
+      "industrial-fulian-md:execution=failed",
+      "industrial-fulian-md:protocol=not_checked",
+      "industrial-fulian-md:packet_statuses={'completed': 7, 'partial': 3}",
+      "industrial-fulian-md:failed_or_partial_slots=22",
+      "industrial-fulian-md:omitted_areas=3",
+      "industrial-fulian-md:reasoning_tokens=127640",
+      "industrial-fulian-md:clean_slots=54<76",
+      "optical-module-docx:execution=failed",
+      "optical-module-docx:protocol=not_checked",
+      "optical-module-docx:packet_statuses={'completed': 6, 'partial': 8}",
+      "optical-module-docx:failed_or_partial_slots=60",
+      "optical-module-docx:omitted_areas=8",
+      "optical-module-docx:reasoning_tokens=224366",
+      "optical-module-docx:clean_slots=54<114"
+    ]
+  },
+  "quality_scoring": {
+    "status": "not_in_this_gate",
+    "note": "target recall / precision / 16 assertions are a separate downstream gate"
+  },
+  "model_requests_during_check": 0,
+  "production_database_access": 0
+}

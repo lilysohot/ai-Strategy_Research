@@ -1,6 +1,6 @@
 # 32 · items selector v6 与执行配置重冻结（零调用预注册）
 
-Status: preregistered_zero_call（待人工逐项授权；本门自身不授权任何行为）
+Status: executed（零调用冻结 + 双臂真实执行完成；treatment 结构性未过门，见 §11）
 Type: gate task
 Parent: [28 · items-only 质量门预注册](28-items-only-quality-gate-preregistration.md)、
 [31 · run-1 突增保护失效与模型替换](31-run1-429-invalidation-model-substitution.md)
@@ -107,5 +107,50 @@ Production database access: 0
 
 ## 10. 签认栏
 
-- 复核人：________　日期：________
-- 结论：☐ 准予执行（按 §7 填授权）　☐ 退回修改
+- 复核人：xyl　日期：2026-10-11
+- 结论： 准予执行（按 §7 填授权）　☐ 退回修改
+
+## 11. 执行结果（2026-10-11）
+
+**零调用冻结**：`r0-zero-call/freeze_two_arms.py` → `freeze-manifest.json`
+`sha256:1a0e008a…`、`preregistered-gate.json` `sha256:6fb47e79…`；`verify_two_arms.py`
+零调用核验 **56/56 通过**（`verification-summary.json.status = verified_zero_call`，模型调用 0、生产库访问 0）。
+
+**授权依据（诚实登记）**：§7 授权表**未填写**；`gate.authorization.items_live_extraction` 依据 §10 具名
+签认（复核人 xyl、2026-10-11、准予执行）与用户 2026-10-11 的明确指令「已经签认，可执行」，参数**逐字取自
+§4/§5 与 `.env` 现值**（model `deepseek-flash`、attempts max md=10/docx=14、节流 20s、并发 1、零重试），
+未由实施方自行裁量；其余三项授权保持 false。此差异已写入 `gate.authorization.basis` 供复核。
+
+**真实执行**（每臂 24 次调用，20s 节流，并发 1，零自动重试；两臂模型/快照/槽位/预算一致）：
+
+| 臂 | 协议 | 思考开关 | attempts | reasoning_tokens | 协议违规批次 | 槽位 failed | items |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| control | `…selector-jsonl-v5` | 未设置（provider 默认＝开） | 10 + 14 | 352,006 | 3 + 8 = **11** | 22 + 60 = 82 | 80 + 66 = 146 |
+| treatment | `…selector-jsonl-v6` | `thinking="disabled"` | 10 + 14 | **0** | **0 + 0 = 0** | 7 + 2 = 9 | 88 + 134 = 222 |
+
+- **判据 5 满足**：treatment `reasoning_tokens = 0`（control 352,006）→ 关闭思考的配置确实生效。
+- **判据 6 满足**：control 复现 v5 失效（11 个批次 `ValueError: role response contains an unsupported
+  JSONL record`，与 Issue 28/31 同形态）。
+- **根因位点已消除**：treatment 零次同类协议违规。
+
+**终态判定：`structural_fail`（未过门）**，未满足 4 项：`protocol_status == valid`、批次
+failed/partial = 0、`completed_min`、`execution_status == succeeded`。原因与协议修复无关：
+
+1. `industrial-fulian-md`：1 次 `TransportOutcomeUnknown`（零重试、不重发）→ 该批 7 槽 failed、
+   packet partial（9/10 completed）、任务 `outcome_unknown`；为独立基础设施事件，与 Issue 31 run-2 同形态。
+2. `optical-module-docx`：2 个槽位被控制器语义判定拒绝（`controller_semantic_validation_failed`
+   伴随 `missing_signal:*` / `commentary_only`）→ packet partial（13/14 completed）、任务 `failed`；
+   属 fail-closed 的语义判定，非 JSONL 格式违规。
+
+**token 效果（treatment vs control）**：completion 377,293 → 21,905（**-94.2%**）；
+reasoning 352,006 → 0；total 429,020 → 72,808（**-83.0%**）。
+
+**证据**（全部保留，未删除）：`../evidence/32-items-v6-reasoning-refreeze-20261011/`
+`r0-zero-call/{freeze-manifest,preregistered-gate,verification-summary}.json`、
+`live/{control-run-summary,treatment-run-summary,post-run-check,gate-decision,candidates}.json`、
+四个独立 store（`control-store/{md,docx}`、`treatment-store/{md,docx}`）。
+
+**归因边界**：本门只报执行要求，不宣称质量达标（§8）；v6 的结论限定为「消除 L2 协议缺陷」。
+剩余未过门项分别是基础设施事件与语义层判定，继续推进须另立门（语义层/重试策略/质量评分）。
+
+

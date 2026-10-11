@@ -10,6 +10,7 @@ See ``.scratch/web-business-context/issues/01-context-inheritance.md`` §9.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import uuid
 from pathlib import Path
@@ -20,10 +21,13 @@ import pytest
 
 from frontier_agent.components.observers.conversation_snapshot import (
     SCHEMA,
+    SUMMARY_TAG,
     ConversationSnapshotObserver,
     build_dump,
     canonical_json,
+    render_summary_content,
     select_replay,
+    summary_from,
     tool_schema_sha256,
     trim_to_turns,
     validate_messages,
@@ -1195,3 +1199,198 @@ async def test_worker_puts_per_run_guidance_in_the_request_tail(db, monkeypatch)
     # Prefix: the system-prompt addendum carries only what is constant per turn.
     assert note not in captured["meta"]["_sys_prompt_addendum"]
     assert "Input files are mounted read-only at /inputs." in captured["meta"]["_sys_prompt_addendum"]
+
+
+# ── S3: the summary block a trim leaves behind (issue 01 §12) ────────
+
+
+class _RecordingSummarizer:
+    """A stand-in summarizer that records what it was asked to summarize."""
+
+    def __init__(self, reply: str | None = "SUMMARY") -> None:
+        self.calls: list[tuple[str | None, int]] = []
+        self._reply = reply
+
+    async def __call__(self, old_summary: str | None, dropped: list[dict]) -> str | None:
+        self.calls.append((old_summary, len(dropped)))
+        return self._reply
+
+
+def _turn(question: str) -> list[dict]:
+    """One real turn: a user message and the assistant reply that answers it."""
+    return [user_msg(question), assistant_msg(f"A: {question}")]
+
+
+async def _dump_with(
+    tmp_path: Path,
+    messages: list[dict],
+    *,
+    summarizer: object = None,
+    max_replay_turns: int = 0,
+    max_replay_tokens: int = 0,
+) -> dict:
+    path = tmp_path / "conversation.json"
+    observer = ConversationSnapshotObserver(
+        path,
+        system_prompt=_SYSTEM,
+        tools=_TOOLS,
+        tool_names=_TOOL_NAMES,
+        thinking_format="none",
+        pipeline_id=_PIPELINE,
+        node_id=_NODE,
+        max_replay_turns=max_replay_turns,
+        max_replay_tokens=max_replay_tokens,
+        summarizer=summarizer,
+    )
+    await observer.on_loop_end(
+        AgentLoopResult(messages=messages, turns_used=1, stopped_by="no_tool")
+    )
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _tagged(messages: list[dict]) -> list[dict]:
+    return [m for m in messages if SUMMARY_TAG in str(m.get("content") or "")]
+
+
+async def test_a_dump_without_a_trim_carries_no_summary_and_calls_nothing(tmp_path) -> None:
+    """No dropped turns ⇒ no summary: the observer must not pay for one."""
+    summarizer = _RecordingSummarizer()
+
+    document = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        summarizer=summarizer,
+        max_replay_turns=5,
+    )
+
+    assert summarizer.calls == []
+    assert summary_from(document["messages"]) == (1, None)
+    assert _tagged(document["messages"]) == []
+
+
+async def test_a_trim_summarizes_what_it_drops_into_one_block(tmp_path) -> None:
+    """The dropped turns become one fixed block right after the system prompt."""
+    summarizer = _RecordingSummarizer("第一轮的记忆")
+
+    document = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2"), *_turn("Q3")],
+        summarizer=summarizer,
+        max_replay_turns=1,
+    )
+
+    assert len(summarizer.calls) == 1
+    old_summary, dropped = summarizer.calls[0]
+    assert old_summary is None
+    assert dropped == 4, "two whole turns, user and assistant each"
+    assert summary_from(document["messages"]) == (2, "第一轮的记忆")
+    assert len(_tagged(document["messages"])) == 1
+    assert document["messages"][2] == user_msg("Q3"), "the kept turn follows the block"
+
+
+async def test_a_second_trim_replaces_the_block_and_feeds_the_old_one_back(tmp_path) -> None:
+    """Memory accumulates across trims — as one block, never two."""
+    first = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2"), *_turn("Q3")],
+        summarizer=_RecordingSummarizer("S1"),
+        max_replay_turns=1,
+    )
+    summarizer = _RecordingSummarizer("S2")
+
+    second = await _dump_with(
+        tmp_path,
+        [*first["messages"], *_turn("Q4"), *_turn("Q5")],
+        summarizer=summarizer,
+        max_replay_turns=1,
+    )
+
+    assert summarizer.calls, "a trim happened, so the summarizer ran"
+    assert summarizer.calls[0][0] == "S1", "the previous memory is an input to the new one"
+    assert summary_from(second["messages"]) == (2, "S2")
+    assert len(_tagged(second["messages"])) == 1
+
+
+async def test_an_untouched_summary_is_rewritten_byte_identically(tmp_path) -> None:
+    """No trim ⇒ the block is untouched: it is part of the cached prefix."""
+    first = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        summarizer=_RecordingSummarizer("S1"),
+        max_replay_turns=1,
+    )
+    summarizer = _RecordingSummarizer("SHOULD NOT BE CALLED")
+
+    second = await _dump_with(
+        tmp_path,
+        [*first["messages"], *_turn("Q3")],
+        summarizer=summarizer,
+        max_replay_turns=5,
+    )
+
+    assert summarizer.calls == []
+    assert canonical_json(second["messages"][1]) == canonical_json(first["messages"][1])
+
+
+async def test_a_failed_summary_keeps_the_previous_memory(tmp_path) -> None:
+    """A failed update must not delete what an earlier trim paid for."""
+    first = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        summarizer=_RecordingSummarizer("S1"),
+        max_replay_turns=1,
+    )
+
+    document = await _dump_with(
+        tmp_path,
+        [*first["messages"], *_turn("Q3"), *_turn("Q4")],
+        summarizer=_RecordingSummarizer(None),
+        max_replay_turns=1,
+    )
+
+    assert summary_from(document["messages"]) == (2, "S1")
+
+
+async def test_a_hanging_summarizer_cannot_hold_the_run_open(tmp_path, monkeypatch) -> None:
+    """The bound lives here because ``on_loop_end`` is drained without one.
+
+    ``notify_observers`` schedules a non-critical observer's ``on_loop_end`` as a
+    background task and drains it with a bare ``asyncio.gather`` — so a summary
+    call with only its own (hundreds of seconds) transport timeout would postpone
+    the loop's return until the run's wall deadline killed it.
+    """
+    import frontier_agent.components.observers.conversation_snapshot as snapshot_mod
+
+    monkeypatch.setattr(snapshot_mod, "SUMMARY_TIMEOUT_S", 0.05)
+
+    async def hang(old_summary: str | None, dropped: list[dict]) -> str | None:
+        await asyncio.sleep(5)
+        return "too late"
+
+    document = await _dump_with(
+        tmp_path,
+        [system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        summarizer=hang,
+        max_replay_turns=1,
+    )
+
+    assert summary_from(document["messages"]) == (1, None), "timed out ⇒ plain trim"
+
+
+def test_the_summary_block_is_not_counted_as_a_real_turn() -> None:
+    """Counting it as a turn would evict a real turn to keep a paragraph.
+
+    ``head=1`` (forgetting the block) is asserted too, because that is exactly
+    the mistake the parameter exists to prevent — and it silently costs the
+    memory a previous trim paid for.
+    """
+    block = user_msg(render_summary_content("memory"))
+    messages = [system_msg(_SYSTEM), block, *_turn("Q1"), *_turn("Q2"), *_turn("Q3")]
+
+    kept, trim = trim_to_turns(messages, 2, head=2)
+    assert trim is not None and trim["cut_at"] == 4
+    assert kept[0] == messages[0] and kept[1] == block
+    assert kept[2:] == [*_turn("Q2"), *_turn("Q3")]
+
+    dropped_memory, _ = trim_to_turns(messages, 2, head=1)
+    assert dropped_memory[1] != block, "head=1 loses the memory (the bug this prevents)"

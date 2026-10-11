@@ -23,12 +23,14 @@ validates the header (``select_replay``) and either replays it as
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import hashlib
 import json
 import logging
 import os
-from collections.abc import Iterable
+import re
+from collections.abc import Awaitable, Callable, Iterable
 from pathlib import Path
 from typing import Any, cast
 
@@ -39,6 +41,8 @@ from frontier_agent.core.messages import (
     Message,
     for_wire,
     system_msg,
+    text_of,
+    user_msg,
 )
 from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
 
@@ -49,6 +53,61 @@ logger = logging.getLogger(__name__)
 SCHEMA = "conversation-dump/1"
 
 _ROLES = frozenset({"system", "user", "assistant", "tool"})
+
+#: Tag wrapping the single cross-turn summary block (issue 01 §12.2).
+#:
+#: The summary rides as a normal ``user`` message at index 1, so it travels
+#: through replay / staging / the kernel's ``initial_messages`` channel with no
+#: new plumbing. The tag is what lets the writer *find and replace* it instead of
+#: appending a second one every time the window is trimmed again — and what keeps
+#: it out of the turn accounting (see :func:`summary_from`).
+SUMMARY_TAG = "conversation-summary"
+
+#: Wall-clock ceiling for the summary call.
+#:
+#: Required rather than defensive: ``notify_observers`` runs a non-critical
+#: observer's ``on_loop_end`` as a background task and then drains it with a bare
+#: ``asyncio.gather`` — **no timeout** — so an unbounded call here would hold the
+#: loop's return open until the run's wall deadline killed it. The summarizer's
+#: own transport timeout is far larger (hundreds of seconds) and is not a bound
+#: this code can rely on.
+SUMMARY_TIMEOUT_S = 60.0
+_SUMMARY_RE = re.compile(
+    rf"<{SUMMARY_TAG}>(?P<body>.*?)</{SUMMARY_TAG}>",
+    re.DOTALL | re.IGNORECASE,
+)
+
+
+def render_summary_content(summary: str) -> str:
+    """The message content a summary is carried as."""
+    return f"<{SUMMARY_TAG}>{summary.strip()}</{SUMMARY_TAG}>"
+
+
+def summary_from(messages: list[Message]) -> tuple[int, str | None]:
+    """Return ``(protected_head, summary_text)`` for a wire message list.
+
+    ``protected_head`` is how many leading messages a trim must never touch: the
+    system prompt, plus the summary block when there is one. Two reasons the
+    summary must be protected:
+
+    * it is not a turn — if it were dropped like one, the memory a previous trim
+      paid an LLM call for would vanish on the next trim;
+    * it is part of the *prefix*, so it sits next to the system prompt where it
+      stays byte-identical until the next trim replaces it.
+    """
+    if len(messages) > 1 and messages[1].get("role") == "user":
+        match = _SUMMARY_RE.search(text_of(messages[1].get("content")))
+        if match:
+            return 2, match.group("body").strip()
+    return 1, None
+
+
+def with_summary(messages: list[Message], summary: str, *, head: int) -> list[Message]:
+    """Place *summary* at index 1, replacing the previous block when present."""
+    block = user_msg(render_summary_content(summary))
+    if head == 2:
+        return [messages[0], block, *messages[2:]]
+    return [messages[0], block, *messages[1:]]
 
 
 def canonical_json(value: Any) -> str:
@@ -118,19 +177,20 @@ def validate_messages(messages: Any) -> str | None:
     return None
 
 
-def _keep_from(messages: list[Message], cut: int) -> list[Message]:
-    """The kept head: the system prompt plus everything from *cut* on."""
-    return [messages[0], *messages[cut:]] if messages else []
+def _keep_from(messages: list[Message], cut: int, head: int = 1) -> list[Message]:
+    """The kept head: the protected prefix plus everything from *cut* on."""
+    return [*messages[:head], *messages[cut:]] if messages else []
 
 
 def trim_to_turns(
-    messages: list[Message], max_turns: int, *, max_tokens: int = 0
+    messages: list[Message], max_turns: int, *, max_tokens: int = 0, head: int = 1
 ) -> tuple[list[Message], dict[str, Any] | None]:
     """Drop the oldest whole turns until both bounds are satisfied.
 
     Cutting on a ``user`` boundary (never mid-turn) keeps tool pairing intact, and
-    index 0 — the system prompt — is never dropped. ``<= 0`` disables a bound,
-    mirroring the repo's "0 disables the bound" convention.
+    the protected head — index 0 (the system prompt), plus index 1 when it holds
+    the summary block (issue 01 §12.2) — is never dropped. ``<= 0`` disables a
+    bound, mirroring the repo's "0 disables the bound" convention.
 
     Two bounds, because a turn count is not a size. A run may legally end just
     under the provider's input-token ceiling — the web profile's tiered compaction
@@ -145,8 +205,14 @@ def trim_to_turns(
     """
     if max_turns <= 0 and max_tokens <= 0:
         return messages, None
-    starts = [idx for idx, message in enumerate(messages) if message.get("role") == "user"]
-    cut = 1
+    # Only real turns count against ``max_turns``: the summary block is memory,
+    # not a turn (counting it would evict a real turn to keep a paragraph).
+    starts = [
+        idx
+        for idx, message in enumerate(messages)
+        if message.get("role") == "user" and idx >= head
+    ]
+    cut = head
     cut_for_turns = False
     if max_turns > 0 and len(starts) > max_turns:
         cut = starts[len(starts) - max_turns]
@@ -154,17 +220,17 @@ def trim_to_turns(
     dropped_for_tokens = 0
     if max_tokens > 0:
         while True:
-            if estimate_tokens(canonical_json(_keep_from(messages, cut))) <= max_tokens:
+            if estimate_tokens(canonical_json(_keep_from(messages, cut, head))) <= max_tokens:
                 break
             following = next((idx for idx in starts if idx > cut), None)
             if following is None:
                 break
             cut = following
             dropped_for_tokens += 1
-    if cut == 1 and dropped_for_tokens == 0:
+    if cut == head and dropped_for_tokens == 0:
         return messages, None
 
-    kept = _keep_from(messages, cut)
+    kept = _keep_from(messages, cut, head)
     kept_turns = sum(1 for message in kept if message.get("role") == "user")
     reasons = []
     if cut_for_turns:
@@ -201,8 +267,17 @@ def build_dump(
     stopped_by: str = "",
     max_replay_turns: int = 0,
     max_replay_tokens: int = 0,
+    summary_block: str | None = None,
 ) -> dict[str, Any]:
     """Render the dump document (header + trimmed message list).
+
+    ``summary_block`` (issue 01 §12) is the memory of a trim that already
+    happened: it is placed at index 1, replacing any previous summary, and then
+    the ordinary trim runs over the result — so the summary **counts against the
+    token budget** like any other content. That is deliberate: a summary larger
+    than the budget must not be able to push the next request over the ceiling.
+    (An earlier sketch had "keep the dropped turns too when both fit", which is
+    incoherent: the turns were dropped *because* they did not fit.)
 
     ``messages_est_tokens`` is informational only — the writer measures the kept
     window once, and the reader copies it into the replay decision so the run's
@@ -211,7 +286,13 @@ def build_dump(
     not know, and no replay decision depends on it.
     """
     wire = for_wire(_wire_copy(messages))
-    trimmed, trim = trim_to_turns(wire, max_replay_turns, max_tokens=max_replay_tokens)
+    if summary_block:
+        head, _ = summary_from(wire)
+        wire = with_summary(wire, summary_block, head=head)
+    head, _ = summary_from(wire)
+    trimmed, trim = trim_to_turns(
+        wire, max_replay_turns, max_tokens=max_replay_tokens, head=head
+    )
     return {
         "schema": SCHEMA,
         "run_id": run_id,
@@ -325,6 +406,50 @@ def select_replay(
     return cast("list[Message]", [dict(message) for message in messages]), decision
 
 
+def build_summarizer(
+    llm: Any,
+) -> Callable[[str | None, list[Message]], Awaitable[str | None]]:
+    """Summarize the turns a write-time trim drops (issue 01 §12.3).
+
+    Built on ``LLMSummaryCompactor`` — the same summarizer the in-run compaction
+    ladder and the CLI's cross-execution history already use — so the codebase
+    keeps *one* notion of what a summary is instead of growing a second one here.
+
+    ``llm`` is whatever the compactor accepts; the caller passes the loop's own
+    llm (D-S3-2), which keeps the feature free of new configuration. Every
+    failure turns into ``None``, and the caller then writes the plain trim:
+    losing memory is acceptable, failing a run is not.
+    """
+    from frontier_agent.core.runtime.loop.compact_llm import LLMSummaryCompactor
+
+    compactor = LLMSummaryCompactor(summary_llm=llm)
+
+    async def summarize(old_summary: str | None, dropped: list[Message]) -> str | None:
+        seed: list[Message] = []
+        if old_summary:
+            # The previous summary is fed back in, so the new one covers the whole
+            # dropped span instead of only the newest slice of it.
+            seed.append(user_msg(render_summary_content(old_summary)))
+        seed.extend(cast("list[Message]", [dict(message) for message in dropped]))
+        try:
+            compacted = await compactor.compact(
+                seed, keep_recent=0, compress_all_tool_results=True
+            )
+        except Exception:
+            logger.warning("conversation summary call failed", exc_info=True)
+            return None
+        text = "\n\n".join(
+            text_of(message.get("content")).strip()
+            for message in compacted
+            if message.get("role") == "user" and text_of(message.get("content")).strip()
+        )
+        if not text or "[Compaction failed" in text:
+            return None
+        return text
+
+    return summarize
+
+
 class ConversationSnapshotObserver(BaseObserver):
     """Persist the loop's final message list so the next turn can replay it.
 
@@ -351,6 +476,7 @@ class ConversationSnapshotObserver(BaseObserver):
         model_name: str = "",
         max_replay_turns: int = 0,
         max_replay_tokens: int = 0,
+        summarizer: Callable[[str | None, list[Message]], Awaitable[str | None]] | None = None,
     ) -> None:
         """Args:
         output_path: Where the dump is written (atomic replace).
@@ -369,6 +495,10 @@ class ConversationSnapshotObserver(BaseObserver):
             run's *first* request: a dump written just under the provider's
             ceiling would otherwise replay past it, where nothing in the run
             can compact it back.
+        summarizer: Called as ``(previous_summary, dropped_messages)`` when a
+            trim is about to discard turns, and expected to return the text that
+            replaces them (issue 01 §12.3). ``None`` — or a ``None`` return —
+            means the trim stands alone, which is the behaviour before S3.
         """
         self._path = Path(output_path)
         self._system_prompt = system_prompt
@@ -383,10 +513,11 @@ class ConversationSnapshotObserver(BaseObserver):
         self._model_name = model_name
         self._max_replay_turns = max_replay_turns
         self._max_replay_tokens = max_replay_tokens
+        self._summarizer = summarizer
 
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         try:
-            self._write(result)
+            await self._write(result)
         except Exception:
             logger.warning(
                 "conversation snapshot write failed: %s",
@@ -394,7 +525,7 @@ class ConversationSnapshotObserver(BaseObserver):
                 exc_info=True,
             )
 
-    def _write(self, result: AgentLoopResult) -> None:
+    async def _write(self, result: AgentLoopResult) -> None:
         messages = list(getattr(result, "messages", None) or [])
         if not messages:
             logger.warning("conversation snapshot skipped: loop returned no messages")
@@ -406,6 +537,7 @@ class ConversationSnapshotObserver(BaseObserver):
             # always correct — replaying a half-answered turn would 400 upstream.
             logger.warning("conversation snapshot skipped: %s", invalid)
             return
+        summary_block = await self._summarize_dropped(wire)
         document = build_dump(
             messages=wire,
             system_prompt=self._system_prompt,
@@ -422,8 +554,35 @@ class ConversationSnapshotObserver(BaseObserver):
             stopped_by=str(getattr(result, "stopped_by", "") or ""),
             max_replay_turns=self._max_replay_turns,
             max_replay_tokens=self._max_replay_tokens,
+            summary_block=summary_block,
         )
         self._atomic_write(document)
+
+    async def _summarize_dropped(self, wire: list[Message]) -> str | None:
+        """The summary block to write, updated only when turns are being dropped.
+
+        Returning the *existing* block untouched when nothing is dropped is what
+        keeps the prefix byte-stable between trims: the block is part of the
+        cached prefix, so rewriting it every turn would reset the cache on every
+        turn — the very failure this whole feature exists to avoid.
+        """
+        head, old_summary = summary_from(wire)
+        _, probe = trim_to_turns(
+            wire, self._max_replay_turns, max_tokens=self._max_replay_tokens, head=head
+        )
+        if probe is None or self._summarizer is None:
+            return old_summary
+        dropped = wire[head : int(probe["cut_at"])]
+        try:
+            summary = await asyncio.wait_for(
+                self._summarizer(old_summary, dropped), timeout=SUMMARY_TIMEOUT_S
+            )
+        except Exception:
+            logger.warning("conversation summary failed; the trim stands alone", exc_info=True)
+            return old_summary
+        # A ``None``/empty result keeps the previous memory rather than dropping
+        # it: a failed update must not lose what an earlier trim paid for.
+        return summary or old_summary
 
     def _atomic_write(self, document: dict[str, Any]) -> None:
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -440,11 +599,16 @@ class ConversationSnapshotObserver(BaseObserver):
 
 __all__ = [
     "SCHEMA",
+    "SUMMARY_TAG",
     "ConversationSnapshotObserver",
     "build_dump",
+    "build_summarizer",
     "canonical_json",
+    "render_summary_content",
     "select_replay",
+    "summary_from",
     "tool_schema_sha256",
     "trim_to_turns",
     "validate_messages",
+    "with_summary",
 ]

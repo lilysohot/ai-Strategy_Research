@@ -97,6 +97,10 @@ class ExtractionAdapter:
             body["reasoning_effort"] = profile.options.reasoning_effort
         if profile.options.thinking is not None:
             body["thinking"] = {"type": profile.options.thinking}
+        # Unconditional tool-free declaration: this adapter never sends `tools`, and an
+        # explicit "none" keeps tool use off at the wire level regardless of provider
+        # defaults. It stays valid while a thinking mode is enabled.
+        body["tool_choice"] = "none"
         intent = RequestIntent(
             role=self.binding.role,
             protocol=self.binding.protocol,
@@ -158,6 +162,7 @@ class ExtractionAdapter:
             "reasoning_tokens": None,
             "reasoning_effort": profile.options.reasoning_effort,
             "thinking": profile.options.thinking,
+            "tool_choice": "none",
         }
         started = time.monotonic()
         failed = False

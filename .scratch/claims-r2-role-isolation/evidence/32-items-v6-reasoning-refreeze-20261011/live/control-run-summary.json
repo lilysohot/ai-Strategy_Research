@@ -1,0 +1,369 @@
+{
+  "schema_version": "items-v6-reasoning-live-summary-1",
+  "arm": "control",
+  "protocol": "material-atomic-selector-jsonl-v5",
+  "model": "deepseek-flash",
+  "profile_sha256": "sha256:cf862bd38f2a3741db14c2457c5f4c2a3b33e1d9404e5bbc90df389bcc40498e",
+  "request_options": {
+    "timeout_seconds": 300.0,
+    "max_output_tokens": 262144,
+    "token_parameter": "max_tokens",
+    "reasoning_effort": null,
+    "thinking": null
+  },
+  "pacing_seconds": 20.0,
+  "gate_sha256": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+  "freeze_manifest_sha256": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+  "executed_on": "2026-10-11",
+  "sources": {
+    "industrial-fulian-md": {
+      "status": "executed",
+      "provenance": "recovered_from_store_zero_call",
+      "batch_id": "batch:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+      "plan_sha256": "sha256:333455c7a13147891a22cb22d00384c7d73bff2a190bdf300184ec56e08e87a2",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "store_root": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/control-store/industrial-fulian-md",
+      "duration_seconds": null,
+      "attempts": 10,
+      "expected_attempts": 10,
+      "attempt_status": {
+        "succeeded": 10
+      },
+      "attempt_roles": {
+        "material_items": 10
+      },
+      "attempt_usage": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 13728,
+            "prompt_tokens": 2466,
+            "reasoning_tokens": 12409,
+            "total_tokens": 16194
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 2,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 12322,
+            "prompt_tokens": 2549,
+            "reasoning_tokens": 10730,
+            "total_tokens": 14871
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 3,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 16822,
+            "prompt_tokens": 2008,
+            "reasoning_tokens": 15522,
+            "total_tokens": 18830
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 4,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 13133,
+            "prompt_tokens": 1662,
+            "reasoning_tokens": 12733,
+            "total_tokens": 14795
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 5,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 19162,
+            "prompt_tokens": 2547,
+            "reasoning_tokens": 17619,
+            "total_tokens": 21709
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 6,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 18657,
+            "prompt_tokens": 2431,
+            "reasoning_tokens": 17076,
+            "total_tokens": 21088
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 7,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 15868,
+            "prompt_tokens": 2250,
+            "reasoning_tokens": 14521,
+            "total_tokens": 18118
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 8,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 2583,
+            "prompt_tokens": 1432,
+            "reasoning_tokens": 2486,
+            "total_tokens": 4015
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 9,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 17120,
+            "prompt_tokens": 2065,
+            "reasoning_tokens": 16131,
+            "total_tokens": 19185
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 10,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 9603,
+            "prompt_tokens": 2263,
+            "reasoning_tokens": 8413,
+            "total_tokens": 11866
+          },
+          "response_model": "deepseek-flash"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 21673,
+        "completion_tokens": 138998,
+        "reasoning_tokens": 127640,
+        "total_tokens": 160671
+      },
+      "reasoning_tokens_field_present": true,
+      "plan_consistent": true,
+      "findings": [],
+      "tasks": [
+        {
+          "task_id": "task:d580e9e081a82364f093c5298234d43167d678db457f4ce9e61e620725118f15",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "failed",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:6c0c89cafd8c0ef22db87f7afd02b9e1ebdac5613f9e9544fe565ff3ca67b21c",
+          "error_codes": []
+        }
+      ]
+    },
+    "optical-module-docx": {
+      "status": "executed",
+      "provenance": "executed_live",
+      "batch_id": "batch:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+      "plan_sha256": "sha256:ccf29d45067a3a4fb3295ea43f3690d176912720fd86128443cc301a35cdd1dc",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "store_root": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/control-store/optical-module-docx",
+      "duration_seconds": 1327.4,
+      "attempts": 14,
+      "expected_attempts": 14,
+      "attempt_status": {
+        "succeeded": 14
+      },
+      "attempt_roles": {
+        "material_items": 14
+      },
+      "attempt_usage": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 14830,
+            "prompt_tokens": 1981,
+            "reasoning_tokens": 14078,
+            "total_tokens": 16811
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 2,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 24600,
+            "prompt_tokens": 2458,
+            "reasoning_tokens": 23455,
+            "total_tokens": 27058
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 3,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 13803,
+            "prompt_tokens": 1782,
+            "reasoning_tokens": 13397,
+            "total_tokens": 15585
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 4,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 18993,
+            "prompt_tokens": 2785,
+            "reasoning_tokens": 17305,
+            "total_tokens": 21778
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 5,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 23829,
+            "prompt_tokens": 2336,
+            "reasoning_tokens": 22584,
+            "total_tokens": 26165
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 6,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 18611,
+            "prompt_tokens": 2095,
+            "reasoning_tokens": 17864,
+            "total_tokens": 20706
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 7,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 18751,
+            "prompt_tokens": 2684,
+            "reasoning_tokens": 17271,
+            "total_tokens": 21435
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 8,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 4136,
+            "prompt_tokens": 1661,
+            "reasoning_tokens": 3417,
+            "total_tokens": 5797
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 9,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 16359,
+            "prompt_tokens": 1407,
+            "reasoning_tokens": 16096,
+            "total_tokens": 17766
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 10,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 19947,
+            "prompt_tokens": 1972,
+            "reasoning_tokens": 18933,
+            "total_tokens": 21919
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 11,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 17229,
+            "prompt_tokens": 2011,
+            "reasoning_tokens": 16176,
+            "total_tokens": 19240
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 12,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 12296,
+            "prompt_tokens": 1666,
+            "reasoning_tokens": 11727,
+            "total_tokens": 13962
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 13,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 12439,
+            "prompt_tokens": 2304,
+            "reasoning_tokens": 11520,
+            "total_tokens": 14743
+          },
+          "response_model": "deepseek-flash"
+        },
+        {
+          "attempt_number": 14,
+          "execution_status": "succeeded",
+          "usage": {
+            "completion_tokens": 22472,
+            "prompt_tokens": 2912,
+            "reasoning_tokens": 20543,
+            "total_tokens": 25384
+          },
+          "response_model": "deepseek-flash"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 30054,
+        "completion_tokens": 238295,
+        "reasoning_tokens": 224366,
+        "total_tokens": 268349
+      },
+      "reasoning_tokens_field_present": true,
+      "plan_consistent": true,
+      "findings": [],
+      "tasks": [
+        {
+          "task_id": "task:2953ca1f378c4f827cbb9ef4f4c9eb314650491acc99045e6eb6331118f528cf",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "failed",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:77d49e5e5ee6066a2741e14c02aaf56924b5e40e33cd5268b1936901facf36f0",
+          "error_codes": []
+        }
+      ]
+    }
+  },
+  "errors": []
+}

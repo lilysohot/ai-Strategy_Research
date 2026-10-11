@@ -27,19 +27,18 @@ from sqlalchemy import text
 from server import readiness, store
 from server.config import get_config
 
-#: The migration this checkout expects a deployed database to be at. Update both
-#: whenever a new revision lands: the gate is only meaningful while these point at
-#: the real head and the revision just below it.
-HEAD = "0006_business_operations"
-BEHIND = "0005_business_objects"
-#: Everything in the chain below HEAD, asserted explicitly so a new revision cannot
-#: silently land outside the graph this test reasons about.
-ANCESTORS = (
-    "0001_initial",
-    "0002_run_usage",
-    "0003_turn_seq_unique",
-    "0004_control_records",
-)
+#: Derived from the migration files, never pinned.
+#:
+#: These used to be hard-coded (``HEAD = "0006_business_operations"``) with a
+#: comment asking whoever added a revision to update them. By revision 0019 they
+#: were **thirteen revisions stale**, so the gate's coverage had been silently
+#: broken since 0007 — while the schema kept changing. The comment could not save
+#: it either: the tests could not simply be pointed at the real head, because
+#: they migrated the fixture database (see :func:`_stamp`) and the chain stops
+#: running on SQLite after 0006.
+HEAD = sorted(readiness.expected_heads())[0]
+_HEAD_PARENTS = readiness.migration_graph().get(HEAD, ())
+BEHIND = _HEAD_PARENTS[0] if len(_HEAD_PARENTS) == 1 else ""
 
 
 @pytest.fixture
@@ -84,25 +83,45 @@ def _logging_intact() -> Iterator[None]:
             logger.propagate = propagate
 
 
-async def _migrate(cfg, target: str = "head") -> None:
-    """Run Alembic against the fixture's database (in a worker thread).
+async def _stamp(cfg, revision: str) -> None:
+    """Record *revision* in the fixture database's ``alembic_version`` — no DDL.
+
+    These tests are about the **revision gate**: given a database stamped at X
+    and a checkout whose head is Y, does the gate say ready / behind / ahead /
+    ambiguous? Nothing in that question needs the tables to exist, and migrating
+    them is not merely unnecessary — it cannot work here: the chain hits
+    ``ALTER`` of a constraint, which SQLite refuses without batch mode, which is
+    why this file was pinned at 0006 in the first place. Stamping expresses the
+    same state without depending on dialect support.
 
     Alembic's ``env.py`` drives its own event loop via ``asyncio.run``, so it
     cannot be called from inside this test's running loop; off-thread is also how
     a deploy step actually runs it. ``env.py`` derives the URL from the live
-    config, so the fixture's monkeypatched ``database_url`` is what gets migrated
+    config, so the fixture's monkeypatched ``database_url`` is what gets stamped
     — never the database in ``.env``.
     """
     config = Config("server/alembic.ini")
     config.set_main_option("sqlalchemy.url", cfg.database_url)
     with _logging_intact():
-        await asyncio.to_thread(command.upgrade, config, target)
+        await asyncio.to_thread(command.stamp, config, revision)
 
 
 async def test_migration_graph_has_a_single_head():
+    """One head, on a linear chain rooted at the first revision.
+
+    Deliberately says nothing about *which* revisions exist: enumerating them is
+    what went stale (the old assertion compared against a hand-written list that
+    stopped at 0006). What the gate needs is "exactly one head, and no branch" —
+    which is what this checks, on however many revisions the chain has today.
+    """
     graph = readiness.migration_graph()
-    assert set(graph) == set(ANCESTORS) | {BEHIND, HEAD}
+    children: dict[str, int] = {}
+    for parents in graph.values():
+        for parent in parents:
+            children[parent] = children.get(parent, 0) + 1
+
     assert readiness.expected_heads() == (HEAD,)
+    assert all(count == 1 for count in children.values()), children
     assert readiness._is_ancestor("0001_initial", HEAD)
     assert readiness._is_ancestor(BEHIND, HEAD)
     assert not readiness._is_ancestor(HEAD, BEHIND)
@@ -119,7 +138,7 @@ async def test_empty_database_is_not_ready_and_says_so(env):
 
 
 async def test_database_behind_this_build_is_not_ready(env):
-    await _migrate(env, BEHIND)  # an installation that was migrated, but not to head
+    await _stamp(env, BEHIND)  # an installation whose schema is behind this build
     verdict = await readiness.storage_readiness()
     assert not verdict.ok
     assert verdict.reasons == (readiness.SCHEMA_BEHIND,)
@@ -128,7 +147,7 @@ async def test_database_behind_this_build_is_not_ready(env):
 
 
 async def test_database_at_head_is_ready(env):
-    await _migrate(env, "head")
+    await _stamp(env, HEAD)
     verdict = await readiness.storage_readiness()
     assert verdict.ok, (verdict.reasons, verdict.detail)
     assert verdict.reasons == ()
@@ -143,7 +162,7 @@ async def test_unstamped_database_with_all_tables_is_accepted(env):
 
 
 async def test_unknown_revision_is_reported_as_ahead_not_behind(env):
-    await _migrate(env, "head")
+    await _stamp(env, HEAD)
     async with store.get_engine().begin() as conn:
         await conn.execute(text("UPDATE alembic_version SET version_num='zz_future'"))
     verdict = await readiness.storage_readiness()
@@ -153,7 +172,7 @@ async def test_unknown_revision_is_reported_as_ahead_not_behind(env):
 
 
 async def test_two_stamped_heads_are_ambiguous(env, monkeypatch):
-    await _migrate(env, "head")
+    await _stamp(env, HEAD)
     monkeypatch.setattr(readiness, "expected_heads", lambda: ("a", "b"))
     verdict = await readiness.storage_readiness()
     assert not verdict.ok
@@ -161,7 +180,7 @@ async def test_two_stamped_heads_are_ambiguous(env, monkeypatch):
 
 
 async def test_unwritable_data_root_is_not_ready(env, tmp_path):
-    await _migrate(env, "head")
+    await _stamp(env, HEAD)
     # A path whose parent is a regular file cannot be created on any platform —
     # the cross-platform stand-in for a read-only mount.
     blocker = tmp_path / "not-a-directory"
@@ -224,7 +243,7 @@ def test_startup_gate_passes_a_ready_store():
 
 async def test_readyz_is_stricter_than_healthz(env):
     """The two probes differ exactly where the remedies differ."""
-    await _migrate(env, BEHIND)
+    await _stamp(env, BEHIND)
     from server.app import app
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://gate") as client:
@@ -239,7 +258,7 @@ async def test_readyz_is_stricter_than_healthz(env):
 
 
 async def test_readyz_ok_after_migrating(env):
-    await _migrate(env, "head")
+    await _stamp(env, HEAD)
     from server.app import app
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://gate") as client:

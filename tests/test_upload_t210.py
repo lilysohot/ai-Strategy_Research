@@ -21,6 +21,7 @@ uploaded input, proving the file is visible to the agent at its inputs dir).
 from __future__ import annotations
 
 import asyncio
+import json
 import uuid
 
 import pytest
@@ -28,6 +29,16 @@ import pytest
 from deploy.huggingface.mock_llm import MockLLMServer, text_turn, tool_call_turn
 from server.config import get_config, run_dir_for
 from server.store import init_db
+
+
+def _trajectory_start(run_id: str) -> dict:
+    """The runtime's first trajectory record: the prompt the model actually got."""
+    path = run_dir_for(run_id) / "run" / "agent" / "trajectories" / "react_agent.jsonl"
+    for line in path.read_text(encoding="utf-8").splitlines():
+        record = json.loads(line)
+        if record.get("t") == "start":
+            return record
+    raise AssertionError(f"no start record in {path}")
 
 
 @pytest.fixture
@@ -248,6 +259,16 @@ async def test_upload_reaches_agent_via_prompt_addendum(
 
     # The uploaded file is present on disk in the run's inputs dir.
     assert (run_dir_for(run_id) / "inputs" / "brief.md").exists()
+
+    # Where the note landed (issue 01 §10.7 S1-b). This is the only test that
+    # checks the *position* through the real submission path — route → outbox →
+    # orchestrator → worker — because the worker-level test and the direct
+    # orchestrator acceptance both skip the first two hops. The runtime's own
+    # start record is where the two strings the model saw are written down.
+    start = _trajectory_start(run_id)
+    assert "The user attached 1 input file(s)" in start["user_message"]
+    assert "/inputs/brief.md" in start["user_message"]
+    assert "The user attached" not in start["system_prompt"]
 
     # The approver task has posted its decision and returned.
     await asyncio.wait_for(approver, timeout=5)

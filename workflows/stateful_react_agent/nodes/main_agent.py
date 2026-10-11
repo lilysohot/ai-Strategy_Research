@@ -18,6 +18,7 @@ from frontier_agent.components.finalization import (
 from frontier_agent.components.observers.context_size_guard import ContextSizeGuard
 from frontier_agent.components.observers.conversation_snapshot import (
     ConversationSnapshotObserver,
+    build_summarizer,
     select_replay,
     tool_schema_sha256,
 )
@@ -994,6 +995,16 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 model_name=model_name,
                 max_replay_turns=replay_max_turns,
                 max_replay_tokens=replay_max_tokens,
+                # Issue 01 §12.3: when the write-time trim drops turns, summarize
+                # them first (the same LLMSummaryCompactor the in-run compaction
+                # ladder uses) so the memory survives as one fixed block instead
+                # of disappearing. Built only when a bound is actually in force —
+                # a run that can never trim has nothing to summarize.
+                summarizer=(
+                    build_summarizer(llm)
+                    if (replay_max_turns or replay_max_tokens)
+                    else None
+                ),
             )
         )
     if not direct:

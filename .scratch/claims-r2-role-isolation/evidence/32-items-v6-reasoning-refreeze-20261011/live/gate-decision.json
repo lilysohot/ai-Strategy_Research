@@ -1,0 +1,193 @@
+{
+  "schema_version": "items-v6-reasoning-gate-decision-1",
+  "decided_on": "2026-10-11",
+  "gate_sha256": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+  "freeze_manifest_sha256": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+  "post_run_check_sha256": "sha256:17833585aa3819ba473bf6b5867954a75dbe04ad7ba80648515cf843d445d624",
+  "run_summaries": {
+    "control": "sha256:60bfdb4ecea591066f61cc1589e2c5c1572c19da52ff2269b3451fd0c5fd4e71",
+    "treatment": "sha256:c3c34e407e614f2befed1f2ccc393caeb5c10add88ebba3bb344b33d952c4039"
+  },
+  "verdict": "structural_fail",
+  "criteria": {
+    "attempts_match_plan": {
+      "met": true,
+      "detail": {
+        "industrial-fulian-md": "10/10",
+        "optical-module-docx": "14/14"
+      }
+    },
+    "no_http_429": {
+      "met": true,
+      "detail": "attempt statuses limited to succeeded/outcome_unknown"
+    },
+    "no_automatic_retries": {
+      "met": true,
+      "detail": "adapter attempts == 1 on every batch"
+    },
+    "protocol_status_valid": {
+      "met": false,
+      "observed": {
+        "industrial-fulian-md": "not_checked",
+        "optical-module-docx": "not_checked"
+      },
+      "reason": "the items task did not succeed, so protocol adjudication was not reached"
+    },
+    "failed_partial_invalid_duplicate_batches_max_0": {
+      "met": false,
+      "observed_packet_statuses": {
+        "industrial-fulian-md": {
+          "completed": 9,
+          "partial": 1
+        },
+        "optical-module-docx": {
+          "completed": 13,
+          "partial": 1
+        }
+      }
+    },
+    "completed_min": {
+      "met": false,
+      "detail": {
+        "industrial-fulian-md": 9,
+        "optical-module-docx": 13
+      }
+    },
+    "execution_status_succeeded": {
+      "met": false,
+      "observed": {
+        "industrial-fulian-md": "outcome_unknown",
+        "optical-module-docx": "failed"
+      }
+    },
+    "context_status_complete": {
+      "met": true
+    },
+    "reasoning_tokens_zero_or_absent": {
+      "met": true,
+      "detail": {
+        "treatment": 0,
+        "control": 352006
+      }
+    },
+    "control_arm_reproduced_failure": {
+      "met": true,
+      "detail": {
+        "control_protocol_violation_batches": {
+          "industrial-fulian-md": 3,
+          "optical-module-docx": 8
+        },
+        "control_failed_slots": {
+          "industrial-fulian-md": 22,
+          "optical-module-docx": 60
+        }
+      }
+    }
+  },
+  "criteria_unmet": [
+    "protocol_status_valid",
+    "failed_partial_invalid_duplicate_batches_max_0",
+    "completed_min",
+    "execution_status_succeeded"
+  ],
+  "token_effect_treatment_vs_control": {
+    "prompt_tokens": {
+      "control": 51727,
+      "treatment": 50903
+    },
+    "completion_tokens": {
+      "control": 377293,
+      "treatment": 21905,
+      "delta_percent": -94.2
+    },
+    "reasoning_tokens": {
+      "control": 352006,
+      "treatment": 0
+    },
+    "total_tokens": {
+      "control": 429020,
+      "treatment": 72808,
+      "delta_percent": -83.0
+    }
+  },
+  "items_produced": {
+    "control": {
+      "industrial-fulian-md": 80,
+      "optical-module-docx": 66
+    },
+    "treatment": {
+      "industrial-fulian-md": 88,
+      "optical-module-docx": 134
+    }
+  },
+  "protocol_violations_unsupported_jsonl_record": {
+    "control": {
+      "industrial-fulian-md": 3,
+      "optical-module-docx": 8
+    },
+    "treatment": {
+      "industrial-fulian-md": 0,
+      "optical-module-docx": 0
+    }
+  },
+  "failed_slot_reasons": {
+    "control": {
+      "industrial-fulian-md": [
+        [
+          "items_error:ValueError"
+        ]
+      ],
+      "optical-module-docx": [
+        [
+          "items_error:ValueError"
+        ]
+      ]
+    },
+    "treatment": {
+      "industrial-fulian-md": [
+        [
+          "items_error:LlmCallError"
+        ]
+      ],
+      "optical-module-docx": [
+        [
+          "controller_semantic_validation_failed",
+          "commentary_only",
+          "detected_signal_rejected:forecast",
+          "missing_signal:forecast"
+        ],
+        [
+          "controller_semantic_validation_failed",
+          "missing_signal:evidence"
+        ]
+      ]
+    }
+  },
+  "attribution": {
+    "protocol_violation_batches": {
+      "control": {
+        "industrial-fulian-md": 3,
+        "optical-module-docx": 8
+      },
+      "treatment": {
+        "industrial-fulian-md": 0,
+        "optical-module-docx": 0
+      }
+    },
+    "treatment_residual_causes": [
+      "industrial-fulian-md: one TransportOutcomeUnknown attempt (LlmCallError, no automatic retry) — independent infrastructure event, same shape as issue-31 run-2",
+      "optical-module-docx: two slots rejected by controller semantic validation (controller_semantic_validation_failed with missing_signal/commentary_only) — fail-closed semantic adjudication, not a JSONL format violation"
+    ],
+    "root_cause_status": "eliminated: zero 'unsupported JSONL record' batches under the v6 prompt, against 11 batches under the v5 control arm"
+  },
+  "quality_scoring": {
+    "status": "not_in_this_gate",
+    "note": "target recall / precision / 16 assertions belong to a separate downstream gate"
+  },
+  "reporting_scope": {
+    "structural_only": true,
+    "passed_is_not_quality_pass": true
+  },
+  "model_requests_during_decision": 0,
+  "production_database_access": 0
+}

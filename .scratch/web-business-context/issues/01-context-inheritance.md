@@ -585,7 +585,7 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 - 验收：① 多轮两臂对照复用 R4/R5'；② **跨进程/重启**同一会话连跑（证明不依赖进程内状态）；③ 表为空/读取失败 ⇒ 行为 = 全新会话（fail-open 演练）；④ 保留期 `plan` 不再涉及会话载体；⑤ `alembic check` 无新增漂移。
 
 **S3 窗口 + 写时固化摘要（成本有界）**
-1. consumer 侧：入口发现"窗口外还有历史"时，先做**一次**摘要调用，把更早轮压成固定文本块（置于 system 之后、窗口之前），再跑主循环。
+1. ~~consumer 侧：入口发现"窗口外还有历史"时，先做**一次**摘要调用，把更早轮压成固定文本块（置于 system 之后、窗口之前），再跑主循环。~~ **2026-10-11 修订（见 §12.1）**：写时裁剪已把被裁轮次从 payload 中丢掉，**下一轮看不到那些内容**，所以摘要改由**写侧**生成并随 dump 固化；设计稿见 **§12**。
 2. 摘要结果随本轮 dump **固化** ⇒ 之后每轮前缀稳定；**压缩那一轮允许一次 miss**，其后必须恢复。
 3. 摘要失败 ⇒ 回退 token 预算丢最旧轮（已有能力），不阻断。
 - 验收（合成 40+ 轮会话）：① 首请求 token 有界（≤ 预算）；② 压缩后连续轮次命中率恢复 ≥80%；③ 摘要在后续轮次**不重算**（相邻 dump 的摘要块逐字节相同）。
@@ -734,15 +734,23 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 | # | 项 | 事实 | 建议 |
 |---|---|---|---|
-| 1 | **S1 验收第 2 项"3 轮两臂复跑（R4/R5'）"未执行** | §10.2 的 S1 验收写的是"单测 + 3 轮两臂复跑 + 带附件两轮"；本次做了单测与带附件两轮，**无附件路径的两臂复跑没做** | 预期不变（无附件时 `--prompt-addendum` 为空 ⇒ system prompt 与改动前逐字节相同；本次改动只新增 dump 字段与 `usage_json` 键），但"预期"≠"实测"。补跑需 8 次 run（两臂各 4 轮）——**待裁决是否花这次额度** |
-| 2 | 带附件验收**没有对照臂** | C6（轮 2 命中 ≥ 80% 轮 1 prompt）在"共享块已暖"时并非严格归因：本轮共享块（system + 工具）≈12.3k，阈值 13.1k，只差约 0.8k ⇒ **共享块再大一点，C6 可能因错的原因通过** | 判据签认时不含对照臂，故不改判据；要归因就加"控制臂 = 轮后移走 dump"再跑一次（§9.17 的两臂先例） |
+| 1 | **S1 验收第 2 项"3 轮两臂复跑（R4/R5'）"未执行** | §10.2 的 S1 验收写的是"单测 + 3 轮两臂复跑 + 带附件两轮"；本次做了单测与带附件两轮，**无附件路径的两臂复跑没做** | **2026-10-11 处置：由 §11.10 的 S2 验收替代。** 那条要测的形状（无附件、同会话、两臂各 3 轮）就是 S2 验收 P1–P6 的形状（treatment 复用 99.4%，control 12,288）；而它原本的对象——**文件载体——已随 S2 退役**，原样复跑既不可能也无必要。故归档，不再花额度 |
+| 2 | 带附件验收**没有对照臂** | C6（轮 2 命中 ≥ 80% 轮 1 prompt）在"共享块已暖"时并非严格归因：本轮共享块（system + 工具）≈12.3k，阈值 13.1k，只差约 0.8k ⇒ **共享块再大一点，C6 可能因错的原因通过** | **2026-10-11 处置：由 §11.10 的对照臂覆盖。** control 轮 3 的 12,288 就是共享块，treatment 的 16,512 比它多 4,224 —— 差值只能来自重放。归档，不再单独补跑 |
 | 3 | 验收走 **`orchestrator.submit` 直连**，不经 HTTP 路由 + DATA-06 outbox | 路由/outbox 的连通性由 `tests/test_upload_t210.py`（HTTP + 真 worker + mock LLM）与 `tests/pg/test_run_dispatch.py` 覆盖，但它们**不校验说明的位置**；"位置"结论的证据在 worker 级单测 + 直连验收 | 记录为边界。若要端到端含路由，可在 `test_upload_t210` 里加一条"说明在 user message、不在 system prompt"的断言（mock 下即可，零额度） |
 | 4 | `server/input_requests.py:670` 的"Continue input request"说明也随本次改动进了尾部 | 属**顺带收益**（该文本含 per-request id，原先进前缀会翻转缓存）；无测试钉住 | 记录；断言可归 S4 的常驻回归 |
 | 5 | PG 侧用量契约测试本机**跳过** | `tests/pg/test_data15_joint.py` → 3 skipped（无 PG 连接）；全量跑也因此不含该文件 | 本次 `usage_json` 只新增键，该测试不校验键集合；记录 |
 | 6 | `usage_summary_for_runs`（AC-20 成本对比口径）不返回 replay 块 | 有意：那是成本口径，不是会话口径；replay 走 `usage_json` 与统计脚本 | 若成本板要看命中原因再评估加字段 |
 | 7 | 文档漂移（历史计划文档的行号） | `docs/p0-implementation-spec.md:235` 引 `worker.py:351` / `main_agent.py:817`，实际已漂移到 `506` / `852`；其结论（业务策略复用 `_sys_prompt_addendum`）**仍然成立**（上传说明才移走） | 记录；历史计划文档不做行号维护 |
 
-**C. 结论**：S1 可执行的验收格子已闭合（b / a / 统计脚本 / 带附件实测 / 观测），**唯一硬缺口是"无附件路径的两臂复跑"（B1）**；其余为如实记录的边界（B2 无对照臂、B3 路由路径未覆盖位置断言、B5 PG 跳过、B7 行号漂移）。
+**C. 结论（2026-10-11 更新）**：S1 可执行的验收格子已闭合（b / a / 统计脚本 / 带附件实测 / 观测）。原记的"唯一硬缺口 B1"已由 **§11.10 的 S2 验收替代**（形状相同；其原始对象"文件载体"已随 S2 退役）；B2 由 S2 的对照臂覆盖；B3 已补；其余为如实记录的边界（B5 PG 跳过、B7 行号漂移）。
+
+**D. 2026-10-11 清尾（用户"开始执行"：D5 / B3 / B1-B2）**
+
+| # | 项 | 处置与证据 |
+|---|---|---|
+| **D5** | F19 门测试硬编码 head | 查清是**两个**根因叠在一起：常量停在 `0006`（已落后 13 个 revision）+ 这些测试用 `command.upgrade` 跑**真实迁移链**，而链条到 0007 之后 SQLite 拒绝执行（`NotImplementedError: No support for ALTER of constraints in SQLite dialect`）——**这才是当年把常量钉在 0006 的真原因**，所以只"更新常量"修不好。改法三条：① `HEAD`/`BEHIND` 改为从 `readiness.expected_heads()` / `migration_graph()` **动态取**（消掉"每加一个迁移就改测试"的根因）；② 这些**版本门**测试改用 `command.stamp`（它们问的是"给定版本号门怎么判"，本来不需要表）；③ 单 head 测试改为断言"恰好一个 head + 链上每点恰好一个孩子 + 无分支"，不再列举 revision。结果：该文件 **7 failed → 16 passed**，全量 **12 failed → 5 failed** |
+| **B3** | 位置结论只在 worker 级 | 在 `tests/test_upload_t210.py` 的**真实链路** E2E 里加断言：读该 run 轨迹的 `start` 记录，断言说明文本在 `user_message`、且**不在** `system_prompt`。这是唯一经 `路由 → outbox → orchestrator → worker` 全链的位置证据 |
+| **B1 / B2** | 见 §10.8 B 表 | 归档（由 §11.10 验收替代），不再花额度 |
 
 ## 11. S2 设计稿：会话状态归位（2026-10-11）
 
@@ -965,6 +973,120 @@ prior_payload = row.payload if row else None
 - 过渡期一次性损失照旧记在案：S2 落地前遗留在旧 run 目录的 dump 不再可达，那些会话下一轮退化为新会话（一次 cache miss）。
 - 旧的多进程假设未变（§11.8）：同会话串行化是进程内的；`revision` 与同 run 幂等把最坏情况兜成"后写覆盖"。
 
+## 12. S3 设计稿：窗口 + 写时固化摘要（2026-10-11）
+
+**目标**（§10.1/§10.2 S3）：让"轮数很多"的会话**成本有界**——今天的写时裁剪（`trim_to_turns`，只丢最旧轮）是**止损**，不是解法：它能保证不越界，但历史被成段丢掉。S3 把"丢掉的那一段"换成**一段固定文本摘要**，且摘要随 payload **固化**，从而既不越界、又不丢信息、也不破坏前缀稳定。
+
+**范围**：只做 `stateful-react-agent`；不改 `session_conversations` 表（payload 是 opaque，S2 的 D1 裁决在这里直接兑现——**S3 不需要任何迁移**）。
+
+### 12.1 现状核准（设计前实查）
+
+| 机制 | 位置 | 对本设计的意义 |
+|---|---|---|
+| 写时裁剪 | `conversation_snapshot.trim_to_turns(messages, max_turns, *, max_tokens)` | 只按 `user` 边界丢最旧轮、保 system、永不孤儿 tool；节点传 `replay_max_turns` 与 `replay_max_tokens`（默认 `max_input_tokens // 2`） |
+| **跨轮压缩阶梯（现成）** | `frontier_agent/core/runtime/session_history.py::SessionHistoryCompactor.compact(turns, current_query)` | 已经是"先删旧工具结果 → 用 `LLMSummaryCompactor` **摘要旧轮** → 最近工具结果 → 丢最旧轮 → 确定性截断"；且摘要的表示法就是列表头部一个 `{"summary": ...}` 伪轮。**S3 应当复用它，不新造压缩器** |
+| 循环内 tiered 压缩 | `frontier_agent/core/runtime/loop/tiered_compact.py::compaction_trigger_tokens(max_len)` = `0.8 × max_len`（`AGENT_COMPACTION_TRIGGER_RATIO` 可覆盖） | 那是 **run 内**上下文管理，与 S3 的**跨轮窗口**是两件事，S3 不动它。该文件还留着一条有用的实测结论：把比例放到 0.65 **被实测否决**（压缩更频繁、得分无提升 49.7% vs 50.0%），所以别用"多压一点更安全"的思路设计 S3 |
+| 摘要提示词 | `frontier_agent/infra/llm/summary_prompt.py::compaction_prompt(messages)` | 直接复用 |
+
+**一条决定设计走向的硬约束**：写时裁剪发生在**产生 dump 的那一轮**，被裁掉的轮次**不会进入 payload** —— 所以**下一轮看不到被裁内容，无法事后补摘要**。⇒ 摘要只能由"本轮"生成（本轮手里有完整 messages），并把结果**固化进它写的 payload**。这条约束把 S3 的实现位置钉死在**写侧**，而不是 §10.2 原稿写的"consumer 侧入口先做一次摘要调用"（那一版假设被裁内容还可得，**不成立**，本稿据此修订）。
+
+### 12.2 形态：摘要块的位置与生命周期
+
+payload 的 messages 序列变成：
+
+```
+[ system,  摘要块（可选）,  窗口内的若干轮… ]
+   ↑ 恒定      ↑ 只在裁剪时更新      ↑ 每轮追加
+```
+
+- **摘要块是什么**：一条 `role="user"` 的消息，内容由固定模板包裹（如 `<conversation-summary>…</conversation-summary>`），紧接 system 之后。**唯一**：永远只有一块，新的摘要**替换**旧的。
+- **为什么放进 messages 而不是 doc 头部字段**：kernel 只接受 `initial_messages`（消息列表），放头部字段的话下一轮还得在入口把它拼成一条消息——等于多一个每轮都要走一遍的拼接点；放进序列里，`select_replay`/`initial_messages` 的既有路径一个字都不用改。
+- **为什么它不破坏前缀稳定**：块的位置固定在 system 之后；**一旦写入就不再变**，直到下一次裁剪才被替换。于是"第 N 轮请求的前缀 = 第 N-1 轮请求"，除了发生裁剪的那一轮（**允许一次失效**，§9.7 的既定口径）。
+- **role 选 `user` 不选 `system`**：system 只能有一条，且 `select_replay` 会拿它和本轮 system prompt **逐字节比对**；把摘要塞进去等于让 system prompt 每轮变，直接毁掉前缀。
+
+### 12.3 触发、生成与失败语义
+
+```
+节点（react_agent，loop 结束后、构造 observer 之前）：
+  if 本轮 messages 会触发裁剪（轮数 > max_replay_turns 或 est_tokens > max_replay_tokens）:
+      旧摘要 := payload 里那一块（若有）
+      被裁轮 := 按 trim 规则将被丢掉的那些轮
+      新摘要 := await SessionHistoryCompactor/LLMSummaryCompactor(旧摘要 + 被裁轮)   # 最多 1 次 LLM 调用
+      交给 observer 的参数 summary_block := 新摘要（失败则 None）
+  observer：写 dump 时把 summary_block 放在 system 之后（无则不放）
+```
+
+- **成本上界**：**每次发生裁剪的轮次最多 1 次摘要调用**；不发生裁剪的轮次 **0 次**。长期会话里裁剪是低频事件（每跨过一次窗口才发生一次）。
+- **失败语义（fail-open）**：摘要生成失败/超时 ⇒ `summary_block=None` ⇒ 行为**回退到今天的写时裁剪**（丢最旧轮），run 不受影响。**宁可少记忆，不可卡住运行**。
+- **不做**：不做"摘要+被裁原文并存"的中间态（那会让 payload 再次无界增长，违背本节目标）；不重算既有摘要（相邻 dump 的摘要块必须逐字节相同）。
+
+### 12.4 影响面（很小）
+
+| 层 | 变化 |
+|---|---|
+| 观察者 | 新增可选参数 `summary_block: str | None`；写 dump 时按 §12.2 插入。裁剪逻辑（`trim_to_turns`）**不变** |
+| 节点 | 在 loop 结束后判定"是否将裁剪"，需要时调一次摘要（复用 `SessionHistoryCompactor`），把结果传给观察者 |
+| `select_replay` | **不变**（摘要块就是普通 user 消息，配对/角色校验天然通过） |
+| 数据层 | **无迁移**（payload opaque） |
+| 保留期/观测 | 不变；`scripts/replay_stats.py` 的窗口列会体现裁剪后的消息数 |
+
+### 12.5 验收
+
+**单元（零额度，SQLite）**
+
+1. 不裁剪 ⇒ dump **不含**摘要块、**不调用**摘要器（用假的 `summary_llm` 断言调用次数为 0）。
+2. 裁剪 ⇒ dump 含摘要块、位置在 system 之后、且被裁轮不再出现；摘要器被调用**恰好 1 次**。
+3. 连续两轮都裁剪 ⇒ 第二次的摘要输入是"(旧摘要 + 本轮被裁轮)"，且新摘要**替换**旧的（不出现两块）。
+4. 摘要失败 ⇒ 回退为今天的裁剪结果（无摘要块），且不抛错。
+5. 前缀性质：不裁剪的相邻两轮，前一轮 payload 是新一轮 payload 的前缀（逐条 canonical 比较）。
+
+**集成（合成 40+ 轮会话，需额度）**
+
+6. 首请求 token 有界（≤ `replay_max_tokens`）；7. 裁剪那一轮之后连续 ≥2 轮命中率恢复 ≥80%（R4 口径）；8. 相邻 dump 的摘要块逐字节相同（不重算）；9. 40 轮总 prompt 呈"平台期"而非线性增长。
+
+### 12.6 待裁决
+
+| # | 议题 | 选项 | 我的建议 |
+|---|---|---|---|
+| D-S3-1 | 摘要块位置 | 甲：messages[1]（本稿）／乙：doc 头部字段 | **甲**（少一个每轮拼接点；`select_replay` 不改） |
+| D-S3-2 | 摘要用哪个模型 | 甲：本轮 loop 的同一个 `llm`／乙：另配一个便宜模型 | **甲**（不引入新配置面；成本已由"低频 1 次"限住） |
+| D-S3-3 | 窗口参数 | 甲：沿用 `replay_max_tokens = max_input_tokens // 2`／乙：单独配 `summary_at_ratio` | **甲**（先沿用，等实测有需要再加旋钮） |
+| D-S3-4 | 摘要块是否参与 `select_replay` 的 session/thinking 校验 | 甲：不参与（就是普通消息）／乙：单独校验 | **甲** |
+| D-S3-5 | ~~是否允许"只摘要、不丢轮"（当摘要后仍在预算内）~~ | **2026-10-11 执行时否决**：该选项**算术上不自洽**——被丢的那些轮正是因为超预算才被丢的，摘要本身也占预算，插进去只会更超。替换为自洽规则：**摘要块参与 token 预算**（详见 §12.7 修正 ①） |
+
+**与 S2 的关系**：S3 完全建立在 S2 的载体上（摘要随 payload 入库、下一轮主键读出），**不新增存储、也不需要迁移**；S2 留的 `replay_max_tokens` 预算正是 S3 的触发判据。§10.2 里 S3 那句"consumer 侧先做一次摘要"已按 §12.1 的硬约束**修订为写侧生成**。
+
+### 12.7 S3 实施记录（2026-10-11）
+
+**裁决口径**：D-S3-1/2/3/4 按建议执行（摘要块放 `messages[1]`／用本轮同一个 `llm`／沿用 `replay_max_tokens`／不参与 `select_replay` 校验）；**D-S3-5 在执行中被否决并替换**（见修正 ①）。
+
+**落地清单**
+
+| 文件 | 改动 |
+|---|---|
+| `frontier_agent/components/observers/conversation_snapshot.py` | 摘要块机制：`SUMMARY_TAG` + `render_summary_content` / `summary_from`（返回 `(protected_head, summary)`）/ `with_summary`；`trim_to_turns(..., head=)` 保护头，且**摘要不计入轮数**；`build_dump(..., summary_block=)` **先插块再裁剪**（摘要参与 token 预算）；观察者新增 `summarizer` 参数 + `_summarize_dropped`（只在真要裁剪时调用；未裁剪时把旧块**原样**写回，保证前缀逐字节不变）；`build_summarizer(llm)` 复用 `LLMSummaryCompactor` |
+| `workflows/stateful_react_agent/nodes/main_agent.py` | observer 构造处接 `summarizer=build_summarizer(llm)`（仅在 `replay_max_turns`/`replay_max_tokens` 生效时构建） |
+| `tests/test_context_inheritance.py` | 新增 7 条：不裁剪不调用摘要器／裁剪生成一块／二次裁剪替换且把旧摘要喂回／未裁剪时旧块逐字节不变／摘要失败保留旧记忆／**超时不能拖住 run**／摘要不计入轮数（并断言 `head=1` 会丢记忆） |
+
+**设计期修正（两条，实查发现）**
+
+1. **D-S3-5 甲被否**：原选项"摘要后若仍在预算内就**不丢轮**"**算术上不自洽**——被丢的轮正是因为超预算才被丢；摘要本身也占预算，插进去只会更超。改为自洽规则：**摘要块参与 token 预算**（`build_dump` 先插块再裁剪），因此超预算时按既有规则再丢更旧一轮。已写入 `build_dump` 的 docstring，避免后人重犯。
+2. **`on_loop_end` 没有超时**：`notify_observers` 对**非 critical** 观察者走"后台任务 + 裸 `asyncio.gather` drain"（`frontier_agent/core/loop_types.py:325-376`）——**没有任何超时**。观察者此前只写文件，所以无碍；S3 往里放了一次 LLM 调用，而摘要器自带的传输超时是**几百秒**级 ⇒ 会把 loop 的返回一直挂住，直到 wall deadline 杀进程（还会连带丢掉 dump）。故在观察者内加 `SUMMARY_TIMEOUT_S = 60`，超时即当失败（保留旧摘要 + 普通裁剪），并用专门单测钉住"挂住的摘要器不能拖住 run"。
+
+**门禁（实跑）**
+
+| 项 | 结果 |
+|---|---|
+| `tests/test_context_inheritance.py` | **50 passed**（43 → 50） |
+| 波及面回归集（10 个文件） | **169 passed** |
+| 全量 | **3016 passed / 5 failed** —— 与清尾后**同名同数**（corpus/market/dev lane 既有环境依赖），**无新增** |
+| `ruff` / `pyright` | 干净（0 error） |
+
+**未做**
+
+- **§12.5 的集成验收（合成 40+ 轮会话，需额度）未跑**：判据已预注册（① 首请求 token 有界；② 裁剪轮之后连续 ≥2 轮命中率恢复 ≥80%；③ 相邻 dump 的摘要块逐字节相同；④ 40 轮总 prompt 呈平台期而非线性）。**待批**，跑法照 S2：跑前探针确认模型上报缓存字段、每轮独立进程。
+- 观察项（有意取舍）：摘要块计入预算后，**窗口能保留的轮数会略少于** S3 之前——这是"用一点窗口换长期记忆"。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
@@ -988,6 +1110,12 @@ prior_payload = row.payload if row else None
 2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 属**部署侧配置与文档滞后**，本 issue 不改配置、不推荐具体模型，只保留"选定模型必须实测会上报缓存命中"这条判据。交付后按要求做了**回溯自查（§10.8）**：当场补齐 5 处遗漏（统计脚本库源与未计量三态测试、两处落后文档、agent_team 描述不准、`usage.py` 模块文档），并如实记录 7 条边界——其中**唯一硬缺口是"无附件路径的两臂复跑（R4/R5'）未执行"**（预期不变但未实测，补跑需 8 次 run，待裁决）。
 
 2026-10-11：写出 **§11 S2 设计稿（会话状态归位）**。设计前实查补上两个**此前没被写下来、且会改变验收口径**的事实：① 本机 `alembic check` **本来就是脏的**（40+ 项历史漂移）⇒ §10.2 的"无新增漂移"必须改成**差分**（新表之外不得多出任何操作）；② `readiness.expected_heads()` 是从迁移文件**动态解析**的 ⇒ 新增 `0019` 后不升级库就 `/readyz` not_ready，故"执行迁移"是落地步骤而非可选项。设计上对 §10.1 有一处**实质修订**：行形态改为 **opaque `payload TEXT` + 记账列**（而非把 dump 头字段分列）——分列等于让 server 开始建模 pipeline 内部结构，与 §9.12 口径 A 的动机相反。另列出**退役清单**（含 4 条既有测试的处置）与 **7 项待裁决**（D1 行形态、D2 删除时机、D3 乱序守卫、D4 迁移执行、D5 F19 门测试硬编码 head、D6 头部探针、D7 命名）。
+
+2026-10-11：**S3 实现落地**（用户"开始执行"；D-S3-1/2/3/4 按建议，D-S3-5 执行中否决并替换）：摘要块作为 `messages[1]` 的唯一一条、`trim_to_turns` 保护它且不计入轮数、只在真要裁剪时调一次摘要（复用 `LLMSummaryCompactor`）、未裁剪时旧块逐字节原样写回。**两条设计期修正**：① D-S3-5 甲"只摘要不丢轮"算术上不自洽，改为"摘要块参与 token 预算"；② 实查发现**非 critical 观察者的 `on_loop_end` 由裸 `gather` drain、无超时**（`loop_types.py:325-376`），而摘要器传输超时是几百秒级 ⇒ 会挂住 loop 返回直到 wall deadline，故加 `SUMMARY_TIMEOUT_S=60` 并按失败处理。门禁：该文件 50 passed、波及面 169 passed、全量 3016 passed / 5 failed（同名同数，无新增）、ruff/pyright 干净。**未做**：§12.5 的 40+ 轮集成验收（待批，需额度）。
+
+2026-10-11：**写出 §12 S3 设计稿（窗口 + 写时固化摘要）**。设计前实查补上一条**改变实现位置**的硬约束：写时裁剪发生在产生 dump 的那一轮，**被裁轮次不会进入 payload**，下一轮根本看不到它们 ⇒ §10.2 原稿"consumer 侧入口先做一次摘要"**不成立**，摘要只能由**写侧**生成并随 dump 固化（§12.1 已据此修订）。同时确认**不必新造压缩器**：`frontier_agent/core/runtime/session_history.py::SessionHistoryCompactor` 已是"删旧工具结果 → 摘要旧轮 → 丢最旧轮"的阶梯，且摘要的既有表示法就是列表头部一个 `{"summary": …}` 伪轮；`tiered_compact` 的 `0.8 × max_len` 及"把比例放低到 0.65 被实测否决"也一并引用（提醒不要用"多压更安全"的思路）。形态定为：摘要块作为 `role="user"` 的**唯一**一块、紧接 system，裁剪时替换、其余轮次逐字节不变 ⇒ 前缀只在裁剪轮失效一次。**S3 不需要迁移**（payload opaque，S2 的 D1 直接兑现）。待裁决 5 项（块位置/摘要模型/窗口参数/是否参与校验/是否允许"只摘要不丢轮"）。
+
+2026-10-11：**清尾三件（D5 / B3 / B1-B2）**（用户"开始执行"；均为测试与账目，零额度、零生产代码改动）。**D5**：查出 F19 门测试失败是"常量落后 13 个 revision"+"这些测试在 SQLite 上跑真实迁移链（0007 后 SQLite 不支持 ALTER 约束）"两个根因叠加，故改为动态取 head + 用 `stamp` 代替 `upgrade` + 单 head 断言去掉 revision 清单 —— 该文件 7 failed → **16 passed**，全量失败数 **12 → 5**（余下 5 条为 corpus/market/dev lane 既有环境依赖）。**B3**：在真实链路 E2E 里断言"上传说明在 `user_message`、不在 `system_prompt`"（读该 run 轨迹的 `start` 记录），补上唯一缺的路由级位置证据。**B1/B2**：归档——B1 要测的文件载体已随 S2 退役、其形状已由 S2 验收覆盖；B2 的对照臂已由 S2 提供。详见 §10.8 D。
 
 2026-10-11：**S2 实跑验收全部 PASS**（用户批准；模型取 `.env` 的 `deepseek-flash`，跑前探针确认其上报 `cached_tokens`）。方法：两臂各 3 轮、**每轮独立进程**（pid 53826/53872/53948），control 每轮后删库中会话行作唯一差别。结果：treatment 轮 2/3 `replay=used`、轮 3 复用轮 2 prompt 的 **99.4%**；每轮跑完 run 目录里的 dump 已删、库中有行；control 轮 2/3 全部 `skipped`；逐轮存储 messages 以上一轮为前缀。**归因补强**：control 轮 3 的 12,288 即共享块，treatment 多出的 4,224 只能来自重放（S1 附件验收缺的对照臂在这里补上）。证据 `evidence/20261011-s2-session-store/run-20261011/`；明细见 §11.10。
 
