@@ -149,6 +149,39 @@ def test_the_dump_carries_the_header_the_reader_matches_on() -> None:
     assert document["trim"] is None
 
 
+def test_the_dump_measures_the_window_it_will_send() -> None:
+    """The writer measures the kept window once; the reader reports it (S1-a).
+
+    This is what lets a run's ``usage_json`` say "replayed the previous turn's
+    window of N estimated tokens" without a consumer re-tokenising the history,
+    and it is measured on the *kept* list — so a trimmed dump reports the window
+    it actually replays, not the one it started with.
+    """
+    document = _dump()
+
+    assert document["messages_est_tokens"] > 0
+
+    messages, decision = _select(document)
+
+    assert messages is not None
+    assert decision["est_tokens"] == document["messages_est_tokens"]
+    assert decision["payload_bytes"] == len(
+        json.dumps(document, ensure_ascii=False).encode("utf-8")
+    )
+
+
+def test_a_dump_from_before_the_window_measurement_still_replays() -> None:
+    """The field is informational: its absence must not refuse a valid dump."""
+    document = _dump()
+    document.pop("messages_est_tokens")
+
+    messages, decision = _select(document)
+
+    assert messages is not None
+    assert decision["decision"] == "used"
+    assert decision["est_tokens"] == 0
+
+
 def test_non_wire_keys_never_reach_the_dump() -> None:
     tainted = {**assistant_msg("A1"), "duration_ms": 5, "is_error": False}
 
@@ -932,3 +965,81 @@ async def test_worker_non_business_prefix_keeps_the_calculation_tools(db, monkey
     assert "position_sizing" in tools
     assert "investment_position_sizing" not in tools
     assert "BUSINESS CONTEXT POLICY" not in captured["meta"]["_sys_prompt_addendum"]
+
+
+# ── per-run guidance rides in the tail, never in the prefix (S1-b) ───
+
+
+@pytest.mark.asyncio
+async def test_worker_puts_per_run_guidance_in_the_request_tail(db, monkeypatch) -> None:
+    """The uploaded-file note lands after the prompt, not inside the system prompt.
+
+    The file list names *this run's* inputs, so inside the system prompt it would
+    change the cached request prefix on any turn that carries an attachment and
+    invalidate reuse for the whole conversation (issue 01 §10.2 S1-b). The model
+    sees the same bytes; only their position moves.
+    """
+    import os
+    import uuid
+    from argparse import Namespace
+
+    from server import worker as worker_mod
+    from server.config import run_dir_for
+
+    run_id = uuid.uuid4().hex
+    run_root = run_dir_for(run_id)
+    run_root.mkdir(parents=True, exist_ok=True)
+
+    captured: dict[str, Any] = {}
+
+    class FakeBenchmarkSession:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
+            captured["instruction"] = instruction
+            captured["meta"] = meta or {}
+            return {"final_answer": "ok"}
+
+    monkeypatch.setattr(
+        "benchmarks.public.core.kernel_adapter.BenchmarkSession",
+        FakeBenchmarkSession,
+    )
+    monkeypatch.setattr(
+        "server.config.run_dir_for",
+        lambda rid: run_root if rid == run_id else run_dir_for(rid),
+    )
+
+    note = "The user attached 1 input file(s) for this task. Read it from /inputs/brief.md"
+    args = Namespace(
+        run_id=run_id,
+        session_id="s",
+        turn_index=2,
+        prompt="read the brief",
+        prompt_addendum=note,
+        pipeline_id="stateful-react-agent",
+        backend="native",
+        wall_time=10,
+        max_turns=5,
+        model="",
+        base_url="",
+        api_key="",
+        agent_tools="",
+        business_prefix=1,
+    )
+    env_snapshot = dict(os.environ)
+    try:
+        assert await worker_mod.run_once(args) == 0
+    finally:
+        os.environ.clear()
+        os.environ.update(env_snapshot)
+
+    # Tail: after the prompt, in the message the model sees as this turn's ask.
+    assert captured["instruction"].startswith("read the brief")
+    assert note in captured["instruction"]
+    # Prefix: the system-prompt addendum carries only what is constant per turn.
+    assert note not in captured["meta"]["_sys_prompt_addendum"]
+    assert "Input files are mounted read-only at /inputs." in captured["meta"]["_sys_prompt_addendum"]

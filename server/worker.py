@@ -504,11 +504,13 @@ async def run_once(args: argparse.Namespace) -> int:
             approval_observer,
         ],
         "_sys_prompt_addendum": (
+            # Constant for every run, so it belongs to the request *prefix*.
+            # Per-run guidance (the uploaded-file note, the business data) is
+            # appended to the instruction tail below instead — see issue 01 §10.2
+            # S1-b and `_per_run_tail`.
             "Input files are mounted read-only at /inputs. Write the final deliverable to /outputs."
         ),
     }
-    if args.prompt_addendum:
-        metadata["_sys_prompt_addendum"] += "\n" + args.prompt_addendum
     if business_prefix:
         metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
     # 缺料表达对**所有**研究 Run 生效（2026-10-08 实测补充）：只有工具描述不够，
@@ -548,7 +550,16 @@ async def run_once(args: argparse.Namespace) -> int:
     if replay_path.exists():
         replay_payload = replay_path.read_text(encoding="utf-8")
 
+    # The request *tail*: everything that differs between turns of ONE
+    # conversation. The uploaded-file note names this run's inputs and the
+    # business data is this run's snapshot, so neither may sit in the system
+    # prompt — one per-run byte in the prefix resets the provider's cache for the
+    # whole conversation (issue 01 §9.15). The model sees the same bytes as
+    # before; they are simply appended after the user's prompt instead of before
+    # it. The workflow adds this run's own directory notes to the same tail.
     instruction = args.prompt
+    if args.prompt_addendum:
+        instruction = f"{instruction}\n\n{args.prompt_addendum}"
     if investment_context is not None:
         from server.investment_context import render_context_data
 

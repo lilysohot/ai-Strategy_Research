@@ -1,0 +1,33 @@
+{
+  "schema_version": "items-only-quality-gate-final-decision-1",
+  "decided_on": "2026-10-11",
+  "issue": "28-items-only-quality-gate-preregistration",
+  "terminal_rule_applied": "close current model plus extractor route; no prompt or threshold relaxation; no new gold",
+  "basis": {
+    "run_1": "infrastructure invalidation: 16/24 attempts rejected by provider burst protection (HTTP 429, zero tokens); evidence preserved, not counted as quality evidence",
+    "run_2": "structural gate failure under the frozen route: 12/23 returned responses violate the strict selector JSONL validator (records lack record_type; kind carried as status=\"items\"), 13/24 packets partial, 107/190 candidate slots failed, execution_status not succeeded, protocol_status not_checked; 1 transport outcome_unknown",
+    "user_confirmation": "2026-10-11, user confirmed recording the closure per the frozen terminal rule"
+  },
+  "route_closed": "deepseek-v4-flash plus the extractor route as frozen in this gate (material-atomic-selector-jsonl-v5 / material-semantics-32 / material-items-validation-v11)",
+  "not_done_by_design": {
+    "quality_scoring": "not performed: execution requirements failed first, so recall/precision/accepted-record thresholds and the 16 high-risk assertions are moot for this gate",
+    "relaxations": "no threshold relaxation, no prompt revision, no protocol/extractor change, no new gold"
+  },
+  "evidence_sha256": {
+    "gate": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    "freeze_manifest": "sha256:004ca636b992e970a46fe66380bab73bbb8f13160a6f80a95ebf3350d20d21ae",
+    "replan_manifest": "sha256:f9c3be706345e6fb63bcba107353533d487fdc42b476a7c0f7fee63ca79e89eb",
+    "run_1_summary": "sha256:1c7eab9c669f53ae8790065fe46013f40ad430eb6e8e176607128319719f0b90",
+    "run_2_summary": "sha256:47707a0c5c2b14d874d3a4261087d284a12640fce4092218da2f27bdaa9c772a",
+    "post_run_check": "sha256:f25c4598995ac7faa6e12762da8995d4cceb5e194d77155ae14e96a678aa24cf",
+    "protocol_violations": "sha256:b1a54e95c350f66b63df96342bd59cf31a8810a3ed910df0f4485ef7d601b7d3",
+    "pre_execution_verification_r1": "sha256:b67b1c9dcf1ce27472af20ad7e3bf10e792c72b1f0abdea4adf096772f2cb790",
+    "pre_execution_verification_r2": "sha256:e44b582adabb30f80d5eca3de62d4b523dd20fb58aa54cf2ae0577f0b3339d04"
+  },
+  "preserved": [
+    "r1-live/live-store (24 attempts, 429 diagnostics)",
+    "r2-live/live-store (24 attempts, raw response objects, slot ledgers)",
+    "both plans, both manifests, all zero-call verification records"
+  ],
+  "next_boundary": "any further route (new model, revised protocol, or divergence probes) requires a new pre-registered gate and a fresh explicit authorization; nothing in this gate may be relaxed or re-pointed"
+}

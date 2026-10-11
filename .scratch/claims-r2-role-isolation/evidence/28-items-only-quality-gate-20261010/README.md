@@ -1,7 +1,7 @@
 # Issue 28 · items-only 质量门预注册（零调用冻结）
 
-Status: frozen_before_execution
-Model calls: 0
+Status: frozen_before_execution（冻结态；执行记录见 §12）
+Model calls: 冻结/核验 0；执行 run-1 24（失效）+ run-2 24（结构性未过门）
 Production database access: 0
 
 本目录在**不发起任何真实模型调用**的前提下，冻结 items-only 质量门 + items-only 正向消费闭环的
@@ -115,7 +115,33 @@ Production database access: 0
 任务计数 0/1/0、`material_items_options == 64/24/8192`、`gold_not_exposed_to_model is True`、
 scope locators 与评分契约一致、批次预算可确定性复算、gate 计数 20/48/24、授权全 false、签认 pending。
 
-## 11. 下一步
+## 11. 下一步（已终结）
 
-本预注册仅为零调用冻结。若要验证 items-only 质量门，须由用户**单独授权**一次有界 items-only 真实复验
-（`attempts_max` = md 10 + docx 14，共 24 次，`concurrency = 1`），并指定模型；本目录不得自动发起任何模型调用。
+本预注册已执行并终结：run-1（doubao-seed-2.1-lite）因方舟突增保护 429 失效；run-2
+（deepseek-v4-flash）结构性未过门；经用户确认按冻结终态关闭本门所验「模型 + extractor」路线
+（详见 §12 与 `../../issues/28-…md`、`../../issues/31-…md`）。后续任何新模型、新协议或归因实验
+路线须**另立新门**并经新的显式授权；本门不得再执行、不得放宽阈值、不改 prompt、不新增金标。
+
+## 12. 执行记录（2026-10-11）
+
+### run-1（`r1-live/`）— 基础设施失效
+
+- 门 rev 3 授权（xyl；doubao-seed-2.1-lite；attempts 10+14；零重试；并发 1；无节流）。
+- 24 次尝试：md #01–#08 成功（HTTP 200、`finish_reason=stop`、30,407 tokens）；
+  md #09–#10 与 docx #01–#14 共 **16 次被 HTTP 429 瞬时拒绝**（~180ms、零 token）——
+  方舟「突增流量保护」（`RequestBurstTooFast`，seed-2.x 系列；配额未必耗尽）。
+- 判定：基础设施失效、不触发 on_fail；证据保留（`r1-live/live-store`、
+  `live-run-summary.json`、`pre-execution-verification.json` 86 项零调用核验）。
+
+### run-2（`r2-live/`）— 模型替换后结构性未过门
+
+- 门 rev 4（`sha256:987772e9…`，用户指示更换模型，节流 20s）；`r2-live/replan-manifest.json`
+  零调用重冻结（快照/槽位/预算不变、attempts 仍 10/14、profile `033e5f19…`）；
+  `r2-live/pre-execution-verification.json` 78 项零调用核验通过。
+- 24 次尝试全部发出（无 429、零重试、并发 1）：23 次响应、1 次 `TransportOutcomeUnknown`；
+  **12/23 响应违反冻结 selector JSONL 严格校验**（记录缺 `record_type`、类型被写入
+  `status:"items"`）；13/24 批次 partial、107/190 槽位失败；execution/protocol 不达门。
+- 后置零调用核查：`r2-live/post-run-check.json`（门执行要求 11 项 unmet）；
+  `r2-live/run2-protocol-violations.json`（违规逐条分类）；`r2-live/run2-candidates.json`（候选清单）。
+- **终态**：`r2-live/run2-final-decision.json` — 按冻结 `terminal_decision.on_fail` 关闭本路线
+  （用户确认登记关闭）；不做质量评分（执行要求先行未过）；全部证据保留。

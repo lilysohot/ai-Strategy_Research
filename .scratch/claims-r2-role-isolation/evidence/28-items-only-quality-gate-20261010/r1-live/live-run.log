@@ -1,0 +1,8 @@
+[live] executing industrial-fulian-md batch=batch:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6 budget=10
+[live] industrial-fulian-md attempts=10 attempt_status={'succeeded': 8, 'failed': 2} attempt_roles={'material_items': 10}
+[live] industrial-fulian-md task=material_items execution=failed protocol=not_checked quality=review_required context=complete errors=[]
+[live] executing optical-module-docx batch=batch:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d budget=14
+[live] optical-module-docx attempts=14 attempt_status={'failed': 14} attempt_roles={'material_items': 14}
+[live] optical-module-docx task=material_items execution=failed protocol=not_checked quality=review_required context=complete errors=[]
+{"written": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r1-live/live-run-summary.json", "error": null, "attempts_total": 24}
+exit_code=0

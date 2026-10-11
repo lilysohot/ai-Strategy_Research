@@ -553,6 +553,169 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 
 **仍待裁决**：O5 保留期（`run_retention.py` 默认 `keep_days=30` 会连 dump 一起 `rmtree`，连续性静默退回新会话）——"做/记录"待示下。
 
+## 10. 全面方案（2026-10-11）
+
+**定位**：把阶段 1 的"文件搬运"收敛为"服务端会话状态"，并把窗口、观测、清理一次排到位。
+**前提修正**：**不按轮数分布决定投入**——用户对话轮数不固定，方案必须对 1..N 全部成立：**1 轮零成本、2..N 命中且成本有界、N 很大不失败也不膨胀**。（撤回 §9.20 之后"先看真实轮数分布再定"的建议。）
+
+### 10.1 终局形态
+
+| 维度 | 目标态 | 现状 |
+|---|---|---|
+| 会话消息序列的权威源 | **服务端 DB**：`session_conversations(session_id PK, revision, messages jsonb, system_prompt, thinking_format, tool_schema_sha256, updated_at, updated_by_run_id)` | run 目录里的文件，且每轮复制一份 |
+| 生产者 | workflow 在 loop 结束落 dump 文件；**父进程**在 run 收尾 ingest 入库并清理文件（worker 继续**无 DB 凭据**） | 同左，但无人入库 |
+| 消费者 | 下一轮从 DB **一次索引读** → opaque payload → workflow 校验后重放 | 逆序扫 turns 找文件 |
+| 工作集上界 | 最近窗口 + **写时固化的更早轮摘要**，首请求 token 有界 | 只按轮数/token 丢最旧（止损，不解决线性增长） |
+| 观测 | 每轮 `replay.decision/reason` + prompt/cache + window 落 `runs.usage_json`，带常驻回归 | 只在 `summary.json` |
+| 清理 | 保留期/审计按 DB 语义；run 目录不再承载会话 | dump 住在 run 目录，会被保留期误删（§9.18 #3） |
+
+### 10.2 分阶段（依赖顺序 + 各自验收）
+
+**S1 阶段 1 收尾（小）**（实施记录见 §10.7）
+1. **b**：upload 说明移入请求尾部（与 A 同模式）⇒ system prompt 只由 profile + 工具集决定，带附件会话不再"抖一次"（§9.20 O4）。
+2. **a**：`replay` 决策与 window 统计落 `runs.usage_json`；配一个只读统计脚本（每轮命中率、跳过原因分布）。
+3. **O5 保留期**：若 S2 先落地，本项由 S2 直接替代（不重复投入）。（**2026-10-11 裁决：并入 S2**）
+- 验收：单测 + 3 轮两臂复跑（R4/R5'）+ **新增"带附件两轮"实测**（证明不抖、次轮命中）；统计脚本能打出每轮 decision/reason。
+
+**S2 会话状态归位（结构主体）**
+1. 新表 + alembic 迁移（**只新增**；本机 `alembic_version` 有漂移，先 `stamp head` 再 `check`）。
+2. 父进程 ingest：run 收尾读 `run/conversation.json` → 按 `revision` upsert → 成功后删除文件；失败则保留文件 + 记日志。
+3. 下一轮 payload 来自 DB：`_spawn` 不再扫 turns/文件，`resolve_prior_conversation` / `_stage_prior_conversation` 退役（**不留双路径**，避免两条都活着）。
+4. watch 分支语义不变（不读不写）。
+- 验收：① 多轮两臂对照复用 R4/R5'；② **跨进程/重启**同一会话连跑（证明不依赖进程内状态）；③ 表为空/读取失败 ⇒ 行为 = 全新会话（fail-open 演练）；④ 保留期 `plan` 不再涉及会话载体；⑤ `alembic check` 无新增漂移。
+
+**S3 窗口 + 写时固化摘要（成本有界）**
+1. consumer 侧：入口发现"窗口外还有历史"时，先做**一次**摘要调用，把更早轮压成固定文本块（置于 system 之后、窗口之前），再跑主循环。
+2. 摘要结果随本轮 dump **固化** ⇒ 之后每轮前缀稳定；**压缩那一轮允许一次 miss**，其后必须恢复。
+3. 摘要失败 ⇒ 回退 token 预算丢最旧轮（已有能力），不阻断。
+- 验收（合成 40+ 轮会话）：① 首请求 token 有界（≤ 预算）；② 压缩后连续轮次命中率恢复 ≥80%；③ 摘要在后续轮次**不重算**（相邻 dump 的摘要块逐字节相同）。
+
+**S4 收口与退役**
+`history.txt` / `conversation_history` 先证无消费方再退役；`docs/tech-stack.md`、`AGENTS.md` 同步；把"多轮缓存回归"固化为常驻脚本/门禁。
+
+**S5 agent_team**：单独 spec，复用 S2 的存储与 S1 的观测（三个 loop 的"哪份消息算会话"另议）。
+
+### 10.3 主流 Web 形态对照（2026-10-11 整理）
+
+**问题**：会话的「完整消息序列」该由谁持有？本仓库现状是"落在 run 目录的文件里、由 server 逐字节搬运"，需要判断这一步偏离主流多远、S2 归位后站在哪。
+
+**三类主流形态**
+
+| 形态 | 代表 | 会话状态 owner | 证据 |
+|---|---|---|---|
+| 无状态 API + 调用方自持历史 | Chat Completions / Messages API | **应用/服务端**（工程上落 DB 的 session/thread 表） | OpenAI 会话状态文档：请求本无状态，"多轮上下文必须由开发者显式携带"，并要求原样重放上一轮的完整 output 数组 |
+| 服务端会话对象 | Responses `store=true` / `previous_response_id` / Conversations API | **平台服务端**；conversation 存 items（消息、工具调用、工具输出） | 同上：官方首选有状态形态；Conversations 可跨设备续接 |
+| 工作流/图框架 | LangGraph checkpointer | **编排层**（≈ 本仓库 server 的位置）；消息列表即一等状态 | LangGraph Persistence：checkpointer 把 thread 的**整个 graph state**（含 `messages`）快照持久化到 Postgres/SQLite，按 `thread_id` 恢复 |
+
+⇒ 主流**没有**"完整消息序列锁在 agent 内部、编排层只能拿到渲染文本"这种做法。本仓库 §9 的形态是**过渡态**（server 只搬字节，§9.12 口径 A），S2 把它升格为服务端存储 ⇒ 站到主流位置上。
+
+**九条通用工程共识**（除标注外为通用实践，非某家官方原文）
+
+| # | 共识 | 本仓库对照 |
+|---|---|---|
+| 1 | 应用层无状态、状态外置（水平扩容/滚动发布/崩溃重启的前提） | `runs` + worker 子进程符合；会话载体挂在文件上是偏离 |
+| 2 | 一次请求 = 一条可重放的作业（状态机 + 终态幂等） | 符合 |
+| 3 | 会话数据两种存法：**按消息行存**（可查询/软删）vs **整段快照**（LangGraph 式） | S2 选整段快照 —— 与"整段读、前缀逐字节稳定"匹配 |
+| 4 | prompt 由服务端组装，且必须**确定性**（同一份状态 ⇒ 同一份字节） | 组装在 pipeline、server 只搬文本：**刻意偏离**，代价就是本 issue 全部工作量 |
+| 5 | 缓存友好 = 排序纪律 + canonical 序列化 + 指纹校验（与 ETag/乐观并发同构） | 已落地：dump 的 sha/`thinking_format` + `select_replay` |
+| 6 | 数据有明确 owner，保留策略才不打架 | **O5 的根因**就是两个 owner（§9.18 #3） |
+| 7 | 执行体不直连业务库（防越权/泄漏） | worker 无 DB 凭据 ⇒ S2 的"父进程 ingest"顺着这条边界 |
+| 8 | usage 逐请求落库，缓存命中率是一等成本指标 | `runs.usage_json`；S1 把 `replay` 决策并入 |
+| 9 | 读路径 fail-open、写路径 fail-loud | `initial_messages=None` 是安全出口；S2 的 ingest 失败必须记日志 |
+
+| 主流部件 | 本仓库对应 | 是否主流 |
+|---|---|---|
+| 无状态应用层 | `server/orchestrator.py` + worker 子进程 | 是（会话载体在文件上，偏） |
+| 作业状态机 | `runs` 表 + SSE relay | 是 |
+| 会话状态中心存储 | **暂无**（run 目录文件 + 每轮复制） | **否 ← S2 修这条** |
+| 服务端组装 prompt | pipeline 组装，server 只搬运 | 否（刻意，隔离收益真实） |
+| canonical 序列化 + 指纹 | `conversation_snapshot.tool_schema_sha256` / `select_replay` | 是 |
+| owner 清晰的保留策略 | run 目录清理会误伤会话载体 | 否 ← S2 顺带解 O5 |
+| 执行体无库凭据 | worker 侧 `SERVER_DATABASE_URL` 被置空 | 是 |
+| 逐请求 usage 指标 | `runs.usage_json` | 是 |
+
+**演进三步**（很典型的路径）：① 本地/文件先跑通 → ② 状态落中心存储、应用层无状态 → ③ 多实例 + 队列 + 归档/保留策略。S1/S2/S3 正走第二、三步 ⇒ S2 不是架构洁癖，而是把两个已知偏离点（会话载体、owner 冲突）收敛回主流位置。
+
+**证据分级**：LangGraph Persistence 与 OpenAI 会话状态两条为已取到的官方口径（OpenAI 官网本次 403，取的是**自称与 OpenAI 无关的镜像页**，措辞一致但按低一档证据看）；Anthropic 的显式断点（`cache_control`）因地区限制未取到官方页，**不作为依据**；其余为通用工程共识。
+
+### 10.4 贯穿的不变量与失败模式
+
+- **不变量**：前缀区只放跨轮不变内容；易变内容一律尾部；只有**写时**裁剪/压缩允许一次性失效；watch 不参与；**server 不解析消息内容**（只搬运/存储结构）。
+- **失败模式（全部 fail-open）**：DB 不可用 / 表为空 / 读取失败 ⇒ 新会话；dump 写失败 ⇒ 无 dump；摘要失败 ⇒ 丢最旧轮；超 token 预算 ⇒ 丢最旧轮。**任一环节坏掉都不允许让 run 跑不起来。**
+
+### 10.5 成本模型（对 1..N 都成立）
+
+| 轮数 | 行为 | 边际成本 |
+|---|---|---|
+| 1 | 无输入；写一次 upsert | ≈ 0 |
+| 2..N | 命中跨轮前缀（实测 96–99%）；prompt 被窗口上界**夹住**，不随 N 线性增长 | 每轮 ≈ 新增内容 |
+| N 很大 | 首请求 token 有界；磁盘 O(1)/会话；保留期按 DB 策略 | 一次摘要（一次性 miss） |
+
+### 10.6 明确不做
+
+路由层（§2）；`turns` 表结构改造（保留作 presentation）；弹窗；无绑定研究的自由问答；**不按轮数分布决定投入**。
+
+### 10.7 S1 实施记录（2026-10-11）
+
+**b：upload 说明移入请求尾部（已落地）**
+
+| 文件 | 改动 |
+|---|---|
+| `server/worker.py` | `--prompt-addendum` 不再拼进 `metadata["_sys_prompt_addendum"]`，改为拼到本轮 `instruction` 尾部（与业务数据同一位置）；系统提示只留跨轮恒定部分 |
+| `server/routes/runs.py` | 注释改写：说明 upload 说明走**尾部**而非系统提示，避免带附件那一轮翻转前缀 |
+| `tests/test_context_inheritance.py` | 新增 `test_worker_puts_per_run_guidance_in_the_request_tail`（尾部含、前缀不含） |
+
+效果：带附件会话不再"抖一次"（§9.20 O4 变成已消除）；与 §9.16 的 A 方案同一模式——**同样的字节，换个位置**。§9.11 第 4 项范围外说明仍然成立：`agent_team` 也随 worker 变化把说明落在 user message 里（位置变化，无新风险）。
+
+**a：replay 决策与窗口统计落 `usage_json` + 只读统计脚本（已落地）**
+
+| 文件 | 改动 |
+|---|---|
+| `frontier_agent/components/observers/conversation_snapshot.py` | dump 增 `messages_est_tokens`（写侧一次测量；**additive**，旧 dump 读作 0，不参与任何判定）；`select_replay` 的 used 决策增 `est_tokens` / `payload_bytes` |
+| `server/usage.py` | 新增 `replay_block_from_summary`（纯函数，`{}` 兜底） |
+| `server/orchestrator.py` | 新增 `_usage_with_replay`；`_record_usage` 与崩溃恢复收尾都改用它 ⇒ `runs.usage_json.replay` 有值 |
+| `scripts/replay_stats.py`（新） | 只读统计：`--session`（库）或 `--runs-root`（目录）；每轮 decision/reason/窗口 + **按会话**的命中率 + 跳过原因分布 + 未计量标记 |
+| `tests/test_usage_t211.py` / `tests/test_replay_stats.py`（新） | 决策块契约、端到端 `usage_json.replay`、板子算术与分组 |
+
+工具口径（写死在脚本里，避免口径漂移）：`reuse% = 本轮 cache_read / **同一会话**上一轮 prompt`；**跨会话不计算**；未计量的轮报 `-` 且不进均值——把"未计量"当 0% 会污染均值。目录源从各 run 自己的 dump 读 `session_id`；无 dump 的 run 视为独立分组（错的比没有更糟）。
+
+**门禁证据**
+
+| 项 | 结果 |
+|---|---|
+| 目标测试集（继承/统计/用量/历史/会话/附件/业务上下文/P3） | **137 passed** |
+| 全量 `uv run pytest tests -q`（deselect 1 条已知项） | **2980 passed / 12 failed**；失败集合的类别与 §9.13 基线一致（corpus 数据、market 数据、dev lane、alembic 多 head、PG 状态）。逐条复核其中 `test_research_discipline.py::test_react_profile_binds_the_finance_tools`：失败断言是 `get_profile("react").tools() == set()`（插件/环境注册），与本次 diff 无交集（本次未触碰 `apodex/profiles/`、`plugins/`、profile 解析）。**本轮未重建 worktree 做逐条对照**（`git worktree` 命令被用户取消），故按"同类别 + 无代码交集"记，不作"逐条同失败"的强断言 |
+| `ruff check` / `ruff format --check`（新文件） / `pyright`（改动文件） | 全部干净（0 error） |
+| CLI 冒烟（真实 runs_root，317 个 run） | `uv run python scripts/replay_stats.py --runs-root ~/.local/share/frontier-agent/web/runs --top 10` 跑通；修复前跨会话算出 112.6% 的假命中，分组后同会话复现 98.6%，无 dump 的 run 报 `-` |
+
+**带附件两轮实测（2026-10-11，判据跑前签认后执行）**
+
+判据：C1 说明文本不在 system prompt；C2 说明文本在 user message；C3 两轮 system prompt 逐字节相同；C4 轮 2 `replay.decision == "used"`；C5 轮 2 dump 逐字节以轮 1 dump 为前缀；C6 轮 2 `cache_read ≥ 0.8 × 轮 1 prompt`（R4 口径）。同一绑定研究会话：轮 1 带真实附件（`inputs/brief.md`，并把路由构造的说明文本交给 worker），轮 2 纯文本。
+
+两次尝试，如实留档：
+
+| 尝试 | 模型 | 判定 | 事实 |
+|---|---|---|---|
+| `run-20261011` | `deepseek-v4-flash-ga-260731`（§9.14 R2 预注册） | **不可判定**（不是判负） | 端点回 400：`The supported API model names are deepseek-flash, deepseek-v4-pro, but you passed …`；两轮 `stopped_by=llm_error`、`llm_calls=0`。**C1–C5 仍 PASS**（本地性质不依赖 provider），C6 无值可取 |
+| `run-20261011b` | `deepseek-flash`（探针证实的替代） | **全部 PASS** | 轮 1 prompt 16,414 / 轮 2 `cache_read` 16,384 = **99.8%**；`replay=used`；两轮 system prompt 同长 7749、逐字节相同；`usage_json.replay` 两轮都有值 |
+
+**模型替换的依据是我们自己的探针**（不是"历史运行记得它会报"）：同一端点两次同前缀请求，`deepseek-v4-pro` 报 `cached_tokens 3328/3392`、`deepseek-flash` 报 `3072/3339`，字段为 `prompt_tokens_details.cached_tokens` —— 正是 `frontier_agent/infra/openai_client.py::_usage_dict` 已在读的字段 ⇒ **无需改适配器**，R2 的"选定模型必须上报 `cached_tokens`"由本次实测满足。替换如实标注为**预注册环境失效**（模型名下线），非判据变化。
+
+现场工具输出：`run-20261011b/board.txt`（`scripts/replay_stats.py --session 95754ee0…`）显示 `used (1 turns)`、`reuse 99.8%`、窗口 `3 msg / 9184 tok`。
+
+**另行发现（不在本 issue 范围，需部署侧处置）**
+
+`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` **也不在该端点的支持列表内**（只认 `deepseek-flash` / `deepseek-v4-pro`）⇒ 按当前 `.env` 起的 web run，首个 LLM 调用即 400 `llm_error`。本次**未改 `.env`**：属部署配置，不属本 issue。
+
+**O5 保留期（裁决：并入 S2）**
+
+2026-10-11 裁决：**并入 S2，不在 S1 做**。理由：S2 把会话载体搬进 DB 后该问题自动消失（S2 验收第 4 条即"保留期 `plan` 不再涉及会话载体"）；现在做等于为一个即将退场的载体写保护逻辑。若将来 S2 被推迟，再按原口径执行：`RunStorage` 增 `session_id`、`RetentionPolicy` 增 `protect_recent_session_tail`、`plan_cleanup` 增一条"会话最近一轮，保留"的处置（三处改动 + 新测试）。
+
+**观察项（如实记）**
+
+- 旧 dump 无 `messages_est_tokens` ⇒ 板子窗口列显示 `N msg / 0 tok`；新 run 起正常。这是"字段后来才有"，不是读取失败。
+- 板子在真实 runs_root 上能把 §9.17 的四个验收 run 复现成同一会话的 98.6% 命中，说明"常驻统计"这一格已可用。
+
 ## Comments
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
@@ -568,3 +731,9 @@ FILESYSTEM CONVENTION (native mode): Your current working directory
 2026-10-10 裁决并落地：**watch 类 Run 不继承上下文**（研报投资策略要上下文干净、成本可控）。落地为"两个方向都关"：watch Run 不读旧 dump、也不写新 dump（`is_watch_run` → `--continuity off` → 节点既不重放也不注册 dump observer），见 §9.19。门禁：单测 32 条、目标集 104 passed、ruff/pyright 干净；聊天路径用新的 3 轮两臂复跑确认**全部判据 PASS**（`run-20261010-watch-ruling/`）。覆盖缺口如实记：watch 的节点内分支没有端到端实跑（缺 watch_rule→event→run 夹具链）。
 
 2026-10-10 缺口自查后执行 O1/O3（§9.20）：重放补 **token 上限**（`trim_to_turns(max_tokens=…)`，节点默认取 `max_input_tokens // 2`，显式 0 关闭）——防的是"上一轮合法结束在 209k–229k ⇒ 下一轮首请求越界"这类跑不起来的失败；`select_replay` 补 **session 校验**。门禁：单测 34 条、目标集 106 passed、ruff/pyright 干净、3 轮两臂复跑全 PASS（`run-20261010-O1O3/`）。同轮把 **O4（带附件轮）与 O8（中途绑定账户）** 记为"一次跳过再恢复"的已知边界；**O5 保留期**仍待裁决。`docs/tech-stack.md` 已同步新增的两个 run 产物（O2）。
+
+2026-10-11：用户指出**不能按轮数分布决定投入**（轮数不固定），据此给出**全面方案 §10**：终局 = 会话消息序列归位服务端 DB（worker 保持无 DB 凭据，由父进程 ingest）+ 窗口与写时固化摘要 + 观测常驻 + 清理按 DB 语义；分 S1（收尾：upload 入尾 / 观测落库 / 保留期）、S2（会话状态归位，撤掉文件双路径）、S3（窗口 + 固化摘要）、S4（退役与常驻回归）、S5（agent_team 另立）；贯穿不变量与"任一环节坏掉都不让 run 跑不起来"的失败模式。实测依据（每 Run 首个调用的跨轮命中 36–46%，修复后 96–99%）只用于说明收益面，不作为取舍判据。
+
+2026-10-11：补 **§10.3 主流 Web 形态对照**（会话状态 owner 的三类主流形态 + 九条通用共识 + 本仓库逐条对照 + 证据分级），用于回答"我们偏离主流多远、S2 站位在哪"。同日执行 **S1**（记录见 §10.7）：**b** upload 说明移入请求尾部（消除 §9.20 O4 的"抖一次"）；**a** replay 决策与窗口统计落 `runs.usage_json`，新增只读统计脚本 `scripts/replay_stats.py`（`--session` / `--runs-root`，按会话计算命中率，跨会话不算、未计量不算），真实 runs_root 冒烟复现同一会话 98.6% 命中。门禁：目标集 137 passed、全量 2980 passed / 12 failed（失败类别同 §9.13 基线，未重建 worktree 逐条对照）、ruff/格式/pyright 干净。**尚待**：① 带附件两轮实测需先签认预注册判据后放行（消耗额度，实施方不自宣）；② **O5 保留期建议并入 S2**（S2 让载体进 DB 后该问题自动消失），待裁决。
+
+2026-10-11 收尾：用户签认判据并批准实跑；**O5 裁决并入 S2**。实跑两次：第一次因 §9.14 R2 预注册的模型名（`deepseek-v4-flash-ga-260731`）在该端点已下线而 **不可判定**（400 `invalid_request_error`，`llm_calls=0`），但 C1–C5 仍 PASS；随后用自测探针选定的 `deepseek-flash` 复跑，**C1–C6 全部 PASS**（轮 2 复用轮 1 prompt 的 **99.8%**、`replay=used`、两轮 system prompt 逐字节相同）。**另行发现**：`.env` 现值 `OPENAI_MODEL=deepseek-v4-flash` 同样不在该端点支持列表内，按当前配置起的 web run 首次调用即 400 —— 需部署侧处置，未在本次改动（不属本 issue）。

@@ -1,0 +1,91 @@
+{
+  "label": "attachment-then-plain",
+  "research_id": "f97016c50589444a9969d6252ce7b2f4",
+  "model": "deepseek-v4-flash-ga-260731",
+  "runs": [
+    {
+      "turn": 1,
+      "run_id": "a5e7f62d928341e7a96a779bc2a2238d",
+      "has_attachment": true,
+      "status": "stopped",
+      "stopped_by": "llm_error",
+      "prompt_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "llm_calls": 0,
+      "usage_status": "partial",
+      "usage_replay": {
+        "decision": "skipped",
+        "reason": "no_payload"
+      },
+      "summary_replay": {
+        "decision": "skipped",
+        "reason": "no_payload"
+      },
+      "final_answer_head": "## 当前可交付结果\n\n执行已按现有进度提前收尾；工作区和输出目录中已经生成的文件均予以保留。由于最终汇总未能完成，这里不对尚未验证的结果做断言。请以现有交付物为准；若输出目录为空，则本次任务尚未形成可验证的完整交付——仍然返回这一明确状态",
+      "error": null,
+      "dump": {
+        "exists": true,
+        "readable": true,
+        "messages": 2,
+        "user_turns": 1,
+        "trim": null,
+        "est_tokens": 8845
+      },
+      "system_prompt_len": 7749,
+      "system_prompt_sha256": "937ea01bcc6d152088af9d1f5a6516cfc288eca628c88f4f5f658043488dc2e5",
+      "note_in_system_prompt": false,
+      "note_in_user_message": true,
+      "prefix_matches_previous_dump": null,
+      "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/a5e7f62d928341e7a96a779bc2a2238d"
+    },
+    {
+      "turn": 2,
+      "run_id": "cb323feafbff4ce5a30c3955f00a8f78",
+      "has_attachment": false,
+      "status": "stopped",
+      "stopped_by": "llm_error",
+      "prompt_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "llm_calls": 0,
+      "usage_status": "partial",
+      "usage_replay": {
+        "decision": "used",
+        "reason": "",
+        "messages": 2,
+        "prior_turns": 1,
+        "est_tokens": 8845,
+        "payload_bytes": 37612,
+        "trim": null,
+        "stopped_by": "llm_error"
+      },
+      "summary_replay": {
+        "decision": "used",
+        "reason": "",
+        "messages": 2,
+        "prior_turns": 1,
+        "est_tokens": 8845,
+        "payload_bytes": 37612,
+        "trim": null,
+        "stopped_by": "llm_error"
+      },
+      "final_answer_head": "## 当前可交付结果\n\n执行已按现有进度提前收尾；工作区和输出目录中已经生成的文件均予以保留。由于最终汇总未能完成，这里不对尚未验证的结果做断言。请以现有交付物为准；若输出目录为空，则本次任务尚未形成可验证的完整交付——仍然返回这一明确状态",
+      "error": null,
+      "dump": {
+        "exists": true,
+        "readable": true,
+        "messages": 3,
+        "user_turns": 2,
+        "trim": null,
+        "est_tokens": 9091
+      },
+      "system_prompt_len": 7749,
+      "system_prompt_sha256": "937ea01bcc6d152088af9d1f5a6516cfc288eca628c88f4f5f658043488dc2e5",
+      "note_in_system_prompt": false,
+      "note_in_user_message": true,
+      "prefix_matches_previous_dump": true,
+      "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/cb323feafbff4ce5a30c3955f00a8f78"
+    }
+  ]
+}

@@ -3,6 +3,34 @@
   "created_on": "2026-10-10",
   "status": "frozen_not_executed",
   "issue": "28-items-only-quality-gate-preregistration",
+  "revision_history": [
+    {
+      "revision": 1,
+      "created_on": "2026-10-10",
+      "preregistered_gate_sha256": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47",
+      "scoring_contract_sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "note": "冻结时快照（Issue 30 路线 A 之前）：门为 v2 契约绑定、授权全空、待签认。"
+    },
+    {
+      "revision": 2,
+      "rebound_on": "2026-10-11",
+      "preregistered_gate_sha256": "sha256:c665259153d98fa9b41275595383408e66baf95737f89870369decfe3c015acc",
+      "scoring_contract_sha256": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+      "note": "Issue 30 路线 A：门再绑定已签认 v3 契约（详见门 revision_history 2）。本清单当时未同步，于 revision 3 一并补录。"
+    },
+    {
+      "revision": 3,
+      "revised_on": "2026-10-11",
+      "preregistered_gate_sha256": "sha256:0c5c986dbeee30a68a535fe7c29d6da0759cbd83c20256656690646812b03339",
+      "note": "用户授权有界 items-only 真实复验（模型 doubao-seed-2.1-lite）后填写门授权（门 revision_history 3），同步更新下方 files_sha256/inputs_sha256；计划与冻结金标字节未变。"
+    },
+    {
+      "revision": 4,
+      "revised_on": "2026-10-11",
+      "preregistered_gate_sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+      "note": "run-1 触发方舟突增保护 429（16/24 次零 token 拒绝）判定为基础设施失效；用户指示更换模型为 deepseek-v4-flash 并重跑（节流 20s）。门 revision 4 记录该替换与 run-1 失效（详见门 revision_history 4）；本节计划文件仍为冻结原件，run-2 计划在 r2-live/ 零调用重冻结。"
+    }
+  ],
   "role_scope": [
     "material_items"
   ],
@@ -39,7 +67,7 @@
     "frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
     "freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
     "freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
-    "scoring-contract.json": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "scoring-contract.json": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
     "source-prose-units.json": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
     "material_semantics.py": "sha256:fd603dca3e95fb23bd67912949144fe0a8e21153424290e6d18f64624653b9ae",
     "ledger.py": "sha256:f9f4b86c984a331616dca2e65bc39c9ebbe447d7d105d0ecd5bc4887c1406798"
@@ -47,7 +75,7 @@
   "files_sha256": {
     "plan-industrial-fulian-md.json": "sha256:74143f76a8e1a9dee4ca19b27d3c0732b4ab9879670b502bddb19a2eb0edf7bd",
     "plan-optical-module-docx.json": "sha256:aaa50ab48e97175c232ebff43c7f9ca6f27f8ca4cd0c5fdad2e1a934c9757f25",
-    "preregistered-gate.json": "sha256:7cf87208e7c22ba545836d319010ef9afc0c5b8406812464d8dadd08a7319f47"
+    "preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684"
   },
   "model_requests_during_freeze": 0,
   "production_database_access": 0,

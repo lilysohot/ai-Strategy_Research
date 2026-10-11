@@ -1,0 +1,9 @@
+turn  session     run              prompt  cache_read   reuse  replay                      window
+   1  95754ee00b  d1a283599385      16414         128       -  skipped: no_payload         -
+   2  95754ee00b  d35f4b627354      16953       16384   99.8%  used (1 turns)              3 msg / 9184 tok
+
+2 run(s) in 1 session(s); replayed 1, skipped 1, no decision 0
+mean reuse of the previous prompt: 99.8%
+prompt 33367 / cache_read 16512
+skip reasons:
+     1  no_payload

@@ -1,0 +1,45 @@
+{
+  "schema_version": "items-only-live-pre-execution-verification-r2-1",
+  "status": "verified_zero_call",
+  "checked_on": "2026-10-11",
+  "gate_sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+  "gate_revision": 4,
+  "model": "deepseek-v4-flash",
+  "profile_sha256": "sha256:033e5f19303e639a2b6a1fdd7f72b748cbc4c37ce910416d6c63c7591aa5d656",
+  "plans": {
+    "industrial-fulian-md": {
+      "batch_id": "batch:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "plan_sha256": "sha256:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "attempts_max": 10,
+      "runtime_calls": 10,
+      "packets": 10,
+      "candidate_slots": 76
+    },
+    "optical-module-docx": {
+      "batch_id": "batch:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "plan_sha256": "sha256:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "attempts_max": 14,
+      "runtime_calls": 14,
+      "packets": 14,
+      "candidate_slots": 114
+    }
+  },
+  "authorization": {
+    "authorized_by": "xyl",
+    "authorized_on": "2026-10-11",
+    "model": "deepseek-v4-flash",
+    "attempts_total": 24
+  },
+  "run1_invalidation": {
+    "summary_sha256": "sha256:1c7eab9c669f53ae8790065fe46013f40ad430eb6e8e176607128319719f0b90",
+    "store_preserved": true,
+    "status": "invalidated_http_429_burst_protection",
+    "attempts": 24,
+    "rejected_429": 16
+  },
+  "checks_passed": 78,
+  "model_requests_during_verification": 0,
+  "production_database_access": 0
+}

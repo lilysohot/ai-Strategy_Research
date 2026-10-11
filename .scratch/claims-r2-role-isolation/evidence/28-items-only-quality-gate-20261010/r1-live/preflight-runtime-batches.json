@@ -1,0 +1,171 @@
+{
+  "schema_version": "items-only-live-preflight-runtime-batches-1",
+  "model_requests": 0,
+  "sources": {
+    "industrial-fulian-md": {
+      "packets": [
+        {
+          "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+          "kind": "prose",
+          "slots": 11,
+          "batches": 1
+        },
+        {
+          "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+          "kind": "prose",
+          "slots": 10,
+          "batches": 1
+        },
+        {
+          "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+          "kind": "prose",
+          "slots": 6,
+          "batches": 1
+        },
+        {
+          "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+          "kind": "prose",
+          "slots": 3,
+          "batches": 1
+        },
+        {
+          "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+          "kind": "prose",
+          "slots": 11,
+          "batches": 1
+        },
+        {
+          "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+          "kind": "prose",
+          "slots": 9,
+          "batches": 1
+        },
+        {
+          "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+          "kind": "prose",
+          "slots": 9,
+          "batches": 1
+        },
+        {
+          "packet_id": "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69",
+          "kind": "prose",
+          "slots": 1,
+          "batches": 1
+        },
+        {
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "kind": "prose",
+          "slots": 7,
+          "batches": 1
+        },
+        {
+          "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+          "kind": "prose",
+          "slots": 9,
+          "batches": 1
+        }
+      ],
+      "packet_count": 10,
+      "slot_count": 76,
+      "runtime_calls": 10,
+      "freeze_global_batches": 10,
+      "expected_budget": 10,
+      "match": true
+    },
+    "optical-module-docx": {
+      "packets": [
+        {
+          "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+          "kind": "prose",
+          "slots": 7,
+          "batches": 1
+        },
+        {
+          "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+          "kind": "prose",
+          "slots": 11,
+          "batches": 1
+        },
+        {
+          "packet_id": "31c690def71cac4bfb9a88d59e800d4db35e886574026559aa42e738360ff0f0",
+          "kind": "prose",
+          "slots": 4,
+          "batches": 1
+        },
+        {
+          "packet_id": "65301e444c69bd7518384b5f729a454fed67ee3cd0d878a83b7627f653f6b392",
+          "kind": "prose",
+          "slots": 14,
+          "batches": 1
+        },
+        {
+          "packet_id": "c3130936f920b5979e41f7038a7fe97347b039a6da90b7aebcbd45d48b3d2022",
+          "kind": "prose",
+          "slots": 9,
+          "batches": 1
+        },
+        {
+          "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+          "kind": "prose",
+          "slots": 7,
+          "batches": 1
+        },
+        {
+          "packet_id": "93a86d758794efcc7854b55b07fcb08ae478d8017626bdb539a2c0ee2f36881f",
+          "kind": "prose",
+          "slots": 13,
+          "batches": 1
+        },
+        {
+          "packet_id": "8abc9ab7880259eec995653362aae8c72a1210d00a8f35ab116ee1e45a360734",
+          "kind": "prose",
+          "slots": 4,
+          "batches": 1
+        },
+        {
+          "packet_id": "f011b35327ba4485ad14b24ea3bfe59a8fb210a36143f2a8b59f52f1f1ca5f05",
+          "kind": "prose",
+          "slots": 2,
+          "batches": 1
+        },
+        {
+          "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+          "kind": "prose",
+          "slots": 7,
+          "batches": 1
+        },
+        {
+          "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+          "kind": "prose",
+          "slots": 7,
+          "batches": 1
+        },
+        {
+          "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+          "kind": "prose",
+          "slots": 4,
+          "batches": 1
+        },
+        {
+          "packet_id": "55df234c63c63f686c1e88a8ea6a3629f3c8577d911ee50c1e006fb6bfefb6d7",
+          "kind": "prose",
+          "slots": 9,
+          "batches": 1
+        },
+        {
+          "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+          "kind": "prose",
+          "slots": 16,
+          "batches": 1
+        }
+      ],
+      "packet_count": 14,
+      "slot_count": 114,
+      "runtime_calls": 14,
+      "freeze_global_batches": 14,
+      "expected_budget": 14,
+      "match": true
+    }
+  },
+  "all_match": true
+}

@@ -202,7 +202,14 @@ def build_dump(
     max_replay_turns: int = 0,
     max_replay_tokens: int = 0,
 ) -> dict[str, Any]:
-    """Render the dump document (header + trimmed message list)."""
+    """Render the dump document (header + trimmed message list).
+
+    ``messages_est_tokens`` is informational only — the writer measures the kept
+    window once, and the reader copies it into the replay decision so the run's
+    ``usage_json`` can report how big the replayed context was without
+    re-tokenising it. It is additive to ``SCHEMA``: readers ignore keys they do
+    not know, and no replay decision depends on it.
+    """
     wire = for_wire(_wire_copy(messages))
     trimmed, trim = trim_to_turns(wire, max_replay_turns, max_tokens=max_replay_tokens)
     return {
@@ -218,6 +225,7 @@ def build_dump(
         "tool_names": list(tool_names),
         "tool_schema_sha256": tools_hash,
         "messages": trimmed,
+        "messages_est_tokens": estimate_tokens(canonical_json(trimmed)),
         "turns_used": turns_used,
         "stopped_by": stopped_by,
         "trim": trim,
@@ -305,6 +313,11 @@ def select_replay(
             "decision": "used",
             "messages": len(messages),
             "prior_turns": sum(1 for m in messages if m.get("role") == "user"),
+            # Window size, reported next to the field's own counters so a reader
+            # can tell "replayed a 9k-token window" from "started fresh" (S1-a).
+            # ``est_tokens`` is 0 for dumps written before the writer recorded it.
+            "est_tokens": int(doc.get("messages_est_tokens") or 0),
+            "payload_bytes": len(payload.encode("utf-8")),
             "trim": doc.get("trim"),
             "stopped_by": str(doc.get("stopped_by") or ""),
         }

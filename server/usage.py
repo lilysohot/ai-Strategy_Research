@@ -143,6 +143,28 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     return {**aggregate, "status": "complete"}
 
 
+def replay_block_from_summary(summary: dict[str, Any] | None) -> dict[str, Any]:
+    """The cross-turn replay verdict a worker recorded, for ``usage_json`` (S1).
+
+    A window statistic, not a token one: "did this run replay the previous
+    turn's messages, and how big was that window" is what turns a hit-rate board
+    into something actionable, and a reader that only has the Run row (cost
+    board, regression script, UI) otherwise cannot tell a replayed turn from a
+    freshly started conversation. The worker writes it into the run directory's
+    ``summary.json``; merging it here is what puts it next to the counters.
+
+    Best-effort by design: anything unexpected yields ``{}``, so a malformed
+    summary can never give the metering payload a wrong shape. Older runs
+    (no ``replay`` key) simply carry none.
+    """
+    if not isinstance(summary, dict):
+        return {}
+    replay = summary.get("replay")
+    if not isinstance(replay, dict) or not replay.get("decision"):
+        return {}
+    return dict(replay)
+
+
 def usage_summary_for_runs(runs: Iterable[Any]) -> dict[str, Any]:
     """Aggregate metering across a set of runs (DATA-15 / AC-20).
 

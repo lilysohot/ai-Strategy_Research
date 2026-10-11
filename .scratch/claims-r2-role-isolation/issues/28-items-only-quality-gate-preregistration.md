@@ -1,9 +1,9 @@
 # 28 · items-only 质量门零调用预注册
 
-Status: open
+Status: complete
 Type: task
-Parent: [10 · 评分、标注范围与质量门冻结](10-quality-gates.md)、[17 · 结构化提取收敛闭环与最终去留门](17-structured-extraction-convergence-closure.md)
-Model attempts: 0（零调用冻结与复验）
+Parent: [10 · 评分、标注范围与质量门冻结](10-quality-gates.md)、[17 · 结构化提取收敛闭环与最终去留门](17-structure-extraction-convergence-closure.md)
+Model attempts: run-1 24（doubao-seed-2.1-lite，16 次 429 失效）+ run-2 24（deepseek-v4-flash）；零调用冻结/核验若干
 Production database access: 0
 
 ## 问题
@@ -53,6 +53,24 @@ R2 关闭 relation 修复与验收后，`spec.md` 明确「下一阶段只处理
   冻结金标与 freeze-state 字节不变。新门哈希 `sha256:c6652591…`（旧 `sha256:7cf87208…` 留存于门 `revision_history`）。
   门仍处 `frozen_before_execution`，真实复验须另行授权。
 
+### 真实复验与终态（2026-10-11，Issues 31）
+
+- **授权与执行**：门 revision 3 填写 `items_live_extraction` 授权（xyl，模型 doubao-seed-2.1-lite，
+  attempts 10/14）并完成 86 项零调用前置核验；**run-1** 因 16/24 次尝试被方舟突增保护以 HTTP 429
+  瞬时拒绝（零 token、未触达模型）判定为基础设施失效、不触发 on_fail（详见 Issue 31）。
+- **模型替换（门 revision 4，`sha256:987772e9…`）**：用户指示更换执行模型为 `deepseek-v4-flash`，
+  r2 零调用重冻结（快照/槽位/预算不变，attempts 仍 10/14），78 项前置核验通过；节流标准 20s。
+- **run-2 结果**：24 次尝试全部发出（无 429、零重试、并发 1）；23 次收到响应，其中 **12/23 违反冻结
+  selector JSONL 严格校验**（记录缺 `record_type`，记录类型被写入 `status:"items"`），另 1 次
+  `TransportOutcomeUnknown`。结构后果：md 3 completed/7 partial、docx 8/6；槽位
+  md 18 extracted/2 nsi/56 failed、docx 61/2/51；execution=outcome_unknown/failed、
+  protocol=not_checked。门执行要求 **11 项 unmet → 结构性未过门**。
+- **终态（经用户确认）**：按冻结 `terminal_decision.on_fail` 关闭本门所验「模型 + extractor」路线
+  （run-2 deepseek-v4-flash 组合；run-1 doubao 组合因 429 失效未取得有效结果）；**不放宽阈值、
+  不改 prompt、不新增金标**。质量评分（recall/precision/16 断言）因执行要求先行未过而未执行。
+  终态记录：`../evidence/28-items-only-quality-gate-20261010/r2-live/run2-final-decision.json`；
+  run-1/run-2 全部证据保留（两个 live-store 均未删除）。
+
 ## 关联
 
 - 金标：Issue 10 `evidence/10-quality-gold-freeze-20261008-r2`（48-item 非表格冻结金标，xyl 签认）。
@@ -64,8 +82,11 @@ R2 关闭 relation 修复与验收后，`spec.md` 明确「下一阶段只处理
 
 - `../evidence/28-items-only-quality-gate-20261010/README.md`
 - `../evidence/28-items-only-quality-gate-20261010/r0-zero-call/`
+- `../evidence/28-items-only-quality-gate-20261010/r1-live/`（run-1 失效记录与前置核验）
+- `../evidence/28-items-only-quality-gate-20261010/r2-live/`（run-2 结果、后置核查、终态记录）
 
-## 下一步（需独立授权，本票不自动发起）
+## 下一步（本票已终结）
 
-申请一次有界 items-only 真实复验：`attempts_max` = md 10 + docx 14 = 24、`concurrency = 1`，
-模型须由用户指定；仅在用户明确授权后执行，且不得放宽阈值、不改 prompt、不新增金标。
+本门已执行并终结：真实复验（run-1 基础设施失效、run-2 结构性未过门）完成后，按冻结终态关闭
+本门所验「模型 + extractor」路线（用户确认登记关闭，2026-10-11）。后续任何新模型、新协议或
+归因实验路线须**另立新门**并经新的显式授权；本门不得再执行、不得放宽阈值、不改 prompt、不新增金标。

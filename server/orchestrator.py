@@ -70,7 +70,7 @@ from server.store import (
     update_run_result,
     update_run_usage,
 )
-from server.usage import usage_for_run
+from server.usage import replay_block_from_summary, usage_for_run
 
 logger = logging.getLogger(__name__)
 
@@ -976,6 +976,20 @@ class Orchestrator:
         if closed:
             logger.info("closed %d open control record(s) for run_id=%s", closed, run_id)
 
+    def _usage_with_replay(self, run_id: str) -> dict[str, Any]:
+        """A run's token aggregate plus its cross-turn replay window (S1-a).
+
+        The counters come from the trajectory; the window/decision comes from the
+        worker's ``summary.json``. Both already live in the run directory, and
+        merging them here is what lets a reader holding only the Run row see
+        "replayed the previous turn's window of N estimated tokens" instead of
+        just how many tokens were spent (issue 01 §10.2 S1-a). Absent on runs
+        whose workflow reported no decision, so the payload keeps its old shape.
+        """
+        usage = usage_for_run(run_id)
+        replay = replay_block_from_summary(_read_run_summary(run_dir_for(run_id)))
+        return {**usage, "replay": replay} if replay else usage
+
     async def _record_usage(self, handle: RunHandle) -> None:
         """Aggregate the run's per-turn usage from its trajectory and persist it.
 
@@ -986,7 +1000,7 @@ class Orchestrator:
         if not _looks_like_uuid(handle.run_id):
             return
         try:
-            usage = usage_for_run(handle.run_id)
+            usage = self._usage_with_replay(handle.run_id)
         except Exception:
             return
         try:
@@ -1438,7 +1452,7 @@ class Orchestrator:
         found = scan_outputs(run_id.hex)
         if found:
             await record_artifacts(run_id=run_id, artifacts=found)
-        await update_run_usage(run_id=run_id, usage=usage_for_run(run_id.hex))
+        await update_run_usage(run_id=run_id, usage=self._usage_with_replay(run_id.hex))
 
     def _session_uuid_for(self, handle: RunHandle) -> uuid.UUID | None:
         """Resolve the session UUID for a handle from its enqueued params."""

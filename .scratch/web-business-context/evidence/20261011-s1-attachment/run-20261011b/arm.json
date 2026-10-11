@@ -1,0 +1,91 @@
+{
+  "label": "attachment-then-plain",
+  "research_id": "95754ee00b5a4d40b4fa0e48fdf9b149",
+  "model": "deepseek-flash",
+  "runs": [
+    {
+      "turn": 1,
+      "run_id": "d1a2835993854fd0bb567771e2cd5c25",
+      "has_attachment": true,
+      "status": "stopped",
+      "stopped_by": "no_tool",
+      "prompt_tokens": 16414,
+      "cache_read_tokens": 128,
+      "cache_write_tokens": 0,
+      "llm_calls": 1,
+      "usage_status": "complete",
+      "usage_replay": {
+        "decision": "skipped",
+        "reason": "no_payload"
+      },
+      "summary_replay": {
+        "decision": "skipped",
+        "reason": "no_payload"
+      },
+      "final_answer_head": "收到",
+      "error": null,
+      "dump": {
+        "exists": true,
+        "readable": true,
+        "messages": 3,
+        "user_turns": 1,
+        "trim": null,
+        "est_tokens": 9184
+      },
+      "system_prompt_len": 7749,
+      "system_prompt_sha256": "937ea01bcc6d152088af9d1f5a6516cfc288eca628c88f4f5f658043488dc2e5",
+      "note_in_system_prompt": false,
+      "note_in_user_message": true,
+      "prefix_matches_previous_dump": null,
+      "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/d1a2835993854fd0bb567771e2cd5c25"
+    },
+    {
+      "turn": 2,
+      "run_id": "d35f4b627354465dbd9033659579eb99",
+      "has_attachment": false,
+      "status": "stopped",
+      "stopped_by": "no_tool",
+      "prompt_tokens": 16953,
+      "cache_read_tokens": 16384,
+      "cache_write_tokens": 0,
+      "llm_calls": 1,
+      "usage_status": "complete",
+      "usage_replay": {
+        "decision": "used",
+        "reason": "",
+        "messages": 3,
+        "prior_turns": 1,
+        "est_tokens": 9184,
+        "payload_bytes": 39036,
+        "trim": null,
+        "stopped_by": "no_tool"
+      },
+      "summary_replay": {
+        "decision": "used",
+        "reason": "",
+        "messages": 3,
+        "prior_turns": 1,
+        "est_tokens": 9184,
+        "payload_bytes": 39036,
+        "trim": null,
+        "stopped_by": "no_tool"
+      },
+      "final_answer_head": "收到",
+      "error": null,
+      "dump": {
+        "exists": true,
+        "readable": true,
+        "messages": 5,
+        "user_turns": 2,
+        "trim": null,
+        "est_tokens": 9427
+      },
+      "system_prompt_len": 7749,
+      "system_prompt_sha256": "937ea01bcc6d152088af9d1f5a6516cfc288eca628c88f4f5f658043488dc2e5",
+      "note_in_system_prompt": false,
+      "note_in_user_message": true,
+      "prefix_matches_previous_dump": true,
+      "run_root": "/home/administrator/.local/share/frontier-agent/web/runs/d35f4b627354465dbd9033659579eb99"
+    }
+  ]
+}

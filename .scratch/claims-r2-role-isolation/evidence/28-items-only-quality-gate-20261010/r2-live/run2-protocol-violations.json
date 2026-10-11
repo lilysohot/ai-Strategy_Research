@@ -1,0 +1,188 @@
+{
+  "schema_version": "items-only-run2-protocol-violation-classification-1",
+  "created_on": "2026-10-11",
+  "basis": "strict validator rule: every non-empty response line must parse as a JSON dict with record_type == \"obligation_result\" (plugins/corpus/material_semantics.py _strict_role_llm, selector protocol)",
+  "expected_record": {
+    "record_type": "obligation_result",
+    "obligation_index": "int",
+    "status": "enum",
+    "reason_code": "str|null",
+    "items": "list"
+  },
+  "summary": {
+    "attempts_total": 24,
+    "compliant_responses": 11,
+    "offending_responses": 12,
+    "no_response": 1,
+    "offender_record_keyset": {
+      "['items', 'obligation_index', 'reason_code', 'status']": 98
+    },
+    "violation": "missing record_type field; record kind carried as status=\"items\""
+  },
+  "offenders": [
+    {
+      "attempt_id": "attempt:90fddb8f52460e6a62470d22e65d70b815a6ff3e0056bdfa2d89c59f3cebc087",
+      "slug": "optical-module-docx",
+      "offending_lines": 14,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:3a9d0c523ce82b142caf1ed6f744eacb7fdc584bf10e890cc855088d1ce5a220",
+      "slug": "optical-module-docx",
+      "offending_lines": 9,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:8c0609de6d78db0fa54858df980394174410ce89d89c9f2f53c9d6af280164e6",
+      "slug": "optical-module-docx",
+      "offending_lines": 13,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:d38b1ee7d19725d64a4840843b7e9b51132b8183213b4e8eeda58d19ef341b27",
+      "slug": "optical-module-docx",
+      "offending_lines": 4,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:15549ba123621faafa0245aef93afab2079ff5272171d5b7ca85e8453d0047c6",
+      "slug": "optical-module-docx",
+      "offending_lines": 2,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:e39a24a60af7bee80cc8844b5c12a19ab276ba52c15da3cce490eac4b5b3c9da",
+      "slug": "optical-module-docx",
+      "offending_lines": 9,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:5d97cd64cbb213f5cfbb578ddac195ef999a76dc556426a4511ddced859950cf",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 10,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:f31d74f3b5552e3354125e613422407d11e1303046168da7c089421b97c1ef9b",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 11,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:0b45c9af76a3546b906f9b08bf0c2933791b1803f17bbdb2336fa75a7fc0c73c",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 9,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:b9e11ddeecb86fd9d9af6698d1641a2b88cf52802db535d1a1a9dc17aca2686b",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 1,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:800419885f41c5d0dfd874f60ff33ca6d875eb1dc3ce452871a92264f51dab63",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 7,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    },
+    {
+      "attempt_id": "attempt:c0991455b6c0e31263b5a83fb5a0241db480fe7b376f128028c2055c2408ccbd",
+      "slug": "industrial-fulian-md",
+      "offending_lines": 9,
+      "record_keysets": [
+        [
+          "items",
+          "obligation_index",
+          "reason_code",
+          "status"
+        ]
+      ]
+    }
+  ],
+  "no_response": [
+    {
+      "attempt_id": "attempt:718834faa894007a4d712bd5b4d384f275c626a961e8c1658c95ca7d0e720102",
+      "slug": "industrial-fulian-md",
+      "status": "outcome_unknown"
+    }
+  ],
+  "note": "Raw response objects remain in r2-live/live-store/objects/ (evidence, not deleted). Each offending response caused a whole-batch ValueError and its slots to be marked failed (no retries by design)."
+}

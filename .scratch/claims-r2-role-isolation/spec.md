@@ -132,6 +132,15 @@ items-only 正向消费闭环。28 已按此零调用冻结 items-only 质量门
 condition 项（NT-I09/I19/I29/I35/I39）；门同步再绑定 v3、`quality_requirements_status` 转 `signed`。
 冻结金标与 freeze-state 字节未变，旧 v2 契约与旧门哈希留存于各自 `revision_history`/`supersedes`。
 Issue 29 的两项门就绪阻塞据此解除；门仍处 `frozen_before_execution`，真实复验须经人工单独授权。
+31 记录并收口随后的有界真实复验（2026-10-11）：首次授权（doubao-seed-2.1-lite，24 次、零重试、无节流）
+中 16/24 次被方舟突增流量保护以 HTTP 429 瞬时拒绝（零 token、未触达模型），判定为基础设施失效、
+不触发 on_fail；用户随即更换模型为 deepseek-v4-flash（20s 节流）重跑。run-2 **结构性未过门**：
+12/23 响应违反冻结 selector JSONL 严格校验（记录缺 `record_type`，记录类型被写入 `status:"items"`），
+13/24 批次 partial、107/190 槽位失败，execution/protocol 状态不达门；另 1 次传输结果不明。
+经用户确认，按门冻结 `terminal_decision.on_fail` 关闭本门所验「模型 + extractor」路线
+（run-2 deepseek-v4-flash 组合；run-1 doubao 组合因 429 失效未取得有效结果）：不放宽阈值、不改 prompt、
+不新增金标。run-1/run-2 全部证据与终态记录留存（`evidence/28-…/r1-live`、`r2-live/run2-final-decision.json`）；
+后续任何新模型/新协议路线须另立新门并经新的显式授权。
 W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
 

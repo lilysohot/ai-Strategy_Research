@@ -214,12 +214,14 @@ async def submit_run(
             raise HTTPException(status_code=exc.status_code, detail=str(exc)) from None
         uploaded = await uploads.stage(run_id_hex, planned)
 
-    # Surface the uploaded input files to the agent via the system-prompt addendum
-    # (worker.py forwards this into metadata["_sys_prompt_addendum"], which the
-    # react node appends to the system prompt — see main_agent.py:817). Files are
-    # published into inputs before any worker is spawned (see server/uploads.py
-    # and dispatch_outbox), so the agent sees them at /inputs in container/serve
-    # mode and at the physical path in native mode.
+    # Surface the uploaded input files to the agent via the request *tail*: the
+    # worker appends this text to the run's instruction (the user message) rather
+    # than to the system prompt, because the file list names this run's own
+    # inputs and would otherwise change the cached request prefix for every turn
+    # of the conversation (issue 01 §10.2 S1-b). Files are published into inputs
+    # before any worker is spawned (see server/uploads.py and dispatch_outbox),
+    # so the agent sees them at /inputs in container/serve mode and at the
+    # physical path in native mode.
     prompt_addendum = ""
     if uploaded:
         file_list = "\n".join(f"  - /inputs/{u.stored_name}" for u in uploaded)

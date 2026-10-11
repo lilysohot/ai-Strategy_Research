@@ -1,0 +1,38 @@
+{
+  "schema_version": "items-only-live-pre-execution-verification-1",
+  "status": "verified_zero_call",
+  "checked_on": "2026-10-11",
+  "gate_sha256": "sha256:0c5c986dbeee30a68a535fe7c29d6da0759cbd83c20256656690646812b03339",
+  "gate_revision": 3,
+  "freeze_manifest_sha256": "sha256:b4ef8158a3dfeea4163dd89b5362eb0b00113da3ca053cc128ebcb15857561c7",
+  "scoring_contract_sha256": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+  "plans": {
+    "industrial-fulian-md": {
+      "batch_id": "batch:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6",
+      "plan_sha256": "sha256:ee25378a0076e67741d05e856e4c428856bac1b8c00998ae6d0c0d2e83fd52c6",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "attempts_max": 10,
+      "runtime_calls": 10,
+      "packets": 10,
+      "candidate_slots": 76
+    },
+    "optical-module-docx": {
+      "batch_id": "batch:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d",
+      "plan_sha256": "sha256:c5caa810af2481182301e9aa31fcff0409bd94f0d57210738e870b06a37c2a8d",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "attempts_max": 14,
+      "runtime_calls": 14,
+      "packets": 14,
+      "candidate_slots": 114
+    }
+  },
+  "authorization": {
+    "authorized_by": "xyl",
+    "authorized_on": "2026-10-11",
+    "model": "doubao-seed-2.1-lite",
+    "attempts_total": 24
+  },
+  "checks_passed": 86,
+  "model_requests_during_verification": 0,
+  "production_database_access": 0
+}

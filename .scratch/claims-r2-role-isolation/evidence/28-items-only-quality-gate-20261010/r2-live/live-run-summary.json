@@ -1,0 +1,128 @@
+{
+  "schema_version": "items-only-live-run-summary-r2-1",
+  "executed_on": "2026-10-11",
+  "gate_revision": 4,
+  "model": "deepseek-v4-flash",
+  "profile_fingerprint": "sha256:033e5f19303e639a2b6a1fdd7f72b748cbc4c37ce910416d6c63c7591aa5d656",
+  "pacing_seconds": 20.0,
+  "gate_sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+  "replan_manifest_sha256": "sha256:f9c3be706345e6fb63bcba107353533d487fdc42b476a7c0f7fee63ca79e89eb",
+  "supersedes_run": {
+    "run": "r1-live",
+    "summary_sha256": "sha256:1c7eab9c669f53ae8790065fe46013f40ad430eb6e8e176607128319719f0b90",
+    "status": "invalidated_http_429_burst_protection"
+  },
+  "store_root": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/live-store",
+  "sources": {
+    "industrial-fulian-md": {
+      "status": "executed",
+      "batch_id": "batch:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "plan_sha256": "sha256:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "attempts": 10,
+      "attempt_status": {
+        "succeeded": 9,
+        "outcome_unknown": 1
+      },
+      "attempt_roles": {
+        "material_items": 10
+      },
+      "tasks": [
+        {
+          "task_id": "task:634b15a6f457c19089b60fa24354a887c4176ac1c631bfc4bb509b36b23ba908",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "outcome_unknown",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:39dd35de940e7f6b7d762188a375b27180b54fb6b80c70157d16178aaeed59eb",
+          "error_codes": [
+            "CS_OUTCOME_UNKNOWN"
+          ]
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 19441,
+        "completion_tokens": 85876,
+        "reasoning_tokens": 76301,
+        "total_tokens": 105317
+      },
+      "plan_consistent": true,
+      "findings": [
+        "attempt_outcome_unknown:attempt:718834faa894007a4d712bd5b4d384f275c626a961e8c1658c95ca7d0e720102"
+      ],
+      "derivations": {
+        "task:634b15a6f457c19089b60fa24354a887c4176ac1c631bfc4bb509b36b23ba908": "disabled"
+      },
+      "role_budgets": {
+        "claims": {
+          "max_attempts": 0,
+          "reserved_attempts": 0
+        },
+        "material_items": {
+          "max_attempts": 10,
+          "reserved_attempts": 10
+        },
+        "material_relations": {
+          "max_attempts": 0,
+          "reserved_attempts": 0
+        }
+      }
+    },
+    "optical-module-docx": {
+      "status": "executed",
+      "batch_id": "batch:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "plan_sha256": "sha256:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "attempts": 14,
+      "attempt_status": {
+        "succeeded": 14
+      },
+      "attempt_roles": {
+        "material_items": 14
+      },
+      "tasks": [
+        {
+          "task_id": "task:3f84784d02a200ca639cde12e39c86130ccd0a637f309328d1c4bfc6bbeb3c62",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "failed",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:58754c25afb2cde6d72eea3080c73f012e1fbe569d6839ceef6b8ff30629f23c",
+          "error_codes": []
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 30096,
+        "completion_tokens": 162868,
+        "reasoning_tokens": 148731,
+        "total_tokens": 192964
+      },
+      "plan_consistent": true,
+      "findings": [],
+      "derivations": {
+        "task:3f84784d02a200ca639cde12e39c86130ccd0a637f309328d1c4bfc6bbeb3c62": "disabled"
+      },
+      "role_budgets": {
+        "claims": {
+          "max_attempts": 0,
+          "reserved_attempts": 0
+        },
+        "material_items": {
+          "max_attempts": 14,
+          "reserved_attempts": 14
+        },
+        "material_relations": {
+          "max_attempts": 0,
+          "reserved_attempts": 0
+        }
+      }
+    }
+  },
+  "error": null
+}

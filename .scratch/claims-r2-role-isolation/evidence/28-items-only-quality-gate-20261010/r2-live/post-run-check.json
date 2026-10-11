@@ -1,0 +1,396 @@
+{
+  "schema_version": "items-only-post-run-check-r2-1",
+  "checked_on": "2026-10-11",
+  "model": "deepseek-v4-flash",
+  "gate_revision": 4,
+  "gate_sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+  "replan_manifest_sha256": "sha256:f9c3be706345e6fb63bcba107353533d487fdc42b476a7c0f7fee63ca79e89eb",
+  "run_summary_sha256": "sha256:47707a0c5c2b14d874d3a4261087d284a12640fce4092218da2f27bdaa9c772a",
+  "store_root": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/live-store",
+  "sources": {
+    "industrial-fulian-md": {
+      "batch_id": "batch:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "plan_sha256": "sha256:a3d445164910f6de69343115b20ca4791bfc35ad8affdcfad602d699ba8e81eb",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "plan_consistent": true,
+      "findings": [
+        "attempt_outcome_unknown:attempt:718834faa894007a4d712bd5b4d384f275c626a961e8c1658c95ca7d0e720102"
+      ],
+      "derivations": {
+        "task:634b15a6f457c19089b60fa24354a887c4176ac1c631bfc4bb509b36b23ba908": "disabled"
+      },
+      "budget": {
+        "max_attempts": 10,
+        "reserved_attempts": 10,
+        "actual_attempts": 10,
+        "currency": null
+      },
+      "tasks": [
+        {
+          "task_id": "task:634b15a6f457c19089b60fa24354a887c4176ac1c631bfc4bb509b36b23ba908",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "outcome_unknown",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:39dd35de940e7f6b7d762188a375b27180b54fb6b80c70157d16178aaeed59eb",
+          "error_codes": [
+            "CS_OUTCOME_UNKNOWN"
+          ]
+        }
+      ],
+      "attempts": 10,
+      "attempt_status": {
+        "succeeded": 9,
+        "outcome_unknown": 1
+      },
+      "attempt_roles": {
+        "material_items": 10
+      },
+      "request_models": [
+        "deepseek-v4-flash"
+      ],
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "batch_attempt_flags": [
+        1,
+        null,
+        1,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        null
+      ],
+      "finish_flags": [
+        "stop",
+        null,
+        "stop",
+        "stop",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "slot_statuses": {
+        "no_supported_item": 2,
+        "extracted": 18,
+        "failed": 56
+      },
+      "missing_slots": [],
+      "duplicate_slots": [],
+      "invalid_slots": [
+        "slot_06028a3f339dfe73",
+        "slot_067bb3e7f85fa37f",
+        "slot_0c217abf1b9110c6",
+        "slot_1440934d4bb011d8",
+        "slot_1496a1c1b2a0bda1",
+        "slot_14d2e2087ab604fa",
+        "slot_19c9a4b56ca8758a",
+        "slot_1a926c3aef1c3e49",
+        "slot_1e58b10db0b7f3a1",
+        "slot_2504373c638833da",
+        "slot_29ab4859fdf4372a",
+        "slot_2a3f19c09e30112e",
+        "slot_2bfe7106911a3b8f",
+        "slot_32645f062c3a40e5",
+        "slot_3b5447b5e44bf07b",
+        "slot_3e8965b10d203f0b",
+        "slot_40803d68acea01c6",
+        "slot_40bc19242ac6d859",
+        "slot_499ce1615b28e781",
+        "slot_5032c0ad0ef20662",
+        "slot_55a3f0ebb79c8967",
+        "slot_5e0a114ed8b5d2a6",
+        "slot_63a469c9fe86142d",
+        "slot_6c6ccb4a50efee24",
+        "slot_71f5d245323013c4",
+        "slot_76cdf271eaa15b4a",
+        "slot_7908edd5877a7489",
+        "slot_7b2c716720ace1aa",
+        "slot_8a33a8aadc6a6490",
+        "slot_8f2aead4505e12c9",
+        "slot_92689adf6cbb4468",
+        "slot_998e49ccab85bdb7",
+        "slot_a0285709c19e993e",
+        "slot_a3873dd64753c0cc",
+        "slot_aa5380b7fa9129bf",
+        "slot_adf90a1aa6f1b715",
+        "slot_b4343e8b16dfe42c",
+        "slot_c3ae1ee9ff0978f3",
+        "slot_cfef88ff74c1e18c",
+        "slot_d27d22600e82d6f5",
+        "slot_d7e8feef7808cf61",
+        "slot_dccec44c385534fa",
+        "slot_de31fca8eb3a0b26",
+        "slot_de9cc51c9c6b9b35",
+        "slot_e1cc134434cdc458",
+        "slot_e786d10909fb106d",
+        "slot_e8b4d08ba6737f95",
+        "slot_eb54e0de842530b5",
+        "slot_ebd71047dd959ab6",
+        "slot_ecf006ec266ff39e",
+        "slot_eff3c201d3a2856c",
+        "slot_f09a3a0fbe66feb7",
+        "slot_f234961d69f646a7",
+        "slot_f429b9cd71e5d734",
+        "slot_fcd2151e320ca2f9",
+        "slot_ff5db383726f84c7"
+      ],
+      "omitted_areas": [
+        "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703:atomic_obligations_incomplete",
+        "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91:atomic_obligations_incomplete",
+        "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d:atomic_obligations_incomplete",
+        "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610:atomic_obligations_incomplete",
+        "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69:atomic_obligations_incomplete",
+        "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7:atomic_obligations_incomplete",
+        "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794:atomic_obligations_incomplete"
+      ],
+      "packet_statuses": {
+        "completed": 3,
+        "partial": 7
+      },
+      "items": {
+        "total": 31,
+        "by_statement_role": {
+          "claim": 25,
+          "evidence": 6
+        },
+        "by_semantic_type": {
+          "fact": 22,
+          "opinion": 9
+        },
+        "by_perspective": {
+          "source_explicit": 31
+        },
+        "empty_text": 0,
+        "missing_evidence": 0
+      },
+      "gate_unmet": [
+        "industrial-fulian-md:execution=outcome_unknown",
+        "industrial-fulian-md:protocol=not_checked",
+        "industrial-fulian-md:findings=['attempt_outcome_unknown:attempt:718834faa894007a4d712bd5b4d384f275c626a961e8c1658c95ca7d0e720102']",
+        "industrial-fulian-md:packet_statuses={'completed': 3, 'partial': 7}",
+        "industrial-fulian-md:failed_or_partial_slots=56",
+        "industrial-fulian-md:omitted_areas=7"
+      ]
+    },
+    "optical-module-docx": {
+      "batch_id": "batch:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "plan_sha256": "sha256:2a632e87fcba929e27daf032a6fe27b42dfa8ec4723a0e9db46956fcacbfa2f2",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "plan_consistent": true,
+      "findings": [],
+      "derivations": {
+        "task:3f84784d02a200ca639cde12e39c86130ccd0a637f309328d1c4bfc6bbeb3c62": "disabled"
+      },
+      "budget": {
+        "max_attempts": 14,
+        "reserved_attempts": 14,
+        "actual_attempts": 14,
+        "currency": null
+      },
+      "tasks": [
+        {
+          "task_id": "task:3f84784d02a200ca639cde12e39c86130ccd0a637f309328d1c4bfc6bbeb3c62",
+          "role": "material_items",
+          "method": "model",
+          "execution_status": "failed",
+          "protocol_status": "not_checked",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "context_status": "complete",
+          "artifact_sha256": "sha256:58754c25afb2cde6d72eea3080c73f012e1fbe569d6839ceef6b8ff30629f23c",
+          "error_codes": []
+        }
+      ],
+      "attempts": 14,
+      "attempt_status": {
+        "succeeded": 14
+      },
+      "attempt_roles": {
+        "material_items": 14
+      },
+      "request_models": [
+        "deepseek-v4-flash"
+      ],
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "batch_attempt_flags": [
+        1,
+        1,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        null,
+        1,
+        1,
+        1,
+        null,
+        1
+      ],
+      "finish_flags": [
+        "stop",
+        "stop",
+        "stop",
+        null,
+        null,
+        "stop",
+        null,
+        null,
+        null,
+        "stop",
+        "stop",
+        "stop",
+        null,
+        "stop"
+      ],
+      "slot_statuses": {
+        "extracted": 61,
+        "no_supported_item": 2,
+        "failed": 51
+      },
+      "missing_slots": [],
+      "duplicate_slots": [],
+      "invalid_slots": [
+        "slot_0208795740178680",
+        "slot_04243d2b33678945",
+        "slot_0528ef3b34e98b5f",
+        "slot_09178161273883f3",
+        "slot_0a70fdb4d56e5c74",
+        "slot_0c09c8a736242cd5",
+        "slot_0d013b6aa424d46b",
+        "slot_0ee144f01ec0a3a4",
+        "slot_17c6edfc82252bb8",
+        "slot_2091f42de4ab38dd",
+        "slot_212c3e4437286d51",
+        "slot_24b72c4dd4de8247",
+        "slot_366c4fcb47a634b6",
+        "slot_4ca838699b5bed30",
+        "slot_4e453094cbc6dcc9",
+        "slot_5273dc2502048b2b",
+        "slot_58c72baa18c18f13",
+        "slot_5a0b1357f70ac191",
+        "slot_5ca6b29fa9f8cc4a",
+        "slot_5d5249e972ca10f3",
+        "slot_5fa264cca17d9f52",
+        "slot_62e630415ec783f7",
+        "slot_63041fef22e45f39",
+        "slot_63a7efc13768bd58",
+        "slot_65060d531b706201",
+        "slot_6cd1caa7b0832307",
+        "slot_6fc49380c6c3db3a",
+        "slot_76e76b155a099629",
+        "slot_776ac63e6ec4f893",
+        "slot_7b29b6d7ec89f54f",
+        "slot_80ac6c6023e312ad",
+        "slot_8148d03a05533f27",
+        "slot_843fc9c8dd1863db",
+        "slot_89b483fa86b2d06f",
+        "slot_8ddf7726e4b71b24",
+        "slot_a8f8888f41383869",
+        "slot_aff85993f910660f",
+        "slot_b8b0def5302229d0",
+        "slot_c86346a0c45bfbf9",
+        "slot_c92ff9e4eddcdd29",
+        "slot_cdce9776218c5fbb",
+        "slot_cfc23b06a16f1c9b",
+        "slot_cfc78adeeac26e2d",
+        "slot_dcba8be813cb39b6",
+        "slot_df7f86f7cada8987",
+        "slot_e006ab94a77270df",
+        "slot_e05d2ba8b3c9dac0",
+        "slot_e89fba3eddb2bf18",
+        "slot_ed7d027a960c3697",
+        "slot_f79f67b8b35662b1",
+        "slot_fe4b276b62ccf197"
+      ],
+      "omitted_areas": [
+        "65301e444c69bd7518384b5f729a454fed67ee3cd0d878a83b7627f653f6b392:atomic_obligations_incomplete",
+        "c3130936f920b5979e41f7038a7fe97347b039a6da90b7aebcbd45d48b3d2022:atomic_obligations_incomplete",
+        "93a86d758794efcc7854b55b07fcb08ae478d8017626bdb539a2c0ee2f36881f:atomic_obligations_incomplete",
+        "8abc9ab7880259eec995653362aae8c72a1210d00a8f35ab116ee1e45a360734:atomic_obligations_incomplete",
+        "f011b35327ba4485ad14b24ea3bfe59a8fb210a36143f2a8b59f52f1f1ca5f05:atomic_obligations_incomplete",
+        "55df234c63c63f686c1e88a8ea6a3629f3c8577d911ee50c1e006fb6bfefb6d7:atomic_obligations_incomplete"
+      ],
+      "packet_statuses": {
+        "completed": 8,
+        "partial": 6
+      },
+      "items": {
+        "total": 80,
+        "by_statement_role": {
+          "condition": 4,
+          "claim": 54,
+          "question": 12,
+          "answer": 2,
+          "evidence": 8
+        },
+        "by_semantic_type": {
+          "unknown": 13,
+          "fact": 34,
+          "opinion": 14,
+          "forecast": 19
+        },
+        "by_perspective": {
+          "source_explicit": 77,
+          "quoted_other": 3
+        },
+        "empty_text": 0,
+        "missing_evidence": 0
+      },
+      "gate_unmet": [
+        "optical-module-docx:execution=failed",
+        "optical-module-docx:protocol=not_checked",
+        "optical-module-docx:packet_statuses={'completed': 8, 'partial': 6}",
+        "optical-module-docx:failed_or_partial_slots=51",
+        "optical-module-docx:omitted_areas=6"
+      ]
+    }
+  },
+  "gate_execution": {
+    "status": "fail",
+    "unmet": [
+      "industrial-fulian-md:execution=outcome_unknown",
+      "industrial-fulian-md:protocol=not_checked",
+      "industrial-fulian-md:findings=['attempt_outcome_unknown:attempt:718834faa894007a4d712bd5b4d384f275c626a961e8c1658c95ca7d0e720102']",
+      "industrial-fulian-md:packet_statuses={'completed': 3, 'partial': 7}",
+      "industrial-fulian-md:failed_or_partial_slots=56",
+      "industrial-fulian-md:omitted_areas=7",
+      "optical-module-docx:execution=failed",
+      "optical-module-docx:protocol=not_checked",
+      "optical-module-docx:packet_statuses={'completed': 8, 'partial': 6}",
+      "optical-module-docx:failed_or_partial_slots=51",
+      "optical-module-docx:omitted_areas=6"
+    ],
+    "evaluated": [
+      "attempts==attempts_max==completed_batches_min",
+      "failed_batches_max=0",
+      "partial_batches_max=0",
+      "missing_duplicate_invalid_max=0",
+      "execution_status=succeeded",
+      "protocol_status=valid",
+      "context_status=complete",
+      "claims_attempts=0",
+      "material_relations_attempts=0",
+      "automatic_retries=0 (adapter attempts==1)"
+    ]
+  },
+  "quality_scoring": {
+    "status": "pending_scoring_step",
+    "note": "target recall / precision / accepted records / 16 high-risk assertions are scored against the signed non-table-selected-target-scoring-contract-v3 in a separate zero-call step; this check only covers execution requirements."
+  },
+  "model_requests_during_check": 0,
+  "production_database_access": 0
+}

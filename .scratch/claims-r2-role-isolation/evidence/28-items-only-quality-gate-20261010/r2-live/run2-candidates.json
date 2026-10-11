@@ -1,0 +1,2664 @@
+{
+  "schema_version": "items-only-run2-candidates-1",
+  "sources": {
+    "industrial-fulian-md": {
+      "candidate_slots": [
+        {
+          "candidate_slot_id": "slot_a034e951d274aadf",
+          "status": "no_supported_item"
+        },
+        {
+          "candidate_slot_id": "slot_f91d3261e66bce58",
+          "status": "no_supported_item"
+        },
+        {
+          "candidate_slot_id": "slot_6ad5e01d7d38f35a",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_40ee124742e4d80d",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_3cc2e4cebb1caf59",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_87b3b187d8e3125d",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_1bb9284a5a158adc",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_1cb2c67f8f2ec615",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_b903c33f0fd15d3c",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_fce46d8dd0c9fbde",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_7d9ec7c631c99e82",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_0c217abf1b9110c6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_de31fca8eb3a0b26",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_dccec44c385534fa",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_63a469c9fe86142d",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_a3873dd64753c0cc",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_1a926c3aef1c3e49",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_eb54e0de842530b5",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_fcd2151e320ca2f9",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_2504373c638833da",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_32645f062c3a40e5",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_35e2dca9dafaf387",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_63053fdb0687d99e",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_e0e7ca1ce11ed610",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_d81515e9bb046866",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_99063943ec604797",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_9bf184abe4e57559",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_50d7557446961af3",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_0a08e2eb7641ff11",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_f932c5c1f3bd3cf7",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_2bfe7106911a3b8f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_b4343e8b16dfe42c",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_c3ae1ee9ff0978f3",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_aa5380b7fa9129bf",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_8f2aead4505e12c9",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_19c9a4b56ca8758a",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_6c6ccb4a50efee24",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_29ab4859fdf4372a",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_de9cc51c9c6b9b35",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_92689adf6cbb4468",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_adf90a1aa6f1b715",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_2a3f19c09e30112e",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_d7e8feef7808cf61",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e786d10909fb106d",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_f09a3a0fbe66feb7",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_d27d22600e82d6f5",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_71f5d245323013c4",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_f429b9cd71e5d734",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_f234961d69f646a7",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_499ce1615b28e781",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_1496a1c1b2a0bda1",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e1cc134434cdc458",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_067bb3e7f85fa37f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_ecf006ec266ff39e",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_40bc19242ac6d859",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e8b4d08ba6737f95",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_55a3f0ebb79c8967",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_40803d68acea01c6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_14d2e2087ab604fa",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5e0a114ed8b5d2a6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_7b2c716720ace1aa",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_998e49ccab85bdb7",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_8a33a8aadc6a6490",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_3e8965b10d203f0b",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_06028a3f339dfe73",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_ff5db383726f84c7",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_a0285709c19e993e",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_1440934d4bb011d8",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_cfef88ff74c1e18c",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5032c0ad0ef20662",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_1e58b10db0b7f3a1",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_3b5447b5e44bf07b",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_ebd71047dd959ab6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_eff3c201d3a2856c",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_7908edd5877a7489",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_76cdf271eaa15b4a",
+          "status": "failed"
+        }
+      ],
+      "items": [
+        {
+          "item_id": "itm_f8a6c319244a39f2",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "中报验证了量",
+          "evidence": [
+            {
+              "end": 51,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "中报验证了量：",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 44
+            }
+          ]
+        },
+        {
+          "item_id": "itm_bf0c10772dfcb0bd",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "云计算 +75.7%",
+          "evidence": [
+            {
+              "end": 62,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "云计算 +75.7%，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 51
+            }
+          ]
+        },
+        {
+          "item_id": "itm_45f70982875f3a56",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "CSP AI 服务器 +2.3 倍",
+          "evidence": [
+            {
+              "end": 80,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "CSP AI 服务器 +2.3 倍，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 62
+            }
+          ]
+        },
+        {
+          "item_id": "itm_3b9a69efd161992e",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "GPU 机柜出货 +3.2 倍",
+          "evidence": [
+            {
+              "end": 106,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "GPU/ASIC 机柜出货 +3.2 / +3 倍，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 80
+            }
+          ]
+        },
+        {
+          "item_id": "itm_3c212041901c8750",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "ASIC 机柜出货 +3 倍",
+          "evidence": [
+            {
+              "end": 106,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "GPU/ASIC 机柜出货 +3.2 / +3 倍，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 80
+            }
+          ]
+        },
+        {
+          "item_id": "itm_2fffb232d5494932",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "Q2 营收 3067.83 亿",
+          "evidence": [
+            {
+              "end": 129,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "Q2 营收 3067.83 亿环比 +22%。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 106
+            }
+          ]
+        },
+        {
+          "item_id": "itm_03bfd1f169c68b07",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "Q2 营收环比 +22%",
+          "evidence": [
+            {
+              "end": 129,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "Q2 营收 3067.83 亿环比 +22%。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 106
+            }
+          ]
+        },
+        {
+          "item_id": "itm_1de2630d266b0916",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "卖方爱用归母 +96% 和 26E 600 亿+",
+          "evidence": [
+            {
+              "end": 167,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 133
+            }
+          ]
+        },
+        {
+          "item_id": "itm_caa6895072f4c54d",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "中报扣非虽然同步",
+          "evidence": [
+            {
+              "end": 167,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 133
+            }
+          ]
+        },
+        {
+          "item_id": "itm_7baa229aa2e043e1",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "OCF 只有 73.91 亿",
+          "evidence": [
+            {
+              "end": 184,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "但 OCF 只有 73.91 亿；",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 167
+            }
+          ]
+        },
+        {
+          "item_id": "itm_f10a2786bce96b74",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "Q2 毛利率环比 −0.36pct",
+          "evidence": [
+            {
+              "end": 222,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c462803f22154b00",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "并表 7% 的加工费没有变成「系统商」",
+          "evidence": [
+            {
+              "end": 222,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_635b951bd68230db",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "框架站扣非、OCF 和毛利率",
+          "evidence": [
+            {
+              "end": 262,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 222
+            }
+          ]
+        },
+        {
+          "item_id": "itm_b832c16fbb5144cc",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "框架不站归母标题",
+          "evidence": [
+            {
+              "end": 262,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 222
+            }
+          ]
+        },
+        {
+          "item_id": "itm_21a0e12bf36db72e",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "框架不站 90 元共识当明天的地板价",
+          "evidence": [
+            {
+              "end": 262,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+              "quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 222
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6aacb1ab12e7e24d",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "少数股东 0.086 亿，几乎可忽略",
+          "evidence": [
+            {
+              "end": 19,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "少数股东 0.086 亿，几乎可忽略，",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_90c85a453cdc6f7f",
+          "statement_role": "evidence",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。",
+          "evidence": [
+            {
+              "end": 63,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 19
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c4442734f0161593",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "中期不分红",
+          "evidence": [
+            {
+              "end": 90,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "中期不分红、应付股利 130.52 亿是上年股利落账；",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 63
+            }
+          ]
+        },
+        {
+          "item_id": "itm_33d99c2ada452a84",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "应付股利 130.52 亿是上年股利落账",
+          "evidence": [
+            {
+              "end": 90,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "中期不分红、应付股利 130.52 亿是上年股利落账；",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 63
+            }
+          ]
+        },
+        {
+          "item_id": "itm_90f204ec22474324",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿",
+          "evidence": [
+            {
+              "end": 153,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 90
+            }
+          ]
+        },
+        {
+          "item_id": "itm_31abfba98c1cc126",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "现金在往外走的同时短贷在滚动",
+          "evidence": [
+            {
+              "end": 153,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 90
+            }
+          ]
+        },
+        {
+          "item_id": "itm_08a24e1009f2d09c",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "借 960 亿、还 951 亿",
+          "evidence": [
+            {
+              "end": 153,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 90
+            }
+          ]
+        },
+        {
+          "item_id": "itm_99362251f6fe0d54",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "利润质量相对扣非是干净的",
+          "evidence": [
+            {
+              "end": 184,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 158
+            }
+          ]
+        },
+        {
+          "item_id": "itm_7e31e390e92488a5",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "现金质量相对扣非是差的",
+          "evidence": [
+            {
+              "end": 184,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 158
+            }
+          ]
+        },
+        {
+          "item_id": "itm_00695d32780b930a",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "AI 放量把资产负债表做成了服务器厂的标准形状",
+          "evidence": [
+            {
+              "end": 219,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_e85eadf8f2c2ba98",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "存贷双高",
+          "evidence": [
+            {
+              "end": 219,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_3d9daf7102916091",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "保理托底",
+          "evidence": [
+            {
+              "end": 219,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+              "quote": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_f92a6a993cd4e761",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "2026-08-28 收盘 64.04 元（mx-xuangu）。",
+          "evidence": [
+            {
+              "end": 36,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+              "quote": "2026-08-28 收盘 64.04 元（mx-xuangu）。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 3
+            }
+          ]
+        },
+        {
+          "item_id": "itm_cd2d67aa9c4b0f08",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+          "evidence": [
+            {
+              "end": 84,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+              "quote": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 36
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6c0e1c6959200a47",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "本报告只对标的本身做独立判断",
+          "evidence": [
+            {
+              "end": 109,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+              "quote": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 84
+            }
+          ]
+        },
+        {
+          "item_id": "itm_d74523b8b2fb550a",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "不针对任何已有仓位",
+          "evidence": [
+            {
+              "end": 109,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+              "quote": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+              "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+              "start": 84
+            }
+          ]
+        }
+      ]
+    },
+    "optical-module-docx": {
+      "candidate_slots": [
+        {
+          "candidate_slot_id": "slot_363180e19a472989",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_14047aa305743ea2",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_993b56f61f6c61e8",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_5682c4550e5c6cbf",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_6161b380836506af",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_d58f0041cee353c5",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_a819f7b11f039e52",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_ba2857f5a41d6ecf",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_808162b34c7962d2",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_ff68d3ba23cf1162",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_4cdc7fa73aaa1d0f",
+          "status": "no_supported_item"
+        },
+        {
+          "candidate_slot_id": "slot_f2ce69d71af11c6f",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_857d50b83356c4b3",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_34e48878c632e95a",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_06c0d9f20ba9bfec",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_647be14b410103cf",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_404e01c594f04976",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_cebf5cbdf8ec801f",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_8bf48871bb2b4891",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_fdbaf8887e7c481b",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_bd82be33101583eb",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_b7377f203f0b6c06",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_6cd1caa7b0832307",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_a8f8888f41383869",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_c86346a0c45bfbf9",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_58c72baa18c18f13",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_65060d531b706201",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_8ddf7726e4b71b24",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5273dc2502048b2b",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0528ef3b34e98b5f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_df7f86f7cada8987",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_dcba8be813cb39b6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_b8b0def5302229d0",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0c09c8a736242cd5",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_ed7d027a960c3697",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_17c6edfc82252bb8",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_cfc78adeeac26e2d",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_4e453094cbc6dcc9",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_843fc9c8dd1863db",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5fa264cca17d9f52",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e006ab94a77270df",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_09178161273883f3",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_c92ff9e4eddcdd29",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_04243d2b33678945",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_fe4b276b62ccf197",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_439ece2faece25ef",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_583169a87972ade5",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_b9a151e6fe078821",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_64bddfe9acf0ca0c",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_072c0a2c468a109b",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_e43a3df00a5c7885",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_d49a1779006632e7",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_63a7efc13768bd58",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0ee144f01ec0a3a4",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_63041fef22e45f39",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_366c4fcb47a634b6",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_8148d03a05533f27",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_76e76b155a099629",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_cfc23b06a16f1c9b",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0a70fdb4d56e5c74",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5d5249e972ca10f3",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e89fba3eddb2bf18",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5ca6b29fa9f8cc4a",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0208795740178680",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_6fc49380c6c3db3a",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_80ac6c6023e312ad",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_62e630415ec783f7",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_5a0b1357f70ac191",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_776ac63e6ec4f893",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_2091f42de4ab38dd",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_89b483fa86b2d06f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_f4561978779da5fd",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_eeed077c5a89f840",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_87e8ba4e3241af9a",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_ecdf91e33b43f77b",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_d50708895de68a36",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_5759f3d91c19055b",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_28bdc2732c6aa934",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_c1712c2b5d649478",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_1cf7098f1c258900",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_1ea8b50b88f38ac8",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_559c6005dfc531f3",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_f822854561e94fd3",
+          "status": "no_supported_item"
+        },
+        {
+          "candidate_slot_id": "slot_7ed0989bddc91d87",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_7faece19533dd030",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_a6adcde0451323ff",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_7a807ec94a33b129",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_c0b53f157efa3fc0",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_6ce87f44427dd544",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_f79f67b8b35662b1",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_7b29b6d7ec89f54f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_0d013b6aa424d46b",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_24b72c4dd4de8247",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_4ca838699b5bed30",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_cdce9776218c5fbb",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_aff85993f910660f",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_e05d2ba8b3c9dac0",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_212c3e4437286d51",
+          "status": "failed"
+        },
+        {
+          "candidate_slot_id": "slot_ceec98d8b5f90a96",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_8b7f93c3a9ccaea4",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_934f92fb486faae0",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_2ce46731ce94561f",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_27d50c619ef56e33",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_d7fbc2675127852f",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_55331bf3a01983de",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_0ab3a6464bcf5e46",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_20ef1bf14c1dbf48",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_b2d35bc42c056184",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_8b631a18f85c29a1",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_f6a00cfe05e27fec",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_3886cc470c7cba1b",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_69065a9f6957e399",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_3384671376704e7f",
+          "status": "extracted"
+        },
+        {
+          "candidate_slot_id": "slot_8c8690d90a19977e",
+          "status": "extracted"
+        }
+      ],
+      "items": [
+        {
+          "item_id": "itm_4083fb6b1acaaad6",
+          "statement_role": "condition",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "如果你所有的都选择相信，",
+          "evidence": [
+            {
+              "end": 12,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "如果你所有的都选择相信，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c8690f1bdde8846d",
+          "statement_role": "claim",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "公司所有说的话每个公司你都选择相信。",
+          "evidence": [
+            {
+              "end": 30,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "公司所有说的话每个公司你都选择相信。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 12
+            }
+          ]
+        },
+        {
+          "item_id": "itm_0398b930d1777c44",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "那最后加起来是不是会出现一个状态？",
+          "evidence": [
+            {
+              "end": 47,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "那最后加起来是不是会出现一个状态？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 30
+            }
+          ]
+        },
+        {
+          "item_id": "itm_8b4a64fcf5385fec",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "什么状态？",
+          "evidence": [
+            {
+              "end": 52,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "什么状态？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 47
+            }
+          ]
+        },
+        {
+          "item_id": "itm_ec18c38405c7e17f",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "像当年机器人份额加起来超过100%，会不会出现这个状态？",
+          "evidence": [
+            {
+              "end": 80,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "像当年机器人份额加起来超过100%，会不会出现这个状态？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 52
+            }
+          ]
+        },
+        {
+          "item_id": "itm_de69e52043452b66",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？",
+          "evidence": [
+            {
+              "end": 117,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 80
+            }
+          ]
+        },
+        {
+          "item_id": "itm_39f7ca0b5c2e1e73",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "你说的加起来总不能超过100%。",
+          "evidence": [
+            {
+              "end": 133,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2c3666a3a8c3fce24e203f742dfbf022c6e7cab728c2aa6090d74302d147c886",
+              "quote": "你说的加起来总不能超过100%。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 117
+            }
+          ]
+        },
+        {
+          "item_id": "itm_0d765014a64939ef",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "二季度800G出货量未达市场预期的原因是什么？",
+          "evidence": [
+            {
+              "end": 23,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "二季度800G出货量未达市场预期的原因是什么？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5e44b07c386a6c1e",
+          "statement_role": "question",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "实际上这出货量主要原因是1.6T影响了800G",
+          "evidence": [
+            {
+              "end": 51,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "实际上这出货量主要原因是1.6T影响了800G，谁说的？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 23
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5697c7311f116fbb",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "谁说的？",
+          "evidence": [
+            {
+              "end": 51,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "实际上这出货量主要原因是1.6T影响了800G，谁说的？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 23
+            }
+          ]
+        },
+        {
+          "item_id": "itm_aebcf763aeee8816",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "这个不太对",
+          "evidence": [
+            {
+              "end": 68,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "这个不太对，那反正不是旭创的数字。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 51
+            }
+          ]
+        },
+        {
+          "item_id": "itm_e3109b1c8250afaf",
+          "statement_role": "answer",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "那反正不是旭创的数字",
+          "evidence": [
+            {
+              "end": 68,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "这个不太对，那反正不是旭创的数字。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 51
+            }
+          ]
+        },
+        {
+          "item_id": "itm_8a34906d1d9851c6",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，",
+          "evidence": [
+            {
+              "end": 109,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 77
+            }
+          ]
+        },
+        {
+          "item_id": "itm_17134ba31492ceb6",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "预计到28年整个行业的出货量将达到500万只的水平。",
+          "evidence": [
+            {
+              "end": 135,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "预计到28年整个行业的出货量将达到500万只的水平。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 109
+            }
+          ]
+        },
+        {
+          "item_id": "itm_e48d0ede317dd7f6",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。",
+          "evidence": [
+            {
+              "end": 184,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 135
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6338147637296ae1",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。",
+          "evidence": [
+            {
+              "end": 227,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 184
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5b8352b2c78e1066",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "到28年预计增长至300至500万只",
+          "evidence": [
+            {
+              "end": 259,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "到28年预计增长至300至500万只，这个就是金像电的这个产品。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 227
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9bcf569cc80261ee",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "这个就是金像电的这个产品",
+          "evidence": [
+            {
+              "end": 259,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "到28年预计增长至300至500万只，这个就是金像电的这个产品。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 227
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5f065df437189787",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "然后EML和硅光26年初是4比6，",
+          "evidence": [
+            {
+              "end": 276,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "然后EML和硅光26年初是4比6，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 259
+            }
+          ]
+        },
+        {
+          "item_id": "itm_b9765ac862cad98e",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "预计到年底是规划到65%比35%。",
+          "evidence": [
+            {
+              "end": 293,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "82f68e6b8bee4f8d19ea9c727636e6400a45e0bb30552c83aea2619858ca0c7b",
+              "quote": "预计到年底是规划到65%比35%。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 276
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9866d2a4b4aef22e",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "渗透率反正都是吹牛的，都没准数的。",
+          "evidence": [
+            {
+              "end": 29,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "31c690def71cac4bfb9a88d59e800d4db35e886574026559aa42e738360ff0f0",
+              "quote": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_a5aa206666c9808a",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "29年NPO到10%",
+          "evidence": [
+            {
+              "end": 40,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "31c690def71cac4bfb9a88d59e800d4db35e886574026559aa42e738360ff0f0",
+              "quote": "29年NPO到10%，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 29
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5f650ae8a299f855",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "CPO到30%",
+          "evidence": [
+            {
+              "end": 48,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "31c690def71cac4bfb9a88d59e800d4db35e886574026559aa42e738360ff0f0",
+              "quote": "CPO到30%，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 40
+            }
+          ]
+        },
+        {
+          "item_id": "itm_1bbc77a290d046dd",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "可插拔主导70%",
+          "evidence": [
+            {
+              "end": 57,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "31c690def71cac4bfb9a88d59e800d4db35e886574026559aa42e738360ff0f0",
+              "quote": "可插拔主导70%。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 48
+            }
+          ]
+        },
+        {
+          "item_id": "itm_f466cfafd673c044",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "然后网络架构中scale out、scale up分别有哪些产品？",
+          "evidence": [
+            {
+              "end": 33,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "然后网络架构中scale out、scale up分别有哪些产品？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_851382695eeee492",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "200G scale up领域主要用NPO",
+          "evidence": [
+            {
+              "end": 55,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "200G scale up领域主要用NPO，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 33
+            }
+          ]
+        },
+        {
+          "item_id": "itm_30e29b25c89ece02",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "NPO可以理解为一种可插拔光模块。",
+          "evidence": [
+            {
+              "end": 77,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "NPO可以理解为一种没有外壳的可插拔光模块。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 55
+            }
+          ]
+        },
+        {
+          "item_id": "itm_d783e0af4a5ce574",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "NPO没有外壳。",
+          "evidence": [
+            {
+              "end": 77,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "NPO可以理解为一种没有外壳的可插拔光模块。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 55
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c63044b435d9a213",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "2.4T产品用于scale up领域",
+          "evidence": [
+            {
+              "end": 122,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 77
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9924e0f1b270ce86",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "3.2T则在scale out外面就是普通的光模块。",
+          "evidence": [
+            {
+              "end": 122,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 77
+            }
+          ]
+        },
+        {
+          "item_id": "itm_71bbd42cf3522bea",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "CPO目前可以理解为还没有实际的出货，这个是真实情况。",
+          "evidence": [
+            {
+              "end": 149,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "CPO目前可以理解为还没有实际的出货，这个是真实情况。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 122
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9810f47659de26fb",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "在CPO里面90%以上的价值由交换机芯片厂商",
+          "evidence": [
+            {
+              "end": 172,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "在CPO里面90%以上的价值由交换机芯片厂商，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 149
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9bac5918ef97d1d8",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "就是NVIDIA、台积电来主导。",
+          "evidence": [
+            {
+              "end": 188,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "009d712266dace32c1f1e5d2a8409b1d076768352b1bfec19820ee8e05ac998c",
+              "quote": "就是NVIDIA、台积电来主导。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 172
+            }
+          ]
+        },
+        {
+          "item_id": "itm_cc3f8bfbe7ddcdb8",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "北美客户今年定位非常明确，就服务于顶级客户",
+          "evidence": [
+            {
+              "end": 22,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "北美客户今年定位非常明确，就服务于顶级客户。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_025e513482fce9a6",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队",
+          "evidence": [
+            {
+              "end": 55,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 22
+            }
+          ]
+        },
+        {
+          "item_id": "itm_42e3bb9f9ed31279",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？",
+          "evidence": [
+            {
+              "end": 99,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 55
+            }
+          ]
+        },
+        {
+          "item_id": "itm_88efc09d561e6b0a",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "quoted_other",
+          "text": "他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？",
+          "evidence": [
+            {
+              "end": 128,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 99
+            }
+          ]
+        },
+        {
+          "item_id": "itm_fdd5b9554cfbbe24",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "自己都还没搞清楚赚钱模式",
+          "evidence": [
+            {
+              "end": 155,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 128
+            }
+          ]
+        },
+        {
+          "item_id": "itm_98a099df645d28dc",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "什么应用也没有",
+          "evidence": [
+            {
+              "end": 155,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 128
+            }
+          ]
+        },
+        {
+          "item_id": "itm_fa2e10da8ec1ade5",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "就来投入云",
+          "evidence": [
+            {
+              "end": 155,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 128
+            }
+          ]
+        },
+        {
+          "item_id": "itm_08767f6405840d2a",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "你们莫名其妙，说的就是这些新客户",
+          "evidence": [
+            {
+              "end": 172,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "你们莫名其妙，说的就是这些新客户。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 155
+            }
+          ]
+        },
+        {
+          "item_id": "itm_2da92712a28a7d31",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "他那个采访反正他是有立场的，对吧？",
+          "evidence": [
+            {
+              "end": 189,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "2d4ac2060c3c8bc37f2d67402bffd842e7fea996aa90460654266c56517d9908",
+              "quote": "他那个采访反正他是有立场的，对吧？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 172
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6f1b8a89083b8834",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "的确有一些可能性",
+          "evidence": [
+            {
+              "end": 32,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_03ecf1fb93238c1d",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "这些前沿东西得关注，那些才是更重要的东西",
+          "evidence": [
+            {
+              "end": 32,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_82f621b00c342721",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "目前反正是有新客户了",
+          "evidence": [
+            {
+              "end": 57,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "目前反正是有新客户了，这些新的云不知道是什么原因。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 32
+            }
+          ]
+        },
+        {
+          "item_id": "itm_a6783e858a8b34f7",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "这些新的云不知道是什么原因",
+          "evidence": [
+            {
+              "end": 57,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "目前反正是有新客户了，这些新的云不知道是什么原因。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 32
+            }
+          ]
+        },
+        {
+          "item_id": "itm_5bf6ca9cd94e9c05",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "目前公司与这些新客户开展顺利",
+          "evidence": [
+            {
+              "end": 81,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "目前公司与这些新客户开展顺利，进入了小批量测试。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 57
+            }
+          ]
+        },
+        {
+          "item_id": "itm_d62068b7684c8572",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "进入了小批量测试",
+          "evidence": [
+            {
+              "end": 81,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "目前公司与这些新客户开展顺利，进入了小批量测试。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 57
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c989223703768326",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "到26年底这些新客户开始供应",
+          "evidence": [
+            {
+              "end": 154,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 81
+            }
+          ]
+        },
+        {
+          "item_id": "itm_021d0f3455b1eabe",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "供应占比合计能达到15%左右",
+          "evidence": [
+            {
+              "end": 154,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 81
+            }
+          ]
+        },
+        {
+          "item_id": "itm_34387b197119a5e2",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "那是一个比较有意义的体量了",
+          "evidence": [
+            {
+              "end": 154,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 81
+            }
+          ]
+        },
+        {
+          "item_id": "itm_03e4f875c16ca66a",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "不限于那四大了，还有四大加上NVIDIA，不限于这五家了",
+          "evidence": [
+            {
+              "end": 154,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 81
+            }
+          ]
+        },
+        {
+          "item_id": "itm_7a6432a7f2560a43",
+          "statement_role": "claim",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "预计北美市场收入占比将达到85%左右。",
+          "evidence": [
+            {
+              "end": 185,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "预计北美市场收入占比将达到85%左右。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 166
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6d2656d8c74031f9",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "今年85%左右，还有15%是国内。",
+          "evidence": [
+            {
+              "end": 202,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+              "quote": "今年85%左右，还有15%是国内。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 185
+            }
+          ]
+        },
+        {
+          "item_id": "itm_7a66b43bfe409696",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "Q2 800G其实是超预期的，肯定是超预期的",
+          "evidence": [
+            {
+              "end": 32,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9fa96f0ebf60ed79",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "但这也不叫超预期",
+          "evidence": [
+            {
+              "end": 32,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_8c4a2ad0e2114d84",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "就是因为1.6T拉胯了",
+          "evidence": [
+            {
+              "end": 44,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "就是因为1.6T拉胯了，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 32
+            }
+          ]
+        },
+        {
+          "item_id": "itm_991e17bd88e3d066",
+          "statement_role": "answer",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "不是DSP拉胯了",
+          "evidence": [
+            {
+              "end": 74,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "不是DSP拉胯了，然后800G就明显比那个800G肯定不止。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 44
+            }
+          ]
+        },
+        {
+          "item_id": "itm_64b1c3c4d4c7511b",
+          "statement_role": "evidence",
+          "semantic_type": "opinion",
+          "perspective": "quoted_other",
+          "text": "半年这个肯定数字不对",
+          "evidence": [
+            {
+              "end": 103,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "他说什么半年这个肯定数字不对，二季度就有超过300万个了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 74
+            }
+          ]
+        },
+        {
+          "item_id": "itm_a90b04145641ea92",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "quoted_other",
+          "text": "二季度就有超过300万个了",
+          "evidence": [
+            {
+              "end": 103,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "124271f01805fb40dec44c5da6589cc4f9f32c22caecfeab3f7a60d3de0b75c7",
+              "quote": "他说什么半年这个肯定数字不对，二季度就有超过300万个了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 74
+            }
+          ]
+        },
+        {
+          "item_id": "itm_14665f23956f28f0",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "Mems相比光波导有优势，这个以前都解释过，可看时延、功耗等",
+          "evidence": [
+            {
+              "end": 36,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "Mems相比光波导优势，这个以前都解释过，就稍微看看时延、功耗等等这些。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 0
+            }
+          ]
+        },
+        {
+          "item_id": "itm_c3c1266d9aa7373c",
+          "statement_role": "question",
+          "semantic_type": "unknown",
+          "perspective": "source_explicit",
+          "text": "既然光波导的方案优势明显，为何300还是要用mems？",
+          "evidence": [
+            {
+              "end": 63,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "既然光波导的方案优势明显，为何300还是要用mems？",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 36
+            }
+          ]
+        },
+        {
+          "item_id": "itm_7c3277c9c5348a69",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "因为光波导还没做出来。",
+          "evidence": [
+            {
+              "end": 74,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "因为光波导还没做出来。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 63
+            }
+          ]
+        },
+        {
+          "item_id": "itm_72c15c56146bfac0",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "他自称在全球上处于领先地位",
+          "evidence": [
+            {
+              "end": 106,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 74
+            }
+          ]
+        },
+        {
+          "item_id": "itm_9c781b0035359cc8",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "理论仿真已经跑通了256端口的设计",
+          "evidence": [
+            {
+              "end": 106,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 74
+            }
+          ]
+        },
+        {
+          "item_id": "itm_8d12fa5fd46efe24",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观",
+          "evidence": [
+            {
+              "end": 140,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 106
+            }
+          ]
+        },
+        {
+          "item_id": "itm_205aec35acfd8df6",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "128的光波导尚未达到可以量产的阈值",
+          "evidence": [
+            {
+              "end": 152,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "尚未达到可以量产的阈值，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 140
+            }
+          ]
+        },
+        {
+          "item_id": "itm_51e18a9345135f2f",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "说明设计上仍然存在缺陷",
+          "evidence": [
+            {
+              "end": 164,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "说明设计上仍然存在缺陷，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 152
+            }
+          ]
+        },
+        {
+          "item_id": "itm_6f8c263e39a692fc",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "设计需要进一步调整",
+          "evidence": [
+            {
+              "end": 172,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "需要进一步调整，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 164
+            }
+          ]
+        },
+        {
+          "item_id": "itm_411ffa88a72e6040",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "就是没进展",
+          "evidence": [
+            {
+              "end": 178,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "就是没进展。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 172
+            }
+          ]
+        },
+        {
+          "item_id": "itm_74d7e925bc187972",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "希望谷歌、德科立加快这个速度，以匹配其V8I的需求",
+          "evidence": [
+            {
+              "end": 218,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 178
+            }
+          ]
+        },
+        {
+          "item_id": "itm_e023d46bc95b2e22",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "这个需求是非常紧急的了",
+          "evidence": [
+            {
+              "end": 218,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 178
+            }
+          ]
+        },
+        {
+          "item_id": "itm_55810563190ba49b",
+          "statement_role": "claim",
+          "semantic_type": "opinion",
+          "perspective": "source_explicit",
+          "text": "所以就要看你跑不跑得过",
+          "evidence": [
+            {
+              "end": 230,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "所以就要看你跑不跑得过，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 218
+            }
+          ]
+        },
+        {
+          "item_id": "itm_d48fd568af7b315a",
+          "statement_role": "condition",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "你自己如果跑不过",
+          "evidence": [
+            {
+              "end": 239,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "你自己如果跑不过，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 230
+            }
+          ]
+        },
+        {
+          "item_id": "itm_30d5c693bdbfaa12",
+          "statement_role": "claim",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "但是芯片是不能等你的",
+          "evidence": [
+            {
+              "end": 250,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "但是芯片是不能等你的，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 239
+            }
+          ]
+        },
+        {
+          "item_id": "itm_013e848248a3f569",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "因为这里面不光有芯片，有博通，有台积电",
+          "evidence": [
+            {
+              "end": 270,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "因为这里面不光有芯片，有博通，有台积电，",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 250
+            }
+          ]
+        },
+        {
+          "item_id": "itm_b8fcd0e069a53944",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "你还有PCB，还有7788的所有的供应链",
+          "evidence": [
+            {
+              "end": 299,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "你还有PCB，还有7788的所有的供应链，没法等你这一个。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 270
+            }
+          ]
+        },
+        {
+          "item_id": "itm_eee149db0a33796c",
+          "statement_role": "evidence",
+          "semantic_type": "fact",
+          "perspective": "source_explicit",
+          "text": "没法等你这一个",
+          "evidence": [
+            {
+              "end": 299,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "你还有PCB，还有7788的所有的供应链，没法等你这一个。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 270
+            }
+          ]
+        },
+        {
+          "item_id": "itm_d01b13bd38e7b61f",
+          "statement_role": "condition",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "如果你这个出来就出来了",
+          "evidence": [
+            {
+              "end": 323,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "如果你这个出来就出来了，出不来只能用替代方案了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 299
+            }
+          ]
+        },
+        {
+          "item_id": "itm_1c0a15f2c565c477",
+          "statement_role": "condition",
+          "semantic_type": "forecast",
+          "perspective": "source_explicit",
+          "text": "出不来只能用替代方案了",
+          "evidence": [
+            {
+              "end": 323,
+              "locator": "chunk:signed-non-table-target-scope",
+              "packet_id": "e91a34c8625a22005b089dd5af15da209a05a71051acc5e872d69ca18262722f",
+              "quote": "如果你这个出来就出来了，出不来只能用替代方案了。",
+              "source_rev": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+              "start": 299
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

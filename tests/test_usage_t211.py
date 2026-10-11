@@ -26,7 +26,7 @@ from server.store import (
     init_db,
     update_run_usage,
 )
-from server.usage import aggregate_usage, usage_for_run
+from server.usage import aggregate_usage, replay_block_from_summary, usage_for_run
 
 
 @pytest.fixture
@@ -141,6 +141,20 @@ def test_aggregate_empty_is_zeroed():
     assert agg["prompt_tokens"] == 0
     assert agg["llm_calls"] == 0
     assert agg["models"] == []
+
+
+def test_replay_block_is_copied_only_when_the_worker_decided() -> None:
+    """S1-a: the replay verdict is copied verbatim, never invented or half-shaped."""
+    decided = {"decision": "used", "prior_turns": 2, "est_tokens": 950}
+    assert replay_block_from_summary({"replay": decided}) == decided
+
+    # A run whose workflow reported nothing, or a malformed block: no replay key
+    # at all — the metering payload keeps the shape it had before the feature.
+    assert replay_block_from_summary(None) == {}
+    assert replay_block_from_summary({}) == {}
+    assert replay_block_from_summary({"replay": {}}) == {}
+    assert replay_block_from_summary({"replay": "used"}) == {}
+    assert replay_block_from_summary({"replay": {"reason": "no_payload"}}) == {}
 
 
 def test_usage_for_run_missing_trajectory_is_best_effort(monkeypatch, tmp_path):
@@ -313,6 +327,13 @@ async def test_run_is_metered_from_trajectory(mock_llm_two_turns, app_client,
     # The trajectory the aggregate came from really exists for this run.
     assert (run_dir_for(run_id) / "run" / "agent" / "trajectories"
             / "react_agent.jsonl").exists()
+
+    # S1-a: the cross-turn replay verdict rides next to the counters, so a reader
+    # holding only the Run row can tell a replayed turn from a fresh start. This
+    # run is the first of its session, so the honest answer is "nothing to
+    # replay" — the point is that the verdict is *there* and machine-readable.
+    assert row.usage_json["replay"]["decision"] == "skipped"
+    assert row.usage_json["replay"]["reason"] == "no_payload"
 
     # The approver task has posted its decision and returned.
     await asyncio.wait_for(approver, timeout=5)

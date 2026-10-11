@@ -24,7 +24,37 @@
         "high_risk_item_assertions_required 增补 label-only condition 项 NT-I09/I19/I29/I35/I39（原清单不变）。",
         "high_risk_item_annotations 增补上述 5 条注释。",
         "未改动门阈值、执行要求、授权四项与终态判定；冻结金标与 freeze-state 字节不变。"
-      ]
+      ],
+      "gate_sha256": "sha256:c665259153d98fa9b41275595383408e66baf95737f89870369decfe3c015acc"
+    },
+    {
+      "revision": 3,
+      "revised_on": "2026-10-11",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "用户于 2026-10-11 授权执行有界 items-only 真实复验（「好的，执行吧」），并选定模型 doubao-seed-2.1-lite（与冻结 manifest 一致）。",
+      "changes": [
+        "authorization.items_live_extraction 授权生效：authorized_by=xyl、attempts_max 与 execution_requirements 完全一致、model=doubao-seed-2.1-lite。",
+        "countersignature 由 pending_human_signoff 转为 signed（reviewer=xyl，signed_on=2026-10-11）。",
+        "执行前置零调用核验通过：计划字节、冻结金标字节与 freeze-manifest 一致；contract v3 绑定一致；运行时逐 packet 批次计数 10/14 与预算完全相符（r1-live/preflight-runtime-batches.json）。",
+        "未改动门阈值、执行要求、其余三项授权与终态判定；冻结金标与冻结计划字节不变。"
+      ],
+      "previous_gate_sha256": "sha256:c665259153d98fa9b41275595383408e66baf95737f89870369decfe3c015acc"
+    },
+    {
+      "revision": 4,
+      "revised_on": "2026-10-11",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "run-1（doubao-seed-2.1-lite）24 次尝试中 16 次被方舟「突增流量保护」以 HTTP 429 瞬时拒绝（零 token、未触达模型；md 前 8 次成功后 #09-#10 与 docx 全部 14 次被拒），判定为基础设施失效而非模型/抽取器质量证据，不触发 on_fail；用户随后指示「模型我已经更换，重新尝试请求模型」并选定节流「标准：间隔 20s」。",
+      "changes": [
+        "记录 run-1 失效（证据保留于 r1-live/，含 live-store、live-run-summary.json 与 429 诊断；不删除不改写）。",
+        "authorization.items_live_extraction.model 由 doubao-seed-2.1-lite 更换为用户指定的 deepseek-v4-flash（base_url https://api.deepseek.com；profile 指纹 sha256:033e5f19303e639a2b6a1fdd7f72b748cbc4c37ce910416d6c63c7591aa5d656）。",
+        "计划于 r2-live/ 按新模型零调用重冻结（replan-manifest.json；快照/槽位/批次预算不变，attempts 仍 10/14）；本次授权最坏再发起 ≤24 次真实调用（两轮累计 ≤48）。",
+        "request_options 逐字沿用冻结值（timeout 300 / max_output_tokens 262144 / token_parameter max_tokens / reasoning_effort minimal；DeepSeek 官方文档明确接受 minimal 并映射 low，max_tokens 262144 在 1~384K 合法区间内）；节流标准：首叫前 20s、此后每叫间隔 20s（checkpoint 于 after_reserve 处等待，非重试）。",
+        "未改动门阈值、金标、评分契约绑定（仍 v3）、协议/抽取器版本、执行要求其余项与终态判定；protocol/extractor/gold/thresholds 不变。"
+      ],
+      "previous_gate_sha256": "sha256:0c5c986dbeee30a68a535fe7c29d6da0759cbd83c20256656690646812b03339"
     }
   ],
   "role_scope": [
@@ -345,11 +375,14 @@
   "authorization": {
     "note": "Every entry must be filled by an explicit human decision; this gate authorizes nothing on its own.",
     "items_live_extraction": {
-      "authorized": false,
-      "authorized_by": null,
-      "authorized_on": null,
-      "attempts_max": null,
-      "model": null
+      "authorized": true,
+      "authorized_by": "xyl",
+      "authorized_on": "2026-10-11",
+      "attempts_max": {
+        "industrial-fulian-md": 10,
+        "optical-module-docx": 14
+      },
+      "model": "deepseek-v4-flash"
     },
     "publication": {
       "authorized": false,
@@ -369,9 +402,9 @@
   },
   "countersignature": {
     "required": true,
-    "status": "pending_human_signoff",
-    "reviewer": null,
-    "signed_on": null
+    "status": "signed",
+    "reviewer": "xyl",
+    "signed_on": "2026-10-11"
   },
   "terminal_decision": {
     "on_pass": "items-only quality gate satisfied; proceed to authorized positive consumption closure",
